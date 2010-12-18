@@ -1,7 +1,4 @@
-﻿
-
-
-/*dennis start*/
+﻿/*dennis start*/
 body
 {
 width: 320px;
@@ -118,8 +115,11 @@ ul li input[type="checkbox"]:after {
 ul li a, li.img a + a {
     padding: 12px 22px 12px 10px;
 }
+/*changes contact list*/
+.contact li{
+  /*  padding:5px 10px 5px 10px; */
 
-
+}
 .page1{
   margin: 7px 10px 7px 10px;
 }

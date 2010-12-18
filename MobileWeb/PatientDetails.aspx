@@ -15,7 +15,7 @@
 </li>
 </ul>
 
-<ul>
+<ul class="contact">
 <li><span class="style1">Home:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
 <li><span class="style1">Work:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
 <li><span class="style1">Mobile:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>

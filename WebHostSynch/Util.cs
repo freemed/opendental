@@ -10,16 +10,17 @@ using OpenDentBusiness.Mobile;
 namespace WebHostSynch {
 	public class Util {
 
+		private static bool IsMobileDBSet=false;
+		string previousConnectStr="";
 
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
 			Logger.Information("In CheckRegistrationKey() RegistrationKeyFromDentalOffice="+RegistrationKeyFromDentalOffice);
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			// sets a static variable
-			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
 			RegistrationKey RegistrationKeyFromDb=null;
 			try {
-				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
+				RegistrationKeys registrationKeys=new RegistrationKeys();
+				registrationKeys.SetDb(connectStr);
+				RegistrationKeyFromDb=registrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
 				DateTime d1=new DateTime(1902,1,1);
 				if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
 					Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);
@@ -41,31 +42,24 @@ namespace WebHostSynch {
 		public void SetMobileDbConnection() {
 			Logger.Information("In SetMobileDbConnection()");
 			string connectStr=ConfigurationManager.ConnectionStrings["DBMobileWeb"].ConnectionString;
-			
-			/* working Old code */
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			
-			// sets a static variable
-			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-			
-
-			//attempted new code
-			//OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection(connectStr,true);
+			if(previousConnectStr!=connectStr) {
+				IsMobileDBSet=false;// this situation would occur if the connection sting in the  web.config file
+			}
+			if(!IsMobileDBSet) {
+				OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+				Logger.Information("IsMobileDBSet is false");
+				dc.SetDb(connectStr,"",DatabaseType.MySql,true);
+				IsMobileDBSet=true;
+				Logger.Information("IsMobileDBSet is true");
+			}
 		}
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
-
-			/* working Old code */
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			// sets a static variable
-			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-			
-			//attempted new code
-			//OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection(connectStr,true);
-
 			RegistrationKey RegistrationKeyFromDb=null;
 			try {
-				RegistrationKeyFromDb=RegistrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
+				RegistrationKeys registrationKeys=new RegistrationKeys();
+				registrationKeys.SetDb(connectStr);
+				RegistrationKeyFromDb=registrationKeys.GetByKey(RegistrationKeyFromDentalOffice);
 				DateTime d1=new DateTime(1902,1,1);
 				if(d1<RegistrationKeyFromDb.DateDisabled && RegistrationKeyFromDb.DateDisabled<DateTime.Today) {
 					Logger.Information("RegistrationKey has been disabled. Dental OfficeId="+RegistrationKeyFromDb.PatNum);

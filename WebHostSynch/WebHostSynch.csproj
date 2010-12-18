@@ -86,11 +86,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Db.cs" />
     <Compile Include="Mobile.asmx.cs">
       <DependentUpon>Mobile.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistrationKey.cs" />
+    <Compile Include="RegistrationKeys.cs" />
     <Compile Include="Sheets.asmx.cs">
       <DependentUpon>Sheets.asmx</DependentUpon>
       <SubType>Component</SubType>

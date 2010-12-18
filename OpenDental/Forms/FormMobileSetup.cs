@@ -11,17 +11,16 @@ using OpenDentBusiness.Mobile;
 namespace OpenDental {
 	public partial class FormMobileSetup:Form {
 
-		string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-		long DentalOfficeID=0;
-		MobileWeb.Mobile mb = new MobileWeb.Mobile();
-
+		static string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+		static MobileWeb.Mobile mb = new MobileWeb.Mobile();
+		static DateTime dateTimeLastUploaded;
 		public FormMobileSetup() {
 			InitializeComponent();
 			Lan.F(this);
 
 		}
 
-		public void SynchPatientRecordsOnMobileWeb() {
+		public static void SynchPatientRecordsOnMobileWeb() {
 			try {
 			int RecordCountOfPatientm=Patientms.GetRecordCount(RegistrationKey);
 			int RecordCountOfPatient= Patients.GetNumberPatients();
@@ -65,33 +64,52 @@ namespace OpenDental {
 			return true;
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-				//disabled unless user changed url
-				Cursor=Cursors.WaitCursor;
-				if(!TestWebServiceExists()) {
-					Cursor=Cursors.Default;
-					MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
-					return;
-				}
-				try {
-					//Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-					//butSave.Enabled=false;
-				}
-				catch(Exception ex) {
-					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message);
-				}
-			#if DEBUG
-				SynchPatientRecordsOnMobileWeb();
-			#endif
-				Cursor=Cursors.Default;
 
 
-			DialogResult=DialogResult.OK;
+		private void timerRefreshLastSynchTime_Tick(object sender,EventArgs e) {
+			//refresh lable here
+			//labelTimeLastSynchDisplay.Text="";
+			//Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
+			//textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
 		}
 
+
+		private void butSynchNow_Click(object sender,EventArgs e) {
+			//disabled unless user changed url
+			Cursor=Cursors.WaitCursor;
+			if(!TestWebServiceExists()) {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
+				return;
+			}
+			try {
+				//Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
+				//butSave.Enabled=false;
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+			}
+		#if DEBUG
+			SynchPatientRecordsOnMobileWeb();
+		#endif
+			Cursor=Cursors.Default;
+		}
+
+		private void butSave_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.OK;
+		}
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
+
+
+
 	}
 }
