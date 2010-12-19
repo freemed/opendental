@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 		public static int GetOrderLong(long covCatNum) {
 			for(int i=0;i<Listt.Count;i++) {
 				if(covCatNum==Listt[i].CovCatNum) {
-					return i;
+					return (byte)i;
 				}
 			}
 			return -1;

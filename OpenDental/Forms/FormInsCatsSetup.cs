@@ -380,7 +380,7 @@ namespace OpenDental {
 
 		private void butAddCat_Click(object sender, System.EventArgs e) {
 			CovCat covcat=new CovCat();
-			covcat.CovOrder=CovCatC.Listt.Count;
+			covcat.CovOrder=(byte)CovCatC.Listt.Count;
 			covcat.DefaultPercent=-1;
 			FormInsCatEdit FormE=new FormInsCatEdit(covcat);
 			FormE.IsNew=true;

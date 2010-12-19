@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 	///<summary>Used in public health.</summary>
+	[Serializable]
 	public class County{
 		///<summary>Primary key, but allowed to change.  Change is programmatically synchronized.</summary>
 		public string CountyName;

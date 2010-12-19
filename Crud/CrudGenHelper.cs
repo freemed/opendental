@@ -313,8 +313,8 @@ namespace Crud {
 				case "Color":
 					dataTypeExpected="int";
 					break;
-				case "DateTime"://Need to handle DateT fields here better.
-					dataTypeExpected="date";
+				case "DateTime":
+					dataTypeExpected="date";//If the mysql field is datetime, then the C# field should have an [attribute] describing the type. 
 					break;
 				case "Double":
 					dataTypeExpected="double";
@@ -329,7 +329,7 @@ namespace Crud {
 					//use C# int for ItemOrder style fields.  We know they will not use random keys.
 					dataTypeExpected="int";
 					dataTypeExpected2="smallint";//ok as long as the coding is careful.  Less than ideal.
-					//tinyint not allowed.  Change C# type to byte.
+					//tinyint not allowed.  Possibly change C# type to byte if values can be between 0 and 255 with no negatives.
 					break;
 				case "Single":
 					dataTypeExpected="float";//not 1:1, but we never use the full range anyway.

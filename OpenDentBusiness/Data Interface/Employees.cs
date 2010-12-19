@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 				ListLong[i].MiddleI=PIn.String(table.Rows[i][3].ToString());
 				ListLong[i].IsHidden=PIn.Bool(table.Rows[i][4].ToString());
 				ListLong[i].ClockStatus=PIn.String(table.Rows[i][5].ToString());
-				ListLong[i].PhoneExt=PIn.Long(table.Rows[i][6].ToString());
+				ListLong[i].PhoneExt=PIn.Int(table.Rows[i][6].ToString());
 				if(!ListLong[i].IsHidden) {
 					tempList.Add(ListLong[i]);
 				}

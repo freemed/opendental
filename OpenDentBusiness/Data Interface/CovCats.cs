@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 				covcat.CovCatNum     =PIn.Long(table.Rows[i][0].ToString());
 				covcat.Description   =PIn.String(table.Rows[i][1].ToString());
 				covcat.DefaultPercent=PIn.Int(table.Rows[i][2].ToString());
-				covcat.CovOrder      =PIn.Int(table.Rows[i][3].ToString());
+				covcat.CovOrder      =PIn.Byte(table.Rows[i][3].ToString());
 				covcat.IsHidden      =PIn.Bool(table.Rows[i][4].ToString());
 				covcat.EbenefitCat   =(EbenefitCategory)PIn.Long(table.Rows[i][5].ToString());
 				CovCatC.Listt.Add(covcat);
@@ -92,11 +92,11 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			RefreshCache();
 			int oldOrder=CovCatC.GetOrderLong(covcat.CovCatNum);
-			if(oldOrder==0) {
+			if(oldOrder==0 || oldOrder==-1) {
 				return;
 			}
-			SetOrder(CovCatC.Listt[oldOrder],oldOrder-1);
-			SetOrder(CovCatC.Listt[oldOrder-1],oldOrder);
+			SetOrder(CovCatC.Listt[oldOrder],(byte)(oldOrder-1));
+			SetOrder(CovCatC.Listt[oldOrder-1],(byte)oldOrder);
 		}
 
 		///<summary></summary>
@@ -104,15 +104,15 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			RefreshCache();
 			int oldOrder=CovCatC.GetOrderLong(covcat.CovCatNum);
-			if(oldOrder==CovCatC.Listt.Count-1) {
+			if(oldOrder==CovCatC.Listt.Count-1 || oldOrder==-1) {
 				return;
 			}
-			SetOrder(CovCatC.Listt[oldOrder],oldOrder+1);
-			SetOrder(CovCatC.Listt[oldOrder+1],oldOrder);
+			SetOrder(CovCatC.Listt[oldOrder],(byte)(oldOrder+1));
+			SetOrder(CovCatC.Listt[oldOrder+1],(byte)oldOrder);
 		}
 
 		///<summary></summary>
-		private static void SetOrder(CovCat covcat, int newOrder) {
+		private static void SetOrder(CovCat covcat, byte newOrder) {
 			//No need to check RemotingRole; no call to db.
 			covcat.CovOrder=newOrder;
 			Update(covcat);
@@ -229,7 +229,7 @@ namespace OpenDentBusiness {
 			SetOrder(GetForEbenCat(EbenefitCategory.Orthodontics),12);
 			SetOrder(GetForEbenCat(EbenefitCategory.Adjunctive),13);
 			//now set the remaining categories to come after the ebens.
-			int idx=14;
+			byte idx=14;
 			for(int i=0;i<CovCatC.ListShort.Count;i++) {
 				if(CovCatC.ListShort[i].EbenefitCat !=EbenefitCategory.None) {
 					continue;

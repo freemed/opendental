@@ -4,8 +4,10 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	///<summary>Keeps track of one file attached to an email.  Multiple files can be attached to an email using this method.</summary>
-	public class EmailAttach {
+	[Serializable]
+	public class EmailAttach:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long EmailAttachNum;
 		///<summary>FK to emailmessage.EmailMessageNum</summary>
 		public long EmailMessageNum;

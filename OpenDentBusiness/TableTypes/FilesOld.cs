@@ -1,0 +1,20 @@
+//"files" table hasn't been used for quite some time.  We are leaving it in the database in case a user from a very old version has some important data in it.  As time goes by, that seems less and less likely.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

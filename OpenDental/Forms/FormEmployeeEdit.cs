@@ -251,7 +251,7 @@ namespace OpenDental{
 			EmployeeCur.FName=textFName.Text;
 			EmployeeCur.MiddleI=textMI.Text;
 			try{
-				EmployeeCur.PhoneExt=PIn.Long(textPhoneExt.Text);
+				EmployeeCur.PhoneExt=PIn.Int(textPhoneExt.Text);
 			}
 			catch{
 				EmployeeCur.PhoneExt=0;
