@@ -641,7 +641,7 @@
     <Compile Include="TableTypes\Fee.cs" />
     <Compile Include="TableTypes\GroupPermission.cs" />
     <Compile Include="TableTypes\InsPlan.cs" />
-    <Compile Include="TableTypes\Instructor.cs" />
+    <Compile Include="TableTypes\InstructorOld.cs" />
     <Compile Include="Misc\Interval.cs" />
     <Compile Include="TableTypes\JournalEntry.cs" />
     <Compile Include="TableTypes\Language.cs" />

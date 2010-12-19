@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 
 	}
 }
-	/*
+	
 		///<summary>Primary key.</summary>
 		public long InstructorNum;
 		///<summary>.</summary>
