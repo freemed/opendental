@@ -543,6 +543,7 @@
     <Compile Include="Data Interface\Userods.cs" />
     <Compile Include="Meth.cs" />
     <Compile Include="Misc\DatabaseMaintenance.cs" />
+    <Compile Include="Misc\DbHelper.cs" />
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
     <Compile Include="Misc\TimeSpanExtension.cs" />
