@@ -44,14 +44,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),covcat);
 				return;
 			}
-			string command= "UPDATE covcat SET "
-				+ "Description = '"    +POut.String(covcat.Description)+"'"
-				+",DefaultPercent = '" +POut.Long   (covcat.DefaultPercent)+"'"
-				+",CovOrder = '"       +POut.Long   (covcat.CovOrder)+"'"
-				+",IsHidden = '"       +POut.Bool  (covcat.IsHidden)+"'"
-				+",EbenefitCat = '"    +POut.Long((int)covcat.EbenefitCat)+"'"
-				+" WHERE CovCatNum = '"+POut.Long(covcat.CovCatNum)+"'";
-			Db.NonQ(command);
+			Crud.CovCatCrud.Update(covcat);
 		}
 
 		///<summary></summary>
@@ -60,31 +53,7 @@ namespace OpenDentBusiness {
 				covcat.CovCatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),covcat);
 				return covcat.CovCatNum;
 			}
-			if(PrefC.RandomKeys) {
-				covcat.CovCatNum=ReplicationServers.GetKey("covcat","CovCatNum");
-			}
-			string command="INSERT INTO covcat (";
-			if(PrefC.RandomKeys) {
-				command+="CovCatNum,";
-			}
-			command+="Description,DefaultPercent,"
-				+"CovOrder,IsHidden,EbenefitCat) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(covcat.CovCatNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(covcat.Description)+"', "
-				+"'"+POut.Long(covcat.DefaultPercent)+"', "
-				+"'"+POut.Long(covcat.CovOrder)+"', "
-				+"'"+POut.Bool(covcat.IsHidden)+"', "
-				+"'"+POut.Long((int)covcat.EbenefitCat)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				covcat.CovCatNum=Db.NonQ(command,true);
-			}
-			return covcat.CovCatNum;
+			return Crud.CovCatCrud.Insert(covcat);
 		}
 
 		///<summary></summary>

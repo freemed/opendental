@@ -39,12 +39,8 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Validate(span);
-			string command="UPDATE covspan SET "
-				+"CovCatNum = '"+POut.Long   (span.CovCatNum)+"'"
-				+",FromCode = '"+POut.String(span.FromCode)+"'"
-				+",ToCode = '"  +POut.String(span.ToCode)+"'"
-				+" WHERE CovSpanNum = '"+POut.Long(span.CovSpanNum)+"'";
-			Db.NonQ(command);
+			Crud.CovSpanCrud.Update(span);
+			return;
 		}
 
 		///<summary></summary>
@@ -54,29 +50,7 @@ namespace OpenDentBusiness{
 				return span.CovSpanNum;
 			}
 			Validate(span);
-			if(PrefC.RandomKeys) {
-				span.CovSpanNum=ReplicationServers.GetKey("covspan","CovSpanNum");
-			}
-			string command="INSERT INTO covspan (";
-			if(PrefC.RandomKeys) {
-				command+="CovSpanNum,";
-			}
-			command+="CovCatNum,"
-				+"FromCode,ToCode) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(span.CovSpanNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (span.CovCatNum)+"', "
-				+"'"+POut.String(span.FromCode)+"', "
-				+"'"+POut.String(span.ToCode)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				span.CovSpanNum=Db.NonQ(command,true);
-			}
-			return span.CovSpanNum;
+			return Crud.CovSpanCrud.Insert(span);
 		}
 
 		///<summary></summary>
