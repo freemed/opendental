@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 
 	///<summary>One Rx for one patient. Copied from rxdef rather than linked to it.</summary>
-	public class RxPat{
+	[Serializable]
+	public class RxPat:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long RxNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

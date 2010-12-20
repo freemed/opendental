@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 
 	///<summary>Used in public health.  This screening table is meant to be general purpose.  It is compliant with the popular Basic Screening Survey.  It is also designed with minimal foreign keys and can be easily adapted to a palm or pocketPC.  This table can be used with only the screengroup table, but is more efficient if provider, school, and county tables are also available.</summary>
-	public class Screen{
+	[Serializable]
+	public class Screen:TableBase {
 		///<summary>Primary key</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ScreenNum;
 		///<summary>The date of the screening.</summary>
 		public DateTime ScreenDate;
@@ -25,7 +27,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:PatientGrade</summary>
 		public PatientGrade GradeLevel;
 		///<summary>Age of patient at the time the screening was done. Faster than recording birthdates.</summary>
-		public int Age;
+		public byte Age;
 		///<summary>Enum:TreatmentUrgency</summary>
 		public TreatmentUrgency Urgency;
 		///<summary>Enum:YN Set to true if patient has cavities.</summary>

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness{
-	
+
 	/// <summary>Used to track missing teeth, primary teeth, movements, and drawings.</summary>
-	public class ToothInitial{
+	[Serializable]
+	public class ToothInitial:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ToothInitialNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;

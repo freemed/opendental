@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 
 	///<summary>A treatment plan saved by a user.  Does not include the default tp, which is just a list of procedurelog entries with a status of tp.  A treatplan has many proctp's attached to it.</summary>
-	public class TreatPlan{
+	[Serializable]
+	public class TreatPlan:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long TreatPlanNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

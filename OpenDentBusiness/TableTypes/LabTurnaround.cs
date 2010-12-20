@@ -5,8 +5,10 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness{
 
 	///<summary>The amount of time it takes for a lab case to be processed at the lab.  Used to compute due dates.</summary>
-	public class LabTurnaround{
+	[Serializable]
+	public class LabTurnaround:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long LabTurnaroundNum;
 		///<summary>FK to laboratory.LaboratoryNum. The lab that this item is attached to.</summary>
 		public long LaboratoryNum;
@@ -18,13 +20,7 @@ namespace OpenDentBusiness{
 		public int DaysActual;
 
 		public LabTurnaround Copy(){
-			LabTurnaround l=new LabTurnaround();
-			l.LabTurnaroundNum=LabTurnaroundNum;
-			l.LaboratoryNum=LaboratoryNum;
-			l.Description=Description;
-			l.DaysPublished=DaysPublished;
-			l.DaysActual=DaysActual;
-			return l;
+			return (LabTurnaround)this.MemberwiseClone();
 		}
 		
 	}

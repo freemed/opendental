@@ -3159,6 +3159,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE covcat CHANGE DefaultPercent DefaultPercent smallint NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE IntTooth IntTooth smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE ToothValue ToothValue smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE MBvalue MBvalue smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE Bvalue Bvalue smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE DBvalue DBvalue smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE MLvalue MLvalue smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE Lvalue Lvalue smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE periomeasure CHANGE DLvalue DLvalue smallint NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE sigbutdef CHANGE ButtonIndex ButtonIndex smallint NOT NULL";
+				Db.NonQ(command);
+				
+
 
 
 				

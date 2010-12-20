@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Used in dental schools.  eg OP 732 Operative Dentistry Clinic II.</summary>
-	public class SchoolCourse{
+	[Serializable]
+	public class SchoolCourse:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long SchoolCourseNum;
 		///<summary>Alphanumeric.  eg PEDO 732.</summary>
 		public string CourseID;

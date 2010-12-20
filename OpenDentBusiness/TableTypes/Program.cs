@@ -1,10 +1,12 @@
 using System;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Each row is a bridge to an outside program, frequently an imaging program.  Most of the bridges are hard coded, and simply need to be enabled.  But user can also add their own custom bridge.</summary>
-	public class Program{
+	[Serializable]
+	public class Program:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProgramNum;
 		///<summary>Unique name for built-in program bridges. Not user-editable. enum ProgramName</summary>
 		public string ProgName;

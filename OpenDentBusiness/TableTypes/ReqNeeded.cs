@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness{
-		///<summary>For Dental Schools.  Requirements needed in order to complete a course.</summary>
-	public class ReqNeeded{
+	///<summary>For Dental Schools.  Requirements needed in order to complete a course.</summary>
+	[Serializable]
+	public class ReqNeeded:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ReqNeededNum;
 		///<summary>.</summary>
 		public string Descript;

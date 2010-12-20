@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>One printer selection for one situation for one computer.</summary>
-	public class Printer{
+	[Serializable]
+	public class Printer:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long PrinterNum;
 		///<summary>FK to computer.ComputerNum.  This will be changed some day to refer to the computername, because it would make more sense as a key than a cryptic number.</summary>
 		public long ComputerNum;

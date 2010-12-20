@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	/// <summary>Each row represents one charge that will be added monthly.</summary>
-	public class RepeatCharge{
+	[Serializable]
+	public class RepeatCharge:TableBase {
 		/// <summary>Primary key</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long RepeatChargeNum;
 		/// <summary>FK to patient.PatNum.</summary>
 		public long PatNum;

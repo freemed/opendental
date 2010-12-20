@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Links one schedule block to one operatory.  So for a schedule block to show, it must be linked to one or more operatories.</summary>
-	public class ScheduleOp{
+	[Serializable]
+	public class ScheduleOp:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ScheduleOpNum;
 		///<summary>FK to schedule.ScheduleNum.</summary>
 		public long ScheduleNum;

@@ -81,7 +81,7 @@ namespace OpenDental {
 				if(PhoneEmpDefaults.IsNoGraph(scheds[i].EmployeeNum)) {
 					continue;
 				}
-				TimeSpan lunch=(scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0)).TimeOfDay;//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
+				TimeSpan lunch=scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0);//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
 				for(int b=0;b<buckets.Length;b++) {
 					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
 					time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
@@ -96,25 +96,25 @@ namespace OpenDental {
 						}
 					}
 					//situation 1: this bucket is completely within the start and stop times.
-					if(scheds[i].StartTime.TimeOfDay <= time1 && scheds[i].StopTime.TimeOfDay >= time2) {
+					if(scheds[i].StartTime <= time1 && scheds[i].StopTime >= time2) {
 						buckets[b]+=1;
 					}
 					//situation 2: the start time is after this bucket
-					else if(scheds[i].StartTime.TimeOfDay >= time2) {
+					else if(scheds[i].StartTime >= time2) {
 						continue;
 					}
 					//situation 3: the stop time is before this bucket
-					else if(scheds[i].StopTime.TimeOfDay <= time1) {
+					else if(scheds[i].StopTime <= time1) {
 						continue;
 					}
 					//situation 4: start time falls within this bucket
-					if(scheds[i].StartTime.TimeOfDay > time1) {
-						delta=scheds[i].StartTime.TimeOfDay - time1;
+					if(scheds[i].StartTime > time1) {
+						delta=scheds[i].StartTime - time1;
 						buckets[b]+= (float)delta.TotalHours * 2f;//example, .5 hours would add 1 to the bucket
 					}
 					//situation 5: stop time falls within this bucket
-					if(scheds[i].StopTime.TimeOfDay < time2) {
-						delta= time2 - scheds[i].StopTime.TimeOfDay;
+					if(scheds[i].StopTime < time2) {
+						delta= time2 - scheds[i].StopTime;
 						buckets[b]+= (float)delta.TotalHours * 2f;
 					}
 				}

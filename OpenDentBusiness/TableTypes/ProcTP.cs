@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>These are copies of procedures that are attached to treatment plans.</summary>
-	public class ProcTP{
+	[Serializable]
+	public class ProcTP:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProcTPNum;
 		///<summary>FK to treatplan.TreatPlanNum.  The treatment plan to which this proc is attached.</summary>
 		public long TreatPlanNum;

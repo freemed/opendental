@@ -1,10 +1,12 @@
 using System;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Some insurance companies require special provider ID #s, and this table holds them.</summary>
-	public class ProviderIdent{
+	[Serializable]
+	public class ProviderIdent:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProviderIdentNum;
 		///<summary>FK to provider.ProvNum.  An ID only applies to one provider.</summary>
 		public long ProvNum;

@@ -134,8 +134,8 @@ namespace OpenDentBusiness{
 				sched=new Schedule();
 				sched.ScheduleNum    = PIn.Long   (table.Rows[i]["ScheduleNum"].ToString());
 				sched.SchedDate      = PIn.Date  (table.Rows[i]["SchedDate"].ToString());
-				sched.StartTime      = PIn.DateT (table.Rows[i]["StartTime"].ToString());
-				sched.StopTime       = PIn.DateT (table.Rows[i]["StopTime"].ToString());
+				sched.StartTime      = PIn.TimeSpan (table.Rows[i]["StartTime"].ToString());
+				sched.StopTime       = PIn.TimeSpan (table.Rows[i]["StopTime"].ToString());
 				sched.SchedType      = (ScheduleType)PIn.Long(table.Rows[i]["SchedType"].ToString());
 				sched.ProvNum        = PIn.Long   (table.Rows[i]["ProvNum"].ToString());
 				sched.BlockoutType   = PIn.Long   (table.Rows[i]["BlockoutType"].ToString());
@@ -165,8 +165,8 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE schedule SET " 
 				+ "SchedDate = "    +POut.Date  (sched.SchedDate)
-				+ ",StartTime = "   +POut.DateT (sched.StartTime)
-				+ ",StopTime = "    +POut.DateT (sched.StopTime)
+				+ ",StartTime = "   +POut.TimeSpan (sched.StartTime)
+				+ ",StopTime = "    +POut.TimeSpan(sched.StopTime)
 				+ ",SchedType = '"   +POut.Long   ((int)sched.SchedType)+"'"
 				+ ",ProvNum = '"     +POut.Long   (sched.ProvNum)+"'"
 				+ ",BlockoutType = '"+POut.Long   (sched.BlockoutType)+"'"
@@ -206,8 +206,8 @@ namespace OpenDentBusiness{
 			}
 			command+=
 				 POut.Date  (sched.SchedDate)+", "
-				+POut.DateT (sched.StartTime)+", "
-				+POut.DateT (sched.StopTime)+", "
+				+POut.TimeSpan (sched.StartTime)+", "
+				+POut.TimeSpan (sched.StopTime)+", "
 				+"'"+POut.Long   ((int)sched.SchedType)+"', "
 				+"'"+POut.Long   (sched.ProvNum)+"', "
 				+"'"+POut.Long   (sched.BlockoutType)+"', "
@@ -236,10 +236,10 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sched,isNew);
 				return;
 			}
-			if(sched.StartTime.TimeOfDay > sched.StopTime.TimeOfDay){
+			if(sched.StartTime > sched.StopTime){
 				throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
 			}
-			if(sched.StartTime.TimeOfDay+TimeSpan.FromMinutes(5) > sched.StopTime.TimeOfDay
+			if(sched.StartTime+TimeSpan.FromMinutes(5) > sched.StopTime
 				&& sched.Status==SchedStatus.Open)
 			{
 				throw new Exception(Lans.g("Schedule","Stop time cannot be the same as the start time."));
@@ -280,20 +280,20 @@ namespace OpenDentBusiness{
 					}
 				}
 				if(sched.ScheduleNum!=ListForType[i].ScheduleNum
-					&& sched.StartTime.TimeOfDay >= ListForType[i].StartTime.TimeOfDay
-					&& sched.StartTime.TimeOfDay < ListForType[i].StopTime.TimeOfDay)
+					&& sched.StartTime >= ListForType[i].StartTime
+					&& sched.StartTime < ListForType[i].StopTime)
 				{
 					return true;
 				}
 				if(sched.ScheduleNum!=ListForType[i].ScheduleNum
-					&& sched.StopTime.TimeOfDay > ListForType[i].StartTime.TimeOfDay
-					&& sched.StopTime.TimeOfDay <= ListForType[i].StopTime.TimeOfDay)
+					&& sched.StopTime > ListForType[i].StartTime
+					&& sched.StopTime <= ListForType[i].StopTime)
 				{
 					return true;
 				}
 				if(sched.ScheduleNum!=ListForType[i].ScheduleNum
-					&& sched.StartTime.TimeOfDay <= ListForType[i].StartTime.TimeOfDay
-					&& sched.StopTime.TimeOfDay >= ListForType[i].StopTime.TimeOfDay)
+					&& sched.StartTime <= ListForType[i].StartTime
+					&& sched.StopTime >= ListForType[i].StopTime)
 				{
 					return true;
 				}
@@ -400,11 +400,11 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				//for the time, if the sched starts later than the apt starts
-				if(listForPeriod[i].StartTime.TimeOfDay > aptDateTime.TimeOfDay){
+				if(listForPeriod[i].StartTime > aptDateTime.TimeOfDay){
 					continue;
 				}
 				//or if the sched ends (before or at same time) as the apt starts
-				if(listForPeriod[i].StopTime.TimeOfDay <= aptDateTime.TimeOfDay){
+				if(listForPeriod[i].StopTime <= aptDateTime.TimeOfDay){
 					continue;
 				}
 				//matching sched found
@@ -604,7 +604,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			for(int i=0;i<SchedList.Count;i++){
-				if(SchedList[i].StartTime.TimeOfDay > SchedList[i].StopTime.TimeOfDay) {
+				if(SchedList[i].StartTime > SchedList[i].StopTime) {
 					throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
 				}
 			}

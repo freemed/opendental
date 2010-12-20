@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Always attached to a payment.  Always affects exactly one patient account and one provider.</summary>
-	public class PaySplit{
+	[Serializable]
+	public class PaySplit:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long SplitNum;
 		///<summary>Amount of split.</summary>
 		public double SplitAmt;
@@ -18,7 +20,7 @@ namespace OpenDentBusiness{
 		///<summary>No longer used.</summary>
 		public bool IsDiscount;
 		///<summary>No longer used</summary>
-		public int DiscountType;
+		public byte DiscountType;
 		///<summary>FK to provider.ProvNum.</summary>
 		public long ProvNum;
 		///<summary>FK to payplan.PayPlanNum.  0 if not attached to a payplan.</summary>

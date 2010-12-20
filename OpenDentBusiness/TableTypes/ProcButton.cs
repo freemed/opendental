@@ -3,10 +3,12 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>The 'buttons' to show in the Chart module.  They must have items attached in order to do anything.</summary>
-	public class ProcButton{
+	[Serializable]
+	public class ProcButton:TableBase {
 		///<summary>Primary key</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProcButtonNum;
 		///<summary>The text to show on the button.</summary>
 		public string Description;

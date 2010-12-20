@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 
 	///<summary>Attaches a referral to a patient.</summary>
-	public class RefAttach{  
+	[Serializable]
+	public class RefAttach:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long RefAttachNum;
 		///<summary>FK to referral.ReferralNum.</summary>
 		public long ReferralNum;

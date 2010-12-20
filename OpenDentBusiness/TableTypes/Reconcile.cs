@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Used in the Accounting section.  Each row represents one reconcile.  Transactions will be attached to it.</summary>
-	public class Reconcile{
+	[Serializable]
+	public class Reconcile:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ReconcileNum;
 		///<summary>FK to account.AccountNum</summary>
 		public long AccountNum;

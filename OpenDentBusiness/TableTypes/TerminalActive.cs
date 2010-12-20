@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	/// <summary>Each row is one computer that currently acting as a terminal for new patient info input.</summary>
-	public class TerminalActive{
+	[Serializable]
+	public class TerminalActive:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long TerminalActiveNum;
 		///<summary>The name of the computer where the terminal is active.</summary>
 		public string ComputerName;

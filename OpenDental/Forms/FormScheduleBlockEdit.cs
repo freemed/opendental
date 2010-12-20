@@ -291,8 +291,8 @@ namespace OpenDental{
 				return;
 			}
 		  try{
-				SchedCur.StartTime=DateTime.Parse(comboStart.Text);
-				SchedCur.StopTime=DateTime.Parse(comboStop.Text);
+				SchedCur.StartTime=DateTime.Parse(comboStart.Text).TimeOfDay;
+				SchedCur.StopTime=DateTime.Parse(comboStop.Text).TimeOfDay;
 			}
 			catch{
 				MsgBox.Show(this,"Incorrect time format");

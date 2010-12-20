@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Describes the templates for letter merges to Word.</summary>
-	public class LetterMerge{
+	[Serializable]
+	public class LetterMerge:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long LetterMergeNum;
 		///<summary>Description of this letter.</summary>
 		public string Description;
@@ -16,16 +18,11 @@ namespace OpenDentBusiness{
 		public string DataFileName;
 		///<summary>FK to definition.DefNum.</summary>
 		public long Category;
-		///<summary>Not a database column.  Filled using fk from the lettermergefields table.  The arrayList is a collection of strings representing field names.</summary>
+		///<summary>Not a database column.  Filled using fk from the lettermergefields table.  A collection of strings representing field names.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public List<string> Fields;
 
-		/*//<summary>Returns a copy of the clearinghouse.</summary>
-    public ClaimForm Clone(){
-			ClaimForm cf=new ClaimForm();
-			cf.ClaimFormNum=ClaimFormNum;
-			cf.Description=Description;
-			return cf;
-		}*/
+		
 
 		
 

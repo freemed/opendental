@@ -1853,7 +1853,7 @@ namespace OpenDentBusiness {
 					if(schedList[i].Status!=SchedStatus.Open) {
 						continue;//closed and holiday statuses do not use starttime and stoptime
 					}
-					if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up.
+					if(schedList[i].StopTime-schedList[i].StartTime < new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up.
 						//But we don't want to count provider notes, employee notes, or pratice notes.
 						if(schedList[i].Note=="") {
 							numFound++;
@@ -1871,7 +1871,7 @@ namespace OpenDentBusiness {
 					if(schedList[i].Status!=SchedStatus.Open) {
 						continue;//closed and holiday statuses do not use starttime and stoptime
 					}
-					if(schedList[i].StopTime.TimeOfDay-schedList[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up. Remove them.
+					if(schedList[i].StopTime-schedList[i].StartTime < new TimeSpan(0,5,0)) {//Schedule items less than five minutes won't show up. Remove them.
 						//But we don't want to remove provider notes, employee notes, or pratice notes.
 						if(schedList[i].Note=="") {
 							Schedules.Delete(schedList[i]);

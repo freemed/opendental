@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 				List[i].Gender          =(PatientGender)   PIn.Long   (table.Rows[i][7].ToString());
 				List[i].Race            =(PatientRace)     PIn.Long   (table.Rows[i][8].ToString());
 				List[i].GradeLevel      =(PatientGrade)    PIn.Long   (table.Rows[i][9].ToString());
-				List[i].Age             =                  PIn.Int   (table.Rows[i][10].ToString());
+				List[i].Age             =                  PIn.Byte   (table.Rows[i][10].ToString());
 				List[i].Urgency         =(TreatmentUrgency)PIn.Long   (table.Rows[i][11].ToString());
 				List[i].HasCaries       =(YN)              PIn.Long   (table.Rows[i][12].ToString());
 				List[i].NeedsSealants   =(YN)              PIn.Long   (table.Rows[i][13].ToString());

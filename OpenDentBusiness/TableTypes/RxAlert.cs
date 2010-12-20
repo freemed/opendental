@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness {
 
 	/// <summary>Many-to-many relationship connecting Rx with DiseaseDef.</summary>
-	public class RxAlert{
+	[Serializable]
+	public class RxAlert:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long RxAlertNum;
 		///<summary>FK to rxdef.RxDefNum.</summary>
 		public long RxDefNum;

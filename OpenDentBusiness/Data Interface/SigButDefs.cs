@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 				listt[i].SigButDefNum= PIn.Long(table.Rows[i][0].ToString());
 				listt[i].ButtonText  = PIn.String(table.Rows[i][1].ToString());
 				listt[i].ButtonIndex = PIn.Int(table.Rows[i][2].ToString());
-				listt[i].SynchIcon   = PIn.Int(table.Rows[i][3].ToString());
+				listt[i].SynchIcon   = PIn.Byte(table.Rows[i][3].ToString());
 				listt[i].ComputerName= PIn.String(table.Rows[i][4].ToString());
 				listt[i].ElementList=SigButDefElements.GetForButton(listt[i].SigButDefNum);
 			}

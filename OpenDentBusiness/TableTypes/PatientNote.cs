@@ -1,10 +1,12 @@
 using System;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Essentially more columns in the patient table.  They are stored here because these fields can contain a lot of information, and we want to try to keep the size of the patient table a bit smaller.</summary>
-	public class PatientNote{
+	[Serializable]
+	public class PatientNote:TableBase {
 		///<summary>FK to patient.PatNum.  Also the primary key for this table. Always one to one relationship with patient table.  A new patient might not have an entry here until needed.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long PatNum;
 		///<summary>Only one note per family stored with guarantor.</summary>
 		public string FamFinancial;

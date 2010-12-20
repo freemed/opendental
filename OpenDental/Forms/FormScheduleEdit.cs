@@ -212,8 +212,8 @@ namespace OpenDental{
 				listOps.SetSelected(0,true);
 			}
 			textNote.Text=SchedCur.Note;
-			if(SchedCur.StartTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay 
-				&& SchedCur.StopTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay)
+			if(SchedCur.StartTime==TimeSpan.Zero 
+				&& SchedCur.StopTime==TimeSpan.Zero)
 			{ 
 				comboStop.Visible=false;
 				comboStart.Visible=false;
@@ -249,8 +249,8 @@ namespace OpenDental{
 					return;
 				}
 			}
-			SchedCur.StartTime=DateTime.Parse(comboStart.Text);
-			SchedCur.StopTime=DateTime.Parse(comboStop.Text);
+			SchedCur.StartTime=DateTime.Parse(comboStart.Text).TimeOfDay;
+			SchedCur.StopTime=DateTime.Parse(comboStop.Text).TimeOfDay;
       SchedCur.Note=textNote.Text;
 			SchedCur.Ops=new List<long>();
 			if(!listOps.SelectedIndices.Contains(0)){

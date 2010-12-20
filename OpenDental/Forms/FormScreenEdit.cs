@@ -607,7 +607,7 @@ namespace OpenDental{
         ScreenCur.Gender=PatientGender.Female;
 			ScreenCur.Race=(PatientRace)listRace.SelectedIndex;
 			ScreenCur.GradeLevel=(PatientGrade)comboGradeLevel.SelectedIndex;
-			ScreenCur.Age=PIn.Int(textAge.Text);//"" is OK
+			ScreenCur.Age=PIn.Byte(textAge.Text);//"" is OK
 			ScreenCur.Urgency=(TreatmentUrgency)listUrgency.SelectedIndex;
 			ScreenCur.HasCaries=GetCheckState(checkHasCaries);
 			ScreenCur.NeedsSealants=GetCheckState(checkNeedsSealants);

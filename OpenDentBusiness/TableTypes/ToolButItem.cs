@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 
 	///<summary>Each row represents one toolbar button to be placed on a toolbar and linked to a program.</summary>
-	public class ToolButItem{
+	[Serializable]
+	public class ToolButItem:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ToolButItemNum;
 		///<summary>FK to program.ProgramNum.</summary>
 		public long ProgramNum;

@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness {
 
 	/// <summary>Each row is one Question for one patient.  If a patient has never filled out a questionnaire, then they will have no rows in this table.</summary>
-	public class Question{
+	[Serializable]
+	public class Question:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long QuestionNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;

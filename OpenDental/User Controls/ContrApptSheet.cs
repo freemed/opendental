@@ -342,7 +342,7 @@ namespace OpenDental{
 						for(int i=0;i<schedsForOp.Count;i++) {
 							g.FillRectangle(openBrush
 								,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
-								,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
 								,ColAptWidth
 								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
 								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
@@ -372,7 +372,7 @@ namespace OpenDental{
 					for(int i=0;i<schedsForOp.Count;i++) {
 						g.FillRectangle(openBrush
 							,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-							,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+							,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
 							,ColWidth
 							,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
 							+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
@@ -385,7 +385,7 @@ namespace OpenDental{
 						if(!Providers.GetIsSec(schedsForOp[i].ProvNum)){//if the provider is a dentist
 							g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
 								,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-								,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
 								,ProvWidth
 								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
 								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
@@ -393,7 +393,7 @@ namespace OpenDental{
 						else{//hygienist
 							g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
 								,TimeWidth+ProvWidth*ProvCount+j*ColWidth+ProvWidth
-								,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
 								,ProvWidth
 								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
 								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
@@ -431,8 +431,8 @@ namespace OpenDental{
 						rect=new RectangleF(
 							TimeWidth+1+(dayofweek)*ColDayWidth
 							+ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
-							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
-							+schedForType[i].StartTime.Minute*Lh/MinPerRow
+							,schedForType[i].StartTime.Hours*Lh*RowsPerHr
+							+schedForType[i].StartTime.Minutes*Lh/MinPerRow
 							,ColAptWidth-1
 							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
@@ -445,8 +445,8 @@ namespace OpenDental{
 							TimeWidth+ProvWidth*ProvCount
 							+ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
 							+ProvWidth*2//so they don't overlap prov bars
-							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
-							+schedForType[i].StartTime.Minute*Lh/MinPerRow
+							,schedForType[i].StartTime.Hours*Lh*RowsPerHr
+							+schedForType[i].StartTime.Minutes*Lh/MinPerRow
 							,ColWidth-1-ProvWidth*2
 							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
@@ -475,8 +475,8 @@ namespace OpenDental{
 				for(int i=0;i<schedForType.Length;i++){	
 					g.FillRectangle(openBrush
 						,TimeWidth+ProvWidth*j
-						,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
-						+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//10
+						,schedForType[i].StartTime.Hours*Lh*RowsPerHr//6
+						+(int)schedForType[i].StartTime.Minutes*Lh/MinPerRow//10
 						,ProvWidth
 						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
 						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10

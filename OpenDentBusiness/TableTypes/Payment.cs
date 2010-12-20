@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>A patient payment.  Always has at least one split.</summary>
-	public class Payment{
+	[Serializable]
+	public class Payment:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long PayNum;
 		///<summary>FK to definition.DefNum.  This will be 0 if this is an income transfer to another provider.</summary>
 		public long PayType;
-		///<summary>The date the the payment displays on the patient account.</summary>
+		///<summary>The date that the payment displays on the patient account.</summary>
 		public DateTime PayDate;
 		///<summary>Amount of the payment.  Must equal the sum of the splits.</summary>
 		public double PayAmt;

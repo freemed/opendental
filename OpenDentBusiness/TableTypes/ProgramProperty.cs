@@ -1,10 +1,12 @@
 using System;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Some program links (bridges), have properties that need to be set.  The property names are always hard coded.  User can change the value.  The property is usually retrieved based on its name.</summary>
-	public class ProgramProperty{
+	[Serializable]
+	public class ProgramProperty:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProgramPropertyNum;
 		///<summary>FK to program.ProgramNum</summary>
 		public long ProgramNum;

@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public static class TimeAdjusts {
+	public class TimeAdjusts {
 
 		///<summary></summary>
 		public static List<TimeAdjust> Refresh(long empNum,DateTime fromDate,DateTime toDate) {
@@ -50,38 +50,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>-H:mm.  If zero, then returns empty string.  Hours can be greater than 24.</summary>
-		public static string ToStringHmm(this TimeSpan tspan){
-			//No need to check RemotingRole; no call to db.
-			if(tspan==TimeSpan.Zero) {
-				return "";
-			}
-			string retVal="";
-			if(tspan < TimeSpan.Zero){
-				retVal+="-";
-				tspan=tspan.Duration();
-			}
-			//It has to be done this way to support hours greater than 24.
-			int hours=(tspan.Days*24)+tspan.Hours;
-			retVal+=hours.ToString()+":"+tspan.Minutes.ToString().PadLeft(2,'0');
-			return retVal;
-		}
-	
-		///<summary>-H:mm:ss.  If zero, then returns empty string.</summary>
-		public static string ToStringHmmss(this TimeSpan tspan){
-			//No need to check RemotingRole; no call to db.
-			if(tspan==TimeSpan.Zero) {
-				return "";
-			}
-			string retVal="";
-			if(tspan < TimeSpan.Zero){
-				retVal+="-";
-				tspan=tspan.Duration();
-			}
-			int hours=(tspan.Days*24)+tspan.Hours;
-			retVal+=hours.ToString()+":"+tspan.Minutes.ToString().PadLeft(2,'0')+":"+tspan.Seconds.ToString().PadLeft(2,'0');
-			return retVal;
-		}
+		
 	
 
 		

@@ -4,10 +4,13 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Used in the accounting section of the program.  Each row is one transaction in the ledger, and must always have at least two splits.  All splits must always add up to zero.</summary>
-	public class Transaction{
+	[Serializable]
+	public class Transaction:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long TransactionNum;
 		///<summary>Not user editable.  Server time.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>FK to user.UserNum.</summary>
 		public long UserNum;

@@ -5,8 +5,10 @@ using System.Data;
 namespace OpenDentBusiness{
 
 	///<summary>A task is a single todo item.</summary>
-	public class Task {
+	[Serializable]
+	public class Task:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long TaskNum;
 		///<summary>FK to tasklist.TaskListNum.  If 0, then it will show in the trunk of a section.  </summary>
 		public long TaskListNum;
@@ -27,10 +29,12 @@ namespace OpenDentBusiness{
 		///<summary>Enum:TaskObjectType  0=none,1=Patient,2=Appointment.  More will be added later. If a type is selected, then the KeyNum will contain the primary key of the corresponding Patient or Appointment.  Does not really have anything to do with the ObjectType of the parent tasklist, although they tend to match.</summary>
 		public TaskObjectType ObjectType;
 		///<summary>The date and time that this task was added.  Used to sort the list by the order entered.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEntry;
 		///<summary>FK to user.UserNum.  The person who created the task or who made the most recent edit to the task.</summary>
 		public long UserNum;
 		///<summary>The date and time that this task was marked "done".</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeFinished;
 
 		///<summary></summary>

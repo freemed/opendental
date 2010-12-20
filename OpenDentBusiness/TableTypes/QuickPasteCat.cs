@@ -1,10 +1,12 @@
 using System;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Quick paste categories are used by the quick paste notes feature.</summary>
-	public class QuickPasteCat{
+	[Serializable]
+	public class QuickPasteCat:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long QuickPasteCatNum;
 		///<summary>.</summary>
 		public string Description;

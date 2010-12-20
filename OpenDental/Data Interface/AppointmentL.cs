@@ -141,7 +141,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used in GetSearchResults.  All times between start and stop get set to true in provBarSched.</summary>
-		private static void SetProvBarSched(ref bool[] provBarSched,DateTime timeStart,DateTime timeStop){
+		private static void SetProvBarSched(ref bool[] provBarSched,TimeSpan timeStart,TimeSpan timeStop){
 			int startI=GetProvBarIndex(timeStart);
 			int stopI=GetProvBarIndex(timeStop);
 			for(int i=startI;i<=stopI;i++){
@@ -149,9 +149,9 @@ namespace OpenDental{
 			}
 		}
 
-		private static int GetProvBarIndex(DateTime time){
-			return (int)(((double)time.Hour*(double)60/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)//aptTimeIncr=minutesPerIncr
-				+(double)time.Minute/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement))
+		private static int GetProvBarIndex(TimeSpan time) {
+			return (int)(((double)time.Hours*(double)60/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)//aptTimeIncr=minutesPerIncr
+				+(double)time.Minutes/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement))
 				*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr)
 				/ContrApptSheet.Lh;//rounds down
 		}

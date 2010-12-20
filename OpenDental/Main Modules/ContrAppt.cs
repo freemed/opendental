@@ -2638,8 +2638,8 @@ namespace OpenDental{
 						if(ListForType[i].SchedDate.Date!=WeekStartDate.AddDays(SheetClickedonDay).Date){
 							continue;
 						}
-						if(ListForType[i].StartTime.TimeOfDay > sheetClickedOnTime
-							|| ListForType[i].StopTime.TimeOfDay <= sheetClickedOnTime)
+						if(ListForType[i].StartTime > sheetClickedOnTime
+							|| ListForType[i].StopTime <= sheetClickedOnTime)
 						{
 							continue;
 						}
@@ -3634,7 +3634,7 @@ namespace OpenDental{
 				if(SchedListPeriod[i].SchedType!=ScheduleType.Provider){
 					continue;
 				}
-				if(SchedListPeriod[i].StartTime.TimeOfDay==TimeSpan.FromHours(0)) {//ignore notes at midnight
+				if(SchedListPeriod[i].StartTime==TimeSpan.FromHours(0)) {//ignore notes at midnight
 					continue;
 				}
         AListStart.Add(SchedListPeriod[i].StartTime);
@@ -4213,11 +4213,11 @@ namespace OpenDental{
 			TimeSpan timeOfDay=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
 			timeOfDay=TimeSpan.FromMinutes(
 				((int)Math.Round((decimal)timeOfDay.TotalMinutes/(decimal)ContrApptSheet.MinPerIncr))*ContrApptSheet.MinPerIncr);
-			sched.StartTime=DateTime.Today+timeOfDay;
+			sched.StartTime=timeOfDay;
 			sched.StopTime=sched.StartTime.Add(span);
-			if(sched.StopTime.Date!=sched.StartTime.Date) {//long span that spills over to next day
-				sched.StopTime=DateTime.Today+(new TimeSpan(23,59,0));
-			}
+			//if(sched.StopTime.Date!=sched.StartTime.Date) {//long span that spills over to next day
+			//	sched.StopTime=DateTime.Today+(new TimeSpan(23,59,0));
+			//}
 			Schedules.Insert(sched);
 			RefreshPeriod();
 		}
@@ -4264,8 +4264,8 @@ namespace OpenDental{
 				if(ListForType[i].SchedDate.Date!=WeekStartDate.AddDays(SheetClickedonDay)){
 					continue;
 				}
-				if(ListForType[i].StartTime.TimeOfDay <= SheetClickedonTime.TimeOfDay
-					&& SheetClickedonTime.TimeOfDay < ListForType[i].StopTime.TimeOfDay) {
+				if(ListForType[i].StartTime <= SheetClickedonTime.TimeOfDay
+					&& SheetClickedonTime.TimeOfDay < ListForType[i].StopTime) {
 					SchedCur=ListForType[i];
 					break;
 				}

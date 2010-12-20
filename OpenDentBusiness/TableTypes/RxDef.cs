@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Rx definitions.  Can safely delete or alter, because they get copied to the rxPat table, not referenced.</summary>
-	public class RxDef{
+	[Serializable]
+	public class RxDef:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long RxDefNum;
 		///<summary>The name of the drug.</summary>
 		public string Drug;

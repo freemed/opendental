@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 	
 	///<summary></summary>
-	public class QuickPasteNote{
+	[Serializable]
+	public class QuickPasteNote:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long QuickPasteNoteNum;
 		///<summary>FK to quickpastecat.QuickPasteCatNum.  Keeps track of which category this note is in.</summary>
 		public long QuickPasteCatNum;

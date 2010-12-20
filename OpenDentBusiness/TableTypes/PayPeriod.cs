@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Used to view employee timecards.  Timecard entries are not linked to a pay period.  Instead, payperiods are setup, and the user can only view specific pay periods.  So it feels like they are linked, but it's date based.</summary>
-	public class PayPeriod{
+	[Serializable]
+	public class PayPeriod:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long PayPeriodNum;
 		///<summary>The first day of the payperiod</summary>
 		public DateTime DateStart;
@@ -16,12 +18,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public PayPeriod Copy() {
-			PayPeriod p=new PayPeriod();
-			p.PayPeriodNum=PayPeriodNum;
-			p.DateStart=DateStart;
-			p.DateStop=DateStop;
-			p.DatePaycheck=DatePaycheck;
-			return p;
+			return (PayPeriod)this.MemberwiseClone();
 		}
 
 

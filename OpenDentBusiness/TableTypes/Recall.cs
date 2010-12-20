@@ -6,8 +6,10 @@ namespace OpenDentBusiness{
 	///<summary>Max one per patient.  A patient can only have one recall date set for each type (there is currently only one type).  The recall table stores a few dates that must be kept synchronized with other information in the database.  This is difficult.  Anytime one of the following items changes, things need to be synchronized: procedurecode.SetRecall, any procedurelog change for a patient (procs added, deleted, completed, status changed, date changed, etc), patient status changed.  There are expected to be a few bugs in the synchronization logic, so anytime a patient's recall is opened, it will also update.
 	///
 	///During synchronization, the program will frequently alter DateDueCalc, DateDue, and DatePrevious based on trigger procs.  The system will also add and delete recalls as necessary. But it will not delete a recall unless all values are default and there is no useful information.  When a user tries to delete a recall, they will only be successful if the trigger conditions do not apply.  Otherwise, they will have to disable the recall instead.</summary>
-	public class Recall{
+	[Serializable]
+	public class Recall:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long RecallNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -34,6 +36,7 @@ namespace OpenDentBusiness{
 		public DateTime DisableUntilDate;
 
 		///<summary>Not a database column.  Just used internally.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
 		public DateTime DateScheduled;
 
 		///<summary>Returns a copy of this Recall.</summary>

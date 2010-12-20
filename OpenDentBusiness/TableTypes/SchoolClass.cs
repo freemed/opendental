@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Used in dental schools.  eg. Dental 2009 or Hygiene 2007.</summary>
-	public class SchoolClass{
+	[Serializable]
+	public class SchoolClass:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long SchoolClassNum;
 		///<summary>The year this class will graduate</summary>
 		public int GradYear;

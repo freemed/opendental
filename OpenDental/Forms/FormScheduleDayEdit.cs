@@ -369,8 +369,8 @@ namespace OpenDental{
 					row.Cells.Add(Employees.GetEmp(SchedList[i].EmployeeNum).FName);
 				}
 				//times
-				if(SchedList[i].StartTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay 
-					&& SchedList[i].StopTime.TimeOfDay==PIn.DateT("12 AM").TimeOfDay)
+				if(SchedList[i].StartTime==TimeSpan.Zero 
+					&& SchedList[i].StopTime==TimeSpan.Zero)
 					//SchedList[i].SchedType==ScheduleType.Practice){
 				{
 					row.Cells.Add("");
@@ -452,8 +452,8 @@ namespace OpenDental{
 			Schedule SchedCur=new Schedule();
 			SchedCur.SchedDate=SchedCurDate;
 			SchedCur.Status=SchedStatus.Open;
-			SchedCur.StartTime=new DateTime(1,1,1,8,0,0);//8am
-			SchedCur.StopTime=new DateTime(1,1,1,17,0,0);//5pm
+			SchedCur.StartTime=new TimeSpan(8,0,0);//8am
+			SchedCur.StopTime=new TimeSpan(17,0,0);//5pm
 			//schedtype, provNum, and empnum will be set down below
 			FormScheduleEdit FormS=new FormScheduleEdit();
 			FormS.SchedCur=SchedCur;

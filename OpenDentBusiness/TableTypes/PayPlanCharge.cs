@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>One of the dated charges attached to a payment plan.  This has nothing to do with payments, but rather just causes the amount due to increase on the date of the charge.  The amount of the charge is the sum of the principal and the interest.</summary>
-	public class PayPlanCharge{
+	[Serializable]
+	public class PayPlanCharge:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long PayPlanChargeNum;
 		///<summary>FK to payplan.PayPlanNum.</summary>
 		public long PayPlanNum;

@@ -4,10 +4,12 @@ using System.Drawing;
 using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
-	
+
 	///<summary>Stores the default note and time increments for one procedure code for one provider.  That way, an unlimited number of providers can each have different notes and times.  These notes and times override the defaults which are part of the procedurecode table.  So, for single provider offices, there will be no change to the current interface.</summary>
-	public class ProcCodeNote{
+	[Serializable]
+	public class ProcCodeNote:TableBase {
 		///<summary>Primary Key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ProcCodeNoteNum;
 		///<summary>FK to procedurecode.CodeNum.</summary>
 		public long CodeNum;

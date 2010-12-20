@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>All info about a referral is stored with that referral even if a patient.  That way, it's available for easy queries.</summary>
-	public class Referral{
+	[Serializable]
+	public class Referral:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long ReferralNum;
 		///<summary>Last name.</summary>
 		public string LName;

@@ -4,8 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 
 	///<summary>Every user group has certain permissions.  This defines a permission for a group.  The absense of permission would cause that row to be deleted from this table.</summary>
-	public class GroupPermission{
+	[Serializable]
+	public class GroupPermission:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long GroupPermNum;
 		///<summary>Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission.</summary>
 		public DateTime NewerDate;
@@ -18,13 +20,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public GroupPermission Copy(){
-			GroupPermission g=new GroupPermission();
-			g.GroupPermNum=GroupPermNum;
-			g.NewerDate=NewerDate;
-			g.NewerDays=NewerDays;
-			g.UserGroupNum=UserGroupNum;
-			g.PermType=PermType;
-			return g;
+			return (GroupPermission)this.MemberwiseClone();
 		}
 
 	}

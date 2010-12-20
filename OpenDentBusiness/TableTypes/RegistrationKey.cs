@@ -4,8 +4,10 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	///<summary>Keeps track of which product keys have been assigned to which customers. This datatype is only used if the program is being run from a distributor installation. A single customer is allowed to have more than one key, to accommodate for various circumstances, including having multiple physical business locations.</summary>
-	public class RegistrationKey {
+	[Serializable]
+	public class RegistrationKey:TableBase {
 		///<summary>Primary Key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long RegistrationKeyNum;
 		///<summary>FK to patient.PatNum. The customer to which this registration key applies.</summary>
 		public long PatNum;

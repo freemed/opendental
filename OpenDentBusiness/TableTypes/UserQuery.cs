@@ -3,8 +3,10 @@ using System;
 namespace OpenDentBusiness{
 
 	///<summary>A list of query favorites that users can run.</summary>
-	public class UserQuery{
+	[Serializable]
+	public class UserQuery:TableBase {
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long QueryNum;
 		///<summary>Description.</summary>
 		public string Description;

@@ -303,6 +303,7 @@ namespace Crud {
 					throw new ApplicationException("Type not yet supported: "+field.FieldType.Name);
 				case "Bitmap":
 					dataTypeExpected="mediumtext";
+					dataTypeExpected="text";//only for very small images
 					break;
 				case "Boolean":
 					dataTypeExpected="tinyint";
@@ -330,6 +331,7 @@ namespace Crud {
 					dataTypeExpected="int";
 					dataTypeExpected2="smallint";//ok as long as the coding is careful.  Less than ideal.
 					//tinyint not allowed.  Possibly change C# type to byte if values can be between 0 and 255 with no negatives.
+					//We might some day use SByte for values that can be -127 to 127.  Example, perio depths, percentages that allow -1, etc.  For now, those are smallint.
 					break;
 				case "Single":
 					dataTypeExpected="float";//not 1:1, but we never use the full range anyway.
