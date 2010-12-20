@@ -2348,7 +2348,7 @@ namespace OpenDental{
 			Operatory opCur=Operatories.GetOperatory(aptCur.Op);
 			Operatory opOld=Operatories.GetOperatory(aptOld.Op);
 			if(opOld==null || opCur.SetProspective!=opOld.SetProspective) {
-				if(opCur.SetProspective==true && PatCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
+				if(opCur.SetProspective && PatCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
 					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
 						mouseIsDown=false;
 						boolAptMoved=false;
@@ -2359,7 +2359,7 @@ namespace OpenDental{
 					PatCur.PatStatus=PatientStatus.Prospective;
 					Patients.Update(PatCur,patOld);
 				}
-				else if(opCur.SetProspective==false && PatCur.PatStatus==PatientStatus.Prospective) {
+				else if(!opCur.SetProspective && PatCur.PatStatus==PatientStatus.Prospective) {
 					//Do we need to warn about changing FROM prospective? Assume so for now.
 					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
 						mouseIsDown=false;
@@ -3046,7 +3046,7 @@ namespace OpenDental{
 			Operatory opCur=Operatories.GetOperatory(apt.Op);
 			Operatory opOld=Operatories.GetOperatory(aptOld.Op);
 			if(opOld==null || opCur.SetProspective!=opOld.SetProspective) {
-				if(opCur.SetProspective==true && PatCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
+				if(opCur.SetProspective && PatCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
 					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
 						mouseIsDown = false;
 						boolAptMoved=false;
@@ -3057,7 +3057,7 @@ namespace OpenDental{
 					PatCur.PatStatus=PatientStatus.Prospective;
 					Patients.Update(PatCur,patOld);
 				}
-				else if(opCur.SetProspective==false && PatCur.PatStatus==PatientStatus.Prospective) {
+				else if(!opCur.SetProspective && PatCur.PatStatus==PatientStatus.Prospective) {
 					//Do we need to warn about changing FROM prospective? Assume so for now.
 					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
 						mouseIsDown = false;
@@ -3384,7 +3384,7 @@ namespace OpenDental{
 					apt.Op=SheetClickedonOp;
 					Operatory curOp=Operatories.GetOperatory(apt.Op);
 					//New patient. Set to prospective if operatory is set to set prospective.
-					if(curOp.SetProspective==true) {
+					if(curOp.SetProspective) {
 						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
 							return;
 						}
