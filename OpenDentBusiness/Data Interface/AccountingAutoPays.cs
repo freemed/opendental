@@ -44,27 +44,7 @@ namespace OpenDentBusiness{
 				pay.AccountingAutoPayNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pay);
 				return pay.AccountingAutoPayNum;
 			}
-			if(PrefC.RandomKeys) {
-				pay.AccountingAutoPayNum=ReplicationServers.GetKey("accountingautopay","AccountingAutoPayNum");
-			}
-			string command="INSERT INTO accountingautopay (";
-			if(PrefC.RandomKeys) {
-				command+="AccountingAutoPayNum,";
-			}
-			command+="PayType,PickList) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(pay.AccountingAutoPayNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (pay.PayType)+"', "
-				+"'"+POut.String(pay.PickList)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				pay.AccountingAutoPayNum=Db.NonQ(command,true);
-			}
-			return pay.AccountingAutoPayNum;
+			return Crud.AccountingAutoPayCrud.Insert(pay);
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into full descriptions separated by carriage returns.</summary>

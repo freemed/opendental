@@ -73,7 +73,8 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM computerpref WHERE ComputerName='"+POut.String(computerName)+"'";
 			try {
 				return Db.GetTable(command);
-			} catch {
+			} 
+			catch {
 				return null;
 			}
 		}
@@ -84,64 +85,15 @@ namespace OpenDentBusiness {
 				computerPref.ComputerPrefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),computerPref);
 				return computerPref.ComputerPrefNum;
 			}
-			if(PrefC.RandomKeys) {
-				computerPref.ComputerPrefNum=ReplicationServers.GetKey("computerpref","ComputerPrefNum");
-			}
-			string command="INSERT INTO computerpref (";
-			if(PrefC.RandomKeys){
-				command+="ComputerPrefNum,";
-			}			
-			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,"
-				+ "GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY,DirectXFormat) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(computerPref.ComputerPrefNum)+"',";
-			}
-			command+="'"+POut.String(computerPref.ComputerName)+"',"
-				+"'"+POut.Bool(computerPref.GraphicsUseHardware)+"',"
-				+"'"+POut.Int((int)computerPref.GraphicsSimple)+"',"
-				+"'"+POut.String(computerPref.SensorType)+"',"
-				+"'"+POut.Bool(computerPref.SensorBinned)+"',"
-				+"'"+POut.Long(computerPref.SensorPort)+"',"
-				+"'"+POut.Long(computerPref.SensorExposure)+"',"
-				+"'"+POut.Bool(computerPref.GraphicsDoubleBuffering)+"',"
-				+"'"+POut.Long(computerPref.PreferredPixelFormatNum)+"',"
-				+"'"+POut.String(computerPref.AtoZpath)+"',"
-				+"'"+POut.Bool(computerPref.TaskKeepListHidden)+"',"
-				+"'"+POut.Long(computerPref.TaskDock)+"',"
-				+"'"+POut.Long(computerPref.TaskX)+"',"
-				+"'"+POut.Long(computerPref.TaskY)+"',"
-				+"'"+POut.String(computerPref.DirectXFormat)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				computerPref.ComputerPrefNum=Db.NonQ(command,true);
-			}
-			return computerPref.ComputerPrefNum;
+			return Crud.ComputerPrefCrud.Insert(computerPref);
 		}
 
-		public static long Update(ComputerPref computerPref) {
+		public static void Update(ComputerPref computerPref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod(),computerPref);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerPref);
+				return;
 			}
-			string command="UPDATE computerpref SET "
-				+"ComputerName='"+POut.String(computerPref.ComputerName)+"',"
-				+"GraphicsUseHardware='"+POut.Bool(computerPref.GraphicsUseHardware)+"',"
-				+"GraphicsSimple='"+POut.Int((int)computerPref.GraphicsSimple)+"',"
-				+"SensorType='"+POut.String(computerPref.SensorType)+"',"
-				+"SensorBinned='"+POut.Bool(computerPref.SensorBinned)+"',"
-				+"SensorPort='"+POut.Long(computerPref.SensorPort)+"',"
-				+"SensorExposure='"+POut.Long(computerPref.SensorExposure)+"',"
-				+"GraphicsDoubleBuffering='"+POut.Bool(computerPref.GraphicsDoubleBuffering)+"',"
-				+"PreferredPixelFormatNum='"+POut.Long(computerPref.PreferredPixelFormatNum)+"',"
-				+"AtoZpath='"+POut.String(computerPref.AtoZpath)+"',"
-				+"TaskKeepListHidden='"+POut.Bool(computerPref.TaskKeepListHidden)+"',"
-				+"TaskDock='"+POut.Long(computerPref.TaskDock)+"',"
-				+"TaskX='"+POut.Long(computerPref.TaskX)+"',"
-				+"TaskY='"+POut.Long(computerPref.TaskY)+"',"
-				+"DirectXFormat='"+POut.String(computerPref.DirectXFormat)+"' "
-				+"WHERE ComputerPrefNum='"+POut.Long(computerPref.ComputerPrefNum)+"'";
-			return Db.NonQ(command);
+			Crud.ComputerPrefCrud.Update(computerPref);
 		}
 
 		//public static int Update(ComputerPref computerPref) {
