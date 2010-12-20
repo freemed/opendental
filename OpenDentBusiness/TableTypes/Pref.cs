@@ -5,9 +5,14 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	///<summary>Stores small bits of data for a wide variety of purposes.  Any data that's too small to warrant its own table will usually end up here.</summary>
-	public class Pref {
+	[Serializable]
+	[CrudTable(TableName="preference")]
+	public class Pref:TableBase {
 		///<summary>Primary key.</summary>
-		public string PrefName;//
+		[CrudColumn(IsPriKey=true)]
+		public string PrefNum;
+		///<summary>The text 'key' in the key/value pairing.</summary>
+		public string PrefName;
 		///<summary>The stored value.</summary>
 		public string ValueString;
 		///<summary>Documentation on usage and values of each pref.</summary>
@@ -147,8 +152,11 @@ namespace OpenDentBusiness {
 		MainWindowTitle,
 		MedicalEclaimsEnabled,
 		MobileSyncDateTimeLastRun,
-		MobileSyncLastFileNumber,
-		MobileSyncPath,
+		MobileSyncIntervalMinutes,
+		MobileSyncServerURL,
+		MobileExcludeApptsBeforeDate,
+		//MobileSyncLastFileNumber,
+		//MobileSyncPath,
 		OpenDentalVendor,
 		OracleInsertId,
 		PasswordsMustBeStrong,
@@ -287,6 +295,7 @@ namespace OpenDentBusiness {
 		UseBillingAddressOnClaims,
 		///<summary>Enum:ToothNumberingNomenclature 0=Universal(American), 1=FDI, 2=Haderup, 3=Palmer</summary>
 		UseInternationalToothNumbers,
+		///<summary>Only used for sheet synch.  See Mobile... for URL for mobile synch.</summary>
 		WebHostSynchServerURL,
 		WebServiceServerName,
 		WordProcessorPath,

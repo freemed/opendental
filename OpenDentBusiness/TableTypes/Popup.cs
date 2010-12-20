@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	[Serializable()]
+	[Serializable]
 	public class Popup:TableBase {
 		/// <summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
