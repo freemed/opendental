@@ -3187,8 +3187,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileExcludeApptsBeforeDate','2009-12-20')";
 				Db.NonQ(command);
-				
-				
+				command="DELETE FROM preference WHERE PrefName = 'MobileSyncLastFileNumber'";
+				Db.NonQ(command);
+				command="DELETE FROM preference WHERE PrefName = 'MobileSyncPath'";
+				Db.NonQ(command);
+			
+
 
 
 

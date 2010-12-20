@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 	public class Pref:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
-		public string PrefNum;
+		public long PrefNum;
 		///<summary>The text 'key' in the key/value pairing.</summary>
 		public string PrefName;
 		///<summary>The stored value.</summary>

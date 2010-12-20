@@ -23,13 +23,15 @@ namespace OpenDentBusiness{
 			PrefC.Dict=new Dictionary<string,Pref>();
 			Pref pref;
 			//PrefName enumpn;
+			//Can't use Crud.PrefCrud.TableToList(table) because it will fail the first time someone runs 7.6 before conversion.
 			for(int i=0;i<table.Rows.Count;i++) {
 				pref=new Pref();
-				pref.PrefName=PIn.String(table.Rows[i][0].ToString());
-				//enumpn=
-				pref.ValueString=PIn.String(table.Rows[i][1].ToString());
+				if(table.Columns.Contains("PrefNum")) {
+					pref.PrefNum=PIn.Long(table.Rows[i]["PrefNum"].ToString());
+				}
+				pref.PrefName=PIn.String(table.Rows[i]["PrefName"].ToString());
+				pref.ValueString=PIn.String(table.Rows[i]["ValueString"].ToString());
 				//no need to load up the comments.  Especially since this will fail when user first runs version 5.8.
-					//pref.Comments=PIn.PString(table.Rows[i][2].ToString());
 				PrefC.Dict.Add(pref.PrefName,pref);
 			}
 		}
@@ -40,9 +42,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pref);
 				return;
 			}
+			//Don't use CRUD here because we want to update based on PrefName instead of PrefNum.  Otherwise, it might fail the first time someone runs 7.6.
 			string command= "UPDATE preference SET "
 				+"ValueString = '"+POut.String(pref.ValueString)+"' "
-				//+",Comments = '"  +POut.PString(pref.Comments)+"' "
 				+" WHERE PrefName = '"+POut.String(pref.PrefName)+"'";
 			Db.NonQ(command);
 		}

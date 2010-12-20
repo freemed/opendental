@@ -225,6 +225,7 @@
     <Compile Include="Crud\PhoneNumberCrud.cs" />
     <Compile Include="Crud\PlannedApptCrud.cs" />
     <Compile Include="Crud\PopupCrud.cs" />
+    <Compile Include="Crud\PrefCrud.cs" />
     <Compile Include="Crud\PrinterCrud.cs" />
     <Compile Include="Crud\ProcApptColorCrud.cs" />
     <Compile Include="Crud\ProcButtonCrud.cs" />
