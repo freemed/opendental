@@ -5,7 +5,10 @@ namespace OpenDentBusiness{
 
 	///<summary>Will usually only contain translations for a single foreign language, although more are allowed.  The primary key is a combination of the ClassType and the English phrase and the culture.</summary>
 	[Serializable]
-	public class LanguageForeign{
+	public class LanguageForeign:TableBase {
+		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
+		public long LanguageForeignNum;
 		///<summary>A string representing the class where the translation is used.</summary>
 		public string ClassType;
 		///<summary>The English version of the phrase.  Case sensitive.</summary>
@@ -19,13 +22,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public LanguageForeign Copy(){
-			LanguageForeign l=new LanguageForeign();
-			l.ClassType=ClassType;
-			l.English=English;
-			l.Culture=Culture;
-			l.Translation=Translation;
-			l.Comments=Comments;
-			return l;
+			return (LanguageForeign)this.MemberwiseClone();
 		}
 
 		

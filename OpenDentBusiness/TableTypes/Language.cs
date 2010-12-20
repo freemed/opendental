@@ -5,7 +5,10 @@ namespace OpenDentBusiness{
 
 	///<summary>This is a list of phrases that need to be translated.  The primary key is a combination of the ClassType and the English phrase.  This table is currently filled dynmically at run time, but the plan is to fill it using a tool that parses the code.</summary>
 	[Serializable]
-	public class Language{
+	public class Language:TableBase {
+		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
+		public long LanguageNum;
 		///<summary>No longer used.</summary>
 		public string EnglishComments;
 		///<summary>A string representing the class where the translation is used. Maximum length is 25 characters.</summary>

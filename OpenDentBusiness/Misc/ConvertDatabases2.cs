@@ -3191,7 +3191,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="DELETE FROM preference WHERE PrefName = 'MobileSyncPath'";
 				Db.NonQ(command);
-			
+				command="ALTER TABLE county DROP PRIMARY KEY";
+				Db.NonQ(command);
+				command="ALTER TABLE county ADD COLUMN CountyNum bigint NOT NULL auto_increment FIRST, ADD PRIMARY KEY (CountyNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE language DROP PRIMARY KEY";
+				try {
+					Db.NonQ(command);
+				}
+				catch { }//because I don't think there is any primary key for that table.
+				command="ALTER TABLE language ADD COLUMN LanguageNum bigint NOT NULL auto_increment FIRST, ADD PRIMARY KEY (LanguageNum)";
+				Db.NonQ(command);
+				command="ALTER TABLE languageforeign DROP PRIMARY KEY";
+				try {
+					Db.NonQ(command);
+				}
+				catch { }
+				command="ALTER TABLE languageforeign ADD COLUMN LanguageForeignNum bigint NOT NULL auto_increment FIRST, ADD PRIMARY KEY (LanguageForeignNum)";
+				Db.NonQ(command);
 
 
 

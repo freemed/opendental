@@ -88,6 +88,9 @@ namespace Crud {
 			if(typeClassName=="RegistrationKey") {
 				return "RegistrationKeys";
 			}
+			if(typeClassName=="Language") {
+				return "Lans";
+			}
 			if(Sname.EndsWith("s")){
 				Sname=Sname+"es";
 			}

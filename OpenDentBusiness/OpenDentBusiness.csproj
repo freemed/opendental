@@ -163,6 +163,7 @@
     <Compile Include="Crud\ComputerCrud.cs" />
     <Compile Include="Crud\ComputerPrefCrud.cs" />
     <Compile Include="Crud\ContactCrud.cs" />
+    <Compile Include="Crud\CountyCrud.cs" />
     <Compile Include="Crud\CovCatCrud.cs" />
     <Compile Include="Crud\CovSpanCrud.cs" />
     <Compile Include="Crud\DefCrud.cs" />
@@ -196,6 +197,8 @@
     <Compile Include="Crud\LabCaseCrud.cs" />
     <Compile Include="Crud\LaboratoryCrud.cs" />
     <Compile Include="Crud\LabTurnaroundCrud.cs" />
+    <Compile Include="Crud\LanguageCrud.cs" />
+    <Compile Include="Crud\LanguageForeignCrud.cs" />
     <Compile Include="Crud\LetterCrud.cs" />
     <Compile Include="Crud\LetterMergeCrud.cs" />
     <Compile Include="Crud\LetterMergeFieldCrud.cs" />

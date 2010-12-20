@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -16,15 +17,11 @@ namespace OpenDentBusiness{
 				"SELECT * from county "
 				+"WHERE CountyName LIKE '"+name+"%' "
 				+"ORDER BY CountyName";
-			DataTable table=Db.GetTable(command);
-			County[] List=new County[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new County();
-				List[i].CountyName    =PIn.String(table.Rows[i][0].ToString());
-				List[i].CountyCode    =PIn.String(table.Rows[i][1].ToString());
-				List[i].OldCountyName =PIn.String(table.Rows[i][0].ToString());
+			List<County> list=Crud.CountyCrud.SelectMany(command);
+			for(int i=0;i<list.Count;i++) {
+				list[i].OldCountyName=list[i].CountyName;
 			}
-			return List;
+			return list.ToArray();
 		}
 
 		///<summary></summary>
@@ -44,41 +41,35 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			string[] ListNames=new string[table.Rows.Count];
 			for(int i=0;i<ListNames.Length;i++){
-				ListNames[i]=PIn.String(table.Rows[i][0].ToString());
+				ListNames[i]=PIn.String(table.Rows[i]["CountyName"].ToString());
 			}
 			return ListNames;
 		}
 
 		///<summary>Need to make sure Countyname not already in db.</summary>
-		public static void Insert(County Cur){
+		public static long Insert(County county){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),county);
 			}
-			string command= "INSERT INTO county (CountyName,CountyCode) "
-				+"VALUES ("
-				+"'"+POut.String(Cur.CountyName)+"', "
-				+"'"+POut.String(Cur.CountyCode)+"')";
-			//MessageBox.Show(string command);
-			Db.NonQ(command);
-			//Cur.ZipCodeNum=InsertID;
+			return Crud.CountyCrud.Insert(county);
 		}
 
 		///<summary>Updates the Countyname and code in the County table, and also updates all patients that were using the oldCounty name.</summary>
-		public static void Update(County Cur){
+		public static void Update(County county){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),county);
 				return;
 			}
+			//Can't use CRUD here because we're updating by the OldCountyName
 			string command = "UPDATE county SET "
-				+"CountyName ='"  +POut.String(Cur.CountyName)+"'"
-				+",CountyCode ='" +POut.String(Cur.CountyCode)+"'"
-				+" WHERE CountyName = '"+POut.String(Cur.OldCountyName)+"'";
+				+"CountyName ='"  +POut.String(county.CountyName)+"'"
+				+",CountyCode ='" +POut.String(county.CountyCode)+"'"
+				+" WHERE CountyName = '"+POut.String(county.OldCountyName)+"'";
 			Db.NonQ(command);
 			//then, update all patients using that County
 			command = "UPDATE patient SET "
-				+"County ='"  +POut.String(Cur.CountyName)+"'"
-				+" WHERE County = '"+POut.String(Cur.OldCountyName)+"'";
+				+"County ='"  +POut.String(county.CountyName)+"'"
+				+" WHERE County = '"+POut.String(county.OldCountyName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -98,11 +89,12 @@ namespace OpenDentBusiness{
 				return Meth.GetString(MethodBase.GetCurrentMethod(),countyName);
 			}
 			string command=
-				"SELECT LName,FName from patient "
-				+"WHERE County = '"+POut.String(countyName)+"' ";
+				"SELECT LName,FName FROM patient "
+				+"WHERE County = '"+POut.String(countyName)+"'";
 			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0)
+			if(table.Rows.Count==0) {
 				return "";
+			}
 			string retVal="";
 			for(int i=0;i<table.Rows.Count;i++){
 				retVal+=PIn.String(table.Rows[i][0].ToString())+", "
@@ -114,19 +106,21 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Use before InsertCur to determine if this County name already exists. Also used when closing patient edit window to validate that the Countyname exists.</summary>
+		///<summary>Use before Insert to determine if this County name already exists. Also used when closing patient edit window to validate that the Countyname exists.</summary>
 		public static bool DoesExist(string countyName){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),countyName);
 			}
 			string command =
-				"SELECT * from county "
+				"SELECT * FROM county "
 				+"WHERE CountyName = '"+POut.String(countyName)+"' ";
 			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0)
+			if(table.Rows.Count==0) {
 				return false;
-			else
+			}
+			else {
 				return true;
+			}
 		}
 
 	}
