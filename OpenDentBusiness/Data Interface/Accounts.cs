@@ -83,6 +83,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through listLong to find a description for the specified account.  0 returns an empty string.</summary>
 		public static string GetDescript(long accountNum){
+			//No need to check RemotingRole; no call to db.
 			if(accountNum==0) {
 				return "";
 			}
@@ -96,6 +97,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through listLong to find an account.  Will return null if accountNum is 0.</summary>
 		public static Account GetAccount(long accountNum) {
+			//No need to check RemotingRole; no call to db.
 			if(accountNum==0){
 				return null;
 			}
