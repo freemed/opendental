@@ -4,13 +4,17 @@ using System.Linq;
 using System.Text;
 
 namespace OpenDentBusiness {
-
+	///<summary>Hold parameter info in a database independent manner.</summary>
 	public class OdSqlParameter {
 
 		///<summary>parameterName should not include the leading character such as @ or :.</summary>
-		public OdSqlParameter(string parameterName) {
+		public OdSqlParameter(string parameterName,OdDbType dbType) {
 
 		}
+
+
+
+
 	}
 
 	public enum OdDbType{
@@ -38,7 +42,7 @@ namespace OpenDentBusiness {
 		Text,
 		///<summary>C#:TimeSpan, MySql:time, Oracle:date, Range:Valid time of day.</summary>
 		TimeOfDay,
-//todo: Jordan: assign CrudSpecialColType to all TimeSpans that require negatives. Jason: use list to edit schema file.
+//todo: Make a list of these based on CrudSpecialColType.  Used list to edit schema file to change type from date to varchar2.
 		///<summary>C#:TimeSpan, MySql:time, Oracle:varchar2, Range:Pos or neg spans of many days.  Oracle has no such type.</summary>
 		TimeSpan,
 		///<summary>C#:string, MySql:varchar(255), Oracle:varchar2(255), MaxSize:255</summary>
