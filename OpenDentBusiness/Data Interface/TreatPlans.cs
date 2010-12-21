@@ -40,16 +40,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),tp);
 				return;
 			}
-			string command= "UPDATE treatplan SET "
-				+"PatNum = '"     +POut.Long   (tp.PatNum)+"'"
-				+",DateTP = "     +POut.Date  (tp.DateTP)
-				+",Heading = '"   +POut.String(tp.Heading)+"'"
-				+",Note = '"      +POut.String(tp.Note)+"'"
-				+",Signature = '" +POut.String(tp.Signature)+"'"
-				+",SigIsTopaz = '"+POut.Bool  (tp.SigIsTopaz)+"'"
-				+",ResponsParty='"+POut.Long   (tp.ResponsParty)+"'"
-				+" WHERE TreatPlanNum = '"+POut.Long(tp.TreatPlanNum)+"'";
- 			Db.NonQ(command);
+			Crud.TreatPlanCrud.Update(tp);
 		}
 
 		///<summary></summary>
@@ -58,32 +49,7 @@ namespace OpenDentBusiness{
 				tp.TreatPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),tp);
 				return tp.TreatPlanNum;
 			}
-			if(PrefC.RandomKeys){
-				tp.TreatPlanNum=ReplicationServers.GetKey("treatplan","TreatPlanNum");
-			}
-			string command= "INSERT INTO treatplan (";
-			if(PrefC.RandomKeys){
-				command+="TreatPlanNum,";
-			}
-			command+="PatNum,DateTP,Heading,Note,Signature,SigIsTopaz,ResponsParty) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(tp.TreatPlanNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (tp.PatNum)+"', "
-				+POut.Date  (tp.DateTP)+", "
-				+"'"+POut.String(tp.Heading)+"', "
-				+"'"+POut.String(tp.Note)+"', "
-				+"'"+POut.String(tp.Signature)+"', "
-				+"'"+POut.Bool  (tp.SigIsTopaz)+"', "
-				+"'"+POut.Long   (tp.ResponsParty)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				tp.TreatPlanNum=Db.NonQ(command,true);
-			}
-			return tp.TreatPlanNum;
+			return Crud.TreatPlanCrud.Insert(tp);
 		}
 
 		///<summary>Dependencies checked first and throws an exception if any found. So surround by try catch</summary>

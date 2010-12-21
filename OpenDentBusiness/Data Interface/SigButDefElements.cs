@@ -64,27 +64,7 @@ namespace OpenDentBusiness{
 				element.ElementNum=Meth.GetLong(MethodBase.GetCurrentMethod(),element);
 				return element.ElementNum;
 			}
-			if(PrefC.RandomKeys) {
-				element.ElementNum=ReplicationServers.GetKey("sigbutdefelement","ElementNum");
-			}
-			string command="INSERT INTO sigbutdefelement (";
-			if(PrefC.RandomKeys) {
-				command+="ElementNum,";
-			}
-			command+="SigButDefNum,SigElementDefNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(element.ElementNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (element.SigButDefNum)+"', "
-				+"'"+POut.Long   (element.SigElementDefNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				element.ElementNum=Db.NonQ(command,true);
-			}
-			return element.ElementNum;
+			return Crud.SigButDefElementCrud.Insert(element);
 		}
 
 		///<summary></summary>

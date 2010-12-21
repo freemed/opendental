@@ -73,29 +73,7 @@ namespace OpenDentBusiness{
 				Cur.ZipCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ZipCodeNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.ZipCodeNum=ReplicationServers.GetKey("zipcode","ZipCodeNum");
-			}
-			string command="INSERT INTO zipcode (";
-			if(PrefC.RandomKeys){
-				 command+="ZipCodeNum,";
-			}
-			command+="zipcodedigits,city,state,isfrequent) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.ZipCodeNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(Cur.ZipCodeDigits)+"', "
-				+"'"+POut.String(Cur.City)+"', "
-				+"'"+POut.String(Cur.State)+"', "
-				+"'"+POut.Bool  (Cur.IsFrequent)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.ZipCodeNum=Db.NonQ(command,true);
-			}
-			return Cur.ZipCodeNum;
+			return Crud.ZipCodeCrud.Insert(Cur);
 		}
 
 		///<summary></summary>
@@ -104,13 +82,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE zipcode SET "
-				+"zipcodedigits ='"+POut.String(Cur.ZipCodeDigits)+"'"
-				+",city ='"        +POut.String(Cur.City)+"'"
-				+",state ='"       +POut.String(Cur.State)+"'"
-				+",isfrequent ='"  +POut.Bool  (Cur.IsFrequent)+"'"
-				+" WHERE zipcodenum = '"+POut.Long(Cur.ZipCodeNum)+"'";
-			Db.NonQ(command);
+			Crud.ZipCodeCrud.Update(Cur);
 		}
 
 		///<summary></summary>

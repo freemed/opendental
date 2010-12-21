@@ -49,10 +49,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),group);
 				return;
 			}
-			string command= "UPDATE usergroup SET " 
-				+"Description = '"  +POut.String(group.Description)+"'"
-				+" WHERE UserGroupNum = '"+POut.Long(group.UserGroupNum)+"'";
- 			Db.NonQ(command);
+			Crud.UserGroupCrud.Update(group);
 		}
 
 		///<summary></summary>
@@ -61,26 +58,7 @@ namespace OpenDentBusiness{
 				group.UserGroupNum=Meth.GetLong(MethodBase.GetCurrentMethod(),group);
 				return group.UserGroupNum;
 			}
-			if(PrefC.RandomKeys) {
-				group.UserGroupNum=ReplicationServers.GetKey("usergroup","UserGroupNum");
-			}
-			string command="INSERT INTO usergroup (";
-			if(PrefC.RandomKeys) {
-				command+="UserGroupNum,";
-			}
-			command+="Description) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(group.UserGroupNum)+", ";
-			}
-			command+=
-				"'"+POut.String(group.Description)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				group.UserGroupNum=Db.NonQ(command,true);
-			}
-			return group.UserGroupNum;
+			return Crud.UserGroupCrud.Insert(group);
 		}
 
 		///<summary>Checks for dependencies first</summary>

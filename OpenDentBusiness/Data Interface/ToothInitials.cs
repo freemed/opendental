@@ -44,28 +44,7 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				init.ToothInitialNum=ReplicationServers.GetKey("toothinitial","ToothInitialNum");
 			}
-			string command="INSERT INTO toothinitial (";
-			if(PrefC.RandomKeys) {
-				command+="ToothInitialNum,";
-			}
-			command+="PatNum,ToothNum,InitialType,Movement,DrawingSegment,ColorDraw) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(init.ToothInitialNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (init.PatNum)+"', "
-				+"'"+POut.String(init.ToothNum)+"', "
-				+"'"+POut.Long   ((int)init.InitialType)+"', "
-				+"'"+POut.Float (init.Movement)+"', "
-				+"'"+POut.String(init.DrawingSegment)+"', "
-				+"'"+POut.Long   (init.ColorDraw.ToArgb())+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				init.ToothInitialNum=Db.NonQ(command,true);
-			}
-			return init.ToothInitialNum;
+			return Crud.ToothInitialCrud.Insert(init);
 		}
 
 		///<summary></summary>
@@ -74,15 +53,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),init);
 				return;
 			}
-			string command= "UPDATE toothinitial SET "
-				+"PatNum = '"        +POut.Long   (init.PatNum)+"', "
-				+"ToothNum= '"       +POut.String(init.ToothNum)+"', "
-				+"InitialType = '"   +POut.Long   ((int)init.InitialType)+"', "
-				+"Movement = '"      +POut.Float (init.Movement)+"', "
-				+"DrawingSegment = '"+POut.String(init.DrawingSegment)+"', "
-				+"ColorDraw = '"     +POut.Long   (init.ColorDraw.ToArgb())+"' "
-				+"WHERE ToothInitialNum = '"+POut.Long(init.ToothInitialNum)+"'";
-			Db.NonQ(command);
+			Crud.ToothInitialCrud.Update(init);
 		}
 
 		///<summary></summary>

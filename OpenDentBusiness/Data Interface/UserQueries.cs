@@ -58,28 +58,7 @@ namespace OpenDentBusiness{
 				Cur.QueryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.QueryNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.QueryNum=ReplicationServers.GetKey("userquery","QueryNum");
-			}
-			string command="INSERT INTO userquery (";
-			if(PrefC.RandomKeys) {
-				command+="QueryNum,";
-			}
-			command+="description,filename,querytext) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.QueryNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(Cur.Description)+"', "
-				+"'"+POut.String(Cur.FileName)+"', "
-				+"'"+POut.String(Cur.QueryText)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				Cur.QueryNum=Db.NonQ(command,true);
-			}
-			return Cur.QueryNum;
+			return Crud.UserQueryCrud.Insert(Cur);
 		}
 		
 		///<summary></summary>
@@ -98,12 +77,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE userquery SET "
-				+ "description = '" +POut.String(Cur.Description)+"'"
-				+ ",filename = '"    +POut.String(Cur.FileName)+"'"
-				+",querytext = '"   +POut.String(Cur.QueryText)+"'"
-				+" WHERE querynum = '"+POut.Long(Cur.QueryNum)+"'";
-			Db.NonQ(command);
+			Crud.UserQueryCrud.Update(Cur);
 		}
 	}
 

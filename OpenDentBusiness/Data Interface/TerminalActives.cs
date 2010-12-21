@@ -50,12 +50,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),te);
 				return;
 			}
-			string command="UPDATE terminalactive SET " 
-				+"ComputerName = '"   +POut.String(te.ComputerName)+"'"
-				+",TerminalStatus = '"+POut.Long   ((int)te.TerminalStatus)+"'"
-				+",PatNum = '"        +POut.Long   (te.PatNum)+"'"
-				+" WHERE TerminalActiveNum  ='"+POut.Long   (te.TerminalActiveNum)+"'";
-			Db.NonQ(command);
+			Crud.TerminalActiveCrud.Update(te);
 		}
 
 		///<summary></summary>
@@ -64,28 +59,7 @@ namespace OpenDentBusiness {
 				te.TerminalActiveNum=Meth.GetLong(MethodBase.GetCurrentMethod(),te);
 				return te.TerminalActiveNum;
 			}
-			if(PrefC.RandomKeys) {
-				te.TerminalActiveNum=ReplicationServers.GetKey("terminalactive","TerminalActiveNum");
-			}
-			string command="INSERT INTO terminalactive (";
-			if(PrefC.RandomKeys) {
-				command+="TerminalActiveNum,";
-			}
-			command+="ComputerName,TerminalStatus,PatNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(te.TerminalActiveNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(te.ComputerName)+"', "
-				+"'"+POut.Long   ((int)te.TerminalStatus)+"', "
-				+"'"+POut.Long   (te.PatNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				te.TerminalActiveNum=Db.NonQ(command,true);
-			}
-			return te.TerminalActiveNum;
+			return Crud.TerminalActiveCrud.Insert(te);
 		}
 
 		///<summary></summary>

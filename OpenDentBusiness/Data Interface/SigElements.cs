@@ -56,28 +56,7 @@ namespace OpenDentBusiness{
 				se.SigElementNum=Meth.GetLong(MethodBase.GetCurrentMethod(),se);
 				return se.SigElementNum;
 			}
-			if(PrefC.RandomKeys){
-				se.SigElementNum=ReplicationServers.GetKey("sigelement","SigElementNum");
-			}
-			string command= "INSERT INTO sigelement (";
-			if(PrefC.RandomKeys){
-				command+="SigElementNum,";
-			}
-			command+="SigElementDefNum,SignalNum"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(se.SigElementNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (se.SigElementDefNum)+"', "
-				+"'"+POut.Long   (se.SignalNum)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				se.SigElementNum=Db.NonQ(command,true);
-			}
-			return se.SigElementNum;
+			return Crud.SigElementCrud.Insert(se);
 		}
 
 		//<summary>There's no such thing as deleting a SigElement</summary>

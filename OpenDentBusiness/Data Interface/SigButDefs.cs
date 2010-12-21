@@ -57,13 +57,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="UPDATE sigbutdef SET " 
-				+"ButtonText = '"   +POut.String(def.ButtonText)+"'"
-				+",ButtonIndex = '" +POut.Long(def.ButtonIndex)+"'"
-				+",SynchIcon = '"   +POut.Long(def.SynchIcon)+"'"
-				+",ComputerName = '"+POut.String(def.ComputerName)+"'"
-				+" WHERE SigButDefNum  ='"+POut.Long(def.SigButDefNum)+"'";
-			Db.NonQ(command);
+			Crud.SigButDefCrud.Update(def);
 		}
 
 		///<summary></summary>
@@ -72,29 +66,7 @@ namespace OpenDentBusiness {
 				def.SigButDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.SigButDefNum;
 			}
-			if(PrefC.RandomKeys) {
-				def.SigButDefNum=ReplicationServers.GetKey("sigbutdef","SigButDefNum");
-			}
-			string command="INSERT INTO sigbutdef (";
-			if(PrefC.RandomKeys) {
-				command+="SigButDefNum,";
-			}
-			command+="ButtonText,ButtonIndex,SynchIcon,ComputerName) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(def.SigButDefNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(def.ButtonText)+"', "
-				+"'"+POut.Long(def.ButtonIndex)+"', "
-				+"'"+POut.Long(def.SynchIcon)+"', "
-				+"'"+POut.String(def.ComputerName)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				def.SigButDefNum=Db.NonQ(command,true);
-			}
-			return def.SigButDefNum;
+			return Crud.SigButDefCrud.Insert(def);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>

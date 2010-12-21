@@ -61,29 +61,7 @@ namespace OpenDentBusiness{
 				trans.TransactionNum=Meth.GetLong(MethodBase.GetCurrentMethod(),trans);
 				return trans.TransactionNum;
 			}
-			if(PrefC.RandomKeys) {
-				trans.TransactionNum=ReplicationServers.GetKey("transaction","TransactionNum");
-			}
-			string command="INSERT INTO transaction (";
-			if(PrefC.RandomKeys) {
-				command+="TransactionNum,";
-			}
-			command+="DateTimeEntry,UserNum,DepositNum,PayNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(trans.TransactionNum)+"', ";
-			}
-			command+=
-				 "NOW(), "//DateTimeEntry set to current server time
-				+"'"+POut.Long   (trans.UserNum)+"', "
-				+"'"+POut.Long   (trans.DepositNum)+"', "
-				+"'"+POut.Long   (trans.PayNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				trans.TransactionNum=Db.NonQ(command,true);
-			}
-			return trans.TransactionNum;
+			return Crud.TransactionCrud.Insert(trans);
 		}
 
 		///<summary></summary>
@@ -92,13 +70,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),trans);
 				return;
 			}
-			string command= "UPDATE transaction SET "
-				+"DateTimeEntry = " +POut.DateT (trans.DateTimeEntry)+" "
-				+",UserNum = '"      +POut.Long   (trans.UserNum)+"' "
-				+",DepositNum = '"   +POut.Long   (trans.DepositNum)+"' "
-				+",PayNum = '"       +POut.Long   (trans.PayNum)+"' "
-				+"WHERE TransactionNum = '"+POut.Long(trans.TransactionNum)+"'";
-			Db.NonQ(command);
+			Crud.TransactionCrud.Update(trans);
 		}
 
 		///<summary>Also deletes all journal entries for the transaction.  Will later throw an error if journal entries attached to any reconciles.  Be sure to surround with try-catch.</summary>

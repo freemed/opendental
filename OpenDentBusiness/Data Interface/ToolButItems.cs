@@ -54,28 +54,7 @@ namespace OpenDentBusiness{
 				Cur.ToolButItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ToolButItemNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.ToolButItemNum=ReplicationServers.GetKey("toolbutitem","ToolButItemNum");
-			}
-			string command="INSERT INTO toolbutitem (";
-			if(PrefC.RandomKeys) {
-				command+="ToolButItemNum,";
-			}
-			command+="ProgramNum,ToolBar,ButtonText) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.ToolButItemNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (Cur.ProgramNum)+"', "
-				+"'"+POut.Long   ((int)Cur.ToolBar)+"', "
-				+"'"+POut.String(Cur.ButtonText)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				Cur.ToolButItemNum=Db.NonQ(command,true);
-			}
-			return Cur.ToolButItemNum;
+			return Crud.ToolButItemCrud.Insert(Cur);
 		}
 
 		///<summary>This in not currently being used.</summary>
@@ -84,12 +63,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE toolbutitem SET "
-				+"ProgramNum ='" +POut.Long   (Cur.ProgramNum)+"'"
-				+",ToolBar ='"   +POut.Long   ((int)Cur.ToolBar)+"'"
-				+",ButtonText ='"+POut.String(Cur.ButtonText)+"'"
-				+" WHERE ToolButItemNum = '"+POut.Long(Cur.ToolButItemNum)+"'";
-			Db.NonQ(command);
+			Crud.ToolButItemCrud.Update(Cur);
 		}
 
 		///<summary>This is not currently being used.</summary>
