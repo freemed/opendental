@@ -79,7 +79,7 @@ namespace OpenDental.Reporting.Allocators
 				if (i < DbaseTableColumns.Length - 1)
 					cmd += ", ";
 			}
-			cmd += " FROM " + DbaseStorageTable + " "+DbHelper.Limit(1);
+			cmd += " FROM " + DbaseStorageTable + " "+DbHelper.LimitWhere(1);
 			try
 			{
 				Db.GetTableOld(cmd);

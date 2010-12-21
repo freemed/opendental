@@ -90,11 +90,7 @@ namespace OpenDentBusiness{
 			//first, do dependency testing
 			string command="SELECT * FROM insplan WHERE claimformnum = '"
 				+cf.ClaimFormNum.ToString()+"' ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+="AND ROWNUM <= 1";
-			}else{//Assume MySQL
-				command+="LIMIT 1";
-			}
+			command+=DbHelper.LimitAnd(1);
  			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==1){
 				return false;

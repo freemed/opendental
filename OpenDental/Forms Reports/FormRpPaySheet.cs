@@ -418,7 +418,7 @@ WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 			}
 			queryIns+=" ORDER BY claimproc.DateCP,lfname";
 			if(!checkIns.Checked){
-				queryIns+=" "+DbHelper.Limit(0);
+				queryIns=DbHelper.LimitGroupBy(queryIns,0);
 			}
 			//patient payments-----------------------------------------------------------------------------------------
 			whereProv="";
@@ -488,7 +488,7 @@ WHERE 1 "
 			}
 			queryPat+=" ORDER BY paysplit.DatePay,lfname";
 			if(!checkAllTypes.Checked && listTypes.SelectedIndices.Count==0){
-				queryPat+=" "+DbHelper.Limit(0);
+				queryPat=DbHelper.LimitGroupBy(queryPat,0);
 			}
 			DataTable tableIns=Reports.GetTable(queryIns);
 			DataTable tablePat=Reports.GetTable(queryPat);
