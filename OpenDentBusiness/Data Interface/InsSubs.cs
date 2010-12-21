@@ -193,13 +193,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),planNum,subNumExclude);
 			}
-			string command="SELECT BenefitNotes FROM inssub WHERE BenefitNotes != '' AND PlanNum="+POut.Long(planNum)+" AND InsSubNum !="+POut.Long(subNumExclude)+" ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+="AND ROWNUM<=1";
-			}
-			else {//Assume MySQL
-				command+="LIMIT 1";
-			}
+			string command="SELECT BenefitNotes FROM inssub WHERE BenefitNotes != '' AND PlanNum="+POut.Long(planNum)+" AND InsSubNum !="+POut.Long(subNumExclude)+" "+DbHelper.LimitAnd(1);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return "";

@@ -114,7 +114,7 @@ namespace ODR{
 				outputQuery=regex.Replace(outputQuery,replacement);
 			}			
 			//MessageBox.Show("output query: "+outputQuery);
-			//string retVal="SELECT * FROM patient LIMIT 10";
+			//string retVal="SELECT * FROM patient "+DbHelper.LimitWhere(10);
 			return outputQuery;
 		}
 

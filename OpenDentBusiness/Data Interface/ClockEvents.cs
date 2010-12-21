@@ -70,12 +70,14 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ClockEvent>(MethodBase.GetCurrentMethod(),employeeNum);
 			}
 			string command="SELECT * FROM clockevent WHERE EmployeeNum="+POut.Long(employeeNum)
-				+" ORDER BY TimeDisplayed1 DESC LIMIT 1";
+				+" ORDER BY TimeDisplayed1 DESC";
+			command=DbHelper.LimitOrderBy(command,1);
 			ClockEvent ce=Crud.ClockEventCrud.SelectOne(command);
 			if(ce!=null && ce.ClockStatus==TimeClockStatus.Break && ce.TimeDisplayed2.Year>1880) {
 				command="SELECT * FROM clockevent WHERE EmployeeNum="+POut.Long(employeeNum)+" "
 					+"AND ClockStatus != 2 "//not a break
-					+"ORDER BY TimeDisplayed1 DESC LIMIT 1";
+					+"ORDER BY TimeDisplayed1 DESC";
+				command=DbHelper.LimitOrderBy(command,1);
 				ce=Crud.ClockEventCrud.SelectOne(command);
 				return ce;
 			}

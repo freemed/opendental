@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<OrionProc>(MethodBase.GetCurrentMethod(),ProcNum);
 			}
 			string command="SELECT * FROM orionproc "
-				+"WHERE ProcNum="+POut.Long(ProcNum)+" LIMIT 1";
+				+"WHERE ProcNum="+POut.Long(ProcNum)+" "+DbHelper.LimitAnd(1);
 			return Crud.OrionProcCrud.SelectOne(command);
 		}
 
@@ -88,18 +88,20 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum,ToothNum,Surf);
 			}
+			string optionalclause="";
+			if(POut.String(ToothNum)==""){
+				optionalclause=" AND procedurelog.Surf='"+POut.String(Surf)+"'";
+			}
 			string command="SELECT orionproc.DateScheduleBy,procedurelog.ToothNum,procedurelog.Surf "
 				+"FROM orionproc "
 				+"LEFT JOIN procedurelog ON orionproc.ProcNum=procedurelog.ProcNum "
 				+"WHERE procedurelog.PatNum="+POut.Long(PatNum)
 				+" AND orionproc.Status2=128 "
-				+" AND procedurelog.ToothNum='"+POut.String(ToothNum)+"'";
-			if(POut.String(ToothNum)==""){
-				command+=" AND procedurelog.Surf='"+POut.String(Surf)+"'";
-			}
-			command+=" AND YEAR(orionproc.DateScheduleBy)>1880"
-				+" ORDER BY orionproc.DateScheduleBy "
-				+"LIMIT 1";
+				+" AND procedurelog.ToothNum='"+POut.String(ToothNum)+"'"
+				+optionalclause
+				+" AND YEAR(orionproc.DateScheduleBy)>1880"
+				+" ORDER BY orionproc.DateScheduleBy ";
+			command=DbHelper.LimitOrderBy(command,1);
 			return Db.GetTable(command);
 		}
 

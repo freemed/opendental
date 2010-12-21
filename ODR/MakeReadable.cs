@@ -17,7 +17,7 @@ namespace ODR{
 		public static string Query(string query,string parameters){
 			MessageBox.Show("query: "+query);
 			MessageBox.Show("parameter info: "+parameters);
-			return "SELECT * FROM patient LIMIT 10";
+			return "SELECT * FROM patient "+DbHelper.LimitWhere(10);
 		}
 
 

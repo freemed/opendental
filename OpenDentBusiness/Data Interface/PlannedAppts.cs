@@ -32,7 +32,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<PlannedAppt>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM plannedappt WHERE PatNum="+POut.Long(patNum)
-				+" ORDER BY ItemOrder LIMIT 1";
+				+" ORDER BY ItemOrder";
+			command=DbHelper.LimitOrderBy(command,1);
 			return Crud.PlannedApptCrud.SelectOne(command);
 		}
 

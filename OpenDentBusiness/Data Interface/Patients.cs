@@ -121,7 +121,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT * FROM patient WHERE DateTStamp > "+POut.DateT(changedSince);
-				//+" LIMIT 1000";
+			//command+=" "+DbHelper.LimitAnd(1000);
 			return Crud.PatientCrud.SelectMany(command);
 		}
 
@@ -275,12 +275,7 @@ namespace OpenDentBusiness{
 			}
 			command+="ORDER BY LName,FName ";
 			if(limit){
-				if(DataConnection.DBtype==DatabaseType.Oracle){
-					command="SELECT * FROM ("+command+") WHERE ROWNUM<=";
-				}else{//Assume MySQL
-					command+="LIMIT ";
-				}
-				command+="40";
+				command=DbHelper.LimitOrderBy(command,40);
 			}
 			//MessageBox.Show(command);
  			DataTable table=Db.GetTable(command);
@@ -961,13 +956,8 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT ChartNumber from patient WHERE"
 				+" ChartNumber REGEXP '^[0-9]+$'"//matches any number of digits
-				+" ORDER BY (chartnumber+0) DESC ";//1/13/05 by Keyush Shaw-added 0.
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			}
-			else{//Assume MySQL
-				command+="LIMIT 1";
-			}
+				+" ORDER BY (chartnumber+0) DESC";//1/13/05 by Keyush Shaw-added 0.
+			command=DbHelper.LimitOrderBy(command,1);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){//no existing chart numbers
 				return "1";
@@ -1535,7 +1525,7 @@ namespace OpenDentBusiness{
 					}
 					command="UPDATE document "
 						+"SET FileName='"+POut.String(Path.GetFileName(destFilePath))+"' "
-						+"WHERE FileName='"+POut.String(fileName)+"' AND PatNum="+POut.Long(patFrom)+" LIMIT 1";
+						+"WHERE FileName='"+POut.String(fileName)+"' AND PatNum="+POut.Long(patFrom)+" "+DbHelper.LimitAnd(1);
 					Db.NonQ(command);					
 				}
 				File.Copy(fromFiles[i],destFilePath);//Will throw exception if file already exists.
@@ -1587,7 +1577,7 @@ namespace OpenDentBusiness{
 				+"SET PatStatus="+((int)PatientStatus.Archived)+" "
 				+"WHERE PatNum="+POut.Long(patFrom)+" "
 				+"AND PatStatus<>"+((int)PatientStatus.Deceased)+" "
-				+"LIMIT 1";
+				+DbHelper.LimitAnd(1);
 			Db.NonQ(command);
 		}
 

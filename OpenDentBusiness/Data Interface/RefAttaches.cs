@@ -106,8 +106,8 @@ namespace OpenDentBusiness{
 				+"FROM refattach " 
 				+"WHERE refattach.PatNum ="+POut.Long(patNum)+" "
 				+"AND refattach.IsFrom=1 "
-				+"ORDER BY ItemOrder "
-				+"LIMIT 1";
+				+"ORDER BY ItemOrder ";
+			command=DbHelper.LimitOrderBy(command,1);
 			return PIn.Long(Db.GetScalar(command));
 		}
 

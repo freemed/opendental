@@ -27,8 +27,18 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Takes an SQL string including a group by and modifies the query to return only the top n rows independent of the database.</summary>
-		public static string LimitGroupBy(string query, int n) {
+		///<summary>Use when there is a GROUP BY clause in the query. Uses HAVING RowNum... for Oracle. Needs testing. May need to use subquery instead (like with ORDER BY).</summary>
+		public static string LimitHaving(int n) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "HAVING RowNum <= " + n;
+			}
+			else {
+				return "LIMIT " + n;
+			}
+		}
+
+		///<summary>Use when there is an ORDER BY clause in the query. Uses RowNum... for Oracle.</summary>
+		public static string LimitOrderBy(string query,int n) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "SELECT * FROM (" + query + ") WHERE RowNum <= " + n;
 			}

@@ -161,13 +161,12 @@ namespace OpenDentBusiness {
 			if(defNumPicts==0){//no category set for picts
 				return null;
 			}
-			//then find 
+			//then find, limit 1 to get the most recent
 			string command="SELECT * FROM document "
 				+"WHERE document.PatNum="+POut.Long(patNum)
 				+" AND document.DocCategory="+POut.Long(defNumPicts)
-				+" ORDER BY DateCreated DESC ";
-			//gets the most recent
-			command+="LIMIT 1";
+				+" ORDER BY DateCreated DESC";
+			command=DbHelper.LimitOrderBy(command,1);
 			DataTable table=Db.GetTable(command);
 			Document[] pictureDocs=Fill(table);
 			if(pictureDocs==null || pictureDocs.Length<1){//no pictures

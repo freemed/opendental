@@ -77,7 +77,7 @@ namespace OpenDental {
 				command="SELECT "+
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') "+DbHelper.LimitAnd(1)+")) PCIN, "+//Patient's Care ID Number
-					"TRIM(("+DbHelper.LimitGroupBy("SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.PatNum="+patNum+" AND "+
+					"TRIM(("+DbHelper.LimitOrderBy("SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.PatNum="+patNum+" AND "+
 						"ap.AptStatus="+((int)ApptStatus.Complete)+" AND ap.ClinicNum=cl.ClinicNum ORDER BY ap.AptDateTime DESC",1)+")) SiteIDNumber,"+
 					"p.BirthDate,"+
 					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 "+
@@ -93,7 +93,7 @@ namespace OpenDental {
 						"LOWER(f.FieldName)=LOWER('"+householdGrossIncomeStr+"') "+DbHelper.LimitAnd(1)+")) HGI, "+//Household gross income
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') "+DbHelper.LimitAnd(1)+")) HPP, "+//Household % of poverty
-					"("+DbHelper.LimitGroupBy("SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
+					"("+DbHelper.LimitOrderBy("SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
 						copayDefNum+" ORDER BY AdjDate DESC",1)+") HSFS,"+//Household sliding fee scale
 					"(SELECT i.DateEffective FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum "+DbHelper.LimitAnd(1)+") DES,"+//Date of eligibility status
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+

@@ -479,12 +479,7 @@ namespace OpenDentBusiness {
 				}
 				s+=" PlanNum="+POut.Long(planNums[i]);
 			}
-			string command="SELECT BenefitNotes FROM insplan WHERE BenefitNotes != '' AND ("+s+") ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+="AND ROWNUM<=1";
-			}else{//Assume MySQL
-				command+="LIMIT 1";
-			}
+			string command="SELECT BenefitNotes FROM insplan WHERE BenefitNotes != '' AND ("+s+") "+DbHelper.LimitAnd(1);
 			DataTable table=Db.GetTable(command);
 			//string[] retVal=new string[];
 			if(table.Rows.Count==0){
@@ -933,13 +928,7 @@ namespace OpenDentBusiness {
 			}
 			//first, check claims
 			string command="SELECT PatNum FROM claim "
-				+"WHERE plannum = '"+plan.PlanNum.ToString()+"' ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+="AND ROWNUM<=1";
-			}
-			else {//Assume MySQL
-				command+="LIMIT 1";
-			}
+				+"WHERE plannum = '"+plan.PlanNum.ToString()+"' "+DbHelper.LimitAnd(1);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count!=0) {
 				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a plan with existing claims."));
@@ -947,13 +936,8 @@ namespace OpenDentBusiness {
 			//then, check claimprocs
 			command="SELECT PatNum FROM claimproc "
 				+"WHERE PlanNum = "+POut.Long(plan.PlanNum)
-				+" AND Status != 6 ";//ignore estimates
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+="AND ROWNUM<=1";
-			}
-			else {//Assume MySQL
-				command+="LIMIT 1";
-			}
+				+" AND Status != 6 "//ignore estimates
+				+DbHelper.LimitAnd(1);
 			table=Db.GetTable(command);
 			if(table.Rows.Count!=0) {
 				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a plan attached to procedures."));

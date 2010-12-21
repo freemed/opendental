@@ -174,7 +174,8 @@ namespace OpenDentBusiness {
 			if(proc==null){
 				return new Procedure();
 			}
-			command="SELECT * FROM procnote WHERE ProcNum="+POut.Long(procNum)+" ORDER BY EntryDateTime DESC LIMIT 1";
+			command="SELECT * FROM procnote WHERE ProcNum="+POut.Long(procNum)+" ORDER BY EntryDateTime DESC";
+			DbHelper.LimitOrderBy(command,1);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return proc;
@@ -210,7 +211,8 @@ namespace OpenDentBusiness {
 				"WHERE PatNum='"+POut.Long(patNum)+"' AND (ProcDate="+POut.Date(date)+" OR DateEntryC="+POut.Date(date)+")";
 			List<Procedure> result=Crud.ProcedureCrud.SelectMany(command);
 			for(int i=0;i<result.Count;i++){
-				command="SELECT * FROM procnote WHERE ProcNum="+POut.Long(result[i].ProcNum)+" ORDER BY EntryDateTime DESC LIMIT 1";
+				command="SELECT * FROM procnote WHERE ProcNum="+POut.Long(result[i].ProcNum)+" ORDER BY EntryDateTime DESC";
+				command=DbHelper.LimitOrderBy(command,1);
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count==0) {
 					continue;
@@ -252,7 +254,8 @@ namespace OpenDentBusiness {
 				+"OR ProcStatus ="+POut.Int((int)ProcStat.EO)+") "
 				+"AND procedurecode.ProcCode >= '"+POut.String(code1)+"' "
 				+"AND procedurecode.ProcCode <= '"+POut.String(code2)+"' "
-				+"ORDER BY ProcDate DESC LIMIT 1";
+				+"ORDER BY ProcDate DESC";
+			command=DbHelper.LimitOrderBy(command,1);
 			DateTime date=PIn.Date(Db.GetScalar(command));
 			if(date.Year<1880) {
 				return "";

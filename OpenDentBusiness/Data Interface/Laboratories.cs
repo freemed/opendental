@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 			command="SELECT LName,FName FROM patient,labcase "
 				+"WHERE patient.PatNum=labcase.PatNum "
 				+"AND LaboratoryNum ="+POut.Long(laboratoryNum)+" "
-				+"LIMIT 30";
+				+DbHelper.LimitAnd(30);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";

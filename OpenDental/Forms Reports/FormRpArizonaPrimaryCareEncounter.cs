@@ -108,12 +108,12 @@ namespace OpenDental {
 						"'' DiagnosisCode3,"+//Diagnosis code 3
 						"'' DiagnosisCode4,"+//Diagnosis code 4
 						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+" "+DbHelper.LimitAnd(1)+") DateOfEncounter,"+//Date of encounter
-						"("+DbHelper.LimitGroupBy("SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
+						"("+DbHelper.LimitOrderBy("SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
 							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum",1)+") Procedure1,"+
 						"'' Procedure1Modifier1,"+//Procedure modifier 1
 						"'' Procedure1Modifier2,"+//Procedure modifier 2
 						"'' Procedure1DiagnosisCode,"+//Diagnosis code
-						"("+DbHelper.LimitGroupBy("SELECT pl.ProcFee FROM procedurecode pc,procedurelog pl "+
+						"("+DbHelper.LimitOrderBy("SELECT pl.ProcFee FROM procedurecode pc,procedurelog pl "+
 							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum",1)+") Procedure1Charges,"+
 						"'' Procedure2,"+//2nd procedure cpt/hcpcs
 						"'' Procedure2Modifier1,"+//2nd procedure modifier 1
