@@ -3183,7 +3183,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSyncIntervalMinutes','5')";
 				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSyncServerURL','url goes here')";
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSyncServerURL','https://opendentalsoft.com/WebHostSynch/Mobile.asmx')";
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileExcludeApptsBeforeDate','2009-12-20')";
 				Db.NonQ(command);

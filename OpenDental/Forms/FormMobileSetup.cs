@@ -10,7 +10,6 @@ using OpenDentBusiness.Mobile;
 
 namespace OpenDental {
 	public partial class FormMobileSetup:Form {
-
 		static string RegistrationKey;
 		static MobileWeb.Mobile mb = new MobileWeb.Mobile();
 		static DateTime MobileSyncDateTimeLastRun;
@@ -28,6 +27,7 @@ namespace OpenDental {
 			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
 			textboxMobileSyncServerURL.Text=MobileSyncServerURL;
 			textBoxSynchMinutes.Text=MobileSyncIntervalMinutes+"";
+			textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
 		}
 
 		private void InitializeVariables() {
@@ -38,30 +38,38 @@ namespace OpenDental {
 			MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
 		}
 
-		public void SynchPatientRecordsOnMobileWeb() {
+		public void SynchPatientRecordsOnMobileWeb(DateTime GetChangedSince) {
 			try {
 			#if DEBUG
 				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 			#endif
 			DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
-			List<Patientm> ChangedPatientmList=Patientms.GetChanged(MobileSyncDateTimeLastRun);
+			List<Patientm> ChangedPatientmList=Patientms.GetChanged(GetChangedSince);
 			mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
-			textDateTimeLastRun.Text=MobileSyncDateTimeLastRunNew.ToShortDateString()+" "+MobileSyncDateTimeLastRunNew.ToShortTimeString();
+			MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
-			
 		}
 
+		public void SynchPatientRecordsOnMobileWeb() {
+			SynchPatientRecordsOnMobileWeb(MobileSyncDateTimeLastRun);
+		}
+
+		public void SynchPatientFull() {
+			DateTime FullSynchDateTime=new DateTime(1880,1,1);
+			SynchPatientRecordsOnMobileWeb(FullSynchDateTime);
+		}
+					
 		/// <summary>
 		/// An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.
 		/// </summary>
 		/// <returns></returns>
 		private bool TestWebServiceExists() {
 			try {
-				//mb.Url=url;
+				mb.Url=MobileSyncServerURL;
 				if(mb.ServiceExists()) {
 					return true;
 				}
@@ -87,7 +95,6 @@ namespace OpenDental {
 		}
 
 		private void timerRefreshLastSynchTime_Tick(object sender,EventArgs e) {
-			InitializeVariables();
 			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
 		}
 
@@ -95,24 +102,47 @@ namespace OpenDental {
 			Prefs.UpdateString(PrefName.MobileSyncServerURL,textboxMobileSyncServerURL.Text.Trim());
 			Prefs.UpdateDateT(PrefName.MobileExcludeApptsBeforeDate,PIn.Date(textDateBefore.Text));
 			Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textBoxSynchMinutes.Text));
+			butSavePreferences.Enabled=false;
+			MobileSyncServerURL=textboxMobileSyncServerURL.Text.Trim();
+			MobileSyncIntervalMinutes=PIn.Int(textBoxSynchMinutes.Text);
+			MobileExcludeApptsBeforeDate=PIn.Date(textDateBefore.Text);
+		}
+
+		private void textboxMobileSyncServerURL_TextChanged(object sender,EventArgs e) {
+			butSavePreferences.Enabled=true;
+		}
+
+		private void textBoxSynchMinutes_TextChanged(object sender,EventArgs e) {
+			butSavePreferences.Enabled=true;
 		}
 
 		private void butSync_Click(object sender,EventArgs e) {
-			//disabled unless user changed url
+			if(MobileSyncDateTimeLastRun.Year<1880) {
+				// should a full synch be forced at startup?
+				//MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
+				//return;
+			}
 			Cursor=Cursors.WaitCursor;
 			if(!TestWebServiceExists()) {
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
 				return;
 			}
+			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""){
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
+			Prefs.UpdateDateT(PrefName.MobileExcludeApptsBeforeDate,PIn.Date(textDateBefore.Text));
+			MobileExcludeApptsBeforeDate=PIn.Date(textDateBefore.Text);
 			try {
 				SynchPatientRecordsOnMobileWeb();
+				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 			}
-
 			Cursor=Cursors.Default;
 		}
 
@@ -120,12 +150,8 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
 				return;
 			}
-			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""){
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
 			Cursor=Cursors.WaitCursor;
-			SynchPatientRecordsOnMobileWeb();
+			SynchPatientFull();
 			Cursor=Cursors.Default;
 			/*if(objCount==0) {
 				MsgBox.Show(this,"Done. No sync necessary.");
@@ -138,6 +164,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+
 
 
 

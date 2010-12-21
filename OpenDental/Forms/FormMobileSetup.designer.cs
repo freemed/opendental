@@ -32,12 +32,12 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textDateTimeLastRun = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.groupPreferences = new System.Windows.Forms.GroupBox();
+			this.butSavePreferences = new OpenDental.UI.Button();
 			this.textDateBefore = new OpenDental.ValidDate();
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.groupPreferences = new System.Windows.Forms.GroupBox();
-			this.butSavePreferences = new OpenDental.UI.Button();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -47,6 +47,7 @@ namespace OpenDental{
 			this.textboxMobileSyncServerURL.Name = "textboxMobileSyncServerURL";
 			this.textboxMobileSyncServerURL.Size = new System.Drawing.Size(445,20);
 			this.textboxMobileSyncServerURL.TabIndex = 75;
+			this.textboxMobileSyncServerURL.TextChanged += new System.EventHandler(this.textboxMobileSyncServerURL_TextChanged);
 			// 
 			// labelMobileSynchURL
 			// 
@@ -72,6 +73,7 @@ namespace OpenDental{
 			this.textBoxSynchMinutes.Name = "textBoxSynchMinutes";
 			this.textBoxSynchMinutes.Size = new System.Drawing.Size(22,20);
 			this.textBoxSynchMinutes.TabIndex = 80;
+			this.textBoxSynchMinutes.TextChanged += new System.EventHandler(this.textBoxSynchMinutes_TextChanged);
 			// 
 			// timerRefreshLastSynchTime
 			// 
@@ -105,60 +107,6 @@ namespace OpenDental{
 			this.label2.Text = "Exclude appointments before";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textDateBefore
-			// 
-			this.textDateBefore.Location = new System.Drawing.Point(195,187);
-			this.textDateBefore.Name = "textDateBefore";
-			this.textDateBefore.Size = new System.Drawing.Size(100,20);
-			this.textDateBefore.TabIndex = 84;
-			// 
-			// butFullSync
-			// 
-			this.butFullSync.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butFullSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butFullSync.Autosize = true;
-			this.butFullSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFullSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butFullSync.CornerRadius = 4F;
-			this.butFullSync.Enabled = false;
-			this.butFullSync.Location = new System.Drawing.Point(427,265);
-			this.butFullSync.Name = "butFullSync";
-			this.butFullSync.Size = new System.Drawing.Size(68,24);
-			this.butFullSync.TabIndex = 83;
-			this.butFullSync.Text = "Full Sync";
-			this.butFullSync.Click += new System.EventHandler(this.butFullSync_Click);
-			// 
-			// butSync
-			// 
-			this.butSync.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butSync.Autosize = true;
-			this.butSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSync.CornerRadius = 4F;
-			this.butSync.Enabled = false;
-			this.butSync.Location = new System.Drawing.Point(554,265);
-			this.butSync.Name = "butSync";
-			this.butSync.Size = new System.Drawing.Size(68,24);
-			this.butSync.TabIndex = 82;
-			this.butSync.Text = "Sync";
-			this.butSync.Click += new System.EventHandler(this.butSync_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(712,265);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
-			this.butClose.TabIndex = 81;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
 			// groupPreferences
 			// 
 			this.groupPreferences.Controls.Add(this.butSavePreferences);
@@ -188,6 +136,58 @@ namespace OpenDental{
 			this.butSavePreferences.TabIndex = 240;
 			this.butSavePreferences.Text = "Save Preferences";
 			this.butSavePreferences.Click += new System.EventHandler(this.butSavePreferences_Click);
+			// 
+			// textDateBefore
+			// 
+			this.textDateBefore.Location = new System.Drawing.Point(195,187);
+			this.textDateBefore.Name = "textDateBefore";
+			this.textDateBefore.Size = new System.Drawing.Size(100,20);
+			this.textDateBefore.TabIndex = 84;
+			// 
+			// butFullSync
+			// 
+			this.butFullSync.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butFullSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butFullSync.Autosize = true;
+			this.butFullSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFullSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFullSync.CornerRadius = 4F;
+			this.butFullSync.Location = new System.Drawing.Point(427,265);
+			this.butFullSync.Name = "butFullSync";
+			this.butFullSync.Size = new System.Drawing.Size(68,24);
+			this.butFullSync.TabIndex = 83;
+			this.butFullSync.Text = "Full Sync";
+			this.butFullSync.Click += new System.EventHandler(this.butFullSync_Click);
+			// 
+			// butSync
+			// 
+			this.butSync.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSync.Autosize = true;
+			this.butSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSync.CornerRadius = 4F;
+			this.butSync.Location = new System.Drawing.Point(554,265);
+			this.butSync.Name = "butSync";
+			this.butSync.Size = new System.Drawing.Size(68,24);
+			this.butSync.TabIndex = 82;
+			this.butSync.Text = "Sync";
+			this.butSync.Click += new System.EventHandler(this.butSync_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(712,265);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.TabIndex = 81;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// FormMobileSetup
 			// 
