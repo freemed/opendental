@@ -69,30 +69,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),refer);
 				return;
 			}
-			string command = "UPDATE referral SET " 
-				+ "LName = '"      +POut.String(refer.LName)+"'"
-				+ ",FName = '"     +POut.String(refer.FName)+"'"
-				+ ",MName = '"     +POut.String(refer.MName)+"'"
-				+ ",SSN = '"       +POut.String(refer.SSN)+"'"
-				+ ",UsingTIN = '"  +POut.Bool(refer.UsingTIN)+"'"
-				+ ",Specialty = '" +POut.Long((int)refer.Specialty)+"'"
-				+ ",ST = '"        +POut.String(refer.ST)+"'"
-				+ ",Telephone = '" +POut.String(refer.Telephone)+"'"
-				+ ",Address = '"   +POut.String(refer.Address)+"'"
-				+ ",Address2 = '"  +POut.String(refer.Address2)+"'"
-				+ ",City = '"      +POut.String(refer.City)+"'"
-				+ ",Zip = '"       +POut.String(refer.Zip)+"'"
-				+ ",Note = '"      +POut.String(refer.Note)+"'"
-				+ ",Phone2 = '"    +POut.String(refer.Phone2)+"'"
-				+ ",IsHidden = '"  +POut.Bool(refer.IsHidden)+"'"
-				+ ",NotPerson = '" +POut.Bool(refer.NotPerson)+"'"
-				+ ",Title = '"     +POut.String(refer.Title)+"'"
-				+ ",EMail = '"     +POut.String(refer.EMail)+"'"
-				+ ",PatNum = '"    +POut.Long(refer.PatNum)+"'"
-				+ ",NationalProvID='"+POut.String(refer.NationalProvID)+"'"
-				+ ",Slip = '"      +POut.Long(refer.Slip)+"'"
-				+" WHERE ReferralNum = '" +POut.Long(refer.ReferralNum)+"'";
-			Db.NonQ(command);
+			Crud.ReferralCrud.Update(refer);
 		}
 
 		///<summary></summary>
@@ -101,48 +78,7 @@ namespace OpenDentBusiness{
 				refer.ReferralNum=Meth.GetLong(MethodBase.GetCurrentMethod(),refer);
 				return refer.ReferralNum;
 			}
-			if(PrefC.RandomKeys) {
-				refer.ReferralNum=ReplicationServers.GetKey("referral","ReferralNum");
-			}
-			string command= "INSERT INTO referral (";
-			if(PrefC.RandomKeys) {
-				command+="ReferralNum,";
-			}
-			command+="LName,FName,MName,SSN,UsingTIN,Specialty,ST,"
-				+"Telephone,Address,Address2,City,Zip,Note,Phone2,IsHidden,NotPerson,Title,Email,PatNum,"
-				+"NationalProvID,Slip) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(refer.ReferralNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(refer.LName)+"', "
-				+"'"+POut.String(refer.FName)+"', "
-				+"'"+POut.String(refer.MName)+"', "
-				+"'"+POut.String(refer.SSN)+"', "
-				+"'"+POut.Bool(refer.UsingTIN)+"', "
-				+"'"+POut.Long((int)refer.Specialty)+"', "
-				+"'"+POut.String(refer.ST)+"', "
-				+"'"+POut.String(refer.Telephone)+"', "    
-				+"'"+POut.String(refer.Address)+"', "
-				+"'"+POut.String(refer.Address2)+"', "
-				+"'"+POut.String(refer.City)+"', "
-				+"'"+POut.String(refer.Zip)+"', "
-				+"'"+POut.String(refer.Note)+"', "
-				+"'"+POut.String(refer.Phone2)+"', "
-				+"'"+POut.Bool(refer.IsHidden)+"', "
-				+"'"+POut.Bool(refer.NotPerson)+"', "
-				+"'"+POut.String(refer.Title)+"', "
-				+"'"+POut.String(refer.EMail)+"', "
-				+"'"+POut.Long(refer.PatNum)+"', "
-				+"'"+POut.String(refer.NationalProvID)+"', "
-				+"'"+POut.Long   (refer.Slip)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				refer.ReferralNum=Db.NonQ(command,true);
-			}
-			return refer.ReferralNum;
+			return Crud.ReferralCrud.Insert(refer);
 		}
 
 		///<summary></summary>

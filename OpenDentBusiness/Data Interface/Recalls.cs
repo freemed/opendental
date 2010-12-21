@@ -463,40 +463,7 @@ namespace OpenDentBusiness{
 				recall.RecallNum=Meth.GetLong(MethodBase.GetCurrentMethod(),recall);
 				return recall.RecallNum;
 			}
-			if(PrefC.RandomKeys) {
-				recall.RecallNum=ReplicationServers.GetKey("recall","RecallNum");
-			}
-			string command= "INSERT INTO recall (";
-			if(PrefC.RandomKeys) {
-				command+="RecallNum,";
-			}
-			command+="PatNum,DateDueCalc,DateDue,DatePrevious,"
-				+"RecallInterval,RecallStatus,Note,IsDisabled,"//DateTStamp
-				+"RecallTypeNum,DisableUntilBalance,DisableUntilDate"
-				+") VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(recall.RecallNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (recall.PatNum)+"', "
-				    +POut.Date  (recall.DateDueCalc)+", "
-				    +POut.Date  (recall.DateDue)+", "
-				    +POut.Date  (recall.DatePrevious)+", "
-				+"'"+POut.Long   (recall.RecallInterval.ToInt())+"', "
-				+"'"+POut.Long   (recall.RecallStatus)+"', "
-				+"'"+POut.String(recall.Note)+"', "
-				+"'"+POut.Bool  (recall.IsDisabled)+"', "
-				//DateTStamp
-				+"'"+POut.Long   (recall.RecallTypeNum)+"', "
-				+"'"+POut.Double(recall.DisableUntilBalance)+"', "
-				    +POut.Date  (recall.DisableUntilDate)+")";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				recall.RecallNum=Db.NonQ(command,true);
-			}
-			return recall.RecallNum;
+			return Crud.RecallCrud.Insert(recall);
 		}
 
 		///<summary></summary>
@@ -505,21 +472,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),recall);
 				return;
 			}
-			string command= "UPDATE recall SET "
-				+"PatNum = '"          +POut.Long   (recall.PatNum)+"'"
-				+",DateDueCalc = "     +POut.Date  (recall.DateDueCalc)+" "
-				+",DateDue = "         +POut.Date  (recall.DateDue)+" "
-				+",DatePrevious = "    +POut.Date  (recall.DatePrevious)+" "
-				+",RecallInterval = '" +POut.Long   (recall.RecallInterval.ToInt())+"' "
-				+",RecallStatus= '"    +POut.Long   (recall.RecallStatus)+"' "
-				+",Note = '"           +POut.String(recall.Note)+"' "
-				+",IsDisabled = '"     +POut.Bool  (recall.IsDisabled)+"' "
-				//DateTStamp
-				+",RecallTypeNum = '"  +POut.Long   (recall.RecallTypeNum)+"' "
-				+",DisableUntilBalance = '"+POut.Double(recall.DisableUntilBalance)+"' "
-				+",DisableUntilDate = "    +POut.Date(recall.DisableUntilDate)
-				+" WHERE RecallNum = '"+POut.Long   (recall.RecallNum)+"'";
-			Db.NonQ(command);
+			Crud.RecallCrud.Update(recall);
 		}
 
 		///<summary></summary>

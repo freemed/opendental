@@ -51,20 +51,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKey);
 				return;
 			}
-			string command="UPDATE registrationkey SET "
-				+"PatNum='"+POut.Long(registrationKey.PatNum)+"' "
-				+",RegKey='"+POut.String(registrationKey.RegKey)+"' "
-				+",Note='"+POut.String(registrationKey.Note)+"' "
-				+",DateStarted="+POut.Date(registrationKey.DateStarted)+" "
-				+",DateDisabled="+POut.Date(registrationKey.DateDisabled)+" "
-				+",DateEnded="+POut.Date(registrationKey.DateEnded)+" "
-				+",IsForeign='"+POut.Bool(registrationKey.IsForeign)+"' "
-				+",UsesServerVersion='"+POut.Bool(registrationKey.UsesServerVersion)+"' "
-				+",IsFreeVersion='"+POut.Bool(registrationKey.IsFreeVersion)+"' "
-				+",IsOnlyForTesting='"+POut.Bool(registrationKey.IsOnlyForTesting)+"' "
-				+",VotesAllotted='"+POut.Int(registrationKey.VotesAllotted)+"' "
-				+" WHERE RegistrationKeyNum='"+POut.Long(registrationKey.RegistrationKeyNum)+"'";
-			Db.NonQ(command);
+			Crud.RegistrationKeyCrud.Update(registrationKey);
 		}
 
 		///<summary>Inserts a new and unique registration key into the database.</summary>

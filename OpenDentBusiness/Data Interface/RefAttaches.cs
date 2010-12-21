@@ -38,16 +38,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
 				return;
 			}
-			string command= "UPDATE refattach SET " 
-				+ "ReferralNum = '" +POut.Long   (attach.ReferralNum)+"'"
-				+ ",PatNum = '"     +POut.Long   (attach.PatNum)+"'"
-				+ ",ItemOrder = '"  +POut.Long   (attach.ItemOrder)+"'"
-				+ ",RefDate = "    +POut.Date  (attach.RefDate)
-				+ ",IsFrom = '"     +POut.Bool  (attach.IsFrom)+"'"
-				+ ",RefToStatus = '"+POut.Long   ((int)attach.RefToStatus)+"'"
-				+ ",Note = '"       +POut.String(attach.Note)+"'"
-				+" WHERE RefAttachNum = '" +POut.Long(attach.RefAttachNum)+"'";
- 			Db.NonQ(command);
+			Crud.RefAttachCrud.Update(attach);
 		}
 
 		///<summary></summary>
@@ -56,31 +47,7 @@ namespace OpenDentBusiness{
 				attach.RefAttachNum=Meth.GetLong(MethodBase.GetCurrentMethod(),attach);
 				return attach.RefAttachNum;
 			}
-			if(PrefC.RandomKeys){
-				attach.RefAttachNum=ReplicationServers.GetKey("refattach","RefAttachNum");
-			}
-			string command="INSERT INTO refattach (";
-			if(PrefC.RandomKeys){
-				command+="RefAttachNum,";
-			}			
-			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note) VALUES (";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(attach.RefAttachNum)+"', ";
-			}
-			command+="'"+POut.Long(attach.ReferralNum)+"', "
-				+"'"+POut.Long(attach.PatNum)+"', "
-				+"'"+POut.Long(attach.ItemOrder)+"', "
-				+POut.Date(attach.RefDate)+", "
-				+"'"+POut.Bool(attach.IsFrom)+"', "
-				+"'"+POut.Long ((int)attach.RefToStatus)+"', "
-				+"'"+POut.String(attach.Note)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				attach.RefAttachNum=Db.NonQ(command,true);
-			}
-			return attach.RefAttachNum;
+			return Crud.RefAttachCrud.Insert(attach);
 		}
 
 		///<summary></summary>

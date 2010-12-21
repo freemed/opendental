@@ -49,30 +49,7 @@ namespace OpenDentBusiness{
 				reconcile.ReconcileNum=Meth.GetLong(MethodBase.GetCurrentMethod(),reconcile);
 				return reconcile.ReconcileNum;
 			}
-			if(PrefC.RandomKeys) {
-				reconcile.ReconcileNum=ReplicationServers.GetKey("reconcile","ReconcileNum");
-			}
-			string command="INSERT INTO reconcile (";
-			if(PrefC.RandomKeys) {
-				command+="ReconcileNum,";
-			}
-			command+="AccountNum,StartingBal,EndingBal,DateReconcile,IsLocked) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(reconcile.ReconcileNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (reconcile.AccountNum)+"', "
-				+"'"+POut.Double(reconcile.StartingBal)+"', "
-				+"'"+POut.Double(reconcile.EndingBal)+"', "
-				+POut.Date  (reconcile.DateReconcile)+", "
-				+"'"+POut.Bool  (reconcile.IsLocked)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				reconcile.ReconcileNum=Db.NonQ(command,true);
-			}
-			return reconcile.ReconcileNum;
+			return Crud.ReconcileCrud.Insert(reconcile);
 		}
 
 		///<summary></summary>
@@ -81,14 +58,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),reconcile);
 				return;
 			}
-			string command= "UPDATE reconcile SET "
-				+"AccountNum = '"    +POut.Long   (reconcile.AccountNum)+"' "
-				+",StartingBal= '"   +POut.Double(reconcile.StartingBal)+"' "
-				+",EndingBal = '"    +POut.Double(reconcile.EndingBal)+"' "
-				+",DateReconcile = "+POut.Date  (reconcile.DateReconcile)+" "
-				+",IsLocked = '"     +POut.Bool  (reconcile.IsLocked)+"' "
-				+"WHERE ReconcileNum = '"+POut.Long(reconcile.ReconcileNum)+"'";
-			Db.NonQ(command);
+			Crud.ReconcileCrud.Update(reconcile);
 		}
 
 		///<summary>Throws exception if Reconcile is in use.</summary>
