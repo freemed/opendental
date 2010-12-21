@@ -340,10 +340,25 @@ namespace UnitTests {
 				command="DELETE FROM tempcore";
 				DataCore.NonQ(command);
 				retVal+="Bool, false: Passed.\r\n";
-				//clob----------------------------------------------------------------------------------------
-				string clobstring1="typicalClobData";
+				//VARCHAR2(4000)------------------------------------------------------------------------------
+				string varchar1=CreateRandomAlphaNumericString(4000); //Tested 4001 and it was too large as expected.
+				string varchar2="";
+				command="INSERT INTO tempcore (varchar2test) VALUES ('"+POut.String(varchar1)+"')";
+				DataCore.NonQ(command);
+				command="SELECT varchar2test FROM tempcore";
+				table=DataCore.GetTable(command);
+				varchar2=PIn.String(table.Rows[0]["varchar2test"].ToString());
+				if(varchar1!=varchar2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="VARCHAR2(4000): Passed.\r\n";
+				//clob:-----------------------------------------------------------------------------------------
+				string clobstring1=CreateRandomAlphaNumericString(52428800); //50MB should be larger than anything we store.
 				string clobstring2="";
-				command="INSERT INTO tempcore (clobtest) VALUES ('"+POut.String(clobstring1)+"')";
+				DataCore.AddParam(clobstring1);
+				command="INSERT INTO tempcore (clobtest) VALUES (:param1)";
 				DataCore.NonQ(command);
 				command="SELECT clobtest FROM tempcore";
 				table=DataCore.GetTable(command);
@@ -354,8 +369,32 @@ namespace UnitTests {
 				command="DELETE FROM tempcore";
 				DataCore.NonQ(command);
 				retVal+="Clob: Passed.\r\n";
+				//clob:foreign----------------------------------------------------------------------------------
+				clobstring1="是像电子和质子这样的亚原子粒子之间的产生排斥力和吸引";
+				clobstring2="";
+				command="INSERT INTO tempcore (clobtest) VALUES ('"+POut.String(clobstring1)+"')";
+				DataCore.NonQ(command);
+				command="SELECT clobtest FROM tempcore";
+				table=DataCore.GetTable(command);
+				clobstring2=PIn.String(table.Rows[0]["clobtest"].ToString());
+				if(clobstring1!=clobstring2) {
+					throw new Exception();
+				}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Clob:Foreign Passed.\r\n";
 				return retVal+="Oracle CoreTypes test done.\r\n";
 			}
+		}
+
+		public static string CreateRandomAlphaNumericString(int length){
+			StringBuilder result=new StringBuilder(length);
+			Random rand=new Random();
+			string randChrs="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			for(int i=0;i<length;i++){
+				result.Append(randChrs[rand.Next(0,randChrs.Length-1)]);
+			}
+			return result.ToString();
 		}
 	}
 }

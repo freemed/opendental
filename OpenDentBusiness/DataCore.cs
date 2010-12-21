@@ -59,8 +59,9 @@ namespace OpenDentBusiness {
 			return dcon.GetScalar(command);
 		}
 
-
-
+		public static void AddParam(object param) {
+			DataConnection.AddParam(param);
+		}
 
 	}
 

@@ -30,7 +30,7 @@ namespace UnitTests {
 				else { 
 					DataConnection.DBtype=DatabaseType.Oracle;
 					dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
-					dcon.SetDb("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=Jason)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XE)));User Id=unittest;Password=unittest;","",DataConnection.DBtype,true);
+					dcon.SetDb("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XE)));User Id=unittest;Password=unittest;","",DataConnection.DBtype,true);
 					RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 					return true;
 				}
