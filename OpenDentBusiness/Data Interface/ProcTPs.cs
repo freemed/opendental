@@ -63,23 +63,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
 				return;
 			}
-			string command= "UPDATE proctp SET "
-				+"TreatPlanNum = '"+POut.Long   (proc.TreatPlanNum)+"'"
-				+",PatNum = '"     +POut.Long   (proc.PatNum)+"'"
-				+",ProcNumOrig = '"+POut.Long   (proc.ProcNumOrig)+"'"
-				+",ItemOrder = '"  +POut.Long   (proc.ItemOrder)+"'"
-				+",Priority = '"   +POut.Long   (proc.Priority)+"'"
-				+",ToothNumTP = '" +POut.String(proc.ToothNumTP)+"'"
-				+",Surf = '"       +POut.String(proc.Surf)+"'"
-				+",ProcCode = '"   +POut.String(proc.ProcCode)+"'"
-				+",Descript = '"   +POut.String(proc.Descript)+"'"
-				+",FeeAmt = '"     +POut.Double(proc.FeeAmt)+"'"
-				+",PriInsAmt = '"  +POut.Double(proc.PriInsAmt)+"'"
-				+",SecInsAmt = '"  +POut.Double(proc.SecInsAmt)+"'"
-				+",PatAmt = '"     +POut.Double(proc.PatAmt)+"'"
-				+",Discount = '"   +POut.Double(proc.Discount)+"'"
-				+" WHERE ProcTPNum = '"+POut.Long(proc.ProcTPNum)+"'";
- 			Db.NonQ(command);
+			Crud.ProcTPCrud.Update(proc);
 		}
 
 		///<summary></summary>
@@ -88,40 +72,7 @@ namespace OpenDentBusiness{
 				proc.ProcTPNum=Meth.GetLong(MethodBase.GetCurrentMethod(),proc);
 				return proc.ProcTPNum;
 			}
-			if(PrefC.RandomKeys){
-				proc.ProcTPNum=ReplicationServers.GetKey("proctp","ProcTPNum");
-			}
-			string command= "INSERT INTO proctp (";
-			if(PrefC.RandomKeys){
-				command+="ProcTPNum,";
-			}
-			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,"
-				+"PriInsAmt,SecInsAmt,PatAmt,Discount) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(proc.ProcTPNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (proc.TreatPlanNum)+"', "
-				+"'"+POut.Long   (proc.PatNum)+"', "
-				+"'"+POut.Long   (proc.ProcNumOrig)+"', "
-				+"'"+POut.Long   (proc.ItemOrder)+"', "
-				+"'"+POut.Long   (proc.Priority)+"', "
-				+"'"+POut.String(proc.ToothNumTP)+"', "
-				+"'"+POut.String(proc.Surf)+"', "
-				+"'"+POut.String(proc.ProcCode)+"', "
-				+"'"+POut.String(proc.Descript)+"', "
-				+"'"+POut.Double(proc.FeeAmt)+"', "
-				+"'"+POut.Double(proc.PriInsAmt)+"', "
-				+"'"+POut.Double(proc.SecInsAmt)+"', "
-				+"'"+POut.Double(proc.PatAmt)+"', "
-				+"'"+POut.Double(proc.Discount)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				proc.ProcTPNum=Db.NonQ(command,true);
-			}
-			return proc.ProcTPNum;
+			return Crud.ProcTPCrud.Insert(proc);
 		}
 
 		///<summary></summary>

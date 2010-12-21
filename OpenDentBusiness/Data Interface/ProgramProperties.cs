@@ -41,12 +41,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command= "UPDATE programproperty SET "
-				+"ProgramNum = '"     +POut.Long   (Cur.ProgramNum)+"'"
-				+",PropertyDesc  = '" +POut.String(Cur.PropertyDesc)+"'"
-				+",PropertyValue = '" +POut.String(Cur.PropertyValue)+"'"
-				+" WHERE ProgramPropertyNum = '"+POut.Long(Cur.ProgramPropertyNum)+"'";
-			Db.NonQ(command);
+			Crud.ProgramPropertyCrud.Update(Cur);
 		}
 
 		///<summary>This can only be called from ClassConversions. Users not allowed to add properties so there is no user interface.</summary>
@@ -55,28 +50,7 @@ namespace OpenDentBusiness {
 				Cur.ProgramPropertyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ProgramPropertyNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.ProgramPropertyNum=ReplicationServers.GetKey("programproperty","ProgramPropertyNum");
-			}
-			string command="INSERT INTO programproperty (";
-			if(PrefC.RandomKeys) {
-				command+="ProgramPropertyNum,";
-			}
-			command+="ProgramNum,PropertyDesc,PropertyValue) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.ProgramPropertyNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (Cur.ProgramNum)+"', "
-				+"'"+POut.String(Cur.PropertyDesc)+"', "
-				+"'"+POut.String(Cur.PropertyValue)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				Cur.ProgramPropertyNum=Db.NonQ(command,true);
-			}
-			return Cur.ProgramPropertyNum;
+			return Crud.ProgramPropertyCrud.Insert(Cur);
 		}
 
 		

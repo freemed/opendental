@@ -51,29 +51,7 @@ namespace OpenDentBusiness{
 				item.ProcButtonItemNum=Meth.GetLong(MethodBase.GetCurrentMethod(),item);
 				return item.ProcButtonItemNum;
 			}
-			if(PrefC.RandomKeys) {
-				item.ProcButtonItemNum=ReplicationServers.GetKey("procbuttonitem","ProcButtonItemNum");
-			}
-			string command="INSERT INTO procbuttonitem (";
-			if(PrefC.RandomKeys) {
-				command+="ProcButtonItemNum,";
-			}
-			command+="ProcButtonNum,OldCode,AutoCodeNum,CodeNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(item.ProcButtonItemNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (item.ProcButtonNum)+"', "
-				+"'"+POut.String(item.OldCode)+"', "
-				+"'"+POut.Long   (item.AutoCodeNum)+"', "
-				+"'"+POut.Long   (item.CodeNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				item.ProcButtonItemNum=Db.NonQ(command,true);
-			}
-			return item.ProcButtonItemNum;
+			return Crud.ProcButtonItemCrud.Insert(item);
 		}
 
 		///<summary></summary>
@@ -82,13 +60,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
 				return;
 			}
-			string command="UPDATE procbuttonitem SET " 
-				+ "ProcButtonNum='"+POut.Long   (item.ProcButtonNum)+"'"
-				+ ",OldCode='"     +POut.String(item.OldCode)+"'"
-				+ ",AutoCodeNum='" +POut.Long   (item.AutoCodeNum)+"'"
-				+ ",CodeNum='" +POut.Long   (item.CodeNum)+"'"
-				+" WHERE ProcButtonItemNum = '"+POut.Long(item.ProcButtonItemNum)+"'";
-			Db.NonQ(command);
+			Crud.ProcButtonItemCrud.Update(item);
 		}
 
 		///<summary></summary>

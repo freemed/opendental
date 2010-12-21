@@ -69,29 +69,7 @@ namespace OpenDentBusiness{
 				note.ProcCodeNoteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),note);
 				return note.ProcCodeNoteNum;
 			}
-			if(PrefC.RandomKeys) {
-				note.ProcCodeNoteNum=ReplicationServers.GetKey("proccodenote","ProcCodeNoteNum");
-			}
-			string command="INSERT INTO proccodenote (";
-			if(PrefC.RandomKeys) {
-				command+="ProcCodeNoteNum,";
-			}
-			command+="CodeNum,ProvNum,Note,ProcTime) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(note.ProcCodeNoteNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (note.CodeNum)+"', "
-				+"'"+POut.Long   (note.ProvNum)+"', "
-				+"'"+POut.String(note.Note)+"', "
-				+"'"+POut.String(note.ProcTime)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				note.ProcCodeNoteNum=Db.NonQ(command,true);
-			}
-			return note.ProcCodeNoteNum;
+			return Crud.ProcCodeNoteCrud.Insert(note);
 		}
 
 		///<summary></summary>
@@ -100,13 +78,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
 				return;
 			}
-			string command="UPDATE proccodenote SET " 
-				+ "CodeNum = '"    +POut.Long   (note.CodeNum)+"'"
-				+ ",ProvNum = '"   +POut.Long   (note.ProvNum)+"'"
-				+ ",Note = '"      +POut.String(note.Note)+"'"
-				+ ",ProcTime = '"  +POut.String(note.ProcTime)+"'"
-				+" WHERE ProcCodeNoteNum = "+POut.Long(note.ProcCodeNoteNum);
-			Db.NonQ(command);
+			Crud.ProcCodeNoteCrud.Update(note);
 		}
 
 		public static void Delete(long procCodeNoteNum) {
