@@ -50,28 +50,7 @@ namespace OpenDentBusiness{
 				pp.PayPeriodNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pp);
 				return pp.PayPeriodNum;
 			}
-			if(PrefC.RandomKeys) {
-				pp.PayPeriodNum=ReplicationServers.GetKey("payperiod","PayPeriodNum");
-			}
-			string command="INSERT INTO payperiod (";
-			if(PrefC.RandomKeys) {
-				command+="PayPeriodNum,";
-			}
-			command+="DateStart,DateStop,DatePaycheck) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(pp.PayPeriodNum)+"', ";
-			}
-			command+=
-				 POut.Date  (pp.DateStart)+", "
-				+POut.Date  (pp.DateStop)+", "
-				+POut.Date  (pp.DatePaycheck)+")";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				pp.PayPeriodNum=Db.NonQ(command,true);
-			}
-			return pp.PayPeriodNum;
+			return Crud.PayPeriodCrud.Insert(pp);
 		}
 
 		///<summary></summary>

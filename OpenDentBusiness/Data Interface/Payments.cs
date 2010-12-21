@@ -175,37 +175,7 @@ namespace OpenDentBusiness{
 				pay.PayNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pay);
 				return pay.PayNum;
 			}
-			if(PrefC.RandomKeys){
-				pay.PayNum=ReplicationServers.GetKey("payment","PayNum");
-			}
-			string command= "INSERT INTO payment (";
-			if(PrefC.RandomKeys){
-				command+="PayNum,";
-			}
-			command+="PayType,PayDate,PayAmt, "
-				+"CheckNum,BankBranch,PayNote,IsSplit,PatNum,ClinicNum,DateEntry,DepositNum) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(pay.PayNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (pay.PayType)+"', "
-				+POut.Date  (pay.PayDate)+", "
-				+"'"+POut.Double(pay.PayAmt)+"', "
-				+"'"+POut.String(pay.CheckNum)+"', "
-				+"'"+POut.String(pay.BankBranch)+"', "
-				+"'"+POut.String(pay.PayNote)+"', "
-				+"'"+POut.Bool  (pay.IsSplit)+"', "
-				+"'"+POut.Long   (pay.PatNum)+"', "
-				+"'"+POut.Long   (pay.ClinicNum)+"', "
-				+"NOW()"
-				+", '"+POut.Long   (pay.DepositNum)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				pay.PayNum=Db.NonQ(command,true);
-			}
-			return pay.PayNum;
+			return Crud.PaymentCrud.Insert(pay);
 		}
 
 		///<summary>Deletes the payment as well as all splits.  Surround by try catch, because it will throw an exception if trying to delete a payment attached to a deposit.</summary>

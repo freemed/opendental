@@ -70,19 +70,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
 				return;
 			}
-			string command= "UPDATE payplancharge SET " 
-				+"PayPlanChargeNum = '"+POut.Long   (charge.PayPlanChargeNum)+"'"
-				+",PayPlanNum = '"     +POut.Long   (charge.PayPlanNum)+"'"
-				+",Guarantor = '"      +POut.Long   (charge.Guarantor)+"'"
-				+",PatNum = '"         +POut.Long   (charge.PatNum)+"'"
-				+",ChargeDate = "     +POut.Date  (charge.ChargeDate)
-				+",Principal = '"      +POut.Double(charge.Principal)+"'"
-				+",Interest = '"       +POut.Double(charge.Interest)+"'"
-				+",Note = '"           +POut.String(charge.Note)+"'"
-				+",ProvNum = '"        +POut.Long(charge.ProvNum)+"'"
-				+",ClinicNum = '"        +POut.Long(charge.ClinicNum)+"'"
-				+" WHERE PayPlanChargeNum = '"+POut.Long(charge.PayPlanChargeNum)+"'";
- 			Db.NonQ(command);
+			Crud.PayPlanChargeCrud.Update(charge);
 		}
 
 		///<summary></summary>
@@ -91,34 +79,7 @@ namespace OpenDentBusiness{
 				charge.PayPlanChargeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),charge);
 				return charge.PayPlanChargeNum;
 			}
-			if(PrefC.RandomKeys){
-				charge.PayPlanChargeNum=ReplicationServers.GetKey("payplancharge","PayPlanChargeNum");
-			}
-			string command= "INSERT INTO payplancharge (";
-			if(PrefC.RandomKeys){
-				command+="PayPlanChargeNum,";
-			}
-			command+="PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note,ProvNum,ClinicNum) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(charge.PayPlanChargeNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (charge.PayPlanNum)+"', "
-				+"'"+POut.Long   (charge.Guarantor)+"', "
-				+"'"+POut.Long   (charge.PatNum)+"', "
-				+POut.Date  (charge.ChargeDate)+", "
-				+"'"+POut.Double(charge.Principal)+"', "
-				+"'"+POut.Double(charge.Interest)+"', "
-				+"'"+POut.String(charge.Note)+"', "
-				+"'"+POut.Long(charge.ProvNum)+"', "
-				+"'"+POut.Long(charge.ClinicNum)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				charge.PayPlanChargeNum=Db.NonQ(command,true);
-			}
-			return charge.PayPlanChargeNum;
+			return Crud.PayPlanChargeCrud.Insert(charge);
 		}
 
 		///<summary></summary>

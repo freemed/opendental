@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 			}
 			Crud.EmailMessageCrud.Update(message);
 			//now, delete all attachments and recreate.
-			command="DELETE FROM emailattach WHERE EmailMessageNum="+POut.Long(message.EmailMessageNum);
+			string command="DELETE FROM emailattach WHERE EmailMessageNum="+POut.Long(message.EmailMessageNum);
 			Db.NonQ(command);
 			for(int i=0;i<message.Attachments.Count;i++) {
 				message.Attachments[i].EmailMessageNum=message.EmailMessageNum;

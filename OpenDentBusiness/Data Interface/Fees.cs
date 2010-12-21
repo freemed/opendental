@@ -55,15 +55,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),fee);
 				return;
 			}
-			string command= "UPDATE fee SET " 
-				+ "Amount = '"        +POut.Double(fee.Amount)+"'"
-				//+ ",oldcode = '"      +POut.PString(fee.OldCode)+"'"
-				+ ",FeeSched = '"     +POut.Long   (fee.FeeSched)+"'"
-				//+ ",usedefaultfee = '"+POut.PBool  (fee.UseDefaultFee)+"'"
-				//+ ",usedefaultcov = '"+POut.PBool  (fee.UseDefaultCov)+"'"
-				+ ",CodeNum = '"      +POut.Long   (fee.CodeNum)+"'"
-				+" WHERE FeeNum = '"  +POut.Long   (fee.FeeNum)+"'";
- 			Db.NonQ(command);
+			Crud.FeeCrud.Update(fee);
 		}
 
 		///<summary></summary>

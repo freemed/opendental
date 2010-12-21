@@ -62,6 +62,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),split);
 				return;
 			}
+			//Crud.PaySplitCrud.Update(split);
 			string command="UPDATE paysplit SET " 
 				+ "SplitAmt = '"     +POut.Double(split.SplitAmt)+"'"
 				+ ",PatNum = '"      +POut.Long   (split.PatNum)+"'"
@@ -84,6 +85,7 @@ namespace OpenDentBusiness{
 				split.SplitNum=Meth.GetLong(MethodBase.GetCurrentMethod(),split);
 				return split.SplitNum;
 			}
+			//return Crud.PaySplitCrud.Insert(split);
 			if(PrefC.RandomKeys){
 				split.SplitNum=ReplicationServers.GetKey("paysplit","SplitNum");
 			}
