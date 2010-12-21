@@ -61,7 +61,7 @@ namespace OpenDental {
 		/// <returns></returns>
 		private bool TestWebServiceExists() {
 			try {
-				mb.Url=url;
+				//mb.Url=url;
 				if(mb.ServiceExists()) {
 					return true;
 				}
