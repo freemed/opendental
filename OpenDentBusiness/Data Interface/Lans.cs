@@ -51,15 +51,10 @@ namespace OpenDentBusiness {
 			if(CultureInfo.CurrentCulture.Name=="en-US") {
 				return;
 			}
-			Language langTemp;
-			for(int i=0;i<table.Rows.Count;i++) {
-				langTemp=new Language();
-				//List[i].EnglishCommentsOld= PIn.PString(table.Rows[i][0].ToString());
-				langTemp.ClassType      = PIn.String(table.Rows[i][1].ToString());
-				langTemp.English        = PIn.String(table.Rows[i][2].ToString());
-				langTemp.IsObsolete     = PIn.Bool(table.Rows[i][3].ToString());
-				if(!hList.ContainsKey(langTemp.ClassType+langTemp.English)) {
-					hList.Add(langTemp.ClassType+langTemp.English,langTemp);
+			List<Language> list=Crud.LanguageCrud.TableToList(table);
+			for(int i=0;i<list.Count;i++) {
+				if(!hList.ContainsKey(list[i].ClassType+list[i].English)) {
+					hList.Add(list[i].ClassType+list[i].English,list[i]);
 				}
 			}
 		}
@@ -118,22 +113,12 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Tries to insert, but ignores the insert if this row already exists. This prevents the previous frequent crashes.</summary>
-		public static void Insert(Language mylan) {
+		///<summary></summary>
+		public static long Insert(Language language) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),mylan);
-				return;
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),language);
 			}
-			//In Oracle, one must specify logging options for logging to occur, otherwise logging is not used.
-			string ignoreClause="";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				ignoreClause="IGNORE";
-			}
-			string command = "INSERT "+ignoreClause+" INTO language (ClassType,English,EnglishComments,IsObsolete) "
-				+"VALUES("
-				+"'"+POut.String(mylan.ClassType)+"', "
-				+"'"+POut.String(mylan.English)+"','',0)";
-			Db.NonQ(command);
+			return Crud.LanguageCrud.Insert(language);
 		}
 
 		/*
@@ -188,16 +173,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM language "
 				+"WHERE ClassType = BINARY '"+POut.String(classType)+"' ORDER BY English";
-			DataTable table=Db.GetTable(command);
-			Language[] ListForCat=new Language[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				ListForCat[i]=new Language();
-				//ListForCat[i].EnglishComments= PIn.PString(table.Rows[i][0].ToString());
-				ListForCat[i].ClassType      = PIn.String(table.Rows[i][1].ToString());
-				ListForCat[i].English        = PIn.String(table.Rows[i][2].ToString());
-				ListForCat[i].IsObsolete     = PIn.Bool(table.Rows[i][3].ToString());
-			}
-			return ListForCat;
+			return Crud.LanguageCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>This had to be added because SilverLight does not allow globally setting the current culture format.</summary>

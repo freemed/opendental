@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Reflection;
@@ -43,24 +44,19 @@ namespace OpenDentBusiness{
 				table=Db.GetTable(command);
 			}
 			hList=new Hashtable();
-			LanguageForeign lf;
-			for(int i=0;i<table.Rows.Count;i++) {
-				lf=new LanguageForeign();
-				lf.ClassType  = PIn.String(table.Rows[i][0].ToString());
-				lf.English    = PIn.String(table.Rows[i][1].ToString());
-				lf.Culture    = PIn.String(table.Rows[i][2].ToString());
-				lf.Translation= PIn.String(table.Rows[i][3].ToString());
-				lf.Comments   = PIn.String(table.Rows[i][4].ToString());
-				if(lf.Culture==cultureInfoName) {//if exact culture match
-					if(hList.ContainsKey(lf.ClassType+lf.English)) {
-						hList.Remove(lf.ClassType+lf.English);//remove any existing entry
+			//LanguageForeign lanf;
+			List<LanguageForeign> list=Crud.LanguageForeignCrud.TableToList(table);
+			for(int i=0;i<list.Count;i++) {
+				if(list[i].Culture==cultureInfoName) {//if exact culture match
+					if(hList.ContainsKey(list[i].ClassType+list[i].English)) {
+						hList.Remove(list[i].ClassType+list[i].English);//remove any existing entry
 					}
-					hList.Add(lf.ClassType+lf.English,lf);
+					hList.Add(list[i].ClassType+list[i].English,list[i]);
 				}
 				else {//or if any other culture of same language
-					if(!hList.ContainsKey(lf.ClassType+lf.English)) {
+					if(!hList.ContainsKey(list[i].ClassType+list[i].English)) {
 						//only add if not already in HList
-						hList.Add(lf.ClassType+lf.English,lf);
+						hList.Add(list[i].ClassType+list[i].English,list[i]);
 					}
 				}
 			}
@@ -68,48 +64,29 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(LanguageForeign lf){
+		public static long Insert(LanguageForeign lanf){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),lf);
-				return;
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),lanf);
 			}
-			string command= "INSERT INTO languageforeign(ClassType,English,Culture"
-				+",Translation,Comments) "
-				+"VALUES("
-				+"'"+POut.String(lf.ClassType)+"', "
-				+"'"+POut.String(lf.English)+"', "
-				+"'"+POut.String(lf.Culture)+"', "
-				+"'"+POut.String(lf.Translation)+"', "
-				+"'"+POut.String(lf.Comments)+"')";
-			Db.NonQ(command);
+			return Crud.LanguageForeignCrud.Insert(lanf);
 		}
 
 		///<summary></summary>
-		public static void Update(LanguageForeign lf){
+		public static void Update(LanguageForeign lanf) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),lf);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lanf);
 				return;
 			}
-			string command="UPDATE languageforeign SET " 
-				+"Translation	= '"+POut.String(lf.Translation)+"'"
-				+",Comments = '"  +POut.String(lf.Comments)+"'" 
-				+" WHERE ClassType= BINARY '"+POut.String(lf.ClassType)+"'" 
-				+" AND English= BINARY '"+POut.String(lf.English)+"'"
-				+" AND Culture= '"+CultureInfo.CurrentCulture.Name+"'";
-			Db.NonQ(command);
+			Crud.LanguageForeignCrud.Update(lanf);
 		}
 
 		///<summary></summary>
-		public static void Delete(LanguageForeign lf){
+		public static void Delete(LanguageForeign lanf){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),lf);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lanf);
 				return;
 			}
-			string command= "DELETE from languageforeign "
-				+"WHERE ClassType=BINARY '"+POut.String(lf.ClassType)+"' "
-				+"AND English=BINARY '"    +POut.String(lf.English)+"' "
-				+"AND Culture='"+CultureInfo.CurrentCulture.Name+"'";
-			Db.NonQ(command);
+			Crud.LanguageForeignCrud.Delete(lanf.LanguageForeignNum);
 		}
 
 		///<summary>Only used during export to get a list of all translations for specified culture only.</summary>
@@ -120,17 +97,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM languageforeign "
 				+"WHERE Culture='"+CultureInfo.CurrentCulture.Name+"'";
-			DataTable table=Db.GetTable(command);
-			LanguageForeign[] List=new LanguageForeign[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new LanguageForeign();
-				List[i].ClassType  = PIn.String(table.Rows[i][0].ToString());
-				List[i].English    = PIn.String(table.Rows[i][1].ToString());
-				List[i].Culture    = PIn.String(table.Rows[i][2].ToString());
-				List[i].Translation= PIn.String(table.Rows[i][3].ToString());
-				List[i].Comments   = PIn.String(table.Rows[i][4].ToString());
-			}
-			return List;
+			return Crud.LanguageForeignCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Used in FormTranslation to get all translations for all cultures for one classtype</summary>
@@ -141,17 +108,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM languageforeign "
 				+"WHERE ClassType='"+POut.String(classType)+"'";
-			DataTable table=Db.GetTable(command);
-			LanguageForeign[] List=new LanguageForeign[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new LanguageForeign();
-				List[i].ClassType  = PIn.String(table.Rows[i][0].ToString());
-				List[i].English    = PIn.String(table.Rows[i][1].ToString());
-				List[i].Culture    = PIn.String(table.Rows[i][2].ToString());
-				List[i].Translation= PIn.String(table.Rows[i][3].ToString());
-				List[i].Comments   = PIn.String(table.Rows[i][4].ToString());
-			}
-			return List;
+			return Crud.LanguageForeignCrud.SelectMany(command).ToArray();
 		}
 		
 		///<summary>Used in FormTranslation to get a single entry for the specified culture.  The culture match must be extact.  If no translation entries, then it returns null.</summary>
