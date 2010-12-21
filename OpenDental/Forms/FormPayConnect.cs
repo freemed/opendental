@@ -7,6 +7,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel.Tables;
 
 namespace OpenDental {
 	public partial class FormPayConnect:Form {
@@ -14,8 +17,9 @@ namespace OpenDental {
 		private Payment PaymentCur;
 		private Patient PatCur;
 		private string amountInit;
-		private PayConnectService.Status status;
+		private PayConnectService.transResponse response;
 		private MagstripCardParser parser=null;
+		private string receiptStr;
 
 		public FormPayConnect(Payment payment,Patient pat,string amount) {
 			InitializeComponent();
@@ -23,6 +27,7 @@ namespace OpenDental {
 			PaymentCur=payment;
 			PatCur=pat;
 			amountInit=amount;
+			receiptStr="";
 		}
 
 		private void FormPayConnect_Load(object sender,EventArgs e) {
@@ -71,8 +76,13 @@ namespace OpenDental {
 		}
 
 		///<summary>Only call after the form is closed and the DialogResult is DialogResult.OK.</summary>
-		public PayConnectService.Status PaymentStatus{
-			get{ return status; }
+		public PayConnectService.transResponse Response {
+			get{ return response; }
+		}
+
+		///<summary>Only call after the form is closed and the DialogResult is DialogResult.OK.</summary>
+		public string ReceiptStr {
+			get { return receiptStr; }
 		}
 
 		private bool VerifyData(out int expYear,out int expMonth){
@@ -106,17 +116,63 @@ namespace OpenDental {
 			return true;
 		}
 
+		private string BuildReceiptString(PayConnectService.transResponse response) {
+			string result="";
+			//PrintTransaction();
+			//PrintMessages();
+			//if(response.Status.code==0) {
+			//  //PrintDisclaimer();
+			//  //PrintSignature();
+			//}
+			return result;
+		}
+
+		private void PrintReceipt(string receiptStr) {
+			MigraDoc.DocumentObjectModel.Document doc=new MigraDoc.DocumentObjectModel.Document();
+			doc.DefaultPageSetup.PageWidth=Unit.FromInch(3.0);
+			doc.DefaultPageSetup.PageHeight=Unit.FromInch(11);
+			doc.DefaultPageSetup.TopMargin=Unit.FromInch(.5);
+			doc.DefaultPageSetup.LeftMargin=Unit.FromInch(.5);
+			doc.DefaultPageSetup.RightMargin=Unit.FromInch(.5);
+			MigraDoc.DocumentObjectModel.Font bodyFontx=MigraDocHelper.CreateFont(9,false);
+			MigraDoc.DocumentObjectModel.Section section=doc.AddSection();
+			Paragraph par=section.AddParagraph();
+			ParagraphFormat parformat=new ParagraphFormat();
+			parformat.Alignment=ParagraphAlignment.Center;
+			parformat.Font=bodyFontx;
+			par.Format=parformat;
+			par.AddFormattedText(receiptStr,bodyFontx);
+			MigraDoc.Rendering.Printing.MigraDocPrintDocument printdoc=new MigraDoc.Rendering.Printing.MigraDocPrintDocument();
+			MigraDoc.Rendering.DocumentRenderer renderer=new MigraDoc.Rendering.DocumentRenderer(doc);
+			renderer.PrepareDocument();
+			printdoc.Renderer=renderer;
+			//we might want to surround some of this with a try-catch
+#if DEBUG
+			FormRpPrintPreview pView=new FormRpPrintPreview();
+			pView.printPreviewControl2.Document=printdoc;
+			pView.ShowDialog();
+#else
+				if(PrinterL.SetPrinter(pd2,PrintSituation.Statement)){
+					printdoc.PrinterSettings=pd2.PrinterSettings;
+					printdoc.Print();
+				}
+#endif
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			int expYear;
 			int expMonth;
-			if(!VerifyData(out expYear,out expMonth)){
+			if(!VerifyData(out expYear,out expMonth)) {
 				Cursor=Cursors.Default;
 				return;
 			}
-			status=Bridges.PayConnect.ProcessCreditCard(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
+			PayConnectService.creditCardRequest request=Bridges.PayConnect.BuildSaleRequest(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
 				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text,(parser!=null?parser.Track2:null));
-			if(status==null || status.code!=0){//error in transaction
+			response=Bridges.PayConnect.ProcessCreditCard(request);
+			receiptStr=BuildReceiptString(response);
+			PrintReceipt(receiptStr);
+			if(response==null || response.Status.code!=0) {//error in transaction
 				Cursor=Cursors.Default;
 				DialogResult=DialogResult.Cancel;
 				return;

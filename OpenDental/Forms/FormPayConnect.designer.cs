@@ -36,6 +36,7 @@ namespace OpenDental{
 			this.textSecurityCode = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textZipCode = new System.Windows.Forms.TextBox();
+			this.pd2 = new System.Drawing.Printing.PrintDocument();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
@@ -148,7 +149,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(301,163);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 7;
+			this.butOK.TabIndex = 17;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -163,7 +164,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(301,204);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 8;
+			this.butCancel.TabIndex = 18;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -171,6 +172,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(401,255);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.textZipCode);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.textSecurityCode);
@@ -183,8 +186,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textAmount);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormPayConnect";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -197,8 +198,6 @@ namespace OpenDental{
 
 		#endregion
 
-		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textAmount;
 		private System.Windows.Forms.Label label3;
@@ -211,5 +210,8 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textSecurityCode;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.TextBox textZipCode;
+		private System.Drawing.Printing.PrintDocument pd2;
+		private UI.Button butOK;
+		private UI.Button butCancel;
 	}
 }

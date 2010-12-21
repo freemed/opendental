@@ -1262,8 +1262,14 @@ namespace OpenDental{
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
 			SetComboDepositAccounts();
-			if(FormP.PaymentStatus!=null){
-				textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+Lan.g(this,"Payment Status")+": "+FormP.PaymentStatus.description;
+			if(FormP.Response!=null){
+				textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+Lan.g(this,"Payment Status")+": "+FormP.Response.Status.description;
+				if(FormP.Response.Status.code==0) {
+					textNote.Text+=Environment.NewLine
+						+Lan.g(this,"Auth Code")+": "+FormP.Response.AuthCode+Environment.NewLine
+						+Lan.g(this,"Ref Number")+": "+FormP.Response.RefNumber;
+				}
+				PaymentCur.Receipt=FormP.ReceiptStr;
 			}
 		}
 

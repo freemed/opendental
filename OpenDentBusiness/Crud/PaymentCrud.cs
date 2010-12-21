@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				payment.ClinicNum = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
 				payment.DateEntry = PIn.Date  (table.Rows[i]["DateEntry"].ToString());
 				payment.DepositNum= PIn.Long  (table.Rows[i]["DepositNum"].ToString());
+				payment.Receipt   = PIn.String(table.Rows[i]["Receipt"].ToString());
 				retVal.Add(payment);
 			}
 			return retVal;
@@ -77,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PayNum,";
 			}
-			command+="PayType,PayDate,PayAmt,CheckNum,BankBranch,PayNote,IsSplit,PatNum,ClinicNum,DateEntry,DepositNum) VALUES(";
+			command+="PayType,PayDate,PayAmt,CheckNum,BankBranch,PayNote,IsSplit,PatNum,ClinicNum,DateEntry,DepositNum,Receipt) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(payment.PayNum)+",";
 			}
@@ -92,7 +93,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (payment.PatNum)+","
 				+    POut.Long  (payment.ClinicNum)+","
 				+    POut.Date  (payment.DateEntry)+","
-				+    POut.Long  (payment.DepositNum)+")";
+				+    POut.Long  (payment.DepositNum)+","
+				+"'"+POut.String(payment.Receipt)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -116,6 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+"ClinicNum =  "+POut.Long  (payment.ClinicNum)+", "
 				+"DateEntry =  "+POut.Date  (payment.DateEntry)+", "
 				//DepositNum excluded from update
+				+"Receipt   = '"+POut.String(payment.Receipt)+"' "
 				+"WHERE PayNum = "+POut.Long(payment.PayNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -164,6 +167,10 @@ namespace OpenDentBusiness.Crud{
 				command+="DateEntry = "+POut.Date(payment.DateEntry)+"";
 			}
 			//DepositNum excluded from update
+			if(payment.Receipt != oldPayment.Receipt) {
+				if(command!=""){ command+=",";}
+				command+="Receipt = '"+POut.String(payment.Receipt)+"'";
+			}
 			if(command==""){
 				return;
 			}

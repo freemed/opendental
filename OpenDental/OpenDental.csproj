@@ -4430,10 +4430,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="C:\development\odinternal\Bridge Info\DentalXChange\PayConnect\Merchant Services WSDL.wsdl">
+    <WebReferenceUrl Include="C:\development\Shared Project Subversion\Bridge Info\DentalXChange\PayConnect\Merchant Services WSDL.wsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\PayConnectService\</RelPath>
-      <UpdateFromURL>C:\development\odinternal\Bridge Info\DentalXChange\PayConnect\Merchant Services WSDL.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\development\Shared Project Subversion\Bridge Info\DentalXChange\PayConnect\Merchant Services WSDL.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

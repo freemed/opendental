@@ -3214,6 +3214,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="ALTER TABLE school ADD COLUMN SchoolNum bigint NOT NULL auto_increment FIRST, ADD PRIMARY KEY (SchoolNum)";
 				Db.NonQ(command);
 				//DbSchema.AddColumn("SchoolNum",OdDbType.Long);
+				command="ALTER TABLE payment ADD Receipt text NOT NULL";
+				Db.NonQ(command);
 
 
 
@@ -3239,7 +3241,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
-				
-
-				
 
