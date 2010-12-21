@@ -94,6 +94,22 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
+			if(Cur.LName=="" && Cur.FName=="") {
+				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
+			}
+			string command="UPDATE employee SET " 
+				+ "lname = '"       +POut.String(Cur.LName)+"' "
+				+ ",fname = '"      +POut.String(Cur.FName)+"' "
+				+ ",middlei = '"    +POut.String(Cur.MiddleI)+"' "
+				+ ",ishidden = '"   +POut.Bool  (Cur.IsHidden)+"' "
+				+ ",ClockStatus = '"+POut.String(Cur.ClockStatus)+"' "
+				+ ",PhoneExt = '"   +POut.Long   (Cur.PhoneExt)+"' "
+				+"WHERE EmployeeNum = '"+POut.Long(Cur.EmployeeNum)+"'";
+			//MessageBox.Show(string command);
+			Db.NonQ(command);
+			if(Cur.LName=="" && Cur.FName=="") {
+				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
+			}
 			Crud.EmployeeCrud.Update(Cur);
 		}
 
@@ -102,6 +118,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.EmployeeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployeeNum;
+			}
+			if(Cur.LName=="" && Cur.FName=="") {
+				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
 			}
 			return Crud.EmployeeCrud.Insert(Cur);
 		}

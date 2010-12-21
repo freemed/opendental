@@ -38,15 +38,12 @@ namespace OpenDentBusiness{
 				match=Regex.Match(msgText,"~[^(\n)(\r)]");
 			}
 			return msgText;
-
 			//MatchCollection matches=Regex.Matches(msgText,"~[^(\n)(\r)]");
 			//for(int i=0;i<matches.Count;i++) {
 				//Regex.
 			//	matches[i].
 			//}
 			//msgText=Regex.Replace(msgText,"~[^(\r\n)(\n)(\r)]","~\r\n");
-			
-			
 		}
 
 		/*

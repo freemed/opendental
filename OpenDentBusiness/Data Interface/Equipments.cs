@@ -35,24 +35,7 @@ namespace OpenDentBusiness{
 					+" AND DateSold <= "+POut.Date(toDate)+")"
 					+" ORDER BY DatePurchased";
 			}
-			DataTable table=Db.GetTable(command);
-			List<Equipment> list=new List<Equipment>();
-			Equipment equip;
-			for(int i=0;i<table.Rows.Count;i++) {
-				equip=new Equipment();
-				equip.EquipmentNum = PIn.Long(table.Rows[i][0].ToString());
-				equip.Description  = PIn.String(table.Rows[i][1].ToString());
-				equip.SerialNumber = PIn.String(table.Rows[i][2].ToString());
-				equip.ModelYear    = PIn.String(table.Rows[i][3].ToString());
-				equip.DatePurchased= PIn.Date(table.Rows[i][4].ToString());
-				equip.DateSold     = PIn.Date(table.Rows[i][5].ToString());
-				equip.PurchaseCost = PIn.Double(table.Rows[i][6].ToString());
-				equip.MarketValue  = PIn.Double(table.Rows[i][7].ToString());
-				equip.Location     = PIn.String(table.Rows[i][8].ToString());
-				equip.DateEntry    = PIn.Date(table.Rows[i][9].ToString());
-				list.Add(equip);
-			}
-			return list;
+			return Crud.EquipmentCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

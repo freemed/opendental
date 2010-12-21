@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Reflection;
@@ -50,20 +51,14 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			ListLong=new DiseaseDef[table.Rows.Count];
-			ArrayList AL=new ArrayList();
-			for(int i=0;i<table.Rows.Count;i++) {
-				ListLong[i]=new DiseaseDef();
-				ListLong[i].DiseaseDefNum=PIn.Long(table.Rows[i][0].ToString());
-				ListLong[i].DiseaseName=PIn.String(table.Rows[i][1].ToString());
-				ListLong[i].ItemOrder=PIn.Int(table.Rows[i][2].ToString());
-				ListLong[i].IsHidden=PIn.Bool(table.Rows[i][3].ToString());
-				if(!ListLong[i].IsHidden) {
-					AL.Add(ListLong[i]);
+			listLong=Crud.DiseaseDefCrud.TableToList(table).ToArray();
+			List<DiseaseDef> listshort=new List<DiseaseDef>();
+			for(int i=0;i<listLong.Length;i++) {
+				if(!listLong[i].IsHidden) {
+					listshort.Add(listLong[i]);
 				}
 			}
-			List=new DiseaseDef[AL.Count];
-			AL.CopyTo(List);
+			list=listshort.ToArray();
 		}
 
 		///<summary></summary>

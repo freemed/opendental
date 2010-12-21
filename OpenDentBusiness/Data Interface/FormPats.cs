@@ -23,32 +23,14 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<FormPat>(MethodBase.GetCurrentMethod(),formPatNum);
 			}
 			string command= "SELECT * FROM formpat WHERE FormPatNum="+POut.Long(formPatNum);
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0){
+			FormPat formpat=Crud.FormPatCrud.SelectOne(formPatNum);
+			if(formpat==null){
 				return null;//should never happen.
 			}
-			FormPat form=new FormPat();
-			form.FormPatNum=formPatNum;
-			form.PatNum      =PIn.Long  (table.Rows[0][1].ToString());
-			form.FormDateTime=PIn.DateT(table.Rows[0][2].ToString());
-			form.QuestionList=new List<Question>();
 			command="SELECT * FROM question WHERE FormPatNum="+POut.Long(formPatNum);
-			table=Db.GetTable(command);
-			Question quest;
-			for(int i=0;i<table.Rows.Count;i++){
-				quest=new Question();
-				quest.QuestionNum=PIn.Long   (table.Rows[i][0].ToString());
-				quest.PatNum     =PIn.Long   (table.Rows[i][1].ToString());
-				quest.ItemOrder  =PIn.Int   (table.Rows[i][2].ToString());
-				quest.Description=PIn.String(table.Rows[i][3].ToString());
-				quest.Answer     =PIn.String(table.Rows[i][4].ToString());
-				quest.FormPatNum =PIn.Long   (table.Rows[i][5].ToString());
-				form.QuestionList.Add(quest);
-			}
-			return form;
+			formpat.QuestionList=Crud.QuestionCrud.SelectMany(command);
+			return formpat;
 		}
-
-		
 
 		///<summary></summary>
 		public static void Delete(long formPatNum) {
