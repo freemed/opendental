@@ -41,29 +41,7 @@ namespace OpenDentBusiness{
 				note.QuickPasteNoteNum=Meth.GetLong(MethodBase.GetCurrentMethod(),note);
 				return note.QuickPasteNoteNum;
 			}
-			if(PrefC.RandomKeys){
-				note.QuickPasteNoteNum=ReplicationServers.GetKey("quickpastenote","QuickPasteNoteNum");
-			}
-			string command= "INSERT INTO quickpastenote (";
-			if(PrefC.RandomKeys){
-				command+="QuickPasteNoteNum,";
-			}
-			command+="QuickPasteCatNum,ItemOrder,Note,Abbreviation) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(note.QuickPasteNoteNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (note.QuickPasteCatNum)+"', "
-				+"'"+POut.Long   (note.ItemOrder)+"', "
-				+"'"+POut.String(note.Note)+"', "
-				+"'"+POut.String(note.Abbreviation)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				note.QuickPasteNoteNum=Db.NonQ(command,true);
-			}
-			return note.QuickPasteNoteNum;
+			return Crud.QuickPasteNoteCrud.Insert(note);
 		}
 
 		///<summary></summary>
@@ -72,13 +50,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
 				return;
 			}
-			string command="UPDATE quickpastenote SET "
-				+"QuickPasteCatNum='" +POut.Long   (note.QuickPasteCatNum)+"'"
-				+",ItemOrder = '"     +POut.Long   (note.ItemOrder)+"'"
-				+",Note = '"          +POut.String(note.Note)+"'"
-				+",Abbreviation = '"  +POut.String(note.Abbreviation)+"'"
-				+" WHERE QuickPasteNoteNum = '"+POut.Long (note.QuickPasteNoteNum)+"'";
- 			Db.NonQ(command);
+			Crud.QuickPasteNoteCrud.Update(note);
 		}
 		
 		///<summary></summary>

@@ -34,14 +34,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),quest);
 				return;
 			}
-			string command="UPDATE question SET " 
-				+"PatNum = '"      +POut.Long   (quest.PatNum)+"'"
-				+",ItemOrder = '"  +POut.Long   (quest.ItemOrder)+"'"
-				+",Description = '"+POut.String(quest.Description)+"'"
-				+",Answer = '"     +POut.String(quest.Answer)+"'"
-				+",FormPatNum = '" +POut.Long   (quest.FormPatNum)+"'"
-				+" WHERE QuestionNum  ='"+POut.Long   (quest.QuestionNum)+"'";
-			Db.NonQ(command);
+			Crud.QuestionCrud.Update(quest);
 		}
 
 		///<summary></summary>
@@ -50,30 +43,7 @@ namespace OpenDentBusiness {
 				quest.QuestionNum=Meth.GetLong(MethodBase.GetCurrentMethod(),quest);
 				return quest.QuestionNum;
 			}
-			if(PrefC.RandomKeys) {
-				quest.QuestionNum=ReplicationServers.GetKey("question","QuestionNum");
-			}
-			string command="INSERT INTO question (";
-			if(PrefC.RandomKeys) {
-				command+="QuestionNum,";
-			}
-			command+="PatNum,ItemOrder,Description,Answer,FormPatNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(quest.QuestionNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (quest.PatNum)+"', "
-				+"'"+POut.Long   (quest.ItemOrder)+"', "
-				+"'"+POut.String(quest.Description)+"', "
-				+"'"+POut.String(quest.Answer)+"', "
-				+"'"+POut.Long   (quest.FormPatNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				quest.QuestionNum=Db.NonQ(command,true);
-			}
-			return quest.QuestionNum;
+			return Crud.QuestionCrud.Insert(quest);
 		}
 
 		//<summary>I can't see how this could ever be used.</summary>

@@ -50,16 +50,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command= "UPDATE program SET "
-				+"ProgName = '"     +POut.String(Cur.ProgName)+"'"
-				+",ProgDesc  = '"   +POut.String(Cur.ProgDesc)+"'"
-				+",Enabled  = '"    +POut.Bool  (Cur.Enabled)+"'"
-				+",Path = '"        +POut.String(Cur.Path)+"'"
-				+",CommandLine  = '"+POut.String(Cur.CommandLine)+"'"
-				+",Note  = '"       +POut.String(Cur.Note)+"'"
-				+",PluginDllName  = '"+POut.String(Cur.PluginDllName)+"'"
-				+" WHERE programnum = '"+POut.Long(Cur.ProgramNum)+"'";
-			Db.NonQ(command);
+			Crud.ProgramCrud.Update(Cur);
 		}
 
 		///<summary></summary>
@@ -68,32 +59,7 @@ namespace OpenDentBusiness{
 				Cur.ProgramNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ProgramNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.ProgramNum=ReplicationServers.GetKey("program","ProgramNum");
-			}
-			string command="INSERT INTO program (";
-			if(PrefC.RandomKeys) {
-				command+="ProgramNum,";
-			}
-			command+="ProgName,ProgDesc,Enabled,Path,CommandLine,Note,PluginDllName) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.ProgramNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(Cur.ProgName)+"', "
-				+"'"+POut.String(Cur.ProgDesc)+"', "
-				+"'"+POut.Bool  (Cur.Enabled)+"', "
-				+"'"+POut.String(Cur.Path)+"', "
-				+"'"+POut.String(Cur.CommandLine)+"', "
-				+"'"+POut.String(Cur.Note)+"', "
-				+"'"+POut.String(Cur.PluginDllName)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				Cur.ProgramNum=Db.NonQ(command, true);
-			}
-			return Cur.ProgramNum;
+			return Crud.ProgramCrud.Insert(Cur);
 		}
 
 		///<summary>This can only be called by the user if it is a program link that they created. Included program links cannot be deleted.  If calling this from ClassConversion, must delete any dependent ProgramProperties first.  It will delete ToolButItems for you.</summary>

@@ -40,13 +40,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pi);
 				return;
 			}
-			string command= "UPDATE providerident SET "
-				+ "ProvNum = '"   +POut.Long   (pi.ProvNum)+"'"
-				+",PayorID = '"   +POut.String(pi.PayorID)+"'"
-				+",SuppIDType = '"+POut.Long   ((int)pi.SuppIDType)+"'"
-				+",IDNumber = '"  +POut.String(pi.IDNumber)+"'"
-				+" WHERE ProviderIdentNum = '"+POut.Long(pi.ProviderIdentNum)+"'";
- 			Db.NonQ(command);
+			Crud.ProviderIdentCrud.Update(pi);
 		}
 
 		///<summary></summary>
@@ -55,29 +49,7 @@ namespace OpenDentBusiness{
 				pi.ProviderIdentNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pi);
 				return pi.ProviderIdentNum;
 			}
-			if(PrefC.RandomKeys) {
-				pi.ProviderIdentNum=ReplicationServers.GetKey("providerident","ProviderIdentNum");
-			}
-			string command="INSERT INTO providerident (";
-			if(PrefC.RandomKeys) {
-				command+="ProviderIdentNum,";
-			}
-			command+="ProvNum,PayorID,SuppIDType,IDNumber) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(pi.ProviderIdentNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (pi.ProvNum)+"', "
-				+"'"+POut.String(pi.PayorID)+"', "
-				+"'"+POut.Long   ((int)pi.SuppIDType)+"', "
-				+"'"+POut.String(pi.IDNumber)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				pi.ProviderIdentNum=Db.NonQ(command,true);
-			}
-			return pi.ProviderIdentNum;
+			return Crud.ProviderIdentCrud.Insert(pi);
 		}
 
 		///<summary></summary>

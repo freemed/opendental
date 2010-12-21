@@ -32,13 +32,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="UPDATE questiondef SET " 
-				+"QuestionDefNum = '"+POut.Long   (def.QuestionDefNum)+"'"
-				+",Description = '"  +POut.String(def.Description)+"'"
-				+",ItemOrder = '"    +POut.Long   (def.ItemOrder)+"'"
-				+",QuestType = '"    +POut.Long   ((int)def.QuestType)+"'"
-				+" WHERE QuestionDefNum  ='"+POut.Long   (def.QuestionDefNum)+"'";
-			Db.NonQ(command);
+			Crud.QuestionDefCrud.Update(def);
 		}
 
 		///<summary></summary>
@@ -47,28 +41,7 @@ namespace OpenDentBusiness {
 				def.QuestionDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.QuestionDefNum;
 			}
-			if(PrefC.RandomKeys) {
-				def.QuestionDefNum=ReplicationServers.GetKey("questiondef","QuestionDefNum");
-			}
-			string command="INSERT INTO questiondef (";
-			if(PrefC.RandomKeys) {
-				command+="QuestionDefNum,";
-			}
-			command+="Description,ItemOrder,QuestType) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(def.QuestionDefNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(def.Description)+"', "
-				+"'"+POut.Long   (def.ItemOrder)+"', "
-				+"'"+POut.Long   ((int)def.QuestType)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				def.QuestionDefNum=Db.NonQ(command,true);
-			}
-			return def.QuestionDefNum;
+			return Crud.QuestionDefCrud.Insert(def);
 		}
 
 		///<summary>Ok to delete whenever, because no patients are tied to this table by any dependencies.</summary>
