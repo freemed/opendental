@@ -81,6 +81,9 @@ namespace OpenDentBusiness{
 				je.JournalEntryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),je);
 				return je.JournalEntryNum;
 			}
+			if(je.DebitAmt<0 || je.CreditAmt<0){
+				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
+			}
 			return Crud.JournalEntryCrud.Insert(je);
 		}
 
