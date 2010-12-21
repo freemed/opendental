@@ -3213,7 +3213,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE school ADD COLUMN SchoolNum bigint NOT NULL auto_increment FIRST, ADD PRIMARY KEY (SchoolNum)";
 				Db.NonQ(command);
-
+				//DbSchema.AddColumn("SchoolNum",OdDbType.Long);
 
 
 

@@ -549,8 +549,10 @@
     <Compile Include="Meth.cs" />
     <Compile Include="Misc\DatabaseMaintenance.cs" />
     <Compile Include="Misc\DbHelper.cs" />
+    <Compile Include="Misc\DbSchema.cs" />
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
+    <Compile Include="Misc\OdSqlParameter.cs" />
     <Compile Include="Misc\TimeSpanExtension.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="Mobile\ConvertDatabasem.cs" />

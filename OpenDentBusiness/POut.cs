@@ -142,9 +142,9 @@ namespace OpenDentBusiness{
 			return myInt.ToString();
 		}
 
-		public static string Short(short myShort) {
-			return myShort.ToString();
-		}
+		//public static string Short(short myShort) {
+		//	return myShort.ToString();
+		//}
 
 		///<summary></summary>
 		public static string Float(float myFloat){

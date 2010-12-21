@@ -395,7 +395,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
-		public long NonQ(string commands,bool getInsertID){
+		public long NonQ(string commands,bool getInsertID,params string[] parameters){
 			#if DEBUG
 				if(logDebugQueries){
 					Debug.WriteLine(commands);
@@ -446,6 +446,8 @@ namespace OpenDentBusiness{
 			}
 			else if(DBtype==DatabaseType.MySql) {
 				cmd.CommandText=commands;
+				//MySqlParameter param=new MySqlParameter(
+				//cmd.Parameters.Add("",MySqlDbType.
 				con.Open();
 				rowsChanged=cmd.ExecuteNonQuery();
 				if(getInsertID) {
