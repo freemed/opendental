@@ -43,13 +43,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE medicationpat SET " 
-				+ "patnum = '"        +POut.Long   (Cur.PatNum)+"'"
-				+ ",medicationnum = '"+POut.Long   (Cur.MedicationNum)+"'"
-				+ ",patnote = '"      +POut.String(Cur.PatNote)+"'"
-				+" WHERE medicationpatnum = '" +POut.Long   (Cur.MedicationPatNum)+"'";
-			//MessageBox.Show(command);
-			Db.NonQ(command);
+			Crud.MedicationPatCrud.Update(Cur);
 		}
 
 		///<summary></summary>
@@ -58,29 +52,7 @@ namespace OpenDentBusiness{
 				Cur.MedicationPatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.MedicationPatNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.MedicationPatNum=ReplicationServers.GetKey("medicationpat","MedicationPatNum");
-			}
-			string command="INSERT INTO medicationpat (";
-			if(PrefC.RandomKeys){
-				command+="MedicationPatNum,";
-			}
-			command+="patnum,medicationnum,patnote"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.MedicationPatNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (Cur.PatNum)+"', "
-				+"'"+POut.Long   (Cur.MedicationNum)+"', "
-				+"'"+POut.String(Cur.PatNote)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.MedicationPatNum=Db.NonQ(command,true);
-			}
-			return Cur.MedicationPatNum;
+			return Crud.MedicationPatCrud.Insert(Cur);
 		}
 
 		///<summary></summary>

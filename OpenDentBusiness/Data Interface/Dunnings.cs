@@ -34,31 +34,7 @@ namespace OpenDentBusiness{
 				dun.DunningNum=Meth.GetLong(MethodBase.GetCurrentMethod(),dun);
 				return dun.DunningNum;
 			}
-			if(PrefC.RandomKeys) {
-				dun.DunningNum=ReplicationServers.GetKey("dunning","DunningNum");
-			}
-			string command="INSERT INTO dunning (";
-			if(PrefC.RandomKeys) {
-				command+="DunningNum,";
-			}
-			command+="DunMessage,BillingType,AgeAccount,InsIsPending,"
-				+"MessageBold) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(dun.DunningNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(dun.DunMessage)+"', "
-				+"'"+POut.Long   (dun.BillingType)+"', "
-				+"'"+POut.Long   (dun.AgeAccount)+"', "
-				+"'"+POut.Long   ((int)dun.InsIsPending)+"', "
-				+"'"+POut.String(dun.MessageBold)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				dun.DunningNum=Db.NonQ(command,true);
-			}
-			return dun.DunningNum;
+			return Crud.DunningCrud.Insert(dun);
 		}
 
 		///<summary></summary>
@@ -67,14 +43,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dun);
 				return;
 			}
-			string command= "UPDATE dunning SET " 
-				+ "DunMessage = '"       +POut.String(dun.DunMessage)+"'"
-				+ ",BillingType = '"     +POut.Long   (dun.BillingType)+"'"
-				+ ",AgeAccount = '"      +POut.Long   (dun.AgeAccount)+"'"
-				+ ",InsIsPending = '"    +POut.Long   ((int)dun.InsIsPending)+"'"
-				+ ",MessageBold = '"     +POut.String(dun.MessageBold)+"'"
-				+" WHERE DunningNum = '" +POut.Long   (dun.DunningNum)+"'";
- 			Db.NonQ(command);
+			Crud.DunningCrud.Update(dun);
 		}
 
 		///<summary></summary>

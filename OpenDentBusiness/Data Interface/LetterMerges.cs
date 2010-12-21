@@ -78,30 +78,7 @@ namespace OpenDentBusiness{
 				merge.LetterMergeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),merge);
 				return merge.LetterMergeNum;
 			}
-			if(PrefC.RandomKeys){
-				merge.LetterMergeNum=ReplicationServers.GetKey("lettermerge","LetterMergeNum");
-			}
-			string command= "INSERT INTO lettermerge (";
-			if(PrefC.RandomKeys){
-				command+="LetterMergeNum,";
-			}
-			command+="Description,TemplateName,DataFileName,"
-				+"Category) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(merge.LetterMergeNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(merge.Description)+"', "
-				+"'"+POut.String(merge.TemplateName)+"', "
-				+"'"+POut.String(merge.DataFileName)+"', "
-				+"'"+POut.Long   (merge.Category)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				merge.LetterMergeNum=Db.NonQ(command,true);
-			}
-			return merge.LetterMergeNum;
+			return Crud.LetterMergeCrud.Insert(merge);
 		}
 
 		///<summary></summary>
@@ -110,13 +87,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),merge);
 				return;
 			}
-			string command="UPDATE lettermerge SET "
-				+"Description = '"   +POut.String(merge.Description)+"' "
-				+",TemplateName = '" +POut.String(merge.TemplateName)+"' "
-				+",DataFileName = '" +POut.String(merge.DataFileName)+"' "
-				+",Category = '"     +POut.Long   (merge.Category)+"' "
-				+"WHERE LetterMergeNum = '"+POut.Long(merge.LetterMergeNum)+"'";
- 			Db.NonQ(command);
+			Crud.LetterMergeCrud.Update(merge);
 		}
 
 		///<summary></summary>

@@ -54,13 +54,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE medication SET " 
-				+ "medname = '"      +POut.String(Cur.MedName)+"'"
-				+ ",genericnum = '"  +POut.Long   (Cur.GenericNum)+"'"
-				+ ",notes = '"       +POut.String(Cur.Notes)+"'"
-				+" WHERE medicationnum = '" +POut.Long   (Cur.MedicationNum)+"'";
-			//MessageBox.Show(command);
-			Db.NonQ(command);
+			Crud.MedicationCrud.Update(Cur);
 		}
 
 		///<summary></summary>
@@ -69,29 +63,7 @@ namespace OpenDentBusiness{
 				Cur.MedicationNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.MedicationNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.MedicationNum=ReplicationServers.GetKey("medication","MedicationNum");
-			}
-			string command="INSERT INTO medication (";
-			if(PrefC.RandomKeys){
-				command+="MedicationNum,";
-			}
-			command+="medname,genericnum,notes"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.MedicationNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(Cur.MedName)+"', "
-				+"'"+POut.Long   (Cur.GenericNum)+"', "
-				+"'"+POut.String(Cur.Notes)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.MedicationNum=Db.NonQ(command,true);
-			}
-			return Cur.MedicationNum;
+			return Crud.MedicationCrud.Insert(Cur);
 		}
 
 		///<summary>Dependent brands and patients will already be checked.</summary>

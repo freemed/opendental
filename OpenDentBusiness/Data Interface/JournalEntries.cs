@@ -81,38 +81,7 @@ namespace OpenDentBusiness{
 				je.JournalEntryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),je);
 				return je.JournalEntryNum;
 			}
-			if(je.DebitAmt<0 || je.CreditAmt<0){
-				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
-			}
-			if(PrefC.RandomKeys) {
-				je.JournalEntryNum=ReplicationServers.GetKey("journalentry","JournalEntryNum");
-			}
-			string command="INSERT INTO journalentry (";
-			if(PrefC.RandomKeys) {
-				command+="JournalEntryNum,";
-			}
-			command+="TransactionNum,AccountNum,DateDisplayed,DebitAmt,CreditAmt,Memo,Splits,CheckNumber,"
-				+"ReconcileNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(je.JournalEntryNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (je.TransactionNum)+"', "
-				+"'"+POut.Long   (je.AccountNum)+"', "
-				    +POut.Date  (je.DateDisplayed)+", "
-				+"'"+POut.Double(je.DebitAmt)+"', "
-				+"'"+POut.Double(je.CreditAmt)+"', "
-				+"'"+POut.String(je.Memo)+"', "
-				+"'"+POut.String(je.Splits)+"', "
-				+"'"+POut.String(je.CheckNumber)+"', "
-				+"'"+POut.Long   (je.ReconcileNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				je.JournalEntryNum=Db.NonQ(command,true);
-			}
-			return je.JournalEntryNum;
+			return Crud.JournalEntryCrud.Insert(je);
 		}
 
 		///<summary></summary>
@@ -124,18 +93,7 @@ namespace OpenDentBusiness{
 			if(je.DebitAmt<0 || je.CreditAmt<0) {
 				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
 			}
-			string command= "UPDATE journalentry SET "
-				+"TransactionNum = '"+POut.Long   (je.TransactionNum)+"' "
-				+",AccountNum = '"   +POut.Long   (je.AccountNum)+"' "
-				+",DateDisplayed = "+POut.Date  (je.DateDisplayed)+" "
-				+",DebitAmt = '"     +POut.Double(je.DebitAmt)+"' "
-				+",CreditAmt = '"    +POut.Double(je.CreditAmt)+"' "
-				+",Memo = '"         +POut.String(je.Memo)+"' "
-				+",Splits = '"       +POut.String(je.Splits)+"' "
-				+",CheckNumber = '"  +POut.String(je.CheckNumber)+"' "
-				+",ReconcileNum = '" +POut.Long   (je.ReconcileNum)+"' "
-				+"WHERE JournalEntryNum = '"+POut.Long(je.JournalEntryNum)+"'";
-			Db.NonQ(command);
+			Crud.JournalEntryCrud.Update(je);
 		}
 
 		///<summary></summary>

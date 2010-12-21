@@ -87,16 +87,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command="UPDATE employer SET " 
-				+ "EmpName= '"  +POut.String(Cur.EmpName)+"' "
-				+ ",Address= '"    +POut.String(Cur.Address)+"' "
-				+ ",Address2= '"   +POut.String(Cur.Address2)+"' "
-				+ ",City= '"       +POut.String(Cur.City)+"' "
-				+ ",State= '"      +POut.String(Cur.State)+"' "
-				+ ",Zip= '"        +POut.String(Cur.Zip)+"' "
-				+ ",Phone= '"      +POut.String(Cur.Phone)+"' "
-				+" WHERE EmployerNum = '"+POut.Long(Cur.EmployerNum)+"'";
-			Db.NonQ(command);
+			Crud.EmployerCrud.Update(Cur);
 		}
 
 		///<summary></summary>
@@ -105,32 +96,7 @@ namespace OpenDentBusiness{
 				Cur.EmployerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployerNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.EmployerNum=ReplicationServers.GetKey("employer","EmployerNum");
-			}
-			string command="INSERT INTO employer (";
-			if(PrefC.RandomKeys){
-				command+="EmployerNum,";
-			}
-			command+="EmpName,Address,Address2,City,State,Zip,Phone) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.EmployerNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(Cur.EmpName)+"', "
-				+"'"+POut.String(Cur.Address)+"', "
-				+"'"+POut.String(Cur.Address2)+"', "
-				+"'"+POut.String(Cur.City)+"', "
-				+"'"+POut.String(Cur.State)+"', "
-				+"'"+POut.String(Cur.Zip)+"', "
-				+"'"+POut.String(Cur.Phone)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.EmployerNum=Db.NonQ(command,true);
-			}
-			return Cur.EmployerNum;
+			return Crud.EmployerCrud.Insert(Cur);
 		}
 
 		///<summary>There MUST not be any dependencies before calling this or there will be invalid foreign keys.  This is only called from FormEmployers after proper validation.</summary>

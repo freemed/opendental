@@ -16,25 +16,7 @@ namespace OpenDentBusiness{
 				etransMessageText.EtransMessageTextNum=Meth.GetLong(MethodBase.GetCurrentMethod(),etransMessageText);
 				return etransMessageText.EtransMessageTextNum;
 			}
-			if(PrefC.RandomKeys) {
-				etransMessageText.EtransMessageTextNum=ReplicationServers.GetKey("etransmessagetext","EtransMessageTextNum");
-			}
-			string command="INSERT INTO etransmessagetext (";
-			if(PrefC.RandomKeys) {
-				command+="EtransMessageTextNum,";
-			}
-			command+="MessageText) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(etransMessageText.EtransMessageTextNum)+"', ";
-			}
-			command+="'"+POut.String(etransMessageText.MessageText)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				etransMessageText.EtransMessageTextNum=Db.NonQ(command,true);
-			}
-			return etransMessageText.EtransMessageTextNum;
+			return Crud.EtransMessageTextCrud.Insert(etransMessageText);
 		}
 
 		///<summary>If the message text is X12, then it always normalizes it to include carriage returns for better readability.</summary>

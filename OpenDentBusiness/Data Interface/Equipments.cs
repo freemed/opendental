@@ -61,34 +61,7 @@ namespace OpenDentBusiness{
 				equip.EquipmentNum=Meth.GetLong(MethodBase.GetCurrentMethod(),equip);
 				return equip.EquipmentNum;
 			}
-			if(PrefC.RandomKeys) {
-				equip.EquipmentNum=ReplicationServers.GetKey("equipment","EquipmentNum");
-			}
-			string command="INSERT INTO equipment (";
-			if(PrefC.RandomKeys) {
-				command+="EquipmentNum,";
-			}
-			command+="Description,SerialNumber,ModelYear,DatePurchased,DateSold,PurchaseCost,MarketValue,Location,DateEntry) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(equip.EquipmentNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(equip.Description)+"', "
-				+"'"+POut.String(equip.SerialNumber)+"', "
-				+"'"+POut.String(equip.ModelYear)+"', "
-				+POut.Date(equip.DatePurchased)+", "
-				+POut.Date(equip.DateSold)+", "
-				+"'"+POut.Double(equip.PurchaseCost)+"', "
-				+"'"+POut.Double(equip.MarketValue)+"', "
-				+"'"+POut.String(equip.Location)+"', "
-				+POut.Date(equip.DateEntry)+")";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				equip.EquipmentNum=Db.NonQ(command,true);
-			}
-			return equip.EquipmentNum;
+			return Crud.EquipmentCrud.Insert(equip);
 		}
 
 		///<summary></summary>
@@ -97,18 +70,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),equip);
 				return;
 			}
-			string command= "UPDATE equipment SET " 
-				+ "Description = '"  +POut.String(equip.Description)+"'"
-				+ ",SerialNumber = '"+POut.String(equip.SerialNumber)+"'"
-				+ ",ModelYear = '"   +POut.String(equip.ModelYear)+"'"
-				+ ",DatePurchased = "+POut.Date(equip.DatePurchased)
-				+ ",DateSold = "     +POut.Date(equip.DateSold)
-				+ ",PurchaseCost = '"+POut.Double(equip.PurchaseCost)+"'"
-				+ ",MarketValue = '" +POut.Double(equip.MarketValue)+"'"
-				+ ",Location = '"    +POut.String(equip.Location)+"'"
-				+ ",DateEntry = "   +POut.Date(equip.DateEntry)
-				+" WHERE equipmentNum = '" +POut.Long (equip.EquipmentNum)+"'";
- 			Db.NonQ(command);
+			Crud.EquipmentCrud.Update(equip);
 		}
 
 		///<summary></summary>

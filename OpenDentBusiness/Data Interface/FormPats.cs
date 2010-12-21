@@ -15,27 +15,7 @@ namespace OpenDentBusiness{
 				Cur.FormPatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.FormPatNum;
 			}
-			if(PrefC.RandomKeys) {
-				Cur.FormPatNum=ReplicationServers.GetKey("formpat","FormPatNum");
-			}
-			string command="INSERT INTO formpat (";
-			if(PrefC.RandomKeys) {
-				command+="FormPatNum,";
-			}
-			command+="PatNum,FormDateTime) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(Cur.FormPatNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long  (Cur.PatNum)+"', "
-				+POut.DateT(Cur.FormDateTime)+")";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.FormPatNum=Db.NonQ(command,true);
-			}
-			return Cur.FormPatNum;
+			return Crud.FormPatCrud.Insert(Cur);
 		}
 
 		public static FormPat GetOne(long formPatNum) {

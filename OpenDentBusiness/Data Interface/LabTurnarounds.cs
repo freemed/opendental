@@ -49,29 +49,7 @@ namespace OpenDentBusiness{
 				lab.LabTurnaroundNum=Meth.GetLong(MethodBase.GetCurrentMethod(),lab);
 				return lab.LabTurnaroundNum;
 			}
-			if(PrefC.RandomKeys) {
-				lab.LabTurnaroundNum=ReplicationServers.GetKey("labturnaround","LabTurnaroundNum");
-			}
-			string command="INSERT INTO labturnaround (";
-			if(PrefC.RandomKeys) {
-				command+="LabTurnaroundNum,";
-			}
-			command+="LaboratoryNum,Description,DaysPublished,DaysActual) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(lab.LabTurnaroundNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (lab.LaboratoryNum)+"', "
-				+"'"+POut.String(lab.Description)+"', "
-				+"'"+POut.Long   (lab.DaysPublished)+"', "
-				+"'"+POut.Long   (lab.DaysActual)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				lab.LabTurnaroundNum=Db.NonQ(command,true);
-			}
-			return lab.LabTurnaroundNum;
+			return Crud.LabTurnaroundCrud.Insert(lab);
 		}
 
 		///<summary>Calculates the due date by adding the number of business days listed.  Adds an additional day for each office holiday.</summary>

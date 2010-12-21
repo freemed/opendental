@@ -51,28 +51,7 @@ namespace OpenDentBusiness{
 				template.EmailTemplateNum=Meth.GetLong(MethodBase.GetCurrentMethod(),template);
 				return template.EmailTemplateNum;
 			}
-			if(PrefC.RandomKeys){
-				template.EmailTemplateNum=ReplicationServers.GetKey("emailtemplate","EmailTemplateNum");
-			}
-			string command= "INSERT INTO emailtemplate (";
-			if(PrefC.RandomKeys){
-				command+="EmailTemplateNum,";
-			}
-			command+="Subject,BodyText"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(template.EmailTemplateNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(template.Subject)+"', "
-				+"'"+POut.String(template.BodyText)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				template.EmailTemplateNum=Db.NonQ(command,true);
-			}
-			return template.EmailTemplateNum;
+			return Crud.EmailTemplateCrud.Insert(template);
 		}
 
 		///<summary></summary>
@@ -81,11 +60,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),template);
 				return;
 			}
-			string command= "UPDATE emailtemplate SET "
-				+ "Subject = '"  +POut.String(template.Subject)+"' "
-				+ ",BodyText = '"+POut.String(template.BodyText)+"' "
-				+"WHERE EmailTemplateNum = '"+POut.Long(template.EmailTemplateNum)+"'";
- 			Db.NonQ(command);
+			Crud.EmailTemplateCrud.Update(template);
 		}
 
 		///<summary></summary>

@@ -87,15 +87,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command = "UPDATE definition SET "
-				+ "Category = '"  +POut.Long((int)def.Category)+"'"
-				+",ItemOrder = '" +POut.Long(def.ItemOrder)+"'"
-				+",ItemName = '"  +POut.String(def.ItemName)+"'"
-				+",ItemValue = '" +POut.String(def.ItemValue)+"'"
-				+",ItemColor = '" +POut.Long(def.ItemColor.ToArgb())+"'"
-				+",IsHidden = '"  +POut.Bool(def.IsHidden)+"'"
-				+"WHERE defnum = '"+POut.Long(def.DefNum)+"'";
-			Db.NonQ(command);
+			Crud.DefCrud.Update(def);
 		}
 
 		///<summary></summary>
@@ -104,32 +96,7 @@ namespace OpenDentBusiness {
 				def.DefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.DefNum;
 			}
-			if(PrefC.RandomKeys) {
-				def.DefNum=ReplicationServers.GetKey("definition","DefNum");
-			}
-			string command="INSERT INTO definition (";
-			if(PrefC.RandomKeys) {
-				command+="DefNum,";
-			}
-			command+="Category,ItemOrder,"
-				+"ItemName,ItemValue,ItemColor,IsHidden) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(def.DefNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long((int)def.Category)+"', "
-				+"'"+POut.Long(def.ItemOrder)+"', "
-				+"'"+POut.String(def.ItemName)+"', "
-				+"'"+POut.String(def.ItemValue)+"', "
-				+"'"+POut.Long(def.ItemColor.ToArgb())+"', "
-				+"'"+POut.Bool(def.IsHidden)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				def.DefNum=Db.NonQ(command,true);//used in conversion
-			}
-			return def.DefNum;
+			return Crud.DefCrud.Insert(def);
 		}
 
 		///<summary>CAUTION.  This does not perform all validations.  It only properly validates for one def type right now.</summary>

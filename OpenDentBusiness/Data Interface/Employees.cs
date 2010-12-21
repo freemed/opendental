@@ -94,19 +94,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			if(Cur.LName=="" && Cur.FName=="") {
-				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
-			}
-			string command="UPDATE employee SET " 
-				+ "lname = '"       +POut.String(Cur.LName)+"' "
-				+ ",fname = '"      +POut.String(Cur.FName)+"' "
-				+ ",middlei = '"    +POut.String(Cur.MiddleI)+"' "
-				+ ",ishidden = '"   +POut.Bool  (Cur.IsHidden)+"' "
-				+ ",ClockStatus = '"+POut.String(Cur.ClockStatus)+"' "
-				+ ",PhoneExt = '"   +POut.Long   (Cur.PhoneExt)+"' "
-				+"WHERE EmployeeNum = '"+POut.Long(Cur.EmployeeNum)+"'";
-			//MessageBox.Show(string command);
-			Db.NonQ(command);
+			Crud.EmployeeCrud.Update(Cur);
 		}
 
 		///<summary></summary>
@@ -115,35 +103,7 @@ namespace OpenDentBusiness{
 				Cur.EmployeeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployeeNum;
 			}
-			if(Cur.LName=="" && Cur.FName=="") {
-				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
-			}
-			if(PrefC.RandomKeys) {
-				Cur.EmployeeNum=ReplicationServers.GetKey("employee","EmployeeNum");
-			}
-			string command="INSERT INTO employee (";
-			if(PrefC.RandomKeys) {
-				command+="EmployeeNum,";
-			}
-			command+="lname,fname,middlei,ishidden"
-				+",ClockStatus,PhoneExt) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(Cur.EmployeeNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(Cur.LName)+"', "
-				+"'"+POut.String(Cur.FName)+"', "
-				+"'"+POut.String(Cur.MiddleI)+"', "
-				+"'"+POut.Bool  (Cur.IsHidden)+"', "
-				+"'"+POut.String(Cur.ClockStatus)+"', "
-				+"'"+POut.Long   (Cur.PhoneExt)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				Cur.EmployeeNum=Db.NonQ(command,true);
-			}
-			return Cur.EmployeeNum;
+			return Crud.EmployeeCrud.Insert(Cur);
 		}
 
 		///<summary>Surround with try-catch</summary>

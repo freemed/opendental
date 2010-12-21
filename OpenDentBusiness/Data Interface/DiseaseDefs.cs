@@ -72,12 +72,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="UPDATE diseasedef SET " 
-				+"DiseaseName = '" +POut.String(def.DiseaseName)+"'"
-				+",ItemOrder = '"   +POut.Long   (def.ItemOrder)+"'"
-				+",IsHidden = '"    +POut.Bool  (def.IsHidden)+"'"
-				+" WHERE DiseaseDefNum  ='"+POut.Long   (def.DiseaseDefNum)+"'";
-			Db.NonQ(command);
+			Crud.DiseaseDefCrud.Update(def);
 		}
 
 		///<summary></summary>
@@ -86,28 +81,7 @@ namespace OpenDentBusiness {
 				def.DiseaseDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.DiseaseDefNum;
 			}
-			if(PrefC.RandomKeys) {
-				def.DiseaseDefNum=ReplicationServers.GetKey("diseasedef","DiseaseDefNum");
-			}
-			string command="INSERT INTO diseasedef (";
-			if(PrefC.RandomKeys) {
-				command+="DiseaseDefNum,";
-			}
-			command+="DiseaseName,ItemOrder,IsHidden) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(def.DiseaseDefNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(def.DiseaseName)+"', "
-				+"'"+POut.Long   (def.ItemOrder)+"', "
-				+"'"+POut.Bool  (def.IsHidden)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				def.DiseaseDefNum=Db.NonQ(command,true);
-			}
-			return def.DiseaseDefNum;
+			return Crud.DiseaseDefCrud.Insert(def);
 		}
 
 		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>

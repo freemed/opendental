@@ -36,13 +36,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),gp);
 				return;
 			}
-			string command= "UPDATE grouppermission SET " 
-				+"NewerDate = "   +POut.Date  (gp.NewerDate)
-				+",NewerDays = '"   +POut.Long   (gp.NewerDays)+"'"
-				+",UserGroupNum = '"+POut.Long   (gp.UserGroupNum)+"'"
-				+",PermType = '"    +POut.Long   ((int)gp.PermType)+"'"
-				+" WHERE GroupPermNum = '"+POut.Long(gp.GroupPermNum)+"'";
- 			Db.NonQ(command);
+			Crud.GroupPermissionCrud.Update(gp);
 		}
 
 		///<summary></summary>
@@ -51,29 +45,7 @@ namespace OpenDentBusiness{
 				gp.GroupPermNum=Meth.GetLong(MethodBase.GetCurrentMethod(),gp);
 				return gp.GroupPermNum;
 			}
-			if(PrefC.RandomKeys) {
-				gp.GroupPermNum=ReplicationServers.GetKey("grouppermission","GroupPermNum");
-			}
-			string command="INSERT INTO grouppermission (";
-			if(PrefC.RandomKeys) {
-				command+="GroupPermNum,";
-			}
-			command+="NewerDate,NewerDays,UserGroupNum,PermType) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(gp.GroupPermNum)+", ";
-			}
-			command+=
-				 POut.Date  (gp.NewerDate)+", "
-				+"'"+POut.Long   (gp.NewerDays)+"', "
-				+"'"+POut.Long   (gp.UserGroupNum)+"', "
-				+"'"+POut.Long   ((int)gp.PermType)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				gp.GroupPermNum=Db.NonQ(command,true);
-			}
-			return gp.GroupPermNum;
+			return Crud.GroupPermissionCrud.Insert(gp);
 		}
 
 		///<summary></summary>

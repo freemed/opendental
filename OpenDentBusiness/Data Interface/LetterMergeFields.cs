@@ -39,28 +39,7 @@ namespace OpenDentBusiness{
 				lmf.FieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),lmf);
 				return lmf.FieldNum;
 			}
-			if(PrefC.RandomKeys){
-				lmf.FieldNum=ReplicationServers.GetKey("lettermergefield","FieldNum");
-			}
-			string command= "INSERT INTO lettermergefield (";
-			if(PrefC.RandomKeys){
-				command+="FieldNum,";
-			}
-			command+="LetterMergeNum,FieldName"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(lmf.FieldNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (lmf.LetterMergeNum)+"', "
-				+"'"+POut.String(lmf.FieldName)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				lmf.FieldNum=Db.NonQ(command,true);
-			}
-			return lmf.FieldNum;
+			return Crud.LetterMergeFieldCrud.Insert(lmf);
 		}
 
 		/*

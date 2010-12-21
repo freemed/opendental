@@ -13,33 +13,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<EmailMessage>(MethodBase.GetCurrentMethod(),msgNum);
 			}
-			string command="SELECT * FROM emailmessage WHERE EmailMessageNum = "+POut.Long(msgNum);
-			DataTable table=Db.GetTable(command);
-			EmailMessage Cur=new EmailMessage();
-			if(table.Rows.Count==0)
-				return null;
-			//for(int i=0;i<table.Rows.Count;i++){
-			Cur.EmailMessageNum=PIn.Long   (table.Rows[0][0].ToString());
-			Cur.PatNum         =PIn.Long   (table.Rows[0][1].ToString());
-			Cur.ToAddress      =PIn.String(table.Rows[0][2].ToString());
-			Cur.FromAddress    =PIn.String(table.Rows[0][3].ToString());
-			Cur.Subject        =PIn.String(table.Rows[0][4].ToString());
-			Cur.BodyText       =PIn.String(table.Rows[0][5].ToString());
-			Cur.MsgDateTime    =PIn.DateT (table.Rows[0][6].ToString());
-			Cur.SentOrReceived =(CommSentOrReceived)PIn.Long(table.Rows[0][7].ToString());
-			command="SELECT * FROM emailattach WHERE EmailMessageNum = "+POut.Long(msgNum);
-			table=Db.GetTable(command);
-			Cur.Attachments=new List<EmailAttach>();
-			EmailAttach attach;
-			for(int i=0;i<table.Rows.Count;i++){
-				attach=new EmailAttach();
-				attach.EmailAttachNum   =PIn.Long   (table.Rows[i][0].ToString());
-				attach.EmailMessageNum  =PIn.Long   (table.Rows[i][1].ToString());
-				attach.DisplayedFileName=PIn.String(table.Rows[i][2].ToString());
-				attach.ActualFileName   =PIn.String(table.Rows[i][3].ToString());
-				Cur.Attachments.Add(attach);
-			}
-			return Cur;
+			return Crud.EmailMessageCrud.SelectOne(msgNum);
 		}
 
 		///<summary></summary>

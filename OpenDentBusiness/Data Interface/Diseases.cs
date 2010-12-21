@@ -52,12 +52,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),disease);
 				return;
 			}
-			string command="UPDATE disease SET " 
-				+"PatNum = '"        +POut.Long   (disease.PatNum)+"'"
-				+",DiseaseDefNum = '"+POut.Long   (disease.DiseaseDefNum)+"'"
-				+",PatNote = '"      +POut.String(disease.PatNote)+"'"
-				+" WHERE DiseaseNum  ='"+POut.Long   (disease.DiseaseNum)+"'";
-			Db.NonQ(command);
+			Crud.DiseaseCrud.Update(disease);
 		}
 
 		///<summary></summary>
@@ -66,28 +61,7 @@ namespace OpenDentBusiness {
 				disease.DiseaseNum=Meth.GetLong(MethodBase.GetCurrentMethod(),disease);
 				return disease.DiseaseNum;
 			}
-			if(PrefC.RandomKeys) {
-				disease.DiseaseNum=ReplicationServers.GetKey("disease","DiseaseNum");
-			}
-			string command="INSERT INTO disease (";
-			if(PrefC.RandomKeys) {
-				command+="DiseaseNum,";
-			}
-			command+="PatNum,DiseaseDefNum,PatNote) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(disease.DiseaseNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (disease.PatNum)+"', "
-				+"'"+POut.Long   (disease.DiseaseDefNum)+"', "
-				+"'"+POut.String(disease.PatNote)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				disease.DiseaseNum=Db.NonQ(command,true);
-			}
-			return disease.DiseaseNum;
+			return Crud.DiseaseCrud.Insert(disease);
 		}
 
 		///<summary></summary>

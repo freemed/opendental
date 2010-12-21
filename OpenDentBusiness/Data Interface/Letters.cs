@@ -52,11 +52,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command="UPDATE letter SET "
-				+ "Description= '" +POut.String(Cur.Description)+"' "
-				+ ",BodyText= '"   +POut.String(Cur.BodyText)+"' "
-				+"WHERE LetterNum = '"+POut.Long(Cur.LetterNum)+"'";
-			Db.NonQ(command);
+			Crud.LetterCrud.Update(Cur);
 		}
 
 		///<summary></summary>
@@ -65,27 +61,7 @@ namespace OpenDentBusiness{
 				Cur.LetterNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.LetterNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.LetterNum=ReplicationServers.GetKey("letter","LetterNum");
-			}
-			string command="INSERT INTO letter (";
-			if(PrefC.RandomKeys){
-				command+="LetterNum,";
-			}
-			command+="Description,BodyText) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.LetterNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(Cur.Description)+"', "
-				+"'"+POut.String(Cur.BodyText)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.LetterNum=Db.NonQ(command,true);
-			}
-			return Cur.LetterNum;
+			return Crud.LetterCrud.Insert(Cur);
 		}
 
 		///<summary></summary>
