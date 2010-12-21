@@ -34,15 +34,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command= "UPDATE rxdef SET " 
-				+"Drug = '"       +POut.String(def.Drug)+"'"
-				+",Sig = '"       +POut.String(def.Sig)+"'"
-				+",Disp = '"      +POut.String(def.Disp)+"'"
-				+",Refills = '"   +POut.String(def.Refills)+"'"
-				+",Notes = '"     +POut.String(def.Notes)+"'"
-				+",IsControlled='"+POut.Bool  (def.IsControlled)+"'"
-				+" WHERE RxDefNum = '" +POut.Long(def.RxDefNum)+"'";
-			Db.NonQ(command);
+			Crud.RxDefCrud.Update(def);
 		}
 
 		///<summary></summary>
@@ -51,31 +43,7 @@ namespace OpenDentBusiness{
 				def.RxDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.RxDefNum;
 			}
-			if(PrefC.RandomKeys) {
-				def.RxDefNum=ReplicationServers.GetKey("rxdef","RxDefNum");
-			}
-			string command="INSERT INTO rxdef (";
-			if(PrefC.RandomKeys) {
-				command+="RxDefNum,";
-			}
-			command+="Drug,Sig,Disp,Refills,Notes,IsControlled) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(def.RxDefNum)+", ";
-			}
-			command+=
-				 "'"+POut.String(def.Drug)+"', "
-				+"'"+POut.String(def.Sig)+"', "
-				+"'"+POut.String(def.Disp)+"', "
-				+"'"+POut.String(def.Refills)+"', "
-				+"'"+POut.String(def.Notes)+"', "
-				+"'"+POut.Bool(def.IsControlled)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				def.RxDefNum=Db.NonQ(command,true);
-			}
-			return def.RxDefNum;
+			return Crud.RxDefCrud.Insert(def);
 		}
 
 		///<summary>Also deletes all RxAlerts that were attached.</summary>

@@ -39,12 +39,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
 				return;
 			}
-			string command = "UPDATE reqneeded SET " 
-				+ "Descript = '"        +POut.String(req.Descript)+"'"
-				+ ",SchoolCourseNum = '"+POut.Long   (req.SchoolCourseNum)+"'"
-				+ ",SchoolClassNum = '" +POut.Long   (req.SchoolClassNum)+"'"   
-				+" WHERE ReqNeededNum = '" +POut.Long(req.ReqNeededNum)+"'";
-			Db.NonQ(command);
+			Crud.ReqNeededCrud.Update(req);
 		}
 
 		///<summary></summary>
@@ -53,28 +48,7 @@ namespace OpenDentBusiness{
 				req.ReqNeededNum=Meth.GetLong(MethodBase.GetCurrentMethod(),req);
 				return req.ReqNeededNum;
 			}
-			if(PrefC.RandomKeys) {
-				req.ReqNeededNum=ReplicationServers.GetKey("reqneeded","ReqNeededNum");
-			}
-			string command= "INSERT INTO reqneeded (";
-			if(PrefC.RandomKeys) {
-				command+="ReqNeededNum,";
-			}
-			command+="Descript,SchoolCourseNum,SchoolClassNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(req.ReqNeededNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(req.Descript)+"', "
-				+"'"+POut.Long   (req.SchoolCourseNum)+"', "
-				+"'"+POut.Long   (req.SchoolClassNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				req.ReqNeededNum=Db.NonQ(command,true);
-			}
-			return req.ReqNeededNum;
+			return Crud.ReqNeededCrud.Insert(req);
 		}
 
 		///<summary>Surround with try/catch.</summary>

@@ -32,11 +32,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),alert);
 				return;
 			}
-			string command="UPDATE rxalert SET " 
-				+"RxDefNum = '"      +POut.Long   (alert.RxDefNum)+"'"
-				+",DiseaseDefNum = '"+POut.Long   (alert.DiseaseDefNum)+"'"
-				+" WHERE RxAlertNum  ='"+POut.Long   (alert.RxAlertNum)+"'";
-			Db.NonQ(command);
+			Crud.RxAlertCrud.Update(alert);
 		}
 
 		///<summary></summary>
@@ -45,27 +41,7 @@ namespace OpenDentBusiness {
 				alert.RxAlertNum=Meth.GetLong(MethodBase.GetCurrentMethod(),alert);
 				return alert.RxAlertNum;
 			}
-			if(PrefC.RandomKeys) {
-				alert.RxAlertNum=ReplicationServers.GetKey("rxalert","RxAlertNum");
-			}
-			string command="INSERT INTO rxalert (";
-			if(PrefC.RandomKeys) {
-				command+="RxAlertNum,";
-			}
-			command+="RxDefNum,DiseaseDefNum) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(alert.RxAlertNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (alert.RxDefNum)+"', "
-				+"'"+POut.Long   (alert.DiseaseDefNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				alert.RxAlertNum=Db.NonQ(command,true);
-			}
-			return alert.RxAlertNum;
+			return Crud.RxAlertCrud.Insert(alert);
 		}
 
 		///<summary></summary>

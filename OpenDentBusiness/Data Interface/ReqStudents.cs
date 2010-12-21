@@ -54,17 +54,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
 				return;
 			}
-			string command = "UPDATE reqstudent SET "
-				+ " ReqNeededNum = '"   +POut.Long(req.ReqNeededNum)+"'"
-				+ ",Descript = '"       +POut.String(req.Descript)+"'"
-				+ ",SchoolCourseNum = '"+POut.Long(req.SchoolCourseNum)+"'"
-				+ ",ProvNum = '"        +POut.Long(req.ProvNum)+"'"
-				+ ",AptNum = '"         +POut.Long(req.AptNum)+"'"   
-				+ ",PatNum = '"         +POut.Long(req.PatNum)+"'"   
-				+ ",InstructorNum = '"  +POut.Long(req.InstructorNum)+"'"   
-				+ ",DateCompleted = "   +POut.Date(req.DateCompleted)      
-				+" WHERE ReqStudentNum = '" +POut.Long(req.ReqStudentNum)+"'";
-			Db.NonQ(command);
+			Crud.ReqStudentCrud.Update(req);
 		}
 
 		///<summary></summary>
@@ -73,33 +63,7 @@ namespace OpenDentBusiness{
 				req.ReqStudentNum=Meth.GetLong(MethodBase.GetCurrentMethod(),req);
 				return req.ReqStudentNum;
 			}
-			if(PrefC.RandomKeys) {
-				req.ReqStudentNum=ReplicationServers.GetKey("reqstudent","ReqStudentNum");
-			}
-			string command= "INSERT INTO reqstudent (";
-			if(PrefC.RandomKeys) {
-				command+="ReqStudentNum,";
-			}
-			command+="ReqNeededNum,Descript,SchoolCourseNum,ProvNum,AptNum,PatNum,InstructorNum,DateCompleted) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(req.ReqStudentNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long(req.ReqNeededNum)+"', "
-				+"'"+POut.String(req.Descript)+"', "
-				+"'"+POut.Long(req.SchoolCourseNum)+"', "
-				+"'"+POut.Long(req.ProvNum)+"', "
-				+"'"+POut.Long(req.AptNum)+"', "
-				+"'"+POut.Long(req.PatNum)+"', "
-				+"'"+POut.Long(req.InstructorNum)+"', "
-				    +POut.Date(req.DateCompleted)+")";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				req.ReqStudentNum=Db.NonQ(command,true);
-			}
-			return req.ReqStudentNum;
+			return Crud.ReqStudentCrud.Insert(req);
 		}
 
 		///<summary>Surround with try/catch.</summary>

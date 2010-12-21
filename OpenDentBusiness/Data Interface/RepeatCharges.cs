@@ -37,15 +37,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
 				return;
 			}
-			string command="UPDATE repeatcharge SET " 
-				+"PatNum = '"    +POut.Long   (charge.PatNum)+"'"
-				+",ProcCode = '" +POut.String(charge.ProcCode)+"'"
-				+",ChargeAmt = '"+POut.Double(charge.ChargeAmt)+"'"
-				+",DateStart = "+POut.Date  (charge.DateStart)
-				+",DateStop = " +POut.Date  (charge.DateStop)
-				+",Note = '"     +POut.String(charge.Note)+"'"
-				+" WHERE RepeatChargeNum = '" +POut.Long(charge.RepeatChargeNum)+"'";
- 			Db.NonQ(command);
+			Crud.RepeatChargeCrud.Update(charge);
 		}
 
 		///<summary></summary>
@@ -54,31 +46,7 @@ namespace OpenDentBusiness{
 				charge.RepeatChargeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),charge);
 				return charge.RepeatChargeNum;
 			}
-			if(PrefC.RandomKeys){
-				charge.RepeatChargeNum=ReplicationServers.GetKey("repeatcharge","RepeatChargeNum");
-			}
-			string command="INSERT INTO repeatcharge (";
-			if(PrefC.RandomKeys){
-				command+="RepeatChargeNum,";
-			}
-			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(charge.RepeatChargeNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (charge.PatNum)+"', "
-				+"'"+POut.String(charge.ProcCode)+"', "
-				+"'"+POut.Double(charge.ChargeAmt)+"', "
-				+POut.Date  (charge.DateStart)+", "
-				+POut.Date  (charge.DateStop)+", "
-				+"'"+POut.String(charge.Note)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				charge.RepeatChargeNum=Db.NonQ(command,true);
-			}
-			return charge.RepeatChargeNum;
+			return Crud.RepeatChargeCrud.Insert(charge);
 		}
 
 		///<summary>Called from FormRepeatCharge.</summary>

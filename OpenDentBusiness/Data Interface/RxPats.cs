@@ -58,19 +58,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),rx);
 				return;
 			}
-			string command= "UPDATE rxpat SET " 
-				+ "PatNum = '"      +POut.Long   (rx.PatNum)+"'"
-				+ ",RxDate = "      +POut.Date  (rx.RxDate)
-				+ ",Drug = '"       +POut.String(rx.Drug)+"'"
-				+ ",Sig = '"        +POut.String(rx.Sig)+"'"
-				+ ",Disp = '"       +POut.String(rx.Disp)+"'"
-				+ ",Refills = '"    +POut.String(rx.Refills)+"'"
-				+ ",ProvNum = '"    +POut.Long   (rx.ProvNum)+"'"
-				+ ",Notes = '"      +POut.String(rx.Notes)+"'"
-				+ ",PharmacyNum = '"+POut.Long   (rx.PharmacyNum)+"'"
-				+ ",IsControlled='" +POut.Bool  (rx.IsControlled)+"'"
-				+" WHERE RxNum = '" +POut.Long   (rx.RxNum)+"'";
-			Db.NonQ(command);
+			Crud.RxPatCrud.Update(rx);
 		}
 
 		///<summary></summary>
@@ -79,35 +67,7 @@ namespace OpenDentBusiness{
 				rx.RxNum=Meth.GetLong(MethodBase.GetCurrentMethod(),rx);
 				return rx.RxNum;
 			}
-			if(PrefC.RandomKeys) {
-				rx.RxNum=ReplicationServers.GetKey("rxpat","RxNum");
-			}
-			string command="INSERT INTO rxpat (";
-			if(PrefC.RandomKeys) {
-				command+="RxNum,";
-			}
-			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+="'"+POut.Long(rx.RxNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (rx.PatNum)+"', "
-				+POut.Date  (rx.RxDate)+", "
-				+"'"+POut.String(rx.Drug)+"', "
-				+"'"+POut.String(rx.Sig)+"', "
-				+"'"+POut.String(rx.Disp)+"', "
-				+"'"+POut.String(rx.Refills)+"', "
-				+"'"+POut.Long   (rx.ProvNum)+"', "
-				+"'"+POut.String(rx.Notes)+"', "
-				+"'"+POut.Long   (rx.PharmacyNum)+"', "
-				+"'"+POut.Bool  (rx.IsControlled)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				rx.RxNum=Db.NonQ(command,true);
-			}
-			return rx.RxNum;
+			return Crud.RxPatCrud.Insert(rx);
 		}
 
 		///<summary></summary>
