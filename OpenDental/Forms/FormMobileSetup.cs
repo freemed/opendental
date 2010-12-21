@@ -11,45 +11,48 @@ using OpenDentBusiness.Mobile;
 namespace OpenDental {
 	public partial class FormMobileSetup:Form {
 
-		static string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+		static string RegistrationKey;
 		static MobileWeb.Mobile mb = new MobileWeb.Mobile();
-		static DateTime dateTimeLastUploaded;
-		static string url="http://localhost:2923/Mobile.asmx";
+		static DateTime MobileSyncDateTimeLastRun;
+		static string MobileSyncServerURL;
+		static int MobileSyncIntervalMinutes;
+		static DateTime MobileExcludeApptsBeforeDate;
+
 		public FormMobileSetup() {
 			InitializeComponent();
 			Lan.F(this);
-
 		}
 
 		private void FormMobileSetup_Load(object sender,EventArgs e) {
-			labelTimeLastSynchDisplay.Text=dateTimeLastUploaded.ToString();
+			InitializeVariables();
+			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
+			textboxMobileSyncServerURL.Text=MobileSyncServerURL;
+			textBoxSynchMinutes.Text=MobileSyncIntervalMinutes+"";
+		}
+
+		private void InitializeVariables() {
+			RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+			MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
+			MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
+			MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
 		}
 
 		public void SynchPatientRecordsOnMobileWeb() {
 			try {
-			int RecordCountOfPatientm=Patientms.GetRecordCount(RegistrationKey);
-			int RecordCountOfPatient= Patients.GetNumberPatients();
-			DateTime changedSince;
-			if(RecordCountOfPatient>RecordCountOfPatientm) {
-				changedSince= new DateTime(1902,1,1); //will featch all records
-			}
-			else {
-				//DateTime dateTimeLastUploaded=PIn.DateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
-			}
-			List<Patientm> ChangedPatientmList=Patientms.GetChanged(dateTimeLastUploaded);
+			#if DEBUG
+				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+			#endif
+			DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
+			List<Patientm> ChangedPatientmList=Patientms.GetChanged(MobileSyncDateTimeLastRun);
 			mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
-			dateTimeLastUploaded= DateTime.Now;
-			labelTimeLastSynchDisplay.Text=dateTimeLastUploaded.ToString();
+			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
+			textDateTimeLastRun.Text=MobileSyncDateTimeLastRunNew.ToShortDateString()+" "+MobileSyncDateTimeLastRunNew.ToShortTimeString();
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
 			
-		}
-
-		public void SendMissingRecords() {
-
-
 		}
 
 		/// <summary>
@@ -69,17 +72,32 @@ namespace OpenDental {
 			return true;
 		}
 
-
-
-		private void timerRefreshLastSynchTime_Tick(object sender,EventArgs e) {
-			//refresh lable here
-			//labelTimeLastSynchDisplay.Text="";
-			//Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-			//textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
+		/// <summary>
+		///  This method is used only for testing with security certificates that has problems.
+		/// </summary>
+		private void IgnoreCertificateErrors() {
+			///the line below will allow the code to continue by not throwing an exception.
+			///It will accept the security certificate if there is a problem with the security certificate.
+			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
+			delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+									System.Security.Cryptography.X509Certificates.X509Chain chain,
+									System.Net.Security.SslPolicyErrors sslPolicyErrors) {
+				return true;
+			};
 		}
 
+		private void timerRefreshLastSynchTime_Tick(object sender,EventArgs e) {
+			InitializeVariables();
+			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
+		}
 
-		private void butSynchNow_Click(object sender,EventArgs e) {
+		private void butSavePreferences_Click(object sender,EventArgs e) {
+			Prefs.UpdateString(PrefName.MobileSyncServerURL,textboxMobileSyncServerURL.Text.Trim());
+			Prefs.UpdateDateT(PrefName.MobileExcludeApptsBeforeDate,PIn.Date(textDateBefore.Text));
+			Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textBoxSynchMinutes.Text));
+		}
+
+		private void butSync_Click(object sender,EventArgs e) {
 			//disabled unless user changed url
 			Cursor=Cursors.WaitCursor;
 			if(!TestWebServiceExists()) {
@@ -88,29 +106,39 @@ namespace OpenDental {
 				return;
 			}
 			try {
-				//Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim());
-				//butSave.Enabled=false;
+				SynchPatientRecordsOnMobileWeb();
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 			}
-		#if DEBUG
-			SynchPatientRecordsOnMobileWeb();
-		#endif
+
 			Cursor=Cursors.Default;
 		}
 
-		private void butSave_Click(object sender,EventArgs e) {
-
+		private void butFullSync_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
+				return;
+			}
+			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""){
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			SynchPatientRecordsOnMobileWeb();
+			Cursor=Cursors.Default;
+			/*if(objCount==0) {
+				MsgBox.Show(this,"Done. No sync necessary.");
+			}
+			else {
+				MessageBox.Show(Lan.g(this,"Done.  Objects exported: ")+objCount.ToString());
+			}*/
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void butClose_Click(object sender,EventArgs e) {
+			Close();
 		}
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+
 
 
 

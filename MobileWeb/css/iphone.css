@@ -35,6 +35,7 @@ min-height: 480px;
 .logout{
      left: 6px;
      right: auto;
+     z-index: 1;
 }
 .datenavigation{
     height:30px;
