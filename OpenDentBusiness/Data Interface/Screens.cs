@@ -52,49 +52,7 @@ namespace OpenDentBusiness{
 				Cur.ScreenNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ScreenNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.ScreenNum=ReplicationServers.GetKey("screen","ScreenNum");
-			}
-			string command="INSERT INTO screen (";
-			if(PrefC.RandomKeys){
-				command+="ScreenNum,";
-			}
-			command+="ScreenDate,GradeSchool,County,PlaceService,"
-				+"ProvNum,ProvName,Gender,Race,GradeLevel,Age,Urgency,HasCaries,NeedsSealants,"
-				+"CariesExperience,EarlyChildCaries,ExistingSealants,MissingAllTeeth,Birthdate,"
-				+"ScreenGroupNum,ScreenGroupOrder,Comments) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.ScreenNum)+"', ";
-			}
-			command+=
-				 POut.Date  (Cur.ScreenDate)+", "
-				+"'"+POut.String(Cur.GradeSchool)+"', "
-				+"'"+POut.String(Cur.County)+"', "
-				+"'"+POut.Long   ((int)Cur.PlaceService)+"', "
-				+"'"+POut.Long   (Cur.ProvNum)+"', "
-				+"'"+POut.String(Cur.ProvName)+"', "
-				+"'"+POut.Long   ((int)Cur.Gender)+"', "
-				+"'"+POut.Long   ((int)Cur.Race)+"', "
-				+"'"+POut.Long   ((int)Cur.GradeLevel)+"', "
-				+"'"+POut.Long   (Cur.Age)+"', "
-				+"'"+POut.Long   ((int)Cur.Urgency)+"', "
-				+"'"+POut.Long   ((int)Cur.HasCaries)+"', "
-				+"'"+POut.Long   ((int)Cur.NeedsSealants)+"', "
-				+"'"+POut.Long   ((int)Cur.CariesExperience)+"', "
-				+"'"+POut.Long   ((int)Cur.EarlyChildCaries)+"', "
-				+"'"+POut.Long   ((int)Cur.ExistingSealants)+"', "
-				+"'"+POut.Long   ((int)Cur.MissingAllTeeth)+"', "
-				+POut.Date  (Cur.Birthdate)+", "
-				+"'"+POut.Long   (Cur.ScreenGroupNum)+"', "
-				+"'"+POut.Long   (Cur.ScreenGroupOrder)+"', "
-				+"'"+POut.String(Cur.Comments)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.ScreenNum=Db.NonQ(command,true);
-			}
-			return Cur.ScreenNum;
+			return Crud.ScreenCrud.Insert(Cur);
 		}
 
 		///<summary></summary>
@@ -103,30 +61,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE screen SET "
-				+"ScreenDate     ="    +POut.Date  (Cur.ScreenDate)
-				+",GradeSchool ='"      +POut.String(Cur.GradeSchool)+"'"
-				+",County ='"           +POut.String(Cur.County)+"'"
-				+",PlaceService ='"     +POut.Long   ((int)Cur.PlaceService)+"'"
-				+",ProvNum ='"          +POut.Long   (Cur.ProvNum)+"'"
-				+",ProvName ='"         +POut.String(Cur.ProvName)+"'"
-				+",Gender ='"           +POut.Long   ((int)Cur.Gender)+"'"
-				+",Race ='"             +POut.Long   ((int)Cur.Race)+"'"
-				+",GradeLevel ='"       +POut.Long   ((int)Cur.GradeLevel)+"'"
-				+",Age ='"              +POut.Long   (Cur.Age)+"'"
-				+",Urgency ='"          +POut.Long   ((int)Cur.Urgency)+"'"
-				+",HasCaries ='"      +POut.Long   ((int)Cur.HasCaries)+"'"
-				+",NeedsSealants ='"    +POut.Long   ((int)Cur.NeedsSealants)+"'"
-				+",CariesExperience ='" +POut.Long   ((int)Cur.CariesExperience)+"'"
-				+",EarlyChildCaries ='" +POut.Long   ((int)Cur.EarlyChildCaries)+"'"
-				+",ExistingSealants ='" +POut.Long   ((int)Cur.ExistingSealants)+"'"
-				+",MissingAllTeeth ='"  +POut.Long   ((int)Cur.MissingAllTeeth)+"'"
-				+",Birthdate ="        +POut.Date  (Cur.Birthdate)
-				+",ScreenGroupNum ='"   +POut.Long   (Cur.ScreenGroupNum)+"'"
-				+",ScreenGroupOrder ='" +POut.Long   (Cur.ScreenGroupOrder)+"'"
-				+",Comments ='"         +POut.String(Cur.Comments)+"'"
-				+" WHERE ScreenNum = '" +POut.Long(Cur.ScreenNum)+"'";
-			Db.NonQ(command);
+			Crud.ScreenCrud.Update(Cur);
 		}
 
 		///<summary>Updates all screens for a group with the date,prov, and location info of the current group.</summary>

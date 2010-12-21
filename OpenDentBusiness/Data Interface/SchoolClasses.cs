@@ -52,12 +52,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sc);
 				return;
 			}
-			string command= "UPDATE schoolclass SET " 
-				+"SchoolClassNum = '" +POut.Long   (sc.SchoolClassNum)+"'"
-				+",GradYear = '"      +POut.Long   (sc.GradYear)+"'"
-				+",Descript = '"      +POut.String(sc.Descript)+"'"
-				+" WHERE SchoolClassNum = '"+POut.Long(sc.SchoolClassNum)+"'";
- 			Db.NonQ(command);
+			Crud.SchoolClassCrud.Update(sc);
 		}
 
 		///<summary></summary>
@@ -66,27 +61,7 @@ namespace OpenDentBusiness{
 				sc.SchoolClassNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sc);
 				return sc.SchoolClassNum;
 			}
-			if(PrefC.RandomKeys){
-				sc.SchoolClassNum=ReplicationServers.GetKey("schoolclass","SchoolClassNum");
-			}
-			string command= "INSERT INTO schoolclass (";
-			if(PrefC.RandomKeys){
-				command+="SchoolClassNum,";
-			}
-			command+="GradYear,Descript) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(sc.SchoolClassNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (sc.GradYear)+"', "
-				+"'"+POut.String(sc.Descript)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				sc.SchoolClassNum=Db.NonQ(command,true);
-			}
-			return sc.SchoolClassNum;
+			return Crud.SchoolClassCrud.Insert(sc);
 		}
 
 		///<summary></summary>

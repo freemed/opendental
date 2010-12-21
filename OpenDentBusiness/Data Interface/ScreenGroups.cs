@@ -38,27 +38,7 @@ namespace OpenDentBusiness{
 				Cur.ScreenGroupNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ScreenGroupNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.ScreenGroupNum=ReplicationServers.GetKey("screengroup","ScreenGroupNum");
-			}
-			string command="INSERT INTO screengroup (";
-			if(PrefC.RandomKeys){
-				command+="ScreenGroupNum,";
-			}
-			command+="Description,SGDate) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.ScreenGroupNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(Cur.Description)+"', "
-				+POut.Date  (Cur.SGDate)+")";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.ScreenGroupNum=Db.NonQ(command,true);
-			}
-			return Cur.ScreenGroupNum;
+			return Crud.ScreenGroupCrud.Insert(Cur);
 		}
 
 		///<summary></summary>
@@ -67,11 +47,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "UPDATE screengroup SET "
-				+"Description ='"  +POut.String(Cur.Description)+"'"
-				+",SGDate ="      +POut.Date  (Cur.SGDate)
-				+" WHERE ScreenGroupNum = '" +POut.Long(Cur.ScreenGroupNum)+"'";
-			Db.NonQ(command);
+			Crud.ScreenGroupCrud.Update(Cur);
 		}
 
 		///<summary>This will also delete all screen items, so may need to ask user first.</summary>

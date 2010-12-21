@@ -13,27 +13,7 @@ namespace OpenDentBusiness{
 				op.ScheduleOpNum=Meth.GetLong(MethodBase.GetCurrentMethod(),op);
 				return op.ScheduleOpNum;
 			}
-			if(PrefC.RandomKeys){
-				op.ScheduleOpNum=ReplicationServers.GetKey("scheduleop","ScheduleOpNum");
-			}
-			string command= "INSERT INTO scheduleop (";
-			if(PrefC.RandomKeys){
-				command+="ScheduleOpNum,";
-			}
-			command+="ScheduleNum,OperatoryNum) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(op.ScheduleOpNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (op.ScheduleNum)+"', "
-				+"'"+POut.Long   (op.OperatoryNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				op.ScheduleOpNum=Db.NonQ(command,true);
-			}
-			return op.ScheduleOpNum;
+			return Crud.ScheduleOpCrud.Insert(op);
 		}
 
 		

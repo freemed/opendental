@@ -163,6 +163,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sched);
 				return;
 			}
+			//Crud.ScheduleCrud.Update(sched);
 			string command= "UPDATE schedule SET " 
 				+ "SchedDate = "    +POut.Date  (sched.SchedDate)
 				+ ",StartTime = "   +POut.TimeSpan (sched.StartTime)

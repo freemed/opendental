@@ -47,30 +47,7 @@ namespace OpenDentBusiness{
 				log.SecurityLogNum=Meth.GetLong(MethodBase.GetCurrentMethod(),log);
 				return log.SecurityLogNum;
 			}
-			if(PrefC.RandomKeys){
-				log.SecurityLogNum=ReplicationServers.GetKey("securitylog","SecurityLogNum");
-			}
-			string command= "INSERT INTO securitylog (";
-			if(PrefC.RandomKeys){
-				command+="SecurityLogNum,";
-			}
-			command+="PermType,UserNum,LogDateTime,LogText,PatNum) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(log.SecurityLogNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   ((int)log.PermType)+"', "
-				+"'"+POut.Long   (log.UserNum)+"', "
-				+"NOW(), "//LogDateTime set to current server time
-				+"'"+POut.String(log.LogText)+"', "
-				+"'"+POut.Long   (log.PatNum)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				log.SecurityLogNum=Db.NonQ(command,true);
-			}
-			return log.SecurityLogNum;
+			return Crud.SecurityLogCrud.Insert(log);
 		}
 
 		//there are no methods for deleting or changing log entries because that will never be allowed.
