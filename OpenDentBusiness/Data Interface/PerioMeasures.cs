@@ -17,6 +17,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
+			//Crud.PerioMeasureCrud.Update(Cur);
 			string command = "UPDATE periomeasure SET "
 				+ "PerioExamNum = '"+POut.Long   (Cur.PerioExamNum)+"'"
 				+",SequenceType = '"+POut.Long   ((int)Cur.SequenceType)+"'"
@@ -46,37 +47,7 @@ namespace OpenDentBusiness{
 				Cur.PerioMeasureNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.PerioMeasureNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.PerioMeasureNum=ReplicationServers.GetKey("periomeasure","PerioMeasureNum");
-			}
-			string command="INSERT INTO periomeasure (";
-			if(PrefC.RandomKeys){
-				command+="PerioMeasureNum,";
-			}
-			command+="PerioExamNum,SequenceType,IntTooth,ToothValue,"
-				+"MBvalue,Bvalue,DBvalue,MLvalue,Lvalue,DLvalue"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.PerioMeasureNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (Cur.PerioExamNum)+"', "
-				+"'"+POut.Long   ((int)Cur.SequenceType)+"', "
-				+"'"+POut.Long   (Cur.IntTooth)+"', "
-				+"'"+POut.Long   (Cur.ToothValue)+"', "
-				+"'"+POut.Long   (Cur.MBvalue)+"', "
-				+"'"+POut.Long   (Cur.Bvalue)+"', "
-				+"'"+POut.Long   (Cur.DBvalue)+"', "
-				+"'"+POut.Long   (Cur.MLvalue)+"', "
-				+"'"+POut.Long   (Cur.Lvalue)+"', "
-				+"'"+POut.Long   (Cur.DLvalue)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.PerioMeasureNum=Db.NonQ(command,true);
-			}
-			return Cur.PerioMeasureNum;
+			return Crud.PerioMeasureCrud.Insert(Cur);
 		}
 
 		///<summary></summary>

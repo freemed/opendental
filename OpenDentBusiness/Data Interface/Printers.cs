@@ -39,6 +39,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Printer>(MethodBase.GetCurrentMethod(),sit,compNum);
 			}
+			//place a Crude "select one"statement here
 			Printer[] tempList=list;
 			string command="SELECT * FROM printer WHERE "
 				+"PrintSit = '"      +POut.Long((int)sit)+"' "
@@ -59,30 +60,7 @@ namespace OpenDentBusiness{
 				cur.PrinterNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cur);
 				return cur.PrinterNum;
 			}
-			if(PrefC.RandomKeys){
-				cur.PrinterNum=ReplicationServers.GetKey("printer","PrinterNum");
-			}
-			string command= "INSERT INTO printer (";
-			if(PrefC.RandomKeys){
-				command+="PrinterNum,";
-			}
-			command+="ComputerNum,PrintSit,PrinterName,"
-				+"DisplayPrompt) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(cur.PrinterNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (cur.ComputerNum)+"', "
-				+"'"+POut.Long   ((int)cur.PrintSit)+"', "
-				+"'"+POut.String(cur.PrinterName)+"', "
-				+"'"+POut.Bool  (cur.DisplayPrompt)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				cur.PrinterNum=Db.NonQ(command,true);
-			}
-			return cur.PrinterNum;
+			return Crud.PrinterCrud.Insert(cur);
 		}
 
 		///<summary></summary>
@@ -91,13 +69,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cur);
 				return;
 			}
-			string command="UPDATE printer SET "
-				+"ComputerNum = '"   +POut.Long   (cur.ComputerNum)+"' "
-				+",PrintSit = '"     +POut.Long   ((int)cur.PrintSit)+"' "
-				+",PrinterName = '"  +POut.String(cur.PrinterName)+"' "
-				+",DisplayPrompt = '"+POut.Bool  (cur.DisplayPrompt)+"' "
-				+"WHERE PrinterNum = '"+POut.Long(cur.PrinterNum)+"'";
- 			Db.NonQ(command);
+			Crud.PrinterCrud.Update(cur);
 		}
 
 		///<summary></summary>

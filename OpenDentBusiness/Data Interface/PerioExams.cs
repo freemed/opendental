@@ -47,12 +47,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command= "UPDATE perioexam SET "
-				+ "PatNum = '"     +POut.Long   (Cur.PatNum)+"'"
-				+",ExamDate = "    +POut.Date  (Cur.ExamDate)
-				+",ProvNum = '"    +POut.Long   (Cur.ProvNum)+"'"
-				+" WHERE PerioExamNum = '"+POut.Long(Cur.PerioExamNum)+"'";
-			Db.NonQ(command);
+			Crud.PerioExamCrud.Update(Cur);
 		}
 
 		///<summary></summary>
@@ -61,29 +56,7 @@ namespace OpenDentBusiness{
 				Cur.PerioExamNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.PerioExamNum;
 			}
-			if(PrefC.RandomKeys){
-				Cur.PerioExamNum=ReplicationServers.GetKey("perioexam","PerioExamNum");
-			}
-			string command="INSERT INTO perioexam (";
-			if(PrefC.RandomKeys){
-				command+="PerioExamNum,";
-			}
-			command+="PatNum,ExamDate,ProvNum"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(Cur.PerioExamNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (Cur.PatNum)+"', "
-				+POut.Date  (Cur.ExamDate)+", "
-				+"'"+POut.Long   (Cur.ProvNum)+"')";
-			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				Cur.PerioExamNum=Db.NonQ(command,true);
-			}
-			return Cur.PerioExamNum;
+			return Crud.PerioExamCrud.Insert(Cur);
 		}
 
 		///<summary></summary>
