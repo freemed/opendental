@@ -76,9 +76,9 @@ namespace OpenDental {
 				string patNum=POut.Long(PIn.Long(primaryCarePatients.Rows[i][0].ToString()));
 				command="SELECT "+
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number
-					"TRIM((SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.PatNum="+patNum+" AND "+
-						"ap.AptStatus="+((int)ApptStatus.Complete)+" AND ap.ClinicNum=cl.ClinicNum ORDER BY ap.AptDateTime DESC LIMIT 1)) SiteIDNumber,"+
+						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') "+DbHelper.Limit(1)+")) PCIN, "+//Patient's Care ID Number
+					"TRIM(("+DbHelper.LimitGroupBy("SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.PatNum="+patNum+" AND "+
+						"ap.AptStatus="+((int)ApptStatus.Complete)+" AND ap.ClinicNum=cl.ClinicNum ORDER BY ap.AptDateTime DESC",1)+")) SiteIDNumber,"+
 					"p.BirthDate,"+
 					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 "+
 						"WHEN "+((int)PatientPosition.Married)+" THEN 2 ELSE 3 END MaritalStatus,"+//Marital status
@@ -90,14 +90,14 @@ namespace OpenDental {
 					"p.State HouseholdState,"+//Household residence state
 					"p.Zip HouseholdZip,"+//Household residence zip code
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+householdGrossIncomeStr+"') LIMIT 1)) HGI, "+//Household gross income
+						"LOWER(f.FieldName)=LOWER('"+householdGrossIncomeStr+"') "+DbHelper.Limit(1)+")) HGI, "+//Household gross income
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') LIMIT 1)) HPP, "+//Household % of poverty
-					"(SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
-						copayDefNum+" ORDER BY AdjDate DESC LIMIT 1) HSFS,"+//Household sliding fee scale
-					"(SELECT i.DateEffective FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1) DES,"+//Date of eligibility status
+						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') "+DbHelper.Limit(1)+")) HPP, "+//Household % of poverty
+					"("+DbHelper.LimitGroupBy("SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
+						copayDefNum+" ORDER BY AdjDate DESC",1)+") HSFS,"+//Household sliding fee scale
+					"(SELECT i.DateEffective FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum "+DbHelper.Limit(1)+") DES,"+//Date of eligibility status
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+statusStr+"') LIMIT 1)) CareStatus "+//Status
+						"LOWER(f.FieldName)=LOWER('"+statusStr+"') "+DbHelper.Limit(1)+")) CareStatus "+//Status
 					"FROM patient p WHERE "+
 					"p.PatNum="+patNum;
 				DataTable primaryCareReportRow=Reports.GetTable(command);

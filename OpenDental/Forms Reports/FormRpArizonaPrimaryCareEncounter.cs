@@ -82,13 +82,13 @@ namespace OpenDental {
 				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum+" AND a.AptStatus="+((int)ApptStatus.Complete)+" AND "+
 					"a.AptDateTime BETWEEN "+POut.Date(dateTimeFrom.Value)+" AND "+POut.Date(dateTimeTo.Value)+" AND "+
 					"(SELECT COUNT(*) FROM procedurelog pl,procedurecode pc WHERE pl.AptNum=a.AptNum AND pc.CodeNum=pl.CodeNum AND "+
-					"pc.ProcCode IN ("+billableProcedures+") LIMIT 1)>0";
+					"pc.ProcCode IN ("+billableProcedures+") "+DbHelper.Limit(1)+")>0";
 				DataTable appointmentList=Reports.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
 					string aptNum=POut.Long(PIn.Long(appointmentList.Rows[j][0].ToString()));
 					command="SELECT "+
 						"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-							"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number
+							"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') "+DbHelper.Limit(1)+")) PCIN, "+//Patient's Care ID Number
 						"p.BirthDate,"+//birthdate
 						"(CASE p.Gender WHEN 0 THEN 'M' WHEN 1 THEN 'F' ELSE '' END) Gender,"+//Gender
 						"CONCAT(CONCAT(p.Address,' '),p.Address2) Address,"+//address
@@ -96,7 +96,7 @@ namespace OpenDental {
 						"p.State,"+//state
 						"p.Zip,"+//zipcode
 						"(SELECT CASE pp.Relationship WHEN 0 THEN 1 ELSE 0 END FROM patplan pp,insplan i,carrier c WHERE "+//Relationship to subscriber
-							"pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah' LIMIT 1) InsRelat,"+
+							"pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah' "+DbHelper.Limit(1)+") InsRelat,"+
 						"(CASE p.Position WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END) MaritalStatus,"+//Marital status
 						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN (ADDDATE(p.BirthDate,INTERVAL 18 YEAR)>CURDATE()) THEN 3 ELSE 2 END) ELSE 1 END) EmploymentStatus,"+
 						"(CASE p.StudentStatus WHEN 'f' THEN 1 WHEN 'p' THEN 2 ELSE 3 END) StudentStatus,"+//student status
@@ -107,14 +107,14 @@ namespace OpenDental {
 						"'' DiagnosisCode2,"+//Diagnosis code 2
 						"'' DiagnosisCode3,"+//Diagnosis code 3
 						"'' DiagnosisCode4,"+//Diagnosis code 4
-						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+" LIMIT 1) DateOfEncounter,"+//Date of encounter
-						"(SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum LIMIT 1) Procedure1,"+
+						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+" "+DbHelper.Limit(1)+") DateOfEncounter,"+//Date of encounter
+						"("+DbHelper.LimitGroupBy("SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
+							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum",1)+") Procedure1,"+
 						"'' Procedure1Modifier1,"+//Procedure modifier 1
 						"'' Procedure1Modifier2,"+//Procedure modifier 2
 						"'' Procedure1DiagnosisCode,"+//Diagnosis code
-						"(SELECT pl.ProcFee FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum LIMIT 1) Procedure1Charges,"+
+						"("+DbHelper.LimitGroupBy("SELECT pl.ProcFee FROM procedurecode pc,procedurelog pl "+
+							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum",1)+") Procedure1Charges,"+
 						"'' Procedure2,"+//2nd procedure cpt/hcpcs
 						"'' Procedure2Modifier1,"+//2nd procedure modifier 1
 						"'' Procedure2Modifier2,"+//2nd procedure modifier 2
@@ -145,12 +145,12 @@ namespace OpenDental {
 							payDefNum+") AmountPaid,"+//Amount paid
 						"0 BalanceDue,"+//Balance due
 						"TRIM((SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.AptNum="+aptNum+" AND "+
-							"ap.ClinicNum=cl.ClinicNum LIMIT 1)) ClinicDescription,"+
+							"ap.ClinicNum=cl.ClinicNum "+DbHelper.Limit(1)+")) ClinicDescription,"+
 						"(SELECT pr.StateLicense FROM provider pr,appointment ap WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianID,"+
 						"(SELECT CONCAT(CONCAT(pr.FName,' '),pr.MI) FROM provider pr,appointment ap "+
-							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianFAndMNames,"+//Physician's first name and middle initial
+							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum "+DbHelper.Limit(1)+") PhysicianFAndMNames,"+//Physician's first name and middle initial
 						"(SELECT pr.LName FROM provider pr,appointment ap "+
-							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianLName "+//Physician's last name
+							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum "+DbHelper.Limit(1)+") PhysicianLName "+//Physician's last name
 						"FROM patient p WHERE "+
 						"p.PatNum="+patNum;
 					DataTable primaryCareReportRow=Reports.GetTable(command);
