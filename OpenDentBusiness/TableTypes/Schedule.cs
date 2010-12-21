@@ -13,7 +13,6 @@ namespace OpenDentBusiness{
 		///<summary>Date for this timeblock.</summary>
 		public DateTime SchedDate;
 		///<summary>Start time for this timeblock.</summary>
-		//[CrudColumn(SpecialType=CrudSpecialColType.
 		public TimeSpan StartTime;
 		///<summary>Stop time for this timeblock.</summary>
 		public TimeSpan StopTime;

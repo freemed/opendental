@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 		public ContactMethod PreferContactMethod;
 		/// <summary>Enum:ContactMethod</summary>
 		public ContactMethod PreferRecallMethod;
-		/// <summary>Only the time portion of the TimeSpan is used.</summary>
+		/// <summary></summary>
 		public TimeSpan SchedBeforeTime;
 		/// <summary></summary>
 		public TimeSpan SchedAfterTime;

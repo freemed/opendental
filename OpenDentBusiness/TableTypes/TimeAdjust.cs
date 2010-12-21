@@ -15,8 +15,10 @@ namespace OpenDentBusiness{
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime TimeEntry;
 		///<summary>The number of regular hours to adjust timecard by.  Can be + or -.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		public TimeSpan RegHours;
 		///<summary>Overtime hours. Usually +.  Automatically combined with a - adj to RegHours.  Another option is clockevent.OTimeHours.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		public TimeSpan OTimeHours;
 		///<summary>.</summary>
 		public string Note;

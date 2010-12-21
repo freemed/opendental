@@ -45,9 +45,5 @@ namespace OpenDentBusiness {
 		VarChar255
 	}
 
-	///<summary>Just used to mark some Timespans </summary>
-	[AttributeUsage(AttributeTargets.Field,AllowMultiple=false)]
-	public class OdDbTypeIsTimeSpan:Attribute {
-
-	}
+	
 }
