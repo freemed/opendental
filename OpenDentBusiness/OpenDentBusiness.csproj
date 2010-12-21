@@ -265,6 +265,7 @@
     <Compile Include="Crud\ScheduleOpCrud.cs" />
     <Compile Include="Crud\SchoolClassCrud.cs" />
     <Compile Include="Crud\SchoolCourseCrud.cs" />
+    <Compile Include="Crud\SchoolCrud.cs" />
     <Compile Include="Crud\ScreenCrud.cs" />
     <Compile Include="Crud\ScreenGroupCrud.cs" />
     <Compile Include="Crud\SecurityLogCrud.cs" />

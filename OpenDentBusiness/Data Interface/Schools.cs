@@ -37,17 +37,11 @@ namespace OpenDentBusiness{
 				"SELECT * from school "
 				+"WHERE SchoolName LIKE '"+name+"%' "
 				+"ORDER BY SchoolName";
-			DataTable table=Db.GetTable(command);;
-			List<School> retVal=new List<School>();
-			School school;
-			for(int i=0;i<table.Rows.Count;i++){
-				school=new School();
-				school.SchoolName =PIn.String(table.Rows[i][0].ToString());
-				school.SchoolCode =PIn.String(table.Rows[i][1].ToString());
-				school.OldSchoolName =PIn.String(table.Rows[i][0].ToString());
-				retVal.Add(school);
+			List<School> list=Crud.SchoolCrud.SelectMany(command);
+			for(int i=0;i<list.Count;i++) {
+				list[i].OldSchoolName=list[i].SchoolName;
 			}
-			return retVal;
+			return list;
 		}
 
 		///<summary></summary>
@@ -73,44 +67,34 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Need to make sure schoolname not already in db.</summary>
-		public static void Insert(School Cur){
+		public static long Insert(School school){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),school);
 			}
-			string command = "INSERT INTO school (SchoolName,SchoolCode) "
-				+"VALUES ("
-				+"'"+POut.String(Cur.SchoolName)+"', "
-				+"'"+POut.String(Cur.SchoolCode)+"')";
-			//MessageBox.Show(string command);
-			Db.NonQ(command);
+			return Crud.SchoolCrud.Insert(school);
 		}
 
-		///<summary>Updates the schoolname and code in the school table, and also updates all patients that were using the oldschool name.</summary>
-		public static void Update(School Cur){
+		///<summary>Also updates all patients that were using the oldschool name.</summary>
+		public static void Update(School school) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),school);
 				return;
 			}
-			string command = "UPDATE school SET "
-				+"SchoolName ='"  +POut.String(Cur.SchoolName)+"'"
-				+",SchoolCode ='" +POut.String(Cur.SchoolCode)+"'"
-				+" WHERE SchoolName = '"+POut.String(Cur.OldSchoolName)+"'";
-			Db.NonQ(command);
+			Crud.SchoolCrud.Update(school);
 			//then, update all patients using that school
-			command = "UPDATE patient SET "
-				+"GradeSchool ='"  +POut.String(Cur.SchoolName)+"'"
-				+" WHERE GradeSchool = '"+POut.String(Cur.OldSchoolName)+"'";
+			string command = "UPDATE patient SET "
+				+"GradeSchool ='"  +POut.String(school.SchoolName)+"'"
+				+" WHERE GradeSchool = '"+POut.String(school.OldSchoolName)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Must run UsedBy before running this.</summary>
-		public static void Delete(School Cur){
+		public static void Delete(School school) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),school);
 				return;
 			}
-			string command = "DELETE from school WHERE SchoolName = '"+POut.String(Cur.SchoolName)+"'";
+			string command = "DELETE from school WHERE SchoolName = '"+POut.String(school.SchoolName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -119,16 +103,15 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),schoolName);
 			}
-			string command =
-				"SELECT LName,FName from patient "
+			string command ="SELECT LName,FName FROM patient "
 				+"WHERE GradeSchool = '"+POut.String(schoolName)+"' ";
 			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0)
+			if(table.Rows.Count==0) {
 				return "";
+			}
 			string retVal="";
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal+=PIn.String(table.Rows[i][0].ToString())+", "
-					+PIn.String(table.Rows[i][1].ToString());
+				retVal+=PIn.String(table.Rows[i][0].ToString())+", "+PIn.String(table.Rows[i][1].ToString());
 				if(i<table.Rows.Count-1){//if not the last row
 					retVal+="\r";
 				}
@@ -145,10 +128,12 @@ namespace OpenDentBusiness{
 				"SELECT * from school "
 				+"WHERE SchoolName = '"+POut.String(schoolName)+"' ";
 			DataTable table=Db.GetTable(command);;
-			if(table.Rows.Count==0)
+			if(table.Rows.Count==0) {
 				return false;
-			else
+			}
+			else {
 				return true;
+			}
 		}
 
 	}
