@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 	public enum OdDbType{
 		///<summary>C#:bool, MySql:tinyint(3)or(1), Oracle:number(3), </summary>
 		Bool,
-		///<summary>C#:byte, MySql:tinyint, Oracle:number(), Range:0-255.</summary>
+		///<summary>C#:byte, MySql:tinyint unsigned, Oracle:number(3), Range:0-255.</summary>
 		Byte,
 		///<summary>C#:double, MySql:double, Oracle:number(38,8), Need to change C# type to Decimal.  Need to change MySQL type.</summary>
 		Currency,
@@ -43,5 +43,11 @@ namespace OpenDentBusiness {
 		TimeSpan,
 		///<summary>C#:string, MySql:varchar(255), Oracle:varchar2(255), MaxSize:255</summary>
 		VarChar255
+	}
+
+	///<summary>Just used to mark some Timespans </summary>
+	[AttributeUsage(AttributeTargets.Field,AllowMultiple=false)]
+	public class OdDbTypeIsTimeSpan:Attribute {
+
 	}
 }

@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * from payment"
 				+" WHERE PatNum="+patNum.ToString();
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.PaymentCrud.SelectMany(command);
 		}
 
 		///<summary>Get one specific payment from db.</summary>
@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * from payment"
 				+" WHERE PayNum = '"+payNum+"'";
-			return RefreshAndFill(Db.GetTable(command))[0];
+			return Crud.PaymentCrud.SelectOne(command);
 		}
 
 		///<summary>Get all specified payments.</summary>
@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 				}
 				command+=" PayNum="+payNums[i].ToString();
 			}
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.PaymentCrud.SelectMany(command);
 		}
 
 		///<summary>Gets all payments attached to a single deposit.</summary>
@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM payment "
 				+"WHERE DepositNum = "+POut.Long(depositNum)+" "
 				+"ORDER BY PayDate";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.PaymentCrud.SelectMany(command);
 		}
 
 		///<summary>Gets all unattached payments for a new deposit slip.  Excludes payments before dateStart.  There is a chance payTypes might be of length 1 or even 0.</summary>
@@ -87,30 +87,8 @@ namespace OpenDentBusiness{
 				}
 			}
 			command+=" ORDER BY PayDate";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.PaymentCrud.SelectMany(command);
 		}
-
-		private static List <Payment> RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List <Payment> List=new List <Payment> ();
-			for(int i=0;i<table.Rows.Count;i++) {
-				List.Add(new Payment());
-				List[i].PayNum    =PIn.Long(table.Rows[i][0].ToString());
-				List[i].PayType   =PIn.Long(table.Rows[i][1].ToString());
-				List[i].PayDate   =PIn.Date(table.Rows[i][2].ToString());
-				List[i].PayAmt    =PIn.Double(table.Rows[i][3].ToString());
-				List[i].CheckNum  =PIn.String(table.Rows[i][4].ToString());
-				List[i].BankBranch=PIn.String(table.Rows[i][5].ToString());
-				List[i].PayNote   =PIn.String(table.Rows[i][6].ToString());
-				List[i].IsSplit   =PIn.Bool(table.Rows[i][7].ToString());
-				List[i].PatNum    =PIn.Long(table.Rows[i][8].ToString());
-				List[i].ClinicNum =PIn.Long(table.Rows[i][9].ToString());
-				List[i].DateEntry =PIn.Date(table.Rows[i][10].ToString());
-				List[i].DepositNum=PIn.Long(table.Rows[i][11].ToString());
-			}
-			return List;
-		}
-
 
 		///<summary>Updates this payment.  Must make sure to update the datePay of all attached paysplits so that they are always in synch.  Also need to manually set IsSplit before here.  Will throw an exception if bad date, so surround by try-catch.  Set excludeDepositNum to true from FormPayment to prevent collision from another worksation that just deleted a deposit.</summary>
 		public static void Update(Payment pay,bool excludeDepositNum){
@@ -136,37 +114,11 @@ namespace OpenDentBusiness{
 					&& PIn.PDouble(table.Rows[0][1].ToString())!=PayAmt) {//and PayAmt changes
 				throw new ApplicationException(Lans.g("Payments","Not allowed to change the amount on payments attached to deposits."));
 			}*/
-			string command="UPDATE payment SET " 
-				+ "paytype = '"      +POut.Long(pay.PayType)+"'"
-				+ ",paydate = "     +POut.Date(pay.PayDate)
-				+ ",payamt = '"      +POut.Double(pay.PayAmt)+"'"
-				+ ",checknum = '"    +POut.String(pay.CheckNum)+"'"
-				+ ",bankbranch = '"  +POut.String(pay.BankBranch)+"'"
-				+ ",paynote = '"     +POut.String(pay.PayNote)+"'"
-				+ ",issplit = '"     +POut.Bool(pay.IsSplit)+"'"
-				+ ",patnum = '"      +POut.Long(pay.PatNum)+"'"
-				+ ",ClinicNum = '"   +POut.Long(pay.ClinicNum)+"'";
-				//DateEntry not allowed to change
-			if(!excludeDepositNum){
-				command+= ",DepositNum = '"  +POut.Long(pay.DepositNum)+"'";
+			Crud.PaymentCrud.Update(pay);
+			if(!excludeDepositNum) {
+				string command="UPDATE payment SET DepositNum="+POut.Long(pay.DepositNum)+" WHERE payNum = "+POut.Long(pay.PayNum);
+				Db.NonQ(command);
 			}
-			command+=" WHERE payNum = '" +POut.Long(pay.PayNum)+"'";
-			//MessageBox.Show(string command);
- 			Db.NonQ(command);
-			/*
-			command="UPDATE paysplit SET DatePay='"+POut.PDate(PayDate)
-				+"' WHERE PayNum = "+POut.PInt(PayNum);
- 			Db.NonQ(command);
-			//set IsSplit
-			command="SELECT COUNT(*) FROM paysplit WHERE PayNum="+POut.PInt(PayNum);
-			DataTable table=Db.GetTable(command);
-			if(table.Rows[0][0].ToString()=="1"){
-				command="UPDATE payment SET IsSplit=0 WHERE PayNum="+POut.PInt(PayNum);
-			}
-			else{
-				command="UPDATE payment SET IsSplit=1 WHERE PayNum="+POut.PInt(PayNum);
-			}
-			Db.NonQ(command);*/
 		}
 
 		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>

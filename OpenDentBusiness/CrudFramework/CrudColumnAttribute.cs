@@ -63,7 +63,7 @@ namespace OpenDentBusiness {
 		DateTEntryEditable,
 		///<summary>Database type is tinyint unsigned.  C# type is int.  Range -128 to 128.  The validation does not check to make sure the db is unsigned.  The programmer must do that.  So far, only used for percent fields because -1 is required to be accepted.  For most other fields, such as enums and itemorders, the solution is to change the field in C# to a byte, findicating a range of 0-255.  It usually doesn't matter whether the database accepts values to 255 or only to 127.  The validation does not check that.</summary>
 		TinyIntUnsigned,
-		///<summary>We do not want this column updated except as part of a separate routine.</summary>
+		///<summary>We do not want this column updated except as part of a separate routine.  Warning! The logic fails if this is used on the last column in a table.</summary>
 		ExcludeFromUpdate,
 		///<summary>Instead of storing this enum as an int in the db, it is stored as a string.  Very rarely used.</summary>
 		EnumAsString

@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum    =  "+POut.Long  (payment.PatNum)+", "
 				+"ClinicNum =  "+POut.Long  (payment.ClinicNum)+", "
 				+"DateEntry =  "+POut.Date  (payment.DateEntry)+", "
-				+"DepositNum=  "+POut.Long  (payment.DepositNum)+" "
+				//DepositNum excluded from update
 				+"WHERE PayNum = "+POut.Long(payment.PayNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -163,10 +163,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="DateEntry = "+POut.Date(payment.DateEntry)+"";
 			}
-			if(payment.DepositNum != oldPayment.DepositNum) {
-				if(command!=""){ command+=",";}
-				command+="DepositNum = "+POut.Long(payment.DepositNum)+"";
-			}
+			//DepositNum excluded from update
 			if(command==""){
 				return;
 			}
