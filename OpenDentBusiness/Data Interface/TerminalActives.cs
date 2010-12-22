@@ -23,25 +23,7 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<TerminalActive>(MethodBase.GetCurrentMethod(),computerName);
 			}
 			string command="SELECT * FROM terminalactive WHERE ComputerName ='"+POut.String(computerName)+"'";
-			TerminalActive[] List=RefreshAndFill(Db.GetTable(command));
-			if(List.Length>0) {
-				return List[0];
-			}
-			return null;
-		}
-
-		///<summary>Gets a list of all TerminalActives.  Used by the terminal monitor window and by the terminal window itself.  Data is retrieved at regular short intervals, so functions as a messaging system.</summary>
-		private static TerminalActive[] RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			TerminalActive[] List=new TerminalActive[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new TerminalActive();
-				List[i].TerminalActiveNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].ComputerName     = PIn.String(table.Rows[i][1].ToString());
-				List[i].TerminalStatus   = (TerminalStatusEnum)PIn.Long(table.Rows[i][2].ToString());
-				List[i].PatNum           = PIn.Long(table.Rows[i][3].ToString());
-			}
-			return List;
+			return Crud.TerminalActiveCrud.SelectOne(command);
 		}
 
 		///<summary></summary>

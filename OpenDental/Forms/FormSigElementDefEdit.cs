@@ -503,7 +503,7 @@ namespace OpenDental{
 			}
 			ElementCur.SigElementType=(SignalElementType)listType.SelectedIndex;
 			ElementCur.SigText=textSigText.Text;
-			ElementCur.LightRow=PIn.Int(textLightRow.Text);
+			ElementCur.LightRow=PIn.Byte(textLightRow.Text);
 			ElementCur.LightColor=butColor.BackColor;
 			if(IsNew){
 				SigElementDefs.Insert(ElementCur);

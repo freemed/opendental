@@ -149,36 +149,23 @@ namespace OpenDentBusiness{
 
 		private static List<TaskList> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			List<TaskList> retVal=new List<TaskList>();
+			List<TaskList> retVal=Crud.TaskListCrud.TableToList(table);
 			TaskList tasklist;
 			string desc;
-			for(int i=0;i<table.Rows.Count;i++) {
-				tasklist=new TaskList();
-				tasklist.TaskListNum    = PIn.Long(table.Rows[i][0].ToString());
-				tasklist.Descript       = PIn.String(table.Rows[i][1].ToString());
-				tasklist.Parent         = PIn.Long(table.Rows[i][2].ToString());
-				tasklist.DateTL         = PIn.Date(table.Rows[i][3].ToString());
-				tasklist.IsRepeating    = PIn.Bool(table.Rows[i][4].ToString());
-				tasklist.DateType       = (TaskDateType)PIn.Long(table.Rows[i][5].ToString());
-				tasklist.FromNum        = PIn.Long(table.Rows[i][6].ToString());
-				tasklist.ObjectType     = (TaskObjectType)PIn.Long(table.Rows[i][7].ToString());
-				tasklist.DateTimeEntry  = PIn.DateT(table.Rows[i][8].ToString());
-				tasklist.ParentDesc="";
-				tasklist.NewTaskCount=0;
+			for(int i=0;i<retVal.Count;i++) {
 				if(table.Columns.Count>9){
-					tasklist.NewTaskCount=PIn.Int(table.Rows[i][9].ToString());
+					retVal[i].NewTaskCount=PIn.Int(table.Rows[i][9].ToString());
 				}
 				if(table.Columns.Count>10){
 					desc=PIn.String(table.Rows[i][10].ToString());
 					if(desc!=""){
-						tasklist.ParentDesc=desc+"/";
+						retVal[i].ParentDesc=desc+"/";
 					}
 					desc=PIn.String(table.Rows[i][11].ToString());
 					if(desc!="") {
-						tasklist.ParentDesc=desc+"/"+tasklist.ParentDesc;
+						retVal[i].ParentDesc=desc+"/"+retVal[i].ParentDesc;
 					}
 				}
-				retVal.Add(tasklist);
 			}
 			return retVal;
 		}
@@ -192,29 +179,25 @@ namespace OpenDentBusiness{
 				"SELECT * FROM tasklist "
 				+"WHERE ObjectType="+POut.Long((int)oType)
 				+" ORDER BY Descript";
-			DataTable table=Db.GetTable(command);
-			TaskList[] List=new TaskList[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new TaskList();
-				List[i].TaskListNum    = PIn.Long(table.Rows[i][0].ToString());
-				List[i].Descript       = PIn.String(table.Rows[i][1].ToString());
-				List[i].Parent         = PIn.Long(table.Rows[i][2].ToString());
-				List[i].DateTL         = PIn.Date(table.Rows[i][3].ToString());
-				List[i].IsRepeating    = PIn.Bool(table.Rows[i][4].ToString());
-				List[i].DateType       = (TaskDateType)PIn.Long(table.Rows[i][5].ToString());
-				List[i].FromNum        = PIn.Long(table.Rows[i][6].ToString());
-				List[i].ObjectType     = (TaskObjectType)PIn.Long(table.Rows[i][7].ToString());
-				List[i].DateTimeEntry  = PIn.DateT(table.Rows[i][8].ToString());
-			}
-			return List;
+			return Crud.TaskListCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>
-		private static void Update(TaskList tlist){
+		public static void Update(TaskList tlist){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),tlist);
 				return;
 			}
+			if(tlist.IsRepeating && tlist.DateTL.Year>1880) {
+				throw new Exception(Lans.g("TaskLists","TaskList cannot be tagged repeating and also have a date."));
+			}
+			if(tlist.Parent==0 && tlist.DateTL.Year>1880 && tlist.DateType==TaskDateType.None) {//it would not show anywhere, so it would be 'lost'
+				throw new Exception(Lans.g("TaskLists","A TaskList with a date must also have a type selected."));
+			}
+			if(tlist.IsRepeating && tlist.Parent!=0 && tlist.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
+				throw new Exception(Lans.g("TaskLists","In repeating tasklists, only the main parents can have a task status."));
+			}
+			//Crud:
 			string command= "UPDATE tasklist SET " 
 				+"Descript = '"       +POut.String(tlist.Descript)+"'"
 				+",Parent = '"        +POut.Long   (tlist.Parent)+"'"
@@ -229,11 +212,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static long Insert(TaskList tlist) {
+		public static long Insert(TaskList tlist) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				tlist.TaskListNum=Meth.GetLong(MethodBase.GetCurrentMethod(),tlist);
 				return tlist.TaskListNum;
 			}
+			if(tlist.IsRepeating && tlist.DateTL.Year>1880) {
+				throw new Exception(Lans.g("TaskLists","TaskList cannot be tagged repeating and also have a date."));
+			}
+			if(tlist.Parent==0 && tlist.DateTL.Year>1880 && tlist.DateType==TaskDateType.None) {//it would not show anywhere, so it would be 'lost'
+				throw new Exception(Lans.g("TaskLists","A TaskList with a date must also have a type selected."));
+			}
+			if(tlist.IsRepeating && tlist.Parent!=0 && tlist.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
+				throw new Exception(Lans.g("TaskLists","In repeating tasklists, only the main parents can have a task status."));
+			}
+			//Crud:
 			if(PrefC.RandomKeys){
 				tlist.TaskListNum=ReplicationServers.GetKey("tasklist","TaskListNum");
 			}
@@ -262,27 +255,6 @@ namespace OpenDentBusiness{
  				tlist.TaskListNum=Db.NonQ(command,true);
 			}
 			return tlist.TaskListNum;
-		}
-
-		///<summary></summary>
-		public static void InsertOrUpdate(TaskList tlist, bool isNew){
-			//No need to check RemotingRole; no call to db.
-			//check for duplicate trunk?
-			if(tlist.IsRepeating && tlist.DateTL.Year>1880){
-				throw new Exception(Lans.g("TaskLists","TaskList cannot be tagged repeating and also have a date."));
-			}
-			if(tlist.Parent==0 && tlist.DateTL.Year>1880 && tlist.DateType==TaskDateType.None){//it would not show anywhere, so it would be 'lost'
-				throw new Exception(Lans.g("TaskLists","A TaskList with a date must also have a type selected."));
-			}
-			if(tlist.IsRepeating && tlist.Parent!=0 && tlist.DateType!=TaskDateType.None){//In repeating, children not allowed to repeat.
-				throw new Exception(Lans.g("TaskLists","In repeating tasklists, only the main parents can have a task status."));
-			}
-			if(isNew){
-				Insert(tlist);
-			}
-			else{
-				Update(tlist);
-			}
 		}
 
 		///<summary>Throws exception if any child tasklists or tasks.</summary>

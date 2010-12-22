@@ -298,7 +298,12 @@ namespace OpenDental{
 			}
 			Cur.ObjectType=(TaskObjectType)listObjectType.SelectedIndex;
 			try{
-				TaskLists.InsertOrUpdate(Cur,IsNew);
+				if(IsNew) {
+					TaskLists.Insert(Cur);
+				}
+				else {
+					TaskLists.Update(Cur);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

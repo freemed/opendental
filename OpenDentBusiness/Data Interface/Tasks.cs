@@ -202,6 +202,7 @@ namespace OpenDentBusiness{
 			if(WasTaskAltered(oldTask)){
 				throw new Exception(Lans.g("Tasks","Not allowed to save changes because the task has been altered by someone else."));
 			}
+			//Crud:
 			string command= "UPDATE task SET " 
 				+"TaskListNum = '"    +POut.Long   (task.TaskListNum)+"'"
 				+",DateTask = "       +POut.Date  (task.DateTask)
@@ -217,6 +218,7 @@ namespace OpenDentBusiness{
 				+",DateTimeFinished ="+POut.DateT (task.DateTimeFinished)
 				+" WHERE TaskNum = '" +POut.Long(task.TaskNum)+"'";
  			Db.NonQ(command);
+			//Crud stop
 			//need to optimize this later to skip unless TaskListNumChanged
 			TaskAncestors.Synch(task);
 		}
@@ -236,37 +238,7 @@ namespace OpenDentBusiness{
 			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
 				throw new Exception(Lans.g("Tasks","In repeating tasks, only the main parents can have a task status."));
 			}
-			if(PrefC.RandomKeys){
-				task.TaskNum=ReplicationServers.GetKey("task","TaskNum");
-			}
-			string command= "INSERT INTO task (";
-			if(PrefC.RandomKeys){
-				command+="TaskNum,";
-			}
-			command+="TaskListNum,DateTask,KeyNum,Descript,TaskStatus,"
-				+"IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry,UserNum,DateTimeFinished) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(task.TaskNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Long   (task.TaskListNum)+"', "
-				+POut.Date  (task.DateTask)+", "
-				+"'"+POut.Long   (task.KeyNum)+"', "
-				+"'"+POut.String(task.Descript)+"', "
-				+"'"+POut.Long   ((int)task.TaskStatus)+"', "
-				+"'"+POut.Bool  (task.IsRepeating)+"', "
-				+"'"+POut.Long   ((int)task.DateType)+"', "
-				+"'"+POut.Long   (task.FromNum)+"', "
-				+"'"+POut.Long   ((int)task.ObjectType)+"', "
-				+POut.DateT (task.DateTimeEntry)+","
-				+"'"+POut.Long   (task.UserNum)+"',"
-				+POut.DateT (task.DateTimeFinished)+")";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				task.TaskNum=Db.NonQ(command,true);
-			}
+			Crud.TaskCrud.Insert(task);
 			TaskAncestors.Synch(task);
 			return task.TaskNum;
 		}

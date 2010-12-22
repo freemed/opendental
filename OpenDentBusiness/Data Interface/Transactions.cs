@@ -14,22 +14,6 @@ namespace OpenDentBusiness{
 			return Crud.TransactionCrud.SelectOne(transactionNum);
 		}
 
-		///<summary>For now, all transactions are retrieved singly.  Returns null if no match found.</summary>
-		private static Transaction RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			if(table.Rows.Count==0) {
-				return null;
-			}
-			Transaction trans=new Transaction();
-			trans=new Transaction();
-			trans.TransactionNum= PIn.Long(table.Rows[0][0].ToString());
-			trans.DateTimeEntry = PIn.DateT(table.Rows[0][1].ToString());
-			trans.UserNum       = PIn.Long(table.Rows[0][2].ToString());
-			trans.DepositNum    = PIn.Long(table.Rows[0][3].ToString());
-			trans.PayNum        = PIn.Long(table.Rows[0][4].ToString());
-			return trans;
-		}
-
 		///<summary>Gets one transaction directly from the database which has this deposit attached to it.  If none exist, then returns null.</summary>
 		public static Transaction GetAttachedToDeposit(long depositNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -38,7 +22,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM transaction "
 				+"WHERE DepositNum="+POut.Long(depositNum);
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TransactionCrud.SelectOne(command);
 		}
 
 		///<summary>Gets one transaction directly from the database which has this payment attached to it.  If none exist, then returns null.  There should never be more than one, so that's why it doesn't return more than one.</summary>
@@ -49,7 +33,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM transaction "
 				+"WHERE PayNum="+POut.Long(payNum);
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TransactionCrud.SelectOne(command);
 		}
 
 		///<summary></summary>

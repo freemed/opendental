@@ -809,7 +809,7 @@ namespace OpenDental {
 			//get all children:
 			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum);
 			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue);
-			TaskLists.InsertOrUpdate(newList,true);
+			TaskLists.Insert(newList);
 			//now we have a new taskListNum to work with
 			for(int i=0;i<childLists.Count;i++) {
 				childLists[i].Parent=newList.TaskListNum;
