@@ -14,15 +14,7 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<RxAlert[]>(MethodBase.GetCurrentMethod(),rxDefNum);
 			}
 			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.Long(rxDefNum);
-			DataTable table=Db.GetTable(command);
-			RxAlert[] List=new RxAlert[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new RxAlert();
-				List[i].RxAlertNum   = PIn.Long(table.Rows[i][0].ToString());
-				List[i].RxDefNum     = PIn.Long(table.Rows[i][1].ToString());
-				List[i].DiseaseDefNum= PIn.Long(table.Rows[i][2].ToString());
-			}
-			return List;
+			return Crud.RxAlertCrud.SelectMany(command).ToArray();
 		}
 	
 

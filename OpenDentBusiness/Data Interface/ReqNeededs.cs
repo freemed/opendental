@@ -20,17 +20,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ReqNeeded>(MethodBase.GetCurrentMethod(),reqNeededNum);
 			}
 			string command="SELECT * FROM reqneeded WHERE ReqNeededNum="+POut.Long(reqNeededNum);
- 			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0){
-				return null;
-			}
-			ReqNeeded req=new ReqNeeded();
-			//for(int i=0;i<table.Rows.Count;i++){
-			req.ReqNeededNum   = PIn.Long   (table.Rows[0][0].ToString());
-			req.Descript       = PIn.String(table.Rows[0][1].ToString());
-			req.SchoolCourseNum= PIn.Long   (table.Rows[0][2].ToString());
-			req.SchoolClassNum = PIn.Long   (table.Rows[0][3].ToString());
-			return req;
+			return Crud.ReqNeededCrud.SelectOne(command);
 		}
 
 		///<summary></summary>

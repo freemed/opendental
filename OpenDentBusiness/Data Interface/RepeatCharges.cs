@@ -16,19 +16,7 @@ namespace OpenDentBusiness{
 				command+=" WHERE PatNum = "+POut.Long(patNum);
 			}
 			command+=" ORDER BY DateStart";
-			DataTable table=Db.GetTable(command);
-			RepeatCharge[] List=new RepeatCharge[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new RepeatCharge();
-				List[i].RepeatChargeNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].PatNum         = PIn.Long(table.Rows[i][1].ToString());
-				List[i].ProcCode       = PIn.String(table.Rows[i][2].ToString());
-				List[i].ChargeAmt      = PIn.Double(table.Rows[i][3].ToString());
-				List[i].DateStart      = PIn.Date(table.Rows[i][4].ToString());
-				List[i].DateStop       = PIn.Date(table.Rows[i][5].ToString());
-				List[i].Note           = PIn.String(table.Rows[i][6].ToString());
-			}
-			return List;
+			return Crud.RepeatChargeCrud.SelectMany(command).ToArray();
 		}	
 
 		///<summary></summary>

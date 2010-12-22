@@ -13,19 +13,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<RxDef[]>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM rxdef ORDER BY Drug";
-			DataTable table=Db.GetTable(command);
-			RxDef[] List=new RxDef[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new RxDef();
-				List[i].RxDefNum    = PIn.Long(table.Rows[i][0].ToString());
-				List[i].Drug        = PIn.String(table.Rows[i][1].ToString());
-				List[i].Sig         = PIn.String(table.Rows[i][2].ToString());
-				List[i].Disp        = PIn.String(table.Rows[i][3].ToString());
-				List[i].Refills     = PIn.String(table.Rows[i][4].ToString());
-				List[i].Notes       = PIn.String(table.Rows[i][5].ToString());
-				List[i].IsControlled= PIn.Bool  (table.Rows[i][6].ToString());
-			}
-			return List;
+			return Crud.RxDefCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

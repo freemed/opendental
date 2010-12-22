@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ReqStudent>>(MethodBase.GetCurrentMethod(),aptNum);
 			}
 			string command="SELECT * FROM reqstudent WHERE AptNum="+POut.Long(aptNum)+" ORDER BY ProvNum,Descript";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.ReqStudentCrud.SelectMany(command);
 		}
 
 		public static ReqStudent GetOne(long ReqStudentNum) {
@@ -21,31 +21,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ReqStudent>(MethodBase.GetCurrentMethod(),ReqStudentNum);
 			}
 			string command="SELECT * FROM reqstudent WHERE ReqStudentNum="+POut.Long(ReqStudentNum);
-			List<ReqStudent> reqList=RefreshAndFill(Db.GetTable(command));
-			if(reqList.Count==0) {
-				return null;
-			}
-			return reqList[0];
-		}
-
-		private static List<ReqStudent> RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List<ReqStudent> reqList=new List<ReqStudent>();
-			ReqStudent req;
-			for(int i=0;i<table.Rows.Count;i++) {
-				req=new ReqStudent();
-				req.ReqStudentNum  = PIn.Long(table.Rows[i][0].ToString());
-				req.ReqNeededNum   = PIn.Long(table.Rows[i][1].ToString());
-				req.Descript       = PIn.String(table.Rows[i][2].ToString());
-				req.SchoolCourseNum= PIn.Long(table.Rows[i][3].ToString());
-				req.ProvNum        = PIn.Long(table.Rows[i][4].ToString());
-				req.AptNum         = PIn.Long(table.Rows[i][5].ToString());
-				req.PatNum         = PIn.Long(table.Rows[i][6].ToString());
-				req.InstructorNum  = PIn.Long(table.Rows[i][7].ToString());
-				req.DateCompleted  = PIn.Date(table.Rows[i][8].ToString());
-				reqList.Add(req);
-			}
-			return reqList;
+			return Crud.ReqStudentCrud.SelectOne(ReqStudentNum);
 		}
 
 		///<summary></summary>
