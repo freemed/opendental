@@ -59,12 +59,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pp);
 				return;
 			}
-			string command= "UPDATE payperiod SET "
-				+"DateStart = "    +POut.Date  (pp.DateStart)+" "
-				+",DateStop = "    +POut.Date  (pp.DateStop)+" "
-				+",DatePaycheck = "+POut.Date  (pp.DatePaycheck)+" "
-				+"WHERE PayPeriodNum = '"+POut.Long(pp.PayPeriodNum)+"'";
-			Db.NonQ(command);
+			Crud.PayPeriodCrud.Update(pp);
 		}
 
 		///<summary></summary>

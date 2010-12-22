@@ -17,32 +17,7 @@ namespace OpenDentBusiness{
 				+"WHERE paysplit.PayNum=payment.PayNum "
 				+"AND (paysplit.PatNum = '"+POut.Long(patNum)+"' OR payment.PatNum = '"+POut.Long(patNum)+"') "
 				+"ORDER BY ProcDate";
-			return RefreshAndFill(Db.GetTable(command)).ToArray();
-		}
-
-		private static List<PaySplit> RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List<PaySplit> retVal=new List<PaySplit>();
-			PaySplit split;
-			for(int i=0;i<table.Rows.Count;i++) {
-				split=new PaySplit();
-				split.SplitNum    = PIn.Long(table.Rows[i][0].ToString());
-				split.SplitAmt    = PIn.Double(table.Rows[i][1].ToString());
-				split.PatNum      = PIn.Long(table.Rows[i][2].ToString());
-				split.ProcDate    = PIn.Date(table.Rows[i][3].ToString());
-				split.PayNum      = PIn.Long(table.Rows[i][4].ToString());
-				//List[i].IsDiscount  = PIn.PBool  (table.Rows[i][5].ToString());
-				//List[i].DiscountType= PIn.PInt   (table.Rows[i][6].ToString());
-				split.ProvNum     = PIn.Long(table.Rows[i][7].ToString());
-				split.PayPlanNum  = PIn.Long(table.Rows[i][8].ToString());
-				split.DatePay     = PIn.Date(table.Rows[i][9].ToString());
-				split.ProcNum     = PIn.Long(table.Rows[i][10].ToString());
-				split.DateEntry   = PIn.Date(table.Rows[i][11].ToString());
-				split.UnearnedType= PIn.Long(table.Rows[i][12].ToString());
-				split.ClinicNum   = PIn.Long(table.Rows[i][13].ToString());
-				retVal.Add(split);
-			}
-			return retVal;
+			return Crud.PaySplitCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Used from payment window to get all paysplits for the payment.</summary>
@@ -62,21 +37,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),split);
 				return;
 			}
-			//Crud.PaySplitCrud.Update(split);
-			string command="UPDATE paysplit SET " 
-				+ "SplitAmt = '"     +POut.Double(split.SplitAmt)+"'"
-				+ ",PatNum = '"      +POut.Long   (split.PatNum)+"'"
-				+ ",ProcDate = "    +POut.Date  (split.ProcDate)
-				+ ",PayNum = '"      +POut.Long   (split.PayNum)+"'"
-				+ ",ProvNum = '"     +POut.Long   (split.ProvNum)+"'"
-				+ ",PayPlanNum = '"  +POut.Long   (split.PayPlanNum)+"'"
-				+ ",DatePay = "     +POut.Date  (split.DatePay)
-				+ ",ProcNum = '"     +POut.Long   (split.ProcNum)+"'"
-				//+ ",DateEntry = '"   +POut.PDate  (DateEntry)+"'"//not allowed to change
-				+ ",UnearnedType = '"+POut.Long(split.UnearnedType)+"'"
-				+ ",ClinicNum = '"   +POut.Long(split.ClinicNum)+"'"
-				+" WHERE SplitNum = '"+POut.Long (split.SplitNum)+"'";
- 			Db.NonQ(command);
+			Crud.PaySplitCrud.Update(split);
 		}
 
 		///<summary></summary>
@@ -85,40 +46,7 @@ namespace OpenDentBusiness{
 				split.SplitNum=Meth.GetLong(MethodBase.GetCurrentMethod(),split);
 				return split.SplitNum;
 			}
-			//return Crud.PaySplitCrud.Insert(split);
-			if(PrefC.RandomKeys){
-				split.SplitNum=ReplicationServers.GetKey("paysplit","SplitNum");
-			}
-			string command= "INSERT INTO paysplit (";
-			if(PrefC.RandomKeys){
-				command+="SplitNum,";
-			}
-			command+="SplitAmt,PatNum,ProcDate, "
-				+"PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry,UnearnedType,ClinicNum) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(split.SplitNum)+"', ";
-			}
-			command+=
-				 "'"+POut.Double(split.SplitAmt)+"', "
-				+"'"+POut.Long(split.PatNum)+"', "
-				+POut.Date(split.ProcDate)+", "
-				+"'"+POut.Long(split.PayNum)+"', "
-				+"'0', "//IsDiscount
-				+"'0', "//DiscountType
-				+"'"+POut.Long(split.ProvNum)+"', "
-				+"'"+POut.Long(split.PayPlanNum)+"', "
-				+POut.Date(split.DatePay)+", "
-				+"'"+POut.Long(split.ProcNum)+"', "
-				+"NOW(), "//DateEntry: date of server
-				+"'"+POut.Long(split.UnearnedType)+"', "
-				+"'"+POut.Long(split.ClinicNum)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				split.SplitNum=Db.NonQ(command,true);
-			}
-			return split.SplitNum;
+			return Crud.PaySplitCrud.Insert(split);
 		}
 
 		///<summary>Deletes the paysplit.</summary>

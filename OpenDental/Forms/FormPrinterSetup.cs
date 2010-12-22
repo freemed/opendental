@@ -678,6 +678,7 @@ namespace OpenDental{
 				Prefs.UpdateBool(PrefName.EasyHidePrinters,checkSimple.Checked);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
+			Printers.RefreshCache();//the other computers don't care
 			DialogResult=DialogResult.OK;
 		}
 

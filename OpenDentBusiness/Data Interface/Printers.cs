@@ -34,24 +34,15 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
+		///<summary>Gets directly from database</summary>
 		public static Printer GetOnePrinter(PrintSituation sit,long compNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Printer>(MethodBase.GetCurrentMethod(),sit,compNum);
 			}
-			//place a Crude "select one"statement here
-			Printer[] tempList=list;
 			string command="SELECT * FROM printer WHERE "
 				+"PrintSit = '"      +POut.Long((int)sit)+"' "
 				+"AND ComputerNum ='"+POut.Long(compNum)+"'";
-			DataTable table=Db.GetTable(command);
-			FillCache(table);
-			if(list.Length==0){
-				return null;
-			}
-			Printer result=list[0];
-			list=tempList;
-			return result;
+			return Crud.PrinterCrud.SelectOne(command);
 		}
 
 		///<summary></summary>
@@ -125,6 +116,7 @@ namespace OpenDentBusiness{
 				return;//computer not yet entered in db.
 			}
 			long compNum=PIn.Long(table.Rows[0][0].ToString());
+			//only called from PrinterSetup window. Get info directly from db, then refresh when closing window. 
 			Printer existing=GetOnePrinter(sit,compNum);   //GetForSit(sit);
 			if(printerName=="" && !displayPrompt){//then should not be an entry in db
 				if(existing!=null){//need to delete Printer

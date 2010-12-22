@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (paySplit.PayPlanNum)+","
 				+    POut.Date  (paySplit.DatePay)+","
 				+    POut.Long  (paySplit.ProcNum)+","
-				+    POut.Date  (paySplit.DateEntry)+","
+				+"NOW(),"
 				+    POut.Long  (paySplit.UnearnedType)+","
 				+    POut.Long  (paySplit.ClinicNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"PayPlanNum  =  "+POut.Long  (paySplit.PayPlanNum)+", "
 				+"DatePay     =  "+POut.Date  (paySplit.DatePay)+", "
 				+"ProcNum     =  "+POut.Long  (paySplit.ProcNum)+", "
-				+"DateEntry   =  "+POut.Date  (paySplit.DateEntry)+", "
+				//DateEntry not allowed to change
 				+"UnearnedType=  "+POut.Long  (paySplit.UnearnedType)+", "
 				+"ClinicNum   =  "+POut.Long  (paySplit.ClinicNum)+" "
 				+"WHERE SplitNum = "+POut.Long(paySplit.SplitNum)+" LIMIT 1";
@@ -169,10 +169,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="ProcNum = "+POut.Long(paySplit.ProcNum)+"";
 			}
-			if(paySplit.DateEntry != oldPaySplit.DateEntry) {
-				if(command!=""){ command+=",";}
-				command+="DateEntry = "+POut.Date(paySplit.DateEntry)+"";
-			}
+			//DateEntry not allowed to change
 			if(paySplit.UnearnedType != oldPaySplit.UnearnedType) {
 				if(command!=""){ command+=",";}
 				command+="UnearnedType = "+POut.Long(paySplit.UnearnedType)+"";

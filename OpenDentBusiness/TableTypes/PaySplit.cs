@@ -30,6 +30,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to procedurelog.ProcNum.  0 if not attached to a procedure.</summary>
 		public long ProcNum;
 		///<summary>Date this paysplit was created.  User not allowed to edit.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime DateEntry;
 		///<summary>FK to definition.DefNum.  Usually 0 unless this is a special unearned split.</summary>
 		public long UnearnedType;
