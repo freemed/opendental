@@ -27,18 +27,7 @@ namespace OpenDentBusiness{
 				command+=" AND UserNum="+POut.Long(userNum);
 			}
 			command+=" ORDER BY LogDateTime";
-			DataTable table=Db.GetTable(command);
-			SecurityLog[] List=new SecurityLog[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new SecurityLog();
-				List[i].SecurityLogNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].PermType      = (Permissions)PIn.Long(table.Rows[i][1].ToString());
-				List[i].UserNum       = PIn.Long(table.Rows[i][2].ToString());
-				List[i].LogDateTime   = PIn.DateT(table.Rows[i][3].ToString());
-				List[i].LogText       = PIn.String(table.Rows[i][4].ToString());
-				List[i].PatNum        = PIn.Long(table.Rows[i][5].ToString());
-			}
-			return List;
+			return Crud.SecurityLogCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

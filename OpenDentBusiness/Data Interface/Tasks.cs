@@ -33,11 +33,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM task"
 				+" WHERE TaskNum = "+POut.Long(TaskNum);
-			List<Task> taskList=RefreshAndFill(Db.GetTable(command));
-			if(taskList.Count==0) {
-				return null;
-			}
-			return taskList[0];
+			return Crud.TaskCrud.SelectOne(TaskNum);
 		}
 
 		///<summary>Gets all tasks for the main trunk.</summary>
@@ -58,7 +54,7 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.Long((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		///<summary>Gets all 'new' tasks for a user.</summary>
@@ -71,7 +67,7 @@ namespace OpenDentBusiness{
 				+"AND taskunread.UserNum = "+POut.Long(userNum)
 				+" GROUP BY task.TaskNum "
 				+"ORDER BY DateTimeEntry";//a datetime stamp would be nice.
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		///<summary>Gets all tasks for the repeating trunk.  Always includes "done".</summary>
@@ -84,7 +80,7 @@ namespace OpenDentBusiness{
 				+"AND DateTask < '1880-01-01' "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>

@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskListCrud.SelectMany(command);
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>

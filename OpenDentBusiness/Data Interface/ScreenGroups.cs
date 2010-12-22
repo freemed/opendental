@@ -19,6 +19,7 @@ namespace OpenDentBusiness{
 				+"AND SGDate <= "+POut.DateT(toDate.AddDays(1))+" "
 				//added one day since it's calculated based on midnight.
 				+"ORDER BY SGDate,ScreenGroupNum";
+			//return Crud.ScreenGroupCrud.SelectMany(command);
 			DataTable table=Db.GetTable(command);;
 			List<ScreenGroup> list=new List<ScreenGroup>();
 			ScreenGroup sg;

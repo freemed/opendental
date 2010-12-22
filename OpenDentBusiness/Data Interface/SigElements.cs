@@ -25,16 +25,7 @@ namespace OpenDentBusiness{
 				command+="SignalNum="+POut.Long(signalList[i].SignalNum);
 			}
 			command+=") ORDER BY sigelementdef.SigElementType";
-			DataTable table=Db.GetTable(command);
-			SigElement[] List=new SigElement[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new SigElement();
-				List[i].SigElementNum   = PIn.Long(table.Rows[i][0].ToString());
-				List[i].SigElementDefNum= PIn.Long(table.Rows[i][1].ToString());
-				List[i].SignalNum       = PIn.Long(table.Rows[i][2].ToString());
-			}
-			//Array.Sort(List);
-			return List;
+			return Crud.SigElementCrud.SelectMany(command).ToArray();
 		}
 
 		/*
