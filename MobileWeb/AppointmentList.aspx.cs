@@ -19,7 +19,7 @@ namespace MobileWeb {
 		protected void Page_Load(object sender,EventArgs e) {
 			//Thread.Sleep(1000);
 			Message.Text="";
-			if(Session["userid"]!=null) {
+			if(Session["CustomerNum"]!=null) {
 				Message.Text="LoggedIn";
 
 				

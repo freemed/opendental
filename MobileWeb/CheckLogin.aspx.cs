@@ -9,7 +9,7 @@ namespace MobileWeb {
 	public partial class CheckLogin:System.Web.UI.Page {
 		protected void Page_Load(object sender,EventArgs e) {
 			Message.Text="";
-			if(Session["userid"]!=null) {
+			if(Session["CustomerNum"]!=null) {
 				Message.Text="LoggedIn";
 			}
 		}

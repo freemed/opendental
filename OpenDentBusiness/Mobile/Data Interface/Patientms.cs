@@ -14,7 +14,7 @@ namespace OpenDentBusiness.Mobile {
 		}
 
 		///<summary>Gets all Patientms from the db as specified by the customerNum </summary>
-		public static List<Patientm> GetPatients(long customerNum) {
+		public static List<Patientm> GetPatientsForList(long customerNum) {
 			string command="SELECT * FROM patientm "
 				+"WHERE CustomerNum = "+POut.Long(customerNum);
 			return Crud.PatientmCrud.SelectMany(command);

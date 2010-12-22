@@ -11,14 +11,15 @@ using OpenDentBusiness.Mobile;
 
 namespace MobileWeb {
 	public partial class PatientList:System.Web.UI.Page {
-		
 		private Util util=new Util();
+		private long CustomerNum=0;
 
 		protected void Page_Load(object sender,EventArgs e) {
 			util.SetMobileDbConnection();
-			List<Patientm> patientmList=Patientms.GetPatients(1486);
 			Message.Text="";
-			if(Session["userid"]!=null) {
+			if(Session["CustomerNum"]!=null) {
+				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+				List<Patientm> patientmList=Patientms.GetPatientsForList(CustomerNum);
 				Message.Text="LoggedIn";
 				Repeater1.DataSource=patientmList;
 				Repeater1.DataBind();

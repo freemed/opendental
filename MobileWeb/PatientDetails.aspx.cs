@@ -14,16 +14,18 @@ namespace MobileWeb {
 		public Patientm pat;
 		public string patFName="";
 		private long PatNum=0;
+		private long CustomerNum=0;
 		protected void Page_Load(object sender,EventArgs e) {
 			Message.Text="";
-			if(Session["userid"]!=null) {
+			if(Session["CustomerNum"]!=null) {
 				Message.Text="LoggedIn";
 				////Thread.Sleep(500);
 				if(Request["PatNum"]!=null) {
 					Int64.TryParse(Request["PatNum"].ToString().Trim(),out PatNum);
 				}
-				pat=Patientms.GetOne(1486,PatNum);
-
+				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+				pat=Patientms.GetOne(CustomerNum,PatNum);
+				
 				
 
 			}

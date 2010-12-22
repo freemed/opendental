@@ -30,7 +30,7 @@ namespace MobileWeb {
 				if(username=="" && password=="") {
 
 					Message.Text="CorrectLogin";
-					Session["userid"]=3;
+					Session["CustomerNum"]=1486;
 				}
 				else {
 					Message.Text="LoginFailed";
