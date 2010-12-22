@@ -357,9 +357,9 @@ namespace UnitTests {
 				//clob:-----------------------------------------------------------------------------------------
 				string clobstring1=CreateRandomAlphaNumericString(52428800); //50MB should be larger than anything we store.
 				string clobstring2="";
-				DataCore.AddParam(clobstring1);
+				OdSqlParameter param=new OdSqlParameter(":param1",OdDbType.Text,clobstring1);
 				command="INSERT INTO tempcore (clobtest) VALUES (:param1)";
-				DataCore.NonQ(command);
+				DataCore.NonQ(command,param);
 				command="SELECT clobtest FROM tempcore";
 				table=DataCore.GetTable(command);
 				clobstring2=PIn.String(table.Rows[0]["clobtest"].ToString());

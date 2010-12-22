@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using System.Text;
+using Oracle.DataAccess.Client;
 
 namespace OpenDentBusiness {
 	///<summary>Hold parameter info in a database independent manner.</summary>
@@ -11,10 +12,11 @@ namespace OpenDentBusiness {
 		private OdDbType dbType;
 		private Object value;
 
-		///<summary>parameterName should not include the leading character such as @ or :.</summary>
-		public OdSqlParameter(string parameterName,OdDbType dbType) {
+		///<summary>parameterName should include the leading character such as @ or : for now. (although I'm working on a better approach).</summary>
+		public OdSqlParameter(string parameterName,OdDbType dbType,Object value) {
 			this.parameterName=parameterName;
 			this.dbType=dbType;
+			this.value=value;
 		}
 
 		public MySqlParameter GetMySqlParameter() {
@@ -64,6 +66,52 @@ namespace OpenDentBusiness {
 			return param;
 		}
 
+		public OracleParameter GetOracleParameter() {
+			OracleParameter param=new OracleParameter();
+			param.ParameterName=this.parameterName;
+			switch(this.dbType) {
+				case OdDbType.Bool:
+					param.OracleDbType=OracleDbType.Byte;
+					break;
+				case OdDbType.Byte:
+					param.OracleDbType=OracleDbType.Byte;
+					break;
+				case OdDbType.Currency:
+					param.OracleDbType=OracleDbType.Decimal;
+					break;
+				case OdDbType.Date:
+					param.OracleDbType=OracleDbType.Date;
+					break;
+				case OdDbType.DateTime:
+					param.OracleDbType=OracleDbType.Date;
+					break;
+				case OdDbType.DateTimeStamp:
+					param.OracleDbType=OracleDbType.Date;
+					break;
+				case OdDbType.Float:
+					param.OracleDbType=OracleDbType.Double;
+					break;
+				case OdDbType.Int:
+					param.OracleDbType=OracleDbType.Int32;
+					break;
+				case OdDbType.Long:
+					param.OracleDbType=OracleDbType.Int64;
+					break;
+				case OdDbType.Text:
+					param.OracleDbType=OracleDbType.Clob;
+					break;
+				case OdDbType.TimeOfDay:
+					param.OracleDbType=OracleDbType.Date;
+					break;
+				case OdDbType.TimeSpan:
+					param.OracleDbType=OracleDbType.Varchar2;
+					break;
+				case OdDbType.VarChar255:
+					param.OracleDbType=OracleDbType.Varchar2;
+					break;
+			}
+			return param;
+		}
 
 	}
 

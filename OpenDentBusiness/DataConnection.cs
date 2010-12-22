@@ -55,7 +55,6 @@ namespace OpenDentBusiness{
 		private static string MysqlPassLow;
 		///<summary>If this is used, then none of the fields above will be set.</summary>
 		private static string ConnectionString="";
-		private static ArrayList parameters=new ArrayList();
 #if DEBUG
 		///<summary>milliseconds.</summary>
 		private static int delayForTesting=0;
@@ -225,13 +224,14 @@ namespace OpenDentBusiness{
 		}
 
 		private void PrepOracleConnection(){
-			if(parameters.Count>0) {//Getting parameters for statement.
-				for(int p=0;p<parameters.Count;p++) {
-					cmdOr.Parameters.Add(":param"+(p+1),parameters[p]);
-				}
-				cmdOr.Prepare();
-				parameters.Clear();
-			}
+			//if(parameters.Count>0) {//Getting parameters for statement.
+			//	for(int p=0;p<parameters.Count;p++) {
+			//		cmdOr.Parameters.Add(":param"+(p+1),parameters[p]);
+			//	}
+			//	cmdOr.Prepare();
+			//	parameters.Clear();
+			//}
+			//This affects performance.  We need a better alternative than this:
 			cmdOr.CommandText="ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'";
 			try{
 				cmdOr.ExecuteNonQuery();	//Change the date-time format for this oracle connection to match our
@@ -417,8 +417,11 @@ namespace OpenDentBusiness{
 						cmdOr.ExecuteNonQuery();//Lock the preference table, because we need exclusive access to the OracleInsertId.
 					}
 					//for(int i=0;i<commandArray.Length;i++){
-						cmdOr.CommandText=commands; //Array[i];
-						rowsChanged=cmdOr.ExecuteNonQuery();
+					cmdOr.CommandText=commands; //Array[i];
+					for(int p=0;p<parameters.Length;p++) {
+						cmdOr.Parameters.Add(parameters[p].GetOracleParameter());
+					}
+					rowsChanged=cmdOr.ExecuteNonQuery();
 					//}
 				}
 				catch(System.Exception e){
@@ -526,9 +529,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		public static void AddParam(object param) {
-			parameters.Add(param);
-		}
+		
 
 	}
 }
