@@ -54,13 +54,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ProcCodeNote>>(MethodBase.GetCurrentMethod(),codeNum);
 			}
-			List<ProcCodeNote> tempList=list;
 			string command="SELECT * FROM proccodenote WHERE CodeNum="+POut.Long(codeNum);
-			DataTable table=Db.GetTable(command);
-			FillCache(table);
-			List<ProcCodeNote> result=list;
-			list=tempList;
-			return result;
+			return Crud.ProcCodeNoteCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

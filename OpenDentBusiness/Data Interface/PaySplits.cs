@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM paysplit "
 				+"WHERE PayNum="+POut.Long(payNum);
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.PaySplitCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

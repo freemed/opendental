@@ -25,6 +25,7 @@ namespace OpenDentBusiness {
 					command+="OR ";
 				}
 			}
+
 			DataTable table=Db.GetTable(command);
 			RegistrationKey[] keys=new RegistrationKey[table.Rows.Count];
 			for(int i=0;i<keys.Length;i++){
@@ -84,6 +85,7 @@ namespace OpenDentBusiness {
 				}
 			} 
 			while(KeyIsInUse(registrationKey.RegKey));
+//Crud:
 			if(PrefC.RandomKeys) {
 				registrationKey.RegistrationKeyNum=ReplicationServers.GetKey("registrationkey","RegistrationKeyNum");
 			}
