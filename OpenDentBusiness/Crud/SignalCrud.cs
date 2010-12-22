@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (signal.DateViewing)+","
 				+    POut.Int   ((int)signal.SigType)+","
 				+"'"+POut.String(signal.SigText)+"',"
-				+"NOW(),"
+				+    POut.DateT (signal.SigDateTime)+","
 				+"'"+POut.String(signal.ToUser)+"',"
 				+    POut.DateT (signal.AckTime)+","
 				+    POut.Long  (signal.TaskNum)+")";
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+"DateViewing=  "+POut.Date  (signal.DateViewing)+", "
 				+"SigType    =  "+POut.Int   ((int)signal.SigType)+", "
 				+"SigText    = '"+POut.String(signal.SigText)+"', "
-				//SigDateTime not allowed to change
+				+"SigDateTime=  "+POut.DateT (signal.SigDateTime)+", "
 				+"ToUser     = '"+POut.String(signal.ToUser)+"', "
 				+"AckTime    =  "+POut.DateT (signal.AckTime)+", "
 				+"TaskNum    =  "+POut.Long  (signal.TaskNum)+" "
@@ -137,7 +137,10 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="SigText = '"+POut.String(signal.SigText)+"'";
 			}
-			//SigDateTime not allowed to change
+			if(signal.SigDateTime != oldSignal.SigDateTime) {
+				if(command!=""){ command+=",";}
+				command+="SigDateTime = "+POut.DateT(signal.SigDateTime)+"";
+			}
 			if(signal.ToUser != oldSignal.ToUser) {
 				if(command!=""){ command+=",";}
 				command+="ToUser = '"+POut.String(signal.ToUser)+"'";
