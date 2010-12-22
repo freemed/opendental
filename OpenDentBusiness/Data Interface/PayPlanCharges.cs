@@ -41,30 +41,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM payplancharge "
 				+"WHERE PayPlanChargeNum="+POut.Long(payPlanChargeNum);
 			return Crud.PayPlanChargeCrud.SelectOne(command);
-			//Ryan//return RefreshAndFill(Db.GetTable(command))[0];
 		}
-		/*Ryan
-		private static List<PayPlanCharge> RefreshAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<PayPlanCharge> retVal=new List<PayPlanCharge>();
-			PayPlanCharge ppcharge;
-			for(int i=0;i<table.Rows.Count;i++) {
-				ppcharge=new PayPlanCharge();
-				ppcharge.PayPlanChargeNum= PIn.Long(table.Rows[i][0].ToString());
-				ppcharge.PayPlanNum      = PIn.Long(table.Rows[i][1].ToString());
-				ppcharge.Guarantor       = PIn.Long(table.Rows[i][2].ToString());
-				ppcharge.PatNum          = PIn.Long(table.Rows[i][3].ToString());
-				ppcharge.ChargeDate      = PIn.Date(table.Rows[i][4].ToString());
-				ppcharge.Principal       = PIn.Double(table.Rows[i][5].ToString());
-				ppcharge.Interest        = PIn.Double(table.Rows[i][6].ToString());
-				ppcharge.Note            = PIn.String(table.Rows[i][7].ToString());
-				ppcharge.ProvNum         = PIn.Long(table.Rows[i][8].ToString());
-				ppcharge.ClinicNum       = PIn.Long(table.Rows[i][9].ToString());
-				retVal.Add(ppcharge);
-			}
-
-		}
-			return retVal;Ryan*/
 
 		///<summary></summary>
 		public static void Update(PayPlanCharge charge){

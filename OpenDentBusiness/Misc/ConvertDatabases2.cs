@@ -3216,6 +3216,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//DbSchema.AddColumn("SchoolNum",OdDbType.Long);
 				command="ALTER TABLE payment ADD Receipt text NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE sigelementdef CHANGE ItemOrder ItemOrder smallint NOT NULL";
+				Db.NonQ(command);
 
 
 

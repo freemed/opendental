@@ -5,11 +5,13 @@ using System.Drawing;
 namespace OpenDentBusiness{
 
 	/// <summary>This defines the items that will be available for clicking when composing a manual message.  Also, these are referred to in the button definitions as a sequence of elements.</summary>
-	public class SigElementDef{
+	[Serializable]
+	public class SigElementDef:TableBase{
 		///<summary>Primary key.</summary>
+		[CrudColumn(IsPriKey=true)]
 		public long SigElementDefNum;
 		///<summary>If this element should cause a button to light up, this would be the row.  0 means none.</summary>
-		public int LightRow;
+		public byte LightRow;
 		///<summary>If a light row is set, this is the color it will turn when triggered.  Ack sets it back to white.  Note that color and row can be in two separate elements of the same signal.</summary>
 		public Color LightColor;
 		///<summary>Enum:SignalElementType  0=User,1=Extra,2=Message.</summary>

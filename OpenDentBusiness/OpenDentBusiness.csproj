@@ -276,6 +276,8 @@
     <Compile Include="Crud\SigButDefCrud.cs" />
     <Compile Include="Crud\SigButDefElementCrud.cs" />
     <Compile Include="Crud\SigElementCrud.cs" />
+    <Compile Include="Crud\SigElementDefCrud.cs" />
+    <Compile Include="Crud\SignalCrud.cs" />
     <Compile Include="Crud\SiteCrud.cs" />
     <Compile Include="Crud\StatementCrud.cs" />
     <Compile Include="Crud\SupplierCrud.cs" />

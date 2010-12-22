@@ -45,7 +45,6 @@ namespace OpenDentBusiness{
 			}
 		}
 
-
 		///<summary></summary>
 		private static void Update(SchoolClass sc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

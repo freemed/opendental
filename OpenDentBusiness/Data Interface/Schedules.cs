@@ -125,58 +125,33 @@ namespace OpenDentBusiness{
 
 		public static List<Schedule> ConvertTableToList(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			List<Schedule> retVal=new List<Schedule>();
-			//Schedule[] List=new Schedule[table.Rows.Count];
-			Schedule sched;
+			List<Schedule> retVal=Crud.ScheduleCrud.TableToList(table);
 			string opstr;
 			string[] oparray;
-			for(int i=0;i<table.Rows.Count;i++) {
-				sched=new Schedule();
-				sched.ScheduleNum    = PIn.Long   (table.Rows[i]["ScheduleNum"].ToString());
-				sched.SchedDate      = PIn.Date  (table.Rows[i]["SchedDate"].ToString());
-				sched.StartTime      = PIn.TimeSpan (table.Rows[i]["StartTime"].ToString());
-				sched.StopTime       = PIn.TimeSpan (table.Rows[i]["StopTime"].ToString());
-				sched.SchedType      = (ScheduleType)PIn.Long(table.Rows[i]["SchedType"].ToString());
-				sched.ProvNum        = PIn.Long   (table.Rows[i]["ProvNum"].ToString());
-				sched.BlockoutType   = PIn.Long   (table.Rows[i]["BlockoutType"].ToString());
-				sched.Note           = PIn.String(table.Rows[i]["Note"].ToString());
-				sched.Status         = (SchedStatus)PIn.Long(table.Rows[i]["Status"].ToString());
-				sched.EmployeeNum    = PIn.Long   (table.Rows[i]["EmployeeNum"].ToString());
-				if(table.Columns.Contains("ops")){
-					sched.Ops=new List<long>();
+			if(table.Columns.Contains("ops")){
+				for(int i=0;i<retVal.Count;i++){
+					retVal[i].Ops=new List<long>();
 					opstr=PIn.String(table.Rows[i]["ops"].ToString());
 					if(opstr!=""){
 						oparray=opstr.Split(',');
 						for(int o=0;o<oparray.Length;o++){
-							sched.Ops.Add(PIn.Long(oparray[o]));
+							retVal[i].Ops.Add(PIn.Long(oparray[o]));
 						}
 					}
 				}
-				retVal.Add(sched);
 			}
 			return retVal;
 		}
 
 		///<summary></summary>
-		private static void Update(Schedule sched){
+		public static void Update(Schedule sched){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sched);
 				return;
 			}
-			//Crud.ScheduleCrud.Update(sched);
-			string command= "UPDATE schedule SET " 
-				+ "SchedDate = "    +POut.Date  (sched.SchedDate)
-				+ ",StartTime = "   +POut.TimeSpan (sched.StartTime)
-				+ ",StopTime = "    +POut.TimeSpan(sched.StopTime)
-				+ ",SchedType = '"   +POut.Long   ((int)sched.SchedType)+"'"
-				+ ",ProvNum = '"     +POut.Long   (sched.ProvNum)+"'"
-				+ ",BlockoutType = '"+POut.Long   (sched.BlockoutType)+"'"
-				+ ",Note = '"        +POut.String(sched.Note)+"'"
-				+ ",Status = '"      +POut.Long   ((int)sched.Status)+"'"
-				+ ",EmployeeNum = '" +POut.Long   (sched.EmployeeNum)+"'"
-				+" WHERE ScheduleNum = '" +POut.Long (sched.ScheduleNum)+"'";
- 			Db.NonQ(command);
-			command="DELETE FROM scheduleop WHERE ScheduleNum="+POut.Long (sched.ScheduleNum);
+			Validate(sched);
+			Crud.ScheduleCrud.Update(sched);
+			string command="DELETE FROM scheduleop WHERE ScheduleNum="+POut.Long (sched.ScheduleNum);
 			Db.NonQ(command);
 			ScheduleOp op;
 			for(int i=0;i<sched.Ops.Count;i++){
@@ -187,40 +162,14 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.</summary>
+		///<summary></summary>
 		public static long Insert(Schedule sched){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sched.ScheduleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sched);
 				return sched.ScheduleNum;
 			}
-			if(PrefC.RandomKeys){
-				sched.ScheduleNum=ReplicationServers.GetKey("schedule","ScheduleNum");
-			}
-			string command= "INSERT INTO schedule (";
-			if(PrefC.RandomKeys){
-				command+="ScheduleNum,";
-			}
-			command+="scheddate,starttime,stoptime,"
-				+"SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(sched.ScheduleNum)+"', ";
-			}
-			command+=
-				 POut.Date  (sched.SchedDate)+", "
-				+POut.TimeSpan (sched.StartTime)+", "
-				+POut.TimeSpan (sched.StopTime)+", "
-				+"'"+POut.Long   ((int)sched.SchedType)+"', "
-				+"'"+POut.Long   (sched.ProvNum)+"', "
-				+"'"+POut.Long   (sched.BlockoutType)+"', "
-				+"'"+POut.String(sched.Note)+"', "
-				+"'"+POut.Long   ((int)sched.Status)+"', "
-				+"'"+POut.Long   (sched.EmployeeNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				sched.ScheduleNum=Db.NonQ(command,true);
-			}
+			Validate(sched);
+			Crud.ScheduleCrud.Insert(sched);
 			ScheduleOp op;
 			for(int i=0;i<sched.Ops.Count;i++){
 				op=new ScheduleOp();
@@ -232,11 +181,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void InsertOrUpdate(Schedule sched,bool isNew,bool failSilently){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),sched,isNew);
-				return;
-			}
+		private static void Validate(Schedule sched){
 			if(sched.StartTime > sched.StopTime){
 				throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
 			}
@@ -244,19 +189,6 @@ namespace OpenDentBusiness{
 				&& sched.Status==SchedStatus.Open)
 			{
 				throw new Exception(Lans.g("Schedule","Stop time cannot be the same as the start time."));
-			}
-			/*
-			if(Overlaps(sched)){
-				if(failSilently) {//used in blockout pasting
-					return;
-				}
-				throw new Exception(Lans.g("Schedule","Cannot overlap another time block."));
-			}*/
-			if(isNew){
-				Insert(sched);
-			}
-			else{
-				Update(sched);
 			}
 		}
 

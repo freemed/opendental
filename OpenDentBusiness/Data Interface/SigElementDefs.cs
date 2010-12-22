@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new SigElementDef();
 				list[i].SigElementDefNum= PIn.Long(table.Rows[i][0].ToString());
-				list[i].LightRow        = PIn.Int(table.Rows[i][1].ToString());
+				list[i].LightRow        = PIn.Byte(table.Rows[i][1].ToString());
 				list[i].LightColor      = Color.FromArgb(PIn.Int(table.Rows[i][2].ToString()));
 				list[i].SigElementType  = (SignalElementType)PIn.Long(table.Rows[i][3].ToString());
 				list[i].SigText         = PIn.String(table.Rows[i][4].ToString());
