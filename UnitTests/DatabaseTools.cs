@@ -76,11 +76,13 @@ namespace UnitTests {
 				ProcedureCodes.RefreshCache();
 			}
 			else {
+				//This stopped working. Might look into it later: for now manually create the unittest db
+
 				//Make sure the command CREATE OR REPLACE DIRECTORY dmpdir AS 'c:\oraclexe\app\tmp'; was ran
 				//and there is an opendental user with matching username/pass 
 				//The unittest.dmp was taken from a fresh unittest db created from the code above.  No need to alter it further. 
-				string command=@"impdp opendental/opendental DIRECTORY=dmpdir DUMPFILE=unittest.dmp TABLE_EXISTS_ACTION=replace LOGFILE=impschema.log";
-				ExecuteCommand(command);
+				//string command=@"impdp opendental/opendental DIRECTORY=dmpdir DUMPFILE=unittest.dmp TABLE_EXISTS_ACTION=replace LOGFILE=impschema.log";
+				//ExecuteCommand(command);
 			}
 		return "Fresh database loaded from sql dump.\r\n";
 		}

@@ -419,7 +419,8 @@ namespace OpenDentBusiness{
 					//for(int i=0;i<commandArray.Length;i++){
 					cmdOr.CommandText=commands; //Array[i];
 					for(int p=0;p<parameters.Length;p++) {
-						cmdOr.Parameters.Add(parameters[p].GetOracleParameter());
+						cmdOr.Parameters.Add(parameters[p].ParameterName,parameters[p].Value);
+							//parameters[p].GetOracleParameter());
 					}
 					rowsChanged=cmdOr.ExecuteNonQuery();
 					//}

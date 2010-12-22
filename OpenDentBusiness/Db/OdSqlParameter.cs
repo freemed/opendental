@@ -12,6 +12,16 @@ namespace OpenDentBusiness {
 		private OdDbType dbType;
 		private Object value;
 
+		public string ParameterName {
+			get { return parameterName; }
+			set { parameterName = value; }
+		}
+	
+		public Object Value {
+			get { return this.value; }
+			set { this.value = value; }
+		}
+
 		///<summary>parameterName should include the leading character such as @ or : for now. (although I'm working on a better approach).</summary>
 		public OdSqlParameter(string parameterName,OdDbType dbType,Object value) {
 			this.parameterName=parameterName;
