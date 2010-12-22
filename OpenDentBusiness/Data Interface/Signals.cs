@@ -19,7 +19,8 @@ namespace OpenDentBusiness{
 			//note: this might return an occasional row that has both times newer.
 			List<Signal> sigList=new List<Signal>();
 			try {
-				sigList=RefreshAndFill(Db.GetTable(command));
+				sigList=Crud.SignalCrud.SelectMany(command);
+				sigList.Sort();
 			} 
 			catch {
 				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
@@ -45,7 +46,8 @@ namespace OpenDentBusiness{
 			//note: this might return an occasional row that has both times newer.
 			List<Signal> sigList=new List<Signal>();
 			try {
-				sigList=RefreshAndFill(Db.GetTable(command));
+				sigList=Crud.SignalCrud.SelectMany(command);
+				sigList.Sort();
 			} 
 			catch {
 				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
@@ -54,7 +56,6 @@ namespace OpenDentBusiness{
 			for(int i=0;i<sigList.Count;i++) {
 				sigList[i].ElementList=SigElements.GetForSig(sigElementsAll,sigList[i].SignalNum);
 			}
-			//ArrayList retVal=new ArrayList(sigList);
 			return sigList;//retVal;
 		}
 
@@ -69,7 +70,8 @@ namespace OpenDentBusiness{
 				+"ORDER BY SigDateTime";
 			List <Signal> sigList=new List<Signal> ();
 			try {
-				sigList=RefreshAndFill(Db.GetTable(command));
+				sigList=Crud.SignalCrud.SelectMany(command);
+				sigList.Sort();
 			} 
 			catch {
 				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
@@ -80,28 +82,6 @@ namespace OpenDentBusiness{
 			}
 			return sigList;
 		}
-
-		private static List<Signal> RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List<Signal> retVal=new List<Signal>();
-			Signal sig;
-			for(int i=0;i<table.Rows.Count;i++) {
-				sig=new Signal();
-				sig.SignalNum  = PIn.Long(table.Rows[i][0].ToString());
-				sig.FromUser   = PIn.String(table.Rows[i][1].ToString());
-				sig.ITypes     = PIn.String(table.Rows[i][2].ToString());
-				sig.DateViewing= PIn.Date(table.Rows[i][3].ToString());
-				sig.SigType    = (SignalType)PIn.Long(table.Rows[i][4].ToString());
-				sig.SigText    = PIn.String(table.Rows[i][5].ToString());
-				sig.SigDateTime= PIn.DateT(table.Rows[i][6].ToString());
-				sig.ToUser     = PIn.String(table.Rows[i][7].ToString());
-				sig.AckTime    = PIn.DateT(table.Rows[i][8].ToString());
-				sig.TaskNum    = PIn.Long(table.Rows[i][9].ToString());
-				retVal.Add(sig);
-			}
-			retVal.Sort();
-			return retVal;
-		}
 	
 		///<summary></summary>
 		public static void Update(Signal sig){
@@ -109,18 +89,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sig);
 				return;
 			}
-			string command= "UPDATE signal SET " 
-				+"FromUser = '"    +POut.String(sig.FromUser)+"'"
-				+",ITypes = '"     +POut.String(sig.ITypes)+"'"
-				+",DateViewing = " +POut.Date  (sig.DateViewing)
-				+",SigType = '"    +POut.Long   ((int)sig.SigType)+"'"
-				+",SigText = '"    +POut.String(sig.SigText)+"'"
-				//+",SigDateTime = '"+POut.PDateT (SigDateTime)+"'"//we don't want to ever update this
-				+",ToUser = '"     +POut.String(sig.ToUser)+"'"
-				+",AckTime = "     +POut.DateT (sig.AckTime)
-				+",TaskNum = '"    +POut.Long   (sig.TaskNum)+"'"
-				+" WHERE SignalNum = '"+POut.Long(sig.SignalNum)+"'";
-			Db.NonQ(command);
+			Crud.SignalCrud.Update(sig);
 		}
 
 		///<summary></summary>
@@ -131,37 +100,8 @@ namespace OpenDentBusiness{
 			}
 			//we need to explicitly get the server time in advance rather than using NOW(),
 			//because we need to update the signal object soon after creation.
-			//DateTime now=ClockEvents.GetServerTime();
 			sig.SigDateTime=MiscData.GetNowDateTime();
-			if(PrefC.RandomKeys){
-				sig.SignalNum=ReplicationServers.GetKey("signal","SignalNum");
-			}
-			string command= "INSERT INTO signal (";
-			if(PrefC.RandomKeys){
-				command+="SignalNum,";
-			}
-			command+="FromUser,ITypes,DateViewing,SigType,SigText,SigDateTime,ToUser,AckTime,TaskNum"
-				+") VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(sig.SignalNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(sig.FromUser)+"', "
-				+"'"+POut.String(sig.ITypes)+"', "
-				+POut.Date  (sig.DateViewing)+", "
-				+"'"+POut.Long   ((int)sig.SigType)+"', "
-				+"'"+POut.String(sig.SigText)+"', "
-				+POut.DateT(sig.SigDateTime)+", "
-				+"'"+POut.String(sig.ToUser)+"', "
-				+POut.DateT (sig.AckTime)+", "
-				+"'"+POut.Long(sig.TaskNum)+"')";
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				sig.SignalNum=Db.NonQ(command,true);
-			}
-			return sig.SignalNum;
+			return Crud.SignalCrud.Insert(sig);
 		}
 
 		//<summary>There's no such thing as deleting a signal</summary>
@@ -212,7 +152,7 @@ namespace OpenDentBusiness{
 				command+="task.TaskNum= "+POut.Long(sigListFiltered[i].TaskNum);
 			}
 			command+=")";
-			return Tasks.RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		///<summary>After a refresh, this is used to get a list containing all flags of types that need to be refreshed.   Types of Date and Task are not included.  Because type are an enumeration, the returned list is int32, not int64.</summary>

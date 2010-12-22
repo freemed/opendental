@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
-			return Crud.TaskListCrud.SelectMany(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>
@@ -133,11 +133,7 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			string command="SELECT * FROM tasklist WHERE TaskListNum="+POut.Long(taskListNum);
-			List<TaskList> list=RefreshAndFill(Db.GetTable(command));
-			if(list.Count>0){
-				return list[0];
-			}
-			return null;
+			return Crud.TaskListCrud.SelectOne(command);
 		}
 
 		/*
@@ -197,18 +193,7 @@ namespace OpenDentBusiness{
 			if(tlist.IsRepeating && tlist.Parent!=0 && tlist.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
 				throw new Exception(Lans.g("TaskLists","In repeating tasklists, only the main parents can have a task status."));
 			}
-			//Crud:
-			string command= "UPDATE tasklist SET " 
-				+"Descript = '"       +POut.String(tlist.Descript)+"'"
-				+",Parent = '"        +POut.Long   (tlist.Parent)+"'"
-				+",DateTL = "        +POut.Date  (tlist.DateTL)
-				+",IsRepeating = '"   +POut.Bool  (tlist.IsRepeating)+"'"
-				+",DateType = '"      +POut.Long   ((int)tlist.DateType)+"'"
-				+",FromNum = '"       +POut.Long   (tlist.FromNum)+"'"
-				+",ObjectType = '"    +POut.Long   ((int)tlist.ObjectType)+"'"
-				+",DateTimeEntry = " +POut.DateT (tlist.DateTimeEntry)
-				+" WHERE TaskListNum = '" +POut.Long (tlist.TaskListNum)+"'";
- 			Db.NonQ(command);
+			Crud.TaskListCrud.Update(tlist);
 		}
 
 		///<summary></summary>
@@ -226,35 +211,7 @@ namespace OpenDentBusiness{
 			if(tlist.IsRepeating && tlist.Parent!=0 && tlist.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
 				throw new Exception(Lans.g("TaskLists","In repeating tasklists, only the main parents can have a task status."));
 			}
-			//Crud:
-			if(PrefC.RandomKeys){
-				tlist.TaskListNum=ReplicationServers.GetKey("tasklist","TaskListNum");
-			}
-			string command= "INSERT INTO tasklist (";
-			if(PrefC.RandomKeys){
-				command+="TaskListNum,";
-			}
-			command+="Descript,Parent,DateTL,IsRepeating,DateType,"
-				+"FromNum,ObjectType,DateTimeEntry) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.Long(tlist.TaskListNum)+"', ";
-			}
-			command+=
-				 "'"+POut.String(tlist.Descript)+"', "
-				+"'"+POut.Long   (tlist.Parent)+"', "
-				+POut.Date  (tlist.DateTL)+", "
-				+"'"+POut.Bool  (tlist.IsRepeating)+"', "
-				+"'"+POut.Long   ((int)tlist.DateType)+"', "
-				+"'"+POut.Long   (tlist.FromNum)+"', "
-				+"'"+POut.Long   ((int)tlist.ObjectType)+"', "
-				+"NOW() )";//DateTimeEntry set to current server time
- 			if(PrefC.RandomKeys){
-				Db.NonQ(command);
-			}
-			else{
- 				tlist.TaskListNum=Db.NonQ(command,true);
-			}
-			return tlist.TaskListNum;
+			return Crud.TaskListCrud.Insert(tlist);
 		}
 
 		///<summary>Throws exception if any child tasklists or tasks.</summary>

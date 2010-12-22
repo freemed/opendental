@@ -56,15 +56,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="UPDATE sigelementdef SET " 
-				+"LightRow = '"       +POut.Long   (def.LightRow)+"'"
-				+",LightColor = '"    +POut.Long   (def.LightColor.ToArgb())+"'"
-				+",SigElementType = '"+POut.Long   ((int)def.SigElementType)+"'"
-				+",SigText = '"       +POut.String(def.SigText)+"'"
-				+",Sound = '"         +POut.String(def.Sound)+"'"
-				+",ItemOrder = '"     +POut.Long   (def.ItemOrder)+"'"
-				+" WHERE SigElementDefNum  ='"+POut.Long   (def.SigElementDefNum)+"'";
-			Db.NonQ(command);
+			Crud.SigElementDefCrud.Update(def);
 		}
 
 		///<summary></summary>
@@ -73,32 +65,7 @@ namespace OpenDentBusiness {
 				def.SigElementDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),def);
 				return def.SigElementDefNum;
 			}
-			if(PrefC.RandomKeys) {
-				def.SigElementDefNum=ReplicationServers.GetKey("sigelementdef","SigElementDefNum");
-			}
-			string command="INSERT INTO sigelementdef (";
-			if(PrefC.RandomKeys) {
-				command+="SigElementDefNum,";
-			}
-			command+="LightRow,LightColor,SigElementType,SigText,Sound,"
-				+"ItemOrder) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(def.SigElementDefNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long   (def.LightRow)+"', "
-				+"'"+POut.Long   (def.LightColor.ToArgb())+"', "
-				+"'"+POut.Long   ((int)def.SigElementType)+"', "
-				+"'"+POut.String(def.SigText)+"', "
-				+"'"+POut.String(def.Sound)+"', "
-				+"'"+POut.Long   (def.ItemOrder)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				def.SigElementDefNum=Db.NonQ(command,true);
-			}
-			return def.SigElementDefNum;
+			return Crud.SigElementDefCrud.Insert(def);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.  This routine, deletes references in the SigButDefElement table.  References in the SigElement table are left hanging.  The user interface needs to be able to handle missing elementdefs.</summary>

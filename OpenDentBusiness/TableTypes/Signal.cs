@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		///<summary>This is only used if the type is button, and the user types in some text.  This is the typed portion and does not include any of the text that was on the buttons.  These types of signals are displayed in their own separate list in addition to any light and sound that they may cause.</summary>
 		public string SigText;
 		///<summary>The exact server time when this signal was entered into db.  This does not need to be set by sender since it's handled automatically.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime SigDateTime;
 		///<summary>Text version of 'user' this message was sent to, which can actually be any description of a group or individual.</summary>
 		public string ToUser;

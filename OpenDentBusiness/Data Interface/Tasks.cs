@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM task"
 				+" WHERE TaskNum = "+POut.Long(TaskNum);
-			return Crud.TaskCrud.SelectOne(TaskNum);
+			return Crud.TaskCrud.SelectOne(command);
 		}
 
 		///<summary>Gets all tasks for the main trunk.</summary>
@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.Long((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		///<summary>All repeating items for one date type with no heirarchy.</summary>
@@ -113,7 +113,7 @@ namespace OpenDentBusiness{
 				+"WHERE IsRepeating=1 "
 				+"AND DateType="+POut.Long((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		///<summary>Gets all tasks for one of the 3 dated trunks. startDate only applies if showing Done.</summary>
@@ -148,7 +148,7 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.Long((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		///<summary>The full refresh is only used once when first synching all the tasks for taskAncestors.</summary>
@@ -157,7 +157,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM task WHERE TaskListNum != 0";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TaskCrud.SelectMany(command);
 		}
 
 		public static List<Task> RefreshAndFill(DataTable table){
@@ -202,23 +202,7 @@ namespace OpenDentBusiness{
 			if(WasTaskAltered(oldTask)){
 				throw new Exception(Lans.g("Tasks","Not allowed to save changes because the task has been altered by someone else."));
 			}
-			//Crud:
-			string command= "UPDATE task SET " 
-				+"TaskListNum = '"    +POut.Long   (task.TaskListNum)+"'"
-				+",DateTask = "       +POut.Date  (task.DateTask)
-				+",KeyNum = '"        +POut.Long   (task.KeyNum)+"'"
-				+",Descript = '"      +POut.String(task.Descript)+"'"
-				+",TaskStatus = '"    +POut.Long   ((int)task.TaskStatus)+"'"
-				+",IsRepeating = '"   +POut.Bool  (task.IsRepeating)+"'"
-				+",DateType = '"      +POut.Long   ((int)task.DateType)+"'"
-				+",FromNum = '"       +POut.Long   (task.FromNum)+"'"
-				+",ObjectType = '"    +POut.Long   ((int)task.ObjectType)+"'"
-				+",DateTimeEntry = "  +POut.DateT (task.DateTimeEntry)
-				+",UserNum = '"       +POut.Long   (task.UserNum)+"'"
-				+",DateTimeFinished ="+POut.DateT (task.DateTimeFinished)
-				+" WHERE TaskNum = '" +POut.Long(task.TaskNum)+"'";
- 			Db.NonQ(command);
-			//Crud stop
+			Crud.TaskCrud.Update(task);
 			//need to optimize this later to skip unless TaskListNumChanged
 			TaskAncestors.Synch(task);
 		}
@@ -249,7 +233,7 @@ namespace OpenDentBusiness{
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),task);
 			}
 			string command="SELECT * FROM task WHERE TaskNum="+POut.Long(task.TaskNum);
-			Task oldtask=RefreshAndFill(Db.GetTable(command))[0];
+			Task oldtask=Crud.TaskCrud.SelectOne(command);
 			if(oldtask.DateTask!=task.DateTask
 					|| oldtask.DateType!=task.DateType
 					|| oldtask.Descript!=task.Descript
