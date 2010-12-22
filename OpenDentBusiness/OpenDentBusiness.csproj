@@ -360,7 +360,7 @@
     <Compile Include="InternalTools\Phones\TableTypes\PhoneOverride.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />
-    <Compile Include="ClientSL.cs" />
+    <Compile Include="Remoting\ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Accounts.cs" />
@@ -488,7 +488,7 @@
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\Family.cs" />
-    <Compile Include="Data Interface\Db.cs" />
+    <Compile Include="Db\Db.cs" />
     <Compile Include="Data Interface\Ledgers.cs" />
     <Compile Include="Data Interface\MountDefs.cs" />
     <Compile Include="Data Interface\MountItemDefs.cs" />
@@ -515,10 +515,10 @@
     <Compile Include="Data Interface\UserGroups.cs" />
     <Compile Include="Data Interface\UserQueries.cs" />
     <Compile Include="Data Interface\ZipCodes.cs" />
-    <Compile Include="DataConnection.cs">
+    <Compile Include="Db\DataConnection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DtoObject.cs" />
+    <Compile Include="Remoting\DtoObject.cs" />
     <Compile Include="HL7\ADT.cs" />
     <Compile Include="HL7\ComponentHL7.cs" />
     <Compile Include="HL7\DFT.cs" />
@@ -530,15 +530,15 @@
     <Compile Include="Imaging\ImageHelper.cs" />
     <Compile Include="Imaging\ImageStore.cs" />
     <Compile Include="Data Interface\MiscData.cs" />
-    <Compile Include="DataTransferObject.cs" />
-    <Compile Include="Enumerations.cs" />
+    <Compile Include="Remoting\DataTransferObject.cs" />
+    <Compile Include="Db\Enumerations.cs" />
     <Compile Include="Data Interface\Lans.cs" />
     <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Data Interface\AccountModules.cs" />
     <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Logic\BenefitLogic.cs" />
     <Compile Include="Data Interface\ChartModules.cs" />
-    <Compile Include="DataCore.cs" />
+    <Compile Include="Db\DataCore.cs" />
     <Compile Include="Logic\PatientLogic.cs" />
     <Compile Include="Logic\ProcedureLogic.cs" />
     <Compile Include="Data Interface\ProcNotes.cs" />
@@ -546,13 +546,13 @@
     <Compile Include="Logic\Tooth.cs" />
     <Compile Include="Logic\ToothComparer.cs" />
     <Compile Include="Data Interface\Userods.cs" />
-    <Compile Include="Meth.cs" />
+    <Compile Include="Remoting\Meth.cs" />
     <Compile Include="Misc\DatabaseMaintenance.cs" />
-    <Compile Include="Misc\DbHelper.cs" />
-    <Compile Include="Misc\DbSchema.cs" />
+    <Compile Include="Db\DbHelper.cs" />
+    <Compile Include="Db\DbSchema.cs" />
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
-    <Compile Include="Misc\OdSqlParameter.cs" />
+    <Compile Include="Db\OdSqlParameter.cs" />
     <Compile Include="Misc\TimeSpanExtension.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="Mobile\ConvertDatabasem.cs" />
@@ -598,8 +598,8 @@
     <Compile Include="ODDataSet\ODDataRow.cs" />
     <Compile Include="ODDataSet\ODDataSet.cs" />
     <Compile Include="ODDataSet\ODDataTable.cs" />
-    <Compile Include="PIn.cs" />
-    <Compile Include="POut.cs" />
+    <Compile Include="Db\PIn.cs" />
+    <Compile Include="Db\POut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -611,7 +611,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="RemotingClient.cs" />
+    <Compile Include="Remoting\RemotingClient.cs" />
     <Compile Include="Reports\Reports.cs" />
     <Compile Include="Reports\RpAdjSheet.cs" />
     <Compile Include="Settings.cs" />
@@ -706,7 +706,7 @@
     <Compile Include="TableTypes\GroupPermission.cs" />
     <Compile Include="TableTypes\InsPlan.cs" />
     <Compile Include="TableTypes\InstructorOld.cs" />
-    <Compile Include="Misc\Interval.cs" />
+    <Compile Include="Db\Interval.cs" />
     <Compile Include="TableTypes\JournalEntry.cs" />
     <Compile Include="TableTypes\Language.cs" />
     <Compile Include="TableTypes\LanguageForeign.cs" />
@@ -783,7 +783,7 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="X12\X12object.cs" />
-    <Compile Include="XmlConverter.cs" />
+    <Compile Include="Remoting\XmlConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
