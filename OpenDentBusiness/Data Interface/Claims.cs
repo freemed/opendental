@@ -93,17 +93,7 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.Long(claimNum);
-			DataTable table=Db.GetTable(command);
-			retClaim.Attachments=new List<ClaimAttach>();
-			ClaimAttach attach;
-			for(int i=0;i<table.Rows.Count;i++){
-				attach=new ClaimAttach();
-				attach.ClaimAttachNum   =PIn.Long   (table.Rows[i][0].ToString());
-				attach.ClaimNum         =PIn.Long   (table.Rows[i][1].ToString());
-				attach.DisplayedFileName=PIn.String(table.Rows[i][2].ToString());
-				attach.ActualFileName   =PIn.String(table.Rows[i][3].ToString());
-				retClaim.Attachments.Add(attach);
-			}
+			retClaim.Attachments=Crud.ClaimAttachCrud.SelectMany(command);
 			return retClaim;
 		}
 
@@ -118,58 +108,6 @@ namespace OpenDentBusiness{
 				+" ORDER BY dateservice";
 			return Crud.ClaimCrud.SelectMany(command);
 		}
-		/*
-		private static List<Claim> SubmitAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			Claim tempClaim;
-			List<Claim> claims=new List<Claim>();
-			for(int i=0;i<table.Rows.Count;i++){
-				tempClaim=new Claim();
-				tempClaim.ClaimNum     =		PIn.Long   (table.Rows[i][0].ToString());
-				tempClaim.PatNum       =		PIn.Long   (table.Rows[i][1].ToString());
-				tempClaim.DateService  =		PIn.Date  (table.Rows[i][2].ToString());
-				tempClaim.DateSent     =		PIn.Date  (table.Rows[i][3].ToString());
-				tempClaim.ClaimStatus  =		PIn.String(table.Rows[i][4].ToString());
-				tempClaim.DateReceived =		PIn.Date  (table.Rows[i][5].ToString());
-				tempClaim.PlanNum      =		PIn.Long   (table.Rows[i][6].ToString());
-				tempClaim.ProvTreat    =		PIn.Long   (table.Rows[i][7].ToString());
-				tempClaim.ClaimFee     =		PIn.Double(table.Rows[i][8].ToString());
-				tempClaim.InsPayEst    =		PIn.Double(table.Rows[i][9].ToString());
-				tempClaim.InsPayAmt    =		PIn.Double(table.Rows[i][10].ToString());
-				tempClaim.DedApplied   =		PIn.Double(table.Rows[i][11].ToString());
-				tempClaim.PreAuthString=		PIn.String(table.Rows[i][12].ToString());
-				tempClaim.IsProsthesis =		PIn.String(table.Rows[i][13].ToString());
-				tempClaim.PriorDate    =		PIn.Date  (table.Rows[i][14].ToString());
-				tempClaim.ReasonUnderPaid=	PIn.String(table.Rows[i][15].ToString());
-				tempClaim.ClaimNote    =		PIn.String(table.Rows[i][16].ToString());
-				tempClaim.ClaimType    =    PIn.String(table.Rows[i][17].ToString());
-				tempClaim.ProvBill     =		PIn.Long   (table.Rows[i][18].ToString());
-				tempClaim.ReferringProv=		PIn.Long   (table.Rows[i][19].ToString());
-				tempClaim.RefNumString =		PIn.String(table.Rows[i][20].ToString());
-				tempClaim.PlaceService = (PlaceOfService)PIn.Long(table.Rows[i][21].ToString());
-				tempClaim.AccidentRelated=	PIn.String(table.Rows[i][22].ToString());
-				tempClaim.AccidentDate  =		PIn.Date  (table.Rows[i][23].ToString());
-				tempClaim.AccidentST    =		PIn.String(table.Rows[i][24].ToString());
-				tempClaim.EmployRelated=(YN)PIn.Long   (table.Rows[i][25].ToString());
-				tempClaim.IsOrtho       =		PIn.Bool  (table.Rows[i][26].ToString());
-				tempClaim.OrthoRemainM  =		PIn.Byte   (table.Rows[i][27].ToString());
-				tempClaim.OrthoDate     =		PIn.Date  (table.Rows[i][28].ToString());
-				tempClaim.PatRelat      =(Relat)PIn.Long(table.Rows[i][29].ToString());
-				tempClaim.PlanNum2      =   PIn.Long   (table.Rows[i][30].ToString());
-				tempClaim.PatRelat2     =(Relat)PIn.Long(table.Rows[i][31].ToString());
-				tempClaim.WriteOff      =   PIn.Double(table.Rows[i][32].ToString());
-				tempClaim.Radiographs   =   PIn.Byte   (table.Rows[i][33].ToString());
-				tempClaim.ClinicNum     =   PIn.Long   (table.Rows[i][34].ToString());
-				tempClaim.ClaimForm     =   PIn.Long   (table.Rows[i][35].ToString());
-				tempClaim.EFormat       =(EtransType)PIn.Long(table.Rows[i][36].ToString());
-				tempClaim.AttachedImages=   PIn.Int   (table.Rows[i][37].ToString());
-				tempClaim.AttachedModels=   PIn.Int   (table.Rows[i][38].ToString());
-				tempClaim.AttachedFlags =   PIn.String(table.Rows[i][39].ToString());
-				tempClaim.AttachmentID  =   PIn.String(table.Rows[i][40].ToString());
-				claims.Add(tempClaim);
-			}
-			return claims;
-		}*/
 
 		public static Claim GetFromList(List<Claim> list,long claimNum) {
 			//No need to check RemotingRole; no call to db.
@@ -371,7 +309,7 @@ namespace OpenDentBusiness{
 
 	}//end class Claims
 
-	///<summary>This is an odd class.  It holds data for the X12 generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.</summary>
+	///<summary>This is an odd class.  It holds data for the X12 generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.  Not an actual database table.</summary>
 	public class X12TransactionItem{
 		public string PayorId0;
 		public long ProvBill1;
@@ -380,7 +318,7 @@ namespace OpenDentBusiness{
 		public long ClaimNum4;
 	}
 
-	///<summary>Holds a list of claims to show in the claims 'queue' waiting to be sent.</summary>
+	///<summary>Holds a list of claims to show in the claims 'queue' waiting to be sent.  Not an actual database table.</summary>
 	public class ClaimSendQueueItem{
 		///<summary></summary>
 		public long ClaimNum;
@@ -405,7 +343,7 @@ namespace OpenDentBusiness{
 		}
 	}
 
-	///<summary>Holds a list of claims to show in the Claim Check Edit window.</summary>
+	///<summary>Holds a list of claims to show in the Claim Check Edit window.  Not an actual database table.</summary>
 	public class ClaimPaySplit{
 		///<summary></summary>
 		public long ClaimNum;
