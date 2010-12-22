@@ -14,7 +14,7 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<TerminalActive[]>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM terminalactive ORDER BY ComputerName";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TerminalActiveCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

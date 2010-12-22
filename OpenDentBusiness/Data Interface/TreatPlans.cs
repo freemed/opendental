@@ -18,20 +18,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM treatplan "
 				+"WHERE PatNum="+POut.Long(patNum)
 				+" ORDER BY DateTP";
-			DataTable table=Db.GetTable(command);
-			TreatPlan[] List=new TreatPlan[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new TreatPlan();
-				List[i].TreatPlanNum= PIn.Long   (table.Rows[i][0].ToString());
-				List[i].PatNum      = PIn.Long   (table.Rows[i][1].ToString());
-				List[i].DateTP      = PIn.Date  (table.Rows[i][2].ToString());
-				List[i].Heading     = PIn.String(table.Rows[i][3].ToString());
-				List[i].Note        = PIn.String(table.Rows[i][4].ToString());
-				List[i].Signature   = PIn.String(table.Rows[i][5].ToString());
-				List[i].SigIsTopaz  = PIn.Bool  (table.Rows[i][6].ToString());
-				List[i].ResponsParty= PIn.Long   (table.Rows[i][7].ToString());
-			}
-			return List;
+			return Crud.TreatPlanCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

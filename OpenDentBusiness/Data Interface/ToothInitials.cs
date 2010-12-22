@@ -17,21 +17,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM toothinitial"
 				+" WHERE PatNum = "+POut.Long(patNum);
-			DataTable table=Db.GetTable(command);
-			List<ToothInitial> tList=new List<ToothInitial>();
-			ToothInitial ti;
-			for(int i=0;i<table.Rows.Count;i++) {
-				ti=new ToothInitial();
-				ti.ToothInitialNum= PIn.Long   (table.Rows[i][0].ToString());
-				ti.PatNum         = PIn.Long   (table.Rows[i][1].ToString());
-				ti.ToothNum       = PIn.String(table.Rows[i][2].ToString());
-				ti.InitialType    = (ToothInitialType)PIn.Long(table.Rows[i][3].ToString());
-				ti.Movement       = PIn.Float (table.Rows[i][4].ToString());
-				ti.DrawingSegment = PIn.String(table.Rows[i][5].ToString());
-				ti.ColorDraw      = Color.FromArgb(PIn.Int(table.Rows[i][6].ToString()));
-				tList.Add(ti);
-			}
-			return tList;
+			return Crud.ToothInitialCrud.SelectMany(command);
 		}
 	
 

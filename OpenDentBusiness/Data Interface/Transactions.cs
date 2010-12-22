@@ -11,10 +11,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Transaction>(MethodBase.GetCurrentMethod(),transactionNum);
 			}
-			string command=
-				"SELECT * FROM transaction "
-				+"WHERE TransactionNum="+POut.Long(transactionNum);
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.TransactionCrud.SelectOne(transactionNum);
 		}
 
 		///<summary>For now, all transactions are retrieved singly.  Returns null if no match found.</summary>
