@@ -13,11 +13,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM disease WHERE PatNum="+POut.Long(patNum)
 				+" AND DiseaseDefNum="+POut.Long(diseaseDefNum);
-			Disease[] disList=RefreshAndFill(Db.GetTable(command));
-			if(disList.Length==0){
-				return null;
-			}
-			return disList[0].Copy();
+			return Crud.DiseaseCrud.SelectOne(command);
 		}
 
 		///<summary>Gets a list of all Diseases for a given patient.  Includes hidden. Sorted by diseasedef.ItemOrder.</summary>
@@ -29,21 +25,7 @@ namespace OpenDentBusiness {
 				+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 				+"AND PatNum="+POut.Long(patNum)
 				+" ORDER BY diseasedef.ItemOrder";
-			return RefreshAndFill(Db.GetTable(command));
-		}
-
-		private static Disease[] RefreshAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			Disease[] List=new Disease[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Disease();
-				List[i].DiseaseNum   = PIn.Long(table.Rows[i][0].ToString());
-				List[i].PatNum       = PIn.Long(table.Rows[i][1].ToString());
-				List[i].DiseaseDefNum= PIn.Long(table.Rows[i][2].ToString());
-				List[i].PatNote      = PIn.String(table.Rows[i][3].ToString());
-			}
-			//Array.Sort(List);
-			return List;
+			return Crud.DiseaseCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

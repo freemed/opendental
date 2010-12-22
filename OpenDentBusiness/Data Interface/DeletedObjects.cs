@@ -22,18 +22,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<DeletedObject>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT * FROM deletedobject WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable table=Db.GetTable(command);
-			List<DeletedObject> list=new List<DeletedObject>();
-			DeletedObject delObj;
-			for(int i=0;i<table.Rows.Count;i++) {
-				delObj=new DeletedObject();
-				delObj.DeletedObjectNum =PIn.Long(table.Rows[i][0].ToString());
-				delObj.ObjectNum        =PIn.Long(table.Rows[i][1].ToString());
-				delObj.ObjectType       =(DeletedObjectType)PIn.Long(table.Rows[i][2].ToString());
-				//DateTStamp
-				list.Add(delObj);
-			}
-			return list;
+			return Crud.DeletedObjectCrud.SelectMany(command);
 		}
 
 		///<summary>This is only run at the server for the mobile db.  It currently handles deleted appointments.  Deleted patients are not handled here because patients never get deleted.</summary>

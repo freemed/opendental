@@ -31,43 +31,37 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Update(GroupPermission gp){
+		public static void Update(GroupPermission gp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),gp);
 				return;
+			}
+			if(gp.NewerDate.Year>1880 && gp.NewerDays>0) {
+				throw new Exception(Lans.g("GroupPermissions","Date or days can be set, but not both."));
+			}
+			if(!GroupPermissions.PermTakesDates(gp.PermType)) {
+				if(gp.NewerDate.Year>1880 || gp.NewerDays>0) {
+					throw new Exception(Lans.g("GroupPermissions","This type of permission may not have a date or days set."));
+				}
 			}
 			Crud.GroupPermissionCrud.Update(gp);
 		}
 
 		///<summary></summary>
-		private static long Insert(GroupPermission gp){
+		public static long Insert(GroupPermission gp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				gp.GroupPermNum=Meth.GetLong(MethodBase.GetCurrentMethod(),gp);
 				return gp.GroupPermNum;
 			}
-			return Crud.GroupPermissionCrud.Insert(gp);
-		}
-
-		///<summary></summary>
-		public static void InsertOrUpdate(GroupPermission gp, bool isNew){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),gp,isNew);
-				return;
-			}
-			if(gp.NewerDate.Year>1880 && gp.NewerDays>0){
+			if(gp.NewerDate.Year>1880 && gp.NewerDays>0) {
 				throw new Exception(Lans.g("GroupPermissions","Date or days can be set, but not both."));
 			}
-			if(!GroupPermissions.PermTakesDates(gp.PermType)){
-				if(gp.NewerDate.Year>1880 || gp.NewerDays>0){
+			if(!GroupPermissions.PermTakesDates(gp.PermType)) {
+				if(gp.NewerDate.Year>1880 || gp.NewerDays>0) {
 					throw new Exception(Lans.g("GroupPermissions","This type of permission may not have a date or days set."));
 				}
 			}
-			if(isNew){
-				Insert(gp);
-			}
-			else{
-				Update(gp);
-			}
+			return Crud.GroupPermissionCrud.Insert(gp);
 		}
 
 		///<summary></summary>

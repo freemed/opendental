@@ -245,7 +245,12 @@ namespace OpenDental{
 			Cur.NewerDays=PIn.Int (textDays.Text);
 			Cur.NewerDate=PIn.Date(textDate.Text);
 			try{
-				GroupPermissions.InsertOrUpdate(Cur,IsNew);
+				if(IsNew) {
+					GroupPermissions.Insert(Cur);
+				}
+				else {
+					GroupPermissions.Update(Cur);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

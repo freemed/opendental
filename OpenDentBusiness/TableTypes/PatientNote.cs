@@ -9,6 +9,7 @@ namespace OpenDentBusiness{
 		[CrudColumn(IsPriKey=true)]
 		public long PatNum;
 		///<summary>Only one note per family stored with guarantor.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public string FamFinancial;
 		///<summary>No longer used.</summary>
 		public string ApptPhone;

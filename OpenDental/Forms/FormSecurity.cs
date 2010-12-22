@@ -737,7 +737,7 @@ namespace OpenDental{
 				}
 				else{
 					try{
-						GroupPermissions.InsertOrUpdate(perm,true);
+						GroupPermissions.Insert(perm);
 					}
 					catch(Exception ex){
 						MessageBox.Show(ex.Message);
@@ -803,7 +803,7 @@ namespace OpenDental{
 					perm.PermType=(Permissions)i;
 					perm.UserGroupNum=SelectedGroupNum;
 					try{
-						GroupPermissions.InsertOrUpdate(perm,true);
+						GroupPermissions.Insert(perm);
 					}
 					catch(Exception ex){
 						MessageBox.Show(ex.Message);

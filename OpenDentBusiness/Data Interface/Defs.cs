@@ -66,19 +66,7 @@ namespace OpenDentBusiness {
 				"SELECT * from definition"
 				+" WHERE category = '"+myCat+"'"
 				+" ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
-			Def[] List=new Def[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new Def();
-				List[i].DefNum    = PIn.Long   (table.Rows[i][0].ToString());
-				List[i].Category  = (DefCat)PIn.Long   (table.Rows[i][1].ToString());
-				List[i].ItemOrder = PIn.Int   (table.Rows[i][2].ToString());
-				List[i].ItemName  = PIn.String(table.Rows[i][3].ToString());
-				List[i].ItemValue = PIn.String(table.Rows[i][4].ToString());
-				List[i].ItemColor = Color.FromArgb(PIn.Int(table.Rows[i][5].ToString()));
-				List[i].IsHidden  = PIn.Bool  (table.Rows[i][6].ToString());
-			}
-			return List;
+			return Crud.DefCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

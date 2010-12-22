@@ -23,18 +23,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command ="SELECT * from medicationpat WHERE patnum = '"+patNum+"'";
-			DataTable table=Db.GetTable(command);
-			List<MedicationPat> retVal=new List<MedicationPat>();
-			MedicationPat mp;
-			for(int i=0;i<table.Rows.Count;i++){
-				mp=new MedicationPat();
-				mp.MedicationPatNum=PIn.Long(table.Rows[i][0].ToString());
-				mp.PatNum          =PIn.Long(table.Rows[i][1].ToString());
-				mp.MedicationNum   =PIn.Long(table.Rows[i][2].ToString());
-				mp.PatNote         =PIn.String(table.Rows[i][3].ToString());
-				retVal.Add(mp);
-			}
-			return retVal;
+			return Crud.MedicationPatCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

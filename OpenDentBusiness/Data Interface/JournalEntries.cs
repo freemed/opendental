@@ -16,13 +16,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM journalentry "
 				+"WHERE TransactionNum="+POut.Long(transactionNum);
-			List<JournalEntry> list=RefreshAndFill(Db.GetTable(command));
-			//ArrayList retVal=new ArrayList();
-			//for(int i=0;i<List.Count;i++) {
-			//	retVal.Add(List[i]);
-			//}
-			//return retVal;
-			return list;
+			return Crud.JournalEntryCrud.SelectMany(command);
 		}
 
 		///<summary>Used to display a list of entries for one account.</summary>
@@ -34,7 +28,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM journalentry "
 				+"WHERE AccountNum="+POut.Long(accountNum)
 				+" ORDER BY DateDisplayed";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.JournalEntryCrud.SelectMany(command);
 		}
 
 		///<summary>Used in reconcile window.</summary>
@@ -53,26 +47,7 @@ namespace OpenDentBusiness{
 				command+=")";
 			}
 			command+=" ORDER BY DateDisplayed";
-			return RefreshAndFill(Db.GetTable(command));
-		}
-
-		private static List <JournalEntry> RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			List <JournalEntry> List=new List <JournalEntry> ();
-			for(int i=0;i<table.Rows.Count;i++) {
-				List.Add(new JournalEntry());
-				List[i].JournalEntryNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].TransactionNum = PIn.Long(table.Rows[i][1].ToString());
-				List[i].AccountNum     = PIn.Long(table.Rows[i][2].ToString());
-				List[i].DateDisplayed  = PIn.Date(table.Rows[i][3].ToString());
-				List[i].DebitAmt       = PIn.Double(table.Rows[i][4].ToString());
-				List[i].CreditAmt      = PIn.Double(table.Rows[i][5].ToString());
-				List[i].Memo           = PIn.String(table.Rows[i][6].ToString());
-				List[i].Splits         = PIn.String(table.Rows[i][7].ToString());
-				List[i].CheckNumber    = PIn.String(table.Rows[i][8].ToString());
-				List[i].ReconcileNum   = PIn.Long(table.Rows[i][9].ToString());
-			}
-			return List;
+			return Crud.JournalEntryCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

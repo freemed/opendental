@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PatientNote in the database.</summary>
 		internal static void Update(PatientNote patientNote){
 			string command="UPDATE patientnote SET "
-				+"FamFinancial= '"+POut.String(patientNote.FamFinancial)+"', "
+				//FamFinancial excluded from update
 				+"ApptPhone   = '"+POut.String(patientNote.ApptPhone)+"', "
 				+"Medical     = '"+POut.String(patientNote.Medical)+"', "
 				+"Service     = '"+POut.String(patientNote.Service)+"', "
@@ -114,10 +114,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PatientNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
 		internal static void Update(PatientNote patientNote,PatientNote oldPatientNote){
 			string command="";
-			if(patientNote.FamFinancial != oldPatientNote.FamFinancial) {
-				if(command!=""){ command+=",";}
-				command+="FamFinancial = '"+POut.String(patientNote.FamFinancial)+"'";
-			}
+			//FamFinancial excluded from update
 			if(patientNote.ApptPhone != oldPatientNote.ApptPhone) {
 				if(command!=""){ command+=",";}
 				command+="ApptPhone = '"+POut.String(patientNote.ApptPhone)+"'";
