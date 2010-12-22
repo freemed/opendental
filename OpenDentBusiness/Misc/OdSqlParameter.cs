@@ -78,7 +78,7 @@ namespace OpenDentBusiness {
 		Date,
 		///<summary>C#:DateTime, MySql:datetime, Oracle:date, </summary>
 		DateTime,
-//todo: Research existence of triggers
+//todo: Research existence of triggers.  Jason: We will have to write custom trigger.
 		///<summary>C#:DateTime, MySql:timestamp, Oracle:date + trigger, </summary>
 		DateTimeStamp,
 		///<summary>C#:float, MySql:float, Oracle:number(38,8), </summary>
