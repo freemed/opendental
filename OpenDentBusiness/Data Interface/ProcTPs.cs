@@ -15,8 +15,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM proctp "
 				+"WHERE PatNum="+POut.Long(patNum)
 				+" ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
-			return RefreshAndFill(table).ToArray();
+			return Crud.ProcTPCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Only used when obtaining the signature data.  Ordered by ItemOrder.</summary>
@@ -28,35 +27,9 @@ namespace OpenDentBusiness{
 				+"WHERE TreatPlanNum="+POut.Long(tpNum)
 				+" ORDER BY ItemOrder";
 			DataTable table=Db.GetTable(command);
-			return RefreshAndFill(table);
+			return Crud.ProcTPCrud.SelectMany(command);
 		}
 
-		private static List<ProcTP> RefreshAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<ProcTP> retVal=new List<ProcTP>();
-			ProcTP proc;
-			for(int i=0;i<table.Rows.Count;i++) {
-				proc=new ProcTP();
-				proc.ProcTPNum   = PIn.Long(table.Rows[i][0].ToString());
-				proc.TreatPlanNum= PIn.Long(table.Rows[i][1].ToString());
-				proc.PatNum      = PIn.Long(table.Rows[i][2].ToString());
-				proc.ProcNumOrig = PIn.Long(table.Rows[i][3].ToString());
-				proc.ItemOrder   = PIn.Int(table.Rows[i][4].ToString());
-				proc.Priority    = PIn.Long(table.Rows[i][5].ToString());
-				proc.ToothNumTP  = PIn.String(table.Rows[i][6].ToString());
-				proc.Surf        = PIn.String(table.Rows[i][7].ToString());
-				proc.ProcCode    = PIn.String(table.Rows[i][8].ToString());
-				proc.Descript    = PIn.String(table.Rows[i][9].ToString());
-				proc.FeeAmt      = PIn.Double(table.Rows[i][10].ToString());
-				proc.PriInsAmt   = PIn.Double(table.Rows[i][11].ToString());
-				proc.SecInsAmt   = PIn.Double(table.Rows[i][12].ToString());
-				proc.PatAmt      = PIn.Double(table.Rows[i][13].ToString());
-				proc.Discount    = PIn.Double(table.Rows[i][14].ToString());
-				retVal.Add(proc);
-			}
-			return retVal;
-		}
-		
 		///<summary></summary>
 		public static void Update(ProcTP proc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

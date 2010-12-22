@@ -14,18 +14,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM question WHERE PatNum="+POut.Long(patNum)
 				+" ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
-			Question[] List=new Question[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Question();
-				List[i].QuestionNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].PatNum     = PIn.Long(table.Rows[i][1].ToString());
-				List[i].ItemOrder  = PIn.Int(table.Rows[i][2].ToString());
-				List[i].Description= PIn.String(table.Rows[i][3].ToString());
-				List[i].Answer     = PIn.String(table.Rows[i][4].ToString());
-				List[i].FormPatNum = PIn.Long   (table.Rows[i][5].ToString());
-			}
-			return List;
+			return Crud.QuestionCrud.SelectMany(command).ToArray();
 		}	
 
 		///<summary></summary>

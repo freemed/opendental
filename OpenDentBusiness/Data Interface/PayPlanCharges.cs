@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 				+"WHERE Guarantor='"+POut.Long(patNum)+"' "
 				+"OR PatNum='"+POut.Long(patNum)+"' "
 				+"ORDER BY ChargeDate";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.PayPlanChargeCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM payplancharge "
 				+"WHERE PayPlanNum="+POut.Long(payPlanNum)
 				+" ORDER BY ChargeDate";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.PayPlanChargeCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -40,9 +40,10 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM payplancharge "
 				+"WHERE PayPlanChargeNum="+POut.Long(payPlanChargeNum);
-			return RefreshAndFill(Db.GetTable(command))[0];
+			return Crud.PayPlanChargeCrud.SelectOne(command);
+			//Ryan//return RefreshAndFill(Db.GetTable(command))[0];
 		}
-
+		/*Ryan
 		private static List<PayPlanCharge> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			List<PayPlanCharge> retVal=new List<PayPlanCharge>();
@@ -61,8 +62,9 @@ namespace OpenDentBusiness{
 				ppcharge.ClinicNum       = PIn.Long(table.Rows[i][9].ToString());
 				retVal.Add(ppcharge);
 			}
-			return retVal;
+
 		}
+			return retVal;Ryan*/
 
 		///<summary></summary>
 		public static void Update(PayPlanCharge charge){

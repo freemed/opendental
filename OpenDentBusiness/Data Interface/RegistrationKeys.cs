@@ -25,25 +25,7 @@ namespace OpenDentBusiness {
 					command+="OR ";
 				}
 			}
-
-			DataTable table=Db.GetTable(command);
-			RegistrationKey[] keys=new RegistrationKey[table.Rows.Count];
-			for(int i=0;i<keys.Length;i++){
-				keys[i]=new RegistrationKey();
-				keys[i].RegistrationKeyNum	=PIn.Long(table.Rows[i][0].ToString());
-				keys[i].PatNum							=PIn.Long(table.Rows[i][1].ToString());
-				keys[i].RegKey							=PIn.String(table.Rows[i][2].ToString());
-				keys[i].Note								=PIn.String(table.Rows[i][3].ToString());
-				keys[i].DateStarted 				=PIn.Date(table.Rows[i][4].ToString());
-				keys[i].DateDisabled				=PIn.Date(table.Rows[i][5].ToString());
-				keys[i].DateEnded   				=PIn.Date(table.Rows[i][6].ToString());
-				keys[i].IsForeign   				=PIn.Bool(table.Rows[i][7].ToString());
-				keys[i].UsesServerVersion		=PIn.Bool(table.Rows[i][8].ToString());
-				keys[i].IsFreeVersion		    =PIn.Bool(table.Rows[i][9].ToString());
-				keys[i].IsOnlyForTesting		=PIn.Bool(table.Rows[i][10].ToString());
-				keys[i].VotesAllotted   		=PIn.Int (table.Rows[i][11].ToString());
-			}
-			return keys;
+			return Crud.RegistrationKeyCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Updates the given key data to the database.</summary>
@@ -85,38 +67,7 @@ namespace OpenDentBusiness {
 				}
 			} 
 			while(KeyIsInUse(registrationKey.RegKey));
-//Crud:
-			if(PrefC.RandomKeys) {
-				registrationKey.RegistrationKeyNum=ReplicationServers.GetKey("registrationkey","RegistrationKeyNum");
-			}
-			string command="INSERT INTO registrationkey (";
-			if(PrefC.RandomKeys) {
-				command+="RegistrationKeyNum,";
-			}
-			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
-				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting,VotesAllotted) VALUES(";
-			if(PrefC.RandomKeys) {
-				command+=POut.Long(registrationKey.RegistrationKeyNum)+", ";
-			}
-			command+=
-				 "'"+POut.Long(registrationKey.PatNum)+"',"
-				+"'"+POut.String(registrationKey.RegKey)+"',"
-				+"'"+POut.String(registrationKey.Note)+"',"
-				+POut.Date(registrationKey.DateStarted)+","
-				+POut.Date(registrationKey.DateDisabled)+","
-				+POut.Date(registrationKey.DateEnded)+","
-				+"'"+POut.Bool(registrationKey.IsForeign)+"',"
-				+"'"+POut.Bool(registrationKey.UsesServerVersion)+"',"
-				+"'"+POut.Bool(registrationKey.IsFreeVersion)+"',"
-				+"'"+POut.Bool(registrationKey.IsOnlyForTesting)+"',"
-				+"'"+POut.Int(registrationKey.VotesAllotted)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else{
-				registrationKey.RegistrationKeyNum=Db.NonQ(command,true);
-			}
-			return registrationKey.RegistrationKeyNum;
+			return Crud.RegistrationKeyCrud.Insert(registrationKey);
 		}
 
 		public static void Delete(long registrationKeyNum) {

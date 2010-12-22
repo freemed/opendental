@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM reconcile WHERE AccountNum="+POut.Long(accountNum)
 				+" ORDER BY DateReconcile";
-			return RefreshAndFill(Db.GetTable(command));
+			return Crud.ReconcileCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary>Gets one reconcile directly from the database.  Program will crash if reconcile not found.</summary>
@@ -25,23 +25,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Reconcile>(MethodBase.GetCurrentMethod(),reconcileNum);
 			}
 			string command="SELECT * FROM reconcile WHERE ReconcileNum="+POut.Long(reconcileNum);
-			return RefreshAndFill(Db.GetTable(command))[0];
+			return Crud.ReconcileCrud.SelectOne(command);
 		}
-
-		private static Reconcile[] RefreshAndFill(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			Reconcile[] List=new Reconcile[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new Reconcile();
-				List[i].ReconcileNum = PIn.Long(table.Rows[i][0].ToString());
-				List[i].AccountNum   = PIn.Long(table.Rows[i][1].ToString());
-				List[i].StartingBal  = PIn.Double(table.Rows[i][2].ToString());
-				List[i].EndingBal    = PIn.Double(table.Rows[i][3].ToString());
-				List[i].DateReconcile= PIn.Date(table.Rows[i][4].ToString());
-				List[i].IsLocked     = PIn.Bool(table.Rows[i][5].ToString());
-			}
-			return List;
-		}	
 
 		///<summary></summary>
 		public static long Insert(Reconcile reconcile) {

@@ -14,16 +14,7 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<QuestionDef[]>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM questiondef ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
-			QuestionDef[] List=new QuestionDef[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new QuestionDef();
-				List[i].QuestionDefNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].Description   = PIn.String(table.Rows[i][1].ToString());
-				List[i].ItemOrder     = PIn.Int(table.Rows[i][2].ToString());
-				List[i].QuestType     = (QuestionType)PIn.Long(table.Rows[i][3].ToString());
-			}
-			return List;
+			return Crud.QuestionDefCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

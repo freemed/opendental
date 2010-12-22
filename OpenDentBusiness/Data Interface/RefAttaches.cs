@@ -16,20 +16,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM refattach"
 				+" WHERE PatNum = "+POut.Long(patNum)
 				+" ORDER BY itemorder";
-			DataTable table=Db.GetTable(command);
-			RefAttach[] List=new RefAttach[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new RefAttach();
-				List[i].RefAttachNum= PIn.Long(table.Rows[i][0].ToString());
-				List[i].ReferralNum = PIn.Long(table.Rows[i][1].ToString());
-				List[i].PatNum      = PIn.Long(table.Rows[i][2].ToString());
-				List[i].ItemOrder   = PIn.Int(table.Rows[i][3].ToString());
-				List[i].RefDate     = PIn.Date(table.Rows[i][4].ToString());
-				List[i].IsFrom      = PIn.Bool(table.Rows[i][5].ToString());
-				List[i].RefToStatus = (ReferralToStatus)PIn.Long(table.Rows[i][6].ToString());
-				List[i].Note        = PIn.String(table.Rows[i][7].ToString());
-			}
-			return List;
+			return Crud.RefAttachCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>
