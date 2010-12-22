@@ -434,12 +434,12 @@ namespace OpenDental{
 			this.menuEmail = new System.Windows.Forms.ContextMenu();
 			this.menuLetter = new System.Windows.Forms.ContextMenu();
 			this.timerDisabledKey = new System.Windows.Forms.Timer(this.components);
-			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
-			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
-			this.butBigPhones = new OpenDental.UI.Button();
 			this.timerPhoneWebCam = new System.Windows.Forms.Timer(this.components);
 			this.timerWebHostSynch = new System.Windows.Forms.Timer(this.components);
+			this.butBigPhones = new OpenDental.UI.Button();
+			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
+			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1246,24 +1246,22 @@ namespace OpenDental{
 			this.timerDisabledKey.Interval = 600000;
 			this.timerDisabledKey.Tick += new System.EventHandler(this.timerDisabledKey_Tick);
 			// 
-			// lightSignalGrid1
-			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
-			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
-			this.lightSignalGrid1.TabIndex = 20;
-			this.lightSignalGrid1.Text = "lightSignalGrid1";
-			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
-			// 
-			// smartCardWatcher1
-			// 
-			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
-			// 
 			// timerHeartBeat
 			// 
 			this.timerHeartBeat.Enabled = true;
 			this.timerHeartBeat.Interval = 180000;
 			this.timerHeartBeat.Tick += new System.EventHandler(this.timerHeartBeat_Tick);
+			// 
+			// timerPhoneWebCam
+			// 
+			this.timerPhoneWebCam.Interval = 1600;
+			this.timerPhoneWebCam.Tick += new System.EventHandler(this.timerPhoneWebCam_Tick);
+			// 
+			// timerWebHostSynch
+			// 
+			this.timerWebHostSynch.Enabled = true;
+			this.timerWebHostSynch.Interval = 10000;
+			this.timerWebHostSynch.Tick += new System.EventHandler(this.timerWebHostSynch_Tick);
 			// 
 			// butBigPhones
 			// 
@@ -1280,20 +1278,22 @@ namespace OpenDental{
 			this.butBigPhones.Visible = false;
 			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
 			// 
-			// timerPhoneWebCam
+			// lightSignalGrid1
 			// 
-			this.timerPhoneWebCam.Interval = 1600;
-			this.timerPhoneWebCam.Tick += new System.EventHandler(this.timerPhoneWebCam_Tick);
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
+			this.lightSignalGrid1.Name = "lightSignalGrid1";
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
+			this.lightSignalGrid1.TabIndex = 20;
+			this.lightSignalGrid1.Text = "lightSignalGrid1";
+			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
 			// 
-			// timerWebHostSynch
+			// smartCardWatcher1
 			// 
-			this.timerWebHostSynch.Enabled = true;
-			this.timerWebHostSynch.Interval = 10000;
-			this.timerWebHostSynch.Tick += new System.EventHandler(this.timerWebHostSynch_Tick);
+			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,626);
+			this.ClientSize = new System.Drawing.Size(982,605);
 			this.Controls.Add(this.butBigPhones);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
@@ -4386,7 +4386,7 @@ namespace OpenDental{
 
 		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
 			//For debugging, this timer is already enabled, and it's set to fire every 10 seconds.  We can change that later.
-
+			//MessageBox.Show("hello from timer");
 		}
 
 		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {

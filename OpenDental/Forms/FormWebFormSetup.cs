@@ -50,7 +50,6 @@ namespace OpenDental {
 					return;
 				}
 				DentalOfficeID=wh.GetDentalOfficeID(RegistrationKey);
-			
 				if(wh.GetDentalOfficeID(RegistrationKey)==0) {
 					Cursor=Cursors.Default;
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");

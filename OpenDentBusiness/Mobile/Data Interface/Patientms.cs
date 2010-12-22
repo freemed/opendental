@@ -13,6 +13,13 @@ namespace OpenDentBusiness.Mobile {
 			return Crud.PatientmCrud.SelectOne(customerNum,patNum);
 		}
 
+		///<summary>Gets all Patientms from the db as specified by the customerNum </summary>
+		public static List<Patientm> GetPatients(long customerNum) {
+			string command="SELECT * FROM patientm "
+				+"WHERE CustomerNum = "+POut.Long(customerNum);
+			return Crud.PatientmCrud.SelectMany(command);
+		}
+
 		///<summary>This would be executed on the webserver only</summary>
 		public static long Insert(Patientm patientm) {
 			return Crud.PatientmCrud.Insert(patientm,true);

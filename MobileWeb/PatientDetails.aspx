@@ -11,15 +11,15 @@
 <div id="content">
 <h2></h2>
 <ul>
-<li> <span class="style2">Patient name <%Response.Write(id);%>Patient name Patient name Patient name Patient name</span>
+<li> <span class="style2"><%Response.Write(pat.LName + " "+pat.MiddleI +"" + pat.FName);%></span>
 </li>
 </ul>
 
 <ul class="contact">
-<li><span class="style1">Home:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
-<li><span class="style1">Work:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
-<li><span class="style1">Mobile:</span> <span class="style2">333-555-1234<%Response.Write(id);%> </span></li>
-<li><span class="style1">Email:</span> <span class="style2">333-555-1234@gggg.com<%Response.Write(id);%> </span></li>
+<li><span class="style1">Home:</span> <span class="style2"><%Response.Write(pat.HmPhone);%> </span></li>
+<li><span class="style1">Work:</span> <span class="style2"><%Response.Write(pat.WkPhone);%> </span></li>
+<li><span class="style1">Mobile:</span> <span class="style2"><%Response.Write(pat.WirelessPhone);%> </span></li>
+<li><span class="style1">Email:</span> <span class="style2"><%Response.Write(pat.Email);%> </span></li>
 </ul>
 <h2>Appointments</h2>
 <ul>

@@ -28,9 +28,11 @@ namespace OpenDental {
 			textboxMobileSyncServerURL.Text=MobileSyncServerURL;
 			textBoxSynchMinutes.Text=MobileSyncIntervalMinutes+"";
 			textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
+			butSavePreferences.Enabled=false;
 		}
 
 		private void InitializeVariables() {
+			
 			RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 			MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
 			MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
@@ -40,14 +42,18 @@ namespace OpenDental {
 
 		public void SynchPatientRecordsOnMobileWeb(DateTime GetChangedSince) {
 			try {
-			#if DEBUG
-				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
-			#endif
-			DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
-			List<Patientm> ChangedPatientmList=Patientms.GetChanged(GetChangedSince);
-			mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
-			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
-			MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
+				#if DEBUG
+					IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+				#endif
+					if(mb.GetCustomerNum(RegistrationKey)==0) {
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
+					return;
+				}
+				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
+				List<Patientm> ChangedPatientmList=Patientms.GetChanged(GetChangedSince);
+				mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
+				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
+				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -118,7 +124,7 @@ namespace OpenDental {
 
 		private void butSync_Click(object sender,EventArgs e) {
 			if(MobileSyncDateTimeLastRun.Year<1880) {
-				// should a full synch be forced at startup?
+				// should a patient full synch be forced at startup?
 				//MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
 				//return;
 			}

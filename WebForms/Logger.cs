@@ -32,7 +32,8 @@ namespace WebForms {
 		/// Static constructor
 		/// </summary>
 		static Logger() {
-			string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();
+			//string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();
+			string LogFile=Properties.Settings.Default.LogFile;
 
 			// formatter
 			TextFormatter formatter = new TextFormatter("[{timestamp}] [{machine}] {category}  \t: {message}");

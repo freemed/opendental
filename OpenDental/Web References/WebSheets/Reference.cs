@@ -136,7 +136,7 @@ namespace OpenDental.WebSheets {
         }
         
         /// <remarks/>
-        public void SetPreferencesAsync(string RegistrationKey, int ColorBorder, string Heading1, string Heading2) {
+        public void SetPreferencesAsync(string RegistrationKey, int ColorBorder) {
             this.SetPreferencesAsync(RegistrationKey, ColorBorder, null);
         }
         
@@ -479,7 +479,6 @@ namespace OpenDental.WebSheets {
         
         private long dentalOfficeIDField;
         
-       
         /// <remarks/>
         public int ColorBorder {
             get {
@@ -499,8 +498,7 @@ namespace OpenDental.WebSheets {
                 this.dentalOfficeIDField = value;
             }
         }
-        
-	}
+    }
     
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(webforms_preference))]
@@ -604,7 +602,7 @@ namespace OpenDental.WebSheets {
             }
         }
     }
-      
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReference))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EntityReferenceOfwebforms_sheet))]

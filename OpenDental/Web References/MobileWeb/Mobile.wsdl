@@ -12,7 +12,21 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="GetRecordCount">
+      <s:element name="GetCustomerNum">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKeyFromDentalOffice" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomerNumResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetCustomerNumResult" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SynchRecords">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
@@ -102,42 +116,6 @@
           <s:enumeration value="TextMessage" />
         </s:restriction>
       </s:simpleType>
-      <s:element name="GetRecordCountResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="GetRecordCountResult" type="s:int" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SynchRecordsTest">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SynchRecordsTestResponse">
-        <s:complexType />
-      </s:element>
-      <s:element name="SynchRecordsTestV2">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="patientm" type="tns:Patientm" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SynchRecordsTestV2Response">
-        <s:complexType />
-      </s:element>
-      <s:element name="SynchRecords">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="patientmList" type="tns:ArrayOfPatientm" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
       <s:element name="SynchRecordsResponse">
         <s:complexType />
       </s:element>
@@ -176,23 +154,11 @@
   <wsdl:message name="ServiceExistsSoapOut">
     <wsdl:part name="parameters" element="tns:ServiceExistsResponse" />
   </wsdl:message>
-  <wsdl:message name="GetRecordCountSoapIn">
-    <wsdl:part name="parameters" element="tns:GetRecordCount" />
+  <wsdl:message name="GetCustomerNumSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomerNum" />
   </wsdl:message>
-  <wsdl:message name="GetRecordCountSoapOut">
-    <wsdl:part name="parameters" element="tns:GetRecordCountResponse" />
-  </wsdl:message>
-  <wsdl:message name="SynchRecordsTestSoapIn">
-    <wsdl:part name="parameters" element="tns:SynchRecordsTest" />
-  </wsdl:message>
-  <wsdl:message name="SynchRecordsTestSoapOut">
-    <wsdl:part name="parameters" element="tns:SynchRecordsTestResponse" />
-  </wsdl:message>
-  <wsdl:message name="SynchRecordsTestV2SoapIn">
-    <wsdl:part name="parameters" element="tns:SynchRecordsTestV2" />
-  </wsdl:message>
-  <wsdl:message name="SynchRecordsTestV2SoapOut">
-    <wsdl:part name="parameters" element="tns:SynchRecordsTestV2Response" />
+  <wsdl:message name="GetCustomerNumSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomerNumResponse" />
   </wsdl:message>
   <wsdl:message name="SynchRecordsSoapIn">
     <wsdl:part name="parameters" element="tns:SynchRecords" />
@@ -217,17 +183,9 @@
       <wsdl:input message="tns:ServiceExistsSoapIn" />
       <wsdl:output message="tns:ServiceExistsSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="GetRecordCount">
-      <wsdl:input message="tns:GetRecordCountSoapIn" />
-      <wsdl:output message="tns:GetRecordCountSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="SynchRecordsTest">
-      <wsdl:input message="tns:SynchRecordsTestSoapIn" />
-      <wsdl:output message="tns:SynchRecordsTestSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="SynchRecordsTestV2">
-      <wsdl:input message="tns:SynchRecordsTestV2SoapIn" />
-      <wsdl:output message="tns:SynchRecordsTestV2SoapOut" />
+    <wsdl:operation name="GetCustomerNum">
+      <wsdl:input message="tns:GetCustomerNumSoapIn" />
+      <wsdl:output message="tns:GetCustomerNumSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="SynchRecords">
       <wsdl:input message="tns:SynchRecordsSoapIn" />
@@ -253,26 +211,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetRecordCount">
-      <soap:operation soapAction="http://opendental.com/GetRecordCount" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SynchRecordsTest">
-      <soap:operation soapAction="http://opendental.com/SynchRecordsTest" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SynchRecordsTestV2">
-      <soap:operation soapAction="http://opendental.com/SynchRecordsTestV2" style="document" />
+    <wsdl:operation name="GetCustomerNum">
+      <soap:operation soapAction="http://opendental.com/GetCustomerNum" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -319,26 +259,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetRecordCount">
-      <soap12:operation soapAction="http://opendental.com/GetRecordCount" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SynchRecordsTest">
-      <soap12:operation soapAction="http://opendental.com/SynchRecordsTest" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SynchRecordsTestV2">
-      <soap12:operation soapAction="http://opendental.com/SynchRecordsTestV2" style="document" />
+    <wsdl:operation name="GetCustomerNum">
+      <soap12:operation soapAction="http://opendental.com/GetCustomerNum" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

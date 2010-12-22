@@ -5,20 +5,22 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Threading;
+using WebForms;
+using OpenDentBusiness;
+using OpenDentBusiness.Mobile;
 
 namespace MobileWeb {
 	public partial class PatientList:System.Web.UI.Page {
 		
-		protected void Page_Load(object sender,EventArgs e) {
+		private Util util=new Util();
 
+		protected void Page_Load(object sender,EventArgs e) {
+			util.SetMobileDbConnection();
+			List<Patientm> patientmList=Patientms.GetPatients(1486);
 			Message.Text="";
 			if(Session["userid"]!=null) {
 				Message.Text="LoggedIn";
-
-				string[] ar= { "Patient1 Patient1","Patient2 Patient2 Patient2 Patient2 Patient2","Patient3","Patient4","Patient5" };
-
-				var somevar = ar.Where(a => a.Contains("Patient"));
-				Repeater1.DataSource = somevar;
+				Repeater1.DataSource=patientmList;
 				Repeater1.DataBind();
 			}
 

@@ -93,7 +93,7 @@ namespace OpenDental {
 				WebSheets.Sheets wh=new WebSheets.Sheets();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-				if(wh.CheckRegistrationKey(RegistrationKey)==false) {
+				if(wh.GetDentalOfficeID(RegistrationKey)==0) {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}

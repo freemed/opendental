@@ -162,6 +162,9 @@ namespace WebHostSynch {
 			}
 		}
 
+		/// <summary>
+		/// This method is redundant. It may be deleted later. Older version of OD may be using it.
+		/// </summary>
 		[WebMethod]
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
 			return util.CheckRegistrationKey(RegistrationKeyFromDentalOffice);

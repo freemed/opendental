@@ -13,6 +13,9 @@ namespace WebHostSynch {
 		private static bool IsMobileDBSet=false;
 		string previousConnectStr="";
 
+		/// <summary>
+		/// This method is redundant. It may be deleted later. Some older versions of OD may use this method.
+		/// </summary>
 		public bool CheckRegistrationKey(string RegistrationKeyFromDentalOffice) {
 			Logger.Information("In CheckRegistrationKey() RegistrationKeyFromDentalOffice="+RegistrationKeyFromDentalOffice);
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;

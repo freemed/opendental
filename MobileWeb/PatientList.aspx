@@ -21,8 +21,12 @@
 		<ItemTemplate>
 		<li class="arrow style1">
 		<div>
-			<a linkattib="PatientDetails.aspx?id=<%#(((RepeaterItem)Container).ItemIndex+1).ToString()%>" href="#PatientDetails">
+			<%--<a linkattib="PatientDetails.aspx?id=<%#(((RepeaterItem)Container).ItemIndex+1).ToString()%>" href="#PatientDetails">
 			<asp:Label ID="Label1" runat="server" Text="<%#Container.DataItem %>"></asp:Label></a>
+--%>
+			<a linkattib="PatientDetails.aspx?PatNum=<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).PatNum %>" href="#PatientDetails">
+			<asp:Label ID="Label1" runat="server" Text="<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).FName %>"></asp:Label></a>
+			
 		</div>
 		</li>
 		</ItemTemplate>

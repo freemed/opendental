@@ -29,37 +29,9 @@ namespace WebHostSynch {
 			return true;
 		}
 
-		/// <summary>A method which is used to decided if certain missing records are to be transferred to the webserver. This is especially true when synchronization happens for the very first time when there are no records on the  webserver./// </summary>
 		[WebMethod]
-		public int GetRecordCount(String RegistrationKey,List<Patientm> patientmList) {
-			customerNum=util.GetDentalOfficeID(RegistrationKey);
-			if(customerNum==0) {
-				return 0;
-			}
-			return 0;
-		}
-
-		[WebMethod]
-		public void SynchRecordsTest(String RegistrationKey) {
-			try {
-				Logger.Information("In SynchRecordsTest");
-	
-			}
-			catch(Exception ex) {
-				Logger.LogError(ex);
-			}
-
-		}
-		[WebMethod]
-		public void SynchRecordsTestV2(String RegistrationKey,Patientm patientm) {
-			try {
-				Logger.Information("In SynchRecordsTestV2");
-
-			}
-			catch(Exception ex) {
-				Logger.LogError(ex);
-			}
-
+		public long GetCustomerNum(string RegistrationKeyFromDentalOffice) {
+			return util.GetDentalOfficeID(RegistrationKeyFromDentalOffice);
 		}
 
 		[WebMethod]
