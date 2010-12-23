@@ -146,7 +146,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender,EventArgs e) {
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			if(radioDateRange.Checked) {
-				report.Query="SELECT DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),ItemName,SplitAmt "
+				report.Query="SELECT DatePay,"+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+",ItemName,SplitAmt "
 					+"FROM paysplit,patient,definition "
 					+"WHERE paysplit.PatNum=patient.PatNum "
 					+"AND definition.DefNum=paysplit.UnearnedType "
@@ -165,7 +165,7 @@ namespace OpenDental{
 				report.SetColumn(this,3,"Amount",80,HorizontalAlignment.Right);
 			}
 			else {
-				report.Query="SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),GROUP_CONCAT(DISTINCT ItemName),SUM(SplitAmt) Amount "
+				report.Query="SELECT "+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+",GROUP_CONCAT(DISTINCT ItemName),SUM(SplitAmt) Amount "
 					+"FROM paysplit,patient,definition "
 					+"WHERE paysplit.PatNum=patient.PatNum "
 					+"AND definition.DefNum=paysplit.UnearnedType "

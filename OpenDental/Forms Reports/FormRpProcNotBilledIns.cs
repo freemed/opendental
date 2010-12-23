@@ -130,12 +130,14 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			//if(radioRange.Checked){
-			report.Query="SELECT CONCAT(";
-			if(PrefC.GetBool(PrefName.ReportsShowPatNum)){
-				report.Query+="CAST(patient.PatNum AS CHAR),'-',";
+			report.Query="SELECT ";
+			if(PrefC.GetBool(PrefName.ReportsShowPatNum)) {
+				report.Query+=DbHelper.Concat("CAST(patient.PatNum AS CHAR)","'-'","patient.LName","', '","patient.FName","' '","patient.MiddleI");
 			}
-			report.Query+="patient.LName,', ',patient.FName,' ',patient.MiddleI),"
-				+"procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee "
+			else {
+				report.Query+=DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI");
+			}
+			report.Query+=",procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee "
 				+"FROM patient,procedurecode,procedurelog,claimproc,insplan "
 				+"WHERE claimproc.procnum=procedurelog.procnum "
 				+"AND patient.PatNum=procedurelog.PatNum "

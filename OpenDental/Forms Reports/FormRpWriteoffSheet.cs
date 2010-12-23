@@ -343,7 +343,7 @@ namespace OpenDental{
 			report.Query="SET @FromDate="+POut.Date(date1.SelectionStart)+", @ToDate="+POut.Date(date2.SelectionStart)+";";
 			if(radioWriteoffPay.Checked){
 				report.Query+="SELECT DATE(claimproc.DateCP) date,"
-					+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
+					+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+","
 					+"carrier.CarrierName,"
 					+"provider.Abbr,";
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
@@ -369,7 +369,7 @@ namespace OpenDental{
 			}
 			else{//using procedure date
 				report.Query+="SELECT Date(claimproc.ProcDate) date, "
-					+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI), "
+					+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+", "
 					+"carrier.CarrierName, "
 					+"provider.Abbr,";
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {

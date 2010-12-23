@@ -363,8 +363,9 @@ namespace OpenDental{
 
 		private void CreateIndividual(ReportSimpleGrid report) {
 			//added Procnum to retrieve all codes
-			report.Query="SELECT procedurelog.ProcDate,CONCAT("
-				+"patient.LName,', ',patient.FName,' ',patient.MiddleI) AS plfname, procedurecode.ProcCode,"
+			report.Query="SELECT procedurelog.ProcDate,"
+			  +DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+" "
+			  +"AS plfname, procedurecode.ProcCode,"
 				+"procedurelog.ToothNum,procedurecode.Descript,provider.Abbr,"
 				+"procedurelog.ClinicNum,"
 				+"procedurelog.ProcFee-IFNULL(SUM(claimproc.WriteOff),0) $fee "//if no writeoff, then subtract 0

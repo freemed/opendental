@@ -840,7 +840,7 @@ namespace OpenDental{
 			report.Query+="SELECT "
 				+"paysplit.DatePay,"
 				//+"GROUP_CONCAT(DISTINCT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI)),"
-				+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
+				+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+","
 				+"definition.ItemName,"
 				//+"GROUP_CONCAT(DISTINCT provider.Abbr),"
 				+"provider.Abbr,"
@@ -899,7 +899,7 @@ namespace OpenDental{
 			}
 			report.Query+="SELECT "
 				+"claimpayment.CheckDate,"
-				+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
+				+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+","
 				+"carrier.CarrierName,"
 				+"provider.Abbr,"
 				+"claimproc.ClinicNum,"

@@ -78,7 +78,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			AddColBalance(report);// Calculates and Adds the Balance Column to the Query. // Also Adds Providers Abbreviations
 			report.Title = "Allocation to Guarantor ";
 
-			DataTable dtGuarantorName = Db.GetTableOld("SELECT CONCAT(LName,' ', FName) FROM Patient WHERE PatNum = " + Guarantor);
+			DataTable dtGuarantorName = Db.GetTableOld("SELECT "+DbHelper.Concat("LName","' '","FName")+"FROM Patient WHERE PatNum = " + Guarantor);
 			string GuarantorName = dtGuarantorName.Rows[0][0].ToString();
 			report.SubTitle.Add("Guarantor Account: " + GuarantorName + " " + DateTime.Now.ToShortDateString());
 			this._MainReportTable = report.TableQ;
@@ -302,7 +302,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 		+ "\nSELECT"
 				+ "\n  pl.ProcDate as 'Date', "
 				+ "\n  pc.descript as 'Description', "
-				+ "\n  CONCAT(pt.LName , ', ', pt.FName) as 'Patient', "
+				+ "\n  "+DbHelper.Concat("pt.LName","', '","pt.FName")+" as 'Patient', "
 				+ "\n  'Procedure' as 'TableSource', # meaning 0=Procedurelog "
 				+ "\n  ' ' as 'Provider', "
 				+ "\n  ' ' as 'Charges', "
@@ -323,7 +323,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			+ "\nSELECT "
 					+ "\n Payment.PayDate, "
 					+ "\n 'Cash/MC/Visa' as 'Description', "
-					+ "\n CONCAT(pt.LName , ', ', pt.FName) as 'Patient', "
+					+ "\n "+DbHelper.Concat("pt.LName","', '","pt.FName")+" as 'Patient', "
 					+ "\n 'Reg Payment'   as 'Type', "					
 					+ "\n ' ' as 'Provider', "
 					+ "\n  ' ' as 'Charges', "
@@ -347,7 +347,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 					+ "\n  # ap.AllocNum, "
  					+ "\n  cp.DateEntry, "
  					+ "\n  'Insurance Payment' as 'Description', "
- 					+ "\n  CONCAT(pt.LName , ', ', pt.FName) as 'Patient', "
+ 					+ "\n  "+DbHelper.Concat("pt.LName","', '","pt.FName")+" as 'Patient', "
  					+ "\n  'Ins Payment' as 'Type', "
  					+ "\n  ' ' as 'Provider', "
   					+ "\n  ' ' as 'Charges', "
@@ -370,7 +370,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			+ "\nSELECT "
 					+ "\n   a.AdjDate as 'Date', "
 					+ "\n   'Account Adjustment against Provider' as 'Description', "
-					+ "\n   CONCAT(pt.LName , ', ', pt.FName) as 'Patient',  "
+					+ "\n   "+DbHelper.Concat("pt.LName","', '","pt.FName")+" as 'Patient',  "
 					+ "\n   'Adjustment' as 'Type', "
 					+ "\n   ' ' as 'Provider', "
 					+ "\n  ' ' as 'Charges', "
@@ -389,7 +389,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			+ "\nSELECT "
 					+ "\n   cp.DateEntry as 'Date', "
 					+ "\n   CONCAT('Ins Write Off against Code ', cp.CodeSent) as 'Description', "
-					+ "\n   CONCAT(pt.LName , ', ', pt.FName) as 'Patient', "
+					+ "\n   "+DbHelper.Concat("pt.LName","', '","pt.FName")+" as 'Patient', "
 					+ "\n   'Ins Write Off' as 'Type', "
 					+ "\n   ' ' as 'Provider', "
 					+ "\n  ' ' as 'Charges', "

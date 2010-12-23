@@ -321,7 +321,7 @@ namespace OpenDental
 			//setup query
 			report.Query=@"SELECT appointment.AptDateTime, 
 				trim(CONCAT(CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),case when length(patient.Preferred) > 0 
-				then CONCAT(concat('(',patient.Preferred),') ') else '' end),patient.fname), ' '),patient.middlei))
+				then CONCAT(CONCAT('(',patient.Preferred),') ') else '' end),patient.fname), ' '),patient.middlei))
 				AS PatName,
 				patient.Birthdate,
 				appointment.AptDateTime,
