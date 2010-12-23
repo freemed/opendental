@@ -52,9 +52,11 @@ namespace OpenDentBusiness {
 		public static string Concat(params string[] values) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				string result="(";
-				result+=values[0];
-				for(int i=1;i<values.Length;i++) {
-					result+=" || "+values[i];
+				for(int i=0;i<values.Length;i++) {
+					if(i!=0) {
+						result+=" || ";
+					}
+					result+=values[i];
 				}
 				result+=")";
 				return result;
