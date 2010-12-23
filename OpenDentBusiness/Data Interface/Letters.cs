@@ -37,13 +37,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new Letter[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Letter();
-				List[i].LetterNum=PIn.Long(table.Rows[i][0].ToString());
-				List[i].Description=PIn.String(table.Rows[i][1].ToString());
-				List[i].BodyText=PIn.String(table.Rows[i][2].ToString());
-			}
+			list=Crud.LetterCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>

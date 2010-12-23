@@ -34,14 +34,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new PayPeriod[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new PayPeriod();
-				List[i].PayPeriodNum=PIn.Long(table.Rows[i][0].ToString());
-				List[i].DateStart=PIn.Date(table.Rows[i][1].ToString());
-				List[i].DateStop=PIn.Date(table.Rows[i][2].ToString());
-				List[i].DatePaycheck=PIn.Date(table.Rows[i][3].ToString());
-			}
+			list=Crud.PayPeriodCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>
