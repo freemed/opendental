@@ -17,23 +17,10 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			//Crud.PerioMeasureCrud.Update(Cur);
-			string command = "UPDATE periomeasure SET "
-				+ "PerioExamNum = '"+POut.Long   (Cur.PerioExamNum)+"'"
-				+",SequenceType = '"+POut.Long   ((int)Cur.SequenceType)+"'"
-				+",IntTooth = '"    +POut.Long   (Cur.IntTooth)+"'"
-				+",ToothValue = '"  +POut.Long   (Cur.ToothValue)+"'"
-				+",MBvalue = '"     +POut.Long   (Cur.MBvalue)+"'"
-				+",Bvalue = '"      +POut.Long   (Cur.Bvalue)+"'"
-				+",DBvalue = '"     +POut.Long   (Cur.DBvalue)+"'"
-				+",MLvalue = '"     +POut.Long   (Cur.MLvalue)+"'"
-				+",Lvalue = '"      +POut.Long   (Cur.Lvalue)+"'"
-				+",DLvalue = '"     +POut.Long   (Cur.DLvalue)+"'"
-				+" WHERE PerioMeasureNum = '"+POut.Long(Cur.PerioMeasureNum)+"'";
-			Db.NonQ(command);
+			Crud.PerioMeasureCrud.Update(Cur);
 			//3-10-10 A bug that only lasted for a few weeks has resulted in a number of duplicate entries for each tooth.
 			//So we need to clean up duplicates as we go.  Might put in db maint later.
-			command="DELETE FROM periomeasure WHERE "
+			string command="DELETE FROM periomeasure WHERE "
 				+ "PerioExamNum = "+POut.Long(Cur.PerioExamNum)
 				+" AND SequenceType = "+POut.Long((int)Cur.SequenceType)
 				+" AND IntTooth = "+POut.Long(Cur.IntTooth)
@@ -117,7 +104,7 @@ namespace OpenDentBusiness{
 			List=new PerioMeasure[listPerioExams.Count,Enum.GetNames(typeof(PerioSequenceType)).Length,33];
 			int examIdx=0;
 			//PerioMeasure pm;
-			List<PerioMeasure> list=FillFromTable(table);
+			List<PerioMeasure> list=Crud.PerioMeasureCrud.TableToList(table);
 			for(int i=0;i<list.Count;i++) {
 				//the next statement can also handle exams with no measurements:
 				if(i==0//if this is the first row
@@ -127,28 +114,6 @@ namespace OpenDentBusiness{
 				}
 				List[examIdx,(int)list[i].SequenceType,list[i].IntTooth]=list[i];
 			}
-		}
-
-		private static List<PerioMeasure> FillFromTable(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			PerioMeasure pm;
-			List<PerioMeasure> retVal=new List<PerioMeasure>();
-			for(int i=0;i<table.Rows.Count;i++) {
-				pm=new PerioMeasure();
-				pm.PerioMeasureNum =PIn.Long(table.Rows[i][0].ToString());
-				pm.PerioExamNum    =PIn.Long(table.Rows[i][1].ToString());
-				pm.SequenceType    =(PerioSequenceType)PIn.Long(table.Rows[i][2].ToString());
-				pm.IntTooth        =PIn.Int(table.Rows[i][3].ToString());
-				pm.ToothValue      =PIn.Int(table.Rows[i][4].ToString());
-				pm.MBvalue         =PIn.Int(table.Rows[i][5].ToString());
-				pm.Bvalue          =PIn.Int(table.Rows[i][6].ToString());
-				pm.DBvalue         =PIn.Int(table.Rows[i][7].ToString());
-				pm.MLvalue         =PIn.Int(table.Rows[i][8].ToString());
-				pm.Lvalue          =PIn.Int(table.Rows[i][9].ToString());
-				pm.DLvalue         =PIn.Int(table.Rows[i][10].ToString());
-				retVal.Add(pm);
-			}
-			return retVal;
 		}
 
 		public static DataTable GetMeasurementTable(long patNum,List<PerioExam> listPerioExams) {
@@ -171,8 +136,7 @@ namespace OpenDentBusiness{
 			}
 			string command ="SELECT * FROM periomeasure "
 				+"WHERE PerioExamNum = "+POut.Long(perioExamNum);
-			DataTable table=Db.GetTable(command);
-			return FillFromTable(table);
+			return Crud.PerioMeasureCrud.SelectMany(command);
 		}
 			
 		

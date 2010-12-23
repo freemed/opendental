@@ -1,4 +1,6 @@
-﻿using System;
+﻿/*This attempt at directly casting data from the database into the correct type failed.  For any given type that we use in OD, the type coming from the database can vary significantly.  The problem is compounded when the data comes from multiple connectors and multiple database types.  Strings are the way to go except in unusual circumstances.
+ * 
+ * using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,4 +44,4 @@ namespace OpenDentBusiness {
 	
 
 	}
-}
+}*/

@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 
 		private static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			GroupPermissionC.List=Crud.GroupPermissionCrud.TableToList(table);
+			GroupPermissionC.List=Crud.GroupPermissionCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>

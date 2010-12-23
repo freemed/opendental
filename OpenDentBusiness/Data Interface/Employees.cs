@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			listLong=Crud.EmployeeCrud.TableToList(table).ToArray();
 			List<Employee> tempList=new List<Employee>();
-			for(int i=0;i<listLong.Count;i++) {
+			for(int i=0;i<listLong.Length;i++) {
 				if(!listLong[i].IsHidden) {
 					tempList.Add(listLong[i]);
 				}

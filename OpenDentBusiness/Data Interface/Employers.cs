@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			list=Crud.EmployerCrud.TableToList(table).ToArray();
 			HList=new Hashtable();
-			for(int i=0;i<list.Count;i++) {
+			for(int i=0;i<list.Length;i++) {
 				HList.Add(list[i].EmployerNum,list[i]);
 			}
 		}
