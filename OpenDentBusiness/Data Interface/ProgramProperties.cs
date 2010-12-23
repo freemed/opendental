@@ -21,18 +21,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			ProgramPropertyC.Listt=new List<ProgramProperty>();
-			ProgramProperty progprop;
-			for (int i=0;i<table.Rows.Count;i++){
-				progprop=new ProgramProperty();
-				progprop.ProgramPropertyNum =PIn.Long(table.Rows[i][0].ToString());
-				progprop.ProgramNum         =PIn.Long(table.Rows[i][1].ToString());
-				progprop.PropertyDesc       =PIn.String(table.Rows[i][2].ToString());
-				progprop.PropertyValue      =PIn.String(table.Rows[i][3].ToString());
-				ProgramPropertyC.Listt.Add(progprop);
-				//List[i].ValueType          =(FieldValueType)PIn.PInt(table.Rows[i][4].ToString());
-			}
-			//MessageBox.Show();
+			ProgramPropertyC.Listt=Crud.ProgramPropertyCrud.TableToList(table);
 		}
 
 		///<summary></summary>

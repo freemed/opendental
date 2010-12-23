@@ -37,16 +37,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			list=new List<ProcCodeNote>();
-			for(int i=0;i<table.Rows.Count;i++) {
-				ProcCodeNote note=new ProcCodeNote();
-				note.ProcCodeNoteNum=PIn.Long(table.Rows[i][0].ToString());
-				note.CodeNum=PIn.Long(table.Rows[i][1].ToString());
-				note.ProvNum=PIn.Long(table.Rows[i][2].ToString());
-				note.Note=PIn.String(table.Rows[i][3].ToString());
-				note.ProcTime=PIn.String(table.Rows[i][4].ToString());
-				list.Add(note);
-			}
+			list=Crud.ProcCodeNoteCrud.TableToList(table);
 		}
 
 		///<summary></summary>

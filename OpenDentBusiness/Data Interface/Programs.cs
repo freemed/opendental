@@ -25,6 +25,15 @@ namespace OpenDentBusiness{
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
 			ProgramC.HList=new Hashtable();
+			ProgramC.Listt=Crud.ProgramCrud.TableToList(table);
+			for(int i=0;i<ProgramC.Listt.Count;i++){
+				if(!ProgramC.HList.ContainsKey(ProgramC.Listt[i].ProgName)) {
+					ProgramC.HList.Add(ProgramC.Listt[i].ProgName,ProgramC.Listt[i]);
+				}
+			}
+			//The lines below are replaced by the logic above.
+			/*
+			ProgramC.HList=new Hashtable();
 			Program prog = new Program();
 			ProgramC.Listt=new List<Program>();
 			for (int i=0;i<table.Rows.Count;i++){
@@ -41,7 +50,7 @@ namespace OpenDentBusiness{
 				if(!ProgramC.HList.ContainsKey(prog.ProgName)) {
 					ProgramC.HList.Add(prog.ProgName,prog);
 				}
-			}
+			}*/
 		}
 
 		///<summary></summary>
