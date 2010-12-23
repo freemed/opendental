@@ -50,8 +50,24 @@ namespace OpenDentBusiness {
 
 		/// <summary>If passing in a literal, surround with single quotes first.</summary>
 		public static string Concat(params string[] values) {
-
-			return "";
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				string result=")";
+				result+=values[0];
+				for(int i=1;i<values.Length;i++) {
+					result+=" || "+values[i];
+				}
+				result+=")";
+				return result;
+			}
+			else {
+				string result="CONCAT(";
+				result+=values[0];
+				for(int i=1;i<values.Length; i++) {
+					result+=","+values[i];
+				}
+				result+=")";
+				return result;
+			}
 		}
 
 
