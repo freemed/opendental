@@ -39,6 +39,9 @@ namespace OpenDentBusiness {
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.SigButDefCrud.TableToList(table).ToArray();
+			for(int i=0;i<listt.Length;i++) {
+				listt[i].ElementList=SigButDefElements.GetForButton(listt[i].SigButDefNum);
+			}
 		}
 
 		///<summary></summary>

@@ -35,7 +35,7 @@ namespace UnitTests {
 					return true;
 				}
 			}
-			catch{//(Exception ex){
+			catch(Exception ex){
 				//throw new Exception(ex.Message);
 				//MessageBox.Show(ex.Message);
 				//textResults.Text="Make a copy of any OD db and rename it to unittest.";
