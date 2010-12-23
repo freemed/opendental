@@ -350,7 +350,7 @@ namespace OpenDental{
 			whereType+=")";
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query="SELECT adjustment.AdjDate,"
-				+"CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
+				+DbHelper.Concat("patient.LName","', '","patient.FName","', '","patient.MiddleI")+","
 				+"adjustment.ProvNum,adjustment.ClinicNum,"
 				+"definition.ItemName,adjustment.AdjNote,adjustment.AdjAmt FROM "
 				+"adjustment,patient,definition WHERE adjustment.AdjType=definition.DefNum "

@@ -382,12 +382,14 @@ namespace OpenDental{
 			//The aging report always show historical numbers based on the date entered.
 			Ledgers.ComputeAging(0,asOfDate,true);
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			string cmd="SELECT CONCAT(";
+			string cmd="SELECT ";
 			if(PrefC.GetBool(PrefName.ReportsShowPatNum)){
-				cmd+="CAST(PatNum AS CHAR),'-',";
+				cmd+=DbHelper.Concat("Cast(PatNum AS CHAR)","'-'","LName","', '","FName","' '","MiddleI");
 			}
-			cmd+="LName,', ',FName,' ',MiddleI)"
-				+",Bal_0_30,Bal_31_60,Bal_61_90,BalOver90"
+			else{
+				cmd+=DbHelper.Concat("LName","', '","FName","' '","MiddleI");
+			}
+			cmd+=",Bal_0_30,Bal_31_60,Bal_61_90,BalOver90"
 				+",BalTotal "
 				+",InsEst"
 				+",BalTotal-InsEst AS $pat "

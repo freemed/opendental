@@ -1033,7 +1033,7 @@ namespace OpenDental {
 							MsgBox.Show(this,"Please use the selection button first.");
 							return;
 						}
-						command += " WHERE CONCAT(carrier.CarrierName,carrier.Address) = '" + textInsCoStart.Text + labInsCoStartAddr.Text + "'";
+						command += " WHERE " + DbHelper.Concat("carrier.CarrierName","carrier.Address") + ") = '" + textInsCoStart.Text + labInsCoStartAddr.Text + "'";
 						RptAddrTable = Reports.GetTable(command);
 						if(RptAddrTable.Rows.Count==0) {
 							MsgBox.Show(this,"No matching carriers found.");

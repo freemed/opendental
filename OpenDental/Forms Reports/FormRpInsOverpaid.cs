@@ -107,7 +107,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.Query=@"SELECT procedurelog.PatNum,CONCAT(patient.LName,', ',patient.FName) patname,
+			report.Query=@"SELECT procedurelog.PatNum,"+DbHelper.Concat("patient.LName","', '","patient.FName")+@" patname,
 procedurelog.ProcDate,
 SUM(procedurelog.ProcFee) $sumfee,
 SUM((SELECT SUM(claimproc.InsPayAmt + claimproc.Writeoff) FROM claimproc WHERE claimproc.ProcNum=procedurelog.ProcNum)) AS

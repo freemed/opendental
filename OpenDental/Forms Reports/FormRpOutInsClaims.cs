@@ -212,12 +212,14 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			DateTime startQDate = DateTime.Today.AddDays(-daysOld);
 			report.Query = "SELECT carrier.CarrierName,claim.ClaimNum"
-				+",claim.ClaimType,claim.DateService,"
-				+"CONCAT(";
-			if(PrefC.GetBool(PrefName.ReportsShowPatNum)){
-				report.Query+="CAST(patient.PatNum AS CHAR),'-',";
+				+",claim.ClaimType,claim.DateService,";
+			if(PrefC.GetBool(PrefName.ReportsShowPatNum)) {
+				report.Query+=DbHelper.Concat("CAST(patient.PatNum AS CHAR)","'-'","patient.LName","', '","patient.FName","' '","patient.MiddleI");
 			}
-			report.Query+="patient.LName,', ',patient.FName,' ',patient.MiddleI), claim.DateSent"
+			else {
+				report.Query+=DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI");
+			}
+			report.Query+="claim.DateSent"
 				+",claim.ClaimFee,carrier.Phone "
 				+"FROM claim,insplan,patient,carrier "
 				+"WHERE claim.PlanNum = insplan.PlanNum "
