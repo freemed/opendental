@@ -50,19 +50,10 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
+			list=Crud.EmployerCrud.TableToList(table).ToArray();
 			HList=new Hashtable();
-			List=new Employer[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new Employer();
-				List[i].EmployerNum =PIn.Long   (table.Rows[i][0].ToString());
-				List[i].EmpName     =PIn.String(table.Rows[i][1].ToString());
-				List[i].Address     =PIn.String(table.Rows[i][2].ToString());
-				List[i].Address2    =PIn.String(table.Rows[i][3].ToString());
-				List[i].City        =PIn.String(table.Rows[i][4].ToString());
-				List[i].State       =PIn.String(table.Rows[i][5].ToString());
-				List[i].Zip         =PIn.String(table.Rows[i][6].ToString());
-				List[i].Phone       =PIn.String(table.Rows[i][7].ToString());
-				HList.Add(List[i].EmployerNum,List[i]);
+			for(int i=0;i<list.Count;i++) {
+				HList.Add(list[i].EmployerNum,list[i]);
 			}
 		}
 

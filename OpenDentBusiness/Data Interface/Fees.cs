@@ -22,29 +22,18 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
+			Listt=Crud.FeeCrud.TableToList(table);
 			Dict=new Dictionary<FeeKey,Fee>();
-			Listt=new List<Fee>();
-			Fee fee;
 			FeeKey key;
-			for(int i=0;i<table.Rows.Count;i++) {
-				fee=new Fee();
-				fee.FeeNum=PIn.Long(table.Rows[i][0].ToString());
-				fee.Amount=PIn.Double(table.Rows[i][1].ToString());
-				//fee.OldCode      =PIn.PString(table.Rows[i][2].ToString());
-				fee.FeeSched=PIn.Long(table.Rows[i][3].ToString());
-				//fee.UseDefaultFee=PIn.PBool(table.Rows[i][4].ToString());
-				//fee.UseDefaultCov=PIn.PBool(table.Rows[i][5].ToString());
-				fee.CodeNum=PIn.Long(table.Rows[i][6].ToString());
-				key.codeNum=fee.CodeNum;
-				key.feeSchedNum=fee.FeeSched;
+			for(int i=0;i<Listt.Count;i++) {
+				key=new FeeKey();
+				key.codeNum=Listt[i].CodeNum;
+				key.feeSchedNum=Listt[i].FeeSched;
 				if(Dict.ContainsKey(key)) {
-					//if fee was already loaded for this code, delete this duplicate.
-					string command="DELETE FROM fee WHERE FeeNum ="+POut.Long(fee.FeeNum);
-					Db.NonQ(command);
-				} 
+					//Older versions used to delete duplicates here
+				}
 				else {
-					Dict.Add(key,fee);
-					Listt.Add(fee);
+					Dict.Add(key,Listt[i]);
 				}
 			}
 		}

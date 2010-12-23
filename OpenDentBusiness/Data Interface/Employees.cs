@@ -50,26 +50,14 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			ListLong=new Employee[table.Rows.Count];
-			ArrayList tempList=new ArrayList();
-			//Employee temp;
-			for(int i=0;i<table.Rows.Count;i++) {
-				ListLong[i]=new Employee();
-				ListLong[i].EmployeeNum=PIn.Long(table.Rows[i][0].ToString());
-				ListLong[i].LName=PIn.String(table.Rows[i][1].ToString());
-				ListLong[i].FName=PIn.String(table.Rows[i][2].ToString());
-				ListLong[i].MiddleI=PIn.String(table.Rows[i][3].ToString());
-				ListLong[i].IsHidden=PIn.Bool(table.Rows[i][4].ToString());
-				ListLong[i].ClockStatus=PIn.String(table.Rows[i][5].ToString());
-				ListLong[i].PhoneExt=PIn.Int(table.Rows[i][6].ToString());
-				if(!ListLong[i].IsHidden) {
-					tempList.Add(ListLong[i]);
+			listLong=Crud.EmployeeCrud.TableToList(table).ToArray();
+			List<Employee> tempList=new List<Employee>();
+			for(int i=0;i<listLong.Count;i++) {
+				if(!listLong[i].IsHidden) {
+					tempList.Add(listLong[i]);
 				}
 			}
-			ListShort=new Employee[tempList.Count];
-			for(int i=0;i<tempList.Count;i++) {
-				ListShort[i]=(Employee)tempList[i];
-			}
+			listShort=tempList.ToArray();
 		}
 
 		/*public static Employee[] GetListByExtension(){

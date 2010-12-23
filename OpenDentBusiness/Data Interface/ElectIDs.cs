@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			list=Crud.ElectIDCrud.TableToList(table).ToArray();
-			/*
+			/* Commented out so that Ryan can refer back to it. This comment should be deleted.
 			List=new ElectID[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new ElectID();
