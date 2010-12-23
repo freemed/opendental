@@ -24,15 +24,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new QuickPasteNote[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new QuickPasteNote();
-				List[i].QuickPasteNoteNum=PIn.Long(table.Rows[i][0].ToString());
-				List[i].QuickPasteCatNum=PIn.Long(table.Rows[i][1].ToString());
-				List[i].ItemOrder=PIn.Int(table.Rows[i][2].ToString());
-				List[i].Note=PIn.String(table.Rows[i][3].ToString());
-				List[i].Abbreviation=PIn.String(table.Rows[i][4].ToString());
-			}
+			List=Crud.QuickPasteNoteCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>

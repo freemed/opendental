@@ -20,16 +20,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			RecallTriggerC.Listt=new List<RecallTrigger>();
-			RecallTrigger trig;
-			for(int i=0;i<table.Rows.Count;i++){
-				trig=new RecallTrigger();
-				trig.IsNew=false;
-				trig.RecallTriggerNum = PIn.Long   (table.Rows[i][0].ToString());
-				trig.RecallTypeNum    = PIn.Long   (table.Rows[i][1].ToString());
-				trig.CodeNum          = PIn.Long   (table.Rows[i][2].ToString());
-				RecallTriggerC.Listt.Add(trig);
-			}
+			RecallTriggerC.Listt=Crud.RecallTriggerCrud.TableToList(table);
 		}
 
 		///<summary></summary>

@@ -35,32 +35,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			list=new Referral[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				list[i]=new Referral();
-				list[i].ReferralNum= PIn.Long   (table.Rows[i][0].ToString());
-				list[i].LName      = PIn.String(table.Rows[i][1].ToString());
-				list[i].FName      = PIn.String(table.Rows[i][2].ToString());
-				list[i].MName      = PIn.String(table.Rows[i][3].ToString());
-				list[i].SSN        = PIn.String(table.Rows[i][4].ToString());
-				list[i].UsingTIN   = PIn.Bool  (table.Rows[i][5].ToString());
-				list[i].Specialty  = (DentalSpecialty)PIn.Long(table.Rows[i][6].ToString());
-				list[i].ST         = PIn.String(table.Rows[i][7].ToString());
-				list[i].Telephone  = PIn.String(table.Rows[i][8].ToString());
-				list[i].Address    = PIn.String(table.Rows[i][9].ToString());
-				list[i].Address2   = PIn.String(table.Rows[i][10].ToString());
-				list[i].City       = PIn.String(table.Rows[i][11].ToString());
-				list[i].Zip        = PIn.String(table.Rows[i][12].ToString());
-				list[i].Note       = PIn.String(table.Rows[i][13].ToString());
-				list[i].Phone2     = PIn.String(table.Rows[i][14].ToString());
-				list[i].IsHidden   = PIn.Bool  (table.Rows[i][15].ToString());
-				list[i].NotPerson  = PIn.Bool  (table.Rows[i][16].ToString());
-				list[i].Title      = PIn.String(table.Rows[i][17].ToString());
-				list[i].EMail      = PIn.String(table.Rows[i][18].ToString());
-				list[i].PatNum     = PIn.Long   (table.Rows[i][19].ToString());
-				list[i].NationalProvID     = PIn.String   (table.Rows[i][20].ToString());
-				list[i].Slip       = PIn.Long   (table.Rows[i][21].ToString());
-			}
+			list=Crud.ReferralCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>

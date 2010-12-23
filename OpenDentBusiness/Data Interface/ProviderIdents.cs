@@ -23,15 +23,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			list=new ProviderIdent[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				list[i]=new ProviderIdent();
-				list[i].ProviderIdentNum= PIn.Long(table.Rows[i][0].ToString());
-				list[i].ProvNum         = PIn.Long(table.Rows[i][1].ToString());
-				list[i].PayorID         = PIn.String(table.Rows[i][2].ToString());
-				list[i].SuppIDType      = (ProviderSupplementalID)PIn.Long(table.Rows[i][3].ToString());
-				list[i].IDNumber        = PIn.String(table.Rows[i][4].ToString());
-			}
+			list=Crud.ProviderIdentCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>
