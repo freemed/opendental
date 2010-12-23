@@ -116,29 +116,57 @@ namespace OpenDental {
 			return true;
 		}
 
-		private string BuildReceiptString(PayConnectService.transResponse response) {
+		private string BuildReceiptString(PayConnectService.creditCardRequest request,PayConnectService.transResponse response) {
 			string result="";
-			//PrintTransaction();
-			//PrintMessages();
-			//if(response.Status.code==0) {
-			//  //PrintDisclaimer();
-			//  //PrintSignature();
-			//}
+			int xleft=0;
+			int xright=15;
+			int xmax=37;
+			result+=Environment.NewLine;
+			result+="Date".PadRight(xright-xleft,'.')+DateTime.Now.ToString()+Environment.NewLine;
+			result+=Environment.NewLine;
+			result+="Trans Type".PadRight(xright-xleft,'.')+request.TransType.ToString()+Environment.NewLine;
+			result+=Environment.NewLine;
+			result+="Transaction #".PadRight(xright-xleft,'.')+response.RefNumber+Environment.NewLine;
+			result+="Name".PadRight(xright-xleft,'.')+request.NameOnCard+Environment.NewLine;
+			result+="Account".PadRight(xright-xleft,'.');
+			for(int i=0;i<request.CardNumber.Length-4;i++) {
+				result+="*";
+			}
+			result+=request.CardNumber.Substring(request.CardNumber.Length-4)+Environment.NewLine;//last 4 digits of card number only.
+			result+="Exp Date".PadRight(xright-xleft,'.')+request.Expiration.month.ToString().PadLeft(2,'0')+(request.Expiration.year%100)+Environment.NewLine;
+			result+="Card Type".PadRight(xright-xleft,'.')+CreditCardUtils.GetType(request.CardNumber)+Environment.NewLine;
+			result+="Entry".PadRight(xright-xleft,'.')+(request.MagData==""?"Manual":"Swiped")+Environment.NewLine;
+			result+="Auth Code".PadRight(xright-xleft,'.')+response.AuthCode+Environment.NewLine;
+			result+="Result".PadRight(xright-xleft,'.')+response.Status.description+Environment.NewLine;			
+			if(response.Messages!=null) {
+				string label="Message";
+				foreach(string m in response.Messages) {
+					result+=label.PadRight(xright-xleft,'.')+m+Environment.NewLine;
+					label="";
+				}
+			}
+			result+=Environment.NewLine+Environment.NewLine+Environment.NewLine;
+			result+="Total Amt".PadRight(xright-xleft,'.')+request.Amount+Environment.NewLine;
+			result+=Environment.NewLine+Environment.NewLine+Environment.NewLine;
+			result+="I agree to pay the above total amount according to my card issuer/bank agreement."+Environment.NewLine;
+			result+=Environment.NewLine+Environment.NewLine+Environment.NewLine+Environment.NewLine+Environment.NewLine;
+			result+="Signature X".PadRight(xmax-xleft,'_');
 			return result;
 		}
 
 		private void PrintReceipt(string receiptStr) {
 			MigraDoc.DocumentObjectModel.Document doc=new MigraDoc.DocumentObjectModel.Document();
 			doc.DefaultPageSetup.PageWidth=Unit.FromInch(3.0);
-			doc.DefaultPageSetup.PageHeight=Unit.FromInch(11);
-			doc.DefaultPageSetup.TopMargin=Unit.FromInch(.5);
-			doc.DefaultPageSetup.LeftMargin=Unit.FromInch(.5);
-			doc.DefaultPageSetup.RightMargin=Unit.FromInch(.5);
-			MigraDoc.DocumentObjectModel.Font bodyFontx=MigraDocHelper.CreateFont(9,false);
+			doc.DefaultPageSetup.PageHeight=Unit.FromInch(5.26);//enough to print receipt (4.7) plus 9/16 (0.56) extra space at bottom.
+			doc.DefaultPageSetup.TopMargin=Unit.FromInch(0.25);
+			doc.DefaultPageSetup.LeftMargin=Unit.FromInch(0.25);
+			doc.DefaultPageSetup.RightMargin=Unit.FromInch(0.25);
+			MigraDoc.DocumentObjectModel.Font bodyFontx=MigraDocHelper.CreateFont(8,false);
+			bodyFontx.Name=FontFamily.GenericMonospace.Name;
 			MigraDoc.DocumentObjectModel.Section section=doc.AddSection();
 			Paragraph par=section.AddParagraph();
 			ParagraphFormat parformat=new ParagraphFormat();
-			parformat.Alignment=ParagraphAlignment.Center;
+			parformat.Alignment=ParagraphAlignment.Left;
 			parformat.Font=bodyFontx;
 			par.Format=parformat;
 			par.AddFormattedText(receiptStr,bodyFontx);
@@ -152,7 +180,7 @@ namespace OpenDental {
 			pView.printPreviewControl2.Document=printdoc;
 			pView.ShowDialog();
 #else
-				if(PrinterL.SetPrinter(pd2,PrintSituation.Statement)){
+				if(PrinterL.SetPrinter(pd2,PrintSituation.Receipt)){
 					printdoc.PrinterSettings=pd2.PrinterSettings;
 					printdoc.Print();
 				}
@@ -170,8 +198,10 @@ namespace OpenDental {
 			PayConnectService.creditCardRequest request=Bridges.PayConnect.BuildSaleRequest(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
 				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text,(parser!=null?parser.Track2:null));
 			response=Bridges.PayConnect.ProcessCreditCard(request);
-			receiptStr=BuildReceiptString(response);
-			PrintReceipt(receiptStr);
+			if(response.Status.code==0) {//Only print a receipt if approved.
+				receiptStr=BuildReceiptString(request,response);
+				PrintReceipt(receiptStr);
+			}
 			if(response==null || response.Status.code!=0) {//error in transaction
 				Cursor=Cursors.Default;
 				DialogResult=DialogResult.Cancel;
@@ -412,6 +442,29 @@ namespace OpenDental {
 	}
 
 	static class CreditCardUtils {
+
+		public static string GetType(string ccNum) {
+			if(ccNum==null || ccNum=="") {
+				return "";
+			}
+			ccNum=StripNonDigits(ccNum);
+			if(ccNum.StartsWith("4")) {
+				return "VISA";
+			}
+			if(ccNum.StartsWith("5")) {
+				return "MASTERCARD";
+			}
+			if(ccNum.StartsWith("34") || ccNum.StartsWith("37")) {
+				return "AMEX";
+			}
+			if(ccNum.StartsWith("30") || ccNum.StartsWith("36") || ccNum.StartsWith("38")) {
+				return "DINERS";
+			}
+			if(ccNum.StartsWith("6011")) {
+				return "DISCOVER";
+			}
+			return "";
+		}
 
 		private static bool IsValidVisaNumber(string ccNum) {
 			char[] number=ccNum.ToCharArray();

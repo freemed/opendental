@@ -23,8 +23,8 @@ namespace OpenDental.Bridges {
 				}
 			}
 			cred.Client="OpenDental2";
-			//cred.ServiceID="DCI Web Service ID: 006328";//Production
-			cred.ServiceID="DCI Web Service ID: 002778";//Testing
+			cred.ServiceID="DCI Web Service ID: 006328";//Production
+			//cred.ServiceID="DCI Web Service ID: 002778";//Testing
 			cred.version="0310";
 			return cred;
 		}

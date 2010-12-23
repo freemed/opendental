@@ -932,7 +932,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		Appointments,
 		///<summary></summary>
-		RxControlled
+		RxControlled,
+		///<summary></summary>
+		Receipt
 	}
 
 	///<summary></summary>

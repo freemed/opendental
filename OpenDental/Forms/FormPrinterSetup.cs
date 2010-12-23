@@ -46,6 +46,9 @@ namespace OpenDental{
 		private Label label13;
 		private CheckBox checkRxControlled;
 		private ComboBox comboRxControlled;
+		private ComboBox comboReceipt;
+		private Label label14;
+		private CheckBox checkReceipt;
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
@@ -105,6 +108,9 @@ namespace OpenDental{
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkRxControlled = new System.Windows.Forms.CheckBox();
 			this.comboRxControlled = new System.Windows.Forms.ComboBox();
+			this.comboReceipt = new System.Windows.Forms.ComboBox();
+			this.label14 = new System.Windows.Forms.Label();
+			this.checkReceipt = new System.Windows.Forms.CheckBox();
 			this.panelSimple.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -124,7 +130,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(550,307);
+			this.butOK.Location = new System.Drawing.Point(550,333);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 2;
@@ -140,7 +146,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(550,341);
+			this.butCancel.Location = new System.Drawing.Point(550,367);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 3;
@@ -403,7 +409,7 @@ namespace OpenDental{
 			// 
 			this.checkSimple.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkSimple.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSimple.Location = new System.Drawing.Point(49,344);
+			this.checkSimple.Location = new System.Drawing.Point(49,370);
 			this.checkSimple.Name = "checkSimple";
 			this.checkSimple.Size = new System.Drawing.Size(440,24);
 			this.checkSimple.TabIndex = 33;
@@ -412,6 +418,9 @@ namespace OpenDental{
 			// 
 			// panelSimple
 			// 
+			this.panelSimple.Controls.Add(this.comboReceipt);
+			this.panelSimple.Controls.Add(this.label14);
+			this.panelSimple.Controls.Add(this.checkReceipt);
 			this.panelSimple.Controls.Add(this.label13);
 			this.panelSimple.Controls.Add(this.checkRxControlled);
 			this.panelSimple.Controls.Add(this.comboRxControlled);
@@ -445,7 +454,7 @@ namespace OpenDental{
 			this.panelSimple.Controls.Add(this.label2);
 			this.panelSimple.Location = new System.Drawing.Point(6,5);
 			this.panelSimple.Name = "panelSimple";
-			this.panelSimple.Size = new System.Drawing.Size(620,298);
+			this.panelSimple.Size = new System.Drawing.Size(620,324);
 			this.panelSimple.TabIndex = 34;
 			// 
 			// label13
@@ -474,12 +483,38 @@ namespace OpenDental{
 			this.comboRxControlled.Size = new System.Drawing.Size(253,21);
 			this.comboRxControlled.TabIndex = 33;
 			// 
+			// comboReceipt
+			// 
+			this.comboReceipt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboReceipt.Location = new System.Drawing.Point(202,296);
+			this.comboReceipt.MaxDropDownItems = 30;
+			this.comboReceipt.Name = "comboReceipt";
+			this.comboReceipt.Size = new System.Drawing.Size(253,21);
+			this.comboReceipt.TabIndex = 36;
+			// 
+			// label14
+			// 
+			this.label14.Location = new System.Drawing.Point(4,297);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(195,19);
+			this.label14.TabIndex = 37;
+			this.label14.Text = "Receipts";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkReceipt
+			// 
+			this.checkReceipt.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkReceipt.Location = new System.Drawing.Point(467,299);
+			this.checkReceipt.Name = "checkReceipt";
+			this.checkReceipt.Size = new System.Drawing.Size(24,15);
+			this.checkReceipt.TabIndex = 38;
+			// 
 			// FormPrinterSetup
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(654,381);
+			this.ClientSize = new System.Drawing.Size(654,407);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label1);
@@ -602,6 +637,10 @@ namespace OpenDental{
 				case "comboTPPerio":
 				case "checkTPPerio":
 					sit=PrintSituation.TPPerio;
+					break;
+				case "comboReceipt":
+				case "checkReceipt":
+					sit=PrintSituation.Receipt;
 					break;
 			}
 			return sit;
