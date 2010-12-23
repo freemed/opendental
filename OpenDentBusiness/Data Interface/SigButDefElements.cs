@@ -35,14 +35,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			list=new SigButDefElement[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				list[i]=new SigButDefElement();
-				list[i].ElementNum      = PIn.Long(table.Rows[i][0].ToString());
-				list[i].SigButDefNum    = PIn.Long(table.Rows[i][1].ToString());
-				list[i].SigElementDefNum= PIn.Long(table.Rows[i][2].ToString());
-			}
-			//Array.Sort(List);
+			list=Crud.SigButDefElementCrud.TableToList(table).ToArray();
 		}
 
 		/*

@@ -38,14 +38,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			list=new ToolButItem[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				list[i]=new ToolButItem();
-				list[i].ToolButItemNum  =PIn.Long   (table.Rows[i][0].ToString());
-				list[i].ProgramNum      =PIn.Long   (table.Rows[i][1].ToString());
-				list[i].ToolBar         =(ToolBarsAvail)PIn.Long(table.Rows[i][2].ToString());
-				list[i].ButtonText      =PIn.String(table.Rows[i][3].ToString());
-			}
+			list=Crud.ToolButItemCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>
