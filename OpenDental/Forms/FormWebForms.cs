@@ -88,7 +88,7 @@ namespace OpenDental {
 		private void RetrieveAndSaveData() {
 			try {
 				#if DEBUG
-				IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+				//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 				#endif
 				WebSheets.Sheets wh=new WebSheets.Sheets();
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);

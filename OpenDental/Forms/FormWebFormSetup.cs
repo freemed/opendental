@@ -41,7 +41,7 @@ namespace OpenDental {
 				textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				butSave.Enabled=false;
 				#if DEBUG
-				IgnoreCertificateErrors();
+				//IgnoreCertificateErrors();
 				#endif
 				Cursor=Cursors.WaitCursor;
 				if(!TestWebServiceExists()) {
