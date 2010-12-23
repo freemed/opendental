@@ -11,7 +11,10 @@ namespace OpenDentBusiness {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum);
 			} 
 			DataSet ds=new DataSet();
-			string command=Patients.GetFamilySelectCommand(patNum);
+			string command=//Patients.GetFamilySelectCommand(patNum);
+				"SELECT patient.* FROM patient WHERE Guarantor = ("
+				+"SELECT Guarantor FROM patient WHERE PatNum="+POut.Long(patNum)+") "
+				+"ORDER BY CASE WHEN Guarantor=PatNum THEN 0 ELSE 1 END,Birthdate";
 			DataTable table=Db.GetTable(command);
 			table.TableName="Patient";
 			table.Columns.Add("Age");

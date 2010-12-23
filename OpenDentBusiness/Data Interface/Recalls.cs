@@ -81,27 +81,11 @@ namespace OpenDentBusiness{
 
 		private static List<Recall> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			List<Recall> list=new List<Recall>();
-			Recall recall;
-			for(int i=0;i<table.Rows.Count;i++){
-				recall=new Recall();
-				recall.RecallNum      = PIn.Long   (table.Rows[i][0].ToString());
-				recall.PatNum         = PIn.Long   (table.Rows[i][1].ToString());
-				recall.DateDueCalc    = PIn.Date  (table.Rows[i][2].ToString());
-				recall.DateDue        = PIn.Date  (table.Rows[i][3].ToString());
-				recall.DatePrevious   = PIn.Date  (table.Rows[i][4].ToString());
-				recall.RecallInterval = new Interval(PIn.Int(table.Rows[i][5].ToString()));
-				recall.RecallStatus   = PIn.Long   (table.Rows[i][6].ToString());
-				recall.Note           = PIn.String(table.Rows[i][7].ToString());
-				recall.IsDisabled     = PIn.Bool  (table.Rows[i][8].ToString());
-				//DateTStamp
-				recall.RecallTypeNum  = PIn.Long   (table.Rows[i][10].ToString());
-				recall.DisableUntilBalance= PIn.Double(table.Rows[i][11].ToString());
-				recall.DisableUntilDate   = PIn.Date  (table.Rows[i][12].ToString());
-				if(table.Columns.Count>13){
-					recall.DateScheduled= PIn.Date  (table.Rows[i][13].ToString());
+			List<Recall> list=Crud.RecallCrud.TableToList(table);
+			if(table.Columns.Count>13) {
+				for(int i=0;i<list.Count;i++) {
+					list[i].DateScheduled=PIn.Date(table.Rows[i][13].ToString());
 				}
-				list.Add(recall);
 			}
 			return list;
 		}

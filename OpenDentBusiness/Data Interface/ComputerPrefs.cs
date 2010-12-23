@@ -47,22 +47,7 @@ namespace OpenDentBusiness {
 					+"database maintenance tool, then call us for help if you still get this message.",
 					Logger.Severity.WARNING);
 			}
-			computerPref.ComputerPrefNum=				PIn.Long		(table.Rows[0][0].ToString());
-			computerPref.ComputerName=					PIn.String		(table.Rows[0][1].ToString());
-			computerPref.GraphicsUseHardware=			PIn.Bool		(table.Rows[0][2].ToString());
-			computerPref.GraphicsSimple=(DrawingMode)PIn.Int  (table.Rows[0][3].ToString());
-			computerPref.SensorType=					PIn.String		(table.Rows[0][4].ToString());
-			computerPref.SensorBinned=					PIn.Bool		(table.Rows[0][5].ToString());
-			computerPref.SensorPort=					PIn.Int		(table.Rows[0][6].ToString());
-			computerPref.SensorExposure=				PIn.Int		(table.Rows[0][7].ToString());
-			computerPref.GraphicsDoubleBuffering=		PIn.Bool		(table.Rows[0][8].ToString());
-			computerPref.PreferredPixelFormatNum=		PIn.Int		(table.Rows[0][9].ToString());
-			computerPref.AtoZpath=						PIn.String		(table.Rows[0][10].ToString());
-			computerPref.TaskKeepListHidden=			PIn.Bool		(table.Rows[0][11].ToString());
-			computerPref.TaskDock=						PIn.Int		(table.Rows[0][12].ToString());
-			computerPref.TaskX=							PIn.Int		(table.Rows[0][13].ToString());
-			computerPref.TaskY=							PIn.Int		(table.Rows[0][14].ToString());
-			computerPref.DirectXFormat=			PIn.String(table.Rows[0][15].ToString());
+			computerPref=Crud.ComputerPrefCrud.TableToList(table)[0];
 			return computerPref;
 		}
 
@@ -96,9 +81,7 @@ namespace OpenDentBusiness {
 			Crud.ComputerPrefCrud.Update(computerPref);
 		}
 
-		//public static int Update(ComputerPref computerPref) {
-		//	return 0;
-		//}
+		
 
 	}
 

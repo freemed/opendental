@@ -19,8 +19,11 @@ namespace OpenDentBusiness{
 		public static Family GetFamily(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Family>(MethodBase.GetCurrentMethod(),patNum);
-			} 
-			string command=GetFamilySelectCommand(patNum);
+			}
+			string command=//GetFamilySelectCommand(patNum);
+				"SELECT patient.* FROM patient WHERE Guarantor = ("
+				+"SELECT Guarantor FROM patient WHERE PatNum="+POut.Long(patNum)+") "
+				+"ORDER BY CASE WHEN Guarantor=PatNum THEN 0 ELSE 1 END,Birthdate";//Guarantor!=PatNum,Birthdate";
 			Family fam=new Family();
 			List<Patient> patients=Crud.PatientCrud.SelectMany(command);
 			foreach(Patient patient in patients) {
@@ -31,6 +34,7 @@ namespace OpenDentBusiness{
 			return fam;
 		}
 
+		/*
 		public static string GetFamilySelectCommand(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
@@ -48,7 +52,7 @@ namespace OpenDentBusiness{
 				+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
 				+" ORDER BY Guarantor!=PatNum,Birthdate";
 			return command;
-		}
+		}*/
 
 		///<summary>This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found.</summary>
 		public static Patient GetPat(long patNum) {

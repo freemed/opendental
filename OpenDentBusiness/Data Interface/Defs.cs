@@ -20,41 +20,31 @@ namespace OpenDentBusiness {
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
+			List<Def> list=Crud.DefCrud.TableToList(table);
 			DefC.Long=new Def[Enum.GetValues(typeof(DefCat)).Length][];
 			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
-				DefC.Long[j]=GetForCategory(j,true,table);
+				DefC.Long[j]=GetForCategory(j,true,list);
 			}
 			DefC.Short=new Def[Enum.GetValues(typeof(DefCat)).Length][];
 			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
-				DefC.Short[j]=GetForCategory(j,false,table);
+				DefC.Short[j]=GetForCategory(j,false,list);
 			}
 		}
 
 		///<summary>Used by the refresh method above.</summary>
-		private static Def[] GetForCategory(int catIndex,bool includeHidden,DataTable table) {
+		private static Def[] GetForCategory(int catIndex,bool includeHidden,List<Def> list) {
 			//No need to check RemotingRole; no call to db.
-			List<Def> list=new List<Def>();
-			Def def;
-			for(int i=0;i<table.Rows.Count;i++) {
-				if(PIn.Long(table.Rows[i][1].ToString())!=catIndex) {
+			List<Def> retVal=new List<Def>();
+			for(int i=0;i<list.Count;i++) {
+				if((int)list[i].Category!=catIndex){
 					continue;
 				}
-				if(PIn.Bool(table.Rows[i][6].ToString())//if is hidden
-					&& !includeHidden)//and we don't want to include hidden
-				{
+				if(list[i].IsHidden && !includeHidden){
 					continue;
 				}
-				def=new Def();
-				def.DefNum    = PIn.Long(table.Rows[i][0].ToString());
-				def.Category  = (DefCat)PIn.Long(table.Rows[i][1].ToString());
-				def.ItemOrder = PIn.Int(table.Rows[i][2].ToString());
-				def.ItemName  = PIn.String(table.Rows[i][3].ToString());
-				def.ItemValue = PIn.String(table.Rows[i][4].ToString());
-				def.ItemColor = Color.FromArgb(PIn.Int(table.Rows[i][5].ToString()));
-				def.IsHidden  = PIn.Bool(table.Rows[i][6].ToString());
-				list.Add(def);
+				retVal.Add(list[i]);
 			}
-			return list.ToArray();
+			return retVal.ToArray();
 		}
 
 		///<summary>Only used in FormDefinitions</summary>
