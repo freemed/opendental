@@ -35,12 +35,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			list=new UserGroup[table.Rows.Count];
-			for(int i=0;i<list.Length;i++) {
-				list[i]=new UserGroup();
-				list[i].UserGroupNum  = PIn.Long(table.Rows[i][0].ToString());
-				list[i].Description   = PIn.String(table.Rows[i][1].ToString());
-			}
+			list=Crud.UserGroupCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>
