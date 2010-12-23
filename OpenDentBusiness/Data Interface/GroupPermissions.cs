@@ -19,15 +19,7 @@ namespace OpenDentBusiness{
 
 		private static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			GroupPermissionC.List=new GroupPermission[table.Rows.Count];
-			for(int i=0;i<GroupPermissionC.List.Length;i++) {
-				GroupPermissionC.List[i]=new GroupPermission();
-				GroupPermissionC.List[i].GroupPermNum  = PIn.Long(table.Rows[i][0].ToString());
-				GroupPermissionC.List[i].NewerDate     = PIn.Date(table.Rows[i][1].ToString());
-				GroupPermissionC.List[i].NewerDays     = PIn.Int(table.Rows[i][2].ToString());
-				GroupPermissionC.List[i].UserGroupNum  = PIn.Long(table.Rows[i][3].ToString());
-				GroupPermissionC.List[i].PermType      =(Permissions)PIn.Long(table.Rows[i][4].ToString());
-			}
+			GroupPermissionC.List=Crud.GroupPermissionCrud.TableToList(table);
 		}
 
 		///<summary></summary>

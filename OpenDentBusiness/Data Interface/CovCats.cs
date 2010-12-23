@@ -27,24 +27,6 @@ namespace OpenDentBusiness {
 					CovCatC.ListShort.Add(CovCatC.Listt[i]);
 				}
 			}
-			
-
-			
-			
-			
-			CovCat covcat;
-			CovCatC.Listt=new List<CovCat>();
-
-				covcat=new CovCat();
-				covcat.CovCatNum     =PIn.Long(table.Rows[i][0].ToString());
-				covcat.Description   =PIn.String(table.Rows[i][1].ToString());
-				covcat.DefaultPercent=PIn.Int(table.Rows[i][2].ToString());
-				covcat.CovOrder      =PIn.Byte(table.Rows[i][3].ToString());
-				covcat.IsHidden      =PIn.Bool(table.Rows[i][4].ToString());
-				covcat.EbenefitCat   =(EbenefitCategory)PIn.Long(table.Rows[i][5].ToString());
-				CovCatC.Listt.Add(covcat);
-				
-			}
 		}
 
 		///<summary></summary>

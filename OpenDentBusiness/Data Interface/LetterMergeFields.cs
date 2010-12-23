@@ -24,13 +24,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			list=new LetterMergeField[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				list[i]=new LetterMergeField();
-				list[i].FieldNum=PIn.Long(table.Rows[i][0].ToString());
-				list[i].LetterMergeNum=PIn.Long(table.Rows[i][1].ToString());
-				list[i].FieldName=PIn.String(table.Rows[i][2].ToString());
-			}
+			list=Crud.LetterMergeFieldCrud.TableToList(table).ToArray();
 		}
 
 		///<summary>Inserts this lettermergefield into database.</summary>
