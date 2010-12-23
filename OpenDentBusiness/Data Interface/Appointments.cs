@@ -1126,12 +1126,13 @@ namespace OpenDentBusiness{
 			table.Columns.Add("Status");
 			table.Columns.Add("ops");
 			table.Columns.Add("EmployeeNum");
-			string command="SELECT schedule.*,GROUP_CONCAT(scheduleop.OperatoryNum) _ops "
+			string columns="schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum";
+			string command="SELECT "+columns+",GROUP_CONCAT(scheduleop.OperatoryNum) _ops "
 				+"FROM schedule "
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
 				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
-				+"GROUP BY schedule.ScheduleNum "
+				+"GROUP BY "+columns+" "
 				+"ORDER BY StartTime";
 			DataTable raw=Db.GetTable(command);
 			//the times come back as times rather than datetimes.  This causes problems.  That's why we're not just returning raw.

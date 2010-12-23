@@ -165,11 +165,18 @@ namespace OpenDental{
 				report.SetColumn(this,3,"Amount",80,HorizontalAlignment.Right);
 			}
 			else {
-				report.Query="SELECT "+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+",GROUP_CONCAT(DISTINCT ItemName),SUM(SplitAmt) Amount "
+				report.Query="SELECT "+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+",";
+				if(DataConnection.DBtype==DatabaseType.Oracle){
+					report.Query+="ItemName,";//untested
+				}
+				else{
+					report.Query+="GROUP_CONCAT(DISTINCT ItemName),";
+				}
+				report.Query+="SUM(SplitAmt) Amount "
 					+"FROM paysplit,patient,definition "
 					+"WHERE paysplit.PatNum=patient.PatNum "
 					+"AND definition.DefNum=paysplit.UnearnedType "
-					+"AND UnearnedType > 0 GROUP BY paysplit.PatNum HAVING Amount != 0";
+					+"AND UnearnedType > 0 GROUP BY paysplit.PatNum HAVING Amount != 0";//still won't work for oracle
 				FormQuery2=new FormQuery(report);
 				FormQuery2.IsReport=true;
 				FormQuery2.SubmitReportQuery();
