@@ -35,6 +35,8 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
+			list=Crud.ElectIDCrud.TableToList(table).ToArray();
+			/*
 			List=new ElectID[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new ElectID();
@@ -44,7 +46,7 @@ namespace OpenDentBusiness{
 				List[i].IsMedicaid   = PIn.Bool  (table.Rows[i][3].ToString());
 				List[i].ProviderTypes= PIn.String(table.Rows[i][4].ToString());
 				List[i].Comments     = PIn.String(table.Rows[i][5].ToString());
-			}
+			}*/
 		}
 
 		///<summary></summary>
