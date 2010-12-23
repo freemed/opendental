@@ -63,9 +63,11 @@ namespace OpenDentBusiness {
 			}
 			else {
 				string result="CONCAT(";
-				result+=values[0];
-				for(int i=1;i<values.Length; i++) {
-					result+=","+values[i];
+				for(int i=0;i<values.Length; i++) {
+					if(i!=0) {
+						result+=",";
+					}
+					result+=values[i];
 				}
 				result+=")";
 				return result;
