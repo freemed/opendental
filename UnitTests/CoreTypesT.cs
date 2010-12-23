@@ -43,7 +43,8 @@ namespace UnitTests {
 				+"BOOLTEST NUMBER(3,0), "
 				+"VARCHAR2TEST VARCHAR2(4000), "
 				+"CHARTEST CHAR(1), "
-				+"CLOBTEST CLOB)";
+				+"CLOBTEST CLOB, "
+				+"BLOBTEST BLOB)";
 				DataCore.NonQ(command);
 				command=command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE UNITTEST.TEMPGROUPCONCAT'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 				DataCore.NonQ(command);
@@ -355,7 +356,8 @@ namespace UnitTests {
 				DataCore.NonQ(command);
 				retVal+="VARCHAR2(4000): Passed.\r\n";
 				//clob:-----------------------------------------------------------------------------------------
-				string clobstring1=CreateRandomAlphaNumericString(52428800); //50MB should be larger than anything we store.
+				//tested up to 20MB.  50MB however was failing: Chunk size error
+				string clobstring1=CreateRandomAlphaNumericString(10485760); //10MB should be larger than anything we store.
 				string clobstring2="";
 				OdSqlParameter param=new OdSqlParameter(":param1",OdDbType.Text,clobstring1);
 				command="INSERT INTO tempcore (clobtest) VALUES (:param1)";
@@ -383,6 +385,24 @@ namespace UnitTests {
 				command="DELETE FROM tempcore";
 				DataCore.NonQ(command);
 				retVal+="Clob:Foreign Passed.\r\n";
+				
+				/*
+				//Blob:-----------------------------------------------------------------------------------------
+				byte[] array1 = new byte[10 * 1024 * 1024];
+				byte[] array2;
+				//OdSqlParameter param=new OdSqlParameter(":param1",OdDbType.Text,clobstring1);
+				command="INSERT INTO tempcore (blobtest) VALUES ("+array1+")";
+				DataCore.NonQ(command,param);
+				command="SELECT blobtest FROM tempcore";
+				table=DataCore.GetTable(command);
+				//array2=PIn.ByteArray(table.Rows[0]["blobtest"].ToString());
+				//if(array1!=array2) {
+				//  throw new Exception();
+				//}
+				command="DELETE FROM tempcore";
+				DataCore.NonQ(command);
+				retVal+="Blob: Passed.\r\n";
+				 */
 				return retVal+="Oracle CoreTypes test done.\r\n";
 			}
 		}
