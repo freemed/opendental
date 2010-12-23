@@ -37,13 +37,13 @@ namespace OpenDentBusiness {
 				}
 					//other:
 				else if(letter.Fields[i]=="TPResponsPartyNameFL") {
-					command+="CONCAT(patResp.FName,' ',patResp.LName) TPResponsPartyNameFL";
+					command+=DbHelper.Concat("patResp.FName","' '","patResp.LName")+" TPResponsPartyNameFL";
 				} 
 				else if(letter.Fields[i]=="TPResponsPartyAddress") {
 					command+="patResp.Address TPResponsPartyAddress";
 				} 
 				else if(letter.Fields[i]=="TPResponsPartyCityStZip") {
-					command+="CONCAT(patResp.City,', ',patResp.State,' ',patResp.Zip) TPResponsPartyCityStZip";
+					command+=DbHelper.Concat("patResp.City","', '","patResp.State","' '","patResp.Zip")+" TPResponsPartyCityStZip";
 				} 
 				else if(letter.Fields[i]=="SiteDescription") {
 					command+="site.Description SiteDescription";
@@ -61,10 +61,10 @@ namespace OpenDentBusiness {
 					command+="carrier.Address CarrierAddress";
 				} 
 				else if(letter.Fields[i]=="CarrierCityStZip") {
-					command+="CONCAT(carrier.City,', ',carrier.State,' ',carrier.Zip) CarrierCityStZip";
+					command+=DbHelper.Concat("carrier.City","', '","carrier.State","' '","carrier.Zip")+" CarrierCityStZip";
 				} 
 				else if(letter.Fields[i]=="SubscriberNameFL") {
-					command+="CONCAT(patSubsc.FName,' ',patSubsc.LName) SubscriberNameFL";
+					command+=DbHelper.Concat("patSubsc.FName","' '","patSubsc.LName")+" SubscriberNameFL";
 				} 
 				else if(letter.Fields[i]=="SubscriberID") {
 					command+="inssub.SubscriberID";
@@ -76,7 +76,7 @@ namespace OpenDentBusiness {
 					command+="patient.Birthdate BirthdateForAge";
 				}
 				else if(letter.Fields[i]=="Guarantor") {
-					command+="CONCAT(patGuar.FName,' ',patGuar.LName) Guarantor";
+					command+=DbHelper.Concat("patGuar.FName","' '","patGuar.LName")+" Guarantor";
 				}
 				else if(letter.Fields[i].StartsWith("referral.")) {
 					command+="referral."+letter.Fields[i].Substring(9);
