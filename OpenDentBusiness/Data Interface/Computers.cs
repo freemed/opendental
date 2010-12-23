@@ -52,12 +52,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new Computer[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new Computer();
-				List[i].ComputerNum=PIn.Long(table.Rows[i][0].ToString());
-				List[i].CompName=PIn.String(table.Rows[i][1].ToString());
-			}
+			List=Crud.ComputerCrud.TableToList(table).ToArray();
 		}
 
 		///<summary>ONLY use this if compname is not already present</summary>

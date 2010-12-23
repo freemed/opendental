@@ -23,6 +23,7 @@ namespace OpenDentBusiness {
 			CovCat covcat;
 			CovCatC.Listt=new List<CovCat>();
 			CovCatC.ListShort=new List<CovCat>();
+			//listt = Crud.CovCatCrud.TableToList(table);
 			for(int i=0;i<table.Rows.Count;i++) {
 				covcat=new CovCat();
 				covcat.CovCatNum     =PIn.Long(table.Rows[i][0].ToString());
@@ -33,6 +34,7 @@ namespace OpenDentBusiness {
 				covcat.EbenefitCat   =(EbenefitCategory)PIn.Long(table.Rows[i][5].ToString());
 				CovCatC.Listt.Add(covcat);
 				if(!covcat.IsHidden) {
+				//Short list crud
 					CovCatC.ListShort.Add(covcat);
 				}
 			}
