@@ -51,9 +51,11 @@ namespace OpenDental {
 				}
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
 				List<Patientm> ChangedPatientmList=Patientms.GetChanged(GetChangedSince);
-				mb.SynchRecords(RegistrationKey,ChangedPatientmList.ToArray());
+				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
+				//m
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
 				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
+				
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

@@ -17,12 +17,9 @@ namespace MobileWeb {
 		public int NextDateYear=0;
 
 		protected void Page_Load(object sender,EventArgs e) {
-			//Thread.Sleep(1000);
 			Message.Text="";
 			if(Session["CustomerNum"]!=null) {
 				Message.Text="LoggedIn";
-
-				
 				int Year=0;
 				int Month=0;
 				int Day=0;

@@ -19,15 +19,11 @@ namespace MobileWeb {
 			Message.Text="";
 			if(Session["CustomerNum"]!=null) {
 				Message.Text="LoggedIn";
-				////Thread.Sleep(500);
 				if(Request["PatNum"]!=null) {
 					Int64.TryParse(Request["PatNum"].ToString().Trim(),out PatNum);
 				}
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
 				pat=Patientms.GetOne(CustomerNum,PatNum);
-				
-				
-
 			}
 		}
 	}

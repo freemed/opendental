@@ -11,7 +11,7 @@
 <div id="content">
 <h2></h2>
 <ul>
-<li> <span class="style2"><%Response.Write(pat.LName + " "+pat.MiddleI +"" + pat.FName);%></span>
+<li> <span class="style2"><%Response.Write(pat.LName + " "+pat.MiddleI +" " + pat.FName  +" " + pat.Birthdate.ToShortDateString());%></span>
 </li>
 </ul>
 

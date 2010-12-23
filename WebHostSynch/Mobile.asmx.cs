@@ -26,6 +26,7 @@ namespace WebHostSynch {
 		/// </summary>
 		[WebMethod]
 		public bool ServiceExists() {
+			util.SetMobileDbConnection();
 			return true;
 		}
 
@@ -35,27 +36,33 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void SynchRecords(String RegistrationKey,List<Patientm> patientmList) {
+		public void SynchPatients(String RegistrationKey,List<Patientm> patientmList) {
 			try {
-				Logger.Information("In SynchRecords");
+				Logger.Information("In SynchPatients");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
 				}
-				util.SetMobileDbConnection();
 				Patientms.UpdateFromChangeList(patientmList,customerNum);
-
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);
 			}
-
 		}
 
 		[WebMethod]
-		public void DeleteRecords(String RegistrationKey,List<long> patientNums) {
-
-
+		public void SynchAppointments(String RegistrationKey,List<Appointmentm> appointmentList) {
+			try {
+				Logger.Information("In SynchAppointments");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				Appointmentms.UpdateFromChangeList(appointmentList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
 		}
 
 		[WebMethod]

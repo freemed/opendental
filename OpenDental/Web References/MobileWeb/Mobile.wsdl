@@ -26,7 +26,7 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="SynchRecords">
+      <s:element name="SynchPatients">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
@@ -116,23 +116,59 @@
           <s:enumeration value="TextMessage" />
         </s:restriction>
       </s:simpleType>
-      <s:element name="SynchRecordsResponse">
+      <s:element name="SynchPatientsResponse">
         <s:complexType />
       </s:element>
-      <s:element name="DeleteRecords">
+      <s:element name="SynchAppointments">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="patientNums" type="tns:ArrayOfLong" />
+            <s:element minOccurs="0" maxOccurs="1" name="appointmentList" type="tns:ArrayOfAppointmentm" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="ArrayOfLong">
+      <s:complexType name="ArrayOfAppointmentm">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="long" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Appointmentm" nillable="true" type="tns:Appointmentm" />
         </s:sequence>
       </s:complexType>
-      <s:element name="DeleteRecordsResponse">
+      <s:complexType name="Appointmentm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="AptNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="AptStatus" type="tns:ApptStatus" />
+              <s:element minOccurs="0" maxOccurs="1" name="Pattern" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="Confirmed" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="Op" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ProvNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="ProvHyg" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="AptDateTime" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsNewPatient" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="ProcDescript" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ClinicNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsHygiene" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="ApptStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="Scheduled" />
+          <s:enumeration value="Complete" />
+          <s:enumeration value="UnschedList" />
+          <s:enumeration value="ASAP" />
+          <s:enumeration value="Broken" />
+          <s:enumeration value="Planned" />
+          <s:enumeration value="PtNote" />
+          <s:enumeration value="PtNoteCompleted" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SynchAppointmentsResponse">
         <s:complexType />
       </s:element>
       <s:element name="SetMobileWebPassword">
@@ -160,17 +196,17 @@
   <wsdl:message name="GetCustomerNumSoapOut">
     <wsdl:part name="parameters" element="tns:GetCustomerNumResponse" />
   </wsdl:message>
-  <wsdl:message name="SynchRecordsSoapIn">
-    <wsdl:part name="parameters" element="tns:SynchRecords" />
+  <wsdl:message name="SynchPatientsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchPatients" />
   </wsdl:message>
-  <wsdl:message name="SynchRecordsSoapOut">
-    <wsdl:part name="parameters" element="tns:SynchRecordsResponse" />
+  <wsdl:message name="SynchPatientsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchPatientsResponse" />
   </wsdl:message>
-  <wsdl:message name="DeleteRecordsSoapIn">
-    <wsdl:part name="parameters" element="tns:DeleteRecords" />
+  <wsdl:message name="SynchAppointmentsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchAppointments" />
   </wsdl:message>
-  <wsdl:message name="DeleteRecordsSoapOut">
-    <wsdl:part name="parameters" element="tns:DeleteRecordsResponse" />
+  <wsdl:message name="SynchAppointmentsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchAppointmentsResponse" />
   </wsdl:message>
   <wsdl:message name="SetMobileWebPasswordSoapIn">
     <wsdl:part name="parameters" element="tns:SetMobileWebPassword" />
@@ -187,13 +223,13 @@
       <wsdl:input message="tns:GetCustomerNumSoapIn" />
       <wsdl:output message="tns:GetCustomerNumSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="SynchRecords">
-      <wsdl:input message="tns:SynchRecordsSoapIn" />
-      <wsdl:output message="tns:SynchRecordsSoapOut" />
+    <wsdl:operation name="SynchPatients">
+      <wsdl:input message="tns:SynchPatientsSoapIn" />
+      <wsdl:output message="tns:SynchPatientsSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="DeleteRecords">
-      <wsdl:input message="tns:DeleteRecordsSoapIn" />
-      <wsdl:output message="tns:DeleteRecordsSoapOut" />
+    <wsdl:operation name="SynchAppointments">
+      <wsdl:input message="tns:SynchAppointmentsSoapIn" />
+      <wsdl:output message="tns:SynchAppointmentsSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebPassword">
       <wsdl:input message="tns:SetMobileWebPasswordSoapIn" />
@@ -220,8 +256,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SynchRecords">
-      <soap:operation soapAction="http://opendental.com/SynchRecords" style="document" />
+    <wsdl:operation name="SynchPatients">
+      <soap:operation soapAction="http://opendental.com/SynchPatients" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -229,8 +265,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="DeleteRecords">
-      <soap:operation soapAction="http://opendental.com/DeleteRecords" style="document" />
+    <wsdl:operation name="SynchAppointments">
+      <soap:operation soapAction="http://opendental.com/SynchAppointments" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -268,8 +304,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SynchRecords">
-      <soap12:operation soapAction="http://opendental.com/SynchRecords" style="document" />
+    <wsdl:operation name="SynchPatients">
+      <soap12:operation soapAction="http://opendental.com/SynchPatients" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -277,8 +313,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="DeleteRecords">
-      <soap12:operation soapAction="http://opendental.com/DeleteRecords" style="document" />
+    <wsdl:operation name="SynchAppointments">
+      <soap12:operation soapAction="http://opendental.com/SynchAppointments" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

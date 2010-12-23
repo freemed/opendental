@@ -36,9 +36,9 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback GetCustomerNumOperationCompleted;
         
-        private System.Threading.SendOrPostCallback SynchRecordsOperationCompleted;
+        private System.Threading.SendOrPostCallback SynchPatientsOperationCompleted;
         
-        private System.Threading.SendOrPostCallback DeleteRecordsOperationCompleted;
+        private System.Threading.SendOrPostCallback SynchAppointmentsOperationCompleted;
         
         private System.Threading.SendOrPostCallback SetMobileWebPasswordOperationCompleted;
         
@@ -87,10 +87,10 @@ namespace OpenDental.MobileWeb {
         public event GetCustomerNumCompletedEventHandler GetCustomerNumCompleted;
         
         /// <remarks/>
-        public event SynchRecordsCompletedEventHandler SynchRecordsCompleted;
+        public event SynchPatientsCompletedEventHandler SynchPatientsCompleted;
         
         /// <remarks/>
-        public event DeleteRecordsCompletedEventHandler DeleteRecordsCompleted;
+        public event SynchAppointmentsCompletedEventHandler SynchAppointmentsCompleted;
         
         /// <remarks/>
         public event SetMobileWebPasswordCompletedEventHandler SetMobileWebPasswordCompleted;
@@ -152,62 +152,62 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchRecords", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void SynchRecords(string RegistrationKey, Patientm[] patientmList) {
-            this.Invoke("SynchRecords", new object[] {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchPatients", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchPatients(string RegistrationKey, Patientm[] patientmList) {
+            this.Invoke("SynchPatients", new object[] {
                         RegistrationKey,
                         patientmList});
         }
         
         /// <remarks/>
-        public void SynchRecordsAsync(string RegistrationKey, Patientm[] patientmList) {
-            this.SynchRecordsAsync(RegistrationKey, patientmList, null);
+        public void SynchPatientsAsync(string RegistrationKey, Patientm[] patientmList) {
+            this.SynchPatientsAsync(RegistrationKey, patientmList, null);
         }
         
         /// <remarks/>
-        public void SynchRecordsAsync(string RegistrationKey, Patientm[] patientmList, object userState) {
-            if ((this.SynchRecordsOperationCompleted == null)) {
-                this.SynchRecordsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchRecordsOperationCompleted);
+        public void SynchPatientsAsync(string RegistrationKey, Patientm[] patientmList, object userState) {
+            if ((this.SynchPatientsOperationCompleted == null)) {
+                this.SynchPatientsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchPatientsOperationCompleted);
             }
-            this.InvokeAsync("SynchRecords", new object[] {
+            this.InvokeAsync("SynchPatients", new object[] {
                         RegistrationKey,
-                        patientmList}, this.SynchRecordsOperationCompleted, userState);
+                        patientmList}, this.SynchPatientsOperationCompleted, userState);
         }
         
-        private void OnSynchRecordsOperationCompleted(object arg) {
-            if ((this.SynchRecordsCompleted != null)) {
+        private void OnSynchPatientsOperationCompleted(object arg) {
+            if ((this.SynchPatientsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.SynchRecordsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.SynchPatientsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/DeleteRecords", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void DeleteRecords(string RegistrationKey, long[] patientNums) {
-            this.Invoke("DeleteRecords", new object[] {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchAppointments", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchAppointments(string RegistrationKey, Appointmentm[] appointmentList) {
+            this.Invoke("SynchAppointments", new object[] {
                         RegistrationKey,
-                        patientNums});
+                        appointmentList});
         }
         
         /// <remarks/>
-        public void DeleteRecordsAsync(string RegistrationKey, long[] patientNums) {
-            this.DeleteRecordsAsync(RegistrationKey, patientNums, null);
+        public void SynchAppointmentsAsync(string RegistrationKey, Appointmentm[] appointmentList) {
+            this.SynchAppointmentsAsync(RegistrationKey, appointmentList, null);
         }
         
         /// <remarks/>
-        public void DeleteRecordsAsync(string RegistrationKey, long[] patientNums, object userState) {
-            if ((this.DeleteRecordsOperationCompleted == null)) {
-                this.DeleteRecordsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteRecordsOperationCompleted);
+        public void SynchAppointmentsAsync(string RegistrationKey, Appointmentm[] appointmentList, object userState) {
+            if ((this.SynchAppointmentsOperationCompleted == null)) {
+                this.SynchAppointmentsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchAppointmentsOperationCompleted);
             }
-            this.InvokeAsync("DeleteRecords", new object[] {
+            this.InvokeAsync("SynchAppointments", new object[] {
                         RegistrationKey,
-                        patientNums}, this.DeleteRecordsOperationCompleted, userState);
+                        appointmentList}, this.SynchAppointmentsOperationCompleted, userState);
         }
         
-        private void OnDeleteRecordsOperationCompleted(object arg) {
-            if ((this.DeleteRecordsCompleted != null)) {
+        private void OnSynchAppointmentsOperationCompleted(object arg) {
+            if ((this.SynchAppointmentsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.DeleteRecordsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.SynchAppointmentsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -314,11 +314,11 @@ namespace OpenDental.MobileWeb {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    public delegate void SynchRecordsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    public delegate void SynchPatientsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    public delegate void DeleteRecordsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    public delegate void SynchAppointmentsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

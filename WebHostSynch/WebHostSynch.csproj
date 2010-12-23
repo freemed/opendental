@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="RegistrationKey.cs" />
     <Compile Include="RegistrationKeys.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Sheets.asmx.cs">
       <DependentUpon>Sheets.asmx</DependentUpon>
       <SubType>Component</SubType>
