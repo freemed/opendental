@@ -22,19 +22,7 @@ namespace OpenDentBusiness {
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			DisplayFieldC.Listt=new List<DisplayField>();
-			DisplayField field;
-			for(int i=0;i<table.Rows.Count;i++){
-				field = new DisplayField();
-				field.DisplayFieldNum = PIn.Long   (table.Rows[i][0].ToString());
-				field.InternalName    = PIn.String(table.Rows[i][1].ToString());
-				field.ItemOrder       = PIn.Int   (table.Rows[i][2].ToString());
-				field.Description     = PIn.String(table.Rows[i][3].ToString());
-				field.ColumnWidth     = PIn.Int   (table.Rows[i][4].ToString());
-				field.Category        = (DisplayFieldCategory)PIn.Long(table.Rows[i][5].ToString());
-				field.ChartViewNum	  = PIn.Long(table.Rows[i][6].ToString());
-				DisplayFieldC.Listt.Add(field);
-			}
+			DisplayFieldC.Listt=Crud.DisplayFieldCrud.TableToList(table);
 		}
 
 		///<summary></summary>

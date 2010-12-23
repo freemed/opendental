@@ -22,14 +22,7 @@ namespace OpenDentBusiness{
 
 		private static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			CovSpanC.List=new CovSpan[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				CovSpanC.List[i]=new CovSpan();
-				CovSpanC.List[i].CovSpanNum  = PIn.Long(table.Rows[i][0].ToString());
-				CovSpanC.List[i].CovCatNum   = PIn.Long(table.Rows[i][1].ToString());
-				CovSpanC.List[i].FromCode    = PIn.String(table.Rows[i][2].ToString());
-				CovSpanC.List[i].ToCode      = PIn.String(table.Rows[i][3].ToString());
-			}
+			CovSpanC.List=Crud.CovSpanCrud.TableToList(table).ToArray();
 		}
 
 		///<summary></summary>

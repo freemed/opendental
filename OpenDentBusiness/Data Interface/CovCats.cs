@@ -20,11 +20,21 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
+			CovCatC.Listt=Crud.CovCatCrud.TableToList(table);
+			CovCatC.ListShort=new List<CovCat>();
+			for(int i=0;i<CovCatC.Listt.Count;i++) {
+				if(!CovCatC.Listt[i].IsHidden) {
+					CovCatC.ListShort.Add(CovCatC.Listt[i]);
+				}
+			}
+			
+
+			
+			
+			
 			CovCat covcat;
 			CovCatC.Listt=new List<CovCat>();
-			CovCatC.ListShort=new List<CovCat>();
-			//listt = Crud.CovCatCrud.TableToList(table);
-			for(int i=0;i<table.Rows.Count;i++) {
+
 				covcat=new CovCat();
 				covcat.CovCatNum     =PIn.Long(table.Rows[i][0].ToString());
 				covcat.Description   =PIn.String(table.Rows[i][1].ToString());
@@ -33,10 +43,7 @@ namespace OpenDentBusiness {
 				covcat.IsHidden      =PIn.Bool(table.Rows[i][4].ToString());
 				covcat.EbenefitCat   =(EbenefitCategory)PIn.Long(table.Rows[i][5].ToString());
 				CovCatC.Listt.Add(covcat);
-				if(!covcat.IsHidden) {
-				//Short list crud
-					CovCatC.ListShort.Add(covcat);
-				}
+				
 			}
 		}
 
