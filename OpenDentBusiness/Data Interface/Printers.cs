@@ -23,15 +23,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			list=new Printer[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				list[i]=new Printer();
-				list[i].PrinterNum=PIn.Long(table.Rows[i][0].ToString());
-				list[i].ComputerNum=PIn.Long(table.Rows[i][1].ToString());
-				list[i].PrintSit=(PrintSituation)PIn.Long(table.Rows[i][2].ToString());
-				list[i].PrinterName=PIn.String(table.Rows[i][3].ToString());
-				list[i].DisplayPrompt=PIn.Bool(table.Rows[i][4].ToString());
-			}
+			list=Crud.PrinterCrud.TableToList(table).ToArray();
 		}
 
 		///<summary>Gets directly from database</summary>

@@ -35,15 +35,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new ProcButton[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new ProcButton();
-				List[i].ProcButtonNum=PIn.Long(table.Rows[i][0].ToString());
-				List[i].Description=PIn.String(table.Rows[i][1].ToString());
-				List[i].ItemOrder=PIn.Int(table.Rows[i][2].ToString());
-				List[i].Category=PIn.Long(table.Rows[i][3].ToString());
-				List[i].ButtonImage=PIn.Bitmap(table.Rows[i][4].ToString());
-			}
+			list=Crud.ProcButtonCrud.TableToList(table).ToArray();
 		}
 
 		///<summary>must have already checked procCode for nonduplicate.</summary>
