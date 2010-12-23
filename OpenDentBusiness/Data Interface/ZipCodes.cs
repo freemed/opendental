@@ -41,8 +41,7 @@ namespace OpenDentBusiness{
 
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command=
-			"SELECT * from zipcode ORDER BY zipcodedigits";
+			string command="SELECT * from zipcode ORDER BY zipcodedigits";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ZipCode";
 			FillCache(table);
@@ -52,15 +51,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
+			list=Crud.ZipCodeCrud.TableToList(table).ToArray();
 			aLFrequent=new ArrayList();
-			list=new ZipCode[table.Rows.Count];
 			for(int i=0;i<list.Length;i++) {
-				list[i]=new ZipCode();
-				list[i].ZipCodeNum=PIn.Long(table.Rows[i][0].ToString());
-				list[i].ZipCodeDigits=PIn.String(table.Rows[i][1].ToString());
-				list[i].City=PIn.String(table.Rows[i][2].ToString());
-				list[i].State=PIn.String(table.Rows[i][3].ToString());
-				list[i].IsFrequent=PIn.Bool(table.Rows[i][4].ToString());
 				if(list[i].IsFrequent) {
 					aLFrequent.Add(list[i]);
 				}

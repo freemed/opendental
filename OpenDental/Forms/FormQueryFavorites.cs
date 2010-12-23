@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -22,6 +23,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private OpenDental.UI.Button butEdit;
 		public UserQuery UserQueryCur;
+		private List<UserQuery> QueryList;
 
 		///<summary></summary>
 		public FormQueryFavorites() {
@@ -238,11 +240,11 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			UserQueries.Refresh();
+			QueryList=UserQueries.Refresh();
 			int tempIndex=list2.SelectedIndex;
 			list2.Items.Clear();
-			for(int i=0;i<UserQueries.List.Length;i++){
-				this.list2.Items.Add(UserQueries.List[i].Description);
+			for(int i=0;i<QueryList.Count;i++) {
+				this.list2.Items.Add(QueryList[i].Description);
 			}
 			list2.SelectedIndex=tempIndex;
 		}
@@ -251,7 +253,7 @@ namespace OpenDental{
 			if(list2.IndexFromPoint(e.X,e.Y)<0){//>list2.Items.Count){
 				return;
 			}
-			UserQueryCur=UserQueries.List[list2.IndexFromPoint(e.X,e.Y)];
+			UserQueryCur=QueryList[list2.IndexFromPoint(e.X,e.Y)];
 			textQuery.Text=UserQueryCur.QueryText;
 			textTitle.Text=UserQueryCur.Description;
 			textFileName.Text=UserQueryCur.FileName;
