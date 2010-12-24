@@ -27,17 +27,6 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/*
-		///<summary>Use when there is a GROUP BY clause in the query. Uses HAVING RowNum... for Oracle. Needs testing. May need to use subquery instead (like with ORDER BY).</summary>
-		public static string LimitHaving(int n) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "HAVING RowNum <= " + n;
-			}
-			else {
-				return "LIMIT " + n;
-			}
-		}*/
-
 		///<summary>Use when there is an ORDER BY clause in the query. Uses RowNum... for Oracle.</summary>
 		public static string LimitOrderBy(string query,int n) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
@@ -71,6 +60,16 @@ namespace OpenDentBusiness {
 				}
 				result+=")";
 				return result;
+			}
+		}
+
+		///<summary>Specify column for equivalent of "GROUP_CONCAT(column)" in MySQL.</summary>
+		public static string GroupConcat(string column) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+") ORDER BY "+column+"),'<x>'),'</x>',','))";//Tested, works on our Oracle database in SQL Developer.
+			}
+			else {
+				return "GROUP_CONCAT("+column+")";
 			}
 		}
 
