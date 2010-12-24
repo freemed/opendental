@@ -1127,7 +1127,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("ops");
 			table.Columns.Add("EmployeeNum");
 			string columns="schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum";
-			string command="SELECT "+columns+",GROUP_CONCAT(scheduleop.OperatoryNum) _ops "
+			string command="SELECT "+columns+","+DbHelper.GroupConcat("scheduleop.OperatoryNum")+" _ops "
 				+"FROM schedule "
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "

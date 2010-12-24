@@ -65,14 +65,38 @@ namespace OpenDentBusiness {
 
 		///<summary>Specify column for equivalent of "GROUP_CONCAT(column)" in MySQL.</summary>
 		public static string GroupConcat(string column) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+") ORDER BY "+column+"),'<x>'),'</x>',','))";//Tested, works on our Oracle database in SQL Developer.
-			}
-			else {
-				return "GROUP_CONCAT("+column+")";
-			}
+			return GroupConcat(column,false);
 		}
 
+		///<summary>Specify column for equivalent of "GROUP_CONCAT(column)" in MySQL. Adds DISTINCT in MySQL if specified.</summary>
+		public static string GroupConcat(string column,bool distinct) {
+			return GroupConcat(column,distinct,false);
+		}
 
+		///<summary>Specify column for equivalent of "GROUP_CONCAT(column)" in MySQL. Adds DISTINCT (MySQL only) and ORDERBY as specified.</summary>
+		public static string GroupConcat(string column,bool distinct,bool orderby) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				if(orderby) {
+					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+") ORDER BY "+column+"),'<x>'),'</x>',','))";
+				}
+				else {
+					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+")),'<x>'),'</x>',','))";
+				}//Distinct ignored for Oracle case.
+			}
+			else {
+				if(distinct && orderby) {
+					return "GROUP_CONCAT(DISTINCT "+column+" ORDER BY "+column+")";
+				}
+				if(distinct &&  !orderby) {
+					return "GROUP_CONCAT(DISTINCT "+column+")";
+				}
+				if(!distinct && orderby) {
+					return "GROUP_CONCAT("+column+" ORDER BY "+column+")";
+				}
+				else {
+					return "GROUP_CONCAT("+column+")";
+				}
+			}
+		}
 	}
 }

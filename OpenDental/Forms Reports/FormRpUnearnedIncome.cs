@@ -166,12 +166,7 @@ namespace OpenDental{
 			}
 			else {
 				report.Query="SELECT "+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+",";
-				if(DataConnection.DBtype==DatabaseType.Oracle){
-					report.Query+="ItemName,";//untested
-				}
-				else{
-					report.Query+="GROUP_CONCAT(DISTINCT ItemName),";
-				}
+				report.Query+=DbHelper.GroupConcat("ItemName",true);
 				report.Query+="SUM(SplitAmt) Amount "
 					+"FROM paysplit,patient,definition "
 					+"WHERE paysplit.PatNum=patient.PatNum "

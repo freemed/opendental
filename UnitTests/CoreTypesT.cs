@@ -164,7 +164,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			command="INSERT INTO tempgroupconcat VALUES ('name2')";
 			DataCore.NonQ(command);
-			command="SELECT GROUP_CONCAT(_name) allnames FROM tempgroupconcat";
+			command="SELECT "+DbHelper.GroupConcat("_name")+" allnames FROM tempgroupconcat";
 			table=DataCore.GetTable(command);
 			string allnames=PIn.ByteArray(table.Rows[0]["allnames"].ToString());
 			if(allnames!="name1,name2") {
@@ -307,7 +307,8 @@ namespace UnitTests {
 			retVal+="Double: Passed.\r\n";
 			/*
 			//group_concat------------------------------------------------------------------------------------
-			//Oracle does not have something that acts like GROUP_CONCAT might look into later.
+			//Oracle does not have something that acts like GROUP_CONCAT might look into later. 
+			//(Michael) Use RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement("x",column_name)),'<x>'),'</x>',',')) instead of GROUP_CONCAT(column_name) for Oracle.
 			command="INSERT INTO tempgroupconcat VALUES ('name1')";
 			DataCore.NonQ(command);
 			command="INSERT INTO tempgroupconcat VALUES ('name2')";

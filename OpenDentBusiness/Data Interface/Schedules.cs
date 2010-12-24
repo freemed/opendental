@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 			//In this case, the ops column is filled with a comma separated list of
 			//operatories for the corresponding schedule record.
 			command="SELECT s.*,"+
-				"IFNULL(CAST((SELECT GROUP_CONCAT(so.OperatoryNum) "+
+				"IFNULL(CAST((SELECT "+DbHelper.GroupConcat("so.OperatoryNum")+
 					"FROM scheduleop so "+
 					"WHERE so.ScheduleNum=s.ScheduleNum "+
 					"GROUP BY so.ScheduleNum) AS CHAR(4000)),'') ops "+
@@ -649,7 +649,7 @@ namespace OpenDentBusiness{
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
 			string command=@"SELECT COUNT(*) countDups,SchedDate,schedule.ScheduleNum,
-				(SELECT GROUP_CONCAT(so1.OperatoryNum ORDER BY so1.OperatoryNum) FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops				
+				(SELECT "+DbHelper.GroupConcat("so1.OperatoryNum",false,true)+@" FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops				
 				FROM schedule
 				WHERE SchedType=2
 				GROUP BY SchedDate,ops,StartTime,StopTime
@@ -673,7 +673,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command=@"CREATE TABLE tempBlockoutOps
 				SELECT ScheduleNum,
-				(SELECT GROUP_CONCAT(so1.OperatoryNum ORDER BY so1.OperatoryNum) FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops
+				(SELECT "+DbHelper.GroupConcat("so1.OperatoryNum",false,true)+@" FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops
 				FROM schedule
 				WHERE SchedType=2
 				GROUP BY ScheduleNum";

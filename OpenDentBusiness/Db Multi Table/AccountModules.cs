@@ -755,7 +755,7 @@ namespace OpenDentBusiness {
 			DataTable rawPay;
 			command="SELECT CheckNum,paysplit.ClinicNum,DatePay,paysplit.PatNum,payment.PatNum patNumPayment_,PayAmt,"
 				+"paysplit.PayNum,PayPlanNum,"
-				+"PayType,ProcDate,GROUP_CONCAT(ProcNum) ProcNums_, "
+				+"PayType,ProcDate,"+DbHelper.GroupConcat("ProcNum")+" ProcNums_, "
 				+"ProvNum,SUM(SplitAmt) splitAmt_,payment.PayNote,paysplit.UnearnedType "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
@@ -842,7 +842,7 @@ namespace OpenDentBusiness {
 			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,claim.ClinicNum,DateReceived,DateService,"
 				+"claim.DedApplied,claim.InsPayEst,"
 				+"claim.InsPayAmt,claim.PatNum,SUM(ProcFee) procAmt_,"
-				+"GROUP_CONCAT(claimproc.ProcNum) ProcNums_,ProvTreat,"
+				+DbHelper.GroupConcat("claimproc.ProcNum")+" ProcNums_,ProvTreat,"
 				+"claim.ReasonUnderPaid,claim.WriteOff "
 				+"FROM claim "
 				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
