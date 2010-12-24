@@ -1132,17 +1132,16 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
 				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
-				+"GROUP BY "+columns+" "
+				+"GROUP BY "+columns+" "//schedule.ScheduleNum
 				+"ORDER BY StartTime";
 			DataTable raw=Db.GetTable(command);
-			//the times come back as times rather than datetimes.  This causes problems.  That's why we're not just returning raw.
 			DataRow row;
 			for(int i=0;i<raw.Rows.Count;i++){
 				row=table.NewRow();
 				row["ScheduleNum"]=raw.Rows[i]["ScheduleNum"].ToString();
 				row["SchedDate"]=POut.Date(PIn.Date(raw.Rows[i]["SchedDate"].ToString()),false);
-				row["StartTime"]=POut.DateT(PIn.DateT(raw.Rows[i]["StartTime"].ToString()),false);
-				row["StopTime"]=POut.DateT(PIn.DateT(raw.Rows[i]["StopTime"].ToString()),false);
+				row["StartTime"]=POut.TimeSpan(PIn.TimeSpan(raw.Rows[i]["StartTime"].ToString()),false);
+				row["StopTime"]=POut.TimeSpan(PIn.TimeSpan(raw.Rows[i]["StopTime"].ToString()),false);
 				row["SchedType"]=raw.Rows[i]["SchedType"].ToString();
 				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
 				row["BlockoutType"]=raw.Rows[i]["BlockoutType"].ToString();
