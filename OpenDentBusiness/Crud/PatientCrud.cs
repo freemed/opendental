@@ -197,8 +197,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)patient.PreferConfirmMethod)+","
 				+    POut.Int   ((int)patient.PreferContactMethod)+","
 				+    POut.Int   ((int)patient.PreferRecallMethod)+","
-				+    POut.TimeSpan(patient.SchedBeforeTime)+","
-				+    POut.TimeSpan(patient.SchedAfterTime)+","
+				+    POut.Time  (patient.SchedBeforeTime)+","
+				+    POut.Time  (patient.SchedAfterTime)+","
 				+    POut.Byte  (patient.SchedDayOfWeek)+","
 				+"'"+POut.String(patient.Language)+"',"
 				+    POut.Date  (patient.AdmitDate)+","
@@ -278,8 +278,8 @@ namespace OpenDentBusiness.Crud{
 				+"PreferConfirmMethod    =  "+POut.Int   ((int)patient.PreferConfirmMethod)+", "
 				+"PreferContactMethod    =  "+POut.Int   ((int)patient.PreferContactMethod)+", "
 				+"PreferRecallMethod     =  "+POut.Int   ((int)patient.PreferRecallMethod)+", "
-				+"SchedBeforeTime        =  "+POut.TimeSpan(patient.SchedBeforeTime)+", "
-				+"SchedAfterTime         =  "+POut.TimeSpan(patient.SchedAfterTime)+", "
+				+"SchedBeforeTime        =  "+POut.Time  (patient.SchedBeforeTime)+", "
+				+"SchedAfterTime         =  "+POut.Time  (patient.SchedAfterTime)+", "
 				+"SchedDayOfWeek         =  "+POut.Byte  (patient.SchedDayOfWeek)+", "
 				+"Language               = '"+POut.String(patient.Language)+"', "
 				+"AdmitDate              =  "+POut.Date  (patient.AdmitDate)+", "
@@ -527,11 +527,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(patient.SchedBeforeTime != oldPatient.SchedBeforeTime) {
 				if(command!=""){ command+=",";}
-				command+="SchedBeforeTime = "+POut.TimeSpan(patient.SchedBeforeTime)+"";
+				command+="SchedBeforeTime = "+POut.Time  (patient.SchedBeforeTime)+"";
 			}
 			if(patient.SchedAfterTime != oldPatient.SchedAfterTime) {
 				if(command!=""){ command+=",";}
-				command+="SchedAfterTime = "+POut.TimeSpan(patient.SchedAfterTime)+"";
+				command+="SchedAfterTime = "+POut.Time  (patient.SchedAfterTime)+"";
 			}
 			if(patient.SchedDayOfWeek != oldPatient.SchedDayOfWeek) {
 				if(command!=""){ command+=",";}

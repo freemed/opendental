@@ -2708,8 +2708,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					regSpan=TimeSpan.FromHours(regDouble);
 					oTimeSpan=TimeSpan.FromHours(oTimeDouble);
 					command="UPDATE timeadjust "
-						+"SET RegHours="+POut.TimeSpan(regSpan)+", "
-						+"OTimeHours="+POut.TimeSpan(oTimeSpan)+" "
+						+"SET RegHours='"+POut.TSpan(regSpan)+"', "
+						+"OTimeHours='"+POut.TSpan(oTimeSpan)+"' "
 						+"WHERE TimeAdjustNum="+POut.Long(timeAdjustNum);
 					Db.NonQ(command);
 				}

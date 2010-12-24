@@ -83,8 +83,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (apptView.ItemOrder)+","
 				+    POut.Byte  (apptView.RowsPerIncr)+","
 				+    POut.Bool  (apptView.OnlyScheduledProvs)+","
-				+    POut.TimeSpan(apptView.OnlySchedBeforeTime)+","
-				+    POut.TimeSpan(apptView.OnlySchedAfterTime)+","
+				+    POut.Time  (apptView.OnlySchedBeforeTime)+","
+				+    POut.Time  (apptView.OnlySchedAfterTime)+","
 				+    POut.Int   ((int)apptView.StackBehavUR)+","
 				+    POut.Int   ((int)apptView.StackBehavLR)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -103,8 +103,8 @@ namespace OpenDentBusiness.Crud{
 				+"ItemOrder          =  "+POut.Int   (apptView.ItemOrder)+", "
 				+"RowsPerIncr        =  "+POut.Byte  (apptView.RowsPerIncr)+", "
 				+"OnlyScheduledProvs =  "+POut.Bool  (apptView.OnlyScheduledProvs)+", "
-				+"OnlySchedBeforeTime=  "+POut.TimeSpan(apptView.OnlySchedBeforeTime)+", "
-				+"OnlySchedAfterTime =  "+POut.TimeSpan(apptView.OnlySchedAfterTime)+", "
+				+"OnlySchedBeforeTime=  "+POut.Time  (apptView.OnlySchedBeforeTime)+", "
+				+"OnlySchedAfterTime =  "+POut.Time  (apptView.OnlySchedAfterTime)+", "
 				+"StackBehavUR       =  "+POut.Int   ((int)apptView.StackBehavUR)+", "
 				+"StackBehavLR       =  "+POut.Int   ((int)apptView.StackBehavLR)+" "
 				+"WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum)+" LIMIT 1";
@@ -132,11 +132,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(apptView.OnlySchedBeforeTime != oldApptView.OnlySchedBeforeTime) {
 				if(command!=""){ command+=",";}
-				command+="OnlySchedBeforeTime = "+POut.TimeSpan(apptView.OnlySchedBeforeTime)+"";
+				command+="OnlySchedBeforeTime = "+POut.Time  (apptView.OnlySchedBeforeTime)+"";
 			}
 			if(apptView.OnlySchedAfterTime != oldApptView.OnlySchedAfterTime) {
 				if(command!=""){ command+=",";}
-				command+="OnlySchedAfterTime = "+POut.TimeSpan(apptView.OnlySchedAfterTime)+"";
+				command+="OnlySchedAfterTime = "+POut.Time  (apptView.OnlySchedAfterTime)+"";
 			}
 			if(apptView.StackBehavUR != oldApptView.StackBehavUR) {
 				if(command!=""){ command+=",";}

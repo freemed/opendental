@@ -393,6 +393,9 @@ using System.Drawing;"+rn);
 				else if(specialType==CrudSpecialColType.EnumAsString) {
 					strb.Append("    POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
 				}
+				else if(specialType==CrudSpecialColType.TimeSpanNeg) {
+					strb.Append("\"'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("    POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
@@ -433,7 +436,7 @@ using System.Drawing;"+rn);
 						strb.Append("\"'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
 						break;
 					case "TimeSpan":
-						strb.Append("    POut.TimeSpan("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						strb.Append("    POut.Time  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 				}
 				if(f==fieldsExceptPri.Count-2
@@ -504,6 +507,9 @@ using System.Drawing;"+rn);
 				else if(specialType==CrudSpecialColType.EnumAsString) {
 					strb.Append(" \"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
 				}
+				else if(specialType==CrudSpecialColType.TimeSpanNeg) {
+					strb.Append("'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append(" \"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
@@ -544,7 +550,7 @@ using System.Drawing;"+rn);
 						strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
 						break;
 					case "TimeSpan":
-						strb.Append(" \"+POut.TimeSpan("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+						strb.Append(" \"+POut.Time  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 						break;
 				}
 				if(f==fieldsExceptPri.Count-2
@@ -609,6 +615,9 @@ using System.Drawing;"+rn);
 					else if(specialType==CrudSpecialColType.EnumAsString) {
 						strb.Append("\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
 					}
+					else if(specialType==CrudSpecialColType.TimeSpanNeg) {
+						strb.Append("'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+					}
 					else if(fieldsExceptPri[f].FieldType.IsEnum) {
 						strb.Append("\"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 					}
@@ -649,7 +658,7 @@ using System.Drawing;"+rn);
 								strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
 								break;
 							case "TimeSpan":
-								strb.Append("\"+POut.TimeSpan("+obj+"."+fieldsExceptPri[f].Name+")+\"");
+								strb.Append("\"+POut.Time  ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 								break;
 						}
 					strb.Append("\";");

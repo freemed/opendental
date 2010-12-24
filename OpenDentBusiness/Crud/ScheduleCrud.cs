@@ -81,8 +81,8 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				     POut.Date  (schedule.SchedDate)+","
-				+    POut.TimeSpan(schedule.StartTime)+","
-				+    POut.TimeSpan(schedule.StopTime)+","
+				+    POut.Time  (schedule.StartTime)+","
+				+    POut.Time  (schedule.StopTime)+","
 				+    POut.Int   ((int)schedule.SchedType)+","
 				+    POut.Long  (schedule.ProvNum)+","
 				+    POut.Long  (schedule.BlockoutType)+","
@@ -102,8 +102,8 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(Schedule schedule){
 			string command="UPDATE schedule SET "
 				+"SchedDate   =  "+POut.Date  (schedule.SchedDate)+", "
-				+"StartTime   =  "+POut.TimeSpan(schedule.StartTime)+", "
-				+"StopTime    =  "+POut.TimeSpan(schedule.StopTime)+", "
+				+"StartTime   =  "+POut.Time  (schedule.StartTime)+", "
+				+"StopTime    =  "+POut.Time  (schedule.StopTime)+", "
 				+"SchedType   =  "+POut.Int   ((int)schedule.SchedType)+", "
 				+"ProvNum     =  "+POut.Long  (schedule.ProvNum)+", "
 				+"BlockoutType=  "+POut.Long  (schedule.BlockoutType)+", "
@@ -123,11 +123,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(schedule.StartTime != oldSchedule.StartTime) {
 				if(command!=""){ command+=",";}
-				command+="StartTime = "+POut.TimeSpan(schedule.StartTime)+"";
+				command+="StartTime = "+POut.Time  (schedule.StartTime)+"";
 			}
 			if(schedule.StopTime != oldSchedule.StopTime) {
 				if(command!=""){ command+=",";}
-				command+="StopTime = "+POut.TimeSpan(schedule.StopTime)+"";
+				command+="StopTime = "+POut.Time  (schedule.StopTime)+"";
 			}
 			if(schedule.SchedType != oldSchedule.SchedType) {
 				if(command!=""){ command+=",";}

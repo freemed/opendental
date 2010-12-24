@@ -90,10 +90,10 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(clockEvent.Note)+"',"
 				+    POut.DateT (clockEvent.TimeEntered2)+","
 				+    POut.DateT (clockEvent.TimeDisplayed2)+","
-				+    POut.TimeSpan(clockEvent.OTimeHours)+","
-				+    POut.TimeSpan(clockEvent.OTimeAuto)+","
-				+    POut.TimeSpan(clockEvent.Adjust)+","
-				+    POut.TimeSpan(clockEvent.AdjustAuto)+","
+				+"'"+POut.TSpan (clockEvent.OTimeHours)+"',"
+				+"'"+POut.TSpan (clockEvent.OTimeAuto)+"',"
+				+"'"+POut.TSpan (clockEvent.Adjust)+"',"
+				+"'"+POut.TSpan (clockEvent.AdjustAuto)+"',"
 				+    POut.Bool  (clockEvent.AdjustIsOverridden)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -114,10 +114,10 @@ namespace OpenDentBusiness.Crud{
 				+"Note              = '"+POut.String(clockEvent.Note)+"', "
 				+"TimeEntered2      =  "+POut.DateT (clockEvent.TimeEntered2)+", "
 				+"TimeDisplayed2    =  "+POut.DateT (clockEvent.TimeDisplayed2)+", "
-				+"OTimeHours        =  "+POut.TimeSpan(clockEvent.OTimeHours)+", "
-				+"OTimeAuto         =  "+POut.TimeSpan(clockEvent.OTimeAuto)+", "
-				+"Adjust            =  "+POut.TimeSpan(clockEvent.Adjust)+", "
-				+"AdjustAuto        =  "+POut.TimeSpan(clockEvent.AdjustAuto)+", "
+				+"OTimeHours        = '"+POut.TSpan (clockEvent.OTimeHours)+"', "
+				+"OTimeAuto         = '"+POut.TSpan (clockEvent.OTimeAuto)+"', "
+				+"Adjust            = '"+POut.TSpan (clockEvent.Adjust)+"', "
+				+"AdjustAuto        = '"+POut.TSpan (clockEvent.AdjustAuto)+"', "
 				+"AdjustIsOverridden=  "+POut.Bool  (clockEvent.AdjustIsOverridden)+" "
 				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum)+" LIMIT 1";
 			Db.NonQ(command);
@@ -153,19 +153,19 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(clockEvent.OTimeHours != oldClockEvent.OTimeHours) {
 				if(command!=""){ command+=",";}
-				command+="OTimeHours = "+POut.TimeSpan(clockEvent.OTimeHours)+"";
+				command+="OTimeHours = '"+POut.TSpan (clockEvent.OTimeHours)+"'";
 			}
 			if(clockEvent.OTimeAuto != oldClockEvent.OTimeAuto) {
 				if(command!=""){ command+=",";}
-				command+="OTimeAuto = "+POut.TimeSpan(clockEvent.OTimeAuto)+"";
+				command+="OTimeAuto = '"+POut.TSpan (clockEvent.OTimeAuto)+"'";
 			}
 			if(clockEvent.Adjust != oldClockEvent.Adjust) {
 				if(command!=""){ command+=",";}
-				command+="Adjust = "+POut.TimeSpan(clockEvent.Adjust)+"";
+				command+="Adjust = '"+POut.TSpan (clockEvent.Adjust)+"'";
 			}
 			if(clockEvent.AdjustAuto != oldClockEvent.AdjustAuto) {
 				if(command!=""){ command+=",";}
-				command+="AdjustAuto = "+POut.TimeSpan(clockEvent.AdjustAuto)+"";
+				command+="AdjustAuto = '"+POut.TSpan (clockEvent.AdjustAuto)+"'";
 			}
 			if(clockEvent.AdjustIsOverridden != oldClockEvent.AdjustIsOverridden) {
 				if(command!=""){ command+=",";}

@@ -79,8 +79,8 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				     POut.Long  (timeAdjust.EmployeeNum)+","
 				+    POut.DateT (timeAdjust.TimeEntry)+","
-				+    POut.TimeSpan(timeAdjust.RegHours)+","
-				+    POut.TimeSpan(timeAdjust.OTimeHours)+","
+				+"'"+POut.TSpan (timeAdjust.RegHours)+"',"
+				+"'"+POut.TSpan (timeAdjust.OTimeHours)+"',"
 				+"'"+POut.String(timeAdjust.Note)+"',"
 				+    POut.Bool  (timeAdjust.IsAuto)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -97,8 +97,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE timeadjust SET "
 				+"EmployeeNum  =  "+POut.Long  (timeAdjust.EmployeeNum)+", "
 				+"TimeEntry    =  "+POut.DateT (timeAdjust.TimeEntry)+", "
-				+"RegHours     =  "+POut.TimeSpan(timeAdjust.RegHours)+", "
-				+"OTimeHours   =  "+POut.TimeSpan(timeAdjust.OTimeHours)+", "
+				+"RegHours     = '"+POut.TSpan (timeAdjust.RegHours)+"', "
+				+"OTimeHours   = '"+POut.TSpan (timeAdjust.OTimeHours)+"', "
 				+"Note         = '"+POut.String(timeAdjust.Note)+"', "
 				+"IsAuto       =  "+POut.Bool  (timeAdjust.IsAuto)+" "
 				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjust.TimeAdjustNum)+" LIMIT 1";
@@ -118,11 +118,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(timeAdjust.RegHours != oldTimeAdjust.RegHours) {
 				if(command!=""){ command+=",";}
-				command+="RegHours = "+POut.TimeSpan(timeAdjust.RegHours)+"";
+				command+="RegHours = '"+POut.TSpan (timeAdjust.RegHours)+"'";
 			}
 			if(timeAdjust.OTimeHours != oldTimeAdjust.OTimeHours) {
 				if(command!=""){ command+=",";}
-				command+="OTimeHours = "+POut.TimeSpan(timeAdjust.OTimeHours)+"";
+				command+="OTimeHours = '"+POut.TSpan (timeAdjust.OTimeHours)+"'";
 			}
 			if(timeAdjust.Note != oldTimeAdjust.Note) {
 				if(command!=""){ command+=",";}

@@ -26,10 +26,10 @@ namespace OpenDentBusiness {
 					table.Rows[i]["Title"]="";//handles null
 				}
 				if(table.Rows[i]["SchedBeforeTime"].ToString()==""){
-					table.Rows[i]["SchedBeforeTime"]=POut.TimeSpan(TimeSpan.Zero,false);
+					table.Rows[i]["SchedBeforeTime"]=POut.Time(TimeSpan.Zero,false);
 				}
 				if(table.Rows[i]["SchedAfterTime"].ToString()==""){
-					table.Rows[i]["SchedAfterTime"]=POut.TimeSpan(TimeSpan.Zero,false);
+					table.Rows[i]["SchedAfterTime"]=POut.Time(TimeSpan.Zero,false);
 				}
 			}
 			Family fam=new Family();

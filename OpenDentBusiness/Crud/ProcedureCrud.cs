@@ -154,8 +154,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (procedure.SiteNum)+","
 				+    POut.Bool  (procedure.HideGraphics)+","
 				+"'"+POut.String(procedure.CanadianTypeCodes)+"',"
-				+    POut.TimeSpan(procedure.ProcTime)+","
-				+    POut.TimeSpan(procedure.ProcTimeEnd)+")";
+				+    POut.Time  (procedure.ProcTime)+","
+				+    POut.Time  (procedure.ProcTimeEnd)+")";
 				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -209,8 +209,8 @@ namespace OpenDentBusiness.Crud{
 				+"SiteNum           =  "+POut.Long  (procedure.SiteNum)+", "
 				+"HideGraphics      =  "+POut.Bool  (procedure.HideGraphics)+", "
 				+"CanadianTypeCodes = '"+POut.String(procedure.CanadianTypeCodes)+"', "
-				+"ProcTime          =  "+POut.TimeSpan(procedure.ProcTime)+", "
-				+"ProcTimeEnd       =  "+POut.TimeSpan(procedure.ProcTimeEnd)+" "
+				+"ProcTime          =  "+POut.Time  (procedure.ProcTime)+", "
+				+"ProcTimeEnd       =  "+POut.Time  (procedure.ProcTimeEnd)+" "
 				//DateTStamp can only be set by MySQL
 				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum)+" LIMIT 1";
 			Db.NonQ(command);
@@ -381,11 +381,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(procedure.ProcTime != oldProcedure.ProcTime) {
 				if(command!=""){ command+=",";}
-				command+="ProcTime = "+POut.TimeSpan(procedure.ProcTime)+"";
+				command+="ProcTime = "+POut.Time  (procedure.ProcTime)+"";
 			}
 			if(procedure.ProcTimeEnd != oldProcedure.ProcTimeEnd) {
 				if(command!=""){ command+=",";}
-				command+="ProcTimeEnd = "+POut.TimeSpan(procedure.ProcTimeEnd)+"";
+				command+="ProcTimeEnd = "+POut.Time  (procedure.ProcTimeEnd)+"";
 			}
 			//DateTStamp can only be set by MySQL
 			if(command==""){

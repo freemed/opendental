@@ -1140,8 +1140,8 @@ namespace OpenDentBusiness{
 				row=table.NewRow();
 				row["ScheduleNum"]=raw.Rows[i]["ScheduleNum"].ToString();
 				row["SchedDate"]=POut.Date(PIn.Date(raw.Rows[i]["SchedDate"].ToString()),false);
-				row["StartTime"]=POut.TimeSpan(PIn.TimeSpan(raw.Rows[i]["StartTime"].ToString()),false);
-				row["StopTime"]=POut.TimeSpan(PIn.TimeSpan(raw.Rows[i]["StopTime"].ToString()),false);
+				row["StartTime"]=POut.Time(PIn.TimeSpan(raw.Rows[i]["StartTime"].ToString()),false);
+				row["StopTime"]=POut.Time(PIn.TimeSpan(raw.Rows[i]["StopTime"].ToString()),false);
 				row["SchedType"]=raw.Rows[i]["SchedType"].ToString();
 				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
 				row["BlockoutType"]=raw.Rows[i]["BlockoutType"].ToString();

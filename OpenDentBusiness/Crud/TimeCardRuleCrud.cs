@@ -75,8 +75,8 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				     POut.Long  (timeCardRule.EmployeeNum)+","
-				+    POut.TimeSpan(timeCardRule.OverHoursPerDay)+","
-				+    POut.TimeSpan(timeCardRule.AfterTimeOfDay)+")";
+				+    POut.Time  (timeCardRule.OverHoursPerDay)+","
+				+    POut.Time  (timeCardRule.AfterTimeOfDay)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -90,8 +90,8 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(TimeCardRule timeCardRule){
 			string command="UPDATE timecardrule SET "
 				+"EmployeeNum    =  "+POut.Long  (timeCardRule.EmployeeNum)+", "
-				+"OverHoursPerDay=  "+POut.TimeSpan(timeCardRule.OverHoursPerDay)+", "
-				+"AfterTimeOfDay =  "+POut.TimeSpan(timeCardRule.AfterTimeOfDay)+" "
+				+"OverHoursPerDay=  "+POut.Time  (timeCardRule.OverHoursPerDay)+", "
+				+"AfterTimeOfDay =  "+POut.Time  (timeCardRule.AfterTimeOfDay)+" "
 				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRule.TimeCardRuleNum)+" LIMIT 1";
 			Db.NonQ(command);
 		}
@@ -105,11 +105,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(timeCardRule.OverHoursPerDay != oldTimeCardRule.OverHoursPerDay) {
 				if(command!=""){ command+=",";}
-				command+="OverHoursPerDay = "+POut.TimeSpan(timeCardRule.OverHoursPerDay)+"";
+				command+="OverHoursPerDay = "+POut.Time  (timeCardRule.OverHoursPerDay)+"";
 			}
 			if(timeCardRule.AfterTimeOfDay != oldTimeCardRule.AfterTimeOfDay) {
 				if(command!=""){ command+=",";}
-				command+="AfterTimeOfDay = "+POut.TimeSpan(timeCardRule.AfterTimeOfDay)+"";
+				command+="AfterTimeOfDay = "+POut.Time  (timeCardRule.AfterTimeOfDay)+"";
 			}
 			if(command==""){
 				return;

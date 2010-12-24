@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 				return outDate;
 			}
 			catch{
-				return "";//this saves zero's to the database
+				return "";//this saves zero's to a mysql database
 			}
 		}
 
@@ -89,36 +89,45 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static string TimeSpan(System.TimeSpan myTimeSpan) {
-			return POut.TimeSpan(myTimeSpan,true);
+		///<summary>Timespans that might be invalid time of day.  Can be + or - and can be up to 800+ hours.  Stored in Oracle as varchar2.  Never encapsulates</summary>
+		public static string TSpan(TimeSpan myTimeSpan) {
+			if(myTimeSpan==System.TimeSpan.Zero) {
+				return "00:00:00"; ;
+			}
+			try {
+				string retval="";
+				if(myTimeSpan < System.TimeSpan.Zero) {
+					retval+="-";
+					myTimeSpan=myTimeSpan.Duration();
+				}
+				int hours=(myTimeSpan.Days*24)+myTimeSpan.Hours;
+				retval+=hours.ToString().PadLeft(2,'0')+":"+myTimeSpan.Minutes.ToString().PadLeft(2,'0')+":"+myTimeSpan.Seconds.ToString().PadLeft(2,'0');
+				return retval;
+			} 
+			catch {
+				return "00:00:00";
+			}
 		}
 
-		public static string TimeSpan(System.TimeSpan myTimeSpan,bool encapsulate) {
-			//In mysql, time can be + or - and can be up to 800+ hours.  Not sure about Oracle.
-			string retval="00:00:00";
-			if(myTimeSpan!=System.TimeSpan.Zero) {
-				try {
-					retval="";
-					if(myTimeSpan < System.TimeSpan.Zero) {
-						retval+="-";
-						myTimeSpan=myTimeSpan.Duration();
-					}
-					int hours=(myTimeSpan.Days*24)+myTimeSpan.Hours;
-					retval+=hours.ToString()+":"+myTimeSpan.Minutes.ToString().PadLeft(2,'0')+":"+myTimeSpan.Seconds.ToString().PadLeft(2,'0');
-				} 
-				catch {
-					//Do nothing. This will return the time zero.
+		///<summary>Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.  Encapsulated by default.</summary>
+		public static string Time(TimeSpan myTimeSpan) {
+			return POut.Time(myTimeSpan,true);
+		}
+
+		///<summary>Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.  Encapsulated by default.</summary>
+		public static string Time(TimeSpan myTimeSpan,bool encapsulate) {
+			string retval=myTimeSpan.Hours.ToString().PadLeft(2,'0')+":"+myTimeSpan.Minutes.ToString().PadLeft(2,'0')+":"+myTimeSpan.Seconds.ToString().PadLeft(2,'0');
+			if(encapsulate) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					return "'"+retval+"'";
+				}
+				else {//Oracle
+					return "TO_TIMESTAMP('"+retval+"','HH24:MI:SS')";
 				}
 			}
-			//if(DataConnection.DBtype==DatabaseType.MySql) {
-				if(encapsulate) {
-					retval="'"+retval+"'";
-				}
-			//} 
-			//else {//oracle
-			//	retval="TO_TIMESTAMP('"+retval+"','HH24:MI:SS')";
-			//}
-			return retval;
+			else {
+				return retval;
+			}
 		}
 
 		///<summary></summary>

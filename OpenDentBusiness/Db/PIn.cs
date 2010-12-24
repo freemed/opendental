@@ -170,6 +170,7 @@ namespace OpenDentBusiness{
 			return myString;
 		}
 
+		///<summary>Used for both kinds of TimeSpans, both time of day and timespans that can be neg or invalid.</summary>
 		public static TimeSpan TimeSpan(string myString) {
 			if (string.IsNullOrEmpty(myString)) {
 				return System.TimeSpan.MinValue;
