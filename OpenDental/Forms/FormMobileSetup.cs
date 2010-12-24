@@ -32,7 +32,6 @@ namespace OpenDental {
 		}
 
 		private void InitializeVariables() {
-			
 			RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 			MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
 			MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
@@ -40,7 +39,7 @@ namespace OpenDental {
 			MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
 		}
 
-		public void SynchPatientRecordsOnMobileWeb(DateTime GetChangedSince) {
+		public void Synch(DateTime GetChangedSince) {
 			try {
 				#if DEBUG
 					IgnoreCertificateErrors();// used with faulty certificates only while debugging.
@@ -49,10 +48,18 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
+				CreatePatients(100);
+				CreateAppointments(50); // for each patient
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
+				long memprev=GC.GetTotalMemory(false);
 				List<Patientm> ChangedPatientmList=Patientms.GetChanged(GetChangedSince);
+				List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetChanged(GetChangedSince,MobileExcludeApptsBeforeDate);
+				long memcurr=GC.GetTotalMemory(false);
+				GC.GetTotalMemory(false);
+				MessageBox.Show("memory=" + (memprev-memcurr) + "memorypre=" + memprev+ "memorycurr=" + memcurr);
+
 				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
-				//m
+				mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
 				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
 				
@@ -62,13 +69,13 @@ namespace OpenDental {
 			}
 		}
 
-		public void SynchPatientRecordsOnMobileWeb() {
-			SynchPatientRecordsOnMobileWeb(MobileSyncDateTimeLastRun);
+		public void Synch() {
+			Synch(MobileSyncDateTimeLastRun);
 		}
 
-		public void SynchPatientFull() {
+		public void SynchFull() {
 			DateTime FullSynchDateTime=new DateTime(1880,1,1);
-			SynchPatientRecordsOnMobileWeb(FullSynchDateTime);
+			Synch(FullSynchDateTime);
 		}
 					
 		/// <summary>
@@ -108,12 +115,14 @@ namespace OpenDental {
 
 		private void butSavePreferences_Click(object sender,EventArgs e) {
 			Prefs.UpdateString(PrefName.MobileSyncServerURL,textboxMobileSyncServerURL.Text.Trim());
-			Prefs.UpdateDateT(PrefName.MobileExcludeApptsBeforeDate,PIn.Date(textDateBefore.Text));
-			Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textBoxSynchMinutes.Text));
-			butSavePreferences.Enabled=false;
 			MobileSyncServerURL=textboxMobileSyncServerURL.Text.Trim();
+			if(!FieldsValid()) {
+				return;
+			}
+			Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textBoxSynchMinutes.Text));
 			MobileSyncIntervalMinutes=PIn.Int(textBoxSynchMinutes.Text);
-			MobileExcludeApptsBeforeDate=PIn.Date(textDateBefore.Text);
+			SetMobileExcludeApptsBeforeDate();
+			butSavePreferences.Enabled=false;
 		}
 
 		private void textboxMobileSyncServerURL_TextChanged(object sender,EventArgs e) {
@@ -124,27 +133,86 @@ namespace OpenDental {
 			butSavePreferences.Enabled=true;
 		}
 
-		private void butSync_Click(object sender,EventArgs e) {
-			if(MobileSyncDateTimeLastRun.Year<1880) {
-				// should a patient full synch be forced at startup?
-				//MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
-				//return;
+		private bool FieldsValid() {
+			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""
+				||textBoxSynchMinutes.errorProvider1.GetError(textBoxSynchMinutes)!="") {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return false;
 			}
-			Cursor=Cursors.WaitCursor;
+			return true;
+	}
+		
+		/// <summary>
+		/// For testing only
+		/// </summary>
+		private void CreatePatients(int PatientCount) {
+			for(int i=0;i<PatientCount;i++) {
+				Patient newPat=new Patient();
+				newPat.LName="Mathew"+i;
+				newPat.FName="Dennis"+i;
+				newPat.Birthdate=new DateTime(1970,3,3).AddDays(i);
+				Patients.Insert(newPat,false);
+				//set Guarantor field the same as PatNum
+				Patient patOld=newPat.Copy();
+				newPat.Guarantor=newPat.PatNum;
+				Patients.Update(newPat,patOld);
+			}
+		}
+
+		/// <summary>
+		/// For testing only
+		/// </summary>
+		private void CreateAppointments(int AppointmentCount) {
+			long[] patNumArray=Patients.GetAllPatNums();
+			for(int i=0;i<patNumArray.Length;i++) {
+				for(int j=0;j<AppointmentCount;j++) {
+					Appointment apt=new Appointment();
+					apt.PatNum=patNumArray[i];
+					apt.IsNewPatient=true;
+					apt.ProvNum=3;
+					apt.AptStatus=ApptStatus.Scheduled;
+					apt.AptDateTime=new DateTime(2005,10,15);
+					Appointments.Insert(apt);
+				}
+			}
+		}
+
+		/// <summary>
+		/// If the MobileExcludeApptsBeforeDate is not specified then it defaults to a year before the current time.
+		/// </summary>
+		private void SetMobileExcludeApptsBeforeDate() {
+			if(textDateBefore.Text.Trim()=="") {
+				MobileExcludeApptsBeforeDate=DateTime.Now.AddYears(-1);
+			}
+			else {
+				Prefs.UpdateDateT(PrefName.MobileExcludeApptsBeforeDate,PIn.Date(textDateBefore.Text));
+				MobileExcludeApptsBeforeDate=PIn.Date(textDateBefore.Text);
+			}
+		}
+
+		private void butSync_Click(object sender,EventArgs e) {
 			if(!TestWebServiceExists()) {
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
 				return;
 			}
-			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""){
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"Please fix data entry errors first.");
+			if(!FieldsValid()) {
 				return;
 			}
-			Prefs.UpdateDateT(PrefName.MobileExcludeApptsBeforeDate,PIn.Date(textDateBefore.Text));
-			MobileExcludeApptsBeforeDate=PIn.Date(textDateBefore.Text);
+			if(MobileSyncIntervalMinutes==0) {
+				// Charge the customer!
+				MsgBox.Show(this,"You must be a paid customer to use this feature");
+				//return;
+			}
+			if(MobileSyncDateTimeLastRun.Year<1880) {
+				MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
+				return;
+			}
+			SetMobileExcludeApptsBeforeDate();
+			Cursor=Cursors.WaitCursor;
 			try {
-				SynchPatientRecordsOnMobileWeb();
+				Synch();
 				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
 			}
 			catch(Exception ex) {
@@ -158,8 +226,9 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
 				return;
 			}
+			SetMobileExcludeApptsBeforeDate();
 			Cursor=Cursors.WaitCursor;
-			SynchPatientFull();
+			SynchFull();
 			Cursor=Cursors.Default;
 			/*if(objCount==0) {
 				MsgBox.Show(this,"Done. No sync necessary.");

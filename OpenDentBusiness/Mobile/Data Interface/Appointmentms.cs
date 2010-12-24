@@ -13,6 +13,12 @@ namespace OpenDentBusiness.Mobile {
 			return Crud.AppointmentmCrud.SelectOne(customerNum,aptNum);
 		}
 
+		///<summary>Gets all Appointmentm from the db as specified by the customerNum </summary>
+		public static List<Appointmentm> GetAppointmentmsForList(long customerNum) {
+			string command="SELECT * FROM appointmentm "
+				+"WHERE CustomerNum = "+POut.Long(customerNum);
+			return Crud.AppointmentmCrud.SelectMany(command);
+		}
 		///<summary></summary>
 		public static long Insert(Appointmentm appointmentm) {
 			return Crud.AppointmentmCrud.Insert(appointmentm,true);
@@ -29,6 +35,12 @@ namespace OpenDentBusiness.Mobile {
 			Db.NonQ(command);
 		}
 
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<Appointmentm> GetChanged(DateTime changedSince,DateTime excludeOlderThan) {
+			List<Appointment> ChangedAppointmentList=Appointments.GetChangedSince(changedSince,excludeOlderThan);
+			List<Appointmentm> ChangedAppointmentmList=ConvertListToM(ChangedAppointmentList);
+			return ChangedAppointmentmList;
+		}
 		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
 		public static List<Appointmentm> ConvertListToM(List<Appointment> list) {
 			List<Appointmentm> retVal=new List<Appointmentm>();

@@ -27,12 +27,12 @@ namespace OpenDental{
 			this.textboxMobileSyncServerURL = new System.Windows.Forms.TextBox();
 			this.labelMobileSynchURL = new System.Windows.Forms.Label();
 			this.labelMinutesBetweenSynch = new System.Windows.Forms.Label();
-			this.textBoxSynchMinutes = new System.Windows.Forms.TextBox();
 			this.timerRefreshLastSynchTime = new System.Windows.Forms.Timer(this.components);
 			this.label3 = new System.Windows.Forms.Label();
 			this.textDateTimeLastRun = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupPreferences = new System.Windows.Forms.GroupBox();
+			this.textBoxSynchMinutes = new OpenDental.ValidNumber();
 			this.butSavePreferences = new OpenDental.UI.Button();
 			this.textDateBefore = new OpenDental.ValidDate();
 			this.butFullSync = new OpenDental.UI.Button();
@@ -66,14 +66,6 @@ namespace OpenDental{
 			this.labelMinutesBetweenSynch.TabIndex = 79;
 			this.labelMinutesBetweenSynch.Text = "Minutes between synch";
 			this.labelMinutesBetweenSynch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBoxSynchMinutes
-			// 
-			this.textBoxSynchMinutes.Location = new System.Drawing.Point(177,59);
-			this.textBoxSynchMinutes.Name = "textBoxSynchMinutes";
-			this.textBoxSynchMinutes.Size = new System.Drawing.Size(22,20);
-			this.textBoxSynchMinutes.TabIndex = 80;
-			this.textBoxSynchMinutes.TextChanged += new System.EventHandler(this.textBoxSynchMinutes_TextChanged);
 			// 
 			// timerRefreshLastSynchTime
 			// 
@@ -109,17 +101,27 @@ namespace OpenDental{
 			// 
 			// groupPreferences
 			// 
+			this.groupPreferences.Controls.Add(this.textBoxSynchMinutes);
 			this.groupPreferences.Controls.Add(this.butSavePreferences);
 			this.groupPreferences.Controls.Add(this.labelMobileSynchURL);
 			this.groupPreferences.Controls.Add(this.textboxMobileSyncServerURL);
 			this.groupPreferences.Controls.Add(this.labelMinutesBetweenSynch);
-			this.groupPreferences.Controls.Add(this.textBoxSynchMinutes);
 			this.groupPreferences.Location = new System.Drawing.Point(18,12);
 			this.groupPreferences.Name = "groupPreferences";
 			this.groupPreferences.Size = new System.Drawing.Size(753,109);
 			this.groupPreferences.TabIndex = 239;
 			this.groupPreferences.TabStop = false;
 			this.groupPreferences.Text = "Preferences";
+			// 
+			// textBoxSynchMinutes
+			// 
+			this.textBoxSynchMinutes.Location = new System.Drawing.Point(177,59);
+			this.textBoxSynchMinutes.MaxVal = 255;
+			this.textBoxSynchMinutes.MinVal = 0;
+			this.textBoxSynchMinutes.Name = "textBoxSynchMinutes";
+			this.textBoxSynchMinutes.Size = new System.Drawing.Size(39,20);
+			this.textBoxSynchMinutes.TabIndex = 241;
+			this.textBoxSynchMinutes.TextChanged += new System.EventHandler(this.textBoxSynchMinutes_TextChanged);
 			// 
 			// butSavePreferences
 			// 
@@ -216,7 +218,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textboxMobileSyncServerURL;
 		private System.Windows.Forms.Label labelMobileSynchURL;
 		private System.Windows.Forms.Label labelMinutesBetweenSynch;
-		private System.Windows.Forms.TextBox textBoxSynchMinutes;
 		private System.Windows.Forms.Timer timerRefreshLastSynchTime;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textDateTimeLastRun;
@@ -227,5 +228,6 @@ namespace OpenDental{
 		private UI.Button butClose;
 		private System.Windows.Forms.GroupBox groupPreferences;
 		private UI.Button butSavePreferences;
+		private ValidNumber textBoxSynchMinutes;
 	}
 }
