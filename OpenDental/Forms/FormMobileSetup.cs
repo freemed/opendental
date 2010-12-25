@@ -165,14 +165,16 @@ namespace OpenDental {
 		/// </summary>
 		private void CreateAppointments(int AppointmentCount) {
 			long[] patNumArray=Patients.GetAllPatNums();
+			DateTime appdate= new DateTime(2010,12,1,11,0,0);
 			for(int i=0;i<patNumArray.Length;i++) {
+				appdate=appdate.AddDays(2);
 				for(int j=0;j<AppointmentCount;j++) {
 					Appointment apt=new Appointment();
 					apt.PatNum=patNumArray[i];
 					apt.IsNewPatient=true;
 					apt.ProvNum=3;
 					apt.AptStatus=ApptStatus.Scheduled;
-					apt.AptDateTime=new DateTime(2005,10,15);
+					apt.AptDateTime=appdate;
 					Appointments.Insert(apt);
 				}
 			}

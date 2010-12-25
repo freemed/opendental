@@ -186,7 +186,7 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 	$.ajax({
 		type: "GET",
 		url: UrlForFetchingData,
-		success: function (msg) {
+		success: function (msg) {//console.log(msg);
 			var $response = $(msg);
 			var IsLoggedIn = $response.filter('#loggedin').text();
 			var Content = $response.filter('#content').html();

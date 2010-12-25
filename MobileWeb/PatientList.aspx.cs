@@ -16,9 +16,10 @@ namespace MobileWeb {
 		protected void Page_Load(object sender,EventArgs e) {
 			Message.Text="";
 			if(Session["CustomerNum"]!=null) {
+				Message.Text="LoggedIn";
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
 				List<Patientm> patientmList=Patientms.GetPatientmsForList(CustomerNum);
-				Message.Text="LoggedIn";
+				
 				Repeater1.DataSource=patientmList;
 				Repeater1.DataBind();
 			}

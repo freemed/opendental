@@ -6,8 +6,7 @@
 	<title></title>
 </head>
 <body>
-	<div id="loggedin">
-		<asp:Literal runat="server" ID="Message"></asp:Literal></div>
+	<div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 	<div id="content">
 		<form method="post" runat="server" enableviewstate="False">
 		<ul>

@@ -59,15 +59,15 @@ namespace MobileWeb {
 				var somevar = ar.Where(a => a.Contains("Appointment"));
 				Repeater1.DataSource = somevar;
 				*/
+				
 				Message.Text="";
 				if(Session["CustomerNum"]!=null) {
-					Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-					List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentmsForList(CustomerNum);
 					Message.Text="LoggedIn";
+					Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+					List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentmsForList(CustomerNum,AppointmentDate,AppointmentDate);
 					Repeater1.DataSource=appointmentmList;
 					Repeater1.DataBind();
 				}
-				Repeater1.DataBind();
 			}
 		}
 	}
