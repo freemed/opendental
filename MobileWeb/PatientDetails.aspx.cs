@@ -12,7 +12,6 @@ using OpenDentBusiness.Mobile;
 namespace MobileWeb {
 	public partial class PatientDetails:System.Web.UI.Page {
 		public Patientm pat;
-		public string patFName="";
 		private long PatNum=0;
 		private long CustomerNum=0;
 		protected void Page_Load(object sender,EventArgs e) {

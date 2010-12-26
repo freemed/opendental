@@ -13,16 +13,16 @@
 	<ul>
 		<li class="arrow style1">
 		<div>
-			<a linkattib="PatientDetails.aspx?id=<%Response.Write(id);%>" href="#PatientDetails">
-			<asp:Label ID="Label1" runat="server" Text="Patient name <%Response.Write(id);%>Patient name Patient name Patient name Patient name"></asp:Label></a>
+			<a linkattib="PatientDetails.aspx?PatNum=<%Response.Write(pat.PatNum);%>" href="#PatientDetails">
+			<asp:Label ID="Label1" runat="server" Text=""><%Response.Write(pat.LName + " "+pat.MiddleI +" " + pat.FName  +" " + pat.Birthdate.ToShortDateString());%></asp:Label></a>
 		</div>
 		</li>
 	</ul>
 
 
 <ul>
-<li> <span class="style2">12/05/2010 Monday <br />
-10:30 a.m, 90 min.<br />
+<li> <span class="style2"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
+<br />
 hhhhhhhhhhhh<br />
 asdasddddddddd<br />
 ffffffffff

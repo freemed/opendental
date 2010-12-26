@@ -5,20 +5,26 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Threading;
+using WebForms;
+using OpenDentBusiness;
+using OpenDentBusiness.Mobile;
 
 namespace MobileWeb {
 	public partial class AppointmentDetails:System.Web.UI.Page {
-		public int id=0;
+		public Appointmentm apt;
+		public Patientm pat;
+		private long AptNum=0;
+		private long CustomerNum=0;
 		protected void Page_Load(object sender,EventArgs e) {
-
 			Message.Text="";
 			if(Session["CustomerNum"]!=null) {
 				Message.Text="LoggedIn";
-				////Thread.Sleep(1000);
-				if(Request["id"]!=null) {
-					Int32.TryParse(Request["id"].ToString().Trim(),out id);
+				if(Request["AptNum"]!=null) {
+					Int64.TryParse(Request["AptNum"].ToString().Trim(),out AptNum);
 				}
-				id = id+7;
+				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+				apt=Appointmentms.GetOne(CustomerNum,AptNum);
+				pat=Patientms.GetOne(CustomerNum,apt.PatNum);
 			}
 		}
 	}
