@@ -52,7 +52,6 @@ namespace OpenDental {
 				//CreateAppointments(10); // for each patient
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
 				long[] patNumArray=Patientms.GetChangedSincePatNums(GetChangedSince);
-
 				SynchPatients(new List<long>(patNumArray));
 				long mem2=GC.GetTotalMemory(false);
 				//MessageBox.Show("M1 Memory in MB=" + (mem1-mem2)/1000000);
