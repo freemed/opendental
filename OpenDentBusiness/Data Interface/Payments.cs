@@ -200,12 +200,12 @@ namespace OpenDentBusiness{
 				return new List<PaySplit>();
 			}
 			command= 
-				"SELECT patient.PatNum,EstBalance,PriProv,SUM(InsPayEst)+SUM(Writeoff) _insEst "
+				"SELECT patient.PatNum,EstBalance,PriProv,SUM(InsPayEst)+SUM(Writeoff) \"_insEst\" "
 				+"FROM patient "
 				+"LEFT JOIN claimproc ON patient.PatNum=claimproc.PatNum "
 				+"AND Status=0 "//NotReceived
 				+"WHERE Guarantor = "+table.Rows[0][0].ToString()+" "
-				+"GROUP BY patient.PatNum";
+				+"GROUP BY  patient.PatNum,EstBalance,PriProv";
 				//+" ORDER BY PatNum!="+POut.PInt(pay.PatNum);//puts current patient in position 0 //Oracle does not allow
  			table=Db.GetTable(command);
 			List<Patient> pats=new List<Patient>();

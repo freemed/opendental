@@ -15,8 +15,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum,showUnattached);
 			}
 			string command=
-				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) _patName"
-				+",carrier.CarrierName,SUM(claimproc.FeeBilled) _feeBilled,SUM(claimproc.InsPayAmt) _insPayAmt,claim.ClaimNum"
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) \"_patName\""//Double quotes allow oracle column aliases to start with _, #, or $.
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) \"_feeBilled\",SUM(claimproc.InsPayAmt) \"_insPayAmt\",claim.ClaimNum"
 				+",claimproc.ClaimPaymentNum,claim.PatNum"
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
@@ -26,14 +26,14 @@ namespace OpenDentBusiness{
 				+" AND (claimproc.Status = '1' OR claimproc.Status = '4' OR claimproc.Status=5)"//received or supplemental or capclaim
  				+" AND (claimproc.ClaimPaymentNum = '"+POut.Long(claimPaymentNum)+"'";
 			if(showUnattached){
-				command+=" OR (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0'))"
-					+" GROUP BY claimproc.ClaimNum";
+				command+=" OR (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0')";
 			}
-			else{//shows only items attached to this payment
-				command+=")"
-					+" GROUP BY claimproc.ClaimNum";
-			}
-			command+=" ORDER BY _patName";
+			//else shows only items attached to this payment
+			command+=")"
+				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) "
+				+",carrier.CarrierName,claim.ClaimNum"
+				+",claimproc.ClaimPaymentNum,claim.PatNum";
+			command+=" ORDER BY \"_patName\"";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
 		}
@@ -44,8 +44,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
 			}
 			string command=
-				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) _patName"
-				+",carrier.CarrierName,SUM(claimproc.FeeBilled) _feeBilled,SUM(claimproc.InsPayAmt) _insPayAmt,claim.ClaimNum"
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) \"_patName\""
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) \"_feeBilled\",SUM(claimproc.InsPayAmt) \"_insPayAmt\",claim.ClaimNum"
 				+",claimproc.ClaimPaymentNum,claim.PatNum"
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
@@ -54,8 +54,9 @@ namespace OpenDentBusiness{
 				+" AND insplan.CarrierNum = carrier.CarrierNum"
 				+" AND (claimproc.Status = '1' OR claimproc.Status = '4' OR claimproc.Status=5)"//received or supplemental or capclaim
 				+" AND (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0')"
-				+" GROUP BY claimproc.ClaimNum"
-				+" ORDER BY _patName";
+				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
+				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
+				+" ORDER BY \"_patName\"";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
 		}

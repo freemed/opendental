@@ -602,15 +602,8 @@ namespace OpenDentBusiness{
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
-				+"ProcDescript,ProcsColored,";
-				//+"(SELECT SUM(ProcFee) FROM procedurelog ";
-			//if(isPlanned){
-			//	command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum!=0) Production, ";
-			//}
-			//else{
-			//	command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0) Production, ";
-			//}
-			command+="ProvHyg,appointment.ProvNum,patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
+				+"ProcDescript,ProcsColored,ProvHyg,appointment.ProvNum,"
+				+"patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
 				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg ";
@@ -635,7 +628,17 @@ namespace OpenDentBusiness{
 			else{
 				command+="WHERE appointment.AptNum="+POut.Long(aptNum);
 			}
-			command+=" GROUP BY appointment.AptNum";
+			command+=" GROUP BY p1.Abbr,p2.Abbr,patient.Address,patient.Address2,patient.AddrNote,"
+				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
+				+"patient.BillingType,patient.BirthDate,"
+				+"carrier1.CarrierName,carrier2.CarrierName,"
+				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
+				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
+				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
+				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
+				+"patient.PreferRecallMethod,patient.Premed,"
+				+"ProcDescript,ProcsColored,ProvHyg,appointment.ProvNum,"
+				+"patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip ";
 			DataTable raw=dcon.GetTable(command);
 			//rawProc table was historically used for other purposes.  It is currently only used for production--------------------------
 			DataTable rawProc;
@@ -691,7 +694,7 @@ namespace OpenDentBusiness{
 					+"AND procedurelog.procstatus=2 "
 					+"AND procedurelog.ProcDate >= "+POut.Date(DateTime.Now.AddYears(-1))+" "//I'm sure this is the slow part.  Should be easy to make faster with less range
 					+"AND procedurelog.ProcDate <= "+POut.Date(DateTime.Now)+ " "
-					+"GROUP BY patient.Guarantor"; 
+					+"GROUP BY patient.PatNum, patient.Guarantor"; 
 				rawInsProc=dcon.GetTable(command);
 			}
 			//Guardians-------------------------------------------------------------------------------------------------------------------
@@ -1126,13 +1129,12 @@ namespace OpenDentBusiness{
 			table.Columns.Add("Status");
 			table.Columns.Add("ops");
 			table.Columns.Add("EmployeeNum");
-			string columns="schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum";
-			string command="SELECT "+columns+","+DbHelper.GroupConcat("scheduleop.OperatoryNum")+" _ops "
+			string command="SELECT schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum,"+DbHelper.GroupConcat("scheduleop.OperatoryNum")+" \"_ops\" "
 				+"FROM schedule "
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
 				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
-				+"GROUP BY "+columns+" "//schedule.ScheduleNum
+				+"GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum "
 				+"ORDER BY StartTime";
 			DataTable raw=Db.GetTable(command);
 			DataRow row;

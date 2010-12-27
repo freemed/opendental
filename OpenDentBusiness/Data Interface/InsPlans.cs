@@ -644,7 +644,8 @@ namespace OpenDentBusiness {
 			if(feeSchedWith!=0) {
 				command+="AND insplan."+pFeeSched+" ="+POut.Long(feeSchedWith)+" ";
 			}
-			command+="GROUP BY insplan.EmployerNum,insplan.GroupName,insplan.GroupNum,carrier.CarrierName,insplan.PlanType,"
+			command+="insplan.GroupName,employer.EmpName,carrier.CarrierName,"
+				+"insplan.EmployerNum,insplan.CarrierNum,feesched.Description,insplan.PlanType,"
 				+"insplan."+pFeeSched+" "
 				+"ORDER BY carrier.CarrierName,employer.EmpName,insplan.GroupNum";
 			return Db.GetTable(command);

@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 				+"WHERE claimpayment.ClinicNum ="+POut.Long(clinic.ClinicNum)
 				+" AND patient.PatNum=claimproc.PatNum"
 				+" AND claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
-				+"GROUP BY claimpayment.ClaimPaymentNum";
+				+"GROUP BY patient.LName,patient.FName,claimpayment.ClaimPaymentNum";
 			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";

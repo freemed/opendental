@@ -82,7 +82,9 @@ namespace OpenDentBusiness{
 			if(!showHidden){
 				command+="AND carrier.IsHidden=0 ";
 			}
-			command+="GROUP BY carrier.CarrierNum "
+			command+="GROUP BY Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
+				+"CarrierName,CDAnetVersion,City,ElectID,"
+				+"carrier.IsHidden,Phone,State,Zip "
 				+"ORDER BY CarrierName";
 			tableRaw=Db.GetTable(command);
 			table=new DataTable();
@@ -497,7 +499,7 @@ namespace OpenDentBusiness{
 				}
 				command+=" patient.PatNum="+POut.Long(patients[i].PatNum);
 			}
-			command+=" GROUP BY patient.PatNum";
+			command+=" GROUP BY patient.PatNum,carrier.CarrierName";
 			DataTable table=Db.GetTable(command);
 			Dictionary<long,string> retVal=new Dictionary<long,string>();
 			for(int i=0;i<table.Rows.Count;i++){

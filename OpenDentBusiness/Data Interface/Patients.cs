@@ -481,7 +481,7 @@ namespace OpenDentBusiness{
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum,ClinicNum
-				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum;
+				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum,FName,Preferred;
 
 				DROP TABLE IF EXISTS tempfambal";
 			return Db.GetTable(command);
@@ -849,8 +849,9 @@ namespace OpenDentBusiness{
 			}
 			if(excludeAddr){
 				command+=" AND (zip !='')";
-			}	
-			command+=" GROUP BY patient.PatNum "
+			}
+			command+=" GROUP BY patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
+				+"InsEst,LName,FName,MiddleI,PayPlanDue,Preferred "
 				+"HAVING (LastStatement < "+POut.Date(lastStatement.AddDays(1))+" ";//<midnight of lastStatement date
 				//+"OR PayPlanDue>0 ";we don't have a great way to trigger due to a payplancharge yet
 			if(includeChanged){
@@ -1316,7 +1317,7 @@ namespace OpenDentBusiness{
 				command+="AND insplan.MonthRenew='"+POut.Int(monthStart)+"' ";
 			}
 				command+=@"
-				GROUP BY benefit.PlanNum
+				GROUP BY benefit.PlanNum, benefit.MonetaryAmt
 				ORDER BY benefit.PlanNum;
 
 				SELECT patient.PatNum, patient.LName, patient.FName,
