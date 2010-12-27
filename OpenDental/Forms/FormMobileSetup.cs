@@ -48,24 +48,34 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				CreatePatients(100);
-				CreateAppointments(50); // for each patient
+				//CreatePatients(100000);
+				//CreateAppointments(10); // for each patient
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
-				long memprev=GC.GetTotalMemory(false);
-				List<Patientm> ChangedPatientmList=Patientms.GetChanged(GetChangedSince);
-				List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetChanged(GetChangedSince,MobileExcludeApptsBeforeDate);
-				long memcurr=GC.GetTotalMemory(false);
-				GC.GetTotalMemory(false);
-				MessageBox.Show("memory=" + (memprev-memcurr) + "memorypre=" + memprev+ "memorycurr=" + memcurr);
+				long[] patNumArray=Patientms.GetChangedSincePatNums(GetChangedSince);
 
-				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
-				mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
+				SynchPatients(new List<long>(patNumArray));
+				long mem2=GC.GetTotalMemory(false);
+				//MessageBox.Show("M1 Memory in MB=" + (mem1-mem2)/1000000);
+				// major problem with system out of mem exception for a large number of recors
+				//mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
+				//List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetChanged(GetChangedSince,MobileExcludeApptsBeforeDate);
+				//mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
 				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
-				
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
+			}
+		}
+		public void SynchPatients(List<long> patNumList) {
+			int BlockLength =10;
+			for(int start=0;start<patNumList.Count;start+=BlockLength) {
+				if((start+BlockLength)>patNumList.Count) {
+					BlockLength=patNumList.Count-start;
+				}
+				List<long> BlockPatNumList=patNumList.GetRange(start,BlockLength);
+				List<Patientm> ChangedPatientmList=Patientms.GetMultPats(BlockPatNumList);
+				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
 			}
 		}
 
@@ -151,6 +161,24 @@ namespace OpenDental {
 				Patient newPat=new Patient();
 				newPat.LName="Mathew"+i;
 				newPat.FName="Dennis"+i;
+				newPat.Address="Address Line 1.Address Line 1___"+i;
+				newPat.Address2="Address Line 2. Address Line 2__"+i;
+				newPat.AddrNote="Lives off in far off Siberia Lives off in far off Siberia"+i;
+				newPat.AdmitDate=new DateTime(1985,3,3).AddDays(i);
+				newPat.ApptModNote="Flies from Siberia on specially chartered flight piloted by goblins:)"+i;
+				newPat.AskToArriveEarly=1555;
+				newPat.BillingType=3;
+				newPat.ChartNumber="111111"+i;
+				newPat.City="NL";
+				newPat.ClinicNum=i;
+				newPat.County= "county"+i;
+				newPat.CreditType="A";
+				newPat.DateFirstVisit=new DateTime(1985,3,3).AddDays(i);
+				newPat.Email="dennis.mathew________________seb@siberiacrawlmail.com";
+				newPat.HmPhone="416-222-5678";
+				newPat.WkPhone="416-222-5678";
+				newPat.Zip="M3L2L9";
+				newPat.WirelessPhone="416-222-5678";
 				newPat.Birthdate=new DateTime(1970,3,3).AddDays(i);
 				Patients.Insert(newPat,false);
 				//set Guarantor field the same as PatNum
@@ -171,6 +199,11 @@ namespace OpenDental {
 				for(int j=0;j<AppointmentCount;j++) {
 					Appointment apt=new Appointment();
 					apt.PatNum=patNumArray[i];
+					apt.DateTimeArrived=appdate;
+					apt.DateTimeAskedToArrive=appdate;
+					apt.DateTimeDismissed=appdate;
+					apt.DateTimeSeated=appdate;
+					apt.Note="some notenote noten otenotenot enotenot enote"+j;
 					apt.IsNewPatient=true;
 					apt.ProvNum=3;
 					apt.AptStatus=ApptStatus.Scheduled;
@@ -230,7 +263,13 @@ namespace OpenDental {
 			}
 			SetMobileExcludeApptsBeforeDate();
 			Cursor=Cursors.WaitCursor;
-			SynchFull();
+			try {
+				SynchFull();
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+			}
 			Cursor=Cursors.Default;
 			/*if(objCount==0) {
 				MsgBox.Show(this,"Done. No sync necessary.");

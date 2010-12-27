@@ -129,6 +129,20 @@ namespace OpenDentBusiness{
 			return Crud.PatientCrud.SelectMany(command);
 		}
 
+		///<summary>Used if the number of records are very large, in which case using GetChangedSince(DateTime changedSince) is not the preffered route due to memory problems caused by large recordsets. </summary>
+		public static long[] GetChangedSincePatNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<long[]>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT PatNum From patient WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			long[] patnums=new long[dt.Rows.Count];
+			for(int i=0;i<patnums.Length;i++) {
+				patnums[i]=PIn.Long(dt.Rows[i]["PatNum"].ToString());
+			}
+			return patnums;
+		}
+
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Used in HL7.  Otherwise, uses InsertID to fill PatNum.</summary>
 		public static long Insert(Patient pat,bool useExistingPK) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

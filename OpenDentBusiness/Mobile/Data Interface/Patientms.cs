@@ -43,6 +43,17 @@ namespace OpenDentBusiness.Mobile {
 			return ChangedPatientmList;
 		}
 
+		public static long[] GetChangedSincePatNums(DateTime changedSince) {
+			return Patients.GetChangedSincePatNums(changedSince);
+		}
+
+		///<summary>The values returned are sent to the webserver. Used if GetChanged returns large recordsets.</summary>
+		public static List<Patientm> GetMultPats(List<long> patNums) {
+			Patient[]  patientArray=Patients.GetMultPats(patNums);
+			List<Patient> patientList=new List<Patient>(patientArray);
+			List<Patientm> patientmList=ConvertListToM(patientList);
+			return patientmList;
+		}
 		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
 		public static List<Patientm> ConvertListToM(List<Patient> list) {
 			List<Patientm> retVal=new List<Patientm>();
