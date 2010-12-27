@@ -3404,6 +3404,9 @@ namespace OpenDental{
 		}
 
 		private void OnRx_Click(){
+			if(!Security.IsAuthorized(Permissions.RxCreate)) {
+				return;
+			}
 			if(UsingEcwTight()) {
 				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
 				//refresh the right panel:
@@ -3421,9 +3424,6 @@ namespace OpenDental{
 				}
 			}
 			else {
-				if(!Security.IsAuthorized(Permissions.RxCreate)) {
-					return;
-				}
 				FormRxSelect FormRS=new FormRxSelect(PatCur);
 				FormRS.ShowDialog();
 				if(FormRS.DialogResult!=DialogResult.OK) return;
