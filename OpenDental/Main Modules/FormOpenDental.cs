@@ -1431,16 +1431,16 @@ namespace OpenDental{
 			}
 			Splash.Dispose();			
 			//Choose a default DirectX format when no DirectX format has been specified and running in DirectX tooth chart mode.
-			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
-			if(localComputerPrefs.GraphicsSimple==DrawingMode.DirectX && localComputerPrefs.DirectXFormat==""){
+			//ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
+			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.DirectX && ComputerPrefs.LocalComputer.DirectXFormat=="") {
 				MessageBox.Show(Lan.g(this,"Optimizing tooth chart graphics. This may take a few minutes. You will be notified when the process is complete."));
-				localComputerPrefs.DirectXFormat=FormGraphics.GetPreferredDirectXFormat(this);
-				if(localComputerPrefs.DirectXFormat=="invalid"){
+				ComputerPrefs.LocalComputer.DirectXFormat=FormGraphics.GetPreferredDirectXFormat(this);
+				if(ComputerPrefs.LocalComputer.DirectXFormat=="invalid") {
 					//No valid local DirectX format could be found.
 					//Simply revert to OpenGL.
-					localComputerPrefs.GraphicsSimple=DrawingMode.OpenGL;
+					ComputerPrefs.LocalComputer.GraphicsSimple=DrawingMode.OpenGL;
 				}
-				ComputerPrefs.Update(localComputerPrefs);
+				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 				ContrChart2.InitializeOnStartup();
 				MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
@@ -1683,21 +1683,21 @@ namespace OpenDental{
 				ContrChart2.InitializeLocalData();
 				if(PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom)) {
 					//separate if statement to prevent database call if not showing task list at bottom to begin with
-					ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
-					if(computerPref.TaskKeepListHidden) {
+					//ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
+					if(ComputerPrefs.LocalComputer.TaskKeepListHidden) {
 						userControlTasks1.Visible = false;
 					}
 					else {//task list show
 						userControlTasks1.Visible = true;
 						userControlTasks1.InitializeOnStartup();
-						if(computerPref.TaskDock == 0) {//bottom
+						if(ComputerPrefs.LocalComputer.TaskDock == 0) {//bottom
 							menuItemDockBottom.Checked = true;
 							menuItemDockRight.Checked = false;
 							panelSplitter.Cursor=Cursors.HSplit;
 							panelSplitter.Height=7;
 							int splitterNewY=540;
-							if(computerPref.TaskY!=0) {
-								splitterNewY=computerPref.TaskY;
+							if(ComputerPrefs.LocalComputer.TaskY!=0) {
+								splitterNewY=ComputerPrefs.LocalComputer.TaskY;
 								if(splitterNewY<300) {
 									splitterNewY=300;//keeps it from going too high
 								}
@@ -1713,8 +1713,8 @@ namespace OpenDental{
 							panelSplitter.Cursor=Cursors.VSplit;
 							panelSplitter.Width=7;
 							int splitterNewX=900;
-							if(computerPref.TaskX!=0) {
-								splitterNewX=computerPref.TaskX;
+							if(ComputerPrefs.LocalComputer.TaskX!=0) {
+								splitterNewX=ComputerPrefs.LocalComputer.TaskX;
 								if(splitterNewX<300) {
 									splitterNewX=300;//keeps it from going too far to the left
 								}
@@ -2454,16 +2454,16 @@ namespace OpenDental{
 
 		///<summary>Every time user changes doc position, it will save automatically.</summary>
 		private void TaskDockSavePos(){
-			ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
+			//ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
 			if(menuItemDockBottom.Checked){
-				computerPref.TaskY = panelSplitter.Top;
-				computerPref.TaskDock = 0;
+				ComputerPrefs.LocalComputer.TaskY = panelSplitter.Top;
+				ComputerPrefs.LocalComputer.TaskDock = 0;
 			}
 			else{
-				computerPref.TaskX = panelSplitter.Left;
-				computerPref.TaskDock = 1;
+				ComputerPrefs.LocalComputer.TaskX = panelSplitter.Left;
+				ComputerPrefs.LocalComputer.TaskDock = 1;
 			}
-			ComputerPrefs.Update(computerPref);
+			ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 		}
 		
 		///<summary>This is called when any local data becomes outdated.  It's purpose is to tell the other computers to update certain local data.</summary>

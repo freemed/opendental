@@ -1818,18 +1818,18 @@ namespace OpenDental{
 				toothChart.Size=new Size(500,370);
 				//toothChart.Location=new Point(-600,-500);//off the visible screen
 				//toothChart.SendToBack();
-				ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
-				toothChart.UseHardware=computerPref.GraphicsUseHardware;
+				//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+				toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
 				toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
-				toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
-				toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(computerPref.DirectXFormat);
+				toothChart.PreferredPixelFormatNumber=ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
+				toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
 				//Must be last setting set for preferences, because
 																														//this is the line where the device pixel format is
 																														//recreated.
 																														//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
-				toothChart.DrawMode=computerPref.GraphicsSimple;
-				computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
-				ComputerPrefs.Update(computerPref);
+				toothChart.DrawMode=ComputerPrefs.LocalComputer.GraphicsSimple;
+				ComputerPrefs.LocalComputer.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
+				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 				this.Controls.Add(toothChart);
 				toothChart.BringToFront();
 				toothChart.ResetTeeth();

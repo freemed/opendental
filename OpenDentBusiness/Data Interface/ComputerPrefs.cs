@@ -8,10 +8,23 @@ using CodeBase;
 
 namespace OpenDentBusiness {
 	public class ComputerPrefs {
-		//public static ComputerPref ForLocalComputer;//js Maybe do this later for speed.
+		///<summary>Only used by the client.</summary>
+		private static ComputerPref localComputer;
+
+		public static ComputerPref LocalComputer{
+			get {
+				if(localComputer==null) {
+					localComputer=GetForLocalComputer();
+				}
+				return localComputer;
+			}
+			//set {
+				//I don't think this gets used.
+			//}
+		}
 
 		///<summary>Returns the computer preferences for the computer which this instance of Open Dental is running on.</summary>
-		public static ComputerPref GetForLocalComputer(){
+		private static ComputerPref GetForLocalComputer(){
 			//No need to check RemotingRole; no call to db.
 			string computerName=Dns.GetHostName();//local computer name
 			ComputerPref computerPref=new ComputerPref();
@@ -30,13 +43,15 @@ namespace OpenDentBusiness {
 			computerPref.TaskDock=0; //bottom
 			computerPref.TaskX=900;
 			computerPref.TaskY=625;
+			computerPref.ComputerName=computerName;
+			computerPref.DirectXFormat="";
+			computerPref.GraphicsSimple=DrawingMode.DirectX;
 			DataTable table=GetPrefsForComputer(computerName);
 			if(table==null){
 				//In case of database error, just use default graphics settings so that it is possible for the program to start.
 				return computerPref;
 			}
-			if(table.Rows.Count==0){//Computer prefs do not exist yet.
-				computerPref.ComputerName=computerName;
+			if(table.Rows.Count==0){//Computer pref row does not yet exist for this computer.
 				Insert(computerPref);//Create default prefs for the specified computer. Also sets primary key in our computerPref object.
 				return computerPref;
 			}
@@ -51,6 +66,7 @@ namespace OpenDentBusiness {
 			return computerPref;
 		}
 
+		///<summary>Should not be called by external classes.</summary>
 		public static DataTable GetPrefsForComputer(string computerName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),computerName);
@@ -64,7 +80,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Inserts the given preference and ensures that the primary key is properly set.</summary>
+		///<summary>Should not be called by external classes.</summary>
 		public static long Insert(ComputerPref computerPref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				computerPref.ComputerPrefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),computerPref);
@@ -73,6 +89,7 @@ namespace OpenDentBusiness {
 			return Crud.ComputerPrefCrud.Insert(computerPref);
 		}
 
+		///<summary>Any time this is called, ComputerPrefs.LocalComputer will be passed in.  It will have already been changed for local use, and this saves it for next time.</summary>
 		public static void Update(ComputerPref computerPref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerPref);

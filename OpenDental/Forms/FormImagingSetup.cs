@@ -31,7 +31,7 @@ namespace OpenDental{
 		private ValidNum textDoc;
 		private ComboBox comboType;
 		private CheckBox checkBinned;
-		private ComputerPref computerPrefs;
+		//private ComputerPref computerPrefs;
 
 		///<summary></summary>
 		public FormImagingSetup(){
@@ -381,11 +381,11 @@ namespace OpenDental{
 			textDoc.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
 			slider.MinVal=PrefC.GetInt(PrefName.ImageWindowingMin);
 			slider.MaxVal=PrefC.GetInt(PrefName.ImageWindowingMax);
-			computerPrefs=ComputerPrefs.GetForLocalComputer();
-			upDownPort.Value=computerPrefs.SensorPort;
-			comboType.Text=computerPrefs.SensorType;
-			checkBinned.Checked=computerPrefs.SensorBinned;
-			int exposureLevelVal=computerPrefs.SensorExposure;
+			//computerPrefs=ComputerPrefs.GetForLocalComputer();
+			upDownPort.Value=ComputerPrefs.LocalComputer.SensorPort;
+			comboType.Text=ComputerPrefs.LocalComputer.SensorType;
+			checkBinned.Checked=ComputerPrefs.LocalComputer.SensorBinned;
+			int exposureLevelVal=ComputerPrefs.LocalComputer.SensorExposure;
 			if(exposureLevelVal<(int)upDownExposure.Minimum || exposureLevelVal>(int)upDownExposure.Maximum){
 				exposureLevelVal=(int)upDownExposure.Minimum;//Play it safe with the default exposure.
 			}
@@ -400,11 +400,11 @@ namespace OpenDental{
 			Prefs.UpdateLong(PrefName.ScannerCompression,PIn.Long(textDoc.Text));
 			Prefs.UpdateLong(PrefName.ImageWindowingMin,slider.MinVal);
 			Prefs.UpdateLong(PrefName.ImageWindowingMax,slider.MaxVal);
-			computerPrefs.SensorType=comboType.Text;
-			computerPrefs.SensorPort=(int)upDownPort.Value;
-			computerPrefs.SensorExposure=(int)upDownExposure.Value;
-			computerPrefs.SensorBinned=checkBinned.Checked;
-			ComputerPrefs.Update(computerPrefs);
+			ComputerPrefs.LocalComputer.SensorType=comboType.Text;
+			ComputerPrefs.LocalComputer.SensorPort=(int)upDownPort.Value;
+			ComputerPrefs.LocalComputer.SensorExposure=(int)upDownExposure.Value;
+			ComputerPrefs.LocalComputer.SensorBinned=checkBinned.Checked;
+			ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}

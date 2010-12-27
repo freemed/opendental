@@ -305,17 +305,17 @@ namespace OpenDental{
 				group3DToothChart.Enabled=false;
 				return;
 			}
-			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
-			checkHardwareAccel.Checked=computerPref.GraphicsUseHardware;
-			checkDoubleBuffering.Checked=computerPref.GraphicsDoubleBuffering;
-			selectedFormatNum=computerPref.PreferredPixelFormatNum;
-			selectedDirectXFormat=computerPref.DirectXFormat;
+			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			checkHardwareAccel.Checked=ComputerPrefs.LocalComputer.GraphicsUseHardware;
+			checkDoubleBuffering.Checked=ComputerPrefs.LocalComputer.GraphicsDoubleBuffering;
+			selectedFormatNum=ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
+			selectedDirectXFormat=ComputerPrefs.LocalComputer.DirectXFormat;
 			textSelected.Text="";
-			if(computerPref.GraphicsSimple==DrawingMode.Simple2D){
+			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.Simple2D) {
 				radioSimpleChart.Checked=true;
 				group3DToothChart.Enabled=false;
 			}
-			else if(computerPref.GraphicsSimple==DrawingMode.DirectX){
+			else if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.DirectX) {
 				radioDirectXChart.Checked=true;
 				group3DToothChart.Enabled=true;
 				groupFilters.Enabled=false;
@@ -536,18 +536,18 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender,System.EventArgs e) {
-			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			if(radioDirectXChart.Checked) {
 				if(!TestDirectXFormat(this,selectedDirectXFormat)){
 					MessageBox.Show(Lan.g(this,"Please choose a different device format, "+
 						"the selected device format will not support the DirectX 3D tooth chart on this computer"));
 					return;
 				}
-				computerPref.GraphicsSimple=DrawingMode.DirectX;
-				computerPref.DirectXFormat=selectedDirectXFormat;
+				ComputerPrefs.LocalComputer.GraphicsSimple=DrawingMode.DirectX;
+				ComputerPrefs.LocalComputer.DirectXFormat=selectedDirectXFormat;
 			}
 			else if(radioSimpleChart.Checked) {
-				computerPref.GraphicsSimple=DrawingMode.Simple2D;
+				ComputerPrefs.LocalComputer.GraphicsSimple=DrawingMode.Simple2D;
 			}
 			else { //OpenGL
 				OpenGLWinFormsControl contextTester=new OpenGLWinFormsControl();
@@ -562,12 +562,12 @@ namespace OpenDental{
 					return;
 				}
 				contextTester.Dispose();
-				computerPref.GraphicsUseHardware=checkHardwareAccel.Checked;
-				computerPref.GraphicsDoubleBuffering=checkDoubleBuffering.Checked;
-				computerPref.PreferredPixelFormatNum=selectedFormatNum;
-				computerPref.GraphicsSimple=DrawingMode.OpenGL;
+				ComputerPrefs.LocalComputer.GraphicsUseHardware=checkHardwareAccel.Checked;
+				ComputerPrefs.LocalComputer.GraphicsDoubleBuffering=checkDoubleBuffering.Checked;
+				ComputerPrefs.LocalComputer.PreferredPixelFormatNum=selectedFormatNum;
+				ComputerPrefs.LocalComputer.GraphicsSimple=DrawingMode.OpenGL;
 			}
-			ComputerPrefs.Update(computerPref);
+			ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 			DialogResult=DialogResult.OK;
 		}
 

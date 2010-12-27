@@ -465,9 +465,9 @@ namespace OpenDental{
 			this.ContrApptSheet2.Size = new System.Drawing.Size(60,1728);
 			this.ContrApptSheet2.TabIndex = 22;
 			this.ContrApptSheet2.DoubleClick += new System.EventHandler(this.ContrApptSheet2_DoubleClick);
+			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
 			this.ContrApptSheet2.MouseLeave += new System.EventHandler(this.ContrApptSheet2_MouseLeave);
 			this.ContrApptSheet2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseMove);
-			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
 			this.ContrApptSheet2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseUp);
 			// 
 			// panelAptInfo
@@ -633,10 +633,10 @@ namespace OpenDental{
 			this.pinBoard.Size = new System.Drawing.Size(99,96);
 			this.pinBoard.TabIndex = 78;
 			this.pinBoard.Text = "pinBoard";
-			this.pinBoard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseMove);
-			this.pinBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseDown);
-			this.pinBoard.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseUp);
 			this.pinBoard.SelectedIndexChanged += new System.EventHandler(this.pinBoard_SelectedIndexChanged);
+			this.pinBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseDown);
+			this.pinBoard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseMove);
+			this.pinBoard.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseUp);
 			// 
 			// butLab
 			// 
@@ -707,7 +707,7 @@ namespace OpenDental{
 			this.comboView.Name = "comboView";
 			this.comboView.Size = new System.Drawing.Size(133,21);
 			this.comboView.TabIndex = 35;
-			this.comboView.SelectedIndexChanged += new System.EventHandler(this.comboView_SelectedIndexChanged);
+			this.comboView.SelectionChangeCommitted += new System.EventHandler(this.comboView_SelectionChangeCommitted);
 			// 
 			// label2
 			// 
@@ -1043,8 +1043,8 @@ namespace OpenDental{
 			this.gridEmpSched.TabIndex = 77;
 			this.gridEmpSched.Title = "Employee Schedules";
 			this.gridEmpSched.TranslationName = "TableApptEmpSched";
-			this.gridEmpSched.DoubleClick += new System.EventHandler(this.gridEmpSched_DoubleClick);
 			this.gridEmpSched.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmpSched_CellDoubleClick);
+			this.gridEmpSched.DoubleClick += new System.EventHandler(this.gridEmpSched_DoubleClick);
 			// 
 			// timerWaitingRoom
 			// 
@@ -1138,12 +1138,13 @@ namespace OpenDental{
 		public void ModuleSelected(long patNum) {
 			RefreshModuleDataPatient(patNum);
 			RefreshModuleDataPeriod();
-			LayoutScrollOpProv();//can only call this as part of ModuleSelected.
+			LayoutScrollOpProv();
 			RefreshModuleScreenPatient();
 			RefreshModuleScreenPeriod();
 			Plugins.HookAddCode(this,"ContrAppt.ModuleSelected_end",patNum);
 		}
 
+		///<summary>Refreshes everything except the patient info.</summary>
 		public void RefreshPeriod() {
 			RefreshModuleDataPeriod();
 			LayoutScrollOpProv();
@@ -1162,6 +1163,7 @@ namespace OpenDental{
 			PatCur=Patients.GetPat(patNum);
 		}
 
+		///<summary>Gets the entire DS for appointments and schedules.  Gets op and prov indices for current view.</summary>
 		private void RefreshModuleDataPeriod() {
 			bubbleAptNum=0;
 			DateTime startDate;
@@ -1188,7 +1190,7 @@ namespace OpenDental{
 			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView,SchedListPeriod);
 		}
 
-		/// <summary>This also clears listConfirmed.</summary>
+		/// <summary>Called from both ModuleSelected and from RefreshPeriod.  Do not call it from any event like Layout.  This also clears listConfirmed.</summary>
 		public void LayoutScrollOpProv() {//ModuleSelectedOld(int patNum){
 			//the scrollbar logic cannot be moved to someplace where it will be activated while working in apptbook
 			//RefreshVisops();//forces reset after changing databases
@@ -1348,7 +1350,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Important.  Gets all new day info from db and redraws screen</summary>
+		///<summary>Redraws screen based on data already gathered.  RefreshModuleDataPeriod will have already retrieved the data from the db.</summary>
 		public void RefreshModuleScreenPeriod() {
 			DateTime startDate;
 			DateTime endDate;
@@ -1526,6 +1528,7 @@ namespace OpenDental{
 			}
 		}
 
+		/*This was resulting in too many firings of ModuleSelected
 		///<summary>Currently only used when comboView really does change.  Otherwise, just call ModuleSelected.  Triggered in FunctionKeyPress, SetView, and  FillViews</summary>
 		private void comboView_SelectedIndexChanged(object sender,System.EventArgs e) {
 			if(PatCur==null) {
@@ -1534,6 +1537,11 @@ namespace OpenDental{
 			else {
 				ModuleSelected(PatCur.PatNum);
 			}
+		}*/
+
+		///<summary></summary>
+		private void comboView_SelectionChangeCommitted(object sender,EventArgs e) {
+			SetView(comboView.SelectedIndex);
 		}
 
 		///<summary>Activated anytime a Patient menu item is clicked.</summary>
@@ -1584,22 +1592,20 @@ namespace OpenDental{
 		///<summary>Called from FormOpenDental upon startup.</summary>
 		public void InitializeOnStartup(){
 			//jsparks-
-			//This method is inefficient and can cause 4 refreshes: RefreshPeriod, FillViews->comboView_SelectedIndexChanged, SetView?, SetWeeklyView. 
-			//This is especially inefficient, because after calling this method, FormOD refreshes this module anyway.  So about 5 refreshes on startup.
-			//But it's not critical.
+			//This method was inefficient and was causing 4 refreshes: RefreshPeriod, FillViews->comboView_SelectedIndexChanged, SetView?, SetWeeklyView.
+			//This was especially inefficient, because after calling this method, FormOD refreshes this module anyway.  So about 5 refreshes on startup.
+			//Now, InitializedOnStartup remains false until the end of this method, preventing all refreshes when inside this method.
+			//Verified that it only does one RefreshPeriod call to the db.
 			if(InitializedOnStartup) {
 				return;
 			}
-			InitializedOnStartup=true;
-			//if(DefC.DefShortIsNull) {
-			//	Defs.RefreshCache();//So that when RefreshPeriod, LayoutPanels, ComputeColWidth gets called.
 			LayoutPanels();
-			//}
 			ContrApptSheet.RowsPerIncr=1;
 			AppointmentL.DateSelected=DateTime.Now;
 			ContrApptSingle.SelectedAptNum=-1;
-			RefreshPeriod();
-			FillViews();
+			//RefreshPeriod();//Don't think this is needed.
+			FillViews();//This does a SetView which will be overridden in the next line.
+			//ComputerPrefs.GetForLocalComputer(
 			if(ApptViewC.List.Length>0){//if any views
 				SetView(1);//default to first view
 			}
@@ -1658,6 +1664,7 @@ namespace OpenDental{
 				butGraph.Visible=true;
 			}
 			SetWeeklyView(false);
+			InitializedOnStartup=true;//moved this down to prevent view setting from triggering ModuleSelected().
 		}
 
 		///<summary></summary>
@@ -1703,12 +1710,24 @@ namespace OpenDental{
 			}
 		}
 
-		/// <summary>Sets the view to the specified index, checking for validity in the process.</summary>
+		/// <summary>Sets the view to the specified index, checking for validity in the process.  Then, does a ModuleSelected().</summary>
 		private void SetView(int viewIndex){
 			if(viewIndex > ApptViewC.List.Length){
 				return;
 			}
-			comboView.SelectedIndex=viewIndex;//this also triggers SelectedIndexChanged
+			comboView.SelectedIndex=viewIndex;
+			if(comboView.SelectedIndex==-1) {
+				comboView.SelectedIndex=0;
+			}
+			if(!InitializedOnStartup) {
+				return;//prevent ModuleSelected().
+			}
+			if(PatCur==null) {
+				ModuleSelected(0);
+			}
+			else {
+				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
 		///<summary>Fills the comboView with the current list of views and then tries to reselect the previous selection.  Also called from FormOpenDental.RefreshLocalData().</summary>
@@ -1724,12 +1743,7 @@ namespace OpenDental{
 					f="";
 				comboView.Items.Add(f+ApptViewC.List[i].Description);
 			}
-			if(selected<comboView.Items.Count){
-				comboView.SelectedIndex=selected;//this also triggers SelectedIndexChanged
-			}
-			if(comboView.SelectedIndex==-1){
-				comboView.SelectedIndex=0;
-			}
+			SetView(selected);//this also triggers ModuleSelected()
 		}
 
 		///<summary>Sets appointment data invalid on all other computers, causing them to refresh.  Does NOT refresh the data for this computer which must be done separately.</summary>
@@ -1810,6 +1824,9 @@ namespace OpenDental{
 			WeekStartDate=AppointmentL.DateSelected.AddDays(1-(int)AppointmentL.DateSelected.DayOfWeek).Date;
 			WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1).Date;
 			ContrApptSheet.IsWeeklyView=isWeeklyView;
+			if(!InitializedOnStartup) {
+				return;//prevent refreshing repeatedly on startup
+			}
 			if(weeklyViewChanged || isWeeklyView){
 				if(PatCur==null) {
 					ModuleSelected(0);
@@ -4788,6 +4805,8 @@ namespace OpenDental{
 			FormGraphEmployeeTime form=new FormGraphEmployeeTime();
 			form.ShowDialog();
 		}
+
+		
 
 		//private void butTest_Click(object sender,EventArgs e) {
 		//	timerTests.Enabled=!timerTests.Enabled;

@@ -23,7 +23,7 @@ namespace OpenDental{
 		private CheckBox checkTaskListAlwaysShow;
 		private CheckBox checkTasksCheckOnStartup;
 		private CheckBox checkBoxTaskKeepListHidden;
-		private ComputerPref computerPref;
+		//private ComputerPref computerPref;
 		private ValidNumber validNumX;
 		private Label labelX;
 		private GroupBox groupBox2;
@@ -484,16 +484,16 @@ namespace OpenDental{
 			else {
 				groupBoxTaskDefaults.Enabled=false;
 			}
-			computerPref=ComputerPrefs.GetForLocalComputer();
-			checkBoxTaskKeepListHidden.Checked=computerPref.TaskKeepListHidden;
-			if(computerPref.TaskDock==0) {
+			//computerPref=ComputerPrefs.GetForLocalComputer();
+			checkBoxTaskKeepListHidden.Checked=ComputerPrefs.LocalComputer.TaskKeepListHidden;
+			if(ComputerPrefs.LocalComputer.TaskDock==0) {
 				radioBottom.Checked=true;
 			}
 			else {
 				radioRight.Checked=true;
 			}
-			validNumX.Text=computerPref.TaskX.ToString();
-			validNumY.Text=computerPref.TaskY.ToString();
+			validNumX.Text=ComputerPrefs.LocalComputer.TaskX.ToString();
+			validNumY.Text=ComputerPrefs.LocalComputer.TaskY.ToString();
 			checkTitleBarShowSite.Checked=PrefC.GetBool(PrefName.TitleBarShowSite);
 			textWebServiceServerName.Text=PrefC.GetString(PrefName.WebServiceServerName);
 			checkReportsProcDate.Checked=PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate);
@@ -557,24 +557,24 @@ namespace OpenDental{
 				changed=true;
 			}
 			//task list------------------------------------------------------------------------------------------
-			if(computerPref.TaskKeepListHidden!=checkBoxTaskKeepListHidden.Checked){
-				computerPref.TaskKeepListHidden=checkBoxTaskKeepListHidden.Checked;
+			if(ComputerPrefs.LocalComputer.TaskKeepListHidden!=checkBoxTaskKeepListHidden.Checked) {
+				ComputerPrefs.LocalComputer.TaskKeepListHidden=checkBoxTaskKeepListHidden.Checked;
 				changed=true;//needed to trigger screen refresh
 			}
-			if(radioBottom.Checked && computerPref.TaskDock!=0){
-				computerPref.TaskDock=0;
+			if(radioBottom.Checked && ComputerPrefs.LocalComputer.TaskDock!=0) {
+				ComputerPrefs.LocalComputer.TaskDock=0;
 				changed=true;
 			}
-			else if(!radioBottom.Checked && computerPref.TaskDock!=1){
-				computerPref.TaskDock=1;
+			else if(!radioBottom.Checked && ComputerPrefs.LocalComputer.TaskDock!=1) {
+				ComputerPrefs.LocalComputer.TaskDock=1;
 				changed=true;
 			}
-			if(computerPref.TaskX!=PIn.Int(validNumX.Text)){
-				computerPref.TaskX=PIn.Int(validNumX.Text);
+			if(ComputerPrefs.LocalComputer.TaskX!=PIn.Int(validNumX.Text)) {
+				ComputerPrefs.LocalComputer.TaskX=PIn.Int(validNumX.Text);
 				changed=true;
 			}
-			if(computerPref.TaskY!=PIn.Int(validNumY.Text)){
-				computerPref.TaskY=PIn.Int(validNumY.Text);
+			if(ComputerPrefs.LocalComputer.TaskY!=PIn.Int(validNumY.Text)) {
+				ComputerPrefs.LocalComputer.TaskY=PIn.Int(validNumY.Text);
 				changed=true;
 			}
 			//end of tasklist section-----------------------------------------------------------------------------
@@ -590,7 +590,7 @@ namespace OpenDental{
 			}
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Prefs, InvalidType.Computers);
-				ComputerPrefs.Update(computerPref);//redundant?
+				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 			}
 			DialogResult=DialogResult.OK;
 		}

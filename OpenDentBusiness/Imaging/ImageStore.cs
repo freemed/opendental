@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 				return null;
 			}
 			if(LocalAtoZpath==null) {//on startup
-				LocalAtoZpath=ComputerPrefs.GetForLocalComputer().AtoZpath;
+				LocalAtoZpath=ComputerPrefs.LocalComputer.AtoZpath;
 			}
 			string replicationAtoZ=ReplicationServers.GetAtoZpath();
 			if(replicationAtoZ!=""){

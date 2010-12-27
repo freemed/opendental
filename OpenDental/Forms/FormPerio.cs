@@ -1746,7 +1746,7 @@ namespace OpenDental{
 		}
 
 		private void butGraphical_Click(object sender,EventArgs e) {
-			if(ComputerPrefs.GetForLocalComputer().GraphicsSimple!=DrawingMode.DirectX) {
+			if(ComputerPrefs.LocalComputer.GraphicsSimple!=DrawingMode.DirectX) {
 				MsgBox.Show(this,"In the Graphics setup window, you must first select DirectX.");
 				return;
 			}

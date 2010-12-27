@@ -528,9 +528,9 @@ namespace OpenDental{
 			}
 			if(ImageStore.LocalAtoZpath!=textLocalPath.Text) {//if local path changed
 				ImageStore.LocalAtoZpath=textLocalPath.Text;
-				ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
-				compPref.AtoZpath=ImageStore.LocalAtoZpath;
-				ComputerPrefs.Update(compPref);
+				//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
+				ComputerPrefs.LocalComputer.AtoZpath=ImageStore.LocalAtoZpath;
+				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 			}
 			if(ReplicationServers.GetAtoZpath()!=textServerPath.Text) {
 				ReplicationServer server=ReplicationServers.GetForLocalComputer();

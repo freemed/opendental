@@ -7,7 +7,9 @@ namespace OpenDentBusiness.Mobile {
 	/// <summary>This table is called preference in the mobile database.  This is to simply to avoid having to rewrite DataConnection.TestConnection().  The primary key of this table has an m in it to remind us that the preferences are totally different than in the main program.</summary>
 	public class Prefm {
 		///<summary>Primary key.</summary>
-		public string PrefmName;//
+		public long PrefmNum;
+		///<summary>Frequently used like a primary key.</summary>
+		public string PrefmName;
 		///<summary>The stored value.</summary>
 		public string ValueString;
 	}

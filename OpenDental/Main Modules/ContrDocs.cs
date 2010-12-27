@@ -2167,11 +2167,11 @@ namespace OpenDental{
 					DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 					mountNum=Convert.ToInt64(obj["MountNum"].ToString());					
 				}
-				ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
-				xRayImageController.SensorType=computerPrefs.SensorType;
-				xRayImageController.PortNumber=computerPrefs.SensorPort;
-				xRayImageController.Binned=computerPrefs.SensorBinned;
-				xRayImageController.ExposureLevel=computerPrefs.SensorExposure;
+				//ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
+				xRayImageController.SensorType=ComputerPrefs.LocalComputer.SensorType;
+				xRayImageController.PortNumber=ComputerPrefs.LocalComputer.SensorPort;
+				xRayImageController.Binned=ComputerPrefs.LocalComputer.SensorBinned;
+				xRayImageController.ExposureLevel=ComputerPrefs.LocalComputer.SensorExposure;
 				if(mountNum==0) {//No mount is currently selected.
 					//Show the user that they are performing an image capture by generating a new mount.
 					Mount mount=new Mount();
@@ -2217,7 +2217,8 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Capture"].Enabled=true;
 				ToolBarMain.Invalidate();
 				xRayImageController.CaptureXRay();
-			}else{//The user unselected the image capture button, so cancel the current image capture.
+			}
+			else{//The user unselected the image capture button, so cancel the current image capture.
 				xRayImageController.KillXRayThread();//Stop current xRay capture and call OnCaptureFinalize() when done.
 			}
 		}

@@ -3112,26 +3112,26 @@ namespace OpenDental{
 				tabDraw},
 				true);
 			LayoutToolBar();
-			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
-			this.toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(localComputerPrefs.DirectXFormat);
-			this.toothChart.DrawMode=localComputerPrefs.GraphicsSimple;//triggers ResetControls.
+			//ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
+			this.toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
+			this.toothChart.DrawMode=ComputerPrefs.LocalComputer.GraphicsSimple;//triggers ResetControls.
 		}
 
 		///<summary>Called every time prefs are changed from any workstation.</summary>
 		public void InitializeLocalData(){
 			butAddKey.Visible=PrefC.GetBool(PrefName.DistributorKey);
 			butForeignKey.Visible=PrefC.GetBool(PrefName.DistributorKey);
-			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
-			toothChart.UseHardware=computerPref.GraphicsUseHardware;
-			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
-			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(computerPref.DirectXFormat);
+			toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
+			toothChart.PreferredPixelFormatNumber=ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
+			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
 			//Must be last preference set here, because this causes the 
 																													//pixel format to be recreated.
-			toothChart.DrawMode=computerPref.GraphicsSimple;
+			toothChart.DrawMode=ComputerPrefs.LocalComputer.GraphicsSimple;
 			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
-			computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
-			ComputerPrefs.Update(computerPref);
+			ComputerPrefs.LocalComputer.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
+			ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 			if(PatCur!=null){
 				FillToothChart(true);
 			}

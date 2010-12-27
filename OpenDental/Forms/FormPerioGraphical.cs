@@ -22,8 +22,8 @@ namespace OpenDental {
 			PerioExamCur=perioExam;
 			PatCur=patient;
 			InitializeComponent();
-			ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
-			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(localComputerPrefs.DirectXFormat);//Must be set before draw mode
+			//ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
+			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);//Must be set before draw mode
 			toothChart.DrawMode=DrawingMode.DirectX;
 			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
 			toothChart.ColorBackground=Color.White;
