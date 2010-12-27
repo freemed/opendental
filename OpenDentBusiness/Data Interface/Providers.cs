@@ -66,13 +66,13 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),schoolClass,isAlph);
 			}
-			string command="SELECT Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,GradYear,Descript,UserName "
+			string command="SELECT Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,GradYear,Descript,MAX(UserName) UserName "//Max function used for Oracle compatability (some providers may have multiple user names).
 				+"FROM provider LEFT JOIN schoolclass ON provider.SchoolClassNum=schoolclass.SchoolClassNum "
 				+"LEFT JOIN userod ON userod.ProvNum=provider.ProvNum ";
 			if(schoolClass!=0){
 				command+="WHERE provider.SchoolClassNum="+POut.Long(schoolClass)+" ";
 			}
-			command+="GROUP BY provider.ProvNum ";
+			command+="GROUP BY Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,GradYear,Descript ";
 			if(isAlph){
 				command+="ORDER BY GradYear,Descript,LName,FName";
 			}
