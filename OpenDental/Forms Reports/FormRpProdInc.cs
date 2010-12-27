@@ -923,7 +923,7 @@ namespace OpenDental{
 				+"AND claimpayment.CheckDate <= "+POut.Date(dateTo)+" "
 				//+"GROUP BY claimproc.ClaimNum"
 				+"GROUP BY claimproc.PatNum,claimproc.ProvNum,claimproc.PlanNum,claimproc.ClinicNum,claimpayment.CheckDate"//same as claimproc.DateCP
-				+") ORDER BY procdate,namelf";
+				+") ORDER BY "+DbHelper.UnionOrderBy("procdate",1)+","+DbHelper.UnionOrderBy("namelf",2);
 			//MessageBox.Show(report.Query);
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;

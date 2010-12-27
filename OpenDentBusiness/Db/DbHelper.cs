@@ -98,5 +98,15 @@ namespace OpenDentBusiness {
 				}
 			}
 		}
+
+		///<summary>In Oracle, union order by combos can only use ordinals and not column names. Values for ordinal start at 1.</summary>
+		public static string UnionOrderBy(string colName,int ordinal) {
+			//Using POut doesn't name sense for column names or ordinal numbers because they are not values they are part of the query.
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return ordinal.ToString();
+			}
+			return colName;
+		}
+
 	}
 }

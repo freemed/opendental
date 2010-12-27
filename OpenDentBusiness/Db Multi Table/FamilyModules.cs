@@ -6,6 +6,7 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class FamilyModules {
+		/*js I think this is used, but can't find where.  I will uncomment when found.
 		public static DataSet GetAll(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum);
@@ -68,20 +69,19 @@ namespace OpenDentBusiness {
 				command+=" Subscriber="+POut.Long(fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
-			command+=") UNION (SELECT insplan.*,'0' FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
+			command+=") UNION ALL (SELECT insplan.*,'0' FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
 			for(int i=0;i<fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
 				command+=" patplan.PatNum="+POut.Long(fam.ListPats[i].PatNum);
 			}
-			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
-			command+=")) ORDER BY 3";//***ORACLE ORDINAL
+			command+="))";
 			//Debug.WriteLine(command);
 			DataTable table=Db.GetTable(command);
 			table.TableName="InsPlan";
 			return table;
-		}
+		}*/
 
 	}
 }
