@@ -1283,7 +1283,7 @@ GROUP BY SchedDate
 			report.Query= "SELECT DATE(appointment.AptDateTime) SchedDate,SUM(IFNULL(procedurelog.ProcFee,0)-IFNULL(WriteOffEst,0)) "
 				+"FROM appointment "
 				+"LEFT JOIN procedurelog ON appointment.AptNum = procedurelog.AptNum "
-				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND WriteOffEst != -1 "
+				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND Status=6 AND WriteOffEst != -1 "
 				+"WHERE (appointment.AptStatus = 1 OR "//stat=scheduled
         +"appointment.AptStatus = 4) "//or stat=ASAP
 				+"AND DATE(appointment.AptDateTime) >= "+POut.Date(dateFrom)+" "
