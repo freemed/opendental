@@ -1541,7 +1541,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private void comboView_SelectionChangeCommitted(object sender,EventArgs e) {
-			SetView(comboView.SelectedIndex);
+			SetView(comboView.SelectedIndex,true);
 		}
 
 		///<summary>Activated anytime a Patient menu item is clicked.</summary>
@@ -1593,7 +1593,7 @@ namespace OpenDental{
 		public void InitializeOnStartup(){
 			//jsparks-
 			//This method was inefficient and was causing 4 refreshes: RefreshPeriod, FillViews->comboView_SelectedIndexChanged, SetView?, SetWeeklyView.
-			//This was especially inefficient, because after calling this method, FormOD refreshes this module anyway.  So about 5 refreshes on startup.
+			//This was especially inefficient, because after calling this method, FormOD was refreshing this module anyway.  So about 5 refreshes on startup.
 			//Now, InitializedOnStartup remains false until the end of this method, preventing all refreshes when inside this method.
 			//Verified that it only does one RefreshPeriod call to the db.
 			if(InitializedOnStartup) {
@@ -1605,10 +1605,7 @@ namespace OpenDental{
 			ContrApptSingle.SelectedAptNum=-1;
 			//RefreshPeriod();//Don't think this is needed.
 			FillViews();//This does a SetView which will be overridden in the next line.
-			//ComputerPrefs.GetForLocalComputer(
-			if(ApptViewC.List.Length>0){//if any views
-				SetView(1);//default to first view
-			}
+			SetView((int)ComputerPrefs.LocalComputer.RecentApptView,false);
 			menuWeeklyApt.MenuItems.Clear();
 			menuWeeklyApt.MenuItems.Add(Lan.g(this,"Copy to Pinboard"),new EventHandler(menuWeekly_Click));
 			menuApt.MenuItems.Clear();
@@ -1695,23 +1692,23 @@ namespace OpenDental{
 		///<summary>The key press from the main form is passed down to this module.</summary>
 		public void FunctionKeyPress(Keys keys){
 			switch(keys){
-				case Keys.F1: SetView(1); break;
-				case Keys.F2: SetView(2); break;
-				case Keys.F3: SetView(3); break;
-				case Keys.F4: SetView(4); break;
-				case Keys.F5: SetView(5); break;
-				case Keys.F6: SetView(6); break;
-				case Keys.F7: SetView(7); break;
-				case Keys.F8: SetView(8); break;
-				case Keys.F9: SetView(9); break;
-				case Keys.F10: SetView(10); break;
-				case Keys.F11: SetView(11); break;
-				case Keys.F12: SetView(12); break;
+				case Keys.F1: SetView(1,true); break;
+				case Keys.F2: SetView(2,true); break;
+				case Keys.F3: SetView(3,true); break;
+				case Keys.F4: SetView(4,true); break;
+				case Keys.F5: SetView(5,true); break;
+				case Keys.F6: SetView(6,true); break;
+				case Keys.F7: SetView(7,true); break;
+				case Keys.F8: SetView(8,true); break;
+				case Keys.F9: SetView(9,true); break;
+				case Keys.F10: SetView(10,true); break;
+				case Keys.F11: SetView(11,true); break;
+				case Keys.F12: SetView(12,true); break;
 			}
 		}
 
-		/// <summary>Sets the view to the specified index, checking for validity in the process.  Then, does a ModuleSelected().</summary>
-		private void SetView(int viewIndex){
+		/// <summary>Sets the view to the specified index, checking for validity in the process.  Then, does a ModuleSelected().  If saveToDb, then it will remember the index for this workstation.</summary>
+		private void SetView(int viewIndex,bool saveToDb){
 			if(viewIndex > ApptViewC.List.Length){
 				return;
 			}
@@ -1721,6 +1718,10 @@ namespace OpenDental{
 			}
 			if(!InitializedOnStartup) {
 				return;//prevent ModuleSelected().
+			}
+			if(saveToDb) {
+				ComputerPrefs.LocalComputer.RecentApptView=(byte)viewIndex;
+				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 			}
 			if(PatCur==null) {
 				ModuleSelected(0);
@@ -1743,7 +1744,7 @@ namespace OpenDental{
 					f="";
 				comboView.Items.Add(f+ApptViewC.List[i].Description);
 			}
-			SetView(selected);//this also triggers ModuleSelected()
+			SetView(selected,false);//this also triggers ModuleSelected()
 		}
 
 		///<summary>Sets appointment data invalid on all other computers, causing them to refresh.  Does NOT refresh the data for this computer which must be done separately.</summary>
