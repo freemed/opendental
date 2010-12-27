@@ -351,6 +351,7 @@
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
     <Compile Include="Data Interface\TimeCardRules.cs" />
+    <Compile Include="Db\OdDbType.cs" />
     <Compile Include="Db\PoIn.cs" />
     <Compile Include="InternalTools\Phones\PhoneAsterisks.cs" />
     <Compile Include="InternalTools\Phones\PhoneEmpDefaults.cs" />

@@ -5,6 +5,15 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class DbSchema {
+		public enum TextSizeMySqlOracle {
+			///<summary>255-4k, MySql: text, Oracle: varchar2</summary>
+			Small,
+			///<summary>4k-65k, MySql: text, Oracle: clob</summary>
+			Medium,
+			///<summary>65k+, MySql: mediumtext, Oracle: clob</summary>
+			Large
+		}
+
 		/// <summary>If text, this overload handles sizes up to 4k.  If specifying an int, this uses int by default instead of smallint.</summary>
 		public static void AddColumnEnd(string tableName,string columnName,OdDbType dataType) {
 			AddColumnEnd(tableName,columnName,dataType,TextSizeMySqlOracle.Small,false);

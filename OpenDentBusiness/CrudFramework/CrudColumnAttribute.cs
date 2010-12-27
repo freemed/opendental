@@ -68,6 +68,8 @@ namespace OpenDentBusiness {
 		///<summary>Instead of storing this enum as an int in the db, it is stored as a string.  Very rarely used.</summary>
 		EnumAsString,
 		///<summary>For most C# TimeSpans, the default db type is TimeOfDay.  But for the few that need to use negative values or values greater than 24 hours, they get marked as this special type.  Handled differently in MySQL vs Oracle.</summary>
-		TimeSpanNeg
+		TimeSpanNeg,
+		///<summary>For most C# TimeSpans, the default db type is TimeOfDay.  But for the few that need to use negative values or values greater than 24 hours, they get marked as this special type.  Handled differently in MySQL vs Oracle.</summary>
+		Text
 	}
 }
