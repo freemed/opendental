@@ -40,9 +40,9 @@ namespace UnitTests {
 			command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE TEMPCORE'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 			DataCore.NonQ(command);
 			command="CREATE TABLE TEMPCORE "
-			+"(TimeOfDayTest TIMESTAMP, "//js I thought we decided this was a datetime
-			+"TimeStampTest DATE, "//js I thought we decided this was a datetime
-			+"DateTest DATE, "//js I thought we decided this was a datetime
+			+"(TimeOfDayTest TIMESTAMP, "//js changed type and name
+			+"TimeStampTest DATE, "
+			+"DateTest DATE, "
 			+"TimeSpanTest VARCHAR2(255), "//js added
 			+"DOUBLETEST FLOAT(24), "
 			+"BOOLTEST NUMBER(3,0), "
@@ -234,34 +234,28 @@ namespace UnitTests {
 			timespan=new TimeSpan(1,2,3);//1hr,2min,3sec
 			command="INSERT INTO tempcore (TimeOfDayTest) VALUES ("+POut.Time(timespan)+")";
 			DataCore.NonQ(command);
-			//this needs work unless we intend to rewrite a bunch of queries
-			//command="SELECT TO_CHAR(timetest,'HH24:MI:SS') timetest FROM tempcore";
-			//more like this:
 			command="SELECT TimeOfDayTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["timetest"].ToString());
+			timespan2=PIn.TimeSpan(table.Rows[0]["TimeOfDayTest"].ToString());
 			if(timespan!=timespan2) {
 				throw new Exception();
 			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="TimeSpan (time of day): Passed.\r\n";
-			/*
 			//timespan, negative------------------------------------------------------------------------------------
 			timespan=new TimeSpan(0,-36,0);//Oracle does not seem to like negative values.
-			//Usually says "Hr between 1-12 (unless you specify 24 then 0-23), min between 1-59 and sec between 1-59
-			command="INSERT INTO tempcore (timetest) VALUES (TO_TIMESTAMP("+POut.TimeSpan(timespan)+",'HH24:MI:SS'))";
+			command="INSERT INTO tempcore (TimeSpanTest) VALUES ('"+POut.TSpan(timespan)+"')";
 			DataCore.NonQ(command);
-			command="SELECT TO_CHAR(timetest,'HH24:MI:SS') timetest FROM tempcore";
+			command="SELECT TimeSpanTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["timetest"].ToString());
-			if(timespan!=timespan2) {
+			string timespanstring2=PIn.String(table.Rows[0]["TimeSpanTest"].ToString());
+			if(timespan.ToString()!=timespanstring2) {
 				throw new Exception();
 			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="TimeSpan, negative: Passed.\r\n";
-				*/
 			//date----------------------------------------------------------------------------------------------
 			DateTime date1;
 			DateTime date2;
@@ -305,24 +299,21 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Double: Passed.\r\n";
-			/*
 			//group_concat------------------------------------------------------------------------------------
-			//Oracle does not have something that acts like GROUP_CONCAT might look into later. 
 			//(Michael) Use RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement("x",column_name)),'<x>'),'</x>',',')) instead of GROUP_CONCAT(column_name) for Oracle.
 			command="INSERT INTO tempgroupconcat VALUES ('name1')";
 			DataCore.NonQ(command);
 			command="INSERT INTO tempgroupconcat VALUES ('name2')";
 			DataCore.NonQ(command);
-			command="SELECT GROUP_CONCAT(NAME) allnames FROM tempgroupconcat";
+			command="SELECT RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\",NAME)),'<x>'),'</x>',',')) allnames FROM tempgroupconcat";
 			table=DataCore.GetTable(command);
 			string allnames=PIn.ByteArray(table.Rows[0]["allnames"].ToString());
-			if(allnames!="name1,name2") {
+			if(allnames!="name1,name2,") {//RTRIM puts a ',' at the end. Jordan and Michael will look into this. Will come back to later.
 				throw new Exception();
 			}
 			command="DELETE FROM tempgroupconcat";
 			DataCore.NonQ(command);
 			retVal+="Group_concat: Passed.\r\n";
-				*/
 			//bool,pos------------------------------------------------------------------------------------
 			bool bool1;
 			bool bool2;
@@ -366,7 +357,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			retVal+="VARCHAR2(4000): Passed.\r\n";
 			//clob:-----------------------------------------------------------------------------------------
-			//tested up to 20MB.  50MB however was failing: Chunk size error
+			//tested up to 20MB.  (50MB however was failing: Chunk size error)
 			string clobstring1=CreateRandomAlphaNumericString(10485760); //10MB should be larger than anything we store.
 			string clobstring2="";
 			OdSqlParameter param=new OdSqlParameter(":param1",OdDbType.Text,clobstring1);

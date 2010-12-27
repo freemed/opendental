@@ -176,6 +176,9 @@ namespace OpenDentBusiness{
 				return System.TimeSpan.MinValue;
 			}
 			try {
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					return DateTime.Parse(myString).TimeOfDay;
+				}
 				return (System.TimeSpan.Parse(myString));
 			}
 			catch {
