@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long DepositNum;
 		///<summary>Text of printed receipt if the payment was done electronically. Allows reprinting if needed. Only used for PayConnect at the moment, but plans to use for XCharge as well.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Receipt;
 
 
