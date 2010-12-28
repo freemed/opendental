@@ -5,71 +5,48 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class DbSchema {
-		public enum TextSizeMySqlOracle {
-			///<summary>255-4k, MySql: text, Oracle: varchar2</summary>
-			Small,
-			///<summary>4k-65k, MySql: text, Oracle: clob</summary>
-			Medium,
-			///<summary>65k+, MySql: mediumtext, Oracle: clob</summary>
-			Large
-		}
-
-		/// <summary>If text, this overload handles sizes up to 4k.  If specifying an int, this uses int by default instead of smallint.</summary>
-		public static void AddColumnEnd(string tableName,string columnName,OdDbType dataType) {
-			AddColumnEnd(tableName,columnName,dataType,TextSizeMySqlOracle.Small,false);
-		}
-
-		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
-		public static void AddColumnEnd(string tableName,string columnName,OdDbType dataType,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
+		
+		/// <summary></summary>
+		public static void AddColumnEnd(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" ADD "+columnName+" "+GetMySqlType(dataType,textSize,intUseSmallInt)+";";
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+";";
 			}
 			else {//oracle
-				command = "ALTER TABLE "+tableName+" ADD "+columnName+" "+GetOracleType(dataType,textSize,intUseSmallInt)+";";
-				if(dataType==OdDbType.DateTimeStamp) {
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+";";
+				if(col.DataType==OdDbType.DateTimeStamp) {
 				//Add code for building trigger here.
 				}
 			}
 			Db.NonQ(command);
 		}
 
-		/// <summary>If text, this overload handles sizes up to 4k.  If specifying an int, this uses int by default instead of smallint.</summary>
-		public static void AddColumnAfter(string tableName,string columnName,string afterColumn,OdDbType dataType) {
-			AddColumnAfter(tableName,columnName,afterColumn,dataType,TextSizeMySqlOracle.Small,false);
-		}
-
 		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
-		public static void AddColumnAfter(string tableName,string columnName,string afterColumn,OdDbType dataType,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
+		public static void AddColumnAfter(string tableName,DbSchemaCol col,string afterColumn) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" ADD "+columnName+" "+GetMySqlType(dataType,textSize,intUseSmallInt)+" AFTER "+afterColumn+";";
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" AFTER "+afterColumn+";";
 			}
 			else {//oracle
 				//query to find the column names
 
 				//Workaround, must create a new table and copy data to add new column anywhere except the end.
-				if(dataType==OdDbType.DateTimeStamp) {
+				if(col.DataType==OdDbType.DateTimeStamp) {
 					//Add code for building trigger here.
 				}
 			}
 			Db.NonQ(command);
 		}
 
-		/// <summary>If text, this overload handles sizes up to 4k.  If specifying an int, this uses int by default instead of smallint.</summary>
-		public static void AddColumnFirst(string tableName,string columnName,OdDbType dataType) {
-			AddColumnFirst(tableName,columnName,dataType,TextSizeMySqlOracle.Small,false);
-		}
-
 		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
-		public static void AddColumnFirst(string tableName,string columnName,OdDbType dataType,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
+		public static void AddColumnFirst(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" ADD "+columnName+" "+GetMySqlType(dataType,textSize,intUseSmallInt)+";";
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+";";
 			}
 			else {//oracle
 				//Workaround, must create a new table and copy data to add new column anywhere except the end.
-				if(dataType==OdDbType.DateTimeStamp) {
+				if(col.DataType==OdDbType.DateTimeStamp) {
 					//Add code for building trigger here.
 				}
 			}
@@ -84,12 +61,13 @@ namespace OpenDentBusiness {
 			}
 			else {//oracle
 				command= "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+" ;";
+//todo: check for existing trigger or index
 			}
 			Db.NonQ(command);
 		}
 
-		/// <summary></summary>
-		public static void AddTable(string tableName) {
+		/// <summary>First column is always a bigint, primary key, autoincrement.</summary>
+		public static void AddTable(string tableName,List<DbSchemaCol> cols) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 
 			}
@@ -138,8 +116,8 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		private static string GetMySqlType(OdDbType dataType,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
-			switch(dataType) {
+		private static string GetMySqlType(DbSchemaCol col) {
+			switch(col.DataType) {
 				case OdDbType.Bool:
 					return "tinyint";
 					break;
@@ -162,7 +140,7 @@ namespace OpenDentBusiness {
 					return "float";
 					break;
 				case OdDbType.Int:
-					if(intUseSmallInt){
+					if(col.IntUseSmallInt){
 						return "smallint";
 					}
 					else{
@@ -173,7 +151,7 @@ namespace OpenDentBusiness {
 					return "bigint";
 					break;
 				case OdDbType.Text:
-					if(textSize==TextSizeMySqlOracle.Small || textSize==TextSizeMySqlOracle.Medium) {
+					if(col.TextSize==TextSizeMySqlOracle.Small || col.TextSize==TextSizeMySqlOracle.Medium) {
 						return "text";
 					}
 					else {//textSize==TextSizeMySqlOracle.large
@@ -193,8 +171,8 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
-		private static string GetOracleType(OdDbType dataType,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
-			switch(dataType) {
+		private static string GetOracleType(DbSchemaCol col) {
+			switch(col.DataType) {
 				case OdDbType.Bool:
 					return "NUMBER(3)";
 					break;
@@ -224,7 +202,7 @@ namespace OpenDentBusiness {
 					return "NUMBER(20)";
 					break;
 				case OdDbType.Text:
-					if(textSize==TextSizeMySqlOracle.Small) {
+					if(col.TextSize==TextSizeMySqlOracle.Small) {
 						return "varchar2(4000)";
 					}
 					else {//textSize == medium or large
