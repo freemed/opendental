@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -15,7 +16,17 @@ namespace OpenDentBusiness {
 			else {//oracle
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+";";
 				if(col.DataType==OdDbType.DateTimeStamp) {
-				//Add code for building trigger here.
+					Db.NonQ(command);//add column
+					command ="Select * from user_tab_columns where table_name='"+tableName+"';";
+					DataTable tempTable = Db.GetTable(command);//get list of columns
+					command = "CREATE OR REPLACE TRIGGER "+tableName+"_timestamp BEFORE UPDATE ON "+tableName+"FOR EACH ROW"
+										+"BEGIN";
+					for(int i=0;i<tempTable.Rows.Count;i++) {//iterate through each column to see if it was changed
+						command+="	IF :OLD."+tempTable.Rows[i].ToString()+" <> :NEW."+tempTable.Rows[i].ToString()+" THEN"
+										+"	:NEW.DateTStamp := SYSDATE;"
+										+"	END IF;";
+					}
+										command+="END "+tableName+"_timespan;";
 				}
 			}
 			Db.NonQ(command);
@@ -189,7 +200,7 @@ namespace OpenDentBusiness {
 					return "date";
 					break;
 				case OdDbType.DateTimeStamp:
-					//also requires a trigger to be made
+					//also requires trigger, trigger code is automatically created above.
 					return "date";
 					break;
 				case OdDbType.Float:
