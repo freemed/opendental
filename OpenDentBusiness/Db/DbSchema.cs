@@ -78,12 +78,14 @@ namespace OpenDentBusiness {
 
 		/// <summary></summary>
 		public static void DropColumn(string tableName,string columnName) {
+			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-
+				command= "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+" ;";
 			}
 			else {//oracle
-
+				command= "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+" ;";
 			}
+			Db.NonQ(command);
 		}
 
 		/// <summary></summary>
