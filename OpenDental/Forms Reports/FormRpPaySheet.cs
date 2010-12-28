@@ -393,7 +393,7 @@ namespace OpenDental{
 				whereClin+=") ";
 			}
 			string queryIns=
-				@"SELECT CONVERT(DATE_FORMAT(claimproc.DateCP,'%c/%d/%Y'),CHAR(25)) DateCP,"
+				@"SELECT CONVERT("+DbHelper.DateFormatColumn("claimproc.DateCP","%c/%d/%Y")+",CHAR(25)) DateCP,"
 +DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@"lfname,
 carrier.CarrierName,provider.Abbr,
 clinic.Description clinicDesc,
@@ -453,7 +453,7 @@ WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 				whereClin+=") ";
 			}
 			string queryPat=
-				@"SELECT CONVERT(DATE_FORMAT(paysplit.DatePay,'%c/%d/%Y'),CHAR(25)) AS DatePay,"
+				@"SELECT CONVERT("+DbHelper.DateFormatColumn("paysplit.DatePay","%c/%d/%Y")+",CHAR(25)) AS DatePay,"
 +DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@"AS lfname,
 payment.PayType,provider.Abbr,
 clinic.Description clinicDesc,

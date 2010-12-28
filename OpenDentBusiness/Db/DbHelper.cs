@@ -115,5 +115,21 @@ namespace OpenDentBusiness {
 			return "DATE("+colName+")";
 		}
 
+		///<summary>The format must be the MySQL format. The following formats are currently acceptable as input: %c/%d/%Y , %m/%d/%Y</summary>
+		public static string DateFormatColumn(string colName,string format) {
+			//MySQL DATE_FORMAT() reference: http://dev.mysql.com/doc/refman/5.0/en/date-and-time-functions.html#function_date-format
+			//Oracle TO_CHAR() reference: http://download.oracle.com/docs/cd/B19306_01/server.102/b14200/sql_elements004.htm#i34510
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				if(format=="%c/%d/%Y") {
+					return "TO_CHAR("+colName+",'MM/DD/YYYY')";//Sadly, not exactly the same but closest option.
+				}
+				else if(format=="%m/%d/%Y") {
+					return "TO_CHAR("+colName+",'MM/DD/YYYY')";//Sadly, not exactly the same but closest option.
+				}
+				throw new Exception("Unrecognized date format string.");
+			}
+			return "DATE_FORMAT("+colName+",'"+format+"')";
+		}
+
 	}
 }

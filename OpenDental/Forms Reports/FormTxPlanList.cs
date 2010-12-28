@@ -351,7 +351,7 @@ namespace OpenDental {
 			PatCur = Patients.GetPat(PatNum);
 			bool DoesPatientHasTreatment;
 
-			command = "SELECT date_format(procedurelog.DateTP,'%m/%d/%Y') AS ProcDate," +
+			command = "SELECT "+DbHelper.DateFormatColumn("procedurelog.DateTP","%m/%d/%Y")+" ProcDate," +
                       "procedurelog.ToothNum,procedurelog.Surf,procedurecode.ProcCode," +
                       "procedurecode.Descript,procedurelog.ProcFee,claimproc.InsPayEst," +
                       "ifNull(procedurelog.ProcFee,0) - ifNull(claimproc.InsPayEst,0) as PatPays " +

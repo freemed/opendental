@@ -1049,7 +1049,8 @@ namespace OpenDentBusiness{
 				+"WHERE SUBSTRING(Birthdate,6,5) >= '"+dateFrom.ToString("MM-dd")+"' "
 				+"AND SUBSTRING(Birthdate,6,5) <= '"+dateTo.ToString("MM-dd")+"' "
 				+"AND Birthdate > '1880-01-01' "
-				+"AND PatStatus=0	ORDER BY DATE_FORMAT(Birthdate,'%m/%d/%Y')";
+				+"AND PatStatus=0	"
+				+"ORDER BY "+DbHelper.DateFormatColumn("Birthdate","%m/%d/%Y");
 			DataTable table=Db.GetTable(command);
 			table.Columns.Add("Age");
 			for(int i=0;i<table.Rows.Count;i++){
@@ -1225,8 +1226,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
 			}
-			string command=@"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				FROM patient WHERE patient.PatNum="+PatNum;
+			string command="SELECT FName,LName,"+DbHelper.DateFormatColumn("birthdate","%m/%d/%Y")+" BirthDate,Gender "
+				+"FROM patient WHERE patient.PatNum="+PatNum;
 			return Db.GetTable(command);
 		}
 
@@ -1234,9 +1235,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
 			}
-			string command=@"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				        FROM patient WHERE PatNum In (SELECT Guarantor FROM 
-                            PATIENT WHERE patnum = "+PatNum+")";
+			string command=@"SELECT FName,LName,"+DbHelper.DateFormatColumn("birthdate","%m/%d/%Y")+" BirthDate,Gender "
+				+"FROM patient WHERE PatNum In (SELECT Guarantor FROM PATIENT WHERE patnum = "+PatNum+")";
 			return Db.GetTable(command);
 		}
 
@@ -1244,8 +1244,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),patId);
 			}
-			string command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				FROM patient WHERE patient.PatNum=" + POut.Long(patId);
+			string command = @"SELECT FName,LName,"+DbHelper.DateFormatColumn("birthdate","%m/%d/%Y")+" BirthDate,Gender "
+				+"FROM patient WHERE patient.PatNum=" + POut.Long(patId);
 			DataTable table = Db.GetTable(command);
 			if(table.Rows.Count == 0) {
 				return "Patient(???) is Eligible";
