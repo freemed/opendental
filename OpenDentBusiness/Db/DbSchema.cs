@@ -7,7 +7,7 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class DbSchema {
 		
-		/// <summary></summary>
+		/// <summary>Completed</summary>
 		public static void AddColumnEnd(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -26,13 +26,13 @@ namespace OpenDentBusiness {
 										+"	:NEW.DateTStamp := SYSDATE;"
 										+"	END IF;";
 					}
-										command+="END "+tableName+"_timespan;";
+						command+="END "+tableName+"_timespan;";
 				}
 			}
 			Db.NonQ(command);
 		}
 
-		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
+		/// <summary>TODO:this function; Specify textSize if there's any chance of it being greater than 4000 char.</summary>
 		public static void AddColumnAfter(string tableName,DbSchemaCol col,string afterColumn) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -49,7 +49,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
+		/// <summary>TODO:this function; Specify textSize if there's any chance of it being greater than 4000 char.</summary>
 		public static void AddColumnFirst(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -64,7 +64,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		/// <summary></summary>
+		/// <summary>TODO: trigger cleanup for oracle</summary>
 		public static void DropColumn(string tableName,string columnName) {
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -87,7 +87,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>TODO.this</summary>
 		public static void RenameColumn(string tableName,string columnName,string newColumnName) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 
@@ -97,7 +97,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>TODO.this</summary>
 		public static void ChangeColumnType(string tableName,string columnName,OdDbType newType) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 
@@ -107,7 +107,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>TODO.this</summary>
 		public static void AddKey(string tableName,string columnName) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 
@@ -117,7 +117,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>TODO.this</summary>
 		public static void RemoveKey(string tableName,string columnName) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 
