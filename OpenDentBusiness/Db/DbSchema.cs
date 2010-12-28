@@ -25,14 +25,20 @@ namespace OpenDentBusiness {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" AFTER "+afterColumn+";";
+				Db.NonQ(command);
 			}
 			else {//oracle
-				//query to find the column names
-
-				//Workaround, must create a new table and copy data to add new column anywhere except the end.
+				int addAtIndex=0;
+				command ="Select TABLE_NAME, COLUMN_NAME from user_tab_columns where table_name='"+tableName.ToUpper()+"';";
+				DataTable tempTable = Db.GetTable(command);//get list of columns
+				for(int i=0;i<tempTable.Rows.Count;i++) {//find column index of column that matches afterColumn
+					if(tempTable.Rows[i][1].ToString()==afterColumn) {
+						addAtIndex = i+1;
+					}
+				}
+				OracleAddAtIndexHelper(tableName,col,addAtIndex);
 				OracleValidateDateTStampTriggerHelper(tableName);
 			}
-			Db.NonQ(command);
 		}
 
 		/// <summary>TODO:this function; Specify textSize if there's any chance of it being greater than 4000 char.</summary>
@@ -42,7 +48,7 @@ namespace OpenDentBusiness {
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+";";
 			}
 			else {//oracle
-				//Workaround, must create a new table and copy data to add new column anywhere except the end.
+				OracleAddAtIndexHelper(tableName,col,0);
 				OracleValidateDateTStampTriggerHelper(tableName);
 			}
 			Db.NonQ(command);
@@ -63,12 +69,28 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>First column is always a bigint, primary key, autoincrement.</summary>
-		public static void AddTable(string tableName,List<DbSchemaCol> cols) {
+		public static void AddOrReplaceTable(string tableName,List<DbSchemaCol> cols) {
+			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-
+				//redefine keys
+				//redefine indexes and sequences
 			}
 			else {//oracle
+				command = "CREATE TABLE newtemptable ( ";
+				for(int i=0;i<cols.Count;i++) {
+					command+=cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==0?" primary key ":"")+", ";
+				}
+//				command.TrimEnd();
+				command += " );";
+				//redefine keys
+				//redefine indexes and sequences
+				//fill new table with old data
+				//check sequences
+				//check other triggers
 
+				command = "ALTER TABLE newtemptable RENAME TO "+tableName+";";
+				Db.NonQ(command);
+				OracleValidateDateTStampTriggerHelper(tableName);
 			}
 		}
 
@@ -192,18 +214,18 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
-		/// <summary>validates any table's dateTStamp triggers for oracle.</summary>
+		/// <summary>validates any table's dateTStamp triggers for Oracle.</summary>
 		private static void OracleValidateDateTStampTriggerHelper(string tableName){
 			bool triggerNeeded = false;
 			bool needDropTrigger = false;
 			string command ="Select TABLE_NAME, COLUMN_NAME from user_tab_columns where table_name='"+tableName.ToUpper()+"';";
 			DataTable tempTable = Db.GetTable(command);//get list of columns
-			for(int i=0;i<tempTable.Rows.Count;i++){
+			for(int i=0;i<tempTable.Rows.Count;i++){//check columns for a DateTStamp
 				if(tempTable.Rows[i][1].ToString()=="DateTStamp"){
 					triggerNeeded=true;
 				}
 			}
-			if(triggerNeeded) {
+			if(triggerNeeded) {//table needs a timestamp trigger, regaurdless of existing triggers
 				command = "CREATE OR REPLACE TRIGGER "+tableName+"_timestamp BEFORE UPDATE ON "+tableName+"FOR EACH ROW "
 										+"BEGIN";
 				for(int i=0;i<tempTable.Rows.Count;i++) {//iterate through each column to see if it was changed
@@ -213,7 +235,7 @@ namespace OpenDentBusiness {
 				}
 				command+="END "+tableName+"_timespan;";
 			}
-			else {//table needs no DateTStamp trigger
+			else {//table needs to have zero DateTStamp triggers
 				command = "Select TRIGGER_NAME from user_triggers WHERE tablename = '"+tableName.ToUpper()+"';";
 				DataTable tempTriggerTable = Db.GetTable(command);
 				for(int i=0;i<tempTriggerTable.Rows.Count;i++) {//check for timestamp triggers before trying to delete
@@ -229,9 +251,24 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Fills new table by selecting each column before index from old table, creates new column at index, continues to select columns from old table, drops old table, renames new table.</summary>
-		private static void OracleAddAtIndexHelper(string tableName,int indexOfNewColumn) {
-			//Oracle does not support adding columns to tables anywhere other than the end of the table. Workaround is to create a new table, fill it with data, drop the old table, and rename the new table.
-			//MySql does not need to use this function ever.
+		private static void OracleAddAtIndexHelper(string tableName,DbSchemaCol col, int indexOfNewColumn) {
+			string command;
+			DbSchemaCol newCol;
+			command = "Select * FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"';";
+			DataTable tempTable = Db.GetTable(command);//get list of columns
+			List<DbSchemaCol> newTableCols = new List<DbSchemaCol>();
+			for(int i=0;i<tempTable.Rows.Count;i++) {
+				if(i==indexOfNewColumn){//once we reach the index of the new column add it to the table
+					newCol = new DbSchemaCol(col.ColumnName,col.DataType);//add new column here
+					newTableCols.Add(newCol);
+				}
+				newCol = new DbSchemaCol(tempTable.Rows[i][1].ToString(),OdDbType.Bool /* must convert this:tempTable.Rows[i][2] to OdDbTypes*/);
+				newTableCols.Add(newCol);
+			}
+			AddOrReplaceTable(tableName,newTableCols);
+			//Validating timestamps occurs in the code above
+			//drop old table
+			//rename new table_name to old table_name
 		}
 
 
