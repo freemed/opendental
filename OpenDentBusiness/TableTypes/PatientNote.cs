@@ -18,6 +18,7 @@ namespace OpenDentBusiness{
 		///<summary>Service notes</summary>
 		public string Service;
 		///<summary>Complete current Medical History</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MedicalComp;
 		///<summary>Shows in the Chart module just below the graphical tooth chart.</summary>
 		public string Treatment;

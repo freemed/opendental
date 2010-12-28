@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:HL7MessageStatus  OutPending, OutSent, InReceived, InProcessed.</summary>
 		public HL7MessageStatus HL7Status;
 		///<summary>The actual HL7 message in its entirity.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MsgText;
 		///<summary>FK to appointment.AptNum.  Many of the messages contain "Visit ID" which is equivalent to the our AptNum.</summary>
 		public long AptNum;

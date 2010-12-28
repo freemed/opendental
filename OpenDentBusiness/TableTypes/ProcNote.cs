@@ -19,6 +19,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
 		///<summary>The actual note.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>There are two kinds of signatures.  Topaz signatures use hardware manufactured by that company, and the signature is created by their library.  OD signatures work exactly the same way, but are only for on-screen signing.</summary>
 		public bool SigIsTopaz;

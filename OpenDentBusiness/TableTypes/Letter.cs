@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		///<summary>Description of the Letter.</summary>
 		public string Description;
 		///<summary>Text of the letter</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BodyText;
 	}
 	

@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 		///<summary>The name of the file to export to.</summary>
 		public string FileName;
 		///<summary>The text of the query.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string QueryText;
 	}
 

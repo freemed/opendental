@@ -17,6 +17,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to patient.PatNum or appointment.AptNum. Only used when ObjectType is not 0.</summary>
 		public long KeyNum;
 		///<summary>The description of this task.  Might be very long.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Descript;
 		///<summary>Enum:TaskStatusEnum New,Viewed,Done.</summary>
 		public TaskStatusEnum TaskStatus;

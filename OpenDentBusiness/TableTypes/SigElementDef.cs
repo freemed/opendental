@@ -19,6 +19,7 @@ namespace OpenDentBusiness{
 		///<summary>The text that shows for the element, like the user name or the two word message.  No long text is stored here.</summary>
 		public string SigText;
 		///<summary>The sound to play for this element.  Wav file stored in the database in string format until "played".  If empty string, then no sound.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Sound;
 		///<summary>The order of this element within the list of the same type.</summary>
 		public int ItemOrder;

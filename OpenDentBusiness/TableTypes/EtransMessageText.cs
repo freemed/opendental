@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		[CrudColumn(IsPriKey=true)]
 		public long EtransMessageTextNum;
 		///<summary>The entire message text, including carriage returns.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MessageText;
 
 		///<summary></summary>
