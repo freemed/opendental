@@ -279,7 +279,7 @@ namespace OpenDentBusiness{
 				+"AND claim.InsSubNum=inssub.InsSubNum "
 				+"AND carrier.CarrierNum=insplan.CarrierNum "
 				+"AND ("+str.ToString()+") "
-				+"ORDER BY carrier.ElectID,claim.ProvBill,inssub.Subscriber,inssub.Subscriber!=claim.PatNum,claim.PatNum";
+				+"ORDER BY carrier.ElectID,claim.ProvBill,inssub.Subscriber,CASE WHEN inssub.Subscriber=claim.PatNum THEN 0 ELSE 1 END,claim.PatNum";
 			DataTable table=Db.GetTable(command);
 			List<X12TransactionItem> retVal=new List<X12TransactionItem>();
 			//object[,] myA=new object[5,table.Rows.Count];

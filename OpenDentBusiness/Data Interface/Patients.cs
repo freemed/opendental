@@ -495,7 +495,7 @@ namespace OpenDentBusiness{
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum,ClinicNum
-				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum,FName,Preferred;
+				ORDER BY CASE Guarantor=patient.PatNum THEN 0 ELSE 1 END,Birthdate,ProvNum,FName,Preferred;
 
 				DROP TABLE IF EXISTS tempfambal";
 			return Db.GetTable(command);
