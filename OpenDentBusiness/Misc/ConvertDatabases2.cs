@@ -3221,6 +3221,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.6.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_6_2();
+		}
+
+		private static void To7_6_2() {
+			if(FromVersion<new Version("7.6.2.0")) {
+				string command;
+				command="ALTER TABLE preference DROP COLUMN PrefNum";
+				Db.NonQ(command);
+				command="ALTER TABLE preference ADD COLUMN PrefNum bigint NOT NULL auto_increment AFTER ValueString, ADD PRIMARY KEY (PrefNum)";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.6.2.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_7_0();
 		}
 
