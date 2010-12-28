@@ -1292,49 +1292,56 @@ namespace OpenDentBusiness{
 				CREATE TABLE tempannualmax(
 				PlanNum bigint unsigned NOT NULL,
 				AnnualMax double NOT NULL,
-				PRIMARY KEY (PlanNum));
-
-				INSERT INTO tempused
-				SELECT patplan.PatPlanNum,
-				SUM(IFNULL(claimproc.InsPayAmt,0))
-				FROM claimproc
-				LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
-				AND patplan.PlanNum = claimproc.PlanNum
-				WHERE claimproc.Status IN (1, 3, 4)
-				AND claimproc.ProcDate BETWEEN makedate(year(curdate()), 1)
-				AND makedate(year(curdate())+1, 1) /*current calendar year*/
-				GROUP BY patplan.PatPlanNum;
-
-				INSERT INTO tempplanned
-				SELECT PatNum, SUM(ProcFee)
-				FROM procedurelog
-				LEFT JOIN procedurecode ON procedurecode.CodeNum = procedurelog.CodeNum
-				WHERE ProcStatus = 1 /*treatment planned*/";
+				PRIMARY KEY (PlanNum));";
+			Db.NonQ(command);
+			command=@"INSERT INTO tempused
+SELECT patplan.PatPlanNum,
+SUM(IFNULL(claimproc.InsPayAmt,0))
+FROM claimproc
+LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
+AND patplan.PlanNum = claimproc.PlanNum
+WHERE claimproc.Status IN (1, 3, 4)
+AND claimproc.ProcDate BETWEEN makedate(year(curdate()), 1)
+AND makedate(year(curdate())+1, 1) /*current calendar year*/
+GROUP BY patplan.PatPlanNum";
+			Db.NonQ(command);
+			command=@"INSERT INTO tempplanned
+SELECT PatNum, SUM(ProcFee)
+FROM procedurelog
+LEFT JOIN procedurecode ON procedurecode.CodeNum = procedurelog.CodeNum
+WHERE ProcStatus = 1 /*treatment planned*/";
 			if(code1!="") {
-				command+=@"
-				AND (((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=-1))
+				command+=@" AND (((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=-1))
 				AND (((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=1))";
 			}
-				command+=@"
-				AND procedurelog.ProcDate>"+POut.DateT(dateSince)+@"
-				GROUP BY PatNum;
-
-				INSERT INTO tempannualmax
-				SELECT benefit.PlanNum, benefit.MonetaryAmt
-				FROM benefit, covcat, insplan
-				WHERE covcat.CovCatNum = benefit.CovCatNum
-				AND benefit.BenefitType = 5 /* limitation */
-				AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
-				AND benefit.MonetaryAmt <> 0
-				AND benefit.PlanNum=insplan.PlanNum ";
+			command+="AND procedurelog.ProcDate>"+POut.DateT(dateSince)+" "
+				+"GROUP BY PatNum";
+			Db.NonQ(command);
+			command=@"INSERT INTO tempannualmax
+SELECT benefit.PlanNum, benefit.MonetaryAmt
+FROM benefit, covcat, insplan
+WHERE covcat.CovCatNum = benefit.CovCatNum
+AND benefit.BenefitType = 5 /* limitation */
+AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
+AND benefit.MonetaryAmt <> 0
+AND benefit.PlanNum=insplan.PlanNum ";
 			if(monthStart!=13) {
 				command+="AND insplan.MonthRenew='"+POut.Int(monthStart)+"' ";
 			}
-				command+=@"
-				GROUP BY benefit.PlanNum, benefit.MonetaryAmt
-				ORDER BY benefit.PlanNum;
-
-				SELECT patient.PatNum, patient.LName, patient.FName,
+			command+="GROUP BY benefit.PlanNum, benefit.MonetaryAmt ORDER BY benefit.PlanNum";
+//crashes here.  This is the query:
+/*
+INSERT INTO tempannualmax
+SELECT benefit.PlanNum, benefit.MonetaryAmt
+FROM benefit, covcat, insplan
+WHERE covcat.CovCatNum = benefit.CovCatNum
+AND benefit.BenefitType = 5
+AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
+AND benefit.MonetaryAmt <> 0
+AND benefit.PlanNum=insplan.PlanNum 
+GROUP BY benefit.PlanNum, benefit.MonetaryAmt ORDER BY benefit.PlanNum*/
+			Db.NonQ(command);
+			command=@"SELECT patient.PatNum, patient.LName, patient.FName,
 				patient.Email, patient.HmPhone, patient.PreferRecallMethod,
 				patient.WirelessPhone, patient.WkPhone, patient.Address,
 				patient.Address2, patient.City, patient.State, patient.Zip,
@@ -1383,11 +1390,12 @@ namespace OpenDentBusiness{
 			}
 			command+=@"
 				AND patient.PatStatus =0
-				ORDER BY tempplanned.AmtPlanned DESC;
-				DROP TABLE tempused;
+				ORDER BY tempplanned.AmtPlanned DESC";
+			DataTable rawtable=Db.GetTable(command);
+			command=@"DROP TABLE tempused;
 				DROP TABLE tempplanned;
 				DROP TABLE tempannualmax;";
-			DataTable rawtable=Db.GetTable(command);
+			Db.NonQ(command);
 			ContactMethod contmeth;
 			for(int i=0;i<rawtable.Rows.Count;i++) {
 				row=table.NewRow();
