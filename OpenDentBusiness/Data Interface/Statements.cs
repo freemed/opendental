@@ -109,7 +109,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("StatementNum");
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT BalTotal,BillingType,FName,InsEst,statement.IsSent,"
-				+"IFNULL(MAX(s2.DateSent),DATE('0001-01-01')) LastStatement,"
+				+"IFNULL(MAX(s2.DateSent),"+POut.Date(DateTime.MinValue)+") LastStatement,"
 				+"LName,MiddleI,statement.Mode_,PayPlanDue,Preferred,"
 				+"statement.PatNum,statement.StatementNum "
 				+"FROM statement "

@@ -49,7 +49,7 @@ namespace OpenDentBusiness {
 					command+="site.Description SiteDescription";
 				} 
 				else if(letter.Fields[i]=="DateOfLastSavedTP") {
-					command+="DATE(treatplan.DateTP) DateOfLastSavedTP";
+					command+=DbHelper.DateColumn("treatplan.DateTP")+" DateOfLastSavedTP";
 				} 
 				else if(letter.Fields[i]=="DateRecallDue") {
 					command+="recall.DateDue  DateRecallDue";

@@ -342,7 +342,7 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query="SET @FromDate="+POut.Date(date1.SelectionStart)+", @ToDate="+POut.Date(date2.SelectionStart)+";";
 			if(radioWriteoffPay.Checked){
-				report.Query+="SELECT DATE(claimproc.DateCP) date,"
+				report.Query+="SELECT "+DbHelper.DateColumn("claimproc.DateCP")+" date,"
 					+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+","
 					+"carrier.CarrierName,"
 					+"provider.Abbr,";
@@ -368,7 +368,7 @@ namespace OpenDental{
 					+"ORDER BY claimproc.DateCP,claimproc.PatNum";
 			}
 			else{//using procedure date
-				report.Query+="SELECT Date(claimproc.ProcDate) date, "
+				report.Query+="SELECT "+DbHelper.DateColumn("claimproc.ProcDate")+" date, "
 					+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+", "
 					+"carrier.CarrierName, "
 					+"provider.Abbr,";

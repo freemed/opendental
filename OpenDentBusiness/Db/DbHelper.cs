@@ -108,5 +108,12 @@ namespace OpenDentBusiness {
 			return colName;
 		}
 
+		public static string DateColumn(string colName) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "TO_DATE("+colName+")";
+			}
+			return "DATE("+colName+")";
+		}
+
 	}
 }

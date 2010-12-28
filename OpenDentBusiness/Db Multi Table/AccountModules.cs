@@ -561,7 +561,7 @@ namespace OpenDentBusiness {
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) noBillIns_,procedurelog.PatNum,"
 				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
 				+"AND paysplit.PatNum IN ("+familyPatNums+")) patPay_,"
-				+"ProcCode,DATE(procedurelog.ProcDate) procDate_,ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
+				+"ProcCode,"+DbHelper.DateColumn("procedurelog.ProcDate")+" procDate_,ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
 				+"procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) writeOff_, "
 				+"(SELECT MIN(ClaimNum) FROM claimproc cp3,insplan WHERE procedurelog.ProcNum=cp3.ProcNum "

@@ -16,8 +16,8 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM timeadjust WHERE "
 				+"EmployeeNum = "+POut.Long(empNum)+" "
-				+"AND DATE(TimeEntry) >= "+POut.Date(fromDate)+" "
-				+"AND DATE(TimeEntry) <= "+POut.Date(toDate)+" "
+				+"AND "+DbHelper.DateColumn("TimeEntry")+" >= "+POut.Date(fromDate)+" "
+				+"AND "+DbHelper.DateColumn("TimeEntry")+" <= "+POut.Date(toDate)+" "
 				+"ORDER BY TimeEntry";
 			return Crud.TimeAdjustCrud.SelectMany(command);
 		}

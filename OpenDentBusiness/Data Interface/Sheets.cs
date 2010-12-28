@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)
-				+" AND DATE(DateTimeSheet) = CURDATE()";
+				+" AND "+DbHelper.DateColumn("DateTimeSheet")+" = CURDATE()";
 			return Crud.SheetCrud.SelectMany(command);
 		}
 
@@ -272,7 +272,7 @@ namespace OpenDentBusiness{
 			if(examDescript!=""){
 				command+="AND Description LIKE '%"+POut.String(examDescript)+"%' ";//case insensitive text matches
 			}
-			command+="AND DATE(DateTimeSheet)>="+POut.Date(startDate)+" AND DATE(DateTimeSheet)<="+POut.Date(endDate)+" "
+			command+="AND "+DbHelper.DateColumn("DateTimeSheet")+">="+POut.Date(startDate)+" AND "+DbHelper.DateColumn("DateTimeSheet")+"<="+POut.Date(endDate)+" "
 				+"ORDER BY DateTimeSheet";
 			return Crud.SheetCrud.SelectMany(command);
 		}

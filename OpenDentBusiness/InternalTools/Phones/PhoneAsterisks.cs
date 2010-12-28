@@ -124,7 +124,7 @@ namespace OpenDentBusiness {
 		///<summary>For a given date, gets a list of dateTimes of missed calls.  Gets directly from the Asterisk database, hard-coded.</summary>
 		public static List<DateTime> GetMissedCalls(DateTime date) {
 			DataConnection dcon=new DataConnection("192.168.0.197","asteriskcdrdb","opendental","secret",DatabaseType.MySql);
-			string command="SELECT calldate FROM cdr WHERE DATE(calldate) = "+POut.Date(date)+" "
+			string command="SELECT calldate FROM cdr WHERE "+DbHelper.DateColumn("calldate")+" = "+POut.Date(date)+" "
 				+"AND (dcontext='ext-group' OR dcontext='ext-local') AND dst='vmu998'";
 			List<DateTime> retVal=new List<DateTime>();
 			DataTable table=dcon.GetTable(command);

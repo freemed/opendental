@@ -1079,7 +1079,7 @@ namespace OpenDentBusiness{
 			string command="SELECT DateTimeArrived,DateTimeSeated,LName,FName,Preferred,NOW() dateTimeNow "
 				+"FROM appointment,patient "
 				+"WHERE appointment.PatNum=patient.PatNum "
-				+"AND DATE(AptDateTime) = "+POut.Date(dateStart)+" "
+				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(dateStart)+" "
 				+"AND TIME(DateTimeArrived) > 0 "
 				+"AND TIME(DateTimeArrived) < CURTIME() "
 				+"AND TIME(DateTimeSeated) = 0 "
@@ -1331,7 +1331,7 @@ namespace OpenDentBusiness{
 				DateTime aptDate=PIn.DateT(aptDateTime);
 				command+=" OR (AptNum=0 "//unattached
 					+"AND ProcStatus=2 "//complete
-					+"AND Date(ProcDate)="+POut.Date(aptDate)+")";//same date
+					+"AND "+DbHelper.DateColumn("ProcDate")+"="+POut.Date(aptDate)+")";//same date
 			}
 			command+=") "
 				+"AND ProcStatus<>6";//Not deleted.
