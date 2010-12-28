@@ -512,7 +512,7 @@ namespace OpenDental{
 			comboBoxMultiBilling.SetSelected(0,true);
 			comboBoxMultiBilling.RefreshText();
 			comboMonthStart.SelectedIndex=13;
-			FillGrid();
+			//FillGrid();
 		}
 
 		private void FillGrid() {
