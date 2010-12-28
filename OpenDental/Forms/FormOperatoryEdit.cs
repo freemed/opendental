@@ -181,7 +181,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(178,148);
+			this.label9.Location = new System.Drawing.Point(178,150);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(363,16);
 			this.label9.TabIndex = 117;
@@ -191,7 +191,7 @@ namespace OpenDental{
 			// 
 			this.checkIsHygiene.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsHygiene.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsHygiene.Location = new System.Drawing.Point(69,147);
+			this.checkIsHygiene.Location = new System.Drawing.Point(69,149);
 			this.checkIsHygiene.Name = "checkIsHygiene";
 			this.checkIsHygiene.Size = new System.Drawing.Size(104,16);
 			this.checkIsHygiene.TabIndex = 116;
@@ -220,7 +220,7 @@ namespace OpenDental{
 			// 
 			this.checkSetProspective.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSetProspective.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSetProspective.Location = new System.Drawing.Point(69,169);
+			this.checkSetProspective.Location = new System.Drawing.Point(69,168);
 			this.checkSetProspective.Name = "checkSetProspective";
 			this.checkSetProspective.Size = new System.Drawing.Size(104,16);
 			this.checkSetProspective.TabIndex = 116;
@@ -229,7 +229,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(178,170);
+			this.label3.Location = new System.Drawing.Point(178,169);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(363,16);
 			this.label3.TabIndex = 117;

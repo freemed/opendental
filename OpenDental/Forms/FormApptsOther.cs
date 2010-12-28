@@ -832,20 +832,18 @@ namespace OpenDental{
 				//Change PatStatus to Prospective or from Prospective.
 				Operatory opCur=Operatories.GetOperatory(AptCur.Op);
 				if(opCur.SetProspective && PatCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
-						return;
+					if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
+						Patient patOld=PatCur.Copy();
+						PatCur.PatStatus=PatientStatus.Prospective;
+						Patients.Update(PatCur,patOld);
 					}
-					Patient patOld=PatCur.Copy();
-					PatCur.PatStatus=PatientStatus.Prospective;
-					Patients.Update(PatCur,patOld);
 				}
 				else if(!opCur.SetProspective && PatCur.PatStatus==PatientStatus.Prospective) {
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
-						return;
+					if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
+						Patient patOld=PatCur.Copy();
+						PatCur.PatStatus=PatientStatus.Patient;
+						Patients.Update(PatCur,patOld);
 					}
-					Patient patOld=PatCur.Copy();
-					PatCur.PatStatus=PatientStatus.Patient;
-					Patients.Update(PatCur,patOld);
 				}
 			}
 			AptNumsSelected.Add(AptCur.AptNum);

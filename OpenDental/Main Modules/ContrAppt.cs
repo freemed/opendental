@@ -2367,27 +2367,19 @@ namespace OpenDental{
 			Operatory opOld=Operatories.GetOperatory(aptOld.Op);
 			if(opOld==null || opCur.SetProspective!=opOld.SetProspective) {
 				if(opCur.SetProspective && PatCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
-						mouseIsDown=false;
-						boolAptMoved=false;
-						TempApptSingle.Dispose();
-						return;
+					if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
+						Patient patOld=PatCur.Copy();
+						PatCur.PatStatus=PatientStatus.Prospective;
+						Patients.Update(PatCur,patOld);
 					}
-					Patient patOld=PatCur.Copy();
-					PatCur.PatStatus=PatientStatus.Prospective;
-					Patients.Update(PatCur,patOld);
 				}
 				else if(!opCur.SetProspective && PatCur.PatStatus==PatientStatus.Prospective) {
 					//Do we need to warn about changing FROM prospective? Assume so for now.
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
-						mouseIsDown=false;
-						boolAptMoved=false;
-						TempApptSingle.Dispose();
-						return;
+					if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
+						Patient patOld=PatCur.Copy();
+						PatCur.PatStatus=PatientStatus.Patient;
+						Patients.Update(PatCur,patOld);
 					}
-					Patient patOld=PatCur.Copy();
-					PatCur.PatStatus=PatientStatus.Patient;
-					Patients.Update(PatCur,patOld);
 				}
 			}
 			if(aptCur.AptStatus==ApptStatus.Broken){
@@ -3065,27 +3057,19 @@ namespace OpenDental{
 			Operatory opOld=Operatories.GetOperatory(aptOld.Op);
 			if(opOld==null || opCur.SetProspective!=opOld.SetProspective) {
 				if(opCur.SetProspective && PatCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
-						mouseIsDown = false;
-						boolAptMoved=false;
-						TempApptSingle.Dispose();
-						return;
+					if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
+						Patient patOld=PatCur.Copy();
+						PatCur.PatStatus=PatientStatus.Prospective;
+						Patients.Update(PatCur,patOld);
 					}
-					Patient patOld=PatCur.Copy();
-					PatCur.PatStatus=PatientStatus.Prospective;
-					Patients.Update(PatCur,patOld);
 				}
 				else if(!opCur.SetProspective && PatCur.PatStatus==PatientStatus.Prospective) {
 					//Do we need to warn about changing FROM prospective? Assume so for now.
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
-						mouseIsDown = false;
-						boolAptMoved=false;
-						TempApptSingle.Dispose();
-						return;
+					if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
+						Patient patOld=PatCur.Copy();
+						PatCur.PatStatus=PatientStatus.Patient;
+						Patients.Update(PatCur,patOld);
 					}
-					Patient patOld=PatCur.Copy();
-					PatCur.PatStatus=PatientStatus.Patient;
-					Patients.Update(PatCur,patOld);
 				}
 			}
 			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
@@ -3403,12 +3387,11 @@ namespace OpenDental{
 					Operatory curOp=Operatories.GetOperatory(apt.Op);
 					//New patient. Set to prospective if operatory is set to set prospective.
 					if(curOp.SetProspective) {
-						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
-							return;
+						if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
+							Patient patOld=PatCur.Copy();
+							PatCur.PatStatus=PatientStatus.Prospective;
+							Patients.Update(PatCur,patOld);
 						}
-						Patient patOld=PatCur.Copy();
-						PatCur.PatStatus=PatientStatus.Prospective;
-						Patients.Update(PatCur,patOld);
 					}
 					if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
 						apt.ProvNum=curOp.ProvDentist;

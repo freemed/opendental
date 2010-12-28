@@ -181,7 +181,7 @@ namespace OpenDentBusiness{
 			long siteNum,string subscriberId)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,clinicNum,birthdate,siteNum,subscriberId);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,showProspectiveOnly,clinicNum,birthdate,siteNum,subscriberId);
 			}
 			string billingsnippet=" ";
 			if(billingtype!=0){
@@ -226,12 +226,12 @@ namespace OpenDentBusiness{
 			}
 			command+="WHERE PatStatus != '4' ";//not status 'deleted'
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command+=(lname.Length>0?"AND LName LIKE '"+POut.String(lname)+"%' ":"")//LIKE is case insensitive in mysql.
-					+(fname.Length>0?"AND FName LIKE '"+POut.String(fname)+"%' ":"");//LIKE is case insensitive in mysql.
+				command+=(lname.Length>0?"AND LName LIKE '%"+POut.String(lname)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(fname.Length>0?"AND FName LIKE '%"+POut.String(fname)+"%' ":"");//LIKE is case insensitive in mysql.
 			}
 			else {//oracle
-				command+=(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
-					+(fname.Length>0?"AND LOWER(FName) LIKE '"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+				command+=(lname.Length>0?"AND LOWER(LName) LIKE '%"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
+					+(fname.Length>0?"AND LOWER(FName) LIKE '%"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
 			}
 			if(regexp!="") {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -247,7 +247,7 @@ namespace OpenDentBusiness{
 			}
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command+=
-					(address.Length>0?"AND Address LIKE '"+POut.String(address)+"%' ":"")//LIKE is case insensitive in mysql.
+					(address.Length>0?"AND Address LIKE '%"+POut.String(address)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(city.Length>0?"AND City LIKE '"+POut.String(city)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(state.Length>0?"AND State LIKE '"+POut.String(state)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(ssn.Length>0?"AND SSN LIKE '"+POut.String(ssn)+"%' ":"")//LIKE is case insensitive in mysql.
@@ -256,7 +256,7 @@ namespace OpenDentBusiness{
 			}
 			else {//oracle
 				command+=
-					(address.Length>0?"AND LOWER(Address) LIKE '"+POut.String(address).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+					(address.Length>0?"AND LOWER(Address) LIKE '%"+POut.String(address).ToLower()+"%' ":"")//case matters in a like statement in oracle.
 					+(city.Length>0?"AND LOWER(City) LIKE '"+POut.String(city).ToLower()+"%' ":"")//case matters in a like statement in oracle.
 					+(state.Length>0?"AND LOWER(State) LIKE '"+POut.String(state).ToLower()+"%' ":"")//case matters in a like statement in oracle.
 					+(ssn.Length>0?"AND LOWER(SSN) LIKE '"+POut.String(ssn).ToLower()+"%' ":"")//In case an office uses this field for something else.
@@ -274,10 +274,10 @@ namespace OpenDentBusiness{
 				command+="AND PatStatus != '3' AND PatStatus != '5' ";
 			}
 			if(showProspectiveOnly) {
-				command+="AND PatStatus = '6' ";
+				command+="AND PatStatus = "+POut.Int((int)PatientStatus.Prospective)+" ";
 			}
 			if(!showProspectiveOnly) {
-				command+="AND PatStatus != '6' ";
+				command+="AND PatStatus != "+POut.Int((int)PatientStatus.Prospective)+" ";
 			}
 			if(guarOnly){
 				command+="AND PatNum = Guarantor ";

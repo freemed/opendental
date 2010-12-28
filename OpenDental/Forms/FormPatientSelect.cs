@@ -355,7 +355,7 @@ namespace OpenDental{
 			this.checkShowProspectiveOnly.Name = "checkShowProspectiveOnly";
 			this.checkShowProspectiveOnly.Size = new System.Drawing.Size(161,17);
 			this.checkShowProspectiveOnly.TabIndex = 25;
-			this.checkShowProspectiveOnly.Text = "Show Prospective Only";
+			this.checkShowProspectiveOnly.Text = "Show/Hide Prospective";
 			this.checkShowProspectiveOnly.CheckedChanged += new System.EventHandler(this.textSubscriberID_TextChanged);
 			// 
 			// checkShowArchived
