@@ -15,7 +15,6 @@ namespace OpenDentBusiness {
 		Date,
 		///<summary>C#:DateTime, MySql:datetime, Oracle:date, </summary>
 		DateTime,
-		//todo: Research existence of triggers.  Jason: We will have to write custom trigger.
 		///<summary>C#:DateTime, MySql:timestamp, Oracle:date + trigger, </summary>
 		DateTimeStamp,
 		///<summary>C#:float, MySql:float, Oracle:number(38,8), </summary>
@@ -24,12 +23,10 @@ namespace OpenDentBusiness {
 		Int,
 		///<summary>C#:long, MySql:bigint, Oracle:number(20), Range:–9,223,372,036,854,775,808 to 9,223,372,036,854,775,807</summary>
 		Long,
-		//todo: Make a list of these that can be less than 4000, because they must be set manually in Oracle to varchar2:
 		///<summary>C#:string, MySql:text,mediumtext, Oracle:varchar2,clob, Range:256+. MaxSizes: MySql.text=65k, Oracle.varchar2=4k.</summary>
 		Text,
 		///<summary>C#:TimeSpan, MySql:time, Oracle:date, Range:Valid time of day.</summary>
 		TimeOfDay,
-		//todo: Make a list of these based on CrudSpecialColType.  Used list to edit schema file to change type from date to varchar2.
 		///<summary>C#:TimeSpan, MySql:time, Oracle:varchar2, Range:Pos or neg spans of many days.  Oracle has no such type.</summary>
 		TimeSpan,
 		///<summary>C#:string, MySql:varchar(255), Oracle:varchar2(255), MaxSize:255</summary>

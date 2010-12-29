@@ -20,6 +20,12 @@ namespace OpenDentBusiness {
 			Indexed=false;
 		}
 
+		public DbSchemaCol(string columnName,OdDbType dataType,bool indexed) {
+			ColumnName=columnName;
+			DataType=dataType;
+			Indexed=indexed;
+		}
+
 	}
 
 	public enum TextSizeMySqlOracle {

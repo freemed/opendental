@@ -8,29 +8,29 @@ namespace OpenDentBusiness {
 	public class DbSchema {
 		
 		/// <summary></summary>
-		public static void AddColumnEnd(string tableName,DbSchemaCol col) {
+		public static void AddColumnEnd7_7(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+";";
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType7_7(col);
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+";";
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType7_7(col);
 				Db.NonQ(command);
-				OracleValidateDateTStampTriggerHelper(tableName);
+				OracleValidateDateTStampTriggerHelper7_7(tableName);
 			}
 		}
 
 		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
-		public static void AddColumnAfter(string tableName,DbSchemaCol col,string afterColumn) {
+		public static void AddColumnAfter7_7(string tableName,DbSchemaCol col,string afterColumn) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" AFTER "+afterColumn+";";
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType7_7(col)+" AFTER "+afterColumn+" DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 			}
 			else {//oracle
 				int addAtIndex=0;
-				command ="Select TABLE_NAME, COLUMN_NAME from user_tab_columns where table_name='"+tableName.ToUpper()+"';";
+				command ="Select TABLE_NAME, COLUMN_NAME from user_tab_columns where table_name='"+tableName.ToUpper()+"'";
 				DataTable tempTable = Db.GetTable(command);//get list of columns
 				for(int i=0;i<tempTable.Rows.Count;i++) {//find column index of column that matches afterColumn
 					if(tempTable.Rows[i][1].ToString()==afterColumn) {
@@ -38,14 +38,15 @@ namespace OpenDentBusiness {
 					}
 				}
 				if(addAtIndex!=0) {//only add after if the column was found
-					OracleAddAtIndexHelper(tableName,col,addAtIndex);
+					OracleAddAtIndexHelper7_7(tableName,col,addAtIndex);
 				}
-				OracleValidateDateTStampTriggerHelper(tableName);
+				OracleValidateDateTStampTriggerHelper7_7(tableName);
 			}
 		}
 
+		/*
 		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
-		public static void AddColumnFirst(string tableName,DbSchemaCol col) {
+		public static void AddColumnFirst#_#(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command = "ALTER TABLE "+tableName+" DROP PRIMARY KEY, ADD "+col.ColumnName+" "+GetMySqlType(col)+" PRIMARY KEY FIRST;";
@@ -55,10 +56,10 @@ namespace OpenDentBusiness {
 				OracleAddAtIndexHelper(tableName,col,0);
 				OracleValidateDateTStampTriggerHelper(tableName);
 			}
-		}
+		}*/
 
 		/// <summary>TODO: trigger cleanup for oracle</summary>
-		public static void DropColumn(string tableName,string columnName) {
+		public static void DropColumn7_7(string tableName,string columnName) {
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command= "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+" ;";
@@ -67,24 +68,27 @@ namespace OpenDentBusiness {
 			else {//oracle
 				command= "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+" ;";
 				Db.NonQ(command);
-				OracleValidateDateTStampTriggerHelper(tableName);
+				OracleValidateDateTStampTriggerHelper7_7(tableName);
 //todo: check for existing trigger or index other than DateTStamp
 			}
 		}
 
 		/// <summary>First column is always a bigint, primary key, autoincrement.</summary>
-		public static void AddTable(string tableName,List<DbSchemaCol> cols) {
+		public static void AddTable7_7(string tableName,List<DbSchemaCol> cols) {
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "CREATE TABLE IF NOT EXISTS "+tableName+" (";
+				command="DROP TABLE IF EXISTS "+tableName;
+				Db.NonQ(command);
+				command = "CREATE TABLE "+tableName+" (";
 				for(int i=0;i<cols.Count;i++) {
-					command+=cols[i].ColumnName+" "+GetMySqlType(cols[i])+(i==0?" PRIMARY KEY":"")+(i==cols.Count-1?");":", ");
+					command+=cols[i].ColumnName+" "+GetMySqlType7_7(cols[i])+(i==0?" PRIMARY KEY":"")+(i==cols.Count-1?") DEFAULT CHARSET=utf8 ;":", ");
 				}
 				Db.NonQ(command);
 			}
 			else {//oracle
 				bool tableExists=false;
-				command="SELECT * FROM user_tables WHERE user='"+Db.GetTable("SELECT username FROM user_users;").Rows[0].ToString()+"';";//check to see if table exists
+				DataTable tempUsernameTable = Db.GetTable("SELECT username FROM user_users;");//cannot exlicitly use tempUsernameTable.Rows["username"] because it cannot convert from string to int.
+				command="SELECT * FROM user_tables WHERE user='"+tempUsernameTable.Rows[0].ToString()+"';";//check to see if table exists
 				DataTable tempTableNames = Db.GetTable(command);
 				for(int i=0;i<tempTableNames.Rows.Count;i++) {
 					if(tempTableNames.Rows[i].ToString().Equals(tableName)) {
@@ -92,25 +96,24 @@ namespace OpenDentBusiness {
 					}
 				}
 				if(tableExists) {
-					//dont add table.
-					//TODO:how to handle trying to add a table that exists
+					//TODO:DROP
+
 				}
-				else {//table doesn't exist and therefor needs to be created
-					command = "CREATE TABLE "+tableName+" (";
-					for(int i=0;i<cols.Count;i++) {
-						command+=cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?");":", ");
-					}
-					Db.NonQ(command);
-					OracleValidateDateTStampTriggerHelper(tableName);
+				//table doesn't exist and therefor needs to be created
+				command = "CREATE TABLE "+tableName+" (";
+				for(int i=0;i<cols.Count;i++) {
+					command+=cols[i].ColumnName+" "+GetOracleType7_7(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?");":", ");
 				}
+				Db.NonQ(command);
+				OracleValidateDateTStampTriggerHelper7_7(tableName);
 			}
 		}
 
 		/// <summary>TODO.this.oracle</summary>
-		public static void RenameColumn(string tableName,string columnName,string newColumnName) {
+		public static void RenameColumn7_7(string tableName,string columnNameOld,DbSchemaCol colNew) {
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" CHANGE "+columnName+" "+newColumnName+" "+Db.GetTable("SHOW FULL FIELDS FROM '"+tableName+"' WHERE FIELD = '"+columnName+"';").Rows[1].ToString()+";";
+				command = "ALTER TABLE "+tableName+" CHANGE "+columnNameOld+" "+colNew.ColumnName+" "+GetMySqlType7_7(colNew);
 			}
 			else {//oracle
 
@@ -118,10 +121,10 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>TODO.this.Oracle</summary>
-		public static void ChangeColumnType(string tableName,string columnName,OdDbType newType) {
+		public static void ChangeColumnType7_7(string tableName,DbSchemaCol colNew){//  string columnName,OdDbType newType) {
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" MODIFY "+columnName+" "+GetMySqlType(new DbSchemaCol(columnName,newType))+";";
+				command = "ALTER TABLE "+tableName+" MODIFY "+colNew.ColumnName+" "+GetMySqlType7_7(colNew)+";";
 			}
 			else {//oracle
 
@@ -131,7 +134,7 @@ namespace OpenDentBusiness {
 		/// <summary>TODO.this</summary>
 		public static void AddKey(string tableName,string columnName) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-
+				//surround with try catch to fail silently.
 			}
 			else {//oracle
 
@@ -148,8 +151,8 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary></summary>
-		private static string GetMySqlType(DbSchemaCol col) {
+		/// <summary>For example, might return "bigint NOT NULL".</summary>
+		private static string GetMySqlType7_7(DbSchemaCol col) {
 			switch(col.DataType) {
 				case OdDbType.Bool:
 					return "tinyint";
@@ -191,8 +194,8 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
-		/// <summary></summary>
-		private static string GetOracleType(DbSchemaCol col) {
+		///<summary>For example, might return "NUMBER(11) NOT NULL".</summary>
+		private static string GetOracleType7_7(DbSchemaCol col) {
 			switch(col.DataType) {
 				case OdDbType.Bool:
 					return "NUMBER(3)";
@@ -230,48 +233,48 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
-		/// <summary>validates any table's dateTStamp triggers for Oracle.</summary>
-		private static void OracleValidateDateTStampTriggerHelper(string tableName){
+		/// <summary>Validates any table's dateTStamp triggers for Oracle.</summary>
+		private static void OracleValidateDateTStampTriggerHelper7_7(string tableName) {
 			bool triggerNeeded = false;
 			bool needDropTrigger = false;
 			string command ="Select TABLE_NAME, COLUMN_NAME from user_tab_columns where table_name='"+tableName.ToUpper()+"';";
 			DataTable tempTable = Db.GetTable(command);//get list of columns
-			for(int i=0;i<tempTable.Rows.Count;i++){//check columns for a DateTStamp
-				if(tempTable.Rows[i][1].ToString()=="DateTStamp"){
+			for(int i=0;i<tempTable.Rows.Count;i++){//check for a column named "DateTStamp"
+				if(tempTable.Rows[i]["COLUMN_NAME"].ToString()=="DateTStamp") {
 					triggerNeeded=true;
 				}
 			}
-			if(triggerNeeded) {//table needs a timestamp trigger, regaurdless of existing triggers
-				command = "CREATE OR REPLACE TRIGGER "+tableName+"_timestamp BEFORE UPDATE ON "+tableName+"FOR EACH ROW "
+			if(triggerNeeded) {//table needs a timestamp trigger, regardless of existing triggers
+				command = "CREATE OR REPLACE TRIGGER "+tableName+"_timestamp BEFORE UPDATE ON "+tableName+" FOR EACH ROW "
 										+"BEGIN";
 				for(int i=0;i<tempTable.Rows.Count;i++) {//iterate through each column to see if it was changed
-					command+="	IF :OLD."+tempTable.Rows[i][1].ToString()+" <> :NEW."+tempTable.Rows[i][1].ToString()+" THEN"
+					command+="	IF :OLD."+tempTable.Rows[i]["COLUMN_NAME"].ToString()+" <> :NEW."+tempTable.Rows[i]["COLUMN_NAME"].ToString()+" THEN"
 										+"	:NEW.DateTStamp := SYSDATE;"
 										+"	END IF;";
 				}
-				command+="END "+tableName+"_timespan;";
+				command+="END "+tableName+"_timestamp;";
 			}
 			else {//table needs to have zero DateTStamp triggers
-				command = "Select TRIGGER_NAME from user_triggers WHERE tablename = '"+tableName.ToUpper()+"';";
+				command = "Select TRIGGER_NAME FROM user_triggers WHERE tablename = '"+tableName.ToUpper()+"';";
 				DataTable tempTriggerTable = Db.GetTable(command);
 				for(int i=0;i<tempTriggerTable.Rows.Count;i++) {//check for timestamp triggers before trying to delete
-					if(tempTriggerTable.Rows[i][0].ToString().Contains("_TIMESTAMP")) {
+					if(tempTriggerTable.Rows[i]["TRIGGER_NAME"].ToString().Contains("_timestamp")) {
 						needDropTrigger = true;
 					}
 				}
 				if(needDropTrigger) {//Delete timestamp triggers if they exist
-					command = "DROP TRIGGER "+tableName.ToUpper()+"_TIMESTAMP WHERE TABLE_NAME = '"+tableName.ToUpper()+"';";
+					command = "DROP TRIGGER "+tableName.ToUpper()+"_timestamp WHERE TABLE_NAME = '"+tableName.ToUpper()+"';";
 					Db.NonQ(command);
 				}
 			}
 		}
 
-		/// <summary>Fills new table by selecting each column before index from old table, creates new column at index, continues to select columns from old table, drops old table, renames new table.</summary>
-		private static void OracleAddAtIndexHelper(string tableName,DbSchemaCol col, int indexOfNewColumn) {
+		/// <summary>Fills new table by selecting each column before index from old table, creates new column at index, continues to select columns from old table, drops old table, renames new table.  Does not support adding as first column.  Does not support adding a primary key.  Assumes that primary key is always first column.  Will fail on "preference" table.</summary>
+		private static void OracleAddAtIndexHelper7_7(string tableName,DbSchemaCol col, int indexOfNewColumn) {
 			string command;
 			string commandPart2;
 			DbSchemaCol newCol;
-			command = "Select * FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"';";
+			command = "SELECT TABLE_NAME, COLUMN_NAME FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"';";
 			DataTable tempTable = Db.GetTable(command);//get list of columns
 			List<DbSchemaCol> newTableCols = new List<DbSchemaCol>();
 			for(int i=0;i<tempTable.Rows.Count;i++) {
@@ -279,16 +282,16 @@ namespace OpenDentBusiness {
 					newCol = new DbSchemaCol(col.ColumnName,col.DataType);//add new column here
 					newTableCols.Add(newCol);
 				}
-				newCol = new DbSchemaCol(tempTable.Rows[i][1].ToString(),OdDbType.Bool /* must convert this:tempTable.Rows[i][2] to OdDbTypes*/);
+				newCol = new DbSchemaCol(tempTable.Rows[i]["COLUMN_NAME"].ToString(),OdDbType.Bool);/* must convert this:tempTable.Rows[i][2] to OdDbTypes*/
 				newTableCols.Add(newCol);
 			}
-			AddColumnEnd(tableName,col);
+			AddColumnEnd7_7(tableName,col);
 			command="CREATE TABLE newtemptable ( ";
 			commandPart2=" AS (SELECT ";
 			for(int i=0;i<newTableCols.Count;i++) {
-				//TODO:if someone try's to add a column to the beginning it will be set as the primary key, and requires information to be input. Also reuires unique entries.
-				command+=newTableCols[i].ColumnName+" "+GetOracleType(newTableCols[i])+(i==0?" primary key ":"")+(i==newTableCols.Count-1?", ":" )");
-				commandPart2+=tableName+"."+newTableCols[i].ColumnName+(i==newTableCols.Count-1?", ":" FROM "+tableName+");");
+				//TODO:if someone try's to add a column to the beginning it will be set as the primary key, and requires information to be input. Also requires unique entries.
+				command+=newTableCols[i].ColumnName+" "+GetOracleType7_7(newTableCols[i])+(i==0?" primary key ":"")+(i==newTableCols.Count-1?", ":" )");
+				commandPart2+=tableName+"."+newTableCols[i].ColumnName+(i==newTableCols.Count-1?", ":" FROM "+tableName+") DEFAULT CHARSET=utf8;");
 			}
 			command+=commandPart2;
 			Db.NonQ(command);
