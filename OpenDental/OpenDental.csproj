@@ -392,12 +392,6 @@
     <Compile Include="Forms Reports\FormSearchPatNotes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms Reports\FormTxPlanList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms Reports\FormTxPlanManager.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -999,9 +993,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms Reports\FormRpInsCo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms Reports\FormRpOutInsClaims.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms Reports\FormRpPatients.cs">
@@ -2142,10 +2133,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpInsCo.resx">
       <DependentUpon>FormRpInsCo.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms Reports\FormRpOutInsClaims.resx">
-      <DependentUpon>FormRpOutInsClaims.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpPatients.resx">
@@ -3869,14 +3856,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormSearchPatNotes.resx">
       <DependentUpon>FormSearchPatNotes.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms Reports\FormTxPlanList.resx">
-      <DependentUpon>FormTxPlanList.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms Reports\FormTxPlanManager.resx">
-      <DependentUpon>FormTxPlanManager.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">

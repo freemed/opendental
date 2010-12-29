@@ -33,6 +33,8 @@ namespace OpenDental {
 		private OpenDental.UI.ListBoxClickable listArizonaPrimaryCare;
 		private Label labelArizonaPrimaryCare;
 		private OpenDental.UI.ListBoxClickable listMonthly;
+		///<summary>After this form closes, this value is checked to see if any non-modal dialog boxes are needed.</summary>
+		public ReportModalSelection RpModalSelection;
 
 		///<summary></summary>
 		public FormReportsMore() {
@@ -633,9 +635,9 @@ namespace OpenDental {
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referral Analysis");
 					break;
 				case 10://Treatment Finder
-					FormRpTreatmentFinder FormT=new FormRpTreatmentFinder();
-					FormT.Show();
+					RpModalSelection=ReportModalSelection.TreatmentFinder;
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Finder");
+					Close();
 					break;
 				//case 11://Treatment Plan Manager
 				//  FormTxPlanManager FormTM=new FormTxPlanManager();
@@ -665,15 +667,6 @@ namespace OpenDental {
 			}
 		}
 
-		private void butClose_Click(object sender,System.EventArgs e) {
-			Close();
-		}
-
-		private void butLaserLabels_Click(object sender,EventArgs e) {
-			FormRpLaserLabels LaserLabels = new FormRpLaserLabels();
-			LaserLabels.ShowDialog();
-		}
-
 		private void listArizonaPrimaryCare_MouseDown(object sender,MouseEventArgs e) {
 			int selected=this.listArizonaPrimaryCare.IndexFromPoint(e.Location);
 			if(selected==-1) {
@@ -693,5 +686,26 @@ namespace OpenDental {
 			}
 		}
 
+		private void butLaserLabels_Click(object sender,EventArgs e) {
+			FormRpLaserLabels LaserLabels = new FormRpLaserLabels();
+			LaserLabels.ShowDialog();
+		}
+
+		private void butClose_Click(object sender,System.EventArgs e) {
+			Close();
+		}
+
+		
+
+		
+
+	}
+
+	///<summary>Used in FormReportsMore to indicate that a modal window should be shown.</summary>
+	public enum ReportModalSelection {
+		///<summary></summary>
+		None,
+		///<summary></summary>
+		TreatmentFinder
 	}
 }

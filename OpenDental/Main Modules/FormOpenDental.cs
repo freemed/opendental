@@ -3862,6 +3862,10 @@ namespace OpenDental{
 			}
 			FormReportsMore FormR=new FormReportsMore();
 			FormR.ShowDialog();
+			if(FormR.RpModalSelection==ReportModalSelection.TreatmentFinder) {
+				FormRpTreatmentFinder FormT=new FormRpTreatmentFinder();
+				FormT.Show();
+			}
 		}
 
 		//Custom Reports
