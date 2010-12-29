@@ -7,20 +7,21 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class DbSchema {
 		
-		/// <summary>Completed</summary>
+		/// <summary></summary>
 		public static void AddColumnEnd(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+";";
+				Db.NonQ(command);
 			}
 			else {//oracle
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+";";
+				Db.NonQ(command);
 				OracleValidateDateTStampTriggerHelper(tableName);
 			}
-			Db.NonQ(command);
 		}
 
-		/// <summary>TODO:this function; Specify textSize if there's any chance of it being greater than 4000 char.</summary>
+		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
 		public static void AddColumnAfter(string tableName,DbSchemaCol col,string afterColumn) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -36,22 +37,24 @@ namespace OpenDentBusiness {
 						addAtIndex = i+1;
 					}
 				}
-				OracleAddAtIndexHelper(tableName,col,addAtIndex);
+				if(addAtIndex!=0) {//only add after if the column was found
+					OracleAddAtIndexHelper(tableName,col,addAtIndex);
+				}
 				OracleValidateDateTStampTriggerHelper(tableName);
 			}
 		}
 
-		/// <summary>TODO:this function; Specify textSize if there's any chance of it being greater than 4000 char.</summary>
+		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
 		public static void AddColumnFirst(string tableName,DbSchemaCol col) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+";";
+				command = "ALTER TABLE "+tableName+" DROP PRIMARY KEY, ADD "+col.ColumnName+" "+GetMySqlType(col)+" PRIMARY KEY FIRST;";
+				Db.NonQ(command);
 			}
 			else {//oracle
 				OracleAddAtIndexHelper(tableName,col,0);
 				OracleValidateDateTStampTriggerHelper(tableName);
 			}
-			Db.NonQ(command);
 		}
 
 		/// <summary>TODO: trigger cleanup for oracle</summary>
@@ -59,13 +62,14 @@ namespace OpenDentBusiness {
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command= "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+" ;";
+				Db.NonQ(command);
 			}
 			else {//oracle
 				command= "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+" ;";
+				Db.NonQ(command);
 				OracleValidateDateTStampTriggerHelper(tableName);
-//todo: check for existing trigger or index
+//todo: check for existing trigger or index other than DateTStamp
 			}
-			Db.NonQ(command);
 		}
 
 		/// <summary>First column is always a bigint, primary key, autoincrement.</summary>
@@ -102,20 +106,22 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary>TODO.this</summary>
+		/// <summary>TODO.this.oracle</summary>
 		public static void RenameColumn(string tableName,string columnName,string newColumnName) {
+			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-
+				command = "ALTER TABLE "+tableName+" CHANGE "+columnName+" "+newColumnName+" "+Db.GetTable("SHOW FULL FIELDS FROM '"+tableName+"' WHERE FIELD = '"+columnName+"';").Rows[1].ToString()+";";
 			}
 			else {//oracle
 
 			}
 		}
 
-		/// <summary>TODO.this</summary>
+		/// <summary>TODO.this.Oracle</summary>
 		public static void ChangeColumnType(string tableName,string columnName,OdDbType newType) {
+			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-
+				command = "ALTER TABLE "+tableName+" MODIFY "+columnName+" "+GetMySqlType(new DbSchemaCol(columnName,newType))+";";
 			}
 			else {//oracle
 
@@ -142,6 +148,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		/// <summary></summary>
 		private static string GetMySqlType(DbSchemaCol col) {
 			switch(col.DataType) {
 				case OdDbType.Bool:
@@ -184,6 +191,7 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
+		/// <summary></summary>
 		private static string GetOracleType(DbSchemaCol col) {
 			switch(col.DataType) {
 				case OdDbType.Bool:
