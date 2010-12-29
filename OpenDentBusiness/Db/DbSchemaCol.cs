@@ -7,6 +7,7 @@ namespace OpenDentBusiness {
 	public class DbSchemaCol {
 		public string ColumnName;
 		public OdDbType DataType;
+		///<summary>Specify Indexed true if column should be indexed.</summary>
 		public bool Indexed;
 		///<summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
 		public TextSizeMySqlOracle TextSize;
