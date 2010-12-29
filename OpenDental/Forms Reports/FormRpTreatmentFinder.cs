@@ -512,7 +512,7 @@ namespace OpenDental{
 			comboBoxMultiBilling.SetSelected(0,true);
 			comboBoxMultiBilling.RefreshText();
 			comboMonthStart.SelectedIndex=13;
-			//FillGrid();
+			FillGrid();
 		}
 
 		private void FillGrid() {
@@ -586,6 +586,7 @@ namespace OpenDental{
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
+			Cursor=Cursors.WaitCursor;
 			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked,monthStart,dateSince,aboveAmount,provFilter,billFilter,code1,code2);
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -599,6 +600,7 @@ namespace OpenDental{
 			  gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			Cursor=Cursors.Default;
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {

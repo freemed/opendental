@@ -1318,28 +1318,18 @@ WHERE ProcStatus = 1 /*treatment planned*/";
 				+"GROUP BY PatNum";
 			Db.NonQ(command);
 			command=@"INSERT INTO tempannualmax
-SELECT benefit.PlanNum, benefit.MonetaryAmt
+SELECT benefit.PlanNum, MAX(benefit.MonetaryAmt) /*for oracle in case there's more than one*/
 FROM benefit, covcat, insplan
-WHERE covcat.CovCatNum = benefit.CovCatNum
+WHERE benefit.CovCatNum = covcat.CovCatNum
+AND benefit.PlanNum=insplan.PlanNum 
 AND benefit.BenefitType = 5 /* limitation */
 AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
-AND benefit.MonetaryAmt <> 0
-AND benefit.PlanNum=insplan.PlanNum ";
+AND benefit.MonetaryAmt > 0
+AND benefit.QuantityQualifier=0 ";
 			if(monthStart!=13) {
 				command+="AND insplan.MonthRenew='"+POut.Int(monthStart)+"' ";
 			}
-			command+="GROUP BY benefit.PlanNum, benefit.MonetaryAmt ORDER BY benefit.PlanNum";
-//crashes here.  This is the query:
-/*
-INSERT INTO tempannualmax
-SELECT benefit.PlanNum, benefit.MonetaryAmt
-FROM benefit, covcat, insplan
-WHERE covcat.CovCatNum = benefit.CovCatNum
-AND benefit.BenefitType = 5
-AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
-AND benefit.MonetaryAmt <> 0
-AND benefit.PlanNum=insplan.PlanNum 
-GROUP BY benefit.PlanNum, benefit.MonetaryAmt ORDER BY benefit.PlanNum*/
+			command+="GROUP BY benefit.PlanNum ORDER BY benefit.PlanNum";
 			Db.NonQ(command);
 			command=@"SELECT patient.PatNum, patient.LName, patient.FName,
 				patient.Email, patient.HmPhone, patient.PreferRecallMethod,
