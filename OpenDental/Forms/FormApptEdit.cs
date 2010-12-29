@@ -1506,6 +1506,7 @@ namespace OpenDental{
 					}
 					//also deletes the claimProcs and adjustments. Might throw exception.
 					Procedures.Delete(PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString()));
+					SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,AptCur.PatNum,Lan.g(this,"Completed procedure deleted: ")+DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcCode"].ToString());
 				}
 			}
 			catch(Exception ex){
