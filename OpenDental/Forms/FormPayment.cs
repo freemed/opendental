@@ -10,6 +10,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -1141,6 +1142,10 @@ namespace OpenDental{
 			if(e.Button != MouseButtons.Left){
 				return;
 			}
+			if(textAmount.Text=="") {
+				MsgBox.Show(this,"Please enter an amount first.");
+				return;
+			}
 			Program prog=Programs.GetCur(ProgramName.Xcharge);
 			if(prog==null){
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
@@ -1199,9 +1204,11 @@ namespace OpenDental{
 			while(!process.HasExited){
 				Application.DoEvents();
 			}
+			Thread.Sleep(2000);//Wait two seconds to hopefully resolve the file issue.
 			Cursor=Cursors.Default;
 			string resulttext="";
 			string line="";
+			bool showReturnedNote=true;
 			using(TextReader reader=new StreamReader(resultfile)){
 				line=reader.ReadLine();
 				while(line!=null){
@@ -1215,8 +1222,10 @@ namespace OpenDental{
 						}
 					}
 					if(line.StartsWith("AMOUNT=")){
-						amt=PIn.Double(line.Substring(7));
-						textAmount.Text=amt.ToString("F2");
+						double amtReturned=PIn.Double(line.Substring(7));
+						if(amtReturned != amt) {
+							showReturnedNote=false;
+						}
 					}
 					line=reader.ReadLine();
 				}
@@ -1233,10 +1242,12 @@ namespace OpenDental{
 				AVSRESULT=Y
 				CVRESULT=M
 			*/
-			if(textNote.Text!=""){
-				textNote.Text+="\r\n";
+			if(showReturnedNote) {
+				if(textNote.Text!="") {
+					textNote.Text+="\r\n";
+				}
+				textNote.Text+=resulttext;
 			}
-			textNote.Text+=resulttext;
 		}
 
 		private void butPayConnect_Click(object sender,EventArgs e) {
