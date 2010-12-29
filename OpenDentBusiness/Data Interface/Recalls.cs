@@ -195,7 +195,15 @@ namespace OpenDentBusiness{
 				}
 				command+=") ";
 			}
-			command+="GROUP BY recall.PatNum,recall.RecallTypeNum ";//this forces both manual and prophy types to show independently.
+			command+=@"GROUP BY  patguar.BalTotal,patient.BillingType,
+				patient.Birthdate,recall.DateDue,
+				DisableUntilBalance,DisableUntilDate,
+				patient.Email,patguar.Email,patguar.FName,
+				patguar.LName,patient.FName,
+				patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
+				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
+				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
+				recalltype.Description,patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum ";//RecallTypeNum forces both manual and prophy types to show independently.
  			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;
@@ -752,7 +760,14 @@ namespace OpenDentBusiness{
 				}
         command+="recall.RecallNum="+POut.Long(recallNums[i]);
       }
-			command+=" GROUP BY recall.RecallNum";
+			command+=@" GROUP BY patient.Address,patguar.Address,
+				patient.Address2,patguar.Address2,
+				patient.City,patguar.City,patient.ClinicNum,patguar.ClinicNum,
+				recall.DateDue,patient.Email,patguar.Email,
+				patient.FName,patguar.FName,patient.Guarantor,
+				patient.LName,patguar.LName,temprecallmaxdate.MaxDateDue,
+				patient.MiddleI,patient.PatNum,patient.Preferred,recall.RecallNum,
+				patient.State,patguar.State,patient.Zip,patguar.Zip";
 			DataTable rawTable=Db.GetTable(command);
 			command="DROP TABLE IF EXISTS temprecallmaxdate";
 			Db.NonQ(command);

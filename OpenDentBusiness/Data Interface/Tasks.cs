@@ -62,11 +62,15 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),userNum);
 			}
-			string command="SELECT task.* FROM task,taskunread "
+			string command="SELECT task.TaskNum,task.TaskListNum,task.DateTask,task.KeyNum,task.Descript,"
+				+"task.TaskStatus,task.IsRepeating,task.DateType,task.FromNum,task.ObjectType,"
+				+"task.DateTimeEntry,task.UserNum,task.DateTimeFinished "
+				+"FROM task,taskunread "
 				+"WHERE task.TaskNum=taskunread.TaskNum "
-				+"AND taskunread.UserNum = "+POut.Long(userNum)
-				+" GROUP BY task.TaskNum "
-				+"ORDER BY DateTimeEntry";//a datetime stamp would be nice.
+				+"AND taskunread.UserNum = "+POut.Long(userNum)+" "
+				+"ORDER BY task.TaskNum,task.TaskListNum,task.DateTask,task.KeyNum,task.Descript,"
+				+"task.TaskStatus,task.IsRepeating,task.DateType,task.FromNum,task.ObjectType,"
+				+"task.DateTimeEntry,task.UserNum,task.DateTimeFinished";//a datetime stamp would be nice.
 			return Crud.TaskCrud.SelectMany(command);
 		}
 

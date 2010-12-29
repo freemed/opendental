@@ -122,7 +122,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN reqstudent req2 ON req2.ProvNum=provider.ProvNum AND YEAR(req2.DateCompleted) > 1880 "
 				+"AND req2.SchoolCourseNum="+POut.Long(courseNum)+" "
 				+"WHERE provider.SchoolClassNum="+POut.Long(classNum)
-				+" GROUP BY provider.ProvNum "
+				+" GROUP BY FName,LName,provider.ProvNum "
 				+"ORDER BY LName,FName";
 			DataTable raw=Db.GetTable(command);
 			for(int i=0;i<raw.Rows.Count;i++) {

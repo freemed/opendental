@@ -60,7 +60,8 @@ namespace OpenDentBusiness{
 			if(opNums.Count==0){
 				return new List<Schedule>();
 			}
-			string command="SELECT schedule.* "
+			string command="SELECT schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedTime,"
+				+"ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp "
 				+"FROM schedule,scheduleop "
 				+"WHERE schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"AND SchedDate >= "+POut.Date(dateStart)+" "
@@ -73,7 +74,8 @@ namespace OpenDentBusiness{
 				}
 				command+="OperatoryNum="+POut.Long(opNums[i]);
 			}
-			command+=") GROUP BY schedule.ScheduleNum";
+			command+=") GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedTime,"
+				+"ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp";
 			return RefreshAndFill(command);
 		}
 
@@ -648,8 +650,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
-			string command=@"SELECT COUNT(*) countDups,SchedDate,schedule.ScheduleNum,
-				(SELECT "+DbHelper.GroupConcat("so1.OperatoryNum",false,true)+@" FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops				
+			string command=@"SELECT COUNT(*) countDups,SchedDate,MAX(schedule.ScheduleNum),"//MAX on id. Cannot GROUP BY id without splitting up duplicates.
+				+@"(SELECT "+DbHelper.GroupConcat("so1.OperatoryNum",false,true)+@" FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops				
 				FROM schedule
 				WHERE SchedType=2
 				GROUP BY SchedDate,ops,StartTime,StopTime
@@ -683,8 +685,8 @@ namespace OpenDentBusiness{
 			//Get a list of scheduleNums that have duplicates
 			//A duplicate is defined as a matching opsList and matching times
 			//The result list will contain one random scheduleNum out of the many duplicates
-			command=@"SELECT SchedDate,ScheduleNum,StartTime,StopTime,
-				(SELECT ops FROM tempBlockoutOps WHERE tempBlockoutOps.ScheduleNum=schedule.ScheduleNum) ops_______________ops,
+			command=@"SELECT SchedDate,MAX(ScheduleNum),StartTime,StopTime,"//MAX on id. Cannot GROUP BY id without splitting up duplicates.
+				+@"(SELECT ops FROM tempBlockoutOps WHERE tempBlockoutOps.ScheduleNum=schedule.ScheduleNum) ops_______________ops,
 				COUNT(*) countDups
 				FROM schedule
 				WHERE SchedType=2

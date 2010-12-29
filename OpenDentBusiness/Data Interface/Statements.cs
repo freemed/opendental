@@ -129,9 +129,11 @@ namespace OpenDentBusiness{
 			//if(dateFrom.Year>1800){
 				command+="AND statement.DateSent<"+POut.Date(dateTo.AddDays(1))+" ";//less than midnight tonight
 			//}
-			command+="GROUP BY statement.StatementNum ";
+			command+="GROUP BY BalTotal,BillingType,FName,InsEst,statement.IsSent,"
+				+"LName,MiddleI,statement.Mode_,PayPlanDue,Preferred,"
+				+"statement.PatNum,statement.StatementNum ";
 			if(orderBy==0){//BillingType
-				command+="ORDER BY definition.ItemOrder,LName,FName";
+				command+="ORDER BY definition.ItemOrder,LName,FName,MiddleI,PayPlanDue";
 			}
 			else{
 				command+="ORDER BY LName,FName";
