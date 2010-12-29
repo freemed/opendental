@@ -1260,7 +1260,7 @@ namespace OpenDental{
 			// timerWebHostSynch
 			// 
 			this.timerWebHostSynch.Enabled = true;
-			this.timerWebHostSynch.Interval = 10000;
+			this.timerWebHostSynch.Interval = 30000;
 			this.timerWebHostSynch.Tick += new System.EventHandler(this.timerWebHostSynch_Tick);
 			// 
 			// butBigPhones
@@ -4394,7 +4394,7 @@ namespace OpenDental{
 
 		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
 			//For debugging, this timer is already enabled, and it's set to fire every 10 seconds.  We can change that later.
-			//MessageBox.Show("hello from timer");
+			//FormMobileSetup.Synch();
 		}
 
 		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {

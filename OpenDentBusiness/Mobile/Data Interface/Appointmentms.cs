@@ -43,6 +43,20 @@ namespace OpenDentBusiness.Mobile {
 			List<Appointmentm> ChangedAppointmentmList=ConvertListToM(ChangedAppointmentList);
 			return ChangedAppointmentmList;
 		}
+
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<long> GetChangedSinceAptNums(DateTime changedSince,DateTime excludeOlderThan) {
+			return Appointments.GetChangedSinceAptNums(changedSince,excludeOlderThan);
+		}
+
+		///<summary>The values returned are sent to the webserver. Used if GetChanged returns large recordsets.</summary>
+		public static List<Appointmentm> GetMultApts(List<long> aptNums) {
+			Appointment[] aptArray=Appointments.GetMultApts(aptNums);
+			List<Appointment> aptList=new List<Appointment>(aptArray);
+			List<Appointmentm> aptmList=ConvertListToM(aptList);
+			return aptmList;
+		}
+
 		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
 		public static List<Appointmentm> ConvertListToM(List<Appointment> list) {
 			List<Appointmentm> retVal=new List<Appointmentm>();

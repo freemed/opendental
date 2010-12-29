@@ -38,6 +38,7 @@ namespace OpenDental{
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.textProgress = new System.Windows.Forms.TextBox();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -191,10 +192,19 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// textProgress
+			// 
+			this.textProgress.Location = new System.Drawing.Point(434,157);
+			this.textProgress.Name = "textProgress";
+			this.textProgress.ReadOnly = true;
+			this.textProgress.Size = new System.Drawing.Size(266,20);
+			this.textProgress.TabIndex = 240;
+			// 
 			// FormMobileSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(826,320);
+			this.Controls.Add(this.textProgress);
 			this.Controls.Add(this.groupPreferences);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textDateTimeLastRun);
@@ -229,5 +239,6 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupPreferences;
 		private UI.Button butSavePreferences;
 		private ValidNumber textBoxSynchMinutes;
+		private System.Windows.Forms.TextBox textProgress;
 	}
 }

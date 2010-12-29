@@ -43,7 +43,7 @@ namespace OpenDentBusiness.Mobile {
 			return ChangedPatientmList;
 		}
 
-		public static long[] GetChangedSincePatNums(DateTime changedSince) {
+		public static List<long> GetChangedSincePatNums(DateTime changedSince) {
 			return Patients.GetChangedSincePatNums(changedSince);
 		}
 

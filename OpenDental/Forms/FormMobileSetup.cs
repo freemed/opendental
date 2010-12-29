@@ -31,7 +31,7 @@ namespace OpenDental {
 			butSavePreferences.Enabled=false;
 		}
 
-		private void InitializeVariables() {
+		static void InitializeVariables() {
 			RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 			MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
 			MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
@@ -39,26 +39,27 @@ namespace OpenDental {
 			MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
 		}
 
-		public void Synch(DateTime GetChangedSince) {
+		static void Synch(DateTime GetChangedSince) {
 			try {
 				#if DEBUG
 					IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 				#endif
-					if(mb.GetCustomerNum(RegistrationKey)==0) {
-					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
+				if(!TestWebServiceExists()) {
+					//not called from main form// Cursor=Cursors.Default;
+					//not called from main form// MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
 					return;
+				}
+				if(mb.GetCustomerNum(RegistrationKey)==0) {
+					//not called from main form// MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
+				return;
 				}
 				//CreatePatients(100000);
 				//CreateAppointments(10); // for each patient
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
-				long[] patNumArray=Patientms.GetChangedSincePatNums(GetChangedSince);
-				SynchPatients(new List<long>(patNumArray));
-				long mem2=GC.GetTotalMemory(false);
-				//MessageBox.Show("M1 Memory in MB=" + (mem1-mem2)/1000000);
-				// major problem with system out of mem exception for a large number of recors
-				//mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
-				//List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetChanged(GetChangedSince,MobileExcludeApptsBeforeDate);
-				//mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
+				List<long> patNumList=Patientms.GetChangedSincePatNums(GetChangedSince);
+				SynchPatients(patNumList);
+				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(GetChangedSince,MobileExcludeApptsBeforeDate);
+				SynchAppointments(aptNumList);
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
 				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
 			}
@@ -66,32 +67,65 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 			}
 		}
-		public void SynchPatients(List<long> patNumList) {
-			int BlockLength =10;
-			for(int start=0;start<patNumList.Count;start+=BlockLength) {
-				if((start+BlockLength)>patNumList.Count) {
-					BlockLength=patNumList.Count-start;
+
+		static void SynchNow() {
+			Synch(MobileSyncDateTimeLastRun);
+		}
+		/// <summary>
+		/// Called from the main form
+		/// </summary>
+		public static void Synch() {
+			InitializeVariables();
+			if(MobileSyncIntervalMinutes==0) {
+				// Charge the customer!
+				//MsgBox.Show(this,"You must be a paid customer to use this feature");
+				//return;
+			}
+			if(DateTime.Now>MobileSyncDateTimeLastRun.AddMinutes(MobileSyncIntervalMinutes)) {
+				Synch(MobileSyncDateTimeLastRun);
+			}
+			
+		}
+
+		static void SynchFull() {
+			DateTime FullSynchDateTime=new DateTime(1880,1,1);
+			Synch(FullSynchDateTime);
+		}
+
+		static void SynchPatients(List<long> patNumList) {
+			// major problem with system out of memory exception for a large number of records hence the synch in done in batches
+			int BatchSize =100;
+			for(int start=0;start<patNumList.Count;start+=BatchSize) {
+				if((start+BatchSize)>patNumList.Count) {
+					BatchSize=patNumList.Count-start;
 				}
-				List<long> BlockPatNumList=patNumList.GetRange(start,BlockLength);
+				List<long> BlockPatNumList=patNumList.GetRange(start,BatchSize);
 				List<Patientm> ChangedPatientmList=Patientms.GetMultPats(BlockPatNumList);
+				//not called from main form// textProgress.Text="Upload Status: " + start + " records of "+patNumList.Count +"Patient Uploads";
+				Application.DoEvents();// allows textProgress to be rfreshed 
 				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
 			}
 		}
 
-		public void Synch() {
-			Synch(MobileSyncDateTimeLastRun);
+		static void SynchAppointments(List<long> AptNumList) {
+			// major problem with system out of memory exception for a large number of records hence the synch in done in batches
+			int BatchSize =100;
+			for(int start=0;start<AptNumList.Count;start+=BatchSize) {
+				if((start+BatchSize)>AptNumList.Count) {
+					BatchSize=AptNumList.Count-start;
+				}
+				List<long> BlockAptNumList=AptNumList.GetRange(start,BatchSize);
+				List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetMultApts(BlockAptNumList);
+				//not called from main form// textProgress.Text="Upload Status: " + start + " records of "+AptNumList.Count +"Appointmnet Uploads";
+				mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
+			}
 		}
 
-		public void SynchFull() {
-			DateTime FullSynchDateTime=new DateTime(1880,1,1);
-			Synch(FullSynchDateTime);
-		}
-					
 		/// <summary>
 		/// An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.
 		/// </summary>
 		/// <returns></returns>
-		private bool TestWebServiceExists() {
+		static bool TestWebServiceExists() {
 			try {
 				mb.Url=MobileSyncServerURL;
 				if(mb.ServiceExists()) {
@@ -107,7 +141,7 @@ namespace OpenDental {
 		/// <summary>
 		///  This method is used only for testing with security certificates that has problems.
 		/// </summary>
-		private void IgnoreCertificateErrors() {
+		static void IgnoreCertificateErrors() {
 			///the line below will allow the code to continue by not throwing an exception.
 			///It will accept the security certificate if there is a problem with the security certificate.
 			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
@@ -226,11 +260,6 @@ namespace OpenDental {
 		}
 
 		private void butSync_Click(object sender,EventArgs e) {
-			if(!TestWebServiceExists()) {
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
-				return;
-			}
 			if(!FieldsValid()) {
 				return;
 			}
@@ -246,7 +275,7 @@ namespace OpenDental {
 			SetMobileExcludeApptsBeforeDate();
 			Cursor=Cursors.WaitCursor;
 			try {
-				Synch();
+				SynchNow();
 				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
 			}
 			catch(Exception ex) {
@@ -259,6 +288,14 @@ namespace OpenDental {
 		private void butFullSync_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
 				return;
+			}
+			if(!FieldsValid()) {
+				return;
+			}
+			if(MobileSyncIntervalMinutes==0) {
+				// Charge the customer!
+				MsgBox.Show(this,"You must be a paid customer to use this feature");
+				//return;
 			}
 			SetMobileExcludeApptsBeforeDate();
 			Cursor=Cursors.WaitCursor;

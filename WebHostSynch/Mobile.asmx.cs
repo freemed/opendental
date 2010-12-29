@@ -67,6 +67,7 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public void SetMobileWebPassword(String RegistrationKey,String Password) {
+			Logger.Information("In SetMobileWebPassword");
 		}
 
 	}

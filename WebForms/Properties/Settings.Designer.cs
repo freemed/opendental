@@ -22,14 +22,5 @@ namespace WebForms.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("WebForms.log")]
-        public string LogFile {
-            get {
-                return ((string)(this["LogFile"]));
-            }
-        }
     }
 }

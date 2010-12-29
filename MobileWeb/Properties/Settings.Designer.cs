@@ -32,14 +32,5 @@ namespace MobileWeb.Properties {
                 return ((string)(this["DBMobileWeb"]));
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("MobileWeb.log")]
-        public string LogFile {
-            get {
-                return ((string)(this["LogFile"]));
-            }
-        }
     }
 }

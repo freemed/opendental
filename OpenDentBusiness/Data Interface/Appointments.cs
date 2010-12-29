@@ -220,6 +220,47 @@ namespace OpenDentBusiness{
 			return Crud.AppointmentCrud.SelectMany(command);
 		}
 
+		///<summary>Used if the number of records are very large, in which case using GetChangedSince is not the preffered route due to memory problems caused by large recordsets. </summary>
+		public static List<long> GetChangedSinceAptNums(DateTime changedSince,DateTime excludeOlderThan) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT AptNum FROM appointment WHERE DateTStamp > "+POut.DateT(changedSince)
+				+" AND AptDateTime > "+POut.DateT(excludeOlderThan);
+			DataTable dt=Db.GetTable(command);
+			List<long> aptnums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				aptnums.Add(PIn.Long(dt.Rows[i]["AptNum"].ToString()));
+			}
+			return aptnums;
+		}
+
+		///<summary>Used along with GetChangedSinceAptNums</summary>
+		public static Appointment[] GetMultApts(List<long> aptNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),aptNums);
+			}
+			//MessageBox.Show(patNums.Length.ToString());
+			string strAptNums="";
+			DataTable table;
+			if(aptNums.Count>0) {
+				for(int i=0;i<aptNums.Count;i++) {
+					if(i>0) {
+						strAptNums+="OR ";
+					}
+					strAptNums+="AptNum='"+aptNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM appointment WHERE "+strAptNums;
+				//MessageBox.Show(string command);
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			Appointment[] multApts=Crud.AppointmentCrud.TableToList(table).ToArray();
+			return multApts;
+		}
+
 		///<summary>A list of strings.  Each string corresponds to one appointment in the supplied list.  Each string is a comma delimited list of codenums of the procedures attached to the appointment.</summary>
 		public static List<string> GetUAppointProcs(List<Appointment> appts){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

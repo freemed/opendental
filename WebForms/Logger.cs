@@ -1,9 +1,7 @@
 ﻿///Dennis: There are far too many intricacies for the Enterprise library  all of which would be an overkill if througly explored.
 ///At this stge all I needed was simple logging to a flat files. If needed the more features could be added later.
-/// The following code has being pieced together from the web uses the of Enterprise Library Logging Application Block without the hassle of configuration 
-///setting in the config file. It shows two listeners, a flat file 
-///listener and the event log listener. Errors go to the Event Log - i.e if the code pertaining to it is uncomented.
-///and everything else to file
+/// The following code has being pieced together from the web uses the of Enterprise Library Logging Application Block without the hassle of configuration setting in the config file.
+/// There is only one flat listener in this code.The other listenr in the code i.e event log listener has been commented.
 ///To compile this code the Enterprise library should installed from http://www.microsoft.com/downloads/details.aspx?familyid=1643758B-2986-47F7-B529-3E41584B6CE5&displaylang=en
 
 
@@ -32,38 +30,42 @@ namespace WebForms {
 		/// Static constructor
 		/// </summary>
 		static Logger() {
-			//string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();
-			string LogFile=Properties.Settings.Default.LogFile;
+			string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();
+			// this defaults to the namespace WebForms even when used in another application so it's not used
+			//string LogFile=Properties.Settings.Default.LogFile;
+			
 
 			// formatter
 			TextFormatter formatter = new TextFormatter("[{timestamp}] [{machine}] {category}  \t: {message}");
 
 			// listeners
 			FlatFileTraceListener logFileListener = new FlatFileTraceListener(LogFile,"","",formatter);
-			FormattedEventLogTraceListener logEventListener = new FormattedEventLogTraceListener("Enterprise Library Logging",formatter);
+			//uncomment if an event log is needed
+			//FormattedEventLogTraceListener logEventListener = new FormattedEventLogTraceListener("Enterprise Library Logging",formatter);
 
 			// Sources
 			LogSource mainLogSource = new LogSource("MainLogSource",SourceLevels.All);
 			mainLogSource.Listeners.Add(logFileListener);
-
-			LogSource errorLogSource = new LogSource("ErrorLogSource",SourceLevels.Error);
-			errorLogSource.Listeners.Add(logEventListener);
+			//uncomment if an event log is needed
+			//LogSource errorLogSource = new LogSource("ErrorLogSource",SourceLevels.Error);
+			//errorLogSource.Listeners.Add(logEventListener);
 
 			// empty source
-			LogSource nonExistantLogSource = new LogSource("Empty");
+			LogSource nonExistantLogSource = new LogSource("Empty");//non matching category.
 
 			// trace sources
 			IDictionary<string,LogSource> traceSources = new Dictionary<string,LogSource>();
-			traceSources.Add("Error",errorLogSource);
+			//traceSources.Add("Error",errorLogSource);//uncomment if an event log is needed
 			traceSources.Add("Warning",mainLogSource);
 			traceSources.Add("Information",mainLogSource);
 
 
 			// log writer
 			writer = new LogWriter(new ILogFilter[0],traceSources,mainLogSource,nonExistantLogSource,
-				errorLogSource,"Error",false,true);
+				mainLogSource,"Error",false,true);
+			//writer = new LogWriter(new ILogFilter[0],traceSources,mainLogSource,nonExistantLogSource,
+			//errorLogSource,"Error",false,true);//uncomment if 'internal' error are to be logged to an event log is needed
 		}
-
 
 		/// <summary>
 		/// Writes an Error to the log. Dennis - uncomment method below to enable Error()
