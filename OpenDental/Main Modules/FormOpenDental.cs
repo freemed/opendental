@@ -3866,6 +3866,10 @@ namespace OpenDental{
 				FormRpTreatmentFinder FormT=new FormRpTreatmentFinder();
 				FormT.Show();
 			}
+			if(FormR.RpModalSelection==ReportModalSelection.OutstandingIns) {
+				FormRpOutstandingIns FormOI=new FormRpOutstandingIns();
+				FormOI.Show();
+			}
 		}
 
 		//Custom Reports

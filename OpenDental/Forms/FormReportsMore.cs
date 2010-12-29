@@ -538,9 +538,9 @@ namespace OpenDental {
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Finance Charges");
 					break;
 				case 4://Outstanding Insurance Claims
-					FormOutIns FormOI=new FormOutIns();
-					FormOI.Show();
+					RpModalSelection=ReportModalSelection.OutstandingIns;
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Outstanding Insurance Claims");
+					Close();
 					break;
 				case 5://Procedures Not Billed to Insurance
 					FormRpProcNotBilledIns FormProc=new FormRpProcNotBilledIns();
@@ -706,6 +706,8 @@ namespace OpenDental {
 		///<summary></summary>
 		None,
 		///<summary></summary>
-		TreatmentFinder
+		TreatmentFinder,
+		///<summary></summary>
+		OutstandingIns
 	}
 }

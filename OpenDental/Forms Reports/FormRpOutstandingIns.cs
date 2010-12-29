@@ -11,7 +11,7 @@ using System.Collections;
 using OpenDental.UI;
 
 namespace OpenDental {
-	public partial class FormOutIns:Form {
+	public partial class FormRpOutstandingIns:Form {
 		private ODGrid gridMain;
 		private CheckBox checkPreauth;
 		private Label labelProv;
@@ -19,8 +19,7 @@ namespace OpenDental {
 		private Label labelDaysOldMin;
 		private UI.Button butCancel;
 		private ValidNum textDaysOldMax;
-    private Label labelDaysOldMax;
-		private UI.Button butOK;
+		private Label labelDaysOldMax;
     private DateTime dateMin;
     private DateTime dateMax;
     private List<long> provNumList;
@@ -31,27 +30,28 @@ namespace OpenDental {
 		private ComboBoxMulti comboBoxMultiProv;
 		private bool headingPrinted;
 		private int pagesPrinted;
+		private Label label1;
 		private int headingPrintH;
 
 
-		public FormOutIns() {
+		public FormRpOutstandingIns() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormOutIns));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRpOutstandingIns));
 			this.checkPreauth = new System.Windows.Forms.CheckBox();
 			this.labelProv = new System.Windows.Forms.Label();
 			this.labelDaysOldMin = new System.Windows.Forms.Label();
 			this.labelDaysOldMax = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboBoxMultiProv = new OpenDental.UI.ComboBoxMulti();
 			this.butPrint = new OpenDental.UI.Button();
 			this.textDaysOldMax = new OpenDental.ValidNum();
 			this.textDaysOldMin = new OpenDental.ValidNum();
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butOK = new OpenDental.UI.Button();
-			this.comboBoxMultiProv = new OpenDental.UI.ComboBoxMulti();
 			this.SuspendLayout();
 			// 
 			// checkPreauth
@@ -60,7 +60,7 @@ namespace OpenDental {
 			this.checkPreauth.Checked = true;
 			this.checkPreauth.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkPreauth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPreauth.Location = new System.Drawing.Point(309,26);
+			this.checkPreauth.Location = new System.Drawing.Point(309,9);
 			this.checkPreauth.Name = "checkPreauth";
 			this.checkPreauth.Size = new System.Drawing.Size(145,18);
 			this.checkPreauth.TabIndex = 51;
@@ -70,16 +70,16 @@ namespace OpenDental {
 			// 
 			// labelProv
 			// 
-			this.labelProv.Location = new System.Drawing.Point(450,26);
+			this.labelProv.Location = new System.Drawing.Point(460,8);
 			this.labelProv.Name = "labelProv";
-			this.labelProv.Size = new System.Drawing.Size(104,16);
+			this.labelProv.Size = new System.Drawing.Size(94,16);
 			this.labelProv.TabIndex = 48;
 			this.labelProv.Text = "Providers";
 			this.labelProv.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// labelDaysOldMin
 			// 
-			this.labelDaysOldMin.Location = new System.Drawing.Point(6,25);
+			this.labelDaysOldMin.Location = new System.Drawing.Point(7,7);
 			this.labelDaysOldMin.Name = "labelDaysOldMin";
 			this.labelDaysOldMin.Size = new System.Drawing.Size(127,18);
 			this.labelDaysOldMin.TabIndex = 46;
@@ -88,12 +88,34 @@ namespace OpenDental {
 			// 
 			// labelDaysOldMax
 			// 
-			this.labelDaysOldMax.Location = new System.Drawing.Point(120,25);
+			this.labelDaysOldMax.Location = new System.Drawing.Point(179,7);
 			this.labelDaysOldMax.Name = "labelDaysOldMax";
-			this.labelDaysOldMax.Size = new System.Drawing.Size(127,18);
+			this.labelDaysOldMax.Size = new System.Drawing.Size(69,18);
 			this.labelDaysOldMax.TabIndex = 46;
 			this.labelDaysOldMax.Text = "(max)";
 			this.labelDaysOldMax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(86,25);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(240,18);
+			this.label1.TabIndex = 54;
+			this.label1.Text = "(leave both blank to show all)";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// comboBoxMultiProv
+			// 
+			this.comboBoxMultiProv.BackColor = System.Drawing.SystemColors.Window;
+			this.comboBoxMultiProv.DroppedDown = false;
+			this.comboBoxMultiProv.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.Items")));
+			this.comboBoxMultiProv.Location = new System.Drawing.Point(560,7);
+			this.comboBoxMultiProv.Name = "comboBoxMultiProv";
+			this.comboBoxMultiProv.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.SelectedIndices")));
+			this.comboBoxMultiProv.Size = new System.Drawing.Size(160,21);
+			this.comboBoxMultiProv.TabIndex = 53;
+			this.comboBoxMultiProv.UseCommas = true;
+			this.comboBoxMultiProv.Leave += new System.EventHandler(this.comboBoxMultiProv_Leave);
 			// 
 			// butPrint
 			// 
@@ -114,7 +136,7 @@ namespace OpenDental {
 			// 
 			// textDaysOldMax
 			// 
-			this.textDaysOldMax.Location = new System.Drawing.Point(251,25);
+			this.textDaysOldMax.Location = new System.Drawing.Point(251,7);
 			this.textDaysOldMax.MaxVal = 255;
 			this.textDaysOldMax.MinVal = 0;
 			this.textDaysOldMax.Name = "textDaysOldMax";
@@ -124,7 +146,7 @@ namespace OpenDental {
 			// 
 			// textDaysOldMin
 			// 
-			this.textDaysOldMin.Location = new System.Drawing.Point(138,25);
+			this.textDaysOldMin.Location = new System.Drawing.Point(138,7);
 			this.textDaysOldMin.MaxVal = 255;
 			this.textDaysOldMin.MinVal = 0;
 			this.textDaysOldMin.Name = "textDaysOldMin";
@@ -146,56 +168,29 @@ namespace OpenDental {
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,23);
 			this.butCancel.TabIndex = 45;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// gridMain
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,52);
+			this.gridMain.Location = new System.Drawing.Point(12,46);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(740,410);
+			this.gridMain.Size = new System.Drawing.Size(740,416);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = null;
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(576,477);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,23);
-			this.butOK.TabIndex = 0;
-			this.butOK.Text = "OK";
-			this.butOK.UseVisualStyleBackColor = true;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// comboBoxMultiProv
-			// 
-			this.comboBoxMultiProv.BackColor = System.Drawing.SystemColors.Window;
-			this.comboBoxMultiProv.DroppedDown = false;
-			this.comboBoxMultiProv.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.Items")));
-			this.comboBoxMultiProv.Location = new System.Drawing.Point(560,25);
-			this.comboBoxMultiProv.Name = "comboBoxMultiProv";
-			this.comboBoxMultiProv.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.SelectedIndices")));
-			this.comboBoxMultiProv.Size = new System.Drawing.Size(160,21);
-			this.comboBoxMultiProv.TabIndex = 53;
-			this.comboBoxMultiProv.UseCommas = true;
-			this.comboBoxMultiProv.Leave += new System.EventHandler(this.comboBoxMultiProv_Leave);
-			// 
-			// FormOutIns
+			// FormRpOutstandingIns
 			// 
 			this.ClientSize = new System.Drawing.Size(764,512);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.labelDaysOldMin);
 			this.Controls.Add(this.comboBoxMultiProv);
 			this.Controls.Add(this.butPrint);
@@ -206,8 +201,8 @@ namespace OpenDental {
 			this.Controls.Add(this.labelDaysOldMax);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butOK);
-			this.Name = "FormOutIns";
+			this.Name = "FormRpOutstandingIns";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Outstanding Insurance Claims";
 			this.Load += new System.EventHandler(this.FormRpOutIns_Load);
 			this.ResumeLayout(false);
@@ -217,7 +212,7 @@ namespace OpenDental {
 
 		private void FormRpOutIns_Load(object sender,EventArgs e) {
 			FillProvs();
-			RefreshGrid();
+			FillGrid();
 		}
 
 		private void FillProvs() {
@@ -230,7 +225,7 @@ namespace OpenDental {
 			isAllProv=true;
 		}
 
-		private void RefreshGrid() {
+		private void FillGrid() {
 			if(textDaysOldMin.Text.Trim()=="" || PIn.Double(textDaysOldMin.Text)==0) {
 				dateMin=DateTime.MinValue;
 			}
@@ -255,10 +250,6 @@ namespace OpenDental {
 			}
 			isPreauth=checkPreauth.Checked;
 			Table=Claims.GetOutInsClaims(isAllProv,provNumList,dateMin,dateMax,isPreauth);
-			FillGrid();
-		}
-
-		private void FillGrid(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -318,23 +309,19 @@ namespace OpenDental {
 		}
 
 		private void listProv_SelectedIndexChanged(object sender,EventArgs e) {
-			RefreshGrid();
-		}
-
-		private void label3_Click(object sender,EventArgs e) {
-			RefreshGrid();
+			FillGrid();
 		}
 
 		private void textDaysOldMin_TextChanged(object sender,EventArgs e) {
-			RefreshGrid();
+			FillGrid();
 		}
 
 		private void checkPreauth_CheckedChanged(object sender,EventArgs e) {
-			RefreshGrid();
+			FillGrid();
 		}
 
 		private void textDaysOldMax_TextChanged(object sender,EventArgs e) {
-			RefreshGrid();
+			FillGrid();
 		}
 
 		private void comboBoxMultiProv_Leave(object sender,EventArgs e) {
@@ -365,13 +352,7 @@ namespace OpenDental {
 			FormCE.ShowDialog();
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-			Close();
-		}
-
 		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
 			Close();
 		}
 
