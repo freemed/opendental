@@ -69,26 +69,36 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>First column is always a bigint, primary key, autoincrement.</summary>
-		public static void AddOrReplaceTable(string tableName,List<DbSchemaCol> cols) {
+		public static void AddTable(string tableName,List<DbSchemaCol> cols) {
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				//redefine keys
-				//redefine indexes and sequences
+				command = "CREATE TABLE IF NOT EXISTS "+tableName+" (";
+				for(int i=0;i<cols.Count;i++) {
+					command+=cols[i].ColumnName+" "+GetMySqlType(cols[i])+(i==0?" PRIMARY KEY":"")+(i==cols.Count-1?");":", ");
+				}
+				Db.NonQ(command);
 			}
 			else {//oracle
-				command = "CREATE TABLE newtemptable ( ";
-				for(int i=0;i<cols.Count;i++) {
-					command+=cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?", ":" );");
+				bool tableExists=false;
+				command="SELECT * FROM user_tables WHERE user='"+Db.GetTable("SELECT username FROM user_users;").Rows[0].ToString()+"';";//check to see if table exists
+				DataTable tempTableNames = Db.GetTable(command);
+				for(int i=0;i<tempTableNames.Rows.Count;i++) {
+					if(tempTableNames.Rows[i].ToString().Equals(tableName)) {
+						tableExists=true;
+					}
 				}
-				//redefine keys Primary key should always be first column and only the first column.
-				//redefine indexes and sequences
-				//fill new table with old data
-				//check sequences
-				//check other triggers
-
-				command = "ALTER TABLE newtemptable RENAME TO "+tableName+";";
-				Db.NonQ(command);
-				OracleValidateDateTStampTriggerHelper(tableName);
+				if(tableExists) {
+					//dont add table.
+					//TODO:how to handle trying to add a table that exists
+				}
+				else {//table doesn't exist and therefor needs to be created
+					command = "CREATE TABLE "+tableName+" (";
+					for(int i=0;i<cols.Count;i++) {
+						command+=cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?");":", ");
+					}
+					Db.NonQ(command);
+					OracleValidateDateTStampTriggerHelper(tableName);
+				}
 			}
 		}
 
@@ -251,6 +261,7 @@ namespace OpenDentBusiness {
 		/// <summary>Fills new table by selecting each column before index from old table, creates new column at index, continues to select columns from old table, drops old table, renames new table.</summary>
 		private static void OracleAddAtIndexHelper(string tableName,DbSchemaCol col, int indexOfNewColumn) {
 			string command;
+			string commandPart2;
 			DbSchemaCol newCol;
 			command = "Select * FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"';";
 			DataTable tempTable = Db.GetTable(command);//get list of columns
@@ -263,10 +274,20 @@ namespace OpenDentBusiness {
 				newCol = new DbSchemaCol(tempTable.Rows[i][1].ToString(),OdDbType.Bool /* must convert this:tempTable.Rows[i][2] to OdDbTypes*/);
 				newTableCols.Add(newCol);
 			}
-			AddOrReplaceTable(tableName,newTableCols);
-			//Validating timestamps occurs in the code above
-			//drop old table
-			//rename new table_name to old table_name
+			AddColumnEnd(tableName,col);
+			command="CREATE TABLE newtemptable ( ";
+			commandPart2=" AS (SELECT ";
+			for(int i=0;i<newTableCols.Count;i++) {
+				//TODO:if someone try's to add a column to the beginning it will be set as the primary key, and requires information to be input. Also reuires unique entries.
+				command+=newTableCols[i].ColumnName+" "+GetOracleType(newTableCols[i])+(i==0?" primary key ":"")+(i==newTableCols.Count-1?", ":" )");
+				commandPart2+=tableName+"."+newTableCols[i].ColumnName+(i==newTableCols.Count-1?", ":" FROM "+tableName+");");
+			}
+			command+=commandPart2;
+			Db.NonQ(command);
+			command="DROP TABLE "+tableName+";";
+			Db.NonQ(command);
+			command = "ALTER TABLE newtemptable RENAME TO "+tableName+";";
+			Db.NonQ(command);
 		}
 
 
