@@ -80,7 +80,7 @@ namespace OpenDentBusiness {
 				for(int i=0;i<cols.Count;i++) {
 					command+=cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?", ":" );");
 				}
-				//redefine keys
+				//redefine keys Primary key should always be first column and only the first column.
 				//redefine indexes and sequences
 				//fill new table with old data
 				//check sequences
