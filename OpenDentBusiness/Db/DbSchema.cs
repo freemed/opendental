@@ -78,10 +78,8 @@ namespace OpenDentBusiness {
 			else {//oracle
 				command = "CREATE TABLE newtemptable ( ";
 				for(int i=0;i<cols.Count;i++) {
-					command+=cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==0?" primary key ":"")+", ";
+					command+=cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?", ":" );");
 				}
-//				command.TrimEnd();
-				command += " );";
 				//redefine keys
 				//redefine indexes and sequences
 				//fill new table with old data
