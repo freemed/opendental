@@ -4393,7 +4393,7 @@ namespace OpenDental{
 		}
 
 		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
-			//For debugging, this timer is already enabled, and it's set to fire every 10 seconds.  We can change that later.
+			//set to 30 seconds
 			//FormMobileSetup.Synch();
 		}
 
