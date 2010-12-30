@@ -327,6 +327,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
+			this.label4.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label4.Location = new System.Drawing.Point(32,236);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(221,15);
@@ -368,6 +369,7 @@ namespace OpenDental{
 			// 
 			// label18
 			// 
+			this.label18.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label18.Location = new System.Drawing.Point(37,145);
 			this.label18.Name = "label18";
 			this.label18.Size = new System.Drawing.Size(318,27);
@@ -384,6 +386,7 @@ namespace OpenDental{
 			// 
 			// label20
 			// 
+			this.label20.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label20.Location = new System.Drawing.Point(30,354);
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(188,13);
@@ -426,6 +429,7 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
+			this.label12.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label12.Location = new System.Drawing.Point(32,258);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(221,15);
@@ -445,6 +449,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
+			this.label10.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label10.Location = new System.Drawing.Point(90,89);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(195,15);
@@ -518,6 +523,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
+			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label2.Location = new System.Drawing.Point(36,113);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(318,27);
@@ -577,6 +583,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.checkApptBubbleDelay);
 			this.groupBox4.Controls.Add(this.checkAppointmentBubblesDisabled);
 			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
+			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox4.Location = new System.Drawing.Point(12,11);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(422,219);
@@ -597,6 +604,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
+			this.label6.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label6.Location = new System.Drawing.Point(6,174);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(247,15);
@@ -616,6 +624,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
+			this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label5.Location = new System.Drawing.Point(6,152);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(247,15);
@@ -635,6 +644,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
+			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label3.Location = new System.Drawing.Point(6,130);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(247,15);
@@ -666,6 +676,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
+			this.label7.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label7.Location = new System.Drawing.Point(32,88);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(221,15);
@@ -737,6 +748,7 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.groupBox3.Controls.Add(this.comboToothNomenclature);
 			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
+			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.Location = new System.Drawing.Point(454,444);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(422,115);
@@ -770,6 +782,7 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
+			this.label11.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label11.Location = new System.Drawing.Point(17,54);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(144,13);
@@ -829,6 +842,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.checkMedicalEclaimsEnabled);
 			this.groupBox2.Controls.Add(this.checkPPOpercentage);
 			this.groupBox2.Controls.Add(this.checkInsurancePlansShared);
+			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(12,233);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(422,134);

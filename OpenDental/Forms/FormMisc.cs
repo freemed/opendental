@@ -40,6 +40,8 @@ namespace OpenDental{
 		private Label label2;
 		private CheckBox checkReportsProcDate;
 		private CheckBox checkReportsShowPatNum;
+		private CheckBox checkReportProdWO;
+		private GroupBox groupBox1;
 		private Label label1;
 		//private List<Def> posAdjTypes;
 
@@ -93,9 +95,12 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkReportsProcDate = new System.Windows.Forms.CheckBox();
 			this.checkReportsShowPatNum = new System.Windows.Forms.CheckBox();
+			this.checkReportProdWO = new System.Windows.Forms.CheckBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBoxTaskDefaults.SuspendLayout();
 			this.groupBox6.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textMainWindowTitle
@@ -107,6 +112,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
+			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label3.Location = new System.Drawing.Point(41,138);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(333,35);
@@ -117,6 +123,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
+			this.label4.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label4.Location = new System.Drawing.Point(59,183);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(298,17);
@@ -168,7 +175,7 @@ namespace OpenDental{
 			// 
 			this.checkTaskListAlwaysShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTaskListAlwaysShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTaskListAlwaysShow.Location = new System.Drawing.Point(106,34);
+			this.checkTaskListAlwaysShow.Location = new System.Drawing.Point(158,34);
 			this.checkTaskListAlwaysShow.Name = "checkTaskListAlwaysShow";
 			this.checkTaskListAlwaysShow.Size = new System.Drawing.Size(190,14);
 			this.checkTaskListAlwaysShow.TabIndex = 74;
@@ -181,7 +188,7 @@ namespace OpenDental{
 			// 
 			this.checkTasksCheckOnStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTasksCheckOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTasksCheckOnStartup.Location = new System.Drawing.Point(66,12);
+			this.checkTasksCheckOnStartup.Location = new System.Drawing.Point(118,12);
 			this.checkTasksCheckOnStartup.Name = "checkTasksCheckOnStartup";
 			this.checkTasksCheckOnStartup.Size = new System.Drawing.Size(230,19);
 			this.checkTasksCheckOnStartup.TabIndex = 75;
@@ -260,9 +267,10 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.groupBoxTaskDefaults);
 			this.groupBox2.Controls.Add(this.checkTaskListAlwaysShow);
 			this.groupBox2.Controls.Add(this.checkTasksCheckOnStartup);
-			this.groupBox2.Location = new System.Drawing.Point(12,277);
+			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox2.Location = new System.Drawing.Point(101,308);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(346,166);
+			this.groupBox2.Size = new System.Drawing.Size(386,166);
 			this.groupBox2.TabIndex = 188;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Task List";
@@ -277,15 +285,17 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults.Controls.Add(this.labelX);
 			this.groupBoxTaskDefaults.Controls.Add(this.checkBoxTaskKeepListHidden);
 			this.groupBoxTaskDefaults.Enabled = false;
-			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(15,59);
+			this.groupBoxTaskDefaults.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(67,59);
 			this.groupBoxTaskDefaults.Name = "groupBoxTaskDefaults";
-			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(312,101);
+			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(297,101);
 			this.groupBoxTaskDefaults.TabIndex = 76;
 			this.groupBoxTaskDefaults.TabStop = false;
 			this.groupBoxTaskDefaults.Text = "Local Computer Default Settings";
 			// 
 			// label15
 			// 
+			this.label15.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label15.Location = new System.Drawing.Point(86,17);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(83,17);
@@ -295,6 +305,7 @@ namespace OpenDental{
 			// 
 			// label17
 			// 
+			this.label17.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label17.Location = new System.Drawing.Point(110,39);
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(195,15);
@@ -309,6 +320,7 @@ namespace OpenDental{
 			this.groupBox6.Controls.Add(this.label15);
 			this.groupBox6.Controls.Add(this.comboShowID);
 			this.groupBox6.Controls.Add(this.label17);
+			this.groupBox6.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox6.Location = new System.Drawing.Point(12,46);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(453,83);
@@ -329,6 +341,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
+			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label1.Location = new System.Drawing.Point(12,9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(410,17);
@@ -368,7 +381,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(480,436);
+			this.butCancel.Location = new System.Drawing.Point(548,452);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -383,7 +396,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(480,398);
+			this.butOK.Location = new System.Drawing.Point(548,414);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
@@ -399,6 +412,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
+			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label2.Location = new System.Drawing.Point(4,213);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(279,17);
@@ -410,30 +424,53 @@ namespace OpenDental{
 			// 
 			this.checkReportsProcDate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkReportsProcDate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportsProcDate.Location = new System.Drawing.Point(87,238);
+			this.checkReportsProcDate.Location = new System.Drawing.Point(75,13);
 			this.checkReportsProcDate.Name = "checkReportsProcDate";
 			this.checkReportsProcDate.Size = new System.Drawing.Size(362,17);
 			this.checkReportsProcDate.TabIndex = 199;
-			this.checkReportsProcDate.Text = "Reports default to using Proc Date for PPO writeoffs";
+			this.checkReportsProcDate.Text = "Default to using Proc Date for PPO writeoffs";
 			this.checkReportsProcDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkReportsShowPatNum
 			// 
 			this.checkReportsShowPatNum.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkReportsShowPatNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportsShowPatNum.Location = new System.Drawing.Point(15,256);
+			this.checkReportsShowPatNum.Location = new System.Drawing.Point(23,31);
 			this.checkReportsShowPatNum.Name = "checkReportsShowPatNum";
-			this.checkReportsShowPatNum.Size = new System.Drawing.Size(434,17);
+			this.checkReportsShowPatNum.Size = new System.Drawing.Size(414,17);
 			this.checkReportsShowPatNum.TabIndex = 200;
-			this.checkReportsShowPatNum.Text = "Reports show PatNum: Aging, OutstandingIns, ProcsNotBilled";
+			this.checkReportsShowPatNum.Text = "Show PatNum: Aging, OutstandingIns, ProcsNotBilled";
 			this.checkReportsShowPatNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkReportProdWO
+			// 
+			this.checkReportProdWO.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkReportProdWO.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkReportProdWO.Location = new System.Drawing.Point(23,50);
+			this.checkReportProdWO.Name = "checkReportProdWO";
+			this.checkReportProdWO.Size = new System.Drawing.Size(414,17);
+			this.checkReportProdWO.TabIndex = 201;
+			this.checkReportProdWO.Text = "Monthly P&&I scheduled production subtracts PPO writeoffs";
+			this.checkReportProdWO.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.checkReportsShowPatNum);
+			this.groupBox1.Controls.Add(this.checkReportProdWO);
+			this.groupBox1.Controls.Add(this.checkReportsProcDate);
+			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox1.Location = new System.Drawing.Point(12,229);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(453,73);
+			this.groupBox1.TabIndex = 202;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Reports";
 			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(602,486);
-			this.Controls.Add(this.checkReportsShowPatNum);
-			this.Controls.Add(this.checkReportsProcDate);
+			this.ClientSize = new System.Drawing.Size(670,502);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textWebServiceServerName);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -458,6 +495,7 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults.PerformLayout();
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -498,6 +536,7 @@ namespace OpenDental{
 			textWebServiceServerName.Text=PrefC.GetString(PrefName.WebServiceServerName);
 			checkReportsProcDate.Checked=PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate);
 			checkReportsShowPatNum.Checked=PrefC.GetBool(PrefName.ReportsShowPatNum);
+			checkReportProdWO.Checked=PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO);
 		}
 
 		private void butLanguages_Click(object sender,EventArgs e) {
@@ -552,6 +591,7 @@ namespace OpenDental{
 				| Prefs.UpdateString(PrefName.WebServiceServerName,textWebServiceServerName.Text)
 				| Prefs.UpdateBool(PrefName.ReportsPPOwriteoffDefaultToProcDate,checkReportsProcDate.Checked)
 				| Prefs.UpdateBool(PrefName.ReportsShowPatNum,checkReportsShowPatNum.Checked)
+				| Prefs.UpdateBool(PrefName.ReportPandIschedProdSubtractsWO,checkReportProdWO.Checked)
 				)
 			{
 				changed=true;

@@ -3234,6 +3234,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.6.2.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_6_4();
+		}
+
+		private static void To7_6_4() {
+			if(FromVersion<new Version("7.6.4.0")) {
+				string command;
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('ReportPandIschedProdSubtractsWO','0')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.6.4.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_7_0();
 		}
 

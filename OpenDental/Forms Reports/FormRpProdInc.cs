@@ -1280,8 +1280,11 @@ GROUP BY SchedDate
 				}
 				whereClin+=") ";
 			}
-			report.Query= "SELECT "+DbHelper.DateColumn("appointment.AptDateTime")+" SchedDate,SUM(IFNULL(procedurelog.ProcFee,0)-IFNULL(WriteOffEst,0)) "
-				+"FROM appointment "
+			report.Query= "SELECT "+DbHelper.DateColumn("appointment.AptDateTime")+" SchedDate,SUM(IFNULL(procedurelog.ProcFee,0)";
+			if(PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO)){
+				report.Query+="-IFNULL(WriteOffEst,0)";
+			}
+			report.Query+=") FROM appointment "
 				+"LEFT JOIN procedurelog ON appointment.AptNum = procedurelog.AptNum "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND Status=6 AND WriteOffEst != -1 "
 				+"WHERE (appointment.AptStatus = 1 OR "//stat=scheduled
