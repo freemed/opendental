@@ -28,15 +28,14 @@ namespace OpenDental {
 		}
 
 		private void FormWebForms_Load(object sender,EventArgs e) {
-		}
-
-		/// <summary>
-		/// Code in this method was not put into the Form load event because often the "No Patient forms available" Message would popup even before a form is loaded - which could confuse the user.
-		/// </summary>
-		private void FormWebForms_Shown(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
+		}
+
+		///<summary>This reason no longer applies: Code in this method was not put into the Form load event because often the "No Patient forms available" Message would popup even before a form is loaded - which could confuse the user.</summary>
+		private void FormWebForms_Shown(object sender,EventArgs e) {
+			
 		}
 
 		/// <summary>
@@ -430,6 +429,12 @@ namespace OpenDental {
 			}
 		}
 
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			long sheetNum=(long)gridMain.Rows[e.Row].Tag;
+			Sheet sheet=Sheets.GetSheet(sheetNum);
+			GotoModule.GotoFamily(sheet.PatNum);
+		}
+
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			long sheetNum=(long)gridMain.Rows[e.Row].Tag;
 			Sheet sheet=Sheets.GetSheet(sheetNum);
@@ -443,6 +448,7 @@ namespace OpenDental {
 			}
 		}
 
+		/*
 		private void menuItemViewSheet_Click(object sender,EventArgs e) {
 			long sheetNum=(long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 			Sheet sheet=Sheets.GetSheet(sheetNum);
@@ -456,7 +462,7 @@ namespace OpenDental {
 			FormSheetImport formSI=new FormSheetImport();
 			formSI.SheetCur=sheet;
 			formSI.ShowDialog();
-		}
+		}*/
 
 		private void menuItemViewAllSheets_Click(object sender,EventArgs e) {
 			long sheetNum=(long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
@@ -466,13 +472,11 @@ namespace OpenDental {
 			formP.ShowDialog();
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void butCancel_Click(object sender,EventArgs e) {
+			Close();
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+	
 
 
 

@@ -133,7 +133,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12,67);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(939,363);
+			this.gridMain.Size = new System.Drawing.Size(860,363);
 			this.gridMain.TabIndex = 56;
 			this.gridMain.Title = "Sheet Defs";
 			this.gridMain.TranslationName = "TableSheetDefs";
@@ -148,7 +148,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(874,446);
+			this.butCancel.Location = new System.Drawing.Point(795,446);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -190,7 +190,7 @@ namespace OpenDental{
 			// FormWebFormSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(963,486);
+			this.ClientSize = new System.Drawing.Size(884,486);
 			this.Controls.Add(this.butSave);
 			this.Controls.Add(this.butChange);
 			this.Controls.Add(this.butDelete);
@@ -201,7 +201,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textboxWebHostAddress);
 			this.Controls.Add(this.labelWebhostURL);
 			this.Controls.Add(this.butCancel);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "FormWebFormSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Web Form Setup";
