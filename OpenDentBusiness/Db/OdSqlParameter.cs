@@ -12,6 +12,11 @@ namespace OpenDentBusiness {
 		private OdDbType dbType;
 		private Object value;
 
+		public OdDbType DbType {
+			get { return dbType; }
+			set { dbType = value; }
+		}
+
 		public string ParameterName {
 			get { return parameterName; }
 			set { parameterName = value; }
@@ -76,50 +81,45 @@ namespace OpenDentBusiness {
 			return param;
 		}
 
+		public OracleDbType GetOracleDbType() {
+			switch(this.dbType) {
+				case OdDbType.Blob:
+					return OracleDbType.Blob;
+				case OdDbType.Bool:
+					return OracleDbType.Byte;
+				case OdDbType.Byte:
+					return OracleDbType.Byte;
+				case OdDbType.Currency:
+					return OracleDbType.Decimal;
+				case OdDbType.Date:
+					return OracleDbType.Date;
+				case OdDbType.DateTime:
+					return OracleDbType.Date;
+				case OdDbType.DateTimeStamp:
+					return OracleDbType.Date;
+				case OdDbType.Float:
+					return OracleDbType.Double;
+				case OdDbType.Int:
+					return OracleDbType.Int32;
+				case OdDbType.Long:
+					return OracleDbType.Int64;
+				case OdDbType.Text:
+					return OracleDbType.Clob;
+				case OdDbType.TimeOfDay:
+					return OracleDbType.Date;
+				case OdDbType.TimeSpan:
+					return OracleDbType.Varchar2;
+				case OdDbType.VarChar255:
+					return OracleDbType.Varchar2;
+				default://should never happen
+					return OracleDbType.Char;
+			}
+		}
+
 		public OracleParameter GetOracleParameter() {
 			OracleParameter param=new OracleParameter();
 			param.ParameterName=this.parameterName;
-			switch(this.dbType) {
-				case OdDbType.Bool:
-					param.OracleDbType=OracleDbType.Byte;
-					break;
-				case OdDbType.Byte:
-					param.OracleDbType=OracleDbType.Byte;
-					break;
-				case OdDbType.Currency:
-					param.OracleDbType=OracleDbType.Decimal;
-					break;
-				case OdDbType.Date:
-					param.OracleDbType=OracleDbType.Date;
-					break;
-				case OdDbType.DateTime:
-					param.OracleDbType=OracleDbType.Date;
-					break;
-				case OdDbType.DateTimeStamp:
-					param.OracleDbType=OracleDbType.Date;
-					break;
-				case OdDbType.Float:
-					param.OracleDbType=OracleDbType.Double;
-					break;
-				case OdDbType.Int:
-					param.OracleDbType=OracleDbType.Int32;
-					break;
-				case OdDbType.Long:
-					param.OracleDbType=OracleDbType.Int64;
-					break;
-				case OdDbType.Text:
-					param.OracleDbType=OracleDbType.Clob;
-					break;
-				case OdDbType.TimeOfDay:
-					param.OracleDbType=OracleDbType.Date;
-					break;
-				case OdDbType.TimeSpan:
-					param.OracleDbType=OracleDbType.Varchar2;
-					break;
-				case OdDbType.VarChar255:
-					param.OracleDbType=OracleDbType.Varchar2;
-					break;
-			}
+			param.OracleDbType=GetOracleDbType();
 			return param;
 		}
 

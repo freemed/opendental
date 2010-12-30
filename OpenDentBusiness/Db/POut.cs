@@ -229,10 +229,11 @@ namespace OpenDentBusiness{
 			if(bitmap==null) {
 				return "";
 			}
-			MemoryStream stream=new MemoryStream();
-			bitmap.Save(stream,ImageFormat.Png);//was Bmp, so there will be a mix of different kinds.
-			byte[] rawData=stream.ToArray();
-			return Convert.ToBase64String(rawData);
+			using(MemoryStream stream=new MemoryStream()) {
+				bitmap.Save(stream,ImageFormat.Png);//was Bmp, so there will be a mix of different kinds.
+				byte[] rawData=stream.ToArray();
+				return Convert.ToBase64String(rawData);
+			}
 		}
 
 		///<summary>Converts the specified wav file into a string representation.  The timing of this is a little different than with the other "P" functions and is only used by the import button in FormSigElementDefEdit.  After that, the wav spends the rest of it's life as a string until "played" or exported.</summary>
