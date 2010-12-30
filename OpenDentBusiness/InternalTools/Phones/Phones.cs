@@ -58,7 +58,8 @@ namespace OpenDentBusiness{
 				FROM phone
 				LEFT JOIN phoneoverride ON phone.Extension=phoneoverride.Extension
 				WHERE phone.Extension="+POut.Long(extens)
-				+" GROUP BY phone.Extension";
+				//+" phone.Extension";
+				+" GROUP BY EmployeeNum,Description,EmployeeName,phone.Extension";
 			DataTable tablePhone=Db.GetTable(command);
 			if(tablePhone.Rows.Count==0) {
 				return;

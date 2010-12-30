@@ -276,7 +276,7 @@ namespace OpenDentBusiness{
 			string command="SELECT task.TaskNum FROM task,taskunread "
 				+"WHERE task.TaskNum=taskunread.TaskNum "
 				+"AND taskunread.UserNum = "+POut.Long(userNum)
-				+" GROUP BY task.TaskNum";//this handles duplicate taskunread entries.";
+				+" GROUP BY task.TaskNum";//this handles duplicate taskunread entries.
 			/*
 			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "

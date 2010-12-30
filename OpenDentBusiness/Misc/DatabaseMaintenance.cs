@@ -362,7 +362,7 @@ namespace OpenDentBusiness {
 			command=@"SELECT claim.ClaimNum,SUM(claimproc.WriteOff) sumwo,claim.WriteOff
 				FROM claim,claimproc
 				WHERE claim.ClaimNum=claimproc.ClaimNum
-				GROUP BY claim.ClaimNum
+				GROUP BY claim.ClaimNum,claim.WriteOff
 				HAVING sumwo-claim.WriteOff > .01
 				OR sumwo-claim.WriteOff < -.01";
 			table=Db.GetTable(command);

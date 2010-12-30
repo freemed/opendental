@@ -494,7 +494,7 @@ namespace OpenDentBusiness{
 				SELECT tempfambal.PatNum,tempfambal.ProvNum,tempfambal.ClinicNum,SUM(AmtBal) StartBal,SUM(AmtBal-tempfambal.InsEst) AfterIns,FName,Preferred,'0' EndBal
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
-				GROUP BY PatNum,ProvNum,ClinicNum
+				GROUP BY PatNum,ProvNum,ClinicNum,FName,Preferred
 				ORDER BY CASE WHEN Guarantor!=patient.PatNum THEN 0 ELSE 1 END,Birthdate,ProvNum,FName,Preferred;
 
 				DROP TABLE IF EXISTS tempfambal";

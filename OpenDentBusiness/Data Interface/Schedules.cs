@@ -650,7 +650,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
-			string command=@"SELECT COUNT(*) countDups,SchedDate,MAX(schedule.ScheduleNum),"//MAX on id. Cannot GROUP BY id without splitting up duplicates.
+			string command=@"SELECT COUNT(*) countDups,SchedDate,MAX(schedule.ScheduleNum),"//MAX on id as to not change query behavior from prior to MySQL/Oracle independence.
 				+@"(SELECT "+DbHelper.GroupConcat("so1.OperatoryNum",false,true)+@" FROM scheduleop so1 WHERE so1.ScheduleNum=schedule.ScheduleNum) AS ops				
 				FROM schedule
 				WHERE SchedType=2

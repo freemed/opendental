@@ -481,7 +481,7 @@ namespace OpenDentBusiness {
 			double amt;
 			string command;
 			//claimprocs (ins payments)----------------------------------------------------------------------------
-			command="SELECT ClaimNum,ClaimPaymentNum,ClinicNum,DateCP,SUM(InsPayAmt) InsPayAmt_,PatNum,ProcDate,"
+			command="SELECT ClaimNum,MAX(ClaimPaymentNum) ClaimPaymentNum,MAX(ClinicNum) ClinicNum,DateCP,SUM(InsPayAmt) InsPayAmt_,MAX(PatNum) PatNum,MAX(ProcDate) ProcDate,"//MAX functions added to preserve behavior in Oracle.
 				+"ProvNum,SUM(WriteOff) WriteOff_,"
 				+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) provNum_ "
 				+"FROM claimproc "
@@ -574,7 +574,9 @@ namespace OpenDentBusiness {
 				+"WHERE ProcStatus=2 "//complete
 				+"AND procedurelog.PatNum IN ("
 				+familyPatNums
-				+") GROUP BY procedurelog.ProcNum ";
+				+") GROUP BY procedurelog.ClinicNum,procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,ProcCode,"
+				+DbHelper.DateColumn("procedurelog.ProcDate")+",ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,procedurelog.ProvNum,ToothNum,"
+				+"ToothRange,UnitQty ";
 			command+="ORDER BY procDate_";
 			DataTable rawProc=dcon.GetTable(command);
 			double insPayAmt;
@@ -753,10 +755,10 @@ namespace OpenDentBusiness {
 			}
 			//paysplits-----------------------------------------------------------------------------------------
 			DataTable rawPay;
-			command="SELECT CheckNum,paysplit.ClinicNum,DatePay,paysplit.PatNum,payment.PatNum patNumPayment_,PayAmt,"
+			command="SELECT MAX(CheckNum) CheckNum,paysplit.ClinicNum,MAX(DatePay) DatePay,paysplit.PatNum,MAX(payment.PatNum) patNumPayment_,MAX(PayAmt) PayAmt,"//MAX function used to preserve behavior in Oracle.
 				+"paysplit.PayNum,PayPlanNum,"
-				+"PayType,ProcDate,"+DbHelper.GroupConcat("ProcNum")+" ProcNums_, "
-				+"ProvNum,SUM(SplitAmt) splitAmt_,payment.PayNote,paysplit.UnearnedType "
+				+"MAX(PayType) PayType,ProcDate,"+DbHelper.GroupConcat("ProcNum")+" ProcNums_, "
+				+"MAX(ProvNum) ProvNum,SUM(SplitAmt) splitAmt_,MAX(payment.PayNote) PayNote,MAX(paysplit.UnearnedType) UnearnedType "//Column names with MAX left the same as they should not be considered aggregate (even though they are).
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -857,7 +859,11 @@ namespace OpenDentBusiness {
 				}
 				command+="claim.PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
 			}
-			command+=") GROUP BY claim.ClaimNum ORDER BY DateService";
+			command+=") GROUP BY CarrierName,claim.ClaimNum,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,claim.ClinicNum,DateReceived,DateService,"
+				+"claim.DedApplied,claim.InsPayEst,"
+				+"claim.InsPayAmt,claim.PatNum,ProvTreat,"
+				+"claim.ReasonUnderPaid,claim.WriteOff "
+				+"ORDER BY DateService";
 			rawClaim=dcon.GetTable(command);
 			DateTime daterec;
 			double amtpaid;//can be different than amt if claims show UCR.
@@ -1062,7 +1068,7 @@ namespace OpenDentBusiness {
 					+"AND ChargeDate <= "+datesql+@") principalDue_,"
 				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
 					+"AND ChargeDate <= "+datesql+@") interestDue_,"
-				+"CarrierName,CompletedAmt,payplan.Guarantor,"
+				+"MAX(CarrierName) CarrierName,CompletedAmt,payplan.Guarantor,"
 				+"payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
 				+"payplan.PlanNum "
 				+"FROM payplan "
@@ -1076,7 +1082,9 @@ namespace OpenDentBusiness {
 				command+="payplan.Guarantor ="+POut.Long(fam.ListPats[i].PatNum)+" "
 					+"OR payplan.PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
 			}
-			command+=") GROUP BY payplan.PayPlanNum ";
+			command+=") GROUP BY CompletedAmt,payplan.Guarantor,"
+				+"payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
+				+"payplan.PlanNum ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+=",CarrierName,payplan.Guarantor,payplan.PatNum,PayPlanDate,payplan.PlanNum ";
 			}

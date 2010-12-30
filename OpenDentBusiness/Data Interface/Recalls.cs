@@ -203,7 +203,7 @@ namespace OpenDentBusiness{
 				patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
 				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
-				recalltype.Description,patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum ";//RecallTypeNum forces both manual and prophy types to show independently.
+				recalltype.Description,patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum ";//GROUP BY RecallTypeNum forces both manual and prophy types to show independently.
  			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;

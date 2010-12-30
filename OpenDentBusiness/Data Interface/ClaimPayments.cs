@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 				+"FROM claimpayment,claimproc "
 				+"WHERE claimpayment.ClaimPaymentNum = claimproc.ClaimPaymentNum "
 				+"AND claimproc.ClaimNum = '"+POut.Long(claimNum)+"' "
-				+"GROUP BY claimpayment.ClaimPaymentNum, BankBranch, CheckDate, CheckNum, Note";//required by Oracle
+				+"GROUP BY claimpayment.ClaimPaymentNum, BankBranch, CheckDate, CheckNum, Note";
 			DataTable rawT=Db.GetTable(command);
 			DateTime date;
 			for(int i=0;i<rawT.Rows.Count;i++) {

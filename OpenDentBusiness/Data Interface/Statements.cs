@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 			//}
 			command+="GROUP BY BalTotal,BillingType,FName,InsEst,statement.IsSent,"
 				+"LName,MiddleI,statement.Mode_,PayPlanDue,Preferred,"
-				+"statement.PatNum,statement.StatementNum ";
+				+"statement.PatNum,statement.StatementNum "; 
 			if(orderBy==0){//BillingType
 				command+="ORDER BY definition.ItemOrder,LName,FName,MiddleI,PayPlanDue";
 			}
