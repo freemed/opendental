@@ -370,7 +370,7 @@ namespace OpenDental{
 				else {
 					sched.SchedDate=dateSelectedStart;
 				}
-				Schedules.Insert(sched);//Doing it this way makes use of validation to prevent overlaps
+				Schedules.Insert(sched,true);//Doing it this way makes use of validation to prevent overlaps
 			}
 			Cursor=Cursors.Default;
 			Close();
@@ -437,7 +437,7 @@ namespace OpenDental{
 					else {
 						sched.SchedDate=dateSelectedStart.AddDays(dayDelta);
 					}
-					Schedules.Insert(sched);
+					Schedules.Insert(sched,true);
 				}
 				if(!checkWeekend.Checked && dateSelectedStart.AddDays(dayDelta).DayOfWeek==DayOfWeek.Friday) {
 					dayDelta+=3;

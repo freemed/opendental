@@ -4258,7 +4258,7 @@ namespace OpenDental{
 			//if(sched.StopTime.Date!=sched.StartTime.Date) {//long span that spills over to next day
 			//	sched.StopTime=DateTime.Today+(new TimeSpan(23,59,0));
 			//}
-			Schedules.Insert(sched);
+			Schedules.Insert(sched,false);
 			RefreshPeriod();
 		}
 

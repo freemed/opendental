@@ -306,7 +306,7 @@ namespace OpenDental{
 			}
 			try{
 				if(IsNew) {
-					Schedules.Insert(SchedCur);
+					Schedules.Insert(SchedCur,true);
 				}
 				else {
 					Schedules.Update(SchedCur);

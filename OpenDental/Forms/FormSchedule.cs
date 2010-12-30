@@ -761,7 +761,7 @@ namespace OpenDental{
 				else{
 					sched.SchedDate=dateSelectedStart;
 				}
-				Schedules.Insert(sched);
+				Schedules.Insert(sched,false);
 			}
 			DateTime rememberDateStart=DateCopyStart;
 			DateTime rememberDateEnd=DateCopyEnd;
@@ -870,7 +870,7 @@ namespace OpenDental{
 					else {
 						sched.SchedDate=dateSelectedStart.AddDays(dayDelta);
 					}
-					Schedules.Insert(sched);
+					Schedules.Insert(sched,false);
 				}
 				if(!checkWeekend.Checked && dateSelectedStart.AddDays(dayDelta).DayOfWeek==DayOfWeek.Friday){
 					dayDelta+=3;

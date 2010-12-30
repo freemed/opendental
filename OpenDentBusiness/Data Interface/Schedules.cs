@@ -164,13 +164,15 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		public static long Insert(Schedule sched){
+		///<summary>Set validate to true to throw an exception if start and stop times need to be validated.  If validate is set to false, then the calling code is responsible for the validation.</summary>
+		public static long Insert(Schedule sched,bool validate){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				sched.ScheduleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sched);
+				sched.ScheduleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sched,validate);
 				return sched.ScheduleNum;
 			}
-			Validate(sched);
+			if(validate) {
+				Validate(sched);
+			}
 			Crud.ScheduleCrud.Insert(sched);
 			ScheduleOp op;
 			for(int i=0;i<sched.Ops.Count;i++){
@@ -184,12 +186,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Validate(Schedule sched){
-			if(sched.StartTime > sched.StopTime){
+			if(sched.StartTime > sched.StopTime) {
 				throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
 			}
-			if(sched.StartTime+TimeSpan.FromMinutes(5) > sched.StopTime
-				&& sched.Status==SchedStatus.Open)
-			{
+			if(sched.StartTime+TimeSpan.FromMinutes(5) > sched.StopTime	&& sched.Status==SchedStatus.Open) {
 				throw new Exception(Lans.g("Schedule","Stop time cannot be the same as the start time."));
 			}
 		}
@@ -555,7 +555,7 @@ namespace OpenDentBusiness{
 				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";
 			Db.NonQ(command);
 			for(int i=0;i<SchedList.Count;i++){
-				Insert(SchedList[i]);
+				Insert(SchedList[i],false);
 			}
 		}
 
