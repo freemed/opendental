@@ -13,10 +13,31 @@ namespace OpenDentBusiness {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType7_7(col);
 				Db.NonQ(command);
+				if(col.Indexed) {
+					command = "ALTER TABLE "+tableName+" ADD INDEX IDX_"+tableName.ToUpper()+col.ColumnName.ToUpper()+" ("+col.ColumnName+")";
+					Db.NonQ(command);
+				}
+				//TODO: Fill new column with blank data
+				//Set column to NOT NULL
 			}
 			else {//oracle
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType7_7(col);
 				Db.NonQ(command);
+				command = "UPDATE TABLE "+tableName+" SET "+col.ColumnName+" = "+getBlankOracleData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column will 'blank' data
+				Db.NonQ(command);
+				if(getBlankOracleData(col)!="''") {//only set column to NOT NULL if it is not a string type column.
+					command = "ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL";
+					try {
+						Db.NonQ(command);
+					}
+					catch(Exception e) {
+						//fail silently. If this fails that means that the column is already set to NOT NULL Which should theoretically never be the case.
+					}
+				}
+				if(col.Indexed) {
+					command=" CREATE INDEX IDX_"+tableName+"_"+col.ColumnName+" ON "+tableName+" ("+col.ColumnName+")";
+					Db.NonQ(command);
+				}
 				OracleValidateDateTStampTriggerHelper7_7(tableName);
 			}
 		}
@@ -25,8 +46,12 @@ namespace OpenDentBusiness {
 		public static void AddColumnAfter7_7(string tableName,DbSchemaCol col,string afterColumn) {
 			string command = "";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType7_7(col)+" AFTER "+afterColumn+" DEFAULT CHARSET=utf8";
+				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType7_7(col)+" AFTER "+afterColumn;
 				Db.NonQ(command);
+				if(col.Indexed) {
+					command = "ALTER TABLE "+tableName+" ADD INDEX IDX_"+tableName.ToUpper()+col.ColumnName.ToUpper()+" ("+col.ColumnName+")";
+					Db.NonQ(command);
+				}
 			}
 			else {//oracle
 				int addAtIndex=0;
@@ -80,10 +105,16 @@ namespace OpenDentBusiness {
 				command="DROP TABLE IF EXISTS "+tableName;
 				Db.NonQ(command);
 				command = "CREATE TABLE "+tableName+" (";
-				for(int i=0;i<cols.Count;i++) {
+				for(int i=0;i<cols.Count;i++) {//create table
 					command+=cols[i].ColumnName+" "+GetMySqlType7_7(cols[i])+(i==0?" PRIMARY KEY":"")+(i==cols.Count-1?") DEFAULT CHARSET=utf8 ;":", ");
 				}
 				Db.NonQ(command);
+				for(int i=0;i<cols.Count;i++) {//create indexes
+					if(cols[i].Indexed) {
+						command = "ALTER TABLE "+tableName+" ADD INDEX IDX_"+tableName.ToUpper()+cols[i].ColumnName.ToUpper()+" ("+cols[i].ColumnName+")";
+						Db.NonQ(command);
+					}
+				}
 			}
 			else {//oracle
 				bool tableExists=false;
@@ -233,6 +264,68 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
+		/// <summary>Used to get the value that should be used instead of null. For example will return ' ' for a string column or 0 for an int column.</summary>
+		private static string getBlankOracleData(DbSchemaCol col) {
+			switch(col.DataType) {
+				case OdDbType.Bool:
+				case OdDbType.Byte:
+				case OdDbType.Float:
+				case OdDbType.Int:
+				case OdDbType.Long:
+				case OdDbType.Currency:
+					return "0";
+				case OdDbType.Date:
+				case OdDbType.DateTime:
+				case OdDbType.TimeOfDay:
+				case OdDbType.DateTimeStamp:
+					return "'01-JAN-2001'";
+				case OdDbType.Text:
+				case OdDbType.VarChar255:
+					return "''";
+				case OdDbType.TimeSpan:
+					return "'00:00:00";
+			}
+			return "";
+		}
+
+		/// <summary>This creates a DbSchemaCol from an oracle datatype passed in as a string. Returns null if no matching type is found.
+		/// DO NOT use to convert from oracleCol>>odDBCol>>MySQLCol, datatypes WILL be changed if used that way.</summary>
+		private static DbSchemaCol getDbSchemaColFromOracleDataType(string colName,string oracleType) {
+			DbSchemaCol newCol = new DbSchemaCol(colName,OdDbType.Bool);
+			switch(oracleType.ToUpper()){
+				case "NUMBER(3)":
+					newCol.DataType=OdDbType.Byte;
+					break;
+				case "NUMBER(38,8)":
+					newCol.DataType=OdDbType.Float;
+					break;
+				case "DATE":
+					newCol.DataType=OdDbType.Date;
+					break;
+				case "NUMBER(11)":
+					newCol.DataType=OdDbType.Int;
+					break;
+				case "NUMBER(20)":
+					newCol.DataType=OdDbType.Long;
+					break;
+				case "VARCHAR2(4000)":
+					newCol.DataType=OdDbType.Text;
+					newCol.TextSize=TextSizeMySqlOracle.Small;
+					break;
+				case "CLOB":
+					newCol.DataType=OdDbType.Text;
+					newCol.TextSize=TextSizeMySqlOracle.Medium;
+					break;
+				case "VARCHAR2(255)":
+					newCol.DataType=OdDbType.VarChar255;
+					break;
+				default://no matching datatype was found
+					return null;
+			}
+			return newCol;
+
+		}
+
 		/// <summary>Validates any table's dateTStamp triggers for Oracle.</summary>
 		private static void OracleValidateDateTStampTriggerHelper7_7(string tableName) {
 			bool triggerNeeded = false;
@@ -274,7 +367,7 @@ namespace OpenDentBusiness {
 			string command;
 			string commandPart2;
 			DbSchemaCol newCol;
-			command = "SELECT TABLE_NAME, COLUMN_NAME FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"';";
+			command = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"';";
 			DataTable tempTable = Db.GetTable(command);//get list of columns
 			List<DbSchemaCol> newTableCols = new List<DbSchemaCol>();
 			for(int i=0;i<tempTable.Rows.Count;i++) {
@@ -282,7 +375,7 @@ namespace OpenDentBusiness {
 					newCol = new DbSchemaCol(col.ColumnName,col.DataType);//add new column here
 					newTableCols.Add(newCol);
 				}
-				newCol = new DbSchemaCol(tempTable.Rows[i]["COLUMN_NAME"].ToString(),OdDbType.Bool);/* must convert this:tempTable.Rows[i][2] to OdDbTypes*/
+				newCol = new DbSchemaCol(getDbSchemaColFromOracleDataType(tempTable.Rows[i]["COLUMN_NAME"].ToString(),tempTable.Rows[i]["DATA_TYPE"].ToString()));
 				newTableCols.Add(newCol);
 			}
 			AddColumnEnd7_7(tableName,col);
@@ -299,6 +392,12 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 			command = "ALTER TABLE newtemptable RENAME TO "+tableName+";";
 			Db.NonQ(command);
+			for(int i=0;i<newTableCols.Count;i++) {//creates triggers
+				if(newTableCols[i].Indexed) {
+					command=" CREATE INDEX IDX_"+tableName+"_"+col.ColumnName+" ON "+tableName+" ("+col.ColumnName+")";
+					Db.NonQ(command);
+				}
+			}
 		}
 
 

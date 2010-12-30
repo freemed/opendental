@@ -14,6 +14,15 @@ namespace OpenDentBusiness {
 		///<summary>If specifying an int, it uses int by default.  Set this to true to instead use smallint.</summary>
 		public bool IntUseSmallInt;
 
+		/// <summary>Takes DbSchemaCol and makes a new instance of it. </summary>
+		public DbSchemaCol(DbSchemaCol newCol) {
+			ColumnName=newCol.ColumnName;
+			DataType=newCol.DataType;
+			Indexed=newCol.Indexed;
+			IntUseSmallInt=newCol.IntUseSmallInt;
+			TextSize=newCol.TextSize;
+		}
+
 		public DbSchemaCol(string columnName,OdDbType dataType) {
 			ColumnName=columnName;
 			DataType=dataType;
@@ -24,6 +33,14 @@ namespace OpenDentBusiness {
 			ColumnName=columnName;
 			DataType=dataType;
 			Indexed=indexed;
+		}
+
+		/// <summary>Creates a new instance of this object with identical variable values.</summary>
+		public DbSchemaCol Copy() {
+			DbSchemaCol newCol = new DbSchemaCol(ColumnName,DataType,Indexed);
+			newCol.IntUseSmallInt=IntUseSmallInt;
+			newCol.TextSize=TextSize;
+			return newCol;
 		}
 
 	}
