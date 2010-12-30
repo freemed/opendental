@@ -17,8 +17,17 @@ namespace OpenDentBusiness {
 					command = "ALTER TABLE "+tableName+" ADD INDEX IDX_"+tableName.ToUpper()+col.ColumnName.ToUpper()+" ("+col.ColumnName+")";
 					Db.NonQ(command);
 				}
-				//TODO: Fill new column with blank data
-				//Set column to NOT NULL
+				command = "UPDATE "+tableName+" SET "+col.ColumnName+" = "+getBlankMySQLData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column will 'blank' data
+				Db.NonQ(command);
+				if(getBlankMySQLData(col)!="''") {//only set column to NOT NULL if it is not a string type column.
+					command = "ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" "+GetMySqlType7_7(col)+" NOT NULL";
+					try {
+						Db.NonQ(command);
+					}
+					catch(Exception e) {
+						//fail silently. If this fails that means that the column is already set to NOT NULL Which should theoretically never be the case.
+					}
+				}
 			}
 			else {//oracle
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType7_7(col);
@@ -264,7 +273,7 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
-		/// <summary>Used to get the value that should be used instead of null. For example will return ' ' for a string column or 0 for an int column.</summary>
+		/// <summary>Used to get the value that should be used instead of null. For example will return '' for a string column or 0 for an int column.</summary>
 		private static string getBlankOracleData(DbSchemaCol col) {
 			switch(col.DataType) {
 				case OdDbType.Bool:
@@ -278,12 +287,36 @@ namespace OpenDentBusiness {
 				case OdDbType.DateTime:
 				case OdDbType.TimeOfDay:
 				case OdDbType.DateTimeStamp:
-					return "'01-JAN-2001'";
+					return "'01-JAN-0001'";
 				case OdDbType.Text:
 				case OdDbType.VarChar255:
 					return "''";
 				case OdDbType.TimeSpan:
-					return "'00:00:00";
+					return "'00:00:00'";
+			}
+			return "";
+		}
+
+		/// <summary>Used to get the value that should be used instead of null. For example will return '' for a string column or 0 for an int column.</summary>
+		private static string getBlankMySQLData(DbSchemaCol col) {
+			switch(col.DataType) {
+				case OdDbType.Bool:
+				case OdDbType.Byte:
+				case OdDbType.Float:
+				case OdDbType.Int:
+				case OdDbType.Long:
+				case OdDbType.Currency:
+					return "0";
+				case OdDbType.Date:
+				case OdDbType.DateTime:
+				case OdDbType.TimeOfDay:
+				case OdDbType.DateTimeStamp:
+					return "'0001-01-01'";
+				case OdDbType.Text:
+				case OdDbType.VarChar255:
+					return "''";
+				case OdDbType.TimeSpan:
+					return "'00:00:00'";
 			}
 			return "";
 		}
