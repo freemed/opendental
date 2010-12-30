@@ -1873,52 +1873,28 @@ namespace OpenDental{
 					showProduction=true;
 				}
 			}
-			if(showProduction){
-				double totalproduction=0;
-				double hygproduction = 0;
-				double drproduction = 0;
-				bool nohygAssigned = false;
-				int indexProv;
-				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
-					indexProv=-1;
-					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){//if isHygiene
-						if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//if no hyg prov set.
-							indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
-						}
-						else {
-							indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
-						}
-					}
-					else{//not hyg
-						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
-					}
-					if(indexProv==-1){
-						continue;
-					}
-					if(DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()
-						&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.UnschedList).ToString()
-						&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNote).ToString()
-						&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNoteCompleted).ToString())
-					{
-						//set individual production #'s
-						if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString() == "1" && !nohygAssigned) {
-							hygproduction += PIn.Double(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
-						}
-						else {
-							drproduction += PIn.Double(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
-						}
-						//the production numbers above will not be accurate enough to be useful.  They are not based on individual
-						//procedures, so the inaccuracies will only cause more complaints rather than providing useful information.
-						//The only real solution would be to generate the total production numbers in another table
-						//from the business layer.  But even that won't work until hyg procedures are appropriately assigned
-						//when setting appointments.
-						totalproduction+=PIn.Double(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
-					}
-				}
-				textProduction.Text=totalproduction.ToString("c0");
-			}
-			else{
+			if(!showProduction){
 				textProduction.Text="";
+				return;
+			}
+			decimal grossproduction=0;
+			decimal netproduction=0;
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
+				if(DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()
+					&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.UnschedList).ToString()
+					&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNote).ToString()
+					&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNoteCompleted).ToString())
+				{
+					//In order to get production numbers split by provider, it would require generating total production numbers
+					//in another table from the business layer.  But that will only work if hyg procedures are appropriately assigned
+					//when setting appointments.
+					grossproduction+=PIn.Decimal(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+					netproduction=grossproduction-PIn.Decimal(DS.Tables["Appointments"].Rows[i]["writeoffPPO"].ToString());
+				}
+			}
+			textProduction.Text=grossproduction.ToString("c0");
+			if(grossproduction!=netproduction) {
+				textProduction.Text+=Lan.g(this,", net:")+netproduction.ToString("c0");
 			}
 		}
 

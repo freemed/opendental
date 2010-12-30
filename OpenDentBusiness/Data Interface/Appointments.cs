@@ -633,6 +633,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("timeAskedToArrive");
 			table.Columns.Add("wkPhone");
 			table.Columns.Add("wirelessPhone");
+			table.Columns.Add("writeoffPPO");
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.Address,patient.Address2,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
@@ -763,6 +764,7 @@ namespace OpenDentBusiness{
 			DateTime birthdate;
 			DateTime timeAskedToArrive;
 			decimal production;
+			decimal writeoffPPO;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 				row["address"]=Patients.GetAddressFull(raw.Rows[i]["Address"].ToString(),raw.Rows[i]["Address2"].ToString(),
@@ -954,6 +956,7 @@ namespace OpenDentBusiness{
 				row["procs"]=raw.Rows[i]["ProcDescript"].ToString();
 				row["procsColored"]+=raw.Rows[i]["ProcsColored"].ToString();
 				production=0;
+				writeoffPPO=0;
 				if(rawProc!=null) {
 					for(int p=0;p<rawProc.Rows.Count;p++) {
 						if(isPlanned && raw.Rows[i]["AptNum"].ToString()!=rawProc.Rows[p]["PlannedAptNum"].ToString()) {
@@ -964,7 +967,8 @@ namespace OpenDentBusiness{
 						}
 						production+=PIn.Decimal(rawProc.Rows[p]["ProcFee"].ToString());
 						//WriteOffEst -1 and WriteOffEstOverride -1 already excluded
-						production-=PIn.Decimal(rawProc.Rows[p]["writeoffPPO"].ToString());//frequently zero
+						//production-=
+						writeoffPPO+=PIn.Decimal(rawProc.Rows[p]["writeoffPPO"].ToString());//frequently zero
 					}
 				}
 				row["production"]=production.ToString("c");//PIn.Double(raw.Rows[i]["Production"].ToString()).ToString("c");
@@ -990,6 +994,7 @@ namespace OpenDentBusiness{
 				}
 				row["wirelessPhone"]=Lans.g("Appointments","Cell: ")+raw.Rows[i]["WirelessPhone"].ToString();
 				row["wkPhone"]=Lans.g("Appointments","Wk: ")+raw.Rows[i]["WkPhone"].ToString();
+				row["writeoffPPO"]=writeoffPPO.ToString();
 				table.Rows.Add(row);
 			}
 			return table;
@@ -1030,12 +1035,14 @@ namespace OpenDentBusiness{
 			if(tableAppts.Rows.Count==0) {
 				command+="0";
 			}
-			else for(int i=0;i<tableAppts.Rows.Count;i++) {
+			else{
+				for(int i=0;i<tableAppts.Rows.Count;i++) {
 					if(i>0) {
 						command+=",";
 					}
 					command+=tableAppts.Rows[i]["PatNum"].ToString();
 				}
+			}
 			command+=")";
 			DataConnection dcon=new DataConnection();
 			DataTable table= dcon.GetTable(command);
