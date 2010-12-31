@@ -395,7 +395,7 @@ namespace OpenDentBusiness {
 			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt
 					FROM claimpayment,claimproc
 					WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
-					GROUP BY claimproc.ClaimPaymentNum
+					GROUP BY claimproc.ClaimPaymentNum,CheckAmt
 					HAVING _sumpay!=_checkamt";
 			table=Db.GetTable(command);
 			if(isCheck){
@@ -1748,7 +1748,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command=@"SELECT MAX(claimproc.ProcDate),provider.ProvNum
+			command=@"SELECT MAX(claimproc.ProcDate) ProcDate,provider.ProvNum
 				FROM claimproc,provider
 				WHERE claimproc.ProvNum=provider.ProvNum
 				AND provider.IsHidden=1
@@ -1789,7 +1789,7 @@ namespace OpenDentBusiness {
 			command="SELECT FName,LName,COUNT(*) countDups FROM patient LEFT JOIN recall ON recall.PatNum=patient.PatNum "
 			  +"AND (recall.RecallTypeNum="+POut.Long(RecallTypes.PerioType)+" "
 			  +"OR recall.RecallTypeNum="+POut.Long(RecallTypes.ProphyType)+") "
-			  +"GROUP BY patient.PatNum HAVING countDups>1";
+			  +"GROUP BY FName,LName,patient.PatNum HAVING countDups>1";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				if(verbose) {
@@ -1993,7 +1993,7 @@ LEFT JOIN patient ON patient.PatNum=claimproc.PatNum
 WHERE ClaimNum > 0
 AND ProcNum>0
 AND Status!=4/*exclude supplemental*/
-GROUP BY ClaimNum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber
+GROUP BY LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber 
 HAVING cnt>1";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0){
@@ -2029,7 +2029,7 @@ LEFT JOIN patient ON patient.PatNum=claimproc.PatNum
 WHERE ClaimNum > 0
 AND ProcNum>0
 AND Status=4/*only supplemental*/
-GROUP BY Claimnum,ProcNum,Status,InsPayAmt,FeeBilled,LineNumber,ClaimPaymentNum
+GROUP BY LName,FName,patient.PatNum,ClaimNum,FeeBilled,Status,ProcNum,ProcDate,ClaimProcNum,InsPayAmt,LineNumber
 HAVING cnt>1";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0){

@@ -33,56 +33,56 @@ namespace OpenDentBusiness {
 					command+=",";
 				}
 				if(letter.Fields[i]=="NextAptNum") {
-					command+="plannedappt.AptNum NextAptNum";
+					command+="MAX(plannedappt.AptNum) NextAptNum";
 				}
 					//other:
 				else if(letter.Fields[i]=="TPResponsPartyNameFL") {
-					command+=DbHelper.Concat("patResp.FName","' '","patResp.LName")+" TPResponsPartyNameFL";
+					command+=DbHelper.Concat("MAX(patResp.FName) FName","' '","MAX(patResp.LName)")+" TPResponsPartyNameFL";
 				} 
 				else if(letter.Fields[i]=="TPResponsPartyAddress") {
-					command+="patResp.Address TPResponsPartyAddress";
+					command+="MAX(patResp.Address) TPResponsPartyAddress";
 				} 
 				else if(letter.Fields[i]=="TPResponsPartyCityStZip") {
-					command+=DbHelper.Concat("patResp.City","', '","patResp.State","' '","patResp.Zip")+" TPResponsPartyCityStZip";
+					command+=DbHelper.Concat("MAX(patResp.City)","', '","MAX(patResp.State)","' '","MAX(patResp.Zip)")+" TPResponsPartyCityStZip";
 				} 
 				else if(letter.Fields[i]=="SiteDescription") {
-					command+="site.Description SiteDescription";
+					command+="MAX(site.Description) SiteDescription";
 				} 
 				else if(letter.Fields[i]=="DateOfLastSavedTP") {
-					command+=DbHelper.DateColumn("treatplan.DateTP")+" DateOfLastSavedTP";
+					command+=DbHelper.DateColumn("MAX(treatplan.DateTP)")+" DateOfLastSavedTP";
 				} 
 				else if(letter.Fields[i]=="DateRecallDue") {
-					command+="recall.DateDue  DateRecallDue";
+					command+="MAX(recall.DateDue)  DateRecallDue";
 				} 
 				else if(letter.Fields[i]=="CarrierName") {
-					command+="CarrierName";
+					command+="MAX(CarrierName) CarrierName";
 				} 
 				else if(letter.Fields[i]=="CarrierAddress") {
-					command+="carrier.Address CarrierAddress";
+					command+="MAX(carrier.Address) CarrierAddress";
 				} 
 				else if(letter.Fields[i]=="CarrierCityStZip") {
-					command+=DbHelper.Concat("carrier.City","', '","carrier.State","' '","carrier.Zip")+" CarrierCityStZip";
+					command+=DbHelper.Concat("MAX(carrier.City)","', '","MAX(carrier.State)","' '","MAX(carrier.Zip)")+" CarrierCityStZip";
 				} 
 				else if(letter.Fields[i]=="SubscriberNameFL") {
-					command+=DbHelper.Concat("patSubsc.FName","' '","patSubsc.LName")+" SubscriberNameFL";
+					command+=DbHelper.Concat("MAX(patSubsc.FName)","' '","MAX(patSubsc.LName)")+" SubscriberNameFL";
 				} 
 				else if(letter.Fields[i]=="SubscriberID") {
-					command+="inssub.SubscriberID";
+					command+="MAX(inssub.SubscriberID) SubscriberID";
 				} 
 				else if(letter.Fields[i]=="NextSchedAppt") {
 					command+="MIN(appointment.AptDateTime) NextSchedAppt";
 				}
 				else if(letter.Fields[i]=="Age") {
-					command+="patient.Birthdate BirthdateForAge";
+					command+="MAX(patient.Birthdate) BirthdateForAge";
 				}
 				else if(letter.Fields[i]=="Guarantor") {
-					command+=DbHelper.Concat("patGuar.FName","' '","patGuar.LName")+" Guarantor";
+					command+=DbHelper.Concat("MAX(patGuar.FName)","' '","MAX(patGuar.LName)")+" Guarantor";
 				}
 				else if(letter.Fields[i].StartsWith("referral.")) {
-					command+="referral."+letter.Fields[i].Substring(9);
+					command+="MAX(referral."+letter.Fields[i].Substring(9)+") "+letter.Fields[i].Substring(9);
 				}
 				else {
-					command+="patient."+letter.Fields[i];
+					command+="MAX(patient."+letter.Fields[i]+") "+letter.Fields[i];
 				}
 			}
 			command+=" FROM patient "
