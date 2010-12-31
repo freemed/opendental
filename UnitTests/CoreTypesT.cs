@@ -368,17 +368,19 @@ namespace UnitTests {
 			command="SELECT clobtest FROM tempcore";
 			table=DataCore.GetTable(command);
 			clobstring2=PIn.String(table.Rows[0]["clobtest"].ToString());
-			//if(clobstring1!=clobstring2) {
-			//  throw new Exception();
-			//}
+			if(clobstring1!=clobstring2) {
+			  throw new Exception();
+			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
-			retVal+="Clob: Passed.\r\n";
-			//clob:foreign----------------------------------------------------------------------------------
-			clobstring1="是像电子和质子这样的亚原子粒子之间的产生排斥力和吸引";
+			retVal+="Clob: Alpha-Numeric Passed.\r\n";
+			//clob:non-standard----------------------------------------------------------------------------------
+			//tested up to 20MB.  (50MB however was failing: Chunk size error)
+			clobstring1=CreateRandomNonStandardString(10485760); //10MB should be larger than anything we store.
 			clobstring2="";
-			command="INSERT INTO tempcore (clobtest) VALUES ('"+POut.String(clobstring1)+"')";
-			DataCore.NonQ(command);
+			param=new OdSqlParameter(":param1",OdDbType.Text,clobstring1);
+			command="INSERT INTO tempcore (clobtest) VALUES (:param1)";
+			DataCore.NonQ(command,param);
 			command="SELECT clobtest FROM tempcore";
 			table=DataCore.GetTable(command);
 			clobstring2=PIn.String(table.Rows[0]["clobtest"].ToString());
@@ -387,7 +389,23 @@ namespace UnitTests {
 			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
-			retVal+="Clob:Foreign Passed.\r\n";
+			retVal+="Clob: Non-Standard Passed.\r\n";
+			//clob:Rick Roller----------------------------------------------------------------------------------
+			//tested up to 20MB.  (50MB however was failing: Chunk size error)
+			clobstring1=RickRoller(10485760); //10MB should be larger than anything we store.
+			clobstring2="";
+			param=new OdSqlParameter(":param1",OdDbType.Text,clobstring1);
+			command="INSERT INTO tempcore (clobtest) VALUES (:param1)";
+			DataCore.NonQ(command,param);
+			command="SELECT clobtest FROM tempcore";
+			table=DataCore.GetTable(command);
+			clobstring2=PIn.String(table.Rows[0]["clobtest"].ToString());
+			if(clobstring1!=clobstring2) {
+				throw new Exception();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="Clob: Rick Roller Passed.\r\n";
 			//Blob:-----------------------------------------------------------------------------------------
 			Image img=null;
 			img=Image.FromFile(@"C:\temp\Koala.jpg");
@@ -407,6 +425,11 @@ namespace UnitTests {
 			if(blobTest.Length!=rawData.Length){
 				throw new Exception();
 			}
+			for(int i=0;i<rawData.Length;i++) {
+				if(blobTest[i]!=rawData[i]) {
+					throw new Exception();
+				}
+			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Blob: Passed.\r\n";
@@ -417,13 +440,32 @@ namespace UnitTests {
 		public static string CreateRandomAlphaNumericString(int length){
 			StringBuilder result=new StringBuilder(length);
 			Random rand=new Random();
-//			string randChrs="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-				string randChrs="Were no strangers to love You know the rules and so do I A full commitments what Im thinking of You wouldnt get this from any other guy I just wanna tell you how Im feeling Gotta make you understand Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Weve know each other for so long Your hearts been aching But youre too shy to say it Inside we both know whats been going on We know the game and were gonna play it And if you ask me how Im feeling Dont tell me youre too blind to see Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Give you up give you up Give you up give you up Never gonna give Never gonna give give you up Never gonna give Never gonna give give you up I just wanna tell you how Im feeling Gotta make you understand";
+			string randChrs="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 			for(int i=0;i<length;i++){
-//				result.Append(randChrs[rand.Next(0,randChrs.Length-1)]);
+				result.Append(randChrs[rand.Next(0,randChrs.Length-1)]);
+			}
+			return result.ToString();
+		}
+
+		public static string CreateRandomNonStandardString(int length) {
+			StringBuilder result=new StringBuilder(length);
+			Random rand=new Random();
+			string randChrs="'!@#$%^&*()-+[{]}\\`~,<.>/?'\";:=_是像电子和质子这样的亚原子粒子之间的产生排斥力和吸引";
+			for(int i=0;i<length;i++) {
+				result.Append(randChrs[rand.Next(0,randChrs.Length-1)]);
+			}
+			return result.ToString();
+		}
+
+		public static string RickRoller(int length) {
+			StringBuilder result=new StringBuilder(length);
+			Random rand=new Random();
+			string randChrs="Were no strangers to love You know the rules and so do I A full commitments what Im thinking of You wouldnt get this from any other guy I just wanna tell you how Im feeling Gotta make you understand Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Weve know each other for so long Your hearts been aching But youre too shy to say it Inside we both know whats been going on We know the game and were gonna play it And if you ask me how Im feeling Dont tell me youre too blind to see Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Give you up give you up Give you up give you up Never gonna give Never gonna give give you up Never gonna give Never gonna give give you up I just wanna tell you how Im feeling Gotta make you understand";
+			for(int i=0;i<length;i++) {
 				result.Append(randChrs[i % randChrs.Length]);
 			}
 			return result.ToString();
 		}
+
 	}
 }
