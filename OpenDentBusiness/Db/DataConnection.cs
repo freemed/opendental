@@ -419,7 +419,7 @@ namespace OpenDentBusiness{
 					//for(int i=0;i<commandArray.Length;i++){
 					cmdOr.CommandText=commands; //Array[i];
 					for(int p=0;p<parameters.Length;p++) {
-						cmdOr.Parameters.Add(parameters[p].ParameterName,parameters[p].GetOracleDbType()).Value=parameters[p].Value;
+						cmdOr.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetOracleDbType()).Value=parameters[p].Value;
 						//cmdOr.Parameters.Add(parameters[p].GetOracleParameter());//doesn't work
 					}
 					rowsChanged=cmdOr.ExecuteNonQuery();
@@ -451,10 +451,18 @@ namespace OpenDentBusiness{
 			else if(DBtype==DatabaseType.MySql) {
 				cmd.CommandText=commands;
 				for(int p=0;p<parameters.Length;p++) {
-					cmd.Parameters.Add(parameters[p].GetMySqlParameter());
+					cmd.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetMySqlDbType()).Value=parameters[p].Value;
 				}
 				con.Open();
-				rowsChanged=cmd.ExecuteNonQuery();
+				try {
+					rowsChanged=cmd.ExecuteNonQuery();
+				}
+				catch(MySqlException ex){
+					if(ex.Number==1153) {
+						throw new ApplicationException("Please add the following to your my.ini file: max_allowed_packet=40000000");
+					}
+					throw ex;
+				}
 				if(getInsertID) {
 					cmd.CommandText="SELECT LAST_INSERT_ID()";
 					dr=(MySqlDataReader)cmd.ExecuteReader();

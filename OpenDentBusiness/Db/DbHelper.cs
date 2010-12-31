@@ -138,5 +138,15 @@ namespace OpenDentBusiness {
 			return input+" REGEXP '"+pattern+"'";
 		}
 
+		///<summary>Gets the database specific character used for parameters.  For example, : or @.</summary>
+		public static string ParamChar {
+			get {
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					return ":";
+				}
+				return "@";
+			}
+		}
+
 	}
 }

@@ -72,12 +72,11 @@ namespace UnitTests {
 			Application.DoEvents();
 			textResults.Text+=CoreTypesT.CreateTempTable(isOracle);
 			Application.DoEvents();
-			if(isOracle) {
-				textResults.Text+=CoreTypesT.RunAllOracle();
-			}
-			else {
-				textResults.Text+=CoreTypesT.RunAllMySql();
-			}
+			textResults.Text+=CoreTypesT.RunAll();
+			//}
+			//else {
+			//	textResults.Text+=CoreTypesT.RunAllMySql();
+			//}
 			Cursor=Cursors.Default;
 		}
 

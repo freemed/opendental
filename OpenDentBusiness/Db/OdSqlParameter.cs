@@ -17,6 +17,7 @@ namespace OpenDentBusiness {
 			set { dbType = value; }
 		}
 
+		///<summary>parameterName should not include the leading character such as @ or : . And DbHelper.ParamChar() should be used to determine the char in the query itself.</summary>
 		public string ParameterName {
 			get { return parameterName; }
 			set { parameterName = value; }
@@ -27,57 +28,56 @@ namespace OpenDentBusiness {
 			set { this.value = value; }
 		}
 
-		///<summary>parameterName should include the leading character such as @ or : for now. (although I'm working on a better approach).</summary>
+		///<summary>parameterName should not include the leading character such as @ or : . And DbHelper.ParamChar() should be used to determine the char in the query itself.</summary>
 		public OdSqlParameter(string parameterName,OdDbType dbType,Object value) {
 			this.parameterName=parameterName;
 			this.dbType=dbType;
 			this.value=value;
 		}
 
+		public MySqlDbType GetMySqlDbType() {
+			switch(this.dbType) {
+				case OdDbType.Blob:
+					return MySqlDbType.MediumBlob;
+				case OdDbType.Text:
+					return MySqlDbType.MediumText;
+				//none of these other types will use parameters.
+					/*
+				case OdDbType.Bool:
+					return MySqlDbType.UByte;
+				case OdDbType.Byte:
+					return MySqlDbType.UByte;
+				case OdDbType.Currency:
+					return MySqlDbType.Double;
+				case OdDbType.Date:
+					return MySqlDbType.Date;
+				case OdDbType.DateTime:
+					return MySqlDbType.DateTime;
+				case OdDbType.DateTimeStamp:
+					return MySqlDbType.Timestamp;
+				case OdDbType.Float:
+					return MySqlDbType.Float;
+				case OdDbType.Int:
+					return MySqlDbType.Int32;
+				case OdDbType.Long:
+					return MySqlDbType.Int64;
+				case OdDbType.Text:
+					return MySqlDbType.MediumText;//hope this will work
+				case OdDbType.TimeOfDay:
+					return MySqlDbType.Time;
+				case OdDbType.TimeSpan:
+					return MySqlDbType.Time;
+				case OdDbType.VarChar255:
+					return MySqlDbType.VarChar;*/
+				default:
+					throw new ApplicationException("Type not found");
+			}
+		}
+
 		public MySqlParameter GetMySqlParameter() {
 			MySqlParameter param=new MySqlParameter();
 			param.ParameterName=this.parameterName;
-			switch(this.dbType) {
-				case OdDbType.Bool:
-					param.MySqlDbType=MySqlDbType.UByte;
-					break;
-				case OdDbType.Byte:
-					param.MySqlDbType=MySqlDbType.UByte;
-					break;
-				case OdDbType.Currency:
-					param.MySqlDbType=MySqlDbType.Double;
-					break;
-				case OdDbType.Date:
-					param.MySqlDbType=MySqlDbType.Date;
-					break;
-				case OdDbType.DateTime:
-					param.MySqlDbType=MySqlDbType.DateTime;
-					break;
-				case OdDbType.DateTimeStamp:
-					param.MySqlDbType=MySqlDbType.Timestamp;
-					break;
-				case OdDbType.Float:
-					param.MySqlDbType=MySqlDbType.Float;
-					break;
-				case OdDbType.Int:
-					param.MySqlDbType=MySqlDbType.Int32;
-					break;
-				case OdDbType.Long:
-					param.MySqlDbType=MySqlDbType.Int64;
-					break;
-				case OdDbType.Text:
-					param.MySqlDbType=MySqlDbType.MediumText;//hope this will work
-					break;
-				case OdDbType.TimeOfDay:
-					param.MySqlDbType=MySqlDbType.Time;
-					break;
-				case OdDbType.TimeSpan:
-					param.MySqlDbType=MySqlDbType.Time;
-					break;
-				case OdDbType.VarChar255:
-					param.MySqlDbType=MySqlDbType.VarChar;
-					break;
-			}
+			param.MySqlDbType=GetMySqlDbType();
 			return param;
 		}
 
@@ -85,6 +85,10 @@ namespace OpenDentBusiness {
 			switch(this.dbType) {
 				case OdDbType.Blob:
 					return OracleDbType.Blob;
+				case OdDbType.Text:
+					return OracleDbType.Clob;
+				//none of these other types will use parameters.
+					/*
 				case OdDbType.Bool:
 					return OracleDbType.Byte;
 				case OdDbType.Byte:
@@ -110,9 +114,9 @@ namespace OpenDentBusiness {
 				case OdDbType.TimeSpan:
 					return OracleDbType.Varchar2;
 				case OdDbType.VarChar255:
-					return OracleDbType.Varchar2;
-				default://should never happen
-					return OracleDbType.Char;
+					return OracleDbType.Varchar2;*/
+				default:
+					throw new ApplicationException("Type not found");
 			}
 		}
 
