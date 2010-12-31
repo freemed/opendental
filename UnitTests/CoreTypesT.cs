@@ -371,7 +371,7 @@ namespace UnitTests {
 		public static string RickRoller(int length) {
 			StringBuilder result=new StringBuilder(length);
 			Random rand=new Random();
-			string randChrs="Were no strangers to love You know the rules and so do I A full commitments what Im thinking of You wouldnt get this from any other guy I just wanna tell you how Im feeling Gotta make you understand Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Weve know each other for so long Your hearts been aching But youre too shy to say it Inside we both know whats been going on We know the game and were gonna play it And if you ask me how Im feeling Dont tell me youre too blind to see Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Give you up give you up Give you up give you up Never gonna give Never gonna give give you up Never gonna give Never gonna give give you up I just wanna tell you how Im feeling Gotta make you understand";
+			string randChrs="I just couldn't take it anymore.  Kept getting the d--- song stuck in my head.";
 			for(int i=0;i<length;i++) {
 				result.Append(randChrs[i % randChrs.Length]);
 			}
