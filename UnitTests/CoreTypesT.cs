@@ -300,52 +300,22 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Clob, Rick Roller: Passed.\r\n";
-
-
-			//SHOW CREATE TABLE -----------------------------------------------------------------------
-			//This command is needed in order to perform a backup.
-			/*
-			command="SHOW CREATE TABLE account";
-			table=DataCore.GetTable(command);
-			string createResult=PIn.ByteArray(table.Rows[0][1]);
-			if(!createResult.StartsWith("CREATE TABLE")) {
-				throw new Exception();
-			}
-			retVal+="SHOW CREATE TABLE: Passed.\r\n";*/
-			//Cleanup---------------------------------------------------------------------------------------
-			command="DROP TABLE IF EXISTS tempcore";
-			DataCore.NonQ(command);
-			command="DROP TABLE IF EXISTS tempgroupconcat";
-			DataCore.NonQ(command);
-			retVal+="CoreTypes test done.\r\n";
-			return retVal;
-		}
-
-
-		/*
-		/// <summary></summary>
-		public static string RunAllOracle() {
-			
-			
-			
-			
-			
 			//Blob:-----------------------------------------------------------------------------------------
 			Image img=null;
-			img=Image.FromFile(@"C:\temp\Koala.jpg");
+			img=Image.FromFile(@"..\..\koala.jpg");//~2MB (huge photo)
 			byte[] rawData;
 			byte[] blobTest;
 			using(MemoryStream stream=new MemoryStream()) {
 				Bitmap bitmap=new Bitmap(img);
-				bitmap.Save(stream,ImageFormat.Png);
+				bitmap.Save(stream,ImageFormat.Jpeg);//note that if png is used, it will bloat the file size by at least 10x.
 				rawData=stream.ToArray();
 			}
-			OdSqlParameter paramBlob=new OdSqlParameter(":param1",OdDbType.Blob,rawData);
-			command="INSERT INTO tempcore (blobtest) VALUES (:param1)";
+			OdSqlParameter paramBlob=new OdSqlParameter("param1",OdDbType.Blob,rawData);
+			command="INSERT INTO tempcore (BlobTest) VALUES ("+DbHelper.ParamChar+"param1)";
 			DataCore.NonQ(command,paramBlob);
-			command="SELECT blobtest FROM tempcore";
+			command="SELECT BlobTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			blobTest=(byte[])table.Rows[0]["blobtest"];
+			blobTest=(byte[])table.Rows[0]["BlobTest"];
 			if(blobTest.Length!=rawData.Length){
 				throw new Exception();
 			}
@@ -356,10 +326,27 @@ namespace UnitTests {
 			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
-			retVal+="Blob: Passed.\r\n";
-			retVal+="Oracle CoreTypes test done.\r\n";
+			retVal+="Blob, 2MB: Passed.\r\n";
+			//SHOW CREATE TABLE -----------------------------------------------------------------------
+			//This command is needed in order to perform a backup.
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="SHOW CREATE TABLE account";
+				table=DataCore.GetTable(command);
+				string createResult=PIn.ByteArray(table.Rows[0][1]);
+				if(!createResult.StartsWith("CREATE TABLE")) {
+					throw new Exception();
+				}
+				retVal+="SHOW CREATE TABLE: Passed.\r\n";
+			}
+			else {
+				retVal+="SHOW CREATE TABLE: Not applicable to Oracle.\r\n";
+			}
+			//Cleanup---------------------------------------------------------------------------------------
+			DbSchema.DropTable7_7("tempcore");
+			DbSchema.DropTable7_7("tempgroupconcat");
+			retVal+="CoreTypes test done.\r\n";
 			return retVal;
-		}*/
+		}
 
 		public static string CreateRandomAlphaNumericString(int length){
 			StringBuilder result=new StringBuilder(length);

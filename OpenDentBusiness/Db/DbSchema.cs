@@ -149,6 +149,19 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		/// <summary>TODO: trigger cleanup for oracle</summary>
+		public static void DropTable7_7(string tableName) {
+			string command;
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command= "DROP TABLE IF EXISTS "+tableName;
+				Db.NonQ(command);
+			}
+			else {//oracle
+	//todo: implement
+				//todo: check for existing trigger or index other than DateTStamp
+			}
+		}
+
 		/// <summary>TODO.this.oracle</summary>
 		public static void RenameColumn7_7(string tableName,string columnNameOld,DbSchemaCol colNew) {
 			string command;
