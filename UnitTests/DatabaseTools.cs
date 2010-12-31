@@ -78,7 +78,7 @@ namespace UnitTests {
 			else {
 				//This stopped working. Might look into it later: for now manually create the unittest db
 
-				//Make sure the command CREATE OR REPLACE DIRECTORY dmpdir AS 'c:\oraclexe\app\tmp'; was ran
+				//Make sure the command CREATE OR REPLACE DIRECTORY dmpdir AS 'c:\oraclexe\app\tmp'; was run
 				//and there is an opendental user with matching username/pass 
 				//The unittest.dmp was taken from a fresh unittest db created from the code above.  No need to alter it further. 
 				//string command=@"impdp opendental/opendental DIRECTORY=dmpdir DUMPFILE=unittest.dmp TABLE_EXISTS_ACTION=replace LOGFILE=impschema.log";

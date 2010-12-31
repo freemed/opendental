@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public enum OdDbType {
-		/// <summary>C#:byte[], MySql:blob???, Oracle:blob, </summary>
+		/// <summary>C#:byte[], MySql:mediumblob, Oracle:blob, </summary>
 		Blob,
 		///<summary>C#:bool, MySql:tinyint(3)or(1), Oracle:number(3), </summary>
 		Bool,

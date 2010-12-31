@@ -172,7 +172,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>TODO.this</summary>
-		public static void AddKey(string tableName,string columnName) {
+		public static void AddKey7_7(string tableName,string columnName) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				//surround with try catch to fail silently.
 			}
@@ -182,7 +182,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>TODO.this</summary>
-		public static void RemoveKey(string tableName,string columnName) {
+		public static void RemoveKey7_7(string tableName,string columnName) {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 
 			}
@@ -194,6 +194,8 @@ namespace OpenDentBusiness {
 		/// <summary>For example, might return "bigint NOT NULL".</summary>
 		private static string GetMySqlType7_7(DbSchemaCol col) {
 			switch(col.DataType) {
+				case OdDbType.Blob:
+					return "mediumblob";
 				case OdDbType.Bool:
 					return "tinyint";
 				case OdDbType.Byte:
@@ -230,19 +232,22 @@ namespace OpenDentBusiness {
 					return "time";
 				case OdDbType.VarChar255:
 					return "varchar(255)";
+				default:
+					throw new ApplicationException("type not found");
 			}
-			return "";
 		}
 
 		///<summary>For example, might return "NUMBER(11) NOT NULL".</summary>
 		private static string GetOracleType7_7(DbSchemaCol col) {
 			switch(col.DataType) {
+				case OdDbType.Blob:
+					return "blob";
 				case OdDbType.Bool:
-					return "NUMBER(3)";
+					return "number(3)";
 				case OdDbType.Byte:
-					return "NUMBER(3)";
+					return "number(3)";
 				case OdDbType.Currency:
-					return "NUMBER(38,8)";
+					return "number(38,8)";
 				case OdDbType.Date:
 					return "date";
 				case OdDbType.DateTime:
@@ -253,9 +258,9 @@ namespace OpenDentBusiness {
 				case OdDbType.Float:
 					return "number(38,8)";
 				case OdDbType.Int:
-					return "NUMBER(11)";
+					return "number(11)";
 				case OdDbType.Long:
-					return "NUMBER(20)";
+					return "number(20)";
 				case OdDbType.Text:
 					if(col.TextSize==TextSizeMySqlOracle.Small) {
 						return "varchar2(4000)";
@@ -269,8 +274,9 @@ namespace OpenDentBusiness {
 					return "varchar2(255)";
 				case OdDbType.VarChar255:
 					return "varchar2(255)";
+				default:
+					throw new ApplicationException("type not found");
 			}
-			return "";
 		}
 
 		/// <summary>Used to get the value that should be used instead of null. For example will return '' for a string column or 0 for an int column.</summary>

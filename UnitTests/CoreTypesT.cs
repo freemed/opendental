@@ -10,6 +10,28 @@ using System.Drawing.Imaging;
 namespace UnitTests {
 	public class CoreTypesT {
 		/// <summary></summary>
+		public static string CreateTempTable(bool isOracle) {
+			string retVal="";
+			DatabaseTools.SetDbConnection("unittest",isOracle);
+			List<DbSchemaCol> cols=new List<DbSchemaCol>();
+			cols.Add(new DbSchemaCol("TimeOfDayTest",OdDbType.TimeOfDay));
+			cols.Add(new DbSchemaCol("TimeStampTest",OdDbType.DateTimeStamp));
+			cols.Add(new DbSchemaCol("DateTest",OdDbType.Date));
+			cols.Add(new DbSchemaCol("DateTimeTest",OdDbType.DateTime));
+			cols.Add(new DbSchemaCol("TimeSpanTest",OdDbType.TimeSpan));
+			cols.Add(new DbSchemaCol("CurrencyTest",OdDbType.Currency));
+			cols.Add(new DbSchemaCol("BoolTest",OdDbType.Bool));
+			cols.Add(new DbSchemaCol("TextSmallTest",OdDbType.Text,false,TextSizeMySqlOracle.Small,false));
+			cols.Add(new DbSchemaCol("VarCharTest",OdDbType.VarChar255));
+			cols.Add(new DbSchemaCol("TextLargeTest",OdDbType.Text,false,TextSizeMySqlOracle.Large,false));
+			cols.Add(new DbSchemaCol("BlobTest",OdDbType.Blob));
+			DbSchema.AddTable7_7("tempcore",cols);
+			retVal+="Temp tables created.\r\n";
+			return retVal;
+		}
+
+		/*
+		/// <summary></summary>
 		public static string CreateTempTableMySql() {
 			string retVal="";
 			DatabaseTools.SetDbConnection("unittest",false);
@@ -17,11 +39,17 @@ namespace UnitTests {
 			command="DROP TABLE IF EXISTS tempcore";
 			DataCore.NonQ(command);
 			command=@"CREATE TABLE tempcore (
-			_timespan time NOT NULL default '00:00:00',
-			_date date NOT NULL default '0001-01-01',
-			_datetime datetime NOT NULL default '0001-01-01 00:00:00',
-			_double double NOT NULL,
-			_bool tinyint(1) NOT NULL
+			TimeOfDayTest time NOT NULL default '00:00:00',
+			TimeStampTest timestamp,
+			DateTest date NOT NULL default '0001-01-01',
+			DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
+			TimeSpanTest time NOT NULL default '00:00:00',
+			CurrencyTest double NOT NULL,
+			BoolTest tinyint NOT NULL,
+			TextTest text NOT NULL,
+			CharTest char(1) NOT NULL,
+			ClobTest mediumtext NOT NULL,
+			BlobTest mediumblob NOT NULL
 			) DEFAULT CHARSET=utf8";
 			DataCore.NonQ(command);
 			command="DROP TABLE IF EXISTS tempgroupconcat";
@@ -42,16 +70,16 @@ namespace UnitTests {
 			command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE TEMPCORE'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 			DataCore.NonQ(command);
 			command="CREATE TABLE TEMPCORE "
-			+"(TimeOfDayTest TIMESTAMP, "//js changed type and name
+			+"(TimeOfDayTest TIMESTAMP, "
 			+"TimeStampTest DATE, "
 			+"DateTest DATE, "
-			+"TimeSpanTest VARCHAR2(255), "//js added
-			+"DOUBLETEST FLOAT(24), "
-			+"BOOLTEST NUMBER(3,0), "
-			+"VARCHAR2TEST VARCHAR2(4000), "
-			+"CHARTEST CHAR(1), "
-			+"CLOBTEST CLOB, "
-			+"BLOBTEST BLOB)";
+			+"TimeSpanTest VARCHAR2(255), "
+			+"DoubleTest FLOAT(24), "
+			+"BoolTest NUMBER(3,0), "
+			+"Varchar2Test VARCHAR2(4000), "
+			+"CharTest CHAR(1), "
+			+"ClobTest CLOB, "
+			+"BlobTest BLOB)";
 			DataCore.NonQ(command);
 			command=command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE UNITTEST.TEMPGROUPCONCAT'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 			DataCore.NonQ(command);
@@ -60,7 +88,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			retVal+="Temp tables created.\r\n";
 			return retVal;
-		}
+		}*/
 
 		/// <summary></summary>
 		public static string RunAllMySql() {
@@ -78,11 +106,11 @@ namespace UnitTests {
 			TimeSpan timespan2;
 			//timespan(timeOfDay)----------------------------------------------------------------------------------------------
 			timespan=new TimeSpan(1,2,3);//1hr,2min,3sec
-			command="INSERT INTO tempcore (_timespan) VALUES ("+POut.Time(timespan)+")";
+			command="INSERT INTO tempcore (TimeOfDayTest) VALUES ("+POut.Time(timespan)+")";
 			DataCore.NonQ(command);
-			command="SELECT _timespan FROM tempcore";
+			command="SELECT TimeOfDayTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["_timespan"].ToString());
+			timespan2=PIn.TimeSpan(table.Rows[0]["TimeOfDayTest"].ToString());
 			if(timespan!=timespan2) {
 				throw new Exception();
 			}
@@ -92,11 +120,11 @@ namespace UnitTests {
 			//timespan, negative------------------------------------------------------------------------------------
 			timespan=new TimeSpan(0,-36,0);//This particular timespan value was found to fail in mysql with the old connector.
 			//Don't know what's so special about this one value.  There are probably other values failing as well, but it doesn't matter.
-			command="INSERT INTO tempcore (_timespan) VALUES ('"+POut.TSpan(timespan)+"')";
+			command="INSERT INTO tempcore (TimeSpanTest) VALUES ('"+POut.TSpan(timespan)+"')";
 			DataCore.NonQ(command);
-			command="SELECT _timespan FROM tempcore";
+			command="SELECT TimeSpanTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["_timespan"].ToString());
+			timespan2=PIn.TimeSpan(table.Rows[0]["TimeSpanTest"].ToString());
 			if(timespan!=timespan2) {
 				throw new Exception();
 			}
@@ -105,11 +133,11 @@ namespace UnitTests {
 			retVal+="TimeSpan, negative: Passed.\r\n";
 			//timespan, over 24 hours-----------------------------------------------------------------------------
 			timespan=new TimeSpan(432,5,17);
-			command="INSERT INTO tempcore (_timespan) VALUES ('"+POut.TSpan(timespan)+"')";
+			command="INSERT INTO tempcore (TimeSpanTest) VALUES ('"+POut.TSpan(timespan)+"')";
 			DataCore.NonQ(command);
-			command="SELECT _timespan FROM tempcore";
+			command="SELECT TimeSpanTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["_timespan"].ToString());
+			timespan2=PIn.TimeSpan(table.Rows[0]["TimeSpanTest"].ToString());
 			if(timespan!=timespan2) {
 				throw new Exception();
 			}
@@ -120,11 +148,11 @@ namespace UnitTests {
 			DateTime date1;
 			DateTime date2;
 			date1=new DateTime(2003,5,23);
-			command="INSERT INTO tempcore (_date) VALUES ("+POut.Date(date1)+")";
+			command="INSERT INTO tempcore (DateTest) VALUES ("+POut.Date(date1)+")";
 			DataCore.NonQ(command);
-			command="SELECT _date FROM tempcore";
+			command="SELECT DateTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			date2=PIn.Date(table.Rows[0]["_date"].ToString());
+			date2=PIn.Date(table.Rows[0]["DateTest"].ToString());
 			if(date1!=date2) {
 				throw new Exception();
 			}
@@ -135,11 +163,11 @@ namespace UnitTests {
 			DateTime datet1;
 			DateTime datet2;
 			datet1=new DateTime(2003,5,23,10,18,0);
-			command="INSERT INTO tempcore (_datetime) VALUES ("+POut.DateT(datet1)+")";
+			command="INSERT INTO tempcore (DateTimeTest) VALUES ("+POut.DateT(datet1)+")";
 			DataCore.NonQ(command);
-			command="SELECT _datetime FROM tempcore";
+			command="SELECT DateTimeTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			datet2=PIn.DateT(table.Rows[0]["_datetime"].ToString());
+			datet2=PIn.DateT(table.Rows[0]["DateTimeTest"].ToString());
 			if(datet1!=datet2) {
 				throw new Exception();
 			}
@@ -150,11 +178,11 @@ namespace UnitTests {
 			double double1;
 			double double2;
 			double1=12.34d;
-			command="INSERT INTO tempcore (_double) VALUES ("+POut.Double(double1)+")";
+			command="INSERT INTO tempcore (CurrencyTest) VALUES ("+POut.Double(double1)+")";
 			DataCore.NonQ(command);
-			command="SELECT _double FROM tempcore";
+			command="SELECT CurrencyTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			double2=PIn.Double(table.Rows[0]["_double"].ToString());
+			double2=PIn.Double(table.Rows[0]["CurrencyTest"].ToString());
 			if(double1!=double2) {
 				throw new Exception();
 			}
@@ -162,6 +190,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			retVal+="Double: Passed.\r\n";
 			//group_concat------------------------------------------------------------------------------------
+			/*
 			command="INSERT INTO tempgroupconcat VALUES ('name1')";
 			DataCore.NonQ(command);
 			command="INSERT INTO tempgroupconcat VALUES ('name2')";
@@ -174,29 +203,29 @@ namespace UnitTests {
 			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
-			retVal+="Group_concat: Passed.\r\n";
+			retVal+="Group_concat: Passed.\r\n";*/
 			//bool,pos------------------------------------------------------------------------------------
 			bool bool1;
 			bool bool2;
 			bool1=true;
-			command="INSERT INTO tempcore (_bool) VALUES ("+POut.Bool(bool1)+")";
+			command="INSERT INTO tempcore (BoolTest) VALUES ("+POut.Bool(bool1)+")";
 			DataCore.NonQ(command);
-			command="SELECT _bool FROM tempcore";
+			command="SELECT BoolTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			bool2=PIn.Bool(table.Rows[0]["_bool"].ToString());
+			bool2=PIn.Bool(table.Rows[0]["BoolTest"].ToString());
 			if(bool1!=bool2) {
 				throw new Exception();
 			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Bool, true: Passed.\r\n";
-			//bool,pos------------------------------------------------------------------------------------
+			//bool,neg------------------------------------------------------------------------------------
 			bool1=false;
-			command="INSERT INTO tempcore (_bool) VALUES ("+POut.Bool(bool1)+")";
+			command="INSERT INTO tempcore (BoolTest) VALUES ("+POut.Bool(bool1)+")";
 			DataCore.NonQ(command);
-			command="SELECT _bool FROM tempcore";
+			command="SELECT BoolTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			bool2=PIn.Bool(table.Rows[0]["_bool"].ToString());
+			bool2=PIn.Bool(table.Rows[0]["BoolTest"].ToString());
 			if(bool1!=bool2) {
 				throw new Exception();
 			}
@@ -205,18 +234,15 @@ namespace UnitTests {
 			retVal+="Bool, false: Passed.\r\n";
 			//SHOW CREATE TABLE -----------------------------------------------------------------------
 			//This command is needed in order to perform a backup.
+			/*
 			command="SHOW CREATE TABLE account";
 			table=DataCore.GetTable(command);
 			string createResult=PIn.ByteArray(table.Rows[0][1]);
 			if(!createResult.StartsWith("CREATE TABLE")) {
 				throw new Exception();
 			}
-			retVal+="SHOW CREATE TABLE: Passed.\r\n";
-
-
-
-
-
+			retVal+="SHOW CREATE TABLE: Passed.\r\n";*/
+			//Cleanup---------------------------------------------------------------------------------------
 			command="DROP TABLE IF EXISTS tempcore";
 			DataCore.NonQ(command);
 			command="DROP TABLE IF EXISTS tempgroupconcat";

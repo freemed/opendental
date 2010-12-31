@@ -70,9 +70,14 @@ namespace UnitTests {
 			Cursor=Cursors.WaitCursor;
 			textResults.Text="";
 			Application.DoEvents();
-			textResults.Text+=CoreTypesT.CreateTempTableOracle();
+			textResults.Text+=CoreTypesT.CreateTempTable(isOracle);
 			Application.DoEvents();
-			textResults.Text+=CoreTypesT.RunAllOracle();
+			if(isOracle) {
+				textResults.Text+=CoreTypesT.RunAllOracle();
+			}
+			else {
+				textResults.Text+=CoreTypesT.RunAllMySql();
+			}
 			Cursor=Cursors.Default;
 		}
 
