@@ -128,7 +128,7 @@ namespace OpenDentBusiness {
 			else {//oracle
 				bool tableExists=false;
 				DataTable tempUsernameTable = Db.GetTable("SELECT username FROM user_users;");//cannot exlicitly use tempUsernameTable.Rows["username"] because it cannot convert from string to int.
-				command="SELECT * FROM user_tables WHERE user='"+tempUsernameTable.Rows[0].ToString()+"';";//check to see if table exists
+				command="SELECT * FROM user_tables WHERE user='"+tempUsernameTable.Rows[0][0].ToString()+"'";//check to see if table exists
 				DataTable tempTableNames = Db.GetTable(command);
 				for(int i=0;i<tempTableNames.Rows.Count;i++) {
 					if(tempTableNames.Rows[i].ToString().Equals(tableName)) {
@@ -136,13 +136,14 @@ namespace OpenDentBusiness {
 					}
 				}
 				if(tableExists) {
-					//TODO:DROP
-
+					command="DROP TABLE "+tableName;
+					Db.NonQ(command);
+					//TODO: drop indexes and triggers?
 				}
 				//table doesn't exist and therefor needs to be created
 				command = "CREATE TABLE "+tableName+" (";
 				for(int i=0;i<cols.Count;i++) {
-					command+=cols[i].ColumnName+" "+GetOracleType7_7(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?");":", ");
+					command+=cols[i].ColumnName+" "+GetOracleType7_7(cols[i])+(i==0?" primary key ":"")+(i==cols.Count-1?")":", ");
 				}
 				Db.NonQ(command);
 				OracleValidateDateTStampTriggerHelper7_7(tableName);
@@ -157,8 +158,20 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 			}
 			else {//oracle
-	//todo: implement
-				//todo: check for existing trigger or index other than DateTStamp
+				bool tableExists=false;
+				DataTable tempUsernameTable = Db.GetTable("SELECT username FROM user_users;");//cannot exlicitly use tempUsernameTable.Rows["username"] because it cannot convert from string to int.
+				command="SELECT * FROM user_tables WHERE user='"+tempUsernameTable.Rows[0][0].ToString()+"'";//check to see if table exists
+				DataTable tempTableNames = Db.GetTable(command);
+				for(int i=0;i<tempTableNames.Rows.Count;i++) {
+					if(tempTableNames.Rows[i].ToString().Equals(tableName)) {
+						tableExists=true;
+					}
+				}
+				if(tableExists) {
+					command="DROP TABLE "+tableName;
+					Db.NonQ(command);
+					//TODO: check for existing trigger or index other than DateTStamp
+				}
 			}
 		}
 
@@ -382,7 +395,7 @@ namespace OpenDentBusiness {
 		private static void OracleValidateDateTStampTriggerHelper7_7(string tableName) {
 			bool triggerNeeded = false;
 			bool needDropTrigger = false;
-			string command ="Select TABLE_NAME, COLUMN_NAME from user_tab_columns where table_name='"+tableName.ToUpper()+"';";
+			string command ="Select TABLE_NAME, COLUMN_NAME from user_tab_columns where table_name='"+tableName.ToUpper()+"'";
 			DataTable tempTable = Db.GetTable(command);//get list of columns
 			for(int i=0;i<tempTable.Rows.Count;i++){//check for a column named "DateTStamp"
 				if(tempTable.Rows[i]["COLUMN_NAME"].ToString()=="DateTStamp") {
@@ -400,7 +413,7 @@ namespace OpenDentBusiness {
 				command+="END "+tableName+"_timestamp;";
 			}
 			else {//table needs to have zero DateTStamp triggers
-				command = "Select TRIGGER_NAME FROM user_triggers WHERE tablename = '"+tableName.ToUpper()+"';";
+				command = "Select TRIGGER_NAME FROM user_triggers WHERE table_name = '"+tableName.ToUpper()+"'";
 				DataTable tempTriggerTable = Db.GetTable(command);
 				for(int i=0;i<tempTriggerTable.Rows.Count;i++) {//check for timestamp triggers before trying to delete
 					if(tempTriggerTable.Rows[i]["TRIGGER_NAME"].ToString().Contains("_timestamp")) {
@@ -408,7 +421,7 @@ namespace OpenDentBusiness {
 					}
 				}
 				if(needDropTrigger) {//Delete timestamp triggers if they exist
-					command = "DROP TRIGGER "+tableName.ToUpper()+"_timestamp WHERE TABLE_NAME = '"+tableName.ToUpper()+"';";
+					command = "DROP TRIGGER "+tableName.ToUpper()+"_timestamp WHERE TABLE_NAME = '"+tableName.ToUpper()+"'";
 					Db.NonQ(command);
 				}
 			}
@@ -419,7 +432,7 @@ namespace OpenDentBusiness {
 			string command;
 			string commandPart2;
 			DbSchemaCol newCol;
-			command = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"';";
+			command = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM user_tab_columns WHERE table_name='"+tableName.ToUpper()+"'";
 			DataTable tempTable = Db.GetTable(command);//get list of columns
 			List<DbSchemaCol> newTableCols = new List<DbSchemaCol>();
 			for(int i=0;i<tempTable.Rows.Count;i++) {
@@ -440,9 +453,9 @@ namespace OpenDentBusiness {
 			}
 			command+=commandPart2;
 			Db.NonQ(command);
-			command="DROP TABLE "+tableName+";";
+			command="DROP TABLE "+tableName;
 			Db.NonQ(command);
-			command = "ALTER TABLE newtemptable RENAME TO "+tableName+";";
+			command = "ALTER TABLE newtemptable RENAME TO "+tableName;
 			Db.NonQ(command);
 			for(int i=0;i<newTableCols.Count;i++) {//creates triggers
 				if(newTableCols[i].Indexed) {
