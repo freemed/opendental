@@ -108,6 +108,27 @@ namespace OpenDentBusiness {
 			return colName;
 		}
 
+		public static string DateAddDay(string date,string days) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return date+" +"+days;//Can handle negatives even with '+' hardcoded.
+			}
+			return "ADDDATE("+date+","+days+")";
+		}
+
+		public static string DateAddMonth(string date,string months) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "ADD_MONTHS("+date+","+months+")";
+			}
+			return "ADDDATE("+date+",INTERVAL "+months+" MONTH)";
+		}
+
+		public static string DateAddYear(string date,string years) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "ADD_MONTHS("+date+","+years+"*12)";
+			}
+			return "ADDDATE("+date+",INTERVAL "+years+" YEAR)";
+		}
+
 		public static string DateColumn(string colName) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "TO_DATE("+colName+")";
@@ -129,6 +150,13 @@ namespace OpenDentBusiness {
 				throw new Exception("Unrecognized date format string.");
 			}
 			return "DATE_FORMAT("+colName+",'"+format+"')";
+		}
+
+		public static string GetTime(string dateTimeVal) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "TO_CHAR("+dateTimeVal+",'hh24:mi:ss')";
+			}
+			return "TIME("+dateTimeVal+")";
 		}
 
 		public static string Regexp(string input,string pattern) {

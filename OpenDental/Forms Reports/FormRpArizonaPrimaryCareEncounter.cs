@@ -98,7 +98,7 @@ namespace OpenDental {
 						"(SELECT CASE pp.Relationship WHEN 0 THEN 1 ELSE 0 END FROM patplan pp,insplan i,carrier c WHERE "+//Relationship to subscriber
 							"pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah' "+DbHelper.LimitAnd(1)+") InsRelat,"+
 						"(CASE p.Position WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END) MaritalStatus,"+//Marital status
-						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN (ADDDATE(p.BirthDate,INTERVAL 18 YEAR)>CURDATE()) THEN 3 ELSE 2 END) ELSE 1 END) EmploymentStatus,"+
+						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN ("+DbHelper.DateAddYear("p.BirthDate","18")+">CURDATE()) THEN 3 ELSE 2 END) ELSE 1 END) EmploymentStatus,"+
 						"(CASE p.StudentStatus WHEN 'f' THEN 1 WHEN 'p' THEN 2 ELSE 3 END) StudentStatus,"+//student status
 						"'ADHS PCP' InsurancePlanName,"+//insurance plan name
 						"'' ReferringPhysicianName,"+//Name of referring physician

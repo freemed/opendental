@@ -1128,9 +1128,9 @@ namespace OpenDentBusiness{
 				+"FROM appointment,patient "
 				+"WHERE appointment.PatNum=patient.PatNum "
 				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(dateStart)+" "
-				+"AND TIME(DateTimeArrived) > 0 "
-				+"AND TIME(DateTimeArrived) < CURTIME() "
-				+"AND TIME(DateTimeSeated) = 0 "
+				+"AND "+DbHelper.GetTime("DateTimeArrived")+" > 0 "
+				+"AND "+DbHelper.GetTime("DateTimeArrived")+" < CURTIME() "
+				+"AND "+DbHelper.GetTime("DateTimeSeated")+" = 0 "
 				+"ORDER BY AptDateTime";
 			DataTable raw=dcon.GetTable(command);
 			TimeSpan timeArrived;
