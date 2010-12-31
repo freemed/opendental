@@ -495,7 +495,7 @@ namespace OpenDentBusiness{
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum,ClinicNum,FName,Preferred
-				ORDER BY CASE WHEN Guarantor!=patient.PatNum THEN 0 ELSE 1 END,Birthdate,ProvNum,FName,Preferred;
+				ORDER BY CASE WHEN Guarantor=patient.PatNum THEN 0 ELSE 1 END,Birthdate,ProvNum,FName,Preferred;
 
 				DROP TABLE IF EXISTS tempfambal";
 			return Db.GetTable(command);
@@ -973,9 +973,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT ChartNumber from patient WHERE"
-				+" ChartNumber REGEXP '^[0-9]+$'"//matches any number of digits
-				+" ORDER BY (chartnumber+0) DESC";//1/13/05 by Keyush Shaw-added 0.
+			string command="SELECT ChartNumber from patient WHERE "
+				+DbHelper.Regexp("ChartNumber","^[0-9]+$")+" "//matches any positive number of digits
+				+"ORDER BY (chartnumber+0) DESC";//1/13/05 by Keyush Shaw-added 0.
 			command=DbHelper.LimitOrderBy(command,1);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){//no existing chart numbers

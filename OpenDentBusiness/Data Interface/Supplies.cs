@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 				+"WHERE definition.DefNum=supply.Category "
 				+"AND supply.SupplierNum="+POut.Long(supplierNum)+" ";
 			if(findText!=""){
-				command+="AND (supply.CatalogNumber REGEXP '"+POut.String(findText)+"' OR supply.Descript REGEXP '"+POut.String(findText)+"') ";
+				command+="AND ("+DbHelper.Regexp("supply.CatalogNumber",POut.String(findText))+" OR "+DbHelper.Regexp("supply.Descript",POut.String(findText))+") ";
 			}
 			if(!includeHidden){
 				command+="AND supply.IsHidden=0 ";
