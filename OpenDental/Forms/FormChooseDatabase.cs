@@ -604,6 +604,13 @@ namespace OpenDental{
 					listType.SelectedIndex=1;
 					DataConnection.DBtype=DatabaseType.Oracle;
 				}
+				//See if there's a ConnectionString
+				nav=Navigator.SelectSingleNode("//ConnectionString");
+				if(nav!=null) {
+					//If there is a ConnectionString, then use it.
+					textConnectionString.Text=nav.Value;
+					return;
+				}
 				//See if there's a DatabaseConnection
 				nav=Navigator.SelectSingleNode("//DatabaseConnection");
 				if(nav!=null) {
@@ -739,7 +746,12 @@ namespace OpenDental{
 				settings.IndentChars = ("    ");
 				using(XmlWriter writer=XmlWriter.Create(ODFileUtils.CombinePaths(Application.StartupPath,"FreeDentalConfig.xml"),settings)) {
 					writer.WriteStartElement("ConnectionSettings");
-					if(RemotingClient.RemotingRole==RemotingRole.ClientDirect){
+					if(textConnectionString.Text!="") {
+						writer.WriteStartElement("ConnectionString");
+						writer.WriteString(textConnectionString.Text);
+						writer.WriteEndElement();
+					}
+					else if(RemotingClient.RemotingRole==RemotingRole.ClientDirect){
 						writer.WriteStartElement("DatabaseConnection");
 						writer.WriteStartElement("ComputerName");
 						writer.WriteString(comboComputerName.Text);
