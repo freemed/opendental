@@ -131,5 +131,12 @@ namespace OpenDentBusiness {
 			return "DATE_FORMAT("+colName+",'"+format+"')";
 		}
 
+		public static string Regexp(string input,string pattern) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "REGEXP_INSTR("+input+",'"+pattern+"')";
+			}
+			return input+" REGEXP '"+pattern+"'";
+		}
+
 	}
 }
