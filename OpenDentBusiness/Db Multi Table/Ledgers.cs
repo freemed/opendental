@@ -100,25 +100,53 @@ namespace OpenDentBusiness{
 			//not being changed by multiple threads if more than one user is calculating aging.
 			//Since a temporary table is dropped automatically only when the connection is closed,
 			//and since we use connection pooling, drop them before using.
-			string tempTableSuffix=CodeBase.MiscUtils.CreateRandomAlphaNumericString(32);
+			string tempTableSuffix=CodeBase.MiscUtils.CreateRandomAlphaNumericString(14);//max size for a table name in oracle is 30 chars.
 			string tempAgingTableName="tempaging"+tempTableSuffix;
 			string tempOdAgingTransTableName="tempodagingtrans"+tempTableSuffix;
-			command="DROP TEMPORARY TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
-			Db.NonQ(command);
-			command="DROP TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
-			Db.NonQ(command);
-			command="CREATE TEMPORARY TABLE "+tempAgingTableName+" ("+
-				"PatNum bigint,"+
-				"Guarantor bigint,"+
-				"Charges_0_30 DOUBLE DEFAULT 0,"+
-				"Charges_31_60 DOUBLE DEFAULT 0,"+
-				"Charges_61_90 DOUBLE DEFAULT 0,"+
-				"ChargesOver90 DOUBLE DEFAULT 0,"+
-				"TotalCredits DOUBLE DEFAULT 0,"+
-				"InsEst DOUBLE DEFAULT 0,"+
-				"PayPlanDue DOUBLE DEFAULT 0,"+
-				"BalTotal DOUBLE DEFAULT 0"+
-			");";
+			try {
+				//We would use DROP TEMPORARY TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
+				command="DROP TEMPORARY TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+				Db.NonQ(command);
+			}
+			catch {
+				//The tables do not exist. Nothing to do.
+			}
+			try {
+				//We would use DROP TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
+				command="DROP TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+				Db.NonQ(command);
+			}
+			catch {
+				//The tables do not exist. Nothing to do.
+			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				command="CREATE GLOBAL TEMPORARY TABLE "+tempAgingTableName+" ("+
+					"PatNum NUMBER,"+
+					"Guarantor NUMBER,"+
+					"Charges_0_30 NUMBER(38,8) DEFAULT 0,"+
+					"Charges_31_60 NUMBER(38,8) DEFAULT 0,"+
+					"Charges_61_90 NUMBER(38,8) DEFAULT 0,"+
+					"ChargesOver90 NUMBER(38,8) DEFAULT 0,"+
+					"TotalCredits NUMBER(38,8) DEFAULT 0,"+
+					"InsEst NUMBER(38,8) DEFAULT 0,"+
+					"PayPlanDue NUMBER(38,8) DEFAULT 0,"+
+					"BalTotal NUMBER(38,8) DEFAULT 0"+
+				");";
+			}
+			else {
+				command="CREATE TEMPORARY TABLE "+tempAgingTableName+" ("+
+					"PatNum bigint,"+
+					"Guarantor bigint,"+
+					"Charges_0_30 DOUBLE DEFAULT 0,"+
+					"Charges_31_60 DOUBLE DEFAULT 0,"+
+					"Charges_61_90 DOUBLE DEFAULT 0,"+
+					"ChargesOver90 DOUBLE DEFAULT 0,"+
+					"TotalCredits DOUBLE DEFAULT 0,"+
+					"InsEst DOUBLE DEFAULT 0,"+
+					"PayPlanDue DOUBLE DEFAULT 0,"+
+					"BalTotal DOUBLE DEFAULT 0"+
+				");";
+			}
 			if(guarantor==0) {
 				//We insert all of the patient numbers and guarantor numbers only when we are running aging for everyone,
 				//since we do not want MySQL to examine every patient record when running aging for a single family.
