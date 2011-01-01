@@ -104,14 +104,15 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(letter.BodyText != oldLetter.BodyText) {
 				if(command!=""){ command+=",";}
-				command+="BodyText = '"+POut.String(letter.BodyText)+"'";
+				command+="BodyText = "+DbHelper.ParamChar+"paramBodyText";
 			}
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,letter.BodyText);
 			command="UPDATE letter SET "+command
 				+" WHERE LetterNum = "+POut.Long(letter.LetterNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramBodyText);
 		}
 
 		///<summary>Deletes one Letter from the database.</summary>

@@ -111,14 +111,15 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(userQuery.QueryText != oldUserQuery.QueryText) {
 				if(command!=""){ command+=",";}
-				command+="QueryText = '"+POut.String(userQuery.QueryText)+"'";
+				command+="QueryText = "+DbHelper.ParamChar+"paramQueryText";
 			}
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramQueryText=new OdSqlParameter("paramQueryText",OdDbType.Text,userQuery.QueryText);
 			command="UPDATE userquery SET "+command
 				+" WHERE QueryNum = "+POut.Long(userQuery.QueryNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramQueryText);
 		}
 
 		///<summary>Deletes one UserQuery from the database.</summary>

@@ -171,14 +171,15 @@ namespace OpenDentBusiness.Crud{
 			//DepositNum excluded from update
 			if(payment.Receipt != oldPayment.Receipt) {
 				if(command!=""){ command+=",";}
-				command+="Receipt = '"+POut.String(payment.Receipt)+"'";
+				command+="Receipt = "+DbHelper.ParamChar+"paramReceipt";
 			}
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramReceipt=new OdSqlParameter("paramReceipt",OdDbType.Text,payment.Receipt);
 			command="UPDATE payment SET "+command
 				+" WHERE PayNum = "+POut.Long(payment.PayNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramReceipt);
 		}
 
 		///<summary>Deletes one Payment from the database.</summary>

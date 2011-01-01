@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(hL7Msg.MsgText != oldHL7Msg.MsgText) {
 				if(command!=""){ command+=",";}
-				command+="MsgText = '"+POut.String(hL7Msg.MsgText)+"'";
+				command+="MsgText = "+DbHelper.ParamChar+"paramMsgText";
 			}
 			if(hL7Msg.AptNum != oldHL7Msg.AptNum) {
 				if(command!=""){ command+=",";}
@@ -116,9 +116,10 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,hL7Msg.MsgText);
 			command="UPDATE hl7msg SET "+command
 				+" WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramMsgText);
 		}
 
 		///<summary>Deletes one HL7Msg from the database.</summary>

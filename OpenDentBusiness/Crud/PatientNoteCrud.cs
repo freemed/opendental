@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(patientNote.MedicalComp != oldPatientNote.MedicalComp) {
 				if(command!=""){ command+=",";}
-				command+="MedicalComp = '"+POut.String(patientNote.MedicalComp)+"'";
+				command+="MedicalComp = "+DbHelper.ParamChar+"paramMedicalComp";
 			}
 			if(patientNote.Treatment != oldPatientNote.Treatment) {
 				if(command!=""){ command+=",";}
@@ -148,9 +148,10 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramMedicalComp=new OdSqlParameter("paramMedicalComp",OdDbType.Text,patientNote.MedicalComp);
 			command="UPDATE patientnote SET "+command
 				+" WHERE PatNum = "+POut.Long(patientNote.PatNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramMedicalComp);
 		}
 
 		///<summary>Deletes one PatientNote from the database.</summary>

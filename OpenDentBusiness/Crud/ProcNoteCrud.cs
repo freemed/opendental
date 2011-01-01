@@ -128,7 +128,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(procNote.Note != oldProcNote.Note) {
 				if(command!=""){ command+=",";}
-				command+="Note = '"+POut.String(procNote.Note)+"'";
+				command+="Note = "+DbHelper.ParamChar+"paramNote";
 			}
 			if(procNote.SigIsTopaz != oldProcNote.SigIsTopaz) {
 				if(command!=""){ command+=",";}
@@ -141,9 +141,10 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,procNote.Note);
 			command="UPDATE procnote SET "+command
 				+" WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramNote);
 		}
 
 		///<summary>Deletes one ProcNote from the database.</summary>

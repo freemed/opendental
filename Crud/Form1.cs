@@ -91,6 +91,7 @@ namespace Crud {
 					File.WriteAllText(Path.Combine(crudDir,className+".cs"),strb.ToString());
 					CrudQueries.Write(convertDbFile,tableTypes[i],textDb.Text,false);
 					CrudGenDataInterface.Create(convertDbFile,tableTypes[i],textDb.Text,false);
+					Application.DoEvents();
 				}
 			}
 			if(checkRunM.Checked) {
@@ -642,6 +643,10 @@ using System.Drawing;"+rn);
 					else if(specialType==CrudSpecialColType.TimeSpanNeg) {
 						strb.Append("'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
 					}
+					else if(specialType==CrudSpecialColType.TextIsClob) {
+						strb.Append("\"+DbHelper.ParamChar+\"param"+fieldsExceptPri[f].Name);
+						//paramList is already set above
+					}
 					else if(fieldsExceptPri[f].FieldType.IsEnum) {
 						strb.Append("\"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 					}
@@ -691,9 +696,13 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t3+"if(command==\"\"){");
 				strb.Append(rn+t4+"return;");
 				strb.Append(rn+t3+"}");
+				for(int i=0;i<paramList.Count;i++) {
+					strb.Append(rn+t3+"OdSqlParameter param"+paramList[i].ParameterName+"=new OdSqlParameter(\"param"+paramList[i].ParameterName+"\","
+					+"OdDbType.Text,"+obj+"."+paramList[i].ParameterName+");");
+				}
 				strb.Append(rn+t3+"command=\"UPDATE "+tablename+" SET \"+command");
 				strb.Append(rn+t4+"+\" WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+");");
-				strb.Append(rn+t3+"Db.NonQ(command);");
+				strb.Append(rn+t3+"Db.NonQ(command"+paramsString+");");
 				strb.Append(rn+t2+"}");
 			}
 			#endregion Update 2nd override

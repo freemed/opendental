@@ -97,14 +97,15 @@ namespace OpenDentBusiness.Crud{
 			string command="";
 			if(etransMessageText.MessageText != oldEtransMessageText.MessageText) {
 				if(command!=""){ command+=",";}
-				command+="MessageText = '"+POut.String(etransMessageText.MessageText)+"'";
+				command+="MessageText = "+DbHelper.ParamChar+"paramMessageText";
 			}
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramMessageText=new OdSqlParameter("paramMessageText",OdDbType.Text,etransMessageText.MessageText);
 			command="UPDATE etransmessagetext SET "+command
 				+" WHERE EtransMessageTextNum = "+POut.Long(etransMessageText.EtransMessageTextNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramMessageText);
 		}
 
 		///<summary>Deletes one EtransMessageText from the database.</summary>

@@ -151,7 +151,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(sheetField.FieldValue != oldSheetField.FieldValue) {
 				if(command!=""){ command+=",";}
-				command+="FieldValue = '"+POut.String(sheetField.FieldValue)+"'";
+				command+="FieldValue = "+DbHelper.ParamChar+"paramFieldValue";
 			}
 			if(sheetField.FontSize != oldSheetField.FontSize) {
 				if(command!=""){ command+=",";}
@@ -200,9 +200,10 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,sheetField.FieldValue);
 			command="UPDATE sheetfield SET "+command
 				+" WHERE SheetFieldNum = "+POut.Long(sheetField.SheetFieldNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramFieldValue);
 		}
 
 		///<summary>Deletes one SheetField from the database.</summary>

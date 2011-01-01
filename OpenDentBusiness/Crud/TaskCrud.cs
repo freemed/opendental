@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(task.Descript != oldTask.Descript) {
 				if(command!=""){ command+=",";}
-				command+="Descript = '"+POut.String(task.Descript)+"'";
+				command+="Descript = "+DbHelper.ParamChar+"paramDescript";
 			}
 			if(task.TaskStatus != oldTask.TaskStatus) {
 				if(command!=""){ command+=",";}
@@ -179,9 +179,10 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,task.Descript);
 			command="UPDATE task SET "+command
 				+" WHERE TaskNum = "+POut.Long(task.TaskNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramDescript);
 		}
 
 		///<summary>Deletes one Task from the database.</summary>

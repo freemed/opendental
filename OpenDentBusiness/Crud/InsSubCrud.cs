@@ -149,7 +149,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(insSub.BenefitNotes != oldInsSub.BenefitNotes) {
 				if(command!=""){ command+=",";}
-				command+="BenefitNotes = '"+POut.String(insSub.BenefitNotes)+"'";
+				command+="BenefitNotes = "+DbHelper.ParamChar+"paramBenefitNotes";
 			}
 			if(insSub.SubscNote != oldInsSub.SubscNote) {
 				if(command!=""){ command+=",";}
@@ -158,9 +158,10 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramBenefitNotes=new OdSqlParameter("paramBenefitNotes",OdDbType.Text,insSub.BenefitNotes);
 			command="UPDATE inssub SET "+command
 				+" WHERE InsSubNum = "+POut.Long(insSub.InsSubNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramBenefitNotes);
 		}
 
 		///<summary>Deletes one InsSub from the database.</summary>

@@ -128,7 +128,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(sigElementDef.Sound != oldSigElementDef.Sound) {
 				if(command!=""){ command+=",";}
-				command+="Sound = '"+POut.String(sigElementDef.Sound)+"'";
+				command+="Sound = "+DbHelper.ParamChar+"paramSound";
 			}
 			if(sigElementDef.ItemOrder != oldSigElementDef.ItemOrder) {
 				if(command!=""){ command+=",";}
@@ -137,9 +137,10 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramSound=new OdSqlParameter("paramSound",OdDbType.Text,sigElementDef.Sound);
 			command="UPDATE sigelementdef SET "+command
 				+" WHERE SigElementDefNum = "+POut.Long(sigElementDef.SigElementDefNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramSound);
 		}
 
 		///<summary>Deletes one SigElementDef from the database.</summary>

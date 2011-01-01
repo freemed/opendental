@@ -118,14 +118,15 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(procButton.ButtonImage != oldProcButton.ButtonImage) {
 				if(command!=""){ command+=",";}
-				command+="ButtonImage = "+POut.Bitmap(procButton.ButtonImage)+"";
+				command+="ButtonImage = "+DbHelper.ParamChar+"paramButtonImage";
 			}
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramButtonImage=new OdSqlParameter("paramButtonImage",OdDbType.Text,procButton.ButtonImage);
 			command="UPDATE procbutton SET "+command
 				+" WHERE ProcButtonNum = "+POut.Long(procButton.ProcButtonNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramButtonImage);
 		}
 
 		///<summary>Deletes one ProcButton from the database.</summary>
