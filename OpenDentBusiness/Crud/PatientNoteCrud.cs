@@ -83,15 +83,16 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(patientNote.ApptPhone)+"',"
 				+"'"+POut.String(patientNote.Medical)+"',"
 				+"'"+POut.String(patientNote.Service)+"',"
-				+"'"+POut.String(patientNote.MedicalComp)+"',"
+				+DbHelper.ParamChar+"paramMedicalComp,"
 				+"'"+POut.String(patientNote.Treatment)+"',"
 				+"'"+POut.String(patientNote.CCNumber)+"',"
 				+    POut.Date  (patientNote.CCExpiration)+")";
+			OdSqlParameter paramMedicalComp=new OdSqlParameter("paramMedicalComp",OdDbType.Text,patientNote.MedicalComp);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramMedicalComp);
 			}
 			else {
-				patientNote.PatNum=Db.NonQ(command,true);
+				patientNote.PatNum=Db.NonQ(command,true,paramMedicalComp);
 			}
 			return patientNote.PatNum;
 		}

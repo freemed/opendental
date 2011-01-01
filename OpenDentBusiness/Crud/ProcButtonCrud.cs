@@ -78,12 +78,13 @@ namespace OpenDentBusiness.Crud{
 				 "'"+POut.String(procButton.Description)+"',"
 				+    POut.Int   (procButton.ItemOrder)+","
 				+    POut.Long  (procButton.Category)+","
-				+    POut.Bitmap(procButton.ButtonImage)+")";
+				+DbHelper.ParamChar+"paramButtonImage)";
+			OdSqlParameter paramButtonImage=new OdSqlParameter("paramButtonImage",OdDbType.Text,procButton.ButtonImage);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramButtonImage);
 			}
 			else {
-				procButton.ProcButtonNum=Db.NonQ(command,true);
+				procButton.ProcButtonNum=Db.NonQ(command,true,paramButtonImage);
 			}
 			return procButton.ProcButtonNum;
 		}

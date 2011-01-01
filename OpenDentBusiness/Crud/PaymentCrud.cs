@@ -94,12 +94,13 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (payment.ClinicNum)+","
 				+    POut.Date  (payment.DateEntry)+","
 				+    POut.Long  (payment.DepositNum)+","
-				+"'"+POut.String(payment.Receipt)+"')";
+				+DbHelper.ParamChar+"paramReceipt)";
+			OdSqlParameter paramReceipt=new OdSqlParameter("paramReceipt",OdDbType.Text,payment.Receipt);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramReceipt);
 			}
 			else {
-				payment.PayNum=Db.NonQ(command,true);
+				payment.PayNum=Db.NonQ(command,true,paramReceipt);
 			}
 			return payment.PayNum;
 		}

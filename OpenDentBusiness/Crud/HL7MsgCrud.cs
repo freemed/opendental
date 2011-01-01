@@ -75,13 +75,14 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				     POut.Int   ((int)hL7Msg.HL7Status)+","
-				+"'"+POut.String(hL7Msg.MsgText)+"',"
+				+DbHelper.ParamChar+"paramMsgText,"
 				+    POut.Long  (hL7Msg.AptNum)+")";
+			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,hL7Msg.MsgText);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramMsgText);
 			}
 			else {
-				hL7Msg.HL7MsgNum=Db.NonQ(command,true);
+				hL7Msg.HL7MsgNum=Db.NonQ(command,true,paramMsgText);
 			}
 			return hL7Msg.HL7MsgNum;
 		}

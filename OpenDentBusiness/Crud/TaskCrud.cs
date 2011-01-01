@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (task.TaskListNum)+","
 				+    POut.Date  (task.DateTask)+","
 				+    POut.Long  (task.KeyNum)+","
-				+"'"+POut.String(task.Descript)+"',"
+				+DbHelper.ParamChar+"paramDescript,"
 				+    POut.Int   ((int)task.TaskStatus)+","
 				+    POut.Bool  (task.IsRepeating)+","
 				+    POut.Int   ((int)task.DateType)+","
@@ -95,11 +95,12 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (task.DateTimeEntry)+","
 				+    POut.Long  (task.UserNum)+","
 				+    POut.DateT (task.DateTimeFinished)+")";
+			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,task.Descript);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramDescript);
 			}
 			else {
-				task.TaskNum=Db.NonQ(command,true);
+				task.TaskNum=Db.NonQ(command,true,paramDescript);
 			}
 			return task.TaskNum;
 		}

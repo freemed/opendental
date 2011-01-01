@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (sheetFieldDef.SheetDefNum)+","
 				+    POut.Int   ((int)sheetFieldDef.FieldType)+","
 				+"'"+POut.String(sheetFieldDef.FieldName)+"',"
-				+"'"+POut.String(sheetFieldDef.FieldValue)+"',"
+				+DbHelper.ParamChar+"paramFieldValue,"
 				+    POut.Float (sheetFieldDef.FontSize)+","
 				+"'"+POut.String(sheetFieldDef.FontName)+"',"
 				+    POut.Bool  (sheetFieldDef.FontIsBold)+","
@@ -101,11 +101,12 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(sheetFieldDef.RadioButtonValue)+"',"
 				+"'"+POut.String(sheetFieldDef.RadioButtonGroup)+"',"
 				+    POut.Bool  (sheetFieldDef.IsRequired)+")";
+			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,sheetFieldDef.FieldValue);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramFieldValue);
 			}
 			else {
-				sheetFieldDef.SheetFieldDefNum=Db.NonQ(command,true);
+				sheetFieldDef.SheetFieldDefNum=Db.NonQ(command,true,paramFieldValue);
 			}
 			return sheetFieldDef.SheetFieldDefNum;
 		}

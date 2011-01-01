@@ -76,12 +76,13 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				 "'"+POut.String(userQuery.Description)+"',"
 				+"'"+POut.String(userQuery.FileName)+"',"
-				+"'"+POut.String(userQuery.QueryText)+"')";
+				+DbHelper.ParamChar+"paramQueryText)";
+			OdSqlParameter paramQueryText=new OdSqlParameter("paramQueryText",OdDbType.Text,userQuery.QueryText);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramQueryText);
 			}
 			else {
-				userQuery.QueryNum=Db.NonQ(command,true);
+				userQuery.QueryNum=Db.NonQ(command,true,paramQueryText);
 			}
 			return userQuery.QueryNum;
 		}

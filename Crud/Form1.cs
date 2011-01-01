@@ -367,6 +367,8 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t3+"}");
 				strb.Append(rn+t3+"command+=");
 			}
+			//a quick and dirty temporary list that just helps keep track of which columns take parameters
+			List<OdSqlParameter> paramList=new List<OdSqlParameter>();
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
 				strb.Append(rn+t4);
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
@@ -395,6 +397,10 @@ using System.Drawing;"+rn);
 				}
 				else if(specialType==CrudSpecialColType.TimeSpanNeg) {
 					strb.Append("\"'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
+				}
+				else if(specialType==CrudSpecialColType.TextIsClob) {
+					strb.Append("DbHelper.ParamChar+\"param"+fieldsExceptPri[f].Name);
+					paramList.Add(new OdSqlParameter(fieldsExceptPri[f].Name,OdDbType.Text,null));
 				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append("    POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
@@ -452,17 +458,27 @@ using System.Drawing;"+rn);
 					strb.Append(")\";");
 				}
 			}
+			for(int i=0;i<paramList.Count;i++) {
+				//example: OdSqlParameter paramNote=new OdSqlParameter("paramNote",
+				//           OdDbType.Text,procNote.Note);
+				strb.Append(rn+t3+"OdSqlParameter param"+paramList[i].ParameterName+"=new OdSqlParameter(\"param"+paramList[i].ParameterName+"\","
+					+"OdDbType.Text,"+obj+"."+paramList[i].ParameterName+");");
+			}
+			string paramsString="";//example: ,paramNote,paramAltNote
+			for(int i=0;i<paramList.Count;i++){
+				paramsString+=",param"+paramList[i].ParameterName;
+			}	
 			if(isMobile) {
-				strb.Append(rn+t3+"Db.NonQ(command);//There is no autoincrement in the mobile server.");
+				strb.Append(rn+t3+"Db.NonQ(command"+paramsString+");//There is no autoincrement in the mobile server.");
 				strb.Append(rn+t3+"return "+obj+"."+priKey2.Name+";");
 				strb.Append(rn+t2+"}");
 			}
 			else {
 				strb.Append(rn+t3+"if(useExistingPK || PrefC.RandomKeys) {");
-				strb.Append(rn+t4+"Db.NonQ(command);");
+				strb.Append(rn+t4+"Db.NonQ(command"+paramsString+");");
 				strb.Append(rn+t3+"}");
 				strb.Append(rn+t3+"else {");
-				strb.Append(rn+t4+obj+"."+priKey.Name+"=Db.NonQ(command,true);");
+				strb.Append(rn+t4+obj+"."+priKey.Name+"=Db.NonQ(command,true"+paramsString+");");
 				strb.Append(rn+t3+"}");
 				strb.Append(rn+t3+"return "+obj+"."+priKey.Name+";");
 				strb.Append(rn+t2+"}");

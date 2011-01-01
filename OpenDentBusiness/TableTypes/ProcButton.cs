@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		public int ItemOrder;
 		///<summary>FK to definition.DefNum.</summary>
 		public long Category;
-		///<summary>If no image, then the blob will be an empty string.  In this case, the bitmap will be null when loaded from the database.</summary>
+		///<summary>If no image, then the clob will be an empty string.  In this case, the bitmap will be null when loaded from the database.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public Bitmap ButtonImage;
 

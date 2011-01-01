@@ -82,14 +82,15 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (procNote.ProcNum)+","
 				+"NOW(),"
 				+    POut.Long  (procNote.UserNum)+","
-				+"'"+POut.String(procNote.Note)+"',"
+				+DbHelper.ParamChar+"paramNote,"
 				+    POut.Bool  (procNote.SigIsTopaz)+","
 				+"'"+POut.String(procNote.Signature)+"')";
+			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,procNote.Note);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramNote);
 			}
 			else {
-				procNote.ProcNoteNum=Db.NonQ(command,true);
+				procNote.ProcNoteNum=Db.NonQ(command,true,paramNote);
 			}
 			return procNote.ProcNoteNum;
 		}

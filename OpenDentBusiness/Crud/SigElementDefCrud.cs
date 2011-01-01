@@ -81,13 +81,14 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (sigElementDef.LightColor.ToArgb())+","
 				+    POut.Int   ((int)sigElementDef.SigElementType)+","
 				+"'"+POut.String(sigElementDef.SigText)+"',"
-				+"'"+POut.String(sigElementDef.Sound)+"',"
+				+DbHelper.ParamChar+"paramSound,"
 				+    POut.Int   (sigElementDef.ItemOrder)+")";
+			OdSqlParameter paramSound=new OdSqlParameter("paramSound",OdDbType.Text,sigElementDef.Sound);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramSound);
 			}
 			else {
-				sigElementDef.SigElementDefNum=Db.NonQ(command,true);
+				sigElementDef.SigElementDefNum=Db.NonQ(command,true,paramSound);
 			}
 			return sigElementDef.SigElementDefNum;
 		}

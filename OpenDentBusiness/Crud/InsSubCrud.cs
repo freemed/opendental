@@ -87,13 +87,14 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (insSub.ReleaseInfo)+","
 				+    POut.Bool  (insSub.AssignBen)+","
 				+"'"+POut.String(insSub.SubscriberID)+"',"
-				+"'"+POut.String(insSub.BenefitNotes)+"',"
+				+DbHelper.ParamChar+"paramBenefitNotes,"
 				+"'"+POut.String(insSub.SubscNote)+"')";
+			OdSqlParameter paramBenefitNotes=new OdSqlParameter("paramBenefitNotes",OdDbType.Text,insSub.BenefitNotes);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramBenefitNotes);
 			}
 			else {
-				insSub.InsSubNum=Db.NonQ(command,true);
+				insSub.InsSubNum=Db.NonQ(command,true,paramBenefitNotes);
 			}
 			return insSub.InsSubNum;
 		}
