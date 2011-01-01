@@ -119,9 +119,10 @@ namespace OpenDentBusiness.Crud{
 				+"ClinicNum =  "+POut.Long  (payment.ClinicNum)+", "
 				+"DateEntry =  "+POut.Date  (payment.DateEntry)+", "
 				//DepositNum excluded from update
-				+"Receipt   = '"+POut.String(payment.Receipt)+"' "
-				+"WHERE PayNum = "+POut.Long(payment.PayNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"Receipt   =  "+DbHelper.ParamChar+"paramReceipt "
+				+"WHERE PayNum = "+POut.Long(payment.PayNum);
+			OdSqlParameter paramReceipt=new OdSqlParameter("paramReceipt",OdDbType.Text,payment.Receipt);
+			Db.NonQ(command,paramReceipt);
 		}
 
 		///<summary>Updates one Payment in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -176,14 +177,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE payment SET "+command
-				+" WHERE PayNum = "+POut.Long(payment.PayNum)+" LIMIT 1";
+				+" WHERE PayNum = "+POut.Long(payment.PayNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Payment from the database.</summary>
 		internal static void Delete(long payNum){
 			string command="DELETE FROM payment "
-				+"WHERE PayNum = "+POut.Long(payNum)+" LIMIT 1";
+				+"WHERE PayNum = "+POut.Long(payNum);
 			Db.NonQ(command);
 		}
 

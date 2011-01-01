@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE screengroup SET "
 				+"Description   = '"+POut.String(screenGroup.Description)+"', "
 				+"SGDate        =  "+POut.Date  (screenGroup.SGDate)+" "
-				+"WHERE ScreenGroupNum = "+POut.Long(screenGroup.ScreenGroupNum)+" LIMIT 1";
+				+"WHERE ScreenGroupNum = "+POut.Long(screenGroup.ScreenGroupNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE screengroup SET "+command
-				+" WHERE ScreenGroupNum = "+POut.Long(screenGroup.ScreenGroupNum)+" LIMIT 1";
+				+" WHERE ScreenGroupNum = "+POut.Long(screenGroup.ScreenGroupNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ScreenGroup from the database.</summary>
 		internal static void Delete(long screenGroupNum){
 			string command="DELETE FROM screengroup "
-				+"WHERE ScreenGroupNum = "+POut.Long(screenGroupNum)+" LIMIT 1";
+				+"WHERE ScreenGroupNum = "+POut.Long(screenGroupNum);
 			Db.NonQ(command);
 		}
 

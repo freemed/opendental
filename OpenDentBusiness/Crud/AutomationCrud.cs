@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"SheetDefNum   =  "+POut.Long  (automation.SheetDefNum)+", "
 				+"CommType      =  "+POut.Long  (automation.CommType)+", "
 				+"MessageContent= '"+POut.String(automation.MessageContent)+"' "
-				+"WHERE AutomationNum = "+POut.Long(automation.AutomationNum)+" LIMIT 1";
+				+"WHERE AutomationNum = "+POut.Long(automation.AutomationNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE automation SET "+command
-				+" WHERE AutomationNum = "+POut.Long(automation.AutomationNum)+" LIMIT 1";
+				+" WHERE AutomationNum = "+POut.Long(automation.AutomationNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Automation from the database.</summary>
 		internal static void Delete(long automationNum){
 			string command="DELETE FROM automation "
-				+"WHERE AutomationNum = "+POut.Long(automationNum)+" LIMIT 1";
+				+"WHERE AutomationNum = "+POut.Long(automationNum);
 			Db.NonQ(command);
 		}
 

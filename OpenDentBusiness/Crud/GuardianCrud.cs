@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNumChild   =  "+POut.Long  (guardian.PatNumChild)+", "
 				+"PatNumGuardian=  "+POut.Long  (guardian.PatNumGuardian)+", "
 				+"Relationship  =  "+POut.Int   ((int)guardian.Relationship)+" "
-				+"WHERE GuardianNum = "+POut.Long(guardian.GuardianNum)+" LIMIT 1";
+				+"WHERE GuardianNum = "+POut.Long(guardian.GuardianNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE guardian SET "+command
-				+" WHERE GuardianNum = "+POut.Long(guardian.GuardianNum)+" LIMIT 1";
+				+" WHERE GuardianNum = "+POut.Long(guardian.GuardianNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Guardian from the database.</summary>
 		internal static void Delete(long guardianNum){
 			string command="DELETE FROM guardian "
-				+"WHERE GuardianNum = "+POut.Long(guardianNum)+" LIMIT 1";
+				+"WHERE GuardianNum = "+POut.Long(guardianNum);
 			Db.NonQ(command);
 		}
 

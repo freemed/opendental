@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(UserGroup userGroup){
 			string command="UPDATE usergroup SET "
 				+"Description = '"+POut.String(userGroup.Description)+"' "
-				+"WHERE UserGroupNum = "+POut.Long(userGroup.UserGroupNum)+" LIMIT 1";
+				+"WHERE UserGroupNum = "+POut.Long(userGroup.UserGroupNum);
 			Db.NonQ(command);
 		}
 
@@ -101,14 +101,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE usergroup SET "+command
-				+" WHERE UserGroupNum = "+POut.Long(userGroup.UserGroupNum)+" LIMIT 1";
+				+" WHERE UserGroupNum = "+POut.Long(userGroup.UserGroupNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one UserGroup from the database.</summary>
 		internal static void Delete(long userGroupNum){
 			string command="DELETE FROM usergroup "
-				+"WHERE UserGroupNum = "+POut.Long(userGroupNum)+" LIMIT 1";
+				+"WHERE UserGroupNum = "+POut.Long(userGroupNum);
 			Db.NonQ(command);
 		}
 

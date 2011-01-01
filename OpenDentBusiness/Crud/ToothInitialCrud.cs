@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"Movement       =  "+POut.Float (toothInitial.Movement)+", "
 				+"DrawingSegment = '"+POut.String(toothInitial.DrawingSegment)+"', "
 				+"ColorDraw      =  "+POut.Int   (toothInitial.ColorDraw.ToArgb())+" "
-				+"WHERE ToothInitialNum = "+POut.Long(toothInitial.ToothInitialNum)+" LIMIT 1";
+				+"WHERE ToothInitialNum = "+POut.Long(toothInitial.ToothInitialNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE toothinitial SET "+command
-				+" WHERE ToothInitialNum = "+POut.Long(toothInitial.ToothInitialNum)+" LIMIT 1";
+				+" WHERE ToothInitialNum = "+POut.Long(toothInitial.ToothInitialNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ToothInitial from the database.</summary>
 		internal static void Delete(long toothInitialNum){
 			string command="DELETE FROM toothinitial "
-				+"WHERE ToothInitialNum = "+POut.Long(toothInitialNum)+" LIMIT 1";
+				+"WHERE ToothInitialNum = "+POut.Long(toothInitialNum);
 			Db.NonQ(command);
 		}
 

@@ -91,10 +91,11 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(HL7Msg hL7Msg){
 			string command="UPDATE hl7msg SET "
 				+"HL7Status=  "+POut.Int   ((int)hL7Msg.HL7Status)+", "
-				+"MsgText  = '"+POut.String(hL7Msg.MsgText)+"', "
+				+"MsgText  =  "+DbHelper.ParamChar+"paramMsgText, "
 				+"AptNum   =  "+POut.Long  (hL7Msg.AptNum)+" "
-				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
+			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,hL7Msg.MsgText);
+			Db.NonQ(command,paramMsgText);
 		}
 
 		///<summary>Updates one HL7Msg in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -116,14 +117,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE hl7msg SET "+command
-				+" WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum)+" LIMIT 1";
+				+" WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one HL7Msg from the database.</summary>
 		internal static void Delete(long hL7MsgNum){
 			string command="DELETE FROM hl7msg "
-				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum)+" LIMIT 1";
+				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum);
 			Db.NonQ(command);
 		}
 

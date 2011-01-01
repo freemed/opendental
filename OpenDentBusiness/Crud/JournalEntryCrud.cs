@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"Splits         = '"+POut.String(journalEntry.Splits)+"', "
 				+"CheckNumber    = '"+POut.String(journalEntry.CheckNumber)+"', "
 				+"ReconcileNum   =  "+POut.Long  (journalEntry.ReconcileNum)+" "
-				+"WHERE JournalEntryNum = "+POut.Long(journalEntry.JournalEntryNum)+" LIMIT 1";
+				+"WHERE JournalEntryNum = "+POut.Long(journalEntry.JournalEntryNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE journalentry SET "+command
-				+" WHERE JournalEntryNum = "+POut.Long(journalEntry.JournalEntryNum)+" LIMIT 1";
+				+" WHERE JournalEntryNum = "+POut.Long(journalEntry.JournalEntryNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one JournalEntry from the database.</summary>
 		internal static void Delete(long journalEntryNum){
 			string command="DELETE FROM journalentry "
-				+"WHERE JournalEntryNum = "+POut.Long(journalEntryNum)+" LIMIT 1";
+				+"WHERE JournalEntryNum = "+POut.Long(journalEntryNum);
 			Db.NonQ(command);
 		}
 

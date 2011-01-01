@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"UseDefaultFee=  "+POut.Bool  (fee.UseDefaultFee)+", "
 				+"UseDefaultCov=  "+POut.Bool  (fee.UseDefaultCov)+", "
 				+"CodeNum      =  "+POut.Long  (fee.CodeNum)+" "
-				+"WHERE FeeNum = "+POut.Long(fee.FeeNum)+" LIMIT 1";
+				+"WHERE FeeNum = "+POut.Long(fee.FeeNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE fee SET "+command
-				+" WHERE FeeNum = "+POut.Long(fee.FeeNum)+" LIMIT 1";
+				+" WHERE FeeNum = "+POut.Long(fee.FeeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Fee from the database.</summary>
 		internal static void Delete(long feeNum){
 			string command="DELETE FROM fee "
-				+"WHERE FeeNum = "+POut.Long(feeNum)+" LIMIT 1";
+				+"WHERE FeeNum = "+POut.Long(feeNum);
 			Db.NonQ(command);
 		}
 

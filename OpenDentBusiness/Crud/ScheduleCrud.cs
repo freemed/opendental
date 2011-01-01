@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"Note        = '"+POut.String(schedule.Note)+"', "
 				+"Status      =  "+POut.Int   ((int)schedule.Status)+", "
 				+"EmployeeNum =  "+POut.Long  (schedule.EmployeeNum)+" "
-				+"WHERE ScheduleNum = "+POut.Long(schedule.ScheduleNum)+" LIMIT 1";
+				+"WHERE ScheduleNum = "+POut.Long(schedule.ScheduleNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE schedule SET "+command
-				+" WHERE ScheduleNum = "+POut.Long(schedule.ScheduleNum)+" LIMIT 1";
+				+" WHERE ScheduleNum = "+POut.Long(schedule.ScheduleNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Schedule from the database.</summary>
 		internal static void Delete(long scheduleNum){
 			string command="DELETE FROM schedule "
-				+"WHERE ScheduleNum = "+POut.Long(scheduleNum)+" LIMIT 1";
+				+"WHERE ScheduleNum = "+POut.Long(scheduleNum);
 			Db.NonQ(command);
 		}
 

@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE lettermergefield SET "
 				+"LetterMergeNum=  "+POut.Long  (letterMergeField.LetterMergeNum)+", "
 				+"FieldName     = '"+POut.String(letterMergeField.FieldName)+"' "
-				+"WHERE FieldNum = "+POut.Long(letterMergeField.FieldNum)+" LIMIT 1";
+				+"WHERE FieldNum = "+POut.Long(letterMergeField.FieldNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE lettermergefield SET "+command
-				+" WHERE FieldNum = "+POut.Long(letterMergeField.FieldNum)+" LIMIT 1";
+				+" WHERE FieldNum = "+POut.Long(letterMergeField.FieldNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one LetterMergeField from the database.</summary>
 		internal static void Delete(long fieldNum){
 			string command="DELETE FROM lettermergefield "
-				+"WHERE FieldNum = "+POut.Long(fieldNum)+" LIMIT 1";
+				+"WHERE FieldNum = "+POut.Long(fieldNum);
 			Db.NonQ(command);
 		}
 

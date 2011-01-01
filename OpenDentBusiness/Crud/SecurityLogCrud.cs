@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				//LogDateTime not allowed to change
 				+"LogText       = '"+POut.String(securityLog.LogText)+"', "
 				+"PatNum        =  "+POut.Long  (securityLog.PatNum)+" "
-				+"WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum)+" LIMIT 1";
+				+"WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum);
 			Db.NonQ(command);
 		}
 
@@ -126,14 +126,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE securitylog SET "+command
-				+" WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum)+" LIMIT 1";
+				+" WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SecurityLog from the database.</summary>
 		internal static void Delete(long securityLogNum){
 			string command="DELETE FROM securitylog "
-				+"WHERE SecurityLogNum = "+POut.Long(securityLogNum)+" LIMIT 1";
+				+"WHERE SecurityLogNum = "+POut.Long(securityLogNum);
 			Db.NonQ(command);
 		}
 

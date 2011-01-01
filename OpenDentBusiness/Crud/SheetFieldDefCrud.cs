@@ -117,7 +117,7 @@ namespace OpenDentBusiness.Crud{
 				+"SheetDefNum     =  "+POut.Long  (sheetFieldDef.SheetDefNum)+", "
 				+"FieldType       =  "+POut.Int   ((int)sheetFieldDef.FieldType)+", "
 				+"FieldName       = '"+POut.String(sheetFieldDef.FieldName)+"', "
-				+"FieldValue      = '"+POut.String(sheetFieldDef.FieldValue)+"', "
+				+"FieldValue      =  "+DbHelper.ParamChar+"paramFieldValue, "
 				+"FontSize        =  "+POut.Float (sheetFieldDef.FontSize)+", "
 				+"FontName        = '"+POut.String(sheetFieldDef.FontName)+"', "
 				+"FontIsBold      =  "+POut.Bool  (sheetFieldDef.FontIsBold)+", "
@@ -129,8 +129,9 @@ namespace OpenDentBusiness.Crud{
 				+"RadioButtonValue= '"+POut.String(sheetFieldDef.RadioButtonValue)+"', "
 				+"RadioButtonGroup= '"+POut.String(sheetFieldDef.RadioButtonGroup)+"', "
 				+"IsRequired      =  "+POut.Bool  (sheetFieldDef.IsRequired)+" "
-				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum);
+			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,sheetFieldDef.FieldValue);
+			Db.NonQ(command,paramFieldValue);
 		}
 
 		///<summary>Updates one SheetFieldDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -200,14 +201,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sheetfielddef SET "+command
-				+" WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum)+" LIMIT 1";
+				+" WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SheetFieldDef from the database.</summary>
 		internal static void Delete(long sheetFieldDefNum){
 			string command="DELETE FROM sheetfielddef "
-				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum)+" LIMIT 1";
+				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum);
 			Db.NonQ(command);
 		}
 

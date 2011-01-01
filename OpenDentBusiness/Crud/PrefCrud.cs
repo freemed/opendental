@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PrefName   = '"+POut.String(pref.PrefName)+"', "
 				+"ValueString= '"+POut.String(pref.ValueString)+"', "
 				+"Comments   = '"+POut.String(pref.Comments)+"' "
-				+"WHERE PrefNum = "+POut.Long(pref.PrefNum)+" LIMIT 1";
+				+"WHERE PrefNum = "+POut.Long(pref.PrefNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE preference SET "+command
-				+" WHERE PrefNum = "+POut.Long(pref.PrefNum)+" LIMIT 1";
+				+" WHERE PrefNum = "+POut.Long(pref.PrefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Pref from the database.</summary>
 		internal static void Delete(long prefNum){
 			string command="DELETE FROM preference "
-				+"WHERE PrefNum = "+POut.Long(prefNum)+" LIMIT 1";
+				+"WHERE PrefNum = "+POut.Long(prefNum);
 			Db.NonQ(command);
 		}
 

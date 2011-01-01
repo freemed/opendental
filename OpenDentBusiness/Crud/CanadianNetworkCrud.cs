@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE canadiannetwork SET "
 				+"Abbrev            = '"+POut.String(canadianNetwork.Abbrev)+"', "
 				+"Descript          = '"+POut.String(canadianNetwork.Descript)+"' "
-				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum)+" LIMIT 1";
+				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE canadiannetwork SET "+command
-				+" WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum)+" LIMIT 1";
+				+" WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one CanadianNetwork from the database.</summary>
 		internal static void Delete(long canadianNetworkNum){
 			string command="DELETE FROM canadiannetwork "
-				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum)+" LIMIT 1";
+				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum);
 			Db.NonQ(command);
 		}
 

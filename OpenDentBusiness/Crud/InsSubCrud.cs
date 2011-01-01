@@ -109,10 +109,11 @@ namespace OpenDentBusiness.Crud{
 				+"ReleaseInfo  =  "+POut.Bool  (insSub.ReleaseInfo)+", "
 				+"AssignBen    =  "+POut.Bool  (insSub.AssignBen)+", "
 				+"SubscriberID = '"+POut.String(insSub.SubscriberID)+"', "
-				+"BenefitNotes = '"+POut.String(insSub.BenefitNotes)+"', "
+				+"BenefitNotes =  "+DbHelper.ParamChar+"paramBenefitNotes, "
 				+"SubscNote    = '"+POut.String(insSub.SubscNote)+"' "
-				+"WHERE InsSubNum = "+POut.Long(insSub.InsSubNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE InsSubNum = "+POut.Long(insSub.InsSubNum);
+			OdSqlParameter paramBenefitNotes=new OdSqlParameter("paramBenefitNotes",OdDbType.Text,insSub.BenefitNotes);
+			Db.NonQ(command,paramBenefitNotes);
 		}
 
 		///<summary>Updates one InsSub in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -158,14 +159,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE inssub SET "+command
-				+" WHERE InsSubNum = "+POut.Long(insSub.InsSubNum)+" LIMIT 1";
+				+" WHERE InsSubNum = "+POut.Long(insSub.InsSubNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one InsSub from the database.</summary>
 		internal static void Delete(long insSubNum){
 			string command="DELETE FROM inssub "
-				+"WHERE InsSubNum = "+POut.Long(insSubNum)+" LIMIT 1";
+				+"WHERE InsSubNum = "+POut.Long(insSubNum);
 			Db.NonQ(command);
 		}
 

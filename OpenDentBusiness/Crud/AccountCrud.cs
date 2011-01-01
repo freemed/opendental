@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"BankNumber  = '"+POut.String(account.BankNumber)+"', "
 				+"Inactive    =  "+POut.Bool  (account.Inactive)+", "
 				+"AccountColor=  "+POut.Int   (account.AccountColor.ToArgb())+" "
-				+"WHERE AccountNum = "+POut.Long(account.AccountNum)+" LIMIT 1";
+				+"WHERE AccountNum = "+POut.Long(account.AccountNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE account SET "+command
-				+" WHERE AccountNum = "+POut.Long(account.AccountNum)+" LIMIT 1";
+				+" WHERE AccountNum = "+POut.Long(account.AccountNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Account from the database.</summary>
 		internal static void Delete(long accountNum){
 			string command="DELETE FROM account "
-				+"WHERE AccountNum = "+POut.Long(accountNum)+" LIMIT 1";
+				+"WHERE AccountNum = "+POut.Long(accountNum);
 			Db.NonQ(command);
 		}
 

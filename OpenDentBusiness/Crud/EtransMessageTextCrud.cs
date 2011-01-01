@@ -86,9 +86,10 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EtransMessageText in the database.</summary>
 		internal static void Update(EtransMessageText etransMessageText){
 			string command="UPDATE etransmessagetext SET "
-				+"MessageText         = '"+POut.String(etransMessageText.MessageText)+"' "
-				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageText.EtransMessageTextNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"MessageText         =  "+DbHelper.ParamChar+"paramMessageText "
+				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageText.EtransMessageTextNum);
+			OdSqlParameter paramMessageText=new OdSqlParameter("paramMessageText",OdDbType.Text,etransMessageText.MessageText);
+			Db.NonQ(command,paramMessageText);
 		}
 
 		///<summary>Updates one EtransMessageText in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -102,14 +103,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE etransmessagetext SET "+command
-				+" WHERE EtransMessageTextNum = "+POut.Long(etransMessageText.EtransMessageTextNum)+" LIMIT 1";
+				+" WHERE EtransMessageTextNum = "+POut.Long(etransMessageText.EtransMessageTextNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one EtransMessageText from the database.</summary>
 		internal static void Delete(long etransMessageTextNum){
 			string command="DELETE FROM etransmessagetext "
-				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageTextNum)+" LIMIT 1";
+				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageTextNum);
 			Db.NonQ(command);
 		}
 

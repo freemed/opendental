@@ -212,7 +212,7 @@ namespace OpenDentBusiness.Crud{
 				+"ProcTime          =  "+POut.Time  (procedure.ProcTime)+", "
 				+"ProcTimeEnd       =  "+POut.Time  (procedure.ProcTimeEnd)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum)+" LIMIT 1";
+				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum);
 			Db.NonQ(command);
 		}
 
@@ -392,7 +392,7 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procedurelog SET "+command
-				+" WHERE ProcNum = "+POut.Long(procedure.ProcNum)+" LIMIT 1";
+				+" WHERE ProcNum = "+POut.Long(procedure.ProcNum);
 			Db.NonQ(command);
 		}
 

@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"ItemOrder        =  "+POut.Int   (quickPasteNote.ItemOrder)+", "
 				+"Note             = '"+POut.String(quickPasteNote.Note)+"', "
 				+"Abbreviation     = '"+POut.String(quickPasteNote.Abbreviation)+"' "
-				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNote.QuickPasteNoteNum)+" LIMIT 1";
+				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNote.QuickPasteNoteNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE quickpastenote SET "+command
-				+" WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNote.QuickPasteNoteNum)+" LIMIT 1";
+				+" WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNote.QuickPasteNoteNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one QuickPasteNote from the database.</summary>
 		internal static void Delete(long quickPasteNoteNum){
 			string command="DELETE FROM quickpastenote "
-				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNoteNum)+" LIMIT 1";
+				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNoteNum);
 			Db.NonQ(command);
 		}
 

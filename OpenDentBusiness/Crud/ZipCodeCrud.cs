@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"City         = '"+POut.String(zipCode.City)+"', "
 				+"State        = '"+POut.String(zipCode.State)+"', "
 				+"IsFrequent   =  "+POut.Bool  (zipCode.IsFrequent)+" "
-				+"WHERE ZipCodeNum = "+POut.Long(zipCode.ZipCodeNum)+" LIMIT 1";
+				+"WHERE ZipCodeNum = "+POut.Long(zipCode.ZipCodeNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE zipcode SET "+command
-				+" WHERE ZipCodeNum = "+POut.Long(zipCode.ZipCodeNum)+" LIMIT 1";
+				+" WHERE ZipCodeNum = "+POut.Long(zipCode.ZipCodeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ZipCode from the database.</summary>
 		internal static void Delete(long zipCodeNum){
 			string command="DELETE FROM zipcode "
-				+"WHERE ZipCodeNum = "+POut.Long(zipCodeNum)+" LIMIT 1";
+				+"WHERE ZipCodeNum = "+POut.Long(zipCodeNum);
 			Db.NonQ(command);
 		}
 

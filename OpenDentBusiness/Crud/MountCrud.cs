@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"ImgType    =  "+POut.Int   ((int)mount.ImgType)+", "
 				+"Width      =  "+POut.Int   (mount.Width)+", "
 				+"Height     =  "+POut.Int   (mount.Height)+" "
-				+"WHERE MountNum = "+POut.Long(mount.MountNum)+" LIMIT 1";
+				+"WHERE MountNum = "+POut.Long(mount.MountNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE mount SET "+command
-				+" WHERE MountNum = "+POut.Long(mount.MountNum)+" LIMIT 1";
+				+" WHERE MountNum = "+POut.Long(mount.MountNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Mount from the database.</summary>
 		internal static void Delete(long mountNum){
 			string command="DELETE FROM mount "
-				+"WHERE MountNum = "+POut.Long(mountNum)+" LIMIT 1";
+				+"WHERE MountNum = "+POut.Long(mountNum);
 			Db.NonQ(command);
 		}
 

@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"EndingBal    = '"+POut.Double(reconcile.EndingBal)+"', "
 				+"DateReconcile=  "+POut.Date  (reconcile.DateReconcile)+", "
 				+"IsLocked     =  "+POut.Bool  (reconcile.IsLocked)+" "
-				+"WHERE ReconcileNum = "+POut.Long(reconcile.ReconcileNum)+" LIMIT 1";
+				+"WHERE ReconcileNum = "+POut.Long(reconcile.ReconcileNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE reconcile SET "+command
-				+" WHERE ReconcileNum = "+POut.Long(reconcile.ReconcileNum)+" LIMIT 1";
+				+" WHERE ReconcileNum = "+POut.Long(reconcile.ReconcileNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Reconcile from the database.</summary>
 		internal static void Delete(long reconcileNum){
 			string command="DELETE FROM reconcile "
-				+"WHERE ReconcileNum = "+POut.Long(reconcileNum)+" LIMIT 1";
+				+"WHERE ReconcileNum = "+POut.Long(reconcileNum);
 			Db.NonQ(command);
 		}
 

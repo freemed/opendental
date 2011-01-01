@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"ObjectNum       =  "+POut.Long  (deletedObject.ObjectNum)+", "
 				+"ObjectType      =  "+POut.Int   ((int)deletedObject.ObjectType)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum)+" LIMIT 1";
+				+"WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum);
 			Db.NonQ(command);
 		}
 
@@ -112,14 +112,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE deletedobject SET "+command
-				+" WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum)+" LIMIT 1";
+				+" WHERE DeletedObjectNum = "+POut.Long(deletedObject.DeletedObjectNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one DeletedObject from the database.</summary>
 		internal static void Delete(long deletedObjectNum){
 			string command="DELETE FROM deletedobject "
-				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum)+" LIMIT 1";
+				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum);
 			Db.NonQ(command);
 		}
 

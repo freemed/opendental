@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 				+"TaskListNum     =  "+POut.Long  (task.TaskListNum)+", "
 				+"DateTask        =  "+POut.Date  (task.DateTask)+", "
 				+"KeyNum          =  "+POut.Long  (task.KeyNum)+", "
-				+"Descript        = '"+POut.String(task.Descript)+"', "
+				+"Descript        =  "+DbHelper.ParamChar+"paramDescript, "
 				+"TaskStatus      =  "+POut.Int   ((int)task.TaskStatus)+", "
 				+"IsRepeating     =  "+POut.Bool  (task.IsRepeating)+", "
 				+"DateType        =  "+POut.Int   ((int)task.DateType)+", "
@@ -120,8 +120,9 @@ namespace OpenDentBusiness.Crud{
 				+"DateTimeEntry   =  "+POut.DateT (task.DateTimeEntry)+", "
 				+"UserNum         =  "+POut.Long  (task.UserNum)+", "
 				+"DateTimeFinished=  "+POut.DateT (task.DateTimeFinished)+" "
-				+"WHERE TaskNum = "+POut.Long(task.TaskNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE TaskNum = "+POut.Long(task.TaskNum);
+			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,task.Descript);
+			Db.NonQ(command,paramDescript);
 		}
 
 		///<summary>Updates one Task in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -179,14 +180,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE task SET "+command
-				+" WHERE TaskNum = "+POut.Long(task.TaskNum)+" LIMIT 1";
+				+" WHERE TaskNum = "+POut.Long(task.TaskNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Task from the database.</summary>
 		internal static void Delete(long taskNum){
 			string command="DELETE FROM task "
-				+"WHERE TaskNum = "+POut.Long(taskNum)+" LIMIT 1";
+				+"WHERE TaskNum = "+POut.Long(taskNum);
 			Db.NonQ(command);
 		}
 

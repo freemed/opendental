@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"OnlySchedAfterTime =  "+POut.Time  (apptView.OnlySchedAfterTime)+", "
 				+"StackBehavUR       =  "+POut.Int   ((int)apptView.StackBehavUR)+", "
 				+"StackBehavLR       =  "+POut.Int   ((int)apptView.StackBehavLR)+" "
-				+"WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum)+" LIMIT 1";
+				+"WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE apptview SET "+command
-				+" WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum)+" LIMIT 1";
+				+" WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ApptView from the database.</summary>
 		internal static void Delete(long apptViewNum){
 			string command="DELETE FROM apptview "
-				+"WHERE ApptViewNum = "+POut.Long(apptViewNum)+" LIMIT 1";
+				+"WHERE ApptViewNum = "+POut.Long(apptViewNum);
 			Db.NonQ(command);
 		}
 

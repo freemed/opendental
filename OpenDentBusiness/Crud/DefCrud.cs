@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"ItemValue= '"+POut.String(def.ItemValue)+"', "
 				+"ItemColor=  "+POut.Int   (def.ItemColor.ToArgb())+", "
 				+"IsHidden =  "+POut.Bool  (def.IsHidden)+" "
-				+"WHERE DefNum = "+POut.Long(def.DefNum)+" LIMIT 1";
+				+"WHERE DefNum = "+POut.Long(def.DefNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE definition SET "+command
-				+" WHERE DefNum = "+POut.Long(def.DefNum)+" LIMIT 1";
+				+" WHERE DefNum = "+POut.Long(def.DefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Def from the database.</summary>
 		internal static void Delete(long defNum){
 			string command="DELETE FROM definition "
-				+"WHERE DefNum = "+POut.Long(defNum)+" LIMIT 1";
+				+"WHERE DefNum = "+POut.Long(defNum);
 			Db.NonQ(command);
 		}
 

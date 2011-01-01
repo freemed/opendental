@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"CommandLine  = '"+POut.String(program.CommandLine)+"', "
 				+"Note         = '"+POut.String(program.Note)+"', "
 				+"PluginDllName= '"+POut.String(program.PluginDllName)+"' "
-				+"WHERE ProgramNum = "+POut.Long(program.ProgramNum)+" LIMIT 1";
+				+"WHERE ProgramNum = "+POut.Long(program.ProgramNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE program SET "+command
-				+" WHERE ProgramNum = "+POut.Long(program.ProgramNum)+" LIMIT 1";
+				+" WHERE ProgramNum = "+POut.Long(program.ProgramNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Program from the database.</summary>
 		internal static void Delete(long programNum){
 			string command="DELETE FROM program "
-				+"WHERE ProgramNum = "+POut.Long(programNum)+" LIMIT 1";
+				+"WHERE ProgramNum = "+POut.Long(programNum);
 			Db.NonQ(command);
 		}
 

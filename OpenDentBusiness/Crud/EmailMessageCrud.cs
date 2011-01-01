@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"BodyText       = '"+POut.String(emailMessage.BodyText)+"', "
 				+"MsgDateTime    =  "+POut.DateT (emailMessage.MsgDateTime)+", "
 				+"SentOrReceived =  "+POut.Int   ((int)emailMessage.SentOrReceived)+" "
-				+"WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum)+" LIMIT 1";
+				+"WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE emailmessage SET "+command
-				+" WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum)+" LIMIT 1";
+				+" WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one EmailMessage from the database.</summary>
 		internal static void Delete(long emailMessageNum){
 			string command="DELETE FROM emailmessage "
-				+"WHERE EmailMessageNum = "+POut.Long(emailMessageNum)+" LIMIT 1";
+				+"WHERE EmailMessageNum = "+POut.Long(emailMessageNum);
 			Db.NonQ(command);
 		}
 

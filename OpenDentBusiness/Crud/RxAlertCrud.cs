@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE rxalert SET "
 				+"RxDefNum     =  "+POut.Long  (rxAlert.RxDefNum)+", "
 				+"DiseaseDefNum=  "+POut.Long  (rxAlert.DiseaseDefNum)+" "
-				+"WHERE RxAlertNum = "+POut.Long(rxAlert.RxAlertNum)+" LIMIT 1";
+				+"WHERE RxAlertNum = "+POut.Long(rxAlert.RxAlertNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE rxalert SET "+command
-				+" WHERE RxAlertNum = "+POut.Long(rxAlert.RxAlertNum)+" LIMIT 1";
+				+" WHERE RxAlertNum = "+POut.Long(rxAlert.RxAlertNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RxAlert from the database.</summary>
 		internal static void Delete(long rxAlertNum){
 			string command="DELETE FROM rxalert "
-				+"WHERE RxAlertNum = "+POut.Long(rxAlertNum)+" LIMIT 1";
+				+"WHERE RxAlertNum = "+POut.Long(rxAlertNum);
 			Db.NonQ(command);
 		}
 

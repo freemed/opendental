@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsMedicaid   =  "+POut.Bool  (electID.IsMedicaid)+", "
 				+"ProviderTypes= '"+POut.String(electID.ProviderTypes)+"', "
 				+"Comments     = '"+POut.String(electID.Comments)+"' "
-				+"WHERE ElectIDNum = "+POut.Long(electID.ElectIDNum)+" LIMIT 1";
+				+"WHERE ElectIDNum = "+POut.Long(electID.ElectIDNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE electid SET "+command
-				+" WHERE ElectIDNum = "+POut.Long(electID.ElectIDNum)+" LIMIT 1";
+				+" WHERE ElectIDNum = "+POut.Long(electID.ElectIDNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ElectID from the database.</summary>
 		internal static void Delete(long electIDNum){
 			string command="DELETE FROM electid "
-				+"WHERE ElectIDNum = "+POut.Long(electIDNum)+" LIMIT 1";
+				+"WHERE ElectIDNum = "+POut.Long(electIDNum);
 			Db.NonQ(command);
 		}
 

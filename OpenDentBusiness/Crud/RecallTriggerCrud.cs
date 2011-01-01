@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE recalltrigger SET "
 				+"RecallTypeNum   =  "+POut.Long  (recallTrigger.RecallTypeNum)+", "
 				+"CodeNum         =  "+POut.Long  (recallTrigger.CodeNum)+" "
-				+"WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum)+" LIMIT 1";
+				+"WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE recalltrigger SET "+command
-				+" WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum)+" LIMIT 1";
+				+" WHERE RecallTriggerNum = "+POut.Long(recallTrigger.RecallTriggerNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RecallTrigger from the database.</summary>
 		internal static void Delete(long recallTriggerNum){
 			string command="DELETE FROM recalltrigger "
-				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum)+" LIMIT 1";
+				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum);
 			Db.NonQ(command);
 		}
 

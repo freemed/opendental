@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"LevelDesired =  "+POut.Float (supply.LevelDesired)+", "
 				+"IsHidden     =  "+POut.Bool  (supply.IsHidden)+", "
 				+"Price        = '"+POut.Double(supply.Price)+"' "
-				+"WHERE SupplyNum = "+POut.Long(supply.SupplyNum)+" LIMIT 1";
+				+"WHERE SupplyNum = "+POut.Long(supply.SupplyNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE supply SET "+command
-				+" WHERE SupplyNum = "+POut.Long(supply.SupplyNum)+" LIMIT 1";
+				+" WHERE SupplyNum = "+POut.Long(supply.SupplyNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Supply from the database.</summary>
 		internal static void Delete(long supplyNum){
 			string command="DELETE FROM supply "
-				+"WHERE SupplyNum = "+POut.Long(supplyNum)+" LIMIT 1";
+				+"WHERE SupplyNum = "+POut.Long(supplyNum);
 			Db.NonQ(command);
 		}
 

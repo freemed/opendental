@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"Fax       = '"+POut.String(contact.Fax)+"', "
 				+"Category  =  "+POut.Long  (contact.Category)+", "
 				+"Notes     = '"+POut.String(contact.Notes)+"' "
-				+"WHERE ContactNum = "+POut.Long(contact.ContactNum)+" LIMIT 1";
+				+"WHERE ContactNum = "+POut.Long(contact.ContactNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE contact SET "+command
-				+" WHERE ContactNum = "+POut.Long(contact.ContactNum)+" LIMIT 1";
+				+" WHERE ContactNum = "+POut.Long(contact.ContactNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Contact from the database.</summary>
 		internal static void Delete(long contactNum){
 			string command="DELETE FROM contact "
-				+"WHERE ContactNum = "+POut.Long(contactNum)+" LIMIT 1";
+				+"WHERE ContactNum = "+POut.Long(contactNum);
 			Db.NonQ(command);
 		}
 

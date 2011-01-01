@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE supplyneeded SET "
 				+"Description    = '"+POut.String(supplyNeeded.Description)+"', "
 				+"DateAdded      =  "+POut.Date  (supplyNeeded.DateAdded)+" "
-				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum)+" LIMIT 1";
+				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE supplyneeded SET "+command
-				+" WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum)+" LIMIT 1";
+				+" WHERE SupplyNeededNum = "+POut.Long(supplyNeeded.SupplyNeededNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SupplyNeeded from the database.</summary>
 		internal static void Delete(long supplyNeededNum){
 			string command="DELETE FROM supplyneeded "
-				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeededNum)+" LIMIT 1";
+				+"WHERE SupplyNeededNum = "+POut.Long(supplyNeededNum);
 			Db.NonQ(command);
 		}
 

@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE formpat SET "
 				+"PatNum      =  "+POut.Long  (formPat.PatNum)+", "
 				+"FormDateTime=  "+POut.DateT (formPat.FormDateTime)+" "
-				+"WHERE FormPatNum = "+POut.Long(formPat.FormPatNum)+" LIMIT 1";
+				+"WHERE FormPatNum = "+POut.Long(formPat.FormPatNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE formpat SET "+command
-				+" WHERE FormPatNum = "+POut.Long(formPat.FormPatNum)+" LIMIT 1";
+				+" WHERE FormPatNum = "+POut.Long(formPat.FormPatNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one FormPat from the database.</summary>
 		internal static void Delete(long formPatNum){
 			string command="DELETE FROM formpat "
-				+"WHERE FormPatNum = "+POut.Long(formPatNum)+" LIMIT 1";
+				+"WHERE FormPatNum = "+POut.Long(formPatNum);
 			Db.NonQ(command);
 		}
 

@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE procgroupitem SET "
 				+"ProcNum         =  "+POut.Long  (procGroupItem.ProcNum)+", "
 				+"GroupNum        =  "+POut.Long  (procGroupItem.GroupNum)+" "
-				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItem.ProcGroupItemNum)+" LIMIT 1";
+				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItem.ProcGroupItemNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procgroupitem SET "+command
-				+" WHERE ProcGroupItemNum = "+POut.Long(procGroupItem.ProcGroupItemNum)+" LIMIT 1";
+				+" WHERE ProcGroupItemNum = "+POut.Long(procGroupItem.ProcGroupItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcGroupItem from the database.</summary>
 		internal static void Delete(long procGroupItemNum){
 			string command="DELETE FROM procgroupitem "
-				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItemNum)+" LIMIT 1";
+				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItemNum);
 			Db.NonQ(command);
 		}
 

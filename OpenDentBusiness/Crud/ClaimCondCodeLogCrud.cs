@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"Code8              = '"+POut.String(claimCondCodeLog.Code8)+"', "
 				+"Code9              = '"+POut.String(claimCondCodeLog.Code9)+"', "
 				+"Code10             = '"+POut.String(claimCondCodeLog.Code10)+"' "
-				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum)+" LIMIT 1";
+				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum);
 			Db.NonQ(command);
 		}
 
@@ -178,14 +178,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claimcondcodelog SET "+command
-				+" WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum)+" LIMIT 1";
+				+" WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLog.ClaimCondCodeLogNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClaimCondCodeLog from the database.</summary>
 		internal static void Delete(long claimCondCodeLogNum){
 			string command="DELETE FROM claimcondcodelog "
-				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum)+" LIMIT 1";
+				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum);
 			Db.NonQ(command);
 		}
 

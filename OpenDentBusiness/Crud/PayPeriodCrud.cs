@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"DateStart   =  "+POut.Date  (payPeriod.DateStart)+", "
 				+"DateStop    =  "+POut.Date  (payPeriod.DateStop)+", "
 				+"DatePaycheck=  "+POut.Date  (payPeriod.DatePaycheck)+" "
-				+"WHERE PayPeriodNum = "+POut.Long(payPeriod.PayPeriodNum)+" LIMIT 1";
+				+"WHERE PayPeriodNum = "+POut.Long(payPeriod.PayPeriodNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE payperiod SET "+command
-				+" WHERE PayPeriodNum = "+POut.Long(payPeriod.PayPeriodNum)+" LIMIT 1";
+				+" WHERE PayPeriodNum = "+POut.Long(payPeriod.PayPeriodNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PayPeriod from the database.</summary>
 		internal static void Delete(long payPeriodNum){
 			string command="DELETE FROM payperiod "
-				+"WHERE PayPeriodNum = "+POut.Long(payPeriodNum)+" LIMIT 1";
+				+"WHERE PayPeriodNum = "+POut.Long(payPeriodNum);
 			Db.NonQ(command);
 		}
 

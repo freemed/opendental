@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"PlanNum     =  "+POut.Long  (payPlan.PlanNum)+", "
 				+"CompletedAmt= '"+POut.Double(payPlan.CompletedAmt)+"', "
 				+"InsSubNum   =  "+POut.Long  (payPlan.InsSubNum)+" "
-				+"WHERE PayPlanNum = "+POut.Long(payPlan.PayPlanNum)+" LIMIT 1";
+				+"WHERE PayPlanNum = "+POut.Long(payPlan.PayPlanNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE payplan SET "+command
-				+" WHERE PayPlanNum = "+POut.Long(payPlan.PayPlanNum)+" LIMIT 1";
+				+" WHERE PayPlanNum = "+POut.Long(payPlan.PayPlanNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PayPlan from the database.</summary>
 		internal static void Delete(long payPlanNum){
 			string command="DELETE FROM payplan "
-				+"WHERE PayPlanNum = "+POut.Long(payPlanNum)+" LIMIT 1";
+				+"WHERE PayPlanNum = "+POut.Long(payPlanNum);
 			Db.NonQ(command);
 		}
 

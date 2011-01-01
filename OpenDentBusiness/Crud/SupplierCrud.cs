@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"UserName   = '"+POut.String(supplier.UserName)+"', "
 				+"Password   = '"+POut.String(supplier.Password)+"', "
 				+"Note       = '"+POut.String(supplier.Note)+"' "
-				+"WHERE SupplierNum = "+POut.Long(supplier.SupplierNum)+" LIMIT 1";
+				+"WHERE SupplierNum = "+POut.Long(supplier.SupplierNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE supplier SET "+command
-				+" WHERE SupplierNum = "+POut.Long(supplier.SupplierNum)+" LIMIT 1";
+				+" WHERE SupplierNum = "+POut.Long(supplier.SupplierNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Supplier from the database.</summary>
 		internal static void Delete(long supplierNum){
 			string command="DELETE FROM supplier "
-				+"WHERE SupplierNum = "+POut.Long(supplierNum)+" LIMIT 1";
+				+"WHERE SupplierNum = "+POut.Long(supplierNum);
 			Db.NonQ(command);
 		}
 

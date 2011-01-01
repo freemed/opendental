@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum     =  "+POut.Long  (popup.PatNum)+", "
 				+"Description= '"+POut.String(popup.Description)+"', "
 				+"IsDisabled =  "+POut.Bool  (popup.IsDisabled)+" "
-				+"WHERE PopupNum = "+POut.Long(popup.PopupNum)+" LIMIT 1";
+				+"WHERE PopupNum = "+POut.Long(popup.PopupNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE popup SET "+command
-				+" WHERE PopupNum = "+POut.Long(popup.PopupNum)+" LIMIT 1";
+				+" WHERE PopupNum = "+POut.Long(popup.PopupNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Popup from the database.</summary>
 		internal static void Delete(long popupNum){
 			string command="DELETE FROM popup "
-				+"WHERE PopupNum = "+POut.Long(popupNum)+" LIMIT 1";
+				+"WHERE PopupNum = "+POut.Long(popupNum);
 			Db.NonQ(command);
 		}
 

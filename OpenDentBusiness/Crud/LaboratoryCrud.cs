@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+"Zip          = '"+POut.String(laboratory.Zip)+"', "
 				+"Email        = '"+POut.String(laboratory.Email)+"', "
 				+"WirelessPhone= '"+POut.String(laboratory.WirelessPhone)+"' "
-				+"WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum)+" LIMIT 1";
+				+"WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum);
 			Db.NonQ(command);
 		}
 
@@ -164,14 +164,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE laboratory SET "+command
-				+" WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum)+" LIMIT 1";
+				+" WHERE LaboratoryNum = "+POut.Long(laboratory.LaboratoryNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Laboratory from the database.</summary>
 		internal static void Delete(long laboratoryNum){
 			string command="DELETE FROM laboratory "
-				+"WHERE LaboratoryNum = "+POut.Long(laboratoryNum)+" LIMIT 1";
+				+"WHERE LaboratoryNum = "+POut.Long(laboratoryNum);
 			Db.NonQ(command);
 		}
 

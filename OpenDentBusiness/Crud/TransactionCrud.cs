@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"UserNum       =  "+POut.Long  (transaction.UserNum)+", "
 				+"DepositNum    =  "+POut.Long  (transaction.DepositNum)+", "
 				+"PayNum        =  "+POut.Long  (transaction.PayNum)+" "
-				+"WHERE TransactionNum = "+POut.Long(transaction.TransactionNum)+" LIMIT 1";
+				+"WHERE TransactionNum = "+POut.Long(transaction.TransactionNum);
 			Db.NonQ(command);
 		}
 
@@ -119,14 +119,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE transaction SET "+command
-				+" WHERE TransactionNum = "+POut.Long(transaction.TransactionNum)+" LIMIT 1";
+				+" WHERE TransactionNum = "+POut.Long(transaction.TransactionNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Transaction from the database.</summary>
 		internal static void Delete(long transactionNum){
 			string command="DELETE FROM transaction "
-				+"WHERE TransactionNum = "+POut.Long(transactionNum)+" LIMIT 1";
+				+"WHERE TransactionNum = "+POut.Long(transactionNum);
 			Db.NonQ(command);
 		}
 

@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum         =  "+POut.Long  (reqStudent.PatNum)+", "
 				+"InstructorNum  =  "+POut.Long  (reqStudent.InstructorNum)+", "
 				+"DateCompleted  =  "+POut.Date  (reqStudent.DateCompleted)+" "
-				+"WHERE ReqStudentNum = "+POut.Long(reqStudent.ReqStudentNum)+" LIMIT 1";
+				+"WHERE ReqStudentNum = "+POut.Long(reqStudent.ReqStudentNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE reqstudent SET "+command
-				+" WHERE ReqStudentNum = "+POut.Long(reqStudent.ReqStudentNum)+" LIMIT 1";
+				+" WHERE ReqStudentNum = "+POut.Long(reqStudent.ReqStudentNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ReqStudent from the database.</summary>
 		internal static void Delete(long reqStudentNum){
 			string command="DELETE FROM reqstudent "
-				+"WHERE ReqStudentNum = "+POut.Long(reqStudentNum)+" LIMIT 1";
+				+"WHERE ReqStudentNum = "+POut.Long(reqStudentNum);
 			Db.NonQ(command);
 		}
 

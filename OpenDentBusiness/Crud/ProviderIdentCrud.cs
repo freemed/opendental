@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"PayorID         = '"+POut.String(providerIdent.PayorID)+"', "
 				+"SuppIDType      =  "+POut.Int   ((int)providerIdent.SuppIDType)+", "
 				+"IDNumber        = '"+POut.String(providerIdent.IDNumber)+"' "
-				+"WHERE ProviderIdentNum = "+POut.Long(providerIdent.ProviderIdentNum)+" LIMIT 1";
+				+"WHERE ProviderIdentNum = "+POut.Long(providerIdent.ProviderIdentNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE providerident SET "+command
-				+" WHERE ProviderIdentNum = "+POut.Long(providerIdent.ProviderIdentNum)+" LIMIT 1";
+				+" WHERE ProviderIdentNum = "+POut.Long(providerIdent.ProviderIdentNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProviderIdent from the database.</summary>
 		internal static void Delete(long providerIdentNum){
 			string command="DELETE FROM providerident "
-				+"WHERE ProviderIdentNum = "+POut.Long(providerIdentNum)+" LIMIT 1";
+				+"WHERE ProviderIdentNum = "+POut.Long(providerIdentNum);
 			Db.NonQ(command);
 		}
 

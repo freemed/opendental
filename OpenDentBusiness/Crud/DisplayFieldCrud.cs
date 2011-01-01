@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"ColumnWidth    =  "+POut.Int   (displayField.ColumnWidth)+", "
 				+"Category       =  "+POut.Int   ((int)displayField.Category)+", "
 				+"ChartViewNum   =  "+POut.Long  (displayField.ChartViewNum)+" "
-				+"WHERE DisplayFieldNum = "+POut.Long(displayField.DisplayFieldNum)+" LIMIT 1";
+				+"WHERE DisplayFieldNum = "+POut.Long(displayField.DisplayFieldNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE displayfield SET "+command
-				+" WHERE DisplayFieldNum = "+POut.Long(displayField.DisplayFieldNum)+" LIMIT 1";
+				+" WHERE DisplayFieldNum = "+POut.Long(displayField.DisplayFieldNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one DisplayField from the database.</summary>
 		internal static void Delete(long displayFieldNum){
 			string command="DELETE FROM displayfield "
-				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum)+" LIMIT 1";
+				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum);
 			Db.NonQ(command);
 		}
 

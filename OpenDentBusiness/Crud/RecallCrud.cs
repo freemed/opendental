@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"RecallTypeNum      =  "+POut.Long  (recall.RecallTypeNum)+", "
 				+"DisableUntilBalance= '"+POut.Double(recall.DisableUntilBalance)+"', "
 				+"DisableUntilDate   =  "+POut.Date  (recall.DisableUntilDate)+" "
-				+"WHERE RecallNum = "+POut.Long(recall.RecallNum)+" LIMIT 1";
+				+"WHERE RecallNum = "+POut.Long(recall.RecallNum);
 			Db.NonQ(command);
 		}
 
@@ -171,14 +171,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE recall SET "+command
-				+" WHERE RecallNum = "+POut.Long(recall.RecallNum)+" LIMIT 1";
+				+" WHERE RecallNum = "+POut.Long(recall.RecallNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Recall from the database.</summary>
 		internal static void Delete(long recallNum){
 			string command="DELETE FROM recall "
-				+"WHERE RecallNum = "+POut.Long(recallNum)+" LIMIT 1";
+				+"WHERE RecallNum = "+POut.Long(recallNum);
 			Db.NonQ(command);
 		}
 

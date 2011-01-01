@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE county SET "
 				+"CountyName= '"+POut.String(county.CountyName)+"', "
 				+"CountyCode= '"+POut.String(county.CountyCode)+"' "
-				+"WHERE CountyNum = "+POut.Long(county.CountyNum)+" LIMIT 1";
+				+"WHERE CountyNum = "+POut.Long(county.CountyNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE county SET "+command
-				+" WHERE CountyNum = "+POut.Long(county.CountyNum)+" LIMIT 1";
+				+" WHERE CountyNum = "+POut.Long(county.CountyNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one County from the database.</summary>
 		internal static void Delete(long countyNum){
 			string command="DELETE FROM county "
-				+"WHERE CountyNum = "+POut.Long(countyNum)+" LIMIT 1";
+				+"WHERE CountyNum = "+POut.Long(countyNum);
 			Db.NonQ(command);
 		}
 

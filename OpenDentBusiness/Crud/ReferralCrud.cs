@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum        =  "+POut.Long  (referral.PatNum)+", "
 				+"NationalProvID= '"+POut.String(referral.NationalProvID)+"', "
 				+"Slip          =  "+POut.Long  (referral.Slip)+" "
-				+"WHERE ReferralNum = "+POut.Long(referral.ReferralNum)+" LIMIT 1";
+				+"WHERE ReferralNum = "+POut.Long(referral.ReferralNum);
 			Db.NonQ(command);
 		}
 
@@ -241,14 +241,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE referral SET "+command
-				+" WHERE ReferralNum = "+POut.Long(referral.ReferralNum)+" LIMIT 1";
+				+" WHERE ReferralNum = "+POut.Long(referral.ReferralNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Referral from the database.</summary>
 		internal static void Delete(long referralNum){
 			string command="DELETE FROM referral "
-				+"WHERE ReferralNum = "+POut.Long(referralNum)+" LIMIT 1";
+				+"WHERE ReferralNum = "+POut.Long(referralNum);
 			Db.NonQ(command);
 		}
 

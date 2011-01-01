@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"Intermingled =  "+POut.Bool  (statement.Intermingled)+", "
 				+"IsSent       =  "+POut.Bool  (statement.IsSent)+", "
 				+"DocNum       =  "+POut.Long  (statement.DocNum)+" "
-				+"WHERE StatementNum = "+POut.Long(statement.StatementNum)+" LIMIT 1";
+				+"WHERE StatementNum = "+POut.Long(statement.StatementNum);
 			Db.NonQ(command);
 		}
 
@@ -178,14 +178,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE statement SET "+command
-				+" WHERE StatementNum = "+POut.Long(statement.StatementNum)+" LIMIT 1";
+				+" WHERE StatementNum = "+POut.Long(statement.StatementNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Statement from the database.</summary>
 		internal static void Delete(long statementNum){
 			string command="DELETE FROM statement "
-				+"WHERE StatementNum = "+POut.Long(statementNum)+" LIMIT 1";
+				+"WHERE StatementNum = "+POut.Long(statementNum);
 			Db.NonQ(command);
 		}
 

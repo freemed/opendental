@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsFrom      =  "+POut.Bool  (refAttach.IsFrom)+", "
 				+"RefToStatus =  "+POut.Int   ((int)refAttach.RefToStatus)+", "
 				+"Note        = '"+POut.String(refAttach.Note)+"' "
-				+"WHERE RefAttachNum = "+POut.Long(refAttach.RefAttachNum)+" LIMIT 1";
+				+"WHERE RefAttachNum = "+POut.Long(refAttach.RefAttachNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE refattach SET "+command
-				+" WHERE RefAttachNum = "+POut.Long(refAttach.RefAttachNum)+" LIMIT 1";
+				+" WHERE RefAttachNum = "+POut.Long(refAttach.RefAttachNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RefAttach from the database.</summary>
 		internal static void Delete(long refAttachNum){
 			string command="DELETE FROM refattach "
-				+"WHERE RefAttachNum = "+POut.Long(refAttachNum)+" LIMIT 1";
+				+"WHERE RefAttachNum = "+POut.Long(refAttachNum);
 			Db.NonQ(command);
 		}
 

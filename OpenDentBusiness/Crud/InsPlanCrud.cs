@@ -152,7 +152,7 @@ namespace OpenDentBusiness.Crud{
 				+"MonthRenew          =  "+POut.Byte  (insPlan.MonthRenew)+", "
 				+"FilingCodeSubtype   =  "+POut.Long  (insPlan.FilingCodeSubtype)+", "
 				+"CanadianPlanFlag    = '"+POut.String(insPlan.CanadianPlanFlag)+"' "
-				+"WHERE PlanNum = "+POut.Long(insPlan.PlanNum)+" LIMIT 1";
+				+"WHERE PlanNum = "+POut.Long(insPlan.PlanNum);
 			Db.NonQ(command);
 		}
 
@@ -255,14 +255,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE insplan SET "+command
-				+" WHERE PlanNum = "+POut.Long(insPlan.PlanNum)+" LIMIT 1";
+				+" WHERE PlanNum = "+POut.Long(insPlan.PlanNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one InsPlan from the database.</summary>
 		internal static void Delete(long planNum){
 			string command="DELETE FROM insplan "
-				+"WHERE PlanNum = "+POut.Long(planNum)+" LIMIT 1";
+				+"WHERE PlanNum = "+POut.Long(planNum);
 			Db.NonQ(command);
 		}
 

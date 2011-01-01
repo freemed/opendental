@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"AptNum      =  "+POut.Long  (apptField.AptNum)+", "
 				+"FieldName   = '"+POut.String(apptField.FieldName)+"', "
 				+"FieldValue  = '"+POut.String(apptField.FieldValue)+"' "
-				+"WHERE ApptFieldNum = "+POut.Long(apptField.ApptFieldNum)+" LIMIT 1";
+				+"WHERE ApptFieldNum = "+POut.Long(apptField.ApptFieldNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE apptfield SET "+command
-				+" WHERE ApptFieldNum = "+POut.Long(apptField.ApptFieldNum)+" LIMIT 1";
+				+" WHERE ApptFieldNum = "+POut.Long(apptField.ApptFieldNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ApptField from the database.</summary>
 		internal static void Delete(long apptFieldNum){
 			string command="DELETE FROM apptfield "
-				+"WHERE ApptFieldNum = "+POut.Long(apptFieldNum)+" LIMIT 1";
+				+"WHERE ApptFieldNum = "+POut.Long(apptFieldNum);
 			Db.NonQ(command);
 		}
 

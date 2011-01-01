@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"ComputerName     = '"+POut.String(terminalActive.ComputerName)+"', "
 				+"TerminalStatus   =  "+POut.Int   ((int)terminalActive.TerminalStatus)+", "
 				+"PatNum           =  "+POut.Long  (terminalActive.PatNum)+" "
-				+"WHERE TerminalActiveNum = "+POut.Long(terminalActive.TerminalActiveNum)+" LIMIT 1";
+				+"WHERE TerminalActiveNum = "+POut.Long(terminalActive.TerminalActiveNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE terminalactive SET "+command
-				+" WHERE TerminalActiveNum = "+POut.Long(terminalActive.TerminalActiveNum)+" LIMIT 1";
+				+" WHERE TerminalActiveNum = "+POut.Long(terminalActive.TerminalActiveNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TerminalActive from the database.</summary>
 		internal static void Delete(long terminalActiveNum){
 			string command="DELETE FROM terminalactive "
-				+"WHERE TerminalActiveNum = "+POut.Long(terminalActiveNum)+" LIMIT 1";
+				+"WHERE TerminalActiveNum = "+POut.Long(terminalActiveNum);
 			Db.NonQ(command);
 		}
 

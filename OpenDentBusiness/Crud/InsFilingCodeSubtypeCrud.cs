@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE insfilingcodesubtype SET "
 				+"InsFilingCodeNum       =  "+POut.Long  (insFilingCodeSubtype.InsFilingCodeNum)+", "
 				+"Descript               = '"+POut.String(insFilingCodeSubtype.Descript)+"' "
-				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum)+" LIMIT 1";
+				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE insfilingcodesubtype SET "+command
-				+" WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum)+" LIMIT 1";
+				+" WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one InsFilingCodeSubtype from the database.</summary>
 		internal static void Delete(long insFilingCodeSubtypeNum){
 			string command="DELETE FROM insfilingcodesubtype "
-				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum)+" LIMIT 1";
+				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum);
 			Db.NonQ(command);
 		}
 

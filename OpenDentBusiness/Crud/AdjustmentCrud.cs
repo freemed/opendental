@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+"ProcNum  =  "+POut.Long  (adjustment.ProcNum)+", "
 				//DateEntry not allowed to change
 				+"ClinicNum=  "+POut.Long  (adjustment.ClinicNum)+" "
-				+"WHERE AdjNum = "+POut.Long(adjustment.AdjNum)+" LIMIT 1";
+				+"WHERE AdjNum = "+POut.Long(adjustment.AdjNum);
 			Db.NonQ(command);
 		}
 
@@ -161,14 +161,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE adjustment SET "+command
-				+" WHERE AdjNum = "+POut.Long(adjustment.AdjNum)+" LIMIT 1";
+				+" WHERE AdjNum = "+POut.Long(adjustment.AdjNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Adjustment from the database.</summary>
 		internal static void Delete(long adjNum){
 			string command="DELETE FROM adjustment "
-				+"WHERE AdjNum = "+POut.Long(adjNum)+" LIMIT 1";
+				+"WHERE AdjNum = "+POut.Long(adjNum);
 			Db.NonQ(command);
 		}
 

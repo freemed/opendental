@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"NewerDays   =  "+POut.Int   (groupPermission.NewerDays)+", "
 				+"UserGroupNum=  "+POut.Long  (groupPermission.UserGroupNum)+", "
 				+"PermType    =  "+POut.Int   ((int)groupPermission.PermType)+" "
-				+"WHERE GroupPermNum = "+POut.Long(groupPermission.GroupPermNum)+" LIMIT 1";
+				+"WHERE GroupPermNum = "+POut.Long(groupPermission.GroupPermNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE grouppermission SET "+command
-				+" WHERE GroupPermNum = "+POut.Long(groupPermission.GroupPermNum)+" LIMIT 1";
+				+" WHERE GroupPermNum = "+POut.Long(groupPermission.GroupPermNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one GroupPermission from the database.</summary>
 		internal static void Delete(long groupPermNum){
 			string command="DELETE FROM grouppermission "
-				+"WHERE GroupPermNum = "+POut.Long(groupPermNum)+" LIMIT 1";
+				+"WHERE GroupPermNum = "+POut.Long(groupPermNum);
 			Db.NonQ(command);
 		}
 

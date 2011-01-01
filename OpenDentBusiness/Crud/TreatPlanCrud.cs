@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"Signature   = '"+POut.String(treatPlan.Signature)+"', "
 				+"SigIsTopaz  =  "+POut.Bool  (treatPlan.SigIsTopaz)+", "
 				+"ResponsParty=  "+POut.Long  (treatPlan.ResponsParty)+" "
-				+"WHERE TreatPlanNum = "+POut.Long(treatPlan.TreatPlanNum)+" LIMIT 1";
+				+"WHERE TreatPlanNum = "+POut.Long(treatPlan.TreatPlanNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE treatplan SET "+command
-				+" WHERE TreatPlanNum = "+POut.Long(treatPlan.TreatPlanNum)+" LIMIT 1";
+				+" WHERE TreatPlanNum = "+POut.Long(treatPlan.TreatPlanNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TreatPlan from the database.</summary>
 		internal static void Delete(long treatPlanNum){
 			string command="DELETE FROM treatplan "
-				+"WHERE TreatPlanNum = "+POut.Long(treatPlanNum)+" LIMIT 1";
+				+"WHERE TreatPlanNum = "+POut.Long(treatPlanNum);
 			Db.NonQ(command);
 		}
 

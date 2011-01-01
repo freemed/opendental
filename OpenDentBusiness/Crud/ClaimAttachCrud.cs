@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"ClaimNum         =  "+POut.Long  (claimAttach.ClaimNum)+", "
 				+"DisplayedFileName= '"+POut.String(claimAttach.DisplayedFileName)+"', "
 				+"ActualFileName   = '"+POut.String(claimAttach.ActualFileName)+"' "
-				+"WHERE ClaimAttachNum = "+POut.Long(claimAttach.ClaimAttachNum)+" LIMIT 1";
+				+"WHERE ClaimAttachNum = "+POut.Long(claimAttach.ClaimAttachNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claimattach SET "+command
-				+" WHERE ClaimAttachNum = "+POut.Long(claimAttach.ClaimAttachNum)+" LIMIT 1";
+				+" WHERE ClaimAttachNum = "+POut.Long(claimAttach.ClaimAttachNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClaimAttach from the database.</summary>
 		internal static void Delete(long claimAttachNum){
 			string command="DELETE FROM claimattach "
-				+"WHERE ClaimAttachNum = "+POut.Long(claimAttachNum)+" LIMIT 1";
+				+"WHERE ClaimAttachNum = "+POut.Long(claimAttachNum);
 			Db.NonQ(command);
 		}
 

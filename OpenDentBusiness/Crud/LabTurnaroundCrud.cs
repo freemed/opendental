@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"Description     = '"+POut.String(labTurnaround.Description)+"', "
 				+"DaysPublished   =  "+POut.Int   (labTurnaround.DaysPublished)+", "
 				+"DaysActual      =  "+POut.Int   (labTurnaround.DaysActual)+" "
-				+"WHERE LabTurnaroundNum = "+POut.Long(labTurnaround.LabTurnaroundNum)+" LIMIT 1";
+				+"WHERE LabTurnaroundNum = "+POut.Long(labTurnaround.LabTurnaroundNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE labturnaround SET "+command
-				+" WHERE LabTurnaroundNum = "+POut.Long(labTurnaround.LabTurnaroundNum)+" LIMIT 1";
+				+" WHERE LabTurnaroundNum = "+POut.Long(labTurnaround.LabTurnaroundNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one LabTurnaround from the database.</summary>
 		internal static void Delete(long labTurnaroundNum){
 			string command="DELETE FROM labturnaround "
-				+"WHERE LabTurnaroundNum = "+POut.Long(labTurnaroundNum)+" LIMIT 1";
+				+"WHERE LabTurnaroundNum = "+POut.Long(labTurnaroundNum);
 			Db.NonQ(command);
 		}
 

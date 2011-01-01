@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"ButtonIndex =  "+POut.Int   (sigButDef.ButtonIndex)+", "
 				+"SynchIcon   =  "+POut.Byte  (sigButDef.SynchIcon)+", "
 				+"ComputerName= '"+POut.String(sigButDef.ComputerName)+"' "
-				+"WHERE SigButDefNum = "+POut.Long(sigButDef.SigButDefNum)+" LIMIT 1";
+				+"WHERE SigButDefNum = "+POut.Long(sigButDef.SigButDefNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sigbutdef SET "+command
-				+" WHERE SigButDefNum = "+POut.Long(sigButDef.SigButDefNum)+" LIMIT 1";
+				+" WHERE SigButDefNum = "+POut.Long(sigButDef.SigButDefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SigButDef from the database.</summary>
 		internal static void Delete(long sigButDefNum){
 			string command="DELETE FROM sigbutdef "
-				+"WHERE SigButDefNum = "+POut.Long(sigButDefNum)+" LIMIT 1";
+				+"WHERE SigButDefNum = "+POut.Long(sigButDefNum);
 			Db.NonQ(command);
 		}
 

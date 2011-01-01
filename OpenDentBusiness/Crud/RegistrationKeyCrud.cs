@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsFreeVersion     =  "+POut.Bool  (registrationKey.IsFreeVersion)+", "
 				+"IsOnlyForTesting  =  "+POut.Bool  (registrationKey.IsOnlyForTesting)+", "
 				+"VotesAllotted     =  "+POut.Int   (registrationKey.VotesAllotted)+" "
-				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKey.RegistrationKeyNum)+" LIMIT 1";
+				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKey.RegistrationKeyNum);
 			Db.NonQ(command);
 		}
 
@@ -171,14 +171,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE registrationkey SET "+command
-				+" WHERE RegistrationKeyNum = "+POut.Long(registrationKey.RegistrationKeyNum)+" LIMIT 1";
+				+" WHERE RegistrationKeyNum = "+POut.Long(registrationKey.RegistrationKeyNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RegistrationKey from the database.</summary>
 		internal static void Delete(long registrationKeyNum){
 			string command="DELETE FROM registrationkey "
-				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKeyNum)+" LIMIT 1";
+				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKeyNum);
 			Db.NonQ(command);
 		}
 

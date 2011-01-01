@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"Culture           = '"+POut.String(languageForeign.Culture)+"', "
 				+"Translation       = '"+POut.String(languageForeign.Translation)+"', "
 				+"Comments          = '"+POut.String(languageForeign.Comments)+"' "
-				+"WHERE LanguageForeignNum = "+POut.Long(languageForeign.LanguageForeignNum)+" LIMIT 1";
+				+"WHERE LanguageForeignNum = "+POut.Long(languageForeign.LanguageForeignNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE languageforeign SET "+command
-				+" WHERE LanguageForeignNum = "+POut.Long(languageForeign.LanguageForeignNum)+" LIMIT 1";
+				+" WHERE LanguageForeignNum = "+POut.Long(languageForeign.LanguageForeignNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one LanguageForeign from the database.</summary>
 		internal static void Delete(long languageForeignNum){
 			string command="DELETE FROM languageforeign "
-				+"WHERE LanguageForeignNum = "+POut.Long(languageForeignNum)+" LIMIT 1";
+				+"WHERE LanguageForeignNum = "+POut.Long(languageForeignNum);
 			Db.NonQ(command);
 		}
 

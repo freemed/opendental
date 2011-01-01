@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"CodeStart         = '"+POut.String(appointmentRule.CodeStart)+"', "
 				+"CodeEnd           = '"+POut.String(appointmentRule.CodeEnd)+"', "
 				+"IsEnabled         =  "+POut.Bool  (appointmentRule.IsEnabled)+" "
-				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum)+" LIMIT 1";
+				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE appointmentrule SET "+command
-				+" WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum)+" LIMIT 1";
+				+" WHERE AppointmentRuleNum = "+POut.Long(appointmentRule.AppointmentRuleNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AppointmentRule from the database.</summary>
 		internal static void Delete(long appointmentRuleNum){
 			string command="DELETE FROM appointmentrule "
-				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum)+" LIMIT 1";
+				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum);
 			Db.NonQ(command);
 		}
 

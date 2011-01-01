@@ -117,7 +117,7 @@ namespace OpenDentBusiness.Crud{
 				+"SheetNum        =  "+POut.Long  (sheetField.SheetNum)+", "
 				+"FieldType       =  "+POut.Int   ((int)sheetField.FieldType)+", "
 				+"FieldName       = '"+POut.String(sheetField.FieldName)+"', "
-				+"FieldValue      = '"+POut.String(sheetField.FieldValue)+"', "
+				+"FieldValue      =  "+DbHelper.ParamChar+"paramFieldValue, "
 				+"FontSize        =  "+POut.Float (sheetField.FontSize)+", "
 				+"FontName        = '"+POut.String(sheetField.FontName)+"', "
 				+"FontIsBold      =  "+POut.Bool  (sheetField.FontIsBold)+", "
@@ -129,8 +129,9 @@ namespace OpenDentBusiness.Crud{
 				+"RadioButtonValue= '"+POut.String(sheetField.RadioButtonValue)+"', "
 				+"RadioButtonGroup= '"+POut.String(sheetField.RadioButtonGroup)+"', "
 				+"IsRequired      =  "+POut.Bool  (sheetField.IsRequired)+" "
-				+"WHERE SheetFieldNum = "+POut.Long(sheetField.SheetFieldNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE SheetFieldNum = "+POut.Long(sheetField.SheetFieldNum);
+			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,sheetField.FieldValue);
+			Db.NonQ(command,paramFieldValue);
 		}
 
 		///<summary>Updates one SheetField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -200,14 +201,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sheetfield SET "+command
-				+" WHERE SheetFieldNum = "+POut.Long(sheetField.SheetFieldNum)+" LIMIT 1";
+				+" WHERE SheetFieldNum = "+POut.Long(sheetField.SheetFieldNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SheetField from the database.</summary>
 		internal static void Delete(long sheetFieldNum){
 			string command="DELETE FROM sheetfield "
-				+"WHERE SheetFieldNum = "+POut.Long(sheetFieldNum)+" LIMIT 1";
+				+"WHERE SheetFieldNum = "+POut.Long(sheetFieldNum);
 			Db.NonQ(command);
 		}
 

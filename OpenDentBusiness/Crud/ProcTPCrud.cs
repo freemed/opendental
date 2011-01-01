@@ -125,7 +125,7 @@ namespace OpenDentBusiness.Crud{
 				+"SecInsAmt   = '"+POut.Double(procTP.SecInsAmt)+"', "
 				+"PatAmt      = '"+POut.Double(procTP.PatAmt)+"', "
 				+"Discount    = '"+POut.Double(procTP.Discount)+"' "
-				+"WHERE ProcTPNum = "+POut.Long(procTP.ProcTPNum)+" LIMIT 1";
+				+"WHERE ProcTPNum = "+POut.Long(procTP.ProcTPNum);
 			Db.NonQ(command);
 		}
 
@@ -192,14 +192,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE proctp SET "+command
-				+" WHERE ProcTPNum = "+POut.Long(procTP.ProcTPNum)+" LIMIT 1";
+				+" WHERE ProcTPNum = "+POut.Long(procTP.ProcTPNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcTP from the database.</summary>
 		internal static void Delete(long procTPNum){
 			string command="DELETE FROM proctp "
-				+"WHERE ProcTPNum = "+POut.Long(procTPNum)+" LIMIT 1";
+				+"WHERE ProcTPNum = "+POut.Long(procTPNum);
 			Db.NonQ(command);
 		}
 

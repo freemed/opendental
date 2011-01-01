@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"Refills     = '"+POut.String(rxDef.Refills)+"', "
 				+"Notes       = '"+POut.String(rxDef.Notes)+"', "
 				+"IsControlled=  "+POut.Bool  (rxDef.IsControlled)+" "
-				+"WHERE RxDefNum = "+POut.Long(rxDef.RxDefNum)+" LIMIT 1";
+				+"WHERE RxDefNum = "+POut.Long(rxDef.RxDefNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE rxdef SET "+command
-				+" WHERE RxDefNum = "+POut.Long(rxDef.RxDefNum)+" LIMIT 1";
+				+" WHERE RxDefNum = "+POut.Long(rxDef.RxDefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RxDef from the database.</summary>
 		internal static void Delete(long rxDefNum){
 			string command="DELETE FROM rxdef "
-				+"WHERE RxDefNum = "+POut.Long(rxDefNum)+" LIMIT 1";
+				+"WHERE RxDefNum = "+POut.Long(rxDefNum);
 			Db.NonQ(command);
 		}
 

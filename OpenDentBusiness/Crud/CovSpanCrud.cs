@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"CovCatNum =  "+POut.Long  (covSpan.CovCatNum)+", "
 				+"FromCode  = '"+POut.String(covSpan.FromCode)+"', "
 				+"ToCode    = '"+POut.String(covSpan.ToCode)+"' "
-				+"WHERE CovSpanNum = "+POut.Long(covSpan.CovSpanNum)+" LIMIT 1";
+				+"WHERE CovSpanNum = "+POut.Long(covSpan.CovSpanNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE covspan SET "+command
-				+" WHERE CovSpanNum = "+POut.Long(covSpan.CovSpanNum)+" LIMIT 1";
+				+" WHERE CovSpanNum = "+POut.Long(covSpan.CovSpanNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one CovSpan from the database.</summary>
 		internal static void Delete(long covSpanNum){
 			string command="DELETE FROM covspan "
-				+"WHERE CovSpanNum = "+POut.Long(covSpanNum)+" LIMIT 1";
+				+"WHERE CovSpanNum = "+POut.Long(covSpanNum);
 			Db.NonQ(command);
 		}
 

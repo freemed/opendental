@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"Descript        = '"+POut.String(insFilingCode.Descript)+"', "
 				+"EclaimCode      = '"+POut.String(insFilingCode.EclaimCode)+"', "
 				+"ItemOrder       =  "+POut.Int   (insFilingCode.ItemOrder)+" "
-				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum)+" LIMIT 1";
+				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE insfilingcode SET "+command
-				+" WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum)+" LIMIT 1";
+				+" WHERE InsFilingCodeNum = "+POut.Long(insFilingCode.InsFilingCodeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one InsFilingCode from the database.</summary>
 		internal static void Delete(long insFilingCodeNum){
 			string command="DELETE FROM insfilingcode "
-				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum)+" LIMIT 1";
+				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum);
 			Db.NonQ(command);
 		}
 

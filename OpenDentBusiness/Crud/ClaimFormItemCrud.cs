@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"YPos            =  "+POut.Float (claimFormItem.YPos)+", "
 				+"Width           =  "+POut.Float (claimFormItem.Width)+", "
 				+"Height          =  "+POut.Float (claimFormItem.Height)+" "
-				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItem.ClaimFormItemNum)+" LIMIT 1";
+				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItem.ClaimFormItemNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claimformitem SET "+command
-				+" WHERE ClaimFormItemNum = "+POut.Long(claimFormItem.ClaimFormItemNum)+" LIMIT 1";
+				+" WHERE ClaimFormItemNum = "+POut.Long(claimFormItem.ClaimFormItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClaimFormItem from the database.</summary>
 		internal static void Delete(long claimFormItemNum){
 			string command="DELETE FROM claimformitem "
-				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItemNum)+" LIMIT 1";
+				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItemNum);
 			Db.NonQ(command);
 		}
 

@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				+"TaskY                  =  "+POut.Int   (computerPref.TaskY)+", "
 				+"DirectXFormat          = '"+POut.String(computerPref.DirectXFormat)+"', "
 				+"RecentApptView         =  "+POut.Byte  (computerPref.RecentApptView)+" "
-				+"WHERE ComputerPrefNum = "+POut.Long(computerPref.ComputerPrefNum)+" LIMIT 1";
+				+"WHERE ComputerPrefNum = "+POut.Long(computerPref.ComputerPrefNum);
 			Db.NonQ(command);
 		}
 
@@ -206,14 +206,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE computerpref SET "+command
-				+" WHERE ComputerPrefNum = "+POut.Long(computerPref.ComputerPrefNum)+" LIMIT 1";
+				+" WHERE ComputerPrefNum = "+POut.Long(computerPref.ComputerPrefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ComputerPref from the database.</summary>
 		internal static void Delete(long computerPrefNum){
 			string command="DELETE FROM computerpref "
-				+"WHERE ComputerPrefNum = "+POut.Long(computerPrefNum)+" LIMIT 1";
+				+"WHERE ComputerPrefNum = "+POut.Long(computerPrefNum);
 			Db.NonQ(command);
 		}
 

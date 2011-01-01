@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"CompareField          =  "+POut.Int   ((int)automationCondition.CompareField)+", "
 				+"Comparison            =  "+POut.Int   ((int)automationCondition.Comparison)+", "
 				+"CompareString         = '"+POut.String(automationCondition.CompareString)+"' "
-				+"WHERE AutomationConditionNum = "+POut.Long(automationCondition.AutomationConditionNum)+" LIMIT 1";
+				+"WHERE AutomationConditionNum = "+POut.Long(automationCondition.AutomationConditionNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE automationcondition SET "+command
-				+" WHERE AutomationConditionNum = "+POut.Long(automationCondition.AutomationConditionNum)+" LIMIT 1";
+				+" WHERE AutomationConditionNum = "+POut.Long(automationCondition.AutomationConditionNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutomationCondition from the database.</summary>
 		internal static void Delete(long automationConditionNum){
 			string command="DELETE FROM automationcondition "
-				+"WHERE AutomationConditionNum = "+POut.Long(automationConditionNum)+" LIMIT 1";
+				+"WHERE AutomationConditionNum = "+POut.Long(automationConditionNum);
 			Db.NonQ(command);
 		}
 

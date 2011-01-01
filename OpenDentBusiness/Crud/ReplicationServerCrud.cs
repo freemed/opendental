@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"RangeEnd            =  "+POut.Long  (replicationServer.RangeEnd)+", "
 				+"AtoZpath            = '"+POut.String(replicationServer.AtoZpath)+"', "
 				+"UpdateBlocked       =  "+POut.Bool  (replicationServer.UpdateBlocked)+" "
-				+"WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum)+" LIMIT 1";
+				+"WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE replicationserver SET "+command
-				+" WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum)+" LIMIT 1";
+				+" WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ReplicationServer from the database.</summary>
 		internal static void Delete(long replicationServerNum){
 			string command="DELETE FROM replicationserver "
-				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum)+" LIMIT 1";
+				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum);
 			Db.NonQ(command);
 		}
 

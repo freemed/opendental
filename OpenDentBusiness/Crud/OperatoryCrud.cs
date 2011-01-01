@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsHygiene     =  "+POut.Bool  (operatory.IsHygiene)+", "
 				+"ClinicNum     =  "+POut.Long  (operatory.ClinicNum)+", "
 				+"SetProspective=  "+POut.Bool  (operatory.SetProspective)+" "
-				+"WHERE OperatoryNum = "+POut.Long(operatory.OperatoryNum)+" LIMIT 1";
+				+"WHERE OperatoryNum = "+POut.Long(operatory.OperatoryNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE operatory SET "+command
-				+" WHERE OperatoryNum = "+POut.Long(operatory.OperatoryNum)+" LIMIT 1";
+				+" WHERE OperatoryNum = "+POut.Long(operatory.OperatoryNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Operatory from the database.</summary>
 		internal static void Delete(long operatoryNum){
 			string command="DELETE FROM operatory "
-				+"WHERE OperatoryNum = "+POut.Long(operatoryNum)+" LIMIT 1";
+				+"WHERE OperatoryNum = "+POut.Long(operatoryNum);
 			Db.NonQ(command);
 		}
 

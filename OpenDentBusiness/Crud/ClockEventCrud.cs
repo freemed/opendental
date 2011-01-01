@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"Adjust            = '"+POut.TSpan (clockEvent.Adjust)+"', "
 				+"AdjustAuto        = '"+POut.TSpan (clockEvent.AdjustAuto)+"', "
 				+"AdjustIsOverridden=  "+POut.Bool  (clockEvent.AdjustIsOverridden)+" "
-				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum)+" LIMIT 1";
+				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum);
 			Db.NonQ(command);
 		}
 
@@ -175,14 +175,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE clockevent SET "+command
-				+" WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum)+" LIMIT 1";
+				+" WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClockEvent from the database.</summary>
 		internal static void Delete(long clockEventNum){
 			string command="DELETE FROM clockevent "
-				+"WHERE ClockEventNum = "+POut.Long(clockEventNum)+" LIMIT 1";
+				+"WHERE ClockEventNum = "+POut.Long(clockEventNum);
 			Db.NonQ(command);
 		}
 

@@ -95,9 +95,10 @@ namespace OpenDentBusiness.Crud{
 				+"Description  = '"+POut.String(procButton.Description)+"', "
 				+"ItemOrder    =  "+POut.Int   (procButton.ItemOrder)+", "
 				+"Category     =  "+POut.Long  (procButton.Category)+", "
-				+"ButtonImage  =  "+POut.Bitmap(procButton.ButtonImage)+" "
-				+"WHERE ProcButtonNum = "+POut.Long(procButton.ProcButtonNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"ButtonImage  =  "+DbHelper.ParamChar+"paramButtonImage "
+				+"WHERE ProcButtonNum = "+POut.Long(procButton.ProcButtonNum);
+			OdSqlParameter paramButtonImage=new OdSqlParameter("paramButtonImage",OdDbType.Text,procButton.ButtonImage);
+			Db.NonQ(command,paramButtonImage);
 		}
 
 		///<summary>Updates one ProcButton in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -123,14 +124,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procbutton SET "+command
-				+" WHERE ProcButtonNum = "+POut.Long(procButton.ProcButtonNum)+" LIMIT 1";
+				+" WHERE ProcButtonNum = "+POut.Long(procButton.ProcButtonNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcButton from the database.</summary>
 		internal static void Delete(long procButtonNum){
 			string command="DELETE FROM procbutton "
-				+"WHERE ProcButtonNum = "+POut.Long(procButtonNum)+" LIMIT 1";
+				+"WHERE ProcButtonNum = "+POut.Long(procButtonNum);
 			Db.NonQ(command);
 		}
 

@@ -89,9 +89,10 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(Letter letter){
 			string command="UPDATE letter SET "
 				+"Description= '"+POut.String(letter.Description)+"', "
-				+"BodyText   = '"+POut.String(letter.BodyText)+"' "
-				+"WHERE LetterNum = "+POut.Long(letter.LetterNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"BodyText   =  "+DbHelper.ParamChar+"paramBodyText "
+				+"WHERE LetterNum = "+POut.Long(letter.LetterNum);
+			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,letter.BodyText);
+			Db.NonQ(command,paramBodyText);
 		}
 
 		///<summary>Updates one Letter in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -109,14 +110,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE letter SET "+command
-				+" WHERE LetterNum = "+POut.Long(letter.LetterNum)+" LIMIT 1";
+				+" WHERE LetterNum = "+POut.Long(letter.LetterNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Letter from the database.</summary>
 		internal static void Delete(long letterNum){
 			string command="DELETE FROM letter "
-				+"WHERE LetterNum = "+POut.Long(letterNum)+" LIMIT 1";
+				+"WHERE LetterNum = "+POut.Long(letterNum);
 			Db.NonQ(command);
 		}
 

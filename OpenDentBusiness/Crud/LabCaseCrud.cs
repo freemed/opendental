@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"ProvNum        =  "+POut.Long  (labCase.ProvNum)+", "
 				+"Instructions   = '"+POut.String(labCase.Instructions)+"', "
 				+"LabFee         = '"+POut.Double(labCase.LabFee)+"' "
-				+"WHERE LabCaseNum = "+POut.Long(labCase.LabCaseNum)+" LIMIT 1";
+				+"WHERE LabCaseNum = "+POut.Long(labCase.LabCaseNum);
 			Db.NonQ(command);
 		}
 
@@ -178,14 +178,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE labcase SET "+command
-				+" WHERE LabCaseNum = "+POut.Long(labCase.LabCaseNum)+" LIMIT 1";
+				+" WHERE LabCaseNum = "+POut.Long(labCase.LabCaseNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one LabCase from the database.</summary>
 		internal static void Delete(long labCaseNum){
 			string command="DELETE FROM labcase "
-				+"WHERE LabCaseNum = "+POut.Long(labCaseNum)+" LIMIT 1";
+				+"WHERE LabCaseNum = "+POut.Long(labCaseNum);
 			Db.NonQ(command);
 		}
 

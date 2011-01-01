@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum      =  "+POut.Long  (perioExam.PatNum)+", "
 				+"ExamDate    =  "+POut.Date  (perioExam.ExamDate)+", "
 				+"ProvNum     =  "+POut.Long  (perioExam.ProvNum)+" "
-				+"WHERE PerioExamNum = "+POut.Long(perioExam.PerioExamNum)+" LIMIT 1";
+				+"WHERE PerioExamNum = "+POut.Long(perioExam.PerioExamNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE perioexam SET "+command
-				+" WHERE PerioExamNum = "+POut.Long(perioExam.PerioExamNum)+" LIMIT 1";
+				+" WHERE PerioExamNum = "+POut.Long(perioExam.PerioExamNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PerioExam from the database.</summary>
 		internal static void Delete(long perioExamNum){
 			string command="DELETE FROM perioexam "
-				+"WHERE PerioExamNum = "+POut.Long(perioExamNum)+" LIMIT 1";
+				+"WHERE PerioExamNum = "+POut.Long(perioExamNum);
 			Db.NonQ(command);
 		}
 

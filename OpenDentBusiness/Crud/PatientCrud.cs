@@ -290,7 +290,7 @@ namespace OpenDentBusiness.Crud{
 				+"ResponsParty           =  "+POut.Long  (patient.ResponsParty)+", "
 				+"CanadianEligibilityCode=  "+POut.Byte  (patient.CanadianEligibilityCode)+", "
 				+"AskToArriveEarly       =  "+POut.Int   (patient.AskToArriveEarly)+" "
-				+"WHERE PatNum = "+POut.Long(patient.PatNum)+" LIMIT 1";
+				+"WHERE PatNum = "+POut.Long(patient.PatNum);
 			Db.NonQ(command);
 		}
 
@@ -574,14 +574,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE patient SET "+command
-				+" WHERE PatNum = "+POut.Long(patient.PatNum)+" LIMIT 1";
+				+" WHERE PatNum = "+POut.Long(patient.PatNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Patient from the database.</summary>
 		internal static void Delete(long patNum){
 			string command="DELETE FROM patient "
-				+"WHERE PatNum = "+POut.Long(patNum)+" LIMIT 1";
+				+"WHERE PatNum = "+POut.Long(patNum);
 			Db.NonQ(command);
 		}
 

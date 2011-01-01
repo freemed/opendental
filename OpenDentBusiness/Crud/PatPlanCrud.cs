@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"Relationship=  "+POut.Int   ((int)patPlan.Relationship)+", "
 				+"PatID       = '"+POut.String(patPlan.PatID)+"', "
 				+"InsSubNum   =  "+POut.Long  (patPlan.InsSubNum)+" "
-				+"WHERE PatPlanNum = "+POut.Long(patPlan.PatPlanNum)+" LIMIT 1";
+				+"WHERE PatPlanNum = "+POut.Long(patPlan.PatPlanNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE patplan SET "+command
-				+" WHERE PatPlanNum = "+POut.Long(patPlan.PatPlanNum)+" LIMIT 1";
+				+" WHERE PatPlanNum = "+POut.Long(patPlan.PatPlanNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PatPlan from the database.</summary>
 		internal static void Delete(long patPlanNum){
 			string command="DELETE FROM patplan "
-				+"WHERE PatPlanNum = "+POut.Long(patPlanNum)+" LIMIT 1";
+				+"WHERE PatPlanNum = "+POut.Long(patPlanNum);
 			Db.NonQ(command);
 		}
 

@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsHidden   =  "+POut.Bool  (employee.IsHidden)+", "
 				+"ClockStatus= '"+POut.String(employee.ClockStatus)+"', "
 				+"PhoneExt   =  "+POut.Int   (employee.PhoneExt)+" "
-				+"WHERE EmployeeNum = "+POut.Long(employee.EmployeeNum)+" LIMIT 1";
+				+"WHERE EmployeeNum = "+POut.Long(employee.EmployeeNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE employee SET "+command
-				+" WHERE EmployeeNum = "+POut.Long(employee.EmployeeNum)+" LIMIT 1";
+				+" WHERE EmployeeNum = "+POut.Long(employee.EmployeeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Employee from the database.</summary>
 		internal static void Delete(long employeeNum){
 			string command="DELETE FROM employee "
-				+"WHERE EmployeeNum = "+POut.Long(employeeNum)+" LIMIT 1";
+				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			Db.NonQ(command);
 		}
 

@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsRadiograph=  "+POut.Bool  (mountDef.IsRadiograph)+", "
 				+"Width       =  "+POut.Int   (mountDef.Width)+", "
 				+"Height      =  "+POut.Int   (mountDef.Height)+" "
-				+"WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum)+" LIMIT 1";
+				+"WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE mountdef SET "+command
-				+" WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum)+" LIMIT 1";
+				+" WHERE MountDefNum = "+POut.Long(mountDef.MountDefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one MountDef from the database.</summary>
 		internal static void Delete(long mountDefNum){
 			string command="DELETE FROM mountdef "
-				+"WHERE MountDefNum = "+POut.Long(mountDefNum)+" LIMIT 1";
+				+"WHERE MountDefNum = "+POut.Long(mountDefNum);
 			Db.NonQ(command);
 		}
 

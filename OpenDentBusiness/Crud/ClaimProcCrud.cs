@@ -191,7 +191,7 @@ namespace OpenDentBusiness.Crud{
 				+"WriteOffEstOverride = '"+POut.Double(claimProc.WriteOffEstOverride)+"', "
 				+"ClinicNum           =  "+POut.Long  (claimProc.ClinicNum)+", "
 				+"InsSubNum           =  "+POut.Long  (claimProc.InsSubNum)+" "
-				+"WHERE ClaimProcNum = "+POut.Long(claimProc.ClaimProcNum)+" LIMIT 1";
+				+"WHERE ClaimProcNum = "+POut.Long(claimProc.ClaimProcNum);
 			Db.NonQ(command);
 		}
 
@@ -346,14 +346,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claimproc SET "+command
-				+" WHERE ClaimProcNum = "+POut.Long(claimProc.ClaimProcNum)+" LIMIT 1";
+				+" WHERE ClaimProcNum = "+POut.Long(claimProc.ClaimProcNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClaimProc from the database.</summary>
 		internal static void Delete(long claimProcNum){
 			string command="DELETE FROM claimproc "
-				+"WHERE ClaimProcNum = "+POut.Long(claimProcNum)+" LIMIT 1";
+				+"WHERE ClaimProcNum = "+POut.Long(claimProcNum);
 			Db.NonQ(command);
 		}
 

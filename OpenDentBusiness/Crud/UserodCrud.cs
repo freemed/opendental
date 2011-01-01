@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"AnesthProvType   =  "+POut.Int   (userod.AnesthProvType)+", "
 				+"DefaultHidePopups=  "+POut.Bool  (userod.DefaultHidePopups)+", "
 				+"PasswordIsStrong =  "+POut.Bool  (userod.PasswordIsStrong)+" "
-				+"WHERE UserNum = "+POut.Long(userod.UserNum)+" LIMIT 1";
+				+"WHERE UserNum = "+POut.Long(userod.UserNum);
 			Db.NonQ(command);
 		}
 
@@ -171,14 +171,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE userod SET "+command
-				+" WHERE UserNum = "+POut.Long(userod.UserNum)+" LIMIT 1";
+				+" WHERE UserNum = "+POut.Long(userod.UserNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Userod from the database.</summary>
 		internal static void Delete(long userNum){
 			string command="DELETE FROM userod "
-				+"WHERE UserNum = "+POut.Long(userNum)+" LIMIT 1";
+				+"WHERE UserNum = "+POut.Long(userNum);
 			Db.NonQ(command);
 		}
 

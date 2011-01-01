@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"ProvNum        =  "+POut.Long  (procCodeNote.ProvNum)+", "
 				+"Note           = '"+POut.String(procCodeNote.Note)+"', "
 				+"ProcTime       = '"+POut.String(procCodeNote.ProcTime)+"' "
-				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNote.ProcCodeNoteNum)+" LIMIT 1";
+				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNote.ProcCodeNoteNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE proccodenote SET "+command
-				+" WHERE ProcCodeNoteNum = "+POut.Long(procCodeNote.ProcCodeNoteNum)+" LIMIT 1";
+				+" WHERE ProcCodeNoteNum = "+POut.Long(procCodeNote.ProcCodeNoteNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcCodeNote from the database.</summary>
 		internal static void Delete(long procCodeNoteNum){
 			string command="DELETE FROM proccodenote "
-				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNoteNum)+" LIMIT 1";
+				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNoteNum);
 			Db.NonQ(command);
 		}
 

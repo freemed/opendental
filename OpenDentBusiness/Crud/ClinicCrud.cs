@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+"BankNumber         = '"+POut.String(clinic.BankNumber)+"', "
 				+"DefaultPlaceService=  "+POut.Int   ((int)clinic.DefaultPlaceService)+", "
 				+"InsBillingProv     =  "+POut.Long  (clinic.InsBillingProv)+" "
-				+"WHERE ClinicNum = "+POut.Long(clinic.ClinicNum)+" LIMIT 1";
+				+"WHERE ClinicNum = "+POut.Long(clinic.ClinicNum);
 			Db.NonQ(command);
 		}
 
@@ -164,14 +164,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE clinic SET "+command
-				+" WHERE ClinicNum = "+POut.Long(clinic.ClinicNum)+" LIMIT 1";
+				+" WHERE ClinicNum = "+POut.Long(clinic.ClinicNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Clinic from the database.</summary>
 		internal static void Delete(long clinicNum){
 			string command="DELETE FROM clinic "
-				+"WHERE ClinicNum = "+POut.Long(clinicNum)+" LIMIT 1";
+				+"WHERE ClinicNum = "+POut.Long(clinicNum);
 			Db.NonQ(command);
 		}
 

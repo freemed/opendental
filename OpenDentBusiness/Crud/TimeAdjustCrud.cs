@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"OTimeHours   = '"+POut.TSpan (timeAdjust.OTimeHours)+"', "
 				+"Note         = '"+POut.String(timeAdjust.Note)+"', "
 				+"IsAuto       =  "+POut.Bool  (timeAdjust.IsAuto)+" "
-				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjust.TimeAdjustNum)+" LIMIT 1";
+				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjust.TimeAdjustNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE timeadjust SET "+command
-				+" WHERE TimeAdjustNum = "+POut.Long(timeAdjust.TimeAdjustNum)+" LIMIT 1";
+				+" WHERE TimeAdjustNum = "+POut.Long(timeAdjust.TimeAdjustNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TimeAdjust from the database.</summary>
 		internal static void Delete(long timeAdjustNum){
 			string command="DELETE FROM timeadjust "
-				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjustNum)+" LIMIT 1";
+				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjustNum);
 			Db.NonQ(command);
 		}
 

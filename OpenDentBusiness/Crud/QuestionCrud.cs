@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"Description= '"+POut.String(question.Description)+"', "
 				+"Answer     = '"+POut.String(question.Answer)+"', "
 				+"FormPatNum =  "+POut.Long  (question.FormPatNum)+" "
-				+"WHERE QuestionNum = "+POut.Long(question.QuestionNum)+" LIMIT 1";
+				+"WHERE QuestionNum = "+POut.Long(question.QuestionNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE question SET "+command
-				+" WHERE QuestionNum = "+POut.Long(question.QuestionNum)+" LIMIT 1";
+				+" WHERE QuestionNum = "+POut.Long(question.QuestionNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Question from the database.</summary>
 		internal static void Delete(long questionNum){
 			string command="DELETE FROM question "
-				+"WHERE QuestionNum = "+POut.Long(questionNum)+" LIMIT 1";
+				+"WHERE QuestionNum = "+POut.Long(questionNum);
 			Db.NonQ(command);
 		}
 

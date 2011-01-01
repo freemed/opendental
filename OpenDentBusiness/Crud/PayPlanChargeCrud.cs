@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"Note            = '"+POut.String(payPlanCharge.Note)+"', "
 				+"ProvNum         =  "+POut.Long  (payPlanCharge.ProvNum)+", "
 				+"ClinicNum       =  "+POut.Long  (payPlanCharge.ClinicNum)+" "
-				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanCharge.PayPlanChargeNum)+" LIMIT 1";
+				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanCharge.PayPlanChargeNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE payplancharge SET "+command
-				+" WHERE PayPlanChargeNum = "+POut.Long(payPlanCharge.PayPlanChargeNum)+" LIMIT 1";
+				+" WHERE PayPlanChargeNum = "+POut.Long(payPlanCharge.PayPlanChargeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PayPlanCharge from the database.</summary>
 		internal static void Delete(long payPlanChargeNum){
 			string command="DELETE FROM payplancharge "
-				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanChargeNum)+" LIMIT 1";
+				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanChargeNum);
 			Db.NonQ(command);
 		}
 

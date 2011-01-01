@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE taskancestor SET "
 				+"TaskNum        =  "+POut.Long  (taskAncestor.TaskNum)+", "
 				+"TaskListNum    =  "+POut.Long  (taskAncestor.TaskListNum)+" "
-				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum)+" LIMIT 1";
+				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE taskancestor SET "+command
-				+" WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum)+" LIMIT 1";
+				+" WHERE TaskAncestorNum = "+POut.Long(taskAncestor.TaskAncestorNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TaskAncestor from the database.</summary>
 		internal static void Delete(long taskAncestorNum){
 			string command="DELETE FROM taskancestor "
-				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum)+" LIMIT 1";
+				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum);
 			Db.NonQ(command);
 		}
 

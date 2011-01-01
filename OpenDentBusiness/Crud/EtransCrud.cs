@@ -137,7 +137,7 @@ namespace OpenDentBusiness.Crud{
 				+"AckEtransNum        =  "+POut.Long  (etrans.AckEtransNum)+", "
 				+"PlanNum             =  "+POut.Long  (etrans.PlanNum)+", "
 				+"InsSubNum           =  "+POut.Long  (etrans.InsSubNum)+" "
-				+"WHERE EtransNum = "+POut.Long(etrans.EtransNum)+" LIMIT 1";
+				+"WHERE EtransNum = "+POut.Long(etrans.EtransNum);
 			Db.NonQ(command);
 		}
 
@@ -220,14 +220,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE etrans SET "+command
-				+" WHERE EtransNum = "+POut.Long(etrans.EtransNum)+" LIMIT 1";
+				+" WHERE EtransNum = "+POut.Long(etrans.EtransNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Etrans from the database.</summary>
 		internal static void Delete(long etransNum){
 			string command="DELETE FROM etrans "
-				+"WHERE EtransNum = "+POut.Long(etransNum)+" LIMIT 1";
+				+"WHERE EtransNum = "+POut.Long(etransNum);
 			Db.NonQ(command);
 		}
 

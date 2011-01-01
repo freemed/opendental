@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"DateStart      =  "+POut.Date  (repeatCharge.DateStart)+", "
 				+"DateStop       =  "+POut.Date  (repeatCharge.DateStop)+", "
 				+"Note           = '"+POut.String(repeatCharge.Note)+"' "
-				+"WHERE RepeatChargeNum = "+POut.Long(repeatCharge.RepeatChargeNum)+" LIMIT 1";
+				+"WHERE RepeatChargeNum = "+POut.Long(repeatCharge.RepeatChargeNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE repeatcharge SET "+command
-				+" WHERE RepeatChargeNum = "+POut.Long(repeatCharge.RepeatChargeNum)+" LIMIT 1";
+				+" WHERE RepeatChargeNum = "+POut.Long(repeatCharge.RepeatChargeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RepeatCharge from the database.</summary>
 		internal static void Delete(long repeatChargeNum){
 			string command="DELETE FROM repeatcharge "
-				+"WHERE RepeatChargeNum = "+POut.Long(repeatChargeNum)+" LIMIT 1";
+				+"WHERE RepeatChargeNum = "+POut.Long(repeatChargeNum);
 			Db.NonQ(command);
 		}
 

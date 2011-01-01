@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"ClassType      = '"+POut.String(language.ClassType)+"', "
 				+"English        = '"+POut.String(language.English)+"', "
 				+"IsObsolete     =  "+POut.Bool  (language.IsObsolete)+" "
-				+"WHERE LanguageNum = "+POut.Long(language.LanguageNum)+" LIMIT 1";
+				+"WHERE LanguageNum = "+POut.Long(language.LanguageNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE language SET "+command
-				+" WHERE LanguageNum = "+POut.Long(language.LanguageNum)+" LIMIT 1";
+				+" WHERE LanguageNum = "+POut.Long(language.LanguageNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Language from the database.</summary>
 		internal static void Delete(long languageNum){
 			string command="DELETE FROM language "
-				+"WHERE LanguageNum = "+POut.Long(languageNum)+" LIMIT 1";
+				+"WHERE LanguageNum = "+POut.Long(languageNum);
 			Db.NonQ(command);
 		}
 

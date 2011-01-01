@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE schoolclass SET "
 				+"GradYear      =  "+POut.Int   (schoolClass.GradYear)+", "
 				+"Descript      = '"+POut.String(schoolClass.Descript)+"' "
-				+"WHERE SchoolClassNum = "+POut.Long(schoolClass.SchoolClassNum)+" LIMIT 1";
+				+"WHERE SchoolClassNum = "+POut.Long(schoolClass.SchoolClassNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE schoolclass SET "+command
-				+" WHERE SchoolClassNum = "+POut.Long(schoolClass.SchoolClassNum)+" LIMIT 1";
+				+" WHERE SchoolClassNum = "+POut.Long(schoolClass.SchoolClassNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SchoolClass from the database.</summary>
 		internal static void Delete(long schoolClassNum){
 			string command="DELETE FROM schoolclass "
-				+"WHERE SchoolClassNum = "+POut.Long(schoolClassNum)+" LIMIT 1";
+				+"WHERE SchoolClassNum = "+POut.Long(schoolClassNum);
 			Db.NonQ(command);
 		}
 

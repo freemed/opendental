@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"NoColor    =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
 				+"RingGroups =  "+POut.Int   ((int)phoneEmpDefault.RingGroups)+", "
 				+"EmpName    = '"+POut.String(phoneEmpDefault.EmpName)+"' "
-				+"WHERE EmployeeNum = "+POut.Long(phoneEmpDefault.EmployeeNum)+" LIMIT 1";
+				+"WHERE EmployeeNum = "+POut.Long(phoneEmpDefault.EmployeeNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE phoneempdefault SET "+command
-				+" WHERE EmployeeNum = "+POut.Long(phoneEmpDefault.EmployeeNum)+" LIMIT 1";
+				+" WHERE EmployeeNum = "+POut.Long(phoneEmpDefault.EmployeeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PhoneEmpDefault from the database.</summary>
 		internal static void Delete(long employeeNum){
 			string command="DELETE FROM phoneempdefault "
-				+"WHERE EmployeeNum = "+POut.Long(employeeNum)+" LIMIT 1";
+				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			Db.NonQ(command);
 		}
 

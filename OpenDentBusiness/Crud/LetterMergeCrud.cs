@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"TemplateName  = '"+POut.String(letterMerge.TemplateName)+"', "
 				+"DataFileName  = '"+POut.String(letterMerge.DataFileName)+"', "
 				+"Category      =  "+POut.Long  (letterMerge.Category)+" "
-				+"WHERE LetterMergeNum = "+POut.Long(letterMerge.LetterMergeNum)+" LIMIT 1";
+				+"WHERE LetterMergeNum = "+POut.Long(letterMerge.LetterMergeNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE lettermerge SET "+command
-				+" WHERE LetterMergeNum = "+POut.Long(letterMerge.LetterMergeNum)+" LIMIT 1";
+				+" WHERE LetterMergeNum = "+POut.Long(letterMerge.LetterMergeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one LetterMerge from the database.</summary>
 		internal static void Delete(long letterMergeNum){
 			string command="DELETE FROM lettermerge "
-				+"WHERE LetterMergeNum = "+POut.Long(letterMergeNum)+" LIMIT 1";
+				+"WHERE LetterMergeNum = "+POut.Long(letterMergeNum);
 			Db.NonQ(command);
 		}
 

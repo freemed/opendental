@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"Description   = '"+POut.String(sheet.Description)+"', "
 				+"ShowInTerminal=  "+POut.Byte  (sheet.ShowInTerminal)+", "
 				+"IsWebForm     =  "+POut.Bool  (sheet.IsWebForm)+" "
-				+"WHERE SheetNum = "+POut.Long(sheet.SheetNum)+" LIMIT 1";
+				+"WHERE SheetNum = "+POut.Long(sheet.SheetNum);
 			Db.NonQ(command);
 		}
 
@@ -178,14 +178,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sheet SET "+command
-				+" WHERE SheetNum = "+POut.Long(sheet.SheetNum)+" LIMIT 1";
+				+" WHERE SheetNum = "+POut.Long(sheet.SheetNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Sheet from the database.</summary>
 		internal static void Delete(long sheetNum){
 			string command="DELETE FROM sheet "
-				+"WHERE SheetNum = "+POut.Long(sheetNum)+" LIMIT 1";
+				+"WHERE SheetNum = "+POut.Long(sheetNum);
 			Db.NonQ(command);
 		}
 

@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE computer SET "
 				+"CompName     = '"+POut.String(computer.CompName)+"', "
 				+"LastHeartBeat=  "+POut.DateT (computer.LastHeartBeat)+" "
-				+"WHERE ComputerNum = "+POut.Long(computer.ComputerNum)+" LIMIT 1";
+				+"WHERE ComputerNum = "+POut.Long(computer.ComputerNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE computer SET "+command
-				+" WHERE ComputerNum = "+POut.Long(computer.ComputerNum)+" LIMIT 1";
+				+" WHERE ComputerNum = "+POut.Long(computer.ComputerNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Computer from the database.</summary>
 		internal static void Delete(long computerNum){
 			string command="DELETE FROM computer "
-				+"WHERE ComputerNum = "+POut.Long(computerNum)+" LIMIT 1";
+				+"WHERE ComputerNum = "+POut.Long(computerNum);
 			Db.NonQ(command);
 		}
 

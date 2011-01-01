@@ -92,9 +92,10 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE userquery SET "
 				+"Description= '"+POut.String(userQuery.Description)+"', "
 				+"FileName   = '"+POut.String(userQuery.FileName)+"', "
-				+"QueryText  = '"+POut.String(userQuery.QueryText)+"' "
-				+"WHERE QueryNum = "+POut.Long(userQuery.QueryNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"QueryText  =  "+DbHelper.ParamChar+"paramQueryText "
+				+"WHERE QueryNum = "+POut.Long(userQuery.QueryNum);
+			OdSqlParameter paramQueryText=new OdSqlParameter("paramQueryText",OdDbType.Text,userQuery.QueryText);
+			Db.NonQ(command,paramQueryText);
 		}
 
 		///<summary>Updates one UserQuery in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -116,14 +117,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE userquery SET "+command
-				+" WHERE QueryNum = "+POut.Long(userQuery.QueryNum)+" LIMIT 1";
+				+" WHERE QueryNum = "+POut.Long(userQuery.QueryNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one UserQuery from the database.</summary>
 		internal static void Delete(long queryNum){
 			string command="DELETE FROM userquery "
-				+"WHERE QueryNum = "+POut.Long(queryNum)+" LIMIT 1";
+				+"WHERE QueryNum = "+POut.Long(queryNum);
 			Db.NonQ(command);
 		}
 

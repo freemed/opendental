@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+"Notes       = '"+POut.String(rxPat.Notes)+"', "
 				+"PharmacyNum =  "+POut.Long  (rxPat.PharmacyNum)+", "
 				+"IsControlled=  "+POut.Bool  (rxPat.IsControlled)+" "
-				+"WHERE RxNum = "+POut.Long(rxPat.RxNum)+" LIMIT 1";
+				+"WHERE RxNum = "+POut.Long(rxPat.RxNum);
 			Db.NonQ(command);
 		}
 
@@ -164,14 +164,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE rxpat SET "+command
-				+" WHERE RxNum = "+POut.Long(rxPat.RxNum)+" LIMIT 1";
+				+" WHERE RxNum = "+POut.Long(rxPat.RxNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RxPat from the database.</summary>
 		internal static void Delete(long rxNum){
 			string command="DELETE FROM rxpat "
-				+"WHERE RxNum = "+POut.Long(rxNum)+" LIMIT 1";
+				+"WHERE RxNum = "+POut.Long(rxNum);
 			Db.NonQ(command);
 		}
 

@@ -236,7 +236,7 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianMaxProsthMaterial  =  "+POut.Byte  (claim.CanadianMaxProsthMaterial)+", "
 				+"InsSubNum                  =  "+POut.Long  (claim.InsSubNum)+", "
 				+"InsSubNum2                 =  "+POut.Long  (claim.InsSubNum2)+" "
-				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum)+" LIMIT 1";
+				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum);
 			Db.NonQ(command);
 		}
 
@@ -451,14 +451,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claim SET "+command
-				+" WHERE ClaimNum = "+POut.Long(claim.ClaimNum)+" LIMIT 1";
+				+" WHERE ClaimNum = "+POut.Long(claim.ClaimNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Claim from the database.</summary>
 		internal static void Delete(long claimNum){
 			string command="DELETE FROM claim "
-				+"WHERE ClaimNum = "+POut.Long(claimNum)+" LIMIT 1";
+				+"WHERE ClaimNum = "+POut.Long(claimNum);
 			Db.NonQ(command);
 		}
 

@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE sigelement SET "
 				+"SigElementDefNum=  "+POut.Long  (sigElement.SigElementDefNum)+", "
 				+"SignalNum       =  "+POut.Long  (sigElement.SignalNum)+" "
-				+"WHERE SigElementNum = "+POut.Long(sigElement.SigElementNum)+" LIMIT 1";
+				+"WHERE SigElementNum = "+POut.Long(sigElement.SigElementNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sigelement SET "+command
-				+" WHERE SigElementNum = "+POut.Long(sigElement.SigElementNum)+" LIMIT 1";
+				+" WHERE SigElementNum = "+POut.Long(sigElement.SigElementNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SigElement from the database.</summary>
 		internal static void Delete(long sigElementNum){
 			string command="DELETE FROM sigelement "
-				+"WHERE SigElementNum = "+POut.Long(sigElementNum)+" LIMIT 1";
+				+"WHERE SigElementNum = "+POut.Long(sigElementNum);
 			Db.NonQ(command);
 		}
 

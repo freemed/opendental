@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"ElementAlignment=  "+POut.Int   ((int)apptViewItem.ElementAlignment)+", "
 				+"ApptFieldDefNum =  "+POut.Long  (apptViewItem.ApptFieldDefNum)+", "
 				+"PatFieldDefNum  =  "+POut.Long  (apptViewItem.PatFieldDefNum)+" "
-				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum)+" LIMIT 1";
+				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE apptviewitem SET "+command
-				+" WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum)+" LIMIT 1";
+				+" WHERE ApptViewItemNum = "+POut.Long(apptViewItem.ApptViewItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ApptViewItem from the database.</summary>
 		internal static void Delete(long apptViewItemNum){
 			string command="DELETE FROM apptviewitem "
-				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum)+" LIMIT 1";
+				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum);
 			Db.NonQ(command);
 		}
 

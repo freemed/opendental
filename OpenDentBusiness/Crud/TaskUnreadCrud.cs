@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE taskunread SET "
 				+"TaskNum      =  "+POut.Long  (taskUnread.TaskNum)+", "
 				+"UserNum      =  "+POut.Long  (taskUnread.UserNum)+" "
-				+"WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum)+" LIMIT 1";
+				+"WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE taskunread SET "+command
-				+" WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum)+" LIMIT 1";
+				+" WHERE TaskUnreadNum = "+POut.Long(taskUnread.TaskUnreadNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TaskUnread from the database.</summary>
 		internal static void Delete(long taskUnreadNum){
 			string command="DELETE FROM taskunread "
-				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum)+" LIMIT 1";
+				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum);
 			Db.NonQ(command);
 		}
 

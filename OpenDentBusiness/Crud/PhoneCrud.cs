@@ -128,7 +128,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum        =  "+POut.Long  (phone.PatNum)+", "
 				+"DateTimeStart =  "+POut.DateT (phone.DateTimeStart)+", "
 				+"WebCamImage   = '"+POut.String(phone.WebCamImage)+"' "
-				+"WHERE PhoneNum = "+POut.Long(phone.PhoneNum)+" LIMIT 1";
+				+"WHERE PhoneNum = "+POut.Long(phone.PhoneNum);
 			Db.NonQ(command);
 		}
 
@@ -187,14 +187,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE phone SET "+command
-				+" WHERE PhoneNum = "+POut.Long(phone.PhoneNum)+" LIMIT 1";
+				+" WHERE PhoneNum = "+POut.Long(phone.PhoneNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Phone from the database.</summary>
 		internal static void Delete(long phoneNum){
 			string command="DELETE FROM phone "
-				+"WHERE PhoneNum = "+POut.Long(phoneNum)+" LIMIT 1";
+				+"WHERE PhoneNum = "+POut.Long(phoneNum);
 			Db.NonQ(command);
 		}
 

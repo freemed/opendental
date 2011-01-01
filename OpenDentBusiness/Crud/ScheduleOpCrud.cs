@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE scheduleop SET "
 				+"ScheduleNum  =  "+POut.Long  (scheduleOp.ScheduleNum)+", "
 				+"OperatoryNum =  "+POut.Long  (scheduleOp.OperatoryNum)+" "
-				+"WHERE ScheduleOpNum = "+POut.Long(scheduleOp.ScheduleOpNum)+" LIMIT 1";
+				+"WHERE ScheduleOpNum = "+POut.Long(scheduleOp.ScheduleOpNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE scheduleop SET "+command
-				+" WHERE ScheduleOpNum = "+POut.Long(scheduleOp.ScheduleOpNum)+" LIMIT 1";
+				+" WHERE ScheduleOpNum = "+POut.Long(scheduleOp.ScheduleOpNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ScheduleOp from the database.</summary>
 		internal static void Delete(long scheduleOpNum){
 			string command="DELETE FROM scheduleop "
-				+"WHERE ScheduleOpNum = "+POut.Long(scheduleOpNum)+" LIMIT 1";
+				+"WHERE ScheduleOpNum = "+POut.Long(scheduleOpNum);
 			Db.NonQ(command);
 		}
 

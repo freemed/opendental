@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"ProgramNum    =  "+POut.Long  (toolButItem.ProgramNum)+", "
 				+"ToolBar       =  "+POut.Int   ((int)toolButItem.ToolBar)+", "
 				+"ButtonText    = '"+POut.String(toolButItem.ButtonText)+"' "
-				+"WHERE ToolButItemNum = "+POut.Long(toolButItem.ToolButItemNum)+" LIMIT 1";
+				+"WHERE ToolButItemNum = "+POut.Long(toolButItem.ToolButItemNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE toolbutitem SET "+command
-				+" WHERE ToolButItemNum = "+POut.Long(toolButItem.ToolButItemNum)+" LIMIT 1";
+				+" WHERE ToolButItemNum = "+POut.Long(toolButItem.ToolButItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ToolButItem from the database.</summary>
 		internal static void Delete(long toolButItemNum){
 			string command="DELETE FROM toolbutitem "
-				+"WHERE ToolButItemNum = "+POut.Long(toolButItemNum)+" LIMIT 1";
+				+"WHERE ToolButItemNum = "+POut.Long(toolButItemNum);
 			Db.NonQ(command);
 		}
 

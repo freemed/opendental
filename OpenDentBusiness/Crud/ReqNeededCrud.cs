@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"Descript       = '"+POut.String(reqNeeded.Descript)+"', "
 				+"SchoolCourseNum=  "+POut.Long  (reqNeeded.SchoolCourseNum)+", "
 				+"SchoolClassNum =  "+POut.Long  (reqNeeded.SchoolClassNum)+" "
-				+"WHERE ReqNeededNum = "+POut.Long(reqNeeded.ReqNeededNum)+" LIMIT 1";
+				+"WHERE ReqNeededNum = "+POut.Long(reqNeeded.ReqNeededNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE reqneeded SET "+command
-				+" WHERE ReqNeededNum = "+POut.Long(reqNeeded.ReqNeededNum)+" LIMIT 1";
+				+" WHERE ReqNeededNum = "+POut.Long(reqNeeded.ReqNeededNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ReqNeeded from the database.</summary>
 		internal static void Delete(long reqNeededNum){
 			string command="DELETE FROM reqneeded "
-				+"WHERE ReqNeededNum = "+POut.Long(reqNeededNum)+" LIMIT 1";
+				+"WHERE ReqNeededNum = "+POut.Long(reqNeededNum);
 			Db.NonQ(command);
 		}
 

@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianEncryptionMethod =  "+POut.Byte  (carrier.CanadianEncryptionMethod)+", "
 				+"CanadianTransactionPrefix= '"+POut.String(carrier.CanadianTransactionPrefix)+"', "
 				+"CanadianSupportedTypes   =  "+POut.Int   ((int)carrier.CanadianSupportedTypes)+" "
-				+"WHERE CarrierNum = "+POut.Long(carrier.CarrierNum)+" LIMIT 1";
+				+"WHERE CarrierNum = "+POut.Long(carrier.CarrierNum);
 			Db.NonQ(command);
 		}
 
@@ -206,14 +206,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE carrier SET "+command
-				+" WHERE CarrierNum = "+POut.Long(carrier.CarrierNum)+" LIMIT 1";
+				+" WHERE CarrierNum = "+POut.Long(carrier.CarrierNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Carrier from the database.</summary>
 		internal static void Delete(long carrierNum){
 			string command="DELETE FROM carrier "
-				+"WHERE CarrierNum = "+POut.Long(carrierNum)+" LIMIT 1";
+				+"WHERE CarrierNum = "+POut.Long(carrierNum);
 			Db.NonQ(command);
 		}
 

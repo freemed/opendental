@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"DateDeposit    =  "+POut.Date  (deposit.DateDeposit)+", "
 				+"BankAccountInfo= '"+POut.String(deposit.BankAccountInfo)+"', "
 				+"Amount         = '"+POut.Double(deposit.Amount)+"' "
-				+"WHERE DepositNum = "+POut.Long(deposit.DepositNum)+" LIMIT 1";
+				+"WHERE DepositNum = "+POut.Long(deposit.DepositNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE deposit SET "+command
-				+" WHERE DepositNum = "+POut.Long(deposit.DepositNum)+" LIMIT 1";
+				+" WHERE DepositNum = "+POut.Long(deposit.DepositNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Deposit from the database.</summary>
 		internal static void Delete(long depositNum){
 			string command="DELETE FROM deposit "
-				+"WHERE DepositNum = "+POut.Long(depositNum)+" LIMIT 1";
+				+"WHERE DepositNum = "+POut.Long(depositNum);
 			Db.NonQ(command);
 		}
 

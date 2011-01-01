@@ -100,10 +100,11 @@ namespace OpenDentBusiness.Crud{
 				+"LightColor      =  "+POut.Int   (sigElementDef.LightColor.ToArgb())+", "
 				+"SigElementType  =  "+POut.Int   ((int)sigElementDef.SigElementType)+", "
 				+"SigText         = '"+POut.String(sigElementDef.SigText)+"', "
-				+"Sound           = '"+POut.String(sigElementDef.Sound)+"', "
+				+"Sound           =  "+DbHelper.ParamChar+"paramSound, "
 				+"ItemOrder       =  "+POut.Int   (sigElementDef.ItemOrder)+" "
-				+"WHERE SigElementDefNum = "+POut.Long(sigElementDef.SigElementDefNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE SigElementDefNum = "+POut.Long(sigElementDef.SigElementDefNum);
+			OdSqlParameter paramSound=new OdSqlParameter("paramSound",OdDbType.Text,sigElementDef.Sound);
+			Db.NonQ(command,paramSound);
 		}
 
 		///<summary>Updates one SigElementDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -137,14 +138,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE sigelementdef SET "+command
-				+" WHERE SigElementDefNum = "+POut.Long(sigElementDef.SigElementDefNum)+" LIMIT 1";
+				+" WHERE SigElementDefNum = "+POut.Long(sigElementDef.SigElementDefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SigElementDef from the database.</summary>
 		internal static void Delete(long sigElementDefNum){
 			string command="DELETE FROM sigelementdef "
-				+"WHERE SigElementDefNum = "+POut.Long(sigElementDefNum)+" LIMIT 1";
+				+"WHERE SigElementDefNum = "+POut.Long(sigElementDefNum);
 			Db.NonQ(command);
 		}
 

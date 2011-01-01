@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"FeeSchedType=  "+POut.Int   ((int)feeSched.FeeSchedType)+", "
 				+"ItemOrder   =  "+POut.Int   (feeSched.ItemOrder)+", "
 				+"IsHidden    =  "+POut.Bool  (feeSched.IsHidden)+" "
-				+"WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum)+" LIMIT 1";
+				+"WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE feesched SET "+command
-				+" WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum)+" LIMIT 1";
+				+" WHERE FeeSchedNum = "+POut.Long(feeSched.FeeSchedNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one FeeSched from the database.</summary>
 		internal static void Delete(long feeSchedNum){
 			string command="DELETE FROM feesched "
-				+"WHERE FeeSchedNum = "+POut.Long(feeSchedNum)+" LIMIT 1";
+				+"WHERE FeeSchedNum = "+POut.Long(feeSchedNum);
 			Db.NonQ(command);
 		}
 

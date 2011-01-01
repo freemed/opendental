@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 				+"WindowingMax  =  "+POut.Int   (document.WindowingMax)+", "
 				+"MountItemNum  =  "+POut.Long  (document.MountItemNum)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE DocNum = "+POut.Long(document.DocNum)+" LIMIT 1";
+				+"WHERE DocNum = "+POut.Long(document.DocNum);
 			Db.NonQ(command);
 		}
 
@@ -231,14 +231,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE document SET "+command
-				+" WHERE DocNum = "+POut.Long(document.DocNum)+" LIMIT 1";
+				+" WHERE DocNum = "+POut.Long(document.DocNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Document from the database.</summary>
 		internal static void Delete(long docNum){
 			string command="DELETE FROM document "
-				+"WHERE DocNum = "+POut.Long(docNum)+" LIMIT 1";
+				+"WHERE DocNum = "+POut.Long(docNum);
 			Db.NonQ(command);
 		}
 

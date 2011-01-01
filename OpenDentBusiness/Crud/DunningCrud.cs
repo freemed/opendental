@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"AgeAccount  =  "+POut.Byte  (dunning.AgeAccount)+", "
 				+"InsIsPending=  "+POut.Int   ((int)dunning.InsIsPending)+", "
 				+"MessageBold = '"+POut.String(dunning.MessageBold)+"' "
-				+"WHERE DunningNum = "+POut.Long(dunning.DunningNum)+" LIMIT 1";
+				+"WHERE DunningNum = "+POut.Long(dunning.DunningNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE dunning SET "+command
-				+" WHERE DunningNum = "+POut.Long(dunning.DunningNum)+" LIMIT 1";
+				+" WHERE DunningNum = "+POut.Long(dunning.DunningNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Dunning from the database.</summary>
 		internal static void Delete(long dunningNum){
 			string command="DELETE FROM dunning "
-				+"WHERE DunningNum = "+POut.Long(dunningNum)+" LIMIT 1";
+				+"WHERE DunningNum = "+POut.Long(dunningNum);
 			Db.NonQ(command);
 		}
 

@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE site SET "
 				+"Description= '"+POut.String(site.Description)+"', "
 				+"Note       = '"+POut.String(site.Note)+"' "
-				+"WHERE SiteNum = "+POut.Long(site.SiteNum)+" LIMIT 1";
+				+"WHERE SiteNum = "+POut.Long(site.SiteNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE site SET "+command
-				+" WHERE SiteNum = "+POut.Long(site.SiteNum)+" LIMIT 1";
+				+" WHERE SiteNum = "+POut.Long(site.SiteNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Site from the database.</summary>
 		internal static void Delete(long siteNum){
 			string command="DELETE FROM site "
-				+"WHERE SiteNum = "+POut.Long(siteNum)+" LIMIT 1";
+				+"WHERE SiteNum = "+POut.Long(siteNum);
 			Db.NonQ(command);
 		}
 

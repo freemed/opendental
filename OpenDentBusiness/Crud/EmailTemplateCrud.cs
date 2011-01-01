@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE emailtemplate SET "
 				+"Subject         = '"+POut.String(emailTemplate.Subject)+"', "
 				+"BodyText        = '"+POut.String(emailTemplate.BodyText)+"' "
-				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplate.EmailTemplateNum)+" LIMIT 1";
+				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplate.EmailTemplateNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE emailtemplate SET "+command
-				+" WHERE EmailTemplateNum = "+POut.Long(emailTemplate.EmailTemplateNum)+" LIMIT 1";
+				+" WHERE EmailTemplateNum = "+POut.Long(emailTemplate.EmailTemplateNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one EmailTemplate from the database.</summary>
 		internal static void Delete(long emailTemplateNum){
 			string command="DELETE FROM emailtemplate "
-				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplateNum)+" LIMIT 1";
+				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplateNum);
 			Db.NonQ(command);
 		}
 

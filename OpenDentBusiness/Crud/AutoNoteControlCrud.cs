@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"ControlType       = '"+POut.String(autoNoteControl.ControlType)+"', "
 				+"ControlLabel      = '"+POut.String(autoNoteControl.ControlLabel)+"', "
 				+"ControlOptions    = '"+POut.String(autoNoteControl.ControlOptions)+"' "
-				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.AutoNoteControlNum)+" LIMIT 1";
+				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.AutoNoteControlNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE autonotecontrol SET "+command
-				+" WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.AutoNoteControlNum)+" LIMIT 1";
+				+" WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.AutoNoteControlNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutoNoteControl from the database.</summary>
 		internal static void Delete(long autoNoteControlNum){
 			string command="DELETE FROM autonotecontrol "
-				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControlNum)+" LIMIT 1";
+				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControlNum);
 			Db.NonQ(command);
 		}
 

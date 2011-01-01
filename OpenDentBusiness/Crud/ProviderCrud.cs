@@ -158,7 +158,7 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"AnesthProvType      =  "+POut.Long  (provider.AnesthProvType)+", "
 				+"TaxonomyCodeOverride= '"+POut.String(provider.TaxonomyCodeOverride)+"' "
-				+"WHERE ProvNum = "+POut.Long(provider.ProvNum)+" LIMIT 1";
+				+"WHERE ProvNum = "+POut.Long(provider.ProvNum);
 			Db.NonQ(command);
 		}
 
@@ -266,14 +266,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE provider SET "+command
-				+" WHERE ProvNum = "+POut.Long(provider.ProvNum)+" LIMIT 1";
+				+" WHERE ProvNum = "+POut.Long(provider.ProvNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Provider from the database.</summary>
 		internal static void Delete(long provNum){
 			string command="DELETE FROM provider "
-				+"WHERE ProvNum = "+POut.Long(provNum)+" LIMIT 1";
+				+"WHERE ProvNum = "+POut.Long(provNum);
 			Db.NonQ(command);
 		}
 

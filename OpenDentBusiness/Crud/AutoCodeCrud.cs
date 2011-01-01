@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"Description  = '"+POut.String(autoCode.Description)+"', "
 				+"IsHidden     =  "+POut.Bool  (autoCode.IsHidden)+", "
 				+"LessIntrusive=  "+POut.Bool  (autoCode.LessIntrusive)+" "
-				+"WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum)+" LIMIT 1";
+				+"WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE autocode SET "+command
-				+" WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum)+" LIMIT 1";
+				+" WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutoCode from the database.</summary>
 		internal static void Delete(long autoCodeNum){
 			string command="DELETE FROM autocode "
-				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum)+" LIMIT 1";
+				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum);
 			Db.NonQ(command);
 		}
 

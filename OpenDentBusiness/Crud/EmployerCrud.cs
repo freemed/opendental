@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"State      = '"+POut.String(employer.State)+"', "
 				+"Zip        = '"+POut.String(employer.Zip)+"', "
 				+"Phone      = '"+POut.String(employer.Phone)+"' "
-				+"WHERE EmployerNum = "+POut.Long(employer.EmployerNum)+" LIMIT 1";
+				+"WHERE EmployerNum = "+POut.Long(employer.EmployerNum);
 			Db.NonQ(command);
 		}
 
@@ -143,14 +143,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE employer SET "+command
-				+" WHERE EmployerNum = "+POut.Long(employer.EmployerNum)+" LIMIT 1";
+				+" WHERE EmployerNum = "+POut.Long(employer.EmployerNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Employer from the database.</summary>
 		internal static void Delete(long employerNum){
 			string command="DELETE FROM employer "
-				+"WHERE EmployerNum = "+POut.Long(employerNum)+" LIMIT 1";
+				+"WHERE EmployerNum = "+POut.Long(employerNum);
 			Db.NonQ(command);
 		}
 

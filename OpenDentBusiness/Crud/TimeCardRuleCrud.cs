@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"EmployeeNum    =  "+POut.Long  (timeCardRule.EmployeeNum)+", "
 				+"OverHoursPerDay=  "+POut.Time  (timeCardRule.OverHoursPerDay)+", "
 				+"AfterTimeOfDay =  "+POut.Time  (timeCardRule.AfterTimeOfDay)+" "
-				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRule.TimeCardRuleNum)+" LIMIT 1";
+				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRule.TimeCardRuleNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE timecardrule SET "+command
-				+" WHERE TimeCardRuleNum = "+POut.Long(timeCardRule.TimeCardRuleNum)+" LIMIT 1";
+				+" WHERE TimeCardRuleNum = "+POut.Long(timeCardRule.TimeCardRuleNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TimeCardRule from the database.</summary>
 		internal static void Delete(long timeCardRuleNum){
 			string command="DELETE FROM timecardrule "
-				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRuleNum)+" LIMIT 1";
+				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRuleNum);
 			Db.NonQ(command);
 		}
 

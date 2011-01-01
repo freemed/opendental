@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				//DateEntry not allowed to change
 				+"UnearnedType=  "+POut.Long  (paySplit.UnearnedType)+", "
 				+"ClinicNum   =  "+POut.Long  (paySplit.ClinicNum)+" "
-				+"WHERE SplitNum = "+POut.Long(paySplit.SplitNum)+" LIMIT 1";
+				+"WHERE SplitNum = "+POut.Long(paySplit.SplitNum);
 			Db.NonQ(command);
 		}
 
@@ -182,14 +182,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE paysplit SET "+command
-				+" WHERE SplitNum = "+POut.Long(paySplit.SplitNum)+" LIMIT 1";
+				+" WHERE SplitNum = "+POut.Long(paySplit.SplitNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PaySplit from the database.</summary>
 		internal static void Delete(long splitNum){
 			string command="DELETE FROM paysplit "
-				+"WHERE SplitNum = "+POut.Long(splitNum)+" LIMIT 1";
+				+"WHERE SplitNum = "+POut.Long(splitNum);
 			Db.NonQ(command);
 		}
 

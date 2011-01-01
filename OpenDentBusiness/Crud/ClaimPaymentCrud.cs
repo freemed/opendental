@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"ClinicNum      =  "+POut.Long  (claimPayment.ClinicNum)+", "
 				+"DepositNum     =  "+POut.Long  (claimPayment.DepositNum)+", "
 				+"CarrierName    = '"+POut.String(claimPayment.CarrierName)+"' "
-				+"WHERE ClaimPaymentNum = "+POut.Long(claimPayment.ClaimPaymentNum)+" LIMIT 1";
+				+"WHERE ClaimPaymentNum = "+POut.Long(claimPayment.ClaimPaymentNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE claimpayment SET "+command
-				+" WHERE ClaimPaymentNum = "+POut.Long(claimPayment.ClaimPaymentNum)+" LIMIT 1";
+				+" WHERE ClaimPaymentNum = "+POut.Long(claimPayment.ClaimPaymentNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ClaimPayment from the database.</summary>
 		internal static void Delete(long claimPaymentNum){
 			string command="DELETE FROM claimpayment "
-				+"WHERE ClaimPaymentNum = "+POut.Long(claimPaymentNum)+" LIMIT 1";
+				+"WHERE ClaimPaymentNum = "+POut.Long(claimPaymentNum);
 			Db.NonQ(command);
 		}
 

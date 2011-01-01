@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"Quantity         =  "+POut.Byte  (benefit.Quantity)+", "
 				+"CodeNum          =  "+POut.Long  (benefit.CodeNum)+", "
 				+"CoverageLevel    =  "+POut.Int   ((int)benefit.CoverageLevel)+" "
-				+"WHERE BenefitNum = "+POut.Long(benefit.BenefitNum)+" LIMIT 1";
+				+"WHERE BenefitNum = "+POut.Long(benefit.BenefitNum);
 			Db.NonQ(command);
 		}
 
@@ -171,14 +171,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE benefit SET "+command
-				+" WHERE BenefitNum = "+POut.Long(benefit.BenefitNum)+" LIMIT 1";
+				+" WHERE BenefitNum = "+POut.Long(benefit.BenefitNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Benefit from the database.</summary>
 		internal static void Delete(long benefitNum){
 			string command="DELETE FROM benefit "
-				+"WHERE BenefitNum = "+POut.Long(benefitNum)+" LIMIT 1";
+				+"WHERE BenefitNum = "+POut.Long(benefitNum);
 			Db.NonQ(command);
 		}
 

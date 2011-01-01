@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"MarketValue  = '"+POut.Double(equipment.MarketValue)+"', "
 				+"Location     = '"+POut.String(equipment.Location)+"', "
 				+"DateEntry    =  "+POut.Date  (equipment.DateEntry)+" "
-				+"WHERE EquipmentNum = "+POut.Long(equipment.EquipmentNum)+" LIMIT 1";
+				+"WHERE EquipmentNum = "+POut.Long(equipment.EquipmentNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE equipment SET "+command
-				+" WHERE EquipmentNum = "+POut.Long(equipment.EquipmentNum)+" LIMIT 1";
+				+" WHERE EquipmentNum = "+POut.Long(equipment.EquipmentNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Equipment from the database.</summary>
 		internal static void Delete(long equipmentNum){
 			string command="DELETE FROM equipment "
-				+"WHERE EquipmentNum = "+POut.Long(equipmentNum)+" LIMIT 1";
+				+"WHERE EquipmentNum = "+POut.Long(equipmentNum);
 			Db.NonQ(command);
 		}
 

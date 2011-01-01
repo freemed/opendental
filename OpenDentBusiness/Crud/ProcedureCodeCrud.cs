@@ -152,7 +152,7 @@ namespace OpenDentBusiness.Crud{
 				+"SubstitutionCode= '"+POut.String(procedureCode.SubstitutionCode)+"', "
 				+"SubstOnlyIf     =  "+POut.Int   ((int)procedureCode.SubstOnlyIf)+", "
 				+"IsMultiVisit    =  "+POut.Bool  (procedureCode.IsMultiVisit)+" "
-				+"WHERE CodeNum = "+POut.Long(procedureCode.CodeNum)+" LIMIT 1";
+				+"WHERE CodeNum = "+POut.Long(procedureCode.CodeNum);
 			Db.NonQ(command);
 		}
 
@@ -252,14 +252,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procedurecode SET "+command
-				+" WHERE CodeNum = "+POut.Long(procedureCode.CodeNum)+" LIMIT 1";
+				+" WHERE CodeNum = "+POut.Long(procedureCode.CodeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcedureCode from the database.</summary>
 		internal static void Delete(long codeNum){
 			string command="DELETE FROM procedurecode "
-				+"WHERE CodeNum = "+POut.Long(codeNum)+" LIMIT 1";
+				+"WHERE CodeNum = "+POut.Long(codeNum);
 			Db.NonQ(command);
 		}
 

@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"FromNum      =  "+POut.Long  (taskList.FromNum)+", "
 				+"ObjectType   =  "+POut.Int   ((int)taskList.ObjectType)+", "
 				+"DateTimeEntry=  "+POut.DateT (taskList.DateTimeEntry)+" "
-				+"WHERE TaskListNum = "+POut.Long(taskList.TaskListNum)+" LIMIT 1";
+				+"WHERE TaskListNum = "+POut.Long(taskList.TaskListNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE tasklist SET "+command
-				+" WHERE TaskListNum = "+POut.Long(taskList.TaskListNum)+" LIMIT 1";
+				+" WHERE TaskListNum = "+POut.Long(taskList.TaskListNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TaskList from the database.</summary>
 		internal static void Delete(long taskListNum){
 			string command="DELETE FROM tasklist "
-				+"WHERE TaskListNum = "+POut.Long(taskListNum)+" LIMIT 1";
+				+"WHERE TaskListNum = "+POut.Long(taskListNum);
 			Db.NonQ(command);
 		}
 

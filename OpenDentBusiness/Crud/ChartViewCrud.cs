@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsAudit          =  "+POut.Bool  (chartView.IsAudit)+", "
 				+"SelectedTeethOnly=  "+POut.Bool  (chartView.SelectedTeethOnly)+", "
 				+"OrionStatusFlags =  "+POut.Int   ((int)chartView.OrionStatusFlags)+" "
-				+"WHERE ChartViewNum = "+POut.Long(chartView.ChartViewNum)+" LIMIT 1";
+				+"WHERE ChartViewNum = "+POut.Long(chartView.ChartViewNum);
 			Db.NonQ(command);
 		}
 
@@ -150,14 +150,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE chartview SET "+command
-				+" WHERE ChartViewNum = "+POut.Long(chartView.ChartViewNum)+" LIMIT 1";
+				+" WHERE ChartViewNum = "+POut.Long(chartView.ChartViewNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ChartView from the database.</summary>
 		internal static void Delete(long chartViewNum){
 			string command="DELETE FROM chartview "
-				+"WHERE ChartViewNum = "+POut.Long(chartViewNum)+" LIMIT 1";
+				+"WHERE ChartViewNum = "+POut.Long(chartViewNum);
 			Db.NonQ(command);
 		}
 

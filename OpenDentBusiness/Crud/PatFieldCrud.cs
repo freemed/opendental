@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum     =  "+POut.Long  (patField.PatNum)+", "
 				+"FieldName  = '"+POut.String(patField.FieldName)+"', "
 				+"FieldValue = '"+POut.String(patField.FieldValue)+"' "
-				+"WHERE PatFieldNum = "+POut.Long(patField.PatFieldNum)+" LIMIT 1";
+				+"WHERE PatFieldNum = "+POut.Long(patField.PatFieldNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE patfield SET "+command
-				+" WHERE PatFieldNum = "+POut.Long(patField.PatFieldNum)+" LIMIT 1";
+				+" WHERE PatFieldNum = "+POut.Long(patField.PatFieldNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PatField from the database.</summary>
 		internal static void Delete(long patFieldNum){
 			string command="DELETE FROM patfield "
-				+"WHERE PatFieldNum = "+POut.Long(patFieldNum)+" LIMIT 1";
+				+"WHERE PatFieldNum = "+POut.Long(patFieldNum);
 			Db.NonQ(command);
 		}
 

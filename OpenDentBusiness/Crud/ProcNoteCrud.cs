@@ -102,11 +102,12 @@ namespace OpenDentBusiness.Crud{
 				+"ProcNum      =  "+POut.Long  (procNote.ProcNum)+", "
 				//EntryDateTime not allowed to change
 				+"UserNum      =  "+POut.Long  (procNote.UserNum)+", "
-				+"Note         = '"+POut.String(procNote.Note)+"', "
+				+"Note         =  "+DbHelper.ParamChar+"paramNote, "
 				+"SigIsTopaz   =  "+POut.Bool  (procNote.SigIsTopaz)+", "
 				+"Signature    = '"+POut.String(procNote.Signature)+"' "
-				+"WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum);
+			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,procNote.Note);
+			Db.NonQ(command,paramNote);
 		}
 
 		///<summary>Updates one ProcNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -141,14 +142,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procnote SET "+command
-				+" WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum)+" LIMIT 1";
+				+" WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcNote from the database.</summary>
 		internal static void Delete(long procNoteNum){
 			string command="DELETE FROM procnote "
-				+"WHERE ProcNoteNum = "+POut.Long(procNoteNum)+" LIMIT 1";
+				+"WHERE ProcNoteNum = "+POut.Long(procNoteNum);
 			Db.NonQ(command);
 		}
 

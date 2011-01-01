@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"OldCode          = '"+POut.String(procButtonItem.OldCode)+"', "
 				+"AutoCodeNum      =  "+POut.Long  (procButtonItem.AutoCodeNum)+", "
 				+"CodeNum          =  "+POut.Long  (procButtonItem.CodeNum)+" "
-				+"WHERE ProcButtonItemNum = "+POut.Long(procButtonItem.ProcButtonItemNum)+" LIMIT 1";
+				+"WHERE ProcButtonItemNum = "+POut.Long(procButtonItem.ProcButtonItemNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procbuttonitem SET "+command
-				+" WHERE ProcButtonItemNum = "+POut.Long(procButtonItem.ProcButtonItemNum)+" LIMIT 1";
+				+" WHERE ProcButtonItemNum = "+POut.Long(procButtonItem.ProcButtonItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcButtonItem from the database.</summary>
 		internal static void Delete(long procButtonItemNum){
 			string command="DELETE FROM procbuttonitem "
-				+"WHERE ProcButtonItemNum = "+POut.Long(procButtonItemNum)+" LIMIT 1";
+				+"WHERE ProcButtonItemNum = "+POut.Long(procButtonItemNum);
 			Db.NonQ(command);
 		}
 

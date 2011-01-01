@@ -526,6 +526,10 @@ using System.Drawing;"+rn);
 				else if(specialType==CrudSpecialColType.TimeSpanNeg) {
 					strb.Append("'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
 				}
+				else if(specialType==CrudSpecialColType.TextIsClob) {
+					strb.Append(" \"+DbHelper.ParamChar+\"param"+fieldsExceptPri[f].Name);
+					//paramList is already set above
+				}
 				else if(fieldsExceptPri[f].FieldType.IsEnum) {
 					strb.Append(" \"+POut.Int   ((int)"+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
@@ -581,12 +585,16 @@ using System.Drawing;"+rn);
 				strb.Append(" \"");
 			}
 			if(isMobile) {
-				strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+obj+"."+priKey1.Name+")+\" AND "+priKey2.Name+" = \"+POut.Long("+obj+"."+priKey2.Name+")+\" LIMIT 1\";");
+				strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+obj+"."+priKey1.Name+")+\" AND "+priKey2.Name+" = \"+POut.Long("+obj+"."+priKey2.Name+");");
 			}
 			else {
-				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
+				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+");");
 			}
-			strb.Append(rn+t3+"Db.NonQ(command);");
+			for(int i=0;i<paramList.Count;i++) {
+				strb.Append(rn+t3+"OdSqlParameter param"+paramList[i].ParameterName+"=new OdSqlParameter(\"param"+paramList[i].ParameterName+"\","
+					+"OdDbType.Text,"+obj+"."+paramList[i].ParameterName+");");
+			}
+			strb.Append(rn+t3+"Db.NonQ(command"+paramsString+");");
 			strb.Append(rn+t2+"}");
 			#endregion Update
 			#region Update 2nd override
@@ -684,12 +692,7 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t4+"return;");
 				strb.Append(rn+t3+"}");
 				strb.Append(rn+t3+"command=\"UPDATE "+tablename+" SET \"+command");
-				//if(isMobile) {
-				//	strb.Append(rn+t4+"+\" WHERE "+priKey1.Name+" = \"+POut.Long("+obj+"."+priKey1.Name+")+\" AND "+priKey2.Name+" = \"+POut.Long("+obj+"."+priKey2.Name+")+\" LIMIT 1\";");
-				//}
-				//else {
-					strb.Append(rn+t4+"+\" WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+")+\" LIMIT 1\";");
-				//}
+				strb.Append(rn+t4+"+\" WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+");");
 				strb.Append(rn+t3+"Db.NonQ(command);");
 				strb.Append(rn+t2+"}");
 			}
@@ -707,12 +710,12 @@ using System.Drawing;"+rn);
 				if(isMobile) {
 					strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam1+",long "+priKeyParam2+"){");
 					strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
-					strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+priKeyParam1+")+\" AND "+priKey2.Name+" = \"+POut.Long("+priKeyParam2+")+\" LIMIT 1\";");
+					strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+priKeyParam1+")+\" AND "+priKey2.Name+" = \"+POut.Long("+priKeyParam2+");");
 				}
 				else {
 					strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam+"){");
 					strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
-					strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+")+\" LIMIT 1\";");
+					strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+");");
 				}
 				strb.Append(rn+t3+"Db.NonQ(command);");
 				strb.Append(rn+t2+"}");

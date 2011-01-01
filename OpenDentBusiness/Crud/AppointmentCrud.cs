@@ -158,7 +158,7 @@ namespace OpenDentBusiness.Crud{
 				+"InsPlan2             =  "+POut.Long  (appointment.InsPlan2)+", "
 				+"DateTimeAskedToArrive=  "+POut.DateT (appointment.DateTimeAskedToArrive)+", "
 				+"ProcsColored         = '"+POut.String(appointment.ProcsColored)+"' "
-				+"WHERE AptNum = "+POut.Long(appointment.AptNum)+" LIMIT 1";
+				+"WHERE AptNum = "+POut.Long(appointment.AptNum);
 			Db.NonQ(command);
 		}
 
@@ -266,14 +266,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE appointment SET "+command
-				+" WHERE AptNum = "+POut.Long(appointment.AptNum)+" LIMIT 1";
+				+" WHERE AptNum = "+POut.Long(appointment.AptNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Appointment from the database.</summary>
 		internal static void Delete(long aptNum){
 			string command="DELETE FROM appointment "
-				+"WHERE AptNum = "+POut.Long(aptNum)+" LIMIT 1";
+				+"WHERE AptNum = "+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
 

@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"CovOrder      =  "+POut.Byte  (covCat.CovOrder)+", "
 				+"IsHidden      =  "+POut.Bool  (covCat.IsHidden)+", "
 				+"EbenefitCat   =  "+POut.Int   ((int)covCat.EbenefitCat)+" "
-				+"WHERE CovCatNum = "+POut.Long(covCat.CovCatNum)+" LIMIT 1";
+				+"WHERE CovCatNum = "+POut.Long(covCat.CovCatNum);
 			Db.NonQ(command);
 		}
 
@@ -129,14 +129,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE covcat SET "+command
-				+" WHERE CovCatNum = "+POut.Long(covCat.CovCatNum)+" LIMIT 1";
+				+" WHERE CovCatNum = "+POut.Long(covCat.CovCatNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one CovCat from the database.</summary>
 		internal static void Delete(long covCatNum){
 			string command="DELETE FROM covcat "
-				+"WHERE CovCatNum = "+POut.Long(covCatNum)+" LIMIT 1";
+				+"WHERE CovCatNum = "+POut.Long(covCatNum);
 			Db.NonQ(command);
 		}
 

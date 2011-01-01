@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"EmailMessageNum  =  "+POut.Long  (emailAttach.EmailMessageNum)+", "
 				+"DisplayedFileName= '"+POut.String(emailAttach.DisplayedFileName)+"', "
 				+"ActualFileName   = '"+POut.String(emailAttach.ActualFileName)+"' "
-				+"WHERE EmailAttachNum = "+POut.Long(emailAttach.EmailAttachNum)+" LIMIT 1";
+				+"WHERE EmailAttachNum = "+POut.Long(emailAttach.EmailAttachNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE emailattach SET "+command
-				+" WHERE EmailAttachNum = "+POut.Long(emailAttach.EmailAttachNum)+" LIMIT 1";
+				+" WHERE EmailAttachNum = "+POut.Long(emailAttach.EmailAttachNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one EmailAttach from the database.</summary>
 		internal static void Delete(long emailAttachNum){
 			string command="DELETE FROM emailattach "
-				+"WHERE EmailAttachNum = "+POut.Long(emailAttachNum)+" LIMIT 1";
+				+"WHERE EmailAttachNum = "+POut.Long(emailAttachNum);
 			Db.NonQ(command);
 		}
 

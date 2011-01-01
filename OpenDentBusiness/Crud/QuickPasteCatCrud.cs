@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"Description     = '"+POut.String(quickPasteCat.Description)+"', "
 				+"ItemOrder       =  "+POut.Int   (quickPasteCat.ItemOrder)+", "
 				+"DefaultForTypes = '"+POut.String(quickPasteCat.DefaultForTypes)+"' "
-				+"WHERE QuickPasteCatNum = "+POut.Long(quickPasteCat.QuickPasteCatNum)+" LIMIT 1";
+				+"WHERE QuickPasteCatNum = "+POut.Long(quickPasteCat.QuickPasteCatNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE quickpastecat SET "+command
-				+" WHERE QuickPasteCatNum = "+POut.Long(quickPasteCat.QuickPasteCatNum)+" LIMIT 1";
+				+" WHERE QuickPasteCatNum = "+POut.Long(quickPasteCat.QuickPasteCatNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one QuickPasteCat from the database.</summary>
 		internal static void Delete(long quickPasteCatNum){
 			string command="DELETE FROM quickpastecat "
-				+"WHERE QuickPasteCatNum = "+POut.Long(quickPasteCatNum)+" LIMIT 1";
+				+"WHERE QuickPasteCatNum = "+POut.Long(quickPasteCatNum);
 			Db.NonQ(command);
 		}
 

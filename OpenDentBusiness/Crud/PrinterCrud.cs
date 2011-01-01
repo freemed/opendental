@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"PrintSit     =  "+POut.Int   ((int)printer.PrintSit)+", "
 				+"PrinterName  = '"+POut.String(printer.PrinterName)+"', "
 				+"DisplayPrompt=  "+POut.Bool  (printer.DisplayPrompt)+" "
-				+"WHERE PrinterNum = "+POut.Long(printer.PrinterNum)+" LIMIT 1";
+				+"WHERE PrinterNum = "+POut.Long(printer.PrinterNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE printer SET "+command
-				+" WHERE PrinterNum = "+POut.Long(printer.PrinterNum)+" LIMIT 1";
+				+" WHERE PrinterNum = "+POut.Long(printer.PrinterNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Printer from the database.</summary>
 		internal static void Delete(long printerNum){
 			string command="DELETE FROM printer "
-				+"WHERE PrinterNum = "+POut.Long(printerNum)+" LIMIT 1";
+				+"WHERE PrinterNum = "+POut.Long(printerNum);
 			Db.NonQ(command);
 		}
 

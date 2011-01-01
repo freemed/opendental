@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"DiseaseName  = '"+POut.String(diseaseDef.DiseaseName)+"', "
 				+"ItemOrder    =  "+POut.Int   (diseaseDef.ItemOrder)+", "
 				+"IsHidden     =  "+POut.Bool  (diseaseDef.IsHidden)+" "
-				+"WHERE DiseaseDefNum = "+POut.Long(diseaseDef.DiseaseDefNum)+" LIMIT 1";
+				+"WHERE DiseaseDefNum = "+POut.Long(diseaseDef.DiseaseDefNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE diseasedef SET "+command
-				+" WHERE DiseaseDefNum = "+POut.Long(diseaseDef.DiseaseDefNum)+" LIMIT 1";
+				+" WHERE DiseaseDefNum = "+POut.Long(diseaseDef.DiseaseDefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one DiseaseDef from the database.</summary>
 		internal static void Delete(long diseaseDefNum){
 			string command="DELETE FROM diseasedef "
-				+"WHERE DiseaseDefNum = "+POut.Long(diseaseDefNum)+" LIMIT 1";
+				+"WHERE DiseaseDefNum = "+POut.Long(diseaseDefNum);
 			Db.NonQ(command);
 		}
 

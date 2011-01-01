@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE tasksubscription SET "
 				+"UserNum            =  "+POut.Long  (taskSubscription.UserNum)+", "
 				+"TaskListNum        =  "+POut.Long  (taskSubscription.TaskListNum)+" "
-				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum)+" LIMIT 1";
+				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum);
 			Db.NonQ(command);
 		}
 
@@ -108,14 +108,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE tasksubscription SET "+command
-				+" WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum)+" LIMIT 1";
+				+" WHERE TaskSubscriptionNum = "+POut.Long(taskSubscription.TaskSubscriptionNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one TaskSubscription from the database.</summary>
 		internal static void Delete(long taskSubscriptionNum){
 			string command="DELETE FROM tasksubscription "
-				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum)+" LIMIT 1";
+				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum);
 			Db.NonQ(command);
 		}
 

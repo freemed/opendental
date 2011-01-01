@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum        =  "+POut.Long  (plannedAppt.PatNum)+", "
 				+"AptNum        =  "+POut.Long  (plannedAppt.AptNum)+", "
 				+"ItemOrder     =  "+POut.Int   (plannedAppt.ItemOrder)+" "
-				+"WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum)+" LIMIT 1";
+				+"WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE plannedappt SET "+command
-				+" WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum)+" LIMIT 1";
+				+" WHERE PlannedApptNum = "+POut.Long(plannedAppt.PlannedApptNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PlannedAppt from the database.</summary>
 		internal static void Delete(long plannedApptNum){
 			string command="DELETE FROM plannedappt "
-				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum)+" LIMIT 1";
+				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum);
 			Db.NonQ(command);
 		}
 

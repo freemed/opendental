@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"CodeRange       = '"+POut.String(procApptColor.CodeRange)+"', "
 				+"ShowPreviousDate=  "+POut.Bool  (procApptColor.ShowPreviousDate)+", "
 				+"ColorText       =  "+POut.Int   (procApptColor.ColorText.ToArgb())+" "
-				+"WHERE ProcApptColorNum = "+POut.Long(procApptColor.ProcApptColorNum)+" LIMIT 1";
+				+"WHERE ProcApptColorNum = "+POut.Long(procApptColor.ProcApptColorNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE procapptcolor SET "+command
-				+" WHERE ProcApptColorNum = "+POut.Long(procApptColor.ProcApptColorNum)+" LIMIT 1";
+				+" WHERE ProcApptColorNum = "+POut.Long(procApptColor.ProcApptColorNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProcApptColor from the database.</summary>
 		internal static void Delete(long procApptColorNum){
 			string command="DELETE FROM procapptcolor "
-				+"WHERE ProcApptColorNum = "+POut.Long(procApptColorNum)+" LIMIT 1";
+				+"WHERE ProcApptColorNum = "+POut.Long(procApptColorNum);
 			Db.NonQ(command);
 		}
 

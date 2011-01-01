@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+"MLvalue        =  "+POut.Int   (perioMeasure.MLvalue)+", "
 				+"Lvalue         =  "+POut.Int   (perioMeasure.Lvalue)+", "
 				+"DLvalue        =  "+POut.Int   (perioMeasure.DLvalue)+" "
-				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasure.PerioMeasureNum)+" LIMIT 1";
+				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasure.PerioMeasureNum);
 			Db.NonQ(command);
 		}
 
@@ -164,14 +164,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE periomeasure SET "+command
-				+" WHERE PerioMeasureNum = "+POut.Long(perioMeasure.PerioMeasureNum)+" LIMIT 1";
+				+" WHERE PerioMeasureNum = "+POut.Long(perioMeasure.PerioMeasureNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PerioMeasure from the database.</summary>
 		internal static void Delete(long perioMeasureNum){
 			string command="DELETE FROM periomeasure "
-				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasureNum)+" LIMIT 1";
+				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasureNum);
 			Db.NonQ(command);
 		}
 

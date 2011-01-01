@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"ToUser     = '"+POut.String(signal.ToUser)+"', "
 				+"AckTime    =  "+POut.DateT (signal.AckTime)+", "
 				+"TaskNum    =  "+POut.Long  (signal.TaskNum)+" "
-				+"WHERE SignalNum = "+POut.Long(signal.SignalNum)+" LIMIT 1";
+				+"WHERE SignalNum = "+POut.Long(signal.SignalNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE signal SET "+command
-				+" WHERE SignalNum = "+POut.Long(signal.SignalNum)+" LIMIT 1";
+				+" WHERE SignalNum = "+POut.Long(signal.SignalNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Signal from the database.</summary>
 		internal static void Delete(long signalNum){
 			string command="DELETE FROM signal "
-				+"WHERE SignalNum = "+POut.Long(signalNum)+" LIMIT 1";
+				+"WHERE SignalNum = "+POut.Long(signalNum);
 			Db.NonQ(command);
 		}
 

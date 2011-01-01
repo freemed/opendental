@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"ProgramNum        =  "+POut.Long  (programProperty.ProgramNum)+", "
 				+"PropertyDesc      = '"+POut.String(programProperty.PropertyDesc)+"', "
 				+"PropertyValue     = '"+POut.String(programProperty.PropertyValue)+"' "
-				+"WHERE ProgramPropertyNum = "+POut.Long(programProperty.ProgramPropertyNum)+" LIMIT 1";
+				+"WHERE ProgramPropertyNum = "+POut.Long(programProperty.ProgramPropertyNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE programproperty SET "+command
-				+" WHERE ProgramPropertyNum = "+POut.Long(programProperty.ProgramPropertyNum)+" LIMIT 1";
+				+" WHERE ProgramPropertyNum = "+POut.Long(programProperty.ProgramPropertyNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one ProgramProperty from the database.</summary>
 		internal static void Delete(long programPropertyNum){
 			string command="DELETE FROM programproperty "
-				+"WHERE ProgramPropertyNum = "+POut.Long(programPropertyNum)+" LIMIT 1";
+				+"WHERE ProgramPropertyNum = "+POut.Long(programPropertyNum);
 			Db.NonQ(command);
 		}
 

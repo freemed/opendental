@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 				+"SenderName      = '"+POut.String(clearinghouse.SenderName)+"', "
 				+"SenderTelephone = '"+POut.String(clearinghouse.SenderTelephone)+"', "
 				+"GS03            = '"+POut.String(clearinghouse.GS03)+"' "
-				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum)+" LIMIT 1";
+				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum);
 			Db.NonQ(command);
 		}
 
@@ -231,14 +231,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE clearinghouse SET "+command
-				+" WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum)+" LIMIT 1";
+				+" WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Clearinghouse from the database.</summary>
 		internal static void Delete(long clearinghouseNum){
 			string command="DELETE FROM clearinghouse "
-				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum)+" LIMIT 1";
+				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum);
 			Db.NonQ(command);
 		}
 

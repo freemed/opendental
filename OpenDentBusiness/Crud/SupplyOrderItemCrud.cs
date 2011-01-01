@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"SupplyNum         =  "+POut.Long  (supplyOrderItem.SupplyNum)+", "
 				+"Qty               =  "+POut.Int   (supplyOrderItem.Qty)+", "
 				+"Price             = '"+POut.Double(supplyOrderItem.Price)+"' "
-				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum)+" LIMIT 1";
+				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE supplyorderitem SET "+command
-				+" WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum)+" LIMIT 1";
+				+" WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItem.SupplyOrderItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one SupplyOrderItem from the database.</summary>
 		internal static void Delete(long supplyOrderItemNum){
 			string command="DELETE FROM supplyorderitem "
-				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum)+" LIMIT 1";
+				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum);
 			Db.NonQ(command);
 		}
 

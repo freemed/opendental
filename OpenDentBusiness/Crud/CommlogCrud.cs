@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+"Signature      = '"+POut.String(commlog.Signature)+"', "
 				+"SigIsTopaz     =  "+POut.Bool  (commlog.SigIsTopaz)+" "
 				//DateTStamp can only be set by MySQL
-				+"WHERE CommlogNum = "+POut.Long(commlog.CommlogNum)+" LIMIT 1";
+				+"WHERE CommlogNum = "+POut.Long(commlog.CommlogNum);
 			Db.NonQ(command);
 		}
 
@@ -168,14 +168,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE commlog SET "+command
-				+" WHERE CommlogNum = "+POut.Long(commlog.CommlogNum)+" LIMIT 1";
+				+" WHERE CommlogNum = "+POut.Long(commlog.CommlogNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Commlog from the database.</summary>
 		internal static void Delete(long commlogNum){
 			string command="DELETE FROM commlog "
-				+"WHERE CommlogNum = "+POut.Long(commlogNum)+" LIMIT 1";
+				+"WHERE CommlogNum = "+POut.Long(commlogNum);
 			Db.NonQ(command);
 		}
 

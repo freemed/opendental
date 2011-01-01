@@ -104,12 +104,13 @@ namespace OpenDentBusiness.Crud{
 				+"ApptPhone   = '"+POut.String(patientNote.ApptPhone)+"', "
 				+"Medical     = '"+POut.String(patientNote.Medical)+"', "
 				+"Service     = '"+POut.String(patientNote.Service)+"', "
-				+"MedicalComp = '"+POut.String(patientNote.MedicalComp)+"', "
+				+"MedicalComp =  "+DbHelper.ParamChar+"paramMedicalComp, "
 				+"Treatment   = '"+POut.String(patientNote.Treatment)+"', "
 				+"CCNumber    = '"+POut.String(patientNote.CCNumber)+"', "
 				+"CCExpiration=  "+POut.Date  (patientNote.CCExpiration)+" "
-				+"WHERE PatNum = "+POut.Long(patientNote.PatNum)+" LIMIT 1";
-			Db.NonQ(command);
+				+"WHERE PatNum = "+POut.Long(patientNote.PatNum);
+			OdSqlParameter paramMedicalComp=new OdSqlParameter("paramMedicalComp",OdDbType.Text,patientNote.MedicalComp);
+			Db.NonQ(command,paramMedicalComp);
 		}
 
 		///<summary>Updates one PatientNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -148,14 +149,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE patientnote SET "+command
-				+" WHERE PatNum = "+POut.Long(patientNote.PatNum)+" LIMIT 1";
+				+" WHERE PatNum = "+POut.Long(patientNote.PatNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one PatientNote from the database.</summary>
 		internal static void Delete(long patNum){
 			string command="DELETE FROM patientnote "
-				+"WHERE PatNum = "+POut.Long(patNum)+" LIMIT 1";
+				+"WHERE PatNum = "+POut.Long(patNum);
 			Db.NonQ(command);
 		}
 

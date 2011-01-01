@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsOnCall       =  "+POut.Bool  (orionProc.IsOnCall)+", "
 				+"IsEffectiveComm=  "+POut.Bool  (orionProc.IsEffectiveComm)+", "
 				+"IsRepair       =  "+POut.Bool  (orionProc.IsRepair)+" "
-				+"WHERE OrionProcNum = "+POut.Long(orionProc.OrionProcNum)+" LIMIT 1";
+				+"WHERE OrionProcNum = "+POut.Long(orionProc.OrionProcNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE orionproc SET "+command
-				+" WHERE OrionProcNum = "+POut.Long(orionProc.OrionProcNum)+" LIMIT 1";
+				+" WHERE OrionProcNum = "+POut.Long(orionProc.OrionProcNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one OrionProc from the database.</summary>
 		internal static void Delete(long orionProcNum){
 			string command="DELETE FROM orionproc "
-				+"WHERE OrionProcNum = "+POut.Long(orionProcNum)+" LIMIT 1";
+				+"WHERE OrionProcNum = "+POut.Long(orionProcNum);
 			Db.NonQ(command);
 		}
 

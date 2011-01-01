@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 				+"AutoCodeNum    =  "+POut.Long  (autoCodeItem.AutoCodeNum)+", "
 				+"OldCode        = '"+POut.String(autoCodeItem.OldCode)+"', "
 				+"CodeNum        =  "+POut.Long  (autoCodeItem.CodeNum)+" "
-				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum)+" LIMIT 1";
+				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum);
 			Db.NonQ(command);
 		}
 
@@ -115,14 +115,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE autocodeitem SET "+command
-				+" WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum)+" LIMIT 1";
+				+" WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one AutoCodeItem from the database.</summary>
 		internal static void Delete(long autoCodeItemNum){
 			string command="DELETE FROM autocodeitem "
-				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum)+" LIMIT 1";
+				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum);
 			Db.NonQ(command);
 		}
 

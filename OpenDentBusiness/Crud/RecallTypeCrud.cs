@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 				+"DefaultInterval=  "+POut.Int   (recallType.DefaultInterval.ToInt())+", "
 				+"TimePattern    = '"+POut.String(recallType.TimePattern)+"', "
 				+"Procedures     = '"+POut.String(recallType.Procedures)+"' "
-				+"WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum)+" LIMIT 1";
+				+"WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum);
 			Db.NonQ(command);
 		}
 
@@ -122,14 +122,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE recalltype SET "+command
-				+" WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum)+" LIMIT 1";
+				+" WHERE RecallTypeNum = "+POut.Long(recallType.RecallTypeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one RecallType from the database.</summary>
 		internal static void Delete(long recallTypeNum){
 			string command="DELETE FROM recalltype "
-				+"WHERE RecallTypeNum = "+POut.Long(recallTypeNum)+" LIMIT 1";
+				+"WHERE RecallTypeNum = "+POut.Long(recallTypeNum);
 			Db.NonQ(command);
 		}
 

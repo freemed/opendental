@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+"OrdinalPos  =  "+POut.Int   (mountItem.OrdinalPos)+", "
 				+"Width       =  "+POut.Int   (mountItem.Width)+", "
 				+"Height      =  "+POut.Int   (mountItem.Height)+" "
-				+"WHERE MountItemNum = "+POut.Long(mountItem.MountItemNum)+" LIMIT 1";
+				+"WHERE MountItemNum = "+POut.Long(mountItem.MountItemNum);
 			Db.NonQ(command);
 		}
 
@@ -136,14 +136,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE mountitem SET "+command
-				+" WHERE MountItemNum = "+POut.Long(mountItem.MountItemNum)+" LIMIT 1";
+				+" WHERE MountItemNum = "+POut.Long(mountItem.MountItemNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one MountItem from the database.</summary>
 		internal static void Delete(long mountItemNum){
 			string command="DELETE FROM mountitem "
-				+"WHERE MountItemNum = "+POut.Long(mountItemNum)+" LIMIT 1";
+				+"WHERE MountItemNum = "+POut.Long(mountItemNum);
 			Db.NonQ(command);
 		}
 

@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 				+"ScreenGroupNum  =  "+POut.Long  (screen.ScreenGroupNum)+", "
 				+"ScreenGroupOrder=  "+POut.Int   (screen.ScreenGroupOrder)+", "
 				+"Comments        = '"+POut.String(screen.Comments)+"' "
-				+"WHERE ScreenNum = "+POut.Long(screen.ScreenNum)+" LIMIT 1";
+				+"WHERE ScreenNum = "+POut.Long(screen.ScreenNum);
 			Db.NonQ(command);
 		}
 
@@ -241,14 +241,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE screen SET "+command
-				+" WHERE ScreenNum = "+POut.Long(screen.ScreenNum)+" LIMIT 1";
+				+" WHERE ScreenNum = "+POut.Long(screen.ScreenNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Screen from the database.</summary>
 		internal static void Delete(long screenNum){
 			string command="DELETE FROM screen "
-				+"WHERE ScreenNum = "+POut.Long(screenNum)+" LIMIT 1";
+				+"WHERE ScreenNum = "+POut.Long(screenNum);
 			Db.NonQ(command);
 		}
 
