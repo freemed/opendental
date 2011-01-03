@@ -393,8 +393,8 @@ namespace OpenDental{
 				whereClin+=") ";
 			}
 			string queryIns=
-				@"SELECT CONVERT("+DbHelper.DateFormatColumn("claimproc.DateCP","%c/%d/%Y")+",CHAR(25)) DateCP,"
-+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@"lfname,
+				@"SELECT CONVERT("+DbHelper.DateFormatColumn("claimproc.DateCP","%c/%d/%Y")+",CHAR(25)) DateCP,MAX("
++DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@") lfname,
 carrier.CarrierName,provider.Abbr,
 clinic.Description clinicDesc,
 claimpayment.CheckNum,FORMAT(SUM(claimproc.InsPayAmt),2) amt,claimproc.ClaimNum 
@@ -409,12 +409,13 @@ WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 				+whereProv
 				+whereClin
 				+"AND claimpayment.CheckDate >= "+POut.Date(date1.SelectionStart)+" "
-				+"AND claimpayment.CheckDate <= "+POut.Date(date2.SelectionStart)+" ";
+				+"AND claimpayment.CheckDate <= "+POut.Date(date2.SelectionStart)+" "
++@"GROUP BY CONVERT("+DbHelper.DateFormatColumn("claimproc.DateCP","%c/%d/%Y")+@",CHAR(25)),
+claimproc.ClaimPaymentNum,provider.ProvNum,
+claimproc.ClinicNum,carrier.CarrierName,provider.Abbr,
+clinic.Description,claimpayment.CheckNum";
 			if(radioPatient.Checked){
-				queryIns+="GROUP BY patient.PatNum,claimproc.ClaimPaymentNum,provider.ProvNum,claimproc.ClinicNum";
-			}
-			else{
-				queryIns+="GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum,claimproc.ClinicNum";
+				queryIns+=",patient.PatNum";
 			}
 			queryIns+=" ORDER BY claimproc.DateCP,lfname";
 			if(!checkIns.Checked){

@@ -143,7 +143,7 @@ namespace OpenDental
 				LEFT JOIN patient ON patient.PatNum=payplan.Guarantor "
 				//WHERE SUBSTRING(Birthdate,6,5) >= '"+dateFrom.ToString("MM-dd")+"' "
 				//+"AND SUBSTRING(Birthdate,6,5) <= '"+dateTo.ToString("MM-dd")+"' "
-				+"GROUP BY payplan.PayPlanNum ORDER BY LName,FName";
+				+"GROUP BY FName,LName,MiddleI,Preferred,payplan.PayPlanNum ORDER BY LName,FName";
 			DataTable raw=Reports.GetTable(command);
 			//DateTime payplanDate;
 			Patient pat;

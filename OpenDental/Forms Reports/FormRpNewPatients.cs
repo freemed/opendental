@@ -375,7 +375,7 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=@"SET @pos=0;
 SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,"
-+DbHelper.Concat("referral.LName","IF(referral.FName='','',',')","referral.FName")+"refname,SUM(procedurelog.ProcFee) \"$HowMuch\"";
++DbHelper.Concat("referral.LName","IF(referral.FName='','',',')","referral.FName")+" refname,SUM(procedurelog.ProcFee) \"$HowMuch\"";
 			if(checkAddress.Checked){
 				report.Query+=",patient.Preferred,patient.Address,patient.Address2,patient.City,patient.State,patient.Zip";
 			}
@@ -389,7 +389,10 @@ SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,"
 				LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1
 				LEFT JOIN referral ON referral.ReferralNum=refattach.ReferralNum "
 				+whereProv;
-			report.Query+="GROUP BY patient.PatNum ";
+			report.Query+="GROUP BY patient.LName,patient.FName,patient.PatNum,"+DbHelper.Concat("referral.LName","IF(referral.FName='','',',')","referral.FName");
+			if(checkAddress.Checked) {
+				report.Query+=",patient.Preferred,patient.Address,patient.Address2,patient.City,patient.State,patient.Zip ";
+			}
 			if(checkProd.Checked){
 				report.Query+="HAVING \"$HowMuch\" > 0 ";
 			}
