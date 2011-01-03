@@ -159,7 +159,7 @@ namespace OpenDentBusiness {
 			return "TIME("+dateTimeVal+")";
 		}
 
-		///<summary>Helper for Oracle that will return equivalent of MySql CURTIME()</summary>
+		///<summary>Helper for Oracle that will return equivalent of MySql CURTIME().  Only used once.</summary>
 		public static string Curtime() {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "(SELECT TO_CHAR(SYSDATE,'HH24:MI:SS') FROM DUAL)";
@@ -170,7 +170,8 @@ namespace OpenDentBusiness {
 		///<summary>Helper for Oracle that will return equivalent of MySql CURDATE()</summary>
 		public static string Curdate() {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "(SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD') FROM DUAL)";
+				//return "(SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD') FROM DUAL)";
+				return "SYSDATE";
 			}
 			return "CURDATE()";
 		}
@@ -178,7 +179,8 @@ namespace OpenDentBusiness {
 		///<summary>Helper for Oracle that will return equivalent of MySql NOW()</summary>
 		public static string Now() {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "(SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') FROM DUAL)";
+				//return "(SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') FROM DUAL)";
+				return "SYSDATE";
 			}
 			return "NOW()";
 		}

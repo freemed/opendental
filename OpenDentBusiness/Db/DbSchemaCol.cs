@@ -31,6 +31,13 @@ namespace OpenDentBusiness {
 			//Indexed=false;
 		}
 
+		public DbSchemaCol(string columnName,OdDbType dataType,TextSizeMySqlOracle textSize) {
+			ColumnName=columnName;
+			DataType=dataType;
+			//Indexed=indexed;
+			TextSize=textSize;
+		}
+
 		public DbSchemaCol(string columnName,OdDbType dataType,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
 			ColumnName=columnName;
 			DataType=dataType;

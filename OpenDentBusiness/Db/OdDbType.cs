@@ -18,6 +18,8 @@ namespace OpenDentBusiness {
 		///<summary>C#:DateTime, MySql:timestamp, Oracle:date + trigger, </summary>
 		DateTimeStamp,
 		///<summary>C#:float, MySql:float, Oracle:number(38,8), </summary>
+		Enum,
+		///<summary>C#:enum, MySql:tinyint, Oracle:number(3), </summary>
 		Float,
 		///<summary>C#:int32, MySql:int,smallint(if careful), Oracle:number(11), Range:-2,147,483,647-2,147,483,647</summary>
 		Int,
@@ -34,6 +36,5 @@ namespace OpenDentBusiness {
 	}
 
 	
-
 
 }

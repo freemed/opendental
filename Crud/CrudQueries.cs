@@ -12,6 +12,7 @@ using OpenDentBusiness;
 namespace Crud {
 	public class CrudQueries {
 		private const string rn="\r\n";
+		private const string t4="\t\t\t\t";
 	
 		///<summary>Writes any necessary queries to the end of the ConvertDatabase file.  Usually zero or one.  The convertDbFile could also be the one in the Mobile folder.</summary>
 		public static void Write(string convertDbFile,Type typeClass,string dbName,bool isMobile) {
@@ -77,12 +78,20 @@ namespace Crud {
 				}
 				strb.Append(rn+"Query will be found at the end of "+Path.GetFileName(convertDbFile));
 				MessageBox.Show(strb.ToString());//one message for all new columns in a table.
+				strb=new StringBuilder();
+				strb.Append(rn+rn+t4+"/*");
 				for(int f=0;f<newColumns.Count;f++) {
-					//OdDbType odtype=OdDbType.Text;
-					DbSchemaCol col=new DbSchemaCol(newColumns[f].Name,OdDbType.Text);
-					string result=CrudSchemaRaw.AddColumnEnd(tablename,col);
+					specialType=CrudGenHelper.GetSpecialType(newColumns[f]);
+					OdDbType odtype=GetOdDbTypeFromColType(newColumns[f].FieldType.Name,specialType);
+					TextSizeMySqlOracle textsize=TextSizeMySqlOracle.Small;
+					if(specialType==CrudSpecialColType.TextIsClob){
+						textsize=TextSizeMySqlOracle.Medium;
+					}
+					DbSchemaCol col=new DbSchemaCol(newColumns[f].Name,odtype,textsize);
+					strb.Append(CrudSchemaRaw.AddColumnEnd(tablename,col));
 				}
-
+				strb.Append(rn+t4+"*/");
+				File.AppendAllText(convertDbFile,strb.ToString());
 
 				/* Needs to be moved into CrudSchemaRaw:
 				strb=new StringBuilder();
@@ -164,6 +173,32 @@ namespace Crud {
 				//File.AppendAllText(convertDbFile,strb.ToString());
 			}
 		}
+
+		public static OdDbType GetOdDbTypeFromColType(string FieldTypeName,CrudSpecialColType specialType) {
+			if(specialType==CrudSpecialColType.DateEntry
+						|| specialType==CrudSpecialColType.DateEntryEditable) 
+			{
+				return OdDbType.Date;
+			}
+			if(specialType==CrudSpecialColType.TimeStamp) {
+				return OdDbType.DateTimeStamp;
+			}
+			if(specialType==CrudSpecialColType.DateT
+						|| specialType==CrudSpecialColType.DateTEntry
+						|| specialType==CrudSpecialColType.DateTEntryEditable) 
+			{
+				return OdDbType.DateTime;
+			}
+			if(specialType==CrudSpecialColType.EnumAsString) {
+				return OdDbType.VarChar255;
+			}
+			//else if(newColumns[f].FieldType.IsEnum) {
+				//very rare
+				
+			//}
+			return OdDbType.VarChar255;
+		}
+
 
 		/*
 		///<summary>priKeyName2=null for not mobile.</summary>
