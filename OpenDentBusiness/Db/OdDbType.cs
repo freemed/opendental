@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 		Enum,
 		///<summary>C#:enum, MySql:tinyint, Oracle:number(3), </summary>
 		Float,
-		///<summary>C#:int32, MySql:int,smallint(if careful), Oracle:number(11), Range:-2,147,483,647-2,147,483,647</summary>
+		///<summary>C#:int32, MySql:int,smallint(if careful), Oracle:number(11), Range:-2,147,483,647-2,147,483,647.  Also used for colors</summary>
 		Int,
 		///<summary>C#:long, MySql:bigint, Oracle:number(20), Range:–9,223,372,036,854,775,808 to 9,223,372,036,854,775,807</summary>
 		Long,

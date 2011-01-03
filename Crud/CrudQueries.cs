@@ -82,13 +82,13 @@ namespace Crud {
 				strb.Append(rn+rn+t4+"/*");
 				for(int f=0;f<newColumns.Count;f++) {
 					specialType=CrudGenHelper.GetSpecialType(newColumns[f]);
-					OdDbType odtype=GetOdDbTypeFromColType(newColumns[f].FieldType.Name,specialType);
+					OdDbType odtype=GetOdDbTypeFromColType(newColumns[f].FieldType,specialType);
 					TextSizeMySqlOracle textsize=TextSizeMySqlOracle.Small;
 					if(specialType==CrudSpecialColType.TextIsClob){
 						textsize=TextSizeMySqlOracle.Medium;
 					}
 					DbSchemaCol col=new DbSchemaCol(newColumns[f].Name,odtype,textsize);
-					strb.Append(CrudSchemaRaw.AddColumnEnd(tablename,col));
+					strb.Append(CrudSchemaRaw.AddColumnEnd(tablename,col,4));
 				}
 				strb.Append(rn+t4+"*/");
 				File.AppendAllText(convertDbFile,strb.ToString());
@@ -174,7 +174,7 @@ namespace Crud {
 			}
 		}
 
-		public static OdDbType GetOdDbTypeFromColType(string FieldTypeName,CrudSpecialColType specialType) {
+		public static OdDbType GetOdDbTypeFromColType(Type fieldType,CrudSpecialColType specialType) {
 			if(specialType==CrudSpecialColType.DateEntry
 						|| specialType==CrudSpecialColType.DateEntryEditable) 
 			{
@@ -192,10 +192,58 @@ namespace Crud {
 			if(specialType==CrudSpecialColType.EnumAsString) {
 				return OdDbType.VarChar255;
 			}
-			//else if(newColumns[f].FieldType.IsEnum) {
-				//very rare
-				
-			//}
+			if(fieldType.IsEnum) {
+				return OdDbType.Enum;
+			}
+			switch(fieldType.Name) {
+				default:
+					throw new ApplicationException("Type not yet supported: "+fieldType.Name);
+				case "Bitmap":
+					return OdDbType.Text;
+					break;
+				case "Boolean":
+					return OdDbType.Bool;
+				case "Byte":
+					return OdDbType.Byte;
+				case "Color":
+					return OdDbType.Int;
+					/*
+				case "DateTime"://This is only for date, not dateT
+					return OdDbType
+					strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
+					break;
+				case "Double":
+					return OdDbType
+					strb.Append("double NOT NULL");
+					break;
+				case "Interval":
+					return OdDbType
+					strb.Append("int NOT NULL");
+					break;
+				case "Int64":
+					return OdDbType
+					strb.Append("bigint NOT NULL");
+					break;
+				case "Int32":
+					return OdDbType
+					strb.Append("int NOT NULL");
+					break;
+				case "Single":
+					return OdDbType
+					strb.Append("float NOT NULL");
+					break;
+				case "String":
+					return OdDbType
+					strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
+					break;
+				case "TimeSpan":
+					return OdDbType
+					strb.Append("time NOT NULL");
+					break;*/
+			}
+
+
+
 			return OdDbType.VarChar255;
 		}
 
