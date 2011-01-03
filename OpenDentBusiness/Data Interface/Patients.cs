@@ -794,7 +794,7 @@ namespace OpenDentBusiness{
 				command+=",IFNULL(tempclaimspending.PendingClaimCount,'0') AS ClaimCount ";
 			}
 			if(excludeIfUnsentProcs) {
-				command+=",IFNULL(tempunsentprocs.UnsentProcCount,'0') AS _unsentProcCount ";
+				command+=",IFNULL(tempunsentprocs.UnsentProcCount,'0') AS \"_unsentProcCount\" ";
 			}
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
@@ -880,7 +880,7 @@ namespace OpenDentBusiness{
 				command+="AND ClaimCount=0 ";
 			}
 			if(excludeIfUnsentProcs) {
-				command+="AND _unsentProcCount=0 ";
+				command+="AND \"_unsentProcCount\"=0 ";
 			}
 			command+="ORDER BY LName,FName";
 			//Debug.WriteLine(command);
