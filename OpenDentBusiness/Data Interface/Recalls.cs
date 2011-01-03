@@ -134,15 +134,15 @@ namespace OpenDentBusiness{
 			List<DataRow> rows=new List<DataRow>();
 			string command;
 			command=
-				@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) "+"\"_dateLastReminder\""+@",
+				@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
 				DisableUntilBalance,DisableUntilDate,
-				patient.Email,patguar.Email "+"\"_guarEmail\""+",patguar.FName \"_guarFName\""+@",
-				patguar.LName "+"\"_guarLName\""+@",patient.FName,
+				patient.Email,patguar.Email ""_guarEmail"",patguar.FName ""_guarFName"",
+				patguar.LName ""_guarLName"",patient.FName,
 				patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
-				COUNT(commlog.CommlogNum) "+"\"_numberOfReminders\""+@",
+				COUNT(commlog.CommlogNum) ""_numberOfReminders"",
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
 				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
-				recalltype.Description "+"\"_recalltype\""+@",patient.WirelessPhone,patient.WkPhone
+				recalltype.Description ""_recalltype"",patient.WirelessPhone,patient.WkPhone
 				FROM recall
 				LEFT JOIN patient ON recall.PatNum=patient.PatNum
 				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum

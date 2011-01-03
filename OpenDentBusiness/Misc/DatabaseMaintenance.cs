@@ -392,11 +392,11 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			//because of the way this is grouped, it will just get one of many patients for each
-			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) "+"\"_sumpay\",ROUND(CheckAmt,2) \"_checkamt\""+@"
+			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) ""_sumpay"",ROUND(CheckAmt,2) ""_checkamt""
 					FROM claimpayment,claimproc
 					WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
 					GROUP BY claimproc.ClaimPaymentNum,CheckAmt
-					HAVING "+"\"_sumpay\"!=\"_checkamt\"";
+					HAVING ""_sumpay""!=""_checkamt""";
 			table=Db.GetTable(command);
 			if(isCheck){
 				if(table.Rows.Count>0 || verbose){
@@ -417,9 +417,9 @@ namespace OpenDentBusiness {
 			//now deposits which were affected by the changes above--------------------------------------------------
 			command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
 				IFNULL((SELECT SUM(CheckAmt) FROM claimpayment WHERE claimpayment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0)
-				+IFNULL((SELECT SUM(PayAmt) FROM payment WHERE payment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0) "+"\"_sum\""+@"
+				+IFNULL((SELECT SUM(PayAmt) FROM payment WHERE payment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0) ""_sum""
 				FROM deposit
-				HAVING ROUND("+"\"_sum\",2) != ROUND(deposit.Amount,2)";
+				HAVING ROUND(""_sum"",2) != ROUND(deposit.Amount,2)";
 			table=Db.GetTable(command);
 			if(isCheck){
 				if(table.Rows.Count>0 || verbose) {

@@ -134,11 +134,11 @@ namespace OpenDental
 			}
 			string command=@"SELECT FName,LName,MiddleI,PlanNum,Preferred,
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= "+datesql+@") "+"\"_accumDue\""+@",
+				AND ChargeDate <= "+datesql+@") ""_accumDue"",
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= "+DbHelper.DateAddDay("'"+datesql+"'",POut.Long(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)))+@") "+"\"_dueTen\""+@",
-				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum) "+"\"_paid\""+@",
-				(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) "+"\"_principal\""+@"
+				AND ChargeDate <= "+DbHelper.DateAddDay("'"+datesql+"'",POut.Long(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)))+@") ""_dueTen"",
+				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum) ""_paid"",
+				(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) ""_principal""
 				FROM payplan
 				LEFT JOIN patient ON patient.PatNum=payplan.Guarantor "
 				//WHERE SUBSTRING(Birthdate,6,5) >= '"+dateFrom.ToString("MM-dd")+"' "
