@@ -34,6 +34,12 @@ namespace OpenDentBusiness {
 			else {//oracle
 				command="ALTER TABLE tempcore ADD ColEnd clob";
 				Db.NonQ(command);
+/*				if(!isStringDataType()) {
+					command="update tempcore set ColEnd = "+getBlankData(col)+" where ColEnd IS NULL";
+					Db.NonQ(command);
+					command="Alter table tempcore modify ColEnd NOT NULL";
+					Db.NonQ(command);
+				}*/
 			}
 		}
 
