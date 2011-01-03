@@ -354,6 +354,8 @@
     <Compile Include="Db\DbSchemaCol.cs" />
     <Compile Include="Db\OdDbType.cs" />
     <Compile Include="Db\PoIn.cs" />
+    <Compile Include="Db\SchemaCrudProposedTest.cs" />
+    <Compile Include="Db\SchemaCrudTest.cs" />
     <Compile Include="InternalTools\Phones\PhoneAsterisks.cs" />
     <Compile Include="InternalTools\Phones\PhoneEmpDefaults.cs" />
     <Compile Include="InternalTools\Phones\PhoneNumbers.cs" />

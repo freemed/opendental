@@ -88,6 +88,8 @@
     <Compile Include="CrudGenDataInterface.cs" />
     <Compile Include="CrudGenHelper.cs" />
     <Compile Include="CrudQueries.cs" />
+    <Compile Include="CrudSchemaForUnitTest.cs" />
+    <Compile Include="CrudSchemaRaw.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

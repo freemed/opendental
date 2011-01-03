@@ -37,6 +37,9 @@ namespace UnitTests {
 			this.label5 = new System.Windows.Forms.Label();
 			this.listType = new System.Windows.Forms.ListBox();
 			this.label7 = new System.Windows.Forms.Label();
+			this.butSchema = new System.Windows.Forms.Button();
+			this.radioSchema1 = new System.Windows.Forms.RadioButton();
+			this.radioSchema2 = new System.Windows.Forms.RadioButton();
 			this.SuspendLayout();
 			// 
 			// textResults
@@ -44,10 +47,10 @@ namespace UnitTests {
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,132);
+			this.textResults.Location = new System.Drawing.Point(12,158);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(733,663);
+			this.textResults.Size = new System.Drawing.Size(733,637);
 			this.textResults.TabIndex = 1;
 			// 
 			// label1
@@ -61,7 +64,7 @@ namespace UnitTests {
 			// 
 			// butNewDb
 			// 
-			this.butNewDb.Location = new System.Drawing.Point(12,80);
+			this.butNewDb.Location = new System.Drawing.Point(12,104);
 			this.butNewDb.Name = "butNewDb";
 			this.butNewDb.Size = new System.Drawing.Size(75,23);
 			this.butNewDb.TabIndex = 0;
@@ -71,7 +74,7 @@ namespace UnitTests {
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(92,82);
+			this.label2.Location = new System.Drawing.Point(92,106);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(505,18);
 			this.label2.TabIndex = 6;
@@ -81,7 +84,7 @@ namespace UnitTests {
 			// 
 			// butRun
 			// 
-			this.butRun.Location = new System.Drawing.Point(12,105);
+			this.butRun.Location = new System.Drawing.Point(12,129);
 			this.butRun.Name = "butRun";
 			this.butRun.Size = new System.Drawing.Size(75,23);
 			this.butRun.TabIndex = 7;
@@ -91,7 +94,7 @@ namespace UnitTests {
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(92,107);
+			this.label3.Location = new System.Drawing.Point(92,131);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(90,18);
 			this.label3.TabIndex = 8;
@@ -100,7 +103,7 @@ namespace UnitTests {
 			// 
 			// textSpecificTest
 			// 
-			this.textSpecificTest.Location = new System.Drawing.Point(177,107);
+			this.textSpecificTest.Location = new System.Drawing.Point(177,131);
 			this.textSpecificTest.Name = "textSpecificTest";
 			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
 			this.textSpecificTest.TabIndex = 9;
@@ -127,7 +130,7 @@ namespace UnitTests {
 			// 
 			// butCore
 			// 
-			this.butCore.Location = new System.Drawing.Point(12,55);
+			this.butCore.Location = new System.Drawing.Point(12,79);
 			this.butCore.Name = "butCore";
 			this.butCore.Size = new System.Drawing.Size(75,23);
 			this.butCore.TabIndex = 12;
@@ -137,7 +140,7 @@ namespace UnitTests {
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(93,63);
+			this.label5.Location = new System.Drawing.Point(93,82);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(547,18);
 			this.label5.TabIndex = 13;
@@ -163,11 +166,44 @@ namespace UnitTests {
 			this.label7.Text = "Database Type";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// butSchema
+			// 
+			this.butSchema.Location = new System.Drawing.Point(12,54);
+			this.butSchema.Name = "butSchema";
+			this.butSchema.Size = new System.Drawing.Size(75,23);
+			this.butSchema.TabIndex = 23;
+			this.butSchema.Text = "Schema";
+			this.butSchema.UseVisualStyleBackColor = true;
+			this.butSchema.Click += new System.EventHandler(this.butSchema_Click);
+			// 
+			// radioSchema1
+			// 
+			this.radioSchema1.Checked = true;
+			this.radioSchema1.Location = new System.Drawing.Point(97,57);
+			this.radioSchema1.Name = "radioSchema1";
+			this.radioSchema1.Size = new System.Drawing.Size(133,18);
+			this.radioSchema1.TabIndex = 24;
+			this.radioSchema1.TabStop = true;
+			this.radioSchema1.Text = "Test proposed crud";
+			this.radioSchema1.UseVisualStyleBackColor = true;
+			// 
+			// radioSchema2
+			// 
+			this.radioSchema2.Location = new System.Drawing.Point(234,57);
+			this.radioSchema2.Name = "radioSchema2";
+			this.radioSchema2.Size = new System.Drawing.Size(189,18);
+			this.radioSchema2.TabIndex = 25;
+			this.radioSchema2.Text = "Compare proposed to generated";
+			this.radioSchema2.UseVisualStyleBackColor = true;
+			// 
 			// FormUnitTests
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(757,807);
+			this.Controls.Add(this.radioSchema2);
+			this.Controls.Add(this.radioSchema1);
+			this.Controls.Add(this.butSchema);
 			this.Controls.Add(this.listType);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.label5);
@@ -206,6 +242,9 @@ namespace UnitTests {
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ListBox listType;
 		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.Button butSchema;
+		private System.Windows.Forms.RadioButton radioSchema1;
+		private System.Windows.Forms.RadioButton radioSchema2;
 	}
 }
 

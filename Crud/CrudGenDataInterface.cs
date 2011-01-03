@@ -71,12 +71,14 @@ namespace Crud {
 						return GetEntireSclass(typeClass.Name,obj,priKey.Name,Sname,tablename,priKeyParam);
 					}
 				case SnippetType.CreateTable:
+					return "Currently unavailable.";
+					/*
 					if(isMobile) {
 						return GetCreateTable(tablename,priKey1.Name,priKey2.Name,fieldsExceptPri);
 					}
 					else {
 						return GetCreateTable(tablename,priKey.Name,null,fieldsExceptPri);
-					}
+					}*/
 			}
 		}
 
@@ -334,12 +336,13 @@ namespace OpenDentBusiness.Mobile{
 			return str;
 		}
 
+		/*
 		///<summary>priKeyName2 will be null if not mobile.</summary>
 		private static string GetCreateTable(string tablename,string priKeyName1,string priKeyName2,List<FieldInfo> fieldsExceptPri) {
 			StringBuilder strb=new StringBuilder();
 			CrudQueries.GetCreateTable(strb,tablename,priKeyName1,priKeyName2,fieldsExceptPri);
 			return strb.ToString();
-		}
+		}*/
 
 
 

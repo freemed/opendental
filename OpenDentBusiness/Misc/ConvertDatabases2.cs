@@ -3251,7 +3251,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_7_0() {
 			if(FromVersion<new Version("7.7.0.0")) {
 				string command;
-				
+
+				//DbSchema.AddColumnAfter7_7("document",new DbSchemaCol("
 
 
 

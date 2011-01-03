@@ -66,6 +66,19 @@ namespace UnitTests {
 			Cursor=Cursors.Default;
 		}
 
+		private void butSchema_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			textResults.Text="";
+			Application.DoEvents();
+			if(radioSchema1.Checked) {
+				textResults.Text+=SchemaT.TestProposedCrud(isOracle);
+			}
+			else {
+				textResults.Text+=SchemaT.CompareProposedToGenerated(isOracle);
+			}
+			Cursor=Cursors.Default;
+		}
+
 		private void butCore_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			textResults.Text="";
@@ -191,6 +204,8 @@ namespace UnitTests {
 			textResults.SelectionStart=textResults.Text.Length;
 			*/
 		}
+
+	
 
 		
 

@@ -11,7 +11,8 @@ namespace UnitTests {
 	public class CoreTypesT {
 		/// <summary></summary>
 		public static string CreateTempTable(bool isOracle) {
-			string retVal="";
+			string retVal=""; 
+			/*
 			DatabaseTools.SetDbConnection("unittest",isOracle);
 			List<DbSchemaCol> cols=new List<DbSchemaCol>();
 			cols.Add(new DbSchemaCol("TimeOfDayTest",OdDbType.TimeOfDay));
@@ -29,7 +30,8 @@ namespace UnitTests {
 			cols=new List<DbSchemaCol>();
 			cols.Add(new DbSchemaCol("Names",OdDbType.VarChar255));
 			DbSchema.AddTable7_7("tempgroupconcat",cols);
-			retVal+="Temp tables created.\r\n";
+			retVal+="Temp tables created.\r\n";*/
+			retVal+="Temp tables cannot yet be created.\r\n";
 			return retVal;
 		}
 
@@ -342,8 +344,8 @@ namespace UnitTests {
 				retVal+="SHOW CREATE TABLE: Not applicable to Oracle.\r\n";
 			}
 			//Cleanup---------------------------------------------------------------------------------------
-			DbSchema.DropTable7_7("tempcore");
-			DbSchema.DropTable7_7("tempgroupconcat");
+			//DbSchema.DropTable7_7("tempcore");
+			//DbSchema.DropTable7_7("tempgroupconcat");
 			retVal+="CoreTypes test done.\r\n";
 			return retVal;
 		}

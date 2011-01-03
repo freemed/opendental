@@ -1,4 +1,6 @@
-﻿using System;
+﻿/*This is outdated, but will remain here for reference for a while.
+  Functionality was moved to the CrudGenerator project.
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -17,7 +19,7 @@ namespace OpenDentBusiness {
 					command = "ALTER TABLE "+tableName+" ADD INDEX IDX_"+tableName.ToUpper()+col.ColumnName.ToUpper()+" ("+col.ColumnName+")";
 					Db.NonQ(command);
 				}
-				command = "UPDATE "+tableName+" SET "+col.ColumnName+" = "+getBlankMySQLData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column will 'blank' data
+				command = "UPDATE "+tableName+" SET "+col.ColumnName+" = "+getBlankMySQLData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column with 'blank' data
 				Db.NonQ(command);
 				if(getBlankMySQLData(col)!="''") {//only set column to NOT NULL if it is not a string type column.
 					command = "ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" "+GetMySqlType7_7(col)+" NOT NULL";
@@ -32,7 +34,7 @@ namespace OpenDentBusiness {
 			else {//oracle
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType7_7(col);
 				Db.NonQ(command);
-				command = "UPDATE TABLE "+tableName+" SET "+col.ColumnName+" = "+getBlankOracleData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column will 'blank' data
+				command = "UPDATE TABLE "+tableName+" SET "+col.ColumnName+" = "+getBlankOracleData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column with 'blank' data
 				Db.NonQ(command);
 				if(getBlankOracleData(col)!="''") {//only set column to NOT NULL if it is not a string type column.
 					command = "ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL";
@@ -78,7 +80,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/*
+		/*applied to just this method
 		/// <summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
 		public static void AddColumnFirst#_#(string tableName,DbSchemaCol col) {
 			string command = "";
@@ -90,7 +92,7 @@ namespace OpenDentBusiness {
 				OracleAddAtIndexHelper(tableName,col,0);
 				OracleValidateDateTStampTriggerHelper(tableName);
 			}
-		}*/
+		}  /
 
 		/// <summary>TODO: trigger cleanup for oracle</summary>
 		public static void DropColumn7_7(string tableName,string columnName) {
@@ -469,3 +471,4 @@ namespace OpenDentBusiness {
 
 	}
 }
+*/

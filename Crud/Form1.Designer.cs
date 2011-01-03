@@ -41,6 +41,8 @@
 			this.checkRun = new System.Windows.Forms.CheckBox();
 			this.checkRunM = new System.Windows.Forms.CheckBox();
 			this.label8 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
+			this.checkRunSchema = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -81,7 +83,7 @@
 			// label2
 			// 
 			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(160,84);
+			this.label2.Location = new System.Drawing.Point(160,104);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(163,17);
 			this.label2.TabIndex = 9;
@@ -90,7 +92,7 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(9,207);
+			this.label4.Location = new System.Drawing.Point(9,227);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(125,17);
 			this.label4.TabIndex = 10;
@@ -99,7 +101,7 @@
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(9,162);
+			this.label5.Location = new System.Drawing.Point(9,182);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(125,17);
 			this.label5.TabIndex = 12;
@@ -110,7 +112,7 @@
 			// 
 			this.comboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboType.FormattingEnabled = true;
-			this.comboType.Location = new System.Drawing.Point(11,182);
+			this.comboType.Location = new System.Drawing.Point(11,202);
 			this.comboType.MaxDropDownItems = 100;
 			this.comboType.Name = "comboType";
 			this.comboType.Size = new System.Drawing.Size(144,21);
@@ -118,7 +120,7 @@
 			// 
 			// butSnippet
 			// 
-			this.butSnippet.Location = new System.Drawing.Point(59,136);
+			this.butSnippet.Location = new System.Drawing.Point(59,156);
 			this.butSnippet.Name = "butSnippet";
 			this.butSnippet.Size = new System.Drawing.Size(96,23);
 			this.butSnippet.TabIndex = 13;
@@ -129,17 +131,17 @@
 			// textSnippet
 			// 
 			this.textSnippet.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textSnippet.Location = new System.Drawing.Point(161,104);
+			this.textSnippet.Location = new System.Drawing.Point(161,124);
 			this.textSnippet.Multiline = true;
 			this.textSnippet.Name = "textSnippet";
 			this.textSnippet.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textSnippet.Size = new System.Drawing.Size(988,751);
+			this.textSnippet.Size = new System.Drawing.Size(988,529);
 			this.textSnippet.TabIndex = 14;
 			this.textSnippet.WordWrap = false;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(1,86);
+			this.label6.Location = new System.Drawing.Point(1,106);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(157,43);
 			this.label6.TabIndex = 15;
@@ -149,9 +151,9 @@
 			// listClass
 			// 
 			this.listClass.FormattingEnabled = true;
-			this.listClass.Location = new System.Drawing.Point(11,227);
+			this.listClass.Location = new System.Drawing.Point(11,247);
 			this.listClass.Name = "listClass";
-			this.listClass.Size = new System.Drawing.Size(144,628);
+			this.listClass.Size = new System.Drawing.Size(144,407);
 			this.listClass.TabIndex = 16;
 			// 
 			// label7
@@ -173,8 +175,6 @@
 			// 
 			// checkRun
 			// 
-			this.checkRun.Checked = true;
-			this.checkRun.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkRun.Location = new System.Drawing.Point(239,26);
 			this.checkRun.Name = "checkRun";
 			this.checkRun.Size = new System.Drawing.Size(39,17);
@@ -198,11 +198,32 @@
 			this.label8.Text = "Run";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(59,73);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(176,17);
+			this.label9.TabIndex = 22;
+			this.label9.Text = "Schema (no db needed)";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkRunSchema
+			// 
+			this.checkRunSchema.Checked = true;
+			this.checkRunSchema.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkRunSchema.Location = new System.Drawing.Point(239,74);
+			this.checkRunSchema.Name = "checkRunSchema";
+			this.checkRunSchema.Size = new System.Drawing.Size(39,17);
+			this.checkRunSchema.TabIndex = 23;
+			this.checkRunSchema.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1161,876);
+			this.ClientSize = new System.Drawing.Size(1161,910);
+			this.Controls.Add(this.checkRunSchema);
+			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.checkRunM);
 			this.Controls.Add(this.checkRun);
@@ -248,6 +269,8 @@
 		private System.Windows.Forms.CheckBox checkRun;
 		private System.Windows.Forms.CheckBox checkRunM;
 		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.CheckBox checkRunSchema;
 	}
 }
 

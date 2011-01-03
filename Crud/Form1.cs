@@ -107,6 +107,9 @@ namespace Crud {
 					CrudGenDataInterface.Create(convertDbFilem,tableTypesM[i],textDbM.Text,true);
 				}
 			}
+			if(checkRunSchema.Checked) {
+				File.WriteAllText(@"..\..\..\OpenDentBusiness\Db\SchemaCrudTest.cs",CrudSchemaForUnitTest.Create());
+			}
 			Cursor=Cursors.Default;
 			MessageBox.Show("Done");
 			//Application.Exit();

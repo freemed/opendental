@@ -1,4 +1,6 @@
-﻿using System;
+﻿//This is outdated, but will remain here for reference for a while.
+//Functionality was moved to the CrudGenerator project.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

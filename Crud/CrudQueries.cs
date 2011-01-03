@@ -12,12 +12,7 @@ using OpenDentBusiness;
 namespace Crud {
 	public class CrudQueries {
 		private const string rn="\r\n";
-		private const string t="\t";
-		private const string t2="\t\t";
-		private const string t3="\t\t\t";
-		private const string t4="\t\t\t\t";
-		private const string t5="\t\t\t\t\t";
-
+	
 		///<summary>Writes any necessary queries to the end of the ConvertDatabase file.  Usually zero or one.  The convertDbFile could also be the one in the Mobile folder.</summary>
 		public static void Write(string convertDbFile,Type typeClass,string dbName,bool isMobile) {
 			StringBuilder strb;
@@ -57,19 +52,20 @@ namespace Crud {
 				if(!CrudGenHelper.IsMissingInGeneral(typeClass)) {
 					MessageBox.Show("This table was not found in the database:"
 						+rn+tablename
-						+rn+"Query will be found at the end of "+Path.GetFileName(convertDbFile));
-					strb=new StringBuilder();
-					strb.Append(rn+rn+t4+"/*");
-					strb.Append(rn+t4+"command=\"DROP TABLE IF EXISTS "+tablename+"\";");
-					strb.Append(rn+t4+"Db.NonQ(command);");
-					if(isMobile) {
-						GetCreateTable(strb,tablename,priKey1.Name,priKey2.Name,fieldsExceptPri);
-					}
-					else {
-						GetCreateTable(strb,tablename,priKey.Name,null,fieldsExceptPri);
-					}
-					strb.Append(rn+t4+"*/");
-					File.AppendAllText(convertDbFile,strb.ToString());
+						+rn+"Queries will be found at the end of "+Path.GetFileName(convertDbFile));
+					//needs to be moved into CrudSchemaRaw:
+					//strb=new StringBuilder();
+					//strb.Append(rn+rn+t4+"/*");
+					//strb.Append(rn+t4+"command=\"DROP TABLE IF EXISTS "+tablename+"\";");
+					//strb.Append(rn+t4+"Db.NonQ(command);");
+					//if(isMobile) {
+					//	GetCreateTable(strb,tablename,priKey1.Name,priKey2.Name,fieldsExceptPri);
+					//}
+					//else {
+					//	GetCreateTable(strb,tablename,priKey.Name,null,fieldsExceptPri);
+					//}
+					//strb.Append(rn+t4+"*/");
+					//File.AppendAllText(convertDbFile,strb.ToString());
 				}
 			}
 			List<FieldInfo> newColumns=CrudGenHelper.GetNewFields(fields,typeClass,dbName);
@@ -81,6 +77,7 @@ namespace Crud {
 				}
 				strb.Append(rn+"Query will be found at the end of "+Path.GetFileName(convertDbFile));
 				MessageBox.Show(strb.ToString());//one message for all new columns in a table.
+				/* Needs to be moved into CrudSchemaRaw:
 				strb=new StringBuilder();
 				strb.Append(rn+rn+t4+"/*");
 				for(int f=0;f<newColumns.Count;f++) {
@@ -155,12 +152,13 @@ namespace Crud {
 					}
 					strb.Append("\";");
 					strb.Append(rn+t4+"Db.NonQ(command);");
-				}
-				strb.Append(rn+t4+"*/");
-				File.AppendAllText(convertDbFile,strb.ToString());
+				}*/
+				//strb.Append(rn+t4+"*/");
+				//File.AppendAllText(convertDbFile,strb.ToString());
 			}
 		}
 
+		/*
 		///<summary>priKeyName2=null for not mobile.</summary>
 		public static void GetCreateTable(StringBuilder strb,string tablename,string priKeyName1,string priKeyName2,List<FieldInfo> fieldsExceptPri) {
 			CrudSpecialColType specialType;
@@ -259,7 +257,7 @@ namespace Crud {
 			strb.Append(rn+t5+"(delete this comment as well as any INDEX rows above that do not apply.)");
 			strb.Append(rn+t5+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+t4+"Db.NonQ(command);");
-		}
+		}*/
 				
 
 

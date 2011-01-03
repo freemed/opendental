@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness{
-	///<summary>It should be called image, but the name is for historical reasons.  Represents a single document in the images module.</summary>
-	[Serializable()]
+	///<summary>Represents a single document in the images module.</summary>
+	[Serializable]
 	public class Document:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
@@ -50,6 +50,12 @@ namespace OpenDentBusiness{
 		/// <summary>Date/time last altered.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		///<summary>The raw file data encoded as base64.  Only used if there is no AtoZ folder.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		public string RawBase64;
+		///<summary>Thumbnail encoded as base64.  Only present if not using AtoZ folder. 100x100 pixels, jpg, takes around 5.5k.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		public string Thumbnail;
 
 		///<summary>Returns a copy of this Document.</summary>
 		public Document Copy() {
