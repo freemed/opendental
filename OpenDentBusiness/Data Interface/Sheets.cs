@@ -98,8 +98,12 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum);
 			}
+			string datesql="CURDATE()";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				datesql="(SELECT CURRENT_DATE FROM dual)";
+			}
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)
-				+" AND "+DbHelper.DateColumn("DateTimeSheet")+" = CURDATE()";
+				+" AND "+DbHelper.DateColumn("DateTimeSheet")+" = "+datesql;
 			return Crud.SheetCrud.SelectMany(command);
 		}
 

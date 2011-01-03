@@ -133,6 +133,10 @@ namespace OpenDentBusiness{
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
 			string command;
+			string datesql="CURDATE()";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				datesql="(SELECT CURRENT_DATE FROM dual)";
+			}
 			command=
 				@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
 				DisableUntilBalance,DisableUntilDate,
@@ -173,7 +177,7 @@ namespace OpenDentBusiness{
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
 				+"AND (appointment.AptStatus=1 "//Scheduled
 				+"OR appointment.AptStatus=4) "//ASAP
-				+"AND appointment.AptDateTime > CURDATE() "//early this morning
+				+"AND appointment.AptDateTime > "+datesql+" "//early this morning
 				+") "//end of NOT EXISTS
 				+"AND recall.DateDue >= "+POut.Date(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.Date(toDate)+" "

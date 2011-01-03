@@ -63,14 +63,13 @@ namespace OpenDentBusiness{
 			}
 			long recallType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 			string command;
+			string datesql="CURDATE()";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				datesql="(SELECT CURRENT_DATE FROM dual)";
+			}
 			if(recallType!=0){
 				command="SELECT COUNT(*) FROM commlog WHERE ";
-				if(DataConnection.DBtype==DatabaseType.Oracle){
-					command+="TO_DATE(CommDateTime) = "+POut.Date(MiscData.GetNowDateTime());
-				}
-				else{//MySQL
-					command+=DbHelper.DateColumn("CommDateTime")+" = CURDATE()";
-				}
+				command+=DbHelper.DateColumn("CommDateTime")+" = "+datesql;
 				command+=" AND PatNum="+POut.Long(patNum)+" AND CommType="+POut.Long(recallType)
 					+" AND Mode_="+POut.Long((int)_mode)
 					+" AND SentOrReceived=1";
