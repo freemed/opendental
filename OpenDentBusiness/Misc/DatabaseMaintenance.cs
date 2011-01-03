@@ -298,6 +298,36 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string AppointmentPlannedNoPlannedApt(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM appointment WHERE AptStatus=6 AND AptNum NOT IN (SELECT AptNum FROM plannedappt)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Appointments with status set to planned without Planned Appointment: ")+numFound.ToString()+"\r\n";
+				}
+			}
+			else {
+				command="SELECT * FROM appointment WHERE AptStatus=6 AND AptNum NOT IN (SELECT AptNum FROM plannedappt)";
+				DataTable appts=Db.GetTable(command);
+				if(appts.Rows.Count > 0 || verbose){
+					PlannedAppt plannedAppt;
+					for(int i=0;i<appts.Rows.Count;i++) {
+						plannedAppt=new PlannedAppt();
+						plannedAppt.PatNum=PIn.Long(appts.Rows[i]["PatNum"].ToString());
+						plannedAppt.AptNum=PIn.Long(appts.Rows[i]["AptNum"].ToString());
+						plannedAppt.ItemOrder=1;
+						PlannedAppts.Insert(plannedAppt);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Planned Appointments created for Appointments with status set to planned and no Planned Appointment: ")+appts.Rows.Count+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string AutoCodesDeleteWithNoItems(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
