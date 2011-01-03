@@ -33,6 +33,7 @@ namespace OpenDentBusiness {
 			}
 			else {//oracle
 				command="ALTER TABLE tempcore ADD ColEnd clob";
+				//If ColEnd will never exceed 4k characters use varchar2(4000)
 				Db.NonQ(command);
 			}
 		}
