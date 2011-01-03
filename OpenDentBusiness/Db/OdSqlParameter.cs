@@ -37,8 +37,8 @@ namespace OpenDentBusiness {
 
 		public MySqlDbType GetMySqlDbType() {
 			switch(this.dbType) {
-				case OdDbType.Blob:
-					return MySqlDbType.MediumBlob;
+				//case OdDbType.Blob:
+				//	return MySqlDbType.MediumBlob;
 				case OdDbType.Text:
 					return MySqlDbType.MediumText;
 				//none of these other types will use parameters.
@@ -83,8 +83,8 @@ namespace OpenDentBusiness {
 
 		public OracleDbType GetOracleDbType() {
 			switch(this.dbType) {
-				case OdDbType.Blob:
-					return OracleDbType.Blob;
+				//case OdDbType.Blob:
+				//	return OracleDbType.Blob;
 				case OdDbType.Text:
 					return OracleDbType.Clob;
 				//none of these other types will use parameters.

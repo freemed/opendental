@@ -9,8 +9,8 @@ namespace OpenDentBusiness {
 	public class DbSchemaCol {
 		public string ColumnName;
 		public OdDbType DataType;
-		///<summary>Specify Indexed true if column should be indexed.</summary>
-		public bool Indexed;
+		//<summary>Specify Indexed true if column should be indexed.</summary>
+		//public bool Indexed;
 		///<summary>Specify textSize if there's any chance of it being greater than 4000 char.</summary>
 		public TextSizeMySqlOracle TextSize;
 		///<summary>If specifying an int, it uses int by default.  Set this to true to instead use smallint.</summary>
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 		public DbSchemaCol(DbSchemaCol newCol) {
 			ColumnName=newCol.ColumnName;
 			DataType=newCol.DataType;
-			Indexed=newCol.Indexed;
+			//Indexed=newCol.Indexed;
 			IntUseSmallInt=newCol.IntUseSmallInt;
 			TextSize=newCol.TextSize;
 		}
@@ -28,29 +28,26 @@ namespace OpenDentBusiness {
 		public DbSchemaCol(string columnName,OdDbType dataType) {
 			ColumnName=columnName;
 			DataType=dataType;
-			Indexed=false;
+			//Indexed=false;
 		}
 
-		public DbSchemaCol(string columnName,OdDbType dataType,bool indexed,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
+		public DbSchemaCol(string columnName,OdDbType dataType,TextSizeMySqlOracle textSize,bool intUseSmallInt) {
 			ColumnName=columnName;
 			DataType=dataType;
-			Indexed=indexed;
+			//Indexed=indexed;
 			TextSize=textSize;
 			IntUseSmallInt=intUseSmallInt;
 		}
 
-		public DbSchemaCol(string columnName,OdDbType dataType,bool indexed) {
-			ColumnName=columnName;
-			DataType=dataType;
-			Indexed=indexed;
-		}
+		//public DbSchemaCol(string columnName,OdDbType dataType) {
+		//	ColumnName=columnName;
+		//	DataType=dataType;
+			//Indexed=indexed;
+		//}
 
 		/// <summary>Creates a new instance of this object with identical variable values.</summary>
 		public DbSchemaCol Copy() {
-			DbSchemaCol newCol = new DbSchemaCol(ColumnName,DataType,Indexed);
-			newCol.IntUseSmallInt=IntUseSmallInt;
-			newCol.TextSize=TextSize;
-			return newCol;
+			return (DbSchemaCol)this.MemberwiseClone();
 		}
 
 	}

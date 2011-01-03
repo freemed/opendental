@@ -303,6 +303,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			retVal+="Clob, Rick Roller: Passed.\r\n";
 			//Blob:-----------------------------------------------------------------------------------------
+			/*
 			Image img=null;
 			img=Image.FromFile(@"..\..\koala.jpg");//~2MB (huge photo)
 			byte[] rawData;
@@ -328,7 +329,7 @@ namespace UnitTests {
 			}
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
-			retVal+="Blob, 2MB: Passed.\r\n";
+			retVal+="Blob, 2MB: Passed.\r\n";*/
 			//SHOW CREATE TABLE -----------------------------------------------------------------------
 			//This command is needed in order to perform a backup.
 			if(DataConnection.DBtype==DatabaseType.MySql) {

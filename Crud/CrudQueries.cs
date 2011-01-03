@@ -77,6 +77,13 @@ namespace Crud {
 				}
 				strb.Append(rn+"Query will be found at the end of "+Path.GetFileName(convertDbFile));
 				MessageBox.Show(strb.ToString());//one message for all new columns in a table.
+				for(int f=0;f<newColumns.Count;f++) {
+					//OdDbType odtype=OdDbType.Text;
+					DbSchemaCol col=new DbSchemaCol(newColumns[f].Name,OdDbType.Text);
+					string result=CrudSchemaRaw.AddColumnEnd(tablename,col);
+				}
+
+
 				/* Needs to be moved into CrudSchemaRaw:
 				strb=new StringBuilder();
 				strb.Append(rn+rn+t4+"/*");
