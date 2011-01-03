@@ -306,10 +306,11 @@ namespace OpenDental{
 			// 
 			this.radioAtoZfolderNotRequired.Location = new System.Drawing.Point(10,262);
 			this.radioAtoZfolderNotRequired.Name = "radioAtoZfolderNotRequired";
-			this.radioAtoZfolderNotRequired.Size = new System.Drawing.Size(311,17);
+			this.radioAtoZfolderNotRequired.Size = new System.Drawing.Size(537,17);
 			this.radioAtoZfolderNotRequired.TabIndex = 101;
 			this.radioAtoZfolderNotRequired.TabStop = true;
-			this.radioAtoZfolderNotRequired.Text = "Do not use folder. (Some features will be unavailable)";
+			this.radioAtoZfolderNotRequired.Text = "Store images directly in database.  No AtoZ folder. (Some features will be unavai" +
+    "lable)";
 			this.radioAtoZfolderNotRequired.UseVisualStyleBackColor = true;
 			this.radioAtoZfolderNotRequired.Click += new System.EventHandler(this.radioAtoZfolderNotRequired_Click);
 			// 
@@ -345,8 +346,8 @@ namespace OpenDental{
 			this.Name = "FormPath";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Paths";
-			this.Load += new System.EventHandler(this.FormPath_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPath_Closing);
+			this.Load += new System.EventHandler(this.FormPath_Load);
 			this.groupbox1.ResumeLayout(false);
 			this.groupbox1.PerformLayout();
 			this.ResumeLayout(false);
