@@ -152,17 +152,10 @@ namespace OpenDentBusiness {
 			return "DATE_FORMAT("+colName+",'"+format+"')";
 		}
 
-		public static string GetTime(string dateTimeVal) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "TO_CHAR("+dateTimeVal+",'hh24:mi:ss')";
-			}
-			return "TIME("+dateTimeVal+")";
-		}
-
 		///<summary>Helper for Oracle that will return equivalent of MySql CURTIME().  Only used once.</summary>
 		public static string Curtime() {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "(SELECT TO_CHAR(SYSDATE,'HH24:MI:SS') FROM DUAL)";
+				return "SYSDATE";
 			}
 			return "CURTIME()";
 		}
