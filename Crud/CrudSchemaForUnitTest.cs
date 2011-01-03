@@ -29,8 +29,7 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command=""""
-					+@""CREATE TABLE tempcore (
+				command=@""CREATE TABLE tempcore (
 					ColOne int NOT NULL
 					)"";
 				Db.NonQ(command);
@@ -39,7 +38,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Example only</summary>
 		public static void AddColumnEnd() {
-			string command="""";
+			string command="""";");
+			DbSchemaCol col=new DbSchemaCol("ColEnd",OdDbType.Text,TextSizeMySqlOracle.Medium);
+			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,3));
+			/*
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command=""ALTER TABLE tempcore ADD ColEnd int NOT NULL"";
 				Db.NonQ(command);
@@ -49,7 +51,8 @@ namespace OpenDentBusiness {
 					+""UPDATE TABLE tempcore SET ColEnd = 0 WHERE ColEnd IS NULL;""
 					+""ALTER TABLE tempcore MODIFY ColEnd NOT NULL"";
 				Db.NonQ(command);
-			}
+			}*/
+			strb.Append(@"
 		}
 
 		//AddColumnEndTimeStamp

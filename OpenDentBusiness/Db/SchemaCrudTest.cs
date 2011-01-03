@@ -16,25 +16,23 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="DROP TABLE IF EXISTS tempcore;"
-					+@"CREATE TABLE tempcore (
+				command=@"CREATE TABLE tempcore (
 					ColOne int NOT NULL
-					) DEFAULT CHARSET=utf8";
+					)";
 				Db.NonQ(command);
 			}
 		}
 
 		///<summary>Example only</summary>
 		public static void AddColumnEnd() {
-			string command="";
+			string command="";			
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD ColEnd int NOT NULL";
+				command="ALTER TABLE tempcore ADD ColEndtext";
+				//If ColEnd might be over 65k characters, use mediumtext
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="ALTER TABLE tempcore ADD ColEnd number(11);"
-					+"UPDATE TABLE tempcore SET ColEnd = 0 WHERE ColEnd IS NULL;"
-					+"ALTER TABLE tempcore MODIFY ColEnd NOT NULL";
+				command="ALTER TABLE tempcore ADD ColEnd clob";
 				Db.NonQ(command);
 			}
 		}

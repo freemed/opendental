@@ -15,7 +15,7 @@ namespace Crud {
 		private const string t5="\t\t\t\t\t";
 		private static string tb = "";
 
-		/// <summary></summary>
+		/// <summary>Currently only works for string types.  Needs work.</summary>
 		public static string AddColumnEnd(string tableName,DbSchemaCol col,int tabInset) {
 			//After the rewrite, this will return C# with queries in it instead of actually running them here.
 			StringBuilder strb = new StringBuilder();
@@ -30,7 +30,6 @@ namespace Crud {
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\"");
-			strb.Append(rn+tb+t1+"//If ColEnd will never exceed 4k characters use varchar2(4000)");
 			strb.Append(rn+tb+t1+"DB.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
