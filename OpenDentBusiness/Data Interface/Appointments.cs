@@ -1127,11 +1127,18 @@ namespace OpenDentBusiness{
 			string command="SELECT DateTimeArrived,DateTimeSeated,LName,FName,Preferred,NOW() dateTimeNow "
 				+"FROM appointment,patient "
 				+"WHERE appointment.PatNum=patient.PatNum "
-				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(dateStart)+" "
-				+"AND "+DbHelper.GetTime("DateTimeArrived")+" > 0 "
-				+"AND "+DbHelper.GetTime("DateTimeArrived")+" < CURTIME() "
-				+"AND "+DbHelper.GetTime("DateTimeSeated")+" = 0 "
-				+"ORDER BY AptDateTime";
+				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(dateStart)+" ";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				command+="AND TO_CHAR(DateTimeArrived,'HH24:MI:SS') > TO_CHAR('00:00:00','HH24:MI:SS') "
+				+"AND TO_CHAR(DateTimeArrived,'HH24:MI:SS') < (SELECT TO_CHAR(SYSDATE,'HH24:MI:SS') FROM DUAL) "
+				+"AND TO_CHAR(DateTimeSeated,'HH24:MI:SS') = TO_CHAR('00:00:00','HH24:MI:SS') ";
+			}
+			else {
+				command+="AND TIME(DateTimeArrived) > 0 "
+				+"AND TIME(DateTimeArrived) < CURTIME() "
+				+"AND TIME(DateTimeSeated) = 0 ";
+			}
+			command+="ORDER BY AptDateTime";
 			DataTable raw=dcon.GetTable(command);
 			TimeSpan timeArrived;
 			//DateTime timeSeated;
