@@ -27,7 +27,7 @@ namespace UnitTests {
 			string retVal="";
 			DatabaseTools.SetDbConnection("unittest",isOracle);
 			SchemaCrudProposedTest.AddTable();
-			SchemaCrudProposedTest.AddColumnEnd();
+			SchemaCrudProposedTest.AddColumnEndClob();
 			retVal+="Proposed Crud passed test.\r\n";
 			return retVal;
 		}

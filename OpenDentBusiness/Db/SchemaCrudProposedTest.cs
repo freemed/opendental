@@ -24,22 +24,36 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Example only</summary>
-		public static void AddColumnEnd() {
+		public static void AddColumnEndClob() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD ColEnd text NOT NULL";
+				command="ALTER TABLE tempcore ADD ColEndClob text NOT NULL";
 				//If ColEnd might be over 65k characters, use mediumtext
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="ALTER TABLE tempcore ADD ColEnd clob";
+				command="ALTER TABLE tempcore ADD ColEndClob clob";
 				Db.NonQ(command);
-/*				if(!isStringDataType()) {
-					command="update tempcore set ColEnd = "+getBlankData(col)+" where ColEnd IS NULL";
-					Db.NonQ(command);
-					command="Alter table tempcore modify ColEnd NOT NULL";
-					Db.NonQ(command);
-				}*/
+			}
+		}
+
+		///<summary>Example only</summary>
+		public static void AddColumnEndInt() {
+			string command="";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE tempcore ADD ColEndInt int NOT NULL";
+				//If ColEnd might be over 65k characters, use mediumtext
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="ALTER TABLE tempcore ADD ColEndInt number(20)";
+				Db.NonQ(command);
+				//if(!isStringDataType()) {
+				//	command="update tempcore set ColEndInt = "+getBlankData(col)+" where ColEnd IS NULL";
+				//	Db.NonQ(command);
+				//	command="Alter table tempcore MODIFY ColEndInt NOT NULL";
+				//	Db.NonQ(command);
+				//}
 			}
 		}
 
