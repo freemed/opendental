@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 		public static void AddColumnEnd() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD ColEnd text NOT NULL";
+				command="ALTER TABLE tempcore ADD ColEnd varchar2(4000) NOT NULL";
 				//If ColEnd might be over 65k characters, use mediumtext
 				Db.NonQ(command);
 			}
