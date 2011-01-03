@@ -392,7 +392,7 @@ namespace OpenDental{
 			cmd+=",Bal_0_30,Bal_31_60,Bal_61_90,BalOver90"
 				+",BalTotal "
 				+",InsEst"
-				+",BalTotal-InsEst AS $pat "
+				+",BalTotal-InsEst AS \"$pat\" "
 				+"FROM patient "
 				+"WHERE ";
 			if(checkExcludeInactive.Checked) {

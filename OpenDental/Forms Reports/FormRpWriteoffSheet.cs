@@ -350,7 +350,7 @@ namespace OpenDental{
 					report.Query+="clinic.Description,";
 				}
 				report.Query+=
-					"SUM(claimproc.WriteOff) $amount,"
+					"SUM(claimproc.WriteOff) \"$amount\","
 					+"claimproc.ClaimNum "
 					+"FROM claimproc "//,insplan,patient,carrier,provider "
 					+"LEFT JOIN insplan ON claimproc.PlanNum = insplan.PlanNum "
@@ -376,7 +376,7 @@ namespace OpenDental{
 					report.Query+="clinic.Description,";
 				}
 				report.Query+=
-					"SUM(claimproc.WriteOff) $amount, "
+					"SUM(claimproc.WriteOff) \"$amount\", "
 					+"claimproc.ClaimNum "
 					+"FROM claimproc "//,insplan,patient,carrier,provider "
 					+"LEFT JOIN insplan ON claimproc.PlanNum = insplan.PlanNum "

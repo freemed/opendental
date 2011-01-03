@@ -368,7 +368,7 @@ namespace OpenDental{
 			  +"AS plfname, procedurecode.ProcCode,"
 				+"procedurelog.ToothNum,procedurecode.Descript,provider.Abbr,"
 				+"procedurelog.ClinicNum,"
-				+"procedurelog.ProcFee-IFNULL(SUM(claimproc.WriteOff),0) $fee "//if no writeoff, then subtract 0
+				+"procedurelog.ProcFee-IFNULL(SUM(claimproc.WriteOff),0) \"$fee\" "//if no writeoff, then subtract 0
 				+"FROM patient,procedurecode,provider,procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
 				+"AND claimproc.Status='7' "//only CapComplete writeoffs are subtracted here.
@@ -475,7 +475,7 @@ namespace OpenDental{
 		private void CreateGrouped(ReportSimpleGrid report) {
 			//this would require a temporary table to be able to handle capitation.
 			report.Query="SELECT definition.ItemName,procedurecode.ProcCode,procedurecode.Descript,"
-        +"Count(*),AVG(procedurelog.ProcFee) $AvgFee,SUM(procedurelog.ProcFee) AS $TotFee "
+        +"Count(*),AVG(procedurelog.ProcFee) \"$AvgFee\",SUM(procedurelog.ProcFee) AS \"$TotFee\" "
 				+"FROM procedurelog,procedurecode,definition "
 				+"WHERE procedurelog.ProcStatus = '2' "
 				+"AND procedurelog.CodeNum=procedurecode.CodeNum "

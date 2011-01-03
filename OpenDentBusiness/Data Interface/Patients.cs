@@ -1336,10 +1336,10 @@ AND benefit.QuantityQualifier=0 ";
 				patient.WirelessPhone, patient.WkPhone, patient.Address,
 				patient.Address2, patient.City, patient.State, patient.Zip,
 				patient.PriProv, patient.BillingType, 
-				tempannualmax.AnnualMax $AnnualMax,
-				tempused.AmtUsed $AmountUsed,
-				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) $AmtRemaining,
-				tempplanned.AmtPlanned $TreatmentPlan
+				tempannualmax.AnnualMax ""$AnnualMax"",
+				tempused.AmtUsed ""$AmountUsed"",
+				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) ""$AmtRemaining"",
+				tempplanned.AmtPlanned ""$TreatmentPlan""
 				FROM patient
 				LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
 				LEFT JOIN patplan ON patient.PatNum=patplan.PatNum

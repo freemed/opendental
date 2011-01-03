@@ -387,7 +387,7 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=@"SELECT referral.LName,referral.FName,
 COUNT(DISTINCT refattach.PatNum) HowMany,
-SUM(procedurelog.ProcFee) $HowMuch";
+SUM(procedurelog.ProcFee) ""$HowMuch""";
 			if(checkAddress.Checked){
 				report.Query+=",referral.Title,referral.Address,referral.Address2,referral.City,"
 					+"referral.ST,referral.Zip,referral.Specialty";

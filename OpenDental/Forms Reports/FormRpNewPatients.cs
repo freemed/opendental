@@ -375,7 +375,7 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=@"SET @pos=0;
 SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,"
-+DbHelper.Concat("referral.LName","IF(referral.FName='','',',')","referral.FName")+"refname,SUM(procedurelog.ProcFee) $HowMuch";
++DbHelper.Concat("referral.LName","IF(referral.FName='','',',')","referral.FName")+"refname,SUM(procedurelog.ProcFee) \"$HowMuch\"";
 			if(checkAddress.Checked){
 				report.Query+=",patient.Preferred,patient.Address,patient.Address2,patient.City,patient.State,patient.Zip";
 			}
@@ -391,7 +391,7 @@ SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,"
 				+whereProv;
 			report.Query+="GROUP BY patient.PatNum ";
 			if(checkProd.Checked){
-				report.Query+="HAVING $HowMuch > 0 ";
+				report.Query+="HAVING \"$HowMuch\" > 0 ";
 			}
 			report.Query+="ORDER BY dateFirstProc,patient.LName,patient.FName";
 			FormQuery2=new FormQuery(report);

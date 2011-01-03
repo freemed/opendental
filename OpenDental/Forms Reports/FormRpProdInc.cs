@@ -649,11 +649,11 @@ namespace OpenDental{
 				+"procedurecode.Descript,"
 				+"provider.Abbr,"
 				+"procedurelog.ClinicNum,"
-				+"procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)-IFNULL(SUM(claimproc.WriteOff),0) $fee,"//if no writeoff, then subtract 0
-				+"0 $Adj,"
-				+"0 $InsW,"
-				+"0 $PtInc,"
-				+"0 $InsInc,"
+				+"procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)-IFNULL(SUM(claimproc.WriteOff),0) \"$fee\","//if no writeoff, then subtract 0
+				+"0 \"$Adj\","
+				+"0 \"$InsW\","
+				+"0 \"$PtInc\","
+				+"0 \"$InsInc\","
 				+"procedurelog.ProcNum "
 				+"FROM patient,procedurecode,provider,procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
