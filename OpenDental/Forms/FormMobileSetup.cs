@@ -10,13 +10,14 @@ using OpenDentBusiness.Mobile;
 
 namespace OpenDental {
 	public partial class FormMobileSetup:Form {
-		static string RegistrationKey;
-		static MobileWeb.Mobile mb = new MobileWeb.Mobile();
-		static DateTime MobileSyncDateTimeLastRun;
-		static string MobileSyncServerURL;
-		static int MobileSyncIntervalMinutes;
-		static DateTime MobileExcludeApptsBeforeDate;
-		static String StatusMessage="";
+		private FormOpenDental frmOD=null;
+		private static string RegistrationKey;
+		private static MobileWeb.Mobile mb = new MobileWeb.Mobile();
+		private static DateTime MobileSyncDateTimeLastRun;
+		private static string MobileSyncServerURL;
+		private static int MobileSyncIntervalMinutes;
+		private static DateTime MobileExcludeApptsBeforeDate;
+		private static String StatusMessage="";
 
 		public FormMobileSetup() {
 			InitializeComponent();
@@ -32,15 +33,24 @@ namespace OpenDental {
 			butSavePreferences.Enabled=false;
 		}
 
-		static void InitializeVariables() {
+		internal void SetParentFormReference(FormOpenDental frmOD) {
+			this.frmOD=frmOD;
+		}
+		private static void InitializeVariables() {
 			RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 			MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
 			MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
 			MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
+			bool PaidCustomer=true; // check for payment here
+			if(PaidCustomer) {
+				MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
+			}else{
+				MobileSyncIntervalMinutes=0;
+				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
+			}
 		}
 
-		static void Synch(DateTime GetChangedSince) {
+		private static void Synch(DateTime GetChangedSince) {
 			try {
 				#if DEBUG
 					IgnoreCertificateErrors();// used with faulty certificates only while debugging.
@@ -66,31 +76,36 @@ namespace OpenDental {
 			}
 		}
 
-		static void SynchNow() {
+		private static void SynchNow() {
 			Synch(MobileSyncDateTimeLastRun);
 		}
+		
 		/// <summary>
 		/// Called from the main form
 		/// </summary>
-		public static void Synch() {
+		internal static void Synch() {
 			InitializeVariables();
 			if(MobileSyncIntervalMinutes==0) {
 				// Charge the customer!
 				//MsgBox.Show(this,"You must be a paid customer to use this feature");
 				//return;
 			}
+			if(MobileSyncDateTimeLastRun.Year<1880) {
+				//MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
+				//return;
+			}
 			if(DateTime.Now>MobileSyncDateTimeLastRun.AddMinutes(MobileSyncIntervalMinutes)) {
 				Synch(MobileSyncDateTimeLastRun);
 			}
-			
 		}
 
-		static void SynchFull() {
+		private static void SynchFull() {
 			DateTime FullSynchDateTime=new DateTime(1880,1,1);
+			//delete all records on server here
 			Synch(FullSynchDateTime);
 		}
 
-		static void SynchPatients(List<long> patNumList) {
+		private static void SynchPatients(List<long> patNumList) {
 			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
 			int BatchSize =100;
 			for(int start=0;start<patNumList.Count;start+=BatchSize) {
@@ -99,13 +114,13 @@ namespace OpenDental {
 				}
 				List<long> BlockPatNumList=patNumList.GetRange(start,BatchSize);
 				List<Patientm> ChangedPatientmList=Patientms.GetMultPats(BlockPatNumList);
-				StatusMessage="Upload Status: " + start + " records of "+patNumList.Count +"Patient Uploads";
+				StatusMessage=start + " records of "+patNumList.Count +" Patient Uploads";
 				Application.DoEvents();// allows textProgress to be refreshed 
 				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
 			}
 		}
 
-		static void SynchAppointments(List<long> AptNumList) {
+		private static void SynchAppointments(List<long> AptNumList) {
 			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
 			int BatchSize =100;
 			for(int start=0;start<AptNumList.Count;start+=BatchSize) {
@@ -114,7 +129,8 @@ namespace OpenDental {
 				}
 				List<long> BlockAptNumList=AptNumList.GetRange(start,BatchSize);
 				List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetMultApts(BlockAptNumList);
-				StatusMessage="Upload Status: " + start + " records of "+AptNumList.Count +"Appointmnet Uploads";
+				StatusMessage=start + " records of "+AptNumList.Count +" Appointmnet Uploads";
+				Application.DoEvents();// allows textProgress to be refreshed 
 				mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
 			}
 		}
@@ -123,7 +139,7 @@ namespace OpenDental {
 		/// An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.
 		/// </summary>
 		/// <returns></returns>
-		static bool TestWebServiceExists() {
+		private static bool TestWebServiceExists() {
 			try {
 				mb.Url=MobileSyncServerURL;
 				if(mb.ServiceExists()) {
@@ -139,7 +155,7 @@ namespace OpenDental {
 		/// <summary>
 		///  This method is used only for testing with security certificates that has problems.
 		/// </summary>
-		static void IgnoreCertificateErrors() {
+		private static void IgnoreCertificateErrors() {
 			///the line below will allow the code to continue by not throwing an exception.
 			///It will accept the security certificate if there is a problem with the security certificate.
 			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
@@ -161,10 +177,26 @@ namespace OpenDental {
 			if(!FieldsValid()) {
 				return;
 			}
-			Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textBoxSynchMinutes.Text));
-			MobileSyncIntervalMinutes=PIn.Int(textBoxSynchMinutes.Text);
 			SetMobileExcludeApptsBeforeDate();
 			butSavePreferences.Enabled=false;
+
+			if(textMobilePassword.Text.Trim()!="") {
+				mb.SetMobileWebPassword(RegistrationKey,textMobilePassword.Text.Trim());
+			}
+			bool PaidCustomer=true; // check for payment here
+			if(PaidCustomer) {
+				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textBoxSynchMinutes.Text));
+				MobileSyncIntervalMinutes=PIn.Int(textBoxSynchMinutes.Text);
+				//start timer on main form
+				if(MobileSyncIntervalMinutes!=0) {
+					frmOD.StartTimerWebHostSynch();
+				}
+			}
+			else {
+				MobileSyncIntervalMinutes=0;
+				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
+			}
+
 		}
 
 		private void textboxMobileSyncServerURL_TextChanged(object sender,EventArgs e) {
@@ -283,6 +315,7 @@ namespace OpenDental {
 			SetMobileExcludeApptsBeforeDate();
 			return proceed;
 		}
+		
 		private void butSync_Click(object sender,EventArgs e) {
 			if(!CanProceed()) {
 				return;
@@ -301,6 +334,7 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 			}
 			Cursor=Cursors.Default;
+			MsgBox.Show(this,"Sync Completed");
 		}
 
 		private void butFullSync_Click(object sender,EventArgs e) {
@@ -319,12 +353,7 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 			}
 			Cursor=Cursors.Default;
-			/*if(objCount==0) {
-				MsgBox.Show(this,"Done. No sync necessary.");
-			}
-			else {
-				MessageBox.Show(Lan.g(this,"Done.  Objects exported: ")+objCount.ToString());
-			}*/
+			MsgBox.Show(this,"Sync Completed");
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

@@ -33,11 +33,6 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		///<summary>This reason no longer applies: Code in this method was not put into the Form load event because often the "No Patient forms available" Message would popup even before a form is loaded - which could confuse the user.</summary>
-		private void FormWebForms_Shown(object sender,EventArgs e) {
-			
-		}
-
 		/// <summary>
 		/// </summary>
 		private void FillGrid() {

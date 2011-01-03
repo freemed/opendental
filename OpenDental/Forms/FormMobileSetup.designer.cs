@@ -39,6 +39,9 @@ namespace OpenDental{
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.textProgress = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textMobilePassword = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,7 +79,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(26,157);
+			this.label3.Location = new System.Drawing.Point(26,182);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(167,18);
 			this.label3.TabIndex = 87;
@@ -85,7 +88,7 @@ namespace OpenDental{
 			// 
 			// textDateTimeLastRun
 			// 
-			this.textDateTimeLastRun.Location = new System.Drawing.Point(195,157);
+			this.textDateTimeLastRun.Location = new System.Drawing.Point(195,182);
 			this.textDateTimeLastRun.Name = "textDateTimeLastRun";
 			this.textDateTimeLastRun.ReadOnly = true;
 			this.textDateTimeLastRun.Size = new System.Drawing.Size(188,20);
@@ -93,7 +96,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(23,188);
+			this.label2.Location = new System.Drawing.Point(23,213);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(170,18);
 			this.label2.TabIndex = 85;
@@ -102,6 +105,8 @@ namespace OpenDental{
 			// 
 			// groupPreferences
 			// 
+			this.groupPreferences.Controls.Add(this.label4);
+			this.groupPreferences.Controls.Add(this.textMobilePassword);
 			this.groupPreferences.Controls.Add(this.textBoxSynchMinutes);
 			this.groupPreferences.Controls.Add(this.butSavePreferences);
 			this.groupPreferences.Controls.Add(this.labelMobileSynchURL);
@@ -109,7 +114,7 @@ namespace OpenDental{
 			this.groupPreferences.Controls.Add(this.labelMinutesBetweenSynch);
 			this.groupPreferences.Location = new System.Drawing.Point(18,12);
 			this.groupPreferences.Name = "groupPreferences";
-			this.groupPreferences.Size = new System.Drawing.Size(753,109);
+			this.groupPreferences.Size = new System.Drawing.Size(753,122);
 			this.groupPreferences.TabIndex = 239;
 			this.groupPreferences.TabStop = false;
 			this.groupPreferences.Text = "Preferences";
@@ -133,7 +138,7 @@ namespace OpenDental{
 			this.butSavePreferences.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSavePreferences.CornerRadius = 4F;
 			this.butSavePreferences.Enabled = false;
-			this.butSavePreferences.Location = new System.Drawing.Point(602,70);
+			this.butSavePreferences.Location = new System.Drawing.Point(602,83);
 			this.butSavePreferences.Name = "butSavePreferences";
 			this.butSavePreferences.Size = new System.Drawing.Size(119,24);
 			this.butSavePreferences.TabIndex = 240;
@@ -142,7 +147,7 @@ namespace OpenDental{
 			// 
 			// textDateBefore
 			// 
-			this.textDateBefore.Location = new System.Drawing.Point(195,187);
+			this.textDateBefore.Location = new System.Drawing.Point(195,212);
 			this.textDateBefore.Name = "textDateBefore";
 			this.textDateBefore.Size = new System.Drawing.Size(100,20);
 			this.textDateBefore.TabIndex = 84;
@@ -194,16 +199,42 @@ namespace OpenDental{
 			// 
 			// textProgress
 			// 
-			this.textProgress.Location = new System.Drawing.Point(434,157);
+			this.textProgress.Location = new System.Drawing.Point(195,153);
 			this.textProgress.Name = "textProgress";
 			this.textProgress.ReadOnly = true;
-			this.textProgress.Size = new System.Drawing.Size(266,20);
+			this.textProgress.Size = new System.Drawing.Size(380,20);
 			this.textProgress.TabIndex = 240;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(23,155);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(167,18);
+			this.label1.TabIndex = 241;
+			this.label1.Text = "Upload Status";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textMobilePassword
+			// 
+			this.textMobilePassword.Location = new System.Drawing.Point(177,86);
+			this.textMobilePassword.Name = "textMobilePassword";
+			this.textMobilePassword.Size = new System.Drawing.Size(247,20);
+			this.textMobilePassword.TabIndex = 242;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(5,86);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(169,19);
+			this.label4.TabIndex = 243;
+			this.label4.Text = "Mobile phone password";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormMobileSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(826,320);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textProgress);
 			this.Controls.Add(this.groupPreferences);
 			this.Controls.Add(this.label3);
@@ -240,5 +271,8 @@ namespace OpenDental{
 		private UI.Button butSavePreferences;
 		private ValidNumber textBoxSynchMinutes;
 		private System.Windows.Forms.TextBox textProgress;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.TextBox textMobilePassword;
 	}
 }

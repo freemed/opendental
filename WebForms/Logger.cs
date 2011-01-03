@@ -30,7 +30,7 @@ namespace WebForms {
 		/// Static constructor
 		/// </summary>
 		static Logger() {
-			string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();
+			string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();// a static constructor works because changing the web.configs restarts the appliaction.
 			// this defaults to the namespace WebForms even when used in another application so it's not used
 			//string LogFile=Properties.Settings.Default.LogFile;
 			
@@ -39,13 +39,15 @@ namespace WebForms {
 			TextFormatter formatter = new TextFormatter("[{timestamp}] [{machine}] {category}  \t: {message}");
 
 			// listeners
-			FlatFileTraceListener logFileListener = new FlatFileTraceListener(LogFile,"","",formatter);
+			FlatFileTraceListener logFileListener=new FlatFileTraceListener(LogFile,"","",formatter);
+			RollingFlatFileTraceListener rollingFlatFileListener=new RollingFlatFileTraceListener(LogFile,"","",formatter,1000,"yyyy-MM-dd",RollFileExistsBehavior.Increment,RollInterval.Day);
 			//uncomment if an event log is needed
 			//FormattedEventLogTraceListener logEventListener = new FormattedEventLogTraceListener("Enterprise Library Logging",formatter);
 
 			// Sources
 			LogSource mainLogSource = new LogSource("MainLogSource",SourceLevels.All);
-			mainLogSource.Listeners.Add(logFileListener);
+			//mainLogSource.Listeners.Add(logFileListener);//regular flat file
+			mainLogSource.Listeners.Add(rollingFlatFileListener);
 			//uncomment if an event log is needed
 			//LogSource errorLogSource = new LogSource("ErrorLogSource",SourceLevels.Error);
 			//errorLogSource.Listeners.Add(logEventListener);

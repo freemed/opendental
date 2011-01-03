@@ -27,6 +27,7 @@ namespace WebHostSynch {
 		[WebMethod]
 		public bool ServiceExists() {
 			util.SetMobileDbConnection();
+			Logger.Information("testing the log feature");
 			return true;
 		}
 
@@ -67,7 +68,16 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public void SetMobileWebPassword(String RegistrationKey,String Password) {
-			Logger.Information("In SetMobileWebPassword");
+			try {
+				Logger.Information("In SetMobileWebPassword");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
 		}
 
 	}
