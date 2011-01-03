@@ -24,13 +24,13 @@ namespace Crud {
 			}
 			//command already exists generate if/else code block for mysql/oracle
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
-			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+""+GetMySqlType(col)+"\"");
+			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" NOT NULL\";");
 			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
-			strb.Append(rn+tb+t1+"DB.NonQ(command);");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
-			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\"");
-			strb.Append(rn+tb+t1+"DB.NonQ(command);");
+			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\";");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
 		}
