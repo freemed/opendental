@@ -3251,8 +3251,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_7_0() {
 			if(FromVersion<new Version("7.7.0.0")) {
 				string command;
-
-				//
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE document ADD RawBase64 mediumtext NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE document ADD RawBase64 clob";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE document ADD Thumbnail text NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE document ADD Thumbnail clob";
+					Db.NonQ(command);
+				}
 
 
 

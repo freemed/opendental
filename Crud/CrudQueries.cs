@@ -92,85 +92,6 @@ namespace Crud {
 				}
 				strb.Append(rn+t4+"*/");
 				File.AppendAllText(convertDbFile,strb.ToString());
-
-				/* Needs to be moved into CrudSchemaRaw:
-				strb=new StringBuilder();
-				strb.Append(rn+rn+t4+"/*");
-				for(int f=0;f<newColumns.Count;f++) {
-					strb.Append(rn+t4+"command=\"ALTER TABLE "+tablename+" ADD "+newColumns[f].Name+" ");
-					specialType=CrudGenHelper.GetSpecialType(newColumns[f]);
-					if(specialType==CrudSpecialColType.DateEntry
-						|| specialType==CrudSpecialColType.DateEntryEditable) {
-						strb.Append("date NOT NULL default '0001-01-01'");
-						strb.Append("\";");
-						strb.Append(rn+t4+"Db.NonQ(command);");
-						continue;
-					}
-					if(specialType==CrudSpecialColType.TimeStamp) {
-						strb.Append("timestamp");
-						strb.Append("\";");
-						strb.Append(rn+t4+"Db.NonQ(command);");
-						continue;
-					}
-					if(specialType==CrudSpecialColType.DateT
-						|| specialType==CrudSpecialColType.DateTEntry
-						|| specialType==CrudSpecialColType.DateTEntryEditable) {
-						strb.Append("datetime NOT NULL default '0001-01-01 00:00:00'");
-						strb.Append("\";");
-						strb.Append(rn+t4+"Db.NonQ(command);");
-						continue;
-					}
-					if(specialType==CrudSpecialColType.EnumAsString) {
-						strb.Append("varchar(255) NOT NULL");
-					}
-					else if(newColumns[f].FieldType.IsEnum) {
-						strb.Append("tinyint NOT NULL");
-					}
-					else switch(newColumns[f].FieldType.Name) {
-						default:
-							throw new ApplicationException("Type not yet supported: "+newColumns[f].FieldType.Name);
-						case "Bitmap":
-							strb.Append("mediumtext NOT NULL");
-							break;
-						case "Boolean":
-							strb.Append("tinyint NOT NULL");
-							break;
-						case "Byte":
-							strb.Append("tinyint NOT NULL");
-							break;
-						case "Color":
-							strb.Append("int NOT NULL");
-							break;
-						case "DateTime"://This is only for date, not dateT
-							strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
-							break;
-						case "Double":
-							strb.Append("double NOT NULL");
-							break;
-						case "Interval":
-							strb.Append("int NOT NULL");
-							break;
-						case "Int64":
-							strb.Append("bigint NOT NULL");
-							break;
-						case "Int32":
-							strb.Append("int NOT NULL");
-							break;
-						case "Single":
-							strb.Append("float NOT NULL");
-							break;
-						case "String":
-							strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
-							break;
-						case "TimeSpan":
-							strb.Append("time NOT NULL");
-							break;
-					}
-					strb.Append("\";");
-					strb.Append(rn+t4+"Db.NonQ(command);");
-				}*/
-				//strb.Append(rn+t4+"*/");
-				//File.AppendAllText(convertDbFile,strb.ToString());
 			}
 		}
 
@@ -192,6 +113,12 @@ namespace Crud {
 			if(specialType==CrudSpecialColType.EnumAsString) {
 				return OdDbType.VarChar255;
 			}
+			if(specialType==CrudSpecialColType.TimeSpanNeg) {
+				return OdDbType.TimeSpan;
+			}
+			if(specialType==CrudSpecialColType.TextIsClob) {
+				return OdDbType.Text;
+			}
 			if(fieldType.IsEnum) {
 				return OdDbType.Enum;
 			}
@@ -200,51 +127,29 @@ namespace Crud {
 					throw new ApplicationException("Type not yet supported: "+fieldType.Name);
 				case "Bitmap":
 					return OdDbType.Text;
-					break;
 				case "Boolean":
 					return OdDbType.Bool;
 				case "Byte":
 					return OdDbType.Byte;
 				case "Color":
 					return OdDbType.Int;
-					/*
 				case "DateTime"://This is only for date, not dateT
-					return OdDbType
-					strb.Append("date NOT NULL default '0001-01-01' (if this is actually supposed to be a datetime, timestamp, DateEntry, DateTEntry, or DateTEntryEditable column, add the missing attribute, then rerun the crud generator)");
-					break;
+					return OdDbType.Date;
 				case "Double":
-					return OdDbType
-					strb.Append("double NOT NULL");
-					break;
+					return OdDbType.Currency;
 				case "Interval":
-					return OdDbType
-					strb.Append("int NOT NULL");
-					break;
+					return OdDbType.Int;
 				case "Int64":
-					return OdDbType
-					strb.Append("bigint NOT NULL");
-					break;
+					return OdDbType.Long;
 				case "Int32":
-					return OdDbType
-					strb.Append("int NOT NULL");
-					break;
+					return OdDbType.Int;
 				case "Single":
-					return OdDbType
-					strb.Append("float NOT NULL");
-					break;
+					return OdDbType.Float;
 				case "String":
-					return OdDbType
-					strb.Append("varchar(255) NOT NULL  (or text NOT NULL)");
-					break;
+					return OdDbType.VarChar255;//or text
 				case "TimeSpan":
-					return OdDbType
-					strb.Append("time NOT NULL");
-					break;*/
+					return OdDbType.TimeOfDay;
 			}
-
-
-
-			return OdDbType.VarChar255;
 		}
 
 

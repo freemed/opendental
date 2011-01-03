@@ -67,6 +67,8 @@ namespace OpenDentBusiness.Crud{
 				document.WindowingMax  = PIn.Int   (table.Rows[i]["WindowingMax"].ToString());
 				document.MountItemNum  = PIn.Long  (table.Rows[i]["MountItemNum"].ToString());
 				document.DateTStamp    = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				document.RawBase64     = PIn.String(table.Rows[i]["RawBase64"].ToString());
+				document.Thumbnail     = PIn.String(table.Rows[i]["Thumbnail"].ToString());
 				retVal.Add(document);
 			}
 			return retVal;
@@ -86,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DocNum,";
 			}
-			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,WindowingMin,WindowingMax,MountItemNum) VALUES(";
+			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,WindowingMin,WindowingMax,MountItemNum,RawBase64,Thumbnail) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(document.DocNum)+",";
 			}
@@ -109,13 +111,17 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (document.CropH)+","
 				+    POut.Int   (document.WindowingMin)+","
 				+    POut.Int   (document.WindowingMax)+","
-				+    POut.Long  (document.MountItemNum)+")";
+				+    POut.Long  (document.MountItemNum)+","
 				//DateTStamp can only be set by MySQL
+				+DbHelper.ParamChar+"paramRawBase64,"
+				+DbHelper.ParamChar+"paramThumbnail)";
+			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,document.RawBase64);
+			OdSqlParameter paramThumbnail=new OdSqlParameter("paramThumbnail",OdDbType.Text,document.Thumbnail);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramRawBase64,paramThumbnail);
 			}
 			else {
-				document.DocNum=Db.NonQ(command,true);
+				document.DocNum=Db.NonQ(command,true,paramRawBase64,paramThumbnail);
 			}
 			return document.DocNum;
 		}
@@ -141,10 +147,14 @@ namespace OpenDentBusiness.Crud{
 				+"CropH         =  "+POut.Int   (document.CropH)+", "
 				+"WindowingMin  =  "+POut.Int   (document.WindowingMin)+", "
 				+"WindowingMax  =  "+POut.Int   (document.WindowingMax)+", "
-				+"MountItemNum  =  "+POut.Long  (document.MountItemNum)+" "
+				+"MountItemNum  =  "+POut.Long  (document.MountItemNum)+", "
 				//DateTStamp can only be set by MySQL
+				+"RawBase64     =  "+DbHelper.ParamChar+"paramRawBase64, "
+				+"Thumbnail     =  "+DbHelper.ParamChar+"paramThumbnail "
 				+"WHERE DocNum = "+POut.Long(document.DocNum);
-			Db.NonQ(command);
+			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,document.RawBase64);
+			OdSqlParameter paramThumbnail=new OdSqlParameter("paramThumbnail",OdDbType.Text,document.Thumbnail);
+			Db.NonQ(command,paramRawBase64,paramThumbnail);
 		}
 
 		///<summary>Updates one Document in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -227,12 +237,22 @@ namespace OpenDentBusiness.Crud{
 				command+="MountItemNum = "+POut.Long(document.MountItemNum)+"";
 			}
 			//DateTStamp can only be set by MySQL
+			if(document.RawBase64 != oldDocument.RawBase64) {
+				if(command!=""){ command+=",";}
+				command+="RawBase64 = "+DbHelper.ParamChar+"paramRawBase64";
+			}
+			if(document.Thumbnail != oldDocument.Thumbnail) {
+				if(command!=""){ command+=",";}
+				command+="Thumbnail = "+DbHelper.ParamChar+"paramThumbnail";
+			}
 			if(command==""){
 				return;
 			}
+			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,document.RawBase64);
+			OdSqlParameter paramThumbnail=new OdSqlParameter("paramThumbnail",OdDbType.Text,document.Thumbnail);
 			command="UPDATE document SET "+command
 				+" WHERE DocNum = "+POut.Long(document.DocNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramRawBase64,paramThumbnail);
 		}
 
 		///<summary>Deletes one Document from the database.</summary>
