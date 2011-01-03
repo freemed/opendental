@@ -152,13 +152,14 @@ namespace OpenDentBusiness {
 			return "DATE_FORMAT("+colName+",'"+format+"')";
 		}
 
-		///<summary>Helper for Oracle that will return equivalent of MySql CURTIME().  Only used once.</summary>
+		/* Not used
+		///<summary>Helper for Oracle that will return equivalent of MySql CURTIME().</summary>
 		public static string Curtime() {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "SYSDATE";
 			}
 			return "CURTIME()";
-		}
+		}*/
 
 		///<summary>Helper for Oracle that will return equivalent of MySql CURDATE()</summary>
 		public static string Curdate() {
