@@ -1,5 +1,5 @@
-﻿/*This is outdated, but will remain here for reference for a while.
-  Functionality was moved to the CrudGenerator project.
+﻿/*/This is outdated, but will remain here for reference for a while.
+ // Functionality was moved to the CrudGenerator project.
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,7 +34,7 @@ namespace OpenDentBusiness {
 			else {//oracle
 				command = "ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType7_7(col);
 				Db.NonQ(command);
-				command = "UPDATE TABLE "+tableName+" SET "+col.ColumnName+" = "+getBlankOracleData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column with 'blank' data
+				command = "UPDATE "+tableName+" SET "+col.ColumnName+" = "+getBlankOracleData(col)+" WHERE "+col.ColumnName+" IS NULL";//fills column with 'blank' data
 				Db.NonQ(command);
 				if(getBlankOracleData(col)!="''") {//only set column to NOT NULL if it is not a string type column.
 					command = "ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL";

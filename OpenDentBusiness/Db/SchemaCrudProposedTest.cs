@@ -9,17 +9,16 @@ namespace OpenDentBusiness {
 		public static void AddTable() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="DROP TABLE IF EXISTS tempcore;"
-					+@"CREATE TABLE tempcore (
+				command="DROP TABLE IF EXISTS ryantempcore;"
+					+@"CREATE TABLE ryantempcore (
 					ColOne int NOT NULL
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="DROP TABLE IF EXISTS tempcore;"
-					+@"CREATE TABLE tempcore (
+				command=@"CREATE TABLE ryantempcore (
 					ColOne int NOT NULL
-					) DEFAULT CHARSET=utf8";
+					)";
 				Db.NonQ(command);
 			}
 		}
@@ -28,13 +27,15 @@ namespace OpenDentBusiness {
 		public static void AddColumnEnd() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD ColEnd int NOT NULL";
+				command="ALTER TABLE ryantempcore ADD ColEnd int NOT NULL";
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="ALTER TABLE tempcore ADD ColEnd number(11);"
-					+"UPDATE TABLE tempcore SET ColEnd = 0 WHERE ColEnd IS NULL;"
-					+"ALTER TABLE tempcore MODIFY ColEnd NOT NULL";
+				command="ALTER TABLE ryantempcore ADD ColEnd number(11);";
+				Db.NonQ(command);
+				command="UPDATE tempcore SET ColEnd = 0 WHERE ColEnd IS NULL;";
+				Db.NonQ(command);
+				command="ALTER TABLE tempcore MODIFY ColEnd NOT NULL";
 				Db.NonQ(command);
 			}
 		}

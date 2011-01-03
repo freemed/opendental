@@ -12,6 +12,10 @@ namespace Crud {
 		private const string t3="\t\t\t";
 		private const string t4="\t\t\t\t";
 		private const string t5="\t\t\t\t\t";
+
+		private string addTable() {
+			return "";
+		}
 /*
 		/// <summary></summary>
 		public static string AddColumnEnd(string tableName,DbSchemaCol col,bool isMobile) {

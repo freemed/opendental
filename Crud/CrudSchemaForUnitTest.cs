@@ -29,10 +29,10 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command=""DROP TABLE IF EXISTS tempcore;""
+				command=""""
 					+@""CREATE TABLE tempcore (
 					ColOne int NOT NULL
-					) DEFAULT CHARSET=utf8"";
+					)"";
 				Db.NonQ(command);
 			}
 		}
