@@ -9,16 +9,43 @@ namespace OpenDentBusiness {
 		public static void AddTable() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="DROP TABLE IF EXISTS tempcore;"
-					+@"CREATE TABLE tempcore (
-					ColOne int NOT NULL
+				command="DROP TABLE IF EXISTS tempcore";
+				DataCore.NonQ(command);
+				command=@"CREATE TABLE tempcore (
+					TimeOfDayTest time NOT NULL default '00:00:00',
+					TimeStampTest timestamp,
+					DateTest date NOT NULL default '0001-01-01',
+					DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
+					TimeSpanTest time NOT NULL default '00:00:00',
+					CurrencyTest double NOT NULL,
+					BoolTest tinyint NOT NULL,
+					TextTest text NOT NULL,
+					CharTest char(1) NOT NULL,
+					ClobTest mediumtext NOT NULL,
+					BlobTest mediumblob NOT NULL
 					) DEFAULT CHARSET=utf8";
-				Db.NonQ(command);
+				DataCore.NonQ(command);
 			}
 			else {//oracle
-				command=@"CREATE TABLE tempcore (
-					ColOne int NOT NULL
-					)";
+				try {
+					command="DROP TABLE tempcore";
+					Db.NonQ(command);
+				}
+				catch {
+				}
+/*				command = @"CREATE TABLE tempcore (
+					TimeOfDayTest time NOT NULL default '00:00:00',
+					TimeStampTest timestamp,
+					DateTest date NOT NULL default '0001-01-01',
+					DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
+					TimeSpanTest time NOT NULL default '00:00:00',
+					CurrencyTest double NOT NULL,
+					BoolTest tinyint NOT NULL,
+					TextTest text NOT NULL,
+					CharTest char(1) NOT NULL,
+					ClobTest mediumtext NOT NULL,
+					BlobTest mediumblob NOT NULL
+				)";*/
 				Db.NonQ(command);
 			}
 		}
