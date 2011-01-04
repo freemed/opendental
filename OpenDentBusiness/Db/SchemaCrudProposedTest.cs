@@ -28,7 +28,6 @@ namespace OpenDentBusiness {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="ALTER TABLE tempcore ADD ColEndClob text NOT NULL";
-				//If ColEnd might be over 65k characters, use mediumtext
 				Db.NonQ(command);
 			}
 			else {//oracle
@@ -45,7 +44,7 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="ALTER TABLE tempcore ADD ColEndInt number(20)";
+				command="ALTER TABLE tempcore ADD ColEndInt number(11)";
 				Db.NonQ(command);
 				command="UPDATE tempcore SET ColEndInt = 0 WHERE ColEndInt IS NULL";
 				Db.NonQ(command);

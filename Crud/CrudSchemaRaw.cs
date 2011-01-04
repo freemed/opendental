@@ -19,12 +19,13 @@ namespace Crud {
 		public static string AddColumnEnd(string tableName,DbSchemaCol col,int tabInset) {
 			//After the rewrite, this will return C# with queries in it instead of actually running them here.
 			StringBuilder strb = new StringBuilder();
+			tb="";//must reset tabs each time method is called
 			for(int i=0;i<tabInset;i++){//defines the base tabs to be added to all lines
 				tb+="\t";
 			}
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" NOT NULL\";");
-			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
+//			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
@@ -33,9 +34,9 @@ namespace Crud {
 			if(GetOracleBlankData(col)=="") {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
 			}
 			else {//Non string types must be filled with "blank" data and set to NOT NULL
-				strb.Append(rn+tb+t1+"command+=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+GetOracleBlankData(col)+" WHERE "+col.ColumnName+" IS NULL\";");
+				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+GetOracleBlankData(col)+" WHERE "+col.ColumnName+" IS NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
-				strb.Append(rn+tb+t1+"command+=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
+				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			}
 			strb.Append(rn+tb+"}");

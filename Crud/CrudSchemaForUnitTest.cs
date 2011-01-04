@@ -46,8 +46,8 @@ namespace OpenDentBusiness {
 
 		///<summary>Example only</summary>
 		public static void AddColumnEndInt() {
-			string command="";");
-			col = new DbSchemaCol("",OdDbType.Int);
+			string command="""";");
+			col = new DbSchemaCol("ColEndInt",OdDbType.Int);
 			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,3));
 			strb.Append(@"
 		}
