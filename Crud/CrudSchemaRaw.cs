@@ -15,7 +15,7 @@ namespace Crud {
 		private const string t5="\t\t\t\t\t";
 		private static string tb = "";
 
-		/// <summary>Currently only works for string types.  Needs work.</summary>
+		/// <summary>Generates C# code to Add Column to table.</summary>
 		public static string AddColumnEnd(string tableName,DbSchemaCol col,int tabInset) {
 			//After the rewrite, this will return C# with queries in it instead of actually running them here.
 			StringBuilder strb = new StringBuilder();
@@ -41,6 +41,10 @@ namespace Crud {
 			}
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
+		}
+
+		public static string AddTable() {
+			return "";
 		}
 
 		/// <summary>For example, might return "bigint NOT NULL".</summary>
