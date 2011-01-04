@@ -445,27 +445,27 @@ clinic.Description,claimpayment.CheckNum";
 						whereClin+="OR ";
 					}
 					if(listClin.SelectedIndices[i]==0) {
-						whereClin+="paysplit.ClinicNum = 0 ";
+						whereClin+="payment.ClinicNum = 0 ";
 					}
 					else {
-						whereClin+="paysplit.ClinicNum = "+POut.Long(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
+						whereClin+="payment.ClinicNum = "+POut.Long(Clinics.List[listClin.SelectedIndices[i]-1].ClinicNum)+" ";
 					}
 				}
 				whereClin+=") ";
 			}
 			string queryPat=
-				@"SELECT CONVERT("+DbHelper.DateFormatColumn("paysplit.DatePay","%c/%d/%Y")+",CHAR(25)) AS DatePay,"
-+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@"AS lfname,
+				@"SELECT CONVERT("+DbHelper.DateFormatColumn("payment.PayDate","%c/%d/%Y")+",CHAR(25)) AS DatePay,"
++DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@" AS lfname,
 payment.PayType,provider.Abbr,
 clinic.Description clinicDesc,
 payment.CheckNum,
-FORMAT(SUM(paysplit.SplitAmt),2) amt, payment.PayNum,ItemName 
-FROM paysplit
-LEFT JOIN payment ON payment.PayNum=paysplit.PayNum
-LEFT JOIN patient ON patient.PatNum=paysplit.PatNum
-LEFT JOIN provider ON provider.ProvNum=paysplit.ProvNum
-LEFT JOIN definition ON definition.DefNum=payment.PayType 
-LEFT JOIN clinic ON paysplit.ClinicNum=clinic.ClinicNum
+FORMAT(payment.PayAmt,2) amt, payment.PayNum,ItemName 
+FROM payment
+LEFT JOIN paysplit ON payment.PayNum=paysplit.PayNum
+LEFT JOIN patient ON payment.PatNum=patient.PatNum
+LEFT JOIN provider ON paysplit.ProvNum=provider.ProvNum
+LEFT JOIN definition ON payment.PayType=definition.DefNum 
+LEFT JOIN clinic ON payment.ClinicNum=clinic.ClinicNum
 WHERE 1 "
 				+whereProv
 				+whereClin
@@ -481,12 +481,12 @@ WHERE 1 "
 				}
 				queryPat+=") ";
 			}
-			if(radioPatient.Checked){
-				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,patient.PatNum,provider.ProvNum,paysplit.ClinicNum";
-			}
-			else{
-				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,provider.ProvNum,paysplit.ClinicNum";
-			}
+			queryPat+=@"GROUP BY patient.LName,patient.FName,patient.MiddleI,"
+				+"payment.PayNum,payment.PayAmt,payment.PayDate,provider.ProvNum,payment.ClinicNum"
+				+",provider.Abbr,clinic.Description,payment.CheckNum,definition.ItemName";
+			//if(radioPatient.Checked){
+			//	queryPat+=",patient.PatNum";
+			//}
 			queryPat+=" ORDER BY paysplit.DatePay,lfname";
 			if(!checkAllTypes.Checked && listTypes.SelectedIndices.Count==0){
 				queryPat=DbHelper.LimitOrderBy(queryPat,0);
