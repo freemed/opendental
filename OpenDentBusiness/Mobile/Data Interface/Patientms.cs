@@ -13,10 +13,11 @@ namespace OpenDentBusiness.Mobile {
 			return Crud.PatientmCrud.SelectOne(customerNum,patNum);
 		}
 
-		///<summary>Gets all Patientms from the db as specified by the customerNum </summary>
-		public static List<Patientm> GetPatientmsForList(long customerNum) {
+		///<summary>Gets Patientms from the db as specified by the search string. Limit to 20 </summary>
+		public static List<Patientm> GetPatientms(long customerNum,string searchterm) {
 			string command="SELECT * FROM patientm "
-				+"WHERE CustomerNum = "+POut.Long(customerNum);
+				+"WHERE CustomerNum = "+POut.Long(customerNum)+ " "
+				+" AND LName like '"+searchterm+"%'"+" LIMIT 20";
 			return Crud.PatientmCrud.SelectMany(command);
 		}
 

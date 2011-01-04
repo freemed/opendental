@@ -8,13 +8,8 @@
 <body>
 	<div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 	<div id="content">
-		<form method="post" runat="server" enableviewstate="False">
-		<ul>
-			<li>
-				<input type="text" placeholder="Search Patient" name="patientname" id="patientname"
-					autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
-		</ul>
-		</form>
+
+
 		<ul>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
@@ -22,12 +17,15 @@
 						<div>
 							<a linkattib="PatientDetails.aspx?PatNum=<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).PatNum %>"
 								href="#PatientDetails">
-								<asp:Label ID="Label1" runat="server" Text="<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).FName %>"></asp:Label></a>
+								<asp:Label ID="Label1" runat="server" Text="<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).LName%> "></asp:Label>
+								<asp:Label ID="Label2" runat="server" Text="<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).FName%> "></asp:Label>
+								</a>
 						</div>
 					</li>
 				</ItemTemplate>
 			</asp:Repeater>
 		</ul>
+
 	</div>
 </body>
 </html>

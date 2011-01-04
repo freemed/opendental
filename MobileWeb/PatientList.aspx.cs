@@ -12,14 +12,21 @@ using OpenDentBusiness.Mobile;
 namespace MobileWeb {
 	public partial class PatientList:System.Web.UI.Page {
 		private long CustomerNum=0;
-
+		private string searchterm="";
+		List<Patientm> patientmList=new List<Patientm>();
+		
 		protected void Page_Load(object sender,EventArgs e) {
 			Message.Text="";
 			if(Session["CustomerNum"]!=null) {
-				Message.Text="LoggedIn";
+				//Thread.Sleep(1500);
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-				List<Patientm> patientmList=Patientms.GetPatientmsForList(CustomerNum);
-				
+				Message.Text="LoggedIn";
+				if(Request["searchterm"]!=null) {
+					searchterm=Request["searchterm"].Trim();
+				}
+				if(searchterm!="") {
+					patientmList=Patientms.GetPatientms(CustomerNum,searchterm);
+				}
 				Repeater1.DataSource=patientmList;
 				Repeater1.DataBind();
 			}

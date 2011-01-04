@@ -23,14 +23,14 @@ namespace MobileWeb {
 				if(Request.Form["password"]!=null) {
 					password=Request.Form["password"].ToString().Trim();
 				}
-				if(username=="" && password=="") {
+				//if(username=="" && password=="") {
 					Message.Text="CorrectLogin";
 					Session["CustomerNum"]=1486;
 					util.SetMobileDbConnection();
-				}
-				else {
-					Message.Text="LoginFailed";
-				}
+				//}
+				//else {
+				//	Message.Text="LoginFailed";
+				//}
 		}
 		
 		//Dennis: don't see the point in adding a 'salt' for now

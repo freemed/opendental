@@ -76,9 +76,10 @@ min-height: 480px;
  color:#000000;
  font-size:14px;
 }
-.style2
-{
+/*long words like long email addresses may need the word wrap*/
+.style2{
  font-size:14px;
+ word-wrap:break-word;
 }
 .appts, .home, .patients{
     left: 6px;
@@ -87,7 +88,6 @@ min-height: 480px;
     max-width: 55px;
     border-width: 0 8px 0 14px;
     -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14;    
-
 }
 /*overides existing checkbox css in theme.css*/
 
