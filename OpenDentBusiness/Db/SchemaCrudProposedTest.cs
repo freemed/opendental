@@ -59,7 +59,6 @@ namespace OpenDentBusiness {
 		//DropColumn
 		//DropColumnTimeStamp
 		//DropIndex
-		//AddTable
 		//etc.
 
 

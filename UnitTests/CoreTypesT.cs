@@ -25,7 +25,6 @@ namespace UnitTests {
 			cols.Add(new DbSchemaCol("TextSmallTest",OdDbType.Text,false,TextSizeMySqlOracle.Small,false));//<4k
 			cols.Add(new DbSchemaCol("VarCharTest",OdDbType.VarChar255));
 			cols.Add(new DbSchemaCol("TextLargeTest",OdDbType.Text,false,TextSizeMySqlOracle.Large,false));//>65k
-			cols.Add(new DbSchemaCol("BlobTest",OdDbType.Blob));
 			DbSchema.AddTable7_7("tempcore",cols);
 			cols=new List<DbSchemaCol>();
 			cols.Add(new DbSchemaCol("Names",OdDbType.VarChar255));
@@ -302,34 +301,6 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Clob, Rick Roller: Passed.\r\n";
-			//Blob:-----------------------------------------------------------------------------------------
-			/*
-			Image img=null;
-			img=Image.FromFile(@"..\..\koala.jpg");//~2MB (huge photo)
-			byte[] rawData;
-			byte[] blobTest;
-			using(MemoryStream stream=new MemoryStream()) {
-				Bitmap bitmap=new Bitmap(img);
-				bitmap.Save(stream,ImageFormat.Jpeg);//note that if png is used, it will bloat the file size by at least 10x.
-				rawData=stream.ToArray();
-			}
-			OdSqlParameter paramBlob=new OdSqlParameter("param1",OdDbType.Blob,rawData);
-			command="INSERT INTO tempcore (BlobTest) VALUES ("+DbHelper.ParamChar+"param1)";
-			DataCore.NonQ(command,paramBlob);
-			command="SELECT BlobTest FROM tempcore";
-			table=DataCore.GetTable(command);
-			blobTest=(byte[])table.Rows[0]["BlobTest"];
-			if(blobTest.Length!=rawData.Length){
-				throw new Exception();
-			}
-			for(int i=0;i<rawData.Length;i++) {
-				if(blobTest[i]!=rawData[i]) {
-					throw new Exception();
-				}
-			}
-			command="DELETE FROM tempcore";
-			DataCore.NonQ(command);
-			retVal+="Blob, 2MB: Passed.\r\n";*/
 			//SHOW CREATE TABLE -----------------------------------------------------------------------
 			//This command is needed in order to perform a backup.
 			if(DataConnection.DBtype==DatabaseType.MySql) {
