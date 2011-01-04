@@ -64,7 +64,7 @@ namespace MobileWeb {
 				if(Session["CustomerNum"]!=null) {
 					Message.Text="LoggedIn";
 					Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-					List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentmsForList(CustomerNum,AppointmentDate,AppointmentDate);
+					List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
 					Repeater1.DataSource=appointmentmList;
 					Repeater1.DataBind();
 				}

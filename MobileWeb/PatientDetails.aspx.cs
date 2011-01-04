@@ -23,6 +23,9 @@ namespace MobileWeb {
 				}
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
 				pat=Patientms.GetOne(CustomerNum,PatNum);
+				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,PatNum);
+				Repeater1.DataSource=appointmentmList;
+				Repeater1.DataBind();
 			}
 		}
 	}

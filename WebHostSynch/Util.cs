@@ -43,7 +43,7 @@ namespace WebHostSynch {
 		}
 
 		public void SetMobileDbConnection() {
-			Logger.Information("In SetMobileDbConnection()");
+			/*Logger.Information("In SetMobileDbConnection()");
 			string connectStr=ConfigurationManager.ConnectionStrings["DBMobileWeb"].ConnectionString;
 			if(previousConnectStr!=connectStr) {
 				IsMobileDBSet=false;// this situation would occur if the connection sting in the  web.config file
@@ -53,6 +53,8 @@ namespace WebHostSynch {
 				dc.SetDb(connectStr,"",DatabaseType.MySql,true);
 				IsMobileDBSet=true;
 			}
+			*/
+			DbInit.Init(); // The above code works but this is a cleaner.
 		}
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;

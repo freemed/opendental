@@ -14,15 +14,7 @@ namespace MobileWeb {
 		
 		public void SetMobileDbConnection() {
 			Logger.Information("In SetMobileDbConnection()");
-			string connectStr=Properties.Settings.Default.DBMobileWeb;
-			if(previousConnectStr!=connectStr) {
-				IsMobileDBSet=false;// this situation would occur if the connection sting in the  web.config file is changed.
-			}
-			if(!IsMobileDBSet) {
-				OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-				dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-				IsMobileDBSet=true;
-			}
+			DbInit.Init();
 		}
 	}
 }

@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Db.cs" />
+    <Compile Include="DbInit.cs" />
     <Compile Include="Mobile.asmx.cs">
       <DependentUpon>Mobile.asmx</DependentUpon>
       <SubType>Component</SubType>

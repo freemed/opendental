@@ -114,6 +114,7 @@
     <Compile Include="AppointmentList.aspx.designer.cs">
       <DependentUpon>AppointmentList.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DbInit.cs" />
     <Compile Include="PatientList.aspx.cs">
       <DependentUpon>PatientList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

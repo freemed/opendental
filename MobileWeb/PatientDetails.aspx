@@ -22,7 +22,25 @@
 <li><span class="style1">Email:</span> <span class="style2"><%Response.Write(pat.Email);%> </span></li>
 </ul>
 <h2>Appointments</h2>
+
 <ul>
+			<asp:Repeater ID="Repeater1" runat="server">
+				<ItemTemplate>
+					<li class="arrow style2">
+						<div>
+							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
+								href="#AppointmentDetails">
+								Apt Num:<asp:Label ID="Label1" runat="server" Text="<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"></asp:Label>
+								Date:<asp:Label ID="Label2" runat="server" Text="<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptDateTime.ToString() %>"></asp:Label></a>
+								
+						</div>
+					</li>
+				</ItemTemplate>
+			</asp:Repeater>
+</ul>
+
+
+<%--<ul>
 <li class="arrow style2">
 		<div>
 			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
@@ -43,7 +61,8 @@
 </li>
 
 
-</ul>
+</ul>--%>
+
 
 <h2>Prescriptions</h2>
 <ul>
