@@ -220,9 +220,19 @@ namespace OpenDentBusiness {
 			else{
 				if(table.Rows.Count>0) {
 					//detach all procedures
-					command="UPDATE procedurelog P, appointment A SET P.AptNum = 0 WHERE P.AptNum = A.AptNum AND A.Pattern = ''";
+					if(DataConnection.DBtype==DatabaseType.Oracle) {
+						command="UPDATE procedurelog P SET P.AptNum = 0 WHERE (SELECT A.Pattern FROM appointment A WHERE A.AptNum=P.AptNum AND ROWNUM<=1)=''";
+					}
+					else {
+						command="UPDATE procedurelog P, appointment A SET P.AptNum = 0 WHERE P.AptNum = A.AptNum AND A.Pattern = ''";
+					}
 					Db.NonQ(command);
-					command="UPDATE procedurelog P, appointment A SET P.PlannedAptNum = 0 WHERE P.PlannedAptNum = A.AptNum AND A.Pattern = ''";
+					if(DataConnection.DBtype==DatabaseType.Oracle) {
+						command="UPDATE procedurelog P SET P.PlannedAptNum = 0 WHERE (SELECT A.Pattern FROM appointment A WHERE A.AptNum=P.PlannedAptNum AND ROWNUM<=1)=''";
+					}
+					else {
+						command="UPDATE procedurelog P, appointment A SET P.PlannedAptNum = 0 WHERE P.PlannedAptNum = A.AptNum AND A.Pattern = ''";
+					}
 					Db.NonQ(command);
 					command="DELETE FROM appointment WHERE Pattern = ''";
 					Db.NonQ(command);
@@ -1503,21 +1513,30 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "";
-			}
 			string log="";
 			if(isCheck) {
-				command="SELECT COUNT(*) FROM appointment,procedurelog "
-					+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command="SELECT COUNT(*) FROM procedurelog p "
+						+"WHERE (SELECT COUNT(*) FROM appointment a WHERE p.AptNum=a.AptNum AND p.PatNum!=a.PatNum AND ROWNUM<=1)>0";
+				}
+				else {
+					command="SELECT COUNT(*) FROM appointment,procedurelog "
+						+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
+				}
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Procedures attached to appointments with incorrect patient: ")+numFound+"\r\n";
 				}
 			}
 			else {
-				command="UPDATE appointment,procedurelog SET procedurelog.AptNum=0 "
-					+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command="UPDATE procedurelog p SET p.AptNum=0 "
+						+"WHERE (SELECT COUNT(*) FROM appointment a WHERE p.AptNum=a.AptNum AND p.PatNum!=a.PatNum AND ROWNUM<=1)>0";
+				}
+				else {
+					command="UPDATE appointment,procedurelog SET procedurelog.AptNum=0 "
+						+"WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
+				}
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments: ")+numberFixed.ToString()+"\r\n";
@@ -1532,21 +1551,36 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(isCheck) {
-				command=@"SELECT COUNT(*) FROM procedurelog,appointment
-					WHERE procedurelog.AptNum = appointment.AptNum
-					AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
-					AND procedurelog.ProcStatus = 2";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command=@"SELECT COUNT(*) FROM procedurelog p
+						WHERE p.ProcStatus=2 AND 
+						(SELECT COUNT(*) FROM appointment a WHERE a.AptNum=p.AptNum AND TO_DATE(p.ProcDate)!=TO_DATE(a.AptDateTime) AND ROWNUM<=1)>0";
+				}
+				else {
+					command=@"SELECT COUNT(*) FROM procedurelog,appointment
+						WHERE procedurelog.AptNum = appointment.AptNum
+						AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
+						AND procedurelog.ProcStatus = 2";
+				}
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Procedures which are attached to appointments with mismatched dates: ")+numFound+"\r\n";
 				}
 			}
 			else {
-				command=@"UPDATE procedurelog,appointment
-					SET procedurelog.AptNum=0
-					WHERE procedurelog.AptNum = appointment.AptNum
-					AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
-					AND procedurelog.ProcStatus = 2";//only detach completed procs 
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command=@"UPDATE procedurelog p
+						SET p.AptNum=0
+						WHERE p.ProcStatus=2 AND 
+						(SELECT COUNT(*) FROM appointment a WHERE a.AptNum=p.AptNum AND TO_DATE(p.ProcDate)!=TO_DATE(a.AptDateTime) AND ROWNUM<=1)>0";
+				}
+				else {
+					command=@"UPDATE procedurelog,appointment
+						SET procedurelog.AptNum=0
+						WHERE procedurelog.AptNum = appointment.AptNum
+						AND DATE(procedurelog.ProcDate) != DATE(appointment.AptDateTime)
+						AND procedurelog.ProcStatus = 2";//only detach completed procs 
+				}
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Procedures detached from appointments due to mismatched dates: ")+numberFixed.ToString()+"\r\n";
