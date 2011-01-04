@@ -121,6 +121,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="SchemaTable.cs" />
     <Compile Include="SnippetType.cs" />
   </ItemGroup>
   <ItemGroup>

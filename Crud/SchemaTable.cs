@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenDentBusiness;
 
-namespace UnitTests {
+namespace Crud {
 	class SchemaTable {
 		//This defines a test table from which the schema insert table will be generated.
 		///<summary>Primary key</summary>

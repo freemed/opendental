@@ -144,7 +144,6 @@
     <Compile Include="ClaimProcT.cs" />
     <Compile Include="Sandbox.cs" />
     <Compile Include="SchemaT.cs" />
-    <Compile Include="SchemaTable.cs" />
     <Compile Include="ToothT.cs" />
     <Compile Include="WebServiceT.cs" />
   </ItemGroup>
