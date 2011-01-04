@@ -132,7 +132,7 @@ namespace OpenDentBusiness {
 				SELECT IFNULL(MAX(DateStop),'0001-01-01')
 				FROM repeatcharge
 				WHERE repeatcharge.PatNum=tempRegKeys.PatNum
-				AND DateStop < NOW() AND DateStop > '0001-01-01');
+				AND DateStop < "+DbHelper.Now()+@" AND DateStop > '0001-01-01');
 				/*Step 2:*/
 				UPDATE tempRegKeys
 				SET Date_='0001-01-01'

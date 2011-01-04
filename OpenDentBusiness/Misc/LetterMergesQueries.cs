@@ -102,7 +102,7 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN patient patSubsc ON patSubsc.PatNum=inssub.Subscriber "
 				+"LEFT JOIN appointment ON appointment.PatNum=patient.PatNum "
 					+"AND AptStatus="+POut.Long((int)ApptStatus.Scheduled)+" "
-					+"AND AptDateTime > NOW() "
+					+"AND AptDateTime > "+DbHelper.Now()+" "
 				+"LEFT JOIN patient patGuar ON patGuar.PatNum=patient.Guarantor "
 				+"WHERE patient.PatNum="+POut.Long(PatCur.PatNum)
 				+" GROUP BY patient.PatNum "

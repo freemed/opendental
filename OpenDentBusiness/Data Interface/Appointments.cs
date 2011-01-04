@@ -176,7 +176,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM appointment "
 				+"WHERE PatNum = "+POut.Long(patNum)+" "
-				+"AND AptDateTime > NOW() "
+				+"AND AptDateTime > "+DbHelper.Now()+" "
 				+"AND (aptstatus = "+(int)ApptStatus.Scheduled+" "
 				+"OR aptstatus = "+(int)ApptStatus.ASAP+") "
 				+"ORDER BY AptDateTime";
@@ -487,13 +487,13 @@ namespace OpenDentBusiness{
 			}
 			string command="UPDATE appointment SET Confirmed="+POut.Long(newStatus);
 			if(PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger)==newStatus){
-				command+=",DateTimeArrived=NOW()";
+				command+=",DateTimeArrived="+DbHelper.Now();
 			}
 			else if(PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger)==newStatus){
-				command+=",DateTimeSeated=NOW()";
+				command+=",DateTimeSeated="+DbHelper.Now();
 			}
 			else if(PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger)==newStatus){
-				command+=",DateTimeDismissed=NOW()";
+				command+=",DateTimeDismissed="+DbHelper.Now();
 			}
 			command+=" WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);

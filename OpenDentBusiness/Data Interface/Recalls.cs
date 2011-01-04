@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 				//MIN prevents multiple rows from being returned in the subquery.
 				+"DATE((SELECT MIN(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
 				+"WHERE appointment.AptNum=procedurelog.AptNum "
-				+"AND appointment.AptDateTime > NOW() "
+				+"AND appointment.AptDateTime > "+DbHelper.Now()+" "
 				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND recall.PatNum=procedurelog.PatNum "
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "

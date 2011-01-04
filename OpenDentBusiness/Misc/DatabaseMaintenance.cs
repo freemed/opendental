@@ -849,18 +849,18 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(isCheck){
-				command=@"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed1 > NOW()+INTERVAL 15 MINUTE";
+				command=@"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed1 > "+DbHelper.Now()+"+INTERVAL 15 MINUTE";
 				int numFound=PIn.Int(Db.GetCount(command));
-				command=@"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed2 > NOW()+INTERVAL 15 MINUTE";
+				command=@"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed2 > "+DbHelper.Now()+"+INTERVAL 15 MINUTE";
 				numFound+=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Timecard entries invalid: ")+numFound+"\r\n";
 				}
 			}
 			else{
-				command=@"UPDATE clockevent SET TimeDisplayed1=NOW() WHERE TimeDisplayed1 > NOW()+INTERVAL 15 MINUTE";
+				command=@"UPDATE clockevent SET TimeDisplayed1="+DbHelper.Now()+" WHERE TimeDisplayed1 > "+DbHelper.Now()+"+INTERVAL 15 MINUTE";
 				int numberFixed=Db.NonQ32(command);
-				command=@"UPDATE clockevent SET TimeDisplayed2=NOW() WHERE TimeDisplayed2 > NOW()+INTERVAL 15 MINUTE";
+				command=@"UPDATE clockevent SET TimeDisplayed2="+DbHelper.Now()+" WHERE TimeDisplayed2 > "+DbHelper.Now()+"+INTERVAL 15 MINUTE";
 				numberFixed+=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Future timecard entry times fixed: ")+numberFixed.ToString()+"\r\n";

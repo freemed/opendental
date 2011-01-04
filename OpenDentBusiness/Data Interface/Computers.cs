@@ -103,6 +103,9 @@ namespace OpenDentBusiness{
 			}
 			//heartbeat is every three minutes.  We'll allow four to be generous.
 			string command="SELECT CompName FROM computer WHERE LastHeartBeat > SUBTIME(NOW(),'00:04:00')";
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				command="SELECT CompName FROM computer WHERE LastHeartBeat > SYSDATE - (4/1440)";
+			}
 			DataTable table=Db.GetTable(command);
 			List<string> retVal=new List<string>();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -116,7 +119,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
 				return;
 			}
-			string command= "UPDATE computer SET LastHeartBeat=NOW() WHERE CompName = '"+POut.String(computerName)+"'";
+			string command= "UPDATE computer SET LastHeartBeat="+DbHelper.Now()+" WHERE CompName = '"+POut.String(computerName)+"'";
 			Db.NonQ(command);
 		}
 
