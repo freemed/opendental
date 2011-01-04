@@ -22,7 +22,6 @@ namespace Crud {
 			for(int i=0;i<tabInset;i++){//defines the base tabs to be added to all lines
 				tb+="\t";
 			}
-			//command already exists generate if/else code block for mysql/oracle
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" NOT NULL\";");
 			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
@@ -31,6 +30,14 @@ namespace Crud {
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			if(GetOracleBlankData(col)=="") {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
+			}
+			else {//Non string types must be filled with "blank" data and set to NOT NULL
+				strb.Append(rn+tb+t1+"command+=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+GetOracleBlankData(col)+" WHERE "+col.ColumnName+" IS NULL\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+				strb.Append(rn+tb+t1+"command+=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			}
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
 		}
@@ -81,6 +88,31 @@ namespace Crud {
 			}
 		}
 
+		///<summary>For example, might returns "0", "", or "01-01-0001" for cols with types OdDbType.Byte, OdDbType.Text, and OdDbType.DateTime respectively.</summary>
+		private static string GetMySqlBlankData(DbSchemaCol col) {
+			switch(col.DataType) {
+				case OdDbType.Bool:
+				case OdDbType.Byte:
+				case OdDbType.Currency:
+				case OdDbType.Enum:
+				case OdDbType.Float:
+				case OdDbType.Int:
+				case OdDbType.Long:
+					return "0";
+				case OdDbType.Date:
+				case OdDbType.DateTime:
+				case OdDbType.DateTimeStamp:
+				case OdDbType.TimeOfDay://causes database warning, Sets time to 00:00:01
+				case OdDbType.TimeSpan://causes database warning, Sets time to 00:00:01
+					return "01-01-0001";//sets date to 01 JAN 2001, 00:00:00
+				case OdDbType.Text:
+				case OdDbType.VarChar255:
+					return "";//sets to empty string
+				default:
+					throw new ApplicationException("type not found");
+			}
+		}
+
 		///<summary>For example, might return "NUMBER(11) NOT NULL".</summary>
 		private static string GetOracleType(DbSchemaCol col) {
 			switch(col.DataType) {
@@ -123,6 +155,30 @@ namespace Crud {
 			}
 		}
 
+		///<summary>For example, might returns "0", "", or "01-JAN-0001" for cols with types OdDbType.Byte, OdDbType.Text, and OdDbType.DateTime respectively.</summary>
+		private static string GetOracleBlankData(DbSchemaCol col) {
+			switch(col.DataType) {
+				case OdDbType.Bool:
+				case OdDbType.Byte:
+				case OdDbType.Currency:
+				case OdDbType.Float:
+				case OdDbType.Enum:
+				case OdDbType.Int:
+				case OdDbType.Long:
+					return "0";
+				case OdDbType.Date:
+				case OdDbType.DateTime:
+				case OdDbType.DateTimeStamp://timestamp is stored as a date and trigger combination
+				case OdDbType.TimeOfDay:
+					return "01-JAN-0001";
+				case OdDbType.Text:
+				case OdDbType.TimeSpan:
+				case OdDbType.VarChar255:
+					return "";//stored as NULL, 
+				default:
+					throw new ApplicationException("type not found");
+			}
+		}
 
 
 	}

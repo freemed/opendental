@@ -37,21 +37,18 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Example only</summary>
-		public static void AddColumnEnd() {
+		public static void AddColumnEndClob() {
 			string command="""";");
-			DbSchemaCol col=new DbSchemaCol("ColEnd",OdDbType.Text,TextSizeMySqlOracle.Medium);
+			DbSchemaCol col=new DbSchemaCol("ColEndClob",OdDbType.Text,TextSizeMySqlOracle.Medium);
 			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,3));
-			/*
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command=""ALTER TABLE tempcore ADD ColEnd int NOT NULL"";
-				Db.NonQ(command);
-			}
-			else {//oracle
-				command=""ALTER TABLE tempcore ADD ColEnd number(11);""
-					+""UPDATE TABLE tempcore SET ColEnd = 0 WHERE ColEnd IS NULL;""
-					+""ALTER TABLE tempcore MODIFY ColEnd NOT NULL"";
-				Db.NonQ(command);
-			}*/
+			strb.Append(@"
+		}
+
+		///<summary>Example only</summary>
+		public static void AddColumnEndInt() {
+			string command="";");
+			col = new DbSchemaCol("",OdDbType.Int);
+			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,3);
 			strb.Append(@"
 		}
 
