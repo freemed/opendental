@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 				command+=" Subscriber="+POut.Long(Fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
-			command+=") UNION ALL (SELECT inssub.* FROM inssub,patplan WHERE inssub.InsSubNum=patplan.InsSubNum AND (";
+			command+=") UNION (SELECT inssub.* FROM inssub,patplan WHERE inssub.InsSubNum=patplan.InsSubNum AND (";
 			for(int i=0;i<Fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
