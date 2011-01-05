@@ -21,8 +21,7 @@ namespace OpenDentBusiness {
 					BoolTest tinyint NOT NULL,
 					TextTest text NOT NULL,
 					CharTest char(1) NOT NULL,
-					ClobTest mediumtext NOT NULL,
-					BlobTest mediumblob NOT NULL
+					ClobTest mediumtext NOT NULL
 					) DEFAULT CHARSET=utf8";
 				DataCore.NonQ(command);
 			}
@@ -44,7 +43,6 @@ namespace OpenDentBusiness {
 					TextTest text NOT NULL,
 					CharTest char(1) NOT NULL,
 					ClobTest mediumtext NOT NULL,
-					BlobTest mediumblob NOT NULL
 				)";*/
 				Db.NonQ(command);
 			}
