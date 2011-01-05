@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using OpenDentBusiness;
 
@@ -20,7 +21,14 @@ namespace OpenDentBusiness {
 	public class SchemaCrudTest {
 		///<summary>Example only</summary>
 		public static void AddTableTempcore() {
-			string command="""";
+			string command="""";");
+			Type typeClass=typeof(SchemaTable);
+			FieldInfo[] fields=typeClass.GetFields();
+			FieldInfo priKey=CrudGenHelper.GetPriKey(fields,typeClass.Name);
+			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
+			List<DbSchemaCol> cols=CrudQueries.GetListColumns(priKey.Name,null,fieldsExceptPri,false);
+			CrudSchemaRaw.AddTable("tempcore",cols,3);
+			/*
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command=""DROP TABLE IF EXISTS tempcore"";
 				Db.NonQ(command);
@@ -79,9 +87,9 @@ namespace OpenDentBusiness {
 					BoolTest default 0
 					)"";
 				Db.NonQ(command);
-			}
+			}*/
+			strb.Append(@"
 		}
-
 
 		///<summary>Example only</summary>
 		public static void AddColumnEndClob() {

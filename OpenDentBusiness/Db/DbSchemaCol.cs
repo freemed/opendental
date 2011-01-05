@@ -16,6 +16,7 @@ namespace OpenDentBusiness {
 		///<summary>If specifying an int, it uses int by default.  Set this to true to instead use smallint.</summary>
 		public bool IntUseSmallInt;
 
+		/*
 		/// <summary>Takes DbSchemaCol and makes a new instance of it. </summary>
 		public DbSchemaCol(DbSchemaCol newCol) {
 			ColumnName=newCol.ColumnName;
@@ -23,7 +24,7 @@ namespace OpenDentBusiness {
 			//Indexed=newCol.Indexed;
 			IntUseSmallInt=newCol.IntUseSmallInt;
 			TextSize=newCol.TextSize;
-		}
+		}*/
 
 		public DbSchemaCol(string columnName,OdDbType dataType) {
 			ColumnName=columnName;

@@ -4,7 +4,8 @@ using System.Text;
 using OpenDentBusiness;
 
 namespace Crud {
-	class SchemaTable {
+	[CrudTable(TableName="tempcore")]
+	class SchemaTable {//do not inherit from TableBase because it's not a real table
 /*		
 			//This defines a test table from which the schema insert table will be generated.
 			cols.Add(new DbSchemaCol("TimeOfDayTest",OdDbType.TimeOfDay));
@@ -18,18 +19,20 @@ namespace Crud {
 			cols.Add(new DbSchemaCol("VarCharTest",OdDbType.VarChar255));
 			cols.Add(new DbSchemaCol("TextLargeTest",OdDbType.Text,false,TextSizeMySqlOracle.Large,false));//>65k
 */
+		[CrudColumn(IsPriKey=true)]
+		public long TempCoreNum;
 		///<summary>Column of data type TimeOfDayTest</summary>
 		public DateTime TimeOfDayTest;
 		///<summary>Column of data type byte</summary>
-//		[CrudColumn(CrudSpecialColType=CrudSpecialColType.TimeStamp)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime TimeStampTest;
 		///<summary>Column of data type byte</summary>
 		public DateTime DateTest;
 		///<summary>Column of data type byte</summary>
-//		[CrudColumn(CrudSpecialColType=CrudSpecialColType.DateT)]
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeTest;
 		///<summary>Column of data type byte</summary>
-//		[CrudColumn(CrudSpecialColType=CrudSpecialColType.TimeSpanNeg)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		public TimeSpan TimeSpanTest;
 		///<summary>Column of data type byte</summary>
 		public double CurrencyTest;
@@ -38,10 +41,10 @@ namespace Crud {
 		///<summary>Column of data type byte</summary>
 		public string TextSmallTest;// <4k
 		///<summary>Column of data type byte</summary>
-//		[CrudColumn(CrudSpecialColType=CrudSpecialColType.TextIsClob)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TextMediumTest;// >4k & <65k
 		///<summary>Column of data type byte</summary>
-//		[CrudColumn(CrudSpecialColType=CrudSpecialColType.TextIsClob)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TextLargeTest;// >65k
 		///<summary>Column of data type byte</summary>
 		public string VarCharTest;// <255

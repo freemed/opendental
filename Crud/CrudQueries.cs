@@ -152,6 +152,24 @@ namespace Crud {
 			}
 		}
 
+		///<summary>priKeyName2=null for not mobile.</summary>
+		public static List<DbSchemaCol> GetListColumns(string priKeyName1,string priKeyName2,List<FieldInfo> fieldsExceptPri,bool isMobile) {
+			List<DbSchemaCol> retVal=new List<DbSchemaCol>();
+			//DbSchemaCol col;
+			retVal.Add(new DbSchemaCol(priKeyName1,OdDbType.Long));
+			if(isMobile) {
+				retVal.Add(new DbSchemaCol(priKeyName2,OdDbType.Long));
+			}
+			CrudSpecialColType specialType;
+			for(int f=0;f<fieldsExceptPri.Count;f++) {
+				if(isMobile && fieldsExceptPri[f].Name==priKeyName1) {//2 already skipped
+					continue;
+				}
+				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
+				retVal.Add(new DbSchemaCol(fieldsExceptPri[f].Name,GetOdDbTypeFromColType(fieldsExceptPri[f].FieldType,specialType)));
+			}
+			return retVal;
+		}
 
 		/*
 		///<summary>priKeyName2=null for not mobile.</summary>

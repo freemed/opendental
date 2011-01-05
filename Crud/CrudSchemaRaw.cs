@@ -15,6 +15,79 @@ namespace Crud {
 		private const string t5="\t\t\t\t\t";
 		private static string tb = "";
 
+		public static string AddTable(string tableName,List<DbSchemaCol> cols,int tabInset) {
+			StringBuilder strb = new StringBuilder();
+			tb="";//must reset tabs each time method is called
+			for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
+				tb+="\t";
+			}
+			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
+			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE ");
+
+			/*
+									if(DataConnection.DBtype==DatabaseType.MySql) {
+										command="DROP TABLE IF EXISTS tempcore";
+										Db.NonQ(command);
+										command=@"CREATE TABLE tempcore (
+											TimeOfDayTest time NOT NULL default '00:00:00',
+											TimeStampTest timestamp,
+											DateTest date NOT NULL default '0001-01-01',
+											DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
+											TimeSpanTest time NOT NULL default '00:00:00',
+											CurrencyTest double NOT NULL,
+											BoolTest tinyint NOT NULL,
+											TextSmallTest text NOT NULL,
+											TextMediumTest text NOT NULL,
+											TextLargeTest mediumtext NOT NULL,
+											varCharTest varchar(255) NOT NULL
+											) DEFAULT CHARSET=utf8";
+										Db.NonQ(command);
+									}
+									else {//oracle
+										try {
+											command="DROP TABLE tempcore";
+											Db.NonQ(command);
+										}
+										catch(Exception e) {
+										}
+										command=@"CREATE TABLE tempcore (
+											TimeOfDayTest date,
+											TimeStampTest timestamp,
+											DateTest date,
+											DateTimeTest date,
+											TimeSpanTest date,
+											CurrencyTest number(20),
+											BoolTest number(3),
+											TextSmallTest varchar2(4000),
+											TextMediumTest clob,
+											TextLargeTest clob,
+											VarCharTest varchar2(255)
+											)";
+										Db.NonQ(command);
+										command=@"ALTER TABLE tempcore MODIFY(
+											TimeOfDayTest NOT NULL,
+											DateTest NOT NULL,
+											DateTimeTest NOT NULL,
+											TimeSpanTest NOT NULL,
+											CurrencyTest NOT NULL,
+											BoolTest NOT NULL
+											)";
+										Db.NonQ(command);
+										command=@"ALTER TABLE tempcore MODIFY(
+											TimeOfDayTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+											TimeStampTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+											DateTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+											DateTimeTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+											TimeSpanTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+											CurrencyTest default 0,
+											BoolTest default 0
+											)";
+										Db.NonQ(command);
+									}
+			*/
+			return "";
+		}
+
 		/// <summary>Generates C# code to Add Column to table.</summary>
 		public static string AddColumnEnd(string tableName,DbSchemaCol col,int tabInset) {
 			StringBuilder strb = new StringBuilder();
@@ -40,79 +113,6 @@ namespace Crud {
 			}
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
-		}
-
-		public static string AddTable() {
-			StringBuilder strb = new StringBuilder();
-			tb="";//must reset tabs each time method is called
-			for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
-				tb+="\t";
-			}
-			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
-			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE ");
-
-/*
-						if(DataConnection.DBtype==DatabaseType.MySql) {
-							command="DROP TABLE IF EXISTS tempcore";
-							Db.NonQ(command);
-							command=@"CREATE TABLE tempcore (
-								TimeOfDayTest time NOT NULL default '00:00:00',
-								TimeStampTest timestamp,
-								DateTest date NOT NULL default '0001-01-01',
-								DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
-								TimeSpanTest time NOT NULL default '00:00:00',
-								CurrencyTest double NOT NULL,
-								BoolTest tinyint NOT NULL,
-								TextSmallTest text NOT NULL,
-								TextMediumTest text NOT NULL,
-								TextLargeTest mediumtext NOT NULL,
-								varCharTest varchar(255) NOT NULL
-								) DEFAULT CHARSET=utf8";
-							Db.NonQ(command);
-						}
-						else {//oracle
-							try {
-								command="DROP TABLE tempcore";
-								Db.NonQ(command);
-							}
-							catch(Exception e) {
-							}
-							command=@"CREATE TABLE tempcore (
-								TimeOfDayTest date,
-								TimeStampTest timestamp,
-								DateTest date,
-								DateTimeTest date,
-								TimeSpanTest date,
-								CurrencyTest number(20),
-								BoolTest number(3),
-								TextSmallTest varchar2(4000),
-								TextMediumTest clob,
-								TextLargeTest clob,
-								VarCharTest varchar2(255)
-								)";
-							Db.NonQ(command);
-							command=@"ALTER TABLE tempcore MODIFY(
-								TimeOfDayTest NOT NULL,
-								DateTest NOT NULL,
-								DateTimeTest NOT NULL,
-								TimeSpanTest NOT NULL,
-								CurrencyTest NOT NULL,
-								BoolTest NOT NULL
-								)";
-							Db.NonQ(command);
-							command=@"ALTER TABLE tempcore MODIFY(
-								TimeOfDayTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-								TimeStampTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-								DateTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-								DateTimeTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-								TimeSpanTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-								CurrencyTest default 0,
-								BoolTest default 0
-								)";
-							Db.NonQ(command);
-						}
-*/
-			return "";
 		}
 
 		/// <summary>For example, might return "bigint NOT NULL".</summary>
