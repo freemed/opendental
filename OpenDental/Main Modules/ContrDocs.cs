@@ -614,11 +614,11 @@ namespace OpenDental{
 
 		///<summary>This overload is needed when jumping to a specific image from FormPatientForms.</summary>
 		public void ModuleSelected(long patNum,long docNum) {
-			if(!PrefC.UsingAtoZfolder) {
-				MsgBox.Show(this,"Not currently using documents. Turn on the A to Z folders option by going to Setup | Data Paths to enable imaging.");
-				this.Enabled=false;
-				return;
-			}
+			//if(!PrefC.UsingAtoZfolder) {
+			//	MsgBox.Show(this,"Not currently using documents. Turn on the A to Z folders option by going to Setup | Data Paths to enable imaging.");
+			//	this.Enabled=false;
+			//	return;
+			//}
 			this.Enabled=true;
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
@@ -1407,7 +1407,8 @@ namespace OpenDental{
 					doc.WindowingMax=255;
 					doc.WindowingMin=0;
 					Documents.Update(doc);
-				} catch {
+				} 
+				catch {
 					MessageBox.Show(Lan.g(this,"Error saving document."));
 					this.Cursor=Cursors.Default;
 					return;

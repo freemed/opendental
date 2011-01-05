@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
@@ -218,7 +219,7 @@ namespace OpenDental {
 					else if(File.Exists(filePathAndName)) {
 						img=Image.FromFile(filePathAndName);
 					}
-					sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img));
+					sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),ImageFormat.Png);//Because that's what we did before. Review this later. 
 				}
 				else{
 					sheetDefCur.SheetFieldDefs[j].ImageData="";// because null is not allowed

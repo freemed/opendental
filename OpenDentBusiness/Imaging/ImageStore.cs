@@ -249,21 +249,31 @@ namespace OpenDentBusiness {
 		}
 
 		public static Document Import(Bitmap image,long docCategory,Patient pat) {
-			string patFolder=GetPatientFolder(pat);
-			Document doc = new Document();
-			doc.FileName = ".jpg";
-			doc.DateCreated = DateTime.Today;
-			doc.DocCategory = docCategory;
-			doc.PatNum =pat.PatNum;
-			doc.ImgType = ImageType.Photo;
-			Documents.Insert(doc, pat);//this assigns a filename and saves to db
-			doc=Documents.GetByNum(doc.DocNum);
-			try {
-				SaveDocument(doc, image,patFolder);
+			string patFolder="";
+			if(PrefC.UsingAtoZfolder) {
+				patFolder=GetPatientFolder(pat);
 			}
-			catch {
-				Documents.Delete(doc);
-				throw;
+			Document doc=new Document();
+			doc.FileName=".jpg";
+			doc.DateCreated=DateTime.Today;
+			doc.DocCategory=docCategory;
+			doc.PatNum=pat.PatNum;
+			doc.ImgType=ImageType.Photo;
+			if(!PrefC.UsingAtoZfolder) {
+				doc.RawBase64=POut.Bitmap(image,ImageFormat.Jpeg);
+				doc.Thumbnail="";
+				//no thumbnail yet
+			}
+			Documents.Insert(doc,pat);//this assigns a filename and saves to db
+			doc=Documents.GetByNum(doc.DocNum);
+			if(PrefC.UsingAtoZfolder) {
+				try {
+					SaveDocument(doc,image,patFolder);
+				}
+				catch {
+					Documents.Delete(doc);
+					throw;
+				}
 			}
 			return doc;
 		}

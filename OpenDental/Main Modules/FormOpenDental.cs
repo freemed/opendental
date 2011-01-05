@@ -1557,24 +1557,25 @@ namespace OpenDental{
 			if(!PrefL.ConvertDB()){
 				return false;
 			}
-			//if(PrefC.UsingAtoZfolder && ImageStore.GetPreferredImagePath()==null) {//AtoZ folder not found
-			string prefImagePath=ImageStore.GetPreferredImagePath();
-			if(prefImagePath==null || !Directory.Exists(prefImagePath)) {//AtoZ folder not found
-				Cache.Refresh(InvalidType.Security);
-				FormPath FormP=new FormPath();
-				FormP.IsStartingUp=true;
-				FormP.ShowDialog();
-				if(FormP.DialogResult!=DialogResult.OK){
-					MsgBox.Show(this,"Invalid A to Z path.  Closing program.");
-					Application.Exit();
-					return false;
+			if(PrefC.UsingAtoZfolder) {
+				string prefImagePath=ImageStore.GetPreferredImagePath();
+				if(prefImagePath==null || !Directory.Exists(prefImagePath)) {//AtoZ folder not found
+					Cache.Refresh(InvalidType.Security);
+					FormPath FormP=new FormPath();
+					FormP.IsStartingUp=true;
+					FormP.ShowDialog();
+					if(FormP.DialogResult!=DialogResult.OK) {
+						MsgBox.Show(this,"Invalid A to Z path.  Closing program.");
+						Application.Exit();
+						return false;
+					}
+					//bool usingAtoZ=FormPath.UsingImagePath();
+					//ContrDocs2.Enabled=usingAtoZ;
+					//menuItemClaimForms.Visible=usingAtoZ;
+					//CheckCustomReports();
+					//this.RefreshCurrentModule();
+					Cache.Refresh(InvalidType.Prefs);//because listening thread not started yet.
 				}
-				//bool usingAtoZ=FormPath.UsingImagePath();
-				//ContrDocs2.Enabled=usingAtoZ;
-				//menuItemClaimForms.Visible=usingAtoZ;
-				//CheckCustomReports();
-				//this.RefreshCurrentModule();
-				Cache.Refresh(InvalidType.Prefs);//because listening thread not started yet.
 			}
 			if(!PrefL.CheckProgramVersion()){
 				return false;

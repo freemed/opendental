@@ -225,12 +225,12 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static string Bitmap(System.Drawing.Bitmap bitmap) {
+		public static string Bitmap(System.Drawing.Bitmap bitmap,ImageFormat imageFormat) {
 			if(bitmap==null) {
 				return "";
 			}
 			using(MemoryStream stream=new MemoryStream()) {
-				bitmap.Save(stream,ImageFormat.Png);//was Bmp, so there will be a mix of different kinds.
+				bitmap.Save(stream,imageFormat);//was Bmp, then Png, then user defined.  So there will be a mix of different kinds.
 				byte[] rawData=stream.ToArray();
 				return Convert.ToBase64String(rawData);
 			}

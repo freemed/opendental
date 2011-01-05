@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Data;
 using System.Reflection;
 using System.Threading;
@@ -163,7 +164,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE phone SET "
-				+"WebCamImage   = '"+POut.Bitmap(bitmap)+"' "//handles null
+				+"WebCamImage   = '"+POut.Bitmap(bitmap,ImageFormat.Png)+"' "//handles null
 				+"WHERE Extension = "+POut.Long(extension);
 			Db.NonQ(command);
 		}
