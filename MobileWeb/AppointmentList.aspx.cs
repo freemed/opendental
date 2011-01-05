@@ -51,16 +51,6 @@ namespace MobileWeb {
 				NextDateDay=NextDate.Day;
 				NextDateMonth=NextDate.Month;
 				NextDateYear=NextDate.Year;
-				/*
-				string timeofapp ="8:30 a.m &nbsp;&nbsp;&nbsp;";
-
-				string[] ar= { timeofapp + " Appointment1 of "+ appsuffix,"Appointment2","Appointment3","Appointment4","Appointment5" };
-
-				var somevar = ar.Where(a => a.Contains("Appointment"));
-				Repeater1.DataSource = somevar;
-				*/
-				
-				Message.Text="";
 				if(Session["CustomerNum"]!=null) {
 					Message.Text="LoggedIn";
 					Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
@@ -70,5 +60,26 @@ namespace MobileWeb {
 				}
 			}
 		}
+
+		public string GetPatientName(long PatNum) {
+			try {
+				Patientm pat=Patientms.GetOne(CustomerNum,PatNum);
+				return pat.LName+ ", " +pat.FName;
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return "";
+			}
+
+		}
+
+
+
+
+
+
+
+
+
 	}
 }

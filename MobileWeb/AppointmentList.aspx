@@ -23,8 +23,9 @@
 						<div>
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
-								Apt Num:<asp:Label ID="Label1" runat="server" Text="<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"></asp:Label>
-								Date:<asp:Label ID="Label2" runat="server" Text="<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptDateTime.ToString() %>"></asp:Label></a>
+								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptDateTime.ToString("hh:mm tt")%>&nbsp;&nbsp;&nbsp;&nbsp;
+								<%#GetPatientName(((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).PatNum)%>
+								</a>
 								
 						</div>
 					</li>

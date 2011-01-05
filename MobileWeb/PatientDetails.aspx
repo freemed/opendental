@@ -11,7 +11,12 @@
 <div id="content">
 <h2></h2>
 <ul>
-<li> <span class="style2"><%Response.Write(pat.LName + " "+pat.MiddleI +" " + pat.FName  +" " + pat.Birthdate.ToShortDateString());%></span>
+<li> 
+<span class="style2">
+<%Response.Write(pat.LName + " "+pat.MiddleI+" "+pat.FName+" "+pat.Birthdate.ToShortDateString());%><br />
+<%Response.Write(pat.Birthdate.ToShortDateString()+" ("+pat.Age+")");%>
+
+</span>
 </li>
 </ul>
 
@@ -38,31 +43,6 @@
 				</ItemTemplate>
 			</asp:Repeater>
 </ul>
-
-
-<%--<ul>
-<li class="arrow style2">
-		<div>
-			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
-			<asp:Label ID="Label1" runat="server" Text="Appointment1"></asp:Label></a>
-		</div>
-</li>
-<li class="arrow style2">
-		<div>
-			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
-			<asp:Label ID="Label2" runat="server" Text="Appointment2"></asp:Label></a>
-		</div>
-</li>
-<li class="arrow style2">
-		<div>
-			<a linkattib="AppointmentDetails.aspx?id=1" href="#AppointmentDetails">
-			<asp:Label ID="Label3" runat="server" Text="Appointment3"></asp:Label></a>
-		</div>
-</li>
-
-
-</ul>--%>
-
 
 <h2>Prescriptions</h2>
 <ul>

@@ -14,7 +14,7 @@
 		<li class="arrow style1">
 		<div>
 			<a linkattib="PatientDetails.aspx?PatNum=<%Response.Write(pat.PatNum);%>" href="#PatientDetails">
-			<asp:Label ID="Label1" runat="server" Text=""><%Response.Write(pat.LName + " "+pat.MiddleI +" " + pat.FName  +" " + pat.Birthdate.ToShortDateString());%></asp:Label></a>
+			<asp:Label ID="Label1" runat="server" Text=""><%Response.Write(pat.LName + " "+pat.MiddleI +" " + pat.FName);%></asp:Label></a>
 		</div>
 		</li>
 	</ul>
@@ -23,9 +23,9 @@
 <ul>
 <li> <span class="style2"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
 <br />
-hhhhhhhhhhhh<br />
-asdasddddddddd<br />
-ffffffffff
+<%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%><br />
+<%Response.Write(apt.Note);%><br />
+
 </span>
 </li>
 </ul>

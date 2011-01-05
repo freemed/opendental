@@ -78,6 +78,11 @@ namespace OpenDentBusiness.Mobile {
 			}
 		}
 
+		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
+		public static int DateToAge(DateTime date) {
+			return Patients.DateToAge(date);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
