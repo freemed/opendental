@@ -6,7 +6,7 @@ namespace OpenDentBusiness {
 	///<summary>Please ignore this class.  It's used only for testing.</summary>
 	public class SchemaCrudProposedTest {
 		///<summary>Example only</summary>
-		public static void AddTable() {
+		public static void AddTableTempcore() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="DROP TABLE IF EXISTS tempcore";
@@ -31,20 +31,20 @@ namespace OpenDentBusiness {
 					command="DROP TABLE tempcore";
 					Db.NonQ(command);
 				}
-				catch {
+				catch(Exception e) {
 				}
 				command=@"CREATE TABLE tempcore (
-					TimeOfDayTest time,
+					TimeOfDayTest date,
 					TimeStampTest timestamp,
-					DateTest date ,
-					DateTimeTest datetime ,
-					TimeSpanTest time,
-					CurrencyTest double,
-					BoolTest tinyint,
-					TextSmallTest text,
-					TextMediumTest text,
-					TextLargeTest mediumtext,
-					varCharTest varchar(255)
+					DateTest date,
+					DateTimeTest date,
+					TimeSpanTest date,
+					CurrencyTest number(20),
+					BoolTest number(3),
+					TextSmallTest varchar2(4000),
+					TextMediumTest clob,
+					TextLargeTest clob,
+					VarCharTest varchar2(255)
 					)";
 				Db.NonQ(command);
 				command=@"ALTER TABLE tempcore MODIFY(
@@ -53,15 +53,15 @@ namespace OpenDentBusiness {
 					DateTimeTest NOT NULL,
 					TimeSpanTest NOT NULL,
 					CurrencyTest NOT NULL,
-					BoolTest NOT NULL,
+					BoolTest NOT NULL
 					)";
 				Db.NonQ(command);
 				command=@"ALTER TABLE tempcore MODIFY(
-					TimeOfDayTest default '01-JAN-0001',
-					TimeStampTest default '01-JAN-0001',
-					DateTest default '01-JAN-0001',
-					DateTimeTest default '01-JAN-0001',
-					TimeSpanTest default 0,
+					TimeOfDayTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+					TimeStampTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+					DateTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+					DateTimeTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
+					TimeSpanTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
 					CurrencyTest default 0,
 					BoolTest default 0
 					)";
