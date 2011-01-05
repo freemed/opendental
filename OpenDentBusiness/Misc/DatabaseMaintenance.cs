@@ -935,53 +935,52 @@ namespace OpenDentBusiness {
 				command="SELECT COUNT(*) FROM appointment WHERE appointment.InsPlan1 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan1)";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsPlan1 values: ")+numFound+"\r\n";
 				}
 				command="SELECT COUNT(*) FROM appointment WHERE appointment.InsPlan2 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan2)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsPlan2 values: ")+numFound+"\r\n";
 				}
 				command="SELECT COUNT(*) FROM benefit WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=benefit.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid benefit InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid benefit PlanNums: ")+numFound+"\r\n";
 				}
-				command="SELECT COUNT(*) FROM claim WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum)";
+				command="SELECT COUNT(*) FROM claim WHERE claim.PlanNum !=0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim PlanNums: ")+numFound+"\r\n";
 				}
-				//This one can cause an error when trying to open the send claims window:
 				command="SELECT COUNT(*) FROM claim WHERE claim.PlanNum2 !=0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum2)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim PlanNum2 values: ")+numFound+"\r\n";
 				}
 				command="SELECT COUNT(*) FROM claimproc WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claimproc.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid claimproc InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claimproc PlanNums: ")+numFound+"\r\n";
 				}
 				command="SELECT COUNT(*) FROM etrans WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=etrans.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid etrans InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid etrans PlanNums: ")+numFound+"\r\n";
 				}
 				command="SELECT COUNT(*) FROM patplan WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=patplan.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid patplan InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid patplan PlanNums: ")+numFound+"\r\n";
 				}
 				command="SELECT COUNT(*) FROM payplan WHERE PlanNum != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=payplan.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid payplan InsSubNums: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Invalid payplan PlanNums: ")+numFound+"\r\n";
 				}
 			}
-			else {
+			else {/*
+				//The final long-term solution might be to just create a dummy plan to attache these things to.  We really have no idea what plan they belong to.  We need databases with actualy problems to test these fixes against.
 				//appointment.InsPlan1
-				//command="UPDDATE appointment SET appointment.PlanNum=(SELECT inssub.PlanNum FROM inssub WHERE appointment.InsSubNum=inssub.InsSubNum)
 				//appointment.InsPlan2
 				//benefit.PlanNum
 				//claim.PlanNum
@@ -990,7 +989,71 @@ namespace OpenDentBusiness {
 				//etrans.PlanNum
 				//patplan.PlanNum
 				//payplan.PlanNum
-			}
+				long numFixed;
+				//appointment.InsPlan1/2 are rarely used and will be zero for almost all patients in all databases
+				command="SELECT AptNum,PatNum FROM appointment WHERE appointment.InsPlan1 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan1)";
+				DataTable table=Db.GetTable(command);
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="UPDATE appointment SET appointment.InsPlan1=(SELECT PlanNum FROM patplan WHERE Ordinal=1 AND patplan.PatNum="+table.Rows[i]["PatNum"]+") WHERE AptNum="+table.Rows[i]["AptNum"];
+						numFixed=Db.NonQ(command);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsPlan1 values fixed: ")+numFixed+"\r\n";
+				}
+				command="SELECT AptNum,PatNum FROM appointment WHERE appointment.InsPlan2 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan2)";
+				table=Db.GetTable(command);
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="UPDATE appointment SET appointment.InsPlan2=(SELECT PlanNum FROM patplan WHERE Ordinal=2 AND patplan.PatNum="+table.Rows[i]["PatNum"]+") WHERE AptNum="+table.Rows[i]["AptNum"];
+						numFixed=Db.NonQ(command);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsPlan2 values fixed: ")+numFixed+"\r\n";
+				}
+				//benefit.PatPlanNum will almost always be zero for all patients in all databases.
+				command="SELECT BenefitNum,PatPlanNum FROM benefit WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=benefit.PlanNum)";
+				table=Db.GetTable(command);
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="UPDATE benefit SET benefit.PlanNum=(SELECT PlanNum FROM patplan WHERE PatPlanNum="+table.Rows[i]["PatPlanNum"]+") WHERE BenefitNum="+table.Rows[i]["BenefitNum"];
+						numFixed=Db.NonQ(command);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Invalid benefit PlanNums fixed: ")+numFixed+"\r\n";
+				}
+				command="SELECT ClaimNum,InsSubNum FROM claim WHERE claim.PlanNum !=0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum)";
+				table=Db.GetTable(command);
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="UPDATE claim SET claim.PlanNum=(SELECT PlanNum FROM inssub WHERE InsSubNum="+table.Rows[i]["InsSubNum"]+") WHERE ClaimNum="+table.Rows[i]["ClaimNum"];
+						numFixed=Db.NonQ(command);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim PlanNums fixed: ")+numFixed+"\r\n";
+				}
+				command="SELECT ClaimNum,InsSubNum2 FROM claim WHERE claim.PlanNum2 !=0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claim.PlanNum2)";
+				table=Db.GetTable(command);
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="UPDATE claim SET claim.PlanNum2=(SELECT PlanNum FROM inssub WHERE InsSubNum="+table.Rows[i]["InsSubNum2"]+") WHERE ClaimNum="+table.Rows[i]["ClaimNum"];
+						numFixed=Db.NonQ(command);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim PlanNum2 values fixed: ")+numFixed+"\r\n";
+				}
+				command="SELECT ClaimProcNum,InsSubNum FROM claimproc WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claimproc.PlanNum)";
+				table=Db.GetTable(command);
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="UPDATE claimproc SET claimproc.PlanNum=(SELECT PlanNum FROM inssub WHERE InsSubNum="+table.Rows[i]["InsSubNum"]+") WHERE ClaimProcNum="+table.Rows[i]["ClaimProcNum"];
+						numFixed=Db.NonQ(command);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claimproc PlanNums fixed: ")+numFixed+"\r\n";
+				}
+				command="SELECT /*relevant fields*//* FROM etrans WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=etrans.PlanNum)";
+				//Follow pattern from above.
+				command="SELECT /*relevant fields*//* FROM patplan WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=patplan.PlanNum)";
+				//Follow pattern from above.
+				command="SELECT /*relevant fields*//* FROM payplan WHERE PlanNum != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=payplan.PlanNum)";
+				//Follow pattern from above.
+				*/
+			}	
 			return log;
 		}
 
