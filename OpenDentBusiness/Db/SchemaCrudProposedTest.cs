@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="DROP TABLE IF EXISTS tempcore";
-				DataCore.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
 					TimeOfDayTest time NOT NULL default '00:00:00',
 					TimeStampTest timestamp,
@@ -19,11 +19,12 @@ namespace OpenDentBusiness {
 					TimeSpanTest time NOT NULL default '00:00:00',
 					CurrencyTest double NOT NULL,
 					BoolTest tinyint NOT NULL,
-					TextTest text NOT NULL,
-					CharTest char(1) NOT NULL,
-					ClobTest mediumtext NOT NULL
+					TextSmallTest text NOT NULL,
+					TextMediumTest text NOT NULL,
+					TextLargeTest mediumtext NOT NULL,
+					varCharTest varchar(255) NOT NULL
 					) DEFAULT CHARSET=utf8";
-				DataCore.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {//oracle
 				try {
@@ -32,18 +33,38 @@ namespace OpenDentBusiness {
 				}
 				catch {
 				}
-/*				command = @"CREATE TABLE tempcore (
-					TimeOfDayTest time NOT NULL default '00:00:00',
+				command=@"CREATE TABLE tempcore (
+					TimeOfDayTest time,
 					TimeStampTest timestamp,
-					DateTest date NOT NULL default '0001-01-01',
-					DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
-					TimeSpanTest time NOT NULL default '00:00:00',
-					CurrencyTest double NOT NULL,
-					BoolTest tinyint NOT NULL,
-					TextTest text NOT NULL,
-					CharTest char(1) NOT NULL,
-					ClobTest mediumtext NOT NULL,
-				)";*/
+					DateTest date ,
+					DateTimeTest datetime ,
+					TimeSpanTest time,
+					CurrencyTest double,
+					BoolTest tinyint,
+					TextSmallTest text,
+					TextMediumTest text,
+					TextLargeTest mediumtext,
+					varCharTest varchar(255)
+					)";
+				Db.NonQ(command);
+				command=@"ALTER TABLE tempcore MODIFY(
+					TimeOfDayTest NOT NULL,
+					DateTest NOT NULL,
+					DateTimeTest NOT NULL,
+					TimeSpanTest NOT NULL,
+					CurrencyTest NOT NULL,
+					BoolTest NOT NULL,
+					)";
+				Db.NonQ(command);
+				command=@"ALTER TABLE tempcore MODIFY(
+					TimeOfDayTest default '01-JAN-0001',
+					TimeStampTest default '01-JAN-0001',
+					DateTest default '01-JAN-0001',
+					DateTimeTest default '01-JAN-0001',
+					TimeSpanTest default 0,
+					CurrencyTest default 0,
+					BoolTest default 0
+					)";
 				Db.NonQ(command);
 			}
 		}

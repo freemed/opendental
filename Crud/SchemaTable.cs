@@ -32,7 +32,7 @@ namespace Crud {
 //		[CrudColumn(CrudSpecialColType=CrudSpecialColType.TimeSpanNeg)]
 		public TimeSpan TimeSpanTest;
 		///<summary>Column of data type byte</summary>
-		public long CurrencyTest;
+		public double CurrencyTest;
 		///<summary>Column of data type byte</summary>
 		public bool BoolTest;
 		///<summary>Column of data type byte</summary>
