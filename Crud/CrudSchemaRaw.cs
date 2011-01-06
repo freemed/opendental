@@ -21,6 +21,7 @@ namespace Crud {
 			for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
 				tb+="\t";
 			}
+			#region MySQL
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
 			strb.Append(rn+tb+t1+"command=\"DROP TABLE IF EXISTS "+tableName+"\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -31,6 +32,8 @@ namespace Crud {
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
+			#endregion
+			#region Oracle
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"try {");
 			strb.Append(rn+tb+t2+"command=\"DROP TABLE "+tableName+"\";");
@@ -65,6 +68,7 @@ namespace Crud {
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			}
 			strb.Append(rn+tb+"}");
+			#endregion
 			return strb.ToString();
 		}
 

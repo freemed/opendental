@@ -15,7 +15,7 @@ namespace UnitTests {
 		//Step 3: In the CrudGenerator project, run with the Schema box checked in order to generate SchemaCrudTest.
 		//   SchemaCrudTest will not actually be used.  It is simply to test the code generation ability. 
 		//Step 4: In FormUnitTests, check the radiobutton for "Compare proposed to generated".  Click the Schema button.
-		//   It will compare SchemaCrudProposedT to the generated SchemaCrudT, and then notify the user whether they match or not.
+		//   It will compare SchemaCrudProposedTest to the generated SchemaCrudTest, and then notify the user whether they match or not.
 		//   If they don't match, alter CrudGenerator in order to produce the exact code needed.
 		//Step 5: (Jordan only) Improve CrudGenerator to generate similar code on demand.  This happens in three different situations:
 		//   a. Code is generated for the unit testing above.
