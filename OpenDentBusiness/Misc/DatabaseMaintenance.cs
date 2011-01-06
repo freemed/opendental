@@ -602,7 +602,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//Inform onlyInfo
+				//We can't touch those claimprocs because it would mess up the accounting.  So the only option, if we decide to fix automatically, is going to be to create some sort of claim that has the specific ClaimNum that seems to be missing.
 			}
 			return log;
 		}
@@ -741,8 +741,13 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//create a dummy provider (using helper function).
-				//change provnum to the dummy prov
+				//create a dummy provider (using helper function in Providers.cs)
+				//change provnum to the dummy prov (something like Providers.GetDummy())
+				//Provider dummy=new Provider();
+				//dummy.Abbr="Dummy";
+				//dummy.FName="Dummy";
+				//dummy.LName="Provider";
+				//Will get to this soon.
 
 				//command="UPDATE claimproc SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
 				//int numberFixed=Db.NonQ32(command);
