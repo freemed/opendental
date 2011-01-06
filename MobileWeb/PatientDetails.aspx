@@ -13,7 +13,7 @@
 <ul>
 <li> 
 <span class="style2">
-<%Response.Write(pat.LName + " "+pat.MiddleI+" "+pat.FName+" "+pat.Birthdate.ToShortDateString());%><br />
+<%Response.Write(pat.LName + " "+pat.MiddleI+" "+pat.FName);%><br />
 <%Response.Write(pat.Birthdate.ToShortDateString()+" ("+pat.Age+")");%>
 
 </span>
@@ -32,12 +32,12 @@
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
 					<li class="arrow style2">
-						<div>
+						<div class="elladjust">
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
-								Apt Num:<asp:Label ID="Label1" runat="server" Text="<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"></asp:Label>
-								Date:<asp:Label ID="Label2" runat="server" Text="<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptDateTime.ToString() %>"></asp:Label></a>
-								
+								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptDateTime.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;&nbsp;
+								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).Note%>
+								</a>
 						</div>
 					</li>
 				</ItemTemplate>

@@ -116,15 +116,14 @@ ul li input[type="checkbox"]:after {
 
 }
 
-/*right padding adjusted to adjust postion of the ellipse*/
-ul li, li.img {
-    padding: 5px 22px 5px 10px;
+/*top and bottom padding adjusted*/
+ul li {
+    padding: 5px 10px 5px 10px;
 }
 
-/*changes contact list*/
-.contact li{
-  /*  padding:5px 10px 5px 10px; */
-
+/*right padding to adjust postion of the ellipse*/
+.elladjust{
+ padding-right:10px;
 }
 .page1{
   margin: 7px 10px 7px 10px;
@@ -133,4 +132,6 @@ ul li, li.img {
 .applist{
 margin: 15px 0px 17px 0px;
 }
+
+
 /*webkit-transform-style: preserve-3d; not overwritten*/

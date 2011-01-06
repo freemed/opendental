@@ -22,7 +22,6 @@
 
 <ul>
 <li> <span class="style2"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
-<br />
 <%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%><br />
 <%Response.Write(apt.Note);%><br />
 

@@ -27,6 +27,9 @@ namespace MobileWeb {
 				if(searchterm!="") {
 					patientmList=Patientms.GetPatientms(CustomerNum,searchterm);
 				}
+				if(patientmList.Count==0) {
+					MessageNoPatients.Text="No patients found. Please search again";
+				}
 				Repeater1.DataSource=patientmList;
 				Repeater1.DataBind();
 			}
