@@ -166,7 +166,11 @@ namespace Crud {
 					continue;
 				}
 				specialType=CrudGenHelper.GetSpecialType(fieldsExceptPri[f]);
-				retVal.Add(new DbSchemaCol(fieldsExceptPri[f].Name,GetOdDbTypeFromColType(fieldsExceptPri[f].FieldType,specialType)));
+				TextSizeMySqlOracle textsize=TextSizeMySqlOracle.Small;
+				if(specialType==CrudSpecialColType.TextIsClob) {
+					textsize=TextSizeMySqlOracle.Medium;
+				}
+				retVal.Add(new DbSchemaCol(fieldsExceptPri[f].Name,GetOdDbTypeFromColType(fieldsExceptPri[f].FieldType,specialType),textSize));
 			}
 			return retVal;
 		}

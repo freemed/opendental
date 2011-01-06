@@ -22,7 +22,7 @@ namespace Crud {
 		[CrudColumn(IsPriKey=true)]
 		public long TempCoreNum;
 		///<summary>Column of data type TimeOfDayTest</summary>
-		public DateTime TimeOfDayTest;
+		public TimeSpan TimeOfDayTest;
 		///<summary>Column of data type byte</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime TimeStampTest;
@@ -38,12 +38,12 @@ namespace Crud {
 		public double CurrencyTest;
 		///<summary>Column of data type byte</summary>
 		public bool BoolTest;
-		///<summary>Column of data type byte</summary>
+		///<summary>The crud will create this as a varchar(255) and the programmer must change it manually.</summary>
 		public string TextSmallTest;// >255 & <4k
-		///<summary>Column of data type byte</summary>
+		///<summary>The crud should generate mysql=text and oracle=clob</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TextMediumTest;// >4k & <65k
-		///<summary>Column of data type byte</summary>
+		///<summary>The crud should generate mysql=text and oracle=clob</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TextLargeTest;// >65k
 		///<summary>Column of data type byte</summary>

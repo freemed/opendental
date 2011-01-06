@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum bigint NOT NULL DEFAULT 0,
-					TimeOfDayTest date NOT NULL DEFAULT '01-01-0001',
+					TimeOfDayTest time NOT NULL DEFAULT '01-01-0001',
 					TimeStampTest timestamp NOT NULL DEFAULT '01-01-0001',
 					DateTest date NOT NULL DEFAULT '01-01-0001',
 					DateTimeTest datetime NOT NULL DEFAULT '01-01-0001',

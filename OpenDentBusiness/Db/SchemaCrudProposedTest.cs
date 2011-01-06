@@ -20,9 +20,9 @@ namespace OpenDentBusiness {
 					TimeSpanTest time NOT NULL default '00:00:00',
 					CurrencyTest double NOT NULL,
 					BoolTest tinyint NOT NULL,
-					TextSmallTest text NOT NULL,
+					TextSmallTest varchar(255) NOT NULL,
 					TextMediumTest text NOT NULL,
-					TextLargeTest mediumtext NOT NULL,
+					TextLargeTest text NOT NULL,
 					VarCharTest varchar(255) NOT NULL
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 					TimeSpanTest date,
 					CurrencyTest number(20),
 					BoolTest number(3),
-					TextSmallTest varchar2(4000),
+					TextSmallTest varchar2(255),
 					TextMediumTest clob,
 					TextLargeTest clob,
 					VarCharTest varchar2(255)
