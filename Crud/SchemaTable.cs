@@ -39,7 +39,7 @@ namespace Crud {
 		///<summary>Column of data type byte</summary>
 		public bool BoolTest;
 		///<summary>Column of data type byte</summary>
-		public string TextSmallTest;// <4k
+		public string TextSmallTest;// >255 & <4k
 		///<summary>Column of data type byte</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TextMediumTest;// >4k & <65k
