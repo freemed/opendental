@@ -28,66 +28,6 @@ namespace OpenDentBusiness {
 			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
 			List<DbSchemaCol> cols=CrudQueries.GetListColumns(priKey.Name,null,fieldsExceptPri,false);
 			strb.Append("\r\n"+CrudSchemaRaw.AddTable("tempcore",cols,3));
-			/*
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command=""DROP TABLE IF EXISTS tempcore"";
-				Db.NonQ(command);
-				command=@""CREATE TABLE tempcore (
-					TimeOfDayTest time NOT NULL default '00:00:00',
-					TimeStampTest timestamp,
-					DateTest date NOT NULL default '0001-01-01',
-					DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
-					TimeSpanTest time NOT NULL default '00:00:00',
-					CurrencyTest double NOT NULL,
-					BoolTest tinyint NOT NULL,
-					TextSmallTest text NOT NULL,
-					TextMediumTest text NOT NULL,
-					TextLargeTest mediumtext NOT NULL,
-					varCharTest varchar(255) NOT NULL
-					) DEFAULT CHARSET=utf8"";
-				Db.NonQ(command);
-			}
-			else {//oracle
-				try {
-					command=""DROP TABLE tempcore"";
-					Db.NonQ(command);
-				}
-				catch(Exception e) {
-				}
-				command=@""CREATE TABLE tempcore (
-					TimeOfDayTest date,
-					TimeStampTest timestamp,
-					DateTest date,
-					DateTimeTest date,
-					TimeSpanTest date,
-					CurrencyTest number(20),
-					BoolTest number(3),
-					TextSmallTest varchar2(4000),
-					TextMediumTest clob,
-					TextLargeTest clob,
-					VarCharTest varchar2(255)
-					)"";
-				Db.NonQ(command);
-				command=@""ALTER TABLE tempcore MODIFY(
-					TimeOfDayTest NOT NULL,
-					DateTest NOT NULL,
-					DateTimeTest NOT NULL,
-					TimeSpanTest NOT NULL,
-					CurrencyTest NOT NULL,
-					BoolTest NOT NULL
-					)"";
-				Db.NonQ(command);
-				command=@""ALTER TABLE tempcore MODIFY(
-					TimeOfDayTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-					TimeStampTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-					DateTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-					DateTimeTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-					TimeSpanTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-					CurrencyTest default 0,
-					BoolTest default 0
-					)"";
-				Db.NonQ(command);
-			}*/
 			strb.Append(@"
 		}
 

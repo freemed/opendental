@@ -49,7 +49,7 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			List<DbSchemaCol> colsNotNull=new List<DbSchemaCol>();
 			for(int i=0;i<cols.Count;i++) {
-				if(GetOracleBlankData(cols[i])!="\"\"") {
+				if(GetOracleBlankData(cols[i])!=null) {
 					colsNotNull.Add(cols[i]);
 				}
 			}
@@ -87,10 +87,10 @@ namespace Crud {
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			if(GetOracleBlankData(col)=="\"\"") {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
+			if(GetOracleBlankData(col)==null) {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
 			}
 			else {//Non string types must be filled with "blank" data and set to NOT NULL
-				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+(GetOracleBlankData(col)=="\"\""?"\\\"\\\"":GetOracleBlankData(col))+" WHERE "+col.ColumnName+" IS NULL\";");
+				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+GetOracleBlankData(col)+" WHERE "+col.ColumnName+" IS NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -234,7 +234,7 @@ namespace Crud {
 				case OdDbType.Text:
 				case OdDbType.TimeSpan:
 				case OdDbType.VarChar255:
-					return "\"\"";//stored as NULL, 
+					return null;//stored as NULL, 
 				default:
 					throw new ApplicationException("type not found");
 			}
