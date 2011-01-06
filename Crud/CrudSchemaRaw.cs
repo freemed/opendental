@@ -157,11 +157,10 @@ namespace Crud {
 				case OdDbType.Long:
 					return "0";
 				case OdDbType.Date:
-					return "'0001-01-01'";
-				case OdDbType.DateTime:
-					return "'0001-01-01 00:00:00'";
 				case OdDbType.DateTimeStamp:
 					return "'0001-01-01'";//sets date to 01 JAN 2001, 00:00:00
+				case OdDbType.DateTime:
+					return "'0001-01-01 00:00:00'";
 				case OdDbType.TimeOfDay:
 				case OdDbType.TimeSpan:
 					return "'00:00:00'";
