@@ -13,11 +13,11 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum bigint NOT NULL DEFAULT 0,
-					TimeOfDayTest time NOT NULL DEFAULT '01-01-0001',
+					TimeOfDayTest time NOT NULL DEFAULT '00:00:00',
 					TimeStampTest timestamp NOT NULL DEFAULT '01-01-0001',
 					DateTest date NOT NULL DEFAULT '01-01-0001',
 					DateTimeTest datetime NOT NULL DEFAULT '01-01-0001',
-					TimeSpanTest time NOT NULL DEFAULT '01-01-0001',
+					TimeSpanTest time NOT NULL DEFAULT '00:00:00',
 					CurrencyTest double NOT NULL DEFAULT 0,
 					BoolTest tinyint NOT NULL DEFAULT 0,
 					TextSmallTest varchar(255) NOT NULL DEFAULT "",
@@ -44,8 +44,8 @@ namespace OpenDentBusiness {
 					CurrencyTest number(38,8),
 					BoolTest number(3),
 					TextSmallTest varchar2(255),
-					TextMediumTest varchar2(4000),
-					TextLargeTest varchar2(4000),
+					TextMediumTest clob,
+					TextLargeTest clob,
 					VarCharTest varchar2(255)
 					)";
 				Db.NonQ(command);

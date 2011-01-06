@@ -155,9 +155,10 @@ namespace Crud {
 				case OdDbType.Date:
 				case OdDbType.DateTime:
 				case OdDbType.DateTimeStamp:
-				case OdDbType.TimeOfDay://causes database warning, Sets time to 00:00:01
-				case OdDbType.TimeSpan://causes database warning, Sets time to 00:00:01
 					return "'01-01-0001'";//sets date to 01 JAN 2001, 00:00:00
+				case OdDbType.TimeOfDay:
+				case OdDbType.TimeSpan:
+					return "'00:00:00'";
 				case OdDbType.Text:
 				case OdDbType.VarChar255:
 					return "\"\"";//sets to empty string

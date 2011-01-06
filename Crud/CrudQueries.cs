@@ -170,7 +170,7 @@ namespace Crud {
 				if(specialType==CrudSpecialColType.TextIsClob) {
 					textsize=TextSizeMySqlOracle.Medium;
 				}
-				retVal.Add(new DbSchemaCol(fieldsExceptPri[f].Name,GetOdDbTypeFromColType(fieldsExceptPri[f].FieldType,specialType),textSize));
+				retVal.Add(new DbSchemaCol(fieldsExceptPri[f].Name,GetOdDbTypeFromColType(fieldsExceptPri[f].FieldType,specialType),textsize));
 			}
 			return retVal;
 		}
