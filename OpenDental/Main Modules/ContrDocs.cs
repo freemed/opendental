@@ -1431,7 +1431,8 @@ namespace OpenDental{
 				formD.ShowDialog();
 				if(formD.DialogResult!=DialogResult.OK) {
 					DeleteSelection(false,false);
-				} else {
+				} 
+				else {
 					FillDocList(true);
 				}
 			}

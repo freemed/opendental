@@ -153,25 +153,24 @@ namespace OpenDentBusiness {
 		//}
 
 		public static Bitmap OpenImage(Document doc,string patFolder) {
-			/*if(ImageStoreIsDatabase) {//not supported.
-				byte[] buffer = GetBytes(doc);
-				MemoryStream stream = new MemoryStream(buffer);
-				return new Bitmap(stream);
-			}
-			else {*/
-			string srcFileName = ODFileUtils.CombinePaths(patFolder,doc.FileName);
-			if(HasImageExtension(srcFileName)) {
-				//if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
-				if(File.Exists(srcFileName)) {
-					return new Bitmap(srcFileName);
-				}
-				else {
-					//throw new Exception();
-					return null;
-				}
+			if(!PrefC.UsingAtoZfolder) {
+				return PIn.Bitmap(doc.RawBase64);
 			}
 			else {
-				return null;
+				string srcFileName = ODFileUtils.CombinePaths(patFolder,doc.FileName);
+				if(HasImageExtension(srcFileName)) {
+					//if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
+					if(File.Exists(srcFileName)) {
+						return new Bitmap(srcFileName);
+					}
+					else {
+						//throw new Exception();
+						return null;
+					}
+				}
+				else {
+					return null;
+				}
 			}
 		}
 
