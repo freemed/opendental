@@ -35,40 +35,19 @@ namespace OpenDentBusiness {
 				catch(Exception e) {}
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
-					TimeOfDayTest date NOT NULL DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
-					TimeStampTest timestamp,
-					DateTest date,
-					DateTimeTest date,
+					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					TimeStampTest timestamp DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					DateTimeTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 					TimeSpanTest varchar2(255),
-					CurrencyTest number(38,8),
-					BoolTest number(3),
+					CurrencyTest number(38,8) NOT NULL,
+					BoolTest number(3) NOT NULL,
 					TextSmallTest varchar2(255),
 					TextMediumTest clob,
 					TextLargeTest clob,
 					VarCharTest varchar2(255)
 					)";
 				Db.NonQ(command);
-				/*
-				command=@"ALTER TABLE tempcore MODIFY(
-					TempCoreNum NOT NULL,
-					TimeOfDayTest NOT NULL,
-					TimeStampTest NOT NULL,
-					DateTest NOT NULL,
-					DateTimeTest NOT NULL,
-					CurrencyTest NOT NULL,
-					BoolTest NOT NULL
-					)";
-				Db.NonQ(command);
-				command=@"ALTER TABLE tempcore MODIFY(
-					TempCoreNum DEFAULT 0,
-					TimeOfDayTest DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
-					TimeStampTest DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
-					DateTest DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
-					DateTimeTest DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
-					CurrencyTest DEFAULT 0,
-					BoolTest DEFAULT 0
-					)";
-				Db.NonQ(command);*/
 			}
 		}
 

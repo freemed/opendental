@@ -27,7 +27,7 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
-				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+(GetMySqlBlankData(cols[i])=="\"\""||GetMySqlType(cols[i])=="timestamp"?"":" NOT NULL DEFAULT "+GetMySqlBlankData(cols[i]))+(i==cols.Count-1?"":","));
+				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+(GetMySqlType(cols[i])=="timestamp"?"":" NOT NULL")+(GetMySqlBlankData(cols[i])=="\"\""||GetMySqlBlankData(cols[i])=="0"||GetMySqlType(cols[i])=="timestamp"?"":" DEFAULT "+GetMySqlBlankData(cols[i]))+(i==cols.Count-1?"":","));
 			}
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -39,34 +39,14 @@ namespace Crud {
 			strb.Append(rn+tb+t2+"command=\"DROP TABLE "+tableName+"\";");
 			strb.Append(rn+tb+t2+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"}");
-			strb.Append(rn+tb+t1+"catch(Exception e) {");
-			strb.Append(rn+tb+t1+"}");
+			strb.Append(rn+tb+t1+"catch(Exception e) {}");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
-				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==cols.Count-1?"":","));
+				string tempData = GetOracleBlankData(cols[i]);//to save calls to the function, and shorten the following line of code.
+				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetOracleType(cols[i])+(tempData==null?"":(tempData=="0"?" NOT NULL":" DEFAULT "+tempData+" NOT NULL"))+(i==cols.Count-1?"":","));
 			}
 			strb.Append(rn+tb+t2+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			List<DbSchemaCol> colsNotNull=new List<DbSchemaCol>();
-			for(int i=0;i<cols.Count;i++) {
-				if(GetOracleBlankData(cols[i])!=null) {
-					colsNotNull.Add(cols[i]);
-				}
-			}
-			if(colsNotNull.Count>0) {//only if there are some non string columns
-				strb.Append(rn+tb+t1+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
-				for(int i=0;i<colsNotNull.Count;i++) {
-					strb.Append(rn+tb+t2+colsNotNull[i].ColumnName+" NOT NULL"+(i==colsNotNull.Count-1?"":","));
-				}
-				strb.Append(rn+tb+t2+")\";");
-				strb.Append(rn+tb+t1+"Db.NonQ(command);");
-				strb.Append(rn+tb+t1+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
-				for(int i=0;i<colsNotNull.Count;i++) {
-					strb.Append(rn+tb+t2+colsNotNull[i].ColumnName+" DEFAULT "+GetOracleBlankData(colsNotNull[i])+(i==colsNotNull.Count-1?"":","));
-				}
-				strb.Append(rn+tb+t2+")\";");
-				strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			}
 			strb.Append(rn+tb+"}");
 			#endregion
 			return strb.ToString();
