@@ -26,7 +26,7 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
-				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+" NOT NULL DEFAULT "+GetMySqlBlankData(cols[i])+(i==cols.Count-1?"":","));
+				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+(GetMySqlBlankData(cols[i])=="\"\""||GetMySqlType(cols[i])=="timestamp"?"":" NOT NULL DEFAULT "+GetMySqlBlankData(cols[i]))+(i==cols.Count-1?"":","));
 			}
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -53,13 +53,13 @@ namespace Crud {
 			if(colsNotNull.Count>0) {//only if there are some non string columns
 				strb.Append(rn+tb+t1+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
 				for(int i=0;i<colsNotNull.Count;i++) {
-					strb.Append(rn+tb+t1+colsNotNull[i].ColumnName+" NOT NULL"+(i==colsNotNull.Count-1?"":","));
+					strb.Append(rn+tb+t2+colsNotNull[i].ColumnName+" NOT NULL"+(i==colsNotNull.Count-1?"":","));
 				}
 				strb.Append(rn+tb+t2+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				strb.Append(rn+tb+t1+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
-				for(int i=0;i<cols.Count;i++) {
-					strb.Append(rn+tb+t2+cols[i].ColumnName+" DEFAULT "+GetOracleBlankData(cols[i])+(i==cols.Count?"":","));
+				for(int i=0;i<colsNotNull.Count;i++) {
+					strb.Append(rn+tb+t2+colsNotNull[i].ColumnName+" DEFAULT "+GetOracleBlankData(colsNotNull[i])+(i==colsNotNull.Count-1?"":","));
 				}
 				strb.Append(rn+tb+t2+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -83,7 +83,7 @@ namespace Crud {
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			if(GetOracleBlankData(col)=="") {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
+			if(GetOracleBlankData(col)=="\"\"") {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
 			}
 			else {//Non string types must be filled with "blank" data and set to NOT NULL
 				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+(GetOracleBlankData(col)=="\"\""?"\\\"\\\"":GetOracleBlankData(col))+" WHERE "+col.ColumnName+" IS NULL\";");
@@ -153,9 +153,11 @@ namespace Crud {
 				case OdDbType.Long:
 					return "0";
 				case OdDbType.Date:
+					return "'0001-01-01'";
 				case OdDbType.DateTime:
+					return "'0001-01-01 00:00:00'";
 				case OdDbType.DateTimeStamp:
-					return "'01-01-0001'";//sets date to 01 JAN 2001, 00:00:00
+					return "'0001-01-01'";//sets date to 01 JAN 2001, 00:00:00
 				case OdDbType.TimeOfDay:
 				case OdDbType.TimeSpan:
 					return "'00:00:00'";
@@ -182,7 +184,7 @@ namespace Crud {
 					return "date";
 				case OdDbType.DateTimeStamp:
 					//also requires trigger, trigger code is automatically created above.
-					return "date";
+					return "timestamp";
 				case OdDbType.Float:
 					return "number(38,8)";
 				case OdDbType.Enum:

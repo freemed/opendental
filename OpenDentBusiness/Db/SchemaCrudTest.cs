@@ -14,16 +14,16 @@ namespace OpenDentBusiness {
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum bigint NOT NULL DEFAULT 0,
 					TimeOfDayTest time NOT NULL DEFAULT '00:00:00',
-					TimeStampTest timestamp NOT NULL DEFAULT '01-01-0001',
-					DateTest date NOT NULL DEFAULT '01-01-0001',
-					DateTimeTest datetime NOT NULL DEFAULT '01-01-0001',
+					TimeStampTest timestamp,
+					DateTest date NOT NULL DEFAULT '0001-01-01',
+					DateTimeTest datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 					TimeSpanTest time NOT NULL DEFAULT '00:00:00',
 					CurrencyTest double NOT NULL DEFAULT 0,
 					BoolTest tinyint NOT NULL DEFAULT 0,
-					TextSmallTest varchar(255) NOT NULL DEFAULT "",
-					TextMediumTest text NOT NULL DEFAULT "",
-					TextLargeTest text NOT NULL DEFAULT "",
-					VarCharTest varchar(255) NOT NULL DEFAULT ""
+					TextSmallTest varchar(255),
+					TextMediumTest text,
+					TextLargeTest text,
+					VarCharTest varchar(255)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 			}
@@ -37,7 +37,7 @@ namespace OpenDentBusiness {
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20),
 					TimeOfDayTest date,
-					TimeStampTest date,
+					TimeStampTest timestamp,
 					DateTest date,
 					DateTimeTest date,
 					TimeSpanTest varchar2(255),
@@ -50,13 +50,13 @@ namespace OpenDentBusiness {
 					)";
 				Db.NonQ(command);
 				command=@"ALTER TABLE tempcore MODIFY(
-				TempCoreNum NOT NULL,
-				TimeOfDayTest NOT NULL,
-				TimeStampTest NOT NULL,
-				DateTest NOT NULL,
-				DateTimeTest NOT NULL,
-				CurrencyTest NOT NULL,
-				BoolTest NOT NULL
+					TempCoreNum NOT NULL,
+					TimeOfDayTest NOT NULL,
+					TimeStampTest NOT NULL,
+					DateTest NOT NULL,
+					DateTimeTest NOT NULL,
+					CurrencyTest NOT NULL,
+					BoolTest NOT NULL
 					)";
 				Db.NonQ(command);
 				command=@"ALTER TABLE tempcore MODIFY(
@@ -65,13 +65,8 @@ namespace OpenDentBusiness {
 					TimeStampTest DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
 					DateTest DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
 					DateTimeTest DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
-					TimeSpanTest DEFAULT "",
 					CurrencyTest DEFAULT 0,
-					BoolTest DEFAULT 0,
-					TextSmallTest DEFAULT "",
-					TextMediumTest DEFAULT "",
-					TextLargeTest DEFAULT "",
-					VarCharTest DEFAULT "",
+					BoolTest DEFAULT 0
 					)";
 				Db.NonQ(command);
 			}
@@ -86,10 +81,6 @@ namespace OpenDentBusiness {
 			}
 			else {//oracle
 				command="ALTER TABLE tempcore ADD ColEndClob clob";
-				Db.NonQ(command);
-				command="UPDATE tempcore SET ColEndClob = \"\" WHERE ColEndClob IS NULL";
-				Db.NonQ(command);
-				command="ALTER TABLE tempcore MODIFY ColEndClob NOT NULL";
 				Db.NonQ(command);
 			}
 		}
@@ -117,7 +108,6 @@ namespace OpenDentBusiness {
 		//DropColumn
 		//DropColumnTimeStamp
 		//DropIndex
-		//AddTable
 		//etc.
 
 
