@@ -523,18 +523,39 @@ namespace OpenDentBusiness{
 				}
 				Thread.Sleep(delayForTesting);
 			#endif
-//todo: Oracle.
+			object scalar;
 			string retVal="";
-			cmd.CommandText=command;
-			con.Open();
-			object scalar=cmd.ExecuteScalar();
-			if(scalar==null) {
-				retVal="";
+			if(DBtype==DatabaseType.Oracle) {
+				conOr.Open();
+				PrepOracleConnection();
+				cmdOr.CommandText=command;
+				try {
+					scalar=cmdOr.ExecuteScalar();
+				}
+				catch(System.Exception e) {
+					Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
+					throw;//continue to pass the exception one level up.
+				}
+				if(scalar==null) {
+					retVal="";
+				}
+				else {
+					retVal=scalar.ToString();
+				}
+				conOr.Close();
 			}
-			else {
-				retVal=scalar.ToString();
+			else if(DBtype==DatabaseType.MySql) {
+				cmd.CommandText=command;
+				con.Open();
+				scalar=cmd.ExecuteScalar();
+				if(scalar==null) {
+					retVal="";
+				}
+				else {
+					retVal=scalar.ToString();
+				}
+				con.Close();
 			}
-			con.Close();
 			return retVal;
 		}
 

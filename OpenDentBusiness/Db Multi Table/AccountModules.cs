@@ -757,7 +757,7 @@ namespace OpenDentBusiness {
 			DataTable rawPay;
 			command="SELECT MAX(CheckNum) CheckNum,paysplit.ClinicNum,MAX(DatePay) DatePay,paysplit.PatNum,MAX(payment.PatNum) patNumPayment_,MAX(PayAmt) PayAmt,"//MAX function used to preserve behavior in Oracle.
 				+"paysplit.PayNum,paysplit.PayPlanNum,"
-				+"MAX(PayType) PayType,ProcDate,"+DbHelper.GroupConcat("ProcNum")+" ProcNums_, "
+				+"MAX(PayType) PayType,MAX(ProcDate) ProcDate,"+DbHelper.GroupConcat("ProcNum")+" ProcNums_, "
 				+"MAX(ProvNum) ProvNum,SUM(SplitAmt) splitAmt_,MAX(payment.PayNote) PayNote,MAX(paysplit.UnearnedType) UnearnedType "//Column names with MAX left the same as they should not be considered aggregate (even though they are).
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
