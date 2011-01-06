@@ -12,18 +12,18 @@ namespace OpenDentBusiness {
 				command="DROP TABLE IF EXISTS tempcore";
 				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
-					TempCoreNum bigint NOT NULL DEFAULT 0,
+					TempCoreNum bigint NOT NULL,
 					TimeOfDayTest time NOT NULL DEFAULT '00:00:00',
 					TimeStampTest timestamp,
 					DateTest date NOT NULL DEFAULT '0001-01-01',
 					DateTimeTest datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 					TimeSpanTest time NOT NULL DEFAULT '00:00:00',
-					CurrencyTest double NOT NULL DEFAULT 0,
-					BoolTest tinyint NOT NULL DEFAULT 0,
-					TextSmallTest varchar(255),
-					TextMediumTest text,
-					TextLargeTest text,
-					VarCharTest varchar(255)
+					CurrencyTest double NOT NULL,
+					BoolTest tinyint NOT NULL,
+					TextSmallTest varchar(255) NOT NULL,
+					TextMediumTest text NOT NULL,
+					TextLargeTest text NOT NULL,
+					VarCharTest varchar(255) NOT NULL
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 			}
@@ -31,12 +31,11 @@ namespace OpenDentBusiness {
 				try {
 					command="DROP TABLE tempcore";
 					Db.NonQ(command);
-				}
-				catch(Exception e) {
-				}
+				}	
+				catch(Exception e) {}
 				command=@"CREATE TABLE tempcore (
-					TempCoreNum number(20),
-					TimeOfDayTest date,
+					TempCoreNum number(20) NOT NULL,
+					TimeOfDayTest date NOT NULL DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
 					TimeStampTest timestamp,
 					DateTest date,
 					DateTimeTest date,
@@ -49,6 +48,7 @@ namespace OpenDentBusiness {
 					VarCharTest varchar2(255)
 					)";
 				Db.NonQ(command);
+				/*
 				command=@"ALTER TABLE tempcore MODIFY(
 					TempCoreNum NOT NULL,
 					TimeOfDayTest NOT NULL,
@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 					CurrencyTest DEFAULT 0,
 					BoolTest DEFAULT 0
 					)";
-				Db.NonQ(command);
+				Db.NonQ(command);*/
 			}
 		}
 
