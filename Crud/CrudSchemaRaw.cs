@@ -22,70 +22,47 @@ namespace Crud {
 				tb+="\t";
 			}
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
-			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE ");
-
-			/*
-									if(DataConnection.DBtype==DatabaseType.MySql) {
-										command="DROP TABLE IF EXISTS tempcore";
-										Db.NonQ(command);
-										command=@"CREATE TABLE tempcore (
-											TimeOfDayTest time NOT NULL default '00:00:00',
-											TimeStampTest timestamp,
-											DateTest date NOT NULL default '0001-01-01',
-											DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
-											TimeSpanTest time NOT NULL default '00:00:00',
-											CurrencyTest double NOT NULL,
-											BoolTest tinyint NOT NULL,
-											TextSmallTest text NOT NULL,
-											TextMediumTest text NOT NULL,
-											TextLargeTest mediumtext NOT NULL,
-											varCharTest varchar(255) NOT NULL
-											) DEFAULT CHARSET=utf8";
-										Db.NonQ(command);
-									}
-									else {//oracle
-										try {
-											command="DROP TABLE tempcore";
-											Db.NonQ(command);
-										}
-										catch(Exception e) {
-										}
-										command=@"CREATE TABLE tempcore (
-											TimeOfDayTest date,
-											TimeStampTest timestamp,
-											DateTest date,
-											DateTimeTest date,
-											TimeSpanTest date,
-											CurrencyTest number(20),
-											BoolTest number(3),
-											TextSmallTest varchar2(4000),
-											TextMediumTest clob,
-											TextLargeTest clob,
-											VarCharTest varchar2(255)
-											)";
-										Db.NonQ(command);
-										command=@"ALTER TABLE tempcore MODIFY(
-											TimeOfDayTest NOT NULL,
-											DateTest NOT NULL,
-											DateTimeTest NOT NULL,
-											TimeSpanTest NOT NULL,
-											CurrencyTest NOT NULL,
-											BoolTest NOT NULL
-											)";
-										Db.NonQ(command);
-										command=@"ALTER TABLE tempcore MODIFY(
-											TimeOfDayTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-											TimeStampTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-											DateTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-											DateTimeTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-											TimeSpanTest default TO_DATE('0001-01-01','YYYY-MM-DD'),
-											CurrencyTest default 0,
-											BoolTest default 0
-											)";
-										Db.NonQ(command);
-									}
-			*/
-			return "";
+			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
+			for(int i=0;i<cols.Count;i++) {
+				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+" NOT NULL DEFAULT "+GetMySqlBlankData(cols[i])+(i==cols.Count-1?"":","));
+			}
+			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			strb.Append(rn+tb+t1+"}");
+			strb.Append(rn+tb+t1+"else {//oracle");
+			strb.Append(rn+tb+t2+"try {");
+			strb.Append(rn+tb+t3+"command=\"DROP TABLE "+tableName+"\"");
+			strb.Append(rn+tb+t3+"Db.NonQ(command);");
+			strb.Append(rn+tb+t2+"}");
+			strb.Append(rn+tb+t2+"catch(Exception e) {");
+			strb.Append(rn+tb+t2+"}");
+			strb.Append(rn+tb+t2+"command=@\"CREATE TABLE "+tableName+" (");
+			for(int i=0;i<cols.Count;i++) {
+				strb.Append(rn+tb+t3+cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==cols.Count-1?"":","));
+			}
+			strb.Append(rn+tb+t3+")\";");
+			strb.Append(rn+tb+t2+"Db.NonQ(command);");
+			List<DbSchemaCol> colsNotNull=new List<DbSchemaCol>();
+			for(int i=0;i<cols.Count;i++) {
+				if(GetOracleBlankData(cols[i])!="") {
+					colsNotNull.Add(cols[i]);
+				}
+			}
+			if(colsNotNull.Count>0) {//only if there are some non string columns
+				strb.Append(rn+tb+t2+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
+				for(int i=0;i<colsNotNull.Count;i++) {
+					strb.Append(rn+tb+t3+colsNotNull[i].ColumnName+" NOT NULL"+(i==colsNotNull.Count-1?"":","));
+				}
+				strb.Append(rn+tb+t2+"Db.NonQ(command);");
+				strb.Append(rn+tb+t2+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
+				for(int i=0;i<cols.Count;i++) {
+					strb.Append(rn+tb+t3+cols[i].ColumnName+" DEFAULT "+GetOracleBlankData(cols[i])+(i==cols.Count?"":","));
+				}
+				strb.Append(rn+tb+t3+")\";");
+				strb.Append(rn+tb+t2+"Db.NonQ(command);");
+			}
+			strb.Append(rn+tb+t1+"}");
+			return strb.ToString();
 		}
 
 		/// <summary>Generates C# code to Add Column to table.</summary>
@@ -243,7 +220,7 @@ namespace Crud {
 				case OdDbType.DateTime:
 				case OdDbType.DateTimeStamp://timestamp is stored as a date and trigger combination
 				case OdDbType.TimeOfDay:
-					return "01-JAN-0001";
+					return "TO_DATE('0001-01-01','YYYY-MM-DD')";
 				case OdDbType.Text:
 				case OdDbType.TimeSpan:
 				case OdDbType.VarChar255:
