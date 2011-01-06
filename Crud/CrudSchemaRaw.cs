@@ -39,7 +39,7 @@ namespace Crud {
 			strb.Append(rn+tb+t2+"command=\"DROP TABLE "+tableName+"\";");
 			strb.Append(rn+tb+t2+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"}");
-			strb.Append(rn+tb+t1+"catch(Exception e) {}");
+			strb.Append(rn+tb+t1+"catch{}");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
 				string tempData = GetOracleBlankData(cols[i]);//to save calls to the function, and shorten the following line of code.

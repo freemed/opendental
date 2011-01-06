@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 					command="DROP TABLE tempcore";
 					Db.NonQ(command);
 				}	
-				catch(Exception e) {}
+				catch{}
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
