@@ -12,6 +12,7 @@ namespace OpenDentBusiness {
 				command="DROP TABLE IF EXISTS tempcore";
 				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
+					TempCoreNum bigint NOT NULL DEFAULT 0,
 					TimeOfDayTest time NOT NULL default '00:00:00',
 					TimeStampTest timestamp,
 					DateTest date NOT NULL default '0001-01-01',
@@ -22,7 +23,7 @@ namespace OpenDentBusiness {
 					TextSmallTest text NOT NULL,
 					TextMediumTest text NOT NULL,
 					TextLargeTest mediumtext NOT NULL,
-					varCharTest varchar(255) NOT NULL
+					VarCharTest varchar(255) NOT NULL
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 			}

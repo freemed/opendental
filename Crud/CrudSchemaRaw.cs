@@ -22,46 +22,49 @@ namespace Crud {
 				tb+="\t";
 			}
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
+			strb.Append(rn+tb+t1+"command=\"DROP TABLE IF EXISTS "+tableName+"\";");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
 				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+" NOT NULL DEFAULT "+GetMySqlBlankData(cols[i])+(i==cols.Count-1?"":","));
 			}
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			strb.Append(rn+tb+t1+"}");
-			strb.Append(rn+tb+t1+"else {//oracle");
-			strb.Append(rn+tb+t2+"try {");
-			strb.Append(rn+tb+t3+"command=\"DROP TABLE "+tableName+"\"");
-			strb.Append(rn+tb+t3+"Db.NonQ(command);");
-			strb.Append(rn+tb+t2+"}");
-			strb.Append(rn+tb+t2+"catch(Exception e) {");
-			strb.Append(rn+tb+t2+"}");
-			strb.Append(rn+tb+t2+"command=@\"CREATE TABLE "+tableName+" (");
-			for(int i=0;i<cols.Count;i++) {
-				strb.Append(rn+tb+t3+cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==cols.Count-1?"":","));
-			}
-			strb.Append(rn+tb+t3+")\";");
+			strb.Append(rn+tb+"}");
+			strb.Append(rn+tb+"else {//oracle");
+			strb.Append(rn+tb+t1+"try {");
+			strb.Append(rn+tb+t2+"command=\"DROP TABLE "+tableName+"\";");
 			strb.Append(rn+tb+t2+"Db.NonQ(command);");
+			strb.Append(rn+tb+t1+"}");
+			strb.Append(rn+tb+t1+"catch(Exception e) {");
+			strb.Append(rn+tb+t1+"}");
+			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
+			for(int i=0;i<cols.Count;i++) {
+				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetOracleType(cols[i])+(i==cols.Count-1?"":","));
+			}
+			strb.Append(rn+tb+t2+")\";");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			List<DbSchemaCol> colsNotNull=new List<DbSchemaCol>();
 			for(int i=0;i<cols.Count;i++) {
-				if(GetOracleBlankData(cols[i])!="") {
+				if(GetOracleBlankData(cols[i])!="\"\"") {
 					colsNotNull.Add(cols[i]);
 				}
 			}
 			if(colsNotNull.Count>0) {//only if there are some non string columns
-				strb.Append(rn+tb+t2+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
+				strb.Append(rn+tb+t1+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
 				for(int i=0;i<colsNotNull.Count;i++) {
-					strb.Append(rn+tb+t3+colsNotNull[i].ColumnName+" NOT NULL"+(i==colsNotNull.Count-1?"":","));
+					strb.Append(rn+tb+t1+colsNotNull[i].ColumnName+" NOT NULL"+(i==colsNotNull.Count-1?"":","));
 				}
-				strb.Append(rn+tb+t2+"Db.NonQ(command);");
-				strb.Append(rn+tb+t2+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
+				strb.Append(rn+tb+t2+")\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+				strb.Append(rn+tb+t1+"command=@\"ALTER TABLE "+tableName+" MODIFY(");
 				for(int i=0;i<cols.Count;i++) {
-					strb.Append(rn+tb+t3+cols[i].ColumnName+" DEFAULT "+GetOracleBlankData(cols[i])+(i==cols.Count?"":","));
+					strb.Append(rn+tb+t2+cols[i].ColumnName+" DEFAULT "+GetOracleBlankData(cols[i])+(i==cols.Count?"":","));
 				}
-				strb.Append(rn+tb+t3+")\";");
-				strb.Append(rn+tb+t2+"Db.NonQ(command);");
+				strb.Append(rn+tb+t2+")\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			}
-			strb.Append(rn+tb+t1+"}");
+			strb.Append(rn+tb+"}");
 			return strb.ToString();
 		}
 
@@ -83,7 +86,7 @@ namespace Crud {
 			if(GetOracleBlankData(col)=="") {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
 			}
 			else {//Non string types must be filled with "blank" data and set to NOT NULL
-				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+GetOracleBlankData(col)+" WHERE "+col.ColumnName+" IS NULL\";");
+				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+(GetOracleBlankData(col)=="\"\""?"\\\"\\\"":GetOracleBlankData(col))+" WHERE "+col.ColumnName+" IS NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -154,10 +157,10 @@ namespace Crud {
 				case OdDbType.DateTimeStamp:
 				case OdDbType.TimeOfDay://causes database warning, Sets time to 00:00:01
 				case OdDbType.TimeSpan://causes database warning, Sets time to 00:00:01
-					return "01-01-0001";//sets date to 01 JAN 2001, 00:00:00
+					return "'01-01-0001'";//sets date to 01 JAN 2001, 00:00:00
 				case OdDbType.Text:
 				case OdDbType.VarChar255:
-					return "";//sets to empty string
+					return "\"\"";//sets to empty string
 				default:
 					throw new ApplicationException("type not found");
 			}
@@ -224,7 +227,7 @@ namespace Crud {
 				case OdDbType.Text:
 				case OdDbType.TimeSpan:
 				case OdDbType.VarChar255:
-					return "";//stored as NULL, 
+					return "\"\"";//stored as NULL, 
 				default:
 					throw new ApplicationException("type not found");
 			}
