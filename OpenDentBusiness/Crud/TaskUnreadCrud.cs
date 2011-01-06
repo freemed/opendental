@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TaskUnread object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TaskUnread SelectOne(long taskUnreadNum){
 			string command="SELECT * FROM taskunread "
-				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum)+" LIMIT 1";
+				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum);
 			List<TaskUnread> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

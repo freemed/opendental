@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Signal object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Signal SelectOne(long signalNum){
 			string command="SELECT * FROM signal "
-				+"WHERE SignalNum = "+POut.Long(signalNum)+" LIMIT 1";
+				+"WHERE SignalNum = "+POut.Long(signalNum);
 			List<Signal> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

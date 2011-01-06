@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one EmailTemplate object from the database using the primary key.  Returns null if not found.</summary>
 		internal static EmailTemplate SelectOne(long emailTemplateNum){
 			string command="SELECT * FROM emailtemplate "
-				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplateNum)+" LIMIT 1";
+				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplateNum);
 			List<EmailTemplate> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

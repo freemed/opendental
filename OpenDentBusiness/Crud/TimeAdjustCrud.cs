@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TimeAdjust object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TimeAdjust SelectOne(long timeAdjustNum){
 			string command="SELECT * FROM timeadjust "
-				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjustNum)+" LIMIT 1";
+				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjustNum);
 			List<TimeAdjust> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

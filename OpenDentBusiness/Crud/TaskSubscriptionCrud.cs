@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TaskSubscription object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TaskSubscription SelectOne(long taskSubscriptionNum){
 			string command="SELECT * FROM tasksubscription "
-				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum)+" LIMIT 1";
+				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum);
 			List<TaskSubscription> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

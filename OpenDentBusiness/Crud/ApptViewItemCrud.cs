@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ApptViewItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ApptViewItem SelectOne(long apptViewItemNum){
 			string command="SELECT * FROM apptviewitem "
-				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum)+" LIMIT 1";
+				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum);
 			List<ApptViewItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

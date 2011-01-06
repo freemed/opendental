@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ClockEvent object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ClockEvent SelectOne(long clockEventNum){
 			string command="SELECT * FROM clockevent "
-				+"WHERE ClockEventNum = "+POut.Long(clockEventNum)+" LIMIT 1";
+				+"WHERE ClockEventNum = "+POut.Long(clockEventNum);
 			List<ClockEvent> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

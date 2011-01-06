@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one EmailMessage object from the database using the primary key.  Returns null if not found.</summary>
 		internal static EmailMessage SelectOne(long emailMessageNum){
 			string command="SELECT * FROM emailmessage "
-				+"WHERE EmailMessageNum = "+POut.Long(emailMessageNum)+" LIMIT 1";
+				+"WHERE EmailMessageNum = "+POut.Long(emailMessageNum);
 			List<EmailMessage> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

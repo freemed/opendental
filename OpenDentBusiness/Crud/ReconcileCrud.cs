@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Reconcile object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Reconcile SelectOne(long reconcileNum){
 			string command="SELECT * FROM reconcile "
-				+"WHERE ReconcileNum = "+POut.Long(reconcileNum)+" LIMIT 1";
+				+"WHERE ReconcileNum = "+POut.Long(reconcileNum);
 			List<Reconcile> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

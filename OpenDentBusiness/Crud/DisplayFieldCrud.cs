@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one DisplayField object from the database using the primary key.  Returns null if not found.</summary>
 		internal static DisplayField SelectOne(long displayFieldNum){
 			string command="SELECT * FROM displayfield "
-				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum)+" LIMIT 1";
+				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum);
 			List<DisplayField> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

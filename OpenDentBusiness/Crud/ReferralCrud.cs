@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Referral object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Referral SelectOne(long referralNum){
 			string command="SELECT * FROM referral "
-				+"WHERE ReferralNum = "+POut.Long(referralNum)+" LIMIT 1";
+				+"WHERE ReferralNum = "+POut.Long(referralNum);
 			List<Referral> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

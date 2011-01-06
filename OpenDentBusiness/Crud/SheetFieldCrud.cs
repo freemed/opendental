@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one SheetField object from the database using the primary key.  Returns null if not found.</summary>
 		internal static SheetField SelectOne(long sheetFieldNum){
 			string command="SELECT * FROM sheetfield "
-				+"WHERE SheetFieldNum = "+POut.Long(sheetFieldNum)+" LIMIT 1";
+				+"WHERE SheetFieldNum = "+POut.Long(sheetFieldNum);
 			List<SheetField> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

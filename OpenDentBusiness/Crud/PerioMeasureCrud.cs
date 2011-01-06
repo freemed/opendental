@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PerioMeasure object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PerioMeasure SelectOne(long perioMeasureNum){
 			string command="SELECT * FROM periomeasure "
-				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasureNum)+" LIMIT 1";
+				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasureNum);
 			List<PerioMeasure> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

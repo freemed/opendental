@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ProgramProperty object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ProgramProperty SelectOne(long programPropertyNum){
 			string command="SELECT * FROM programproperty "
-				+"WHERE ProgramPropertyNum = "+POut.Long(programPropertyNum)+" LIMIT 1";
+				+"WHERE ProgramPropertyNum = "+POut.Long(programPropertyNum);
 			List<ProgramProperty> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

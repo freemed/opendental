@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Account object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Account SelectOne(long accountNum){
 			string command="SELECT * FROM account "
-				+"WHERE AccountNum = "+POut.Long(accountNum)+" LIMIT 1";
+				+"WHERE AccountNum = "+POut.Long(accountNum);
 			List<Account> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PhoneEmpDefault object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PhoneEmpDefault SelectOne(long employeeNum){
 			string command="SELECT * FROM phoneempdefault "
-				+"WHERE EmployeeNum = "+POut.Long(employeeNum)+" LIMIT 1";
+				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			List<PhoneEmpDefault> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

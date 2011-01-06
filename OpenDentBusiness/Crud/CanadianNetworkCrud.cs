@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one CanadianNetwork object from the database using the primary key.  Returns null if not found.</summary>
 		internal static CanadianNetwork SelectOne(long canadianNetworkNum){
 			string command="SELECT * FROM canadiannetwork "
-				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum)+" LIMIT 1";
+				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum);
 			List<CanadianNetwork> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

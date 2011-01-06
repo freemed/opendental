@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AutoNoteControl object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AutoNoteControl SelectOne(long autoNoteControlNum){
 			string command="SELECT * FROM autonotecontrol "
-				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControlNum)+" LIMIT 1";
+				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControlNum);
 			List<AutoNoteControl> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

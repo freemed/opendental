@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AccountingAutoPay object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AccountingAutoPay SelectOne(long accountingAutoPayNum){
 			string command="SELECT * FROM accountingautopay "
-				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum)+" LIMIT 1";
+				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum);
 			List<AccountingAutoPay> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

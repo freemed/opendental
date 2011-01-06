@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ZipCode object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ZipCode SelectOne(long zipCodeNum){
 			string command="SELECT * FROM zipcode "
-				+"WHERE ZipCodeNum = "+POut.Long(zipCodeNum)+" LIMIT 1";
+				+"WHERE ZipCodeNum = "+POut.Long(zipCodeNum);
 			List<ZipCode> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

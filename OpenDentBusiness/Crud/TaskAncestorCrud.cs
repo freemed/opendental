@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TaskAncestor object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TaskAncestor SelectOne(long taskAncestorNum){
 			string command="SELECT * FROM taskancestor "
-				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum)+" LIMIT 1";
+				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum);
 			List<TaskAncestor> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

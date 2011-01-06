@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Fee object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Fee SelectOne(long feeNum){
 			string command="SELECT * FROM fee "
-				+"WHERE FeeNum = "+POut.Long(feeNum)+" LIMIT 1";
+				+"WHERE FeeNum = "+POut.Long(feeNum);
 			List<Fee> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

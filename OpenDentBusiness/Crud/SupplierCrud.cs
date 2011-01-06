@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Supplier object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Supplier SelectOne(long supplierNum){
 			string command="SELECT * FROM supplier "
-				+"WHERE SupplierNum = "+POut.Long(supplierNum)+" LIMIT 1";
+				+"WHERE SupplierNum = "+POut.Long(supplierNum);
 			List<Supplier> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

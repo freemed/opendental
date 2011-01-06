@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one InsFilingCode object from the database using the primary key.  Returns null if not found.</summary>
 		internal static InsFilingCode SelectOne(long insFilingCodeNum){
 			string command="SELECT * FROM insfilingcode "
-				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum)+" LIMIT 1";
+				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum);
 			List<InsFilingCode> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one LetterMerge object from the database using the primary key.  Returns null if not found.</summary>
 		internal static LetterMerge SelectOne(long letterMergeNum){
 			string command="SELECT * FROM lettermerge "
-				+"WHERE LetterMergeNum = "+POut.Long(letterMergeNum)+" LIMIT 1";
+				+"WHERE LetterMergeNum = "+POut.Long(letterMergeNum);
 			List<LetterMerge> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

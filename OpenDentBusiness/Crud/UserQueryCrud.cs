@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one UserQuery object from the database using the primary key.  Returns null if not found.</summary>
 		internal static UserQuery SelectOne(long queryNum){
 			string command="SELECT * FROM userquery "
-				+"WHERE QueryNum = "+POut.Long(queryNum)+" LIMIT 1";
+				+"WHERE QueryNum = "+POut.Long(queryNum);
 			List<UserQuery> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

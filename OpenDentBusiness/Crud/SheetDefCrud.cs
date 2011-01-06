@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one SheetDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static SheetDef SelectOne(long sheetDefNum){
 			string command="SELECT * FROM sheetdef "
-				+"WHERE SheetDefNum = "+POut.Long(sheetDefNum)+" LIMIT 1";
+				+"WHERE SheetDefNum = "+POut.Long(sheetDefNum);
 			List<SheetDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

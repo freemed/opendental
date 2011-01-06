@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Etrans object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Etrans SelectOne(long etransNum){
 			string command="SELECT * FROM etrans "
-				+"WHERE EtransNum = "+POut.Long(etransNum)+" LIMIT 1";
+				+"WHERE EtransNum = "+POut.Long(etransNum);
 			List<Etrans> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

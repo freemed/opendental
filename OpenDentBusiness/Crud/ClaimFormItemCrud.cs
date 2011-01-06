@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ClaimFormItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ClaimFormItem SelectOne(long claimFormItemNum){
 			string command="SELECT * FROM claimformitem "
-				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItemNum)+" LIMIT 1";
+				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItemNum);
 			List<ClaimFormItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

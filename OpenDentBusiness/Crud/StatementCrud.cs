@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Statement object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Statement SelectOne(long statementNum){
 			string command="SELECT * FROM statement "
-				+"WHERE StatementNum = "+POut.Long(statementNum)+" LIMIT 1";
+				+"WHERE StatementNum = "+POut.Long(statementNum);
 			List<Statement> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

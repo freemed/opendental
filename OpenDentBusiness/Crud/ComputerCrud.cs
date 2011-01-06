@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Computer object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Computer SelectOne(long computerNum){
 			string command="SELECT * FROM computer "
-				+"WHERE ComputerNum = "+POut.Long(computerNum)+" LIMIT 1";
+				+"WHERE ComputerNum = "+POut.Long(computerNum);
 			List<Computer> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

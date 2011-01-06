@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one RxAlert object from the database using the primary key.  Returns null if not found.</summary>
 		internal static RxAlert SelectOne(long rxAlertNum){
 			string command="SELECT * FROM rxalert "
-				+"WHERE RxAlertNum = "+POut.Long(rxAlertNum)+" LIMIT 1";
+				+"WHERE RxAlertNum = "+POut.Long(rxAlertNum);
 			List<RxAlert> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

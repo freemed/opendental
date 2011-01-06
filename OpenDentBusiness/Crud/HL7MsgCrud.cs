@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one HL7Msg object from the database using the primary key.  Returns null if not found.</summary>
 		internal static HL7Msg SelectOne(long hL7MsgNum){
 			string command="SELECT * FROM hl7msg "
-				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum)+" LIMIT 1";
+				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum);
 			List<HL7Msg> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

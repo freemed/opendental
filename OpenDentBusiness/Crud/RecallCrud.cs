@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Recall object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Recall SelectOne(long recallNum){
 			string command="SELECT * FROM recall "
-				+"WHERE RecallNum = "+POut.Long(recallNum)+" LIMIT 1";
+				+"WHERE RecallNum = "+POut.Long(recallNum);
 			List<Recall> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

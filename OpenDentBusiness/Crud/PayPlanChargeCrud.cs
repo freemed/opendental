@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PayPlanCharge object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PayPlanCharge SelectOne(long payPlanChargeNum){
 			string command="SELECT * FROM payplancharge "
-				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanChargeNum)+" LIMIT 1";
+				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanChargeNum);
 			List<PayPlanCharge> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

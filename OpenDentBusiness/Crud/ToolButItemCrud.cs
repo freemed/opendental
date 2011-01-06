@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ToolButItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ToolButItem SelectOne(long toolButItemNum){
 			string command="SELECT * FROM toolbutitem "
-				+"WHERE ToolButItemNum = "+POut.Long(toolButItemNum)+" LIMIT 1";
+				+"WHERE ToolButItemNum = "+POut.Long(toolButItemNum);
 			List<ToolButItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

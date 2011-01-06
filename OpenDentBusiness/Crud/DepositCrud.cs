@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Deposit object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Deposit SelectOne(long depositNum){
 			string command="SELECT * FROM deposit "
-				+"WHERE DepositNum = "+POut.Long(depositNum)+" LIMIT 1";
+				+"WHERE DepositNum = "+POut.Long(depositNum);
 			List<Deposit> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

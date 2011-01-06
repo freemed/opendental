@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Printer object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Printer SelectOne(long printerNum){
 			string command="SELECT * FROM printer "
-				+"WHERE PrinterNum = "+POut.Long(printerNum)+" LIMIT 1";
+				+"WHERE PrinterNum = "+POut.Long(printerNum);
 			List<Printer> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

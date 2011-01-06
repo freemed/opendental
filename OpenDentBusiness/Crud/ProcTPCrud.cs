@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ProcTP object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ProcTP SelectOne(long procTPNum){
 			string command="SELECT * FROM proctp "
-				+"WHERE ProcTPNum = "+POut.Long(procTPNum)+" LIMIT 1";
+				+"WHERE ProcTPNum = "+POut.Long(procTPNum);
 			List<ProcTP> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

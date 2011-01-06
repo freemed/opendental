@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one RepeatCharge object from the database using the primary key.  Returns null if not found.</summary>
 		internal static RepeatCharge SelectOne(long repeatChargeNum){
 			string command="SELECT * FROM repeatcharge "
-				+"WHERE RepeatChargeNum = "+POut.Long(repeatChargeNum)+" LIMIT 1";
+				+"WHERE RepeatChargeNum = "+POut.Long(repeatChargeNum);
 			List<RepeatCharge> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

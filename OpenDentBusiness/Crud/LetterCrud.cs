@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Letter object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Letter SelectOne(long letterNum){
 			string command="SELECT * FROM letter "
-				+"WHERE LetterNum = "+POut.Long(letterNum)+" LIMIT 1";
+				+"WHERE LetterNum = "+POut.Long(letterNum);
 			List<Letter> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

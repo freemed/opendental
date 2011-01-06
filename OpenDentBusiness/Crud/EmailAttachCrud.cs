@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one EmailAttach object from the database using the primary key.  Returns null if not found.</summary>
 		internal static EmailAttach SelectOne(long emailAttachNum){
 			string command="SELECT * FROM emailattach "
-				+"WHERE EmailAttachNum = "+POut.Long(emailAttachNum)+" LIMIT 1";
+				+"WHERE EmailAttachNum = "+POut.Long(emailAttachNum);
 			List<EmailAttach> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

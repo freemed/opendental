@@ -3677,8 +3677,8 @@ namespace OpenDental{
 				if(SchedListPeriod[i].StartTime==TimeSpan.FromHours(0)) {//ignore notes at midnight
 					continue;
 				}
-        AListStart.Add(SchedListPeriod[i].StartTime);
-        AListStop.Add(SchedListPeriod[i].StopTime);
+				AListStart.Add(SchedListPeriod[i].SchedDate+SchedListPeriod[i].StartTime);
+				AListStop.Add(SchedListPeriod[i].SchedDate+SchedListPeriod[i].StopTime);
       } 
 			if(AListStart.Count > 0){//makes sure there is at least one timeblock
         StartTime=(DateTime)AListStart[0]; 

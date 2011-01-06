@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Dunning object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Dunning SelectOne(long dunningNum){
 			string command="SELECT * FROM dunning "
-				+"WHERE DunningNum = "+POut.Long(dunningNum)+" LIMIT 1";
+				+"WHERE DunningNum = "+POut.Long(dunningNum);
 			List<Dunning> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Pref object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Pref SelectOne(long prefNum){
 			string command="SELECT * FROM preference "
-				+"WHERE PrefNum = "+POut.Long(prefNum)+" LIMIT 1";
+				+"WHERE PrefNum = "+POut.Long(prefNum);
 			List<Pref> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

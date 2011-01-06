@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ReqStudent object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ReqStudent SelectOne(long reqStudentNum){
 			string command="SELECT * FROM reqstudent "
-				+"WHERE ReqStudentNum = "+POut.Long(reqStudentNum)+" LIMIT 1";
+				+"WHERE ReqStudentNum = "+POut.Long(reqStudentNum);
 			List<ReqStudent> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

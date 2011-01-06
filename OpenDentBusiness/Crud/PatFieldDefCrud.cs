@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PatFieldDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PatFieldDef SelectOne(long patFieldDefNum){
 			string command="SELECT * FROM patfielddef "
-				+"WHERE PatFieldDefNum = "+POut.Long(patFieldDefNum)+" LIMIT 1";
+				+"WHERE PatFieldDefNum = "+POut.Long(patFieldDefNum);
 			List<PatFieldDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

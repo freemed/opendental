@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one CovCat object from the database using the primary key.  Returns null if not found.</summary>
 		internal static CovCat SelectOne(long covCatNum){
 			string command="SELECT * FROM covcat "
-				+"WHERE CovCatNum = "+POut.Long(covCatNum)+" LIMIT 1";
+				+"WHERE CovCatNum = "+POut.Long(covCatNum);
 			List<CovCat> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

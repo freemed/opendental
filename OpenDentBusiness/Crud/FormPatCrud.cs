@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one FormPat object from the database using the primary key.  Returns null if not found.</summary>
 		internal static FormPat SelectOne(long formPatNum){
 			string command="SELECT * FROM formpat "
-				+"WHERE FormPatNum = "+POut.Long(formPatNum)+" LIMIT 1";
+				+"WHERE FormPatNum = "+POut.Long(formPatNum);
 			List<FormPat> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

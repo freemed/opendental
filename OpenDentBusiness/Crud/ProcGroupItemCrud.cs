@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ProcGroupItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ProcGroupItem SelectOne(long procGroupItemNum){
 			string command="SELECT * FROM procgroupitem "
-				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItemNum)+" LIMIT 1";
+				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItemNum);
 			List<ProcGroupItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

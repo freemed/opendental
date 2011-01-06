@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Userod object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Userod SelectOne(long userNum){
 			string command="SELECT * FROM userod "
-				+"WHERE UserNum = "+POut.Long(userNum)+" LIMIT 1";
+				+"WHERE UserNum = "+POut.Long(userNum);
 			List<Userod> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TimeCardRule object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TimeCardRule SelectOne(long timeCardRuleNum){
 			string command="SELECT * FROM timecardrule "
-				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRuleNum)+" LIMIT 1";
+				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRuleNum);
 			List<TimeCardRule> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

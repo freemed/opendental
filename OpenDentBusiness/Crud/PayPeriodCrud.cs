@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PayPeriod object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PayPeriod SelectOne(long payPeriodNum){
 			string command="SELECT * FROM payperiod "
-				+"WHERE PayPeriodNum = "+POut.Long(payPeriodNum)+" LIMIT 1";
+				+"WHERE PayPeriodNum = "+POut.Long(payPeriodNum);
 			List<PayPeriod> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

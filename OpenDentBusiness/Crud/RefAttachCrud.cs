@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one RefAttach object from the database using the primary key.  Returns null if not found.</summary>
 		internal static RefAttach SelectOne(long refAttachNum){
 			string command="SELECT * FROM refattach "
-				+"WHERE RefAttachNum = "+POut.Long(refAttachNum)+" LIMIT 1";
+				+"WHERE RefAttachNum = "+POut.Long(refAttachNum);
 			List<RefAttach> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

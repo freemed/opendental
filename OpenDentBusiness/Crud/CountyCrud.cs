@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one County object from the database using the primary key.  Returns null if not found.</summary>
 		internal static County SelectOne(long countyNum){
 			string command="SELECT * FROM county "
-				+"WHERE CountyNum = "+POut.Long(countyNum)+" LIMIT 1";
+				+"WHERE CountyNum = "+POut.Long(countyNum);
 			List<County> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ProcCodeNote object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ProcCodeNote SelectOne(long procCodeNoteNum){
 			string command="SELECT * FROM proccodenote "
-				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNoteNum)+" LIMIT 1";
+				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNoteNum);
 			List<ProcCodeNote> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

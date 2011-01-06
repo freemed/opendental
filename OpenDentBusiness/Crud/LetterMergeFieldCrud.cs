@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one LetterMergeField object from the database using the primary key.  Returns null if not found.</summary>
 		internal static LetterMergeField SelectOne(long fieldNum){
 			string command="SELECT * FROM lettermergefield "
-				+"WHERE FieldNum = "+POut.Long(fieldNum)+" LIMIT 1";
+				+"WHERE FieldNum = "+POut.Long(fieldNum);
 			List<LetterMergeField> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

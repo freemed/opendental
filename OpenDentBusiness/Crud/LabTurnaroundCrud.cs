@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one LabTurnaround object from the database using the primary key.  Returns null if not found.</summary>
 		internal static LabTurnaround SelectOne(long labTurnaroundNum){
 			string command="SELECT * FROM labturnaround "
-				+"WHERE LabTurnaroundNum = "+POut.Long(labTurnaroundNum)+" LIMIT 1";
+				+"WHERE LabTurnaroundNum = "+POut.Long(labTurnaroundNum);
 			List<LabTurnaround> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

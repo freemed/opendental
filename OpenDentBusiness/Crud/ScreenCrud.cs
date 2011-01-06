@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Screen object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Screen SelectOne(long screenNum){
 			string command="SELECT * FROM screen "
-				+"WHERE ScreenNum = "+POut.Long(screenNum)+" LIMIT 1";
+				+"WHERE ScreenNum = "+POut.Long(screenNum);
 			List<Screen> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one UserGroup object from the database using the primary key.  Returns null if not found.</summary>
 		internal static UserGroup SelectOne(long userGroupNum){
 			string command="SELECT * FROM usergroup "
-				+"WHERE UserGroupNum = "+POut.Long(userGroupNum)+" LIMIT 1";
+				+"WHERE UserGroupNum = "+POut.Long(userGroupNum);
 			List<UserGroup> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

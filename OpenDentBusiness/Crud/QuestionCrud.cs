@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Question object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Question SelectOne(long questionNum){
 			string command="SELECT * FROM question "
-				+"WHERE QuestionNum = "+POut.Long(questionNum)+" LIMIT 1";
+				+"WHERE QuestionNum = "+POut.Long(questionNum);
 			List<Question> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

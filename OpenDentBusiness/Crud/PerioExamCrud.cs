@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PerioExam object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PerioExam SelectOne(long perioExamNum){
 			string command="SELECT * FROM perioexam "
-				+"WHERE PerioExamNum = "+POut.Long(perioExamNum)+" LIMIT 1";
+				+"WHERE PerioExamNum = "+POut.Long(perioExamNum);
 			List<PerioExam> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

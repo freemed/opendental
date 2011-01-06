@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ReqNeeded object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ReqNeeded SelectOne(long reqNeededNum){
 			string command="SELECT * FROM reqneeded "
-				+"WHERE ReqNeededNum = "+POut.Long(reqNeededNum)+" LIMIT 1";
+				+"WHERE ReqNeededNum = "+POut.Long(reqNeededNum);
 			List<ReqNeeded> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

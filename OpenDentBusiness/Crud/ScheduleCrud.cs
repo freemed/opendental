@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Schedule object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Schedule SelectOne(long scheduleNum){
 			string command="SELECT * FROM schedule "
-				+"WHERE ScheduleNum = "+POut.Long(scheduleNum)+" LIMIT 1";
+				+"WHERE ScheduleNum = "+POut.Long(scheduleNum);
 			List<Schedule> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

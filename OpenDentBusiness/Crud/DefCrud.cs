@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Def object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Def SelectOne(long defNum){
 			string command="SELECT * FROM definition "
-				+"WHERE DefNum = "+POut.Long(defNum)+" LIMIT 1";
+				+"WHERE DefNum = "+POut.Long(defNum);
 			List<Def> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one SigButDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static SigButDef SelectOne(long sigButDefNum){
 			string command="SELECT * FROM sigbutdef "
-				+"WHERE SigButDefNum = "+POut.Long(sigButDefNum)+" LIMIT 1";
+				+"WHERE SigButDefNum = "+POut.Long(sigButDefNum);
 			List<SigButDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

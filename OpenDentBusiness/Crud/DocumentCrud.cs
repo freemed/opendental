@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Document object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Document SelectOne(long docNum){
 			string command="SELECT * FROM document "
-				+"WHERE DocNum = "+POut.Long(docNum)+" LIMIT 1";
+				+"WHERE DocNum = "+POut.Long(docNum);
 			List<Document> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

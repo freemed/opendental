@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one QuickPasteNote object from the database using the primary key.  Returns null if not found.</summary>
 		internal static QuickPasteNote SelectOne(long quickPasteNoteNum){
 			string command="SELECT * FROM quickpastenote "
-				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNoteNum)+" LIMIT 1";
+				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNoteNum);
 			List<QuickPasteNote> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

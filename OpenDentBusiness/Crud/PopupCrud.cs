@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Popup object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Popup SelectOne(long popupNum){
 			string command="SELECT * FROM popup "
-				+"WHERE PopupNum = "+POut.Long(popupNum)+" LIMIT 1";
+				+"WHERE PopupNum = "+POut.Long(popupNum);
 			List<Popup> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

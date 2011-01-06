@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one GroupPermission object from the database using the primary key.  Returns null if not found.</summary>
 		internal static GroupPermission SelectOne(long groupPermNum){
 			string command="SELECT * FROM grouppermission "
-				+"WHERE GroupPermNum = "+POut.Long(groupPermNum)+" LIMIT 1";
+				+"WHERE GroupPermNum = "+POut.Long(groupPermNum);
 			List<GroupPermission> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

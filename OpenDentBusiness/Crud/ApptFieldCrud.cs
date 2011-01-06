@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ApptField object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ApptField SelectOne(long apptFieldNum){
 			string command="SELECT * FROM apptfield "
-				+"WHERE ApptFieldNum = "+POut.Long(apptFieldNum)+" LIMIT 1";
+				+"WHERE ApptFieldNum = "+POut.Long(apptFieldNum);
 			List<ApptField> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

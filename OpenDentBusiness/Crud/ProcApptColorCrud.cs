@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ProcApptColor object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ProcApptColor SelectOne(long procApptColorNum){
 			string command="SELECT * FROM procapptcolor "
-				+"WHERE ProcApptColorNum = "+POut.Long(procApptColorNum)+" LIMIT 1";
+				+"WHERE ProcApptColorNum = "+POut.Long(procApptColorNum);
 			List<ProcApptColor> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

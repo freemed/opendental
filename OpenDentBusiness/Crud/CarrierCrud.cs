@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Carrier object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Carrier SelectOne(long carrierNum){
 			string command="SELECT * FROM carrier "
-				+"WHERE CarrierNum = "+POut.Long(carrierNum)+" LIMIT 1";
+				+"WHERE CarrierNum = "+POut.Long(carrierNum);
 			List<Carrier> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TerminalActive object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TerminalActive SelectOne(long terminalActiveNum){
 			string command="SELECT * FROM terminalactive "
-				+"WHERE TerminalActiveNum = "+POut.Long(terminalActiveNum)+" LIMIT 1";
+				+"WHERE TerminalActiveNum = "+POut.Long(terminalActiveNum);
 			List<TerminalActive> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

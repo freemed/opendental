@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one PaySplit object from the database using the primary key.  Returns null if not found.</summary>
 		internal static PaySplit SelectOne(long splitNum){
 			string command="SELECT * FROM paysplit "
-				+"WHERE SplitNum = "+POut.Long(splitNum)+" LIMIT 1";
+				+"WHERE SplitNum = "+POut.Long(splitNum);
 			List<PaySplit> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

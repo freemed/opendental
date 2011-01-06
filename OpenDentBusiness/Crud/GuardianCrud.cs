@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Guardian object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Guardian SelectOne(long guardianNum){
 			string command="SELECT * FROM guardian "
-				+"WHERE GuardianNum = "+POut.Long(guardianNum)+" LIMIT 1";
+				+"WHERE GuardianNum = "+POut.Long(guardianNum);
 			List<Guardian> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

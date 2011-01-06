@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Procedure object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Procedure SelectOne(long procNum){
 			string command="SELECT * FROM procedurelog "
-				+"WHERE ProcNum = "+POut.Long(procNum)+" LIMIT 1";
+				+"WHERE ProcNum = "+POut.Long(procNum);
 			List<Procedure> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

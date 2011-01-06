@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Adjustment object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Adjustment SelectOne(long adjNum){
 			string command="SELECT * FROM adjustment "
-				+"WHERE AdjNum = "+POut.Long(adjNum)+" LIMIT 1";
+				+"WHERE AdjNum = "+POut.Long(adjNum);
 			List<Adjustment> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

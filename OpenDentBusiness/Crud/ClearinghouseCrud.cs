@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Clearinghouse object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Clearinghouse SelectOne(long clearinghouseNum){
 			string command="SELECT * FROM clearinghouse "
-				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum)+" LIMIT 1";
+				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum);
 			List<Clearinghouse> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

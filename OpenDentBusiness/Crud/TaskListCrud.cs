@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one TaskList object from the database using the primary key.  Returns null if not found.</summary>
 		internal static TaskList SelectOne(long taskListNum){
 			string command="SELECT * FROM tasklist "
-				+"WHERE TaskListNum = "+POut.Long(taskListNum)+" LIMIT 1";
+				+"WHERE TaskListNum = "+POut.Long(taskListNum);
 			List<TaskList> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

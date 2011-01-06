@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one LabCase object from the database using the primary key.  Returns null if not found.</summary>
 		internal static LabCase SelectOne(long labCaseNum){
 			string command="SELECT * FROM labcase "
-				+"WHERE LabCaseNum = "+POut.Long(labCaseNum)+" LIMIT 1";
+				+"WHERE LabCaseNum = "+POut.Long(labCaseNum);
 			List<LabCase> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

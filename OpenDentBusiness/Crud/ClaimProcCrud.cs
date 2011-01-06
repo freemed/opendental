@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ClaimProc object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ClaimProc SelectOne(long claimProcNum){
 			string command="SELECT * FROM claimproc "
-				+"WHERE ClaimProcNum = "+POut.Long(claimProcNum)+" LIMIT 1";
+				+"WHERE ClaimProcNum = "+POut.Long(claimProcNum);
 			List<ClaimProc> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

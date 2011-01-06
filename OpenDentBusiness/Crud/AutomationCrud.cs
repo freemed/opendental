@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Automation object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Automation SelectOne(long automationNum){
 			string command="SELECT * FROM automation "
-				+"WHERE AutomationNum = "+POut.Long(automationNum)+" LIMIT 1";
+				+"WHERE AutomationNum = "+POut.Long(automationNum);
 			List<Automation> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

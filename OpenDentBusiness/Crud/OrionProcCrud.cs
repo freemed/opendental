@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one OrionProc object from the database using the primary key.  Returns null if not found.</summary>
 		internal static OrionProc SelectOne(long orionProcNum){
 			string command="SELECT * FROM orionproc "
-				+"WHERE OrionProcNum = "+POut.Long(orionProcNum)+" LIMIT 1";
+				+"WHERE OrionProcNum = "+POut.Long(orionProcNum);
 			List<OrionProc> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

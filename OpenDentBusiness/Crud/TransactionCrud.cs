@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Transaction object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Transaction SelectOne(long transactionNum){
 			string command="SELECT * FROM transaction "
-				+"WHERE TransactionNum = "+POut.Long(transactionNum)+" LIMIT 1";
+				+"WHERE TransactionNum = "+POut.Long(transactionNum);
 			List<Transaction> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

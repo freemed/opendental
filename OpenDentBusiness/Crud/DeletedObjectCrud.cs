@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one DeletedObject object from the database using the primary key.  Returns null if not found.</summary>
 		internal static DeletedObject SelectOne(long deletedObjectNum){
 			string command="SELECT * FROM deletedobject "
-				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum)+" LIMIT 1";
+				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum);
 			List<DeletedObject> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

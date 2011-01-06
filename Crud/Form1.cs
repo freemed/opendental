@@ -165,13 +165,13 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using primaryKey1(CustomerNum) and primaryKey2.  Returns null if not found.</summary>");
 				strb.Append(rn+t2+"internal static "+typeClass.Name+" SelectOne(long "+priKeyParam1+",long "+priKeyParam2+"){");
 				strb.Append(rn+t3+"string command=\"SELECT * FROM "+tablename+" \"");
-				strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+priKeyParam1+")+\" AND "+priKey2.Name+" = \"+POut.Long("+priKeyParam2+")+\" LIMIT 1\";");
+				strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+priKeyParam1+")+\" AND "+priKey2.Name+" = \"+POut.Long("+priKeyParam2+");");
 			}
 			else {
 				strb.Append(rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using the primary key.  Returns null if not found.</summary>");
 				strb.Append(rn+t2+"internal static "+typeClass.Name+" SelectOne(long "+priKeyParam+"){");
 				strb.Append(rn+t3+"string command=\"SELECT * FROM "+tablename+" \"");
-				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+")+\" LIMIT 1\";");
+				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+");");
 			}
 			strb.Append(rn+t3+"List<"+typeClass.Name+"> list=TableToList(Db.GetTable(command));");
 			strb.Append(rn+t3+"if(list.Count==0) {");

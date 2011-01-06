@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one RegistrationKey object from the database using the primary key.  Returns null if not found.</summary>
 		internal static RegistrationKey SelectOne(long registrationKeyNum){
 			string command="SELECT * FROM registrationkey "
-				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKeyNum)+" LIMIT 1";
+				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKeyNum);
 			List<RegistrationKey> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

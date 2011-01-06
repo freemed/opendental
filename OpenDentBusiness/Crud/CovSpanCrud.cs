@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one CovSpan object from the database using the primary key.  Returns null if not found.</summary>
 		internal static CovSpan SelectOne(long covSpanNum){
 			string command="SELECT * FROM covspan "
-				+"WHERE CovSpanNum = "+POut.Long(covSpanNum)+" LIMIT 1";
+				+"WHERE CovSpanNum = "+POut.Long(covSpanNum);
 			List<CovSpan> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

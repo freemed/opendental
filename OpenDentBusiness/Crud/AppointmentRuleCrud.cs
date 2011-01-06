@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AppointmentRule object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AppointmentRule SelectOne(long appointmentRuleNum){
 			string command="SELECT * FROM appointmentrule "
-				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum)+" LIMIT 1";
+				+"WHERE AppointmentRuleNum = "+POut.Long(appointmentRuleNum);
 			List<AppointmentRule> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

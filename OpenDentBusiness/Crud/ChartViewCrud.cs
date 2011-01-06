@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one ChartView object from the database using the primary key.  Returns null if not found.</summary>
 		internal static ChartView SelectOne(long chartViewNum){
 			string command="SELECT * FROM chartview "
-				+"WHERE ChartViewNum = "+POut.Long(chartViewNum)+" LIMIT 1";
+				+"WHERE ChartViewNum = "+POut.Long(chartViewNum);
 			List<ChartView> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

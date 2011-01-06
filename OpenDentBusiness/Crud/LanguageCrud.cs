@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Language object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Language SelectOne(long languageNum){
 			string command="SELECT * FROM language "
-				+"WHERE LanguageNum = "+POut.Long(languageNum)+" LIMIT 1";
+				+"WHERE LanguageNum = "+POut.Long(languageNum);
 			List<Language> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

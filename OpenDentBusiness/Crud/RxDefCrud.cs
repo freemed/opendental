@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one RxDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static RxDef SelectOne(long rxDefNum){
 			string command="SELECT * FROM rxdef "
-				+"WHERE RxDefNum = "+POut.Long(rxDefNum)+" LIMIT 1";
+				+"WHERE RxDefNum = "+POut.Long(rxDefNum);
 			List<RxDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Operatory object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Operatory SelectOne(long operatoryNum){
 			string command="SELECT * FROM operatory "
-				+"WHERE OperatoryNum = "+POut.Long(operatoryNum)+" LIMIT 1";
+				+"WHERE OperatoryNum = "+POut.Long(operatoryNum);
 			List<Operatory> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

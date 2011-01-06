@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one MountDef object from the database using the primary key.  Returns null if not found.</summary>
 		internal static MountDef SelectOne(long mountDefNum){
 			string command="SELECT * FROM mountdef "
-				+"WHERE MountDefNum = "+POut.Long(mountDefNum)+" LIMIT 1";
+				+"WHERE MountDefNum = "+POut.Long(mountDefNum);
 			List<MountDef> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

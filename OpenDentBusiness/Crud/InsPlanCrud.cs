@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one InsPlan object from the database using the primary key.  Returns null if not found.</summary>
 		internal static InsPlan SelectOne(long planNum){
 			string command="SELECT * FROM insplan "
-				+"WHERE PlanNum = "+POut.Long(planNum)+" LIMIT 1";
+				+"WHERE PlanNum = "+POut.Long(planNum);
 			List<InsPlan> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

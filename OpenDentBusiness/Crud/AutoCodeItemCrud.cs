@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one AutoCodeItem object from the database using the primary key.  Returns null if not found.</summary>
 		internal static AutoCodeItem SelectOne(long autoCodeItemNum){
 			string command="SELECT * FROM autocodeitem "
-				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum)+" LIMIT 1";
+				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum);
 			List<AutoCodeItem> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;

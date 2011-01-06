@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Gets one Commlog object from the database using the primary key.  Returns null if not found.</summary>
 		internal static Commlog SelectOne(long commlogNum){
 			string command="SELECT * FROM commlog "
-				+"WHERE CommlogNum = "+POut.Long(commlogNum)+" LIMIT 1";
+				+"WHERE CommlogNum = "+POut.Long(commlogNum);
 			List<Commlog> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
