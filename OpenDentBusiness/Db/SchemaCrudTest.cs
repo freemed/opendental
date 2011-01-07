@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 					command="DROP TABLE tempcore";
 					Db.NonQ(command);
 				}
-				catch(Exception e) {}
+				catch{}
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
@@ -81,8 +81,20 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Example only</summary>
+		public static void AddIndex() {
+			string command="";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE tempcore ADD INDEX IDX_TEMPCORE_TEMPCORENUM (tempCoreNum)";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (tempCoreNum)";
+				Db.NonQ(command);
+			}
+		}
+
 		//AddColumnEndTimeStamp
-		//AddIndex
 		//AddColumnAfter
 		//DropColumn
 		//DropColumnTimeStamp

@@ -47,8 +47,14 @@ namespace OpenDentBusiness {
 			strb.Append(@"
 		}
 
+		///<summary>Example only</summary>
+		public static void AddIndex() {
+			string command="""";");
+			strb.Append("\r\n"+CrudSchemaRaw.AddIndex("tempcore","tempCoreNum",3));
+			strb.Append(@"
+		}
+
 		//AddColumnEndTimeStamp
-		//AddIndex
 		//AddColumnAfter
 		//DropColumn
 		//DropColumnTimeStamp

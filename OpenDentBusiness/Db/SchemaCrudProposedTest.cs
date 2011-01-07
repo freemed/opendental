@@ -81,8 +81,20 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Example only</summary>
+		public static void AddIndex() {
+			string command="";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE tempcore ADD INDEX IDX_TEMPCORE_TEMPCORENUM (tempCoreNum)";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (tempCoreNum)";
+				Db.NonQ(command);
+			}
+		}
+
 		//AddColumnEndTimeStamp
-		//AddIndex
 		//AddColumnAfter
 		//DropColumn
 		//DropColumnTimeStamp

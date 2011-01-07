@@ -79,6 +79,24 @@ namespace Crud {
 			return strb.ToString();
 		}
 
+		/// <summary></summary>
+		public static string AddIndex(string tableName,string colName,int tabInset) {
+			StringBuilder strb = new StringBuilder();
+			tb="";//must reset tabs each time method is called
+			for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
+				tb+="\t";
+			}
+			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
+			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD INDEX IDX_"+tableName.ToUpper()+"_"+colName.ToUpper()+" ("+colName+")\";");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			strb.Append(rn+tb+"}");
+			strb.Append(rn+tb+"else {//oracle");
+			strb.Append(rn+tb+t1+"command=\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+colName.ToUpper()+" ON "+tableName+" ("+colName+")\";");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			strb.Append(rn+tb+"}");
+			return strb.ToString();
+		}
+
 		/// <summary>For example, might return "bigint NOT NULL".</summary>
 		private static string GetMySqlType(DbSchemaCol col) {
 			switch(col.DataType) {
