@@ -391,7 +391,7 @@ using System.Drawing;"+rn);
 					|| specialType==CrudSpecialColType.DateTEntry
 					|| specialType==CrudSpecialColType.DateTEntryEditable) 
 				{
-					strb.Append("\"NOW()");
+					strb.Append("    DbHelper.Now()+\"");
 				}
 				else if(specialType==CrudSpecialColType.DateT) {
 					strb.Append("    POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");

@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (paySplit.PayPlanNum)+","
 				+    POut.Date  (paySplit.DatePay)+","
 				+    POut.Long  (paySplit.ProcNum)+","
-				+"NOW(),"
+				+    DbHelper.Now()+","
 				+    POut.Long  (paySplit.UnearnedType)+","
 				+    POut.Long  (paySplit.ClinicNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {

@@ -75,7 +75,7 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(transaction.TransactionNum)+",";
 			}
 			command+=
-				 "NOW(),"
+				     DbHelper.Now()+","
 				+    POut.Long  (transaction.UserNum)+","
 				+    POut.Long  (transaction.DepositNum)+","
 				+    POut.Long  (transaction.PayNum)+")";

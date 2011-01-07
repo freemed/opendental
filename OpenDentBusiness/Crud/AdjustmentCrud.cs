@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(adjustment.AdjNote)+"',"
 				+    POut.Date  (adjustment.ProcDate)+","
 				+    POut.Long  (adjustment.ProcNum)+","
-				+"NOW(),"
+				+    DbHelper.Now()+","
 				+    POut.Long  (adjustment.ClinicNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);

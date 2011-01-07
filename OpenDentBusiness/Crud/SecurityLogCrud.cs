@@ -78,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				     POut.Int   ((int)securityLog.PermType)+","
 				+    POut.Long  (securityLog.UserNum)+","
-				+"NOW(),"
+				+    DbHelper.Now()+","
 				+"'"+POut.String(securityLog.LogText)+"',"
 				+    POut.Long  (securityLog.PatNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {

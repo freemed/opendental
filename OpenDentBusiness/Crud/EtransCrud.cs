@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(etrans.EtransNum)+",";
 			}
 			command+=
-				 "NOW(),"
+				     DbHelper.Now()+","
 				+    POut.Long  (etrans.ClearingHouseNum)+","
 				+    POut.Int   ((int)etrans.Etype)+","
 				+    POut.Long  (etrans.ClaimNum)+","

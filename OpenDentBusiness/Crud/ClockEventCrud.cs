@@ -84,8 +84,8 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				     POut.Long  (clockEvent.EmployeeNum)+","
-				+"NOW(),"
-				+"NOW(),"
+				+    DbHelper.Now()+","
+				+    DbHelper.Now()+","
 				+    POut.Int   ((int)clockEvent.ClockStatus)+","
 				+"'"+POut.String(clockEvent.Note)+"',"
 				+    POut.DateT (clockEvent.TimeEntered2)+","

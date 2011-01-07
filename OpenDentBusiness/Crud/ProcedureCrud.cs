@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(procedure.Prosthesis)+"',"
 				+    POut.Date  (procedure.DateOriginalProsth)+","
 				+"'"+POut.String(procedure.ClaimNote)+"',"
-				+"NOW(),"
+				+    DbHelper.Now()+","
 				+    POut.Long  (procedure.ClinicNum)+","
 				+"'"+POut.String(procedure.MedicalCode)+"',"
 				+"'"+POut.String(procedure.DiagnosticCode)+"',"

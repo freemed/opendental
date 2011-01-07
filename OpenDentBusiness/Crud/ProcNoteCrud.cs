@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				     POut.Long  (procNote.PatNum)+","
 				+    POut.Long  (procNote.ProcNum)+","
-				+"NOW(),"
+				+    DbHelper.Now()+","
 				+    POut.Long  (procNote.UserNum)+","
 				+DbHelper.ParamChar+"paramNote,"
 				+    POut.Bool  (procNote.SigIsTopaz)+","
