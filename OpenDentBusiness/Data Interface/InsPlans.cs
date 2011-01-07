@@ -1017,5 +1017,21 @@ namespace OpenDentBusiness {
 			return Db.NonQ(command);
 		}
 
+		public static InsPlan GetByCarrierName(string carrierName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<InsPlan>(MethodBase.GetCurrentMethod(),carrierName);
+			}
+			string command="SELECT * FROM insplan WHERE CarrierNum=(SELECT CarrierNum FROM carrier WHERE CarrierName='"+POut.String(carrierName)+"')";
+			InsPlan plan=Crud.InsPlanCrud.SelectOne(command);
+			if(plan!=null) {
+				return plan;
+			}
+			Carrier carrier=Carriers.GetByNameAndPhone(carrierName,"");
+			plan=new InsPlan();
+			plan.CarrierNum=carrier.CarrierNum;
+			InsPlans.Insert(plan);
+			return plan;
+		}
+
 	}
 }
