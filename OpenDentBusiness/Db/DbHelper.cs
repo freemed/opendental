@@ -179,6 +179,14 @@ namespace OpenDentBusiness {
 			return "NOW()";
 		}
 
+		///<summary>Helper for Oracle that will return equivalent of MySql YEAR()</summary>
+		public static string Year(string date) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "CAST(TO_CHAR("+date+",'YYYY') AS NUMBER)";
+			}
+			return "YEAR("+date+")";
+		}
+
 		public static string Regexp(string input,string pattern) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "REGEXP_INSTR("+input+",'"+pattern+"')";

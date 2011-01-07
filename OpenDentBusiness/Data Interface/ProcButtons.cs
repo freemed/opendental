@@ -95,10 +95,11 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command= @"
-				DELETE FROM procbutton;
-				DELETE FROM procbuttonitem;
-				DELETE FROM definition WHERE Category=26";
+			string command="DELETE FROM procbutton";
+			Db.NonQ(command);
+			command="DELETE FROM procbuttonitem";
+			Db.NonQ(command);
+			command="DELETE FROM definition WHERE Category=26";
 			Db.NonQ(command);
 			long category;//defNum
 			long procButtonNum;
@@ -114,7 +115,7 @@ namespace OpenDentBusiness{
 				command="INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES('Amalgam',0,"
 					+POut.Long(category)+@",'Qk12BgAAAAAAADYAAAAoAAAAFAAAABQAAAABACAAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA/////////////////////9bW1v+ctbX/vebv/8XW1v+tvbX/hKWt/36crf9+nKX/nLW1/97v7//m9/f/pdbe/5y9vf/3////////////////////////////////////ztbO/5y1rf+cxcX/hKWt/5S1vf+cvcX/nMXO/5S9zv+Mrb3/jK2t/629vf+cxc7/nL29//f///////////////////////////////////+9zs7/fpSM/5S1vf+cxc7/tdbe/87m5v/O5u//1u/v/8Xe5v+lxdb/jK21/4Slrf+cvbX/9////////////////////////////////////7XW1v+ErbX/rc7W/8Xm5v/F3ub/3u/v/9739//W7+//zubv/87m7/+11t7/jK21/5y9vf/////////////////////////////////39/f/nLW9/5zFzv/O5ub/3vf3/8Xe5v/m////7////+/////O5u//zu/v/9739/+11tb/lLW1/+/39////////////////////////////9bW5v9NXb3/VWbv/8XW9//v////vdbm/+b3///v////9////73e3v+UtbX/5vf3/7XF9/9ufr3/zt7m////////////////////////////xcXv/xws3v8THO//bn73/87e5v+MrbX/xd7m/+/////v////rc7W/4ylpf/e7///PU33/xwk5v+1ve////////////////////////////+1ve//HCze/xwk7/80Pe//doy9/5y9vf/O5ub/9/////f///+1ztb/nLW1/4yc9/8cJOb/EyTv/4SU7////////////////////////////5yl7/8kLOb/HCzv/xwk7/80Rc7/foze/5Sl7/+crff/nK33/36U5v9dbsX/PUXv/xwk5v8cJOb/XW7m///////////////////////m9/f/foTv/yQs5v8cLO//HCzm/xws7/8kLOb/JCzm/yQs5v8kLOb/JCzm/xws5v8cJOb/HCzm/xwk7/9FVdb/9////////////////////+/39/9dbt7/HCTm/xws5v8cLOb/HCzm/xws5v8cLOb/HCzm/xws5v8cLOb/HCzm/xws5v8cLOb/HCTv/0VVzv/3/////////////////////////1Vm1v8cJO//HCzm/xws5v8cJOb/HCTv/xwk5v8cJOb/HCTm/xwk5v8cJO//HCTm/xws5v8cJO//RVXO//f39//////////////////3////RVXO/xwk7/8cLOb/HCTm/yw05v8sNOb/ND3v/zQ97/80Pe//ND3v/yw05v8kLO//HCTm/xwk7/9FVc7/9/f3//////////////////f///9FVc7/HCTv/xwk5v8sNOb/jJzm/3aErf+1xff/xdb3/8XW//+ElL3/nLXe/4yc9/8kLOb/HCTv/0VVzv/39/f/////////////////9////0VVzv8THO//ND3v/7XF9//O5ub/lK2l/87e1v/3////9////5y1rf/W7+//9////4yU9/8cJO//RVXW//f/////////////////////////boTF/1Vm7//Fzv//9////97v9/+1ztb/xdbW//f////m9/f/rcXO/+b39//3////7////5Sl7/9NXbX/9/f3//////////////////////+91tb/nL3F//f////v////5vf3/87m5v/e7/f/7////+b39//W7+//7////+/////v////tc7O/629vf////////////////////////////////+lxcX/pcXF/+/////3////1u/v/9739//3////3u/3/97v9//3////7////7XO1v+lvcX/9/////////////////////////////////////f39/+lvcX/nL3F/+b39//3////7////+/////m////7////97v7/+txcX/pb3F//f39/////////////////////////////////////////////f39/+txcX/lLW1/629vf/O3t7/3vf3/8Xe3v+lxcX/jKWc/7XFxf/39/f//////////////////////w==')";
 				procButtonNum=Db.NonQ(command,true);
-				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",'',"
+				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",0,"
 					+POut.Long(autoCodeNum)+")";
 				Db.NonQ(command);
 			}
@@ -124,7 +125,7 @@ namespace OpenDentBusiness{
 				command="INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES('Composite',1,"
 					+POut.Long(category)+@",'Qk12BgAAAAAAADYAAAAoAAAAFAAAABQAAAABACAAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA///////////e5v//RU3m/yQ05v8kNOb/JDTm/xwk7/8cJO//JCzm/36UnP9+lJT/fpSc/3aUlP9+lIz/xc7O/////////////////////////////////3Z+9/8kLOb/Znbv/3aE7/+ElO//fpTv/zQ97/8kLOb/rcXm/73e3v+11t7/tdbe/5zFzv+EpaX/1t7e////////////////////////////LDTv/11u5v/e7/f/5vf//+/////3////pbX//yQs7//e7///7////+b39//e7/f/zubv/5S1vf+tvbX///////////////////////////80Pff/XW7m/+b////3////7/////f///+1xf//JCzv/+b3///3////7////+b39//W7+//nL3F/629vf///////////////////////////z1F9/9dbu//7/f//+/////v////9////4yc//89Rff/5vf//+/////v////7////9bv7/+cvcX/rb29////////////////////////////ND3v/3aE7//3////7////+/////v////XWb3/36M9//3////7////+/////v////1u/3/5S1vf+9zs7///////////////////////////8sNO//doTv//f////v////7////+////80Pe//pbX///f////v////7////+/////e7/f/jK2t/9be3v///////////////////////////yw07/9ufu//7////+/////v////3u///zQ97/+9zv//9////+/////v////7////87m7/9+lIz/3u/v////////////////////////////JCzv/2Z27//m////7/////f///+MlP//VWb3//f////v////7////+/////v////zubm/36UlP/m7+////////////////////////////89Rff/VWbm/97v9//3////7////11m9/9mbvf/9////+/////v////7////+////+91t7/lK2t//f3/////////////////////////////5yl//80Rd7/zubv//f////O3v//LDTv/7XF///3////7////+/////v////5vf//6W9xf+ctbX/////////////////////////////////1t7//yQ05v+MnO///////4yU//89Rff/5vf//+/////v////7////+/////m9///nL3F/7XFzv/////////////////////////////////39///Zm73/0VV5v+9zvf/LDTv/5yl///3////7////+/////v////7////+b39/+UrbX/1t7e//////////////////////////////////////+UnPf/JCzm/yw07/9dbvf/5vf//+/////v////7////+/////v////1ubv/4ylpf/m7+///////////////////////////////////////97m//8sNO//XW7v/97v///3////7////+/////v////7////+/////F3t7/nK2t/////////////////////////////////////////////////25+vf+Mpc7/7////+/////v////7////+/////v////7////6W9vf/Fzs7/////////////////////////////////////////////////pb21/5Strf/O5ub/7////+/////v////7/////f////e7+//jK2t/+bv7//////////////////////////////////////////////////O5ub/fpyc/7XOzv/e9/f/9////+/////v////9////7XOzv+EpaX/5vf3/////////////////////////////////////////////////+bv7/+MvcX/lK2t/5y1tf/O5ub/5vf3/+bv7/+9zs7/lL29/4ytrf/3////////////////////////////////////////////////////3ubm/5TFxf+95u//rb29/4ylnP+cra3/lK2t/6W9vf+t1t7/nLW1/////////////////////////////////w==')";
 				procButtonNum=Db.NonQ(command,true);
-				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",'',"
+				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",0,"
 					+POut.Long(autoCodeNum)+")";
 				Db.NonQ(command);
 			}
@@ -150,7 +151,7 @@ namespace OpenDentBusiness{
 				command="INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES('RCT',3,"
 					+POut.Long(category)+@",'Qk12BgAAAAAAADYAAAAoAAAAFAAAABQAAAABACAAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA///////////////////////////////////////////F1tb/boyt/xwkpf/m5ub//////////////////////////////////////////////////////////////////////////////////////36MjP9VbpT/EySc/7XFxf//////////////////////////////////////////////////////////////////////////////////////XWZm/36lzv8kNMX/ZnZu//////////////////////////////////////////////////////////////////////////////////f39/9NXV3/fpz//wMD//9ddm7/zs7O////////////////////////////////////////////////////////////////////////////3t7e/2Z+dv9mfv//AwP//2aEfv+lpaX////////////////////////////////////////////////////////////////////////////FxcX/XXZ2/26E//8DA///jK2t/5ycnP///////////////////////////////////////////////////////////////////////////8XFxf9mfnb/fpT//wMD//+Era3/lJSU//f39///////////////////////////////////////////////////////////////////////nKWl/2aMjP9uhP//AwP//4y1tf+UnJz/9/f3//////////////////////////////////////////////////////////////////////9mbm7/ZoSE/2Z+//8DA///nMXF/4SMjP/39/f//////////////////////////////////////////////////////////////////////2Zubv9ujIT/Znb//wMD//+lzs7/foyM//f39///////////////////////////////////////////////////////////////////////PUVF/36lpf9ufv//AwP//63W1v9ufn7/9/f3/////////////////////////////////////////////////////////////////+/v7/9VVVX/jLW1/2Z2//8DA///td7m/2Z2dv/v7+//////////////////////////////////////////////////////////////////3t7e/1VVVf+Uxb3/bn7//wMD//+13ub/ZnZ2/+bm5v/////////////////////////////////////////////////////////////////e3t7/XWZu/5TFvf9mdv//AwP//7Xe5v9mdnb/3t7e/////////////////////////////////////////////////////////////////8XFxf9mbm7/nMXF/11m//8DA///zu/3/1VmXf/e3t7/////////////////////////////////////////////////////////////////zs7O/11mZv+cxcX/XW7//wMD///O7/f/VWZm/87Ozv/////////////////////////////////////////////////////////////////FxcX/ZnZ2/6XOzv9dbv//AwP//9bv9/9Vbm7/pa2t/////////////////////////////////////////////////////////////////62trf9VZmb/rdbW/01d//8DA///1u/3/01mZv+UlJT/////////////////////////////////////////////////////////////////nJyc/0VNTf+t3tb/XW7//wMD//+Urf//RV1d/4yUlP////////////////////////////////////////////////////////////////+1tbX/RV1d/7Xe3v9dZv//AwP//4yl//89VVX/foSE/////////////////////////////////w==')";
 				procButtonNum=Db.NonQ(command,true);
-				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",'',"
+				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",0,"
 					+POut.Long(autoCodeNum)+")";
 				Db.NonQ(command);
 			}
@@ -172,12 +173,12 @@ namespace OpenDentBusiness{
 					Db.NonQ(command);
 				}
 				if(autoCodeNum!=0) {
-					command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",'',"
+					command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",0,"
 					+POut.Long(autoCodeNum)+")";
 					Db.NonQ(command);
 				}
 				if(autoCodeNum2!=0) {
-					command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",'',"
+					command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",0,"
 					+POut.Long(autoCodeNum2)+")";
 					Db.NonQ(command);
 				}
@@ -194,7 +195,7 @@ namespace OpenDentBusiness{
 					Db.NonQ(command);
 				}
 				if(autoCodeNum!=0) {
-					command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",'',"
+					command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",0,"
 					+POut.Long(autoCodeNum)+")";
 					Db.NonQ(command);
 				}
@@ -205,7 +206,7 @@ namespace OpenDentBusiness{
 				command="INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES('BU/P&C',6,"
 					+POut.Long(category)+@",'')";
 				procButtonNum=Db.NonQ(command,true);
-				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",'',"
+				command="INSERT INTO procbuttonitem (ProcButtonNum,CodeNum,AutoCodeNum) VALUES ("+POut.Long(procButtonNum)+",0,"
 					+POut.Long(autoCodeNum)+")";
 				Db.NonQ(command);
 			}

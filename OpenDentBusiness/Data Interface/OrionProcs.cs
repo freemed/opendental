@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 				+" AND orionproc.Status2=128 "
 				+" AND procedurelog.ToothNum='"+POut.String(ToothNum)+"'"
 				+optionalclause
-				+" AND YEAR(orionproc.DateScheduleBy)>1880"
+				+" AND "+DbHelper.Year("orionproc.DateScheduleBy")+">1880"
 				+" ORDER BY orionproc.DateScheduleBy ";
 			command=DbHelper.LimitOrderBy(command,1);
 			return Db.GetTable(command);

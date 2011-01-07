@@ -82,10 +82,11 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command=@"
-				DELETE FROM autocode;
-				DELETE FROM autocodecond;
-				DELETE FROM autocodeitem";
+			string command="DELETE FROM autocode";
+			Db.NonQ(command);
+			command="DELETE FROM autocodecond";
+			Db.NonQ(command);
+			command="DELETE FROM autocodeitem";
 			Db.NonQ(command);
 			long autoCodeNum;
 			long autoCodeItemNum;

@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 				+"COUNT(DISTINCT req1.ReqStudentNum) totalreq "
 				+"FROM provider "
 				+"LEFT JOIN reqstudent req1 ON req1.ProvNum=provider.ProvNum AND req1.SchoolCourseNum="+POut.Long(courseNum)+" "
-				+"LEFT JOIN reqstudent req2 ON req2.ProvNum=provider.ProvNum AND YEAR(req2.DateCompleted) > 1880 "
+				+"LEFT JOIN reqstudent req2 ON req2.ProvNum=provider.ProvNum AND "+DbHelper.Year("req2.DateCompleted")+" > 1880 "
 				+"AND req2.SchoolCourseNum="+POut.Long(courseNum)+" "
 				+"WHERE provider.SchoolClassNum="+POut.Long(classNum)
 				+" GROUP BY FName,LName,provider.ProvNum "

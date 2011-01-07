@@ -253,7 +253,7 @@ namespace OpenDentBusiness {
 			if(isCheck){
 				command="SELECT COUNT(*) FROM appointment "
 				  +"WHERE AptStatus=1 "//scheduled 
-				  +"AND YEAR(AptDateTime)<1880 "//scheduled but no date 
+				  +"AND "+DbHelper.Year("AptDateTime")+"<1880 "//scheduled but no date 
 				  +"AND NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum)";//and no procs
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound!=0 || verbose) {
@@ -263,7 +263,7 @@ namespace OpenDentBusiness {
 			else{
 				command="DELETE FROM appointment "
 				  +"WHERE AptStatus=1 "//scheduled 
-				  +"AND YEAR(AptDateTime)<1880 "//scheduled but no date 
+				  +"AND "+DbHelper.Year("AptDateTime")+"<1880 "//scheduled but no date 
 				  +"AND NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum)";//and no procs
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed!=0 || verbose) {

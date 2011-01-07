@@ -1301,9 +1301,9 @@ FROM claimproc
 LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
 AND patplan.PlanNum = claimproc.PlanNum
 WHERE claimproc.Status IN (1, 3, 4)
-AND claimproc.ProcDate BETWEEN makedate(year(curdate()), 1)
-AND makedate(year(curdate())+1, 1) /*current calendar year*/
-GROUP BY patplan.PatPlanNum";
+AND claimproc.ProcDate BETWEEN makedate("+DbHelper.Year(DbHelper.Now())+", 1) "
++"AND makedate("+DbHelper.Year(DbHelper.Now())+"+1, 1) "/*current calendar year*/
++"GROUP BY patplan.PatPlanNum";
 			Db.NonQ(command);
 			command=@"INSERT INTO tempplanned
 SELECT PatNum, SUM(ProcFee)
