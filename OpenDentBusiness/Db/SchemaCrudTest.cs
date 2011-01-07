@@ -23,7 +23,8 @@ namespace OpenDentBusiness {
 					TextSmallTest varchar(255) NOT NULL,
 					TextMediumTest text NOT NULL,
 					TextLargeTest text NOT NULL,
-					VarCharTest varchar(255) NOT NULL
+					VarCharTest varchar(255) NOT NULL,
+					DropableColumn tinyint NOT NULL
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 			}
@@ -45,7 +46,8 @@ namespace OpenDentBusiness {
 					TextSmallTest varchar2(255),
 					TextMediumTest clob,
 					TextLargeTest clob,
-					VarCharTest varchar2(255)
+					VarCharTest varchar2(255),
+					DropableColumn number(3) NOT NULL
 					)";
 				Db.NonQ(command);
 			}
@@ -94,9 +96,21 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Example only</summary>
+		public static void DropColumn() {
+			string command="";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				Db.NonQ(command);
+			}
+		}
+
 		//AddColumnEndTimeStamp
 		//AddColumnAfter
-		//DropColumn
 		//DropColumnTimeStamp
 		//DropIndex
 		//etc.

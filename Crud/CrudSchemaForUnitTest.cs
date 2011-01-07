@@ -54,9 +54,15 @@ namespace OpenDentBusiness {
 			strb.Append(@"
 		}
 
+		///<summary>Example only</summary>
+		public static void DropColumn() {
+			string command="""";");
+			strb.Append("\r\n"+CrudSchemaRaw.DropColumn("tempcore","DropableColumn",3));
+			strb.Append(@"
+		}
+
 		//AddColumnEndTimeStamp
 		//AddColumnAfter
-		//DropColumn
 		//DropColumnTimeStamp
 		//DropIndex
 		//etc.

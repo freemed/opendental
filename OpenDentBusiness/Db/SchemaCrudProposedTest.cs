@@ -94,9 +94,21 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Example only</summary>
+		public static void DropColumn() {
+			string command="";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				Db.NonQ(command);
+			}
+		}
+
 		//AddColumnEndTimeStamp
 		//AddColumnAfter
-		//DropColumn
 		//DropColumnTimeStamp
 		//DropIndex
 		//etc.

@@ -36,6 +36,8 @@ namespace Crud {
 		public string TextLargeTest;// >65k
 		///<summary></summary>
 		public string VarCharTest;// <255
+		///<summary>This column is added only to be dropped later.</summary>
+		public bool DropableColumn;
 
 	}
 }
