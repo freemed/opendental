@@ -50,7 +50,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CheckLogin.aspx" />
     <Content Include="AppointmentDetails.aspx" />
     <Content Include="AppointmentList.aspx" />
     <Content Include="css\themes\apple\img\backButton.png" />
@@ -93,13 +92,6 @@
     <Content Include="PatientDetails.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckLogin.aspx.cs">
-      <DependentUpon>CheckLogin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CheckLogin.aspx.designer.cs">
-      <DependentUpon>CheckLogin.aspx</DependentUpon>
-    </Compile>
     <Compile Include="AppointmentDetails.aspx.cs">
       <DependentUpon>AppointmentDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

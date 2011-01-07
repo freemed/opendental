@@ -16,11 +16,11 @@ namespace MobileWeb {
 		List<Patientm> patientmList=new List<Patientm>();
 		
 		protected void Page_Load(object sender,EventArgs e) {
-			Message.Text="";
-			if(Session["CustomerNum"]!=null) {
+			try {
+				if(!SetCustomerNum()) {
+						return;
+				}
 				//Thread.Sleep(1500);
-				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-				Message.Text="LoggedIn";
 				if(Request["searchterm"]!=null) {
 					searchterm=Request["searchterm"].Trim();
 				}
@@ -33,8 +33,21 @@ namespace MobileWeb {
 				Repeater1.DataSource=patientmList;
 				Repeater1.DataBind();
 			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
+		}
 
-
+		private bool SetCustomerNum() {
+			Message.Text="";
+			if(Session["CustomerNum"]==null) {
+				return false;
+			}
+			Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+			if(CustomerNum!=0) {
+				Message.Text="LoggedIn";
+			}
+			return true;
 		}
 	}
 }

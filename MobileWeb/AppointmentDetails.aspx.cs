@@ -16,9 +16,10 @@ namespace MobileWeb {
 		private long AptNum=0;
 		private long CustomerNum=0;
 		protected void Page_Load(object sender,EventArgs e) {
-			Message.Text="";
-			if(Session["CustomerNum"]!=null) {
-				Message.Text="LoggedIn";
+			try {
+				if(!SetCustomerNum()) {
+					return;
+				}
 				if(Request["AptNum"]!=null) {
 					Int64.TryParse(Request["AptNum"].ToString().Trim(),out AptNum);
 				}
@@ -26,6 +27,23 @@ namespace MobileWeb {
 				apt=Appointmentms.GetOne(CustomerNum,AptNum);
 				pat=Patientms.GetOne(CustomerNum,apt.PatNum);
 			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
 		}
+
+		private bool SetCustomerNum() {
+			Message.Text="";
+			if(Session["CustomerNum"]==null) {
+				return false;
+			}
+			Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+			if(CustomerNum!=0) {
+				Message.Text="LoggedIn";
+			}
+			return true;
+		}
+
+
 	}
 }

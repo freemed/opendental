@@ -44,7 +44,7 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
 
-	$('#searchpatientbox').live('keyup', function(e) {
+	$('#searchpatientbox').keyup(function(e) {
 		var searchterm=$('#searchpatientbox').val();
 		//console.log('searchterm is ' + searchterm);
 		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
@@ -60,6 +60,7 @@ function TraversePage(){
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+		$('#searchpatientbox').val('');
 	}); 
 
 	// a tap function is used instead of .live() for elements loaded by AJAX
@@ -117,7 +118,10 @@ function TraversePage(){
 	
 	$('.button.patients').tap(function(e) {
 		console.log('patients button tapped');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		//var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var searchterm=$('#searchpatientbox').val();
+		//console.log('searchterm is ' + searchterm);
+		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);

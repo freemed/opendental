@@ -24,19 +24,27 @@ namespace WebForms {
 		/// <summary>
 		/// Log writer
 		/// </summary>
-		static readonly LogWriter writer;
+		static readonly LogWriter writer;// readonly modifier can be initialized only in a constructor 
+		static readonly bool LogErr=false;
+		static readonly bool LogInfo=false;
 
 		/// <summary>
 		/// Static constructor
 		/// </summary>
 		static Logger() {
-			string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();// a static constructor works because changing the web.configs restarts the appliaction.
+			string LogFile = ConfigurationManager.AppSettings["LogFile"].ToString();// a static constructor works because changing the web.config restarts the appliaction.
 			// this defaults to the namespace WebForms even when used in another application so it's not used
 			//string LogFile=Properties.Settings.Default.LogFile;
-			
+
+			if(ConfigurationManager.AppSettings["LogErr"].ToString().ToLower()=="yes") {
+				LogErr=true;
+			}
+			if(ConfigurationManager.AppSettings["LogInfo"].ToString().ToLower()=="yes") {
+				LogInfo=true;
+			}
 
 			// formatter
-			TextFormatter formatter = new TextFormatter("[{timestamp}] [{machine}] {category}  \t: {message}");
+			TextFormatter formatter = new TextFormatter("[{timestamp(local)}] [{machine}] {category}  \t: {message}");
 
 			// listeners
 			FlatFileTraceListener logFileListener=new FlatFileTraceListener(LogFile,"","",formatter);
@@ -95,6 +103,9 @@ namespace WebForms {
 		/// </summary>
 		/// <param name="message">Information Message</param>
 		public static void Information(string message) {
+			if(!LogInfo) {
+				return;
+			}
 			StackFrame stFrame = new StackFrame(1,true);
 			string Filename = " Filename: " + stFrame.GetFileName().Substring(stFrame.GetFileName().LastIndexOf(@"\")+1);
 			string MethodName =" Method: "+ stFrame.GetMethod();
@@ -108,6 +119,9 @@ namespace WebForms {
 		/// </summary>
 		/// <param name="message">Information Message</param>
 		public static void LogError(Exception ex) {
+			if(!LogErr) {
+				return;
+			}
 			string message=ex.Message.ToString();
 			StackFrame stFrame = new StackFrame(1,true);
 			string Filename = " Filename: " + stFrame.GetFileName().Substring(stFrame.GetFileName().LastIndexOf(@"\")+1);
@@ -130,10 +144,8 @@ namespace WebForms {
 		/// <param name="category">Message category. e.g. 'Error','Warning','Information'</param>
 		private static void Write(string message,string category) {
 			LogEntry entry = new LogEntry();
-
 			entry.Categories.Add(category);
 			entry.Message = message;
-
 			writer.Write(entry);
 		}
 
@@ -145,7 +157,6 @@ namespace WebForms {
 		/// <param name="category"></param>
 		private static void Write(string message,TraceEventType severity) {
 			LogEntry entry = new LogEntry();
-
 			entry.Categories.Add(severity.ToString());
 			entry.Message = message;
 			entry.Severity = severity;

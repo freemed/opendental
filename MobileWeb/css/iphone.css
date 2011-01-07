@@ -72,15 +72,13 @@ min-height: 480px;
 .contents{
     clear:both;
 }
+/*long words like long email addresses may need the word wrap*/
 .style1{
  color:#000000;
  font-size:14px;
-}
-/*long words like long email addresses may need the word wrap*/
-.style2{
- font-size:14px;
  word-wrap:break-word;
 }
+
 .appts, .home, .patients{
     left: 6px;
     right: auto;
@@ -123,7 +121,7 @@ ul li {
 
 /*right padding to adjust postion of the ellipse*/
 .elladjust{
- padding-right:10px;
+ padding-right:15px;
 }
 .page1{
   margin: 7px 10px 7px 10px;

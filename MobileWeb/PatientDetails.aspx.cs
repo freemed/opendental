@@ -15,9 +15,10 @@ namespace MobileWeb {
 		private long PatNum=0;
 		private long CustomerNum=0;
 		protected void Page_Load(object sender,EventArgs e) {
-			Message.Text="";
-			if(Session["CustomerNum"]!=null) {
-				Message.Text="LoggedIn";
+			try {
+				if(!SetCustomerNum()) {
+					return;
+				}
 				if(Request["PatNum"]!=null) {
 					Int64.TryParse(Request["PatNum"].ToString().Trim(),out PatNum);
 				}
@@ -28,6 +29,22 @@ namespace MobileWeb {
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
 			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
 		}
+
+		private bool SetCustomerNum() {
+			Message.Text="";
+			if(Session["CustomerNum"]==null) {
+				return false;
+			}
+			Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+			if(CustomerNum!=0) {
+				Message.Text="LoggedIn";
+			}
+			return true;
+		}
+	
 	}
 }

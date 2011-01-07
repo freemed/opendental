@@ -20,25 +20,21 @@ namespace MobileWeb {
 		public int NextDateYear=0;
 
 		protected void Page_Load(object sender,EventArgs e) {
-			Message.Text="";
-			if(Session["CustomerNum"]!=null) {
-				Message.Text="LoggedIn";
+			try {
+				if(!SetCustomerNum()) {
+					return;
+				}
 				int Year=0;
 				int Month=0;
 				int Day=0;
 				DateTime AppointmentDate;
-				try {
-					if(Request["year"]!=null && Request["month"]!=null && Request["day"]!=null) {
-						Int32.TryParse(Request["year"].ToString().Trim(),out Year);
-						Int32.TryParse(Request["month"].ToString().Trim(),out Month);
-						Int32.TryParse(Request["day"].ToString().Trim(),out Day);
-						AppointmentDate= new DateTime(Year,Month,Day);
-					}
-					else {
-						AppointmentDate= DateTime.Today;
-					}
+				if(Request["year"]!=null && Request["month"]!=null && Request["day"]!=null) {
+					Int32.TryParse(Request["year"].ToString().Trim(),out Year);
+					Int32.TryParse(Request["month"].ToString().Trim(),out Month);
+					Int32.TryParse(Request["day"].ToString().Trim(),out Day);
+					AppointmentDate= new DateTime(Year,Month,Day);
 				}
-				catch(Exception ex) {
+				else {
 					AppointmentDate= DateTime.Today;
 				}
 				DayLabel.Text=AppointmentDate.ToString("ddd") + ", " + AppointmentDate.ToString("MMM") + " " + AppointmentDate.ToString("dd");
@@ -51,13 +47,12 @@ namespace MobileWeb {
 				NextDateDay=NextDate.Day;
 				NextDateMonth=NextDate.Month;
 				NextDateYear=NextDate.Year;
-				if(Session["CustomerNum"]!=null) {
-					Message.Text="LoggedIn";
-					Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-					List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
-					Repeater1.DataSource=appointmentmList;
-					Repeater1.DataBind();
-				}
+				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
+				Repeater1.DataSource=appointmentmList; 
+				Repeater1.DataBind();
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
 			}
 		}
 
@@ -70,9 +65,19 @@ namespace MobileWeb {
 				Logger.LogError(ex);
 				return "";
 			}
-
 		}
 
+		private bool SetCustomerNum(){
+			Message.Text="";
+			if(Session["CustomerNum"]==null) {
+				return false;
+			}
+			Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
+			if(CustomerNum!=0) {
+				Message.Text="LoggedIn";
+			}
+			return true;
+		}
 
 
 

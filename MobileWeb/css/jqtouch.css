@@ -11,8 +11,8 @@ body {
     -webkit-user-select: none;
     -webkit-text-size-adjust: none;
     font-family: Helvetica;
-    -webkit-perspective: 800;/*dennis check box appear- comment this*/
-    -webkit-transform-style: preserve-3d;/*dennis check box appear- comment this*/
+   -webkit-perspective: 800;/*dennis commented to make the check box appear*/
+   -webkit-transform-style: preserve-3d;/*dennis commented to make the check box appear*/
 }
 .selectable, input, textarea {
     -webkit-user-select: auto;
@@ -21,10 +21,10 @@ body > * {
     -webkit-backface-visibility: hidden;
     -webkit-box-sizing: border-box;
     display: none;
-   position: absolute;/*dennis check box appear- comment this*/
+  position: absolute;/*dennis commented to make the check box appear*/
     left: 0;
     width: 100%;
-   -webkit-transform: translate3d(0,0,0) rotate(0) scale(1);/*dennis check box appear- comment this*/
+  -webkit-transform: translate3d(0,0,0) rotate(0) scale(1);/*dennis commented to make the check box appear*/
     min-height: 420px !important;
 }
 body.fullscreen > * {

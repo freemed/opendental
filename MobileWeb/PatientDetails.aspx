@@ -12,7 +12,7 @@
 <h2></h2>
 <ul>
 <li> 
-<span class="style2">
+<span class="style1">
 <%Response.Write(pat.LName + " "+pat.MiddleI+" "+pat.FName);%><br />
 <%Response.Write(pat.Birthdate.ToShortDateString()+" ("+pat.Age+")");%>
 
@@ -21,17 +21,18 @@
 </ul>
 
 <ul class="contact">
-<li><span class="style1">Home:</span> <span class="style2"><%Response.Write(pat.HmPhone);%> </span></li>
-<li><span class="style1">Work:</span> <span class="style2"><%Response.Write(pat.WkPhone);%> </span></li>
-<li><span class="style1">Mobile:</span> <span class="style2"><%Response.Write(pat.WirelessPhone);%> </span></li>
-<li><span class="style1">Email:</span> <span class="style2"><%Response.Write(pat.Email);%> </span></li>
+<li><span class="style1">Home: <%Response.Write(pat.HmPhone);%> 
+<a href="tel:<%Response.Write(pat.HmPhone);%>">Dial number</a></span></li>
+<li><span class="style1">Work: <%Response.Write(pat.WkPhone);%> </span></li>
+<li><span class="style1">Mobile: <%Response.Write(pat.WirelessPhone);%> </span></li>
+<li><span class="style1">Email: <%Response.Write(pat.Email);%> </span></li>
 </ul>
 <h2>Appointments</h2>
 
 <ul>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
-					<li class="arrow style2">
+					<li class="arrow style1">
 						<div class="elladjust">
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
@@ -48,17 +49,17 @@
 <ul>
 <li>
 		<div>
-		<span class="style2"><asp:Label ID="Label4" runat="server" Text="Penicillin"></asp:Label></span>
+		<span class="style1"><asp:Label ID="Label4" runat="server" Text="Penicillin"></asp:Label></span>
 		</div>
 </li>
 <li>
 		<div>
-		<span class="style2"><asp:Label ID="Label5" runat="server" Text="Vicodin"></asp:Label></span>
+		<span class="style1"><asp:Label ID="Label5" runat="server" Text="Vicodin"></asp:Label></span>
 		</div>
 </li>
 <li>
 		<div>
-		<span class="style2"><asp:Label ID="Label6" runat="server" Text="Peridex"></asp:Label></span>
+		<span class="style1"><asp:Label ID="Label6" runat="server" Text="Peridex"></asp:Label></span>
 		</div>
 </li>
 
