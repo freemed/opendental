@@ -47,24 +47,28 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<InsSub>>(MethodBase.GetCurrentMethod(),Fam);
 			}
+			//The command is written in a nested fashion in order to be compatible with both MySQL and Oracle.
 			string command=
-				"(SELECT * FROM inssub WHERE";
+				"SELECT D.* FROM inssub D,"+
+				"((SELECT A.InsSubNum FROM inssub A WHERE";
 			//subscribers in family
 			for(int i=0;i<Fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" Subscriber="+POut.Long(Fam.ListPats[i].PatNum);
+				command+=" A.Subscriber="+POut.Long(Fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
-			command+=") UNION (SELECT inssub.* FROM inssub,patplan WHERE inssub.InsSubNum=patplan.InsSubNum AND (";
+			command+=") UNION (SELECT B.InsSubNum FROM inssub B,patplan P WHERE B.InsSubNum=P.InsSubNum AND (";
 			for(int i=0;i<Fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" patplan.PatNum="+POut.Long(Fam.ListPats[i].PatNum);
+				command+=" P.PatNum="+POut.Long(Fam.ListPats[i].PatNum);
 			}
-			command+=")) ORDER BY "+DbHelper.UnionOrderBy("DateEffective",4);
+			command+="))) C "
+				+"WHERE D.InsSubNum=C.InsSubNum "
+				+"ORDER BY "+DbHelper.UnionOrderBy("DateEffective",4);
 			return Crud.InsSubCrud.SelectMany(command);
 		}
 
