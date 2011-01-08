@@ -75,6 +75,9 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				 "'"+POut.String(letter.Description)+"',"
 				+DbHelper.ParamChar+"paramBodyText)";
+			if(letter.BodyText==null) {
+				letter.BodyText="";
+			}
 			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,letter.BodyText);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramBodyText);
@@ -91,6 +94,9 @@ namespace OpenDentBusiness.Crud{
 				+"Description= '"+POut.String(letter.Description)+"', "
 				+"BodyText   =  "+DbHelper.ParamChar+"paramBodyText "
 				+"WHERE LetterNum = "+POut.Long(letter.LetterNum);
+			if(letter.BodyText==null) {
+				letter.BodyText="";
+			}
 			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,letter.BodyText);
 			Db.NonQ(command,paramBodyText);
 		}
@@ -108,6 +114,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(letter.BodyText==null) {
+				letter.BodyText="";
 			}
 			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,letter.BodyText);
 			command="UPDATE letter SET "+command

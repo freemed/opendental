@@ -77,6 +77,9 @@ namespace OpenDentBusiness.Crud{
 				 "'"+POut.String(userQuery.Description)+"',"
 				+"'"+POut.String(userQuery.FileName)+"',"
 				+DbHelper.ParamChar+"paramQueryText)";
+			if(userQuery.QueryText==null) {
+				userQuery.QueryText="";
+			}
 			OdSqlParameter paramQueryText=new OdSqlParameter("paramQueryText",OdDbType.Text,userQuery.QueryText);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramQueryText);
@@ -94,6 +97,9 @@ namespace OpenDentBusiness.Crud{
 				+"FileName   = '"+POut.String(userQuery.FileName)+"', "
 				+"QueryText  =  "+DbHelper.ParamChar+"paramQueryText "
 				+"WHERE QueryNum = "+POut.Long(userQuery.QueryNum);
+			if(userQuery.QueryText==null) {
+				userQuery.QueryText="";
+			}
 			OdSqlParameter paramQueryText=new OdSqlParameter("paramQueryText",OdDbType.Text,userQuery.QueryText);
 			Db.NonQ(command,paramQueryText);
 		}
@@ -115,6 +121,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(userQuery.QueryText==null) {
+				userQuery.QueryText="";
 			}
 			OdSqlParameter paramQueryText=new OdSqlParameter("paramQueryText",OdDbType.Text,userQuery.QueryText);
 			command="UPDATE userquery SET "+command

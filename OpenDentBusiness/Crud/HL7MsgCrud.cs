@@ -77,6 +77,9 @@ namespace OpenDentBusiness.Crud{
 				     POut.Int   ((int)hL7Msg.HL7Status)+","
 				+DbHelper.ParamChar+"paramMsgText,"
 				+    POut.Long  (hL7Msg.AptNum)+")";
+			if(hL7Msg.MsgText==null) {
+				hL7Msg.MsgText="";
+			}
 			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,hL7Msg.MsgText);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramMsgText);
@@ -94,6 +97,9 @@ namespace OpenDentBusiness.Crud{
 				+"MsgText  =  "+DbHelper.ParamChar+"paramMsgText, "
 				+"AptNum   =  "+POut.Long  (hL7Msg.AptNum)+" "
 				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
+			if(hL7Msg.MsgText==null) {
+				hL7Msg.MsgText="";
+			}
 			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,hL7Msg.MsgText);
 			Db.NonQ(command,paramMsgText);
 		}
@@ -115,6 +121,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(hL7Msg.MsgText==null) {
+				hL7Msg.MsgText="";
 			}
 			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,hL7Msg.MsgText);
 			command="UPDATE hl7msg SET "+command

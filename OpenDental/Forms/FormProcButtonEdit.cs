@@ -362,7 +362,7 @@ namespace OpenDental{
 			if(comboCategory.SelectedIndex==-1){
 				comboCategory.SelectedIndex=0;//we know that there will always be at least one cat. Validated in FormProcButtons
 			}
-			pictureBox.Image=ProcButtonCur.ButtonImage;
+			pictureBox.Image=PIn.Bitmap(ProcButtonCur.ButtonImage);
 			long[] codeNumList=ProcButtonItems.GetCodeNumListForButton(ProcButtonCur.ProcButtonNum);
 			long[] auto=ProcButtonItems.GetAutoListForButton(ProcButtonCur.ProcButtonNum);
 			listADA.Items.Clear();
@@ -443,7 +443,7 @@ namespace OpenDental{
 					=ProcButtons.GetForCat(DefC.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum).Length;
 			}
 			ProcButtonCur.Category=DefC.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum;
-			ProcButtonCur.ButtonImage=(Bitmap)pictureBox.Image;
+			ProcButtonCur.ButtonImage=POut.Bitmap((Bitmap)pictureBox.Image,System.Drawing.Imaging.ImageFormat.MemoryBmp);
       if(IsNew){
         ProcButtonCur.ItemOrder=ProcButtons.List.Length;        
         ProcButtons.Insert(ProcButtonCur);

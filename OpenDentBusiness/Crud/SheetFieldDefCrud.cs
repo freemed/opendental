@@ -101,6 +101,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(sheetFieldDef.RadioButtonValue)+"',"
 				+"'"+POut.String(sheetFieldDef.RadioButtonGroup)+"',"
 				+    POut.Bool  (sheetFieldDef.IsRequired)+")";
+			if(sheetFieldDef.FieldValue==null) {
+				sheetFieldDef.FieldValue="";
+			}
 			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,sheetFieldDef.FieldValue);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramFieldValue);
@@ -130,6 +133,9 @@ namespace OpenDentBusiness.Crud{
 				+"RadioButtonGroup= '"+POut.String(sheetFieldDef.RadioButtonGroup)+"', "
 				+"IsRequired      =  "+POut.Bool  (sheetFieldDef.IsRequired)+" "
 				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDef.SheetFieldDefNum);
+			if(sheetFieldDef.FieldValue==null) {
+				sheetFieldDef.FieldValue="";
+			}
 			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,sheetFieldDef.FieldValue);
 			Db.NonQ(command,paramFieldValue);
 		}
@@ -199,6 +205,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(sheetFieldDef.FieldValue==null) {
+				sheetFieldDef.FieldValue="";
 			}
 			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,sheetFieldDef.FieldValue);
 			command="UPDATE sheetfielddef SET "+command

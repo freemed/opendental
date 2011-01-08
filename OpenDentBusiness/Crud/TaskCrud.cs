@@ -95,6 +95,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (task.DateTimeEntry)+","
 				+    POut.Long  (task.UserNum)+","
 				+    POut.DateT (task.DateTimeFinished)+")";
+			if(task.Descript==null) {
+				task.Descript="";
+			}
 			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,task.Descript);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramDescript);
@@ -121,6 +124,9 @@ namespace OpenDentBusiness.Crud{
 				+"UserNum         =  "+POut.Long  (task.UserNum)+", "
 				+"DateTimeFinished=  "+POut.DateT (task.DateTimeFinished)+" "
 				+"WHERE TaskNum = "+POut.Long(task.TaskNum);
+			if(task.Descript==null) {
+				task.Descript="";
+			}
 			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,task.Descript);
 			Db.NonQ(command,paramDescript);
 		}
@@ -178,6 +184,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(task.Descript==null) {
+				task.Descript="";
 			}
 			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,task.Descript);
 			command="UPDATE task SET "+command

@@ -290,7 +290,7 @@ namespace OpenDental{
 			for(int i=0;i<ButtonList.Length;i++) {
 				if(ButtonList[i].ButtonImage!=null){
 					//image keys are simply the ProcButtonNum
-					imageListProcButtons.Images.Add(ButtonList[i].ProcButtonNum.ToString(),ButtonList[i].ButtonImage);
+					imageListProcButtons.Images.Add(ButtonList[i].ProcButtonNum.ToString(),PIn.Bitmap(ButtonList[i].ButtonImage));
 				}
 				item=new ListViewItem(new string[] {ButtonList[i].Description},ButtonList[i].ProcButtonNum.ToString());
 				listViewButtons.Items.Add(item);

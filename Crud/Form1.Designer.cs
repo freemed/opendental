@@ -175,6 +175,8 @@
 			// 
 			// checkRun
 			// 
+			this.checkRun.Checked = true;
+			this.checkRun.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkRun.Location = new System.Drawing.Point(239,26);
 			this.checkRun.Name = "checkRun";
 			this.checkRun.Size = new System.Drawing.Size(39,17);
@@ -209,8 +211,6 @@
 			// 
 			// checkRunSchema
 			// 
-			this.checkRunSchema.Checked = true;
-			this.checkRunSchema.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkRunSchema.Location = new System.Drawing.Point(239,74);
 			this.checkRunSchema.Name = "checkRunSchema";
 			this.checkRunSchema.Size = new System.Drawing.Size(39,17);

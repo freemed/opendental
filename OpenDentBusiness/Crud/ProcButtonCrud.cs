@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				procButton.Description  = PIn.String(table.Rows[i]["Description"].ToString());
 				procButton.ItemOrder    = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
 				procButton.Category     = PIn.Long  (table.Rows[i]["Category"].ToString());
-				procButton.ButtonImage  = PIn.Bitmap(table.Rows[i]["ButtonImage"].ToString());
+				procButton.ButtonImage  = PIn.String(table.Rows[i]["ButtonImage"].ToString());
 				retVal.Add(procButton);
 			}
 			return retVal;
@@ -79,6 +79,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (procButton.ItemOrder)+","
 				+    POut.Long  (procButton.Category)+","
 				+DbHelper.ParamChar+"paramButtonImage)";
+			if(procButton.ButtonImage==null) {
+				procButton.ButtonImage="";
+			}
 			OdSqlParameter paramButtonImage=new OdSqlParameter("paramButtonImage",OdDbType.Text,procButton.ButtonImage);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramButtonImage);
@@ -97,6 +100,9 @@ namespace OpenDentBusiness.Crud{
 				+"Category     =  "+POut.Long  (procButton.Category)+", "
 				+"ButtonImage  =  "+DbHelper.ParamChar+"paramButtonImage "
 				+"WHERE ProcButtonNum = "+POut.Long(procButton.ProcButtonNum);
+			if(procButton.ButtonImage==null) {
+				procButton.ButtonImage="";
+			}
 			OdSqlParameter paramButtonImage=new OdSqlParameter("paramButtonImage",OdDbType.Text,procButton.ButtonImage);
 			Db.NonQ(command,paramButtonImage);
 		}
@@ -122,6 +128,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(procButton.ButtonImage==null) {
+				procButton.ButtonImage="";
 			}
 			OdSqlParameter paramButtonImage=new OdSqlParameter("paramButtonImage",OdDbType.Text,procButton.ButtonImage);
 			command="UPDATE procbutton SET "+command

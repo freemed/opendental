@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 		public long Category;
 		///<summary>If no image, then the clob will be an empty string.  In this case, the bitmap will be null when loaded from the database.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public Bitmap ButtonImage;
+		public string ButtonImage;
 
 		///<summary></summary>
 		public ProcButton Copy() {

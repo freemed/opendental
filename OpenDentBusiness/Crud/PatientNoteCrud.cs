@@ -87,6 +87,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(patientNote.Treatment)+"',"
 				+"'"+POut.String(patientNote.CCNumber)+"',"
 				+    POut.Date  (patientNote.CCExpiration)+")";
+			if(patientNote.MedicalComp==null) {
+				patientNote.MedicalComp="";
+			}
 			OdSqlParameter paramMedicalComp=new OdSqlParameter("paramMedicalComp",OdDbType.Text,patientNote.MedicalComp);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramMedicalComp);
@@ -109,6 +112,9 @@ namespace OpenDentBusiness.Crud{
 				+"CCNumber    = '"+POut.String(patientNote.CCNumber)+"', "
 				+"CCExpiration=  "+POut.Date  (patientNote.CCExpiration)+" "
 				+"WHERE PatNum = "+POut.Long(patientNote.PatNum);
+			if(patientNote.MedicalComp==null) {
+				patientNote.MedicalComp="";
+			}
 			OdSqlParameter paramMedicalComp=new OdSqlParameter("paramMedicalComp",OdDbType.Text,patientNote.MedicalComp);
 			Db.NonQ(command,paramMedicalComp);
 		}
@@ -147,6 +153,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(patientNote.MedicalComp==null) {
+				patientNote.MedicalComp="";
 			}
 			OdSqlParameter paramMedicalComp=new OdSqlParameter("paramMedicalComp",OdDbType.Text,patientNote.MedicalComp);
 			command="UPDATE patientnote SET "+command

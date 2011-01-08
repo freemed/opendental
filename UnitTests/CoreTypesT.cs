@@ -11,7 +11,49 @@ namespace UnitTests {
 	public class CoreTypesT {
 		/// <summary></summary>
 		public static string CreateTempTable(bool isOracle) {
-			string retVal=""; 
+			string retVal="";
+			string command;
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="DROP TABLE IF EXISTS tempcore";
+				DataCore.NonQ(command);
+				command=@"CREATE TABLE tempcore (
+					TempCoreNum bigint NOT NULL,
+					TimeOfDayTest time NOT NULL DEFAULT '00:00:00',
+					TimeStampTest timestamp,
+					DateTest date NOT NULL DEFAULT '0001-01-01',
+					DateTimeTest datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+					TimeSpanTest time NOT NULL DEFAULT '00:00:00',
+					CurrencyTest double NOT NULL,
+					BoolTest tinyint NOT NULL,
+					TextSmallTest text NOT NULL,
+					TextMediumTest text NOT NULL,
+					TextLargeTest mediumtext NOT NULL,
+					VarCharTest varchar(255) NOT NULL
+					) DEFAULT CHARSET=utf8";
+				DataCore.NonQ(command);
+			}
+			else {//oracle
+				try {
+					command="DROP TABLE tempcore";
+					DataCore.NonQ(command);
+				}
+				catch(Exception e) { }
+				command=@"CREATE TABLE tempcore (
+					TempCoreNum number(20) NOT NULL,
+					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					TimeStampTest timestamp DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					DateTimeTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					TimeSpanTest varchar2(255),
+					CurrencyTest number(38,8) NOT NULL,
+					BoolTest number(3) NOT NULL,
+					TextSmallTest varchar2(4000),
+					TextMediumTest clob,
+					TextLargeTest clob,
+					VarCharTest varchar2(255)
+					)";
+				DataCore.NonQ(command);
+			}
 			/*
 			DatabaseTools.SetDbConnection("unittest",isOracle);
 			List<DbSchemaCol> cols=new List<DbSchemaCol>();
@@ -28,9 +70,9 @@ namespace UnitTests {
 			DbSchema.AddTable7_7("tempcore",cols);
 			cols=new List<DbSchemaCol>();
 			cols.Add(new DbSchemaCol("Names",OdDbType.VarChar255));
-			DbSchema.AddTable7_7("tempgroupconcat",cols);
-			retVal+="Temp tables created.\r\n";*/
-			retVal+="Temp tables cannot yet be created.\r\n";
+			DbSchema.AddTable7_7("tempgroupconcat",cols);*/
+			retVal+="Temp tables created.\r\n";
+			//retVal+="Temp tables cannot yet be created.\r\n";
 			return retVal;
 		}
 

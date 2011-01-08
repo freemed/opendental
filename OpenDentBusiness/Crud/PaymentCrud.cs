@@ -95,6 +95,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (payment.DateEntry)+","
 				+    POut.Long  (payment.DepositNum)+","
 				+DbHelper.ParamChar+"paramReceipt)";
+			if(payment.Receipt==null) {
+				payment.Receipt="";
+			}
 			OdSqlParameter paramReceipt=new OdSqlParameter("paramReceipt",OdDbType.Text,payment.Receipt);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramReceipt);
@@ -121,6 +124,9 @@ namespace OpenDentBusiness.Crud{
 				//DepositNum excluded from update
 				+"Receipt   =  "+DbHelper.ParamChar+"paramReceipt "
 				+"WHERE PayNum = "+POut.Long(payment.PayNum);
+			if(payment.Receipt==null) {
+				payment.Receipt="";
+			}
 			OdSqlParameter paramReceipt=new OdSqlParameter("paramReceipt",OdDbType.Text,payment.Receipt);
 			Db.NonQ(command,paramReceipt);
 		}
@@ -175,6 +181,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(payment.Receipt==null) {
+				payment.Receipt="";
 			}
 			OdSqlParameter paramReceipt=new OdSqlParameter("paramReceipt",OdDbType.Text,payment.Receipt);
 			command="UPDATE payment SET "+command

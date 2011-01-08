@@ -73,6 +73,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				 DbHelper.ParamChar+"paramMessageText)";
+			if(etransMessageText.MessageText==null) {
+				etransMessageText.MessageText="";
+			}
 			OdSqlParameter paramMessageText=new OdSqlParameter("paramMessageText",OdDbType.Text,etransMessageText.MessageText);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramMessageText);
@@ -88,6 +91,9 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE etransmessagetext SET "
 				+"MessageText         =  "+DbHelper.ParamChar+"paramMessageText "
 				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageText.EtransMessageTextNum);
+			if(etransMessageText.MessageText==null) {
+				etransMessageText.MessageText="";
+			}
 			OdSqlParameter paramMessageText=new OdSqlParameter("paramMessageText",OdDbType.Text,etransMessageText.MessageText);
 			Db.NonQ(command,paramMessageText);
 		}
@@ -101,6 +107,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(etransMessageText.MessageText==null) {
+				etransMessageText.MessageText="";
 			}
 			OdSqlParameter paramMessageText=new OdSqlParameter("paramMessageText",OdDbType.Text,etransMessageText.MessageText);
 			command="UPDATE etransmessagetext SET "+command

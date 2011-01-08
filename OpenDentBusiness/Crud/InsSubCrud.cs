@@ -89,6 +89,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(insSub.SubscriberID)+"',"
 				+DbHelper.ParamChar+"paramBenefitNotes,"
 				+"'"+POut.String(insSub.SubscNote)+"')";
+			if(insSub.BenefitNotes==null) {
+				insSub.BenefitNotes="";
+			}
 			OdSqlParameter paramBenefitNotes=new OdSqlParameter("paramBenefitNotes",OdDbType.Text,insSub.BenefitNotes);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramBenefitNotes);
@@ -112,6 +115,9 @@ namespace OpenDentBusiness.Crud{
 				+"BenefitNotes =  "+DbHelper.ParamChar+"paramBenefitNotes, "
 				+"SubscNote    = '"+POut.String(insSub.SubscNote)+"' "
 				+"WHERE InsSubNum = "+POut.Long(insSub.InsSubNum);
+			if(insSub.BenefitNotes==null) {
+				insSub.BenefitNotes="";
+			}
 			OdSqlParameter paramBenefitNotes=new OdSqlParameter("paramBenefitNotes",OdDbType.Text,insSub.BenefitNotes);
 			Db.NonQ(command,paramBenefitNotes);
 		}
@@ -157,6 +163,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(insSub.BenefitNotes==null) {
+				insSub.BenefitNotes="";
 			}
 			OdSqlParameter paramBenefitNotes=new OdSqlParameter("paramBenefitNotes",OdDbType.Text,insSub.BenefitNotes);
 			command="UPDATE inssub SET "+command

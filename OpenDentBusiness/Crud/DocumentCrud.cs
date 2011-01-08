@@ -115,7 +115,13 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+DbHelper.ParamChar+"paramRawBase64,"
 				+DbHelper.ParamChar+"paramThumbnail)";
+			if(document.RawBase64==null) {
+				document.RawBase64="";
+			}
 			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,document.RawBase64);
+			if(document.Thumbnail==null) {
+				document.Thumbnail="";
+			}
 			OdSqlParameter paramThumbnail=new OdSqlParameter("paramThumbnail",OdDbType.Text,document.Thumbnail);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramRawBase64,paramThumbnail);
@@ -152,7 +158,13 @@ namespace OpenDentBusiness.Crud{
 				+"RawBase64     =  "+DbHelper.ParamChar+"paramRawBase64, "
 				+"Thumbnail     =  "+DbHelper.ParamChar+"paramThumbnail "
 				+"WHERE DocNum = "+POut.Long(document.DocNum);
+			if(document.RawBase64==null) {
+				document.RawBase64="";
+			}
 			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,document.RawBase64);
+			if(document.Thumbnail==null) {
+				document.Thumbnail="";
+			}
 			OdSqlParameter paramThumbnail=new OdSqlParameter("paramThumbnail",OdDbType.Text,document.Thumbnail);
 			Db.NonQ(command,paramRawBase64,paramThumbnail);
 		}
@@ -248,7 +260,13 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			if(document.RawBase64==null) {
+				document.RawBase64="";
+			}
 			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,document.RawBase64);
+			if(document.Thumbnail==null) {
+				document.Thumbnail="";
+			}
 			OdSqlParameter paramThumbnail=new OdSqlParameter("paramThumbnail",OdDbType.Text,document.Thumbnail);
 			command="UPDATE document SET "+command
 				+" WHERE DocNum = "+POut.Long(document.DocNum);

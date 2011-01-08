@@ -85,6 +85,9 @@ namespace OpenDentBusiness.Crud{
 				+DbHelper.ParamChar+"paramNote,"
 				+    POut.Bool  (procNote.SigIsTopaz)+","
 				+"'"+POut.String(procNote.Signature)+"')";
+			if(procNote.Note==null) {
+				procNote.Note="";
+			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,procNote.Note);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramNote);
@@ -106,6 +109,9 @@ namespace OpenDentBusiness.Crud{
 				+"SigIsTopaz   =  "+POut.Bool  (procNote.SigIsTopaz)+", "
 				+"Signature    = '"+POut.String(procNote.Signature)+"' "
 				+"WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum);
+			if(procNote.Note==null) {
+				procNote.Note="";
+			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,procNote.Note);
 			Db.NonQ(command,paramNote);
 		}
@@ -140,6 +146,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(procNote.Note==null) {
+				procNote.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,procNote.Note);
 			command="UPDATE procnote SET "+command

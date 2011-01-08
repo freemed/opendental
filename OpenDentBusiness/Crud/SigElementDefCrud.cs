@@ -83,6 +83,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(sigElementDef.SigText)+"',"
 				+DbHelper.ParamChar+"paramSound,"
 				+    POut.Int   (sigElementDef.ItemOrder)+")";
+			if(sigElementDef.Sound==null) {
+				sigElementDef.Sound="";
+			}
 			OdSqlParameter paramSound=new OdSqlParameter("paramSound",OdDbType.Text,sigElementDef.Sound);
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command,paramSound);
@@ -103,6 +106,9 @@ namespace OpenDentBusiness.Crud{
 				+"Sound           =  "+DbHelper.ParamChar+"paramSound, "
 				+"ItemOrder       =  "+POut.Int   (sigElementDef.ItemOrder)+" "
 				+"WHERE SigElementDefNum = "+POut.Long(sigElementDef.SigElementDefNum);
+			if(sigElementDef.Sound==null) {
+				sigElementDef.Sound="";
+			}
 			OdSqlParameter paramSound=new OdSqlParameter("paramSound",OdDbType.Text,sigElementDef.Sound);
 			Db.NonQ(command,paramSound);
 		}
@@ -136,6 +142,9 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(command==""){
 				return;
+			}
+			if(sigElementDef.Sound==null) {
+				sigElementDef.Sound="";
 			}
 			OdSqlParameter paramSound=new OdSqlParameter("paramSound",OdDbType.Text,sigElementDef.Sound);
 			command="UPDATE sigelementdef SET "+command

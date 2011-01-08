@@ -463,6 +463,9 @@ using System.Drawing;"+rn);
 				}
 			}
 			for(int i=0;i<paramList.Count;i++) {
+				strb.Append(rn+t3+"if("+obj+"."+paramList[i].ParameterName+"==null) {");
+				strb.Append(rn+t4+""+obj+"."+paramList[i].ParameterName+"=\"\";");
+				strb.Append(rn+t3+"}");
 				//example: OdSqlParameter paramNote=new OdSqlParameter("paramNote",
 				//           OdDbType.Text,procNote.Note);
 				strb.Append(rn+t3+"OdSqlParameter param"+paramList[i].ParameterName+"=new OdSqlParameter(\"param"+paramList[i].ParameterName+"\","
@@ -595,6 +598,9 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+obj+"."+priKey.Name+");");
 			}
 			for(int i=0;i<paramList.Count;i++) {
+				strb.Append(rn+t3+"if("+obj+"."+paramList[i].ParameterName+"==null) {");
+				strb.Append(rn+t4+""+obj+"."+paramList[i].ParameterName+"=\"\";");
+				strb.Append(rn+t3+"}");
 				strb.Append(rn+t3+"OdSqlParameter param"+paramList[i].ParameterName+"=new OdSqlParameter(\"param"+paramList[i].ParameterName+"\","
 					+"OdDbType.Text,"+obj+"."+paramList[i].ParameterName+");");
 			}
@@ -700,6 +706,9 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t4+"return;");
 				strb.Append(rn+t3+"}");
 				for(int i=0;i<paramList.Count;i++) {
+					strb.Append(rn+t3+"if("+obj+"."+paramList[i].ParameterName+"==null) {");
+					strb.Append(rn+t4+""+obj+"."+paramList[i].ParameterName+"=\"\";");
+					strb.Append(rn+t3+"}");
 					strb.Append(rn+t3+"OdSqlParameter param"+paramList[i].ParameterName+"=new OdSqlParameter(\"param"+paramList[i].ParameterName+"\","
 					+"OdDbType.Text,"+obj+"."+paramList[i].ParameterName+");");
 				}
