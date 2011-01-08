@@ -29,8 +29,8 @@ namespace OpenDental {
 		private void FormMobileSetup_Load(object sender,EventArgs e) {
 			InitializeVariables();
 			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
-			textboxMobileSyncServerURL.Text=MobileSyncServerURL;
-			textBoxSynchMinutes.Text=MobileSyncIntervalMinutes+"";
+			//textboxMobileSyncServerURL.Text=MobileSyncServerURL;
+			//textBoxSynchMinutes.Text=MobileSyncIntervalMinutes+"";
 			textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
 			butSavePreferences.Enabled=false;
 		}
