@@ -5,8 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using OpenDentBusiness;
 using OpenDentBusiness.Mobile;
+
 
 namespace OpenDental {
 	public partial class FormMobileSetup:Form {
@@ -172,21 +174,25 @@ namespace OpenDental {
 		}
 
 		private void butSavePreferences_Click(object sender,EventArgs e) {
-			Prefs.UpdateString(PrefName.MobileSyncServerURL,textboxMobileSyncServerURL.Text.Trim());
-			MobileSyncServerURL=textboxMobileSyncServerURL.Text.Trim();
+			Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text.Trim());
+			MobileSyncServerURL=textMobileSyncServerURL.Text.Trim();
 			if(!FieldsValid()) {
 				return;
 			}
 			SetMobileExcludeApptsBeforeDate();
 			butSavePreferences.Enabled=false;
-
+			//bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"[0-9]+");//find the first group of numbers
+			//		o Must be at least 10 characters
+			//o Must contain at least one one lower case letter, one upper case letter, one digit and one special character
+			//o Valid special characters are -   @#$%^&+=
+			//^.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$
 			if(textMobilePassword.Text.Trim()!="") {
 				mb.SetMobileWebPassword(RegistrationKey,textMobilePassword.Text.Trim());
 			}
 			bool PaidCustomer=true; // check for payment here
 			if(PaidCustomer) {
-				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textBoxSynchMinutes.Text));
-				MobileSyncIntervalMinutes=PIn.Int(textBoxSynchMinutes.Text);
+				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textSynchMinutes.Text));
+				MobileSyncIntervalMinutes=PIn.Int(textSynchMinutes.Text);
 				//start timer on main form
 				if(MobileSyncIntervalMinutes!=0) {
 					frmOD.StartTimerWebHostSynch();
@@ -199,17 +205,25 @@ namespace OpenDental {
 
 		}
 
-		private void textboxMobileSyncServerURL_TextChanged(object sender,EventArgs e) {
+		private void textMobileSyncServerURL_TextChanged(object sender,EventArgs e) {
 			butSavePreferences.Enabled=true;
 		}
 
-		private void textBoxSynchMinutes_TextChanged(object sender,EventArgs e) {
+		private void textSynchMinutes_TextChanged(object sender,EventArgs e) {
+			butSavePreferences.Enabled=true;
+		}
+
+		private void textMobileUserName_TextChanged(object sender,EventArgs e) {
+			butSavePreferences.Enabled=true;
+		}
+
+		private void textMobilePassword_TextChanged(object sender,EventArgs e) {
 			butSavePreferences.Enabled=true;
 		}
 
 		private bool FieldsValid() {
 			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""
-				||textBoxSynchMinutes.errorProvider1.GetError(textBoxSynchMinutes)!="") {
+				||textSynchMinutes.errorProvider1.GetError(textSynchMinutes)!="") {
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
@@ -359,6 +373,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+
 
 
 
