@@ -91,17 +91,17 @@ namespace OpenDentBusiness{
 				}
 				//incomplete: there is no check here for whether person is already clocked out when they set this.
 				//but it's no big deal if their phone keeps ringing.
-				PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
+				//PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
 			}
 			else{
 				Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,phoneCur.Extension,phoneCur.EmpCurrent);
-				PhoneAsterisks.SetRingGroups(phoneCur.Extension,AsteriskRingGroups.None);
+				//PhoneAsterisks.SetRingGroups(phoneCur.Extension,AsteriskRingGroups.None);
 			}
 			//then the old extension for the emp.  But only if it's different.
 			long defaultExtension=Employees.GetEmp(phoneCur.EmpCurrent).PhoneExt;
 			if(defaultExtension > 0 && defaultExtension != phoneCur.Extension){
 				Phones.SetPhoneStatus(ClockStatusEnum.None,(int)defaultExtension,0);//clear it out.
-				PhoneAsterisks.SetRingGroups((int)defaultExtension,AsteriskRingGroups.None);
+				//PhoneAsterisks.SetRingGroups((int)defaultExtension,AsteriskRingGroups.None);
 			}
 			return phoneCur.PhoneOverrideNum;
 		}
@@ -128,11 +128,11 @@ namespace OpenDentBusiness{
 					ClockStatusEnum status=Phones.GetClockStatusFromEmp(tableEmp.Rows[0][0].ToString());
 					Phones.SetPhoneStatus(status,phoneCur.Extension,phoneCur.EmpCurrent);
 				}
-				PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
+				//PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
 			}
 			else{
 				Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,phoneCur.Extension,phoneCur.EmpCurrent);
-				PhoneAsterisks.SetRingGroups(phoneCur.Extension,AsteriskRingGroups.None);
+				//PhoneAsterisks.SetRingGroups(phoneCur.Extension,AsteriskRingGroups.None);
 			}
 		}
 
@@ -152,7 +152,7 @@ namespace OpenDentBusiness{
 				if(tableEmp.Rows.Count>0){
 					ClockStatusEnum status=Phones.GetClockStatusFromEmp(tableEmp.Rows[0][0].ToString());
 					Phones.SetPhoneStatus(status,phoneCur.Extension,empNumOriginal);
-					PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
+					//PhoneAsterisks.SetToDefaultRingGroups(phoneCur.Extension,phoneCur.EmpCurrent);
 				}
 			}
 			else{
@@ -167,7 +167,7 @@ namespace OpenDentBusiness{
 				if(tableEmp.Rows.Count>0){
 					ClockStatusEnum status=Phones.GetClockStatusFromEmp(tableEmp.Rows[0][0].ToString());
 					Phones.SetPhoneStatus(status,(int)defaultExtension,phoneCur.EmpCurrent);
-					PhoneAsterisks.SetToDefaultRingGroups((int)defaultExtension,phoneCur.EmpCurrent);
+					//PhoneAsterisks.SetToDefaultRingGroups((int)defaultExtension,phoneCur.EmpCurrent);
 				}
 			}
 		}
