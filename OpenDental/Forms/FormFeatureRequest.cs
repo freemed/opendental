@@ -359,10 +359,10 @@ namespace OpenDental{
 		}
 
 		private void buttonAdd_Click(object sender,EventArgs e) {
-			//if(textSearch.Text==""){
-			//	MsgBox.Show(this,"Please perform a search first.\r\nHint: Type a few letters into the search box.");
-			//	return;
-			//}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"The majority of feature requests that users submit are duplicates of existing requests.  Please take the time to do a thorough search for different keywords and become familiar with similar requests before adding one of your own.  Continue?")) 
+			{
+				return;
+			}
 			FormRequestEdit FormR=new FormRequestEdit();
 			//FormR.IsNew=true;
 			FormR.IsAdminMode=isAdminMode;
