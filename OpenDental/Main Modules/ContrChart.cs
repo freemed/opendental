@@ -3486,6 +3486,10 @@ namespace OpenDental{
 		}
 
 		private void OnToothChart_Click() {
+			if(Programs.UsingOrion) {
+				menuItemChartSave_Click(this,new EventArgs());
+				return;
+			}
 			MsgBox.Show(this,"Please use dropdown list.");
 			return;
 		}
@@ -3582,7 +3586,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Unable to save file: ") + ex.Message);
 				return;
 			}
-			MsgBox.Show(this,"Done.");
+			MsgBox.Show(this,"Saved.");
 		}
 
 		public void FillPtInfo() {
@@ -4728,7 +4732,7 @@ namespace OpenDental{
 			ProcButtonList=ProcButtons.GetForCat(DefC.Short[(int)DefCat.ProcButtonCats][listButtonCats.SelectedIndex-1].DefNum);
 			ListViewItem item;
 			for(int i=0;i<ProcButtonList.Length;i++){
-				if(ProcButtonList[i].ButtonImage!=null) {
+				if(ProcButtonList[i].ButtonImage!="") {
 					//image keys are simply the ProcButtonNum
 					imageListProcButtons.Images.Add(ProcButtonList[i].ProcButtonNum.ToString(),PIn.Bitmap(ProcButtonList[i].ButtonImage));
 				}
