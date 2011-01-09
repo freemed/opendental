@@ -154,7 +154,12 @@ namespace OpenDentBusiness {
 
 		public static Bitmap OpenImage(Document doc,string patFolder) {
 			if(!PrefC.UsingAtoZfolder) {
-				return PIn.Bitmap(doc.RawBase64);
+				if(HasImageExtension(doc.FileName)) {
+					return PIn.Bitmap(doc.RawBase64);
+				}
+				else {
+					return null;
+				}
 			}
 			else {
 				string srcFileName = ODFileUtils.CombinePaths(patFolder,doc.FileName);
@@ -258,21 +263,19 @@ namespace OpenDentBusiness {
 			doc.DocCategory=docCategory;
 			doc.PatNum=pat.PatNum;
 			doc.ImgType=ImageType.Photo;
-			if(!PrefC.UsingAtoZfolder) {
-				doc.RawBase64=POut.Bitmap(image,ImageFormat.Jpeg);
-				doc.Thumbnail="";
-				//no thumbnail yet
-			}
+			//doc.RawBase64 handled further down.
+			//doc.Thumbnail="";//no thumbnail yet
 			Documents.Insert(doc,pat);//this assigns a filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
-			if(PrefC.UsingAtoZfolder) {
-				try {
-					SaveDocument(doc,image,patFolder);
+			try {
+				SaveDocument(doc,image,patFolder);
+				if(PrefC.UsingAtoZfolder) {
+					Documents.Update(doc);
 				}
-				catch {
-					Documents.Delete(doc);
-					throw;
-				}
+			}
+			catch {
+				Documents.Delete(doc);
+				throw;
 			}
 			return doc;
 		}
@@ -313,7 +316,11 @@ namespace OpenDentBusiness {
 			myEncoderParameters.Param[0] = myEncoderParameter;
 			//AutoCrop()?
 			try {
-				SaveDocument(doc, image, myImageCodecInfo, myEncoderParameters,patFolder);
+				SaveDocument(doc,image,myImageCodecInfo,myEncoderParameters,patFolder);
+				if(!PrefC.UsingAtoZfolder) {
+					Documents.Update(doc);
+					//no thumbnail yet
+				}
 			}
 			catch {
 				Documents.Delete(doc);
@@ -377,57 +384,15 @@ namespace OpenDentBusiness {
 			SaveDocument(document, filename,patFolder);
 		}
 
-		/*public static void ImportPdf(string sPDF,Patient pat) {
-			string patFolder=GetPatientFolder(pat);
-			Document DocCur = new Document();
-			DocCur.FileName = ".pdf";
-			DocCur.DateCreated = DateTime.Today;
-			//Find the category, hopefully 'Patient Information'
-			//otherwise, just default to first one
-			Def[] defs=DefC.GetList(DefCat.ImageCats);
-			long iCategory = defs[0].DefNum; ;
-			for(int i = 0;i < defs.Length;i++) {
-				if(defs[i].ItemName == "Patient Information") {
-					iCategory = defs[i].DefNum;
-				}
-			}
-			DocCur.DocCategory = iCategory;
-			DocCur.ImgType = ImageType.Document;
-			DocCur.Description = "New Patient Form";
-			DocCur.PatNum = pat.PatNum;
-			Documents.Insert(DocCur,pat);//this assigns a filename and saves to db
-			DocCur=Documents.GetByNum(DocCur.DocNum);
-			// Save the PDF to a temporary file, then import that file.
-			string tempFileName = Path.GetTempFileName();
-			try {
-				// Convert the Base64 UUEncoded input into binary output.
-				byte[] binaryData = Convert.FromBase64String(sPDF);
-				// Write out the decoded data.
-				FileStream outFile = new FileStream(tempFileName, FileMode.Create, FileAccess.Write);
-				outFile.Write(binaryData, 0, binaryData.Length);
-				outFile.Close();
-				//Above is the code to save the file to a particular directory from NewPatientForm.com
-				// Import this file
-				SaveDocument(DocCur, tempFileName,patFolder);
-			}
-			catch {
-				Documents.Delete(DocCur);
-				throw;
-			}
-			finally {
-				if(File.Exists(tempFileName))
-					File.Delete(tempFileName);
-			}
-		}*/
-
-		///<summary>patFolder must be fully qualified and valid.</summary>
+		///<summary>If using AtoZ folder, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,string patFolder) {
-			//if(ImageStoreIsDatabase) {
-			//	SaveDocument(doc,image,image.RawFormat);
-			//}
-			//else {
-			string srcFile = ODFileUtils.CombinePaths(patFolder,doc.FileName);
-			image.Save(srcFile);
+			if(!PrefC.UsingAtoZfolder) {
+				doc.RawBase64=POut.Bitmap(image,ImageFormat.Jpeg);
+			}
+			else {
+				string srcFile = ODFileUtils.CombinePaths(patFolder,doc.FileName);
+				image.Save(srcFile);
+			}
 		}
 
 		///<summary>patFolder must be fully qualified and valid.</summary>
@@ -442,16 +407,18 @@ namespace OpenDentBusiness {
 			image.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),ImageFormat.Bmp);
 		}
 
-		///<summary>patFolder must be fully qualified and valid.</summary>
+		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string patFolder) {
-			//if(ImageStoreIsDatabase) {
-			//	using(MemoryStream stream = new MemoryStream()) {
-			//		image.Save(stream,codec,encoderParameters);
-			//		SaveDocumentToDatabase(doc,stream);
-			//	}
-			//}
-			//else {
-			image.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),codec,encoderParameters);
+			if(!PrefC.UsingAtoZfolder) {
+				using(MemoryStream stream=new MemoryStream()) {
+					image.Save(stream,codec,encoderParameters);
+					byte[] rawData=stream.ToArray();
+					doc.RawBase64=Convert.ToBase64String(rawData);
+				}
+			}
+			else {
+				image.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),codec,encoderParameters);
+			}
 		}
 
 		///<summary>patFolder must be fully qualified and valid.</summary>
@@ -464,33 +431,6 @@ namespace OpenDentBusiness {
 			//else {
 			File.Copy(filename,ODFileUtils.CombinePaths(patFolder,doc.FileName));
 		}
-
-		/*
-		private static void SaveDocumentToDatabase(Document doc,Stream stream) {
-			// Clone the contents to a byte array
-			int length = (int)stream.Length;
-			byte[] buffer = new byte[length];
-			stream.Read(buffer,0,length);
-			using(IDbConnection connection = DataSettings.GetConnection())
-			using(IDbCommand command = connection.CreateCommand()) {
-				command.CommandText =@"INSERT INTO files (DocNum, Data, Thumbnail) VALUES (?DocNum, ?Data, NULL)";
-				IDataParameter docNumParameter = command.CreateParameter();
-				docNumParameter.ParameterName = "?DocNum";
-				docNumParameter.Value = doc.DocNum;
-				command.Parameters.Add(docNumParameter);
-				IDataParameter dataParameter = command.CreateParameter();
-				dataParameter.ParameterName = "?Data";
-				dataParameter.Value = buffer;
-				command.Parameters.Add(dataParameter);
-				connection.Open();
-				command.ExecuteNonQuery();
-				connection.Close();
-			}
-		}*/
-
-		//public static void DeleteThumbnailImage(Document doc) {
-		//	DeleteThumbnailImageInternal(doc);
-		//}
 
 		public static void DeleteImage(IList<Document> documents,string patFolder) {
 			//string patFolder=GetPatientFolder(pat);

@@ -770,7 +770,8 @@ namespace OpenDental{
 					if(currentImages[0]==null){
 						if(ImageHelper.HasImageExtension(selectionDoc.FileName)) {
 							MessageBox.Show(Lan.g(this,"File not found: ") + selectionDoc.FileName);
-						}else if(Path.GetExtension(selectionDoc.FileName).ToLower()==".pdf"){//Adobe acrobat file.
+						}
+						else if(Path.GetExtension(selectionDoc.FileName).ToLower()==".pdf"){//Adobe acrobat file.
 							try{
 								axAcroPDF1=new AxAcroPDFLib.AxAcroPDF();
 								this.Controls.Add(axAcroPDF1);
@@ -781,11 +782,13 @@ namespace OpenDental{
 								string pdfFilePath=ODFileUtils.CombinePaths(PatFolder,selectionDoc.FileName);
 								if(!File.Exists(pdfFilePath)){
 									MessageBox.Show(Lan.g(this,"File not found: ") + selectionDoc.FileName);
-								}else{
+								}
+								else{
 									axAcroPDF1.LoadFile(pdfFilePath);//The return status of this function doesn't seem to be helpful.
 									PictureBox1.Visible=false;
 								}
-							}catch{
+							}
+							catch{
 								//An exception can happen if they do not have Adobe Acrobat Reader version 8.0 or later installed.
 								//Simply ignore this exception and do nothing. We never used to display .pdf files anyway, so we
 								//essentially revert back to the old behavior in this case.
@@ -815,7 +818,8 @@ namespace OpenDental{
 						new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),out imageZoom,
 						out zoomLevel,out zoomFactor,out imageTranslation);
 					RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,imageZoom,imageTranslation);
-				}else{//document
+				}
+				else{//document
 					//Render the initial image within the current bounds of the picturebox (if the document is an image).
 					InvalidateSettings(ApplyImageSettings.ALL,true);
 				}
