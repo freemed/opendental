@@ -118,6 +118,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
+			this.textNote.AcceptsReturn = true;
 			this.textNote.Location = new System.Drawing.Point(75,64);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";

@@ -65,6 +65,8 @@ namespace OpenDentBusiness{
 		///<summary>If none of the supplied taxonomies works.  This will show on claims.</summary>
 		public string TaxonomyCodeOverride;
 
+		//Need: StateRxNum varchar255
+
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("ProvColor",typeof(int))]
 		public int ProvColorXml {
