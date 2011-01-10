@@ -15,8 +15,10 @@ namespace Crud {
 		private const string t5="\t\t\t\t\t";
 		private static string tb = "";
 
+		///<summary>Generates C# code to add a table.</summary>
 		public static string AddTable(string tableName,List<DbSchemaCol> cols,int tabInset) {
 			StringBuilder strb = new StringBuilder();
+			List<DbSchemaCol> indexes = new List<DbSchemaCol>();
 			tb="";//must reset tabs each time method is called
 			for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
 				tb+="\t";
@@ -28,25 +30,37 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
 				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+(GetMySqlType(cols[i])=="timestamp"?"":" NOT NULL")+(GetMySqlBlankData(cols[i])=="\"\""||GetMySqlBlankData(cols[i])=="0"||GetMySqlType(cols[i])=="timestamp"?"":" DEFAULT "+GetMySqlBlankData(cols[i]))+(i==cols.Count-1?"":","));
+				if(cols[i].DataType==OdDbType.Long) {//OdDbType.Long==bigint in MySQL. All bigints are assumed to be either keys or foreign keys.
+					indexes.Add(cols[i]);
+				}
 			}
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			for(int i=0;i<indexes.Count;i++) {
+				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+indexes[i].ColumnName.ToUpper()+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			}
 			strb.Append(rn+tb+"}");
 			#endregion
 			#region Oracle
 			strb.Append(rn+tb+"else {//oracle");
-			strb.Append(rn+tb+t1+"try {");
-			strb.Append(rn+tb+t2+"command=\"DROP TABLE "+tableName+"\";");
+			strb.Append(rn+tb+t1+"command=\"BEGIN EXECUTE IMMEDIATE 'DROP TABLE "+tableName+"'; EXCEPTION WHEN OTHERS THEN NULL; END;\";");//Equivalent to "If drop table if exists <table>"
 			strb.Append(rn+tb+t2+"Db.NonQ(command);");
-			strb.Append(rn+tb+t1+"}");
-			strb.Append(rn+tb+t1+"catch{}");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
 				string tempData = GetOracleBlankData(cols[i]);//to save calls to the function, and shorten the following line of code.
 				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetOracleType(cols[i])+(tempData==null?"":(tempData=="0"?" NOT NULL":" DEFAULT "+tempData+" NOT NULL"))+(i==cols.Count-1?"":","));
+//        Columns are added to index from the MySQL section above. Technically the same columns should have indexes in MySql and Oracle.
+//				if(cols[i].DataType==OdDbType.Long) {//all OdDbType.Long columns are assumed to be either keys or foreign keys.
+//					indexes.Add(cols[i]);
+//				}
 			}
 			strb.Append(rn+tb+t2+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			for(int i=0;i<indexes.Count;i++) {
+				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+indexes[i].ColumnName.ToUpper()+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			}
 			strb.Append(rn+tb+"}");
 			#endregion
 			return strb.ToString();
@@ -63,17 +77,24 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" NOT NULL\";");
 //			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			if(col.DataType==OdDbType.Long) {//key or foreign key
+				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+col.ColumnName.ToUpper()+" ON "+tableName+" ("+col.ColumnName+")\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			}
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			if(GetOracleBlankData(col)==null) {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
-			}
-			else {//Non string types must be filled with "blank" data and set to NOT NULL
+			if(GetOracleBlankData(col)!=null) {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
+			//Non string types must be filled with "blank" data and set to NOT NULL
 				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+GetOracleBlankData(col)+" WHERE "+col.ColumnName+" IS NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+				if(col.DataType==OdDbType.Long) {//key or foreign key
+					strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+col.ColumnName.ToUpper()+" ON "+tableName+" ("+col.ColumnName+")\";");
+					strb.Append(rn+tb+t1+"Db.NonQ(command);");
+				}
 			}
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
@@ -97,7 +118,7 @@ namespace Crud {
 			return strb.ToString();
 		}
 
-		///<summary></summary>
+		///<summary>Does not work for Timestamp because of Oracle triggers.</summary>
 		public static string DropColumn(string tableName,string colName,int tabInset) {
 			StringBuilder strb = new StringBuilder();
 			tb="";//must reset tabs each time method is called

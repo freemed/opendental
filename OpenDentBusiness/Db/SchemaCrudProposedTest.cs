@@ -23,16 +23,16 @@ namespace OpenDentBusiness {
 					TextSmallTest varchar(255) NOT NULL,
 					TextMediumTest text NOT NULL,
 					TextLargeTest text NOT NULL,
-					VarCharTest varchar(255) NOT NULL
+					VarCharTest varchar(255) NOT NULL,
+					DropableColumn tinyint NOT NULL
 					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				command=@"CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (TempCoreNum)";
 				Db.NonQ(command);
 			}
 			else {//oracle
-				try {
-					command="DROP TABLE tempcore";
-					Db.NonQ(command);
-				}	
-				catch{}
+				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempcore'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
@@ -45,8 +45,11 @@ namespace OpenDentBusiness {
 					TextSmallTest varchar2(255),
 					TextMediumTest clob,
 					TextLargeTest clob,
-					VarCharTest varchar2(255)
+					VarCharTest varchar2(255),
+					DropableColumn number(3) NOT NULL
 					)";
+				Db.NonQ(command);
+				command=@"CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (TempCoreNum)";
 				Db.NonQ(command);
 			}
 		}
