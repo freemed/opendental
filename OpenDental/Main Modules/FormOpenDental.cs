@@ -1736,9 +1736,9 @@ namespace OpenDental{
 				FillSignalButtons(null);
 			}
 			if(itypeList.Contains((int)InvalidType.Programs) || isAll) {
-				//if(Programs.GetCur(ProgramName.PT).Enabled) {//old bridge
-				//	Bridges.PaperlessTechnology.InitializeFileWatcher();
-				//}
+				if(Programs.GetCur(ProgramName.PT).Enabled) {
+					Bridges.PaperlessTechnology.InitializeFileWatcher();
+				}
 				if(Programs.UsingEcwTight()) {
 					myOutlookBar.Buttons[0].Visible=false;
 					myOutlookBar.Buttons[1].Visible=false;

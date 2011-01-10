@@ -217,6 +217,7 @@
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
     <Compile Include="Bridges\Orion.cs" />
+    <Compile Include="Bridges\PaperlessTechnology.cs" />
     <Compile Include="Bridges\PayConnect.cs" />
     <Compile Include="Bridges\PreXion.cs" />
     <Compile Include="Bridges\Ewoo.cs" />
