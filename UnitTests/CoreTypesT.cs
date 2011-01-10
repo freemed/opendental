@@ -34,11 +34,8 @@ namespace UnitTests {
 				DataCore.NonQ(command);
 			}
 			else {//oracle
-				try {
-					command="DROP TABLE tempcore";
-					DataCore.NonQ(command);
-				}
-				catch{ }
+				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempcore'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+				DataCore.NonQ(command);
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
@@ -55,74 +52,26 @@ namespace UnitTests {
 					)";
 				DataCore.NonQ(command);
 			}
-			/*
-			cols=new List<DbSchemaCol>();
-			cols.Add(new DbSchemaCol("Names",OdDbType.VarChar255));
-			DbSchema.AddTable7_7("tempgroupconcat",cols);*/
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="DROP TABLE IF EXISTS tempgroupconcat";
+				DataCore.NonQ(command);
+				command=@"CREATE TABLE tempgroupconcat (
+					Names varchar(255)
+					) DEFAULT CHARSET=utf8";
+				DataCore.NonQ(command);
+			}
+			else {//oracle
+				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempgroupconcat'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+				DataCore.NonQ(command);
+				command=@"CREATE TABLE tempgroupconcat (
+					Names varchar2(255)
+					)";
+				DataCore.NonQ(command);
+			}
 			retVal+="Temp tables created.\r\n";
 			//retVal+="Temp tables cannot yet be created.\r\n";
 			return retVal;
 		}
-
-		/*
-		/// <summary></summary>
-		public static string CreateTempTableMySql() {
-			string retVal="";
-			DatabaseTools.SetDbConnection("unittest",false);
-			string command="";
-			command="DROP TABLE IF EXISTS tempcore";
-			DataCore.NonQ(command);
-			command=@"CREATE TABLE tempcore (
-			TimeOfDayTest time NOT NULL default '00:00:00',
-			TimeStampTest timestamp,
-			DateTest date NOT NULL default '0001-01-01',
-			DateTimeTest datetime NOT NULL default '0001-01-01 00:00:00',
-			TimeSpanTest time NOT NULL default '00:00:00',
-			CurrencyTest double NOT NULL,
-			BoolTest tinyint NOT NULL,
-			TextTest text NOT NULL,
-			CharTest char(1) NOT NULL,
-			ClobTest mediumtext NOT NULL,
-			BlobTest mediumblob NOT NULL
-			) DEFAULT CHARSET=utf8";
-			DataCore.NonQ(command);
-			command="DROP TABLE IF EXISTS tempgroupconcat";
-			DataCore.NonQ(command);
-			command=@"CREATE TABLE tempgroupconcat (
-			_name varchar(255) NOT NULL 
-			) DEFAULT CHARSET=utf8";
-			DataCore.NonQ(command);
-			retVal+="Temp tables created.\r\n";
-			return retVal;
-		}
-
-		/// <summary></summary>
-		public static string CreateTempTableOracle() {
-			string retVal="";
-			DatabaseTools.SetDbConnection("",true);
-			string command="";
-			command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE TEMPCORE'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-			DataCore.NonQ(command);
-			command="CREATE TABLE TEMPCORE "
-			+"(TimeOfDayTest TIMESTAMP, "
-			+"TimeStampTest DATE, "
-			+"DateTest DATE, "
-			+"TimeSpanTest VARCHAR2(255), "
-			+"DoubleTest FLOAT(24), "
-			+"BoolTest NUMBER(3,0), "
-			+"Varchar2Test VARCHAR2(4000), "
-			+"CharTest CHAR(1), "
-			+"ClobTest CLOB, "
-			+"BlobTest BLOB)";
-			DataCore.NonQ(command);
-			command=command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE UNITTEST.TEMPGROUPCONCAT'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-			DataCore.NonQ(command);
-			command="CREATE TABLE UNITTEST.TEMPGROUPCONCAT " 
-			+"(	NAME VARCHAR2(255) NOT NULL ENABLE )";
-			DataCore.NonQ(command);
-			retVal+="Temp tables created.\r\n";
-			return retVal;
-		}*/
 
 		/// <summary></summary>
 		public static string RunAll() {
@@ -224,7 +173,6 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			retVal+="Currency: Passed.\r\n";
 			//group_concat------------------------------------------------------------------------------------
-			/*
 			command="INSERT INTO tempgroupconcat VALUES ('name1')";
 			DataCore.NonQ(command);
 			command="INSERT INTO tempgroupconcat VALUES ('name2')";
@@ -241,7 +189,7 @@ namespace UnitTests {
 			}
 			command="DELETE FROM tempgroupconcat";
 			DataCore.NonQ(command);
-			retVal+="Group_concat: Passed.\r\n";*/
+			retVal+="Group_concat: Passed.\r\n";
 			//bool,pos------------------------------------------------------------------------------------
 			bool bool1;
 			bool bool2;
@@ -346,8 +294,18 @@ namespace UnitTests {
 				retVal+="SHOW CREATE TABLE: Not applicable to Oracle.\r\n";
 			}
 			//Cleanup---------------------------------------------------------------------------------------
-			//DbSchema.DropTable7_7("tempcore");
-			//DbSchema.DropTable7_7("tempgroupconcat");
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="DROP TABLE IF EXISTS tempcore";
+				DataCore.NonQ(command);
+				command="DROP TABLE IF EXISTS tempgroupconcat";
+				DataCore.NonQ(command);
+			}
+			else {
+				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempcore'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+				DataCore.NonQ(command);
+				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempgroupconcat'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+				DataCore.NonQ(command);
+			}
 			retVal+="CoreTypes test done.\r\n";
 			return retVal;
 		}
