@@ -21,9 +21,9 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Family>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command=//GetFamilySelectCommand(patNum);
-				"SELECT patient.* FROM patient WHERE Guarantor = ("
+				"SELECT patient.*,CASE WHEN Guarantor!=PatNum THEN 1 ELSE 0 END AS IsNotGuar FROM patient WHERE Guarantor = ("
 				+"SELECT Guarantor FROM patient WHERE PatNum="+POut.Long(patNum)+") "
-				+"ORDER BY CASE WHEN Guarantor=PatNum THEN 0 ELSE 1 END,Birthdate";//Guarantor!=PatNum,Birthdate";
+				+"ORDER BY IsNotGuar,Birthdate";
 			Family fam=new Family();
 			List<Patient> patients=Crud.PatientCrud.SelectMany(command);
 			foreach(Patient patient in patients) {
@@ -491,11 +491,12 @@ namespace OpenDentBusiness{
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
-				SELECT tempfambal.PatNum,tempfambal.ProvNum,tempfambal.ClinicNum,SUM(AmtBal) StartBal,SUM(AmtBal-tempfambal.InsEst) AfterIns,FName,Preferred,'0' EndBal
+				SELECT tempfambal.PatNum,tempfambal.ProvNum,tempfambal.ClinicNum,SUM(AmtBal) StartBal,SUM(AmtBal-tempfambal.InsEst) AfterIns,FName,Preferred,'0' EndBal,
+					CASE WHEN Guarantor!=patient.PatNum THEN 1 ELSE 0 END AS IsNotGuar
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum,ClinicNum,FName,Preferred
-				ORDER BY CASE WHEN Guarantor=patient.PatNum THEN 0 ELSE 1 END,Birthdate,ProvNum,FName,Preferred;
+				ORDER BY IsNotGuar,Birthdate,ProvNum,FName,Preferred;
 
 				DROP TABLE IF EXISTS tempfambal";
 			return Db.GetTable(command);
