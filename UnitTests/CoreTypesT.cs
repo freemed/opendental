@@ -37,14 +37,14 @@ namespace UnitTests {
 				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempcore'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 				DataCore.NonQ(command);
 				command=@"CREATE TABLE tempcore (
-					TempCoreNum number(20) NOT NULL,
-					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-					TimeStampTest timestamp DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-					DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-					DateTimeTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					TempCoreNum number(20),
+					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
+					TimeStampTest timestamp DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
+					DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
+					DateTimeTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
 					TimeSpanTest varchar2(255),
-					CurrencyTest number(38,8) NOT NULL,
-					BoolTest number(3) NOT NULL,
+					CurrencyTest number(38,8),
+					BoolTest number(3),
 					TextSmallTest varchar2(4000),
 					TextMediumTest clob,
 					TextLargeTest clob,
@@ -92,7 +92,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			command="SELECT TimeOfDayTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["TimeOfDayTest"].ToString());
+			timespan2=PIn.Time(table.Rows[0]["TimeOfDayTest"].ToString());
 			if(timespan!=timespan2) {
 				throw new Exception();
 			}
@@ -107,7 +107,8 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			command="SELECT TimeSpanTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["TimeSpanTest"].ToString());
+			string tempVal=table.Rows[0]["TimeSpanTest"].ToString();
+			timespan2=PIn.TSpan(tempVal);
 			if(timespan!=timespan2) {
 				throw new Exception();
 			}
@@ -120,7 +121,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			command="SELECT TimeSpanTest FROM tempcore";
 			table=DataCore.GetTable(command);
-			timespan2=PIn.TimeSpan(table.Rows[0]["TimeSpanTest"].ToString());
+			timespan2=PIn.TSpan(table.Rows[0]["TimeSpanTest"].ToString());
 			if(timespan!=timespan2) {
 				throw new Exception();
 			}

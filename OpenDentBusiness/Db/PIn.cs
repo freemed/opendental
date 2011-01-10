@@ -177,7 +177,39 @@ namespace OpenDentBusiness{
 			}
 			try {
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					return System.TimeSpan.Parse(myString);
+						// DateTime.Parse(myString).TimeOfDay;
+				}
+				return (System.TimeSpan.Parse(myString));
+			}
+			catch {
+				return System.TimeSpan.MinValue;
+			}
+		}
+
+		///<summary>Used for Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.</summary>
+		public static TimeSpan Time(string myString) {
+			if(string.IsNullOrEmpty(myString)) {
+				return System.TimeSpan.MinValue;
+			}
+			try {
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					return DateTime.Parse(myString).TimeOfDay;
+				}
+				return (System.TimeSpan.Parse(myString));
+			}
+			catch {
+				return System.TimeSpan.MinValue;
+			}
+		}
+
+		public static TimeSpan TSpan(string myString) {
+			if (string.IsNullOrEmpty(myString)) {
+				return System.TimeSpan.MinValue;
+			}
+			try {
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					return System.TimeSpan.Parse(myString);
 				}
 				return (System.TimeSpan.Parse(myString));
 			}

@@ -77,10 +77,10 @@ namespace OpenDentBusiness {
 		public static string GroupConcat(string column,bool distinct,bool orderby) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				if(orderby) {
-					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+") ORDER BY "+column+"),'<x>'),'</x>',','))";
+					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+") ORDER BY "+column+"),'<x>'),'</x>',','),',')";
 				}
 				else {
-					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+")),'<x>'),'</x>',','))";
+					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+")),'<x>'),'</x>',','),',')";
 				}//Distinct ignored for Oracle case.
 			}
 			else {
