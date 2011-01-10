@@ -430,6 +430,9 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				return "";
+			}
 			string log="";
 			//because of the way this is grouped, it will just get one of many patients for each
 			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) ""_sumpay"",ROUND(CheckAmt,2) ""_checkamt""
@@ -852,6 +855,9 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "";
+			}
 			string log="";
 			if(isCheck){
 				command=@"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed1 > "+DbHelper.Now()+"+INTERVAL 15 MINUTE";
@@ -1182,6 +1188,9 @@ namespace OpenDentBusiness {
 		public static string PatFieldsDeleteDuplicates(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "";
 			}
 			string log="";
 			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
@@ -1982,6 +1991,9 @@ namespace OpenDentBusiness {
 		public static string RecallDuplicatesWarn(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "";
 			}
 			string log="";
 			if(RecallTypes.PerioType<1 || RecallTypes.ProphyType<1) {

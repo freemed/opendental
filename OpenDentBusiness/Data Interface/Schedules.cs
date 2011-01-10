@@ -115,11 +115,11 @@ namespace OpenDentBusiness{
 			//The GROUP_CONCAT() function returns a comma separated list of items.
 			//In this case, the ops column is filled with a comma separated list of
 			//operatories for the corresponding schedule record.
-			command="SELECT s.*,"+
-				"IFNULL(CAST((SELECT "+DbHelper.GroupConcat("so.OperatoryNum")+
+			command="SELECT s.*,"
+				+DbHelper.IfNull(DbHelper.CastToChar("(SELECT "+DbHelper.GroupConcat("so.OperatoryNum")+
 					"FROM scheduleop so "+
 					"WHERE so.ScheduleNum=s.ScheduleNum "+
-					"GROUP BY so.ScheduleNum) AS CHAR(4000)),'') ops "+
+					"GROUP BY so.ScheduleNum)"),"")+" ops "+
 				"FROM ("+command+") s";
 			DataTable table=Db.GetTable(command);
 			return ConvertTableToList(table);

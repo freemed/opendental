@@ -222,5 +222,23 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
+		public static string CastToChar(string expr) {
+			string result="CAST(";
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				result+=expr+" AS VARCHAR2(4000))";
+			}
+			else {
+				result+=expr+" AS CHAR(4000))";
+			}
+			return result;
+		}
+
+		public static string IfNull(string expr,string valWhenNull) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "CASE WHEN ("+expr+") IS NULL THEN "+expr+" ELSE '"+valWhenNull+"' END";
+			}
+			return "IFNULL("+expr+",'"+valWhenNull+"')";
+		}
+
 	}
 }
