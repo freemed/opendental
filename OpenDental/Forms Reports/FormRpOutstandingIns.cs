@@ -282,7 +282,7 @@ namespace OpenDental {
 					case "S":
 						type="Secondary";
 						break;
-					case "Preauth":
+					case "PreAuth":
 						type="Preauth";
 						break;
 					case "Other":
@@ -300,7 +300,13 @@ namespace OpenDental {
 				}
 				row.Cells.Add(type);
 				row.Cells.Add(Table.Rows[i]["LName"].ToString()+", "+Table.Rows[i]["FName"].ToString()+" "+Table.Rows[i]["MiddleI"].ToString());
-				row.Cells.Add(PIn.Date(Table.Rows[i]["DateService"].ToString()).ToShortDateString());
+				DateTime dateService=PIn.Date(Table.Rows[i]["DateService"].ToString());
+				if(dateService.Year<1880) {
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(dateService.ToShortDateString());
+				}
 				row.Cells.Add(PIn.Date(Table.Rows[i]["DateSent"].ToString()).ToShortDateString());
 				row.Cells.Add("$"+PIn.Double(Table.Rows[i]["ClaimFee"].ToString()).ToString("F"));
 				gridMain.Rows.Add(row);

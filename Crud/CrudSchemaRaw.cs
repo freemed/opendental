@@ -44,7 +44,7 @@ namespace Crud {
 			#endregion
 			#region Oracle
 			strb.Append(rn+tb+"else {//oracle");
-			strb.Append(rn+tb+t1+"command=\"BEGIN EXECUTE IMMEDIATE 'DROP TABLE "+tableName+"'; EXCEPTION WHEN OTHERS THEN NULL; END;\";");//Equivalent to "If drop table if exists <table>"
+			strb.Append(rn+tb+t1+"command=\"BEGIN EXECUTE IMMEDIATE 'DROP TABLE "+tableName+"'; EXCEPTION WHEN OTHERS THEN NULL; END;\";");//Equivalent to "drop table if exists <table>"
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
@@ -66,7 +66,7 @@ namespace Crud {
 			return strb.ToString();
 		}
 
-		/// <summary>Generates C# code to Add Column to table.</summary>
+		/// <summary>Generates C# code to Add Column to table. Does not work for Timestamps in Oracle due to triggers.</summary>
 		public static string AddColumnEnd(string tableName,DbSchemaCol col,int tabInset) {
 			StringBuilder strb = new StringBuilder();
 			tb="";//must reset tabs each time method is called
