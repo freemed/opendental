@@ -273,13 +273,13 @@ namespace OpenDentBusiness{
 			}
 			string command;
 			command="SELECT carrier.ElectID,claim.ProvBill,inssub.Subscriber,"
-				+"claim.PatNum,claim.ClaimNum "
+				+"claim.PatNum,claim.ClaimNum,CASE WHEN inssub.Subscriber!=claim.PatNum THEN 1 ELSE 0 END AS subscNotPatient "
 				+"FROM claim,insplan,inssub,carrier "
 				+"WHERE claim.PlanNum=insplan.PlanNum "
 				+"AND claim.InsSubNum=inssub.InsSubNum "
 				+"AND carrier.CarrierNum=insplan.CarrierNum "
 				+"AND ("+str.ToString()+") "
-				+"ORDER BY carrier.ElectID,claim.ProvBill,inssub.Subscriber,CASE WHEN inssub.Subscriber=claim.PatNum THEN 0 ELSE 1 END,claim.PatNum";
+				+"ORDER BY carrier.ElectID,claim.ProvBill,inssub.Subscriber,subscNotPatient,claim.PatNum";
 			DataTable table=Db.GetTable(command);
 			List<X12TransactionItem> retVal=new List<X12TransactionItem>();
 			//object[,] myA=new object[5,table.Rows.Count];
