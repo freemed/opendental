@@ -12,6 +12,7 @@ namespace UnitTests {
 		/// <summary></summary>
 		public static string CreateTempTable(bool isOracle) {
 			string retVal="";
+			DatabaseTools.SetDbConnection("unittest",isOracle);
 			string command;
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="DROP TABLE IF EXISTS tempcore";
@@ -37,7 +38,7 @@ namespace UnitTests {
 					command="DROP TABLE tempcore";
 					DataCore.NonQ(command);
 				}
-				catch(Exception e) { }
+				catch{ }
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
@@ -55,19 +56,6 @@ namespace UnitTests {
 				DataCore.NonQ(command);
 			}
 			/*
-			DatabaseTools.SetDbConnection("unittest",isOracle);
-			List<DbSchemaCol> cols=new List<DbSchemaCol>();
-			cols.Add(new DbSchemaCol("TimeOfDayTest",OdDbType.TimeOfDay));
-			cols.Add(new DbSchemaCol("TimeStampTest",OdDbType.DateTimeStamp));
-			cols.Add(new DbSchemaCol("DateTest",OdDbType.Date));
-			cols.Add(new DbSchemaCol("DateTimeTest",OdDbType.DateTime));
-			cols.Add(new DbSchemaCol("TimeSpanTest",OdDbType.TimeSpan));
-			cols.Add(new DbSchemaCol("CurrencyTest",OdDbType.Currency));
-			cols.Add(new DbSchemaCol("BoolTest",OdDbType.Bool));
-			cols.Add(new DbSchemaCol("TextSmallTest",OdDbType.Text,false,TextSizeMySqlOracle.Small,false));//<4k
-			cols.Add(new DbSchemaCol("VarCharTest",OdDbType.VarChar255));
-			cols.Add(new DbSchemaCol("TextLargeTest",OdDbType.Text,false,TextSizeMySqlOracle.Large,false));//>65k
-			DbSchema.AddTable7_7("tempcore",cols);
 			cols=new List<DbSchemaCol>();
 			cols.Add(new DbSchemaCol("Names",OdDbType.VarChar255));
 			DbSchema.AddTable7_7("tempgroupconcat",cols);*/
@@ -140,7 +128,6 @@ namespace UnitTests {
 		public static string RunAll() {
 			string retVal="";
 			//Things that we might later add to this series of tests:
-			//Foreign language testing (utf8)
 			//Special column types such as timestamp
 			//Computer set to other region, affecting string parsing of types such dates and decimals
 			//Test types without casting back and forth to strings.
@@ -237,6 +224,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			retVal+="Currency: Passed.\r\n";
 			//group_concat------------------------------------------------------------------------------------
+			/*
 			command="INSERT INTO tempgroupconcat VALUES ('name1')";
 			DataCore.NonQ(command);
 			command="INSERT INTO tempgroupconcat VALUES ('name2')";
@@ -253,7 +241,7 @@ namespace UnitTests {
 			}
 			command="DELETE FROM tempgroupconcat";
 			DataCore.NonQ(command);
-			retVal+="Group_concat: Passed.\r\n";
+			retVal+="Group_concat: Passed.\r\n";*/
 			//bool,pos------------------------------------------------------------------------------------
 			bool bool1;
 			bool bool2;
@@ -297,7 +285,7 @@ namespace UnitTests {
 			DataCore.NonQ(command);
 			retVal+="VarChar2(4000): Passed.\r\n";
 			//clob:-----------------------------------------------------------------------------------------
-			//tested up to 20MB.  (50MB however was failing: Chunk size error)
+			//tested up to 20MB in oracle.  (50MB however was failing: Chunk size error)
 			//mysql mediumtext maxes out at about 16MB.
 			string clobstring1=CreateRandomAlphaNumericString(10485760); //10MB should be larger than anything we store.
 			string clobstring2="";
