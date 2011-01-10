@@ -45,7 +45,7 @@ namespace Crud {
 			#region Oracle
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"command=\"BEGIN EXECUTE IMMEDIATE 'DROP TABLE "+tableName+"'; EXCEPTION WHEN OTHERS THEN NULL; END;\";");//Equivalent to "If drop table if exists <table>"
-			strb.Append(rn+tb+t2+"Db.NonQ(command);");
+			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
 				string tempData = GetOracleBlankData(cols[i]);//to save calls to the function, and shorten the following line of code.

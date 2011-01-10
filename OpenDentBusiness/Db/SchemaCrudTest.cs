@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 			}
 			else {//oracle
 				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempcore'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
