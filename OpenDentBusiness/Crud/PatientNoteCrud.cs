@@ -62,7 +62,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PatientNote into the database.  Returns the new priKey.</summary>
 		internal static long Insert(PatientNote patientNote){
-			return Insert(patientNote,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				patientNote.PatNum=DbHelper.GetNextOracleKey("patientnote","PatNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(patientNote,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							patientNote.PatNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(patientNote,false);
+			}
 		}
 
 		///<summary>Inserts one PatientNote into the database.  Provides option to use the existing priKey.</summary>

@@ -64,7 +64,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RxPat into the database.  Returns the new priKey.</summary>
 		internal static long Insert(RxPat rxPat){
-			return Insert(rxPat,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				rxPat.RxNum=DbHelper.GetNextOracleKey("rxpat","RxNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(rxPat,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							rxPat.RxNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(rxPat,false);
+			}
 		}
 
 		///<summary>Inserts one RxPat into the database.  Provides option to use the existing priKey.</summary>

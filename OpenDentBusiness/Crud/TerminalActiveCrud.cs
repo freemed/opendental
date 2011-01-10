@@ -57,7 +57,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TerminalActive into the database.  Returns the new priKey.</summary>
 		internal static long Insert(TerminalActive terminalActive){
-			return Insert(terminalActive,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				terminalActive.TerminalActiveNum=DbHelper.GetNextOracleKey("terminalactive","TerminalActiveNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(terminalActive,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							terminalActive.TerminalActiveNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(terminalActive,false);
+			}
 		}
 
 		///<summary>Inserts one TerminalActive into the database.  Provides option to use the existing priKey.</summary>

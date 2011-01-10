@@ -65,7 +65,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Recall into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Recall recall){
-			return Insert(recall,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				recall.RecallNum=DbHelper.GetNextOracleKey("recall","RecallNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(recall,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							recall.RecallNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(recall,false);
+			}
 		}
 
 		///<summary>Inserts one Recall into the database.  Provides option to use the existing priKey.</summary>

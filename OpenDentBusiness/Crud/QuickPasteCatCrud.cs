@@ -57,7 +57,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one QuickPasteCat into the database.  Returns the new priKey.</summary>
 		internal static long Insert(QuickPasteCat quickPasteCat){
-			return Insert(quickPasteCat,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				quickPasteCat.QuickPasteCatNum=DbHelper.GetNextOracleKey("quickpastecat","QuickPasteCatNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(quickPasteCat,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							quickPasteCat.QuickPasteCatNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(quickPasteCat,false);
+			}
 		}
 
 		///<summary>Inserts one QuickPasteCat into the database.  Provides option to use the existing priKey.</summary>

@@ -72,7 +72,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Etrans into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Etrans etrans){
-			return Insert(etrans,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				etrans.EtransNum=DbHelper.GetNextOracleKey("etrans","EtransNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(etrans,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							etrans.EtransNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(etrans,false);
+			}
 		}
 
 		///<summary>Inserts one Etrans into the database.  Provides option to use the existing priKey.</summary>

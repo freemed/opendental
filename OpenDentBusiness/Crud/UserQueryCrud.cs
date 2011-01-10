@@ -57,7 +57,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one UserQuery into the database.  Returns the new priKey.</summary>
 		internal static long Insert(UserQuery userQuery){
-			return Insert(userQuery,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				userQuery.QueryNum=DbHelper.GetNextOracleKey("userquery","QueryNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(userQuery,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							userQuery.QueryNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(userQuery,false);
+			}
 		}
 
 		///<summary>Inserts one UserQuery into the database.  Provides option to use the existing priKey.</summary>

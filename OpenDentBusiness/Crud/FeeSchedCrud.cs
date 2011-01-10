@@ -58,7 +58,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one FeeSched into the database.  Returns the new priKey.</summary>
 		internal static long Insert(FeeSched feeSched){
-			return Insert(feeSched,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				feeSched.FeeSchedNum=DbHelper.GetNextOracleKey("feesched","FeeSchedNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(feeSched,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							feeSched.FeeSchedNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(feeSched,false);
+			}
 		}
 
 		///<summary>Inserts one FeeSched into the database.  Provides option to use the existing priKey.</summary>

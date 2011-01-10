@@ -76,7 +76,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Document into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Document document){
-			return Insert(document,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				document.DocNum=DbHelper.GetNextOracleKey("document","DocNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(document,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							document.DocNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(document,false);
+			}
 		}
 
 		///<summary>Inserts one Document into the database.  Provides option to use the existing priKey.</summary>

@@ -57,7 +57,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PerioExam into the database.  Returns the new priKey.</summary>
 		internal static long Insert(PerioExam perioExam){
-			return Insert(perioExam,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				perioExam.PerioExamNum=DbHelper.GetNextOracleKey("perioexam","PerioExamNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(perioExam,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							perioExam.PerioExamNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(perioExam,false);
+			}
 		}
 
 		///<summary>Inserts one PerioExam into the database.  Provides option to use the existing priKey.</summary>

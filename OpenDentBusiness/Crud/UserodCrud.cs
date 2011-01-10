@@ -65,7 +65,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Userod into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Userod userod){
-			return Insert(userod,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				userod.UserNum=DbHelper.GetNextOracleKey("userod","UserNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(userod,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							userod.UserNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(userod,false);
+			}
 		}
 
 		///<summary>Inserts one Userod into the database.  Provides option to use the existing priKey.</summary>

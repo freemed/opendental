@@ -57,7 +57,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PayPeriod into the database.  Returns the new priKey.</summary>
 		internal static long Insert(PayPeriod payPeriod){
-			return Insert(payPeriod,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				payPeriod.PayPeriodNum=DbHelper.GetNextOracleKey("payperiod","PayPeriodNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(payPeriod,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							payPeriod.PayPeriodNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(payPeriod,false);
+			}
 		}
 
 		///<summary>Inserts one PayPeriod into the database.  Provides option to use the existing priKey.</summary>

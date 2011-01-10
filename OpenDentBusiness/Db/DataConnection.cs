@@ -223,7 +223,7 @@ namespace OpenDentBusiness{
 			return BuildSimpleConnectionString(DBtype,pServer,pDatabase,pUserID,pPassword);
 		}
 
-		private void PrepOracleConnection(){
+		//private void PrepOracleConnection(){
 			//if(parameters.Count>0) {//Getting parameters for statement.
 			//	for(int p=0;p<parameters.Count;p++) {
 			//		cmdOr.Parameters.Add(":param"+(p+1),parameters[p]);
@@ -232,16 +232,16 @@ namespace OpenDentBusiness{
 			//	parameters.Clear();
 			//}
 			//This affects performance.  We need a better alternative than this:
-			cmdOr.CommandText="ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'";
-			try{
-				cmdOr.ExecuteNonQuery();	//Change the date-time format for this oracle connection to match our
+			//cmdOr.CommandText="ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'";
+			//try{
+			//	cmdOr.ExecuteNonQuery();	//Change the date-time format for this oracle connection to match our
 																	//MySQL date-time format.
-			}
-			catch(Exception e) {
-				Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
-				throw;//continue to pass the exception one level up.
-			}
-		}
+			//}
+			//catch(Exception e) {
+			//	Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
+			//	throw;//continue to pass the exception one level up.
+			//}
+		//}
 
 		///<summary>This needs to be run every time we switch databases, especially on startup.  Will throw an exception if fails.  Calling class should catch exception.</summary>
 		public void SetDb(string server,string db,string user, string password, string userLow, string passLow, DatabaseType dbtype){
@@ -332,7 +332,7 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable();
 			if(DBtype==DatabaseType.Oracle){
 				conOr.Open();
-				PrepOracleConnection();
+				//PrepOracleConnection();
 				cmdOr.CommandText=command;
 				daOr=new OracleDataAdapter(cmdOr);
 				try{
@@ -364,7 +364,7 @@ namespace OpenDentBusiness{
 			DataSet ds=new DataSet();
 			if(DBtype==DatabaseType.Oracle){
 				conOr.Open();
-				PrepOracleConnection();
+				//PrepOracleConnection();
 				string[] commandArray=new string[] { commands };
 				if(splitStrings) {
 					commandArray=commands.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries);
@@ -405,31 +405,32 @@ namespace OpenDentBusiness{
 			long rowsChanged=0;
 			if(DBtype==DatabaseType.Oracle){
 				conOr.Open();
-				PrepOracleConnection();
+				//PrepOracleConnection();
 				//string[] commandArray=new string[] {commands};
 				//if(splitStrings){
 				//  commandArray=commands.Split(new char[] {';'},StringSplitOptions.RemoveEmptyEntries);
 				//}
 				//Can't do batch queries in Oracle, so we have to split them up and run them individually.
-				try{
-					if(getInsertID){
-						cmdOr.CommandText="LOCK TABLE preference IN EXCLUSIVE MODE";
-						cmdOr.ExecuteNonQuery();//Lock the preference table, because we need exclusive access to the OracleInsertId.
-					}
-					//for(int i=0;i<commandArray.Length;i++){
-					cmdOr.CommandText=commands; //Array[i];
-					for(int p=0;p<parameters.Length;p++) {
-						cmdOr.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetOracleDbType()).Value=parameters[p].Value;
-						//cmdOr.Parameters.Add(parameters[p].GetOracleParameter());//doesn't work
-					}
-					rowsChanged=cmdOr.ExecuteNonQuery();
+				//try{
+					//if(getInsertID){
+					//	cmdOr.CommandText="LOCK TABLE preference IN EXCLUSIVE MODE";
+					//	cmdOr.ExecuteNonQuery();//Lock the preference table, because we need exclusive access to the OracleInsertId.
 					//}
+					//for(int i=0;i<commandArray.Length;i++){
+				cmdOr.CommandText=commands; //Array[i];
+				for(int p=0;p<parameters.Length;p++) {
+					cmdOr.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetOracleDbType()).Value=parameters[p].Value;
+					//cmdOr.Parameters.Add(parameters[p].GetOracleParameter());//doesn't work
 				}
-				catch(System.Exception e){
-					Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
-					throw;//continue to pass the exception one level up.
-				}
-				finally{
+				rowsChanged=cmdOr.ExecuteNonQuery();
+					//}
+				//}
+				//catch(System.Exception e){
+				//	Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
+				//	throw;//continue to pass the exception one level up.
+				//}
+				//finally{
+				/*
 					if(getInsertID){
 						try{
 							cmdOr.CommandText="SELECT ValueString FROM preference WHERE PrefName='OracleInsertId'";
@@ -439,13 +440,14 @@ namespace OpenDentBusiness{
 							this.InsertID=Convert.ToInt32((table.Rows[0][0]).ToString());
 							cmdOr.CommandText="commit";
 							cmdOr.ExecuteNonQuery();//Release the exlusive lock we attaned above.
-						}catch(Exception e){
+						}
+						catch(Exception e){
 							Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),
 								Logger.Severity.ERROR);
 							throw e;//continue to pass the exception one level up.
 						}
-					}
-				}
+					}*/
+				//}
 				conOr.Close();
 			}
 			else if(DBtype==DatabaseType.MySql) {
@@ -491,7 +493,7 @@ namespace OpenDentBusiness{
 			string retVal="";
 			if(DBtype==DatabaseType.Oracle){
 				conOr.Open();
-				PrepOracleConnection();
+				//PrepOracleConnection();
 				cmdOr.CommandText=command;
 				try{
 					drOr=(OracleDataReader)cmdOr.ExecuteReader();
@@ -527,7 +529,7 @@ namespace OpenDentBusiness{
 			string retVal="";
 			if(DBtype==DatabaseType.Oracle) {
 				conOr.Open();
-				PrepOracleConnection();
+				//PrepOracleConnection();
 				cmdOr.CommandText=command;
 				try {
 					scalar=cmdOr.ExecuteScalar();
@@ -558,7 +560,6 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
-
 		
 
 	}

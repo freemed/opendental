@@ -59,7 +59,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Reconcile into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Reconcile reconcile){
-			return Insert(reconcile,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				reconcile.ReconcileNum=DbHelper.GetNextOracleKey("reconcile","ReconcileNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(reconcile,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							reconcile.ReconcileNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(reconcile,false);
+			}
 		}
 
 		///<summary>Inserts one Reconcile into the database.  Provides option to use the existing priKey.</summary>

@@ -66,7 +66,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LabCase into the database.  Returns the new priKey.</summary>
 		internal static long Insert(LabCase labCase){
-			return Insert(labCase,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				labCase.LabCaseNum=DbHelper.GetNextOracleKey("labcase","LabCaseNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(labCase,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							labCase.LabCaseNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(labCase,false);
+			}
 		}
 
 		///<summary>Inserts one LabCase into the database.  Provides option to use the existing priKey.</summary>

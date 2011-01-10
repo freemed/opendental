@@ -59,7 +59,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Question into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Question question){
-			return Insert(question,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				question.QuestionNum=DbHelper.GetNextOracleKey("question","QuestionNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(question,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							question.QuestionNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(question,false);
+			}
 		}
 
 		///<summary>Inserts one Question into the database.  Provides option to use the existing priKey.</summary>

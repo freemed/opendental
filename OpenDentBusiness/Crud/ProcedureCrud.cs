@@ -97,7 +97,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Procedure into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Procedure procedure){
-			return Insert(procedure,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				procedure.ProcNum=DbHelper.GetNextOracleKey("procedurelog","ProcNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(procedure,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							procedure.ProcNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(procedure,false);
+			}
 		}
 
 		///<summary>Inserts one Procedure into the database.  Provides option to use the existing priKey.</summary>

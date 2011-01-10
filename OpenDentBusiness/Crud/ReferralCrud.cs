@@ -75,7 +75,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Referral into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Referral referral){
-			return Insert(referral,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				referral.ReferralNum=DbHelper.GetNextOracleKey("referral","ReferralNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(referral,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							referral.ReferralNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(referral,false);
+			}
 		}
 
 		///<summary>Inserts one Referral into the database.  Provides option to use the existing priKey.</summary>

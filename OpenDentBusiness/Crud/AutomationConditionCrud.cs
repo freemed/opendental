@@ -58,7 +58,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AutomationCondition into the database.  Returns the new priKey.</summary>
 		internal static long Insert(AutomationCondition automationCondition){
-			return Insert(automationCondition,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				automationCondition.AutomationConditionNum=DbHelper.GetNextOracleKey("automationcondition","AutomationConditionNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(automationCondition,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							automationCondition.AutomationConditionNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(automationCondition,false);
+			}
 		}
 
 		///<summary>Inserts one AutomationCondition into the database.  Provides option to use the existing priKey.</summary>

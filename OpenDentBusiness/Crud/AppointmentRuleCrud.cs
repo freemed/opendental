@@ -58,7 +58,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AppointmentRule into the database.  Returns the new priKey.</summary>
 		internal static long Insert(AppointmentRule appointmentRule){
-			return Insert(appointmentRule,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				appointmentRule.AppointmentRuleNum=DbHelper.GetNextOracleKey("appointmentrule","AppointmentRuleNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(appointmentRule,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							appointmentRule.AppointmentRuleNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(appointmentRule,false);
+			}
 		}
 
 		///<summary>Inserts one AppointmentRule into the database.  Provides option to use the existing priKey.</summary>

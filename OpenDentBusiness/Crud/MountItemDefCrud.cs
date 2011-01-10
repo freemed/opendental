@@ -59,7 +59,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MountItemDef into the database.  Returns the new priKey.</summary>
 		internal static long Insert(MountItemDef mountItemDef){
-			return Insert(mountItemDef,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				mountItemDef.MountItemDefNum=DbHelper.GetNextOracleKey("mountitemdef","MountItemDefNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(mountItemDef,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							mountItemDef.MountItemDefNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(mountItemDef,false);
+			}
 		}
 
 		///<summary>Inserts one MountItemDef into the database.  Provides option to use the existing priKey.</summary>

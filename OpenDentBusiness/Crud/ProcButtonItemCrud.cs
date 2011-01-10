@@ -58,7 +58,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcButtonItem into the database.  Returns the new priKey.</summary>
 		internal static long Insert(ProcButtonItem procButtonItem){
-			return Insert(procButtonItem,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				procButtonItem.ProcButtonItemNum=DbHelper.GetNextOracleKey("procbuttonitem","ProcButtonItemNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(procButtonItem,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							procButtonItem.ProcButtonItemNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(procButtonItem,false);
+			}
 		}
 
 		///<summary>Inserts one ProcButtonItem into the database.  Provides option to use the existing priKey.</summary>

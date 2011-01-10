@@ -204,5 +204,23 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Gets the maximum value for the specified field within the specified table. This key will always be the MAX(field)+1 and will usually be the correct key to use for new inserts, but not always.</summary>
+		public static long GetNextOracleKey(string tablename,string field) {
+			//When inserting a new record with the key value returned by this function, these are some possible errors that can occur. 
+			//The actual error text starts after the ... on each line. Note especially the duplicate key exception, as this exception 
+			//must be considered by the insertion algorithm:
+			//DUPLICATE PRIMARY KEY....ORA-00001: unique constraint (DEV77.PRIMARY_87) violated
+			//MISSING WHOLE TABLE......ORA-00942: table or view does not exist
+			//MISSING TABLE COLUMN.....ORA-00904: "ITEMORDER": invalid identifier
+			//MISSING OPENING PAREND...ORA-00926: missing VALUES keyword
+			//CONNECTION LOST..........ORA-03113: end-of-file on communication channel
+			string command="SELECT MAX("+field+")+1 FROM "+tablename;
+			long retval=PIn.Long(Db.GetCount(command));
+			if(retval==0) {//Happens when the table has no records
+				return 1;
+			}
+			return retval;
+		}
+
 	}
 }

@@ -74,7 +74,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Clearinghouse into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Clearinghouse clearinghouse){
-			return Insert(clearinghouse,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				clearinghouse.ClearinghouseNum=DbHelper.GetNextOracleKey("clearinghouse","ClearinghouseNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(clearinghouse,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							clearinghouse.ClearinghouseNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(clearinghouse,false);
+			}
 		}
 
 		///<summary>Inserts one Clearinghouse into the database.  Provides option to use the existing priKey.</summary>

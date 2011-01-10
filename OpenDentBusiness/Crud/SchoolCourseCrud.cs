@@ -56,7 +56,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SchoolCourse into the database.  Returns the new priKey.</summary>
 		internal static long Insert(SchoolCourse schoolCourse){
-			return Insert(schoolCourse,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				schoolCourse.SchoolCourseNum=DbHelper.GetNextOracleKey("schoolcourse","SchoolCourseNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(schoolCourse,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							schoolCourse.SchoolCourseNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(schoolCourse,false);
+			}
 		}
 
 		///<summary>Inserts one SchoolCourse into the database.  Provides option to use the existing priKey.</summary>

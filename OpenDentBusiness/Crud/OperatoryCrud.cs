@@ -63,7 +63,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Operatory into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Operatory operatory){
-			return Insert(operatory,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				operatory.OperatoryNum=DbHelper.GetNextOracleKey("operatory","OperatoryNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(operatory,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							operatory.OperatoryNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(operatory,false);
+			}
 		}
 
 		///<summary>Inserts one Operatory into the database.  Provides option to use the existing priKey.</summary>

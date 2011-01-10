@@ -57,7 +57,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DeletedObject into the database.  Returns the new priKey.</summary>
 		internal static long Insert(DeletedObject deletedObject){
-			return Insert(deletedObject,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				deletedObject.DeletedObjectNum=DbHelper.GetNextOracleKey("deletedobject","DeletedObjectNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(deletedObject,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							deletedObject.DeletedObjectNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(deletedObject,false);
+			}
 		}
 
 		///<summary>Inserts one DeletedObject into the database.  Provides option to use the existing priKey.</summary>

@@ -56,7 +56,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LetterMergeField into the database.  Returns the new priKey.</summary>
 		internal static long Insert(LetterMergeField letterMergeField){
-			return Insert(letterMergeField,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				letterMergeField.FieldNum=DbHelper.GetNextOracleKey("lettermergefield","FieldNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(letterMergeField,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							letterMergeField.FieldNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(letterMergeField,false);
+			}
 		}
 
 		///<summary>Inserts one LetterMergeField into the database.  Provides option to use the existing priKey.</summary>

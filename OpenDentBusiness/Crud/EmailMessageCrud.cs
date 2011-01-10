@@ -61,7 +61,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EmailMessage into the database.  Returns the new priKey.</summary>
 		internal static long Insert(EmailMessage emailMessage){
-			return Insert(emailMessage,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				emailMessage.EmailMessageNum=DbHelper.GetNextOracleKey("emailmessage","EmailMessageNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(emailMessage,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							emailMessage.EmailMessageNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(emailMessage,false);
+			}
 		}
 
 		///<summary>Inserts one EmailMessage into the database.  Provides option to use the existing priKey.</summary>

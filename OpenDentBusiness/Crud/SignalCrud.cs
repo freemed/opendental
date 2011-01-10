@@ -63,7 +63,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Signal into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Signal signal){
-			return Insert(signal,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				signal.SignalNum=DbHelper.GetNextOracleKey("signal","SignalNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(signal,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							signal.SignalNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(signal,false);
+			}
 		}
 
 		///<summary>Inserts one Signal into the database.  Provides option to use the existing priKey.</summary>

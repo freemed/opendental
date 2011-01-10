@@ -61,7 +61,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SheetDef into the database.  Returns the new priKey.</summary>
 		internal static long Insert(SheetDef sheetDef){
-			return Insert(sheetDef,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				sheetDef.SheetDefNum=DbHelper.GetNextOracleKey("sheetdef","SheetDefNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(sheetDef,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							sheetDef.SheetDefNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(sheetDef,false);
+			}
 		}
 
 		///<summary>Inserts one SheetDef into the database.  Provides option to use the existing priKey.</summary>

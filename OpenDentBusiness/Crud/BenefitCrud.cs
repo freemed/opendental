@@ -65,7 +65,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Benefit into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Benefit benefit){
-			return Insert(benefit,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				benefit.BenefitNum=DbHelper.GetNextOracleKey("benefit","BenefitNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(benefit,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							benefit.BenefitNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(benefit,false);
+			}
 		}
 
 		///<summary>Inserts one Benefit into the database.  Provides option to use the existing priKey.</summary>

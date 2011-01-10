@@ -61,7 +61,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RefAttach into the database.  Returns the new priKey.</summary>
 		internal static long Insert(RefAttach refAttach){
-			return Insert(refAttach,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				refAttach.RefAttachNum=DbHelper.GetNextOracleKey("refattach","RefAttachNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(refAttach,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							refAttach.RefAttachNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(refAttach,false);
+			}
 		}
 
 		///<summary>Inserts one RefAttach into the database.  Provides option to use the existing priKey.</summary>

@@ -58,7 +58,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Language into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Language language){
-			return Insert(language,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				language.LanguageNum=DbHelper.GetNextOracleKey("language","LanguageNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(language,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							language.LanguageNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(language,false);
+			}
 		}
 
 		///<summary>Inserts one Language into the database.  Provides option to use the existing priKey.</summary>

@@ -58,7 +58,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ZipCode into the database.  Returns the new priKey.</summary>
 		internal static long Insert(ZipCode zipCode){
-			return Insert(zipCode,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				zipCode.ZipCodeNum=DbHelper.GetNextOracleKey("zipcode","ZipCodeNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(zipCode,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							zipCode.ZipCodeNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(zipCode,false);
+			}
 		}
 
 		///<summary>Inserts one ZipCode into the database.  Provides option to use the existing priKey.</summary>

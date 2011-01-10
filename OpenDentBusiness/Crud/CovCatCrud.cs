@@ -59,7 +59,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CovCat into the database.  Returns the new priKey.</summary>
 		internal static long Insert(CovCat covCat){
-			return Insert(covCat,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				covCat.CovCatNum=DbHelper.GetNextOracleKey("covcat","CovCatNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(covCat,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							covCat.CovCatNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(covCat,false);
+			}
 		}
 
 		///<summary>Inserts one CovCat into the database.  Provides option to use the existing priKey.</summary>

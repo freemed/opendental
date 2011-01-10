@@ -56,7 +56,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskSubscription into the database.  Returns the new priKey.</summary>
 		internal static long Insert(TaskSubscription taskSubscription){
-			return Insert(taskSubscription,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				taskSubscription.TaskSubscriptionNum=DbHelper.GetNextOracleKey("tasksubscription","TaskSubscriptionNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(taskSubscription,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							taskSubscription.TaskSubscriptionNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(taskSubscription,false);
+			}
 		}
 
 		///<summary>Inserts one TaskSubscription into the database.  Provides option to use the existing priKey.</summary>

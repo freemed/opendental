@@ -57,7 +57,28 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CovSpan into the database.  Returns the new priKey.</summary>
 		internal static long Insert(CovSpan covSpan){
-			return Insert(covSpan,false);
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				covSpan.CovSpanNum=DbHelper.GetNextOracleKey("covspan","CovSpanNum");
+				int loopcount=0;
+				while(loopcount<100){
+					try {
+						return Insert(covSpan,true);
+					}
+					catch(Oracle.DataAccess.Client.OracleException ex){
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+							covSpan.CovSpanNum++;
+							loopcount++;
+						}
+						else{
+							throw ex;
+						}
+					}
+				}
+				throw new ApplicationException("Insert failed.  Could not generate primary key.");
+			}
+			else {
+				return Insert(covSpan,false);
+			}
 		}
 
 		///<summary>Inserts one CovSpan into the database.  Provides option to use the existing priKey.</summary>
