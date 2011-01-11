@@ -44,8 +44,8 @@ min-height: 480px;
     position: relative;
 }
 
-.previous
-{   left:10px;
+.previous  {
+    left:10px;
     top:10px;
     float: left; 
     height:25px;
@@ -56,18 +56,19 @@ min-height: 480px;
 
 .today{
     float:left;
-    margin-left:50px
+    margin-left:30px
 }
-.next
-{   top:10px;
+.next{
+    top:10px;
     height:25px;
     float: right;
     border-width:0px 0px 0px 25px;
     -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 0 0 25;
   
 }
+
 .datestring{
-    position: relative;float:center; top:10px; left:10px;
+    position: relative;float:center; top:15px; left:10px;
 }
 .contents{
     clear:both;
@@ -78,7 +79,14 @@ min-height: 480px;
  font-size:14px;
  word-wrap:break-word;
 }
-
+.style2
+{ display:inline;
+  text-decoration:underline;
+  color:blue;
+}
+h2 {
+    font: bold 14px Helvetica;
+}
 .appts, .home, .patients{
     left: 6px;
     right: auto;
@@ -86,6 +94,11 @@ min-height: 480px;
     max-width: 55px;
     border-width: 0 8px 0 14px;
     -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14;    
+}
+
+.searchbutton{
+ position:relative;
+ float:left; 
 }
 /*overides existing checkbox css in theme.css*/
 
@@ -111,7 +124,6 @@ ul li input[type="checkbox"]:after {
     width: 246px;
     color: #777;
     margin: -0px 0px 0px 27px;
-
 }
 
 /*top and bottom padding adjusted*/
@@ -126,10 +138,5 @@ ul li {
 .page1{
   margin: 7px 10px 7px 10px;
 }
-/*The borders on these links nearly touch the edges of the page*/ 
-.applist{
-margin: 15px 0px 17px 0px;
-}
-
 
 /*webkit-transform-style: preserve-3d; not overwritten*/

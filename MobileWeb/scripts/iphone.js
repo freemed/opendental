@@ -43,7 +43,17 @@ function TraversePage(){
 		var MoveToURL='#AppointmentList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
-
+	
+		$('.searchbutton').tap(function(e) {
+		
+		var searchterm=$('#searchpatientbox').val();
+		//console.log('searchterm is dd' + searchterm);
+		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
+		var SectionToFill='#PatientListContents';
+		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
+	});
+	
+	/*
 	$('#searchpatientbox').keyup(function(e) {
 		var searchterm=$('#searchpatientbox').val();
 		//console.log('searchterm is ' + searchterm);
@@ -53,7 +63,8 @@ function TraversePage(){
 		FetchPage(UrlForFetchingData, SectionToFill)
 
 	});
-	$('a[href="#PatientList"]').click(function (e) {
+	*/
+	$('a[href="#PatientList"]').tap(function (e) {
 		//e.preventDefault();
 		console.log('PatientList clicked');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
@@ -86,16 +97,14 @@ function TraversePage(){
 		console.log('Previous button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
-		var MoveToURL='#AppointmentList';
-		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
+		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
 	$('.button.today').tap(function(e) {
 		console.log('Today button tapped');
 		var UrlForFetchingData = 'AppointmentList.aspx'; 
 		var SectionToFill='#AppointmentListContents';
-		var MoveToURL='#AppointmentList';
-		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
+		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
 	
@@ -103,8 +112,7 @@ function TraversePage(){
 		console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
-		var MoveToURL='#AppointmentList';
-		ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill);
+		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
 	/*home, appt, patient buttons*/
@@ -156,7 +164,7 @@ function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
 	FetchPage(UrlForFetchingData, SectionToFill)
 }
 
-function ProcessPreviousNextButton(e,UrlForFetchingData, MoveToURL, SectionToFill){
+function ProcessPreviousNextButton(e,UrlForFetchingData, SectionToFill){
 	e.preventDefault();
 	console.log(' UrlForFetchingData =' + UrlForFetchingData );
  	$(SectionToFill).append('<div id="progress">Loading...</div>');

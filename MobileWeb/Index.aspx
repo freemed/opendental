@@ -16,7 +16,7 @@
             var jQT = $.jQTouch({
                 icon: 'Mob.png',
                 statusBar: 'black',
-                slideSelector: 'body > * > ul li a:not(.arrowless)'
+                slideSelector: 'body > * > ul li a:not(.arrowless, .searchbutton)'
             });
 		</script>
     </head>
@@ -28,7 +28,7 @@
             </div>
 			<br />
             &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
-            <form method="post" id="ajaxform" runat="server" enableviewstate="False">
+            <form method="post">
                 <ul>
                     <li><input type="text" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
                     <li><input type="password" placeholder="Password" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
@@ -72,11 +72,14 @@
                 <h1>Patients</h1>
                 <a class="button home" href="#">Home</a>
             </div>
-		<ul>
-			<li>
+			 <ul>
+                <li>
 				<input type="text" placeholder="Search Patient" name="searchpatientbox" id="searchpatientbox" autocapitalize="off" autocorrect="off" autocomplete="off" />
-			</li>
-		</ul>
+				<%--<a class="button searchbutton" href="#">Search</a>--%>
+				</li>
+			</ul>
+			
+				
 			<div id="PatientListContents">
              </div>
         </div>

@@ -22,9 +22,14 @@
 
 <ul class="contact">
 <li><span class="style1">Home: <%Response.Write(pat.HmPhone);%> 
-<a href="tel:<%Response.Write(pat.HmPhone);%>">Dial number</a></span></li>
-<li><span class="style1">Work: <%Response.Write(pat.WkPhone);%> </span></li>
-<li><span class="style1">Mobile: <%Response.Write(pat.WirelessPhone);%> </span></li>
+	<a href="tel:<%Response.Write(pat.HmPhone);%>" class="style2">Dial</a>
+</span></li>
+<li><span class="style1">Work: <%Response.Write(pat.WkPhone);%>
+	<a href="tel:<%Response.Write(pat.WkPhone);%>" class="style2">Dial</a>
+</span></li>
+<li><span class="style1">Mobile: <%Response.Write(pat.WirelessPhone);%>
+	<a href="tel:<%Response.Write(pat.WirelessPhone);%>" class="style2">Dial</a>
+</span></li>
 <li><span class="style1">Email: <%Response.Write(pat.Email);%> </span></li>
 </ul>
 <h2>Appointments</h2>

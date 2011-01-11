@@ -16,7 +16,7 @@
 			<a class="button next" linkattib="AppointmentList.aspx?year=<%Response.Write(NextDateYear);%>&month=<%Response.Write(NextDateMonth);%>&day=<%Response.Write(NextDateDay);%>"
 				href="#">&nbsp;&nbsp;</a>
 		</div>
-		<ul class="applist">
+		<ul>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
 					<li class="arrow style1">
