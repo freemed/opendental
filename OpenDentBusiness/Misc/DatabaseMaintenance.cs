@@ -50,7 +50,7 @@ namespace OpenDentBusiness {
 						log+=Lans.g("FormDatabaseMaintenance","Repair log:")+"\r\n";
 						for(int t=0;t<tableResults.Rows.Count;t++) {
 							for(int j=0;j<tableResults.Columns.Count;j++) {
-								log+=tableResults.Rows[t][j].ToString()+",";
+								log+=PIn.ByteArray(tableResults.Rows[t][j])+",";
 							}
 							log+="\r\n";
 						}
