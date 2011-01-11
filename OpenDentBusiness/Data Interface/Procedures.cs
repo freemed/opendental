@@ -670,11 +670,11 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in ContrAccount.CreateClaim to validate that procedure is not already attached to a claim for this specific insPlan.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
-		public static bool IsAlreadyAttachedToClaim(Procedure proc,List<ClaimProc> claimProcList,long planNum) {
+		public static bool IsAlreadyAttachedToClaim(Procedure proc,List<ClaimProc> claimProcList,long insSubNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==proc.ProcNum
-					&& claimProcList[i].PlanNum==planNum
+					&& claimProcList[i].InsSubNum==insSubNum
 					&& claimProcList[i].ClaimNum>0
 					&& claimProcList[i].Status!=ClaimProcStatus.Preauth) {
 					return true;

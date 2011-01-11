@@ -2843,7 +2843,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
 				proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
-				if(Procedures.IsAlreadyAttachedToClaim(proc,ClaimProcList,PlanCur.PlanNum)){
+				if(Procedures.IsAlreadyAttachedToClaim(proc,ClaimProcList,SubCur.InsSubNum)){
 					MsgBox.Show(this,"Not allowed to send a procedure to the same insurance company twice.");
 					return new Claim();
 				}
