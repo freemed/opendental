@@ -48,8 +48,8 @@ namespace OpenDentBusiness.Crud{
 				schedule=new Schedule();
 				schedule.ScheduleNum = PIn.Long  (table.Rows[i]["ScheduleNum"].ToString());
 				schedule.SchedDate   = PIn.Date  (table.Rows[i]["SchedDate"].ToString());
-				schedule.StartTime   = PIn.TimeSpan(table.Rows[i]["StartTime"].ToString());
-				schedule.StopTime    = PIn.TimeSpan(table.Rows[i]["StopTime"].ToString());
+				schedule.StartTime   = PIn.Time(table.Rows[i]["StartTime"].ToString());
+				schedule.StopTime    = PIn.Time(table.Rows[i]["StopTime"].ToString());
 				schedule.SchedType   = (ScheduleType)PIn.Int(table.Rows[i]["SchedType"].ToString());
 				schedule.ProvNum     = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				schedule.BlockoutType= PIn.Long  (table.Rows[i]["BlockoutType"].ToString());

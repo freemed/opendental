@@ -87,8 +87,8 @@ namespace OpenDentBusiness.Crud{
 				procedure.SiteNum           = PIn.Long  (table.Rows[i]["SiteNum"].ToString());
 				procedure.HideGraphics      = PIn.Bool  (table.Rows[i]["HideGraphics"].ToString());
 				procedure.CanadianTypeCodes = PIn.String(table.Rows[i]["CanadianTypeCodes"].ToString());
-				procedure.ProcTime          = PIn.TimeSpan(table.Rows[i]["ProcTime"].ToString());
-				procedure.ProcTimeEnd       = PIn.TimeSpan(table.Rows[i]["ProcTimeEnd"].ToString());
+				procedure.ProcTime          = PIn.Time(table.Rows[i]["ProcTime"].ToString());
+				procedure.ProcTimeEnd       = PIn.Time(table.Rows[i]["ProcTimeEnd"].ToString());
 				procedure.DateTStamp        = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(procedure);
 			}

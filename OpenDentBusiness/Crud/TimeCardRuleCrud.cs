@@ -48,8 +48,8 @@ namespace OpenDentBusiness.Crud{
 				timeCardRule=new TimeCardRule();
 				timeCardRule.TimeCardRuleNum= PIn.Long  (table.Rows[i]["TimeCardRuleNum"].ToString());
 				timeCardRule.EmployeeNum    = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				timeCardRule.OverHoursPerDay= PIn.TimeSpan(table.Rows[i]["OverHoursPerDay"].ToString());
-				timeCardRule.AfterTimeOfDay = PIn.TimeSpan(table.Rows[i]["AfterTimeOfDay"].ToString());
+				timeCardRule.OverHoursPerDay= PIn.Time(table.Rows[i]["OverHoursPerDay"].ToString());
+				timeCardRule.AfterTimeOfDay = PIn.Time(table.Rows[i]["AfterTimeOfDay"].ToString());
 				retVal.Add(timeCardRule);
 			}
 			return retVal;

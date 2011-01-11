@@ -104,8 +104,8 @@ namespace OpenDentBusiness.Crud{
 				patient.PreferConfirmMethod    = (ContactMethod)PIn.Int(table.Rows[i]["PreferConfirmMethod"].ToString());
 				patient.PreferContactMethod    = (ContactMethod)PIn.Int(table.Rows[i]["PreferContactMethod"].ToString());
 				patient.PreferRecallMethod     = (ContactMethod)PIn.Int(table.Rows[i]["PreferRecallMethod"].ToString());
-				patient.SchedBeforeTime        = PIn.TimeSpan(table.Rows[i]["SchedBeforeTime"].ToString());
-				patient.SchedAfterTime         = PIn.TimeSpan(table.Rows[i]["SchedAfterTime"].ToString());
+				patient.SchedBeforeTime        = PIn.Time(table.Rows[i]["SchedBeforeTime"].ToString());
+				patient.SchedAfterTime         = PIn.Time(table.Rows[i]["SchedAfterTime"].ToString());
 				patient.SchedDayOfWeek         = PIn.Byte  (table.Rows[i]["SchedDayOfWeek"].ToString());
 				patient.Language               = PIn.String(table.Rows[i]["Language"].ToString());
 				patient.AdmitDate              = PIn.Date  (table.Rows[i]["AdmitDate"].ToString());

@@ -170,66 +170,53 @@ namespace OpenDentBusiness{
 			return myString;
 		}
 
-		///<summary>Used for both kinds of TimeSpans, both time of day and timespans that can be neg or invalid.</summary>
-		public static TimeSpan TimeSpan(string myString) {
-			if (string.IsNullOrEmpty(myString)) {
-				return System.TimeSpan.MinValue;
-			}
-			try {
-				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					return System.TimeSpan.Parse(myString);
-						// DateTime.Parse(myString).TimeOfDay;
-				}
-				return (System.TimeSpan.Parse(myString));
-			}
-			catch {
-				return System.TimeSpan.MinValue;
-			}
-		}
-
 		///<summary>Timespans that might be invalid time of day.  Can be + or - and can be up to 800+ hours.  Stored in Oracle as varchar2.</summary>
 		public static TimeSpan TSpan(string myString) {
-			if (string.IsNullOrEmpty(myString)) {
-				return System.TimeSpan.MinValue;
+			if(string.IsNullOrEmpty(myString)) {
+				return System.TimeSpan.Zero;
 			}
 			try {
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					//return System.TimeSpan.Parse(myString); //Does not work. Confuses hours with days and an exception is thrown in our large timespan test.
-					bool negative=false;
-					if(myString[0]=='-') {
-						negative=true;
+					bool isNegative=false;
+					if(myString.StartsWith("-")) {
+						isNegative=true;
 						myString=myString.Substring(1);//remove the '-'
 					}
-					string[] timeValues=myString.Split(new char[] {':'});
+					string[] timeValues=myString.Split(new char[] { ':' });
 					if(timeValues.Length!=3) {
-						return System.TimeSpan.MinValue;
+						return System.TimeSpan.Zero;
 					}
 					TimeSpan retval=new TimeSpan(PIn.Int(timeValues[0]),PIn.Int(timeValues[1]),PIn.Int(timeValues[2]));
-					if(negative) {
+					if(isNegative) {
 						return retval.Negate();
 					}
 					return retval;
 				}
-				return (System.TimeSpan.Parse(myString));
+				else {//mysql
+					return (System.TimeSpan.Parse(myString));
+				}
 			}
 			catch {
-				return System.TimeSpan.MinValue;
+				return System.TimeSpan.Zero;
 			}
 		}
 
 		///<summary>Used for Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.</summary>
 		public static TimeSpan Time(string myString) {
 			if(string.IsNullOrEmpty(myString)) {
-				return System.TimeSpan.MinValue;
+				return System.TimeSpan.Zero;
 			}
 			try {
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					return DateTime.Parse(myString).TimeOfDay;
 				}
-				return (System.TimeSpan.Parse(myString));
+				else {//mysql
+					return (System.TimeSpan.Parse(myString));
+				}
 			}
 			catch {
-				return System.TimeSpan.MinValue;
+				return System.TimeSpan.Zero;
 			}
 		}
 		

@@ -252,6 +252,10 @@ using System.Drawing;"+rn);
 					strb.Append("PIn.DateT (");
 				}
 				//else if(specialType==CrudSpecialColType.EnumAsString) {//moved up
+				else if(specialType==CrudSpecialColType.TimeSpanNeg) {
+					strb.Append("PIn.TSpan (");
+				}
+				//no special treatment for specialType clob
 				else if(fieldsInDb[f].FieldType.IsEnum) {
 					strb.Append("("+fieldsInDb[f].FieldType.Name+")PIn.Int(");
 				}
@@ -292,7 +296,7 @@ using System.Drawing;"+rn);
 						strb.Append("PIn.String(");
 						break;
 					case "TimeSpan":
-						strb.Append("PIn.TimeSpan(");
+						strb.Append("PIn.Time(");
 						break;
 				}
 				strb.Append("table.Rows[i][\""+fieldsInDb[f].Name+"\"].ToString())");

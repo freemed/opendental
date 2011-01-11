@@ -54,10 +54,10 @@ namespace OpenDentBusiness.Crud{
 				clockEvent.Note              = PIn.String(table.Rows[i]["Note"].ToString());
 				clockEvent.TimeEntered2      = PIn.DateT (table.Rows[i]["TimeEntered2"].ToString());
 				clockEvent.TimeDisplayed2    = PIn.DateT (table.Rows[i]["TimeDisplayed2"].ToString());
-				clockEvent.OTimeHours        = PIn.TimeSpan(table.Rows[i]["OTimeHours"].ToString());
-				clockEvent.OTimeAuto         = PIn.TimeSpan(table.Rows[i]["OTimeAuto"].ToString());
-				clockEvent.Adjust            = PIn.TimeSpan(table.Rows[i]["Adjust"].ToString());
-				clockEvent.AdjustAuto        = PIn.TimeSpan(table.Rows[i]["AdjustAuto"].ToString());
+				clockEvent.OTimeHours        = PIn.TSpan (table.Rows[i]["OTimeHours"].ToString());
+				clockEvent.OTimeAuto         = PIn.TSpan (table.Rows[i]["OTimeAuto"].ToString());
+				clockEvent.Adjust            = PIn.TSpan (table.Rows[i]["Adjust"].ToString());
+				clockEvent.AdjustAuto        = PIn.TSpan (table.Rows[i]["AdjustAuto"].ToString());
 				clockEvent.AdjustIsOverridden= PIn.Bool  (table.Rows[i]["AdjustIsOverridden"].ToString());
 				retVal.Add(clockEvent);
 			}

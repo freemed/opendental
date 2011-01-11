@@ -49,8 +49,8 @@ namespace OpenDentBusiness.Crud{
 				timeAdjust.TimeAdjustNum= PIn.Long  (table.Rows[i]["TimeAdjustNum"].ToString());
 				timeAdjust.EmployeeNum  = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
 				timeAdjust.TimeEntry    = PIn.DateT (table.Rows[i]["TimeEntry"].ToString());
-				timeAdjust.RegHours     = PIn.TimeSpan(table.Rows[i]["RegHours"].ToString());
-				timeAdjust.OTimeHours   = PIn.TimeSpan(table.Rows[i]["OTimeHours"].ToString());
+				timeAdjust.RegHours     = PIn.TSpan (table.Rows[i]["RegHours"].ToString());
+				timeAdjust.OTimeHours   = PIn.TSpan (table.Rows[i]["OTimeHours"].ToString());
 				timeAdjust.Note         = PIn.String(table.Rows[i]["Note"].ToString());
 				timeAdjust.IsAuto       = PIn.Bool  (table.Rows[i]["IsAuto"].ToString());
 				retVal.Add(timeAdjust);
