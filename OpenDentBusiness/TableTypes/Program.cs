@@ -64,8 +64,8 @@ namespace OpenDentBusiness{
 		Planmeca,
 		PracticeWebReports,
 		Progeny,
-		//PT,//old. Did not delete from db just yet.
-		//PTupdate,//old. Did not delete from db just yet.
+		PT,
+		PTupdate,
 		Schick,
 		Sirona,
 		Sopro,
