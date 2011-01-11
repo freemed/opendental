@@ -448,11 +448,13 @@ namespace OpenDental.Bridges{
 				List<InsSub> subList=InsSubs.RefreshForFam(fam);
 				List <InsPlan> planList=InsPlans.RefreshForSubList(subList);
 				PatPlan patplan=null;
+				InsSub sub=null;
 				InsPlan plan=null;
 				Carrier carrier=null;
 				Employer emp=null;
 				if(patPlanList.Count>0){
 					patplan=patPlanList[0];
+					sub=InsSubs.GetSub(patplan.InsSubNum,subList);
 					plan=InsPlans.GetPlan(patplan.PlanNum,planList);
 					carrier=Carriers.GetCarrier(plan.CarrierNum);
 					if(plan.EmployerNum!=0){
@@ -561,12 +563,12 @@ namespace OpenDental.Bridges{
 					sw.Write("0");
 				}
 				sw.Write(",");//PAT_RESPRT Responsible party checkbox T/F
-				//if(plan!=null && pat.PatNum==plan.Subscriber) {//if current patient is the subscriber on their primary plan
+				if(plan!=null && pat.PatNum==sub.Subscriber) {//if current patient is the subscriber on their primary plan
 					sw.Write("1");
-				//}
-				//else {
-				//	sw.Write("0");
-				//}
+				}
+				else {
+					sw.Write("0");
+				}
 				sw.Write(",");//PAT_POLHLD Policy holder checkbox T/F
 				sw.Write(",");//PAT_CUSCD Web sync folder, used internally this can be ignored.
 				sw.Write("");//PAT_PMPID Practice Management Program ID. Can be ignored
