@@ -187,14 +187,28 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Used for Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.</summary>
-		public static TimeSpan Time(string myString) {
-			if(string.IsNullOrEmpty(myString)) {
+		///<summary>Timespans that might be invalid time of day.  Can be + or - and can be up to 800+ hours.  Stored in Oracle as varchar2.</summary>
+		public static TimeSpan TSpan(string myString) {
+			if (string.IsNullOrEmpty(myString)) {
 				return System.TimeSpan.MinValue;
 			}
 			try {
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					return DateTime.Parse(myString).TimeOfDay;
+					//return System.TimeSpan.Parse(myString); //Does not work. Confuses hours with days and an exception is thrown in our large timespan test.
+					bool negative=false;
+					if(myString[0]=='-') {
+						negative=true;
+						myString=myString.Substring(1);//remove the '-'
+					}
+					string[] timeValues=myString.Split(new char[] {':'});
+					if(timeValues.Length!=3) {
+						return System.TimeSpan.MinValue;
+					}
+					TimeSpan retval=new TimeSpan(PIn.Int(timeValues[0]),PIn.Int(timeValues[1]),PIn.Int(timeValues[2]));
+					if(negative) {
+						return retval.Negate();
+					}
+					return retval;
 				}
 				return (System.TimeSpan.Parse(myString));
 			}
@@ -203,13 +217,14 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static TimeSpan TSpan(string myString) {
-			if (string.IsNullOrEmpty(myString)) {
+		///<summary>Used for Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.</summary>
+		public static TimeSpan Time(string myString) {
+			if(string.IsNullOrEmpty(myString)) {
 				return System.TimeSpan.MinValue;
 			}
 			try {
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					return System.TimeSpan.Parse(myString);
+					return DateTime.Parse(myString).TimeOfDay;
 				}
 				return (System.TimeSpan.Parse(myString));
 			}
