@@ -43,7 +43,7 @@ namespace OpenDental {
 					Directory.Delete(folderUpdate,true);
 				}
 				catch {
-					MessageBox.Show(Lan.g("Prefs","Please delete this folder and then try again: ")+folderUpdate);
+					MessageBox.Show(Lan.g("Prefs","Please delete this folder and then re-open the program: ")+folderUpdate);
 					return false;
 				}
 				//wait a bit so that CreateDirectory won't malfunction.
@@ -52,7 +52,7 @@ namespace OpenDental {
 					Application.DoEvents();
 				}
 				if(Directory.Exists(folderUpdate)) {
-					MessageBox.Show(Lan.g("Prefs","Please delete this folder and then try again: ")+folderUpdate);
+					MessageBox.Show(Lan.g("Prefs","Please delete this folder and then re-open the program: ")+folderUpdate);
 					return false;
 				}
 			}
