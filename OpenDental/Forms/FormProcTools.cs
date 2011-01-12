@@ -20,7 +20,6 @@ namespace OpenDental{
 		private CheckBox checkTcodes;
 		private CheckBox checkDcodes;
 		private CheckBox checkNcodes;
-		private OpenDental.UI.Button butUncheck;
 		private Label label5;
 		private CheckBox checkProcButtons;
 		private OpenDental.UI.Button butRun;
@@ -69,16 +68,13 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.checkProcButtons = new System.Windows.Forms.CheckBox();
 			this.butRun = new OpenDental.UI.Button();
-			this.butUncheck = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.checkApptProcsQuickAdd = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// checkAutocodes
 			// 
-			this.checkAutocodes.Checked = true;
-			this.checkAutocodes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkAutocodes.Location = new System.Drawing.Point(15,238);
+			this.checkAutocodes.Location = new System.Drawing.Point(15,190);
 			this.checkAutocodes.Name = "checkAutocodes";
 			this.checkAutocodes.Size = new System.Drawing.Size(646,36);
 			this.checkAutocodes.TabIndex = 43;
@@ -89,9 +85,7 @@ namespace OpenDental{
 			// 
 			// checkTcodes
 			// 
-			this.checkTcodes.Checked = true;
-			this.checkTcodes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkTcodes.Location = new System.Drawing.Point(15,115);
+			this.checkTcodes.Location = new System.Drawing.Point(15,67);
 			this.checkTcodes.Name = "checkTcodes";
 			this.checkTcodes.Size = new System.Drawing.Size(646,36);
 			this.checkTcodes.TabIndex = 44;
@@ -104,19 +98,17 @@ namespace OpenDental{
 			// 
 			this.checkDcodes.Checked = true;
 			this.checkDcodes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkDcodes.Location = new System.Drawing.Point(15,197);
+			this.checkDcodes.Location = new System.Drawing.Point(15,149);
 			this.checkDcodes.Name = "checkDcodes";
 			this.checkDcodes.Size = new System.Drawing.Size(646,36);
 			this.checkDcodes.TabIndex = 45;
-			this.checkDcodes.Text = "D codes - Add any missing 2009 ADA codes.  This option does not work in the trial" +
+			this.checkDcodes.Text = "D codes - Add any missing 2011 ADA codes.  This option does not work in the trial" +
     " version or compiled version.";
 			this.checkDcodes.UseVisualStyleBackColor = true;
 			// 
 			// checkNcodes
 			// 
-			this.checkNcodes.Checked = true;
-			this.checkNcodes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkNcodes.Location = new System.Drawing.Point(15,156);
+			this.checkNcodes.Location = new System.Drawing.Point(15,108);
 			this.checkNcodes.Name = "checkNcodes";
 			this.checkNcodes.Size = new System.Drawing.Size(646,36);
 			this.checkNcodes.TabIndex = 46;
@@ -133,9 +125,7 @@ namespace OpenDental{
 			// 
 			// checkProcButtons
 			// 
-			this.checkProcButtons.Checked = true;
-			this.checkProcButtons.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkProcButtons.Location = new System.Drawing.Point(15,279);
+			this.checkProcButtons.Location = new System.Drawing.Point(15,231);
 			this.checkProcButtons.Name = "checkProcButtons";
 			this.checkProcButtons.Size = new System.Drawing.Size(646,36);
 			this.checkProcButtons.TabIndex = 49;
@@ -150,26 +140,12 @@ namespace OpenDental{
 			this.butRun.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRun.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRun.CornerRadius = 4F;
-			this.butRun.Location = new System.Drawing.Point(477,384);
+			this.butRun.Location = new System.Drawing.Point(477,335);
 			this.butRun.Name = "butRun";
 			this.butRun.Size = new System.Drawing.Size(82,26);
 			this.butRun.TabIndex = 50;
 			this.butRun.Text = "Run Now";
 			this.butRun.Click += new System.EventHandler(this.butRun_Click);
-			// 
-			// butUncheck
-			// 
-			this.butUncheck.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butUncheck.Autosize = true;
-			this.butUncheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUncheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUncheck.CornerRadius = 4F;
-			this.butUncheck.Location = new System.Drawing.Point(15,78);
-			this.butUncheck.Name = "butUncheck";
-			this.butUncheck.Size = new System.Drawing.Size(84,22);
-			this.butUncheck.TabIndex = 47;
-			this.butUncheck.Text = "Uncheck All";
-			this.butUncheck.Click += new System.EventHandler(this.butUncheck_Click);
 			// 
 			// butClose
 			// 
@@ -179,7 +155,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(586,384);
+			this.butClose.Location = new System.Drawing.Point(586,335);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(82,26);
 			this.butClose.TabIndex = 0;
@@ -188,9 +164,7 @@ namespace OpenDental{
 			// 
 			// checkApptProcsQuickAdd
 			// 
-			this.checkApptProcsQuickAdd.Checked = true;
-			this.checkApptProcsQuickAdd.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkApptProcsQuickAdd.Location = new System.Drawing.Point(15,320);
+			this.checkApptProcsQuickAdd.Location = new System.Drawing.Point(15,272);
 			this.checkApptProcsQuickAdd.Name = "checkApptProcsQuickAdd";
 			this.checkApptProcsQuickAdd.Size = new System.Drawing.Size(646,36);
 			this.checkApptProcsQuickAdd.TabIndex = 51;
@@ -201,12 +175,11 @@ namespace OpenDental{
 			// FormProcTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(698,434);
+			this.ClientSize = new System.Drawing.Size(698,385);
 			this.Controls.Add(this.checkApptProcsQuickAdd);
 			this.Controls.Add(this.butRun);
 			this.Controls.Add(this.checkProcButtons);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.butUncheck);
 			this.Controls.Add(this.checkNcodes);
 			this.Controls.Add(this.checkDcodes);
 			this.Controls.Add(this.checkTcodes);
