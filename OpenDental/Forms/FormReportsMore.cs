@@ -406,6 +406,10 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.UserQuery)) {
 				return;
 			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				MsgBox.Show(this,"Not allowed while using Oracle.");
+				return;
+			}
 			FormQuery FormQuery2=new FormQuery(null);
 			FormQuery2.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.UserQuery,0,"");
