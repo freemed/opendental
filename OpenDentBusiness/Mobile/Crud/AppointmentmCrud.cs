@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 		///<summary>Gets one Appointmentm object from the database using primaryKey1(CustomerNum) and primaryKey2.  Returns null if not found.</summary>
 		internal static Appointmentm SelectOne(long customerNum,long aptNum){
 			string command="SELECT * FROM appointmentm "
-				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND AptNum = "+POut.Long(aptNum)+" LIMIT 1";
+				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND AptNum = "+POut.Long(aptNum);
 			List<Appointmentm> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -110,14 +110,14 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"ProcDescript= '"+POut.String(appointmentm.ProcDescript)+"', "
 				+"ClinicNum   =  "+POut.Long  (appointmentm.ClinicNum)+", "
 				+"IsHygiene   =  "+POut.Bool  (appointmentm.IsHygiene)+" "
-				+"WHERE CustomerNum = "+POut.Long(appointmentm.CustomerNum)+" AND AptNum = "+POut.Long(appointmentm.AptNum)+" LIMIT 1";
+				+"WHERE CustomerNum = "+POut.Long(appointmentm.CustomerNum)+" AND AptNum = "+POut.Long(appointmentm.AptNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Appointmentm from the database.</summary>
 		internal static void Delete(long customerNum,long aptNum){
 			string command="DELETE FROM appointmentm "
-				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND AptNum = "+POut.Long(aptNum)+" LIMIT 1";
+				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND AptNum = "+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
 

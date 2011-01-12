@@ -54,19 +54,19 @@ namespace Crud {
 					MessageBox.Show("This table was not found in the database:"
 						+rn+tablename
 						+rn+"Queries will be found at the end of "+Path.GetFileName(convertDbFile));
-					//needs to be moved into CrudSchemaRaw:
-					//strb=new StringBuilder();
-					//strb.Append(rn+rn+t4+"/*");
-					//strb.Append(rn+t4+"command=\"DROP TABLE IF EXISTS "+tablename+"\";");
-					//strb.Append(rn+t4+"Db.NonQ(command);");
-					//if(isMobile) {
-					//	GetCreateTable(strb,tablename,priKey1.Name,priKey2.Name,fieldsExceptPri);
-					//}
-					//else {
-					//	GetCreateTable(strb,tablename,priKey.Name,null,fieldsExceptPri);
-					//}
-					//strb.Append(rn+t4+"*/");
-					//File.AppendAllText(convertDbFile,strb.ToString());
+					
+					strb=new StringBuilder();
+					strb.Append(rn+rn+t4+"/*");
+					List<DbSchemaCol> cols=null;
+					if(isMobile) {
+						cols=CrudQueries.GetListColumns(priKey1.Name,priKey2.Name,fieldsExceptPri,true);
+					}
+					else {
+						cols=CrudQueries.GetListColumns(priKey.Name,null,fieldsExceptPri,false);
+					}
+					strb.Append("\r\n"+CrudSchemaRaw.AddTable(tablename,cols,4,isMobile));
+					strb.Append(rn+t4+"*/");
+					File.AppendAllText(convertDbFile,strb.ToString());
 				}
 			}
 			List<FieldInfo> newColumns=CrudGenHelper.GetNewFields(fields,typeClass,dbName);

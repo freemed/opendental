@@ -367,6 +367,8 @@
     <Compile Include="InternalTools\Phones\TableTypes\PhoneOverride.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />
+    <Compile Include="Mobile\Data Interface\RxPatms.cs" />
+    <Compile Include="Mobile\TableTypes\RxPatm.cs" />
     <Compile Include="Remoting\ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\AccountingAutoPays.cs" />

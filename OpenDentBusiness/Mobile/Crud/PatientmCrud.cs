@@ -11,7 +11,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 		///<summary>Gets one Patientm object from the database using primaryKey1(CustomerNum) and primaryKey2.  Returns null if not found.</summary>
 		internal static Patientm SelectOne(long customerNum,long patNum){
 			string command="SELECT * FROM patientm "
-				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patNum)+" LIMIT 1";
+				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patNum);
 			List<Patientm> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -74,7 +74,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			return retVal;
 		}
 
-		///<summary>Usually set useExistingPK=true.  Inserts one Patientm into the database. This would be executed against the webserver db</summary>
+		///<summary>Usually set useExistingPK=true.  Inserts one Patientm into the database.</summary>
 		internal static long Insert(Patientm patientm,bool useExistingPK){
 			if(!useExistingPK) {
 				patientm.PatNum=ReplicationServers.GetKey("patientm","PatNum");
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			return patientm.PatNum;
 		}
 
-		///<summary>Updates one Patientm in the database. This would be executed against the webserver db</summary>
+		///<summary>Updates one Patientm in the database.</summary>
 		internal static void Update(Patientm patientm){
 			string command="UPDATE patientm SET "
 				+"LName              = '"+POut.String(patientm.LName)+"', "
@@ -134,14 +134,14 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"AddrNote           = '"+POut.String(patientm.AddrNote)+"', "
 				+"ClinicNum          =  "+POut.Long  (patientm.ClinicNum)+", "
 				+"PreferContactMethod=  "+POut.Int   ((int)patientm.PreferContactMethod)+" "
-				+"WHERE CustomerNum = "+POut.Long(patientm.CustomerNum)+" AND PatNum = "+POut.Long(patientm.PatNum)+" LIMIT 1";
+				+"WHERE CustomerNum = "+POut.Long(patientm.CustomerNum)+" AND PatNum = "+POut.Long(patientm.PatNum);
 			Db.NonQ(command);
 		}
 
-		///<summary>Deletes one Patientm from the database.  This would be executed against the webserver db</summary>
+		///<summary>Deletes one Patientm from the database.</summary>
 		internal static void Delete(long customerNum,long patNum){
 			string command="DELETE FROM patientm "
-				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patNum)+" LIMIT 1";
+				+"WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patNum);
 			Db.NonQ(command);
 		}
 

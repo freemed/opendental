@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 			FieldInfo priKey=CrudGenHelper.GetPriKey(fields,typeClass.Name);
 			List<FieldInfo> fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
 			List<DbSchemaCol> cols=CrudQueries.GetListColumns(priKey.Name,null,fieldsExceptPri,false);
-			strb.Append("\r\n"+CrudSchemaRaw.AddTable("tempcore",cols,3));
+			strb.Append("\r\n"+CrudSchemaRaw.AddTable("tempcore",cols,3,false));
 			strb.Append(@"
 		}
 

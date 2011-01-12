@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 				command="DROP TABLE IF EXISTS tempcore";
 				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
-					TempCoreNum bigint NOT NULL,
+					TempCoreNum bigint NOT NULL auto_increment PRIMARY KEY,
 					TimeOfDayTest time NOT NULL DEFAULT '00:00:00',
 					TimeStampTest timestamp,
 					DateTest date NOT NULL DEFAULT '0001-01-01',
@@ -26,8 +26,6 @@ namespace OpenDentBusiness {
 					VarCharTest varchar(255) NOT NULL,
 					DropableColumn tinyint NOT NULL
 					) DEFAULT CHARSET=utf8";
-				Db.NonQ(command);
-				command=@"CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (TempCoreNum)";
 				Db.NonQ(command);
 			}
 			else {//oracle

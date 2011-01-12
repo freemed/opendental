@@ -16,7 +16,7 @@ namespace Crud {
 		private static string tb = "";
 
 		///<summary>Generates C# code to add a table.</summary>
-		public static string AddTable(string tableName,List<DbSchemaCol> cols,int tabInset) {
+		public static string AddTable(string tableName,List<DbSchemaCol> cols,int tabInset,bool isMobile) {
 			StringBuilder strb = new StringBuilder();
 			List<DbSchemaCol> indexes = new List<DbSchemaCol>();
 			tb="";//must reset tabs each time method is called
@@ -29,18 +29,40 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
-				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i])+(GetMySqlType(cols[i])=="timestamp"?"":" NOT NULL")+(GetMySqlBlankData(cols[i])=="\"\""||GetMySqlBlankData(cols[i])=="0"||GetMySqlType(cols[i])=="timestamp"?"":" DEFAULT "+GetMySqlBlankData(cols[i]))+(i==cols.Count-1?"":","));
-				if(cols[i].DataType==OdDbType.Long) {//OdDbType.Long==bigint in MySQL. All bigints are assumed to be either keys or foreign keys.
-					indexes.Add(cols[i]);
+				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetMySqlType(cols[i]));
+				if(GetMySqlType(cols[i]) != "timestamp"){
+					strb.Append(" NOT NULL");
 				}
+				if(GetMySqlBlankData(cols[i])!="\"\"" && GetMySqlBlankData(cols[i])!="0" && GetMySqlType(cols[i])!="timestamp"){				
+					strb.Append(" DEFAULT "+GetMySqlBlankData(cols[i]));
+				}
+				if(i==0 && !isMobile){
+					strb.Append(" PRIMARY KEY");
+					//indexes.Add(cols[i]);//oracle needs to be changed to handle the primary key
+				}
+				else if(cols[i].DataType==OdDbType.Long) {//All bigints are assumed to be either keys or foreign keys.
+					indexes.Add(cols[i]);//for oracle
+				}
+				if(i<cols.Count-1) {
+					strb.Append(",");
+				}
+			}
+			for(int i=0;i<indexes.Count;i++) {
+				if(i<indexes.Count-1) {
+					strb.Append(",");
+				}
+				strb.Append(rn+tb+t2+"INDEX("+indexes[i].ColumnName+")");
 			}
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			for(int i=0;i<indexes.Count;i++) {
-				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+indexes[i].ColumnName.ToUpper()+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
-				strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			}
+			//for(int i=0;i<indexes.Count;i++) {
+			//	strb.Append(rn+tb+t1+"command=@\"ALTER TABLE "+tableName+" ADD INDEX ("+indexes[i].ColumnName+")\";");
+			//	strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			//}
 			strb.Append(rn+tb+"}");
+			if(isMobile) {
+				return strb.ToString();//no oracle
+			}
 			#endregion
 			#region Oracle
 			strb.Append(rn+tb+"else {//oracle");
