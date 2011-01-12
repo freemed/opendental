@@ -144,14 +144,21 @@ namespace OpenDentBusiness {
 			if(navConn==null) {
 				throw new Exception(configFilePath+" does not contain a valid database entry.");//database+" is not an allowed database.");
 			}
-			//return navOne.SelectSingleNode("summary").Value;
-			//now, get the values for this connection
-			string server=navConn.SelectSingleNode("ComputerName").Value;
-			string database=navConn.SelectSingleNode("Database").Value;
-			string mysqlUser=navConn.SelectSingleNode("User").Value;
-			string mysqlPassword=navConn.SelectSingleNode("Password").Value;
-			string mysqlUserLow=navConn.SelectSingleNode("UserLow").Value;
-			string mysqlPasswordLow=navConn.SelectSingleNode("PasswordLow").Value;
+			string connString="",server="",database="",mysqlUser="",mysqlPassword="",mysqlUserLow="",mysqlPasswordLow="";
+			XPathNavigator navConString=navConn.SelectSingleNode("ConnectionString");
+			if(navConString!=null) {//If there is a connection string then use it.
+				connString=navConString.Value;
+			}
+			else {
+				//return navOne.SelectSingleNode("summary").Value;
+				//now, get the values for this connection
+				server=navConn.SelectSingleNode("ComputerName").Value;
+				database=navConn.SelectSingleNode("Database").Value;
+				mysqlUser=navConn.SelectSingleNode("User").Value;
+				mysqlPassword=navConn.SelectSingleNode("Password").Value;
+				mysqlUserLow=navConn.SelectSingleNode("UserLow").Value;
+				mysqlPasswordLow=navConn.SelectSingleNode("PasswordLow").Value;
+			}
 			XPathNavigator dbTypeNav=navConn.SelectSingleNode("DatabaseType");
 			DatabaseType dbtype=DatabaseType.MySql;
 			if(dbTypeNav!=null){
@@ -160,11 +167,21 @@ namespace OpenDentBusiness {
 				}
 			}
 			DataConnection dcon=new DataConnection();
-			try {
-				dcon.SetDb(server,database,mysqlUser,mysqlPassword,mysqlUserLow,mysqlPasswordLow,dbtype);
+			if(connString!="") {
+				try {
+					dcon.SetDb(connString,"",dbtype);
+				}
+				catch(Exception e) {
+					throw new Exception(e.Message+"\r\n"+"Connection to database failed.  Check the values in the config file on the web server "+configFilePath);
+				}
 			}
-			catch(Exception e){
-				throw new Exception(e.Message+"\r\n"+"Connection to database failed.  Check the values in the config file on the web server "+configFilePath);
+			else {
+				try {
+					dcon.SetDb(server,database,mysqlUser,mysqlPassword,mysqlUserLow,mysqlPasswordLow,dbtype);
+				}
+				catch(Exception e) {
+					throw new Exception(e.Message+"\r\n"+"Connection to database failed.  Check the values in the config file on the web server "+configFilePath);
+				}
 			}
 			//todo?: make sure no users have blank passwords.
 		}
