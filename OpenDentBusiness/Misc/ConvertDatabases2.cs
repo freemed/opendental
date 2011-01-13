@@ -3267,7 +3267,16 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE document ADD Thumbnail clob";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxpat ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE rxpat SET DateTStamp = NULL";//to set all timestamps to now.
+					Db.NonQ(command);
+				}
+				else {//oracle
+	//todo: needs to be implemented:
+					
+				}
 
 
 
@@ -3302,6 +3311,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 				
+
 
 
 

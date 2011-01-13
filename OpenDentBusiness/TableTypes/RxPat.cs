@@ -28,6 +28,9 @@ namespace OpenDentBusiness{
 		public long PharmacyNum;
 		///<summary>Is a controlled substance.  This will affect the way it prints.</summary>
 		public bool IsControlled;
+		///<summary>The last date and time this row was altered.  Not user editable.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 
 		///<summary></summary>
 		public RxPat Copy() {
