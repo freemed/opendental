@@ -225,13 +225,27 @@ namespace OpenDentBusiness{
 					+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum ";
 			}
 			command+="WHERE PatStatus != '4' ";//not status 'deleted'
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command+=(lname.Length>0?"AND LName LIKE '%"+POut.String(lname)+"%' ":"")//LIKE is case insensitive in mysql.
-					+(fname.Length>0?"AND FName LIKE '%"+POut.String(fname)+"%' ":"");//LIKE is case insensitive in mysql.
+			if(DataConnection.DBtype==DatabaseType.MySql) {//LIKE is case insensitive in mysql.
+				if(lname.Length>0) {
+					if(lname.Length<4) {
+						command+="AND LName LIKE '"+POut.String(lname)+"%' ";
+					}
+					else {
+						command+="AND LName LIKE '%"+POut.String(lname)+"%' ";
+					}
+				}
+				command+=(fname.Length>0?"AND FName LIKE '%"+POut.String(fname)+"%' ":"");
 			}
-			else {//oracle
-				command+=(lname.Length>0?"AND LOWER(LName) LIKE '%"+POut.String(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
-					+(fname.Length>0?"AND LOWER(FName) LIKE '%"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+			else {//oracle, case matters in a like statement
+				if(lname.Length>0) {
+					if(lname.Length<4) {
+						command+="AND LOWER(LName) LIKE '"+POut.String(lname)+"%' ";
+					}
+					else {
+						command+="AND LOWER(LName) LIKE '%"+POut.String(lname)+"%' ";
+					}
+				}
+				command+=(fname.Length>0?"AND LOWER(FName) LIKE '%"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
 			}
 			if(regexp!="") {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
