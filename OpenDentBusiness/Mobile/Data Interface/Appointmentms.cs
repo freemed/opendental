@@ -31,42 +31,6 @@ namespace OpenDentBusiness.Mobile {
 			return Crud.AppointmentmCrud.SelectMany(command);
 		}
 
-		///<summary></summary>
-		public static long Insert(Appointmentm appointmentm) {
-			return Crud.AppointmentmCrud.Insert(appointmentm,true);
-		}
-
-		///<summary></summary>
-		public static void Update(Appointmentm appointmentm) {
-			Crud.AppointmentmCrud.Update(appointmentm);
-		}
-
-		///<summary></summary>
-		public static void Delete(long customerNum,long aptNum) {
-			string command= "DELETE FROM appointmentm WHERE CustomerNum = "+POut.Long(customerNum)+" AND AptNum = "+POut.Long(aptNum);
-			Db.NonQ(command);
-		}
-
-		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<Appointmentm> GetChanged(DateTime changedSince,DateTime excludeOlderThan) {
-			List<Appointment> ChangedAppointmentList=Appointments.GetChangedSince(changedSince,excludeOlderThan);
-			List<Appointmentm> ChangedAppointmentmList=ConvertListToM(ChangedAppointmentList);
-			return ChangedAppointmentmList;
-		}
-
-		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<long> GetChangedSinceAptNums(DateTime changedSince,DateTime excludeOlderThan) {
-			return Appointments.GetChangedSinceAptNums(changedSince,excludeOlderThan);
-		}
-
-		///<summary>The values returned are sent to the webserver. Used if GetChanged returns large recordsets.</summary>
-		public static List<Appointmentm> GetMultApts(List<long> aptNums) {
-			Appointment[] aptArray=Appointments.GetMultApts(aptNums);
-			List<Appointment> aptList=new List<Appointment>(aptArray);
-			List<Appointmentm> aptmList=ConvertListToM(aptList);
-			return aptmList;
-		}
-
 		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
 		public static List<Appointmentm> ConvertListToM(List<Appointment> list) {
 			List<Appointmentm> retVal=new List<Appointmentm>();
@@ -89,10 +53,39 @@ namespace OpenDentBusiness.Mobile {
 				}
 			}
 		}
-		
+
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<long> GetChangedSinceAptNums(DateTime changedSince,DateTime excludeOlderThan) {
+			return Appointments.GetChangedSinceAptNums(changedSince,excludeOlderThan);
+		}
+
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<Appointmentm> GetMultApts(List<long> aptNums) {
+			List<Appointment> aptList=Appointments.GetMultApts(aptNums);
+			List<Appointmentm> aptmList=ConvertListToM(aptList);
+			return aptmList;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
+		///<summary></summary>
+		public static long Insert(Appointmentm appointmentm) {
+			return Crud.AppointmentmCrud.Insert(appointmentm,true);
+		}
+		
+		///<summary></summary>
+		public static void Update(Appointmentm appointmentm) {
+			Crud.AppointmentmCrud.Update(appointmentm);
+		}
+		 
+		///<summary></summary>
+		public static void Delete(long customerNum,long aptNum) {
+			string command= "DELETE FROM appointmentm WHERE CustomerNum = "+POut.Long(customerNum)+" AND AptNum = "+POut.Long(aptNum);
+			Db.NonQ(command);
+		}
+
+		 
 		///<summary></summary>
 		public static List<Appointmentm> Refresh(long patNum){
 			string command="SELECT * FROM appointmentm WHERE PatNum = "+POut.Long(patNum);

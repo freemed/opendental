@@ -20,6 +20,7 @@ namespace OpenDental {
 		private static int MobileSyncIntervalMinutes;
 		private static DateTime MobileExcludeApptsBeforeDate;
 		private static String StatusMessage="";
+		private static int BatchSize=100;
 
 		public FormMobileSetup() {
 			InitializeComponent();
@@ -29,8 +30,8 @@ namespace OpenDental {
 		private void FormMobileSetup_Load(object sender,EventArgs e) {
 			InitializeVariables();
 			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
-			//textboxMobileSyncServerURL.Text=MobileSyncServerURL;
-			//textBoxSynchMinutes.Text=MobileSyncIntervalMinutes+"";
+			textMobileSyncServerURL.Text=MobileSyncServerURL;
+			textSynchMinutes.Text=MobileSyncIntervalMinutes+"";
 			textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
 			butSavePreferences.Enabled=false;
 		}
@@ -65,11 +66,14 @@ namespace OpenDental {
 				}
 				//CreatePatients(100000);
 				//CreateAppointments(10); // for each patient
+				CreatePrescriptions(10);// for each patient
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
 				List<long> patNumList=Patientms.GetChangedSincePatNums(GetChangedSince);
 				SynchPatients(patNumList);
 				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(GetChangedSince,MobileExcludeApptsBeforeDate);
 				SynchAppointments(aptNumList);
+				//List<long> rxNumList=Prescriptionms.GetChangedSinceRxNums(GetChangedSince);
+				//SynchPrescriptions();
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
 				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
 			}
@@ -109,12 +113,12 @@ namespace OpenDental {
 
 		private static void SynchPatients(List<long> patNumList) {
 			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
-			int BatchSize =100;
-			for(int start=0;start<patNumList.Count;start+=BatchSize) {
-				if((start+BatchSize)>patNumList.Count) {
-					BatchSize=patNumList.Count-start;
+			int LocalBatchSize=BatchSize;
+			for(int start=0;start<patNumList.Count;start+=LocalBatchSize) {
+				if((start+LocalBatchSize)>patNumList.Count) {
+					LocalBatchSize=patNumList.Count-start;
 				}
-				List<long> BlockPatNumList=patNumList.GetRange(start,BatchSize);
+				List<long> BlockPatNumList=patNumList.GetRange(start,LocalBatchSize);
 				List<Patientm> ChangedPatientmList=Patientms.GetMultPats(BlockPatNumList);
 				StatusMessage=start + " records of "+patNumList.Count +" Patient Uploads";
 				Application.DoEvents();// allows textProgress to be refreshed 
@@ -124,16 +128,31 @@ namespace OpenDental {
 
 		private static void SynchAppointments(List<long> AptNumList) {
 			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
-			int BatchSize =100;
-			for(int start=0;start<AptNumList.Count;start+=BatchSize) {
-				if((start+BatchSize)>AptNumList.Count) {
-					BatchSize=AptNumList.Count-start;
+			int LocalBatchSize=BatchSize;
+			for(int start=0;start<AptNumList.Count;start+=LocalBatchSize) {
+				if((start+LocalBatchSize)>AptNumList.Count) {
+					LocalBatchSize=AptNumList.Count-start;
 				}
-				List<long> BlockAptNumList=AptNumList.GetRange(start,BatchSize);
+				List<long> BlockAptNumList=AptNumList.GetRange(start,LocalBatchSize);
 				List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetMultApts(BlockAptNumList);
 				StatusMessage=start + " records of "+AptNumList.Count +" Appointmnet Uploads";
 				Application.DoEvents();// allows textProgress to be refreshed 
 				mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
+			}
+		}
+
+		private static void SynchPrescriptions(List<long> RxNumList) {
+			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
+			int LocalBatchSize=BatchSize;
+			for(int start=0;start<RxNumList.Count;start+=LocalBatchSize) {
+				if((start+LocalBatchSize)>RxNumList.Count) {
+					LocalBatchSize=RxNumList.Count-start;
+				}
+				List<long> BlockRxNumList=RxNumList.GetRange(start,LocalBatchSize);
+				List<RxPatm> ChangedRxList=RxPatms.GetMultRxPats(BlockRxNumList);
+				StatusMessage=start + " records of "+RxNumList.Count +" Prescriptions Uploads";
+				Application.DoEvents();// allows textProgress to be refreshed 
+				mb.SynchPrescriptions(RegistrationKey,ChangedRxList.ToArray());
 			}
 		}
 
@@ -181,14 +200,7 @@ namespace OpenDental {
 			}
 			SetMobileExcludeApptsBeforeDate();
 			butSavePreferences.Enabled=false;
-			//bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"[0-9]+");//find the first group of numbers
-			//		o Must be at least 10 characters
-			//o Must contain at least one one lower case letter, one upper case letter, one digit and one special character
-			//o Valid special characters are -   @#$%^&+=
-			//^.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$
-			if(textMobilePassword.Text.Trim()!="") {
-				mb.SetMobileWebPassword(RegistrationKey,textMobilePassword.Text.Trim());
-			}
+			mb.SetMobileWebUserPassword(RegistrationKey,textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
 			bool PaidCustomer=true; // check for payment here
 			if(PaidCustomer) {
 				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textSynchMinutes.Text));
@@ -228,6 +240,22 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
+
+			//Minimum 14 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
+			bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"^.*(?=.{14,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$");
+			if(!IsMatch) {
+				MsgBox.Show(this,"The username must be atleast 14 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
+				return false;
+			}
+			if(RegistrationKey==textMobileUserName.Text.Trim()){
+				MsgBox.Show(this,"The username cannot be the same as the Registration Key");
+				return false;
+			}
+			if(textMobilePassword.Text.Trim()=="") {
+				MsgBox.Show(this,"The password cannot be empty");
+				return false;
+			}
+
 			return true;
 	}
 		
@@ -291,6 +319,24 @@ namespace OpenDental {
 			}
 		}
 
+		/// <summary>
+		/// For testing only
+		/// </summary>
+		private static void CreatePrescriptions(int PrescriptionCount) {
+			long[] patNumArray=Patients.GetAllPatNums();
+			for(int i=0;i<patNumArray.Length;i++) {
+				for(int j=0;j<PrescriptionCount;j++) {
+					RxPat rxpat= new RxPat();
+					rxpat.Drug="VicodinA VicodinB VicodinC"+j;
+					rxpat.Disp="50.50";
+					rxpat.IsControlled=true;
+					rxpat.PatNum=patNumArray[i];
+					rxpat.RxDate=new DateTime(2010,12,1,11,0,0);
+					RxPats.Insert(rxpat);
+				}
+			}
+		}
+		
 		/// <summary>
 		/// If the MobileExcludeApptsBeforeDate is not specified then it defaults to a year before the current time.
 		/// </summary>

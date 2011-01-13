@@ -65,9 +65,23 @@ namespace WebHostSynch {
 				Logger.LogError(ex);
 			}
 		}
-
+		
 		[WebMethod]
-		public void SetMobileWebPassword(String RegistrationKey,String Password) {
+		public void SynchPrescriptions(String RegistrationKey,List<RxPatm> rxList) {
+			try {
+				Logger.Information("In SynchPrescriptions");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				RxPatms.UpdateFromChangeList(rxList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
+		}
+		[WebMethod]
+		public void SetMobileWebUserPassword(String RegistrationKey,String UserName,String Password) {
 			try {
 				Logger.Information("In SetMobileWebPassword");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);

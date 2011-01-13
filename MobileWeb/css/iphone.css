@@ -56,7 +56,7 @@ min-height: 480px;
 
 .today{
     float:left;
-    margin-left:30px
+    margin-left:15px
 }
 .next{
     top:10px;
@@ -68,7 +68,8 @@ min-height: 480px;
 }
 
 .datestring{
-    position: relative;float:center; top:15px; left:10px;
+    position: relative;float:center; top:15px; 
+    margin-left:20px;
 }
 .contents{
     clear:both;
@@ -82,10 +83,11 @@ min-height: 480px;
 .style2
 { display:inline;
   text-decoration:underline;
-  color:blue;
+  color:#343C83;
 }
 h2 {
     font: bold 14px Helvetica;
+    color:#FFFFFF;
 }
 .appts, .home, .patients{
     left: 6px;

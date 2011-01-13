@@ -21,29 +21,6 @@ namespace OpenDentBusiness.Mobile {
 			return Crud.PatientmCrud.SelectMany(command);
 		}
 
-		///<summary>This would be executed on the webserver only</summary>
-		public static long Insert(Patientm patientm) {
-			return Crud.PatientmCrud.Insert(patientm,true);
-		}
-
-		///<summary>This would be executed on the webserver only</summary>
-		public static void Update(Patientm patientm) {
-			Crud.PatientmCrud.Update(patientm);
-		}
-
-		///<summary>This would be executed on the webserver only</summary>
-		public static void Delete(long customerNum,long patNum) {
-			Crud.PatientmCrud.Delete(customerNum, patNum);
-		}
-
-	
-		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<Patientm> GetChanged(DateTime changedSince) {
-			List<Patient> ChangedPatientList=Patients.GetChangedSince(changedSince);
-			List<Patientm> ChangedPatientmList=ConvertListToM(ChangedPatientList);
-			return ChangedPatientmList;
-		}
-
 		public static List<long> GetChangedSincePatNums(DateTime changedSince) {
 			return Patients.GetChangedSincePatNums(changedSince);
 		}
@@ -92,8 +69,28 @@ namespace OpenDentBusiness.Mobile {
 			return Crud.PatientmCrud.SelectMany(command);
 		}
 
+		 ///<summary>This would be executed on the webserver only</summary>
+		public static long Insert(Patientm patientm) {
+			return Crud.PatientmCrud.Insert(patientm,true);
+		}
 
+		///<summary>This would be executed on the webserver only</summary>
+		public static void Update(Patientm patientm) {
+			Crud.PatientmCrud.Update(patientm);
+		}
 
+		///<summary>This would be executed on the webserver only</summary>
+		public static void Delete(long customerNum,long patNum) {
+			Crud.PatientmCrud.Delete(customerNum, patNum);
+		}
+
+	
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<Patientm> GetChanged(DateTime changedSince) {
+			List<Patient> ChangedPatientList=Patients.GetChangedSince(changedSince);
+			List<Patientm> ChangedPatientmList=ConvertListToM(ChangedPatientList);
+			return ChangedPatientmList;
+		}
 
 		*/
 

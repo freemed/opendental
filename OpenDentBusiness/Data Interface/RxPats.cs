@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -43,10 +44,43 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static List<long> GetChangedSinceRxNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT RxNum FROM rxpat WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> rxnums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				rxnums.Add(PIn.Long(dt.Rows[i]["RxNum"].ToString()));
+			}
+			return rxnums;
+		}
 
-
-	
-	
+		///<summary>Used along with GetChangedSinceRxNums</summary>
+		public static List<RxPat> GetMultRxPats(List<long> rxNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),rxNums);
+			}
+			string strRxNums="";
+			DataTable table;
+			if(rxNums.Count>0) {
+				for(int i=0;i<rxNums.Count;i++) {
+					if(i>0) {
+						strRxNums+="OR ";
+					}
+					strRxNums+="RxNum='"+rxNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM rxpat WHERE "+strRxNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			RxPat[] multRxs=Crud.RxPatCrud.TableToList(table).ToArray();
+			List<RxPat> rxList=new List<RxPat>(multRxs);
+			return rxList;
+		}
 
 		
 	}

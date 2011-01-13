@@ -236,9 +236,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used along with GetChangedSinceAptNums</summary>
-		public static Appointment[] GetMultApts(List<long> aptNums) {
+		public static List<Appointment> GetMultApts(List<long> aptNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),aptNums);
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),aptNums);
 			}
 			//MessageBox.Show(patNums.Length.ToString());
 			string strAptNums="";
@@ -258,7 +258,8 @@ namespace OpenDentBusiness{
 				table=new DataTable();
 			}
 			Appointment[] multApts=Crud.AppointmentCrud.TableToList(table).ToArray();
-			return multApts;
+			List<Appointment> aptList=new List<Appointment>(multApts);
+			return aptList;
 		}
 
 		///<summary>A list of strings.  Each string corresponds to one appointment in the supplied list.  Each string is a comma delimited list of codenums of the procedures attached to the appointment.</summary>

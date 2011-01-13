@@ -171,15 +171,49 @@
       <s:element name="SynchAppointmentsResponse">
         <s:complexType />
       </s:element>
-      <s:element name="SetMobileWebPassword">
+      <s:element name="SynchPrescriptions">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="rxList" type="tns:ArrayOfRxPatm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRxPatm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RxPatm" nillable="true" type="tns:RxPatm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RxPatm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="RxNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="RxDate" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="Drug" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Sig" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Disp" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Refills" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ProvNum" type="s:long" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchPrescriptionsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SetMobileWebUserPassword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="SetMobileWebPasswordResponse">
+      <s:element name="SetMobileWebUserPasswordResponse">
         <s:complexType />
       </s:element>
     </s:schema>
@@ -208,11 +242,17 @@
   <wsdl:message name="SynchAppointmentsSoapOut">
     <wsdl:part name="parameters" element="tns:SynchAppointmentsResponse" />
   </wsdl:message>
-  <wsdl:message name="SetMobileWebPasswordSoapIn">
-    <wsdl:part name="parameters" element="tns:SetMobileWebPassword" />
+  <wsdl:message name="SynchPrescriptionsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchPrescriptions" />
   </wsdl:message>
-  <wsdl:message name="SetMobileWebPasswordSoapOut">
-    <wsdl:part name="parameters" element="tns:SetMobileWebPasswordResponse" />
+  <wsdl:message name="SynchPrescriptionsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchPrescriptionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetMobileWebUserPasswordSoapIn">
+    <wsdl:part name="parameters" element="tns:SetMobileWebUserPassword" />
+  </wsdl:message>
+  <wsdl:message name="SetMobileWebUserPasswordSoapOut">
+    <wsdl:part name="parameters" element="tns:SetMobileWebUserPasswordResponse" />
   </wsdl:message>
   <wsdl:portType name="MobileSoap">
     <wsdl:operation name="ServiceExists">
@@ -231,9 +271,13 @@
       <wsdl:input message="tns:SynchAppointmentsSoapIn" />
       <wsdl:output message="tns:SynchAppointmentsSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="SetMobileWebPassword">
-      <wsdl:input message="tns:SetMobileWebPasswordSoapIn" />
-      <wsdl:output message="tns:SetMobileWebPasswordSoapOut" />
+    <wsdl:operation name="SynchPrescriptions">
+      <wsdl:input message="tns:SynchPrescriptionsSoapIn" />
+      <wsdl:output message="tns:SynchPrescriptionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetMobileWebUserPassword">
+      <wsdl:input message="tns:SetMobileWebUserPasswordSoapIn" />
+      <wsdl:output message="tns:SetMobileWebUserPasswordSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="MobileSoap" type="tns:MobileSoap">
@@ -274,8 +318,17 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SetMobileWebPassword">
-      <soap:operation soapAction="http://opendental.com/SetMobileWebPassword" style="document" />
+    <wsdl:operation name="SynchPrescriptions">
+      <soap:operation soapAction="http://opendental.com/SynchPrescriptions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetMobileWebUserPassword">
+      <soap:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -322,8 +375,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SetMobileWebPassword">
-      <soap12:operation soapAction="http://opendental.com/SetMobileWebPassword" style="document" />
+    <wsdl:operation name="SynchPrescriptions">
+      <soap12:operation soapAction="http://opendental.com/SynchPrescriptions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetMobileWebUserPassword">
+      <soap12:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

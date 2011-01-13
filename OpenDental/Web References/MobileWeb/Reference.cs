@@ -40,7 +40,9 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SynchAppointmentsOperationCompleted;
         
-        private System.Threading.SendOrPostCallback SetMobileWebPasswordOperationCompleted;
+        private System.Threading.SendOrPostCallback SynchPrescriptionsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SetMobileWebUserPasswordOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -93,7 +95,10 @@ namespace OpenDental.MobileWeb {
         public event SynchAppointmentsCompletedEventHandler SynchAppointmentsCompleted;
         
         /// <remarks/>
-        public event SetMobileWebPasswordCompletedEventHandler SetMobileWebPasswordCompleted;
+        public event SynchPrescriptionsCompletedEventHandler SynchPrescriptionsCompleted;
+        
+        /// <remarks/>
+        public event SetMobileWebUserPasswordCompletedEventHandler SetMobileWebUserPasswordCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/ServiceExists", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -212,32 +217,64 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetMobileWebPassword", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void SetMobileWebPassword(string RegistrationKey, string Password) {
-            this.Invoke("SetMobileWebPassword", new object[] {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchPrescriptions", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchPrescriptions(string RegistrationKey, RxPatm[] rxList) {
+            this.Invoke("SynchPrescriptions", new object[] {
                         RegistrationKey,
+                        rxList});
+        }
+        
+        /// <remarks/>
+        public void SynchPrescriptionsAsync(string RegistrationKey, RxPatm[] rxList) {
+            this.SynchPrescriptionsAsync(RegistrationKey, rxList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchPrescriptionsAsync(string RegistrationKey, RxPatm[] rxList, object userState) {
+            if ((this.SynchPrescriptionsOperationCompleted == null)) {
+                this.SynchPrescriptionsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchPrescriptionsOperationCompleted);
+            }
+            this.InvokeAsync("SynchPrescriptions", new object[] {
+                        RegistrationKey,
+                        rxList}, this.SynchPrescriptionsOperationCompleted, userState);
+        }
+        
+        private void OnSynchPrescriptionsOperationCompleted(object arg) {
+            if ((this.SynchPrescriptionsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchPrescriptionsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetMobileWebUserPassword", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SetMobileWebUserPassword(string RegistrationKey, string UserName, string Password) {
+            this.Invoke("SetMobileWebUserPassword", new object[] {
+                        RegistrationKey,
+                        UserName,
                         Password});
         }
         
         /// <remarks/>
-        public void SetMobileWebPasswordAsync(string RegistrationKey, string Password) {
-            this.SetMobileWebPasswordAsync(RegistrationKey, Password, null);
+        public void SetMobileWebUserPasswordAsync(string RegistrationKey, string UserName, string Password) {
+            this.SetMobileWebUserPasswordAsync(RegistrationKey, UserName, Password, null);
         }
         
         /// <remarks/>
-        public void SetMobileWebPasswordAsync(string RegistrationKey, string Password, object userState) {
-            if ((this.SetMobileWebPasswordOperationCompleted == null)) {
-                this.SetMobileWebPasswordOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetMobileWebPasswordOperationCompleted);
+        public void SetMobileWebUserPasswordAsync(string RegistrationKey, string UserName, string Password, object userState) {
+            if ((this.SetMobileWebUserPasswordOperationCompleted == null)) {
+                this.SetMobileWebUserPasswordOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetMobileWebUserPasswordOperationCompleted);
             }
-            this.InvokeAsync("SetMobileWebPassword", new object[] {
+            this.InvokeAsync("SetMobileWebUserPassword", new object[] {
                         RegistrationKey,
-                        Password}, this.SetMobileWebPasswordOperationCompleted, userState);
+                        UserName,
+                        Password}, this.SetMobileWebUserPasswordOperationCompleted, userState);
         }
         
-        private void OnSetMobileWebPasswordOperationCompleted(object arg) {
-            if ((this.SetMobileWebPasswordCompleted != null)) {
+        private void OnSetMobileWebUserPasswordOperationCompleted(object arg) {
+            if ((this.SetMobileWebUserPasswordCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.SetMobileWebPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.SetMobileWebUserPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -322,7 +359,11 @@ namespace OpenDental.MobileWeb {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    public delegate void SetMobileWebPasswordCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    public delegate void SynchPrescriptionsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SetMobileWebUserPasswordCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591
