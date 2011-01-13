@@ -130,6 +130,15 @@ namespace OpenDentBusiness{
 			return Crud.PaymentCrud.Insert(pay);
 		}
 
+		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
+		public static long Insert(Payment pay,bool useExistingPK) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				pay.PayNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pay,useExistingPK);
+				return pay.PayNum;
+			}
+			return Crud.PaymentCrud.Insert(pay,useExistingPK);
+		}
+
 		///<summary>Deletes the payment as well as all splits.  Surround by try catch, because it will throw an exception if trying to delete a payment attached to a deposit.</summary>
 		public static void Delete(Payment pay){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

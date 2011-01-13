@@ -447,6 +447,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
+				/*
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE claimpayment SET CheckAmt='"+POut.Double(PIn.Double(table.Rows[i]["_sumpay"].ToString()))+"' "
 				    +"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
@@ -455,7 +456,7 @@ namespace OpenDentBusiness {
 				int numberFixed=table.Rows.Count;
 				if(numberFixed>0||verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
-				}
+				}*/
 			}
 			//now deposits which were affected by the changes above--------------------------------------------------
 			command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
@@ -470,6 +471,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
+				/*
 				for(int i=0;i<table.Rows.Count;i++) {
 					if(i==0) {
 						log+=Lans.g("FormDatabaseMaintenance","PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
@@ -486,7 +488,7 @@ namespace OpenDentBusiness {
 				int numberFixed=table.Rows.Count;
 				if(numberFixed>0||verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
-				}
+				}*/
 			}
 			return log;
 		}
@@ -1504,16 +1506,26 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//create a payment
-				//attach one paysplit to the payment
-				//repeat as needed.
-
-
-				//command="DELETE FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum)";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Paysplits deleted due to invalid PayNum: ")+numberFixed.ToString()+"\r\n";
-				//}
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					return "";
+				}
+				command="SELECT *,SUM(SplitAmt) \"_SplitAmt\" FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum) GROUP BY PayNum";
+				DataTable table=Db.GetTable(command);
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
+						Payment payment=new Payment();
+						payment.PayType=DefC.Short[(int)DefCat.PaymentTypes][0].DefNum;
+						payment.DateEntry=PIn.Date(table.Rows[i]["DateEntry"].ToString());
+						payment.PatNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+						payment.PayDate=PIn.Date(table.Rows[i]["DatePay"].ToString());
+						payment.PayAmt=PIn.Long(table.Rows[i]["_SplitAmt"].ToString());
+						payment.PayNote="Dummy payment. Original payment entry missing from the database.";
+						payment.PayNum=PIn.Long(table.Rows[i]["PayNum"].ToString());
+						Payments.Insert(payment,true);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Paysplits found with invalid PayNum fixed: ")+table.Rows.Count+"\r\n";
+				}
 			}
 			return log;
 		}
