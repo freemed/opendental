@@ -218,10 +218,12 @@ namespace OpenDental {
 				return true;
 			}
 			string thisVersion=MiscData.GetMySqlVersion();
-			if(thisVersion.Substring(0,3)=="4.1"
-				|| thisVersion.Substring(0,3)=="5.0"
-				|| thisVersion.Substring(0,3)=="5.1")
-			{
+			float floatVersion=PIn.Float(thisVersion.Substring(0,3));
+			if(floatVersion >= 5.0f){
+			//if(thisVersion.Substring(0,3)=="4.1"
+			//	|| thisVersion.Substring(0,3)=="5.0"
+			//	|| thisVersion.Substring(0,3)=="5.1")
+			//{
 				if(PrefC.ContainsKey("DatabaseConvertedForMySql41"))
 				//&& GetBool("DatabaseConvertedForMySql41"))
 				{
@@ -250,7 +252,7 @@ namespace OpenDental {
 			}
 			else {
 				MessageBox.Show(Lan.g("Prefs","Your version of MySQL won't work with this program")+": "+thisVersion
-					+".  "+Lan.g("Prefs","You should upgrade to MySQL 4.1"));
+					+".  "+Lan.g("Prefs","You should upgrade to MySQL 5.0 using the installer on our website."));
 				Application.Exit();
 				return false;
 			}
