@@ -1747,6 +1747,10 @@ namespace OpenDental{
 			if(comboProvNum.SelectedIndex!=-1) {
 				provColor=ProviderC.List[comboProvNum.SelectedIndex].ProvColor;
 			}
+			if(strBTime.Length > tbTime.MaxRows) {
+				strBTime.Remove(tbTime.MaxRows-1,strBTime.Length-tbTime.MaxRows+1);//example: Remove(40-1,78-40+1), start at 39, remove 39.
+				MsgBox.Show(this,"Appointment time shortened.  10 and 15 minute increments allow longer appointments than 5 minute increments.");
+			}
 			for(int i=0;i<strBTime.Length;i++) {
 				if(strBTime.ToString(i,1)=="X") {
 					tbTime.BackGColor[0,i]=provColor;
