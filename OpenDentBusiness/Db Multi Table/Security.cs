@@ -254,8 +254,10 @@ namespace OpenDentBusiness{
 				string dbVersionStr=Db.GetScalar(command);
 				string serverVersionStr=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString(4);
 				#if DEBUG
-					command="SELECT ValueString FROM preference WHERE PrefName='DataBaseVersion'";//Using this during debug in the head makes it open fast with less fiddling.
-					dbVersionStr=Db.GetScalar(command);
+					if(Assembly.GetAssembly(typeof(Db)).GetName().Version.Build==0) {
+						command="SELECT ValueString FROM preference WHERE PrefName='DataBaseVersion'";//Using this during debug in the head makes it open fast with less fiddling.
+						dbVersionStr=Db.GetScalar(command);
+					}
 				#endif
 				if(dbVersionStr!=serverVersionStr) {
 					throw new Exception("Version mismatch.  Server:"+serverVersionStr+"  Database:"+dbVersionStr);
