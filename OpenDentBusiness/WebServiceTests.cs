@@ -75,8 +75,10 @@ namespace OpenDentBusiness {
 				return Meth.GetDS(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT 'cell00'";
-			DataSet ds=Db.GetDataSet(command);
-			ds.Tables[0].TableName="table0";
+			DataSet ds=new DataSet();
+			DataTable table=Db.GetTable(command);
+			table.TableName="table0";
+			ds.Tables.Add(table);
 			return ds;
 		}
 

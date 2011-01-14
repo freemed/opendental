@@ -165,6 +165,7 @@ namespace OpenDentBusiness{
 			if(myString==null) {
 				return "";
 			}
+			/*
 			if(DataConnection.DBtype!=DatabaseType.MySql){
 				if(myString.Contains(";")){
 					myString=myString.Replace(";","");
@@ -175,18 +176,26 @@ namespace OpenDentBusiness{
 				if(myString==null) {
 					return "";
 				}
-			}
+			}*/
 			StringBuilder strBuild=new StringBuilder();
 			for(int i=0;i<myString.Length;i++){
-				switch(myString.Substring(i,1)){
-					//note. When using binary data, must escape ',",\, and nul(? haven't done nul)
-					case "'": strBuild.Append(@"\'");	break;// ' replaced by \'
-					case "\"": strBuild.Append("\\\"");	break;// " replaced by \"
-					case @"\": strBuild.Append(@"\\"); break;//single \ replaced by \\
-					case "\r": strBuild.Append(@"\r"); break;//carriage return(usually followed by new line)
-					case "\n": strBuild.Append(@"\n"); break;//new line
-					case "\t": strBuild.Append(@"\t"); break;//tab
-					default: strBuild.Append(myString.Substring(i,1)); break;
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					switch(myString.Substring(i,1)) {
+						case "'": strBuild.Append(@"''"); break;// ' replaced by ''
+						default: strBuild.Append(myString.Substring(i,1)); break;
+					}
+				}
+				else {
+					switch(myString.Substring(i,1)) {
+						//note. When using binary data, must escape ',",\, and nul(? haven't done nul)
+						case "'": strBuild.Append(@"\'"); break;// ' replaced by \'
+						case "\"": strBuild.Append("\\\""); break;// " replaced by \"
+						case @"\": strBuild.Append(@"\\"); break;//single \ replaced by \\
+						case "\r": strBuild.Append(@"\r"); break;//carriage return(usually followed by new line)
+						case "\n": strBuild.Append(@"\n"); break;//new line
+						case "\t": strBuild.Append(@"\t"); break;//tab
+						default: strBuild.Append(myString.Substring(i,1)); break;
+					}
 				}
 			}
 			//The old slow way of doing it:

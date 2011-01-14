@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		//For queries that do not use this flag, all queries are split into single commands. For those SQL commands which
 		//are a single command but contain multiple semi-colons, then this string should be set to false before the 
 		//command is executed, then set back to true immediately thereafter.
-		public static bool splitStrings=true;
+		//public static bool splitStrings=true;
 
 		public static int DefaultPortNum(){
 			switch(DBtype){
@@ -352,7 +352,8 @@ namespace OpenDentBusiness{
 			}
 			return table;
 		}
-		
+
+		/*
 		///<summary>Fills dataset with data from the database.</summary>
 		public DataSet GetDs(string commands) {
 			#if DEBUG
@@ -365,24 +366,24 @@ namespace OpenDentBusiness{
 			if(DBtype==DatabaseType.Oracle){
 				conOr.Open();
 				//PrepOracleConnection();
-				string[] commandArray=new string[] { commands };
-				if(splitStrings) {
-					commandArray=commands.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries);
-				}
+				//string[] commandArray=new string[] { commands };
+				//if(splitStrings) {
+				//	commandArray=commands.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries);
+				//}
 				//Can't do batch queries in Oracle, so we have to split them up and run them individually.
-				foreach(string com in commandArray){
-					cmdOr.CommandText=com;
+				//foreach(string com in commandArray){
+					cmdOr.CommandText=commands;
 					daOr=new OracleDataAdapter(cmdOr);
-					DataTable dsTab=new DataTable();
-					try{
-						daOr.Fill(dsTab);
-					}
-					catch(System.Exception e) {
-						Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
-						throw e;//continue to pass the exception one level up.
-					}
-					ds.Tables.Add(dsTab);
-				}
+					//DataTable dsTab=new DataTable();
+					//try{
+						daOr.Fill(ds);
+					//}
+					//catch(System.Exception e) {
+					//	Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
+					//	throw e;//continue to pass the exception one level up.
+					//}
+					//ds.Tables.Add(dsTab);
+				//}
 				conOr.Close();
 			}
 			else if(DBtype==DatabaseType.MySql){
@@ -392,7 +393,7 @@ namespace OpenDentBusiness{
 				con.Close();
 			}
 			return ds;
-		}
+		}*/
 
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
 		public long NonQ(string commands,bool getInsertID,params OdSqlParameter[] parameters){

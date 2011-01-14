@@ -149,6 +149,9 @@ namespace OpenDentBusiness{
 				pat.PatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),pat,useExistingPK);
 				return pat.PatNum;
 			}
+			if(!useExistingPK) {
+				return Crud.PatientCrud.Insert(pat);
+			}
 			return Crud.PatientCrud.Insert(pat,useExistingPK);
 		}
 

@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 			Collection <string> familyPatNumList=new Collection<string> ();
 			if(guarantor!=0) {
 				familyPatNums="(";
-				command="SELECT p.PatNum FROM patient p WHERE p.Guarantor="+guarantor+";";
+				command="SELECT p.PatNum FROM patient p WHERE p.Guarantor="+guarantor;
 				DataTable tFamilyPatNums=Db.GetTable(command);
 				for(int i=0;i<tFamilyPatNums.Rows.Count;i++) {
 					if(i>0) {
@@ -249,7 +249,8 @@ namespace OpenDentBusiness{
 					"SELECT PatNum,ROUND(SUM(TranAmount),2) FROM "+tempOdAgingTransTableName+
 					"GROUP BY PatNum;";
 				command+="UPDATE patient p "+
-					"SET p.BalTotal=(SELECT t.BalTotal FROM "+tempTotalsTableName+" t WHERE t.PatNum=p.PatNum "+DbHelper.LimitAnd(1)+")";
+					"SET p.BalTotal=(SELECT t.BalTotal FROM "+tempTotalsTableName+" t WHERE t.PatNum=p.PatNum "+DbHelper.LimitAnd(1)+");";
+				Db.NonQ(command);
 			}
 			else {
 				//Now that we have all of the pertinent transaction history, we will calculate all of the charges for

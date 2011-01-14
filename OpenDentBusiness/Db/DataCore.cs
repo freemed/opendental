@@ -44,6 +44,7 @@ namespace OpenDentBusiness {
 			return NonQ(command,false,parameters);
 		}
 
+		/*
 		///<summary>This is for multiple queries all concatenated together with ;</summary>
 		public static DataSet GetDataSet(string commands){
 			DataConnection dcon=new DataConnection();
@@ -51,7 +52,7 @@ namespace OpenDentBusiness {
 			DataSet retVal=dcon.GetDs(commands);
 			//retVal.Tables.Add(table);
 			return retVal;
-		}
+		}*/
 
 		///<summary>Get one single value.</summary>
 		public static string GetScalar(string command) {

@@ -26,6 +26,7 @@ namespace UnitTests {
 					TimeSpanTest time NOT NULL DEFAULT '00:00:00',
 					CurrencyTest double NOT NULL,
 					BoolTest tinyint NOT NULL,
+					TextTinyTest varchar(255) NOT NULL, 
 					TextSmallTest text NOT NULL,
 					TextMediumTest text NOT NULL,
 					TextLargeTest mediumtext NOT NULL,
@@ -45,6 +46,7 @@ namespace UnitTests {
 					TimeSpanTest varchar2(255),
 					CurrencyTest number(38,8),
 					BoolTest number(3),
+					TextTinyTest varchar2(255),
 					TextSmallTest varchar2(4000),
 					TextMediumTest clob,
 					TextLargeTest clob,
@@ -219,9 +221,35 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Bool, false: Passed.\r\n";
+			//Run multiple non-queries in one transaction--------------------------------------------------
+			string varchar1="A";
+			string varchar2="B";
+			command="INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar1)+"'); DELETE FROM tempcore; INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar2)+"');";
+			DataCore.NonQ(command);
+			command="SELECT TextTinyTest FROM tempcore";
+			table=DataCore.GetTable(command);
+			if(PIn.String(table.Rows[0][0].ToString())!=varchar2) {
+				throw new ApplicationException();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="Multi-Non-Queries: Passed.\r\n";
+			//varchar255 Nonstandard Characters-----------------------------------------------------------
+			varchar1=@"'!@#$%^&*()-+[{]}\`~,<.>/?'"";:=_";
+			varchar2="";
+			command="INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar1)+"')";
+			DataCore.NonQ(command);
+			command="SELECT TextTinyTest FROM tempcore";
+			table=DataCore.GetTable(command);
+			varchar2=PIn.String(table.Rows[0]["TextTinyTest"].ToString());
+			if(varchar1!=varchar2) {
+				throw new Exception();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="VarChar(255): Passed.\r\n";
 			//VARCHAR2(4000)------------------------------------------------------------------------------
-			string varchar1=CreateRandomAlphaNumericString(4000); //Tested 4001 and it was too large as expected.
-			string varchar2="";
+			varchar1=CreateRandomAlphaNumericString(4000); //Tested 4001 and it was too large as expected.
 			command="INSERT INTO tempcore (TextSmallTest) VALUES ('"+POut.String(varchar1)+"')";
 			DataCore.NonQ(command);
 			command="SELECT TextSmallTest FROM tempcore";
