@@ -1199,46 +1199,39 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 			//This query run very fast on a db with no corruption.
 			command=@"CREATE TABLE tempduplicatepatfields
-				SELECT DISTINCT PatNum
-				FROM patfield
-				GROUP BY PatNum,FieldName
-				HAVING COUNT(*)>1";
+								SELECT *
+								FROM patfield
+								GROUP BY PatNum,FieldName
+								HAVING COUNT(*)>1";
 			Db.NonQ(command);
-			command=@"SELECT p.PatNum, p.LName, p.FName
-				FROM patient p, tempduplicatepatfields t
-				WHERE p.PatNum=t.PatNum";
+			command=@"SELECT PatNum, LName, FName
+								FROM patient 
+								WHERE (PatNum IN (SELECT DISTINCT PatNum FROM tempduplicatepatfields))";
 			table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries found: ")+table.Rows.Count.ToString()+".\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Patients with duplicate field entries found: ")+table.Rows.Count+".\r\n";
 				}
 			}
 			else {
-				if(table.Rows.Count==0) {
-					if(verbose) {
-						log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted")+": 0\r\n";
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","The following patients had corrupt Patient Fields. Please verify the Patient Fields of these patients:")+"\r\n";
+					for(int i=0;i<table.Rows.Count;i++) {
+						log+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"]+", "+table.Rows[i]["FName"]+".\r\n";
 					}
+					//Without this index the delete process takes too long.
+					command="ALTER TABLE tempduplicatepatfields ADD INDEX(PatNum)";
+					Db.NonQ(command);
+					command="ALTER TABLE tempduplicatepatfields ADD INDEX(FieldName)";
+					Db.NonQ(command);
+					command="DELETE FROM patfield WHERE ((PatNum, FieldName) IN (SELECT PatNum, FieldName FROM tempduplicatepatfields));";
+					Db.NonQ(command);
+					command="INSERT INTO patfield SELECT * FROM tempduplicatepatfields;";
+					Db.NonQ(command);
+					log+=Lans.g("FormDatabaseMaintenance","Patients with duplicate field entries removed: ")+table.Rows.Count+".\r\n";
 					command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
 					Db.NonQ(command);
-					return log;
 				}
-				else {
-					log+=Lans.g("FormDatabaseMaintenance","The following patients had corrupted 'Patient Fields'.  Compare the Patient Fields of each patient in the list against a backup from before the most recent version upgrade.")+"\r\n";
-				}
-				for(int i=0;i<table.Rows.Count;i++) {
-					log+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"]+", "+table.Rows[i]["FName"]+".\r\n";
-				}
-				//Without this index the delete process takes too long.
-				command=@"ALTER TABLE tempduplicatepatfields 
-					ADD INDEX idx_temppatfield_patnum(PatNum)";
-				command="DELETE FROM patfield "
-					+"WHERE PatNum IN(SELECT PatNum FROM tempduplicatepatfields)";
-				int numberFixed=Db.NonQ32(command);
-				if(numberFixed>0) {
-					log+=Lans.g("FormDatabaseMaintenance","Patient Field duplicate entries deleted: ")+numberFixed.ToString()+".\r\n";
-				}
-				command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
-				Db.NonQ(command);
 			}
 			return log;
 		}
