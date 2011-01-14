@@ -44,17 +44,17 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	}); 
 	
-	/*
+	
 	$('.searchbutton').tap(function(e) {
 		
 		var searchterm=$('#searchpatientbox').val();
-		//console.log('searchterm is dd' + searchterm);
+		console.log('searchterm is dd' + searchterm);
 		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
 		var SectionToFill='#PatientListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
-		*/
-	
+		
+	/*
 	$('#searchpatientbox').keyup(function(e) {
 		var searchterm=$('#searchpatientbox').val();
 		console.log('searchterm is ' + searchterm);
@@ -64,7 +64,7 @@ function TraversePage(){
 		FetchPage(UrlForFetchingData, SectionToFill)
 
 	});
-
+*/
 	$('a[href="#PatientList"]').tap(function (e) {
 		//e.preventDefault();
 		console.log('PatientList clicked');

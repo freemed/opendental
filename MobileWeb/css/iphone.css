@@ -97,10 +97,15 @@ h2 {
     border-width: 0 8px 0 14px;
     -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14;    
 }
+#searchpatientbox_deletelater
+{
+    border-width: 2px 39px 2px 0px;
+    -webkit-border-image: url(themes/apple/img/searchfield.png) 4 39 4 0; 
+}
 
 .searchbutton{
- position:relative;
- float:left; 
+ position:relative; float:right; top:-30px;
+ 
 }
 /*overides existing checkbox css in theme.css*/
 
@@ -109,9 +114,9 @@ h2 {
  -webkit-transform-style: flat;
  position: static;
  -webkit-transform:none;
- z-index:30px;
 
 }
+/*possible overide values whic do not work.*/
 ul li input[type="checkbox"]{
     -webkit-perspective: none;
     -webkit-transform-style: flat;
@@ -127,6 +132,7 @@ ul li input[type="checkbox"]:after {
     color: #777;
     margin: -0px 0px 0px 27px;
 }
+/* end overides existing checkbox css in theme.css*/
 
 /*top and bottom padding adjusted*/
 ul li {

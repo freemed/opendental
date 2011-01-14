@@ -52,23 +52,15 @@
 
 <h2>Prescriptions</h2>
 <ul>
-<li>
-		<div>
-		<span class="style1"><asp:Label ID="Label4" runat="server" Text="Penicillin"></asp:Label></span>
-		</div>
-</li>
-<li>
-		<div>
-		<span class="style1"><asp:Label ID="Label5" runat="server" Text="Vicodin"></asp:Label></span>
-		</div>
-</li>
-<li>
-		<div>
-		<span class="style1"><asp:Label ID="Label6" runat="server" Text="Peridex"></asp:Label></span>
-		</div>
-</li>
-
-
+			<asp:Repeater ID="Repeater2" runat="server">
+				<ItemTemplate>
+					<li class="style1">
+						<div class="elladjust">
+							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Drug%>
+						</div>
+					</li>
+				</ItemTemplate>
+			</asp:Repeater>
 </ul>
 
 </div>

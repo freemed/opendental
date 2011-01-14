@@ -20,6 +20,15 @@ namespace OpenDentBusiness.Mobile{
 			return retVal;
 		}
 
+		///<summary>Gets all RxPatm for a single patient </summary>
+		public static List<RxPatm> GetRxPatms(long customerNum,long patNum) {
+			string command=
+				"SELECT * from rxpatm "
+				+"WHERE CustomerNum = "+POut.Long(customerNum)
+				+" AND PatNum = "+POut.Long(patNum);
+			return Crud.RxPatmCrud.SelectMany(command);
+		}
+
 		///<summary>Only run on server for mobile.  Takes the list of changes from the dental office and makes updates to those items in the mobile server db.  Also, make sure to run DeletedObjects.DeleteForMobile().</summary>
 		public static void UpdateFromChangeList(List<RxPatm> list,long customerNum) {
 			for(int i=0;i<list.Count;i++) {

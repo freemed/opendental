@@ -75,7 +75,7 @@
 			 <ul>
                 <li>
 				<input type="text" placeholder="Search Patient" name="searchpatientbox" id="searchpatientbox" autocapitalize="off" autocorrect="off" autocomplete="off" />
-				<%--<a class="button searchbutton" href="#">Search</a>--%>
+				<a class="searchbutton" href="#"><img src="css/themes/apple/img/searchfield.png" border="0" /></a>
 				</li>
 			</ul>
 			

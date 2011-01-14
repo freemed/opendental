@@ -66,14 +66,14 @@ namespace OpenDental {
 				}
 				//CreatePatients(100000);
 				//CreateAppointments(10); // for each patient
-				CreatePrescriptions(10);// for each patient
+				//CreatePrescriptions(10);// for each patient
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
 				List<long> patNumList=Patientms.GetChangedSincePatNums(GetChangedSince);
-				SynchPatients(patNumList);
+				//SynchPatients(patNumList);
 				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(GetChangedSince,MobileExcludeApptsBeforeDate);
-				SynchAppointments(aptNumList);
-				//List<long> rxNumList=Prescriptionms.GetChangedSinceRxNums(GetChangedSince);
-				//SynchPrescriptions();
+				//SynchAppointments(aptNumList);
+				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(GetChangedSince);
+				SynchPrescriptions(rxNumList);
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
 				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
 			}
@@ -167,10 +167,10 @@ namespace OpenDental {
 					return true;
 				}
 			}
-			catch {//(Exception ex) {
+			catch (Exception ex) {
 				return false;
 			}
-			return true;
+			return false;
 		}
 
 		/// <summary>
@@ -244,16 +244,16 @@ namespace OpenDental {
 			//Minimum 14 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
 			bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"^.*(?=.{14,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$");
 			if(!IsMatch) {
-				MsgBox.Show(this,"The username must be atleast 14 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
-				return false;
+				//MsgBox.Show(this,"The username must be atleast 14 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
+				//return false;
 			}
 			if(RegistrationKey==textMobileUserName.Text.Trim()){
 				MsgBox.Show(this,"The username cannot be the same as the Registration Key");
 				return false;
 			}
 			if(textMobilePassword.Text.Trim()=="") {
-				MsgBox.Show(this,"The password cannot be empty");
-				return false;
+				//MsgBox.Show(this,"The password cannot be empty");
+				//return false;
 			}
 
 			return true;
@@ -283,7 +283,7 @@ namespace OpenDental {
 				newPat.Email="dennis.mathew________________seb@siberiacrawlmail.com";
 				newPat.HmPhone="416-222-5678";
 				newPat.WkPhone="416-222-5678";
-				newPat.Zip="M3L2L9";
+				newPat.Zip="M3L 2L9";
 				newPat.WirelessPhone="416-222-5678";
 				newPat.Birthdate=new DateTime(1970,3,3).AddDays(i);
 				Patients.Insert(newPat,false);

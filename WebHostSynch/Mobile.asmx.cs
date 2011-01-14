@@ -26,9 +26,14 @@ namespace WebHostSynch {
 		/// </summary>
 		[WebMethod]
 		public bool ServiceExists() {
-			util.SetMobileDbConnection();
-			Logger.Information("testing the log feature");
-			return true;
+			try{
+				util.SetMobileDbConnection();
+				Logger.Information("testing the log feature");
+				return true;
+			}catch(Exception ex) {
+				Logger.LogError(ex);
+				return false;
+			}
 		}
 
 		[WebMethod]

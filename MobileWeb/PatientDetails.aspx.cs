@@ -28,6 +28,9 @@ namespace MobileWeb {
 				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,PatNum);
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
+				List<RxPatm> rxList=RxPatms.GetRxPatms(CustomerNum,PatNum);
+				Repeater2.DataSource=rxList;
+				Repeater2.DataBind();
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);

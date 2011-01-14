@@ -21,10 +21,10 @@ body > * {
     -webkit-backface-visibility: hidden;
     -webkit-box-sizing: border-box;
     display: none;
-  position: absolute;/*dennis commented to make the check box appear*/
+    position: absolute;/*dennis commented to make the check box appear*/
     left: 0;
     width: 100%;
-  -webkit-transform: translate3d(0,0,0) rotate(0) scale(1);/*dennis commented to make the check box appear*/
+    -webkit-transform: translate3d(0,0,0) rotate(0) scale(1);/*dennis commented to make the check box appear*/
     min-height: 420px !important;
 }
 body.fullscreen > * {
