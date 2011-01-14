@@ -100,7 +100,7 @@ namespace OpenDentBusiness {
 		public static void AddIndex() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD INDEX (tempCoreNum)";
+				command="ALTER TABLE tempcore ADD INDEX(tempCoreNum)";
 				Db.NonQ(command);
 			}
 			else {//oracle

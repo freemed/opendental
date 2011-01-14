@@ -85,7 +85,7 @@ namespace OpenDentBusiness {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="ALTER TABLE tempcore ADD ColEndTimeStamp timestamp";
 				Db.NonQ(command);
-				command="UPDATE tempcore SET ColEndTimeStamp = NOW()";// WHERE timestamptest = '0000-00-00 00:00:00'";
+				command="UPDATE tempcore SET ColEndTimeStamp = NOW()";
 				Db.NonQ(command);
 			}
 			else {//oracle
@@ -100,11 +100,11 @@ namespace OpenDentBusiness {
 		public static void AddIndex() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD INDEX IDX_TEMPCORE_TEMPCORENUM (tempCoreNum)";
+				command="ALTER TABLE tempcore ADD INDEX(ColEndInt)";
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (tempCoreNum)";
+				command="CREATE INDEX ColEndInt ON tempcore (ColEndInt)";
 				Db.NonQ(command);
 			}
 		}
