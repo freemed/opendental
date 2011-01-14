@@ -21,6 +21,7 @@ namespace OpenDental {
 		private static DateTime MobileExcludeApptsBeforeDate;
 		private static String StatusMessage="";
 		private static int BatchSize=100;
+		private static bool PaidCustomer=false;
 
 		public FormMobileSetup() {
 			InitializeComponent();
@@ -33,18 +34,26 @@ namespace OpenDental {
 			textMobileSyncServerURL.Text=MobileSyncServerURL;
 			textSynchMinutes.Text=MobileSyncIntervalMinutes+"";
 			textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
+			
+			if(!TestWebServiceExists()) {
+				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
+			}
+			else {
+				textMobileUserName.Text=mb.GetUserName(RegistrationKey);
+			}
 			butSavePreferences.Enabled=false;
 		}
 
 		internal void SetParentFormReference(FormOpenDental frmOD) {
 			this.frmOD=frmOD;
 		}
+
 		private static void InitializeVariables() {
 			RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 			MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
 			MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 			MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
-			bool PaidCustomer=true; // check for payment here
+			PaidCustomer=mb.IsPaidCustomer(RegistrationKey); // check for payment here
 			if(PaidCustomer) {
 				MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
 			}else{
@@ -92,13 +101,12 @@ namespace OpenDental {
 		internal static void Synch() {
 			InitializeVariables();
 			if(MobileSyncIntervalMinutes==0) {
-				// Charge the customer!
-				//MsgBox.Show(this,"You must be a paid customer to use this feature");
-				//return;
+				// not a paid customer
+				return;
 			}
 			if(MobileSyncDateTimeLastRun.Year<1880) {
-				//MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
-				//return;
+				//Sync has never been run before.
+				return;
 			}
 			if(DateTime.Now>MobileSyncDateTimeLastRun.AddMinutes(MobileSyncIntervalMinutes)) {
 				Synch(MobileSyncDateTimeLastRun);
@@ -200,19 +208,18 @@ namespace OpenDental {
 			}
 			SetMobileExcludeApptsBeforeDate();
 			butSavePreferences.Enabled=false;
-			mb.SetMobileWebUserPassword(RegistrationKey,textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
-			bool PaidCustomer=true; // check for payment here
-			if(PaidCustomer) {
-				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textSynchMinutes.Text));
-				MobileSyncIntervalMinutes=PIn.Int(textSynchMinutes.Text);
-				//start timer on main form
-				if(MobileSyncIntervalMinutes!=0) {
-					frmOD.StartTimerWebHostSynch();
-				}
+			InitializeVariables();//payment is checked here.
+			if(!TestWebServiceExists()) {
+				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
+				return;
+			}
+			if(MobileSyncIntervalMinutes==0) {
+				MsgBox.Show(this,"You must be a paid customer to use this feature");
+				return;
 			}
 			else {
-				MobileSyncIntervalMinutes=0;
-				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
+				mb.SetMobileWebUserPassword(RegistrationKey,textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
+				frmOD.StartTimerWebHostSynch();
 			}
 
 		}
@@ -244,8 +251,8 @@ namespace OpenDental {
 			//Minimum 14 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
 			bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"^.*(?=.{14,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$");
 			if(!IsMatch) {
-				//MsgBox.Show(this,"The username must be atleast 14 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
-				//return false;
+				MsgBox.Show(this,"The username must be atleast 14 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
+				return false;
 			}
 			if(RegistrationKey==textMobileUserName.Text.Trim()){
 				MsgBox.Show(this,"The username cannot be the same as the Registration Key");
@@ -358,7 +365,7 @@ namespace OpenDental {
 			if(MobileSyncIntervalMinutes==0) {
 				// Charge the customer!
 				MsgBox.Show(this,"You must be a paid customer to use this feature");
-				//return false;
+				return false;
 			}
 			if(MobileSyncDateTimeLastRun.Year<1880) {
 				MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");

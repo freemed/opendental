@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Configuration;
-using WebForms;
+using System.Text;
+using System.Security.Cryptography;
+using System.Data;
 using OpenDentBusiness;
 using OpenDentBusiness.Mobile;
+using WebForms;
 
 namespace WebHostSynch {
 	public class Util {
@@ -80,7 +83,28 @@ namespace WebHostSynch {
 			}
 			return RegistrationKeyFromDb.PatNum;
 		}
+		public void SetMobileWebUserPassword(long customerNum,String UserName,String Password) {
+			String command="INSERT INTO users (CustomerNum,user,password) VALUES ("+customerNum+",'"+UserName+"','"+MD5Encrypt(Password)+"')ON DUPLICATE KEY UPDATE user='"+UserName+"',password='"+MD5Encrypt(Password)+"'";
+			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+			dc.NonQ(command);
+		}
 
+		public string GetMobileWebUserName(long customerNum){
+			String command="SELECT user FROM users WHERE CustomerNum="+customerNum;
+			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+			DataTable table=dc.GetTable(command);
+			String UserName="";
+			if(table.Rows.Count!=0) {
+				UserName=table.Rows[0][0].ToString();
+			}
+			return UserName;
+		}
+
+		private string MD5Encrypt(string data) {
+			MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+			byte[] result = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
+			return Encoding.UTF8.GetString(result);
+		}
 
 	}
 }

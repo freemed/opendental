@@ -36,11 +36,15 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback GetCustomerNumOperationCompleted;
         
+        private System.Threading.SendOrPostCallback IsPaidCustomerOperationCompleted;
+        
         private System.Threading.SendOrPostCallback SynchPatientsOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchAppointmentsOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchPrescriptionsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetUserNameOperationCompleted;
         
         private System.Threading.SendOrPostCallback SetMobileWebUserPasswordOperationCompleted;
         
@@ -89,6 +93,9 @@ namespace OpenDental.MobileWeb {
         public event GetCustomerNumCompletedEventHandler GetCustomerNumCompleted;
         
         /// <remarks/>
+        public event IsPaidCustomerCompletedEventHandler IsPaidCustomerCompleted;
+        
+        /// <remarks/>
         public event SynchPatientsCompletedEventHandler SynchPatientsCompleted;
         
         /// <remarks/>
@@ -96,6 +103,9 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SynchPrescriptionsCompletedEventHandler SynchPrescriptionsCompleted;
+        
+        /// <remarks/>
+        public event GetUserNameCompletedEventHandler GetUserNameCompleted;
         
         /// <remarks/>
         public event SetMobileWebUserPasswordCompletedEventHandler SetMobileWebUserPasswordCompleted;
@@ -153,6 +163,35 @@ namespace OpenDental.MobileWeb {
             if ((this.GetCustomerNumCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetCustomerNumCompleted(this, new GetCustomerNumCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/IsPaidCustomer", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public bool IsPaidCustomer(string RegistrationKey) {
+            object[] results = this.Invoke("IsPaidCustomer", new object[] {
+                        RegistrationKey});
+            return ((bool)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void IsPaidCustomerAsync(string RegistrationKey) {
+            this.IsPaidCustomerAsync(RegistrationKey, null);
+        }
+        
+        /// <remarks/>
+        public void IsPaidCustomerAsync(string RegistrationKey, object userState) {
+            if ((this.IsPaidCustomerOperationCompleted == null)) {
+                this.IsPaidCustomerOperationCompleted = new System.Threading.SendOrPostCallback(this.OnIsPaidCustomerOperationCompleted);
+            }
+            this.InvokeAsync("IsPaidCustomer", new object[] {
+                        RegistrationKey}, this.IsPaidCustomerOperationCompleted, userState);
+        }
+        
+        private void OnIsPaidCustomerOperationCompleted(object arg) {
+            if ((this.IsPaidCustomerCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.IsPaidCustomerCompleted(this, new IsPaidCustomerCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -243,6 +282,35 @@ namespace OpenDental.MobileWeb {
             if ((this.SynchPrescriptionsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.SynchPrescriptionsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetUserName", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string GetUserName(string RegistrationKey) {
+            object[] results = this.Invoke("GetUserName", new object[] {
+                        RegistrationKey});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetUserNameAsync(string RegistrationKey) {
+            this.GetUserNameAsync(RegistrationKey, null);
+        }
+        
+        /// <remarks/>
+        public void GetUserNameAsync(string RegistrationKey, object userState) {
+            if ((this.GetUserNameOperationCompleted == null)) {
+                this.GetUserNameOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetUserNameOperationCompleted);
+            }
+            this.InvokeAsync("GetUserName", new object[] {
+                        RegistrationKey}, this.GetUserNameOperationCompleted, userState);
+        }
+        
+        private void OnGetUserNameOperationCompleted(object arg) {
+            if ((this.GetUserNameCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetUserNameCompleted(this, new GetUserNameCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -351,6 +419,32 @@ namespace OpenDental.MobileWeb {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void IsPaidCustomerCompletedEventHandler(object sender, IsPaidCustomerCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class IsPaidCustomerCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal IsPaidCustomerCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SynchPatientsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
@@ -360,6 +454,32 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SynchPrescriptionsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void GetUserNameCompletedEventHandler(object sender, GetUserNameCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetUserNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetUserNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

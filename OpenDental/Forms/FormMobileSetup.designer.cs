@@ -36,14 +36,14 @@ namespace OpenDental{
 			this.textMobilePassword = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textMobileUserName = new System.Windows.Forms.TextBox();
+			this.textProgress = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.textSynchMinutes = new OpenDental.ValidNumber();
 			this.butSavePreferences = new OpenDental.UI.Button();
 			this.textDateBefore = new OpenDental.ValidDate();
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.textProgress = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -136,6 +136,7 @@ namespace OpenDental{
 			// 
 			this.textMobilePassword.Location = new System.Drawing.Point(177,112);
 			this.textMobilePassword.Name = "textMobilePassword";
+			this.textMobilePassword.PasswordChar = '*';
 			this.textMobilePassword.Size = new System.Drawing.Size(247,20);
 			this.textMobilePassword.TabIndex = 243;
 			this.textMobilePassword.TextChanged += new System.EventHandler(this.textMobilePassword_TextChanged);
@@ -156,6 +157,23 @@ namespace OpenDental{
 			this.textMobileUserName.Size = new System.Drawing.Size(247,20);
 			this.textMobileUserName.TabIndex = 242;
 			this.textMobileUserName.TextChanged += new System.EventHandler(this.textMobileUserName_TextChanged);
+			// 
+			// textProgress
+			// 
+			this.textProgress.Location = new System.Drawing.Point(195,183);
+			this.textProgress.Name = "textProgress";
+			this.textProgress.ReadOnly = true;
+			this.textProgress.Size = new System.Drawing.Size(380,20);
+			this.textProgress.TabIndex = 240;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(26,185);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(167,18);
+			this.label1.TabIndex = 241;
+			this.label1.Text = "Upload Status";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSynchMinutes
 			// 
@@ -234,23 +252,6 @@ namespace OpenDental{
 			this.butClose.TabIndex = 81;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// textProgress
-			// 
-			this.textProgress.Location = new System.Drawing.Point(195,183);
-			this.textProgress.Name = "textProgress";
-			this.textProgress.ReadOnly = true;
-			this.textProgress.Size = new System.Drawing.Size(380,20);
-			this.textProgress.TabIndex = 240;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(26,185);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(167,18);
-			this.label1.TabIndex = 241;
-			this.label1.Text = "Upload Status";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormMobileSetup
 			// 

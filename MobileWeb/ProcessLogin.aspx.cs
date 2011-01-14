@@ -39,7 +39,7 @@ namespace MobileWeb {
 		}
 		
 		//Dennis: don't see the point in adding a 'salt' for now
-		public static string MD5Encrypt(string data) {
+		private string MD5Encrypt(string data) {
 			MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
 			byte[] result = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
 			return Encoding.UTF8.GetString(result);

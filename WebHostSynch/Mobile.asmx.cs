@@ -42,6 +42,23 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
+		public bool IsPaidCustomer(String RegistrationKey) {
+			bool IsPaidCustomer=false;
+			try {
+				Logger.Information("In IsPaidCustomer");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum!=0) {
+					// put code here to check for payments
+					IsPaidCustomer=true;
+				}
+				return IsPaidCustomer;
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return IsPaidCustomer;
+			}
+		}
+		[WebMethod]
 		public void SynchPatients(String RegistrationKey,List<Patientm> patientmList) {
 			try {
 				Logger.Information("In SynchPatients");
@@ -85,6 +102,24 @@ namespace WebHostSynch {
 				Logger.LogError(ex);
 			}
 		}
+
+		[WebMethod]
+		public string GetUserName(String RegistrationKey) {
+			String UserName="";
+			try {
+				Logger.Information("In GetUserName");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum!=0) {
+					UserName=util.GetMobileWebUserName(customerNum);
+				}
+				return UserName;
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return UserName;
+			}
+		}
+
 		[WebMethod]
 		public void SetMobileWebUserPassword(String RegistrationKey,String UserName,String Password) {
 			try {
@@ -92,6 +127,9 @@ namespace WebHostSynch {
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
+				}
+				else {
+					util.SetMobileWebUserPassword(customerNum,UserName,Password);
 				}
 			}
 			catch(Exception ex) {
