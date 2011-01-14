@@ -719,7 +719,6 @@ namespace OpenDental{
 				OpenDentBusiness.DataConnection dcon;
 				//Try to connect to the database directly
 				try {
-//todo:
 					DataConnection.DBtype=DatabaseType.MySql;
 					if(listType.SelectedIndex==1) {
 						DataConnection.DBtype=DatabaseType.Oracle;
