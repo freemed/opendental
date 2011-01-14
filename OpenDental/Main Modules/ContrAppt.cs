@@ -1879,7 +1879,23 @@ namespace OpenDental{
 			}
 			decimal grossproduction=0;
 			decimal netproduction=0;
+			int indexProv;
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
+				indexProv=-1;
+				if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1") {//if isHygiene
+					if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//if no hyg prov set.
+						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+					}
+					else {
+						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
+					}
+				}
+				else {//not hyg
+					indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+				}
+				if(indexProv==-1) {
+					continue;
+				}
 				if(DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()
 					&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.UnschedList).ToString()
 					&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNote).ToString()
