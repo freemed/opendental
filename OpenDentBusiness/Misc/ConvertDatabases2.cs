@@ -3264,6 +3264,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
+	//todo: oracle trigger for existing timestamp
 					command="ALTER TABLE document ADD Thumbnail clob";
 					Db.NonQ(command);
 				}
