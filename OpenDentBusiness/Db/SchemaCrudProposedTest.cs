@@ -44,10 +44,54 @@ namespace OpenDentBusiness {
 					TextMediumTest clob,
 					TextLargeTest clob,
 					VarCharTest varchar2(255),
-					DropableColumn number(3) NOT NULL
+					DropableColumn number(3) NOT NULL,
+					CONSTRAINT TempCoreNum PRIMARY KEY (TempCoreNum)
 					)";
 				Db.NonQ(command);
-				command=@"CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (TempCoreNum)";
+				command=@"CREATE OR REPLACE TRIGGER tempcore_timestamp
+				           BEFORE UPDATE ON tempcore
+				           FOR EACH ROW
+				           BEGIN
+					           IF :OLD.TempCoreNum <> :NEW.TempCoreNum THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TimeOfDayTest <> :NEW.TimeOfDayTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TimeStampTest <> :NEW.TimeStampTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.DateTest <> :NEW.DateTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.DateTimeTest <> :NEW.DateTimeTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TimeSpanTest <> :NEW.TimeSpanTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.CurrencyTest <> :NEW.CurrencyTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.BoolTest <> :NEW.BoolTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TextSmallTest <> :NEW.TextSmallTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TextMediumTest <> :NEW.TextMediumTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TextLargeTest <> :NEW.TextLargeTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.VarCharTest <> :NEW.VarCharTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.DropableColumn <> :NEW.DropableColumn THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+				           END tempcore_timestamp;";
 				Db.NonQ(command);
 			}
 		}
@@ -78,6 +122,34 @@ namespace OpenDentBusiness {
 				command="UPDATE tempcore SET ColEndInt = 0 WHERE ColEndInt IS NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE tempcore MODIFY ColEndInt NOT NULL";
+				Db.NonQ(command);
+			}
+		}
+
+		///<summary>Example only</summary>
+		public static void AddColumnEndTimeStamp() {
+			string command="";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE tempcore ADD ColEndTimeStamp timestamp";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="ALTER TABLE tempcore ADD ColEndTimeStamp date";
+				Db.NonQ(command);
+				command=@"CREATE OR REPLACE TRIGGER tempcore_timestamp
+				BEFORE UPDATE ON tempcore
+				FOR EACH ROW
+				BEGIN
+					IF :OLD.TempCoreNum <> :NEW.OpName THEN
+					:NEW.ColEndTimeStamp := SYSDATE;
+					END IF;
+					... REPEAT FOR EACH COLLUMN IN TABLE...
+					... REPEAT FOR EACH COLLUMN IN TABLE...
+					... REPEAT FOR EACH COLLUMN IN TABLE...
+					... REPEAT FOR EACH COLLUMN IN TABLE...
+					... REPEAT FOR EACH COLLUMN IN TABLE...
+					... REPEAT FOR EACH COLLUMN IN TABLE...
+				END tempcore_timestamp";
 				Db.NonQ(command);
 			}
 		}

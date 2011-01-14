@@ -37,7 +37,7 @@ namespace Crud {
 					strb.Append(" DEFAULT "+GetMySqlBlankData(cols[i]));
 				}
 				if(i==0 && !isMobile){
-					strb.Append(" PRIMARY KEY");
+					strb.Append(" auto_increment PRIMARY KEY");
 					//indexes.Add(cols[i]);//oracle needs to be changed to handle the primary key
 				}
 				else if(cols[i].DataType==OdDbType.Long) {//All bigints are assumed to be either keys or foreign keys.
@@ -71,15 +71,32 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"command=@\"CREATE TABLE "+tableName+" (");
 			for(int i=0;i<cols.Count;i++) {
 				string tempData = GetOracleBlankData(cols[i]);//to save calls to the function, and shorten the following line of code.
-				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetOracleType(cols[i])+(tempData==null?"":(tempData=="0"?" NOT NULL":" DEFAULT "+tempData+" NOT NULL"))+(i==cols.Count-1?"":","));
+				strb.Append(rn+tb+t2+cols[i].ColumnName+" "+GetOracleType(cols[i])+(tempData==null?"":(tempData=="0"?" NOT NULL":" DEFAULT "+tempData+" NOT NULL"))+",");
 //        Columns are added to index from the MySQL section above. Technically the same columns should have indexes in MySql and Oracle.
 //				if(cols[i].DataType==OdDbType.Long) {//all OdDbType.Long columns are assumed to be either keys or foreign keys.
 //					indexes.Add(cols[i]);
 //				}
 			}
+			strb.Append(rn+tb+t2+"CONSTRAINT "+cols[0].ColumnName+" PRIMARY KEY ("+cols[0].ColumnName+")");
 			strb.Append(rn+tb+t2+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			for(int i=0;i<indexes.Count;i++) {
+			//Generate timestamp triggers if they need to be created.
+			for(int i=0;i<cols.Count;i++) {//check for timestamp columns
+				if(cols[i].DataType == OdDbType.DateTimeStamp) {
+					strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
+					strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
+					strb.Append(rn+tb+t1+"           FOR EACH ROW");
+					strb.Append(rn+tb+t1+"           BEGIN");
+					for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
+						strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
+						strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
+						strb.Append(rn+tb+t2+"           END IF");
+					}
+					strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
+					strb.Append(rn+tb+t1+"Db.NonQ(command);");
+				}
+			}
+			for(int i=0;i<indexes.Count;i++) {//Generate Triggers if need be
 				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+indexes[i].ColumnName.ToUpper()+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			}
@@ -88,8 +105,8 @@ namespace Crud {
 			return strb.ToString();
 		}
 
-		/// <summary>Generates C# code to Add Column to table. Does not work for Timestamps in Oracle due to triggers.</summary>
-		public static string AddColumnEnd(string tableName,DbSchemaCol col,int tabInset) {
+		/// <summary>Generates C# code to Add Column to table. List of DbSchemaCol cols should not contain the new column to be added.</summary>
+		public static string AddColumnEnd(string tableName,DbSchemaCol col,List<DbSchemaCol> cols,int tabInset) {
 			StringBuilder strb = new StringBuilder();
 			tb="";//must reset tabs each time method is called
 			for(int i=0;i<tabInset;i++){//defines the base tabs to be added to all lines
@@ -100,7 +117,7 @@ namespace Crud {
 //			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			if(col.DataType==OdDbType.Long) {//key or foreign key
-				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+col.ColumnName.ToUpper()+" ON "+tableName+" ("+col.ColumnName+")\";");
+				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD INDEX ("+col.ColumnName+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			}
 			strb.Append(rn+tb+"}");
@@ -118,6 +135,24 @@ namespace Crud {
 					strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				}
 			}
+			if(cols != null) {//this should be removed once the nulls have been removed from the function calls.
+				cols.Add(col);
+				for(int i=0;i<cols.Count;i++) {//check for timestamp columns
+					if(cols[i].DataType == OdDbType.DateTimeStamp) {
+						strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
+						strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
+						strb.Append(rn+tb+t1+"           FOR EACH ROW");
+						strb.Append(rn+tb+t1+"           BEGIN");
+						for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
+							strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
+							strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
+							strb.Append(rn+tb+t2+"           END IF");
+						}
+						strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
+						strb.Append(rn+tb+t1+"Db.NonQ(command);");
+					}
+				}
+			}
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
 		}
@@ -130,7 +165,7 @@ namespace Crud {
 				tb+="\t";
 			}
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
-			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD INDEX IDX_"+tableName.ToUpper()+"_"+colName.ToUpper()+" ("+colName+")\";");
+			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD INDEX ("+colName+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
@@ -286,9 +321,10 @@ namespace Crud {
 					return "0";
 				case OdDbType.Date:
 				case OdDbType.DateTime:
-				case OdDbType.DateTimeStamp://timestamp is stored as a date and trigger combination
 				case OdDbType.TimeOfDay:
 					return "TO_DATE('0001-01-01','YYYY-MM-DD')";
+				case OdDbType.DateTimeStamp://timestamp is stored as a date and trigger combination
+					return null;
 				case OdDbType.Text:
 				case OdDbType.TimeSpan:
 				case OdDbType.VarChar255:
@@ -296,6 +332,35 @@ namespace Crud {
 				default:
 					throw new ApplicationException("type not found");
 			}
+		}
+
+		///<summary>Rebuilds timestamp triggers for Oracle timestamps.</summary>
+		private static string TimeStampTriggerBuilderOracle(string tableName,List<DbSchemaCol> cols,int tabInset) {
+			StringBuilder strb = new StringBuilder();
+			tb="";//must reset tabs each time method is called
+			for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
+				tb+="\t";
+			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				for(int i=0;i<cols.Count;i++) {//check for timestamp columns
+					if(cols[i].DataType == OdDbType.DateTimeStamp) {
+						strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
+						strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
+						strb.Append(rn+tb+t1+"           FOR EACH ROW");
+						strb.Append(rn+tb+t1+"           BEGIN");
+						for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
+							strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
+							strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
+							strb.Append(rn+tb+t2+"           END IF");
+						}
+						strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
+						strb.Append(rn+tb+t1+"Db.NonQ(command);");
+					}
+				}
+
+
+			}
+			return strb.ToString();
 		}
 
 

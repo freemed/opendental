@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 				command="DROP TABLE IF EXISTS tempcore";
 				Db.NonQ(command);
 				command=@"CREATE TABLE tempcore (
-					TempCoreNum bigint NOT NULL,
+					TempCoreNum bigint NOT NULL auto_increment PRIMARY KEY,
 					TimeOfDayTest time NOT NULL DEFAULT '00:00:00',
 					TimeStampTest timestamp,
 					DateTest date NOT NULL DEFAULT '0001-01-01',
@@ -27,8 +27,6 @@ namespace OpenDentBusiness {
 					DropableColumn tinyint NOT NULL
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
-				command=@"CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (TempCoreNum)";
-				Db.NonQ(command);
 			}
 			else {//oracle
 				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tempcore'; EXCEPTION WHEN OTHERS THEN NULL; END;";
@@ -36,7 +34,7 @@ namespace OpenDentBusiness {
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-					TimeStampTest timestamp DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					TimeStampTest timestamp,
 					DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 					DateTimeTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 					TimeSpanTest varchar2(255),
@@ -46,10 +44,54 @@ namespace OpenDentBusiness {
 					TextMediumTest clob,
 					TextLargeTest clob,
 					VarCharTest varchar2(255),
-					DropableColumn number(3) NOT NULL
+					DropableColumn number(3) NOT NULL,
+					CONSTRAINT TempCoreNum PRIMARY KEY (TempCoreNum)
 					)";
 				Db.NonQ(command);
-				command=@"CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (TempCoreNum)";
+				command=@"CREATE OR REPLACE TRIGGER tempcore_timestamp
+				           BEFORE UPDATE ON tempcore
+				           FOR EACH ROW
+				           BEGIN
+					           IF :OLD.TempCoreNum <> :NEW.TempCoreNum THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TimeOfDayTest <> :NEW.TimeOfDayTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TimeStampTest <> :NEW.TimeStampTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.DateTest <> :NEW.DateTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.DateTimeTest <> :NEW.DateTimeTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TimeSpanTest <> :NEW.TimeSpanTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.CurrencyTest <> :NEW.CurrencyTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.BoolTest <> :NEW.BoolTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TextSmallTest <> :NEW.TextSmallTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TextMediumTest <> :NEW.TextMediumTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.TextLargeTest <> :NEW.TextLargeTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.VarCharTest <> :NEW.VarCharTest THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+					           IF :OLD.DropableColumn <> :NEW.DropableColumn THEN
+					           :NEW.TimeStampTest := SYSDATE;
+					           END IF
+				           END tempcore_timestamp;";
 				Db.NonQ(command);
 			}
 		}
@@ -88,7 +130,7 @@ namespace OpenDentBusiness {
 		public static void AddIndex() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD INDEX IDX_TEMPCORE_TEMPCORENUM (tempCoreNum)";
+				command="ALTER TABLE tempcore ADD INDEX (tempCoreNum)";
 				Db.NonQ(command);
 			}
 			else {//oracle

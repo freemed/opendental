@@ -88,7 +88,7 @@ namespace Crud {
 						textsize=TextSizeMySqlOracle.Medium;
 					}
 					DbSchemaCol col=new DbSchemaCol(newColumns[f].Name,odtype,textsize);
-					strb.Append(CrudSchemaRaw.AddColumnEnd(tablename,col,4));
+					strb.Append(CrudSchemaRaw.AddColumnEnd(tablename,col,null,4));//todo: replace null with a list<OdSchemaCol>
 				}
 				strb.Append(rn+t4+"*/");
 				File.AppendAllText(convertDbFile,strb.ToString());
