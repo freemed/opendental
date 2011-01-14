@@ -23,8 +23,7 @@ namespace OpenDentBusiness {
 					TextSmallTest varchar(255) NOT NULL,
 					TextMediumTest text NOT NULL,
 					TextLargeTest text NOT NULL,
-					VarCharTest varchar(255) NOT NULL,
-					DropableColumn tinyint NOT NULL
+					VarCharTest varchar(255) NOT NULL
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 			}
@@ -34,7 +33,7 @@ namespace OpenDentBusiness {
 				command=@"CREATE TABLE tempcore (
 					TempCoreNum number(20) NOT NULL,
 					TimeOfDayTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-					TimeStampTest timestamp DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+					TimeStampTest timestamp,
 					DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 					DateTimeTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 					TimeSpanTest varchar2(255),
@@ -44,54 +43,8 @@ namespace OpenDentBusiness {
 					TextMediumTest clob,
 					TextLargeTest clob,
 					VarCharTest varchar2(255),
-					DropableColumn number(3) NOT NULL,
 					CONSTRAINT TempCoreNum PRIMARY KEY (TempCoreNum)
 					)";
-				Db.NonQ(command);
-				command=@"CREATE OR REPLACE TRIGGER tempcore_timestamp
-				           BEFORE UPDATE ON tempcore
-				           FOR EACH ROW
-				           BEGIN
-					           IF :OLD.TempCoreNum <> :NEW.TempCoreNum THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TimeOfDayTest <> :NEW.TimeOfDayTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TimeStampTest <> :NEW.TimeStampTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.DateTest <> :NEW.DateTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.DateTimeTest <> :NEW.DateTimeTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TimeSpanTest <> :NEW.TimeSpanTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.CurrencyTest <> :NEW.CurrencyTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.BoolTest <> :NEW.BoolTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TextSmallTest <> :NEW.TextSmallTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TextMediumTest <> :NEW.TextMediumTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TextLargeTest <> :NEW.TextLargeTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.VarCharTest <> :NEW.VarCharTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.DropableColumn <> :NEW.DropableColumn THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-				           END tempcore_timestamp;";
 				Db.NonQ(command);
 			}
 		}
@@ -132,6 +85,7 @@ namespace OpenDentBusiness {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="ALTER TABLE tempcore ADD ColEndTimeStamp timestamp";
 				Db.NonQ(command);
+//todo: set to now().
 			}
 			else {//oracle
 				command="ALTER TABLE tempcore ADD ColEndTimeStamp date";

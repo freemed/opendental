@@ -3264,19 +3264,20 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
-	//todo: oracle trigger for existing timestamp
 					command="ALTER TABLE document ADD Thumbnail clob";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE rxpat ADD DateTStamp timestamp";
 					Db.NonQ(command);
-					command="UPDATE rxpat SET DateTStamp = NULL";//to set all timestamps to now.
+					command="UPDATE rxpat SET DateTStamp = NOW()";
 					Db.NonQ(command);
 				}
 				else {//oracle
-	//todo: needs to be implemented:
-					
+					command="ALTER TABLE rxpat ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE rxpat SET DateTStamp = SYSDATE";
+					Db.NonQ(command);
 				}
 
 

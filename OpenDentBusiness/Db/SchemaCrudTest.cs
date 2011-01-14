@@ -49,49 +49,49 @@ namespace OpenDentBusiness {
 					)";
 				Db.NonQ(command);
 				command=@"CREATE OR REPLACE TRIGGER tempcore_timestamp
-				           BEFORE UPDATE ON tempcore
-				           FOR EACH ROW
-				           BEGIN
-					           IF :OLD.TempCoreNum <> :NEW.TempCoreNum THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TimeOfDayTest <> :NEW.TimeOfDayTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TimeStampTest <> :NEW.TimeStampTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.DateTest <> :NEW.DateTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.DateTimeTest <> :NEW.DateTimeTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TimeSpanTest <> :NEW.TimeSpanTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.CurrencyTest <> :NEW.CurrencyTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.BoolTest <> :NEW.BoolTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TextSmallTest <> :NEW.TextSmallTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TextMediumTest <> :NEW.TextMediumTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.TextLargeTest <> :NEW.TextLargeTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.VarCharTest <> :NEW.VarCharTest THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-					           IF :OLD.DropableColumn <> :NEW.DropableColumn THEN
-					           :NEW.TimeStampTest := SYSDATE;
-					           END IF
-				           END tempcore_timestamp;";
+				  BEFORE UPDATE ON tempcore
+				  FOR EACH ROW
+				  BEGIN
+					  IF :OLD.TempCoreNum <> :NEW.TempCoreNum THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.TimeOfDayTest <> :NEW.TimeOfDayTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.TimeStampTest <> :NEW.TimeStampTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.DateTest <> :NEW.DateTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.DateTimeTest <> :NEW.DateTimeTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.TimeSpanTest <> :NEW.TimeSpanTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.CurrencyTest <> :NEW.CurrencyTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.BoolTest <> :NEW.BoolTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.TextSmallTest <> :NEW.TextSmallTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.TextMediumTest <> :NEW.TextMediumTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.TextLargeTest <> :NEW.TextLargeTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.VarCharTest <> :NEW.VarCharTest THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+					  IF :OLD.DropableColumn <> :NEW.DropableColumn THEN
+					  :NEW.TimeStampTest := SYSDATE;
+					  END IF
+				  END tempcore_timestamp;";
 				Db.NonQ(command);
 			}
 		}
