@@ -88,6 +88,8 @@ namespace UnitTests {
 			DataTable table;
 			TimeSpan timespan;
 			TimeSpan timespan2;
+			string varchar1;
+			string varchar2;
 			//timespan(timeOfDay)----------------------------------------------------------------------------------------------
 			timespan=new TimeSpan(1,2,3);//1hr,2min,3sec
 			command="INSERT INTO tempcore (TimeOfDayTest) VALUES ("+POut.Time(timespan)+")";
@@ -221,21 +223,8 @@ namespace UnitTests {
 			command="DELETE FROM tempcore";
 			DataCore.NonQ(command);
 			retVal+="Bool, false: Passed.\r\n";
-			//Run multiple non-queries in one transaction--------------------------------------------------
-			string varchar1="A";
-			string varchar2="B";
-			command="INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar1)+"'); DELETE FROM tempcore; INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar2)+"');";
-			DataCore.NonQ(command);
-			command="SELECT TextTinyTest FROM tempcore";
-			table=DataCore.GetTable(command);
-			if(PIn.String(table.Rows[0][0].ToString())!=varchar2) {
-				throw new ApplicationException();
-			}
-			command="DELETE FROM tempcore";
-			DataCore.NonQ(command);
-			retVal+="Multi-Non-Queries: Passed.\r\n";
 			//varchar255 Nonstandard Characters-----------------------------------------------------------
-			varchar1=@"'!@#$%^&*()-+[{]}\`~,<.>/?'"";:=_";
+			varchar1=@"'!@#$%^&*()-+[{]}\`~,<.>/?'"";:=_"+"\r\n\t";
 			varchar2="";
 			command="INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar1)+"')";
 			DataCore.NonQ(command);
@@ -322,6 +311,32 @@ namespace UnitTests {
 			else {
 				retVal+="SHOW CREATE TABLE: Not applicable to Oracle.\r\n";
 			}
+			//Single Command Split-------------------------------------------------------------------------
+			varchar1="';\"";   //After POut.String() will turn into '';"
+			varchar2=";'';;;;\"\"\"\"'asdfsadsdaf'"; //After POut.String() will turn into ;'''';;;;""""''asdfsadsdaf''
+			command="INSERT INTO tempcore (\"TextTinyTest\",TextSmallTest) VALUES ('"+POut.String(varchar1)+"','"+POut.String(varchar2)+"');";
+			DataCore.NonQ(command);//Test the split function.
+			command="SELECT TextTinyTest,TextSmallTest FROM tempcore";
+			table=DataCore.GetTable(command);
+			if(PIn.String(table.Rows[0]["TextTinyTest"].ToString())!=varchar1 || PIn.String(table.Rows[0]["TextSmallTest"].ToString())!=varchar2) {
+				throw new ApplicationException();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="Single Command Split: Passed.";
+			//Run multiple non-queries in one transaction--------------------------------------------------
+			varchar1="A";
+			varchar2="B";
+			command="INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar1)+"'); DELETE FROM tempcore; INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar2)+"');";
+			DataCore.NonQ(command);
+			command="SELECT TextTinyTest FROM tempcore";
+			table=DataCore.GetTable(command);
+			if(PIn.String(table.Rows[0][0].ToString())!=varchar2) {
+				throw new ApplicationException();
+			}
+			command="DELETE FROM tempcore";
+			DataCore.NonQ(command);
+			retVal+="Multi-Non-Queries: Passed.\r\n";
 			//Cleanup---------------------------------------------------------------------------------------
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="DROP TABLE IF EXISTS tempcore";

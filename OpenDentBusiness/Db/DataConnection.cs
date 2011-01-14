@@ -5,8 +5,10 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Text;
 using System.Threading;
 #if !LINUX
 using Oracle.DataAccess.Client;
@@ -417,13 +419,15 @@ namespace OpenDentBusiness{
 					//	cmdOr.CommandText="LOCK TABLE preference IN EXCLUSIVE MODE";
 					//	cmdOr.ExecuteNonQuery();//Lock the preference table, because we need exclusive access to the OracleInsertId.
 					//}
-					//for(int i=0;i<commandArray.Length;i++){
-				cmdOr.CommandText=commands; //Array[i];
-				for(int p=0;p<parameters.Length;p++) {
-					cmdOr.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetOracleDbType()).Value=parameters[p].Value;
-					//cmdOr.Parameters.Add(parameters[p].GetOracleParameter());//doesn't work
+				string[] commandList=SplitCommands(commands);
+				for(int i=0;i<commandList.Length;i++) {
+					cmdOr.CommandText=commandList[i];
+					for(int p=0;p<parameters.Length;p++) { //Parameters are not used with batch commands so we don't need to worry about adding the parameters mulitple times.
+						cmdOr.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetOracleDbType()).Value=parameters[p].Value;
+						//cmdOr.Parameters.Add(parameters[p].GetOracleParameter());//doesn't work
+					}
+					rowsChanged=cmdOr.ExecuteNonQuery();
 				}
-				rowsChanged=cmdOr.ExecuteNonQuery();
 					//}
 				//}
 				//catch(System.Exception e){
@@ -560,6 +564,63 @@ namespace OpenDentBusiness{
 				con.Close();
 			}
 			return retVal;
+		}
+
+		///<summary>Oracle only. Used to split a command string into a list of individual commands so that each command can be run individually. It has proven difficult to run multiple commands at one time in Oracle without making drastic changes to existing queries.</summary>
+		private string[] SplitCommands(string batchCmd) {
+			return new string[] { batchCmd };//Skip this method for now until it can be debugged.
+			if(DBtype!=DatabaseType.Oracle) {
+				return new string[] { batchCmd };
+			}
+			//Possibilities within a single statement:
+			//Reference for Oracle Text Literals: http://download.oracle.com/docs/cd/B19306_01/server.102/b14200/sql_elements003.htm#SQLRF00218
+			//Oracle allows one to use alternative quoting mechanisms instead of single-quotes, but we are not going to worry about that here.
+			//In Oracle, one must escape ' with '' so we can just treat these like a string ending and a new one beginning immediately afterward.
+			//Commands are terminated with semi-colons. We need to watch for the case when a semi-colon is within a single-quote string. As long as we correctly handle strings and ignore all data in a string, this shouldn't matter.
+			//If batchCmd contains a command which has maulformed single or double quotes, this algorithm will not work so we will need to throw an exception in this case.
+			List<string> result=new List<string>();
+			StringBuilder strb=new StringBuilder();
+			//bool beginningChar;
+			//bool isInString;
+			for(int i=0;i<batchCmd.Length;i++) {
+				/*
+				if(batchCmd[i]=='"') {
+					if(isInString && beginningChar=='"') {
+						isInString=false;
+					}
+					else {
+						isInString=true;
+					}
+				}
+				if(batchCmd[i]==";" && !isInString) {
+					if(strb.Length>0){
+						result.Add(strb.ToString();
+					}
+					strb=new StringBuilder();
+					continue;
+				}
+				strb.Append(batchCmd[i]);*/
+				if(batchCmd[i]=='\'') { //Single quotes are escaped with a single quote. So, for the string 'Hi I''m Bob' there are always an even number of single quotes.
+					int endIndex=batchCmd.IndexOf('\'',i+1);
+					if(endIndex<0) {
+						throw new ApplicationException("Mismatched quotes found while splitting command.");
+					}
+					while(i<=endIndex) {
+						strb.Append(batchCmd[i]);
+						i++;
+					}
+				}
+				else if(batchCmd[i]==';') { //top-level ; so this is the end of a command.
+					if(strb.Length>0) {
+						result.Add(strb.ToString());
+					}
+					strb=new StringBuilder();
+				}
+				else { //All other characters
+					strb.Append(batchCmd[i]);
+				}
+			}
+			return result.ToArray();
 		}
 		
 
