@@ -80,22 +80,22 @@ namespace Crud {
 			strb.Append(rn+tb+t2+"CONSTRAINT "+cols[0].ColumnName+" PRIMARY KEY ("+cols[0].ColumnName+")");
 			strb.Append(rn+tb+t2+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
-			//Generate timestamp triggers if they need to be created.
-			for(int i=0;i<cols.Count;i++) {//check for timestamp columns
-				if(cols[i].DataType == OdDbType.DateTimeStamp) {
-					strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
-					strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
-					strb.Append(rn+tb+t1+"           FOR EACH ROW");
-					strb.Append(rn+tb+t1+"           BEGIN");
-					for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
-						strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
-						strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
-						strb.Append(rn+tb+t2+"           END IF");
-					}
-					strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
-					strb.Append(rn+tb+t1+"Db.NonQ(command);");
-				}
-			}
+			////Generate timestamp triggers if they need to be created.
+			//for(int i=0;i<cols.Count;i++) {//check for timestamp columns
+			//  if(cols[i].DataType == OdDbType.DateTimeStamp) {
+			//    strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
+			//    strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
+			//    strb.Append(rn+tb+t1+"           FOR EACH ROW");
+			//    strb.Append(rn+tb+t1+"           BEGIN");
+			//    for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
+			//      strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
+			//      strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
+			//      strb.Append(rn+tb+t2+"           END IF");
+			//    }
+			//    strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
+			//    strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			//  }
+			//}
 			for(int i=0;i<indexes.Count;i++) {//Generate Triggers if need be
 				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+indexes[i].ColumnName.ToUpper()+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -106,16 +106,20 @@ namespace Crud {
 		}
 
 		/// <summary>Generates C# code to Add Column to table. List of DbSchemaCol cols should not contain the new column to be added.</summary>
-		public static string AddColumnEnd(string tableName,DbSchemaCol col,List<DbSchemaCol> cols,int tabInset) {
+		public static string AddColumnEnd(string tableName,DbSchemaCol col,int tabInset) {
 			StringBuilder strb = new StringBuilder();
 			tb="";//must reset tabs each time method is called
 			for(int i=0;i<tabInset;i++){//defines the base tabs to be added to all lines
 				tb+="\t";
 			}
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
-			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+" NOT NULL\";");
+			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+(col.DataType==OdDbType.DateTimeStamp?"":" NOT NULL")+"\";");
 //			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			if(col.DataType==OdDbType.DateTimeStamp) {//set value of new timestamp column to now()
+				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = NOW()\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			}
 			if(col.DataType==OdDbType.Long) {//key or foreign key
 				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD INDEX ("+col.ColumnName+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -124,6 +128,10 @@ namespace Crud {
 			strb.Append(rn+tb+"else {//oracle");
 			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetOracleType(col)+"\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			if(col.DataType==OdDbType.DateTimeStamp) {//set value of new timestamp column to SYSTIMESTAMP
+				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = SYSTIMESTAMP\";");
+				strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			}
 			if(GetOracleBlankData(col)!=null) {//Do not add NOT NULL constraint because empty strings are stored as NULL in Oracle
 			//Non string types must be filled with "blank" data and set to NOT NULL
 				strb.Append(rn+tb+t1+"command=\"UPDATE "+tableName+" SET "+col.ColumnName+" = "+GetOracleBlankData(col)+" WHERE "+col.ColumnName+" IS NULL\";");
@@ -135,24 +143,24 @@ namespace Crud {
 					strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				}
 			}
-			if(cols != null) {//this should be removed once the nulls have been removed from the function calls.
-				cols.Add(col);
-				for(int i=0;i<cols.Count;i++) {//check for timestamp columns
-					if(cols[i].DataType == OdDbType.DateTimeStamp) {
-						strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
-						strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
-						strb.Append(rn+tb+t1+"           FOR EACH ROW");
-						strb.Append(rn+tb+t1+"           BEGIN");
-						for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
-							strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
-							strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
-							strb.Append(rn+tb+t2+"           END IF");
-						}
-						strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
-						strb.Append(rn+tb+t1+"Db.NonQ(command);");
-					}
-				}
-			}
+			//if(cols != null) {//this should be removed once the nulls have been removed from the function calls.
+			//  cols.Add(col);
+			//  for(int i=0;i<cols.Count;i++) {//check for timestamp columns
+			//    if(cols[i].DataType == OdDbType.DateTimeStamp) {
+			//      strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
+			//      strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
+			//      strb.Append(rn+tb+t1+"           FOR EACH ROW");
+			//      strb.Append(rn+tb+t1+"           BEGIN");
+			//      for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
+			//        strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
+			//        strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
+			//        strb.Append(rn+tb+t2+"           END IF");
+			//      }
+			//      strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
+			//      strb.Append(rn+tb+t1+"Db.NonQ(command);");
+			//    }
+			//  }
+			//}
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
 		}
@@ -251,8 +259,9 @@ namespace Crud {
 				case OdDbType.Long:
 					return "0";
 				case OdDbType.Date:
-				case OdDbType.DateTimeStamp:
 					return "'0001-01-01'";//sets date to 01 JAN 2001, 00:00:00
+				case OdDbType.DateTimeStamp:
+					return "NOW()";
 				case OdDbType.DateTime:
 					return "'0001-01-01 00:00:00'";
 				case OdDbType.TimeOfDay:
@@ -334,34 +343,32 @@ namespace Crud {
 			}
 		}
 
-		///<summary>Rebuilds timestamp triggers for Oracle timestamps.</summary>
-		private static string TimeStampTriggerBuilderOracle(string tableName,List<DbSchemaCol> cols,int tabInset) {
-			StringBuilder strb = new StringBuilder();
-			tb="";//must reset tabs each time method is called
-			for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
-				tb+="\t";
-			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				for(int i=0;i<cols.Count;i++) {//check for timestamp columns
-					if(cols[i].DataType == OdDbType.DateTimeStamp) {
-						strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
-						strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
-						strb.Append(rn+tb+t1+"           FOR EACH ROW");
-						strb.Append(rn+tb+t1+"           BEGIN");
-						for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
-							strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
-							strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
-							strb.Append(rn+tb+t2+"           END IF");
-						}
-						strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
-						strb.Append(rn+tb+t1+"Db.NonQ(command);");
-					}
-				}
-
-
-			}
-			return strb.ToString();
-		}
+		/////<summary>Rebuilds timestamp triggers for Oracle timestamps.</summary>
+		//private static string TimeStampTriggerBuilderOracle(string tableName,List<DbSchemaCol> cols,int tabInset) {
+		//  StringBuilder strb = new StringBuilder();
+		//  tb="";//must reset tabs each time method is called
+		//  for(int i=0;i<tabInset;i++) {//defines the base tabs to be added to all lines
+		//    tb+="\t";
+		//  }
+		//  if(DataConnection.DBtype==DatabaseType.Oracle) {
+		//    for(int i=0;i<cols.Count;i++) {//check for timestamp columns
+		//      if(cols[i].DataType == OdDbType.DateTimeStamp) {
+		//        strb.Append(rn+tb+t1+"command=@\"CREATE OR REPLACE TRIGGER "+tableName+"_timestamp");
+		//        strb.Append(rn+tb+t1+"           BEFORE UPDATE ON "+tableName);
+		//        strb.Append(rn+tb+t1+"           FOR EACH ROW");
+		//        strb.Append(rn+tb+t1+"           BEGIN");
+		//        for(int j=0;j<cols.Count;j++) {//Each column in the table must be set up to change timestamp when changed
+		//          strb.Append(rn+tb+t2+"           IF :OLD."+cols[j].ColumnName+" <> :NEW."+cols[j].ColumnName+" THEN");
+		//          strb.Append(rn+tb+t2+"           :NEW."+cols[i].ColumnName+" := SYSDATE;");
+		//          strb.Append(rn+tb+t2+"           END IF");
+		//        }
+		//        strb.Append(rn+tb+t1+"           END "+tableName+"_timestamp;\";");
+		//        strb.Append(rn+tb+t1+"Db.NonQ(command);");
+		//      }
+		//    }
+		//  }
+		//  return strb.ToString();
+		//}
 
 
 	}

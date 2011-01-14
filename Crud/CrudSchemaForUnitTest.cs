@@ -35,7 +35,7 @@ namespace OpenDentBusiness {
 		public static void AddColumnEndClob() {
 			string command="""";");
 			DbSchemaCol col=new DbSchemaCol("ColEndClob",OdDbType.Text,TextSizeMySqlOracle.Medium);
-			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,null,3));
+			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,3));
 			strb.Append(@"
 		}
 
@@ -43,7 +43,15 @@ namespace OpenDentBusiness {
 		public static void AddColumnEndInt() {
 			string command="""";");
 			col = new DbSchemaCol("ColEndInt",OdDbType.Int);
-			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,null,3));
+			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,3));
+			strb.Append(@"
+		}
+
+		///<summary>Example only</summary>
+		public static void AddColumnEndTimeStamp() {
+			string command="""";");
+			col=new DbSchemaCol("ColEndTimeStamp",OdDbType.DateTimeStamp);
+			strb.Append("\r\n"+CrudSchemaRaw.AddColumnEnd("tempcore",col,3));
 			strb.Append(@"
 		}
 

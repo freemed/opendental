@@ -85,25 +85,13 @@ namespace OpenDentBusiness {
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="ALTER TABLE tempcore ADD ColEndTimeStamp timestamp";
 				Db.NonQ(command);
-//todo: set to now().
+				command="UPDATE tempcore SET ColEndTimeStamp = NOW()";// WHERE timestamptest = '0000-00-00 00:00:00'";
+				Db.NonQ(command);
 			}
 			else {//oracle
-				command="ALTER TABLE tempcore ADD ColEndTimeStamp date";
+				command="ALTER TABLE tempcore ADD ColEndTimeStamp timestamp";
 				Db.NonQ(command);
-				command=@"CREATE OR REPLACE TRIGGER tempcore_timestamp
-				BEFORE UPDATE ON tempcore
-				FOR EACH ROW
-				BEGIN
-					IF :OLD.TempCoreNum <> :NEW.OpName THEN
-					:NEW.ColEndTimeStamp := SYSDATE;
-					END IF;
-					... REPEAT FOR EACH COLLUMN IN TABLE...
-					... REPEAT FOR EACH COLLUMN IN TABLE...
-					... REPEAT FOR EACH COLLUMN IN TABLE...
-					... REPEAT FOR EACH COLLUMN IN TABLE...
-					... REPEAT FOR EACH COLLUMN IN TABLE...
-					... REPEAT FOR EACH COLLUMN IN TABLE...
-				END tempcore_timestamp";
+				command="UPDATE tempcore SET ColEndTimeStamp = SYSTIMESTAMP";
 				Db.NonQ(command);
 			}
 		}
@@ -134,7 +122,6 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		//AddColumnEndTimeStamp
 		//AddColumnAfter
 		//DropColumnTimeStamp
 		//DropIndex
