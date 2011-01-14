@@ -100,11 +100,11 @@ namespace OpenDentBusiness {
 		public static void AddIndex() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore ADD INDEX(tempCoreNum)";
+				command="ALTER TABLE tempcore ADD INDEX(ColEndInt)";
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="CREATE INDEX IDX_TEMPCORE_TEMPCORENUM ON tempcore (tempCoreNum)";
+				command="CREATE INDEX ColEndInt ON tempcore (ColEndInt)";
 				Db.NonQ(command);
 			}
 		}
@@ -113,16 +113,15 @@ namespace OpenDentBusiness {
 		public static void DropColumn() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				command="ALTER TABLE tempcore DROP COLUMN TextLargeTest";
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				command="ALTER TABLE tempcore DROP COLUMN TextLargeTest";
 				Db.NonQ(command);
 			}
 		}
 
-		//AddColumnEndTimeStamp
 		//AddColumnAfter
 		//DropColumnTimeStamp
 		//DropIndex

@@ -173,11 +173,11 @@ namespace Crud {
 				tb+="\t";
 			}
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
-			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD INDEX ("+colName+")\";");
+			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD INDEX("+colName+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
-			strb.Append(rn+tb+t1+"command=\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+colName.ToUpper()+" ON "+tableName+" ("+colName+")\";");
+			strb.Append(rn+tb+t1+"command=\"CREATE INDEX "+colName+" ON "+tableName+" ("+colName+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			return strb.ToString();

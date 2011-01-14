@@ -113,11 +113,11 @@ namespace OpenDentBusiness {
 		public static void DropColumn() {
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				command="ALTER TABLE tempcore DROP COLUMN TextLargeTest";
 				Db.NonQ(command);
 			}
 			else {//oracle
-				command="ALTER TABLE tempcore DROP COLUMN DropableColumn";
+				command="ALTER TABLE tempcore DROP COLUMN TextLargeTest";
 				Db.NonQ(command);
 			}
 		}

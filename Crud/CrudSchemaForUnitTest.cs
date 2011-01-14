@@ -58,18 +58,17 @@ namespace OpenDentBusiness {
 		///<summary>Example only</summary>
 		public static void AddIndex() {
 			string command="""";");
-			strb.Append("\r\n"+CrudSchemaRaw.AddIndex("tempcore","tempCoreNum",3));
+			strb.Append("\r\n"+CrudSchemaRaw.AddIndex("tempcore","ColEndInt",3));
 			strb.Append(@"
 		}
 
 		///<summary>Example only</summary>
 		public static void DropColumn() {
 			string command="""";");
-			strb.Append("\r\n"+CrudSchemaRaw.DropColumn("tempcore","DropableColumn",3));
+			strb.Append("\r\n"+CrudSchemaRaw.DropColumn("tempcore","TextLargeTest",3));
 			strb.Append(@"
 		}
 
-		//AddColumnEndTimeStamp
 		//AddColumnAfter
 		//DropColumnTimeStamp
 		//DropIndex

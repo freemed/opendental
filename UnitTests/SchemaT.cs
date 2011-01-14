@@ -28,6 +28,10 @@ namespace UnitTests {
 			DatabaseTools.SetDbConnection("unittest",isOracle);
 			SchemaCrudProposedTest.AddTableTempcore();
 			SchemaCrudProposedTest.AddColumnEndClob();
+			SchemaCrudProposedTest.AddColumnEndInt();
+			SchemaCrudProposedTest.AddColumnEndTimeStamp();
+			SchemaCrudProposedTest.AddIndex();
+			SchemaCrudProposedTest.DropColumn();
 			retVal+="Proposed Crud passed test.\r\n";
 			return retVal;
 		}
