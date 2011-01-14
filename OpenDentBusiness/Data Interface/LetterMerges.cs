@@ -61,6 +61,9 @@ namespace OpenDentBusiness{
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
 			Listt=Crud.LetterMergeCrud.TableToList(table).ToArray();
+			for(int i=0;i<Listt.Length;i++) {
+				Listt[i].Fields=LetterMergeFields.GetForLetter(Listt[i].LetterMergeNum);
+			}
 		}
 
 		///<summary>Inserts this lettermerge into database.</summary>
