@@ -17,12 +17,18 @@ namespace MobileWeb {
 			try {
 				String username="";
 				String password="";
+				bool RememberMe=false;
 				Message.Text="";
 					if(Request.Form["username"]!=null) {
 						username=Request.Form["username"].ToString().Trim();
 					}
 					if(Request.Form["password"]!=null) {
 						password=Request.Form["password"].ToString().Trim();
+					}
+					if(Request.Form["rememberusername"]!=null) {
+						if(Request.Form["rememberusername"].ToString().Trim()=="true") {
+							RememberMe=true;
+						}
 					}
 					//if(username=="" && password=="") {
 						util.SetMobileDbConnection();
@@ -32,6 +38,17 @@ namespace MobileWeb {
 					//else {
 					//	Message.Text="LoginFailed";
 					//}
+					HttpCookie UserNameCookie=new HttpCookie("UserNameCookie");
+					if(RememberMe) {
+						UserNameCookie.Value=username;
+						UserNameCookie.Expires=DateTime.Now.AddYears(1);
+						Response.Cookies.Add(UserNameCookie);
+					}
+					else {
+						UserNameCookie.Expires=DateTime.Now.AddDays(-1);
+						Response.Cookies.Add(UserNameCookie);
+					}
+			
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);

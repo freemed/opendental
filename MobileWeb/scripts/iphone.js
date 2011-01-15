@@ -197,8 +197,9 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 function ProcessLogin() {
     var username = $('#username').val();
     var password = $('#password').val();
-    var datatosent = "username=" + username + "&password=" + password;
-	//console.log('username:' + username + ' password:' + password);
+	var rememberusername = $('#rememberusername').attr('checked');
+    var datatosent = "username=" + username + "&password=" + password+ "&rememberusername=" + rememberusername;
+//	console.log(datatosent);
 	console.log('login clicked');
 	$('#login').append('<div id="progress">Loading...</div>');
     $.ajax({

@@ -28,14 +28,13 @@
             </div>
 			<br />
             &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
-            <form method="post">
+            <form id="form1" method="post" runat="server">
                 <ul>
-                    <li><input type="text" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
+                    <%--<li><input type="text" runat="server" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>--%>
+					<li><asp:TextBox ID="username" runat="server"></asp:TextBox></li>
                     <li><input type="password" placeholder="Password" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
-                   <li><div class="chk"><input id="rememberusername" title="Remember username" type="checkbox" /></div></li>
-					<%--<div class="searchbox">
-					<input id="search" placeholder="search character" type="text" name="key" value="">
-					</div>--%>
+                   <%--<li><div class="chk"><input runat="server" id="rememberusername" title="Remember username" type="checkbox" /></div></li>--%>
+				   <li><asp:CheckBox ID="rememberusername" runat="server" /></li>
 					<li><input type="submit" class="submit" name="action" value="Login" /></li>
                 </ul>
             </form>
