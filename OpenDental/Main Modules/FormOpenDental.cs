@@ -4403,7 +4403,7 @@ namespace OpenDental{
 			if(PIn.Int(interval)==0) {
 				timerWebHostSynch.Stop();
 			}
-			//FormMobileSetup.Synch();
+			FormMobileSetup.Synch();
 		}
 
 		/// <summary>This function is called from FormMobileSetup if the MobileSyncIntervalMinutes is set to nonzero </summary>

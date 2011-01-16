@@ -22,6 +22,10 @@ namespace OpenDental {
 		private static String StatusMessage="";
 		private static int BatchSize=100;
 		private static bool PaidCustomer=false;
+		private string NotPaidMessage="You must be a paid customer to use this feature";
+		private string WebServiceUnavailableMessage="Either the web service is not available or the WebHostSynch URL is incorrect";
+		private string SyncCompletedMessage="Sync Completed";
+		private string FullSynchNotRunMessage="Sync has never been run. You must do a full sync first.";
 
 		public FormMobileSetup() {
 			InitializeComponent();
@@ -29,19 +33,25 @@ namespace OpenDental {
 		}
 
 		private void FormMobileSetup_Load(object sender,EventArgs e) {
-			InitializeVariables();
-			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
-			textMobileSyncServerURL.Text=MobileSyncServerURL;
-			textSynchMinutes.Text=MobileSyncIntervalMinutes+"";
-			textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
-			
-			if(!TestWebServiceExists()) {
-				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
-			}
-			else {
+			try {
+				InitializeVariables();
+				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
+				textMobileSyncServerURL.Text=MobileSyncServerURL;
+				textSynchMinutes.Text=MobileSyncIntervalMinutes+"";
+				textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
+				if(!TestWebServiceExists()) {
+					MsgBox.Show(this,WebServiceUnavailableMessage);
+				}
+				if(!PaidCustomer) {
+					MsgBox.Show(this,NotPaidMessage);
+					return;
+				}
 				textMobileUserName.Text=mb.GetUserName(RegistrationKey);
+				butSavePreferences.Enabled=false;
 			}
-			butSavePreferences.Enabled=false;
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		internal void SetParentFormReference(FormOpenDental frmOD) {
@@ -73,21 +83,23 @@ namespace OpenDental {
 				if(mb.GetCustomerNum(RegistrationKey)==0) {
 				return;
 				}
-				//CreatePatients(100000);
-				//CreateAppointments(10); // for each patient
-				//CreatePrescriptions(10);// for each patient
+				CreatePatients(1000);
+				CreateAppointments(10); // for each patient
+				CreatePrescriptions(10);// for each patient
+				/*
 				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
 				List<long> patNumList=Patientms.GetChangedSincePatNums(GetChangedSince);
-				//SynchPatients(patNumList);
+				SynchPatients(patNumList);
 				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(GetChangedSince,MobileExcludeApptsBeforeDate);
-				//SynchAppointments(aptNumList);
+				SynchAppointments(aptNumList);
 				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(GetChangedSince);
 				SynchPrescriptions(rxNumList);
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
 				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
+				*/
 			}
 			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message);// will this show up ever?
 			}
 		}
 
@@ -201,25 +213,29 @@ namespace OpenDental {
 		}
 
 		private void butSavePreferences_Click(object sender,EventArgs e) {
-			Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text.Trim());
-			MobileSyncServerURL=textMobileSyncServerURL.Text.Trim();
-			if(!FieldsValid()) {
-				return;
-			}
-			SetMobileExcludeApptsBeforeDate();
-			butSavePreferences.Enabled=false;
-			InitializeVariables();//payment is checked here.
-			if(!TestWebServiceExists()) {
-				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
-				return;
-			}
-			if(MobileSyncIntervalMinutes==0) {
-				MsgBox.Show(this,"You must be a paid customer to use this feature");
-				return;
-			}
-			else {
+			try {
+				Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text.Trim());
+				MobileSyncServerURL=textMobileSyncServerURL.Text.Trim();
+				InitializeVariables();//payment is checked here.
+				if(!PaidCustomer) {
+					textSynchMinutes.Text="0";
+					MsgBox.Show(this,NotPaidMessage);
+					return;
+				}
+				if(!FieldsValid()) {
+					return;
+				}
+				SetMobileExcludeApptsBeforeDate();
+				butSavePreferences.Enabled=false;
+				if(!TestWebServiceExists()) {
+					MsgBox.Show(this,WebServiceUnavailableMessage);
+					return;
+				}
 				mb.SetMobileWebUserPassword(RegistrationKey,textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
-				frmOD.StartTimerWebHostSynch();
+				frmOD.StartTimerWebHostSynch();//check if this throws an error
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
 			}
 
 		}
@@ -259,8 +275,8 @@ namespace OpenDental {
 				return false;
 			}
 			if(textMobilePassword.Text.Trim()=="") {
-				//MsgBox.Show(this,"The password cannot be empty");
-				//return false;
+				MsgBox.Show(this,"The password cannot be empty");
+				return false;
 			}
 
 			return true;
@@ -269,7 +285,7 @@ namespace OpenDental {
 		/// <summary>
 		/// For testing only
 		/// </summary>
-		private void CreatePatients(int PatientCount) {
+		private static void CreatePatients(int PatientCount) {
 			for(int i=0;i<PatientCount;i++) {
 				Patient newPat=new Patient();
 				newPat.LName="Mathew"+i;
@@ -304,7 +320,7 @@ namespace OpenDental {
 		/// <summary>
 		/// For testing only
 		/// </summary>
-		private void CreateAppointments(int AppointmentCount) {
+		private static void CreateAppointments(int AppointmentCount) {
 			long[] patNumArray=Patients.GetAllPatNums();
 			DateTime appdate= new DateTime(2010,12,1,11,0,0);
 			for(int i=0;i<patNumArray.Length;i++) {
@@ -359,20 +375,19 @@ namespace OpenDental {
 
 		private bool CanProceed() {
 			bool proceed=true;
+			if(!PaidCustomer) {
+				MsgBox.Show(this,NotPaidMessage);
+				return false;
+			}
 			if(!FieldsValid()) {
 				return false;
 			}
-			if(MobileSyncIntervalMinutes==0) {
-				// Charge the customer!
-				MsgBox.Show(this,"You must be a paid customer to use this feature");
-				return false;
-			}
 			if(MobileSyncDateTimeLastRun.Year<1880) {
-				MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
+				MsgBox.Show(this,FullSynchNotRunMessage);
 				return false;
 			}
 			if(!TestWebServiceExists()) {
-				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
+				MsgBox.Show(this,WebServiceUnavailableMessage);
 				return false;
 			}
 			if(mb.GetCustomerNum(RegistrationKey)==0) {
@@ -384,43 +399,59 @@ namespace OpenDental {
 		}
 		
 		private void butSync_Click(object sender,EventArgs e) {
-			if(!CanProceed()) {
-				return;
-			}
-			if(MobileSyncDateTimeLastRun.Year<1880) {
-				MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
 			try {
-				SynchNow();
-				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
+				InitializeVariables();//payment is checked here.
+				if(!CanProceed()) {
+					return;
+				}
+				if(MobileSyncIntervalMinutes==0) {
+					MsgBox.Show(this,"Minutes Between Synch must be set to greater than zero");
+					return;
+				}
+				if(MobileSyncDateTimeLastRun.Year<1880) {
+					MsgBox.Show(this,FullSynchNotRunMessage);
+					return;
+				}
+				Cursor=Cursors.WaitCursor;
+				try {
+					SynchNow();
+					textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
+				}
+				catch(Exception ex) {
+					Cursor=Cursors.Default;
+					MessageBox.Show(ex.Message);
+				}
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,SyncCompletedMessage);
 			}
 			catch(Exception ex) {
-				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 			}
-			Cursor=Cursors.Default;
-			MsgBox.Show(this,"Sync Completed");
 		}
 
 		private void butFullSync_Click(object sender,EventArgs e) {
-			if(!CanProceed()) {
-				return;
-			}
-			if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
 			try {
-				SynchFull();
-			}
-			catch(Exception ex) {
+				InitializeVariables();//payment is checked here.
+				if(!CanProceed()) {
+					return;
+				}
+				if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
+					return;
+				}
+				Cursor=Cursors.WaitCursor;
+				try {
+					SynchFull();
+				}
+				catch(Exception ex) {
+					Cursor=Cursors.Default;
+					MessageBox.Show(ex.Message);
+				}
 				Cursor=Cursors.Default;
+				MsgBox.Show(this,SyncCompletedMessage);
+				}
+			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
-			Cursor=Cursors.Default;
-			MsgBox.Show(this,"Sync Completed");
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
