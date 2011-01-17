@@ -363,16 +363,8 @@ namespace OpenDental{
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				DisableControls(this);
-				Enabled=true;
-				butCancel.Enabled=true;
-			}
-		}
-
-		private void DisableControls(Control control){
-			control.Enabled=false;
-			for(int i=0;i<control.Controls.Count;i++){
-				DisableControls(control.Controls[i]);
+				butDelete.Enabled=false;
+				butOK.Enabled=false;
 			}
 		}
 
@@ -409,76 +401,6 @@ namespace OpenDental{
 				CommlogCur.SigIsTopaz=signatureBoxWrapper.GetSigIsTopaz();
 			}
 		}
-		/*
-		///<summary>This button won't even be visible unless there is an email to view.</summary>
-		private void butEmail_Click(object sender, System.EventArgs e) {
-			EmailMessage message=EmailMessages.Refresh(CommlogCur.EmailMessageNum);
-			//If a date is entered, user will not be able to click Send
-			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
-			FormE.ShowDialog();
-			CommlogCur=Commlogs.GetOne(CommlogCur.CommlogNum);
-		}*/
-
-		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textDateTime.Text==""
-				//|| textAmount.errorProvider1.GetError(textAmount)!=""
-				){
-				MessageBox.Show(Lan.g(this,"Please enter a date first."));
-				return;
-			}
-			try{
-				DateTime.Parse(textDateTime.Text);
-			}
-			catch{
-				MessageBox.Show(Lan.g(this,"Date and time invalid."));
-				return;
-			}
-			//if(!checkIsStatementSent.Checked && listType.SelectedIndex==-1){
-			//	MsgBox.Show(this,"Please select a type.");
-			//	return;
-			//}
-			CommlogCur.CommDateTime=PIn.DateT(textDateTime.Text);
-			//there may not be a commtype selected.
-			if(listType.SelectedIndex==-1){
-				CommlogCur.CommType=0;
-			}
-			else{
-				CommlogCur.CommType=DefC.Short[(int)DefCat.CommLogTypes][listType.SelectedIndex].DefNum;
-			}
-			CommlogCur.Mode_=(CommItemMode)listMode.SelectedIndex;
-			CommlogCur.SentOrReceived=(CommSentOrReceived)listSentOrReceived.SelectedIndex;
-			CommlogCur.Note=textNote.Text;
-			//CommlogCur.IsStatementSent=checkIsStatementSent.Checked;
-			try {
-				SaveSignature();
-			}
-			catch(Exception ex){
-				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
-			}
-			if(IsNew){
-				Commlogs.Insert(CommlogCur);
-			}
-			else{
-				Commlogs.Update(CommlogCur);
-		  	//SecurityLogs.MakeLogEntry("Adjustment Edit",Adjustments.cmd.CommandText);
-			}
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butDelete_Click(object sender, System.EventArgs e) {
-			if(IsNew){
-				DialogResult=DialogResult.Cancel;
-			}
-			else{
-				//SecurityLogs.MakeLogEntry("Adjustment Edit","Delete. patNum: "+Adjustments.Cur.PatNum.ToString());
-				Commlogs.Delete(CommlogCur);
-				DialogResult=DialogResult.OK;
-			}
-		}
-
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
 
 		private void textDateTime_TextChanged(object sender,EventArgs e) {
 			ClearSignature();
@@ -500,17 +422,72 @@ namespace OpenDental{
 			ClearSignature();
 		}
 
+		private void butDelete_Click(object sender,System.EventArgs e) {
+			//button not enabled if no permission
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
+				return;
+			}
+			SecurityLogs.MakeLogEntry(Permissions.CommlogEdit,CommlogCur.PatNum,"Delete");
+			Commlogs.Delete(CommlogCur);
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butOK_Click(object sender, System.EventArgs e) {
+			//button not enabled if no permission
+			if(textDateTime.Text==""){
+				MessageBox.Show(Lan.g(this,"Please enter a date first."));
+				return;
+			}
+			try{
+				DateTime.Parse(textDateTime.Text);
+			}
+			catch{
+				MessageBox.Show(Lan.g(this,"Date and time invalid."));
+				return;
+			}
+			CommlogCur.CommDateTime=PIn.DateT(textDateTime.Text);
+			//there may not be a commtype selected.
+			if(listType.SelectedIndex==-1){
+				CommlogCur.CommType=0;
+			}
+			else{
+				CommlogCur.CommType=DefC.Short[(int)DefCat.CommLogTypes][listType.SelectedIndex].DefNum;
+			}
+			CommlogCur.Mode_=(CommItemMode)listMode.SelectedIndex;
+			CommlogCur.SentOrReceived=(CommSentOrReceived)listSentOrReceived.SelectedIndex;
+			CommlogCur.Note=textNote.Text;
+			try {
+				SaveSignature();
+			}
+			catch(Exception ex){
+				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
+				return;
+			}
+			if(IsNew){
+				Commlogs.Insert(CommlogCur);
+				SecurityLogs.MakeLogEntry(Permissions.CommlogEdit,CommlogCur.PatNum,"Insert");
+			}
+			else{
+				Commlogs.Update(CommlogCur);
+				SecurityLogs.MakeLogEntry(Permissions.CommlogEdit,CommlogCur.PatNum,"");
+			}
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butCancel_Click(object sender, System.EventArgs e) {
+			DialogResult=DialogResult.Cancel;
+		}
 
 		
 
 
+		
 
 
-
-
-		//private void button1_Click(object sender, System.EventArgs e) {
-		//	textNote.Select(textNote.Text.Length,1);
-		//}
 
 	}
 
