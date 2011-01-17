@@ -102,6 +102,7 @@ namespace WebHostSynch {
 
 		private string MD5Encrypt(string data) {
 			MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+			data=data+"saturn";
 			byte[] result = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
 			return Encoding.UTF8.GetString(result);
 		}

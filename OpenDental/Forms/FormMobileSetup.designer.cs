@@ -36,10 +36,10 @@ namespace OpenDental{
 			this.textMobilePassword = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textMobileUserName = new System.Windows.Forms.TextBox();
-			this.textProgress = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.textSynchMinutes = new OpenDental.ValidNumber();
 			this.butSavePreferences = new OpenDental.UI.Button();
+			this.textProgress = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.textDateBefore = new OpenDental.ValidDate();
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
@@ -57,7 +57,7 @@ namespace OpenDental{
 			// 
 			// labelMobileSynchURL
 			// 
-			this.labelMobileSynchURL.Location = new System.Drawing.Point(5,29);
+			this.labelMobileSynchURL.Location = new System.Drawing.Point(6,29);
 			this.labelMobileSynchURL.Name = "labelMobileSynchURL";
 			this.labelMobileSynchURL.Size = new System.Drawing.Size(169,19);
 			this.labelMobileSynchURL.TabIndex = 76;
@@ -81,7 +81,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(25,213);
+			this.label3.Location = new System.Drawing.Point(25,249);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(167,18);
 			this.label3.TabIndex = 87;
@@ -90,7 +90,7 @@ namespace OpenDental{
 			// 
 			// textDateTimeLastRun
 			// 
-			this.textDateTimeLastRun.Location = new System.Drawing.Point(195,211);
+			this.textDateTimeLastRun.Location = new System.Drawing.Point(195,247);
 			this.textDateTimeLastRun.Name = "textDateTimeLastRun";
 			this.textDateTimeLastRun.ReadOnly = true;
 			this.textDateTimeLastRun.Size = new System.Drawing.Size(188,20);
@@ -98,7 +98,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(22,241);
+			this.label2.Location = new System.Drawing.Point(5,139);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(170,18);
 			this.label2.TabIndex = 85;
@@ -112,20 +112,22 @@ namespace OpenDental{
 			this.groupPreferences.Controls.Add(this.label4);
 			this.groupPreferences.Controls.Add(this.textMobileUserName);
 			this.groupPreferences.Controls.Add(this.textSynchMinutes);
+			this.groupPreferences.Controls.Add(this.label2);
 			this.groupPreferences.Controls.Add(this.butSavePreferences);
+			this.groupPreferences.Controls.Add(this.textDateBefore);
 			this.groupPreferences.Controls.Add(this.labelMobileSynchURL);
 			this.groupPreferences.Controls.Add(this.textMobileSyncServerURL);
 			this.groupPreferences.Controls.Add(this.labelMinutesBetweenSynch);
 			this.groupPreferences.Location = new System.Drawing.Point(18,12);
 			this.groupPreferences.Name = "groupPreferences";
-			this.groupPreferences.Size = new System.Drawing.Size(753,151);
+			this.groupPreferences.Size = new System.Drawing.Size(796,179);
 			this.groupPreferences.TabIndex = 239;
 			this.groupPreferences.TabStop = false;
 			this.groupPreferences.Text = "Preferences";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(2,113);
+			this.label5.Location = new System.Drawing.Point(5,113);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(169,19);
 			this.label5.TabIndex = 244;
@@ -143,7 +145,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(2,85);
+			this.label4.Location = new System.Drawing.Point(5,85);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(169,19);
 			this.label4.TabIndex = 243;
@@ -157,23 +159,6 @@ namespace OpenDental{
 			this.textMobileUserName.Size = new System.Drawing.Size(247,20);
 			this.textMobileUserName.TabIndex = 242;
 			this.textMobileUserName.TextChanged += new System.EventHandler(this.textMobileUserName_TextChanged);
-			// 
-			// textProgress
-			// 
-			this.textProgress.Location = new System.Drawing.Point(195,183);
-			this.textProgress.Name = "textProgress";
-			this.textProgress.ReadOnly = true;
-			this.textProgress.Size = new System.Drawing.Size(380,20);
-			this.textProgress.TabIndex = 240;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(26,185);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(167,18);
-			this.label1.TabIndex = 241;
-			this.label1.Text = "Upload Status";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSynchMinutes
 			// 
@@ -194,19 +179,37 @@ namespace OpenDental{
 			this.butSavePreferences.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSavePreferences.CornerRadius = 4F;
 			this.butSavePreferences.Enabled = false;
-			this.butSavePreferences.Location = new System.Drawing.Point(602,112);
+			this.butSavePreferences.Location = new System.Drawing.Point(645,140);
 			this.butSavePreferences.Name = "butSavePreferences";
 			this.butSavePreferences.Size = new System.Drawing.Size(119,24);
 			this.butSavePreferences.TabIndex = 240;
 			this.butSavePreferences.Text = "Save Preferences";
 			this.butSavePreferences.Click += new System.EventHandler(this.butSavePreferences_Click);
 			// 
+			// textProgress
+			// 
+			this.textProgress.Location = new System.Drawing.Point(195,219);
+			this.textProgress.Name = "textProgress";
+			this.textProgress.ReadOnly = true;
+			this.textProgress.Size = new System.Drawing.Size(380,20);
+			this.textProgress.TabIndex = 240;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(26,221);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(167,18);
+			this.label1.TabIndex = 241;
+			this.label1.Text = "Upload Status";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// textDateBefore
 			// 
-			this.textDateBefore.Location = new System.Drawing.Point(195,239);
+			this.textDateBefore.Location = new System.Drawing.Point(177,140);
 			this.textDateBefore.Name = "textDateBefore";
 			this.textDateBefore.Size = new System.Drawing.Size(100,20);
 			this.textDateBefore.TabIndex = 84;
+			this.textDateBefore.TextChanged += new System.EventHandler(this.textDateBefore_TextChanged);
 			// 
 			// butFullSync
 			// 
@@ -262,8 +265,6 @@ namespace OpenDental{
 			this.Controls.Add(this.groupPreferences);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textDateTimeLastRun);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textDateBefore);
 			this.Controls.Add(this.butFullSync);
 			this.Controls.Add(this.butSync);
 			this.Controls.Add(this.butClose);

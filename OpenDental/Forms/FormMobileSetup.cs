@@ -22,10 +22,14 @@ namespace OpenDental {
 		private static String StatusMessage="";
 		private static int BatchSize=100;
 		private static bool PaidCustomer=false;
+		private static bool IsSynching=false;// this variable prevents the synching methods from being called when a previous synch is in progress.
+		private bool MobileUserNameChanged=false;
+		private bool MobilePasswordChanged=false;
 		private string NotPaidMessage="You must be a paid customer to use this feature";
 		private string WebServiceUnavailableMessage="Either the web service is not available or the WebHostSynch URL is incorrect";
 		private string SyncCompletedMessage="Sync Completed";
 		private string FullSynchNotRunMessage="Sync has never been run. You must do a full sync first.";
+		private string IncorrectRegKeyMessage="Registration key provided by the dental office is incorrect";
 
 		public FormMobileSetup() {
 			InitializeComponent();
@@ -41,12 +45,14 @@ namespace OpenDental {
 				textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
 				if(!TestWebServiceExists()) {
 					MsgBox.Show(this,WebServiceUnavailableMessage);
+					return;
 				}
 				if(!PaidCustomer) {
 					MsgBox.Show(this,NotPaidMessage);
 					return;
 				}
 				textMobileUserName.Text=mb.GetUserName(RegistrationKey);
+				MobileUserNameChanged=false;// when textMobileUserName is changed in textMobileUserName_TextChanged MobileUserNameChanged is set to true
 				butSavePreferences.Enabled=false;
 			}
 			catch(Exception ex) {
@@ -59,17 +65,27 @@ namespace OpenDental {
 		}
 
 		private static void InitializeVariables() {
-			RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-			MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
-			MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
-			PaidCustomer=mb.IsPaidCustomer(RegistrationKey); // check for payment here
-			if(PaidCustomer) {
-				MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
-			}else{
-				MobileSyncIntervalMinutes=0;
-				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
+			try {
+				RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
+				MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
+				MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+				MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
+				if(!TestWebServiceExists()) {
+					return;
+				}
+				PaidCustomer=mb.IsPaidCustomer(RegistrationKey); // check for payment here
+				if(PaidCustomer) {
+					MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
+				}else{
+					MobileSyncIntervalMinutes=0;
+					Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
+				}
 			}
+			catch(Exception ex) {
+				//MessageBox.Show(ex.Message);// this will show up even when this form is not open hence it is commented.
+			}
+
+
 		}
 
 		private static void Synch(DateTime GetChangedSince) {
@@ -83,20 +99,22 @@ namespace OpenDental {
 				if(mb.GetCustomerNum(RegistrationKey)==0) {
 				return;
 				}
-				CreatePatients(1000);
-				CreateAppointments(10); // for each patient
-				CreatePrescriptions(10);// for each patient
-				/*
-				DateTime MobileSyncDateTimeLastRunNew= MiscData.GetNowDateTime();
-				List<long> patNumList=Patientms.GetChangedSincePatNums(GetChangedSince);
-				SynchPatients(patNumList);
-				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(GetChangedSince,MobileExcludeApptsBeforeDate);
-				SynchAppointments(aptNumList);
-				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(GetChangedSince);
-				SynchPrescriptions(rxNumList);
-				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
-				MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
-				*/
+				if(!IsSynching) {// making sure that the previous synching process is complete.
+					IsSynching=true;
+					//CreatePatients(1000);//for testing only
+					//CreateAppointments(10); // for each patient //for testing only
+					//CreatePrescriptions(10);// for each patient //for testing only
+					DateTime MobileSyncDateTimeLastRunNew=MiscData.GetNowDateTime();
+					List<long> patNumList=Patientms.GetChangedSincePatNums(GetChangedSince);
+					SynchPatients(patNumList);
+					List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(GetChangedSince,MobileExcludeApptsBeforeDate);
+					SynchAppointments(aptNumList);
+					List<long> rxNumList=RxPatms.GetChangedSinceRxNums(GetChangedSince);
+					SynchPrescriptions(rxNumList);
+					Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
+					MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
+					IsSynching=false;
+				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);// will this show up ever?
@@ -216,6 +234,10 @@ namespace OpenDental {
 			try {
 				Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text.Trim());
 				MobileSyncServerURL=textMobileSyncServerURL.Text.Trim();
+				if(!TestWebServiceExists()) {
+					MsgBox.Show(this,WebServiceUnavailableMessage);
+					return;
+				}
 				InitializeVariables();//payment is checked here.
 				if(!PaidCustomer) {
 					textSynchMinutes.Text="0";
@@ -225,14 +247,16 @@ namespace OpenDental {
 				if(!FieldsValid()) {
 					return;
 				}
+				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textSynchMinutes.Text.Trim()));
+				MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
 				SetMobileExcludeApptsBeforeDate();
 				butSavePreferences.Enabled=false;
-				if(!TestWebServiceExists()) {
-					MsgBox.Show(this,WebServiceUnavailableMessage);
-					return;
+				if((MobileUserNameChanged||MobilePasswordChanged)) {
+					mb.SetMobileWebUserPassword(RegistrationKey,textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
+					MobileUserNameChanged=false;
+					MobilePasswordChanged=false;
 				}
-				mb.SetMobileWebUserPassword(RegistrationKey,textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
-				frmOD.StartTimerWebHostSynch();//check if this throws an error
+				frmOD.StartTimerWebHostSynch();//check if this throws an error. this line may not be needed if the timer is never stopped.
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -249,10 +273,15 @@ namespace OpenDental {
 		}
 
 		private void textMobileUserName_TextChanged(object sender,EventArgs e) {
+			MobileUserNameChanged=true;
 			butSavePreferences.Enabled=true;
 		}
 
 		private void textMobilePassword_TextChanged(object sender,EventArgs e) {
+			MobilePasswordChanged=true;
+			butSavePreferences.Enabled=true;
+		}
+		private void textDateBefore_TextChanged(object sender,EventArgs e) {
 			butSavePreferences.Enabled=true;
 		}
 
@@ -274,9 +303,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"The username cannot be the same as the Registration Key");
 				return false;
 			}
-			if(textMobilePassword.Text.Trim()=="") {
-				MsgBox.Show(this,"The password cannot be empty");
-				return false;
+			if((MobileUserNameChanged||MobilePasswordChanged)) {
+				if(textMobilePassword.Text.Trim()=="") {
+					MsgBox.Show(this,"The password cannot be empty");
+					return false;
+				}
 			}
 
 			return true;
@@ -373,37 +404,30 @@ namespace OpenDental {
 			}
 		}
 
-		private bool CanProceed() {
-			bool proceed=true;
-			if(!PaidCustomer) {
-				MsgBox.Show(this,NotPaidMessage);
-				return false;
-			}
-			if(!FieldsValid()) {
-				return false;
-			}
-			if(MobileSyncDateTimeLastRun.Year<1880) {
-				MsgBox.Show(this,FullSynchNotRunMessage);
-				return false;
-			}
-			if(!TestWebServiceExists()) {
-				MsgBox.Show(this,WebServiceUnavailableMessage);
-				return false;
-			}
-			if(mb.GetCustomerNum(RegistrationKey)==0) {
-				MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
-				return false;
-			}
-			SetMobileExcludeApptsBeforeDate();
-			return proceed;
-		}
-		
 		private void butSync_Click(object sender,EventArgs e) {
 			try {
-				InitializeVariables();//payment is checked here.
-				if(!CanProceed()) {
+				if(!TestWebServiceExists()) {
+					MsgBox.Show(this,WebServiceUnavailableMessage);
 					return;
 				}
+				InitializeVariables();//payment is checked here.
+				if(!PaidCustomer) {
+					MsgBox.Show(this,NotPaidMessage);
+					return;
+				}
+				if(MobileSyncDateTimeLastRun.Year<1880) {
+					MsgBox.Show(this,FullSynchNotRunMessage);
+					return;
+				}
+				
+				if(mb.GetCustomerNum(RegistrationKey)==0) {
+					MsgBox.Show(this,IncorrectRegKeyMessage);
+					return;
+				}
+				if(!FieldsValid()) {
+					return;
+				}
+				SetMobileExcludeApptsBeforeDate();
 				if(MobileSyncIntervalMinutes==0) {
 					MsgBox.Show(this,"Minutes Between Synch must be set to greater than zero");
 					return;
@@ -431,10 +455,24 @@ namespace OpenDental {
 
 		private void butFullSync_Click(object sender,EventArgs e) {
 			try {
-				InitializeVariables();//payment is checked here.
-				if(!CanProceed()) {
+				if(!TestWebServiceExists()) {
+					MsgBox.Show(this,WebServiceUnavailableMessage);
 					return;
 				}
+				InitializeVariables();//payment is checked here.
+
+				if(!PaidCustomer) {
+					MsgBox.Show(this,NotPaidMessage);
+					return;
+				}
+				if(mb.GetCustomerNum(RegistrationKey)==0) {
+					MsgBox.Show(this,IncorrectRegKeyMessage);
+					return;
+				}
+				if(!FieldsValid()) {
+					return;
+				}
+				SetMobileExcludeApptsBeforeDate();
 				if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
 					return;
 				}
@@ -457,6 +495,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+
 
 
 

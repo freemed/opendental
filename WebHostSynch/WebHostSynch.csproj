@@ -79,6 +79,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="db\db.sql" />
     <Content Include="Mobile.asmx" />
     <Content Include="Sheets.asmx" />
     <Content Include="Web.config">
