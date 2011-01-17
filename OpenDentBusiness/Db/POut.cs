@@ -181,7 +181,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<myString.Length;i++){
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					switch(myString.Substring(i,1)) {
-						case "'": strBuild.Append(@"''"); break;// ' replaced by ''
+						case "'": strBuild.Append("''"); break;// ' replaced by ''
 						default: strBuild.Append(myString.Substring(i,1)); break;
 					}
 				}

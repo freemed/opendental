@@ -312,9 +312,9 @@ namespace UnitTests {
 				retVal+="SHOW CREATE TABLE: Not applicable to Oracle.\r\n";
 			}
 			//Single Command Split-------------------------------------------------------------------------
-			varchar1="';\"";   //After POut.String() will turn into '';"
-			varchar2=";'';;;;\"\"\"\"'asdfsadsdaf'"; //After POut.String() will turn into ;'''';;;;""""''asdfsadsdaf''
-			command="INSERT INTO tempcore (\"TextTinyTest\",TextSmallTest) VALUES ('"+POut.String(varchar1)+"','"+POut.String(varchar2)+"');";
+			varchar1="';\"";
+			varchar2=";'';;;;\"\"\"\"'asdfsadsdaf'";
+			command="INSERT INTO tempcore (TextTinyTest,TextSmallTest) VALUES ('"+POut.String(varchar1)+"','"+POut.String(varchar2)+"');";
 			DataCore.NonQ(command);//Test the split function.
 			command="SELECT TextTinyTest,TextSmallTest FROM tempcore";
 			table=DataCore.GetTable(command);
@@ -327,7 +327,7 @@ namespace UnitTests {
 			//Run multiple non-queries in one transaction--------------------------------------------------
 			varchar1="A";
 			varchar2="B";
-			command="INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar1)+"'); DELETE FROM tempcore; INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar2)+"');";
+			command="INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar1)+"'); DELETE FROM tempcore; INSERT INTO tempcore (TextTinyTest) VALUES ('"+POut.String(varchar2)+"')";
 			DataCore.NonQ(command);
 			command="SELECT TextTinyTest FROM tempcore";
 			table=DataCore.GetTable(command);

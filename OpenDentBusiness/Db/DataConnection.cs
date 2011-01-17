@@ -568,8 +568,11 @@ namespace OpenDentBusiness{
 
 		///<summary>Oracle only. Used to split a command string into a list of individual commands so that each command can be run individually. It has proven difficult to run multiple commands at one time in Oracle without making drastic changes to existing queries.</summary>
 		private string[] SplitCommands(string batchCmd) {
-			return new string[] { batchCmd };//Skip this method for now until it can be debugged.
 			if(DBtype!=DatabaseType.Oracle) {
+				return new string[] { batchCmd };
+			}
+			//Some commands are surrounded by a BEGIN and END block, which does correctly execute in the Oracle connector and is hard for us to parse if there are nested BEGIN and END blocks.
+			if(batchCmd.TrimStart().StartsWith("BEGIN",StringComparison.OrdinalIgnoreCase)) {
 				return new string[] { batchCmd };
 			}
 			//Possibilities within a single statement:
@@ -601,14 +604,13 @@ namespace OpenDentBusiness{
 				}
 				strb.Append(batchCmd[i]);*/
 				if(batchCmd[i]=='\'') { //Single quotes are escaped with a single quote. So, for the string 'Hi I''m Bob' there are always an even number of single quotes.
-					int endIndex=batchCmd.IndexOf('\'',i+1);
-					if(endIndex<0) {
-						throw new ApplicationException("Mismatched quotes found while splitting command.");
-					}
-					while(i<=endIndex) {
-						strb.Append(batchCmd[i]);
-						i++;
-					}
+					do {
+						strb.Append(batchCmd[i++]);//Uses i then increments it.
+						if(i>=batchCmd.Length) {
+							throw new ApplicationException("Mismatched quotes found while splitting command.");
+						}
+					} while(batchCmd[i]!='\'');
+					strb.Append(batchCmd[i]);
 				}
 				else if(batchCmd[i]==';') { //top-level ; so this is the end of a command.
 					if(strb.Length>0) {
@@ -619,6 +621,9 @@ namespace OpenDentBusiness{
 				else { //All other characters
 					strb.Append(batchCmd[i]);
 				}
+			}
+			if(strb.Length>0) { //Make sure to add the last command if it did not have a ;
+				result.Add(strb.ToString());
 			}
 			return result.ToArray();
 		}
