@@ -225,6 +225,9 @@ namespace Crud {
 
 		///<summary>Gets the regular non-mobile type by stripping the m off the end of the mobile type.  Quicker than formalizing the type with an attribute on the m table.</summary>
 		public static Type GetTypeFromMType(string typeNameMobile,List<Type> typesReg) {
+			if(typeNameMobile=="Userm") {
+				return null;
+			}
 			string typeNameReg=typeNameMobile.Substring(0,typeNameMobile.Length-1);
 			for(int i=0;i<typesReg.Count;i++) {
 				if(typesReg[i].Name==typeNameReg) {

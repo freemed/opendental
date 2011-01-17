@@ -76,7 +76,7 @@ namespace OpenDentBusiness.Mobile {
 				command="DROP TABLE IF EXISTS rxpatm";
 				Db.NonQ(command);
 				command=@"CREATE TABLE rxpatm (
-					CustomerNum bigint NOT NULL PRIMARY KEY,
+					CustomerNum bigint NOT NULL,
 					RxNum bigint NOT NULL,
 					PatNum bigint NOT NULL,
 					RxDate date NOT NULL DEFAULT '0001-01-01',
@@ -88,6 +88,19 @@ namespace OpenDentBusiness.Mobile {
 					PRIMARY KEY (CustomerNum,RxNum),
 					INDEX(PatNum),
 					INDEX(ProvNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				*/
+
+				/*
+				command="DROP TABLE IF EXISTS userm";
+				Db.NonQ(command);
+				command=@"CREATE TABLE userm (
+					CustomerNum bigint NOT NULL,
+					UsermNum bigint NOT NULL,
+					UserName varchar(255) NOT NULL,
+					Password varchar(255) NOT NULL,
+					PRIMARY KEY (CustomerNum,UsermNum)
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 				*/

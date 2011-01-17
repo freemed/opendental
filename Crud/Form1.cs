@@ -771,31 +771,36 @@ using System.Drawing;"+rn);
 			if(isMobile) {
 				//ConvertToM------------------------------------------------------------------------------------------
 				Type typeClassReg=CrudGenHelper.GetTypeFromMType(typeClass.Name,tableTypes);//gets the non-mobile type
-				string tablenameReg=CrudGenHelper.GetTableName(typeClassReg);//in lowercase now.
-				string objReg=typeClassReg.Name.Substring(0,1).ToLower()+typeClassReg.Name.Substring(1);//lowercase initial letter.  Example feeSched
-				FieldInfo[] fieldsReg=typeClassReg.GetFields();//We can't assume they are in the correct order.
-				List<FieldInfo> fieldsInDbReg=CrudGenHelper.GetFieldsExceptNotDb(fieldsReg);
-				strb.Append(rn+rn+t2+"///<summary>Converts one "+typeClassReg.Name+" object to its mobile equivalent.  Warning! CustomerNum will always be 0.</summary>");
-				strb.Append(rn+t2+"internal static "+typeClass.Name+" ConvertToM("+typeClassReg.Name+" "+objReg+"){");
-				strb.Append(rn+t3+typeClass.Name+" "+obj+"=new "+typeClass.Name+"();");
-				for(int f=0;f<fieldsInDb.Count;f++) {
-					if(fieldsInDb[f].Name=="CustomerNum") {
-						strb.Append(rn+t3+"//CustomerNum cannot be set.  Remains 0.");
-						continue;
-					}
-					bool matchfound=false;
-					for(int r=0;r<fieldsInDbReg.Count;r++) {
-						if(fieldsInDb[f].Name==fieldsInDbReg[r].Name) {
-							strb.Append(rn+t3+obj+"."+fieldsInDb[f].Name.PadRight(longestField,' ')+"="+objReg+"."+fieldsInDbReg[r].Name+";");
-							matchfound=true;
+				if(typeClassReg==null) {
+					strb.Append(rn+rn+t2+"//ConvertToM not applicable.");
+				}
+				else{
+					string tablenameReg=CrudGenHelper.GetTableName(typeClassReg);//in lowercase now.
+					string objReg=typeClassReg.Name.Substring(0,1).ToLower()+typeClassReg.Name.Substring(1);//lowercase initial letter.  Example feeSched
+					FieldInfo[] fieldsReg=typeClassReg.GetFields();//We can't assume they are in the correct order.
+					List<FieldInfo> fieldsInDbReg=CrudGenHelper.GetFieldsExceptNotDb(fieldsReg);
+					strb.Append(rn+rn+t2+"///<summary>Converts one "+typeClassReg.Name+" object to its mobile equivalent.  Warning! CustomerNum will always be 0.</summary>");
+					strb.Append(rn+t2+"internal static "+typeClass.Name+" ConvertToM("+typeClassReg.Name+" "+objReg+"){");
+					strb.Append(rn+t3+typeClass.Name+" "+obj+"=new "+typeClass.Name+"();");
+					for(int f=0;f<fieldsInDb.Count;f++) {
+						if(fieldsInDb[f].Name=="CustomerNum") {
+							strb.Append(rn+t3+"//CustomerNum cannot be set.  Remains 0.");
+							continue;
+						}
+						bool matchfound=false;
+						for(int r=0;r<fieldsInDbReg.Count;r++) {
+							if(fieldsInDb[f].Name==fieldsInDbReg[r].Name) {
+								strb.Append(rn+t3+obj+"."+fieldsInDb[f].Name.PadRight(longestField,' ')+"="+objReg+"."+fieldsInDbReg[r].Name+";");
+								matchfound=true;
+							}
+						}
+						if(!matchfound) {
+							throw new ApplicationException("Match not found.");
 						}
 					}
-					if(!matchfound) {
-						throw new ApplicationException("Match not found.");
-					}
+					strb.Append(rn+t3+"return "+obj+";");
+					strb.Append(rn+t2+"}");
 				}
-				strb.Append(rn+t3+"return "+obj+";");
-				strb.Append(rn+t2+"}");
 			}
 			#endregion ConvertToM
 			//Footer

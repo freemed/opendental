@@ -369,7 +369,10 @@
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />
     <Compile Include="Mobile\Crud\RxPatmCrud.cs" />
+    <Compile Include="Mobile\Crud\UsermCrud.cs" />
     <Compile Include="Mobile\Data Interface\RxPatms.cs" />
+    <Compile Include="Mobile\Data Interface\Userms.cs" />
+    <Compile Include="Mobile\TableTypes\Userm.cs" />
     <Compile Include="Mobile\TableTypes\RxPatm.cs" />
     <Compile Include="Remoting\ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
