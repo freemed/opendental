@@ -3245,6 +3245,29 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.6.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_6_10();
+		}
+
+		private static void To7_6_10() {
+			if(FromVersion<new Version("7.6.10.0")) {
+				string command;
+				command="SELECT ProgramNum FROM program WHERE ProgName='Xcharge'";
+				long programNum=PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'Username', "
+					+"'')";
+				Db.NonQ(command);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'Password', "
+					+"'')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.6.10.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+				}
 			To7_7_0();
 		}
 

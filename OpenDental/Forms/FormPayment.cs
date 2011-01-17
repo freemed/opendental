@@ -1182,19 +1182,23 @@ namespace OpenDental{
 			}
 			Patient pat=Patients.GetPat(PaymentCur.PatNum);
 			PatientNote patnote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor);
-			if(patnote.CCNumber!=""){
-				info.Arguments+="/ACCOUNT:"+patnote.CCNumber+" ";
-			}
-			if(patnote.CCExpiration.Year>2005){
-				info.Arguments+="/EXP:"+patnote.CCExpiration.ToString("MMyy")+" ";
-			}
+			//if(patnote.CCNumber!=""){
+			//  info.Arguments+="/ACCOUNT:"+patnote.CCNumber+" "; //No longer allows ACCOUNT
+			//}
+			//if(patnote.CCExpiration.Year>2005){
+			//  info.Arguments+="/EXP:"+patnote.CCExpiration.ToString("MMyy")+" "; //No longer allows EXP
+			//}
 			info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 			info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
 			info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
 			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
+			info.Arguments+="/PARTIALAPPROVALSUPPORT:T ";
 			info.Arguments+="/AUTOCLOSE ";
 			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+			File.Delete(resultfile);//delete the old result file.
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\"";
+			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
+			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
 			//info.Arguments+="/MID:223496";//what's this?
 			Cursor=Cursors.WaitCursor;
 			Process process=new Process();
@@ -1204,7 +1208,7 @@ namespace OpenDental{
 			while(!process.HasExited){
 				Application.DoEvents();
 			}
-			Thread.Sleep(2000);//Wait two seconds to hopefully resolve the file issue.
+			Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
 			Cursor=Cursors.Default;
 			string resulttext="";
 			string line="";

@@ -25,7 +25,10 @@ namespace OpenDental{
 		private Label label1;
 		private ComboBox comboPaymentType;
 		private Program prog;
-		private ProgramProperty prop=null;
+		private TextBox textPassword;
+		private Label labelPassword;
+		private TextBox textUser;
+		private Label labelUser;
 
 		///<summary></summary>
 		public FormXchargeSetup()
@@ -68,6 +71,10 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboPaymentType = new System.Windows.Forms.ComboBox();
+			this.textPassword = new System.Windows.Forms.TextBox();
+			this.labelPassword = new System.Windows.Forms.Label();
+			this.textUser = new System.Windows.Forms.TextBox();
+			this.labelUser = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -78,7 +85,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(353,223);
+			this.butCancel.Location = new System.Drawing.Point(353,330);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -93,7 +100,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(256,223);
+			this.butOK.Location = new System.Drawing.Point(256,330);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -123,14 +130,14 @@ namespace OpenDental{
 			// 
 			// textPath
 			// 
-			this.textPath.Location = new System.Drawing.Point(20,117);
+			this.textPath.Location = new System.Drawing.Point(20,224);
 			this.textPath.Name = "textPath";
 			this.textPath.Size = new System.Drawing.Size(410,20);
-			this.textPath.TabIndex = 51;
+			this.textPath.TabIndex = 7;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(18,96);
+			this.label3.Location = new System.Drawing.Point(18,203);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(231,18);
 			this.label3.TabIndex = 50;
@@ -139,7 +146,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(18,147);
+			this.label1.Location = new System.Drawing.Point(18,254);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(154,16);
 			this.label1.TabIndex = 53;
@@ -150,16 +157,52 @@ namespace OpenDental{
 			// 
 			this.comboPaymentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboPaymentType.FormattingEnabled = true;
-			this.comboPaymentType.Location = new System.Drawing.Point(21,166);
+			this.comboPaymentType.Location = new System.Drawing.Point(21,273);
 			this.comboPaymentType.MaxDropDownItems = 25;
 			this.comboPaymentType.Name = "comboPaymentType";
 			this.comboPaymentType.Size = new System.Drawing.Size(205,21);
-			this.comboPaymentType.TabIndex = 54;
+			this.comboPaymentType.TabIndex = 8;
+			// 
+			// textPassword
+			// 
+			this.textPassword.Location = new System.Drawing.Point(20,179);
+			this.textPassword.Name = "textPassword";
+			this.textPassword.Size = new System.Drawing.Size(410,20);
+			this.textPassword.TabIndex = 6;
+			// 
+			// labelPassword
+			// 
+			this.labelPassword.Location = new System.Drawing.Point(18,158);
+			this.labelPassword.Name = "labelPassword";
+			this.labelPassword.Size = new System.Drawing.Size(231,18);
+			this.labelPassword.TabIndex = 55;
+			this.labelPassword.Text = "Password";
+			this.labelPassword.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textUser
+			// 
+			this.textUser.Location = new System.Drawing.Point(20,134);
+			this.textUser.Name = "textUser";
+			this.textUser.Size = new System.Drawing.Size(410,20);
+			this.textUser.TabIndex = 5;
+			// 
+			// labelUser
+			// 
+			this.labelUser.Location = new System.Drawing.Point(18,113);
+			this.labelUser.Name = "labelUser";
+			this.labelUser.Size = new System.Drawing.Size(231,18);
+			this.labelUser.TabIndex = 57;
+			this.labelUser.Text = "User Id";
+			this.labelUser.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormXchargeSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(480,274);
+			this.ClientSize = new System.Drawing.Size(480,381);
+			this.Controls.Add(this.textUser);
+			this.Controls.Add(this.labelUser);
+			this.Controls.Add(this.textPassword);
+			this.Controls.Add(this.labelPassword);
 			this.Controls.Add(this.comboPaymentType);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textPath);
@@ -189,10 +232,12 @@ namespace OpenDental{
 			}
 			checkEnabled.Checked=prog.Enabled;
 			textPath.Text=prog.Path;
-			prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
+			textUser.Text=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
+			textPassword.Text=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
+			string paymentType=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType");
 			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++) {
 				comboPaymentType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
-				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum.ToString()==prop.PropertyValue)
+				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum.ToString()==paymentType)
 					comboPaymentType.SelectedIndex=i;
 			}
 		}
@@ -217,8 +262,10 @@ namespace OpenDental{
 			prog.Enabled=checkEnabled.Checked;
 			prog.Path=textPath.Text;
 			Programs.Update(prog);
-			prop.PropertyValue=DefC.Short[(int)DefCat.PaymentTypes][comboPaymentType.SelectedIndex].DefNum.ToString();
-			ProgramProperties.Update(prop);
+			string paymentType=DefC.Short[(int)DefCat.PaymentTypes][comboPaymentType.SelectedIndex].DefNum.ToString();
+			ProgramProperties.SetProperty(prog.ProgramNum,"PaymentType",paymentType);
+			ProgramProperties.SetProperty(prog.ProgramNum,"Username",textUser.Text);
+			ProgramProperties.SetProperty(prog.ProgramNum,"Password",textPassword.Text);
 			DataValid.SetInvalid(InvalidType.Programs);
 			DialogResult=DialogResult.OK;
 		}
