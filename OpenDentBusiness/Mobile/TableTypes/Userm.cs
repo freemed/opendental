@@ -14,7 +14,7 @@ namespace OpenDentBusiness.Mobile {
 		public long UsermNum;
 		///<summary></summary>
 		public string UserName;
-		///<summary>Hashed in the same manner as the main program.  UTF-8, md5, base64.</summary>
+		///<summary>Hashed in the same manner as the main program.  UTF-8, md5, base64.  See userods.EncryptPassword().</summary>
 		public string Password;
 
 		///<summary></summary>
