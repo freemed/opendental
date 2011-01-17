@@ -443,7 +443,7 @@ namespace OpenDental{
 					=ProcButtons.GetForCat(DefC.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum).Length;
 			}
 			ProcButtonCur.Category=DefC.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum;
-			ProcButtonCur.ButtonImage=POut.Bitmap((Bitmap)pictureBox.Image,System.Drawing.Imaging.ImageFormat.MemoryBmp);
+			ProcButtonCur.ButtonImage=POut.Bitmap((Bitmap)pictureBox.Image,System.Drawing.Imaging.ImageFormat.Png);
       if(IsNew){
         ProcButtonCur.ItemOrder=ProcButtons.List.Length;        
         ProcButtons.Insert(ProcButtonCur);

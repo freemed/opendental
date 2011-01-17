@@ -4397,12 +4397,12 @@ namespace OpenDental{
 		/// <summary>This is set to 30 second for now </summary>
 		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
 			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
-			if(interval=="") {
+			if(interval=="" || interval=="0") {
 				return;
 			}
-			if(PIn.Int(interval)==0) {
-				timerWebHostSynch.Stop();
-			}
+			//if(PIn.Int(interval)==0) {
+			//	timerWebHostSynch.Stop();
+			//}
 			FormMobileSetup.Synch();
 		}
 
