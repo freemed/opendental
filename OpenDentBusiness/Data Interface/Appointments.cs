@@ -639,7 +639,8 @@ namespace OpenDentBusiness{
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
 				+"carrier1.CarrierName carrierName1,carrier2.CarrierName carrierName2,"
-				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
+				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,"
+				+"DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
 				+"COUNT(DiseaseNum) hasDisease,"
 				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
@@ -657,7 +658,8 @@ namespace OpenDentBusiness{
 				command+="LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum ";
 			}
 			command+="LEFT JOIN patient guar ON guar.PatNum=patient.Guarantor "
-				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
+				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND patplan.Ordinal=1 "
+				//these four lines are very rarely made use of. They depend on the appointment.InsPlan1/2 being filled, which is unreliable.
 				+"LEFT JOIN insplan plan1 ON InsPlan1=plan1.PlanNum "
 				+"LEFT JOIN insplan plan2 ON InsPlan2=plan2.PlanNum "
 				+"LEFT JOIN carrier carrier1 ON plan1.CarrierNum=carrier1.CarrierNum "
@@ -675,7 +677,8 @@ namespace OpenDentBusiness{
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
 				+"carrier1.CarrierName,carrier2.CarrierName,"
-				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
+				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,"
+				+"DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
 				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
