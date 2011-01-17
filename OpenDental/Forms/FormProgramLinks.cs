@@ -204,6 +204,15 @@ namespace OpenDental{
 				}
 				return;
 			}
+			if(program.ProgName=="Xcharge") {
+				FormXchargeSetup fxcs=new FormXchargeSetup();
+				fxcs.ShowDialog();
+				if(fxcs.DialogResult==DialogResult.OK) {
+					changed=true;
+					FillList();
+				}
+				return;
+			}
 			FormProgramLinkEdit FormPE=new FormProgramLinkEdit();
 			FormPE.ProgramCur=program;
 			FormPE.ShowDialog();
