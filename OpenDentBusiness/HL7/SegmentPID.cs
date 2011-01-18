@@ -139,10 +139,10 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>M,F,U</summary>
 		public static PatientGender GenderParse(string str) {
-			if(str=="M") {
+			if(str=="M" || str.ToLower()=="male") {
 				return PatientGender.Male;
 			}
-			else if(str=="F") {
+			else if(str=="F" || str.ToLower()=="female") {
 				return PatientGender.Female;
 			}
 			else {
