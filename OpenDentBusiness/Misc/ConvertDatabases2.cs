@@ -3302,12 +3302,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE rxpat SET DateTStamp = SYSDATE";
 					Db.NonQ(command);
 				}
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSyncWorkstationName','')";
+				Db.NonQ(command);
 
 
 
 
-
-
+				
 
 
 
