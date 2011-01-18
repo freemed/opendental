@@ -170,6 +170,13 @@ namespace OpenDentBusiness {
 			}
 			return "error";
 		}
+
+		public static TimeSpan GetTimeSpan() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TimeSpan>(MethodBase.GetCurrentMethod());
+			}
+			return new TimeSpan(1,0,0);
+		}
 		
 
 

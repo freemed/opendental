@@ -135,7 +135,12 @@ namespace UnitTests {
 				throw new Exception("Should be fielddefOK.");
 			}
 			retVal+="SendSheetDefWithFieldDefs: Passed.\r\n";
-			
+			//TimeSpanNeg
+			TimeSpan tspan=WebServiceTests.GetTimeSpan();
+			if(tspan!=new TimeSpan(1,0,0)) {
+				throw new Exception("Should be 1 hour.");
+			}
+			retVal+="GetTimeSpan: Passed.\r\n";
 
 			
 			return retVal;
