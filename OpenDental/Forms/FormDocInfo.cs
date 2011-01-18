@@ -287,14 +287,16 @@ namespace OpenDental{
 			textToothNumbers.Text=Tooth.FormatRangeForDisplay(DocCur.ToothNumbers);
 			textDate.Text=DocCur.DateCreated.ToString("d");
 			textDescript.Text=DocCur.Description;
-			//When the A to Z folders are disabled, the image module is disabled and this
-			//code will never get called. Thus, by the time this point in the code is reached,
-			//there will be a valid image path.
-			string patFolder=ImageStore.GetPatientFolder(PatCur);
-			textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName);
-			if(File.Exists(textFileName.Text)){
-				FileInfo fileInfo=new FileInfo(textFileName.Text);
-				textSize.Text=fileInfo.Length.ToString("n0");
+			if(PrefC.UsingAtoZfolder) {
+				string patFolder=ImageStore.GetPatientFolder(PatCur);
+				textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName);
+				if(File.Exists(textFileName.Text)) {
+					FileInfo fileInfo=new FileInfo(textFileName.Text);
+					textSize.Text=fileInfo.Length.ToString("n0");
+				}
+			}
+			else {
+				textSize.Text=DocCur.RawBase64.Length.ToString();
 			}
 			textToothNumbers.Text=Tooth.FormatRangeForDisplay(DocCur.ToothNumbers);
 			//textNote.Text=DocCur.Note;
