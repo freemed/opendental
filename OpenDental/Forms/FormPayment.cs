@@ -1182,12 +1182,12 @@ namespace OpenDental{
 			}
 			Patient pat=Patients.GetPat(PaymentCur.PatNum);
 			PatientNote patnote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor);
-			//if(patnote.CCNumber!=""){
-			//  info.Arguments+="/ACCOUNT:"+patnote.CCNumber+" "; //No longer allows ACCOUNT
-			//}
-			//if(patnote.CCExpiration.Year>2005){
-			//  info.Arguments+="/EXP:"+patnote.CCExpiration.ToString("MMyy")+" "; //No longer allows EXP
-			//}
+			if(patnote.CCNumber!=""){
+			  info.Arguments+="/ACCOUNT:"+patnote.CCNumber+" ";
+			}
+			if(patnote.CCExpiration.Year>2005){
+			  info.Arguments+="/EXP:"+patnote.CCExpiration.ToString("MMyy")+" ";
+			}
 			info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 			info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
 			info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
