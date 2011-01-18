@@ -1224,7 +1224,7 @@ namespace OpenDentBusiness {
 				if(listShort[i].CovCatNum != 0) {
 					continue;
 				}
-				if(benList[i].PatPlanNum !=0) {
+				if(listShort[i].PatPlanNum !=0) {
 					benPat=listShort[i];
 				}
 				else {
@@ -1252,7 +1252,7 @@ namespace OpenDentBusiness {
 				if(!isMatch) {
 					continue;//no match
 				}
-				if(benList[i].PatPlanNum !=0) {
+				if(listShort[i].PatPlanNum !=0) {
 					if(benPat != null && benPat.CovCatNum!=0) {//must compare
 						//only use the new one if the item order is larger
 						if(CovCats.GetOrderShort(listShort[i].CovCatNum) > CovCats.GetOrderShort(benPat.CovCatNum)) {
