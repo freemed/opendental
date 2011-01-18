@@ -821,10 +821,12 @@ namespace OpenDental{
 						labelEmailed.Text=Lan.g(this,"E-mailed=")+emailed.ToString();
 						Application.DoEvents();
 					}
-					catch(Exception ex){
-						Cursor=Cursors.Default;
-						MessageBox.Show(ex.Message);
-						return;
+					catch{
+						//Cursor=Cursors.Default;
+						//MessageBox.Show(ex.Message);
+						//return;
+						skipped++;
+						continue;
 					}
 					Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
 				}
@@ -879,7 +881,7 @@ namespace OpenDental{
 			}
 			string msg="";
 			if(skipped>0){
-				msg+=Lan.g(this,"Skipped due to missing email address: ")+skipped.ToString()+"\r\n";
+				msg+=Lan.g(this,"Skipped due to missing or bad email address: ")+skipped.ToString()+"\r\n";
 			}
 			msg+=Lan.g(this,"Printed: ")+printed.ToString()+"\r\n"
 				+Lan.g(this,"E-mailed: ")+emailed.ToString()+"\r\n"
