@@ -1196,7 +1196,7 @@ namespace OpenDental{
 			info.Arguments+="/AUTOCLOSE ";
 			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
 			File.Delete(resultfile);//delete the old result file.
-			info.Arguments+="/RESULTFILE:\""+resultfile+"\"";
+			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
 			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
 			//info.Arguments+="/MID:223496";//what's this?
