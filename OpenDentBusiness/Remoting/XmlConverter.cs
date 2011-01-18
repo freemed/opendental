@@ -48,6 +48,10 @@ namespace OpenDentBusiness {
 				serializer = new XmlSerializer(typeof(int));
 				serializer.Serialize(writer,((Color)obj).ToArgb());
 			}
+			else if(classType==typeof(TimeSpan)) {
+				serializer = new XmlSerializer(typeof(long));
+				serializer.Serialize(writer,((TimeSpan)obj).Ticks);
+			}
 			else {
 				serializer = new XmlSerializer(classType);
 				serializer.Serialize(writer,obj);
@@ -80,6 +84,10 @@ namespace OpenDentBusiness {
 			if(type==typeof(Color)) {
 				serializer = new XmlSerializer(typeof(int));
 				retVal=(T)((object)Color.FromArgb((int)serializer.Deserialize(reader)));
+			}
+			else if(type==typeof(TimeSpan)) {
+				serializer = new XmlSerializer(typeof(long));
+				retVal=(T)((object)TimeSpan.FromTicks((long)serializer.Deserialize(reader)));
 			}
 			else {
 				serializer = new XmlSerializer(type);

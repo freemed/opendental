@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 	
@@ -18,13 +19,37 @@ namespace OpenDentBusiness{
 		///<summary>If set to true, then the only operatories that will show will be for providers that have schedules for the day, ops with no provs assigned.</summary>
 		public bool OnlyScheduledProvs;
 		///<summary>If OnlyScheduledProvs is set to true, and this time is not 0:00, then only provider schedules with start or stop time before this time will be included.</summary>
+		[XmlIgnore]
 		public TimeSpan OnlySchedBeforeTime;
 		///<summary>If OnlyScheduledProvs is set to true, and this time is not 0:00, then only provider schedules with start or stop time after this time will be included.</summary>
+		[XmlIgnore]
 		public TimeSpan OnlySchedAfterTime;
 		///<summary>Enum:ApptViewStackBehavior </summary>
 		public ApptViewStackBehavior StackBehavUR;
 		///<summary>Enum:ApptViewStackBehavior </summary>
 		public ApptViewStackBehavior StackBehavLR;
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("OnlySchedBeforeTime",typeof(long))]
+		public long OnlySchedBeforeTimeXml {
+			get {
+				return OnlySchedBeforeTime.Ticks;
+			}
+			set {
+				OnlySchedBeforeTime = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("OnlySchedAfterTime",typeof(long))]
+		public long OnlySchedAfterTimeXml {
+			get {
+				return OnlySchedAfterTime.Ticks;
+			}
+			set {
+				OnlySchedAfterTime = TimeSpan.FromTicks(value);
+			}
+		}
 
 
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 	///<summary>One clock-in / clock-out pair.  Of, if the pair is a break, then it's an out/in pair.  With normal clock in/out pairs, we want to know how long the employee was working.  It's the opposite with breaks.  We want to know how long they were not working, so the pair is backwards.  This means that a normal clock in is left incomplete when the clock out for break is created.  And once both are finished, the regular in/out will surround the break.  Breaks cannot be viewed easily on the same grid as regular clock events for this reason.  And since breaks do not affect pay, they should not clutter the normal grid.</summary>
@@ -28,20 +29,68 @@ namespace OpenDentBusiness{
 		public DateTime TimeDisplayed2;
 		///<summary>This is a manual override for OTimeAuto.  Typically -1 hour (-01:00:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is an alternative to using a TimeAdjust row.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
+		[XmlIgnore]
 		public TimeSpan OTimeHours;
 		///<summary>Automatically calculated OT.  Will be zero if none.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
+		[XmlIgnore]
 		public TimeSpan OTimeAuto;
 		///<summary>This is a manual override of AdjustAuto.  Ignored unless AdjustIsOverridden set to true.  When used as override, it's typically negative, although zero and positive are also allowed.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
+		[XmlIgnore]
 		public TimeSpan Adjust;
 		///<summary>Automatically calculated Adjust.  Will be zero if none.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
+		[XmlIgnore]
 		public TimeSpan AdjustAuto;
 		///<summary>True if AdjustAuto is overridden by Adjust.</summary>
 		public bool AdjustIsOverridden;
 
-		public ClockEvent(){
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("OTimeHours",typeof(long))]
+		public long OTimeHoursXml {
+			get {
+				return OTimeHours.Ticks;
+			}
+			set {
+				OTimeHours = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("OTimeAuto",typeof(long))]
+		public long OTimeAutoXml {
+			get {
+				return OTimeAuto.Ticks;
+			}
+			set {
+				OTimeAuto = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("Adjust",typeof(long))]
+		public long AdjustXml {
+			get {
+				return Adjust.Ticks;
+			}
+			set {
+				Adjust = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("AdjustAuto",typeof(long))]
+		public long AdjustAutoXml {
+			get {
+				return AdjustAuto.Ticks;
+			}
+			set {
+				AdjustAuto = TimeSpan.FromTicks(value);
+			}
+		}
+
+		public ClockEvent() {
 			OTimeHours=TimeSpan.FromHours(-1);
 		}
 

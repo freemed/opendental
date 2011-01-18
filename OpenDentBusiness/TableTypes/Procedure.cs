@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness {
 	///<summary>Database table is procedurelog.  A procedure for a patient.  Can be treatment planned or completed.  Once it's completed, it gets tracked more closely be the security portion of the program.  A procedure can NEVER be deleted.  Status can just be changed to "deleted".</summary>
@@ -92,8 +93,10 @@ namespace OpenDentBusiness {
 		///<summary>F16, up to 5 char. One or more of the following: A=Repair of a prior service, B=Temporary placement, C=TMJ, E=Implant, L=Appliance lost, S=Appliance stolen, X=none of the above.  Blank is equivalent to X for claim output, but one value will not be automatically converted to the other in this table.  That will allow us to track user entry for procedurecode.IsProsth.</summary>
 		public string CanadianTypeCodes;
 		///<summary>Used to be part of the ProcDate, but that was causing reporting issues.</summary>
+		[XmlIgnore]
 		public TimeSpan ProcTime;
 		///<summary>Marks the time a procedure was finished.</summary>
+		[XmlIgnore]
 		public TimeSpan ProcTimeEnd;
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
@@ -112,7 +115,29 @@ namespace OpenDentBusiness {
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 
-		public Procedure(){
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("ProcTime",typeof(long))]
+		public long ProcTimeXml {
+			get {
+				return ProcTime.Ticks;
+			}
+			set {
+				ProcTime = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("ProcTimeEnd",typeof(long))]
+		public long ProcTimeEndXml {
+			get {
+				return ProcTimeEnd.Ticks;
+			}
+			set {
+				ProcTimeEnd = TimeSpan.FromTicks(value);
+			}
+		}
+
+		public Procedure() {
 			UnitQty=1;
 		}
 
