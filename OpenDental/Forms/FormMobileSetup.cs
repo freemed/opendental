@@ -111,8 +111,6 @@ namespace OpenDental {
 						DataValid.SetInvalid(InvalidType.Prefs);// change value on all machines
 					}
 					MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
-
-
 					IsSynching=false;
 				}
 			}
@@ -131,12 +129,10 @@ namespace OpenDental {
 		internal static void Synch() {
 			InitializeVariables();
 			if(MobileSyncIntervalMinutes==0) {
-				// not a paid customer
-				return;
+				return;// not a paid customer
 			}
 			if(MobileSyncDateTimeLastRun.Year<1880) {
-				//Sync has never been run before.
-				return;
+				return;//Sync has never been run before.
 			}
 			if(DateTime.Now>MobileSyncDateTimeLastRun.AddMinutes(MobileSyncIntervalMinutes)) {
 				Synch(MobileSyncDateTimeLastRun);
@@ -145,8 +141,7 @@ namespace OpenDental {
 
 		private static void SynchFull() {
 			DateTime FullSynchDateTime=new DateTime(1880,1,1);
-			//delete all records on server here
-			Synch(FullSynchDateTime);
+			Synch(FullSynchDateTime);//Todo: delete all records on server here
 		}
 
 		private static void SynchPatients(List<long> patNumList) {
