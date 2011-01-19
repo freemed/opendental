@@ -4400,10 +4400,9 @@ namespace OpenDental{
 			if(interval=="" || interval=="0") {
 				return;
 			}
-			//if(PIn.Int(interval)==0) {
-			//	timerWebHostSynch.Stop();
-			//}
-			FormMobileSetup.Synch();
+			if(System.Environment.MachineName.ToUpper()==PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
+				FormMobileSetup.Synch();
+			}
 		}
 
 		/// <summary>This function is called from FormMobileSetup if the MobileSyncIntervalMinutes is set to nonzero </summary>

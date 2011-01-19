@@ -29,17 +29,20 @@ namespace OpenDental{
 			this.labelMinutesBetweenSynch = new System.Windows.Forms.Label();
 			this.timerRefreshLastSynchTime = new System.Windows.Forms.Timer(this.components);
 			this.label3 = new System.Windows.Forms.Label();
-			this.textDateTimeLastRun = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupPreferences = new System.Windows.Forms.GroupBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.textMobileSynchWorkStation = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textMobilePassword = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textMobileUserName = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textProgress = new System.Windows.Forms.Label();
+			this.textDateTimeLastRun = new System.Windows.Forms.Label();
+			this.butCurrentWorkstation = new OpenDental.UI.Button();
 			this.textSynchMinutes = new OpenDental.ValidNumber();
 			this.butSavePreferences = new OpenDental.UI.Button();
-			this.textProgress = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.textDateBefore = new OpenDental.ValidDate();
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
@@ -81,20 +84,12 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(25,249);
+			this.label3.Location = new System.Drawing.Point(25,273);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(167,18);
 			this.label3.TabIndex = 87;
 			this.label3.Text = "Date/time of last sync";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDateTimeLastRun
-			// 
-			this.textDateTimeLastRun.Location = new System.Drawing.Point(195,247);
-			this.textDateTimeLastRun.Name = "textDateTimeLastRun";
-			this.textDateTimeLastRun.ReadOnly = true;
-			this.textDateTimeLastRun.Size = new System.Drawing.Size(188,20);
-			this.textDateTimeLastRun.TabIndex = 86;
 			// 
 			// label2
 			// 
@@ -107,6 +102,9 @@ namespace OpenDental{
 			// 
 			// groupPreferences
 			// 
+			this.groupPreferences.Controls.Add(this.butCurrentWorkstation);
+			this.groupPreferences.Controls.Add(this.label6);
+			this.groupPreferences.Controls.Add(this.textMobileSynchWorkStation);
 			this.groupPreferences.Controls.Add(this.label5);
 			this.groupPreferences.Controls.Add(this.textMobilePassword);
 			this.groupPreferences.Controls.Add(this.label4);
@@ -120,10 +118,27 @@ namespace OpenDental{
 			this.groupPreferences.Controls.Add(this.labelMinutesBetweenSynch);
 			this.groupPreferences.Location = new System.Drawing.Point(18,12);
 			this.groupPreferences.Name = "groupPreferences";
-			this.groupPreferences.Size = new System.Drawing.Size(796,179);
+			this.groupPreferences.Size = new System.Drawing.Size(796,203);
 			this.groupPreferences.TabIndex = 239;
 			this.groupPreferences.TabStop = false;
 			this.groupPreferences.Text = "Preferences";
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(1,170);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(170,18);
+			this.label6.TabIndex = 246;
+			this.label6.Text = "Work Station for Synching";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textMobileSynchWorkStation
+			// 
+			this.textMobileSynchWorkStation.Location = new System.Drawing.Point(177,168);
+			this.textMobileSynchWorkStation.Name = "textMobileSynchWorkStation";
+			this.textMobileSynchWorkStation.Size = new System.Drawing.Size(247,20);
+			this.textMobileSynchWorkStation.TabIndex = 245;
+			this.textMobileSynchWorkStation.TextChanged += new System.EventHandler(this.textMobileSynchWorkStation_TextChanged);
 			// 
 			// label5
 			// 
@@ -160,6 +175,46 @@ namespace OpenDental{
 			this.textMobileUserName.TabIndex = 242;
 			this.textMobileUserName.TextChanged += new System.EventHandler(this.textMobileUserName_TextChanged);
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(26,245);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(167,18);
+			this.label1.TabIndex = 241;
+			this.label1.Text = "Upload Status";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textProgress
+			// 
+			this.textProgress.Location = new System.Drawing.Point(196,245);
+			this.textProgress.Name = "textProgress";
+			this.textProgress.Size = new System.Drawing.Size(464,18);
+			this.textProgress.TabIndex = 242;
+			this.textProgress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textDateTimeLastRun
+			// 
+			this.textDateTimeLastRun.Location = new System.Drawing.Point(196,273);
+			this.textDateTimeLastRun.Name = "textDateTimeLastRun";
+			this.textDateTimeLastRun.Size = new System.Drawing.Size(207,18);
+			this.textDateTimeLastRun.TabIndex = 243;
+			this.textDateTimeLastRun.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butCurrentWorkstation
+			// 
+			this.butCurrentWorkstation.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCurrentWorkstation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCurrentWorkstation.Autosize = true;
+			this.butCurrentWorkstation.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCurrentWorkstation.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCurrentWorkstation.CornerRadius = 4F;
+			this.butCurrentWorkstation.Location = new System.Drawing.Point(458,167);
+			this.butCurrentWorkstation.Name = "butCurrentWorkstation";
+			this.butCurrentWorkstation.Size = new System.Drawing.Size(146,24);
+			this.butCurrentWorkstation.TabIndex = 247;
+			this.butCurrentWorkstation.Text = "Current Workstation";
+			this.butCurrentWorkstation.Click += new System.EventHandler(this.butCurrentWorkstation_Click);
+			// 
 			// textSynchMinutes
 			// 
 			this.textSynchMinutes.Location = new System.Drawing.Point(177,56);
@@ -179,29 +234,12 @@ namespace OpenDental{
 			this.butSavePreferences.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSavePreferences.CornerRadius = 4F;
 			this.butSavePreferences.Enabled = false;
-			this.butSavePreferences.Location = new System.Drawing.Point(645,140);
+			this.butSavePreferences.Location = new System.Drawing.Point(650,168);
 			this.butSavePreferences.Name = "butSavePreferences";
 			this.butSavePreferences.Size = new System.Drawing.Size(119,24);
 			this.butSavePreferences.TabIndex = 240;
 			this.butSavePreferences.Text = "Save Preferences";
 			this.butSavePreferences.Click += new System.EventHandler(this.butSavePreferences_Click);
-			// 
-			// textProgress
-			// 
-			this.textProgress.Location = new System.Drawing.Point(195,219);
-			this.textProgress.Name = "textProgress";
-			this.textProgress.ReadOnly = true;
-			this.textProgress.Size = new System.Drawing.Size(380,20);
-			this.textProgress.TabIndex = 240;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(26,221);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(167,18);
-			this.label1.TabIndex = 241;
-			this.label1.Text = "Upload Status";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textDateBefore
 			// 
@@ -219,7 +257,7 @@ namespace OpenDental{
 			this.butFullSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFullSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFullSync.CornerRadius = 4F;
-			this.butFullSync.Location = new System.Drawing.Point(427,314);
+			this.butFullSync.Location = new System.Drawing.Point(427,397);
 			this.butFullSync.Name = "butFullSync";
 			this.butFullSync.Size = new System.Drawing.Size(68,24);
 			this.butFullSync.TabIndex = 83;
@@ -234,7 +272,7 @@ namespace OpenDental{
 			this.butSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSync.CornerRadius = 4F;
-			this.butSync.Location = new System.Drawing.Point(554,314);
+			this.butSync.Location = new System.Drawing.Point(554,397);
 			this.butSync.Name = "butSync";
 			this.butSync.Size = new System.Drawing.Size(68,24);
 			this.butSync.TabIndex = 82;
@@ -249,7 +287,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(712,314);
+			this.butClose.Location = new System.Drawing.Point(712,397);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 81;
@@ -259,12 +297,12 @@ namespace OpenDental{
 			// FormMobileSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(826,369);
-			this.Controls.Add(this.label1);
+			this.ClientSize = new System.Drawing.Size(826,452);
+			this.Controls.Add(this.textDateTimeLastRun);
 			this.Controls.Add(this.textProgress);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupPreferences);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textDateTimeLastRun);
 			this.Controls.Add(this.butFullSync);
 			this.Controls.Add(this.butSync);
 			this.Controls.Add(this.butClose);
@@ -274,7 +312,6 @@ namespace OpenDental{
 			this.groupPreferences.ResumeLayout(false);
 			this.groupPreferences.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -285,7 +322,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelMinutesBetweenSynch;
 		private System.Windows.Forms.Timer timerRefreshLastSynchTime;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.TextBox textDateTimeLastRun;
 		private System.Windows.Forms.Label label2;
 		private ValidDate textDateBefore;
 		private UI.Button butFullSync;
@@ -294,11 +330,15 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupPreferences;
 		private UI.Button butSavePreferences;
 		private ValidNumber textSynchMinutes;
-		private System.Windows.Forms.TextBox textProgress;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textMobileUserName;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox textMobilePassword;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.TextBox textMobileSynchWorkStation;
+		private UI.Button butCurrentWorkstation;
+		private System.Windows.Forms.Label textProgress;
+		private System.Windows.Forms.Label textDateTimeLastRun;
 	}
 }

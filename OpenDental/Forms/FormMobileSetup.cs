@@ -17,6 +17,7 @@ namespace OpenDental {
 		private static MobileWeb.Mobile mb = new MobileWeb.Mobile();
 		private static DateTime MobileSyncDateTimeLastRun;
 		private static string MobileSyncServerURL;
+		private static string MobileSyncWorkstationName;
 		private static int MobileSyncIntervalMinutes;
 		private static DateTime MobileExcludeApptsBeforeDate;
 		private static String StatusMessage="";
@@ -25,7 +26,7 @@ namespace OpenDental {
 		private static bool IsSynching=false;// this variable prevents the synching methods from being called when a previous synch is in progress.
 		private bool MobileUserNameChanged=false;
 		private bool MobilePasswordChanged=false;
-		private string NotPaidMessage="You must be a paid customer to use this feature";
+		private string NotPaidMessage="You must be a paid customer to use this feature. Please call Open Dental and register as a paid user";
 		private string WebServiceUnavailableMessage="Either the web service is not available or the WebHostSynch URL is incorrect";
 		private string SyncCompletedMessage="Sync Completed";
 		private string FullSynchNotRunMessage="Sync has never been run. You must do a full sync first.";
@@ -65,11 +66,12 @@ namespace OpenDental {
 		}
 
 		private static void InitializeVariables() {
-			try {
-				RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
-				MobileSyncServerURL=PrefC.GetString(PrefName.MobileSyncServerURL);
+				RegistrationKey=PrefC.GetStringSilent(PrefName.RegistrationKey);
+				MobileSyncServerURL=PrefC.GetStringSilent(PrefName.MobileSyncServerURL);
+				MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
 				MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 				MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
+				StatusMessage="";
 				if(!TestWebServiceExists()) {
 					return;
 				}
@@ -80,12 +82,6 @@ namespace OpenDental {
 					MobileSyncIntervalMinutes=0;
 					Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
 				}
-			}
-			catch(Exception ex) {
-				//MessageBox.Show(ex.Message);// this will show up even when this form is not open hence it is commented.
-			}
-
-
 		}
 
 		private static void Synch(DateTime GetChangedSince) {
@@ -111,8 +107,12 @@ namespace OpenDental {
 					SynchAppointments(aptNumList);
 					List<long> rxNumList=RxPatms.GetChangedSinceRxNums(GetChangedSince);
 					SynchPrescriptions(rxNumList);
-					Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew);
+					if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew)){
+						DataValid.SetInvalid(InvalidType.Prefs);// change value on all machines
+					}
 					MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
+
+
 					IsSynching=false;
 				}
 			}
@@ -158,9 +158,9 @@ namespace OpenDental {
 				}
 				List<long> BlockPatNumList=patNumList.GetRange(start,LocalBatchSize);
 				List<Patientm> ChangedPatientmList=Patientms.GetMultPats(BlockPatNumList);
-				StatusMessage=start + " records of "+patNumList.Count +" Patient Uploads";
-				Application.DoEvents();// allows textProgress to be refreshed 
 				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
+				StatusMessage=start+LocalBatchSize+" record(s) of "+patNumList.Count +" Patient Uploads";
+				Application.DoEvents();// allows textProgress to be refreshed 
 			}
 		}
 
@@ -173,9 +173,9 @@ namespace OpenDental {
 				}
 				List<long> BlockAptNumList=AptNumList.GetRange(start,LocalBatchSize);
 				List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetMultApts(BlockAptNumList);
-				StatusMessage=start + " records of "+AptNumList.Count +" Appointmnet Uploads";
-				Application.DoEvents();// allows textProgress to be refreshed 
 				mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
+				StatusMessage=start+LocalBatchSize+" records(s) of "+AptNumList.Count +" Appointmnet Uploads";
+				Application.DoEvents();// allows textProgress to be refreshed 
 			}
 		}
 
@@ -188,9 +188,9 @@ namespace OpenDental {
 				}
 				List<long> BlockRxNumList=RxNumList.GetRange(start,LocalBatchSize);
 				List<RxPatm> ChangedRxList=RxPatms.GetMultRxPats(BlockRxNumList);
-				StatusMessage=start + " records of "+RxNumList.Count +" Prescriptions Uploads";
-				Application.DoEvents();// allows textProgress to be refreshed 
 				mb.SynchPrescriptions(RegistrationKey,ChangedRxList.ToArray());
+				StatusMessage=start+LocalBatchSize+" records(s) of "+RxNumList.Count +" Prescriptions Uploads";
+				Application.DoEvents();// allows textProgress to be refreshed 
 			}
 		}
 
@@ -230,6 +230,10 @@ namespace OpenDental {
 			textProgress.Text=StatusMessage;
 		}
 
+		private void butCurrentWorkstation_Click(object sender,EventArgs e) {
+			textMobileSynchWorkStation.Text=System.Environment.MachineName.ToUpper();
+		}
+		
 		private void butSavePreferences_Click(object sender,EventArgs e) {
 			try {
 				Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text.Trim());
@@ -249,6 +253,8 @@ namespace OpenDental {
 				}
 				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textSynchMinutes.Text.Trim()));
 				MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
+				Prefs.UpdateString(PrefName.MobileSyncWorkstationName,textMobileSynchWorkStation.Text.Trim());
+				MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
 				SetMobileExcludeApptsBeforeDate();
 				butSavePreferences.Enabled=false;
 				if((MobileUserNameChanged||MobilePasswordChanged)) {
@@ -285,6 +291,10 @@ namespace OpenDental {
 			butSavePreferences.Enabled=true;
 		}
 
+		private void textMobileSynchWorkStation_TextChanged(object sender,EventArgs e) {
+			butSavePreferences.Enabled=true;
+		}
+
 		private bool FieldsValid() {
 			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""
 				||textSynchMinutes.errorProvider1.GetError(textSynchMinutes)!="") {
@@ -293,23 +303,27 @@ namespace OpenDental {
 				return false;
 			}
 
-			//Minimum 14 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
-			bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"^.*(?=.{14,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$");
-			if(!IsMatch) {
-				MsgBox.Show(this,"The username must be atleast 14 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
-				return false;
-			}
-			if(RegistrationKey==textMobileUserName.Text.Trim()){
-				MsgBox.Show(this,"The username cannot be the same as the Registration Key");
-				return false;
-			}
 			if((MobileUserNameChanged||MobilePasswordChanged)) {
+				//Minimum 14 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
+				bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"^.*(?=.{10,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$");
+				if(!IsMatch) {
+					MsgBox.Show(this,"The username must be atleast 10 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
+					return false;
+				}
+				if(RegistrationKey==textMobileUserName.Text.Trim()) {
+					MsgBox.Show(this,"The username cannot be the same as the Registration Key");
+					return false;
+				}
 				if(textMobilePassword.Text.Trim()=="") {
 					MsgBox.Show(this,"The password cannot be empty");
 					return false;
 				}
 			}
 
+			if(textMobileSynchWorkStation.Text.Trim()=="") {
+					MsgBox.Show(this,"WorkStation field cannot be empty");
+					return false;
+				}
 			return true;
 	}
 		
@@ -331,7 +345,6 @@ namespace OpenDental {
 				newPat.ChartNumber="111111"+i;
 				newPat.City="NL";
 				newPat.ClinicNum=i;
-				newPat.County= "county"+i;
 				newPat.CreditType="A";
 				newPat.DateFirstVisit=new DateTime(1985,3,3).AddDays(i);
 				newPat.Email="dennis.mathew________________seb@siberiacrawlmail.com";
@@ -424,14 +437,14 @@ namespace OpenDental {
 					MsgBox.Show(this,IncorrectRegKeyMessage);
 					return;
 				}
-				if(!FieldsValid()) {
+				/*if(!FieldsValid()) {
 					return;
-				}
+				}*/
 				SetMobileExcludeApptsBeforeDate();
-				if(MobileSyncIntervalMinutes==0) {
+				/*if(MobileSyncIntervalMinutes==0) {
 					MsgBox.Show(this,"Minutes Between Synch must be set to greater than zero");
 					return;
-				}
+				}*/
 				if(MobileSyncDateTimeLastRun.Year<1880) {
 					MsgBox.Show(this,FullSynchNotRunMessage);
 					return;
@@ -469,9 +482,9 @@ namespace OpenDental {
 					MsgBox.Show(this,IncorrectRegKeyMessage);
 					return;
 				}
-				if(!FieldsValid()) {
+				/*if(!FieldsValid()) {
 					return;
-				}
+				}*/
 				SetMobileExcludeApptsBeforeDate();
 				if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
 					return;
@@ -495,6 +508,10 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+
+
+
 
 
 
