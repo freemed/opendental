@@ -66,6 +66,9 @@ namespace OpenDental {
 		}
 
 		private static void InitializeVariables() {
+				#if DEBUG
+					IgnoreCertificateErrors();// used with faulty certificates only while debugging.
+				#endif
 				RegistrationKey=PrefC.GetStringSilent(PrefName.RegistrationKey);
 				MobileSyncServerURL=PrefC.GetStringSilent(PrefName.MobileSyncServerURL);
 				MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
@@ -86,9 +89,6 @@ namespace OpenDental {
 
 		private static void Synch(DateTime GetChangedSince) {
 			try {
-				#if DEBUG
-					IgnoreCertificateErrors();// used with faulty certificates only while debugging.
-				#endif
 				if(!TestWebServiceExists()) {
 					return;
 				}
