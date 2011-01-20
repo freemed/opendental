@@ -19,8 +19,12 @@
 	<asp:Button ID="Button1" runat="server" Text="Submit" onclick="Button1_Click" />
 
 </div>
-
+<asp:Panel ID="Panel3" Height="50px" runat="server" style="position:relative">&nbsp;
+<%--This panel is only to give some space below the button an the edge of the page.--%>
 </asp:Panel>
+</asp:Panel>
+
+
 <asp:Panel ID="Panel2" runat="server" Width="0px" HorizontalAlign="Left" BorderColor="White"
 					BorderWidth="60px" Style="border-bottom: 20px;text-align: center;" BackColor="White" 
 					Visible="False" Height="0px">

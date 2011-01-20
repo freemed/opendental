@@ -46,160 +46,165 @@ namespace WebForms {
 
 		private void GeneratePage(long DentalOfficeID,long WebSheetDefID) {
 			try {
-				int FormXOffset=37;
-				int FormYOffset=26;
-				int ImageXOffset=0;
-				int ImageYOffset=0;
-				int ImageZIndex=1;
-				int DrawingZIndex=2;
-				int ElementZIndex=3;
-				int SubmitButtonXoffset=-150;
-				int SubmitButtonYoffset=-50;
-				int RadioButtonXOffset=-4;
-				int RadioButtonYOffset=-5;
-				int RadioButtonXOffsetIE=0;
-				int RadioButtonXOffsetFirefox=-2;
-				float CheckBoxXOffset=-4.0f;
-				float CheckBoxYOffset=-4.0f;
-				int SignatureFontSize=16;
-				String SignatureFont="sans-serif";
-				float heightfactor=1.2f;
-				System.Web.HttpBrowserCapabilities browser=Request.Browser;
-				if(browser.Browser=="Firefox") {
-					RadioButtonXOffset+=RadioButtonXOffsetFirefox;
-				}
-				if(browser.Browser=="IE") {
-					RadioButtonXOffset+=RadioButtonXOffsetIE;
-				}
-				ODWebServiceEntities db=new ODWebServiceEntities();
-				int ColorBorder=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID).First().ColorBorder;
-				bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorBorder)));
-				var SheetDefObj=db.webforms_sheetdef.Where(sd=>sd.WebSheetDefID==WebSheetDefID && sd.webforms_preference.DentalOfficeID==DentalOfficeID).First();
-				int SheetDefWidth=SheetDefObj.Width;
-				int SheetDefHeight=SheetDefObj.Height;
-				bool SheetDefIsLandscape=SheetDefObj.IsLandscape==(sbyte)1?true:false;
-				if(SheetDefIsLandscape) {
-					SheetDefWidth=SheetDefObj.Height;
-					SheetDefHeight=SheetDefObj.Width;
-				}
-				form1.Style["position"]="absolute";
-				form1.Style["top"]=FormXOffset+"px";
-				form1.Style["left"]=FormYOffset+"px";
-				form1.Style["width"]=SheetDefWidth+"px";
-				form1.Style["height"]=SheetDefHeight+"px";
-				form1.Style["background-color"]="white";
-				var SheetFieldDefList=(db.webforms_sheetfielddef.Where(sfd=>sfd.webforms_sheetdef.WebSheetDefID==WebSheetDefID && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID)).ToList();
-				for(int j=0;j<SheetFieldDefList.Count();j++) {
-					String FieldName=SheetFieldDefList.ElementAt(j).FieldName;
-					String FieldValue=SheetFieldDefList.ElementAt(j).FieldValue;
-					SheetFieldType FieldType=(SheetFieldType)SheetFieldDefList.ElementAt(j).FieldType;
-					int XPos=SheetFieldDefList.ElementAt(j).XPos;
-					int YPos=SheetFieldDefList.ElementAt(j).YPos;
-					int width=SheetFieldDefList.ElementAt(j).Width;
-					int height=SheetFieldDefList.ElementAt(j).Height;
-					float fontsize=SheetFieldDefList.ElementAt(j).FontSize;
-					String fontname=SheetFieldDefList.ElementAt(j).FontName;
-					bool fontIsBold=SheetFieldDefList.ElementAt(j).FontIsBold==(sbyte)1?true:false;
-					long WebSheetFieldDefID=SheetFieldDefList.ElementAt(j).WebSheetFieldDefID;
-					WebControl wc=null; // WebControl is the parent class of all controls
-					if(FieldType==SheetFieldType.InputField) {
-						TextBox tb=new TextBox();
-						int rowcount=(int)Math.Floor((double)height/fontsize);
-                        if (rowcount>1){
-							tb.TextMode=TextBoxMode.MultiLine;
-                            tb.Rows=rowcount;
-						}
-						tb.Text=FieldValue;
-						wc=tb;						
+					int FormXOffset=37;
+					int FormYOffset=26;
+					int ImageXOffset=0;
+					int ImageYOffset=0;
+					int ImageZIndex=1;
+					int DrawingZIndex=2;
+					int ElementZIndex=3;
+					int SubmitButtonXoffset=0;//-150
+					int SubmitButtonYoffset=50;//-50
+					int RadioButtonXOffset=-4;
+					int RadioButtonYOffset=-5;
+					int RadioButtonXOffsetIE=0;
+					int RadioButtonXOffsetFirefox=-2;
+					float CheckBoxXOffset=-4.0f;
+					float CheckBoxYOffset=-4.0f;
+					int SignatureFontSize=16;
+					String SignatureFont="sans-serif";
+					float heightfactor=1.2f;
+					System.Web.HttpBrowserCapabilities browser=Request.Browser;
+					if(browser.Browser=="Firefox") {
+						RadioButtonXOffset+=RadioButtonXOffsetFirefox;
 					}
-					if(FieldType==SheetFieldType.CheckBox) {
-						wc=AddCheckBox(SheetFieldDefList.ElementAt(j));
+					if(browser.Browser=="IE") {
+						RadioButtonXOffset+=RadioButtonXOffsetIE;
 					}
-					if(FieldType==SheetFieldType.StaticText) {
-						Label lb=new Label();
-						if(FieldValue.Contains("[dateToday]")) {
-							FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
-						}
-						lb.Text=FieldValue;
-						wc=lb;
+					ODWebServiceEntities db=new ODWebServiceEntities();
+					int ColorBorder=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID).First().ColorBorder;
+					bodytag.Attributes.Add("bgcolor",ColorTranslator.ToHtml(Color.FromArgb(ColorBorder)));
+					var SheetDefObj=db.webforms_sheetdef.Where(sd=>sd.WebSheetDefID==WebSheetDefID && sd.webforms_preference.DentalOfficeID==DentalOfficeID).First();
+					int SheetDefWidth=SheetDefObj.Width;
+					int SheetDefHeight=SheetDefObj.Height;
+					bool SheetDefIsLandscape=SheetDefObj.IsLandscape==(sbyte)1?true:false;
+					if(SheetDefIsLandscape) {
+						SheetDefWidth=SheetDefObj.Height;
+						SheetDefHeight=SheetDefObj.Width;
 					}
-					if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
-						// this is a bug which must be addressed. Horizontal and vertical lines may have either height or width as zero. this throws an error, so they have been excluded for now
-						if(width!=0 && height!=0) { 
-							System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
-							img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefID="+WebSheetFieldDefID);
-							wc=img;
-						}
-					}
-					if(FieldType==SheetFieldType.SigBox) {
-						Panel pa=new Panel();
-						pa.BorderStyle=BorderStyle.Solid;
-						pa.BorderWidth=Unit.Pixel(1);
-						pa.HorizontalAlign=HorizontalAlign.Center;
-						Label lb=new Label();
-						lb.Style["font-family"]=SignatureFont;
-						lb.Style["font-size"]=SignatureFontSize+"px";
-						lb.Style["position"]="relative";						
-						lb.Style["top"]=(height-SignatureFontSize)/2  +"px";
-						lb.Text="Signature will be recorded later.";
-						pa.Controls.Add(lb);
-						wc=pa;
-					}
-					if(wc!=null) {
-						wc.ID=""+WebSheetFieldDefID;
-						wc.Style["position"]="absolute";
-						wc.Style["width"]=width+"px";
-						wc.Style["height"]=height+"px";
-						wc.Style["top"]=YPos+"px";
-						wc.Style["left"]=XPos+"px";
-						wc.Style["z-index"]=""+ElementZIndex;
-						if(FieldType==SheetFieldType.Image) {
-							wc.Style["top"]=YPos+ImageYOffset+"px";
-							wc.Style["left"]=XPos+ImageXOffset+"px";
-							wc.Style["z-index"]=""+ImageZIndex;
-						}
-						if(FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
-							wc.Style["z-index"]=""+DrawingZIndex;
-						}
-						if(FieldType==SheetFieldType.InputField) { //textboxes
-							wc.Style["font-family"]=fontname;
-							wc.Style["font-size"]=fontsize+"pt";
-							wc.Style["height"]=height/heightfactor+"px";
-							if(fontIsBold) {
-								wc.Font.Bold=true;
+					form1.Style["position"]="absolute";
+					form1.Style["top"]=FormXOffset+"px";
+					form1.Style["left"]=FormYOffset+"px";
+					form1.Style["width"]=SheetDefWidth+"px";
+					form1.Style["height"]=SheetDefHeight+"px";
+					form1.Style["background-color"]="white";
+					var SheetFieldDefList=(db.webforms_sheetfielddef.Where(sfd=>sfd.webforms_sheetdef.WebSheetDefID==WebSheetDefID && sfd.webforms_sheetdef.webforms_preference.DentalOfficeID==DentalOfficeID)).ToList();
+					for(int j=0;j<SheetFieldDefList.Count();j++) {
+						String FieldName=SheetFieldDefList.ElementAt(j).FieldName;
+						String FieldValue=SheetFieldDefList.ElementAt(j).FieldValue;
+						SheetFieldType FieldType=(SheetFieldType)SheetFieldDefList.ElementAt(j).FieldType;
+						int XPos=SheetFieldDefList.ElementAt(j).XPos;
+						int YPos=SheetFieldDefList.ElementAt(j).YPos;
+						int width=SheetFieldDefList.ElementAt(j).Width;
+						int height=SheetFieldDefList.ElementAt(j).Height;
+						float fontsize=SheetFieldDefList.ElementAt(j).FontSize;
+						String fontname=SheetFieldDefList.ElementAt(j).FontName;
+						bool fontIsBold=SheetFieldDefList.ElementAt(j).FontIsBold==(sbyte)1?true:false;
+						long WebSheetFieldDefID=SheetFieldDefList.ElementAt(j).WebSheetFieldDefID;
+						WebControl wc=null; // WebControl is the parent class of all controls
+						if(FieldType==SheetFieldType.InputField) {
+							TextBox tb=new TextBox();
+							int rowcount=(int)Math.Floor((double)height/fontsize);
+							if (rowcount>1){
+								tb.TextMode=TextBoxMode.MultiLine;
+								tb.Rows=rowcount;
 							}
-							wc.BorderWidth=Unit.Pixel(0);
-							wc.BackColor=Color.LightYellow;
-							AddValidator(SheetFieldDefList.ElementAt(j));
-							WControl wcobj=new WControl(XPos,YPos,wc);
-							listwc.Add(wcobj);
+							tb.Text=FieldValue;
+							wc=tb;						
 						}
-						if(wc.GetType()==typeof(RadioButtonList)) {
-							wc.Style["position"]="static";
-							WControl wcobj=new WControl(XPos,YPos,wc);
-							listwc.Add(wcobj);
-						}
-						if(wc.GetType()==typeof(CheckBox)) {
-							wc.Style["top"]=YPos+CheckBoxYOffset+"px";
-							wc.Style["left"]=XPos+CheckBoxXOffset+"px";
-							WControl wcobj=new WControl(XPos,YPos,wc);
-							listwc.Add(wcobj);
+						if(FieldType==SheetFieldType.CheckBox) {
+							wc=AddCheckBox(SheetFieldDefList.ElementAt(j));
 						}
 						if(FieldType==SheetFieldType.StaticText) {
-							wc.Style["font-family"]=fontname;
-							wc.Style["font-size"]=fontsize+"pt";
-							if(fontIsBold) {
-								wc.Font.Bold=true;
+							Label lb=new Label();
+							if(FieldValue.Contains("[dateToday]")) {
+								FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
+							}
+							lb.Text=FieldValue;
+							wc=lb;
+						}
+						if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
+							// this is a bug which must be addressed. Horizontal and vertical lines may have either height or width as zero. this throws an error, so they have been excluded for now
+							if(width!=0 && height!=0) { 
+								System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
+								img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefID="+WebSheetFieldDefID);
+								wc=img;
 							}
 						}
-						Panel1.Controls.Add(wc);
+						if(FieldType==SheetFieldType.SigBox) {
+							Panel pa=new Panel();
+							pa.BorderStyle=BorderStyle.Solid;
+							pa.BorderWidth=Unit.Pixel(1);
+							pa.HorizontalAlign=HorizontalAlign.Center;
+							Label lb=new Label();
+							lb.Style["font-family"]=SignatureFont;
+							lb.Style["font-size"]=SignatureFontSize+"px";
+							lb.Style["position"]="relative";						
+							lb.Style["top"]=(height-SignatureFontSize)/2  +"px";
+							lb.Text="Signature will be recorded later";
+							pa.Controls.Add(lb);
+							wc=pa;
+						}
+						if(wc!=null) {
+							wc.ID=""+WebSheetFieldDefID;
+							wc.Style["position"]="absolute";
+							wc.Style["width"]=width+"px";
+							wc.Style["height"]=height+"px";
+							wc.Style["top"]=YPos+"px";
+							wc.Style["left"]=XPos+"px";
+							wc.Style["z-index"]=""+ElementZIndex;
+							if(FieldType==SheetFieldType.Image) {
+								wc.Style["top"]=YPos+ImageYOffset+"px";
+								wc.Style["left"]=XPos+ImageXOffset+"px";
+								wc.Style["z-index"]=""+ImageZIndex;
+							}
+							if(FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
+								wc.Style["z-index"]=""+DrawingZIndex;
+							}
+							if(FieldType==SheetFieldType.InputField) { //textboxes
+								wc.Style["font-family"]=fontname;
+								wc.Style["font-size"]=fontsize+"pt";
+								wc.Style["height"]=height/heightfactor+"px";
+								if(fontIsBold) {
+									wc.Font.Bold=true;
+								}
+								wc.BorderWidth=Unit.Pixel(0);
+								wc.BackColor=Color.LightYellow;
+								AddValidator(SheetFieldDefList.ElementAt(j));
+								WControl wcobj=new WControl(XPos,YPos,wc);
+								listwc.Add(wcobj);
+							}
+							if(wc.GetType()==typeof(RadioButtonList)) {
+								wc.Style["position"]="static";
+								WControl wcobj=new WControl(XPos,YPos,wc);
+								listwc.Add(wcobj);
+							}
+							if(wc.GetType()==typeof(CheckBox)) {
+								wc.Style["top"]=YPos+CheckBoxYOffset+"px";
+								wc.Style["left"]=XPos+CheckBoxXOffset+"px";
+								WControl wcobj=new WControl(XPos,YPos,wc);
+								listwc.Add(wcobj);
+							}
+							if(FieldType==SheetFieldType.StaticText) {
+								wc.Style["font-family"]=fontname;
+								wc.Style["font-size"]=fontsize+"pt";
+								if(fontIsBold) {
+									wc.Font.Bold=true;
+								}
+							}
+							Panel1.Controls.Add(wc);
+						}
 					}
-				}
-				AssignTabOrder();
-				//position the submit button at the end of the page.
-				Button1.Style["position"]="absolute";
-				Button1.Style["left"]=SheetDefWidth+SubmitButtonXoffset+"px";
-				Button1.Style["top"]=SheetDefHeight+SubmitButtonYoffset+"px";
+					AssignTabOrder();
+					//position the submit button at the end of the page.
+					Button1.Style["position"]="absolute";
+					Button1.Style["left"]=SheetDefWidth/2+SubmitButtonXoffset+"px";
+					Button1.Style["top"]=SheetDefHeight+SubmitButtonYoffset+"px";
+					Button1.Style["z-index"]=""+ElementZIndex;
+					Panel3.Style["position"]="absolute";
+					//Panel3.Style["left"]=FormYOffset+"px";
+					Panel3.Style["top"]=FormXOffset+SheetDefHeight+SubmitButtonYoffset+"px";
+					
 				}
 				catch(ApplicationException ex) {
 					Logger.LogError(ex);

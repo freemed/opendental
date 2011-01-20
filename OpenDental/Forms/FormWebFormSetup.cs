@@ -24,6 +24,8 @@ namespace OpenDental {
 		WebSheets.Sheets wh=new WebSheets.Sheets();
 		OpenDental.WebSheets.webforms_sheetdef[] sheetDefList;
 		long DentalOfficeID=0;
+		private String SynchUrlStaging="https://192.168.0.196/WebHostSynch/Sheets.asmx";
+		private String SynchUrlDev="http://localhost:2923/Sheets.asmx";
 
 		public FormWebFormSetup() {
 			InitializeComponent();
@@ -39,11 +41,14 @@ namespace OpenDental {
 
 		private void FetchValuesFromWebServer() {
 			try {
-				textboxWebHostAddress.Text=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				String WebHostSynchServerURL=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				textboxWebHostAddress.Text=WebHostSynchServerURL;
 				butSave.Enabled=false;
-				#if DEBUG
-				//IgnoreCertificateErrors();
-				#endif
+				//#if DEBUG // ignore the certificate errors for the staging machine and development machine
+				if((WebHostSynchServerURL==SynchUrlStaging)||(WebHostSynchServerURL==SynchUrlDev)) {
+						IgnoreCertificateErrors();
+					}
+				//#endif
 				Cursor=Cursors.WaitCursor;
 				if(!TestWebServiceExists()) {
 					Cursor=Cursors.Default;

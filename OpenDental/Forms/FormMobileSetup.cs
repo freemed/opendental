@@ -17,6 +17,8 @@ namespace OpenDental {
 		private static MobileWeb.Mobile mb = new MobileWeb.Mobile();
 		private static DateTime MobileSyncDateTimeLastRun;
 		private static string MobileSyncServerURL;
+		private static String SynchUrlStaging="https://192.168.0.196/WebHostSynch/Mobile.asmx";
+		private static String SynchUrlDev="http://localhost:2923/Mobile.asmx";
 		private static string MobileSyncWorkstationName;
 		private static int MobileSyncIntervalMinutes;
 		private static DateTime MobileExcludeApptsBeforeDate;
@@ -66,14 +68,16 @@ namespace OpenDental {
 		}
 
 		private static void InitializeVariables() {
-				#if DEBUG
-					IgnoreCertificateErrors();// used with faulty certificates only while debugging.
-				#endif
 				RegistrationKey=PrefC.GetStringSilent(PrefName.RegistrationKey);
 				MobileSyncServerURL=PrefC.GetStringSilent(PrefName.MobileSyncServerURL);
 				MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
 				MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 				MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
+				//#if DEBUG	
+				if((MobileSyncServerURL==SynchUrlStaging)||(MobileSyncServerURL==SynchUrlDev)) {
+					IgnoreCertificateErrors();
+				}
+				//#endif
 				StatusMessage="";
 				if(!TestWebServiceExists()) {
 					return;
