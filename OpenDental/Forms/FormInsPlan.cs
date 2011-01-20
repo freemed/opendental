@@ -3910,6 +3910,7 @@ namespace OpenDental{
 							}
 							else {//option is checked for "create new plan if needed"
 								PlanCur.PlanNum=PlanNumOriginal;
+								InsPlans.Update(PlanCur);
 								//no need to update PatPlan.  Same old PlanNum.
 								//when 'pick from list' button was pushed, benefitListOld was set to new empty list.
 								for(int i=0;i<benefitList.Count;i++) {
@@ -3991,6 +3992,7 @@ namespace OpenDental{
 					}
 				}
 			}
+			//PatPlanCur.InsSubNum is already set before opening this window.  There is no possible way to change it from within this window.  Even if PlanNum changes, it's still the same inssub.  And even if inssub.Subscriber changes, it's still the same inssub.  So no change to PatPlanCur.InsSubNum is ever require from within this window.
 			//Synch benefits-----------------------------------------------------------------------------------------------
 			Benefits.UpdateList(benefitListOld,benefitList);
 			//Update SubCur if needed-------------------------------------------------------------------------------------
