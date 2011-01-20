@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using OpenDentBusiness;
 using System.Collections;
 using OpenDental.UI;
@@ -31,6 +32,9 @@ namespace OpenDental {
 		private bool headingPrinted;
 		private int pagesPrinted;
 		private Label label1;
+		private Label label2;
+		private TextBox textBox1;
+		private UI.Button butExport;
 		private int headingPrintH;
 
 
@@ -52,6 +56,9 @@ namespace OpenDental {
 			this.textDaysOldMin = new OpenDental.ValidNum();
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.label2 = new System.Windows.Forms.Label();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.butExport = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// checkPreauth
@@ -127,9 +134,9 @@ namespace OpenDental {
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(17,477);
+			this.butPrint.Location = new System.Drawing.Point(17,475);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(79,23);
+			this.butPrint.Size = new System.Drawing.Size(79,26);
 			this.butPrint.TabIndex = 52;
 			this.butPrint.Text = "&Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -164,9 +171,9 @@ namespace OpenDental {
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(670,477);
+			this.butCancel.Location = new System.Drawing.Point(670,475);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,23);
+			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 45;
 			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -187,9 +194,43 @@ namespace OpenDental {
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(520,480);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(69,18);
+			this.label2.TabIndex = 46;
+			this.label2.Text = "Total";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textBox1
+			// 
+			this.textBox1.Location = new System.Drawing.Point(595,479);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(61,20);
+			this.textBox1.TabIndex = 56;
+			// 
+			// butExport
+			// 
+			this.butExport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExport.Autosize = true;
+			this.butExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExport.CornerRadius = 4F;
+			this.butExport.Image = global::OpenDental.Properties.Resources.butExport;
+			this.butExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butExport.Location = new System.Drawing.Point(102,475);
+			this.butExport.Name = "butExport";
+			this.butExport.Size = new System.Drawing.Size(79,26);
+			this.butExport.TabIndex = 57;
+			this.butExport.Text = "&Export";
+			this.butExport.Click += new System.EventHandler(this.butExport_Click);
+			// 
 			// FormRpOutstandingIns
 			// 
 			this.ClientSize = new System.Drawing.Size(764,512);
+			this.Controls.Add(this.butExport);
+			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.labelDaysOldMin);
 			this.Controls.Add(this.comboBoxMultiProv);
@@ -198,6 +239,7 @@ namespace OpenDental {
 			this.Controls.Add(this.labelProv);
 			this.Controls.Add(this.textDaysOldMax);
 			this.Controls.Add(this.textDaysOldMin);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.labelDaysOldMax);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.gridMain);
@@ -270,6 +312,7 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			string type;
+			decimal total=0;
 			for(int i=0;i<Table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(Table.Rows[i]["CarrierName"].ToString());
@@ -310,7 +353,9 @@ namespace OpenDental {
 				row.Cells.Add(PIn.Date(Table.Rows[i]["DateSent"].ToString()).ToShortDateString());
 				row.Cells.Add("$"+PIn.Double(Table.Rows[i]["ClaimFee"].ToString()).ToString("F"));
 				gridMain.Rows.Add(row);
+				total+=PIn.Decimal(Table.Rows[i]["ClaimFee"].ToString());
 			}
+			textBox1.Text="$"+total.ToString("F");
 			gridMain.EndUpdate();
 		}
 
@@ -518,6 +563,52 @@ namespace OpenDental {
 			g.Dispose();
 		}
 
+		private void butExport_Click(object sender,System.EventArgs e) {
+			SaveFileDialog saveFileDialog=new SaveFileDialog();
+			saveFileDialog.AddExtension=true;
+			saveFileDialog.FileName="Outstanding Insurance Claims";
+			if(!Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
+				try {
+					Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath));
+					saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+				}
+				catch {
+					//initialDirectory will be blank
+				}
+			}
+			else {
+				saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			}
+			saveFileDialog.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
+			saveFileDialog.FilterIndex=0;
+			if(saveFileDialog.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			try {
+				using(StreamWriter sw=new StreamWriter(saveFileDialog.FileName,false))
+				//new FileStream(,FileMode.Create,FileAccess.Write,FileShare.Read)))
+				{
+					String line="";
+					line+=Lan.g(this,"Carrier")+"\t"+Lan.g(this,"Phone")+"\t"+Lan.g(this,"Type")+"\t"+Lan.g(this,"Patient Name")+"\t"+Lan.g(this,"Date of Service")+"\t"+Lan.g(this,"Date Sent")+"\t"+Lan.g(this,"Amount");
+					sw.WriteLine(line);
+					for(int i=0;i<gridMain.Rows.Count;i++) {
+						line="";
+						for(int j=0;j<gridMain.Columns.Count;j++) {
+							line+=gridMain.Rows[i].Cells[j].Text;
+							if(j<gridMain.Columns.Count-1) {
+								line+="\t";
+							}
+						}
+						sw.WriteLine(line);
+					}
+				}
+			}
+			catch {
+				MessageBox.Show(Lan.g(this,"File in use by another program.  Close and try again."));
+				return;
+			}
+			MessageBox.Show(Lan.g(this,"File created successfully"));
+		}
 
 
 
