@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -118,10 +119,42 @@ namespace OpenDental {
 
 		private string BuildReceiptString(PayConnectService.creditCardRequest request,PayConnectService.transResponse response) {
 			string result="";
-			int xleft=0;
+			int xmin=0;
+			int xleft=xmin;
 			int xright=15;
 			int xmax=37;
 			result+=Environment.NewLine;
+			//Print header/Practice information
+			string practiceTitle=PrefC.GetString(PrefName.PracticeTitle);
+			if(practiceTitle.Length>0) {
+				result+=practiceTitle+Environment.NewLine;
+			}
+			string practiceAddress=PrefC.GetString(PrefName.PracticeAddress);
+			if(practiceAddress.Length>0) {
+				result+=practiceAddress+Environment.NewLine;
+			}
+			string practiceAddress2=PrefC.GetString(PrefName.PracticeAddress2);
+			if(practiceAddress2.Length>0) {
+				result+=practiceAddress2+Environment.NewLine;
+			}
+			string practiceCity=PrefC.GetString(PrefName.PracticeCity);
+			string practiceState=PrefC.GetString(PrefName.PracticeST);
+			string practiceZip=PrefC.GetString(PrefName.PracticeZip);
+			if(practiceCity.Length>0 || practiceState.Length>0 || practiceZip.Length>0) {
+				string cityStateZip=practiceCity+" "+practiceState+" "+practiceZip;
+				result+=cityStateZip+Environment.NewLine;
+			}
+			string practicePhone=PrefC.GetString(PrefName.PracticePhone);
+			if(practicePhone.Length==10 
+				&& (CultureInfo.CurrentCulture.Name=="en-US" || 
+				(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"))) {
+					result+="("+practicePhone.Substring(0,3)+")"+practicePhone.Substring(3,3)+"-"+practicePhone.Substring(6)+Environment.NewLine;
+			}
+			else if(practicePhone.Length>0) {
+				result+=practicePhone+Environment.NewLine;
+			}
+			result+=Environment.NewLine;
+			//Print body
 			result+="Date".PadRight(xright-xleft,'.')+DateTime.Now.ToString()+Environment.NewLine;
 			result+=Environment.NewLine;
 			result+="Trans Type".PadRight(xright-xleft,'.')+request.TransType.ToString()+Environment.NewLine;
@@ -155,9 +188,10 @@ namespace OpenDental {
 		}
 
 		private void PrintReceipt(string receiptStr) {
+			string[] receiptLines=receiptStr.Split(new string[] { Environment.NewLine },StringSplitOptions.None);
 			MigraDoc.DocumentObjectModel.Document doc=new MigraDoc.DocumentObjectModel.Document();
 			doc.DefaultPageSetup.PageWidth=Unit.FromInch(3.0);
-			doc.DefaultPageSetup.PageHeight=Unit.FromInch(5.26);//enough to print receipt (4.7) plus 9/16 (0.56) extra space at bottom.
+			doc.DefaultPageSetup.PageHeight=Unit.FromInch(0.181*receiptLines.Length+0.56);//enough to print receipt text plus 9/16 inch (0.56) extra space at bottom.
 			doc.DefaultPageSetup.TopMargin=Unit.FromInch(0.25);
 			doc.DefaultPageSetup.LeftMargin=Unit.FromInch(0.25);
 			doc.DefaultPageSetup.RightMargin=Unit.FromInch(0.25);
