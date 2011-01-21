@@ -1410,7 +1410,9 @@ namespace OpenDentBusiness {
 			string log="";
 			if(isCheck) {
 				command="SELECT COUNT(*) FROM payment "
-					+"WHERE PayNum NOT IN (SELECT PayNum FROM paysplit)";
+					+"WHERE PayNum NOT IN (SELECT PayNum FROM paysplit) "
+					+"AND DepositNum=0 "
+					+"AND PayAmt=0";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Payments with no attached paysplit: ")+numFound+"\r\n";
@@ -1418,7 +1420,9 @@ namespace OpenDentBusiness {
 			}
 			else {
 				command="DELETE FROM payment "
-					+"WHERE PayNum NOT IN (SELECT PayNum FROM paysplit)";
+					+"WHERE PayNum NOT IN (SELECT PayNum FROM paysplit) "
+					+"AND DepositNum=0 "
+					+"AND PayAmt=0";
 				long numberFixed=Db.NonQ(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Payments with no attached paysplit fixed: ")+numberFixed+"\r\n";
