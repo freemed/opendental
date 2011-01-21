@@ -36,6 +36,8 @@ namespace OpenDental {
 		public event EventHandler GoToChanged=null;
 		///<summary>Toggle button controls this field.</summary>
 		public bool PopupsAreBlocked;
+		///<summary>All notes for the showing tasks, ordered by date time.</summary>
+		private List<TaskNote> TaskNoteList;
 
 		public UserControlTasks() {
 			InitializeComponent();
@@ -227,7 +229,7 @@ namespace OpenDental {
 				List<Task> repeatingTasks=new List<Task>();
 				if(tabContr.SelectedTab==tabDate){
 					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Day);
-						repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day);
 				}
 				if(tabContr.SelectedTab==tabWeek){
 					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Week);
@@ -304,6 +306,7 @@ namespace OpenDental {
 			string dateStr="";
 			string objDesc="";
 			string tasklistdescript="";
+			string notes="";
 			int imageindex;
 			for(int i=0;i<TaskListsList.Count;i++) {
 				dateStr="";
@@ -374,6 +377,17 @@ namespace OpenDental {
 						}
 					}
 				}
+				notes="";
+				for(int n=0;n<TaskNoteList.Count;n++) {
+					if(TaskNoteList[n].TaskNum!=TasksList[i].TaskNum) {
+						continue;
+					}
+					notes+="\r\n"//even on the first loop
+						+"=="+Userods.GetName(TaskNoteList[n].UserNum)+" - "
+						+TaskNoteList[n].DateTimeNote.ToShortDateString()+" "
+						+TaskNoteList[n].DateTimeNote.ToShortTimeString()
+						+" - "+TaskNoteList[n].Note;
+				}
 				row=new ODGridRow();
 				switch(TasksList[i].TaskStatus) {
 					case TaskStatusEnum.New:
@@ -389,7 +403,7 @@ namespace OpenDental {
 				if(tabContr.SelectedTab==tabNew) {
 					row.Cells.Add("read");
 				}
-				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript);
+				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript+notes);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -440,6 +454,7 @@ namespace OpenDental {
 			if(this.DesignMode){
 				TaskListsList=new List<TaskList>();
 				TasksList=new List<Task>();
+				TaskNoteList=new List<TaskNote>();
 				return;
 			}
 			if(parent!=0){//not a trunk
@@ -474,6 +489,12 @@ namespace OpenDental {
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Month);
 				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Month,checkShowFinished.Checked,startDate);
 			}
+			//notes
+			List<long> taskNums=new List<long>();
+			for(int i=0;i<TasksList.Count;i++) {
+				taskNums.Add(TasksList[i].TaskNum);
+			}
+			TaskNoteList=TaskNotes.RefreshForTasks(taskNums);
 		}
 
 		private void tabContr_Click(object sender,System.EventArgs e) {

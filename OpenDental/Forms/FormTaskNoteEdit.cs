@@ -31,6 +31,7 @@ namespace OpenDental {
 				return;
 			}
 			TaskNotes.Delete(TaskNoteCur.TaskNoteNum);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
