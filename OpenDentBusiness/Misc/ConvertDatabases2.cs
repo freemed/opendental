@@ -3304,8 +3304,37 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSyncWorkstationName','')";
 				Db.NonQ(command);
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS tasknote";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tasknote (
+						TaskNoteNum bigint NOT NULL auto_increment PRIMARY KEY,
+						TaskNum bigint NOT NULL,
+						UserNum bigint NOT NULL,
+						DateTimeNote datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						Note Text NOT NULL,
+						INDEX(TaskNum)
+						INDEX(UserNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE tasknote'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tasknote (
+						TaskNoteNum number(20) NOT NULL,
+						TaskNum number(20) NOT NULL,
+						UserNum number(20) NOT NULL,
+						DateTimeNote date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						Note varchar2(4000),
+						CONSTRAINT TaskNoteNum PRIMARY KEY (TaskNoteNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX IDX_TASKNOTE_TASKNUM ON tasknote (TaskNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX IDX_TASKNOTE_USERNUM ON tasknote (UserNum)";
+					Db.NonQ(command);
+				}
 
 
 				
