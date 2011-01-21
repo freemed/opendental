@@ -1243,9 +1243,9 @@ namespace OpenDental{
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK){
-					File.Delete(selectionDoc.FileName);
 					DeleteSelection(false,true);
-				}else{
+				}
+				else{
 					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
 				}
 			}
