@@ -51,7 +51,7 @@ namespace Crud {
 				if(i<indexes.Count-1) {
 					strb.Append(",");
 				}
-				strb.Append(rn+tb+t2+"INDEX("+indexes[i].ColumnName+")");
+				strb.Append(rn+tb+t2+"INDEX("+indexes[i].ColumnName+")"+(i==indexes.Count-1?"":","));
 			}
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
@@ -97,7 +97,7 @@ namespace Crud {
 			//  }
 			//}
 			for(int i=0;i<indexes.Count;i++) {//Generate Triggers if need be
-				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+indexes[i].ColumnName.ToUpper()+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
+				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+indexes[i].ColumnName+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			}
 			strb.Append(rn+tb+"}");
@@ -139,7 +139,7 @@ namespace Crud {
 				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				if(col.DataType==OdDbType.Long) {//key or foreign key
-					strb.Append(rn+tb+t1+"command=@\"CREATE INDEX IDX_"+tableName.ToUpper()+"_"+col.ColumnName.ToUpper()+" ON "+tableName+" ("+col.ColumnName+")\";");
+					strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+col.ColumnName+" ON "+tableName+" ("+col.ColumnName+")\";");
 					strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				}
 			}
