@@ -133,6 +133,8 @@ namespace OpenDental{
 				return;
 			}
 			Task task=new Task();
+			task.TaskListNum=-1;//don't show it in any list yet.
+			Tasks.Insert(task);
 			task.KeyNum=KeyNum;
 			task.ObjectType=OType;
 			task.TaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;
@@ -149,6 +151,8 @@ namespace OpenDental{
 				return;
 			}
 			Task task=new Task();
+			task.TaskListNum=-1;//don't show it in any list yet.
+			Tasks.Insert(task);
 			task.KeyNum=KeyNum;
 			task.ObjectType=OType;
 			task.TaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;

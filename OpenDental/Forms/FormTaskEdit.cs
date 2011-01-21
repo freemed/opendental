@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -21,8 +23,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
 		private OpenDental.ODtextBox textDescript;
-		private Task Cur;
-		private Task CurOld;
+		private Task TaskCur;
+		private Task TaskOld;
 		private OpenDental.ValidDate textDateTask;
 		private OpenDental.UI.Button butChange;
 		private OpenDental.UI.Button butGoto;
@@ -60,21 +62,23 @@ namespace OpenDental{
 		private TextBox textTaskList;
 		private Label label10;
 		private ComboBox comboDateType;
-		private ODtextBox textAppend;
-		private OpenDental.UI.Button butAppendNoPop;
-		private OpenDental.UI.Button butAppendAndPop;
 		private TaskList TaskListCur;
+		private UI.ODGrid gridMain;
+		///<summary>Will be set to true if any note was added or an existing note changed. Does not track changes in the description.</summary>
+		private bool notesChanged;
+		private UI.Button butAddNote;
+		private List<TaskNote> NoteList;
 
-		///<summary></summary>
-		public FormTaskEdit(Task cur)
+		///<summary>Task gets inserted ahead of time.</summary>
+		public FormTaskEdit(Task taskCur)
 		{
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Cur=cur;
-			CurOld=cur.Copy();
-			TaskListCur=TaskLists.GetOne(cur.TaskListNum);
+			TaskCur=taskCur;
+			TaskOld=taskCur.Copy();
+			TaskListCur=TaskLists.GetOne(taskCur.TaskListNum);
 			Lan.F(this);
 		}
 
@@ -130,9 +134,6 @@ namespace OpenDental{
 			this.textTaskList = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.comboDateType = new System.Windows.Forms.ComboBox();
-			this.butAppendAndPop = new OpenDental.UI.Button();
-			this.butAppendNoPop = new OpenDental.UI.Button();
-			this.textAppend = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butReply = new OpenDental.UI.Button();
 			this.butNowFinished = new OpenDental.UI.Button();
@@ -142,6 +143,8 @@ namespace OpenDental{
 			this.textDescript = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butAddNote = new OpenDental.UI.Button();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -282,7 +285,7 @@ namespace OpenDental{
 			// 
 			// textUser
 			// 
-			this.textUser.Location = new System.Drawing.Point(445,7);
+			this.textUser.Location = new System.Drawing.Point(470,7);
 			this.textUser.Name = "textUser";
 			this.textUser.ReadOnly = true;
 			this.textUser.Size = new System.Drawing.Size(134,20);
@@ -290,7 +293,7 @@ namespace OpenDental{
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(350,9);
+			this.label16.Location = new System.Drawing.Point(375,9);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(94,16);
 			this.label16.TabIndex = 125;
@@ -351,7 +354,7 @@ namespace OpenDental{
 			// 
 			// textTaskNum
 			// 
-			this.textTaskNum.Location = new System.Drawing.Point(525,60);
+			this.textTaskNum.Location = new System.Drawing.Point(550,60);
 			this.textTaskNum.Name = "textTaskNum";
 			this.textTaskNum.ReadOnly = true;
 			this.textTaskNum.Size = new System.Drawing.Size(54,20);
@@ -360,7 +363,7 @@ namespace OpenDental{
 			// 
 			// labelTaskNum
 			// 
-			this.labelTaskNum.Location = new System.Drawing.Point(450,61);
+			this.labelTaskNum.Location = new System.Drawing.Point(475,61);
 			this.labelTaskNum.Name = "labelTaskNum";
 			this.labelTaskNum.Size = new System.Drawing.Size(73,16);
 			this.labelTaskNum.TabIndex = 133;
@@ -370,7 +373,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(581,10);
+			this.label8.Location = new System.Drawing.Point(606,10);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(133,17);
 			this.label8.TabIndex = 139;
@@ -398,7 +401,7 @@ namespace OpenDental{
 			// 
 			// textTaskList
 			// 
-			this.textTaskList.Location = new System.Drawing.Point(445,30);
+			this.textTaskList.Location = new System.Drawing.Point(470,30);
 			this.textTaskList.Name = "textTaskList";
 			this.textTaskList.ReadOnly = true;
 			this.textTaskList.Size = new System.Drawing.Size(134,20);
@@ -406,7 +409,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(350,32);
+			this.label10.Location = new System.Drawing.Point(375,32);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(94,16);
 			this.label10.TabIndex = 147;
@@ -422,50 +425,10 @@ namespace OpenDental{
 			this.comboDateType.Size = new System.Drawing.Size(145,21);
 			this.comboDateType.TabIndex = 148;
 			// 
-			// butAppendAndPop
-			// 
-			this.butAppendAndPop.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAppendAndPop.Autosize = true;
-			this.butAppendAndPop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAppendAndPop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAppendAndPop.CornerRadius = 4F;
-			this.butAppendAndPop.Location = new System.Drawing.Point(585,442);
-			this.butAppendAndPop.Name = "butAppendAndPop";
-			this.butAppendAndPop.Size = new System.Drawing.Size(68,24);
-			this.butAppendAndPop.TabIndex = 151;
-			this.butAppendAndPop.Text = "Append";
-			this.butAppendAndPop.Click += new System.EventHandler(this.butAppendAndPop_Click);
-			// 
-			// butAppendNoPop
-			// 
-			this.butAppendNoPop.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAppendNoPop.Autosize = true;
-			this.butAppendNoPop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAppendNoPop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAppendNoPop.CornerRadius = 4F;
-			this.butAppendNoPop.Location = new System.Drawing.Point(585,477);
-			this.butAppendNoPop.Name = "butAppendNoPop";
-			this.butAppendNoPop.Size = new System.Drawing.Size(106,24);
-			this.butAppendNoPop.TabIndex = 150;
-			this.butAppendNoPop.Text = "Append, no Popup";
-			this.butAppendNoPop.Visible = false;
-			this.butAppendNoPop.Click += new System.EventHandler(this.butAppendNoPop_Click);
-			// 
-			// textAppend
-			// 
-			this.textAppend.AcceptsReturn = true;
-			this.textAppend.Location = new System.Drawing.Point(127,355);
-			this.textAppend.Multiline = true;
-			this.textAppend.Name = "textAppend";
-			this.textAppend.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textAppend.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textAppend.Size = new System.Drawing.Size(452,111);
-			this.textAppend.TabIndex = 149;
-			// 
 			// butSend
 			// 
 			this.butSend.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butSend.Autosize = true;
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -480,7 +443,7 @@ namespace OpenDental{
 			// butReply
 			// 
 			this.butReply.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butReply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butReply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butReply.Autosize = true;
 			this.butReply.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReply.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -509,7 +472,7 @@ namespace OpenDental{
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -547,12 +510,14 @@ namespace OpenDental{
 			// textDescript
 			// 
 			this.textDescript.AcceptsReturn = true;
+			this.textDescript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textDescript.Location = new System.Drawing.Point(127,105);
 			this.textDescript.Multiline = true;
 			this.textDescript.Name = "textDescript";
 			this.textDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textDescript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textDescript.Size = new System.Drawing.Size(452,249);
+			this.textDescript.Size = new System.Drawing.Size(683,67);
 			this.textDescript.TabIndex = 1;
 			// 
 			// butOK
@@ -563,7 +528,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(543,628);
+			this.butOK.Location = new System.Drawing.Point(653,628);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 4;
@@ -578,20 +543,50 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,628);
+			this.butCancel.Location = new System.Drawing.Point(735,628);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,173);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(798,293);
+			this.gridMain.TabIndex = 149;
+			this.gridMain.Title = "Notes";
+			this.gridMain.TranslationName = "FormTaskEdit";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// butAddNote
+			// 
+			this.butAddNote.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddNote.Autosize = true;
+			this.butAddNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddNote.CornerRadius = 4F;
+			this.butAddNote.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddNote.Location = new System.Drawing.Point(648,472);
+			this.butAddNote.Name = "butAddNote";
+			this.butAddNote.Size = new System.Drawing.Size(80,24);
+			this.butAddNote.TabIndex = 150;
+			this.butAddNote.Text = "Add";
+			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(726,676);
-			this.Controls.Add(this.butAppendAndPop);
-			this.Controls.Add(this.butAppendNoPop);
-			this.Controls.Add(this.textAppend);
+			this.ClientSize = new System.Drawing.Size(836,676);
+			this.Controls.Add(this.butAddNote);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.comboDateType);
 			this.Controls.Add(this.textTaskList);
 			this.Controls.Add(this.label10);
@@ -645,9 +640,9 @@ namespace OpenDental{
 			#if DEBUG
 				labelTaskNum.Visible=true;
 				textTaskNum.Visible=true;
-				textTaskNum.Text=Cur.TaskNum.ToString();
+				textTaskNum.Text=TaskCur.TaskNum.ToString();
 			#endif
-			switch(Cur.TaskStatus){
+			switch(TaskCur.TaskStatus){
 				case TaskStatusEnum.New:
 					radioNew.Checked=true;
 					break;
@@ -658,44 +653,44 @@ namespace OpenDental{
 					radioDone.Checked=true;
 					break;
 			}
-			textUser.Text=Userods.GetName(Cur.UserNum);//might be blank.
+			textUser.Text=Userods.GetName(TaskCur.UserNum);//might be blank.
 			if(TaskListCur!=null){
 				textTaskList.Text=TaskListCur.Descript;
 			}
-			if(Cur.DateTimeEntry.Year<1880){
+			if(TaskCur.DateTimeEntry.Year<1880){
 				textDateTimeEntry.Text=DateTime.Now.ToString();
 			}
 			else{
-				textDateTimeEntry.Text=Cur.DateTimeEntry.ToString();
+				textDateTimeEntry.Text=TaskCur.DateTimeEntry.ToString();
 			}
-			if(Cur.DateTimeFinished.Year<1880){
+			if(TaskCur.DateTimeFinished.Year<1880){
 				textDateTimeFinished.Text="";//DateTime.Now.ToString();
 			}
 			else{
-				textDateTimeFinished.Text=Cur.DateTimeFinished.ToString();
+				textDateTimeFinished.Text=TaskCur.DateTimeFinished.ToString();
 			}
-			textDescript.Text=Cur.Descript;
+			textDescript.Text=TaskCur.Descript;
 			//textDescript.Select(textDescript.Text.Length,0);
-			if(Cur.DateTask.Year>1880){
-				textDateTask.Text=Cur.DateTask.ToShortDateString();
+			if(TaskCur.DateTask.Year>1880){
+				textDateTask.Text=TaskCur.DateTask.ToShortDateString();
 			}
-			if(Cur.IsRepeating){
+			if(TaskCur.IsRepeating){
 				radioNew.Enabled=false;
 				radioViewed.Enabled=false;
 				radioDone.Enabled=false;
 				textDateTask.Enabled=false;
 				listObjectType.Enabled=false;
-				if(Cur.TaskListNum!=0){//not a main parent
+				if(TaskCur.TaskListNum!=0){//not a main parent
 					comboDateType.Enabled=false;
 				}
 			}
 			for(int i=0;i<Enum.GetNames(typeof(TaskDateType)).Length;i++){
 				comboDateType.Items.Add(Lan.g("enumTaskDateType",Enum.GetNames(typeof(TaskDateType))[i]));
-				if((int)Cur.DateType==i){
+				if((int)TaskCur.DateType==i){
 					comboDateType.SelectedIndex=i;
 				}
 			}
-			if(Cur.FromNum==0){
+			if(TaskCur.FromNum==0){
 				checkFromNum.Checked=false;
 				checkFromNum.Enabled=false;
 			}
@@ -714,30 +709,72 @@ namespace OpenDental{
 				labelReply.Visible=false;
 				butReply.Visible=false;
 			}
+			FillGrid();
+		}
+
+		private void FillGrid(){
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Time"),120);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"User"),80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Note"),400);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			NoteList=TaskNotes.GetForTask(TaskCur.TaskNum);
+			for(int i=0;i<NoteList.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(NoteList[i].DateTimeNote.ToShortDateString()+" "+NoteList[i].DateTimeNote.ToShortTimeString());
+				row.Cells.Add(Userods.GetName(NoteList[i].UserNum));
+				row.Cells.Add(NoteList[i].Note);
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
+			gridMain.ScrollToEnd();
+		}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormTaskNoteEdit form=new FormTaskNoteEdit();
+			form.TaskNoteCur=NoteList[e.Row];
+			form.ShowDialog();
+			FillGrid();
+		}
+
+		private void butAddNote_Click(object sender,EventArgs e) {
+			FormTaskNoteEdit form=new FormTaskNoteEdit();
+			form.TaskNoteCur=new TaskNote();
+			form.TaskNoteCur.TaskNum=TaskCur.TaskNum;
+			form.TaskNoteCur.DateTimeNote=DateTime.Now;//Will be slightly adjusted at server.
+			form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
+			form.TaskNoteCur.IsNew=true;
+			form.ShowDialog();
+			FillGrid();
 		}
 
 		private void FillObject(){
-			if(Cur.ObjectType==TaskObjectType.None){
+			if(TaskCur.ObjectType==TaskObjectType.None){
 				listObjectType.SelectedIndex=0;
 				panelObject.Visible=false;
 			}
-			else if(Cur.ObjectType==TaskObjectType.Patient){
+			else if(TaskCur.ObjectType==TaskObjectType.Patient){
 				listObjectType.SelectedIndex=1;
 				panelObject.Visible=true;
 				labelObjectDesc.Text=Lan.g(this,"Patient Name");
-				if(Cur.KeyNum>0){
-					textObjectDesc.Text=Patients.GetPat(Cur.KeyNum).GetNameLF();
+				if(TaskCur.KeyNum>0){
+					textObjectDesc.Text=Patients.GetPat(TaskCur.KeyNum).GetNameLF();
 				}
 				else{
 					textObjectDesc.Text="";
 				}
 			}
-			else if(Cur.ObjectType==TaskObjectType.Appointment){
+			else if(TaskCur.ObjectType==TaskObjectType.Appointment){
 				listObjectType.SelectedIndex=2;
 				panelObject.Visible=true;
 				labelObjectDesc.Text=Lan.g(this,"Appointment Desc");
-				if(Cur.KeyNum>0){
-					Appointment AptCur=Appointments.GetOneApt(Cur.KeyNum);
+				if(TaskCur.KeyNum>0){
+					Appointment AptCur=Appointments.GetOneApt(TaskCur.KeyNum);
 					if(AptCur==null){
 						textObjectDesc.Text=Lan.g(this,"(appointment deleted)");
 					}
@@ -763,14 +800,14 @@ namespace OpenDental{
 		}
 
 		private void listObjectType_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-			if(Cur.KeyNum>0){
+			if(TaskCur.KeyNum>0){
 				if(!MsgBox.Show(this,true,"The linked object will no longer be attached.  Continue?")){
 					FillObject();
 					return;
 				}
 			}
-			Cur.KeyNum=0;
-			Cur.ObjectType=(TaskObjectType)listObjectType.SelectedIndex;
+			TaskCur.KeyNum=0;
+			TaskCur.ObjectType=(TaskObjectType)listObjectType.SelectedIndex;
 			FillObject();
 		}
 
@@ -781,17 +818,17 @@ namespace OpenDental{
 			if(FormPS.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(Cur.ObjectType==TaskObjectType.Patient){
-				Cur.KeyNum=FormPS.SelectedPatNum;
+			if(TaskCur.ObjectType==TaskObjectType.Patient){
+				TaskCur.KeyNum=FormPS.SelectedPatNum;
 			}
-			if(Cur.ObjectType==TaskObjectType.Appointment){
+			if(TaskCur.ObjectType==TaskObjectType.Appointment){
 				FormApptsOther FormA=new FormApptsOther(FormPS.SelectedPatNum);
 				FormA.SelectOnly=true;
 				FormA.ShowDialog();
 				if(FormA.DialogResult==DialogResult.Cancel){
 					return;
 				}
-				Cur.KeyNum=FormA.AptNumsSelected[0];
+				TaskCur.KeyNum=FormA.AptNumsSelected[0];
 			}
 			FillObject();
 		}
@@ -800,15 +837,14 @@ namespace OpenDental{
 			if(!SaveCur(false)){
 				return;
 			}
-			GotoType=Cur.ObjectType;
-			GotoKeyNum=Cur.KeyNum;
+			GotoType=TaskCur.ObjectType;
+			GotoKeyNum=TaskCur.KeyNum;
 			DialogResult=DialogResult.OK;
 			Close();
 		}
 
 		private bool SaveCur(bool resetUser){
-			if(  textDateTask.errorProvider1.GetError(textDateTask)!=""
-				){
+			if(textDateTask.errorProvider1.GetError(textDateTask)!=""){
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
@@ -831,40 +867,40 @@ namespace OpenDental{
 				}
 			}
 			if(radioNew.Checked){
-				Cur.TaskStatus=TaskStatusEnum.New;
+				TaskCur.TaskStatus=TaskStatusEnum.New;
 			}
 			else if(radioViewed.Checked){
-				Cur.TaskStatus=TaskStatusEnum.Viewed;
+				TaskCur.TaskStatus=TaskStatusEnum.Viewed;
 			}
 			else{
-				Cur.TaskStatus=TaskStatusEnum.Done;
+				TaskCur.TaskStatus=TaskStatusEnum.Done;
 			}
 			//UserNum was not allowed to change in previous versions.  But now, it changes anytime the text changes.
-			if(resetUser && Cur.Descript!=textDescript.Text){
-				Cur.UserNum=Security.CurUser.UserNum;
+			if(resetUser && TaskCur.Descript!=textDescript.Text){
+				TaskCur.UserNum=Security.CurUser.UserNum;
 			}
-			Cur.DateTimeEntry=PIn.DateT(textDateTimeEntry.Text);
-			if(Cur.TaskStatus==TaskStatusEnum.Done && textDateTimeFinished.Text==""){
-				Cur.DateTimeFinished=DateTime.Now;
+			TaskCur.DateTimeEntry=PIn.DateT(textDateTimeEntry.Text);
+			if(TaskCur.TaskStatus==TaskStatusEnum.Done && textDateTimeFinished.Text==""){
+				TaskCur.DateTimeFinished=DateTime.Now;
 			}
 			else{
-				Cur.DateTimeFinished=PIn.DateT(textDateTimeFinished.Text);
+				TaskCur.DateTimeFinished=PIn.DateT(textDateTimeFinished.Text);
 			}
-			Cur.Descript=textDescript.Text;
-			Cur.DateTask=PIn.Date(textDateTask.Text);
-			Cur.DateType=(TaskDateType)comboDateType.SelectedIndex;
+			TaskCur.Descript=textDescript.Text;
+			TaskCur.DateTask=PIn.Date(textDateTask.Text);
+			TaskCur.DateType=(TaskDateType)comboDateType.SelectedIndex;
 			if(!checkFromNum.Checked){//user unchecked the box. Never allowed to check if initially unchecked
-				Cur.FromNum=0;
+				TaskCur.FromNum=0;
 			}
 			//ObjectType already handled
 			//Cur.KeyNum already handled
 			try{
 				if(IsNew){
-					Tasks.Insert(Cur);
+					Tasks.Insert(TaskCur);
 				}
 				else{
-					if(!Cur.Equals(CurOld)){//If user clicks OK without making any changes, then skip.
-						Tasks.Update(Cur,CurOld);//if task has already been altered, then this is where it will fail.
+					if(!TaskCur.Equals(TaskOld)){//If user clicks OK without making any changes, then skip.
+						Tasks.Update(TaskCur,TaskOld);//if task has already been altered, then this is where it will fail.
 					}
 				}
 			}
@@ -876,11 +912,13 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,true,"Delete?")) {
-				return;
+			if(!IsNew) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
+					return;
+				}
 			}
-			Tasks.Delete(Cur);
-			DataValid.SetInvalidTask(Cur.TaskNum,false);//no popup
+			Tasks.Delete(TaskCur.TaskNum);//always do it this way to clean up all three tables
+			DataValid.SetInvalidTask(TaskCur.TaskNum,false);//no popup
 			DialogResult=DialogResult.OK;
 			Close();
 		}
@@ -888,36 +926,24 @@ namespace OpenDental{
 		private void butReply_Click(object sender,EventArgs e) {
 			//This can't happen if IsNew
 			//This also can't happen unless the task is in my inbox.
-			if(textAppend.Text=="" && textDescript.Text==Cur.Descript) {//nothing changed
-				MsgBox.Show(this,"Please type in a reply before using the reply button.");
+			if(!notesChanged && textDescript.Text==TaskCur.Descript) {//nothing changed
+				MsgBox.Show(this,"Please add a note before using the reply button.");
 				return;
 			}
-			if(textAppend.Text!="" && textDescript.Text!=Cur.Descript) {//changed and appending
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Text in the main description has changed and the change will not be saved.  Continue anyway?")) {
-					return;
-				}
-			}
-			if(Cur.UserNum==Security.CurUser.UserNum){
+			if(TaskCur.UserNum==Security.CurUser.UserNum){
 				MsgBox.Show(this,"You can't reply to yourself.");
 				return;
 			}
-			long inbox=Userods.GetInbox(Cur.UserNum);
+			long inbox=Userods.GetInbox(TaskCur.UserNum);
 			if(inbox==0){
-				MsgBox.Show(this,"No inbox has been setup for this user yet.");
+				MsgBox.Show(this,"No inbox has been set up for this user yet.");
 				return;
 			}
-			if(textAppend.Text!=""){//append
-				Cur.TaskListNum=inbox;//so that synch will work
-				Tasks.Append(Cur.TaskNum,textAppend.Text,inbox);
-				TaskAncestors.Synch(Cur);
+			TaskCur.TaskListNum=inbox;
+			if(!SaveCur(true)){
+				return;
 			}
-			else{//just change
-				Cur.TaskListNum=inbox;
-				if(!SaveCur(true)){
-					return;
-				}
-			}
-			DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
+			DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
 			DialogResult=DialogResult.OK;
 			Close();
 		}
@@ -925,32 +951,21 @@ namespace OpenDental{
 		///<summary>Send to another user.</summary>
 		private void butSend_Click(object sender,EventArgs e) {
 			//This button is always present.
-			if(textAppend.Text!="" && textDescript.Text!=Cur.Descript) {//changed and appending
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Text in the main description has changed and the change will not be saved.  Continue anyway?")) {
-					return;
-				}
-			}
 			FormTaskSendUser FormT=new FormTaskSendUser();
 			FormT.ShowDialog();
 			if(FormT.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(textAppend.Text!=""){//append
-				Cur.TaskListNum=FormT.TaskListNum;//so that synch will work
-				Tasks.Append(Cur.TaskNum,textAppend.Text,FormT.TaskListNum);
-				TaskAncestors.Synch(Cur);
+			TaskCur.TaskListNum=FormT.TaskListNum;
+			if(!SaveCur(true)){
+				return;
 			}
-			else{//just change
-				Cur.TaskListNum=FormT.TaskListNum;
-				if(!SaveCur(true)){
-					return;
-				}
-			}
-			DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
+			DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
 			DialogResult=DialogResult.OK;
 			Close();
 		}
 
+		/*
 		private void butAppendAndPop_Click(object sender,EventArgs e) {
 			if(IsNew) {
 				MsgBox.Show(this,"Cannot append to a new task.");
@@ -989,40 +1004,25 @@ namespace OpenDental{
 			DataValid.SetInvalidTask(Cur.TaskNum,false);
 			DialogResult=DialogResult.OK;
 			Close();
-		}
+		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textAppend.Text!="") {
-				MsgBox.Show(this,"Either use the Append button, or clear that text box before clicking OK.");
-				return;
-			}
-			bool textChanged=false;//irrelevant if IsNew
-			if(!IsNew && textDescript.Text!=Cur.Descript){
-				textChanged=true;
-			}
 			if(!SaveCur(true)){//If user clicked OK without changing anything, then this will have no effect.
 				return;
 			}
-			if(Cur.Equals(CurOld)){//if there were no changes, then don't bother with the signal
+			if(!notesChanged && TaskCur.Equals(TaskOld)){//if there were no changes, then don't bother with the signal
 				DialogResult=DialogResult.OK;
 				Close();
 				return;
 			}
 			if(IsNew){
-				DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
+				DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
 			}
-			else if(textChanged){
-				//DialogResult result=MessageBox.Show(Lan.g(this,"Display popup for recipient?"),"",MessageBoxButtons.YesNo);
-				DialogResult result=DialogResult.Yes;
-				if(result==DialogResult.Yes){
-					DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
-				}
-				else{
-					DataValid.SetInvalidTask(Cur.TaskNum,false);
-				}
+			else if(notesChanged || textDescript.Text!=TaskCur.Descript){//notes or descript changed
+				DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
 			}
 			else{
-				DataValid.SetInvalidTask(Cur.TaskNum,false);//no popup
+				DataValid.SetInvalidTask(TaskCur.TaskNum,false);//no popup
 			}
 			DialogResult=DialogResult.OK;
 			Close();
@@ -1034,9 +1034,18 @@ namespace OpenDental{
 		}
 
 		private void FormTaskEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			//no matter why it was closed
-			TaskUnreads.SetRead(Security.CurUser.UserNum,Cur.TaskNum);
+			TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);//no matter why it was closed
+			if(DialogResult==DialogResult.OK) {
+				return;
+			}
+			if(IsNew) {
+				Tasks.Delete(TaskCur.TaskNum);
+			}
 		}
+
+		
+
+		
 
 
 		

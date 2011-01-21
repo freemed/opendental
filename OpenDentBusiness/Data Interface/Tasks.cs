@@ -257,14 +257,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deleting a task never causes a problem, so no dependencies are checked.</summary>
-		public static void Delete(Task task){
+		public static void Delete(long taskNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),task);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum);
 				return;
 			}
-			string command= "DELETE from task WHERE TaskNum = "+POut.Long(task.TaskNum);
+			string command= "DELETE from task WHERE TaskNum = "+POut.Long(taskNum);
  			Db.NonQ(command);
-			command="DELETE from taskancestor WHERE TaskNum = "+POut.Long(task.TaskNum);
+			command="DELETE from taskancestor WHERE TaskNum = "+POut.Long(taskNum);
+			Db.NonQ(command);
+			command="DELETE from tasknote WHERE TaskNum = "+POut.Long(taskNum);
 			Db.NonQ(command);
 		}
 
@@ -289,6 +291,7 @@ namespace OpenDentBusiness{
 			//return PIn.Int(Db.GetScalar(command));//GetCount failed if no new tasks.
 		}
 
+		/*
 		///<summary>Appends a carriage return as well as the text to any task.  If a taskListNum is specified, then it also changes the taskList.</summary>
 		public static void Append(long taskNum,string text) {
 			//No need to check RemotingRole; no call to db.
@@ -311,7 +314,7 @@ namespace OpenDentBusiness{
 					+"WHERE TaskNum="+POut.Long(taskNum);
 			}
 			Db.NonQ(command);
-		}
+		}*/
 	
 	
 

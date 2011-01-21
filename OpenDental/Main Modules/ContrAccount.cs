@@ -3845,8 +3845,8 @@ namespace OpenDental {
 				}
 			}
 			else if(row["TaskNum"].ToString() != "0") {
-				Task curTask = Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));
-				FormTaskEdit FormT = new FormTaskEdit(curTask);
+				Task task = Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));
+				FormTaskEdit FormT = new FormTaskEdit(task);
 				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 				FormT.Show();//non-modal
 			}

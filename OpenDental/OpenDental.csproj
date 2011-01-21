@@ -327,6 +327,12 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormTaskNoteEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormTaskNoteEdit.designer.cs">
+      <DependentUpon>FormTaskNoteEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormMobileSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1987,6 +1993,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTaskNoteEdit.resx">
+      <DependentUpon>FormTaskNoteEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMobileSetup.resx">

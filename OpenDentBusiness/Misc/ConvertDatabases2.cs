@@ -3313,7 +3313,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						UserNum bigint NOT NULL,
 						DateTimeNote datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						Note Text NOT NULL,
-						INDEX(TaskNum)
+						INDEX(TaskNum),
 						INDEX(UserNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -3330,9 +3330,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						CONSTRAINT TaskNoteNum PRIMARY KEY (TaskNoteNum)
 						)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX IDX_TASKNOTE_TASKNUM ON tasknote (TaskNum)";
+					command=@"CREATE INDEX TaskNum ON tasknote (TaskNum)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX IDX_TASKNOTE_USERNUM ON tasknote (UserNum)";
+					command=@"CREATE INDEX UserNum ON tasknote (UserNum)";
 					Db.NonQ(command);
 				}
 

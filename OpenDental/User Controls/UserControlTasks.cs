@@ -214,7 +214,7 @@ namespace OpenDental {
 						continue;
 					}
 					if(TasksList[i].TaskStatus==TaskStatusEnum.New) {
-						Tasks.Delete(TasksList[i]);
+						Tasks.Delete(TasksList[i].TaskNum);
 						changeMade=true;
 					}
 				}
@@ -562,31 +562,33 @@ namespace OpenDental {
 				MsgBox.Show(this,"Not allowed to add items to the 'New' tab.");
 				return;
 			}
-			Task cur=new Task();
+			Task task=new Task();
+			task.TaskListNum=-1;//don't show it in any list yet.
+			Tasks.Insert(task);
 			//if this is a child of any taskList
 			if(TreeHistory.Count>0) {
-				cur.TaskListNum=TreeHistory[TreeHistory.Count-1].TaskListNum;
+				task.TaskListNum=TreeHistory[TreeHistory.Count-1].TaskListNum;
 			}
 			else {
-				cur.TaskListNum=0;
+				task.TaskListNum=0;
 				if(tabContr.SelectedTab==tabDate) {
-					cur.DateTask=cal.SelectionStart;
-					cur.DateType=TaskDateType.Day;
+					task.DateTask=cal.SelectionStart;
+					task.DateType=TaskDateType.Day;
 				}
 				else if(tabContr.SelectedTab==tabWeek) {
-					cur.DateTask=cal.SelectionStart;
-					cur.DateType=TaskDateType.Week;
+					task.DateTask=cal.SelectionStart;
+					task.DateType=TaskDateType.Week;
 				}
 				else if(tabContr.SelectedTab==tabMonth) {
-					cur.DateTask=cal.SelectionStart;
-					cur.DateType=TaskDateType.Month;
+					task.DateTask=cal.SelectionStart;
+					task.DateType=TaskDateType.Month;
 				}
 			}
 			if(tabContr.SelectedTab==tabRepeating) {
-				cur.IsRepeating=true;
+				task.IsRepeating=true;
 			}
-			cur.UserNum=Security.CurUser.UserNum;
-			FormTaskEdit FormT=new FormTaskEdit(cur);
+			task.UserNum=Security.CurUser.UserNum;
+			FormTaskEdit FormT=new FormTaskEdit(task);
 			FormT.IsNew=true;
 			FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 			FormT.Show();//non-modal
@@ -790,7 +792,7 @@ namespace OpenDental {
 					DeleteEntireList(ClipTaskList);
 				}
 				else if(ClipTask!=null) {
-					Tasks.Delete(ClipTask);
+					Tasks.Delete(ClipTask.TaskNum);
 				}
 			}
 			FillGrid();
@@ -863,7 +865,7 @@ namespace OpenDental {
 				if(!MsgBox.Show(this,true,"Delete?")) {
 					return;
 				}
-				Tasks.Delete(TasksList[clickedI-TaskListsList.Count]);
+				Tasks.Delete(TasksList[clickedI-TaskListsList.Count].TaskNum);
 				DataValid.SetInvalidTask(TasksList[clickedI-TaskListsList.Count].TaskNum,false);
 			}
 			FillGrid();
@@ -878,7 +880,7 @@ namespace OpenDental {
 				DeleteEntireList(childLists[i]);
 			}
 			for(int i=0;i<childTasks.Count;i++) {
-				Tasks.Delete(childTasks[i]);
+				Tasks.Delete(childTasks[i].TaskNum);
 			}
 			try {
 				TaskLists.Delete(list);

@@ -1540,8 +1540,9 @@ namespace OpenDental{
 		}
 
 		private void FormPayment_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(DialogResult==DialogResult.OK)
+			if(DialogResult==DialogResult.OK) {
 				return;
+			}
 			if(IsNew){ 
 				Payments.Delete(PaymentCur);
 			}
