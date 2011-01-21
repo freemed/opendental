@@ -222,7 +222,7 @@ namespace OpenDental{
 			// 
 			// listToolBars
 			// 
-			this.listToolBars.Location = new System.Drawing.Point(15,245);
+			this.listToolBars.Location = new System.Drawing.Point(15,255);
 			this.listToolBars.Name = "listToolBars";
 			this.listToolBars.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listToolBars.Size = new System.Drawing.Size(147,108);
@@ -230,7 +230,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(14,211);
+			this.label6.Location = new System.Drawing.Point(14,221);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(223,30);
 			this.label6.TabIndex = 56;
@@ -239,14 +239,14 @@ namespace OpenDental{
 			// 
 			// textButtonText
 			// 
-			this.textButtonText.Location = new System.Drawing.Point(246,160);
+			this.textButtonText.Location = new System.Drawing.Point(246,170);
 			this.textButtonText.Name = "textButtonText";
 			this.textButtonText.Size = new System.Drawing.Size(195,20);
 			this.textButtonText.TabIndex = 58;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(13,161);
+			this.label7.Location = new System.Drawing.Point(13,171);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(232,18);
 			this.label7.TabIndex = 57;
@@ -255,7 +255,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(246,367);
+			this.textNote.Location = new System.Drawing.Point(246,377);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
@@ -264,7 +264,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(246,347);
+			this.label8.Location = new System.Drawing.Point(246,357);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(221,17);
 			this.label8.TabIndex = 60;
@@ -275,15 +275,16 @@ namespace OpenDental{
 			// 
 			this.label9.Location = new System.Drawing.Point(244,128);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(410,29);
+			this.label9.Size = new System.Drawing.Size(410,39);
 			this.label9.TabIndex = 61;
-			this.label9.Text = "For custom bridges, NOT for regular bridges, you can also include [PatNum], [Char" +
-    "tNumber], [WirelessPhone], or [HmPhone] in either of the two boxes above.";
+			this.label9.Text = "For custom bridges, NOT for regular bridges, you can also include [LName], [FName" +
+    "], [PatNum], [ChartNumber], [WirelessPhone], or [HmPhone] in either of the two b" +
+    "oxes above.";
 			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(246,211);
+			this.gridMain.Location = new System.Drawing.Point(246,221);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(410,133);
@@ -294,14 +295,14 @@ namespace OpenDental{
 			// 
 			// textPluginDllName
 			// 
-			this.textPluginDllName.Location = new System.Drawing.Point(246,185);
+			this.textPluginDllName.Location = new System.Drawing.Point(246,195);
 			this.textPluginDllName.Name = "textPluginDllName";
 			this.textPluginDllName.Size = new System.Drawing.Size(195,20);
 			this.textPluginDllName.TabIndex = 64;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(13,186);
+			this.label5.Location = new System.Drawing.Point(13,196);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(232,18);
 			this.label5.TabIndex = 63;
@@ -342,8 +343,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Program Link";
-			this.Load += new System.EventHandler(this.FormProgramLinkEdit_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProgramLinkEdit_Closing);
+			this.Load += new System.EventHandler(this.FormProgramLinkEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
