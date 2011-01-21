@@ -18,13 +18,12 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private TaskObjectType OType;
-		//<summary>If dialog result=ok, this will contain the TaskList that was selected.</summary>
-		//public TaskList SelectedList;
+		///<summary>If dialog result=ok, this will contain the TaskListNum that was selected.</summary>
 		private TaskList[] TaskListList;
-		private long KeyNum;
+		public long SelectedTaskListNum;
 
 		///<summary></summary>
-		public FormTaskListSelect(TaskObjectType oType,long keyNum)
+		public FormTaskListSelect(TaskObjectType oType)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -32,7 +31,6 @@ namespace OpenDental{
 			InitializeComponent();
 			Lan.F(this);
 			OType=oType;
-			KeyNum=keyNum;
 		}
 
 		/// <summary>
@@ -71,9 +69,9 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(275,172);
+			this.butCancel.Location = new System.Drawing.Point(257,407);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -86,25 +84,25 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(275,131);
+			this.butOK.Location = new System.Drawing.Point(257,366);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// listMain
 			// 
-			this.listMain.Location = new System.Drawing.Point(18,22);
+			this.listMain.Location = new System.Drawing.Point(12,12);
 			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(225,173);
+			this.listMain.Size = new System.Drawing.Size(225,420);
 			this.listMain.TabIndex = 2;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// FormTaskListSelect
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(402,223);
+			this.ClientSize = new System.Drawing.Size(349,446);
 			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -132,6 +130,8 @@ namespace OpenDental{
 			if(listMain.SelectedIndex==-1){
 				return;
 			}
+			SelectedTaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;
+			/*
 			Task task=new Task();
 			task.TaskListNum=-1;//don't show it in any list yet.
 			Tasks.Insert(task);
@@ -140,9 +140,9 @@ namespace OpenDental{
 			task.TaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;
 			FormTaskEdit FormT=new FormTaskEdit(task);
 			FormT.IsNew=true;
-			FormT.Show();
-			//DialogResult=DialogResult.OK;
-			Close();
+			FormT.Show();*/
+			DialogResult=DialogResult.OK;
+			//Close();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -150,6 +150,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a task list first.");
 				return;
 			}
+			SelectedTaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;
+			/*
 			Task task=new Task();
 			task.TaskListNum=-1;//don't show it in any list yet.
 			Tasks.Insert(task);
@@ -158,14 +160,14 @@ namespace OpenDental{
 			task.TaskListNum=TaskListList[listMain.SelectedIndex].TaskListNum;
 			FormTaskEdit FormT=new FormTaskEdit(task);
 			FormT.IsNew=true;
-			FormT.Show();
-			//DialogResult=DialogResult.OK;
-			Close();
+			FormT.Show();*/
+			DialogResult=DialogResult.OK;
+			//Close();
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
-			//DialogResult=DialogResult.Cancel;
-			Close();
+			DialogResult=DialogResult.Cancel;
+			//Close();
 		}
 
 		

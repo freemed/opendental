@@ -58,7 +58,6 @@ namespace OpenDental{
 		private Label labelReply;
 		private OpenDental.UI.Button butReply;
 		private OpenDental.UI.Button butSend;
-		private Label label9;
 		private TextBox textTaskList;
 		private Label label10;
 		private ComboBox comboDateType;
@@ -115,8 +114,6 @@ namespace OpenDental{
 			this.listObjectType = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.panelObject = new System.Windows.Forms.Panel();
-			this.butGoto = new OpenDental.UI.Button();
-			this.butChange = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textDateTimeEntry = new System.Windows.Forms.TextBox();
 			this.textUser = new System.Windows.Forms.TextBox();
@@ -130,21 +127,22 @@ namespace OpenDental{
 			this.labelTaskNum = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.labelReply = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
 			this.textTaskList = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.comboDateType = new System.Windows.Forms.ComboBox();
+			this.butAddNote = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSend = new OpenDental.UI.Button();
 			this.butReply = new OpenDental.UI.Button();
 			this.butNowFinished = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butNow = new OpenDental.UI.Button();
+			this.butGoto = new OpenDental.UI.Button();
+			this.butChange = new OpenDental.UI.Button();
 			this.textDateTask = new OpenDental.ValidDate();
 			this.textDescript = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAddNote = new OpenDental.UI.Button();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -238,34 +236,6 @@ namespace OpenDental{
 			this.panelObject.Name = "panelObject";
 			this.panelObject.Size = new System.Drawing.Size(594,64);
 			this.panelObject.TabIndex = 15;
-			// 
-			// butGoto
-			// 
-			this.butGoto.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butGoto.Autosize = true;
-			this.butGoto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGoto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGoto.CornerRadius = 4F;
-			this.butGoto.Location = new System.Drawing.Point(200,39);
-			this.butGoto.Name = "butGoto";
-			this.butGoto.Size = new System.Drawing.Size(75,24);
-			this.butGoto.TabIndex = 12;
-			this.butGoto.Text = "Go To";
-			this.butGoto.Click += new System.EventHandler(this.butGoto_Click);
-			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(123,39);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(75,24);
-			this.butChange.TabIndex = 10;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// label5
 			// 
@@ -389,16 +359,6 @@ namespace OpenDental{
 			this.labelReply.Text = "(Send to author)";
 			this.labelReply.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// label9
-			// 
-			this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label9.Location = new System.Drawing.Point(346,654);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(134,19);
-			this.label9.TabIndex = 143;
-			this.label9.Text = "(Send to other user)";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// textTaskList
 			// 
 			this.textTaskList.Location = new System.Drawing.Point(470,30);
@@ -424,6 +384,37 @@ namespace OpenDental{
 			this.comboDateType.Name = "comboDateType";
 			this.comboDateType.Size = new System.Drawing.Size(145,21);
 			this.comboDateType.TabIndex = 148;
+			// 
+			// butAddNote
+			// 
+			this.butAddNote.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddNote.Autosize = true;
+			this.butAddNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddNote.CornerRadius = 4F;
+			this.butAddNote.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddNote.Location = new System.Drawing.Point(648,472);
+			this.butAddNote.Name = "butAddNote";
+			this.butAddNote.Size = new System.Drawing.Size(80,24);
+			this.butAddNote.TabIndex = 150;
+			this.butAddNote.Text = "Add";
+			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,173);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(798,293);
+			this.gridMain.TabIndex = 149;
+			this.gridMain.Title = "Notes";
+			this.gridMain.TranslationName = "FormTaskEdit";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butSend
 			// 
@@ -500,6 +491,34 @@ namespace OpenDental{
 			this.butNow.Text = "Now";
 			this.butNow.Click += new System.EventHandler(this.butNow_Click);
 			// 
+			// butGoto
+			// 
+			this.butGoto.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGoto.Autosize = true;
+			this.butGoto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGoto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGoto.CornerRadius = 4F;
+			this.butGoto.Location = new System.Drawing.Point(200,39);
+			this.butGoto.Name = "butGoto";
+			this.butGoto.Size = new System.Drawing.Size(75,24);
+			this.butGoto.TabIndex = 12;
+			this.butGoto.Text = "Go To";
+			this.butGoto.Click += new System.EventHandler(this.butGoto_Click);
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(123,39);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(75,24);
+			this.butChange.TabIndex = 10;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
+			// 
 			// textDateTask
 			// 
 			this.textDateTask.Location = new System.Drawing.Point(127,472);
@@ -550,37 +569,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,173);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(798,293);
-			this.gridMain.TabIndex = 149;
-			this.gridMain.Title = "Notes";
-			this.gridMain.TranslationName = "FormTaskEdit";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
-			// butAddNote
-			// 
-			this.butAddNote.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAddNote.Autosize = true;
-			this.butAddNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddNote.CornerRadius = 4F;
-			this.butAddNote.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddNote.Location = new System.Drawing.Point(648,472);
-			this.butAddNote.Name = "butAddNote";
-			this.butAddNote.Size = new System.Drawing.Size(80,24);
-			this.butAddNote.TabIndex = 150;
-			this.butAddNote.Text = "Add";
-			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
-			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -590,7 +578,6 @@ namespace OpenDental{
 			this.Controls.Add(this.comboDateType);
 			this.Controls.Add(this.textTaskList);
 			this.Controls.Add(this.label10);
-			this.Controls.Add(this.label9);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.labelReply);
 			this.Controls.Add(this.butReply);
@@ -739,6 +726,9 @@ namespace OpenDental{
 			FormTaskNoteEdit form=new FormTaskNoteEdit();
 			form.TaskNoteCur=NoteList[e.Row];
 			form.ShowDialog();
+			if(form.DialogResult==DialogResult.OK) {
+				notesChanged=true;
+			}
 			FillGrid();
 		}
 
@@ -750,6 +740,9 @@ namespace OpenDental{
 			form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
 			form.TaskNoteCur.IsNew=true;
 			form.ShowDialog();
+			if(form.DialogResult==DialogResult.OK) {
+				notesChanged=true;
+			}
 			FillGrid();
 		}
 
@@ -951,16 +944,30 @@ namespace OpenDental{
 		///<summary>Send to another user.</summary>
 		private void butSend_Click(object sender,EventArgs e) {
 			//This button is always present.
-			FormTaskSendUser FormT=new FormTaskSendUser();
-			FormT.ShowDialog();
-			if(FormT.DialogResult!=DialogResult.OK){
-				return;
+			if(listObjectType.SelectedIndex==(int)TaskObjectType.Patient) {
+				FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient);
+				FormT.ShowDialog();
+				if(FormT.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				TaskCur.TaskListNum=FormT.SelectedTaskListNum;
+				if(!SaveCur(true)) {
+					return;
+				}
+				DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
 			}
-			TaskCur.TaskListNum=FormT.TaskListNum;
-			if(!SaveCur(true)){
-				return;
+			else {//to an in-box
+				FormTaskSendUser FormT=new FormTaskSendUser();
+				FormT.ShowDialog();
+				if(FormT.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				TaskCur.TaskListNum=FormT.TaskListNum;
+				if(!SaveCur(true)) {
+					return;
+				}
+				DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
 			}
-			DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
 			DialogResult=DialogResult.OK;
 			Close();
 		}

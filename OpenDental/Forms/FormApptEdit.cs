@@ -2470,8 +2470,20 @@ namespace OpenDental{
 			if(!UpdateToDB()) {
 				return;
 			}
-			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Appointment,AptCur.AptNum);
+			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Appointment);//,AptCur.AptNum);
 			FormT.ShowDialog();
+			if(FormT.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			Task task=new Task();
+			task.TaskListNum=-1;//don't show it in any list yet.
+			Tasks.Insert(task);
+			task.KeyNum=AptCur.AptNum;
+			task.ObjectType=TaskObjectType.Appointment;
+			task.TaskListNum=FormT.SelectedTaskListNum;
+			FormTaskEdit FormTE=new FormTaskEdit(task);
+			FormTE.IsNew=true;
+			FormTE.ShowDialog();
 		}
 
 		private void butPin_Click(object sender,System.EventArgs e) {

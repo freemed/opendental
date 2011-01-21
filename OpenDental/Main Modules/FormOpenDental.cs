@@ -2171,9 +2171,21 @@ namespace OpenDental{
 		}
 
 		private void OnTasklist_Click(){
-			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,CurPatNum);
+			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient);//,CurPatNum);
 			FormT.Location=new Point(50,50);
-			FormT.Show();
+			FormT.ShowDialog();
+			if(FormT.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			Task task=new Task();
+			task.TaskListNum=-1;//don't show it in any list yet.
+			Tasks.Insert(task);
+			task.KeyNum=CurPatNum;
+			task.ObjectType=TaskObjectType.Patient;
+			task.TaskListNum=FormT.SelectedTaskListNum;
+			FormTaskEdit FormTE=new FormTaskEdit(task);
+			FormTE.IsNew=true;
+			FormTE.Show();
 		}
 
 		private void OnLabel_Click() {
