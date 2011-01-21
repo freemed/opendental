@@ -590,6 +590,7 @@
     <Compile Include="TableTypes\ProcGroupItem.cs" />
     <Compile Include="TableTypes\ProcApptColor.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
+    <Compile Include="TableTypes\TaskNote.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
     <Compile Include="TableTypes\Equipment.cs" />
     <Compile Include="TableTypes\ReplicationServer.cs" />
