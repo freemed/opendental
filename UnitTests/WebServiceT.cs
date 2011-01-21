@@ -141,6 +141,22 @@ namespace UnitTests {
 				throw new Exception("Should be 1 hour.");
 			}
 			retVal+="GetTimeSpan: Passed.\r\n";
+			//GetStringContainingCR
+			//fails, but we have a strategy to fix some day by putting serialization code into the crud layer.
+			/*
+			strResult=WebServiceTests.GetStringContainingCR();
+			strResult=strResult.Replace("\\r","\r");
+			if(strResult!="Line1\r\nLine2") {
+				throw new Exception("Should be Line1\r\nLine2");
+			}
+			retVal+="GetStringContainingCR: Passed.\r\n";
+			//GetListTasksContainingCR
+			Task task=WebServiceTests.GetListTasksContainingCR()[0];
+			if(task.Descript!="Line1\r\nLine2") {
+				throw new Exception("Should be Line1\r\nLine2");
+			}
+			retVal+="GetListTasksContainingCR: Passed.\r\n";*/
+
 
 			
 			return retVal;

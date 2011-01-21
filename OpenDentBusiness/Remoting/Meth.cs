@@ -182,11 +182,12 @@ namespace OpenDentBusiness {
 				throw new ApplicationException("Meth.GetBool may only be used when RemotingRole is ClientWeb.");
 			}
 			#if DEBUG
+			/*
 				//Verify that it returns string
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
 				if(methodInfo.ReturnType != typeof(bool)) {
 					throw new ApplicationException("Meth.GetBool calling class must return bool.");
-				}
+				}*/
 			#endif
 			DtoGetBool dto=new DtoGetBool();
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;

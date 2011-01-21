@@ -177,6 +177,26 @@ namespace OpenDentBusiness {
 			}
 			return new TimeSpan(1,0,0);
 		}
+
+		public static string GetStringContainingCR() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			return "Line1\r\nLine2";
+		}
+
+		public static List<Task> GetListTasksContainingCR() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod());
+			}
+			Task task=new Task();
+//			task.Descript="Line1";
+			task.Descript="Line1\r\nLine2";
+			List<Task> retVal=new List<Task>();
+			retVal.Add(task);
+			return retVal;
+		}
+		
 		
 
 

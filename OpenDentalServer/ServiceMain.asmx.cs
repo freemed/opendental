@@ -165,6 +165,8 @@ namespace OpenDentalServer {
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
 					string strResult=(string)methodInfo.Invoke(null,paramObjs);
+					//strResult=strResult.Replace("\r","\\r");
+					//return XmlConverter.Serialize(typeof(string),strResult);
 					return strResult;
 				}
 				else if(type == typeof(DtoGetBool)) {
