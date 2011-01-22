@@ -575,20 +575,26 @@ namespace OpenDental {
 		}
 
 		private void AddTask_Clicked() {
-			if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//trunk of user tab
-				MsgBox.Show(this,"Not allowed to add a task to the trunk of the user tab.  Add it to a child list instead.");
-				return;
-			}
-			if(tabContr.SelectedTab==tabNew) {//new tab
-				MsgBox.Show(this,"Not allowed to add items to the 'New' tab.");
-				return;
-			}
+			//if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//trunk of user tab
+			//	MsgBox.Show(this,"Not allowed to add a task to the trunk of the user tab.  Add it to a child list instead.");
+			//	return;
+			//}
+			//if(tabContr.SelectedTab==tabNew) {//new tab
+			//	MsgBox.Show(this,"Not allowed to add items to the 'New' tab.");
+			//	return;
+			//}
 			Task task=new Task();
 			task.TaskListNum=-1;//don't show it in any list yet.
 			Tasks.Insert(task);
 			//if this is a child of any taskList
 			if(TreeHistory.Count>0) {
 				task.TaskListNum=TreeHistory[TreeHistory.Count-1].TaskListNum;
+			}
+			else if(tabContr.SelectedTab==tabNew) {//new tab
+				task.TaskListNum=-1;
+			}
+			else if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//trunk of user tab
+				task.TaskListNum=-1;
 			}
 			else {
 				task.TaskListNum=0;

@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		///<summary>The date and time that this task was added.  Used to sort the list by the order entered.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEntry;
-		///<summary>FK to user.UserNum.  The person who created the task or who made the most recent edit to the task.</summary>
+		///<summary>FK to user.UserNum.  The person who created the task.</summary>
 		public long UserNum;
 		///<summary>The date and time that this task was marked "done".</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]

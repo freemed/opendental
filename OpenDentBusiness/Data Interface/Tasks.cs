@@ -164,6 +164,7 @@ namespace OpenDentBusiness{
 			return Crud.TaskCrud.SelectMany(command);
 		}
 
+		/*
 		public static List<Task> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			List<Task> retVal=new List<Task>();
@@ -186,7 +187,7 @@ namespace OpenDentBusiness{
 				retVal.Add(task);
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>Must supply the supposedly unaltered oldTask.  The update will fail if oldTask does not exactly match the database state.  Keeps users from overwriting each other's changes.</summary>
 		public static void Update(Task task,Task oldTask){

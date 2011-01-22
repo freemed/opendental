@@ -11,7 +11,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormTaskSendUser:Form {
 		private List<TaskList> FilteredList;
-		///<summary>If OK, then this will contain the selected </summary>
+		///<summary>If OK, then this will contain the selected TaskListNum</summary>
 		public long TaskListNum;
 
 		public FormTaskSendUser() {

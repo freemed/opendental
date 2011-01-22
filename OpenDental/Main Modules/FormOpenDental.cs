@@ -2762,8 +2762,16 @@ namespace OpenDental{
 				if(tasksPopup.Count>0) {
 					for(int i=0;i<tasksPopup.Count;i++) {
 						//Even though this is triggered to popup, if this is my own task, then do not popup.
-						if(tasksPopup[i].UserNum==Security.CurUser.UserNum) {
-							continue;
+						List<TaskNote> notesForThisTask=TaskNotes.GetForTask(tasksPopup[i].TaskNum);
+						if(notesForThisTask.Count==0) {//'sender' is the usernum on the task
+							if(tasksPopup[i].UserNum==Security.CurUser.UserNum) {
+								continue;
+							}
+						}
+						else {//'sender' is the user on the last added note
+							if(notesForThisTask[notesForThisTask.Count-1].UserNum==Security.CurUser.UserNum) {
+								continue;
+							}
 						}
 						if(tasksPopup[i].TaskListNum!=Security.CurUser.TaskListInBox//if not my inbox
 							&& userControlTasks1.PopupsAreBlocked)//and popups blocked

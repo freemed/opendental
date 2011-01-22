@@ -20,6 +20,21 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static List<Userod> ShortList {
+			get {
+				if(listt==null) {
+					Userods.RefreshCache();
+				}
+				List<Userod> shortList=new List<Userod>();
+				for(int i=0;i<listt.Count;i++) {
+					if(!listt[i].IsHidden) {
+						shortList.Add(listt[i]);
+					}
+				}
+				return shortList;
+			}
+		}
+
 		
 	}
 }

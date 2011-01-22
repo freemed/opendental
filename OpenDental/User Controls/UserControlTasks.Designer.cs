@@ -27,6 +27,7 @@ namespace OpenDental {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlTasks));
 			this.tabContr = new System.Windows.Forms.TabControl();
 			this.tabUser = new System.Windows.Forms.TabPage();
+			this.tabNew = new System.Windows.Forms.TabPage();
 			this.tabMain = new System.Windows.Forms.TabPage();
 			this.tabRepeating = new System.Windows.Forms.TabPage();
 			this.tabDate = new System.Windows.Forms.TabPage();
@@ -53,7 +54,6 @@ namespace OpenDental {
 			this.textStartDate = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.tabNew = new System.Windows.Forms.TabPage();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -83,6 +83,15 @@ namespace OpenDental {
 			this.tabUser.TabIndex = 5;
 			this.tabUser.Text = "for User";
 			this.tabUser.UseVisualStyleBackColor = true;
+			// 
+			// tabNew
+			// 
+			this.tabNew.Location = new System.Drawing.Point(4,22);
+			this.tabNew.Name = "tabNew";
+			this.tabNew.Size = new System.Drawing.Size(933,0);
+			this.tabNew.TabIndex = 6;
+			this.tabNew.Text = "New for User";
+			this.tabNew.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -294,8 +303,8 @@ namespace OpenDental {
 			this.gridMain.TabIndex = 9;
 			this.gridMain.Title = "Tasks";
 			this.gridMain.TranslationName = "TableTasks";
-			this.gridMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseDown);
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseDown);
 			// 
 			// ToolBarMain
 			// 
@@ -306,15 +315,6 @@ namespace OpenDental {
 			this.ToolBarMain.Size = new System.Drawing.Size(941,25);
 			this.ToolBarMain.TabIndex = 2;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
-			// tabNew
-			// 
-			this.tabNew.Location = new System.Drawing.Point(4,22);
-			this.tabNew.Name = "tabNew";
-			this.tabNew.Size = new System.Drawing.Size(933,0);
-			this.tabNew.TabIndex = 6;
-			this.tabNew.Text = "New for User";
-			this.tabNew.UseVisualStyleBackColor = true;
 			// 
 			// UserControlTasks
 			// 

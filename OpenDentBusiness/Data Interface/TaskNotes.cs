@@ -7,7 +7,7 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class TaskNotes{
-		///<summary></summary>
+		///<summary>A list of notes for one task, ordered by datetime.</summary>
 		public static List<TaskNote> GetForTask(long taskNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<TaskNote>>(MethodBase.GetCurrentMethod(),taskNum);

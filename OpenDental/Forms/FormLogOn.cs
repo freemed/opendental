@@ -18,7 +18,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textPassword;
-		private System.Windows.Forms.Button butResetPassword;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -64,7 +63,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textPassword = new System.Windows.Forms.TextBox();
-			this.butResetPassword = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -99,15 +97,15 @@ namespace OpenDental{
 			// 
 			// listUser
 			// 
-			this.listUser.Location = new System.Drawing.Point(51,31);
+			this.listUser.Location = new System.Drawing.Point(31,31);
 			this.listUser.Name = "listUser";
-			this.listUser.Size = new System.Drawing.Size(120,316);
+			this.listUser.Size = new System.Drawing.Size(141,316);
 			this.listUser.TabIndex = 2;
 			this.listUser.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listUser_MouseUp);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(50,10);
+			this.label1.Location = new System.Drawing.Point(30,10);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(122,18);
 			this.label1.TabIndex = 6;
@@ -131,22 +129,11 @@ namespace OpenDental{
 			this.textPassword.Size = new System.Drawing.Size(215,20);
 			this.textPassword.TabIndex = 0;
 			// 
-			// butResetPassword
-			// 
-			this.butResetPassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.butResetPassword.ForeColor = System.Drawing.SystemColors.Control;
-			this.butResetPassword.Location = new System.Drawing.Point(-1,334);
-			this.butResetPassword.Name = "butResetPassword";
-			this.butResetPassword.Size = new System.Drawing.Size(50,38);
-			this.butResetPassword.TabIndex = 45;
-			this.butResetPassword.Click += new System.EventHandler(this.butResetPassword_Click);
-			// 
 			// FormLogOn
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(464,378);
-			this.Controls.Add(this.butResetPassword);
 			this.Controls.Add(this.textPassword);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -175,14 +162,10 @@ namespace OpenDental{
 		}
 
 		private void butResetPassword_Click(object sender, System.EventArgs e) {
-			FormPasswordReset FormPR=new FormPasswordReset();
-			FormPR.ShowDialog();
+			//This feature was never used, so was removed.
+			//FormPasswordReset FormPR=new FormPasswordReset();
+			//FormPR.ShowDialog();
 		}
-
-		//js-Someone else added this. I don't know what it's for:
-		/*private void FormLogOn_MinimumSizeChanged(object sender, EventArgs e){		
-			this.Parent.MinimumSize = this.MinimumSize;
-		}*/
 
 		private void FillListBox(){
 			Userods.RefreshCache();
@@ -190,12 +173,7 @@ namespace OpenDental{
 			GroupPermissions.RefreshCache();
 			listUser.BeginUpdate();
 			listUser.Items.Clear();
-			shortList=new List<Userod>();
-			for(int i=0;i<UserodC.Listt.Count;i++){
-				if(!UserodC.Listt[i].IsHidden){
-					shortList.Add(UserodC.Listt[i]);
-				}
-			}
+			shortList=UserodC.ShortList;
 			for(int i=0;i<shortList.Count;i++){
 				listUser.Items.Add(shortList[i]);
 				if(Security.CurUser!=null && shortList[i].UserNum==Security.CurUser.UserNum){
