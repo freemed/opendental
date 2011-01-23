@@ -268,6 +268,7 @@ namespace OpenDentBusiness {
 		TaskAncestorsAllSetInVersion55,
 		TaskListAlwaysShowsAtBottom,
 		TasksCheckOnStartup,
+		TasksNewTrackedByUser,
 		TerminalClosePassword,
 		TimecardSecurityEnabled,
 		TimeCardsMakesAdjustmentsForOverBreaks,

@@ -3231,6 +3231,9 @@ namespace OpenDental{
 			myOutlookBar.Invalidate();
 			UnselectActive();
 			allNeutral();
+			if(userControlTasks1.Visible) {
+				userControlTasks1.ClearLogOff();
+			}
 			FormLogOn FormL=new FormLogOn();
 			FormL.ShowDialog(this);
 			if(FormL.DialogResult==DialogResult.Cancel){

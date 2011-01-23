@@ -16,7 +16,15 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
-				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0),"
+				+"AND task.TaskNum=taskancestor.TaskNum ";
+			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+				command+="AND EXISTS(SELECT * FROM taskunread WHERE taskunread.TaskNum=task.TaskNum "
+					+"AND taskunread.UserNum="+POut.Long(userNum)+")";
+			}
+			else {
+				command+="AND task.TaskStatus=0";
+			}
+			command+="),"
 				+"t2.Descript,t3.Descript FROM tasksubscription "
 				+"LEFT JOIN tasklist ON tasklist.TaskListNum=tasksubscription.TaskListNum "
 				+"LEFT JOIN tasklist t2 ON t2.TaskListNum=tasklist.Parent "
@@ -26,23 +34,36 @@ namespace OpenDentBusiness{
 				+"WHERE tasksubscription.UserNum="+POut.Long(userNum)
 				+" AND tasksubscription.TaskListNum!=0 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return TableToList(Db.GetTable(command));
 		}
 
-		///<summary>Gets all task lists for the main trunk.</summary>
-		public static List<TaskList> RefreshMainTrunk() {
+		///<summary>Gets all task lists for the main trunk.  Pass in the current user.</summary>
+		public static List<TaskList> RefreshMainTrunk(long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
-				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"AND task.TaskNum=taskancestor.TaskNum ";
+			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+				command+="AND EXISTS(SELECT * FROM taskunread WHERE taskunread.TaskNum=task.TaskNum ";
+				//if a list is someone's inbox, 
+				command+="AND (CASE WHEN EXISTS(SELECT * FROM userod WHERE userod.TaskListInBox=tasklist.TaskListNum) ";
+				//then restrict by that user
+				command+="THEN (taskunread.UserNum=(SELECT UserNum FROM userod WHERE userod.TaskListInBox=tasklist.TaskListNum)) ";
+				//otherwise, restrict by current user
+				command+="ELSE taskunread.UserNum="+POut.Long(userNum)+" END))";
+			}
+			else {
+				command+="AND task.TaskStatus=0";
+			}
+			command+=") "
 				+"FROM tasklist "
 				+"WHERE Parent=0 "
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=0 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return TableToList(Db.GetTable(command));
 		}
 
 		///<summary>Gets all task lists for the repeating trunk.</summary>
@@ -53,27 +74,45 @@ namespace OpenDentBusiness{
 			string command="SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				//I don't think the repeating trunk would ever track by user, so no special treatment here.
+				//Acutual behavior in both cases needs to be tested.
 				+"FROM tasklist "
 				+"WHERE Parent=0 "
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return TableToList(Db.GetTable(command));
 		}
 
-		///<summary>0 is not allowed, because that would be a trunk.</summary>
-		public static List<TaskList> RefreshChildren(long parent) {
+		///<summary>0 is not allowed, because that would be a trunk.  Pass in the current user.  Also, if this is in someone's inbox, then pass in the userNum whose inbox it is in.  If not in an inbox, pass in 0.</summary>
+		public static List<TaskList> RefreshChildren(long parent,long userNum,long userNumInbox) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),parent);
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),parent,userNum,userNumInbox);
 			}
 			string command=
 				"SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
-				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"AND task.TaskNum=taskancestor.TaskNum ";
+			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+				command+="AND EXISTS(SELECT * FROM taskunread WHERE taskunread.TaskNum=task.TaskNum ";
+				//if a list is someone's inbox,
+				if(userNumInbox>0) {
+					//then restrict by that user
+					command+="AND taskunread.UserNum="+POut.Long(userNumInbox)+") ";
+				}
+				else{
+					//otherwise, restrict by current user
+					command+="AND taskunread.UserNum="+POut.Long(userNum)+") ";
+				}
+			}
+			else {
+				command+="AND task.TaskStatus=0";
+			}
+			command+=") "
 				+"FROM tasklist "
 				+"WHERE Parent="+POut.Long(parent)
 				+" ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return TableToList(Db.GetTable(command));
 		}
 
 		///<summary>All repeating items for one date type with no heirarchy.</summary>
@@ -85,11 +124,12 @@ namespace OpenDentBusiness{
 				"SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				//See the note in RefreshRepeatingTrunk.  Behavior needs to be tested.
 				+"FROM tasklist "
 				+"WHERE IsRepeating=1 "
 				+"AND DateType="+POut.Long((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return TableToList(Db.GetTable(command));
 		}
 
 		///<summary>Gets all task lists for one of the 3 dated trunks.</summary>
@@ -114,13 +154,20 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
-				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"AND task.TaskNum=taskancestor.TaskNum ";
+			//if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+			//	command+="AND EXISTS(SELECT * FROM taskunread WHERE taskunread.TaskNum=task.TaskNum)";
+			//}
+			//else {
+				command+="AND task.TaskStatus=0";
+			//}
+			command+=") "
 				+"FROM tasklist "
 				+"WHERE DateTL >= "+POut.Date(dateFrom)
 				+" AND DateTL <= "+POut.Date(dateTo)
 				+" AND DateType="+POut.Long((int)dateType)
 				+" ORDER BY DateTimeEntry";
-			return RefreshAndFill(Db.GetTable(command));
+			return TableToList(Db.GetTable(command));
 		}
 
 		///<summary></summary>
@@ -142,7 +189,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM tasklist WHERE DateType=0 ";
 		}*/
 
-		private static List<TaskList> RefreshAndFill(DataTable table){
+		private static List<TaskList> TableToList(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			List<TaskList> retVal=Crud.TaskListCrud.TableToList(table);
 			TaskList tasklist;
@@ -239,7 +286,13 @@ namespace OpenDentBusiness{
  			Db.NonQ(command);
 		}
 
-		
+		public static long GetMailboxUserNum(long taskListNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),taskListNum);
+			}
+			string command="SELECT UserNum FROM userod WHERE TaskListInBox="+POut.Long(taskListNum);
+			return PIn.Long(Db.GetScalar(command));
+		}
 	
 	
 

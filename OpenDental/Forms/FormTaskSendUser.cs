@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		private void FormTaskSendUser_Load(object sender,EventArgs e) {
 			List<Userod> UserList=Userods.GetNotHidden();
-			List<TaskList> TrunkList=TaskLists.RefreshMainTrunk();
+			List<TaskList> TrunkList=TaskLists.RefreshMainTrunk(Security.CurUser.UserNum);
 			FilteredList=new List<TaskList>();
 			for(int i=0;i<UserList.Count;i++){
 				if(UserList[i].TaskListInBox==0){

@@ -42,6 +42,7 @@ namespace OpenDental{
 		private CheckBox checkReportsShowPatNum;
 		private CheckBox checkReportProdWO;
 		private GroupBox groupBox1;
+		private CheckBox checkTasksNewTrackedByUser;
 		private Label label1;
 		//private List<Def> posAdjTypes;
 
@@ -77,6 +78,7 @@ namespace OpenDental{
 			this.checkBoxTaskKeepListHidden = new System.Windows.Forms.CheckBox();
 			this.validNumY = new OpenDental.ValidNumber();
 			this.validNumX = new OpenDental.ValidNumber();
+			this.checkTasksNewTrackedByUser = new System.Windows.Forms.CheckBox();
 			this.labelX = new System.Windows.Forms.Label();
 			this.labelY = new System.Windows.Forms.Label();
 			this.comboShowID = new System.Windows.Forms.ComboBox();
@@ -144,31 +146,25 @@ namespace OpenDental{
 			// radioBottom
 			// 
 			this.radioBottom.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioBottom.Location = new System.Drawing.Point(170,45);
+			this.radioBottom.Location = new System.Drawing.Point(185,38);
 			this.radioBottom.Name = "radioBottom";
-			this.radioBottom.Size = new System.Drawing.Size(111,17);
+			this.radioBottom.Size = new System.Drawing.Size(96,17);
 			this.radioBottom.TabIndex = 190;
 			this.radioBottom.TabStop = true;
 			this.radioBottom.Text = "Dock Bottom";
 			this.radioBottom.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.radioBottom,"Will show task list on the bottom of the main screen.\r\nYou can also change this s" +
-        "etting by right clicking on the splitter bar between the task list and main prog" +
-        "ram.");
 			this.radioBottom.UseVisualStyleBackColor = true;
 			// 
 			// radioRight
 			// 
 			this.radioRight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioRight.Location = new System.Drawing.Point(63,45);
+			this.radioRight.Location = new System.Drawing.Point(84,38);
 			this.radioRight.Name = "radioRight";
 			this.radioRight.Size = new System.Drawing.Size(99,17);
 			this.radioRight.TabIndex = 191;
 			this.radioRight.TabStop = true;
 			this.radioRight.Text = "Dock Right";
 			this.radioRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.radioRight,"Will show task list on the right side of the main screen.\r\nYou can also change th" +
-        "is setting by right clicking on the splitter bar between the task list and main " +
-        "program.");
 			this.radioRight.UseVisualStyleBackColor = true;
 			// 
 			// checkTaskListAlwaysShow
@@ -194,7 +190,6 @@ namespace OpenDental{
 			this.checkTasksCheckOnStartup.TabIndex = 75;
 			this.checkTasksCheckOnStartup.Text = "Check for new user tasks on startup";
 			this.checkTasksCheckOnStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.checkTasksCheckOnStartup,"This will alert you to new tasks when you log in.");
 			// 
 			// checkBoxTaskKeepListHidden
 			// 
@@ -211,7 +206,7 @@ namespace OpenDental{
 			// 
 			// validNumY
 			// 
-			this.validNumY.Location = new System.Drawing.Point(235,77);
+			this.validNumY.Location = new System.Drawing.Point(235,59);
 			this.validNumY.MaxLength = 4;
 			this.validNumY.MaxVal = 1200;
 			this.validNumY.MinVal = 300;
@@ -220,11 +215,10 @@ namespace OpenDental{
 			this.validNumY.TabIndex = 188;
 			this.validNumY.Text = "542";
 			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumY,resources.GetString("validNumY.ToolTip"));
 			// 
 			// validNumX
 			// 
-			this.validNumX.Location = new System.Drawing.Point(115,77);
+			this.validNumX.Location = new System.Drawing.Point(115,59);
 			this.validNumX.MaxLength = 4;
 			this.validNumX.MaxVal = 2000;
 			this.validNumX.MinVal = 300;
@@ -233,11 +227,21 @@ namespace OpenDental{
 			this.validNumX.TabIndex = 186;
 			this.validNumX.Text = "542";
 			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumX,resources.GetString("validNumX.ToolTip"));
+			// 
+			// checkTasksNewTrackedByUser
+			// 
+			this.checkTasksNewTrackedByUser.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTasksNewTrackedByUser.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTasksNewTrackedByUser.Location = new System.Drawing.Point(48,53);
+			this.checkTasksNewTrackedByUser.Name = "checkTasksNewTrackedByUser";
+			this.checkTasksNewTrackedByUser.Size = new System.Drawing.Size(300,14);
+			this.checkTasksNewTrackedByUser.TabIndex = 77;
+			this.checkTasksNewTrackedByUser.Text = "New/Viewed status tracked by individual user";
+			this.checkTasksNewTrackedByUser.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelX
 			// 
-			this.labelX.Location = new System.Drawing.Point(47,77);
+			this.labelX.Location = new System.Drawing.Point(47,59);
 			this.labelX.Name = "labelX";
 			this.labelX.Size = new System.Drawing.Size(62,18);
 			this.labelX.TabIndex = 187;
@@ -246,7 +250,7 @@ namespace OpenDental{
 			// 
 			// labelY
 			// 
-			this.labelY.Location = new System.Drawing.Point(167,77);
+			this.labelY.Location = new System.Drawing.Point(167,59);
 			this.labelY.Name = "labelY";
 			this.labelY.Size = new System.Drawing.Size(62,18);
 			this.labelY.TabIndex = 189;
@@ -264,6 +268,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkTasksNewTrackedByUser);
 			this.groupBox2.Controls.Add(this.groupBoxTaskDefaults);
 			this.groupBox2.Controls.Add(this.checkTaskListAlwaysShow);
 			this.groupBox2.Controls.Add(this.checkTasksCheckOnStartup);
@@ -286,9 +291,9 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults.Controls.Add(this.checkBoxTaskKeepListHidden);
 			this.groupBoxTaskDefaults.Enabled = false;
 			this.groupBoxTaskDefaults.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(67,59);
+			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(67,75);
 			this.groupBoxTaskDefaults.Name = "groupBoxTaskDefaults";
-			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(297,101);
+			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(297,83);
 			this.groupBoxTaskDefaults.TabIndex = 76;
 			this.groupBoxTaskDefaults.TabStop = false;
 			this.groupBoxTaskDefaults.Text = "Local Computer Default Settings";
@@ -435,7 +440,7 @@ namespace OpenDental{
 			// 
 			this.checkReportsShowPatNum.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkReportsShowPatNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportsShowPatNum.Location = new System.Drawing.Point(23,31);
+			this.checkReportsShowPatNum.Location = new System.Drawing.Point(23,32);
 			this.checkReportsShowPatNum.Name = "checkReportsShowPatNum";
 			this.checkReportsShowPatNum.Size = new System.Drawing.Size(414,17);
 			this.checkReportsShowPatNum.TabIndex = 200;
@@ -446,7 +451,7 @@ namespace OpenDental{
 			// 
 			this.checkReportProdWO.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkReportProdWO.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportProdWO.Location = new System.Drawing.Point(23,50);
+			this.checkReportProdWO.Location = new System.Drawing.Point(23,51);
 			this.checkReportProdWO.Name = "checkReportProdWO";
 			this.checkReportProdWO.Size = new System.Drawing.Size(414,17);
 			this.checkReportProdWO.TabIndex = 201;
@@ -522,6 +527,7 @@ namespace OpenDental{
 			else {
 				groupBoxTaskDefaults.Enabled=false;
 			}
+			checkTasksNewTrackedByUser.Checked=PrefC.GetBool(PrefName.TasksNewTrackedByUser);
 			//computerPref=ComputerPrefs.GetForLocalComputer();
 			checkBoxTaskKeepListHidden.Checked=ComputerPrefs.LocalComputer.TaskKeepListHidden;
 			if(ComputerPrefs.LocalComputer.TaskDock==0) {
@@ -587,6 +593,7 @@ namespace OpenDental{
 				| Prefs.UpdateLong(PrefName.ShowIDinTitleBar,comboShowID.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.TaskListAlwaysShowsAtBottom, checkTaskListAlwaysShow.Checked)
 				| Prefs.UpdateBool(PrefName.TasksCheckOnStartup, checkTasksCheckOnStartup.Checked)
+				| Prefs.UpdateBool(PrefName.TasksNewTrackedByUser, checkTasksNewTrackedByUser.Checked)
 				| Prefs.UpdateBool(PrefName.TitleBarShowSite, checkTitleBarShowSite.Checked)
 				| Prefs.UpdateString(PrefName.WebServiceServerName,textWebServiceServerName.Text)
 				| Prefs.UpdateBool(PrefName.ReportsPPOwriteoffDefaultToProcDate,checkReportsProcDate.Checked)

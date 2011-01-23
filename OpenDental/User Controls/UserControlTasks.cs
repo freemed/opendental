@@ -75,14 +75,23 @@ namespace OpenDental {
 			else {//reopening
 				tabContr.SelectedIndex=Tasks.LastOpenGroup;
 				TreeHistory=new List<TaskList>();
-				for(int i=0;i<Tasks.LastOpenList.Count;i++) {
-					TreeHistory.Add(((TaskList)Tasks.LastOpenList[i]).Copy());
-				}
+				//for(int i=0;i<Tasks.LastOpenList.Count;i++) {
+				//	TreeHistory.Add(((TaskList)Tasks.LastOpenList[i]).Copy());
+				//}
 				cal.SelectionStart=Tasks.LastOpenDate;
 			}
 			FillTree();
 			FillGrid();
 			SetMenusEnabled();
+		}
+
+		public void ClearLogOff() {
+			tabUser.Text="for";
+			tabNew.Text="New for";
+			TreeHistory=new List<TaskList>();
+			FillTree();
+			gridMain.Rows.Clear();
+			gridMain.Invalidate();
 		}
 
 		private void UserControlTasks_Load(object sender,System.EventArgs e) {
@@ -229,15 +238,15 @@ namespace OpenDental {
 				List<Task> repeatingTasks=new List<Task>();
 				if(tabContr.SelectedTab==tabDate){
 					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Day);
-					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day,Security.CurUser.UserNum);
 				}
 				if(tabContr.SelectedTab==tabWeek){
 					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Week);
-					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Week);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Week,Security.CurUser.UserNum);
 				}
 				if(tabContr.SelectedTab==tabMonth) {
 					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Month);
-					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Month);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Month,Security.CurUser.UserNum);
 				}
 				//loop through list and add back any that meet criteria.
 				changeMade=false;
@@ -294,7 +303,7 @@ namespace OpenDental {
 			ODGridColumn col=new ODGridColumn("",17);
 			col.ImageList=imageListTree;
 			gridMain.Columns.Add(col);
-			if(tabContr.SelectedTab==tabNew) {
+			if(tabContr.SelectedTab==tabNew && !PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//The old way
 				col=new ODGridColumn(Lan.g("TableTasks","Read"),35,HorizontalAlignment.Center);
 				//col.ImageList=imageListTree;
 				gridMain.Columns.Add(col);
@@ -389,19 +398,34 @@ namespace OpenDental {
 						+" - "+TaskNoteList[n].Note;
 				}
 				row=new ODGridRow();
-				switch(TasksList[i].TaskStatus) {
-					case TaskStatusEnum.New:
-						row.Cells.Add("4");
-						break;
-					case TaskStatusEnum.Viewed:
-						row.Cells.Add("2");
-						break;
-					case TaskStatusEnum.Done:
+				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//The new way
+					if(TasksList[i].TaskStatus==TaskStatusEnum.Done) {
 						row.Cells.Add("1");
-						break;
+					}
+					else {
+						if(TasksList[i].IsUnread) {
+							row.Cells.Add("4");
+						}
+						else{
+							row.Cells.Add("2");
+						}
+					}
 				}
-				if(tabContr.SelectedTab==tabNew) {
-					row.Cells.Add("read");
+				else {
+					switch(TasksList[i].TaskStatus) {
+						case TaskStatusEnum.New:
+							row.Cells.Add("4");
+							break;
+						case TaskStatusEnum.Viewed:
+							row.Cells.Add("2");
+							break;
+						case TaskStatusEnum.Done:
+							row.Cells.Add("1");
+							break;
+					}
+					if(tabContr.SelectedTab==tabNew) {//In this mode, there's a extra column in this tab
+						row.Cells.Add("read");
+					}
 				}
 				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript+notes);
 				gridMain.Rows.Add(row);
@@ -425,8 +449,8 @@ namespace OpenDental {
 		///<summary>A recursive function that checks every child in a list IsFromRepeating.  If any are marked complete, then it returns true, signifying that this list should be immune from being deleted since it's already in use.</summary>
 		private bool AnyAreMarkedComplete(TaskList list) {
 			//get all children:
-			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum);
-			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue);
+			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum,Security.CurUser.UserNum,0);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue,Security.CurUser.UserNum,0);
 			for(int i=0;i<childLists.Count;i++) {
 				if(AnyAreMarkedComplete(childLists[i])) {
 					return true;
@@ -458,8 +482,10 @@ namespace OpenDental {
 				return;
 			}
 			if(parent!=0){//not a trunk
-				TaskListsList=TaskLists.RefreshChildren(parent);
-				TasksList=Tasks.RefreshChildren(parent,checkShowFinished.Checked,startDate);
+				//if(TreeHistory.Count>0//we already know this is true
+				long userNumInbox=TaskLists.GetMailboxUserNum(TreeHistory[0].TaskListNum);
+				TaskListsList=TaskLists.RefreshChildren(parent,Security.CurUser.UserNum,userNumInbox);
+				TasksList=Tasks.RefreshChildren(parent,checkShowFinished.Checked,startDate,Security.CurUser.UserNum,userNumInbox);
 			}
 			else if(tabContr.SelectedTab==tabUser) {
 				TaskListsList=TaskLists.RefreshUserTrunk(Security.CurUser.UserNum);
@@ -470,8 +496,8 @@ namespace OpenDental {
 				TasksList=Tasks.RefreshUserNew(Security.CurUser.UserNum);
 			}
 			else if(tabContr.SelectedTab==tabMain) {
-				TaskListsList=TaskLists.RefreshMainTrunk();
-				TasksList=Tasks.RefreshMainTrunk(checkShowFinished.Checked,startDate);
+				TaskListsList=TaskLists.RefreshMainTrunk(Security.CurUser.UserNum);
+				TasksList=Tasks.RefreshMainTrunk(checkShowFinished.Checked,startDate,Security.CurUser.UserNum);
 			}
 			else if(tabContr.SelectedTab==tabRepeating) {
 				TaskListsList=TaskLists.RefreshRepeatingTrunk();
@@ -479,15 +505,15 @@ namespace OpenDental {
 			}
 			else if(tabContr.SelectedTab==tabDate) {
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Day);
-				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Day,checkShowFinished.Checked,startDate);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Day,checkShowFinished.Checked,startDate,Security.CurUser.UserNum);
 			}
 			else if(tabContr.SelectedTab==tabWeek) {
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Week);
-				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Week,checkShowFinished.Checked,startDate);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Week,checkShowFinished.Checked,startDate,Security.CurUser.UserNum);
 			}
 			else if(tabContr.SelectedTab==tabMonth) {
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Month);
-				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Month,checkShowFinished.Checked,startDate);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Month,checkShowFinished.Checked,startDate,Security.CurUser.UserNum);
 			}
 			//notes
 			List<long> taskNums=new List<long>();
@@ -836,8 +862,8 @@ namespace OpenDental {
 		///<summary>A recursive function that duplicates an entire existing TaskList.  For the initial loop, make changes to the original taskList before passing it in.  That way, Date and type are only set in initial loop.  All children preserve original dates and types.  The isRepeating value will be applied in all loops.  Also, make sure to change the parent num to the new one before calling this function.  The taskListNum will always change, because we are inserting new record into database.</summary>
 		private void DuplicateExistingList(TaskList newList,bool isInMainOrUser) {
 			//get all children:
-			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum);
-			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue);
+			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurUser.UserNum,0);
+			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue,Security.CurUser.UserNum,0);
 			TaskLists.Insert(newList);
 			//now we have a new taskListNum to work with
 			for(int i=0;i<childLists.Count;i++) {
@@ -877,16 +903,17 @@ namespace OpenDental {
 		private void Delete_Clicked() {
 			if(clickedI < TaskListsList.Count) {//is list
 				//check to make sure the list is empty.
-				List<Task> tsks=Tasks.RefreshChildren(TaskListsList[clickedI].TaskListNum,true,DateTime.MinValue);
-				List<TaskList> tsklsts=TaskLists.RefreshChildren(TaskListsList[clickedI].TaskListNum);
+				List<Task> tsks=Tasks.RefreshChildren(TaskListsList[clickedI].TaskListNum,true,DateTime.MinValue,Security.CurUser.UserNum,0);
+				List<TaskList> tsklsts=TaskLists.RefreshChildren(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum,0);
 				if(tsks.Count>0 || tsklsts.Count>0){
 					MsgBox.Show(this,"Not allowed to delete a list unless it's empty.");
 					return;
 				}
-				if(!MsgBox.Show(this,true,"Delete list including all sublists and tasks?")) {
+				if(!MsgBox.Show(this,true,"Delete this empty list?")) {
 					return;
 				}
-				DeleteEntireList(TaskListsList[clickedI]);
+				TaskLists.Delete(TaskListsList[clickedI]);
+				//DeleteEntireList(TaskListsList[clickedI]);
 			}
 			else {//Is task
 				if(!MsgBox.Show(this,true,"Delete?")) {
@@ -901,8 +928,8 @@ namespace OpenDental {
 		///<summary>A recursive function that deletes the specified list and all children.</summary>
 		private void DeleteEntireList(TaskList list) {
 			//get all children:
-			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum);
-			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue);
+			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum,Security.CurUser.UserNum,0);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue,Security.CurUser.UserNum,0);
 			for(int i=0;i<childLists.Count;i++) {
 				DeleteEntireList(childLists[i]);
 			}
@@ -923,7 +950,9 @@ namespace OpenDental {
 				return;
 			}
 			if(e.Row >= TaskListsList.Count) {//is task
-				FormTaskEdit FormT=new FormTaskEdit(TasksList[e.Row-TaskListsList.Count]);
+				//It's important to grab the task directly from the db because the status in this list is fake, being the "unread" status instead.
+				Task task=Tasks.GetOne(TasksList[e.Row-TaskListsList.Count].TaskNum);
+				FormTaskEdit FormT=new FormTaskEdit(task);
 				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 				FormT.Show();//non-modal
 			}
@@ -940,12 +969,19 @@ namespace OpenDental {
 				return;
 			}
 			if(clickedI < TaskListsList.Count) {//is list
+				//If the list is someone else's inbox, block
+				//long mailboxUserNum=TaskLists.GetMailboxUserNum(TaskListsList[clickedI].TaskListNum);
+				//This is too restrictive.  Need to work into security permissions:
+				//if(mailboxUserNum != 0 && mailboxUserNum != Security.CurUser.UserNum) {
+				//	MsgBox.Show(this,"Inboxes are private.");
+				//	return;
+				//}
 				TreeHistory.Add(TaskListsList[clickedI]);
 				FillTree();
 				FillGrid();
 				return;
 			}
-			if(tabContr.SelectedTab==tabNew){
+			if(tabContr.SelectedTab==tabNew && !PrefC.GetBool(PrefName.TasksNewTrackedByUser)){//There's an extra column
 				if(clickedCol==1) {
 					TaskUnreads.SetRead(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum);
 					FillGrid();
@@ -953,26 +989,36 @@ namespace OpenDental {
 				return;//but ignore column 0 for now.  We would need to add that as a new feature.
 			}
 			if(clickedCol==0){//check tasks off
-				Task task=TasksList[clickedI-TaskListsList.Count].Copy();
-				Task taskOld=task.Copy();
-				if(task.TaskStatus==TaskStatusEnum.New) {
-					task.TaskStatus=TaskStatusEnum.Viewed;
+				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+					long userNumInbox=TaskLists.GetMailboxUserNum(TreeHistory[0].TaskListNum);
+					if(userNumInbox != 0 && userNumInbox != Security.CurUser.UserNum) {
+						MsgBox.Show(this,"Not allowed to mark off tasks in someone else's inbox.");
+						return;
+					}
+					//might not need to go to db to get this info 
+					//might be able to check this:
+					//if(task.IsUnread) {
+					//But seems safer to go to db.
+					if(TaskUnreads.IsUnread(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum)) {
+						TaskUnreads.SetRead(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum);
+					}
+					//if already read, nothing else to do.  If done, nothing to do
 				}
-				else if(task.TaskStatus==TaskStatusEnum.Viewed) {
-					task.TaskStatus=TaskStatusEnum.Done;
-					task.DateTimeFinished=DateTime.Now;
-				}
-				else if(task.TaskStatus==TaskStatusEnum.Done) {
-					//I guess just leave the date finished in place. It will reset if they mark it complete again.
-					task.TaskStatus=TaskStatusEnum.New;
-				}
-				try {
-					Tasks.Update(task,taskOld);
-					DataValid.SetInvalidTask(task.TaskNum,false);
-				}
-				catch(Exception ex) {
-					MessageBox.Show(ex.Message);
-					return;
+				else {
+					if(TasksList[clickedI-TaskListsList.Count].TaskStatus==TaskStatusEnum.New) {
+						Task task=TasksList[clickedI-TaskListsList.Count].Copy();
+						Task taskOld=task.Copy();
+						task.TaskStatus=TaskStatusEnum.Viewed;
+						try {
+							Tasks.Update(task,taskOld);
+							DataValid.SetInvalidTask(task.TaskNum,false);
+						}
+						catch(Exception ex) {
+							MessageBox.Show(ex.Message);
+							return;
+						}
+					}
+					//no longer allowed to mark done from here
 				}
 				FillGrid();
 			}

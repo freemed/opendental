@@ -22,7 +22,7 @@ namespace OpenDental {
 		private void FormTaskSetup_Load(object sender,EventArgs e) {
 			UserList=Userods.GetNotHidden();
 			UserListOld=Userods.GetNotHidden();
-			TrunkList=TaskLists.RefreshMainTrunk();
+			TrunkList=TaskLists.RefreshMainTrunk(Security.CurUser.UserNum);
 			listMain.Items.Add(Lan.g(this,"none"));
 			for(int i=0;i<TrunkList.Count;i++){
 				listMain.Items.Add(TrunkList[i].Descript);

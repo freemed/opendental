@@ -14,6 +14,18 @@ namespace OpenDentBusiness{
 		///<summary>Only used from UI.</summary>
 		public static DateTime LastOpenDate;
 
+		///<summary>This is needed because of the extra column that is not part of the database.</summary>
+		private static List<Task> TableToList(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			List<Task> retVal=Crud.TaskCrud.TableToList(table);
+			for(int i=0;i<retVal.Count;i++) {
+				if(table.Columns.Contains("IsUnread")) {
+					retVal[i].IsUnread=PIn.Bool(table.Rows[i]["IsUnread"].ToString());//1 or more will result in true.
+				}
+			}
+			return retVal;
+		}
+
 		/*
 		///<summary>There are NO tasks on the user trunk, so this is not needed.</summary>
 		public static List<Task> RefreshUserTrunk(int userNum) {
@@ -30,19 +42,20 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Task>(MethodBase.GetCurrentMethod(),TaskNum);
 			}
-			string command=
-				"SELECT * FROM task"
-				+" WHERE TaskNum = "+POut.Long(TaskNum);
+			string command="SELECT * FROM task WHERE TaskNum = "+POut.Long(TaskNum);
 			return Crud.TaskCrud.SelectOne(command);
 		}
 
 		///<summary>Gets all tasks for the main trunk.</summary>
-		public static List<Task> RefreshMainTrunk(bool showDone,DateTime startDate) {
+		public static List<Task> RefreshMainTrunk(bool showDone,DateTime startDate,long currentUserNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),showDone,startDate);
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),showDone,startDate,currentUserNum);
 			}
 			//startDate only applies if showing Done tasks.
-			string command="SELECT * FROM task "
+			string command="SELECT task.*,"
+				+"(SELECT COUNT(*) FROM taskunread WHERE task.TaskNum=taskunread.TaskNum "
+				+"AND taskunread.UserNum="+POut.Long(currentUserNum)+") IsUnread "
+				+"FROM task "
 				+"WHERE TaskListNum=0 "
 				+"AND DateTask < '1880-01-01' "
 				+"AND IsRepeating=0";
@@ -54,7 +67,8 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.Long((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return Crud.TaskCrud.SelectMany(command);
+			DataTable table=Db.GetTable(command);
+			return TableToList(table);
 		}
 
 		///<summary>Gets all 'new' tasks for a user.</summary>
@@ -64,14 +78,16 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT task.TaskNum,task.TaskListNum,task.DateTask,task.KeyNum,task.Descript,"
 				+"task.TaskStatus,task.IsRepeating,task.DateType,task.FromNum,task.ObjectType,"
-				+"task.DateTimeEntry,task.UserNum,task.DateTimeFinished "
+				+"task.DateTimeEntry,task.UserNum,task.DateTimeFinished,1 AS IsUnread "
+				//we fill the IsUnread column with 1's because we already know that they are all unread
 				+"FROM task,taskunread "
 				+"WHERE task.TaskNum=taskunread.TaskNum "
 				+"AND taskunread.UserNum = "+POut.Long(userNum)+" "
 				+"ORDER BY task.TaskNum,task.TaskListNum,task.DateTask,task.KeyNum,task.Descript,"
 				+"task.TaskStatus,task.IsRepeating,task.DateType,task.FromNum,task.ObjectType,"
 				+"task.DateTimeEntry,task.UserNum,task.DateTimeFinished";//a datetime stamp would be nice.
-			return Crud.TaskCrud.SelectMany(command);
+			DataTable table=Db.GetTable(command);
+			return TableToList(table);
 		}
 
 		///<summary>Gets all tasks for the repeating trunk.  Always includes "done".</summary>
@@ -84,17 +100,30 @@ namespace OpenDentBusiness{
 				+"AND DateTask < '1880-01-01' "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
-			return Crud.TaskCrud.SelectMany(command);
+			DataTable table=Db.GetTable(command);
+			return TableToList(table);
 		}
 
-		///<summary>0 is not allowed, because that would be a trunk.</summary>
-		public static List<Task> RefreshChildren(long listNum,bool showDone,DateTime startDate) {
+		///<summary>0 is not allowed, because that would be a trunk.  Also, if this is in someone's inbox, then pass in the userNum whose inbox it is in.  If not in an inbox, pass in 0.</summary>
+		public static List<Task> RefreshChildren(long listNum,bool showDone,DateTime startDate,long currentUserNum,long userNumInbox) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),listNum,showDone,startDate);
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),listNum,showDone,startDate,currentUserNum,userNumInbox);
 			}
 			//startDate only applies if showing Done tasks.
 			string command=
-				"SELECT * FROM task "
+				"SELECT task.*, "
+				+"(SELECT COUNT(*) FROM taskunread WHERE task.TaskNum=taskunread.TaskNum ";//the count turns into a bool
+			//if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//we don't bother with this.  Always get IsUnread
+			//if a task is someone's inbox,
+			if(userNumInbox>0) {
+				//then restrict by that user
+				command+="AND taskunread.UserNum="+POut.Long(userNumInbox)+") IsUnread ";
+			}
+			else {
+				//otherwise, restrict by current user
+				command+="AND taskunread.UserNum="+POut.Long(currentUserNum)+") IsUnread ";
+			}
+			command+="FROM task "
 				+"WHERE TaskListNum="+POut.Long(listNum);
 			if(showDone){
 				command+=" AND (TaskStatus !="+POut.Long((int)TaskStatusEnum.Done)
@@ -104,26 +133,31 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.Long((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return Crud.TaskCrud.SelectMany(command);
+			DataTable table=Db.GetTable(command);
+			return TableToList(table);
 		}
 
 		///<summary>All repeating items for one date type with no heirarchy.</summary>
-		public static List<Task> RefreshRepeating(TaskDateType dateType) {
+		public static List<Task> RefreshRepeating(TaskDateType dateType,long currentUserNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),dateType);
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),dateType,currentUserNum);
 			}
 			string command=
-				"SELECT * FROM task "
+				"SELECT task.*, "
+				+"(SELECT COUNT(*) FROM taskunread WHERE task.TaskNum=taskunread.TaskNum "
+				+"AND taskunread.UserNum="+POut.Long(currentUserNum)+") IsUnread "//Don't know if this makes sense here
+				+"FROM task "
 				+"WHERE IsRepeating=1 "
 				+"AND DateType="+POut.Long((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
-			return Crud.TaskCrud.SelectMany(command);
+			DataTable table=Db.GetTable(command);
+			return TableToList(table);
 		}
 
 		///<summary>Gets all tasks for one of the 3 dated trunks. startDate only applies if showing Done.</summary>
-		public static List<Task> RefreshDatedTrunk(DateTime date,TaskDateType dateType,bool showDone,DateTime startDate) {
+		public static List<Task> RefreshDatedTrunk(DateTime date,TaskDateType dateType,bool showDone,DateTime startDate,long currentUserNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),date,dateType,showDone,startDate);
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),date,dateType,showDone,startDate,currentUserNum);
 			}
 			DateTime dateFrom=DateTime.MinValue;
 			DateTime dateTo=DateTime.MaxValue;
@@ -140,7 +174,10 @@ namespace OpenDentBusiness{
 				dateTo=dateFrom.AddMonths(1).AddDays(-1);
 			}
 			string command=
-				"SELECT * FROM task "
+				"SELECT task.*, "
+				+"(SELECT COUNT(*) FROM taskunread WHERE task.TaskNum=taskunread.TaskNum "
+				+"AND taskunread.UserNum="+POut.Long(currentUserNum)+") IsUnread "//don't know if this makes sense here
+				+"FROM task "
 				+"WHERE DateTask >= "+POut.Date(dateFrom)
 				+" AND DateTask <= "+POut.Date(dateTo)
 				+" AND DateType="+POut.Long((int)dateType);
@@ -152,7 +189,8 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.Long((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return Crud.TaskCrud.SelectMany(command);
+			DataTable table=Db.GetTable(command);
+			return TableToList(table);
 		}
 
 		///<summary>The full refresh is only used once when first synching all the tasks for taskAncestors.</summary>
@@ -240,17 +278,17 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM task WHERE TaskNum="+POut.Long(task.TaskNum);
 			Task oldtask=Crud.TaskCrud.SelectOne(command);
 			if(oldtask.DateTask!=task.DateTask
-					|| oldtask.DateType!=task.DateType
-					|| oldtask.Descript!=task.Descript
-					|| oldtask.FromNum!=task.FromNum
-					|| oldtask.IsRepeating!=task.IsRepeating
-					|| oldtask.KeyNum!=task.KeyNum
-					|| oldtask.ObjectType!=task.ObjectType
-					|| oldtask.TaskListNum!=task.TaskListNum
-					|| oldtask.TaskStatus!=task.TaskStatus
-					|| oldtask.UserNum!=task.UserNum
-					|| oldtask.DateTimeEntry!=task.DateTimeEntry
-					|| oldtask.DateTimeFinished!=task.DateTimeFinished)
+				|| oldtask.DateType!=task.DateType
+				|| oldtask.Descript!=task.Descript
+				|| oldtask.FromNum!=task.FromNum
+				|| oldtask.IsRepeating!=task.IsRepeating
+				|| oldtask.KeyNum!=task.KeyNum
+				|| oldtask.ObjectType!=task.ObjectType
+				|| oldtask.TaskListNum!=task.TaskListNum
+				|| oldtask.TaskStatus!=task.TaskStatus
+				|| oldtask.UserNum!=task.UserNum
+				|| oldtask.DateTimeEntry!=task.DateTimeEntry
+				|| oldtask.DateTimeFinished!=task.DateTimeFinished)
 			{
 				return true;
 			}

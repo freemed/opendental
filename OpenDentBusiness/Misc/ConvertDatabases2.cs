@@ -3335,9 +3335,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX UserNum ON tasknote (UserNum)";
 					Db.NonQ(command);
 				}
-
-
-				
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('TasksNewTrackedByUser','0')";
+				Db.NonQ(command);
 
 
 

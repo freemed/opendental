@@ -66,6 +66,7 @@ namespace OpenDentBusiness{
 				Synch(listTasks[i]);
 			}
 		}
+
 		
 
 

@@ -44,9 +44,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private TextBox textUser;
 		private Label label16;
-		private RadioButton radioNew;
-		private RadioButton radioViewed;
-		private RadioButton radioDone;
 		private OpenDental.UI.Button butNowFinished;
 		private TextBox textDateTimeFinished;
 		private Label label7;
@@ -67,6 +64,9 @@ namespace OpenDental{
 		private UI.Button butAddNote;
 		private UI.Button butChangeUser;
 		private List<TaskNote> NoteList;
+		private CheckBox checkNew;
+		private CheckBox checkDone;
+		private Label labelDoneAffectsAll;
 		///<summary>If the reply button is visible, this stores who to reply to.  It's determined when loading the form.</summary>
 		private long ReplyToUserNum;
 
@@ -116,15 +116,10 @@ namespace OpenDental{
 			this.listObjectType = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.panelObject = new System.Windows.Forms.Panel();
-			this.butGoto = new OpenDental.UI.Button();
-			this.butChange = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textDateTimeEntry = new System.Windows.Forms.TextBox();
 			this.textUser = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
-			this.radioNew = new System.Windows.Forms.RadioButton();
-			this.radioViewed = new System.Windows.Forms.RadioButton();
-			this.radioDone = new System.Windows.Forms.RadioButton();
 			this.textDateTimeFinished = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textTaskNum = new System.Windows.Forms.TextBox();
@@ -133,6 +128,10 @@ namespace OpenDental{
 			this.textTaskList = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.comboDateType = new System.Windows.Forms.ComboBox();
+			this.checkNew = new System.Windows.Forms.CheckBox();
+			this.checkDone = new System.Windows.Forms.CheckBox();
+			this.labelDoneAffectsAll = new System.Windows.Forms.Label();
+			this.butChangeUser = new OpenDental.UI.Button();
 			this.butAddNote = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSend = new OpenDental.UI.Button();
@@ -140,17 +139,18 @@ namespace OpenDental{
 			this.butNowFinished = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butNow = new OpenDental.UI.Button();
+			this.butGoto = new OpenDental.UI.Button();
+			this.butChange = new OpenDental.UI.Button();
 			this.textDateTask = new OpenDental.ValidDate();
 			this.textDescript = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butChangeUser = new OpenDental.UI.Button();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(9,105);
+			this.label1.Location = new System.Drawing.Point(9,93);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(116,19);
 			this.label1.TabIndex = 2;
@@ -239,37 +239,9 @@ namespace OpenDental{
 			this.panelObject.Size = new System.Drawing.Size(594,64);
 			this.panelObject.TabIndex = 15;
 			// 
-			// butGoto
-			// 
-			this.butGoto.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butGoto.Autosize = true;
-			this.butGoto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGoto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGoto.CornerRadius = 4F;
-			this.butGoto.Location = new System.Drawing.Point(200,39);
-			this.butGoto.Name = "butGoto";
-			this.butGoto.Size = new System.Drawing.Size(75,24);
-			this.butGoto.TabIndex = 12;
-			this.butGoto.Text = "Go To";
-			this.butGoto.Click += new System.EventHandler(this.butGoto_Click);
-			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(123,39);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(75,24);
-			this.butChange.TabIndex = 10;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
-			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(9,57);
+			this.label5.Location = new System.Drawing.Point(9,45);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(116,19);
 			this.label5.TabIndex = 17;
@@ -278,7 +250,7 @@ namespace OpenDental{
 			// 
 			// textDateTimeEntry
 			// 
-			this.textDateTimeEntry.Location = new System.Drawing.Point(127,56);
+			this.textDateTimeEntry.Location = new System.Drawing.Point(127,44);
 			this.textDateTimeEntry.Name = "textDateTimeEntry";
 			this.textDateTimeEntry.Size = new System.Drawing.Size(151,20);
 			this.textDateTimeEntry.TabIndex = 18;
@@ -300,52 +272,16 @@ namespace OpenDental{
 			this.label16.Text = "From User";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// radioNew
-			// 
-			this.radioNew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioNew.Location = new System.Drawing.Point(37,4);
-			this.radioNew.Name = "radioNew";
-			this.radioNew.Size = new System.Drawing.Size(104,16);
-			this.radioNew.TabIndex = 127;
-			this.radioNew.TabStop = true;
-			this.radioNew.Text = "New";
-			this.radioNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioNew.UseVisualStyleBackColor = true;
-			// 
-			// radioViewed
-			// 
-			this.radioViewed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioViewed.Location = new System.Drawing.Point(37,20);
-			this.radioViewed.Name = "radioViewed";
-			this.radioViewed.Size = new System.Drawing.Size(104,16);
-			this.radioViewed.TabIndex = 128;
-			this.radioViewed.TabStop = true;
-			this.radioViewed.Text = "Viewed";
-			this.radioViewed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioViewed.UseVisualStyleBackColor = true;
-			// 
-			// radioDone
-			// 
-			this.radioDone.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioDone.Location = new System.Drawing.Point(37,37);
-			this.radioDone.Name = "radioDone";
-			this.radioDone.Size = new System.Drawing.Size(104,16);
-			this.radioDone.TabIndex = 129;
-			this.radioDone.TabStop = true;
-			this.radioDone.Text = "Done";
-			this.radioDone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioDone.UseVisualStyleBackColor = true;
-			// 
 			// textDateTimeFinished
 			// 
-			this.textDateTimeFinished.Location = new System.Drawing.Point(127,81);
+			this.textDateTimeFinished.Location = new System.Drawing.Point(127,69);
 			this.textDateTimeFinished.Name = "textDateTimeFinished";
 			this.textDateTimeFinished.Size = new System.Drawing.Size(151,20);
 			this.textDateTimeFinished.TabIndex = 131;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(9,82);
+			this.label7.Location = new System.Drawing.Point(9,70);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(116,19);
 			this.label7.TabIndex = 130;
@@ -407,6 +343,53 @@ namespace OpenDental{
 			this.comboDateType.Size = new System.Drawing.Size(145,21);
 			this.comboDateType.TabIndex = 148;
 			// 
+			// checkNew
+			// 
+			this.checkNew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkNew.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkNew.Location = new System.Drawing.Point(47,5);
+			this.checkNew.Name = "checkNew";
+			this.checkNew.Size = new System.Drawing.Size(94,17);
+			this.checkNew.TabIndex = 152;
+			this.checkNew.Text = "New";
+			this.checkNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkNew.Click += new System.EventHandler(this.checkNew_Click);
+			// 
+			// checkDone
+			// 
+			this.checkDone.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDone.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkDone.Location = new System.Drawing.Point(47,24);
+			this.checkDone.Name = "checkDone";
+			this.checkDone.Size = new System.Drawing.Size(94,17);
+			this.checkDone.TabIndex = 153;
+			this.checkDone.Text = "Done";
+			this.checkDone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDone.Click += new System.EventHandler(this.checkDone_Click);
+			// 
+			// labelDoneAffectsAll
+			// 
+			this.labelDoneAffectsAll.Location = new System.Drawing.Point(141,24);
+			this.labelDoneAffectsAll.Name = "labelDoneAffectsAll";
+			this.labelDoneAffectsAll.Size = new System.Drawing.Size(167,16);
+			this.labelDoneAffectsAll.TabIndex = 154;
+			this.labelDoneAffectsAll.Text = "(affects all users)";
+			this.labelDoneAffectsAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butChangeUser
+			// 
+			this.butChangeUser.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChangeUser.Autosize = true;
+			this.butChangeUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangeUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangeUser.CornerRadius = 4F;
+			this.butChangeUser.Location = new System.Drawing.Point(731,14);
+			this.butChangeUser.Name = "butChangeUser";
+			this.butChangeUser.Size = new System.Drawing.Size(24,22);
+			this.butChangeUser.TabIndex = 151;
+			this.butChangeUser.Text = "...";
+			this.butChangeUser.Click += new System.EventHandler(this.butChangeUser_Click);
+			// 
 			// butAddNote
 			// 
 			this.butAddNote.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -429,10 +412,10 @@ namespace OpenDental{
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,173);
+			this.gridMain.Location = new System.Drawing.Point(12,161);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(798,293);
+			this.gridMain.Size = new System.Drawing.Size(798,306);
 			this.gridMain.TabIndex = 149;
 			this.gridMain.Title = "Notes";
 			this.gridMain.TranslationName = "FormTaskEdit";
@@ -475,7 +458,7 @@ namespace OpenDental{
 			this.butNowFinished.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNowFinished.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNowFinished.CornerRadius = 4F;
-			this.butNowFinished.Location = new System.Drawing.Point(284,79);
+			this.butNowFinished.Location = new System.Drawing.Point(284,67);
 			this.butNowFinished.Name = "butNowFinished";
 			this.butNowFinished.Size = new System.Drawing.Size(62,24);
 			this.butNowFinished.TabIndex = 132;
@@ -506,12 +489,40 @@ namespace OpenDental{
 			this.butNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNow.CornerRadius = 4F;
-			this.butNow.Location = new System.Drawing.Point(284,54);
+			this.butNow.Location = new System.Drawing.Point(284,42);
 			this.butNow.Name = "butNow";
 			this.butNow.Size = new System.Drawing.Size(62,24);
 			this.butNow.TabIndex = 19;
 			this.butNow.Text = "Now";
 			this.butNow.Click += new System.EventHandler(this.butNow_Click);
+			// 
+			// butGoto
+			// 
+			this.butGoto.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGoto.Autosize = true;
+			this.butGoto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGoto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGoto.CornerRadius = 4F;
+			this.butGoto.Location = new System.Drawing.Point(200,39);
+			this.butGoto.Name = "butGoto";
+			this.butGoto.Size = new System.Drawing.Size(75,24);
+			this.butGoto.TabIndex = 12;
+			this.butGoto.Text = "Go To";
+			this.butGoto.Click += new System.EventHandler(this.butGoto_Click);
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(123,39);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(75,24);
+			this.butChange.TabIndex = 10;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// textDateTask
 			// 
@@ -525,7 +536,7 @@ namespace OpenDental{
 			this.textDescript.AcceptsReturn = true;
 			this.textDescript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDescript.Location = new System.Drawing.Point(127,105);
+			this.textDescript.Location = new System.Drawing.Point(127,93);
 			this.textDescript.Multiline = true;
 			this.textDescript.Name = "textDescript";
 			this.textDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
@@ -563,24 +574,13 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butChangeUser
-			// 
-			this.butChangeUser.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChangeUser.Autosize = true;
-			this.butChangeUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangeUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChangeUser.CornerRadius = 4F;
-			this.butChangeUser.Location = new System.Drawing.Point(731,14);
-			this.butChangeUser.Name = "butChangeUser";
-			this.butChangeUser.Size = new System.Drawing.Size(24,22);
-			this.butChangeUser.TabIndex = 151;
-			this.butChangeUser.Text = "...";
-			this.butChangeUser.Click += new System.EventHandler(this.butChangeUser_Click);
-			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(836,676);
+			this.Controls.Add(this.checkDone);
+			this.Controls.Add(this.labelDoneAffectsAll);
+			this.Controls.Add(this.checkNew);
 			this.Controls.Add(this.butChangeUser);
 			this.Controls.Add(this.butAddNote);
 			this.Controls.Add(this.gridMain);
@@ -595,9 +595,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butNowFinished);
 			this.Controls.Add(this.textDateTimeFinished);
 			this.Controls.Add(this.label7);
-			this.Controls.Add(this.radioDone);
-			this.Controls.Add(this.radioViewed);
-			this.Controls.Add(this.radioNew);
 			this.Controls.Add(this.textUser);
 			this.Controls.Add(this.label16);
 			this.Controls.Add(this.butDelete);
@@ -637,16 +634,20 @@ namespace OpenDental{
 				textTaskNum.Visible=true;
 				textTaskNum.Text=TaskCur.TaskNum.ToString();
 			#endif
-			switch(TaskCur.TaskStatus){
-				case TaskStatusEnum.New:
-					radioNew.Checked=true;
-					break;
-				case TaskStatusEnum.Viewed:
-					radioViewed.Checked=true;
-					break;
-				case TaskStatusEnum.Done:
-					radioDone.Checked=true;
-					break;
+			if(TaskCur.TaskStatus==TaskStatusEnum.Done) {//global even if new status is tracked by user
+				checkDone.Checked=true;
+			}
+			else {//because it can't be both new and done.
+				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+					if(TaskUnreads.IsUnread(Security.CurUser.UserNum,TaskCur.TaskNum)) {
+						checkNew.Checked=true;
+					}
+				}
+				else {//tracked globally, the old way
+					if(TaskCur.TaskStatus==TaskStatusEnum.New) {
+						checkNew.Checked=true;
+					}
+				}
 			}
 			textUser.Text=Userods.GetName(TaskCur.UserNum);//might be blank.
 			if(TaskListCur!=null){
@@ -670,9 +671,8 @@ namespace OpenDental{
 				textDateTask.Text=TaskCur.DateTask.ToShortDateString();
 			}
 			if(TaskCur.IsRepeating){
-				radioNew.Enabled=false;
-				radioViewed.Enabled=false;
-				radioDone.Enabled=false;
+				checkNew.Enabled=false;
+				checkDone.Enabled=false;
 				textDateTask.Enabled=false;
 				listObjectType.Enabled=false;
 				if(TaskCur.TaskListNum!=0){//not a main parent
@@ -770,6 +770,18 @@ namespace OpenDental{
 				notesChanged=true;
 			}
 			FillGrid();
+		}
+
+		private void checkNew_Click(object sender,EventArgs e) {
+			if(checkNew.Checked && checkDone.Checked) {
+				checkDone.Checked=false;
+			}
+		}
+
+		private void checkDone_Click(object sender,EventArgs e) {
+			if(checkNew.Checked && checkDone.Checked) {
+				checkNew.Checked=false;
+			}
 		}
 
 		private void FillObject(){
@@ -902,14 +914,28 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a description.");
 				return false;
 			}
-			if(radioNew.Checked){
-				TaskCur.TaskStatus=TaskStatusEnum.New;
+			if(checkDone.Checked) {//This is the only place in the whole program that user is allowed to set done.
+				TaskCur.TaskStatus=TaskStatusEnum.Done;//global even if new status is tracked by user
+				//don't clear out taskreads, because someone might not have read the task before it was marked complete.
 			}
-			else if(radioViewed.Checked){
-				TaskCur.TaskStatus=TaskStatusEnum.Viewed;
-			}
-			else{
-				TaskCur.TaskStatus=TaskStatusEnum.Done;
+			else {//because it can't be both new and done.
+				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+					//This is done explicitly instead of automatically like it was the old way
+					if(checkNew.Checked) {
+						TaskUnreads.SetUnread(Security.CurUser.UserNum,TaskCur.TaskNum);	
+					}
+					else {
+						TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);					
+					}
+				}
+				else {//tracked globally, the old way
+					if(checkNew.Checked) {
+						TaskCur.TaskStatus=TaskStatusEnum.New;
+					}
+					else{
+						TaskCur.TaskStatus=TaskStatusEnum.Viewed;
+					}
+				}
 			}
 			//UserNum no longer allowed to change automatically
 			//if(resetUser && TaskCur.Descript!=textDescript.Text){
@@ -1016,47 +1042,6 @@ namespace OpenDental{
 			Close();
 		}
 
-		/*
-		private void butAppendAndPop_Click(object sender,EventArgs e) {
-			if(IsNew) {
-				MsgBox.Show(this,"Cannot append to a new task.");
-				return;
-			}
-			if(textAppend.Text=="") {
-				MsgBox.Show(this,"Please enter text in the box first.");
-				return;
-			}
-			if(textDescript.Text!=Cur.Descript) {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Text in the main description has changed and the change will not be saved.  Continue anyway?")) {
-					return;
-				}
-			}
-			Tasks.Append(Cur.TaskNum,textAppend.Text);
-			DataValid.SetInvalidTask(Cur.TaskNum,true);
-			DialogResult=DialogResult.OK;
-			Close();
-		}
-
-		private void butAppendNoPop_Click(object sender,EventArgs e) {
-			if(IsNew) {
-				MsgBox.Show(this,"Cannot append to a new task.");
-				return;
-			}
-			if(textAppend.Text=="") {
-				MsgBox.Show(this,"Please enter text in the box first.");
-				return;
-			}
-			if(textDescript.Text!=Cur.Descript){
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Text in the main description has changed and the change will not be saved.  Continue anyway?")){
-					return;
-				}
-			}
-			Tasks.Append(Cur.TaskNum,textAppend.Text);
-			DataValid.SetInvalidTask(Cur.TaskNum,false);
-			DialogResult=DialogResult.OK;
-			Close();
-		}*/
-
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(!SaveCur()){//If user clicked OK without changing anything, then this will have no effect.
 				return;
@@ -1085,7 +1070,12 @@ namespace OpenDental{
 		}
 
 		private void FormTaskEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);//no matter why it was closed
+			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+				//No more automation here
+			}
+			else {
+				TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);//no matter why it was closed
+			}
 			if(DialogResult==DialogResult.OK) {
 				return;
 			}
@@ -1093,6 +1083,8 @@ namespace OpenDental{
 				Tasks.Delete(TaskCur.TaskNum);
 			}
 		}
+
+		
 
 	
 

@@ -17,13 +17,14 @@ namespace OpenDentBusiness{
 			return Crud.TaskUnreadCrud.Insert(taskUnread);
 		}
 
+		///<summary>Sets a task read by a user by deleting all the matching taskunreads.  Quick and efficient to run any time.</summary>
 		public static void SetRead(long userNum,long taskNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),userNum,taskNum);
 				return;
 			}
-			string command="DELETE FROM taskunread WHERE userNum = "+POut.Long(userNum)+" "
-				+"AND taskNum = "+POut.Long(taskNum);
+			string command="DELETE FROM taskunread WHERE UserNum = "+POut.Long(userNum)+" "
+				+"AND TaskNum = "+POut.Long(taskNum);
 			Db.NonQ(command);
 		}
 
@@ -32,20 +33,52 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum);
 				return;
 			}
-			TaskUnread taskUnread;
+			//if the task is done, don't add unreads
+			string command="SELECT TaskStatus FROM task WHERE TaskNum = "+POut.Long(taskNum);
+			TaskStatusEnum taskStatus=(TaskStatusEnum)PIn.Int(Db.GetScalar(command));
+			if(taskStatus==TaskStatusEnum.Done) {
+				return;
+			}
 			//task subscriptions are not cached yet, so we use a query.
 			//Get a list of all subscribers to this task
-			string command="SELECT tasksubscription.UserNum FROM tasksubscription,taskancestor,tasklist "
+			command="SELECT tasksubscription.UserNum "
+				+"FROM tasksubscription,taskancestor,tasklist "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND taskancestor.TaskNum = "+POut.Long(taskNum)+" "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum";
 			DataTable table=Db.GetTable(command);//Crud.TaskSubscriptionCrud.SelectMany(
+			long userNum;
 			for(int i=0;i<table.Rows.Count;i++) {
-				taskUnread=new TaskUnread();
-				taskUnread.TaskNum=taskNum;
-				taskUnread.UserNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
-				Insert(taskUnread);//Yes, this will frequently create duplicates in this table, but the query to show tasks in the New tab handles the duplicates just fine.
+				userNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
+				SetUnread(userNum,taskNum);//This no longer results in duplicates like it used to
 			}
+		}
+
+		public static bool IsUnread(long userNum,long taskNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),userNum,taskNum);
+			}
+			string command="SELECT COUNT(*) FROM taskunread WHERE UserNum = "+POut.Long(userNum)+" "
+				+"AND TaskNum = "+POut.Long(taskNum);
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
+		}
+
+		///<summary>Sets unread for a single user.  Works well without duplicates, whether it's already set to Unread(new) or not.</summary>
+		public static void SetUnread(long userNum,long taskNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),userNum,taskNum);
+				return;
+			}
+			if(IsUnread(userNum,taskNum)) {
+				return;//Already set to unread, so nothing else to do
+			}
+			TaskUnread taskUnread=new TaskUnread();
+			taskUnread.TaskNum=taskNum;
+			taskUnread.UserNum=userNum;
+			Insert(taskUnread);
 		}
 
 

@@ -30,7 +30,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool Bool (string myString){
-			return myString=="1";
+			if(myString=="" || myString=="0") {
+				return false;
+			}
+			return true;//js enhanced this to allow larger numbers to indicate bool true.  Specifically TaskUnreads
+			//return myString=="1";
 		}
 
 		///<summary></summary>

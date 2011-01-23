@@ -37,6 +37,9 @@ namespace OpenDentBusiness{
 		///<summary>The date and time that this task was marked "done".</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeFinished;
+		///<summary>Only used when tracking unread status by user instead of by task.  This gets set to true to indicate it has not yet been read.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public bool IsUnread;
 
 		///<summary></summary>
 		public Task Copy() {
