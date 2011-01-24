@@ -289,6 +289,7 @@
     <Compile Include="Crud\TaskAncestorCrud.cs" />
     <Compile Include="Crud\TaskCrud.cs" />
     <Compile Include="Crud\TaskListCrud.cs" />
+    <Compile Include="Crud\TaskNoteCrud.cs" />
     <Compile Include="Crud\TaskSubscriptionCrud.cs" />
     <Compile Include="Crud\TaskUnreadCrud.cs" />
     <Compile Include="Crud\TerminalActiveCrud.cs" />
