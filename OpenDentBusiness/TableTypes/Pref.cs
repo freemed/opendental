@@ -135,6 +135,7 @@ namespace OpenDentBusiness {
 		GenericEClaimsForm,
 		HL7FolderOut,
 		HL7FolderIn,
+		ImagesModuleTreeIsCollapsed,
 		ImageStoreIsDatabase,
 		ImageWindowingMax,
 		ImageWindowingMin,
