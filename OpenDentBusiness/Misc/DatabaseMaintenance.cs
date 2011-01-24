@@ -981,6 +981,11 @@ namespace OpenDentBusiness {
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid etrans PlanNums: ")+numFound+"\r\n";
 				}
+				command="SELECT COUNT(*) FROM inssub WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=inssub.PlanNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid inssub PlanNums: ")+numFound+"\r\n";
+				}
 				command="SELECT COUNT(*) FROM patplan WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=patplan.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
@@ -993,21 +998,80 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//The final long-term solution might be to just create a dummy plan to attach these things to.  We really have no idea what plan they belong to.  We need databases with actual problems to test these fixes against.
+				//One option will sometimes be tocreate a dummy plan to attach these things to, be we have not had to implement that yet.  We need databases with actual problems to test these fixes against.
 				//appointment.InsPlan1
 				//appointment.InsPlan2
 				//claim.PlanNum
 				//claim.PlanNum2
 				//claimproc.PlanNum
 				//etrans.PlanNum
+				//inssub.PlanNum
 				//payplan.PlanNum
-				//benefit.PlanNum
+				//benefit.PlanNum----------------------------------------------------------------------------------------------------
 				command="DELETE FROM benefit WHERE PlanNum !=0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=benefit.PlanNum)";
 				long numFixed=Db.NonQ(command);
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid benefit PlanNums fixed: ")+numFixed+"\r\n";
 				}
-				//patplan.PlanNum
+				//inssub.PlanNum------------------------------------------------------------------------------------------------------
+				//1: PlanNum=0
+				command="SELECT InsSubNum FROM inssub WHERE PlanNum=0";
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					long insSubNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+					command="SELECT COUNT(*) FROM claim WHERE InsSubNum="+POut.Long(insSubNum);
+					int countUsed=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM etrans WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM patplan WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM payplan WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					if(countUsed==0) {
+						command="DELETE FROM inssub WHERE InsSubNum="+POut.Long(insSubNum);
+						Db.NonQ(command);
+						numFixed++;
+						continue;
+					}
+				}
+				//2: PlanNum invalid
+				command="SELECT InsSubNum,PlanNum FROM inssub WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=inssub.PlanNum)";
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					long planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
+					long insSubNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+					command="SELECT COUNT(*) FROM claim WHERE InsSubNum="+POut.Long(insSubNum);
+					int countUsed=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM etrans WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM patplan WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM payplan WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					//planNum
+					command="SELECT COUNT(*) FROM benefit WHERE PlanNum="+POut.Long(planNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM claim WHERE PlanNum="+POut.Long(planNum);
+					countUsed=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM claimproc WHERE PlanNum="+POut.Long(planNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM patplan WHERE PlanNum="+POut.Long(planNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
+					if(countUsed==0) {
+						command="DELETE FROM inssub WHERE InsSubNum="+POut.Long(insSubNum);
+						Db.NonQ(command);
+						numFixed++;
+						continue;
+					}
+				}
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid inssub PlanNums fixed: ")+numFixed+"\r\n";
+				}
+				//patplan.PlanNum----------------------------------------------------------------------------------------------------
 				command="SELECT InsSubNum,PatPlanNum,PlanNum FROM patplan WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=patplan.PlanNum)";
 				table=Db.GetTable(command);
 				numFixed=0;
@@ -1030,6 +1094,8 @@ namespace OpenDentBusiness {
 					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM etrans WHERE InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM inssub WHERE InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM payplan WHERE InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
 					if(countUsed==0) {
@@ -1046,6 +1112,8 @@ namespace OpenDentBusiness {
 					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM etrans WHERE PlanNum!=0 AND InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
+					command="SELECT COUNT(*) FROM inssub WHERE PlanNum!=0 AND InsSubNum="+POut.Long(insSubNum);
+					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM payplan WHERE PlanNum!=0 AND InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
 					if(countUsed!=0) {
@@ -1059,6 +1127,8 @@ namespace OpenDentBusiness {
 					command="UPDATE claimproc SET PlanNum="+POut.Long(plan.PlanNum)+" WHERE InsSubNum="+POut.Long(insSubNum);
 					Db.NonQ(command);
 					command="UPDATE etrans SET PlanNum="+POut.Long(plan.PlanNum)+" WHERE InsSubNum="+POut.Long(insSubNum);
+					Db.NonQ(command);
+					command="UPDATE inssub SET PlanNum="+POut.Long(plan.PlanNum)+" WHERE InsSubNum="+POut.Long(insSubNum);
 					Db.NonQ(command);
 					command="UPDATE payplan SET PlanNum="+POut.Long(plan.PlanNum)+" WHERE InsSubNum="+POut.Long(insSubNum);
 					Db.NonQ(command);
