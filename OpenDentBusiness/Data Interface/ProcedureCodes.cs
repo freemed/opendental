@@ -357,23 +357,29 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
-		public static void ResetADAdescriptions() {
+		public static int ResetADAdescriptions() {
 			//No need to check RemotingRole; no call to db.
-			ResetADAdescriptions(CDT.Class1.GetADAcodes());
+			return ResetADAdescriptions(CDT.Class1.GetADAcodes());
 		}
 
 		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
-		public static void ResetADAdescriptions(List<ProcedureCode> codeList) {
+		public static int ResetADAdescriptions(List<ProcedureCode> codeList) {
 			//No need to check RemotingRole; no call to db.
 			ProcedureCode code;
+			int count=0;
 			for(int i=0;i<codeList.Count;i++) {
-				if(!ProcedureCodes.IsValidCode(codeList[i].ProcCode)) {
+				if(!ProcedureCodes.IsValidCode(codeList[i].ProcCode)) {//If this code is not in this database
 					continue;
 				}
 				code=ProcedureCodes.GetProcCode(codeList[i].ProcCode);
+				if(code.Descript==codeList[i].Descript) {
+					continue;
+				}
 				code.Descript=codeList[i].Descript;
 				ProcedureCodes.Update(code);
+				count++;
 			}
+			return count;
 			//don't forget to refresh procedurecodes.
 		}
 
