@@ -1415,8 +1415,8 @@ namespace OpenDental{
 				CultureInfo cInfo=(CultureInfo)CultureInfo.CurrentCulture.Clone();
 				cInfo.DateTimeFormat.ShortDatePattern="MM/dd/yyyy";
 				Application.CurrentCulture=cInfo;
-			}
-			if(CultureInfo.CurrentCulture.TwoLetterISOLanguageName=="en"){
+				//
+				//if(CultureInfo.CurrentCulture.TwoLetterISOLanguageName=="en"){
 				menuItemTranslation.Visible=false;
 			}
 			if(!File.Exists("Help.chm")){
