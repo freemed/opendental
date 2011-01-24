@@ -78,7 +78,8 @@ namespace OpenDental.Bridges {
 				string whoToContact=record[3].ToUpper();
 				if(whoToContact=="T"){
 					deleteTrojanRecords.Add(record);
-				}else{//whoToContact="P"
+				}
+				else{//whoToContact="P"
 					deletePatientRecords.Add(record);
 				}
 			}

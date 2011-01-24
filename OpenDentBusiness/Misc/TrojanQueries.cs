@@ -117,7 +117,7 @@ namespace OpenDentBusiness {
 					"c.CarrierName,"+
 					"c.Phone "+
 					"FROM patient p,insplan i,employer e,carrier c,inssub s "+
-					"WHERE p.PatNum=i.Subscriber AND "+
+					"WHERE p.PatNum=s.Subscriber AND "+
 					"("+whereTrojanID+") AND "+
 					"i.CarrierNum=c.CarrierNum AND "+
 					"s.PlanNum=i.PlanNum AND "+
