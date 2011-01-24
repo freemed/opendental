@@ -2783,6 +2783,7 @@ namespace OpenDental{
 						soundplay.Play();
 						this.BringToFront();//don't know if this is doing anything.
 						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
+						FormT.IsPopup=true;
 						FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 						FormT.Show();//non-modal
 					}

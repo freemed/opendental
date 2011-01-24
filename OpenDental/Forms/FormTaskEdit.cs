@@ -69,6 +69,10 @@ namespace OpenDental{
 		private Label labelDoneAffectsAll;
 		///<summary>If the reply button is visible, this stores who to reply to.  It's determined when loading the form.</summary>
 		private long ReplyToUserNum;
+		///<summary>Gets set to true externally if this window popped up without user interaction.  It will behave slightly differently.  Specifically, the New checkbox will be unchecked so that if user clicks OK, the task will be marked as read.</summary>
+		public bool IsPopup;
+		///<summary>When tracking status by user, this tracks whether it has changed.  This is so that if it has changed, a signal can be sent for a refresh of lists.</summary>
+		private bool StatusChanged;
 
 		///<summary>Task gets inserted ahead of time.</summary>
 		public FormTaskEdit(Task taskCur)
@@ -638,7 +642,11 @@ namespace OpenDental{
 				checkDone.Checked=true;
 			}
 			else {//because it can't be both new and done.
-				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+				if(IsPopup) {//It clearly is Unread, but we don't want to leave it that way upon close OK.
+					checkNew.Checked=false;
+					StatusChanged=true;
+				}
+				else if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
 					if(TaskUnreads.IsUnread(Security.CurUser.UserNum,TaskCur.TaskNum)) {
 						checkNew.Checked=true;
 					}
@@ -1046,7 +1054,7 @@ namespace OpenDental{
 			if(!SaveCur()){//If user clicked OK without changing anything, then this will have no effect.
 				return;
 			}
-			if(!notesChanged && TaskCur.Equals(TaskOld)){//if there were no changes, then don't bother with the signal
+			if(!notesChanged && TaskCur.Equals(TaskOld) && !StatusChanged){//if there were no changes, then don't bother with the signal
 				DialogResult=DialogResult.OK;
 				Close();
 				return;
