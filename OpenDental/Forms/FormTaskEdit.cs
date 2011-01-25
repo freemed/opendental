@@ -929,6 +929,9 @@ namespace OpenDental{
 			}
 			else {//because it can't be both new and done.
 				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+					if(TaskCur.TaskStatus==TaskStatusEnum.Done) {
+						TaskCur.TaskStatus=TaskStatusEnum.Viewed;
+					}
 					//This is done explicitly instead of automatically like it was the old way
 					if(checkNew.Checked) {
 						TaskUnreads.SetUnread(Security.CurUser.UserNum,TaskCur.TaskNum);	
