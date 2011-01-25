@@ -997,14 +997,24 @@ namespace OpenDental{
 			//This can't happen if IsNew
 			//This also can't happen unless the task is in my inbox.
 			//Button not visible unless a ReplyToUserNum has been calculated successfully.
-			if(!notesChanged && textDescript.Text==TaskCur.Descript) {//nothing changed
-				MsgBox.Show(this,"Please add a note before using the reply button.");
-				return;
-			}
 			long inbox=Userods.GetInbox(ReplyToUserNum);
 			if(inbox==0){
 				MsgBox.Show(this,"No inbox has been set up for this user yet.");
 				return;
+			}
+			if(!notesChanged && textDescript.Text==TaskCur.Descript) {//nothing changed
+				//MsgBox.Show(this,"Please add a note before using the reply button.");
+				//return;
+				FormTaskNoteEdit form=new FormTaskNoteEdit();
+				form.TaskNoteCur=new TaskNote();
+				form.TaskNoteCur.TaskNum=TaskCur.TaskNum;
+				form.TaskNoteCur.DateTimeNote=DateTime.Now;//Will be slightly adjusted at server.
+				form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
+				form.TaskNoteCur.IsNew=true;
+				form.ShowDialog();
+				if(form.DialogResult!=DialogResult.OK) {
+					return;
+				}
 			}
 			TaskCur.TaskListNum=inbox;
 			if(!SaveCur()){
