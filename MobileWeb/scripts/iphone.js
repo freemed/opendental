@@ -45,7 +45,7 @@ function TraversePage(){
 	}); 
 	
 	
-	$('.searchbutton').tap(function(e) {
+	$('#searchbutton').tap(function(e) {
 		
 		var searchterm=$('#searchpatientbox').val();
 		console.log('searchterm is dd' + searchterm);

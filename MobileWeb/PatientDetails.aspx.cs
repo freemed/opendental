@@ -12,6 +12,9 @@ using OpenDentBusiness.Mobile;
 namespace MobileWeb {
 	public partial class PatientDetails:System.Web.UI.Page {
 		public Patientm pat;
+		public string DialLinkHmPhone="";
+		public string DialLinkWkPhone="";
+		public string DialLinkWirelessPhone="";
 		private long PatNum=0;
 		private long CustomerNum=0;
 		protected void Page_Load(object sender,EventArgs e) {
@@ -25,6 +28,21 @@ namespace MobileWeb {
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
 				pat=Patientms.GetOne(CustomerNum,PatNum);
 				pat.Age=Patientms.DateToAge(pat.Birthdate);
+
+				String DialString1=@"&nbsp;&nbsp;&nbsp;<a href=""tel:";
+				String DialString2=@""" class=""style2"">dial</a>";
+				if(pat.HmPhone!="") {
+					DialLinkHmPhone=DialString1+pat.HmPhone+DialString2;
+				}
+				if(pat.WkPhone!="") {
+					DialLinkWkPhone=DialString1+pat.WkPhone+DialString2;
+				}
+				if(pat.WirelessPhone!="") {
+					DialLinkWirelessPhone=DialString1+pat.WirelessPhone+DialString2;
+				}
+
+
+
 				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,PatNum);
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();

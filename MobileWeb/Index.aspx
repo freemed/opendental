@@ -16,7 +16,7 @@
             var jQT = $.jQTouch({
                 icon: 'Mob.png',
                 statusBar: 'black',
-                slideSelector: 'body > * > ul li a:not(.arrowless, .searchbutton)'
+                slideSelector: 'body > * > ul li a:not(.arrowless, #searchbutton)'
             });
 		</script>
     </head>
@@ -59,7 +59,6 @@
             <div class="toolbar">
                 <h1>Appointments</h1>
                 <a class="button home" href="#">Home</a>
-               <%-- <a class="button logout" href="#">Logout</a>--%>
             </div>
             <div id="AppointmentListContents">
             </div>
@@ -71,13 +70,14 @@
                 <h1>Patients</h1>
                 <a class="button home" href="#">Home</a>
             </div>
-			 <ul>
+			 <ul style="width:71%; display:inline-block;">
                 <li>
 				<input type="text" placeholder="Search Patient" name="searchpatientbox" id="searchpatientbox" autocapitalize="off" autocorrect="off" autocomplete="off" />
-				<a class="searchbutton" href="#"><img src="css/themes/apple/img/searchfield.png" border="0" /></a>
+				<%--<a class="searchbutton" href="#"><img src="css/themes/apple/img/searchfield.png" border="0" /></a>--%>
+				
 				</li>
 			</ul>
-			
+			<a class="button" id="searchbutton" href="#">Search</a>
 				
 			<div id="PatientListContents">
              </div>
@@ -87,7 +87,6 @@
         <div class="toolbar">
         <h1>Patient</h1>
         <a class="button patients" linkattib="PatientList.aspx" href="#">Patients</a>
-        <%-- <a class="button logout" href="#">Logout</a>--%>
     </div>
    <div id="PatientDetailsContents">
    </div>
@@ -98,7 +97,6 @@
 		<div class="toolbar">
 		<h1>Appointment</h1>
 		<a class="button appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
-		<%--<a class="button logout" href="#">Logout</a>--%>
 		</div>
 	   <div id="AppointmentDetailsContents">
 	   </div>

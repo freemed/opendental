@@ -83,6 +83,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app_offlineRemoveThisSuffix.htm" />
     <Content Include="App_Themes\Theme1\Stylesheet1.css" />
     <Content Include="Sheets.aspx" />
     <Content Include="Web.config">

@@ -21,14 +21,12 @@
 </ul>
 
 <ul class="contact">
-<li><span class="style1">Home: <%Response.Write(pat.HmPhone);%> 
-	&nbsp;&nbsp;&nbsp;<a href="tel:<%Response.Write(pat.HmPhone);%>" class="style2">dial</a>
+<li><span class="style1">Home: <%Response.Write(pat.HmPhone);%> <%Response.Write(DialLinkHmPhone);%>
+	
 </span></li>
-<li><span class="style1">Work: <%Response.Write(pat.WkPhone);%>
-	&nbsp;&nbsp;&nbsp;<a href="tel:<%Response.Write(pat.WkPhone);%>" class="style2">dial</a>
+<li><span class="style1">Work: <%Response.Write(pat.WkPhone);%><%Response.Write(DialLinkWkPhone);%>
 </span></li>
-<li><span class="style1">Mobile: <%Response.Write(pat.WirelessPhone);%>
-	&nbsp;&nbsp;&nbsp;<a href="tel:<%Response.Write(pat.WirelessPhone);%>" class="style2">dial</a>
+<li><span class="style1">Mobile: <%Response.Write(pat.WirelessPhone);%><%Response.Write(DialLinkWirelessPhone);%>
 </span></li>
 <li><span class="style1">Email: <%Response.Write(pat.Email);%> </span></li>
 </ul>

@@ -103,10 +103,11 @@ h2 {
     -webkit-border-image: url(themes/apple/img/searchfield.png) 4 39 4 0; 
 }
 
-.searchbutton{
- position:relative; float:right; top:-30px;
+#searchbutton{
+ position:relative; float:right;top:17px;left:-10px;
  
 }
+
 /*overides existing checkbox css in theme.css*/
 
 .chk{

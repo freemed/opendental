@@ -134,6 +134,9 @@ namespace WebForms {
 			if(ex.InnerException != null) {
 				Console.WriteLine("Inner Exception");
 				Write("InnerException " +ex.InnerException.StackTrace+ " " +ex.InnerException.Message,TraceEventType.Information);
+				if(ex.InnerException.InnerException!= null) {
+					Write("InnerException of  InnerException" +ex.InnerException.InnerException.StackTrace+ " " +ex.InnerException.InnerException.Message,TraceEventType.Information);
+				}
 			}
 		}
 

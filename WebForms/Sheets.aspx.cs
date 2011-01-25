@@ -53,8 +53,8 @@ namespace WebForms {
 					int ImageZIndex=1;
 					int DrawingZIndex=2;
 					int ElementZIndex=3;
-					int SubmitButtonXoffset=0;//-150
-					int SubmitButtonYoffset=50;//-50
+					int SubmitButtonWidth=70;//-150
+					int SubmitButtonYoffset=10;//-50
 					int RadioButtonXOffset=-4;
 					int RadioButtonYOffset=-5;
 					int RadioButtonXOffsetIE=0;
@@ -198,13 +198,12 @@ namespace WebForms {
 					AssignTabOrder();
 					//position the submit button at the end of the page.
 					Button1.Style["position"]="absolute";
-					Button1.Style["left"]=SheetDefWidth/2+SubmitButtonXoffset+"px";
+					Button1.Style["left"]=SheetDefWidth/2-(SubmitButtonWidth/2)+"px";
 					Button1.Style["top"]=SheetDefHeight+SubmitButtonYoffset+"px";
 					Button1.Style["z-index"]=""+ElementZIndex;
+					Button1.Width=Unit.Pixel(SubmitButtonWidth);
 					Panel3.Style["position"]="absolute";
-					//Panel3.Style["left"]=FormYOffset+"px";
 					Panel3.Style["top"]=FormXOffset+SheetDefHeight+SubmitButtonYoffset+"px";
-					
 				}
 				catch(ApplicationException ex) {
 					Logger.LogError(ex);
