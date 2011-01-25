@@ -45,7 +45,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(471,315);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 3;
+			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Adjustment;
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(541,218);
-			this.textNote.TabIndex = 8;
+			this.textNote.TabIndex = 0;
 			// 
 			// label4
 			// 
