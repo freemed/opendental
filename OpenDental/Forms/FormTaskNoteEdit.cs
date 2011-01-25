@@ -20,6 +20,7 @@ namespace OpenDental {
 			textDateTime.Text=TaskNoteCur.DateTimeNote.ToString();
 			textUser.Text=Userods.GetName(TaskNoteCur.UserNum);
 			textNote.Text=TaskNoteCur.Note;
+			this.Top+=150;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
