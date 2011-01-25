@@ -28,6 +28,7 @@ namespace OpenDental {
 			this.tabContr = new System.Windows.Forms.TabControl();
 			this.tabUser = new System.Windows.Forms.TabPage();
 			this.tabNew = new System.Windows.Forms.TabPage();
+			this.tabOpenTickets = new System.Windows.Forms.TabPage();
 			this.tabMain = new System.Windows.Forms.TabPage();
 			this.tabRepeating = new System.Windows.Forms.TabPage();
 			this.tabDate = new System.Windows.Forms.TabPage();
@@ -54,7 +55,8 @@ namespace OpenDental {
 			this.textStartDate = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.tabOpenTickets = new System.Windows.Forms.TabPage();
+			this.menuItemDone = new System.Windows.Forms.MenuItem();
+			this.menuItem4 = new System.Windows.Forms.MenuItem();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -94,6 +96,15 @@ namespace OpenDental {
 			this.tabNew.TabIndex = 6;
 			this.tabNew.Text = "New for User";
 			this.tabNew.UseVisualStyleBackColor = true;
+			// 
+			// tabOpenTickets
+			// 
+			this.tabOpenTickets.Location = new System.Drawing.Point(4,22);
+			this.tabOpenTickets.Name = "tabOpenTickets";
+			this.tabOpenTickets.Size = new System.Drawing.Size(933,0);
+			this.tabOpenTickets.TabIndex = 7;
+			this.tabOpenTickets.Text = "Open Tickets";
+			this.tabOpenTickets.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -185,6 +196,8 @@ namespace OpenDental {
 			// menuEdit
 			// 
 			this.menuEdit.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemDone,
+            this.menuItem4,
             this.menuItemEdit,
             this.menuItem6,
             this.menuItemCut,
@@ -200,64 +213,64 @@ namespace OpenDental {
 			// 
 			// menuItemEdit
 			// 
-			this.menuItemEdit.Index = 0;
+			this.menuItemEdit.Index = 2;
 			this.menuItemEdit.Text = "Edit Properties";
 			this.menuItemEdit.Click += new System.EventHandler(this.menuItemEdit_Click);
 			// 
 			// menuItem6
 			// 
-			this.menuItem6.Index = 1;
+			this.menuItem6.Index = 3;
 			this.menuItem6.Text = "-";
 			// 
 			// menuItemCut
 			// 
-			this.menuItemCut.Index = 2;
+			this.menuItemCut.Index = 4;
 			this.menuItemCut.Text = "Cut";
 			this.menuItemCut.Click += new System.EventHandler(this.menuItemCut_Click);
 			// 
 			// menuItemCopy
 			// 
-			this.menuItemCopy.Index = 3;
+			this.menuItemCopy.Index = 5;
 			this.menuItemCopy.Text = "Copy";
 			this.menuItemCopy.Click += new System.EventHandler(this.menuItemCopy_Click);
 			// 
 			// menuItemPaste
 			// 
-			this.menuItemPaste.Index = 4;
+			this.menuItemPaste.Index = 6;
 			this.menuItemPaste.Text = "Paste";
 			this.menuItemPaste.Click += new System.EventHandler(this.menuItemPaste_Click);
 			// 
 			// menuItemDelete
 			// 
-			this.menuItemDelete.Index = 5;
+			this.menuItemDelete.Index = 7;
 			this.menuItemDelete.Text = "Delete";
 			this.menuItemDelete.Click += new System.EventHandler(this.menuItemDelete_Click);
 			// 
 			// menuItem2
 			// 
-			this.menuItem2.Index = 6;
+			this.menuItem2.Index = 8;
 			this.menuItem2.Text = "-";
 			// 
 			// menuItemSubscribe
 			// 
-			this.menuItemSubscribe.Index = 7;
+			this.menuItemSubscribe.Index = 9;
 			this.menuItemSubscribe.Text = "Subscribe";
 			this.menuItemSubscribe.Click += new System.EventHandler(this.menuItemSubscribe_Click);
 			// 
 			// menuItemUnsubscribe
 			// 
-			this.menuItemUnsubscribe.Index = 8;
+			this.menuItemUnsubscribe.Index = 10;
 			this.menuItemUnsubscribe.Text = "Unsubscribe";
 			this.menuItemUnsubscribe.Click += new System.EventHandler(this.menuItemUnsubscribe_Click);
 			// 
 			// menuItem3
 			// 
-			this.menuItem3.Index = 9;
+			this.menuItem3.Index = 11;
 			this.menuItem3.Text = "-";
 			// 
 			// menuItemGoto
 			// 
-			this.menuItemGoto.Index = 10;
+			this.menuItemGoto.Index = 12;
 			this.menuItemGoto.Text = "Go To";
 			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
 			// 
@@ -318,14 +331,15 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 2;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// tabOpenTickets
+			// menuItemDone
 			// 
-			this.tabOpenTickets.Location = new System.Drawing.Point(4,22);
-			this.tabOpenTickets.Name = "tabOpenTickets";
-			this.tabOpenTickets.Size = new System.Drawing.Size(933,0);
-			this.tabOpenTickets.TabIndex = 7;
-			this.tabOpenTickets.Text = "Open Tickets";
-			this.tabOpenTickets.UseVisualStyleBackColor = true;
+			this.menuItemDone.Index = 0;
+			this.menuItemDone.Text = "Done (affects all users)";
+			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 1;
+			this.menuItem4.Text = "-";
 			// 
 			// UserControlTasks
 			// 
@@ -380,5 +394,7 @@ namespace OpenDental {
 		private System.Windows.Forms.Label labelStartDate;
 		private System.Windows.Forms.TabPage tabNew;
 		private System.Windows.Forms.TabPage tabOpenTickets;
+		private System.Windows.Forms.MenuItem menuItemDone;
+		private System.Windows.Forms.MenuItem menuItem4;
 	}
 }

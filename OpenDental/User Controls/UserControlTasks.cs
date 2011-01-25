@@ -692,6 +692,19 @@ namespace OpenDental {
 			DataValid.SetInvalid(InvalidType.Security);
 		}
 
+		private void Done_Clicked() {
+			//already blocked if list
+			Task task=TasksList[clickedI-TaskListsList.Count];
+			Task oldTask=task.Copy();
+			task.TaskStatus=TaskStatusEnum.Done;
+			if(task.DateTimeFinished.Year<1880) {
+				task.DateTimeFinished=DateTime.Now;
+			}
+			Tasks.Update(task,oldTask);
+			TaskUnreads.SetRead(Security.CurUser.UserNum,task.TaskNum);
+			FillGrid();
+		}
+
 		private void Edit_Clicked() {
 			if(clickedI < TaskListsList.Count) {//is list
 				FormTaskListEdit FormT=new FormTaskListEdit(TaskListsList[clickedI]);
@@ -1061,6 +1074,14 @@ namespace OpenDental {
 		}
 
 		private void SetMenusEnabled() {
+			//Done----------------------------------
+			if(gridMain.SelectedIndices.Length==0 || clickedI < TaskListsList.Count) {//or a tasklist selected
+				menuItemDone.Enabled=false;
+			}
+			else {
+				menuItemDone.Enabled=true;
+			}
+			//Cut/Copy/Paste-------------------------
 			if(gridMain.SelectedIndices.Length==0) {
 				menuItemEdit.Enabled=false;
 				menuItemCut.Enabled=false;
@@ -1135,6 +1156,10 @@ namespace OpenDental {
 			TaskSubscriptions.UnsubscList(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum);
 			//FillMain();
 			FillGrid();
+		}
+
+		private void menuItemDone_Click(object sender,EventArgs e) {
+			Done_Clicked();
 		}
 
 		private void menuItemEdit_Click(object sender,System.EventArgs e) {
