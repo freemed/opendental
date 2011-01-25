@@ -335,6 +335,7 @@ namespace OpenDental {
 			// 
 			this.menuItemDone.Index = 0;
 			this.menuItemDone.Text = "Done (affects all users)";
+			this.menuItemDone.Click += new System.EventHandler(this.menuItemDone_Click);
 			// 
 			// menuItem4
 			// 
