@@ -2428,6 +2428,17 @@ namespace OpenDental{
 				}
 				if(procAlreadyAttached){
 					MessageBox.Show(Lan.g(this,"One or more procedures could not be scheduled because they were already attached to another appointment. Someone probably forgot to update the Next appointment in the Chart module."));
+					FormApptEdit formAE=new FormApptEdit(aptCur.AptNum);
+					formAE.IsNew=true;
+					formAE.ShowDialog();//to force refresh of aptDescript
+					if(formAE.DialogResult!=DialogResult.OK) {//apt gets deleted from within aptEdit window.
+						TempApptSingle.Dispose();
+						RefreshModuleScreenPatient();
+						RefreshPeriod();
+						mouseIsDown = false;
+						boolAptMoved=false;
+						return;
+					}
 				}
 				if(lab!=null) {
 					LabCases.AttachToAppt(lab.LabCaseNum,aptCur.AptNum);
