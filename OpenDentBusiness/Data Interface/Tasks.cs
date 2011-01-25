@@ -111,6 +111,7 @@ namespace OpenDentBusiness{
 				+"AND task.DateType=0 "//this only handles tasks directly in the dated trunks
 				+"AND task.ObjectType="+POut.Int((int)TaskObjectType.Patient)+" "
 				+"AND task.IsRepeating=0 "
+				+"AND task.UserNum="+POut.Long(userNum)+" "
 				+"AND TaskStatus != "+POut.Int((int)TaskStatusEnum.Done)+" "
 				+"ORDER BY DateTimeEntry";
 			DataTable table=Db.GetTable(command);
