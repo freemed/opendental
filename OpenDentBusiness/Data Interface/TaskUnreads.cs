@@ -52,6 +52,8 @@ namespace OpenDentBusiness{
 				userNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
 				SetUnread(userNum,taskNum);//This no longer results in duplicates like it used to
 			}
+			//Now, we also want to set it unread for the originator of the task if they have an inbox:
+
 		}
 
 		public static bool IsUnread(long userNum,long taskNum) {

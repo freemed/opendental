@@ -3539,6 +3539,9 @@ namespace OpenDental{
 			if(FormM.ShowDialog()!=DialogResult.OK) {
 				return;
 			}
+			if(userControlTasks1.Visible) {
+				userControlTasks1.InitializeOnStartup();
+			}
 			//menuItemMergeDatabases.Visible=PrefC.GetBool(PrefName.RandomPrimaryKeys");
 			//if(timerSignals.Interval==0){
 			if(PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)==0){

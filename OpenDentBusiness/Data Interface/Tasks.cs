@@ -76,16 +76,38 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),userNum);
 			}
-			string command="SELECT task.TaskNum,task.TaskListNum,task.DateTask,task.KeyNum,task.Descript,"
-				+"task.TaskStatus,task.IsRepeating,task.DateType,task.FromNum,task.ObjectType,"
-				+"task.DateTimeEntry,task.UserNum,task.DateTimeFinished,1 AS IsUnread "
+			string command="SELECT task.*,1 AS IsUnread "
 				//we fill the IsUnread column with 1's because we already know that they are all unread
 				+"FROM task,taskunread "
 				+"WHERE task.TaskNum=taskunread.TaskNum "
 				+"AND taskunread.UserNum = "+POut.Long(userNum)+" "
-				+"ORDER BY task.TaskNum,task.TaskListNum,task.DateTask,task.KeyNum,task.Descript,"
-				+"task.TaskStatus,task.IsRepeating,task.DateType,task.FromNum,task.ObjectType,"
-				+"task.DateTimeEntry,task.UserNum,task.DateTimeFinished";//a datetime stamp would be nice.
+				+"ORDER BY task.DateTimeEntry";
+			DataTable table=Db.GetTable(command);
+			return TableToList(table);
+		}
+
+		///<summary>Gets all 'open ticket' tasks for a user.  An open ticket is a task that was created by this user, is not on a list subscribed to by this user, and is attached to a patient.</summary>
+		public static List<Task> RefreshOpenTickets(long userNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),userNum);
+			}
+			string command="SELECT task.*, "
+				+"(SELECT COUNT(*) FROM taskunread WHERE task.TaskNum=taskunread.TaskNum "
+				+"AND taskunread.UserNum="+POut.Long(userNum)+") IsUnread "
+				+"FROM task "
+				+"WHERE NOT EXISTS(SELECT * FROM taskancestor,tasklist "
+				+"WHERE taskancestor.TaskNum=task.TaskNum "
+				+"AND tasklist.TaskListNum=taskancestor.TaskListNum "
+				+"AND tasklist.DateType!=0) "//if any ancestor is a dated list, then we don't want that task
+				+"AND NOT EXISTS(SELECT * FROM taskancestor,tasksubscription "//a different set of ancestors
+				+"WHERE taskancestor.TaskNum=task.TaskNum "
+				+"AND tasksubscription.TaskListNum=taskancestor.TaskListNum "
+				+"AND tasksubscription.UserNum="+POut.Long(userNum)+") "//if this user is subscribed to any ancestor list, then we won't include it
+				+"AND task.DateType=0 "//this only handles tasks directly in the dated trunks
+				+"AND task.ObjectType="+POut.Int((int)TaskObjectType.Patient)+" "
+				+"AND task.IsRepeating=0 "
+				+"AND TaskStatus != "+POut.Int((int)TaskStatusEnum.Done)+" "
+				+"ORDER BY DateTimeEntry";
 			DataTable table=Db.GetTable(command);
 			return TableToList(table);
 		}

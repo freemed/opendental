@@ -270,6 +270,7 @@ namespace OpenDentBusiness {
 		TaskListAlwaysShowsAtBottom,
 		TasksCheckOnStartup,
 		TasksNewTrackedByUser,
+		TasksShowOpenTickets,
 		TerminalClosePassword,
 		TimecardSecurityEnabled,
 		TimeCardsMakesAdjustmentsForOverBreaks,

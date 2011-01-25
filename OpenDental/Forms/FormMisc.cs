@@ -43,6 +43,7 @@ namespace OpenDental{
 		private CheckBox checkReportProdWO;
 		private GroupBox groupBox1;
 		private CheckBox checkTasksNewTrackedByUser;
+		private CheckBox checkShowOpenTickets;
 		private Label label1;
 		//private List<Def> posAdjTypes;
 
@@ -71,13 +72,11 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
+			this.checkBoxTaskKeepListHidden = new System.Windows.Forms.CheckBox();
 			this.radioBottom = new System.Windows.Forms.RadioButton();
 			this.radioRight = new System.Windows.Forms.RadioButton();
-			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
 			this.checkTasksCheckOnStartup = new System.Windows.Forms.CheckBox();
-			this.checkBoxTaskKeepListHidden = new System.Windows.Forms.CheckBox();
-			this.validNumY = new OpenDental.ValidNumber();
-			this.validNumX = new OpenDental.ValidNumber();
 			this.checkTasksNewTrackedByUser = new System.Windows.Forms.CheckBox();
 			this.labelX = new System.Windows.Forms.Label();
 			this.labelY = new System.Windows.Forms.Label();
@@ -89,16 +88,19 @@ namespace OpenDental{
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkTitleBarShowSite = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.butLanguages = new OpenDental.UI.Button();
-			this.textSigInterval = new OpenDental.ValidNumber();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.textWebServiceServerName = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkReportsProcDate = new System.Windows.Forms.CheckBox();
 			this.checkReportsShowPatNum = new System.Windows.Forms.CheckBox();
 			this.checkReportProdWO = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkShowOpenTickets = new System.Windows.Forms.CheckBox();
+			this.validNumY = new OpenDental.ValidNumber();
+			this.validNumX = new OpenDental.ValidNumber();
+			this.butLanguages = new OpenDental.UI.Button();
+			this.textSigInterval = new OpenDental.ValidNumber();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBoxTaskDefaults.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -143,6 +145,32 @@ namespace OpenDental{
 			this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
 			this.toolTip1.ToolTipTitle = "Help";
 			// 
+			// checkTaskListAlwaysShow
+			// 
+			this.checkTaskListAlwaysShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTaskListAlwaysShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTaskListAlwaysShow.Location = new System.Drawing.Point(158,34);
+			this.checkTaskListAlwaysShow.Name = "checkTaskListAlwaysShow";
+			this.checkTaskListAlwaysShow.Size = new System.Drawing.Size(190,14);
+			this.checkTaskListAlwaysShow.TabIndex = 74;
+			this.checkTaskListAlwaysShow.Text = "Global - Always show Task List";
+			this.checkTaskListAlwaysShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolTip1.SetToolTip(this.checkTaskListAlwaysShow,resources.GetString("checkTaskListAlwaysShow.ToolTip"));
+			this.checkTaskListAlwaysShow.CheckedChanged += new System.EventHandler(this.checkTaskListAlwaysShow_CheckedChanged);
+			// 
+			// checkBoxTaskKeepListHidden
+			// 
+			this.checkBoxTaskKeepListHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBoxTaskKeepListHidden.Location = new System.Drawing.Point(63,19);
+			this.checkBoxTaskKeepListHidden.Name = "checkBoxTaskKeepListHidden";
+			this.checkBoxTaskKeepListHidden.Size = new System.Drawing.Size(218,20);
+			this.checkBoxTaskKeepListHidden.TabIndex = 185;
+			this.checkBoxTaskKeepListHidden.Text = "Don\'t show on this computer";
+			this.checkBoxTaskKeepListHidden.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.toolTip1.SetToolTip(this.checkBoxTaskKeepListHidden,resources.GetString("checkBoxTaskKeepListHidden.ToolTip"));
+			this.checkBoxTaskKeepListHidden.UseVisualStyleBackColor = true;
+			this.checkBoxTaskKeepListHidden.CheckedChanged += new System.EventHandler(this.checkBoxTaskKeepListHidden_CheckedChanged);
+			// 
 			// radioBottom
 			// 
 			this.radioBottom.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -167,19 +195,6 @@ namespace OpenDental{
 			this.radioRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.radioRight.UseVisualStyleBackColor = true;
 			// 
-			// checkTaskListAlwaysShow
-			// 
-			this.checkTaskListAlwaysShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkTaskListAlwaysShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTaskListAlwaysShow.Location = new System.Drawing.Point(158,34);
-			this.checkTaskListAlwaysShow.Name = "checkTaskListAlwaysShow";
-			this.checkTaskListAlwaysShow.Size = new System.Drawing.Size(190,14);
-			this.checkTaskListAlwaysShow.TabIndex = 74;
-			this.checkTaskListAlwaysShow.Text = "Global - Always show Task List";
-			this.checkTaskListAlwaysShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.checkTaskListAlwaysShow,resources.GetString("checkTaskListAlwaysShow.ToolTip"));
-			this.checkTaskListAlwaysShow.CheckedChanged += new System.EventHandler(this.checkTaskListAlwaysShow_CheckedChanged);
-			// 
 			// checkTasksCheckOnStartup
 			// 
 			this.checkTasksCheckOnStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -190,43 +205,6 @@ namespace OpenDental{
 			this.checkTasksCheckOnStartup.TabIndex = 75;
 			this.checkTasksCheckOnStartup.Text = "Check for new user tasks on startup";
 			this.checkTasksCheckOnStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkBoxTaskKeepListHidden
-			// 
-			this.checkBoxTaskKeepListHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBoxTaskKeepListHidden.Location = new System.Drawing.Point(63,19);
-			this.checkBoxTaskKeepListHidden.Name = "checkBoxTaskKeepListHidden";
-			this.checkBoxTaskKeepListHidden.Size = new System.Drawing.Size(218,20);
-			this.checkBoxTaskKeepListHidden.TabIndex = 185;
-			this.checkBoxTaskKeepListHidden.Text = "Don\'t show on this computer";
-			this.checkBoxTaskKeepListHidden.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.toolTip1.SetToolTip(this.checkBoxTaskKeepListHidden,resources.GetString("checkBoxTaskKeepListHidden.ToolTip"));
-			this.checkBoxTaskKeepListHidden.UseVisualStyleBackColor = true;
-			this.checkBoxTaskKeepListHidden.CheckedChanged += new System.EventHandler(this.checkBoxTaskKeepListHidden_CheckedChanged);
-			// 
-			// validNumY
-			// 
-			this.validNumY.Location = new System.Drawing.Point(235,59);
-			this.validNumY.MaxLength = 4;
-			this.validNumY.MaxVal = 1200;
-			this.validNumY.MinVal = 300;
-			this.validNumY.Name = "validNumY";
-			this.validNumY.Size = new System.Drawing.Size(47,20);
-			this.validNumY.TabIndex = 188;
-			this.validNumY.Text = "542";
-			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// validNumX
-			// 
-			this.validNumX.Location = new System.Drawing.Point(115,59);
-			this.validNumX.MaxLength = 4;
-			this.validNumX.MaxVal = 2000;
-			this.validNumX.MinVal = 300;
-			this.validNumX.Name = "validNumX";
-			this.validNumX.Size = new System.Drawing.Size(47,20);
-			this.validNumX.TabIndex = 186;
-			this.validNumX.Text = "542";
-			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// checkTasksNewTrackedByUser
 			// 
@@ -268,6 +246,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkShowOpenTickets);
 			this.groupBox2.Controls.Add(this.checkTasksNewTrackedByUser);
 			this.groupBox2.Controls.Add(this.groupBoxTaskDefaults);
 			this.groupBox2.Controls.Add(this.checkTaskListAlwaysShow);
@@ -275,7 +254,7 @@ namespace OpenDental{
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(101,308);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(386,166);
+			this.groupBox2.Size = new System.Drawing.Size(386,182);
 			this.groupBox2.TabIndex = 188;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Task List";
@@ -291,7 +270,7 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults.Controls.Add(this.checkBoxTaskKeepListHidden);
 			this.groupBoxTaskDefaults.Enabled = false;
 			this.groupBoxTaskDefaults.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(67,75);
+			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(67,94);
 			this.groupBoxTaskDefaults.Name = "groupBoxTaskDefaults";
 			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(297,83);
 			this.groupBoxTaskDefaults.TabIndex = 76;
@@ -352,61 +331,6 @@ namespace OpenDental{
 			this.label1.Size = new System.Drawing.Size(410,17);
 			this.label1.TabIndex = 196;
 			this.label1.Text = "See Setup | Modules for setup options that were previously in this window.";
-			// 
-			// butLanguages
-			// 
-			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLanguages.Autosize = true;
-			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(360,178);
-			this.butLanguages.Name = "butLanguages";
-			this.butLanguages.Size = new System.Drawing.Size(88,24);
-			this.butLanguages.TabIndex = 63;
-			this.butLanguages.Text = "Edit Languages";
-			this.butLanguages.Click += new System.EventHandler(this.butLanguages_Click);
-			// 
-			// textSigInterval
-			// 
-			this.textSigInterval.Location = new System.Drawing.Point(375,147);
-			this.textSigInterval.MaxVal = 1000000;
-			this.textSigInterval.MinVal = 1;
-			this.textSigInterval.Name = "textSigInterval";
-			this.textSigInterval.Size = new System.Drawing.Size(74,20);
-			this.textSigInterval.TabIndex = 57;
-			this.textSigInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(548,452);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 8;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(548,414);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 7;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// textWebServiceServerName
 			// 
@@ -471,6 +395,96 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Reports";
 			// 
+			// checkShowOpenTickets
+			// 
+			this.checkShowOpenTickets.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowOpenTickets.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowOpenTickets.Location = new System.Drawing.Point(6,72);
+			this.checkShowOpenTickets.Name = "checkShowOpenTickets";
+			this.checkShowOpenTickets.Size = new System.Drawing.Size(342,14);
+			this.checkShowOpenTickets.TabIndex = 78;
+			this.checkShowOpenTickets.Text = "Show open tickets for user";
+			this.checkShowOpenTickets.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// validNumY
+			// 
+			this.validNumY.Location = new System.Drawing.Point(235,59);
+			this.validNumY.MaxLength = 4;
+			this.validNumY.MaxVal = 1200;
+			this.validNumY.MinVal = 300;
+			this.validNumY.Name = "validNumY";
+			this.validNumY.Size = new System.Drawing.Size(47,20);
+			this.validNumY.TabIndex = 188;
+			this.validNumY.Text = "542";
+			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// validNumX
+			// 
+			this.validNumX.Location = new System.Drawing.Point(115,59);
+			this.validNumX.MaxLength = 4;
+			this.validNumX.MaxVal = 2000;
+			this.validNumX.MinVal = 300;
+			this.validNumX.Name = "validNumX";
+			this.validNumX.Size = new System.Drawing.Size(47,20);
+			this.validNumX.TabIndex = 186;
+			this.validNumX.Text = "542";
+			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// butLanguages
+			// 
+			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLanguages.Autosize = true;
+			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLanguages.CornerRadius = 4F;
+			this.butLanguages.Location = new System.Drawing.Point(360,178);
+			this.butLanguages.Name = "butLanguages";
+			this.butLanguages.Size = new System.Drawing.Size(88,24);
+			this.butLanguages.TabIndex = 63;
+			this.butLanguages.Text = "Edit Languages";
+			this.butLanguages.Click += new System.EventHandler(this.butLanguages_Click);
+			// 
+			// textSigInterval
+			// 
+			this.textSigInterval.Location = new System.Drawing.Point(375,147);
+			this.textSigInterval.MaxVal = 1000000;
+			this.textSigInterval.MinVal = 1;
+			this.textSigInterval.Name = "textSigInterval";
+			this.textSigInterval.Size = new System.Drawing.Size(74,20);
+			this.textSigInterval.TabIndex = 57;
+			this.textSigInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(548,452);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 8;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(548,414);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 7;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -528,6 +542,7 @@ namespace OpenDental{
 				groupBoxTaskDefaults.Enabled=false;
 			}
 			checkTasksNewTrackedByUser.Checked=PrefC.GetBool(PrefName.TasksNewTrackedByUser);
+			checkShowOpenTickets.Checked=PrefC.GetBool(PrefName.TasksShowOpenTickets);
 			//computerPref=ComputerPrefs.GetForLocalComputer();
 			checkBoxTaskKeepListHidden.Checked=ComputerPrefs.LocalComputer.TaskKeepListHidden;
 			if(ComputerPrefs.LocalComputer.TaskDock==0) {
@@ -594,6 +609,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.TaskListAlwaysShowsAtBottom, checkTaskListAlwaysShow.Checked)
 				| Prefs.UpdateBool(PrefName.TasksCheckOnStartup, checkTasksCheckOnStartup.Checked)
 				| Prefs.UpdateBool(PrefName.TasksNewTrackedByUser, checkTasksNewTrackedByUser.Checked)
+				| Prefs.UpdateBool(PrefName.TasksShowOpenTickets,checkShowOpenTickets.Checked)
 				| Prefs.UpdateBool(PrefName.TitleBarShowSite, checkTitleBarShowSite.Checked)
 				| Prefs.UpdateString(PrefName.WebServiceServerName,textWebServiceServerName.Text)
 				| Prefs.UpdateBool(PrefName.ReportsPPOwriteoffDefaultToProcDate,checkReportsProcDate.Checked)

@@ -67,6 +67,16 @@ namespace OpenDental {
 			}
 			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
 			tabNew.Text=Lan.g(this,"New for ")+Security.CurUser.UserName;
+			if(PrefC.GetBool(PrefName.TasksShowOpenTickets)) {
+				if(!tabContr.TabPages.Contains(tabOpenTickets)) {
+					tabContr.TabPages.Insert(2,tabOpenTickets);
+				}
+			}
+			else{
+				if(tabContr.TabPages.Contains(tabOpenTickets)) {
+					tabContr.TabPages.Remove(tabOpenTickets);
+				}
+			}
 			LayoutToolBar();
 			if(Tasks.LastOpenList==null) {//first time openning
 				TreeHistory=new List<TaskList>();
@@ -494,6 +504,10 @@ namespace OpenDental {
 			else if(tabContr.SelectedTab==tabNew) {
 				TaskListsList=new List<TaskList>();//no task lists in new tab
 				TasksList=Tasks.RefreshUserNew(Security.CurUser.UserNum);
+			}
+			else if(tabContr.SelectedTab==tabOpenTickets) {
+				TaskListsList=new List<TaskList>();//no task lists in new tab
+				TasksList=Tasks.RefreshOpenTickets(Security.CurUser.UserNum);
 			}
 			else if(tabContr.SelectedTab==tabMain) {
 				TaskListsList=TaskLists.RefreshMainTrunk(Security.CurUser.UserNum);
@@ -990,10 +1004,21 @@ namespace OpenDental {
 			}
 			if(clickedCol==0){//check tasks off
 				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
-					long userNumInbox=TaskLists.GetMailboxUserNum(TreeHistory[0].TaskListNum);
-					if(userNumInbox != 0 && userNumInbox != Security.CurUser.UserNum) {
-						MsgBox.Show(this,"Not allowed to mark off tasks in someone else's inbox.");
-						return;
+					if(tabContr.SelectedTab==tabNew){
+						//these are never in someone else's inbox, so don't block. 
+					}
+					else{
+						long userNumInbox=0;
+						if(tabContr.SelectedTab==tabOpenTickets) {
+							userNumInbox=TaskLists.GetMailboxUserNumByAncestor(TasksList[clickedI-TaskListsList.Count].TaskNum);
+						}
+						else {
+							userNumInbox=TaskLists.GetMailboxUserNum(TreeHistory[0].TaskListNum);
+						}
+						if(userNumInbox != 0 && userNumInbox != Security.CurUser.UserNum) {
+							MsgBox.Show(this,"Not allowed to mark off tasks in someone else's inbox.");
+							return;
+						}
 					}
 					//might not need to go to db to get this info 
 					//might be able to check this:

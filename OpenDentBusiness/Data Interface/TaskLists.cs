@@ -286,6 +286,7 @@ namespace OpenDentBusiness{
  			Db.NonQ(command);
 		}
 
+		///<summary>Will return 0 if not anyone's inbox.</summary>
 		public static long GetMailboxUserNum(long taskListNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetLong(MethodBase.GetCurrentMethod(),taskListNum);
@@ -293,8 +294,17 @@ namespace OpenDentBusiness{
 			string command="SELECT UserNum FROM userod WHERE TaskListInBox="+POut.Long(taskListNum);
 			return PIn.Long(Db.GetScalar(command));
 		}
-	
-	
+
+		///<summary>Checks all ancestors of a task.  Will return 0 if no ancestor is anyone's inbox.</summary>
+		public static long GetMailboxUserNumByAncestor(long taskNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),taskNum);
+			}
+			string command="SELECT UserNum FROM taskancestor,userod "
+				+"WHERE taskancestor.TaskListNum=userod.TaskListInBox "
+				+"AND taskancestor.TaskNum="+POut.Long(taskNum);
+			return PIn.Long(Db.GetScalar(command));
+		}
 
 		
 

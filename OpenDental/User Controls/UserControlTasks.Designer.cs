@@ -54,6 +54,7 @@ namespace OpenDental {
 			this.textStartDate = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.tabOpenTickets = new System.Windows.Forms.TabPage();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -63,6 +64,7 @@ namespace OpenDental {
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabContr.Controls.Add(this.tabUser);
 			this.tabContr.Controls.Add(this.tabNew);
+			this.tabContr.Controls.Add(this.tabOpenTickets);
 			this.tabContr.Controls.Add(this.tabMain);
 			this.tabContr.Controls.Add(this.tabRepeating);
 			this.tabContr.Controls.Add(this.tabDate);
@@ -316,6 +318,15 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 2;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// tabOpenTickets
+			// 
+			this.tabOpenTickets.Location = new System.Drawing.Point(4,22);
+			this.tabOpenTickets.Name = "tabOpenTickets";
+			this.tabOpenTickets.Size = new System.Drawing.Size(933,0);
+			this.tabOpenTickets.TabIndex = 7;
+			this.tabOpenTickets.Text = "Open Tickets";
+			this.tabOpenTickets.UseVisualStyleBackColor = true;
+			// 
 			// UserControlTasks
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -368,5 +379,6 @@ namespace OpenDental {
 		private ValidDate textStartDate;
 		private System.Windows.Forms.Label labelStartDate;
 		private System.Windows.Forms.TabPage tabNew;
+		private System.Windows.Forms.TabPage tabOpenTickets;
 	}
 }

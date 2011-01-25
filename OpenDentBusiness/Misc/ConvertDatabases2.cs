@@ -3339,7 +3339,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('ImagesModuleTreeIsCollapsed','0')";
 				Db.NonQ(command);
-
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('TasksShowOpenTickets','0')";
+				Db.NonQ(command);
 
 
 
