@@ -2183,6 +2183,7 @@ namespace OpenDental{
 			task.KeyNum=CurPatNum;
 			task.ObjectType=TaskObjectType.Patient;
 			task.TaskListNum=FormT.SelectedTaskListNum;
+			task.UserNum=Security.CurUser.UserNum;
 			FormTaskEdit FormTE=new FormTaskEdit(task);
 			FormTE.IsNew=true;
 			FormTE.Show();

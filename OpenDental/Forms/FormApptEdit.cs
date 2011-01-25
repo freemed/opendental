@@ -2481,6 +2481,7 @@ namespace OpenDental{
 			task.KeyNum=AptCur.AptNum;
 			task.ObjectType=TaskObjectType.Appointment;
 			task.TaskListNum=FormT.SelectedTaskListNum;
+			task.UserNum=Security.CurUser.UserNum;
 			FormTaskEdit FormTE=new FormTaskEdit(task);
 			FormTE.IsNew=true;
 			FormTE.ShowDialog();
