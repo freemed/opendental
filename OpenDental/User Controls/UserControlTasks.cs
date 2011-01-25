@@ -318,6 +318,10 @@ namespace OpenDental {
 				//col.ImageList=imageListTree;
 				gridMain.Columns.Add(col);
 			}
+			if(tabContr.SelectedTab==tabNew || tabContr.SelectedTab==tabOpenTickets) {
+				col=new ODGridColumn(Lan.g("TableTasks","Task List"),90);
+				gridMain.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TableTasks","Description"),200);//any width
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -436,6 +440,9 @@ namespace OpenDental {
 					if(tabContr.SelectedTab==tabNew) {//In this mode, there's a extra column in this tab
 						row.Cells.Add("read");
 					}
+				}
+				if(tabContr.SelectedTab==tabNew || tabContr.SelectedTab==tabOpenTickets) {
+					row.Cells.Add(TasksList[i].ParentDesc);
 				}
 				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript+notes);
 				gridMain.Rows.Add(row);

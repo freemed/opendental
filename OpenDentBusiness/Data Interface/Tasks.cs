@@ -22,6 +22,9 @@ namespace OpenDentBusiness{
 				if(table.Columns.Contains("IsUnread")) {
 					retVal[i].IsUnread=PIn.Bool(table.Rows[i]["IsUnread"].ToString());//1 or more will result in true.
 				}
+				if(table.Columns.Contains("ParentDesc")) {
+					retVal[i].ParentDesc=PIn.String(table.Rows[i]["ParentDesc"].ToString());
+				}
 			}
 			return retVal;
 		}
@@ -76,8 +79,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),userNum);
 			}
-			string command="SELECT task.*,1 AS IsUnread "
+			string command="SELECT task.*,1 AS IsUnread, "
 				//we fill the IsUnread column with 1's because we already know that they are all unread
+				+"(SELECT tasklist.Descript FROM tasklist WHERE task.TaskListNum=tasklist.TaskListNum) ParentDesc "
 				+"FROM task,taskunread "
 				+"WHERE task.TaskNum=taskunread.TaskNum "
 				+"AND taskunread.UserNum = "+POut.Long(userNum)+" "
@@ -93,7 +97,8 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT task.*, "
 				+"(SELECT COUNT(*) FROM taskunread WHERE task.TaskNum=taskunread.TaskNum "
-				+"AND taskunread.UserNum="+POut.Long(userNum)+") IsUnread "
+				+"AND taskunread.UserNum="+POut.Long(userNum)+") AS IsUnread, "
+				+"(SELECT tasklist.Descript FROM tasklist WHERE task.TaskListNum=tasklist.TaskListNum) ParentDesc "
 				+"FROM task "
 				+"WHERE NOT EXISTS(SELECT * FROM taskancestor,tasklist "
 				+"WHERE taskancestor.TaskNum=task.TaskNum "

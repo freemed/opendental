@@ -40,6 +40,9 @@ namespace OpenDentBusiness{
 		///<summary>Only used when tracking unread status by user instead of by task.  This gets set to true to indicate it has not yet been read.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public bool IsUnread;
+		///<Summary>Not a database column.  A string description of the parent of this task.  It will only include the immediate parent.  Only useful in the New and OpenTicket tabs.</Summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string ParentDesc;
 
 		///<summary></summary>
 		public Task Copy() {
