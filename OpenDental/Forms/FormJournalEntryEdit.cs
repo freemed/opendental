@@ -375,6 +375,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Only one amount can be filled in.");
 				return;
 			}
+			if(AccountPicked==null || AccountPicked.AccountNum==0) {
+				MsgBox.Show(this,"Please select an account.");
+				return;
+			}
 			EntryCur.AccountNum=AccountPicked.AccountNum;
 			EntryCur.DebitAmt=PIn.Double(textDebit.Text);
 			EntryCur.CreditAmt=PIn.Double(textCredit.Text);
