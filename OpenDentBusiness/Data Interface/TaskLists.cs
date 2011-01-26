@@ -19,10 +19,11 @@ namespace OpenDentBusiness{
 				+"AND task.TaskNum=taskancestor.TaskNum ";
 			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
 				command+="AND EXISTS(SELECT * FROM taskunread WHERE taskunread.TaskNum=task.TaskNum "
-					+"AND taskunread.UserNum="+POut.Long(userNum)+")";
+					+"AND taskunread.UserNum="+POut.Long(userNum)+") "
+					+"AND task.TaskStatus !=2 ";//not done
 			}
 			else {
-				command+="AND task.TaskStatus=0";
+				command+="AND task.TaskStatus=0 ";
 			}
 			command+="),"
 				+"t2.Descript,t3.Descript FROM tasksubscription "
@@ -52,7 +53,8 @@ namespace OpenDentBusiness{
 				//then restrict by that user
 				command+="THEN (taskunread.UserNum=(SELECT UserNum FROM userod WHERE userod.TaskListInBox=tasklist.TaskListNum)) ";
 				//otherwise, restrict by current user
-				command+="ELSE taskunread.UserNum="+POut.Long(userNum)+" END))";
+				command+="ELSE taskunread.UserNum="+POut.Long(userNum)+" END)) "
+					+"AND task.TaskStatus !=2 ";//not done
 			}
 			else {
 				command+="AND task.TaskStatus=0";
@@ -62,7 +64,7 @@ namespace OpenDentBusiness{
 				+"WHERE Parent=0 "
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=0 "
-				+"ORDER BY DateTimeEntry";
+				+"ORDER BY Descript";//DateTimeEntry";
 			return TableToList(Db.GetTable(command));
 		}
 
