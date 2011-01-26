@@ -85,6 +85,7 @@ namespace OpenDentBusiness{
 				+"FROM task,taskunread "
 				+"WHERE task.TaskNum=taskunread.TaskNum "
 				+"AND taskunread.UserNum = "+POut.Long(userNum)+" "
+				+"GROUP BY task.TaskNum "//in case there are duplicate unreads
 				+"ORDER BY task.DateTimeEntry";
 			DataTable table=Db.GetTable(command);
 			return TableToList(table);
