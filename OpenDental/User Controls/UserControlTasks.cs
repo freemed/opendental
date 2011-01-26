@@ -363,7 +363,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<TasksList.Count;i++) {
 				dateStr="";
-				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabMain) {
+				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabMain || tabContr.SelectedTab==tabOpenTickets) {
 					if(TasksList[i].DateTask.Year>1880) {
 						if(TasksList[i].DateType==TaskDateType.Day) {
 							dateStr=TasksList[i].DateTask.ToShortDateString()+" - ";
