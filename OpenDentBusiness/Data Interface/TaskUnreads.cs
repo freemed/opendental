@@ -34,11 +34,17 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//if the task is done, don't add unreads
-			string command="SELECT TaskStatus FROM task WHERE TaskNum = "+POut.Long(taskNum);
-			TaskStatusEnum taskStatus=(TaskStatusEnum)PIn.Int(Db.GetScalar(command));
+			string command="SELECT TaskStatus,UserNum FROM task WHERE TaskNum = "+POut.Long(taskNum);
+			DataTable table=Db.GetTable(command);
+			TaskStatusEnum taskStatus=(TaskStatusEnum)PIn.Int(table.Rows[0]["TaskStatus"].ToString());
+			long userNumOwner=PIn.Long(table.Rows[0]["UserNum"].ToString());
 			if(taskStatus==TaskStatusEnum.Done) {
 				return;
 			}
+			//Set it unread for the original owner of the task.
+			SetUnread(userNumOwner,taskNum);
+			//Then, for anyone subscribed
+			long userNum;
 			//task subscriptions are not cached yet, so we use a query.
 			//Get a list of all subscribers to this task
 			command="SELECT tasksubscription.UserNum "
@@ -46,14 +52,14 @@ namespace OpenDentBusiness{
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND taskancestor.TaskNum = "+POut.Long(taskNum)+" "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum";
-			DataTable table=Db.GetTable(command);//Crud.TaskSubscriptionCrud.SelectMany(
-			long userNum;
+			table=Db.GetTable(command);//Crud.TaskSubscriptionCrud.SelectMany(
 			for(int i=0;i<table.Rows.Count;i++) {
 				userNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
+				if(userNum==userNumOwner) {
+					continue;//alread set
+				}
 				SetUnread(userNum,taskNum);//This no longer results in duplicates like it used to
 			}
-			//Now, we also want to set it unread for the originator of the task if they have an inbox:
-
 		}
 
 		public static bool IsUnread(long userNum,long taskNum) {
