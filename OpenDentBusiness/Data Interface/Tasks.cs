@@ -90,7 +90,7 @@ namespace OpenDentBusiness{
 			return TableToList(table);
 		}
 
-		///<summary>Gets all 'open ticket' tasks for a user.  An open ticket is a task that was created by this user, is not on a list subscribed to by this user, and is attached to a patient.</summary>
+		///<summary>Gets all 'open ticket' tasks for a user.  An open ticket is a task that was created by this user, is attached to a patient, and is not done.</summary>
 		public static List<Task> RefreshOpenTickets(long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),userNum);
@@ -104,10 +104,10 @@ namespace OpenDentBusiness{
 				+"WHERE taskancestor.TaskNum=task.TaskNum "
 				+"AND tasklist.TaskListNum=taskancestor.TaskListNum "
 				+"AND tasklist.DateType!=0) "//if any ancestor is a dated list, then we don't want that task
-				+"AND NOT EXISTS(SELECT * FROM taskancestor,tasksubscription "//a different set of ancestors
-				+"WHERE taskancestor.TaskNum=task.TaskNum "
-				+"AND tasksubscription.TaskListNum=taskancestor.TaskListNum "
-				+"AND tasksubscription.UserNum="+POut.Long(userNum)+") "//if this user is subscribed to any ancestor list, then we won't include it
+				//+"AND NOT EXISTS(SELECT * FROM taskancestor,tasksubscription "//a different set of ancestors
+				//+"WHERE taskancestor.TaskNum=task.TaskNum "
+				//+"AND tasksubscription.TaskListNum=taskancestor.TaskListNum "
+				//+"AND tasksubscription.UserNum="+POut.Long(userNum)+") "//if this user is subscribed to any ancestor list, then we won't include it
 				+"AND task.DateType=0 "//this only handles tasks directly in the dated trunks
 				+"AND task.ObjectType="+POut.Int((int)TaskObjectType.Patient)+" "
 				+"AND task.IsRepeating=0 "
