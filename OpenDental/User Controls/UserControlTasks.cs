@@ -92,7 +92,21 @@ namespace OpenDental {
 			}
 			FillTree();
 			FillGrid();
+			if(tabContr.SelectedTab!=tabOpenTickets) {//because it will have alread been set
+				SetOpenTicketTab(-1);
+			}
 			SetMenusEnabled();
+		}
+
+		///<summary>Called whenever OpenTicket tab is refreshed to set the count at the top.  Also called from InitializeOnStartup.  In that case, we don't know what the count should be, so we pass in a -1.</summary>
+		private void SetOpenTicketTab(int countSet) {
+			if(!tabContr.TabPages.Contains(tabOpenTickets)) {
+				return;
+			}
+			if(countSet==-1) {
+				countSet=Tasks.GetCountOpenTickets(Security.CurUser.UserNum);
+			}
+			tabOpenTickets.Text=Lan.g(this,"Open Tickets")+" ("+countSet.ToString()+")";
 		}
 
 		public void ClearLogOff() {
@@ -448,6 +462,9 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			if(tabContr.SelectedTab==tabOpenTickets) {
+				SetOpenTicketTab(gridMain.Rows.Count);
+			}
 		}
 
 		private void checkShowFinished_Click(object sender,EventArgs e) {

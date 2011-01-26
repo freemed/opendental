@@ -382,7 +382,24 @@ namespace OpenDentBusiness{
 			}
 			Db.NonQ(command);
 		}*/
-	
+
+		public static int GetCountOpenTickets(long userNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),userNum);
+			}
+			string command="SELECT COUNT(*) "
+				+"FROM task "
+				+"WHERE NOT EXISTS(SELECT * FROM taskancestor,tasklist "
+				+"WHERE taskancestor.TaskNum=task.TaskNum "
+				+"AND tasklist.TaskListNum=taskancestor.TaskListNum "
+				+"AND tasklist.DateType!=0) "//if any ancestor is a dated list, then we don't want that task
+				+"AND task.DateType=0 "//this only handles tasks directly in the dated trunks
+				+"AND task.ObjectType="+POut.Int((int)TaskObjectType.Patient)+" "
+				+"AND task.IsRepeating=0 "
+				+"AND task.UserNum="+POut.Long(userNum)+" "
+				+"AND TaskStatus != "+POut.Int((int)TaskStatusEnum.Done);
+			return PIn.Int(Db.GetCount(command));
+		}
 	
 
 	
