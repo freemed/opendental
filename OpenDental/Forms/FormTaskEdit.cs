@@ -74,15 +74,15 @@ namespace OpenDental{
 		///<summary>When tracking status by user, this tracks whether it has changed.  This is so that if it has changed, a signal can be sent for a refresh of lists.</summary>
 		private bool StatusChanged;
 
-		///<summary>Task gets inserted ahead of time.</summary>
-		public FormTaskEdit(Task taskCur)
+		///<summary>Task gets inserted ahead of time, then frequently altered before passing in here.  The taskOld that is passed in should be the task as it is in the database.  When saving, taskOld will be compared with db to make sure no changes.</summary>
+		public FormTaskEdit(Task taskCur,Task taskOld) 
 		{
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 			TaskCur=taskCur;
-			TaskOld=taskCur.Copy();
+			TaskOld=taskOld;
 			TaskListCur=TaskLists.GetOne(taskCur.TaskListNum);
 			Lan.F(this);
 		}
@@ -970,7 +970,7 @@ namespace OpenDental{
 			//Cur.KeyNum already handled
 			try{
 				if(IsNew){
-					Tasks.Insert(TaskCur);
+					Tasks.Update(TaskCur,TaskOld);
 				}
 				else{
 					if(!TaskCur.Equals(TaskOld)){//If user clicks OK without making any changes, then skip.

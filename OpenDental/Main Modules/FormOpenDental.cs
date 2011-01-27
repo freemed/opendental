@@ -2180,11 +2180,12 @@ namespace OpenDental{
 			Task task=new Task();
 			task.TaskListNum=-1;//don't show it in any list yet.
 			Tasks.Insert(task);
+			Task taskOld=task.Copy();
 			task.KeyNum=CurPatNum;
 			task.ObjectType=TaskObjectType.Patient;
 			task.TaskListNum=FormT.SelectedTaskListNum;
 			task.UserNum=Security.CurUser.UserNum;
-			FormTaskEdit FormTE=new FormTaskEdit(task);
+			FormTaskEdit FormTE=new FormTaskEdit(task,taskOld);
 			FormTE.IsNew=true;
 			FormTE.Show();
 		}
@@ -2783,7 +2784,7 @@ namespace OpenDental{
 						System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
 						soundplay.Play();
 						this.BringToFront();//don't know if this is doing anything.
-						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
+						FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i],tasksPopup[i].Copy());
 						FormT.IsPopup=true;
 						FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 						FormT.Show();//non-modal

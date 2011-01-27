@@ -2478,11 +2478,12 @@ namespace OpenDental{
 			Task task=new Task();
 			task.TaskListNum=-1;//don't show it in any list yet.
 			Tasks.Insert(task);
+			Task taskOld=task.Copy();
 			task.KeyNum=AptCur.AptNum;
 			task.ObjectType=TaskObjectType.Appointment;
 			task.TaskListNum=FormT.SelectedTaskListNum;
 			task.UserNum=Security.CurUser.UserNum;
-			FormTaskEdit FormTE=new FormTaskEdit(task);
+			FormTaskEdit FormTE=new FormTaskEdit(task,taskOld);
 			FormTE.IsNew=true;
 			FormTE.ShowDialog();
 		}

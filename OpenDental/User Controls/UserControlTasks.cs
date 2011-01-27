@@ -650,6 +650,7 @@ namespace OpenDental {
 			Task task=new Task();
 			task.TaskListNum=-1;//don't show it in any list yet.
 			Tasks.Insert(task);
+			Task taskOld=task.Copy();
 			//if this is a child of any taskList
 			if(TreeHistory.Count>0) {
 				task.TaskListNum=TreeHistory[TreeHistory.Count-1].TaskListNum;
@@ -679,7 +680,7 @@ namespace OpenDental {
 				task.IsRepeating=true;
 			}
 			task.UserNum=Security.CurUser.UserNum;
-			FormTaskEdit FormT=new FormTaskEdit(task);
+			FormTaskEdit FormT=new FormTaskEdit(task,taskOld);
 			FormT.IsNew=true;
 			FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 			FormT.Show();//non-modal
@@ -729,7 +730,7 @@ namespace OpenDental {
 				FillGrid();
 			}
 			else {//task
-				FormTaskEdit FormT=new FormTaskEdit(TasksList[clickedI-TaskListsList.Count]);
+				FormTaskEdit FormT=new FormTaskEdit(TasksList[clickedI-TaskListsList.Count],TasksList[clickedI-TaskListsList.Count].Copy());
 				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 				FormT.Show();//non-modal
 			}
@@ -1003,7 +1004,7 @@ namespace OpenDental {
 			if(e.Row >= TaskListsList.Count) {//is task
 				//It's important to grab the task directly from the db because the status in this list is fake, being the "unread" status instead.
 				Task task=Tasks.GetOne(TasksList[e.Row-TaskListsList.Count].TaskNum);
-				FormTaskEdit FormT=new FormTaskEdit(task);
+				FormTaskEdit FormT=new FormTaskEdit(task,task.Copy());
 				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
 				FormT.Show();//non-modal
 			}
