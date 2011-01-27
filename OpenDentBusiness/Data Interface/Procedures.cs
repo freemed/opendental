@@ -699,13 +699,15 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only used in ContrAccount.CreateClaim to decide whether a given procedure has an estimate that can be used to attach to a claim for the specified plan.  Returns a valid claimProc if this procedure has an estimate attached that is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. Returns null if there are no claimprocs that would work.</summary>
-		public static ClaimProc GetClaimProcEstimate(long procNum,List<ClaimProc> claimProcList,InsPlan plan) {
+		public static ClaimProc GetClaimProcEstimate(long procNum,List<ClaimProc> claimProcList,InsPlan plan,long insSubNum) {
 			//No need to check RemotingRole; no call to db.
 			//bool matchOfWrongType=false;
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==procNum
 					&& !claimProcList[i].NoBillIns
-					&& claimProcList[i].PlanNum==plan.PlanNum) {
+					&& claimProcList[i].PlanNum==plan.PlanNum
+					&& claimProcList[i].InsSubNum==insSubNum) 
+				{
 					if(plan.PlanType=="c") {
 						if(claimProcList[i].Status==ClaimProcStatus.CapComplete) {
 							return claimProcList[i];

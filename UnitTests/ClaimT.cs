@@ -33,7 +33,7 @@ namespace UnitTests {
 			for(int i=0;i<procsForClaim.Count;i++) {//loop through selected procs
 				//and try to find an estimate that can be used
 				procNum=procsForClaim[i].ProcNum;
-				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur);
+				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur,SubCur.InsSubNum);
 			}
 			for(int i=0;i<claimProcs.Length;i++) {//loop through each claimProc
 				//and create any missing estimates. This handles claims to 3rd and 4th ins co's.

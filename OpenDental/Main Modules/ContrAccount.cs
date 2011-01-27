@@ -2862,7 +2862,7 @@ namespace OpenDental {
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){//loop through selected procs
 				//and try to find an estimate that can be used
 				procNum=PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString());
-				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur);
+				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur,SubCur.InsSubNum);
 			}
 			for(int i=0;i<claimProcs.Length;i++){//loop through each claimProc
 				//and create any missing estimates. This handles claims to 3rd and 4th ins co's.
