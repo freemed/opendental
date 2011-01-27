@@ -1104,7 +1104,7 @@ namespace OpenDental {
 			else {
 				menuItemDone.Enabled=true;
 			}
-			//Cut/Copy/Paste-------------------------
+			//Edit,Cut,Copy,Delete-------------------------
 			if(gridMain.SelectedIndices.Length==0) {
 				menuItemEdit.Enabled=false;
 				menuItemCut.Enabled=false;
@@ -1117,6 +1117,7 @@ namespace OpenDental {
 				menuItemCopy.Enabled=true;
 				menuItemDelete.Enabled=true;
 			}
+			//Paste----------------------------------------
 			if(tabContr.SelectedTab==tabUser && TreeHistory.Count==0) {//not allowed to paste into the trunk of a user tab
 				menuItemPaste.Enabled=false;
 			}
@@ -1126,7 +1127,8 @@ namespace OpenDental {
 			else {//there is an item on our clipboard
 				menuItemPaste.Enabled=true;
 			}
-			if(tabContr.SelectedTab==tabNew) {//overrides for the new tab
+			//(overrides)
+			if(tabContr.SelectedTab==tabNew || tabContr.SelectedTab==tabOpenTickets) {
 				menuItemCut.Enabled=false;
 				menuItemDelete.Enabled=false;
 				menuItemPaste.Enabled=false;
