@@ -715,20 +715,21 @@ namespace OpenDental{
 				butReply.Visible=false;
 			}
 			else {//reply button will be visible
-				if(TaskCur.UserNum==Security.CurUser.UserNum) {//If I wrote the task originally
+				if(NoteList.Count==0) {//no notes, so reply to owner
+					ReplyToUserNum=TaskCur.UserNum;
+				}
+				else {//reply to most recent author who is not me
 					//loop backward through the notes to find who to reply to
 					for(int i=NoteList.Count-1;i>=0;i--) {
 						if(NoteList[i].UserNum!=Security.CurUser.UserNum) {
 							ReplyToUserNum=NoteList[i].UserNum;
+							break;
 						}
 					}
 					if(ReplyToUserNum==0) {//can't figure out who to reply to.
 						labelReply.Visible=false;
 						butReply.Visible=false;
 					}
-				}
-				else {//someone else wrote the task originally.
-					ReplyToUserNum=TaskCur.UserNum;//reply to them
 				}
 				labelReply.Text=Lan.g(this,"(Send to ")+Userods.GetName(ReplyToUserNum)+")";
 			}
