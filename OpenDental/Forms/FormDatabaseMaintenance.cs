@@ -377,6 +377,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.StatementDateRangeMax(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.TaskSubscriptionsInvalid(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=Lan.g("FormDatabaseMaintenance","Done");
 			SaveLogToFile();
 			Cursor=Cursors.Default;
