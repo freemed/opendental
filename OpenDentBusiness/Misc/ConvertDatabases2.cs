@@ -3302,8 +3302,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE rxpat SET DateTStamp = SYSDATE";
 					Db.NonQ(command);
 				}
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSyncWorkstationName','')";
-				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSyncWorkstationName','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MobileSyncWorkstationName','')";
+					Db.NonQ(command);
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS tasknote";
 					Db.NonQ(command);
@@ -3327,20 +3333,38 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						UserNum number(20) NOT NULL,
 						DateTimeNote date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						Note varchar2(4000),
-						CONSTRAINT TaskNoteNum PRIMARY KEY (TaskNoteNum)
+						CONSTRAINT tasknote_TaskNoteNum PRIMARY KEY (TaskNoteNum)
 						)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX TaskNum ON tasknote (TaskNum)";
+					command=@"CREATE INDEX tasknote_TaskNum ON tasknote (TaskNum)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX UserNum ON tasknote (UserNum)";
+					command=@"CREATE INDEX tasknote_UserNum ON tasknote (UserNum)";
 					Db.NonQ(command);
 				}
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('TasksNewTrackedByUser','0')";
-				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('ImagesModuleTreeIsCollapsed','0')";
-				Db.NonQ(command);
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('TasksShowOpenTickets','0')";
-				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('TasksNewTrackedByUser','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'TasksNewTrackedByUser','0')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ImagesModuleTreeIsCollapsed','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ImagesModuleTreeIsCollapsed','0')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('TasksShowOpenTickets','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'TasksShowOpenTickets','0')";
+					Db.NonQ(command);
+				}
 				command="UPDATE preference SET ValueString = '7.7.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
