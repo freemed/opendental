@@ -377,20 +377,22 @@ namespace OpenDental {
 			}
 			for(int i=0;i<TasksList.Count;i++) {
 				dateStr="";
-				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabMain || tabContr.SelectedTab==tabOpenTickets) {
+				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabNew
+					|| tabContr.SelectedTab==tabOpenTickets || tabContr.SelectedTab==tabMain) 
+				{
 					if(TasksList[i].DateTask.Year>1880) {
 						if(TasksList[i].DateType==TaskDateType.Day) {
-							dateStr=TasksList[i].DateTask.ToShortDateString()+" - ";
+							dateStr+=TasksList[i].DateTask.ToShortDateString()+" - ";
 						}
 						else if(TasksList[i].DateType==TaskDateType.Week) {
-							dateStr=Lan.g(this,"Week of")+" "+TasksList[i].DateTask.ToShortDateString()+" - ";
+							dateStr+=Lan.g(this,"Week of")+" "+TasksList[i].DateTask.ToShortDateString()+" - ";
 						}
 						else if(TasksList[i].DateType==TaskDateType.Month) {
-							dateStr=TasksList[i].DateTask.ToString("MMMM")+" - ";
+							dateStr+=TasksList[i].DateTask.ToString("MMMM")+" - ";
 						}
 					}
 					else if(TasksList[i].DateTimeEntry.Year>1880) {
-						dateStr=TasksList[i].DateTimeEntry.ToShortDateString()+" - ";
+						dateStr+=TasksList[i].DateTimeEntry.ToShortDateString()+" "+TasksList[i].DateTimeEntry.ToShortTimeString()+" - ";
 					}
 				}
 				objDesc="";
@@ -413,6 +415,9 @@ namespace OpenDental {
 								+" - ";
 						}
 					}
+				}
+				if(!TasksList[i].Descript.StartsWith("==") && TasksList[i].UserNum!=0) {
+					objDesc+=Userods.GetName(TasksList[i].UserNum)+" - ";
 				}
 				notes="";
 				for(int n=0;n<TaskNoteList.Count;n++) {
