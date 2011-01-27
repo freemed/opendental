@@ -275,8 +275,9 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("Tasks","Not allowed to save changes because the task has been altered by someone else."));
 			}
 			Crud.TaskCrud.Update(task);
-			//need to optimize this later to skip unless TaskListNumChanged
-			TaskAncestors.Synch(task);
+			if(task.TaskListNum!=oldTask.TaskListNum) {
+				TaskAncestors.Synch(task);
+			}
 		}
 
 		///<summary></summary>
