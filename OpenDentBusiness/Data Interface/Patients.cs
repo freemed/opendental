@@ -1365,7 +1365,8 @@ AND benefit.QuantityQualifier=0 ";
 				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
 					AND tempannualmax.AnnualMax>0
 					/*AND tempannualmax.AnnualMax-tempused.AmtUsed>0*/
-				WHERE tempplanned.AmtPlanned>0 ";
+				WHERE tempplanned.AmtPlanned>0 
+				AND patplan.Ordinal=1 ";
 			if(!noIns) {//if we don't want patients without insurance
 				command+="AND AnnualMax > 0 ";
 			}
