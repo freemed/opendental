@@ -73,9 +73,11 @@ namespace OpenDental{
 		public bool IsPopup;
 		///<summary>When tracking status by user, this tracks whether it has changed.  This is so that if it has changed, a signal can be sent for a refresh of lists.</summary>
 		private bool StatusChanged;
+		///<summary>If this task starts out 'unread', then this starts out true.  If the user changes the description or changes a note, then the task gets set to read.  But the user can manually change it back and this variable gets set to false.  From then on, any changes to description or note do not trigger the task to get set to read.  In other words, the automation only happens once.</summary>
+		private bool MightNeedSetRead;
 
 		///<summary>Task gets inserted ahead of time, then frequently altered before passing in here.  The taskOld that is passed in should be the task as it is in the database.  When saving, taskOld will be compared with db to make sure no changes.</summary>
-		public FormTaskEdit(Task taskCur,Task taskOld) 
+		public FormTaskEdit(Task taskCur,Task taskOld)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -548,6 +550,7 @@ namespace OpenDental{
 			this.textDescript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textDescript.Size = new System.Drawing.Size(683,121);
 			this.textDescript.TabIndex = 1;
+			this.textDescript.TextChanged += new System.EventHandler(this.textDescript_TextChanged);
 			// 
 			// butOK
 			// 
@@ -639,25 +642,6 @@ namespace OpenDental{
 				textTaskNum.Visible=true;
 				textTaskNum.Text=TaskCur.TaskNum.ToString();
 			#endif
-			if(TaskCur.TaskStatus==TaskStatusEnum.Done) {//global even if new status is tracked by user
-				checkDone.Checked=true;
-			}
-			else {//because it can't be both new and done.
-				if(IsPopup) {//It clearly is Unread, but we don't want to leave it that way upon close OK.
-					checkNew.Checked=false;
-					StatusChanged=true;
-				}
-				else if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
-					if(TaskUnreads.IsUnread(Security.CurUser.UserNum,TaskCur.TaskNum)) {
-						checkNew.Checked=true;
-					}
-				}
-				else {//tracked globally, the old way
-					if(TaskCur.TaskStatus==TaskStatusEnum.New) {
-						checkNew.Checked=true;
-					}
-				}
-			}
 			textUser.Text=Userods.GetName(TaskCur.UserNum);//might be blank.
 			if(TaskListCur!=null){
 				textTaskList.Text=TaskListCur.Descript;
@@ -675,7 +659,27 @@ namespace OpenDental{
 				textDateTimeFinished.Text=TaskCur.DateTimeFinished.ToString();
 			}
 			textDescript.Text=TaskCur.Descript;
-			//textDescript.Select(textDescript.Text.Length,0);
+			//this section must come after textDescript is set:
+			if(TaskCur.TaskStatus==TaskStatusEnum.Done) {//global even if new status is tracked by user
+				checkDone.Checked=true;
+			}
+			else {//because it can't be both new and done.
+				if(IsPopup) {//It clearly is Unread, but we don't want to leave it that way upon close OK.
+					checkNew.Checked=false;
+					StatusChanged=true;
+				}
+				else if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+					if(TaskUnreads.IsUnread(Security.CurUser.UserNum,TaskCur.TaskNum)) {
+						checkNew.Checked=true;
+						MightNeedSetRead=true;
+					}
+				}
+				else {//tracked globally, the old way
+					if(TaskCur.TaskStatus==TaskStatusEnum.New) {
+						checkNew.Checked=true;
+					}
+				}
+			}
 			if(TaskCur.DateTask.Year>1880){
 				textDateTask.Text=TaskCur.DateTask.ToShortDateString();
 			}
@@ -776,22 +780,31 @@ namespace OpenDental{
 			form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
 			form.TaskNoteCur.IsNew=true;
 			form.ShowDialog();
-			if(form.DialogResult==DialogResult.OK) {
-				notesChanged=true;
+			if(form.DialogResult!=DialogResult.OK) {
+				return;
 			}
+			notesChanged=true;
 			FillGrid();
+			if(MightNeedSetRead) {//'new' box is checked
+				checkNew.Checked=false;
+				StatusChanged=true;
+				MightNeedSetRead=false;//so that the automation won't happen again
+			}
 		}
 
 		private void checkNew_Click(object sender,EventArgs e) {
 			if(checkNew.Checked && checkDone.Checked) {
 				checkDone.Checked=false;
 			}
+			StatusChanged=true;
+			MightNeedSetRead=false;//don't override user's intent
 		}
 
 		private void checkDone_Click(object sender,EventArgs e) {
 			if(checkNew.Checked && checkDone.Checked) {
 				checkNew.Checked=false;
 			}
+			MightNeedSetRead=false;//don't override user's intent
 		}
 
 		private void FillObject(){
@@ -890,6 +903,14 @@ namespace OpenDental{
 			if(formP.DialogResult==DialogResult.OK) {
 				TaskCur.UserNum=formP.SelectedUserNum;
 				textUser.Text=Userods.GetName(TaskCur.UserNum);
+			}
+		}
+
+		private void textDescript_TextChanged(object sender,EventArgs e) {
+			if(MightNeedSetRead) {//'new' box is checked
+				checkNew.Checked=false;
+				StatusChanged=true;
+				MightNeedSetRead=false;//so that the automation won't happen again
 			}
 		}
 
@@ -1020,6 +1041,11 @@ namespace OpenDental{
 				if(form.DialogResult!=DialogResult.OK) {
 					return;
 				}
+				if(MightNeedSetRead) {//'new' box is checked
+					checkNew.Checked=false;
+					StatusChanged=true;
+					MightNeedSetRead=false;//so that the automation won't happen again
+				}
 			}
 			TaskCur.TaskListNum=inbox;
 			if(!SaveCur()){
@@ -1106,6 +1132,8 @@ namespace OpenDental{
 				Tasks.Delete(TaskCur.TaskNum);
 			}
 		}
+
+	
 
 		
 
