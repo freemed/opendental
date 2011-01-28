@@ -195,6 +195,9 @@ namespace OpenDental{
 				if(components != null){
 					components.Dispose();
 				}
+				if(sigBoxTopaz!=null) {
+					sigBoxTopaz.Dispose();
+				}
 				xRayImageController.KillXRayThread();
 			}
 			base.Dispose( disposing );
@@ -1213,9 +1216,11 @@ namespace OpenDental{
 				IDataObject oDataObject=Clipboard.GetDataObject();
 				if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
 					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
-				}else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
+				}
+				else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
 					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
-				}else{
+				}
+				else{
 					throw new Exception("Unknown image data format.");
 				}
 			}catch(Exception ex){
@@ -1248,7 +1253,7 @@ namespace OpenDental{
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK){
-					DeleteSelection(false,true);
+					DeleteSelection(false,false);
 				}
 				else{
 					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
@@ -1282,7 +1287,7 @@ namespace OpenDental{
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK) {
-					DeleteSelection(false,true);
+					DeleteSelection(false,false);
 				}
 				else {
 					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
@@ -1318,7 +1323,8 @@ namespace OpenDental{
 					FormD.ShowDialog();//some of the fields might get changed, but not the filename
 					if(FormD.DialogResult!=DialogResult.OK){
 						DeleteSelection(false,false);
-					}else{
+					}
+					else{
 						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0");
 						selectionDoc=doc.Copy();
 					}
@@ -1374,10 +1380,9 @@ namespace OpenDental{
 				docNum=Convert.ToInt64(obj["DocNum"]);
 			}
 			this.Cursor=Cursors.WaitCursor;
-			if(mountNum!=0&&hotDocument>=0) {//Pasting into the mount item of the currently selected mount.
+			if(mountNum!=0 && hotDocument>=0) {//Pasting into the mount item of the currently selected mount.
 				if(mountDocs[hotDocument]!=null) {
-					if(MessageBox.Show("Do you want to replace the existing item in this mount location?",
-						"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Do you want to replace the existing item in this mount location?")) {
 						this.Cursor=Cursors.Default;
 						return;
 					}
@@ -1514,7 +1519,8 @@ namespace OpenDental{
 				FormD.ShowDialog();//some of the fields might get changed, but not the filename
 				if(FormD.DialogResult!=DialogResult.OK){
 					DeleteSelection(false,false);
-				}else{
+				}
+				else{
 					FillDocList(true);//Refresh possible changes in the document due to FormD.
 				}
 			}
