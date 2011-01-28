@@ -467,6 +467,7 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			gridMain.ScrollValue=gridMain.ScrollValue;//this forces scroll value to reset if it's > allowed max.
 			if(tabContr.SelectedTab==tabOpenTickets) {
 				SetOpenTicketTab(gridMain.Rows.Count);
 			}
