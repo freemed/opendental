@@ -77,7 +77,7 @@ namespace Crud {
 //					indexes.Add(cols[i]);
 //				}
 			}
-			strb.Append(rn+tb+t2+"CONSTRAINT "+cols[0].ColumnName+" PRIMARY KEY ("+cols[0].ColumnName+")");
+			strb.Append(rn+tb+t2+"CONSTRAINT "+tableName+"_"+cols[0].ColumnName+" PRIMARY KEY ("+cols[0].ColumnName+")");
 			strb.Append(rn+tb+t2+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			////Generate timestamp triggers if they need to be created.
@@ -139,7 +139,7 @@ namespace Crud {
 				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				if(col.DataType==OdDbType.Long) {//key or foreign key
-					strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+col.ColumnName+" ON "+tableName+" ("+col.ColumnName+")\";");
+					strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+tableName+"_"+col.ColumnName+" ON "+tableName+" ("+col.ColumnName+")\";");
 					strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				}
 			}
@@ -177,7 +177,7 @@ namespace Crud {
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
-			strb.Append(rn+tb+t1+"command=\"CREATE INDEX "+colName+" ON "+tableName+" ("+colName+")\";");
+			strb.Append(rn+tb+t1+"command=\"CREATE INDEX "+tableName+"_"+colName+" ON "+tableName+" ("+colName+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
