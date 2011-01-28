@@ -1203,8 +1203,9 @@ namespace OpenDental{
 		///<summary>Valid values for scanType are "doc","xray",and "photo"</summary>
 		private void OnScan_Click(string scanType) {
 			Bitmap scannedImage=null;
+			IntPtr hdib=IntPtr.Zero;
 			//Try catch here prevents a crash when a customer who has no scanner installed tries to scan.
-			try{
+			try {
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
 				xImageDeviceManager.Obfuscator.ActivateEZTwain();
@@ -1212,50 +1213,62 @@ namespace OpenDental{
 				if(wPIXTypes==0) {//user clicked Cancel
 					return;
 				}
-				EZTwain.AcquireToClipboard(this.Handle,wPIXTypes);
-				IDataObject oDataObject=Clipboard.GetDataObject();
-				if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
-					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
-				}
-				else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
-					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
-				}
-				else{
-					throw new Exception("Unknown image data format.");
-				}
-			}catch(Exception ex){
+				hdib=EZTwain.AcquireMemory(this.Handle);
+				double xdpi=EZTwain.DIB_XResolution(hdib);
+				double ydpi=EZTwain.DIB_XResolution(hdib);
+				IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
+				scannedImage=Bitmap.FromHbitmap(hbitmap);
+				scannedImage.SetResolution((float)xdpi,(float)ydpi);
+				Clipboard.SetImage(scannedImage);
+				//EZTwain.AcquireToClipboard(this.Handle,wPIXTypes);
+				//IDataObject oDataObject=Clipboard.GetDataObject();
+				//if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
+				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
+				//}else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
+				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
+				//}else{
+				//  throw new Exception("Unknown image data format.");
+				//}
+			}
+			catch(Exception ex) {
 				MessageBox.Show("The image could not be acquired from the scanner. "+
 					"Please check to see that the scanner is properly connected to the computer. Specific error: "+ex.Message);
 				return;
 			}
 			ImageType imgType;
-			if(scanType=="xray"){
+			if(scanType=="xray") {
 				imgType=ImageType.Radiograph;
 			}
-			else if(scanType=="photo"){
+			else if(scanType=="photo") {
 				imgType=ImageType.Photo;
 			}
-			else{//Assume document
+			else {//Assume document
 				imgType=ImageType.Document;
 			}
 			bool saved=true;
 			Document doc = null;
-			try{//Create corresponding image file.
-				doc=ImageStore.Import(scannedImage, GetCurrentCategory(),imgType,PatCur);
+			try {//Create corresponding image file.
+				doc=ImageStore.Import(scannedImage,GetCurrentCategory(),imgType,PatCur);
 			}
-			catch(Exception ex){
+			catch(Exception ex) {
 				saved=false;
 				MessageBox.Show(Lan.g(this,"Unable to save document")+": "+ex.Message);
 			}
-			if(saved){
+			if(scannedImage!=null) {
+				scannedImage.Dispose();
+			}
+			if(hdib!=IntPtr.Zero) {
+				EZTwain.DIB_Free(hdib);
+			}
+			if(saved) {
 				FillDocList(false);//Reload and keep new document selected.
 				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
-				if(formDocInfo.DialogResult!=DialogResult.OK){
+				if(formDocInfo.DialogResult!=DialogResult.OK) {
 					DeleteSelection(false,false);
 				}
-				else{
+				else {
 					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
 				}
 			}
