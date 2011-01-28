@@ -104,7 +104,7 @@ namespace OpenDental{
 			if(isPopup){
 				itypeList.Add((int)InvalidType.TaskPopup);
 				//we also need to tell the database about all the users with unread tasks
-				TaskUnreads.AddUnreads(taskNum);
+				TaskUnreads.AddUnreads(taskNum,Security.CurUser.UserNum);
 			}
 			else{
 				itypeList.Add((int)InvalidType.Task);

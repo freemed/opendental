@@ -28,9 +28,9 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static void AddUnreads(long taskNum) {
+		public static void AddUnreads(long taskNum,long curUserNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum,curUserNum);
 				return;
 			}
 			//if the task is done, don't add unreads
@@ -42,7 +42,9 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//Set it unread for the original owner of the task.
-			SetUnread(userNumOwner,taskNum);
+			if(userNumOwner!=curUserNum) {//but only if it's some other user
+				SetUnread(userNumOwner,taskNum);
+			}
 			//Then, for anyone subscribed
 			long userNum;
 			//task subscriptions are not cached yet, so we use a query.
@@ -56,7 +58,10 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++) {
 				userNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
 				if(userNum==userNumOwner) {
-					continue;//alread set
+					continue;//already set
+				}
+				if(userNum==curUserNum) {//If the current user is subscribed to this task.
+					continue;//User has obviously already read it.
 				}
 				SetUnread(userNum,taskNum);//This no longer results in duplicates like it used to
 			}
