@@ -5015,6 +5015,7 @@ namespace OpenDental{
 			TaskObjectType GotoType=FormT.GotoType;
 			long keyNum=FormT.GotoKeyNum;
 			if(GotoType==TaskObjectType.None) {
+				ModuleSelected(PatCur.PatNum);
 				return;
 			}
 			if(GotoType == TaskObjectType.Patient) {
