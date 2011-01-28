@@ -718,14 +718,15 @@ namespace OpenDental{
 			}
 			DataRow thisRow;
 			//copy data from tableInput to tableOutput while converting to strings
-			string str;
+			//string str;
 			//Type t;
 			for(int i=0;i<tableIn.Rows.Count;i++){
 				thisRow=tableOut.NewRow();//new row with new schema
 				for(int j=0;j<tableIn.Columns.Count;j++){
-					str=tableIn.Rows[i][j].ToString();
+					thisRow[j]=PIn.ByteArray(tableIn.Rows[i][j]);
+					//str=tableIn.Rows[i][j].ToString();
 					//t=tableIn.Rows[i][j].GetType();
-					thisRow[j]=str;
+					//thisRow[j]=str;
 				}
 				tableOut.Rows.Add(thisRow);
 			}
