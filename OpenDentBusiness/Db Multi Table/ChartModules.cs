@@ -653,6 +653,11 @@ namespace OpenDentBusiness {
 				+" AND task.ObjectType=1 "
 				+"ORDER BY DateTimeEntry";
 			DataTable rawTask=dcon.GetTable(command);
+			List<long> taskNums=new List<long>();
+			for(int i=0;i<rawTask.Rows.Count;i++) {
+				taskNums.Add(PIn.Long(rawTask.Rows[i]["TaskNum"].ToString()));
+			}
+			List<TaskNote> TaskNoteList=TaskNotes.RefreshForTasks(taskNums);
 			for(int i=0;i<rawTask.Rows.Count;i++) {
 				row=table.NewRow();
 				row["aptDateTime"]=DateTime.MinValue;
@@ -686,7 +691,23 @@ namespace OpenDentBusiness {
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
-				row["note"]=rawTask.Rows[i]["Descript"].ToString();
+				txt="";
+				if(!rawTask.Rows[i]["Descript"].ToString().StartsWith("==") && rawTask.Rows[i]["UserNum"].ToString()!="") {
+					txt+=Userods.GetName(PIn.Long(rawTask.Rows[i]["UserNum"].ToString()))+" - ";
+				}
+				txt+=rawTask.Rows[i]["Descript"].ToString();
+				long taskNum=PIn.Long(rawTask.Rows[i]["TaskNum"].ToString());
+				for(int n=0;n<TaskNoteList.Count;n++) {
+					if(TaskNoteList[n].TaskNum!=taskNum) {
+						continue;
+					}
+					txt+="\r\n"//even on the first loop
+						+"=="+Userods.GetName(TaskNoteList[n].UserNum)+" - "
+						+TaskNoteList[n].DateTimeNote.ToShortDateString()+" "
+						+TaskNoteList[n].DateTimeNote.ToShortTimeString()
+						+" - "+TaskNoteList[n].Note;
+				}
+				row["note"]=txt;
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
 				row["orionDPC"]="";
@@ -733,7 +754,7 @@ namespace OpenDentBusiness {
 				row["SheetNum"]=0;
 				row["signature"]="";
 				row["Surf"]="";
-				row["TaskNum"]=rawTask.Rows[i]["TaskNum"].ToString();
+				row["TaskNum"]=taskNum;
 				row["toothNum"]="";
 				row["ToothNum"]="";
 				row["ToothRange"]="";
