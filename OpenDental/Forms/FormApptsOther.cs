@@ -87,11 +87,11 @@ namespace OpenDental{
 			this.butNew = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.listFamily = new System.Windows.Forms.ListView();
-			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.butOK = new OpenDental.UI.Button();
 			this.butRecall = new OpenDental.UI.Button();
 			this.textFinUrg = new System.Windows.Forms.TextBox();
@@ -205,9 +205,9 @@ namespace OpenDental{
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butNew.Location = new System.Drawing.Point(576,620);
 			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(118,24);
+			this.butNew.Size = new System.Drawing.Size(125,24);
 			this.butNew.TabIndex = 48;
-			this.butNew.Text = "Create &New Apt";
+			this.butNew.Text = "Create &New Appt";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
 			// label2
@@ -237,8 +237,8 @@ namespace OpenDental{
 			this.listFamily.TabIndex = 58;
 			this.listFamily.UseCompatibleStateImageBehavior = false;
 			this.listFamily.View = System.Windows.Forms.View.Details;
-			this.listFamily.DoubleClick += new System.EventHandler(this.listFamily_DoubleClick);
 			this.listFamily.Click += new System.EventHandler(this.listFamily_Click);
+			this.listFamily.DoubleClick += new System.EventHandler(this.listFamily_DoubleClick);
 			// 
 			// columnHeader1
 			// 
@@ -379,8 +379,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Other Appointments";
-			this.Load += new System.EventHandler(this.FormApptsOther_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormApptsOther_Closing);
+			this.Load += new System.EventHandler(this.FormApptsOther_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
