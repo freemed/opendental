@@ -12,7 +12,7 @@
 		<script type="text/javascript" src="scripts/jqtouch.js"></script>
 		<script type="text/javascript" src="scripts/iphone.js"></script>
 		<script type="text/javascript">
-		/*Dennis: the default slide animation is disabled on anchor tags with arrowless style*/
+			/*Dennis: the default slide animation is disabled on anchor tags with arrowless style and id searchbutton*/
             var jQT = $.jQTouch({
                 icon: 'Mob.png',
                 statusBar: 'black',
@@ -58,7 +58,7 @@
         <div id="AppointmentList">
             <div class="toolbar">
                 <h1>Appointments</h1>
-                <a class="button home" href="#">Home</a>
+                <a class="home" href="#">Home</a>
             </div>
             <div id="AppointmentListContents">
             </div>
@@ -68,13 +68,11 @@
         <div id="PatientList">
             <div class="toolbar">
                 <h1>Patients</h1>
-                <a class="button home" href="#">Home</a>
+                <a class="home" href="#">Home</a>
             </div>
 			 <ul style="width:71%; display:inline-block;">
                 <li>
 				<input type="text" placeholder="Search Patient" name="searchpatientbox" id="searchpatientbox" autocapitalize="off" autocorrect="off" autocomplete="off" />
-				<%--<a class="searchbutton" href="#"><img src="css/themes/apple/img/searchfield.png" border="0" /></a>--%>
-				
 				</li>
 			</ul>
 			<a class="button" id="searchbutton" href="#">Search</a>
@@ -86,7 +84,7 @@
    <div id="PatientDetails">
         <div class="toolbar">
         <h1>Patient</h1>
-        <a class="button patients" linkattib="PatientList.aspx" href="#">Patients</a>
+        <a class="patients" linkattib="PatientList.aspx" href="#">Patients</a>
     </div>
    <div id="PatientDetailsContents">
    </div>
@@ -96,7 +94,7 @@
    <div id="AppointmentDetails">
 		<div class="toolbar">
 		<h1>Appointment</h1>
-		<a class="button appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
+		<a class="appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
 		</div>
 	   <div id="AppointmentDetailsContents">
 	   </div>

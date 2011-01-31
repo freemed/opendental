@@ -14,6 +14,7 @@ namespace MobileWeb {
 		static DbInit() {
 			string connectStr=Properties.Settings.Default.DBMobileWeb;
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+			Logger.Information("connectStr="+connectStr);
 			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
 		}
 		

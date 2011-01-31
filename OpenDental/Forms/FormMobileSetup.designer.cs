@@ -31,19 +31,19 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupPreferences = new System.Windows.Forms.GroupBox();
+			this.butCurrentWorkstation = new OpenDental.UI.Button();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textMobileSynchWorkStation = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textMobilePassword = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textMobileUserName = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textProgress = new System.Windows.Forms.Label();
-			this.textDateTimeLastRun = new System.Windows.Forms.Label();
-			this.butCurrentWorkstation = new OpenDental.UI.Button();
 			this.textSynchMinutes = new OpenDental.ValidNumber();
 			this.butSavePreferences = new OpenDental.UI.Button();
 			this.textDateBefore = new OpenDental.ValidDate();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textProgress = new System.Windows.Forms.Label();
+			this.textDateTimeLastRun = new System.Windows.Forms.Label();
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
@@ -79,7 +79,7 @@ namespace OpenDental{
 			// timerRefreshLastSynchTime
 			// 
 			this.timerRefreshLastSynchTime.Enabled = true;
-			this.timerRefreshLastSynchTime.Interval = 10000;
+			this.timerRefreshLastSynchTime.Interval = 60000;
 			this.timerRefreshLastSynchTime.Tick += new System.EventHandler(this.timerRefreshLastSynchTime_Tick);
 			// 
 			// label3
@@ -122,6 +122,21 @@ namespace OpenDental{
 			this.groupPreferences.TabIndex = 239;
 			this.groupPreferences.TabStop = false;
 			this.groupPreferences.Text = "Preferences";
+			// 
+			// butCurrentWorkstation
+			// 
+			this.butCurrentWorkstation.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCurrentWorkstation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCurrentWorkstation.Autosize = true;
+			this.butCurrentWorkstation.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCurrentWorkstation.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCurrentWorkstation.CornerRadius = 4F;
+			this.butCurrentWorkstation.Location = new System.Drawing.Point(458,167);
+			this.butCurrentWorkstation.Name = "butCurrentWorkstation";
+			this.butCurrentWorkstation.Size = new System.Drawing.Size(146,24);
+			this.butCurrentWorkstation.TabIndex = 247;
+			this.butCurrentWorkstation.Text = "Current Workstation";
+			this.butCurrentWorkstation.Click += new System.EventHandler(this.butCurrentWorkstation_Click);
 			// 
 			// label6
 			// 
@@ -175,46 +190,6 @@ namespace OpenDental{
 			this.textMobileUserName.TabIndex = 242;
 			this.textMobileUserName.TextChanged += new System.EventHandler(this.textMobileUserName_TextChanged);
 			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(26,245);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(167,18);
-			this.label1.TabIndex = 241;
-			this.label1.Text = "Upload Status";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textProgress
-			// 
-			this.textProgress.Location = new System.Drawing.Point(196,245);
-			this.textProgress.Name = "textProgress";
-			this.textProgress.Size = new System.Drawing.Size(464,18);
-			this.textProgress.TabIndex = 242;
-			this.textProgress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textDateTimeLastRun
-			// 
-			this.textDateTimeLastRun.Location = new System.Drawing.Point(196,273);
-			this.textDateTimeLastRun.Name = "textDateTimeLastRun";
-			this.textDateTimeLastRun.Size = new System.Drawing.Size(207,18);
-			this.textDateTimeLastRun.TabIndex = 243;
-			this.textDateTimeLastRun.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// butCurrentWorkstation
-			// 
-			this.butCurrentWorkstation.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCurrentWorkstation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCurrentWorkstation.Autosize = true;
-			this.butCurrentWorkstation.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCurrentWorkstation.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCurrentWorkstation.CornerRadius = 4F;
-			this.butCurrentWorkstation.Location = new System.Drawing.Point(458,167);
-			this.butCurrentWorkstation.Name = "butCurrentWorkstation";
-			this.butCurrentWorkstation.Size = new System.Drawing.Size(146,24);
-			this.butCurrentWorkstation.TabIndex = 247;
-			this.butCurrentWorkstation.Text = "Current Workstation";
-			this.butCurrentWorkstation.Click += new System.EventHandler(this.butCurrentWorkstation_Click);
-			// 
 			// textSynchMinutes
 			// 
 			this.textSynchMinutes.Location = new System.Drawing.Point(177,56);
@@ -248,6 +223,31 @@ namespace OpenDental{
 			this.textDateBefore.Size = new System.Drawing.Size(100,20);
 			this.textDateBefore.TabIndex = 84;
 			this.textDateBefore.TextChanged += new System.EventHandler(this.textDateBefore_TextChanged);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(26,245);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(167,18);
+			this.label1.TabIndex = 241;
+			this.label1.Text = "Upload Status";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textProgress
+			// 
+			this.textProgress.Location = new System.Drawing.Point(196,245);
+			this.textProgress.Name = "textProgress";
+			this.textProgress.Size = new System.Drawing.Size(464,18);
+			this.textProgress.TabIndex = 242;
+			this.textProgress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textDateTimeLastRun
+			// 
+			this.textDateTimeLastRun.Location = new System.Drawing.Point(196,273);
+			this.textDateTimeLastRun.Name = "textDateTimeLastRun";
+			this.textDateTimeLastRun.Size = new System.Drawing.Size(207,18);
+			this.textDateTimeLastRun.TabIndex = 243;
+			this.textDateTimeLastRun.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butFullSync
 			// 

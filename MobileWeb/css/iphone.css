@@ -40,8 +40,27 @@ min-height: 480px;
 .datenavigation{
     height:30px;
 }
+/* multiple style don't work in some cases android hence some styles had to be written all over again*/
 .previous, .next, .today{
     position: relative;
+        overflow: hidden;
+    top: 8px;
+    right: 6px;
+    margin: 0;
+    border-width: 0 5px;
+    padding: 0 3px;
+    width: auto;
+    height: 30px;
+    line-height: 30px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    white-space: nowrap;
+    background: none;
 }
 
 .previous  {
@@ -64,7 +83,6 @@ min-height: 480px;
     float: right;
     border-width:0px 0px 0px 25px;
     -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 0 0 25;
-  
 }
 
 .datestring{
@@ -89,7 +107,8 @@ h2 {
     font: bold 14px Helvetica;
     color:#FFFFFF;
 }
-.appts, .home, .patients{
+/* multiple style don't work in some cases android hence some styles had to be written all over again*/
+/*.appts, .home, .patients{
     left: 6px;
     right: auto;
     padding: 0;
@@ -97,18 +116,42 @@ h2 {
     border-width: 0 8px 0 14px;
     -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14;    
 }
-#searchpatientbox_deletelater
+*/
+/* multiple style don't work in some cases android hence some styles had to be written all over again*/
+.appts, .home, .patients
 {
-    border-width: 2px 39px 2px 0px;
-    -webkit-border-image: url(themes/apple/img/searchfield.png) 4 39 4 0; 
+    left: 6px;
+    right: auto;
+    padding: 0;
+    max-width: 35px;
+    border-width: 0 8px 0 14px;
+    position: absolute;
+    overflow: hidden;
+    top: 8px;
+    right: 6px;
+    margin: 0;
+    width: auto;
+    height: 30px;
+    line-height: 30px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    white-space: nowrap;
+    background: none;
+    -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14; 
 }
+
 
 #searchbutton{
  position:relative; float:right;top:17px;left:-10px;
  
 }
 
-/*overides existing checkbox css in theme.css*/
+/*overides existing checkbox css in theme.css does not work*/
 
 .chk{
  -webkit-perspective: none;

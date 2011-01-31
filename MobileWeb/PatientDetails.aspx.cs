@@ -31,18 +31,15 @@ namespace MobileWeb {
 
 				String DialString1=@"&nbsp;&nbsp;&nbsp;<a href=""tel:";
 				String DialString2=@""" class=""style2"">dial</a>";
-				if(pat.HmPhone!="") {
+				if(!String.IsNullOrEmpty(pat.HmPhone)) {
 					DialLinkHmPhone=DialString1+pat.HmPhone+DialString2;
-				}
-				if(pat.WkPhone!="") {
+				} 
+				if(!String.IsNullOrEmpty(pat.WkPhone)) {
 					DialLinkWkPhone=DialString1+pat.WkPhone+DialString2;
 				}
-				if(pat.WirelessPhone!="") {
+				if(!String.IsNullOrEmpty(pat.WirelessPhone)) {
 					DialLinkWirelessPhone=DialString1+pat.WirelessPhone+DialString2;
 				}
-
-
-
 				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,PatNum);
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();

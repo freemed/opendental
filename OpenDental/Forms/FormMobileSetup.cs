@@ -44,8 +44,10 @@ namespace OpenDental {
 				InitializeVariables();
 				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
 				textMobileSyncServerURL.Text=MobileSyncServerURL;
+				textMobileSynchWorkStation.Text=MobileSyncWorkstationName;
 				textSynchMinutes.Text=MobileSyncIntervalMinutes+"";
 				textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
+				butSavePreferences.Enabled=false;//this line is repeated belwo on purpose
 				if(!TestWebServiceExists()) {
 					MsgBox.Show(this,WebServiceUnavailableMessage);
 					return;
@@ -56,15 +58,11 @@ namespace OpenDental {
 				}
 				textMobileUserName.Text=mb.GetUserName(RegistrationKey);
 				MobileUserNameChanged=false;// when textMobileUserName is changed in textMobileUserName_TextChanged MobileUserNameChanged is set to true
-				butSavePreferences.Enabled=false;
+				butSavePreferences.Enabled=false;//this line is repeated on purpose
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
-		}
-
-		internal void SetParentFormReference(FormOpenDental frmOD) {
-			this.frmOD=frmOD;
 		}
 
 		private static void InitializeVariables() {
@@ -224,6 +222,7 @@ namespace OpenDental {
 			};
 		}
 
+		/// <summary>This is set to 60 second</summary>
 		private void timerRefreshLastSynchTime_Tick(object sender,EventArgs e) {
 			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
 			textProgress.Text=StatusMessage;
@@ -237,6 +236,7 @@ namespace OpenDental {
 			try {
 				Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text.Trim());
 				MobileSyncServerURL=textMobileSyncServerURL.Text.Trim();
+				butSavePreferences.Enabled=false;
 				if(!TestWebServiceExists()) {
 					MsgBox.Show(this,WebServiceUnavailableMessage);
 					return;
@@ -244,6 +244,7 @@ namespace OpenDental {
 				InitializeVariables();//payment is checked here.
 				if(!PaidCustomer) {
 					textSynchMinutes.Text="0";
+					butSavePreferences.Enabled=false;
 					MsgBox.Show(this,NotPaidMessage);
 					return;
 				}
@@ -261,7 +262,6 @@ namespace OpenDental {
 					MobileUserNameChanged=false;
 					MobilePasswordChanged=false;
 				}
-				frmOD.StartTimerWebHostSynch();//check if this throws an error. this line may not be needed if the timer is never stopped.
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -286,6 +286,7 @@ namespace OpenDental {
 			MobilePasswordChanged=true;
 			butSavePreferences.Enabled=true;
 		}
+
 		private void textDateBefore_TextChanged(object sender,EventArgs e) {
 			butSavePreferences.Enabled=true;
 		}

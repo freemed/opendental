@@ -117,7 +117,7 @@ function TraversePage(){
 	});
 	
 	/*home, appt, patient buttons*/
-	$('.button.appts').tap(function(e) {
+	$('.appts').tap(function(e) {
 		console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
@@ -125,7 +125,7 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-	$('.button.patients').tap(function(e) {
+	$('patients').tap(function(e) {
 		console.log('patients button tapped');
 		//var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var searchterm=$('#searchpatientbox').val();
@@ -136,7 +136,7 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-	$('.button.home').tap(function(e) {
+	$('.home').tap(function(e) {
 	jQT.goTo('#home');
 	});
 	

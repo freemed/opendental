@@ -4089,9 +4089,7 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
 			*/
 			FormMobileSetup FormM=new FormMobileSetup();
-			FormM.SetParentFormReference(this);
 			FormM.ShowDialog();
-			
 		}
 
 		private void menuItemWebForms_Click(object sender,EventArgs e) {
@@ -4423,7 +4421,7 @@ namespace OpenDental{
 			phoneSmall.PhoneCur=phone;
 		}
 
-		/// <summary>This is set to 30 second for now </summary>
+		/// <summary>This is set to 30 second</summary>
 		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
 			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
 			if(interval=="" || interval=="0") {
@@ -4432,11 +4430,6 @@ namespace OpenDental{
 			if(System.Environment.MachineName.ToUpper()==PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
 				FormMobileSetup.Synch();
 			}
-		}
-
-		/// <summary>This function is called from FormMobileSetup if the MobileSyncIntervalMinutes is set to nonzero </summary>
-		internal void StartTimerWebHostSynch() {
-			timerWebHostSynch.Start();
 		}
 
 		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {
