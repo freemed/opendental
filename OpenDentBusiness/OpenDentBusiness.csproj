@@ -167,6 +167,7 @@
     <Compile Include="Crud\CountyCrud.cs" />
     <Compile Include="Crud\CovCatCrud.cs" />
     <Compile Include="Crud\CovSpanCrud.cs" />
+    <Compile Include="Crud\CreditCardCrud.cs" />
     <Compile Include="Crud\DefCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
     <Compile Include="Crud\DepositCrud.cs" />
@@ -308,6 +309,7 @@
     <Compile Include="Data Interface\AutomationConditions.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
+    <Compile Include="Data Interface\CreditCards.cs" />
     <Compile Include="Data Interface\DisplayFields.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -587,6 +589,7 @@
     <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
+    <Compile Include="TableTypes\CreditCard.cs" />
     <Compile Include="TableTypes\InsSub.cs" />
     <Compile Include="TableTypes\OrionProc.cs" />
     <Compile Include="TableTypes\ProcGroupItem.cs" />
