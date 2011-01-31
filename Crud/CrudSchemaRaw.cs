@@ -97,7 +97,7 @@ namespace Crud {
 			//  }
 			//}
 			for(int i=0;i<indexes.Count;i++) {//Generate Triggers if need be
-				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+indexes[i].ColumnName+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
+				strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+tableName+"_"+indexes[i].ColumnName+" ON "+tableName+" ("+indexes[i].ColumnName+")\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			}
 			strb.Append(rn+tb+"}");

@@ -3374,7 +3374,48 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_8_0() {
 			if(FromVersion<new Version("7.8.0.0")) {
 				string command;
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS creditcard";
+					Db.NonQ(command);
+					command=@"CREATE TABLE creditcard (
+						CreditCardNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						Address varchar(255),
+						City varchar(255),
+						State varchar(255),
+						Zip varchar(255),
+						XChargeToken varchar(255),
+						CCType varchar(255),
+						CCNumberMasked varchar(255),
+						CVVNumber int,
+						CCExpiration date DEFAULT '0001-01-01',
+						ItemOrder int NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE creditcard'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE creditcard (
+						CreditCardNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						Address varchar2(255),
+						City varchar2(255),
+						State varchar2(255),
+						Zip varchar2(255),
+						XChargeToken varchar2(255),
+						CCType varchar2(255),
+						CCNumberMasked varchar2(255),
+						CVVNumber number(11),
+						CCExpiration date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD'),
+						ItemOrder number(11) NOT NULL,
+						CONSTRAINT creditcard_CreditCardNum PRIMARY KEY (CreditCardNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX creditcard_PatNum ON creditcard (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3411,3 +3452,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				
