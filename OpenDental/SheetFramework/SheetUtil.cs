@@ -75,11 +75,11 @@ namespace OpenDental{
 			}
 		}
 
-		///<Summary>Supply the field that we are testing.  All other fields which intersect with it will be moved down.  Each time one is moved down, this method is called recursively.  The end result should be no intersections among fields near to the original field that grew.</Summary>
+		///<Summary>Supply the field that we are testing.  All other fields which intersect with it will be moved down.  Each time one (or maybe some) is moved down, this method is called recursively.  The end result should be no intersections among fields near the original field that grew.</Summary>
 		public static void MoveAllDownWhichIntersect(Sheet sheet,SheetField field){
-			//it turns out that order of operation is critical.
-			//The recursion feature can't be called until everything below has been evenly moved down.
-			//So... First phase
+			//Phase 1 is to move everything that intersects with the field down. Phase 2 is to call this method on everything that was moved.
+			//Phase 1: Move 
+			List<SheetField> affectedFields=new List<SheetField>();
 			foreach(SheetField field2 in sheet.SheetFields) {
 				if(field2==field){
 					continue;
@@ -92,16 +92,19 @@ namespace OpenDental{
 					//drawings do not get moved down.
 				}
 				if(field.Bounds.IntersectsWith(field2.Bounds)) {
-					//Debug.WriteLine(field.FieldValue+" -forces-> "+field2.FieldValue+" -to-> "+field.Bounds.Bottom.ToString());
 					field2.YPos=field.Bounds.Bottom;
 					MoveAllDownWhichIntersect(sheet,field2);
 				}
 			}
-			//js- did I forget the second phase?
+			//Phase 2: Recursion
+			//foreach(SheetField field2 in affectedFields) {
+			//  //reuse the same distance again.
+			//  MoveAllDownWhichIntersect(sheet,field2);
+			//}
 		}
 
 		///<summary>Creates a Sheet object from a sheetDef, complete with fields and parameters.  This overload is only to be used when the sheet will not be saved to the database, such as for labels</summary>
-		public static Sheet CreateSheet(SheetDef sheetDef){
+		public static Sheet CreateSheet(SheetDef sheetDef) {
 			return CreateSheet(sheetDef,0);
 		}
 
