@@ -3620,9 +3620,6 @@ namespace OpenDental {
 		private void butCreditCard_Click(object sender,EventArgs e) {
 			FormCreditCardManage FormCCM=new FormCreditCardManage();
 			FormCCM.ShowDialog();
-			if(FormCCM.DialogResult!=DialogResult.OK) {
-				return;
-			}
 		}
 
 		private void butTrojan_Click(object sender,EventArgs e) {

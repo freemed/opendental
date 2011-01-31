@@ -14,11 +14,25 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void listCreditCards_MouseDoubleClick(object sender,MouseEventArgs e) {
+			if(listCreditCards.SelectedIndex==-1) {
+				return;
+			}
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
+		private void butAdd_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butUp_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butDown_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 	}
