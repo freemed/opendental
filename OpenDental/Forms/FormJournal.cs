@@ -398,7 +398,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			double bal=0;
+			decimal bal=0;
 			for(int i=0;i<JournalList.Count;i++){
 				if(JournalList[i].DateDisplayed > dateTo) {
 					break;
@@ -413,18 +413,18 @@ namespace OpenDental{
 				}
 				if(JournalList[i].DebitAmt!=0) {
 					if(Accounts.DebitIsPos(AccountCur.AcctType)) {//this one is used for checking account
-						bal+=JournalList[i].DebitAmt;
+						bal+=(Decimal)JournalList[i].DebitAmt;
 					}
 					else {
-						bal-=JournalList[i].DebitAmt;
+						bal-=(Decimal)JournalList[i].DebitAmt;
 					}
 				}
 				if(JournalList[i].CreditAmt!=0) {
 					if(Accounts.DebitIsPos(AccountCur.AcctType)) {//this one is used for checking account
-						bal-=JournalList[i].CreditAmt;
+						bal-=(Decimal)JournalList[i].CreditAmt;
 					}
 					else {
-						bal+=JournalList[i].CreditAmt;
+						bal+=(Decimal)JournalList[i].CreditAmt;
 					}
 				}
 				if(AccountCur.AcctType==AccountType.Asset
