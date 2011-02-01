@@ -38,10 +38,18 @@ namespace OpenDental {
 			if(listCreditCards.SelectedIndex==-1) {
 				return;
 			}
+			int prev=CreditCards.Listt.Count;
+			int placement=listCreditCards.SelectedIndex;
 			FormCreditCardEdit FormCCE=new FormCreditCardEdit(PatCur);
-			FormCCE.CreditCardCur=creditCards[listCreditCards.SelectedIndex];
+			FormCCE.CreditCardCur=creditCards[placement];
 			FormCCE.ShowDialog();
 			RefreshCardList();
+			if(CreditCards.Listt.Count==prev) {
+				listCreditCards.SelectedIndex=placement;
+			}
+			else if(CreditCards.Listt.Count>0) {
+				listCreditCards.SelectedIndex=0;
+			}
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -58,7 +66,7 @@ namespace OpenDental {
 			if(remember) {//in case they canceled and had one selected
 				listCreditCards.SelectedIndex=placement;
 			}
-			if(FormCCE.DialogResult==DialogResult.OK) {
+			if(FormCCE.DialogResult==DialogResult.OK && CreditCards.Listt.Count>0) {
 				listCreditCards.SelectedIndex=0;
 			}
 		}

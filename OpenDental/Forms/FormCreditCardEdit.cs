@@ -24,11 +24,6 @@ namespace OpenDental {
 				textCardNumber.Text=CreditCardCur.CCNumberMasked;
 				textAddress.Text=CreditCardCur.Address;
 				textExpDate.Text=CreditCardCur.CCExpiration.ToString("MMyy");
-				textCity.Text=CreditCardCur.City;
-				textNameOnCard.Text=CreditCardCur.NameOnCard;
-				textSecurityCode.Text=CreditCardCur.CVVNumber.ToString();
-				textType.Text=CreditCardCur.CCType;
-				textState.Text=CreditCardCur.State;
 				textZip.Text=CreditCardCur.Zip;
 			}
 		}
@@ -54,10 +49,6 @@ namespace OpenDental {
 				MsgBox.Show(this,"Expiration format invalid.");
 				return false;
 			}
-			if(textNameOnCard.Text.Trim()==""){
-				MsgBox.Show(this,"Name On Card required.");
-				return false;
-			}
 			return true;
 		}
 
@@ -65,14 +56,9 @@ namespace OpenDental {
 			if(!VerifyData()) {
 				return;
 			}
-			CreditCardCur.NameOnCard=textNameOnCard.Text;
 			CreditCardCur.Address=textAddress.Text;
 			CreditCardCur.CCNumberMasked=textCardNumber.Text;
-			CreditCardCur.CCType=textType.Text;
-			CreditCardCur.City=textCity.Text;
-			CreditCardCur.CVVNumber=PIn.Int(textSecurityCode.Text.ToString());
 			CreditCardCur.PatNum=PatCur.PatNum;
-			CreditCardCur.State=textState.Text;
 			CreditCardCur.Zip=textZip.Text;
 			if(CreditCardCur.IsNew) {
 				CreditCards.FillCache(CreditCards.RefreshCache());
@@ -94,6 +80,11 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 			}
 			CreditCards.Delete(CreditCardCur.CreditCardNum);
+			CreditCards.FillCache(CreditCards.RefreshCache());
+			for(int i=0;i<CreditCards.Listt.Count;i++) {
+				CreditCards.Listt[i].ItemOrder=CreditCards.Listt.Count-(i+1);
+				CreditCards.Update(CreditCards.Listt[i]);//Resets ItemOrder.
+			}
 			DialogResult=DialogResult.OK;
 		}
 

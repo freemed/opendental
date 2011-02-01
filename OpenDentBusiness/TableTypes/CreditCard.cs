@@ -13,26 +13,16 @@ namespace OpenDentBusiness {
 		public long PatNum;
 		///<summary></summary>
 		public string Address;
-		///<summary></summary>
-		public string City;
-		///<summary>2 Char in USA</summary>
-		public string State;
 		///<summary>Postal code.</summary>
 		public string Zip;
 		///<summary>Token for X-Charge. Alphanumeric, upper and lower case, about 15 char long.  Passed into Xcharge instead of the actual card number.</summary>
 		public string XChargeToken;
-		///<summary>Type:Visa, MasterCard, etc.</summary>
-		public string CCType;
 		///<summary>Credit Card Number.  Will be stored masked: XXXXXXXXXXXX1234.</summary>
 		public string CCNumberMasked;
-		///<summary>Card Verification Value.  Three digit number on the back of the card.</summary>
-		public int CVVNumber;
 		///<summary>Only month and year are used, the day will usually be 1.</summary>
 		public DateTime CCExpiration;
 		///<summary>The order that multiple cards will show.  Zero-based.  First one will be default.</summary>
 		public int ItemOrder;
-		///<summary></summary>
-		public string NameOnCard;
 
 		///<summary></summary>
 		public CreditCard Clone() {

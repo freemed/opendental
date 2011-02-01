@@ -84,6 +84,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPayConnect;
 		private ContextMenu contextMenuPayConnect;
 		private MenuItem menuPayConnect;
+		private ComboBox comboCreditCards;
+		private Label labelCreditCards;
 		///<summary>This table gets created and filled once at the beginning.  After that, only the last column gets carefully updated.</summary>
 		private DataTable tableBalances;
 
@@ -162,6 +164,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butDeleteAll = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
+			this.comboCreditCards = new System.Windows.Forms.ComboBox();
+			this.labelCreditCards = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -407,7 +411,7 @@ namespace OpenDental{
 			// 
 			// textDeposit
 			// 
-			this.textDeposit.Location = new System.Drawing.Point(694,75);
+			this.textDeposit.Location = new System.Drawing.Point(694,158);
 			this.textDeposit.Name = "textDeposit";
 			this.textDeposit.ReadOnly = true;
 			this.textDeposit.Size = new System.Drawing.Size(100,20);
@@ -416,7 +420,7 @@ namespace OpenDental{
 			// labelDeposit
 			// 
 			this.labelDeposit.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelDeposit.Location = new System.Drawing.Point(691,56);
+			this.labelDeposit.Location = new System.Drawing.Point(691,139);
 			this.labelDeposit.Name = "labelDeposit";
 			this.labelDeposit.Size = new System.Drawing.Size(199,16);
 			this.labelDeposit.TabIndex = 126;
@@ -440,8 +444,8 @@ namespace OpenDental{
 			this.checkPayTypeNone.TabIndex = 128;
 			this.checkPayTypeNone.Text = "None (Income Transfer)";
 			this.checkPayTypeNone.UseVisualStyleBackColor = true;
-			this.checkPayTypeNone.Click += new System.EventHandler(this.checkPayTypeNone_Click);
 			this.checkPayTypeNone.CheckedChanged += new System.EventHandler(this.checkPayTypeNone_CheckedChanged);
+			this.checkPayTypeNone.Click += new System.EventHandler(this.checkPayTypeNone_Click);
 			// 
 			// contextMenuPayConnect
 			// 
@@ -608,10 +612,30 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add Split";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// comboCreditCards
+			// 
+			this.comboCreditCards.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCreditCards.Location = new System.Drawing.Point(694,65);
+			this.comboCreditCards.MaxDropDownItems = 30;
+			this.comboCreditCards.Name = "comboCreditCards";
+			this.comboCreditCards.Size = new System.Drawing.Size(198,21);
+			this.comboCreditCards.TabIndex = 130;
+			// 
+			// labelCreditCards
+			// 
+			this.labelCreditCards.Location = new System.Drawing.Point(694,45);
+			this.labelCreditCards.Name = "labelCreditCards";
+			this.labelCreditCards.Size = new System.Drawing.Size(198,17);
+			this.labelCreditCards.TabIndex = 131;
+			this.labelCreditCards.Text = "Credit Card";
+			this.labelCreditCards.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(974,562);
+			this.Controls.Add(this.labelCreditCards);
+			this.Controls.Add(this.comboCreditCards);
 			this.Controls.Add(this.butPayConnect);
 			this.Controls.Add(this.checkPayTypeNone);
 			this.Controls.Add(this.textFamAfterIns);
@@ -661,8 +685,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Payment";
-			this.Load += new System.EventHandler(this.FormPayment_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPayment_Closing);
+			this.Load += new System.EventHandler(this.FormPayment_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -701,6 +725,12 @@ namespace OpenDental{
 						comboClinic.SelectedIndex=i+1;
 					}
 				}
+			}
+			if(CreditCards.Listt.Count>0) {
+				for(int i=0;i<CreditCards.Listt.Count;i++) {
+					comboCreditCards.Items.Add(CreditCards.Listt[i].CCNumberMasked);
+				}
+				comboCreditCards.SelectedIndex=0;
 			}
 			tableBalances=Patients.GetPaymentStartingBalances(PatCur.Guarantor,PaymentCur.PayNum);
 			//this works even if patient not in family
@@ -1166,6 +1196,7 @@ namespace OpenDental{
 				}
 				return;
 			}
+			bool needToken=false;
 			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
@@ -1175,37 +1206,82 @@ namespace OpenDental{
 				[/APPROVALCODE:approval] [/AUTOPROCESS] [/AUTOCLOSE] [/STAYONTOP] [/MID]
 				[/RESULTFILE:”C:\Program Files\X-Charge\LocalTran\XCResult.txt”*/
 			ProcessStartInfo info=new ProcessStartInfo(prog.Path);
-			info.Arguments="";
-			double amt=PIn.Double(textAmount.Text);
-			if(amt>0){
-				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" ";
-			}
 			Patient pat=Patients.GetPat(PaymentCur.PatNum);
 			PatientNote patnote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor);
-			if(patnote.CCNumber!=""){
-			  info.Arguments+="/ACCOUNT:"+patnote.CCNumber+" ";
-			}
-			if(patnote.CCExpiration.Year>2005){
-			  info.Arguments+="/EXP:"+patnote.CCExpiration.ToString("MMyy")+" ";
-			}
-			info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
-			info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
-			info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
-			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
-			info.Arguments+="/PARTIALAPPROVALSUPPORT:T ";
-			info.Arguments+="/AUTOCLOSE ";
 			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
 			File.Delete(resultfile);//delete the old result file.
-			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
-			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
-			//info.Arguments+="/MID:223496";//what's this?
+			info.Arguments="";
+			double amt=PIn.Double(textAmount.Text);
+			if(amt>0) {
+				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" ";
+			}
+			if(CreditCards.Listt.Count>0) {//Have credit card on file
+				CreditCard CCard=CreditCards.Listt[comboCreditCards.SelectedIndex];
+				if(CCard.XChargeToken!="") {//Recurring charge
+					/*       ***** An example of how recurring charges work***** 
+					C:\Program Files\X-Charge\XCharge.exe /TRANSACTIONTYPE:Purchase /LOCKTRANTYPE
+					/AMOUNT:10.00 /LOCKAMOUNT /XCACCOUNTID: XAW0JWtx5kjG8 /RECEIPT:RC001
+					/LOCKRECEIPT /CLERK:Clerk /LOCKCLERK /RESULTFILE:C:\ResultFile.txt /USERID:system
+					/PASSWORD:system /STAYONTOP /AUTOPROCESS /AUTOCLOSE /HIDEMAINWINDOW
+					/RECURRING /SMALLWINDOW /NORESULTDIALOG
+					*/
+					info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+					info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
+					info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
+					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+					info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
+					info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+					info.Arguments+="/AUTOPROCESS ";
+					info.Arguments+="/AUTOCLOSE ";
+					info.Arguments+="/HIDEMAINWINDOW ";
+					info.Arguments+="/RECURRING ";
+				}
+				else {//Not recurring charge
+					needToken=true;//Will create a token from result file so credit card info isn't saved in our db.
+					if(CCard.CCNumberMasked!="") {//Number won't be masked if not recurring
+						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
+					}
+					if(CCard.CCExpiration!=null && CCard.CCExpiration.Year>2005) {
+						info.Arguments+="/EXP:"+CCard.CCExpiration.ToString("MMyy")+" ";
+					}
+					if(CCard.Zip!="") {
+						info.Arguments+="\"/ZIP:"+CCard.Zip+"\" ";
+					}
+					else {
+						info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
+					}
+					if(CCard.Address!="") {
+						info.Arguments+="\"/ADDRESS:"+CCard.Address+"\" ";
+					}
+					else {
+						info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
+					}
+					info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
+					info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
+					info.Arguments+="/AUTOPROCESS ";
+					info.Arguments+="/AUTOCLOSE ";
+					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+					info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
+					info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+				}
+			}
+			else {//No credit cards in creditcard table so use they will manually type in information.
+				info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
+				info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
+				info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
+				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
+				info.Arguments+="/PARTIALAPPROVALSUPPORT:T ";
+				info.Arguments+="/AUTOCLOSE ";
+				info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+				info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
+				info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+			}
 			Cursor=Cursors.WaitCursor;
 			Process process=new Process();
 			process.StartInfo=info;
 			process.EnableRaisingEvents=true;
 			process.Start();
-			while(!process.HasExited){
+			while(!process.HasExited) {
 				Application.DoEvents();
 			}
 			Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
@@ -1213,25 +1289,42 @@ namespace OpenDental{
 			string resulttext="";
 			string line="";
 			bool showReturnedNote=true;
-			using(TextReader reader=new StreamReader(resultfile)){
+			string xChargeToken="";
+			string accountMasked="";
+			using(TextReader reader=new StreamReader(resultfile)) {
 				line=reader.ReadLine();
-				while(line!=null){
-					if(resulttext!=""){
+				while(line!=null) {
+					if(resulttext!="") {
 						resulttext+="\r\n";
 					}
 					resulttext+=line;
-					if(line.StartsWith("RESULT=")){
-						if(line!="RESULT=SUCCESS"){
+					if(line.StartsWith("RESULT=")) {
+						if(line!="RESULT=SUCCESS") {
 							break;
 						}
 					}
-					if(line.StartsWith("AMOUNT=")){
+					if(line.StartsWith("AMOUNT=")) {
 						double amtReturned=PIn.Double(line.Substring(7));
 						if(amtReturned != amt) {
 							showReturnedNote=false;
 						}
 					}
+					if(line.StartsWith("XCACCOUNTID=")) {
+						xChargeToken=PIn.String(line.Substring(12));
+					}
+					if(line.StartsWith("ACCOUNT=")) {
+						accountMasked=PIn.String(line.Substring(8));
+					}
 					line=reader.ReadLine();
+				}
+				if(needToken) {
+					//Only way this code can be hit is if they have set up a credit card and it does not have a token.
+					//So we'll use the created token from result file and assign it to the coresponding account.
+					//Also will delete the credit card number and replace it with secure masked number.
+					CreditCard CCard=CreditCards.Listt[comboCreditCards.SelectedIndex];
+					CCard.XChargeToken=xChargeToken;
+					CCard.CCNumberMasked=accountMasked;
+					CreditCards.Update(CCard);
 				}
 				//resulttext+=reader.ReadToEnd();
 				//MessageBox.Show("ResultFile:\r\n"+resultText);
