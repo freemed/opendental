@@ -35,6 +35,8 @@ namespace OpenDental{
 			VisProvs=new List<int>();
 			VisOps=new List<int>();
 			ApptRows=new List<ApptViewItem>();
+			int index;
+			//If there are no appointment views set up (therefore, none selected), then use a hard-coded default view.
 			if(ApptViewCur==null){
 				//MessageBox.Show("apptcategorynum:"+ApptCategories.Cur.ApptCategoryNum.ToString());
 				//make visible ops exactly the same as the short ops list (all except hidden)
@@ -55,8 +57,8 @@ namespace OpenDental{
 				ApptRows.Add(new ApptViewItem("Note",6,Color.Black));
 				ContrApptSheet.RowsPerIncr=1;
 			}
+			//An appointment view is selected, so add provs and ops from the view to our lists of indexes.
 			else{
-				int index;
 				for(int i=0;i<ApptViewItemC.List.Length;i++){
 					if(ApptViewItemC.List[i].ApptViewNum==ApptViewCur.ApptViewNum){
 						ForCurView.Add(ApptViewItemC.List[i]);
@@ -82,12 +84,15 @@ namespace OpenDental{
 				}
 				ContrApptSheet.RowsPerIncr=ApptViewCur.RowsPerIncr;
 			}
+			//if this appt view has the option to show only scheduled providers and this is daily view.
+			//Remember that there is no intelligence in weekly view for this option, and it behaves just like it always did.
 			if(ApptViewCur!=null && ApptViewCur.OnlyScheduledProvs && !isWeekly) {
 				//intelligently decide what ops to show.  It's based on the schedule for the day.
+				//VisOps will be totally empty right now because it looped out of the above section of code.
 				List<long> listSchedOps;
 				bool opAdded;
 				int indexOp;
-				for(int i=0;i<OperatoryC.ListShort.Count;i++){
+				for(int i=0;i<OperatoryC.ListShort.Count;i++){//loop through all ops for all views (except the hidden ones, of course)
 					//find any applicable sched for the op
 					opAdded=false;
 					for(int s=0;s<dailySched.Count;s++){
@@ -114,19 +119,34 @@ namespace OpenDental{
 								continue;
 							}
 						}
+						//this 'sched' must apply to this situation.
+						//listSchedOps is the ops for this 'sched'.
 						listSchedOps=dailySched[s].Ops;
+						//Add all the ops for this 'sched' to the list of visible ops
 						for(int p=0;p<listSchedOps.Count;p++) {
 							if(listSchedOps[p]==OperatoryC.ListShort[i].OperatoryNum) {
 								indexOp=Operatories.GetOrder(listSchedOps[p]);
-								if(indexOp!=-1) {
+								if(indexOp!=-1 && !VisOps.Contains(indexOp)) {//prevents adding duplicate ops
 									VisOps.Add(indexOp);
 									opAdded=true;
 									break;
 								}
 							}
 						}
+						//Also add any ops that are assigned to this dentist by default.
+						if(OperatoryC.ListShort[i].ProvDentist==dailySched[s].ProvNum) {
+							indexOp=Operatories.GetOrder(OperatoryC.ListShort[i].OperatoryNum);
+							if(indexOp!=-1 && !VisOps.Contains(indexOp)) {
+								VisOps.Add(indexOp);
+								opAdded=true;
+							}
+							//index=Providers.GetIndex(OperatoryC.ListShort[i].ProvDentist);
+							//if(index!=-1 && !VisProvs.Contains(index)) {
+							//	VisProvs.Add(index);
+							//}
+						}
 						if(opAdded) {
-							break;
+							break;//break out of the loop of schedules.  Continue with the next op.
 						}
 					}
 				}

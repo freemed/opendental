@@ -851,7 +851,7 @@ namespace OpenDental{
 			}
 			int dayDelta=0;//this is needed when repeat pasting days in order to calculate skipping weekends.
 			//dayDelta will start out zero and increment separately from r.
-			for(int r=0;r<PIn.Long(textRepeat.Text);r++){
+			for(int r=0;r<PIn.Long(textRepeat.Text);r++){//for example, user wants to repeat 3 times.
 				if(checkReplace.Checked) {
 					if(isWeek){
 						Schedules.Clear(dateSelectedStart.AddDays(r*7),dateSelectedEnd.AddDays(r*7),
@@ -862,7 +862,7 @@ namespace OpenDental{
 							provNums,empNums,checkPractice.Checked);
 					}
 				}
-				for(int i=0;i<SchedList.Count;i++) {
+				for(int i=0;i<SchedList.Count;i++) {//For example, if 3 weeks for one provider, then about 30 loops.
 					sched=SchedList[i].Copy();
 					if(isWeek) {
 						sched.SchedDate=sched.SchedDate.AddDays((weekDelta+r)*7).AddHours(1).Date;
@@ -870,7 +870,7 @@ namespace OpenDental{
 					else {
 						sched.SchedDate=dateSelectedStart.AddDays(dayDelta);
 					}
-					Schedules.Insert(sched,false);
+					Schedules.Insert(sched,false);//if there is one provider in 4 ops, then this does 5 inserts per loop.
 				}
 				if(!checkWeekend.Checked && dateSelectedStart.AddDays(dayDelta).DayOfWeek==DayOfWeek.Friday){
 					dayDelta+=3;
