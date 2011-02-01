@@ -3618,7 +3618,7 @@ namespace OpenDental {
 		}*/
 
 		private void butCreditCard_Click(object sender,EventArgs e) {
-			FormCreditCardManage FormCCM=new FormCreditCardManage();
+			FormCreditCardManage FormCCM=new FormCreditCardManage(PatCur);
 			FormCCM.ShowDialog();
 		}
 

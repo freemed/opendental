@@ -117,6 +117,7 @@ namespace OpenDental{
 			this.Name = "FormCreditCardManage";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Credit Card Manage";
+			this.Load += new System.EventHandler(this.FormCreditCardManage_Load);
 			this.ResumeLayout(false);
 
 		}
