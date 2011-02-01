@@ -3408,6 +3408,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX creditcard_PatNum ON creditcard (PatNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO creditcard (PatNum,CCExpiration,CCNumberMasked,ItemOrder) SELECT PatNum,CCExpiration,CCNumber,0 FROM patientnote WHERE CCNumber!=''";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"INSERT INTO creditcard (CreditCardNum,PatNum,CCExpiration,CCNumberMasked,ItemOrder) SELECT PatNum,PatNum,CCExpiration,CCNumber,0 FROM patientnote WHERE LENGTH(ccnumber)>0";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patientnote DROP COLUMN CCNumber";
+					Db.NonQ(command);
+					command="ALTER TABLE patientnote DROP COLUMN CCExpiration";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patientnote DROP (CCNumber, CCExpiration)";
+					Db.NonQ(command);
+				}
+
 
 
 
