@@ -41,7 +41,7 @@ min-height: 480px;
     height:30px;
 }
 /* multiple style don't work in some cases android hence some styles had to be written all over again*/
-.previous, .next, .today{
+#previous, #next, #today{
     position: relative;
         overflow: hidden;
     top: 8px;
@@ -63,7 +63,7 @@ min-height: 480px;
     background: none;
 }
 
-.previous  {
+#previous  {
     left:10px;
     top:10px;
     float: left; 
@@ -73,11 +73,11 @@ min-height: 480px;
     -webkit-transform: rotate(180deg);
 }
 
-.today{
+#today{
     float:left;
     margin-left:15px
 }
-.next{
+#next{
     top:10px;
     height:25px;
     float: right;
@@ -98,14 +98,17 @@ min-height: 480px;
  font-size:14px;
  word-wrap:break-word;
 }
-.style2
-{ display:inline;
+.style2 {
+  display:inline;
   text-decoration:underline;
   color:#343C83;
+  word-wrap:break-word;
+  white-space: normal;
 }
-h2 {
-    font: bold 14px Helvetica;
-    color:#FFFFFF;
+
+h2{
+   font: bold 14px Helvetica;
+   color:#FFFFFF;
 }
 /* multiple style don't work in some cases android hence some styles had to be written all over again*/
 /*.appts, .home, .patients{
@@ -145,6 +148,9 @@ h2 {
     -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14; 
 }
 
+.patients{
+    max-width: 50px;
+}
 
 #searchbutton{
  position:relative; float:right;top:17px;left:-10px;
@@ -186,9 +192,10 @@ ul li {
 /*right padding to adjust postion of the ellipse*/
 .elladjust{
  padding-right:15px;
+ 
 }
 .page1{
-  margin: 7px 10px 7px 10px;
+    text-align:center;
+     margin-left:50px;
+     margin-right:50px
 }
-
-/*webkit-transform-style: preserve-3d; not overwritten*/

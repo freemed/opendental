@@ -15,6 +15,7 @@ namespace MobileWeb {
 		public string DialLinkHmPhone="";
 		public string DialLinkWkPhone="";
 		public string DialLinkWirelessPhone="";
+		public string EmailString="";
 		private long PatNum=0;
 		private long CustomerNum=0;
 		protected void Page_Load(object sender,EventArgs e) {
@@ -39,6 +40,9 @@ namespace MobileWeb {
 				}
 				if(!String.IsNullOrEmpty(pat.WirelessPhone)) {
 					DialLinkWirelessPhone=DialString1+pat.WirelessPhone+DialString2;
+				}
+				if(!String.IsNullOrEmpty(pat.Email)) {
+					EmailString=@"<a href=""mailto:"+pat.Email+@""" class=""style2"">" + pat.Email+"</a>";
 				}
 				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,PatNum);
 				Repeater1.DataSource=appointmentmList;

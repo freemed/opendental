@@ -28,8 +28,10 @@
 </span></li>
 <li><span class="style1">Mobile: <%Response.Write(pat.WirelessPhone);%><%Response.Write(DialLinkWirelessPhone);%>
 </span></li>
-<li><span class="style1">Email: <%Response.Write(pat.Email);%> </span></li>
+<%--<li><span class="style1">Email: <%Response.Write(EmailString);%> </span></li>--%>
+<li><span class="style1">Email: <a href="mailto:hello" class="style2">sebmathew________________seb@siberiacrawlmail.com</a> </span></li>
 </ul>
+
 <h2>Appointments</h2>
 
 <ul>

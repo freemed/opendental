@@ -31,10 +31,10 @@
             <form id="form1" method="post" runat="server">
                 <ul>
                     <%--<li><input type="text" runat="server" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>--%>
-					<li><asp:TextBox ID="username" runat="server"></asp:TextBox></li>
+					<li><asp:TextBox placeholder="Username" ID="username" runat="server"></asp:TextBox></li>
                     <li><input type="password" placeholder="Password" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
                    <%--<li><div class="chk"><input runat="server" id="rememberusername" title="Remember username" type="checkbox" /></div></li>--%>
-				   <li><asp:CheckBox ID="rememberusername" runat="server" /></li>
+				   <li><asp:CheckBox ID="rememberusername" title="Remember username" runat="server" /></li>
 					<li><input type="submit" class="submit" name="action" value="Login" /></li>
                 </ul>
             </form>

@@ -94,14 +94,14 @@ function TraversePage(){
 	});
 	
 	/*previous, today and next buttons*/
-	$('.button.previous').tap(function(e) {
+	$('#previous').tap(function(e) {
 		console.log('Previous button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
-	$('.button.today').tap(function(e) {
+	$('#today').tap(function(e) {
 		console.log('Today button tapped');
 		var UrlForFetchingData = 'AppointmentList.aspx'; 
 		var SectionToFill='#AppointmentListContents';
@@ -109,7 +109,7 @@ function TraversePage(){
 	});
 	
 	
-	$('.button.next').tap(function(e) {
+	$('#next').tap(function(e) {
 		console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
@@ -125,7 +125,7 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-	$('patients').tap(function(e) {
+	$('.patients').tap(function(e) {
 		console.log('patients button tapped');
 		//var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var searchterm=$('#searchpatientbox').val();
