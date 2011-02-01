@@ -3416,7 +3416,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX creditcard_PatNum ON creditcard (PatNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE creditcard ADD NameOnCard varchar(255)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE creditcard ADD NameOnCard varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3453,5 +3460,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
 
 				

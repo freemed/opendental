@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				creditCard.CVVNumber     = PIn.Int   (table.Rows[i]["CVVNumber"].ToString());
 				creditCard.CCExpiration  = PIn.Date  (table.Rows[i]["CCExpiration"].ToString());
 				creditCard.ItemOrder     = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
+				creditCard.NameOnCard    = PIn.String(table.Rows[i]["NameOnCard"].ToString());
 				retVal.Add(creditCard);
 			}
 			return retVal;
@@ -98,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CreditCardNum,";
 			}
-			command+="PatNum,Address,City,State,Zip,XChargeToken,CCType,CCNumberMasked,CVVNumber,CCExpiration,ItemOrder) VALUES(";
+			command+="PatNum,Address,City,State,Zip,XChargeToken,CCType,CCNumberMasked,CVVNumber,CCExpiration,ItemOrder,NameOnCard) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(creditCard.CreditCardNum)+",";
 			}
@@ -113,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(creditCard.CCNumberMasked)+"',"
 				+    POut.Int   (creditCard.CVVNumber)+","
 				+    POut.Date  (creditCard.CCExpiration)+","
-				+    POut.Int   (creditCard.ItemOrder)+")";
+				+    POut.Int   (creditCard.ItemOrder)+","
+				+"'"+POut.String(creditCard.NameOnCard)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -136,7 +138,8 @@ namespace OpenDentBusiness.Crud{
 				+"CCNumberMasked= '"+POut.String(creditCard.CCNumberMasked)+"', "
 				+"CVVNumber     =  "+POut.Int   (creditCard.CVVNumber)+", "
 				+"CCExpiration  =  "+POut.Date  (creditCard.CCExpiration)+", "
-				+"ItemOrder     =  "+POut.Int   (creditCard.ItemOrder)+" "
+				+"ItemOrder     =  "+POut.Int   (creditCard.ItemOrder)+", "
+				+"NameOnCard    = '"+POut.String(creditCard.NameOnCard)+"' "
 				+"WHERE CreditCardNum = "+POut.Long(creditCard.CreditCardNum);
 			Db.NonQ(command);
 		}
@@ -187,6 +190,10 @@ namespace OpenDentBusiness.Crud{
 			if(creditCard.ItemOrder != oldCreditCard.ItemOrder) {
 				if(command!=""){ command+=",";}
 				command+="ItemOrder = "+POut.Int(creditCard.ItemOrder)+"";
+			}
+			if(creditCard.NameOnCard != oldCreditCard.NameOnCard) {
+				if(command!=""){ command+=",";}
+				command+="NameOnCard = '"+POut.String(creditCard.NameOnCard)+"'";
 			}
 			if(command==""){
 				return;

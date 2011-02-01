@@ -31,6 +31,8 @@ namespace OpenDentBusiness {
 		public DateTime CCExpiration;
 		///<summary>The order that multiple cards will show.  Zero-based.  First one will be default.</summary>
 		public int ItemOrder;
+		///<summary></summary>
+		public string NameOnCard;
 
 		///<summary></summary>
 		public CreditCard Clone() {

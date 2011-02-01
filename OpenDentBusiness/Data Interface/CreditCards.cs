@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM creditcard ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM creditcard ORDER BY ItemOrder DESC";//stub query probably needs to be changed
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="CreditCard";
 			FillCache(table);
@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM creditcard WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM creditcard WHERE PatNum = "+POut.Long(patNum)+" ORDER BY ItemOrder DESC";
 			return Crud.CreditCardCrud.SelectMany(command);
 		}
 
