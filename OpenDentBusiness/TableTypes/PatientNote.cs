@@ -22,10 +22,6 @@ namespace OpenDentBusiness{
 		public string MedicalComp;
 		///<summary>Shows in the Chart module just below the graphical tooth chart.</summary>
 		public string Treatment;
-		///<summary>Credit Card Number.  It is a field that must be turned on to be visible, so it usually isn't.</summary>
-		public string CCNumber;
-		///<summary>Credit Card expiration date. Only month and year are used, and the day is usually just 1.  This field is usually hidden to the user.</summary>
-		public DateTime CCExpiration;
 
 	}
 

@@ -53,8 +53,6 @@ namespace OpenDentBusiness.Crud{
 				patientNote.Service     = PIn.String(table.Rows[i]["Service"].ToString());
 				patientNote.MedicalComp = PIn.String(table.Rows[i]["MedicalComp"].ToString());
 				patientNote.Treatment   = PIn.String(table.Rows[i]["Treatment"].ToString());
-				patientNote.CCNumber    = PIn.String(table.Rows[i]["CCNumber"].ToString());
-				patientNote.CCExpiration= PIn.Date  (table.Rows[i]["CCExpiration"].ToString());
 				retVal.Add(patientNote);
 			}
 			return retVal;
@@ -95,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatNum,";
 			}
-			command+="FamFinancial,ApptPhone,Medical,Service,MedicalComp,Treatment,CCNumber,CCExpiration) VALUES(";
+			command+="FamFinancial,ApptPhone,Medical,Service,MedicalComp,Treatment) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patientNote.PatNum)+",";
 			}
@@ -105,9 +103,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(patientNote.Medical)+"',"
 				+"'"+POut.String(patientNote.Service)+"',"
 				+DbHelper.ParamChar+"paramMedicalComp,"
-				+"'"+POut.String(patientNote.Treatment)+"',"
-				+"'"+POut.String(patientNote.CCNumber)+"',"
-				+    POut.Date  (patientNote.CCExpiration)+")";
+				+"'"+POut.String(patientNote.Treatment)+"')";
 			if(patientNote.MedicalComp==null) {
 				patientNote.MedicalComp="";
 			}
@@ -129,9 +125,7 @@ namespace OpenDentBusiness.Crud{
 				+"Medical     = '"+POut.String(patientNote.Medical)+"', "
 				+"Service     = '"+POut.String(patientNote.Service)+"', "
 				+"MedicalComp =  "+DbHelper.ParamChar+"paramMedicalComp, "
-				+"Treatment   = '"+POut.String(patientNote.Treatment)+"', "
-				+"CCNumber    = '"+POut.String(patientNote.CCNumber)+"', "
-				+"CCExpiration=  "+POut.Date  (patientNote.CCExpiration)+" "
+				+"Treatment   = '"+POut.String(patientNote.Treatment)+"' "
 				+"WHERE PatNum = "+POut.Long(patientNote.PatNum);
 			if(patientNote.MedicalComp==null) {
 				patientNote.MedicalComp="";
@@ -163,14 +157,6 @@ namespace OpenDentBusiness.Crud{
 			if(patientNote.Treatment != oldPatientNote.Treatment) {
 				if(command!=""){ command+=",";}
 				command+="Treatment = '"+POut.String(patientNote.Treatment)+"'";
-			}
-			if(patientNote.CCNumber != oldPatientNote.CCNumber) {
-				if(command!=""){ command+=",";}
-				command+="CCNumber = '"+POut.String(patientNote.CCNumber)+"'";
-			}
-			if(patientNote.CCExpiration != oldPatientNote.CCExpiration) {
-				if(command!=""){ command+=",";}
-				command+="CCExpiration = "+POut.Date(patientNote.CCExpiration)+"";
 			}
 			if(command==""){
 				return;
