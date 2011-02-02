@@ -36,6 +36,7 @@ namespace OpenDental {
 		private TextBox textBox1;
 		private UI.Button butExport;
 		private int headingPrintH;
+		private decimal total;
 
 
 		public FormRpOutstandingIns() {
@@ -301,18 +302,18 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Type"),60);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient Name"),150);
+			col=new ODGridColumn(Lan.g(this,"Patient Name"),140);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Date of Service"),93);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Date Sent"),85);
+			col=new ODGridColumn(Lan.g(this,"Date Sent"),75);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Amount"),65,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g(this,"Amount"),85,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			string type;
-			decimal total=0;
+			total=0;
 			for(int i=0;i<Table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(Table.Rows[i]["CarrierName"].ToString());
@@ -559,6 +560,8 @@ namespace OpenDental {
 			}
 			else {
 				e.HasMorePages=false;
+				text="Total: $"+total.ToString("F");
+				g.DrawString(text,subHeadingFont,Brushes.Black,805-g.MeasureString(text,subHeadingFont).Width,yPos);
 			}
 			g.Dispose();
 		}
