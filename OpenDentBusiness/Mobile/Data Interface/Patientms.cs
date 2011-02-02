@@ -17,7 +17,7 @@ namespace OpenDentBusiness.Mobile {
 		public static List<Patientm> GetPatientms(long customerNum,string searchterm) {
 			string command="SELECT * FROM patientm "
 				+"WHERE CustomerNum = "+POut.Long(customerNum)+ " "
-				+" AND LName like '"+searchterm+"%'"+" LIMIT 20";
+				+" AND LName like '"+POut.String(searchterm)+"%'"+" LIMIT 30";
 			return Crud.PatientmCrud.SelectMany(command);
 		}
 

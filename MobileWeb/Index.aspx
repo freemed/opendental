@@ -26,17 +26,26 @@
     <div class="toolbar">
                 <h1>Open Dental</h1>
             </div>
-			<br />
+			
             &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
             <form id="form1" method="post" runat="server">
-                <ul>
+			<span class="style1" style="font-weight:bold;position:relative;left:15px;">Username</span><br />
+                <ul style="margin-top:4px">
                     <%--<li><input type="text" runat="server" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>--%>
-					<li><asp:TextBox placeholder="Username" ID="username" runat="server"></asp:TextBox></li>
-                    <li><input type="password" placeholder="Password" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
-                   <%--<li><div class="chk"><input runat="server" id="rememberusername" title="Remember username" type="checkbox" /></div></li>--%>
-				   <li><asp:CheckBox ID="rememberusername" title="Remember username" runat="server" /></li>
-					<li><input type="submit" class="submit" name="action" value="Login" /></li>
+					<%--<li><div class="chk"><input runat="server" id="rememberusername" title="Remember username" type="checkbox" /></div></li>--%>
+					<%--<li><input type="submit" class="submit" name="action" value="Login" /></li>--%>
+					<li><asp:TextBox placeholder="" ID="username" runat="server"></asp:TextBox></li>
                 </ul>
+				<span class="style1" style="font-weight:bold;position:relative;left:15px;">Password</span>
+                <ul style="margin-top:4px">
+					<li><input type="password" placeholder="" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
+                </ul>
+                <div style="margin-left:15px;margin-bottom:10px">  
+					<asp:CheckBox ID="rememberusername" title="Remember username" runat="server" /><span class="style1" style="margin-left:15px;font-weight:bold;position:relative;top:0px;left:0px;">Remember username</span>
+                </div>	
+				<ul style="width:80%;margin:auto;">
+					<li style="text-align:center;padding-top:0px;padding-bottom:0px;"><input style="padding-top:0px;padding-bottom:0px;height:24px;font-weight:bold;" type="submit" class="submit" name="action" value="Login" /></li>
+                </ul>	
             </form>
         </div>
 

@@ -83,20 +83,15 @@ namespace WebHostSynch {
 			}
 			return RegistrationKeyFromDb.PatNum;
 		}
-		/// <summary>
-		/// parameterise this query later
-		/// </summary>
+
 		public void SetMobileWebUserPassword(long customerNum,String UserName,String Password) {
-			String command="INSERT INTO userm (CustomerNum,UserName,Password) VALUES ("+customerNum+",'"+UserName+"','"+MD5Encrypt(Password)+"')ON DUPLICATE KEY UPDATE UserName='"+UserName+"',Password='"+MD5Encrypt(Password)+"'";
+			String command="INSERT INTO userm (CustomerNum,UserName,Password) VALUES ("+POut.Long(customerNum)+",'"+POut.String(UserName)+"','"+POut.String(MD5Encrypt(Password))+"')ON DUPLICATE KEY UPDATE UserName='"+POut.String(UserName)+"',Password='"+POut.String(MD5Encrypt(Password))+"'";
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
 			dc.NonQ(command);
 		}
 
-		/// <summary>
-		/// parameterise this query later
-		/// </summary>
 		public string GetMobileWebUserName(long customerNum){
-			String command="SELECT UserName FROM userm WHERE CustomerNum="+customerNum;
+			String command="SELECT UserName FROM userm WHERE CustomerNum="+POut.Long(customerNum);
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
 			DataTable table=dc.GetTable(command);
 			String UserName="";

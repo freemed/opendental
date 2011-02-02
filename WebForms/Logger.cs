@@ -128,14 +128,14 @@ namespace WebForms {
 			string MethodName =" Method: "+ stFrame.GetMethod();
 			string LineNumber =" LineNumber: "+ stFrame.GetFileLineNumber();
 			string StackTrace=" StackTrace: "+ ex.StackTrace;
-			message = message + Filename + MethodName + LineNumber+StackTrace;
-			Write(message,TraceEventType.Information);
+			message =message+Filename+MethodName+LineNumber+StackTrace;
+			Write(message,TraceEventType.Error);
 			
 			if(ex.InnerException != null) {
 				Console.WriteLine("Inner Exception");
 				Write("InnerException " +ex.InnerException.StackTrace+ " " +ex.InnerException.Message,TraceEventType.Information);
 				if(ex.InnerException.InnerException!= null) {
-					Write("InnerException of  InnerException" +ex.InnerException.InnerException.StackTrace+ " " +ex.InnerException.InnerException.Message,TraceEventType.Information);
+					Write("InnerException of  InnerException" +ex.InnerException.InnerException.StackTrace+ " " +ex.InnerException.InnerException.Message,TraceEventType.Error);
 				}
 			}
 		}
