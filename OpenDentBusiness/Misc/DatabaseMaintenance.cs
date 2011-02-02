@@ -1611,7 +1611,7 @@ namespace OpenDentBusiness {
 						payment.DateEntry=PIn.Date(table.Rows[i]["DateEntry"].ToString());
 						payment.PatNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
 						payment.PayDate=PIn.Date(table.Rows[i]["DatePay"].ToString());
-						payment.PayAmt=PIn.Long(table.Rows[i]["_SplitAmt"].ToString());
+						payment.PayAmt=PIn.Double(table.Rows[i]["_SplitAmt"].ToString());
 						payment.PayNote="Dummy payment. Original payment entry missing from the database.";
 						payment.PayNum=PIn.Long(table.Rows[i]["PayNum"].ToString());
 						Payments.Insert(payment,true);
