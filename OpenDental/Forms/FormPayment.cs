@@ -726,10 +726,11 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(CreditCards.Listt.Count>0) {
-				for(int i=0;i<CreditCards.Listt.Count;i++) {
-					comboCreditCards.Items.Add(CreditCards.Listt[i].CCNumberMasked);
-				}
+			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
+			for(int i=0;i<creditCards.Count;i++) {
+				comboCreditCards.Items.Add(creditCards[i].CCNumberMasked);
+			}
+			if(creditCards.Count>0) {
 				comboCreditCards.SelectedIndex=0;
 			}
 			tableBalances=Patients.GetPaymentStartingBalances(PatCur.Guarantor,PaymentCur.PayNum);
@@ -1215,8 +1216,14 @@ namespace OpenDental{
 			if(amt>0) {
 				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" ";
 			}
-			if(CreditCards.Listt.Count>0) {//Have credit card on file
-				CreditCard CCard=CreditCards.Listt[comboCreditCards.SelectedIndex];
+			CreditCard CCard=null;
+			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
+			for(int i=0;i<creditCards.Count;i++) {
+				if(i==comboCreditCards.SelectedIndex){
+					CCard=creditCards[i];
+				}
+			}
+			if(CCard!=null) {//Have credit card on file
 				if(CCard.XChargeToken!="") {//Recurring charge
 					/*       ***** An example of how recurring charges work***** 
 					C:\Program Files\X-Charge\XCharge.exe /TRANSACTIONTYPE:Purchase /LOCKTRANTYPE
@@ -1300,6 +1307,7 @@ namespace OpenDental{
 					resulttext+=line;
 					if(line.StartsWith("RESULT=")) {
 						if(line!="RESULT=SUCCESS") {
+							needToken=false;//Don't update CCard due to failure
 							break;
 						}
 					}
@@ -1321,7 +1329,6 @@ namespace OpenDental{
 					//Only way this code can be hit is if they have set up a credit card and it does not have a token.
 					//So we'll use the created token from result file and assign it to the coresponding account.
 					//Also will delete the credit card number and replace it with secure masked number.
-					CreditCard CCard=CreditCards.Listt[comboCreditCards.SelectedIndex];
 					CCard.XChargeToken=xChargeToken;
 					CCard.CCNumberMasked=accountMasked;
 					CreditCards.Update(CCard);

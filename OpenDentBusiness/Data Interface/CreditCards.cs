@@ -7,43 +7,6 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CreditCards{
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
-		///<summary>A list of all CreditCards.</summary>
-		private static List<CreditCard> listt;
-
-		///<summary>A list of all CreditCards.</summary>
-		public static List<CreditCard> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
-
-		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM creditcard ORDER BY ItemOrder DESC";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="CreditCard";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.CreditCardCrud.TableToList(table);
-		}
-		#endregion
 
 		///<summary></summary>
 		public static List<CreditCard> Refresh(long patNum){

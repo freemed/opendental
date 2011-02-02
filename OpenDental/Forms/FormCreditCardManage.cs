@@ -27,7 +27,6 @@ namespace OpenDental {
 
 		private void RefreshCardList() {
 			listCreditCards.Items.Clear();
-			CreditCards.FillCache(CreditCards.RefreshCache());
 			creditCards=CreditCards.Refresh(PatCur.PatNum);
 			for(int i=0;i<creditCards.Count;i++) {
 				listCreditCards.Items.Add(creditCards[i].CCNumberMasked);
@@ -38,16 +37,16 @@ namespace OpenDental {
 			if(listCreditCards.SelectedIndex==-1) {
 				return;
 			}
-			int prev=CreditCards.Listt.Count;
+			int prev=creditCards.Count;
 			int placement=listCreditCards.SelectedIndex;
 			FormCreditCardEdit FormCCE=new FormCreditCardEdit(PatCur);
 			FormCCE.CreditCardCur=creditCards[placement];
 			FormCCE.ShowDialog();
 			RefreshCardList();
-			if(CreditCards.Listt.Count==prev) {
+			if(creditCards.Count==prev) {
 				listCreditCards.SelectedIndex=placement;
 			}
-			else if(CreditCards.Listt.Count>0) {
+			else if(creditCards.Count>0) {
 				listCreditCards.SelectedIndex=0;
 			}
 		}
@@ -66,7 +65,7 @@ namespace OpenDental {
 			if(remember) {//in case they canceled and had one selected
 				listCreditCards.SelectedIndex=placement;
 			}
-			if(FormCCE.DialogResult==DialogResult.OK && CreditCards.Listt.Count>0) {
+			if(FormCCE.DialogResult==DialogResult.OK && creditCards.Count>0) {
 				listCreditCards.SelectedIndex=0;
 			}
 		}
@@ -86,10 +85,10 @@ namespace OpenDental {
 			CreditCard newItem;
 			oldIdx=creditCards[placement].ItemOrder;
 			newIdx=oldIdx+1; 
-			for(int i=0;i<CreditCards.Listt.Count;i++) {
-				if(CreditCards.Listt[i].ItemOrder==oldIdx) {
-					oldItem=CreditCards.Listt[i];
-					newItem=CreditCards.Listt[i-1];
+			for(int i=0;i<creditCards.Count;i++) {
+				if(creditCards[i].ItemOrder==oldIdx) {
+					oldItem=creditCards[i];
+					newItem=creditCards[i-1];
 					oldItem.ItemOrder=newItem.ItemOrder;
 					newItem.ItemOrder-=1;
 					CreditCards.Update(oldItem);
@@ -115,10 +114,10 @@ namespace OpenDental {
 			CreditCard newItem;
 			oldIdx=creditCards[placement].ItemOrder;
 			newIdx=oldIdx-1;
-			for(int i=0;i<CreditCards.Listt.Count;i++) {
-				if(CreditCards.Listt[i].ItemOrder==newIdx) {
-					newItem=CreditCards.Listt[i];
-					oldItem=CreditCards.Listt[i-1];
+			for(int i=0;i<creditCards.Count;i++) {
+				if(creditCards[i].ItemOrder==newIdx) {
+					newItem=creditCards[i];
+					oldItem=creditCards[i-1];
 					newItem.ItemOrder=oldItem.ItemOrder;
 					oldItem.ItemOrder-=1;
 					CreditCards.Update(oldItem);
