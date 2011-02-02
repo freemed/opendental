@@ -78,11 +78,7 @@ namespace OpenDental {
 		private TextBox textOver90;
 		private Label label2;
 		private OpenDental.UI.Button butTrojan;
-		private TextBox textCC;
 		private Panel panelCC;
-		private Label labelCC;
-		private Label label1;
-		private TextBox textCCexp;
 		private MenuItem menuItemStatementEmail;
 		private Label labelBalanceAmt;
 		private TabControl tabControlShow;
@@ -258,14 +254,10 @@ namespace OpenDental {
 			this.label3 = new System.Windows.Forms.Label();
 			this.textOver90 = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textCC = new System.Windows.Forms.TextBox();
 			this.panelCC = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textCCexp = new System.Windows.Forms.TextBox();
-			this.labelCC = new System.Windows.Forms.Label();
+			this.butCreditCard = new OpenDental.UI.Button();
 			this.tabControlShow = new System.Windows.Forms.TabControl();
 			this.tabMain = new System.Windows.Forms.TabPage();
-			this.butCreditCard = new OpenDental.UI.Button();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
 			this.textFinNotes = new OpenDental.ODtextBox();
@@ -994,54 +986,28 @@ namespace OpenDental {
 			this.label2.Text = "Family\r\nAging";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textCC
-			// 
-			this.textCC.Location = new System.Drawing.Point(31,0);
-			this.textCC.Name = "textCC";
-			this.textCC.Size = new System.Drawing.Size(131,20);
-			this.textCC.TabIndex = 214;
-			this.textCC.Text = "1234-5678-1234-5678";
-			this.textCC.TextChanged += new System.EventHandler(this.textCC_TextChanged);
-			this.textCC.Leave += new System.EventHandler(this.textCC_Leave);
-			// 
 			// panelCC
 			// 
 			this.panelCC.Controls.Add(this.butCreditCard);
-			this.panelCC.Controls.Add(this.label1);
-			this.panelCC.Controls.Add(this.textCCexp);
-			this.panelCC.Controls.Add(this.labelCC);
-			this.panelCC.Controls.Add(this.textCC);
 			this.panelCC.Location = new System.Drawing.Point(0,103);
 			this.panelCC.Name = "panelCC";
 			this.panelCC.Size = new System.Drawing.Size(172,41);
 			this.panelCC.TabIndex = 215;
 			// 
-			// label1
+			// butCreditCard
 			// 
-			this.label1.Location = new System.Drawing.Point(0,23);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(70,15);
-			this.label1.TabIndex = 217;
-			this.label1.Text = "CC Expire";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textCCexp
-			// 
-			this.textCCexp.Location = new System.Drawing.Point(71,20);
-			this.textCCexp.Name = "textCCexp";
-			this.textCCexp.Size = new System.Drawing.Size(91,20);
-			this.textCCexp.TabIndex = 216;
-			this.textCCexp.TextChanged += new System.EventHandler(this.textCCexp_TextChanged);
-			this.textCCexp.Leave += new System.EventHandler(this.textCCexp_Leave);
-			// 
-			// labelCC
-			// 
-			this.labelCC.Location = new System.Drawing.Point(0,3);
-			this.labelCC.Name = "labelCC";
-			this.labelCC.Size = new System.Drawing.Size(30,15);
-			this.labelCC.TabIndex = 215;
-			this.labelCC.Text = "CC#";
-			this.labelCC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.butCreditCard.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCreditCard.Autosize = true;
+			this.butCreditCard.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCreditCard.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCreditCard.CornerRadius = 4F;
+			this.butCreditCard.Location = new System.Drawing.Point(17,8);
+			this.butCreditCard.Name = "butCreditCard";
+			this.butCreditCard.Size = new System.Drawing.Size(137,26);
+			this.butCreditCard.TabIndex = 216;
+			this.butCreditCard.Text = "Credit Card Manage";
+			this.butCreditCard.UseVisualStyleBackColor = true;
+			this.butCreditCard.Click += new System.EventHandler(this.butCreditCard_Click);
 			// 
 			// tabControlShow
 			// 
@@ -1069,20 +1035,6 @@ namespace OpenDental {
 			this.tabMain.TabIndex = 0;
 			this.tabMain.Text = "Main";
 			this.tabMain.UseVisualStyleBackColor = true;
-			// 
-			// butCreditCard
-			// 
-			this.butCreditCard.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCreditCard.Autosize = true;
-			this.butCreditCard.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCreditCard.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCreditCard.CornerRadius = 4F;
-			this.butCreditCard.Location = new System.Drawing.Point(159,-1);
-			this.butCreditCard.Name = "butCreditCard";
-			this.butCreditCard.Size = new System.Drawing.Size(10,41);
-			this.butCreditCard.TabIndex = 216;
-			this.butCreditCard.UseVisualStyleBackColor = true;
-			this.butCreditCard.Click += new System.EventHandler(this.butCreditCard_Click);
 			// 
 			// textUrgFinNote
 			// 
@@ -1678,7 +1630,6 @@ namespace OpenDental {
 			this.panelAging.PerformLayout();
 			this.panelTotalOwes.ResumeLayout(false);
 			this.panelCC.ResumeLayout(false);
-			this.panelCC.PerformLayout();
 			this.tabControlShow.ResumeLayout(false);
 			this.tabMain.ResumeLayout(false);
 			this.tabMain.PerformLayout();
@@ -1868,10 +1819,10 @@ namespace OpenDental {
 				PatientNotes.Update(PatientNoteCur, PatCur.Guarantor);
 				FinNoteChanged=false;
 			}
-			if(CCChanged){
-				CCSave();
-				CCChanged=false;
-			}
+			//if(CCChanged){
+			//  CCSave();
+			//  CCChanged=false;
+			//}
 			FamCur=null;
 			RepeatChargeList=null;
 			Plugins.HookAddCode(this,"ContrAccount.ModuleUnselected_end");
@@ -2016,8 +1967,8 @@ namespace OpenDental {
 		}
 
 		private void FillMisc() {
-			textCC.Text="";
-			textCCexp.Text="";
+			//textCC.Text="";
+			//textCCexp.Text="";
 			if(PatCur==null) {
 				textUrgFinNote.Text="";
 				textFinNotes.Text="";
@@ -2029,21 +1980,21 @@ namespace OpenDental {
 				textFinNotes.ScrollToCaret();
 				textUrgFinNote.SelectionStart=0;
 				textUrgFinNote.ScrollToCaret();
-				if(PrefC.GetBool(PrefName.StoreCCnumbers)) {
-					string cc=PatientNoteCur.CCNumber;
-					if(Regex.IsMatch(cc,@"^\d{16}$")){
-						textCC.Text=cc.Substring(0,4)+"-"+cc.Substring(4,4)+"-"+cc.Substring(8,4)+"-"+cc.Substring(12,4);
-					}
-					else{
-						textCC.Text=cc;
-					}
-					if(PatientNoteCur.CCExpiration.Year>2000){
-						textCCexp.Text=PatientNoteCur.CCExpiration.ToString("MM/yy");
-					}
-					else{
-						textCCexp.Text="";
-					}
-				}
+				//if(PrefC.GetBool(PrefName.StoreCCnumbers)) {
+					//string cc=PatientNoteCur.CCNumber;
+					//if(Regex.IsMatch(cc,@"^\d{16}$")){
+					//  textCC.Text=cc.Substring(0,4)+"-"+cc.Substring(4,4)+"-"+cc.Substring(8,4)+"-"+cc.Substring(12,4);
+					//}
+					//else{
+					//  textCC.Text=cc;
+					//}
+					//if(PatientNoteCur.CCExpiration.Year>2000){
+					//  textCCexp.Text=PatientNoteCur.CCExpiration.ToString("MM/yy");
+					//}
+					//else{
+					//  textCCexp.Text="";
+					//}
+				//}
 			}
 			UrgFinNoteChanged=false;
 			FinNoteChanged=false;
@@ -3448,20 +3399,20 @@ namespace OpenDental {
 			FinNoteChanged=true;
 		}
 
-		private void textCC_TextChanged(object sender,EventArgs e) {
-			CCChanged=true;
-			if(Regex.IsMatch(textCC.Text,@"^\d{4}$")
-				|| Regex.IsMatch(textCC.Text,@"^\d{4}-\d{4}$")
-				|| Regex.IsMatch(textCC.Text,@"^\d{4}-\d{4}-\d{4}$")) 
-			{
-				textCC.Text=textCC.Text+"-";
-				textCC.Select(textCC.Text.Length,0);
-			}
-		}
+		//private void textCC_TextChanged(object sender,EventArgs e) {
+		//  CCChanged=true;
+		//  if(Regex.IsMatch(textCC.Text,@"^\d{4}$")
+		//    || Regex.IsMatch(textCC.Text,@"^\d{4}-\d{4}$")
+		//    || Regex.IsMatch(textCC.Text,@"^\d{4}-\d{4}-\d{4}$")) 
+		//  {
+		//    textCC.Text=textCC.Text+"-";
+		//    textCC.Select(textCC.Text.Length,0);
+		//  }
+		//}
 
-		private void textCCexp_TextChanged(object sender,EventArgs e) {
-			CCChanged=true;
-		}
+		//private void textCCexp_TextChanged(object sender,EventArgs e) {
+		//  CCChanged=true;
+		//}
 
 		private void textUrgFinNote_Leave(object sender, System.EventArgs e) {
 			//need to skip this if selecting another module. Handled in ModuleUnselected due to click event
@@ -3487,49 +3438,49 @@ namespace OpenDental {
 			}
 		}
 
-		private void textCC_Leave(object sender,EventArgs e) {
-			if(FamCur==null)
-				return;
-			if(CCChanged) {
-				CCSave();
-				CCChanged=false;
-				ModuleSelected(PatCur.PatNum);
-			}
-		}
+		//private void textCC_Leave(object sender,EventArgs e) {
+		//  if(FamCur==null)
+		//    return;
+		//  if(CCChanged) {
+		//    CCSave();
+		//    CCChanged=false;
+		//    ModuleSelected(PatCur.PatNum);
+		//  }
+		//}
 
-		private void textCCexp_Leave(object sender,EventArgs e) {
-			if(FamCur==null)
-				return;
-			if(CCChanged){
-				CCSave();
-				CCChanged=false;
-				ModuleSelected(PatCur.PatNum);
-			}
-		}
+		//private void textCCexp_Leave(object sender,EventArgs e) {
+		//  if(FamCur==null)
+		//    return;
+		//  if(CCChanged){
+		//    CCSave();
+		//    CCChanged=false;
+		//    ModuleSelected(PatCur.PatNum);
+		//  }
+		//}
 
-		private void CCSave(){
-			string cc=textCC.Text;
-			if(Regex.IsMatch(cc,@"^\d{4}-\d{4}-\d{4}-\d{4}$")){
-				PatientNoteCur.CCNumber=cc.Substring(0,4)+cc.Substring(5,4)+cc.Substring(10,4)+cc.Substring(15,4);
-			}
-			else{
-				PatientNoteCur.CCNumber=cc;
-			}
-			string exp=textCCexp.Text;
-			if(Regex.IsMatch(exp,@"^\d\d[/\- ]\d\d$")){//08/07 or 08-07 or 08 07
-				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32("20"+exp.Substring(3,2)),Convert.ToInt32(exp.Substring(0,2)),1);
-			}
-			else if(Regex.IsMatch(exp,@"^\d{4}$")){//0807
-				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32("20"+exp.Substring(2,2)),Convert.ToInt32(exp.Substring(0,2)),1);
-			} 
-			else if(exp=="") {
-				PatientNoteCur.CCExpiration=new DateTime();//Allow the experation date to be deleted.
-			} 
-			else {
-				MsgBox.Show(this,"Expiration format invalid.");
-			}
-			PatientNotes.Update(PatientNoteCur,PatCur.Guarantor);
-		}
+		//private void CCSave(){
+		//  string cc=textCC.Text;
+		//  if(Regex.IsMatch(cc,@"^\d{4}-\d{4}-\d{4}-\d{4}$")){
+		//    PatientNoteCur.CCNumber=cc.Substring(0,4)+cc.Substring(5,4)+cc.Substring(10,4)+cc.Substring(15,4);
+		//  }
+		//  else{
+		//    PatientNoteCur.CCNumber=cc;
+		//  }
+		//  string exp=textCCexp.Text;
+		//  if(Regex.IsMatch(exp,@"^\d\d[/\- ]\d\d$")){//08/07 or 08-07 or 08 07
+		//    PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32("20"+exp.Substring(3,2)),Convert.ToInt32(exp.Substring(0,2)),1);
+		//  }
+		//  else if(Regex.IsMatch(exp,@"^\d{4}$")){//0807
+		//    PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32("20"+exp.Substring(2,2)),Convert.ToInt32(exp.Substring(0,2)),1);
+		//  } 
+		//  else if(exp=="") {
+		//    PatientNoteCur.CCExpiration=new DateTime();//Allow the experation date to be deleted.
+		//  } 
+		//  else {
+		//    MsgBox.Show(this,"Expiration format invalid.");
+		//  }
+		//  PatientNotes.Update(PatientNoteCur,PatCur.Guarantor);
+		//}
 
 		private void butToday_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.ToShortDateString();
