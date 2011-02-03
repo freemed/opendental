@@ -247,59 +247,59 @@ namespace OpenDentBusiness{
 		Prefs,
 		///<summary>6 ApptViews, ApptViewItems, AppointmentRules, ProcApptColors.</summary>
 		Views,
-		///<summary></summary>
+		///<summary>7</summary>
 		AutoCodes,
-		///<summary></summary>
+		///<summary>8</summary>
 		Carriers,
-		///<summary></summary>
+		///<summary>9</summary>
 		ClearHouses,
-		///<summary></summary>
+		///<summary>10</summary>
 		Computers,
-		///<summary></summary>
+		///<summary>11</summary>
 		InsCats,
-		///<summary>Also includes payperiods.</summary>
+		///<summary>12- Also includes payperiods.</summary>
 		Employees,
-		///<summary>Deprecated.</summary>
+		///<summary>13- Deprecated.</summary>
 		StartupOld,
-		///<summary></summary>
+		///<summary>14</summary>
 		Defs,
-		///<summary></summary>
+		///<summary>15</summary>
 		Email,
-		///<summary></summary>
+		///<summary>16</summary>
 		Fees,
-		///<summary></summary>
+		///<summary>17</summary>
 		Letters,
-		///<summary></summary>
+		///<summary>18</summary>
 		QuickPaste,
-		///<summary>Userod and UserGroup</summary>
+		///<summary>19- Userod and UserGroup</summary>
 		Security,
-		///<summary></summary>
+		///<summary>20</summary>
 		Programs,
-		///<summary>Also includes Image Mounts</summary>
+		///<summary>21- Also includes Image Mounts</summary>
 		ToolBut,
-		///<summary>Also includes clinics.</summary>
+		///<summary>22- Also includes clinics.</summary>
 		Providers,
-		///<summary></summary>
+		///<summary>23</summary>
 		ClaimForms,
-		///<summary></summary>
+		///<summary>24</summary>
 		ZipCodes,
-		///<summary></summary>
+		///<summary>25</summary>
 		LetterMerge,
-		///<summary></summary>
+		///<summary>26</summary>
 		DentalSchools,
-		///<summary></summary>
+		///<summary>27</summary>
 		Operatories,
-		///<summary></summary>
+		///<summary>28</summary>
 		TaskPopup,
-		///<summary></summary>
+		///<summary>29</summary>
 		Sites,
-		///<summary></summary>
+		///<summary>30</summary>
 		Pharmacies,
-		///<summary></summary>
+		///<summary>31</summary>
 		Sheets,
-		///<summary></summary>
+		///<summary>32</summary>
 		RecallTypes,
-		///<summary></summary>
+		///<summary>33</summary>
 		FeeScheds,
 		///<summary>34. This is used internally by OD, Inc with the phonenumber table and the phone server.</summary>
 		PhoneNumbers,
