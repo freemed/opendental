@@ -7,8 +7,20 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Fees {
-		private static Dictionary<FeeKey,Fee> Dict;
-		private static List<Fee> Listt;
+		private static List<Fee> listt;
+
+		///<summary>A list of all Fees.</summary>
+		public static List<Fee> Listt{
+			get {
+				if(listt==null) {
+					RefreshCache();
+				}
+				return listt;
+			}
+			set {
+				listt=value;
+			}
+		}
 
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
@@ -22,7 +34,8 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			Listt=Crud.FeeCrud.TableToList(table);
+			listt=Crud.FeeCrud.TableToList(table);
+			/*
 			Dict=new Dictionary<FeeKey,Fee>();
 			FeeKey key;
 			for(int i=0;i<Listt.Count;i++) {
@@ -35,7 +48,7 @@ namespace OpenDentBusiness{
 				else {
 					Dict.Add(key,Listt[i]);
 				}
-			}
+			}*/
 		}
 
 		///<summary></summary>
@@ -75,14 +88,10 @@ namespace OpenDentBusiness{
 			if(feeSchedNum==0){
 				return null;
 			}
-			if(Dict==null) {
-				RefreshCache();
-			}
-			FeeKey key=new FeeKey();
-			key.codeNum=codeNum;
-			key.feeSchedNum=feeSchedNum;
-			if(Dict.ContainsKey(key)){
-				return Dict[key].Copy();
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].CodeNum==codeNum && Listt[i].FeeSched==feeSchedNum) {
+					return Listt[i];
+				}
 			}
 			return null;
 		}
@@ -99,14 +108,10 @@ namespace OpenDentBusiness{
 			if(FeeScheds.GetIsHidden(feeSchedNum)){
 				return -1;//you cannot obtain fees for hidden fee schedules
 			}
-			if(Dict==null) {
-				RefreshCache();
-			}
-			FeeKey key=new FeeKey();
-			key.codeNum=codeNum;
-			key.feeSchedNum=feeSchedNum;
-			if(Dict.ContainsKey(key)){
-				return Dict[key].Amount;
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].CodeNum==codeNum && Listt[i].FeeSched==feeSchedNum) {
+					return Listt[i].Amount;
+				}
 			}
 			return -1;//code not found
 		}
