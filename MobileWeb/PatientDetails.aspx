@@ -42,7 +42,7 @@
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
 								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptDateTime.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;&nbsp;
-								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).Note%>
+								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).ProcDescript%>
 								</a>
 						</div>
 					</li>
@@ -56,7 +56,8 @@
 				<ItemTemplate>
 					<li class="style1">
 						<div class="elladjust">
-							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Drug%>
+							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).RxDate.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;&nbsp;
+							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Drug%>, <%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Disp%>
 						</div>
 					</li>
 				</ItemTemplate>

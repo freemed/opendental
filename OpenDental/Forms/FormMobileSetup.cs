@@ -47,7 +47,7 @@ namespace OpenDental {
 				textMobileSynchWorkStation.Text=MobileSyncWorkstationName;
 				textSynchMinutes.Text=MobileSyncIntervalMinutes+"";
 				textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
-				butSavePreferences.Enabled=false;//this line is repeated belwo on purpose
+				butSavePreferences.Enabled=false;//this line is repeated below on purpose
 				if(!TestWebServiceExists()) {
 					MsgBox.Show(this,WebServiceUnavailableMessage);
 					return;
@@ -143,7 +143,8 @@ namespace OpenDental {
 
 		private static void SynchFull() {
 			DateTime FullSynchDateTime=new DateTime(1880,1,1);
-			Synch(FullSynchDateTime);//Todo: delete all records on server here
+			mb.DeleteAllRecords(RegistrationKey);//for full synch delete all record then repopulate.
+			Synch(FullSynchDateTime);
 		}
 
 		private static void SynchPatients(List<long> patNumList) {
@@ -486,7 +487,7 @@ namespace OpenDental {
 					return;
 				}*/
 				SetMobileExcludeApptsBeforeDate();
-				if(!MsgBox.Show(this,true,"This will be time consuming.  Continue anyway?")) {
+				if(!MsgBox.Show(this,true,"This will be time consuming. Continue anyway?")) {
 					return;
 				}
 				Cursor=Cursors.WaitCursor;

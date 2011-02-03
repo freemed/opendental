@@ -58,6 +58,24 @@ namespace WebHostSynch {
 				return IsPaidCustomer;
 			}
 		}
+
+		[WebMethod]
+		public void DeleteAllRecords(String RegistrationKey) {
+			try {
+				Logger.Information("In DeleteAllRecords");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				Patientms.DeleteAll(customerNum);
+				Appointmentms.DeleteAll(customerNum);
+				RxPatms.DeleteAll(customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+			}
+		}
+
 		[WebMethod]
 		public void SynchPatients(String RegistrationKey,List<Patientm> patientmList) {
 			try {
