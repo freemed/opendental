@@ -778,6 +778,7 @@ namespace OpenDental{
 			client.Credentials=new NetworkCredential(PrefC.GetString(PrefName.EmailUsername),PrefC.GetString(PrefName.EmailPassword));
 			client.DeliveryMethod=SmtpDeliveryMethod.Network;
 			client.EnableSsl=PrefC.GetBool(PrefName.EmailUseSSL);
+			client.Timeout=180000;//Timeout of 3 minutes (in milliseconds).
 			MailMessage message=new MailMessage();
 			Attachment attach;
 			//try{
