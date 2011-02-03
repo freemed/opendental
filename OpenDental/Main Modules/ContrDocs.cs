@@ -846,6 +846,10 @@ namespace OpenDental{
 				}
 				return node.Text;
 			}
+			//We must always return a category if one is available, so that new documents can be properly added.
+			if(TreeDocuments.Nodes.Count>0) {
+				return TreeDocuments.Nodes[0].Text;
+			}
 			return "";
 		}
 
