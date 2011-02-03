@@ -4416,6 +4416,11 @@ namespace OpenDental{
 			}
 			if(extension>0) {
 				phone=Phones.GetPhoneForExtension(phoneList,extension);
+				//if(phone.EmployeeNum!=currentEmployee){
+				//	Set the phone.EmployeeNum in the database;
+				//	phoneList=Phones.GetPhoneList();
+				//	phone=Phones.GetPhoneForExtension(phoneList,extension);
+				//}
 			}
 			phoneSmall.Extension=extension;
 			phoneSmall.PhoneCur=phone;
