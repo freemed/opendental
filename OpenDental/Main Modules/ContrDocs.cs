@@ -1209,8 +1209,8 @@ namespace OpenDental{
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
 				xImageDeviceManager.Obfuscator.ActivateEZTwain();
-				int wPIXTypes=EZTwain.SelectImageSource(this.Handle);
-				if(wPIXTypes==0) {//user clicked Cancel
+				bool wPIXTypes=EZTwain.SelectImageSource(this.Handle);
+				if(!wPIXTypes) {//user clicked Cancel
 					return;
 				}
 				hdib=EZTwain.AcquireMemory(this.Handle);
@@ -1275,25 +1275,55 @@ namespace OpenDental{
 		}
 
 		private void OnScanMulti_Click() {//This is a mess right now. Don't bother looking at it.
+			Bitmap scannedImage=null;
+			IntPtr hdib=IntPtr.Zero;
 			//Try catch here prevents a crash when a customer who has no scanner installed tries to scan.
 			try {
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
 				xImageDeviceManager.Obfuscator.ActivateEZTwain();
-				int wPIXTypes=EZTwain.SelectImageSource(this.Handle);
-				if(wPIXTypes==0) {//user clicked Cancel
+				bool wPIXTypes=EZTwain.SelectImageSource(this.Handle);
+				if(!wPIXTypes) {//user clicked Cancel
 					return;
 				}
-				EZTwain.AcquireMultipageFile(this.Handle,"untitled.pdf");
+				hdib=EZTwain.AcquireMemory(this.Handle);
+				double xdpi=EZTwain.DIB_XResolution(hdib);
+				double ydpi=EZTwain.DIB_XResolution(hdib);
+				IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
+				scannedImage=Bitmap.FromHbitmap(hbitmap);
+				scannedImage.SetResolution((float)xdpi,(float)ydpi);
+				Clipboard.SetImage(scannedImage);
+				//EZTwain.AcquireToClipboard(this.Handle,wPIXTypes);
+				//IDataObject oDataObject=Clipboard.GetDataObject();
+				//if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
+				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
+				//}else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
+				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
+				//}else{
+				//  throw new Exception("Unknown image data format.");
+				//}
 			}
 			catch(Exception ex) {
 				MessageBox.Show("The image could not be acquired from the scanner. "+
 					"Please check to see that the scanner is properly connected to the computer. Specific error: "+ex.Message);
 				return;
 			}
+			ImageType imgType=ImageType.Document;
 			bool saved=true;
 			Document doc = null;
-			//Create image file and safe?
+			try {//Create corresponding image file.
+				doc=ImageStore.Import(scannedImage,GetCurrentCategory(),imgType,PatCur);
+			}
+			catch(Exception ex) {
+				saved=false;
+				MessageBox.Show(Lan.g(this,"Unable to save document")+": "+ex.Message);
+			}
+			if(scannedImage!=null) {
+				scannedImage.Dispose();
+			}
+			if(hdib!=IntPtr.Zero) {
+				EZTwain.DIB_Free(hdib);
+			}
 			if(saved) {
 				FillDocList(false);//Reload and keep new document selected.
 				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
