@@ -1238,10 +1238,10 @@ namespace OpenDental{
 					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 					info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
 					info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
-					info.Arguments+="/AUTOPROCESS ";
 					info.Arguments+="/AUTOCLOSE ";
 					info.Arguments+="/HIDEMAINWINDOW ";
 					info.Arguments+="/RECURRING ";
+					info.Arguments+="/NORESULTDIALOG ";
 				}
 				else {//Not recurring charge
 					needToken=true;//Will create a token from result file so credit card info isn't saved in our db.
@@ -1265,11 +1265,11 @@ namespace OpenDental{
 					}
 					info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
 					info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
-					info.Arguments+="/AUTOPROCESS ";
 					info.Arguments+="/AUTOCLOSE ";
 					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 					info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
 					info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+					info.Arguments+="/NORESULTDIALOG ";
 				}
 			}
 			else {//No credit cards in creditcard table so use they will manually type in information.
