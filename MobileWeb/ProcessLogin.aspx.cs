@@ -15,6 +15,7 @@ namespace MobileWeb {
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
+				util.SetMobileDbConnection();//connects to db if not already connected.
 				String username="";
 				String password="";
 				bool RememberMe=false;
@@ -30,14 +31,13 @@ namespace MobileWeb {
 							RememberMe=true;
 						}
 					}
-					//if(username=="" && password=="") {
-						util.SetMobileDbConnection();
+					if(util.AllowUser(username,password)) {//if(username=="demo" && password=="") {
 						Session["CustomerNum"]=1486;
 						Message.Text="CorrectLogin";
-					//}
-					//else {
-					//	Message.Text="LoginFailed";
-					//}
+					}
+					else {
+						Message.Text="LoginFailed";
+					}
 					HttpCookie UserNameCookie=new HttpCookie("UserNameCookie");
 					if(RememberMe) {
 						UserNameCookie.Value=username;
@@ -51,6 +51,7 @@ namespace MobileWeb {
 			
 			}
 			catch(Exception ex) {
+				Message.Text="Login Failed. Please try again";
 				Logger.LogError(ex);
 			}
 		}

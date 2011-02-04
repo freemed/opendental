@@ -101,11 +101,17 @@ namespace WebHostSynch {
 			return UserName;
 		}
 
-		private string MD5Encrypt(string data) {
+		public string MD5Encrypt(string inputPass) {
+			/*
 			MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
 			data=data+"saturn";
 			byte[] result = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
 			return Encoding.UTF8.GetString(result);
+			*/
+			byte[] unicodeBytes=Encoding.Unicode.GetBytes(inputPass);
+			HashAlgorithm algorithm=MD5.Create();
+			byte[] hashbytes2=algorithm.ComputeHash(unicodeBytes);
+			return Convert.ToBase64String(hashbytes2);
 		}
 
 	}

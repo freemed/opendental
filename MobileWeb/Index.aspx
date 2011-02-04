@@ -27,7 +27,7 @@
                 <h1>Open Dental</h1>
             </div>
 			
-            &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text=""></asp:Label>
+            <br /><br /><br /><br />
             <form id="form1" method="post" runat="server">
 			<span class="style1" style="font-weight:bold;position:relative;left:15px;">Username</span><br />
                 <ul style="margin-top:4px">
@@ -45,7 +45,8 @@
                 </div>	
 				<ul style="width:80%;margin:auto;">
 					<li style="text-align:center;padding-top:0px;padding-bottom:0px;"><input style="padding-top:0px;padding-bottom:0px;height:24px;font-weight:bold;" type="submit" class="submit" name="action" value="Login" /></li>
-                </ul>	
+                </ul>
+				<br />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text="" ForeColor="Red"></asp:Label>	
             </form>
         </div>
 

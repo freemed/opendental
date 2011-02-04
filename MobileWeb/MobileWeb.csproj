@@ -162,6 +162,10 @@
       <Project>{099AC80B-E862-42F1-8109-87BF450DC3D9}</Project>
       <Name>WebForms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WebHostSynch\WebHostSynch.csproj">
+      <Project>{5D4EEBF8-FB60-49CF-83C5-5AA8FB4926CB}</Project>
+      <Name>WebHostSynch</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">

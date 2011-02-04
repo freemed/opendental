@@ -117,6 +117,7 @@ namespace OpenDental {
 				}
 			}
 			catch(Exception ex) {
+				IsSynching=false;
 				MessageBox.Show(ex.Message);// will this show up ever?
 			}
 		}
@@ -143,7 +144,7 @@ namespace OpenDental {
 
 		private static void SynchFull() {
 			DateTime FullSynchDateTime=new DateTime(1880,1,1);
-			mb.DeleteAllRecords(RegistrationKey);//for full synch delete all record then repopulate.
+			mb.DeleteAllRecords(RegistrationKey);//for full synch, delete all records then repopulate.
 			Synch(FullSynchDateTime);
 		}
 
