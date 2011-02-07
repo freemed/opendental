@@ -24,10 +24,11 @@ namespace MobileWeb {
 					Int64.TryParse(Request["AptNum"].ToString().Trim(),out AptNum);
 				}
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-				apt=Appointmentms.GetOne(CustomerNum,AptNum);
+				apt=Appointmentms.GetOne(CustomerNum,AptNum); apt=null;
 				pat=Patientms.GetOne(CustomerNum,apt.PatNum);
 			}
 			catch(Exception ex) {
+				LabelError.Text="There has been an error in processing your request.";
 				Logger.LogError(ex);
 			}
 		}

@@ -27,9 +27,10 @@
                 <h1>Open Dental</h1>
             </div>
 			
-            <br /><br /><br /><br />
+            <span style="margin-left:15px;text-align:center;">For a demo, use the User name:<span style="color:Blue">demo</span></span>
+			<br /><br />
             <form id="form1" method="post" runat="server">
-			<span class="style1" style="font-weight:bold;position:relative;left:15px;">Username</span><br />
+			<span class="style1" style="font-weight:bold;position:relative;left:15px;">User name</span><br />
                 <ul style="margin-top:4px">
                     <%--<li><input type="text" runat="server" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>--%>
 					<%--<li><div class="chk"><input runat="server" id="rememberusername" title="Remember username" type="checkbox" /></div></li>--%>
@@ -46,7 +47,9 @@
 				<ul style="width:80%;margin:auto;">
 					<li style="text-align:center;padding-top:0px;padding-bottom:0px;"><input style="padding-top:0px;padding-bottom:0px;height:24px;font-weight:bold;" type="submit" class="submit" name="action" value="Login" /></li>
                 </ul>
-				<br />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="LabelMessage" runat="server" Text="" ForeColor="Red"></asp:Label>	
+				 <div class="styleError" style="margin-left:15px;">  
+				 <asp:Label ID="LabelMessage" runat="server" Text="" ForeColor="Red"></asp:Label>
+				 </div>	
             </form>
         </div>
 

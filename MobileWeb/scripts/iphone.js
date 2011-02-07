@@ -17,6 +17,8 @@ function hijackLinks() {
 }
 
 */
+var MessageLoad='<div id="progress"><p>&nbsp;</p><p>Loading...</p><p>&nbsp;</p></div>';
+var MessageError='<div id="progress"><p>&nbsp;</p>There has been an error while processing your page. Please try again...<p>&nbsp;</p></div>';
 
 $(document).ready(function () {
     TraversePage();
@@ -37,7 +39,7 @@ function TraversePage(){
 	// a click is used instead of tap because it gives an error with jQT.goTo(MoveToURL, 'slide') 'Not able to tap element' error.
 	$('a[href="#AppointmentList"]').click(function (e) {
 		//e.preventDefault();
-		console.log('AppointmentList clicked');
+		//console.log('AppointmentList clicked');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
@@ -48,26 +50,15 @@ function TraversePage(){
 	$('#searchbutton').tap(function(e) {
 		
 		var searchterm=$('#searchpatientbox').val();
-		console.log('searchterm is dd' + searchterm);
+		//console.log('searchterm is dd' + searchterm);
 		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
 		var SectionToFill='#PatientListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 		
-	/*
-	$('#searchpatientbox').keyup(function(e) {
-		var searchterm=$('#searchpatientbox').val();
-		console.log('searchterm is ' + searchterm);
-		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
-		var SectionToFill='#PatientListContents';
-		$(SectionToFill).append('<div id="progress">Loading...</div>');
-		FetchPage(UrlForFetchingData, SectionToFill)
-
-	});
-*/
 	$('a[href="#PatientList"]').tap(function (e) {
 		//e.preventDefault();
-		console.log('PatientList clicked');
+		//console.log('PatientList clicked');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList';
@@ -78,7 +69,7 @@ function TraversePage(){
 	// a tap function is used instead of .live() for elements loaded by AJAX
 	// here the tap does not give an error with jQT.goTo(MoveToURL, 'slide')
 	$('a[href="#AppointmentDetails"]').tap(function(e) {
-		console.log('AppointmentDetails tapped');
+		//console.log('AppointmentDetails tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentDetailsContents';
 		var MoveToURL='#AppointmentDetails';
@@ -86,7 +77,7 @@ function TraversePage(){
 	});
 	
 	$('a[href="#PatientDetails"]').tap(function(e) {
-		console.log('PatientDetails tapped');
+		//console.log('PatientDetails tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#PatientDetailsContents';
 		var MoveToURL='#PatientDetails';
@@ -95,14 +86,14 @@ function TraversePage(){
 	
 	/*previous, today and next buttons*/
 	$('#previous').tap(function(e) {
-		console.log('Previous button tapped');
+		//console.log('Previous button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
 	$('#today').tap(function(e) {
-		console.log('Today button tapped');
+		//console.log('Today button tapped');
 		var UrlForFetchingData = 'AppointmentList.aspx'; 
 		var SectionToFill='#AppointmentListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
@@ -110,7 +101,7 @@ function TraversePage(){
 	
 	
 	$('#next').tap(function(e) {
-		console.log('Next button tapped');
+		//console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
@@ -118,7 +109,7 @@ function TraversePage(){
 	
 	/*home, appt, patient buttons*/
 	$('.appts').tap(function(e) {
-		console.log('Next button tapped');
+		//console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
@@ -126,7 +117,7 @@ function TraversePage(){
 	});
 	
 	$('.patients').tap(function(e) {
-		console.log('patients button tapped');
+		//console.log('patients button tapped');
 		//var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var searchterm=$('#searchpatientbox').val();
 		//console.log('searchterm is ' + searchterm);
@@ -146,11 +137,11 @@ function TraversePage(){
 
 function ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill){
 	e.preventDefault();
-	console.log(' UrlForFetchingData =' + UrlForFetchingData );
- 	$(SectionToFill).append('<div id="progress">Loading...</div>');
+	//console.log(' UrlForFetchingData =' + UrlForFetchingData );
+	$(SectionToFill).append(MessageLoad);
 	// for newly loaded links this is null
 	if(e.currentTarget.attributes==null){
-	console.log('in this if statement');
+	//console.log('in this if statement');
 	jQT.goTo(MoveToURL,'slide'); //do not use this line with tap event, it gives a 'Not able to tap element' error.
 	}
 	FetchPage(UrlForFetchingData, SectionToFill)
@@ -158,8 +149,8 @@ function ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill){
 
 function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
 	//e.preventDefault();
-	console.log(' UrlForFetchingData =' + UrlForFetchingData );
- 	$(SectionToFill).append('<div id="progress">Loading...</div>');
+	//console.log(' UrlForFetchingData =' + UrlForFetchingData );
+    $(SectionToFill).append(MessageLoad);
 	//no slide effect
 	jQT.goTo(MoveToURL,''); //do not use this line with tap event, it gives a 'Not able to tap element' error.
 	FetchPage(UrlForFetchingData, SectionToFill)
@@ -167,8 +158,8 @@ function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
 
 function ProcessPreviousNextButton(e,UrlForFetchingData, SectionToFill){
 	e.preventDefault();
-	console.log(' UrlForFetchingData =' + UrlForFetchingData );
- 	$(SectionToFill).append('<div id="progress">Loading...</div>');
+	//console.log(' UrlForFetchingData =' + UrlForFetchingData );
+	$(SectionToFill).append(MessageLoad);
 	FetchPage(UrlForFetchingData, SectionToFill)
 }
 	
@@ -184,11 +175,15 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 				//console.log('still in session');
 				$(SectionToFill).html(Content);
 			}else{
-				console.log('session ended');
-				console.log('about to flip');
-				jQT.goTo('#login', 'flip');
+            //console.log('session ended,about to flip');
+             jQT.goTo('#login', 'flip');
 			}
-		}
+		},
+        error: function(){
+           // $('#progress').replaceWith(MessageError);
+            $('#progress').replaceWith('');
+            //$('#LabelError').text(MessageError);
+        }
 	});
 
 }	
@@ -199,23 +194,23 @@ function ProcessLogin() {
     var password = $('#password').val();
 	var rememberusername = $('#rememberusername').attr('checked');
     var datatosent = "username=" + username + "&password=" + password+ "&rememberusername=" + rememberusername;
-//	console.log(datatosent);
-	console.log('login clicked');
-	$('#login').append('<div id="progress">Loading...</div>');
+//	//console.log(datatosent);
+	//console.log('login clicked');
+    $('#login').append(MessageLoad);
     $.ajax({
         type: "POST",
         url: "ProcessLogin.aspx",
         data: datatosent,
         success: function (msg) {
-            //alert("---" + msg + "---");
             if (msg == "CorrectLogin") {
+                //console.log("here");
 				$('#progress').replaceWith(''); //$('#login').remove('#progress') will not work
-				//console.log("here");
+				$('#LabelMessage').text('');
                 jQT.goTo('#home');
 
             } else {
+                $('#progress').replaceWith('');
                 $('#LabelMessage').text(msg);
-				$('#progress').replaceWith(''); 
             }
         }
     });
@@ -225,9 +220,9 @@ function ProcessLogin() {
 
 
 function ProcessLogout(e) {
-		console.log('log out clicked');
+		//console.log('log out clicked');
 		e.preventDefault();
-		$('#home').append('<div id="progress">Loading...</div>');
+		$('#home').append(MessageLoad);
 		$.ajax({
 			type: "GET",
 			url: "ProcessLogout.aspx",
@@ -235,7 +230,7 @@ function ProcessLogout(e) {
 			success: function (msg) {
 				if (msg == "LoggedOut") {
 					$('#progress').replaceWith('');
-					console.log('in LoggedOut');
+					//console.log('in LoggedOut');
 					jQT.goTo('#login');// no 'Not able to tap element' error.
 				}
 			}

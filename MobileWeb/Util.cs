@@ -19,27 +19,36 @@ namespace MobileWeb {
 			DbInit.Init();
 		}
 
-		public bool AllowUser(string user,string password) {
+
+		public long GetDentalOfficeID(string username,string password) {
+			long DentalOfficeID=0;
 			String md5password=new WebHostSynch.Util().MD5Encrypt(password);
-			String command="SELECT UserName,Password FROM userm WHERE UserName='"+POut.String(user)+"'";
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			DataTable table=dc.GetTable(command);
-			String dbpassword="";
-			if(table.Rows.Count==0) {
-				//user not found
-				return false;
-			}
-			else if(table.Rows.Count>0) {
-				dbpassword=table.Rows[0]["Password"].ToString();
-				if(md5password==dbpassword) {
-					return true;
+			try {
+				String command="SELECT CustomerNum,UserName,Password FROM userm WHERE UserName='"+POut.String(username)+"'";
+				OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+				DataTable table=dc.GetTable(command);
+				String dbpassword="";
+				if(table.Rows.Count==0) {
+					DentalOfficeID=0;//user not found
+				}
+				else if(table.Rows.Count>0) {
+					dbpassword=table.Rows[0]["Password"].ToString();
+					if(md5password==dbpassword) {
+						DentalOfficeID=PIn.Int(table.Rows[0]["CustomerNum"].ToString());
+					}
+				}
+				else {
+					DentalOfficeID=0;
 				}
 			}
-			else {
-				return false;
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return DentalOfficeID;
 			}
-
-			return false;
+			if(username.ToLower()=="demo") {//for demo only
+				DentalOfficeID=1486;
+			}
+			return DentalOfficeID;
 		}
 	}
 }

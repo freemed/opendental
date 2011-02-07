@@ -30,11 +30,11 @@ namespace MobileWeb {
 						MessageNoPatients.Text="No patients found. Please search again";
 					}
 				}
-
 				Repeater1.DataSource=patientmList;
 				Repeater1.DataBind();
 			}
 			catch(Exception ex) {
+				LabelError.Text="There has been an error in processing your request.";
 				Logger.LogError(ex);
 			}
 		}

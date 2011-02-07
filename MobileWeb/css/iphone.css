@@ -23,9 +23,7 @@ min-height: 480px;
     color: white;
     font-size: 18px;
     font-weight: bold;
-    height: 80px;
     left: 60px;
-    line-height: 80px;
     margin: 0 auto;
     position: absolute;
     text-align: center;
@@ -43,7 +41,7 @@ min-height: 480px;
 /* multiple style don't work in some cases android hence some styles had to be written all over again*/
 #previous, #next, #today{
     position: relative;
-        overflow: hidden;
+    overflow: hidden;
     top: 8px;
     right: 6px;
     margin: 0;
@@ -104,6 +102,9 @@ min-height: 480px;
   color:#343C83;
   word-wrap:break-word;
   white-space: normal;
+}
+.styleError{
+    margin-left:10px;text-align:center;
 }
 
 h2{

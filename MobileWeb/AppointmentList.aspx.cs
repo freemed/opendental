@@ -25,7 +25,7 @@ namespace MobileWeb {
 					return;
 				}
 				int Year=0;
-				int Month=0;
+				int Month=0; 
 				int Day=0;
 				DateTime AppointmentDate;
 				if(Request["year"]!=null && Request["month"]!=null && Request["day"]!=null) {
@@ -47,11 +47,12 @@ namespace MobileWeb {
 				NextDateDay=NextDate.Day;
 				NextDateMonth=NextDate.Month;
 				NextDateYear=NextDate.Year;
-				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
+				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate); 
 				Repeater1.DataSource=appointmentmList; 
 				Repeater1.DataBind();
 			}
 			catch(Exception ex) {
+				LabelError.Text="There has been an error in processing your request.";
 				Logger.LogError(ex);
 			}
 		}

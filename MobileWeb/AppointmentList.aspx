@@ -32,6 +32,9 @@
 				</ItemTemplate>
 			</asp:Repeater>
 		</ul>
+		<div class="styleError">  
+				 <asp:Label ID="LabelError" runat="server" Text="" ForeColor="Red"></asp:Label>
+		</div>	
 	</div>
 </body>
 </html>
