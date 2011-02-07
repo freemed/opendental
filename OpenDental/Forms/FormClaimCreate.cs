@@ -230,10 +230,11 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<SubList.Count;i++) {
+				InsPlan plan=InsPlans.GetPlan(SubList[i].PlanNum,PlanList);
 				row=new ODGridRow();
 				row.Cells.Add((i+1).ToString());
 				row.Cells.Add(FamCur.GetNameInFamLF(SubList[i].Subscriber));
-				row.Cells.Add(Carriers.GetName(PlanList[i].CarrierNum));
+				row.Cells.Add(Carriers.GetName(plan.CarrierNum));
 				if(SubList[i].DateEffective.Year<1880)
 					row.Cells.Add("");
 				else
