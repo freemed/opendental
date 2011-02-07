@@ -281,8 +281,6 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidClaimNum(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimProcWithInvalidPlanNum(verbose,isCheck);
-			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteEstimateWithInvalidProcNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcEstNoBillIns(verbose,isCheck);
@@ -307,9 +305,11 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanNoClaimForm(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.LaboratoryWithInvalidSlip(verbose,isCheck);
-			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanInvalidNum(verbose,isCheck);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.InsSubNumMismatchPlanNum(verbose,isCheck);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.LaboratoryWithInvalidSlip(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.MedicationPatDeleteWithInvalidMedNum(verbose,isCheck);
 			Application.DoEvents();

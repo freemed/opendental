@@ -638,26 +638,6 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimProcWithInvalidPlanNum(bool verbose,bool isCheck) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
-			}
-			string log="";
-			command=@"SELECT ClaimProcNum,PatNum FROM claimproc
-				LEFT JOIN insplan ON claimproc.PlanNum=insplan.PlanNum
-				WHERE insplan.PlanNum IS NULL";
-			table=Db.GetTable(command);
-			if(isCheck){
-				if(table.Rows.Count>0 || verbose){
-					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs found with invalid PlanNum: ")+table.Rows.Count.ToString()+"\r\n";
-				}
-			}
-			else{
-				//Take no action.  Use descriptive explanation.
-			}
-			return log;
-		}
-
 		public static string ClaimProcDeleteEstimateWithInvalidProcNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -1230,6 +1210,48 @@ namespace OpenDentBusiness {
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Insplan claimforms set if missing: ")+numberFixed.ToString()+"\r\n";
 				}
+			}
+			return log;
+		}
+
+		public static string InsSubNumMismatchPlanNum(bool verbose,bool isCheck) {
+			//Checks for situations where there are valid PlanNums, but mismatched InsSubNums
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				int numFound=0;
+				//still to do include:
+				//appointment x 2 - can't do because no inssubnum.
+				//benefit
+				//claimproc
+				//entrans
+				//inssub?
+				//patplan?
+				//payplan
+				command="SELECT COUNT(*) FROM claim "
+					+"WHERE NOT EXISTS(SELECT * FROM inssub WHERE inssub.PlanNum=claim.PlanNum "//must be an exact match
+					+"AND inssub.InsSubNum=claim.InsSubNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNum values: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM claim WHERE claim.PlanNum2 != 0 "//planNum is not zero
+					+"AND NOT EXISTS(SELECT * FROM inssub WHERE inssub.PlanNum=claim.PlanNum2 "//must be an exact match
+					+"AND inssub.InsSubNum=claim.InsSubNum2)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNum2 values: ")+numFound+"\r\n";
+				}
+			}
+			else {//fix
+				//There is no fix yet.  The only database where we saw this was not amenable to a fix here.
+				//command="UPDATE claim SET InsSubNum2=(SELECT inssub.InsSubNum FROM inssub WHERE inssub.PlanNum)";
+				//long numFixed=Db.NonQ(command);
+				//if(numFixed>0 || verbose) {
+				//	log+=Lans.g("FormDatabaseMaintenance","Invalid patplan PlanNums fixed: ")+numFixed+"\r\n";
+				//}
 			}
 			return log;
 		}
