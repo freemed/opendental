@@ -154,6 +154,22 @@ namespace OpenDentBusiness{
 			return PIn.Long(result);
 		}*/
 
+		///<summary>Sets the employeeName and employeeNum for when someone else logs into another persons computer.</summary>
+		public static void SetPhoneForEmp(long empNum,string empName,long extension) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),empNum,empName,extension);
+				return;
+			}
+			if(extension==0) {
+				return;
+			}
+			string command="UPDATE phone SET "
+				+"EmployeeName   = '"+POut.String(empName)+"', "
+				+"EmployeeNum   = "+POut.Long(empNum)+" "
+				+"WHERE Extension = "+POut.Long(extension);
+			Db.NonQ(command);
+		}
+
 		///<summary>Can handle null for either parameter.</summary>
 		public static void SetWebCamImage(long extension,Bitmap bitmap) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

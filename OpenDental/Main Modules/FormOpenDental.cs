@@ -220,7 +220,7 @@ namespace OpenDental{
 		private FormTerminalManager formTerminalManager;
 		private FormPhoneTiles formPhoneTiles;
 		private System.Windows.Forms.Timer timerWebHostSynch;
-		private UserControlPhoneSmall phoneSmall;		
+		private UserControlPhoneSmall phoneSmall;	
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -4416,11 +4416,13 @@ namespace OpenDental{
 			}
 			if(extension>0) {
 				phone=Phones.GetPhoneForExtension(phoneList,extension);
-				//if(phone.EmployeeNum!=currentEmployee){
-				//	Set the phone.EmployeeNum in the database;
-				//	phoneList=Phones.GetPhoneList();
-				//	phone=Phones.GetPhoneForExtension(phoneList,extension);
-				//}
+				if(Security.CurUser!=null && phone.EmployeeNum!=Security.CurUser.EmployeeNum) {
+					phone.EmployeeNum=Security.CurUser.EmployeeNum;
+					phone.EmployeeName=Security.CurUser.UserName;
+					Phones.SetPhoneForEmp(Security.CurUser.EmployeeNum,Security.CurUser.UserName,phone.Extension);
+					//phoneList=Phones.GetPhoneList();
+					//phone=Phones.GetPhoneForExtension(phoneList,extension);
+				}
 			}
 			phoneSmall.Extension=extension;
 			phoneSmall.PhoneCur=phone;
