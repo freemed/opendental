@@ -35,6 +35,7 @@ namespace OpenDental{
 			this.labelShowInTerminal = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.textDateTime = new System.Windows.Forms.TextBox();
+			this.butUnlock = new OpenDental.UI.Button();
 			this.textShowInTerminal = new OpenDental.ValidNumber();
 			this.butPDF = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
@@ -96,7 +97,7 @@ namespace OpenDental{
 			// checkErase
 			// 
 			this.checkErase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkErase.Location = new System.Drawing.Point(698,393);
+			this.checkErase.Location = new System.Drawing.Point(698,342);
 			this.checkErase.Name = "checkErase";
 			this.checkErase.Size = new System.Drawing.Size(89,20);
 			this.checkErase.TabIndex = 81;
@@ -145,6 +146,23 @@ namespace OpenDental{
 			this.textDateTime.Size = new System.Drawing.Size(144,20);
 			this.textDateTime.TabIndex = 88;
 			// 
+			// butUnlock
+			// 
+			this.butUnlock.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butUnlock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butUnlock.Autosize = true;
+			this.butUnlock.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUnlock.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUnlock.CornerRadius = 4F;
+			this.butUnlock.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butUnlock.Location = new System.Drawing.Point(697,492);
+			this.butUnlock.Name = "butUnlock";
+			this.butUnlock.Size = new System.Drawing.Size(81,24);
+			this.butUnlock.TabIndex = 89;
+			this.butUnlock.Text = "Unlock";
+			this.butUnlock.Visible = false;
+			this.butUnlock.Click += new System.EventHandler(this.butUnlock_Click);
+			// 
 			// textShowInTerminal
 			// 
 			this.textShowInTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -164,7 +182,7 @@ namespace OpenDental{
 			this.butPDF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPDF.CornerRadius = 4F;
 			this.butPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPDF.Location = new System.Drawing.Point(698,497);
+			this.butPDF.Location = new System.Drawing.Point(698,425);
 			this.butPDF.Name = "butPDF";
 			this.butPDF.Size = new System.Drawing.Size(81,24);
 			this.butPDF.TabIndex = 83;
@@ -197,7 +215,7 @@ namespace OpenDental{
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(698,446);
+			this.butPrint.Location = new System.Drawing.Point(698,395);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 80;
@@ -238,6 +256,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(790,672);
+			this.Controls.Add(this.butUnlock);
 			this.Controls.Add(this.textDateTime);
 			this.Controls.Add(this.textShowInTerminal);
 			this.Controls.Add(this.labelShowInTerminal);
@@ -282,5 +301,6 @@ namespace OpenDental{
 		private ValidNumber textShowInTerminal;
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.TextBox textDateTime;
+		private UI.Button butUnlock;
 	}
 }

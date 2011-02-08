@@ -82,18 +82,23 @@ namespace OpenDental {
 			}
 			LayoutFields();
 			if(!SheetCur.IsNew && !Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
-				DisableControls(this);
-				Enabled=true;
-				butCancel.Enabled=true;
-				butPDF.Enabled=true;
-				butPrint.Enabled=true;
+				panelMain.Enabled=false;
+				butOK.Enabled=false;
 			}
-		}
-
-		private void DisableControls(Control control){
-			control.Enabled=false;
-			for(int i=0;i<control.Controls.Count;i++){
-				DisableControls(control.Controls[i]);
+			else if(!SheetCur.IsNew) {
+				bool isSigned=false;
+				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+					if(SheetCur.SheetFields[i].FieldType==SheetFieldType.SigBox
+						&& SheetCur.SheetFields[i].FieldValue.Length>1) 
+					{
+						isSigned=true;
+						break;
+					}
+				}
+				if(isSigned) {
+					panelMain.Enabled=false;
+					butUnlock.Visible=true;
+				}
 			}
 		}
 
@@ -643,6 +648,12 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butUnlock_Click(object sender,EventArgs e) {
+			//we already know the user has permission
+			panelMain.Enabled=true;
+			butUnlock.Visible=false;
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(SheetCur.IsNew){
 				DialogResult=DialogResult.Cancel;
@@ -656,6 +667,9 @@ namespace OpenDental {
 		}
 
 		private bool TryToSaveData(){
+			if(!butOK.Enabled) {//if the OK button is not enabled, user does not have permission.
+				return true;
+			}
 			if(textShowInTerminal.errorProvider1.GetError(textShowInTerminal)!=""){
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
@@ -867,6 +881,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
