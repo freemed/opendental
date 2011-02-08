@@ -208,6 +208,7 @@ namespace OpenDentBusiness{
 				|| permType==Permissions.TimecardDeleteEntry
 				|| permType==Permissions.EquipmentDelete
 				|| permType==Permissions.CommlogEdit
+				|| permType==Permissions.SheetEdit
 				)
 			{
 				return true;
