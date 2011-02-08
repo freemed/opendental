@@ -365,6 +365,30 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string AutomationTriggersWithNoSheetDefs(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck){
+				command=@"SELECT COUNT(*) FROM automation WHERE automation.SheetDefNum!=0 AND NOT EXISTS(
+					SELECT SheetDefNum FROM sheetdef WHERE automation.SheetDefNum=sheetdef.SheetDefNum)";
+        int numFound=PIn.Int(Db.GetCount(command));
+        if(numFound!=0 || verbose) {
+          log+=Lans.g("FormDatabaseMaintenance","Automation triggers found with no sheet defs: ")+numFound+"\r\n";
+        }
+			}
+			else{
+				command=@"DELETE FROM automation WHERE automation.SheetDefNum!=0 AND NOT EXISTS(
+					SELECT SheetDefNum FROM sheetdef WHERE automation.SheetDefNum=sheetdef.SheetDefNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Automation triggers deleted due to no sheet defs: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ClaimDeleteWithNoClaimProcs(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
