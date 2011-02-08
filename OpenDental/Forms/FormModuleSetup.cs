@@ -76,6 +76,8 @@ namespace OpenDental{
 		private CheckBox checkClaimsValidateACN;
 		private CheckBox checkInsDefaultShowUCRonClaims;
 		private CheckBox checkToothChartMoveMenuToRight;
+		private GroupBox groupBox6;
+		private CheckBox checkImagesModuleTreeIsCollapsed;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -163,11 +165,14 @@ namespace OpenDental{
 			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.checkImagesModuleTreeIsCollapsed = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			this.groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textTreatNote
@@ -228,7 +233,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(12,402);
+			this.groupBox1.Location = new System.Drawing.Point(12,419);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(422,140);
 			this.groupBox1.TabIndex = 48;
@@ -916,10 +921,33 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.checkImagesModuleTreeIsCollapsed);
+			this.groupBox6.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox6.Location = new System.Drawing.Point(12,371);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(422,47);
+			this.groupBox6.TabIndex = 194;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Image module";
+			// 
+			// checkImagesModuleTreeIsCollapsed
+			// 
+			this.checkImagesModuleTreeIsCollapsed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkImagesModuleTreeIsCollapsed.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkImagesModuleTreeIsCollapsed.Location = new System.Drawing.Point(57,19);
+			this.checkImagesModuleTreeIsCollapsed.Name = "checkImagesModuleTreeIsCollapsed";
+			this.checkImagesModuleTreeIsCollapsed.Size = new System.Drawing.Size(359,17);
+			this.checkImagesModuleTreeIsCollapsed.TabIndex = 47;
+			this.checkImagesModuleTreeIsCollapsed.Text = "Document tree collapses when patient changes";
+			this.checkImagesModuleTreeIsCollapsed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(890,613);
+			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox4);
@@ -942,6 +970,7 @@ namespace OpenDental{
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
+			this.groupBox6.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1001,6 +1030,8 @@ namespace OpenDental{
 			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate);
 			checkCoPayFeeScheduleBlankLikeZero.Checked=PrefC.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero);
 			checkInsDefaultShowUCRonClaims.Checked=PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims);
+			//Image module-----------------------------------------------------------------------
+			checkImagesModuleTreeIsCollapsed.Checked=PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed);
 			//Account module-----------------------------------------------------------------------
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool(PrefName.StatementShowReturnAddress);
 			checkShowCC.Checked=PrefC.GetBool(PrefName.StatementShowCreditCard);
@@ -1131,6 +1162,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.InsDefaultShowUCRonClaims,checkInsDefaultShowUCRonClaims.Checked)
 				| Prefs.UpdateBool(PrefName.ClaimsValidateACN,checkClaimsValidateACN.Checked)
 				| Prefs.UpdateBool(PrefName.ToothChartMoveMenuToRight,checkToothChartMoveMenuToRight.Checked)
+				| Prefs.UpdateBool(PrefName.ImagesModuleTreeIsCollapsed,checkImagesModuleTreeIsCollapsed.Checked)
 				)
 			{
 				changed=true;

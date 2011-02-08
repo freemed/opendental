@@ -146,6 +146,8 @@ namespace OpenDental{
 		///<summary>Set with each module refresh, and that's where it's set if it doesn't yet exist.  For now, we are not using ImageStore.GetPatientFolder(), because we haven't tested whether it properly updates the patient object.  We don't want to risk using an outdated patient folder path.  And we don't want to waste time refreshing PatCur after every ImageStore.GetPatientFolder().</summary>
 		private string PatFolder;
 		private AxAcroPDFLib.AxAcroPDF axAcroPDF1=null;
+		private long prevPatNum=0;
+		private List<Def> expandedCategories=new List<Def>();
 		#endregion ManuallyCreatedVariables
 
 		///<summary></summary>
@@ -250,6 +252,8 @@ namespace OpenDental{
 			this.TreeDocuments.SelectedImageIndex = 2;
 			this.TreeDocuments.Size = new System.Drawing.Size(228,519);
 			this.TreeDocuments.TabIndex = 0;
+			this.TreeDocuments.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.TreeDocuments_AfterCollapse);
+			this.TreeDocuments.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.TreeDocuments_AfterExpand);
 			this.TreeDocuments.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseDoubleClick);
 			this.TreeDocuments.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseDown);
 			this.TreeDocuments.MouseLeave += new System.EventHandler(this.TreeDocuments_MouseLeave);
@@ -908,6 +912,7 @@ namespace OpenDental{
 			//Add all predefined folder names to the tree.
 			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
 				TreeDocuments.Nodes.Add(new TreeNode(DefC.Short[(int)DefCat.ImageCats][i].ItemName));
+				TreeDocuments.Nodes[i].Tag=DefC.Short[(int)DefCat.ImageCats][i];
 				TreeDocuments.Nodes[i].SelectedImageIndex=1;
 				TreeDocuments.Nodes[i].ImageIndex=1;
 			}
@@ -925,7 +930,26 @@ namespace OpenDental{
 					SelectTreeNode(node);
 				}				
 			}
-			TreeDocuments.ExpandAll();//Invalidates tree too.
+			if(PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed)) {
+				TreeDocuments.CollapseAll();//Invalidates tree too.
+				if(prevPatNum==PatCur.PatNum) {//Maintain previously expanded nodes when patient not changed.
+					for(int i=0;i<expandedCategories.Count;i++) {
+						for(int j=0;j<TreeDocuments.Nodes.Count;j++) {
+							if(expandedCategories[i].DefNum==((Def)TreeDocuments.Nodes[j].Tag).DefNum) {
+								TreeDocuments.Nodes[j].Expand();
+								break;
+							}
+						}
+					}
+				}
+				else {//Patient changed.
+					expandedCategories.Clear();
+				}
+				prevPatNum=PatCur.PatNum;
+			}
+			else {
+				TreeDocuments.ExpandAll();//Invalidates tree too.
+			}
 		}
 
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -1679,6 +1703,19 @@ namespace OpenDental{
 		private void TreeDocuments_MouseLeave(object sender,EventArgs e) {
 			TreeDocuments.Cursor=Cursors.Default;
 			treeIdNumDown="";
+		}
+
+		private void TreeDocuments_AfterExpand(object sender,TreeViewEventArgs e) {
+			expandedCategories.Add((Def)e.Node.Tag);
+		}
+
+		private void TreeDocuments_AfterCollapse(object sender,TreeViewEventArgs e) {
+			for(int i=0;i<expandedCategories.Count;i++) {
+				if(expandedCategories[i].DefNum==((Def)e.Node.Tag).DefNum) {
+					expandedCategories.RemoveAt(i);
+					return;
+				}
+			}
 		}
 
 		///<summary>Invalidates some or all of the image settings.  This will cause those settings to be recalculated, either immediately, or when the current ApplySettings thread is finished.  If supplied settings is ApplySettings.NONE, then that part will be skipped.</summary>
