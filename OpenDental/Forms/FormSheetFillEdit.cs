@@ -546,7 +546,10 @@ namespace OpenDental {
 			else{
 				FormS.PaperCopies=1;
 			}
-			if(SheetCur.PatNum!=0) {
+			if(SheetCur.PatNum!=0
+				&& SheetCur.SheetType!=SheetTypeEnum.LabSlip
+				&& SheetCur.SheetType!=SheetTypeEnum.DepositSlip) 
+			{
 				Patient pat=Patients.GetPat(SheetCur.PatNum);
 				if(pat.Email!="") {
 					FormS.EmailPatAddress=pat.Email;
