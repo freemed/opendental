@@ -83,6 +83,12 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lans.g("sheetDefs","SheetDef is already in use by referrals(s). Not allowed to delete. ")+names);
 			}
+			//validate that not already in use by automation.
+			command="SELECT AutomationNum FROM automation WHERE SheetDefNum="+POut.Long(sheetDefNum);
+			table=Db.GetTable(command);
+			if(table.Rows.Count>0){
+				throw new ApplicationException(Lans.g("sheetDefs","SheetDef is in use by automation. Not allowed to delete."));
+			}
 			command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.Long(sheetDefNum);
 			Db.NonQ(command);
 			Crud.SheetDefCrud.Delete(sheetDefNum);
