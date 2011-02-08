@@ -355,7 +355,7 @@ namespace OpenDental {
 				SheetUtil.MoveAllDownBelowThis(SheetCur,fld,amountOfGrowth);
 			}
 			else if(fld.GrowthBehavior==GrowthBehaviorEnum.DownLocal) {
-				SheetUtil.MoveAllDownWhichIntersect(SheetCur,fld);
+				SheetUtil.MoveAllDownWhichIntersect(SheetCur,fld,amountOfGrowth);
 			}
 			LayoutFields();
 			//find the original textbox, and put the cursor back where it belongs

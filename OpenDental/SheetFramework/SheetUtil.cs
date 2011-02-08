@@ -56,7 +56,7 @@ namespace OpenDental{
 				int amountOfGrowth=calcH-field.Height;
 				field.Height=calcH;
 				if(field.GrowthBehavior==GrowthBehaviorEnum.DownLocal){
-					MoveAllDownWhichIntersect(sheet,field);
+					MoveAllDownWhichIntersect(sheet,field,amountOfGrowth);
 				}
 				else if(field.GrowthBehavior==GrowthBehaviorEnum.DownGlobal){
 					MoveAllDownBelowThis(sheet,field,amountOfGrowth);
@@ -76,7 +76,7 @@ namespace OpenDental{
 		}
 
 		///<Summary>Supply the field that we are testing.  All other fields which intersect with it will be moved down.  Each time one (or maybe some) is moved down, this method is called recursively.  The end result should be no intersections among fields near the original field that grew.</Summary>
-		public static void MoveAllDownWhichIntersect(Sheet sheet,SheetField field){
+		public static void MoveAllDownWhichIntersect(Sheet sheet,SheetField field,int amountOfGrowth) {
 			//Phase 1 is to move everything that intersects with the field down. Phase 2 is to call this method on everything that was moved.
 			//Phase 1: Move 
 			List<SheetField> affectedFields=new List<SheetField>();
@@ -92,15 +92,15 @@ namespace OpenDental{
 					//drawings do not get moved down.
 				}
 				if(field.Bounds.IntersectsWith(field2.Bounds)) {
-					field2.YPos=field.Bounds.Bottom;
-					MoveAllDownWhichIntersect(sheet,field2);
+					field2.YPos+=amountOfGrowth;
+					affectedFields.Add(field2);
 				}
 			}
 			//Phase 2: Recursion
-			//foreach(SheetField field2 in affectedFields) {
-			//  //reuse the same distance again.
-			//  MoveAllDownWhichIntersect(sheet,field2);
-			//}
+			foreach(SheetField field2 in affectedFields) {
+			  //reuse the same amountOfGrowth again.
+			  MoveAllDownWhichIntersect(sheet,field2,amountOfGrowth);
+			}
 		}
 
 		///<summary>Creates a Sheet object from a sheetDef, complete with fields and parameters.  This overload is only to be used when the sheet will not be saved to the database, such as for labels</summary>
