@@ -12,12 +12,14 @@ using OpenDentBusiness.Mobile;
 namespace MobileWeb {
 	public partial class AppointmentList:System.Web.UI.Page {
 		private long CustomerNum=0;
+		private Util util=new Util();
 		public int PreviousDateDay=0;
 		public int PreviousDateMonth=0;
 		public int PreviousDateYear=0;
 		public int NextDateDay=0;
 		public int NextDateMonth=0;
 		public int NextDateYear=0;
+		
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
@@ -47,25 +49,18 @@ namespace MobileWeb {
 				NextDateDay=NextDate.Day;
 				NextDateMonth=NextDate.Month;
 				NextDateYear=NextDate.Year;
-				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate); 
-				Repeater1.DataSource=appointmentmList; 
+				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
+				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
 			}
 			catch(Exception ex) {
-				LabelError.Text="There has been an error in processing your request.";
+				LabelError.Text=Util.ErrorMessage;
 				Logger.LogError(ex);
 			}
 		}
 
 		public string GetPatientName(long PatNum) {
-			try {
-				Patientm pat=Patientms.GetOne(CustomerNum,PatNum);
-				return pat.LName+ ", " +pat.FName;
-			}
-			catch(Exception ex) {
-				Logger.LogError(ex);
-				return "";
-			}
+			return util.GetPatientName(PatNum,CustomerNum);
 		}
 
 		private bool SetCustomerNum(){

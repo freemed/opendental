@@ -59,6 +59,7 @@ namespace WebHostSynch {
 			*/
 			DbInit.Init(); // The above code works but this is a cleaner.
 		}
+
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
 			RegistrationKey RegistrationKeyFromDb=null;
@@ -102,16 +103,14 @@ namespace WebHostSynch {
 		}
 
 		public string MD5Encrypt(string inputPass) {
-			/*
-			MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-			data=data+"saturn";
-			byte[] result = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
-			return Encoding.UTF8.GetString(result);
-			*/
-			byte[] unicodeBytes=Encoding.Unicode.GetBytes(inputPass);
-			HashAlgorithm algorithm=MD5.Create();
-			byte[] hashbytes2=algorithm.ComputeHash(unicodeBytes);
-			return Convert.ToBase64String(hashbytes2);
+		/*
+				byte[] unicodeBytes=Encoding.Unicode.GetBytes(inputPass);
+				HashAlgorithm algorithm=MD5.Create();
+				byte[] hashbytes2=algorithm.ComputeHash(unicodeBytes);
+				return Convert.ToBase64String(hashbytes2);
+		 */
+			String salt="saturn";
+			return Userods.EncryptPassword(inputPass+salt,false);
 		}
 
 	}

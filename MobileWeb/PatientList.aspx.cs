@@ -13,14 +13,14 @@ namespace MobileWeb {
 	public partial class PatientList:System.Web.UI.Page {
 		private long CustomerNum=0;
 		private string searchterm="";
-		List<Patientm> patientmList=new List<Patientm>();
+		private Util util=new Util();
+		private List<Patientm> patientmList=new List<Patientm>();
 		
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
 				if(!SetCustomerNum()) {
 						return;
 				}
-				//Thread.Sleep(1500);
 				if(Request["searchterm"]!=null) {
 					searchterm=Request["searchterm"].Trim();
 				}
@@ -34,9 +34,13 @@ namespace MobileWeb {
 				Repeater1.DataBind();
 			}
 			catch(Exception ex) {
-				LabelError.Text="There has been an error in processing your request.";
+				LabelError.Text=Util.ErrorMessage;
 				Logger.LogError(ex);
 			}
+		}
+
+		public string GetPatientName(long PatNum) {
+			return util.GetPatientName(PatNum,CustomerNum);
 		}
 
 		private bool SetCustomerNum() {

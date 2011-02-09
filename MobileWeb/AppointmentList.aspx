@@ -9,6 +9,9 @@
 <body>
 	<div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 	<div id="content">
+	<div class="styleError">  
+				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
+	</div>
 		<div class="datenavigation">
 			<a id="previous" linkattib="AppointmentList.aspx?year=<%Response.Write(PreviousDateYear);%>&month=<%Response.Write(PreviousDateMonth);%>&day=<%Response.Write(PreviousDateDay);%>"
 				href="#">&nbsp;&nbsp;</a> <a class="button" id="today" href="#">Today</a>
@@ -32,9 +35,6 @@
 				</ItemTemplate>
 			</asp:Repeater>
 		</ul>
-		<div class="styleError">  
-				 <asp:Label ID="LabelError" runat="server" Text="" ForeColor="Red"></asp:Label>
-		</div>	
 	</div>
 </body>
 </html>

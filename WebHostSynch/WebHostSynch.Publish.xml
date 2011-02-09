@@ -1,33 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
   <publishProfile publishUrl="C:\Documents and Settings\dennis1\My Documents\dennis\work\Jordan\ftp\WebHostSynch" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
-    <file relUrl="bin/WebHostSynch.dll" publishTime="01/26/2011 13:09:03" />
+    <file relUrl="bin/WebHostSynch.dll" publishTime="02/05/2011 17:45:44" />
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Logging.xml" publishTime="10/27/2008 10:05:06" />
     <file relUrl="bin/Tao.OpenGl.dll" publishTime="07/18/2010 08:50:18" />
     <file relUrl="bin/MySql.Data.dll" publishTime="10/13/2010 18:39:12" />
     <file relUrl="bin/Tao.Platform.Windows.dll" publishTime="07/18/2010 08:50:18" />
     <file relUrl="bin/CDT.dll" publishTime="07/18/2010 08:50:18" />
     <file relUrl="bin/Interop.VBIDE.dll" publishTime="07/18/2010 08:50:18" />
-    <file relUrl="bin/OpenDentBusiness.pdb" publishTime="01/26/2011 13:09:01" />
+    <file relUrl="bin/OpenDentBusiness.pdb" publishTime="02/05/2011 14:44:35" />
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Common.xml" publishTime="10/27/2008 10:04:34" />
     <file relUrl="db/db.sql" publishTime="01/17/2011 10:06:25" />
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Common.dll" publishTime="10/27/2008 10:11:50" />
     <file relUrl="bin/AjaxControlToolkit.dll" publishTime="06/30/2010 16:48:08" />
-    <file relUrl="bin/WebForms.dll" publishTime="01/26/2011 13:09:02" />
-    <file relUrl="bin/CodeBase.pdb" publishTime="01/25/2011 21:14:55" />
+    <file relUrl="bin/WebForms.dll" publishTime="02/05/2011 14:44:44" />
+    <file relUrl="bin/CodeBase.pdb" publishTime="02/02/2011 11:18:38" />
     <file relUrl="bin/Microsoft.Practices.Unity.dll" publishTime="10/24/2008 17:03:22" />
-    <file relUrl="bin/WebForms.pdb" publishTime="01/26/2011 13:09:02" />
-    <file relUrl="bin/CodeBase.dll" publishTime="01/25/2011 21:14:55" />
+    <file relUrl="bin/WebForms.pdb" publishTime="02/05/2011 14:44:44" />
+    <file relUrl="bin/CodeBase.dll" publishTime="02/02/2011 11:18:38" />
     <file relUrl="Sheets.asmx" publishTime="11/22/2010 18:06:48" />
     <file relUrl="Mobile.asmx" publishTime="11/22/2010 18:53:16" />
     <file relUrl="bin/Microsoft.Practices.ObjectBuilder2.dll" publishTime="10/24/2008 17:03:22" />
-    <file relUrl="Web.config" publishTime="01/26/2011 13:09:04" />
+    <file relUrl="Web.config" publishTime="02/06/2011 16:25:25" />
     <file relUrl="bin/Interop.Word.dll" publishTime="07/18/2010 08:50:18" />
     <file relUrl="bin/Interop.Microsoft.Office.Core.dll" publishTime="07/18/2010 08:50:18" />
     <file relUrl="bin/Oracle.DataAccess.dll" publishTime="01/24/2011 10:26:49" />
-    <file relUrl="bin/WebHostSynch.pdb" publishTime="01/26/2011 13:09:03" />
+    <file relUrl="bin/WebHostSynch.pdb" publishTime="02/05/2011 17:45:44" />
     <file relUrl="bin/SigPlusNET.dll" publishTime="07/18/2010 08:50:18" />
-    <file relUrl="bin/OpenDentBusiness.dll" publishTime="01/26/2011 13:09:01" />
+    <file relUrl="bin/OpenDentBusiness.dll" publishTime="02/05/2011 14:44:35" />
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Logging.dll" publishTime="10/27/2008 10:11:50" />
   </publishProfile>
   <publishProfile publishUrl="https://192.168.0.196/" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="WebHostSynch" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile2" publishMethod="MSDeploy" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="False" />

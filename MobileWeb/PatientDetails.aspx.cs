@@ -19,6 +19,7 @@ namespace MobileWeb {
 		public string PatName="";
 		private long PatNum=0;
 		private long CustomerNum=0;
+		private Util util=new Util();
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
 				if(!SetCustomerNum()) {
@@ -30,11 +31,7 @@ namespace MobileWeb {
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
 				pat=Patientms.GetOne(CustomerNum,PatNum);
 				pat.Age=Patientms.DateToAge(pat.Birthdate);
-				PatName=pat.LName + ", "+pat.FName+" "+pat.MiddleI;
-				if(!String.IsNullOrEmpty(pat.MiddleI)) {
-					PatName+=".";
-				}
-
+				PatName=util.GetPatientName(pat);
 				String DialString1=@"&nbsp;&nbsp;&nbsp;<a href=""tel:";
 				String DialString2=@""" class=""style2"">dial</a>";
 				if(!String.IsNullOrEmpty(pat.HmPhone)) {
@@ -47,17 +44,17 @@ namespace MobileWeb {
 					DialLinkWirelessPhone=DialString1+pat.WirelessPhone+DialString2;
 				}
 				if(!String.IsNullOrEmpty(pat.Email)) {
-					EmailString=@"<a href=""mailto:"+pat.Email+@""" class=""style2"">" + pat.Email+"</a>";
+					EmailString=@"<a href=""mailto:"+pat.Email+@""" class=""style2"">"+pat.Email+"</a>";
 				}
 				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,PatNum);
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
-				List<RxPatm> rxList=RxPatms.GetRxPatms(CustomerNum,PatNum); Repeater2=null;
+				List<RxPatm> rxList=RxPatms.GetRxPatms(CustomerNum,PatNum);
 				Repeater2.DataSource=rxList;
 				Repeater2.DataBind();
 			}
 			catch(Exception ex) {
-				LabelError.Text="There has been an error in processing your request.";
+				LabelError.Text=Util.ErrorMessage;
 				Logger.LogError(ex);
 			}
 		}

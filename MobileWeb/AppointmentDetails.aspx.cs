@@ -11,10 +11,13 @@ using OpenDentBusiness.Mobile;
 
 namespace MobileWeb {
 	public partial class AppointmentDetails:System.Web.UI.Page {
-		public Appointmentm apt;
-		public Patientm pat;
 		private long AptNum=0;
 		private long CustomerNum=0;
+		private Util util=new Util();
+		public Appointmentm apt;
+		public Patientm pat;
+		public String PatName="";
+		
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
 				if(!SetCustomerNum()) {
@@ -24,13 +27,18 @@ namespace MobileWeb {
 					Int64.TryParse(Request["AptNum"].ToString().Trim(),out AptNum);
 				}
 				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-				apt=Appointmentms.GetOne(CustomerNum,AptNum); apt=null;
+				apt=Appointmentms.GetOne(CustomerNum,AptNum);
 				pat=Patientms.GetOne(CustomerNum,apt.PatNum);
+				PatName=util.GetPatientName(pat);
 			}
 			catch(Exception ex) {
-				LabelError.Text="There has been an error in processing your request.";
+				LabelError.Text=Util.ErrorMessage;
 				Logger.LogError(ex);
 			}
+		}
+
+		public string GetPatientName(long PatNum) {
+			return util.GetPatientName(PatNum,CustomerNum);
 		}
 
 		private bool SetCustomerNum() {
@@ -44,6 +52,8 @@ namespace MobileWeb {
 			}
 			return true;
 		}
+
+
 
 
 	}

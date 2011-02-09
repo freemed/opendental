@@ -11,6 +11,7 @@ using OpenDentBusiness.Mobile;
 
 namespace MobileWeb {
 	public class Util {
+		public static string ErrorMessage="There has been an error in processing your request.";
 		private static bool IsMobileDBSet=false;
 		string previousConnectStr="";
 		
@@ -50,5 +51,40 @@ namespace MobileWeb {
 			}
 			return DentalOfficeID;
 		}
+
+		public string GetPatientName(long PatNum,long CustomerNum) {
+			try{
+				String PatName="";
+				Patientm pat=Patientms.GetOne(CustomerNum,PatNum);
+				PatName=GetPatientName(pat);
+				return PatName;
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return "";
+			}
+		}
+
+		public string GetPatientName(Patientm pat) {
+			try {
+				String PatName="";
+				PatName+=pat.LName +", ";
+				if(!String.IsNullOrEmpty(pat.Preferred)) {
+					PatName+="'"+pat.Preferred +"'";
+				}
+				PatName+=" "+pat.FName +" ";
+				if(!String.IsNullOrEmpty(pat.MiddleI)) {
+					PatName+=pat.MiddleI +".";
+				}
+				return PatName;
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return "";
+			}
+		}
+
+
+
 	}
 }

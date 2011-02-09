@@ -9,8 +9,11 @@
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
-<h2></h2>
-<ul>
+	<div class="styleError">  
+				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
+	</div>
+	<h2></h2>
+		<ul>
 <li> 
 <span class="style1">
 <%Response.Write(PatName);%><br />
@@ -20,7 +23,7 @@
 </li>
 </ul>
 
-<ul class="contact">
+		<ul class="contact">
 <li><span class="style1">Home: <%Response.Write(pat.HmPhone);%> <%Response.Write(DialLinkHmPhone);%>
 	
 </span></li>
@@ -28,13 +31,12 @@
 </span></li>
 <li><span class="style1">Mobile: <%Response.Write(pat.WirelessPhone);%><%Response.Write(DialLinkWirelessPhone);%>
 </span></li>
-<%--<li><span class="style1">Email: <%Response.Write(EmailString);%> </span></li>--%>
-<li><span class="style1">Email: <a href="mailto:hello" class="style2"><%Response.Write(pat.Email);%></a> </span></li>
+<li><span class="style1">Email: <%Response.Write(EmailString);%> </span></li>
 </ul>
 
-<h2>Appointments</h2>
+	<h2>Appointments</h2>
 
-<ul>
+		<ul>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
 					<li class="arrow style1">
@@ -50,8 +52,8 @@
 			</asp:Repeater>
 </ul>
 
-<h2>Prescriptions</h2>
-<ul>
+	<h2>Prescriptions</h2>
+		<ul>
 			<asp:Repeater ID="Repeater2" runat="server">
 				<ItemTemplate>
 					<li class="style1">
@@ -63,10 +65,6 @@
 				</ItemTemplate>
 			</asp:Repeater>
 </ul>
-<div class="styleError">  
-				 <asp:Label ID="LabelError" runat="server" Text="" ForeColor="Red"></asp:Label>
-</div>
-
 </div>
 
 </body>

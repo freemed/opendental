@@ -104,12 +104,14 @@ min-height: 480px;
   white-space: normal;
 }
 .styleError{
-    margin-left:10px;text-align:center;
+    margin-left:10px;
+    text-align:center; 
+    color:Red;
 }
 
 h2{
    font: bold 14px Helvetica;
-   color:#FFFFFF;
+   color:#000000;
 }
 /* multiple style don't work in some cases android hence some styles had to be written all over again*/
 /*.appts, .home, .patients{

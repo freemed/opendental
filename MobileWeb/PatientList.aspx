@@ -8,7 +8,9 @@
 <body>
 	<div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 	<div id="content">
-
+	<div class="styleError">  
+				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
+	</div>
 	<div style="position:relative;left:25px"><asp:Literal runat="server" ID="MessageNoPatients"></asp:Literal></div>
 		<ul>
 			<asp:Repeater ID="Repeater1" runat="server">
@@ -17,17 +19,13 @@
 						<div>
 							<a linkattib="PatientDetails.aspx?PatNum=<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).PatNum %>"
 								href="#PatientDetails">
-								<asp:Label ID="Label1" runat="server" Text="<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).LName%> "></asp:Label>
-								<asp:Label ID="Label2" runat="server" Text="<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).FName%> "></asp:Label>
+								<%#GetPatientName(((OpenDentBusiness.Mobile.Patientm)Container.DataItem).PatNum)%> &nbsp;&nbsp;&nbsp;&nbsp;<%#((OpenDentBusiness.Mobile.Patientm)Container.DataItem).Birthdate.ToShortDateString()%>
 								</a>
 						</div>
 					</li>
 				</ItemTemplate>
 			</asp:Repeater>
 		</ul>
-		<div class="styleError">  
-				 <asp:Label ID="LabelError" runat="server" Text="" ForeColor="Red"></asp:Label>
-		</div>
 	</div>
 </body>
 </html>

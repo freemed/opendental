@@ -9,12 +9,15 @@
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
-
+<%//try{%>
+<div class="styleError">  
+				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
+</div>
 	<ul>
 		<li class="arrow style1">
 		<div>
 			<a linkattib="PatientDetails.aspx?PatNum=<%Response.Write(pat.PatNum);%>" href="#PatientDetails">
-			<asp:Label ID="Label1" runat="server" Text=""><%Response.Write(pat.LName + " "+pat.MiddleI +" " + pat.FName);%></asp:Label></a>
+			<asp:Label ID="Label1" runat="server" Text=""><%Response.Write(PatName);%></asp:Label></a>
 		</div>
 		</li>
 	</ul>
@@ -24,13 +27,15 @@
 <li> <span class="style1"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
 <%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%><br />
 <%Response.Write(apt.ProcDescript);%><br />
-
 </span>
 </li>
 </ul>
-<div class="styleError">  
-				 <asp:Label ID="LabelError" runat="server" Text="" ForeColor="Red"></asp:Label>
-</div>
+
+<%//}
+ // catch(Exception ex) {
+	// LabelErrordd.Text="There has been an error in processing your request. from aspx";
+	  
+// } %>
 </div>
 
 </body>

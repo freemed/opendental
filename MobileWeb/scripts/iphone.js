@@ -18,7 +18,7 @@ function hijackLinks() {
 
 */
 var MessageLoad='<div id="progress"><p>&nbsp;</p><p>Loading...</p><p>&nbsp;</p></div>';
-var MessageError='<div id="progress"><p>&nbsp;</p>There has been an error while processing your page. Please try again...<p>&nbsp;</p></div>';
+var MessageError='<div class="styleError">There has been an error while processing your page. Please try again.</div>';
 
 $(document).ready(function () {
     TraversePage();
@@ -180,9 +180,7 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 			}
 		},
         error: function(){
-           // $('#progress').replaceWith(MessageError);
-            $('#progress').replaceWith('');
-            //$('#LabelError').text(MessageError);
+            $(SectionToFill).replaceWith(MessageError);// this takes care of a page not found or page not responding situation.
         }
 	});
 
@@ -202,14 +200,12 @@ function ProcessLogin() {
         url: "ProcessLogin.aspx",
         data: datatosent,
         success: function (msg) {
+            $('#progress').replaceWith(''); //$('#login').remove('#progress') will not work
             if (msg == "CorrectLogin") {
                 //console.log("here");
-				$('#progress').replaceWith(''); //$('#login').remove('#progress') will not work
 				$('#LabelMessage').text('');
                 jQT.goTo('#home');
-
             } else {
-                $('#progress').replaceWith('');
                 $('#LabelMessage').text(msg);
             }
         }
