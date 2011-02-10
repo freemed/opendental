@@ -740,8 +740,8 @@ namespace OpenDental{
 			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textSubscNote.Size = new System.Drawing.Size(439,98);
 			this.textSubscNote.TabIndex = 5;
-			this.textSubscNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
-    "ines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
+			this.textSubscNote.Text = "1 - InsPlan subscriber\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show " +
+    "here in 59 vert.\r\n5 lines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
 			// 
 			// comboLinked
 			// 
@@ -1584,8 +1584,8 @@ namespace OpenDental{
 			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textPlanNote.Size = new System.Drawing.Size(395,85);
 			this.textPlanNote.TabIndex = 8;
-			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
-    "ines in 72 vert\r\n6 in 85";
+			this.textPlanNote.Text = "1 - InsPlan\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 " +
+    "vert.\r\n5 lines in 72 vert\r\n6 in 85";
 			// 
 			// FormInsPlan
 			// 
@@ -3204,6 +3204,7 @@ namespace OpenDental{
 			FormI.OriginalBenList=benefitList;
 			FormI.Note=textSubscNote.Text;
 			FormI.MonthRenew=PlanCur.MonthRenew;
+			FormI.SubCur=SubCur;
 			FormI.ShowDialog();
 			if(FormI.DialogResult!=DialogResult.OK) {
 				return;
@@ -4024,7 +4025,7 @@ namespace OpenDental{
 			if(IsNewPatPlan){
 				PatPlans.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
 			}
-			
+
 		}
 
 
