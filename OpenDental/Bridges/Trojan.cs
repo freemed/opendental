@@ -421,7 +421,7 @@ namespace OpenDental.Bridges {
 		}
 
 		///<summary>Returns number of subscribers affected.  Can throw an exception if user clicks cancel in a note box.</summary>
-		private static int ProcessTrojanPlan(string trojanPlan,bool updateBenefits,bool updateNote){
+		private static int ProcessTrojanPlan(string trojanPlan,bool updateBenefits,bool updateNoteAutomatic){
 			TrojanObject troj=ProcessTextToObject(trojanPlan);
 			Carrier carrier=new Carrier();
 			carrier.Phone=troj.ELIGPHONE;
@@ -441,20 +441,27 @@ namespace OpenDental.Bridges {
 			troj.CarrierNum=carrier.CarrierNum;
 			InsPlan plan=TrojanQueries.GetPlanWithTrojanID(troj.TROJANID);
 			TrojanQueries.UpdatePlan(troj,plan.PlanNum,updateBenefits);
-			plan=InsPlans.GetPlan(plan.PlanNum,null);//refresh
-			//let user pick note
-			if(plan.PlanNote!=troj.PlanNote) {
-				string[] notes=new string[2];
-				notes[0]=plan.PlanNote;
-				notes[1]=troj.PlanNote;
-				FormNotePick FormN=new FormNotePick(notes);
-				FormN.ShowDialog();
-				if(FormN.DialogResult!=DialogResult.OK) {
-					return 0;
-				}
-				if(plan.PlanNote!=FormN.SelectedNote) {
-					plan.PlanNote=FormN.SelectedNote;
+			plan=InsPlans.RefreshOne(plan.PlanNum);
+			if(updateNoteAutomatic) {
+				if(plan.PlanNote!=troj.PlanNote) {
+					plan.PlanNote=troj.PlanNote;
 					InsPlans.Update(plan);
+				}
+			}
+			else {
+				//let user pick note
+				if(plan.PlanNote!=troj.PlanNote) {
+					string[] notes=new string[2];
+					notes[0]=plan.PlanNote;
+					notes[1]=troj.PlanNote;
+					FormNotePick FormN=new FormNotePick(notes);
+					FormN.ShowDialog();
+					if(FormN.DialogResult==DialogResult.OK) {
+						if(plan.PlanNote!=FormN.SelectedNote) {
+							plan.PlanNote=FormN.SelectedNote;
+							InsPlans.Update(plan);
+						}
+					}
 				}
 			}
 			return 1;

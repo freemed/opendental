@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public string GroupName;
 		///<summary>Optional.  In Canada, this is called the Plan Number.</summary>
 		public string GroupNum;
-		///<summary>Note for all plans identical to this one.  Always stays in synch with other identical plans regardless of user actions.  If they change it on one, it gets changed on all.</summary>
+		///<summary>Note for this plan.  Same for all subscribers.</summary>
 		public string PlanNote;
 		///<summary>FK to feesched.FeeSchedNum.</summary>
 		public long FeeSched;
