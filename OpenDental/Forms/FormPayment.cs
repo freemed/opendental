@@ -1238,6 +1238,7 @@ namespace OpenDental{
 					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 					info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
 					info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+					info.Arguments+="/AUTOPROCESS ";
 					info.Arguments+="/AUTOCLOSE ";
 					info.Arguments+="/HIDEMAINWINDOW ";
 					info.Arguments+="/RECURRING ";
