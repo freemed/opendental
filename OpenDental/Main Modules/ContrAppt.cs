@@ -1905,7 +1905,7 @@ namespace OpenDental{
 					//in another table from the business layer.  But that will only work if hyg procedures are appropriately assigned
 					//when setting appointments.
 					grossproduction+=PIn.Decimal(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
-					netproduction=grossproduction-PIn.Decimal(DS.Tables["Appointments"].Rows[i]["writeoffPPO"].ToString());
+					netproduction+=PIn.Decimal(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString())-PIn.Decimal(DS.Tables["Appointments"].Rows[i]["writeoffPPO"].ToString());
 				}
 			}
 			textProduction.Text=grossproduction.ToString("c0");
