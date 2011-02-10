@@ -627,7 +627,7 @@ namespace OpenDentBusiness {
 				pFeeSched="CopayFeeSched";
 			}
 			string command=
-				"SELECT insplan.GroupName,insplan.GroupNum,COUNT(*) AS Plans,employer.EmpName,carrier.CarrierName,"
+				"SELECT insplan.GroupName,insplan.GroupNum,employer.EmpName,carrier.CarrierName,"
 				+"insplan.EmployerNum,insplan.CarrierNum,feesched.Description AS FeeSchedName,insplan.PlanType,"
 				+"insplan."+pFeeSched+" feeSched "
 				+"FROM insplan "
@@ -644,10 +644,7 @@ namespace OpenDentBusiness {
 			if(feeSchedWith!=0) {
 				command+="AND insplan."+pFeeSched+" ="+POut.Long(feeSchedWith)+" ";
 			}
-			command+="insplan.GroupName,employer.EmpName,carrier.CarrierName,"
-				+"insplan.EmployerNum,insplan.CarrierNum,feesched.Description,insplan.PlanType,"
-				+"insplan."+pFeeSched+" "
-				+"ORDER BY carrier.CarrierName,employer.EmpName,insplan.GroupNum";
+			command+="ORDER BY carrier.CarrierName,employer.EmpName,insplan.GroupNum";
 			return Db.GetTable(command);
 		}
 

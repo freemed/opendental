@@ -370,8 +370,6 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Fee Schedule",90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Plans",40);
-			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			string planType;
@@ -395,7 +393,6 @@ namespace OpenDental{
 					row.Cells.Add("Cat%");
 				}
 				row.Cells.Add(table.Rows[i]["FeeSchedName"].ToString());
-				row.Cells.Add(table.Rows[i]["Plans"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
