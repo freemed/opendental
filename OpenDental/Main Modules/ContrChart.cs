@@ -5011,6 +5011,9 @@ namespace OpenDental{
 		}
 
 		public void TaskGoToEvent(object sender,CancelEventArgs e) {
+			if(PatCur==null) {
+				return;
+			}
 			FormTaskEdit FormT=(FormTaskEdit)sender;
 			TaskObjectType GotoType=FormT.GotoType;
 			long keyNum=FormT.GotoKeyNum;
