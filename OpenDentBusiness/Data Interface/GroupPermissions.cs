@@ -161,6 +161,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Payment Create");
 				case Permissions.PaymentEdit:
 					return Lans.g("enumPermissions","Payment Edit");
+				case Permissions.PerioEdit:
+					return Lans.g("enumPermissions","Perio Chart Edit");
 				case Permissions.ProcComplCreate:
 					return Lans.g("enumPermissions","Create Completed Procedure (or set complete)");
 				case Permissions.ProcComplEdit:
@@ -209,6 +211,7 @@ namespace OpenDentBusiness{
 				|| permType==Permissions.EquipmentDelete
 				|| permType==Permissions.CommlogEdit
 				|| permType==Permissions.SheetEdit
+				|| permType==Permissions.PerioEdit
 				)
 			{
 				return true;

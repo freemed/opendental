@@ -1069,7 +1069,9 @@ namespace OpenDentBusiness{
 		///<summary>43</summary>
 		CommlogEdit,
 		///<summary>44</summary>
-		ImageDelete
+		ImageDelete,
+		///<summary>45</summary>
+		PerioEdit
 	}
 
 	///<summary>The type of signal being sent.</summary>

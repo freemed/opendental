@@ -1195,6 +1195,10 @@ namespace OpenDental{
 		///<summary>Usually set the selected index first</summary>
 		private void FillGrid() {
 			if(listExams.SelectedIndex!=-1){
+				gridP.perioEdit=true;
+				if(!Security.IsAuthorized(Permissions.PerioEdit,PerioExams.ListExams[listExams.SelectedIndex].ExamDate,true)) {
+					gridP.perioEdit=false;
+				}
 				PerioExamCur=PerioExams.ListExams[listExams.SelectedIndex];
 			}
 			gridP.SelectedExam=listExams.SelectedIndex;
@@ -1219,8 +1223,12 @@ namespace OpenDental{
 		private void listExams_DoubleClick(object sender, System.EventArgs e) {
 			//remember that the first click may not have triggered the mouse down routine
 			//and the second click will never trigger it.
-			if(listExams.SelectedIndex==-1)
+			if(listExams.SelectedIndex==-1) {
 				return;
+			}
+			if(!Security.IsAuthorized(Permissions.PerioEdit,PerioExams.ListExams[listExams.SelectedIndex].ExamDate)) {
+				return;
+			}
 			//a PerioExam.Cur will always have been set through mousedown(or similar),then FillGrid
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
 			PerioExams.Refresh(PatCur.PatNum);//list will not change
@@ -1235,6 +1243,9 @@ namespace OpenDental{
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.PerioEdit,MiscData.GetNowDateTime())){
+				return;
+			}
 			if(listExams.SelectedIndex!=-1){
 				gridP.SaveCurExam(PerioExamCur.PerioExamNum);
 			}
@@ -1266,6 +1277,9 @@ namespace OpenDental{
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(listExams.SelectedIndex==-1){
 				MessageBox.Show(Lan.g(this,"Please select an item first."));
+				return;
+			}
+			if(!Security.IsAuthorized(Permissions.PerioEdit,PerioExams.ListExams[listExams.SelectedIndex].ExamDate)) {
 				return;
 			}
 			if(MessageBox.Show(Lan.g(this,"Delete Exam?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
@@ -1346,14 +1360,14 @@ namespace OpenDental{
 
 		///<summary>The only valid numbers are 0 through 9</summary>
 		private void NumberClicked(int number){
-			if(gridP.SelectedExam==-1){
+			if(gridP.SelectedExam==-1) {
 				MessageBox.Show(Lan.g(this,"Please add or select an exam first in the list to the left."));
 				return;
 			}
-			if(TenIsDown){
+			if(TenIsDown) {
 				gridP.ButtonPressed(10+number);
 			}
-			else{
+			else {
 				gridP.ButtonPressed(number);
 			}
 			TenIsDown=false;

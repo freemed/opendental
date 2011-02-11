@@ -88,6 +88,8 @@ namespace OpenDental
 		///<summary>Causes each data entry to be entered three times. Also, if the data is a bleeding flag entry, then it changes the behavior by causing it to advance also.</summary>
 		public bool ThreeAtATime;
 		//public PerioExam PerioExamCur;
+		///<summary>Perio security:  False will only allow user to see information but not edit.</summary>
+		public bool perioEdit;
 
 		///<summary>The index in PerioExams.List of the currently selected exam.</summary>
 		public int SelectedExam{
@@ -384,6 +386,9 @@ namespace OpenDental
 			if(CurCell.X==-1){
 				return;
 			}
+			if(!perioEdit) {
+				return;
+			}
 			Graphics g=e.Graphics;
 			RectangleF bounds=GetBounds(CurCell.X,CurCell.Y);
 			if(RowTypes[GetSection(CurCell.Y)][GetSectionRow(CurCell.Y)]==PerioSequenceType.Probing){
@@ -618,6 +623,9 @@ namespace OpenDental
 					drawOld=false;
 					cellValue=PIn.Int(DataArray[i,row].Text);
 					textColor=Color.Black;
+					if(!perioEdit) {
+						textColor=Color.Gray;
+					}
 				}
 				//test for red
 				switch(RowTypes[GetSection(row)][GetSectionRow(row)]){
@@ -645,10 +653,15 @@ namespace OpenDental
 					||(RowTypes[GetSection(row)][GetSectionRow(row)]
 					!=PerioSequenceType.MGJ && cellValue>=redThresh))
 				{
-					if(drawOld)
+					if(drawOld) {
 						textColor=cOldTextRed;
-					else
+					}
+					else {
 						textColor=cRedText;
+						if(!perioEdit) {
+							textColor=cOldTextRed;
+						}
+					}
 					font=new Font(Font,FontStyle.Bold);
 				}
 				//if number is two digits:
@@ -1229,6 +1242,9 @@ namespace OpenDental
 
 		///<summary></summary>
 		protected override void OnMouseDown(MouseEventArgs e){
+			if(!perioEdit) {
+				return;
+			}
 			base.OnMouseDown(e);
 			Point newCell=GetCellFromPixel(e.X,e.Y);
 			if(newCell.X==0){
@@ -1297,6 +1313,9 @@ namespace OpenDental
 		///<summary></summary>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
+			if(!perioEdit) {
+				return;
+			}
 			if (selectedExam == -1)
 			{
 				MessageBox.Show(Lan.g(this, "Please add or select an exam first in the list to the left."));
@@ -1390,6 +1409,9 @@ namespace OpenDental
  
 		///<summary>Accepts button clicks from window rather than the usual keyboard entry.  All validation MUST be done before the value is sent here.  Only valid values are b,s,p,or c. Numbers entered using overload.</summary>
 		public void ButtonPressed(string keyValue){
+			if(!perioEdit) {
+				return;
+			}
 			if(ThreeAtATime){
 				for(int i=0;i<3;i++)
 					EnterValue(keyValue);
@@ -1400,6 +1422,9 @@ namespace OpenDental
 
 		///<summary>Accepts button clicks from window rather than the usual keyboard entry.  All validation MUST be done before the value is sent here.  Only valid values are numbers 0 through 19.</summary>
 		public void ButtonPressed(int keyValue){
+			if(!perioEdit) {
+				return;
+			}
 			if(ThreeAtATime){
 				for(int i=0;i<3;i++)
 					EnterValue(keyValue);

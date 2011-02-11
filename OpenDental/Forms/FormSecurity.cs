@@ -480,6 +480,8 @@ namespace OpenDental{
 						node.Nodes.Add(node2);
 					node2=SetNode(Permissions.RxCreate);
 					node.Nodes.Add(node2);
+					node2=SetNode(Permissions.PerioEdit);
+					node.Nodes.Add(node2);
 				node2 = SetNode("Anesthesia");
 					node3 = SetNode(Permissions.AnesthesiaIntakeMeds);
 						node2.Nodes.Add(node3);
