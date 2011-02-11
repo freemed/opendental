@@ -9,7 +9,6 @@
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 <div id="content">
-<%//try{%>
 <div class="styleError">  
 				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
 </div>
@@ -30,12 +29,6 @@
 </span>
 </li>
 </ul>
-
-<%//}
- // catch(Exception ex) {
-	// LabelErrordd.Text="There has been an error in processing your request. from aspx";
-	  
-// } %>
 </div>
 
 </body>

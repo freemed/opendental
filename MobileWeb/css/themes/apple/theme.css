@@ -192,8 +192,8 @@ ul li a, li.img a + a {
 }
 
 ul li a.active {
-   /* background: #194fdb url(img/selection.png) 0 0 repeat-x;*//*dennis this used to put a blue background to links*/
-   /* color: #fff; */
+   /*background: #194fdb url(img/selection.png) 0 0 repeat-x;*//*dennis this used to put a blue background to links*/
+    /*color: #fff; */ /*dennis when the blue background was removed the active font became white when clicked - which mad eit invisible hence thsi was commented out*/
 }
 
 ul li a.button {
@@ -277,8 +277,8 @@ ul.form li:hover {
 
 ul li input[type="text"], ul li input[type="password"], ul li textarea, ul li select {
     color: #777;
-   /* background: #fff url(../.png);dennis: image not found*/ 
-    border: 0;
+    background:#fff; /*was  background: #fff url(../.png);dennis: image not found*/ 
+    border:0;
     font: normal 17px Helvetica;
     padding: 0;
     display: inline-block;
@@ -286,7 +286,7 @@ ul li input[type="text"], ul li input[type="password"], ul li textarea, ul li se
     width: 100%;
     -webkit-appearance: textarea;
 }
-
+ 
 ul li textarea {
     height: 120px;
     padding: 0;

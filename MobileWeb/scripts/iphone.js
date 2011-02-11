@@ -29,9 +29,20 @@ function TraversePage(){
     //console.log('in TraversePage');
    // window.scrollTo(0, 0); resizeTo(320, 480);
 
+    /* for browser detection use
+       var browser=navigator.userAgent.toLowerCase();  
+        var users_browser = ((browser.indexOf('iPhone')!=-1);  
+        if (users_browser)  
+        {  
+            document.location.href='www.yourdomain.com/iphone_index.html';  
+        } 
+    */
 	//Process Login
-	$('#login form').submit(ProcessLogin);
-	
+	//$('#login form').submit(ProcessLogin);
+
+    //Process Login
+    $('#loginbutton').tap(function (e) { ProcessLogin(); });
+
 	// Process Logout
 	$('.button.logout').click(function (e) {ProcessLogout(e);}); 
 	// this syntax is incorrect for a callback: $('.button.logout').click(ProcessLogout(e));
@@ -192,7 +203,7 @@ function ProcessLogin() {
     var password = $('#password').val();
 	var rememberusername = $('#rememberusername').attr('checked');
     var datatosent = "username=" + username + "&password=" + password+ "&rememberusername=" + rememberusername;
-//	//console.log(datatosent);
+    //console.log(datatosent);
 	//console.log('login clicked');
     $('#login').append(MessageLoad);
     $.ajax({
