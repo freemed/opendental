@@ -1924,40 +1924,28 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits are zero and are not matching procedurecode BaseUnits: ")+numFound+"\r\n";
 				}
 				//not zero----------------------------------------------------------------------------------
-				command=@"SELECT COUNT(*) FROM procedurelog 
-					WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)
-					AND baseunits != 0";
-				//Better query:
-				//SELECT COUNT(*)
-				//FROM procedurelog,procedurecode
-				//WHERE procedurecode.CodeNum=procedurelog.CodeNum
-				//AND procedurelog.BaseUnits != 0
-				//AND procedurecode.BaseUnits = 0;
-
-				//pretty safe to change them back to zero.
+				command=@"SELECT COUNT(*)
+					FROM procedurelog
+					WHERE BaseUnits!=0
+					AND (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)=0";
+				//very safe to change them back to zero.
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits not matching procedurecode BaseUnits: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits not zero, but procedurecode BaseUnits are zero: ")+numFound+"\r\n";
 				}
 			}
 			else {
-				////procedurelog.BaseUnits must match procedurecode.BaseUnits because there is no UI for procs.
-				////For speed, we will use two different strategies
-				//command="SELECT COUNT(*) FROM procedurecode WHERE BaseUnits != 0";
-				//if(Db.GetCount(command)=="0") {
-				//	command="UPDATE procedurelog SET BaseUnits=0 WHERE BaseUnits!=0";
-				//}
-				//else {
-				//	command=@"UPDATE procedurelog
-				//		SET baseunits =  (SELECT procedurecode.BaseUnits FROM procedurecode
-				//		WHERE procedurecode.CodeNum=procedurelog.CodeNum)
-				//		WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode
-				//		WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
-				//}
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//	log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits set to match procedurecode BaseUnits: ")+numberFixed.ToString()+"\r\n";
-				//}
+				//first situation: don't fix.
+				//second situation:
+				//Writing the query this way allows it to work with Oracle.
+				command=@"UPDATE procedurelog
+					SET BaseUnits=0
+					WHERE BaseUnits!=0 
+					AND (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedure BaseUnits set to zero because procedurecode BaseUnits are zero: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
