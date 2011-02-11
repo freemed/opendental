@@ -1282,11 +1282,11 @@ GROUP BY SchedDate
 			}
 			report.Query= "SELECT "+DbHelper.DateColumn("appointment.AptDateTime")+" SchedDate,SUM(IFNULL(procedurelog.ProcFee,0)";
 			if(PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO)){
-				report.Query+="-IFNULL(WriteOffEst,0)";
+				report.Query+="-IFNULL(CASE WHEN WriteOffEstOverride != -1 THEN WriteOffEstOverride ELSE WriteOffEst END,0)";
 			}
 			report.Query+=") FROM appointment "
 				+"LEFT JOIN procedurelog ON appointment.AptNum = procedurelog.AptNum "
-				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND Status=6 AND WriteOffEst != -1 "
+				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND Status=6 AND (WriteOffEst != -1 OR WriteOffEstOverride != -1) "
 				+"WHERE (appointment.AptStatus = 1 OR "//stat=scheduled
         +"appointment.AptStatus = 4) "//or stat=ASAP
 				+"AND "+DbHelper.DateColumn("appointment.AptDateTime")+" >= "+POut.Date(dateFrom)+" "
