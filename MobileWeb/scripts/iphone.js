@@ -59,7 +59,6 @@ function TraversePage(){
 	
 	
 	$('#searchbutton').tap(function(e) {
-		
 		var searchterm=$('#searchpatientbox').val();
 		//console.log('searchterm is dd' + searchterm);
 		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
@@ -109,8 +108,7 @@ function TraversePage(){
 		var SectionToFill='#AppointmentListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
-	
-	
+
 	$('#next').tap(function(e) {
 		//console.log('Next button tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
@@ -124,7 +122,7 @@ function TraversePage(){
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
-		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
 	$('.patients').tap(function(e) {
@@ -135,12 +133,13 @@ function TraversePage(){
 		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList';
-		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-	$('.home').tap(function(e) {
-	jQT.goTo('#home');
+	$('.home').click(function(e) { // tap logs out the user on ipod.
+		jQT.goToReverse('#home','slide');	
 	});
+	
 	
 
 }
@@ -167,6 +166,12 @@ function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
 	FetchPage(UrlForFetchingData, SectionToFill)
 }
 
+function ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill){
+    $(SectionToFill).append(MessageLoad);
+	jQT.goToReverse(MoveToURL,'slide'); //do not use this line with tap event, it gives a 'Not able to tap element' error.
+	FetchPage(UrlForFetchingData, SectionToFill)
+}
+
 function ProcessPreviousNextButton(e,UrlForFetchingData, SectionToFill){
 	e.preventDefault();
 	//console.log(' UrlForFetchingData =' + UrlForFetchingData );
@@ -178,9 +183,9 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 	$.ajax({
 		type: "GET",
 		url: UrlForFetchingData,
-		success: function (msg) {//console.log(msg);
+		success: function (msg) {
 			var $response = $(msg);
-			var IsLoggedIn = $response.filter('#loggedin').text();
+			var IsLoggedIn = $response.filter('#loggedin').text();//console.log(IsLoggedIn);
 			var Content = $response.filter('#content').html();
 			if(IsLoggedIn=='LoggedIn'){
 				//console.log('still in session');
@@ -196,7 +201,6 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 	});
 
 }	
-	
 
 function ProcessLogin() {
     var username = $('#username').val();
@@ -225,7 +229,6 @@ function ProcessLogin() {
     return false;
 }
 
-
 function ProcessLogout(e) {
 		//console.log('log out clicked');
 		e.preventDefault();
@@ -245,3 +248,9 @@ function ProcessLogout(e) {
 
 }
 
+		
+
+		
+		
+		
+		

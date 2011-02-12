@@ -59,6 +59,7 @@ min-height: 480px;
     text-decoration: none;
     white-space: nowrap;
     background: none;
+    background-color:Orange;/*added for testing only*/
 }
 
 #previous  {
@@ -66,21 +67,24 @@ min-height: 480px;
     top:10px;
     float: left; 
     height:25px;
-    border-width:0px 25px 0px 0px;
-    -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 25 0 0;
+    /*border-width:0px 25px 0px 0px;
+    -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 25 0 0;*/
     -webkit-transform: rotate(180deg);
+    width:50px;
 }
 
 #today{
     float:left;
-    margin-left:15px
+    margin-left:15px;
+    background-color:Aqua;/*added for testing only*/
 }
 #next{
     top:10px;
     height:25px;
     float: right;
-    border-width:0px 0px 0px 25px;
-    -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 0 0 25;
+    /*border-width:0px 0px 0px 25px;
+    -webkit-border-image: url(themes/apple/img/listArrowSel.png) 0 0 0 25;*/
+    width:50px;
 }
 
 .datestring{
@@ -169,7 +173,11 @@ h2{
  -webkit-transform:none;
 
 }
-/*possible overide values whic do not work.*/
+ul li input[type="text"], ul li input[type="password"]{
+ -webkit-appearance: none;/*overides -webkit-appearance: textarea; dennis: puts a unacceptable grey shadow at the top of the text box*/ 
+}
+
+/*possible overide values which do not work.*/
 ul li input[type="checkbox"]{
     -webkit-perspective: none;
     -webkit-transform-style: flat;

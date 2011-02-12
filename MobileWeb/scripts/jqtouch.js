@@ -229,7 +229,6 @@
         }
         function goTo(toPage, animation) {
             var fromPage = hist[0].page;
-
             if (typeof (toPage) === 'string') {
                 toPage = $(toPage);
             }
@@ -250,7 +249,31 @@
                 return false;
             }
         }
-        function getOrientation() {
+		//dennis I added this function
+		function goToReverse(toPage, animation) {
+            var fromPage = hist[0].page;
+
+            if (typeof (toPage) === 'string') {
+                toPage = $(toPage);
+            }
+            if (typeof (animation) === 'string') {
+                for (var i = animations.length - 1; i >= 0; i--) {
+                    if (animations[i].name === animation) {
+                        animation = animations[i];
+                        break;
+                    }
+                }
+            }
+            if (animatePages(fromPage, toPage, animation,true)) {
+                addPageToHistory(toPage, animation);
+                return publicObj;
+            }
+            else {
+                console.error('Could not animate pages.');
+                return false;
+            }
+        }
+		function getOrientation() {
             return orientation;
         }
 
@@ -597,7 +620,8 @@
             goBack: goBack,
             goTo: goTo,
             addAnimation: addAnimation,
-            submitForm: submitForm
+            submitForm: submitForm,
+			goToReverse: goToReverse
         }
 
         return publicObj;

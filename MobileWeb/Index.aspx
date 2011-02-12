@@ -55,21 +55,21 @@
 				 </div>	
             </form>
         </div>
-
-        <div id="home">
-            <div class="toolbar">
-			<a class="button logout" href="#">Logout</a>
-                <h1>Home</h1>
-            </div>
-			<div style="height:70px">
-            </div>
-            <ul class="rounded page1">
-                <li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
-            </ul>
-			 <ul class="rounded page1">
-                <li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
-            </ul>
-        </div>
+		<div id="home">
+			<div class="toolbar">
+				<a class="button logout" href="#">Logout</a>
+				<h1>
+					Home</h1>
+			</div>
+			<div style="height: 70px">
+			</div>
+			<ul class="rounded page1">
+				<li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
+			</ul>
+			<ul class="rounded page1">
+				<li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
+			</ul>
+		</div>
 
         <div id="AppointmentList">
             <div class="toolbar">
