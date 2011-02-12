@@ -75,6 +75,8 @@ namespace OpenDental{
 		private bool StatusChanged;
 		///<summary>If this task starts out 'unread', then this starts out true.  If the user changes the description or changes a note, then the task gets set to read.  But the user can manually change it back and this variable gets set to false.  From then on, any changes to description or note do not trigger the task to get set to read.  In other words, the automation only happens once.</summary>
 		private bool MightNeedSetRead;
+		///<summary>When this window is first opened, if this task is in someone else's inbox, then the "new" status is meaningless and will not show.  In that case, this variable is set to true.  Only used when tracking new status by user.</summary>
+		private bool StartedInOthersInbox;
 
 		///<summary>Task gets inserted ahead of time, then frequently altered before passing in here.  The taskOld that is passed in should be the task as it is in the database.  When saving, taskOld will be compared with db to make sure no changes.</summary>
 		public FormTaskEdit(Task taskCur,Task taskOld)
@@ -659,6 +661,14 @@ namespace OpenDental{
 				textDateTimeFinished.Text=TaskCur.DateTimeFinished.ToString();
 			}
 			textDescript.Text=TaskCur.Descript;
+			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser) && TaskCur.TaskListNum !=0) {
+				long mailboxUserNum=TaskLists.GetMailboxUserNum(TaskCur.TaskListNum);
+				if(mailboxUserNum != 0 && mailboxUserNum != Security.CurUser.UserNum) {
+					StartedInOthersInbox=true;
+					checkNew.Checked=false;
+					checkNew.Enabled=false;
+				}
+			}
 			//this section must come after textDescript is set:
 			if(TaskCur.TaskStatus==TaskStatusEnum.Done) {//global even if new status is tracked by user
 				checkDone.Checked=true;
@@ -669,7 +679,7 @@ namespace OpenDental{
 					StatusChanged=true;
 				}
 				else if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
-					if(TaskUnreads.IsUnread(Security.CurUser.UserNum,TaskCur.TaskNum)) {
+					if(!StartedInOthersInbox && TaskUnreads.IsUnread(Security.CurUser.UserNum,TaskCur.TaskNum)) {
 						checkNew.Checked=true;
 						MightNeedSetRead=true;
 					}
@@ -955,11 +965,13 @@ namespace OpenDental{
 						TaskCur.TaskStatus=TaskStatusEnum.Viewed;
 					}
 					//This is done explicitly instead of automatically like it was the old way
-					if(checkNew.Checked) {
-						TaskUnreads.SetUnread(Security.CurUser.UserNum,TaskCur.TaskNum);	
-					}
-					else {
-						TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);					
+					if(!StartedInOthersInbox) {
+						if(checkNew.Checked) {
+							TaskUnreads.SetUnread(Security.CurUser.UserNum,TaskCur.TaskNum);
+						}
+						else {
+							TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);
+						}
 					}
 				}
 				else {//tracked globally, the old way

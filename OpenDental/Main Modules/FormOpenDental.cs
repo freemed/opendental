@@ -4416,7 +4416,7 @@ namespace OpenDental{
 			}
 			if(extension>0) {
 				phone=Phones.GetPhoneForExtension(phoneList,extension);
-				if(Security.CurUser!=null && phone.EmployeeNum!=Security.CurUser.EmployeeNum) {
+				if(Security.CurUser!=null && phone!=null && phone.EmployeeNum!=Security.CurUser.EmployeeNum) {
 					phone.EmployeeNum=Security.CurUser.EmployeeNum;
 					phone.EmployeeName=Security.CurUser.UserName;
 					Phones.SetPhoneForEmp(Security.CurUser.EmployeeNum,Security.CurUser.UserName,phone.Extension);
