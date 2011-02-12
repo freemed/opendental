@@ -724,7 +724,12 @@ namespace OpenDental{
 				labelReply.Visible=false;
 				butReply.Visible=false;
 			}
-			else if(TaskListCur==null || TaskListCur.TaskListNum!=Security.CurUser.TaskListInBox) {//if this task is not in my inbox
+			else if(TaskListCur==null) {
+				//|| TaskListCur.TaskListNum!=Security.CurUser.TaskListInBox) {//if this task is not in my inbox
+				labelReply.Visible=false;
+				butReply.Visible=false;
+			}
+			else if(NoteList.Count==0 && TaskCur.UserNum==Security.CurUser.UserNum) {//if this is my task
 				labelReply.Visible=false;
 				butReply.Visible=false;
 			}
@@ -1033,7 +1038,7 @@ namespace OpenDental{
 
 		private void butReply_Click(object sender,EventArgs e) {
 			//This can't happen if IsNew
-			//This also can't happen unless the task is in my inbox.
+			//This also can't happen if the task is mine with no replies.
 			//Button not visible unless a ReplyToUserNum has been calculated successfully.
 			long inbox=Userods.GetInbox(ReplyToUserNum);
 			if(inbox==0) {
