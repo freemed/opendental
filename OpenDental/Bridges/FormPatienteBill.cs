@@ -656,7 +656,7 @@ namespace OpenDental {
 		/// </summary>
 		private void PrepareNotes(int PatientID,XmlNode EisStatementPatient) {
 			string note = string.Empty;
-			DataTable NoteTable = Statements.GetStatementNotes(PatientID);
+			DataTable NoteTable = Statements.GetStatementNotesPracticeWeb(PatientID);
 
 			if(NoteTable.Rows.Count > 0) {
 				note = NoteTable.Rows[0]["Note"].ToString();
@@ -681,25 +681,19 @@ namespace OpenDental {
 			// Prepare DetailItems Element For Patient Element
 			XmlNode PatientDetailItems = Doc.CreateNode(XmlNodeType.Element,"DetailItems","");
 			EisStatementPatient.AppendChild(PatientDetailItems);
-
-			DataTable StmtTable = Statements.GetStatementInfo(PatientID);
-			bool Singlepatient,Intermingled;
-			DateTime DateRangeFrom,DateRangeTo;
-			if(StmtTable.Rows.Count > 0) {
-				Singlepatient = PIn.Bool(StmtTable.Rows[0]["SinglePatient"].ToString());
-				DateRangeFrom = PIn.DateT(StmtTable.Rows[0]["DateRangeFrom"].ToString());
-				DateRangeTo = PIn.DateT(StmtTable.Rows[0]["DateRangeTo"].ToString());
-				Intermingled = PIn.Bool(StmtTable.Rows[0]["Intermingled"].ToString());
-			}
-			else {
-				Singlepatient = true;
-				DateRangeFrom = System.DateTime.Today;
-				DateRangeTo = System.DateTime.Today;
-				Intermingled = true;
+			//js 2/13/11, this next line is flawed.  You wouldn't get a statement by using pk of the patient.
+			//But that's the way PW wrote it, so I'm leaving it alone.
+			Statement stmt = Statements.GetStatementInfoPracticeWeb(PatientID);
+			//js I had to add this section in 7.8 to make it compile.  Not tested.
+			if(stmt==null) {
+				stmt.SinglePatient = true;
+				stmt.DateRangeFrom = System.DateTime.Today;
+				stmt.DateRangeTo = System.DateTime.Today;
+				stmt.Intermingled = true;
+				stmt.PatNum=(long)PatientID;
 			}
 			DataSet dataSet;
-			dataSet = AccountModules.GetStatement(PatientID,Singlepatient,DateRangeFrom,DateRangeTo,
-				 Intermingled);
+			dataSet = AccountModules.GetStatementDataSet(stmt);
 			DataTable tableAccount = dataSet.Tables["account"];
 			string tablename;
 			// accounttable name is account+patientID

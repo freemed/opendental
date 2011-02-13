@@ -191,7 +191,8 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static DataTable GetStatementNotes(long PatientID) {
+		///<summary>This query is flawed.</summary>
+		public static DataTable GetStatementNotesPracticeWeb(long PatientID) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
 			}
@@ -199,13 +200,14 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static DataTable GetStatementInfo(long PatientID) {
+		///<summary>This query is flawed.</summary>
+		public static Statement GetStatementInfoPracticeWeb(long PatientID) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
+				return Meth.GetObject<Statement>(MethodBase.GetCurrentMethod(),PatientID);
 			}
 			string command=@"Select SinglePatient,DateRangeFrom,DateRangeTo,Intermingled
                         FROM statement WHERE PatNum = "+PatientID;
-			return Db.GetTable(command);
+			return Crud.StatementCrud.SelectOne(command);
 		}
 
 

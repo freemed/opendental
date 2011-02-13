@@ -759,7 +759,7 @@ namespace OpenDental{
 				fam=Patients.GetFamily(stmt.PatNum);
 				pat=fam.GetPatient(stmt.PatNum);
 				patFolder=ImageStore.GetPatientFolder(pat);
-				dataSet=AccountModules.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
+				dataSet=AccountModules.GetStatementDataSet(stmt);
 				if(stmt.Mode_==StatementMode.Email){
 					if(PrefC.GetString(PrefName.EmailSMTPserver)==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");

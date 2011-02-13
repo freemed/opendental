@@ -38,42 +38,30 @@ namespace OpenDentBusiness {
 			bool singlePatient=!intermingled;//so one or the other will be true
 			payPlanDue=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
-			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,false,showProcBreakdown,showNotes);
-			//GetPayPlans(patNum,fromDate,toDate,isFamily);
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,0,showProcBreakdown,showNotes);
 			GetMisc(fam,patNum);//table = misc.  Just holds a few bits of info that we can't find anywhere else.
 			return retVal;
 		}
 
 		///<summary>If intermingled=true the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
-		public static DataSet GetStatement(long patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled) {
+		public static DataSet GetStatementDataSet(Statement stmt){
+			//long patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,singlePatient,fromDate,toDate,intermingled);
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),stmt);
 			}
-			//int patNum=PIn.PInt(parameters[0]);
+			long patNum=stmt.PatNum;
 			fam=Patients.GetFamily(patNum);
-			//bool intermingled=PIn.PBool(parameters[4]);
-			if(intermingled){
+			if(stmt.Intermingled) {
 				patNum=fam.ListPats[0].PatNum;//guarantor
 			}
 			pat=fam.GetPatient(patNum);
-			//bool viewingInRecall=PIn.PBool(parameters[1]);
-			//bool singlePatient=PIn.PBool(parameters[1]);
-			//DateTime fromDate=PIn.PDate(parameters[2]);
-			//DateTime toDate=PIn.PDate(parameters[3]);
 			retVal=new DataSet();
-			//if(viewingInRecall) {
-			//	retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
-			//}
-			//else {
-			//	GetCommLog(patNum);
-			//}
 			payPlanDue=0;
 			balanceForward=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
-			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,true,PrefC.GetBool(PrefName.StatementShowProcBreakdown),
-				PrefC.GetBool(PrefName.StatementShowNotes));
-			//GetPayPlans(patNum,fromDate,toDate,isFamily);
-			GetApptTable(fam,singlePatient,patNum);//table= appts
+			GetAccount(patNum,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled,stmt.SinglePatient,
+				stmt.StatementNum,PrefC.GetBool(PrefName.StatementShowProcBreakdown),PrefC.GetBool(PrefName.StatementShowNotes));
+			GetApptTable(fam,stmt.SinglePatient,patNum);//table= appts
 			GetMisc(fam,patNum);
 			return retVal;
 		}
@@ -456,10 +444,10 @@ namespace OpenDentBusiness {
 			table.Columns.Add("tth");
 		}
 		
-		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If isForStatement, then the resulting payplan table looks totally different.</summary>
-		private static void GetAccount(long patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,bool isForStatement,bool showProcBreakdown,bool showNotes) {
+		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If StatementNum is not zero, then it's for a statement, and the resulting payplan table looks totally different.</summary>
+		private static void GetAccount(long patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,long statementNum,bool showProcBreakdown,bool showNotes) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,isForStatement);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,statementNum,showProcBreakdown,showNotes);
 				return;
 			}
 			DataConnection dcon=new DataConnection();
@@ -1001,7 +989,11 @@ namespace OpenDentBusiness {
 				}
 				command+="PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
 			}
-			command+=") ORDER BY DateSent";
+			command+=") ";
+			if(statementNum>0) {
+				command+="AND StatementNum != "+POut.Long(statementNum)+" ";
+			}
+			command+="ORDER BY DateSent";
 			DataTable rawState=dcon.GetTable(command);
 			StatementMode _mode;
 			for(int i=0;i<rawState.Rows.Count;i++){
@@ -1132,11 +1124,11 @@ namespace OpenDentBusiness {
 				row["tth"]="";
 				rows.Add(row);
 			}
-			if(isForStatement){
-				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate,singlePatient);
-			}
-			else{
+			if(statementNum==0) {
 				GetPayPlans(rawPayPlan,rawPay);
+			}
+			else {
+				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate,singlePatient);
 			}
 			//Sorting-----------------------------------------------------------------------------------------
 			rows.Sort(new AccountLineComparer());
@@ -1278,7 +1270,7 @@ namespace OpenDentBusiness {
 			}
 			else{
 				for(int p=0;p<rowsByPat.Length;p++){
-					if(p>0 && isForStatement && fam.ListPats[p].PatStatus!=PatientStatus.Patient && fam.ListPats[p].EstBalance==0 ){
+					if(p>0 && statementNum>0 && fam.ListPats[p].PatStatus!=PatientStatus.Patient && fam.ListPats[p].EstBalance==0 ){
 						continue;
 					}
 					DataTable tablep=new DataTable("account"+fam.ListPats[p].PatNum.ToString());
