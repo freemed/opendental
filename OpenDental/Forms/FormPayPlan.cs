@@ -1444,6 +1444,11 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
+			if(textCompletedAmt.Text!=textAmount.Text) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Tx Completed Amt and Total Amount do not match, continue?")) {
+					return;
+				}
+			}
 			if(!SaveData()){
 				return;
 			}
