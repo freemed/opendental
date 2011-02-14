@@ -3429,20 +3429,20 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//Add PerioEdit permission to all groups------------------------------------------------------
 				command="SELECT UserGroupNum FROM usergroup";
 				DataTable table=Db.GetTable(command);
-				int groupNum;
+				long groupNum;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					for(int i=0;i<table.Rows.Count;i++) {
-						groupNum=PIn.Int(table.Rows[i][0].ToString());
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (NewerDays,UserGroupNum,PermType) "
-						+"VALUES(0,"+POut.Long(groupNum)+","+POut.Long((int)Permissions.PerioEdit)+")";
+						+"VALUES(0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.PerioEdit)+")";
 						Db.NonQ32(command);
 					}
 				}
 				else {//oracle
 					for(int i=0;i<table.Rows.Count;i++) {
-						groupNum=PIn.Int(table.Rows[i][0].ToString());
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
-						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Long((int)Permissions.PerioEdit)+")";
+						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.PerioEdit)+")";
 						Db.NonQ32(command);
 					}
 				}
