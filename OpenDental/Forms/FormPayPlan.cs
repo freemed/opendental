@@ -956,7 +956,7 @@ namespace OpenDental{
 			gridCharges.EndUpdate();
 			textAccumulatedDue.Text=PayPlans.GetAccumDue(PayPlanCur.PayPlanNum,ChargeList).ToString("n");
 			textPrincPaid.Text=PayPlans.GetPrincPaid(AmtPaid,PayPlanCur.PayPlanNum,ChargeList).ToString("n");
-			if(!IsNew && ChargeList.Count>1) {
+			if(!IsNew && ChargeList.Count>0) {
 				if(comboProv.SelectedIndex==-1) {//This avoids resetting the combo every time FillCharges is run.
 					comboProv.SelectedIndex=Providers.GetIndex(ChargeList[0].ProvNum);//could still be -1
 				}
