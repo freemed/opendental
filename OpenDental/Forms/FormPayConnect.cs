@@ -21,6 +21,7 @@ namespace OpenDental {
 		private PayConnectService.transResponse response;
 		private MagstripCardParser parser=null;
 		private string receiptStr;
+		private PayConnectService.transType trantype=PayConnectService.transType.SALE;
 
 		public FormPayConnect(Payment payment,Patient pat,string amount) {
 			InitializeComponent();
@@ -35,6 +36,50 @@ namespace OpenDental {
 			this.textNameOnCard.Text=PatCur.GetNameFL();
 			this.textZipCode.Text=PatCur.Zip;
 			this.textAmount.Text=amountInit;
+		}
+
+		private void radioSale_Click(object sender,EventArgs e) {
+			radioSale.Checked=true;
+			radioAuthorization.Checked=false;
+			radioVoid.Checked=false;
+			radioReturn.Checked=false;
+			textRefNumber.Visible=false;
+			labelRefNumber.Visible=false;
+			trantype=PayConnectService.transType.SALE;
+			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
+		}
+
+		private void radioAuthorization_Click(object sender,EventArgs e) {
+			radioSale.Checked=false;
+			radioAuthorization.Checked=true;
+			radioVoid.Checked=false;
+			radioReturn.Checked=false;
+			textRefNumber.Visible=false;
+			labelRefNumber.Visible=false;
+			trantype=PayConnectService.transType.AUTH;
+			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
+		}
+
+		private void radioVoid_Click(object sender,EventArgs e) {
+			radioSale.Checked=false;
+			radioAuthorization.Checked=false;
+			radioVoid.Checked=true;
+			radioReturn.Checked=false;
+			textRefNumber.Visible=true;
+			labelRefNumber.Visible=true;
+			trantype=PayConnectService.transType.VOID;
+			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
+		}
+
+		private void radioReturn_Click(object sender,EventArgs e) {
+			radioSale.Checked=false;
+			radioAuthorization.Checked=false;
+			radioVoid.Checked=false;
+			radioReturn.Checked=true;
+			textRefNumber.Visible=true;
+			labelRefNumber.Visible=true;
+			trantype=PayConnectService.transType.RETURN;
+			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
 		}
 
 		private void textCardNumber_KeyPress(object sender,KeyPressEventArgs e) {
@@ -86,6 +131,10 @@ namespace OpenDental {
 			get { return receiptStr; }
 		}
 
+		public PayConnectService.transType TranType {
+			get { return trantype; }
+		}
+
 		private bool VerifyData(out int expYear,out int expMonth){
 			expYear=0;
 			expMonth=0;
@@ -112,6 +161,10 @@ namespace OpenDental {
 			}
 			if(!Regex.IsMatch(textAmount.Text,"^[0-9]+$") && !Regex.IsMatch(textAmount.Text,"^[0-9]*\\.[0-9]+$")){
 				MsgBox.Show(this,"Invalid amount.");
+				return false;
+			}
+			if((trantype==PayConnectService.transType.VOID || trantype==PayConnectService.transType.RETURN) && textRefNumber.Text=="") {
+				MsgBox.Show(this,"Ref Number required.");
 				return false;
 			}
 			return true;
@@ -229,10 +282,14 @@ namespace OpenDental {
 				Cursor=Cursors.Default;
 				return;
 			}
-			PayConnectService.creditCardRequest request=Bridges.PayConnect.BuildSaleRequest(PaymentCur.PayNum,Convert.ToDecimal(textAmount.Text),
-				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text,(parser!=null?parser.Track2:null));
+			string refNumber="";
+			if(trantype==PayConnectService.transType.VOID || trantype==PayConnectService.transType.RETURN) {
+				refNumber=textRefNumber.Text;
+			}
+			PayConnectService.creditCardRequest request=Bridges.PayConnect.BuildSaleRequest(Convert.ToDecimal(textAmount.Text),
+				textCardNumber.Text,expYear,expMonth,textNameOnCard.Text,textSecurityCode.Text,textZipCode.Text,(parser!=null?parser.Track2:null),trantype,refNumber);
 			response=Bridges.PayConnect.ProcessCreditCard(request);
-			if(response.Status.code==0) {//Only print a receipt if approved.
+			if(trantype==PayConnectService.transType.SALE && response.Status.code==0) {//Only print a receipt if transaction is an approved SALE.
 				receiptStr=BuildReceiptString(request,response);
 				PrintReceipt(receiptStr);
 			}

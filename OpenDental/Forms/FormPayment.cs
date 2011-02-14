@@ -1374,18 +1374,35 @@ namespace OpenDental{
 					break;
 				}
 			}
-			textAmount.Text=FormP.AmountCharged;
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
 			SetComboDepositAccounts();
-			if(FormP.Response!=null){
-				textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+Lan.g(this,"Payment Status")+": "+FormP.Response.Status.description;
-				if(FormP.Response.Status.code==0) {
+			if(FormP.Response!=null) {
+				textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+Lan.g(this,"Transaction Type")+": "+Enum.GetName(typeof(PayConnectService.transType),FormP.TranType)+Environment.NewLine+
+					Lan.g(this,"Status")+": "+FormP.Response.Status.description;
+				if(FormP.Response.Status.code==0) { //The transaction succeeded.
 					textNote.Text+=Environment.NewLine
+						+Lan.g(this,"Amount")+": "+FormP.AmountCharged+Environment.NewLine
 						+Lan.g(this,"Auth Code")+": "+FormP.Response.AuthCode+Environment.NewLine
 						+Lan.g(this,"Ref Number")+": "+FormP.Response.RefNumber;
+					textNote.Select(textNote.Text.Length-1,0);
+					textNote.ScrollToCaret();//Scroll to the end of the text box to see the newest notes.
+					if(FormP.TranType==PayConnectService.transType.VOID || FormP.TranType==PayConnectService.transType.RETURN) {
+						textAmount.Text="-"+FormP.AmountCharged;
+					}
+					else if(FormP.TranType==PayConnectService.transType.AUTH) {
+						textAmount.Text=FormP.AmountCharged;
+					}
+					else if(FormP.TranType==PayConnectService.transType.SALE) {
+						textAmount.Text=FormP.AmountCharged;
+						PaymentCur.Receipt=FormP.ReceiptStr; //There is only a receipt when a sale takes place.
+					}
 				}
-				PaymentCur.Receipt=FormP.ReceiptStr;
+			}
+			if(FormP.Response==null || FormP.Response.Status.code!=0) { //The transaction failed.
+				if(FormP.TranType==PayConnectService.transType.SALE || FormP.TranType==PayConnectService.transType.AUTH) {
+					textAmount.Text=FormP.AmountCharged;//Preserve the amount so the user can try the payment again more easily.
+				}
 			}
 		}
 

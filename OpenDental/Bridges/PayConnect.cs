@@ -29,7 +29,7 @@ namespace OpenDental.Bridges {
 			return cred;
 		}
 
-		public static PayConnectService.creditCardRequest BuildSaleRequest(long paymentNum,decimal amount,string cardNumber,int expYear,int expMonth,string nameOnCard,string securityCode,string zip,string magData) {
+		public static PayConnectService.creditCardRequest BuildSaleRequest(decimal amount,string cardNumber,int expYear,int expMonth,string nameOnCard,string securityCode,string zip,string magData,PayConnectService.transType transtype,string refNumber) {
 			PayConnectService.creditCardRequest request=new OpenDental.PayConnectService.creditCardRequest();
 			request.Amount=amount;
 			request.AmountSpecified=true;
@@ -41,9 +41,9 @@ namespace OpenDental.Bridges {
 				request.MagData=magData;
 			}
 			request.NameOnCard=nameOnCard;
-			request.RefNumber="";//Not necessary. Only 32-bit numbers allowed. If using replication, the numbers might not fit inside of a 32-bit number.
+			request.RefNumber=refNumber;
 			request.SecurityCode=securityCode;
-			request.TransType=PayConnectService.transType.SALE;
+			request.TransType=transtype;
 			request.Zip=zip;
 			return request;
 		}
