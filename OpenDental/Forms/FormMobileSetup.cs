@@ -17,8 +17,8 @@ namespace OpenDental {
 		private static MobileWeb.Mobile mb = new MobileWeb.Mobile();
 		private static DateTime MobileSyncDateTimeLastRun;
 		private static string MobileSyncServerURL;
-		private static String SynchUrlStaging="https://192.168.0.196/WebHostSynch/Mobile.asmx";
-		private static String SynchUrlDev="http://localhost:2923/Mobile.asmx";
+		private static String SynchMachineStaging="192.168.0.196";
+		private static String SynchMachineDev="localhost";
 		private static string MobileSyncWorkstationName;
 		private static int MobileSyncIntervalMinutes;
 		private static DateTime MobileExcludeApptsBeforeDate;
@@ -72,7 +72,7 @@ namespace OpenDental {
 				MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 				MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
 				//#if DEBUG	
-				if((MobileSyncServerURL==SynchUrlStaging)||(MobileSyncServerURL==SynchUrlDev)) {
+				if(MobileSyncServerURL.Contains(SynchMachineStaging)||MobileSyncServerURL.Contains(SynchMachineDev)) {
 					IgnoreCertificateErrors();
 				}
 				//#endif

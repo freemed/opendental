@@ -52,12 +52,14 @@
   <ItemGroup>
     <Content Include="AppointmentDetails.aspx" />
     <Content Include="AppointmentList.aspx" />
+    <Content Include="css\iphone.css" />
     <Content Include="css\themes\apple\img\backButton.png" />
     <Content Include="css\themes\apple\img\blueButton.png" />
     <Content Include="css\themes\apple\img\cancel.png" />
     <Content Include="css\themes\apple\img\chevron.png" />
     <Content Include="css\themes\apple\img\grayButton.png" />
     <Content Include="css\themes\apple\img\listArrowSel.png" />
+    <Content Include="css\themes\apple\img\listArrowSelFlipped.png" />
     <Content Include="css\themes\apple\img\listGroup.png" />
     <Content Include="css\themes\apple\img\loading.gif" />
     <Content Include="css\themes\apple\img\on_off.png" />
@@ -77,7 +79,6 @@
     <Content Include="ProcessLogout.aspx" />
     <Content Include="css\jqtouch.css" />
     <Content Include="Index.aspx" />
-    <Content Include="css\iphone.css" />
     <Content Include="ProcessLogin.aspx" />
     <Content Include="scripts\iphone.js" />
     <Content Include="scripts\jqtouch.js" />

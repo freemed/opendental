@@ -96,10 +96,10 @@ function TraversePage(){
 	
 	/*previous, today and next buttons*/
 	$('#previous').tap(function(e) {
-		//console.log('Previous button tapped');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
-		var SectionToFill='#AppointmentListContents';
-		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
+	    //console.log('Previous button tapped');
+	    var UrlForFetchingData = this.attributes["linkattib"].value;
+	    var SectionToFill='#AppointmentListContents';
+	    ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
 	$('#today').tap(function(e) {
@@ -127,7 +127,6 @@ function TraversePage(){
 	
 	$('.patients').tap(function(e) {
 		//console.log('patients button tapped');
-		//var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var searchterm=$('#searchpatientbox').val();
 		//console.log('searchterm is ' + searchterm);
 		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
@@ -136,7 +135,7 @@ function TraversePage(){
 		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 	});
 	
-	$('.home').click(function(e) { // tap logs out the user on ipod.
+	$('.home').click(function(e) { // tap event logs out the user on ipod.
 		jQT.goToReverse('#home','slide');	
 	});
 	
@@ -168,7 +167,7 @@ function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
 
 function ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill){
     $(SectionToFill).append(MessageLoad);
-	jQT.goToReverse(MoveToURL,'slide'); //do not use this line with tap event, it gives a 'Not able to tap element' error.
+	jQT.goToReverse(MoveToURL,'slide'); 
 	FetchPage(UrlForFetchingData, SectionToFill)
 }
 

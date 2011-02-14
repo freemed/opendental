@@ -26,7 +26,7 @@
     <div class="toolbar">
                 <h1>Open Dental</h1>
             </div>
-			
+			<br />
             <span style="margin-left:15px;text-align:center;">For a demo, use the User name:<span style="color:Blue">demo</span></span>
 			<br /><br />
             <form id="form1" method="post" runat="server">
