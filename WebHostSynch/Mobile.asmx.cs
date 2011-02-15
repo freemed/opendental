@@ -48,8 +48,7 @@ namespace WebHostSynch {
 				Logger.Information("In IsPaidCustomer");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum!=0) {
-					// put code here to check for payments
-					IsPaidCustomer=true;
+					IsPaidCustomer=util.IsPaidCustomer(customerNum);
 				}
 				return IsPaidCustomer;
 			}

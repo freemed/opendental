@@ -60,6 +60,25 @@ namespace WebHostSynch {
 			DbInit.Init(); // The above code works but this is a cleaner.
 		}
 
+		public bool IsPaidCustomer(long customerNum) {
+			int count=0;
+			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
+			string command ="SELECT COUNT(*) FROM repeatcharge WHERE PatNum="+POut.Long(customerNum)+
+						" AND ProcCode='027' AND (DateStop='0001-01-01' OR DateStop > NOW())";
+			WebHostSynch.Db db = new WebHostSynch.Db();
+			db.setConn(connectStr);
+			DataTable table=db.GetTable(command);
+			if(table.Rows.Count!=0) {
+				count=PIn.Int(table.Rows[0][0].ToString());
+			}
+			if(count>0) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
 		public long GetDentalOfficeID(string RegistrationKeyFromDentalOffice) {
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
 			RegistrationKey RegistrationKeyFromDb=null;

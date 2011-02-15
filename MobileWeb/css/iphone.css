@@ -1,7 +1,7 @@
 ﻿/*dennis start*/
 body
 {
-width: 320px;
+min-width: 320px;
 
 background-color:#FFFFFF;
 }

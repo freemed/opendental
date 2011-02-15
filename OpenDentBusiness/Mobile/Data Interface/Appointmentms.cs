@@ -20,7 +20,8 @@ namespace OpenDentBusiness.Mobile {
 				string command=
 					"SELECT * from appointmentm "
 					+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"' "
-					+"AND CustomerNum = "+POut.Long(customerNum);
+					+"AND CustomerNum = "+POut.Long(customerNum)+" "
+					+"ORDER BY AptDateTime";
 				return Crud.AppointmentmCrud.SelectMany(command);
 			}
 

@@ -249,10 +249,9 @@
                 return false;
             }
         }
-		//dennis I added this function
-		function goToReverse(toPage, animation) {
-            var fromPage = hist[0].page;
-
+        //dennis I added this function
+        function goToReverse(toPage, animation) {
+            var fromPage = hist[0].page; //current page
             if (typeof (toPage) === 'string') {
                 toPage = $(toPage);
             }
@@ -264,8 +263,8 @@
                     }
                 }
             }
-            if (animatePages(fromPage, toPage, animation,true)) {
-                addPageToHistory(toPage, animation);
+            if (animatePages(fromPage, toPage, animation, true)) {
+                addPageToHistory(toPage, animation);// this seems neccesary for this function.
                 return publicObj;
             }
             else {
@@ -273,7 +272,7 @@
                 return false;
             }
         }
-		function getOrientation() {
+        function getOrientation() {
             return orientation;
         }
 
@@ -621,7 +620,7 @@
             goTo: goTo,
             addAnimation: addAnimation,
             submitForm: submitForm,
-			goToReverse: goToReverse
+            goToReverse: goToReverse
         }
 
         return publicObj;

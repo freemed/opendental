@@ -12,7 +12,6 @@ using OpenDentBusiness.Mobile;
 
 namespace OpenDental {
 	public partial class FormMobileSetup:Form {
-		private FormOpenDental frmOD=null;
 		private static string RegistrationKey;
 		private static MobileWeb.Mobile mb = new MobileWeb.Mobile();
 		private static DateTime MobileSyncDateTimeLastRun;
@@ -110,7 +109,7 @@ namespace OpenDental {
 					List<long> rxNumList=RxPatms.GetChangedSinceRxNums(GetChangedSince);
 					SynchPrescriptions(rxNumList);
 					if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew)){
-						DataValid.SetInvalid(InvalidType.Prefs);// change value on all machines
+						DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines
 					}
 					MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
 					IsSynching=false;
