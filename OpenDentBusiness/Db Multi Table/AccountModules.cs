@@ -1433,7 +1433,7 @@ namespace OpenDentBusiness {
 				row["date"]="";
 				row["description"]=Lans.g("AccountModule","Payment Plan.")+"\r\n"
 					+Lans.g("AccountModule","Total loan amount: ")+princ.ToString("c")+"\r\n"
-					+Lans.g("AccountModule","Balance: ")+bal.ToString("c");
+					+Lans.g("AccountModule","Principal Remaining: ")+bal.ToString("c");
 				if(rawPayPlan.Rows[i]["PlanNum"].ToString()!="0"){
 					//row["description"]+="\r\n"+Lans.g("AccountModule","This 'payment plan' is only used ");
 					continue;//don't show insurance payment plans on statements.
