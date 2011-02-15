@@ -221,7 +221,58 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		
+		/// <summary>Deletes the current recalltype and recalltrigger tables and fills them with our default.  Typically ran to switch T codes to D codes.</summary>
+		public static void SetToDefault() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="DELETE FROM recalltype";
+			Db.NonQ(command);
+			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) VALUES (1,'Prophy',393217,'/XXXX/','D0120,D1110')";
+			Db.NonQ(command);
+			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) VALUES (2,'Child Prophy',0,'XXX','D0120,D1120,D1203')";
+			Db.NonQ(command);
+			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) VALUES (3,'Perio',262144,'/XXXX/','D4910')";
+			Db.NonQ(command);
+			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,Procedures) VALUES (4,'4BW',16777216,'D0274')";
+			Db.NonQ(command);
+			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,Procedures) VALUES (5,'Pano',83886080,'D0330')";
+			Db.NonQ(command);
+			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,Procedures) VALUES (6,'FMX',83886080,'D0210')";
+			Db.NonQ(command);
+			command="DELETE FROM recalltrigger";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (1,1,"+ProcedureCodes.GetCodeNum("D0415")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (2,1,"+ProcedureCodes.GetCodeNum("D0150")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (3,4,"+ProcedureCodes.GetCodeNum("D0274")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (4,5,"+ProcedureCodes.GetCodeNum("D0330")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (5,6,"+ProcedureCodes.GetCodeNum("D0210")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (6,1,"+ProcedureCodes.GetCodeNum("D1110")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (7,1,"+ProcedureCodes.GetCodeNum("D1120")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (8,3,"+ProcedureCodes.GetCodeNum("D4910")+")";
+			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (9,3,"+ProcedureCodes.GetCodeNum("D4341")+")";
+			Db.NonQ(command);
+			//Update the special types in preference table.
+			command="UPDATE preference SET ValueString='1' WHERE PrefName='RecallTypeSpecialProphy'";
+			Db.NonQ(command);
+			command="UPDATE preference SET ValueString='2' WHERE PrefName='RecallTypeSpecialChildProphy'";
+			Db.NonQ(command);
+			command="UPDATE preference SET ValueString='3' WHERE PrefName='RecallTypeSpecialPerio'";
+			Db.NonQ(command);
+			command="UPDATE preference SET ValueString='1,2,3' WHERE PrefName='RecallTypesShowingInList'";
+			Db.NonQ(command);
+		}
+
+
 
 	}
 }

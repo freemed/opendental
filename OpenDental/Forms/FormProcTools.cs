@@ -25,6 +25,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butRun;
 		public bool Changed;
 		private CheckBox checkApptProcsQuickAdd;
+		private CheckBox checkRecallTypes;
 		///<summary>The actual list of ADA codes as published by the ADA.  Only available on our compiled releases.  There is no other way to get this info.</summary>
 		private List<ProcedureCode> codeList;
 
@@ -67,9 +68,10 @@ namespace OpenDental{
 			this.checkNcodes = new System.Windows.Forms.CheckBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.checkProcButtons = new System.Windows.Forms.CheckBox();
+			this.checkApptProcsQuickAdd = new System.Windows.Forms.CheckBox();
+			this.checkRecallTypes = new System.Windows.Forms.CheckBox();
 			this.butRun = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.checkApptProcsQuickAdd = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// checkAutocodes
@@ -132,6 +134,26 @@ namespace OpenDental{
 			this.checkProcButtons.Text = resources.GetString("checkProcButtons.Text");
 			this.checkProcButtons.UseVisualStyleBackColor = true;
 			// 
+			// checkApptProcsQuickAdd
+			// 
+			this.checkApptProcsQuickAdd.Location = new System.Drawing.Point(15,272);
+			this.checkApptProcsQuickAdd.Name = "checkApptProcsQuickAdd";
+			this.checkApptProcsQuickAdd.Size = new System.Drawing.Size(646,36);
+			this.checkApptProcsQuickAdd.TabIndex = 51;
+			this.checkApptProcsQuickAdd.Text = "Appt Procs Quick Add - This is the list of procedures that you pick from within t" +
+    "he appt edit window.  This resets the list to default.";
+			this.checkApptProcsQuickAdd.UseVisualStyleBackColor = true;
+			// 
+			// checkRecallTypes
+			// 
+			this.checkRecallTypes.Location = new System.Drawing.Point(15,314);
+			this.checkRecallTypes.Name = "checkRecallTypes";
+			this.checkRecallTypes.Size = new System.Drawing.Size(646,36);
+			this.checkRecallTypes.TabIndex = 52;
+			this.checkRecallTypes.Text = "Recall Types - Resets the recall types and triggers to default.  Replaces any T c" +
+    "odes with D codes.";
+			this.checkRecallTypes.UseVisualStyleBackColor = true;
+			// 
 			// butRun
 			// 
 			this.butRun.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -140,7 +162,7 @@ namespace OpenDental{
 			this.butRun.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRun.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRun.CornerRadius = 4F;
-			this.butRun.Location = new System.Drawing.Point(477,335);
+			this.butRun.Location = new System.Drawing.Point(477,381);
 			this.butRun.Name = "butRun";
 			this.butRun.Size = new System.Drawing.Size(82,26);
 			this.butRun.TabIndex = 50;
@@ -155,27 +177,18 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(586,335);
+			this.butClose.Location = new System.Drawing.Point(586,381);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(82,26);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// checkApptProcsQuickAdd
-			// 
-			this.checkApptProcsQuickAdd.Location = new System.Drawing.Point(15,272);
-			this.checkApptProcsQuickAdd.Name = "checkApptProcsQuickAdd";
-			this.checkApptProcsQuickAdd.Size = new System.Drawing.Size(646,36);
-			this.checkApptProcsQuickAdd.TabIndex = 51;
-			this.checkApptProcsQuickAdd.Text = "Appt Procs Quick Add - This is the list of procedures that you pick from within t" +
-    "he appt edit window.  This resets the list to default.";
-			this.checkApptProcsQuickAdd.UseVisualStyleBackColor = true;
-			// 
 			// FormProcTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(698,385);
+			this.ClientSize = new System.Drawing.Size(698,431);
+			this.Controls.Add(this.checkRecallTypes);
 			this.Controls.Add(this.checkApptProcsQuickAdd);
 			this.Controls.Add(this.butRun);
 			this.Controls.Add(this.checkProcButtons);
@@ -212,6 +225,7 @@ namespace OpenDental{
 				checkAutocodes.Enabled=false;
 				checkProcButtons.Enabled=false;
 				checkApptProcsQuickAdd.Enabled=false;
+				checkRecallTypes.Enabled=false;
 			#endif
 			codeList=CDT.Class1.GetADAcodes();
 			if(codeList.Count==0){
@@ -227,11 +241,12 @@ namespace OpenDental{
 			checkAutocodes.Checked=false;
 			checkProcButtons.Checked=false;
 			checkApptProcsQuickAdd.Checked=false;
+			checkRecallTypes.Checked=false;
 		}
 
 		private void butRun_Click(object sender,EventArgs e) {
 			if(!checkTcodes.Checked && !checkNcodes.Checked && !checkDcodes.Checked && !checkAutocodes.Checked 
-				&& !checkProcButtons.Checked && !checkApptProcsQuickAdd.Checked)
+				&& !checkProcButtons.Checked && !checkApptProcsQuickAdd.Checked && !checkRecallTypes.Checked)
 			{
 				MsgBox.Show(this,"Please select at least one tool first.");
 				return;
@@ -278,6 +293,10 @@ namespace OpenDental{
 			if(checkApptProcsQuickAdd.Checked) {
 				ProcedureCodes.ResetApptProcsQuickAdd();
 				DataValid.SetInvalid(InvalidType.Defs);
+			}
+			if(checkRecallTypes.Checked) {
+				RecallTypes.SetToDefault();
+				DataValid.SetInvalid(InvalidType.RecallTypes,InvalidType.Prefs);
 			}
 			MessageBox.Show(Lan.g(this,"Done."));
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
