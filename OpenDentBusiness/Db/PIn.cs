@@ -4,6 +4,7 @@ using System.Drawing;
 //using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
+using System.Globalization;
 //using System.Windows.Forms;
 
 namespace OpenDentBusiness{
@@ -112,7 +113,7 @@ namespace OpenDentBusiness{
 			}
 			else {
 				try {
-					return System.Convert.ToDouble(myString);
+					return System.Convert.ToDouble(myString);//In Europe, comes in as a comma, parsed according to culture.
 				}
 				catch {
 					//MessageBox.Show("Error converting "+myString+" to double");
@@ -136,7 +137,12 @@ namespace OpenDentBusiness{
 			if(myString=="") {
 				return 0;
 			}
-			return System.Convert.ToSingle(myString);
+			try{
+				return System.Convert.ToSingle(myString);
+			}
+			catch {//because this will fail when getting the mysql version on startup, which always comes back with a period.
+				return System.Convert.ToSingle(myString,CultureInfo.InvariantCulture);
+			}
 		}
 
 		///<summary></summary>

@@ -134,7 +134,7 @@ namespace OpenDentBusiness{
 		public static string Double(double myDouble){
 			try{
 				//because decimal is a comma in Europe, this sends it to db with period instead 
-				return myDouble.ToString("f",new NumberFormatInfo());
+				return myDouble.ToString("f",CultureInfo.InvariantCulture);
 			}
 			catch{
 				return "0";
@@ -157,7 +157,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string Float(float myFloat){
-			return myFloat.ToString();
+			return myFloat.ToString(CultureInfo.InvariantCulture);//sends as comma in Europe.  (comes back from mysql later as a period)
 		}
 
 		///<summary>Escapes all necessary characters.</summary>
