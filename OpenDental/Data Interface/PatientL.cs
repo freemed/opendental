@@ -67,7 +67,7 @@ namespace OpenDental{
 			int index=menu.MenuItems.IndexOf((MenuItem)sender);
 			//Patients.PatIsLoaded=true;
 			if(index<buttonLastFivePatNums.Count) {
-				return (int)buttonLastFivePatNums[index];
+				return (long)buttonLastFivePatNums[index];
 			}
 			if(fam==null) {
 				return 0;//will never happen
