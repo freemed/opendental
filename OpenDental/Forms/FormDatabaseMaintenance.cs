@@ -267,6 +267,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AutomationTriggersWithNoSheetDefs(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.BillingTypesInvalid(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimWriteoffSum(verbose,isCheck);
@@ -342,8 +344,6 @@ namespace OpenDental {
 			textLog.Text+=DatabaseMaintenance.PaySplitAttachedToPayPlan(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PreferenceDateDepositsStarted(verbose,isCheck);
-			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.PreferencePracticeBillingType(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PreferencePracticeProv(verbose,isCheck);
 			Application.DoEvents();

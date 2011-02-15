@@ -389,6 +389,50 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string BillingTypesInvalid(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				//Make sure preference of default billing type is set.
+				command="SELECT ValueString FROM preference WHERE PrefName = 'PracticeDefaultBillType'";
+				table=Db.GetTable(command);
+				if(table.Rows[0][0].ToString()=="") {
+					log+=Lans.g("FormDatabaseMaintenance","No default billing type set.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Default practice billing type verified.")+"\r\n";
+				}
+				//Check for any patients with invalid billingtype.
+				command="SELECT COUNT(*) FROM patient WHERE NOT EXISTS(SELECT * FROM definition WHERE Category=4 AND patient.BillingType=definition.DefNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Patients with invalid billing type: ")+numFound.ToString()+"\r\n";
+				}
+			}
+			else {
+				command="SELECT ValueString FROM preference WHERE PrefName = 'PracticeDefaultBillType'";
+				table=Db.GetTable(command);
+				//Fix for default billingtype not being set.
+				if(table.Rows[0][0].ToString()=="") {
+					command="SELECT DefNum FROM definition WHERE Category = 4 AND IsHidden = 0 ORDER BY ItemOrder";
+					table=Db.GetTable(command);
+					command="UPDATE preference SET ValueString='"+table.Rows[0][0].ToString()+"' WHERE PrefName='PracticeDefaultBillType'";
+					Db.NonQ(command);
+					log+=Lans.g("FormDatabaseMaintenance","Default billing type preference was set due to being invalid.")+"\r\n";
+				}
+				//Fix for patients with invalid billingtype.
+				command="UPDATE patient SET patient.BillingType="+PrefC.GetLong(PrefName.PracticeDefaultBillType);
+				command+=" WHERE NOT EXISTS(SELECT * FROM definition WHERE Category=4 AND patient.BillingType=definition.DefNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Patients billing type set to default due to being invalid: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ClaimDeleteWithNoClaimProcs(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -1716,31 +1760,6 @@ namespace OpenDentBusiness {
 				}
 				else if(verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Deposit start date checked.")+"\r\n";
-				}
-			}
-			return log;
-		}
-
-		public static string PreferencePracticeBillingType(bool verbose,bool isCheck) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
-			}
-			string log="";
-			command="SELECT valuestring FROM preference WHERE prefname = 'PracticeDefaultBillType'";
-			table=Db.GetTable(command);
-			if(table.Rows[0][0].ToString()!="") {
-				if(verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Default practice billing type verified.")+"\r\n";
-				}
-			}
-			else {
-				log+=Lans.g("FormDatabaseMaintenance","No default billing type set.");
-				if(!isCheck) {
-					command="SELECT defnum FROM definition WHERE category = 4 AND ishidden = 0 ORDER BY itemorder";
-					table=Db.GetTable(command);
-					command="UPDATE preference SET valuestring='"+table.Rows[0][0].ToString()+"' WHERE prefname='PracticeDefaultBillType'";
-					Db.NonQ(command);
-					log+="  "+Lans.g("FormDatabaseMaintenance","Fixed.")+"\r\n";
 				}
 			}
 			return log;
