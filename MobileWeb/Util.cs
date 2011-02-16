@@ -47,11 +47,23 @@ namespace MobileWeb {
 				return DentalOfficeID;
 			}
 			if(username.ToLower()=="demo") {//for demo only
-				DentalOfficeID=1486;
+				DentalOfficeID=GetDemoDentalOfficeID();
 			}
 			return DentalOfficeID;
 		}
+		/// <summary>
+		/// If Properties.Settings.Default.something is used in AppointmentList.aspx.cs page it give a  MobileWeb.Properties.Settings is inaccessible due to its protection level
+		/// </summary>
+		public long GetDemoDentalOfficeID() {
+			return Properties.Settings.Default.DemoDentalOfficeID;
+		}
 
+		/// <summary>
+		/// If Properties.Settings.Default.something is used in AppointmentList.aspx.cs page it give a  MobileWeb.Properties.Settings is inaccessible due to its protection level
+		/// </summary>
+		public DateTime GetDemoTodayDate() {
+			return Properties.Settings.Default.DemoTodayDate;
+		}
 		public string GetPatientName(long PatNum,long CustomerNum) {
 			try{
 				String PatName="";

@@ -37,7 +37,12 @@ namespace MobileWeb {
 					AppointmentDate= new DateTime(Year,Month,Day);
 				}
 				else {
-					AppointmentDate= DateTime.Today;
+					if(CustomerNum==util.GetDemoDentalOfficeID()) {
+						AppointmentDate=util.GetDemoTodayDate();//for demo only. The date is set to a preset date in webconfig.
+					}
+					else {
+						AppointmentDate=DateTime.Today;
+					}
 				}
 				DayLabel.Text=AppointmentDate.ToString("ddd") + ", " + AppointmentDate.ToString("MMM") + " " + AppointmentDate.ToString("dd");
 				String appsuffix=DayLabel.Text;
