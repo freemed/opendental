@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 				//if a list is someone's inbox, 
 				command+="AND (CASE WHEN EXISTS(SELECT * FROM userod WHERE userod.TaskListInBox=tasklist.TaskListNum) ";
 				//then restrict by that user
-				command+="THEN (taskunread.UserNum=(SELECT UserNum FROM userod WHERE userod.TaskListInBox=tasklist.TaskListNum)) ";
+				command+="THEN (taskunread.UserNum=(SELECT UserNum FROM userod WHERE userod.TaskListInBox=tasklist.TaskListNum LIMIT 1)) ";
 				//otherwise, restrict by current user
 				command+="ELSE taskunread.UserNum="+POut.Long(userNum)+" END)) "
 					+"AND task.TaskStatus !=2 ";//not done
