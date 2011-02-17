@@ -83,7 +83,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>This is used only for historical commands in ConvertDatabase.</summary>
+		///<summary>This is used for historical commands in ConvertDatabase.  Seems to also be used in DBmaint when counting rows affected.</summary>
 		internal static int NonQ32(string command) {
 			return NonQ32(command,false);
 		}

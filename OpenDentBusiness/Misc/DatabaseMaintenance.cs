@@ -397,12 +397,16 @@ namespace OpenDentBusiness {
 			if(isCheck) {
 				//Make sure preference of default billing type is set.
 				command="SELECT ValueString FROM preference WHERE PrefName = 'PracticeDefaultBillType'";
-				table=Db.GetTable(command);
-				if(table.Rows[0][0].ToString()=="") {
+				long billingType=PIn.Long(Db.GetScalar(command));
+				command="SELECT COUNT(*) FROM definition WHERE Category=4 AND definition.DefNum="+billingType;
+				int prefExists=PIn.Int(Db.GetCount(command));
+				if(prefExists!=1) {
 					log+=Lans.g("FormDatabaseMaintenance","No default billing type set.")+"\r\n";
 				}
-				else if(verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Default practice billing type verified.")+"\r\n";
+				else{
+					if(verbose) {
+						log+=Lans.g("FormDatabaseMaintenance","Default practice billing type verified.")+"\r\n";
+					}
 				}
 				//Check for any patients with invalid billingtype.
 				command="SELECT COUNT(*) FROM patient WHERE NOT EXISTS(SELECT * FROM definition WHERE Category=4 AND patient.BillingType=definition.DefNum)";
@@ -412,18 +416,25 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				command="SELECT ValueString FROM preference WHERE PrefName = 'PracticeDefaultBillType'";
-				table=Db.GetTable(command);
 				//Fix for default billingtype not being set.
-				if(table.Rows[0][0].ToString()=="") {
+				command="SELECT ValueString FROM preference WHERE PrefName = 'PracticeDefaultBillType'";
+				long billingType=PIn.Long(Db.GetScalar(command));
+				command="SELECT COUNT(*) FROM definition WHERE Category=4 AND definition.DefNum="+billingType;
+				int prefExists=PIn.Int(Db.GetCount(command));
+				if(prefExists!=1) {//invalid billing type
 					command="SELECT DefNum FROM definition WHERE Category = 4 AND IsHidden = 0 ORDER BY ItemOrder";
 					table=Db.GetTable(command);
+					if(table.Rows.Count==0) {//if all billing types are hidden
+						command="SELECT DefNum FROM definition WHERE Category = 4 ORDER BY ItemOrder";
+						table=Db.GetTable(command);
+					}
 					command="UPDATE preference SET ValueString='"+table.Rows[0][0].ToString()+"' WHERE PrefName='PracticeDefaultBillType'";
 					Db.NonQ(command);
 					log+=Lans.g("FormDatabaseMaintenance","Default billing type preference was set due to being invalid.")+"\r\n";
+					Prefs.RefreshCache();//for the next line.
 				}
 				//Fix for patients with invalid billingtype.
-				command="UPDATE patient SET patient.BillingType="+PrefC.GetLong(PrefName.PracticeDefaultBillType);
+				command="UPDATE patient SET patient.BillingType="+POut.Long(PrefC.GetLong(PrefName.PracticeDefaultBillType));
 				command+=" WHERE NOT EXISTS(SELECT * FROM definition WHERE Category=4 AND patient.BillingType=definition.DefNum)";
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed!=0 || verbose) {
