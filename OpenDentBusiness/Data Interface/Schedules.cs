@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 			if(opNums.Count==0){
 				return new List<Schedule>();
 			}
-			string command="SELECT schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedTime,"
+			string command="SELECT schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,"
 				+"ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp "
 				+"FROM schedule,scheduleop "
 				+"WHERE schedule.ScheduleNum=scheduleop.ScheduleNum "
@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 				}
 				command+="OperatoryNum="+POut.Long(opNums[i]);
 			}
-			command+=") GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedTime,"
+			command+=") GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,"
 				+"ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp";
 			return RefreshAndFill(command);
 		}
