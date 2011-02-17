@@ -72,7 +72,6 @@
     <Content Include="css\themes\apple\img\toolButton.png" />
     <Content Include="css\themes\apple\img\whiteButton.png" />
     <Content Include="css\themes\apple\theme.css" />
-    <Content Include="css\themes\apple\theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Mob.png" />
     <Content Include="PatientList.aspx" />
@@ -202,4 +201,16 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <!--Dennis: added lines below to minify css and .js files __start-->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\MicrosoftAjax\ajaxmin.tasks" />
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <JS Include="**\*.js" Exclude="**\*.min.js;Scripts\*.js" />
+    </ItemGroup>
+    <ItemGroup>
+      <CSS Include="**\*.css" Exclude="**\*.min.css" />
+    </ItemGroup>
+    <AjaxMin JsSourceFiles="@(JS)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" CssSourceFiles="@(CSS)" CssSourceExtensionPattern="\.css$" CssTargetExtension=".min.css" />
+  </Target>
+  <!--Dennis: added lines below to minify css and .js files __end-->
 </Project>
