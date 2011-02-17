@@ -3447,7 +3447,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					}
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE chartview ADD DateStart date NOT NULL DEFAULT('0001-01-01')";
+					command="ALTER TABLE chartview ADD DateStart date NOT NULL DEFAULT '0001-01-01'";
 					Db.NonQ(command);
 				}
 				else {//oracle
@@ -3459,7 +3459,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}				
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE chartview ADD DateStop date NOT NULL DEFAULT('0001-01-01')";
+					command="ALTER TABLE chartview ADD DateStop date NOT NULL DEFAULT '0001-01-01'";
 					Db.NonQ(command);
 				}
 				else {//oracle
@@ -3470,7 +3470,31 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE chartview MODIFY DateStop NOT NULL";
 					Db.NonQ(command);
 				}
-
+				//add Cerec bridge:
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'Cerec', "
+					+"'Cerec from Sirona', "
+					+"'0', "
+					+"'"+POut.String(@"C:\Program Files\Cerec\Cerec system\CerPI.exe")+"', "
+					+"'', "
+					+@"'Cerec v2.6 default install directory is C:\Program Files\Cerec\System\CerPI.exe 
+					\r\nCerec v2.8 default install directory is C:\Program Files\Cerec\Cerec system\CerPI.exe')";
+				long programNum=Db.NonQ(command,true);
+				//command="SELECT ProgramNum FROM program WHERE ProgName='Cerec' LIMIT 1";
+				//PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.Long(programNum)+"', "
+					+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+					+"'Cerec')";
+				Db.NonQ32(command);
 
 
 

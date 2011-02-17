@@ -34,6 +34,7 @@ namespace OpenDentBusiness{
 		None,
 		Apteryx,
 		Camsight,
+		Cerec,
 		CliniView,
 		DBSWin,
 		DentalEye,
