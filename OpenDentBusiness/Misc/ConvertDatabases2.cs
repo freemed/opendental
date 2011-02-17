@@ -3446,7 +3446,30 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ32(command);
 					}
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE chartview ADD DateStart date NOT NULL DEFAULT('0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE chartview ADD DateStart date";
+					Db.NonQ(command);
+					command="UPDATE chartview SET DateStart = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStart IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE chartview MODIFY DateStart NOT NULL";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE chartview ADD DateStop date NOT NULL DEFAULT('0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE chartview ADD DateStop date NOT NULL";
+					Db.NonQ(command);
+					command="UPDATE chartview SET DateStop = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStop IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE chartview MODIFY DateStop NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3486,4 +3509,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
-				
+

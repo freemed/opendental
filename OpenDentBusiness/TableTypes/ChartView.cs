@@ -25,6 +25,10 @@ namespace OpenDentBusiness{
 		public bool SelectedTeethOnly;
 		///<summary>Which orion statuses to show. Will be zero if not orion.</summary>
 		public OrionStatus OrionStatusFlags;
+		/// <summary>Date range filter starting date.</summary>
+		public DateTime DateStart;
+		/// <summary>Date range filter ending date.</summary>
+		public DateTime DateStop;
 
 
 		public ChartView Copy() {

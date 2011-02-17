@@ -55,6 +55,8 @@ namespace OpenDentBusiness.Crud{
 				chartView.IsAudit          = PIn.Bool  (table.Rows[i]["IsAudit"].ToString());
 				chartView.SelectedTeethOnly= PIn.Bool  (table.Rows[i]["SelectedTeethOnly"].ToString());
 				chartView.OrionStatusFlags = (OrionStatus)PIn.Int(table.Rows[i]["OrionStatusFlags"].ToString());
+				chartView.DateStart        = PIn.Date  (table.Rows[i]["DateStart"].ToString());
+				chartView.DateStop         = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				retVal.Add(chartView);
 			}
 			return retVal;
@@ -95,7 +97,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ChartViewNum,";
 			}
-			command+="Description,ItemOrder,ProcStatuses,ObjectTypes,ShowProcNotes,IsAudit,SelectedTeethOnly,OrionStatusFlags) VALUES(";
+			command+="Description,ItemOrder,ProcStatuses,ObjectTypes,ShowProcNotes,IsAudit,SelectedTeethOnly,OrionStatusFlags,DateStart,DateStop) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(chartView.ChartViewNum)+",";
 			}
@@ -107,7 +109,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (chartView.ShowProcNotes)+","
 				+    POut.Bool  (chartView.IsAudit)+","
 				+    POut.Bool  (chartView.SelectedTeethOnly)+","
-				+    POut.Int   ((int)chartView.OrionStatusFlags)+")";
+				+    POut.Int   ((int)chartView.OrionStatusFlags)+","
+				+    POut.Date  (chartView.DateStart)+","
+				+    POut.Date  (chartView.DateStop)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +131,9 @@ namespace OpenDentBusiness.Crud{
 				+"ShowProcNotes    =  "+POut.Bool  (chartView.ShowProcNotes)+", "
 				+"IsAudit          =  "+POut.Bool  (chartView.IsAudit)+", "
 				+"SelectedTeethOnly=  "+POut.Bool  (chartView.SelectedTeethOnly)+", "
-				+"OrionStatusFlags =  "+POut.Int   ((int)chartView.OrionStatusFlags)+" "
+				+"OrionStatusFlags =  "+POut.Int   ((int)chartView.OrionStatusFlags)+", "
+				+"DateStart        =  "+POut.Date  (chartView.DateStart)+", "
+				+"DateStop         =  "+POut.Date  (chartView.DateStop)+" "
 				+"WHERE ChartViewNum = "+POut.Long(chartView.ChartViewNum);
 			Db.NonQ(command);
 		}
@@ -166,6 +172,14 @@ namespace OpenDentBusiness.Crud{
 			if(chartView.OrionStatusFlags != oldChartView.OrionStatusFlags) {
 				if(command!=""){ command+=",";}
 				command+="OrionStatusFlags = "+POut.Int   ((int)chartView.OrionStatusFlags)+"";
+			}
+			if(chartView.DateStart != oldChartView.DateStart) {
+				if(command!=""){ command+=",";}
+				command+="DateStart = "+POut.Date(chartView.DateStart)+"";
+			}
+			if(chartView.DateStop != oldChartView.DateStop) {
+				if(command!=""){ command+=",";}
+				command+="DateStop = "+POut.Date(chartView.DateStop)+"";
 			}
 			if(command==""){
 				return;

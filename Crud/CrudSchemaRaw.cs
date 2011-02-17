@@ -113,7 +113,7 @@ namespace Crud {
 				tb+="\t";
 			}
 			strb.Append(tb+"if(DataConnection.DBtype==DatabaseType.MySql) {");
-			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+(col.DataType==OdDbType.DateTimeStamp?"":" NOT NULL")+"\";");
+			strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" ADD "+col.ColumnName+" "+GetMySqlType(col)+(col.DataType==OdDbType.DateTimeStamp?"":" NOT NULL")+(col.DataType==OdDbType.Date?" DEFAULT '0001-01-01')":"")+"\";");
 //			strb.Append(rn+tb+t1+"//If ColEnd might be over 65k characters, use mediumtext");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			if(col.DataType==OdDbType.DateTimeStamp) {//set value of new timestamp column to now()
