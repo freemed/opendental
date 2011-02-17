@@ -316,6 +316,7 @@ namespace OpenDental{
 			this.imageListTools2.Images.SetKeyName(15,"scanPhoto.gif");
 			this.imageListTools2.Images.SetKeyName(16,"scanXray.gif");
 			this.imageListTools2.Images.SetKeyName(17,"copy.gif");
+			this.imageListTools2.Images.SetKeyName(18,"ScanMulti.gif");
 			// 
 			// PictureBox1
 			// 
@@ -561,7 +562,7 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.Label;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",14,Lan.g(this,"Scan Document"),"ScanDoc"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",14,Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
+			//ToolBarMain.Buttons.Add(new ODToolBarButton("",18,Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",16,Lan.g(this,"Scan Radiograph"),"ScanXRay"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",15,Lan.g(this,"Scan Photo"),"ScanPhoto"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -1248,15 +1249,6 @@ namespace OpenDental{
 				scannedImage=Bitmap.FromHbitmap(hbitmap);
 				scannedImage.SetResolution((float)xdpi,(float)ydpi);
 				Clipboard.SetImage(scannedImage);
-				//EZTwain.AcquireToClipboard(this.Handle,wPIXTypes);
-				//IDataObject oDataObject=Clipboard.GetDataObject();
-				//if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
-				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
-				//}else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
-				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
-				//}else{
-				//  throw new Exception("Unknown image data format.");
-				//}
 			}
 			catch(Exception ex) {
 				MessageBox.Show("The image could not be acquired from the scanner. "+
@@ -1302,67 +1294,53 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnScanMulti_Click() {//This is a mess right now. Don't bother looking at it.
-			Bitmap scannedImage=null;
-			IntPtr hdib=IntPtr.Zero;
-			//Try catch here prevents a crash when a customer who has no scanner installed tries to scan.
-			try {
-				//A user may have more than one scanning device. 
-				//The code below will allow the user to select one.
-				xImageDeviceManager.Obfuscator.ActivateEZTwain();
-				bool wPIXTypes=EZTwain.SelectImageSource(this.Handle);
-				if(!wPIXTypes) {//user clicked Cancel
-					return;
-				}
-				hdib=EZTwain.AcquireMemory(this.Handle);
-				double xdpi=EZTwain.DIB_XResolution(hdib);
-				double ydpi=EZTwain.DIB_XResolution(hdib);
-				IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
-				scannedImage=Bitmap.FromHbitmap(hbitmap);
-				scannedImage.SetResolution((float)xdpi,(float)ydpi);
-				Clipboard.SetImage(scannedImage);
-				//EZTwain.AcquireToClipboard(this.Handle,wPIXTypes);
-				//IDataObject oDataObject=Clipboard.GetDataObject();
-				//if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
-				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
-				//}else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
-				//  scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
-				//}else{
-				//  throw new Exception("Unknown image data format.");
-				//}
+		private void OnScanMulti_Click() { // Not ready for release yet.
+			File.Delete("C:\\image.pdf"); 
+			xImageDeviceManager.Obfuscator.ActivateEZTwain();
+			EZTwain.SetHideUI(true);
+			EZTwain.SetJpegQuality(75);
+			if(EZTwain.OpenDefaultSource()) {
+				// Not guaranteed to work, check return = 1
+				EZTwain.SetPixelType(2);
+				EZTwain.SetResolution(200);
+				// If you can't get a Window handle, use IntPtr.Zero:
+				EZTwain.AcquireMultipageFile(this.Handle,"c:\\image.pdf");
 			}
-			catch(Exception ex) {
-				MessageBox.Show("The image could not be acquired from the scanner. "+
-					"Please check to see that the scanner is properly connected to the computer. Specific error: "+ex.Message);
-				return;
+			if(EZTwain.LastErrorCode()!=0) {
+				EZTwain.ReportLastError("Unable to scan.");
 			}
-			ImageType imgType=ImageType.Document;
-			bool saved=true;
-			Document doc = null;
-			try {//Create corresponding image file.
-				doc=ImageStore.Import(scannedImage,GetCurrentCategory(),imgType,PatCur);
-			}
-			catch(Exception ex) {
-				saved=false;
-				MessageBox.Show(Lan.g(this,"Unable to save document")+": "+ex.Message);
-			}
-			if(scannedImage!=null) {
-				scannedImage.Dispose();
-			}
-			if(hdib!=IntPtr.Zero) {
-				EZTwain.DIB_Free(hdib);
-			}
-			if(saved) {
-				FillDocList(false);//Reload and keep new document selected.
-				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
-				FormDocInfo formDocInfo=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
-				formDocInfo.ShowDialog();
-				if(formDocInfo.DialogResult!=DialogResult.OK) {
-					DeleteSelection(false,false);
-				}
-				else {
-					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
-				}
+			OpenFileDialog openFileDialog=new OpenFileDialog(); 
+			openFileDialog.FileName = "c:\\image.pdf"; 
+			openFileDialog.Filter = "PDF files (*.pdf)|*.pdf"; 
+			openFileDialog.FilterIndex = 1; 
+			openFileDialog.Multiselect=true; 
+			string[] fileNames=openFileDialog.FileNames; 
+			if(fileNames.Length<1){ 
+				return; 
+			} 
+			string nodeId=""; 
+			Document doc=null; 
+			for(int i=0;i<fileNames.Length;i++){ 
+				bool copied = true; 
+				try { 
+					doc = ImageStore.Import(fileNames[i], GetCurrentCategory(),PatCur); 
+				} 
+				catch(Exception ex) { 
+				MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName); 
+				copied = false; 
+				} 
+				if(copied){ 
+					FillDocList(false); 
+					SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0"))); 
+					FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode)); 
+					FormD.ShowDialog();//some of the fields might get changed, but not the filename 
+					if(FormD.DialogResult!=DialogResult.OK){ 
+						DeleteSelection(false,false); 
+					}
+					else{ 
+						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0"); 
+					} 
+				} 
 			}
 		}
 
