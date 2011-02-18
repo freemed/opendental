@@ -1,16 +1,25 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Index.aspx.cs" Inherits="MobileWeb.Index" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="MobileWeb.Index" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head  runat="server">
         <title>Open Dental Mobile</title>
+		<% if (HttpContext.Current.IsDebuggingEnabled) { %>
         <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.css">
         <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css">
         <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.css">
         <script type="text/javascript" src="scripts/jquery.js"></script>
 		<script type="text/javascript" src="scripts/jqtouch.js"></script>
 		<script type="text/javascript" src="scripts/iphone.js"></script>
+		<% } else { %>
+          <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.min.css">
+        <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.min.css">
+        <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.min.css">
+        <script type="text/javascript" src="scripts/jquery.min.js"></script>
+		<script type="text/javascript" src="scripts/jqtouch.min.js"></script>
+		<script type="text/javascript" src="scripts/iphone.min.js"></script>
+		<% } %>
 		<script type="text/javascript">
 			/*Dennis: the default slide animation is disabled on anchor tags with arrowless style and id searchbutton*/
             var jQT = $.jQTouch({

@@ -201,16 +201,46 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <!--Dennis: added lines below to minify css and .js files __start-->
+  <!--Dennis: added lines to minify css and .js files ===start===-->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\MicrosoftAjax\ajaxmin.tasks" />
   <Target Name="AfterBuild">
     <ItemGroup>
-      <JS Include="**\*.js" Exclude="**\*.min.js;Scripts\*.js" />
+      <JS Include="**\*.js" Exclude="**\*.min.js" />
     </ItemGroup>
     <ItemGroup>
       <CSS Include="**\*.css" Exclude="**\*.min.css" />
     </ItemGroup>
     <AjaxMin JsSourceFiles="@(JS)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" CssSourceFiles="@(CSS)" CssSourceExtensionPattern="\.css$" CssTargetExtension=".min.css" />
   </Target>
-  <!--Dennis: added lines below to minify css and .js files __end-->
+  <!--Dennis: added lines to minify css and js files ===end===-->
+  <!--Dennis: Exclude the source css and js files while publishing ===start===-->
+  <ItemGroup>
+    <ExcludeFromPackageFiles Include="**\*.js">
+      <FromTarget>Project</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="**\*.css">
+      <FromTarget>Project</FromTarget>
+    </ExcludeFromPackageFiles>
+   </ItemGroup>
+  <!--Dennis: Exclude the source css and js files while publishing ===end===-->
+  <!--Dennis: Include the minified css and js files while publishing ===start===-->
+  <PropertyGroup>
+    <CopyAllFilesToSingleFolderForPackageDependsOn>
+      CustomCollectFiles;
+      $(CopyAllFilesToSingleFolderForPackageDependsOn);
+    </CopyAllFilesToSingleFolderForPackageDependsOn>
+  </PropertyGroup>
+  <Target Name="CustomCollectFiles">
+    <ItemGroup>
+      <_CustomFiles Include="css\**\*.min.css" />
+      <FilesForPackagingFromProject Include="%(_CustomFiles.Identity)">
+        <DestinationRelativePath>css\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+      <_CustomFiles1 Include="scripts\**\*.min.js" />
+      <FilesForPackagingFromProject Include="%(_CustomFiles1.Identity)">
+        <DestinationRelativePath>scripts\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
+  <!--Dennis: Include the minified css and js files while publishing ===end===-->
 </Project>

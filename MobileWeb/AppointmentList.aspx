@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="AppointmentList.aspx.cs"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AppointmentList.aspx.cs"
 	Inherits="MobileWeb.AppointmentList" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
