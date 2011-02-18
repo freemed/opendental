@@ -47,6 +47,7 @@ namespace OpenDental{
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.label7 = new System.Windows.Forms.Label();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -102,6 +103,7 @@ namespace OpenDental{
 			// 
 			// groupPreferences
 			// 
+			this.groupPreferences.Controls.Add(this.label7);
 			this.groupPreferences.Controls.Add(this.butCurrentWorkstation);
 			this.groupPreferences.Controls.Add(this.label6);
 			this.groupPreferences.Controls.Add(this.textMobileSynchWorkStation);
@@ -294,6 +296,15 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(222,57);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(255,18);
+			this.label7.TabIndex = 244;
+			this.label7.Text = "Make this figure 0 to stop automatic Synchronization";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormMobileSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -340,5 +351,6 @@ namespace OpenDental{
 		private UI.Button butCurrentWorkstation;
 		private System.Windows.Forms.Label textProgress;
 		private System.Windows.Forms.Label textDateTimeLastRun;
+		private System.Windows.Forms.Label label7;
 	}
 }
