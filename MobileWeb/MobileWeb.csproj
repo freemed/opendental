@@ -207,7 +207,7 @@
   </Target>
   -->
   <!--Dennis: added lines to minify css and .js files ===start===-->
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\MicrosoftAjax\ajaxmin.tasks" />
+  <Import Project="ajaxmin.tasks" />
   <Target Name="AfterBuild">
     <ItemGroup>
       <JS Include="**\*.js" Exclude="**\*.min.js" />
