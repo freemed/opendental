@@ -28,7 +28,7 @@ namespace WebHostSynch {
 		public bool ServiceExists() {
 			try{
 				util.SetMobileDbConnection();
-				Logger.Information("testing the log feature");
+				Logger.Information("in ServiceExists()");
 				return true;
 			}catch(Exception ex) {
 				Logger.LogError(ex);
@@ -53,7 +53,7 @@ namespace WebHostSynch {
 				return IsPaidCustomer;
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 				return IsPaidCustomer;
 			}
 		}
@@ -71,7 +71,7 @@ namespace WebHostSynch {
 				RxPatms.DeleteAll(customerNum);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace WebHostSynch {
 				Patientms.UpdateFromChangeList(patientmList,customerNum);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace WebHostSynch {
 				Appointmentms.UpdateFromChangeList(appointmentList,customerNum);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 		
@@ -116,7 +116,7 @@ namespace WebHostSynch {
 				RxPatms.UpdateFromChangeList(rxList,customerNum);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace WebHostSynch {
 				return UserName;
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 				return UserName;
 			}
 		}
@@ -150,7 +150,7 @@ namespace WebHostSynch {
 				}
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 

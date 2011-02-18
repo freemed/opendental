@@ -28,9 +28,9 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public bool SetPreferences(string RegistrationKey,int ColorBorder) {
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
 				ODWebServiceEntities db=new ODWebServiceEntities();
-				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 				}
 				var wspObj=from wsp in db.webforms_preference
@@ -51,7 +51,7 @@ namespace WebHostSynch {
 				Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 				return false;
 			}
 			return true;
@@ -64,8 +64,8 @@ namespace WebHostSynch {
             ODWebServiceEntities db=new ODWebServiceEntities();
 			webforms_preference wspObj=null;
 			int DefaultColorBorder=-12550016;
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
-				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return wspObj;
 				}
@@ -85,7 +85,7 @@ namespace WebHostSynch {
 				Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 				return wspObj;;
 			}
 			return wspObj;;
@@ -94,8 +94,8 @@ namespace WebHostSynch {
 		[WebMethod]
 		public List<SheetAndSheetField> GetSheets(string RegistrationKey) {
 			List<SheetAndSheetField> sAndsfList=new List<SheetAndSheetField>();
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
-				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 				}
 				ODWebServiceEntities db=new ODWebServiceEntities();
@@ -113,7 +113,7 @@ namespace WebHostSynch {
 				return sAndsfList;
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 				return sAndsfList;
 			}
 		}
@@ -134,8 +134,8 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public void DeleteSheetData(string RegistrationKey,List<long> SheetsForDeletion) {
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
-				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return;
 				}
@@ -158,7 +158,7 @@ namespace WebHostSynch {
 				Logger.Information("In DeleteSheetData IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 			}
 		}
 
@@ -221,8 +221,8 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public void DeleteSheetDef(string RegistrationKey,long WebSheetDefID) {
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
-				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {
 					return;
 				}
@@ -244,7 +244,7 @@ namespace WebHostSynch {
 				Logger.Information("In DeleteSheetDef IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 			}
 		}
 
@@ -268,7 +268,7 @@ namespace WebHostSynch {
 				db.SaveChanges();
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 				return ;
 			}
 		}

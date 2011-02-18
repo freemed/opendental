@@ -118,11 +118,11 @@ namespace WebForms {
 		/// Writes an Error and it's inner exception if any to the log.
 		/// </summary>
 		/// <param name="message">Information Message</param>
-		public static void LogError(Exception ex) {
+		public static void LogError(string Message, Exception ex) {
 			if(!LogErr) {
 				return;
 			}
-			string message=ex.Message.ToString();
+			string message=Message+" "+ex.Message.ToString();
 			StackFrame stFrame = new StackFrame(1,true);
 			string Filename = " Filename: " + stFrame.GetFileName().Substring(stFrame.GetFileName().LastIndexOf(@"\")+1);
 			string MethodName =" Method: "+ stFrame.GetMethod();
@@ -130,14 +130,17 @@ namespace WebForms {
 			string StackTrace=" StackTrace: "+ ex.StackTrace;
 			message =message+Filename+MethodName+LineNumber+StackTrace;
 			Write(message,TraceEventType.Error);
-			
 			if(ex.InnerException != null) {
 				Console.WriteLine("Inner Exception");
-				Write("InnerException " +ex.InnerException.StackTrace+ " " +ex.InnerException.Message,TraceEventType.Information);
+				Write("InnerException " +ex.InnerException.StackTrace+ " " +ex.InnerException.Message,TraceEventType.Error);
 				if(ex.InnerException.InnerException!= null) {
 					Write("InnerException of  InnerException" +ex.InnerException.InnerException.StackTrace+ " " +ex.InnerException.InnerException.Message,TraceEventType.Error);
 				}
 			}
+		}
+
+		public static void LogError(Exception ex) {
+			LogError("",ex);
 		}
 
 		/// <summary>

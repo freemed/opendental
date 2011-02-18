@@ -1,6 +1,6 @@
 ﻿/*
 SQLyog Community Edition- MySQL GUI v8.0 
-MySQL - 5.1.30-community : Database - mobile_dev
+MySQL - 5.1.53-community : Database - mobile_dev
 *********************************************************************
 */
 
@@ -102,16 +102,17 @@ CREATE TABLE `rxpatm` (
   KEY `ProvNum` (`ProvNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Table structure for table `users` */
+/*Table structure for table `userm` */
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `userm`;
 
-CREATE TABLE `users` (
+CREATE TABLE `userm` (
   `CustomerNum` bigint(20) NOT NULL,
-  `user` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  PRIMARY KEY (`CustomerNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `UsermNum` bigint(20) NOT NULL,
+  `UserName` varchar(255) NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  PRIMARY KEY (`CustomerNum`,`UsermNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
