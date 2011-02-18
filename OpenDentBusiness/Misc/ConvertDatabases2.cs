@@ -3495,7 +3495,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
 					+"'Cerec')";
 				Db.NonQ32(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS school";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE school'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+				}
 
 
 
