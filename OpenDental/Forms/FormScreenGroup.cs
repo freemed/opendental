@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -479,7 +480,9 @@ namespace OpenDental{
 			if(ScreenGroupCur.County==null)
 				ScreenGroupCur.County="";//prevents the next line from crashing
 			comboCounty.SelectedIndex=comboCounty.Items.IndexOf(ScreenGroupCur.County);//"" etc OK
-			comboGradeSchool.Items.AddRange(Schools.ListNames);
+			for(int i=0;i<SiteC.List.Length;i++) {
+				comboGradeSchool.Items.Add(SiteC.List[i].Description);
+			}
 			if(ScreenGroupCur.GradeSchool==null)
 				ScreenGroupCur.GradeSchool="";//prevents the next line from crashing
 			comboGradeSchool.SelectedIndex=comboGradeSchool.Items.IndexOf(ScreenGroupCur.GradeSchool);//"" etc OK

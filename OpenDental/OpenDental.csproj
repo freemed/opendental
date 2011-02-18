@@ -1730,12 +1730,6 @@
     <Compile Include="Forms\FormSchoolCourses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormSchoolEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormSchools.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormScreenEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3107,14 +3101,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSchoolCourses.resx">
       <DependentUpon>FormSchoolCourses.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormSchoolEdit.resx">
-      <DependentUpon>FormSchoolEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormSchools.resx">
-      <DependentUpon>FormSchools.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormScreenEdit.resx">

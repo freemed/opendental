@@ -191,7 +191,6 @@ namespace OpenDental{
 			Location=new Point(200,200);
 			textDateFrom.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
-			Schools.GetListNames();
 			FillGrid();
 		}
 

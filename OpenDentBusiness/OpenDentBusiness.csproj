@@ -267,7 +267,6 @@
     <Compile Include="Crud\ScheduleOpCrud.cs" />
     <Compile Include="Crud\SchoolClassCrud.cs" />
     <Compile Include="Crud\SchoolCourseCrud.cs" />
-    <Compile Include="Crud\SchoolCrud.cs" />
     <Compile Include="Crud\ScreenCrud.cs" />
     <Compile Include="Crud\ScreenGroupCrud.cs" />
     <Compile Include="Crud\SecurityLogCrud.cs" />
@@ -480,7 +479,6 @@
     <Compile Include="Data Interface\Schedules.cs" />
     <Compile Include="Data Interface\SchoolClasses.cs" />
     <Compile Include="Data Interface\SchoolCourses.cs" />
-    <Compile Include="Data Interface\Schools.cs" />
     <Compile Include="Data Interface\ScreenGroups.cs" />
     <Compile Include="Data Interface\Screens.cs" />
     <Compile Include="Db Multi Table\Security.cs" />
@@ -776,7 +774,6 @@
     <Compile Include="TableTypes\Schedule.cs" />
     <Compile Include="TableTypes\SchoolClass.cs" />
     <Compile Include="TableTypes\SchoolCourse.cs" />
-    <Compile Include="TableTypes\School.cs" />
     <Compile Include="TableTypes\ScreenGroup.cs" />
     <Compile Include="TableTypes\Screen.cs" />
     <Compile Include="TableTypes\SecurityLog.cs" />
