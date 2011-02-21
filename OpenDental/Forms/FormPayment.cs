@@ -1173,7 +1173,7 @@ namespace OpenDental{
 			if(e.Button != MouseButtons.Left){
 				return;
 			}
-			if(textAmount.Text=="") {
+			if(textAmount.Text=="" || textAmount.Text=="0.00") {
 				MsgBox.Show(this,"Please enter an amount first.");
 				return;
 			}
@@ -1296,7 +1296,9 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 			string resulttext="";
 			string line="";
-			bool showReturnedNote=true;
+			//bool showReturnedNote=true;
+			bool showAmountNotice=false;
+			double amtReturned=0;
 			string xChargeToken="";
 			string accountMasked="";
 			using(TextReader reader=new StreamReader(resultfile)) {
@@ -1313,9 +1315,10 @@ namespace OpenDental{
 						}
 					}
 					if(line.StartsWith("AMOUNT=")) {
-						double amtReturned=PIn.Double(line.Substring(7));
+						amtReturned=PIn.Double(line.Substring(7));
 						if(amtReturned != amt) {
-							showReturnedNote=false;
+							//showReturnedNote=false;
+							showAmountNotice=true;
 						}
 					}
 					if(line.StartsWith("XCACCOUNTID=")) {
@@ -1347,11 +1350,14 @@ namespace OpenDental{
 				AVSRESULT=Y
 				CVRESULT=M
 			*/
-			if(showReturnedNote) {
-				if(textNote.Text!="") {
-					textNote.Text+="\r\n";
-				}
-				textNote.Text+=resulttext;
+			//if(showReturnedNote) {
+			if(textNote.Text!="") {
+				textNote.Text+="\r\n";
+			}
+			textNote.Text+=resulttext;
+			//}
+			if(showAmountNotice) {
+				MessageBox.Show(Lan.g(this,"Warning: The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the amount charged: ")+amtReturned.ToString("C"));
 			}
 		}
 
