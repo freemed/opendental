@@ -237,6 +237,19 @@ namespace OpenDentBusiness {
 				//	list.Add(new DisplayField("DPCpost",52,category));
 				//}
 			}
+			else if(category==DisplayFieldCategory.TreatPlanModule) {
+				list.Add(new DisplayField("Done",50,category));
+				list.Add(new DisplayField("Priority",50,category));
+				list.Add(new DisplayField("Tth",40,category));
+				list.Add(new DisplayField("Surf",45,category));
+				list.Add(new DisplayField("Code",50,category));
+				list.Add(new DisplayField("Description",235,category));
+				list.Add(new DisplayField("Fee",50,category));
+				list.Add(new DisplayField("Pri Ins",50,category));
+				list.Add(new DisplayField("Sec Ins",50,category));
+				list.Add(new DisplayField("Discount",55,category));
+				list.Add(new DisplayField("Pat",50,category));
+			}
 			return list;
 		}
 
@@ -391,6 +404,20 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Repair",45,category));
 					list.Add(new DisplayField("DPCpost",52,category));
 				}
+			}
+			else if(category==DisplayFieldCategory.TreatPlanModule) {
+				list.Add(new DisplayField("Done",50,category));
+				list.Add(new DisplayField("Priority",50,category));
+				list.Add(new DisplayField("Tth",40,category));
+				list.Add(new DisplayField("Surf",45,category));
+				list.Add(new DisplayField("Code",50,category));
+				list.Add(new DisplayField("Description",235,category));
+				list.Add(new DisplayField("Fee",50,category));
+				list.Add(new DisplayField("Pri Ins",50,category));
+				list.Add(new DisplayField("Sec Ins",50,category));
+				list.Add(new DisplayField("Discount",55,category));
+				list.Add(new DisplayField("Pat",50,category));
+				//prognosis later
 			}
 			return list;
 		}

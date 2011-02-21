@@ -63,7 +63,9 @@ namespace OpenDentBusiness{
 		///<summary>5</summary>
 		ChartPatientInformation,
 		///<summary>6</summary>
-		ProcedureGroupNote
+		ProcedureGroupNote,
+		///<summary>7</summary>
+		TreatPlanModule
 	}
 	
 

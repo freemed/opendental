@@ -133,6 +133,7 @@ namespace OpenDental{
 		private TextBox textFamPriMax;
 		private List<ClaimProcHist> LoopList;
 		private bool checkShowInsNotAutomatic;
+		private List<TpRow> RowsMain;
 
 		///<summary></summary>
 		public ContrTreat(){
@@ -666,7 +667,7 @@ namespace OpenDental{
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(0,169);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
@@ -989,64 +990,32 @@ namespace OpenDental{
 			gridPlans.SetSelected(0,true);
 		}
 
-		private void FillMain(){
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col;
-			col=new ODGridColumn(Lan.g("TableTP","Done"),50,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTP","Priority"),50);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTP","Tth"),40);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTP","Surf"),45);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTP","Code"),50);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTP","Description"),235);
-			gridMain.Columns.Add(col);
-			//caution: If you change the names of the columns here,
-			//also be sure to change them in OnCreate_Click()
-			if(checkShowFees.Checked){
-				col=new ODGridColumn(Lan.g("TableTP","Fee"),50,HorizontalAlignment.Right);
-				gridMain.Columns.Add(col);
-			}
-			if(checkShowIns.Checked){
-				col=new ODGridColumn(Lan.g("TableTP","Pri Ins"),50,HorizontalAlignment.Right);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableTP","Sec Ins"),50,HorizontalAlignment.Right);
-				gridMain.Columns.Add(col);
-			}
-			if(checkShowDiscount.Checked){
-				col=new ODGridColumn(Lan.g("TableTP","Discount"),55,HorizontalAlignment.Right);
-				gridMain.Columns.Add(col);
-			}
-			if(checkShowIns.Checked){
-				col=new ODGridColumn(Lan.g("TableTP","Pat"),50,HorizontalAlignment.Right);
-				gridMain.Columns.Add(col);
-			}
-			gridMain.Rows.Clear();
-			if(PatCur==null){
-				gridMain.EndUpdate();
-				return;
-			}
-			double fee;
-			double priIns;
-			double secIns;
-			double discount;
-			double pat;
-			double subfee=0;
-			double subpriIns=0;
-			double subsecIns=0;
-			double subdiscount=0;
-			double subpat=0;
-			double totFee=0;
-			double totPriIns=0;
-			double totSecIns=0;
-			double totDiscount=0;
-			double totPat=0;
+		private void FillMain() {
+			FillMainData();
+			FillMainDisplay();
+		}
+
+		private void FillMainData() {
+			//fairly big method
+			//fill RowsMain
+			decimal fee;
+			decimal priIns;
+			decimal secIns;
+			decimal discount;
+			decimal pat;
+			decimal subfee=0;
+			decimal subpriIns=0;
+			decimal subsecIns=0;
+			decimal subdiscount=0;
+			decimal subpat=0;
+			decimal totFee=0;
+			decimal totPriIns=0;
+			decimal totSecIns=0;
+			decimal totDiscount=0;
+			decimal totPat=0;
 			long feeSched=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;//for standard fee
-			OpenDental.UI.ODGridRow row;
+			RowsMain=new List<TpRow>();
+			TpRow row;
 			#region currentTP
 			if(gridPlans.SelectedIndices[0]==0){//current treatplan selected
 				InsPlan	PriPlanCur=null;
@@ -1078,19 +1047,85 @@ namespace OpenDental{
 				//claimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
 				string estimateNote;
 				for(int i=0;i<ProcListTP.Length;i++) {
-					row=new ODGridRow();
-					row.Cells.Add("");//never done
-					row.Cells.Add(DefC.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));
-					row.Cells.Add(Tooth.ToInternat(ProcListTP[i].ToothNum));
-					if(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).TreatArea==TreatmentArea.Surf){
-						row.Cells.Add(Tooth.SurfTidyFromDbToDisplay(ProcListTP[i].Surf,ProcListTP[i].ToothNum));
+					row=new TpRow();
+					fee=(decimal)ProcListTP[i].ProcFee;
+					int qty=ProcListTP[i].BaseUnits + ProcListTP[i].UnitQty;
+					if(qty>0) {
+						fee*=qty;
 					}
-					else{
-						row.Cells.Add(ProcListTP[i].Surf);//I think this will properly allow UR, L, etc.
+					subfee+=fee;
+					totFee+=fee;
+					#region ShowMaxDed
+					string showPriDeduct="";
+					string showSecDeduct="";
+					if(PatPlanList.Count>0) {//Primary
+						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
+						if(claimproc==null) {
+							priIns=0;
+						}
+						else {
+							if(checkShowMaxDed.Checked) {//whether visible or not
+								priIns=(decimal)ClaimProcs.GetInsEstTotal(claimproc);
+								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
+								if(ded > 0) {
+									showPriDeduct="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+ded.ToString("c");
+								}
+							}
+							else {
+								priIns=(decimal)claimproc.BaseEst;
+							}
+						}
 					}
-					row.Cells.Add(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode);
+					else {//no primary ins
+						priIns=0;
+					}
+					if(PatPlanList.Count>1) {//Secondary
+						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,SecPlanCur.PlanNum);
+						if(claimproc==null) {
+							secIns=0;
+						}
+						else {
+							if(checkShowMaxDed.Checked) {
+								secIns=(decimal)ClaimProcs.GetInsEstTotal(claimproc);
+								decimal ded=(decimal)ClaimProcs.GetDeductibleDisplay(claimproc);
+								if(ded > 0) {
+									showSecDeduct="\r\n"+Lan.g(this,"Sec Deduct Applied: ")+ded.ToString("c");
+								}
+							}
+							else {
+								secIns=(decimal)claimproc.BaseEst;
+							}
+						}
+					}//secondary
+					else {//no secondary ins
+						secIns=0;
+					}
+					#endregion ShowMaxDed
+					subpriIns+=priIns;
+					totPriIns+=priIns;
+					subsecIns+=secIns;
+					totSecIns+=secIns;
+					discount=(decimal)ClaimProcs.GetTotalWriteOffEstimateDisplay(ClaimProcList,ProcListTP[i].ProcNum);
+					subdiscount+=discount;
+					totDiscount+=discount;
+					pat=fee-priIns-secIns-discount;
+					if(pat<0) {
+						pat=0;
+					}
+					subpat+=pat;
+					totPat+=pat;
+					//Fill TpRow object with information.
+					row.Priority=(DefC.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));
+					row.Tth=(Tooth.ToInternat(ProcListTP[i].ToothNum));
+					if(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).TreatArea==TreatmentArea.Surf) {
+						row.Surf=(Tooth.SurfTidyFromDbToDisplay(ProcListTP[i].Surf,ProcListTP[i].ToothNum));
+					}
+					else {
+						row.Surf=(ProcListTP[i].Surf);//I think this will properly allow UR, L, etc.
+					}
+					row.Code=(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode);
 					descript=ProcedureCodes.GetLaymanTerm(ProcListTP[i].CodeNum);
-					if(ProcListTP[i].ToothRange!=""){
+					if(ProcListTP[i].ToothRange!="") {
 						descript+=" #"+Tooth.FormatRangeForDisplay(ProcListTP[i].ToothRange);
 					}
 					if(checkShowMaxDed.Checked) {
@@ -1099,91 +1134,25 @@ namespace OpenDental{
 							descript+="\r\n"+estimateNote;
 						}
 					}
-					row.Cells.Add(descript);
-					fee=ProcListTP[i].ProcFee;
-					int qty=ProcListTP[i].BaseUnits + ProcListTP[i].UnitQty;
-					if(qty>0){
-						fee*=qty;
+					row.Description=(descript);
+					if(showPriDeduct!="") {
+						row.Description+=showPriDeduct;
 					}
-					subfee+=fee;
-					totFee+=fee;
-					#region ShowMaxDed
-					if(PatPlanList.Count>0){//Primary
-						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
-						if(claimproc==null){
-							priIns=0;
-						}
-						else{
-							if(checkShowMaxDed.Checked) {//whether visible or not
-								priIns=ClaimProcs.GetInsEstTotal(claimproc);
-								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
-								if(ded > 0) {
-									row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+ded.ToString("c");
-								}
-							}
-							else {
-								priIns=claimproc.BaseEst;
-							}
-						}
+					if(showSecDeduct!="") {
+						row.Description+=showSecDeduct;
 					}
-					else{//no primary ins
-						priIns=0;
-					}
-					if(PatPlanList.Count>1) {//Secondary
-						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,SecPlanCur.PlanNum);
-						if(claimproc==null){
-							secIns=0;
-						}
-						else{
-							if(checkShowMaxDed.Checked) {
-								secIns=ClaimProcs.GetInsEstTotal(claimproc);
-								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
-								if(ded > 0) {
-									row.Cells[5].Text+="\r\n"+Lan.g(this,"Sec Deduct Applied: ")+ded.ToString("c");
-								}
-							}
-							else {
-								secIns=claimproc.BaseEst;
-							}
-						}
-					}//secondary
-					else{//no secondary ins
-						secIns=0;
-					}
-					#endregion ShowMaxDed
-					subpriIns+=priIns;
-					totPriIns+=priIns;
-					subsecIns+=secIns;
-					totSecIns+=secIns;
-					discount=ClaimProcs.GetTotalWriteOffEstimateDisplay(ClaimProcList,ProcListTP[i].ProcNum);
-					subdiscount+=discount;
-					totDiscount+=discount;
-					pat=fee-priIns-secIns-discount;
-					if(pat<0){
-						pat=0;
-					}
-					subpat+=pat;
-					totPat+=pat;
-					if(checkShowFees.Checked){
-						row.Cells.Add(fee.ToString("F"));
-					}
-					if(checkShowIns.Checked){
-						row.Cells.Add(priIns.ToString("F"));
-						row.Cells.Add(secIns.ToString("F"));
-					}
-					if(checkShowDiscount.Checked){
-						row.Cells.Add(discount.ToString("F"));
-					}
-					if(checkShowIns.Checked){	
-						row.Cells.Add(pat.ToString("F"));
-					}
+					row.Fee=fee;
+					row.PriIns=priIns;
+					row.SecIns=secIns;
+					row.Discount=discount;
+					row.Pat=pat;
 					row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
 					if(row.ColorText==System.Drawing.Color.White){
 						row.ColorText=System.Drawing.Color.Black;
 					}
-					row.Tag=ProcListTP[i].Copy();
-					gridMain.Rows.Add(row);
-					#region Canadian Lab
+					//row.Tag=ProcListTP[i].Copy();
+					RowsMain.Add(row);
+					#region Canadian Lab 
 					/*
 					if(ProcListTP[i].LabProcCode!=""){
 						row=new ODGridRow();
@@ -1226,33 +1195,20 @@ namespace OpenDental{
 					if(checkShowSubtotals.Checked &&
 						(i==ProcListTP.Length-1 || ProcListTP[i+1].Priority != ProcListTP[i].Priority))
 					{
-						row=new ODGridRow();
-						row.Cells.Add("");//done
-						row.Cells.Add("");//priority
-						row.Cells.Add("");//toothnum
-						row.Cells.Add("");//surf
-						row.Cells.Add("");//proccode
-						row.Cells.Add(Lan.g(this,"Subtotal"));//descript
-						if(checkShowFees.Checked){
-							row.Cells.Add(subfee.ToString("F"));//fee
-						}
-						if(checkShowIns.Checked){
-							row.Cells.Add(subpriIns.ToString("F"));//pri
-							row.Cells.Add(subsecIns.ToString("F"));//sec
-						}
-						if(checkShowDiscount.Checked){
-							row.Cells.Add(subdiscount.ToString("F"));//
-						}
-						if(checkShowIns.Checked){
-							row.Cells.Add(subpat.ToString("F"));//pat portion
-						}
+						row=new TpRow();
+						row.Description="Subtotal";
+						row.Fee=subfee;
+						row.PriIns=subpriIns;
+						row.SecIns=subsecIns;
+						row.Discount=subdiscount;
+						row.Pat=subpat;
 						row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
 						if(row.ColorText==System.Drawing.Color.White) {
 							row.ColorText=System.Drawing.Color.Black;
 						}
 						row.Bold=true;
 						row.ColorLborder=System.Drawing.Color.Black;
-						gridMain.Rows.Add(row);
+						RowsMain.Add(row);
 						subfee=0;
 						subpriIns=0;
 						subsecIns=0;
@@ -1269,93 +1225,68 @@ namespace OpenDental{
 				ProcTPSelectList=ProcTPs.GetListForTP(PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum,ProcTPList);
 				bool isDone;
 				for(int i=0;i<ProcTPSelectList.Length;i++){
-					row=new ODGridRow();
+					row=new TpRow();
 					isDone=true;
 					for(int j=0;j<ProcListTP.Length;j++) {
 						if(ProcListTP[j].ProcNum==ProcTPSelectList[i].ProcNumOrig) {
 							isDone=false;
 						}
 					}
-					if(isDone){
-						row.Cells.Add("X");
+					if(isDone) {
+						row.Done="X";
 					}
-					else {
-						row.Cells.Add("");
-					}	
-					row.Cells.Add(DefC.GetName(DefCat.TxPriorities,ProcTPSelectList[i].Priority));
-					row.Cells.Add(ProcTPSelectList[i].ToothNumTP);
-					row.Cells.Add(ProcTPSelectList[i].Surf);
-					row.Cells.Add(ProcTPSelectList[i].ProcCode);
-					row.Cells.Add(ProcTPSelectList[i].Descript);
+					row.Priority=DefC.GetName(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
+					row.Tth=ProcTPSelectList[i].ToothNumTP;
+					row.Surf=ProcTPSelectList[i].Surf;
+					row.Code=ProcTPSelectList[i].ProcCode;
+					row.Description=ProcTPSelectList[i].Descript;
+					row.Fee=(decimal)ProcTPSelectList[i].FeeAmt;//Fee
+					subfee+=(decimal)ProcTPSelectList[i].FeeAmt;
+					totFee+=(decimal)ProcTPSelectList[i].FeeAmt;
+					row.PriIns=(decimal)ProcTPSelectList[i].PriInsAmt;//PriIns
+					subpriIns+=(decimal)ProcTPSelectList[i].PriInsAmt;
+					totPriIns+=(decimal)ProcTPSelectList[i].PriInsAmt;
+					row.SecIns=(decimal)ProcTPSelectList[i].SecInsAmt;//SecIns
+					subsecIns+=(decimal)ProcTPSelectList[i].SecInsAmt;
+					totSecIns+=(decimal)ProcTPSelectList[i].SecInsAmt;
+					row.Discount=(decimal)ProcTPSelectList[i].Discount;//Discount
+					subdiscount+=(decimal)ProcTPSelectList[i].Discount;
+					totDiscount+=(decimal)ProcTPSelectList[i].Discount;
+					row.Pat=(decimal)ProcTPSelectList[i].PatAmt;//Pat
+					subpat+=(decimal)ProcTPSelectList[i].PatAmt;
+					totPat+=(decimal)ProcTPSelectList[i].PatAmt;		
 					//if(checkShowStandard.Checked) {
 					//	standard=Fees.GetAmount0(ProcedureCodes.GetCodeNum(ProcTPSelectList[i].ProcCode),feeSched);
 					//	row.Cells.Add(standard.ToString("F"));//standard
 					//	substandard+=standard;
 					//	totStandard+=standard;
 					//}
-					if(checkShowFees.Checked){
-						row.Cells.Add(ProcTPSelectList[i].FeeAmt.ToString("F"));
-						subfee+=ProcTPSelectList[i].FeeAmt;
-						totFee+=ProcTPSelectList[i].FeeAmt;
-					}
-					if(checkShowIns.Checked){
-						row.Cells.Add(ProcTPSelectList[i].PriInsAmt.ToString("F"));
-						row.Cells.Add(ProcTPSelectList[i].SecInsAmt.ToString("F"));
-						subpriIns+=ProcTPSelectList[i].PriInsAmt;
-						totPriIns+=ProcTPSelectList[i].PriInsAmt;
-						subsecIns+=ProcTPSelectList[i].SecInsAmt;
-						totSecIns+=ProcTPSelectList[i].SecInsAmt;
-					}
-					if(checkShowDiscount.Checked){
-						row.Cells.Add(ProcTPSelectList[i].Discount.ToString("F"));
-						subdiscount+=ProcTPSelectList[i].Discount;
-						totDiscount+=ProcTPSelectList[i].Discount;
-					}
-					if(checkShowIns.Checked){
-						row.Cells.Add(ProcTPSelectList[i].PatAmt.ToString("F"));
-						subpat+=ProcTPSelectList[i].PatAmt;
-						totPat+=ProcTPSelectList[i].PatAmt;						
-					}
 					row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
 					if(row.ColorText==System.Drawing.Color.White){
 						row.ColorText=System.Drawing.Color.Black;
 					}
-					row.Tag=ProcTPSelectList[i].Copy();
-					gridMain.Rows.Add(row);
+					//row.Tag=ProcTPSelectList[i].Copy();
+					RowsMain.Add(row);
 					#region subtotal
 					if(checkShowSubtotals.Checked &&
 						(i==ProcTPSelectList.Length-1 || ProcTPSelectList[i+1].Priority != ProcTPSelectList[i].Priority)) {
-						row=new ODGridRow();
-						row.Cells.Add("");//done
-						row.Cells.Add("");//priority
-						row.Cells.Add("");//toothnum
-						row.Cells.Add("");//surf
-						row.Cells.Add("");//proccode
-						row.Cells.Add(Lan.g(this,"Subtotal"));//descript
+						row=new TpRow();
+						row.Description="Subtotal";
+						row.Fee=subfee;
+						row.PriIns=subpriIns;
+						row.SecIns=subsecIns;
+						row.Discount=subdiscount;
+						row.Pat=subpat;
 						//if(checkShowStandard.Checked) {
 						//	row.Cells.Add(substandard.ToString("F"));//standard
 						//}
-						if(checkShowFees.Checked) {
-							row.Cells.Add(subfee.ToString("F"));//fee
-						}
-						if(checkShowIns.Checked) {
-							row.Cells.Add(subpriIns.ToString("F"));//pri
-							row.Cells.Add(subsecIns.ToString("F"));//sec
-						}
-						if(checkShowDiscount.Checked){
-							row.Cells.Add(subdiscount.ToString("F"));
-						}
-						if(checkShowIns.Checked) {
-							
-							row.Cells.Add(subpat.ToString("F"));//pat portion
-						}
 						row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
 						if(row.ColorText==System.Drawing.Color.White) {
 							row.ColorText=System.Drawing.Color.Black;
 						}
 						row.Bold=true;
 						row.ColorLborder=System.Drawing.Color.Black;
-						gridMain.Rows.Add(row);
+						RowsMain.Add(row);
 						//substandard=0;
 						subfee=0;
 						subpriIns=0;
@@ -1370,40 +1301,158 @@ namespace OpenDental{
 			#endregion AnyTP except current
 			#region Totals
 			if(checkShowTotals.Checked) {
-				row=new ODGridRow();
-				row.Cells.Add("");//done
-				row.Cells.Add("");//priority
-				row.Cells.Add("");//toothnum
-				row.Cells.Add("");//surf
-				row.Cells.Add("");//proccode
-				row.Cells.Add(Lan.g(this,"Total"));//descript
+				row=new TpRow();
+				row.Description="Total";
+				row.Fee=totFee;
+				row.PriIns=totPriIns;
+				row.SecIns=totSecIns;
+				row.Discount=totDiscount;
+				row.Pat=totPat;
 				//if(checkShowStandard.Checked) {
 				//	row.Cells.Add(totStandard.ToString("F"));//standard
 				//}
-				if(checkShowFees.Checked) {
-					row.Cells.Add(totFee.ToString("F"));//fee
-				}
-				if(checkShowIns.Checked) {
-					row.Cells.Add(totPriIns.ToString("F"));//pri
-					row.Cells.Add(totSecIns.ToString("F"));//sec
-				}
-				if(checkShowDiscount.Checked){
-					row.Cells.Add(totDiscount.ToString("F"));
-				}
-				if(checkShowIns.Checked) {
-					
-					row.Cells.Add(totPat.ToString("F"));//pat portion
-				}
 				row.Bold=true;
 				//row.ColorLborder=Color.Black;
-				gridMain.Rows.Add(row);
+				RowsMain.Add(row);
 			}
 			#endregion Totals
-			int gridW=0;
-			for(int i=0;i<gridMain.Columns.Count;i++){
-				gridW+=gridMain.Columns[i].ColWidth;
+		}
+
+		private void FillMainDisplay(){
+			//fairly small method
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col;
+			DisplayFields.RefreshCache();
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.TreatPlanModule);
+			for(int i=0;i<fields.Count;i++){
+				if(fields[i].Description==""){
+					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);
+				}
+				else{
+					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
+				}
+				if(fields[i].InternalName=="Fee" && !checkShowFees.Checked){
+					continue;
+				}
+				if((fields[i].InternalName=="Pri Ins" || fields[i].InternalName=="Sec Ins") && !checkShowIns.Checked){
+					continue;
+				}
+				if(fields[i].InternalName=="Discount" && !checkShowDiscount.Checked){
+					continue;
+				}
+				if(fields[i].InternalName=="Pat" && !checkShowIns.Checked){
+					continue;
+				}
+				if(fields[i].InternalName=="Fee" 
+					|| fields[i].InternalName=="Pri Ins"
+					|| fields[i].InternalName=="Sec Ins"
+					|| fields[i].InternalName=="Discount"
+					|| fields[i].InternalName=="Pat") 
+				{
+					col.TextAlign=HorizontalAlignment.Right;
+				}
+				gridMain.Columns.Add(col);
+			}			
+			gridMain.Rows.Clear();
+			if(PatCur==null){
+				gridMain.EndUpdate();
+				return;
 			}
-			gridMain.Width=gridW+20;
+			ODGridRow row;
+			for(int i=0;i<RowsMain.Count;i++){
+				row=new ODGridRow();
+				for(int j=0;j<gridMain.Columns.Count;j++) {
+					switch(fields[j].InternalName) {
+						case "Done":
+							if(RowsMain[i].Done!=null) {
+								row.Cells.Add(RowsMain[i].Done.ToString());
+							}
+							else {
+								row.Cells.Add("");
+							}
+							break;
+						case "Priority":
+							if(RowsMain[i].Priority!=null) {
+								row.Cells.Add(RowsMain[i].Priority.ToString());
+							}
+							else {
+								row.Cells.Add("");
+							}
+							break;
+						case "Tth":
+							if(RowsMain[i].Tth!=null) {
+								row.Cells.Add(RowsMain[i].Tth.ToString());
+							}
+							else {
+								row.Cells.Add("");
+							}
+							break;
+						case "Surf":
+							if(RowsMain[i].Surf!=null) {
+								row.Cells.Add(RowsMain[i].Surf.ToString());
+							}
+							else {
+								row.Cells.Add("");
+							}
+							break;
+						case "Code":
+							if(RowsMain[i].Code!=null) {
+								row.Cells.Add(RowsMain[i].Code.ToString());
+							}
+							else {
+								row.Cells.Add("");
+							}
+							break;
+						case "Description":
+							if(RowsMain[i].Description!=null) {
+								row.Cells.Add(RowsMain[i].Description.ToString());
+							}
+							else {
+								row.Cells.Add("");
+							}
+							break;
+						case "Fee":
+							if(checkShowFees.Checked) {
+								row.Cells.Add(RowsMain[i].Fee.ToString("F"));
+							}
+							break;
+						case "PriIns":
+							if(checkShowIns.Checked) {
+								row.Cells.Add(RowsMain[i].PriIns.ToString("F"));
+							}
+							break;
+						case "SecIns":
+							if(checkShowIns.Checked) {
+								row.Cells.Add(RowsMain[i].SecIns.ToString("F"));
+							}
+							break;
+						case "Discount":
+							if(checkShowDiscount.Checked) {
+								row.Cells.Add(RowsMain[i].Discount.ToString("F"));
+							}
+							break;
+						case "Pat":
+							if(checkShowIns.Checked) {
+								row.Cells.Add(RowsMain[i].Pat.ToString("F"));
+							}
+							break;
+					}
+				}
+				if(RowsMain[i].ColorText!=null) {
+					row.ColorText=RowsMain[i].ColorText;
+				}
+				if(RowsMain[i].ColorLborder!=null) {
+					row.ColorLborder=RowsMain[i].ColorLborder;
+				}
+				row.Bold=RowsMain[i].Bold;
+				gridMain.Rows.Add(row);
+			}
+			//int gridW=0;
+			//for(int i=0;i<gridMain.Columns.Count;i++){
+			//  gridW+=gridMain.Columns[i].ColWidth;
+			//}
+			//gridMain.Width=gridW+20;
 			gridMain.EndUpdate();
 		}
 
@@ -2725,6 +2774,23 @@ namespace OpenDental{
 
 
 		
+	}
+
+	public class TpRow {
+		public string Done;
+		public string Priority;
+		public string Tth;
+		public string Surf;
+		public string Code;
+		public string Description;
+		public decimal Fee;
+		public decimal PriIns;
+		public decimal SecIns;
+		public decimal Discount;
+		public decimal Pat;
+		public System.Drawing.Color ColorText;
+		public bool Bold;
+		public System.Drawing.Color ColorLborder;
 	}
 
 	
