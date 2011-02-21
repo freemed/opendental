@@ -51,6 +51,7 @@ namespace OpenDental{
 		private TextBox textDate;
 		///<summary>This will be null for ordinary edits.  But sometimes this window is used to edit bulk statements.  In that case, this list contains the statements being edited.  Must contain at least one item.</summary>
 		public List<Statement> StmtList;
+		private int electIndex;
 
 		///<summary></summary>
 		public FormStatementOptions()
@@ -354,6 +355,7 @@ namespace OpenDental{
 			this.listMode.Name = "listMode";
 			this.listMode.Size = new System.Drawing.Size(113,56);
 			this.listMode.TabIndex = 233;
+			this.listMode.SelectedIndexChanged += new System.EventHandler(this.listMode_SelectedIndexChanged);
 			// 
 			// checkIntermingled
 			// 
@@ -568,6 +570,9 @@ namespace OpenDental{
 					listMode.Items.Add(Lan.g("enumStatementMode",Enum.GetNames(typeof(StatementMode))[i]));
 					if((int)StmtCur.Mode_==i){
 						listMode.SelectedIndex=i;
+					}
+					if(Enum.GetNames(typeof(StatementMode))[i]=="Electronic") {
+						electIndex=i;
 					}
 				}
 				checkHidePayment.Checked=StmtCur.HidePayment;
@@ -1348,6 +1353,17 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void listMode_SelectedIndexChanged(object sender,EventArgs e) {
+			if(listMode.SelectedIndex==electIndex) {
+				//Selected electronic mode. Automatically select intermingling family and remove that as a selection option.
+				checkIntermingled.Checked=true;
+				checkIntermingled.Enabled=false;
+			}
+			else {
+				checkIntermingled.Enabled=true;
+			}
 		}
 
 		
