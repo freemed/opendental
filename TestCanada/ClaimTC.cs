@@ -295,15 +295,87 @@ namespace TestCanada {
 		}
 
 		private static void CreateTen() {
-
+			long provNum=ProviderC.List[1].ProvNum;//dentist#2
+			Patient pat=Patients.GetPat(PatientTC.PatNum8);//patient#8, Fred Jones
+			Procedure proc;
+			List<Procedure> procList=new List<Procedure>();
+			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"X",provNum));
+			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"X",provNum));
+			proc=ProcTC.AddProc("21222",pat.PatNum,new DateTime(1999,1,1),"15","MD",102,"X",provNum);
+			procList.Add(proc);
+			Claim claim=CreateClaim(pat,procList,provNum);
+			claim.CanadianMaterialsForwarded="";
+			//billing prov already handled
+			claim.CanadianReferralProviderNum="";
+			claim.CanadianReferralReason=0;
+			//pat.SchoolName
+			//assignBen can't be set here because it changes per claim in the scripts
+			claim.AccidentDate=DateTime.MinValue;
+			claim.PreAuthString="";
+			claim.CanadianIsInitialUpper="X";
+			claim.CanadianDateInitialUpper=DateTime.MinValue;
+			claim.CanadianIsInitialLower="X";
+			claim.CanadianDateInitialLower=DateTime.MinValue;
+			//claim.CanadianMandProsthMaterial=4;
+			claim.IsOrtho=false;
+			Claims.Update(claim);
+			ClaimNums.Add(claim.ClaimNum);
 		}
 
 		private static void CreateEleven() {
-
+			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			Patient pat=Patients.GetPat(PatientTC.PatNum9);//patient#9, Fred Smith
+			Procedure proc;
+			List<Procedure> procList=new List<Procedure>();
+			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"",provNum));
+			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"",provNum));
+			proc=ProcTC.AddProc("21223",pat.PatNum,new DateTime(1999,1,1),"26","MOD",107.6,"",provNum);
+			procList.Add(proc);
+			Claim claim=CreateClaim(pat,procList,provNum);
+			claim.CanadianMaterialsForwarded="";
+			//billing prov already handled
+			claim.CanadianReferralProviderNum="";
+			claim.CanadianReferralReason=0;
+			//pat.SchoolName
+			//assignBen can't be set here because it changes per claim in the scripts
+			claim.AccidentDate=DateTime.MinValue;
+			claim.PreAuthString="";
+			claim.CanadianIsInitialUpper="X";
+			claim.CanadianDateInitialUpper=DateTime.MinValue;
+			claim.CanadianIsInitialLower="X";
+			claim.CanadianDateInitialLower=DateTime.MinValue;
+			//claim.CanadianMandProsthMaterial=4;
+			claim.IsOrtho=false;
+			Claims.Update(claim);
+			ClaimNums.Add(claim.ClaimNum);
 		}
 
 		private static void CreateTwelve() {
-
+			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			Patient pat=Patients.GetPat(PatientTC.PatNum9);//patient#9, Fred Smith
+			Procedure proc;
+			List<Procedure> procList=new List<Procedure>();
+			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"",provNum));
+			procList.Add(ProcTC.AddProc("02102",pat.PatNum,new DateTime(1999,1,1),"","",87.25,"",provNum));
+			proc=ProcTC.AddProc("21223",pat.PatNum,new DateTime(1999,1,1),"27","MOD",107.6,"",provNum);
+			procList.Add(proc);
+			Claim claim=CreateClaim(pat,procList,provNum);
+			claim.CanadianMaterialsForwarded="";
+			//billing prov already handled
+			claim.CanadianReferralProviderNum="";
+			claim.CanadianReferralReason=0;
+			//pat.SchoolName
+			//assignBen can't be set here because it changes per claim in the scripts
+			claim.AccidentDate=DateTime.MinValue;
+			claim.PreAuthString="";
+			claim.CanadianIsInitialUpper="Y";
+			claim.CanadianDateInitialUpper=DateTime.MinValue;
+			claim.CanadianIsInitialLower="X";
+			claim.CanadianDateInitialLower=DateTime.MinValue;
+			//claim.CanadianMandProsthMaterial=4;
+			claim.IsOrtho=false;
+			Claims.Update(claim);
+			ClaimNums.Add(claim.ClaimNum);
 		}
 
 		private static Claim CreateClaim(Patient pat,List<Procedure> procList,long provTreat) {
@@ -455,24 +527,24 @@ namespace TestCanada {
 		}
 
 		public static string RunTen(bool showForms) {
-			string retVal="";
-
-			retVal+="Claim #10 not implemented.\r\n";
-			return retVal;
+			Claim claim=Claims.GetClaim(ClaimNums[9]);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(10,"","21",claim,showForms);//test the result of the COB
 		}
 
 		public static string RunEleven(bool showForms) {
-			string retVal="";
-
-			retVal+="Claim #11 not implemented.\r\n";
-			return retVal;
+			Claim claim=Claims.GetClaim(ClaimNums[10]);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(11,"","11",claim,showForms);
 		}
 
 		public static string RunTwelve(bool showForms) {
-			string retVal="";
-
-			retVal+="Claim #12 not implemented.\r\n";
-			return retVal;
+			Claim claim=Claims.GetClaim(ClaimNums[11]);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(12,"","21",claim,showForms);
 		}
 
 
