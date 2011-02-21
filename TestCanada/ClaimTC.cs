@@ -537,7 +537,10 @@ namespace TestCanada {
 			Claim claim=Claims.GetClaim(ClaimNums[10]);
 			InsSubTC.SetAssignBen(true,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(11,"","11",claim,showForms);
+			string oldVersion=CarrierTC.SetCDAnetVersion(claim.PlanNum,"02");
+			string retval=Run(11,"","11",claim,showForms);
+			CarrierTC.SetCDAnetVersion(claim.PlanNum,oldVersion);
+			return retval;
 		}
 
 		public static string RunTwelve(bool showForms) {

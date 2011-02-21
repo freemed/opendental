@@ -147,5 +147,18 @@ namespace TestCanada {
 			}
 		}
 
+		///<summary>version should be "02" or "04". Returns old version.</summary>
+		public static string SetCDAnetVersion(long planNum,string version) {
+			InsPlan plan=InsPlans.RefreshOne(planNum);
+			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
+			string oldVersion=carrier.CDAnetVersion;
+			if(carrier.CDAnetVersion!=version) {
+				carrier.CDAnetVersion=version;
+				Carriers.Update(carrier);
+				Carriers.RefreshCache();
+			}
+			return oldVersion;
+		}
+
 	}
 }
