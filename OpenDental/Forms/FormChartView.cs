@@ -53,6 +53,8 @@ namespace OpenDental{
 		private Label labelDescription;
 		private ListBox listProcStatusCodes;
 		private Label labelProcStatus;
+		private Label label1;
+		private ComboBox comboDatesShowing;
 		public ChartView ChartViewCur;
 
 		///<summary></summary>
@@ -111,12 +113,14 @@ namespace OpenDental{
 			this.checkAudit = new System.Windows.Forms.CheckBox();
 			this.textBoxViewDesc = new System.Windows.Forms.TextBox();
 			this.groupBoxProperties = new System.Windows.Forms.GroupBox();
-			this.butShowNone = new OpenDental.UI.Button();
-			this.butShowAll = new OpenDental.UI.Button();
 			this.labelDescription = new System.Windows.Forms.Label();
 			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
 			this.labelProcStatus = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboDatesShowing = new System.Windows.Forms.ComboBox();
 			this.butDelete = new OpenDental.UI.Button();
+			this.butShowNone = new OpenDental.UI.Button();
+			this.butShowAll = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butRight = new OpenDental.UI.Button();
 			this.butLeft = new OpenDental.UI.Button();
@@ -132,7 +136,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(126,241);
+			this.label2.Location = new System.Drawing.Point(126,260);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(213,16);
 			this.label2.TabIndex = 5;
@@ -145,7 +149,7 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.listAvailable.FormattingEnabled = true;
 			this.listAvailable.IntegralHeight = false;
-			this.listAvailable.Location = new System.Drawing.Point(388,277);
+			this.listAvailable.Location = new System.Drawing.Point(388,296);
 			this.listAvailable.Name = "listAvailable";
 			this.listAvailable.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listAvailable.Size = new System.Drawing.Size(158,361);
@@ -153,7 +157,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(385,257);
+			this.label3.Location = new System.Drawing.Point(385,276);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(158,17);
 			this.label3.TabIndex = 16;
@@ -382,7 +386,7 @@ namespace OpenDental{
 			// 
 			// textBoxViewDesc
 			// 
-			this.textBoxViewDesc.Location = new System.Drawing.Point(134,11);
+			this.textBoxViewDesc.Location = new System.Drawing.Point(134,9);
 			this.textBoxViewDesc.Name = "textBoxViewDesc";
 			this.textBoxViewDesc.Size = new System.Drawing.Size(367,20);
 			this.textBoxViewDesc.TabIndex = 1;
@@ -396,11 +400,78 @@ namespace OpenDental{
 			this.groupBoxProperties.Controls.Add(this.groupBox7);
 			this.groupBoxProperties.Controls.Add(this.checkNotes);
 			this.groupBoxProperties.Controls.Add(this.checkShowTeeth);
-			this.groupBoxProperties.Location = new System.Drawing.Point(27,31);
+			this.groupBoxProperties.Location = new System.Drawing.Point(27,50);
 			this.groupBoxProperties.Name = "groupBoxProperties";
 			this.groupBoxProperties.Size = new System.Drawing.Size(277,197);
 			this.groupBoxProperties.TabIndex = 67;
 			this.groupBoxProperties.TabStop = false;
+			// 
+			// labelDescription
+			// 
+			this.labelDescription.Location = new System.Drawing.Point(20,10);
+			this.labelDescription.Name = "labelDescription";
+			this.labelDescription.Size = new System.Drawing.Size(108,17);
+			this.labelDescription.TabIndex = 69;
+			this.labelDescription.Text = "Description";
+			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// listProcStatusCodes
+			// 
+			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.listProcStatusCodes.FormattingEnabled = true;
+			this.listProcStatusCodes.Location = new System.Drawing.Point(388,80);
+			this.listProcStatusCodes.Name = "listProcStatusCodes";
+			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listProcStatusCodes.Size = new System.Drawing.Size(158,186);
+			this.listProcStatusCodes.TabIndex = 70;
+			this.listProcStatusCodes.Visible = false;
+			this.listProcStatusCodes.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listProcStatusCodes_MouseUp);
+			// 
+			// labelProcStatus
+			// 
+			this.labelProcStatus.Location = new System.Drawing.Point(388,60);
+			this.labelProcStatus.Name = "labelProcStatus";
+			this.labelProcStatus.Size = new System.Drawing.Size(158,17);
+			this.labelProcStatus.TabIndex = 71;
+			this.labelProcStatus.Text = "Statuses";
+			this.labelProcStatus.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelProcStatus.Visible = false;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(20,32);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(108,17);
+			this.label1.TabIndex = 72;
+			this.label1.Text = "Dates Showing";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboDatesShowing
+			// 
+			this.comboDatesShowing.FormattingEnabled = true;
+			this.comboDatesShowing.Location = new System.Drawing.Point(134,32);
+			this.comboDatesShowing.Name = "comboDatesShowing";
+			this.comboDatesShowing.Size = new System.Drawing.Size(147,21);
+			this.comboDatesShowing.TabIndex = 73;
+			this.comboDatesShowing.SelectedIndexChanged += new System.EventHandler(this.comboDatesShowing_SelectedIndexChanged);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(584,522);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 68;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butShowNone
 			// 
@@ -430,55 +501,6 @@ namespace OpenDental{
 			this.butShowAll.Text = "All";
 			this.butShowAll.Click += new System.EventHandler(this.butShowAll_Click);
 			// 
-			// labelDescription
-			// 
-			this.labelDescription.Location = new System.Drawing.Point(20,12);
-			this.labelDescription.Name = "labelDescription";
-			this.labelDescription.Size = new System.Drawing.Size(108,17);
-			this.labelDescription.TabIndex = 69;
-			this.labelDescription.Text = "Description";
-			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// listProcStatusCodes
-			// 
-			this.listProcStatusCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.listProcStatusCodes.FormattingEnabled = true;
-			this.listProcStatusCodes.Location = new System.Drawing.Point(388,61);
-			this.listProcStatusCodes.Name = "listProcStatusCodes";
-			this.listProcStatusCodes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProcStatusCodes.Size = new System.Drawing.Size(158,186);
-			this.listProcStatusCodes.TabIndex = 70;
-			this.listProcStatusCodes.Visible = false;
-			this.listProcStatusCodes.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listProcStatusCodes_MouseUp);
-			// 
-			// labelProcStatus
-			// 
-			this.labelProcStatus.Location = new System.Drawing.Point(388,41);
-			this.labelProcStatus.Name = "labelProcStatus";
-			this.labelProcStatus.Size = new System.Drawing.Size(158,17);
-			this.labelProcStatus.TabIndex = 71;
-			this.labelProcStatus.Text = "Statuses";
-			this.labelProcStatus.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			this.labelProcStatus.Visible = false;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(584,522);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,24);
-			this.butDelete.TabIndex = 68;
-			this.butDelete.Text = "&Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -487,7 +509,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(584,614);
+			this.butOK.Location = new System.Drawing.Point(584,634);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 56;
@@ -502,7 +524,7 @@ namespace OpenDental{
 			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRight.CornerRadius = 4F;
 			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(335,397);
+			this.butRight.Location = new System.Drawing.Point(335,416);
 			this.butRight.Name = "butRight";
 			this.butRight.Size = new System.Drawing.Size(35,24);
 			this.butRight.TabIndex = 55;
@@ -516,7 +538,7 @@ namespace OpenDental{
 			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLeft.CornerRadius = 4F;
 			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(335,357);
+			this.butLeft.Location = new System.Drawing.Point(335,376);
 			this.butLeft.Name = "butLeft";
 			this.butLeft.Size = new System.Drawing.Size(35,24);
 			this.butLeft.TabIndex = 54;
@@ -532,7 +554,7 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(124,648);
+			this.butDown.Location = new System.Drawing.Point(124,664);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(82,24);
 			this.butDown.TabIndex = 14;
@@ -549,7 +571,7 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(27,648);
+			this.butUp.Location = new System.Drawing.Point(27,664);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(82,24);
 			this.butUp.TabIndex = 13;
@@ -564,7 +586,7 @@ namespace OpenDental{
 			this.butDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDefault.CornerRadius = 4F;
 			this.butDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDefault.Location = new System.Drawing.Point(27,235);
+			this.butDefault.Location = new System.Drawing.Point(27,254);
 			this.butDefault.Name = "butDefault";
 			this.butDefault.Size = new System.Drawing.Size(91,24);
 			this.butDefault.TabIndex = 4;
@@ -576,7 +598,7 @@ namespace OpenDental{
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(27,264);
+			this.gridMain.Location = new System.Drawing.Point(27,283);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
@@ -594,7 +616,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(584,648);
+			this.butCancel.Location = new System.Drawing.Point(584,664);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 57;
@@ -605,6 +627,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(683,696);
+			this.Controls.Add(this.comboDatesShowing);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.labelProcStatus);
 			this.Controls.Add(this.listProcStatusCodes);
 			this.Controls.Add(this.labelDescription);
@@ -640,6 +664,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormChartView_Load(object sender,EventArgs e) {
+			string[] chartViewDateTypes=Enum.GetNames(typeof(ChartViewDates));
+			Array chartViewDateValues=Enum.GetValues(typeof(ChartViewDates));
+			for(int i=0;i<chartViewDateTypes.Length;i++) {
+				comboDatesShowing.Items.Add(chartViewDateTypes[i]);
+				if(ChartViewCur.DatesShowing==(ChartViewDates)chartViewDateValues.GetValue(i)){
+					comboDatesShowing.SelectedIndex=i;
+				}
+			}
 			if(!ChartViewCur.IsNew) {
 				textBoxViewDesc.Text=ChartViewCur.Description;
 			}
@@ -1007,6 +1039,7 @@ namespace OpenDental{
 				return;
 			}
 			ChartViewCur.Description=textBoxViewDesc.Text;
+			ChartViewCur.DatesShowing=(ChartViewDates)Enum.GetValues(typeof(ChartViewDates)).GetValue(comboDatesShowing.SelectedIndex);
 			ChartViewCur.ObjectTypes=ChartViewObjs.None;
 			if(checkAppt.Checked) {
 				ChartViewCur.ObjectTypes|=ChartViewObjs.Appointments;
@@ -1110,6 +1143,10 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void comboDatesShowing_SelectedIndexChanged(object sender,EventArgs e) {
+			changed=true;
 		}
 
 

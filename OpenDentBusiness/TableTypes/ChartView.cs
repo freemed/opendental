@@ -23,13 +23,10 @@ namespace OpenDentBusiness{
 		public bool IsAudit;
 		///<summary>Set true to only show information regarding the selected teeth.</summary>
 		public bool SelectedTeethOnly;
-		///<summary>Which orion statuses to show. Will be zero if not orion.</summary>
+		///<summary>Enum:OrionStatus Which orion statuses to show. Will be zero if not orion.</summary>
 		public OrionStatus OrionStatusFlags;
-		/// <summary>Date range filter starting date.</summary>
-		public DateTime DateStart;
-		/// <summary>Date range filter ending date.</summary>
-		public DateTime DateStop;
-
+		///<summary>Enum:ChartViewDates </summary>
+		public ChartViewDates DatesShowing;
 
 		public ChartView Copy() {
 			return (ChartView)this.MemberwiseClone();
@@ -80,6 +77,20 @@ namespace OpenDentBusiness{
 		Cn=64,
 		///<summary>127- All.</summary>
 		All=127
+	}
+
+	public enum ChartViewDates{
+		/// <summary>0- All</summary>
+		All=0,
+		/// <summary>1- Today</summary>
+		Today=1,
+		/// <summary>2- Yesterday</summary>
+		Yesterday=2,
+		/// <summary>3- This Year</summary>
+		ThisYear=3,
+		/// <summary>4- Last Year</summary>
+		LastYear=4
+
 	}
 }
 
