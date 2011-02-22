@@ -217,6 +217,8 @@ namespace OpenDental{
 		private Label labelStartTime;
 		private Label labelDPCpost;
 		private ComboBox comboDPCpost;
+		private ComboBox comboPrognosis;
+		private Label label1;
 		private List<InsSub> SubList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -380,6 +382,8 @@ namespace OpenDental{
 			this.checkTypeCodeS = new System.Windows.Forms.CheckBox();
 			this.groupCanadianProcType = new System.Windows.Forms.GroupBox();
 			this.panelOrion = new System.Windows.Forms.Panel();
+			this.labelDPCpost = new System.Windows.Forms.Label();
+			this.comboDPCpost = new System.Windows.Forms.ComboBox();
 			this.labelScheduleBy = new System.Windows.Forms.Label();
 			this.checkIsRepair = new System.Windows.Forms.CheckBox();
 			this.checkIsEffComm = new System.Windows.Forms.CheckBox();
@@ -410,8 +414,8 @@ namespace OpenDental{
 			this.tbPay = new OpenDental.TableProcPay();
 			this.tbAdj = new OpenDental.TableProcAdj();
 			this.textClaimNote = new OpenDental.ODtextBox();
-			this.comboDPCpost = new System.Windows.Forms.ComboBox();
-			this.labelDPCpost = new System.Windows.Forms.Label();
+			this.comboPrognosis = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -1716,6 +1720,26 @@ namespace OpenDental{
 			this.panelOrion.TabIndex = 164;
 			this.panelOrion.Visible = false;
 			// 
+			// labelDPCpost
+			// 
+			this.labelDPCpost.Location = new System.Drawing.Point(3,25);
+			this.labelDPCpost.Name = "labelDPCpost";
+			this.labelDPCpost.Size = new System.Drawing.Size(100,16);
+			this.labelDPCpost.TabIndex = 107;
+			this.labelDPCpost.Text = "DPC Post Visit";
+			this.labelDPCpost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboDPCpost
+			// 
+			this.comboDPCpost.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDPCpost.DropDownWidth = 177;
+			this.comboDPCpost.FormattingEnabled = true;
+			this.comboDPCpost.Location = new System.Drawing.Point(105,24);
+			this.comboDPCpost.MaxDropDownItems = 30;
+			this.comboDPCpost.Name = "comboDPCpost";
+			this.comboDPCpost.Size = new System.Drawing.Size(177,21);
+			this.comboDPCpost.TabIndex = 106;
+			// 
 			// labelScheduleBy
 			// 
 			this.labelScheduleBy.Location = new System.Drawing.Point(187,67);
@@ -2086,30 +2110,30 @@ namespace OpenDental{
 			this.textClaimNote.Size = new System.Drawing.Size(277,43);
 			this.textClaimNote.TabIndex = 10;
 			// 
-			// comboDPCpost
+			// comboPrognosis
 			// 
-			this.comboDPCpost.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboDPCpost.DropDownWidth = 177;
-			this.comboDPCpost.FormattingEnabled = true;
-			this.comboDPCpost.Location = new System.Drawing.Point(105,24);
-			this.comboDPCpost.MaxDropDownItems = 30;
-			this.comboDPCpost.Name = "comboDPCpost";
-			this.comboDPCpost.Size = new System.Drawing.Size(177,21);
-			this.comboDPCpost.TabIndex = 106;
+			this.comboPrognosis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPrognosis.Location = new System.Drawing.Point(286,216);
+			this.comboPrognosis.MaxDropDownItems = 30;
+			this.comboPrognosis.Name = "comboPrognosis";
+			this.comboPrognosis.Size = new System.Drawing.Size(153,21);
+			this.comboPrognosis.TabIndex = 165;
 			// 
-			// labelDPCpost
+			// label1
 			// 
-			this.labelDPCpost.Location = new System.Drawing.Point(3,25);
-			this.labelDPCpost.Name = "labelDPCpost";
-			this.labelDPCpost.Size = new System.Drawing.Size(100,16);
-			this.labelDPCpost.TabIndex = 107;
-			this.labelDPCpost.Text = "DPC Post Visit";
-			this.labelDPCpost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label1.Location = new System.Drawing.Point(285,198);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(114,17);
+			this.label1.TabIndex = 166;
+			this.label1.Text = "Prognosis";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormProcEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,696);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.comboPrognosis);
 			this.Controls.Add(this.panelOrion);
 			this.Controls.Add(this.groupCanadianProcType);
 			this.Controls.Add(this.comboProvNum);

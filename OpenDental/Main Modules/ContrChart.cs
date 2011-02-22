@@ -277,6 +277,8 @@ namespace OpenDental{
 		private TabPage tabPatInfo;
 		private ListBox listProcStatusCodes;
 		private bool chartCustViewChanged;
+		private ComboBox comboPrognosis;
+		private Label label2;
 		private long orionProvNum;
 	
 		///<summary></summary>
@@ -326,7 +328,7 @@ namespace OpenDental{
 			this.labelDx = new System.Windows.Forms.Label();
 			this.checkDone = new System.Windows.Forms.CheckBox();
 			this.listViewButtons = new System.Windows.Forms.ListView();
-			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.imageListProcButtons = new System.Windows.Forms.ImageList(this.components);
 			this.listButtonCats = new System.Windows.Forms.ListBox();
 			this.comboPriority = new System.Windows.Forms.ComboBox();
@@ -513,6 +515,8 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
+			this.comboPrognosis = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -629,7 +633,7 @@ namespace OpenDental{
 			// 
 			this.listDx.Location = new System.Drawing.Point(91,16);
 			this.listDx.Name = "listDx";
-			this.listDx.Size = new System.Drawing.Size(94,173);
+			this.listDx.Size = new System.Drawing.Size(94,134);
 			this.listDx.TabIndex = 46;
 			this.listDx.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listDx_MouseDown);
 			// 
@@ -727,8 +731,8 @@ namespace OpenDental{
 			this.textProcCode.TabIndex = 50;
 			this.textProcCode.Text = "Type Proc Code";
 			this.textProcCode.TextChanged += new System.EventHandler(this.textProcCode_TextChanged);
-			this.textProcCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textProcCode_KeyDown);
 			this.textProcCode.Enter += new System.EventHandler(this.textProcCode_Enter);
+			this.textProcCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textProcCode_KeyDown);
 			// 
 			// label14
 			// 
@@ -975,9 +979,9 @@ namespace OpenDental{
 			this.panelImages.Size = new System.Drawing.Size(939,89);
 			this.panelImages.TabIndex = 186;
 			this.panelImages.Visible = false;
+			this.panelImages.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelImages_MouseDown);
 			this.panelImages.MouseLeave += new System.EventHandler(this.panelImages_MouseLeave);
 			this.panelImages.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelImages_MouseMove);
-			this.panelImages.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelImages_MouseDown);
 			this.panelImages.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelImages_MouseUp);
 			// 
 			// listViewImages
@@ -1024,6 +1028,8 @@ namespace OpenDental{
 			// 
 			// tabEnterTx
 			// 
+			this.tabEnterTx.Controls.Add(this.comboPrognosis);
+			this.tabEnterTx.Controls.Add(this.label2);
 			this.tabEnterTx.Controls.Add(this.panelQuickButtons);
 			this.tabEnterTx.Controls.Add(this.listDx);
 			this.tabEnterTx.Controls.Add(this.listViewButtons);
@@ -2312,8 +2318,8 @@ namespace OpenDental{
 			this.gridChartViews.TabIndex = 44;
 			this.gridChartViews.Title = "Chart Views";
 			this.gridChartViews.TranslationName = "GridChartViews";
-			this.gridChartViews.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridChartViews_CellClick);
 			this.gridChartViews.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridChartViews_DoubleClick);
+			this.gridChartViews.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridChartViews_CellClick);
 			// 
 			// labelCustView
 			// 
@@ -2946,10 +2952,10 @@ namespace OpenDental{
 			this.gridProg.TabIndex = 192;
 			this.gridProg.Title = "Progress Notes";
 			this.gridProg.TranslationName = "TableProg";
-			this.gridProg.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellClick);
-			this.gridProg.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridProg_MouseUp);
 			this.gridProg.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellDoubleClick);
+			this.gridProg.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellClick);
 			this.gridProg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridProg_KeyDown);
+			this.gridProg.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridProg_MouseUp);
 			// 
 			// ToolBarMain
 			// 
@@ -3001,6 +3007,24 @@ namespace OpenDental{
 			this.gridPtInfo.Title = "Patient Info";
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
+			// 
+			// comboPrognosis
+			// 
+			this.comboPrognosis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPrognosis.Location = new System.Drawing.Point(91,174);
+			this.comboPrognosis.MaxDropDownItems = 40;
+			this.comboPrognosis.Name = "comboPrognosis";
+			this.comboPrognosis.Size = new System.Drawing.Size(96,21);
+			this.comboPrognosis.TabIndex = 199;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(89,155);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(79,17);
+			this.label2.TabIndex = 200;
+			this.label2.Text = "Prognosis";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// ContrChart
 			// 
