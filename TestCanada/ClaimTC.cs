@@ -340,7 +340,7 @@ namespace TestCanada {
 			//assignBen can't be set here because it changes per claim in the scripts
 			claim.AccidentDate=DateTime.MinValue;
 			claim.PreAuthString="";
-			claim.CanadianIsInitialUpper="X";
+			claim.CanadianIsInitialUpper="Y";//Example documentation suggests 'X', but c11.txt and the test environment suggest this value should be 'Y', with a blank date. Very strange.
 			claim.CanadianDateInitialUpper=DateTime.MinValue;
 			claim.CanadianIsInitialLower="X";
 			claim.CanadianDateInitialLower=DateTime.MinValue;
@@ -535,7 +535,7 @@ namespace TestCanada {
 
 		public static string RunEleven(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[10]);
-			InsSubTC.SetAssignBen(true,claim.InsSubNum);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			string oldVersion=CarrierTC.SetCDAnetVersion(claim.PlanNum,"02");
 			string retval=Run(11,"","11",claim,showForms);
@@ -545,9 +545,12 @@ namespace TestCanada {
 
 		public static string RunTwelve(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[11]);
-			InsSubTC.SetAssignBen(true,claim.InsSubNum);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(12,"","21",claim,showForms);
+			string oldVersion=CarrierTC.SetCDAnetVersion(claim.PlanNum,"02");
+			string retval=Run(12,"","21",claim,showForms);
+			CarrierTC.SetCDAnetVersion(claim.PlanNum,oldVersion);
+			return retval;
 		}
 
 

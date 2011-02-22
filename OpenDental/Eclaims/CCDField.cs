@@ -747,7 +747,7 @@ namespace OpenDental.Eclaims {
 				case "G09":
 					fieldName="E-Mail Flag";
 					frenchFieldName="Drapeau E-Mail";
-					format="A";
+					format="N";
 					lengthRequirement=new ConstLengthRequirement(1);
 					valueRequirements.Add(new DiscreteValueRequirement(new string[] {"0","1","2"}));
 					break;
