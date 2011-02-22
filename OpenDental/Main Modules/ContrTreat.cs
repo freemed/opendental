@@ -1149,7 +1149,7 @@ namespace OpenDental{
 					if(row.ColorText==System.Drawing.Color.White){
 						row.ColorText=System.Drawing.Color.Black;
 					}
-					//row.Tag=ProcListTP[i].Copy();
+					row.Tag=ProcListTP[i].Copy();
 					RowsMain.Add(row);
 					#region Canadian Lab 
 					/*
@@ -1264,7 +1264,7 @@ namespace OpenDental{
 					if(row.ColorText==System.Drawing.Color.White){
 						row.ColorText=System.Drawing.Color.Black;
 					}
-					//row.Tag=ProcTPSelectList[i].Copy();
+					row.Tag=ProcTPSelectList[i].Copy();
 					RowsMain.Add(row);
 					#region subtotal
 					if(checkShowSubtotals.Checked &&
@@ -1442,6 +1442,9 @@ namespace OpenDental{
 				}
 				if(RowsMain[i].ColorLborder!=null) {
 					row.ColorLborder=RowsMain[i].ColorLborder;
+				}
+				if(RowsMain[i].Tag!=null) {
+					row.Tag=RowsMain[i].Tag;
 				}
 				row.Bold=RowsMain[i].Bold;
 				gridMain.Rows.Add(row);
@@ -2784,6 +2787,7 @@ namespace OpenDental{
 		public System.Drawing.Color ColorText;
 		public System.Drawing.Color ColorLborder;
 		public bool Bold;
+		public object Tag;
 	}
 
 	
