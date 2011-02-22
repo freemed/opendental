@@ -216,12 +216,13 @@ namespace OpenDental{
             "Proc Button Categories",
             "Proc Code Categories",
             "Prog Notes Colors",
+            "Prognosis",
             "Recall/Unsch Status",
             "Supply Categories",
             "Treat\' Plan Priorities"});
 			this.listCategory.Location = new System.Drawing.Point(22,36);
 			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(147,290);
+			this.listCategory.Size = new System.Drawing.Size(147,303);
 			this.listCategory.TabIndex = 0;
 			this.listCategory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listCategory_MouseDown);
 			// 
@@ -253,8 +254,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Definitions";
-			this.Load += new System.EventHandler(this.FormDefinitions_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormDefinitions_Closing);
+			this.Load += new System.EventHandler(this.FormDefinitions_Load);
 			this.groupEdit.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -291,9 +292,10 @@ namespace OpenDental{
 			lookupCat[16]=DefCat.ProcButtonCats;
 			lookupCat[17]=DefCat.ProcCodeCats;
 			lookupCat[18]=DefCat.ProgNoteColors;
-			lookupCat[19]=DefCat.RecallUnschedStatus;
-			lookupCat[20]=DefCat.SupplyCats;
-			lookupCat[21]=DefCat.TxPriorities;
+			lookupCat[19]=DefCat.Prognosis;
+			lookupCat[20]=DefCat.RecallUnschedStatus;
+			lookupCat[21]=DefCat.SupplyCats;
+			lookupCat[22]=DefCat.TxPriorities;
 			for(int i=0;i<listCategory.Items.Count;i++){
 				listCategory.Items[i]=Lan.g(this,(string)listCategory.Items[i]);
 				if((int)lookupCat[i]==SelectedCat){
@@ -422,19 +424,23 @@ namespace OpenDental{
 					FormDefEdit.CanEditName=false;
 					FormDefEdit.HelpText=Lan.g(this,"Changes color of text for different types of entries in the Chart Module Progress Notes.");
 					break;
-				case 19://"Recall/Unsch Status":
+				case 19://"Prognosis":
+					//Nothing special. Might add HelpText later.
+					FormDefEdit.HelpText=Lan.g(this,"");
+					break;
+				case 20://"Recall/Unsch Status":
 					//SelectedCat=13;
 					FormDefEdit.EnableValue=true;
 					FormDefEdit.ValueText=Lan.g(this,"Abbreviation");
 					FormDefEdit.HelpText=Lan.g(this,"Recall/Unsched Status.  Abbreviation must be 7 characters or less.  Changes affect all patients.");
 					break;
-				case 20://Supply Categories
+				case 21://Supply Categories
 					butHide.Visible=false;
 					FormDefEdit.CanDelete=true;
 					FormDefEdit.CanHide=false;
 					FormDefEdit.HelpText=Lan.g(this,"The categories for inventory supplies.");
 					break;
-				case 21://"Treat' Plan Priorities":
+				case 22://"Treat' Plan Priorities":
 					//SelectedCat=20;
 					FormDefEdit.EnableColor=true;
 					FormDefEdit.HelpText=Lan.g(this,"Priorities available for selection in the Treatment Plan module.  They can be simple numbers or descriptive abbreviations 7 letters or less.  Changes affect all procedures where the definition is used.");

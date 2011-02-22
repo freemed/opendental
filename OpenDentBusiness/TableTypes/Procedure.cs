@@ -98,6 +98,8 @@ namespace OpenDentBusiness {
 		///<summary>Marks the time a procedure was finished.</summary>
 		[XmlIgnore]
 		public TimeSpan ProcTimeEnd;
+		///<summary>FK to definition.DefNum, which contains text of the Prognosis.</summary>
+		public long Prognosis;
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

@@ -3491,6 +3491,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE chartview MODIFY DatesShowing NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD Prognosis bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog ADD INDEX (Prognosis)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD Prognosis number(20)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET Prognosis = 0 WHERE Prognosis IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY Prognosis NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX procedurelog_Prognosis ON procedurelog (Prognosis)";
+					Db.NonQ(command);
+				}
+
+
+
 
 
 
@@ -3532,3 +3551,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+

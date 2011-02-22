@@ -210,7 +210,9 @@ namespace OpenDentBusiness{
 		///<summary>28- Categories of Supplies</summary>
 		SupplyCats,
 		///<summary>29- Types of unearned income used in accrual accounting.</summary>
-		PaySplitUnearnedType
+		PaySplitUnearnedType,
+		///<summary>30- Prognosis types.</summary>
+		Prognosis
 	}
 	//public enum StudentStat{None,Full,Part};
 	///<summary>Used in procedurecode setup to specify the treatment area for a procedure.  This determines what fields are available when editing an appointment.</summary>
