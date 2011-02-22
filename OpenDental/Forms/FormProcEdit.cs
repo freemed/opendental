@@ -2403,6 +2403,12 @@ namespace OpenDental{
 				if(DefC.Short[(int)DefCat.Diagnosis][i].DefNum==ProcCur.Dx)
 					comboDx.SelectedIndex=i;
 			}
+			comboPrognosis.Items.Clear();
+			for(int i=0;i<DefC.Short[(int)DefCat.Prognosis].Length;i++) {
+				comboPrognosis.Items.Add(DefC.Short[(int)DefCat.Prognosis][i].ItemName);
+				if(DefC.Short[(int)DefCat.Prognosis][i].DefNum==ProcCur.Prognosis)
+					comboPrognosis.SelectedIndex=i;
+			}
 			checkHideGraphics.Checked=ProcCur.HideGraphics;
 			if(Programs.UsingOrion && this.IsNew && !OrionDentist){
 				ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);//Returns 0 if logged in as non provider.
@@ -4073,6 +4079,9 @@ namespace OpenDental{
 			//clinicNum already handled.
 			if(comboDx.SelectedIndex!=-1) {
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][comboDx.SelectedIndex].DefNum;
+			}
+			if(comboPrognosis.SelectedIndex!=-1) {
+				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex].DefNum;
 			}
 			if(comboPriority.SelectedIndex==0) {
 				ProcCur.Priority=0;

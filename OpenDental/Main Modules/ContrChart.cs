@@ -4670,7 +4670,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Gets run with each ModuleSelected.  Fills Dx, Priorities, ProcButtons, Date, and Image categories</summary>
+		///<summary>Gets run with each ModuleSelected.  Fills Dx, Prognosis, Priorities, ProcButtons, Date, and Image categories</summary>
     private void FillDxProcImage(){
 			//if(textDate.errorProvider1.GetError(textDate)==""){
 			if(checkToday.Checked){//textDate.Text=="" || 
@@ -4681,11 +4681,19 @@ namespace OpenDental{
 			for(int i=0;i<DefC.Short[(int)DefCat.Diagnosis].Length;i++){//move to instantClasses?
 				this.listDx.Items.Add(DefC.Short[(int)DefCat.Diagnosis][i].ItemName);
 			}
+			int selectedPrognosis=comboPrognosis.SelectedIndex;//retain prognosis selection
+			comboPrognosis.Items.Clear();
+			for(int i=0;i<DefC.Short[(int)DefCat.Prognosis].Length;i++) {
+				comboPrognosis.Items.Add(DefC.Short[(int)DefCat.Prognosis][i].ItemName);
+			}
 			int selectedPriority=comboPriority.SelectedIndex;//retain current selection
 			comboPriority.Items.Clear();
 			comboPriority.Items.Add(Lan.g(this,"no priority"));
 			for(int i=0;i<DefC.Short[(int)DefCat.TxPriorities].Length;i++){
 				this.comboPriority.Items.Add(DefC.Short[(int)DefCat.TxPriorities][i].ItemName);
+			}
+			if(selectedPrognosis>0 && selectedPrognosis<comboPrognosis.Items.Count) {
+				comboPrognosis.SelectedIndex=selectedPrognosis;
 			}
 			if(selectedPriority>0 && selectedPriority<comboPriority.Items.Count)
 				//set the selected to what it was before.
@@ -5150,8 +5158,12 @@ namespace OpenDental{
 				ProcCur.Note="";
 			}
 			ProcCur.ClinicNum=PatCur.ClinicNum;
-			if(listDx.SelectedIndex!=-1)
+			if(listDx.SelectedIndex!=-1) {
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
+			}
+			if(comboPrognosis.SelectedIndex!=-1) {
+				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex].DefNum;
+			}
 			//nextaptnum
 			ProcCur.DateEntryC=DateTime.Now;
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
@@ -5274,8 +5286,12 @@ namespace OpenDental{
 				ProcCur.Note="";
 			}
 			ProcCur.ClinicNum=PatCur.ClinicNum;
-			if(listDx.SelectedIndex!=-1)
+			if(listDx.SelectedIndex!=-1) {
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
+			}
+			if(comboPrognosis.SelectedIndex!=-1) {
+				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex].DefNum;
+			}
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=PatCur.SiteNum;
