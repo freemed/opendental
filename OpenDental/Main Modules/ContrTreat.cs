@@ -995,9 +995,8 @@ namespace OpenDental{
 			FillMainDisplay();
 		}
 
+		/// <summary>Fills RowsMain list for gridMain display.</summary>
 		private void FillMainData() {
-			//fairly big method
-			//fill RowsMain
 			decimal fee;
 			decimal priIns;
 			decimal secIns;
@@ -1312,19 +1311,18 @@ namespace OpenDental{
 				//	row.Cells.Add(totStandard.ToString("F"));//standard
 				//}
 				row.Bold=true;
-				//row.ColorLborder=Color.Black;
+				row.ColorText=System.Drawing.Color.Black;
 				RowsMain.Add(row);
 			}
 			#endregion Totals
 		}
 
 		private void FillMainDisplay(){
-			//fairly small method
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			DisplayFields.RefreshCache();
-			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.TreatPlanModule);
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.TreatmentPlanModule);
 			for(int i=0;i<fields.Count;i++){
 				if(fields[i].Description==""){
 					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);
@@ -1362,7 +1360,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<RowsMain.Count;i++){
 				row=new ODGridRow();
-				for(int j=0;j<gridMain.Columns.Count;j++) {
+				for(int j=0;j<fields.Count;j++) {
 					switch(fields[j].InternalName) {
 						case "Done":
 							if(RowsMain[i].Done!=null) {
@@ -1417,12 +1415,12 @@ namespace OpenDental{
 								row.Cells.Add(RowsMain[i].Fee.ToString("F"));
 							}
 							break;
-						case "PriIns":
+						case "Pri Ins":
 							if(checkShowIns.Checked) {
 								row.Cells.Add(RowsMain[i].PriIns.ToString("F"));
 							}
 							break;
-						case "SecIns":
+						case "Sec Ins":
 							if(checkShowIns.Checked) {
 								row.Cells.Add(RowsMain[i].SecIns.ToString("F"));
 							}
@@ -1448,11 +1446,6 @@ namespace OpenDental{
 				row.Bold=RowsMain[i].Bold;
 				gridMain.Rows.Add(row);
 			}
-			//int gridW=0;
-			//for(int i=0;i<gridMain.Columns.Count;i++){
-			//  gridW+=gridMain.Columns[i].ColWidth;
-			//}
-			//gridMain.Width=gridW+20;
 			gridMain.EndUpdate();
 		}
 
@@ -2789,8 +2782,8 @@ namespace OpenDental{
 		public decimal Discount;
 		public decimal Pat;
 		public System.Drawing.Color ColorText;
-		public bool Bold;
 		public System.Drawing.Color ColorLborder;
+		public bool Bold;
 	}
 
 	

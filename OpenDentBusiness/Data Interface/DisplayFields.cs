@@ -237,7 +237,7 @@ namespace OpenDentBusiness {
 				//	list.Add(new DisplayField("DPCpost",52,category));
 				//}
 			}
-			else if(category==DisplayFieldCategory.TreatPlanModule) {
+			else if(category==DisplayFieldCategory.TreatmentPlanModule) {
 				list.Add(new DisplayField("Done",50,category));
 				list.Add(new DisplayField("Priority",50,category));
 				list.Add(new DisplayField("Tth",40,category));
@@ -405,7 +405,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("DPCpost",52,category));
 				}
 			}
-			else if(category==DisplayFieldCategory.TreatPlanModule) {
+			else if(category==DisplayFieldCategory.TreatmentPlanModule) {
 				list.Add(new DisplayField("Done",50,category));
 				list.Add(new DisplayField("Priority",50,category));
 				list.Add(new DisplayField("Tth",40,category));
