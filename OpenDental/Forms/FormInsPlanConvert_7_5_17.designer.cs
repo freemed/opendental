@@ -100,7 +100,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormInsPlanConvert_7_5_17";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Ins Plan Converstion Strategy";
+			this.Text = "Ins Plan Conversion Strategy";
 			this.Load += new System.EventHandler(this.FormInsPlanConvert_7_5_17_Load);
 			this.ResumeLayout(false);
 
