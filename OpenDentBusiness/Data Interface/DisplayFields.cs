@@ -100,6 +100,7 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Priority",65,category));
 				//list.Add(new DisplayField("Date TP",67,category));
 				//list.Add(new DisplayField("Date Entry",67,category));
+				//list.Add(new DisplayField("Prognosis",60,category));
 				//if(Programs.UsingOrion){
 					//list.Add(new DisplayField("DPC",33,category));
 					//list.Add(new DisplayField("Schedule By",72,category));
@@ -249,6 +250,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Sec Ins",50,category));
 				list.Add(new DisplayField("Discount",55,category));
 				list.Add(new DisplayField("Pat",50,category));
+				//list.Add(new DisplayField("Prognosis",60,category));
 			}
 			return list;
 		}
@@ -272,6 +274,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Priority",44,category));
 				list.Add(new DisplayField("Date TP",67,category));
 				list.Add(new DisplayField("Date Entry",67,category));
+				list.Add(new DisplayField("Prognosis",60,category));
 				if(Programs.UsingOrion){
 					list.Add(new DisplayField("DPC",33,category));
 					list.Add(new DisplayField("Schedule By",72,category));
@@ -417,7 +420,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Sec Ins",50,category));
 				list.Add(new DisplayField("Discount",55,category));
 				list.Add(new DisplayField("Pat",50,category));
-				//prognosis later
+				list.Add(new DisplayField("Prognosis",60,category));
 			}
 			return list;
 		}

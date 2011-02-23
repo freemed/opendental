@@ -3507,6 +3507,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX procedurelog_Prognosis ON procedurelog (Prognosis)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE proctp ADD Prognosis varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE proctp ADD Prognosis varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3551,4 +3559,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
+
+
 

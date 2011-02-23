@@ -218,7 +218,7 @@ namespace OpenDental{
 		private Label labelDPCpost;
 		private ComboBox comboDPCpost;
 		private ComboBox comboPrognosis;
-		private Label label1;
+		private Label labelPrognosis;
 		private List<InsSub> SubList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -415,7 +415,7 @@ namespace OpenDental{
 			this.tbAdj = new OpenDental.TableProcAdj();
 			this.textClaimNote = new OpenDental.ODtextBox();
 			this.comboPrognosis = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelPrognosis = new System.Windows.Forms.Label();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -2119,20 +2119,20 @@ namespace OpenDental{
 			this.comboPrognosis.Size = new System.Drawing.Size(153,21);
 			this.comboPrognosis.TabIndex = 165;
 			// 
-			// label1
+			// labelPrognosis
 			// 
-			this.label1.Location = new System.Drawing.Point(285,198);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(114,17);
-			this.label1.TabIndex = 166;
-			this.label1.Text = "Prognosis";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelPrognosis.Location = new System.Drawing.Point(285,198);
+			this.labelPrognosis.Name = "labelPrognosis";
+			this.labelPrognosis.Size = new System.Drawing.Size(114,17);
+			this.labelPrognosis.TabIndex = 166;
+			this.labelPrognosis.Text = "Prognosis";
+			this.labelPrognosis.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormProcEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,696);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelPrognosis);
 			this.Controls.Add(this.comboPrognosis);
 			this.Controls.Add(this.panelOrion);
 			this.Controls.Add(this.groupCanadianProcType);
@@ -2284,6 +2284,8 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.EasyHideClinical)){
 				labelDx.Visible=false;
 				comboDx.Visible=false;
+				labelPrognosis.Visible=false;
+				comboPrognosis.Visible=false;
 			}
 			if(PrefC.GetBool(PrefName.EasyHideMedicaid)) {
 				comboBillingTypeOne.Visible=false;

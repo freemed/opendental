@@ -1140,6 +1140,7 @@ namespace OpenDental{
 					if(showSecDeduct!="") {
 						row.Description+=showSecDeduct;
 					}
+					row.Prognosis=DefC.GetName(DefCat.Prognosis,PIn.Long(ProcListTP[i].Prognosis.ToString()));
 					row.Fee=fee;
 					row.PriIns=priIns;
 					row.SecIns=secIns;
@@ -1433,6 +1434,14 @@ namespace OpenDental{
 						case "Pat":
 							if(checkShowIns.Checked) {
 								row.Cells.Add(RowsMain[i].Pat.ToString("F"));
+							}
+							break;
+						case "Prognosis":
+							if(RowsMain[i].Prognosis!=null) {
+								row.Cells.Add(RowsMain[i].Prognosis.ToString());
+							}
+							else {
+								row.Cells.Add("");
 							}
 							break;
 					}
@@ -2779,6 +2788,7 @@ namespace OpenDental{
 		public string Surf;
 		public string Code;
 		public string Description;
+		public string Prognosis;
 		public decimal Fee;
 		public decimal PriIns;
 		public decimal SecIns;

@@ -61,6 +61,7 @@ namespace OpenDentBusiness.Crud{
 				procTP.SecInsAmt   = PIn.Double(table.Rows[i]["SecInsAmt"].ToString());
 				procTP.PatAmt      = PIn.Double(table.Rows[i]["PatAmt"].ToString());
 				procTP.Discount    = PIn.Double(table.Rows[i]["Discount"].ToString());
+				procTP.Prognosis   = PIn.String(table.Rows[i]["Prognosis"].ToString());
 				retVal.Add(procTP);
 			}
 			return retVal;
@@ -101,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcTPNum,";
 			}
-			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,PriInsAmt,SecInsAmt,PatAmt,Discount) VALUES(";
+			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,PriInsAmt,SecInsAmt,PatAmt,Discount,Prognosis) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procTP.ProcTPNum)+",";
 			}
@@ -119,7 +120,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(procTP.PriInsAmt)+"',"
 				+"'"+POut.Double(procTP.SecInsAmt)+"',"
 				+"'"+POut.Double(procTP.PatAmt)+"',"
-				+"'"+POut.Double(procTP.Discount)+"')";
+				+"'"+POut.Double(procTP.Discount)+"',"
+				+"'"+POut.String(procTP.Prognosis)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -145,7 +147,8 @@ namespace OpenDentBusiness.Crud{
 				+"PriInsAmt   = '"+POut.Double(procTP.PriInsAmt)+"', "
 				+"SecInsAmt   = '"+POut.Double(procTP.SecInsAmt)+"', "
 				+"PatAmt      = '"+POut.Double(procTP.PatAmt)+"', "
-				+"Discount    = '"+POut.Double(procTP.Discount)+"' "
+				+"Discount    = '"+POut.Double(procTP.Discount)+"', "
+				+"Prognosis   = '"+POut.String(procTP.Prognosis)+"' "
 				+"WHERE ProcTPNum = "+POut.Long(procTP.ProcTPNum);
 			Db.NonQ(command);
 		}
@@ -208,6 +211,10 @@ namespace OpenDentBusiness.Crud{
 			if(procTP.Discount != oldProcTP.Discount) {
 				if(command!=""){ command+=",";}
 				command+="Discount = '"+POut.Double(procTP.Discount)+"'";
+			}
+			if(procTP.Prognosis != oldProcTP.Prognosis) {
+				if(command!=""){ command+=",";}
+				command+="Prognosis = '"+POut.String(procTP.Prognosis)+"'";
 			}
 			if(command==""){
 				return;

@@ -65,6 +65,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("ProcStatus");
 			table.Columns.Add("procTime");
 			table.Columns.Add("procTimeEnd");
+			table.Columns.Add("prognosis");
 			table.Columns.Add("prov");
 			table.Columns.Add("quadrant");
 			table.Columns.Add("RxNum");
@@ -85,7 +86,7 @@ namespace OpenDentBusiness {
 				+"procedurelog.CodeNum,procedurelog.DateEntryC,orionproc.DateScheduleBy,orionproc.DateStopClock,procedurelog.DateTP,"
 				+"procedurecode.Descript,orionproc.DPC,orionproc.DPCpost,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,"
 				+"LaymanTerm,Priority,procedurecode.ProcCode,ProcDate,ProcFee,procedurelog.ProcNum,ProcNumLab,procedurelog.ProcTime,"
-				+"procedurelog.ProcTimeEnd,ProcStatus,orionproc.Status2,Surf,ToothNum,ToothRange,UnitQty "
+				+"procedurelog.ProcTimeEnd,procedurelog.Prognosis,ProcStatus,orionproc.Status2,Surf,ToothNum,ToothRange,UnitQty "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
 				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
@@ -280,6 +281,7 @@ namespace OpenDentBusiness {
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["procTimeEnd"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
+				row["prognosis"]=DefC.GetName(DefCat.Prognosis,PIn.Long(rawProcs.Rows[i]["Prognosis"].ToString()));
 				row["prov"]=rawProcs.Rows[i]["Abbr"].ToString();
 				row["quadrant"]="";
 				if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Tooth){

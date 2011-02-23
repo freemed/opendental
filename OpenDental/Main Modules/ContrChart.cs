@@ -278,7 +278,7 @@ namespace OpenDental{
 		private ListBox listProcStatusCodes;
 		private bool chartCustViewChanged;
 		private ComboBox comboPrognosis;
-		private Label label2;
+		private Label labelPrognosis;
 		private long orionProvNum;
 	
 		///<summary></summary>
@@ -367,6 +367,8 @@ namespace OpenDental{
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
 			this.tabProc = new System.Windows.Forms.TabControl();
 			this.tabEnterTx = new System.Windows.Forms.TabPage();
+			this.comboPrognosis = new System.Windows.Forms.ComboBox();
+			this.labelPrognosis = new System.Windows.Forms.Label();
 			this.panelQuickButtons = new System.Windows.Forms.Panel();
 			this.panelQuickPasteAmalgam = new System.Windows.Forms.Panel();
 			this.buttonAMODB = new OpenDental.UI.Button();
@@ -515,8 +517,6 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.comboPrognosis = new System.Windows.Forms.ComboBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -1029,7 +1029,7 @@ namespace OpenDental{
 			// tabEnterTx
 			// 
 			this.tabEnterTx.Controls.Add(this.comboPrognosis);
-			this.tabEnterTx.Controls.Add(this.label2);
+			this.tabEnterTx.Controls.Add(this.labelPrognosis);
 			this.tabEnterTx.Controls.Add(this.panelQuickButtons);
 			this.tabEnterTx.Controls.Add(this.listDx);
 			this.tabEnterTx.Controls.Add(this.listViewButtons);
@@ -1059,6 +1059,24 @@ namespace OpenDental{
 			this.tabEnterTx.TabIndex = 0;
 			this.tabEnterTx.Text = "Enter Treatment";
 			this.tabEnterTx.UseVisualStyleBackColor = true;
+			// 
+			// comboPrognosis
+			// 
+			this.comboPrognosis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPrognosis.Location = new System.Drawing.Point(91,174);
+			this.comboPrognosis.MaxDropDownItems = 40;
+			this.comboPrognosis.Name = "comboPrognosis";
+			this.comboPrognosis.Size = new System.Drawing.Size(96,21);
+			this.comboPrognosis.TabIndex = 199;
+			// 
+			// labelPrognosis
+			// 
+			this.labelPrognosis.Location = new System.Drawing.Point(89,155);
+			this.labelPrognosis.Name = "labelPrognosis";
+			this.labelPrognosis.Size = new System.Drawing.Size(79,17);
+			this.labelPrognosis.TabIndex = 200;
+			this.labelPrognosis.Text = "Prognosis";
+			this.labelPrognosis.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// panelQuickButtons
 			// 
@@ -3008,24 +3026,6 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
-			// comboPrognosis
-			// 
-			this.comboPrognosis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPrognosis.Location = new System.Drawing.Point(91,174);
-			this.comboPrognosis.MaxDropDownItems = 40;
-			this.comboPrognosis.Name = "comboPrognosis";
-			this.comboPrognosis.Size = new System.Drawing.Size(96,21);
-			this.comboPrognosis.TabIndex = 199;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(89,155);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(79,17);
-			this.label2.TabIndex = 200;
-			this.label2.Text = "Prognosis";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.panelEcw);
@@ -3366,6 +3366,8 @@ namespace OpenDental{
 				radioEntryR.Visible=false;
 				labelDx.Visible=false;
 				listDx.Visible=false;
+				labelPrognosis.Visible=false;
+				comboPrognosis.Visible=false;
 			}
 			else{
 				gridPtInfo.Visible=true;
@@ -3381,6 +3383,8 @@ namespace OpenDental{
 				radioEntryR.Visible=true;
 				labelDx.Visible=true;
 				listDx.Visible=true;
+				labelPrognosis.Visible=true;
+				comboPrognosis.Visible=true;
 			}
 		}
 
@@ -4339,6 +4343,9 @@ namespace OpenDental{
 							break;
 						case "Date Entry":
 							row.Cells.Add(table.Rows[i]["dateEntryC"].ToString());
+							break;
+						case "Prognosis":
+							row.Cells.Add(table.Rows[i]["prognosis"].ToString());
 							break;
 						case "Date TP":
 							row.Cells.Add(table.Rows[i]["dateTP"].ToString());
