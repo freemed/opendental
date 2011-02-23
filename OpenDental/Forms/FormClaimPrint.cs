@@ -2753,22 +2753,24 @@ namespace OpenDental{
 						case "MedInsAAssignBen":
 							break;
 						case "MedInsAPriorPmt":
-							if(ClaimCur.ClaimNum==Primary.ClaimNum){
+							if(ClaimCur.ClaimNum==Primary.ClaimNum) {
 								displayStrings[i] = "";
-							} else {
+							}
+							else {
 								PriorPayments += Primary.InsPayAmt;
-								double amt = Primary.InsPayAmt * 100; //get rid of decimal
-								displayStrings[i] = amt.ToString();
+								double amt = Primary.InsPayAmt;// *100; //get rid of decimal
+								displayStrings[i] = amt.ToString("n2");
 							}
 							break;
 						case "MedInsAAmtDue":
 							double AmtDue;
-							if (ClaimCur.ClaimNum == Primary.ClaimNum){
-								AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount) * 100;
-								displayStrings[i]=AmtDue.ToString();
-							} else {
-								displayStrings[i]="";
-							}
+							//if (ClaimCur.ClaimNum == Primary.ClaimNum){
+							AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount);// * 100;
+							displayStrings[i]=AmtDue.ToString("n2");
+							//} 
+							//else {
+							//	displayStrings[i]="";
+							//}
 							break;
 						case "MedInsAOtherProvID":
 							ProviderIdent AltID;
