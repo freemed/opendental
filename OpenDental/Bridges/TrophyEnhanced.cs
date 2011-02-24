@@ -90,7 +90,7 @@ namespace OpenDental.Bridges{
 				dirList.Add(dirArray[i]);
 			}
 			if(dirList.Count==0) {//Create a folder using the numbering convention
-				retVal=ODFileUtils.CombinePaths(folderDesired.Substring(4,2),folderDesired);
+				retVal=ODFileUtils.CombinePaths(folderDesired.PadLeft(6,'0').Substring(4,2),folderDesired);
 				string fullPath=ODFileUtils.CombinePaths(storagePath,retVal);
 				if(!Directory.Exists(fullPath)) {
 					try {
