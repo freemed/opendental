@@ -23,13 +23,56 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.validDate1 = new OpenDental.ValidDate();
-			this.textDateStop = new OpenDental.ValidDate();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.listPresetDateRanges = new System.Windows.Forms.ListBox();
+			this.textDateStop = new OpenDental.ValidDate();
+			this.textDateStart = new OpenDental.ValidDate();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(19,142);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(84,16);
+			this.label1.TabIndex = 6;
+			this.label1.Text = "Start Date";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(19,168);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(84,16);
+			this.label2.TabIndex = 7;
+			this.label2.Text = "Stop Date";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// listPresetDateRanges
+			// 
+			this.listPresetDateRanges.FormattingEnabled = true;
+			this.listPresetDateRanges.Location = new System.Drawing.Point(105,12);
+			this.listPresetDateRanges.Name = "listPresetDateRanges";
+			this.listPresetDateRanges.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listPresetDateRanges.Size = new System.Drawing.Size(91,121);
+			this.listPresetDateRanges.TabIndex = 8;
+			this.listPresetDateRanges.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listPresetDateRanges_MouseClick);
+			// 
+			// textDateStop
+			// 
+			this.textDateStop.Location = new System.Drawing.Point(105,167);
+			this.textDateStop.Name = "textDateStop";
+			this.textDateStop.Size = new System.Drawing.Size(91,20);
+			this.textDateStop.TabIndex = 5;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(105,141);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(91,20);
+			this.textDateStart.TabIndex = 4;
 			// 
 			// butOK
 			// 
@@ -61,46 +104,15 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// validDate1
-			// 
-			this.validDate1.Location = new System.Drawing.Point(105,141);
-			this.validDate1.Name = "validDate1";
-			this.validDate1.Size = new System.Drawing.Size(91,20);
-			this.validDate1.TabIndex = 4;
-			// 
-			// textDateStop
-			// 
-			this.textDateStop.Location = new System.Drawing.Point(105,167);
-			this.textDateStop.Name = "textDateStop";
-			this.textDateStop.Size = new System.Drawing.Size(91,20);
-			this.textDateStop.TabIndex = 5;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(19,142);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(84,16);
-			this.label1.TabIndex = 6;
-			this.label1.Text = "Start Date";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(19,168);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(84,16);
-			this.label2.TabIndex = 7;
-			this.label2.Text = "Stop Date";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormChartViewDateFilter
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(316,262);
+			this.Controls.Add(this.listPresetDateRanges);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textDateStop);
-			this.Controls.Add(this.validDate1);
+			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormChartViewDateFilter";
@@ -116,9 +128,10 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private ValidDate validDate1;
+		private ValidDate textDateStart;
 		private ValidDate textDateStop;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.ListBox listPresetDateRanges;
 	}
 }

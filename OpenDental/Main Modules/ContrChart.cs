@@ -321,7 +321,7 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrChart));
-			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
 			this.textSurf = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioEntryCn = new System.Windows.Forms.RadioButton();
@@ -2333,6 +2333,7 @@ namespace OpenDental{
 			this.butShowDateRange.TabIndex = 47;
 			this.butShowDateRange.Text = "...";
 			this.butShowDateRange.UseVisualStyleBackColor = true;
+			this.butShowDateRange.Click += new System.EventHandler(this.butShowDateRange_Click);
 			// 
 			// textShowDateRange
 			// 
@@ -2951,8 +2952,8 @@ namespace OpenDental{
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
-			toothChartData2.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart.TcData = toothChartData2;
+			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart.TcData = toothChartData1;
 			this.toothChart.UseHardware = false;
 			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
@@ -8306,6 +8307,11 @@ namespace OpenDental{
 			if(textShowDateRange.Text=="") {
 				textShowDateRange.Text=Lan.g(this,"All Dates");
 			}
+		}
+
+		private void butShowDateRange_Click(object sender,EventArgs e) {
+			FormChartViewDateFilter FormC=new FormChartViewDateFilter();
+			FormC.ShowDialog();
 		}
 
 		
