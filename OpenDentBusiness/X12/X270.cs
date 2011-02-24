@@ -300,7 +300,7 @@ IEA*1*000012145~";
 				}
 				strb.Append("Prov TIN 9 digits");
 			}
-			X12Validate.BillProv(billProv,strb);
+			X12Validate.BillProv(billProv,strb,true);//always hardcoded to be a person
 			if(clinic==null) {
 				X12Validate.PracticeAddress(strb);
 			}

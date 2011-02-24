@@ -1697,7 +1697,8 @@ namespace OpenDental.Eclaims
 				return "Medical e-claims not allowed";
 			}
 			//billProv
-			X12Validate.BillProv(billProv,strb);
+			bool isPerson=(billProv.FName!="");//this is our current hack for indicating a person
+			X12Validate.BillProv(billProv,strb,isPerson);
 			//treatProv
 			if(treatProv.LName==""){
 				if(strb.Length!=0) {

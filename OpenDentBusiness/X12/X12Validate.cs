@@ -87,20 +87,20 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>StringBuilder does not get altered if no invalid data.</summary>
-		public static void BillProv(Provider billProv,StringBuilder strb) {
+		public static void BillProv(Provider billProv,StringBuilder strb,bool isPerson) {
 			if(billProv.LName=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Billing Prov LName");
 			}
-			/*this is now allowed to be blank because that's how we identify non-person
-			if(billProv.FName=="") {
+			if(isPerson && billProv.FName==""){//this is allowed to be blank if it's a non-person.
+				//The way that it's now written, this can only happen on 270s, not 
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Billing Prov FName");
-			}*/
+			}
 			if(billProv.SSN.Length<2) {
 				if(strb.Length!=0) {
 					strb.Append(",");
