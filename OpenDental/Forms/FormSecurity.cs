@@ -477,6 +477,8 @@ namespace OpenDental{
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.ProcComplEdit);
 						node2.Nodes.Add(node3);
+					node3=SetNode(Permissions.ProcEditShowFee);
+						node2.Nodes.Add(node3);
 						node.Nodes.Add(node2);
 					node2=SetNode(Permissions.RxCreate);
 					node.Nodes.Add(node2);
