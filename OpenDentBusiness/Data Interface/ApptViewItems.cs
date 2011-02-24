@@ -73,6 +73,12 @@ namespace OpenDentBusiness{
 				if(ApptViewItemC.List[i].ApptViewNum==apptViewNum && ApptViewItemC.List[i].OpNum!=0){
 					retVal.Add(ApptViewItemC.List[i].OpNum);
 				}
+				if(apptViewNum==0 && ApptViewItemC.List[i].OpNum!=0) {//No view selected so return all operatories that are not hidden.
+					Operatory op=Operatories.GetOperatory(ApptViewItemC.List[i].OpNum);
+					if(!op.IsHidden) {
+						retVal.Add(ApptViewItemC.List[i].OpNum);
+					}
+				}
 			}
 			//int[] retVal=new int[AL.Count]();
 			return retVal;//(int[])AL.ToArray(typeof(int));
