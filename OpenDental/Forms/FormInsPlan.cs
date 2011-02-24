@@ -459,9 +459,8 @@ namespace OpenDental{
 			this.textCarrier.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textCarrier.Location = new System.Drawing.Point(102,11);
 			this.textCarrier.MaxLength = 50;
-			this.textCarrier.Multiline = true;
 			this.textCarrier.Name = "textCarrier";
-			this.textCarrier.Size = new System.Drawing.Size(273,20);
+			this.textCarrier.Size = new System.Drawing.Size(273,21);
 			this.textCarrier.TabIndex = 0;
 			this.textCarrier.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier_KeyUp);
 			this.textCarrier.Leave += new System.EventHandler(this.textCarrier_Leave);
