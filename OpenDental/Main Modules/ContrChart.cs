@@ -279,7 +279,13 @@ namespace OpenDental{
 		private bool chartCustViewChanged;
 		private ComboBox comboPrognosis;
 		private Label labelPrognosis;
+//		private TextBox textShowDateRange;
+//		private UI.Button butShowDateRange;
 		private long orionProvNum;
+		private DateTime ShowDateStart;
+		private UI.Button butShowDateRange;
+		private TextBox textShowDateRange;
+		private DateTime ShowDateEnd;
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -315,7 +321,7 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrChart));
-			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
 			this.textSurf = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioEntryCn = new System.Windows.Forms.RadioButton();
@@ -457,6 +463,8 @@ namespace OpenDental{
 			this.butNew = new OpenDental.UI.Button();
 			this.gridPlanned = new OpenDental.UI.ODGrid();
 			this.tabShow = new System.Windows.Forms.TabPage();
+			this.butShowDateRange = new OpenDental.UI.Button();
+			this.textShowDateRange = new System.Windows.Forms.TextBox();
 			this.listProcStatusCodes = new System.Windows.Forms.ListBox();
 			this.gridChartViews = new OpenDental.UI.ODGrid();
 			this.labelCustView = new System.Windows.Forms.Label();
@@ -2290,6 +2298,8 @@ namespace OpenDental{
 			// tabShow
 			// 
 			this.tabShow.BackColor = System.Drawing.Color.White;
+			this.tabShow.Controls.Add(this.butShowDateRange);
+			this.tabShow.Controls.Add(this.textShowDateRange);
 			this.tabShow.Controls.Add(this.listProcStatusCodes);
 			this.tabShow.Controls.Add(this.gridChartViews);
 			this.tabShow.Controls.Add(this.labelCustView);
@@ -2309,6 +2319,28 @@ namespace OpenDental{
 			this.tabShow.TabIndex = 5;
 			this.tabShow.Text = "Show";
 			this.tabShow.UseVisualStyleBackColor = true;
+			// 
+			// butShowDateRange
+			// 
+			this.butShowDateRange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowDateRange.Autosize = true;
+			this.butShowDateRange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowDateRange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowDateRange.CornerRadius = 4F;
+			this.butShowDateRange.Location = new System.Drawing.Point(270,186);
+			this.butShowDateRange.Name = "butShowDateRange";
+			this.butShowDateRange.Size = new System.Drawing.Size(24,22);
+			this.butShowDateRange.TabIndex = 47;
+			this.butShowDateRange.Text = "...";
+			this.butShowDateRange.UseVisualStyleBackColor = true;
+			// 
+			// textShowDateRange
+			// 
+			this.textShowDateRange.Location = new System.Drawing.Point(144,188);
+			this.textShowDateRange.Name = "textShowDateRange";
+			this.textShowDateRange.ReadOnly = true;
+			this.textShowDateRange.Size = new System.Drawing.Size(125,20);
+			this.textShowDateRange.TabIndex = 46;
 			// 
 			// listProcStatusCodes
 			// 
@@ -2344,7 +2376,7 @@ namespace OpenDental{
 			this.labelCustView.AutoSize = true;
 			this.labelCustView.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelCustView.ForeColor = System.Drawing.Color.Red;
-			this.labelCustView.Location = new System.Drawing.Point(160,199);
+			this.labelCustView.Location = new System.Drawing.Point(160,211);
 			this.labelCustView.Name = "labelCustView";
 			this.labelCustView.Size = new System.Drawing.Size(96,16);
 			this.labelCustView.TabIndex = 43;
@@ -2919,8 +2951,8 @@ namespace OpenDental{
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
-			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart.TcData = toothChartData1;
+			toothChartData2.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart.TcData = toothChartData2;
 			this.toothChart.UseHardware = false;
 			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
@@ -4093,7 +4125,7 @@ namespace OpenDental{
 			ODGridColumn col;
 			List<DisplayField> fields;
 			DisplayFields.RefreshCache();
-			if(gridChartViews.Rows.Count==0) {
+			if(gridChartViews.Rows.Count==0) {//No chart views, Use default values.
 				fields=DisplayFields.GetForCategory(DisplayFieldCategory.None);
 				gridProg.Title="Progress Notes";
 				if(!chartCustViewChanged) {
@@ -4114,6 +4146,7 @@ namespace OpenDental{
 					checkNotes.Checked=true;
 					checkShowTeeth.Checked=false;
 					checkAudit.Checked=false;
+					textShowDateRange.Text="All Dates";
 				}
 			}
 			else {
@@ -4139,6 +4172,8 @@ namespace OpenDental{
 					checkShowTeeth.Checked=ChartViewCurDisplay.SelectedTeethOnly;
 					checkNotes.Checked=ChartViewCurDisplay.ShowProcNotes;
 					checkAudit.Checked=ChartViewCurDisplay.IsAudit;
+					SetDateRange();
+					FillDateRange();
 					gridChartViews.SetSelected(ChartViewCurDisplay.ItemOrder,true);
 					if(Programs.UsingOrion) {
 						listProcStatusCodes.ClearSelected();
@@ -8230,6 +8265,48 @@ namespace OpenDental{
 			}
 		}
 
+		///<summary>This does not currently handle custom views.</summary>
+		private void SetDateRange() {
+			switch(ChartViewCurDisplay.DatesShowing) {
+				case ChartViewDates.All:
+					ShowDateStart=DateTime.MinValue;
+					ShowDateEnd=DateTime.MinValue;//interpreted as empty.  We want to show all future dates.
+					break;
+				case ChartViewDates.Today:
+					ShowDateStart=DateTime.Today;
+					ShowDateEnd=DateTime.Today;
+					break;
+				case ChartViewDates.Yesterday:
+					ShowDateStart=DateTime.Today.AddDays(-1);
+					ShowDateEnd=DateTime.Today.AddDays(-1);
+					break;
+				case ChartViewDates.ThisYear:
+					ShowDateStart=new DateTime(DateTime.Today.Year,1,1);
+					ShowDateEnd=new DateTime(DateTime.Today.Year,12,31);
+					break;
+				case ChartViewDates.LastYear:
+					ShowDateStart=new DateTime(DateTime.Today.Year-1,1,1);
+					ShowDateEnd=new DateTime(DateTime.Today.Year-1,12,31);
+					break;
+			}
+		}
+
+		/// <summary>This method is used to set the Date Range filter start and stop dates based on either a custom date range or DatesShowing property of chart view.</summary>
+		private void FillDateRange() {
+			textShowDateRange.Text="";
+			if(ShowDateStart.Year > 1880) {
+				textShowDateRange.Text+=ShowDateStart.ToString("MM/d/yy");
+			}
+			if(ShowDateEnd.Year > 1880 && ShowDateStart != ShowDateEnd) {
+				if(textShowDateRange.Text!="") {
+					textShowDateRange.Text+=" - ";
+				}
+				textShowDateRange.Text+=ShowDateEnd.ToString("MM/d/yy");
+			}
+			if(textShowDateRange.Text=="") {
+				textShowDateRange.Text=Lan.g(this,"All Dates");
+			}
+		}
 
 		
 
