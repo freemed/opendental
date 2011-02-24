@@ -1254,7 +1254,8 @@ namespace OpenDental{
 					totDiscount+=(decimal)ProcTPSelectList[i].Discount;
 					row.Pat=(decimal)ProcTPSelectList[i].PatAmt;//Pat
 					subpat+=(decimal)ProcTPSelectList[i].PatAmt;
-					totPat+=(decimal)ProcTPSelectList[i].PatAmt;		
+					totPat+=(decimal)ProcTPSelectList[i].PatAmt;
+					row.Prognosis=ProcTPSelectList[i].Prognosis;//Prognosis
 					//if(checkShowStandard.Checked) {
 					//	standard=Fees.GetAmount0(ProcedureCodes.GetCodeNum(ProcTPSelectList[i].ProcCode),feeSched);
 					//	row.Cells.Add(standard.ToString("F"));//standard
@@ -2518,26 +2519,21 @@ namespace OpenDental{
 					procTP.Surf=proc.Surf;//for UR, L, etc.
 				}
 				procTP.ProcCode=ProcedureCodes.GetStringProcCode(proc.CodeNum);
-				procTP.Descript=gridMain.Rows[gridMain.SelectedIndices[i]]
-					.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Description"))].Text;
+				procTP.Descript=RowsMain[gridMain.SelectedIndices[i]].Description;
 				if(checkShowFees.Checked){
-					procTP.FeeAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
-						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Fee"))].Text);
+					procTP.FeeAmt=PIn.Double(RowsMain[gridMain.SelectedIndices[i]].Fee.ToString());
 				}
 				if(checkShowIns.Checked){
-					procTP.PriInsAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
-						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Pri Ins"))].Text);
-					procTP.SecInsAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
-						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Sec Ins"))].Text);
+					procTP.PriInsAmt=PIn.Double(RowsMain[gridMain.SelectedIndices[i]].PriIns.ToString());
+					procTP.SecInsAmt=PIn.Double(RowsMain[gridMain.SelectedIndices[i]].SecIns.ToString());
 				}
 				if(checkShowDiscount.Checked){
-					procTP.Discount=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
-							.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Discount"))].Text);
+					procTP.Discount=PIn.Double(RowsMain[gridMain.SelectedIndices[i]].Discount.ToString());
 				}
 				if(checkShowIns.Checked){
-					procTP.PatAmt=PIn.Double(gridMain.Rows[gridMain.SelectedIndices[i]]
-						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Pat"))].Text);
+					procTP.PatAmt=PIn.Double(RowsMain[gridMain.SelectedIndices[i]].Pat.ToString());
 				}
+				procTP.Prognosis=RowsMain[gridMain.SelectedIndices[i]].Prognosis;
 				ProcTPs.InsertOrUpdate(procTP,true);
 				itemNo++;
 				#region Canadian Lab Fees
