@@ -83,8 +83,11 @@ namespace OpenDental.UI {
 		private int sortedByColumnIdx;
 		///<summary>True to show a triangle pointing up.  False to show a triangle pointing down.  Only works if sortedByColumnIdx is not -1.</summary>
 		private bool sortedIsAscending;
-		private List<List<int>> multiPageNoteHeights;//If NoteHeights[i] won't fit on one page, get various page heights here (printing).
-		private List<List<string>> multiPageNoteSection;//Section of the note that is split up across multiple pages.
+		//private List<List<int>> multiPageNoteHeights;//If NoteHeights[i] won't fit on one page, get various page heights here (printing).
+		//private List<List<string>> multiPageNoteSection;//Section of the note that is split up across multiple pages.
+		private int RowsPrinted;
+		///<summary>How many lines of text of the current note have been printed.  If 0, then we are not in the middle of a note.</summary>
+		private int LinesOfNotePrinted;
 
 		///<summary></summary>
 		public ODGrid() {
@@ -400,14 +403,14 @@ namespace OpenDental.UI {
 				using(Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize)) {
 					RowHeights=new int[rows.Count];
 					NoteHeights=new int[rows.Count];
-					multiPageNoteHeights=new List<List<int>>();
-					multiPageNoteSection=new List<List<string>>();
-					for(int i=0;i<rows.Count;i++) {
-						List<int> intList=new List<int>();
-						multiPageNoteHeights.Add(intList);
-						List<string> stringList=new List<string>();
-						multiPageNoteSection.Add(stringList);
-					}
+					//multiPageNoteHeights=new List<List<int>>();
+					//multiPageNoteSection=new List<List<string>>();
+					//for(int i=0;i<rows.Count;i++) {
+						//List<int> intList=new List<int>();
+						//multiPageNoteHeights.Add(intList);
+						//List<string> stringList=new List<string>();
+						//multiPageNoteSection.Add(stringList);
+					//}
 					RowLocs=new int[rows.Count];
 					GridH=0;
 					int cellH;
@@ -880,9 +883,22 @@ namespace OpenDental.UI {
 		#endregion BeginEndUpdate
 
 		#region Printing
-		///<summary>When using the included printing function, this tells you how many pages the printing will take.  The first page does not need to start at 0, but can start further down.</summary>
+		///<summary>When using the included printing function, this tells you how many pages the printing will take.  The first page does not need to start at 0, but can start further down.  Determines how notes will be split across multiple pages.</summary>
 		public int GetNumberOfPages(Rectangle bounds,int marginTopFirstPage) {
-			float adj=100f/96f;
+			int numberOfPages=0;
+			Bitmap bmp=new Bitmap(bounds.Width,bounds.Height);
+			Graphics g=Graphics.FromImage(bmp);
+			int result=-1;
+			while(result==-1){//while there are more pages to print	
+				result=DrawPage(g,numberOfPages,bounds,marginTopFirstPage);
+				numberOfPages++;
+			}
+			g.Dispose();
+			g=null;
+			bmp.Dispose();
+			bmp=null;
+			return numberOfPages;
+			/*
 			int noteMark=-1;
 			int totalPages=0;
 			int rowsPrinted=0;
@@ -956,12 +972,17 @@ namespace OpenDental.UI {
 					yPos=bounds.Top+headerHeight;//Reset to top of page.
 				}
 			}
-			return totalPages+1;
+			return totalPages+1;*/
 		}
 
 		///<summary>Use in conjunction with GetNumberOfPages.  Prints the requested pageNumber based on the supplied printing bounds and start of the first page.  Returns the yPos of where the printing stopped so that the calling function can print below it if needed.</summary>
 		public int PrintPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
-			float adj=100f/96f;//This is a hack for an MS problem.  100 is printer dpi, and 96 is screen dpi.
+			int result=DrawPage(g,pageNumber,bounds,marginTopFirstPage);
+			if(result==-1) {//there are more pages to print
+				return bounds.Bottom;
+			}
+			return result;
+			/*
 			int noteMark=-1;
 			int currentPage=0;//this is for looping.  We need to loop through all pages each time
 			int rowsPrinted=0;
@@ -1190,7 +1211,57 @@ namespace OpenDental.UI {
 					cellFont.Dispose();
 				}
 			}
-			return yPos+4;
+			return yPos+4;*/
+		}
+
+		///<summary>Called by both GetNumberOfPages and PrintPage to print the current page.  If there are more pages to print, it returns -1.  If this is the last page, it returns the yPos of where the printing stopped.  Graphics will either be paper or a dummy image.  Between GetNumberOfPages and PrintPage, no data is remembered.  In both cases, it does it in one pass, only remembering where it needs to pick up on the next page.</summary>
+		public int DrawPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
+			int yPos=bounds.Top;
+			if(pageNumber==0) {
+				yPos=marginTopFirstPage;
+			}
+			if(pageNumber==0){//pageNumber starts at zero.
+				RowsPrinted=0;
+				LinesOfNotePrinted=0;
+				#region TitleAndSub
+				//Print title.  yPos will be affected
+				#endregion TitleAndSub
+			}
+			#region ColumnHeaders
+			//Always print column headers
+			#endregion ColumnHeaders
+			#region Rows
+			while(rowsPrinted<rows.Count) {
+				if(LinesOfNotePrinted==0) {//we are not in the middle of a note from a previous page
+					//print the row if it fits
+					//if the row doesn't fit, break
+				}
+				if(rows[RowsPrinted].Note!="") {
+					continue;
+				}
+				bool roomExistsForEntireNote;
+				//test to see if there's enough room on the page for the rest of the note
+				//{
+
+				//}
+				if(roomExistsForEntireNote) {
+					//print it
+					LinesOfNotePrinted=0;
+				}
+				else {
+					//print as much as you can
+					//LinesOfNotePrinted=##
+					//no change to RowsPrinted
+					break;
+				}
+			}
+			#endregion Rows
+			if(RowsPrinted==rows.Count) {
+				return yPos;
+			}
+			else{
+				return -1;
+			}
 		}
 
 		#endregion Printing
