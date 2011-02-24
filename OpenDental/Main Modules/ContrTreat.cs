@@ -997,6 +997,9 @@ namespace OpenDental{
 
 		/// <summary>Fills RowsMain list for gridMain display.</summary>
 		private void FillMainData() {
+			if(PatCur==null) {
+				return;
+			}
 			decimal fee;
 			decimal priIns;
 			decimal secIns;
