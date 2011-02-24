@@ -115,6 +115,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Adjustment Create");
 				case Permissions.AdjustmentEdit:
 					return Lans.g("enumPermissions","Adjustment Edit");
+				case Permissions.AdjustmentEditZero:
+					return Lans.g("enumPermissions","Adjustment Edit Zero Amount");
 				case Permissions.AnesthesiaIntakeMeds:
 					return Lans.g("enumPermissions","Intake Anesthetic Medications into Inventory");
 				case Permissions.AnesthesiaControlMeds:

@@ -465,6 +465,8 @@ namespace OpenDental{
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.AdjustmentEdit);
 						node2.Nodes.Add(node3);
+					node3=SetNode(Permissions.AdjustmentEditZero);
+						node2.Nodes.Add(node3);
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.TPModule);
