@@ -58,7 +58,7 @@ namespace OpenDental.Eclaims {
 			else {//neither a 997 nor a 271
 				EtransMessageTexts.Delete(etrans.EtransMessageTextNum);
 				Etranss.Delete(etrans.EtransNum);
-				throw new ApplicationException(Lan.g("FormInsPlan","Clearinghouse server sent this error:")+"\r\n"+x12response);
+				throw new ApplicationException(Lan.g("FormInsPlan","Error:")+"\r\n"+x12response);
 			}
 			/*
 			//In realtime mode, X12 limits the request to one patient.
