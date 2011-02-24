@@ -1231,7 +1231,7 @@ namespace OpenDental.UI {
 			//Always print column headers
 			#endregion ColumnHeaders
 			#region Rows
-			while(rowsPrinted<rows.Count) {
+			while(RowsPrinted<rows.Count) {
 				if(LinesOfNotePrinted==0) {//we are not in the middle of a note from a previous page
 					//print the row if it fits
 					//if the row doesn't fit, break
@@ -1239,7 +1239,7 @@ namespace OpenDental.UI {
 				if(rows[RowsPrinted].Note!="") {
 					continue;
 				}
-				bool roomExistsForEntireNote;
+				bool roomExistsForEntireNote=false;
 				//test to see if there's enough room on the page for the rest of the note
 				//{
 
