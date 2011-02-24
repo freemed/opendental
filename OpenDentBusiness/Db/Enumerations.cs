@@ -1073,7 +1073,9 @@ namespace OpenDentBusiness{
 		///<summary>44</summary>
 		ImageDelete,
 		///<summary>45</summary>
-		PerioEdit
+		PerioEdit,
+		///<summary>46</summary>
+		ProcEditShowFee
 	}
 
 	///<summary>The type of signal being sent.</summary>

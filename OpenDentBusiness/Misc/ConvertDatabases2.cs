@@ -3515,7 +3515,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE proctp ADD Prognosis varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				//Add ProcEditShowFee permission to all groups------------------------------------------------------
+				command="SELECT UserGroupNum FROM usergroup";
+				table=Db.GetTable(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+						+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcEditShowFee)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,UserGroupNum,PermType) "
+						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcEditShowFee)+")";
+						Db.NonQ32(command);
+					}
+				}
 
 
 
