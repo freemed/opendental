@@ -2327,7 +2327,7 @@ namespace OpenDental{
 			this.butShowDateRange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowDateRange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowDateRange.CornerRadius = 4F;
-			this.butShowDateRange.Location = new System.Drawing.Point(270,186);
+			this.butShowDateRange.Location = new System.Drawing.Point(273,186);
 			this.butShowDateRange.Name = "butShowDateRange";
 			this.butShowDateRange.Size = new System.Drawing.Size(24,22);
 			this.butShowDateRange.TabIndex = 47;
@@ -2337,10 +2337,11 @@ namespace OpenDental{
 			// 
 			// textShowDateRange
 			// 
+			this.textShowDateRange.Font = new System.Drawing.Font("Microsoft Sans Serif",7.5F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textShowDateRange.Location = new System.Drawing.Point(144,188);
 			this.textShowDateRange.Name = "textShowDateRange";
 			this.textShowDateRange.ReadOnly = true;
-			this.textShowDateRange.Size = new System.Drawing.Size(125,20);
+			this.textShowDateRange.Size = new System.Drawing.Size(125,19);
 			this.textShowDateRange.TabIndex = 46;
 			// 
 			// listProcStatusCodes
@@ -4332,6 +4333,12 @@ namespace OpenDental{
 					if(!checkSheets.Checked) {
 						continue;
 					}
+				}
+				if(ShowDateStart.Year>1880 && ((DateTime)(table.Rows[i]["ProcDate"])).Date < ShowDateStart.Date) {
+					continue;
+				}
+				if(ShowDateEnd.Year>1880 && ((DateTime)(table.Rows[i]["ProcDate"])).Date > ShowDateEnd.Date) {
+					continue;
 				}
 				row=new ODGridRow();
 				row.ColorLborder=Color.Black;
@@ -8319,7 +8326,12 @@ namespace OpenDental{
 			}
 			ShowDateStart=FormC.DateStart;
 			ShowDateEnd=FormC.DateEnd;
+			if(gridChartViews.Rows.Count>0) {//enable custom view label
+				labelCustView.Visible=true;
+			}
+			chartCustViewChanged=true; 
 			FillDateRange();
+			FillProgNotes();
 		}
 
 		

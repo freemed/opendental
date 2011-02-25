@@ -34,7 +34,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(19,101);
+			this.label1.Location = new System.Drawing.Point(19,87);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(84,16);
 			this.label1.TabIndex = 6;
@@ -43,7 +43,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(19,127);
+			this.label2.Location = new System.Drawing.Point(19,113);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(84,16);
 			this.label2.TabIndex = 7;
@@ -56,20 +56,20 @@ namespace OpenDental{
 			this.listPresetDateRanges.Location = new System.Drawing.Point(105,12);
 			this.listPresetDateRanges.Name = "listPresetDateRanges";
 			this.listPresetDateRanges.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listPresetDateRanges.Size = new System.Drawing.Size(91,82);
+			this.listPresetDateRanges.Size = new System.Drawing.Size(91,69);
 			this.listPresetDateRanges.TabIndex = 8;
 			this.listPresetDateRanges.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listPresetDateRanges_MouseClick);
 			// 
 			// textDateEnd
 			// 
-			this.textDateEnd.Location = new System.Drawing.Point(105,126);
+			this.textDateEnd.Location = new System.Drawing.Point(105,112);
 			this.textDateEnd.Name = "textDateEnd";
 			this.textDateEnd.Size = new System.Drawing.Size(91,20);
 			this.textDateEnd.TabIndex = 5;
 			// 
 			// textDateStart
 			// 
-			this.textDateStart.Location = new System.Drawing.Point(105,100);
+			this.textDateStart.Location = new System.Drawing.Point(105,86);
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(91,20);
 			this.textDateStart.TabIndex = 4;
