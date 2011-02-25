@@ -98,6 +98,9 @@ namespace OpenDentBusiness {
 		///<summary>Marks the time a procedure was finished.</summary>
 		[XmlIgnore]
 		public TimeSpan ProcTimeEnd;
+		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 		///<summary>FK to definition.DefNum, which contains text of the Prognosis.</summary>
 		public long Prognosis;
 
@@ -113,9 +116,6 @@ namespace OpenDentBusiness {
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public bool SigIsTopaz;
-		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
-		public DateTime DateTStamp;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("ProcTime",typeof(long))]

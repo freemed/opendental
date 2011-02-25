@@ -184,6 +184,13 @@ namespace OpenDentBusiness{
 				else {
 					retVal+=events[i].AdjustAuto;//typically zero
 				}
+				//ot
+				if(events[i].OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
+					retVal-=events[i].OTimeHours;
+				}
+				else {
+					retVal-=events[i].OTimeAuto;//typically zero
+				}
 			}
 			//now, adjustments
 			List<TimeAdjust> TimeAdjustList=TimeAdjusts.Refresh(empNum,date.AddDays(-6),date.AddDays(-1));
