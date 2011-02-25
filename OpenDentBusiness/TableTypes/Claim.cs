@@ -114,6 +114,8 @@ namespace OpenDentBusiness{
 		public long InsSubNum;
 		///<summary>FK to inssub.InsSubNum.</summary>
 		public long InsSubNum2;
+		//<summary>G01 assigne by carrier/network and returned in acks.  Used for claim reversal.</summary>
+		//public string CanadaTransRefNum;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

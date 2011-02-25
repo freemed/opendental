@@ -313,8 +313,124 @@ namespace OpenDental.Eclaims {
 		}
 
 		///<summary></summary>
-		public static void SendClaimReversal(){
-
+		public static void SendClaimReversal(Claim claim,InsPlan plan,InsSub insSub) {
+			StringBuilder strb=new StringBuilder();
+			Clearinghouse clearhouse=Canadian.GetClearinghouse();
+			if(clearhouse==null) {
+				throw new ApplicationException("Canadian clearinghouse not found.");
+			}
+			string saveFolder=clearhouse.ExportPath;
+			if(!Directory.Exists(saveFolder)) {
+				throw new ApplicationException(saveFolder+" not found.");
+			}
+			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
+			Etrans etrans=Etranss.CreateCanadianOutput(claim.PatNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
+				clearhouse.ClearinghouseNum,EtransType.ReverseResponse_CA,plan.PlanNum,insSub.InsSubNum);
+			Patient patient=Patients.GetPat(claim.PatNum);
+			Provider prov=Providers.GetProv(Patients.GetProvNum(patient));
+			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
+			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
+			Patient subscriber=Patients.GetPat(insSub.Subscriber);
+			//create message----------------------------------------------------------------------------------------------
+			//A01 transaction prefix 12 AN
+			strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+			//A02 office sequence number 6 N
+			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
+			//A03 format version number 2 N
+			strb.Append(carrier.CDAnetVersion);//eg. "04", validated in UI
+			//A04 transaction code 2 N
+			strb.Append("02");//Same for both versions 02 and 04.
+			//A05 carrier id number 6 N
+			strb.Append(carrier.ElectID);//already validated as 6 digit number.
+			//A06 software system id 3 AN  The third character is for version of OD.
+			//todo
+#if DEBUG
+			strb.Append("TS1");
+#else
+			strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
+#endif
+			if(carrier.CDAnetVersion!="02") { //version 04
+				//A10 encryption method 1 N
+				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
+			}
+			if(carrier.CDAnetVersion=="02") {
+				//A07 message length N4
+				strb.Append(Canadian.TidyN("133",4));
+			}
+			else { //version 04
+				//A07 message length N 5
+				strb.Append(Canadian.TidyN("164",5));
+			}
+			if(carrier.CDAnetVersion!="02") { //version 04
+				//A11 mailbox indicator A 1
+				strb.Append("N"); //TODO: When do we indicate when there is mail?
+			}
+			//B01 CDA provider number 9 AN
+			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+			//B02 provider office number 4 AN
+			strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
+			if(claim.PlanNum2!=0) {
+				if(carrier.CDAnetVersion!="02") { //version 04
+					//E19 secondary carrier transaction number 6 N
+					strb.Append(Canadian.TidyN(etrans.CarrierTransCounter2,6));
+				}
+			}
+			if(carrier.CDAnetVersion!="02") { //version 04
+				//B03 billing provider number 9 AN
+				//might need to account for possible 5 digit prov id assigned by carrier
+				strb.Append(Canadian.TidyAN(billProv.NationalProvID,9));//already validated
+				//B04 billing provider office number 4 AN
+				strb.Append(Canadian.TidyAN(billProv.CanadianOfficeNum,4));//already validated
+			}
+			if(carrier.CDAnetVersion=="02") {
+				//C01 primary policy/plan number 8 AN
+				//only validated to ensure that it's not blank and is less than 8. Also that no spaces.
+				strb.Append(Canadian.TidyAN(insPlan.GroupNum,8));
+			}
+			else { //version 04
+				//C01 primary policy/plan number 12 AN
+				//only validated to ensure that it's not blank and is less than 12. Also that no spaces.
+				strb.Append(Canadian.TidyAN(insPlan.GroupNum,12));
+			}
+			//C11 primary division/section number 10 AN
+			strb.Append(Canadian.TidyAN(insPlan.DivisionNo,10));
+			if(carrier.CDAnetVersion=="02") {
+				//C02 subscriber id number 11 AN
+				strb.Append(Canadian.TidyAN(insSub.SubscriberID.Replace("-",""),11));//validated
+			}
+			else { //version 04
+				//C02 subscriber id number 12 AN
+				strb.Append(Canadian.TidyAN(insSub.SubscriberID.Replace("-",""),12));//validated
+			}
+			//C03 relationship code 1 N
+			//User interface does not only show Canadian options, but all options are handled.
+			strb.Append(Canadian.GetRelationshipCode(claim.PatRelat));
+			if(carrier.CDAnetVersion=="02") {
+				//D02 subscriber last name 25 A
+				strb.Append(Canadian.TidyA(subscriber.LName,25));//validated
+			}
+			else { //version 04
+				//D02 subscriber last name 25 AE
+				strb.Append(Canadian.TidyAE(subscriber.LName,25,true));//validated
+			}
+			if(carrier.CDAnetVersion=="02") {
+				//D03 subscriber first name 15 A
+				strb.Append(Canadian.TidyA(subscriber.FName,15));//validated
+			}
+			else { //version 04
+				//D03 subscriber first name 15 AE
+				strb.Append(Canadian.TidyAE(subscriber.FName,15,true));//validated
+			}
+			if(carrier.CDAnetVersion=="02") {
+				//D04 subscriber middle initial 1 A
+				strb.Append(Canadian.TidyA(subscriber.MiddleI,1));
+			}
+			else { //version 04
+				//D04 subscriber middle initial 1 AE
+				strb.Append(Canadian.TidyAE(subscriber.MiddleI,1));
+			}
+			//G01 transaction reference number of original claim AN 14
+			strb.Append("00000000000000"); //todo
 		}
 
 

@@ -185,7 +185,22 @@ namespace TestCanada {
 				}
 			}
 			if(checkClaimReversals.Checked){
-				textResults.Text+="Claim Reversals not implemented yet.\r\n";
+				if(singleScript==1) {
+					textResults.Text+=Reversal.RunOne(checkShowForms.Checked);
+				}
+				else if(singleScript==2) {
+					textResults.Text+=Reversal.RunTwo(checkShowForms.Checked);
+				}
+				else if(singleScript==3) {
+					textResults.Text+=Reversal.RunThree(checkShowForms.Checked);
+				}
+				else if(singleScript==4) {
+					textResults.Text+=Reversal.RunFour(checkShowForms.Checked);
+				}
+				else {
+					MessageBox.Show("Script number not found (not implemented yet).");
+					return;
+				}
 			}
 			if(checkOutstanding.Checked){
 				textResults.Text+="Outstanding Transactions not implemented yet.\r\n";

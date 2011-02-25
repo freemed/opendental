@@ -282,6 +282,9 @@ namespace OpenDental{
 		private ListBox listExtractedTeeth;
 		private OpenDental.UI.Button butHistory;
 		private bool doubleClickWarningAlreadyDisplayed=false;
+		private UI.Button butReverse;
+		private Label label76;
+		private ValidDate validDate1;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -516,9 +519,9 @@ namespace OpenDental{
 			this.checkCorrespondence = new System.Windows.Forms.CheckBox();
 			this.checkEmail = new System.Windows.Forms.CheckBox();
 			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.label73 = new System.Windows.Forms.Label();
 			this.label72 = new System.Windows.Forms.Label();
 			this.comboReferralReason = new System.Windows.Forms.ComboBox();
-			this.label73 = new System.Windows.Forms.Label();
 			this.textReferralProvider = new System.Windows.Forms.TextBox();
 			this.textCanadianAccidentDate = new OpenDental.ValidDate();
 			this.label7 = new System.Windows.Forms.Label();
@@ -551,6 +554,9 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.butReverse = new OpenDental.UI.Button();
+			this.validDate1 = new OpenDental.ValidDate();
+			this.label76 = new System.Windows.Forms.Label();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -2042,7 +2048,7 @@ namespace OpenDental{
 			this.tabUB04.Location = new System.Drawing.Point(4,22);
 			this.tabUB04.Name = "tabUB04";
 			this.tabUB04.Padding = new System.Windows.Forms.Padding(3);
-			this.tabUB04.Size = new System.Drawing.Size(968,140);
+			this.tabUB04.Size = new System.Drawing.Size(968,352);
 			this.tabUB04.TabIndex = 0;
 			this.tabUB04.Text = "Medical-UB04";
 			this.tabUB04.UseVisualStyleBackColor = true;
@@ -2279,6 +2285,9 @@ namespace OpenDental{
 			// tabCanadian
 			// 
 			this.tabCanadian.AutoScroll = true;
+			this.tabCanadian.Controls.Add(this.label76);
+			this.tabCanadian.Controls.Add(this.validDate1);
+			this.tabCanadian.Controls.Add(this.butReverse);
 			this.tabCanadian.Controls.Add(this.textMissingTeeth);
 			this.tabCanadian.Controls.Add(this.label75);
 			this.tabCanadian.Controls.Add(this.label74);
@@ -2293,7 +2302,7 @@ namespace OpenDental{
 			this.tabCanadian.Controls.Add(this.textCanadianAccidentDate);
 			this.tabCanadian.Location = new System.Drawing.Point(4,22);
 			this.tabCanadian.Name = "tabCanadian";
-			this.tabCanadian.Size = new System.Drawing.Size(968,140);
+			this.tabCanadian.Size = new System.Drawing.Size(968,352);
 			this.tabCanadian.TabIndex = 3;
 			this.tabCanadian.Text = "Canadian";
 			this.tabCanadian.UseVisualStyleBackColor = true;
@@ -2586,6 +2595,16 @@ namespace OpenDental{
 			this.groupBox9.TabStop = false;
 			this.groupBox9.Text = "Referring Provider";
 			// 
+			// label73
+			// 
+			this.label73.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label73.Location = new System.Drawing.Point(17,14);
+			this.label73.Name = "label73";
+			this.label73.Size = new System.Drawing.Size(87,30);
+			this.label73.TabIndex = 2;
+			this.label73.Text = "CDA Number\r\nor Identifier";
+			this.label73.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// label72
 			// 
 			this.label72.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -2604,16 +2623,6 @@ namespace OpenDental{
 			this.comboReferralReason.Name = "comboReferralReason";
 			this.comboReferralReason.Size = new System.Drawing.Size(273,21);
 			this.comboReferralReason.TabIndex = 1;
-			// 
-			// label73
-			// 
-			this.label73.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label73.Location = new System.Drawing.Point(17,14);
-			this.label73.Name = "label73";
-			this.label73.Size = new System.Drawing.Size(87,30);
-			this.label73.TabIndex = 2;
-			this.label73.Text = "CDA Number\r\nor Identifier";
-			this.label73.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textReferralProvider
 			// 
@@ -2746,7 +2755,7 @@ namespace OpenDental{
 			this.butHistory.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHistory.CornerRadius = 4F;
 			this.butHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butHistory.Location = new System.Drawing.Point(598,882);
+			this.butHistory.Location = new System.Drawing.Point(595,882);
 			this.butHistory.Name = "butHistory";
 			this.butHistory.Size = new System.Drawing.Size(86,24);
 			this.butHistory.TabIndex = 136;
@@ -2792,7 +2801,7 @@ namespace OpenDental{
 			this.butSend.CornerRadius = 4F;
 			this.butSend.Image = ((System.Drawing.Image)(resources.GetObject("butSend.Image")));
 			this.butSend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSend.Location = new System.Drawing.Point(506,882);
+			this.butSend.Location = new System.Drawing.Point(503,882);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(86,24);
 			this.butSend.TabIndex = 130;
@@ -2988,6 +2997,40 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// butReverse
+			// 
+			this.butReverse.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butReverse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butReverse.Autosize = true;
+			this.butReverse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butReverse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReverse.CornerRadius = 4F;
+			this.butReverse.Enabled = false;
+			this.butReverse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butReverse.Location = new System.Drawing.Point(196,157);
+			this.butReverse.Name = "butReverse";
+			this.butReverse.Size = new System.Drawing.Size(59,24);
+			this.butReverse.TabIndex = 138;
+			this.butReverse.Text = "Reverse";
+			this.butReverse.Click += new System.EventHandler(this.butReverse_Click);
+			// 
+			// validDate1
+			// 
+			this.validDate1.Location = new System.Drawing.Point(88,159);
+			this.validDate1.Name = "validDate1";
+			this.validDate1.Size = new System.Drawing.Size(102,20);
+			this.validDate1.TabIndex = 145;
+			// 
+			// label76
+			// 
+			this.label76.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label76.Location = new System.Drawing.Point(3,159);
+			this.label76.Name = "label76";
+			this.label76.Size = new System.Drawing.Size(82,16);
+			this.label76.TabIndex = 146;
+			this.label76.Text = "Trans Ref Num";
+			this.label76.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormClaimEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -3109,6 +3152,9 @@ namespace OpenDental{
 				groupAccident.Visible=false;
 				labelNote.Text="Claim Note (will only show on printed claims)";
 				tabMain.SelectedTab=tabCanadian;
+				if(ClaimCur.DateSent.Date==MiscData.GetNowDateTime().Date) { //Reversal can only happen on the same day that the claim was originally sent.
+					butReverse.Enabled=true;
+				}
 			}
 			else {
 				tabMain.TabPages.Remove(tabCanadian);
@@ -4451,6 +4497,10 @@ namespace OpenDental{
 			FormE.ShowDialog();
 		}
 
+		private void butReverse_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;//jump straight to Closing, where the claimprocs will be changed
@@ -5029,6 +5079,8 @@ namespace OpenDental{
 				Claims.Delete(ClaimCur);//does not do any validation.  Also deletes the claimcanadian.
 			}
 		}
+
+	
 
 		
 	
