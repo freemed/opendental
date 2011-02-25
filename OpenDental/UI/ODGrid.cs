@@ -86,8 +86,8 @@ namespace OpenDental.UI {
 		//private List<List<int>> multiPageNoteHeights;//If NoteHeights[i] won't fit on one page, get various page heights here (printing).
 		//private List<List<string>> multiPageNoteSection;//Section of the note that is split up across multiple pages.
 		private int RowsPrinted;
-		///<summary>How many lines of text of the current note have been printed.  If 0, then we are not in the middle of a note.</summary>
-		private int LinesOfNotePrinted;
+		///<summary>If we are part way through drawing a note when we reach the end of a page, this will contain the remainder of the note still to be printed.  If it is empty string, then we are not in the middle of a note.</summary>
+		private string NoteRemaining;
 
 		///<summary></summary>
 		public ODGrid() {
@@ -888,6 +888,7 @@ namespace OpenDental.UI {
 			int numberOfPages=0;
 			Bitmap bmp=new Bitmap(bounds.Width,bounds.Height);
 			Graphics g=Graphics.FromImage(bmp);
+			bounds=new Rectangle(0,0,bounds.Width,bounds.Height);//the original bounds was not at 0,0
 			int result=-1;
 			while(result==-1){//while there are more pages to print	
 				result=DrawPage(g,numberOfPages,bounds,marginTopFirstPage);
@@ -982,6 +983,8 @@ namespace OpenDental.UI {
 				return bounds.Bottom;
 			}
 			return result;
+			
+
 			/*
 			int noteMark=-1;
 			int currentPage=0;//this is for looping.  We need to loop through all pages each time
@@ -992,8 +995,8 @@ namespace OpenDental.UI {
 			}
 			int xPos=bounds.Left;
 			//now, try to center in bounds
-			if(adj*(float)GridW<bounds.Width) {
-				xPos=(int)(bounds.Left+bounds.Width/2-adj*(float)GridW/2);
+			if((float)GridW<bounds.Width) {
+				xPos=(int)(bounds.Left+bounds.Width/2-(float)GridW/2);
 			}
 			StringFormat format=new StringFormat();
 			Pen gridPen;
@@ -1216,46 +1219,284 @@ namespace OpenDental.UI {
 
 		///<summary>Called by both GetNumberOfPages and PrintPage to print the current page.  If there are more pages to print, it returns -1.  If this is the last page, it returns the yPos of where the printing stopped.  Graphics will either be paper or a dummy image.  Between GetNumberOfPages and PrintPage, no data is remembered.  In both cases, it does it in one pass, only remembering where it needs to pick up on the next page.</summary>
 		public int DrawPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
+			int xPos=bounds.Left;
+			//now, try to center in bounds
+			if((float)GridW<bounds.Width) {
+				xPos=(int)(bounds.Left+bounds.Width/2-(float)GridW/2);
+			}
+			StringFormat format=new StringFormat();
+			Pen gridPen;
+			Pen lowerPen;
+			SolidBrush textBrush;
+			RectangleF textRect;
+			Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			//Initialize our pens for drawing.
+			gridPen=new Pen(this.cGridLine);
+			lowerPen=new Pen(this.cGridLine);
 			int yPos=bounds.Top;
 			if(pageNumber==0) {
-				yPos=marginTopFirstPage;
+				yPos=marginTopFirstPage;//Margin is lower because title and subtitle are printed externally.
 			}
 			if(pageNumber==0){//pageNumber starts at zero.
 				RowsPrinted=0;
-				LinesOfNotePrinted=0;
-				#region TitleAndSub
-				//Print title.  yPos will be affected
-				#endregion TitleAndSub
+				NoteRemaining="";
 			}
-			#region ColumnHeaders
-			//Always print column headers
-			#endregion ColumnHeaders
-			#region Rows
-			while(RowsPrinted<rows.Count) {
-				if(LinesOfNotePrinted==0) {//we are not in the middle of a note from a previous page
-					//print the row if it fits
-					//if the row doesn't fit, break
+			try {
+				#region ColumnHeaders
+				//Print column headers on every page.
+				g.FillRectangle(Brushes.LightGray,xPos+ColPos[0],yPos,(float)GridW,headerHeight);
+				g.DrawRectangle(Pens.Black,xPos+ColPos[0],yPos,(float)GridW,headerHeight);
+				for(int i=1;i<ColPos.Length;i++) {
+					g.DrawLine(Pens.Black,xPos+(float)ColPos[i],yPos,xPos+(float)ColPos[i],yPos+headerHeight);
 				}
-				if(rows[RowsPrinted].Note!="") {
-					continue;
+				using(Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold)) {
+					for(int i=0;i<columns.Count;i++) {
+						g.DrawString(columns[i].Heading,headerFont,Brushes.Black,xPos+(float)ColPos[i],yPos);
+					}
 				}
-				bool roomExistsForEntireNote=false;
-				//test to see if there's enough room on the page for the rest of the note
-				//{
+				yPos+=headerHeight;
+				#endregion ColumnHeaders
+				#region Rows
+				while(RowsPrinted<rows.Count) {
+					#region RowMainPart
+					if(NoteRemaining=="") {//We are not in the middle of a note from a previous page. If we are in the middle of a note that will get printed next, as it is the next region of code (RowNotePart).
+						//Go to next page if it doesn't fit.
+						if(yPos+(float)RowHeights[RowsPrinted] > bounds.Bottom) {//The row is too tall to fit
+							break;//Go to next page.
+						}
+						//There is enough room to print this row.
+						//Draw the left vertical gridline
+						g.DrawLine(gridPen,
+							xPos+ColPos[0],
+							yPos,
+							xPos+ColPos[0],
+							yPos+(float)RowHeights[RowsPrinted]);
+						for(int i=0;i<columns.Count;i++) {
+							//Draw the other vertical gridlines
+							g.DrawLine(gridPen,
+								xPos+(float)ColPos[i]+(float)columns[i].ColWidth,
+								yPos,
+								xPos+(float)ColPos[i]+(float)columns[i].ColWidth,
+								yPos+(float)RowHeights[RowsPrinted]);
+							if(NoteHeights[RowsPrinted]>0) {
+								//Horizontal line which divides the main part of the row from the notes section of the row
+								g.DrawLine(gridPen,
+									xPos+ColPos[0],
+									yPos+(float)RowHeights[RowsPrinted],
+									xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
+									yPos+(float)RowHeights[RowsPrinted]);
+							}
+							//text
+							if(rows[RowsPrinted].Cells.Count-1<i) {
+								continue;
+							}
+							switch(columns[i].TextAlign) {
+								case HorizontalAlignment.Left:
+									format.Alignment=StringAlignment.Near;
+									break;
+								case HorizontalAlignment.Center:
+									format.Alignment=StringAlignment.Center;
+									break;
+								case HorizontalAlignment.Right:
+									format.Alignment=StringAlignment.Far;
+									break;
+							}
+							if(rows[RowsPrinted].Cells[i].ColorText==Color.Empty) {
+								textBrush=new SolidBrush(rows[RowsPrinted].ColorText);
+							}
+							else {
+								textBrush=new SolidBrush(rows[RowsPrinted].Cells[i].ColorText);
+							}
+							if(rows[RowsPrinted].Cells[i].Bold==YN.Yes) {
+								cellFont=new Font(cellFont,FontStyle.Bold);
+							}
+							else if(rows[RowsPrinted].Cells[i].Bold==YN.No) {
+								cellFont=new Font(cellFont,FontStyle.Regular);
+							}
+							else {//unknown.  Use row bold
+								if(rows[RowsPrinted].Bold) {
+									cellFont=new Font(cellFont,FontStyle.Bold);
+								}
+								else {
+									cellFont=new Font(cellFont,FontStyle.Regular);
+								}
+							}
+							//Some printers will malfunction (BSOD) if print bold colored fonts.  This prevents the error.
+							if(textBrush.Color!=Color.Black && cellFont.Bold) {
+								cellFont=new Font(cellFont,FontStyle.Regular);
+							}
+							if(columns[i].TextAlign==HorizontalAlignment.Right) {
+								textRect=new RectangleF(
+									xPos+(float)ColPos[i]-2,
+									yPos,
+									(float)columns[i].ColWidth+2,
+									(float)RowHeights[RowsPrinted]);
+								//shift the rect to account for MS issue with strings of different lengths
+								textRect.Location=new PointF
+									(textRect.X+g.MeasureString(rows[RowsPrinted].Cells[i].Text,cellFont).Width/textRect.Width,
+									textRect.Y);
+								g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
 
-				//}
-				if(roomExistsForEntireNote) {
-					//print it
-					LinesOfNotePrinted=0;
+							}
+							else {
+								textRect=new RectangleF(
+									xPos+(float)ColPos[i],
+									yPos,
+									(float)columns[i].ColWidth,
+									(float)RowHeights[RowsPrinted]);
+								g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+							}
+							g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+						}
+						yPos+=(int)((float)RowHeights[RowsPrinted]);//Move yPos down the length of the row (not the note).
+					}
+					#endregion RowMainPart
+					#region NotePart
+					if(rows[RowsPrinted].Note!="") {
+						RowsPrinted++;//There is no note. Go to next row.
+						continue; 
+					}
+					//Figure out how much vertical distance the rest of the note will take up.
+					int noteHeight;
+					int noteW=0;
+					for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
+						noteW+=(int)((float)columns[i].ColWidth);
+					}
+					if(NoteRemaining=="") {//We are not in the middle of a note.
+						NoteRemaining=rows[RowsPrinted].Note;//The note remaining is the whole note.
+					}
+					noteHeight=(int)g.MeasureString(rows[RowsPrinted].Note,cellFont,noteW).Height; //This is how much height the rest of the note will take.
+					bool roomForRestOfNote=false;
+					//Test to see if there's enough room on the page for the rest of the note.
+					if(yPos+noteHeight<bounds.Bottom) {
+						roomForRestOfNote=true;
+					}
+					#region PrintRestOfNote
+					if(roomForRestOfNote) { //There is enough room
+						//print it
+						if(noteHeight>0) {
+							//left vertical gridline
+							if(NoteSpanStart!=0) {
+								g.DrawLine(gridPen,
+									xPos+(float)ColPos[NoteSpanStart],
+									yPos,
+									xPos+(float)ColPos[NoteSpanStart],
+									yPos+noteHeight);
+							}
+							//right vertical gridline
+							g.DrawLine(gridPen,
+								xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
+								yPos,
+								xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
+								yPos+noteHeight);
+							//left vertical gridline
+							g.DrawLine(gridPen,
+								xPos+ColPos[0],
+								yPos,
+								xPos+ColPos[0],
+								yPos+noteHeight);
+						}
+						//lower horizontal gridline
+						g.DrawLine(lowerPen,
+							xPos+ColPos[0],
+							yPos+noteHeight,
+							xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
+							yPos+noteHeight);
+						//note text
+						if(noteHeight>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+							if(rows[RowsPrinted].Bold) {
+								cellFont=new Font(cellFont,FontStyle.Bold);
+							}
+							else {
+								cellFont=new Font(cellFont,FontStyle.Regular);
+							}
+							textBrush=new SolidBrush(rows[RowsPrinted].ColorText);
+							textRect=new RectangleF(
+								xPos+(float)ColPos[NoteSpanStart]+1,
+								yPos,
+								(float)ColPos[NoteSpanStop]+(float)columns[NoteSpanStop].ColWidth-(float)ColPos[NoteSpanStart],
+								noteHeight);
+							format.Alignment=StringAlignment.Near;
+							g.DrawString(rows[RowsPrinted].Note,cellFont,textBrush,textRect,format);
+						}
+						NoteRemaining="";
+						RowsPrinted++;
+						yPos+=noteHeight;
+					}
+					#endregion PrintRestOfNote
+					#region PrintPartOfNote
+					else {//The rest of the note will not fit on this page.
+						//Print as much as you can.
+						noteHeight=bounds.Bottom-yPos;//This is the amount of space remaining on the page.
+						SizeF sizeF;
+						int charactersFitted;
+						int linesFilled;
+						string noteFitted;//This is the part of the note we will print.
+						sizeF=g.MeasureString(NoteRemaining,cellFont,new SizeF(noteW,noteHeight),format,out charactersFitted,out linesFilled);//Text that fits will be NoteRemaining.Substring(0,charactersFitted).
+						noteFitted=NoteRemaining.Substring(0,charactersFitted);
+						//lines for note section
+						if(noteHeight>0) {
+							//left vertical gridline
+							if(NoteSpanStart!=0) {
+								g.DrawLine(gridPen,
+									xPos+(float)ColPos[NoteSpanStart],
+									yPos,
+									xPos+(float)ColPos[NoteSpanStart],
+									yPos+noteHeight);
+							}
+							//right vertical gridline
+							g.DrawLine(gridPen,
+								xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
+								yPos,
+								xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
+								yPos+noteHeight);
+							//left vertical gridline
+							g.DrawLine(gridPen,
+								xPos+ColPos[0],
+								yPos,
+								xPos+ColPos[0],
+								yPos+noteHeight);
+						}
+						//lower horizontal gridline
+						g.DrawLine(lowerPen,
+							xPos+ColPos[0],
+							yPos+noteHeight,
+							xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
+							yPos+noteHeight);
+						//note text
+						if(noteHeight>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+							noteW=0;
+							for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
+								noteW+=(int)((float)columns[i].ColWidth);
+							}
+							if(rows[RowsPrinted].Bold) {
+								cellFont=new Font(cellFont,FontStyle.Bold);
+							}
+							else {
+								cellFont=new Font(cellFont,FontStyle.Regular);
+							}
+							textBrush=new SolidBrush(rows[RowsPrinted].ColorText);
+							textRect=new RectangleF(
+								xPos+(float)ColPos[NoteSpanStart]+1,
+								yPos,
+								(float)ColPos[NoteSpanStop]+(float)columns[NoteSpanStop].ColWidth-(float)ColPos[NoteSpanStart],
+								noteHeight);
+							format.Alignment=StringAlignment.Near;
+							g.DrawString(noteFitted,cellFont,textBrush,textRect,format);
+						}
+						NoteRemaining=NoteRemaining.Substring(charactersFitted);
+						break;
+					}
+					#endregion PrintPartOfNote
+					#endregion Rows
 				}
-				else {
-					//print as much as you can
-					//LinesOfNotePrinted=##
-					//no change to RowsPrinted
-					break;
+				#endregion Rows
+			}
+			finally {
+				if(cellFont!=null) {
+					cellFont.Dispose();
 				}
 			}
-			#endregion Rows
 			if(RowsPrinted==rows.Count) {
 				return yPos;
 			}
