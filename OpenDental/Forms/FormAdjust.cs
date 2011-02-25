@@ -44,6 +44,7 @@ namespace OpenDental{
 		private Label labelClinic;
 		///<summary></summary>
 		private DateTime dateLimit=DateTime.MinValue;
+		private bool checkZeroAmount;
 		//<summary>Keeps track of current server time so that user cannot bypass security by altering workstation clock.  Sometimes we compare to nowDate, but sometimes, we're just interested in the date of the adjustment.</summary>
 		//private DateTime nowDate;
 
@@ -351,15 +352,27 @@ namespace OpenDental{
 
 		private void FormAdjust_Load(object sender, System.EventArgs e) {
 			if(IsNew){
-				if(!Security.IsAuthorized(Permissions.AdjustmentCreate)){//date not checked here
-					DialogResult=DialogResult.Cancel;
-					return;
+				if(!Security.IsAuthorized(Permissions.AdjustmentCreate,true)) {//Date not checked here.  Message will show later.
+					if(!Security.IsAuthorized(Permissions.AdjustmentEditZero,true)) {//Let user create an adjustment of zero if they have this perm.
+						MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(Permissions.AdjustmentCreate));
+						DialogResult=DialogResult.Cancel;
+						return;
+					}
+					//Make sure amount is 0 after OK click.
+					checkZeroAmount=true;
 				}
 			}
 			else{
 				if(!Security.IsAuthorized(Permissions.AdjustmentEdit,AdjustmentCur.AdjDate)){
 					butOK.Enabled=false;
 					butDelete.Enabled=false;
+					//User can't edit but has edit zero amount perm.  Allow delete only if date is today.
+					if(Security.IsAuthorized(Permissions.AdjustmentEditZero,true) 
+						&& AdjustmentCur.AdjAmt==0
+						&& AdjustmentCur.DateEntry.Date==MiscData.GetNowDateTime().Date) 
+					{
+						butDelete.Enabled=true;
+					}
 				}
 			}
 			textDateEntry.Text=AdjustmentCur.DateEntry.ToShortDateString();
@@ -461,8 +474,11 @@ namespace OpenDental{
 			}
 			if(IsNew){
 				//prevents backdating of initial adjustment
-				if(!Security.IsAuthorized(Permissions.AdjustmentCreate,PIn.Date(textAdjDate.Text))){
-					return;
+				if(!Security.IsAuthorized(Permissions.AdjustmentCreate,PIn.Date(textAdjDate.Text),true)){//Give message later.
+					if(!checkZeroAmount) {//Let user create as long as Amount is zero and has edit zero permissions.  This was checked on load.
+						MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(Permissions.AdjustmentCreate));
+						return;
+					}
 				}
 			}
 			else{
@@ -500,6 +516,12 @@ namespace OpenDental{
 			}
 			else{//neg
 				AdjustmentCur.AdjAmt=-PIn.Double(textAmount.Text);
+			}
+			if(checkZeroAmount) {
+				if(AdjustmentCur.AdjAmt!=0) {
+					MsgBox.Show(this,"Amount has to be 0.00 due to security permission.");
+					return;
+				}
 			}
 			AdjustmentCur.AdjNote=textNote.Text;
 			try{
