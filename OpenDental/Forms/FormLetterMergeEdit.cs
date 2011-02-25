@@ -448,7 +448,6 @@ namespace OpenDental{
 			listPatSelect.Items.Add("Bal_61_90");
 			listPatSelect.Items.Add("BalOver90");
 			listPatSelect.Items.Add("InsEst");
-			listPatSelect.Items.Add("PrimaryTeeth");
 			listPatSelect.Items.Add("BalTotal");
 			listPatSelect.Items.Add("EmployerNum");
 			listPatSelect.Items.Add("Race");

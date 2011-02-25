@@ -37,7 +37,7 @@ namespace OpenDentBusiness {
 				}
 					//other:
 				else if(letter.Fields[i]=="TPResponsPartyNameFL") {
-					command+=DbHelper.Concat("MAX(patResp.FName) FName","' '","MAX(patResp.LName)")+" TPResponsPartyNameFL";
+					command+=DbHelper.Concat("MAX(patResp.FName)","' '","MAX(patResp.LName)")+" TPResponsPartyNameFL";
 				} 
 				else if(letter.Fields[i]=="TPResponsPartyAddress") {
 					command+="MAX(patResp.Address) TPResponsPartyAddress";
@@ -77,6 +77,9 @@ namespace OpenDentBusiness {
 				}
 				else if(letter.Fields[i]=="Guarantor") {
 					command+=DbHelper.Concat("MAX(patGuar.FName)","' '","MAX(patGuar.LName)")+" Guarantor";
+				}
+				else if(letter.Fields[i]=="GradeSchool"){
+					command+="MAX(site.Description) GradeSchool";
 				}
 				else if(letter.Fields[i].StartsWith("referral.")) {
 					command+="MAX(referral."+letter.Fields[i].Substring(9)+") "+letter.Fields[i].Substring(9);
