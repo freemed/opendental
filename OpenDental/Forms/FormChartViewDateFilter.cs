@@ -23,8 +23,7 @@ namespace OpenDental {
 			for(int i=0;i<Enum.GetNames(typeof(ChartViewDates)).Length;i++) {
 				listPresetDateRanges.Items.Add(Enum.GetNames(typeof(ChartViewDates))[i]);
 			}
-			textDateStart.Text=(DateStart==null?"":DateStart.ToString("MM/d/yy"));
-			textDateStop.Text=(DateEnd==null?"":DateEnd.ToString("MM/d/yy"));
+			FillDateTextBoxesHelper();
 		}
 
 		private void listPresetDateRanges_MouseClick(object sender,MouseEventArgs e) {
@@ -51,19 +50,29 @@ namespace OpenDental {
 					DateEnd=new DateTime(DateTime.Today.Year-1,12,31);
 					break;
 			}
+			FillDateTextBoxesHelper();
+		}
+
+		private void FillDateTextBoxesHelper() {
+			textDateStart.Text=DateStart.ToShortDateString();
+			textDateEnd.Text=DateEnd.ToShortDateString();
+			if(DateStart.Year < 1880) {
+				textDateStart.Text=""; 
+			}
+			if(DateEnd.Year < 1880) { 
+				textDateEnd.Text=""; 
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
-				|| textDateStop.errorProvider1.GetError(textDateStop)!=""
-				) 
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""//validate the date boxes.
+				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="") 
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-
-
-
+			DateStart=PIn.Date(textDateStart.Text);
+			DateEnd=PIn.Date(textDateEnd.Text);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -71,6 +80,7 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
+		
 		
 
 	

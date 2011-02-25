@@ -8296,13 +8296,13 @@ namespace OpenDental{
 		private void FillDateRange() {
 			textShowDateRange.Text="";
 			if(ShowDateStart.Year > 1880) {
-				textShowDateRange.Text+=ShowDateStart.ToString("MM/d/yy");
+				textShowDateRange.Text+=ShowDateStart.ToShortDateString();
 			}
 			if(ShowDateEnd.Year > 1880 && ShowDateStart != ShowDateEnd) {
 				if(textShowDateRange.Text!="") {
-					textShowDateRange.Text+=" - ";
+					textShowDateRange.Text+="-";
 				}
-				textShowDateRange.Text+=ShowDateEnd.ToString("MM/d/yy");
+				textShowDateRange.Text+=ShowDateEnd.ToShortDateString();
 			}
 			if(textShowDateRange.Text=="") {
 				textShowDateRange.Text=Lan.g(this,"All Dates");
@@ -8311,7 +8311,15 @@ namespace OpenDental{
 
 		private void butShowDateRange_Click(object sender,EventArgs e) {
 			FormChartViewDateFilter FormC=new FormChartViewDateFilter();
+			FormC.DateStart=ShowDateStart;
+			FormC.DateEnd=ShowDateEnd;
 			FormC.ShowDialog();
+			if(FormC.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			ShowDateStart=FormC.DateStart;
+			ShowDateEnd=FormC.DateEnd;
+			FillDateRange();
 		}
 
 		
