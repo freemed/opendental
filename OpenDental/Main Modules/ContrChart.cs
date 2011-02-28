@@ -175,8 +175,8 @@ namespace OpenDental{
 		///<summary>a list of the hidden teeth as strings. Includes "1"-"32", and "A"-"Z"</summary>
 		private ArrayList HiddenTeeth;
 		private CheckBox checkAudit;
-		///<summary>This date will usually have minVal except while the hospital print function is running.</summary>
-		private DateTime hospitalDate;
+		//<summary>This date will usually have minVal except while the hospital print function is running.</summary>
+		//private DateTime hospitalDate;
 		private PatientNote PatientNoteCur;
 		private DataSet DataSetMain;
 		private MenuItem menuItemLabFee;
@@ -3957,6 +3957,7 @@ namespace OpenDental{
 		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
+			/*
 			if(hospitalDate.Year > 1880) {
 				if(hospitalDate.Date != PIn.DateT(row["ProcDate"].ToString()).Date) {
 					return false;
@@ -3964,7 +3965,7 @@ namespace OpenDental{
 				if(row["ProcStatus"].ToString() != ((int)ProcStat.C).ToString()) {
 					return false;
 				}
-			}
+			}*/
 			if(checkShowTeeth.Checked) {
 				bool showProc = false;
 				//ArrayList selectedTeeth = new ArrayList();//integers 1-32
@@ -4078,6 +4079,7 @@ namespace OpenDental{
 					}
 					break;
 			}
+			//TODO: if proc Date is within show date range; return true;
 			return false;
 		}
 
@@ -7113,7 +7115,8 @@ namespace OpenDental{
 				return;
 			}
 			DataRow row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag;
-			hospitalDate=PIn.DateT(row["ProcDate"].ToString());
+			//hospitalDate=PIn.DateT(row["ProcDate"].ToString());
+			//Store the state of all checkboxes in temporary variables
 			bool showRx=this.checkRx.Checked;
 			bool showComm=this.checkComm.Checked;
 			bool showApt=this.checkAppt.Checked;
@@ -7121,7 +7124,18 @@ namespace OpenDental{
 			bool showTask=this.checkTasks.Checked;
 			bool showLab=this.checkLabCase.Checked;
 			bool showSheets=this.checkSheets.Checked;
+			bool showTeeth=this.checkShowTeeth.Checked;
+			bool showAudit=this.checkAudit.Checked;
+			DateTime showDateStart=ShowDateStart;
+			DateTime showDateEnd=ShowDateEnd;
+			bool showTP=this.checkShowTP.Checked;
+			bool showComplete=this.checkShowC.Checked;
+			bool showExist=this.checkShowE.Checked;
+			bool showRefer=this.checkShowR.Checked;
+			bool showCond=this.checkShowCn.Checked;
+			bool showProcNote=this.checkNotes.Checked;
 			bool customView=this.chartCustViewChanged;
+			//Set the checkboxes to desired values for print out
 			checkRx.Checked=false;
 			checkComm.Checked=false;
 			checkAppt.Checked=false;
@@ -7129,7 +7143,18 @@ namespace OpenDental{
 			checkTasks.Checked=false;
 			checkLabCase.Checked=false;
 			checkSheets.Checked=false;
+			checkShowTeeth.Checked=false;
+			checkAudit.Checked=false;
+			ShowDateStart=PIn.DateT(row["ProcDate"].ToString());
+			ShowDateEnd=PIn.DateT(row["ProcDate"].ToString());
+			checkShowTP.Checked=false;
+			checkShowC.Checked=true;
+			checkShowE.Checked=false;
+			checkShowR.Checked=false;
+			checkShowCn.Checked=false;
+			checkNotes.Checked=true;
 			chartCustViewChanged=true;//custom view will not reset the check boxes so we force it true.
+			//Fill progress notes with only desired rows to be printed, then print.
 			FillProgNotes();
 			try {
 				pagesPrinted=0;
@@ -7143,7 +7168,8 @@ namespace OpenDental{
 			catch {
 
 			}
-			hospitalDate=DateTime.MinValue;
+			//Set Date values and checkboxes back to original values, then refill progress notes.
+			//hospitalDate=DateTime.MinValue;
 			checkRx.Checked=showRx;
 			checkComm.Checked=showComm;
 			checkAppt.Checked=showApt;
@@ -7151,6 +7177,16 @@ namespace OpenDental{
 			checkTasks.Checked=showTask;
 			checkLabCase.Checked=showLab;
 			checkSheets.Checked=showSheets;
+			checkShowTeeth.Checked=showTeeth;
+			checkAudit.Checked=showAudit;
+			ShowDateStart=showDateStart;
+			ShowDateEnd=showDateEnd;
+			checkShowTP.Checked=showTP;
+			checkShowC.Checked=showComplete;
+			checkShowE.Checked=showExist;
+			checkShowR.Checked=showRefer;
+			checkShowCn.Checked=showCond;
+			checkNotes.Checked=showProcNote;
 			chartCustViewChanged=customView;
 			FillProgNotes();
 		}
