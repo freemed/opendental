@@ -690,10 +690,9 @@ namespace OpenDental{
 				headingPrintH=yPos;
 			}
 			#endregion
-			int totalPages=gridBill.GetNumberOfPages(bounds,headingPrintH);
 			yPos=gridBill.PrintPage(g,pagesPrinted,bounds,headingPrintH);
 			pagesPrinted++;
-			if(pagesPrinted < totalPages) {
+			if(yPos==-1) {
 				e.HasMorePages=true;
 			}
 			else {

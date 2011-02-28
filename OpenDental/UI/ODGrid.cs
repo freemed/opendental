@@ -884,21 +884,21 @@ namespace OpenDental.UI {
 
 		#region Printing
 		///<summary>When using the included printing function, this tells you how many pages the printing will take.  The first page does not need to start at 0, but can start further down.  Determines how notes will be split across multiple pages.</summary>
-		public int GetNumberOfPages(Rectangle bounds,int marginTopFirstPage) {
-			int numberOfPages=0;
-			Bitmap bmp=new Bitmap(bounds.Width,bounds.Height);
-			Graphics g=Graphics.FromImage(bmp);
-			bounds=new Rectangle(0,0,bounds.Width,bounds.Height);//the original bounds was not at 0,0
-			int result=-1;
-			while(result==-1){//while there are more pages to print	
-				result=DrawPage(g,numberOfPages,bounds,marginTopFirstPage);
-				numberOfPages++;
-			}
-			g.Dispose();
-			g=null;
-			bmp.Dispose();
-			bmp=null;
-			return numberOfPages;
+		//public int GetNumberOfPages(Rectangle bounds,int marginTopFirstPage) {
+		//  int numberOfPages=0;
+		//  Bitmap bmp=new Bitmap(bounds.Width,bounds.Height);
+		//  Graphics g=Graphics.FromImage(bmp);
+		//  bounds=new Rectangle(0,0,bounds.Width,bounds.Height);//the original bounds was not at 0,0
+		//  int result=-1;
+		//  while(result==-1){//while there are more pages to print	
+		//    result=DrawPage(g,numberOfPages,bounds,marginTopFirstPage);
+		//    numberOfPages++;
+		//  }
+		//  g.Dispose();
+		//  g=null;
+		//  bmp.Dispose();
+		//  bmp=null;
+		//  return numberOfPages;
 			/*
 			int noteMark=-1;
 			int totalPages=0;
@@ -974,15 +974,15 @@ namespace OpenDental.UI {
 				}
 			}
 			return totalPages+1;*/
-		}
+		//}
 
 		///<summary>Use in conjunction with GetNumberOfPages.  Prints the requested pageNumber based on the supplied printing bounds and start of the first page.  Returns the yPos of where the printing stopped so that the calling function can print below it if needed.</summary>
-		public int PrintPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
-			int result=DrawPage(g,pageNumber,bounds,marginTopFirstPage);
-			if(result==-1) {//there are more pages to print
-				return bounds.Bottom;
-			}
-			return result;
+		//public int PrintPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
+		//  int result=DrawPage(g,pageNumber,bounds,marginTopFirstPage);
+		//  if(result==-1) {//there are more pages to print
+		//    return bounds.Bottom;
+		//  }
+		//  return result;//will be -1 if more pages to print
 			
 
 			/*
@@ -1215,10 +1215,11 @@ namespace OpenDental.UI {
 				}
 			}
 			return yPos+4;*/
-		}
+		//}
 
 		///<summary>Called by both GetNumberOfPages and PrintPage to print the current page.  If there are more pages to print, it returns -1.  If this is the last page, it returns the yPos of where the printing stopped.  Graphics will either be paper or a dummy image.  Between GetNumberOfPages and PrintPage, no data is remembered.  In both cases, it does it in one pass, only remembering where it needs to pick up on the next page.</summary>
-		public int DrawPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
+		//private int DrawPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
+		public int PrintPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
 			int xPos=bounds.Left;
 			//now, try to center in bounds
 			if((float)GridW<bounds.Width) {
@@ -1234,10 +1235,8 @@ namespace OpenDental.UI {
 			gridPen=new Pen(this.cGridLine);
 			lowerPen=new Pen(this.cGridLine);
 			int yPos=bounds.Top;
-			if(pageNumber==0) {
+			if(pageNumber==0) {//This strategy doesn't work for RowsPrinted and NoteRemaining if GetNumberOfPages is called between PrintPage calls. Suggestion: Move this to PrintPage, have PrintPage use these class level variables and have GetNumberOfPages use its own method level variables, have this method (DrawPage) take parameters rowsPrinted and noteRemaining, and return those (or create an object with two ints and pass them and change them directly, or pass and return a struct with those variables... 
 				yPos=marginTopFirstPage;//Margin is lower because title and subtitle are printed externally.
-			}
-			if(pageNumber==0){//pageNumber starts at zero.
 				RowsPrinted=0;
 				NoteRemaining="";
 			}
@@ -1278,9 +1277,9 @@ namespace OpenDental.UI {
 								yPos,
 								xPos+(float)ColPos[i]+(float)columns[i].ColWidth,
 								yPos+(float)RowHeights[RowsPrinted]);
-							if(NoteHeights[RowsPrinted]>0) {
-								//Horizontal line which divides the main part of the row from the notes section of the row
-								g.DrawLine(gridPen,
+							if(rows[RowsPrinted].Note=="") {
+								//Horizontal line which divides the main part of the row from the notes section of the row one column at a time.
+								g.DrawLine(lowerPen,
 									xPos+ColPos[0],
 									yPos+(float)RowHeights[RowsPrinted],
 									xPos+(float)ColPos[columns.Count-1]+(float)columns[columns.Count-1].ColWidth,
@@ -1352,7 +1351,7 @@ namespace OpenDental.UI {
 					}
 					#endregion RowMainPart
 					#region NotePart
-					if(rows[RowsPrinted].Note!="") {
+					if(rows[RowsPrinted].Note=="") {
 						RowsPrinted++;//There is no note. Go to next row.
 						continue; 
 					}
@@ -1365,7 +1364,7 @@ namespace OpenDental.UI {
 					if(NoteRemaining=="") {//We are not in the middle of a note.
 						NoteRemaining=rows[RowsPrinted].Note;//The note remaining is the whole note.
 					}
-					noteHeight=(int)g.MeasureString(rows[RowsPrinted].Note,cellFont,noteW).Height; //This is how much height the rest of the note will take.
+					noteHeight=(int)g.MeasureString(NoteRemaining,cellFont,noteW).Height; //This is how much height the rest of the note will take.
 					bool roomForRestOfNote=false;
 					//Test to see if there's enough room on the page for the rest of the note.
 					if(yPos+noteHeight<bounds.Bottom) {
@@ -1374,6 +1373,7 @@ namespace OpenDental.UI {
 					#region PrintRestOfNote
 					if(roomForRestOfNote) { //There is enough room
 						//print it
+						//draw lines for the rest of the note
 						if(noteHeight>0) {
 							//left vertical gridline
 							if(NoteSpanStart!=0) {
@@ -1417,7 +1417,7 @@ namespace OpenDental.UI {
 								(float)ColPos[NoteSpanStop]+(float)columns[NoteSpanStop].ColWidth-(float)ColPos[NoteSpanStart],
 								noteHeight);
 							format.Alignment=StringAlignment.Near;
-							g.DrawString(rows[RowsPrinted].Note,cellFont,textBrush,textRect,format);
+							g.DrawString(NoteRemaining,cellFont,textBrush,textRect,format);
 						}
 						NoteRemaining="";
 						RowsPrinted++;
@@ -1427,14 +1427,17 @@ namespace OpenDental.UI {
 					#region PrintPartOfNote
 					else {//The rest of the note will not fit on this page.
 						//Print as much as you can.
-						noteHeight=bounds.Bottom-yPos;//This is the amount of space remaining on the page.
+						noteHeight=bounds.Bottom-yPos;//This is the amount of space remaining.
+						if(noteHeight<15) {
+							return -1; //If noteHeight is less than this we will get a negative value for the rectangle of space remaining because we subtract 15 from this for the rectangle size when using measureString. This is because one line takes 15, and if there is 1 pixel of height available, measureString will fill it with text, which will then get partly cut off. So when we use measureString we will subtract 15 from the noteHeight.
+						}							
 						SizeF sizeF;
 						int charactersFitted;
 						int linesFilled;
 						string noteFitted;//This is the part of the note we will print.
-						sizeF=g.MeasureString(NoteRemaining,cellFont,new SizeF(noteW,noteHeight),format,out charactersFitted,out linesFilled);//Text that fits will be NoteRemaining.Substring(0,charactersFitted).
+						sizeF=g.MeasureString(NoteRemaining,cellFont,new SizeF(noteW,noteHeight-15),format,out charactersFitted,out linesFilled);//Text that fits will be NoteRemaining.Substring(0,charactersFitted).
 						noteFitted=NoteRemaining.Substring(0,charactersFitted);
-						//lines for note section
+						//draw lines for the part of the note that fits on this page
 						if(noteHeight>0) {
 							//left vertical gridline
 							if(NoteSpanStart!=0) {
@@ -1465,10 +1468,6 @@ namespace OpenDental.UI {
 							yPos+noteHeight);
 						//note text
 						if(noteHeight>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count) {
-							noteW=0;
-							for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
-								noteW+=(int)((float)columns[i].ColWidth);
-							}
 							if(rows[RowsPrinted].Bold) {
 								cellFont=new Font(cellFont,FontStyle.Bold);
 							}
