@@ -895,7 +895,12 @@ namespace OpenDental {
 					FillGrid();
 					return;
 				}
-				Tasks.Insert(newT);
+				List<TaskNote> noteList=TaskNotes.GetForTask(newT.TaskNum);
+				long newTaskNum=Tasks.Insert(newT);
+				for(int t=0;t<noteList.Count;t++) {
+					noteList[t].TaskNum=newTaskNum;
+					TaskNotes.Insert(noteList[t]);
+				}
 				DataValid.SetInvalidTask(newT.TaskNum,true);
 			}
 			if(WasCut) {
@@ -954,7 +959,12 @@ namespace OpenDental {
 					childTasks[i].DateTask=DateTime.MinValue;
 					childTasks[i].DateType=TaskDateType.None;
 				}
-				Tasks.Insert(childTasks[i]);
+				List<TaskNote> noteList=TaskNotes.GetForTask(childTasks[i].TaskNum);
+				long newTaskNum=Tasks.Insert(childTasks[i]);
+				for(int t=0;t<noteList.Count;t++) {
+					noteList[t].TaskNum=newTaskNum;
+					TaskNotes.Insert(noteList[t]);
+				}
 			}
 		}
 
