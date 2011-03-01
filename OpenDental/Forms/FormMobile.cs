@@ -11,7 +11,7 @@ using OpenDentBusiness.Mobile;
 
 
 namespace OpenDental {
-	public partial class FormMobileSetup:Form {
+	public partial class FormMobile:Form {
 		private static string RegistrationKey;
 		private static MobileWeb.Mobile mb = new MobileWeb.Mobile();
 		private static DateTime MobileSyncDateTimeLastRun;
@@ -33,7 +33,7 @@ namespace OpenDental {
 		private string FullSynchNotRunMessage="Sync has never been run. You must do a full sync first.";
 		private string IncorrectRegKeyMessage="Registration key provided by the dental office is incorrect";
 
-		public FormMobileSetup() {
+		public FormMobile() {
 			InitializeComponent();
 			Lan.F(this);
 		}

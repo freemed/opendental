@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormMobileSetup {
+	partial class FormMobile {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -31,6 +31,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupPreferences = new System.Windows.Forms.GroupBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.butCurrentWorkstation = new OpenDental.UI.Button();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textMobileSynchWorkStation = new System.Windows.Forms.TextBox();
@@ -47,7 +48,6 @@ namespace OpenDental{
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.label7 = new System.Windows.Forms.Label();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -124,6 +124,15 @@ namespace OpenDental{
 			this.groupPreferences.TabIndex = 239;
 			this.groupPreferences.TabStop = false;
 			this.groupPreferences.Text = "Preferences";
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(222,57);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(255,18);
+			this.label7.TabIndex = 244;
+			this.label7.Text = "Make this figure 0 to stop automatic Synchronization";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butCurrentWorkstation
 			// 
@@ -296,16 +305,7 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(222,57);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(255,18);
-			this.label7.TabIndex = 244;
-			this.label7.Text = "Make this figure 0 to stop automatic Synchronization";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// FormMobileSetup
+			// FormMobile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(826,452);
@@ -317,7 +317,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butFullSync);
 			this.Controls.Add(this.butSync);
 			this.Controls.Add(this.butClose);
-			this.Name = "FormMobileSetup";
+			this.Name = "FormMobile";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Load += new System.EventHandler(this.FormMobileSetup_Load);
 			this.groupPreferences.ResumeLayout(false);

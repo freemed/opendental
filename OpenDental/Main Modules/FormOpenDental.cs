@@ -4083,13 +4083,10 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
-			/*
-			FormMobile FormM=new FormMobile();
-			FormM.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
-			*/
-			FormMobileSetup FormM=new FormMobileSetup();
-			FormM.ShowDialog();
+			MessageBox.Show("Not yet functional.");
+			//FormMobile FormM=new FormMobile();
+			//FormM.ShowDialog();
+			//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
 		}
 
 		private void menuItemWebForms_Click(object sender,EventArgs e) {
@@ -4435,7 +4432,7 @@ namespace OpenDental{
 				return;
 			}
 			if(System.Environment.MachineName.ToUpper()==PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
-				FormMobileSetup.Synch();
+				//FormMobile.Synch();
 			}
 		}
 

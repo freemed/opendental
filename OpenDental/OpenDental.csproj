@@ -358,11 +358,11 @@
     <Compile Include="Forms\FormTaskNoteEdit.designer.cs">
       <DependentUpon>FormTaskNoteEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormMobileSetup.cs">
+    <Compile Include="Forms\FormMobile.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormMobileSetup.designer.cs">
-      <DependentUpon>FormMobileSetup.cs</DependentUpon>
+    <Compile Include="Forms\FormMobile.designer.cs">
+      <DependentUpon>FormMobile.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormInsPlanConvert_7_5_17.cs">
       <SubType>Form</SubType>
@@ -2034,8 +2034,8 @@
       <DependentUpon>FormTaskNoteEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormMobileSetup.resx">
-      <DependentUpon>FormMobileSetup.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormMobile.resx">
+      <DependentUpon>FormMobile.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormInsPlanConvert_7_5_17.resx">
