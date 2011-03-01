@@ -313,7 +313,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		///<summary></summary>
-		public static void SendClaimReversal(Claim claim,InsPlan plan,InsSub insSub) {
+		public static long SendClaimReversal(Claim claim,InsPlan plan,InsSub insSub) {
 			StringBuilder strb=new StringBuilder();
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null) {
@@ -431,6 +431,46 @@ namespace OpenDental.Eclaims {
 			}
 			//G01 transaction reference number of original claim AN 14
 			strb.Append("00000000000000"); //todo
+			string result="";
+			bool resultIsError=false;
+			try {
+			  result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+			}
+			catch(ApplicationException ex) {
+			  result=ex.Message;
+			  resultIsError=true;
+			  //Etranss.Delete(etrans.EtransNum);//we don't want to do this, because we want the incremented etrans.OfficeSequenceNumber to be saved
+			  //Attach an ack indicating failure.
+			}
+			//Attach an ack to the etrans
+			Etrans etransAck=new Etrans();
+			etransAck.PatNum=etrans.PatNum;
+			etransAck.PlanNum=etrans.PlanNum;
+			etransAck.InsSubNum=etrans.InsSubNum;
+			etransAck.CarrierNum=etrans.CarrierNum;
+			etransAck.DateTimeTrans=DateTime.Now;
+			CCDFieldInputter fieldInputter=null;
+			if(resultIsError) {
+			  etransAck.Etype=EtransType.AckError;
+			  etrans.Note="failed";
+			}
+			else {
+			  fieldInputter=new CCDFieldInputter(result);
+			  etransAck.Etype=fieldInputter.GetEtransType();
+			}
+			Etranss.Insert(etransAck);
+			Etranss.SetMessage(etransAck.EtransNum,result);
+			etrans.AckEtransNum=etransAck.EtransNum;
+			Etranss.Update(etrans);
+			Etranss.SetMessage(etrans.EtransNum,strb.ToString());
+			if(resultIsError) {
+			  throw new ApplicationException(result);
+			}
+			CCDField field=fieldInputter.GetFieldById("G05");//response status
+			etrans=Etranss.GetEtrans(etrans.EtransNum);
+			etrans.Note="Response: "+field.valuestr;
+			Etranss.Update(etrans);
+			return etransAck.EtransNum;
 		}
 
 

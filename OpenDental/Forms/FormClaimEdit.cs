@@ -491,6 +491,9 @@ namespace OpenDental{
 			this.textCode1 = new System.Windows.Forms.TextBox();
 			this.textCode0 = new System.Windows.Forms.TextBox();
 			this.tabCanadian = new System.Windows.Forms.TabPage();
+			this.label76 = new System.Windows.Forms.Label();
+			this.validDate1 = new OpenDental.ValidDate();
+			this.butReverse = new OpenDental.UI.Button();
 			this.textMissingTeeth = new System.Windows.Forms.TextBox();
 			this.label75 = new System.Windows.Forms.Label();
 			this.label74 = new System.Windows.Forms.Label();
@@ -554,9 +557,6 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.butReverse = new OpenDental.UI.Button();
-			this.validDate1 = new OpenDental.ValidDate();
-			this.label76 = new System.Windows.Forms.Label();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -2307,6 +2307,43 @@ namespace OpenDental{
 			this.tabCanadian.Text = "Canadian";
 			this.tabCanadian.UseVisualStyleBackColor = true;
 			// 
+			// label76
+			// 
+			this.label76.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label76.Location = new System.Drawing.Point(3,159);
+			this.label76.Name = "label76";
+			this.label76.Size = new System.Drawing.Size(82,16);
+			this.label76.TabIndex = 146;
+			this.label76.Text = "Trans Ref Num";
+			this.label76.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label76.Visible = false;
+			// 
+			// validDate1
+			// 
+			this.validDate1.Location = new System.Drawing.Point(88,159);
+			this.validDate1.Name = "validDate1";
+			this.validDate1.Size = new System.Drawing.Size(102,20);
+			this.validDate1.TabIndex = 145;
+			this.validDate1.Visible = false;
+			// 
+			// butReverse
+			// 
+			this.butReverse.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butReverse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butReverse.Autosize = true;
+			this.butReverse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butReverse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReverse.CornerRadius = 4F;
+			this.butReverse.Enabled = false;
+			this.butReverse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butReverse.Location = new System.Drawing.Point(196,157);
+			this.butReverse.Name = "butReverse";
+			this.butReverse.Size = new System.Drawing.Size(59,24);
+			this.butReverse.TabIndex = 138;
+			this.butReverse.Text = "Reverse";
+			this.butReverse.Visible = false;
+			this.butReverse.Click += new System.EventHandler(this.butReverse_Click);
+			// 
 			// textMissingTeeth
 			// 
 			this.textMissingTeeth.Location = new System.Drawing.Point(764,142);
@@ -2996,40 +3033,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 14;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butReverse
-			// 
-			this.butReverse.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butReverse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butReverse.Autosize = true;
-			this.butReverse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butReverse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butReverse.CornerRadius = 4F;
-			this.butReverse.Enabled = false;
-			this.butReverse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butReverse.Location = new System.Drawing.Point(196,157);
-			this.butReverse.Name = "butReverse";
-			this.butReverse.Size = new System.Drawing.Size(59,24);
-			this.butReverse.TabIndex = 138;
-			this.butReverse.Text = "Reverse";
-			this.butReverse.Click += new System.EventHandler(this.butReverse_Click);
-			// 
-			// validDate1
-			// 
-			this.validDate1.Location = new System.Drawing.Point(88,159);
-			this.validDate1.Name = "validDate1";
-			this.validDate1.Size = new System.Drawing.Size(102,20);
-			this.validDate1.TabIndex = 145;
-			// 
-			// label76
-			// 
-			this.label76.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label76.Location = new System.Drawing.Point(3,159);
-			this.label76.Name = "label76";
-			this.label76.Size = new System.Drawing.Size(82,16);
-			this.label76.TabIndex = 146;
-			this.label76.Text = "Trans Ref Num";
-			this.label76.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormClaimEdit
 			// 
