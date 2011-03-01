@@ -98,6 +98,7 @@ namespace OpenDentBusiness.Crud{
 				claim.CanadianMaxProsthMaterial  = PIn.Byte  (table.Rows[i]["CanadianMaxProsthMaterial"].ToString());
 				claim.InsSubNum                  = PIn.Long  (table.Rows[i]["InsSubNum"].ToString());
 				claim.InsSubNum2                 = PIn.Long  (table.Rows[i]["InsSubNum2"].ToString());
+				claim.CanadaTransRefNum          = PIn.String(table.Rows[i]["CanadaTransRefNum"].ToString());
 				retVal.Add(claim);
 			}
 			return retVal;
@@ -138,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClaimNum,";
 			}
-			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2) VALUES(";
+			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2,CanadaTransRefNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(claim.ClaimNum)+",";
 			}
@@ -193,7 +194,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (claim.CanadianDateInitialUpper)+","
 				+    POut.Byte  (claim.CanadianMaxProsthMaterial)+","
 				+    POut.Long  (claim.InsSubNum)+","
-				+    POut.Long  (claim.InsSubNum2)+")";
+				+    POut.Long  (claim.InsSubNum2)+","
+				+"'"+POut.String(claim.CanadaTransRefNum)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -256,7 +258,8 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianDateInitialUpper   =  "+POut.Date  (claim.CanadianDateInitialUpper)+", "
 				+"CanadianMaxProsthMaterial  =  "+POut.Byte  (claim.CanadianMaxProsthMaterial)+", "
 				+"InsSubNum                  =  "+POut.Long  (claim.InsSubNum)+", "
-				+"InsSubNum2                 =  "+POut.Long  (claim.InsSubNum2)+" "
+				+"InsSubNum2                 =  "+POut.Long  (claim.InsSubNum2)+", "
+				+"CanadaTransRefNum          = '"+POut.String(claim.CanadaTransRefNum)+"' "
 				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum);
 			Db.NonQ(command);
 		}
@@ -467,6 +470,10 @@ namespace OpenDentBusiness.Crud{
 			if(claim.InsSubNum2 != oldClaim.InsSubNum2) {
 				if(command!=""){ command+=",";}
 				command+="InsSubNum2 = "+POut.Long(claim.InsSubNum2)+"";
+			}
+			if(claim.CanadaTransRefNum != oldClaim.CanadaTransRefNum) {
+				if(command!=""){ command+=",";}
+				command+="CanadaTransRefNum = '"+POut.String(claim.CanadaTransRefNum)+"'";
 			}
 			if(command==""){
 				return;

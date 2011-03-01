@@ -362,8 +362,8 @@ namespace OpenDental.Eclaims {
 				strb.Append(Canadian.TidyN("164",5));
 			}
 			if(carrier.CDAnetVersion!="02") { //version 04
-				//A11 mailbox indicator A 1
-				strb.Append("N"); //TODO: When do we indicate when there is mail?
+				//A09 carrier transaction counter 5 N
+				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 			}
 			//B01 CDA provider number 9 AN
 			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
@@ -430,7 +430,7 @@ namespace OpenDental.Eclaims {
 				strb.Append(Canadian.TidyAE(subscriber.MiddleI,1));
 			}
 			//G01 transaction reference number of original claim AN 14
-			strb.Append("00000000000000"); //todo
+			strb.Append(Canadian.TidyAN(claim.CanadaTransRefNum,14));
 			string result="";
 			bool resultIsError=false;
 			try {

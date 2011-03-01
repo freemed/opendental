@@ -26,19 +26,34 @@ namespace TestCanada {
 
 		public static string RunOne(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[1]);
+			claim.CanadaTransRefNum="000000BCD12345";
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			return Run(1,"A",claim,showForms);
 		}
 
 		public static string RunTwo(bool showForms) {
-			throw new ApplicationException("Not yet implemented.");
+			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[2]);
+			InsSubTC.SetAssignBen(true,claim.InsSubNum);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
+			return Run(2,"A",claim,showForms);
 		}
 
 		public static string RunThree(bool showForms) {
-			throw new ApplicationException("Not yet implemented.");
+			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[6]);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(3,"R",claim,showForms);
 		}
 
 		public static string RunFour(bool showForms) {
-			throw new ApplicationException("Not yet implemented.");
+			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[11]);
+			InsSubTC.SetAssignBen(false,claim.InsSubNum);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			string oldVersion=CarrierTC.SetCDAnetVersion(claim.PlanNum,"02");
+			string retval=Run(4,"A",claim,showForms);
+			CarrierTC.SetCDAnetVersion(claim.PlanNum,oldVersion);
+			return retval;
 		}
 
 	}
