@@ -166,6 +166,7 @@ namespace OpenDental {
 		private TextBox textFamSecDed;
 		private Label label17;
 		private UI.Button butCreditCard;
+		private MenuItem menuItemRepeatMobile;
 		private bool InitializedOnStartup;
 		#endregion UserVariables
 
@@ -309,6 +310,7 @@ namespace OpenDental {
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.menuItemRepeatMobile = new System.Windows.Forms.MenuItem();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -463,7 +465,8 @@ namespace OpenDental {
 			// 
 			this.contextMenuRepeat.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemRepeatStand,
-            this.menuItemRepeatEmail});
+            this.menuItemRepeatEmail,
+            this.menuItemRepeatMobile});
 			// 
 			// menuItemRepeatStand
 			// 
@@ -1602,6 +1605,12 @@ namespace OpenDental {
 			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			// 
+			// menuItemRepeatMobile
+			// 
+			this.menuItemRepeatMobile.Index = 2;
+			this.menuItemRepeatMobile.Text = "Mobile Monthly";
+			this.menuItemRepeatMobile.Click += new System.EventHandler(this.menuItemRepeatMobile_Click);
 			// 
 			// ContrAccount
 			// 
@@ -3213,6 +3222,19 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
+		private void menuItemRepeatMobile_Click(object sender,EventArgs e) {
+			if(!ProcedureCodeC.HList.ContainsKey("027")) {
+				return;
+			}
+			RepeatCharge repeat=new RepeatCharge();
+			repeat.PatNum=PatCur.PatNum;
+			repeat.ProcCode="027";
+			repeat.ChargeAmt=10;
+			repeat.DateStart=DateTime.Today;
+			RepeatCharges.Insert(repeat);
+			ModuleSelected(PatCur.PatNum);
+		}
+
 		private void OnStatement_Click() {
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.Guarantor;
@@ -3975,6 +3997,8 @@ namespace OpenDental {
 			groupBoxFamilyIns.Visible=false;
 			groupBoxIndIns.Visible=false;
 		}
+
+	
 
 		
 
