@@ -153,6 +153,26 @@ namespace OpenDental{
 		private int printPageVertical=1;
 		///<summary>When a popup happens durring attempted drag off pinboard, this helps cancel the drag.</summary>
 		private bool CancelPinMouseDown;
+		/*
+		//Work for new way of printing appt sched.
+		private SolidBrush openBrush;
+		private SolidBrush closedBrush;
+		private SolidBrush holidayBrush;
+		private float TimeWidth;
+		private float ColWidth;
+		private float ColCount;
+		private float ProvWidth;
+		private float ProvCount;
+		private int NumOfWeekDaysToDisplay;
+		private float ColDayWidth;
+		private float ColAptWidth;
+		private int Lh;
+		private int RowsPerHr;
+		private float MinPerRow;
+		private int RowsPerIncr;
+		private int MinPerIncr;
+		private Rectangle curMargins;
+		*/
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -3655,7 +3675,8 @@ namespace OpenDental{
 
 		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			PrintScreenShot(sender,e);
-			//e.HasMorePages=PrintSchedulePage(e.Graphics,e.MarginBounds);
+			//ComputeColWidth(margins.Width);//Figure out widths based on numbers of pages user chose to print.
+			//PrintSchedulePage(e.Graphics,e.MarginBounds);
 		}
 
 		///<summary>The old method for printing the appointment schedule. Being phased out.</summary>
@@ -3789,30 +3810,54 @@ namespace OpenDental{
       e.Graphics.DrawImage(imageTemp,xPos,yPos); 
 		}
 
+		//Working on new way of printing appt sched.
+		/*
 		///<summary>The new printing method for the appointment schedule. Will be phased in when complete.</summary>
-		private bool PrintSchedulePage(Graphics g,Rectangle margins) {
-			//Interesting
-			//TODO: Read variables from preferences in DB. Testing values used for now.
-			float printNumPagesHorizontal=1.5f;
-			float printNumPagesVertical=2.0f;
-			//Local variables.
-			const float printTimeWidth=37.0f;
+		private void PrintSchedulePage(Graphics g,Rectangle margins) {
+			curMargins=margins;
+			curMargins.Height=margins.Height+60;
+			//Only use header on first page and then blank header on rest of row
+			int yPos=(int)27.5;//starting pos
+			//if(printingRow==1){ do title region }
+			#region title
+			string title;
+			string date;
+			if(ContrApptSheet.IsWeeklyView) {
+				title=Lan.g(this,"Weekly Appointments");
+				date=WeekStartDate.DayOfWeek.ToString()+" "+WeekStartDate.ToShortDateString()
+					+" - "+WeekEndDate.DayOfWeek.ToString()+" "+WeekEndDate.ToShortDateString();
+			}
+			else {
+				title=Lan.g(this,"Daily Appointments");
+				date=AppointmentL.DateSelected.DayOfWeek.ToString()+"   "+AppointmentL.DateSelected.ToShortDateString();
+			}
+			Font titleFont=new Font("Arial",14,FontStyle.Bold);
+			float xTitle = (float)(400-((g.MeasureString(title,titleFont).Width/2)));
+			g.DrawString(title,titleFont,Brushes.Black,xTitle,yPos);//centered
+			#endregion			
+			try {
+			  openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
+			  closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
+			  holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][4].ItemColor);
+			}
+			catch {//this is just for design-time
+			  openBrush=new SolidBrush(Color.White);
+			  closedBrush=new SolidBrush(Color.LightGray);
+			  holidayBrush=new SolidBrush(Color.FromArgb(255,128,128));
+			}
+			TimeWidth=37;
+			ProvWidth=8;
+			Lh=12;
+			//const float printTimeWidth=37.0f;
 			SolidBrush timeBarBrush=new SolidBrush(Color.LightGray);
 			//REMOVE ME LATER: Code commented out below copied from ContrApptSheet.CreateShadow() around line 265.
 			//Code to draw a single appointment is contained in ContrApptSingle.cs.
 			//background
-			g.FillRectangle(timeBarBrush,margins.Left,margins.Top,printTimeWidth,margins.Height);//L time bar
-			//g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,Height);//R time bar
-			//try {
-			//  openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
-			//  closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
-			//  holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][4].ItemColor);
-			//}
-			//catch {//this is just for design-time
-			//  openBrush=new SolidBrush(Color.White);
-			//  closedBrush=new SolidBrush(Color.LightGray);
-			//  holidayBrush=new SolidBrush(Color.FromArgb(255,128,128));
-			//}
+			g.FillRectangle(timeBarBrush,margins.Left-TimeWidth,margins.Top,TimeWidth,curMargins.Height);//L time bar
+			g.FillRectangle(timeBarBrush,margins.Right,margins.Top,TimeWidth,curMargins.Height);//R time bar
+		  g.FillRectangle(closedBrush,curMargins.Left,curMargins.Top,curMargins.Width,curMargins.Height);//Background
+			ComputeColWidth(curMargins.Width);
+			DrawGridLines(g);
 			//DrawMainBackground(g);
 			//DrawBlockouts(g);
 			//if(!IsWeeklyView) {
@@ -3822,16 +3867,404 @@ namespace OpenDental{
 			//DrawGridLines(g);
 			//DrawRedTimeIndicator(g);
 			//DrawMinutes(g);
-
 			timeBarBrush.Dispose();
 			//Increment page numbers.
-			printPageHorizontal++;
-			if(printPageHorizontal>printNumPagesHorizontal){
-				printPageHorizontal=1;
-				printPageVertical++;
-			}
-			return (printPageVertical<=printNumPagesVertical);
+			//printPageHorizontal++;
+			//if(printPageHorizontal>printNumPagesHorizontal){
+			//  printPageHorizontal=1;
+			//  printPageVertical++;
+			//}
+			//return (printPageVertical<=printNumPagesVertical);
 		}
+
+		#region drawingForApptPrint
+		private void DrawMainBackground(Graphics g){
+		  List<Schedule> schedsForOp;
+		  //then, loop through each day and operatory
+		  //Operatory curOp;
+		  bool isHoliday;
+		  if(ContrApptSheet.IsWeeklyView){
+		    for(int d=0;d<NumOfWeekDaysToDisplay;d++){
+		      isHoliday=false;
+		      for(int i=0;i<SchedListPeriod.Count;i++) {
+		        if(SchedListPeriod[i].SchedType!=ScheduleType.Practice){
+		          continue;	
+		        }
+		        if(SchedListPeriod[i].Status!=SchedStatus.Holiday) {
+		          continue;
+		        }
+		        if((int)SchedListPeriod[i].SchedDate.DayOfWeek!=d+1){
+		          continue;
+		        }
+		        isHoliday=true;
+		        break;
+		      }
+		      if(isHoliday){
+		        g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth,0,ColDayWidth,Height);
+		      }
+		      //this is a workaround because we start on Monday:
+		      DayOfWeek dayofweek;
+		      if(d==6) {
+		        dayofweek=(DayOfWeek)(0);
+		      }
+		      else {
+		        dayofweek=(DayOfWeek)(d+1);
+		      }
+		      for(int j=0;j<ColCount;j++) {
+		        schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,dayofweek,OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
+		        for(int i=0;i<schedsForOp.Count;i++) {
+		          g.FillRectangle(openBrush
+		            ,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
+		            ,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+		            ,ColAptWidth
+		            ,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+		            +(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
+		        }
+		      }
+		    }
+		  }
+		  else{//only one day showing
+		    isHoliday=false;
+		    //Schedule[] schedForType;
+		    for(int i=0;i<SchedListPeriod.Count;i++) {
+		      if(SchedListPeriod[i].SchedType!=ScheduleType.Practice) {
+		        continue;
+		      }
+		      if(SchedListPeriod[i].Status!=SchedStatus.Holiday) {
+		        continue;
+		      }
+		      isHoliday=true;
+		      break;
+		    }
+		    if(isHoliday){
+		      g.FillRectangle(holidayBrush,TimeWidth+1,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
+		    }
+		    for(int j=0;j<ColCount;j++) {
+		      schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
+		      //first, do all the backgrounds
+		      for(int i=0;i<schedsForOp.Count;i++) {
+		        g.FillRectangle(openBrush
+		          ,TimeWidth+ProvWidth*ProvCount+j*ColWidth
+		          ,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+		          ,ColWidth
+		          ,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+		          +(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
+		      }
+		      //now, fill up to 2 timebars along the left side of each rectangle.
+		      for(int i=0;i<schedsForOp.Count;i++) {
+		        if(schedsForOp[i].Ops.Count==0){//if this schedule is not assigned to specific ops, skip
+		          continue;
+		        }
+		        if(!Providers.GetIsSec(schedsForOp[i].ProvNum)){//if the provider is a dentist
+		          g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
+		            ,TimeWidth+ProvWidth*ProvCount+j*ColWidth
+		            ,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+		            ,ProvWidth
+		            ,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+		            +(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
+		        }
+		        else{//hygienist
+		          g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
+		            ,TimeWidth+ProvWidth*ProvCount+j*ColWidth+ProvWidth
+		            ,schedsForOp[i].StartTime.Hours*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+		            ,ProvWidth
+		            ,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+		            +(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
+		        }
+		      }
+		    }
+		  }			
+		}
+
+		public void ComputeColWidth(int totalWidth){
+			//TODO: Read variables from preferences in DB. Testing values used for now.
+			//float printNumPagesHorizontal=1.5f;
+			//float printNumPagesVertical=2.0f;
+			if(ApptViewItemL.VisOps==null || ApptViewItemL.VisProvs==null){
+				return;
+			}
+			try{
+				if(RowsPerIncr==0)
+					RowsPerIncr=1;
+				ColCount=ApptViewItemL.VisOps.Count;
+				if(ContrApptSheet.IsWeeklyView){
+					ProvCount=0;
+				}
+				else{
+					ProvCount=ApptViewItemL.VisProvs.Count;
+				}
+				if(ColCount==0) {
+					ColWidth=0;
+				}
+				else {
+					if(ContrApptSheet.IsWeeklyView){
+						ColDayWidth=(totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
+						ColAptWidth=(float)(ColDayWidth-1)/(float)ColCount;
+						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+					}
+					else{
+						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+					}
+				}
+				MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
+				MinPerRow=(float)MinPerIncr/(float)RowsPerIncr;
+				RowsPerHr=60/MinPerIncr*RowsPerIncr;
+				//Height=Lh*24*RowsPerHr;
+				//if(ContrApptSheet.IsWeeklyView){
+				//  Width=TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay;
+				//}
+				//else{
+				//  Width=TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount;
+				//}
+			}
+			catch{
+				MessageBox.Show("error computing width");
+			}
+		}
+
+		//private void DrawBlockouts(Graphics g){
+		//  Schedule[] schedForType;
+		//  schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
+		//  SolidBrush blockBrush;
+		//  Pen blockOutlinePen=new Pen(Color.Black,1);
+		//  Pen penOutline;
+		//  Font blockFont=new Font("Arial",8);
+		//  string blockText;
+		//  RectangleF rect;
+		//  //g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
+		//  for(int i=0;i<schedForType.Length;i++){	
+		//    blockBrush=new SolidBrush(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
+		//    penOutline = new Pen(DefC.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType),2);
+		//    blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
+		//    for(int o=0;o<schedForType[i].Ops.Count;o++){	
+		//      if(IsWeeklyView){
+		//        if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1) {
+		//          continue;//don't display if op not visible
+		//        }
+		//        //this is a workaround because we start on Monday:
+		//        int dayofweek=(int)schedForType[i].SchedDate.DayOfWeek-1;
+		//        if(dayofweek==-1) {
+		//          dayofweek=6;
+		//        }
+		//        rect=new RectangleF(
+		//          TimeWidth+1+(dayofweek)*ColDayWidth
+		//          +ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
+		//          ,schedForType[i].StartTime.Hours*Lh*RowsPerHr
+		//          +schedForType[i].StartTime.Minutes*Lh/MinPerRow
+		//          ,ColAptWidth-1
+		//          ,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+		//          +(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+		//      }
+		//      else{
+		//        if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1){
+		//          continue;//don't display if op not visible
+		//        }
+		//        rect=new RectangleF(
+		//          TimeWidth+ProvWidth*ProvCount
+		//          +ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
+		//          +ProvWidth*2//so they don't overlap prov bars
+		//          ,schedForType[i].StartTime.Hours*Lh*RowsPerHr
+		//          +schedForType[i].StartTime.Minutes*Lh/MinPerRow
+		//          ,ColWidth-1-ProvWidth*2
+		//          ,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+		//          +(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+		//      }
+		//      //paint either solid block or outline
+		//      if(PrefC.GetBool(PrefName.SolidBlockouts)){
+		//        g.FillRectangle(blockBrush,rect);
+		//        g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
+		//      }
+		//      else{
+		//        g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
+		//      }				
+		//      g.DrawString(blockText,blockFont,new SolidBrush(DefC.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
+		//    }
+		//  }         
+		//}
+
+		//private void DrawProvScheds(Graphics g){
+		//  Provider provCur;
+		//  //SchedDefault[] schedDefs;//for one type at a time
+		//  Schedule[] schedForType;
+		//  for(int j=0;j<ApptViewItemL.VisProvs.Count;j++) {
+		//    provCur=ProviderC.List[ApptViewItemL.VisProvs[j]];
+		//    schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
+		//    for(int i=0;i<schedForType.Length;i++){	
+		//      g.FillRectangle(openBrush
+		//        ,TimeWidth+ProvWidth*j
+		//        ,schedForType[i].StartTime.Hours*Lh*RowsPerHr//6
+		//        +(int)schedForType[i].StartTime.Minutes*Lh/MinPerRow//10
+		//        ,ProvWidth
+		//        ,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
+		//        +(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+		//    }         
+		//  }
+		//}
+
+		//private void DrawProvBars(Graphics g){			
+		//  for(int j=0;j<ContrApptSingle.ProvBar.Length;j++){
+		//    for(int i=0;i<24*RowsPerHr;i++){
+		//      //144;i++){//ContrApptSingle.TimeBar.Length;i++){
+		//      switch(ContrApptSingle.ProvBar[j][i]){
+		//        case 0:
+		//          break;
+		//        case 1:
+		//          try{
+		//            g.FillRectangle(new SolidBrush(ProviderC.List[ApptViewItemL.VisProvs[j]].ProvColor)
+		//              ,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
+		//          }
+		//          catch{//design-time
+		//            g.FillRectangle(new SolidBrush(Color.White)
+		//              ,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
+		//          }
+		//          break;
+		//        case 2:
+		//          g.FillRectangle(new HatchBrush(HatchStyle.DarkUpwardDiagonal
+		//            ,Color.Black,ProviderC.List[ApptViewItemL.VisProvs[j]].ProvColor)
+		//            ,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
+		//          break;
+		//        default://more than 2
+		//          g.FillRectangle(new SolidBrush(Color.Black)
+		//            ,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
+		//          break;
+		//      }
+		//    }
+		//  }
+		//}
+
+		private void DrawGridLines(Graphics g){
+		  //Vert
+		  if(ContrApptSheet.IsWeeklyView){
+		    g.DrawLine(new Pen(Color.Red),curMargins.Left,curMargins.Top,curMargins.Left,curMargins.Bottom);
+		    g.DrawLine(new Pen(Color.White),TimeWidth-1,0,TimeWidth-1,curMargins.Height);
+		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth,0,TimeWidth,curMargins.Height);
+		    for(int d=0;d<NumOfWeekDaysToDisplay;d++){
+		      g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ColDayWidth*d,0
+		        ,TimeWidth+ColDayWidth*d,curMargins.Height);
+		    }
+		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ColDayWidth*NumOfWeekDaysToDisplay,0
+		      ,TimeWidth+1+ColDayWidth*NumOfWeekDaysToDisplay,curMargins.Height);
+		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay,0
+		      ,TimeWidth*2+1+ColDayWidth*NumOfWeekDaysToDisplay,curMargins.Height);
+		  }
+		  else{
+		    g.DrawLine(new Pen(Color.DarkGray),0,0,0,curMargins.Height);
+		    g.DrawLine(new Pen(Color.White),TimeWidth-2,0,TimeWidth-2,curMargins.Height);
+		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth-1,0,TimeWidth-1,curMargins.Height);
+		    for(int i=0;i<ProvCount;i++){
+		      g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*i,0,TimeWidth+ProvWidth*i,curMargins.Height);
+		    }
+		    for(int i=0;i<ColCount;i++){
+		      g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*ProvCount+ColWidth*i,0
+		        ,TimeWidth+ProvWidth*ProvCount+ColWidth*i,curMargins.Height);
+		    }
+		    g.DrawLine(new Pen(Color.DarkGray), TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,0
+		      ,TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,curMargins.Height);
+		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,0
+		      ,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curMargins.Height);
+		  }
+		  //horiz gray
+		  for(int i=0;i<(curMargins.Height);i+=Lh*RowsPerIncr){
+		    g.DrawLine(new Pen(Color.LightGray),TimeWidth,i
+		      ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i);
+		  }
+		  //horiz Hour lines
+		  for(int i=0;i<curMargins.Height;i+=Lh*RowsPerHr){
+		    g.DrawLine(new Pen(Color.LightGray),0,i-1//was white
+		      ,TimeWidth*2+ColWidth*ColCount+ProvWidth*ProvCount,i-1);
+		    g.DrawLine(new Pen(Color.DarkSlateGray),0,i,TimeWidth,i);
+		    g.DrawLine(new Pen(Color.Black),TimeWidth,i
+		      ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i);
+		    g.DrawLine(new Pen(Color.DarkSlateGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i
+		      ,TimeWidth*2+ColWidth*ColCount+ProvWidth*ProvCount,i);
+		  }
+		}
+
+		//private void DrawRedTimeIndicator(Graphics g){
+		//  int curTimeY=(int)(DateTime.Now.Hour*Lh*RowsPerHr+DateTime.Now.Minute/60f*(float)Lh*RowsPerHr);
+		//  g.DrawLine(new Pen(Color.Red),0,curTimeY
+		//    ,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curTimeY);
+		//  g.DrawLine(new Pen(Color.Red),0,curTimeY+1
+		//    ,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curTimeY+1);
+		//}
+
+		//private void DrawMinutes(Graphics g){
+		//  Font font=new Font(FontFamily.GenericSansSerif,8);//was msSans
+		//  Font bfont=new Font(FontFamily.GenericSansSerif,8,FontStyle.Bold);//was Arial
+		//  g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
+		//  DateTime hour;
+		//  CultureInfo ci=(CultureInfo)CultureInfo.CurrentCulture.Clone();
+		//  string hFormat=Lans.GetShortTimeFormat(ci);
+		//  string sTime;
+		//  for(int i=0;i<24;i++){
+		//    hour=new DateTime(2000,1,1,i,0,0);//hour is the only important part of this time.
+		//    sTime=hour.ToString(hFormat,ci);
+		//    SizeF sizef=g.MeasureString(sTime,bfont);
+		//    g.DrawString(sTime,bfont,new SolidBrush(Color.Black),TimeWidth-sizef.Width-2,i*Lh*RowsPerHr+1);
+		//    g.DrawString(sTime,bfont,new SolidBrush(Color.Black)
+		//      ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+1);
+		//    if(MinPerIncr==5) {
+		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
+		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
+		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
+		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
+		//    }
+		//    else if(MinPerIncr==10){
+		//      g.DrawString(":10",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		//      g.DrawString(":20",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		//      g.DrawString(":40",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*4);
+		//      g.DrawString(":50",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*5);
+		//      g.DrawString(":10",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		//      g.DrawString(":20",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		//      g.DrawString(":40",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*4);
+		//      g.DrawString(":50",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*5);
+		//    }
+		//    else{//15
+		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		//    }
+		//  }
+		//}
+
+		//public void DrawShadow(){
+		//  if(Shadow!=null){
+		//    Graphics grfx2=this.CreateGraphics();
+		//    grfx2.DrawImage(Shadow,0,0);
+		//    grfx2.Dispose();
+		//  }
+		//}
+		#endregion
+		*/
 
 		///<summary>Clears the pinboard.</summary>
 		private void butClearPin_Click(object sender, System.EventArgs e) {
