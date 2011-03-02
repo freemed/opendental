@@ -129,10 +129,10 @@ namespace OpenDental{
 			// 
 			this.label7.Location = new System.Drawing.Point(222,57);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(255,18);
+			this.label7.Size = new System.Drawing.Size(343,18);
 			this.label7.TabIndex = 244;
 			this.label7.Text = "Make this figure 0 to stop automatic Synchronization";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butCurrentWorkstation
 			// 
