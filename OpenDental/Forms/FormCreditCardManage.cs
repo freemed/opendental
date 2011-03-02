@@ -52,6 +52,10 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {
+				MsgBox.Show(this,"Not allowed to store credit cards.");
+				return;
+			}
 			bool remember=false;
 			int placement=listCreditCards.SelectedIndex;
 			if(placement!=-1) {

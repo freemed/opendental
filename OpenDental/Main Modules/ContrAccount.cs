@@ -1767,15 +1767,9 @@ namespace OpenDental {
 			panelInsInfoDetail.Top = panelBoldBalance.Top + panelBoldBalance.Height;
 			panelInsInfoDetail.Left = panelBoldBalance.Left + panelBoldBalance.Width - panelInsInfoDetail.Width;*/
 			int left=textUrgFinNote.Left;//769;
-			if(PrefC.GetBoolSilent(PrefName.StoreCCnumbers,false)){
-				panelCC.Visible=true;
-				panelCC.Location=new Point(left,textUrgFinNote.Bottom);
-				gridAcctPat.Location=new Point(left,panelCC.Bottom);
-			}
-			else{
-				panelCC.Visible=false;
-				gridAcctPat.Location=new Point(left,textUrgFinNote.Bottom);
-			}
+			panelCC.Visible=true;
+			panelCC.Location=new Point(left,textUrgFinNote.Bottom);
+			gridAcctPat.Location=new Point(left,panelCC.Bottom);
 			labelFamFinancial.Location=new Point(left,gridAcctPat.Bottom);
 			textFinNotes.Location=new Point(left,labelFamFinancial.Bottom);
 			tabControlShow.Height=panelCommButs.Top-tabControlShow.Top;

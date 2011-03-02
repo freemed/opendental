@@ -1198,6 +1198,7 @@ namespace OpenDental{
 				return;
 			}
 			bool needToken=false;
+			bool newCard=false;
 			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
@@ -1274,6 +1275,7 @@ namespace OpenDental{
 				}
 			}
 			else {//No credit cards in creditcard table so use they will manually type in information.
+				newCard=true;
 				info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 				info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
 				info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
@@ -1336,6 +1338,15 @@ namespace OpenDental{
 					CCard.XChargeToken=xChargeToken;
 					CCard.CCNumberMasked=accountMasked;
 					CreditCards.Update(CCard);
+				}
+				if(newCard) {
+					CCard=new CreditCard();
+					List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
+					CCard.ItemOrder=itemOrderCount.Count;
+					CCard.PatNum=PatCur.PatNum;
+					CCard.XChargeToken=xChargeToken;
+					CCard.CCNumberMasked=accountMasked;
+					CreditCards.Insert(CCard);
 				}
 				//resulttext+=reader.ReadToEnd();
 				//MessageBox.Show("ResultFile:\r\n"+resultText);
