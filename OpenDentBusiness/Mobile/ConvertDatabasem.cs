@@ -104,3 +104,18 @@ namespace OpenDentBusiness.Mobile {
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 				*/
+
+				/*
+				command="DROP TABLE IF EXISTS providerm";
+				Db.NonQ(command);
+				command=@"CREATE TABLE providerm (
+					CustomerNum bigint NOT NULL,
+					ProvNum bigint NOT NULL,
+					Abbr varchar(255) NOT NULL,
+					IsSecondary tinyint NOT NULL,
+					ProvColor int NOT NULL,
+					INDEX(CustomerNum),
+					INDEX(ProvNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				*/

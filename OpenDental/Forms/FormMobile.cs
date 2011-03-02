@@ -29,9 +29,6 @@ namespace OpenDental {
 		private bool MobilePasswordChanged=false;
 		private string NotPaidMessage="You must be a paid customer to use this feature. Please call Open Dental and register as a paid user";
 		private string WebServiceUnavailableMessage="Either the web service is not available or the WebHostSynch URL is incorrect";
-		private string SyncCompletedMessage="Sync Completed";
-		private string FullSynchNotRunMessage="Sync has never been run. You must do a full sync first.";
-		private string IncorrectRegKeyMessage="Registration key provided by the dental office is incorrect";
 
 		public FormMobile() {
 			InitializeComponent();
@@ -39,6 +36,13 @@ namespace OpenDental {
 		}
 
 		private void FormMobileSetup_Load(object sender,EventArgs e) {
+			textMobileSyncServerURL.Text=PrefC.GetString(PrefName.MobileSyncServerURL);
+			//textSynchMinutes.Text=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
+			//textDateBefore.Text=PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate);
+			textMobileSynchWorkStation.Text=PrefC.GetString(PrefName.MobileSyncWorkstationName);
+			
+			//textMobileUserName.Text=mb.GetUserName(RegistrationKey);
+			/*
 			try {
 				InitializeVariables();
 				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
@@ -61,15 +65,15 @@ namespace OpenDental {
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
-			}
+			}*/
 		}
 
 		private static void InitializeVariables() {
-				RegistrationKey=PrefC.GetStringSilent(PrefName.RegistrationKey);
-				MobileSyncServerURL=PrefC.GetStringSilent(PrefName.MobileSyncServerURL);
-				MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
-				MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-				MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
+				//RegistrationKey=PrefC.GetStringSilent(PrefName.RegistrationKey);
+				//MobileSyncServerURL=PrefC.GetStringSilent(PrefName.MobileSyncServerURL);
+				//MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
+			//	MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+				//MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
 				//#if DEBUG	
 				if(MobileSyncServerURL.Contains(SynchMachineStaging)||MobileSyncServerURL.Contains(SynchMachineDev)) {
 					IgnoreCertificateErrors();
@@ -82,7 +86,8 @@ namespace OpenDental {
 				PaidCustomer=mb.IsPaidCustomer(RegistrationKey); // check for payment here
 				if(PaidCustomer) {
 					MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
-				}else{
+				}
+				else{
 					MobileSyncIntervalMinutes=0;
 					Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
 				}
@@ -430,24 +435,18 @@ namespace OpenDental {
 					return;
 				}
 				if(MobileSyncDateTimeLastRun.Year<1880) {
-					MsgBox.Show(this,FullSynchNotRunMessage);
+					MsgBox.Show(this,"Sync has never been run. You must do a full sync first.");
 					return;
 				}
 				
 				if(mb.GetCustomerNum(RegistrationKey)==0) {
-					MsgBox.Show(this,IncorrectRegKeyMessage);
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect.");
 					return;
 				}
-				/*if(!FieldsValid()) {
-					return;
-				}*/
 				SetMobileExcludeApptsBeforeDate();
-				/*if(MobileSyncIntervalMinutes==0) {
-					MsgBox.Show(this,"Minutes Between Synch must be set to greater than zero");
-					return;
-				}*/
+				//todo: Why is this run a second time?
 				if(MobileSyncDateTimeLastRun.Year<1880) {
-					MsgBox.Show(this,FullSynchNotRunMessage);
+					MsgBox.Show(this,"Sync has never been run. You must do a full sync first.");
 					return;
 				}
 				Cursor=Cursors.WaitCursor;
@@ -460,7 +459,7 @@ namespace OpenDental {
 					MessageBox.Show(ex.Message);
 				}
 				Cursor=Cursors.Default;
-				MsgBox.Show(this,SyncCompletedMessage);
+				MsgBox.Show(this,"Done.");
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -480,12 +479,9 @@ namespace OpenDental {
 					return;
 				}
 				if(mb.GetCustomerNum(RegistrationKey)==0) {
-					MsgBox.Show(this,IncorrectRegKeyMessage);
+					MsgBox.Show(this,"Registration key provided by the dental office is incorrect.");
 					return;
 				}
-				/*if(!FieldsValid()) {
-					return;
-				}*/
 				SetMobileExcludeApptsBeforeDate();
 				if(!MsgBox.Show(this,true,"This will be time consuming. Continue anyway?")) {
 					return;
@@ -499,7 +495,7 @@ namespace OpenDental {
 					MessageBox.Show(ex.Message);
 				}
 				Cursor=Cursors.Default;
-				MsgBox.Show(this,SyncCompletedMessage);
+				MsgBox.Show(this,"Done.");
 				}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
