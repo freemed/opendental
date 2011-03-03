@@ -38,7 +38,7 @@ namespace WebForms {
 				GeneratePage(DentalOfficeID,WebSheetDefID);
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 				DisplayMessage("Error: Your form is not available. Please contact your Dental Office");
 			}
 			
@@ -206,7 +206,7 @@ namespace WebForms {
 					Panel3.Style["top"]=FormXOffset+SheetDefHeight+SubmitButtonYoffset+"px";
 				}
 				catch(ApplicationException ex) {
-					Logger.LogError(ex);
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 					DisplayMessage("Error: Your form is not available. Please contact your Dental Office");
 				}
 		}
@@ -318,7 +318,7 @@ namespace WebForms {
 				}
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 			}
 		}
 
@@ -338,7 +338,7 @@ namespace WebForms {
 				}
 			}
 			catch(Exception ex) {
-				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 			}
 		}
 
@@ -428,10 +428,9 @@ namespace WebForms {
 				}
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 				Panel1.Visible=false;
 				DisplayMessage("There has been a problem submitting your details. <br /> We apologize for the inconvenience.");
-				Logger.Information("There has been a problem submitting your details IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 		}
 

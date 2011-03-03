@@ -22,7 +22,7 @@
 		<ul>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
-					<li class="arrow style1">
+					<li class="arrow style1" style="background-color:<%#GetProviderColor((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem)%>;">
 						<div>
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">

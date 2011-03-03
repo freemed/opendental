@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Threading;
+using System.Drawing;
 using WebForms;
 using OpenDentBusiness;
 using OpenDentBusiness.Mobile;
@@ -68,6 +69,11 @@ namespace MobileWeb {
 			return util.GetPatientName(PatNum,CustomerNum);
 		}
 
+		public string GetProviderColor(Appointmentm ap) {
+			Providerm pv=Providerms.GetOne(CustomerNum,ap.ProvNum);
+			string HexColor=ColorTranslator.ToHtml(pv.ProvColor);
+			return HexColor;
+		}
 		private bool SetCustomerNum(){
 			Message.Text="";
 			if(Session["CustomerNum"]==null) {

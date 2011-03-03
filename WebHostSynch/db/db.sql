@@ -114,5 +114,17 @@ CREATE TABLE `userm` (
   PRIMARY KEY (`CustomerNum`,`UsermNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `providerm`;
+
+CREATE TABLE `providerm` (
+  `CustomerNum` bigint(20) NOT NULL,
+  `ProvNum` bigint(20) NOT NULL,
+  `Abbr` varchar(255) NOT NULL,
+  `IsSecondary` tinyint(4) NOT NULL,
+  `ProvColor` int(11) NOT NULL,
+  KEY `CustomerNum` (`CustomerNum`),
+  KEY `ProvNum` (`ProvNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

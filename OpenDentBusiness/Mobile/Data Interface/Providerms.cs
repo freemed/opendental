@@ -7,7 +7,11 @@ using System.Text;
 namespace OpenDentBusiness.Mobile{
 	///<summary></summary>
 	public class Providerms{
-		
+
+		///<summary>Gets one Providerm from the db.</summary>
+		public static Providerm GetOne(long customerNum,long provNum) {
+			return Crud.ProvidermCrud.SelectOne(customerNum,provNum);
+		}
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -15,11 +19,6 @@ namespace OpenDentBusiness.Mobile{
 		public static List<Providerm> Refresh(long patNum){
 			string command="SELECT * FROM providerm WHERE PatNum = "+POut.Long(patNum);
 			return Crud.ProvidermCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one Providerm from the db.</summary>
-		public static Providerm GetOne(long customerNum,long provNum){
-			return Crud.ProvidermCrud.SelectOne(customerNum,provNum);
 		}
 
 		///<summary></summary>

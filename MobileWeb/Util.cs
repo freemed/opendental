@@ -25,21 +25,20 @@ namespace MobileWeb {
 			long DentalOfficeID=0;
 			String md5password=new WebHostSynch.Util().MD5Encrypt(password);
 			try {
-				String command="SELECT CustomerNum,UserName,Password FROM userm WHERE UserName='"+POut.String(username)+"'";
-				OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-				DataTable table=dc.GetTable(command);
+				String command="SELECT * FROM userm WHERE UserName='"+POut.String(username)+"'";
+				Userm um=Userms.GetOne(command);
 				String dbpassword="";
-				if(table.Rows.Count==0) {
-					DentalOfficeID=0;//user not found
-				}
-				else if(table.Rows.Count>0) {
-					dbpassword=table.Rows[0]["Password"].ToString();
-					if(md5password==dbpassword) {
-						DentalOfficeID=PIn.Int(table.Rows[0]["CustomerNum"].ToString());
-					}
+				if(um==null) {
+					DentalOfficeID=0;//user not found - specify message if necessary
 				}
 				else {
-					DentalOfficeID=0;
+					dbpassword=um.Password;
+					if(md5password==dbpassword) {
+						DentalOfficeID=um.CustomerNum;
+					}
+					else {
+						//incorrect password - specify message if necessary
+					}
 				}
 			}
 			catch(Exception ex) {

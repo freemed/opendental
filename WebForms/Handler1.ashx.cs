@@ -56,8 +56,7 @@ namespace WebForms {
 				bmp.Dispose();
 			}
 			catch(Exception ex) {
-				Logger.Information("WebSheetFieldDefID="+WebSheetFieldDefID);
-				Logger.LogError(ex);
+				Logger.LogError("WebSheetFieldDefID="+WebSheetFieldDefID,ex);
 			}
 		}
 

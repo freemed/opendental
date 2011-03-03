@@ -105,18 +105,29 @@ namespace WebHostSynch {
 		}
 
 		public void SetMobileWebUserPassword(long customerNum,String UserName,String Password) {
-			String command="INSERT INTO userm (CustomerNum,UserName,Password) VALUES ("+POut.Long(customerNum)+",'"+POut.String(UserName)+"','"+POut.String(MD5Encrypt(Password))+"')ON DUPLICATE KEY UPDATE UserName='"+POut.String(UserName)+"',Password='"+POut.String(MD5Encrypt(Password))+"'";
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			dc.NonQ(command);
+			Userm um=Userms.GetOne(customerNum,1);
+			bool UserExists=true;
+			if(um==null) {
+				um=new Userm();
+				UserExists=false;
+			}
+			um.CustomerNum=customerNum;
+			um.UsermNum=1;//always 1
+			um.UserName=UserName;
+			um.Password=MD5Encrypt(Password);
+			if(UserExists) {
+				Userms.Update(um);				
+			}
+			else{
+				Userms.Insert(um);
+			}
 		}
 
 		public string GetMobileWebUserName(long customerNum){
-			String command="SELECT UserName FROM userm WHERE CustomerNum="+POut.Long(customerNum);
-			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-			DataTable table=dc.GetTable(command);
 			String UserName="";
-			if(table.Rows.Count!=0) {
-				UserName=table.Rows[0][0].ToString();
+			Userm um=Userms.GetOne(customerNum,1);
+			if(um!=null) {
+				UserName=um.UserName;
 			}
 			return UserName;
 		}
