@@ -363,7 +363,12 @@ namespace OpenDental.Eclaims {
 			}
 			if(carrier.CDAnetVersion!="02") { //version 04
 				//A09 carrier transaction counter 5 N
-				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
+				List <Etrans> etransHist=Etranss.GetHistoryOneClaim(claim.ClaimNum);
+				for(int i=etransHist.Count-1;i>=0;i--) {
+					if(etransHist[i].Etype==EtransType.Claim_CA) {
+						strb.Append(Canadian.TidyN(etransHist[i].CarrierTransCounter,5));
+					}
+				}
 			}
 			//B01 CDA provider number 9 AN
 			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
@@ -429,6 +434,8 @@ namespace OpenDental.Eclaims {
 				//D04 subscriber middle initial 1 AE
 				strb.Append(Canadian.TidyAE(subscriber.MiddleI,1));
 			}
+			//For Future Use
+			strb.Append("000000");
 			//G01 transaction reference number of original claim AN 14
 			strb.Append(Canadian.TidyAN(claim.CanadaTransRefNum,14));
 			string result="";

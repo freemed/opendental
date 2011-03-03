@@ -25,18 +25,19 @@ namespace TestCanada {
 		}
 
 		public static string RunOne(bool showForms) {
+			string retval=ClaimTC.RunTwo(false);//We run claim test 2 so that the claim will have the claim.CanadaTransRefNum set and have an etrans record with the CarrierTransCounter set.
 			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[1]);
-			claim.CanadaTransRefNum="000000BCD12345";
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(1,"A",claim,showForms);
+			return retval+Run(1,"A",claim,showForms);
 		}
 
 		public static string RunTwo(bool showForms) {
+			string retval=ClaimTC.RunThree(false);//We run claim test 3 so that the claim will have the claim.CanadaTransRefNum set and have an etrans record with the CarrierTransCounter set.
 			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[2]);
 			InsSubTC.SetAssignBen(true,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
-			return Run(2,"A",claim,showForms);
+			return retval+Run(2,"A",claim,showForms);
 		}
 
 		public static string RunThree(bool showForms) {
