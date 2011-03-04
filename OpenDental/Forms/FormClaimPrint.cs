@@ -59,6 +59,7 @@ namespace OpenDental{
 		private List<ClaimValCodeLog> MedValueCodes;
 		private Referral ClaimReferral;
 		private List<InsSub> SubList;
+		private int procLimit;
 
 		///<summary></summary>
 		public FormClaimPrint(){
@@ -242,14 +243,6 @@ namespace OpenDental{
 
 		private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed.
 			FillDisplayStrings();
-			int procLimit=ProcLimitForFormat();
-			//claimprocs is filled in FillDisplayStrings
-			if(claimprocs.Count==0){
-				totalPages=1;
-			}
-			else{
-				totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
-			}
 			bool HasMedical = false;
 			if(!PrintBlank){
 				FillProcStrings(pagesPrinted*procLimit,procLimit);
@@ -544,6 +537,13 @@ namespace OpenDental{
 				}
 			}
 			displayStrings=new string[ClaimFormCur.Items.Length];
+			procLimit=ProcLimitForFormat();
+			if(claimprocs.Count==0){
+				totalPages=1;
+			}
+			else{
+				totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
+			}
 			//a value is set for every item, but not every case will have a matching claimform item.
 			for(int i=0;i<ClaimFormCur.Items.Length;i++){
 				if(ClaimFormCur.Items[i]==null){//Renaissance does not use [0]
@@ -2435,7 +2435,7 @@ namespace OpenDental{
 							displayStrings[i]=fee.ToString(ClaimFormCur.Items[i].FormatString);
 						}
 						break;
-					case "DateOfService"://only for this page, Earliest proc date.
+					case "DateService"://only for this page, Earliest proc date.
 						DateTime dateService=((ClaimProc)claimprocs[0]).ProcDate;
 						for(int f=startProc;f<startProc+totProcs;f++){//eg f=0;f<10;f++
 							if(f < claimprocs.Count && ((ClaimProc)claimprocs[f]).ProcDate < dateService)
