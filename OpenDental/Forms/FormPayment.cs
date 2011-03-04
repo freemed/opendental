@@ -730,9 +730,8 @@ namespace OpenDental{
 			for(int i=0;i<creditCards.Count;i++) {
 				comboCreditCards.Items.Add(creditCards[i].CCNumberMasked);
 			}
-			if(creditCards.Count>0) {
-				comboCreditCards.SelectedIndex=0;
-			}
+			comboCreditCards.Items.Add("New card");
+			comboCreditCards.SelectedIndex=0;
 			tableBalances=Patients.GetPaymentStartingBalances(PatCur.Guarantor,PaymentCur.PayNum);
 			//this works even if patient not in family
 			textPaidBy.Text=FamCur.GetNameInFamFL(PaymentCur.PatNum);
@@ -1246,7 +1245,9 @@ namespace OpenDental{
 					info.Arguments+="/NORESULTDIALOG ";
 				}
 				else {//Not recurring charge
-					needToken=true;//Will create a token from result file so credit card info isn't saved in our db.
+					if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {//Use token only if user has has pref unchecked in module setup (allow store credit card nums).
+						needToken=true;//Will create a token from result file so credit card info isn't saved in our db.
+					}
 					if(CCard.CCNumberMasked!="") {//Number won't be masked if not recurring
 						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
 					}
@@ -1274,7 +1275,7 @@ namespace OpenDental{
 					info.Arguments+="/NORESULTDIALOG ";
 				}
 			}
-			else {//No credit cards in creditcard table so use they will manually type in information.
+			else {//Add card option was selected in drop down.
 				newCard=true;
 				info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 				info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
@@ -1313,6 +1314,7 @@ namespace OpenDental{
 					if(line.StartsWith("RESULT=")) {
 						if(line!="RESULT=SUCCESS") {
 							needToken=false;//Don't update CCard due to failure
+							newCard=false;//Don't insert CCard due to failure
 							break;
 						}
 					}

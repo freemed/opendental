@@ -29,6 +29,7 @@ namespace OpenDental{
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
+			this.labelXChargeWarning = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -39,7 +40,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(210,211);
+			this.butClose.Location = new System.Drawing.Point(210,165);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(82,26);
 			this.butClose.TabIndex = 2;
@@ -48,17 +49,19 @@ namespace OpenDental{
 			// 
 			// listCreditCards
 			// 
+			this.listCreditCards.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listCreditCards.FormattingEnabled = true;
+			this.listCreditCards.IntegralHeight = false;
 			this.listCreditCards.Location = new System.Drawing.Point(12,12);
 			this.listCreditCards.Name = "listCreditCards";
-			this.listCreditCards.Size = new System.Drawing.Size(175,225);
+			this.listCreditCards.Size = new System.Drawing.Size(175,179);
 			this.listCreditCards.TabIndex = 4;
 			this.listCreditCards.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listCreditCards_MouseDoubleClick);
 			// 
 			// butDown
 			// 
 			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDown.Autosize = true;
 			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -75,7 +78,6 @@ namespace OpenDental{
 			// butUp
 			// 
 			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butUp.Autosize = true;
 			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -92,7 +94,6 @@ namespace OpenDental{
 			// butAdd
 			// 
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -106,10 +107,23 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// labelXChargeWarning
+			// 
+			this.labelXChargeWarning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelXChargeWarning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))),((int)(((byte)(0)))),((int)(((byte)(0)))));
+			this.labelXChargeWarning.Location = new System.Drawing.Point(12,195);
+			this.labelXChargeWarning.Name = "labelXChargeWarning";
+			this.labelXChargeWarning.Size = new System.Drawing.Size(280,45);
+			this.labelXChargeWarning.TabIndex = 39;
+			this.labelXChargeWarning.Text = "You should turn off the option in Module Setup for \"allow storing credit card num" +
+    "bers\" in order to start using tokens.";
+			this.labelXChargeWarning.Visible = false;
+			// 
 			// FormCreditCardManage
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(304,249);
+			this.ClientSize = new System.Drawing.Size(304,240);
+			this.Controls.Add(this.labelXChargeWarning);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
 			this.Controls.Add(this.butAdd);
@@ -131,5 +145,6 @@ namespace OpenDental{
 		private UI.Button butDown;
 		private UI.Button butUp;
 		private UI.Button butAdd;
+		private System.Windows.Forms.Label labelXChargeWarning;
 	}
 }

@@ -19,6 +19,9 @@ namespace OpenDental {
 		}
 		
 		private void FormCreditCardManage_Load(object sender,EventArgs e) {
+			if(PrefC.GetBool(PrefName.StoreCCnumbers) && Programs.IsEnabled(ProgramName.Xcharge)) {
+				labelXChargeWarning.Visible=true;
+			}
 			RefreshCardList();
 			if(creditCards.Count>0) {
 				listCreditCards.SelectedIndex=0;
@@ -53,8 +56,15 @@ namespace OpenDental {
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {
-				MsgBox.Show(this,"Not allowed to store credit cards.");
-				return;
+				if(Programs.IsEnabled(ProgramName.Xcharge)) {
+					MsgBox.Show(this,"To add a new credit card to this list, go to the payment window and select 'New card' from the credit card drop down. "
+						+"Press the X-Charge button and the card will be automatically added after the charge is successful.");
+					return;
+				}
+				else {
+					MsgBox.Show(this,"Not allowed to store credit cards.");
+					return;
+				}
 			}
 			bool remember=false;
 			int placement=listCreditCards.SelectedIndex;
