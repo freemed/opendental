@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using OpenDentBusiness;
 using OpenDental.Eclaims;
 
@@ -25,23 +26,25 @@ namespace TestCanada {
 		}
 
 		public static string RunOne(bool showForms) {
-			string retval=ClaimTC.RunTwo(false);//We run claim test 2 so that the claim will have the claim.CanadaTransRefNum set and have an etrans record with the CarrierTransCounter set.
 			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[1]);
+			claim.CanadaTransRefNum="BCD12345      ";
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return retval+Run(1,"A",claim,showForms);
+			return Run(1,"A",claim,showForms);
 		}
 
 		public static string RunTwo(bool showForms) {
-			string retval=ClaimTC.RunThree(false);//We run claim test 3 so that the claim will have the claim.CanadaTransRefNum set and have an etrans record with the CarrierTransCounter set.
 			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[2]);
+			claim.CanadaTransRefNum="BCD88345      ";
 			InsSubTC.SetAssignBen(true,claim.InsSubNum);
-			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
-			return retval+Run(2,"A",claim,showForms);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			return Run(2,"A",claim,showForms);
+			//TODO: We need to run the reversal for the secondary claim. Can't do this yet since we don't have COB claims implemented yet.
 		}
 
 		public static string RunThree(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[6]);
+			claim.CanadaTransRefNum="CCC12345      ";
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			return Run(3,"R",claim,showForms);
@@ -49,6 +52,7 @@ namespace TestCanada {
 
 		public static string RunFour(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[11]);
+			claim.CanadaTransRefNum="AB123456V2    ";
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
 			string oldVersion=CarrierTC.SetCDAnetVersion(claim.PlanNum,"02");
