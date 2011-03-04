@@ -387,6 +387,7 @@ SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,"
 				+@"INNER JOIN patient ON table1.PatNum=patient.PatNum 
 				LEFT JOIN procedurelog ON patient.PatNum=procedurelog.PatNum AND procedurelog.ProcStatus=2
 				LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1
+				AND refattach.ItemOrder=(SELECT MIN(ra.ItemOrder) FROM refattach ra WHERE ra.PatNum=refattach.PatNum AND ra.IsFrom=1)
 				LEFT JOIN referral ON referral.ReferralNum=refattach.ReferralNum "
 				+whereProv;
 			report.Query+="GROUP BY patient.LName,patient.FName,patient.PatNum,"+DbHelper.Concat("referral.LName","IF(referral.FName='','',',')","referral.FName");
