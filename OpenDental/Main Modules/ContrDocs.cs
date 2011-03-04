@@ -1423,7 +1423,7 @@ namespace OpenDental{
 			Document doc;
 			long mountNum=0;
 			long docNum=0;
-			if(TreeDocuments.SelectedNode!=null&&TreeDocuments.SelectedNode.Tag!=null) {
+			if(TreeDocuments.SelectedNode!=null && TreeDocuments.SelectedNode.Tag!=null && TreeDocuments.SelectedNode.Tag==typeof(DataRow)) {
 				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 				mountNum=Convert.ToInt64(obj["MountNum"]);
 				docNum=Convert.ToInt64(obj["DocNum"]);
