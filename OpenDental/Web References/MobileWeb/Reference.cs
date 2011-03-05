@@ -46,6 +46,8 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SynchPrescriptionsOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SynchProvidersOperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetUserNameOperationCompleted;
         
         private System.Threading.SendOrPostCallback SetMobileWebUserPasswordOperationCompleted;
@@ -108,6 +110,9 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SynchPrescriptionsCompletedEventHandler SynchPrescriptionsCompleted;
+        
+        /// <remarks/>
+        public event SynchProvidersCompletedEventHandler SynchProvidersCompleted;
         
         /// <remarks/>
         public event GetUserNameCompletedEventHandler GetUserNameCompleted;
@@ -319,6 +324,36 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchProviders", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchProviders(string RegistrationKey, Providerm[] providerList) {
+            this.Invoke("SynchProviders", new object[] {
+                        RegistrationKey,
+                        providerList});
+        }
+        
+        /// <remarks/>
+        public void SynchProvidersAsync(string RegistrationKey, Providerm[] providerList) {
+            this.SynchProvidersAsync(RegistrationKey, providerList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchProvidersAsync(string RegistrationKey, Providerm[] providerList, object userState) {
+            if ((this.SynchProvidersOperationCompleted == null)) {
+                this.SynchProvidersOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchProvidersOperationCompleted);
+            }
+            this.InvokeAsync("SynchProviders", new object[] {
+                        RegistrationKey,
+                        providerList}, this.SynchProvidersOperationCompleted, userState);
+        }
+        
+        private void OnSynchProvidersOperationCompleted(object arg) {
+            if ((this.SynchProvidersCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchProvidersCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetUserName", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public string GetUserName(string RegistrationKey) {
             object[] results = this.Invoke("GetUserName", new object[] {
@@ -491,6 +526,10 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SynchPrescriptionsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchProvidersCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

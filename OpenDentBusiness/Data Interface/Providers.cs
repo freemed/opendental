@@ -379,6 +379,45 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
+		public static List<long> GetChangedSinceProvNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT ProvNum FROM provider WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> provnums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				provnums.Add(PIn.Long(dt.Rows[i]["ProvNum"].ToString()));
+			}
+			return provnums;
+		}
+
+		///<summary>Used along with GetChangedSinceProvNums</summary>
+		public static List<Provider> GetMultProviders(List<long> provNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Provider>>(MethodBase.GetCurrentMethod(),provNums);
+			}
+			string strProvNums="";
+			DataTable table;
+			if(provNums.Count>0) {
+				for(int i=0;i<provNums.Count;i++) {
+					if(i>0) {
+						strProvNums+="OR ";
+					}
+					strProvNums+="ProvNum='"+provNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM provider WHERE "+strProvNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			Provider[] multProviders=Crud.ProviderCrud.TableToList(table).ToArray();
+			List<Provider> providerList=new List<Provider>(multProviders);
+			return providerList;
+		}
+
+
 
 	}
 	
