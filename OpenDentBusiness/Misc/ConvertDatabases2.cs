@@ -3537,6 +3537,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.8.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_8_3();
+		}
+
+		private static void To7_8_3() {
+			if(FromVersion<new Version("7.8.3.0")) {
+				string command;
+				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileUserName','')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.8.3.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_9_0();
 		}
 

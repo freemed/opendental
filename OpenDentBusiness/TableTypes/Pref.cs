@@ -157,6 +157,7 @@ namespace OpenDentBusiness {
 		MobileSyncServerURL,
 		MobileSyncWorkstationName,
 		MobileExcludeApptsBeforeDate,
+		MobileUserName,
 		//MobileSyncLastFileNumber,
 		//MobileSyncPath,
 		OpenDentalVendor,
