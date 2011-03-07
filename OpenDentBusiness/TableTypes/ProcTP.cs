@@ -39,6 +39,8 @@ namespace OpenDentBusiness{
 		public double Discount;
 		///<summary>Text from prognosis definition.  Can be changed by user at any time.</summary>
 		public string Prognosis;
+		///<summary>Text from diagnosis definition.  Can be changed by user at any time.</summary>
+		public string Dx;
 		
 		///<summary></summary>
 		public ProcTP Copy(){

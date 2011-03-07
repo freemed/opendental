@@ -40,6 +40,8 @@ namespace OpenDental{
 		private OpenDental.ValidDouble textPatAmt;
 		private Label label3;
 		private TextBox textPrognosis;
+		private TextBox textDx;
+		private Label labelDx;
 		private DateTime DateTP;
 
 		///<summary></summary>
@@ -102,6 +104,8 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textDx = new System.Windows.Forms.TextBox();
+			this.labelDx = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textToothNumTP
@@ -294,7 +298,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(24,368);
+			this.butDelete.Location = new System.Drawing.Point(24,391);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(86,26);
 			this.butDelete.TabIndex = 8;
@@ -309,7 +313,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(480,330);
+			this.butOK.Location = new System.Drawing.Point(480,353);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -324,17 +328,35 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(480,368);
+			this.butCancel.Location = new System.Drawing.Point(480,391);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textDx
+			// 
+			this.textDx.Location = new System.Drawing.Point(175,332);
+			this.textDx.Name = "textDx";
+			this.textDx.Size = new System.Drawing.Size(81,20);
+			this.textDx.TabIndex = 72;
+			// 
+			// labelDx
+			// 
+			this.labelDx.Location = new System.Drawing.Point(43,333);
+			this.labelDx.Name = "labelDx";
+			this.labelDx.Size = new System.Drawing.Size(128,16);
+			this.labelDx.TabIndex = 71;
+			this.labelDx.Text = "Dx";
+			this.labelDx.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormProcTPEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(607,422);
+			this.ClientSize = new System.Drawing.Size(607,445);
+			this.Controls.Add(this.textDx);
+			this.Controls.Add(this.labelDx);
 			this.Controls.Add(this.textPrognosis);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textDiscount);
@@ -398,6 +420,7 @@ namespace OpenDental{
 			textDiscount.Text=ProcCur.Discount.ToString("F");
 			textPatAmt.Text=ProcCur.PatAmt.ToString("F");
 			textPrognosis.Text=ProcCur.Prognosis;
+			textDx.Text=ProcCur.Dx;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -433,6 +456,7 @@ namespace OpenDental{
 			ProcCur.Discount=PIn.Double(textDiscount.Text);
 			ProcCur.PatAmt=PIn.Double(textPatAmt.Text);
 			ProcCur.Prognosis=textPrognosis.Text;
+			ProcCur.Dx=textDx.Text;
 			ProcTPs.InsertOrUpdate(ProcCur,false);//IsNew not applicable here
 			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Edit proc: "+ProcCur.Descript);
 			DialogResult=DialogResult.OK;

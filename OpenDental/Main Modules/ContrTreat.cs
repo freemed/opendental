@@ -1144,6 +1144,7 @@ namespace OpenDental{
 						row.Description+=showSecDeduct;
 					}
 					row.Prognosis=DefC.GetName(DefCat.Prognosis,PIn.Long(ProcListTP[i].Prognosis.ToString()));
+					row.Dx=DefC.GetValue(DefCat.Diagnosis,PIn.Long(ProcListTP[i].Dx.ToString()));
 					row.Fee=fee;
 					row.PriIns=priIns;
 					row.SecIns=secIns;
@@ -1259,6 +1260,7 @@ namespace OpenDental{
 					subpat+=(decimal)ProcTPSelectList[i].PatAmt;
 					totPat+=(decimal)ProcTPSelectList[i].PatAmt;
 					row.Prognosis=ProcTPSelectList[i].Prognosis;//Prognosis
+					row.Dx=ProcTPSelectList[i].Dx;
 					//if(checkShowStandard.Checked) {
 					//	standard=Fees.GetAmount0(ProcedureCodes.GetCodeNum(ProcTPSelectList[i].ProcCode),feeSched);
 					//	row.Cells.Add(standard.ToString("F"));//standard
@@ -1443,6 +1445,14 @@ namespace OpenDental{
 						case "Prognosis":
 							if(RowsMain[i].Prognosis!=null) {
 								row.Cells.Add(RowsMain[i].Prognosis.ToString());
+							}
+							else {
+								row.Cells.Add("");
+							}
+							break;
+						case "Dx":
+							if(RowsMain[i].Dx!=null) {
+								row.Cells.Add(RowsMain[i].Dx.ToString());
 							}
 							else {
 								row.Cells.Add("");
@@ -2537,6 +2547,7 @@ namespace OpenDental{
 					procTP.PatAmt=PIn.Double(RowsMain[gridMain.SelectedIndices[i]].Pat.ToString());
 				}
 				procTP.Prognosis=RowsMain[gridMain.SelectedIndices[i]].Prognosis;
+				procTP.Dx=RowsMain[gridMain.SelectedIndices[i]].Dx;
 				ProcTPs.InsertOrUpdate(procTP,true);
 				itemNo++;
 				#region Canadian Lab Fees
@@ -2788,6 +2799,7 @@ namespace OpenDental{
 		public string Code;
 		public string Description;
 		public string Prognosis;
+		public string Dx;
 		public decimal Fee;
 		public decimal PriIns;
 		public decimal SecIns;

@@ -62,6 +62,7 @@ namespace OpenDentBusiness.Crud{
 				procTP.PatAmt      = PIn.Double(table.Rows[i]["PatAmt"].ToString());
 				procTP.Discount    = PIn.Double(table.Rows[i]["Discount"].ToString());
 				procTP.Prognosis   = PIn.String(table.Rows[i]["Prognosis"].ToString());
+				procTP.Dx          = PIn.String(table.Rows[i]["Dx"].ToString());
 				retVal.Add(procTP);
 			}
 			return retVal;
@@ -102,7 +103,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcTPNum,";
 			}
-			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,PriInsAmt,SecInsAmt,PatAmt,Discount,Prognosis) VALUES(";
+			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,PriInsAmt,SecInsAmt,PatAmt,Discount,Prognosis,Dx) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procTP.ProcTPNum)+",";
 			}
@@ -121,7 +122,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(procTP.SecInsAmt)+"',"
 				+"'"+POut.Double(procTP.PatAmt)+"',"
 				+"'"+POut.Double(procTP.Discount)+"',"
-				+"'"+POut.String(procTP.Prognosis)+"')";
+				+"'"+POut.String(procTP.Prognosis)+"',"
+				+"'"+POut.String(procTP.Dx)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -148,7 +150,8 @@ namespace OpenDentBusiness.Crud{
 				+"SecInsAmt   = '"+POut.Double(procTP.SecInsAmt)+"', "
 				+"PatAmt      = '"+POut.Double(procTP.PatAmt)+"', "
 				+"Discount    = '"+POut.Double(procTP.Discount)+"', "
-				+"Prognosis   = '"+POut.String(procTP.Prognosis)+"' "
+				+"Prognosis   = '"+POut.String(procTP.Prognosis)+"', "
+				+"Dx          = '"+POut.String(procTP.Dx)+"' "
 				+"WHERE ProcTPNum = "+POut.Long(procTP.ProcTPNum);
 			Db.NonQ(command);
 		}
@@ -215,6 +218,10 @@ namespace OpenDentBusiness.Crud{
 			if(procTP.Prognosis != oldProcTP.Prognosis) {
 				if(command!=""){ command+=",";}
 				command+="Prognosis = '"+POut.String(procTP.Prognosis)+"'";
+			}
+			if(procTP.Dx != oldProcTP.Dx) {
+				if(command!=""){ command+=",";}
+				command+="Dx = '"+POut.String(procTP.Dx)+"'";
 			}
 			if(command==""){
 				return;

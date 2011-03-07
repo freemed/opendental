@@ -89,8 +89,8 @@ namespace OpenDentBusiness.Crud{
 				procedure.CanadianTypeCodes = PIn.String(table.Rows[i]["CanadianTypeCodes"].ToString());
 				procedure.ProcTime          = PIn.Time(table.Rows[i]["ProcTime"].ToString());
 				procedure.ProcTimeEnd       = PIn.Time(table.Rows[i]["ProcTimeEnd"].ToString());
-				procedure.Prognosis         = PIn.Long  (table.Rows[i]["Prognosis"].ToString());
 				procedure.DateTStamp        = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				procedure.Prognosis         = PIn.Long  (table.Rows[i]["Prognosis"].ToString());
 				retVal.Add(procedure);
 			}
 			return retVal;
@@ -178,8 +178,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(procedure.CanadianTypeCodes)+"',"
 				+    POut.Time  (procedure.ProcTime)+","
 				+    POut.Time  (procedure.ProcTimeEnd)+","
-				+    POut.Long  (procedure.Prognosis)+")";
 				//DateTStamp can only be set by MySQL
+				+    POut.Long  (procedure.Prognosis)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -234,8 +234,8 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianTypeCodes = '"+POut.String(procedure.CanadianTypeCodes)+"', "
 				+"ProcTime          =  "+POut.Time  (procedure.ProcTime)+", "
 				+"ProcTimeEnd       =  "+POut.Time  (procedure.ProcTimeEnd)+", "
-				+"Prognosis         =  "+POut.Long  (procedure.Prognosis)+" "
 				//DateTStamp can only be set by MySQL
+				+"Prognosis         =  "+POut.Long  (procedure.Prognosis)+" "
 				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum);
 			Db.NonQ(command);
 		}
@@ -411,11 +411,11 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="ProcTimeEnd = "+POut.Time  (procedure.ProcTimeEnd)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(procedure.Prognosis != oldProcedure.Prognosis) {
 				if(command!=""){ command+=",";}
 				command+="Prognosis = "+POut.Long(procedure.Prognosis)+"";
 			}
-			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

@@ -251,6 +251,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Discount",55,category));
 				list.Add(new DisplayField("Pat",50,category));
 				//list.Add(new DisplayField("Prognosis",60,category));
+				//list.Add(new DisplayField("Dx",28,category));
 			}
 			return list;
 		}
@@ -421,6 +422,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Discount",55,category));
 				list.Add(new DisplayField("Pat",50,category));
 				list.Add(new DisplayField("Prognosis",60,category));
+				list.Add(new DisplayField("Dx",28,category));
 			}
 			return list;
 		}
