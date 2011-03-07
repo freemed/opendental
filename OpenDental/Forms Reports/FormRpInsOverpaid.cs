@@ -118,7 +118,7 @@ LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
 WHERE procedurelog.ProcStatus=2/*complete*/
 AND procedurelog.ProcFee > 0 
 GROUP BY procedurelog.PatNum,"+DbHelper.Concat("patient.LName","', '","patient.FName")+@",procedurelog.ProcDate
-HAVING ""$sumfee"" < ""$PaidAndWriteoff""
+HAVING ROUND($sumfee,3) < ROUND($PaidAndWriteoff,3)
 ORDER BY patname,ProcDate";
 			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
