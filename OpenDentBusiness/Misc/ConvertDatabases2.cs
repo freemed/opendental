@@ -3545,6 +3545,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				string command;
 				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileUserName','')";
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE proctp ADD Dx varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE proctp ADD Dx varchar2(255)";
+					Db.NonQ(command);
+				}
 				command="UPDATE preference SET ValueString = '7.8.3.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
@@ -3562,7 +3570,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim ADD CanadaTransRefNum varchar2(255)";
 					Db.NonQ(command);
 				}
-
 
 
 
@@ -3611,6 +3618,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
 
 
 
