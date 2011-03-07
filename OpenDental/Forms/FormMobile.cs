@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using OpenDentBusiness;
@@ -12,23 +13,12 @@ using OpenDentBusiness.Mobile;
 
 namespace OpenDental {
 	public partial class FormMobile:Form {
-		private static string RegistrationKey;
-		private static MobileWeb.Mobile mb = new MobileWeb.Mobile();
-		private static DateTime MobileSyncDateTimeLastRun;
-		private static string MobileSyncServerURL;
-		private static String SynchMachineStaging="192.168.0.196";
-		private static String SynchMachineDev="localhost";
-		private static string MobileSyncWorkstationName;
-		private static int MobileSyncIntervalMinutes;
-		private static DateTime MobileExcludeApptsBeforeDate;
-		private static String StatusMessage="";
+		private static MobileWeb.Mobile mb=new MobileWeb.Mobile();
 		private static int BatchSize=100;
-		private static bool PaidCustomer=false;
-		private static bool IsSynching=false;// this variable prevents the synching methods from being called when a previous synch is in progress.
-		private bool MobileUserNameChanged=false;
-		private bool MobilePasswordChanged=false;
-		private string NotPaidMessage="You must be a paid customer to use this feature. Please call Open Dental and register as a paid user";
-		private string WebServiceUnavailableMessage="Either the web service is not available or the WebHostSynch URL is incorrect";
+		///<summary>This variable prevents the synching methods from being called when a previous synch is in progress.</summary>
+		private static bool IsSynching;
+		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
+		private bool changed;
 
 		public FormMobile() {
 			InitializeComponent();
@@ -37,189 +27,389 @@ namespace OpenDental {
 
 		private void FormMobileSetup_Load(object sender,EventArgs e) {
 			textMobileSyncServerURL.Text=PrefC.GetString(PrefName.MobileSyncServerURL);
-			//textSynchMinutes.Text=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
-			//textDateBefore.Text=PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate);
+			textSynchMinutes.Text=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes).ToString();
+			textDateBefore.Text=PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).ToShortDateString();
 			textMobileSynchWorkStation.Text=PrefC.GetString(PrefName.MobileSyncWorkstationName);
-			
-			//textMobileUserName.Text=mb.GetUserName(RegistrationKey);
-			/*
-			try {
-				InitializeVariables();
-				textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
-				textMobileSyncServerURL.Text=MobileSyncServerURL;
-				textMobileSynchWorkStation.Text=MobileSyncWorkstationName;
-				textSynchMinutes.Text=MobileSyncIntervalMinutes+"";
-				textDateBefore.Text=MobileExcludeApptsBeforeDate.ToShortDateString();
-				butSavePreferences.Enabled=false;//this line is repeated below on purpose
-				if(!TestWebServiceExists()) {
-					MsgBox.Show(this,WebServiceUnavailableMessage);
-					return;
-				}
-				if(!PaidCustomer) {
-					MsgBox.Show(this,NotPaidMessage);
-					return;
-				}
-				textMobileUserName.Text=mb.GetUserName(RegistrationKey);
-				MobileUserNameChanged=false;// when textMobileUserName is changed in textMobileUserName_TextChanged MobileUserNameChanged is set to true
-				butSavePreferences.Enabled=false;//this line is repeated on purpose
+			textMobileUserName.Text=PrefC.GetString(PrefName.MobileUserName);
+			textMobilePassword.Text="";//not stored locally, and not pulled from web server
+			DateTime lastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			if(lastRun.Year>1880) {
+				textDateTimeLastRun.Text=lastRun.ToShortDateString()+" "+lastRun.ToShortTimeString();
 			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}*/
+			textProgress.Text="";
+			//Web server is not contacted when loading this form.  That would be too slow.
 		}
 
-		private static void InitializeVariables() {
-				//RegistrationKey=PrefC.GetStringSilent(PrefName.RegistrationKey);
-				//MobileSyncServerURL=PrefC.GetStringSilent(PrefName.MobileSyncServerURL);
-				//MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
-			//	MobileSyncDateTimeLastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-				//MobileExcludeApptsBeforeDate=PrefC.GetDateT(PrefName.MobileExcludeApptsBeforeDate);
-				//#if DEBUG	
-				if(MobileSyncServerURL.Contains(SynchMachineStaging)||MobileSyncServerURL.Contains(SynchMachineDev)) {
-					IgnoreCertificateErrors();
-				}
-				//#endif
-				StatusMessage="";
-				if(!TestWebServiceExists()) {
-					return;
-				}
-				PaidCustomer=mb.IsPaidCustomer(RegistrationKey); // check for payment here
-				if(PaidCustomer) {
-					MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
-				}
-				else{
-					MobileSyncIntervalMinutes=0;
-					Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,MobileSyncIntervalMinutes);
-				}
+		private void butCurrentWorkstation_Click(object sender,EventArgs e) {
+			textMobileSynchWorkStation.Text=System.Environment.MachineName.ToUpper();
 		}
 
-		private static void Synch(DateTime GetChangedSince) {
-			try {
-				if(!TestWebServiceExists()) {
-					return;
-				}
-				if(mb.GetCustomerNum(RegistrationKey)==0) {
+		private void butSave_Click(object sender,EventArgs e) {
+			SavePrefs();
+			MsgBox.Show(this,"Done");
+		}
+
+		///<summary>Returns false if validation failed.  This also makes sure the web service exists, the customer is paid, and the registration key is correct.</summary>
+		private bool SavePrefs(){
+			//validation
+			if( textSynchMinutes.errorProvider1.GetError(textSynchMinutes)!=""
+				|| textDateBefore.errorProvider1.GetError(textDateBefore)!="")
+			{
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return false;
+			}
+			if(textMobileSynchWorkStation.Text=="") {
+				MsgBox.Show(this,"WorkStation cannot be empty");
+				return false;
+			}
+			if(!TestWebServiceExists()) {
+				return false;
+			}
+			if(mb.GetCustomerNum(PrefC.GetString(PrefName.RegistrationKey))==0) {
+				MsgBox.Show(this,"Registration key is incorrect.");
+				return false;
+			}
+			if(!VerifyPaidCustomer()) {
+				return false;
+			}
+			//Minimum 10 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
+			//The set of symbols checked was far too small, not even including periods, commas, and parentheses.
+			//So I rewrote it all.  New error messages say exactly what's wrong with it.
+//to do: Dennis, make sure that ANY character is allowed on the server end.  
+			//For example, a space, a {, and a Chinese character would all be allowed in username.
+			if(textMobileUserName.Text.Length<10){
+				MsgBox.Show(this,"User Name must be at least 10 characters long.");
+				return false;
+			}
+			if(!Regex.IsMatch(textMobileUserName.Text,"[A-Z]+")){
+				MsgBox.Show(this,"User Name must contain an uppercase letter.");
+				return false;
+			}
+			if(!Regex.IsMatch(textMobileUserName.Text,"[a-z]+")){
+				MsgBox.Show(this,"User Name must contain an lowercase letter.");
+				return false;
+			}
+			if(!Regex.IsMatch(textMobileUserName.Text,"[0-9]+")){
+				MsgBox.Show(this,"User Name must contain a number.");
+				return false;
+			}
+			if(!Regex.IsMatch(textMobileUserName.Text,"[^0-9a-zA-Z]+")){//absolutely anything except number, lower or upper.
+				MsgBox.Show(this,"User Name must contain punctuation or symbols.");
+				return false;
+			}
+			if(textDateBefore.Text==""){//default to one year if empty
+				textDateBefore.Text=DateTime.Today.AddYears(-1).ToShortDateString();
+				//not going to bother informing user.  They can see it.
+			}
+			//save to db------------------------------------------------------------------------------------
+			if(Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text)
+				| Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textSynchMinutes.Text))//blank entry allowed
+				| Prefs.UpdateString(PrefName.MobileExcludeApptsBeforeDate,POut.Date(PIn.Date(textDateBefore.Text),false))//blank 
+				| Prefs.UpdateString(PrefName.MobileSyncWorkstationName,textMobileSynchWorkStation.Text)
+				| Prefs.UpdateString(PrefName.MobileUserName,textMobileUserName.Text)
+			){
+				changed=true;
+				Prefs.RefreshCache();
+			}
+			//Username and password-----------------------------------------------------------------------------
+			mb.SetMobileWebUserPassword(PrefC.GetString(PrefName.RegistrationKey),textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
+//todo: Dennis, if password is blank, you need to make the server not update the password for this user.
+//That is changed behavior.
+			return true;
+		}
+
+		private void butFullSync_Click(object sender,EventArgs e) {
+			if(!SavePrefs()) {
 				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will be time consuming. Continue anyway?")) {
+				return;
+			}
+//todo: think of a way to block calls from the main form while we are in this form.
+			//for full synch, delete all records then repopulate.
+			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
+			//calculate total number of records------------------------------------------------------------------------------
+			List<long> patNumList=Patientms.GetChangedSincePatNums(DateTime.MinValue);
+			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(DateTime.MinValue,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(DateTime.MinValue);
+			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
+			FormProgress FormP=new FormProgress();
+			//start the thread that will perform the upload
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP); };
+			Thread workerThread=new Thread(uploadDelegate);
+			workerThread.Start();
+			//display the progress dialog to the user:
+			FormP.MaxVal=(double)totalCount;
+			FormP.NumberMultiplication=100;
+			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
+			FormP.NumberFormat="F0";
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.Cancel) {
+				workerThread.Abort();
+			}
+			IsSynching=false;
+		}
+
+		private void butSync_Click(object sender,EventArgs e) {
+			if(!SavePrefs()) {
+				return;
+			}
+			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
+				MsgBox.Show(this,"Full synch has never been run before.");
+				return;
+			}
+			//calculate total number of records------------------------------------------------------------------------------
+			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
+			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
+			FormProgress FormP=new FormProgress();
+			//start the thread that will perform the upload
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP); };
+			Thread workerThread=new Thread(uploadDelegate);
+			workerThread.Start();
+			//display the progress dialog to the user:
+			FormP.MaxVal=(double)totalCount;
+			FormP.NumberMultiplication=100;
+			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
+			FormP.NumberFormat="F0";
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.Cancel) {
+				workerThread.Abort();
+			}
+			IsSynching=false;
+		}
+
+		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.</summary>
+		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,ref FormProgress progressIndicator) {
+			//patients--------------------------------------------------------------------
+			int localBatchSize=BatchSize;
+			for(int start=0;start<patNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>patNumList.Count) {
+					localBatchSize=patNumList.Count-start;
 				}
-				if(!IsSynching) {// making sure that the previous synching process is complete.
-					IsSynching=true;
-					//CreatePatients(1000);//for testing only
-					//CreateAppointments(10); // for each patient //for testing only
-					//CreatePrescriptions(10);// for each patient //for testing only
-					DateTime MobileSyncDateTimeLastRunNew=MiscData.GetNowDateTime();
-					List<long> patNumList=Patientms.GetChangedSincePatNums(GetChangedSince);
-					SynchPatients(patNumList);
-					List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(GetChangedSince,MobileExcludeApptsBeforeDate);
-					SynchAppointments(aptNumList);
-					List<long> rxNumList=RxPatms.GetChangedSinceRxNums(GetChangedSince);
-					SynchPrescriptions(rxNumList);
-					if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MobileSyncDateTimeLastRunNew)){
-						DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines
-					}
-					MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
-					IsSynching=false;
+				List<long> blockPatNumList=patNumList.GetRange(start,localBatchSize);
+				List<Patientm> changedPatientmList=Patientms.GetMultPats(blockPatNumList);
+				mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
+				progressIndicator.CurrentVal+=BatchSize;
+				Application.DoEvents();//To hopefully prevent program lockup. 
+			}
+			//Appointments-----------------------------------------------------------------
+			localBatchSize=BatchSize;
+			for(int start=0;start<aptNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>aptNumList.Count) {
+					localBatchSize=aptNumList.Count-start;
 				}
+				List<long> blockAptNumList=aptNumList.GetRange(start,localBatchSize);
+				List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(blockAptNumList);
+				mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
+				progressIndicator.CurrentVal+=BatchSize;
+				Application.DoEvents();
 			}
-			catch(Exception ex) {
-				IsSynching=false;
-				MessageBox.Show(ex.Message);// will this show up ever?
-			}
-		}
-
-		private static void SynchNow() {
-			Synch(MobileSyncDateTimeLastRun);
-		}
-		
-		/// <summary>
-		/// Called from the main form
-		/// </summary>
-		internal static void Synch() {
-			InitializeVariables();
-			if(MobileSyncIntervalMinutes==0) {
-				return;// not a paid customer
-			}
-			if(MobileSyncDateTimeLastRun.Year<1880) {
-				return;//Sync has never been run before.
-			}
-			if(DateTime.Now>MobileSyncDateTimeLastRun.AddMinutes(MobileSyncIntervalMinutes)) {
-				Synch(MobileSyncDateTimeLastRun);
-			}
-		}
-
-		private static void SynchFull() {
-			DateTime FullSynchDateTime=new DateTime(1880,1,1);
-			mb.DeleteAllRecords(RegistrationKey);//for full synch, delete all records then repopulate.
-			Synch(FullSynchDateTime);
-		}
-
-		private static void SynchPatients(List<long> patNumList) {
-			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
-			int LocalBatchSize=BatchSize;
-			for(int start=0;start<patNumList.Count;start+=LocalBatchSize) {
-				if((start+LocalBatchSize)>patNumList.Count) {
-					LocalBatchSize=patNumList.Count-start;
+			//Rx----------------------------------------------------------------------------
+			localBatchSize=BatchSize;
+			for(int start=0;start<rxNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>rxNumList.Count) {
+					localBatchSize=rxNumList.Count-start;
 				}
-				List<long> BlockPatNumList=patNumList.GetRange(start,LocalBatchSize);
-				List<Patientm> ChangedPatientmList=Patientms.GetMultPats(BlockPatNumList);
-				mb.SynchPatients(RegistrationKey,ChangedPatientmList.ToArray());
-				StatusMessage=start+LocalBatchSize+" record(s) of "+patNumList.Count +" Patient Uploads";
-				Application.DoEvents();// allows textProgress to be refreshed 
+				List<long> blockRxNumList=rxNumList.GetRange(start,localBatchSize);
+				List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
+				mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
+				progressIndicator.CurrentVal+=BatchSize;
+				Application.DoEvents();
+			}
+			if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MiscData.GetNowDateTime())) {//MobileSyncDateTimeLastRunNew)) {
+				DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
 			}
 		}
 
-		private static void SynchAppointments(List<long> AptNumList) {
-			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
-			int LocalBatchSize=BatchSize;
-			for(int start=0;start<AptNumList.Count;start+=LocalBatchSize) {
-				if((start+LocalBatchSize)>AptNumList.Count) {
-					LocalBatchSize=AptNumList.Count-start;
-				}
-				List<long> BlockAptNumList=AptNumList.GetRange(start,LocalBatchSize);
-				List<Appointmentm> ChangedAppointmentmList=Appointmentms.GetMultApts(BlockAptNumList);
-				mb.SynchAppointments(RegistrationKey,ChangedAppointmentmList.ToArray());
-				StatusMessage=start+LocalBatchSize+" records(s) of "+AptNumList.Count +" Appointmnet Uploads";
-				Application.DoEvents();// allows textProgress to be refreshed 
-			}
-		}
-
-		private static void SynchPrescriptions(List<long> RxNumList) {
-			// major problem  for a large number of records, a system out of memory exception is thrown, hence the synch is done in batches.
-			int LocalBatchSize=BatchSize;
-			for(int start=0;start<RxNumList.Count;start+=LocalBatchSize) {
-				if((start+LocalBatchSize)>RxNumList.Count) {
-					LocalBatchSize=RxNumList.Count-start;
-				}
-				List<long> BlockRxNumList=RxNumList.GetRange(start,LocalBatchSize);
-				List<RxPatm> ChangedRxList=RxPatms.GetMultRxPats(BlockRxNumList);
-				mb.SynchPrescriptions(RegistrationKey,ChangedRxList.ToArray());
-				StatusMessage=start+LocalBatchSize+" records(s) of "+RxNumList.Count +" Prescriptions Uploads";
-				Application.DoEvents();// allows textProgress to be refreshed 
-			}
-		}
-
-		/// <summary>
-		/// An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.
-		/// </summary>
-		/// <returns></returns>
+		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
 		private static bool TestWebServiceExists() {
 			try {
-				mb.Url=MobileSyncServerURL;
+				mb.Url=PrefC.GetString(PrefName.MobileSyncServerURL);
 				if(mb.ServiceExists()) {
 					return true;
 				}
 			}
-			catch (Exception ex) {
+			catch{//(Exception ex) {
 				return false;
 			}
 			return false;
 		}
 
-		/// <summary>
-		///  This method is used only for testing with security certificates that has problems.
-		/// </summary>
+		private bool VerifyPaidCustomer() {
+			if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
+				IgnoreCertificateErrors();
+			}
+			bool isPaidCustomer=mb.IsPaidCustomer(PrefC.GetString(PrefName.RegistrationKey));
+			if(!isPaidCustomer) {
+				textSynchMinutes.Text="0";
+				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,0);
+				changed=true;
+				MsgBox.Show(this,"This feature requires a separate monthly payment.  Please call customer support.");
+				return false;
+			}
+			return true;
+		}
+
+		///<summary>Only called from FormOpenDental</summary>
+		public static void SynchFromMain() {
+			if(IsSynching) {
+				return;
+			}
+			if(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes)==0) {//not a paid customer or chooses not to synch
+				return;
+			}
+			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
+				return;//Sync has never been run before.
+			}
+			if(DateTime.Now < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
+				return;
+			}
+			if(!TestWebServiceExists()) {
+				return;
+			}
+			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			IsSynching=true;
+			try {
+				//DateTime mobileSyncDateTimeLastRunNew=MiscData.GetNowDateTime();
+				//patients--------------------------------------------------------------------
+				List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+				int localBatchSize=BatchSize;
+				for(int start=0;start<patNumList.Count;start+=localBatchSize) {
+					if((start+localBatchSize)>patNumList.Count) {
+						localBatchSize=patNumList.Count-start;
+					}
+					List<long> blockPatNumList=patNumList.GetRange(start,localBatchSize);
+					List<Patientm> changedPatientmList=Patientms.GetMultPats(blockPatNumList);
+					mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
+					Application.DoEvents();//To hopefully prevent program lockup. 
+				}
+				//Appointments-----------------------------------------------------------------
+				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+				localBatchSize=BatchSize;
+				for(int start=0;start<aptNumList.Count;start+=localBatchSize) {
+					if((start+localBatchSize)>aptNumList.Count) {
+						localBatchSize=aptNumList.Count-start;
+					}
+					List<long> blockAptNumList=aptNumList.GetRange(start,localBatchSize);
+					List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(blockAptNumList);
+					mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
+					Application.DoEvents();
+				}
+				//Rx----------------------------------------------------------------------------
+				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
+				localBatchSize=BatchSize;
+				for(int start=0;start<rxNumList.Count;start+=localBatchSize) {
+					if((start+localBatchSize)>rxNumList.Count) {
+						localBatchSize=rxNumList.Count-start;
+					}
+					List<long> blockRxNumList=rxNumList.GetRange(start,localBatchSize);
+					List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
+					mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
+					Application.DoEvents();
+				}
+				if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MiscData.GetNowDateTime())) {//MobileSyncDateTimeLastRunNew)) {
+					DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
+				}
+				//MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
+				IsSynching=false;
+			}
+			catch(Exception ex) {
+				IsSynching=false;
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		/*
+		///<summary></summary>
+		private void Synch(bool isFull) {
+			if(IsSynching) {
+				return;
+			}
+			if(!TestWebServiceExists()) {
+				return;
+			}
+			DateTime changedSince=DateTime.MinValue;
+			if(!isFull) {
+				changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			}
+			IsSynching=true;
+			//CreatePatients(1000);//for testing only
+			//CreateAppointments(10); // for each patient //for testing only
+			//CreatePrescriptions(10);// for each patient //for testing only
+			try {
+				//DateTime mobileSyncDateTimeLastRunNew=MiscData.GetNowDateTime();
+				List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+				SynchPatients(patNumList);
+				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+				SynchAppointments(aptNumList);
+				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
+				SynchPrescriptions(rxNumList);
+				if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MiscData.GetNowDateTime())){//MobileSyncDateTimeLastRunNew)) {
+					DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
+				}
+				//MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
+				IsSynching=false;
+			}
+			catch(Exception ex) {
+				IsSynching=false;
+				MessageBox.Show(ex.Message);
+			}
+		}*/
+
+		///<summary>Done in batches to prevent system out of memory exception.</summary>
+		private void SynchPatients(List<long> patNumList) {
+			int localBatchSize=BatchSize;
+			for(int start=0;start<patNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>patNumList.Count) {
+					localBatchSize=patNumList.Count-start;
+				}
+				List<long> blockPatNumList=patNumList.GetRange(start,localBatchSize);
+				List<Patientm> changedPatientmList=Patientms.GetMultPats(blockPatNumList);
+				mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
+				textProgress.Text=Lan.g(this,"Patients Uploaded: ")+(start+localBatchSize).ToString()
+					+Lan.g(this," of ")+patNumList.Count.ToString();
+				Application.DoEvents();// allows textProgress to be refreshed 
+			}
+		}
+
+		///<summary>Done in batches to prevent system out of memory exception.</summary>
+		private void SynchAppointments(List<long> aptNumList) {
+			int localBatchSize=BatchSize;
+			for(int start=0;start<aptNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>aptNumList.Count) {
+					localBatchSize=aptNumList.Count-start;
+				}
+				List<long> blockAptNumList=aptNumList.GetRange(start,localBatchSize);
+				List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(blockAptNumList);
+				mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
+				textProgress.Text=Lan.g(this,"Appointments Uploaded: ")+(start+localBatchSize).ToString()
+					+Lan.g(this," of ")+aptNumList.Count.ToString();
+				Application.DoEvents();
+			}
+		}
+
+		///<summary>Done in batches to prevent system out of memory exception.</summary>
+		private void SynchPrescriptions(List<long> rxNumList) {
+			int localBatchSize=BatchSize;
+			for(int start=0;start<rxNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>rxNumList.Count) {
+					localBatchSize=rxNumList.Count-start;
+				}
+				List<long> blockRxNumList=rxNumList.GetRange(start,localBatchSize);
+				List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
+				mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
+				textProgress.Text=Lan.g(this,"Prescriptions Uploaded: ")+(start+localBatchSize).ToString()
+					+Lan.g(this," of ")+rxNumList.Count.ToString();
+				Application.DoEvents();
+			}
+		}
+
+		#region Testing
+		///<summary>This allows the code to continue by not throwing an exception even if there is a problem with the security certificate.</summary>
 		private static void IgnoreCertificateErrors() {
-			///the line below will allow the code to continue by not throwing an exception.
-			///It will accept the security certificate if there is a problem with the security certificate.
 			System.Net.ServicePointManager.ServerCertificateValidationCallback+=
 			delegate(object sender,System.Security.Cryptography.X509Certificates.X509Certificate certificate,
 									System.Security.Cryptography.X509Certificates.X509Chain chain,
@@ -227,115 +417,8 @@ namespace OpenDental {
 				return true;
 			};
 		}
-
-		/// <summary>This is set to 60 second</summary>
-		private void timerRefreshLastSynchTime_Tick(object sender,EventArgs e) {
-			textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
-			textProgress.Text=StatusMessage;
-		}
-
-		private void butCurrentWorkstation_Click(object sender,EventArgs e) {
-			textMobileSynchWorkStation.Text=System.Environment.MachineName.ToUpper();
-		}
 		
-		private void butSavePreferences_Click(object sender,EventArgs e) {
-			try {
-				Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text.Trim());
-				MobileSyncServerURL=textMobileSyncServerURL.Text.Trim();
-				butSavePreferences.Enabled=false;
-				if(!TestWebServiceExists()) {
-					MsgBox.Show(this,WebServiceUnavailableMessage);
-					return;
-				}
-				InitializeVariables();//payment is checked here.
-				if(!PaidCustomer) {
-					textSynchMinutes.Text="0";
-					butSavePreferences.Enabled=false;
-					MsgBox.Show(this,NotPaidMessage);
-					return;
-				}
-				if(!FieldsValid()) {
-					return;
-				}
-				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,PIn.Int(textSynchMinutes.Text.Trim()));
-				MobileSyncIntervalMinutes=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes);
-				Prefs.UpdateString(PrefName.MobileSyncWorkstationName,textMobileSynchWorkStation.Text.Trim());
-				MobileSyncWorkstationName=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName);
-				SetMobileExcludeApptsBeforeDate();
-				butSavePreferences.Enabled=false;
-				if((MobileUserNameChanged||MobilePasswordChanged)) {
-					mb.SetMobileWebUserPassword(RegistrationKey,textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
-					MobileUserNameChanged=false;
-					MobilePasswordChanged=false;
-				}
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-
-		}
-
-		private void textMobileSyncServerURL_TextChanged(object sender,EventArgs e) {
-			butSavePreferences.Enabled=true;
-		}
-
-		private void textSynchMinutes_TextChanged(object sender,EventArgs e) {
-			butSavePreferences.Enabled=true;
-		}
-
-		private void textMobileUserName_TextChanged(object sender,EventArgs e) {
-			MobileUserNameChanged=true;
-			butSavePreferences.Enabled=true;
-		}
-
-		private void textMobilePassword_TextChanged(object sender,EventArgs e) {
-			MobilePasswordChanged=true;
-			butSavePreferences.Enabled=true;
-		}
-
-		private void textDateBefore_TextChanged(object sender,EventArgs e) {
-			butSavePreferences.Enabled=true;
-		}
-
-		private void textMobileSynchWorkStation_TextChanged(object sender,EventArgs e) {
-			butSavePreferences.Enabled=true;
-		}
-
-		private bool FieldsValid() {
-			if(textDateBefore.errorProvider1.GetError(textDateBefore)!=""
-				||textSynchMinutes.errorProvider1.GetError(textSynchMinutes)!="") {
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return false;
-			}
-
-			if((MobileUserNameChanged||MobilePasswordChanged)) {
-				//Minimum 14 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
-				bool IsMatch=Regex.IsMatch(textMobileUserName.Text.Trim(),"^.*(?=.{10,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$");
-				if(!IsMatch) {
-					MsgBox.Show(this,"The username must be atleast 10 characters and must contain an uppercase character, a lowercase character, a number and one of the following symbols:!@#$%^&+=");
-					return false;
-				}
-				if(RegistrationKey==textMobileUserName.Text.Trim()) {
-					MsgBox.Show(this,"The username cannot be the same as the Registration Key");
-					return false;
-				}
-				if(textMobilePassword.Text.Trim()=="") {
-					MsgBox.Show(this,"The password cannot be empty");
-					return false;
-				}
-			}
-
-			if(textMobileSynchWorkStation.Text.Trim()=="") {
-					MsgBox.Show(this,"WorkStation field cannot be empty");
-					return false;
-				}
-			return true;
-	}
-		
-		/// <summary>
-		/// For testing only
-		/// </summary>
+		/// <summary>For testing only</summary>
 		private static void CreatePatients(int PatientCount) {
 			for(int i=0;i<PatientCount;i++) {
 				Patient newPat=new Patient();
@@ -367,9 +450,7 @@ namespace OpenDental {
 			}
 		}
 
-		/// <summary>
-		/// For testing only
-		/// </summary>
+		/// <summary>For testing only</summary>
 		private static void CreateAppointments(int AppointmentCount) {
 			long[] patNumArray=Patients.GetAllPatNums();
 			DateTime appdate= new DateTime(2010,12,1,11,0,0);
@@ -392,9 +473,7 @@ namespace OpenDental {
 			}
 		}
 
-		/// <summary>
-		/// For testing only
-		/// </summary>
+		/// <summary>For testing only</summary>
 		private static void CreatePrescriptions(int PrescriptionCount) {
 			long[] patNumArray=Patients.GetAllPatNums();
 			for(int i=0;i<patNumArray.Length;i++) {
@@ -409,101 +488,16 @@ namespace OpenDental {
 				}
 			}
 		}
-		
-		/// <summary>
-		/// If the MobileExcludeApptsBeforeDate is not specified then it defaults to a year before the current time.
-		/// </summary>
-		private void SetMobileExcludeApptsBeforeDate() {
-			if(textDateBefore.Text.Trim()=="") {
-				MobileExcludeApptsBeforeDate=DateTime.Now.AddYears(-1);
-			}
-			else {
-				Prefs.UpdateDateT(PrefName.MobileExcludeApptsBeforeDate,PIn.Date(textDateBefore.Text));
-				MobileExcludeApptsBeforeDate=PIn.Date(textDateBefore.Text);
-			}
-		}
-
-		private void butSync_Click(object sender,EventArgs e) {
-			try {
-				if(!TestWebServiceExists()) {
-					MsgBox.Show(this,WebServiceUnavailableMessage);
-					return;
-				}
-				InitializeVariables();//payment is checked here.
-				if(!PaidCustomer) {
-					MsgBox.Show(this,NotPaidMessage);
-					return;
-				}
-				if(MobileSyncDateTimeLastRun.Year<1880) {
-					MsgBox.Show(this,"Sync has never been run. You must do a full sync first.");
-					return;
-				}
-				
-				if(mb.GetCustomerNum(RegistrationKey)==0) {
-					MsgBox.Show(this,"Registration key provided by the dental office is incorrect.");
-					return;
-				}
-				SetMobileExcludeApptsBeforeDate();
-				//todo: Why is this run a second time?
-				if(MobileSyncDateTimeLastRun.Year<1880) {
-					MsgBox.Show(this,"Sync has never been run. You must do a full sync first.");
-					return;
-				}
-				Cursor=Cursors.WaitCursor;
-				try {
-					SynchNow();
-					textDateTimeLastRun.Text=MobileSyncDateTimeLastRun.ToShortDateString()+" "+MobileSyncDateTimeLastRun.ToShortTimeString();
-				}
-				catch(Exception ex) {
-					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message);
-				}
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"Done.");
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-		}
-
-		private void butFullSync_Click(object sender,EventArgs e) {
-			try {
-				if(!TestWebServiceExists()) {
-					MsgBox.Show(this,WebServiceUnavailableMessage);
-					return;
-				}
-				InitializeVariables();//payment is checked here.
-
-				if(!PaidCustomer) {
-					MsgBox.Show(this,NotPaidMessage);
-					return;
-				}
-				if(mb.GetCustomerNum(RegistrationKey)==0) {
-					MsgBox.Show(this,"Registration key provided by the dental office is incorrect.");
-					return;
-				}
-				SetMobileExcludeApptsBeforeDate();
-				if(!MsgBox.Show(this,true,"This will be time consuming. Continue anyway?")) {
-					return;
-				}
-				Cursor=Cursors.WaitCursor;
-				try {
-					SynchFull();
-				}
-				catch(Exception ex) {
-					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message);
-				}
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"Done.");
-				}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-		}
+		#endregion Testing
 
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
+		}
+
+		private void FormMobile_FormClosed(object sender,FormClosedEventArgs e) {
+			if(changed) {
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
 		}
 
 

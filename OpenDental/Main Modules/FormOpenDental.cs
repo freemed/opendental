@@ -4083,9 +4083,9 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
-			MessageBox.Show("Not yet functional.");
-			//FormMobile FormM=new FormMobile();
-			//FormM.ShowDialog();
+			//MessageBox.Show("Not yet functional.");
+			FormMobile FormM=new FormMobile();
+			FormM.ShowDialog();
 			//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
 		}
 
@@ -4425,15 +4425,21 @@ namespace OpenDental{
 			phoneSmall.PhoneCur=phone;
 		}
 
-		/// <summary>This is set to 30 second</summary>
+		/// <summary>This is set to 30 seconds</summary>
 		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
 			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
 			if(interval=="" || interval=="0") {
 				return;
 			}
-			if(System.Environment.MachineName.ToUpper()==PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
-				//FormMobile.Synch();
+			if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
+				return;
 			}
+			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
+				//full synch never run
+				return;
+			}
+			//I don't think this is good enough.  It will lock up the UI.  Need a thread
+			FormMobile.SynchFromMain();
 		}
 
 		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {
