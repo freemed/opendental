@@ -5069,7 +5069,7 @@ namespace OpenDental{
 					return;
 				}
 				for(int i=0;i<ClaimProcsForClaim.Count;i++){
-					if(ClaimProcsForClaim[i].Status==ClaimProcStatus.CapClaim){
+					if(ClaimProcsForClaim[i].Status==ClaimProcStatus.CapClaim || ClaimProcsForClaim[i].Status==ClaimProcStatus.Preauth){
 						ClaimProcs.Delete(ClaimProcsForClaim[i]);
 					}
 					else if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){
