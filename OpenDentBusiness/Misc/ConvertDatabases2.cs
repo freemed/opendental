@@ -3583,20 +3583,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.8.3.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To7_9_0();
+			To7_8_4();
 		}
 
-		private static void To7_9_0() {
-			if(FromVersion<new Version("7.9.0.0")) {
+		private static void To7_8_4() {
+			if(FromVersion<new Version("7.8.4.0")) {
 				string command;
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE claim ADD CanadaTransRefNum varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE claim ADD CanadaTransRefNum varchar2(255)";
-					Db.NonQ(command);
-				}
 				//add Patteson Imaging bridge:
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -3647,10 +3639,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'PattersonImg')";
 					Db.NonQ32(command);
 				}//end Patterson Imaging bridge
+				command="UPDATE preference SET ValueString = '7.8.4.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To7_9_0();
+		}
 
-
-
-
+		private static void To7_9_0() {
+			if(FromVersion<new Version("7.9.0.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CanadaTransRefNum varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CanadaTransRefNum varchar2(255)";
+					Db.NonQ(command);
+				}
+				
 
 
 
