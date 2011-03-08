@@ -70,9 +70,16 @@ namespace MobileWeb {
 		}
 
 		public string GetProviderColor(Appointmentm ap) {
-			Providerm pv=Providerms.GetOne(CustomerNum,ap.ProvNum);
-			string HexColor=ColorTranslator.ToHtml(pv.ProvColor);
-			return HexColor;
+			string HexColor="#FFFFFF";
+			try {
+				Providerm pv=Providerms.GetOne(CustomerNum,ap.ProvNum);
+				HexColor=ColorTranslator.ToHtml(pv.ProvColor);
+				return HexColor;
+			}
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return HexColor;
+			}
 		}
 		private bool SetCustomerNum(){
 			Message.Text="";

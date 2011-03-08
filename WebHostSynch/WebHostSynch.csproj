@@ -12,6 +12,11 @@
     <RootNamespace>WebHostSynch</RootNamespace>
     <AssemblyName>WebHostSynch</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <!--Dennis: Exclude sql files ===start===-->
+    <ExcludeFilesFromDeployment>
+      **\*.sql
+    </ExcludeFilesFromDeployment>
+    <!--Dennis: Exclude sql files ===end===-->
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>

@@ -14,7 +14,7 @@
 		<script type="text/javascript" src="scripts/iphone.js"></script>
 		<% } else { %>
           <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.min.css">
-        <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.min.css">
+        <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css"><%--no minified version for this file--%>
         <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.min.css">
         <script type="text/javascript" src="scripts/jquery.min.js"></script>
 		<script type="text/javascript" src="scripts/jqtouch.min.js"></script>

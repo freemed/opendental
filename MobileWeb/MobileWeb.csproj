@@ -235,6 +235,11 @@
       <FilesForPackagingFromProject Include="%(_CustomFiles1.Identity)">
         <DestinationRelativePath>scripts\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
+      <!--css\jqtouch.css does not minify properly hence we want it copied as it is-->
+      <_CustomFiles2 Include="css\jqtouch.css" />
+      <FilesForPackagingFromProject Include="%(_CustomFiles2.Identity)">
+        <DestinationRelativePath>css\%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
   <!--Dennis: Include the minified css and js files while publishing ===end===-->
