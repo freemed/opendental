@@ -3589,7 +3589,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_8_4() {
 			if(FromVersion<new Version("7.8.4.0")) {
 				string command;
-				//add Patteson Imaging bridge:
+				//add Patterson Imaging bridge:
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
@@ -3639,6 +3639,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'PattersonImg')";
 					Db.NonQ32(command);
 				}//end Patterson Imaging bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE chartview MODIFY DatesShowing TINYINT NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					//Does not need to be changed for oracle.
+				}
 				command="UPDATE preference SET ValueString = '7.8.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}

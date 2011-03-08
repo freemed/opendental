@@ -219,7 +219,7 @@ namespace Crud {
 				case OdDbType.Float:
 					return "float";
 				case OdDbType.Enum:
-					return "float";
+					return "tinyint";
 				case OdDbType.Int:
 					if(col.IntUseSmallInt) {
 						return "smallint";
@@ -294,7 +294,7 @@ namespace Crud {
 				case OdDbType.Float:
 					return "number(38,8)";
 				case OdDbType.Enum:
-					return "number(38,8)";
+					return "number(3)";
 				case OdDbType.Int:
 					return "number(11)";
 				case OdDbType.Long:
