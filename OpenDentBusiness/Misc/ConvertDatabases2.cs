@@ -3434,7 +3434,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (NewerDays,UserGroupNum,PermType) "
-						+"VALUES(0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.PerioEdit)+")";
+							+"VALUES(0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.PerioEdit)+")";
 						Db.NonQ32(command);
 					}
 				}
@@ -3442,35 +3442,62 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
-						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.PerioEdit)+")";
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.PerioEdit)+")";
 						Db.NonQ32(command);
 					}
 				}
 				//add Cerec bridge:
-				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
-					+") VALUES("
-					+"'Cerec', "
-					+"'Cerec from Sirona', "
-					+"'0', "
-					+"'"+POut.String(@"C:\Program Files\Cerec\Cerec system\CerPI.exe")+"', "
-					+"'', "
-					+@"'Cerec v2.6 default install directory is C:\Program Files\Cerec\System\CerPI.exe 
-					\r\nCerec v2.8 default install directory is C:\Program Files\Cerec\Cerec system\CerPI.exe')";
-				long programNum=Db.NonQ(command,true);
-				//command="SELECT ProgramNum FROM program WHERE ProgName='Cerec' LIMIT 1";
-				//PIn.Long(Db.GetScalar(command));
-				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
-					+") VALUES("
-					+"'"+POut.Long(programNum)+"', "
-					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
-					+"'0')";
-				Db.NonQ32(command);
-				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
-					+"VALUES ("
-					+"'"+POut.Long(programNum)+"', "
-					+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
-					+"'Cerec')";
-				Db.NonQ32(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {//NOTE: this chunk of code was realeased with MySQL version only, and then revised to use mySQL or Oracle. The mySQL code was unchanged.
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'Cerec', "
+						+"'Cerec from Sirona', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\Cerec\Cerec system\CerPI.exe")+"', "
+						+"'', "
+						+@"'Cerec v2.6 default install directory is C:\Program Files\Cerec\System\CerPI.exe 
+						\r\nCerec v2.8 default install directory is C:\Program Files\Cerec\Cerec system\CerPI.exe')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"', "
+						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+						+"'0')";
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'Cerec')";
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"(SELECT MAX(ProgramNum)+1 FROM program),"
+						+"'Cerec', "
+						+"'Cerec from Sirona', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\Cerec\Cerec system\CerPI.exe")+"', "
+						+"'', "
+						+@"'Cerec v2.6 default install directory is C:\Program Files\Cerec\System\CerPI.exe 
+						\r\nCerec v2.8 default install directory is C:\Program Files\Cerec\Cerec system\CerPI.exe')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"(SELECT MAX(ProgramPropertyNum)+1 FROM programproperty),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+						+"'0')";
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'Cerec')";
+					Db.NonQ32(command);
+				}//End of Cerec Bridge code. This chunk of code works with MySQL, and is unlikely to cause Oracle bugs.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS school";
 					Db.NonQ(command);
@@ -3570,7 +3597,56 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim ADD CanadaTransRefNum varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				//add Patteson Imaging bridge:
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'Patterson', "
+						+"'Patterson Imaging from Patterson Dental Supply Inc.', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\PDI\Shared files\Imaging.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"', "
+						+"'System path to Patterson Imaging ini', "
+						+"'"+POut.String(@"C:\Program Files\PDI\Shared files\Imaging.ini")+"')";
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'PattersonImg')";
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"(SELECT MAX(ProgramNum)+1 FROM program),"
+						+"'Patterson', "
+						+"'Patterson Imaging from Patterson Dental Supply Inc.', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\PDI\Shared files\Imaging.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"(SELECT MAX(ProgramPropertyNum)+1 FROM programproperty),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'System path to Patterson Imaging ini', "
+						+"'"+POut.String(@"C:\Program Files\PDI\Shared files\Imaging.ini")+"')";
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'PattersonImg')";
+					Db.NonQ32(command);
+				}//end Patterson Imaging bridge
 
 
 

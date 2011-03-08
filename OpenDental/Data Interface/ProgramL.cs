@@ -119,6 +119,10 @@ namespace OpenDental{
 				Owandy.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName==ProgramName.Patterson.ToString()) {
+				Patterson.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName==ProgramName.PerioPal.ToString()) {
 				PerioPal.SendData(prog,pat);
 				return;
@@ -127,7 +131,7 @@ namespace OpenDental{
 				Planmeca.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName==ProgramName.Progeny.ToString()){
+			else if(prog.ProgName==ProgramName.Progeny.ToString()) {
 				Progeny.SendData(prog,pat);
 				return;
 			}
@@ -149,11 +153,11 @@ namespace OpenDental{
 				Sirona.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName==ProgramName.Sopro.ToString()){
+			else if(prog.ProgName==ProgramName.Sopro.ToString()) {
 				Sopro.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName==ProgramName.TigerView.ToString()){
+			else if(prog.ProgName==ProgramName.TigerView.ToString()) {
 				TigerView.SendData(prog,pat);
 				return;
 			}

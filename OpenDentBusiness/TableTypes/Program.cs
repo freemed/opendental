@@ -61,6 +61,7 @@ namespace OpenDentBusiness{
 		OrthoPlex,
 		Owandy,
 		PayConnect,
+		Patterson,
 		PerioPal,
 		Planmeca,
 		PracticeWebReports,
