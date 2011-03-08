@@ -472,10 +472,143 @@ namespace OpenDental.Eclaims {
 			  throw new ApplicationException(result);
 			}
 			CCDField field=fieldInputter.GetFieldById("G05");//response status
-			etrans=Etranss.GetEtrans(etrans.EtransNum);
-			etrans.Note="Response: "+field.valuestr;
-			Etranss.Update(etrans);
+			if(field.valuestr=="R") {
+				throw new ApplicationException(Lan.g("CanadianOutput","Reversal was rejected by clearinghouse."));
+			}
 			return etransAck.EtransNum;
+		}
+
+		///<summary>Returns the list of etrans requests. The etrans.AckEtransNum can be used to get the etrans ack. The following are the only possible formats that can be returned in the acks: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response</summary>
+		public static List <Etrans> GetOutstandingTransactions(Carrier carrier) {
+			List<Etrans> etransAcks=new List<Etrans>();
+			Clearinghouse clearhouse=Canadian.GetClearinghouse();
+			if(clearhouse==null) {
+				throw new ApplicationException("Canadian clearinghouse not found.");
+			}
+			string saveFolder=clearhouse.ExportPath;
+			if(!Directory.Exists(saveFolder)) {
+				throw new ApplicationException(saveFolder+" not found.");
+			}
+			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			bool outstandingTransAckReceived=false;
+			//We are required to send the request for outstanding transactions over and over until we get back an outstanding transactions ack format (Transaction type 14), because
+			//there may be more than one item in the mailbox and we can only get one item at time.
+			do {
+				StringBuilder strb=new StringBuilder();
+				Etrans etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
+					clearhouse.ClearinghouseNum,EtransType.RequestOutstand_CA,0,0);				
+				//A01 transaction prefix 12 AN
+				strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+				//A02 office sequence number 6 N
+				strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
+				//A03 format version number 2 N
+				if(carrier.CDAnetVersion=="") {
+					strb.Append("04");
+				}
+				else {
+					strb.Append(carrier.CDAnetVersion);
+				}
+				//A04 transaction code 2 N
+				strb.Append("04");//outstanding transactions request
+				//A05 carrier id number 6 N
+				strb.Append(carrier.ElectID);//already validated as 6 digit number.
+				//A06 software system id 3 AN  The third character is for version of OD.
+				//todo
+	#if DEBUG
+				strb.Append("TS1");
+	#else
+				strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
+	#endif
+				if(carrier.CDAnetVersion!="02") { //version 04
+					//A10 encryption method 1 N
+					strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
+				}
+				if(carrier.CDAnetVersion!="02") {
+					//A07 message length N4
+					strb.Append(Canadian.TidyN("64",5));
+				}
+				if(carrier.CDAnetVersion!="02") { //version 04
+					//A09 carrier transaction counter 5 N
+					strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
+				}
+				//According to the documentation for the outstanding transactions ack format, B01 only has to be a valid provider for the practice,
+				//and that will trigger acknowledgements for all providers of the practice. I am assuming here that the same is true for the 
+				//billing provider in field B03, because there is no real reason to limit the request to any particular provider.
+				//B01 CDA provider number 9 AN
+				strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+				//B02 (treating) provider office number 4 AN
+				strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
+				//B03 billing provider number 9 AN
+				//might need to account for possible 5 digit prov id assigned by carrier
+				strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+				string result="";
+				bool resultIsError=false;
+				try {
+					result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+				}
+				catch(ApplicationException ex) {
+					result=ex.Message;
+					resultIsError=true;
+					//Etranss.Delete(etrans.EtransNum);//we don't want to do this, because we want the incremented etrans.OfficeSequenceNumber to be saved
+					//Attach an ack indicating failure.
+				}
+				//Attach an ack to the etrans
+				Etrans etransAck=new Etrans();
+				etransAck.PatNum=etrans.PatNum;
+				etransAck.PlanNum=etrans.PlanNum;
+				etransAck.InsSubNum=etrans.InsSubNum;
+				etransAck.CarrierNum=etrans.CarrierNum;
+				etransAck.DateTimeTrans=DateTime.Now;
+				CCDFieldInputter fieldInputter=null;
+				if(resultIsError) {
+					etransAck.Etype=EtransType.AckError;
+					etrans.Note="failed";
+				}
+				else {
+					fieldInputter=new CCDFieldInputter(result);
+					etransAck.Etype=fieldInputter.GetEtransType();
+				}
+				Etranss.Insert(etransAck);
+				Etranss.SetMessage(etransAck.EtransNum,result);
+				etrans.AckEtransNum=etransAck.EtransNum;
+				Etranss.Update(etrans);
+				Etranss.SetMessage(etrans.EtransNum,strb.ToString());
+				etransAcks.Add(etransAck);
+				if(resultIsError) {
+					throw new ApplicationException(result);
+				}
+				CCDField fieldA04=fieldInputter.GetFieldById("A04");//message format
+				//Remember, the only allowed response transaction types are: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response
+				if(fieldA04.valuestr=="14") {//Outstanding Transaction Ack Format
+					outstandingTransAckReceived=true;
+					CCDField fieldG05=fieldInputter.GetFieldById("G05");//response status
+					if(fieldG05.valuestr=="R") { //We only expect the result to be 'R' or 'X' as specified in the documentation.
+						CCDField fieldG07=fieldInputter.GetFieldById("G07");//disposition message
+						CCDField fieldG08=fieldInputter.GetFieldById("G08");//error code
+						MessageBox.Show(Lan.g("","Failed to receive outstanding transactions. Messages from CDANet")+": "+Environment.NewLine+
+							fieldG07.valuestr.Trim()+Environment.NewLine+CCDerror.message(Convert.ToInt32(fieldG08.valuestr),false));
+					}
+				}
+				else { //The response is an item from the mailbox that we need to display.
+					//Field A02 exists in all of the possible formats (21,11,23,13,24).
+					CCDField fieldA02=fieldInputter.GetFieldById("A02");//office sequence number
+					//We use the Office Sequence Number to find the original etrans entry so that we can discover which patient the response is referring to.
+					Etrans etranOriginal=Etranss.GetForSequenceNumberCanada(fieldA02.valuestr);
+					if(etranOriginal!=null) { //Null will happen when testing, but should not happen in production.
+						etrans.PatNum=etranOriginal.PatNum;
+						etrans.PlanNum=etranOriginal.PlanNum;
+						etrans.InsSubNum=etranOriginal.InsSubNum;
+						Etranss.Update(etrans);
+						etransAck.PatNum=etranOriginal.PatNum;
+						etransAck.PlanNum=etranOriginal.PlanNum;
+						etransAck.InsSubNum=etranOriginal.InsSubNum;
+						Etranss.Update(etransAck);
+						FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form. 
+						FormP.Print();
+					}
+				}
+			} while(!outstandingTransAckReceived);
+			return etransAcks;
 		}
 
 

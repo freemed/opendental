@@ -186,16 +186,16 @@ namespace TestCanada {
 			}
 			if(checkClaimReversals.Checked){
 				if(singleScript==1) {
-					textResults.Text+=Reversal.RunOne(checkShowForms.Checked);
+					textResults.Text+=Reversal.RunOne();
 				}
 				else if(singleScript==2) {
-					textResults.Text+=Reversal.RunTwo(checkShowForms.Checked);
+					textResults.Text+=Reversal.RunTwo();
 				}
 				else if(singleScript==3) {
-					textResults.Text+=Reversal.RunThree(checkShowForms.Checked);
+					textResults.Text+=Reversal.RunThree();
 				}
 				else if(singleScript==4) {
-					textResults.Text+=Reversal.RunFour(checkShowForms.Checked);
+					textResults.Text+=Reversal.RunFour();
 				}
 				else {
 					MessageBox.Show("Script number not found (not implemented yet).");
@@ -203,7 +203,19 @@ namespace TestCanada {
 				}
 			}
 			if(checkOutstanding.Checked){
-				textResults.Text+="Outstanding Transactions not implemented yet.\r\n";
+				if(singleScript==1) {
+					textResults.Text+=OutstandingTrans.RunOne();
+				}
+				else if(singleScript==2) {
+					textResults.Text+=OutstandingTrans.RunTwo();
+				}
+				else if(singleScript==3) {
+					textResults.Text+=OutstandingTrans.RunThree();
+				}
+				else {
+					MessageBox.Show("Script number not found (not implemented yet).");
+					return;
+				}
 			}
 			if(checkPredeterm.Checked){
 				textResults.Text+="Predeterminations not implemented yet.\r\n";

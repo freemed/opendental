@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDental.UI;
 using CodeBase;
+using OpenDental.Eclaims;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -284,7 +285,7 @@ namespace OpenDental{
 		private bool doubleClickWarningAlreadyDisplayed=false;
 		private UI.Button butReverse;
 		private Label label76;
-		private ValidDate validDate1;
+		private ValidDate textCanadaTransRefNum;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -492,7 +493,7 @@ namespace OpenDental{
 			this.textCode0 = new System.Windows.Forms.TextBox();
 			this.tabCanadian = new System.Windows.Forms.TabPage();
 			this.label76 = new System.Windows.Forms.Label();
-			this.validDate1 = new OpenDental.ValidDate();
+			this.textCanadaTransRefNum = new OpenDental.ValidDate();
 			this.butReverse = new OpenDental.UI.Button();
 			this.textMissingTeeth = new System.Windows.Forms.TextBox();
 			this.label75 = new System.Windows.Forms.Label();
@@ -2286,7 +2287,7 @@ namespace OpenDental{
 			// 
 			this.tabCanadian.AutoScroll = true;
 			this.tabCanadian.Controls.Add(this.label76);
-			this.tabCanadian.Controls.Add(this.validDate1);
+			this.tabCanadian.Controls.Add(this.textCanadaTransRefNum);
 			this.tabCanadian.Controls.Add(this.butReverse);
 			this.tabCanadian.Controls.Add(this.textMissingTeeth);
 			this.tabCanadian.Controls.Add(this.label75);
@@ -2318,13 +2319,14 @@ namespace OpenDental{
 			this.label76.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.label76.Visible = false;
 			// 
-			// validDate1
+			// textCanadaTransRefNum
 			// 
-			this.validDate1.Location = new System.Drawing.Point(88,159);
-			this.validDate1.Name = "validDate1";
-			this.validDate1.Size = new System.Drawing.Size(102,20);
-			this.validDate1.TabIndex = 145;
-			this.validDate1.Visible = false;
+			this.textCanadaTransRefNum.Enabled = false;
+			this.textCanadaTransRefNum.Location = new System.Drawing.Point(88,159);
+			this.textCanadaTransRefNum.Name = "textCanadaTransRefNum";
+			this.textCanadaTransRefNum.Size = new System.Drawing.Size(102,20);
+			this.textCanadaTransRefNum.TabIndex = 145;
+			this.textCanadaTransRefNum.Visible = false;
 			// 
 			// butReverse
 			// 
@@ -3156,8 +3158,10 @@ namespace OpenDental{
 				labelNote.Text="Claim Note (will only show on printed claims)";
 				tabMain.SelectedTab=tabCanadian;
 				if(ClaimCur.DateSent.Date==MiscData.GetNowDateTime().Date) { //Reversal can only happen on the same day that the claim was originally sent.
+					textCanadaTransRefNum.Enabled=true;
 					butReverse.Enabled=true;
 				}
+				textCanadaTransRefNum.Text=ClaimCur.CanadaTransRefNum;
 			}
 			else {
 				tabMain.TabPages.Remove(tabCanadian);
@@ -4501,7 +4505,29 @@ namespace OpenDental{
 		}
 
 		private void butReverse_Click(object sender,EventArgs e) {
-
+			InsPlan insPlan=InsPlans.GetPlan(ClaimCur.PlanNum,null);
+			InsSub insSub=InsSubs.GetOne(ClaimCur.InsSubNum);
+			try {
+				CanadianOutput.SendClaimReversal(ClaimCur,insPlan,insSub);
+				Claims.Delete(ClaimCur);
+				List <Etrans> etransHistory=Etranss.GetHistoryOneClaim(ClaimCur.ClaimNum);
+				for(int i=0;i<etransHistory.Count;i++) {
+					Etranss.Delete(etransHistory[i].EtransNum);
+				}
+				List<Benefit> benList=Benefits.Refresh(PatPlanList);
+				InsPlan plan=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
+				for(int i=0;i<ClaimProcsForClaim.Count;i++) { //Set claimprocs back to estimates.
+					ClaimProcsForClaim[i].Status=ClaimProcStatus.Estimate;
+					ClaimProcsForClaim[i].ClaimNum=0;
+					Procedure proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
+					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0,PatCur.Age,0);
+					ClaimProcsForClaim[i].InsPayEst=0;
+					ClaimProcs.Update(ClaimProcsForClaim[i]);
+				}
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Failed to reverse claim")+": "+ex.Message);
+			}
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {

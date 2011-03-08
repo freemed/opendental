@@ -112,6 +112,16 @@ namespace OpenDentBusiness{
 			return Crud.EtransCrud.SelectMany(command);
 		}
 
+		///<summary>Use for Canadian claims only. Finds the most recent etrans record which matches the unique officeSequenceNumber specified. The officeSequenceNumber corresponds to field A02.</summary>
+		public static Etrans GetForSequenceNumberCanada(string officeSequenceNumber) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),officeSequenceNumber);
+			}
+			string command="SELECT * FROM etrans WHERE OfficeSequenceNumber="+POut.String(officeSequenceNumber)+" ORDER BY EtransNum DESC LIMIT 1";
+			return Crud.EtransCrud.SelectOne(command);
+
+		}
+
 		/*
 		///<summary></summary>
 		public static Etrans GetAckForTrans(int etransNum) {
@@ -186,7 +196,7 @@ namespace OpenDentBusiness{
 		///<summary>Not for claim types, just other types, including Eligibility. This function gets run first.  Then, the messagetext is created and an attempt is made to send the message.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each message before creating the message and attempting to send.  If it fails, we will need to roll back.  Provide EITHER a carrierNum OR a canadianNetworkNum.  Many transactions can be sent to a carrier or to a network.</summary>
 		public static Etrans CreateCanadianOutput(long patNum,long carrierNum,long canadianNetworkNum,long clearinghouseNum,EtransType etype,long planNum,long insSubNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),patNum,carrierNum,canadianNetworkNum,clearinghouseNum,etype,planNum);
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),patNum,carrierNum,canadianNetworkNum,clearinghouseNum,etype,planNum,insSubNum);
 			}
 			//validation of carrier vs network
 			if(etype==EtransType.Eligibility_CA){
@@ -234,7 +244,7 @@ namespace OpenDentBusiness{
 				File.WriteAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
 			#endif
 			etrans.OfficeSequenceNumber++;
-			if(etype==EtransType.Eligibility_CA){
+			if(etype==EtransType.Eligibility_CA || etype==EtransType.RequestOutstand_CA){
 				//find the next CarrierTransCounter------------------------------------------------------------------------------------
 				etrans.CarrierTransCounter=0;
 				command="SELECT MAX(CarrierTransCounter) FROM etrans "

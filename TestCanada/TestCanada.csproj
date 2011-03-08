@@ -74,6 +74,7 @@
     <Compile Include="CarrierTC.cs" />
     <Compile Include="ClaimTC.cs" />
     <Compile Include="InsSubTC.cs" />
+    <Compile Include="OutstandingTrans.cs" />
     <Compile Include="PatPlanTC.cs" />
     <Compile Include="Eligibility.cs" />
     <Compile Include="Reversal.cs" />
