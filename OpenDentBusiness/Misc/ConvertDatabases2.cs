@@ -2765,49 +2765,52 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_4_7() {
 			if(FromVersion<new Version("7.4.7.0")) {
 				string command;
-				List<long> aptNums=new List<long>();
-				Appointment[] aptList=Appointments.GetForPeriod(DateTime.Now.Date,DateTime.MaxValue.AddDays(-10));
-				for(int i=0;i<aptList.Length;i++) {
-					aptNums.Add(aptList[i].AptNum);
-				}
-				List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
-				for(int i=0;i<aptList.Length;i++) {
-					Appointment newApt=aptList[i].Clone();
-					newApt.ProcDescript="";
-					Procedure[] procsForOne=Procedures.GetProcsOneApt(aptList[i].AptNum,procsMultApts);
-					string procDescript="";
-					for(int j=0;j<procsForOne.Length;j++) {
-						ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(procsForOne[j].CodeNum);
-						if(j>0) {
-							procDescript+=", ";
-						}
-						switch(procCode.TreatArea.ToString()) {
-							case "Surf"://TreatmentArea.Surf:
-								procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-"
-									+procsForOne[j].Surf+"-";//""#12-MOD-"
-								break;
-							case "Tooth"://TreatmentArea.Tooth:
-								procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-";//"#12-"
-								break;
-							case "Quad"://TreatmentArea.Quad:
-								procDescript+=procsForOne[j].Surf+"-";//"UL-"
-								break;
-							case "Sextant"://TreatmentArea.Sextant:
-								procDescript+="S"+procsForOne[j].Surf+"-";//"S2-"
-								break;
-							case "Arch"://TreatmentArea.Arch:
-								procDescript+=procsForOne[j].Surf+"-";//"U-"
-								break;
-							case "ToothRange"://TreatmentArea.ToothRange:
-								break;
-							default://area 3 or 0 (mouth)
-								break;
-						}
-						procDescript+=procCode.AbbrDesc;
+				try {
+					List<long> aptNums=new List<long>();
+					Appointment[] aptList=Appointments.GetForPeriod(DateTime.Now.Date,DateTime.MaxValue.AddDays(-10));
+					for(int i=0;i<aptList.Length;i++) {
+						aptNums.Add(aptList[i].AptNum);
 					}
-					newApt.ProcDescript=procDescript;
-					Appointments.Update(newApt,aptList[i]);
+					List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
+					for(int i=0;i<aptList.Length;i++) {
+						Appointment newApt=aptList[i].Clone();
+						newApt.ProcDescript="";
+						Procedure[] procsForOne=Procedures.GetProcsOneApt(aptList[i].AptNum,procsMultApts);
+						string procDescript="";
+						for(int j=0;j<procsForOne.Length;j++) {
+							ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(procsForOne[j].CodeNum);
+							if(j>0) {
+								procDescript+=", ";
+							}
+							switch(procCode.TreatArea.ToString()) {
+								case "Surf"://TreatmentArea.Surf:
+									procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-"
+									+procsForOne[j].Surf+"-";//""#12-MOD-"
+									break;
+								case "Tooth"://TreatmentArea.Tooth:
+									procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-";//"#12-"
+									break;
+								case "Quad"://TreatmentArea.Quad:
+									procDescript+=procsForOne[j].Surf+"-";//"UL-"
+									break;
+								case "Sextant"://TreatmentArea.Sextant:
+									procDescript+="S"+procsForOne[j].Surf+"-";//"S2-"
+									break;
+								case "Arch"://TreatmentArea.Arch:
+									procDescript+=procsForOne[j].Surf+"-";//"U-"
+									break;
+								case "ToothRange"://TreatmentArea.ToothRange:
+									break;
+								default://area 3 or 0 (mouth)
+									break;
+							}
+							procDescript+=procCode.AbbrDesc;
+						}
+						newApt.ProcDescript=procDescript;
+						Appointments.Update(newApt,aptList[i]);
+					}
 				}
+				catch { }//do nothing.  Should not have used objects.  They are causing failures as the objects change in future versions.
 				command="UPDATE preference SET ValueString = '7.4.7.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
