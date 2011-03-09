@@ -35,6 +35,7 @@ namespace OpenDental{
 		private Label labelSite;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public long SelectedPatNum;
+		private CheckBox checkBrokenAppts;
 		private Dictionary<long,string> patientNames;
 
 		///<summary></summary>
@@ -71,6 +72,7 @@ namespace OpenDental{
 			this.butRefresh = new OpenDental.UI.Button();
 			this.comboSite = new System.Windows.Forms.ComboBox();
 			this.labelSite = new System.Windows.Forms.Label();
+			this.checkBrokenAppts = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -91,10 +93,10 @@ namespace OpenDental{
 			// grid
 			// 
 			this.grid.HScrollVisible = false;
-			this.grid.Location = new System.Drawing.Point(10,38);
+			this.grid.Location = new System.Drawing.Point(10,56);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
-			this.grid.Size = new System.Drawing.Size(734,617);
+			this.grid.Size = new System.Drawing.Size(734,599);
 			this.grid.TabIndex = 8;
 			this.grid.Title = "Unscheduled List";
 			this.grid.TranslationName = "TableUnsched";
@@ -120,7 +122,7 @@ namespace OpenDental{
 			// comboOrder
 			// 
 			this.comboOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboOrder.Location = new System.Drawing.Point(97,8);
+			this.comboOrder.Location = new System.Drawing.Point(97,6);
 			this.comboOrder.MaxDropDownItems = 40;
 			this.comboOrder.Name = "comboOrder";
 			this.comboOrder.Size = new System.Drawing.Size(133,21);
@@ -128,7 +130,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(23,12);
+			this.label1.Location = new System.Drawing.Point(23,10);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(72,14);
 			this.label1.TabIndex = 34;
@@ -138,7 +140,7 @@ namespace OpenDental{
 			// comboProv
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.Location = new System.Drawing.Point(319,8);
+			this.comboProv.Location = new System.Drawing.Point(319,6);
 			this.comboProv.MaxDropDownItems = 40;
 			this.comboProv.Name = "comboProv";
 			this.comboProv.Size = new System.Drawing.Size(181,21);
@@ -146,7 +148,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(248,12);
+			this.label4.Location = new System.Drawing.Point(248,10);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(69,14);
 			this.label4.TabIndex = 32;
@@ -171,7 +173,7 @@ namespace OpenDental{
 			// comboSite
 			// 
 			this.comboSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSite.Location = new System.Drawing.Point(584,8);
+			this.comboSite.Location = new System.Drawing.Point(584,6);
 			this.comboSite.MaxDropDownItems = 40;
 			this.comboSite.Name = "comboSite";
 			this.comboSite.Size = new System.Drawing.Size(160,21);
@@ -179,18 +181,31 @@ namespace OpenDental{
 			// 
 			// labelSite
 			// 
-			this.labelSite.Location = new System.Drawing.Point(506,12);
+			this.labelSite.Location = new System.Drawing.Point(506,10);
 			this.labelSite.Name = "labelSite";
 			this.labelSite.Size = new System.Drawing.Size(77,14);
 			this.labelSite.TabIndex = 36;
 			this.labelSite.Text = "Site";
 			this.labelSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkBrokenAppts
+			// 
+			this.checkBrokenAppts.AutoSize = true;
+			this.checkBrokenAppts.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBrokenAppts.Location = new System.Drawing.Point(73,33);
+			this.checkBrokenAppts.Name = "checkBrokenAppts";
+			this.checkBrokenAppts.Size = new System.Drawing.Size(157,17);
+			this.checkBrokenAppts.TabIndex = 38;
+			this.checkBrokenAppts.Text = "Show Broken Appointments";
+			this.checkBrokenAppts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBrokenAppts.UseVisualStyleBackColor = true;
+			// 
 			// FormUnsched
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(858,672);
+			this.Controls.Add(this.checkBrokenAppts);
 			this.Controls.Add(this.comboSite);
 			this.Controls.Add(this.labelSite);
 			this.Controls.Add(this.comboOrder);
@@ -208,10 +223,11 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Unscheduled List";
-			this.Load += new System.EventHandler(this.FormUnsched_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormUnsched_Closing);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormUnsched_FormClosing);
+			this.Load += new System.EventHandler(this.FormUnsched_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -263,7 +279,9 @@ namespace OpenDental{
 			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
-			ListUn=Appointments.RefreshUnsched(order,provNum,siteNum);
+			bool showBrokenAppts;
+			showBrokenAppts=checkBrokenAppts.Checked;
+			ListUn=Appointments.RefreshUnsched(order,provNum,siteNum,showBrokenAppts);
 			int scrollVal=grid.ScrollValue;
 			grid.BeginUpdate();
 			grid.Columns.Clear();
