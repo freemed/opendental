@@ -160,6 +160,7 @@ namespace OpenDentBusiness {
 		MobileUserName,
 		//MobileSyncLastFileNumber,
 		//MobileSyncPath,
+		MySqlVersion,
 		OpenDentalVendor,
 		OracleInsertId,
 		PasswordsMustBeStrong,

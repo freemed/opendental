@@ -3649,6 +3649,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					//Does not need to be changed for oracle.
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('MySqlVersion','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MySqlVersion','')";
+					Db.NonQ(command);
+				}
 				command="UPDATE preference SET ValueString = '7.8.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
