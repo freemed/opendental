@@ -59,7 +59,6 @@ namespace OpenDental{
 		private List<ClaimValCodeLog> MedValueCodes;
 		private Referral ClaimReferral;
 		private List<InsSub> SubList;
-		private int procLimit;
 
 		///<summary></summary>
 		public FormClaimPrint(){
@@ -243,6 +242,15 @@ namespace OpenDental{
 
 		private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed.
 			FillDisplayStrings();
+			int procLimit=ProcLimitForFormat();
+			//claimprocs is filled in FillDisplayStrings
+			//if(claimprocs.Count==0){
+			totalPages=1;
+			//js Some other programmer added this variable and implemented it.  We couldn't figure out why.  For example, in the line above, why would claimprocs ever be zero?  Due to many style and logic issues, we were forced to remove the function of this variable.  It would have to be written from scratch to implement it in the future.  Claims were never designed for multi-page.
+			//}
+			//else{
+			//	totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
+			//}
 			bool HasMedical = false;
 			if(!PrintBlank){
 				FillProcStrings(pagesPrinted*procLimit,procLimit);
@@ -537,13 +545,6 @@ namespace OpenDental{
 				}
 			}
 			displayStrings=new string[ClaimFormCur.Items.Length];
-			procLimit=ProcLimitForFormat();
-			if(claimprocs.Count==0){
-				totalPages=1;
-			}
-			else{
-				totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
-			}
 			//a value is set for every item, but not every case will have a matching claimform item.
 			for(int i=0;i<ClaimFormCur.Items.Length;i++){
 				if(ClaimFormCur.Items[i]==null){//Renaissance does not use [0]
@@ -1478,7 +1479,7 @@ namespace OpenDental{
 							(ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)]);
 						break;
 					case "TotalPages":
-						displayStrings[i]=totalPages.ToString();
+						displayStrings[i]="";//totalPages.ToString();//bugs with this field that we can't fix since we didn't write that code.
 						break;
 					case "ReferringProvNPI":
 						if(ClaimReferral==null){
