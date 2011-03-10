@@ -6,20 +6,20 @@ using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class Signals {
+	public class Signalods {
 		///<summary>Gets all Signals and Acks Since a given DateTime.  If it can't connect to the database, then it no longer throws an error, but instead returns a list of length 0.  Remeber that the supplied dateTime is server time.  This has to be accounted for.</summary>
-		public static List<Signal> RefreshTimed(DateTime sinceDateT) {
+		public static List<Signalod> RefreshTimed(DateTime sinceDateT) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod(),sinceDateT);
+				return Meth.GetObject<List<Signalod>>(MethodBase.GetCurrentMethod(),sinceDateT);
 			}
-			string command="SELECT * FROM signal "
+			string command="SELECT * FROM signalod "
 				+"WHERE SigDateTime>"+POut.DateT(sinceDateT)+" "
 				+"OR AckTime>"+POut.DateT(sinceDateT)+" "
 				+"ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
-			List<Signal> sigList=new List<Signal>();
+			List<Signalod> sigList=new List<Signalod>();
 			try {
-				sigList=Crud.SignalCrud.SelectMany(command);
+				sigList=Crud.SignalodCrud.SelectMany(command);
 				sigList.Sort();
 			} 
 			catch {
@@ -33,20 +33,20 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This excludes all Invalids.  It is only concerned with text and button messages.  It includes all messages, whether acked or not.  It's up to the UI to filter out acked if necessary.  Also includes all unacked messages regardless of date.</summary>
-		public static List<Signal> RefreshFullText(DateTime sinceDateT) {
+		public static List<Signalod> RefreshFullText(DateTime sinceDateT) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod(),sinceDateT);
+				return Meth.GetObject<List<Signalod>>(MethodBase.GetCurrentMethod(),sinceDateT);
 			}
-			string command="SELECT * FROM signal "
+			string command="SELECT * FROM signalod "
 				+"WHERE (SigDateTime>"+POut.DateT(sinceDateT)+" "
 				+"OR AckTime>"+POut.DateT(sinceDateT)+" "
 				+"OR AckTime<'1880-01-01') "//always include all unacked.
 				+"AND SigType="+POut.Long((int)SignalType.Button)
 				+" ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
-			List<Signal> sigList=new List<Signal>();
+			List<Signalod> sigList=new List<Signalod>();
 			try {
-				sigList=Crud.SignalCrud.SelectMany(command);
+				sigList=Crud.SignalodCrud.SelectMany(command);
 				sigList.Sort();
 			} 
 			catch {
@@ -60,17 +60,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only used when starting up to get the current button state.  Only gets unacked messages.  There may well be extra and useless messages included.  But only the lights will be used anyway, so it doesn't matter.</summary>
-		public static List <Signal> RefreshCurrentButState() {
+		public static List<Signalod> RefreshCurrentButState() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<Signalod>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM signal "
+			string command="SELECT * FROM signalod "
 				+"WHERE SigType=0 "//buttons only
 				+"AND AckTime<'1880-01-01' "
 				+"ORDER BY SigDateTime";
-			List <Signal> sigList=new List<Signal> ();
+			List<Signalod> sigList=new List<Signalod>();
 			try {
-				sigList=Crud.SignalCrud.SelectMany(command);
+				sigList=Crud.SignalodCrud.SelectMany(command);
 				sigList.Sort();
 			} 
 			catch {
@@ -84,16 +84,16 @@ namespace OpenDentBusiness{
 		}
 	
 		///<summary></summary>
-		public static void Update(Signal sig){
+		public static void Update(Signalod sig) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sig);
 				return;
 			}
-			Crud.SignalCrud.Update(sig);
+			Crud.SignalodCrud.Update(sig);
 		}
 
 		///<summary></summary>
-		public static long Insert(Signal sig) {
+		public static long Insert(Signalod sig) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sig.SignalNum=Meth.GetLong(MethodBase.GetCurrentMethod(),sig);
 				return sig.SignalNum;
@@ -101,19 +101,19 @@ namespace OpenDentBusiness{
 			//we need to explicitly get the server time in advance rather than using NOW(),
 			//because we need to update the signal object soon after creation.
 			sig.SigDateTime=MiscData.GetNowDateTime();
-			return Crud.SignalCrud.Insert(sig);
+			return Crud.SignalodCrud.Insert(sig);
 		}
 
 		//<summary>There's no such thing as deleting a signal</summary>
 		/*public void Delete(){
-			string command= "DELETE from Signal WHERE SignalNum = '"
+			string command= "DELETE from Signalod WHERE SignalNum = '"
 				+POut.PInt(SignalNum)+"'";
 			DataConnection dcon=new DataConnection();
  			Db.NonQ(command);
 		}*/
 
 		///<summary>After a refresh, this is used to determine whether the Appt Module needs to be refreshed.  Must supply the current date showing as well as the recently retrieved signal list.</summary>
-		public static bool ApptNeedsRefresh(List <Signal> signalList,DateTime dateTimeShowing){
+		public static bool ApptNeedsRefresh(List<Signalod> signalList,DateTime dateTimeShowing) {
 			//No need to check RemotingRole; no call to db.
 			List<string> iTypeList;
 			for(int i=0;i<signalList.Count;i++){
@@ -126,11 +126,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.  The signal list will include any task changes including status changes and deletions.  This will be called twice, once with isPopup=true and once with isPopup=false.</summary>
-		public static List<Task> GetNewTaskPopupsThisUser(List<Signal> signalList,long userNum) {
+		public static List<Task> GetNewTaskPopupsThisUser(List<Signalod> signalList,long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),signalList,userNum);
 			}
-			List<Signal> sigListFiltered=new List<Signal>();
+			List<Signalod> sigListFiltered=new List<Signalod>();
 			for(int i=0;i<signalList.Count;i++){
 				if(signalList[i].ITypes==((int)InvalidType.TaskPopup).ToString()){
 					sigListFiltered.Add(signalList[i]);
@@ -156,24 +156,24 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>After a refresh, this is used to get a list containing all flags of types that need to be refreshed.   Types of Date and Task are not included.  Because type are an enumeration, the returned list is int32, not int64.</summary>
-		public static List<int> GetInvalidTypes(List<Signal> signalList) {
+		public static List<int> GetInvalidTypes(List<Signalod> signalodList) {
 			//No need to check RemotingRole; no call to db.
 			List<int> retVal=new List<int>();
 			string[] strArray;
-			for(int i=0;i<signalList.Count;i++){
-				if(signalList[i].SigType!=SignalType.Invalid){
+			for(int i=0;i<signalodList.Count;i++){
+				if(signalodList[i].SigType!=SignalType.Invalid){
 					continue;
 				}
-				if(signalList[i].ITypes==((int)InvalidType.Date).ToString()){
+				if(signalodList[i].ITypes==((int)InvalidType.Date).ToString()){
 					continue;
 				}
-				if(signalList[i].ITypes==((int)InvalidType.Task).ToString()){
+				if(signalodList[i].ITypes==((int)InvalidType.Task).ToString()){
 					continue;
 				}
-				if(signalList[i].ITypes==((int)InvalidType.TaskPopup).ToString()){
+				if(signalodList[i].ITypes==((int)InvalidType.TaskPopup).ToString()){
 					continue;
 				}
-				strArray=signalList[i].ITypes.Split(',');
+				strArray=signalodList[i].ITypes.Split(',');
 				for(int t=0;t<strArray.Length;t++){
 					if(!retVal.Contains(PIn.Int(strArray[t]))){
 						retVal.Add(PIn.Int(strArray[t]));
@@ -185,14 +185,14 @@ namespace OpenDentBusiness{
 
 
 		///<summary>After a refresh, this gets a list of only the button signals.</summary>
-		public static List <Signal> GetButtonSigs(List <Signal> signalList){
+		public static List<Signalod> GetButtonSigs(List<Signalod> signalodList) {
 			//No need to check RemotingRole; no call to db.
-			List <Signal> list=new List <Signal> ();
-			for(int i=0;i<signalList.Count;i++){
-				if(signalList[i].SigType!=SignalType.Button){
+			List<Signalod> list=new List<Signalod>();
+			for(int i=0;i<signalodList.Count;i++){
+				if(signalodList[i].SigType!=SignalType.Button){
 					continue;
 				}
-				list.Add(signalList[i]);
+				list.Add(signalodList[i]);
 			}
 			return list;
 		}
@@ -205,32 +205,32 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//FIXME:UPDATE-MULTIPLE-TABLES
-			/*string command= "UPDATE signal,sigelement,sigelementdef "
-				+"SET signal.AckTime = ";
+			/*string command= "UPDATE signalod,sigelement,sigelementdef "
+				+"SET signalod.AckTime = ";
 				if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
 					command+="(SELECT CURRENT_TIMESTAMP FROM DUAL)";
 				}else{//Assume MySQL
 					command+="NOW()";
 				}
 				command+=" "
-				+"WHERE signal.AckTime < '1880-01-01' "
+				+"WHERE signalod.AckTime < '1880-01-01' "
 				+"AND SigDateTime <= '"+POut.PDateT(time)+"' "
-				+"AND signal.SignalNum=sigelement.SignalNum "
+				+"AND signalod.SignalNum=sigelement.SignalNum "
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
 				+"AND sigelementdef.LightRow="+POut.PInt(buttonIndex);
 			Db.NonQ(command);*/
 			//Rewritten so that the SQL is compatible with both Oracle and MySQL.
-			string command= "SELECT signal.SignalNum FROM signal,sigelement,sigelementdef "
-				+"WHERE signal.AckTime < '1880-01-01' "
+			string command= "SELECT signalod.SignalNum FROM signalod,sigelement,sigelementdef "
+				+"WHERE signalod.AckTime < '1880-01-01' "
 				+"AND SigDateTime <= "+POut.DateT(time)+" "
-				+"AND signal.SignalNum=sigelement.SignalNum "
+				+"AND signalod.SignalNum=sigelement.SignalNum "
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
 				+"AND sigelementdef.LightRow="+POut.Long(buttonIndex);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
-			command="UPDATE signal SET AckTime = ";
+			command="UPDATE signalod SET AckTime = ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+=POut.DateT(MiscData.GetNowDateTime());
 			}else {//Assume MySQL
@@ -259,7 +259,7 @@ namespace OpenDentBusiness{
 				}
 				itypeString+=((int)itypes[i]).ToString();
 			}
-			Signal sig=new Signal();
+			Signalod sig=new Signalod();
 			sig.ITypes=itypeString;
 			sig.DateViewing=DateTime.MinValue;
 			sig.SigType=SignalType.Invalid;
