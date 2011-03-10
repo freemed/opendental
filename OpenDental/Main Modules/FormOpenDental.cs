@@ -1884,6 +1884,7 @@ namespace OpenDental{
 				Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
 				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+				Plugins.HookAddCode(this,"FormOpenDental.OnPatient_Click_end");   
 			}
 		}
 

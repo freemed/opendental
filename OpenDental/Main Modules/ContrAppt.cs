@@ -3133,6 +3133,7 @@ namespace OpenDental{
 			InfoBubbleDraw(new Point(-1,-1));
 			timerInfoBubble.Enabled=false;//redundant?
 			Cursor=Cursors.Default;
+			Plugins.HookAddCode(this,"ContrAppt.ContrApptSheet2_MouseLeave_end");  
 		}
 
 		///<summary></summary>
