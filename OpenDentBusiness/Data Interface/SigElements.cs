@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class SigElements {
 
 		///<summary>Gets all SigElements for a set of Signals, ordered by type: user,extras, message.</summary>
-		public static SigElement[] GetElements(List <Signal> signalList) {
+		public static SigElement[] GetElements(List <Signalod> signalList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SigElement[]>(MethodBase.GetCurrentMethod(),signalList);
 			}

@@ -1570,9 +1570,9 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="ALTER TABLE sigelementdef CHANGE SigElementDefNum SigElementDefNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
-				command="ALTER TABLE signal CHANGE SignalNum SignalNum bigint NOT NULL auto_increment";
+				command="ALTER TABLE `signal` CHANGE SignalNum SignalNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
-				command="ALTER TABLE signal CHANGE TaskNum TaskNum bigint NOT NULL";
+				command="ALTER TABLE `signal` CHANGE TaskNum TaskNum bigint NOT NULL";
 				Db.NonQ32(command);
 				command="ALTER TABLE site CHANGE SiteNum SiteNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
@@ -3660,6 +3660,23 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.8.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_8_5();
+		}
+
+		private static void To7_8_5() {
+			if(FromVersion<new Version("7.8.5.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {//signal is a reserved word in mySQL 5.5
+					command="RENAME TABLE `signal` TO signalod";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE signal RENAME TO signalod";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '7.8.5.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To7_9_0();
 		}
 
@@ -3718,7 +3735,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
-
 
 
 

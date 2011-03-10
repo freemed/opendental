@@ -114,9 +114,9 @@ namespace OpenDentBusiness {
 				  ,"SELECT COUNT(*) FROM recall WHERE DatePrevious='0000-00-00'"
 				  ,"SELECT COUNT(*) FROM recall WHERE DisableUntilDate='0000-00-00'"
 				  ,"SELECT COUNT(*) FROM schedule WHERE SchedDate='0000-00-00'"
-				  ,"SELECT COUNT(*) FROM signal WHERE DateViewing='0000-00-00'"
-				  ,"SELECT COUNT(*) FROM signal WHERE SigDateTime LIKE '0000-00-00%'"
-				  ,"SELECT COUNT(*) FROM signal WHERE AckTime LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM signalod WHERE DateViewing='0000-00-00'"
+				  ,"SELECT COUNT(*) FROM signalod WHERE SigDateTime LIKE '0000-00-00%'"
+				  ,"SELECT COUNT(*) FROM signalod WHERE AckTime LIKE '0000-00-00%'"
 				};
 				int numInvalidDates=0;
 				for(int i=0;i<commands.Length;i++) {
@@ -160,9 +160,9 @@ namespace OpenDentBusiness {
 				  ,"UPDATE recall SET DatePrevious='0001-01-01' WHERE DatePrevious='0000-00-00'"
 				  ,"UPDATE recall SET DisableUntilDate='0001-01-01' WHERE DisableUntilDate='0000-00-00'"
 				  ,"UPDATE schedule SET SchedDate='0001-01-01' WHERE SchedDate='0000-00-00'"
-				  ,"UPDATE signal SET DateViewing='0001-01-01' WHERE DateViewing='0000-00-00'"
-				  ,"UPDATE signal SET SigDateTime='0001-01-01 00:00:00' WHERE SigDateTime LIKE '0000-00-00%'"
-				  ,"UPDATE signal SET AckTime='0001-01-01 00:00:00' WHERE AckTime LIKE '0000-00-00%'"
+				  ,"UPDATE signalod SET DateViewing='0001-01-01' WHERE DateViewing='0000-00-00'"
+				  ,"UPDATE signalod SET SigDateTime='0001-01-01 00:00:00' WHERE SigDateTime LIKE '0000-00-00%'"
+				  ,"UPDATE signalod SET AckTime='0001-01-01 00:00:00' WHERE AckTime LIKE '0000-00-00%'"
 				};
 				long rowsChanged=0;
 				for(int i=0;i<commands.Length;i++) {
@@ -356,7 +356,7 @@ namespace OpenDentBusiness {
 					SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0) {
-					Signals.SetInvalid(InvalidType.AutoCodes);
+					Signalods.SetInvalid(InvalidType.AutoCodes);
 				}
 				if(numberFixed!=0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
@@ -1766,7 +1766,7 @@ namespace OpenDentBusiness {
 					command="UPDATE preference SET ValueString="+POut.Date(DateTime.Today.AddDays(-21))
 				  +" WHERE PrefName='DateDepositsStarted'";
 					Db.NonQ(command);
-					Signals.SetInvalid(InvalidType.Prefs);
+					Signalods.SetInvalid(InvalidType.Prefs);
 					log+=Lans.g("FormDatabaseMaintenance","Deposit start date reset.")+"\r\n";
 				}
 				else if(verbose) {
@@ -1824,7 +1824,7 @@ namespace OpenDentBusiness {
 					SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0) {
-					Signals.SetInvalid(InvalidType.ProcButtons);
+					Signalods.SetInvalid(InvalidType.ProcButtons);
 				}
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","ProcButtonItems deleted due to invalid autocode: ")+numberFixed.ToString()+"\r\n";
@@ -2238,7 +2238,7 @@ namespace OpenDentBusiness {
 					WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0) {
-					Signals.SetInvalid(InvalidType.RecallTypes);
+					Signalods.SetInvalid(InvalidType.RecallTypes);
 				}
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Recall triggers deleted due to bad codenum: ")+numberFixed.ToString()+"\r\n";
@@ -2318,25 +2318,25 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(isCheck) {
-				command=@"SELECT COUNT(*) FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
+				command=@"SELECT COUNT(*) FROM signalod WHERE SigDateTime > NOW() OR AckTime > NOW()";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
-					command=@"SELECT COUNT(*) FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
+					command=@"SELECT COUNT(*) FROM signalod WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
 				}
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Signal entries with future time: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Signalod entries with future time: ")+numFound+"\r\n";
 				}
 			}
 			else {
-				command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
+				command=@"DELETE FROM signalod WHERE SigDateTime > NOW() OR AckTime > NOW()";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					string nowDateTime=POut.DateT(MiscData.GetNowDateTime());
-					command=@"DELETE FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
+					command=@"DELETE FROM signalod WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
 				}
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Signal entries deleted: ")+numberFixed.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Signalod entries deleted: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;

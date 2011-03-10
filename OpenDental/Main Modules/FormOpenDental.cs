@@ -2508,7 +2508,7 @@ namespace OpenDental{
 				}
 				itypeString+=e.ITypes[i].ToString();
 			}
-			Signal sig=new Signal();
+			Signalod sig=new Signalod();
 			sig.ITypes=itypeString;
 			if(e.ITypes.Contains((int)InvalidType.Date)){
 				sig.DateViewing=e.DateViewing;
@@ -2520,7 +2520,7 @@ namespace OpenDental{
 			if(e.ITypes.Contains((int)InvalidType.Task) || e.ITypes.Contains((int)InvalidType.TaskPopup)){
 				sig.TaskNum=e.TaskNum;
 			}
-			Signals.Insert(sig);
+			Signalods.Insert(sig);
 		}
 
 		private void GotoModule_ModuleSelected(ModuleEventArgs e){
@@ -2564,14 +2564,14 @@ namespace OpenDental{
 		}
 
 		///<summary>If this is initial call when opening program, then set sigListButs=null.  This will cause a call to be made to database to get current status of buttons.  Otherwise, it adds the signals passed in to the current state, then paints.</summary>
-		private void FillSignalButtons(List <Signal> sigListButs){
+		private void FillSignalButtons(List<Signalod> sigListButs) {
 			if(!lightSignalGrid1.Visible){//for faster eCW loading
 				return;
 			}
 			if(sigListButs==null){
 				SigButDefList=SigButDefs.GetByComputer(SystemInformation.ComputerName);
 				lightSignalGrid1.SetButtons(SigButDefList);
-				sigListButs=Signals.RefreshCurrentButState();
+				sigListButs=Signalods.RefreshCurrentButState();
 			}
 			SigElementDef element;
 			SigButDef butDef;
@@ -2658,7 +2658,7 @@ namespace OpenDental{
 
 		private void lightSignalGrid1_ButtonClick(object sender,OpenDental.UI.ODLightSignalGridClickEventArgs e) {
 			if(e.ActiveSignal!=null){//user trying to ack an existing light signal
-				Signals.AckButton(e.ButtonIndex+1,signalLastRefreshed);
+				Signalods.AckButton(e.ButtonIndex+1,signalLastRefreshed);
 				//then, manually ack the light on this computer.  The second ack in a few seconds will be ignored.
 				lightSignalGrid1.SetButtonActive(e.ButtonIndex,Color.White,null);
 				SigButDef butDef=SigButDefs.GetByIndex(e.ButtonIndex,SigButDefList);
@@ -2671,12 +2671,12 @@ namespace OpenDental{
 				return;
 			}
 			//user trying to send a signal
-			Signal sig=new Signal();
+			Signalod sig=new Signalod();
 			sig.SigType=SignalType.Button;
 			//sig.ToUser=sigElementDefUser[listTo.SelectedIndex].SigText;
 			//sig.FromUser=sigElementDefUser[listFrom.SelectedIndex].SigText;
 			//need to do this all as a transaction?
-			Signals.Insert(sig);
+			Signalods.Insert(sig);
 			int row=0;
 			Color color=Color.White;
 			SigElementDef def;
@@ -2689,7 +2689,7 @@ namespace OpenDental{
 				SigElements.Insert(element);
 				if(SigElementDefs.GetElement(element.SigElementDefNum).SigElementType==SignalElementType.User){
 					sig.ToUser=SigElementDefs.GetElement(element.SigElementDefNum).SigText;
-					Signals.Update(sig);
+					Signalods.Update(sig);
 				}
 				def=SigElementDefs.GetElement(element.SigElementDefNum);
 				if(def.LightRow!=0) {
@@ -2709,7 +2709,7 @@ namespace OpenDental{
 		///<summary>Called every time timerSignals_Tick fires.  Usually about every 5-10 seconds.</summary>
 		public void ProcessSignals(){
 			try {
-				List<Signal> sigList=Signals.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
+				List<Signalod> sigList=Signalods.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
 				if(sigList.Count==0) {
 					return;
 				}
@@ -2751,7 +2751,7 @@ namespace OpenDental{
 				else {
 					signalLastRefreshed=sigList[sigList.Count-1].SigDateTime;
 				}
-				if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,AppointmentL.DateSelected.Date)) {
+				if(ContrAppt2.Visible && Signalods.ApptNeedsRefresh(sigList,AppointmentL.DateSelected.Date)) {
 					ContrAppt2.RefreshPeriod();
 				}
 				bool areAnySignalsTasks=false;
@@ -2761,7 +2761,7 @@ namespace OpenDental{
 						areAnySignalsTasks=true;
 					}
 				}
-				List<Task> tasksPopup=Signals.GetNewTaskPopupsThisUser(sigList,Security.CurUser.UserNum);
+				List<Task> tasksPopup=Signalods.GetNewTaskPopupsThisUser(sigList,Security.CurUser.UserNum);
 				if(tasksPopup.Count>0) {
 					for(int i=0;i<tasksPopup.Count;i++) {
 						//Even though this is triggered to popup, if this is my own task, then do not popup.
@@ -2799,16 +2799,16 @@ namespace OpenDental{
 						userControlTasks1.RefreshTasks();
 					}
 				}
-				List<int> itypes=Signals.GetInvalidTypes(sigList);
+				List<int> itypes=Signalods.GetInvalidTypes(sigList);
 				InvalidType[] itypeArray=new InvalidType[itypes.Count];
 				for(int i=0;i<itypeArray.Length;i++) {
 					itypeArray[i]=(InvalidType)itypes[i];
 				}
-				//InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
+				//InvalidTypes invalidTypes=Signalods.GetInvalidTypes(sigList);
 				if(itypes.Count>0) {//invalidTypes!=0){
 					RefreshLocalData(itypeArray);
 				}
-				List<Signal> sigListButs=Signals.GetButtonSigs(sigList);
+				List<Signalod> sigListButs=Signalods.GetButtonSigs(sigList);
 				ContrManage2.LogMsgs(sigListButs);
 				FillSignalButtons(sigListButs);
 				//Need to add a test to this: do not play messages that are over 2 minutes old.
@@ -2836,7 +2836,7 @@ namespace OpenDental{
 		}
 
 		private void PlaySounds(Object objSignalList){
-			List<Signal> signalList=(List<Signal>)objSignalList;
+			List<Signalod> signalList=(List<Signalod>)objSignalList;
 			string strSound;
 			byte[] rawData;
 			MemoryStream stream=null;
@@ -3974,10 +3974,10 @@ namespace OpenDental{
 			}
 			//turn off signal reception for 5 seconds so this workstation will not shut down.
 			signalLastRefreshed=MiscData.GetNowDateTime().AddSeconds(5);
-			Signal sig=new Signal();
+			Signalod sig=new Signalod();
 			sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
 			sig.SigType=SignalType.Invalid;
-			Signals.Insert(sig);
+			Signalods.Insert(sig);
 			Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
 		}

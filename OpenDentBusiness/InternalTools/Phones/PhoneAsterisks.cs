@@ -90,7 +90,7 @@ namespace OpenDentBusiness {
 					AddToRingGroup("609",extension.ToString(),rawExtensions609);
 				}
 			}
-			Signals.SetInvalid(InvalidType.PhoneAsteriskReload);
+			Signalods.SetInvalid(InvalidType.PhoneAsteriskReload);
 		}
 
 		private static void AddToRingGroup(string ringGroup,string extension,string rawExtensions) {

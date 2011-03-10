@@ -56,7 +56,7 @@ namespace OpenDental{
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
 		///<summary>Collection of Signals</summary>
-		private List<Signal> SignalList;
+		private List<Signalod> SignalList;
 		private SigElementDef[] sigElementDefUser;
 		private SigElementDef[] sigElementDefExtras;
 		private Label labelSending;
@@ -1050,7 +1050,7 @@ namespace OpenDental{
 
 		///<summary>Gets all new data from the database for the text messages.  Not sure yet if this will also reset the lights along the left.</summary>
 		private void RefreshFullMessages(){
-			SignalList=Signals.RefreshFullText(DateTime.Today);//since midnight this morning.
+			SignalList=Signalods.RefreshFullText(DateTime.Today);//since midnight this morning.
 			FillMessages();
 		}
 
@@ -1078,7 +1078,7 @@ namespace OpenDental{
 			gridMessages.Columns.Add(col);
 			gridMessages.Rows.Clear();
 			ODGridRow row;
-			Signal sig;
+			Signalod sig;
 			string str;
 			for(int i=0;i<SignalList.Count;i++){
 				sig=SignalList[i];
@@ -1150,7 +1150,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please type in a message first.");
 				return;
 			}
-			Signal sig=new Signal();
+			Signalod sig=new Signalod();
 			sig.SigType=SignalType.Button;
 			sig.SigText=textMessage.Text;
 			if(listTo.SelectedIndex!=-1) {
@@ -1159,7 +1159,7 @@ namespace OpenDental{
 			if(listFrom.SelectedIndex!=-1){
 				sig.FromUser=sigElementDefUser[listFrom.SelectedIndex].SigText;
 			}
-			Signals.Insert(sig);
+			Signalods.Insert(sig);
 			SigElement element;
 			if(listTo.SelectedIndex!=-1) {
 				element=new SigElement();
@@ -1180,7 +1180,7 @@ namespace OpenDental{
 			if(listMessages.SelectedIndex==-1){
 				return;
 			}
-			Signal sig=new Signal();
+			Signalod sig=new Signalod();
 			sig.SigType=SignalType.Button;
 			sig.SigText=textMessage.Text;
 			if(listTo.SelectedIndex!=-1) {
@@ -1191,7 +1191,7 @@ namespace OpenDental{
 			}
 			//need to do this all as a transaction, so need to do a writelock on the signal table first.
 			//alternatively, we could just make sure not to retrieve any signals that were less the 300ms old.
-			Signals.Insert(sig);
+			Signalods.Insert(sig);
 			SigElement element;
 			if(listTo.SelectedIndex!=-1) {
 				element=new SigElement();
@@ -1221,14 +1221,14 @@ namespace OpenDental{
 		}
 
 		///<summary>This processes timed messages coming in from the main form.  Buttons are handled in the main form, and then sent here for further display.  The list gets filtered before display.</summary>
-		public void LogMsgs(List <Signal> signalList){
+		public void LogMsgs(List<Signalod> signalList) {
 			for(int i=0;i<signalList.Count;i++){
 				if(signalList[i].AckTime.Year>1880){//if ack
 					//then find the original
 					for(int s=0;s<SignalList.Count;s++){
-						if(((Signal)SignalList[s]).SignalNum==signalList[i].SignalNum){
+						if(((Signalod)SignalList[s]).SignalNum==signalList[i].SignalNum) {
 							//alter the original
-							((Signal)SignalList[s]).AckTime=signalList[i].AckTime;
+							((Signalod)SignalList[s]).AckTime=signalList[i].AckTime;
 							break;//out of s loop.
 						}
 					}
@@ -1246,14 +1246,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select at least one item first.");
 				return;
 			}
-			Signal sig;
+			Signalod sig;
 			for(int i=gridMessages.SelectedIndices.Length-1;i>=0;i--){//go backwards so that we can remove rows without problems.
-				sig=(Signal)gridMessages.Rows[gridMessages.SelectedIndices[i]].Tag;
+				sig=(Signalod)gridMessages.Rows[gridMessages.SelectedIndices[i]].Tag;
 				if(sig.AckTime.Year>1880){
 					continue;//totally ignore if trying to ack a previously acked signal
 				}
 				sig.AckTime=DateTime.Now+TimeDelta;
-				Signals.Update(sig);
+				Signalods.Update(sig);
 				//change the grid temporarily until the next timer event.  This makes it feel more responsive.
 				if(checkIncludeAck.Checked){
 					gridMessages.Rows[gridMessages.SelectedIndices[i]].Cells[3].Text=sig.AckTime.ToShortTimeString();					
@@ -1280,7 +1280,7 @@ namespace OpenDental{
 			else{
 				labelDays.Visible=false;
 				textDays.Visible=false;
-				SignalList=Signals.RefreshFullText(DateTime.Today);//since midnight this morning.
+				SignalList=Signalods.RefreshFullText(DateTime.Today);//since midnight this morning.
 			}
 			FillMessages();
 		}
@@ -1293,7 +1293,7 @@ namespace OpenDental{
 			try{
 				int days=int.Parse(textDays.Text);
 				errorProvider1.SetError(textDays,"");
-				SignalList=Signals.RefreshFullText(DateTime.Today.AddDays(-days));
+				SignalList=Signalods.RefreshFullText(DateTime.Today.AddDays(-days));
 				FillMessages();
 			}
 			catch{

@@ -167,7 +167,7 @@ namespace OpenDental.UI {
 		}
 
 		///<summary>Sets the specified buttonIndex to a color and attaches the signal responsible.  This is also used for the manual ack to increase responsiveness.  buttonIndex is 0-based.</summary>
-		public void SetButtonActive(int buttonIndex,Color color,Signal activeSignal){
+		public void SetButtonActive(int buttonIndex,Color color,Signalod activeSignal) {
 			if(buttonIndex>=sigButStates.Length){
 				return;//no button to light up.
 			}
@@ -326,7 +326,7 @@ namespace OpenDental.UI {
 		}
 
 		///<summary></summary>
-		protected void OnButtonClicked(int myButton,SigButDef myDef,Signal mySignal) {
+		protected void OnButtonClicked(int myButton,SigButDef myDef,Signalod mySignal) {
 			ODLightSignalGridClickEventArgs bArgs=new ODLightSignalGridClickEventArgs(myButton,myDef,mySignal);
 			if(ButtonClick!=null)
 				ButtonClick(this,bArgs);
@@ -347,18 +347,18 @@ namespace OpenDental.UI {
 		///<summary></summary>
 		public ToolBarButtonState State;
 		///<summary>If this button is lit up, then this will contain the signal that caused it.  That way, when user clicks on the button to ack, the signal object in the db can be ack'd properly.</summary>
-		public Signal ActiveSignal;
+		public Signalod ActiveSignal;
 	}
 
 	///<summary></summary>
 	public class ODLightSignalGridClickEventArgs {
 		private int buttonIndex;
 		private SigButDef buttonDef;
-		private Signal activeSignal;
+		private Signalod activeSignal;
 
 		/// <summary></summary>
 		/// <param name="myButton"></param>
-		public ODLightSignalGridClickEventArgs(int myButton,SigButDef myDef,Signal mySignal) {
+		public ODLightSignalGridClickEventArgs(int myButton,SigButDef myDef,Signalod mySignal) {
 			buttonIndex=myButton;
 			buttonDef=myDef;
 			activeSignal=mySignal;
@@ -379,7 +379,7 @@ namespace OpenDental.UI {
 		}
 
 		///<summary></summary>
-		public Signal ActiveSignal{
+		public Signalod ActiveSignal {
 			get {
 				return activeSignal;
 			}

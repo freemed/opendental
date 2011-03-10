@@ -278,7 +278,7 @@
     <Compile Include="Crud\SigButDefElementCrud.cs" />
     <Compile Include="Crud\SigElementCrud.cs" />
     <Compile Include="Crud\SigElementDefCrud.cs" />
-    <Compile Include="Crud\SignalCrud.cs" />
+    <Compile Include="Crud\SignalodCrud.cs" />
     <Compile Include="Crud\SiteCrud.cs" />
     <Compile Include="Crud\StatementCrud.cs" />
     <Compile Include="Crud\SupplierCrud.cs" />
@@ -322,6 +322,7 @@
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
     <Compile Include="Data Interface\InsFilingCodeSubtypes.cs" />
+    <Compile Include="Data Interface\Signalods.cs" />
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />
     <Compile Include="Cache\aaCache.cs" />
@@ -502,7 +503,6 @@
     <Compile Include="Data Interface\SigButDefs.cs" />
     <Compile Include="Data Interface\SigElementDefs.cs" />
     <Compile Include="Data Interface\SigElements.cs" />
-    <Compile Include="Data Interface\Signals.cs" />
     <Compile Include="Data Interface\Sites.cs" />
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
@@ -596,6 +596,7 @@
     <Compile Include="TableTypes\ProcGroupItem.cs" />
     <Compile Include="TableTypes\ProcApptColor.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
+    <Compile Include="TableTypes\Signalod.cs" />
     <Compile Include="TableTypes\TaskNote.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
     <Compile Include="TableTypes\Equipment.cs" />
@@ -784,7 +785,6 @@
     <Compile Include="TableTypes\SigButDefElement.cs" />
     <Compile Include="TableTypes\SigElement.cs" />
     <Compile Include="TableTypes\SigElementDef.cs" />
-    <Compile Include="TableTypes\Signal.cs" />
     <Compile Include="TableTypes\Task.cs" />
     <Compile Include="TableTypes\TaskList.cs" />
     <Compile Include="TableTypes\TerminalActive.cs" />

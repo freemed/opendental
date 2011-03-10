@@ -1059,10 +1059,10 @@ namespace OpenDental{
 				if(FormSD.DialogResult==DialogResult.OK) {
 					//turn off signal reception for 5 seconds so this workstation will not shut down.
 					FormOpenDental.signalLastRefreshed=MiscData.GetNowDateTime().AddSeconds(5);
-					Signal sig=new Signal();
+					Signalod sig=new Signalod();
 					sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
 					sig.SigType=SignalType.Invalid;
-					Signals.Insert(sig);
+					Signalods.Insert(sig);
 					Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
 					//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");//can't do this because sometimes no user.
 				}

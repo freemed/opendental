@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public long SigElementNum;
 		///<summary>FK to sigelementdef.SigElementDefNum</summary>
 		public long SigElementDefNum;
-		///<summary>FK to signal.SignalNum.</summary>
+		///<summary>FK to signalod.SignalNum.</summary>
 		public long SignalNum;
 		
 		///<summary></summary>
