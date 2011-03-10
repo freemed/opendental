@@ -2042,9 +2042,15 @@ namespace OpenDental{
 			}
 			benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
 			FillBenefits();
-			benefitListOld=new List<Benefit>();
-			for(int i=0;i<benefitList.Count;i++){
-				benefitListOld.Add(benefitList[i].Copy());
+			if(IsNewPlan) {
+				//Leave benefitListOld alone so that it will trigger deletion of the orphaned benefits later.
+			}
+			else{
+				//Replace benefitListOld so that we only cause changes to be save that are made after this point.
+				benefitListOld=new List<Benefit>();
+				for(int i=0;i<benefitList.Count;i++) {
+					benefitListOld.Add(benefitList[i].Copy());
+				}
 			}
 			//benefitListOld=new List<Benefit>(benefitList);//this was not the proper way to make a shallow copy.
 			PlanCurOriginal=PlanCur.Copy();
@@ -3901,8 +3907,11 @@ namespace OpenDental{
 							//do not need to update PlanCur because no changes were made.
 							PatPlanCur.PlanNum=PlanCur.PlanNum;
 							PatPlans.Update(PatPlanCur);
-							//when 'pick from list' button was pushed, benefitListOld was filled with a shallow copy. 
-							//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
+							//When 'pick from list' button was pushed, benfitList was filled with benefits from the picked plan.
+							//Then, those benefits may or may not have been changed.  
+							//benefitListOld will still contain the original defaults for a new plan, but they will be orphaned.
+							//So all the original benefits will be automatically deleted because they won't be found in the newlist.
+							//If any benefits were changed after picking, the synch further down will trigger updates for the benefits on the picked plan.
 						}
 						else {//new plan, no changes, not picked from list.
 							//do not need to update PlanCur because no changes were made.
@@ -3915,17 +3924,16 @@ namespace OpenDental{
 								InsPlans.Delete(PlanNumOriginal);//quick delete doesn't affect other objects.
 								PatPlanCur.PlanNum=PlanCur.PlanNum;
 								PatPlans.Update(PatPlanCur);
-								//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
-								//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
+								//Same logic applies to benefit list as the section above.
 							}
 							else {//option is checked for "create new plan if needed"
 								PlanCur.PlanNum=PlanNumOriginal;
 								InsPlans.Update(PlanCur);
 								//no need to update PatPlan.  Same old PlanNum.
-								//when 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
-								//We must clear the benefitListOld to prevent deletion of those benefits.
-								benefitListOld=new List<Benefit>();
-								//Force copies to be made in the database, but with different PlanNum.
+								//When 'pick from list' button was pushed, benfitList was filled with benefits from the picked plan.
+								//benefitListOld was not touched and still contains the old benefits.  So the original benefits will be automatically deleted.
+								//We force copies to be made in the database, but with different PlanNums.
+								//Any other changes will be preserved.
 								for(int i=0;i<benefitList.Count;i++) {
 									if(benefitList[i].PlanNum>0) {
 										benefitList[i].PlanNum=PlanCur.PlanNum;
@@ -4037,6 +4045,7 @@ namespace OpenDental{
 			if(IsNewPlan){//this would also be new coverage
 				//warning: If user clicked 'pick from list' button, then we don't want to delete an existing plan used by others
 				InsPlans.Delete(PlanNumOriginal);//safe, does not delete other objects
+				Benefits.DeleteForPlan(PlanNumOriginal);
 				if(SubCur!=null) {
 					InsSubs.Delete(SubCur.InsSubNum);
 				}
