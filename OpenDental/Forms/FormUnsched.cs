@@ -192,11 +192,11 @@ namespace OpenDental{
 			// 
 			this.checkBrokenAppts.AutoSize = true;
 			this.checkBrokenAppts.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBrokenAppts.Location = new System.Drawing.Point(73,33);
+			this.checkBrokenAppts.Location = new System.Drawing.Point(65,33);
 			this.checkBrokenAppts.Name = "checkBrokenAppts";
-			this.checkBrokenAppts.Size = new System.Drawing.Size(157,17);
+			this.checkBrokenAppts.Size = new System.Drawing.Size(165,17);
 			this.checkBrokenAppts.TabIndex = 38;
-			this.checkBrokenAppts.Text = "Show Broken Appointments";
+			this.checkBrokenAppts.Text = "Include Broken Appointments";
 			this.checkBrokenAppts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBrokenAppts.UseVisualStyleBackColor = true;
 			// 
