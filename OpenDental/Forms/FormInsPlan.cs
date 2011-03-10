@@ -2035,13 +2035,18 @@ namespace OpenDental{
 			}
 			PlanCur=FormIP.SelectedPlan;
 			FillFormWithPlanCur();
+			//We need to pass patPlanNum in to RefreshForPlan to get patient level benefits:
 			long patPlanNum=0;
 			if(PatPlanCur!=null){
 				patPlanNum=PatPlanCur.PatPlanNum;
 			}
 			benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
 			FillBenefits();
-			benefitListOld=new List<Benefit>(benefitList);
+			benefitListOld=new List<Benefit>();
+			for(int i=0;i<benefitList.Count;i++){
+				benefitListOld.Add(benefitList[i].Copy());
+			}
+			//benefitListOld=new List<Benefit>(benefitList);//this was not the proper way to make a shallow copy.
 			PlanCurOriginal=PlanCur.Copy();
 			FillOtherSubscribers();
 			//PlanNumOriginal is NOT reset here.
@@ -3890,11 +3895,14 @@ namespace OpenDental{
 				if(IsNewPlan) {
 					if(InsPlans.AreEqualValue(PlanCur,PlanCurOriginal)) {//New plan, no changes
 						if(PlanCur.PlanNum != PlanNumOriginal) {//clicked 'pick from list' button
+							//No need to update PlanCur because no changes.
 							//delete original plan.
 							InsPlans.Delete(PlanNumOriginal);//doesn't touch any other objects.
 							//do not need to update PlanCur because no changes were made.
 							PatPlanCur.PlanNum=PlanCur.PlanNum;
 							PatPlans.Update(PatPlanCur);
+							//when 'pick from list' button was pushed, benefitListOld was filled with a shallow copy. 
+							//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 						}
 						else {//new plan, no changes, not picked from list.
 							//do not need to update PlanCur because no changes were made.
@@ -3907,16 +3915,21 @@ namespace OpenDental{
 								InsPlans.Delete(PlanNumOriginal);//quick delete doesn't affect other objects.
 								PatPlanCur.PlanNum=PlanCur.PlanNum;
 								PatPlans.Update(PatPlanCur);
+								//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
+								//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 							}
 							else {//option is checked for "create new plan if needed"
 								PlanCur.PlanNum=PlanNumOriginal;
 								InsPlans.Update(PlanCur);
 								//no need to update PatPlan.  Same old PlanNum.
-								//when 'pick from list' button was pushed, benefitListOld was set to new empty list.
+								//when 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
+								//We must clear the benefitListOld to prevent deletion of those benefits.
+								benefitListOld=new List<Benefit>();
+								//Force copies to be made in the database, but with different PlanNum.
 								for(int i=0;i<benefitList.Count;i++) {
 									if(benefitList[i].PlanNum>0) {
 										benefitList[i].PlanNum=PlanCur.PlanNum;
-										benefitList[i].BenefitNum=0;//triggers insert.
+										benefitList[i].BenefitNum=0;//triggers insert during synch.
 									}
 								}
 							}
@@ -3932,6 +3945,8 @@ namespace OpenDental{
 							//do not need to update PlanCur because no changes were made.
 							PatPlanCur.PlanNum=PlanCur.PlanNum;
 							PatPlans.Update(PatPlanCur);
+							//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
+							//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 						}
 						else {//existing plan, no changes, not picked from list.
 							//do not need to update PlanCur because no changes were made.
@@ -3944,23 +3959,29 @@ namespace OpenDental{
 								InsPlans.Update(PlanCur);
 								PatPlanCur.PlanNum=PlanCur.PlanNum;
 								PatPlans.Update(PatPlanCur);
+								//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
+								//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 							}
 							else {//option is checked for "create new plan if needed"
 								if(comboLinked.Items.Count==0) {//if this is the only subscriber
 									InsPlans.Update(PlanCur);
 									PatPlanCur.PlanNum=PlanCur.PlanNum;
 									PatPlans.Update(PatPlanCur);
+									//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
+									//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 								}
 								else {//if there are other subscribers
 									InsPlans.Insert(PlanCur);//this gives it a new primary key.
 									PatPlanCur.PlanNum=PlanCur.PlanNum;
 									PatPlans.Update(PatPlanCur);
-									//make copies of all the benefits
+									//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
+									//We must clear the benefitListOld to prevent deletion of those benefits.
 									benefitListOld=new List<Benefit>();
+									//Force copies to be made in the database, but with different PlanNum;
 									for(int i=0;i<benefitList.Count;i++) {
 										if(benefitList[i].PlanNum>0) {
 											benefitList[i].PlanNum=PlanCur.PlanNum;
-											benefitList[i].BenefitNum=0;//triggers insert.
+											benefitList[i].BenefitNum=0;//triggers insert during synch.
 										}
 									}
 								}
