@@ -1225,24 +1225,54 @@ namespace OpenDental{
 			}
 			if(CCard!=null) {//Have credit card on file
 				if(CCard.XChargeToken!="") {//Recurring charge
+					FormXchargeTrans FormXT=new FormXchargeTrans();
+					FormXT.ShowDialog();
+					if(FormXT.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					switch(FormXT.TransactionType) {
+						case 0:
+							info.Arguments+="/TRANSACTIONTYPE:PURCHASE ";
+							info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+							info.Arguments+="/AUTOPROCESS ";
+							break;
+						case 1:
+							info.Arguments+="/TRANSACTIONTYPE:RETURN ";
+							info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+							info.Arguments+="/AUTOPROCESS ";
+							break;
+						case 2:
+							info.Arguments+="/TRANSACTIONTYPE:DEBITPURCHASE ";
+							info.Arguments+="/CASHBACK:"+FormXT.CashBackAmount.ToString("F2")+" ";
+							break;
+						case 3:
+							info.Arguments+="/TRANSACTIONTYPE:DEBITRETURN ";
+							break;
+						case 4:
+							info.Arguments+="/TRANSACTIONTYPE:FORCE ";
+							info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+							break;
+						case 5:
+							info.Arguments+="/TRANSACTIONTYPE:PREAUTH ";
+							info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+							info.Arguments+="/AUTOPROCESS ";
+							break;
+						case 6:
+							info.Arguments+="/TRANSACTIONTYPE:ADJUSTMENT ";
+							break;
+						case 7:
+							info.Arguments+="/TRANSACTIONTYPE:VOID ";
+							break;
+					}
 					/*       ***** An example of how recurring charges work***** 
 					C:\Program Files\X-Charge\XCharge.exe /TRANSACTIONTYPE:Purchase /LOCKTRANTYPE
-					/AMOUNT:10.00 /LOCKAMOUNT /XCACCOUNTID: XAW0JWtx5kjG8 /RECEIPT:RC001
+					/AMOUNT:10.00 /LOCKAMOUNT /XCACCOUNTID:XAW0JWtx5kjG8 /RECEIPT:RC001
 					/LOCKRECEIPT /CLERK:Clerk /LOCKCLERK /RESULTFILE:C:\ResultFile.txt /USERID:system
 					/PASSWORD:system /STAYONTOP /AUTOPROCESS /AUTOCLOSE /HIDEMAINWINDOW
 					/RECURRING /SMALLWINDOW /NORESULTDIALOG
 					*/
-					info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
-					info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
-					info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
-					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-					info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
-					info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
-					info.Arguments+="/AUTOPROCESS ";
-					info.Arguments+="/AUTOCLOSE ";
 					info.Arguments+="/HIDEMAINWINDOW ";
 					info.Arguments+="/RECURRING ";
-					info.Arguments+="/NORESULTDIALOG ";
 				}
 				else {//Not recurring charge
 					if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {//Use token only if user has has pref unchecked in module setup (allow store credit card nums).
@@ -1266,27 +1296,20 @@ namespace OpenDental{
 					else {
 						info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
 					}
-					info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
-					info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
-					info.Arguments+="/AUTOCLOSE ";
-					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-					info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
-					info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
-					info.Arguments+="/NORESULTDIALOG ";
 				}
 			}
 			else {//Add card option was selected in drop down.
 				newCard=true;
 				info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 				info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
-				info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
-				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
-				info.Arguments+="/PARTIALAPPROVALSUPPORT:T ";
-				info.Arguments+="/AUTOCLOSE ";
-				info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-				info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
-				info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
 			}
+			info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
+			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
+			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
+			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+			info.Arguments+="/AUTOCLOSE ";
+			info.Arguments+="/NORESULTDIALOG ";
 			Cursor=Cursors.WaitCursor;
 			Process process=new Process();
 			process.StartInfo=info;
@@ -1299,7 +1322,6 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 			string resulttext="";
 			string line="";
-			//bool showReturnedNote=true;
 			bool showAmountNotice=false;
 			double amtReturned=0;
 			string xChargeToken="";
@@ -1321,7 +1343,6 @@ namespace OpenDental{
 					if(line.StartsWith("AMOUNT=")) {
 						amtReturned=PIn.Double(line.Substring(7));
 						if(amtReturned != amt) {
-							//showReturnedNote=false;
 							showAmountNotice=true;
 						}
 					}
@@ -1350,8 +1371,6 @@ namespace OpenDental{
 					CCard.CCNumberMasked=accountMasked;
 					CreditCards.Insert(CCard);
 				}
-				//resulttext+=reader.ReadToEnd();
-				//MessageBox.Show("ResultFile:\r\n"+resultText);
 			}
 			/*Example of successful transaction:
 				RESULT=SUCCESS
@@ -1363,12 +1382,10 @@ namespace OpenDental{
 				AVSRESULT=Y
 				CVRESULT=M
 			*/
-			//if(showReturnedNote) {
 			if(textNote.Text!="") {
 				textNote.Text+="\r\n";
 			}
 			textNote.Text+=resulttext;
-			//}
 			if(showAmountNotice) {
 				MessageBox.Show(Lan.g(this,"Warning: The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the amount charged: ")+amtReturned.ToString("C"));
 			}
