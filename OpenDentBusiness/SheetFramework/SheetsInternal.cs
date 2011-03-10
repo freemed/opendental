@@ -1046,7 +1046,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			sheet.FontSize=9f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",11f,sheet.FontName,false,89,156,100,17));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("deposit.DateDeposit",11f,sheet.FontName,false,89,156,120,17));
 			//col 1, 6 boxes
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem01",8f,sheet.FontName,false,338,62,100,20));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("depositItem02",8f,sheet.FontName,false,338,90,100,20));
