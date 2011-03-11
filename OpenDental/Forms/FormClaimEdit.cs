@@ -285,7 +285,20 @@ namespace OpenDental{
 		private bool doubleClickWarningAlreadyDisplayed=false;
 		private UI.Button butReverse;
 		private Label label76;
-		private ValidDate textCanadaTransRefNum;
+		private GroupBox groupCanadaOrthoPredeterm;
+		private Label label77;
+		private ValidDate textDateCanadaEstTreatStartDate;
+		private TextBox textCanadaTransRefNum;
+		private Label label78;
+		private TextBox textCanadaInitialPayment;
+		private Label label79;
+		private TextBox textCanadaTreatDuration;
+		private Label label80;
+		private TextBox textCanadaNumPaymentsAnticipated;
+		private Label label81;
+		private TextBox textCanadaAnticipatedPayAmount;
+		private Label label82;
+		private TextBox textCanadaExpectedPayCycle;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -449,6 +462,7 @@ namespace OpenDental{
 			this.textRadiographs = new OpenDental.ValidNum();
 			this.groupAttachedImages = new System.Windows.Forms.GroupBox();
 			this.butExport = new OpenDental.UI.Button();
+			this.textNote = new OpenDental.ODtextBox();
 			this.butAttachAdd = new OpenDental.UI.Button();
 			this.butAttachPerio = new OpenDental.UI.Button();
 			this.label61 = new System.Windows.Forms.Label();
@@ -463,7 +477,6 @@ namespace OpenDental{
 			this.textRefNum = new System.Windows.Forms.TextBox();
 			this.label46 = new System.Windows.Forms.Label();
 			this.comboEmployRelated = new System.Windows.Forms.ComboBox();
-			this.textNote = new OpenDental.ODtextBox();
 			this.comboPlaceService = new System.Windows.Forms.ComboBox();
 			this.label48 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
@@ -492,8 +505,21 @@ namespace OpenDental{
 			this.textCode1 = new System.Windows.Forms.TextBox();
 			this.textCode0 = new System.Windows.Forms.TextBox();
 			this.tabCanadian = new System.Windows.Forms.TabPage();
+			this.textCanadaTransRefNum = new System.Windows.Forms.TextBox();
+			this.groupCanadaOrthoPredeterm = new System.Windows.Forms.GroupBox();
+			this.textCanadaExpectedPayCycle = new System.Windows.Forms.TextBox();
+			this.textCanadaAnticipatedPayAmount = new System.Windows.Forms.TextBox();
+			this.label82 = new System.Windows.Forms.Label();
+			this.textCanadaNumPaymentsAnticipated = new System.Windows.Forms.TextBox();
+			this.label81 = new System.Windows.Forms.Label();
+			this.textCanadaTreatDuration = new System.Windows.Forms.TextBox();
+			this.label80 = new System.Windows.Forms.Label();
+			this.label79 = new System.Windows.Forms.Label();
+			this.textCanadaInitialPayment = new System.Windows.Forms.TextBox();
+			this.label78 = new System.Windows.Forms.Label();
+			this.label77 = new System.Windows.Forms.Label();
+			this.textDateCanadaEstTreatStartDate = new OpenDental.ValidDate();
 			this.label76 = new System.Windows.Forms.Label();
-			this.textCanadaTransRefNum = new OpenDental.ValidDate();
 			this.butReverse = new OpenDental.UI.Button();
 			this.textMissingTeeth = new System.Windows.Forms.TextBox();
 			this.label75 = new System.Windows.Forms.Label();
@@ -572,6 +598,7 @@ namespace OpenDental{
 			this.tabUB04.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabCanadian.SuspendLayout();
+			this.groupCanadaOrthoPredeterm.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox8.SuspendLayout();
@@ -2286,8 +2313,9 @@ namespace OpenDental{
 			// tabCanadian
 			// 
 			this.tabCanadian.AutoScroll = true;
-			this.tabCanadian.Controls.Add(this.label76);
 			this.tabCanadian.Controls.Add(this.textCanadaTransRefNum);
+			this.tabCanadian.Controls.Add(this.groupCanadaOrthoPredeterm);
+			this.tabCanadian.Controls.Add(this.label76);
 			this.tabCanadian.Controls.Add(this.butReverse);
 			this.tabCanadian.Controls.Add(this.textMissingTeeth);
 			this.tabCanadian.Controls.Add(this.label75);
@@ -2308,25 +2336,147 @@ namespace OpenDental{
 			this.tabCanadian.Text = "Canadian";
 			this.tabCanadian.UseVisualStyleBackColor = true;
 			// 
+			// textCanadaTransRefNum
+			// 
+			this.textCanadaTransRefNum.Location = new System.Drawing.Point(96,122);
+			this.textCanadaTransRefNum.Name = "textCanadaTransRefNum";
+			this.textCanadaTransRefNum.Size = new System.Drawing.Size(100,20);
+			this.textCanadaTransRefNum.TabIndex = 148;
+			// 
+			// groupCanadaOrthoPredeterm
+			// 
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.textCanadaExpectedPayCycle);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.textCanadaAnticipatedPayAmount);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.label82);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.textCanadaNumPaymentsAnticipated);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.label81);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.textCanadaTreatDuration);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.label80);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.label79);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.textCanadaInitialPayment);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.label78);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.label77);
+			this.groupCanadaOrthoPredeterm.Controls.Add(this.textDateCanadaEstTreatStartDate);
+			this.groupCanadaOrthoPredeterm.Enabled = false;
+			this.groupCanadaOrthoPredeterm.Location = new System.Drawing.Point(7,187);
+			this.groupCanadaOrthoPredeterm.Name = "groupCanadaOrthoPredeterm";
+			this.groupCanadaOrthoPredeterm.Size = new System.Drawing.Size(550,104);
+			this.groupCanadaOrthoPredeterm.TabIndex = 147;
+			this.groupCanadaOrthoPredeterm.TabStop = false;
+			this.groupCanadaOrthoPredeterm.Text = "Ortho Treatment (Predetermination Only)";
+			// 
+			// textCanadaExpectedPayCycle
+			// 
+			this.textCanadaExpectedPayCycle.Location = new System.Drawing.Point(196,75);
+			this.textCanadaExpectedPayCycle.Name = "textCanadaExpectedPayCycle";
+			this.textCanadaExpectedPayCycle.Size = new System.Drawing.Size(75,20);
+			this.textCanadaExpectedPayCycle.TabIndex = 158;
+			// 
+			// textCanadaAnticipatedPayAmount
+			// 
+			this.textCanadaAnticipatedPayAmount.Location = new System.Drawing.Point(466,75);
+			this.textCanadaAnticipatedPayAmount.Name = "textCanadaAnticipatedPayAmount";
+			this.textCanadaAnticipatedPayAmount.Size = new System.Drawing.Size(75,20);
+			this.textCanadaAnticipatedPayAmount.TabIndex = 157;
+			// 
+			// label82
+			// 
+			this.label82.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label82.Location = new System.Drawing.Point(280,74);
+			this.label82.Name = "label82";
+			this.label82.Size = new System.Drawing.Size(180,20);
+			this.label82.TabIndex = 156;
+			this.label82.Text = "Anticipated Pay Amount";
+			this.label82.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCanadaNumPaymentsAnticipated
+			// 
+			this.textCanadaNumPaymentsAnticipated.Location = new System.Drawing.Point(466,45);
+			this.textCanadaNumPaymentsAnticipated.Name = "textCanadaNumPaymentsAnticipated";
+			this.textCanadaNumPaymentsAnticipated.Size = new System.Drawing.Size(75,20);
+			this.textCanadaNumPaymentsAnticipated.TabIndex = 155;
+			// 
+			// label81
+			// 
+			this.label81.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label81.Location = new System.Drawing.Point(277,46);
+			this.label81.Name = "label81";
+			this.label81.Size = new System.Drawing.Size(183,20);
+			this.label81.TabIndex = 154;
+			this.label81.Text = "Number of Payments Anticipated";
+			this.label81.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCanadaTreatDuration
+			// 
+			this.textCanadaTreatDuration.Location = new System.Drawing.Point(466,19);
+			this.textCanadaTreatDuration.Name = "textCanadaTreatDuration";
+			this.textCanadaTreatDuration.Size = new System.Drawing.Size(75,20);
+			this.textCanadaTreatDuration.TabIndex = 153;
+			// 
+			// label80
+			// 
+			this.label80.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label80.Location = new System.Drawing.Point(280,19);
+			this.label80.Name = "label80";
+			this.label80.Size = new System.Drawing.Size(180,20);
+			this.label80.TabIndex = 152;
+			this.label80.Text = "Treatment Duration (Months)";
+			this.label80.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label79
+			// 
+			this.label79.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label79.Location = new System.Drawing.Point(8,74);
+			this.label79.Name = "label79";
+			this.label79.Size = new System.Drawing.Size(182,20);
+			this.label79.TabIndex = 150;
+			this.label79.Text = "Expected Payment Cycle (Months)";
+			this.label79.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCanadaInitialPayment
+			// 
+			this.textCanadaInitialPayment.Location = new System.Drawing.Point(196,46);
+			this.textCanadaInitialPayment.Name = "textCanadaInitialPayment";
+			this.textCanadaInitialPayment.Size = new System.Drawing.Size(75,20);
+			this.textCanadaInitialPayment.TabIndex = 149;
+			// 
+			// label78
+			// 
+			this.label78.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label78.Location = new System.Drawing.Point(8,45);
+			this.label78.Name = "label78";
+			this.label78.Size = new System.Drawing.Size(174,20);
+			this.label78.TabIndex = 141;
+			this.label78.Text = "Initial Payment";
+			this.label78.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label77
+			// 
+			this.label77.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label77.Location = new System.Drawing.Point(5,20);
+			this.label77.Name = "label77";
+			this.label77.Size = new System.Drawing.Size(177,20);
+			this.label77.TabIndex = 140;
+			this.label77.Text = "Estimated Treatment Start Date";
+			this.label77.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDateCanadaEstTreatStartDate
+			// 
+			this.textDateCanadaEstTreatStartDate.Location = new System.Drawing.Point(196,20);
+			this.textDateCanadaEstTreatStartDate.Name = "textDateCanadaEstTreatStartDate";
+			this.textDateCanadaEstTreatStartDate.Size = new System.Drawing.Size(75,20);
+			this.textDateCanadaEstTreatStartDate.TabIndex = 139;
+			// 
 			// label76
 			// 
 			this.label76.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label76.Location = new System.Drawing.Point(3,159);
+			this.label76.Location = new System.Drawing.Point(9,122);
 			this.label76.Name = "label76";
 			this.label76.Size = new System.Drawing.Size(82,16);
 			this.label76.TabIndex = 146;
 			this.label76.Text = "Trans Ref Num";
 			this.label76.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.label76.Visible = false;
-			// 
-			// textCanadaTransRefNum
-			// 
-			this.textCanadaTransRefNum.Enabled = false;
-			this.textCanadaTransRefNum.Location = new System.Drawing.Point(88,159);
-			this.textCanadaTransRefNum.Name = "textCanadaTransRefNum";
-			this.textCanadaTransRefNum.Size = new System.Drawing.Size(102,20);
-			this.textCanadaTransRefNum.TabIndex = 145;
-			this.textCanadaTransRefNum.Visible = false;
 			// 
 			// butReverse
 			// 
@@ -2338,7 +2488,7 @@ namespace OpenDental{
 			this.butReverse.CornerRadius = 4F;
 			this.butReverse.Enabled = false;
 			this.butReverse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butReverse.Location = new System.Drawing.Point(196,157);
+			this.butReverse.Location = new System.Drawing.Point(202,120);
 			this.butReverse.Name = "butReverse";
 			this.butReverse.Size = new System.Drawing.Size(59,24);
 			this.butReverse.TabIndex = 138;
@@ -2385,11 +2535,12 @@ namespace OpenDental{
 			// checkCanadianIsOrtho
 			// 
 			this.checkCanadianIsOrtho.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCanadianIsOrtho.Location = new System.Drawing.Point(28,115);
+			this.checkCanadianIsOrtho.Location = new System.Drawing.Point(36,158);
 			this.checkCanadianIsOrtho.Name = "checkCanadianIsOrtho";
 			this.checkCanadianIsOrtho.Size = new System.Drawing.Size(216,17);
 			this.checkCanadianIsOrtho.TabIndex = 140;
 			this.checkCanadianIsOrtho.Text = "Treatment Required for Ortho";
+			this.checkCanadianIsOrtho.Click += new System.EventHandler(this.checkCanadianIsOrtho_Click);
 			// 
 			// label43
 			// 
@@ -3111,7 +3262,6 @@ namespace OpenDental{
 			this.groupValueCodes.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tabGeneral.ResumeLayout(false);
-			this.tabGeneral.PerformLayout();
 			this.groupAccident.ResumeLayout(false);
 			this.groupAccident.PerformLayout();
 			this.groupAttachments.ResumeLayout(false);
@@ -3124,6 +3274,8 @@ namespace OpenDental{
 			this.groupBox1.PerformLayout();
 			this.tabCanadian.ResumeLayout(false);
 			this.tabCanadian.PerformLayout();
+			this.groupCanadaOrthoPredeterm.ResumeLayout(false);
+			this.groupCanadaOrthoPredeterm.PerformLayout();
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
 			this.groupBox7.ResumeLayout(false);
@@ -3161,7 +3313,6 @@ namespace OpenDental{
 					textCanadaTransRefNum.Enabled=true;
 					butReverse.Enabled=true;
 				}
-				textCanadaTransRefNum.Text=ClaimCur.CanadaTransRefNum;
 			}
 			else {
 				tabMain.TabPages.Remove(tabCanadian);
@@ -3431,6 +3582,29 @@ namespace OpenDental{
 					textAccidentDate.Text=ClaimCur.AccidentDate.ToShortDateString();
 				}
 				checkIsOrtho.Checked=ClaimCur.IsOrtho;
+			}
+			textCanadaTransRefNum.Text=ClaimCur.CanadaTransRefNum;
+			groupCanadaOrthoPredeterm.Enabled=ClaimCur.IsOrtho;
+			if(ClaimCur.CanadaEstTreatStartDate.Year<1880) {
+				textDateCanadaEstTreatStartDate.Text="";
+			}
+			else {
+				textDateCanadaEstTreatStartDate.Text=ClaimCur.CanadaEstTreatStartDate.ToShortDateString();
+			}
+			if(ClaimCur.CanadaInitialPayment==0) {
+				textCanadaInitialPayment.Text="";
+			}
+			else {
+				textCanadaInitialPayment.Text=ClaimCur.CanadaInitialPayment.ToString("F");
+			}
+			textCanadaExpectedPayCycle.Text=ClaimCur.CanadaPaymentMode.ToString("#");
+			textCanadaTreatDuration.Text=ClaimCur.CanadaTreatDuration.ToString("##");
+			textCanadaNumPaymentsAnticipated.Text=ClaimCur.CanadaNumAnticipatedPayments.ToString("##");
+			if(ClaimCur.CanadaAnticipatedPayAmount==0) {
+				textCanadaAnticipatedPayAmount.Text="";
+			}
+			else {
+				textCanadaAnticipatedPayAmount.Text=ClaimCur.CanadaAnticipatedPayAmount.ToString("F");
 			}
 			//attachments------------------
 			textRadiographs.Text=ClaimCur.Radiographs.ToString();
@@ -4530,6 +4704,10 @@ namespace OpenDental{
 			}
 		}
 
+		private void checkCanadianIsOrtho_Click(object sender,EventArgs e) {
+			groupCanadaOrthoPredeterm.Enabled=checkCanadianIsOrtho.Checked;
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;//jump straight to Closing, where the claimprocs will be changed
@@ -4860,6 +5038,53 @@ namespace OpenDental{
 					return false;
 				}
 			}
+			//Ortho Treatment------------------------------------------------------------------------------------------------------
+			if(checkCanadianIsOrtho.Checked) {
+				if(textDateCanadaEstTreatStartDate.errorProvider1.GetError(textDateCanadaEstTreatStartDate)!="") {
+					MsgBox.Show(this,"Please fix data entry errors first.");
+					return false;
+				}
+				try {
+					Double.Parse(textCanadaInitialPayment.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Invalid initial payment amount.");
+					return false;
+				}
+				byte payCycle=0;
+				try {
+					payCycle=byte.Parse(textCanadaExpectedPayCycle.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Invalid expected payment cycle.");
+					return false;
+				}
+				if(payCycle<1 || payCycle>4) {
+					MsgBox.Show(this,"Expected payment cycle must be a value between 1 and 4.");
+					return false;
+				}
+				try {
+					byte.Parse(textCanadaTreatDuration.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Invalid treatment duration.");
+					return false;
+				}
+				try {
+					byte.Parse(textCanadaNumPaymentsAnticipated.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Invalid number of payments anticipated.");
+					return false;
+				}
+				try {
+					Double.Parse(textCanadaAnticipatedPayAmount.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Invalid anticipated pay amount.");
+					return false;
+				}
+			}
 			return true;
 		}
 
@@ -5036,6 +5261,15 @@ namespace OpenDental{
 				}
 				ClaimCur.CanadianDateInitialLower=PIn.Date(textDateInitialLower.Text);
 				ClaimCur.CanadianMandProsthMaterial=(byte)comboMandProsthMaterial.SelectedIndex;
+				//ortho treatment
+				if(checkCanadianIsOrtho.Checked) {
+					ClaimCur.CanadaEstTreatStartDate=DateTime.Parse(textDateCanadaEstTreatStartDate.Text);
+					ClaimCur.CanadaInitialPayment=Double.Parse(textCanadaInitialPayment.Text);
+					ClaimCur.CanadaPaymentMode=byte.Parse(textCanadaExpectedPayCycle.Text);
+					ClaimCur.CanadaTreatDuration=byte.Parse(textCanadaTreatDuration.Text);
+					ClaimCur.CanadaNumAnticipatedPayments=byte.Parse(textCanadaNumPaymentsAnticipated.Text);
+					ClaimCur.CanadaAnticipatedPayAmount=Double.Parse(textCanadaAnticipatedPayAmount.Text);
+				}
 			}//End Canadian-----------------------------------------------------------------------------
 			else {
 				ClaimCur.AccidentDate=PIn.Date(textAccidentDate.Text);
