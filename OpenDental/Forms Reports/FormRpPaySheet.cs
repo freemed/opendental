@@ -454,12 +454,12 @@ clinic.Description,claimpayment.CheckNum";
 				whereClin+=") ";
 			}
 			string queryPat=
-				@"SELECT CONVERT("+DbHelper.DateFormatColumn("payment.PayDate","%c/%d/%Y")+",CHAR(25)) AS DatePay,"
-+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@" AS lfname,
+				@"SELECT CONVERT("+DbHelper.DateFormatColumn("payment.PayDate","%c/%d/%Y")+",CHAR(25)) AS DatePay,MAX("
++DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+@") AS lfname,
 payment.PayType,provider.Abbr,
 clinic.Description clinicDesc,
 payment.CheckNum,
-FORMAT(payment.PayAmt,2) amt, payment.PayNum,ItemName 
+FORMAT(SUM(paysplit.SplitAmt),2) amt, payment.PayNum,ItemName 
 FROM payment
 LEFT JOIN paysplit ON payment.PayNum=paysplit.PayNum
 LEFT JOIN patient ON payment.PatNum=patient.PatNum
@@ -481,12 +481,12 @@ WHERE 1 "
 				}
 				queryPat+=") ";
 			}
-			queryPat+=@"GROUP BY patient.LName,patient.FName,patient.MiddleI,"
-				+"payment.PayNum,payment.PayAmt,payment.PayDate,provider.ProvNum,payment.ClinicNum"
+			queryPat+=@"GROUP BY "
+				+"payment.PayNum,payment.PayDate,provider.ProvNum,payment.ClinicNum"
 				+",provider.Abbr,clinic.Description,payment.CheckNum,definition.ItemName";
-			//if(radioPatient.Checked){
-			//	queryPat+=",patient.PatNum";
-			//}
+			if(radioPatient.Checked){
+				queryPat+=",patient.PatNum";
+			}
 			queryPat+=" ORDER BY paysplit.DatePay,lfname";
 			if(!checkAllTypes.Checked && listTypes.SelectedIndices.Count==0){
 				queryPat=DbHelper.LimitOrderBy(queryPat,0);
