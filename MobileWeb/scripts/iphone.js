@@ -74,7 +74,7 @@ function TraversePage(){
 		var MoveToURL='#PatientList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 		$('#searchpatientbox').val('');
-	}); 
+	});
 
 	// a tap function is used instead of .live() for elements loaded by AJAX
 	// here the tap does not give an error with jQT.goTo(MoveToURL, 'slide')
@@ -104,9 +104,13 @@ function TraversePage(){
 	
 	$('#today').tap(function(e) {
 		//console.log('Today button tapped');
-		var UrlForFetchingData = 'AppointmentList.aspx'; 
+		/*
+        var UrlForFetchingData = 'AppointmentList.aspx'; 
 		var SectionToFill='#AppointmentListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
+        */
+		var MoveToURL = '#FilterPicker';
+		jQT.goTo(MoveToURL, 'slide');
 	});
 
 	$('#next').tap(function(e) {
@@ -133,7 +137,21 @@ function TraversePage(){
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList';
 		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
-	});
+    });
+
+    $("#datepicker").datepicker({
+        onSelect: function (dateText, datePickerInstance) {
+			var SelectedDate=$.datepicker.parseDate('mm/dd/yy', dateText);
+			var d=SelectedDate.getDate();
+			var m=SelectedDate.getMonth()+1; //getMonth() return 0 to 11
+			var y=SelectedDate.getFullYear();
+			var UrlForFetchingData = 'AppointmentList.aspx?year='+y+'&month='+m+'&day='+d; 
+			var SectionToFill='#AppointmentListContents';
+			var MoveToURL='#AppointmentList';
+			ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+        },
+        showButtonPanel: true
+    });
 	
 	$('.home').click(function(e) { // tap event logs out the user on ipod.
 		jQT.goToReverse('#home','slide');	

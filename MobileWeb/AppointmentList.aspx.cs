@@ -46,7 +46,6 @@ namespace MobileWeb {
 					}
 				}
 				DayLabel.Text=AppointmentDate.ToString("ddd") + ", " + AppointmentDate.ToString("MMM") + " " + AppointmentDate.ToString("dd");
-				String appsuffix=DayLabel.Text;
 				DateTime PreviousDate=AppointmentDate.AddDays(-1);
 				PreviousDateDay=PreviousDate.Day;
 				PreviousDateMonth=PreviousDate.Month;

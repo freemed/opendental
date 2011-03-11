@@ -14,7 +14,7 @@
 	</div>
 		<div class="datenavigation">
 			<a id="previous" linkattib="AppointmentList.aspx?year=<%Response.Write(PreviousDateYear);%>&month=<%Response.Write(PreviousDateMonth);%>&day=<%Response.Write(PreviousDateDay);%>"
-				href="#"><img src="css/themes/apple/img/listArrowSelFlipped.png" style="float:left;margin-top:4px;" /></a> <a class="button" id="today" href="#">Today</a>
+				href="#"><img src="css/themes/apple/img/listArrowSelFlipped.png" style="float:left;margin-top:4px;" /></a> <a class="button" id="today" href="#">&nbsp;.&nbsp;.&nbsp;.&nbsp;</a>
 			<asp:Label ID="DayLabel" runat="server" class="datestring" Text=""></asp:Label>
 			<a id="next" linkattib="AppointmentList.aspx?year=<%Response.Write(NextDateYear);%>&month=<%Response.Write(NextDateMonth);%>&day=<%Response.Write(NextDateDay);%>"
 				href="#"><img src="css/themes/apple/img/listArrowSel.png" style="float:right;margin-top:4px" /></a>

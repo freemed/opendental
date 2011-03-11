@@ -8,16 +8,22 @@
 		<% if (HttpContext.Current.IsDebuggingEnabled) { %>
         <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.css">
         <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css">
-        <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.css">
+		<link type="text/css" rel="stylesheet" media="screen" href="css/jqueryui/jquery.ui.all.css">
+		<link type="text/css" rel="stylesheet" media="screen" href="css/iphone.css">
         <script type="text/javascript" src="scripts/jquery.js"></script>
 		<script type="text/javascript" src="scripts/jqtouch.js"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.core.js"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.datepicker.js"></script>
 		<script type="text/javascript" src="scripts/iphone.js"></script>
 		<% } else { %>
           <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.min.css">
         <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css"><%--no minified version for this file--%>
         <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.min.css">
+		<link type="text/css" rel="stylesheet" media="screen" href="css/jqueryui/jquery.ui.all.min.css">
         <script type="text/javascript" src="scripts/jquery.min.js"></script>
 		<script type="text/javascript" src="scripts/jqtouch.min.js"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.core.min.js"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.datepicker.min.js"></script>
 		<script type="text/javascript" src="scripts/iphone.min.js"></script>
 		<% } %>
 		<script type="text/javascript">
@@ -89,6 +95,15 @@
             </div>
         </div>
 
+		 <div id="FilterPicker">
+            <div class="toolbar">
+                <h1>Date Picker</h1>
+                <a class="home" href="#">Home</a>
+            </div>
+            <div id="FilterPickerContents">
+				<div id="datepicker"></div>
+            </div>
+        </div>
 
         <div id="PatientList">
             <div class="toolbar">
