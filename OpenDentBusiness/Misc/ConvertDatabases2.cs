@@ -3691,7 +3691,78 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim ADD CanadaTransRefNum varchar2(255)";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CanadaEstTreatStartDate date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CanadaEstTreatStartDate date";
+					Db.NonQ(command);
+					command="UPDATE claim SET CanadaEstTreatStartDate = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE CanadaEstTreatStartDate IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CanadaEstTreatStartDate NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CanadaInitialPayment double NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CanadaInitialPayment number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE claim SET CanadaInitialPayment = 0 WHERE CanadaInitialPayment IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CanadaInitialPayment NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CanadaPaymentMode tinyint unsigned NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CanadaPaymentMode number(3)";
+					Db.NonQ(command);
+					command="UPDATE claim SET CanadaPaymentMode = 0 WHERE CanadaPaymentMode IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CanadaPaymentMode NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CanadaTreatDuration tinyint unsigned NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CanadaTreatDuration number(3)";
+					Db.NonQ(command);
+					command="UPDATE claim SET CanadaTreatDuration = 0 WHERE CanadaTreatDuration IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CanadaTreatDuration NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CanadaNumAnticipatedPayments tinyint unsigned NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CanadaNumAnticipatedPayments number(3)";
+					Db.NonQ(command);
+					command="UPDATE claim SET CanadaNumAnticipatedPayments = 0 WHERE CanadaNumAnticipatedPayments IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CanadaNumAnticipatedPayments NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CanadaAnticipatedPayAmount double NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CanadaAnticipatedPayAmount number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE claim SET CanadaAnticipatedPayAmount = 0 WHERE CanadaAnticipatedPayAmount IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CanadaAnticipatedPayAmount NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 

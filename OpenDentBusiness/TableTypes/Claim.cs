@@ -116,6 +116,18 @@ namespace OpenDentBusiness{
 		public long InsSubNum2;
 		//<summary>G01 assigne by carrier/network and returned in acks.  Used for claim reversal.</summary>
 		public string CanadaTransRefNum;
+		///<summary>F37 Used for predeterminations.</summary>
+		public DateTime CanadaEstTreatStartDate;
+		///<summary>F28 Used for predeterminations.</summary>
+		public double CanadaInitialPayment;
+		///<summary>F29 Used for predeterminations.</summary>
+		public byte CanadaPaymentMode;
+		///<summary>F30 Used for predeterminations.</summary>
+		public byte CanadaTreatDuration;
+		///<summary>F31 Used for predeterminations.</summary>
+		public byte CanadaNumAnticipatedPayments;
+		///<summary>F32 Used for predeterminations.</summary>
+		public double CanadaAnticipatedPayAmount;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

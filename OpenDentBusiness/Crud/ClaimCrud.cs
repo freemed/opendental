@@ -46,59 +46,65 @@ namespace OpenDentBusiness.Crud{
 			Claim claim;
 			for(int i=0;i<table.Rows.Count;i++) {
 				claim=new Claim();
-				claim.ClaimNum                   = PIn.Long  (table.Rows[i]["ClaimNum"].ToString());
-				claim.PatNum                     = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				claim.DateService                = PIn.Date  (table.Rows[i]["DateService"].ToString());
-				claim.DateSent                   = PIn.Date  (table.Rows[i]["DateSent"].ToString());
-				claim.ClaimStatus                = PIn.String(table.Rows[i]["ClaimStatus"].ToString());
-				claim.DateReceived               = PIn.Date  (table.Rows[i]["DateReceived"].ToString());
-				claim.PlanNum                    = PIn.Long  (table.Rows[i]["PlanNum"].ToString());
-				claim.ProvTreat                  = PIn.Long  (table.Rows[i]["ProvTreat"].ToString());
-				claim.ClaimFee                   = PIn.Double(table.Rows[i]["ClaimFee"].ToString());
-				claim.InsPayEst                  = PIn.Double(table.Rows[i]["InsPayEst"].ToString());
-				claim.InsPayAmt                  = PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
-				claim.DedApplied                 = PIn.Double(table.Rows[i]["DedApplied"].ToString());
-				claim.PreAuthString              = PIn.String(table.Rows[i]["PreAuthString"].ToString());
-				claim.IsProsthesis               = PIn.String(table.Rows[i]["IsProsthesis"].ToString());
-				claim.PriorDate                  = PIn.Date  (table.Rows[i]["PriorDate"].ToString());
-				claim.ReasonUnderPaid            = PIn.String(table.Rows[i]["ReasonUnderPaid"].ToString());
-				claim.ClaimNote                  = PIn.String(table.Rows[i]["ClaimNote"].ToString());
-				claim.ClaimType                  = PIn.String(table.Rows[i]["ClaimType"].ToString());
-				claim.ProvBill                   = PIn.Long  (table.Rows[i]["ProvBill"].ToString());
-				claim.ReferringProv              = PIn.Long  (table.Rows[i]["ReferringProv"].ToString());
-				claim.RefNumString               = PIn.String(table.Rows[i]["RefNumString"].ToString());
-				claim.PlaceService               = (PlaceOfService)PIn.Int(table.Rows[i]["PlaceService"].ToString());
-				claim.AccidentRelated            = PIn.String(table.Rows[i]["AccidentRelated"].ToString());
-				claim.AccidentDate               = PIn.Date  (table.Rows[i]["AccidentDate"].ToString());
-				claim.AccidentST                 = PIn.String(table.Rows[i]["AccidentST"].ToString());
-				claim.EmployRelated              = (YN)PIn.Int(table.Rows[i]["EmployRelated"].ToString());
-				claim.IsOrtho                    = PIn.Bool  (table.Rows[i]["IsOrtho"].ToString());
-				claim.OrthoRemainM               = PIn.Byte  (table.Rows[i]["OrthoRemainM"].ToString());
-				claim.OrthoDate                  = PIn.Date  (table.Rows[i]["OrthoDate"].ToString());
-				claim.PatRelat                   = (Relat)PIn.Int(table.Rows[i]["PatRelat"].ToString());
-				claim.PlanNum2                   = PIn.Long  (table.Rows[i]["PlanNum2"].ToString());
-				claim.PatRelat2                  = (Relat)PIn.Int(table.Rows[i]["PatRelat2"].ToString());
-				claim.WriteOff                   = PIn.Double(table.Rows[i]["WriteOff"].ToString());
-				claim.Radiographs                = PIn.Byte  (table.Rows[i]["Radiographs"].ToString());
-				claim.ClinicNum                  = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
-				claim.ClaimForm                  = PIn.Long  (table.Rows[i]["ClaimForm"].ToString());
-				claim.EFormat                    = (EtransType)PIn.Int(table.Rows[i]["EFormat"].ToString());
-				claim.AttachedImages             = PIn.Int   (table.Rows[i]["AttachedImages"].ToString());
-				claim.AttachedModels             = PIn.Int   (table.Rows[i]["AttachedModels"].ToString());
-				claim.AttachedFlags              = PIn.String(table.Rows[i]["AttachedFlags"].ToString());
-				claim.AttachmentID               = PIn.String(table.Rows[i]["AttachmentID"].ToString());
-				claim.CanadianMaterialsForwarded = PIn.String(table.Rows[i]["CanadianMaterialsForwarded"].ToString());
-				claim.CanadianReferralProviderNum= PIn.String(table.Rows[i]["CanadianReferralProviderNum"].ToString());
-				claim.CanadianReferralReason     = PIn.Byte  (table.Rows[i]["CanadianReferralReason"].ToString());
-				claim.CanadianIsInitialLower     = PIn.String(table.Rows[i]["CanadianIsInitialLower"].ToString());
-				claim.CanadianDateInitialLower   = PIn.Date  (table.Rows[i]["CanadianDateInitialLower"].ToString());
-				claim.CanadianMandProsthMaterial = PIn.Byte  (table.Rows[i]["CanadianMandProsthMaterial"].ToString());
-				claim.CanadianIsInitialUpper     = PIn.String(table.Rows[i]["CanadianIsInitialUpper"].ToString());
-				claim.CanadianDateInitialUpper   = PIn.Date  (table.Rows[i]["CanadianDateInitialUpper"].ToString());
-				claim.CanadianMaxProsthMaterial  = PIn.Byte  (table.Rows[i]["CanadianMaxProsthMaterial"].ToString());
-				claim.InsSubNum                  = PIn.Long  (table.Rows[i]["InsSubNum"].ToString());
-				claim.InsSubNum2                 = PIn.Long  (table.Rows[i]["InsSubNum2"].ToString());
-				claim.CanadaTransRefNum          = PIn.String(table.Rows[i]["CanadaTransRefNum"].ToString());
+				claim.ClaimNum                    = PIn.Long  (table.Rows[i]["ClaimNum"].ToString());
+				claim.PatNum                      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				claim.DateService                 = PIn.Date  (table.Rows[i]["DateService"].ToString());
+				claim.DateSent                    = PIn.Date  (table.Rows[i]["DateSent"].ToString());
+				claim.ClaimStatus                 = PIn.String(table.Rows[i]["ClaimStatus"].ToString());
+				claim.DateReceived                = PIn.Date  (table.Rows[i]["DateReceived"].ToString());
+				claim.PlanNum                     = PIn.Long  (table.Rows[i]["PlanNum"].ToString());
+				claim.ProvTreat                   = PIn.Long  (table.Rows[i]["ProvTreat"].ToString());
+				claim.ClaimFee                    = PIn.Double(table.Rows[i]["ClaimFee"].ToString());
+				claim.InsPayEst                   = PIn.Double(table.Rows[i]["InsPayEst"].ToString());
+				claim.InsPayAmt                   = PIn.Double(table.Rows[i]["InsPayAmt"].ToString());
+				claim.DedApplied                  = PIn.Double(table.Rows[i]["DedApplied"].ToString());
+				claim.PreAuthString               = PIn.String(table.Rows[i]["PreAuthString"].ToString());
+				claim.IsProsthesis                = PIn.String(table.Rows[i]["IsProsthesis"].ToString());
+				claim.PriorDate                   = PIn.Date  (table.Rows[i]["PriorDate"].ToString());
+				claim.ReasonUnderPaid             = PIn.String(table.Rows[i]["ReasonUnderPaid"].ToString());
+				claim.ClaimNote                   = PIn.String(table.Rows[i]["ClaimNote"].ToString());
+				claim.ClaimType                   = PIn.String(table.Rows[i]["ClaimType"].ToString());
+				claim.ProvBill                    = PIn.Long  (table.Rows[i]["ProvBill"].ToString());
+				claim.ReferringProv               = PIn.Long  (table.Rows[i]["ReferringProv"].ToString());
+				claim.RefNumString                = PIn.String(table.Rows[i]["RefNumString"].ToString());
+				claim.PlaceService                = (PlaceOfService)PIn.Int(table.Rows[i]["PlaceService"].ToString());
+				claim.AccidentRelated             = PIn.String(table.Rows[i]["AccidentRelated"].ToString());
+				claim.AccidentDate                = PIn.Date  (table.Rows[i]["AccidentDate"].ToString());
+				claim.AccidentST                  = PIn.String(table.Rows[i]["AccidentST"].ToString());
+				claim.EmployRelated               = (YN)PIn.Int(table.Rows[i]["EmployRelated"].ToString());
+				claim.IsOrtho                     = PIn.Bool  (table.Rows[i]["IsOrtho"].ToString());
+				claim.OrthoRemainM                = PIn.Byte  (table.Rows[i]["OrthoRemainM"].ToString());
+				claim.OrthoDate                   = PIn.Date  (table.Rows[i]["OrthoDate"].ToString());
+				claim.PatRelat                    = (Relat)PIn.Int(table.Rows[i]["PatRelat"].ToString());
+				claim.PlanNum2                    = PIn.Long  (table.Rows[i]["PlanNum2"].ToString());
+				claim.PatRelat2                   = (Relat)PIn.Int(table.Rows[i]["PatRelat2"].ToString());
+				claim.WriteOff                    = PIn.Double(table.Rows[i]["WriteOff"].ToString());
+				claim.Radiographs                 = PIn.Byte  (table.Rows[i]["Radiographs"].ToString());
+				claim.ClinicNum                   = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				claim.ClaimForm                   = PIn.Long  (table.Rows[i]["ClaimForm"].ToString());
+				claim.EFormat                     = (EtransType)PIn.Int(table.Rows[i]["EFormat"].ToString());
+				claim.AttachedImages              = PIn.Int   (table.Rows[i]["AttachedImages"].ToString());
+				claim.AttachedModels              = PIn.Int   (table.Rows[i]["AttachedModels"].ToString());
+				claim.AttachedFlags               = PIn.String(table.Rows[i]["AttachedFlags"].ToString());
+				claim.AttachmentID                = PIn.String(table.Rows[i]["AttachmentID"].ToString());
+				claim.CanadianMaterialsForwarded  = PIn.String(table.Rows[i]["CanadianMaterialsForwarded"].ToString());
+				claim.CanadianReferralProviderNum = PIn.String(table.Rows[i]["CanadianReferralProviderNum"].ToString());
+				claim.CanadianReferralReason      = PIn.Byte  (table.Rows[i]["CanadianReferralReason"].ToString());
+				claim.CanadianIsInitialLower      = PIn.String(table.Rows[i]["CanadianIsInitialLower"].ToString());
+				claim.CanadianDateInitialLower    = PIn.Date  (table.Rows[i]["CanadianDateInitialLower"].ToString());
+				claim.CanadianMandProsthMaterial  = PIn.Byte  (table.Rows[i]["CanadianMandProsthMaterial"].ToString());
+				claim.CanadianIsInitialUpper      = PIn.String(table.Rows[i]["CanadianIsInitialUpper"].ToString());
+				claim.CanadianDateInitialUpper    = PIn.Date  (table.Rows[i]["CanadianDateInitialUpper"].ToString());
+				claim.CanadianMaxProsthMaterial   = PIn.Byte  (table.Rows[i]["CanadianMaxProsthMaterial"].ToString());
+				claim.InsSubNum                   = PIn.Long  (table.Rows[i]["InsSubNum"].ToString());
+				claim.InsSubNum2                  = PIn.Long  (table.Rows[i]["InsSubNum2"].ToString());
+				claim.CanadaTransRefNum           = PIn.String(table.Rows[i]["CanadaTransRefNum"].ToString());
+				claim.CanadaEstTreatStartDate     = PIn.Date  (table.Rows[i]["CanadaEstTreatStartDate"].ToString());
+				claim.CanadaInitialPayment        = PIn.Double(table.Rows[i]["CanadaInitialPayment"].ToString());
+				claim.CanadaPaymentMode           = PIn.Byte  (table.Rows[i]["CanadaPaymentMode"].ToString());
+				claim.CanadaTreatDuration         = PIn.Byte  (table.Rows[i]["CanadaTreatDuration"].ToString());
+				claim.CanadaNumAnticipatedPayments= PIn.Byte  (table.Rows[i]["CanadaNumAnticipatedPayments"].ToString());
+				claim.CanadaAnticipatedPayAmount  = PIn.Double(table.Rows[i]["CanadaAnticipatedPayAmount"].ToString());
 				retVal.Add(claim);
 			}
 			return retVal;
@@ -139,7 +145,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClaimNum,";
 			}
-			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2,CanadaTransRefNum) VALUES(";
+			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2,CanadaTransRefNum,CanadaEstTreatStartDate,CanadaInitialPayment,CanadaPaymentMode,CanadaTreatDuration,CanadaNumAnticipatedPayments,CanadaAnticipatedPayAmount) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(claim.ClaimNum)+",";
 			}
@@ -195,7 +201,13 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (claim.CanadianMaxProsthMaterial)+","
 				+    POut.Long  (claim.InsSubNum)+","
 				+    POut.Long  (claim.InsSubNum2)+","
-				+"'"+POut.String(claim.CanadaTransRefNum)+"')";
+				+"'"+POut.String(claim.CanadaTransRefNum)+"',"
+				+    POut.Date  (claim.CanadaEstTreatStartDate)+","
+				+"'"+POut.Double(claim.CanadaInitialPayment)+"',"
+				+    POut.Byte  (claim.CanadaPaymentMode)+","
+				+    POut.Byte  (claim.CanadaTreatDuration)+","
+				+    POut.Byte  (claim.CanadaNumAnticipatedPayments)+","
+				+"'"+POut.Double(claim.CanadaAnticipatedPayAmount)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -208,58 +220,64 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Claim in the database.</summary>
 		internal static void Update(Claim claim){
 			string command="UPDATE claim SET "
-				+"PatNum                     =  "+POut.Long  (claim.PatNum)+", "
-				+"DateService                =  "+POut.Date  (claim.DateService)+", "
-				+"DateSent                   =  "+POut.Date  (claim.DateSent)+", "
-				+"ClaimStatus                = '"+POut.String(claim.ClaimStatus)+"', "
-				+"DateReceived               =  "+POut.Date  (claim.DateReceived)+", "
-				+"PlanNum                    =  "+POut.Long  (claim.PlanNum)+", "
-				+"ProvTreat                  =  "+POut.Long  (claim.ProvTreat)+", "
-				+"ClaimFee                   = '"+POut.Double(claim.ClaimFee)+"', "
-				+"InsPayEst                  = '"+POut.Double(claim.InsPayEst)+"', "
-				+"InsPayAmt                  = '"+POut.Double(claim.InsPayAmt)+"', "
-				+"DedApplied                 = '"+POut.Double(claim.DedApplied)+"', "
-				+"PreAuthString              = '"+POut.String(claim.PreAuthString)+"', "
-				+"IsProsthesis               = '"+POut.String(claim.IsProsthesis)+"', "
-				+"PriorDate                  =  "+POut.Date  (claim.PriorDate)+", "
-				+"ReasonUnderPaid            = '"+POut.String(claim.ReasonUnderPaid)+"', "
-				+"ClaimNote                  = '"+POut.String(claim.ClaimNote)+"', "
-				+"ClaimType                  = '"+POut.String(claim.ClaimType)+"', "
-				+"ProvBill                   =  "+POut.Long  (claim.ProvBill)+", "
-				+"ReferringProv              =  "+POut.Long  (claim.ReferringProv)+", "
-				+"RefNumString               = '"+POut.String(claim.RefNumString)+"', "
-				+"PlaceService               =  "+POut.Int   ((int)claim.PlaceService)+", "
-				+"AccidentRelated            = '"+POut.String(claim.AccidentRelated)+"', "
-				+"AccidentDate               =  "+POut.Date  (claim.AccidentDate)+", "
-				+"AccidentST                 = '"+POut.String(claim.AccidentST)+"', "
-				+"EmployRelated              =  "+POut.Int   ((int)claim.EmployRelated)+", "
-				+"IsOrtho                    =  "+POut.Bool  (claim.IsOrtho)+", "
-				+"OrthoRemainM               =  "+POut.Byte  (claim.OrthoRemainM)+", "
-				+"OrthoDate                  =  "+POut.Date  (claim.OrthoDate)+", "
-				+"PatRelat                   =  "+POut.Int   ((int)claim.PatRelat)+", "
-				+"PlanNum2                   =  "+POut.Long  (claim.PlanNum2)+", "
-				+"PatRelat2                  =  "+POut.Int   ((int)claim.PatRelat2)+", "
-				+"WriteOff                   = '"+POut.Double(claim.WriteOff)+"', "
-				+"Radiographs                =  "+POut.Byte  (claim.Radiographs)+", "
-				+"ClinicNum                  =  "+POut.Long  (claim.ClinicNum)+", "
-				+"ClaimForm                  =  "+POut.Long  (claim.ClaimForm)+", "
-				+"EFormat                    =  "+POut.Int   ((int)claim.EFormat)+", "
-				+"AttachedImages             =  "+POut.Int   (claim.AttachedImages)+", "
-				+"AttachedModels             =  "+POut.Int   (claim.AttachedModels)+", "
-				+"AttachedFlags              = '"+POut.String(claim.AttachedFlags)+"', "
-				+"AttachmentID               = '"+POut.String(claim.AttachmentID)+"', "
-				+"CanadianMaterialsForwarded = '"+POut.String(claim.CanadianMaterialsForwarded)+"', "
-				+"CanadianReferralProviderNum= '"+POut.String(claim.CanadianReferralProviderNum)+"', "
-				+"CanadianReferralReason     =  "+POut.Byte  (claim.CanadianReferralReason)+", "
-				+"CanadianIsInitialLower     = '"+POut.String(claim.CanadianIsInitialLower)+"', "
-				+"CanadianDateInitialLower   =  "+POut.Date  (claim.CanadianDateInitialLower)+", "
-				+"CanadianMandProsthMaterial =  "+POut.Byte  (claim.CanadianMandProsthMaterial)+", "
-				+"CanadianIsInitialUpper     = '"+POut.String(claim.CanadianIsInitialUpper)+"', "
-				+"CanadianDateInitialUpper   =  "+POut.Date  (claim.CanadianDateInitialUpper)+", "
-				+"CanadianMaxProsthMaterial  =  "+POut.Byte  (claim.CanadianMaxProsthMaterial)+", "
-				+"InsSubNum                  =  "+POut.Long  (claim.InsSubNum)+", "
-				+"InsSubNum2                 =  "+POut.Long  (claim.InsSubNum2)+", "
-				+"CanadaTransRefNum          = '"+POut.String(claim.CanadaTransRefNum)+"' "
+				+"PatNum                      =  "+POut.Long  (claim.PatNum)+", "
+				+"DateService                 =  "+POut.Date  (claim.DateService)+", "
+				+"DateSent                    =  "+POut.Date  (claim.DateSent)+", "
+				+"ClaimStatus                 = '"+POut.String(claim.ClaimStatus)+"', "
+				+"DateReceived                =  "+POut.Date  (claim.DateReceived)+", "
+				+"PlanNum                     =  "+POut.Long  (claim.PlanNum)+", "
+				+"ProvTreat                   =  "+POut.Long  (claim.ProvTreat)+", "
+				+"ClaimFee                    = '"+POut.Double(claim.ClaimFee)+"', "
+				+"InsPayEst                   = '"+POut.Double(claim.InsPayEst)+"', "
+				+"InsPayAmt                   = '"+POut.Double(claim.InsPayAmt)+"', "
+				+"DedApplied                  = '"+POut.Double(claim.DedApplied)+"', "
+				+"PreAuthString               = '"+POut.String(claim.PreAuthString)+"', "
+				+"IsProsthesis                = '"+POut.String(claim.IsProsthesis)+"', "
+				+"PriorDate                   =  "+POut.Date  (claim.PriorDate)+", "
+				+"ReasonUnderPaid             = '"+POut.String(claim.ReasonUnderPaid)+"', "
+				+"ClaimNote                   = '"+POut.String(claim.ClaimNote)+"', "
+				+"ClaimType                   = '"+POut.String(claim.ClaimType)+"', "
+				+"ProvBill                    =  "+POut.Long  (claim.ProvBill)+", "
+				+"ReferringProv               =  "+POut.Long  (claim.ReferringProv)+", "
+				+"RefNumString                = '"+POut.String(claim.RefNumString)+"', "
+				+"PlaceService                =  "+POut.Int   ((int)claim.PlaceService)+", "
+				+"AccidentRelated             = '"+POut.String(claim.AccidentRelated)+"', "
+				+"AccidentDate                =  "+POut.Date  (claim.AccidentDate)+", "
+				+"AccidentST                  = '"+POut.String(claim.AccidentST)+"', "
+				+"EmployRelated               =  "+POut.Int   ((int)claim.EmployRelated)+", "
+				+"IsOrtho                     =  "+POut.Bool  (claim.IsOrtho)+", "
+				+"OrthoRemainM                =  "+POut.Byte  (claim.OrthoRemainM)+", "
+				+"OrthoDate                   =  "+POut.Date  (claim.OrthoDate)+", "
+				+"PatRelat                    =  "+POut.Int   ((int)claim.PatRelat)+", "
+				+"PlanNum2                    =  "+POut.Long  (claim.PlanNum2)+", "
+				+"PatRelat2                   =  "+POut.Int   ((int)claim.PatRelat2)+", "
+				+"WriteOff                    = '"+POut.Double(claim.WriteOff)+"', "
+				+"Radiographs                 =  "+POut.Byte  (claim.Radiographs)+", "
+				+"ClinicNum                   =  "+POut.Long  (claim.ClinicNum)+", "
+				+"ClaimForm                   =  "+POut.Long  (claim.ClaimForm)+", "
+				+"EFormat                     =  "+POut.Int   ((int)claim.EFormat)+", "
+				+"AttachedImages              =  "+POut.Int   (claim.AttachedImages)+", "
+				+"AttachedModels              =  "+POut.Int   (claim.AttachedModels)+", "
+				+"AttachedFlags               = '"+POut.String(claim.AttachedFlags)+"', "
+				+"AttachmentID                = '"+POut.String(claim.AttachmentID)+"', "
+				+"CanadianMaterialsForwarded  = '"+POut.String(claim.CanadianMaterialsForwarded)+"', "
+				+"CanadianReferralProviderNum = '"+POut.String(claim.CanadianReferralProviderNum)+"', "
+				+"CanadianReferralReason      =  "+POut.Byte  (claim.CanadianReferralReason)+", "
+				+"CanadianIsInitialLower      = '"+POut.String(claim.CanadianIsInitialLower)+"', "
+				+"CanadianDateInitialLower    =  "+POut.Date  (claim.CanadianDateInitialLower)+", "
+				+"CanadianMandProsthMaterial  =  "+POut.Byte  (claim.CanadianMandProsthMaterial)+", "
+				+"CanadianIsInitialUpper      = '"+POut.String(claim.CanadianIsInitialUpper)+"', "
+				+"CanadianDateInitialUpper    =  "+POut.Date  (claim.CanadianDateInitialUpper)+", "
+				+"CanadianMaxProsthMaterial   =  "+POut.Byte  (claim.CanadianMaxProsthMaterial)+", "
+				+"InsSubNum                   =  "+POut.Long  (claim.InsSubNum)+", "
+				+"InsSubNum2                  =  "+POut.Long  (claim.InsSubNum2)+", "
+				+"CanadaTransRefNum           = '"+POut.String(claim.CanadaTransRefNum)+"', "
+				+"CanadaEstTreatStartDate     =  "+POut.Date  (claim.CanadaEstTreatStartDate)+", "
+				+"CanadaInitialPayment        = '"+POut.Double(claim.CanadaInitialPayment)+"', "
+				+"CanadaPaymentMode           =  "+POut.Byte  (claim.CanadaPaymentMode)+", "
+				+"CanadaTreatDuration         =  "+POut.Byte  (claim.CanadaTreatDuration)+", "
+				+"CanadaNumAnticipatedPayments=  "+POut.Byte  (claim.CanadaNumAnticipatedPayments)+", "
+				+"CanadaAnticipatedPayAmount  = '"+POut.Double(claim.CanadaAnticipatedPayAmount)+"' "
 				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum);
 			Db.NonQ(command);
 		}
@@ -474,6 +492,30 @@ namespace OpenDentBusiness.Crud{
 			if(claim.CanadaTransRefNum != oldClaim.CanadaTransRefNum) {
 				if(command!=""){ command+=",";}
 				command+="CanadaTransRefNum = '"+POut.String(claim.CanadaTransRefNum)+"'";
+			}
+			if(claim.CanadaEstTreatStartDate != oldClaim.CanadaEstTreatStartDate) {
+				if(command!=""){ command+=",";}
+				command+="CanadaEstTreatStartDate = "+POut.Date(claim.CanadaEstTreatStartDate)+"";
+			}
+			if(claim.CanadaInitialPayment != oldClaim.CanadaInitialPayment) {
+				if(command!=""){ command+=",";}
+				command+="CanadaInitialPayment = '"+POut.Double(claim.CanadaInitialPayment)+"'";
+			}
+			if(claim.CanadaPaymentMode != oldClaim.CanadaPaymentMode) {
+				if(command!=""){ command+=",";}
+				command+="CanadaPaymentMode = "+POut.Byte(claim.CanadaPaymentMode)+"";
+			}
+			if(claim.CanadaTreatDuration != oldClaim.CanadaTreatDuration) {
+				if(command!=""){ command+=",";}
+				command+="CanadaTreatDuration = "+POut.Byte(claim.CanadaTreatDuration)+"";
+			}
+			if(claim.CanadaNumAnticipatedPayments != oldClaim.CanadaNumAnticipatedPayments) {
+				if(command!=""){ command+=",";}
+				command+="CanadaNumAnticipatedPayments = "+POut.Byte(claim.CanadaNumAnticipatedPayments)+"";
+			}
+			if(claim.CanadaAnticipatedPayAmount != oldClaim.CanadaAnticipatedPayAmount) {
+				if(command!=""){ command+=",";}
+				command+="CanadaAnticipatedPayAmount = '"+POut.Double(claim.CanadaAnticipatedPayAmount)+"'";
 			}
 			if(command==""){
 				return;
