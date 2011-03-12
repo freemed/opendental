@@ -213,49 +213,52 @@ namespace OpenDental {
 		}
 
 		///<summary>This ONLY runs when first opening the program.  Gets run early in the sequence. Returns false if the program should exit.</summary>
-		public static bool CheckMySqlVersion41() {
-			if(DataConnection.DBtype!=DatabaseType.MySql){
+		public static bool CheckMySqlVersion() {
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return true;
 			}
 			string thisVersion=MiscData.GetMySqlVersion();
 			float floatVersion=PIn.Float(thisVersion.Substring(0,3));
-			if(floatVersion >= 5.0f){
-			//if(thisVersion.Substring(0,3)=="4.1"
-			//	|| thisVersion.Substring(0,3)=="5.0"
-			//	|| thisVersion.Substring(0,3)=="5.1")
-			//{
-				if(PrefC.ContainsKey("DatabaseConvertedForMySql41"))
-				//&& GetBool("DatabaseConvertedForMySql41"))
-				{
-					return true;//already converted
-				}
-				if(!MsgBox.Show("Prefs",true,"Your database will now be converted for use with MySQL 4.1.")) {
-					Application.Exit();
-					return false;
-				}
-				//ClassConvertDatabase CCD=new ClassConvertDatabase();
-				try {
-					MiscData.MakeABackup();
-				}
-				catch(Exception e) {
-					if(e.Message!="") {
-						MessageBox.Show(e.Message);
-					}
-					MsgBox.Show("Prefs","Backup failed. Your database has not been altered.");
-					Application.Exit();
-					return false;//but this should never happen
-				}
-				MessageBox.Show("Backup performed");
-				Prefs.ConvertToMySqlVersion41();
-				MessageBox.Show("converted");
-				//Refresh();
-			}
-			else {
+			if(floatVersion < 5.0f) {
+				//We will force users to upgrade to 5.0, but not yet to 5.5
 				MessageBox.Show(Lan.g("Prefs","Your version of MySQL won't work with this program")+": "+thisVersion
 					+".  "+Lan.g("Prefs","You should upgrade to MySQL 5.0 using the installer on our website."));
 				Application.Exit();
 				return false;
 			}
+			if(!PrefC.ContainsKey("MySqlVersion")) {//db has not yet been updated to store this pref
+				//We're going to skip this.  We will recommend that people first upgrade OD, then MySQL, so this won't be an issue.
+			}
+			else if(Prefs.UpdateString(PrefName.MySqlVersion,floatVersion.ToString("f1"))) {
+				if(!MsgBox.Show("Prefs",MsgBoxButtons.OKCancel,"Tables will now be optimized.  This will take a minute or two.")) {
+					Application.Exit();
+					return false;
+				}
+				DatabaseMaintenance.RepairAndOptimize();
+			}
+			if(PrefC.ContainsKey("DatabaseConvertedForMySql41")) {
+				return true;//already converted
+			}
+			if(!MsgBox.Show("Prefs",true,"Your database will now be converted for use with MySQL 4.1.")) {
+				Application.Exit();
+				return false;
+			}
+			//ClassConvertDatabase CCD=new ClassConvertDatabase();
+			try {
+				MiscData.MakeABackup();
+			}
+			catch(Exception e) {
+				if(e.Message!="") {
+					MessageBox.Show(e.Message);
+				}
+				MsgBox.Show("Prefs","Backup failed. Your database has not been altered.");
+				Application.Exit();
+				return false;//but this should never happen
+			}
+			MessageBox.Show("Backup performed");
+			Prefs.ConvertToMySqlVersion41();
+			MessageBox.Show("converted");
+			//Refresh();
 			return true;
 		}
 

@@ -28,6 +28,7 @@ namespace OpenDental {
 		private CheckBox checkShow;
 		private UI.Button butFix;
 		private UI.Button butInsPayFix;
+		private UI.Button butOptimize;
 		private OpenDental.UI.Button butPrint;
 
 		///<summary></summary>
@@ -72,6 +73,7 @@ namespace OpenDental {
 			this.butPrint = new OpenDental.UI.Button();
 			this.butFix = new OpenDental.UI.Button();
 			this.butInsPayFix = new OpenDental.UI.Button();
+			this.butOptimize = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -155,7 +157,7 @@ namespace OpenDental {
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(298,631);
+			this.butPrint.Location = new System.Drawing.Point(190,631);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(87,26);
 			this.butPrint.TabIndex = 18;
@@ -192,12 +194,28 @@ namespace OpenDental {
 			this.butInsPayFix.Text = "Ins Pay Fix";
 			this.butInsPayFix.Click += new System.EventHandler(this.butInsPayFix_Click);
 			// 
+			// butOptimize
+			// 
+			this.butOptimize.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOptimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOptimize.Autosize = true;
+			this.butOptimize.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOptimize.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOptimize.CornerRadius = 4F;
+			this.butOptimize.Location = new System.Drawing.Point(343,631);
+			this.butOptimize.Name = "butOptimize";
+			this.butOptimize.Size = new System.Drawing.Size(87,26);
+			this.butOptimize.TabIndex = 23;
+			this.butOptimize.Text = "Optimize";
+			this.butOptimize.Click += new System.EventHandler(this.butOptimize_Click);
+			// 
 			// FormDatabaseMaintenance
 			// 
 			this.AcceptButton = this.buttonCheck;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(895,667);
+			this.Controls.Add(this.butOptimize);
 			this.Controls.Add(this.butInsPayFix);
 			this.Controls.Add(this.butFix);
 			this.Controls.Add(this.butPrint);
@@ -227,6 +245,15 @@ namespace OpenDental {
 
 		private void FormDatabaseMaintenance_Load(object sender,System.EventArgs e) {
 
+		}
+
+		private void butOptimize_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			textLog.Text=DateTime.Now.ToString()+"\r\n";
+			DatabaseMaintenance.RepairAndOptimize();
+			textLog.Text+=Lan.g("FormDatabaseMaintenance","Optimization Done");
+			SaveLogToFile();
+			Cursor=Cursors.Default;
 		}
 
 		private void buttonCheck_Click(object sender,System.EventArgs e) {

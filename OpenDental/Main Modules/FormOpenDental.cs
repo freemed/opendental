@@ -1530,7 +1530,7 @@ namespace OpenDental{
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
 		private bool PrefsStartup(){
 			Cache.Refresh(InvalidType.Prefs);
-			if(!PrefL.CheckMySqlVersion41()){
+			if(!PrefL.CheckMySqlVersion()){
 				return false;
 			}
 			if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -2825,6 +2825,7 @@ namespace OpenDental{
 			TaskGoTo(FormT.GotoType,FormT.GotoKeyNum);
 		}
 
+		///<summary>Gives users 15 seconds to finish what they were doing before the program shuts down.</summary>
 		private void KillThread() {
 			//Application.DoEvents();
 			DateTime now=DateTime.Now;
@@ -4429,17 +4430,20 @@ namespace OpenDental{
 		/// <summary>This is set to 30 seconds</summary>
 		private void timerWebHostSynch_Tick(object sender,EventArgs e) {
 			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
-			if(interval=="" || interval=="0") {
+			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
 				return;
 			}
-			if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
+			 if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
+				//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
 				return;
 			}
 			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
 				//full synch never run
 				return;
 			}
-			//I don't think this is good enough.  It will lock up the UI.  Need a thread
+			//I don't think this is good enough.  I think I need to move the thread out here so I can get rid of it when program closes.
+
+
 			FormMobile.SynchFromMain();
 		}
 

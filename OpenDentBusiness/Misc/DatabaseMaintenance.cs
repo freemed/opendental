@@ -71,6 +71,27 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		///<summary>This is currently called whenever mysql is upgraded.  There's also a button in dbm window.  Needs to be made more elegant.</summary>
+		public static void RepairAndOptimize() {
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
+				return;
+			}
+			command="SHOW TABLES";
+			table=Db.GetTable(command);
+			string[] tableNames=new string[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++) {
+				tableNames[i]=table.Rows[i][0].ToString();
+			}
+			for(int i=0;i<tableNames.Length;i++) {
+				command="REPAIR TABLE `"+tableNames[i]+"`";
+				Db.NonQ(command);
+			}
+			for(int i=0;i<tableNames.Length;i++) {
+				command="OPTIMIZE TABLE `"+tableNames[i]+"`";
+				Db.NonQ(command);
+			}
+		}
+
 		public static string DatesNoZeros(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
