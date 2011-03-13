@@ -45,7 +45,12 @@ namespace OpenDental {
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-			SavePrefs();
+			Cursor=Cursors.WaitCursor;
+			if(!SavePrefs()) {
+				Cursor=Cursors.Default;
+				return;
+			}
+			Cursor=Cursors.Default;
 			MsgBox.Show(this,"Done");
 		}
 
@@ -63,6 +68,7 @@ namespace OpenDental {
 				return false;
 			}
 			if(!TestWebServiceExists()) {
+				MsgBox.Show(this,"Web service not found.");
 				return false;
 			}
 			if(mb.GetCustomerNum(PrefC.GetString(PrefName.RegistrationKey))==0) {
@@ -125,17 +131,17 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will be time consuming. Continue anyway?")) {
 				return;
 			}
-//todo: think of a way to block calls from the main form while we are in this form.
 			//for full synch, delete all records then repopulate.
 			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
 			//calculate total number of records------------------------------------------------------------------------------
+			DateTime timeSynchStarted=MiscData.GetNowDateTime();
 			List<long> patNumList=Patientms.GetChangedSincePatNums(DateTime.MinValue);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(DateTime.MinValue,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(DateTime.MinValue);
 			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
@@ -148,6 +154,7 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 			IsSynching=false;
+			changed=true;
 		}
 
 		private void butSync_Click(object sender,EventArgs e) {
@@ -160,13 +167,14 @@ namespace OpenDental {
 			}
 			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			DateTime timeSynchStarted=MiscData.GetNowDateTime();
 			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
 			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
@@ -179,10 +187,12 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 			IsSynching=false;
+			changed=true;
 		}
 
-		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.</summary>
-		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,ref FormProgress progressIndicator) {
+		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
+		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,ref FormProgress progressIndicator,DateTime timeSynchStarted) {
+			IsSynching=true;
 			//patients--------------------------------------------------------------------
 			int localBatchSize=BatchSize;
 			for(int start=0;start<patNumList.Count;start+=localBatchSize) {
@@ -193,7 +203,6 @@ namespace OpenDental {
 				List<Patientm> changedPatientmList=Patientms.GetMultPats(blockPatNumList);
 				mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
 				progressIndicator.CurrentVal+=BatchSize;
-				Application.DoEvents();//To hopefully prevent program lockup. 
 			}
 			//Appointments-----------------------------------------------------------------
 			localBatchSize=BatchSize;
@@ -205,7 +214,6 @@ namespace OpenDental {
 				List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(blockAptNumList);
 				mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
 				progressIndicator.CurrentVal+=BatchSize;
-				Application.DoEvents();
 			}
 			//Rx----------------------------------------------------------------------------
 			localBatchSize=BatchSize;
@@ -217,11 +225,13 @@ namespace OpenDental {
 				List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
 				mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
 				progressIndicator.CurrentVal+=BatchSize;
-				Application.DoEvents();
 			}
-			if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MiscData.GetNowDateTime())) {//MobileSyncDateTimeLastRunNew)) {
-				DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
-			}
+			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
+			//if( {//MobileSyncDateTimeLastRunNew)) {
+				//DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
+				//would be troublesome with threading anyway
+			//}
+			IsSynching=false;
 		}
 
 		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
@@ -255,156 +265,32 @@ namespace OpenDental {
 
 		///<summary>Only called from FormOpenDental</summary>
 		public static void SynchFromMain() {
+			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
+				return;
+			}
 			if(IsSynching) {
 				return;
 			}
-			if(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes)==0) {//not a paid customer or chooses not to synch
-				return;
-			}
-			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
-				return;//Sync has never been run before.
-			}
-			if(DateTime.Now < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
+			DateTime timeSynchStarted=MiscData.GetNowDateTime();
+			if(timeSynchStarted < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
 				return;
 			}
 			if(!TestWebServiceExists()) {
 				return;
 			}
+			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			IsSynching=true;
-			try {
-				//DateTime mobileSyncDateTimeLastRunNew=MiscData.GetNowDateTime();
-				//patients--------------------------------------------------------------------
-				List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
-				int localBatchSize=BatchSize;
-				for(int start=0;start<patNumList.Count;start+=localBatchSize) {
-					if((start+localBatchSize)>patNumList.Count) {
-						localBatchSize=patNumList.Count-start;
-					}
-					List<long> blockPatNumList=patNumList.GetRange(start,localBatchSize);
-					List<Patientm> changedPatientmList=Patientms.GetMultPats(blockPatNumList);
-					mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
-					Application.DoEvents();//To hopefully prevent program lockup. 
-				}
-				//Appointments-----------------------------------------------------------------
-				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
-				localBatchSize=BatchSize;
-				for(int start=0;start<aptNumList.Count;start+=localBatchSize) {
-					if((start+localBatchSize)>aptNumList.Count) {
-						localBatchSize=aptNumList.Count-start;
-					}
-					List<long> blockAptNumList=aptNumList.GetRange(start,localBatchSize);
-					List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(blockAptNumList);
-					mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
-					Application.DoEvents();
-				}
-				//Rx----------------------------------------------------------------------------
-				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-				localBatchSize=BatchSize;
-				for(int start=0;start<rxNumList.Count;start+=localBatchSize) {
-					if((start+localBatchSize)>rxNumList.Count) {
-						localBatchSize=rxNumList.Count-start;
-					}
-					List<long> blockRxNumList=rxNumList.GetRange(start,localBatchSize);
-					List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
-					mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
-					Application.DoEvents();
-				}
-				if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MiscData.GetNowDateTime())) {//MobileSyncDateTimeLastRunNew)) {
-					DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
-				}
-				//MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
-				IsSynching=false;
-			}
-			catch(Exception ex) {
-				IsSynching=false;
-				MessageBox.Show(ex.Message);
-			}
-		}
-
-		/*
-		///<summary></summary>
-		private void Synch(bool isFull) {
-			if(IsSynching) {
-				return;
-			}
-			if(!TestWebServiceExists()) {
-				return;
-			}
-			DateTime changedSince=DateTime.MinValue;
-			if(!isFull) {
-				changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			}
-			IsSynching=true;
-			//CreatePatients(1000);//for testing only
-			//CreateAppointments(10); // for each patient //for testing only
-			//CreatePrescriptions(10);// for each patient //for testing only
-			try {
-				//DateTime mobileSyncDateTimeLastRunNew=MiscData.GetNowDateTime();
-				List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
-				SynchPatients(patNumList);
-				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
-				SynchAppointments(aptNumList);
-				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-				SynchPrescriptions(rxNumList);
-				if(Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,MiscData.GetNowDateTime())){//MobileSyncDateTimeLastRunNew)) {
-					DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
-				}
-				//MobileSyncDateTimeLastRun=MobileSyncDateTimeLastRunNew;
-				IsSynching=false;
-			}
-			catch(Exception ex) {
-				IsSynching=false;
-				MessageBox.Show(ex.Message);
-			}
-		}*/
-
-		///<summary>Done in batches to prevent system out of memory exception.</summary>
-		private void SynchPatients(List<long> patNumList) {
-			int localBatchSize=BatchSize;
-			for(int start=0;start<patNumList.Count;start+=localBatchSize) {
-				if((start+localBatchSize)>patNumList.Count) {
-					localBatchSize=patNumList.Count-start;
-				}
-				List<long> blockPatNumList=patNumList.GetRange(start,localBatchSize);
-				List<Patientm> changedPatientmList=Patientms.GetMultPats(blockPatNumList);
-				mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
-				textProgress.Text=Lan.g(this,"Patients Uploaded: ")+(start+localBatchSize).ToString()
-					+Lan.g(this," of ")+patNumList.Count.ToString();
-				Application.DoEvents();// allows textProgress to be refreshed 
-			}
-		}
-
-		///<summary>Done in batches to prevent system out of memory exception.</summary>
-		private void SynchAppointments(List<long> aptNumList) {
-			int localBatchSize=BatchSize;
-			for(int start=0;start<aptNumList.Count;start+=localBatchSize) {
-				if((start+localBatchSize)>aptNumList.Count) {
-					localBatchSize=aptNumList.Count-start;
-				}
-				List<long> blockAptNumList=aptNumList.GetRange(start,localBatchSize);
-				List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(blockAptNumList);
-				mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
-				textProgress.Text=Lan.g(this,"Appointments Uploaded: ")+(start+localBatchSize).ToString()
-					+Lan.g(this," of ")+aptNumList.Count.ToString();
-				Application.DoEvents();
-			}
-		}
-
-		///<summary>Done in batches to prevent system out of memory exception.</summary>
-		private void SynchPrescriptions(List<long> rxNumList) {
-			int localBatchSize=BatchSize;
-			for(int start=0;start<rxNumList.Count;start+=localBatchSize) {
-				if((start+localBatchSize)>rxNumList.Count) {
-					localBatchSize=rxNumList.Count-start;
-				}
-				List<long> blockRxNumList=rxNumList.GetRange(start,localBatchSize);
-				List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
-				mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
-				textProgress.Text=Lan.g(this,"Prescriptions Uploaded: ")+(start+localBatchSize).ToString()
-					+Lan.g(this," of ")+rxNumList.Count.ToString();
-				Application.DoEvents();
-			}
+			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
+			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
+			FormProgress FormP=new FormProgress();//but we won't display it.
+			FormP.NumberFormat="";
+			FormP.DisplayText="";
+			//start the thread that will perform the upload
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,ref FormP,timeSynchStarted); };
+			Thread workerThread=new Thread(uploadDelegate);
+			workerThread.Start();
 		}
 
 		#region Testing

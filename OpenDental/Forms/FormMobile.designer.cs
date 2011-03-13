@@ -266,7 +266,7 @@ namespace OpenDental{
 			this.butFullSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFullSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFullSync.CornerRadius = 4F;
-			this.butFullSync.Location = new System.Drawing.Point(195,321);
+			this.butFullSync.Location = new System.Drawing.Point(195,381);
 			this.butFullSync.Name = "butFullSync";
 			this.butFullSync.Size = new System.Drawing.Size(68,24);
 			this.butFullSync.TabIndex = 83;
@@ -281,7 +281,7 @@ namespace OpenDental{
 			this.butSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSync.CornerRadius = 4F;
-			this.butSync.Location = new System.Drawing.Point(269,321);
+			this.butSync.Location = new System.Drawing.Point(269,381);
 			this.butSync.Name = "butSync";
 			this.butSync.Size = new System.Drawing.Size(68,24);
 			this.butSync.TabIndex = 82;
@@ -296,7 +296,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(611,321);
+			this.butClose.Location = new System.Drawing.Point(611,381);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 81;
@@ -306,7 +306,7 @@ namespace OpenDental{
 			// FormMobile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(714,358);
+			this.ClientSize = new System.Drawing.Size(714,418);
 			this.Controls.Add(this.textDateTimeLastRun);
 			this.Controls.Add(this.textProgress);
 			this.Controls.Add(this.label1);

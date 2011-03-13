@@ -1110,7 +1110,7 @@ namespace OpenDental{
 			// menuItemMobileSetup
 			// 
 			this.menuItemMobileSetup.Index = 14;
-			this.menuItemMobileSetup.Text = "Mobile Setup";
+			this.menuItemMobileSetup.Text = "Mobile";
 			this.menuItemMobileSetup.Click += new System.EventHandler(this.menuItemMobileSetup_Click);
 			// 
 			// menuItemWebForms
