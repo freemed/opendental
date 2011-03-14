@@ -1066,7 +1066,7 @@ namespace OpenDental{
 			checkTreatPlanShowCompleted.Checked=PrefC.GetBool(PrefName.TreatPlanShowCompleted);
 			//Chart module-----------------------------------------------------------------------
 			comboToothNomenclature.Items.Add(Lan.g(this, "Universal (Common in the US, 1-32)"));
-			comboToothNomenclature.Items.Add(Lan.g(this, "FDA Notation (International, 11-48)"));
+			comboToothNomenclature.Items.Add(Lan.g(this, "FDI Notation (International, 11-48)"));
 			comboToothNomenclature.Items.Add(Lan.g(this, "Haderup (Danish)"));
 			comboToothNomenclature.Items.Add(Lan.g(this, "Palmer (Ortho)"));
 			comboToothNomenclature.SelectedIndex = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
