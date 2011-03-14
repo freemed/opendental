@@ -1399,7 +1399,22 @@ namespace OpenDental{
 				CheckUIState();
 				return;
 			}
-			FormPayConnect FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text);
+			if(textAmount.Text=="" || textAmount.Text=="0.00") {
+				MsgBox.Show(this,"Please enter an amount first.");
+				return;
+			}
+			CreditCard CCard=null;
+			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
+			for(int i=0;i<creditCards.Count;i++) {
+				if(i==comboCreditCards.SelectedIndex){
+					CCard=creditCards[i];
+				}
+			}
+			FormPayConnect FormP;
+			if(CCard!=null) {//Have credit card on file
+				FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text,CCard.CCNumberMasked);
+			}
+			FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text,"");
 			FormP.ShowDialog();
 			ArrayList props=ProgramProperties.GetForProgram(prog.ProgramNum);
 			ProgramProperty prop=null;

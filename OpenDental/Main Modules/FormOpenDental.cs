@@ -220,6 +220,7 @@ namespace OpenDental{
 		private FormTerminalManager formTerminalManager;
 		private FormPhoneTiles formPhoneTiles;
 		private System.Windows.Forms.Timer timerWebHostSynch;
+		private MenuItem menuItemCCRecurring;
 		private UserControlPhoneSmall phoneSmall;	
 
 		///<summary></summary>
@@ -440,6 +441,7 @@ namespace OpenDental{
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
+			this.menuItemCCRecurring = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -966,18 +968,19 @@ namespace OpenDental{
             this.menuItemPrintScreen,
             this.menuItem1,
             this.menuItem9,
-            this.menuItemAuditTrail,
-            this.menuItemDatabaseMaintenance,
             this.menuItemAging,
+            this.menuItemAuditTrail,
             this.menuItemFinanceCharge,
-            this.menuItemRepeatingCharges,
-            this.menuItemTranslation,
-            this.menuItemScreening,
+            this.menuItemCCRecurring,
+            this.menuItemCustomerManage,
+            this.menuItemDatabaseMaintenance,
             this.menuItemTerminal,
             this.menuItemTerminalManager,
-            this.menuItemReqStudents,
-            this.menuItemCustomerManage,
+            this.menuItemTranslation,
             this.menuItemMobileSetup,
+            this.menuItemScreening,
+            this.menuItemRepeatingCharges,
+            this.menuItemReqStudents,
             this.menuItemWebForms});
 			this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
 			this.menuItemTools.Text = "&Tools";
@@ -1043,79 +1046,79 @@ namespace OpenDental{
 			// 
 			// menuItemAuditTrail
 			// 
-			this.menuItemAuditTrail.Index = 3;
+			this.menuItemAuditTrail.Index = 4;
 			this.menuItemAuditTrail.Text = "Audit Trail";
 			this.menuItemAuditTrail.Click += new System.EventHandler(this.menuItemAuditTrail_Click);
 			// 
 			// menuItemDatabaseMaintenance
 			// 
-			this.menuItemDatabaseMaintenance.Index = 4;
+			this.menuItemDatabaseMaintenance.Index = 8;
 			this.menuItemDatabaseMaintenance.Text = "Database Maintenance";
 			this.menuItemDatabaseMaintenance.Click += new System.EventHandler(this.menuItemDatabaseMaintenance_Click);
 			// 
 			// menuItemAging
 			// 
-			this.menuItemAging.Index = 5;
-			this.menuItemAging.Text = "Calculate &Aging";
+			this.menuItemAging.Index = 3;
+			this.menuItemAging.Text = "&Aging";
 			this.menuItemAging.Click += new System.EventHandler(this.menuItemAging_Click);
 			// 
 			// menuItemFinanceCharge
 			// 
-			this.menuItemFinanceCharge.Index = 6;
-			this.menuItemFinanceCharge.Text = "Run &Finance/Billing Charges";
+			this.menuItemFinanceCharge.Index = 5;
+			this.menuItemFinanceCharge.Text = "Billing/&Finance Charges";
 			this.menuItemFinanceCharge.Click += new System.EventHandler(this.menuItemFinanceCharge_Click);
 			// 
 			// menuItemRepeatingCharges
 			// 
-			this.menuItemRepeatingCharges.Index = 7;
-			this.menuItemRepeatingCharges.Text = "Update Repeating Charges";
+			this.menuItemRepeatingCharges.Index = 14;
+			this.menuItemRepeatingCharges.Text = "Repeating Charges";
 			this.menuItemRepeatingCharges.Click += new System.EventHandler(this.menuItemRepeatingCharges_Click);
 			// 
 			// menuItemTranslation
 			// 
-			this.menuItemTranslation.Index = 8;
+			this.menuItemTranslation.Index = 11;
 			this.menuItemTranslation.Text = "Language Translation";
 			this.menuItemTranslation.Click += new System.EventHandler(this.menuItemTranslation_Click);
 			// 
 			// menuItemScreening
 			// 
-			this.menuItemScreening.Index = 9;
+			this.menuItemScreening.Index = 13;
 			this.menuItemScreening.Text = "Public Health Screening";
 			this.menuItemScreening.Click += new System.EventHandler(this.menuItemScreening_Click);
 			// 
 			// menuItemTerminal
 			// 
-			this.menuItemTerminal.Index = 10;
+			this.menuItemTerminal.Index = 9;
 			this.menuItemTerminal.Text = "Kiosk";
 			this.menuItemTerminal.Click += new System.EventHandler(this.menuItemTerminal_Click);
 			// 
 			// menuItemTerminalManager
 			// 
-			this.menuItemTerminalManager.Index = 11;
+			this.menuItemTerminalManager.Index = 10;
 			this.menuItemTerminalManager.Text = "Kiosk Manager";
 			this.menuItemTerminalManager.Click += new System.EventHandler(this.menuItemTerminalManager_Click);
 			// 
 			// menuItemReqStudents
 			// 
-			this.menuItemReqStudents.Index = 12;
+			this.menuItemReqStudents.Index = 15;
 			this.menuItemReqStudents.Text = "Student Requirements";
 			this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
 			// 
 			// menuItemCustomerManage
 			// 
-			this.menuItemCustomerManage.Index = 13;
+			this.menuItemCustomerManage.Index = 7;
 			this.menuItemCustomerManage.Text = "Customer Management";
 			this.menuItemCustomerManage.Click += new System.EventHandler(this.menuItemCustomerManage_Click);
 			// 
 			// menuItemMobileSetup
 			// 
-			this.menuItemMobileSetup.Index = 14;
+			this.menuItemMobileSetup.Index = 12;
 			this.menuItemMobileSetup.Text = "Mobile";
 			this.menuItemMobileSetup.Click += new System.EventHandler(this.menuItemMobileSetup_Click);
 			// 
 			// menuItemWebForms
 			// 
-			this.menuItemWebForms.Index = 15;
+			this.menuItemWebForms.Index = 16;
 			this.menuItemWebForms.Text = "WebForms";
 			this.menuItemWebForms.Click += new System.EventHandler(this.menuItemWebForms_Click);
 			// 
@@ -1290,6 +1293,12 @@ namespace OpenDental{
 			// smartCardWatcher1
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
+			// 
+			// menuItemCCRecurring
+			// 
+			this.menuItemCCRecurring.Index = 6;
+			this.menuItemCCRecurring.Text = "CC Recurring Charges";
+			this.menuItemCCRecurring.Click += new System.EventHandler(this.menuItemCCRecurring_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -3984,6 +3993,15 @@ namespace OpenDental{
 		}
 
 		//End of MiscTools, resume Tools.
+		private void menuItemAging_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
+			FormAging FormAge=new FormAging();
+			FormAge.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Aging Update");
+		}
+
 		private void menuItemAuditTrail_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
 				return;
@@ -3992,24 +4010,6 @@ namespace OpenDental{
 			FormA.CurPatNum=CurPatNum;
 			FormA.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Audit Trail");
-		}
-
-		private void menuItemDatabaseMaintenance_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
-				return;
-			}
-			FormDatabaseMaintenance FormDM=new FormDatabaseMaintenance();
-			FormDM.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Database Maintenance");
-		}
-
-		private void menuItemAging_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
-				return;
-			}
-			FormAging FormAge=new FormAging();
-			FormAge.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Aging Update");
 		}
 
 		private void menuItemFinanceCharge_Click(object sender, System.EventArgs e) {
@@ -4021,23 +4021,29 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Run Finance Charges");
 		}
 
-		private void menuItemRepeatingCharges_Click(object sender, System.EventArgs e) {
-			FormRepeatChargesUpdate FormR=new FormRepeatChargesUpdate();
-			FormR.ShowDialog();
+		private void menuItemCCRecurring_Click(object sender,EventArgs e) {
+			FormRecurringCharges FormRC=new FormRecurringCharges();
+			FormRC.ShowDialog();
 		}
 
-		private void menuItemTranslation_Click(object sender,System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
+		private void menuItemCustomerManage_Click(object sender,EventArgs e) {
+			FormCustomerManagement FormC=new FormCustomerManagement();
+			FormC.ShowDialog();
+			if(FormC.SelectedPatNum!=0) {
+				CurPatNum=FormC.SelectedPatNum;
+				Patient pat=Patients.GetPat(CurPatNum);
+				RefreshCurrentModule();
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+			}
+		}
+
+		private void menuItemDatabaseMaintenance_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
-			FormTranslationCat FormTC=new FormTranslationCat();
-			FormTC.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Translations");
-		}
-
-		private void menuItemScreening_Click(object sender,System.EventArgs e) {
-			FormScreenings FormS=new FormScreenings();
-			FormS.ShowDialog();
+			FormDatabaseMaintenance FormDM=new FormDatabaseMaintenance();
+			FormDM.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Database Maintenance");
 		}
 
 		private void menuItemTerminal_Click(object sender,EventArgs e) {
@@ -4054,6 +4060,35 @@ namespace OpenDental{
 			formTerminalManager.BringToFront();
 		}
 
+		private void menuItemTranslation_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormTranslationCat FormTC=new FormTranslationCat();
+			FormTC.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Translations");
+		}
+
+		private void menuItemMobileSetup_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
+			//MessageBox.Show("Not yet functional.");
+			FormMobile FormM=new FormMobile();
+			FormM.ShowDialog();
+			//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
+		}
+
+		private void menuItemRepeatingCharges_Click(object sender, System.EventArgs e) {
+			FormRepeatChargesUpdate FormR=new FormRepeatChargesUpdate();
+			FormR.ShowDialog();
+		}
+
+		private void menuItemScreening_Click(object sender,System.EventArgs e) {
+			FormScreenings FormS=new FormScreenings();
+			FormS.ShowDialog();
+		}
+
 		private void menuItemReqStudents_Click(object sender,EventArgs e) {
 			Provider prov=Providers.GetProv(Security.CurUser.ProvNum);
 			if(prov!=null && prov.SchoolClassNum!=0){//if a student is logged in
@@ -4068,27 +4103,6 @@ namespace OpenDental{
 			}
 			FormReqStudentsMany FormM=new FormReqStudentsMany();
 			FormM.ShowDialog();	
-		}
-
-		private void menuItemCustomerManage_Click(object sender,EventArgs e) {
-			FormCustomerManagement FormC=new FormCustomerManagement();
-			FormC.ShowDialog();
-			if(FormC.SelectedPatNum!=0) {
-				CurPatNum=FormC.SelectedPatNum;
-				Patient pat=Patients.GetPat(CurPatNum);
-				RefreshCurrentModule();
-				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
-			}
-		}
-
-		private void menuItemMobileSetup_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
-				return;
-			}
-			//MessageBox.Show("Not yet functional.");
-			FormMobile FormM=new FormMobile();
-			FormM.ShowDialog();
-			//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
 		}
 
 		private void menuItemWebForms_Click(object sender,EventArgs e) {
@@ -4506,6 +4520,8 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+	
 
 
 

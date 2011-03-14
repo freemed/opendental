@@ -23,7 +23,7 @@ namespace OpenDental {
 		private string receiptStr;
 		private PayConnectService.transType trantype=PayConnectService.transType.SALE;
 
-		public FormPayConnect(Payment payment,Patient pat,string amount) {
+		public FormPayConnect(Payment payment,Patient pat,string amount,string ccNumber) {
 			InitializeComponent();
 			Lan.F(this);
 			PaymentCur=payment;
