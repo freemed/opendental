@@ -77,6 +77,7 @@
     <Compile Include="OutstandingTrans.cs" />
     <Compile Include="PatPlanTC.cs" />
     <Compile Include="Eligibility.cs" />
+    <Compile Include="PredeterminationTC.cs" />
     <Compile Include="Reversal.cs" />
     <Compile Include="ToothInitialTC.cs" />
     <Compile Include="ProcTC.cs" />

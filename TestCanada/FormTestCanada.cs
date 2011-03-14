@@ -70,6 +70,9 @@ namespace TestCanada {
 			textResults.Text+=PatientTC.SetInitialPatients(); 
 			Application.DoEvents();
 			textResults.Text+=ClaimTC.CreateAllClaims();
+			Application.DoEvents();
+			textResults.Text+=PredeterminationTC.CreateAllPredeterminations();
+			Application.DoEvents();
 		}
 
 		private void butScripts_Click(object sender,EventArgs e) {
@@ -218,7 +221,16 @@ namespace TestCanada {
 				}
 			}
 			if(checkPredeterm.Checked){
-				textResults.Text+="Predeterminations not implemented yet.\r\n";
+				if(singleScript==1) {
+					textResults.Text+=PredeterminationTC.RunOne(checkShowForms.Checked);
+				}
+				if(singleScript==2) {
+					textResults.Text+=PredeterminationTC.RunTwo(checkShowForms.Checked);
+				}
+				else {
+					MessageBox.Show("Script number not found (not implemented yet).");
+					return;
+				}
 			}
 			if(checkPayReconcil.Checked){
 				textResults.Text+="Payment Reconciliations not implemented yet.\r\n";
