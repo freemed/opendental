@@ -224,8 +224,26 @@ namespace TestCanada {
 				if(singleScript==1) {
 					textResults.Text+=PredeterminationTC.RunOne(checkShowForms.Checked);
 				}
-				if(singleScript==2) {
+				else if(singleScript==2) {
 					textResults.Text+=PredeterminationTC.RunTwo(checkShowForms.Checked);
+				}
+				else if(singleScript==3) {
+					textResults.Text+=PredeterminationTC.RunThree(checkShowForms.Checked);
+				}
+				else if(singleScript==4) {
+					textResults.Text+=PredeterminationTC.RunFour(checkShowForms.Checked);
+				}
+				else if(singleScript==5) {
+					textResults.Text+=PredeterminationTC.RunFive(checkShowForms.Checked);
+				}
+				else if(singleScript==6) {
+					textResults.Text+=PredeterminationTC.RunSix(checkShowForms.Checked);
+				}
+				else if(singleScript==7) {
+					textResults.Text+=PredeterminationTC.RunSeven(checkShowForms.Checked);
+				}
+				else if(singleScript==8) {
+					textResults.Text+=PredeterminationTC.RunEight(checkShowForms.Checked);
 				}
 				else {
 					MessageBox.Show("Script number not found (not implemented yet).");

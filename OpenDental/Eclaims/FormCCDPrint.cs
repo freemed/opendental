@@ -2400,11 +2400,11 @@ namespace OpenDental.Eclaims {
 
 		private void PrintPaymentSummary(Graphics g){
 			const float valuesBlockOffset=300;
-			string expectedPaymentDateStr=formData.GetFieldById("G03").valuestr;
-			if(expectedPaymentDateStr!="00000000"){
+			CCDField fieldG03=formData.GetFieldById("G03");
+			if(fieldG03!=null && fieldG03.valuestr!="00000000"){
 				text=isFrench?"DATE PRÉVUE DU PAIEMENT:":"EXPECTED PAYMENT DATE:";
 				doc.DrawString(g,text,x,0);
-				text=DateNumToPrintDate(expectedPaymentDateStr);
+				text=DateNumToPrintDate(fieldG03.valuestr);
 				doc.DrawString(g,text,x+valuesBlockOffset,0);
 				x=doc.StartElement();
 			}
