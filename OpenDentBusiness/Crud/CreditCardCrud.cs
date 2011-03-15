@@ -54,6 +54,10 @@ namespace OpenDentBusiness.Crud{
 				creditCard.CCNumberMasked= PIn.String(table.Rows[i]["CCNumberMasked"].ToString());
 				creditCard.CCExpiration  = PIn.Date  (table.Rows[i]["CCExpiration"].ToString());
 				creditCard.ItemOrder     = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
+				creditCard.ChargeAmt     = PIn.Double(table.Rows[i]["ChargeAmt"].ToString());
+				creditCard.DateStart     = PIn.Date  (table.Rows[i]["DateStart"].ToString());
+				creditCard.DateStop      = PIn.Date  (table.Rows[i]["DateStop"].ToString());
+				creditCard.Note          = PIn.String(table.Rows[i]["Note"].ToString());
 				retVal.Add(creditCard);
 			}
 			return retVal;
@@ -94,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CreditCardNum,";
 			}
-			command+="PatNum,Address,Zip,XChargeToken,CCNumberMasked,CCExpiration,ItemOrder) VALUES(";
+			command+="PatNum,Address,Zip,XChargeToken,CCNumberMasked,CCExpiration,ItemOrder,ChargeAmt,DateStart,DateStop,Note) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(creditCard.CreditCardNum)+",";
 			}
@@ -105,7 +109,11 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(creditCard.XChargeToken)+"',"
 				+"'"+POut.String(creditCard.CCNumberMasked)+"',"
 				+    POut.Date  (creditCard.CCExpiration)+","
-				+    POut.Int   (creditCard.ItemOrder)+")";
+				+    POut.Int   (creditCard.ItemOrder)+","
+				+"'"+POut.Double(creditCard.ChargeAmt)+"',"
+				+    POut.Date  (creditCard.DateStart)+","
+				+    POut.Date  (creditCard.DateStop)+","
+				+"'"+POut.String(creditCard.Note)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,7 +132,11 @@ namespace OpenDentBusiness.Crud{
 				+"XChargeToken  = '"+POut.String(creditCard.XChargeToken)+"', "
 				+"CCNumberMasked= '"+POut.String(creditCard.CCNumberMasked)+"', "
 				+"CCExpiration  =  "+POut.Date  (creditCard.CCExpiration)+", "
-				+"ItemOrder     =  "+POut.Int   (creditCard.ItemOrder)+" "
+				+"ItemOrder     =  "+POut.Int   (creditCard.ItemOrder)+", "
+				+"ChargeAmt     = '"+POut.Double(creditCard.ChargeAmt)+"', "
+				+"DateStart     =  "+POut.Date  (creditCard.DateStart)+", "
+				+"DateStop      =  "+POut.Date  (creditCard.DateStop)+", "
+				+"Note          = '"+POut.String(creditCard.Note)+"' "
 				+"WHERE CreditCardNum = "+POut.Long(creditCard.CreditCardNum);
 			Db.NonQ(command);
 		}
@@ -159,6 +171,22 @@ namespace OpenDentBusiness.Crud{
 			if(creditCard.ItemOrder != oldCreditCard.ItemOrder) {
 				if(command!=""){ command+=",";}
 				command+="ItemOrder = "+POut.Int(creditCard.ItemOrder)+"";
+			}
+			if(creditCard.ChargeAmt != oldCreditCard.ChargeAmt) {
+				if(command!=""){ command+=",";}
+				command+="ChargeAmt = '"+POut.Double(creditCard.ChargeAmt)+"'";
+			}
+			if(creditCard.DateStart != oldCreditCard.DateStart) {
+				if(command!=""){ command+=",";}
+				command+="DateStart = "+POut.Date(creditCard.DateStart)+"";
+			}
+			if(creditCard.DateStop != oldCreditCard.DateStop) {
+				if(command!=""){ command+=",";}
+				command+="DateStop = "+POut.Date(creditCard.DateStop)+"";
+			}
+			if(creditCard.Note != oldCreditCard.Note) {
+				if(command!=""){ command+=",";}
+				command+="Note = '"+POut.String(creditCard.Note)+"'";
 			}
 			if(command==""){
 				return;

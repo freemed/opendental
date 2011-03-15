@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -11,6 +12,11 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormRecurringCharges:Form {
 		private DataTable table;
+		private PrintDocument pd;
+		private int pagesPrinted;
+		private int headingPrintH;
+		private bool headingPrinted;
+
 
 		public FormRecurringCharges() {
 			InitializeComponent();
@@ -34,15 +40,15 @@ namespace OpenDental {
 			table=new DataTable();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","Name"),180);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","BillType"),100);
+			col=new ODGridColumn(Lan.g("TableRecurring","Name"),200);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","Mode"),100);
+			col=new ODGridColumn(Lan.g("TableRecurring","LastCharge"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","LastStatement"),100);
+			col=new ODGridColumn(Lan.g("TableRecurring","BalTot"),100,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","BalTot"),70,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableRecurring","ChargeAmt"),100,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
@@ -81,7 +87,59 @@ namespace OpenDental {
 		}
 
 		private void butPrintList_Click(object sender,EventArgs e) {
+			pagesPrinted=0;
+			pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			pd.DefaultPageSettings.Landscape=true;
+			if(pd.DefaultPageSettings.PaperSize.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			headingPrinted=false;
+			try {
+				#if DEBUG
+					FormRpPrintPreview pView = new FormRpPrintPreview();
+					pView.printPreviewControl2.Document=pd;
+					pView.ShowDialog();
+				#else
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+						pd.Print();
+					}
+				#endif
+			}
+			catch {
+				MessageBox.Show(Lan.g(this,"Printer not available"));
+			}
+		}
 
+		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+				//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			if(!headingPrinted) {
+				text=Lan.g(this,"Recurring Charges");
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				yPos+=20;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(yPos==-1) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		private void butAll_Click(object sender,EventArgs e) {
@@ -95,7 +153,7 @@ namespace OpenDental {
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
-
+			FillGrid();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

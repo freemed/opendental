@@ -24,7 +24,7 @@ namespace OpenDental {
 		private PayConnectService.transType trantype=PayConnectService.transType.SALE;
 		private CreditCard CreditCardCur;
 
-		/// <summary>Can handle CreditCard being null.</summary>
+		///<summary>Can handle CreditCard being null.</summary>
 		public FormPayConnect(Payment payment,Patient pat,string amount,CreditCard creditCard) {
 			InitializeComponent();
 			Lan.F(this);

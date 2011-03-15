@@ -23,6 +23,14 @@ namespace OpenDentBusiness {
 		public DateTime CCExpiration;
 		///<summary>The order that multiple cards will show.  Zero-based.  First one will be default.</summary>
 		public int ItemOrder;
+		///<summary>Amount set for recurring charges.</summary>
+		public Double ChargeAmt;
+		///<summary>Start date for recurring charges.</summary>
+		public DateTime DateStart;
+		///<summary>Stop date for recurring charges.</summary>
+		public DateTime DateStop;
+		///<summary></summary>
+		public string Note;
 
 		///<summary></summary>
 		public CreditCard Clone() {
