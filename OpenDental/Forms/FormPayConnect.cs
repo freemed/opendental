@@ -22,19 +22,38 @@ namespace OpenDental {
 		private MagstripCardParser parser=null;
 		private string receiptStr;
 		private PayConnectService.transType trantype=PayConnectService.transType.SALE;
+		private CreditCard CreditCardCur;
 
-		public FormPayConnect(Payment payment,Patient pat,string amount,string ccNumber) {
+		/// <summary>Can handle CreditCard being null.</summary>
+		public FormPayConnect(Payment payment,Patient pat,string amount,CreditCard creditCard) {
 			InitializeComponent();
 			Lan.F(this);
 			PaymentCur=payment;
 			PatCur=pat;
 			amountInit=amount;
 			receiptStr="";
+			CreditCardCur=creditCard;
 		}
 
 		private void FormPayConnect_Load(object sender,EventArgs e) {
+			if(CreditCardCur!=null) {//User selected a credit card from drop down.
+				if(CreditCardCur.CCNumberMasked!="") {
+					textCardNumber.Text=CreditCardCur.CCNumberMasked;
+				}
+				if(CreditCardCur.CCExpiration!=null && CreditCardCur.CCExpiration.Year>2005) {
+					textExpDate.Text=CreditCardCur.CCExpiration.ToString("MMyy");
+				}
+				if(CreditCardCur.Zip!="") {
+					textZipCode.Text=CreditCardCur.Zip;
+				}
+				else {
+					textZipCode.Text=PatCur.Zip;
+				}
+			}
+			else {
+				this.textZipCode.Text=PatCur.Zip;
+			}
 			this.textNameOnCard.Text=PatCur.GetNameFL();
-			this.textZipCode.Text=PatCur.Zip;
 			this.textAmount.Text=amountInit;
 		}
 

@@ -1411,10 +1411,7 @@ namespace OpenDental{
 				}
 			}
 			FormPayConnect FormP;
-			if(CCard!=null) {//Have credit card on file
-				FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text,CCard.CCNumberMasked);
-			}
-			FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text,"");
+			FormP=new FormPayConnect(PaymentCur,PatCur,textAmount.Text,CCard);
 			FormP.ShowDialog();
 			ArrayList props=ProgramProperties.GetForProgram(prog.ProgramNum);
 			ProgramProperty prop=null;
