@@ -34,11 +34,21 @@ namespace OpenDental {
 				textAddress.Text=CreditCardCur.Address;
 				textExpDate.Text=CreditCardCur.CCExpiration.ToString("MMyy");
 				textZip.Text=CreditCardCur.Zip;
+				if(CreditCardCur.ChargeAmt>0) {
+					textChargeAmt.Text=CreditCardCur.ChargeAmt.ToString("F");
+				}
+				if(CreditCardCur.DateStart.Year>1880) {
+					textDateStart.Text=CreditCardCur.DateStart.ToShortDateString();
+				}
+				if(CreditCardCur.DateStop.Year>1880) {
+					textDateStop.Text=CreditCardCur.DateStop.ToShortDateString();
+				}
+				textNote.Text=CreditCardCur.Note;
 			}
 		}
 
-		private bool VerifyData(){
-			if(textCardNumber.Text.Trim().Length<5){
+		private bool VerifyData() {
+			if(textCardNumber.Text.Trim().Length<5) {
 				MsgBox.Show(this,"Invalid Card Number.");
 				return false;
 			}
@@ -58,9 +68,45 @@ namespace OpenDental {
 				MsgBox.Show(this,"Expiration format invalid.");
 				return false;
 			}
+			if(  textDateStart.errorProvider1.GetError(textDateStart)!=""
+				|| textDateStop.errorProvider1.GetError(textDateStop)!=""
+				)
+			{
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return false;
+			}
+			if(textChargeAmt.Text!="" && textDateStart.Text.Trim()=="") {
+				MsgBox.Show(this,"You need a start date for recurring charges.");
+				return false;
+			}
 			return true;
 		}
 
+		private void butClear_Click(object sender,EventArgs e) {
+			//Only clear text boxes for recurring charges group.
+			textChargeAmt.Text="";
+			textDateStart.Text="";
+			textDateStop.Text="";
+			textNote.Text="";
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(CreditCardCur.IsNew) {
+				DialogResult=DialogResult.Cancel;
+			}
+			CreditCards.Delete(CreditCardCur.CreditCardNum);
+			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
+			for(int i=0;i<creditCards.Count;i++) {
+				creditCards[i].ItemOrder=creditCards.Count-(i+1);
+				CreditCards.Update(creditCards[i]);//Resets ItemOrder.
+			}
+			DialogResult=DialogResult.OK;
+		}
+		
 		private void butOK_Click(object sender,EventArgs e) {
 			if(!VerifyData()) {
 				return;
@@ -69,6 +115,10 @@ namespace OpenDental {
 			CreditCardCur.CCNumberMasked=textCardNumber.Text;
 			CreditCardCur.PatNum=PatCur.PatNum;
 			CreditCardCur.Zip=textZip.Text;
+			CreditCardCur.ChargeAmt=PIn.Double(textChargeAmt.Text);
+			CreditCardCur.DateStart=PIn.Date(textDateStart.Text);
+			CreditCardCur.DateStop=PIn.Date(textDateStop.Text);
+			CreditCardCur.Note=textNote.Text;
 			if(CreditCardCur.IsNew) {
 				List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
 				CreditCardCur.ItemOrder=itemOrderCount.Count;
@@ -153,25 +203,8 @@ namespace OpenDental {
 							line=reader.ReadLine();
 						}
 					}
-				}
+				}//End of special token logic
 				CreditCards.Update(CreditCardCur);
-			}
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(CreditCardCur.IsNew) {
-				DialogResult=DialogResult.Cancel;
-			}
-			CreditCards.Delete(CreditCardCur.CreditCardNum);
-			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
-			for(int i=0;i<creditCards.Count;i++) {
-				creditCards[i].ItemOrder=creditCards.Count-(i+1);
-				CreditCards.Update(creditCards[i]);//Resets ItemOrder.
 			}
 			DialogResult=DialogResult.OK;
 		}

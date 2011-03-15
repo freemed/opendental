@@ -147,6 +147,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 29;
 			this.gridMain.Title = "Recurring Charges";
 			this.gridMain.TranslationName = "TableRecurring";
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// butSend
 			// 

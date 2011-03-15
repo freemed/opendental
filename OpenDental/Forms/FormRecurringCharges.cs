@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -32,21 +33,34 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			int scrollPos=gridMain.ScrollValue;
-			List<long> selectedKeys=new List<long>();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				selectedKeys.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["StatementNum"].ToString()));
+			Program prog=Programs.GetCur(ProgramName.Xcharge);
+			if(prog==null){
+				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
+				return;
 			}
-			table=new DataTable();
+			if(!prog.Enabled) {
+				if(Security.IsAuthorized(Permissions.Setup)) {
+					FormXchargeSetup FormX=new FormXchargeSetup();
+					FormX.ShowDialog();
+				}
+				return;
+			}
+			if(!File.Exists(prog.Path)) {
+				MsgBox.Show(this,"Path is not valid.");
+				if(Security.IsAuthorized(Permissions.Setup)){
+					FormXchargeSetup FormX=new FormXchargeSetup();
+					FormX.ShowDialog();
+				}
+				return;
+			}
+			table=CreditCards.GetRecurringChargeList(PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType")));
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),70);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","Name"),200);
+			col=new ODGridColumn(Lan.g("TableRecurring","Name"),250);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","LastCharge"),100);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","BalTot"),100,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableRecurring","Total Bal"),100,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecurring","ChargeAmt"),100,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
@@ -54,36 +68,25 @@ namespace OpenDental {
 			OpenDental.UI.ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(table.Rows[i]["name"].ToString());
-				row.Cells.Add(table.Rows[i]["billingType"].ToString());
-				row.Cells.Add(table.Rows[i]["mode"].ToString());
-				row.Cells.Add(table.Rows[i]["lastStatement"].ToString());
+				row.Cells.Add(table.Rows[i]["PatNum"].ToString());
+				row.Cells.Add(table.Rows[i]["PatName"].ToString());
 				row.Cells.Add(table.Rows[i]["balTotal"].ToString());
-				row.Cells.Add(table.Rows[i]["insEst"].ToString());
-				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
-					row.Cells.Add("");
-				}
-				else {
-					row.Cells.Add(table.Rows[i]["amountDue"].ToString());
-				}
-				row.Cells.Add(table.Rows[i]["payPlanDue"].ToString());
+				row.Cells.Add(table.Rows[i]["ChargeAmt"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			for(int i=0;i<selectedKeys.Count;i++) {
-				for(int j=0;j<table.Rows.Count;j++) {
-					if(table.Rows[j]["StatementNum"].ToString()==selectedKeys[i].ToString()) {
-						gridMain.SetSelected(j,true);
-					}
-				}
-			}
-			gridMain.ScrollValue=scrollPos;
 			labelTotal.Text=Lan.g(this,"Total=")+table.Rows.Count.ToString();
+			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
+		}
+		
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
 			FillGrid();
+			labelCharged.Text=Lan.g(this,"Charged=")+"0";
+			labelFailed.Text=Lan.g(this,"Failed=")+"0";
 		}
 
 		private void butPrintList_Click(object sender,EventArgs e) {

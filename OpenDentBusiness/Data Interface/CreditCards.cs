@@ -53,7 +53,36 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-
+		///<summary>Returns list of credit cards that are ready for a recurring charge.</summary>
+		public static DataTable GetRecurringChargeList(int payType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),payType);
+			}
+			DataTable table=new DataTable();
+			DataRow row;
+			table.Columns.Add("PatNum");
+			table.Columns.Add("PatName");
+			table.Columns.Add("balTotal");
+			table.Columns.Add("ChargeAmt");
+			string command="SELECT creditcard.PatNum,"+DbHelper.Concat("patient.LName","', '","patient.FName")+" PatName,patient.BalTotal,creditcard.ChargeAmt "
+					+"FROM creditcard "
+					+"LEFT JOIN patient ON creditcard.PatNum=patient.PatNum "
+					+"LEFT JOIN payment ON creditcard.PatNum=payment.PatNum "
+					+"WHERE payment.PayType="+payType+" "
+					+"AND creditcard.DateStart<payment.PayDate "
+					+"AND DATE_ADD(payment.PayDate,INTERVAL 1 MONTH) < NOW() "
+					+"AND patient.BalTotal>=creditcard.ChargeAmt";
+			DataTable rawTable=Db.GetTable(command);
+			for(int i=0;i<rawTable.Rows.Count;i++) {
+				row=table.NewRow();
+				row["balTotal"]=PIn.Double(rawTable.Rows[i]["BalTotal"].ToString()).ToString("N");
+				row["ChargeAmt"]=PIn.Double(rawTable.Rows[i]["ChargeAmt"].ToString()).ToString("N");
+				row["PatName"]=rawTable.Rows[i]["PatName"].ToString();
+				row["PatNum"]=rawTable.Rows[i]["PatNum"].ToString();
+				table.Rows.Add(row);
+			}
+			return table;
+		}
 
 
 	}

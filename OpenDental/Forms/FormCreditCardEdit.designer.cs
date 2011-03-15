@@ -43,10 +43,10 @@ namespace OpenDental{
 			this.textChargeAmt = new OpenDental.ValidDouble();
 			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label6 = new System.Windows.Forms.Label();
+			this.butClear = new OpenDental.UI.Button();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.butClear = new OpenDental.UI.Button();
+			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -90,7 +90,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(414,322);
+			this.butOK.Location = new System.Drawing.Point(337,322);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 10;
@@ -105,7 +105,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(495,322);
+			this.butCancel.Location = new System.Drawing.Point(418,322);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 11;
@@ -230,14 +230,20 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Authorized Recurring Charges";
 			// 
-			// label6
+			// butClear
 			// 
-			this.label6.Location = new System.Drawing.Point(236,48);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(235,39);
-			this.label6.TabIndex = 73;
-			this.label6.Text = "Date Stop will be blank if the charges will be repeated indefinitely.  Clear all " +
-    "these values if no further recurring charges are planned.";
+			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClear.Autosize = true;
+			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClear.CornerRadius = 4F;
+			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClear.Location = new System.Drawing.Point(239,17);
+			this.butClear.Name = "butClear";
+			this.butClear.Size = new System.Drawing.Size(68,24);
+			this.butClear.TabIndex = 76;
+			this.butClear.Text = "Clear";
+			this.butClear.Click += new System.EventHandler(this.butClear_Click);
 			// 
 			// textNote
 			// 
@@ -257,24 +263,19 @@ namespace OpenDental{
 			this.label7.Text = "Note";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// butClear
+			// label6
 			// 
-			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClear.Autosize = true;
-			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClear.CornerRadius = 4F;
-			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClear.Location = new System.Drawing.Point(239,17);
-			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(68,24);
-			this.butClear.TabIndex = 76;
-			this.butClear.Text = "Clear";
+			this.label6.Location = new System.Drawing.Point(236,48);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(235,39);
+			this.label6.TabIndex = 73;
+			this.label6.Text = "Date Stop will be blank if the charges will be repeated indefinitely.  Clear all " +
+    "these values if no further recurring charges are planned.";
 			// 
 			// FormCreditCardEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(587,358);
+			this.ClientSize = new System.Drawing.Size(510,358);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textZip);
