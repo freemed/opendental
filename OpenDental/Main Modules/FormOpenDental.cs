@@ -3313,9 +3313,10 @@ namespace OpenDental{
 				return;
 			}
 			SecurityLogs.MakeLogEntry(Permissions.ChooseDatabase,0,"");//make the entry before switching databases.
-			FormChooseDatabase FormC=new FormChooseDatabase();
+			FormChooseDatabase FormC=new FormChooseDatabase();//Choose Database is read only from this menu.
+			FormC.IsAccessedFromMainMenu=true;
 			FormC.ShowDialog();
-			if(FormC.DialogResult==DialogResult.Cancel){
+			if(FormC.DialogResult!=DialogResult.OK){
 				return;
 			}
 			CurPatNum=0;

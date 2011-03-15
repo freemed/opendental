@@ -55,6 +55,8 @@ namespace OpenDental{
 		public string OdUser;
 		///<summary>Only used by Ecw.</summary>
 		public string OdPassHash;
+		///<summary>This is used when selecting File>Choose Database.</summary>
+		public bool IsAccessedFromMainMenu;
 
 		///<summary></summary>
 		public FormChooseDatabase(){
@@ -413,6 +415,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormConfig_Load(object sender, System.EventArgs e) {
+			if(IsAccessedFromMainMenu) {
+				butOK.Enabled=false;
+			}
 			listType.Items.Add("MySql");
 			listType.Items.Add("Oracle");
 			listType.SelectedIndex=0;
