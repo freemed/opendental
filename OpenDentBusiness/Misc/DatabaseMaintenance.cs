@@ -2208,7 +2208,7 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(RecallTypes.PerioType<1 || RecallTypes.ProphyType<1) {
-			  log+=Lans.g("FormDatabaseMaintenance","Warning!  Recall types not set up properly.")+"\r\n";
+			  log+=Lans.g("FormDatabaseMaintenance","Warning!  Recall types not set up properly.  There must be at least one of each type: perio and prophy.")+"\r\n";
 			  return log;
 			}
 			command="SELECT FName,LName,COUNT(*) countDups FROM patient LEFT JOIN recall ON recall.PatNum=patient.PatNum "

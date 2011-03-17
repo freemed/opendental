@@ -860,7 +860,7 @@ namespace OpenDental {
 									}
 								}
 							}
-							if(numGroupButtons>1 && !valueSet){
+							if(numGroupButtons>0 && !valueSet){
 								MessageBox.Show(Lan.g(this,"You must select a value for radio button group")+" '"+field.RadioButtonGroup+"' ");
 								return false;
 							}
