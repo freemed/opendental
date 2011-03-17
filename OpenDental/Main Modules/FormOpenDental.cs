@@ -221,7 +221,9 @@ namespace OpenDental{
 		private FormPhoneTiles formPhoneTiles;
 		private System.Windows.Forms.Timer timerWebHostSynch;
 		private MenuItem menuItemCCRecurring;
-		private UserControlPhoneSmall phoneSmall;	
+		private UserControlPhoneSmall phoneSmall;
+		///<summary>This will be null if EHR didn't load up.</summary>
+		public static System.Windows.Forms.Form FormEHR;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -1533,6 +1535,24 @@ namespace OpenDental{
 				Computers.UpdateHeartBeat(Environment.MachineName);
 			}
 			catch { }
+			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
+			#if DEBUG
+				dllPathEHR=@"..\..\..\..\..\Shared Projects Subversion\EHR\EHR_";
+				Version versionApp=new Version(Application.ProductVersion);
+				if(versionApp.Build==0) {//must be head
+					dllPathEHR+=@"head\EHR\bin\Debug\EHR.dll";
+				}
+				else{
+					dllPathEHR+=versionApp.Major.ToString()+"_"+versionApp.Minor.ToString()+@"\EHR\bin\Debug\EHR.dll";
+				}
+				dllPathEHR=Path.GetFullPath(dllPathEHR);
+			#endif
+			FormEHR=null;
+			if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+				Assembly ass=Assembly.LoadFile(dllPathEHR);
+				Type type=ass.GetType("EHR.FormEHR");//namespace.class
+				FormEHR=(Form)Activator.CreateInstance(type);
+			}
 			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
 		}
 

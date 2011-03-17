@@ -3212,6 +3212,9 @@ namespace OpenDental{
 						ToolBarMain.Buttons["Commlog"].Enabled=false;
 						webBrowserEcw.Url=null;
 					}
+					if(FormOpenDental.FormEHR!=null) {
+						ToolBarMain.Buttons["EHR"].Enabled=false;
+					}
 				}
 			}
 		}
@@ -3244,6 +3247,9 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(button);
 			if(UsingEcwTight()) {//button will show in this toolbar instead of the usual one.
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
+			}
+			if(FormOpenDental.FormEHR!=null) {
+				ToolBarMain.Buttons.Add(new ODToolBarButton("EHR",-1,"","EHR"));
 			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -3320,6 +3326,9 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
 					webBrowserEcw.Url=null;
 				}
+				if(FormOpenDental.FormEHR!=null) {
+					ToolBarMain.Buttons["EHR"].Enabled=false;
+				}
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
@@ -3354,6 +3363,9 @@ namespace OpenDental{
 						labelECWerror.Text="Error: "+ex.Message;
 						labelECWerror.Visible=true;
 					}
+				}
+				if(FormOpenDental.FormEHR!=null) {
+					ToolBarMain.Buttons["EHR"].Enabled=true;
 				}
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
@@ -3449,6 +3461,9 @@ namespace OpenDental{
 						break;
 					case "ExamSheet":
 						OnExamSheet_Click();
+						break;
+					case "EHR":
+						OnEHR_Click();
 						break;
 				}
 			}
@@ -3578,6 +3593,10 @@ namespace OpenDental{
 			if(FormCI.DialogResult == DialogResult.OK) {
 				ModuleSelected(PatCur.PatNum);
 			}
+		}
+
+		private void OnEHR_Click() {
+			FormOpenDental.FormEHR.ShowDialog();
 		}
 
 		private void menuConsent_Popup(object sender,EventArgs e) {
