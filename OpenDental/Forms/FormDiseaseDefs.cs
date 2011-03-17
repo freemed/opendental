@@ -77,11 +77,12 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(15,9);
+			this.label1.Location = new System.Drawing.Point(15,11);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(413,24);
+			this.label1.Size = new System.Drawing.Size(335,20);
 			this.label1.TabIndex = 8;
-			this.label1.Text = "This is a list of medical conditions and allergies that patients might have. ";
+			this.label1.Text = "This is a list of medical problems that patients might have. ";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butClose
 			// 
@@ -181,7 +182,7 @@ namespace OpenDental{
 			this.Name = "FormDiseaseDefs";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Diseases";
+			this.Text = "Problems";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDiseaseDefs_FormClosing);
 			this.Load += new System.EventHandler(this.FormDiseaseDefs_Load);
 			this.ResumeLayout(false);

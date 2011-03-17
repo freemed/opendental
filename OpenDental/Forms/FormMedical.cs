@@ -27,6 +27,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridDiseases;
 		private CheckBox checkPremed;
 		private Disease[] DiseaseList;
+		private UI.Button butIcd9;
 		private PatientNote PatientNoteCur;
 
 		///<summary></summary>
@@ -73,6 +74,7 @@ namespace OpenDental{
 			this.gridMeds = new OpenDental.UI.ODGrid();
 			this.gridDiseases = new OpenDental.UI.ODGrid();
 			this.checkPremed = new System.Windows.Forms.CheckBox();
+			this.butIcd9 = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -111,7 +113,7 @@ namespace OpenDental{
 			this.textMedUrgNote.AcceptsReturn = true;
 			this.textMedUrgNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textMedUrgNote.ForeColor = System.Drawing.Color.Red;
-			this.textMedUrgNote.Location = new System.Drawing.Point(156,447);
+			this.textMedUrgNote.Location = new System.Drawing.Point(115,447);
 			this.textMedUrgNote.Multiline = true;
 			this.textMedUrgNote.Name = "textMedUrgNote";
 			this.textMedUrgNote.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalUrgent;
@@ -122,7 +124,7 @@ namespace OpenDental{
 			// textService
 			// 
 			this.textService.AcceptsReturn = true;
-			this.textService.Location = new System.Drawing.Point(156,558);
+			this.textService.Location = new System.Drawing.Point(115,558);
 			this.textService.Multiline = true;
 			this.textService.Name = "textService";
 			this.textService.QuickPasteType = OpenDentBusiness.QuickPasteType.ServiceNotes;
@@ -133,7 +135,7 @@ namespace OpenDental{
 			// textMedical
 			// 
 			this.textMedical.AcceptsReturn = true;
-			this.textMedical.Location = new System.Drawing.Point(156,482);
+			this.textMedical.Location = new System.Drawing.Point(115,482);
 			this.textMedical.Multiline = true;
 			this.textMedical.Name = "textMedical";
 			this.textMedical.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalSummary;
@@ -143,34 +145,34 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(13,559);
+			this.label3.Location = new System.Drawing.Point(6,559);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(140,16);
+			this.label3.Size = new System.Drawing.Size(106,16);
 			this.label3.TabIndex = 50;
 			this.label3.Text = "Service Notes";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(13,445);
+			this.label2.Location = new System.Drawing.Point(6,445);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(140,21);
+			this.label2.Size = new System.Drawing.Size(106,21);
 			this.label2.TabIndex = 49;
 			this.label2.Text = "Med Urgent";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(13,483);
+			this.label4.Location = new System.Drawing.Point(6,483);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(140,17);
+			this.label4.Size = new System.Drawing.Size(106,17);
 			this.label4.TabIndex = 47;
 			this.label4.Text = "Medical Summary";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(419,212);
+			this.label6.Location = new System.Drawing.Point(371,242);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(421,18);
 			this.label6.TabIndex = 6;
@@ -186,7 +188,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(3,1);
+			this.butAdd.Location = new System.Drawing.Point(374,1);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(123,23);
 			this.butAdd.TabIndex = 51;
@@ -196,12 +198,12 @@ namespace OpenDental{
 			// textMedicalComp
 			// 
 			this.textMedicalComp.AcceptsReturn = true;
-			this.textMedicalComp.Location = new System.Drawing.Point(422,232);
+			this.textMedicalComp.Location = new System.Drawing.Point(374,262);
 			this.textMedicalComp.Multiline = true;
 			this.textMedicalComp.Name = "textMedicalComp";
 			this.textMedicalComp.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalHistory;
 			this.textMedicalComp.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textMedicalComp.Size = new System.Drawing.Size(530,409);
+			this.textMedicalComp.Size = new System.Drawing.Size(585,379);
 			this.textMedicalComp.TabIndex = 54;
 			// 
 			// butAddDisease
@@ -213,20 +215,20 @@ namespace OpenDental{
 			this.butAddDisease.CornerRadius = 4F;
 			this.butAddDisease.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddDisease.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddDisease.Location = new System.Drawing.Point(3,207);
+			this.butAddDisease.Location = new System.Drawing.Point(5,1);
 			this.butAddDisease.Name = "butAddDisease";
 			this.butAddDisease.Size = new System.Drawing.Size(98,23);
 			this.butAddDisease.TabIndex = 58;
-			this.butAddDisease.Text = "Add Disease";
+			this.butAddDisease.Text = "Add Problem";
 			this.butAddDisease.Click += new System.EventHandler(this.butAddDisease_Click);
 			// 
 			// gridMeds
 			// 
 			this.gridMeds.HScrollVisible = false;
-			this.gridMeds.Location = new System.Drawing.Point(3,25);
+			this.gridMeds.Location = new System.Drawing.Point(374,26);
 			this.gridMeds.Name = "gridMeds";
 			this.gridMeds.ScrollValue = 0;
-			this.gridMeds.Size = new System.Drawing.Size(959,180);
+			this.gridMeds.Size = new System.Drawing.Size(585,216);
 			this.gridMeds.TabIndex = 59;
 			this.gridMeds.Title = "Medications";
 			this.gridMeds.TranslationName = "TableMedications";
@@ -235,25 +237,40 @@ namespace OpenDental{
 			// gridDiseases
 			// 
 			this.gridDiseases.HScrollVisible = false;
-			this.gridDiseases.Location = new System.Drawing.Point(3,231);
+			this.gridDiseases.Location = new System.Drawing.Point(4,26);
 			this.gridDiseases.Name = "gridDiseases";
 			this.gridDiseases.ScrollValue = 0;
-			this.gridDiseases.Size = new System.Drawing.Size(405,186);
+			this.gridDiseases.Size = new System.Drawing.Size(363,216);
 			this.gridDiseases.TabIndex = 60;
-			this.gridDiseases.Title = "Diseases and Allergies";
+			this.gridDiseases.Title = "Problems";
 			this.gridDiseases.TranslationName = "TableDiseases";
 			this.gridDiseases.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridDiseases_CellDoubleClick);
 			// 
 			// checkPremed
 			// 
 			this.checkPremed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkPremed.Location = new System.Drawing.Point(3,424);
+			this.checkPremed.Location = new System.Drawing.Point(6,407);
 			this.checkPremed.Name = "checkPremed";
-			this.checkPremed.Size = new System.Drawing.Size(167,18);
+			this.checkPremed.Size = new System.Drawing.Size(123,35);
 			this.checkPremed.TabIndex = 61;
 			this.checkPremed.Text = "Premedicate (PAC or other)";
 			this.checkPremed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkPremed.UseVisualStyleBackColor = true;
+			// 
+			// butIcd9
+			// 
+			this.butIcd9.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butIcd9.Autosize = true;
+			this.butIcd9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butIcd9.CornerRadius = 4F;
+			this.butIcd9.Image = global::OpenDental.Properties.Resources.Add;
+			this.butIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butIcd9.Location = new System.Drawing.Point(129,1);
+			this.butIcd9.Name = "butIcd9";
+			this.butIcd9.Size = new System.Drawing.Size(98,23);
+			this.butIcd9.TabIndex = 62;
+			this.butIcd9.Text = "Add ICD9";
 			// 
 			// FormMedical
 			// 
@@ -261,6 +278,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964,683);
+			this.Controls.Add(this.butIcd9);
 			this.Controls.Add(this.checkPremed);
 			this.Controls.Add(this.gridDiseases);
 			this.Controls.Add(this.gridMeds);
@@ -311,20 +329,22 @@ namespace OpenDental{
 			MedicationPats.Refresh(PatCur.PatNum);
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Drug Name"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Generic Name"),100);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes"),210);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes"),370);
-			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),370);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),210);
 			gridMeds.Columns.Add(col);
 			gridMeds.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<MedicationPats.List.Length;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Medications.GetMedication(MedicationPats.List[i].MedicationNum).MedName);
-				row.Cells.Add(Medications.GetGeneric(MedicationPats.List[i].MedicationNum).MedName);
+				Medication generic=Medications.GetGeneric(MedicationPats.List[i].MedicationNum);
+				string medName=Medications.GetMedication(MedicationPats.List[i].MedicationNum).MedName;
+				if(generic.MedicationNum!=MedicationPats.List[i].MedicationNum) {//not generic
+					medName+=" ("+generic.MedName+")";
+				}
+				row.Cells.Add(medName);
 				row.Cells.Add(Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes);
 				row.Cells.Add(MedicationPats.List[i].PatNote);
 				gridMeds.Rows.Add(row);
