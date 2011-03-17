@@ -606,6 +606,7 @@
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
     <Compile Include="CrudFramework\TableBase.cs" />
     <Compile Include="TableTypes\TimeCardRule.cs" />
+    <Compile Include="TableTypes\Vitalsign.cs" />
     <Compile Include="WebServiceTests.cs" />
     <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
