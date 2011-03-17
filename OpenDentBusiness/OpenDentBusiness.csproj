@@ -607,6 +607,14 @@
     <Compile Include="CrudFramework\TableBase.cs" />
     <Compile Include="TableTypes\TimeCardRule.cs" />
     <Compile Include="TableTypes\Vitalsign.cs" />
+    <Compile Include="UI\ODGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ODGridCell.cs" />
+    <Compile Include="UI\ODGridColumn.cs" />
+    <Compile Include="UI\ODGridColumnCollection.cs" />
+    <Compile Include="UI\ODGridRow.cs" />
+    <Compile Include="UI\ODGridRowCollection.cs" />
     <Compile Include="WebServiceTests.cs" />
     <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
@@ -817,6 +825,18 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ODGrid.resx">
+      <DependentUpon>ODGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ODGridCell.resx">
+      <DependentUpon>ODGridCell.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ODGridColumn.resx">
+      <DependentUpon>ODGridColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ODGridRow.resx">
+      <DependentUpon>ODGridRow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

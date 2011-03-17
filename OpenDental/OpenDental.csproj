@@ -3459,22 +3459,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>ContrWindowingSlider.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\ODGrid.resx">
-      <DependentUpon>ODGrid.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ODGridCell.resx">
-      <DependentUpon>ODGridCell.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ODGridColumn.resx">
-      <DependentUpon>ODGridColumn.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ODGridRow.resx">
-      <DependentUpon>ODGridRow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\ODToolBar.resx">
       <DependentUpon>ODToolBar.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3725,14 +3709,6 @@
       <DependentUpon>ListBoxClickable.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\MsgBox.cs" />
-    <Compile Include="UI\ODGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\ODGridCell.cs" />
-    <Compile Include="UI\ODGridColumn.cs" />
-    <Compile Include="UI\ODGridColumnCollection.cs" />
-    <Compile Include="UI\ODGridRow.cs" />
-    <Compile Include="UI\ODGridRowCollection.cs" />
     <Compile Include="UI\ODToolBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
