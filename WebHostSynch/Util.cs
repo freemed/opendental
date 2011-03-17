@@ -114,9 +114,11 @@ namespace WebHostSynch {
 			um.CustomerNum=customerNum;
 			um.UsermNum=1;//always 1
 			um.UserName=UserName;
-			um.Password=MD5Encrypt(Password);
+			if(Password!="") {//do not update password if password string is empty
+				um.Password=MD5Encrypt(Password);
+			}
 			if(UserExists) {
-				Userms.Update(um);				
+				Userms.Update(um);
 			}
 			else{
 				Userms.Insert(um);

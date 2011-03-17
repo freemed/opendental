@@ -36,7 +36,7 @@ min-height: 480px;
      z-index: 1;
 }
 .datenavigation{
-    height:30px;
+    height:33px;
 }
 /* multiple style don't work in some cases android hence some styles had to be written all over again*/
 #previous, #next, #today{

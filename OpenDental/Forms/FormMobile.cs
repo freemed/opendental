@@ -67,6 +67,10 @@ namespace OpenDental {
 				MsgBox.Show(this,"WorkStation cannot be empty");
 				return false;
 			}
+			// the text field are read becaus the keyed in values have not been saved yet
+			if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
+				IgnoreCertificateErrors();// done so that TestWebServiceExists() does not thow an error.
+			}
 			if(!TestWebServiceExists()) {
 				MsgBox.Show(this,"Web service not found.");
 				return false;
@@ -141,7 +145,7 @@ namespace OpenDental {
 			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
@@ -174,7 +178,7 @@ namespace OpenDental {
 			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,patNumList,rxNumList,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:

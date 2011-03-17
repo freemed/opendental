@@ -45,7 +45,7 @@ namespace MobileWeb {
 						AppointmentDate=DateTime.Today;
 					}
 				}
-				DayLabel.Text=AppointmentDate.ToString("ddd") + ", " + AppointmentDate.ToString("MMM") + " " + AppointmentDate.ToString("dd");
+				DayLabel.Text=AppointmentDate.ToString("ddd")+", "+AppointmentDate.ToString("MMM")+AppointmentDate.ToString("dd");
 				DateTime PreviousDate=AppointmentDate.AddDays(-1);
 				PreviousDateDay=PreviousDate.Day;
 				PreviousDateMonth=PreviousDate.Month;
@@ -60,7 +60,7 @@ namespace MobileWeb {
 			}
 			catch(Exception ex) {
 				LabelError.Text=Util.ErrorMessage;
-				Logger.LogError(ex);
+				Logger.LogError(ex); 
 			}
 		}
 
