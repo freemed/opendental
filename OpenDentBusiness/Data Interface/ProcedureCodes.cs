@@ -285,7 +285,8 @@ namespace OpenDentBusiness{
 			}
 			for(int i=0;i<table.Rows.Count;i++) {
 				command="UPDATE procedurecode SET ProcCat="+POut.Long(catNum)
-					+" WHERE ProcCat="+table.Rows[i][0].ToString();
+					+" WHERE ProcCat="+table.Rows[i][0].ToString()
+					+" AND procedurecode.ProcCode LIKE 'T%'";
 				Db.NonQ(command);
 			}
 			//finally, set Never Used category to be hidden.  This isn't really part of clearing Tcodes, but is required
