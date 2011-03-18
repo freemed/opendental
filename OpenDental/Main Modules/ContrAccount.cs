@@ -2708,6 +2708,14 @@ namespace OpenDental {
 				MsgBox.Show(this,"You can only select procedures.");
 				return;
 			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && gridAccount.SelectedIndices.Length>7) {//Canadian
+				countIsOverMaxCanadian=true;
+				List<int> selectedIndicies=new List<int>(gridAccount.SelectedIndices);
+				selectedIndicies.Sort();
+				for(int i=0;i<selectedIndicies.Count;i++) { //Unselect all but the first 7 procedures with the smallest index numbers.
+					gridAccount.SetSelected(selectedIndicies[i],(i<7));
+				}
+			}
 			if(countIsOverMaxCanadian) {
 				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to create a second claim for the remaining procedures.");
 			}
