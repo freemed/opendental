@@ -6,7 +6,7 @@ namespace OpenDentBusiness {
 	public class Vitalsign:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
-		public long VitalSignNum;
+		public long VitalsignNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>Height of patient in inches. Fractions might be needed some day.</summary>

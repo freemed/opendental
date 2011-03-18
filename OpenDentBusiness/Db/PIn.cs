@@ -65,8 +65,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DateTime Date(string myString){
-			if(myString=="" || myString==null)
+			if(myString=="" || myString==null) {
 				return DateTime.MinValue;
+			}
 			try{
 				return (DateTime.Parse(myString));
 				//return DateTime.Parse(myString,CultureInfo.InvariantCulture);

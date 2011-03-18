@@ -46,7 +46,7 @@ namespace OpenDentBusiness.Crud{
 			Vitalsign vitalsign;
 			for(int i=0;i<table.Rows.Count;i++) {
 				vitalsign=new Vitalsign();
-				vitalsign.VitalSignNum= PIn.Long  (table.Rows[i]["VitalSignNum"].ToString());
+				vitalsign.VitalsignNum= PIn.Long  (table.Rows[i]["VitalsignNum"].ToString());
 				vitalsign.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				vitalsign.Height      = PIn.Float (table.Rows[i]["Height"].ToString());
 				vitalsign.Weight      = PIn.Int   (table.Rows[i]["Weight"].ToString());
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one Vitalsign into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Vitalsign vitalsign){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				vitalsign.VitalSignNum=DbHelper.GetNextOracleKey("vitalsign","VitalSignNum");
+				vitalsign.VitalsignNum=DbHelper.GetNextOracleKey("vitalsign","VitalSignNum");
 				int loopcount=0;
 				while(loopcount<100){
 					try {
@@ -69,7 +69,7 @@ namespace OpenDentBusiness.Crud{
 					}
 					catch(Oracle.DataAccess.Client.OracleException ex){
 						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
-							vitalsign.VitalSignNum++;
+							vitalsign.VitalsignNum++;
 							loopcount++;
 						}
 						else{
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one Vitalsign into the database.  Provides option to use the existing priKey.</summary>
 		internal static long Insert(Vitalsign vitalsign,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
-				vitalsign.VitalSignNum=ReplicationServers.GetKey("vitalsign","VitalSignNum");
+				vitalsign.VitalsignNum=ReplicationServers.GetKey("vitalsign","VitalSignNum");
 			}
 			string command="INSERT INTO vitalsign (";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+=POut.Long(vitalsign.VitalSignNum)+",";
+				command+=POut.Long(vitalsign.VitalsignNum)+",";
 			}
 			command+=
 				     POut.Long  (vitalsign.PatNum)+","
@@ -108,9 +108,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				vitalsign.VitalSignNum=Db.NonQ(command,true);
+				vitalsign.VitalsignNum=Db.NonQ(command,true);
 			}
-			return vitalsign.VitalSignNum;
+			return vitalsign.VitalsignNum;
 		}
 
 		///<summary>Updates one Vitalsign in the database.</summary>
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				+"BpSystolic  =  "+POut.Int   (vitalsign.BpSystolic)+", "
 				+"BpDiastolic =  "+POut.Int   (vitalsign.BpDiastolic)+", "
 				+"DateTaken   =  "+POut.Date  (vitalsign.DateTaken)+" "
-				+"WHERE VitalSignNum = "+POut.Long(vitalsign.VitalSignNum);
+				+"WHERE VitalSignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
 
@@ -157,7 +157,7 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE vitalsign SET "+command
-				+" WHERE VitalSignNum = "+POut.Long(vitalsign.VitalSignNum);
+				+" WHERE VitalSignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
 

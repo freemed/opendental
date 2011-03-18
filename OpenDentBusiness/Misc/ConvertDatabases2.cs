@@ -3811,7 +3811,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="DROP TABLE IF EXISTS vitalsign";
 					Db.NonQ(command);
 					command=@"CREATE TABLE vitalsign (
-						VitalSignNum bigint NOT NULL auto_increment PRIMARY KEY,
+						VitalsignNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
 						Height float NOT NULL,
 						Weight smallint NOT NULL,
@@ -3826,14 +3826,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE vitalsign'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 					Db.NonQ(command);
 					command=@"CREATE TABLE vitalsign (
-						VitalSignNum number(20) NOT NULL,
+						VitalsignNum number(20) NOT NULL,
 						PatNum number(20) NOT NULL,
 						Height number(38,8) NOT NULL,
 						Weight number(11) NOT NULL,
 						BpSystolic number(11) NOT NULL,
 						BpDiastolic number(11) NOT NULL,
 						DateTaken date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-						CONSTRAINT vitalsign_VitalSignNum PRIMARY KEY (VitalSignNum)
+						CONSTRAINT vitalsign_VitalsignNum PRIMARY KEY (VitalsignNum)
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX vitalsign_PatNum ON vitalsign (PatNum)";

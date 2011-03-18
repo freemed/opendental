@@ -3596,6 +3596,7 @@ namespace OpenDental{
 		}
 
 		private void OnEHR_Click() {
+			//FormOpenDental.FormEHR.pat=PatCur.PatNum;
 			FormOpenDental.FormEHR.ShowDialog();
 		}
 
