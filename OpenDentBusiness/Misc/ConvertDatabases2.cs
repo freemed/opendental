@@ -3807,6 +3807,42 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE creditcard ADD Note varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS vitalsign";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vitalsign (
+						VitalSignNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						Height float NOT NULL,
+						Weight smallint NOT NULL,
+						BpSystolic smallint NOT NULL,
+						BpDiastolic smallint NOT NULL,
+						DateTaken date NOT NULL DEFAULT '0001-01-01',
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE vitalsign'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vitalsign (
+						VitalSignNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						Height number(38,8) NOT NULL,
+						Weight number(11) NOT NULL,
+						BpSystolic number(11) NOT NULL,
+						BpDiastolic number(11) NOT NULL,
+						DateTaken date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT vitalsign_VitalSignNum PRIMARY KEY (VitalSignNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_PatNum ON vitalsign (PatNum)";
+					Db.NonQ(command);
+				}
+
+				
+
+
 
 
 
@@ -3855,5 +3891,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
 
 				

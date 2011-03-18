@@ -302,6 +302,7 @@
     <Compile Include="Crud\UserGroupCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Crud\UserQueryCrud.cs" />
+    <Compile Include="Crud\VitalsignCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
     <Compile Include="Data Interface\ApptFieldDefs.cs" />
     <Compile Include="Data Interface\ApptFields.cs" />
@@ -356,6 +357,7 @@
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
     <Compile Include="Data Interface\TimeCardRules.cs" />
+    <Compile Include="Data Interface\Vitalsigns.cs" />
     <Compile Include="Db\DbSchemaCol.cs" />
     <Compile Include="Db\OdDbType.cs" />
     <Compile Include="Db\PoIn.cs" />
