@@ -220,7 +220,7 @@ namespace OpenDental{
 			this.butAddDisease.Size = new System.Drawing.Size(98,23);
 			this.butAddDisease.TabIndex = 58;
 			this.butAddDisease.Text = "Add Problem";
-			this.butAddDisease.Click += new System.EventHandler(this.butAddDisease_Click);
+			this.butAddDisease.Click += new System.EventHandler(this.butAddProblem_Click);
 			// 
 			// gridMeds
 			// 
@@ -271,6 +271,7 @@ namespace OpenDental{
 			this.butIcd9.Size = new System.Drawing.Size(98,23);
 			this.butIcd9.TabIndex = 62;
 			this.butIcd9.Text = "Add ICD9";
+			this.butIcd9.Click += new System.EventHandler(this.butIcd9_Click);
 			// 
 			// FormMedical
 			// 
@@ -315,13 +316,7 @@ namespace OpenDental{
 			textMedicalComp.Text=PatientNoteCur.MedicalComp;
 			textService.Text=PatientNoteCur.Service;
 			FillMeds();
-			FillDiseases();
-			/*if(Questions.PatHasQuest(PatCur.PatNum)){
-				butQuestions.Text=Lan.g(this,"Edit Questionnaire");
-			}
-			else{
-				butQuestions.Text=Lan.g(this,"New Questionnaire");
-			}*/
+			FillProblems();
 		}
 
 		private void FillMeds(){
@@ -380,7 +375,7 @@ namespace OpenDental{
 			FillMeds();
 		}
 
-		private void FillDiseases(){
+		private void FillProblems(){
 			DiseaseList=Diseases.Refresh(PatCur.PatNum);
 			gridDiseases.BeginUpdate();
 			gridDiseases.Columns.Clear();
@@ -399,19 +394,31 @@ namespace OpenDental{
 			gridDiseases.EndUpdate();
 		}
 
-		private void butAddDisease_Click(object sender,EventArgs e) {
+		private void butAddProblem_Click(object sender,EventArgs e) {
 			Disease disease=new Disease();
 			disease.PatNum=PatCur.PatNum;
+			//todo: Use FormDiseaseDefs.IsSelectionMode
+			FormDiseaseDefs formDD=new FormDiseaseDefs();
+			formDD.IsSelectionMode=true;
+			formDD.ShowDialog();
+			if(formDD.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			disease.DiseaseDefNum=formDD.SelectedDiseaseDefNum;
 			FormDiseaseEdit FormD=new FormDiseaseEdit(disease);
 			FormD.IsNew=true;
 			FormD.ShowDialog();
-			FillDiseases();
+			FillProblems();
+		}
+
+		private void butIcd9_Click(object sender,EventArgs e) {
+
 		}
 
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);
 			FormD.ShowDialog();
-			FillDiseases();
+			FillProblems();
 		}
 
 		/*
@@ -441,6 +448,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	
 

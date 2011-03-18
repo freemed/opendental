@@ -11,9 +11,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.Windows.Forms.TextBox textName;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+		/// <summary>Required designer variable.</summary>
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
 		public bool IsNew;

@@ -1217,6 +1217,19 @@ namespace OpenDentBusiness{
 			return PIn.Long(Db.GetScalar(command));
 		}
 
+		/// <summary>When importing webforms, if it can't find an exact match, this method attempts a similar match.</summary>
+		public static List<Patient> GetSimilarList(string lName,string fName,DateTime birthdate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),lName,fName,birthdate);
+			}
+			string command="SELECT * FROM patient WHERE "
+				+"LName LIKE '"+POut.String(lName.Substring(0,2))+"%' "
+				+"AND FName LIKE '"+POut.String(fName.Substring(0,2))+"%' "
+				+"AND Birthdate="+POut.Date(birthdate)+" "
+				+"AND PatStatus!=4";//not deleted
+			return Crud.PatientCrud.SelectMany(command);
+		}
+
 		///<summary>Returns a list of patients that match last and first name.</summary>
 		public static List<Patient> GetListByName(string lName,string fName,long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

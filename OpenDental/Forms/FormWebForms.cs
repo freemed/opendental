@@ -91,43 +91,58 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				OpenDental.WebSheets.SheetAndSheetField[] sAnds=wh.GetSheets(RegistrationKey);
+				OpenDental.WebSheets.SheetAndSheetField[] arraySheets=wh.GetSheets(RegistrationKey);
 				List<long> SheetsForDeletion=new List<long>();
-				if(sAnds.Count()==0) {
+				if(arraySheets.Count()==0) {
 					MsgBox.Show(this,"No Patient forms retrieved from server");
 					return;
 				}
 				//loop through all incoming sheets
-				for(int i=0;i<sAnds.Length;i++) {
-					long PatNum=0;
-					string LastName="";
-					string FirstName="";
-					string BirthDate="";
-					//loop through each variable in a single sheetfield to get First name, last name and DOB
-					for(int j=0;j<sAnds[i].web_sheetfieldlist.Count();j++) {
-						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lname")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lastname")) {
-							LastName=sAnds[i].web_sheetfieldlist[j].FieldValue;
+				for(int i=0;i<arraySheets.Length;i++) {
+					long patNum=0;
+					string lName="";
+					string fName="";
+					DateTime bDate=DateTime.MinValue;
+					//loop through each field in this sheet to find First name, last name, and DOB
+					for(int j=0;j<arraySheets[i].web_sheetfieldlist.Count();j++) {
+						if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lname")
+							|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lastname")) 
+						{
+							lName=arraySheets[i].web_sheetfieldlist[j].FieldValue;
 						}
-						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("fname")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("firstname")) {
-							FirstName=sAnds[i].web_sheetfieldlist[j].FieldValue;
+						if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("fname")
+							|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("firstname")) 
+						{
+							fName=arraySheets[i].web_sheetfieldlist[j].FieldValue;
 						}
-						if(sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("bdate")||sAnds[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("birthdate")) {
-							BirthDate=sAnds[i].web_sheetfieldlist[j].FieldValue;
+						if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("bdate")
+							|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("birthdate")) 
+						{
+							bDate=PIn.Date(arraySheets[i].web_sheetfieldlist[j].FieldValue);
 						}
-					}// end of j loop
-					DateTime birthDate=PIn.Date(BirthDate);
-					if(birthDate.Year==1) {
-						//log invalid birth date  format
 					}
-					PatNum=Patients.GetPatNumByNameAndBirthday(LastName,FirstName,birthDate);
-					Patient newPat=null;
-					if(PatNum==0) {
-						newPat=CreatePatient(LastName,FirstName,birthDate,sAnds[i]);
-						PatNum=newPat.PatNum;
+					if(bDate.Year<1880) {
+						//log invalid birth date  format. Shouldn't happen, though.
 					}
-					Sheet newSheet=CreateSheet(PatNum,sAnds[i]);
-					if(DataExistsInDb(newSheet)==true) {
-						SheetsForDeletion.Add(sAnds[i].web_sheet.SheetID);
+					patNum=Patients.GetPatNumByNameAndBirthday(lName,fName,bDate);
+					if(patNum==0) {
+						FormPatientPickWebForm FormPpw=new FormPatientPickWebForm();
+						FormPpw.LnameEntered=lName;
+						FormPpw.FnameEntered=fName;
+						FormPpw.BdateEntered=bDate;
+						FormPpw.ShowDialog();
+						if(FormPpw.DialogResult!=DialogResult.OK) {
+							break;//out of loop
+						}
+						patNum=FormPpw.SelectedPatNum;//might be zero to indicate new patient
+					}
+					if(patNum==0) {
+						Patient newPat=CreatePatient(lName,fName,bDate,arraySheets[i]);
+						patNum=newPat.PatNum;
+					}
+					Sheet newSheet=CreateSheet(patNum,arraySheets[i]);
+					if(DataExistsInDb(newSheet)) {
+						SheetsForDeletion.Add(arraySheets[i].web_sheet.SheetID);
 					}
 				}// end of for loop
 				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
@@ -137,16 +152,14 @@ namespace OpenDental {
 			}
 		}
 
-		/// <summary>
-		/// compare values of the new patient or the new sheet with values that have been inserted into the db if false is returned then there is a mismatch.
-		/// </summary>
-		private bool DataExistsInDb(Sheet newSheet) {
+		/// <summary>Compares values of the sheet with values that have been inserted into the db.  Returns false if the data was not saved properly.</summary>
+		private bool DataExistsInDb(Sheet sheet) {
 			bool dataExistsInDb=true;
-			if(newSheet!=null) {
-				long SheetNum=newSheet.SheetNum;
+			if(sheet!=null) {
+				long SheetNum=sheet.SheetNum;
 				Sheet sheetFromDb=Sheets.GetSheet(SheetNum);
 				if(sheetFromDb!=null) {
-					dataExistsInDb=CompareSheets(sheetFromDb,newSheet);
+					dataExistsInDb=CompareSheets(sheetFromDb,sheet);
 				}
 			}
 			return dataExistsInDb;
