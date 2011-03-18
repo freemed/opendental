@@ -4477,9 +4477,6 @@ namespace OpenDental{
 				//full synch never run
 				return;
 			}
-			//I don't think this is good enough.  I think I need to move the thread out here so I can get rid of it when program closes.
-
-
 			FormMobile.SynchFromMain();
 		}
 
