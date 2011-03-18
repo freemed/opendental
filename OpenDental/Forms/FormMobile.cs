@@ -67,7 +67,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"WorkStation cannot be empty");
 				return false;
 			}
-			// the text field are read becaus the keyed in values have not been saved yet
+			// the text field is read because the keyed in values have not been saved yet
 			if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
 				IgnoreCertificateErrors();// done so that TestWebServiceExists() does not thow an error.
 			}
@@ -142,10 +142,11 @@ namespace OpenDental {
 			List<long> patNumList=Patientms.GetChangedSincePatNums(DateTime.MinValue);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(DateTime.MinValue,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(DateTime.MinValue);
+			List<long> provNumList=Providerms.GetChangedSinceProvNums(DateTime.MinValue);
 			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
@@ -175,10 +176,11 @@ namespace OpenDental {
 			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
+			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSince);
+			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
@@ -195,7 +197,7 @@ namespace OpenDental {
 		}
 
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
-		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,ref FormProgress progressIndicator,DateTime timeSynchStarted) {
+		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,List<long> provNumList,ref FormProgress progressIndicator,DateTime timeSynchStarted) {
 			IsSynching=true;
 			//patients--------------------------------------------------------------------
 			int localBatchSize=BatchSize;
@@ -228,6 +230,17 @@ namespace OpenDental {
 				List<long> blockRxNumList=rxNumList.GetRange(start,localBatchSize);
 				List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
 				mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
+				progressIndicator.CurrentVal+=BatchSize;
+			}
+			//Providers----------------------------------------------------------------------------
+			localBatchSize=BatchSize;
+			for(int start=0;start<provNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>provNumList.Count) {
+					localBatchSize=provNumList.Count-start;
+				}
+				List<long> blockProvNumList=provNumList.GetRange(start,localBatchSize);
+				List<Providerm> changedProvList=Providerms.GetMultProviderms(blockProvNumList);
+				mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
 				progressIndicator.CurrentVal+=BatchSize;
 			}
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
@@ -290,12 +303,13 @@ namespace OpenDental {
 			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
+			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSince);
+			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count;
 			FormProgress FormP=new FormProgress();//but we won't display it.
 			FormP.NumberFormat="";
 			FormP.DisplayText="";
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 		}
