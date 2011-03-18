@@ -59,28 +59,19 @@ namespace OpenDentBusiness{
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),payType);
 			}
 			DataTable table=new DataTable();
-			DataRow row;
-			table.Columns.Add("PatNum");
-			table.Columns.Add("PatName");
-			table.Columns.Add("balTotal");
-			table.Columns.Add("ChargeAmt");
-			string command="SELECT creditcard.PatNum,"+DbHelper.Concat("patient.LName","', '","patient.FName")+" PatName,patient.BalTotal,creditcard.ChargeAmt "
-					+"FROM creditcard "
-					+"LEFT JOIN patient ON creditcard.PatNum=patient.PatNum "
-					+"LEFT JOIN payment ON creditcard.PatNum=payment.PatNum "
-					+"WHERE payment.PayType="+payType+" "
-					+"AND creditcard.DateStart<payment.PayDate "
-					+"AND DATE_ADD(payment.PayDate,INTERVAL 1 MONTH) < NOW() "
-					+"AND patient.BalTotal>=creditcard.ChargeAmt";
-			DataTable rawTable=Db.GetTable(command);
-			for(int i=0;i<rawTable.Rows.Count;i++) {
-				row=table.NewRow();
-				row["balTotal"]=PIn.Double(rawTable.Rows[i]["BalTotal"].ToString()).ToString("N");
-				row["ChargeAmt"]=PIn.Double(rawTable.Rows[i]["ChargeAmt"].ToString()).ToString("N");
-				row["PatName"]=rawTable.Rows[i]["PatName"].ToString();
-				row["PatNum"]=rawTable.Rows[i]["PatNum"].ToString();
-				table.Rows.Add(row);
-			}
+			string command="SELECT cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"
+					+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN DATE('0001-01-01') ELSE MAX(pay.PayDate) END LatestPayment,"
+					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt "
+					+"FROM (creditcard cc,patient pat,patient guar) "
+					+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.PayType="+payType+" AND cc.DateStart<pay.PayDate "
+					+"WHERE cc.PatNum=pat.PatNum "
+					+"AND pat.Guarantor=guar.PatNum "
+					+"AND cc.ChargeAmt<>0 "
+					+"AND (cc.DateStop>NOW() OR YEAR(cc.DateStop)<1880) "
+					+"AND guar.BalTotal-guar.InsEst>=cc.ChargeAmt "
+					+"GROUP BY cc.CreditCardNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
+					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt";
+			table=Db.GetTable(command);
 			return table;
 		}
 

@@ -32,7 +32,9 @@ namespace OpenDental {
 			if(!CreditCardCur.IsNew) {
 				textCardNumber.Text=CreditCardCur.CCNumberMasked;
 				textAddress.Text=CreditCardCur.Address;
-				textExpDate.Text=CreditCardCur.CCExpiration.ToString("MMyy");
+				if(CreditCardCur.CCExpiration.Year>1800) {
+					textExpDate.Text=CreditCardCur.CCExpiration.ToString("MMyy");
+				}
 				textZip.Text=CreditCardCur.Zip;
 				if(CreditCardCur.ChargeAmt>0) {
 					textChargeAmt.Text=CreditCardCur.ChargeAmt.ToString("F");

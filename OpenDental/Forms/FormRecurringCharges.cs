@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -17,6 +19,7 @@ namespace OpenDental {
 		private int pagesPrinted;
 		private int headingPrintH;
 		private bool headingPrinted;
+		private Program prog;
 
 
 		public FormRecurringCharges() {
@@ -33,7 +36,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			Program prog=Programs.GetCur(ProgramName.Xcharge);
+			prog=Programs.GetCur(ProgramName.Xcharge);
 			if(prog==null){
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return;
@@ -56,11 +59,11 @@ namespace OpenDental {
 			table=CreditCards.GetRecurringChargeList(PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType")));
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),130);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecurring","Name"),250);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecurring","Total Bal"),100,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableRecurring","Total Bal"),90,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecurring","ChargeAmt"),100,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
@@ -68,15 +71,19 @@ namespace OpenDental {
 			OpenDental.UI.ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new OpenDental.UI.ODGridRow();
+				Double famBalTotal=PIn.Double(table.Rows[i]["FamBalTotal"].ToString());
+				Double chargeAmt=PIn.Double(table.Rows[i]["ChargeAmt"].ToString());
 				row.Cells.Add(table.Rows[i]["PatNum"].ToString());
 				row.Cells.Add(table.Rows[i]["PatName"].ToString());
-				row.Cells.Add(table.Rows[i]["balTotal"].ToString());
-				row.Cells.Add(table.Rows[i]["ChargeAmt"].ToString());
+				row.Cells.Add(famBalTotal.ToString("F"));
+				row.Cells.Add(chargeAmt.ToString("F"));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
 			labelTotal.Text=Lan.g(this,"Total=")+table.Rows.Count.ToString();
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
+			labelCharged.Text=Lan.g(this,"Charged=")+"0";
+			labelFailed.Text=Lan.g(this,"Failed=")+"0";
 		}
 		
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
@@ -156,7 +163,70 @@ namespace OpenDental {
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
+			if(prog==null){//Gets filled in FillGrid()
+				return;
+			}
+			string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
+			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				ProcessStartInfo info=new ProcessStartInfo(prog.Path);
+				string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+				File.Delete(resultfile);//delete the old result file.
+				info.Arguments="";
+				double amt=PIn.Double(table.Rows[gridMain.SelectedIndices[i]]["ChargeAmt"].ToString());
+				DateTime exp=PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["CCExpiration"].ToString());
+				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" /LOCKAMOUNT ";
+				info.Arguments+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
+				if(table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString()!="") {
+					info.Arguments+="/XCACCOUNTID:"+table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString()+" ";
+				}
+				else {
+					info.Arguments+="/ACCOUNT:"+table.Rows[gridMain.SelectedIndices[i]]["CCNumberMasked"].ToString()+" ";
+					info.Arguments+="/EXP:"+exp.ToString("MMyy")+" ";
+					info.Arguments+="\"/ADDRESS:"+table.Rows[gridMain.SelectedIndices[i]]["Address"].ToString()+"\" ";
+					info.Arguments+="\"/ZIP:"+table.Rows[gridMain.SelectedIndices[i]]["Zip"].ToString()+"\" ";
+				}
+				info.Arguments+="/RECEIPT:Pat"+table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()+" ";//aka invoice#
+				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
+				info.Arguments+="/USERID:"+user+" ";
+				info.Arguments+="/PASSWORD:"+password+" ";
+				info.Arguments+="/HIDEMAINWINDOW ";
+				info.Arguments+="/AUTOPROCESS ";
+				info.Arguments+="/SMALLWINDOW ";
+				info.Arguments+="/AUTOCLOSE ";
+				info.Arguments+="/NORESULTDIALOG ";
+				Cursor=Cursors.WaitCursor;
+				Process process=new Process();
+				process.StartInfo=info;
+				process.EnableRaisingEvents=true;
+				process.Start();
+				while(!process.HasExited) {
+					Application.DoEvents();
+				}
+				Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
+				Cursor=Cursors.Default;
+				string resulttext="";
+				string line="";
+				using(TextReader reader=new StreamReader(resultfile)) {
+					line=reader.ReadLine();
+					while(line!=null) {
+						if(resulttext!="") {
+							resulttext+="\r\n";
+						}
+						resulttext+=line;
+						if(line.StartsWith("RESULT=")) {
+							if(line!="RESULT=SUCCESS") {
+								break;
+							}
+						}
+						line=reader.ReadLine();
+					}
+				}
+			}
+			//PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType"));
 			FillGrid();
+			labelCharged.Text=Lan.g(this,"Charged=")+"0";
+			labelFailed.Text=Lan.g(this,"Failed=")+"0";
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
