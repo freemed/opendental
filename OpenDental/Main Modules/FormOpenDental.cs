@@ -49,6 +49,9 @@ using System.Xml.Serialization;
 using SparksToothChart;
 using OpenDental.SmartCards;
 using OpenDental.UI;
+#if DEBUG
+using EHR;
+#endif
 
 //#if(ORA_DB)
 //using OD_CRYPTO;
@@ -223,7 +226,9 @@ namespace OpenDental{
 		private MenuItem menuItemCCRecurring;
 		private UserControlPhoneSmall phoneSmall;
 		///<summary>This will be null if EHR didn't load up.</summary>
-		public static System.Windows.Forms.Form FormEHR;
+		public static object FormEHR;
+		///<summary>This will be null if EHR didn't load up.</summary>
+		public static Assembly AssemblyEHR;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -1538,6 +1543,8 @@ namespace OpenDental{
 			catch { }
 			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
 			#if DEBUG
+				FormEHR=new FormEHR();
+				/*
 				dllPathEHR=@"..\..\..\..\..\Shared Projects Subversion\EHR\EHR_";
 				Version versionApp=new Version(Application.ProductVersion);
 				if(versionApp.Build==0) {//must be head
@@ -1546,14 +1553,16 @@ namespace OpenDental{
 				else{
 					dllPathEHR+=versionApp.Major.ToString()+"_"+versionApp.Minor.ToString()+@"\EHR\bin\Debug\EHR.dll";
 				}
-				dllPathEHR=Path.GetFullPath(dllPathEHR);
+				dllPathEHR=Path.GetFullPath(dllPathEHR);*/
+			#else
+				FormEHR=null;
+				AssemblyEHR=null;
+				if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+					AssemblyEHR=Assembly.LoadFile(dllPathEHR);
+					Type type=AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+					FormEHR=Activator.CreateInstance(type);
+				}
 			#endif
-			FormEHR=null;
-			if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
-				Assembly ass=Assembly.LoadFile(dllPathEHR);
-				Type type=ass.GetType("EHR.FormEHR");//namespace.class
-				FormEHR=(Form)Activator.CreateInstance(type);
-			}
 			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
 		}
 

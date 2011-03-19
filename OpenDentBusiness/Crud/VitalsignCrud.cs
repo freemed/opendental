@@ -9,9 +9,9 @@ using System.Drawing;
 namespace OpenDentBusiness.Crud{
 	internal class VitalsignCrud {
 		///<summary>Gets one Vitalsign object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Vitalsign SelectOne(long vitalSignNum){
+		internal static Vitalsign SelectOne(long vitalsignNum){
 			string command="SELECT * FROM vitalsign "
-				+"WHERE VitalSignNum = "+POut.Long(vitalSignNum);
+				+"WHERE VitalsignNum = "+POut.Long(vitalsignNum);
 			List<Vitalsign> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one Vitalsign into the database.  Returns the new priKey.</summary>
 		internal static long Insert(Vitalsign vitalsign){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				vitalsign.VitalsignNum=DbHelper.GetNextOracleKey("vitalsign","VitalSignNum");
+				vitalsign.VitalsignNum=DbHelper.GetNextOracleKey("vitalsign","VitalsignNum");
 				int loopcount=0;
 				while(loopcount<100){
 					try {
@@ -87,11 +87,11 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one Vitalsign into the database.  Provides option to use the existing priKey.</summary>
 		internal static long Insert(Vitalsign vitalsign,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
-				vitalsign.VitalsignNum=ReplicationServers.GetKey("vitalsign","VitalSignNum");
+				vitalsign.VitalsignNum=ReplicationServers.GetKey("vitalsign","VitalsignNum");
 			}
 			string command="INSERT INTO vitalsign (";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+="VitalSignNum,";
+				command+="VitalsignNum,";
 			}
 			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				+"BpSystolic  =  "+POut.Int   (vitalsign.BpSystolic)+", "
 				+"BpDiastolic =  "+POut.Int   (vitalsign.BpDiastolic)+", "
 				+"DateTaken   =  "+POut.Date  (vitalsign.DateTaken)+" "
-				+"WHERE VitalSignNum = "+POut.Long(vitalsign.VitalsignNum);
+				+"WHERE VitalsignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
 
@@ -157,14 +157,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE vitalsign SET "+command
-				+" WHERE VitalSignNum = "+POut.Long(vitalsign.VitalsignNum);
+				+" WHERE VitalsignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Vitalsign from the database.</summary>
-		internal static void Delete(long vitalSignNum){
+		internal static void Delete(long vitalsignNum){
 			string command="DELETE FROM vitalsign "
-				+"WHERE VitalSignNum = "+POut.Long(vitalSignNum);
+				+"WHERE VitalsignNum = "+POut.Long(vitalsignNum);
 			Db.NonQ(command);
 		}
 

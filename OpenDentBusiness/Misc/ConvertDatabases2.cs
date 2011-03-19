@@ -3839,7 +3839,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX vitalsign_PatNum ON vitalsign (PatNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD OnlinePassword varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD OnlinePassword varchar2(255)";
+					Db.NonQ(command);
+				}
 				
 
 

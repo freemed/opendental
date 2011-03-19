@@ -4549,6 +4549,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared Projects Subversion\EHR\EHR_head\EHR\xEHR.csproj">
+      <Project>{5ABF1D9D-2B93-4217-AFA6-9EECCF6F525F}</Project>
+      <Name>xEHR</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
       <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
       <Name>xCodeBase</Name>
