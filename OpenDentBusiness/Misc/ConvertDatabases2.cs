@@ -3847,6 +3847,43 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE patient ADD OnlinePassword varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD IsDiscontinued tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD IsDiscontinued number(3)";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET IsDiscontinued = 0 WHERE IsDiscontinued IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat MODIFY IsDiscontinued NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE disease ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE disease SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE disease ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE disease SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
+				
 				
 
 
@@ -3897,6 +3934,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				
+
+				
 
 
 				

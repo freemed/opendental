@@ -14,7 +14,9 @@ namespace OpenDentBusiness {
 		///<summary>FK to diseasedef.DiseaseDefNum.  The disease description is in that table.</summary>
 		public long DiseaseDefNum;
 		///<summary>Any note about this disease that is specific to this patient.</summary>
-		public string PatNote;
+		public string PatNote;///<summary>The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 
 		///<summary></summary>
 		public Disease Copy() {

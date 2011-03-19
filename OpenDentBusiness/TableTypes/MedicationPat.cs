@@ -14,6 +14,12 @@ namespace OpenDentBusiness{
 		public long MedicationNum;
 		///<summary>Medication notes specific to this patient.</summary>
 		public string PatNote;
+		///<summary>The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
+		///<summary>If true, not a current medication.</summary>
+		public bool IsDiscontinued;
+
 	}
 
 

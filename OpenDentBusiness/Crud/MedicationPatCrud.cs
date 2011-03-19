@@ -50,6 +50,8 @@ namespace OpenDentBusiness.Crud{
 				medicationPat.PatNum          = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				medicationPat.MedicationNum   = PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
 				medicationPat.PatNote         = PIn.String(table.Rows[i]["PatNote"].ToString());
+				medicationPat.DateTStamp      = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				medicationPat.IsDiscontinued  = PIn.Bool  (table.Rows[i]["IsDiscontinued"].ToString());
 				retVal.Add(medicationPat);
 			}
 			return retVal;
@@ -90,14 +92,16 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicationPatNum,";
 			}
-			command+="PatNum,MedicationNum,PatNote) VALUES(";
+			command+="PatNum,MedicationNum,PatNote,IsDiscontinued) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicationPat.MedicationPatNum)+",";
 			}
 			command+=
 				     POut.Long  (medicationPat.PatNum)+","
 				+    POut.Long  (medicationPat.MedicationNum)+","
-				+"'"+POut.String(medicationPat.PatNote)+"')";
+				+"'"+POut.String(medicationPat.PatNote)+"',"
+				//DateTStamp can only be set by MySQL
+				+    POut.Bool  (medicationPat.IsDiscontinued)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +116,9 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE medicationpat SET "
 				+"PatNum          =  "+POut.Long  (medicationPat.PatNum)+", "
 				+"MedicationNum   =  "+POut.Long  (medicationPat.MedicationNum)+", "
-				+"PatNote         = '"+POut.String(medicationPat.PatNote)+"' "
+				+"PatNote         = '"+POut.String(medicationPat.PatNote)+"', "
+				//DateTStamp can only be set by MySQL
+				+"IsDiscontinued  =  "+POut.Bool  (medicationPat.IsDiscontinued)+" "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPat.MedicationPatNum);
 			Db.NonQ(command);
 		}
@@ -131,6 +137,11 @@ namespace OpenDentBusiness.Crud{
 			if(medicationPat.PatNote != oldMedicationPat.PatNote) {
 				if(command!=""){ command+=",";}
 				command+="PatNote = '"+POut.String(medicationPat.PatNote)+"'";
+			}
+			//DateTStamp can only be set by MySQL
+			if(medicationPat.IsDiscontinued != oldMedicationPat.IsDiscontinued) {
+				if(command!=""){ command+=",";}
+				command+="IsDiscontinued = "+POut.Bool(medicationPat.IsDiscontinued)+"";
 			}
 			if(command==""){
 				return;
