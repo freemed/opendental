@@ -46,9 +46,12 @@ namespace OpenDentBusiness.Crud{
 			RxAlert rxAlert;
 			for(int i=0;i<table.Rows.Count;i++) {
 				rxAlert=new RxAlert();
-				rxAlert.RxAlertNum   = PIn.Long  (table.Rows[i]["RxAlertNum"].ToString());
-				rxAlert.RxDefNum     = PIn.Long  (table.Rows[i]["RxDefNum"].ToString());
-				rxAlert.DiseaseDefNum= PIn.Long  (table.Rows[i]["DiseaseDefNum"].ToString());
+				rxAlert.RxAlertNum     = PIn.Long  (table.Rows[i]["RxAlertNum"].ToString());
+				rxAlert.RxDefNum       = PIn.Long  (table.Rows[i]["RxDefNum"].ToString());
+				rxAlert.DiseaseDefNum  = PIn.Long  (table.Rows[i]["DiseaseDefNum"].ToString());
+				rxAlert.AllergyDefNum  = PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
+				rxAlert.MedicationNum  = PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
+				rxAlert.NotificationMsg= PIn.String(table.Rows[i]["NotificationMsg"].ToString());
 				retVal.Add(rxAlert);
 			}
 			return retVal;
@@ -89,13 +92,16 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RxAlertNum,";
 			}
-			command+="RxDefNum,DiseaseDefNum) VALUES(";
+			command+="RxDefNum,DiseaseDefNum,AllergyDefNum,MedicationNum,NotificationMsg) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(rxAlert.RxAlertNum)+",";
 			}
 			command+=
 				     POut.Long  (rxAlert.RxDefNum)+","
-				+    POut.Long  (rxAlert.DiseaseDefNum)+")";
+				+    POut.Long  (rxAlert.DiseaseDefNum)+","
+				+    POut.Long  (rxAlert.AllergyDefNum)+","
+				+    POut.Long  (rxAlert.MedicationNum)+","
+				+"'"+POut.String(rxAlert.NotificationMsg)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -108,8 +114,11 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one RxAlert in the database.</summary>
 		internal static void Update(RxAlert rxAlert){
 			string command="UPDATE rxalert SET "
-				+"RxDefNum     =  "+POut.Long  (rxAlert.RxDefNum)+", "
-				+"DiseaseDefNum=  "+POut.Long  (rxAlert.DiseaseDefNum)+" "
+				+"RxDefNum       =  "+POut.Long  (rxAlert.RxDefNum)+", "
+				+"DiseaseDefNum  =  "+POut.Long  (rxAlert.DiseaseDefNum)+", "
+				+"AllergyDefNum  =  "+POut.Long  (rxAlert.AllergyDefNum)+", "
+				+"MedicationNum  =  "+POut.Long  (rxAlert.MedicationNum)+", "
+				+"NotificationMsg= '"+POut.String(rxAlert.NotificationMsg)+"' "
 				+"WHERE RxAlertNum = "+POut.Long(rxAlert.RxAlertNum);
 			Db.NonQ(command);
 		}
@@ -124,6 +133,18 @@ namespace OpenDentBusiness.Crud{
 			if(rxAlert.DiseaseDefNum != oldRxAlert.DiseaseDefNum) {
 				if(command!=""){ command+=",";}
 				command+="DiseaseDefNum = "+POut.Long(rxAlert.DiseaseDefNum)+"";
+			}
+			if(rxAlert.AllergyDefNum != oldRxAlert.AllergyDefNum) {
+				if(command!=""){ command+=",";}
+				command+="AllergyDefNum = "+POut.Long(rxAlert.AllergyDefNum)+"";
+			}
+			if(rxAlert.MedicationNum != oldRxAlert.MedicationNum) {
+				if(command!=""){ command+=",";}
+				command+="MedicationNum = "+POut.Long(rxAlert.MedicationNum)+"";
+			}
+			if(rxAlert.NotificationMsg != oldRxAlert.NotificationMsg) {
+				if(command!=""){ command+=",";}
+				command+="NotificationMsg = '"+POut.String(rxAlert.NotificationMsg)+"'";
 			}
 			if(command==""){
 				return;

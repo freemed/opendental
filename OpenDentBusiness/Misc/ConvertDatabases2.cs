@@ -3883,6 +3883,47 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE disease SET DateTStamp = SYSTIMESTAMP";
 					Db.NonQ(command);
 				}
+				//columns for rxalert----------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxalert ADD AllergyDefNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxalert ADD INDEX (AllergyDefNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxalert ADD AllergyDefNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE rxalert SET AllergyDefNum = 0 WHERE AllergyDefNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxalert MODIFY AllergyDefNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX rxalert_AllergyDefNum ON rxalert (AllergyDefNum)";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxalert ADD MedicationNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxalert ADD INDEX (MedicationNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxalert ADD MedicationNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE rxalert SET MedicationNum = 0 WHERE MedicationNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxalert MODIFY MedicationNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX rxalert_MedicationNum ON rxalert (MedicationNum)";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxalert ADD NotificationMsg varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxalert ADD NotificationMsg varchar2(255)";
+					Db.NonQ(command);
+				}
 				
 				
 
@@ -3908,37 +3949,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 
-
-		
-
-				
-
-				
-
-
-
-
-
-
-				
-
-				
-
-
-
-
-
-				
-
-
-
-
-
-
-
-				
-
-				
 
 
 				

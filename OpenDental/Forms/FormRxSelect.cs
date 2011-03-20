@@ -201,7 +201,7 @@ namespace OpenDental{
 				}
 			}
 			if(matchAL.Count>0){
-				string alert=Lan.g(this,"This patient has the following medical conditions or allergies:\r\n");
+				string alert=Lan.g(this,"This patient has the following medical problems or allergies:\r\n");
 				for(int i=0;i<matchAL.Count;i++){
 					alert+="\r\n"+matchAL[i];
 				}
