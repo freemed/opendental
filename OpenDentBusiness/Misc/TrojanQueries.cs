@@ -149,8 +149,11 @@ namespace OpenDentBusiness {
 				+"GroupName='"   +POut.String(troj.PLANDESC)+"', "
 				+"GroupNum='"    +POut.String(troj.POLICYNO)+"', "
 				+"CarrierNum= "  +POut.Long  (troj.CarrierNum)+", "
-				+"BenefitNotes='"+POut.String(troj.BenefitNotes)+"' "
 				+"WHERE PlanNum="+POut.Long  (planNum);
+			Db.NonQ(command);
+			command="UPDATE inssub SET "
+				+"BenefitNotes='"+POut.String(troj.BenefitNotes)+"' "
+				+"WHERE PlanNum="+POut.Long(planNum);
 			Db.NonQ(command);
 			if(updateBenefits) {
 				//clear benefits

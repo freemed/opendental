@@ -14,7 +14,6 @@ using CodeBase;
 
 namespace OpenDental.Bridges {
 	class Trojan {
-
 		private static Collection<string[]> deletePatientRecords;
 		private static Collection<string[]> deleteTrojanRecords;
 		private static DataTable pendingDeletionTable;
@@ -30,8 +29,9 @@ namespace OpenDental.Bridges {
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
 			string file="";
 #if DEBUG
-			file=@"E:\My Documents\Bridge Info\Trojan\ETW\ALLPLANS.TXT";
-			ProcessTrojanPlanUpdates(file);
+			file=@"C:\Trojan\ETW\";
+			ProcessDeletedPlans(file+@"DELETEDPLANS.TXT");
+			ProcessTrojanPlanUpdates(file+@"ALLPLANS.TXT");
 #else
 			if(regKey==null || regKey.GetValue("INSTALLDIR")==null) {
 				//jsparks: The below is wrong.  The user should create a registry key manually.
@@ -390,11 +390,13 @@ namespace OpenDental.Bridges {
 			if(!MsgBox.Show("Trojan",true,"Trojan plans will now be updated.")) {
 				return;
 			}
+			Cursor.Current=Cursors.WaitCursor;
 			string allplantext="";
 			using(StreamReader sr=new StreamReader(file)) {
 				allplantext=sr.ReadToEnd();
 			}
 			if(allplantext=="") {
+				Cursor.Current=Cursors.Default;
 				MessageBox.Show("Could not read file contents: "+file);
 				return;
 			}
@@ -411,6 +413,7 @@ namespace OpenDental.Bridges {
 			catch{//this will happen if user clicks cancel in a note box.
 				return;
 			}
+			Cursor.Current=Cursors.Default;
 			MessageBox.Show(plansAffected.ToString()+" plans updated.");
 			try{
 				File.Delete(file);
@@ -440,6 +443,9 @@ namespace OpenDental.Bridges {
 			//now, save this all to the database.
 			troj.CarrierNum=carrier.CarrierNum;
 			InsPlan plan=TrojanQueries.GetPlanWithTrojanID(troj.TROJANID);
+			if(plan==null) {
+				return 0;
+			}
 			TrojanQueries.UpdatePlan(troj,plan.PlanNum,updateBenefits);
 			plan=InsPlans.RefreshOne(plan.PlanNum);
 			if(updateNoteAutomatic) {
