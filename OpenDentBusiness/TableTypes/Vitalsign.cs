@@ -9,13 +9,13 @@ namespace OpenDentBusiness {
 		public long VitalsignNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary>Height of patient in inches. Fractions might be needed some day.</summary>
+		///<summary>Height of patient in inches. Fractions might be needed some day.  Allowed to be 0.</summary>
 		public float Height;
-		///<summary>Lbs.</summary>
+		///<summary>Lbs.  Allowed to be 0.</summary>
 		public int Weight;
-		///<summary></summary>
+		///<summary>Allowed to be 0.</summary>
 		public int BpSystolic;
-		///<summary></summary>
+		///<summary>Allowed to be 0.</summary>
 		public int BpDiastolic;
 		///<summary>The date that the vitalsigns were taken.</summary>
 		public DateTime DateTaken;
