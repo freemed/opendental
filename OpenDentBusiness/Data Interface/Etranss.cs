@@ -244,7 +244,7 @@ namespace OpenDentBusiness{
 				File.WriteAllText(@"..\..\..\TestCanada\LastOfficeSequenceNumber.txt",(etrans.OfficeSequenceNumber+1).ToString());
 			#endif
 			etrans.OfficeSequenceNumber++;
-			if(etype==EtransType.Eligibility_CA || etype==EtransType.RequestOutstand_CA){
+			//if(etype==EtransType.Eligibility_CA){ //The counter must be incremented for all transaction types, according to the documentation for field A09 Carrier Transaction Counter.
 				//find the next CarrierTransCounter------------------------------------------------------------------------------------
 				etrans.CarrierTransCounter=0;
 				command="SELECT MAX(CarrierTransCounter) FROM etrans "
@@ -271,7 +271,7 @@ namespace OpenDentBusiness{
 					//maybe by adding a reset date to the preference table which will apply to all counters as a whole.
 				}
 				etrans.CarrierTransCounter++;
-			}
+			//}
 			Insert(etrans);
 			return etrans;
 		}

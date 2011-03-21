@@ -143,65 +143,66 @@ namespace OpenDental.Eclaims {
 			InitializeComponent();
 			breakLinePen.Width=2;
 			//try {
-			patient=Patients.GetPat(etrans.PatNum);
-			primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
-			claim=Claims.GetClaim(etrans.ClaimNum);
-			if(claim==null){//for eligibility
-				provTreat=Providers.GetProv(Patients.GetProvNum(patient));
-				provBill=Providers.GetProv(Patients.GetProvNum(patient));
-				insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
-				insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
-			}
-			else{
-				provTreat=Providers.GetProv(claim.ProvTreat);
-				provBill=Providers.GetProv(claim.ProvBill);
-				insSub=InsSubs.GetSub(claim.InsSubNum,new List<InsSub>());
-				insplan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
-				if(claim.PlanNum2>0){
-					secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
-					insSub2=InsSubs.GetSub(claim.InsSubNum2,new List<InsSub>());
-					insplan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
-					subscriber2=Patients.GetPat(insSub2.Subscriber);
-					if(secondaryCarrier==null || insplan2==null || subscriber2==null) {
-						throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
+			if(etrans.PatNum!=0) { //Some transactions are not patient specific.
+				patient=Patients.GetPat(etrans.PatNum);
+				primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
+				claim=Claims.GetClaim(etrans.ClaimNum);
+				if(claim==null) {//for eligibility
+					provTreat=Providers.GetProv(Patients.GetProvNum(patient));
+					provBill=Providers.GetProv(Patients.GetProvNum(patient));
+					insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
+					insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
+				}
+				else {
+					provTreat=Providers.GetProv(claim.ProvTreat);
+					provBill=Providers.GetProv(claim.ProvBill);
+					insSub=InsSubs.GetSub(claim.InsSubNum,new List<InsSub>());
+					insplan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
+					if(claim.PlanNum2>0) {
+						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
+						insSub2=InsSubs.GetSub(claim.InsSubNum2,new List<InsSub>());
+						insplan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
+						subscriber2=Patients.GetPat(insSub2.Subscriber);
+						if(secondaryCarrier==null || insplan2==null || subscriber2==null) {
+							throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
+						}
+					}
+					claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
+					long clinicNum=0;
+					for(int i=0;i<claimprocs.Count;i++) {
+						if(claimprocs[i].ClinicNum!=0) {
+							clinicNum=claimprocs[i].ClinicNum;
+							break;
+						}
+					}
+					if(clinicNum!=0) {
+						clinic=Clinics.GetClinic(clinicNum);
+					}
+					else if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0) {
+						clinic=Clinics.List[0];
 					}
 				}
-				claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
-				long clinicNum=0;
-				for(int i=0;i<claimprocs.Count;i++){
-					if(claimprocs[i].ClinicNum!=0){
-						clinicNum=claimprocs[i].ClinicNum;
-						break;
-					}
+				patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
+				patPlanPri=PatPlans.GetFromList(patPlansForPatient,insplan.PlanNum);
+				subscriber=Patients.GetPat(insSub.Subscriber);
+				if(subscriber.Language=="fr") {
+					isFrench=true;
+					culture=new CultureInfo("fr-CA");
 				}
-				if(clinicNum!=0){
-					clinic=Clinics.GetClinic(clinicNum);
+				List<Procedure> procsAll=Procedures.Refresh(etrans.PatNum);
+				extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
+				//Test previously untested structures for existence, so that we do not need to check repeatedly later.
+				//
+				if(primaryCarrier==null || provTreat==null || provBill==null || insplan==null || patPlanPri==null //claimprocs == null ||
+					|| patPlansForPatient==null || extracted==null) {
+					throw new Exception(this.ToString()+".FormCCDPrint: failed to load primary insurance info!");
 				}
-				else if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0){
-					clinic=Clinics.List[0];
-				}
+				//}
+				//catch(Exception e) {
+				//	Logger.openlog.LogMB(e.ToString(),Logger.Severity.ERROR);
+				//	printable=false;
+				//}
 			}
-			patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
-			patPlanPri=PatPlans.GetFromList(patPlansForPatient,insplan.PlanNum);
-			subscriber=Patients.GetPat(insSub.Subscriber);
-			if(subscriber.Language=="fr") {
-				isFrench=true;
-				culture=new CultureInfo("fr-CA");
-			}
-			List<Procedure> procsAll=Procedures.Refresh(etrans.PatNum);
-			extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
-			//Test previously untested structures for existence, so that we do not need to check repeatedly later.
-			//
-			if(primaryCarrier==null || provTreat==null || provBill==null || insplan==null || patPlanPri==null //claimprocs == null ||
-				|| patPlansForPatient==null || extracted==null) 
-			{
-				throw new Exception(this.ToString()+".FormCCDPrint: failed to load primary insurance info!");
-			}
-			//}
-			//catch(Exception e) {
-			//	Logger.openlog.LogMB(e.ToString(),Logger.Severity.ERROR);
-			//	printable=false;
-			//}
 			if(MessageText==null || MessageText.Length<23) {
 				throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
 			}
@@ -237,6 +238,7 @@ namespace OpenDental.Eclaims {
 					embeddedForm.Print();
 				}
 				if(formatVersionNumber=="04"){//FormId field does not exist in version 02 in any of the message texts.
+
 					formId=formData.GetFieldById("G42").valuestr;//Always exists in version 04 message responses.
 				}else{//Version 02
 					//Since there is no FormID field in version 02, we figure out what the formId should be based on the transaction type.
@@ -324,13 +326,13 @@ namespace OpenDental.Eclaims {
 					if(responseStatus!=null && responseStatus.valuestr!=null) {
 						status=responseStatus.valuestr.ToUpper();
 					}
-					if(status=="R"){//Claim Rejection
+					transactionCode=formData.GetFieldById("A04").valuestr;
+					if(transactionCode=="16") {
+						PrintPaymentReconciliation_16(e.Graphics);
+					}
+					else if(status=="R"){//Claim Rejection
 					  PrintClaimRejection(e.Graphics);
 					}
-					//else 
-					//if(status=="M" || formId=="05"){//Paper Claim
-						
-					//}
 					else{
 						switch(formId){
 							default:
@@ -2565,6 +2567,9 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Input string is expected to have the form 'YYYYMMDD'.</summary>
 		private string DateNumToPrintDate(string number){
+			if(number=="00000000") {
+				return DateToString(DateTime.MinValue);
+			}
 			DateTime dt=DateTime.ParseExact(number,"yyyyMMdd",culture.DateTimeFormat);
 			return DateToString(dt);
 		}

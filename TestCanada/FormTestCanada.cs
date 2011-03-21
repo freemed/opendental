@@ -251,7 +251,19 @@ namespace TestCanada {
 				}
 			}
 			if(checkPayReconcil.Checked){
-				textResults.Text+="Payment Reconciliations not implemented yet.\r\n";
+				if(singleScript==1) {
+					textResults.Text+=PaymentReconciliation.RunOne();
+				}
+				else if(singleScript==2) {
+					textResults.Text+=PaymentReconciliation.RunTwo();
+				}
+				else if(singleScript==3) {
+					textResults.Text+=PaymentReconciliation.RunThree();
+				}
+				else {
+					MessageBox.Show("Script number not found (not implemented yet).");
+					return;
+				}
 			}
 			if(checkSumReconcil.Checked){
 				textResults.Text+="Summary Reconciliations not implemented yet.\r\n";

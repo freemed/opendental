@@ -3957,6 +3957,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE patient MODIFY SmokeStatus NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE canadiannetwork ADD CanadianTransactionPrefix varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE canadiannetwork ADD CanadianTransactionPrefix varchar2(255)";
+					Db.NonQ(command);
+				}
+				
 
 
 
@@ -3985,3 +3994,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
+				
+
+
+				

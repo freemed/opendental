@@ -400,6 +400,11 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Get Reports"),5,Lan.g(this,"Get Reports from Other Clearinghouses"),"Reports"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Outstanding"),-1,Lan.g(this,"Get Outstanding Transactions"),"Outstanding"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment Rec"),-1,Lan.g(this,"Get Payment Reconciliation Transactions"),"PayRec"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Summary Rec"),-1,Lan.g(this,"Get Summary Reconciliation Transactions"),"SummaryRec"));
+			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"","Close"));
 			/*ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ClaimsSend);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -517,6 +522,15 @@ namespace OpenDental{
 					break;
 				case "Reports":
 					OnReports_Click();
+					break;
+				case "Outstanding":
+					OnOutstanding_Click();
+					break;
+				case "PayRec":
+					OnPayRec_Click();
+					break;
+				case "SummaryRec":
+					OnSummaryRec_Click();
 					break;
 				case "Close":
 					Close();
@@ -714,6 +728,18 @@ namespace OpenDental{
 		private void OnReports_Click(){
 			FormClaimReports FormC=new FormClaimReports();
 			FormC.ShowDialog();
+		}
+
+		private void OnOutstanding_Click() {
+			//todo
+		}
+
+		private void OnPayRec_Click() {
+			//todo
+		}
+
+		private void OnSummaryRec_Click() {
+			//todo
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {

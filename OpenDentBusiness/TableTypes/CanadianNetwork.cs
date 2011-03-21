@@ -15,6 +15,8 @@ namespace OpenDentBusiness{
 		public string Abbrev;
 		///<summary></summary>
 		public string Descript;
+		///<summary>A01.  Up to 12 char.</summary>
+		public string CanadianTransactionPrefix;
 
 		///<summary></summary>
 		public CanadianNetwork Copy() {

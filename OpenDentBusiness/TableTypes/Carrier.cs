@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		public bool IsCDA;
 		///<summary>The version of CDAnet supported.  Either 02 or 04.</summary>
 		public string CDAnetVersion;
-		///<summary>FK to canadiannetwork.CanadianNetworkNum.  Only used in Canada.</summary>
+		///<summary>FK to canadiannetwork.CanadianNetworkNum.  Only used in Canada.  Right now, there is no UI to the canadiannetwork table in our db.</summary>
 		public long CanadianNetworkNum;
 		///<summary></summary>
 		public bool IsHidden;

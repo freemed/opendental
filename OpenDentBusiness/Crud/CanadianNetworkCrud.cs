@@ -46,9 +46,10 @@ namespace OpenDentBusiness.Crud{
 			CanadianNetwork canadianNetwork;
 			for(int i=0;i<table.Rows.Count;i++) {
 				canadianNetwork=new CanadianNetwork();
-				canadianNetwork.CanadianNetworkNum= PIn.Long  (table.Rows[i]["CanadianNetworkNum"].ToString());
-				canadianNetwork.Abbrev            = PIn.String(table.Rows[i]["Abbrev"].ToString());
-				canadianNetwork.Descript          = PIn.String(table.Rows[i]["Descript"].ToString());
+				canadianNetwork.CanadianNetworkNum       = PIn.Long  (table.Rows[i]["CanadianNetworkNum"].ToString());
+				canadianNetwork.Abbrev                   = PIn.String(table.Rows[i]["Abbrev"].ToString());
+				canadianNetwork.Descript                 = PIn.String(table.Rows[i]["Descript"].ToString());
+				canadianNetwork.CanadianTransactionPrefix= PIn.String(table.Rows[i]["CanadianTransactionPrefix"].ToString());
 				retVal.Add(canadianNetwork);
 			}
 			return retVal;
@@ -89,13 +90,14 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CanadianNetworkNum,";
 			}
-			command+="Abbrev,Descript) VALUES(";
+			command+="Abbrev,Descript,CanadianTransactionPrefix) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(canadianNetwork.CanadianNetworkNum)+",";
 			}
 			command+=
 				 "'"+POut.String(canadianNetwork.Abbrev)+"',"
-				+"'"+POut.String(canadianNetwork.Descript)+"')";
+				+"'"+POut.String(canadianNetwork.Descript)+"',"
+				+"'"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -108,8 +110,9 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one CanadianNetwork in the database.</summary>
 		internal static void Update(CanadianNetwork canadianNetwork){
 			string command="UPDATE canadiannetwork SET "
-				+"Abbrev            = '"+POut.String(canadianNetwork.Abbrev)+"', "
-				+"Descript          = '"+POut.String(canadianNetwork.Descript)+"' "
+				+"Abbrev                   = '"+POut.String(canadianNetwork.Abbrev)+"', "
+				+"Descript                 = '"+POut.String(canadianNetwork.Descript)+"', "
+				+"CanadianTransactionPrefix= '"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"' "
 				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum);
 			Db.NonQ(command);
 		}
@@ -124,6 +127,10 @@ namespace OpenDentBusiness.Crud{
 			if(canadianNetwork.Descript != oldCanadianNetwork.Descript) {
 				if(command!=""){ command+=",";}
 				command+="Descript = '"+POut.String(canadianNetwork.Descript)+"'";
+			}
+			if(canadianNetwork.CanadianTransactionPrefix != oldCanadianNetwork.CanadianTransactionPrefix) {
+				if(command!=""){ command+=",";}
+				command+="CanadianTransactionPrefix = '"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"'";
 			}
 			if(command==""){
 				return;
