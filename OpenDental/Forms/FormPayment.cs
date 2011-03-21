@@ -1397,7 +1397,7 @@ namespace OpenDental{
 					}
 					line=reader.ReadLine();
 				}
-				if(needToken) {
+				if(needToken && xChargeToken!="") {
 					//Only way this code can be hit is if they have set up a credit card and it does not have a token.
 					//So we'll use the created token from result file and assign it to the coresponding account.
 					//Also will delete the credit card number and replace it with secure masked number.
@@ -1406,13 +1406,18 @@ namespace OpenDental{
 					CreditCards.Update(CCard);
 				}
 				if(newCard) {
-					CCard=new CreditCard();
-					List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
-					CCard.ItemOrder=itemOrderCount.Count;
-					CCard.PatNum=PatCur.PatNum;
-					CCard.XChargeToken=xChargeToken;
-					CCard.CCNumberMasked=accountMasked;
-					CreditCards.Insert(CCard);
+					if(xChargeToken=="") {
+						MsgBox.Show(this,"X-Charge didn't return a token so credit card information couldn't be saved.");
+					}
+					else {
+						CCard=new CreditCard();
+						List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
+						CCard.ItemOrder=itemOrderCount.Count;
+						CCard.PatNum=PatCur.PatNum;
+						CCard.XChargeToken=xChargeToken;
+						CCard.CCNumberMasked=accountMasked;
+						CreditCards.Insert(CCard);
+					}
 				}
 			}
 			/*Example of successful transaction:
