@@ -3924,6 +3924,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE rxalert ADD NotificationMsg varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxpat ADD IsElectQueue tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxpat ADD IsElectQueue number(3)";
+					Db.NonQ(command);
+					command="UPDATE rxpat SET IsElectQueue = 0 WHERE IsElectQueue IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxpat MODIFY IsElectQueue NOT NULL";
+					Db.NonQ(command);
+				}
 				
 				
 
@@ -3950,7 +3962,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 
-
-				
 
 				
