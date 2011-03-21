@@ -1461,8 +1461,22 @@ namespace OpenDentBusiness{
 		///<summary>3</summary>
 		InProcessed
 	}
-	
 
+	///<summary>0=UnknownIfEver,1=SmokerUnkownCurrent,2=NeverSmoked,3=FormerSmoker,4=CurrentSomeDay,5=CurrentEveryDay</summary>
+	public enum SmokingStatus {
+		///<summary>0</summary>
+		UnknownIfEver,
+		///<summary>1</summary>
+		SmokerUnkownCurrent,
+		///<summary>2</summary>
+		NeverSmoked,
+		///<summary>3</summary>
+		FormerSmoker,
+		///<summary>4</summary>
+		CurrentSomeDay,
+		///<summary>5</summary>
+		CurrentEveryDay
+	}
 
 
 }

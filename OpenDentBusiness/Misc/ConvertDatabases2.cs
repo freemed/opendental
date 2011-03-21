@@ -3945,6 +3945,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"VALUES((SELECT MAX(PrefNum)+1 FROM preference),'RxSendNewToQueue','0')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD SmokeStatus tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD SmokeStatus number(3)";
+					Db.NonQ(command);
+					command="UPDATE patient SET SmokeStatus = 0 WHERE SmokeStatus IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patient MODIFY SmokeStatus NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3971,3 +3983,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
+
