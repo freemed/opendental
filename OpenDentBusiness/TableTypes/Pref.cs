@@ -243,6 +243,7 @@ namespace OpenDentBusiness {
 		ReportsPPOwriteoffDefaultToProcDate,
 		ReportsShowPatNum,
 		ReportPandIschedProdSubtractsWO,
+		RxSendNewToQueue,
 		SalesTaxPercentage,
 		ScannerCompression,
 		ScannerCompressionPhotos,

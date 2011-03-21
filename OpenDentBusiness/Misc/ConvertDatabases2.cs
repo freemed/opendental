@@ -3936,8 +3936,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE rxpat MODIFY IsElectQueue NOT NULL";
 					Db.NonQ(command);
 				}
-				
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('RxSendNewToQueue','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) "
+						+"VALUES((SELECT MAX(PrefNum)+1 FROM preference),'RxSendNewToQueue','0')";
+					Db.NonQ(command);
+				}
 
 
 

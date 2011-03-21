@@ -46,8 +46,8 @@ namespace OpenDental{
 		private Label labelView;
 		//private User user;
 		private RxPat RxPatCur;
-		private UI.Button button1;
-		private UI.Button button2;
+		private UI.Button butSend;
+		private CheckBox checkIsElectQueue;
 		Sheet sheet;
 
 		///<summary></summary>
@@ -101,8 +101,8 @@ namespace OpenDental{
 			this.checkControlled = new System.Windows.Forms.CheckBox();
 			this.butView = new OpenDental.UI.Button();
 			this.labelView = new System.Windows.Forms.Label();
-			this.button1 = new OpenDental.UI.Button();
-			this.button2 = new OpenDental.UI.Button();
+			this.butSend = new OpenDental.UI.Button();
+			this.checkIsElectQueue = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -289,7 +289,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(39,317);
+			this.label8.Location = new System.Drawing.Point(39,307);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(99,14);
 			this.label8.TabIndex = 32;
@@ -303,7 +303,7 @@ namespace OpenDental{
 			this.butPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPick.CornerRadius = 4F;
-			this.butPick.Location = new System.Drawing.Point(338,312);
+			this.butPick.Location = new System.Drawing.Point(338,302);
 			this.butPick.Name = "butPick";
 			this.butPick.Size = new System.Drawing.Size(58,23);
 			this.butPick.TabIndex = 65;
@@ -314,7 +314,7 @@ namespace OpenDental{
 			// textPharmacy
 			// 
 			this.textPharmacy.AcceptsReturn = true;
-			this.textPharmacy.Location = new System.Drawing.Point(138,314);
+			this.textPharmacy.Location = new System.Drawing.Point(138,304);
 			this.textPharmacy.Name = "textPharmacy";
 			this.textPharmacy.ReadOnly = true;
 			this.textPharmacy.Size = new System.Drawing.Size(198,20);
@@ -356,35 +356,32 @@ namespace OpenDental{
 			this.labelView.TabIndex = 245;
 			this.labelView.Text = "This Rx has already been printed.";
 			// 
-			// button1
+			// butSend
 			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button1.Location = new System.Drawing.Point(148,412);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(78,24);
-			this.button1.TabIndex = 246;
-			this.button1.Text = "E-Rx";
+			this.butSend.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butSend.Autosize = true;
+			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSend.CornerRadius = 4F;
+			this.butSend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSend.Location = new System.Drawing.Point(199,412);
+			this.butSend.Name = "butSend";
+			this.butSend.Size = new System.Drawing.Size(78,24);
+			this.butSend.TabIndex = 247;
+			this.butSend.Text = "Send";
+			this.butSend.Click += new System.EventHandler(this.butSend_Click);
 			// 
-			// button2
+			// checkIsElectQueue
 			// 
-			this.button2.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button2.Autosize = true;
-			this.button2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button2.CornerRadius = 4F;
-			this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button2.Location = new System.Drawing.Point(232,412);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(78,24);
-			this.button2.TabIndex = 247;
-			this.button2.Text = "E-Rx";
+			this.checkIsElectQueue.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsElectQueue.Location = new System.Drawing.Point(7,330);
+			this.checkIsElectQueue.Name = "checkIsElectQueue";
+			this.checkIsElectQueue.Size = new System.Drawing.Size(145,20);
+			this.checkIsElectQueue.TabIndex = 248;
+			this.checkIsElectQueue.Text = "In Electronic Queue";
+			this.checkIsElectQueue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsElectQueue.UseVisualStyleBackColor = true;
 			// 
 			// FormRxEdit
 			// 
@@ -392,8 +389,8 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,460);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.checkIsElectQueue);
+			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.labelView);
 			this.Controls.Add(this.butView);
 			this.Controls.Add(this.checkControlled);
@@ -562,48 +559,9 @@ namespace OpenDental{
 			//if user clicked cancel, then we can just stay in this form.
 		}
 
-		/*private void Print(bool preview){
-			if(!SaveRx()){
-				return;
-			}
-			Sheet sheet=Sheets.GetRx(RxPatCur.PatNum,RxPatCur.RxNum);
-			if(sheet!=null){
-				DialogResult result=MessageBox.Show(Lan.g(this,"This Rx has already been printed.  Erase the old printout and create a new one?  If not, then the original will be used."),"",MessageBoxButtons.YesNo);
-				if(result==DialogResult.Yes){
-					Sheets.DeleteObject(sheet.SheetNum);
-				}
-				else{
-					//use the old one
-					SheetFields.GetFieldsAndParameters(sheet);
-					if(preview){
-						FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
-						FormSF.ShowDialog();
-						//notice that we don't close the dialog, because the user might just have wanted to view their rx.
-					}
-					else{
-						SheetPrinting.Print(sheet);
-						DialogResult=DialogResult.OK;
-					}
-					return;
-				}
-			}
-			//if we get to this point, then a new sheet needs to be created.
-			
-			if(preview){
-				FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
-				FormS.ShowDialog();
-				if(FormS.DialogResult==DialogResult.OK){
-					DialogResult=DialogResult.OK;
-					return;
-				}
-				//if cancel, then stay in this form.
-			}
-			else{
-				SheetPrinting.Print(sheet);
-				DialogResult=DialogResult.OK;
-				return;
-			}
-		}*/
+		private void butSend_Click(object sender,EventArgs e) {
+			//Should launch the FormRxSendWindow.
+		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(!SaveRx()){
@@ -615,6 +573,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
