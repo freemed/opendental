@@ -46,6 +46,8 @@ namespace OpenDental{
 		private Label labelView;
 		//private User user;
 		private RxPat RxPatCur;
+		private UI.Button button1;
+		private UI.Button button2;
 		Sheet sheet;
 
 		///<summary></summary>
@@ -99,6 +101,8 @@ namespace OpenDental{
 			this.checkControlled = new System.Windows.Forms.CheckBox();
 			this.butView = new OpenDental.UI.Button();
 			this.labelView = new System.Windows.Forms.Label();
+			this.button1 = new OpenDental.UI.Button();
+			this.button2 = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -248,7 +252,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(350,412);
+			this.butPrint.Location = new System.Drawing.Point(378,412);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 29;
@@ -265,7 +269,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(52,412);
+			this.butDelete.Location = new System.Drawing.Point(20,412);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(88,24);
 			this.butDelete.TabIndex = 30;
@@ -337,7 +341,7 @@ namespace OpenDental{
 			this.butView.CornerRadius = 4F;
 			this.butView.Image = global::OpenDental.Properties.Resources.printPreview20;
 			this.butView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butView.Location = new System.Drawing.Point(437,412);
+			this.butView.Location = new System.Drawing.Point(465,412);
 			this.butView.Name = "butView";
 			this.butView.Size = new System.Drawing.Size(81,24);
 			this.butView.TabIndex = 244;
@@ -346,11 +350,41 @@ namespace OpenDental{
 			// 
 			// labelView
 			// 
-			this.labelView.Location = new System.Drawing.Point(434,439);
+			this.labelView.Location = new System.Drawing.Point(462,439);
 			this.labelView.Name = "labelView";
 			this.labelView.Size = new System.Drawing.Size(199,14);
 			this.labelView.TabIndex = 245;
 			this.labelView.Text = "This Rx has already been printed.";
+			// 
+			// button1
+			// 
+			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button1.Autosize = true;
+			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button1.CornerRadius = 4F;
+			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button1.Location = new System.Drawing.Point(148,412);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(78,24);
+			this.button1.TabIndex = 246;
+			this.button1.Text = "E-Rx";
+			// 
+			// button2
+			// 
+			this.button2.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button2.Autosize = true;
+			this.button2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button2.CornerRadius = 4F;
+			this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button2.Location = new System.Drawing.Point(232,412);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(78,24);
+			this.button2.TabIndex = 247;
+			this.button2.Text = "E-Rx";
 			// 
 			// FormRxEdit
 			// 
@@ -358,6 +392,8 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,460);
+			this.Controls.Add(this.button2);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.labelView);
 			this.Controls.Add(this.butView);
 			this.Controls.Add(this.checkControlled);
