@@ -21,7 +21,7 @@ namespace OpenDental {
 		private bool headingPrinted;
 		private Program prog;
 
-
+		///<summary>Only works for XCharge so far.</summary>
 		public FormRecurringCharges() {
 			InitializeComponent();
 			Lan.F(this);
@@ -163,9 +163,13 @@ namespace OpenDental {
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
+			//Assuming the use of XCharge.  If adding another vendor (PayConnect for example)
+			//make sure to move XCharge validation in FillGrid() to here.
 			if(prog==null){//Gets filled in FillGrid()
 				return;
 			}
+			int failed=0;
+			int success=0;
 			string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
@@ -216,8 +220,10 @@ namespace OpenDental {
 						resulttext+=line;
 						if(line.StartsWith("RESULT=")) {
 							if(line!="RESULT=SUCCESS") {
+								failed++;
 								break;
 							}
+							success++;
 						}
 						line=reader.ReadLine();
 					}
@@ -225,8 +231,8 @@ namespace OpenDental {
 			}
 			//PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType"));
 			FillGrid();
-			labelCharged.Text=Lan.g(this,"Charged=")+"0";
-			labelFailed.Text=Lan.g(this,"Failed=")+"0";
+			labelCharged.Text=Lan.g(this,"Charged=")+success;
+			labelFailed.Text=Lan.g(this,"Failed=")+failed;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
