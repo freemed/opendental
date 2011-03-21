@@ -78,6 +78,8 @@ namespace OpenDental{
 		private CheckBox checkToothChartMoveMenuToRight;
 		private GroupBox groupBox6;
 		private CheckBox checkImagesModuleTreeIsCollapsed;
+		private GroupBox groupBox7;
+		private CheckBox checkRxSendNewToQueue;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -167,31 +169,34 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkImagesModuleTreeIsCollapsed = new System.Windows.Forms.CheckBox();
+			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.checkRxSendNewToQueue = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox6.SuspendLayout();
+			this.groupBox7.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textTreatNote
 			// 
 			this.textTreatNote.AcceptsReturn = true;
-			this.textTreatNote.Location = new System.Drawing.Point(45,34);
+			this.textTreatNote.Location = new System.Drawing.Point(53,19);
 			this.textTreatNote.Multiline = true;
 			this.textTreatNote.Name = "textTreatNote";
-			this.textTreatNote.Size = new System.Drawing.Size(371,53);
+			this.textTreatNote.Size = new System.Drawing.Size(363,53);
 			this.textTreatNote.TabIndex = 3;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(42,16);
+			this.label1.Location = new System.Drawing.Point(4,19);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(163,15);
+			this.label1.Size = new System.Drawing.Size(48,52);
 			this.label1.TabIndex = 35;
 			this.label1.Text = "Default Note";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// checkShowCC
 			// 
@@ -208,7 +213,7 @@ namespace OpenDental{
 			// 
 			this.checkTreatPlanShowGraphics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowGraphics.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(57,89);
+			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(57,74);
 			this.checkTreatPlanShowGraphics.Name = "checkTreatPlanShowGraphics";
 			this.checkTreatPlanShowGraphics.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowGraphics.TabIndex = 46;
@@ -219,7 +224,7 @@ namespace OpenDental{
 			// 
 			this.checkTreatPlanShowCompleted.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowCompleted.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(57,106);
+			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(57,91);
 			this.checkTreatPlanShowCompleted.Name = "checkTreatPlanShowCompleted";
 			this.checkTreatPlanShowCompleted.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowCompleted.TabIndex = 47;
@@ -233,9 +238,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(12,419);
+			this.groupBox1.Location = new System.Drawing.Point(12,448);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(422,140);
+			this.groupBox1.Size = new System.Drawing.Size(422,111);
 			this.groupBox1.TabIndex = 48;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Treatment Plan module";
@@ -925,9 +930,9 @@ namespace OpenDental{
 			// 
 			this.groupBox6.Controls.Add(this.checkImagesModuleTreeIsCollapsed);
 			this.groupBox6.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox6.Location = new System.Drawing.Point(12,371);
+			this.groupBox6.Location = new System.Drawing.Point(12,368);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(422,47);
+			this.groupBox6.Size = new System.Drawing.Size(422,38);
 			this.groupBox6.TabIndex = 194;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Image module";
@@ -936,17 +941,40 @@ namespace OpenDental{
 			// 
 			this.checkImagesModuleTreeIsCollapsed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkImagesModuleTreeIsCollapsed.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkImagesModuleTreeIsCollapsed.Location = new System.Drawing.Point(57,19);
+			this.checkImagesModuleTreeIsCollapsed.Location = new System.Drawing.Point(57,16);
 			this.checkImagesModuleTreeIsCollapsed.Name = "checkImagesModuleTreeIsCollapsed";
 			this.checkImagesModuleTreeIsCollapsed.Size = new System.Drawing.Size(359,17);
 			this.checkImagesModuleTreeIsCollapsed.TabIndex = 47;
 			this.checkImagesModuleTreeIsCollapsed.Text = "Document tree collapses when patient changes";
 			this.checkImagesModuleTreeIsCollapsed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// groupBox7
+			// 
+			this.groupBox7.Controls.Add(this.checkRxSendNewToQueue);
+			this.groupBox7.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox7.Location = new System.Drawing.Point(12,407);
+			this.groupBox7.Name = "groupBox7";
+			this.groupBox7.Size = new System.Drawing.Size(422,38);
+			this.groupBox7.TabIndex = 195;
+			this.groupBox7.TabStop = false;
+			this.groupBox7.Text = "Manage module";
+			// 
+			// checkRxSendNewToQueue
+			// 
+			this.checkRxSendNewToQueue.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkRxSendNewToQueue.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkRxSendNewToQueue.Location = new System.Drawing.Point(57,14);
+			this.checkRxSendNewToQueue.Name = "checkRxSendNewToQueue";
+			this.checkRxSendNewToQueue.Size = new System.Drawing.Size(359,17);
+			this.checkRxSendNewToQueue.TabIndex = 47;
+			this.checkRxSendNewToQueue.Text = "Send all new prescriptions to electronic queue";
+			this.checkRxSendNewToQueue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(890,613);
+			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox3);
@@ -971,6 +999,7 @@ namespace OpenDental{
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
+			this.groupBox7.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1032,6 +1061,8 @@ namespace OpenDental{
 			checkInsDefaultShowUCRonClaims.Checked=PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims);
 			//Image module-----------------------------------------------------------------------
 			checkImagesModuleTreeIsCollapsed.Checked=PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed);
+			//Manage module
+			checkRxSendNewToQueue.Checked=PrefC.GetBool(PrefName.RxSendNewToQueue);
 			//Account module-----------------------------------------------------------------------
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool(PrefName.StatementShowReturnAddress);
 			checkShowCC.Checked=PrefC.GetBool(PrefName.StatementShowCreditCard);
@@ -1163,6 +1194,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.ClaimsValidateACN,checkClaimsValidateACN.Checked)
 				| Prefs.UpdateBool(PrefName.ToothChartMoveMenuToRight,checkToothChartMoveMenuToRight.Checked)
 				| Prefs.UpdateBool(PrefName.ImagesModuleTreeIsCollapsed,checkImagesModuleTreeIsCollapsed.Checked)
+				| Prefs.UpdateBool(PrefName.RxSendNewToQueue,checkRxSendNewToQueue.Checked)
 				)
 			{
 				changed=true;

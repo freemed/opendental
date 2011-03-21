@@ -66,8 +66,7 @@ namespace UnitTests {
 					throw new Exception("Wrong version.");
 				}
 				ProcedureCodes.TcodesClear();
-				//FormProcCodes.ImportProcCodes("",null,OpenDental.Properties.Resources.NoFeeProcCodes);
-				//FormProcCodes.ImportProcCodes("",CDT.Class1.GetADAcodes(),"");//IF THIS LINE CRASHES:
+				FormProcCodes.ImportProcCodes("",CDT.Class1.GetADAcodes(),"");//IF THIS LINE CRASHES:
 				//Go to Solution, Configuration Manager.  Exclude UnitTest project from build.
 				AutoCodes.SetToDefault();
 				ProcButtons.SetToDefault();
