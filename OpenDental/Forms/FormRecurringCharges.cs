@@ -18,8 +18,11 @@ namespace OpenDental {
 		private PrintDocument pd;
 		private int pagesPrinted;
 		private int headingPrintH;
+		private int payType;
 		private bool headingPrinted;
+		private bool insertPayment;
 		private Program prog;
+		private DateTime nowDateTime;
 
 		///<summary>Only works for XCharge so far.</summary>
 		public FormRecurringCharges() {
@@ -28,6 +31,9 @@ namespace OpenDental {
 		}
 
 		private void FormRecurringCharges_Load(object sender,EventArgs e) {
+			nowDateTime=MiscData.GetNowDateTime();
+			prog=Programs.GetCur(ProgramName.Xcharge);
+			payType=PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType"));
 			labelCharged.Text=Lan.g(this,"Charged=")+"0";
 			labelFailed.Text=Lan.g(this,"Failed=")+"0";
 			FillGrid();
@@ -36,7 +42,6 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			prog=Programs.GetCur(ProgramName.Xcharge);
 			if(prog==null){
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return;
@@ -56,7 +61,7 @@ namespace OpenDental {
 				}
 				return;
 			}
-			table=CreditCards.GetRecurringChargeList(PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType")));
+			table=CreditCards.GetRecurringChargeList(payType);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),130);
@@ -75,8 +80,8 @@ namespace OpenDental {
 				Double chargeAmt=PIn.Double(table.Rows[i]["ChargeAmt"].ToString());
 				row.Cells.Add(table.Rows[i]["PatNum"].ToString());
 				row.Cells.Add(table.Rows[i]["PatName"].ToString());
-				row.Cells.Add(famBalTotal.ToString("F"));
-				row.Cells.Add(chargeAmt.ToString("F"));
+				row.Cells.Add(famBalTotal.ToString("c"));
+				row.Cells.Add(chargeAmt.ToString("c"));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -168,12 +173,17 @@ namespace OpenDental {
 			if(prog==null){//Gets filled in FillGrid()
 				return;
 			}
+			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)){
+				return;
+			}
 			int failed=0;
 			int success=0;
 			string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				insertPayment=false;
 				ProcessStartInfo info=new ProcessStartInfo(prog.Path);
+				long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
 				string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
 				File.Delete(resultfile);//delete the old result file.
 				info.Arguments="";
@@ -190,7 +200,7 @@ namespace OpenDental {
 					info.Arguments+="\"/ADDRESS:"+table.Rows[gridMain.SelectedIndices[i]]["Address"].ToString()+"\" ";
 					info.Arguments+="\"/ZIP:"+table.Rows[gridMain.SelectedIndices[i]]["Zip"].ToString()+"\" ";
 				}
-				info.Arguments+="/RECEIPT:Pat"+table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()+" ";//aka invoice#
+				info.Arguments+="/RECEIPT:Pat"+patNum+" ";//aka invoice#
 				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
 				info.Arguments+="/USERID:"+user+" ";
 				info.Arguments+="/PASSWORD:"+password+" ";
@@ -224,12 +234,32 @@ namespace OpenDental {
 								break;
 							}
 							success++;
+							insertPayment=true;
 						}
 						line=reader.ReadLine();
 					}
 				}
+				if(insertPayment) {
+					Patient patCur=Patients.GetPat(patNum);
+					Payment paymentCur=new Payment();
+					paymentCur.PayDate=nowDateTime.Date;
+					paymentCur.PatNum=patCur.PatNum;
+					paymentCur.ClinicNum=patCur.ClinicNum;
+					paymentCur.PayType=payType;
+					paymentCur.PayAmt=amt;
+					paymentCur.PayNote=resulttext;
+					Payments.Insert(paymentCur);
+					PaySplit split=new PaySplit();
+					split.PatNum=paymentCur.PatNum;
+					split.ClinicNum=paymentCur.ClinicNum;
+					split.PayNum=paymentCur.PayNum;
+					split.ProcDate=paymentCur.PayDate;
+					split.DatePay=paymentCur.PayDate;
+					split.ProvNum=Patients.GetProvNum(patCur);
+					split.SplitAmt=paymentCur.PayAmt;
+					PaySplits.Insert(split);
+				}
 			}
-			//PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType"));
 			FillGrid();
 			labelCharged.Text=Lan.g(this,"Charged=")+success;
 			labelFailed.Text=Lan.g(this,"Failed=")+failed;

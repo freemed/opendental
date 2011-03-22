@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),payType);
 			}
 			DataTable table=new DataTable();
-			string command="SELECT cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"
+			string command="SELECT * FROM (SELECT cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"
 					+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN DATE('0001-01-01') ELSE MAX(pay.PayDate) END LatestPayment,"
 					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt "
 					+"FROM (creditcard cc,patient pat,patient guar) "
@@ -67,10 +67,11 @@ namespace OpenDentBusiness{
 					+"WHERE cc.PatNum=pat.PatNum "
 					+"AND pat.Guarantor=guar.PatNum "
 					+"AND cc.ChargeAmt<>0 "
-					+"AND (cc.DateStop>NOW() OR YEAR(cc.DateStop)<1880) "
+					+"AND (cc.DateStop>"+DbHelper.Now()+" OR YEAR(cc.DateStop)<1880) "
 					+"AND guar.BalTotal-guar.InsEst>=cc.ChargeAmt "
 					+"GROUP BY cc.CreditCardNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
-					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt";
+					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt) recurring "
+					+"WHERE "+DbHelper.DateAddMonth("recurring.LatestPayment","1")+"<="+DbHelper.Now();
 			table=Db.GetTable(command);
 			return table;
 		}
