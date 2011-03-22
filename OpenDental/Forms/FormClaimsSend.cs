@@ -735,7 +735,8 @@ namespace OpenDental{
 		}
 
 		private void OnPayRec_Click() {
-			//todo
+			FormCanadaPaymentReconciliation fcpr=new FormCanadaPaymentReconciliation();
+			fcpr.ShowDialog();
 		}
 
 		private void OnSummaryRec_Click() {

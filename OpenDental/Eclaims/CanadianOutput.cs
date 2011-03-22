@@ -622,7 +622,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		///<summary>Each payment reconciliation request can return up to 9 pages. This function will return one etrans ack for each page in the result, since each page must be requested individually. Only for version 04, no such transaction exists for version 02.  Usually pass in a carrier with network null.  If sending to a network, carrier will be null and we still don't see anywhere in the message format to specify network.  We expect to get clarification on this issue later.</summary>
-		public static List <Etrans> GetPaymentReconciliations(Carrier carrier,CanadianNetwork network,Provider prov,Provider billingProv,DateTime reconciliationDate) {
+		public static List <Etrans> GetPaymentReconciliations(Carrier carrier,CanadianNetwork network,Provider provTreat,Provider provBilling,DateTime reconciliationDate) {
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null) {
 				throw new ApplicationException("Canadian clearinghouse not found.");
@@ -684,14 +684,14 @@ namespace OpenDental.Eclaims {
 				//A09 carrier transaction counter 5 N
 				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 				//B01 CDA provider number 9 AN
-				strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+				strb.Append(Canadian.TidyAN(provTreat.NationalProvID,9));//already validated
 				//B02 (treating) provider office number 4 AN
-				strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
+				strb.Append(Canadian.TidyAN(provTreat.CanadianOfficeNum,4));//already validated
 				//B03 billing provider number 9 AN
 				//might need to account for possible 5 digit prov id assigned by carrier
-				strb.Append(Canadian.TidyAN(billingProv.NationalProvID,9));//already validated
+				strb.Append(Canadian.TidyAN(provBilling.NationalProvID,9));//already validated
 				//B04 billing provider office number 4 AN
-				strb.Append(Canadian.TidyAN(billingProv.CanadianOfficeNum,4));//already validated
+				strb.Append(Canadian.TidyAN(provBilling.CanadianOfficeNum,4));//already validated
 				//F33 Reconciliation Date 8 N
 				strb.Append(reconciliationDate.ToString("yyyyMMdd"));
 				//F38 Current Reconciliation Page Number N 1
