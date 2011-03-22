@@ -340,20 +340,12 @@ namespace OpenDental{
 			gridMeds.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
-			if(!checkDiscontinued.Checked) {
-				col=new ODGridColumn(Lan.g("TableMedications","Notes"),210);
-				gridMeds.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),210);
-				gridMeds.Columns.Add(col);
-			}
-			else {//Have to make space for the discontinued column.
-				col=new ODGridColumn(Lan.g("TableMedications","Notes"),190);
-				gridMeds.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),190);
-				gridMeds.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableMedications","Discontinued"),40);
-				gridMeds.Columns.Add(col);
-			}
+			col=new ODGridColumn(Lan.g("TableMedications","Notes"),205);
+			gridMeds.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),205);
+			gridMeds.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableMedications","Disc"),10,HorizontalAlignment.Center);
+			gridMeds.Columns.Add(col);
 			gridMeds.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<MedicationPats.List.Length;i++){
@@ -369,9 +361,7 @@ namespace OpenDental{
 				row.Cells.Add(medName);
 				row.Cells.Add(Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes);
 				row.Cells.Add(MedicationPats.List[i].PatNote);
-				if(checkDiscontinued.Checked) {
-					row.Cells.Add(MedicationPats.List[i].IsDiscontinued?"X":"");
-				}
+				row.Cells.Add(MedicationPats.List[i].IsDiscontinued?"X":"");
 				gridMeds.Rows.Add(row);
 			}
 			gridMeds.EndUpdate();
