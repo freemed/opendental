@@ -2876,10 +2876,10 @@ namespace OpenDental{
 				if(plan.IsMedical) {
 					row.Cells.Add("Med");
 				}
-				else if(ClaimProcsForProc[i].PlanNum==PatPlans.GetPlanNum(PatPlanList,1)){
+				else if(ClaimProcsForProc[i].InsSubNum==PatPlans.GetInsSubNum(PatPlanList,1)){
 					row.Cells.Add("Pri");
 				}
-				else if(ClaimProcsForProc[i].PlanNum==PatPlans.GetPlanNum(PatPlanList,2)) {
+				else if(ClaimProcsForProc[i].InsSubNum==PatPlans.GetInsSubNum(PatPlanList,2)) {
 					row.Cells.Add("Sec");
 				}
 				else {

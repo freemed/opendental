@@ -216,14 +216,14 @@ namespace OpenDental{
 					if(doubDeductibleUsed!=-1){
 						insDeductibleUsed=doubDeductibleUsed.ToString("c");
 					}
-					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
+					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum,subNum);
 					if(doubPending!=-1) {
 						insPending=doubPending.ToString("c");
 						if(doubRemain!=-1){
 							doubRemain-=doubPending;
 						}
 					}
-					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
+					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum,subNum);
 					if(doubUsed!=-1) {
 						insUsed=doubUsed.ToString("c");
 						if(doubRemain!=-1){
@@ -275,14 +275,14 @@ namespace OpenDental{
 					if(doubDeductibleUsed!=-1) {
 						ins2DeductibleUsed=doubDeductibleUsed.ToString("c");
 					}
-					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum);
+					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum,subNum);
 					if(doubPending!=-1) {
 						ins2Pending=doubPending.ToString("c");
 						if(doubRemain!=-1){
 							doubRemain-=doubPending;
 						}
 					}
-					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum);
+					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum,subNum);
 					if(doubUsed!=-1) {
 						ins2Used=doubUsed.ToString("c");
 						if(doubRemain!=-1){

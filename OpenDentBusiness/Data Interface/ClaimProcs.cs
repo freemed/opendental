@@ -1044,12 +1044,11 @@ namespace OpenDentBusiness{
 					//If we use the proc date, then it will indeed get an accurate history.  And future procedures just don't matter when calculating things.
 					dateStart=BenefitLogic.ComputeRenewDate(procDate,plan.MonthRenew);
 				}
-				//we don't include planNum in the query because we are already restricting to one plan
-				//but we do include patnum because this one query can get results for multiple patients that all have this one plan.
-				string command="SELECT claimproc.ProcDate,CodeNum,InsPayEst,InsPayAmt,DedApplied,claimproc.PatNum,Status,ClaimNum "
+				string command="SELECT claimproc.ProcDate,CodeNum,InsPayEst,InsPayAmt,DedApplied,claimproc.PatNum,Status,ClaimNum,claimproc.InsSubNum "
 					+"FROM claimproc "
 					+"LEFT JOIN procedurelog on claimproc.ProcNum=procedurelog.ProcNum "//to get the codenum
 					+"WHERE claimproc.PlanNum="+POut.Long(plan.PlanNum)
+					+" AND claimproc.InsSubNum="+POut.Long(patPlanList[p].InsSubNum)
 					+" AND claimproc.ProcDate >= "+POut.Date(dateStart)//no upper limit on date.
 					+" AND claimproc.Status IN("
 					+POut.Long((int)ClaimProcStatus.NotReceived)+","
@@ -1057,6 +1056,7 @@ namespace OpenDentBusiness{
 					+POut.Long((int)ClaimProcStatus.Received)+","
 					+POut.Long((int)ClaimProcStatus.Supplemental)+")";
 				if(!isFam) {
+					//we include patnum because this one query can get results for multiple patients that all have this one subsriber.
 					command+=" AND claimproc.PatNum="+POut.Long(patNum);
 				}
 				if(excludeClaimNum != -1) {
@@ -1077,6 +1077,7 @@ namespace OpenDentBusiness{
 					cph.Deduct     = PIn.Double(table.Rows[i]["DedApplied"].ToString());
 					cph.PatNum     = PIn.Long   (table.Rows[i]["PatNum"].ToString());
 					cph.ClaimNum   = PIn.Long   (table.Rows[i]["ClaimNum"].ToString());
+					cph.InsSubNum  = PIn.Long   (table.Rows[i]["InsSubNum"].ToString());
 					cph.PlanNum=plan.PlanNum;
 					retVal.Add(cph);
 				}
@@ -1148,6 +1149,8 @@ namespace OpenDentBusiness{
 		public long ClaimNum;
 		///<summary>Only 4 statuses get used anyway.  This helps us filter the pending items sometimes.</summary>
 		public ClaimProcStatus Status;
+		///<summary></summary>
+		public long InsSubNum;
 
 		public override string ToString() {
 			return StrProcCode+" "+Status.ToString()+" "+Amount.ToString()+" ded:"+Deduct.ToString();
