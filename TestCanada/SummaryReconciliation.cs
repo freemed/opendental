@@ -6,12 +6,12 @@ using OpenDentBusiness;
 using OpenDental.Eclaims;
 
 namespace TestCanada {
-	class PaymentReconciliation {
+	class SummaryReconciliation {
 
-		private static string Run(int scriptNum,Carrier carrier,CanadianNetwork network,Provider prov,Provider billingProv,out List <Etrans> etransAcks,DateTime reconciliationDate) { 
+		private static string Run(int scriptNum,Carrier carrier,CanadianNetwork network,Provider prov,out Etrans etrans,DateTime reconciliationDate) {
 			string retVal="";
-			etransAcks=CanadianOutput.GetPaymentReconciliations(carrier,network,prov,billingProv,reconciliationDate);
-			retVal+="Payment Reconciliation#"+scriptNum.ToString()+" successful.\r\n";
+			etrans=CanadianOutput.GetSummaryReconciliation(carrier,network,prov,reconciliationDate);
+			retVal+="Summary Reconciliation#"+scriptNum.ToString()+" successful.\r\n";
 			return retVal;
 		}
 
@@ -19,8 +19,8 @@ namespace TestCanada {
 			long carrierNum=CarrierTC.GetCarrierNumById("666666");
 			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
-			List <Etrans> etransAcks;
-			return Run(1,carrier,null,prov,prov,out etransAcks,new DateTime(1999,6,16));
+			Etrans etransAck;
+			return Run(1,carrier,null,prov,out etransAck,new DateTime(1999,6,1));
 		}
 
 		public static string RunTwo() {
@@ -30,16 +30,16 @@ namespace TestCanada {
 			network.CanadianNetworkNum=2;
 			network.CanadianTransactionPrefix="A";
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
-			List<Etrans> etransAcks;
-			return Run(2,null,network,prov,prov,out etransAcks,new DateTime(1999,6,16));
+			Etrans etransAck;
+			return Run(2,null,network,prov,out etransAck,new DateTime(1999,6,1));
 		}
 
 		public static string RunThree() {
 			long carrierNum=CarrierTC.GetCarrierNumById("111555");
 			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
-			List<Etrans> etransAcks;
-			return Run(3,carrier,null,prov,prov,out etransAcks,new DateTime(1999,6,16));
+			Etrans etransAck;
+			return Run(3,carrier,null,prov,out etransAck,new DateTime(1999,6,1));
 		}
 
 	}

@@ -125,7 +125,7 @@ namespace TestCanada {
 				| CanSupTransTypes.PredeterminationAck_13;
 			Carriers.Insert(carrier);
 			//---------------------------------------------------------
-			//Used for Payment Reconciliation test #3
+			//Used for Payment Reconciliation test #3 and Summary Reconciliation test #3
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="111555";
@@ -133,7 +133,9 @@ namespace TestCanada {
 			carrier.CDAnetVersion="04";
 			carrier.ElectID="111555";
 			carrier.CanadianEncryptionMethod=0;//not applicable
-			carrier.CanadianSupportedTypes=CanSupTransTypes.PaymentReconciliation_16;
+			carrier.CanadianSupportedTypes
+				= CanSupTransTypes.PaymentReconciliation_16
+				| CanSupTransTypes.RequestForSummaryReconciliation_05;
 			Carriers.Insert(carrier);
 			Carriers.RefreshCache();
 			return "Carrier objects set.\r\n";

@@ -266,7 +266,19 @@ namespace TestCanada {
 				}
 			}
 			if(checkSumReconcil.Checked){
-				textResults.Text+="Summary Reconciliations not implemented yet.\r\n";
+				if(singleScript==1) {
+					textResults.Text+=SummaryReconciliation.RunOne();
+				}
+				else if(singleScript==2) {
+					textResults.Text+=SummaryReconciliation.RunTwo();
+				}
+				else if(singleScript==3) {
+					textResults.Text+=SummaryReconciliation.RunThree();
+				}
+				else {
+					MessageBox.Show("Script number not found (not implemented yet).");
+					return;
+				}
 			}
 			textResults.Text+="Done.";
 			Cursor=Cursors.Default;

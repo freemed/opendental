@@ -80,6 +80,7 @@
     <Compile Include="PaymentReconciliation.cs" />
     <Compile Include="PredeterminationTC.cs" />
     <Compile Include="Reversal.cs" />
+    <Compile Include="SummaryReconciliation.cs" />
     <Compile Include="ToothInitialTC.cs" />
     <Compile Include="ProcTC.cs" />
     <Compile Include="PatientTC.cs" />

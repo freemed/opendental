@@ -158,6 +158,8 @@ namespace TestCanada {
 			claim.CanadianIsInitialLower="X";
 			claim.CanadianDateInitialLower=DateTime.MinValue;
 			claim.IsOrtho=false;
+			claim.CanadianReferralProviderNum="081234500";
+			claim.CanadianReferralReason=4;
 			Claims.Update(claim);
 			ClaimNums.Add(claim.ClaimNum);
 		}
@@ -464,7 +466,7 @@ namespace TestCanada {
 		public static string RunFour(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[3]);
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
-			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
+			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
 			return Run(4,"","23",claim,showForms,1,1);
 		}
 
