@@ -31,6 +31,7 @@ namespace OpenDental{
 		private OpenDental.ODtextBox textPatNote;
 		///<summary></summary>
 		public bool IsNew;
+		private CheckBox checkDiscontinued;
 		public MedicationPat MedicationPatCur;
 
 		///<summary></summary>
@@ -81,6 +82,7 @@ namespace OpenDental{
 			this.butRemove = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textPatNote = new OpenDental.ODtextBox();
+			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -169,7 +171,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(66,320);
+			this.label4.Location = new System.Drawing.Point(63,307);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(182,17);
 			this.label4.TabIndex = 8;
@@ -189,14 +191,14 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(71,34);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(565,264);
+			this.groupBox1.Size = new System.Drawing.Size(565,253);
 			this.groupBox1.TabIndex = 10;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Medication";
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(266,218);
+			this.label6.Location = new System.Drawing.Point(266,212);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(128,28);
 			this.label6.TabIndex = 11;
@@ -209,7 +211,7 @@ namespace OpenDental{
 			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEdit.CornerRadius = 4F;
-			this.butEdit.Location = new System.Drawing.Point(183,218);
+			this.butEdit.Location = new System.Drawing.Point(183,212);
 			this.butEdit.Name = "butEdit";
 			this.butEdit.Size = new System.Drawing.Size(75,26);
 			this.butEdit.TabIndex = 9;
@@ -242,7 +244,7 @@ namespace OpenDental{
 			// textPatNote
 			// 
 			this.textPatNote.AcceptsReturn = true;
-			this.textPatNote.Location = new System.Drawing.Point(253,320);
+			this.textPatNote.Location = new System.Drawing.Point(254,307);
 			this.textPatNote.Multiline = true;
 			this.textPatNote.Name = "textPatNote";
 			this.textPatNote.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicationPat;
@@ -250,12 +252,22 @@ namespace OpenDental{
 			this.textPatNote.Size = new System.Drawing.Size(352,129);
 			this.textPatNote.TabIndex = 11;
 			// 
+			// checkDiscontinued
+			// 
+			this.checkDiscontinued.Location = new System.Drawing.Point(254,442);
+			this.checkDiscontinued.Name = "checkDiscontinued";
+			this.checkDiscontinued.Size = new System.Drawing.Size(317,23);
+			this.checkDiscontinued.TabIndex = 62;
+			this.checkDiscontinued.Text = "Discontinued (patient is no longer taking this medication)";
+			this.checkDiscontinued.UseVisualStyleBackColor = true;
+			// 
 			// FormMedPat
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(685,540);
+			this.Controls.Add(this.checkDiscontinued);
 			this.Controls.Add(this.textPatNote);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label4);
@@ -288,6 +300,7 @@ namespace OpenDental{
 			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
 			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
 			textPatNote.Text=MedicationPatCur.PatNote;
+			checkDiscontinued.Checked=MedicationPatCur.IsDiscontinued;
 		}
 
 		private void butEdit_Click(object sender, System.EventArgs e) {
@@ -313,6 +326,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			MedicationPatCur.PatNote=textPatNote.Text;
+			MedicationPatCur.IsDiscontinued=checkDiscontinued.Checked;
 			if(IsNew){
 				MedicationPats.Insert(MedicationPatCur);
 			}
