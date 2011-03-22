@@ -28,6 +28,7 @@ namespace OpenDental{
 		private CheckBox checkPremed;
 		private Disease[] DiseaseList;
 		private UI.Button butIcd9;
+		private CheckBox checkDiscontinued;
 		private PatientNote PatientNoteCur;
 
 		///<summary></summary>
@@ -75,6 +76,7 @@ namespace OpenDental{
 			this.gridDiseases = new OpenDental.UI.ODGrid();
 			this.checkPremed = new System.Windows.Forms.CheckBox();
 			this.butIcd9 = new OpenDental.UI.Button();
+			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -273,6 +275,17 @@ namespace OpenDental{
 			this.butIcd9.Text = "Add ICD9";
 			this.butIcd9.Click += new System.EventHandler(this.butIcd9_Click);
 			// 
+			// checkDiscontinued
+			// 
+			this.checkDiscontinued.Location = new System.Drawing.Point(514,2);
+			this.checkDiscontinued.Name = "checkDiscontinued";
+			this.checkDiscontinued.Size = new System.Drawing.Size(201,23);
+			this.checkDiscontinued.TabIndex = 61;
+			this.checkDiscontinued.Tag = "";
+			this.checkDiscontinued.Text = "Show Discontinued Medications";
+			this.checkDiscontinued.UseVisualStyleBackColor = true;
+			this.checkDiscontinued.MouseUp += new System.Windows.Forms.MouseEventHandler(this.checkShowDiscontinuedMeds_MouseUp);
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
@@ -280,6 +293,7 @@ namespace OpenDental{
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964,683);
 			this.Controls.Add(this.butIcd9);
+			this.Controls.Add(this.checkDiscontinued);
 			this.Controls.Add(this.checkPremed);
 			this.Controls.Add(this.gridDiseases);
 			this.Controls.Add(this.gridMeds);
@@ -326,13 +340,26 @@ namespace OpenDental{
 			gridMeds.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes"),210);
-			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),210);
-			gridMeds.Columns.Add(col);
+			if(!checkDiscontinued.Checked) {
+				col=new ODGridColumn(Lan.g("TableMedications","Notes"),210);
+				gridMeds.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),210);
+				gridMeds.Columns.Add(col);
+			}
+			else {//Have to make space for the discontinued column.
+				col=new ODGridColumn(Lan.g("TableMedications","Notes"),190);
+				gridMeds.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),190);
+				gridMeds.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableMedications","Discontinued"),40);
+				gridMeds.Columns.Add(col);
+			}
 			gridMeds.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<MedicationPats.List.Length;i++){
+				if(!checkDiscontinued.Checked && MedicationPats.List[i].IsDiscontinued) {
+					continue;
+				}
 				row=new ODGridRow();
 				Medication generic=Medications.GetGeneric(MedicationPats.List[i].MedicationNum);
 				string medName=Medications.GetMedication(MedicationPats.List[i].MedicationNum).MedName;
@@ -342,6 +369,9 @@ namespace OpenDental{
 				row.Cells.Add(medName);
 				row.Cells.Add(Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes);
 				row.Cells.Add(MedicationPats.List[i].PatNote);
+				if(checkDiscontinued.Checked) {
+					row.Cells.Add(MedicationPats.List[i].IsDiscontinued?"X":"");
+				}
 				gridMeds.Rows.Add(row);
 			}
 			gridMeds.EndUpdate();
@@ -447,6 +477,10 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void checkShowDiscontinuedMeds_MouseUp(object sender,MouseEventArgs e) {
+			FillMeds();
 		}
 
 		
