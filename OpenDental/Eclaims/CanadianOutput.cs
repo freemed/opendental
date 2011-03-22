@@ -747,6 +747,116 @@ namespace OpenDental.Eclaims {
 			return etransAcks;
 		}
 
+		///<summary>Does not exist in version 02 so only supported for version 04. Returns the request Etrans record. Usually pass in a carrier with network null.  If sending to a network, carrier will be null and we still don't see anywhere in the message format to specify network.  We expect to get clarification on this issue later.</summary>
+		public static Etrans GetSummaryReconciliation(Carrier carrier,CanadianNetwork network,Provider provTreat,DateTime reconciliationDate) {
+			Clearinghouse clearhouse=Canadian.GetClearinghouse();
+			if(clearhouse==null) {
+				throw new ApplicationException("Canadian clearinghouse not found.");
+			}
+			string saveFolder=clearhouse.ExportPath;
+			if(!Directory.Exists(saveFolder)) {
+				throw new ApplicationException(saveFolder+" not found.");
+			}
+			StringBuilder strb=new StringBuilder();
+			Etrans etrans=null;
+			if(carrier!=null) {
+				etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
+					clearhouse.ClearinghouseNum,EtransType.RequestSumm_CA,0,0);
+			}
+			else {//Assume network!=null
+				etrans=Etranss.CreateCanadianOutput(0,0,network.CanadianNetworkNum,
+					clearhouse.ClearinghouseNum,EtransType.RequestSumm_CA,0,0);
+			}
+			//A01 transaction prefix 12 AN
+			if(carrier!=null) {
+				strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+			}
+			else { //Assume network!=null
+				strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
+			}
+			//A02 office sequence number 6 N
+			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
+			//A03 format version number 2 N
+			strb.Append("04");
+			//A04 transaction code 2 N
+			strb.Append("05");//payment reconciliation request
+			//A05 carrier id number 6 N
+			if(carrier!=null) {
+				strb.Append(carrier.ElectID);//already validated as 6 digit number.
+			}
+			else { //Assume network!=null
+				strb.Append("999999");//Always 999999 when sending to a network.
+			}
+			//A06 software system id 3 AN  The third character is for version of OD.
+			//todo
+#if DEBUG
+			strb.Append("TS1");
+#else
+			strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
+#endif
+			//A10 encryption method 1 N
+			if(carrier!=null) {
+				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
+			}
+			else { //Assume network!=null
+				strb.Append("1");//No encryption when sending to a network.
+			}
+			//A07 message length N4
+			strb.Append(Canadian.TidyN("63",5));
+			//A09 carrier transaction counter 5 N
+			strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
+			//B01 CDA provider number 9 AN
+			strb.Append(Canadian.TidyAN(provTreat.NationalProvID,9));//already validated
+			//B02 (treating) provider office number 4 AN
+			strb.Append(Canadian.TidyAN(provTreat.CanadianOfficeNum,4));//already validated
+			//F33 Reconciliation Date 8 N
+			strb.Append(reconciliationDate.ToString("yyyyMMdd"));
+			//End of message construction.
+			string result="";
+			bool resultIsError=false;
+			try {
+				if(carrier!=null) {
+					result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+				}
+				else { //Assume network!=null
+					result=Canadian.PassToIca(strb.ToString(),network.CanadianNetworkNum,clearhouse);
+				}
+			}
+			catch(ApplicationException ex) {
+				result=ex.Message;
+				resultIsError=true;
+				//Etranss.Delete(etrans.EtransNum);//we don't want to do this, because we want the incremented etrans.OfficeSequenceNumber to be saved
+				//Attach an ack indicating failure.
+			}
+			//Attach an ack to the etrans
+			Etrans etransAck=new Etrans();
+			etransAck.PatNum=etrans.PatNum;
+			etransAck.PlanNum=etrans.PlanNum;
+			etransAck.InsSubNum=etrans.InsSubNum;
+			etransAck.CarrierNum=etrans.CarrierNum;
+			etransAck.DateTimeTrans=DateTime.Now;
+			CCDFieldInputter fieldInputter=null;
+			if(resultIsError) {
+				etransAck.Etype=EtransType.AckError;
+				etrans.Note="failed";
+			}
+			else {
+				fieldInputter=new CCDFieldInputter(result);
+				etransAck.Etype=fieldInputter.GetEtransType();
+			}
+			Etranss.Insert(etransAck);
+			Etranss.SetMessage(etransAck.EtransNum,result);
+			etrans.AckEtransNum=etransAck.EtransNum;
+			Etranss.Update(etrans);
+			Etranss.SetMessage(etrans.EtransNum,strb.ToString());
+			if(resultIsError) {
+				throw new ApplicationException(result);
+			}
+			FormCCDPrint formcp=new FormCCDPrint(etrans,result);
+			formcp.ShowDialog();
+			return etrans;
+		}
+
 
 	}
 }

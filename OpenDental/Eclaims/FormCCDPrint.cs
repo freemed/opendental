@@ -238,7 +238,6 @@ namespace OpenDental.Eclaims {
 					embeddedForm.Print();
 				}
 				if(formatVersionNumber=="04"){//FormId field does not exist in version 02 in any of the message texts.
-
 					formId=formData.GetFieldById("G42").valuestr;//Always exists in version 04 message responses.
 				}else{//Version 02
 					//Since there is no FormID field in version 02, we figure out what the formId should be based on the transaction type.
@@ -329,6 +328,9 @@ namespace OpenDental.Eclaims {
 					transactionCode=formData.GetFieldById("A04").valuestr;
 					if(transactionCode=="16") {
 						PrintPaymentReconciliation_16(e.Graphics);
+					}
+					else if(transactionCode=="15") {
+						PrintSummaryReconciliation_15(e.Graphics);
 					}
 					else if(status=="R"){//Claim Rejection
 					  PrintClaimRejection(e.Graphics);
@@ -435,32 +437,31 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintSummaryReconciliation_15(Graphics g){
-			text=isFrench?"RÉCONCILIATION DE RÉSUMÉ":"SUMMARY RECONCILIATION";
+			text=isFrench?"RÉSUMÉ DE RÉCONCILIATION":"SUMMARY RECONCILIATION";
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			doc.StartElement(verticalLine);
 			PrintDentalOfficeClaimReferenceNo(g,x,0);
 			doc.StartElement();
-			PrintOfficeNumber(g,x,0);
 			doc.StartElement();
 			PrintCarrierClaimNo(g,x,0);
 			doc.StartElement();
 			CCDField field=formData.GetFieldById("G34");//Payment reference
-			if(field!=null){
+			if(field!=null) {
 				doc.DrawField(g,field.GetFieldName(isFrench),field.valuestr,true,x,0);
 			}
 			doc.StartElement();
 			field=formData.GetFieldById("G35");//Payment date
-			if(field!=null){
+			if(field!=null) {
 				doc.DrawField(g,field.GetFieldName(isFrench),DateNumToPrintDate(field.valuestr),true,x,0);
 			}
 			doc.StartElement();
 			field=formData.GetFieldById("G36");//Payment amount
-			if(field!=null && field.valuestr!=null){
+			if(field!=null && field.valuestr!=null) {
 				doc.DrawString(g,field.GetFieldName(isFrench)+": "+RawMoneyStrToDisplayMoney(field.valuestr),x,0,headingFont);
 			}
 			doc.StartElement();
 			field=formData.GetFieldById("G33");//Payment adjustment amount
-			if(field!=null){
+			if(field!=null) {
 				doc.DrawField(g,field.GetFieldName(isFrench),RawMoneyStrToDisplayMoney(field.valuestr),true,x,0);
 			}
 			doc.StartElement();
@@ -472,23 +473,26 @@ namespace OpenDental.Eclaims {
 			CCDField[] transactionReferenceNumbers=formData.GetFieldsById("G01");
 			CCDField[] transactionPayments=formData.GetFieldsById("G38");
 			float cdaProviderNumCol=x;
-			float cdaProviderNumColWidth=100;
+			float cdaProviderNumColWidth=75;
 			float carrierIdentificationNumCol=cdaProviderNumCol+cdaProviderNumColWidth;
-			float carrierIdentificationNumColWidth=145;
+			float carrierIdentificationNumColWidth=125;
 			float officeSequenceNumCol=carrierIdentificationNumCol+carrierIdentificationNumColWidth;
-			float officeSequenceNumColWidth=165;
+			float officeSequenceNumColWidth=140;
 			float transactionReferenceNumCol=officeSequenceNumCol+officeSequenceNumColWidth;
-			float transactionReferenceNumColWidth=150;
+			float transactionReferenceNumColWidth=125;
 			float transactionPaymentCol=transactionReferenceNumCol+transactionReferenceNumColWidth;
-			doc.DrawString(g,isFrench?"NO DU\nDENTISTE":"UNIQUE\nID NO",cdaProviderNumCol,0,headingFont);
+			Font temp=doc.standardFont;
+			doc.standardFont=new Font(standardSmall.FontFamily,9,FontStyle.Bold);
+			doc.DrawString(g,isFrench?"NO DU\nDENTISTE":"UNIQUE\nID NO",cdaProviderNumCol,0);
 			doc.DrawString(g,isFrench?"IDENTIFICATION\nDE PORTEUR":
-				"CARRIER\nIDENTIFICATION",carrierIdentificationNumCol,0,headingFont);
+				"CARRIER\nIDENTIFICATION",carrierIdentificationNumCol,0);
 			doc.DrawString(g,isFrench?"NO DE TRANSACTION\nDU CABINET":
-				"DENTAL OFFICE\nCLAIM REFERENCE",officeSequenceNumCol,0,headingFont);
+				"DENTAL OFFICE\nCLAIM REFERENCE",officeSequenceNumCol,0);
 			doc.DrawString(g,isFrench?"NO DE RÉFÉRENCE\nDE TRANSACTION":
-				"CARRIER CLAIM\nNUMBER",transactionReferenceNumCol,0,headingFont);
-			doc.DrawString(g,isFrench?"PAIEMENT DE\nTRANSACTION":"TRANSACTION\nPAYMENT",transactionPaymentCol,0,headingFont);
-			for(int i=0;i<cdaProviderNumbers.Length;i++){
+				"CARRIER CLAIM\nNUMBER",transactionReferenceNumCol,0);
+			doc.DrawString(g,isFrench?"PAIEMENT DE\nTRANSACTION":"TRANSACTION\nPAYMENT",transactionPaymentCol,0);
+			doc.standardFont=standardSmall;
+			for(int i=0;i<cdaProviderNumbers.Length;i++) {
 				doc.StartElement();
 				doc.DrawString(g,cdaProviderNumbers[i].valuestr,cdaProviderNumCol,0);
 				doc.DrawString(g,carrierIdentificationNumbers[i].valuestr,carrierIdentificationNumCol,0);
@@ -496,6 +500,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,transactionReferenceNumbers[i+1].valuestr,transactionReferenceNumCol,0);
 				doc.DrawString(g,RawMoneyStrToDisplayMoney(transactionPayments[i].valuestr),transactionPaymentCol,0);
 			}
+			doc.standardFont=temp;
 			doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			doc.StartElement();

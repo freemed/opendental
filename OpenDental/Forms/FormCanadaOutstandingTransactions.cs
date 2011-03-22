@@ -11,6 +11,8 @@ using OpenDental.Eclaims;
 namespace OpenDental {
 	public partial class FormCanadaOutstandingTransactions:Form {
 
+		List<Carrier> carriers=new List<Carrier>();
+
 		public FormCanadaOutstandingTransactions() {
 			InitializeComponent();
 			Lan.F(this);
@@ -18,7 +20,10 @@ namespace OpenDental {
 
 		private void FormCanadaPaymentReconciliation_Load(object sender,EventArgs e) {
 			for(int i=0;i<Carriers.Listt.Length;i++) {
-				listCarriers.Items.Add(Carriers.Listt[i].CarrierName);
+				if((Carriers.Listt[i].CanadianSupportedTypes&CanSupTransTypes.RequestForOutstandingTrans_04)==CanSupTransTypes.RequestForOutstandingTrans_04) {
+					carriers.Add(Carriers.Listt[i]);
+					listCarriers.Items.Add(Carriers.Listt[i].CarrierName);
+				}
 			}
 		}
 
@@ -28,9 +33,15 @@ namespace OpenDental {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			CanadianOutput.GetOutstandingTransactions(Carriers.Listt[listCarriers.SelectedIndex]);
-			Cursor=Cursors.Default;
-			MsgBox.Show(this,"Done.");
+			try {
+				CanadianOutput.GetOutstandingTransactions(carriers[listCarriers.SelectedIndex]);
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"Done.");
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(Lan.g(this,"Request failed: ")+ex.Message);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -9,11 +9,11 @@ using OpenDentBusiness;
 using OpenDental.Eclaims;
 
 namespace OpenDental {
-	public partial class FormCanadaPaymentReconciliation:Form {
+	public partial class FormCanadaSummaryReconciliation:Form {
 
 		List<Carrier> carriers=new List<Carrier>();
 
-		public FormCanadaPaymentReconciliation() {
+		public FormCanadaSummaryReconciliation() {
 			InitializeComponent();
 			Lan.F(this);
 		}
@@ -24,17 +24,15 @@ namespace OpenDental {
 			}
 			for(int i=0;i<Carriers.Listt.Length;i++) {
 				if(Carriers.Listt[i].CDAnetVersion!="02" &&//This transaction does not exist in version 02.
-					(Carriers.Listt[i].CanadianSupportedTypes&CanSupTransTypes.RequestForPaymentReconciliation_06)==CanSupTransTypes.RequestForPaymentReconciliation_06) {
+					(Carriers.Listt[i].CanadianSupportedTypes&CanSupTransTypes.RequestForSummaryReconciliation_05)==CanSupTransTypes.RequestForSummaryReconciliation_05) {
 					carriers.Add(Carriers.Listt[i]);
 					listCarriers.Items.Add(Carriers.Listt[i].CarrierName);
 				}
 			}
 			long defaultProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			for(int i=0;i<ProviderC.List.Length;i++) {
-				listBillingProvider.Items.Add(ProviderC.List[i].Abbr);
 				listTreatingProvider.Items.Add(ProviderC.List[i].Abbr);
 				if(ProviderC.List[i].ProvNum==defaultProvNum) {
-					listBillingProvider.SelectedIndex=i;
 					listTreatingProvider.SelectedIndex=i;
 				}
 			}
@@ -54,10 +52,6 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must first choose one carrier or one network.");
 				return;
 			}
-			if(listBillingProvider.SelectedIndex<0) {
-				MsgBox.Show(this,"You must first choose a billing provider.");
-				return;
-			}
 			if(listTreatingProvider.SelectedIndex<0) {
 				MsgBox.Show(this,"You must first choose a treating provider.");
 				return;
@@ -73,12 +67,10 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			try {
 				if(listCarriers.SelectedIndex>=0) {
-					CanadianOutput.GetPaymentReconciliations(carriers[listCarriers.SelectedIndex],null,ProviderC.List[listTreatingProvider.SelectedIndex],
-						ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
+					CanadianOutput.GetSummaryReconciliation(carriers[listCarriers.SelectedIndex],null,ProviderC.List[listTreatingProvider.SelectedIndex],reconciliationDate);
 				}
 				else {
-					CanadianOutput.GetPaymentReconciliations(null,CanadianNetworks.Listt[listNetworks.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],
-						ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
+					CanadianOutput.GetSummaryReconciliation(null,CanadianNetworks.Listt[listNetworks.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],reconciliationDate);
 				}
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Done.");
@@ -86,7 +78,7 @@ namespace OpenDental {
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(Lan.g(this,"Request failed: ")+ex.Message);
-			}
+			}			
 			DialogResult=DialogResult.OK;
 		}
 

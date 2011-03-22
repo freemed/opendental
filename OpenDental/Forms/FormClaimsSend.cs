@@ -741,7 +741,8 @@ namespace OpenDental{
 		}
 
 		private void OnSummaryRec_Click() {
-			//todo
+			FormCanadaSummaryReconciliation fcsr=new FormCanadaSummaryReconciliation();
+			fcsr.ShowDialog();
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
