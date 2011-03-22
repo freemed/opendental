@@ -315,20 +315,6 @@ namespace OpenDental.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to insert  into icd9(ICD9Num,ICD9Code,Description) values (1,&apos;001&apos;,&apos;CHOLERA &apos;);
-        ///insert  into icd9(ICD9Num,ICD9Code,Description) values (2,&apos;0010&apos;,&apos;CHOLERA DUE TO VIBRIO CHOLERAE&apos;);
-        ///insert  into icd9(ICD9Num,ICD9Code,Description) values (3,&apos;0011&apos;,&apos;CHOLERA DUE TO VIBRIO CHOLERAE EL TOR&apos;);
-        ///insert  into icd9(ICD9Num,ICD9Code,Description) values (4,&apos;0019&apos;,&apos;CHOLERA UNSPECIFIED&apos;);
-        ///insert  into icd9(ICD9Num,ICD9Code,Description) values (5,&apos;002&apos;,&apos;TYPHOID AND PARATYPHOID FEVERS&apos;);
-        ///insert  into icd9(ICD9Num,ICD9Code, [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string icd9 {
-            get {
-                return ResourceManager.GetString("icd9", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap Left {
             get {
                 object obj = ResourceManager.GetObject("Left", resourceCulture);

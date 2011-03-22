@@ -875,8 +875,9 @@
     <None Include="Web References\OpenDentalServer\ServiceMain.disco" />
     <None Include="Web References\OpenDentalServer\ServiceMain.wsdl" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <None Include="Resources\icd9.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
