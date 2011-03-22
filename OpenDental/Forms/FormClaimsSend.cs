@@ -731,7 +731,8 @@ namespace OpenDental{
 		}
 
 		private void OnOutstanding_Click() {
-			//todo
+			FormCanadaOutstandingTransactions fcot=new FormCanadaOutstandingTransactions();
+			fcot.ShowDialog();
 		}
 
 		private void OnPayRec_Click() {

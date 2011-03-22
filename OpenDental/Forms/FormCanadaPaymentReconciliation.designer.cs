@@ -64,12 +64,12 @@ namespace OpenDental{
 			this.listCarriers.TabIndex = 107;
 			this.listCarriers.Click += new System.EventHandler(this.listCarriers_Click);
 			// 
-			// listNetwork
+			// listNetworks
 			// 
 			this.listNetworks.FormattingEnabled = true;
 			this.listNetworks.Location = new System.Drawing.Point(15,264);
-			this.listNetworks.Name = "listNetwork";
-			this.listNetworks.Size = new System.Drawing.Size(269,160);
+			this.listNetworks.Name = "listNetworks";
+			this.listNetworks.Size = new System.Drawing.Size(275,160);
 			this.listNetworks.TabIndex = 108;
 			this.listNetworks.Click += new System.EventHandler(this.listNetwork_Click);
 			// 

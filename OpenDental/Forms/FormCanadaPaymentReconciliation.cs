@@ -74,6 +74,7 @@ namespace OpenDental {
 					ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
 			}
 			Cursor=Cursors.Default;
+			MsgBox.Show(this,"Done.");
 			DialogResult=DialogResult.OK;
 		}
 
