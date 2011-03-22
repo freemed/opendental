@@ -3965,7 +3965,27 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE canadiannetwork ADD CanadianTransactionPrefix varchar2(255)";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS icd9";
+					Db.NonQ(command);
+					command=@"CREATE TABLE icd9 (
+						ICD9Num bigint NOT NULL auto_increment PRIMARY KEY,
+						ICD9Code varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE icd9'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE icd9 (
+						ICD9Num number(20) NOT NULL,
+						ICD9Code varchar2(255),
+						Description varchar2(255),
+						CONSTRAINT icd9_ICD9Num PRIMARY KEY (ICD9Num)
+						)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3996,5 +4016,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
-
-				

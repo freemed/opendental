@@ -191,6 +191,7 @@
     <Compile Include="Crud\GroupPermissionCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
+    <Compile Include="Crud\ICD9Crud.cs" />
     <Compile Include="Crud\InsFilingCodeCrud.cs" />
     <Compile Include="Crud\InsFilingCodeSubtypeCrud.cs" />
     <Compile Include="Crud\InsPlanCrud.cs" />
@@ -315,6 +316,7 @@
     </Compile>
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
+    <Compile Include="Data Interface\ICD9s.cs" />
     <Compile Include="Data Interface\InsSubs.cs" />
     <Compile Include="Data Interface\OrionProcs.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
@@ -593,6 +595,7 @@
     <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\CreditCard.cs" />
+    <Compile Include="TableTypes\ICD9.cs" />
     <Compile Include="TableTypes\InsSub.cs" />
     <Compile Include="TableTypes\OrionProc.cs" />
     <Compile Include="TableTypes\ProcGroupItem.cs" />
