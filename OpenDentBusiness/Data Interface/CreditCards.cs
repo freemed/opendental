@@ -67,11 +67,12 @@ namespace OpenDentBusiness{
 					+"WHERE cc.PatNum=pat.PatNum "
 					+"AND pat.Guarantor=guar.PatNum "
 					+"AND cc.ChargeAmt<>0 "
-					+"AND (cc.DateStop>"+DbHelper.Now()+" OR YEAR(cc.DateStop)<1880) "
+					+"AND cc.DateStart<="+DbHelper.Curdate()+" "
+					+"AND (cc.DateStop>="+DbHelper.Curdate()+" OR YEAR(cc.DateStop)<1880) "
 					+"AND guar.BalTotal-guar.InsEst>=cc.ChargeAmt "
 					+"GROUP BY cc.CreditCardNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
 					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt) recurring "
-					+"WHERE "+DbHelper.DateAddMonth("recurring.LatestPayment","1")+"<="+DbHelper.Now();
+					+"WHERE "+DbHelper.DateAddMonth("recurring.LatestPayment","1")+"<="+DbHelper.Curdate();
 			table=Db.GetTable(command);
 			return table;
 		}

@@ -64,7 +64,7 @@ namespace OpenDental {
 			table=CreditCards.GetRecurringChargeList(payType);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),130);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),110);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecurring","Name"),250);
 			gridMain.Columns.Add(col);
@@ -87,12 +87,22 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 			labelTotal.Text=Lan.g(this,"Total=")+table.Rows.Count.ToString();
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
-			labelCharged.Text=Lan.g(this,"Charged=")+"0";
-			labelFailed.Text=Lan.g(this,"Failed=")+"0";
 		}
 		
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
+		}
+		
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+				return;
+			}
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Must select at least one recurring charge.");
+				return;
+			}
+			long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoAccount(patNum);
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
@@ -176,6 +186,10 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)){
 				return;
 			}
+			if(gridMain.SelectedIndices.Length<1) {
+				MsgBox.Show(this,"Must select at least one recurring charge.");
+				return;
+			}
 			int failed=0;
 			int success=0;
 			string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
@@ -202,6 +216,7 @@ namespace OpenDental {
 				}
 				info.Arguments+="/RECEIPT:Pat"+patNum+" ";//aka invoice#
 				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
+				info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 				info.Arguments+="/USERID:"+user+" ";
 				info.Arguments+="/PASSWORD:"+password+" ";
 				info.Arguments+="/HIDEMAINWINDOW ";
@@ -231,9 +246,11 @@ namespace OpenDental {
 						if(line.StartsWith("RESULT=")) {
 							if(line!="RESULT=SUCCESS") {
 								failed++;
+								labelFailed.Text=Lan.g(this,"Failed=")+failed;
 								break;
 							}
 							success++;
+							labelCharged.Text=Lan.g(this,"Charged=")+success;
 							insertPayment=true;
 						}
 						line=reader.ReadLine();
