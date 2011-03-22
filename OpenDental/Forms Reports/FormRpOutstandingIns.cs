@@ -371,11 +371,11 @@ namespace OpenDental {
 					row.Cells.Add(dateService.ToShortDateString());
 				}
 				row.Cells.Add(PIn.Date(Table.Rows[i]["DateSent"].ToString()).ToShortDateString());
-				row.Cells.Add("$"+PIn.Double(Table.Rows[i]["ClaimFee"].ToString()).ToString("F"));
+				row.Cells.Add(PIn.Double(Table.Rows[i]["ClaimFee"].ToString()).ToString("c"));
 				gridMain.Rows.Add(row);
 				total+=PIn.Decimal(Table.Rows[i]["ClaimFee"].ToString());
 			}
-			textBox1.Text="$"+total.ToString("F");
+			textBox1.Text=total.ToString("c");
 			gridMain.EndUpdate();
 		}
 
