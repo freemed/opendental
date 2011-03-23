@@ -457,6 +457,7 @@ namespace OpenDental{
 			}
 			textDate.Text=RxPatCur.RxDate.ToString("d");
 			checkControlled.Checked=RxPatCur.IsControlled;
+			checkIsElectQueue.Checked=PrefC.GetBool(PrefName.RxSendNewToQueue);
 			textDrug.Text=RxPatCur.Drug;
 			textSig.Text=RxPatCur.Sig;
 			textDisp.Text=RxPatCur.Disp;
@@ -561,6 +562,12 @@ namespace OpenDental{
 
 		private void butSend_Click(object sender,EventArgs e) {
 			//Should launch the FormRxSendWindow.
+			//Jason- Not sure if this is necessary but following what seems to be the standard for this window.
+			if(!SaveRx()){
+				return;
+			}
+			FormRxSend FormRS=new FormRxSend();
+			FormRS.ShowDialog();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

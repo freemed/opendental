@@ -58,7 +58,7 @@ namespace OpenDental{
 			this.labelFailed.Name = "labelFailed";
 			this.labelFailed.Size = new System.Drawing.Size(89,16);
 			this.labelFailed.TabIndex = 32;
-			this.labelFailed.Text = "Failed=20";
+			this.labelFailed.Text = "Failed=0";
 			this.labelFailed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelCharged
@@ -67,7 +67,7 @@ namespace OpenDental{
 			this.labelCharged.Name = "labelCharged";
 			this.labelCharged.Size = new System.Drawing.Size(89,16);
 			this.labelCharged.TabIndex = 31;
-			this.labelCharged.Text = "Charged=20";
+			this.labelCharged.Text = "Charged=0";
 			this.labelCharged.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelSelected
@@ -76,7 +76,7 @@ namespace OpenDental{
 			this.labelSelected.Name = "labelSelected";
 			this.labelSelected.Size = new System.Drawing.Size(89,16);
 			this.labelSelected.TabIndex = 30;
-			this.labelSelected.Text = "Selected=20";
+			this.labelSelected.Text = "Selected=0";
 			this.labelSelected.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelTotal
@@ -85,7 +85,7 @@ namespace OpenDental{
 			this.labelTotal.Name = "labelTotal";
 			this.labelTotal.Size = new System.Drawing.Size(89,16);
 			this.labelTotal.TabIndex = 29;
-			this.labelTotal.Text = "Total=20";
+			this.labelTotal.Text = "Total=0";
 			this.labelTotal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butNone
