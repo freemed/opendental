@@ -46,6 +46,7 @@ namespace OpenDental{
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.service11 = new OpenDental.localhost.Service1();
+			this.butDelete = new OpenDental.UI.Button();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -247,7 +248,7 @@ namespace OpenDental{
 			this.butFullSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFullSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFullSync.CornerRadius = 4F;
-			this.butFullSync.Location = new System.Drawing.Point(195,288);
+			this.butFullSync.Location = new System.Drawing.Point(269,288);
 			this.butFullSync.Name = "butFullSync";
 			this.butFullSync.Size = new System.Drawing.Size(68,24);
 			this.butFullSync.TabIndex = 83;
@@ -262,7 +263,7 @@ namespace OpenDental{
 			this.butSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSync.CornerRadius = 4F;
-			this.butSync.Location = new System.Drawing.Point(269,288);
+			this.butSync.Location = new System.Drawing.Point(343,288);
 			this.butSync.Name = "butSync";
 			this.butSync.Size = new System.Drawing.Size(68,24);
 			this.butSync.TabIndex = 82;
@@ -289,10 +290,26 @@ namespace OpenDental{
 			this.service11.Url = "http://localhost:3824/Service1.asmx";
 			this.service11.UseDefaultCredentials = true;
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Location = new System.Drawing.Point(195,288);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(68,24);
+			this.butDelete.TabIndex = 245;
+			this.butDelete.Text = "Delete All";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormMobile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(714,325);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textDateTimeLastRun);
 			this.Controls.Add(this.groupPreferences);
 			this.Controls.Add(this.label3);
@@ -335,5 +352,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label8;
 		private localhost.Service1 service11;
+		private UI.Button butDelete;
 	}
 }

@@ -127,6 +127,17 @@ namespace OpenDental {
 			return true;
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(!SavePrefs()) {
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete all your data from our server?  This happens automatically before a full synch.")) {
+				return;
+			}
+			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
+			MsgBox.Show(this,"Done");
+		}
+
 		private void butFullSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
@@ -405,6 +416,8 @@ namespace OpenDental {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
+
+		
 
 
 
