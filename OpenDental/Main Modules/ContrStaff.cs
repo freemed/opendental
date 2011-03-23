@@ -855,7 +855,8 @@ namespace OpenDental{
 		}
 
 		private void butSendRx_Click(object sender,EventArgs e) {
-
+			FormRxSend FormRS=new FormRxSend();
+			FormRS.ShowDialog();
 		}
 
 		private void butSupply_Click(object sender,EventArgs e) {

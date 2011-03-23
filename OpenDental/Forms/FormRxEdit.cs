@@ -495,6 +495,7 @@ namespace OpenDental{
 			RxPatCur.Disp=textDisp.Text;
 			RxPatCur.Refills=textRefills.Text;
 			RxPatCur.Notes=textNotes.Text;
+			RxPatCur.IsElectQueue=checkIsElectQueue.Checked;
 			//pharmacy is set when using pick button.
 			if(IsNew){
 				RxPatCur.RxNum=RxPats.Insert(RxPatCur);
@@ -561,13 +562,12 @@ namespace OpenDental{
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
-			//Should launch the FormRxSendWindow.
-			//Jason- Not sure if this is necessary but following what seems to be the standard for this window.
 			if(!SaveRx()){
 				return;
 			}
 			FormRxSend FormRS=new FormRxSend();
 			FormRS.ShowDialog();
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
