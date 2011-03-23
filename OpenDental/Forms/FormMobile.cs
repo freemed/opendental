@@ -36,7 +36,6 @@ namespace OpenDental {
 			if(lastRun.Year>1880) {
 				textDateTimeLastRun.Text=lastRun.ToShortDateString()+" "+lastRun.ToShortTimeString();
 			}
-			textProgress.Text="";
 			//Web server is not contacted when loading this form.  That would be too slow.
 		}
 
