@@ -244,13 +244,14 @@ namespace OpenDental{
 			FillDisplayStrings();
 			int procLimit=ProcLimitForFormat();
 			//claimprocs is filled in FillDisplayStrings
-			//if(claimprocs.Count==0){
+			if(claimprocs.Count==0){
 			totalPages=1;
-			//js Some other programmer added this variable and implemented it.  We couldn't figure out why.  For example, in the line above, why would claimprocs ever be zero?  Due to many style and logic issues, we were forced to remove the function of this variable.  It would have to be written from scratch to implement it in the future.  Claims were never designed for multi-page.
-			//}
-			//else{
-			//	totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
-			//}
+			//js Some other programmer added this variable and implemented it.  We couldn't figure out why.  For example, in the line above, why would claimprocs ever be zero?  Due to many style and logic issues, we were forced to remove the function of this variable.  It would have to be written from scratch to implement it in the future.  Claims were never designed for multi-page.	
+			//Jason - this code we don't understand worked so I added it back until we get time to rewrite it correctly.
+			}
+			else{
+				totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
+			}
 			bool HasMedical = false;
 			if(!PrintBlank){
 				FillProcStrings(pagesPrinted*procLimit,procLimit);
