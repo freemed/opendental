@@ -4000,6 +4000,32 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						command=reader.ReadLine();
 					}
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS medicalorder";
+					Db.NonQ(command);
+					command=@"CREATE TABLE medicalorder (
+						MedicalOrderNum bigint NOT NULL auto_increment PRIMARY KEY,
+						MedOrderType tinyint NOT NULL,
+						PatNum bigint NOT NULL,
+						DateTimeOrder datetime NOT NULL DEFAULT '0001-01-01 00:00:00'
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE medicalorder'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE medicalorder (
+						MedicalOrderNum number(20) NOT NULL,
+						MedOrderType number(3) NOT NULL,
+						PatNum number(20) NOT NULL,
+						DateTimeOrder date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT medicalorder_MedicalOrderNum PRIMARY KEY (MedicalOrderNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX medicalorder_PatNum ON medicalorder (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4028,4 +4054,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
+
 

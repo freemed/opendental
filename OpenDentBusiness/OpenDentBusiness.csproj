@@ -205,6 +205,7 @@
     <Compile Include="Crud\LetterCrud.cs" />
     <Compile Include="Crud\LetterMergeCrud.cs" />
     <Compile Include="Crud\LetterMergeFieldCrud.cs" />
+    <Compile Include="Crud\MedicalOrderCrud.cs" />
     <Compile Include="Crud\MedicationCrud.cs" />
     <Compile Include="Crud\MedicationPatCrud.cs" />
     <Compile Include="Crud\MountCrud.cs" />
@@ -318,6 +319,7 @@
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ICD9s.cs" />
     <Compile Include="Data Interface\InsSubs.cs" />
+    <Compile Include="Data Interface\MedicalOrders.cs" />
     <Compile Include="Data Interface\OrionProcs.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
     <Compile Include="Data Interface\ProcGroupItems.cs" />
@@ -596,6 +598,7 @@
     <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
+    <Compile Include="TableTypes\MedicalOrder.cs" />
     <Compile Include="TableTypes\CreditCard.cs" />
     <Compile Include="TableTypes\ICD9.cs" />
     <Compile Include="TableTypes\InsSub.cs" />
