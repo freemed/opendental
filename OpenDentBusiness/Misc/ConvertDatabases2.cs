@@ -3559,8 +3559,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
-						command="INSERT INTO grouppermission (GroupPermNum,UserGroupNum,PermType) "
-						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcEditShowFee)+")";
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcEditShowFee)+")";
 						Db.NonQ32(command);
 					}
 				}
@@ -3573,8 +3573,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To7_8_3() {
 			if(FromVersion<new Version("7.8.3.0")) {
 				string command;
-				command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileUserName','')";
-				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileUserName','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MobileUserName','')";
+					Db.NonQ(command);
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE proctp ADD Dx varchar(255) NOT NULL";
 					Db.NonQ(command);
