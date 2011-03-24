@@ -4007,7 +4007,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						MedicalOrderNum bigint NOT NULL auto_increment PRIMARY KEY,
 						MedOrderType tinyint NOT NULL,
 						PatNum bigint NOT NULL,
-						DateTimeOrder datetime NOT NULL DEFAULT '0001-01-01 00:00:00'
+						DateTimeOrder datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
