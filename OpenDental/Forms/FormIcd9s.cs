@@ -10,6 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormIcd9s:Form {
 		public bool IsSelectionMode;
+		public long SelectedIcd9Num;
 
 		public FormIcd9s() {
 			InitializeComponent();
@@ -43,5 +44,22 @@ namespace OpenDental {
 				listMain.Items.Add(s);
 			}
 		}
+
+		private void listMain_DoubleClick(object sender,System.EventArgs e) {
+			if(listMain.SelectedIndex==-1) {
+				return;
+			}
+			if(IsSelectionMode) {
+				SelectedIcd9Num=ICD9s.Listt[listMain.SelectedIndex].ICD9Num;
+				DialogResult=DialogResult.OK;
+				return;
+			}
+			FormIcd9Edit FormI=new FormIcd9Edit(ICD9s.Listt[listMain.SelectedIndex]);
+			FormI.ShowDialog();
+			if(FormI.DialogResult!=DialogResult.OK)
+				return;
+			FillGrid();
+		}
+
 	}
 }

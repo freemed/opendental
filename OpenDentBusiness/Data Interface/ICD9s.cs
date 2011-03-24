@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM icd9 ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM icd9 ORDER BY Description";//stub query probably needs to be changed
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ICD9";
 			FillCache(table);
