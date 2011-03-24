@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -57,8 +60,77 @@ namespace OpenDental {
 		private void butAdd_Click(object sender,EventArgs e) {
 			if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {
 				if(Programs.IsEnabled(ProgramName.Xcharge)) {
-					MsgBox.Show(this,"To add a new credit card to this list, go to the payment window and select 'New card' from the credit card drop down. "
-						+"Press the X-Charge button and the card will be automatically added after the charge is successful.");
+					Program prog=Programs.GetCur(ProgramName.Xcharge);
+					string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
+					string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
+					ProcessStartInfo info=new ProcessStartInfo(prog.Path);
+					string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+					File.Delete(resultfile);//delete the old result file.
+					info.Arguments="";
+					info.Arguments+="/TRANSACTIONTYPE:ArchiveVaultAdd /LOCKTRANTYPE ";
+					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+					info.Arguments+="/USERID:"+user+" ";
+					info.Arguments+="/PASSWORD:"+password+" ";
+					info.Arguments+="/VALIDATEARCHIVEVAULTACCOUNT ";
+					info.Arguments+="/STAYONTOP ";
+					info.Arguments+="/SMARTAUTOPROCESS ";
+					info.Arguments+="/AUTOCLOSE ";
+					info.Arguments+="/HIDEMAINWINDOW ";
+					info.Arguments+="/SMALLWINDOW ";
+					info.Arguments+="/NORESULTDIALOG ";
+					info.Arguments+="/TOOLBAREXITBUTTON ";
+					Cursor=Cursors.WaitCursor;
+					Process process=new Process();
+					process.StartInfo=info;
+					process.EnableRaisingEvents=true;
+					process.Start();
+					while(!process.HasExited) {
+						Application.DoEvents();
+					}
+					Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
+					Cursor=Cursors.Default;
+					string resulttext="";
+					string line="";
+					string xChargeToken="";
+					string accountMasked="";
+					string exp="";;
+					bool insertCard=false;
+					using(TextReader reader=new StreamReader(resultfile)) {
+						line=reader.ReadLine();
+						while(line!=null) {
+							if(resulttext!="") {
+								resulttext+="\r\n";
+							}
+							resulttext+=line;
+							if(line.StartsWith("RESULT=")) {
+								if(line!="RESULT=SUCCESS") {
+									break;
+								}
+								insertCard=true;
+							}
+							if(line.StartsWith("XCACCOUNTID=")) {
+								xChargeToken=PIn.String(line.Substring(12));
+							}
+							if(line.StartsWith("ACCOUNT=")) {
+								accountMasked=PIn.String(line.Substring(8));
+							}
+							if(line.StartsWith("EXPIRATION=")) {
+								exp=PIn.String(line.Substring(11));
+							}
+							line=reader.ReadLine();
+						}
+						if(insertCard && xChargeToken!="") {//Might not be necessary but we've had successful charges with no tokens returned before.
+							CreditCard creditCardCur=new CreditCard();
+							List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
+							creditCardCur.PatNum=PatCur.PatNum;
+							creditCardCur.ItemOrder=itemOrderCount.Count;
+							creditCardCur.CCNumberMasked=accountMasked;
+							creditCardCur.XChargeToken=xChargeToken;
+							creditCardCur.CCExpiration=new DateTime(Convert.ToInt32("20"+PIn.String(exp.Substring(2,2))),Convert.ToInt32(PIn.String(exp.Substring(0,2))),1);
+							CreditCards.Insert(creditCardCur);
+						}
+					}
+					RefreshCardList();
 					return;
 				}
 				else {
