@@ -440,6 +440,9 @@ namespace TestCanada {
 			if(missingData!="") {
 				return "Cannot send claim until missing data is fixed:\r\n"+missingData+"\r\n";
 			}
+#if DEBUG
+			Canadian.testNumber=scriptNum;
+#endif
 			long etransNum=Canadian.SendClaim(queueItem,showForms,"");
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
