@@ -4026,7 +4026,60 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX medicalorder_PatNum ON medicalorder (PatNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS allergy";
+					Db.NonQ(command);
+					command=@"CREATE TABLE allergy (
+						AllergyNum bigint NOT NULL auto_increment PRIMARY KEY,
+						AllergyDefNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						Reaction varchar(255) NOT NULL,
+						StatusIsActive tinyint NOT NULL,
+						DateTStamp timestamp,
+						INDEX(AllergyDefNum),
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE allergy'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE allergy (
+						AllergyNum number(20) NOT NULL,
+						AllergyDefNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						Reaction varchar2(255),
+						StatusIsActive number(3) NOT NULL,
+						DateTStamp timestamp,
+						CONSTRAINT allergy_AllergyNum PRIMARY KEY (AllergyNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX allergy_AllergyDefNum ON allergy (AllergyDefNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX allergy_PatNum ON allergy (PatNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS allergydef";
+					Db.NonQ(command);
+					command=@"CREATE TABLE allergydef (
+						AllergyDefNum bigint NOT NULL auto_increment PRIMARY KEY,
+						Description varchar(255) NOT NULL,
+						IsHidden tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE allergydef'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE allergydef (
+						AllergyDefNum number(20) NOT NULL,
+						Description varchar2(255),
+						IsHidden number(3) NOT NULL,
+						CONSTRAINT allergydef_AllergyDefNum PRIMARY KEY (AllergyDefNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4057,3 +4110,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				
