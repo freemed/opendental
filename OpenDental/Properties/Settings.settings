@@ -20,5 +20,8 @@
     <Setting Name="OpenDental_MobileWeb_Mobile" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost:2923/Mobile.asmx</Value>
     </Setting>
+    <Setting Name="OpenDental_PatientPortal_PatientPortal" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2923/PatientPortal.asmx</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
