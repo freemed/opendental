@@ -50,6 +50,7 @@ namespace TestCanada {
 			plan.GroupNum="PLAN012";
 			plan.DentaideCardSequence=3;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -92,6 +93,7 @@ namespace TestCanada {
 			plan.DivisionNo="1542B";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			long planNum_pat2_pri=plan.PlanNum;
 			sub=new InsSub();
@@ -115,6 +117,7 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			//long planNum_pat2_sec=plan.PlanNum;//won't need this
 			sub=new InsSub();
@@ -166,6 +169,7 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -216,6 +220,7 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -261,6 +266,7 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="N";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -321,6 +327,7 @@ namespace TestCanada {
 			plan.DivisionNo="BA1765";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -342,6 +349,7 @@ namespace TestCanada {
 			plan.DivisionNo="15476";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -402,6 +410,7 @@ namespace TestCanada {
 			plan.DivisionNo="887B3";
 			plan.DentaideCardSequence=22;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -423,6 +432,7 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -483,6 +493,7 @@ namespace TestCanada {
 			plan.DivisionNo="887OP";
 			plan.DentaideCardSequence=03;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -504,6 +515,7 @@ namespace TestCanada {
 			plan.DivisionNo="";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;
@@ -546,6 +558,7 @@ namespace TestCanada {
 			plan.DivisionNo="9914";
 			plan.DentaideCardSequence=0;
 			plan.CanadianPlanFlag="";
+			plan.ClaimFormNum=7;//Canadian claim form
 			InsPlans.Insert(plan);
 			sub=new InsSub();
 			sub.PlanNum=plan.PlanNum;

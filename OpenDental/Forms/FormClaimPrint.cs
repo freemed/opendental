@@ -428,7 +428,12 @@ namespace OpenDental{
 		///<summary>Gets all necessary info from db based on ThisPatNum and ThisClaimNum.  Then fills displayStrings with the actual text that will display on claim.</summary>
 		private void FillDisplayStrings(){
 			if(PrintBlank){
-				ClaimFormCur=ClaimForms.GetClaimFormByUniqueId("OD8");//hard coded to ADA claimform for now.
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//en-CA or fr-CA
+					ClaimFormCur=ClaimForms.GetClaimFormByUniqueId("OD6");//CDA claim form
+				}
+				else { //Assume USA
+					ClaimFormCur=ClaimForms.GetClaimFormByUniqueId("OD8");//ADA claim form
+				}
 				//ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
 				displayStrings=new string[ClaimFormCur.Items.Length];
 				claimprocs=new List<ClaimProc>();
