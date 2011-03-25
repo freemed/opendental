@@ -2068,6 +2068,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\PatientPortal\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\WebSheets\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3929,6 +3934,11 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Web References\PatientPortal\PatientPortal.wsdl" />
+    <None Include="Web References\PatientPortal\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Web References\WebSheets\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -3945,6 +3955,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Web References\PatientPortal\PatientPortal.disco" />
     <None Include="Web References\MobileWeb\Mobile.disco" />
     <None Include="Web References\WebSheets\Sheets.disco" />
     <EmbeddedResource Include="Bridges\FormTrophyNamePick.resx">
@@ -4585,6 +4596,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_MobileWeb_Mobile</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:2923/PatientPortal.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\PatientPortal\</RelPath>
+      <UpdateFromURL>http://localhost:2923/PatientPortal.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>OpenDental_PatientPortal_PatientPortal</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://localhost:2923/Sheets.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
