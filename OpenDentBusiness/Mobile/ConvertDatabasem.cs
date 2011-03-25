@@ -119,3 +119,40 @@ namespace OpenDentBusiness.Mobile {
 					) DEFAULT CHARSET=utf8";
 				Db.NonQ(command);
 				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS medicationm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE medicationm (
+						CustomerNum bigint NOT NULL,
+						MedicationNum bigint NOT NULL,
+						MedName varchar(255) NOT NULL,
+						GenericNum bigint NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(MedicationNum),
+						INDEX(GenericNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS medicationpatm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE medicationpatm (
+						CustomerNum bigint NOT NULL,
+						MedicationPatNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						MedicationNum bigint NOT NULL,
+						PatNote varchar(255) NOT NULL,
+						IsDiscontinued tinyint NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(MedicationPatNum),,
+						INDEX(PatNum),
+						INDEX(MedicationNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
