@@ -548,7 +548,7 @@ namespace OpenDentBusiness {
 				row["ProcStatus"]="";
 				row["procTime"]="";
 				row["procTimeEnd"]="";
-				row["prov"]="";
+				row["prov"]=Providers.GetAbbr(PIn.Long(rawRx.Rows[i]["ProvNum"].ToString()));
 				row["quadrant"]="";
 				//row["prov"]=ProviderB. PIn.PInt(rawRx.Rows[i]["ProvNum"].ToString());
 				row["RxNum"]=rawRx.Rows[i]["RxNum"].ToString();

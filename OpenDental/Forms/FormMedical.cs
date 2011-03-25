@@ -29,6 +29,7 @@ namespace OpenDental{
 		private Disease[] DiseaseList;
 		private UI.Button butIcd9;
 		private CheckBox checkDiscontinued;
+		private ODGrid gridAllergies;
 		private PatientNote PatientNoteCur;
 
 		///<summary></summary>
@@ -77,6 +78,7 @@ namespace OpenDental{
 			this.checkPremed = new System.Windows.Forms.CheckBox();
 			this.butIcd9 = new OpenDental.UI.Button();
 			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
+			this.gridAllergies = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -286,12 +288,26 @@ namespace OpenDental{
 			this.checkDiscontinued.UseVisualStyleBackColor = true;
 			this.checkDiscontinued.MouseUp += new System.Windows.Forms.MouseEventHandler(this.checkShowDiscontinuedMeds_MouseUp);
 			// 
+			// gridAllergies
+			// 
+			this.gridAllergies.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridAllergies.HScrollVisible = false;
+			this.gridAllergies.Location = new System.Drawing.Point(4,262);
+			this.gridAllergies.Name = "gridAllergies";
+			this.gridAllergies.ScrollValue = 0;
+			this.gridAllergies.Size = new System.Drawing.Size(363,139);
+			this.gridAllergies.TabIndex = 63;
+			this.gridAllergies.Title = "Allergies";
+			this.gridAllergies.TranslationName = "TableDiseases";
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964,683);
+			this.Controls.Add(this.gridAllergies);
 			this.Controls.Add(this.butIcd9);
 			this.Controls.Add(this.checkDiscontinued);
 			this.Controls.Add(this.checkPremed);
