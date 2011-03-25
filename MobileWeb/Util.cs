@@ -25,21 +25,17 @@ namespace MobileWeb {
 			long DentalOfficeID=0;
 			String md5password=new WebHostSynch.Util().MD5Encrypt(password);
 			try {
-				String command="SELECT * FROM userm WHERE UserName='"+POut.String(username)+"'";
+				// a query involving both username and password is used because 2 dental offices could potentially have the same username
+				String command="SELECT * FROM userm WHERE UserName='"+POut.String(username)+"' AND Password='" +POut.String(md5password)+"'";
+				//String command="SELECT * FROM userm WHERE UserName='"+POut.String(username)+"'"; Old query
 				Userm um=Userms.GetOne(command);
-				String dbpassword="";
 				if(um==null) {
-					DentalOfficeID=0;//user not found - specify message if necessary
+					DentalOfficeID=0;//user password combination incorrect- specify message if necessary
 				}
 				else {
-					dbpassword=um.Password;
-					if(md5password==dbpassword) {
-						DentalOfficeID=um.CustomerNum;
-					}
-					else {
-						//incorrect password - specify message if necessary
-					}
+					DentalOfficeID=um.CustomerNum;
 				}
+
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);

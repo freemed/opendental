@@ -25,15 +25,6 @@ namespace MobileWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1486")]
-        public long DemoDentalOfficeID {
-            get {
-                return ((long)(this["DemoDentalOfficeID"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2011-02-13")]
         public global::System.DateTime DemoTodayDate {
             get {
@@ -44,10 +35,19 @@ namespace MobileWeb.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;User Id=dennis;database=mobile_dev;Persist Security Info=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;User Id=root;database=mobile_dev;Persist Security Info=True")]
         public string DBMobileWeb {
             get {
                 return ((string)(this["DBMobileWeb"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6219")]
+        public long DemoDentalOfficeID {
+            get {
+                return ((long)(this["DemoDentalOfficeID"]));
             }
         }
     }

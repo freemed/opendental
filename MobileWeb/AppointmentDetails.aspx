@@ -28,6 +28,7 @@
 <%Response.Write(apt.ProcDescript);%><br />
 <!--dentist, hygienist <br />-->
 <!--confirmation status from definition table <br />-->
+<%Response.Write(apt.Note);%><br />
 </span>
 </li>
 </ul>
