@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileWeb", "MobileWeb\Mobi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xEHR", "..\..\Shared Projects Subversion\EHR\EHR_head\EHR\xEHR.csproj", "{5ABF1D9D-2B93-4217-AFA6-9EECCF6F525F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientPortal", "PatientPortal\PatientPortal.csproj", "{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -318,6 +320,15 @@ Global
 		{5ABF1D9D-2B93-4217-AFA6-9EECCF6F525F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5ABF1D9D-2B93-4217-AFA6-9EECCF6F525F}.Release|x86.ActiveCfg = Release|x86
 		{5ABF1D9D-2B93-4217-AFA6-9EECCF6F525F}.Release|x86.Build.0 = Release|x86
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.LinuxRelease|x86.ActiveCfg = Release|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4943D0B-D3B8-410A-B5F4-ED999807F1FF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
