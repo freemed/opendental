@@ -49,7 +49,7 @@ namespace OpenDentBusiness.Crud{
 				vitalsign.VitalsignNum= PIn.Long  (table.Rows[i]["VitalsignNum"].ToString());
 				vitalsign.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				vitalsign.Height      = PIn.Float (table.Rows[i]["Height"].ToString());
-				vitalsign.Weight      = PIn.Int   (table.Rows[i]["Weight"].ToString());
+				vitalsign.Weight      = PIn.Float (table.Rows[i]["Weight"].ToString());
 				vitalsign.BpSystolic  = PIn.Int   (table.Rows[i]["BpSystolic"].ToString());
 				vitalsign.BpDiastolic = PIn.Int   (table.Rows[i]["BpDiastolic"].ToString());
 				vitalsign.DateTaken   = PIn.Date  (table.Rows[i]["DateTaken"].ToString());
@@ -100,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				     POut.Long  (vitalsign.PatNum)+","
 				+    POut.Float (vitalsign.Height)+","
-				+    POut.Int   (vitalsign.Weight)+","
+				+    POut.Float (vitalsign.Weight)+","
 				+    POut.Int   (vitalsign.BpSystolic)+","
 				+    POut.Int   (vitalsign.BpDiastolic)+","
 				+    POut.Date  (vitalsign.DateTaken)+")";
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE vitalsign SET "
 				+"PatNum      =  "+POut.Long  (vitalsign.PatNum)+", "
 				+"Height      =  "+POut.Float (vitalsign.Height)+", "
-				+"Weight      =  "+POut.Int   (vitalsign.Weight)+", "
+				+"Weight      =  "+POut.Float (vitalsign.Weight)+", "
 				+"BpSystolic  =  "+POut.Int   (vitalsign.BpSystolic)+", "
 				+"BpDiastolic =  "+POut.Int   (vitalsign.BpDiastolic)+", "
 				+"DateTaken   =  "+POut.Date  (vitalsign.DateTaken)+" "
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(vitalsign.Weight != oldVitalsign.Weight) {
 				if(command!=""){ command+=",";}
-				command+="Weight = "+POut.Int(vitalsign.Weight)+"";
+				command+="Weight = "+POut.Float(vitalsign.Weight)+"";
 			}
 			if(vitalsign.BpSystolic != oldVitalsign.BpSystolic) {
 				if(command!=""){ command+=",";}

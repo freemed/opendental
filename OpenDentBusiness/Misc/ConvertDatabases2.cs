@@ -3820,7 +3820,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						VitalsignNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
 						Height float NOT NULL,
-						Weight smallint NOT NULL,
+						Weight float NOT NULL,
 						BpSystolic smallint NOT NULL,
 						BpDiastolic smallint NOT NULL,
 						DateTaken date NOT NULL DEFAULT '0001-01-01',
@@ -3835,7 +3835,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						VitalsignNum number(20) NOT NULL,
 						PatNum number(20) NOT NULL,
 						Height number(38,8) NOT NULL,
-						Weight number(11) NOT NULL,
+						Weight number(38,8) NOT NULL,
 						BpSystolic number(11) NOT NULL,
 						BpDiastolic number(11) NOT NULL,
 						DateTaken date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
@@ -4113,3 +4113,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+

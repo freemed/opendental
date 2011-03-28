@@ -1467,7 +1467,7 @@ namespace OpenDentBusiness{
 		///<summary>0</summary>
 		UnknownIfEver,
 		///<summary>1</summary>
-		SmokerUnkownCurrent,
+		SmokerUnknownCurrent,
 		///<summary>2</summary>
 		NeverSmoked,
 		///<summary>3</summary>

@@ -52,13 +52,13 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static float CalcBMI(int weight,float height) {
+		public static float CalcBMI(float weight,float height) {
 			//No need to check RemotingRole; no call to db.
 			//BMI = (lbs*703)/(in^2)
 			if(weight==0 || height==0) {
 				return 0;
 			}
-			float bmi = (float)((weight*703)/(height*height));
+			float bmi = (float)((weight*703f)/(height*height));
 			return bmi;
 		}
 

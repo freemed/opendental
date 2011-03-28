@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 		///<summary>Height of patient in inches. Fractions might be needed some day.  Allowed to be 0.</summary>
 		public float Height;
 		///<summary>Lbs.  Allowed to be 0.</summary>
-		public int Weight;
+		public float Weight;
 		///<summary>Allowed to be 0.</summary>
 		public int BpSystolic;
 		///<summary>Allowed to be 0.</summary>
