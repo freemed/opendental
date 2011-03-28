@@ -398,11 +398,13 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=contextMenuEclaims;
 			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Get Reports"),5,Lan.g(this,"Get Reports from Other Clearinghouses"),"Reports"));
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Outstanding"),-1,Lan.g(this,"Get Outstanding Transactions"),"Outstanding"));
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment Rec"),-1,Lan.g(this,"Get Payment Reconciliation Transactions"),"PayRec"));
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Summary Rec"),-1,Lan.g(this,"Get Summary Reconciliation Transactions"),"SummaryRec"));
+			}
+			else {
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Get Reports"),5,Lan.g(this,"Get Reports from Other Clearinghouses"),"Reports"));
 			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"","Close"));
@@ -767,52 +769,73 @@ namespace OpenDental{
 			//listQueue=Claims.GetQueueList();
 			gridHistory.BeginUpdate();
 			gridHistory.Columns.Clear();
-			ODGridColumn col;
-			col=new ODGridColumn(Lan.g("TableClaimHistory","Patient Name"),130);
-			gridHistory.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimHistory","Carrier Name"),170);
-			gridHistory.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimHistory","Clearinghouse"),120);
-			gridHistory.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimHistory","Date"),130);
-			gridHistory.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimHistory","Type"),100);
-			gridHistory.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimHistory","AckCode"),100);
-			gridHistory.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimHistory","Note"),100);
-			gridHistory.Columns.Add(col);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				ODGridColumn col;
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Patient Name"),130);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Carrier Name"),170);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Clearinghouse"),90);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Date"),70);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Type"),100);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","AckCode"),100);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Note"),100);
+				gridHistory.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableClaimHistory","Office#"),100);
 				gridHistory.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableClaimHistory","CarrierCount"),100);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","CarrierCount"),0);
 				gridHistory.Columns.Add(col);
-			}
-			else{
-				//col=new ODGridColumn("",100);//spacer
-				//gridHistory.Columns.Add(col);
-			}
-			gridHistory.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<tableHistory.Rows.Count;i++) {
-				row=new ODGridRow();
-				row.Cells.Add(tableHistory.Rows[i]["patName"].ToString());
-				row.Cells.Add(tableHistory.Rows[i]["CarrierName"].ToString());
-				row.Cells.Add(tableHistory.Rows[i]["Clearinghouse"].ToString());
-				row.Cells.Add(tableHistory.Rows[i]["dateTimeTrans"].ToString());
+				gridHistory.Rows.Clear();
+				ODGridRow row;
+				for(int i=0;i<tableHistory.Rows.Count;i++) {
+					row=new ODGridRow();
+					row.Cells.Add(tableHistory.Rows[i]["patName"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["CarrierName"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["Clearinghouse"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["dateTimeTrans"].ToString());
 					//((DateTime)tableHistory.Rows[i]["DateTimeTrans"]).ToShortDateString());
-	//still need to trim the _CA
-				row.Cells.Add(tableHistory.Rows[i]["etype"].ToString());
-				row.Cells.Add(tableHistory.Rows[i]["ack"].ToString());
-				row.Cells.Add(tableHistory.Rows[i]["Note"].ToString());
-				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					//still need to trim the _CA
+					row.Cells.Add(tableHistory.Rows[i]["etype"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["ack"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["Note"].ToString());
 					row.Cells.Add(tableHistory.Rows[i]["OfficeSequenceNumber"].ToString());
 					row.Cells.Add(tableHistory.Rows[i]["CarrierTransCounter"].ToString());
+					gridHistory.Rows.Add(row);
 				}
-				else{
-					//row.Cells.Add("");
+			}
+			else {
+				ODGridColumn col;
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Patient Name"),130);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Carrier Name"),170);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Clearinghouse"),90);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Date"),70);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Type"),100);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","AckCode"),100);
+				gridHistory.Columns.Add(col);
+				col=new ODGridColumn(Lan.g("TableClaimHistory","Note"),0);
+				gridHistory.Columns.Add(col);
+				gridHistory.Rows.Clear();
+				ODGridRow row;
+				for(int i=0;i<tableHistory.Rows.Count;i++) {
+					row=new ODGridRow();
+					row.Cells.Add(tableHistory.Rows[i]["patName"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["CarrierName"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["Clearinghouse"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["dateTimeTrans"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["etype"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["ack"].ToString());
+					row.Cells.Add(tableHistory.Rows[i]["Note"].ToString());
+					gridHistory.Rows.Add(row);
 				}
-				gridHistory.Rows.Add(row);
 			}
 			gridHistory.EndUpdate();
 			gridHistory.ScrollToEnd();

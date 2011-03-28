@@ -264,6 +264,7 @@ namespace OpenDental.Eclaims {
 			}
 			else{
 				fieldInputter=new CCDFieldInputter(result);
+				etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
 				etransAck.Etype=fieldInputter.GetEtransType();
 			}
 			Etranss.Insert(etransAck);
@@ -461,6 +462,7 @@ namespace OpenDental.Eclaims {
 			}
 			else {
 			  fieldInputter=new CCDFieldInputter(result);
+				etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
 			  etransAck.Etype=fieldInputter.GetEtransType();
 			}
 			Etranss.Insert(etransAck);
@@ -567,6 +569,7 @@ namespace OpenDental.Eclaims {
 				}
 				else {
 					fieldInputter=new CCDFieldInputter(result);
+					etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
 					etransAck.Etype=fieldInputter.GetEtransType();
 				}
 				Etranss.Insert(etransAck);
@@ -727,6 +730,7 @@ namespace OpenDental.Eclaims {
 				}
 				else {
 					fieldInputter=new CCDFieldInputter(result);
+					etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
 					etransAck.Etype=fieldInputter.GetEtransType();
 				}
 				Etranss.Insert(etransAck);
@@ -842,6 +846,7 @@ namespace OpenDental.Eclaims {
 			}
 			else {
 				fieldInputter=new CCDFieldInputter(result);
+				etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
 				etransAck.Etype=fieldInputter.GetEtransType();
 			}
 			Etranss.Insert(etransAck);
