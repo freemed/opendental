@@ -578,7 +578,7 @@ namespace OpenDental{
 			string phone=PrefC.GetString(PrefName.PracticePhone);
 			if(phone.Length==10 
 				&& (CultureInfo.CurrentCulture.Name=="en-US" || 
-				(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA")))
+				CultureInfo.CurrentCulture.Name.EndsWith("CA"))) //Canadian. en-CA or fr-CA
 			{
 				textPhone.Text="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
 			}
@@ -652,7 +652,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			string phone=textPhone.Text;
 			if(Application.CurrentCulture.Name=="en-US"
-				|| (CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"))
+				|| CultureInfo.CurrentCulture.Name.EndsWith("CA")) //Canadian. en-CA or fr-CA)
 			{
 				phone=phone.Replace("(","");
 				phone=phone.Replace(")","");

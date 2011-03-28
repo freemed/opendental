@@ -149,7 +149,7 @@ namespace OpenDentBusiness{
 			}
 			string command;
 			DataTable table;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(carrier.IsCDA) {
 					if(carrier.ElectID=="") {
 						throw new ApplicationException(Lans.g("Carriers","Carrier Identification Number required."));
@@ -191,7 +191,7 @@ namespace OpenDentBusiness{
 				return carrier.CarrierNum;
 			}
 			//string command;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(carrier.IsCDA){
 					if(carrier.ElectID==""){
 						throw new ApplicationException(Lans.g("Carriers","Carrier Identification Number required."));
@@ -337,7 +337,7 @@ namespace OpenDentBusiness{
 			}
 			//No match found.  Decide what to do.  Usually add carrier.--------------------------------------------------------------
 			//Canada:
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				throw new ApplicationException(Lans.g("Carriers","Carrier not found."));//gives user a chance to add manually.
 				/*if(carrier.ElectID!=""){
 					command="SELECT CarrierNum FROM carrier WHERE "

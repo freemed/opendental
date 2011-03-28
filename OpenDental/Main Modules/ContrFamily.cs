@@ -497,7 +497,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				if(fields[f].Description==""){
 					if(fields[f].InternalName=="SS#"){
-						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 							row.Cells.Add("SIN");
 						}
 						else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
@@ -508,7 +508,7 @@ namespace OpenDental{
 						}
 					}
 					else if(fields[f].InternalName=="State"){
-						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 							row.Cells.Add("Province");
 						}
 						else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
@@ -519,7 +519,7 @@ namespace OpenDental{
 						}
 					}
 					else if(fields[f].InternalName=="Zip"){
-						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 							row.Cells.Add("Postal Code");
 						}
 						else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {

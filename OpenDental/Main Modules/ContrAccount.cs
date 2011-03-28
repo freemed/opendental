@@ -2685,7 +2685,7 @@ namespace OpenDental {
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
 					if(Procedures.NeedsSent(PIn.Long(table.Rows[i]["ProcNum"].ToString()),ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
-						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && countSelected==7){//Canadian
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && countSelected==7) {//Canadian. en-CA or fr-CA
 							countIsOverMaxCanadian=true;
 							continue;//only send 7.  
 						}
@@ -2708,7 +2708,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"You can only select procedures.");
 				return;
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && gridAccount.SelectedIndices.Length>7) {//Canadian
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && gridAccount.SelectedIndices.Length>7) {//Canadian. en-CA or fr-CA
 				countIsOverMaxCanadian=true;
 				List<int> selectedIndicies=new List<int>(gridAccount.SelectedIndices);
 				selectedIndicies.Sort();

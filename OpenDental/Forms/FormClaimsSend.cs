@@ -399,12 +399,12 @@ namespace OpenDental{
 			button.DropDownMenu=contextMenuEclaims;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Get Reports"),5,Lan.g(this,"Get Reports from Other Clearinghouses"),"Reports"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Outstanding"),-1,Lan.g(this,"Get Outstanding Transactions"),"Outstanding"));
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment Rec"),-1,Lan.g(this,"Get Payment Reconciliation Transactions"),"PayRec"));
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Summary Rec"),-1,Lan.g(this,"Get Summary Reconciliation Transactions"),"SummaryRec"));
 			}
+			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"","Close"));
 			/*ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ClaimsSend);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -782,7 +782,7 @@ namespace OpenDental{
 			gridHistory.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimHistory","Note"),100);
 			gridHistory.Columns.Add(col);
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				col=new ODGridColumn(Lan.g("TableClaimHistory","Office#"),100);
 				gridHistory.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableClaimHistory","CarrierCount"),100);
@@ -805,7 +805,7 @@ namespace OpenDental{
 				row.Cells.Add(tableHistory.Rows[i]["etype"].ToString());
 				row.Cells.Add(tableHistory.Rows[i]["ack"].ToString());
 				row.Cells.Add(tableHistory.Rows[i]["Note"].ToString());
-				if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					row.Cells.Add(tableHistory.Rows[i]["OfficeSequenceNumber"].ToString());
 					row.Cells.Add(tableHistory.Rows[i]["CarrierTransCounter"].ToString());
 				}

@@ -848,7 +848,7 @@ namespace OpenDental{
 			}
 			//textTemplates.Text=Carriers.DependentTemplates().ToString();
 			checkIsCDAnet.Checked=CarrierCur.IsCDA;//Can be checked but not visible.
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelCitySt.Text="City,Province,PostalCode";
 				labelElectID.Text="Carrier Identification Number";
 				groupCDAnet.Visible=checkIsCDAnet.Checked;
@@ -977,7 +977,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Carrier Name cannot be blank."));
 				return;
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked) {//if Canadian computer and Canadian carrier
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked) {//Canadian computer and Canadian carrier. en-CA or fr-CA
 				if(textVersion.Text!="02" && textVersion.Text!="04") {
 					MsgBox.Show(this,"Version Number must be 02 or 04.");
 					return;

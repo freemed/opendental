@@ -8,14 +8,27 @@ namespace TestCanada {
 	public class ProviderTC {
 		public static string SetInitialProviders() {
 			//Dentist #1----------------------------------
-			Provider prov=ProviderC.List[0];
-			prov.FName="A.";
-			prov.LName="Dentist";
-			prov.NationalProvID="530123401";
-			prov.CanadianOfficeNum="1234";
-			prov.ItemOrder=0;
-			prov.Abbr="DocA";
-			Providers.Update(prov);
+			Provider prov;
+			if(ProviderC.List.Length>0) {
+				prov=ProviderC.List[0];
+				prov.FName="A.";
+				prov.LName="Dentist";
+				prov.NationalProvID="530123401";
+				prov.CanadianOfficeNum="1234";
+				prov.ItemOrder=0;
+				prov.Abbr="DocA";
+				Providers.Update(prov);
+			}
+			else {
+				prov=new Provider();
+				prov.FName="A.";
+				prov.LName="Dentist";
+				prov.NationalProvID="530123401";
+				prov.CanadianOfficeNum="1234";
+				prov.ItemOrder=0;
+				prov.Abbr="DocA";
+				Providers.Insert(prov);
+			}
 			if(ProviderC.List.Length>1) {
 				prov=ProviderC.List[1];
 				prov.FName="B.";

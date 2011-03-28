@@ -2297,7 +2297,7 @@ namespace OpenDental{
 				comboBillingTypeTwo.Visible=false;
 				labelBillingTypeTwo.Visible=false;
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				groupProsth.Visible=false;
 				labelClaimNote.Visible=false;
 				textClaimNote.Visible=false;
@@ -2472,7 +2472,7 @@ namespace OpenDental{
 				}
 			}
 			textSite.Text=Sites.GetDescription(ProcCur.SiteNum);
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(ProcCur.CanadianTypeCodes!=null){
 					if(ProcCur.CanadianTypeCodes.Contains("A")) {
 						checkTypeCodeA.Checked=true;
@@ -2668,14 +2668,14 @@ namespace OpenDental{
 
 		private void SetSurfButtons(){
 			if(textSurfaces.Text.Contains("B") || textSurfaces.Text.Contains("F")) butBF.BackColor=Color.White;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(textSurfaces.Text.Contains("V")) butBF.BackColor=Color.White;
 			}
 			if(textSurfaces.Text.Contains("O") || textSurfaces.Text.Contains("I")) butOI.BackColor=Color.White;
 			if(textSurfaces.Text.Contains("M")) butM.BackColor=Color.White;
 			if(textSurfaces.Text.Contains("D")) butD.BackColor=Color.White;
 			if(textSurfaces.Text.Contains("L")) butL.BackColor=Color.White;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(textSurfaces.Text.Contains("5")) butV.BackColor=Color.White;
 			}
 			else{
@@ -3677,7 +3677,7 @@ namespace OpenDental{
 				textSurfaces.AppendText("D");
 			}
 			if(butV.BackColor==Color.White) {
-				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					textSurfaces.AppendText("5");
 				}
 				else {
@@ -3686,7 +3686,7 @@ namespace OpenDental{
 			}
 			if(butBF.BackColor==Color.White) {
 				if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
-					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 						textSurfaces.AppendText("V");//vestibular
 					}
 					else {
@@ -3925,7 +3925,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(checkTypeCodeX.Checked) {
 					if(checkTypeCodeA.Checked
 						|| checkTypeCodeB.Checked
@@ -4116,7 +4116,7 @@ namespace OpenDental{
 				ProcCur.BillingTypeTwo=DefC.Short[(int)DefCat.BillingTypes][comboBillingTypeTwo.SelectedIndex-1].DefNum;
 			}
 			//ProcCur.HideGraphical=checkHideGraphical.Checked;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				ProcCur.CanadianTypeCodes="";
 				if(checkTypeCodeA.Checked) {
 					ProcCur.CanadianTypeCodes+="A";

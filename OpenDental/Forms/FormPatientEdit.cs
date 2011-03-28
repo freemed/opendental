@@ -199,7 +199,7 @@ namespace OpenDental{
 			Controls.Add(listSites);
 			listSites.BringToFront();
 			Lan.F(this);
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelSSN.Text="SIN";
 				labelZip.Text="Postal Code";
 				labelST.Text="Province";
@@ -1873,7 +1873,7 @@ namespace OpenDental{
 					break;
 			}
 			textSchool.Text=PatCur.SchoolName;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				comboCanadianEligibilityCode.Items.Add("0 - Please Choose");
 				comboCanadianEligibilityCode.Items.Add("1 - Full-time student");
 				comboCanadianEligibilityCode.Items.Add("2 - Disabled");
@@ -2227,7 +2227,7 @@ namespace OpenDental{
 
 		private void textState_TextChanged(object sender, System.EventArgs e) {
 			if(CultureInfo.CurrentCulture.Name=="en-US" //if USA or Canada, capitalize first 2 letters
-				|| (CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA")){
+				|| CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(textState.Text.Length==1 || textState.Text.Length==2){
 					textState.Text=textState.Text.ToUpper();
 					textState.SelectionStart=2;
@@ -2720,7 +2720,7 @@ namespace OpenDental{
 					PatCur.SiteNum=matchingSite;
 				}
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(comboCanadianEligibilityCode.SelectedIndex==0) {
 					MsgBox.Show(this,"Please enter Eligibility Exception Code.");
 					return;
@@ -2848,7 +2848,7 @@ namespace OpenDental{
 			PatCur.PreferConfirmMethod=(ContactMethod)comboConfirm.SelectedIndex;
 			PatCur.PreferRecallMethod=(ContactMethod)comboRecall.SelectedIndex;
 			PatCur.AdmitDate=PIn.Date(textAdmitDate.Text);
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				PatCur.CanadianEligibilityCode=(byte)comboCanadianEligibilityCode.SelectedIndex;
 			}
 			if(PatCur.Guarantor==0){

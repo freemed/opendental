@@ -428,7 +428,7 @@ namespace OpenDental{
 		///<summary>Gets all necessary info from db based on ThisPatNum and ThisClaimNum.  Then fills displayStrings with the actual text that will display on claim.</summary>
 		private void FillDisplayStrings(){
 			if(PrintBlank){
-				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//en-CA or fr-CA
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					ClaimFormCur=ClaimForms.GetClaimFormByUniqueId("OD6");//CDA claim form
 				}
 				else { //Assume USA

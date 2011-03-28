@@ -419,7 +419,7 @@ namespace OpenDental{
 		///<summary>Setting forClaims to true converts V surfaces to either F or B.  toothNum might be empty, and a tidy should still be attempted.  Otherwise, toothNum must be valid.</summary>
 		public static string SurfTidy(string surf,string toothNum,bool forClaims){
 			//yes... this might be a little more elegant with a regex
-			bool isCanadian=CultureInfo.CurrentCulture.Name.Substring(3)=="CA";//en-CA or fr-CA
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");//Canadian. en-CA or fr-CA
 			//Canadian valid=MOIDBLV
 			if(surf==null){
 				//MessageBox.Show("null");

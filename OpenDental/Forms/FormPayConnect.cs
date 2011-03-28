@@ -219,7 +219,7 @@ namespace OpenDental {
 			string practicePhone=PrefC.GetString(PrefName.PracticePhone);
 			if(practicePhone.Length==10 
 				&& (CultureInfo.CurrentCulture.Name=="en-US" || 
-				(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"))) {
+				CultureInfo.CurrentCulture.Name.EndsWith("CA"))) {//Canadian. en-CA or fr-CA
 					result+="("+practicePhone.Substring(0,3)+")"+practicePhone.Substring(3,3)+"-"+practicePhone.Substring(6)+Environment.NewLine;
 			}
 			else if(practicePhone.Length>0) {

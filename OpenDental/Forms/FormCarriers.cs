@@ -223,7 +223,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormCarriers_Load(object sender, System.EventArgs e) {
-			//if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			//if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 			//No.  Even Canadian users will want to see all their carriers and only use the checkbox for special situations.
 			//	checkCDAnet.Checked=true;
 			//}
@@ -301,7 +301,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableCarriers","Plans"),50);
 			gridMain.Columns.Add(col);
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				col=new ODGridColumn(Lan.g("TableCarriers","CDAnet"),50);
 				gridMain.Columns.Add(col);
 			}
@@ -337,7 +337,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["ElectID"].ToString());
 				row.Cells.Add(table.Rows[i]["isHidden"].ToString());
 				row.Cells.Add(table.Rows[i]["insPlanCount"].ToString());
-				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					row.Cells.Add(table.Rows[i]["isCDA"].ToString());
 				}
 				//}
@@ -387,7 +387,7 @@ namespace OpenDental{
 			FormCarrierEdit FormCE=new FormCarrierEdit();
 			FormCE.IsNew=true;
 			Carrier carrier=new Carrier();
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				carrier.IsCDA=true;
 			}
 			FormCE.CarrierCur=new Carrier();

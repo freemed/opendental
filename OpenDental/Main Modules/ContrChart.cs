@@ -295,7 +295,7 @@ namespace OpenDental{
 			Logger.openlog.Log("Initializing chart module...",Logger.Severity.INFO);
 			InitializeComponent();
 			tabControlImages.DrawItem += new DrawItemEventHandler(OnDrawItem);
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canada
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				panelQuickButtons.Enabled=false;
 				butBF.Text=Lan.g(this,"B/V");//vestibular instead of facial
 				butV.Text=Lan.g(this,"5");
@@ -4932,7 +4932,7 @@ namespace OpenDental{
 				textSurf.AppendText("D");
 			}
 			if(butV.BackColor==Color.White){
-				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					textSurf.AppendText("5");
 				}
 				else {
@@ -4941,7 +4941,7 @@ namespace OpenDental{
 			}
 			if(butBF.BackColor==Color.White){
 				if(ToothGraphic.IsAnterior(toothChart.SelectedTeeth[0])) {
-					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 						textSurf.AppendText("V");//vestibular
 					}
 					else {

@@ -3299,7 +3299,7 @@ namespace OpenDental{
 			if(System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height<this.Height){
 				this.Height=System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;//make this window as tall as possible.
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelPreAuthNum.Text=Lan.g(this,"Predeterm Num");
 				groupProsth.Visible=false;
 				groupReferral.Visible=false;
@@ -3565,7 +3565,7 @@ namespace OpenDental{
 			}
 			//Canadian------------------------------------------------------------------
 			//(there's also a FillCanadian section for fields that do not collide with USA fields)
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(ClaimCur.AccidentDate.Year<1880) {
 					textCanadianAccidentDate.Text="";
 				}
@@ -5206,7 +5206,7 @@ namespace OpenDental{
 			}
 			ClaimCur.AttachmentID=textAttachID.Text;
 			//Canadian---------------------------------------------------------------------------------
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				ClaimCur.CanadianMaterialsForwarded="";
 				if(checkEmail.Checked) {
 					ClaimCur.CanadianMaterialsForwarded+="E";

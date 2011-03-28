@@ -421,7 +421,7 @@ namespace OpenDental{
 				AckCur=null;
 				groupAck.Visible=false;
 			}
-			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")){
+			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Not Canadian.
 				butPrintAck.Visible=false;
 			}
 		}

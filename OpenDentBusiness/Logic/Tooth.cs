@@ -593,7 +593,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Handles direct user input and tidies according to rules.  ToothNum might be empty, and a tidy should still be attempted.  Otherwise, toothNum must be valid.</summary>
 		public static string SurfTidyForDisplay(string surf,string toothNum){
-			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");//Canadian. en-CA or fr-CA
 			//Canadian valid=MOIDBLV
 			if(surf==null){
 				surf="";
@@ -664,7 +664,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Converts the database value to a claim value.  Special handling for V surfaces.  ToothNum must be valid.</summary>
 		public static string SurfTidyForClaims(string surf,string toothNum) {
-			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");//Canadian. en-CA or fr-CA
 			//Canadian valid=MOIDBLV
 			if(surf==null) {
 				surf="";
@@ -721,7 +721,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Takes display string and converts it into Db string.  ToothNum does not need to be valid.</summary>
 		public static string SurfTidyFromDisplayToDb(string surf,string toothNum) {
-			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");//Canadian. en-CA or fr-CA
 			//Canadian valid=MOIDBLV
 			if(surf==null) {
 				surf="";
@@ -792,7 +792,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Takes surfaces from Db and converts them to appropriate culture for display.  Only Canada supported so far.  ToothNum does not need to be valid since minimal manipulation here.</summary>
 		public static string SurfTidyFromDbToDisplay(string surf,string toothNum) {
-			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");
+			bool isCanadian=CultureInfo.CurrentCulture.Name.EndsWith("CA");//Canadian. en-CA or fr-CA
 			//Canadian valid=MOIDBLV
 			if(!isCanadian) {
 				return surf;
