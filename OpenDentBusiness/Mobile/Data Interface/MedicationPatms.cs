@@ -7,7 +7,63 @@ using System.Text;
 namespace OpenDentBusiness.Mobile{
 	///<summary></summary>
 	public class MedicationPatms{
-		
+		#region Only used for webserver for mobile.
+
+
+		///<summary>Gets all MedicationPatm for a single patient </summary>
+		public static List<MedicationPatm> GetMedicationPatms(long customerNum,long patNum) {
+			string command=
+					"SELECT * from medicationpatm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)
+					+" AND PatNum = "+POut.Long(patNum);
+			return Crud.MedicationPatmCrud.SelectMany(command);
+		}
+		#endregion
+
+		#region Used only on OD
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<long> GetChangedSinceMedicationPatNums(DateTime changedSince) {
+			return MedicationPats.GetChangedSinceMedicationPatNums(changedSince);
+		}
+
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<MedicationPatm> GetMultMedicationPatms(List<long> rxNums) {
+			List<MedicationPat> medicationPatList=MedicationPats.GetMultMedicationPats(rxNums);
+			List<MedicationPatm> medicationPatmList=ConvertListToM(medicationPatList);
+			return medicationPatmList;
+		}
+
+		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
+		public static List<MedicationPatm> ConvertListToM(List<MedicationPat> list) {
+			List<MedicationPatm> retVal=new List<MedicationPatm>();
+			for(int i=0;i<list.Count;i++) {
+				retVal.Add(Crud.MedicationPatmCrud.ConvertToM(list[i]));
+			}
+			return retVal;
+		}
+		#endregion
+
+		#region Used only on the Mobile webservice server for  synching.
+		///<summary>Only run on server for mobile.  Takes the list of changes from the dental office and makes updates to those items in the mobile server db.  Also, make sure to run DeletedObjects.DeleteForMobile().</summary>
+		public static void UpdateFromChangeList(List<MedicationPatm> list,long customerNum) {
+			for(int i=0;i<list.Count;i++){
+				list[i].CustomerNum=customerNum;
+				MedicationPatm medicationPatm=Crud.MedicationPatmCrud.SelectOne(customerNum,list[i].MedicationPatNum);
+				if(medicationPatm==null){//not in db
+					Crud.MedicationPatmCrud.Insert(list[i],true);
+				}
+				else{
+					Crud.MedicationPatmCrud.Update(list[i]);
+				}
+			}
+		}
+
+		///<summary>used in tandem with Full synch</summary>
+		public static void DeleteAll(long customerNum) {
+			string command= "DELETE FROM medicationpatm WHERE CustomerNum = "+POut.Long(customerNum); ;
+			Db.NonQ(command);
+		}
+		#endregion
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -38,28 +94,7 @@ namespace OpenDentBusiness.Mobile{
 			Db.NonQ(command);
 		}
 
-		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
-		public static List<MedicationPatm> ConvertListToM(List<MedicationPat> list) {
-			List<MedicationPatm> retVal=new List<MedicationPatm>();
-			for(int i=0;i<list.Count;i++){
-				retVal.Add(Crud.MedicationPatmCrud.ConvertToM(list[i]));
-			}
-			return retVal;
-		}
 
-		///<summary>Only run on server for mobile.  Takes the list of changes from the dental office and makes updates to those items in the mobile server db.  Also, make sure to run DeletedObjects.DeleteForMobile().</summary>
-		public static void UpdateFromChangeList(List<MedicationPatm> list,long customerNum) {
-			for(int i=0;i<list.Count;i++){
-				list[i].CustomerNum=customerNum;
-				MedicationPatm medicationPatm=Crud.MedicationPatmCrud.SelectOne(customerNum,list[i].MedicationPatNum);
-				if(medicationPatm==null){//not in db
-					Crud.MedicationPatmCrud.Insert(list[i],true);
-				}
-				else{
-					Crud.MedicationPatmCrud.Update(list[i]);
-				}
-			}
-		}
 		*/
 
 

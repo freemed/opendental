@@ -131,6 +131,43 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
+		public static List<long> GetChangedSinceMedicationNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT MedicationNum FROM medication WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> medicationNums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				medicationNums.Add(PIn.Long(dt.Rows[i]["MedicationNum"].ToString()));
+			}
+			return medicationNums;
+		}
+
+		///<summary>Used along with GetChangedSinceMedicationNums</summary>
+		public static List<Medication> GetMultMedications(List<long> medicationNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Medication>>(MethodBase.GetCurrentMethod(),medicationNums);
+			}
+			string strMedicationNums="";
+			DataTable table;
+			if(medicationNums.Count>0) {
+				for(int i=0;i<medicationNums.Count;i++) {
+					if(i>0) {
+						strMedicationNums+="OR ";
+					}
+					strMedicationNums+="MedicationNum='"+medicationNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM medication WHERE "+strMedicationNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			Medication[] multMedications=Crud.MedicationCrud.TableToList(table).ToArray();
+			List<Medication> MedicationList=new List<Medication>(multMedications);
+			return MedicationList;
+		}
 		
 	}
 

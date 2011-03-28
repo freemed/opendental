@@ -54,6 +54,44 @@ namespace OpenDentBusiness{
 				+Cur.MedicationPatNum.ToString()+"'";
 			Db.NonQ(command);
 		}
+
+		public static List<long> GetChangedSinceMedicationPatNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT MedicationPatNum FROM medicationpat WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> medicationpatnums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				medicationpatnums.Add(PIn.Long(dt.Rows[i]["MedicationPatNum"].ToString()));
+			}
+			return medicationpatnums;
+		}
+
+		///<summary>Used along with GetChangedSinceMedicationPatNums</summary>
+		public static List<MedicationPat> GetMultMedicationPats(List<long> medicationPatNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),medicationPatNums);
+			}
+			string strMedicationPatNums="";
+			DataTable table;
+			if(medicationPatNums.Count>0) {
+				for(int i=0;i<medicationPatNums.Count;i++) {
+					if(i>0) {
+						strMedicationPatNums+="OR ";
+					}
+					strMedicationPatNums+="MedicationPatNum='"+medicationPatNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM medicationpat WHERE "+strMedicationPatNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			MedicationPat[] multMedicationPats=Crud.MedicationPatCrud.TableToList(table).ToArray();
+			List<MedicationPat> medicationPatList=new List<MedicationPat>(multMedicationPats);
+			return medicationPatList;
+		}
 		
 	}
 

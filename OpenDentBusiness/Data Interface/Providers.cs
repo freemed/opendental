@@ -381,7 +381,7 @@ namespace OpenDentBusiness{
 
 		public static List<long> GetChangedSinceProvNums(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT ProvNum FROM provider WHERE DateTStamp > "+POut.DateT(changedSince);
 			DataTable dt=Db.GetTable(command);

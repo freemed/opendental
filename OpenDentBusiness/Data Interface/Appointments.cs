@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 		///<summary>Used if the number of records are very large, in which case using GetChangedSince is not the preffered route due to memory problems caused by large recordsets. </summary>
 		public static List<long> GetChangedSinceAptNums(DateTime changedSince,DateTime excludeOlderThan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT AptNum FROM appointment WHERE DateTStamp > "+POut.DateT(changedSince)
 				+" AND AptDateTime > "+POut.DateT(excludeOlderThan);

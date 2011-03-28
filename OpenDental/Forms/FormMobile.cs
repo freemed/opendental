@@ -14,11 +14,21 @@ using OpenDentBusiness.Mobile;
 namespace OpenDental {
 	public partial class FormMobile:Form {
 		private static MobileWeb.Mobile mb=new MobileWeb.Mobile();
+		private static PatientPortal.PatientPortal pp=new PatientPortal.PatientPortal();
 		private static int BatchSize=100;
 		///<summary>This variable prevents the synching methods from being called when a previous synch is in progress.</summary>
 		private static bool IsSynching;
 		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
 		private bool changed;
+
+		private enum SynchEntity {
+			patient,
+			appointment,
+			prescription,
+			provider,
+			medication,
+			medicationpat
+		}
 
 		public FormMobile() {
 			InitializeComponent();
@@ -153,7 +163,7 @@ namespace OpenDental {
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(DateTime.MinValue,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(DateTime.MinValue);
 			List<long> provNumList=Providerms.GetChangedSinceProvNums(DateTime.MinValue);
-			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count;
+			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the upload
 			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
@@ -261,6 +271,44 @@ namespace OpenDental {
 			IsSynching=false;
 		}
 
+		///<summary>dennis: code for patient portal starts here. This code may be moved to another location later</summary>
+		private static void UploadWorkerPatPortal(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
+			pp.Url="http://localhost:2923/PatientPortal.asmx";
+			IgnoreCertificateErrors();
+			IsSynching=true;
+			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
+			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
+			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
+			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
+			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
+			IsSynching=false;
+		}
+
+		/// <summary>
+		/// a general function to reduce the amount of code for uploading
+		/// </summary>
+		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,ref FormProgress progressIndicator) {
+			int LocalBatchSize=BatchSize;
+			for(int start=0;start<PKNumList.Count;start+=LocalBatchSize) {
+				if((start+LocalBatchSize)>PKNumList.Count) {
+					LocalBatchSize=PKNumList.Count-start;
+				}
+				List<long> BlockPKNumList=PKNumList.GetRange(start,LocalBatchSize);
+				switch(entity) {
+					case SynchEntity.medication:
+					List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
+					//pp.Sy.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
+					break;
+					List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
+					//mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
+					case SynchEntity.medicationpat:
+					break;
+
+				}
+				progressIndicator.CurrentVal+=BatchSize;
+			}
+		}
+
 		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
 		private static bool TestWebServiceExists() {
 			try {
@@ -320,6 +368,39 @@ namespace OpenDental {
 			FormP.DisplayText="";
 			//start the thread that will perform the upload
 			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
+			Thread workerThread=new Thread(uploadDelegate);
+			workerThread.Start();
+		}
+
+		///<summary>Only called from FormOpenDental</summary>
+		public static void SynchPatientPortalFromMain() {
+			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
+				return;
+			}
+			if(IsSynching) {
+				return;
+			}
+			DateTime timeSynchStarted=MiscData.GetNowDateTime();
+			if(timeSynchStarted < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
+				return;
+			}
+			if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("192.168.0.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
+				IgnoreCertificateErrors();
+			}
+			if(!TestWebServiceExists()) {
+				return;
+			}
+			//calculate total number of records------------------------------------------------------------------------------
+			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
+			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
+			int totalCount=medicationNumList.Count+medicationPatNumList.Count;
+			FormProgress FormP=new FormProgress();//but we won't display it.
+			FormP.NumberFormat="";
+			FormP.DisplayText="";
+			//start the thread that will perform the upload
+			ThreadStart uploadDelegate= delegate { UploadWorkerPatPortal(changedSince,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 		}

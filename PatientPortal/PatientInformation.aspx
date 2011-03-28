@@ -12,17 +12,17 @@
 		<Columns>
 			<asp:TemplateField HeaderText="Notes">
 			<ItemTemplate>
-			<%#OpenDentBusiness.Medications.GetMedication(((OpenDentBusiness.MedicationPat)Container.DataItem).MedicationNum).MedName%>
+			<%--<%#OpenDentBusiness.Medications.GetMedication(((OpenDentBusiness.MedicationPat)Container.DataItem).MedicationNum).MedName%>--%>
 			</ItemTemplate>
 			</asp:TemplateField>
 			<asp:TemplateField HeaderText="Medication Name">
 			<ItemTemplate>
-			<%#((OpenDentBusiness.MedicationPat)Container.DataItem).PatNote%>
+			<%--	<%#((OpenDentBusiness.MedicationPat)Container.DataItem).PatNote%>--%>
 			</ItemTemplate>
 			</asp:TemplateField>
 			<asp:TemplateField HeaderText="Discontinued">
 			<ItemTemplate>
-			<%#GetDiscontinued(((OpenDentBusiness.MedicationPat)Container.DataItem).IsDiscontinued)%>
+			<%--<%#GetDiscontinued(((OpenDentBusiness.MedicationPat)Container.DataItem).IsDiscontinued)%>--%>
 			</ItemTemplate>
 			</asp:TemplateField>
 		</Columns>

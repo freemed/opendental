@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 		///<summary>Used if the number of records are very large, in which case using GetChangedSince(DateTime changedSince) is not the preffered route due to memory problems caused by large recordsets. </summary>
 		public static List<long> GetChangedSincePatNums(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT PatNum From patient WHERE DateTStamp > "+POut.DateT(changedSince);
 			DataTable dt=Db.GetTable(command);

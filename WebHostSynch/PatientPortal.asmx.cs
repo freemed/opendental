@@ -49,12 +49,8 @@ namespace WebHostSynch {
 				if(customerNum==0) {
 					return;
 				}
-				/*
-				Patientms.DeleteAll(customerNum);
-				Appointmentms.DeleteAll(customerNum);
-				RxPatms.DeleteAll(customerNum);
-				Providerms.DeleteAll(customerNum);
-				*/
+				Medicationms.DeleteAll(customerNum);
+				MedicationPatms.DeleteAll(customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -62,14 +58,14 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void SynchPatients(String RegistrationKey,List<Patientm> patientmList) {
+		public void SynchMedications(String RegistrationKey,List<Medicationm> medicationmList) {
 			try {
-				Logger.Information("In SynchPatients");
+				Logger.Information("In SynchMedications");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
 				}
-				Patientms.UpdateFromChangeList(patientmList,customerNum);
+				Medicationms.UpdateFromChangeList(medicationmList,customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -77,83 +73,22 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void SynchAppointments(String RegistrationKey,List<Appointmentm> appointmentList) {
+		public void SynchMedicationPats(String RegistrationKey,List<MedicationPatm> medicationPatList) {
 			try {
-				Logger.Information("In SynchAppointments");
+				Logger.Information("In SynchMedicationPats");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
 				}
-				Appointmentms.UpdateFromChangeList(appointmentList,customerNum);
+				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 		
-		[WebMethod]
-		public void SynchPrescriptions(String RegistrationKey,List<RxPatm> rxList) {
-			try {
-				Logger.Information("In SynchPrescriptions");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
-				}
-				RxPatms.UpdateFromChangeList(rxList,customerNum);
-			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
 
-		[WebMethod]
-		public void SynchProviders(String RegistrationKey,List<Providerm> providerList) {
-			try {
-				Logger.Information("In SynchProviders");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
-				}
-				Providerms.UpdateFromChangeList(providerList,customerNum);
-			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
 
-		[WebMethod]
-		public string GetUserName(String RegistrationKey) {
-			String UserName="";
-			try {
-				Logger.Information("In GetUserName");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum!=0) {
-					UserName=util.GetMobileWebUserName(customerNum);
-				}
-				return UserName;
-			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-				return UserName;
-			}
-		}
-
-		[WebMethod]
-		public void SetMobileWebUserPassword(String RegistrationKey,String UserName,String Password) {
-			try {
-				Logger.Information("In SetMobileWebPassword");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
-				}
-				else {
-					util.SetMobileWebUserPassword(customerNum,UserName,Password);
-				}
-			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
 
 	}
 }
