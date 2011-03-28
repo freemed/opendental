@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 
 		public static List<long> GetChangedSinceRxNums(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
 			string command="SELECT RxNum FROM rxpat WHERE DateTStamp > "+POut.DateT(changedSince);
 			DataTable dt=Db.GetTable(command);
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		///<summary>Used in FormRxSend to fill electronic queue filtered by pharmacy.</summary>
 		public static List<RxPat> GetMultElectQueueRx(long pharmacyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),pharmacyNum);
 			}
 			string command="SELECT * FROM rxpat WHERE IsElectQueue=1 AND PharmacyNum="+pharmacyNum;
 			return Crud.RxPatCrud.SelectMany(command);
