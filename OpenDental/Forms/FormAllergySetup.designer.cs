@@ -37,7 +37,7 @@ namespace OpenDental{
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Location = new System.Drawing.Point(346,24);
+			this.butAdd.Location = new System.Drawing.Point(296,24);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 3;
@@ -52,7 +52,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(346,310);
+			this.butClose.Location = new System.Drawing.Point(296,310);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
@@ -67,25 +67,27 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(26,24);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(294,310);
+			this.gridMain.Size = new System.Drawing.Size(242,310);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Allergies";
 			this.gridMain.TranslationName = null;
 			// 
 			// checkShowHidden
 			// 
-			this.checkShowHidden.Location = new System.Drawing.Point(346,160);
+			this.checkShowHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkShowHidden.Location = new System.Drawing.Point(296,148);
 			this.checkShowHidden.Name = "checkShowHidden";
 			this.checkShowHidden.Size = new System.Drawing.Size(98,24);
 			this.checkShowHidden.TabIndex = 5;
 			this.checkShowHidden.TabStop = false;
 			this.checkShowHidden.Text = "Show Hidden";
 			this.checkShowHidden.UseVisualStyleBackColor = true;
+			this.checkShowHidden.CheckedChanged += new System.EventHandler(this.checkShowHidden_CheckedChanged);
 			// 
 			// FormAllergySetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(446,361);
+			this.ClientSize = new System.Drawing.Size(396,361);
 			this.Controls.Add(this.checkShowHidden);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);

@@ -25,6 +25,7 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.butPreview = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butAllergies = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butPreview
@@ -57,10 +58,26 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butAllergies
+			// 
+			this.butAllergies.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAllergies.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAllergies.Autosize = true;
+			this.butAllergies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAllergies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAllergies.CornerRadius = 4F;
+			this.butAllergies.Location = new System.Drawing.Point(12,103);
+			this.butAllergies.Name = "butAllergies";
+			this.butAllergies.Size = new System.Drawing.Size(175,24);
+			this.butAllergies.TabIndex = 120;
+			this.butAllergies.Text = "Allergies";
+			this.butAllergies.Click += new System.EventHandler(this.butAllergies_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,534);
+			this.Controls.Add(this.butAllergies);
 			this.Controls.Add(this.butPreview);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormEhrSetup";
@@ -74,5 +91,6 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butClose;
 		private UI.Button butPreview;
+		private UI.Button butAllergies;
 	}
 }

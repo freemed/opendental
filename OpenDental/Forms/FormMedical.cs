@@ -30,6 +30,7 @@ namespace OpenDental{
 		private UI.Button butIcd9;
 		private CheckBox checkDiscontinued;
 		private ODGrid gridAllergies;
+		private UI.Button butAddAllergy;
 		private PatientNote PatientNoteCur;
 
 		///<summary></summary>
@@ -79,6 +80,7 @@ namespace OpenDental{
 			this.butIcd9 = new OpenDental.UI.Button();
 			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
 			this.gridAllergies = new OpenDental.UI.ODGrid();
+			this.butAddAllergy = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -293,13 +295,29 @@ namespace OpenDental{
 			this.gridAllergies.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridAllergies.HScrollVisible = false;
-			this.gridAllergies.Location = new System.Drawing.Point(4,262);
+			this.gridAllergies.Location = new System.Drawing.Point(4,278);
 			this.gridAllergies.Name = "gridAllergies";
 			this.gridAllergies.ScrollValue = 0;
-			this.gridAllergies.Size = new System.Drawing.Size(363,139);
+			this.gridAllergies.Size = new System.Drawing.Size(363,123);
 			this.gridAllergies.TabIndex = 63;
 			this.gridAllergies.Title = "Allergies";
 			this.gridAllergies.TranslationName = "TableDiseases";
+			// 
+			// butAddAllergy
+			// 
+			this.butAddAllergy.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butAddAllergy.Autosize = true;
+			this.butAddAllergy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddAllergy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAllergy.CornerRadius = 4F;
+			this.butAddAllergy.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddAllergy.Location = new System.Drawing.Point(5,249);
+			this.butAddAllergy.Name = "butAddAllergy";
+			this.butAddAllergy.Size = new System.Drawing.Size(98,23);
+			this.butAddAllergy.TabIndex = 64;
+			this.butAddAllergy.Text = "Add Allergy";
+			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
 			// 
 			// FormMedical
 			// 
@@ -307,6 +325,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964,683);
+			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.gridAllergies);
 			this.Controls.Add(this.butIcd9);
 			this.Controls.Add(this.checkDiscontinued);
@@ -347,6 +366,7 @@ namespace OpenDental{
 			textService.Text=PatientNoteCur.Service;
 			FillMeds();
 			FillProblems();
+			FillAllergies();
 		}
 
 		private void FillMeds(){
@@ -430,6 +450,10 @@ namespace OpenDental{
 			gridDiseases.EndUpdate();
 		}
 
+		private void FillAllergies() {
+
+		}
+
 		private void butAddProblem_Click(object sender,EventArgs e) {
 			Disease disease=new Disease();
 			disease.PatNum=PatCur.PatNum;
@@ -449,6 +473,10 @@ namespace OpenDental{
 
 		private void butIcd9_Click(object sender,EventArgs e) {
 
+		}
+
+		private void butAddAllergy_Click(object sender,EventArgs e) {
+			FillAllergies();
 		}
 
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {

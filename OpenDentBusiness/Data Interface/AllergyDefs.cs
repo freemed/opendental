@@ -24,6 +24,15 @@ namespace OpenDentBusiness{
 			return Crud.AllergyDefCrud.SelectOne(allergyDefNum);
 		}
 
+		///<summary>Gets all AllergyDefs based on hidden status.</summary>
+		public static List<AllergyDef> GetAll(bool isHidden) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<List<AllergyDef>>(MethodBase.GetCurrentMethod(),isHidden);
+			}
+			string command="SELECT * FROM allergydef WHERE IsHidden="+POut.Bool(isHidden);
+			return Crud.AllergyDefCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(AllergyDef allergyDef){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -51,8 +60,6 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM allergydef WHERE AllergyDefNum = "+POut.Long(allergyDefNum);
 			Db.NonQ(command);
 		}
-
-
 
 	}
 }

@@ -14,6 +14,11 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void butAllergies_Click(object sender,EventArgs e) {
+			FormAllergySetup FAS=new FormAllergySetup();
+			FAS.ShowDialog();
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
