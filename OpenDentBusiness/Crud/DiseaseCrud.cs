@@ -51,6 +51,8 @@ namespace OpenDentBusiness.Crud{
 				disease.DiseaseDefNum= PIn.Long  (table.Rows[i]["DiseaseDefNum"].ToString());
 				disease.PatNote      = PIn.String(table.Rows[i]["PatNote"].ToString());
 				disease.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				disease.ICD9Num      = PIn.Long  (table.Rows[i]["ICD9Num"].ToString());
+				disease.ProbStatus   = (ProblemStatus)PIn.Int(table.Rows[i]["ProbStatus"].ToString());
 				retVal.Add(disease);
 			}
 			return retVal;
@@ -91,15 +93,17 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DiseaseNum,";
 			}
-			command+="PatNum,DiseaseDefNum,PatNote) VALUES(";
+			command+="PatNum,DiseaseDefNum,PatNote,ICD9Num,ProbStatus) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(disease.DiseaseNum)+",";
 			}
 			command+=
 				     POut.Long  (disease.PatNum)+","
 				+    POut.Long  (disease.DiseaseDefNum)+","
-				+"'"+POut.String(disease.PatNote)+"')";
+				+"'"+POut.String(disease.PatNote)+"',"
 				//DateTStamp can only be set by MySQL
+				+    POut.Long  (disease.ICD9Num)+","
+				+    POut.Int   ((int)disease.ProbStatus)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -114,8 +118,10 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE disease SET "
 				+"PatNum       =  "+POut.Long  (disease.PatNum)+", "
 				+"DiseaseDefNum=  "+POut.Long  (disease.DiseaseDefNum)+", "
-				+"PatNote      = '"+POut.String(disease.PatNote)+"' "
+				+"PatNote      = '"+POut.String(disease.PatNote)+"', "
 				//DateTStamp can only be set by MySQL
+				+"ICD9Num      =  "+POut.Long  (disease.ICD9Num)+", "
+				+"ProbStatus   =  "+POut.Int   ((int)disease.ProbStatus)+" "
 				+"WHERE DiseaseNum = "+POut.Long(disease.DiseaseNum);
 			Db.NonQ(command);
 		}
@@ -136,6 +142,14 @@ namespace OpenDentBusiness.Crud{
 				command+="PatNote = '"+POut.String(disease.PatNote)+"'";
 			}
 			//DateTStamp can only be set by MySQL
+			if(disease.ICD9Num != oldDisease.ICD9Num) {
+				if(command!=""){ command+=",";}
+				command+="ICD9Num = "+POut.Long(disease.ICD9Num)+"";
+			}
+			if(disease.ProbStatus != oldDisease.ProbStatus) {
+				if(command!=""){ command+=",";}
+				command+="ProbStatus = "+POut.Int   ((int)disease.ProbStatus)+"";
+			}
 			if(command==""){
 				return;
 			}

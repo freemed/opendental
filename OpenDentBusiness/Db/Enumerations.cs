@@ -42,7 +42,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		CommItemType,
 		///<summary></summary>
-		ToolBarsAvail
+		ToolBarsAvail,
+		///<summary></summary>
+		ProblemStatus
 	}
 	///<summary>Unknown,Yes, or No.</summary>
 	public enum YN{
@@ -1478,7 +1480,15 @@ namespace OpenDentBusiness{
 		CurrentEveryDay
 	}
 
-
+	///<summary>0=Active, 1=Resolved, 2=Inactive
+	public enum ProblemStatus{
+		/// <summary>0</summary>
+		Active,
+		/// <summary>1</summary>
+		Resolved,
+		/// <summary>2</summary>
+		Inactive
+	}
 }
 
 

@@ -4080,6 +4080,33 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE disease ADD ICD9Num bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE disease ADD INDEX (ICD9Num)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE disease ADD ICD9Num number(20)";
+					Db.NonQ(command);
+					command="UPDATE disease SET ICD9Num = 0 WHERE ICD9Num IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE disease MODIFY ICD9Num NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX disease_ICD9Num ON disease (ICD9Num)";
+					Db.NonQ(command);
+				} if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE disease ADD ProbStatus tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE disease ADD ProbStatus number(3)";
+					Db.NonQ(command);
+					command="UPDATE disease SET ProbStatus = 0 WHERE ProbStatus IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE disease MODIFY ProbStatus NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4113,4 +4140,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
-

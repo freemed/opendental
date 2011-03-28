@@ -92,6 +92,7 @@ namespace OpenDental{
 			this.butAdd.Size = new System.Drawing.Size(75,26);
 			this.butAdd.TabIndex = 16;
 			this.butAdd.Text = "&Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// FormIcd9s
 			// 

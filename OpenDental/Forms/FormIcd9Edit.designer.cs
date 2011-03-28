@@ -23,14 +23,66 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textCode = new System.Windows.Forms.TextBox();
 			this.textDescription = new System.Windows.Forms.TextBox();
+			this.textCode = new OpenDental.ValidNumber();
 			this.buttonDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(91,16);
+			this.label1.TabIndex = 4;
+			this.label1.Text = "Code";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(9,35);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(94,16);
+			this.label2.TabIndex = 4;
+			this.label2.Text = "Description";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textDescription
+			// 
+			this.textDescription.Location = new System.Drawing.Point(109,31);
+			this.textDescription.Name = "textDescription";
+			this.textDescription.Size = new System.Drawing.Size(317,20);
+			this.textDescription.TabIndex = 5;
+			// 
+			// textCode
+			// 
+			this.textCode.Enabled = false;
+			this.textCode.Location = new System.Drawing.Point(109,5);
+			this.textCode.MaxVal = 255;
+			this.textCode.MinVal = 0;
+			this.textCode.Name = "textCode";
+			this.textCode.Size = new System.Drawing.Size(100,20);
+			this.textCode.TabIndex = 7;
+			// 
+			// buttonDelete
+			// 
+			this.buttonDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonDelete.Autosize = true;
+			this.buttonDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonDelete.CornerRadius = 4F;
+			this.buttonDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.buttonDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.buttonDelete.Location = new System.Drawing.Point(21,117);
+			this.buttonDelete.Name = "buttonDelete";
+			this.buttonDelete.Size = new System.Drawing.Size(82,25);
+			this.buttonDelete.TabIndex = 6;
+			this.buttonDelete.Text = "&Delete";
+			this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
 			// 
 			// butOK
 			// 
@@ -62,62 +114,13 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(12,9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(91,16);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "Code";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(9,35);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(94,16);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "Description";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textCode
-			// 
-			this.textCode.Enabled = false;
-			this.textCode.Location = new System.Drawing.Point(109,5);
-			this.textCode.Name = "textCode";
-			this.textCode.Size = new System.Drawing.Size(84,20);
-			this.textCode.TabIndex = 5;
-			// 
-			// textDescription
-			// 
-			this.textDescription.Location = new System.Drawing.Point(109,31);
-			this.textDescription.Name = "textDescription";
-			this.textDescription.Size = new System.Drawing.Size(317,20);
-			this.textDescription.TabIndex = 5;
-			// 
-			// buttonDelete
-			// 
-			this.buttonDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonDelete.Autosize = true;
-			this.buttonDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonDelete.CornerRadius = 4F;
-			this.buttonDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.buttonDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonDelete.Location = new System.Drawing.Point(21,117);
-			this.buttonDelete.Name = "buttonDelete";
-			this.buttonDelete.Size = new System.Drawing.Size(82,25);
-			this.buttonDelete.TabIndex = 6;
-			this.buttonDelete.Text = "&Delete";
-			// 
 			// FormIcd9Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(451,169);
+			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.buttonDelete);
 			this.Controls.Add(this.textDescription);
-			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
@@ -137,8 +140,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textCode;
 		private System.Windows.Forms.TextBox textDescription;
 		private UI.Button buttonDelete;
+		private ValidNumber textCode;
 	}
 }

@@ -56,8 +56,17 @@ namespace OpenDental {
 			}
 			FormIcd9Edit FormI=new FormIcd9Edit(ICD9s.Listt[listMain.SelectedIndex]);
 			FormI.ShowDialog();
-			if(FormI.DialogResult!=DialogResult.OK)
+			if(FormI.DialogResult!=DialogResult.OK) {
 				return;
+			}
+			FillGrid();
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			ICD9 icd9=new ICD9();
+			FormIcd9Edit FormI=new FormIcd9Edit(icd9);
+			FormI.IsNew=true;
+			FormI.ShowDialog();
 			FillGrid();
 		}
 

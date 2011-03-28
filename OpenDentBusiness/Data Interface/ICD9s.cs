@@ -64,35 +64,35 @@ namespace OpenDentBusiness{
 			}
 			return Crud.ICD9Crud.SelectOne(iCD9Num);
 		}
+		*/
 
 		///<summary></summary>
-		public static long Insert(ICD9 iCD9){
+		public static long Insert(ICD9 icd9){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				iCD9.ICD9Num=Meth.GetLong(MethodBase.GetCurrentMethod(),iCD9);
-				return iCD9.ICD9Num;
+				icd9.ICD9Num=Meth.GetLong(MethodBase.GetCurrentMethod(),icd9);
+				return icd9.ICD9Num;
 			}
-			return Crud.ICD9Crud.Insert(iCD9);
+			return Crud.ICD9Crud.Insert(icd9);
 		}
 
 		///<summary></summary>
-		public static void Update(ICD9 iCD9){
+		public static void Update(ICD9 icd9) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),iCD9);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),icd9);
 				return;
 			}
-			Crud.ICD9Crud.Update(iCD9);
+			Crud.ICD9Crud.Update(icd9);
 		}
 
 		///<summary></summary>
-		public static void Delete(long iCD9Num) {
+		public static void Delete(long icd9Num) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),iCD9Num);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),icd9Num);
 				return;
 			}
-			string command= "DELETE FROM icd9 WHERE ICD9Num = "+POut.Long(iCD9Num);
+			string command= "DELETE FROM icd9 WHERE ICD9Num = "+POut.Long(icd9Num);
 			Db.NonQ(command);
 		}
-		*/
 
 
 
