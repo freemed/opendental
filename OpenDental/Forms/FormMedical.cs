@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -32,6 +33,7 @@ namespace OpenDental{
 		private ODGrid gridAllergies;
 		private UI.Button butAddAllergy;
 		private PatientNote PatientNoteCur;
+		private List<Allergy> allergyList; 
 
 		///<summary></summary>
 		public FormMedical(PatientNote patientNoteCur,Patient patCur){
@@ -302,6 +304,7 @@ namespace OpenDental{
 			this.gridAllergies.TabIndex = 63;
 			this.gridAllergies.Title = "Allergies";
 			this.gridAllergies.TranslationName = "TableDiseases";
+			this.gridAllergies.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAllergies_CellDoubleClick);
 			// 
 			// butAddAllergy
 			// 
@@ -451,7 +454,31 @@ namespace OpenDental{
 		}
 
 		private void FillAllergies() {
-
+			allergyList=Allergies.Refresh(PatCur.PatNum);
+			gridAllergies.BeginUpdate();
+			gridAllergies.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
+			gridAllergies.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),180);
+			gridAllergies.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAllergies","IsActive"),60);
+			gridAllergies.Columns.Add(col);
+			gridAllergies.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<allergyList.Count;i++){
+				row=new ODGridRow();
+				AllergyDef allergyDef=AllergyDefs.GetOne(allergyList[i].AllergyDefNum);
+				row.Cells.Add(allergyDef.Description);
+				row.Cells.Add(allergyList[i].Reaction);
+				if(allergyList[i].StatusIsActive) {
+					row.Cells.Add("X");
+				}
+				else {
+					row.Cells.Add("");
+				}
+				gridAllergies.Rows.Add(row);
+			}
+			gridAllergies.EndUpdate();
 		}
 
 		private void butAddProblem_Click(object sender,EventArgs e) {
@@ -475,7 +502,18 @@ namespace OpenDental{
 
 		}
 
+		private void gridAllergies_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormAllergyEdit FAE=new FormAllergyEdit(PatCur);
+			FAE.AllergyCur=allergyList[gridAllergies.GetSelectedIndex()];
+			FAE.ShowDialog();
+			FillAllergies();
+		}
+
 		private void butAddAllergy_Click(object sender,EventArgs e) {
+			FormAllergyEdit FAE=new FormAllergyEdit(PatCur);
+			FAE.AllergyCur=new Allergy();
+			FAE.AllergyCur.IsNew=true;
+			FAE.ShowDialog();
 			FillAllergies();
 		}
 
@@ -516,6 +554,7 @@ namespace OpenDental{
 		private void checkShowDiscontinuedMeds_MouseUp(object sender,MouseEventArgs e) {
 			FillMeds();
 		}
+
 
 		
 

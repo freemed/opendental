@@ -23,11 +23,37 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.checkShowHidden = new System.Windows.Forms.CheckBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.checkShowHidden = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
+			// 
+			// checkShowHidden
+			// 
+			this.checkShowHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkShowHidden.Location = new System.Drawing.Point(296,148);
+			this.checkShowHidden.Name = "checkShowHidden";
+			this.checkShowHidden.Size = new System.Drawing.Size(98,24);
+			this.checkShowHidden.TabIndex = 5;
+			this.checkShowHidden.TabStop = false;
+			this.checkShowHidden.Text = "Show Hidden";
+			this.checkShowHidden.UseVisualStyleBackColor = true;
+			this.checkShowHidden.CheckedChanged += new System.EventHandler(this.checkShowHidden_CheckedChanged);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(26,24);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(242,310);
+			this.gridMain.TabIndex = 4;
+			this.gridMain.Title = "Allergies";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd
 			// 
@@ -58,31 +84,6 @@ namespace OpenDental{
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(26,24);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(242,310);
-			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Allergies";
-			this.gridMain.TranslationName = null;
-			// 
-			// checkShowHidden
-			// 
-			this.checkShowHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkShowHidden.Location = new System.Drawing.Point(296,148);
-			this.checkShowHidden.Name = "checkShowHidden";
-			this.checkShowHidden.Size = new System.Drawing.Size(98,24);
-			this.checkShowHidden.TabIndex = 5;
-			this.checkShowHidden.TabStop = false;
-			this.checkShowHidden.Text = "Show Hidden";
-			this.checkShowHidden.UseVisualStyleBackColor = true;
-			this.checkShowHidden.CheckedChanged += new System.EventHandler(this.checkShowHidden_CheckedChanged);
 			// 
 			// FormAllergySetup
 			// 

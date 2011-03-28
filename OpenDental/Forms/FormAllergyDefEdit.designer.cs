@@ -25,8 +25,8 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.butOK = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
-			this.labelAllergy = new System.Windows.Forms.Label();
-			this.textAllergy = new System.Windows.Forms.TextBox();
+			this.labelDescription = new System.Windows.Forms.Label();
+			this.textDescription = new System.Windows.Forms.TextBox();
 			this.checkHidden = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
@@ -60,25 +60,25 @@ namespace OpenDental{
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// labelAllergy
+			// labelDescription
 			// 
-			this.labelAllergy.Location = new System.Drawing.Point(5,25);
-			this.labelAllergy.Name = "labelAllergy";
-			this.labelAllergy.Size = new System.Drawing.Size(85,20);
-			this.labelAllergy.TabIndex = 6;
-			this.labelAllergy.Text = "Allergy";
-			this.labelAllergy.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelDescription.Location = new System.Drawing.Point(5,33);
+			this.labelDescription.Name = "labelDescription";
+			this.labelDescription.Size = new System.Drawing.Size(85,20);
+			this.labelDescription.TabIndex = 6;
+			this.labelDescription.Text = "Description";
+			this.labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textAllergy
+			// textDescription
 			// 
-			this.textAllergy.Location = new System.Drawing.Point(96,25);
-			this.textAllergy.Name = "textAllergy";
-			this.textAllergy.Size = new System.Drawing.Size(276,20);
-			this.textAllergy.TabIndex = 7;
+			this.textDescription.Location = new System.Drawing.Point(96,33);
+			this.textDescription.Name = "textDescription";
+			this.textDescription.Size = new System.Drawing.Size(276,20);
+			this.textDescription.TabIndex = 7;
 			// 
 			// checkHidden
 			// 
-			this.checkHidden.Location = new System.Drawing.Point(8,67);
+			this.checkHidden.Location = new System.Drawing.Point(8,75);
 			this.checkHidden.Name = "checkHidden";
 			this.checkHidden.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.checkHidden.Size = new System.Drawing.Size(104,24);
@@ -91,8 +91,8 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(438,188);
 			this.Controls.Add(this.checkHidden);
-			this.Controls.Add(this.textAllergy);
-			this.Controls.Add(this.labelAllergy);
+			this.Controls.Add(this.textDescription);
+			this.Controls.Add(this.labelDescription);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butDelete);
 			this.Name = "FormAllergyDefEdit";
@@ -108,8 +108,8 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butDelete;
-		private System.Windows.Forms.Label labelAllergy;
-		private System.Windows.Forms.TextBox textAllergy;
+		private System.Windows.Forms.Label labelDescription;
+		private System.Windows.Forms.TextBox textDescription;
 		private System.Windows.Forms.CheckBox checkHidden;
 	}
 }

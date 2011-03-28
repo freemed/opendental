@@ -10,6 +10,8 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormAllergySetup:Form {
+		private List<AllergyDef> listAllergyDefs;
+
 		public FormAllergySetup() {
 			InitializeComponent();
 			Lan.F(this);
@@ -20,7 +22,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			List<AllergyDef> listAllergyDefs=AllergyDefs.GetAll(checkShowHidden.Checked);
+			listAllergyDefs=AllergyDefs.GetAll(checkShowHidden.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormAllergySetup","Desciption"),160);
@@ -32,7 +34,7 @@ namespace OpenDental {
 			for(int i=0;i<listAllergyDefs.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listAllergyDefs[i].Description);
-				if(PIn.Bool(listAllergyDefs[i].IsHidden.ToString())) {
+				if(listAllergyDefs[i].IsHidden) {
 					row.Cells.Add("X");
 				}
 				else {
@@ -47,8 +49,19 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormAllergyDefEdit FADE=new FormAllergyDefEdit();
+			FADE.AllergyDefCur=listAllergyDefs[gridMain.GetSelectedIndex()];
+			FADE.ShowDialog();
+			FillGrid();
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
-			//Show a FormDefSetup window?
+			FormAllergyDefEdit FADE=new FormAllergyDefEdit();
+			FADE.AllergyDefCur=new AllergyDef();
+			FADE.AllergyDefCur.IsNew=true;
+			FADE.ShowDialog();
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

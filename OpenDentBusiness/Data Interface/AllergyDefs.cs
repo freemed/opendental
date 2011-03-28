@@ -24,15 +24,6 @@ namespace OpenDentBusiness{
 			return Crud.AllergyDefCrud.SelectOne(allergyDefNum);
 		}
 
-		///<summary>Gets all AllergyDefs based on hidden status.</summary>
-		public static List<AllergyDef> GetAll(bool isHidden) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<List<AllergyDef>>(MethodBase.GetCurrentMethod(),isHidden);
-			}
-			string command="SELECT * FROM allergydef WHERE IsHidden="+POut.Bool(isHidden);
-			return Crud.AllergyDefCrud.SelectMany(command);
-		}
-
 		///<summary></summary>
 		public static long Insert(AllergyDef allergyDef){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -59,6 +50,34 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM allergydef WHERE AllergyDefNum = "+POut.Long(allergyDefNum);
 			Db.NonQ(command);
+		}
+
+		///<summary>Gets all AllergyDefs based on hidden status.</summary>
+		public static List<AllergyDef> GetAll(bool isHidden) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<List<AllergyDef>>(MethodBase.GetCurrentMethod(),isHidden);
+			}
+			string command="";
+			if(!isHidden) {
+				command="SELECT * FROM allergydef WHERE IsHidden="+POut.Bool(isHidden)
+					+" ORDER BY Description";
+			}
+			else {
+				command="SELECT * FROM allergydef ORDER BY Description";
+			}
+			return Crud.AllergyDefCrud.SelectMany(command);
+		}
+
+		///<summary>Returns true if the allergy def is in use and false if not.</summary>
+		public static bool DefIsInUse(long allergyDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),allergyDefNum);
+			}
+			string command="SELECT COUNT(*) FROM allergy WHERE AllergyDefNum="+POut.Long(allergyDefNum);
+			if(Db.GetCount(command)!="0") {
+				return true;
+			}
+			return false;
 		}
 
 	}
