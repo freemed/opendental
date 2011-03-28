@@ -33,6 +33,7 @@ namespace OpenDental{
 		private ODGrid gridAllergies;
 		private UI.Button butAddAllergy;
 		private PatientNote PatientNoteCur;
+		private CheckBox checkShowInactiveAllergies;
 		private List<Allergy> allergyList; 
 
 		///<summary></summary>
@@ -83,6 +84,7 @@ namespace OpenDental{
 			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
 			this.gridAllergies = new OpenDental.UI.ODGrid();
 			this.butAddAllergy = new OpenDental.UI.Button();
+			this.checkShowInactiveAllergies = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -322,12 +324,24 @@ namespace OpenDental{
 			this.butAddAllergy.Text = "Add Allergy";
 			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
 			// 
+			// checkShowInactiveAllergies
+			// 
+			this.checkShowInactiveAllergies.Location = new System.Drawing.Point(129,250);
+			this.checkShowInactiveAllergies.Name = "checkShowInactiveAllergies";
+			this.checkShowInactiveAllergies.Size = new System.Drawing.Size(201,23);
+			this.checkShowInactiveAllergies.TabIndex = 65;
+			this.checkShowInactiveAllergies.Tag = "";
+			this.checkShowInactiveAllergies.Text = "Show Inactive Allergies";
+			this.checkShowInactiveAllergies.UseVisualStyleBackColor = true;
+			this.checkShowInactiveAllergies.CheckedChanged += new System.EventHandler(this.checkShowInactiveAllergies_CheckedChanged);
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964,683);
+			this.Controls.Add(this.checkShowInactiveAllergies);
 			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.gridAllergies);
 			this.Controls.Add(this.butIcd9);
@@ -454,14 +468,14 @@ namespace OpenDental{
 		}
 
 		private void FillAllergies() {
-			allergyList=Allergies.Refresh(PatCur.PatNum);
+			allergyList=Allergies.GetAll(PatCur.PatNum,checkShowInactiveAllergies.Checked);
 			gridAllergies.BeginUpdate();
 			gridAllergies.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
 			gridAllergies.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),180);
+			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),195);
 			gridAllergies.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAllergies","IsActive"),60);
+			col=new ODGridColumn(Lan.g("TableAllergies","Active"),60,HorizontalAlignment.Center);
 			gridAllergies.Columns.Add(col);
 			gridAllergies.Rows.Clear();
 			ODGridRow row;
@@ -516,6 +530,10 @@ namespace OpenDental{
 			FAE.ShowDialog();
 			FillAllergies();
 		}
+		
+		private void checkShowInactiveAllergies_CheckedChanged(object sender,EventArgs e) {
+			FillAllergies();
+		}
 
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);
@@ -554,6 +572,7 @@ namespace OpenDental{
 		private void checkShowDiscontinuedMeds_MouseUp(object sender,MouseEventArgs e) {
 			FillMeds();
 		}
+
 
 
 		

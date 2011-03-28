@@ -52,7 +52,18 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-
+		///<summary>Gets all allergies for patient whether active or not.</summary>
+		public static List<Allergy> GetAll(long patNum,bool showInactive) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Allergy>>(MethodBase.GetCurrentMethod(),patNum,showInactive);
+			}
+			string command="SELECT * FROM allergy WHERE PatNum = "+POut.Long(patNum)
+				+" AND StatusIsActive<>0";
+			if(showInactive) {
+				command="SELECT * FROM allergy WHERE PatNum = "+POut.Long(patNum);
+			}
+			return Crud.AllergyCrud.SelectMany(command);
+		}
 
 	}
 }
