@@ -30,4 +30,6 @@ namespace OpenDentBusiness.Mobile.TableTypes {
 		public Diseasem Copy() {
 			return (Diseasem)this.MemberwiseClone();
 		}
+
+	}
 }
