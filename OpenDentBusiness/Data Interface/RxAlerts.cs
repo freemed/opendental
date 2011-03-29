@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Reflection;
@@ -9,12 +10,12 @@ namespace OpenDentBusiness {
 	public class RxAlerts {
 
 		///<summary>Gets a list of all RxAlerts for one RxDef.</summary>
-		public static RxAlert[] Refresh(long rxDefNum) {
+		public static List<RxAlert> Refresh(long rxDefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<RxAlert[]>(MethodBase.GetCurrentMethod(),rxDefNum);
+				return Meth.GetObject<List<RxAlert>>(MethodBase.GetCurrentMethod(),rxDefNum);
 			}
 			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.Long(rxDefNum);
-			return Crud.RxAlertCrud.SelectMany(command).ToArray();
+			return Crud.RxAlertCrud.SelectMany(command);
 		}
 	
 

@@ -21,5 +21,16 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			
+			//Code for deletion.
+			//if(listAlerts.SelectedIndex==-1){
+			//  MsgBox.Show(this,"Please select an items first.");
+			//  return;
+			//}
+			//RxAlerts.Delete(RxAlertList[listAlerts.SelectedIndex]);
+			//FillAlerts();
+		}
 	}
 }

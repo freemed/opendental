@@ -3843,7 +3843,7 @@ namespace OpenDental{
 						}
 						break;
 					case "Diseases":
-						Disease[] DiseaseList=Diseases.Refresh(PatCur.PatNum);
+						List<Disease> DiseaseList=Diseases.Refresh(PatCur.PatNum);
 						row=new ODGridRow();
 						cell=new ODGridCell();
 						if(fields[f].Description=="") {
@@ -3856,7 +3856,7 @@ namespace OpenDental{
 						row.Cells.Add(cell);
 						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 						row.Tag="med";
-						if(DiseaseList.Length>0) {
+						if(DiseaseList.Count>0) {
 							row.Cells.Add("");
 							gridPtInfo.Rows.Add(row);
 						}
@@ -3864,7 +3864,7 @@ namespace OpenDental{
 							row.Cells.Add(Lan.g("TableChartPtInfo","none"));
 						}
 						//Add a new row for each med.
-						for(int i=0;i<DiseaseList.Length;i++) {
+						for(int i=0;i<DiseaseList.Count;i++) {
 							row=new ODGridRow();
 							cell=new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
 							cell.ColorText=Color.Red;
@@ -3873,7 +3873,7 @@ namespace OpenDental{
 							row.Cells.Add(DiseaseList[i].PatNote);
 							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 							row.Tag="med";
-							if(i!=DiseaseList.Length-1) {
+							if(i!=DiseaseList.Count-1) {
 								gridPtInfo.Rows.Add(row);
 							}
 						}

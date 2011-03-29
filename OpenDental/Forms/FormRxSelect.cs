@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -190,23 +191,38 @@ namespace OpenDental{
 			}
 			RxDef RxDefCur=RxDefList[gridMain.GetSelectedIndex()];
 			//Alert
-			RxAlert[] alertList=RxAlerts.Refresh(RxDefCur.RxDefNum);
-			Disease[] diseases=Diseases.Refresh(PatCur.PatNum);
-			ArrayList matchAL=new ArrayList();
-			for(int i=0;i<alertList.Length;i++){
-				for(int j=0;j<diseases.Length;j++){
+			List<RxAlert> alertList=RxAlerts.Refresh(RxDefCur.RxDefNum);
+			List<Disease> diseases=Diseases.Refresh(PatCur.PatNum);
+			//ditto for allergies and medications
+			//ArrayList matchAL=new ArrayList();
+			List<string> diseaseMatches=new List<string>();
+			//ditto for allergies and medications
+			List<string> customMessages=new List<string>();
+			for(int i=0;i<alertList.Count;i++){
+				for(int j=0;j<diseases.Count;j++){
 					if(alertList[i].DiseaseDefNum==diseases[j].DiseaseDefNum){
-						matchAL.Add(DiseaseDefs.GetName(diseases[j].DiseaseDefNum));
+						if(alertList[i].NotificationMsg=="") {
+							diseaseMatches.Add(DiseaseDefs.GetName(diseases[j].DiseaseDefNum));
+						}
+						else {
+							customMessages.Add(alertList[i].NotificationMsg);
+						}
 					}
 				}
+				//allergies and medications
 			}
-			if(matchAL.Count>0){
-				string alert=Lan.g(this,"This patient has the following medical problems or allergies:\r\n");
-				for(int i=0;i<matchAL.Count;i++){
-					alert+="\r\n"+matchAL[i];
-				}
-				alert+="\r\n\r\n"+Lan.g(this,"Continue anyway?");
-				if(MessageBox.Show(alert,"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)!=DialogResult.OK){
+			//if(matchAL.Count>0){
+			//  string alert=Lan.g(this,"This patient has the following medical problems or allergies:\r\n");
+			//  for(int i=0;i<matchAL.Count;i++){
+			//    alert+="\r\n"+matchAL[i];
+			//  }
+			//  alert+="\r\n\r\n"+Lan.g(this,"Continue anyway?");
+			//  if(MessageBox.Show(alert,"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)!=DialogResult.OK){
+			//    return;
+			//  }
+			//}
+			for(int i=0;i<customMessages.Count;i++){
+				if(MessageBox.Show(customMessages[i]+"\r\n"+Lan.g(this,"Continue anyway?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)!=DialogResult.OK){
 					return;
 				}
 			}

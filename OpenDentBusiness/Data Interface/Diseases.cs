@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Reflection;
@@ -17,15 +18,15 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list of all Diseases for a given patient.  Includes hidden. Sorted by diseasedef.ItemOrder.</summary>
-		public static Disease[] Refresh(long patNum) {
+		public static List<Disease> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Disease[]>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<Disease>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT disease.* FROM disease,diseasedef "
 				+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 				+"AND PatNum="+POut.Long(patNum)
 				+" ORDER BY diseasedef.ItemOrder";
-			return Crud.DiseaseCrud.SelectMany(command).ToArray();
+			return Crud.DiseaseCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

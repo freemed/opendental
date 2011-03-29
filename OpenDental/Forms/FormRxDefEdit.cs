@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -23,15 +24,16 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private Label label2;
 		private ListBox listAlerts;
-		private OpenDental.UI.Button butAdd;
+		private OpenDental.UI.Button butAddProblem;
 		private OpenDental.UI.Button butDelete;
 		private Label label7;// Required designer variable.
 		///<summary></summary>
 		public bool IsNew;
 		private RxDef RxDefCur;
-		private OpenDental.UI.Button butDeleteAlert;
+		private OpenDental.UI.Button butAddMedication;
 		private CheckBox checkControlled;
-		private RxAlert[] RxAlertList;
+		private UI.Button butAddAllergy;
+		private List<RxAlert> RxAlertList;
 
 		///<summary>Must have already saved it to db so that we have a RxDefNum to work with.</summary>
 		public FormRxDefEdit(RxDef rxDefCur){
@@ -68,11 +70,12 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.listAlerts = new System.Windows.Forms.ListBox();
-			this.butAdd = new OpenDental.UI.Button();
+			this.butAddProblem = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.label7 = new System.Windows.Forms.Label();
-			this.butDeleteAlert = new OpenDental.UI.Button();
+			this.butAddMedication = new OpenDental.UI.Button();
 			this.checkControlled = new System.Windows.Forms.CheckBox();
+			this.butAddAllergy = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -207,21 +210,21 @@ namespace OpenDental{
 			this.listAlerts.Size = new System.Drawing.Size(120,95);
 			this.listAlerts.TabIndex = 8;
 			// 
-			// butAdd
+			// butAddProblem
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(260,298);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80,24);
-			this.butAdd.TabIndex = 9;
-			this.butAdd.Text = "Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			this.butAddProblem.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddProblem.Autosize = false;
+			this.butAddProblem.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddProblem.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddProblem.CornerRadius = 4F;
+			this.butAddProblem.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddProblem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddProblem.Location = new System.Drawing.Point(260,297);
+			this.butAddProblem.Name = "butAddProblem";
+			this.butAddProblem.Size = new System.Drawing.Size(117,24);
+			this.butAddProblem.TabIndex = 9;
+			this.butAddProblem.Text = "Add Problem";
+			this.butAddProblem.Click += new System.EventHandler(this.butAddProblem_Click);
 			// 
 			// butDelete
 			// 
@@ -249,22 +252,22 @@ namespace OpenDental{
 			this.label7.Text = "This does not damage any patient records";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// butDeleteAlert
+			// butAddMedication
 			// 
-			this.butDeleteAlert.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDeleteAlert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDeleteAlert.Autosize = true;
-			this.butDeleteAlert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDeleteAlert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDeleteAlert.CornerRadius = 4F;
-			this.butDeleteAlert.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDeleteAlert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeleteAlert.Location = new System.Drawing.Point(260,330);
-			this.butDeleteAlert.Name = "butDeleteAlert";
-			this.butDeleteAlert.Size = new System.Drawing.Size(80,24);
-			this.butDeleteAlert.TabIndex = 18;
-			this.butDeleteAlert.Text = "Delete";
-			this.butDeleteAlert.Click += new System.EventHandler(this.butDeleteAlert_Click);
+			this.butAddMedication.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddMedication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddMedication.Autosize = true;
+			this.butAddMedication.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddMedication.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddMedication.CornerRadius = 4F;
+			this.butAddMedication.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddMedication.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddMedication.Location = new System.Drawing.Point(260,332);
+			this.butAddMedication.Name = "butAddMedication";
+			this.butAddMedication.Size = new System.Drawing.Size(117,24);
+			this.butAddMedication.TabIndex = 18;
+			this.butAddMedication.Text = "Add Medication";
+			this.butAddMedication.Click += new System.EventHandler(this.butAddMedication_Click);
 			// 
 			// checkControlled
 			// 
@@ -277,17 +280,35 @@ namespace OpenDental{
 			this.checkControlled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkControlled.UseVisualStyleBackColor = true;
 			// 
+			// butAddAllergy
+			// 
+			this.butAddAllergy.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddAllergy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddAllergy.Autosize = true;
+			this.butAddAllergy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddAllergy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAllergy.CornerRadius = 4F;
+			this.butAddAllergy.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddAllergy.Location = new System.Drawing.Point(260,368);
+			this.butAddAllergy.Name = "butAddAllergy";
+			this.butAddAllergy.Size = new System.Drawing.Size(117,24);
+			this.butAddAllergy.TabIndex = 20;
+			this.butAddAllergy.Text = "Add Allergy";
+			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
+			// 
 			// FormRxDefEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(634,496);
+			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.checkControlled);
-			this.Controls.Add(this.butDeleteAlert);
+			this.Controls.Add(this.butAddMedication);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.butAdd);
+			this.Controls.Add(this.butAddProblem);
 			this.Controls.Add(this.listAlerts);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butCancel);
@@ -309,8 +330,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Rx Template";
-			this.Load += new System.EventHandler(this.FormRxDefEdit_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormRxDefEdit_FormClosing);
+			this.Load += new System.EventHandler(this.FormRxDefEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -330,12 +351,12 @@ namespace OpenDental{
 		private void FillAlerts(){
 			RxAlertList=RxAlerts.Refresh(RxDefCur.RxDefNum);
 			listAlerts.Items.Clear();
-			for(int i=0;i<RxAlertList.Length;i++) {
+			for(int i=0;i<RxAlertList.Count;i++) {
 				listAlerts.Items.Add(DiseaseDefs.GetName(RxAlertList[i].DiseaseDefNum));
 			}
 		}
 
-		private void butAdd_Click(object sender,EventArgs e) {
+		private void butAddProblem_Click(object sender,EventArgs e) {
 			FormDiseaseDefs FormD=new FormDiseaseDefs();
 			FormD.IsSelectionMode=true;
 			FormD.ShowDialog();
@@ -349,12 +370,23 @@ namespace OpenDental{
 			FillAlerts();
 		}
 
-		private void butDeleteAlert_Click(object sender,EventArgs e) {
-			if(listAlerts.SelectedIndex==-1){
-				MsgBox.Show(this,"Please select an items first.");
-				return;
-			}
-			RxAlerts.Delete(RxAlertList[listAlerts.SelectedIndex]);
+		private void butAddMedication_Click(object sender,EventArgs e) {
+			FormRxAlertEdit FormRAE=new FormRxAlertEdit();
+			FormRAE.ShowDialog();
+			RxAlert alert=new RxAlert();
+			//alert.DiseaseDefNum=FRAE.SelectedDiseaseDefNum;
+			alert.RxDefNum=RxDefCur.RxDefNum;
+			RxAlerts.Insert(alert);
+			FillAlerts();
+		}
+
+		private void butAddAllergy_Click(object sender,EventArgs e) {
+			FormRxAlertEdit FormRAE=new FormRxAlertEdit();
+			FormRAE.ShowDialog();
+			RxAlert alert=new RxAlert();
+			//alert.DiseaseDefNum=FRAE.SelectedDiseaseDefNum;
+			alert.RxDefNum=RxDefCur.RxDefNum;
+			RxAlerts.Insert(alert);
 			FillAlerts();
 		}
 

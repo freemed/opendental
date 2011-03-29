@@ -27,7 +27,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridMeds;
 		private OpenDental.UI.ODGrid gridDiseases;
 		private CheckBox checkPremed;
-		private Disease[] DiseaseList;
+		private List<Disease> DiseaseList;
 		private UI.Button butIcd9;
 		private CheckBox checkDiscontinued;
 		private ODGrid gridAllergies;
@@ -458,7 +458,7 @@ namespace OpenDental{
 			gridDiseases.Columns.Add(col);
 			gridDiseases.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<DiseaseList.Length;i++){
+			for(int i=0;i<DiseaseList.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
 				row.Cells.Add(DiseaseList[i].PatNote);
