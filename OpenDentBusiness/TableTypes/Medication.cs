@@ -14,6 +14,9 @@ namespace OpenDentBusiness{
 		public long GenericNum;
 		///<summary>Notes.</summary>
 		public string Notes;
+		///<summary>The last date and time this row was altered.  Not user editable.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 	}
 	
 

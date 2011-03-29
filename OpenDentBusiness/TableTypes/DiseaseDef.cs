@@ -16,6 +16,9 @@ namespace OpenDentBusiness{
 		public int ItemOrder;
 		///<summary>If hidden, the disease will still show on any patient that it was previously attached to, but it will not be available for future patients.</summary>
 		public bool IsHidden;
+		///<summary>The last date and time this row was altered.  Not user editable.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 
 		///<summary></summary>
 		public DiseaseDef Copy() {
