@@ -276,9 +276,9 @@ namespace OpenDental {
 			pp.Url="http://localhost:2923/PatientPortal.asmx";
 			IgnoreCertificateErrors();
 			IsSynching=true;
-			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
+			//List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
-			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
+			//SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 			IsSynching=false;
@@ -296,12 +296,12 @@ namespace OpenDental {
 				List<long> BlockPKNumList=PKNumList.GetRange(start,LocalBatchSize);
 				switch(entity) {
 					case SynchEntity.medication:
-					List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
+					//List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
 					//pp.Sy.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
 					break;
-					List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
-					//mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
 					case SynchEntity.medicationpat:
+						List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
+						pp.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
 					break;
 
 				}
@@ -392,10 +392,10 @@ namespace OpenDental {
 			}
 			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
-			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
+			//List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
-			int totalCount=medicationNumList.Count+medicationPatNumList.Count;
+			//int totalCount=medicationNumList.Count+medicationPatNumList.Count;
+			int totalCount=medicationPatNumList.Count;
 			FormProgress FormP=new FormProgress();//but we won't display it.
 			FormP.NumberFormat="";
 			FormP.DisplayText="";

@@ -16,11 +16,9 @@ namespace ODWebsite {
 			if(Session["Patient"]==null) {
 				Response.Redirect("~/Login.aspx");
 			}
-			Medications.Refresh();// preloads all medications without this ststement a call to Medications.GetMedication fails
 			LabelPatientName.Text=((Patientm)Session["Patient"]).LName + " " +((Patientm)Session["Patient"]).FName;
-
-			List<MedicationPat> mMedicationPatList= MedicationPats.GetList(((Patientm)Session["Patient"]).PatNum);
-			GridViewMedication.DataSource = mMedicationPatList;
+			List<MedicationPatm> mMedicationPatmList= MedicationPatms.GetMedicationPatms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
+			GridViewMedication.DataSource = mMedicationPatmList;
 			GridViewMedication.DataBind(); 
 		}
 
