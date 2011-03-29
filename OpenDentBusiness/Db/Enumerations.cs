@@ -1489,6 +1489,8 @@ namespace OpenDentBusiness{
 		/// <summary>2</summary>
 		Inactive
 	}
+
+	
 }
 
 
