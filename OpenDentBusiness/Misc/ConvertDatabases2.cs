@@ -4107,7 +4107,29 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE disease MODIFY ProbStatus NOT NULL";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrmeasure";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrmeasure (
+						EhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
+						MeasureType tinyint NOT NULL,
+						Numerator tinyint NOT NULL,
+						Denominator tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrmeasure'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrmeasure (
+						EhrMeasureNum number(20) NOT NULL,
+						MeasureType number(3) NOT NULL,
+						Numerator number(3) NOT NULL,
+						Denominator number(3) NOT NULL,
+						CONSTRAINT ehrmeasure_EhrMeasureNum PRIMARY KEY (EhrMeasureNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4140,3 +4162,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
+
+
+
+	

@@ -30,6 +30,38 @@ namespace OpenDentBusiness {
 	}
 
 	public enum EhrMeasureType {
+		///<summary>0</summary>
+		ProblemList,
+		///<summary>1</summary>
+		MedicationList,
+		///<summary>2</summary>
+		AllergyList,
+		///<summary>3</summary>
+		Demographics,
+		///<summary>4</summary>
+		Education,
+		///<summary>5</summary>
+		TimelyAccess,
+		///<summary>6</summary>
+		ProvOrderEntry,
+		///<summary>7</summary>
+		Rx,
+		///<summary>8</summary>
+		VitalSigns,
+		///<summary>9</summary>
+		Smoking,
+		///<summary>10</summary>
+		Lab,
+		///<summary>11</summary>
+		ElectronicCopy,
+		///<summary>12</summary>
+		ClinicalSummaries,
+		///<summary>13</summary>
+		Reminders,
+		///<summary>14</summary>
+		MedReconcile,
+		///<summary>15- Summary of care record for transition or referral.</summary>
+		Exchange
 
 	}
 }

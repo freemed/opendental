@@ -178,6 +178,7 @@
     <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
+    <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
     <Compile Include="Crud\EmailAttachCrud.cs" />
     <Compile Include="Crud\EmailMessageCrud.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Data Interface\DisplayFields.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data Interface\EhrMeasures.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ICD9s.cs" />
