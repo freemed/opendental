@@ -27,7 +27,12 @@ namespace OpenDental {
 			prescription,
 			provider,
 			medication,
-			medicationpat
+			medicationpat,
+			allergy,
+			allergydef,
+			disease,
+			diseasedef,
+			icd9
 		}
 
 		public FormMobile() {
@@ -273,13 +278,29 @@ namespace OpenDental {
 
 		///<summary>dennis: code for patient portal starts here. This code may be moved to another location later</summary>
 		private static void UploadWorkerPatPortal(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
-			pp.Url="http://localhost:2923/PatientPortal.asmx";
-			IgnoreCertificateErrors();
-			IsSynching=true;
+
 			//List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
+			//List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
+			//List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
+			//List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
+			//List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince);
+			//List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
+
+			//int totalCount=medicationNumList.Count+medicationPatNumList.Count;
+			int totalCount=medicationPatNumList.Count;
+			pp.Url="http://localhost:2923/PatientPortal.asmx";
+			IgnoreCertificateErrors();
+			FormP.MaxVal=(double)totalCount;
+			IsSynching=true;
+
 			//SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
+			//SynchGeneric(allergyDefNumList,SynchEntity.allergy,ref FormP);
+			//SynchGeneric(allergyNumList,SynchEntity.allergydef,ref FormP);
+			//SynchGeneric(diseaseDefNumList,SynchEntity.disease,ref FormP);
+			//SynchGeneric(diseaseNumList,SynchEntity.diseasedef,ref FormP);
+			//SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 			IsSynching=false;
 		}
@@ -297,11 +318,31 @@ namespace OpenDental {
 				switch(entity) {
 					case SynchEntity.medication:
 					//List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
-					//pp.Sy.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
+					//pp.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
 					break;
 					case SynchEntity.medicationpat:
 						List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
 						pp.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
+					break;
+					case SynchEntity.allergy:
+					//List<Allergym> ChangedAllergyList=Allergyms.GetMultAllergyms(BlockPKNumList);
+					//pp.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
+					break;
+					case SynchEntity.allergydef:
+					//List<AllergyDefm> ChangedAllergyDefList=AllergyDefms.GetMultAllergyDefms(BlockPKNumList);
+					//pp.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
+					break;
+					case SynchEntity.disease:
+					//List<Diseasem> ChangedDiseaseList=Diseasems.GetMultDiseasems(BlockPKNumList);
+					//pp.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
+					break;
+					case SynchEntity.diseasedef:
+					//List<DiseaseDefm> ChangedDiseaseDefList=DiseaseDefms.GetMultDiseaseDefms(BlockPKNumList);
+					//pp.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
+					break;
+					case SynchEntity.icd9:
+					//List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
+					//pp.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
 					break;
 
 				}
@@ -392,10 +433,6 @@ namespace OpenDental {
 			}
 			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			//List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
-			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
-			//int totalCount=medicationNumList.Count+medicationPatNumList.Count;
-			int totalCount=medicationPatNumList.Count;
 			FormProgress FormP=new FormProgress();//but we won't display it.
 			FormP.NumberFormat="";
 			FormP.DisplayText="";

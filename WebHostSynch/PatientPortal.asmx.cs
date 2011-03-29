@@ -86,8 +86,100 @@ namespace WebHostSynch {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
-		
 
+
+		[WebMethod]
+		public void SynchMedicationPats(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+			try {
+				Logger.Information("In SynchMedicationPats");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+
+		[WebMethod]
+		public void SynchAllergies(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+			try {
+				Logger.Information("In SynchMedicationPats");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+
+		[WebMethod]
+		public void SynchAllergyDefs(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+			try {
+				Logger.Information("In SynchMedicationPats");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+
+
+		[WebMethod]
+		public void SynchDiseases(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+			try {
+				Logger.Information("In SynchMedicationPats");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+
+
+		[WebMethod]
+		public void SynchDiseaseDefs(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+			try {
+				Logger.Information("In SynchMedicationPats");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+
+		[WebMethod]
+		public void SynchICD9s(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+			try {
+				Logger.Information("In SynchMedicationPats");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+					
 
 
 	}
