@@ -1273,6 +1273,21 @@ namespace OpenDental{
 							info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
 							break;
 					}
+					if(CCard.CCExpiration.Year>2005) {
+						info.Arguments+="/EXP:"+CCard.CCExpiration.ToString("MMyy")+" ";
+					}
+					if(CCard.Zip!="") {
+						info.Arguments+="\"/ZIP:"+CCard.Zip+"\" ";
+					}
+					else {
+						info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
+					}
+					if(CCard.Address!="") {
+						info.Arguments+="\"/ADDRESS:"+CCard.Address+"\" ";
+					}
+					else {
+						info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
+					}
 					info.Arguments+="/HIDEMAINWINDOW ";
 					info.Arguments+="/RECURRING ";
 					info.Arguments+="/SMALLWINDOW ";
@@ -1345,6 +1360,7 @@ namespace OpenDental{
 			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
 			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
 			info.Arguments+="/AUTOCLOSE ";
+			info.Arguments+="/GETXCACCOUNTID ";
 			info.Arguments+="/NORESULTDIALOG ";
 			Cursor=Cursors.WaitCursor;
 			Process process=new Process();
