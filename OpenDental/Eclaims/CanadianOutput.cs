@@ -264,7 +264,10 @@ namespace OpenDental.Eclaims {
 			}
 			else{
 				fieldInputter=new CCDFieldInputter(result);
-				etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
+				CCDField fieldG05=fieldInputter.GetFieldById("G05");
+				if(fieldG05!=null) {
+					etransAck.AckCode=fieldG05.valuestr;
+				}
 				etransAck.Etype=fieldInputter.GetEtransType();
 			}
 			Etranss.Insert(etransAck);
@@ -462,7 +465,10 @@ namespace OpenDental.Eclaims {
 			}
 			else {
 			  fieldInputter=new CCDFieldInputter(result);
-				etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
+				CCDField fieldG05=fieldInputter.GetFieldById("G05");
+				if(fieldG05!=null) {
+					etransAck.AckCode=fieldG05.valuestr;
+				}
 			  etransAck.Etype=fieldInputter.GetEtransType();
 			}
 			Etranss.Insert(etransAck);
@@ -569,7 +575,10 @@ namespace OpenDental.Eclaims {
 				}
 				else {
 					fieldInputter=new CCDFieldInputter(result);
-					etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
+					CCDField fieldG05=fieldInputter.GetFieldById("G05");
+					if(fieldG05!=null) {
+						etransAck.AckCode=fieldG05.valuestr;
+					}
 					etransAck.Etype=fieldInputter.GetEtransType();
 				}
 				Etranss.Insert(etransAck);
@@ -730,7 +739,10 @@ namespace OpenDental.Eclaims {
 				}
 				else {
 					fieldInputter=new CCDFieldInputter(result);
-					etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
+					CCDField fieldG05=fieldInputter.GetFieldById("G05");
+					if(fieldG05!=null) {
+						etransAck.AckCode=fieldG05.valuestr;
+					}
 					etransAck.Etype=fieldInputter.GetEtransType();
 				}
 				Etranss.Insert(etransAck);
@@ -846,7 +858,10 @@ namespace OpenDental.Eclaims {
 			}
 			else {
 				fieldInputter=new CCDFieldInputter(result);
-				etransAck.AckCode=fieldInputter.GetFieldById("G05").valuestr;
+				CCDField fieldG05=fieldInputter.GetFieldById("G05");
+				if(fieldG05!=null) {
+					etransAck.AckCode=fieldG05.valuestr;
+				}
 				etransAck.Etype=fieldInputter.GetEtransType();
 			}
 			Etranss.Insert(etransAck);

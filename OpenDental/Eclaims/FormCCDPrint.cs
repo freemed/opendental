@@ -231,12 +231,6 @@ namespace OpenDental.Eclaims {
 			//try{  The try/catch is just annoying while debugging.  We can uncomment it later.
 				formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
 				transactionCode=formData.GetFieldById("A04").valuestr;//Must always exist so no error checking here.
-				//Check for embedded messages.
-				CCDField embeddedTransaction=formData.GetFieldById("G40");
-				if(embeddedTransaction!=null){
-					FormCCDPrint embeddedForm=new FormCCDPrint(etrans.Copy(),true,assigned,embeddedTransaction.valuestr);
-					embeddedForm.Print();
-				}
 				if(formatVersionNumber=="04"){//FormId field does not exist in version 02 in any of the message texts.
 					formId=formData.GetFieldById("G42").valuestr;//Always exists in version 04 message responses.
 				}else{//Version 02
@@ -280,6 +274,12 @@ namespace OpenDental.Eclaims {
 			catch(Exception ex){
 				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
 			}*/
+			//Check for embedded messages.
+			CCDField embeddedTransaction=formData.GetFieldById("G40");
+			if(embeddedTransaction!=null) {
+				FormCCDPrint embeddedForm=new FormCCDPrint(etrans.Copy(),true,assigned,embeddedTransaction.valuestr);
+				embeddedForm.Print();
+			}
 		}
 
 		///<summary>Prints the Canadian form.</summary>
