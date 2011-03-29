@@ -4130,8 +4130,76 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				}
-
-
+				//Add EHR Measures to DB
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(0,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(1,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(2,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(3,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(4,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(5,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(6,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(7,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(8,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(9,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(10,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(11,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(12,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(13,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(14,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(15,-1,-1)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),0,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),1,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),2,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),3,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),4,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),5,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),6,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),7,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),8,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),9,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),10,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),11,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),12,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),13,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),14,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),15,-1,-1)";
+					Db.NonQ(command);
+				}
+				
 
 
 
