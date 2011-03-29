@@ -14,7 +14,8 @@ namespace OpenDentBusiness {
 		///<summary>FK to diseasedef.DiseaseDefNum.  The disease description is in that table.  Will be zero if ICD9Num has a value.</summary>
 		public long DiseaseDefNum;
 		///<summary>Any note about this disease that is specific to this patient.</summary>
-		public string PatNote;///<summary>The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned.</summary>
+		public string PatNote;
+		///<summary>The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>FK to icd9.ICD9Num.  Will be zero if DiseaseDefNum has a value.</summary>
