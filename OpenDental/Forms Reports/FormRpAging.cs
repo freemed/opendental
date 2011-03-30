@@ -392,8 +392,14 @@ namespace OpenDental{
 			cmd+=",Bal_0_30,Bal_31_60,Bal_61_90,BalOver90"
 				+",BalTotal "
 				+",InsEst"
-				+",BalTotal-InsEst AS \"$pat\" "
-				+"FROM patient "
+				+",BalTotal-InsEst AS ";//\"$pat\" ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				cmd+="$pat ";
+			}
+			else { //Oracle needs quotes.
+				cmd+="\"$pat\" ";
+			}
+			cmd+="FROM patient "
 				+"WHERE ";
 			if(checkExcludeInactive.Checked) {
 				cmd+="(patstatus != 2) AND ";

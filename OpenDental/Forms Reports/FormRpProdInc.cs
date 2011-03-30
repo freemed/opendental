@@ -649,12 +649,22 @@ namespace OpenDental{
 				+"procedurecode.Descript,"
 				+"provider.Abbr,"
 				+"procedurelog.ClinicNum,"
-				+"procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)-IFNULL(SUM(claimproc.WriteOff),0) \"$fee\","//if no writeoff, then subtract 0
+				+"procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)-IFNULL(SUM(claimproc.WriteOff),0) ";//if no writeoff, then subtract 0
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				report.Query+="$fee,"
+				+"0 $Adj,"
+				+"0 $InsW,"
+				+"0 $PtInc,"
+				+"0 $InsInc,";
+			}
+			else {//Oracle needs quotes.
+				report.Query+="\"$fee\","
 				+"0 \"$Adj\","
 				+"0 \"$InsW\","
 				+"0 \"$PtInc\","
-				+"0 \"$InsInc\","
-				+"procedurelog.ProcNum "
+				+"0 \"$InsInc\",";
+			}
+			report.Query+="procedurelog.ProcNum "
 				+"FROM patient,procedurecode,provider,procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
 				+"AND claimproc.Status='7' "//only CapComplete writeoffs are subtracted here.

@@ -15,8 +15,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum,showUnattached);
 			}
 			string command=
-				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) \"_patName\""//Double quotes allow oracle column aliases to start with _, #, or $.
-				+",carrier.CarrierName,SUM(claimproc.FeeBilled) \"_feeBilled\",SUM(claimproc.InsPayAmt) \"_insPayAmt\",claim.ClaimNum"
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"//Changed from \"_patName\" to patName_ for MySQL 5.5. Also added checks for #<table> and $<table>
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
 				+",claimproc.ClaimPaymentNum,claim.PatNum"
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) "
 				+",carrier.CarrierName,claim.ClaimNum"
 				+",claimproc.ClaimPaymentNum,claim.PatNum";
-			command+=" ORDER BY \"_patName\"";
+			command+=" ORDER BY patName_";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
 		}
@@ -44,8 +44,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
 			}
 			string command=
-				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) \"_patName\""
-				+",carrier.CarrierName,SUM(claimproc.FeeBilled) \"_feeBilled\",SUM(claimproc.InsPayAmt) \"_insPayAmt\",claim.ClaimNum"
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
 				+",claimproc.ClaimPaymentNum,claim.PatNum"
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 				+" AND (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0')"
 				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
 				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
-				+" ORDER BY \"_patName\"";
+				+" ORDER BY patName_";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
 		}
@@ -70,10 +70,10 @@ namespace OpenDentBusiness{
 				split=new ClaimPaySplit();
 				split.DateClaim      =PIn.Date  (table.Rows[i]["DateService"].ToString());
 				split.ProvAbbr       =Providers.GetAbbr(PIn.Long(table.Rows[i]["ProvTreat"].ToString()));
-				split.PatName        =PIn.String(table.Rows[i]["_patName"].ToString());
+				split.PatName        =PIn.String(table.Rows[i]["patName_"].ToString());
 				split.Carrier        =PIn.String(table.Rows[i]["CarrierName"].ToString());
-				split.FeeBilled      =PIn.Double(table.Rows[i]["_feeBilled"].ToString());
-				split.InsPayAmt      =PIn.Double(table.Rows[i]["_insPayAmt"].ToString());
+				split.FeeBilled      =PIn.Double(table.Rows[i]["feeBilled_"].ToString());
+				split.InsPayAmt      =PIn.Double(table.Rows[i]["insPayAmt_"].ToString());
 				split.ClaimNum       =PIn.Long   (table.Rows[i]["ClaimNum"].ToString());
 				split.ClaimPaymentNum=PIn.Long   (table.Rows[i]["ClaimPaymentNum"].ToString());
 				split.PatNum         =PIn.Long   (table.Rows[i]["PatNum"].ToString());

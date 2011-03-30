@@ -209,7 +209,7 @@ namespace OpenDentBusiness{
 				return new List<PaySplit>();
 			}
 			command= 
-				"SELECT patient.PatNum,EstBalance,PriProv,SUM(InsPayEst)+SUM(Writeoff) \"_insEst\" "
+				"SELECT patient.PatNum,EstBalance,PriProv,SUM(InsPayEst)+SUM(Writeoff) insEst_ "
 				+"FROM patient "
 				+"LEFT JOIN claimproc ON patient.PatNum=claimproc.PatNum "
 				+"AND Status=0 "//NotReceived
@@ -226,7 +226,7 @@ namespace OpenDentBusiness{
 					pat.PatNum    = PIn.Long(table.Rows[i][0].ToString());
 					pat.EstBalance= PIn.Double(table.Rows[i][1].ToString());
 					if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
-						pat.EstBalance-=PIn.Double(table.Rows[i]["_insEst"].ToString());
+						pat.EstBalance-=PIn.Double(table.Rows[i]["insEst_"].ToString());
 					}
 					pat.PriProv   = PIn.Long(table.Rows[i][2].ToString());
 					pats.Add(pat.Copy());
@@ -241,7 +241,7 @@ namespace OpenDentBusiness{
 				pat.PatNum    = PIn.Long   (table.Rows[i][0].ToString());
 				pat.EstBalance= PIn.Double(table.Rows[i][1].ToString());
 				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
-					pat.EstBalance-=PIn.Double(table.Rows[i]["_insEst"].ToString());
+					pat.EstBalance-=PIn.Double(table.Rows[i]["insEst_"].ToString());
 				}
 				pat.PriProv   = PIn.Long   (table.Rows[i][2].ToString());
 				pats.Add(pat.Copy());

@@ -532,7 +532,7 @@ namespace OpenDentBusiness{
 			}
 			//get previous dates for all types at once.
 			//Because of the inner join, this will not include recall types with no trigger.
-			command="SELECT RecallTypeNum,MAX(ProcDate) \"_procDate\" "
+			command="SELECT RecallTypeNum,MAX(ProcDate) procDate_ "
 				+"FROM procedurelog,recalltrigger "
 				+"WHERE PatNum="+POut.Long(patNum)
 				+" AND procedurelog.CodeNum=recalltrigger.CodeNum "
@@ -570,7 +570,7 @@ namespace OpenDentBusiness{
 				}
 				for(int d=0;d<tableDates.Rows.Count;d++) {//procs for patient
 					if(tableDates.Rows[d]["RecallTypeNum"].ToString()==typeListActive[i].RecallTypeNum.ToString()) {
-						dateProphyTesting=PIn.Date(tableDates.Rows[d]["_procDate"].ToString());
+						dateProphyTesting=PIn.Date(tableDates.Rows[d]["procDate_"].ToString());
 						//but patient could have both perio and prophy.
 						//So must test to see if the date is newer
 						if(dateProphyTesting>prevDateProphy) {
@@ -595,7 +595,7 @@ namespace OpenDentBusiness{
 					prevDate=DateTime.MinValue;
 					for(int d=0;d<tableDates.Rows.Count;d++) {//procs for patient
 						if(tableDates.Rows[d]["RecallTypeNum"].ToString()==typeList[i].RecallTypeNum.ToString()) {
-							prevDate=PIn.Date(tableDates.Rows[d]["_procDate"].ToString());
+							prevDate=PIn.Date(tableDates.Rows[d]["procDate_"].ToString());
 							break;
 						}
 					}

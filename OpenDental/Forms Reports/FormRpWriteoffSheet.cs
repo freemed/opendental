@@ -349,9 +349,13 @@ namespace OpenDental{
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
 					report.Query+="clinic.Description,";
 				}
-				report.Query+=
-					"SUM(claimproc.WriteOff) \"$amount\","
-					+"claimproc.ClaimNum "
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					report.Query+="SUM(claimproc.WriteOff) $amount,";
+				}
+				else {//Oracle needs quotes.
+					report.Query+="SUM(claimproc.WriteOff) \"$amount\",";
+				}
+				report.Query+="claimproc.ClaimNum "
 					+"FROM claimproc "//,insplan,patient,carrier,provider "
 					+"LEFT JOIN insplan ON claimproc.PlanNum = insplan.PlanNum "
 					+"LEFT JOIN patient ON claimproc.PatNum = patient.PatNum "
@@ -375,9 +379,13 @@ namespace OpenDental{
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
 					report.Query+="clinic.Description,";
 				}
-				report.Query+=
-					"SUM(claimproc.WriteOff) \"$amount\", "
-					+"claimproc.ClaimNum "
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					report.Query+="SUM(claimproc.WriteOff) $amount, ";
+				}
+				else {//Oracle needs quotes.
+					report.Query+="SUM(claimproc.WriteOff) \"$amount\", ";
+				}
+				report.Query+="claimproc.ClaimNum "
 					+"FROM claimproc "//,insplan,patient,carrier,provider "
 					+"LEFT JOIN insplan ON claimproc.PlanNum = insplan.PlanNum "
 					+"LEFT JOIN patient ON claimproc.PatNum = patient.PatNum "

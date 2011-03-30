@@ -1745,7 +1745,7 @@ namespace OpenDentBusiness {
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					return "";
 				}
-				command="SELECT *,SUM(SplitAmt) \"_SplitAmt\" FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum) GROUP BY PayNum";
+				command="SELECT *,SUM(SplitAmt) SplitAmt_ FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum) GROUP BY PayNum";
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count>0 || verbose) {
 					for(int i=0;i<table.Rows.Count;i++) {
@@ -1755,7 +1755,7 @@ namespace OpenDentBusiness {
 						payment.DateEntry=PIn.Date(table.Rows[i]["DateEntry"].ToString());
 						payment.PatNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
 						payment.PayDate=PIn.Date(table.Rows[i]["DatePay"].ToString());
-						payment.PayAmt=PIn.Double(table.Rows[i]["_SplitAmt"].ToString());
+						payment.PayAmt=PIn.Double(table.Rows[i]["SplitAmt_"].ToString());
 						payment.PayNote="Dummy payment. Original payment entry missing from the database.";
 						payment.PayNum=PIn.Long(table.Rows[i]["PayNum"].ToString());
 						Payments.Insert(payment,true);
