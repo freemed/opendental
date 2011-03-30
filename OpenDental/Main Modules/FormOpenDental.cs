@@ -4374,7 +4374,17 @@ namespace OpenDental{
 					}
 				}
 				//Can't use Userods.CheckPassword, because we only have the hashed password.
-				if(passHash==user.Password) {//password accepted
+				if(passHash!=user.Password || !Programs.UsingEcwTight())//password not accepted or not using eCW
+				{
+					//So present logon screen
+					FormLogOn FormL=new FormLogOn();
+					FormL.ShowDialog(this);
+					if(FormL.DialogResult==DialogResult.Cancel) {
+						Application.Exit();
+						return;
+					}
+				}
+				else {//password accepted and using eCW tight.
 					//this part usually happens in the logon window
 					Security.CurUser = user.Copy();
 					//let's skip tasks for now
@@ -4384,15 +4394,6 @@ namespace OpenDental{
 					//		MessageBox.Show(Lan.g(this,"There are ")+taskcount+Lan.g(this," unfinished tasks on your tasklists."));
 					//	}
 					//}
-				}
-				else{//password not accepted
-					//So present logon screen
-					FormLogOn FormL=new FormLogOn();
-					FormL.ShowDialog(this);
-					if(FormL.DialogResult==DialogResult.Cancel) {
-						Application.Exit();
-						return;
-					}
 				}
 				myOutlookBar.SelectedIndex=Security.GetModule(LastModule);
 				myOutlookBar.Invalidate();
