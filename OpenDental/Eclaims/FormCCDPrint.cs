@@ -86,10 +86,11 @@ namespace OpenDental.Eclaims {
 		InsSub insSub;
 		InsSub insSub2;
 		List<ClaimProc> claimprocs;
-		List<PatPlan> patPlansForPatient;
 		List<Procedure> extracted;
 		private string MessageText;
+		List<PatPlan> patPlansForPat;
 		PatPlan patPlanPri;
+		PatPlan patPlanSec;
 		Clinic clinic;
 
 		#endregion
@@ -145,31 +146,46 @@ namespace OpenDental.Eclaims {
 		private void Init(){
 			InitializeComponent();
 			breakLinePen.Width=2;
-			//try {
 			if(etrans.PatNum!=0) { //Some transactions are not patient specific.
 				patient=Patients.GetPat(etrans.PatNum);
+				patPlansForPat=PatPlans.Refresh(etrans.PatNum);
+				//Get primary info
 				primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
+				insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
+				subscriber=Patients.GetPat(insSub.Subscriber);
+				if(subscriber.Language=="fr") {
+					isFrench=true;
+					culture=new CultureInfo("fr-CA");
+				}
+				insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
+				patPlanPri=PatPlans.GetFromList(patPlansForPat,insplan.PlanNum);//Only used when there is no claim.
 				claim=Claims.GetClaim(etrans.ClaimNum);
 				if(claim==null) {//for eligibility
+					//Get secondary info
+					if(etrans.CarrierNum2!=0) {
+						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
+						patPlanSec=PatPlans.GetPatPlan(etrans.PatNum,2);//Would not necessarily work if viewing a historical eligibility request.
+						insSub2=InsSubs.GetSub(patPlanSec.InsSubNum,new List<InsSub>());
+						subscriber2=Patients.GetPat(insSub2.Subscriber);
+						insplan2=InsPlans.GetPlan(patPlanSec.PlanNum,new List<InsPlan>());
+					}
+					//Provider info
 					provTreat=Providers.GetProv(Patients.GetProvNum(patient));
 					provBill=Providers.GetProv(Patients.GetProvNum(patient));
-					insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
-					insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
 				}
 				else {
+					//Get secondary info
+					if(etrans.CarrierNum2!=0) {
+						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
+						patPlanSec=PatPlans.GetFromList(patPlansForPat,claim.PlanNum2);
+						insSub2=InsSubs.GetSub(claim.InsSubNum2,new List<InsSub>());
+						subscriber2=Patients.GetPat(insSub2.Subscriber);
+						insplan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
+					}
+					//Provider info
 					provTreat=Providers.GetProv(claim.ProvTreat);
 					provBill=Providers.GetProv(claim.ProvBill);
-					insSub=InsSubs.GetSub(claim.InsSubNum,new List<InsSub>());
-					insplan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
-					if(claim.PlanNum2>0) {
-						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
-						insSub2=InsSubs.GetSub(claim.InsSubNum2,new List<InsSub>());
-						insplan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
-						subscriber2=Patients.GetPat(insSub2.Subscriber);
-						if(secondaryCarrier==null || insplan2==null || subscriber2==null) {
-							throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
-						}
-					}
+					//Claim related info
 					claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 					long clinicNum=0;
 					for(int i=0;i<claimprocs.Count;i++) {
@@ -185,26 +201,8 @@ namespace OpenDental.Eclaims {
 						clinic=Clinics.List[0];
 					}
 				}
-				patPlansForPatient=PatPlans.Refresh(etrans.PatNum);
-				patPlanPri=PatPlans.GetFromList(patPlansForPatient,insplan.PlanNum);
-				subscriber=Patients.GetPat(insSub.Subscriber);
-				if(subscriber.Language=="fr") {
-					isFrench=true;
-					culture=new CultureInfo("fr-CA");
-				}
 				List<Procedure> procsAll=Procedures.Refresh(etrans.PatNum);
 				extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
-				//Test previously untested structures for existence, so that we do not need to check repeatedly later.
-				//
-				if(primaryCarrier==null || provTreat==null || provBill==null || insplan==null || patPlanPri==null //claimprocs == null ||
-					|| patPlansForPatient==null || extracted==null) {
-					throw new Exception(this.ToString()+".FormCCDPrint: failed to load primary insurance info!");
-				}
-				//}
-				//catch(Exception e) {
-				//	Logger.openlog.LogMB(e.ToString(),Logger.Severity.ERROR);
-				//	printable=false;
-				//}
 			}
 			if(MessageText==null || MessageText.Length<23) {
 				throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
@@ -312,85 +310,75 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Called for each page to be printed.</summary>
 		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e){
-			//try{
-				for(byte i=0;i<255;i++){
-					SizeF size=e.Graphics.MeasureString(""+Canadian.GetCanadianChar(i),doc.standardFont);
-					verticalLine=Math.Max(verticalLine,(float)Math.Ceiling(size.Height));
-					maxCharWidth=Math.Max(maxCharWidth,(float)Math.Ceiling(size.Width));
+			for(byte i=0;i<255;i++){
+				SizeF size=e.Graphics.MeasureString(""+Canadian.GetCanadianChar(i),doc.standardFont);
+				verticalLine=Math.Max(verticalLine,(float)Math.Ceiling(size.Height));
+				maxCharWidth=Math.Max(maxCharWidth,(float)Math.Ceiling(size.Width));
+			}
+			if(dirty){//Only render the document containers the first time through.
+				dirty=false;
+				doc.bounds=e.MarginBounds;
+				center=doc.bounds.X+doc.bounds.Width/2;
+				x=doc.StartElement();//Every printed page always starts on the first row and can choose to skip rows later if desired.
+				CCDField responseStatus=formData.GetFieldById("G05");
+				string status="";
+				if(responseStatus!=null && responseStatus.valuestr!=null) {
+					status=responseStatus.valuestr.ToUpper();
 				}
-				if(dirty){//Only render the document containers the first time through.
-					dirty=false;
-					doc.bounds=e.MarginBounds;
-					center=doc.bounds.X+doc.bounds.Width/2;
-					x=doc.StartElement();//Every printed page always starts on the first row and can choose to skip rows later if desired.
-					CCDField responseStatus=formData.GetFieldById("G05");
-					string status="";
-					if(responseStatus!=null && responseStatus.valuestr!=null) {
-						status=responseStatus.valuestr.ToUpper();
-					}
-					transactionCode=formData.GetFieldById("A04").valuestr;
-					if(transactionCode=="16") {
-						PrintPaymentReconciliation_16(e.Graphics);
-					}
-					else if(transactionCode=="15") {
-						PrintSummaryReconciliation_15(e.Graphics);
-					}
-					else if(status=="R"){//Claim Rejection
-					  PrintClaimRejection(e.Graphics);
-					}
-					else{
-						switch(formId){
-							default:
-								DefaultPrint(e.Graphics);
-								break;
-							case "01"://CDA EOB Form
-								PrintEOB(e.Graphics);
-								break;
-							case "02"://Dentaide Form
-								PrintDentaide(e.Graphics);
-								break;
-							case "03"://Claim Acknowledgement Form
-								PrintClaimAck(e.Graphics);
-								break;
-							case "04"://Employer Certified Form
-								PrintEmployerCertified(e.Graphics);
-								break;
-							case "05"://Plan Paper Claim Form
-								PrintPaperClaim(e.Graphics);
-								break;
-							case "06"://Predetermination Acknowledgement Form
-								PrintPredeterminationAck(e.Graphics);
-								break;
-							case "07"://Predetermination EOB Form
-								PrintEOB(e.Graphics);
-								break;
-							case "08"://Eligibility Form
-								PrintEligibility(e.Graphics);
-								break;
-						}
-					}
-					x=doc.StartElement();//Be sure to end last element always.
-					totalPages=doc.CalcTotalPages(e.Graphics);
+				transactionCode=formData.GetFieldById("A04").valuestr;
+				if(transactionCode=="16") {
+					PrintPaymentReconciliation_16(e.Graphics);
 				}
-				e.Graphics.DrawRectangle(Pens.LightGray,e.MarginBounds);//Draw light border for context.
-				pagesPrinted++;
-				doc.PrintPage(e.Graphics,pagesPrinted);
-				if(printPageNumbers){
-					text="Page "+pagesPrinted.ToString()+(isFrench?" de ":" of ")+totalPages;
-					e.Graphics.DrawString(text,doc.standardFont,Pens.Black.Brush,
-						e.MarginBounds.Right-e.Graphics.MeasureString(text,doc.standardFont).Width-4,e.MarginBounds.Top);
+				else if(transactionCode=="15") {
+					PrintSummaryReconciliation_15(e.Graphics);
 				}
-				if(pagesPrinted<totalPages){					
-					e.HasMorePages=true;
+				switch(formId){
+					default:
+						DefaultPrint(e.Graphics);
+						break;
+					case "01"://CDA EOB Form
+						PrintEOB(e.Graphics);
+						break;
+					case "02"://Dentaide Form
+						PrintDentaide(e.Graphics);
+						break;
+					case "03"://Claim Acknowledgement Form
+						PrintClaimAck(e.Graphics);
+						break;
+					case "04"://Employer Certified Form
+						PrintEmployerCertified(e.Graphics);
+						break;
+					case "05"://Plan Paper Claim Form
+						PrintPaperClaim(e.Graphics);
+						break;
+					case "06"://Predetermination Acknowledgement Form
+						PrintPredeterminationAck(e.Graphics);
+						break;
+					case "07"://Predetermination EOB Form
+						PrintEOB(e.Graphics);
+						break;
+					case "08"://Eligibility Form
+						PrintEligibility(e.Graphics);
+						break;
 				}
-				else{
-					e.HasMorePages=false;
-					labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
-				}
-			/*}
-			catch(Exception ex){
-				Logger.openlog.LogMB(ex.ToString(),Logger.Severity.ERROR);
-			}*/
+				x=doc.StartElement();//Be sure to end last element always.
+				totalPages=doc.CalcTotalPages(e.Graphics);
+			}
+			e.Graphics.DrawRectangle(Pens.LightGray,e.MarginBounds);//Draw light border for context.
+			pagesPrinted++;
+			doc.PrintPage(e.Graphics,pagesPrinted);
+			if(printPageNumbers){
+				text="Page "+pagesPrinted.ToString()+(isFrench?" de ":" of ")+totalPages;
+				e.Graphics.DrawString(text,doc.standardFont,Pens.Black.Brush,
+					e.MarginBounds.Right-e.Graphics.MeasureString(text,doc.standardFont).Width-4,e.MarginBounds.Top);
+			}
+			if(pagesPrinted<totalPages){					
+				e.HasMorePages=true;
+			}
+			else{
+				e.HasMorePages=false;
+				labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
+			}
 		}
 
 		#endregion
@@ -402,7 +390,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement(verticalLine);
 			PrintTransactionDate(g,x,0);
-			PrintOfficeNumber(g,x+250,0);
+			PrintTreatmentProviderOfficeNumber(g,x+250,0);
 			CCDField field=formData.GetFieldById("G54");
 			doc.DrawField(g,field.GetFieldName(isFrench),field.valuestr,true,x+500,0);//REFERENCE
 			x=doc.StartElement(verticalLine);
@@ -443,10 +431,10 @@ namespace OpenDental.Eclaims {
 			text=isFrench?"RÉSUMÉ DE RÉCONCILIATION":"SUMMARY RECONCILIATION";
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			doc.StartElement(verticalLine);
-			PrintDentalOfficeClaimReferenceNo(g,x,0);
+			PrintOfficeSequenceNumber(g,x,0);
 			doc.StartElement();
 			doc.StartElement();
-			PrintCarrierClaimNo(g,x,0);
+			PrintTransactionReferenceNumber(g,x,0);
 			doc.StartElement();
 			CCDField field=formData.GetFieldById("G34");//Payment reference
 			if(field!=null) {
@@ -518,14 +506,14 @@ namespace OpenDental.Eclaims {
 			text=isFrench?"RÉCONCILIATION DE PAIEMENT":"PAYMENT RECONCILIATION";
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			doc.StartElement(verticalLine);
-			PrintDentalOfficeClaimReferenceNo(g,x,0);
+			PrintOfficeSequenceNumber(g,x,0);
 			doc.StartElement();
 			CCDField field=formData.GetFieldById("B04");
 			if(field!=null){
 				doc.DrawField(g,field.GetFieldName(isFrench),field.valuestr,true,x,0);
 			}
 			doc.StartElement();
-			PrintCarrierClaimNo(g,x,0);
+			PrintTransactionReferenceNumber(g,x,0);
 			doc.StartElement();
 			field=formData.GetFieldById("G34");//Payment reference
 			if(field!=null) {
@@ -609,13 +597,13 @@ namespace OpenDental.Eclaims {
 			text=(isFrench?"Acceptabilité":"Eligibility").ToUpper();
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			doc.StartElement(verticalLine);
-			PrintDentalOfficeClaimReferenceNo(g,x,0);
+			PrintOfficeSequenceNumber(g,x,0);
 			doc.StartElement();
-			PrintUniqueIdNo(g,x,0);
+			PrintTreatmentProviderID(g,x,0);
 			doc.StartElement();
-			PrintOfficeNumber(g,x,0);
+			PrintTreatmentProviderOfficeNumber(g,x,0);
 			doc.StartElement();
-			PrintCarrierClaimNo(g,x,0);
+			PrintTransactionReferenceNumber(g,x,0);
 			doc.StartElement(verticalLine);
 			PrintDisposition(g,x,0);
 			doc.StartElement(verticalLine);
@@ -629,18 +617,18 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			PrintTransactionDate(g,x,0);
 			float rightCol=x+400;
-			PrintCarrierClaimNo(g,rightCol,0);
+			PrintTransactionReferenceNumber(g,rightCol,0);
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"NOMBRE DE PRÉDÉTERMINATION:":"PREDETERMINATION NO:",rightCol,0);
 			doc.StartElement();
 			PrintDentistName(g,x,0);
-			PrintUniqueIdNo(g,rightCol,0);
+			PrintTreatmentProviderID(g,rightCol,0);
 			x=doc.StartElement();
 			PrintDentistAddress(g,x,0,0);
-			PrintOfficeNumber(g,rightCol,0);
+			PrintTreatmentProviderOfficeNumber(g,rightCol,0);
 			PrintDentistPhone(g,rightCol,verticalLine);			
 			x=doc.StartElement();
-			PrintDentalOfficeClaimReferenceNo(g,x,0);
+			PrintOfficeSequenceNumber(g,x,0);
 			doc.DrawString(g,isFrench?"VÉRIFICATION D'OFFICE":"OFFICE VERIFICATION:",rightCol,0);
 			x=doc.StartElement(verticalLine);
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
@@ -671,7 +659,7 @@ namespace OpenDental.Eclaims {
 			text=isFrench?"PREMIER ASSUREUR":"PRIMARY COVERAGE";
 			float leftMidCol=center-g.MeasureString(text,doc.standardFont).Width/2;
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text=isFrench?"SECOND ASSUREUR":"SECONDARY COVERAGE";
 				doc.DrawString(g,text,rightMidCol,0);
 			}
@@ -680,14 +668,14 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=primaryCarrier.CarrierName.ToUpper();//Field A05
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text=secondaryCarrier.CarrierName.ToUpper();
 				doc.DrawString(g,text,rightMidCol,0);
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ADRESSE DE PORTEUR:":"CARRIER ADDRESS:",x,0);
 			PrintAddress(g,leftMidCol,0,primaryCarrier.Address,primaryCarrier.Address2,primaryCarrier.City+" "+primaryCarrier.State+" "+primaryCarrier.Zip,150f,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				PrintAddress(g,rightMidCol,0,secondaryCarrier.Address,secondaryCarrier.Address2,
 					secondaryCarrier.City+" "+secondaryCarrier.State+" "+secondaryCarrier.Zip,150f,0);
 			}
@@ -696,7 +684,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=insplan.GroupNum;//Field C01
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text=insplan2.GroupNum;//Field E02
 				doc.DrawString(g,text,rightMidCol,0);
 			}
@@ -705,7 +693,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=subscriber.GetNameFLFormal();
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text=subscriber2.GetNameFLFormal();
 				doc.DrawString(g,text,rightMidCol,0);
 			}
@@ -724,7 +712,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"EMPLOYEUR:":"EMPLOYER:",x,0);
 			doc.DrawString(g,subscriber.EmployerNum==0?"":Employers.GetName(subscriber.EmployerNum),leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				doc.DrawString(g,subscriber2.EmployerNum==0?"":Employers.GetName(subscriber2.EmployerNum),rightMidCol,0);
 			}
 			x=doc.StartElement();
@@ -755,9 +743,9 @@ namespace OpenDental.Eclaims {
 					break;
 			}
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text="";
-				switch(Canadian.GetRelationshipCode(claim.PatRelat2)) {//Field E06
+				switch(Canadian.GetRelationshipCode(patPlanSec.Relationship)) {//Field E06
 					case "1":
 						text=isFrench?"Époux(se)":"Spouse";
 						break;
@@ -876,24 +864,6 @@ namespace OpenDental.Eclaims {
 			}
 		}
 
-		private void PrintClaimRejection(Graphics g){
-			PrintCarrier(g);
-			x=doc.StartElement(verticalLine);
-			string keyword=(predetermination?"PREDETERMINATION":"CLAIM");
-			text=isFrench?"REFUS D'UNE DEMANDE DE PRESTATIONS":(keyword+" REJECTION NOTICE");
-			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
-			x=doc.StartElement(verticalLine);
-			PrintClaimAckBody(g,"",true);
-			if(PrintErrorList(g)>0){
-				x=doc.StartElement(verticalLine);
-				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-			}
-			x=doc.StartElement();
-			text=isFrench?"VEUILLEZ CORRIGER LES ERREURS AVANT DE RESOUMETTRE LA DEMANDE.":
-				"PLEASE CORRECT ERRORS AS SHOWN, PRIOR TO RE-SUBMITTING THE "+keyword+".";
-			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
-		}
-
 		private void PrintDentaide(Graphics g){
 			printPageNumbers=true;
 			int headerHeight=(int)verticalLine;
@@ -917,16 +887,16 @@ namespace OpenDental.Eclaims {
 				}
 			}
 			x=doc.StartElement();
-			PrintUniqueIdNo(g,rightMidCol,0);
+			PrintTreatmentProviderID(g,rightMidCol,0);
 			x=doc.StartElement();
 			PrintDentistName(g,x,0);
-			PrintOfficeNumber(g,rightMidCol,0);
+			PrintTreatmentProviderOfficeNumber(g,rightMidCol,0);
 			x=doc.StartElement();
 			PrintDentistAddress(g,x,0,0);
 			size1=PrintDentistPhone(g,rightMidCol,0);
 			//Dependant NO. should be same for both primary and secondary insurance, because it is the patient account number from within Open Dental.
 			SizeF size2=PrintPrimaryDependantNo(g,rightMidCol,size1.Height,"PATIENT'S OFFICE ACCOUNT NO","NO DE DOSSIER DU PATIENT");
-			PrintDentalOfficeClaimReferenceNo(g,rightMidCol,size1.Height+size2.Height);
+			PrintOfficeSequenceNumber(g,rightMidCol,size1.Height+size2.Height);
 			x=doc.StartElement();
 			PrintPatientName(g,x,0);
 			PrintPatientBirthday(g,rightMidCol,0);
@@ -946,7 +916,7 @@ namespace OpenDental.Eclaims {
 			float leftMidCol=325f;
 			float rightCol=leftMidCol+250f;
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {//claim can be null for eligibility response
+			if(claim!=null && insplan2.PlanNum>0) {//claim can be null for eligibility response
 				text=isFrench?"SECOND ASSUREUR":"SECONDARY COVERAGE";
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -955,7 +925,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=primaryCarrier.CarrierName.ToUpper();//Field A05
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text=secondaryCarrier.CarrierName.ToUpper();
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -964,7 +934,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=insplan.GroupNum;//Field C01
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text=insplan2.GroupNum;//Field E02
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -973,7 +943,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,isFrench?"NO DE DIVISION/SECTION:":"DIV/SECTION NO:",x,0);
 				doc.DrawString(g,insplan.DivisionNo,leftMidCol,0);
 			}
-			if(claim!=null && claim.PlanNum2>0 && insplan2.DivisionNo.Length>0) {
+			if(claim!=null && insplan2.PlanNum>0 && insplan2.DivisionNo.Length>0) {
 				doc.DrawString(g,isFrench?"NO DE DIVISION/SECTION:":"DIV/SECTION NO:",x,0);
 				doc.DrawString(g,insplan2.DivisionNo,rightCol,0);
 			}
@@ -982,7 +952,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=subscriber.GetNameFLFormal();
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text=subscriber2.GetNameFLFormal();
 				doc.DrawString(g,text,rightCol,0);
 			}
@@ -1016,7 +986,7 @@ namespace OpenDental.Eclaims {
 				relatPri=patPlanPri.Relationship;
 			}
 			else{
-				relatPri=claim.PatRelat;
+				relatPri=patPlanPri.Relationship;
 			}
 			switch(Canadian.GetRelationshipCode(relatPri)){//Field C03
 				case "1":
@@ -1038,9 +1008,9 @@ namespace OpenDental.Eclaims {
 					break;
 			}
 			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && claim.PlanNum2>0) {
+			if(claim!=null && insplan2.PlanNum>0) {
 				text="";
-				switch(Canadian.GetRelationshipCode(claim.PatRelat2)){//Field E06
+				switch(Canadian.GetRelationshipCode(patPlanSec.Relationship)){//Field E06
 					case "1":
 						text=isFrench?"Époux(se)":"Spouse";
 						break;
@@ -1467,22 +1437,22 @@ namespace OpenDental.Eclaims {
 			PrintCarrier(g);
 			x=doc.StartElement(verticalLine);
 			if(patientCopy){
-				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UN DEMANDE DE PRESTATIONS - COPIE DU PATIENT":
+				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE DE PRESTATIONS - COPIE DU PATIENT":
 											"CLAIM ACKNOWLEDGEMENT - PATIENT COPY";
 			}else{
-				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UN DEMANDE DE PRESTATIONS - COPIE DE DENTISTE":
+				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE DE PRESTATIONS - COPIE DU DENTISTE":
 										"CLAIM ACKNOWLEDGEMENT - DENTIST COPY";
 			}
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement(verticalLine);
 			text=isFrench?
-				"Nous avons utilisé les renseignements du présent formulaire pour traiter votre demande par"+
-				"ordinateur. Veuillez en vérifier l'exactitude et aviser votre dentiste en cas d'erreur. "+
+				"Nous avons utilisé les renseignements du présent formulaire pour traiter votre demande par ordinateur."+Environment.NewLine+
+				"Veuillez en vérifier l'exactitude et aviser votre dentiste en cas d'erreur."+Environment.NewLine+
 				"Prière de ne pas poster à l'assureur/administrateur du régime.":
-				"The information contained on this form has been used to process your claim electronically. "+
-				"Please verify the accuracy of this data and report any discrepancies to your dental office. "+
+				"The information contained on this form has been used to process your claim electronically."+Environment.NewLine+
+				"Please verify the accuracy of this data and report any discrepancies to your dental office."+Environment.NewLine+
 				"Do not mail this form to the insurer/plan administrator.";
-			PrintClaimAckBody(g,text,false);
+			PrintClaimAckBody(g,text);
 			if(isFrench){
 				text="La présente demande de prestations a été transmise par ordinateur.".ToUpper();
 				doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
@@ -1513,7 +1483,7 @@ namespace OpenDental.Eclaims {
 				"The information contained on this form has been used to process your claim electronically. "+
 				"Please verify the accuracy of this data and report any discrepancies to your dental office. "+
 				"Do not mail this form to the insurer/plan administrator.";
-			PrintClaimAckBody(g,text,false);
+			PrintClaimAckBody(g,text);
 			if(isFrench){
 				text="La présente demande de prestations a été transmise par ordinateur.".ToUpper();
 				doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
@@ -1542,7 +1512,7 @@ namespace OpenDental.Eclaims {
 				"ordinateur. Veuillez en vérifier l'exactitude et aviser votre dentiste en cas d'erreur.":
 				"The information contained on this form has been used to process your claim electronically. "+
 				"Please verify the accuracy of this data and report any discrepancies to your dental office.";
-			PrintClaimAckBody(g,text,false);
+			PrintClaimAckBody(g,text);
 			doc.DrawString(g,isFrench?"VALIDATION DU TITULAIRE/EMPLOYEUR":"POLICYHOLDER/EMPLOYER - CERTIFICATION",x,0);
 			x=doc.StartElement(verticalLine);
 			SizeF size=doc.DrawString(g,isFrench?"EMPLOYEUR: ":"EMPLOYER: ",x,0);
@@ -1573,60 +1543,58 @@ namespace OpenDental.Eclaims {
 		}
 
 		///<summary>Does the actual work for printing claims. When graphicObjects is null, returns the required graphicObjects after calculating them. In normal use, this function should be called twice for each time the form is rendered, once to calculate the graphical primitives, then once more to actually render to form for printing.</summary>
-		private void PrintClaimAckBody(Graphics g,string centralDisclaimer,bool rejection){
-			PrintTransactionDate(g,x,0);
-			PrintCarrierClaimNo(g,x+400,0);
-			x=doc.StartElement(verticalLine);
+		private void PrintClaimAckBody(Graphics g,string centralDisclaimer){
 			PrintDisposition(g,x,0);
-			x=doc.StartElement(verticalLine);
+			x=doc.StartElement();
+			PrintStatus(g,x,0);
+			x=doc.StartElement();
 			PrintDentistName(g,x,0);
-			PrintUniqueIdNo(g,x+400,0);
+			PrintTreatmentProviderID(g,x+400,0);
 			x=doc.StartElement();
-			PrintDentistPhone(g,x,0);
-			PrintOfficeNumber(g,x+400,0);
-			x=doc.StartElement();
-			PrintDentalOfficeClaimReferenceNo(g,x,0);
-			x=doc.StartElement(verticalLine);
-			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-			x=doc.StartElement();
-			PrintPatientName(g,x,0);
-			PrintPatientBirthday(g,x+400,0);
+			PrintOfficeSequenceNumber(g,x,0);
+			PrintTreatmentProviderOfficeNumber(g,x+400,0);
 			x=doc.StartElement();
 			PrintPolicyNo(g,x,0,true);
 			PrintDivisionSectionNo(g,x+400,0);
 			x=doc.StartElement();
 			PrintCertificateNo(g,x,0,true);
-			PrintCardNo(g,x+250,0);
-			PrintPrimaryDependantNo(g,x+400,0);
-			x=doc.StartElement(verticalLine);
+			PrintPrimaryDependantNo(g,x+250,0);
+			PrintCardNo(g,x+400,0);
+			x=doc.StartElement();
+			PrintPatientName(g,x,0);
+			PrintPatientBirthday(g,x+400,0);			
+			x=doc.StartElement();
 			PrintInsuredMember(g,x,0);
 			x=doc.StartElement();
 			PrintInsuredAddress(g,x,0,true,0);
-			x=doc.StartElement(verticalLine);
+			x=doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
+			x=doc.StartElement();
+			PrintTransactionReferenceNumber(g,x,0);
+			PrintTransactionDate(g,x+400,0);
 			x=doc.StartElement();
 			//Field F01 - Not visible in predetermination
 			PrintProcedureListAck(g,predetermination?"":GetPayableToString(insSub.AssignBen));
-			if(!rejection){
-				x=doc.StartElement(verticalLine);
-				doc.DrawString(g,centralDisclaimer,x,0);
-				x=doc.StartElement(verticalLine);
-				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-				x=doc.StartElement();
-				doc.DrawString(g,isFrench?"RENSEIGNEMENTS SUR LE PATIENT":"PATIENT INFORMATION",x,0);
-				x=doc.StartElement(verticalLine);
-				bullet=1;
-				PrintDependencyBullet(g);
-				x=doc.StartElement();
-				PrintSecondaryPolicyBullet(g);
-				x=doc.StartElement();
-				PrintAccidentBullet(g);
-				x=doc.StartElement();
-				PrintInitialPlacementBullet(g);
-				x=doc.StartElement();
-				PrintToothExtractionBullet(g);
-			}
-			x=doc.StartElement(verticalLine);
+			x=doc.StartElement();
+			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
+			x=doc.StartElement();
+			doc.DrawString(g,centralDisclaimer,x,0);
+			x=doc.StartElement();
+			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
+			x=doc.StartElement();
+			doc.DrawString(g,isFrench?"RENSEIGNEMENTS SUR LE PATIENT":"PATIENT INFORMATION",x,0);
+			x=doc.StartElement();
+			bullet=1;
+			PrintDependencyBullet(g);
+			x=doc.StartElement();
+			PrintSecondaryPolicyBullet(g);
+			x=doc.StartElement();
+			PrintAccidentBullet(g);
+			x=doc.StartElement();
+			PrintInitialPlacementBullet(g);
+			x=doc.StartElement();
+			PrintToothExtractionBullet(g);
+			x=doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
 		}
@@ -1651,7 +1619,7 @@ namespace OpenDental.Eclaims {
 			if(!predetermination){
 				doc.DrawString(g,"DATE",procedureDateCol,0);//Same in both languages.
 			}
-			doc.DrawString(g,isFrench?"HONORAIRES":"CHARGE",procedureChargeCol,0);
+			doc.DrawString(g,isFrench?"HONS":"CHARGE",procedureChargeCol,0);
 			x=doc.StartElement();
 			//TODO: Ensure that the ordering of the procedures meets the Canadian standard.
 			Procedure proc;
@@ -1680,9 +1648,9 @@ namespace OpenDental.Eclaims {
 					x=doc.StartElement();
 				}
 			}
-			x=doc.StartElement(verticalLine);
+			x=doc.StartElement();
 			doc.DrawField(g,isFrench?"DESTINATAIRE DU PAIEMENT":"BENEFIT AMOUNT PAYABLE TO",payableToStr,false,x,0);
-			text=isFrench?"TOTAL DEMANDÉ ":"TOTAL SUBMITTED ";
+			text=isFrench?"TOTAL DES FRAIS SOUMIS ":"TOTAL SUBMITTED ";
 			doc.DrawString(g,text,procedureChargeCol-g.MeasureString(text,doc.standardFont).Width,0);
 			text=claim.ClaimFee.ToString("F");
 			doc.DrawString(g,text,procedureChargeCol,0);
@@ -1713,10 +1681,10 @@ namespace OpenDental.Eclaims {
 			PrintVertificationNo(g,x+rightCol,0);
 			x=doc.StartElement();
 			PrintDentistName(g,x,0);
-			PrintUniqueIdNo(g,x+rightCol,0);
+			PrintTreatmentProviderID(g,x+rightCol,0);
 			x=doc.StartElement();
-			PrintDentalOfficeClaimReferenceNo(g,x,0);
-			PrintOfficeNumber(g,x+rightCol,0);
+			PrintOfficeSequenceNumber(g,x,0);
+			PrintTreatmentProviderOfficeNumber(g,x+rightCol,0);
 			x=doc.StartElement();
 			PrintPolicyNo(g,x,0,true);
 			PrintDivisionSectionNo(g,x+rightCol,0);
@@ -1740,7 +1708,7 @@ namespace OpenDental.Eclaims {
 		private void PrintEOB(Graphics g){
 			PrintEOBHeader(g);
 			x=doc.StartElement();
-			PrintCarrierClaimNo(g,x,0);
+			PrintTransactionReferenceNumber(g,x,0);
 			PrintTransactionDate(g,x+450,0);
 			x=doc.StartElement(verticalLine);
 			PrintProcedureListEOB(g,GetPayableToString(insSub.AssignBen));
@@ -1776,7 +1744,7 @@ namespace OpenDental.Eclaims {
 						//reprint header on the second page where the notes overflow as required in the documentation.
 						PrintEOBHeader(g);
 						x=doc.StartElement();
-						PrintCarrierClaimNo(g,x,0);
+						PrintTransactionReferenceNumber(g,x,0);
 						PrintTransactionDate(g,x+450,0);
 						x=doc.StartElement(verticalLine);
 						PrintProcedureListEOB(g,GetPayableToString(insSub.AssignBen));
@@ -1973,20 +1941,52 @@ namespace OpenDental.Eclaims {
 
 		private SizeF PrintTransactionDate(Graphics g,float X,float Y){
 			text=DateToString(etrans.DateTimeTrans);
-			return doc.DrawField(g,"DATE",text,true,X,Y);//Only print reasonable transaction dates.
+			return doc.DrawField(g,isFrench?"DATE DE TRANSMISSION":"DATE SUBMITTED",text,true,X,Y);
 		}
 
-		private SizeF PrintCarrierClaimNo(Graphics g,float X,float Y){
+		///<summary>Corresponds to field G01.</summary>
+		private SizeF PrintTransactionReferenceNumber(Graphics g,float X,float Y){
 			CCDField[] carrierClaimNos=formData.GetFieldsById("G01");
 			if(carrierClaimNos==null || carrierClaimNos.Length==0){
 				throw new Exception("Field G01 does not exist in transaction, cannot print carrier claim number.");
 			}
-			return doc.DrawField(g,carrierClaimNos[0].GetFieldName(isFrench),carrierClaimNos[0].valuestr,false,X,Y);
+			return doc.DrawField(g,isFrench?"NO DE RÉFÉRENCE DU TRANSACTION DU RÉSEAU/ASSUREUR":"CARRIER/NETWORK TRANSACTION REFERENCE",carrierClaimNos[0].valuestr,false,X,Y);
 		}
 
 		private SizeF PrintDisposition(Graphics g,float X,float Y) {
 			CCDField disposition=formData.GetFieldById("G07");
 			return doc.DrawField(g,disposition.GetFieldName(isFrench),disposition.valuestr,false,X,Y);
+		}
+
+		private SizeF PrintStatus(Graphics g,float X,float Y) {
+			CCDField status=formData.GetFieldById("G05");
+			string statusStr="";
+			if(status!=null) {
+				switch(status.valuestr) {
+					default:
+						statusStr="";
+						break;
+					case ("R"):
+						statusStr=isFrench?"":"Claim is rejected because of errors.";
+						break;
+					case ("H"):
+						statusStr=isFrench?"":"Claim is received successfully by the carrier and is held for further processing. Response will NOT be sent back to the dentist electronically.";
+						break;
+					case ("B"):
+						statusStr=isFrench?"":"Claim is received successfully by the network and will be batch-forwarded on to the carrier for further processing. Response will NOT be sent back to the dentist electronically.";
+						break;
+					case ("C"):
+						statusStr=isFrench?"":"Claim is received successfully by the carrier and is held for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
+						break;
+					case ("N"):
+						statusStr=isFrench?"":"Claim is received successfully by the network and will be batch forwarded onto the carrier for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
+						break;
+					case ("M"):
+						statusStr=isFrench?"":"Manual claim form should be submitted by the patient or the dental office.";
+						break;
+				}
+			}
+			return doc.DrawField(g,isFrench?"STATUT":"STATUS",statusStr,true,X,Y);
 		}
 
 		private SizeF PrintComment(Graphics g,float X,float Y) {
@@ -2020,23 +2020,26 @@ namespace OpenDental.Eclaims {
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}
 
-		private SizeF PrintUniqueIdNo(Graphics g,float X,float Y) {
-			CCDField uniqueIdNo=formData.GetFieldById("B01");
-			return doc.DrawField(g,uniqueIdNo.GetFieldName(isFrench),uniqueIdNo.valuestr,false,X,Y);
+		///<summary>Corresponds to field B01.</summary>
+		private SizeF PrintTreatmentProviderID(Graphics g,float X,float Y) {
+			CCDField treatmentProviderID=formData.GetFieldById("B01");
+			return doc.DrawField(g,treatmentProviderID.GetFieldName(isFrench),treatmentProviderID.valuestr,false,X,Y);
 		}
 
-		private SizeF PrintOfficeNumber(Graphics g,float X,float Y) {
+		///<summary>Corresponds to field B02.</summary>
+		private SizeF PrintTreatmentProviderOfficeNumber(Graphics g,float X,float Y) {
 			CCDField cdaOfficeNumber=formData.GetFieldById("B02");
 			return doc.DrawField(g,cdaOfficeNumber.GetFieldName(isFrench),cdaOfficeNumber.valuestr,false,X,Y);
 		}
 
-		private SizeF PrintDentalOfficeClaimReferenceNo(Graphics g,float X,float Y) {
-			CCDField[] dentalOfficeClaimReferenceNos=formData.GetFieldsById("A02");
-			if(dentalOfficeClaimReferenceNos==null || dentalOfficeClaimReferenceNos.Length==0){
+		///<summary>Corresponds to field A02.</summary>
+		private SizeF PrintOfficeSequenceNumber(Graphics g,float X,float Y) {
+			CCDField[] officeSequenceNumbers=formData.GetFieldsById("A02");
+			if(officeSequenceNumbers==null || officeSequenceNumbers.Length==0){
 				throw new Exception("There are no instances of field A02 to read, cannot print dental office claim reference number.");
 			}
-			return doc.DrawField(g,dentalOfficeClaimReferenceNos[0].GetFieldName(isFrench),
-				dentalOfficeClaimReferenceNos[0].valuestr,false,X,Y);
+			return doc.DrawField(g,officeSequenceNumbers[0].GetFieldName(isFrench),
+				officeSequenceNumbers[0].valuestr,false,X,Y);
 		}
 
 		private SizeF PrintPatientName(Graphics g,float X,float Y) {
@@ -2065,7 +2068,7 @@ namespace OpenDental.Eclaims {
 			if(primary){
 				text=insplan.GroupNum;//Field C01
 			}
-			else if(claim.PlanNum2>0){
+			else if(insplan2.PlanNum>0){
 				text=insplan2.GroupNum;//Field E02
 			}
 			return doc.DrawField(g,isFrench?"NO DE POLICE":"POLICY NO",text,true,X,Y);
@@ -2160,8 +2163,9 @@ namespace OpenDental.Eclaims {
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}
 
+		///<summary>Corresponds to field C03.</summary>
 		private SizeF PrintRelationshipToSubscriber(Graphics g,float X,float Y,bool useCaps) {
-			text=GetPatientRelationshipString(claim.PatRelat);//Field C03
+			text=GetPatientRelationshipString(patPlanPri.Relationship);
 			string engStr="Relationship to subscriber";
 			string frStr="Parenté avec titulaire";
 			string label=isFrench?frStr:engStr;
@@ -2270,7 +2274,7 @@ namespace OpenDental.Eclaims {
 			if(stud){
 				x=doc.StartElement();
 				text=patient.SchoolName;
-				doc.DrawField(g,isFrench?"Étudiant: Nom de l'institution qu'il fréquente":
+				doc.DrawField(g,isFrench?"Si étudiant nom de l'école":
 					"If Student, Name of student's school",text,stud,x,0);
 			}
 			x=doc.PopX();//End indentation.
@@ -2280,25 +2284,21 @@ namespace OpenDental.Eclaims {
 			x+=doc.DrawString(g,bullet.ToString()+". ",x,0).Width;
 			bullet++;
 			doc.PushX(x);//Save indentation spot for this bullet point.
-			text=isFrench?	"A-t-il droit à des prestations ou services dans un autre régime de soins dentaires,"+
-											"régime collectif ou gouvernemental? ":
-											"Are any Dental Benefits or services provided under any other group insurance or "+
-											"dental plan, WCB or government plan? ";			
+			text=isFrench?	"A-t-il droit à des prestations ou services dans un autre régime dentaire, régime collectif ou gouvernemental? ":"Are any Dental Benefits or services provided under any other group insurance or dental plan, WCB or gov’t plan? ";			
 			//Only print secondary coverage information on the primary claim report.
-			if(ThisIsPrimary() && claim.PlanNum2!=0){
+			if(ThisIsPrimary() && insplan2!=null && insplan2.PlanNum!=0){
 				doc.DrawString(g,text+(isFrench?"Oui":"Yes"),x,0);
 				x=doc.StartElement();
 				PrintPolicyNo(g,x,0,false);
-				PrintSecondaryDependantNo(g,x+400,0);
-				x=doc.StartElement();
-				text=DateToString(subscriber2.Birthdate);//Field E04
-				doc.DrawField(g,isFrench?"Date de naissance du titulaire":"Insured/Member Date of Birth",text,true,x,0);
-				PrintCertificateNo(g,x+400,0,false);
-				x=doc.StartElement();
 				text=secondaryCarrier.CarrierName;
-				doc.DrawField(g,isFrench?"Nom de l'assureur/administrateur":"Name of Insurer/Plan Administrator",text,true,x,0);
+				doc.DrawField(g,isFrench?"Nom de l'assureur/administrateur":"Name of Insurer/Plan Administrator",text,true,x+200,0);
 				x=doc.StartElement();
-				text=GetPatientRelationshipString(claim.PatRelat2);//Field E06
+				PrintCertificateNo(g,x,0,false);
+				PrintSecondaryDependantNo(g,x+200,0);
+				text=DateToString(subscriber2.Birthdate);//Field E04
+				doc.DrawField(g,isFrench?"Date de naissance du titulaire":"Insured/Member Date of Birth",text,true,x+400,0);			
+				x=doc.StartElement();
+				text=GetPatientRelationshipString(patPlanSec.Relationship);//Field E06
 				doc.DrawField(g,isFrench?"Parenté avec patient":"Relationship to Patient",text,true,x,0);
 			}
 			else{
@@ -2308,7 +2308,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintAccidentBullet(Graphics g){
-			PrintAccidentBullet(g,isFrench?"Y a-t-il un traitement requis par suite d'un accident?":
+			PrintAccidentBullet(g,isFrench?"Y-a-t-il un traitement requis par suite d'un accident?":
 				"Is any treatment required as the result of an accident?");
 		}
 
@@ -2397,7 +2397,7 @@ namespace OpenDental.Eclaims {
 			doc.PushX(x);//Begin indentation.
 			x+=doc.DrawString(g,isFrench?"S'agit-il d'un traitement en vue de soins d'orthodontie? ":
 				"Is any treatment provided for orthodontic purposes? ",x,0).Width;
-			if(claim.IsOrtho){//Field F05
+			if(claim!=null && claim.IsOrtho){//Field F05
 				doc.DrawString(g,isFrench?"Oui":"Yes",x,0);
 				x=doc.StartElement();
 				PrintMissingToothList(g);
