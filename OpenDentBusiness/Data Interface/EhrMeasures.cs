@@ -45,10 +45,19 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+		///<summary>Select All EHRMeasures</summary>
+		public static List<EhrMeasure> SelectAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrMeasure>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM ehrmeasure";
+			return Crud.EhrMeasureCrud.SelectMany(command);
+		}
 
-		///<summary></summary>
+		//Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		/*
+		 ///<summary>Select Many</summary>
 		public static List<EhrMeasure> Refresh(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrMeasure>>(MethodBase.GetCurrentMethod(),patNum);
@@ -56,7 +65,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM ehrmeasure WHERE PatNum = "+POut.Long(patNum);
 			return Crud.EhrMeasureCrud.SelectMany(command);
 		}
-
+		*/
 		///<summary>Gets one EhrMeasure from the db.</summary>
 		public static EhrMeasure GetOne(long ehrMeasureNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -92,7 +101,7 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM ehrmeasure WHERE EhrMeasureNum = "+POut.Long(ehrMeasureNum);
 			Db.NonQ(command);
 		}
-		*/
+		
 
 
 
