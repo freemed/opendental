@@ -34,5 +34,46 @@
 	Problems:
 	<br />
 
+	<asp:GridView ID="GridViewProblem" runat="server" 
+		AutoGenerateColumns="False">
+		<Columns>
+		<asp:TemplateField HeaderText="ICD">
+			<ItemTemplate>
+			<%#OpenDentBusiness.Mobile.ICD9ms.GetOne(((OpenDentBusiness.Mobile.Diseasem)Container.DataItem).CustomerNum,((OpenDentBusiness.Mobile.Diseasem)Container.DataItem).DiseaseDefNum).Description%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="Problem">
+			<ItemTemplate>
+			<%#OpenDentBusiness.Mobile.DiseaseDefms.GetOne(((OpenDentBusiness.Mobile.Diseasem)Container.DataItem).CustomerNum,((OpenDentBusiness.Mobile.Diseasem)Container.DataItem).DiseaseDefNum).DiseaseName%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="Notes">
+			<ItemTemplate>
+			<%#((OpenDentBusiness.Mobile.Diseasem)Container.DataItem).PatNote%>
+			</ItemTemplate>
+			</asp:TemplateField>
+		</Columns>
+	</asp:GridView>
+	<br />
+	<br />
+	<br />
+		Allergies:
+	<br />
+
+	<asp:GridView ID="GridViewAllergy" runat="server" 
+		AutoGenerateColumns="False">
+		<Columns>
+			<asp:TemplateField HeaderText="Allergy">
+			<ItemTemplate>
+			<%#OpenDentBusiness.Mobile.AllergyDefms.GetOne(((OpenDentBusiness.Mobile.Allergym)Container.DataItem).CustomerNum,((OpenDentBusiness.Mobile.Allergym)Container.DataItem).AllergyDefNum).Description%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="Reaction">
+			<ItemTemplate>
+			<%#((OpenDentBusiness.Mobile.Allergym)Container.DataItem).Reaction%>
+			</ItemTemplate>
+			</asp:TemplateField>
+		</Columns>
+	</asp:GridView>
 
 </asp:Content>

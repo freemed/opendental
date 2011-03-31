@@ -10,8 +10,8 @@ namespace OpenDentBusiness.Mobile{
 
 		#region Only used for webserver for Patient Portal.
 		///<summary>Gets one Medicationm from the db.</summary>
-		public static Allergym GetOne(long customerNum,long allergyNum) {
-			return Crud.AllergymCrud.SelectOne(customerNum,allergyNum);
+		public static AllergyDefm GetOne(long customerNum,long allergyNum) {
+			return Crud.AllergyDefmCrud.SelectOne(customerNum,allergyNum);
 		}
 		#endregion
 

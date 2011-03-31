@@ -42,6 +42,23 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
+		public bool IsPaidCustomer(String RegistrationKey) {
+			bool IsPaidCustomer=false;
+			try {
+				Logger.Information("In IsPaidCustomer");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum!=0) {
+					IsPaidCustomer=util.IsPaidCustomer(customerNum);
+				}
+				return IsPaidCustomer;
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				return IsPaidCustomer;
+			}
+		}
+
+		[WebMethod]
 		public void DeleteAllRecords(String RegistrationKey) {
 			try {
 				Logger.Information("In DeleteAllRecords");
@@ -51,6 +68,11 @@ namespace WebHostSynch {
 				}
 				Medicationms.DeleteAll(customerNum);
 				MedicationPatms.DeleteAll(customerNum);
+				AllergyDefms.DeleteAll(customerNum);
+				Allergyms.DeleteAll(customerNum);
+				DiseaseDefms.DeleteAll(customerNum);
+				Diseasems.DeleteAll(customerNum);
+				ICD9ms.DeleteAll(customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);

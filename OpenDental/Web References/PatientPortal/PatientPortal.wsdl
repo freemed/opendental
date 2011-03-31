@@ -26,6 +26,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="IsPaidCustomer">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsPaidCustomerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IsPaidCustomerResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="DeleteAllRecords">
         <s:complexType>
           <s:sequence>
@@ -263,6 +277,12 @@
   <wsdl:message name="GetCustomerNumSoapOut">
     <wsdl:part name="parameters" element="tns:GetCustomerNumResponse" />
   </wsdl:message>
+  <wsdl:message name="IsPaidCustomerSoapIn">
+    <wsdl:part name="parameters" element="tns:IsPaidCustomer" />
+  </wsdl:message>
+  <wsdl:message name="IsPaidCustomerSoapOut">
+    <wsdl:part name="parameters" element="tns:IsPaidCustomerResponse" />
+  </wsdl:message>
   <wsdl:message name="DeleteAllRecordsSoapIn">
     <wsdl:part name="parameters" element="tns:DeleteAllRecords" />
   </wsdl:message>
@@ -320,6 +340,10 @@
       <wsdl:input message="tns:GetCustomerNumSoapIn" />
       <wsdl:output message="tns:GetCustomerNumSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="IsPaidCustomer">
+      <wsdl:input message="tns:IsPaidCustomerSoapIn" />
+      <wsdl:output message="tns:IsPaidCustomerSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="DeleteAllRecords">
       <wsdl:input message="tns:DeleteAllRecordsSoapIn" />
       <wsdl:output message="tns:DeleteAllRecordsSoapOut" />
@@ -366,6 +390,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetCustomerNum">
       <soap:operation soapAction="http://opendental.com/GetCustomerNum" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsPaidCustomer">
+      <soap:operation soapAction="http://opendental.com/IsPaidCustomer" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -459,6 +492,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetCustomerNum">
       <soap12:operation soapAction="http://opendental.com/GetCustomerNum" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsPaidCustomer">
+      <soap12:operation soapAction="http://opendental.com/IsPaidCustomer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

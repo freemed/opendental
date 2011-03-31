@@ -19,7 +19,13 @@ namespace ODWebsite {
 			LabelPatientName.Text=((Patientm)Session["Patient"]).LName + " " +((Patientm)Session["Patient"]).FName;
 			List<MedicationPatm> mMedicationPatmList= MedicationPatms.GetMedicationPatms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
 			GridViewMedication.DataSource = mMedicationPatmList;
-			GridViewMedication.DataBind(); 
+			GridViewMedication.DataBind();
+			List<Diseasem> mDiseasemList= Diseasems.GetDiseasems(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
+			GridViewProblem.DataSource = mDiseasemList;
+			GridViewProblem.DataBind();
+			List<Allergym> mAllergymList= Allergyms.GetAllergyms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
+			GridViewAllergy.DataSource = mAllergymList;
+			GridViewAllergy.DataBind();
 		}
 
 		public string GetDiscontinued(bool IsDiscontinued) {

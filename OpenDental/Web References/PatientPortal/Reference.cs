@@ -36,6 +36,8 @@ namespace OpenDental.PatientPortal {
         
         private System.Threading.SendOrPostCallback GetCustomerNumOperationCompleted;
         
+        private System.Threading.SendOrPostCallback IsPaidCustomerOperationCompleted;
+        
         private System.Threading.SendOrPostCallback DeleteAllRecordsOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchMedicationsOperationCompleted;
@@ -95,6 +97,9 @@ namespace OpenDental.PatientPortal {
         
         /// <remarks/>
         public event GetCustomerNumCompletedEventHandler GetCustomerNumCompleted;
+        
+        /// <remarks/>
+        public event IsPaidCustomerCompletedEventHandler IsPaidCustomerCompleted;
         
         /// <remarks/>
         public event DeleteAllRecordsCompletedEventHandler DeleteAllRecordsCompleted;
@@ -173,6 +178,35 @@ namespace OpenDental.PatientPortal {
             if ((this.GetCustomerNumCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetCustomerNumCompleted(this, new GetCustomerNumCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/IsPaidCustomer", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public bool IsPaidCustomer(string RegistrationKey) {
+            object[] results = this.Invoke("IsPaidCustomer", new object[] {
+                        RegistrationKey});
+            return ((bool)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void IsPaidCustomerAsync(string RegistrationKey) {
+            this.IsPaidCustomerAsync(RegistrationKey, null);
+        }
+        
+        /// <remarks/>
+        public void IsPaidCustomerAsync(string RegistrationKey, object userState) {
+            if ((this.IsPaidCustomerOperationCompleted == null)) {
+                this.IsPaidCustomerOperationCompleted = new System.Threading.SendOrPostCallback(this.OnIsPaidCustomerOperationCompleted);
+            }
+            this.InvokeAsync("IsPaidCustomer", new object[] {
+                        RegistrationKey}, this.IsPaidCustomerOperationCompleted, userState);
+        }
+        
+        private void OnIsPaidCustomerOperationCompleted(object arg) {
+            if ((this.IsPaidCustomerCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.IsPaidCustomerCompleted(this, new IsPaidCustomerCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -481,6 +515,32 @@ namespace OpenDental.PatientPortal {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((long)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void IsPaidCustomerCompletedEventHandler(object sender, IsPaidCustomerCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class IsPaidCustomerCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal IsPaidCustomerCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
             }
         }
     }

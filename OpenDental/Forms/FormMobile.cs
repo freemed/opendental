@@ -187,6 +187,20 @@ namespace OpenDental {
 			changed=true;
 		}
 
+		private void butFullSync_Click1(object sender,EventArgs e) {
+			if(!SavePrefs()) {
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will be time consuming. Continue anyway?")) {
+				return;
+			}
+			//for full synch, delete all records then repopulate.
+			pp.Url="http://localhost:2923/PatientPortal.asmx";
+			IgnoreCertificateErrors();
+			pp.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
+			SynchPatientPortalFromMain();
+			
+		}
 		private void butSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
@@ -278,7 +292,6 @@ namespace OpenDental {
 
 		///<summary>dennis: code for patient portal starts here. This code may be moved to another location later</summary>
 		private static void UploadWorkerPatPortal(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
-
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
 			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
@@ -287,8 +300,7 @@ namespace OpenDental {
 			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 			int totalCount=medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count;
-			pp.Url="http://localhost:2923/PatientPortal.asmx";
-			IgnoreCertificateErrors();
+			
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
 			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
@@ -314,32 +326,32 @@ namespace OpenDental {
 				List<long> BlockPKNumList=PKNumList.GetRange(start,LocalBatchSize);
 				switch(entity) {
 					case SynchEntity.medication:
-					//List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
-					//pp.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
+						List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
+						pp.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
 					break;
 					case SynchEntity.medicationpat:
 						List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
 						pp.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
 					break;
 					case SynchEntity.allergy:
-					//List<Allergym> ChangedAllergyList=Allergyms.GetMultAllergyms(BlockPKNumList);
-					//pp.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
+						List<Allergym> ChangedAllergyList=Allergyms.GetMultAllergyms(BlockPKNumList);
+						pp.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
 					break;
 					case SynchEntity.allergydef:
-					//List<AllergyDefm> ChangedAllergyDefList=AllergyDefms.GetMultAllergyDefms(BlockPKNumList);
-					//pp.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
+						List<AllergyDefm> ChangedAllergyDefList=AllergyDefms.GetMultAllergyDefms(BlockPKNumList);
+						pp.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
 					break;
 					case SynchEntity.disease:
-					//List<Diseasem> ChangedDiseaseList=Diseasems.GetMultDiseasems(BlockPKNumList);
-					//pp.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
+						List<Diseasem> ChangedDiseaseList=Diseasems.GetMultDiseasems(BlockPKNumList);
+						pp.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
 					break;
 					case SynchEntity.diseasedef:
-					//List<DiseaseDefm> ChangedDiseaseDefList=DiseaseDefms.GetMultDiseaseDefms(BlockPKNumList);
-					//pp.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
+						List<DiseaseDefm> ChangedDiseaseDefList=DiseaseDefms.GetMultDiseaseDefms(BlockPKNumList);
+						pp.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
 					break;
 					case SynchEntity.icd9:
-					//List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
-					//pp.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
+						List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
+						pp.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
 					break;
 
 				}
@@ -411,10 +423,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Only called from FormOpenDental</summary>
-		public static void SynchPatientPortalFromMain() {
-			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
-				return;
-			}
+		public  void SynchPatientPortalFromMain() {
 			if(IsSynching) {
 				return;
 			}
@@ -428,7 +437,8 @@ namespace OpenDental {
 			if(!TestWebServiceExists()) {
 				return;
 			}
-			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			//DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			DateTime changedSince=DateTime.Now.AddYears(-1);
 			FormProgress FormP=new FormProgress();//but we won't display it.
 			FormP.NumberFormat="";
 			FormP.DisplayText="";
@@ -436,6 +446,16 @@ namespace OpenDental {
 			ThreadStart uploadDelegate= delegate { UploadWorkerPatPortal(changedSince,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
+			//display the progress dialog to the user:
+			FormP.NumberMultiplication=100;
+			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
+			FormP.NumberFormat="F0";
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.Cancel) {
+				workerThread.Abort();
+			}
+			IsSynching=false;
+			changed=true;
 		}
 
 		#region Testing
