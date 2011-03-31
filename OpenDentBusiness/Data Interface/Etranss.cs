@@ -273,7 +273,7 @@ namespace OpenDentBusiness{
 				etrans.CarrierTransCounter++;
 			//}
 			Insert(etrans);
-			return etrans;
+			return GetEtrans(etrans.EtransNum);//Since the DateTimeTrans is set upon insert, we need to read the record again in order to get the date.
 		}
 
 		///<summary>Only used by Canadian code right now.  CAUTION!  This does not update the EtransMessageTextNum field of an object in memory without a refresh.</summary>
@@ -436,7 +436,7 @@ namespace OpenDentBusiness{
 			EtransMessageTexts.Insert(etransMessageText);
 			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans);
-			return etrans;
+			return GetEtrans(etrans.EtransNum);//Since the DateTimeTrans is set upon insert, we need to read the record again in order to get the date.
 		}
 
 		///<summary>Etrans type will be figured out by this class.  Either TextReport, Acknowledge_997, or StatusNotify_277.</summary>

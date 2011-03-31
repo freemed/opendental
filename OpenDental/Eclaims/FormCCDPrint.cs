@@ -18,6 +18,9 @@ using CodeBase;
  * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
  * *Add option in UI to print dentist copy.
  * *Rejection notice print out does not yet align procedure amounts by decimal (they are currently left aligned).
+ * 
+ * *After we pass testing:
+ * -Do not let the user send eligibility checks to carriers which do not support such inquiries.
  */
 
 namespace OpenDental.Eclaims {
