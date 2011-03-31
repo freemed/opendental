@@ -80,5 +80,43 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
+		public static List<long> GetChangedSinceAllergyDefNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT AllergyDefNum FROM allergydef WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> allergyDefNums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				allergyDefNums.Add(PIn.Long(dt.Rows[i]["AllergyDefNum"].ToString()));
+			}
+			return allergyDefNums;
+		}
+
+		///<summary>Used along with GetChangedSinceAllergyDefNums</summary>
+		public static List<AllergyDef> GetMultAllergyDefs(List<long> allergyDefNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<AllergyDef>>(MethodBase.GetCurrentMethod(),allergyDefNums);
+			}
+			string strAllergyDefNums="";
+			DataTable table;
+			if(allergyDefNums.Count>0) {
+				for(int i=0;i<allergyDefNums.Count;i++) {
+					if(i>0) {
+						strAllergyDefNums+="OR ";
+					}
+					strAllergyDefNums+="AllergyDefNum='"+allergyDefNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM allergydef WHERE "+strAllergyDefNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			AllergyDef[] multAllergyDefs=Crud.AllergyDefCrud.TableToList(table).ToArray();
+			List<AllergyDef> allergyDefList=new List<AllergyDef>(multAllergyDefs);
+			return allergyDefList;
+		}
+
 	}
 }

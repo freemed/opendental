@@ -49,6 +49,7 @@ namespace OpenDentBusiness.Crud{
 				iCD9.ICD9Num    = PIn.Long  (table.Rows[i]["ICD9Num"].ToString());
 				iCD9.ICD9Code   = PIn.String(table.Rows[i]["ICD9Code"].ToString());
 				iCD9.Description= PIn.String(table.Rows[i]["Description"].ToString());
+				iCD9.DateTStamp = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(iCD9);
 			}
 			return retVal;
@@ -96,6 +97,7 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				 "'"+POut.String(iCD9.ICD9Code)+"',"
 				+"'"+POut.String(iCD9.Description)+"')";
+				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -110,6 +112,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE icd9 SET "
 				+"ICD9Code   = '"+POut.String(iCD9.ICD9Code)+"', "
 				+"Description= '"+POut.String(iCD9.Description)+"' "
+				//DateTStamp can only be set by MySQL
 				+"WHERE ICD9Num = "+POut.Long(iCD9.ICD9Num);
 			Db.NonQ(command);
 		}
@@ -125,6 +128,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Description = '"+POut.String(iCD9.Description)+"'";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

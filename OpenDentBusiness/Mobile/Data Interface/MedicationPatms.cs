@@ -8,8 +8,6 @@ namespace OpenDentBusiness.Mobile{
 	///<summary></summary>
 	public class MedicationPatms{
 		#region Only used for webserver for mobile.
-
-
 		///<summary>Gets all MedicationPatm for a single patient </summary>
 		public static List<MedicationPatm> GetMedicationPatms(long customerNum,long patNum) {
 			string command=

@@ -86,17 +86,16 @@ namespace WebHostSynch {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
-
-
+	
 		[WebMethod]
-		public void SynchMedicationPats(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+		public void SynchAllergies(String RegistrationKey,List<Allergym> allergyList) {
 			try {
-				Logger.Information("In SynchMedicationPats");
+				Logger.Information("In SynchAllergies");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
 				}
-				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+				Allergyms.UpdateFromChangeList(allergyList,customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -104,14 +103,14 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void SynchAllergies(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+		public void SynchAllergyDefs(String RegistrationKey,List<AllergyDefm> allergyDefList) {
 			try {
-				Logger.Information("In SynchMedicationPats");
+				Logger.Information("In SynchAllergyDefs");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
 				}
-				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+				AllergyDefms.UpdateFromChangeList(allergyDefList,customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -119,46 +118,14 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void SynchAllergyDefs(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+		public void SynchDiseases(String RegistrationKey,List<Diseasem> diseaseList) {
 			try {
-				Logger.Information("In SynchMedicationPats");
+				Logger.Information("In SynchDiseases");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
 				}
-				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
-			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
-
-
-		[WebMethod]
-		public void SynchDiseases(String RegistrationKey,List<MedicationPatm> medicationPatList) {
-			try {
-				Logger.Information("In SynchMedicationPats");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
-				}
-				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
-			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
-
-
-		[WebMethod]
-		public void SynchDiseaseDefs(String RegistrationKey,List<MedicationPatm> medicationPatList) {
-			try {
-				Logger.Information("In SynchMedicationPats");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
-				}
-				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+				Diseasems.UpdateFromChangeList(diseaseList,customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -166,21 +133,36 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
-		public void SynchICD9s(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+		public void SynchDiseaseDefs(String RegistrationKey,List<DiseaseDefm> diseaseDefList) {
 			try {
-				Logger.Information("In SynchMedicationPats");
+				Logger.Information("In SynchDiseaseDefs");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;
 				}
-				MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+				DiseaseDefms.UpdateFromChangeList(diseaseDefList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+
+		[WebMethod]
+		public void SynchICD9s(String RegistrationKey,List<ICD9m> icd9List) {
+			try {
+				Logger.Information("In SynchICD9s");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				ICD9ms.UpdateFromChangeList(icd9List,customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 					
-
+	
 
 	}
 }

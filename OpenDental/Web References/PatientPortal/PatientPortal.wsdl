@@ -99,6 +99,156 @@
       <s:element name="SynchMedicationPatsResponse">
         <s:complexType />
       </s:element>
+      <s:element name="SynchAllergies">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="allergyList" type="tns:ArrayOfAllergym" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfAllergym">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Allergym" nillable="true" type="tns:Allergym" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Allergym">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="AllergyNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="AllergyDefNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="Reaction" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="StatusIsActive" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchAllergiesResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchAllergyDefs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="allergyDefList" type="tns:ArrayOfAllergyDefm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfAllergyDefm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AllergyDefm" nillable="true" type="tns:AllergyDefm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AllergyDefm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="AllergyDefNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchAllergyDefsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchDiseases">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="diseaseList" type="tns:ArrayOfDiseasem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDiseasem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Diseasem" nillable="true" type="tns:Diseasem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Diseasem">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DiseaseNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DiseaseDefNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="PatNote" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ICD9Num" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="ProbStatus" type="tns:ProblemStatus" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="ProblemStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Active" />
+          <s:enumeration value="Resolved" />
+          <s:enumeration value="Inactive" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SynchDiseasesResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchDiseaseDefs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="diseaseDefList" type="tns:ArrayOfDiseaseDefm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDiseaseDefm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DiseaseDefm" nillable="true" type="tns:DiseaseDefm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DiseaseDefm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DiseaseDefNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="DiseaseName" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchDiseaseDefsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchICD9s">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="icd9List" type="tns:ArrayOfICD9m" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfICD9m">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ICD9m" nillable="true" type="tns:ICD9m" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ICD9m">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="ICD9Num" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="ICD9Code" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchICD9sResponse">
+        <s:complexType />
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="ServiceExistsSoapIn">
@@ -131,6 +281,36 @@
   <wsdl:message name="SynchMedicationPatsSoapOut">
     <wsdl:part name="parameters" element="tns:SynchMedicationPatsResponse" />
   </wsdl:message>
+  <wsdl:message name="SynchAllergiesSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchAllergies" />
+  </wsdl:message>
+  <wsdl:message name="SynchAllergiesSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchAllergiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="SynchAllergyDefsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchAllergyDefs" />
+  </wsdl:message>
+  <wsdl:message name="SynchAllergyDefsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchAllergyDefsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SynchDiseasesSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchDiseases" />
+  </wsdl:message>
+  <wsdl:message name="SynchDiseasesSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchDiseasesResponse" />
+  </wsdl:message>
+  <wsdl:message name="SynchDiseaseDefsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchDiseaseDefs" />
+  </wsdl:message>
+  <wsdl:message name="SynchDiseaseDefsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchDiseaseDefsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SynchICD9sSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchICD9s" />
+  </wsdl:message>
+  <wsdl:message name="SynchICD9sSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchICD9sResponse" />
+  </wsdl:message>
   <wsdl:portType name="PatientPortalSoap">
     <wsdl:operation name="ServiceExists">
       <wsdl:input message="tns:ServiceExistsSoapIn" />
@@ -151,6 +331,26 @@
     <wsdl:operation name="SynchMedicationPats">
       <wsdl:input message="tns:SynchMedicationPatsSoapIn" />
       <wsdl:output message="tns:SynchMedicationPatsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchAllergies">
+      <wsdl:input message="tns:SynchAllergiesSoapIn" />
+      <wsdl:output message="tns:SynchAllergiesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchAllergyDefs">
+      <wsdl:input message="tns:SynchAllergyDefsSoapIn" />
+      <wsdl:output message="tns:SynchAllergyDefsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchDiseases">
+      <wsdl:input message="tns:SynchDiseasesSoapIn" />
+      <wsdl:output message="tns:SynchDiseasesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchDiseaseDefs">
+      <wsdl:input message="tns:SynchDiseaseDefsSoapIn" />
+      <wsdl:output message="tns:SynchDiseaseDefsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchICD9s">
+      <wsdl:input message="tns:SynchICD9sSoapIn" />
+      <wsdl:output message="tns:SynchICD9sSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="PatientPortalSoap" type="tns:PatientPortalSoap">
@@ -200,6 +400,51 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SynchAllergies">
+      <soap:operation soapAction="http://opendental.com/SynchAllergies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchAllergyDefs">
+      <soap:operation soapAction="http://opendental.com/SynchAllergyDefs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchDiseases">
+      <soap:operation soapAction="http://opendental.com/SynchDiseases" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchDiseaseDefs">
+      <soap:operation soapAction="http://opendental.com/SynchDiseaseDefs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchICD9s">
+      <soap:operation soapAction="http://opendental.com/SynchICD9s" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="PatientPortalSoap12" type="tns:PatientPortalSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -241,6 +486,51 @@
     </wsdl:operation>
     <wsdl:operation name="SynchMedicationPats">
       <soap12:operation soapAction="http://opendental.com/SynchMedicationPats" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchAllergies">
+      <soap12:operation soapAction="http://opendental.com/SynchAllergies" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchAllergyDefs">
+      <soap12:operation soapAction="http://opendental.com/SynchAllergyDefs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchDiseases">
+      <soap12:operation soapAction="http://opendental.com/SynchDiseases" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchDiseaseDefs">
+      <soap12:operation soapAction="http://opendental.com/SynchDiseaseDefs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchICD9s">
+      <soap12:operation soapAction="http://opendental.com/SynchICD9s" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

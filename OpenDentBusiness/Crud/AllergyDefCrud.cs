@@ -49,6 +49,7 @@ namespace OpenDentBusiness.Crud{
 				allergyDef.AllergyDefNum= PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
 				allergyDef.Description  = PIn.String(table.Rows[i]["Description"].ToString());
 				allergyDef.IsHidden     = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
+				allergyDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(allergyDef);
 			}
 			return retVal;
@@ -96,6 +97,7 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				 "'"+POut.String(allergyDef.Description)+"',"
 				+    POut.Bool  (allergyDef.IsHidden)+")";
+				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -110,6 +112,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE allergydef SET "
 				+"Description  = '"+POut.String(allergyDef.Description)+"', "
 				+"IsHidden     =  "+POut.Bool  (allergyDef.IsHidden)+" "
+				//DateTStamp can only be set by MySQL
 				+"WHERE AllergyDefNum = "+POut.Long(allergyDef.AllergyDefNum);
 			Db.NonQ(command);
 		}
@@ -125,6 +128,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="IsHidden = "+POut.Bool(allergyDef.IsHidden)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

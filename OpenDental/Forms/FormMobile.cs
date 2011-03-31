@@ -279,28 +279,25 @@ namespace OpenDental {
 		///<summary>dennis: code for patient portal starts here. This code may be moved to another location later</summary>
 		private static void UploadWorkerPatPortal(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
 
-			//List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
+			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
-			//List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
-			//List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
-			//List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
-			//List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince);
-			//List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-
-			//int totalCount=medicationNumList.Count+medicationPatNumList.Count;
-			int totalCount=medicationPatNumList.Count;
+			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
+			List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
+			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
+			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince);
+			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
+			int totalCount=medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count;
 			pp.Url="http://localhost:2923/PatientPortal.asmx";
 			IgnoreCertificateErrors();
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
-
-			//SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
+			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
-			//SynchGeneric(allergyDefNumList,SynchEntity.allergy,ref FormP);
-			//SynchGeneric(allergyNumList,SynchEntity.allergydef,ref FormP);
-			//SynchGeneric(diseaseDefNumList,SynchEntity.disease,ref FormP);
-			//SynchGeneric(diseaseNumList,SynchEntity.diseasedef,ref FormP);
-			//SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
+			SynchGeneric(allergyDefNumList,SynchEntity.allergy,ref FormP);
+			SynchGeneric(allergyNumList,SynchEntity.allergydef,ref FormP);
+			SynchGeneric(diseaseDefNumList,SynchEntity.disease,ref FormP);
+			SynchGeneric(diseaseNumList,SynchEntity.diseasedef,ref FormP);
+			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 			IsSynching=false;
 		}
@@ -431,7 +428,6 @@ namespace OpenDental {
 			if(!TestWebServiceExists()) {
 				return;
 			}
-			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 			FormProgress FormP=new FormProgress();//but we won't display it.
 			FormP.NumberFormat="";

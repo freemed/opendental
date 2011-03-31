@@ -67,6 +67,43 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
+		public static List<long> GetChangedSinceDiseaseNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT DiseaseNum FROM disease WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> diseasenums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				diseasenums.Add(PIn.Long(dt.Rows[i]["DiseaseNum"].ToString()));
+			}
+			return diseasenums;
+		}
+
+		///<summary>Used along with GetChangedSinceDiseaseNums</summary>
+		public static List<Disease> GetMultDiseases(List<long> diseaseNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Disease>>(MethodBase.GetCurrentMethod(),diseaseNums);
+			}
+			string strDiseaseNums="";
+			DataTable table;
+			if(diseaseNums.Count>0) {
+				for(int i=0;i<diseaseNums.Count;i++) {
+					if(i>0) {
+						strDiseaseNums+="OR ";
+					}
+					strDiseaseNums+="DiseaseNum='"+diseaseNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM disease WHERE "+strDiseaseNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			Disease[] multDiseases=Crud.DiseaseCrud.TableToList(table).ToArray();
+			List<Disease> diseaseList=new List<Disease>(multDiseases);
+			return diseaseList;
+		}
 		
 		
 		

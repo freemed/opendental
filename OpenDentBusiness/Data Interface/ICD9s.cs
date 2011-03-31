@@ -94,7 +94,43 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static List<long> GetChangedSinceICD9Nums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT ICD9Num FROM icd9 WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> icd9Nums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				icd9Nums.Add(PIn.Long(dt.Rows[i]["ICD9Num"].ToString()));
+			}
+			return icd9Nums;
+		}
 
+		///<summary>Used along with GetChangedSinceICD9Nums</summary>
+		public static List<ICD9> GetMultICD9s(List<long> icd9Nums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ICD9>>(MethodBase.GetCurrentMethod(),icd9Nums);
+			}
+			string strICD9Nums="";
+			DataTable table;
+			if(icd9Nums.Count>0) {
+				for(int i=0;i<icd9Nums.Count;i++) {
+					if(i>0) {
+						strICD9Nums+="OR ";
+					}
+					strICD9Nums+="ICD9Num='"+icd9Nums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM icd9 WHERE "+strICD9Nums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			ICD9[] multICD9s=Crud.ICD9Crud.TableToList(table).ToArray();
+			List<ICD9> icd9List=new List<ICD9>(multICD9s);
+			return icd9List;
+		}
 
 	}
 }

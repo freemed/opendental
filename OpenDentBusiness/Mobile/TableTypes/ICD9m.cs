@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenDentBusiness.Mobile.TableTypes {
+namespace OpenDentBusiness.Mobile {
 	[Serializable]
 	[CrudTable(IsMobile=true)]
 	public class ICD9m:TableBase {

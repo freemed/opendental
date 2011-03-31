@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenDentBusiness.Mobile.TableTypes {
+namespace OpenDentBusiness.Mobile {
 
 	/// <summary>A list of diseases that can be assigned to patients.</summary>
 	[Serializable]

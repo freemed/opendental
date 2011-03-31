@@ -189,7 +189,44 @@ namespace OpenDentBusiness {
 			}
 			return 0;
 		}
-		
+
+		public static List<long> GetChangedSinceDiseaseDefNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT DiseaseDefNum FROM diseasedef WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> diseaseDefNums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				diseaseDefNums.Add(PIn.Long(dt.Rows[i]["DiseaseDefNum"].ToString()));
+			}
+			return diseaseDefNums;
+		}
+
+		///<summary>Used along with GetChangedSinceDiseaseDefNums</summary>
+		public static List<DiseaseDef> GetMultDiseaseDefs(List<long> diseaseDefNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<DiseaseDef>>(MethodBase.GetCurrentMethod(),diseaseDefNums);
+			}
+			string strDiseaseDefNums="";
+			DataTable table;
+			if(diseaseDefNums.Count>0) {
+				for(int i=0;i<diseaseDefNums.Count;i++) {
+					if(i>0) {
+						strDiseaseDefNums+="OR ";
+					}
+					strDiseaseDefNums+="DiseaseDefNum='"+diseaseDefNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM diseasedef WHERE "+strDiseaseDefNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			DiseaseDef[] multDiseaseDefs=Crud.DiseaseDefCrud.TableToList(table).ToArray();
+			List<DiseaseDef> diseaseDefList=new List<DiseaseDef>(multDiseaseDefs);
+			return diseaseDefList;
+		}
 		
 	}
 

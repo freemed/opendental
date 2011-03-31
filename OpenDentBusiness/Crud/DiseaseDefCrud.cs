@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				diseaseDef.DiseaseName  = PIn.String(table.Rows[i]["DiseaseName"].ToString());
 				diseaseDef.ItemOrder    = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
 				diseaseDef.IsHidden     = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
+				diseaseDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(diseaseDef);
 			}
 			return retVal;
@@ -98,6 +99,7 @@ namespace OpenDentBusiness.Crud{
 				 "'"+POut.String(diseaseDef.DiseaseName)+"',"
 				+    POut.Int   (diseaseDef.ItemOrder)+","
 				+    POut.Bool  (diseaseDef.IsHidden)+")";
+				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -113,6 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"DiseaseName  = '"+POut.String(diseaseDef.DiseaseName)+"', "
 				+"ItemOrder    =  "+POut.Int   (diseaseDef.ItemOrder)+", "
 				+"IsHidden     =  "+POut.Bool  (diseaseDef.IsHidden)+" "
+				//DateTStamp can only be set by MySQL
 				+"WHERE DiseaseDefNum = "+POut.Long(diseaseDef.DiseaseDefNum);
 			Db.NonQ(command);
 		}
@@ -132,6 +135,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="IsHidden = "+POut.Bool(diseaseDef.IsHidden)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}
