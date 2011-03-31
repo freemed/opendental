@@ -4199,7 +4199,54 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),15,-1,-1)";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergydef ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE allergydef SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergydef ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE allergydef SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE diseasedef ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE diseasedef SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE diseasedef ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE diseasedef SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE icd9 ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE icd9 SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE icd9 ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE icd9 SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medication ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE medication SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medication ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE medication SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4235,3 +4282,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 	
+

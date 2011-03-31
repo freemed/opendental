@@ -281,3 +281,128 @@ namespace OpenDentBusiness.Mobile {
 					Db.NonQ(command);
 				}
 				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS allergydefm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE allergydefm (
+						CustomerNum bigint NOT NULL,
+						AllergyDefNum bigint NOT NULL,
+						Description varchar(255) NOT NULL,
+						INDEX(CustomerNum),
+						INDEX(AllergyDefNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS allergym";
+					Db.NonQ(command);
+					command=@"CREATE TABLE allergym (
+						CustomerNum bigint NOT NULL,
+						AllergyNum bigint NOT NULL,
+						AllergyDefNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						Reaction varchar(255) NOT NULL,
+						StatusIsActive tinyint NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(AllergyNum),,
+						INDEX(AllergyDefNum),
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS diseasedefm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE diseasedefm (
+						CustomerNum bigint NOT NULL,
+						DiseaseDefNum bigint NOT NULL,
+						DiseaseName varchar(255) NOT NULL,
+						INDEX(CustomerNum),
+						INDEX(DiseaseDefNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS diseasem";
+					Db.NonQ(command);
+					command=@"CREATE TABLE diseasem (
+						CustomerNum bigint NOT NULL,
+						DiseaseNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						DiseaseDefNum bigint NOT NULL,
+						PatNote varchar(255) NOT NULL,
+						ICD9Num bigint NOT NULL,
+						ProbStatus tinyint NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(DiseaseNum),,
+						INDEX(PatNum),,
+						INDEX(DiseaseDefNum),
+						INDEX(ICD9Num)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS icd9m";
+					Db.NonQ(command);
+					command=@"CREATE TABLE icd9m (
+						CustomerNum bigint NOT NULL,
+						ICD9Num bigint NOT NULL,
+						ICD9Code varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						INDEX(CustomerNum),
+						INDEX(ICD9Num)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS medicationm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE medicationm (
+						CustomerNum bigint NOT NULL,
+						MedicationNum bigint NOT NULL,
+						MedName varchar(255) NOT NULL,
+						GenericNum bigint NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(MedicationNum),
+						INDEX(GenericNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS medicationpatm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE medicationpatm (
+						CustomerNum bigint NOT NULL,
+						MedicationPatNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						MedicationNum bigint NOT NULL,
+						PatNote varchar(255) NOT NULL,
+						IsDiscontinued tinyint NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(MedicationPatNum),,
+						INDEX(PatNum),
+						INDEX(MedicationNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
