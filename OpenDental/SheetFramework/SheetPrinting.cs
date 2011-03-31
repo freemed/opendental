@@ -220,6 +220,7 @@ namespace OpenDental {
 					fontstyle=FontStyle.Bold;
 				}
 				font=new Font(field.FontName,field.FontSize,fontstyle);
+				Plugins.HookAddCode(null,"SheetPrinting.pd_PrintPage_drawFieldLoop",field);
 				GraphicsHelper.DrawString(g,gfx,field.FieldValue,font,Brushes.Black,field.Bounds);
 				//g.DrawString(field.FieldValue,font,Brushes.Black,field.BoundsF);
 			}

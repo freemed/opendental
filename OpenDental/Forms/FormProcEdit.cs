@@ -3298,6 +3298,7 @@ namespace OpenDental{
 			//long provNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			long provNum=ProcCur.ProvNum;
 			textNotes.Text+=ProcCodeNotes.GetNote(provNum,ProcCur.CodeNum);
+			Plugins.HookAddCode(this,"FormProcEdit.butSetComplete_Click_end",ProcCur,ProcOld,textNotes);
 			listProcStatus.SelectedIndex=-1;
 			//radioStatusC.Checked=true;
 			ProcCur.ProcStatus=ProcStat.C;
@@ -3818,7 +3819,8 @@ namespace OpenDental{
 					"Delete for: "
 					+PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
 					+ProcCur.ProcFee.ToString("c"));
-				DialogResult=DialogResult.OK;	
+				DialogResult=DialogResult.OK;
+				Plugins.HookAddCode(this,"FormProcEdit.butDelete_Click_end",ProcCur);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -4416,6 +4418,7 @@ namespace OpenDental{
 				}
 			}
 			SaveAndClose();
+			Plugins.HookAddCode(this,"FormProcEdit.butOK_Click_end",ProcCur); 
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {

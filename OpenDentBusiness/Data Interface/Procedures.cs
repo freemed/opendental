@@ -1320,6 +1320,7 @@ namespace OpenDentBusiness {
 				if(oldProc.ProcStatus!=ProcStat.C) {
 					ProcList[i].Note+=ProcCodeNotes.GetNote(ProcList[i].ProvNum,ProcList[i].CodeNum);
 				}
+				Plugins.HookAddCode(null,"Procedures.SetCompleteInAppt_procLoop",ProcList[i],oldProc);
 				Procedures.Update(ProcList[i],oldProc);
 				Procedures.ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList,patientAge,subList);
 				ClaimProcs.SetProvForProc(ProcList[i],ClaimProcList);

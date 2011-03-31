@@ -5045,7 +5045,11 @@ namespace OpenDental{
 				}
 				else{
 					FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
-					FormP.ShowDialog();
+					Plugins.HookAddCode(this, "ContrChart.gridProg_CellDoubleClick_proc", proc, FormP);
+					if(!FormP.IsDisposed) { //Form might be disposed by the above hook.
+						FormP.ShowDialog();
+					} 
+					Plugins.HookAddCode(this, "ContrChart.gridProg_CellDoubleClick_proc2", proc, FormP);
 					if(FormP.DialogResult!=DialogResult.OK) {
 						return;
 					}
@@ -7357,6 +7361,7 @@ namespace OpenDental{
 					ToothInitials.SetValue(PatCur.PatNum,procCur.ToothNum,ToothInitialType.Missing);
 				}
 				procCur.ProcStatus=ProcStat.C;
+				Plugins.HookAddCode(this,"ContrChart.menuItemSetComplete_Click_procLoop",procCur,procOld);
 				Procedures.Update(procCur,procOld);
 				//Tried to move it to the business layer, but too complex for now.
 				//Procedures.SetComplete(
