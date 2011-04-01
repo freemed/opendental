@@ -11,6 +11,8 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormAllergySetup:Form {
 		private List<AllergyDef> listAllergyDefs;
+		public bool SelectMode;
+		public long AllergyNum;
 
 		public FormAllergySetup() {
 			InitializeComponent();
@@ -18,6 +20,10 @@ namespace OpenDental {
 		}
 
 		private void FormAllergySetup_Load(object sender,EventArgs e) {
+			if(SelectMode) {
+				butOK.Visible=true;
+				butClose.Text="Cancel";
+			}
 			FillGrid();
 		}
 
@@ -50,10 +56,20 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormAllergyDefEdit FADE=new FormAllergyDefEdit();
-			FADE.AllergyDefCur=listAllergyDefs[gridMain.GetSelectedIndex()];
-			FADE.ShowDialog();
-			FillGrid();
+			if(gridMain.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Select at least one allergy.");
+				return;
+			}
+			if(SelectMode) {
+				AllergyNum=listAllergyDefs[gridMain.GetSelectedIndex()].AllergyDefNum;
+				DialogResult=DialogResult.OK;
+			}
+			else {
+				FormAllergyDefEdit FADE=new FormAllergyDefEdit();
+				FADE.AllergyDefCur=listAllergyDefs[gridMain.GetSelectedIndex()];
+				FADE.ShowDialog();
+				FillGrid();
+			}
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -62,6 +78,16 @@ namespace OpenDental {
 			FADE.AllergyDefCur.IsNew=true;
 			FADE.ShowDialog();
 			FillGrid();
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			//Only visible in SelectMode.
+			if(gridMain.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Select at least one allergy.");
+				return;
+			}
+			AllergyNum=listAllergyDefs[gridMain.GetSelectedIndex()].AllergyDefNum;
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

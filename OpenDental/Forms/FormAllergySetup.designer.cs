@@ -27,6 +27,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// checkShowHidden
@@ -87,10 +88,27 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(296,280);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 6;
+			this.butOK.Text = "&OK";
+			this.butOK.Visible = false;
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
 			// FormAllergySetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(396,361);
+			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.checkShowHidden);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
@@ -109,5 +127,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClose;
 		private UI.ODGrid gridMain;
 		private System.Windows.Forms.CheckBox checkShowHidden;
+		private UI.Button butOK;
 	}
 }

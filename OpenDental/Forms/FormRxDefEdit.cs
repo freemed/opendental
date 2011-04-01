@@ -209,6 +209,7 @@ namespace OpenDental{
 			this.listAlerts.Name = "listAlerts";
 			this.listAlerts.Size = new System.Drawing.Size(120,95);
 			this.listAlerts.TabIndex = 8;
+			this.listAlerts.DoubleClick += new System.EventHandler(this.listAlerts_DoubleClick);
 			// 
 			// butAddProblem
 			// 
@@ -352,8 +353,26 @@ namespace OpenDental{
 			RxAlertList=RxAlerts.Refresh(RxDefCur.RxDefNum);
 			listAlerts.Items.Clear();
 			for(int i=0;i<RxAlertList.Count;i++) {
-				listAlerts.Items.Add(DiseaseDefs.GetName(RxAlertList[i].DiseaseDefNum));
+				if(RxAlertList[i].DiseaseDefNum>0) {
+					listAlerts.Items.Add(DiseaseDefs.GetName(RxAlertList[i].DiseaseDefNum));
+				}
+				if(RxAlertList[i].AllergyDefNum>0) {
+					listAlerts.Items.Add(AllergyDefs.GetOne(RxAlertList[i].AllergyDefNum).Description);
+				}
+				if(RxAlertList[i].MedicationNum>0) {
+					Medications.Refresh();
+					listAlerts.Items.Add(Medications.GetMedication(RxAlertList[i].MedicationNum).MedName);
+				}
 			}
+		}
+
+		private void listAlerts_DoubleClick(object sender,EventArgs e) {
+			if(listAlerts.SelectedIndex<0) {
+				MsgBox.Show(this,"Select at least one Alert.");
+			}
+			FormRxAlertEdit FormRAE=new FormRxAlertEdit(RxAlertList[listAlerts.SelectedIndex]);
+			FormRAE.ShowDialog();
+			FillAlerts();
 		}
 
 		private void butAddProblem_Click(object sender,EventArgs e) {
@@ -371,20 +390,28 @@ namespace OpenDental{
 		}
 
 		private void butAddMedication_Click(object sender,EventArgs e) {
-			FormRxAlertEdit FormRAE=new FormRxAlertEdit();
-			FormRAE.ShowDialog();
+			FormMedications FormMED=new FormMedications();
+			FormMED.SelectMode=true;
+			FormMED.ShowDialog();
+			if(FormMED.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			RxAlert alert=new RxAlert();
-			//alert.DiseaseDefNum=FRAE.SelectedDiseaseDefNum;
+			alert.MedicationNum=FormMED.MedicationNum;
 			alert.RxDefNum=RxDefCur.RxDefNum;
 			RxAlerts.Insert(alert);
 			FillAlerts();
 		}
 
 		private void butAddAllergy_Click(object sender,EventArgs e) {
-			FormRxAlertEdit FormRAE=new FormRxAlertEdit();
-			FormRAE.ShowDialog();
+			FormAllergySetup FormAS=new FormAllergySetup();
+			FormAS.SelectMode=true;
+			FormAS.ShowDialog();
+			if(FormAS.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			RxAlert alert=new RxAlert();
-			//alert.DiseaseDefNum=FRAE.SelectedDiseaseDefNum;
+			alert.AllergyDefNum=FormAS.AllergyNum;
 			alert.RxDefNum=RxDefCur.RxDefNum;
 			RxAlerts.Insert(alert);
 			FillAlerts();

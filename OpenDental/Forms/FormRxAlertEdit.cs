@@ -9,12 +9,34 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormRxAlertEdit:Form {
-		public FormRxAlertEdit() {
+		private RxAlert rxAlertCur;
+
+		public FormRxAlertEdit(RxAlert RxAlertCur) {
 			InitializeComponent();
 			Lan.F(this);
+			rxAlertCur=RxAlertCur;
+		}
+
+		private void FormRxAlertEdit_Load(object sender,EventArgs e) {
+			if(rxAlertCur.DiseaseDefNum>0) {
+				labelName.Text="Problem";
+				textName.Text=DiseaseDefs.GetName(rxAlertCur.DiseaseDefNum);
+			}
+			if(rxAlertCur.AllergyDefNum>0) {
+				labelName.Text="Allergy";
+				textName.Text=AllergyDefs.GetOne(rxAlertCur.AllergyDefNum).Description;
+			}
+			if(rxAlertCur.MedicationNum>0) {
+				labelName.Text="Medication";
+				Medications.Refresh();
+				textName.Text=Medications.GetMedication(rxAlertCur.MedicationNum).MedName;
+			}
+			textMessage.Text=rxAlertCur.NotificationMsg;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			rxAlertCur.NotificationMsg=PIn.String(textMessage.Text);
+			RxAlerts.Update(rxAlertCur);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -23,14 +45,8 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			
-			//Code for deletion.
-			//if(listAlerts.SelectedIndex==-1){
-			//  MsgBox.Show(this,"Please select an items first.");
-			//  return;
-			//}
-			//RxAlerts.Delete(RxAlertList[listAlerts.SelectedIndex]);
-			//FillAlerts();
+			RxAlerts.Delete(rxAlertCur);
+			DialogResult=DialogResult.OK;
 		}
 	}
 }
