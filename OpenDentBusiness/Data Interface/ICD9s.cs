@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM icd9 ORDER BY Description";//stub query probably needs to be changed
+			string command="SELECT * FROM icd9 ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ICD9";
 			FillCache(table);
@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM icd9 WHERE PatNum = "+POut.Long(patNum);
 			return Crud.ICD9Crud.SelectMany(command);
 		}
-
+		*/
 		///<summary>Gets one ICD9 from the db.</summary>
 		public static ICD9 GetOne(long iCD9Num){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -64,7 +64,6 @@ namespace OpenDentBusiness{
 			}
 			return Crud.ICD9Crud.SelectOne(iCD9Num);
 		}
-		*/
 
 		///<summary></summary>
 		public static long Insert(ICD9 icd9){

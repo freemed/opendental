@@ -452,9 +452,11 @@ namespace OpenDental{
 			DiseaseList=Diseases.Refresh(PatCur.PatNum);
 			gridDiseases.BeginUpdate();
 			gridDiseases.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableDiseases","Name"),180);//total is about 385
+			ODGridColumn col=new ODGridColumn(Lan.g("TableDiseases","Name"),140);//total is about 325
 			gridDiseases.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableDiseases","Patient Note"),205);
+			col=new ODGridColumn(Lan.g("TableDiseases","Patient Note"),145);
+			gridDiseases.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableDisease","Status"),40);
 			gridDiseases.Columns.Add(col);
 			gridDiseases.Rows.Clear();
 			ODGridRow row;
@@ -462,6 +464,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
 				row.Cells.Add(DiseaseList[i].PatNote);
+				row.Cells.Add(DiseaseList[i].ProbStatus.ToString());
 				gridDiseases.Rows.Add(row);
 			}
 			gridDiseases.EndUpdate();
@@ -506,14 +509,23 @@ namespace OpenDental{
 				return;
 			}
 			disease.DiseaseDefNum=formDD.SelectedDiseaseDefNum;
-			FormDiseaseEdit FormD=new FormDiseaseEdit(disease);
-			FormD.IsNew=true;
-			FormD.ShowDialog();
+			Diseases.Insert(disease);
 			FillProblems();
 		}
 
 		private void butIcd9_Click(object sender,EventArgs e) {
-
+			Disease disease=new Disease();
+			disease.PatNum=PatCur.PatNum;
+			//todo: Use FormDiseaseDefs.IsSelectionMode
+			FormIcd9s formI=new FormIcd9s();
+			formI.IsSelectionMode=true;
+			formI.ShowDialog();
+			if(formI.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			disease.DiseaseDefNum=formI.SelectedIcd9Num;
+			Diseases.Insert(disease);
+			FillProblems();
 		}
 
 		private void gridAllergies_CellDoubleClick(object sender,ODGridClickEventArgs e) {

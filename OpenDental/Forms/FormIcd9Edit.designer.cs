@@ -26,7 +26,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
-			this.textCode = new OpenDental.ValidNumber();
+			this.textCode = new System.Windows.Forms.TextBox();
 			this.buttonDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -61,11 +61,9 @@ namespace OpenDental{
 			// 
 			this.textCode.Enabled = false;
 			this.textCode.Location = new System.Drawing.Point(109,5);
-			this.textCode.MaxVal = 255;
-			this.textCode.MinVal = 0;
 			this.textCode.Name = "textCode";
 			this.textCode.Size = new System.Drawing.Size(100,20);
-			this.textCode.TabIndex = 7;
+			this.textCode.TabIndex = 8;
 			// 
 			// buttonDelete
 			// 
@@ -142,6 +140,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textDescription;
 		private UI.Button buttonDelete;
-		private ValidNumber textCode;
+		private System.Windows.Forms.TextBox textCode;
 	}
 }
