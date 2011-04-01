@@ -348,8 +348,8 @@ namespace OpenDental.Eclaims {
 					break;
 				case "A02":
 					//Provider's Sequence Number
-					fieldName="DENTAL OFFICE CLAIM REFERENCE NO";
-					frenchFieldName="NO DE TRANSACTION DU CABINET";
+					fieldName="OFFICE SEQUENCE NUMBER";
+					frenchFieldName="NO DE SÉQUENCE DU CABINET";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(6);
 					break;
@@ -734,7 +734,7 @@ namespace OpenDental.Eclaims {
 				case "G07":
 					//Disposition message
 					fieldName="DISPOSITION";
-					frenchFieldName="SPÉCIFICATION";
+					frenchFieldName="DISPOSITION";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(75);
 					break;
@@ -913,8 +913,8 @@ namespace OpenDental.Eclaims {
 					break;
 				case "A02":
 					//Office Sequence Number
-					fieldName="DENTAL OFFICE CLAIM REFERENCE NO";
-					frenchFieldName="NO DE TRANSACTION DU CABINET";
+					fieldName="OFFICE SEQUENCE NUMBER";
+					frenchFieldName="NO DE SÉQUENCE DU CABINET";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(6);
 					break;
@@ -1721,7 +1721,7 @@ namespace OpenDental.Eclaims {
 				case "G07":
 					//Disposition message
 					fieldName="DISPOSITION";
-					frenchFieldName="SPÉCIFICATION";
+					frenchFieldName="DISPOSITION";
 					format="AE/N";
 					lengthRequirement=new ConstLengthRequirement(75);
 					break;

@@ -368,11 +368,10 @@ namespace OpenDental.Eclaims {
 			if(carrier.CDAnetVersion!="02") { //version 04
 				//A09 carrier transaction counter 5 N
 				string transCounter="11111";
-				List <Etrans> etransHist=Etranss.GetHistoryOneClaim(claim.ClaimNum);
-				for(int i=etransHist.Count-1;i>=0;i--) {
-					if(etransHist[i].Etype==EtransType.Claim_CA) {
-						transCounter=etransHist[i].CarrierTransCounter.ToString();
-					}
+				List <Etrans> etransHist=Etranss.GetAllForOneClaim(claim.ClaimNum);
+				if(etransHist.Count>0) {
+					//The transactions are always in chronological order, so we can just take the counter from the last transaction.
+					transCounter=etransHist[etransHist.Count-1].CarrierTransCounter.ToString();
 				}
 				strb.Append(Canadian.TidyN(transCounter,5));
 			}

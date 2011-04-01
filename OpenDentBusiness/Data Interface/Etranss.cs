@@ -92,6 +92,15 @@ namespace OpenDentBusiness{
 			return Crud.EtransCrud.SelectMany(command);
 		}
 
+		///<summary>Gets all types of transactions for the given claim number.</summary>
+		public static List<Etrans> GetAllForOneClaim(long claimNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Etrans>>(MethodBase.GetCurrentMethod(),claimNum);
+			}
+			string command="SELECT * FROM etrans WHERE ClaimNum="+POut.Long(claimNum);
+			return Crud.EtransCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static Etrans GetEtrans(long etransNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

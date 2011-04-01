@@ -4684,7 +4684,7 @@ namespace OpenDental{
 			try {
 				CanadianOutput.SendClaimReversal(ClaimCur,insPlan,insSub);
 				Claims.Delete(ClaimCur);
-				List <Etrans> etransHistory=Etranss.GetHistoryOneClaim(ClaimCur.ClaimNum);
+				List <Etrans> etransHistory=Etranss.GetAllForOneClaim(ClaimCur.ClaimNum);
 				for(int i=0;i<etransHistory.Count;i++) {
 					Etranss.Delete(etransHistory[i].EtransNum);
 				}
