@@ -47,8 +47,6 @@ namespace OpenDental.Eclaims {
 		bool predetermination;
 		///<summary>Keeps track of wether we are printing the dentist or patient form.</summary>
 		bool patientCopy=true;
-		///<summary>directly related to isFrench. Is Canadian English by default.</summary>
-		CultureInfo culture=new CultureInfo("en-CA");
 		Font headingFont=new Font(FontFamily.GenericMonospace,10,FontStyle.Bold);
 		Font standardUnderline=new Font(FontFamily.GenericMonospace,10,FontStyle.Underline);
 		Font standardSmall=new Font(FontFamily.GenericMonospace,8);
@@ -153,10 +151,6 @@ namespace OpenDental.Eclaims {
 				primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
 				insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
 				subscriber=Patients.GetPat(insSub.Subscriber);
-				if(subscriber.Language=="fr") {
-					isFrench=true;
-					culture=new CultureInfo("fr-CA");
-				}
 				insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
 				patPlanPri=PatPlans.GetFromList(patPlansForPat,insplan.PlanNum);//Only used when there is no claim.
 				claim=Claims.GetClaim(etrans.ClaimNum);
@@ -208,6 +202,15 @@ namespace OpenDental.Eclaims {
 				throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
 			}
 			formData=new CCDFieldInputter(MessageText);//Input the fields of the given message.
+			CCDField languageOfInsured=formData.GetFieldById("G27");
+			if(languageOfInsured!=null) {
+				if(languageOfInsured.valuestr=="F") {
+					isFrench=true;
+				}
+			}
+			else if(subscriber.Language=="fr") {
+				isFrench=true;
+			}
 		}
 
 		public void ShowDisplayMessages(){
@@ -865,6 +868,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintDentaide(Graphics g){
+			doc.standardFont=standardSmall;
 			printPageNumbers=true;
 			int headerHeight=(int)verticalLine;
 			doc.bounds=new Rectangle(doc.bounds.X,doc.bounds.Y+headerHeight,doc.bounds.Width,
@@ -930,26 +934,23 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			PrintPatientName(g,x,0);			
 			PrintPatientSex(g,rightMidCol,0);
-			x=doc.StartElement(verticalLine);
-			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
-			size1=PrintComment(g,x,0);
-			if(size1.Height>0){
-				x=doc.StartElement(verticalLine);
-				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-			}
+			PrintComment(g,x,0);
 			x=doc.StartElement();
+			float leftMidCol=290f;
 			text=isFrench?"RENSEIGNEMENTS SUR L'ASSURANCE":"INSURANCE INFORMATION";
-			doc.DrawString(g,text,x,0);
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Underline);
+			size1=g.MeasureString(text,doc.standardFont);
+			doc.DrawString(g,text,x+(leftMidCol-x-size1.Width)/2,0);
 			text=isFrench?"PREMIER ASSUREUR":"PRIMARY COVERAGE";
-			float leftMidCol=325f;
-			float rightCol=leftMidCol+250f;
-			doc.DrawString(g,text,leftMidCol,0);
-			if(claim!=null && insplan2.PlanNum>0) {//claim can be null for eligibility response
-				text=isFrench?"SECOND ASSUREUR":"SECONDARY COVERAGE";
-				doc.DrawString(g,text,rightCol,0);
-			}
-			x=doc.StartElement(verticalLine);
+			size1=g.MeasureString(text,doc.standardFont);
+			float rightCol=leftMidCol+260f;
+			doc.DrawString(g,text,leftMidCol+(rightCol-leftMidCol-size1.Width)/2,0);
+			text=isFrench?"SECOND ASSUREUR":"SECONDARY COVERAGE";
+			size1=g.MeasureString(text,doc.standardFont);
+			doc.DrawString(g,text,rightCol+(doc.bounds.Right-rightCol-size1.Width)/2,0);
+			x=doc.StartElement();
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Regular);
 			text=isFrench?"ASSUREUR/ADMINIST. RÉGIME:":"CARRIER/PLAN ADMINISTRATOR:";
 			doc.DrawString(g,text,x,0);
 			text=primaryCarrier.CarrierName.ToUpper();//Field A05
@@ -963,18 +964,15 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,text,x,0);
 			text=insplan.GroupNum;//Field C01
 			doc.DrawString(g,text,leftMidCol,0);
+			doc.DrawString(g,isFrench?"DIV/SECTION:":"DIV/SECTION NO:",leftMidCol+86,0);
+			doc.DrawString(g,insplan.DivisionNo,leftMidCol+190,0);
 			if(claim!=null && insplan2.PlanNum>0) {
 				text=insplan2.GroupNum;//Field E02
 				doc.DrawString(g,text,rightCol,0);
 			}
-			x=doc.StartElement();
-			if(insplan.DivisionNo.Length>0){
-				doc.DrawString(g,isFrench?"NO DE DIVISION/SECTION:":"DIV/SECTION NO:",x,0);
-				doc.DrawString(g,insplan.DivisionNo,leftMidCol,0);
-			}
-			if(claim!=null && insplan2.PlanNum>0 && insplan2.DivisionNo.Length>0) {
-				doc.DrawString(g,isFrench?"NO DE DIVISION/SECTION:":"DIV/SECTION NO:",x,0);
-				doc.DrawString(g,insplan2.DivisionNo,rightCol,0);
+			doc.DrawString(g,isFrench?"DIV/SECTION:":"DIV/SECTION NO:",rightCol+86,0);
+			if(claim!=null && insplan2.PlanNum>0) {
+				doc.DrawString(g,insplan2.DivisionNo,rightCol+190,0);
 			}
 			x=doc.StartElement();
 			text=isFrench?"TITULAIRE:":"INSURED/MEMBER NAME:";
@@ -988,7 +986,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ADRESSE:":"ADDRESS:",x,0);
 			PrintSubscriberAddress(g,leftMidCol,0,true,rightCol-leftMidCol-10f);
-			PrintSubscriberAddress(g,rightCol,0,false,220.0f);
+			PrintSubscriberAddress(g,rightCol,0,false,doc.bounds.Right-rightCol-10f);
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"DATE DE NAISSANCE:":"BIRTHDATE:",x,0);
 			doc.DrawString(g,DateToString(subscriber.Birthdate),leftMidCol,0);//Field D01
@@ -998,14 +996,14 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"NO DU TITULAIRE/CERTIFICAT:":"INSURANCE/CERTIFICATE NO:",x,0);
 			doc.DrawString(g,insSub.SubscriberID,leftMidCol,0);//Fields D01 and D11
+			doc.DrawString(g,isFrench?"- SÉQUENCE:":"- SEQUENCE:",leftMidCol+86,0);
+			doc.DrawString(g,insplan.DentaideCardSequence.ToString().PadLeft(2,'0'),leftMidCol+162,0);
 			if(insplan2!=null){
 				doc.DrawString(g,insSub2.SubscriberID,rightCol,0);//Fields E04 and E07
 			}
-			x=doc.StartElement();
-			doc.DrawString(g,isFrench?"SÉQUENCE:":"SEQUENCE:",x,0);
-			doc.DrawString(g,insplan.DentaideCardSequence.ToString().PadLeft(2,'0'),leftMidCol,0);
+			doc.DrawString(g,isFrench?"- SÉQUENCE:":"- SEQUENCE:",rightCol+86,0);
 			if(insplan2!=null){
-				doc.DrawString(g,insplan2.DentaideCardSequence.ToString().PadLeft(2,'0'),rightCol,0);
+				doc.DrawString(g,insplan2.DentaideCardSequence.ToString().PadLeft(2,'0'),rightCol+162,0);
 			}
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"PARENTÉ AVEC PATIENT:":"RELATIONSHIP TO PATIENT:",x,0);
@@ -1060,16 +1058,13 @@ namespace OpenDental.Eclaims {
 			}
 			//Spaces don't show up with underline, so we will have to underline manually.
 			float underlineWidth=g.MeasureString("***",doc.standardFont).Width;
-			bool dependant=true;
 			string isStudent="   ";
 			string isHandicapped="   ";
-			bool stud=false;
 			if(relatPri==Relat.Child){
 				text="";
 				switch(patient.CanadianEligibilityCode){//Field C09
 					case 1://Patient is a full-time student.
 						isStudent=isFrench?"Oui":"Yes";
-						stud=true;
 						text=patient.SchoolName;
 						break;
 					case 2://Patient is disabled.
@@ -1077,12 +1072,10 @@ namespace OpenDental.Eclaims {
 						break;
 					case 3://Patient is a disabled student.
 						isStudent=isFrench?"Oui":"Yes";
-						stud=true;
 						text=patient.SchoolName;
 						isHandicapped=isFrench?"Oui":"Yes";
 						break;
 					default://Not applicable
-						dependant=false;
 						break;
 				}
 			}
@@ -1092,89 +1085,65 @@ namespace OpenDental.Eclaims {
 			else if(patient.CanadianEligibilityCode==3) {
 				isStudent=isFrench?"Oui":"Yes";
 				isHandicapped=isFrench?"Oui":"Yes";
-				stud=true;
-			}
-			else{
-				dependant=false;//Does not apply.
-			}
-			if(dependant){
-				x=doc.StartElement(verticalLine);
-				doc.PushX(x);
-				x+=doc.DrawString(g,isFrench?"HANDICAPÉ":"HANDICAPPED",x,0).Width;
-				float isHandicappedHeight=doc.DrawString(g,isHandicapped,x,0).Height;
-				doc.HorizontalLine(g,Pens.Black,x,x+underlineWidth,isHandicappedHeight);
-				x+=underlineWidth;
-				x+=doc.DrawString(g,isFrench?" ÉTUDIANT À PLEIN TEMPS":" FULL-TIME STUDENT",x,0).Width;
-				float isStudentHeight=doc.DrawString(g,isStudent,x,0).Height;
-				doc.HorizontalLine(g,Pens.Black,x,x+underlineWidth,isStudentHeight);
-				x+=underlineWidth;
-				if(stud){
-					x=doc.StartElement();
-					text=patient.SchoolName;
-					doc.DrawField(g,isFrench?"NOM DE L'INSTITUTION":"NAME OF STUDENT'S SCHOOL",text,stud,x,0);
-				}
-				x=doc.StartElement(verticalLine);
-				x=doc.PopX();
 			}
 			x=doc.StartElement();
-			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
+			doc.DrawString(g,isFrench?"PERSONNE À CHARGE: HANDICAPÉ     ÉTUDIANT À PLEIN TEMPS     ; NOM DE L'INSTITUTION:":"IF DEPENDANT, INDICATE: HANDICAPPED     FULL-TIME STUDENT    ;NAME OF STUDENT'S SCHOOL:",x,0);
+			doc.DrawString(g,isHandicapped,isFrench?(x+200):(x+248),0);
+			doc.DrawString(g,isStudent,isFrench?(x+385):(x+397),0);
 			x=doc.StartElement();
-			doc.DrawString(g,isFrench?"RENSEIGNEMENTS SUR LES SOINS":"TREATMENT INFORMATION",x,0);
-			x=doc.StartElement(verticalLine);
+			doc.DrawString(g,patient.SchoolName,x,0);
+			x=doc.StartElement();
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Underline);
+			doc.DrawString(g,isFrench?"RENSEIGNEMENTS SUR LES SOINS:":"TREATMENT INFORMATION:",x,0);
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Regular);
+			x=doc.StartElement();
 			bullet=1;
 			PrintAccidentBullet(g,isFrench?"Le traitement résulte-t-il d'un accident?":"Is treatment resulting from an accident?");
 			x=doc.StartElement();
 			CCDField initialPlacementUpperField=formData.GetFieldById("F15");
-			CCDField initialPlacementLowerField=formData.GetFieldById("F18");
-			if(initialPlacementUpperField!=null && initialPlacementLowerField!=null &&
-				(initialPlacementUpperField.valuestr!="X" || initialPlacementLowerField.valuestr!="X")) {//Don't show this bullet if it does not apply.
-				x+=doc.DrawString(g,bullet.ToString()+". ",x,0).Width;
-				bullet++;
-				doc.PushX(x);//Begin indentation.
-				doc.DrawString(g,isFrench?"S'agit-il de la première mise en bouche d'une couronne, prothèse ou pont?":
-					"Is this an initial placement for crown, denture or bridge?",x,0);
-				x=doc.StartElement();
-				if(initialPlacementUpperField.valuestr!="X") {//Field F15 - Avoid invalid upper initial placement data.
-					doc.DrawString(g,isFrench?"Maxillaire: ":"Maxillary: ",x,0);
-					x+=120;
-					doc.PushX(x);//Begin second indentation.
-					if(initialPlacementUpperField.valuestr=="N") {
-						doc.DrawString(g,isFrench?"Non":"No",x,0);
-						x=doc.StartElement();
-						text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
-						doc.DrawField(g,isFrench?"Matériau":"Material",text,true,x,0);
-						x=doc.StartElement();
-						text=DateToString(claim.CanadianDateInitialUpper);//Field F04
-						doc.DrawField(g,"Date",text,true,x,0);
-					}
-					else{
-						doc.DrawString(g,isFrench?"Oui":"Yes",x,0);
-					}
-					x=doc.PopX();//End second indentation.
-				}
-				x=doc.StartElement();
-				if(initialPlacementLowerField.valuestr!="X") {//Field F18 - Avoid invalid lower initial placement data.
-					doc.DrawString(g,isFrench?"Mandibule: ":"Mandibular: ",x,0);
-					x+=120;
-					doc.PushX(x);//Begin second indentation.
-					if(initialPlacementLowerField.valuestr=="N") {
-						doc.DrawString(g,isFrench?"Non":"No",x,0);
-						x=doc.StartElement();
-						text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
-						doc.DrawField(g,isFrench?"Matériau":"Material",text,true,x,0);
-						x=doc.StartElement();
-						text=DateToString(claim.CanadianDateInitialLower);//Field F19
-						doc.DrawField(g,"Date",text,true,x,0);
-					}
-					else{
-						doc.DrawString(g,isFrench?"Oui":"Yes",x,0);
-					}
-					x=doc.PopX();//End second indentation.
-				}
-				x=doc.StartElement();
-				PrintMissingToothList(g);
-				x=doc.PopX();//End first indentation.			
+			string initialPlacementUpperStr="X";
+			if(initialPlacementUpperField!=null) {
+				initialPlacementUpperStr=initialPlacementUpperField.valuestr;
 			}
+			CCDField initialPlacementLowerField=formData.GetFieldById("F18");
+			string initialPlacementLowerStr="X";
+			if(initialPlacementLowerField!=null) {
+				initialPlacementLowerStr=initialPlacementLowerField.valuestr;
+			}			
+			x+=doc.DrawString(g,bullet.ToString()+". ",x,0).Width;
+			bullet++;
+			doc.PushX(x);//Begin indentation.
+			string initialPlacementUpperReadable=initialPlacementUpperStr=="X"?" ":(initialPlacementUpperStr=="N"?(isFrench?"Non":"No"):(isFrench?"Oui":"Yes"));
+			string initialPlacementLowerReadable=initialPlacementLowerStr=="X"?" ":(initialPlacementLowerStr=="N"?(isFrench?"Non":"No"):(isFrench?"Oui":"Yes"));
+			doc.DrawString(g,isFrench?"S'agit-il de la première mise en bouche d'une couronne, prothèse ou pont?       Maxillaire:      Mandibule:":
+				"Is this an initial placement for crown, denture or bridge?      Maxillary:      Mandibular:",x,0);
+			doc.DrawString(g,initialPlacementUpperReadable,x+510,0);
+			doc.DrawString(g,initialPlacementLowerReadable,x+625,0);
+			x=doc.StartElement();
+			doc.DrawString(g,isFrench?"Si Non, indiquer le matériau de l'ancienne prothèse et la date de mise en bouche:":"If no, indicate the material used for the previous prosthesis and the date of insertion:",x,0);
+			x=doc.StartElement();
+			doc.DrawString(g,isFrench?"Maxillaire:      Matériau:                              Date:":"Maxillary:       Material:                              Date:",x,0);
+			doc.DrawString(g,initialPlacementUpperReadable,x+75,0);
+			if(initialPlacementUpperStr=="N") {//Field F15 - Avoid invalid upper initial placement data.
+				text=GetMaterialDescription(claim.CanadianMaxProsthMaterial);//Field F20
+				doc.DrawString(g,text,x+180,0);
+				text=DateToString(claim.CanadianDateInitialUpper);//Field F04
+				doc.DrawString(g,text,x+420,0);
+			}
+			x=doc.StartElement();
+			doc.DrawString(g,isFrench?"Mandibule:       Matériau:                              Date:":"Mandibular:      Material:                              Date:",x,0);
+			doc.DrawString(g,initialPlacementLowerReadable,x+75,0);
+			if(initialPlacementLowerStr=="N") {//Field F18 - Avoid invalid lower initial placement data.				
+				text=GetMaterialDescription(claim.CanadianMandProsthMaterial);//Field F21
+				doc.DrawString(g,text,x+180,0);
+				text=DateToString(claim.CanadianDateInitialLower);//Field F19
+				doc.DrawString(g,text,x+420,0);
+			}
+			x=doc.StartElement();
+			doc.DrawString(g,isFrench?"Si Oui, indiquer le numéro des dents manquantes et la date des extractions.":"If yes, indicate the missing teeth numbers and the date(s) on which they were removed.",x,0);
+			x=doc.StartElement();
+			PrintMissingToothList(g);
+			x=doc.PopX();//End first indentation.			
 			x=doc.StartElement();
 			size1=doc.DrawString(g,bullet.ToString()+". "+(isFrench?"S'agit-il d'un traitement en vue de soins d'orthodontie?":
 				"Is treatment for orthodontic purposes? "),x,0);
@@ -1993,23 +1962,32 @@ namespace OpenDental.Eclaims {
 					default:
 						statusStr="";
 						break;
+					case ("A"):
+						statusStr=isFrench?"La transaction a été acceptée.":"Transaction has been accepted.";
+						break;
+					case ("E"):
+						statusStr=isFrench?"Le patient est admissible.":"The patient is eligible.";
+						break;
 					case ("R"):
-						statusStr=isFrench?"":"Claim is rejected because of errors.";
+						statusStr=isFrench?"Revendication est rejetée en raison d'erreurs.":"Claim is rejected because of errors.";
 						break;
 					case ("H"):
-						statusStr=isFrench?"":"Claim is received successfully by the carrier and is held for further processing. Response will NOT be sent back to the dentist electronically.";
+						statusStr=isFrench?"Revendication est bien reçu par le transporteur et il est détenu pour un traitement ultérieur. Réponse ne sera pas renvoyé chez le dentiste par voie électronique.":"Claim is received successfully by the carrier and is held for further processing. Response will NOT be sent back to the dentist electronically.";
 						break;
 					case ("B"):
-						statusStr=isFrench?"":"Claim is received successfully by the network and will be batch-forwarded on to the carrier for further processing. Response will NOT be sent back to the dentist electronically.";
+						statusStr=isFrench?"Demande est reçue avec succès par le réseau et sera transmis par lots sur le support pour un traitement ultérieur. Réponse ne sera pas renvoyé chez le dentiste par voie électronique.":"Claim is received successfully by the network and will be batch-forwarded on to the carrier for further processing. Response will NOT be sent back to the dentist electronically.";
 						break;
 					case ("C"):
-						statusStr=isFrench?"":"Claim is received successfully by the carrier and is held for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
+						statusStr=isFrench?"Revendication est bien reçu par le transporteur et il est détenu pour un traitement ultérieur. La réponse peut être renvoyée chez le dentiste par voie électronique et accessibles via ROT.":"Claim is received successfully by the carrier and is held for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
 						break;
 					case ("N"):
-						statusStr=isFrench?"":"Claim is received successfully by the network and will be batch forwarded onto the carrier for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
+						statusStr=isFrench?"Demande est reçue avec succès par le réseau et sera transmis par lots sur le support pour un traitement ultérieur. La réponse peut être renvoyée chez le dentiste par voie électronique et accessibles via ROT.":"Claim is received successfully by the network and will be batch forwarded onto the carrier for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
 						break;
 					case ("M"):
-						statusStr=isFrench?"":"Manual claim form should be submitted by the patient or the dental office.";
+						statusStr=isFrench?"Formulaire de demande de manuel doit être présentée par le patient ou le cabinet dentaire.":"Manual claim form should be submitted by the patient or the dental office.";
+						break;
+					case ("X"):
+						statusStr=isFrench?"Pas de réponses les plus remarquables à suivre.":"No more outstanding responses to follow.";
 						break;
 				}
 			}
@@ -2070,7 +2048,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintPatientName(Graphics g,float X,float Y) {
-			return doc.DrawField(g,"PATIENT",patient.GetNameFLFormal(),true,X,Y);//Fields C06,C07,C08
+			return doc.DrawField(g,"PATIENT'S NAME",patient.GetNameFLFormal(),true,X,Y);//Fields C06,C07,C08
 		}
 
 		private SizeF PrintPatientBirthday(Graphics g,float X,float Y) {
@@ -2137,14 +2115,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintPrimaryDependantNo(Graphics g,float X,float Y,string fieldText,string frenchFieldText){
-			text="";
-			CCDField dependantNoField=formData.GetFieldById("C17");
-			if(dependantNoField==null){
-				text=isFrench?"INCONNU":"UNKNOWN";
-			}else{
-				text=dependantNoField.valuestr;
-			}
-			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,text,true,X,Y);
+			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,patPlanPri.PatID,true,X,Y);
 		}
 
 		private SizeF PrintSecondaryDependantNo(Graphics g,float X,float Y) {
@@ -2152,14 +2123,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintSecondaryDependantNo(Graphics g,float X,float Y,string fieldText,string frenchFieldText){
-			text="";
-			CCDField dependantNoField=formData.GetFieldById("E17");
-			if(dependantNoField==null){
-				text=isFrench?"INCONNU":"UNKNOWN";
-			}else{
-				text=dependantNoField.valuestr;
-			}
-			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,text,true,X,Y);
+			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,patPlanSec.PatID,true,X,Y);
 		}
 
 		private SizeF PrintInsuredMember(Graphics g,float X,float Y){
@@ -2180,7 +2144,7 @@ namespace OpenDental.Eclaims {
 				line2=sub.Address2;
 				line3=sub.City+", "+sub.State+" "+sub.Zip;
 			}
-			return PrintAddress(g,X,Y,line1,line2,line3,150f,maxWidthInPixels);
+			return PrintAddress(g,X,Y,line1,line2,line3,maxWidthInPixels,maxWidthInPixels);
 		}
 
 		///<summary>If maxCharsPerLine>0, then the lines which are excess in length are truncated to the value specified.</summary>
@@ -2341,18 +2305,18 @@ namespace OpenDental.Eclaims {
 			bullet++;
 			doc.PushX(x);//Begin indentation.
 			x+=doc.DrawString(g,questionStr+" ",x,0).Width;
-			if(claim==null || !IsValidDate(claim.AccidentDate)) {//Field F02 - No accident claimed.
+			bool accident=(claim!=null && IsValidDate(claim.AccidentDate));
+			if(!accident) {//Field F02 - No accident claimed.
 				doc.DrawString(g,isFrench?"Non":"No",x,0);
 			}
 			else {
 				doc.DrawString(g,isFrench?"Oui":"Yes",x,0);
-				x=doc.StartElement();
-				x+=doc.DrawField(g,isFrench?"Si Oui, donner date":"If yes, give date",
-					DateToString(claim.AccidentDate)+" ",true,x,0).Width;
-				doc.DrawString(g,isFrench?"et détails à part:":"and details separately:",x,0);
-				x=doc.StartElement();
-				doc.DrawString(g,claim.ClaimNote,x,0);
 			}
+			x=doc.StartElement();
+			x+=doc.DrawField(g,isFrench?"Si Oui, donner date":"If yes, give date",(accident?DateToString(claim.AccidentDate):"        ")+" ",true,x,0).Width;
+			doc.DrawString(g,isFrench?"et détails à part:":"and details separately:",x,0);
+			x=doc.StartElement();
+			doc.DrawString(g,accident?claim.ClaimNote:"",x,0);
 			x=doc.PopX();//End indentation.
 		}
 
@@ -2612,7 +2576,7 @@ namespace OpenDental.Eclaims {
 			if(number=="00000000") {
 				return DateToString(DateTime.MinValue);
 			}
-			DateTime dt=DateTime.ParseExact(number,"yyyyMMdd",culture.DateTimeFormat);
+			DateTime dt=new DateTime(Convert.ToInt32(number.Substring(0,4)),Convert.ToInt32(number.Substring(4,2)),Convert.ToInt32(number.Substring(6,2)));
 			return DateToString(dt);
 		}
 
