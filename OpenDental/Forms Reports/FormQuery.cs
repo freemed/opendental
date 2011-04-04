@@ -815,6 +815,7 @@ namespace OpenDental{
 							break;
             //time 
 						case "aptdatetime":
+						case "nextschedappt":
             case "starttime":
             case "stoptime":
 							tableOut.Rows[i][j]=PIn.DateT(tableOut.Rows[i][j].ToString()).ToString("t")+"   "
