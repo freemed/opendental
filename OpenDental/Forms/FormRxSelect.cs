@@ -193,10 +193,11 @@ namespace OpenDental{
 			//Alert
 			List<RxAlert> alertList=RxAlerts.Refresh(RxDefCur.RxDefNum);
 			List<Disease> diseases=Diseases.Refresh(PatCur.PatNum);
-			//ditto for allergies and medications
-			//ArrayList matchAL=new ArrayList();
+			List<Allergy> allergies=Allergies.Refresh(PatCur.PatNum);
+			List<Medication> medications=Medications.GetMedicationsByPat(PatCur.PatNum);
 			List<string> diseaseMatches=new List<string>();
-			//ditto for allergies and medications
+			List<string> allergiesMatches=new List<string>();
+			List<string> medicationsMatches=new List<string>();
 			List<string> customMessages=new List<string>();
 			for(int i=0;i<alertList.Count;i++){
 				for(int j=0;j<diseases.Count;j++){
@@ -209,18 +210,80 @@ namespace OpenDental{
 						}
 					}
 				}
-				//allergies and medications
+				for(int j=0;j<allergies.Count;j++) {
+					if(alertList[i].AllergyDefNum==allergies[j].AllergyDefNum) {
+						if(alertList[i].NotificationMsg=="") {
+							allergiesMatches.Add(AllergyDefs.GetOne(alertList[i].AllergyDefNum).Description);
+						}
+						else {
+							customMessages.Add(alertList[i].NotificationMsg);
+						}
+					}
+				}
+				for(int j=0;j<medications.Count;j++) {
+					if(alertList[i].MedicationNum==medications[j].MedicationNum) {
+						if(alertList[i].NotificationMsg=="") {
+							Medications.Refresh();
+							medicationsMatches.Add(Medications.GetMedication(alertList[i].MedicationNum).MedName);
+						}
+						else {
+							customMessages.Add(alertList[i].NotificationMsg);
+						}
+					}
+				}
 			}
-			//if(matchAL.Count>0){
-			//  string alert=Lan.g(this,"This patient has the following medical problems or allergies:\r\n");
-			//  for(int i=0;i<matchAL.Count;i++){
-			//    alert+="\r\n"+matchAL[i];
-			//  }
-			//  alert+="\r\n\r\n"+Lan.g(this,"Continue anyway?");
-			//  if(MessageBox.Show(alert,"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)!=DialogResult.OK){
-			//    return;
-			//  }
-			//}
+			if(diseaseMatches.Count>0
+				|| allergiesMatches.Count>0
+				|| medicationsMatches.Count>0)
+			{
+				string alert="";
+				for(int i=0;i<diseaseMatches.Count;i++) {
+					if(i<1) {
+						alert+=Lan.g(this,"This patient has the following medical problems: ");
+					}
+					alert+=diseaseMatches[i];
+					if((i+1)==diseaseMatches.Count) {
+						alert+=".\r\n";
+					}
+					else {
+						alert+=", ";
+					}
+				}
+				for(int i=0;i<allergiesMatches.Count;i++) {
+					if(i<1 && diseaseMatches.Count>0) {
+						alert+="and the following allergies: ";
+					}
+					else if(i<1) {
+						alert=Lan.g(this,"This patient has the following allergies: ");
+					}
+					alert+=allergiesMatches[i];
+					if((i+1)==allergiesMatches.Count) {
+						alert+=".\r\n";
+					}
+					else {
+						alert+=", ";
+					}
+				}
+				for(int i=0;i<medicationsMatches.Count;i++) {
+					if(i<1 && (diseaseMatches.Count>0 || allergiesMatches.Count>0)) {
+						alert+="and is taking the following medications: ";
+					}
+					else if(i<1) {
+						alert=Lan.g(this,"This patient is taking the following medications: ");
+					}
+					alert+=medicationsMatches[i];
+					if((i+1)==medicationsMatches.Count) {
+						alert+=".\r\n";
+					}
+					else {
+						alert+=", ";
+					}
+				}
+				alert+="\r\n"+Lan.g(this,"Continue anyway?");
+				if(MessageBox.Show(alert,"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)!=DialogResult.OK) {
+					return;
+				}
+			}
 			for(int i=0;i<customMessages.Count;i++){
 				if(MessageBox.Show(customMessages[i]+"\r\n"+Lan.g(this,"Continue anyway?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)!=DialogResult.OK){
 					return;

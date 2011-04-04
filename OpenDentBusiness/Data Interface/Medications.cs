@@ -169,6 +169,17 @@ namespace OpenDentBusiness{
 			return MedicationList;
 		}
 		
+		///<summary>Returns medication list for a specific patient.</summary
+		public static List<Medication> GetMedicationsByPat(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Medication>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT m.* FROM medication m,medicationpat mp "
+				+"WHERE m.MedicationNum=mp.MedicationNum "
+				+"AND mp.PatNum="+POut.Long(patNum);
+			return Crud.MedicationCrud.SelectMany(command);
+		}
+
 	}
 
 	
