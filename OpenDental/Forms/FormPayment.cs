@@ -1172,7 +1172,7 @@ namespace OpenDental{
 			if(e.Button != MouseButtons.Left){
 				return;
 			}
-			if(textAmount.Text=="" || textAmount.Text=="0.00") {
+			if(textAmount.Text=="") {
 				MsgBox.Show(this,"Please enter an amount first.");
 				return;
 			}
@@ -1388,6 +1388,11 @@ namespace OpenDental{
 					resulttext+=line;
 					if(line.StartsWith("RESULT=")) {
 						if(line!="RESULT=SUCCESS") {
+							//Charge was a failure and there might be a description as to why it failed. Continue to loop through line.
+							while(line!=null) {
+								line=reader.ReadLine();
+								resulttext+="\r\n"+line;
+							}
 							needToken=false;//Don't update CCard due to failure
 							newCard=false;//Don't insert CCard due to failure
 							break;
@@ -1450,7 +1455,7 @@ namespace OpenDental{
 				textNote.Text+="\r\n";
 			}
 			textNote.Text+=resulttext;
-			if(showAmountNotice) {
+			if(showAmountNotice) {//Might happen if a card charges for so much but user thought it would charge for more.
 				MessageBox.Show(Lan.g(this,"Warning: The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the amount charged: ")+amtReturned.ToString("C"));
 			}
 		}
