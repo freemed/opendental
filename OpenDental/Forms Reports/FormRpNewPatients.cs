@@ -374,7 +374,7 @@ namespace OpenDental{
 			}
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=@"SET @pos=0;
-SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,"
+SELECT @pos:=@pos+1 patCount,result.* FROM (SELECT dateFirstProc,patient.LName,patient.FName,"
 +DbHelper.Concat("referral.LName","IF(referral.FName='','',',')","referral.FName")+" refname,SUM(procedurelog.ProcFee) ";//\"$HowMuch\"";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				report.Query+="$HowMuch";
@@ -408,7 +408,7 @@ SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,"
 					report.Query+="HAVING \"$HowMuch\" > 0 ";
 				}
 			}
-			report.Query+="ORDER BY dateFirstProc,patient.LName,patient.FName";
+			report.Query+="ORDER BY dateFirstProc,patient.LName,patient.FName) result";
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
