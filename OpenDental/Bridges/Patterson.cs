@@ -15,7 +15,7 @@ namespace OpenDental.Bridges {
 		public Patterson() { 
 		}
 
-		/// <summary>Launches Patterson Imaging, logs user in, and opens current patient.</summary>
+		///<summary>Launches Patterson Imaging, logs user in, and opens current patient.</summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
 			if(pat==null) {
 				return;
@@ -34,8 +34,10 @@ namespace OpenDental.Bridges {
 					Tidy(pat.SSN.ToString(),9),//This only works with ssn in america with no punctuation
 					Tidy((pat.Gender==PatientGender.Male?"M":(pat.Gender==PatientGender.Female?"F":" ")),1),//uses "M" for male "F" for female and " " for unkown
 					Tidy(pat.Birthdate.ToShortDateString(),11),
-					LTidy(pat.PatNum.ToString(),5),//Limit is 5 characters, but that would only be exceeded if they are using random primary keys or they have a lot of data, neither case is common.
-					LTidy(prov.ProvNum.ToString(),3),//Limit is 3 characters, but that would only be exceeded if they are using random primary keys or they have a lot of data, neither case is common.
+					LTidy(pat.PatNum.ToString(),5),
+					LTidy(prov.ProvNum.ToString(),3),
+					//LTidy(pat.PatNum.ToString(),5),//Limit is 5 characters, but that would only be exceeded if they are using random primary keys or they have a lot of data, neither case is common.
+					//LTidy(prov.ProvNum.ToString(),3),//Limit is 3 characters, but that would only be exceeded if they are using random primary keys or they have a lot of data, neither case is common.
 					Tidy(prov.FName,40),
 					Tidy(prov.LName,40),
 					ProgramCur.Path,
@@ -47,23 +49,39 @@ namespace OpenDental.Bridges {
 			}
 		}
 
-		/// <summary>Appended with whitespace and returns FIRST maxL characters. Accepts null to return string full of spaces.</summary>
+		///<summary>Will only return the beginning amount of characters based on maximum value.</summary>
 		private static string Tidy(string str,int maxL) {
-			if(str==null){
-				str="";
+			if(str.Length>maxL) {
+				str=str.Substring(0,maxL);
 			}
-			str=str.Trim().PadRight(maxL,' ');
-			return str.Substring(0,maxL);
+			return str.Trim();
 		}
 
-		/// <summary>PREpended with whitespace and returns LAST maxL characters. Accepts null to return string full of spaces.</summary>
+		///<summary>Will only return the last amount of characters based on maximum value.</summary>
 		private static string LTidy(string str,int maxL) {
-			if(str==null) {
-				str="";
-			}
-			str=str.Trim().PadLeft(maxL,' ');
-			return str.Substring(str.Length-maxL,maxL);
+		  if(str.Length>maxL) {
+		    str=str.Substring(str.Length-maxL);
+		  }
+		  return str.Trim();
 		}
+
+		/////<summary>Appended with whitespace and returns FIRST maxL characters. Accepts null to return string full of spaces.</summary>
+		//private static string Tidy(string str,int maxL) {
+		//  if(str==null){
+		//    str="";
+		//  }
+		//  str=str.Trim().PadRight(maxL,' ');
+		//  return str.Substring(0,maxL);
+		//}
+
+		/////<summary>PREpended with whitespace and returns LAST maxL characters. Accepts null to return string full of spaces.</summary>
+		//private static string LTidy(string str,int maxL) {
+		//  if(str==null) {
+		//    str="";
+		//  }
+		//  str=str.Trim().PadLeft(maxL,' ');
+		//  return str.Substring(str.Length-maxL,maxL);
+		//}
 
 
 	}
