@@ -201,7 +201,7 @@ namespace OpenDental{
 			List<string> customMessages=new List<string>();
 			for(int i=0;i<alertList.Count;i++){
 				for(int j=0;j<diseases.Count;j++){
-					if(alertList[i].DiseaseDefNum==diseases[j].DiseaseDefNum){
+					if(alertList[i].DiseaseDefNum==diseases[j].DiseaseDefNum && diseases[j].ProbStatus==0){//ProbStatus is active.
 						if(alertList[i].NotificationMsg=="") {
 							diseaseMatches.Add(DiseaseDefs.GetName(diseases[j].DiseaseDefNum));
 						}
@@ -211,7 +211,7 @@ namespace OpenDental{
 					}
 				}
 				for(int j=0;j<allergies.Count;j++) {
-					if(alertList[i].AllergyDefNum==allergies[j].AllergyDefNum) {
+					if(alertList[i].AllergyDefNum==allergies[j].AllergyDefNum && allergies[j].StatusIsActive) {
 						if(alertList[i].NotificationMsg=="") {
 							allergiesMatches.Add(AllergyDefs.GetOne(alertList[i].AllergyDefNum).Description);
 						}
