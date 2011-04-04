@@ -1173,7 +1173,7 @@ namespace OpenDental{
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1){
-				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",400,600);
+				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==3){
