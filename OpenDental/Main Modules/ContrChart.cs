@@ -3865,8 +3865,13 @@ namespace OpenDental{
 						}
 						//Add a new row for each med.
 						for(int i=0;i<DiseaseList.Count;i++) {
-							row=new ODGridRow();
-							cell=new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+							row=new ODGridRow(); 
+							if(DiseaseList[i].DiseaseDefNum!=0) {
+								row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+							}
+							else {
+								row.Cells.Add(ICD9s.GetDescription(DiseaseList[i].ICD9Num));
+							}
 							cell.ColorText=Color.Red;
 							cell.Bold=YN.Yes;
 							row.Cells.Add(cell);

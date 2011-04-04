@@ -22,10 +22,8 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Disease>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT disease.* FROM disease,diseasedef "
-				+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
-				+"AND PatNum="+POut.Long(patNum)
-				+" ORDER BY diseasedef.ItemOrder";
+			string command="SELECT disease.* FROM disease "
+				+"WHERE PatNum="+POut.Long(patNum);
 			return Crud.DiseaseCrud.SelectMany(command);
 		}
 

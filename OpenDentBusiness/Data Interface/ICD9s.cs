@@ -131,5 +131,15 @@ namespace OpenDentBusiness{
 			return icd9List;
 		}
 
+		///<summary>Returns the name of the disease, whether hidden or not.</summary>
+		public static string GetDescription(long icd9Num) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].ICD9Num==icd9Num) {
+					return Listt[i].Description;
+				}
+			}
+			return "";
+		}
 	}
 }

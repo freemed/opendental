@@ -462,7 +462,12 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<DiseaseList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+				if(DiseaseList[i].DiseaseDefNum!=0) {
+					row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+				}
+				else {
+					row.Cells.Add(ICD9s.GetDescription(DiseaseList[i].ICD9Num));
+				}
 				row.Cells.Add(DiseaseList[i].PatNote);
 				row.Cells.Add(DiseaseList[i].ProbStatus.ToString());
 				gridDiseases.Rows.Add(row);
@@ -523,7 +528,7 @@ namespace OpenDental{
 			if(formI.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			disease.DiseaseDefNum=formI.SelectedIcd9Num;
+			disease.ICD9Num=formI.SelectedIcd9Num;
 			Diseases.Insert(disease);
 			FillProblems();
 		}
