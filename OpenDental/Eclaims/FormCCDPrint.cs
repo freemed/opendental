@@ -1115,10 +1115,11 @@ namespace OpenDental.Eclaims {
 			doc.PushX(x);//Begin indentation.
 			string initialPlacementUpperReadable=initialPlacementUpperStr=="X"?" ":(initialPlacementUpperStr=="N"?(isFrench?"Non":"No"):(isFrench?"Oui":"Yes"));
 			string initialPlacementLowerReadable=initialPlacementLowerStr=="X"?" ":(initialPlacementLowerStr=="N"?(isFrench?"Non":"No"):(isFrench?"Oui":"Yes"));
-			doc.DrawString(g,isFrench?"S'agit-il de la première mise en bouche d'une couronne, prothèse ou pont?       Maxillaire:      Mandibule:":
+			doc.DrawString(g,isFrench?
+				"S'agit-il de la première mise en bouche d'une couronne, prothèse ou pont?       Maxillaire:      Mandibule:":
 				"Is this an initial placement for crown, denture or bridge?      Maxillary:      Mandibular:",x,0);
-			doc.DrawString(g,initialPlacementUpperReadable,x+510,0);
-			doc.DrawString(g,initialPlacementLowerReadable,x+625,0);
+			doc.DrawString(g,initialPlacementUpperReadable,isFrench?(x+625):(x+510),0);
+			doc.DrawString(g,initialPlacementLowerReadable,isFrench?(x+740):(x+625),0);
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"Si Non, indiquer le matériau de l'ancienne prothèse et la date de mise en bouche:":"If no, indicate the material used for the previous prosthesis and the date of insertion:",x,0);
 			x=doc.StartElement();
@@ -1216,10 +1217,10 @@ namespace OpenDental.Eclaims {
 				x=doc.PopX();//End indentation.
 			}
 			x=doc.StartElement();
-			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-			x=doc.StartElement();
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Underline);
 			doc.DrawString(g,isFrench?"Validation du titulaire/employeur":"Policy holder / employer certification",x,0);
-			x=doc.StartElement(verticalLine);
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Regular);
+			x=doc.StartElement();
 			underlineWidth=g.MeasureString("**************",doc.standardFont).Width;
 			size1=doc.DrawString(g,isFrench?"1. Entrée en vigueur de couverture:":"1. Date coverage commenced:",x,0);
 			doc.HorizontalLine(g,Pens.Black,x+size1.Width,x+size1.Width+underlineWidth,size1.Height);
@@ -1235,16 +1236,14 @@ namespace OpenDental.Eclaims {
 			x+=doc.HorizontalLine(g,Pens.Black,x,x+150,verticalLine).Width+10;
 			x+=doc.DrawString(g,isFrench?"Fonction:":"Position:",x,0).Width;
 			x+=doc.HorizontalLine(g,Pens.Black,x,x+100,verticalLine).Width+10;
-			x=doc.StartElement();
 			x+=doc.DrawString(g,"Date:",x,0).Width;
-			doc.HorizontalLine(g,Pens.Black,x,x+150,verticalLine);
+			x+=doc.HorizontalLine(g,Pens.Black,x,x+150,verticalLine).Width+10;
 			x=doc.PopX();
-			x=doc.StartElement(verticalLine);
-			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
 			float yoff=0;
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Underline);
 			yoff+=doc.DrawString(g,isFrench?"Signature du patient et du dentiste":"Patient's and Dentist's signature",x,yoff).Height;
-			yoff+=verticalLine;
+			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size,FontStyle.Regular);
 			yoff+=doc.DrawString(g,isFrench?"Je déclare qu’à ma connaissance les renseignements donnés sont "+
 				"véridiques, exacts et complets. J’autorise la divulgation à l’assureur, ou au Centre "+
 				"Dentaide, ou à leurs mandataires de tout renseignement ou dossier relatif à cette "+
@@ -1270,8 +1269,6 @@ namespace OpenDental.Eclaims {
 			yoff+=verticalLine*2;
 			yoff+=doc.HorizontalLine(g,Pens.Black,x,x+400,yoff).Height;
 			yoff+=doc.DrawString(g,isFrench?"Signature du dentiste":"Dentist's signature",x,yoff).Height;
-			yoff+=verticalLine;
-			yoff+=doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,yoff).Height;
 			x=doc.StartElement();
 			size1=doc.DrawString(g,isFrench?"Date du traitement: ":"Date of Service: ",x,0);
 			text=DateToString(etrans.DateTimeTrans);
@@ -1966,25 +1963,25 @@ namespace OpenDental.Eclaims {
 						statusStr=isFrench?"La transaction a été acceptée.":"Transaction has been accepted.";
 						break;
 					case ("E"):
-						statusStr=isFrench?"Le patient est admissible.":"The patient is eligible.";
+						statusStr=isFrench?"Le patient est admissible.":"The patient is eligible.";	
 						break;
 					case ("R"):
-						statusStr=isFrench?"Revendication est rejetée en raison d'erreurs.":"Claim is rejected because of errors.";
+						statusStr=isFrench?"Transaction rejeté due aux erreurs.":"Claim is rejected because of errors.";
 						break;
 					case ("H"):
-						statusStr=isFrench?"Revendication est bien reçu par le transporteur et il est détenu pour un traitement ultérieur. Réponse ne sera pas renvoyé chez le dentiste par voie électronique.":"Claim is received successfully by the carrier and is held for further processing. Response will NOT be sent back to the dentist electronically.";
+						statusStr=isFrench?"Transaction a été reçu par l'assureur et est détenu pour un traitement ultérieur. Réponse ne sera pas renvoyé chez le dentiste par voie électronique.":"Claim is received successfully by the carrier and is held for further processing. Response will NOT be sent back to the dentist electronically.";
 						break;
 					case ("B"):
-						statusStr=isFrench?"Demande est reçue avec succès par le réseau et sera transmis par lots sur le support pour un traitement ultérieur. Réponse ne sera pas renvoyé chez le dentiste par voie électronique.":"Claim is received successfully by the network and will be batch-forwarded on to the carrier for further processing. Response will NOT be sent back to the dentist electronically.";
+						statusStr=isFrench?"Transaction a été reçu par le réseau et sera transmit en lot à l'assureur pour traitement ultérieur. Réponse ne sera pas renvoyé chez le dentiste par voie électronique.":"Claim is received successfully by the network and will be batch-forwarded on to the carrier for further processing. Response will NOT be sent back to the dentist electronically.";
 						break;
 					case ("C"):
-						statusStr=isFrench?"Revendication est bien reçu par le transporteur et il est détenu pour un traitement ultérieur. La réponse peut être renvoyée chez le dentiste par voie électronique et accessibles via ROT.":"Claim is received successfully by the carrier and is held for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
+						statusStr=isFrench?"Transaction a été reçu par l'assureur et est détenu pour un traitement ultérieur. Réponse sera peut-être renvoyé chez le dentiste par voie électronique et obtenu par une demande pour les réponses en suspend.":"Claim is received successfully by the carrier and is held for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
 						break;
 					case ("N"):
-						statusStr=isFrench?"Demande est reçue avec succès par le réseau et sera transmis par lots sur le support pour un traitement ultérieur. La réponse peut être renvoyée chez le dentiste par voie électronique et accessibles via ROT.":"Claim is received successfully by the network and will be batch forwarded onto the carrier for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
+						statusStr=isFrench?"Transaction a été reçu par le réseau et sera transmit en lot à l'assureur pour traitement ultérieur.  Réponse sera peut-être renvoyé chez le dentiste par voie électronique et obtenu par une demande pour les réponses en suspend.":"Claim is received successfully by the network and will be batch forwarded onto the carrier for further processing. Response may be sent back to the dentist electronically and retrievable via ROT.";
 						break;
 					case ("M"):
-						statusStr=isFrench?"Formulaire de demande de manuel doit être présentée par le patient ou le cabinet dentaire.":"Manual claim form should be submitted by the patient or the dental office.";
+						statusStr=isFrench?"Un formulaire de transaction manuelle devrait être soumise par le patient ou le cabinet dentaire.":"Manual claim form should be submitted by the patient or the dental office.";
 						break;
 					case ("X"):
 						statusStr=isFrench?"Pas de réponses les plus remarquables à suivre.":"No more outstanding responses to follow.";
