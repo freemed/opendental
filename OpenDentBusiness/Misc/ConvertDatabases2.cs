@@ -4113,8 +4113,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE ehrmeasure (
 						EhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
 						MeasureType tinyint NOT NULL,
-						Numerator tinyint NOT NULL,
-						Denominator tinyint NOT NULL
+						Numerator smallint NOT NULL,
+						Denominator smallint NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -4124,8 +4124,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE ehrmeasure (
 						EhrMeasureNum number(20) NOT NULL,
 						MeasureType number(3) NOT NULL,
-						Numerator number(3) NOT NULL,
-						Denominator number(3) NOT NULL,
+						Numerator number(11) NOT NULL,
+						Denominator number(11) NOT NULL,
 						CONSTRAINT ehrmeasure_EhrMeasureNum PRIMARY KEY (EhrMeasureNum)
 						)";
 					Db.NonQ(command);
