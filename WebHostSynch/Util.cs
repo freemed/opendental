@@ -12,10 +12,6 @@ using WebForms;
 
 namespace WebHostSynch {
 	public class Util {
-
-		private static bool IsMobileDBSet=false;
-		string previousConnectStr="";
-
 		/// <summary>
 		/// This method is redundant. It may be deleted later. Some older versions of OD may use this method.
 		/// </summary>

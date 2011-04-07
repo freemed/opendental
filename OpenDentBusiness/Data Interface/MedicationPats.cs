@@ -55,15 +55,28 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static List<long> GetChangedSinceMedicationPatNums(DateTime changedSince) {
+		public static List<long> GetChangedSinceMedicationPatNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,eligibleForUploadPatNumList);
 			}
-			string command="SELECT MedicationPatNum FROM medicationpat WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable dt=Db.GetTable(command);
-			List<long> medicationpatnums = new List<long>(dt.Rows.Count);
-			for(int i=0;i<dt.Rows.Count;i++) {
-				medicationpatnums.Add(PIn.Long(dt.Rows[i]["MedicationPatNum"].ToString()));
+			string strEligibleForUploadPatNums="";
+			DataTable table;
+			if(eligibleForUploadPatNumList.Count>0) {
+				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
+					if(i>0) {
+						strEligibleForUploadPatNums+="OR ";
+					}
+					strEligibleForUploadPatNums+="PatNum='"+eligibleForUploadPatNumList[i].ToString()+"' ";
+				}
+				string command="SELECT MedicationPatNum FROM medicationpat WHERE DateTStamp > "+POut.DateT(changedSince)+" AND ("+strEligibleForUploadPatNums+")";
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			List<long> medicationpatnums = new List<long>(table.Rows.Count);
+			for(int i=0;i<table.Rows.Count;i++) {
+				medicationpatnums.Add(PIn.Long(table.Rows[i]["MedicationPatNum"].ToString()));
 			}
 			return medicationpatnums;
 		}

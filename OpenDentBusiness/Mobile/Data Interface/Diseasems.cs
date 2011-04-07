@@ -20,8 +20,8 @@ namespace OpenDentBusiness.Mobile{
 
 		#region Used only on OD
 		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<long> GetChangedSinceDiseaseNums(DateTime changedSince) {
-			return Diseases.GetChangedSinceDiseaseNums(changedSince);
+		public static List<long> GetChangedSinceDiseaseNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+			return Diseases.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 		}
 
 		///<summary>The values returned are sent to the webserver.</summary>

@@ -292,15 +292,15 @@ namespace OpenDental {
 
 		///<summary>dennis: code for patient portal starts here. This code may be moved to another location later</summary>
 		private static void UploadWorkerPatPortal(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
+			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
-			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince);
+			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
 			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
-			List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
+			List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince,eligibleForUploadPatNumList);
 			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
-			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince);
+			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 			int totalCount=medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count;
-			
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
 			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
