@@ -191,6 +191,8 @@
     <Compile Include="Crud\FeeCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\FormPatCrud.cs" />
+    <Compile Include="Crud\FormularyCrud.cs" />
+    <Compile Include="Crud\FormularyMedCrud.cs" />
     <Compile Include="Crud\GroupPermissionCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
