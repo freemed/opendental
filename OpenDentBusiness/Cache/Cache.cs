@@ -86,6 +86,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
 				ds.Tables.Add(DiseaseDefs.RefreshCache());
+				ds.Tables.Add(ICD9s.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				ds.Tables.Add(DisplayFields.RefreshCache());
@@ -254,6 +255,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
 				DiseaseDefs.FillCache(ds.Tables["DiseaseDef"]);
+				ICD9s.FillCache(ds.Tables["ICD9"]);
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				DisplayFields.FillCache(ds.Tables["DisplayField"]);
@@ -368,7 +370,6 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll) {
 				ZipCodes.FillCache(ds.Tables["ZipCode"]);
 			}
-
 		}
 
 	}

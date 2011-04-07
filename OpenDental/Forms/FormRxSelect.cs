@@ -201,6 +201,8 @@ namespace OpenDental{
 			List<string> customMessages=new List<string>();
 			for(int i=0;i<alertList.Count;i++){
 				for(int j=0;j<diseases.Count;j++){
+					//This does not look for matches with icd9s.  The only reason we support diseases anyway is for allergies that may have been entered as diseases.
+					//There is no reason to check icd9s.
 					if(alertList[i].DiseaseDefNum==diseases[j].DiseaseDefNum && diseases[j].ProbStatus==0){//ProbStatus is active.
 						if(alertList[i].NotificationMsg=="") {
 							diseaseMatches.Add(DiseaseDefs.GetName(diseases[j].DiseaseDefNum));

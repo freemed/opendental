@@ -317,7 +317,7 @@ namespace OpenDentBusiness{
 		AccountingAutoPays,
 		///<summary>39</summary>
 		ProcButtons,
-		///<summary>40</summary>
+		///<summary>40.  Includes ICD9s.</summary>
 		Diseases,
 		///<summary>41</summary>
 		Languages,

@@ -85,9 +85,10 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="SELECT LName,FName FROM patient,disease WHERE "
+			string command="SELECT LName,FName,patient.PatNum FROM patient,disease WHERE "
 				+"patient.PatNum=disease.PatNum "
-				+"AND disease.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"'";
+				+"AND disease.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"' "
+				+"GROUP BY patient.PatNum";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string s=Lans.g("DiseaseDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()

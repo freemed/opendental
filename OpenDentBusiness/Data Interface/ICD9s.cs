@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM icd9 ORDER BY Description";
+			string command="SELECT * FROM icd9 ORDER BY ICD9Code";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ICD9";
 			FillCache(table);
@@ -89,7 +89,23 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),icd9Num);
 				return;
 			}
-			string command= "DELETE FROM icd9 WHERE ICD9Num = "+POut.Long(icd9Num);
+			string command="SELECT LName,FName,patient.PatNum FROM patient,disease WHERE "
+				+"patient.PatNum=disease.PatNum "
+				+"AND disease.ICD9Num='"+POut.Long(icd9Num)+"' "
+				+"GROUP BY patient.PatNum";
+			DataTable table=Db.GetTable(command);
+			if(table.Rows.Count>0) {
+				string s=Lans.g("ICD9","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
+					+" "+Lans.g("ICD9","patients, including")+" \r\n";
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i>5) {
+						break;
+					}
+					s+=table.Rows[i]["LName"].ToString()+", "+table.Rows[i]["FName"].ToString()+" - "+table.Rows[i]["PatNum"].ToString()+"\r\n";
+				}
+				throw new ApplicationException(s);
+			}
+			command= "DELETE FROM icd9 WHERE ICD9Num = "+POut.Long(icd9Num);
 			Db.NonQ(command);
 		}
 
@@ -140,6 +156,16 @@ namespace OpenDentBusiness{
 				}
 			}
 			return "";
+		}
+
+		public static bool IsInList(string iCD9Code) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].ICD9Code==iCD9Code) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

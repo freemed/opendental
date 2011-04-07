@@ -30,11 +30,12 @@ namespace OpenDental{
 			this.buttonDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.service11 = new OpenDental.localhost.Service1();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Location = new System.Drawing.Point(12,23);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(91,16);
 			this.label1.TabIndex = 4;
@@ -43,7 +44,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(9,35);
+			this.label2.Location = new System.Drawing.Point(9,49);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(94,16);
 			this.label2.TabIndex = 4;
@@ -52,30 +53,29 @@ namespace OpenDental{
 			// 
 			// textDescription
 			// 
-			this.textDescription.Location = new System.Drawing.Point(109,31);
+			this.textDescription.Location = new System.Drawing.Point(109,45);
 			this.textDescription.Name = "textDescription";
 			this.textDescription.Size = new System.Drawing.Size(317,20);
-			this.textDescription.TabIndex = 5;
+			this.textDescription.TabIndex = 1;
 			// 
 			// textCode
 			// 
-			this.textCode.Enabled = false;
-			this.textCode.Location = new System.Drawing.Point(109,5);
+			this.textCode.Location = new System.Drawing.Point(109,19);
 			this.textCode.Name = "textCode";
 			this.textCode.Size = new System.Drawing.Size(100,20);
-			this.textCode.TabIndex = 8;
+			this.textCode.TabIndex = 0;
 			// 
 			// buttonDelete
 			// 
 			this.buttonDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonDelete.Autosize = true;
 			this.buttonDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.buttonDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonDelete.CornerRadius = 4F;
 			this.buttonDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.buttonDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonDelete.Location = new System.Drawing.Point(21,117);
+			this.buttonDelete.Location = new System.Drawing.Point(22,97);
 			this.buttonDelete.Name = "buttonDelete";
 			this.buttonDelete.Size = new System.Drawing.Size(82,25);
 			this.buttonDelete.TabIndex = 6;
@@ -90,7 +90,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(351,77);
+			this.butOK.Location = new System.Drawing.Point(271,97);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -105,17 +105,22 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(351,118);
+			this.butCancel.Location = new System.Drawing.Point(352,98);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// service11
+			// 
+			this.service11.Url = "http://localhost:3824/Service1.asmx";
+			this.service11.UseDefaultCredentials = true;
+			// 
 			// FormIcd9Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(451,169);
+			this.ClientSize = new System.Drawing.Size(452,144);
 			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.buttonDelete);
 			this.Controls.Add(this.textDescription);
@@ -141,5 +146,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textDescription;
 		private UI.Button buttonDelete;
 		private System.Windows.Forms.TextBox textCode;
+		private localhost.Service1 service11;
 	}
 }

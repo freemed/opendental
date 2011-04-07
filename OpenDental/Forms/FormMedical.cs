@@ -506,7 +506,6 @@ namespace OpenDental{
 		private void butAddProblem_Click(object sender,EventArgs e) {
 			Disease disease=new Disease();
 			disease.PatNum=PatCur.PatNum;
-			//todo: Use FormDiseaseDefs.IsSelectionMode
 			FormDiseaseDefs formDD=new FormDiseaseDefs();
 			formDD.IsSelectionMode=true;
 			formDD.ShowDialog();
@@ -514,14 +513,15 @@ namespace OpenDental{
 				return;
 			}
 			disease.DiseaseDefNum=formDD.SelectedDiseaseDefNum;
-			Diseases.Insert(disease);
+			FormDiseaseEdit FormD=new FormDiseaseEdit(disease);
+			FormD.IsNew=true;
+			FormD.ShowDialog();
 			FillProblems();
 		}
 
 		private void butIcd9_Click(object sender,EventArgs e) {
 			Disease disease=new Disease();
 			disease.PatNum=PatCur.PatNum;
-			//todo: Use FormDiseaseDefs.IsSelectionMode
 			FormIcd9s formI=new FormIcd9s();
 			formI.IsSelectionMode=true;
 			formI.ShowDialog();
@@ -529,7 +529,15 @@ namespace OpenDental{
 				return;
 			}
 			disease.ICD9Num=formI.SelectedIcd9Num;
-			Diseases.Insert(disease);
+			FormDiseaseEdit FormD=new FormDiseaseEdit(disease);
+			FormD.IsNew=true;
+			FormD.ShowDialog();
+			FillProblems();
+		}
+
+		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);
+			FormD.ShowDialog();
 			FillProblems();
 		}
 
@@ -550,12 +558,6 @@ namespace OpenDental{
 		
 		private void checkShowInactiveAllergies_CheckedChanged(object sender,EventArgs e) {
 			FillAllergies();
-		}
-
-		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);
-			FormD.ShowDialog();
-			FillProblems();
 		}
 
 		/*

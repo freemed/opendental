@@ -17,14 +17,6 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
 		private void FormIcd9s_Load(object sender,EventArgs e) {
 			if(IsSelectionMode) {
 				butClose.Text=Lan.g(this,"Cancel");
@@ -36,13 +28,13 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
+			Cursor=Cursors.WaitCursor;
 			ICD9s.RefreshCache();
 			listMain.Items.Clear();
-			string s;
 			for(int i=0;i<ICD9s.Listt.Count;i++) {
-				s=ICD9s.Listt[i].Description;
-				listMain.Items.Add(s);
+				listMain.Items.Add(ICD9s.Listt[i].ICD9Code+" - "+ICD9s.Listt[i].Description);
 			}
+			Cursor=Cursors.Default;
 		}
 
 		private void listMain_DoubleClick(object sender,System.EventArgs e) {
@@ -68,6 +60,20 @@ namespace OpenDental {
 			FormI.IsNew=true;
 			FormI.ShowDialog();
 			FillGrid();
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			//not even visible unless IsSelectionMode
+			if(listMain.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please select an item first.");
+				return;
+			}
+			SelectedIcd9Num=ICD9s.Listt[listMain.SelectedIndex].ICD9Num;
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 	}
