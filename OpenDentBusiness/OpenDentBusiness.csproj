@@ -321,6 +321,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data Interface\EhrMeasures.cs" />
+    <Compile Include="Data Interface\Formularies.cs" />
+    <Compile Include="Data Interface\FormularyMeds.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ICD9s.cs" />
@@ -630,6 +632,8 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\EhrMeasure.cs" />
+    <Compile Include="TableTypes\Formulary.cs" />
+    <Compile Include="TableTypes\FormularyMed.cs" />
     <Compile Include="TableTypes\MedicalOrder.cs" />
     <Compile Include="TableTypes\CreditCard.cs" />
     <Compile Include="TableTypes\ICD9.cs" />

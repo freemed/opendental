@@ -4247,6 +4247,53 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE medication SET DateTStamp = SYSTIMESTAMP";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS formulary";
+					Db.NonQ(command);
+					command=@"CREATE TABLE formulary (
+						FormularyNum bigint NOT NULL auto_increment PRIMARY KEY,
+						Description varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE formulary'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE formulary (
+						FormularyNum number(20) NOT NULL,
+						Description varchar2(255),
+						CONSTRAINT formulary_FormularyNum PRIMARY KEY (FormularyNum)
+						)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS formularymed";
+					Db.NonQ(command);
+					command=@"CREATE TABLE formularymed (
+						FormularyMedNum bigint NOT NULL auto_increment PRIMARY KEY,
+						FormularyNum bigint NOT NULL,
+						MedicationNum bigint NOT NULL,
+						INDEX(FormularyNum),
+						INDEX(MedicationNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE formularymed'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE formularymed (
+						FormularyMedNum number(20) NOT NULL,
+						FormularyNum number(20) NOT NULL,
+						MedicationNum number(20) NOT NULL,
+						CONSTRAINT formularymed_FormularyMedNum PRIMARY KEY (FormularyMedNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX formularymed_FormularyNum ON formularymed (FormularyNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX formularymed_MedicationNum ON formularymed (MedicationNum)";
+					Db.NonQ(command);
+				}
+
 
 
 
@@ -4283,3 +4330,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	
 
+
+
+				
