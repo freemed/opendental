@@ -1325,7 +1325,6 @@ namespace OpenDentBusiness {
 				//still to do include:
 				//appointment x 2 - can't do because no inssubnum.
 				//benefit
-				//claimproc
 				//entrans
 				//inssub?
 				//patplan?
@@ -1335,23 +1334,54 @@ namespace OpenDentBusiness {
 					+"AND inssub.InsSubNum=claim.InsSubNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNum values: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum values: ")+numFound+"\r\n";
 				}
 				command="SELECT COUNT(*) FROM claim WHERE claim.PlanNum2 != 0 "//planNum is not zero
 					+"AND NOT EXISTS(SELECT * FROM inssub WHERE inssub.PlanNum=claim.PlanNum2 "//must be an exact match
 					+"AND inssub.InsSubNum=claim.InsSubNum2)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Invalid claim InsSubNum2 values: ")+numFound+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum2/PlanNum2 values: ")+numFound+"\r\n";
+				}
+				command="SELECT COUNT(*) FROM claimproc "
+					+"WHERE NOT EXISTS(SELECT * FROM inssub WHERE inssub.PlanNum=claimproc.PlanNum "//must be an exact match
+					+"AND inssub.InsSubNum=claimproc.InsSubNum)";
+				numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Mismatched claimproc InsSubNum/PlanNum values: ")+numFound+"\r\n";
 				}
 			}
 			else {//fix
-				//There is no fix yet.  The only database where we saw this was not amenable to a fix here.
-				//command="UPDATE claim SET InsSubNum2=(SELECT inssub.InsSubNum FROM inssub WHERE inssub.PlanNum)";
-				//long numFixed=Db.NonQ(command);
-				//if(numFixed>0 || verbose) {
-				//	log+=Lans.g("FormDatabaseMaintenance","Invalid patplan PlanNums fixed: ")+numFixed+"\r\n";
-				//}
+				//The fixes can be complicated.
+				long numFixed=0;
+				//claim.PlanNum (and attached claimprocs)-----------------------------------------------------------------------------------------------------------------
+				command="SELECT InsSubNum,PlanNum,PatNum,ClaimNum FROM claim "
+					+"WHERE NOT EXISTS(SELECT * FROM inssub WHERE inssub.PlanNum=claim.PlanNum "//must be an exact match
+					+"AND inssub.InsSubNum=claim.InsSubNum)";
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="SELECT PlanNum "
+						+"FROM inssub "
+						+"WHERE InsSubNum="+table.Rows[i]["InsSubNum"].ToString();
+					string planNum=Db.GetScalar(command);
+					command="SELECT PlanNum "
+						+"FROM patplan "
+						+"WHERE InsSubNum="+table.Rows[i]["InsSubNum"].ToString()+" "
+						+"AND PatNum="+table.Rows[i]["PatNum"].ToString();
+					string planNum2=Db.GetScalar(command);
+					if(planNum==planNum2) {//if the inssub and patplan tables agree (are synched), use that plannum (this will not work if subscriber is not self)
+						command="UPDATE claim SET PlanNum="+planNum+" WHERE ClaimNum="+table.Rows[i]["ClaimNum"].ToString();
+						Db.NonQ(command);
+						command="UPDATE claimproc SET PlanNum="+planNum+" WHERE ClaimNum="+table.Rows[i]["ClaimNum"].ToString();
+						Db.NonQ(command);
+						numFixed++;
+					}
+				}
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum fixed: ")+numFixed+"\r\n";
+				}
+				numFixed=0;
+				//others?---------------------------------------------------------------------------------------------------------------------
 			}
 			return log;
 		}
