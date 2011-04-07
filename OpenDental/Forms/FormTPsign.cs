@@ -493,7 +493,7 @@ namespace OpenDental{
 			sigBox.ClearTablet();
 			sigBox.Visible=true;
 			if(allowTopaz) {
-                CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 				sigBoxTopaz.Visible=false;//until user explicitly starts it.
 			}
 			sigBox.SetTabletState(1);//on-screen box is now accepting input.
@@ -504,9 +504,11 @@ namespace OpenDental{
 		private void butTopazSign_Click(object sender,EventArgs e) {
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
-            if(allowTopaz){
-                CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
-            }
+			if(allowTopaz){
+				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+				CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
+			}
 			SigChanged=true;
 			labelInvalidSig.Visible=false;
 		}

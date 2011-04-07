@@ -813,11 +813,11 @@ namespace OpenDental{
 						case "birthdateforage":
 							tableOut.Rows[i][j]=PatientLogic.DateToAgeString(PIn.Date(tableOut.Rows[i][j].ToString()));
 							break;
-            //time 
+						//time 
 						case "aptdatetime":
 						case "nextschedappt":
-            case "starttime":
-            case "stoptime":
+						case "starttime":
+						case "stoptime":
 							tableOut.Rows[i][j]=PIn.DateT(tableOut.Rows[i][j].ToString()).ToString("t")+"   "
 								+PIn.DateT(tableOut.Rows[i][j].ToString()).ToString("d");
 							break;

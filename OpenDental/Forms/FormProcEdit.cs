@@ -3428,6 +3428,7 @@ namespace OpenDental{
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
 			if(allowTopaz){
+				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz); 
 				CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 			}

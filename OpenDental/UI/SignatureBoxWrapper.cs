@@ -203,6 +203,7 @@ namespace OpenDental.UI {
 			sigBoxTopaz.Visible=true;
 			if(allowTopaz){
 				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+				CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 			}
 			labelInvalidSig.Visible=false;
