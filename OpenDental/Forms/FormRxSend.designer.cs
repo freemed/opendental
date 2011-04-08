@@ -41,6 +41,7 @@ namespace OpenDental{
 			this.comboPharmacy.Name = "comboPharmacy";
 			this.comboPharmacy.Size = new System.Drawing.Size(160,21);
 			this.comboPharmacy.TabIndex = 55;
+			this.comboPharmacy.SelectionChangeCommitted += new System.EventHandler(this.comboPharmacy_SelectionChangeCommitted);
 			// 
 			// labelClinic
 			// 

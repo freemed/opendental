@@ -4308,7 +4308,20 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						//7.5 which is before Oracle support started so it will never exist.
 					}
 				}
-				
+				//Jason- I will be working within these next few comments so no conflicts will arise.
+				//SELECT * FROM diseasedef WHERE DiseaseName LIKE '%allerg%';
+				//Loop through table:
+				//	1. Insert allergydef with same PK
+				//  2. Get list of diseases loop through it, add to allergy and delete from disease.  
+				//SELECT * FROM disease WHERE DiseaseDefNum=<PK of disease>;
+				//  3. Convert any disease alert to an allergy alert:
+				//UPDATE rxalert SET AllergyDefNum=<mydiseasedefnum>, DiseaseDefNum=0 WHERE DiseaseDefNum=<mydiseasedefnum>;
+				//	4. Delete the diseasedef with that DiseaseDefNum.
+
+
+
+
+
 
 
 
