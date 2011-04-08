@@ -54,6 +54,12 @@ namespace TestCanada {
 			Providers.RefreshCache();
 			//The billing provider for both is Dr. A.
 			Prefs.UpdateLong(PrefName.InsBillingProv,0);//since Dr. A is also the default practice provider.
+			//We create a fake test address for the practice, so that forms looks correct when printed, even though no such test address is provided by CDANet.
+			Prefs.UpdateString(PrefName.PracticeAddress,"123 Test Ave");
+			Prefs.UpdateString(PrefName.PracticeAddress2,"Suite 100");
+			Prefs.UpdateString(PrefName.PracticeCity,"East Westchester");
+			Prefs.UpdateString(PrefName.PracticeST,"ON");
+			Prefs.UpdateString(PrefName.PracticeZip,"M7F2J9");
 			Prefs.RefreshCache();
 			return "Dentist objects set.\r\n";
 		}
