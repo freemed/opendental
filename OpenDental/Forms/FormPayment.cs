@@ -1198,7 +1198,8 @@ namespace OpenDental{
 			}
 			bool needToken=false;
 			bool newCard=false;
-			bool preAuth=false;
+			bool hasXToken=false;
+			bool notRecurring=false;
 			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
@@ -1224,14 +1225,16 @@ namespace OpenDental{
 					CCard=creditCards[i];
 				}
 			}
-			if(CCard!=null) {//Have credit card on file
-				//Show window to lock in the transaction type.
-				FormXchargeTrans FormXT=new FormXchargeTrans();
-				FormXT.ShowDialog();
-				if(FormXT.DialogResult!=DialogResult.OK) {
-					return;
-				}
+			//Show window to lock in the transaction type.
+			FormXchargeTrans FormXT=new FormXchargeTrans();
+			FormXT.ShowDialog();
+			if(FormXT.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(CCard!=null) {
+				//Have credit card on file
 				if(CCard.XChargeToken!="") {//Recurring charge
+					hasXToken=true;
 					/*       ***** An example of how recurring charges work***** 
 					C:\Program Files\X-Charge\XCharge.exe /TRANSACTIONTYPE:Purchase /LOCKTRANTYPE
 					/AMOUNT:10.00 /LOCKAMOUNT /XCACCOUNTID:XAW0JWtx5kjG8 /RECEIPT:RC001
@@ -1239,127 +1242,101 @@ namespace OpenDental{
 					/PASSWORD:system /STAYONTOP /AUTOPROCESS /AUTOCLOSE /HIDEMAINWINDOW
 					/RECURRING /SMALLWINDOW /NORESULTDIALOG
 					*/
-					switch(FormXT.TransactionType) {
-						case 0:
-							info.Arguments+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
-							info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
-							info.Arguments+="/AUTOPROCESS ";
-							break;
-						case 1:
-							info.Arguments+="/TRANSACTIONTYPE:RETURN /LOCKTRANTYPE ";
-							info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
-							info.Arguments+="/AUTOPROCESS ";
-							break;
-						case 2:
-							info.Arguments+="/TRANSACTIONTYPE:DEBITPURCHASE /LOCKTRANTYPE ";
-							info.Arguments+="/CASHBACK:"+FormXT.CashBackAmount.ToString("F2")+" ";
-							break;
-						case 3:
-							info.Arguments+="/TRANSACTIONTYPE:DEBITRETURN /LOCKTRANTYPE ";
-							break;
-						case 4:
-							info.Arguments+="/TRANSACTIONTYPE:FORCE /LOCKTRANTYPE ";
-							break;
-						case 5:
-							info.Arguments+="/TRANSACTIONTYPE:PREAUTH /LOCKTRANTYPE ";
-							info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
-							info.Arguments+="/AUTOPROCESS ";
-							preAuth=true;
-							break;
-						case 6:
-							info.Arguments+="/TRANSACTIONTYPE:ADJUSTMENT /LOCKTRANTYPE ";
-							break;
-						case 7:
-							info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
-							break;
-					}
-					if(CCard.CCExpiration.Year>2005) {
-						info.Arguments+="/EXP:"+CCard.CCExpiration.ToString("MMyy")+" ";
-					}
-					if(CCard.Zip!="") {
-						info.Arguments+="\"/ZIP:"+CCard.Zip+"\" ";
-					}
-					else {
-						info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
-					}
-					if(CCard.Address!="") {
-						info.Arguments+="\"/ADDRESS:"+CCard.Address+"\" ";
-					}
-					else {
-						info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
-					}
-					info.Arguments+="/HIDEMAINWINDOW ";
-					info.Arguments+="/RECURRING ";
-					info.Arguments+="/SMALLWINDOW ";
 				}
-				else {//Not recurring charge
+				else {//Not recurring charge, on file and might need a token.
+					notRecurring=true;
 					if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {//Use token only if user has has pref unchecked in module setup (allow store credit card nums).
 						needToken=true;//Will create a token from result file so credit card info isn't saved in our db.
 					}
-					switch(FormXT.TransactionType) {
-						case 0:
-							info.Arguments+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
-							info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
-							info.Arguments+="/AUTOPROCESS ";
-							break;
-						case 1:
-							info.Arguments+="/TRANSACTIONTYPE:RETURN /LOCKTRANTYPE ";
-							info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
-							info.Arguments+="/AUTOPROCESS ";
-							break;
-						case 2:
-							info.Arguments+="/TRANSACTIONTYPE:DEBITPURCHASE /LOCKTRANTYPE ";
-							info.Arguments+="/CASHBACK:"+FormXT.CashBackAmount.ToString("F2")+" ";
-							break;
-						case 3:
-							info.Arguments+="/TRANSACTIONTYPE:DEBITRETURN /LOCKTRANTYPE ";
-							break;
-						case 4:
-							info.Arguments+="/TRANSACTIONTYPE:FORCE /LOCKTRANTYPE ";
-							break;
-						case 5:
-							info.Arguments+="/TRANSACTIONTYPE:PREAUTH /LOCKTRANTYPE ";
-							info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
-							info.Arguments+="/AUTOPROCESS ";
-							preAuth=true;
-							break;
-						case 6:
-							info.Arguments+="/TRANSACTIONTYPE:ADJUSTMENT /LOCKTRANTYPE ";
-							break;
-						case 7:
-							info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
-							break;
-					}
-					if(CCard.CCExpiration!=null && CCard.CCExpiration.Year>2005) {
-						info.Arguments+="/EXP:"+CCard.CCExpiration.ToString("MMyy")+" ";
-					}
-					if(CCard.Zip!="") {
-						info.Arguments+="\"/ZIP:"+CCard.Zip+"\" ";
-					}
-					else {
-						info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
-					}
-					if(CCard.Address!="") {
-						info.Arguments+="\"/ADDRESS:"+CCard.Address+"\" ";
-					}
-					else {
-						info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
-					}
-					info.Arguments+="/HIDEMAINWINDOW ";
-					info.Arguments+="/SMALLWINDOW ";
 				}
 			}
-			else {//Add card option was selected in credit card drop down.
+			else {//Add card option was selected in credit card drop down. No other possibility.
 				newCard=true;
+			}
+			switch(FormXT.TransactionType) {
+				case 0:
+					info.Arguments+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
+					if(hasXToken) {
+						info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+						info.Arguments+="/AUTOPROCESS ";
+					}
+					if(notRecurring) {
+						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
+						info.Arguments+="/AUTOPROCESS ";
+					}
+					break;
+				case 1:
+					info.Arguments+="/TRANSACTIONTYPE:RETURN /LOCKTRANTYPE ";
+					if(hasXToken) {
+						info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+						info.Arguments+="/AUTOPROCESS ";
+					}
+					if(notRecurring) {
+						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
+						info.Arguments+="/AUTOPROCESS ";
+					}
+					break;
+				case 2:
+					info.Arguments+="/TRANSACTIONTYPE:DEBITPURCHASE /LOCKTRANTYPE ";
+					info.Arguments+="/CASHBACK:"+FormXT.CashBackAmount.ToString("F2")+" ";
+					break;
+				case 3:
+					info.Arguments+="/TRANSACTIONTYPE:DEBITRETURN /LOCKTRANTYPE ";
+					break;
+				case 4:
+					info.Arguments+="/TRANSACTIONTYPE:FORCE /LOCKTRANTYPE ";
+					break;
+				case 5:
+					info.Arguments+="/TRANSACTIONTYPE:PREAUTH /LOCKTRANTYPE ";
+					if(hasXToken) {
+						info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+						info.Arguments+="/AUTOPROCESS ";
+					}
+					if(notRecurring) {
+						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
+						info.Arguments+="/AUTOPROCESS ";
+					}
+					break;
+				case 6:
+					info.Arguments+="/TRANSACTIONTYPE:ADJUSTMENT /LOCKTRANTYPE ";
+					break;
+				case 7:
+					info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
+					break;
+			}
+			if(newCard) {
 				info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 				info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
+			}
+			else {
+				if(CCard.CCExpiration!=null && CCard.CCExpiration.Year>2005) {
+					info.Arguments+="/EXP:"+CCard.CCExpiration.ToString("MMyy")+" ";
+				}
+				if(CCard.Zip!="") {
+					info.Arguments+="\"/ZIP:"+CCard.Zip+"\" ";
+				}
+				else {
+					info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
+				}
+				if(CCard.Address!="") {
+					info.Arguments+="\"/ADDRESS:"+CCard.Address+"\" ";
+				}
+				else {
+					info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
+				}
+				if(hasXToken) {//Special parameter for tokens.
+					info.Arguments+="/RECURRING ";
+				}
 			}
 			info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
 			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
 			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+			info.Arguments+="/PARTIALAPPROVALSUPPORT:T ";
 			info.Arguments+="/AUTOCLOSE ";
+			info.Arguments+="/HIDEMAINWINDOW ";
+			info.Arguments+="/SMALLWINDOW ";
 			info.Arguments+="/GETXCACCOUNTID ";
 			info.Arguments+="/NORESULTDIALOG ";
 			Cursor=Cursors.WaitCursor;
@@ -1374,13 +1351,23 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 			string resulttext="";
 			string line="";
-			bool showAmountNotice=false;
-			double amtReturned=0;
+			bool showApprovedAmtNotice=false;
 			double approvedAmt=0;
 			string xChargeToken="";
 			string accountMasked="";
+			string expiration="";
 			using(TextReader reader=new StreamReader(resultfile)) {
 				line=reader.ReadLine();
+				/*Example of successful transaction:
+					RESULT=SUCCESS
+					TYPE=Purchase
+					APPROVALCODE=000064
+					ACCOUNT=XXXXXXXXXXXX6781
+					ACCOUNTTYPE=VISA*
+					AMOUNT=1.77
+					AVSRESULT=Y
+					CVRESULT=M
+				*/
 				while(line!=null) {
 					if(resulttext!="") {
 						resulttext+="\r\n";
@@ -1398,16 +1385,10 @@ namespace OpenDental{
 							break;
 						}
 					}
-					if(line.StartsWith("AMOUNT=")) {
-						amtReturned=PIn.Double(line.Substring(7));
-						if(amtReturned != amt) {
-							showAmountNotice=true;
-						}
-					}
 					if(line.StartsWith("APPROVEDAMOUNT=")) {
 						approvedAmt=PIn.Double(line.Substring(15));
-						if(preAuth) {
-							textAmount.Text=approvedAmt.ToString("F");
+						if(approvedAmt != amt) {
+							showApprovedAmtNotice=true;
 						}
 					}
 					if(line.StartsWith("XCACCOUNTID=")) {
@@ -1415,6 +1396,9 @@ namespace OpenDental{
 					}
 					if(line.StartsWith("ACCOUNT=")) {
 						accountMasked=PIn.String(line.Substring(8));
+					}
+					if(line.StartsWith("EXPIRATION=")) {
+						expiration=PIn.String(line.Substring(11));
 					}
 					line=reader.ReadLine();
 				}
@@ -1435,28 +1419,23 @@ namespace OpenDental{
 						List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
 						CCard.ItemOrder=itemOrderCount.Count;
 						CCard.PatNum=PatCur.PatNum;
+						CCard.CCExpiration=new DateTime(Convert.ToInt32("20"+expiration.Substring(2,2)),Convert.ToInt32(expiration.Substring(0,2)),1);
 						CCard.XChargeToken=xChargeToken;
 						CCard.CCNumberMasked=accountMasked;
 						CreditCards.Insert(CCard);
 					}
 				}
 			}
-			/*Example of successful transaction:
-				RESULT=SUCCESS
-				TYPE=Purchase
-				APPROVALCODE=000064
-				ACCOUNT=XXXXXXXXXXXX6781
-				ACCOUNTTYPE=VISA*
-				AMOUNT=1.77
-				AVSRESULT=Y
-				CVRESULT=M
-			*/
 			if(textNote.Text!="") {
 				textNote.Text+="\r\n";
 			}
 			textNote.Text+=resulttext;
-			if(showAmountNotice) {//Might happen if a card charges for so much but user thought it would charge for more.
-				MessageBox.Show(Lan.g(this,"Warning: The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the amount charged: ")+amtReturned.ToString("C"));
+			if(showApprovedAmtNotice) {
+				if(MessageBox.Show(Lan.g(this,"The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the approved amount returned: ")+approvedAmt.ToString("C")
+					+"\r\n"+Lan.g(this,"Change the amount to match?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)==DialogResult.OK) 
+				{
+					textAmount.Text=approvedAmt.ToString("F");
+				}
 			}
 		}
 
