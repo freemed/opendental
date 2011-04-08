@@ -4297,7 +4297,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX formularymed_MedicationNum ON formularymed (MedicationNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					try {
+						command="ALTER TABLE inssub DROP OldPlanNum";
+						Db.NonQ(command);
+					}
+					catch { 
+						//Some might not have this already so do nothing.
+						//No need to test if column exists for Oracle because column was created in 
+						//7.5 which is before Oracle support started so it will never exist.
+					}
+				}
+				
 
 
 
