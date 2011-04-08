@@ -147,27 +147,19 @@ namespace OpenDental.Eclaims {
 			if(etrans.PatNum!=0) { //Some transactions are not patient specific.
 				patient=Patients.GetPat(etrans.PatNum);
 				patPlansForPat=PatPlans.Refresh(etrans.PatNum);
-				//Get primary info
-				primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
-				insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
-				subscriber=Patients.GetPat(insSub.Subscriber);
-				insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
-				patPlanPri=PatPlans.GetFromList(patPlansForPat,insplan.PlanNum);//Only used when there is no claim.
 				claim=Claims.GetClaim(etrans.ClaimNum);
 				if(claim==null) {//for eligibility
-					//Get secondary info
-					if(etrans.CarrierNum2!=0) {
-						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
-						patPlanSec=PatPlans.GetPatPlan(etrans.PatNum,2);//Would not necessarily work if viewing a historical eligibility request.
-						insSub2=InsSubs.GetSub(patPlanSec.InsSubNum,new List<InsSub>());
-						subscriber2=Patients.GetPat(insSub2.Subscriber);
-						insplan2=InsPlans.GetPlan(patPlanSec.PlanNum,new List<InsPlan>());
-					}
 					//Provider info
 					provTreat=Providers.GetProv(Patients.GetProvNum(patient));
 					provBill=Providers.GetProv(Patients.GetProvNum(patient));
 				}
 				else {
+					//Get primary info
+					primaryCarrier=Carriers.GetCarrier(etrans.CarrierNum);
+					insSub=InsSubs.GetSub(claim.InsSubNum,new List<InsSub>());
+					subscriber=Patients.GetPat(insSub.Subscriber);
+					insplan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
+					patPlanPri=PatPlans.GetFromList(patPlansForPat,insplan.PlanNum);//Only used when there is no claim.
 					//Get secondary info
 					if(etrans.CarrierNum2!=0) {
 						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
@@ -683,7 +675,7 @@ namespace OpenDental.Eclaims {
 					secondaryCarrier.City+" "+secondaryCarrier.State+" "+secondaryCarrier.Zip,150f,0);
 			}
 			x=doc.StartElement();
-			text=isFrench?"NO DE POLICE:":"POLICY NO:";
+			text=isFrench?"NO DE POLICE:":"POLICY#:";
 			doc.DrawString(g,text,x,0);
 			text=insplan.GroupNum;//Field C01
 			doc.DrawString(g,text,leftMidCol,0);
@@ -960,7 +952,7 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,text,rightCol,0);
 			}
 			x=doc.StartElement();
-			text=isFrench?"NO DE POLICE:":"POLICY NO:";
+			text=isFrench?"NO DE POLICE:":"POLICY#:";
 			doc.DrawString(g,text,x,0);
 			text=insplan.GroupNum;//Field C01
 			doc.DrawString(g,text,leftMidCol,0);
@@ -1598,8 +1590,8 @@ namespace OpenDental.Eclaims {
 				return;
 			}
 			float procedureCodeCol=x;
-			float procedureDescriptionCol=procedureCodeCol+100;
-			float procedureToothCol=procedureDescriptionCol+350;
+			float procedureDescriptionCol=procedureCodeCol+70;
+			float procedureToothCol=procedureDescriptionCol+380;
 			float procedureSurfaceCol=procedureToothCol+40;
 			float procedureDateCol=procedureSurfaceCol+60;
 			float procedureDateColWidth=predetermination?0:100;
@@ -1623,11 +1615,7 @@ namespace OpenDental.Eclaims {
 					text=claimproc.CodeSent;
 					doc.DrawString(g,text,procedureCodeCol,0);
 					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
-					const int maxDescLen=40;
-					if(text.Length>maxDescLen){
-						text=text.Substring(0,maxDescLen);
-					}
-					doc.DrawString(g,text,procedureDescriptionCol,0);
+					doc.DrawString(g,text,procedureDescriptionCol,0,doc.standardFont,(int)(procedureToothCol-procedureDescriptionCol-10));
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10
 					doc.DrawString(g,text,procedureToothCol,0);
 					text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
@@ -1960,10 +1948,10 @@ namespace OpenDental.Eclaims {
 						statusStr="";
 						break;
 					case ("A"):
-						statusStr=isFrench?"La transaction a été acceptée.":"Transaction has been accepted.";
+						statusStr=isFrench?"La transaction a été accepté.":"Transaction has been accepted.";
 						break;
 					case ("E"):
-						statusStr=isFrench?"Le patient est admissible.":"The patient is eligible.";	
+						statusStr=isFrench?"Le patient est éligible.":"The patient is eligible.";	
 						break;
 					case ("R"):
 						statusStr=isFrench?"Transaction rejeté due aux erreurs.":"Claim is rejected because of errors.";
@@ -1984,7 +1972,7 @@ namespace OpenDental.Eclaims {
 						statusStr=isFrench?"Un formulaire de transaction manuelle devrait être soumise par le patient ou le cabinet dentaire.":"Manual claim form should be submitted by the patient or the dental office.";
 						break;
 					case ("X"):
-						statusStr=isFrench?"Pas de réponses les plus remarquables à suivre.":"No more outstanding responses to follow.";
+						statusStr=isFrench?"Aucunes réponses en suspend à suivre.":"No more outstanding responses to follow.";
 						break;
 				}
 			}
@@ -2045,7 +2033,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintPatientName(Graphics g,float X,float Y) {
-			return doc.DrawField(g,"PATIENT'S NAME",patient.GetNameFLFormal(),true,X,Y);//Fields C06,C07,C08
+			return doc.DrawField(g,"PATIENT",patient.GetNameFLFormal(),true,X,Y);//Fields C06,C07,C08
 		}
 
 		private SizeF PrintPatientBirthday(Graphics g,float X,float Y) {
@@ -2073,7 +2061,7 @@ namespace OpenDental.Eclaims {
 			else if(insplan2.PlanNum>0){
 				text=insplan2.GroupNum;//Field E02
 			}
-			return doc.DrawField(g,isFrench?"NO DE POLICE":"POLICY NO",text,true,X,Y);
+			return doc.DrawField(g,isFrench?"NO DE POLICE":"POLICY#",text,true,X,Y);
 		}
 
 		private SizeF PrintDivisionSectionNo(Graphics g,float X,float Y){
@@ -2146,7 +2134,7 @@ namespace OpenDental.Eclaims {
 
 		///<summary>If maxCharsPerLine>0, then the lines which are excess in length are truncated to the value specified.</summary>
 		private SizeF PrintInsuredAddress(Graphics g,float X,float Y,bool primary,int maxCharsPerLine) {
-			SizeF size1=doc.DrawString(g,isFrench?"ADRESSE: ":"ADDRESS: ",X,Y);
+			SizeF size1=doc.DrawString(g,isFrench?"ADRESSE DU TITULAIRE: ":"INSURED/MEMBER ADDRESS: ",X,Y);
 			SizeF size2=PrintSubscriberAddress(g,X+size1.Width,Y,primary,maxCharsPerLine);
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}

@@ -408,7 +408,7 @@ namespace OpenDental.Eclaims {
 					break;
 				case "C01":
 					//Primary Policy/Plan Number
-					fieldName="POLICY NO";
+					fieldName="POLICY#";
 					frenchFieldName="NO DE POLICE";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(8);
@@ -981,14 +981,14 @@ namespace OpenDental.Eclaims {
 					break;
 				case "B01":
 					//CDA Provider Number
-					fieldName="UNIQUE ID NO";
+					fieldName="PROVIDER ID";
 					frenchFieldName="NO DU DENTISTE";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(9);
 					break;
 				case "B02":
 					//Provider Office Number
-					fieldName="OFFICE NO";
+					fieldName="OFFICE ID";
 					frenchFieldName="NO DU CABINET";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(4);
@@ -1032,7 +1032,7 @@ namespace OpenDental.Eclaims {
 					break;
 				case "C01":
 					//Primary Policy/Plan Number
-					fieldName="POLICY NO";
+					fieldName="POLICY#";
 					frenchFieldName="NO DE POLICE";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(12);

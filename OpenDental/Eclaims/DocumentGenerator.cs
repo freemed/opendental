@@ -218,10 +218,18 @@ namespace OpenDental.Eclaims {
 
 		///<summary>The purpose of this method is to test each string before printing.  It should only print strings that belong on the current page.  y gets passed in as if it were all one long page.</summary>
 		public SizeF DrawString(Graphics g,string text,float X,float Y,Font font) {
-			if(text==null){
+			return DrawString(g,text,X,Y,font,-1);
+		}
+
+		///<summary>The purpose of this method is to test each string before printing.  It should only print strings that belong on the current page.  y gets passed in as if it were all one long page. Use maxPixelWidth to define a maximum width for the output string, which will be truncated to the nearest character that fits within the amount specified. Use maxPixelWidth=-1 to remove width limit.</summary>
+		public SizeF DrawString(Graphics g,string text,float X,float Y,Font font,int maxPixelWidth) {
+			if(text==null) {
 				text="";
 			}
 			Size renderArea=new Size(Convert.ToInt32(Math.Truncate(bounds.Right-X+1)),bounds.Height);
+			if(maxPixelWidth>=0) {
+				renderArea.Width=Math.Min(maxPixelWidth,renderArea.Width);
+			}
 			SizeF size=g.MeasureString(text,font,renderArea);
 			renderContainer.Add(new RenderStr(font,Pens.Black,renderArea,text,X,Y));
 			return size;
