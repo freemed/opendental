@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM formulary ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM formulary ORDER BY FormularyNum";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Formulary";
 			FillCache(table);
@@ -45,9 +45,9 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+		
+		//Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
 		///<summary></summary>
 		public static List<Formulary> Refresh(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -56,6 +56,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM formulary WHERE PatNum = "+POut.Long(patNum);
 			return Crud.FormularyCrud.SelectMany(command);
 		}
+		*/
 
 		///<summary>Gets one Formulary from the db.</summary>
 		public static Formulary GetOne(long formularyNum){
@@ -65,6 +66,7 @@ namespace OpenDentBusiness{
 			return Crud.FormularyCrud.SelectOne(formularyNum);
 		}
 
+		/*
 		///<summary></summary>
 		public static long Insert(Formulary formulary){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){

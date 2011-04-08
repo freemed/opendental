@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM formularymed ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM formularymed ORDER BY FormularyMedNum";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="FormularyMed";
 			FillCache(table);
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		#endregion
 
 		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+		//Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
 		///<summary></summary>
 		public static List<FormularyMed> Refresh(long patNum){
