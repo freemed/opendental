@@ -318,7 +318,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butClose);
 			this.Name = "FormMobile";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Mobile Synch";
+			this.Text = "Mobile and Patient Portal Synch";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMobile_FormClosed);
 			this.Load += new System.EventHandler(this.FormMobileSetup_Load);
 			this.groupPreferences.ResumeLayout(false);
