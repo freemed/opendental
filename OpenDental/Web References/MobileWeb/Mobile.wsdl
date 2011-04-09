@@ -40,6 +40,46 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="DeleteObjects">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dOList" type="tns:ArrayOfDeletedObject" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDeletedObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DeletedObject" nillable="true" type="tns:DeletedObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DeletedObject">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="DeletedObjectNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="ObjectNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="ObjectType" type="tns:DeletedObjectType" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateTStamp" type="s:dateTime" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TableBase" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IsNew" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="DeletedObjectType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Appointment" />
+          <s:enumeration value="ScheduleProv" />
+          <s:enumeration value="RecallPatNum" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="DeleteObjectsResponse">
+        <s:complexType />
+      </s:element>
       <s:element name="DeleteAllRecords">
         <s:complexType>
           <s:sequence>
@@ -94,11 +134,6 @@
             </s:sequence>
           </s:extension>
         </s:complexContent>
-      </s:complexType>
-      <s:complexType name="TableBase" abstract="true">
-        <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="IsNew" type="s:boolean" />
-        </s:sequence>
       </s:complexType>
       <s:simpleType name="PatientStatus">
         <s:restriction base="s:string">
@@ -303,6 +338,12 @@
   <wsdl:message name="IsPaidCustomerSoapOut">
     <wsdl:part name="parameters" element="tns:IsPaidCustomerResponse" />
   </wsdl:message>
+  <wsdl:message name="DeleteObjectsSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteObjects" />
+  </wsdl:message>
+  <wsdl:message name="DeleteObjectsSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteObjectsResponse" />
+  </wsdl:message>
   <wsdl:message name="DeleteAllRecordsSoapIn">
     <wsdl:part name="parameters" element="tns:DeleteAllRecords" />
   </wsdl:message>
@@ -358,6 +399,10 @@
       <wsdl:input message="tns:IsPaidCustomerSoapIn" />
       <wsdl:output message="tns:IsPaidCustomerSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="DeleteObjects">
+      <wsdl:input message="tns:DeleteObjectsSoapIn" />
+      <wsdl:output message="tns:DeleteObjectsSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="DeleteAllRecords">
       <wsdl:input message="tns:DeleteAllRecordsSoapIn" />
       <wsdl:output message="tns:DeleteAllRecordsSoapOut" />
@@ -409,6 +454,15 @@
     </wsdl:operation>
     <wsdl:operation name="IsPaidCustomer">
       <soap:operation soapAction="http://opendental.com/IsPaidCustomer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteObjects">
+      <soap:operation soapAction="http://opendental.com/DeleteObjects" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -502,6 +556,15 @@
     </wsdl:operation>
     <wsdl:operation name="IsPaidCustomer">
       <soap12:operation soapAction="http://opendental.com/IsPaidCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteObjects">
+      <soap12:operation soapAction="http://opendental.com/DeleteObjects" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

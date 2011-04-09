@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Linq;
 using OpenDentBusiness;
 using OpenDentBusiness.Mobile;
 
@@ -300,9 +301,11 @@ namespace OpenDental {
 			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-			int totalCount=medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count;
+			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSince).Where(d=>d.ObjectType==DeletedObjectType.Appointment).ToList();
+			int totalCount=medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count+dO.Count;
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
+			SynchGeneric(dO,ref FormP);
 			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
 			SynchGeneric(allergyDefNumList,SynchEntity.allergy,ref FormP);
@@ -359,6 +362,16 @@ namespace OpenDental {
 			}
 		}
 
+		private static void SynchGeneric(List<DeletedObject> dO,ref FormProgress progressIndicator) {
+			int LocalBatchSize=BatchSize;
+			for(int start=0;start<dO.Count;start+=LocalBatchSize) {
+				if((start+LocalBatchSize)>dO.Count) {
+					mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),dO.ToArray());
+					LocalBatchSize=dO.Count-start;
+				}
+				progressIndicator.CurrentVal+=BatchSize;
+			}
+		}
 		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
 		private static bool TestWebServiceExists() {
 			try {

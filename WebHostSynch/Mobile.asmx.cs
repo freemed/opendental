@@ -59,6 +59,21 @@ namespace WebHostSynch {
 		}
 
 		[WebMethod]
+		public void DeleteObjects(String RegistrationKey,List<DeletedObject> dOList) {
+			try {
+				Logger.Information("In DeleteAllRecords");
+				customerNum=util.GetDentalOfficeID(RegistrationKey);
+				if(customerNum==0) {
+					return;
+				}
+				DeletedObjects.DeleteForMobile(dOList,customerNum);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+			}
+		}
+
+		[WebMethod]
 		public void DeleteAllRecords(String RegistrationKey) {
 			try {
 				Logger.Information("In DeleteAllRecords");
