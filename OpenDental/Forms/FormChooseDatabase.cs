@@ -416,7 +416,7 @@ namespace OpenDental{
 
 		private void FormConfig_Load(object sender, System.EventArgs e) {
 			if(IsAccessedFromMainMenu) {
-				butOK.Enabled=false;
+				comboDatabase.Enabled=false;
 			}
 			listType.Items.Add("MySql");
 			listType.Items.Add("Oracle");
