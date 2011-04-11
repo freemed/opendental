@@ -87,7 +87,6 @@
   <ItemGroup>
     <Content Include="db\db.sql" />
     <Content Include="Mobile.asmx" />
-    <Content Include="PatientPortal.asmx" />
     <Content Include="Sheets.asmx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -99,10 +98,6 @@
     <Compile Include="Mobile.asmx.cs">
       <SubType>Component</SubType>
       <DependentUpon>Mobile.asmx</DependentUpon>
-    </Compile>
-    <Compile Include="PatientPortal.asmx.cs">
-      <SubType>Component</SubType>
-      <DependentUpon>PatientPortal.asmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
