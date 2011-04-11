@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+#if DEBUG
+using EHR;
+#endif
 
 namespace OpenDental {
 	public partial class FormEhrSetup:Form {
@@ -27,7 +30,16 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butPreview_Click(object sender,EventArgs e) {
+		private void butFormularies_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormFormularies FormE=new FormFormularies();
+			FormE.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Formularies");
+		}
+
+		private void butICD9s_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}

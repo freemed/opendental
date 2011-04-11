@@ -107,10 +107,6 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Fees) || isAll){
 				ds.Tables.Add(Fees.RefreshCache());
 			}
-			if(itypes.Contains((int)InvalidType.Formularies) || isAll) {
-				ds.Tables.Add(Formularies.RefreshCache());
-				ds.Tables.Add(FormularyMeds.RefreshCache());
-			}
 			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll){
 				ds.Tables.Add(FeeScheds.RefreshCache());
 			}

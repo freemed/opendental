@@ -23,25 +23,26 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butPreview = new OpenDental.UI.Button();
+			this.butICD9s = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butAllergies = new OpenDental.UI.Button();
+			this.butFormularies = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// butPreview
+			// butICD9s
 			// 
-			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPreview.Autosize = true;
-			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPreview.CornerRadius = 4F;
-			this.butPreview.Location = new System.Drawing.Point(12,61);
-			this.butPreview.Name = "butPreview";
-			this.butPreview.Size = new System.Drawing.Size(175,24);
-			this.butPreview.TabIndex = 119;
-			this.butPreview.Text = "ICD9s";
-			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
+			this.butICD9s.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butICD9s.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butICD9s.Autosize = true;
+			this.butICD9s.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butICD9s.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butICD9s.CornerRadius = 4F;
+			this.butICD9s.Location = new System.Drawing.Point(12,61);
+			this.butICD9s.Name = "butICD9s";
+			this.butICD9s.Size = new System.Drawing.Size(175,24);
+			this.butICD9s.TabIndex = 119;
+			this.butICD9s.Text = "ICD9s";
+			this.butICD9s.Click += new System.EventHandler(this.butICD9s_Click);
 			// 
 			// butClose
 			// 
@@ -73,12 +74,28 @@ namespace OpenDental{
 			this.butAllergies.Text = "Allergies";
 			this.butAllergies.Click += new System.EventHandler(this.butAllergies_Click);
 			// 
+			// butFormularies
+			// 
+			this.butFormularies.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butFormularies.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butFormularies.Autosize = true;
+			this.butFormularies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFormularies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFormularies.CornerRadius = 4F;
+			this.butFormularies.Location = new System.Drawing.Point(12,145);
+			this.butFormularies.Name = "butFormularies";
+			this.butFormularies.Size = new System.Drawing.Size(175,24);
+			this.butFormularies.TabIndex = 121;
+			this.butFormularies.Text = "Formularies";
+			this.butFormularies.Click += new System.EventHandler(this.butFormularies_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,534);
+			this.Controls.Add(this.butFormularies);
 			this.Controls.Add(this.butAllergies);
-			this.Controls.Add(this.butPreview);
+			this.Controls.Add(this.butICD9s);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormEhrSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -90,7 +107,8 @@ namespace OpenDental{
 		#endregion
 
 		private OpenDental.UI.Button butClose;
-		private UI.Button butPreview;
+		private UI.Button butICD9s;
 		private UI.Button butAllergies;
+		private UI.Button butFormularies;
 	}
 }

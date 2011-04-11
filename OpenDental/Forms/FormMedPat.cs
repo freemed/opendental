@@ -1,9 +1,13 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+#if DEBUG
+using EHR;
+#endif
 
 namespace OpenDental{
 	/// <summary>
@@ -32,6 +36,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private CheckBox checkDiscontinued;
+		private UI.Button butFormulary;
 		public MedicationPat MedicationPatCur;
 
 		///<summary></summary>
@@ -83,6 +88,7 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.textPatNote = new OpenDental.ODtextBox();
 			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
+			this.butFormulary = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -261,12 +267,27 @@ namespace OpenDental{
 			this.checkDiscontinued.Text = "Discontinued (patient is no longer taking this medication)";
 			this.checkDiscontinued.UseVisualStyleBackColor = true;
 			// 
+			// butFormulary
+			// 
+			this.butFormulary.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butFormulary.Autosize = true;
+			this.butFormulary.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFormulary.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFormulary.CornerRadius = 4F;
+			this.butFormulary.Location = new System.Drawing.Point(150,474);
+			this.butFormulary.Name = "butFormulary";
+			this.butFormulary.Size = new System.Drawing.Size(117,26);
+			this.butFormulary.TabIndex = 63;
+			this.butFormulary.Text = "Check &Formulary";
+			this.butFormulary.Click += new System.EventHandler(this.butFormulary_Click);
+			// 
 			// FormMedPat
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(685,540);
+			this.Controls.Add(this.butFormulary);
 			this.Controls.Add(this.checkDiscontinued);
 			this.Controls.Add(this.textPatNote);
 			this.Controls.Add(this.groupBox1);
@@ -292,6 +313,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMedPat_Load(object sender, System.EventArgs e) {
+			if(FormOpenDental.FormEHR!=null) {
+				butFormulary.Visible=false;
+			}
 			FillForm();
 		}
 
@@ -338,6 +362,28 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void butFormulary_Click(object sender,EventArgs e) {
+			FormFormularies FormF=new FormFormularies();
+			FormF.IsSelectionMode=true;
+			FormF.ShowDialog();
+			if(FormF.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			List<FormularyMed> ListMeds=FormularyMeds.GetMedsForFormulary(FormF.SelectedFormularyNum);
+			bool medIsInFormulary=false;
+			for(int i=0;i<ListMeds.Count;i++) {
+				if(ListMeds[i].MedicationNum==MedicationPatCur.MedicationNum) {
+					medIsInFormulary=true;
+				}
+			}
+			if(medIsInFormulary){
+				MsgBox.Show(this,"This medication is in the selected formulary.");
+			}
+			else {
+				MsgBox.Show(this,"This medication is not in the selected forumulary.");
+			}
 		}
 
 		

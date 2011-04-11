@@ -340,9 +340,7 @@ namespace OpenDentBusiness{
 		///<summary>50. This is used internally by OD, Inc with the phone server to trigger the phone system to reload after changing which call groups users are in.</summary>
 		PhoneAsteriskReload,
 		///<summary>51</summary>
-		TimeCardRules,
-		///<summary>52. Formularies and FormularyMeds</summary>
-		Formularies
+		TimeCardRules
 	}
 	//<summary></summary>
 	/*public enum ButtonType{
