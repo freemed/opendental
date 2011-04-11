@@ -54,6 +54,20 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SetMobileWebUserPasswordOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SynchMedicationsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchMedicationPatsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchAllergiesOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchAllergyDefsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchDiseasesOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchDiseaseDefsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchICD9sOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -124,6 +138,27 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SetMobileWebUserPasswordCompletedEventHandler SetMobileWebUserPasswordCompleted;
+        
+        /// <remarks/>
+        public event SynchMedicationsCompletedEventHandler SynchMedicationsCompleted;
+        
+        /// <remarks/>
+        public event SynchMedicationPatsCompletedEventHandler SynchMedicationPatsCompleted;
+        
+        /// <remarks/>
+        public event SynchAllergiesCompletedEventHandler SynchAllergiesCompleted;
+        
+        /// <remarks/>
+        public event SynchAllergyDefsCompletedEventHandler SynchAllergyDefsCompleted;
+        
+        /// <remarks/>
+        public event SynchDiseasesCompletedEventHandler SynchDiseasesCompleted;
+        
+        /// <remarks/>
+        public event SynchDiseaseDefsCompletedEventHandler SynchDiseaseDefsCompleted;
+        
+        /// <remarks/>
+        public event SynchICD9sCompletedEventHandler SynchICD9sCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/ServiceExists", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -450,6 +485,216 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchMedications", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchMedications(string RegistrationKey, Medicationm[] medicationmList) {
+            this.Invoke("SynchMedications", new object[] {
+                        RegistrationKey,
+                        medicationmList});
+        }
+        
+        /// <remarks/>
+        public void SynchMedicationsAsync(string RegistrationKey, Medicationm[] medicationmList) {
+            this.SynchMedicationsAsync(RegistrationKey, medicationmList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchMedicationsAsync(string RegistrationKey, Medicationm[] medicationmList, object userState) {
+            if ((this.SynchMedicationsOperationCompleted == null)) {
+                this.SynchMedicationsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchMedicationsOperationCompleted);
+            }
+            this.InvokeAsync("SynchMedications", new object[] {
+                        RegistrationKey,
+                        medicationmList}, this.SynchMedicationsOperationCompleted, userState);
+        }
+        
+        private void OnSynchMedicationsOperationCompleted(object arg) {
+            if ((this.SynchMedicationsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchMedicationsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchMedicationPats", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchMedicationPats(string RegistrationKey, MedicationPatm[] medicationPatList) {
+            this.Invoke("SynchMedicationPats", new object[] {
+                        RegistrationKey,
+                        medicationPatList});
+        }
+        
+        /// <remarks/>
+        public void SynchMedicationPatsAsync(string RegistrationKey, MedicationPatm[] medicationPatList) {
+            this.SynchMedicationPatsAsync(RegistrationKey, medicationPatList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchMedicationPatsAsync(string RegistrationKey, MedicationPatm[] medicationPatList, object userState) {
+            if ((this.SynchMedicationPatsOperationCompleted == null)) {
+                this.SynchMedicationPatsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchMedicationPatsOperationCompleted);
+            }
+            this.InvokeAsync("SynchMedicationPats", new object[] {
+                        RegistrationKey,
+                        medicationPatList}, this.SynchMedicationPatsOperationCompleted, userState);
+        }
+        
+        private void OnSynchMedicationPatsOperationCompleted(object arg) {
+            if ((this.SynchMedicationPatsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchMedicationPatsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchAllergies", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchAllergies(string RegistrationKey, Allergym[] allergyList) {
+            this.Invoke("SynchAllergies", new object[] {
+                        RegistrationKey,
+                        allergyList});
+        }
+        
+        /// <remarks/>
+        public void SynchAllergiesAsync(string RegistrationKey, Allergym[] allergyList) {
+            this.SynchAllergiesAsync(RegistrationKey, allergyList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchAllergiesAsync(string RegistrationKey, Allergym[] allergyList, object userState) {
+            if ((this.SynchAllergiesOperationCompleted == null)) {
+                this.SynchAllergiesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchAllergiesOperationCompleted);
+            }
+            this.InvokeAsync("SynchAllergies", new object[] {
+                        RegistrationKey,
+                        allergyList}, this.SynchAllergiesOperationCompleted, userState);
+        }
+        
+        private void OnSynchAllergiesOperationCompleted(object arg) {
+            if ((this.SynchAllergiesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchAllergiesCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchAllergyDefs", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchAllergyDefs(string RegistrationKey, AllergyDefm[] allergyDefList) {
+            this.Invoke("SynchAllergyDefs", new object[] {
+                        RegistrationKey,
+                        allergyDefList});
+        }
+        
+        /// <remarks/>
+        public void SynchAllergyDefsAsync(string RegistrationKey, AllergyDefm[] allergyDefList) {
+            this.SynchAllergyDefsAsync(RegistrationKey, allergyDefList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchAllergyDefsAsync(string RegistrationKey, AllergyDefm[] allergyDefList, object userState) {
+            if ((this.SynchAllergyDefsOperationCompleted == null)) {
+                this.SynchAllergyDefsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchAllergyDefsOperationCompleted);
+            }
+            this.InvokeAsync("SynchAllergyDefs", new object[] {
+                        RegistrationKey,
+                        allergyDefList}, this.SynchAllergyDefsOperationCompleted, userState);
+        }
+        
+        private void OnSynchAllergyDefsOperationCompleted(object arg) {
+            if ((this.SynchAllergyDefsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchAllergyDefsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchDiseases", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchDiseases(string RegistrationKey, Diseasem[] diseaseList) {
+            this.Invoke("SynchDiseases", new object[] {
+                        RegistrationKey,
+                        diseaseList});
+        }
+        
+        /// <remarks/>
+        public void SynchDiseasesAsync(string RegistrationKey, Diseasem[] diseaseList) {
+            this.SynchDiseasesAsync(RegistrationKey, diseaseList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchDiseasesAsync(string RegistrationKey, Diseasem[] diseaseList, object userState) {
+            if ((this.SynchDiseasesOperationCompleted == null)) {
+                this.SynchDiseasesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchDiseasesOperationCompleted);
+            }
+            this.InvokeAsync("SynchDiseases", new object[] {
+                        RegistrationKey,
+                        diseaseList}, this.SynchDiseasesOperationCompleted, userState);
+        }
+        
+        private void OnSynchDiseasesOperationCompleted(object arg) {
+            if ((this.SynchDiseasesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchDiseasesCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchDiseaseDefs", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchDiseaseDefs(string RegistrationKey, DiseaseDefm[] diseaseDefList) {
+            this.Invoke("SynchDiseaseDefs", new object[] {
+                        RegistrationKey,
+                        diseaseDefList});
+        }
+        
+        /// <remarks/>
+        public void SynchDiseaseDefsAsync(string RegistrationKey, DiseaseDefm[] diseaseDefList) {
+            this.SynchDiseaseDefsAsync(RegistrationKey, diseaseDefList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchDiseaseDefsAsync(string RegistrationKey, DiseaseDefm[] diseaseDefList, object userState) {
+            if ((this.SynchDiseaseDefsOperationCompleted == null)) {
+                this.SynchDiseaseDefsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchDiseaseDefsOperationCompleted);
+            }
+            this.InvokeAsync("SynchDiseaseDefs", new object[] {
+                        RegistrationKey,
+                        diseaseDefList}, this.SynchDiseaseDefsOperationCompleted, userState);
+        }
+        
+        private void OnSynchDiseaseDefsOperationCompleted(object arg) {
+            if ((this.SynchDiseaseDefsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchDiseaseDefsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchICD9s", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchICD9s(string RegistrationKey, ICD9m[] icd9List) {
+            this.Invoke("SynchICD9s", new object[] {
+                        RegistrationKey,
+                        icd9List});
+        }
+        
+        /// <remarks/>
+        public void SynchICD9sAsync(string RegistrationKey, ICD9m[] icd9List) {
+            this.SynchICD9sAsync(RegistrationKey, icd9List, null);
+        }
+        
+        /// <remarks/>
+        public void SynchICD9sAsync(string RegistrationKey, ICD9m[] icd9List, object userState) {
+            if ((this.SynchICD9sOperationCompleted == null)) {
+                this.SynchICD9sOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchICD9sOperationCompleted);
+            }
+            this.InvokeAsync("SynchICD9s", new object[] {
+                        RegistrationKey,
+                        icd9List}, this.SynchICD9sOperationCompleted, userState);
+        }
+        
+        private void OnSynchICD9sOperationCompleted(object arg) {
+            if ((this.SynchICD9sCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchICD9sCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -599,6 +844,34 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SetMobileWebUserPasswordCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchMedicationsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchMedicationPatsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchAllergiesCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchAllergyDefsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchDiseasesCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchDiseaseDefsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchICD9sCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591

@@ -154,7 +154,7 @@ namespace OpenDental {
 			MsgBox.Show(this,"Done");
 		}
 
-		private void butFullSync_Click(object sender,EventArgs e) {
+		private void butFullSync_ClickOld(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
 			}
@@ -188,7 +188,7 @@ namespace OpenDental {
 			changed=true;
 		}
 
-		private void butFullSync_Click1(object sender,EventArgs e) {
+		private void butFullSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
 			}
@@ -196,13 +196,26 @@ namespace OpenDental {
 				return;
 			}
 			//for full synch, delete all records then repopulate.
-			pp.Url="http://localhost:2923/PatientPortal.asmx";
-			IgnoreCertificateErrors();
-			pp.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
-			SynchPatientPortalFromMain();
-			
+			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
+			DateTime timeSynchStarted=MiscData.GetNowDateTime();
+			FormProgress FormP=new FormProgress();
+			//start the thread that will perform the upload
+			ThreadStart uploadDelegate= delegate { UploadWorker(DateTime.MinValue,ref FormP,timeSynchStarted); };
+			Thread workerThread=new Thread(uploadDelegate);
+			workerThread.Start();
+			//display the progress dialog to the user:
+			FormP.NumberMultiplication=100;
+			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
+			FormP.NumberFormat="F0";
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.Cancel) {
+				workerThread.Abort();
+			}
+			changed=true;
 		}
-		private void butSync_Click(object sender,EventArgs e) {
+
+
+		private void butSync_ClickOld(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
 			}
@@ -236,6 +249,32 @@ namespace OpenDental {
 			changed=true;
 		}
 
+		private void butSync_Click(object sender,EventArgs e) {
+			if(!SavePrefs()) {
+				return;
+			}
+			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
+				MsgBox.Show(this,"Full synch has never been run before.");
+				return;
+			}
+			//calculate total number of records------------------------------------------------------------------------------
+			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			DateTime timeSynchStarted=MiscData.GetNowDateTime();
+			FormProgress FormP=new FormProgress();
+			//start the thread that will perform the upload
+			ThreadStart uploadDelegate= delegate { UploadWorker(changedSince,ref FormP,timeSynchStarted); };
+			Thread workerThread=new Thread(uploadDelegate);
+			workerThread.Start();
+			//display the progress dialog to the user:
+			FormP.NumberMultiplication=100;
+			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
+			FormP.NumberFormat="F0";
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.Cancel) {
+				workerThread.Abort();
+			}
+			changed=true;
+		}
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
 		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,List<long> provNumList,ref FormProgress progressIndicator,DateTime timeSynchStarted) {
 			IsSynching=true;
@@ -291,8 +330,14 @@ namespace OpenDental {
 			IsSynching=false;
 		}
 
-		///<summary>dennis: code for patient portal starts here. This code may be moved to another location later</summary>
-		private static void UploadWorkerPatPortal(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
+		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
+		private static void UploadWorker(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
+			//MobileWeb
+			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
+			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSince);
+			//Pat portal
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
@@ -301,11 +346,16 @@ namespace OpenDental {
 			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
+			// change this to accomodate more objects
 			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSince).Where(d=>d.ObjectType==DeletedObjectType.Appointment).ToList();
 			int totalCount=medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count+dO.Count;
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
-			SynchGeneric(dO,ref FormP);
+			DeleteObjects(dO,ref FormP);
+			SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
+			SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
+			SynchGeneric(rxNumList,SynchEntity.prescription,ref FormP);
+			SynchGeneric(provNumList,SynchEntity.provider,ref FormP);
 			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
 			SynchGeneric(allergyDefNumList,SynchEntity.allergy,ref FormP);
@@ -328,6 +378,22 @@ namespace OpenDental {
 				}
 				List<long> BlockPKNumList=PKNumList.GetRange(start,LocalBatchSize);
 				switch(entity) {
+					case SynchEntity.patient:
+						List<Patientm> changedPatientmList=Patientms.GetMultPats(BlockPKNumList);
+						mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
+					break;
+					case SynchEntity.appointment:
+						List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(BlockPKNumList);
+						mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
+					break;
+					case SynchEntity.prescription:
+						List<RxPatm> changedRxList=RxPatms.GetMultRxPats(BlockPKNumList);
+						mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
+					break;
+					case SynchEntity.provider:
+						List<Providerm> changedProvList=Providerms.GetMultProviderms(BlockPKNumList);
+						mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
+					break;
 					case SynchEntity.medication:
 						List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
 						pp.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
@@ -362,7 +428,7 @@ namespace OpenDental {
 			}
 		}
 
-		private static void SynchGeneric(List<DeletedObject> dO,ref FormProgress progressIndicator) {
+		private static void DeleteObjects(List<DeletedObject> dO,ref FormProgress progressIndicator) {
 			int LocalBatchSize=BatchSize;
 			for(int start=0;start<dO.Count;start+=LocalBatchSize) {
 				if((start+LocalBatchSize)>dO.Count) {
@@ -402,7 +468,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Only called from FormOpenDental</summary>
-		public static void SynchFromMain() {
+		public static void SynchFromMainOld() {
 			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
 				return;
 			}
@@ -436,7 +502,10 @@ namespace OpenDental {
 		}
 
 		///<summary>Only called from FormOpenDental</summary>
-		public  void SynchPatientPortalFromMain() {
+		public static void SynchFromMain() {
+			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
+				return;
+			}
 			if(IsSynching) {
 				return;
 			}
@@ -450,26 +519,17 @@ namespace OpenDental {
 			if(!TestWebServiceExists()) {
 				return;
 			}
-			//DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			DateTime changedSince=DateTime.Now.AddYears(-1);
+			//calculate total number of records------------------------------------------------------------------------------
+			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);			
 			FormProgress FormP=new FormProgress();//but we won't display it.
 			FormP.NumberFormat="";
 			FormP.DisplayText="";
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorkerPatPortal(changedSince,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(changedSince,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
-			//display the progress dialog to the user:
-			FormP.NumberMultiplication=100;
-			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
-			FormP.NumberFormat="F0";
-			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.Cancel) {
-				workerThread.Abort();
-			}
-			IsSynching=false;
-			changed=true;
 		}
+
 
 		#region Testing
 		///<summary>This allows the code to continue by not throwing an exception even if there is a problem with the security certificate.</summary>

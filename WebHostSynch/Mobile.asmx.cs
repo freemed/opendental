@@ -81,109 +81,227 @@ namespace WebHostSynch {
 				if(customerNum==0) {
 					return;
 				}
+				//mobile web
 				Patientms.DeleteAll(customerNum);
 				Appointmentms.DeleteAll(customerNum);
 				RxPatms.DeleteAll(customerNum);
 				Providerms.DeleteAll(customerNum);
+				//pat portal
+				Medicationms.DeleteAll(customerNum);
+				MedicationPatms.DeleteAll(customerNum);
+				AllergyDefms.DeleteAll(customerNum);
+				Allergyms.DeleteAll(customerNum);
+				DiseaseDefms.DeleteAll(customerNum);
+				Diseasems.DeleteAll(customerNum);
+				ICD9ms.DeleteAll(customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 			}
 		}
 
-		[WebMethod]
-		public void SynchPatients(String RegistrationKey,List<Patientm> patientmList) {
-			try {
-				Logger.Information("In SynchPatients");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
-				}
-				Patientms.UpdateFromChangeList(patientmList,customerNum);
-			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
+		#region MobileWeb
 
-		[WebMethod]
-		public void SynchAppointments(String RegistrationKey,List<Appointmentm> appointmentList) {
-			try {
-				Logger.Information("In SynchAppointments");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
+			[WebMethod]
+			public void SynchPatients(String RegistrationKey,List<Patientm> patientmList) {
+				try {
+					Logger.Information("In SynchPatients");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Patientms.UpdateFromChangeList(patientmList,customerNum);
 				}
-				Appointmentms.UpdateFromChangeList(appointmentList,customerNum);
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
 			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+
+			[WebMethod]
+			public void SynchAppointments(String RegistrationKey,List<Appointmentm> appointmentList) {
+				try {
+					Logger.Information("In SynchAppointments");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Appointmentms.UpdateFromChangeList(appointmentList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
 			}
-		}
 		
-		[WebMethod]
-		public void SynchPrescriptions(String RegistrationKey,List<RxPatm> rxList) {
-			try {
-				Logger.Information("In SynchPrescriptions");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
+			[WebMethod]
+			public void SynchPrescriptions(String RegistrationKey,List<RxPatm> rxList) {
+				try {
+					Logger.Information("In SynchPrescriptions");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					RxPatms.UpdateFromChangeList(rxList,customerNum);
 				}
-				RxPatms.UpdateFromChangeList(rxList,customerNum);
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
 			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
 
-		[WebMethod]
-		public void SynchProviders(String RegistrationKey,List<Providerm> providerList) {
-			try {
-				Logger.Information("In SynchProviders");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
+			[WebMethod]
+			public void SynchProviders(String RegistrationKey,List<Providerm> providerList) {
+				try {
+					Logger.Information("In SynchProviders");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Providerms.UpdateFromChangeList(providerList,customerNum);
 				}
-				Providerms.UpdateFromChangeList(providerList,customerNum);
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
 			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
 
-		[WebMethod]
-		public string GetUserName(String RegistrationKey) {
-			String UserName="";
-			try {
-				Logger.Information("In GetUserName");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum!=0) {
-					UserName=util.GetMobileWebUserName(customerNum);
+			[WebMethod]
+			public string GetUserName(String RegistrationKey) {
+				String UserName="";
+				try {
+					Logger.Information("In GetUserName");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum!=0) {
+						UserName=util.GetMobileWebUserName(customerNum);
+					}
+					return UserName;
 				}
-				return UserName;
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					return UserName;
+				}
 			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-				return UserName;
-			}
-		}
 
-		[WebMethod]
-		public void SetMobileWebUserPassword(String RegistrationKey,String UserName,String Password) {
-			try {
-				Logger.Information("In SetMobileWebPassword");
-				customerNum=util.GetDentalOfficeID(RegistrationKey);
-				if(customerNum==0) {
-					return;
+			[WebMethod]
+			public void SetMobileWebUserPassword(String RegistrationKey,String UserName,String Password) {
+				try {
+					Logger.Information("In SetMobileWebPassword");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					else {
+						util.SetMobileWebUserPassword(customerNum,UserName,Password);
+					}
 				}
-				else {
-					util.SetMobileWebUserPassword(customerNum,UserName,Password);
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 				}
 			}
-			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-			}
-		}
+		#endregion
 
+		#region PatientPortal
+			[WebMethod]
+			public void SynchMedications(String RegistrationKey,List<Medicationm> medicationmList) {
+				try {
+					Logger.Information("In SynchMedications");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Medicationms.UpdateFromChangeList(medicationmList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchMedicationPats(String RegistrationKey,List<MedicationPatm> medicationPatList) {
+				try {
+					Logger.Information("In SynchMedicationPats");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					MedicationPatms.UpdateFromChangeList(medicationPatList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchAllergies(String RegistrationKey,List<Allergym> allergyList) {
+				try {
+					Logger.Information("In SynchAllergies");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Allergyms.UpdateFromChangeList(allergyList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchAllergyDefs(String RegistrationKey,List<AllergyDefm> allergyDefList) {
+				try {
+					Logger.Information("In SynchAllergyDefs");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					AllergyDefms.UpdateFromChangeList(allergyDefList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchDiseases(String RegistrationKey,List<Diseasem> diseaseList) {
+				try {
+					Logger.Information("In SynchDiseases");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Diseasems.UpdateFromChangeList(diseaseList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchDiseaseDefs(String RegistrationKey,List<DiseaseDefm> diseaseDefList) {
+				try {
+					Logger.Information("In SynchDiseaseDefs");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					DiseaseDefms.UpdateFromChangeList(diseaseDefList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchICD9s(String RegistrationKey,List<ICD9m> icd9List) {
+				try {
+					Logger.Information("In SynchICD9s");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					ICD9ms.UpdateFromChangeList(icd9List,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+		#endregion
 	}
 }
