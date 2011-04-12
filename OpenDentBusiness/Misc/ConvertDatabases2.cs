@@ -4341,7 +4341,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE allergydef SET DateTStamp=SYSTIMESTAMP";
 					Db.NonQ(command);
 				}
-
+				//Canadian claim carrier default values.
+				command="UPDATE carrier SET CanadianEncryptionMethod=1 WHERE IsCDA=1 AND CanadianEncryptionMethod=0";
+				Db.NonQ(command);
+				command="UPDATE carrier SET CanadianSupportedTypes=262143 WHERE IsCDA=1 AND CanadianSupportedTypes=0";//All transaction types are allowed for each carrier by default.
+				Db.NonQ(command);
 
 
 
