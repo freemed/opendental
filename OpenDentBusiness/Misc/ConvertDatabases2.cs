@@ -4170,37 +4170,37 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),0,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES(1,0,-1,-1)";//No rows in table and Oracle returns null so set the first one.
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),1,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),1,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),2,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),2,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),3,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),3,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),4,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),4,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),5,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),5,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),6,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),6,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),7,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),7,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),8,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),8,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),9,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),9,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),10,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),10,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),11,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),11,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),12,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),12,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),13,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),13,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),14,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),14,-1,-1)";
 					Db.NonQ(command);
-					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM preference),15,-1,-1)";
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),15,-1,-1)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -4308,16 +4308,39 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						//7.5 which is before Oracle support started so it will never exist.
 					}
 				}
-				//Jason- I will be working within these next few comments so no conflicts will arise.
-				//SELECT * FROM diseasedef WHERE DiseaseName LIKE '%allerg%';
-				//Loop through table:
-				//	1. Insert allergydef with same PK
-				//  2. Get list of diseases loop through it, add to allergy and delete from disease.  
-				//SELECT * FROM disease WHERE DiseaseDefNum=<PK of disease>;
-				//  3. Convert any disease alert to an allergy alert:
-				//UPDATE rxalert SET AllergyDefNum=<mydiseasedefnum>, DiseaseDefNum=0 WHERE DiseaseDefNum=<mydiseasedefnum>;
-				//	4. Delete the diseasedef with that DiseaseDefNum.
-
+				//Migrating the diseases to allergies and corresponding Rx alerts.
+				command="SELECT * FROM diseasedef WHERE LOWER(DiseaseName) LIKE '%allerg%'";
+				DataTable diseaseDef=Db.GetTable(command);
+				for(int i=0;i<diseaseDef.Rows.Count;i++) {
+					command="INSERT INTO allergydef (AllergyDefNum,Description,IsHidden) VALUES("
+						+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()))+",'"
+						+POut.String(PIn.String(diseaseDef.Rows[i]["DiseaseName"].ToString()))+"',"
+						+POut.Int(PIn.Int(diseaseDef.Rows[i]["IsHidden"].ToString()))+")";
+					Db.NonQ(command);
+					command="SELECT * FROM disease WHERE DiseaseDefNum="+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
+					DataTable disease=Db.GetTable(command);
+					for(int j=0;j<disease.Rows.Count;j++) {
+						command="INSERT INTO allergy (AllergyNum,PatNum,AllergyDefNum,Reaction,StatusIsActive) VALUES ("
+						+POut.Long(PIn.Long(disease.Rows[j]["DiseaseNum"].ToString()))+","
+						+POut.Long(PIn.Long(disease.Rows[j]["PatNum"].ToString()))+","
+						+POut.Long(PIn.Long(disease.Rows[j]["DiseaseDefNum"].ToString()))+",'"
+						+POut.String(PIn.String(disease.Rows[j]["PatNote"].ToString()))+"',1)";
+						Db.NonQ(command);
+						command="DELETE FROM disease WHERE DiseaseNum="+POut.Long(PIn.Long(disease.Rows[j]["DiseaseNum"].ToString()));
+						Db.NonQ(command);
+					}
+					command="UPDATE rxalert SET AllergyDefNum="+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()))+", DiseaseDefNum=0 WHERE DiseaseDefNum="
+						+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
+					Db.NonQ(command);
+					command="DELETE FROM diseasedef WHERE DiseaseDefNum="+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.Oracle) {//Set time stamps to NOW().
+					command="UPDATE allergy SET DateTStamp=SYSTIMESTAMP";
+					Db.NonQ(command);
+					command="UPDATE allergydef SET DateTStamp=SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
 
 
 
