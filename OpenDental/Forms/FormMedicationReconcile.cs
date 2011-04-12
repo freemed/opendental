@@ -11,6 +11,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormMedicationReconcile:Form {
 		public Patient PatCur;
+		private Bitmap BitmapOriginal;
 
 		public FormMedicationReconcile() {
 			InitializeComponent();
@@ -26,9 +27,9 @@ namespace OpenDental {
 			MedicationPats.Refresh(PatCur.PatNum);
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),130);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),140);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),215);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),225);
 			gridMeds.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableMedications","Disc"),10,HorizontalAlignment.Center);
 			gridMeds.Columns.Add(col);
@@ -53,26 +54,33 @@ namespace OpenDental {
 		}
 
 		private void resizePictBox() {
-			Bitmap oldBitmap=(Bitmap)pictBox.BackgroundImage;
-			int width=oldBitmap.Width;
-			int height=oldBitmap.Height;
-			if(width>pictBox.Width) {
-				width=pictBox.Width;
-				height=(int)((float)height*((float)pictBox.Width/(float)oldBitmap.Width));
+			if(pictBox.BackgroundImage!=null) {
+				pictBox.BackgroundImage.Dispose();
 			}
+			int width;
+			int height;
+			float ratio;
+			//Resize the image at the width of the pictBox, then only resize to the height if it doesn't fit.
+			width=pictBox.Width-4;
+			ratio=(float)width/BitmapOriginal.Width;
+			height=(int)(BitmapOriginal.Height*ratio);
 			if(height>pictBox.Height) {
-				height=pictBox.Height;
-				width=(int)((float)height*((float)pictBox.Height/(float)oldBitmap.Height));
+				height=pictBox.Height-4;
+				ratio=(float)height/BitmapOriginal.Height;
+				width=(int)(BitmapOriginal.Width*ratio);
 			}
 			Bitmap newBitmap=new Bitmap(width,height);
 			Graphics g=Graphics.FromImage(newBitmap);
-			g.DrawImage(oldBitmap,0,0,width,height);
+			g.DrawImage(BitmapOriginal,0,0,width,height);
 			g.Dispose();
-			oldBitmap.Dispose();
 			if(pictBox.BackgroundImage!=null) {
 				pictBox.BackgroundImage.Dispose();
 			}
 			pictBox.BackgroundImage=newBitmap;
+		}
+
+		private void FormMedicationReconcile_ResizeEnd(object sender,EventArgs e) {
+			resizePictBox();
 		}
 
 		private void checkDiscontinued_MouseUp(object sender,MouseEventArgs e) {
@@ -81,6 +89,17 @@ namespace OpenDental {
 
 		private void checkDiscontinued_KeyUp(object sender,KeyEventArgs e) {
 			FillMeds();
+		}
+
+		private void gridMeds_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormMedPat FormMP=new FormMedPat();
+			FormMP.MedicationPatCur=MedicationPats.List[e.Row];
+			FormMP.ShowDialog();
+			FillMeds();
+		}
+
+		private void FormMedicationReconcile_Resize(object sender,EventArgs e) {
+			resizePictBox();
 		}
 
 		private void butPickRxListImage_Click(object sender,EventArgs e) {	
@@ -96,8 +115,12 @@ namespace OpenDental {
 			}		
 			string patFolder=ImageStore.GetPatientFolder(PatCur);
 			Document doc=Documents.GetByNum(formIS.SelectedDocNum);
-			Bitmap bitmap=ImageStore.OpenImage(doc,patFolder);
-			bitmap=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmap,ApplyImageSettings.ALL);
+			textDocDateDesc.Text=doc.DateTStamp.ToShortDateString()+" - "+doc.Description.ToString();
+			if(BitmapOriginal!=null) {
+				BitmapOriginal.Dispose();
+			}
+			BitmapOriginal=ImageStore.OpenImage(doc,patFolder);
+			Bitmap bitmap=ImageHelper.ApplyDocumentSettingsToImage(doc,BitmapOriginal,ApplyImageSettings.ALL);
 			pictBox.BackgroundImage=bitmap;
 			resizePictBox();
 		}
@@ -131,9 +154,6 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void FormMedicationReconcile_Resize(object sender,EventArgs e) {
-			resizePictBox();
-		}
 
 		
 	}

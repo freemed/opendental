@@ -23,7 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textDocDateDesc = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -36,21 +36,21 @@ namespace OpenDental{
 			((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// textBox1
+			// textDocDateDesc
 			// 
-			this.textBox1.Enabled = false;
-			this.textBox1.Location = new System.Drawing.Point(112,5);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(272,20);
-			this.textBox1.TabIndex = 71;
+			this.textDocDateDesc.Enabled = false;
+			this.textDocDateDesc.Location = new System.Drawing.Point(101,5);
+			this.textDocDateDesc.Name = "textDocDateDesc";
+			this.textDocDateDesc.Size = new System.Drawing.Size(272,20);
+			this.textDocDateDesc.TabIndex = 71;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Location = new System.Drawing.Point(1,9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(94,16);
 			this.label1.TabIndex = 73;
-			this.label1.Text = "Description";
+			this.label1.Text = "Rx List";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// checkDiscontinued
@@ -96,7 +96,6 @@ namespace OpenDental{
 			this.pictBox.Location = new System.Drawing.Point(3,3);
 			this.pictBox.Name = "pictBox";
 			this.pictBox.Size = new System.Drawing.Size(451,563);
-			this.pictBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
 			this.pictBox.TabIndex = 66;
 			this.pictBox.TabStop = false;
 			// 
@@ -115,6 +114,7 @@ namespace OpenDental{
 			this.gridMeds.TabIndex = 65;
 			this.gridMeds.Title = "Medications";
 			this.gridMeds.TranslationName = "TableMedications";
+			this.gridMeds.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMeds_CellDoubleClick);
 			// 
 			// butPickRxListImage
 			// 
@@ -123,7 +123,7 @@ namespace OpenDental{
 			this.butPickRxListImage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPickRxListImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPickRxListImage.CornerRadius = 4F;
-			this.butPickRxListImage.Location = new System.Drawing.Point(390,3);
+			this.butPickRxListImage.Location = new System.Drawing.Point(379,3);
 			this.butPickRxListImage.Name = "butPickRxListImage";
 			this.butPickRxListImage.Size = new System.Drawing.Size(22,24);
 			this.butPickRxListImage.TabIndex = 76;
@@ -168,7 +168,7 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(923,641);
 			this.Controls.Add(this.butPickRxListImage);
 			this.Controls.Add(this.butAdd);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.textDocDateDesc);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkDiscontinued);
 			this.Controls.Add(this.tableLayoutPanel1);
@@ -189,7 +189,7 @@ namespace OpenDental{
 		#endregion
 
 		private OpenDental.UI.Button butClose;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textDocDateDesc;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckBox checkDiscontinued;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
