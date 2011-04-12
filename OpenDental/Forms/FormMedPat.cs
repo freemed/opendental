@@ -103,7 +103,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(563,474);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -118,7 +118,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(461,474);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -219,7 +219,7 @@ namespace OpenDental{
 			this.butEdit.CornerRadius = 4F;
 			this.butEdit.Location = new System.Drawing.Point(183,212);
 			this.butEdit.Name = "butEdit";
-			this.butEdit.Size = new System.Drawing.Size(75,26);
+			this.butEdit.Size = new System.Drawing.Size(75,24);
 			this.butEdit.TabIndex = 9;
 			this.butEdit.Text = "&Edit";
 			this.butEdit.Click += new System.EventHandler(this.butEdit_Click);
@@ -233,7 +233,7 @@ namespace OpenDental{
 			this.butRemove.CornerRadius = 4F;
 			this.butRemove.Location = new System.Drawing.Point(49,474);
 			this.butRemove.Name = "butRemove";
-			this.butRemove.Size = new System.Drawing.Size(75,26);
+			this.butRemove.Size = new System.Drawing.Size(75,24);
 			this.butRemove.TabIndex = 8;
 			this.butRemove.Text = "&Remove";
 			this.butRemove.Click += new System.EventHandler(this.butRemove_Click);
@@ -274,9 +274,9 @@ namespace OpenDental{
 			this.butFormulary.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFormulary.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFormulary.CornerRadius = 4F;
-			this.butFormulary.Location = new System.Drawing.Point(150,474);
+			this.butFormulary.Location = new System.Drawing.Point(217,474);
 			this.butFormulary.Name = "butFormulary";
-			this.butFormulary.Size = new System.Drawing.Size(117,26);
+			this.butFormulary.Size = new System.Drawing.Size(117,24);
 			this.butFormulary.TabIndex = 63;
 			this.butFormulary.Text = "Check &Formulary";
 			this.butFormulary.Click += new System.EventHandler(this.butFormulary_Click);
@@ -313,7 +313,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMedPat_Load(object sender, System.EventArgs e) {
-			if(FormOpenDental.FormEHR!=null) {
+			if(FormOpenDental.FormEHR==null) {
 				butFormulary.Visible=false;
 			}
 			FillForm();
@@ -325,6 +325,30 @@ namespace OpenDental{
 			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
 			textPatNote.Text=MedicationPatCur.PatNote;
 			checkDiscontinued.Checked=MedicationPatCur.IsDiscontinued;
+		}
+
+		private void butFormulary_Click(object sender,EventArgs e) {
+			FormFormularies FormF=new FormFormularies();
+			FormF.IsSelectionMode=true;
+			FormF.ShowDialog();
+			Cursor=Cursors.WaitCursor;
+			if(FormF.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			List<FormularyMed> ListMeds=FormularyMeds.GetMedsForFormulary(FormF.SelectedFormularyNum);
+			bool medIsInFormulary=false;
+			for(int i=0;i<ListMeds.Count;i++) {
+				if(ListMeds[i].MedicationNum==MedicationPatCur.MedicationNum) {
+					medIsInFormulary=true;
+				}
+			}
+			Cursor=Cursors.Default;
+			if(medIsInFormulary){
+				MsgBox.Show(this,"This medication is in the selected formulary.");
+			}
+			else {
+				MsgBox.Show(this,"This medication is not in the selected forumulary.");
+			}
 		}
 
 		private void butEdit_Click(object sender, System.EventArgs e) {
@@ -362,28 +386,6 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
-		}
-
-		private void butFormulary_Click(object sender,EventArgs e) {
-			FormFormularies FormF=new FormFormularies();
-			FormF.IsSelectionMode=true;
-			FormF.ShowDialog();
-			if(FormF.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			List<FormularyMed> ListMeds=FormularyMeds.GetMedsForFormulary(FormF.SelectedFormularyNum);
-			bool medIsInFormulary=false;
-			for(int i=0;i<ListMeds.Count;i++) {
-				if(ListMeds[i].MedicationNum==MedicationPatCur.MedicationNum) {
-					medIsInFormulary=true;
-				}
-			}
-			if(medIsInFormulary){
-				MsgBox.Show(this,"This medication is in the selected formulary.");
-			}
-			else {
-				MsgBox.Show(this,"This medication is not in the selected forumulary.");
-			}
 		}
 
 		
