@@ -1061,7 +1061,7 @@ namespace OpenDental{
 					string showPriDeduct="";
 					string showSecDeduct="";
 					if(PatPlanList.Count>0) {//Primary
-						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
+						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum,PatPlanList[0].InsSubNum);
 						if(claimproc==null) {
 							priIns=0;
 						}
@@ -1082,7 +1082,7 @@ namespace OpenDental{
 						priIns=0;
 					}
 					if(PatPlanList.Count>1) {//Secondary
-						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,SecPlanCur.PlanNum);
+						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,SecPlanCur.PlanNum,PatPlanList[1].InsSubNum);
 						if(claimproc==null) {
 							secIns=0;
 						}
@@ -2704,7 +2704,7 @@ namespace OpenDental{
 				ClaimProcCur.FeeBilled=ProcCur.ProcFee;
 				ClaimProcCur.PlanNum=FormIPS.SelectedPlan.PlanNum;
 				ClaimProcCur.InsSubNum=FormIPS.SelectedSub.InsSubNum;
-				cpExisting=ClaimProcs.GetEstimate(ClaimProcList,ProcCur.ProcNum,FormIPS.SelectedPlan.PlanNum);
+				cpExisting=ClaimProcs.GetEstimate(ClaimProcList,ProcCur.ProcNum,FormIPS.SelectedPlan.PlanNum,FormIPS.SelectedSub.InsSubNum);
 				if(cpExisting!=null){
 					ClaimProcCur.InsPayEst=cpExisting.InsPayEst;
 				}

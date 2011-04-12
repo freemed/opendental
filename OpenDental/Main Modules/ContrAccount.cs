@@ -2880,7 +2880,7 @@ namespace OpenDental {
 				case "Med":
 					ClaimCur.PlanNum=PlanCur.PlanNum;
 					ClaimCur.InsSubNum=SubCur.InsSubNum;
-					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,PlanCur.PlanNum).Relationship;
+					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,PlanCur.PlanNum,SubCur.InsSubNum).Relationship;
 					ClaimCur.ClaimType="Other";
 					break;
 				case "Other":

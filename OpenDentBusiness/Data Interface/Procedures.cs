@@ -1014,7 +1014,8 @@ namespace OpenDentBusiness {
 						//ignored: adjustment
 						//included: capComplete,CapEstimate,Estimate,NotReceived,Received
 					}
-					if(patPlans[p].PlanNum!=claimProcs[i].PlanNum) {
+					//if(patPlans[p].PlanNum!=claimProcs[i].PlanNum) {
+					if(patPlans[p].InsSubNum!=claimProcs[i].InsSubNum) {
 						continue;
 					}
 					estExists=true;
@@ -1155,7 +1156,7 @@ namespace OpenDentBusiness {
 					//example:cap estimate changed to cap complete, and if estimate, then provnum set
 					//but I don't see how PlanCur could ever be null
 				}
-				patplan=PatPlans.GetFromList(patPlans,claimProcs[i].PlanNum);
+				patplan=PatPlans.GetFromList(patPlans,claimProcs[i].PlanNum,claimProcs[i].InsSubNum);
 				//the cp is altered within ComputeBaseEst, but not saved.
 				if(patplan==null) {//the plan for this claimproc was dropped 
 					if(ordinal!=4) {//only process on the fourth round

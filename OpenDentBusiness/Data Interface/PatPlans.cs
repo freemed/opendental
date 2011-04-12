@@ -92,10 +92,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return null if planNum not found in the list.</summary>
-		public static PatPlan GetFromList(List<PatPlan> patPlans,long planNum) {
+		public static PatPlan GetFromList(List<PatPlan> patPlans,long planNum,long subNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
-				if(patPlans[p].PlanNum==planNum) {
+				if(patPlans[p].PlanNum==planNum && patPlans[p].InsSubNum==subNum) {
 					return patPlans[p];
 				}
 			}

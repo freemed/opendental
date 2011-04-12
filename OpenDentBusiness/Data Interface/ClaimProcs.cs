@@ -213,13 +213,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in TP module to get one estimate. The List must be all ClaimProcs for this patient. If estimate can't be found, then return null.  The procedure is always status TP, so there shouldn't be more than one estimate for one plan.</summary>
-		public static ClaimProc GetEstimate(List<ClaimProc> claimProcList,long procNum,long planNum) {
+		public static ClaimProc GetEstimate(List<ClaimProc> claimProcList,long procNum,long planNum,long subNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].Status==ClaimProcStatus.Preauth) {
 					continue;
 				}
-				if(claimProcList[i].ProcNum==procNum && claimProcList[i].PlanNum==planNum) {
+				if(claimProcList[i].ProcNum==procNum && claimProcList[i].PlanNum==planNum && claimProcList[i].InsSubNum==subNum) {
 					return claimProcList[i];
 				}
 			}
