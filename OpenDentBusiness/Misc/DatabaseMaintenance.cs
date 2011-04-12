@@ -1369,6 +1369,9 @@ namespace OpenDentBusiness {
 						+"WHERE InsSubNum="+table.Rows[i]["InsSubNum"].ToString()+" "
 						+"AND PatNum="+table.Rows[i]["PatNum"].ToString();
 					string planNum2=Db.GetScalar(command);
+					if(planNum=="" || planNum2==""){
+						continue;
+					}
 					if(planNum==planNum2) {//if the inssub and patplan tables agree (are synched), use that plannum (this will not work if subscriber is not self)
 						command="UPDATE claim SET PlanNum="+planNum+" WHERE ClaimNum="+table.Rows[i]["ClaimNum"].ToString();
 						Db.NonQ(command);
