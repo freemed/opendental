@@ -294,6 +294,7 @@ namespace OpenDental{
 			this.checkDiscontinued.Tag = "";
 			this.checkDiscontinued.Text = "Show Discontinued Medications";
 			this.checkDiscontinued.UseVisualStyleBackColor = true;
+			this.checkDiscontinued.KeyUp += new System.Windows.Forms.KeyEventHandler(this.checkDiscontinued_KeyUp);
 			this.checkDiscontinued.MouseUp += new System.Windows.Forms.MouseEventHandler(this.checkShowDiscontinuedMeds_MouseUp);
 			// 
 			// gridAllergies
@@ -345,7 +346,7 @@ namespace OpenDental{
 			this.butMedicationReconcile.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butMedicationReconcile.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMedicationReconcile.CornerRadius = 4F;
-			this.butMedicationReconcile.Location = new System.Drawing.Point(753,1);
+			this.butMedicationReconcile.Location = new System.Drawing.Point(805,2);
 			this.butMedicationReconcile.Name = "butMedicationReconcile";
 			this.butMedicationReconcile.Size = new System.Drawing.Size(154,23);
 			this.butMedicationReconcile.TabIndex = 66;
@@ -394,6 +395,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMedical_Load(object sender, System.EventArgs e){
+			if(FormOpenDental.FormEHR==null) {
+				butMedicationReconcile.Visible=false;
+			}
 			checkPremed.Checked=PatCur.Premed;
 			textMedUrgNote.Text=PatCur.MedUrgNote;
 			textMedical.Text=PatientNoteCur.Medical;
@@ -583,6 +587,10 @@ namespace OpenDental{
 		}*/
 
 		private void checkShowDiscontinuedMeds_MouseUp(object sender,MouseEventArgs e) {
+			FillMeds();
+		}
+
+		private void checkDiscontinued_KeyUp(object sender,KeyEventArgs e) {
 			FillMeds();
 		}
 

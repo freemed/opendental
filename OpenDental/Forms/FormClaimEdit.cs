@@ -4412,7 +4412,7 @@ namespace OpenDental{
 		}
 
 		private void butAttachAdd_Click(object sender,EventArgs e) {
-			FormImageSelect FormI=new FormImageSelect();
+			FormImageSelectClaimAttach FormI=new FormImageSelectClaimAttach();
 			FormI.PatNum=ClaimCur.PatNum;
 			FormI.ShowDialog();
 			if(FormI.DialogResult!=DialogResult.OK){

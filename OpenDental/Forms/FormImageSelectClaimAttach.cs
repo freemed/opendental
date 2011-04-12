@@ -11,7 +11,7 @@ using CodeBase;
 
 namespace OpenDental{
 	/// <summary></summary>
-	public class FormImageSelect : System.Windows.Forms.Form{
+	public class FormImageSelectClaimAttach:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.ODGrid gridMain;
@@ -21,11 +21,11 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		public long PatNum;
 		private Document[] Docs;
-		///<summary>If DialogResult==OK, then this will contain the new DocNum of the image we want.</summary>
-		public long SelectedDocNum;
+		///<summary>If DialogResult==OK, then this will contain the new ClaimAttach with the filename that the file was saved under.  File will be in the EmailAttachments folder.  But ClaimNum will not be set.</summary>
+		public ClaimAttach ClaimAttachNew;
 
 		///<summary></summary>
-		public FormImageSelect()
+		public FormImageSelectClaimAttach()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -56,7 +56,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImageSelect));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImageSelectClaimAttach));
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
@@ -104,7 +104,7 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "FormImageSelect";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// FormImageSelect
+			// FormImageSelectClaimAttach
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(632,564);
@@ -114,10 +114,10 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormImageSelect";
+			this.Name = "FormImageSelectClaimAttach";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Select Image";
+			this.Text = "Select Image for Claim Attachment";
 			this.Load += new System.EventHandler(this.FormImageSelect_Load);
 			this.ResumeLayout(false);
 
@@ -151,8 +151,72 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			SelectedDocNum=Docs[e.Row].DocNum;
-			DialogResult=DialogResult.OK;
+			SaveAttachment();
+		}
+
+		private void SaveAttachment(){
+			Patient PatCur=Patients.GetPat(PatNum);
+			//if(PatCur.ImageFolder=="") {
+			//	MsgBox.Show(this,"Invalid patient image folder.");
+			//	return;
+			//}
+			if(!PrefC.UsingAtoZfolder) {
+				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
+				return;
+			}
+			string patfolder=ImageStore.GetPatientFolder(PatCur);
+				//ODFileUtils.CombinePaths(
+				//FormPath.GetPreferredImagePath(),PatCur.ImageFolder.Substring(0,1).ToUpper(),PatCur.ImageFolder);
+			//if(!Directory.Exists(patfolder)) {
+			//	MsgBox.Show(this,"Patient folder not found in AtoZ folder.");
+			//	return;
+			//}
+			Document doc=Docs[gridMain.GetSelectedIndex()];
+			if(!ImageHelper.HasImageExtension(doc.FileName)){
+				MsgBox.Show(this,"Invalid file.  Only images may be attached, no other file format.");
+				return;
+			}
+			string oldPath=ODFileUtils.CombinePaths(patfolder,doc.FileName);
+			Random rnd=new Random();
+			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()
+				+Path.GetExtension(oldPath);
+			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
+			try {
+				if(ImageHelper.HasImageExtension(oldPath)) {
+					if(doc.CropH !=0
+						|| doc.CropW !=0
+						|| doc.CropX !=0
+						|| doc.CropY !=0
+						|| doc.DegreesRotated !=0
+						|| doc.IsFlipped
+						|| doc.WindowingMax !=0
+						|| doc.WindowingMin !=0) 
+					{
+						//this does result in a significantly larger images size if jpg.  A later optimization would recompress it.
+						Bitmap bitmapold=(Bitmap)Bitmap.FromFile(oldPath);
+						Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ApplyImageSettings.ALL);
+						bitmapnew.Save(newPath);
+					}
+					else {
+						File.Copy(oldPath,newPath);
+					}
+				}
+				else {
+					File.Copy(oldPath,newPath);
+				}
+				ClaimAttachNew=new ClaimAttach();
+				ClaimAttachNew.DisplayedFileName=Docs[gridMain.GetSelectedIndex()].FileName;
+				ClaimAttachNew.ActualFileName=newName;
+				DialogResult=DialogResult.OK;
+			}
+			catch(FileNotFoundException ex) {
+				MessageBox.Show(Lan.g(this,"File not found: ")+ex.Message);
+				return;
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -160,8 +224,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an image first.");
 				return;
 			}
-			SelectedDocNum=Docs[gridMain.GetSelectedIndex()].DocNum;
-			DialogResult=DialogResult.OK;
+			SaveAttachment();
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
