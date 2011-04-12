@@ -1537,6 +1537,7 @@ namespace OpenDental.Eclaims {
 			PrintStatus(g,x,0);
 			x=doc.StartElement();
 			PrintDentistName(g,x,0);
+			PrintDentistPhone(g,x+300,0);
 			PrintTreatmentProviderID(g,x+500,0);
 			x=doc.StartElement();
 			PrintOfficeSequenceNumber(g,x,0);
@@ -1546,7 +1547,7 @@ namespace OpenDental.Eclaims {
 			PrintDivisionSectionNo(g,x+500,0);
 			x=doc.StartElement();
 			PrintCertificateNo(g,x,0,true);
-			PrintPrimaryDependantNo(g,x+200,0);
+			PrintPrimaryDependantNo(g,x+300,0);
 			PrintCardNo(g,x+500,0);
 			x=doc.StartElement();
 			PrintPatientName(g,x,0);
@@ -2014,7 +2015,7 @@ namespace OpenDental.Eclaims {
 			if(text.Length==10) {//May need to format for nice appearance.
 				text=text.Substring(0,3)+"-"+text.Substring(3,3)+"-"+text.Substring(6,4);
 			}
-			return doc.DrawField(g,isFrench?"NO DE TÉLÉPHONE":"TELEPHONE",text,false,X,Y);
+			return doc.DrawField(g,isFrench?"NO DE TÉLÉPHONE":"TELEPHONE",text,true,X,Y);
 		}
 
 		///<summary>The output will be no wider than maxWidthInPixels, unless maxWidthInPixels<=0, in which case there is no maximum width.</summary>

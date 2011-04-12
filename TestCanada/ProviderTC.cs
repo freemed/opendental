@@ -60,6 +60,7 @@ namespace TestCanada {
 			Prefs.UpdateString(PrefName.PracticeCity,"East Westchester");
 			Prefs.UpdateString(PrefName.PracticeST,"ON");
 			Prefs.UpdateString(PrefName.PracticeZip,"M7F2J9");
+			Prefs.UpdateString(PrefName.PracticePhone,"123-456-7890");
 			Prefs.RefreshCache();
 			return "Dentist objects set.\r\n";
 		}
