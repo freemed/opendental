@@ -152,6 +152,14 @@ namespace OpenDentBusiness.HL7 {
 			return "U";
 		}
 
+		//=======================================================================================================================================
+		//DO NOT ALTER any of these Convert... methods for use with any other HL7 bridge.  
+		//Each bridge tends to have slightly different implementation.  
+		//No bridge can share any of these.
+		//Instead, copy them into other classes.
+		//This set of methods is ONLY for ECW, and will have to be renamed and grouped if any other DFT bridge is built.
+		//=======================================================================================================================================
+
 		private string ConvertRace(PatientRace race) {
 			switch(race) {
 				case PatientRace.AmericanIndian:

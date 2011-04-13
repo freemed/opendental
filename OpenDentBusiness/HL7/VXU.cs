@@ -24,13 +24,38 @@ namespace OpenDentBusiness.HL7 {
 			PID(pat);
 			for(int i=0;i<vaccines.Count;i++) {
 				ORC();
-				RXA();
+				RXA(vaccines[i]);
 			}
 		}
 
+		//The 2 examples below have been edited slightly for our purposes.  They still pass validation.
+
+		//example 1:
+		/*
+MSH|^~\&|Open Dental||||20110316102457||VXU^V04^VXU_V04|OD-110316102457117|P|2.5.1
+PID|||9817566735^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||Johnson^Philip||20070526|M||2106-3^White^HL70005|3345 Elm Street^^Aurora^CO^80011^^M||^PRN^^^^303^5548889|||||||||N^Not Hispanic or Latino^HL70189
+ORC|RE
+RXA|0|1|201004051600|201004051600|33^Pneumococcal Polysaccharide^CVX|0.5|ml^milliliter^ISO+||||||||1039A||MSD^Merck^HL70227||||A
+		 */
+
+		//example7 has two vaccines:
+		/*
+MSH|^~\&|EHR Application|EHR Facility|PH Application|PH Facility|20110316102838||VXU^V04^VXU_V04|NIST-110316102838387|P|2.5.1
+PID|||787478017^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||James^Wanda||19810430|F||2106-3^White^HL70005|574 Wilkins Road^^Shawville^Pennsylvania^16873^^M||^PRN^^^^814^5752819|||||||||N^Not Hispanic or Latino^HL70189
+ORC|RE
+RXA|0|1|201004051600|201004051600|52^Hepatitis A^HL70292|1|ml^milliliter^ISO+||||||||HAB9678V1||SKB^GLAXOSMITHKLINE^HL70227||||A
+ORC|RE
+RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999|||||||||||||||A
+		 */
+		
 		///<summary>Message Header Segment</summary>
 		private void MSH(){
-			seg=new SegmentHL7(@"MSH|^~\&|OD||ECW||"+DateTime.Now.ToString("yyyyMMddHHmmss")+"||VXU^V04||P|2.5");
+			seg=new SegmentHL7(@"MSH|^~\&|Open Dental|"//MSH-3: Sending application
+				+"|||"+DateTime.Now.ToString("yyyyMMddHHmmss")+"||"
+				+"VXU^V04^VXU_V04|"//MSH-9: fixed
+				+"OD-110316102457117|"//MSH-10: Control Id, str20. Fixed is ok for testing.
+				+"P|"//MSH-11: P=production
+				+"2.5.1");
 			msg.Segments.Add(seg);
 		}
 
@@ -38,32 +63,32 @@ namespace OpenDentBusiness.HL7 {
 		private void PID(Patient pat){
 			seg=new SegmentHL7(SegmentName.PID);
 			seg.SetField(0,"PID");
-			seg.SetField(1,"1");
-			seg.SetField(2,pat.ChartNumber);//Account number.  eCW requires this to be the same # as came in on PID.4.
-			seg.SetField(3,pat.PatNum.ToString());//??what is this MRN?
-			seg.SetField(5,pat.LName,pat.FName,pat.MiddleI);
-			//need to validate dob first
-			seg.SetField(7,pat.Birthdate.ToString("yyyyMMdd"));
-			//seg.SetField(8,ConvertGender(pat.Gender));
-			//seg.SetField(10,ConvertRace(pat.Race));
-			seg.SetField(11,pat.Address,pat.Address2,pat.City,pat.State,pat.Zip);
-			//seg.SetField(13,ConvertPhone(pat.HmPhone));
-			//seg.SetField(14,ConvertPhone(pat.WkPhone));
-			//seg.SetField(16,ConvertMaritalStatus(pat.Position));
-			seg.SetField(19,pat.SSN);
+			seg.SetField(3,pat.PatNum.ToString());
+			seg.SetField(5,pat.LName,pat.FName);
+			if(pat.Birthdate.Year>1880) {//7: dob optional
+				seg.SetField(7,pat.Birthdate.ToString("yyyyMMdd"));
+			}
+			seg.SetField(8,ConvertGender(pat.Gender));
+			seg.SetField(10,ConvertRace(pat.Race));
+			seg.SetField(11,pat.Address,pat.Address2,pat.City,pat.State,pat.Zip,"","M");//M is for mailing.
+			seg.SetField(13,ConvertPhone(pat.HmPhone));
+			seg.SetField(22,ConvertEthnicGroup(pat.Race));
 			msg.Segments.Add(seg);
 		}
 
 		private void ORC() {
 			seg=new SegmentHL7(SegmentName.ORC);
-			//seg.SetField...
-
+			seg.SetField(1,"RE");//fixed
 			msg.Segments.Add(seg);
 		}
 
-		private void RXA() {
+		private void RXA(VaccinePat vaccine) {
 			seg=new SegmentHL7(SegmentName.RXA);
-			//seg.SetField...
+			seg.SetField(1,"0");//fixed
+			seg.SetField(2,"1");//fixed
+			seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));
+			seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));
+			//etc.  (see the patterns above.  Skip fields as necessary)
 
 			msg.Segments.Add(seg);
 		}
@@ -72,7 +97,66 @@ namespace OpenDentBusiness.HL7 {
 			return msg.ToString();
 		}
 
-		
+		private string ConvertGender(PatientGender gender) {
+			if(gender==PatientGender.Female) {
+				return "F";
+			}
+			if(gender==PatientGender.Male) {
+				return "M";
+			}
+			return "U";
+		}
+
+		private string ConvertRace(PatientRace race) {
+			switch(race) {
+				case PatientRace.AmericanIndian:
+					return "1002-5^American Indian Or Alaska Native^HL70005";
+				case PatientRace.Asian:
+					return "2028-9^Asian^HL70005";
+				case PatientRace.AfricanAmerican:
+					return "2054-5^Black or African American^HL70005";
+				case PatientRace.HawaiiOrPacIsland:
+					return "2076-8^Native Hawaiian or Other Pacific Islander^HL70005";
+				case PatientRace.White:
+					return "2106-3^White^HL70005";
+				case PatientRace.Other:
+					return "2131-1^Other Race^HL70005";
+				default://including hispanic
+					return "2131-1^Other Race^HL70005";
+			}
+		}
+
+		private string ConvertEthnicGroup(PatientRace race) {
+			switch(race) {
+				case PatientRace.HispanicLatino:
+					return "H^Hispanic or Latino^HL70189";
+				default:
+					return "N^Not Hispanic or Latino^HL70189";
+			}
+		}
+
+		private string ConvertPhone(string phone) {
+			string digits="";
+			for(int i=0;i<phone.Length;i++) {
+				if(!Char.IsNumber(phone,i)) {
+					continue;
+				}
+				if(digits=="" && phone.Substring(i,1)=="1") {
+					continue;//skip leading 1.
+				}
+				digits+=phone.Substring(i,1);
+			}
+			if(digits.Length!=10) {
+				return "";
+			}
+			string retVal="";
+			retVal+="^";//1:deprecated
+			retVal+="PRN^";//2:table201. PRN=primary residence number.  
+			retVal+="^^^";//3-5:
+			retVal+=digits.Substring(0,3)+"^";//6:area code
+			retVal+=digits.Substring(3);
+			return retVal;
+		}
 
 
 

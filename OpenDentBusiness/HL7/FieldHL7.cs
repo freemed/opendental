@@ -53,6 +53,10 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>This also resets the number of components.  And it sets fullText.</summary>
 		public void SetVals(params string[] values){
+			if(values.Length==1) {
+				FullText=values[0];//this allows us to pass in all components for the field as one long string: comp1^comp2^comp3
+				return;
+			}
 			fullText="";
 			Components=new List<ComponentHL7>();
 			ComponentHL7 component;
