@@ -195,7 +195,11 @@ namespace OpenDentBusiness.HL7 {
 		FT1,
 		///<summary>Diagnosis Information</summary>
 		DG1,
-		///<summary>PDF Data</summary>
+		///<summary>We use for PDF Data</summary>
 		ZX1,
+		///<summary>Common Order</summary>
+		ORC,
+		///<summary>Pharmacy Administration Segment</summary>
+		RXA
 	}
 }

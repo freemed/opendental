@@ -86,6 +86,8 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Scheduling - S12,S13,S14,S15,S22</summary>
 		SIU,
 		///<summary>Detailed Financial Transaction - P03</summary>
-		DFT
+		DFT,
+		///<summary>Unsolicited Vaccination Record Update - V04</summary>
+		VXU
 	}
 }
