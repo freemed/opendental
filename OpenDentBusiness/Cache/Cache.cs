@@ -194,6 +194,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll){
 				ds.Tables.Add(ToolButItems.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.Vaccines) || isAll) {
+				
+			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll){
 				ds.Tables.Add(ApptViews.RefreshCache());
 				ds.Tables.Add(ApptViewItems.RefreshCache());
@@ -360,6 +363,9 @@ namespace OpenDentBusiness {
 			//InvalidTypes.Tasks not handled here.
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll) {
 				ToolButItems.FillCache(ds.Tables["ToolButItem"]);
+			}
+			if(itypes.Contains((int)InvalidType.Vaccines) || isAll) {
+				
 			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll) {
 				ApptViews.FillCache(ds.Tables["ApptView"]);

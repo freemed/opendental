@@ -4,23 +4,18 @@ using System.Text;
 using OpenDentBusiness;
 
 namespace OpenDentBusiness.HL7 {
+	///<summary>A DFT message is a Charge Specification.  There are different kinds.  The kind we have implemented passes information about completed procedures and their charges to external programs for billing purposes.</summary>
 	public class DFT {
 		private MessageHL7 msg;
 		private SegmentHL7 seg;
 
-		/////<summary>The constructor has all the info necessary to create the Message object.</summary>
-		//public DFT(Appointment apt,Patient pat) {
-		//  msg=new MessageHL7(MessageType.DFT);
-		//  MSH();
-		//  EVN();
-		//  PID(pat);
-		//  PV1(apt);
-		//  FT1(apt);
-		//  DG1();
-		//}
+		///<summary></summary>
+		public DFT() {
+			
+		}
 
-		///<summary>The constructor has all the info necessary to create the Message object.</summary>
-		public DFT(Appointment apt,Patient pat,string pdfDataBase64,string pdfDescription,bool justPDF){
+		///<summary>Creates the Message object and fills it with data.</summary>
+		public void InitializeEcw(Appointment apt,Patient pat,string pdfDataAsBase64,string pdfDescription,bool justPDF){
 			msg=new MessageHL7(MessageType.DFT);
 			MSH();
 			EVN();
@@ -28,38 +23,8 @@ namespace OpenDentBusiness.HL7 {
 			PV1(apt);
 			FT1(apt,justPDF);
 			DG1();
-			ZX1(pdfDataBase64,pdfDescription);
+			ZX1(pdfDataAsBase64,pdfDescription);
 		}
-
-		/////<summary>The constructor has all the info necessary to create the Message object.</summary>
-		//public DFT(Patient pat,List<Procedure> procs,string pdfDataBase64){
-		//  msg=new MessageHL7(MessageType.DFT);
-		//  MSH();
-		//  EVN();
-		//  PID(pat);
-		//  long provNum=0;
-		//  //Try to get a provider from one of the treatment planned procedures.
-		//  for(int i=0;i<procs.Count;i++){
-		//    if(procs[i].ProvNum!=0){
-		//      provNum=procs[i].ProvNum;
-		//      break;
-		//    }
-		//  }
-		//  //If no treatment planned procedures are marked with a provider, then use a default provider.
-		//  if(provNum==0){
-		//    if(pat.PriProv==0){
-		//      provNum=PrefC.GetInt(PrefName.PracticeDefaultProv);
-		//    }
-		//    else{
-		//      provNum=pat.PriProv;
-		//    }
-		//  }
-		//  Provider prov=Providers.GetProv(provNum);
-		//  PV1(prov);
-		//  FT1(procs);
-		//  DG1();
-		//  ZX1(pdfDataBase64);
-		//}
 
 		///<summary>Message Header Segment</summary>
 		private void MSH(){
@@ -92,14 +57,6 @@ namespace OpenDentBusiness.HL7 {
 			seg.SetField(19,pat.SSN);
 			msg.Segments.Add(seg);
 		}
-
-		/////<summary>Patient visit.</summary>
-		//private void PV1(Provider prov){
-		//  seg=new SegmentHL7(SegmentName.PV1);
-		//  seg.SetField(0,"PV1");
-		//  seg.SetField(7,prov.Abbr,prov.LName,prov.FName,prov.MI);
-		//  msg.Segments.Add(seg);
-		//}
 
 		///<summary>Patient visit.</summary>
 		private void PV1(Appointment apt){
@@ -162,28 +119,6 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
-		/////<summary>Financial transaction segment.</summary>
-		//private void FT1(TreatPlan treatplan,Patient pat,Provider prov){
-		//  ProcTP[] allPatTpProcs=ProcTPs.Refresh(pat.PatNum);
-		//  ProcTP[] procsForTp=ProcTPs.GetListForTP(treatplan.TreatPlanNum,allPatTpProcs);
-		//  for(int i=0;i<procsForTp.Length;i++) {
-		//    seg=new SegmentHL7(SegmentName.FT1);
-		//    seg.SetField(0,"FT1");
-		//    seg.SetField(1,(i+1).ToString());
-		//    seg.SetField(4,treatplan.DateTP.ToString("yyyyMMddHHmmss"));
-		//    seg.SetField(5,treatplan.DateTP.ToString("yyyyMMddHHmmss"));
-		//    seg.SetField(6,"CG");
-		//    seg.SetField(10,"1.0");
-		//    seg.SetField(16,"");//location code and description???
-		//    seg.SetField(20,prov.Abbr,prov.LName,prov.FName,prov.MI);//performed by provider.
-		//    seg.SetField(21,prov.Abbr,prov.LName,prov.FName,prov.MI);//ordering provider.
-		//    seg.SetField(22,procsForTp[i].FeeAmt.ToString("F2"));
-		//    seg.SetField(25,procsForTp[i].ProcCode);
-		//    seg.SetField(26,Tooth.ToInternat(procsForTp[i].ToothNumTP),procsForTp[i].Surf);
-		//    msg.Segments.Add(seg);
-		//  }
-		//}
-
 		///<summary>Diagnosis segment. Optional.</summary>
 		private void DG1(){
 			//DG1 optional, so we'll skip for now---------------------------------
@@ -192,14 +127,14 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>PDF data segment.</summary>
-		private void ZX1(string pdfDataBase64,string pdfDescription){
+		private void ZX1(string pdfDataAsBase64,string pdfDescription){
 			seg=new SegmentHL7(SegmentName.ZX1);
 			seg.SetField(0,"ZX1");
 			seg.SetField(1,"6");
 			seg.SetField(2,"PDF");
 			seg.SetField(3,"PATHOLOGY^Pathology Report^L");
 			seg.SetField(4,pdfDescription);
-			seg.SetField(5,pdfDataBase64);
+			seg.SetField(5,pdfDataAsBase64);
 			msg.Segments.Add(seg);
 		}
 

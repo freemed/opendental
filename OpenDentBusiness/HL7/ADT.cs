@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 
 namespace OpenDentBusiness.HL7 {
+	///<summary>ADT messages are known as Patient Administration messages.  There are around 60 different kinds of ADT messages.  ADT messages are the most common message type, and I always think of them as "demographics" messages.  Not sure what ADT stands for; probably "admit/discharge/transfer" since many of the kinds of ADTs have to do with handling incoming and outgoing patients.</summary>
 	public class ADT {
 		public static void ProcessMessage(MessageHL7 message,bool isStandalone,bool isVerboseLogging) {
 			/*string triggerevent=message.Segments[0].GetFieldComponent(8,1);

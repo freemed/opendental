@@ -23,11 +23,13 @@ namespace OpenDental.Bridges {
 		//}
 
 		public static void SendHL7(Appointment apt,Patient pat,string pdfDataBase64,string pdfDescription,bool justPDF) {
-			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(apt,pat,pdfDataBase64,pdfDescription,justPDF);
+			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT();
+			dft.InitializeEcw(apt,pat,pdfDataBase64,pdfDescription,justPDF);
 			HL7Msg msg=new HL7Msg();
 			if(justPDF){
 				msg.AptNum=0;//Prevents the appt complete button from changing to the "Revise" button prematurely.
-			}else{
+			}
+			else{
 				msg.AptNum=apt.AptNum;
 			}
 			msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
