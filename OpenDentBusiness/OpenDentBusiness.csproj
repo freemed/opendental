@@ -177,6 +177,8 @@
     <Compile Include="Crud\DiseaseDefCrud.cs" />
     <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
+    <Compile Include="Crud\DrugManufacturerCrud.cs" />
+    <Compile Include="Crud\DrugUnitCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
     <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
@@ -309,6 +311,8 @@
     <Compile Include="Crud\UserGroupCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Crud\UserQueryCrud.cs" />
+    <Compile Include="Crud\VaccineDefCrud.cs" />
+    <Compile Include="Crud\VaccinePatCrud.cs" />
     <Compile Include="Crud\VitalsignCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
     <Compile Include="Data Interface\Allergies.cs" />
@@ -322,6 +326,8 @@
     <Compile Include="Data Interface\DisplayFields.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data Interface\DrugManufacturers.cs" />
+    <Compile Include="Data Interface\DrugUnits.cs" />
     <Compile Include="Data Interface\EhrMeasures.cs" />
     <Compile Include="Data Interface\Formularies.cs" />
     <Compile Include="Data Interface\FormularyMeds.cs" />
@@ -371,6 +377,8 @@
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
     <Compile Include="Data Interface\TimeCardRules.cs" />
+    <Compile Include="Data Interface\VaccineDefs.cs" />
+    <Compile Include="Data Interface\VaccinePats.cs" />
     <Compile Include="Data Interface\Vitalsigns.cs" />
     <Compile Include="Db\DbSchemaCol.cs" />
     <Compile Include="Db\OdDbType.cs" />
@@ -633,6 +641,8 @@
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
+    <Compile Include="TableTypes\DrugManufacturer.cs" />
+    <Compile Include="TableTypes\DrugUnit.cs" />
     <Compile Include="TableTypes\EhrMeasure.cs" />
     <Compile Include="TableTypes\Formulary.cs" />
     <Compile Include="TableTypes\FormularyMed.cs" />
@@ -654,6 +664,8 @@
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
     <Compile Include="CrudFramework\TableBase.cs" />
     <Compile Include="TableTypes\TimeCardRule.cs" />
+    <Compile Include="TableTypes\VaccineDef.cs" />
+    <Compile Include="TableTypes\VaccinePat.cs" />
     <Compile Include="TableTypes\Vitalsign.cs" />
     <Compile Include="UI\ODGrid.cs">
       <SubType>UserControl</SubType>

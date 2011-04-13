@@ -4347,6 +4347,110 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE carrier SET CanadianSupportedTypes=262143 WHERE IsCDA=1 AND CanadianSupportedTypes=0";//All transaction types are allowed for each carrier by default.
 				Db.NonQ(command);
 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS drugmanufacturer";
+					Db.NonQ(command);
+					command=@"CREATE TABLE drugmanufacturer (
+						DrugManufacturerNum bigint NOT NULL auto_increment PRIMARY KEY,
+						ManufacturerName varchar(255) NOT NULL,
+						ManufacturerCode varchar(20) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE drugmanufacturer'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE drugmanufacturer (
+						DrugManufacturerNum number(20) NOT NULL,
+						ManufacturerName varchar2(255),
+						ManufacturerCode varchar2(20),
+						CONSTRAINT drugmanufacturer_DrugManufacturerNum PRIMARY KEY (DrugManufacturerNum)
+						)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS drugunit";
+					Db.NonQ(command);
+					command=@"CREATE TABLE drugunit (
+						DrugUnitNum bigint NOT NULL auto_increment PRIMARY KEY,
+						UnitIdentifier varchar(20) NOT NULL,
+						UnitText varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE drugunit'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE drugunit (
+						DrugUnitNum number(20) NOT NULL,
+						UnitIdentifier varchar2(20),
+						UnitText varchar2(255),
+						CONSTRAINT drugunit_DrugUnitNum PRIMARY KEY (DrugUnitNum)
+						)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS vaccinedef";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vaccinedef (
+						VaccineDefNum bigint NOT NULL auto_increment PRIMARY KEY,
+						CVXCode varchar(255) NOT NULL,
+						VaccineName varchar(255) NOT NULL,
+						DrugManufacturerNum bigint NOT NULL,
+						INDEX(DrugManufacturerNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE vaccinedef'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vaccinedef (
+						VaccineDefNum number(20) NOT NULL,
+						CVXCode varchar2(255),
+						VaccineName varchar2(255),
+						DrugManufacturerNum number(20) NOT NULL,
+						CONSTRAINT vaccinedef_VaccineDefNum PRIMARY KEY (VaccineDefNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccinedef_DrugManufacturerNum ON vaccinedef (DrugManufacturerNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS vaccinepat";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vaccinepat (
+						VaccinePatNum bigint NOT NULL auto_increment PRIMARY KEY,
+						VaccineDefNum bigint NOT NULL,
+						DateTimeStart date NOT NULL DEFAULT '0001-01-01',
+						DateTimeEnd date NOT NULL DEFAULT '0001-01-01',
+						AdministeredAmt float NOT NULL,
+						DrugUnitNum bigint NOT NULL,
+						LotNumber varchar(255) NOT NULL,
+						INDEX(VaccineDefNum),
+						INDEX(DrugUnitNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE vaccinepat'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vaccinepat (
+						VaccinePatNum number(20) NOT NULL,
+						VaccineDefNum number(20) NOT NULL,
+						DateTimeStart date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						DateTimeEnd date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						AdministeredAmt number(38,8) NOT NULL,
+						DrugUnitNum number(20) NOT NULL,
+						LotNumber varchar2(255),
+						CONSTRAINT vaccinepat_VaccinePatNum PRIMARY KEY (VaccinePatNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccinepat_VaccineDefNum ON vaccinepat (VaccineDefNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccinepat_DrugUnitNum ON vaccinepat (DrugUnitNum)";
+					Db.NonQ(command);
+				}
+
 
 
 
@@ -4387,4 +4491,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-				
+
+
+
