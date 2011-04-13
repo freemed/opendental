@@ -329,6 +329,42 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormVaccineDefSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormVaccineDefSetup.designer.cs">
+      <DependentUpon>FormVaccineDefSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDrugManufacturerEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDrugManufacturerEdit.designer.cs">
+      <DependentUpon>FormDrugManufacturerEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDrugManufacturerSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDrugManufacturerSetup.designer.cs">
+      <DependentUpon>FormDrugManufacturerSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDrugUnitEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDrugUnitEdit.designer.cs">
+      <DependentUpon>FormDrugUnitEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDrugUnitSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDrugUnitSetup.designer.cs">
+      <DependentUpon>FormDrugUnitSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormVaccineDefEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormVaccineDefEdit.designer.cs">
+      <DependentUpon>FormVaccineDefEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormImageSelectClaimAttach.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2111,6 +2147,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormVaccineDefSetup.resx">
+      <DependentUpon>FormVaccineDefSetup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDrugManufacturerEdit.resx">
+      <DependentUpon>FormDrugManufacturerEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDrugManufacturerSetup.resx">
+      <DependentUpon>FormDrugManufacturerSetup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDrugUnitEdit.resx">
+      <DependentUpon>FormDrugUnitEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDrugUnitSetup.resx">
+      <DependentUpon>FormDrugUnitSetup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormVaccineDefEdit.resx">
+      <DependentUpon>FormVaccineDefEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormImageSelectClaimAttach.resx">
