@@ -86,19 +86,16 @@ namespace OpenDental {
 					return;
 				}
 			}
-			//TODO: Collect all information needed (pt, pharmacy, prov, etc.)
-			//RxPat rx=RxPats.GetRx(
-			//etc
-
-
-
 			//Ask Jordan about information like Clinic ID and where we will get/store this stuff.
 			//Add special logic for adding multiple perscriptions to one SCRIPT.
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				//TODO: Get the information for current Rx to fill info.
+				//Collect all information needed
+				RxPat rx=listRx[gridMain.SelectedIndices[i]];
+				Patient pat=Patients.GetPat(rx.PatNum);
+				Provider prov=Providers.GetProv(rx.ProvNum);
+				//Use pharmacy object that was set above because all perscriptions sent MUST have the same pharmacy.
 				StringBuilder strb=new StringBuilder();
-				#region SCRIPT
-				//these characters will be replaced in a production by unprintable characters, but hardcoded for debugging.
+				//These characters will be replaced in a production by unprintable characters, but hardcoded for debugging.
 				char f=':';//separates fields within a composite element
 				char e='+';//(separates composite elements) SureScripts may require an unprintable character here.
 				char d='.';//decimal notation
@@ -118,13 +115,15 @@ namespace OpenDental {
 						//s='';
 					}
 				#else
-					//f='';
+					//f=''; we don't know the values for these characters yet.
 					//e='';
 					//d='';
 					//r='';
 					//p='';
 					//s='';
 				#endif
+				#region SCRIPT
+				//Hardcoded values should never change. Ex:Message type, version, release should always be SCRIPT:010:006
 				//UNA:+./*'------------------------------------------------------------------------------------------------
 				strb.AppendLine("UNA"+f+e+d+r+p+s);
 				//UIB+UNOA:Ш++1234567+++77777777:C:PASSWORDQ+77Ш163Ш:P+19971ШШ1:Ш81522’------------------------------------
@@ -209,6 +208,7 @@ namespace OpenDental {
 				//The SCRIPT has been created, now send it out.
 				//File might contain sensitive info, should we delete the file when done?
 			}//End of selected Rx loop
+			FillGrid();//Refresh the screen so that sent Rx's go away.
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
