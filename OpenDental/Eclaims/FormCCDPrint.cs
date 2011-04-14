@@ -1637,12 +1637,15 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			//TODO: Ensure that the ordering of the procedures meets the Canadian standard.
 			Procedure proc;
+			float procCodeWidth=g.MeasureString("*******",doc.standardFont).Width;
 			for(int i=0;i<this.claimprocs.Count;i++) {
 				ClaimProc claimproc=claimprocs[i];
 				if(claimproc.ProcNum!=0) {//Is this a valid procedure?
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-					text=claimproc.CodeSent.PadLeft(6,' ')+" "+ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
-					doc.DrawString(g,text,procedureCodeCol,0,doc.standardFont,(int)(procedureToothCol-procedureCodeCol-10));
+					text=claimproc.CodeSent.PadLeft(6,' ');
+					doc.DrawString(g,text,x,0);
+					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
+					doc.DrawString(g,text,procedureCodeCol+procCodeWidth,0,doc.standardFont,(int)(procedureToothCol-procedureCodeCol-procCodeWidth-10));
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10
 					doc.DrawString(g,text,procedureToothCol,0);
 					text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
@@ -1816,8 +1819,7 @@ namespace OpenDental.Eclaims {
 			Font tempFont=doc.standardFont;
 			doc.standardFont=standardSmall;
 			float procedureCodeCol=x;
-			float procedureDescriptionCol=procedureCodeCol+70;
-			float procedureToothCol=procedureDescriptionCol+200;
+			float procedureToothCol=procedureCodeCol+270;
 			float procedureDateCol=procedureToothCol+25;
 			float procedureDateColWidth=predetermination?0:75;
 			float procedureChargeCol=procedureDateCol+procedureDateColWidth;
@@ -1828,7 +1830,6 @@ namespace OpenDental.Eclaims {
 			float procedureNotesCol=procedureBenefitCol+60;
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ACTE":"PROCEDURE",procedureCodeCol,0);
-			doc.DrawString(g,"DESCRIPTION",procedureDescriptionCol,0);//Same in both languages.
 			doc.DrawString(g,isFrench?"D#":"TH#",procedureToothCol,0);
 			if(!predetermination) {
 				doc.DrawString(g,"DATE",procedureDateCol,0);//Same in both languages.
@@ -1847,8 +1848,8 @@ namespace OpenDental.Eclaims {
 			CCDField[] explainationNotes1=formData.GetFieldsById("G16");
 			CCDField[] explainationNotes2=formData.GetFieldsById("G17");
 			Procedure proc;
-			const int maxDescriptLen=24;
 			float amountWidth=g.MeasureString("****.**",doc.standardFont).Width;
+			float procCodeWidth=g.MeasureString("*******",doc.standardFont).Width;
 			for(int p=0;p<procedureLineNumbers.Length;p++){
 				int procedureLineNumber=Convert.ToInt32(procedureLineNumbers[p].valuestr);
 				int i=0;
@@ -1859,10 +1860,10 @@ namespace OpenDental.Eclaims {
 					ClaimProc claimproc=claimprocs[i];
 					x=doc.StartElement();
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-					text=claimproc.CodeSent;
-					doc.DrawString(g,text,procedureCodeCol,0);
+					text=claimproc.CodeSent.PadLeft(6,' ');
+					doc.DrawString(g,text,x,0);
 					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
-					doc.DrawString(g,text,procedureDescriptionCol,0,doc.standardFont,(int)(procedureToothCol-procedureDescriptionCol-10));
+					doc.DrawString(g,text,procedureCodeCol+procCodeWidth,0,doc.standardFont,(int)(procedureToothCol-procedureCodeCol-procCodeWidth-10));
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10
 					doc.DrawString(g,text,procedureToothCol,0);
 					if(!predetermination) {//Used to remove service dates in a predetermination ack.
@@ -1900,13 +1901,10 @@ namespace OpenDental.Eclaims {
 			CCDField[] carrierNotes1=formData.GetFieldsById("G24");
 			CCDField[] carrierNotes2=formData.GetFieldsById("G25");
 			for(int p=0;p<carrierProcs.Length;p++){
-				text=carrierProcs[p].valuestr;//Field G19
-				doc.DrawString(g,text,procedureCodeCol,0);
-				text=ProcedureCodes.GetLaymanTerm(ProcedureCodes.GetCodeNum(text));//Abbreviated procedure description.
-				if(text.Length>maxDescriptLen){
-					text=text.Substring(0,maxDescriptLen);
-				}
-				doc.DrawString(g,text,procedureDescriptionCol,0);
+				text=carrierProcs[p].valuestr.PadLeft(6,' ');//Field G19
+				doc.DrawString(g,text,x,0);
+				text=ProcedureCodes.GetProcCode(ProcedureCodes.GetCodeNum(text)).Descript;
+				doc.DrawString(g,text,procedureCodeCol+procCodeWidth,0,doc.standardFont,(int)(procedureToothCol-procedureCodeCol-procCodeWidth-10));
 				text=RawMoneyStrToDisplayMoney(carrierEligibleAmts[p].valuestr);//Field G20
 				doc.DrawString(g,text,procedureEligibleCol,0);
 				text=RawMoneyStrToDisplayMoney(carrierDeductAmts[p].valuestr);//Field G21
@@ -1932,7 +1930,7 @@ namespace OpenDental.Eclaims {
 			if(unallocatedDeductible!="000000") {
 				x=doc.StartElement();
 				text=isFrench?"Total Franchise":"Total Deductible";
-				doc.DrawString(g,text,procedureDescriptionCol,0);
+				doc.DrawString(g,text,x+70,0);
 				text=RawMoneyStrToDisplayMoney(unallocatedDeductible);
 				doc.DrawString(g,text,procedureDeductCol,0);
 				text="-"+text;
