@@ -15,12 +15,38 @@ namespace OpenDental {
 			return Programs.UsingEcwTight();
 		}
 
-		public static void Resize(ODGrid gridProg,Panel panelImages,Panel panelEcw,TabControl tabControlImages,Size ClientSize,ODGrid gridPtInfo) {
+		public static void Resize(ODGrid gridProg,Panel panelImages,Panel panelEcw,TabControl tabControlImages,Size ClientSize,ODGrid gridPtInfo,ToothChartWrapper toothChart,TextBox textTreatmentNotes) {
 			if(ProgramC.HListIsNull()) {
 				return;
 			}
 			if(UsingEcwTight()) {
-				gridProg.Width=524;
+				//gridProg.Width=524;
+				if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
+					int gridW=0;
+					for(int i=0;i<gridProg.Columns.Count;i++) {
+						gridW+=gridProg.Columns[i].ColWidth;
+					}
+					if(gridW<524) {//for example, if not very many columns
+						gridW=524;
+					}
+					if(gridW+20+toothChart.Width < ClientSize.Width) {//if space is big enough to allow full width
+						gridProg.Width=gridW+20;
+					}
+					else {
+						if(ClientSize.Width>0) {//prevents an error
+							if(ClientSize.Width-toothChart.Width-1 < 524) {
+								gridProg.Width=524;
+							}
+							else {
+								gridProg.Width=ClientSize.Width-toothChart.Width-1;
+							}
+						}
+					}
+					//now, bump the other controls over
+					toothChart.Location=new Point(gridProg.Width+2,26);
+					textTreatmentNotes.Location=new Point(gridProg.Width+2,toothChart.Bottom+1);
+					panelEcw.Location=new Point(gridProg.Width+2,textTreatmentNotes.Bottom+1);
+				}
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
 				}
@@ -106,9 +132,38 @@ namespace OpenDental {
 			}
 		}
 
-		public static void SetGridProgWidth(ODGrid gridProg,Size ClientSize){
+		public static void SetGridProgWidth(ODGrid gridProg,Size ClientSize,Panel panelEcw,TextBox textTreatmentNotes,ToothChartWrapper toothChart) {
 			if(UsingEcwTight()) {
-				gridProg.Width=524;
+				//gridProg.Width=524;
+				if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
+					int gridW=0;
+					for(int i=0;i<gridProg.Columns.Count;i++) {
+						gridW+=gridProg.Columns[i].ColWidth;
+					}
+					if(gridW<524) {//for example, if not very many columns
+						gridW=524;
+					}
+					if(gridW+20+toothChart.Width < ClientSize.Width) {//if space is big enough to allow full width
+						gridProg.Width=gridW+20;
+					}
+					else {
+						if(ClientSize.Width>0) {//prevents an error
+							if(ClientSize.Width-toothChart.Width-1 < 524) {
+								gridProg.Width=524;
+							}
+							else {
+								gridProg.Width=ClientSize.Width-toothChart.Width-1;
+							}
+						}
+					}
+					//now, bump the other controls over
+					toothChart.Location=new Point(gridProg.Width+2,26);
+					textTreatmentNotes.Location=new Point(gridProg.Width+2,toothChart.Bottom+1);
+					panelEcw.Location=new Point(gridProg.Width+2,textTreatmentNotes.Bottom+1);
+				}
+				else {
+					gridProg.Width=524;
+				}
 				return;
 			}
 			if(Programs.UsingOrion) {//full width

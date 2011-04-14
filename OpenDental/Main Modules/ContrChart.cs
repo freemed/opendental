@@ -3121,7 +3121,7 @@ namespace OpenDental{
 		}
 
 		private void ContrChart_Resize(object sender,EventArgs e) {
-			ChartLayoutHelper.Resize(gridProg,panelImages,panelEcw,tabControlImages,ClientSize,gridPtInfo);
+			ChartLayoutHelper.Resize(gridProg,panelImages,panelEcw,tabControlImages,ClientSize,gridPtInfo,toothChart,textTreatmentNotes);
 		}
 
 		///<summary></summary>
@@ -4471,7 +4471,7 @@ namespace OpenDental{
 				row.Tag=table.Rows[i];
 				gridProg.Rows.Add(row);
 			}
-			ChartLayoutHelper.SetGridProgWidth(gridProg,ClientSize);
+			ChartLayoutHelper.SetGridProgWidth(gridProg,ClientSize,panelEcw,textTreatmentNotes,toothChart);
 			gridProg.EndUpdate();
 			if(Chartscrollval==0) {
 				gridProg.ScrollToEnd();
