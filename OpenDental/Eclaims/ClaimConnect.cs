@@ -243,7 +243,7 @@ namespace OpenDental.Eclaims
 			cred.username=clearhouse.LoginID;
 			cred.password=clearhouse.Password;
 			com.dentalxchange.webservices.Request request=new com.dentalxchange.webservices.Request();
-			request.content=x12message;
+			request.content=HttpUtility.HtmlEncode(x12message);//get rid of ampersands, etc.
 			com.dentalxchange.webservices.WebServiceService service = new com.dentalxchange.webservices.WebServiceService();
 #if DEBUG
 			//service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
