@@ -1083,7 +1083,6 @@ namespace OpenDentBusiness {
 				//appointment.InsPlan2
 				//claim.PlanNum
 				//claim.PlanNum2
-				//claimproc.PlanNum
 				//etrans.PlanNum
 				//inssub.PlanNum
 				//payplan.PlanNum
@@ -1219,6 +1218,12 @@ namespace OpenDentBusiness {
 				}
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid patplan PlanNums fixed: ")+numFixed+"\r\n";
+				}
+				//claimproc.PlanNum-------------------------------------------------------------------------------------------------
+				command="DELETE FROM claimproc WHERE PlanNum=0 AND ClaimNum=0 AND InsPayAmt=0 AND Status=6";
+				numFixed=Db.NonQ(command);
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid claimproc PlanNums fixed: ")+numFixed+"\r\n";
 				}
 			}
 			return log;
