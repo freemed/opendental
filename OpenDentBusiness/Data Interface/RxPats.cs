@@ -83,12 +83,12 @@ namespace OpenDentBusiness{
 			return rxList;
 		}
 
-		///<summary>Used in FormRxSend to fill electronic queue filtered by pharmacy.</summary>
-		public static List<RxPat> GetMultElectQueueRx(long pharmacyNum) {
+		///<summary>Used in FormRxSend to fill electronic queue.</summary>
+		public static List<RxPat> GetQueue() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),pharmacyNum);
+				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM rxpat WHERE IsElectQueue=1 AND PharmacyNum="+pharmacyNum;
+			string command="SELECT * FROM rxpat WHERE IsElectQueue=1";
 			return Crud.RxPatCrud.SelectMany(command);
 		}
 
