@@ -348,8 +348,8 @@ namespace OpenDental.Eclaims {
 					break;
 				case "A02":
 					//Provider's Sequence Number
-					fieldName="OFFICE SEQUENCE NUMBER";
-					frenchFieldName="NO DE SÉQUENCE DU CABINET";
+					fieldName="DENTAL OFFICE CLAIM REFERENCE NO";
+					frenchFieldName="NO DE TRANSACTION DU CABINET";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(6);
 					break;
@@ -734,7 +734,7 @@ namespace OpenDental.Eclaims {
 				case "G07":
 					//Disposition message
 					fieldName="DISPOSITION";
-					frenchFieldName="DISPOSITION";
+					frenchFieldName="SPÉCIFICATIONS";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(75);
 					break;
@@ -912,9 +912,9 @@ namespace OpenDental.Eclaims {
 					lengthRequirement=new ConstLengthRequirement(12);
 					break;
 				case "A02":
-					//Office Sequence Number
-					fieldName="OFFICE SEQUENCE NUMBER";
-					frenchFieldName="NO DE SÉQUENCE DU CABINET";
+					//DENTAL OFFICE CLAIM REFERENCE NO
+					fieldName="DENTAL OFFICE CLAIM REFERENCE NO";
+					frenchFieldName="NO DE TRANSACTION DU CABINET";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(6);
 					break;
@@ -981,14 +981,14 @@ namespace OpenDental.Eclaims {
 					break;
 				case "B01":
 					//CDA Provider Number
-					fieldName="PROVIDER ID";
+					fieldName="UNIQUE ID NO";
 					frenchFieldName="NO DU DENTISTE";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(9);
 					break;
 				case "B02":
 					//Provider Office Number
-					fieldName="OFFICE ID";
+					fieldName="OFFICE NO";
 					frenchFieldName="NO DU CABINET";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(4);
@@ -1622,7 +1622,7 @@ namespace OpenDental.Eclaims {
 					lengthRequirement=new ConstLengthRequirement(6);
 					break;
 				case "F41"://Not in version 2.
-					fieldName="Original Office Sequence Number";
+					fieldName="Original DENTAL OFFICE CLAIM REFERENCE NO";
 					frenchFieldName="Nombre d'ordre original d'Office";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(6);
@@ -1721,7 +1721,7 @@ namespace OpenDental.Eclaims {
 				case "G07":
 					//Disposition message
 					fieldName="DISPOSITION";
-					frenchFieldName="DISPOSITION";
+					frenchFieldName="SPÉCIFICATIONS";
 					format="AE/N";
 					lengthRequirement=new ConstLengthRequirement(75);
 					break;
