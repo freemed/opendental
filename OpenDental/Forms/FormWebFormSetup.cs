@@ -18,7 +18,6 @@ namespace OpenDental {
 	/// </summary>
 	public partial class FormWebFormSetup:Form {
 
-		private OpenDental.WebSheets.webforms_preference PrefObj=null;
 		string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 		string SheetDefAddress="";
 		WebSheets.Sheets wh=new WebSheets.Sheets();
@@ -61,13 +60,18 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key provided by the dental office is incorrect");
 					return;
 				}
-				PrefObj=wh.GetPreferences(RegistrationKey);
+				OpenDental.WebSheets.webforms_preference PrefObj=wh.GetPreferences(RegistrationKey);
 				if(PrefObj==null) {
 					Cursor=Cursors.Default;
 					MsgBox.Show(this,"There has been an error retrieving values from the server");
 				}
 				butWebformBorderColor.BackColor=Color.FromArgb(PrefObj.ColorBorder);
 				SheetDefAddress=wh.GetSheetDefAddress(RegistrationKey);
+				//dennis: the below if statement is for backward compatibility only April 14 2011 and can be removed later.
+				if(String.IsNullOrEmpty(PrefObj.CultureName)){
+					PrefObj.CultureName=System.Globalization.CultureInfo.CurrentCulture.Name;
+					wh.SetPreferencesV2(RegistrationKey,PrefObj);
+					}
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
@@ -200,10 +204,12 @@ namespace OpenDental {
 					MsgBox.Show(this,"Registration key incorrect.");
 					return;
 				}
-				bool PrefSet=true;
-				PrefSet=wh.SetPreferences(RegistrationKey,butWebformBorderColor.BackColor.ToArgb());
+				OpenDental.WebSheets.webforms_preference PrefObj=new OpenDental.WebSheets.webforms_preference();
+				PrefObj.ColorBorder=butWebformBorderColor.BackColor.ToArgb();
+				PrefObj.CultureName=System.Globalization.CultureInfo.CurrentCulture.Name;
+				bool IsPrefSet=wh.SetPreferencesV2(RegistrationKey,PrefObj);
 				Cursor=Cursors.Default;
-				if(!PrefSet) {
+				if(!IsPrefSet) {
 					MsgBox.Show(this,"Error, color could not be saved to server.");
 				}
 			}

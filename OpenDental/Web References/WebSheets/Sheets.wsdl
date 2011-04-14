@@ -17,17 +17,11 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="GetPreferences">
+      <s:element name="SetPreferencesV2">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="GetPreferencesResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="GetPreferencesResult" type="tns:webforms_preference" />
+            <s:element minOccurs="0" maxOccurs="1" name="prefObj" type="tns:webforms_preference" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -37,6 +31,7 @@
             <s:sequence>
               <s:element minOccurs="1" maxOccurs="1" name="ColorBorder" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="DentalOfficeID" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="CultureName" type="s:string" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -69,6 +64,27 @@
           <s:element minOccurs="0" maxOccurs="1" name="Value" />
         </s:sequence>
       </s:complexType>
+      <s:element name="SetPreferencesV2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SetPreferencesV2Result" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPreferences">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPreferencesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPreferencesResult" type="tns:webforms_preference" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetSheets">
         <s:complexType>
           <s:sequence>
@@ -373,6 +389,7 @@
           <s:enumeration value="LabSlip" />
           <s:enumeration value="ExamSheet" />
           <s:enumeration value="DepositSlip" />
+          <s:enumeration value="EhrEducation" />
         </s:restriction>
       </s:simpleType>
       <s:complexType name="ArrayOfSheetFieldDef">
@@ -390,6 +407,12 @@
   </wsdl:message>
   <wsdl:message name="SetPreferencesSoapOut">
     <wsdl:part name="parameters" element="tns:SetPreferencesResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetPreferencesV2SoapIn">
+    <wsdl:part name="parameters" element="tns:SetPreferencesV2" />
+  </wsdl:message>
+  <wsdl:message name="SetPreferencesV2SoapOut">
+    <wsdl:part name="parameters" element="tns:SetPreferencesV2Response" />
   </wsdl:message>
   <wsdl:message name="GetPreferencesSoapIn">
     <wsdl:part name="parameters" element="tns:GetPreferences" />
@@ -456,6 +479,10 @@
       <wsdl:input message="tns:SetPreferencesSoapIn" />
       <wsdl:output message="tns:SetPreferencesSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="SetPreferencesV2">
+      <wsdl:input message="tns:SetPreferencesV2SoapIn" />
+      <wsdl:output message="tns:SetPreferencesV2SoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetPreferences">
       <wsdl:input message="tns:GetPreferencesSoapIn" />
       <wsdl:output message="tns:GetPreferencesSoapOut" />
@@ -501,6 +528,15 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SetPreferences">
       <soap:operation soapAction="http://opendental.com/SetPreferences" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPreferencesV2">
+      <soap:operation soapAction="http://opendental.com/SetPreferencesV2" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -603,6 +639,15 @@
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SetPreferences">
       <soap12:operation soapAction="http://opendental.com/SetPreferences" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPreferencesV2">
+      <soap12:operation soapAction="http://opendental.com/SetPreferencesV2" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

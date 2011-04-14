@@ -33,6 +33,7 @@
             <PropertyRef Name="DentalOfficeID" />
           </Key>
           <Property Name="ColorBorder" Type="int" Nullable="false" />
+          <Property Name="CultureName" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="DentalOfficeID" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="webforms_sheet">
@@ -190,6 +191,7 @@
           <Property Type="Int64" Name="DentalOfficeID" Nullable="false" />
           <NavigationProperty Name="webforms_sheetdef" Relationship="odwebserviceModel.FK_webforms_sheetdef_DentalOfficeID" FromRole="webforms_preference" ToRole="webforms_sheetdef" />
           <NavigationProperty Name="webforms_sheet" Relationship="odwebserviceModel.FK_webforms_sheet_DentalOfficeID" FromRole="webforms_preference" ToRole="webforms_sheet" />
+          <Property Type="String" Name="CultureName" Nullable="false" />
         </EntityType>
         <EntityType Name="webforms_sheet">
           <Key>
@@ -326,6 +328,7 @@
           <EntitySetMapping Name="webforms_preference">
             <EntityTypeMapping TypeName="odwebserviceModel.webforms_preference">
               <MappingFragment StoreEntitySet="webforms_preference">
+                <ScalarProperty Name="CultureName" ColumnName="CultureName" />
                 <ScalarProperty Name="DentalOfficeID" ColumnName="DentalOfficeID" />
                 <ScalarProperty Name="ColorBorder" ColumnName="ColorBorder" />
               </MappingFragment>

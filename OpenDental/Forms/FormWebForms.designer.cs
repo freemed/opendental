@@ -27,15 +27,15 @@ namespace OpenDental{
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.groupDateRange = new System.Windows.Forms.GroupBox();
-			this.labelStartDate = new System.Windows.Forms.Label();
-			this.labelEndDate = new System.Windows.Forms.Label();
-			this.menuWebFormsRight = new System.Windows.Forms.ContextMenu();
-			this.menuItemViewAllSheets = new System.Windows.Forms.MenuItem();
-			this.label1 = new System.Windows.Forms.Label();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.butToday = new OpenDental.UI.Button();
 			this.textDateStart = new OpenDental.ValidDate();
+			this.labelStartDate = new System.Windows.Forms.Label();
+			this.labelEndDate = new System.Windows.Forms.Label();
 			this.textDateEnd = new OpenDental.ValidDate();
+			this.menuWebFormsRight = new System.Windows.Forms.ContextMenu();
+			this.menuItemViewAllSheets = new System.Windows.Forms.MenuItem();
+			this.label1 = new System.Windows.Forms.Label();
 			this.butRetrieve = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
@@ -67,44 +67,6 @@ namespace OpenDental{
 			this.groupDateRange.TabIndex = 238;
 			this.groupDateRange.TabStop = false;
 			this.groupDateRange.Text = "Show Retrieved Forms";
-			// 
-			// labelStartDate
-			// 
-			this.labelStartDate.Location = new System.Drawing.Point(6,19);
-			this.labelStartDate.Name = "labelStartDate";
-			this.labelStartDate.Size = new System.Drawing.Size(69,14);
-			this.labelStartDate.TabIndex = 221;
-			this.labelStartDate.Text = "Start Date";
-			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelEndDate
-			// 
-			this.labelEndDate.Location = new System.Drawing.Point(6,44);
-			this.labelEndDate.Name = "labelEndDate";
-			this.labelEndDate.Size = new System.Drawing.Size(69,14);
-			this.labelEndDate.TabIndex = 222;
-			this.labelEndDate.Text = "End Date";
-			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// menuWebFormsRight
-			// 
-			this.menuWebFormsRight.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemViewAllSheets});
-			// 
-			// menuItemViewAllSheets
-			// 
-			this.menuItemViewAllSheets.Index = 0;
-			this.menuItemViewAllSheets.Text = "View this patient\'s forms";
-			this.menuItemViewAllSheets.Click += new System.EventHandler(this.menuItemViewAllSheets_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(502,35);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(197,36);
-			this.label1.TabIndex = 239;
-			this.label1.Text = "(All retrieved forms are automatically attached to the correct patient)";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// butRefresh
 			// 
@@ -143,12 +105,50 @@ namespace OpenDental{
 			this.textDateStart.Size = new System.Drawing.Size(77,20);
 			this.textDateStart.TabIndex = 223;
 			// 
+			// labelStartDate
+			// 
+			this.labelStartDate.Location = new System.Drawing.Point(6,19);
+			this.labelStartDate.Name = "labelStartDate";
+			this.labelStartDate.Size = new System.Drawing.Size(69,14);
+			this.labelStartDate.TabIndex = 221;
+			this.labelStartDate.Text = "Start Date";
+			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelEndDate
+			// 
+			this.labelEndDate.Location = new System.Drawing.Point(6,44);
+			this.labelEndDate.Name = "labelEndDate";
+			this.labelEndDate.Size = new System.Drawing.Size(69,14);
+			this.labelEndDate.TabIndex = 222;
+			this.labelEndDate.Text = "End Date";
+			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// textDateEnd
 			// 
 			this.textDateEnd.Location = new System.Drawing.Point(75,41);
 			this.textDateEnd.Name = "textDateEnd";
 			this.textDateEnd.Size = new System.Drawing.Size(77,20);
 			this.textDateEnd.TabIndex = 224;
+			// 
+			// menuWebFormsRight
+			// 
+			this.menuWebFormsRight.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemViewAllSheets});
+			// 
+			// menuItemViewAllSheets
+			// 
+			this.menuItemViewAllSheets.Index = 0;
+			this.menuItemViewAllSheets.Text = "View this patient\'s forms";
+			this.menuItemViewAllSheets.Click += new System.EventHandler(this.menuItemViewAllSheets_Click);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(502,35);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(197,36);
+			this.label1.TabIndex = 239;
+			this.label1.Text = "(All retrieved forms are automatically attached to the correct patient)";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// butRetrieve
 			// 

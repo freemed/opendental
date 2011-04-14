@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS `webforms_preference`;
 CREATE TABLE `webforms_preference` (
   `DentalOfficeID` bigint(20) NOT NULL,
   `ColorBorder` int(11) NOT NULL,
+  `CultureName` varchar(255) NOT NULL,
   PRIMARY KEY (`DentalOfficeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

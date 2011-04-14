@@ -25,7 +25,9 @@ namespace WebHostSynch {
 	// [System.Web.Script.Services.ScriptService]
 	public class Sheets:System.Web.Services.WebService {
 		private Util util=new Util();
-
+		/// <summary>
+		/// Dennis: This method is backward compatibilty only. Older version of OD may be using it. It may be deleted later. 14 April, 2011
+		/// </summary>
 		[WebMethod]
 		public bool SetPreferences(string RegistrationKey,int ColorBorder) {
 			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
@@ -46,6 +48,46 @@ namespace WebHostSynch {
 					wspNewObj.DentalOfficeID=DentalOfficeID;
 					wspNewObj.ColorBorder=ColorBorder;
 					db.AddTowebforms_preference(wspNewObj);
+				}
+				db.SaveChanges();
+				Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+			}
+			catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
+				return false;
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Cannot easily overload a method in webservices hence the suffix V2
+		/// </summary>
+		[WebMethod]
+		public bool SetPreferencesV2(string RegistrationKey,webforms_preference prefObj) {
+			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
+			int ColorBorder;
+			try {
+				ODWebServiceEntities db=new ODWebServiceEntities();
+				if(DentalOfficeID==0) {
+				}
+				var wspObj=from wsp in db.webforms_preference
+						   where wsp.DentalOfficeID==DentalOfficeID
+						   select wsp;
+				//update preference
+				if(wspObj.Count()>0) {
+					wspObj.First().ColorBorder=prefObj.ColorBorder;
+					wspObj.First().CultureName=prefObj.CultureName;
+				}
+				// if there is no entry for that dental office make a new entry.
+				if(wspObj.Count()==0) {
+					/*
+					webforms_preference wspNewObj=new webforms_preference();
+					wspNewObj.DentalOfficeID=DentalOfficeID;
+					wspNewObj.ColorBorder=ColorBorder;
+					db.AddTowebforms_preference(wspNewObj);
+					*/
+					prefObj.DentalOfficeID=DentalOfficeID;
+					db.AddTowebforms_preference(prefObj);
 				}
 				db.SaveChanges();
 				Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);

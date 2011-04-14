@@ -216,11 +216,13 @@ namespace WebForms
         /// </summary>
         /// <param name="colorBorder">Initial value of the ColorBorder property.</param>
         /// <param name="dentalOfficeID">Initial value of the DentalOfficeID property.</param>
-        public static webforms_preference Createwebforms_preference(global::System.Int32 colorBorder, global::System.Int64 dentalOfficeID)
+        /// <param name="cultureName">Initial value of the CultureName property.</param>
+        public static webforms_preference Createwebforms_preference(global::System.Int32 colorBorder, global::System.Int64 dentalOfficeID, global::System.String cultureName)
         {
             webforms_preference webforms_preference = new webforms_preference();
             webforms_preference.ColorBorder = colorBorder;
             webforms_preference.DentalOfficeID = dentalOfficeID;
+            webforms_preference.CultureName = cultureName;
             return webforms_preference;
         }
 
@@ -277,6 +279,30 @@ namespace WebForms
         private global::System.Int64 _DentalOfficeID;
         partial void OnDentalOfficeIDChanging(global::System.Int64 value);
         partial void OnDentalOfficeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CultureName
+        {
+            get
+            {
+                return _CultureName;
+            }
+            set
+            {
+                OnCultureNameChanging(value);
+                ReportPropertyChanging("CultureName");
+                _CultureName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CultureName");
+                OnCultureNameChanged();
+            }
+        }
+        private global::System.String _CultureName;
+        partial void OnCultureNameChanging(global::System.String value);
+        partial void OnCultureNameChanged();
 
         #endregion
     

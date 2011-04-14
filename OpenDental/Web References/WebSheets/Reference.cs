@@ -35,6 +35,8 @@ namespace OpenDental.WebSheets {
         
         private System.Threading.SendOrPostCallback SetPreferencesOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SetPreferencesV2OperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetPreferencesOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetSheetsOperationCompleted;
@@ -97,6 +99,9 @@ namespace OpenDental.WebSheets {
         public event SetPreferencesCompletedEventHandler SetPreferencesCompleted;
         
         /// <remarks/>
+        public event SetPreferencesV2CompletedEventHandler SetPreferencesV2Completed;
+        
+        /// <remarks/>
         public event GetPreferencesCompletedEventHandler GetPreferencesCompleted;
         
         /// <remarks/>
@@ -154,6 +159,37 @@ namespace OpenDental.WebSheets {
             if ((this.SetPreferencesCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.SetPreferencesCompleted(this, new SetPreferencesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetPreferencesV2", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public bool SetPreferencesV2(string RegistrationKey, webforms_preference prefObj) {
+            object[] results = this.Invoke("SetPreferencesV2", new object[] {
+                        RegistrationKey,
+                        prefObj});
+            return ((bool)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void SetPreferencesV2Async(string RegistrationKey, webforms_preference prefObj) {
+            this.SetPreferencesV2Async(RegistrationKey, prefObj, null);
+        }
+        
+        /// <remarks/>
+        public void SetPreferencesV2Async(string RegistrationKey, webforms_preference prefObj, object userState) {
+            if ((this.SetPreferencesV2OperationCompleted == null)) {
+                this.SetPreferencesV2OperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetPreferencesV2OperationCompleted);
+            }
+            this.InvokeAsync("SetPreferencesV2", new object[] {
+                        RegistrationKey,
+                        prefObj}, this.SetPreferencesV2OperationCompleted, userState);
+        }
+        
+        private void OnSetPreferencesV2OperationCompleted(object arg) {
+            if ((this.SetPreferencesV2Completed != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetPreferencesV2Completed(this, new SetPreferencesV2CompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -479,6 +515,8 @@ namespace OpenDental.WebSheets {
         
         private long dentalOfficeIDField;
         
+        private string cultureNameField;
+        
         /// <remarks/>
         public int ColorBorder {
             get {
@@ -496,6 +534,16 @@ namespace OpenDental.WebSheets {
             }
             set {
                 this.dentalOfficeIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string CultureName {
+            get {
+                return this.cultureNameField;
+            }
+            set {
+                this.cultureNameField = value;
             }
         }
     }
@@ -1199,6 +1247,32 @@ namespace OpenDental.WebSheets {
         private object[] results;
         
         internal SetPreferencesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SetPreferencesV2CompletedEventHandler(object sender, SetPreferencesV2CompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class SetPreferencesV2CompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal SetPreferencesV2CompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
