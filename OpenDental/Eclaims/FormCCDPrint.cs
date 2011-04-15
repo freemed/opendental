@@ -2449,9 +2449,9 @@ namespace OpenDental.Eclaims {
 					doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 					x=doc.StartElement();
 					text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
-					doc.DrawString(g,text,x,0);
+					SizeF size1=doc.DrawString(g,text,x,0);
 					text=Patients.GetAddressFull(patient.Address,patient.Address2,patient.City,patient.State,patient.Zip);
-					doc.DrawString(g,text,x+g.MeasureString(text,doc.standardFont).Width+10,0);
+					doc.DrawString(g,text,x+size1.Width+10,0);
 				}
 				else if(payableTo=="2") {//Pay other party.
 					text=isFrench?"TOTAL REMBOURSABLE AU AUTRES:":"TOTAL PAYABLE TO OTHER:";
@@ -2469,8 +2469,8 @@ namespace OpenDental.Eclaims {
 					doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 					x=doc.StartElement();
 					text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
-					doc.DrawString(g,text,x,0);
-					PrintPracticeAddress(g,x+g.MeasureString(text,doc.standardFont).Width+10);
+					SizeF size1=doc.DrawString(g,text,x,0);
+					PrintPracticeAddress(g,x+size1.Width+10);
 				}
 			}
 			x=doc.StartElement();
