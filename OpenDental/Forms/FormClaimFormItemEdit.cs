@@ -300,6 +300,8 @@ namespace OpenDental{
 				"PatientSSN",
 				"PatientMedicaidID",
 				"PatientID-MedicaidOrSSN",
+				"PatientPatNum",
+				"PatientChartNum",
 				"Diagnosis1",
 				"Diagnosis2",
 				"Diagnosis3",

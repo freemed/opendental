@@ -920,6 +920,9 @@ namespace OpenDental{
 					case "PatientChartNum":
 						displayStrings[i]=PatCur.ChartNumber;
 						break;
+					case "PatientPatNum":
+						displayStrings[i]=PatCur.PatNum;
+						break;
 					case "Diagnosis1":
 						displayStrings[i]=diagnoses[0];
 						break;
