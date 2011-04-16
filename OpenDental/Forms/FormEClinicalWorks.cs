@@ -38,6 +38,9 @@ namespace OpenDental{
 		private CheckBox checkShowImages;
 		private RadioButton radioModeTight;
 		private RadioButton radioModeStandalone;
+		private CheckBox checkFeeSchedules;
+		private localhost.Service1 service11;
+		private Label label3;
 		private Label labelHL7FolderIn;
 
 		///<summary></summary>
@@ -91,6 +94,9 @@ namespace OpenDental{
 			this.checkShowImages = new System.Windows.Forms.CheckBox();
 			this.radioModeTight = new System.Windows.Forms.RadioButton();
 			this.radioModeStandalone = new System.Windows.Forms.RadioButton();
+			this.checkFeeSchedules = new System.Windows.Forms.CheckBox();
+			this.service11 = new OpenDental.localhost.Service1();
+			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -103,7 +109,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(524,320);
+			this.butCancel.Location = new System.Drawing.Point(524,351);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -118,7 +124,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(443,320);
+			this.butOK.Location = new System.Drawing.Point(443,351);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -280,11 +286,38 @@ namespace OpenDental{
 			this.radioModeStandalone.UseVisualStyleBackColor = true;
 			this.radioModeStandalone.Click += new System.EventHandler(this.radioModeStandalone_Click);
 			// 
+			// checkFeeSchedules
+			// 
+			this.checkFeeSchedules.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkFeeSchedules.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkFeeSchedules.Location = new System.Drawing.Point(12,303);
+			this.checkFeeSchedules.Name = "checkFeeSchedules";
+			this.checkFeeSchedules.Size = new System.Drawing.Size(247,18);
+			this.checkFeeSchedules.TabIndex = 58;
+			this.checkFeeSchedules.Text = "Patient Fee Schedules Set Manually";
+			this.checkFeeSchedules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// service11
+			// 
+			this.service11.Url = "http://localhost:3824/Service1.asmx";
+			this.service11.UseDefaultCredentials = true;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(264,301);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(170,18);
+			this.label3.TabIndex = 59;
+			this.label3.Text = "(instead of importing from HL7)";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormEClinicalWorks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(611,356);
+			this.ClientSize = new System.Drawing.Size(611,387);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.checkFeeSchedules);
 			this.Controls.Add(this.radioModeStandalone);
 			this.Controls.Add(this.radioModeTight);
 			this.Controls.Add(this.checkShowImages);
@@ -305,8 +338,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "eClinicalWorks Setup";
-			this.Load += new System.EventHandler(this.FormEClinicalWorks_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProgramLinkEdit_Closing);
+			this.Load += new System.EventHandler(this.FormEClinicalWorks_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
@@ -342,6 +375,7 @@ namespace OpenDental{
 				}
 			}
 			checkShowImages.Checked=GetProp("ShowImagesModule")=="1";
+			checkShowImages.Checked=GetProp("FeeSchedulesSetManually")=="1";
 		}
 
 		private string GetProp(string desc){
@@ -406,6 +440,7 @@ namespace OpenDental{
 				labelDefaultUserGroup.Visible=true;
 				comboDefaultUserGroup.Visible=true;
 				checkShowImages.Visible=true;
+				checkFeeSchedules.Visible=true;
 			}
 			else {//standalone
 				labelHL7FolderIn.Visible=false;
@@ -413,6 +448,7 @@ namespace OpenDental{
 				labelDefaultUserGroup.Visible=false;
 				comboDefaultUserGroup.Visible=false;
 				checkShowImages.Visible=false;
+				checkFeeSchedules.Visible=false;
 			}
 		}
 
@@ -452,12 +488,19 @@ namespace OpenDental{
 				else {
 					ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","0");
 				}
+				if(this.checkFeeSchedules.Checked) {
+					ProgramProperties.SetProperty(ProgramCur.ProgramNum,"FeeSchedulesSetManually","1");
+				}
+				else {
+					ProgramProperties.SetProperty(ProgramCur.ProgramNum,"FeeSchedulesSetManually","0");
+				}
 			}
 			else {//standalone
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IsStandalone","1");
 				Prefs.UpdateString(PrefName.HL7FolderIn,"");
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup","0");
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","1");
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"FeeSchedulesSetManually","0");
 			}
 			DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
 			return true;

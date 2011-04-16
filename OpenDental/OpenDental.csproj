@@ -2114,6 +2114,12 @@
     <Compile Include="Misc\Tooth.cs" />
     <Compile Include="Misc\VisiQuick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User Controls\ContrFamilyEcw.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\ContrFamilyEcw.Designer.cs">
+      <DependentUpon>ContrFamilyEcw.cs</DependentUpon>
+    </Compile>
     <Compile Include="Web References\MobileWeb\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3683,6 +3689,9 @@
     <EmbeddedResource Include="User Controls\ContrCalendar.resx">
       <DependentUpon>ContrCalendar.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User Controls\ContrFamilyEcw.resx">
+      <DependentUpon>ContrFamilyEcw.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="User Controls\ContrKeyboard.resx">
       <SubType>Designer</SubType>

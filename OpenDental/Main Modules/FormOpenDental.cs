@@ -200,6 +200,7 @@ namespace OpenDental{
 		private UserControlTasks userControlTasks1;
 		private ContrAppt ContrAppt2;
 		private ContrFamily ContrFamily2;
+		private ContrFamilyEcw ContrFamily2Ecw;
 		private ContrAccount ContrAccount2;
 		private ContrTreat ContrTreat2;
 		private ContrChart ContrChart2;
@@ -267,6 +268,11 @@ namespace OpenDental{
 			ContrFamily2.Visible=false;
 			ContrFamily2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
 			this.Controls.Add(ContrFamily2);
+			//contrFamilyEcw
+			ContrFamily2Ecw=new ContrFamilyEcw();
+			ContrFamily2Ecw.Visible=false;
+			//ContrFamily2Ecw.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrFamily2Ecw);
 			//contrAccount
 			ContrAccount2=new ContrAccount();
 			ContrAccount2.Visible=false;
@@ -1543,9 +1549,9 @@ namespace OpenDental{
 				//So until we really need to do it, it's easiest no just not start the thread for now.
 				//ThreadCommandLine.Start();
 			}
-			if(CommandLineArgs.Length>0) {
-				ProcessCommandLine(CommandLineArgs);
-			}
+			//if(CommandLineArgs.Length>0) {
+			ProcessCommandLine(CommandLineArgs);
+			//}
 			try {
 				Computers.UpdateHeartBeat(Environment.MachineName);
 			}
@@ -1788,9 +1794,10 @@ namespace OpenDental{
 					Bridges.PaperlessTechnology.InitializeFileWatcher();
 				}
 				if(Programs.UsingEcwTight()) {
-					myOutlookBar.Buttons[0].Visible=false;
-					myOutlookBar.Buttons[1].Visible=false;
-					myOutlookBar.Buttons[2].Visible=false;
+					myOutlookBar.Buttons[0].Visible=false;//Appt
+					//The button for Family will be visible, but it will behave differently.
+					//myOutlookBar.Buttons[1].Visible=false;//Family
+					myOutlookBar.Buttons[2].Visible=false;//Account
 					if(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"ShowImagesModule")=="1") {
 						myOutlookBar.Buttons[5].Visible=true;
 					}
@@ -2453,6 +2460,9 @@ namespace OpenDental{
 			ContrFamily2.Location=position;
 			ContrFamily2.Width=width;
 			ContrFamily2.Height=height;
+			ContrFamily2Ecw.Location=position;
+			ContrFamily2Ecw.Width=width;
+			ContrFamily2Ecw.Height=height;
 			ContrManage2.Location=position;
 			ContrManage2.Width=width;
 			ContrManage2.Height=height;
@@ -2987,10 +2997,18 @@ namespace OpenDental{
 					ContrAppt2.ModuleSelected(CurPatNum);
 					break;
 				case 1:
-					ContrFamily2.InitializeOnStartup();
-					ContrFamily2.Visible=true;
-					this.ActiveControl=this.ContrFamily2;
-					ContrFamily2.ModuleSelected(CurPatNum);
+					if(Programs.UsingEcwTight()) {
+						//ContrFamily2Ecw.InitializeOnStartup();
+						ContrFamily2Ecw.Visible=true;
+						this.ActiveControl=this.ContrFamily2Ecw;
+						ContrFamily2Ecw.ModuleSelected(CurPatNum);
+					}
+					else {
+						ContrFamily2.InitializeOnStartup();
+						ContrFamily2.Visible=true;
+						this.ActiveControl=this.ContrFamily2;
+						ContrFamily2.ModuleSelected(CurPatNum);
+					}
 					break;
 				case 2:
 					ContrAccount2.InitializeOnStartup();
@@ -3028,6 +3046,7 @@ namespace OpenDental{
 		private void allNeutral(){
 			ContrAppt2.Visible=false;
 			ContrFamily2.Visible=false;
+			ContrFamily2Ecw.Visible=false;
 			ContrAccount2.Visible=false;
 			ContrTreat2.Visible=false;
 			ContrChart2.Visible=false;
@@ -3041,6 +3060,9 @@ namespace OpenDental{
 			}
 			if(ContrFamily2.Visible){
 				ContrFamily2.ModuleUnselected();
+			}
+			if(ContrFamily2Ecw.Visible) {
+				//ContrFamily2Ecw.ModuleUnselected();
 			}
 			if(ContrAccount2.Visible){
 				ContrAccount2.ModuleUnselected();
@@ -3063,6 +3085,9 @@ namespace OpenDental{
 			}
 			if(ContrFamily2.Visible){
 				ContrFamily2.ModuleSelected(CurPatNum);
+			}
+			if(ContrFamily2Ecw.Visible) {
+				ContrFamily2Ecw.ModuleSelected(CurPatNum);
 			}
 			if(ContrAccount2.Visible){
 				ContrAccount2.ModuleSelected(CurPatNum);
@@ -4274,7 +4299,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void ProcessCommandLine(string[] args) {
-			if(args.Length==0){
+			if(!Programs.UsingEcwTight() && args.Length==0){
 				return;
 			}
 			/*string descript="";
@@ -4338,9 +4363,10 @@ namespace OpenDental{
 			Bridges.ECW.EcwConfigPath=ecwConfigPath;
 			Bridges.ECW.UserId=userId;
 			//Username and password-----------------------------------------------------
-			if(userName!=""//if a username was passed in
+			if(Programs.UsingEcwTight()//for debugging, no username might be passed in, so we want to trigger login window.
+				|| (userName!=""//if a username was passed in
 				&& (Security.CurUser==null || Security.CurUser.UserName != userName))//and it's different from the current user
-			{
+			){
 				//log out------------------------------------
 				LastModule=myOutlookBar.SelectedIndex;
 				myOutlookBar.SelectedIndex=-1;
@@ -4349,7 +4375,7 @@ namespace OpenDental{
 				allNeutral();
 				Userod user=Userods.GetUserByName(userName);
 				if(user==null) {
-					if(Programs.UsingEcwTight()) {
+					if(Programs.UsingEcwTight() && userName!="") {
 						user=new Userod();
 						user.UserName=userName;
 						user.UserGroupNum=PIn.Long(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"DefaultUserGroup"));

@@ -4310,14 +4310,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				//Migrating the diseases to allergies and corresponding Rx alerts.
 				command="SELECT * FROM diseasedef WHERE LOWER(DiseaseName) LIKE '%allerg%'";
-				DataTable diseaseDef=Db.GetTable(command);
-				for(int i=0;i<diseaseDef.Rows.Count;i++) {
+				DataTable tableDiseaseDef=Db.GetTable(command);
+				for(int i=0;i<tableDiseaseDef.Rows.Count;i++) {
 					command="INSERT INTO allergydef (AllergyDefNum,Description,IsHidden) VALUES("
-						+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()))+",'"
-						+POut.String(PIn.String(diseaseDef.Rows[i]["DiseaseName"].ToString()))+"',"
-						+POut.Int(PIn.Int(diseaseDef.Rows[i]["IsHidden"].ToString()))+")";
+						+POut.Long(PIn.Long(tableDiseaseDef.Rows[i]["DiseaseDefNum"].ToString()))+",'"
+						+POut.String(PIn.String(tableDiseaseDef.Rows[i]["DiseaseName"].ToString()))+"',"
+						+POut.Int(PIn.Int(tableDiseaseDef.Rows[i]["IsHidden"].ToString()))+")";
 					Db.NonQ(command);
-					command="SELECT * FROM disease WHERE DiseaseDefNum="+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
+					command="SELECT * FROM disease WHERE DiseaseDefNum="+POut.Long(PIn.Long(tableDiseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
 					DataTable disease=Db.GetTable(command);
 					for(int j=0;j<disease.Rows.Count;j++) {
 						command="INSERT INTO allergy (AllergyNum,PatNum,AllergyDefNum,Reaction,StatusIsActive) VALUES ("
@@ -4329,10 +4329,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						command="DELETE FROM disease WHERE DiseaseNum="+POut.Long(PIn.Long(disease.Rows[j]["DiseaseNum"].ToString()));
 						Db.NonQ(command);
 					}
-					command="UPDATE rxalert SET AllergyDefNum="+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()))+", DiseaseDefNum=0 WHERE DiseaseDefNum="
-						+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
+					command="UPDATE rxalert SET AllergyDefNum="+POut.Long(PIn.Long(tableDiseaseDef.Rows[i]["DiseaseDefNum"].ToString()))+", DiseaseDefNum=0 WHERE DiseaseDefNum="
+						+POut.Long(PIn.Long(tableDiseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
 					Db.NonQ(command);
-					command="DELETE FROM diseasedef WHERE DiseaseDefNum="+POut.Long(PIn.Long(diseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
+					command="DELETE FROM diseasedef WHERE DiseaseDefNum="+POut.Long(PIn.Long(tableDiseaseDef.Rows[i]["DiseaseDefNum"].ToString()));
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.Oracle) {//Set time stamps to NOW().
@@ -4450,7 +4450,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX vaccinepat_DrugUnitNum ON vaccinepat (DrugUnitNum)";
 					Db.NonQ(command);
 				}
-
+				//eCW bridge enhancements
+				command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
+				int programNum=PIn.Int(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programNum)+"', "
+					+"'FeeSchedulesSetManually', "
+					+"'0')";
+				Db.NonQ32(command);
 
 
 

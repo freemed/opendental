@@ -3329,7 +3329,8 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
 					webBrowserEcw.Url=null;
 				}
-				if(FormOpenDental.FormEHR!=null) {
+				//if(FormOpenDental.FormEHR!=null) {//didn't work
+				if(ToolBarMain.Buttons["EHR"]!=null){
 					ToolBarMain.Buttons["EHR"].Enabled=false;
 				}
 				tabProc.Enabled = false;
