@@ -31,6 +31,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textCVXCode = new System.Windows.Forms.TextBox();
 			this.labelCVXCode = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -41,7 +42,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(174,130);
+			this.butOK.Location = new System.Drawing.Point(174,135);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -56,7 +57,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(255,130);
+			this.butCancel.Location = new System.Drawing.Point(255,135);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -113,10 +114,27 @@ namespace OpenDental{
 			this.labelCVXCode.Text = "CVX Code";
 			this.labelCVXCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(25,135);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(79,24);
+			this.butDelete.TabIndex = 109;
+			this.butDelete.Text = "Delete";
+			// 
 			// FormVaccineDefEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(355,181);
+			this.ClientSize = new System.Drawing.Size(355,186);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.comboManufacturer);
 			this.Controls.Add(this.textVaccineName);
@@ -143,5 +161,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textCVXCode;
 		private System.Windows.Forms.Label labelCVXCode;
+		private UI.Button butDelete;
 	}
 }

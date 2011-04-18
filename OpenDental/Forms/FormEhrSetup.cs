@@ -17,17 +17,22 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void butICD9s_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormIcd9s FormE=new FormIcd9s();
+			FormE.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"ICD9s");
+		}
+
 		private void butAllergies_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			} 
 			FormAllergySetup FAS=new FormAllergySetup();
 			FAS.ShowDialog();
-		}
-
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"AllergySetup");
 		}
 
 		private void butFormularies_Click(object sender,EventArgs e) {
@@ -39,13 +44,35 @@ namespace OpenDental {
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Formularies");
 		}
 
-		private void butICD9s_Click(object sender,EventArgs e) {
+		private void butVaccineDef_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			FormIcd9s FormE=new FormIcd9s();
+			FormVaccineDefSetup FormE=new FormVaccineDefSetup();
 			FormE.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"ICD9s");
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"VaccineDefSetup");
+		}
+
+		private void butDrugManufacturer_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormDrugManufacturerSetup FormE=new FormDrugManufacturerSetup();
+			FormE.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"FormDrugManufacturerSetup");
+		}
+
+		private void butDrugUnit_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormDrugUnitSetup FormE=new FormDrugUnitSetup();
+			FormE.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"FormDrugUnitSetup");
+		}
+
+		private void butClose_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 	}
 }

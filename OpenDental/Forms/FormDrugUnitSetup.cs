@@ -14,11 +14,19 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void FormDrugUnitSetup_Load(object sender,EventArgs e) {
+
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
+		private void butAdd_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butClose_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butClose_Click_1(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 	}

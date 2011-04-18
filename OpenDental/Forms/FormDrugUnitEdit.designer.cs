@@ -25,6 +25,11 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
+			this.textVaccineName = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textCVXCode = new System.Windows.Forms.TextBox();
+			this.labelCVXCode = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -35,7 +40,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(544,483);
+			this.butOK.Location = new System.Drawing.Point(185,98);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -50,23 +55,79 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,483);
+			this.butCancel.Location = new System.Drawing.Point(266,98);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(26,98);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(79,24);
+			this.butDelete.TabIndex = 109;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// textVaccineName
+			// 
+			this.textVaccineName.Location = new System.Drawing.Point(113,53);
+			this.textVaccineName.Name = "textVaccineName";
+			this.textVaccineName.Size = new System.Drawing.Size(228,20);
+			this.textVaccineName.TabIndex = 113;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(23,52);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(88,20);
+			this.label1.TabIndex = 112;
+			this.label1.Text = "Unit Text";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCVXCode
+			// 
+			this.textCVXCode.Location = new System.Drawing.Point(113,27);
+			this.textCVXCode.Name = "textCVXCode";
+			this.textCVXCode.Size = new System.Drawing.Size(77,20);
+			this.textCVXCode.TabIndex = 111;
+			// 
+			// labelCVXCode
+			// 
+			this.labelCVXCode.Location = new System.Drawing.Point(23,26);
+			this.labelCVXCode.Name = "labelCVXCode";
+			this.labelCVXCode.Size = new System.Drawing.Size(88,20);
+			this.labelCVXCode.TabIndex = 110;
+			this.labelCVXCode.Text = "Unit Identifier";
+			this.labelCVXCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormDrugUnitEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,534);
+			this.ClientSize = new System.Drawing.Size(366,149);
+			this.Controls.Add(this.textVaccineName);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.textCVXCode);
+			this.Controls.Add(this.labelCVXCode);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormDrugUnitEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Drug Unit Edit";
+			this.Load += new System.EventHandler(this.FormDrugUnitEdit_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -74,5 +135,10 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
+		private UI.Button butDelete;
+		private System.Windows.Forms.TextBox textVaccineName;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textCVXCode;
+		private System.Windows.Forms.Label labelCVXCode;
 	}
 }

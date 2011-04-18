@@ -27,17 +27,19 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.butAllergies = new OpenDental.UI.Button();
 			this.butFormularies = new OpenDental.UI.Button();
+			this.butVaccineDef = new OpenDental.UI.Button();
+			this.butDrugManufacturer = new OpenDental.UI.Button();
+			this.butDrugUnit = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butICD9s
 			// 
 			this.butICD9s.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butICD9s.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butICD9s.Autosize = true;
 			this.butICD9s.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butICD9s.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butICD9s.CornerRadius = 4F;
-			this.butICD9s.Location = new System.Drawing.Point(12,61);
+			this.butICD9s.Location = new System.Drawing.Point(27,60);
 			this.butICD9s.Name = "butICD9s";
 			this.butICD9s.Size = new System.Drawing.Size(175,24);
 			this.butICD9s.TabIndex = 119;
@@ -57,17 +59,16 @@ namespace OpenDental{
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butAllergies
 			// 
 			this.butAllergies.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAllergies.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAllergies.Autosize = true;
 			this.butAllergies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAllergies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAllergies.CornerRadius = 4F;
-			this.butAllergies.Location = new System.Drawing.Point(12,103);
+			this.butAllergies.Location = new System.Drawing.Point(27,100);
 			this.butAllergies.Name = "butAllergies";
 			this.butAllergies.Size = new System.Drawing.Size(175,24);
 			this.butAllergies.TabIndex = 120;
@@ -77,22 +78,66 @@ namespace OpenDental{
 			// butFormularies
 			// 
 			this.butFormularies.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butFormularies.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butFormularies.Autosize = true;
 			this.butFormularies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFormularies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFormularies.CornerRadius = 4F;
-			this.butFormularies.Location = new System.Drawing.Point(12,145);
+			this.butFormularies.Location = new System.Drawing.Point(27,140);
 			this.butFormularies.Name = "butFormularies";
 			this.butFormularies.Size = new System.Drawing.Size(175,24);
 			this.butFormularies.TabIndex = 121;
 			this.butFormularies.Text = "Formularies";
 			this.butFormularies.Click += new System.EventHandler(this.butFormularies_Click);
 			// 
+			// butVaccineDef
+			// 
+			this.butVaccineDef.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butVaccineDef.Autosize = true;
+			this.butVaccineDef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butVaccineDef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butVaccineDef.CornerRadius = 4F;
+			this.butVaccineDef.Location = new System.Drawing.Point(27,180);
+			this.butVaccineDef.Name = "butVaccineDef";
+			this.butVaccineDef.Size = new System.Drawing.Size(175,24);
+			this.butVaccineDef.TabIndex = 122;
+			this.butVaccineDef.Text = "Vaccine Def";
+			this.butVaccineDef.Click += new System.EventHandler(this.butVaccineDef_Click);
+			// 
+			// butDrugManufacturer
+			// 
+			this.butDrugManufacturer.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDrugManufacturer.Autosize = true;
+			this.butDrugManufacturer.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDrugManufacturer.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDrugManufacturer.CornerRadius = 4F;
+			this.butDrugManufacturer.Location = new System.Drawing.Point(27,220);
+			this.butDrugManufacturer.Name = "butDrugManufacturer";
+			this.butDrugManufacturer.Size = new System.Drawing.Size(175,24);
+			this.butDrugManufacturer.TabIndex = 123;
+			this.butDrugManufacturer.Text = "Drug Manufacturer";
+			this.butDrugManufacturer.Click += new System.EventHandler(this.butDrugManufacturer_Click);
+			// 
+			// butDrugUnit
+			// 
+			this.butDrugUnit.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDrugUnit.Autosize = true;
+			this.butDrugUnit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDrugUnit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDrugUnit.CornerRadius = 4F;
+			this.butDrugUnit.Location = new System.Drawing.Point(27,260);
+			this.butDrugUnit.Name = "butDrugUnit";
+			this.butDrugUnit.Size = new System.Drawing.Size(175,24);
+			this.butDrugUnit.TabIndex = 124;
+			this.butDrugUnit.Text = "Drug Unit";
+			this.butDrugUnit.Click += new System.EventHandler(this.butDrugUnit_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,534);
+			this.Controls.Add(this.butDrugUnit);
+			this.Controls.Add(this.butDrugManufacturer);
+			this.Controls.Add(this.butVaccineDef);
 			this.Controls.Add(this.butFormularies);
 			this.Controls.Add(this.butAllergies);
 			this.Controls.Add(this.butICD9s);
@@ -110,5 +155,8 @@ namespace OpenDental{
 		private UI.Button butICD9s;
 		private UI.Button butAllergies;
 		private UI.Button butFormularies;
+		private UI.Button butVaccineDef;
+		private UI.Button butDrugManufacturer;
+		private UI.Button butDrugUnit;
 	}
 }

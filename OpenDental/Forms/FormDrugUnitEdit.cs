@@ -14,6 +14,14 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormDrugUnitEdit_Load(object sender,EventArgs e) {
+
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
