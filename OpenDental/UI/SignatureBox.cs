@@ -95,7 +95,7 @@ namespace OpenDental.UI {
 			//DeflateStream compressedzipStream = new DeflateStream(ms , CompressionMode.Compress, true);
 			//Now, we have the compressed bytes.  Need to encrypt them.
 			Rijndael crypt=Rijndael.Create();
-			crypt.KeySize=128;//16 bytes;
+			crypt.KeySize=128;//16 bytes;  Because this is 128 bits, it is the same as AES.
 			crypt.Key=hash;
 			crypt.IV=new byte[16];
 			CryptoStream cs=new CryptoStream(ms,crypt.CreateEncryptor(),CryptoStreamMode.Write);
