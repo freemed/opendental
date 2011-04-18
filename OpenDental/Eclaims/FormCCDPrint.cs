@@ -594,27 +594,37 @@ namespace OpenDental.Eclaims {
 		private void PrintEligibility(Graphics g){
 			PrintCarrier(g);
 			x=doc.StartElement();
-			if(patientCopy) {
-				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU PATIENT":
-											"ELIGIBILITY ACKNOWLEDGMENT - PATIENT COPY";
+			if(responseStatus=="R") {
+				text=isFrench?"REFUS D'UNE DEMANDE DE PRESTATIONS":"CLAIM REJECTION NOTICE";
 			}
 			else {
-				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU DENTISTE":
-										"ELIGIBILITY ACKNOWLEDGMENT - DENTIST COPY";
+				if(patientCopy) {
+					text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU PATIENT":
+												"ELIGIBILITY RESPONSE - PATIENT COPY";
+				}
+				else {
+					text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU DENTISTE":
+											"ELIGIBILITY RESPONSE - DENTIST COPY";
+				}
 			}
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement();
 			text=isFrench?
 				"Nous avons utilisé les renseignements du présent formulaire pour traiter votre demande par ordinateur. Veuillez en vérifier l'exactitude et aviser votre dentiste en cas d'erreur. Prière de ne pas poster à l'assureur/administrateur du régime.":"The information contained on this form has been used to process your claim electronically. Please verify the accuracy of this data and report any discrepancies to your dental office. Do not mail this form to the insurer/plan administrator.";
 			PrintClaimAckBody(g,text);
-			if(isFrench) {
-				text="La présente demande de prestations a été transmise par ordinateur.".ToUpper();
-				doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
-				x=doc.StartElement();
-				text="Elle sert de reçu seulement.".ToUpper();
+			if(responseStatus=="R") {
+				text=isFrench?"VEUILLEZ CORRIGER LES ERREURS AVANT DE RESOUMETTRE LA DEMANDE.":"PLEASE CORRECT ERRORS AS SHOWN, PRIOR TO RE-SUBMITTING THE CLAIM.";
 			}
 			else {
-				text="THIS CLAIM HAS BEEN SUBMITTED ELECTRONICALLY - THIS IS A RECEIPT ONLY";
+				if(isFrench) {
+					text="La présente demande de prestations a été transmise par ordinateur.".ToUpper();
+					doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
+					x=doc.StartElement();
+					text="Elle sert de reçu seulement.".ToUpper();
+				}
+				else {
+					text="THIS CLAIM HAS BEEN SUBMITTED ELECTRONICALLY - THIS IS A RECEIPT ONLY";
+				}
 			}
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 		}
@@ -1553,11 +1563,10 @@ namespace OpenDental.Eclaims {
 		private void PrintClaimAckBody(Graphics g,string centralDisclaimer){
 			doc.standardFont=new Font(standardSmall.FontFamily,8,FontStyle.Regular);
 			PrintTransactionDate(g,x,0);
-			PrintTransactionReferenceNumber(g,x+400,0);
-			x=doc.StartElement();
-			PrintDisposition(g,x,0);
 			x=doc.StartElement();
 			PrintStatus(g,x,0);
+			x=doc.StartElement();
+			PrintDisposition(g,x,0);
 			x=doc.StartElement();
 			PrintDentistName(g,x,0);
 			PrintDentistPhone(g,x+250,0);
@@ -1579,6 +1588,7 @@ namespace OpenDental.Eclaims {
 			PrintInsuredMember(g,x,0);
 			x=doc.StartElement();
 			PrintInsuredAddress(g,x,0,true,0);
+			PrintTransactionReferenceNumber(g,x+400,0);
 			x=doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
