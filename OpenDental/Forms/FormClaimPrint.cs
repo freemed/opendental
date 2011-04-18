@@ -921,7 +921,7 @@ namespace OpenDental{
 						displayStrings[i]=PatCur.ChartNumber;
 						break;
 					case "PatientPatNum":
-						displayStrings[i]=PatCur.PatNum;
+						displayStrings[i]=PatCur.PatNum.ToString();
 						break;
 					case "Diagnosis1":
 						displayStrings[i]=diagnoses[0];
