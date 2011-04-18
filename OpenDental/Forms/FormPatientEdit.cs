@@ -1894,7 +1894,7 @@ namespace OpenDental{
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			string[] enumRace=Enum.GetNames(typeof(PatientRaceOld));
+			string[] enumRace=Enum.GetNames(typeof(PatientRace));
 			for(int i=0;i<enumRace.Length;i++){
 				comboRace.Items.Add(Lan.g("enumRace",enumRace[i]));
 			}
@@ -2834,7 +2834,7 @@ namespace OpenDental{
 			else{
 				PatCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			PatCur.Race=(PatientRaceOld)comboRace.SelectedIndex;
+			PatCur.Race=(PatientRace)comboRace.SelectedIndex;
 			PatCur.County=textCounty.Text;
 			//site set when user picks from list.
 			PatCur.GradeLevel=(PatientGrade)comboGradeLevel.SelectedIndex;

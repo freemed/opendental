@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 				patient.BalTotal               = PIn.Double(table.Rows[i]["BalTotal"].ToString());
 				patient.EmployerNum            = PIn.Long  (table.Rows[i]["EmployerNum"].ToString());
 				patient.EmploymentNote         = PIn.String(table.Rows[i]["EmploymentNote"].ToString());
-				patient.Race                   = (PatientRaceOld)PIn.Int(table.Rows[i]["Race"].ToString());
+				patient.Race                   = (PatientRace)PIn.Int(table.Rows[i]["Race"].ToString());
 				patient.County                 = PIn.String(table.Rows[i]["County"].ToString());
 				patient.GradeLevel             = (PatientGrade)PIn.Int(table.Rows[i]["GradeLevel"].ToString());
 				patient.Urgency                = (TreatmentUrgency)PIn.Int(table.Rows[i]["Urgency"].ToString());

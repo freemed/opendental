@@ -722,7 +722,7 @@ namespace OpenDentBusiness{
 	}
 
 	///<summary>Race and ethnicity for patient. Used by public health.  The problem is that everyone seems to want different choices.  If we give these choices their own table, then we also need to include mapping functions.  These are currently used in ArizonaReports, HL7 w ECW, and EHR.  Foreign users would like their own mappings.</summary>
-	public enum PatientRaceOld{
+	public enum PatientRace {
 		///<summary>0</summary>
 		Unknown,
 		///<summary>1</summary>
@@ -742,7 +742,9 @@ namespace OpenDentBusiness{
 		///<summary>8</summary>
 		Other,
 		///<summary>9</summary>
-		Aboriginal
+		Aboriginal,
+		///<summary>10 - Required by EHR, even though it's stupid.</summary>
+		BlackHispanic
 	}
 
 	///<summary>Grade level used in public health.</summary>

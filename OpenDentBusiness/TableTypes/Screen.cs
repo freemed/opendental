@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:PatientGender</summary>
 		public PatientGender Gender;
 		///<summary>Enum:PatientRace and ethnicity.</summary>
-		public PatientRaceOld Race;
+		public PatientRace Race;
 		///<summary>Enum:PatientGrade</summary>
 		public PatientGrade GradeLevel;
 		///<summary>Age of patient at the time the screening was done. Faster than recording birthdates.</summary>

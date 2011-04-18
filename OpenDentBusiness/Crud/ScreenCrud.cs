@@ -54,7 +54,7 @@ namespace OpenDentBusiness.Crud{
 				screen.ProvNum         = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				screen.ProvName        = PIn.String(table.Rows[i]["ProvName"].ToString());
 				screen.Gender          = (PatientGender)PIn.Int(table.Rows[i]["Gender"].ToString());
-				screen.Race            = (PatientRaceOld)PIn.Int(table.Rows[i]["Race"].ToString());
+				screen.Race            = (PatientRace)PIn.Int(table.Rows[i]["Race"].ToString());
 				screen.GradeLevel      = (PatientGrade)PIn.Int(table.Rows[i]["GradeLevel"].ToString());
 				screen.Age             = PIn.Byte  (table.Rows[i]["Age"].ToString());
 				screen.Urgency         = (TreatmentUrgency)PIn.Int(table.Rows[i]["Urgency"].ToString());
