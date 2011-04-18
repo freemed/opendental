@@ -85,7 +85,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelST;
 		private OpenDental.UI.Button butEditZip;
 		private System.Windows.Forms.Label labelCity;
-		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label labelRaceEthnicity;
 		private System.Windows.Forms.Label label13;
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.Label label15;
@@ -160,6 +160,8 @@ namespace OpenDental{
 		private Label label42;
 		private CheckBox checkArriveEarlySame;
 		private Label label43;
+		private ComboBox comboEthnicity;
+		private Label labelEthnicity;
 		private List<Guardian> GuardianList;
 
 		///<summary></summary>
@@ -325,7 +327,7 @@ namespace OpenDental{
 			this.label15 = new System.Windows.Forms.Label();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
+			this.labelRaceEthnicity = new System.Windows.Forms.Label();
 			this.textDateFirstVisit = new OpenDental.ValidDate();
 			this.label36 = new System.Windows.Forms.Label();
 			this.label37 = new System.Windows.Forms.Label();
@@ -355,6 +357,8 @@ namespace OpenDental{
 			this.label42 = new System.Windows.Forms.Label();
 			this.checkArriveEarlySame = new System.Windows.Forms.CheckBox();
 			this.label43 = new System.Windows.Forms.Label();
+			this.comboEthnicity = new System.Windows.Forms.ComboBox();
+			this.labelEthnicity = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -742,7 +746,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.radioStudentF);
 			this.groupBox2.Controls.Add(this.label30);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(472,409);
+			this.groupBox2.Location = new System.Drawing.Point(472,397);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(382,87);
 			this.groupBox2.TabIndex = 24;
@@ -870,7 +874,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label11);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(472,8);
+			this.groupBox1.Location = new System.Drawing.Point(472,3);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(424,278);
 			this.groupBox1.TabIndex = 25;
@@ -1007,7 +1011,7 @@ namespace OpenDental{
 			this.groupNotes.Controls.Add(this.textAddrNotes);
 			this.groupNotes.Controls.Add(this.checkNotesSame);
 			this.groupNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupNotes.Location = new System.Drawing.Point(472,291);
+			this.groupNotes.Location = new System.Drawing.Point(472,285);
 			this.groupNotes.Name = "groupNotes";
 			this.groupNotes.Size = new System.Drawing.Size(424,107);
 			this.groupNotes.TabIndex = 26;
@@ -1134,6 +1138,8 @@ namespace OpenDental{
 			// 
 			// groupPH
 			// 
+			this.groupPH.Controls.Add(this.comboEthnicity);
+			this.groupPH.Controls.Add(this.labelEthnicity);
 			this.groupPH.Controls.Add(this.butClearResponsParty);
 			this.groupPH.Controls.Add(this.butPickResponsParty);
 			this.groupPH.Controls.Add(this.textResponsParty);
@@ -1148,11 +1154,11 @@ namespace OpenDental{
 			this.groupPH.Controls.Add(this.label15);
 			this.groupPH.Controls.Add(this.label14);
 			this.groupPH.Controls.Add(this.label13);
-			this.groupPH.Controls.Add(this.label10);
+			this.groupPH.Controls.Add(this.labelRaceEthnicity);
 			this.groupPH.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupPH.Location = new System.Drawing.Point(472,508);
+			this.groupPH.Location = new System.Drawing.Point(472,489);
 			this.groupPH.Name = "groupPH";
-			this.groupPH.Size = new System.Drawing.Size(424,151);
+			this.groupPH.Size = new System.Drawing.Size(424,168);
 			this.groupPH.TabIndex = 23;
 			this.groupPH.TabStop = false;
 			this.groupPH.Text = "Public Health";
@@ -1165,7 +1171,7 @@ namespace OpenDental{
 			this.butClearResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClearResponsParty.CornerRadius = 4F;
 			this.butClearResponsParty.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butClearResponsParty.Location = new System.Drawing.Point(397,116);
+			this.butClearResponsParty.Location = new System.Drawing.Point(397,137);
 			this.butClearResponsParty.Name = "butClearResponsParty";
 			this.butClearResponsParty.Size = new System.Drawing.Size(25,23);
 			this.butClearResponsParty.TabIndex = 67;
@@ -1179,7 +1185,7 @@ namespace OpenDental{
 			this.butPickResponsParty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPickResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPickResponsParty.CornerRadius = 4F;
-			this.butPickResponsParty.Location = new System.Drawing.Point(349,116);
+			this.butPickResponsParty.Location = new System.Drawing.Point(349,137);
 			this.butPickResponsParty.Name = "butPickResponsParty";
 			this.butPickResponsParty.Size = new System.Drawing.Size(48,23);
 			this.butPickResponsParty.TabIndex = 66;
@@ -1190,7 +1196,7 @@ namespace OpenDental{
 			// textResponsParty
 			// 
 			this.textResponsParty.AcceptsReturn = true;
-			this.textResponsParty.Location = new System.Drawing.Point(149,118);
+			this.textResponsParty.Location = new System.Drawing.Point(149,139);
 			this.textResponsParty.Name = "textResponsParty";
 			this.textResponsParty.ReadOnly = true;
 			this.textResponsParty.Size = new System.Drawing.Size(198,20);
@@ -1198,7 +1204,7 @@ namespace OpenDental{
 			// 
 			// label34
 			// 
-			this.label34.Location = new System.Drawing.Point(1,118);
+			this.label34.Location = new System.Drawing.Point(1,139);
 			this.label34.Name = "label34";
 			this.label34.Size = new System.Drawing.Size(146,17);
 			this.label34.TabIndex = 64;
@@ -1212,7 +1218,7 @@ namespace OpenDental{
 			this.butPickSite.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPickSite.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPickSite.CornerRadius = 4F;
-			this.butPickSite.Location = new System.Drawing.Point(349,54);
+			this.butPickSite.Location = new System.Drawing.Point(349,75);
 			this.butPickSite.Name = "butPickSite";
 			this.butPickSite.Size = new System.Drawing.Size(58,23);
 			this.butPickSite.TabIndex = 63;
@@ -1224,7 +1230,7 @@ namespace OpenDental{
 			// 
 			this.comboUrgency.BackColor = System.Drawing.SystemColors.Window;
 			this.comboUrgency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboUrgency.Location = new System.Drawing.Point(149,97);
+			this.comboUrgency.Location = new System.Drawing.Point(149,118);
 			this.comboUrgency.Name = "comboUrgency";
 			this.comboUrgency.Size = new System.Drawing.Size(155,21);
 			this.comboUrgency.TabIndex = 4;
@@ -1233,7 +1239,7 @@ namespace OpenDental{
 			// 
 			this.comboGradeLevel.BackColor = System.Drawing.SystemColors.Window;
 			this.comboGradeLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboGradeLevel.Location = new System.Drawing.Point(149,76);
+			this.comboGradeLevel.Location = new System.Drawing.Point(149,97);
 			this.comboGradeLevel.MaxDropDownItems = 25;
 			this.comboGradeLevel.Name = "comboGradeLevel";
 			this.comboGradeLevel.Size = new System.Drawing.Size(155,21);
@@ -1242,7 +1248,7 @@ namespace OpenDental{
 			// textSite
 			// 
 			this.textSite.AcceptsReturn = true;
-			this.textSite.Location = new System.Drawing.Point(149,56);
+			this.textSite.Location = new System.Drawing.Point(149,77);
 			this.textSite.Name = "textSite";
 			this.textSite.Size = new System.Drawing.Size(198,20);
 			this.textSite.TabIndex = 2;
@@ -1251,7 +1257,7 @@ namespace OpenDental{
 			// 
 			// label35
 			// 
-			this.label35.Location = new System.Drawing.Point(1,96);
+			this.label35.Location = new System.Drawing.Point(1,117);
 			this.label35.Name = "label35";
 			this.label35.Size = new System.Drawing.Size(146,17);
 			this.label35.TabIndex = 6;
@@ -1270,7 +1276,7 @@ namespace OpenDental{
 			// textCounty
 			// 
 			this.textCounty.AcceptsReturn = true;
-			this.textCounty.Location = new System.Drawing.Point(149,36);
+			this.textCounty.Location = new System.Drawing.Point(149,57);
 			this.textCounty.Name = "textCounty";
 			this.textCounty.Size = new System.Drawing.Size(198,20);
 			this.textCounty.TabIndex = 1;
@@ -1279,7 +1285,7 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(7,76);
+			this.label15.Location = new System.Drawing.Point(7,97);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(140,17);
 			this.label15.TabIndex = 3;
@@ -1288,7 +1294,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(1,56);
+			this.label14.Location = new System.Drawing.Point(1,77);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(146,17);
 			this.label14.TabIndex = 2;
@@ -1297,21 +1303,21 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(4,36);
+			this.label13.Location = new System.Drawing.Point(4,57);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(143,17);
 			this.label13.TabIndex = 1;
 			this.label13.Text = "County";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label10
+			// labelRaceEthnicity
 			// 
-			this.label10.Location = new System.Drawing.Point(6,16);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(141,17);
-			this.label10.TabIndex = 0;
-			this.label10.Text = "Race/Ethnicity";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelRaceEthnicity.Location = new System.Drawing.Point(6,16);
+			this.labelRaceEthnicity.Name = "labelRaceEthnicity";
+			this.labelRaceEthnicity.Size = new System.Drawing.Size(141,17);
+			this.labelRaceEthnicity.TabIndex = 0;
+			this.labelRaceEthnicity.Text = "Race/Ethnicity";
+			this.labelRaceEthnicity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textDateFirstVisit
 			// 
@@ -1579,6 +1585,24 @@ namespace OpenDental{
 			this.label43.TabIndex = 120;
 			this.label43.Text = "(minutes)";
 			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboEthnicity
+			// 
+			this.comboEthnicity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboEthnicity.Location = new System.Drawing.Point(149,36);
+			this.comboEthnicity.MaxDropDownItems = 20;
+			this.comboEthnicity.Name = "comboEthnicity";
+			this.comboEthnicity.Size = new System.Drawing.Size(156,21);
+			this.comboEthnicity.TabIndex = 69;
+			// 
+			// labelEthnicity
+			// 
+			this.labelEthnicity.Location = new System.Drawing.Point(6,37);
+			this.labelEthnicity.Name = "labelEthnicity";
+			this.labelEthnicity.Size = new System.Drawing.Size(141,17);
+			this.labelEthnicity.TabIndex = 68;
+			this.labelEthnicity.Text = "Ethnicity";
+			this.labelEthnicity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormPatientEdit
 			// 
@@ -1894,11 +1918,63 @@ namespace OpenDental{
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			string[] enumRace=Enum.GetNames(typeof(PatientRace));
-			for(int i=0;i<enumRace.Length;i++){
-				comboRace.Items.Add(Lan.g("enumRace",enumRace[i]));
+			if(FormOpenDental.FormEHR!=null) {
+				labelRaceEthnicity.Text="Race";
+				comboRace.Items.Add("unknown");//0
+				comboRace.Items.Add("White");//1
+				comboRace.Items.Add("Black");//2
+				comboRace.Items.Add("Asian");//3
+				comboRace.Items.Add("HawaiiPacIsland");//4	
+				comboEthnicity.Items.Add("Not Hispanic");//0
+				comboEthnicity.Items.Add("Hispanic");//1
+				switch(PatCur.Race) {
+					default:
+						comboRace.SelectedIndex=1;//white
+						comboEthnicity.SelectedIndex=0;//not hispanic
+						break;
+					case PatientRace.Aboriginal:
+					case PatientRace.AmericanIndian:
+					case PatientRace.Multiracial:
+					case PatientRace.Other:
+					case PatientRace.White:
+						comboRace.SelectedIndex=1;//white
+						comboEthnicity.SelectedIndex=0;//not hispanic
+						break;
+					case PatientRace.AfricanAmerican:
+						comboRace.SelectedIndex=2;//black
+						comboEthnicity.SelectedIndex=0;//not hispanic
+						break;
+					case PatientRace.Asian:
+						comboRace.SelectedIndex=3;//Asian
+						comboEthnicity.SelectedIndex=0;//not hispanic
+						break;
+					case PatientRace.BlackHispanic:
+						comboRace.SelectedIndex=2;//Black
+						comboEthnicity.SelectedIndex=1;//hispanic
+						break;
+					case PatientRace.HawaiiOrPacIsland:
+						comboRace.SelectedIndex=4;//Hawaii
+						comboEthnicity.SelectedIndex=0;//not hispanic
+						break;
+					case PatientRace.HispanicLatino:
+						comboRace.SelectedIndex=1;//white
+						comboEthnicity.SelectedIndex=1;//hispanic
+						break;
+					case PatientRace.Unknown:
+						comboRace.SelectedIndex=0;//unknown
+						comboEthnicity.SelectedIndex=-1;//empty
+						break;
+				}
 			}
-			comboRace.SelectedIndex=(int)PatCur.Race;
+			else {
+				labelEthnicity.Visible=false;
+				comboEthnicity.Visible=false;
+				string[] enumRace=Enum.GetNames(typeof(PatientRace));
+				for(int i=0;i<enumRace.Length;i++) {
+					comboRace.Items.Add(Lan.g("enumRace",enumRace[i]));
+				}
+				comboRace.SelectedIndex=(int)PatCur.Race;
+			}
 			textCounty.Text=PatCur.County;
 			textSite.Text=Sites.GetDescription(PatCur.SiteNum);
 			string[] enumGrade=Enum.GetNames(typeof(PatientGrade));
@@ -2834,7 +2910,38 @@ namespace OpenDental{
 			else{
 				PatCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			PatCur.Race=(PatientRace)comboRace.SelectedIndex;
+			if(FormOpenDental.FormEHR!=null) {
+				switch(comboRace.SelectedIndex) {
+					case 0://unknown
+						PatCur.Race=PatientRace.Unknown;
+						break;
+					case 1://white
+						if(comboEthnicity.SelectedIndex==1) {//hispanic
+							PatCur.Race=PatientRace.HispanicLatino;
+						}
+						else{
+							PatCur.Race=PatientRace.White;
+						}
+						break;
+					case 2://black
+						if(comboEthnicity.SelectedIndex==1) {//hispanic
+							PatCur.Race=PatientRace.BlackHispanic;
+						}
+						else{
+							PatCur.Race=PatientRace.AfricanAmerican;
+						}
+						break;
+					case 3://asian
+						PatCur.Race=PatientRace.Asian;
+						break;
+					case 4://hawaii
+						PatCur.Race=PatientRace.HawaiiOrPacIsland;
+						break;
+				}
+			}
+			else {
+				PatCur.Race=(PatientRace)comboRace.SelectedIndex;
+			}
 			PatCur.County=textCounty.Text;
 			//site set when user picks from list.
 			PatCur.GradeLevel=(PatientGrade)comboGradeLevel.SelectedIndex;
