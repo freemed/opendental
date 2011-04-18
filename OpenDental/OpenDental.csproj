@@ -329,6 +329,18 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormFormularies.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormFormularies.Designer.cs">
+      <DependentUpon>FormFormularies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormFormularyEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormFormularyEdit.Designer.cs">
+      <DependentUpon>FormFormularyEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormVaccineDefSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2154,6 +2166,12 @@
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFormularies.resx">
+      <DependentUpon>FormFormularies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFormularyEdit.resx">
+      <DependentUpon>FormFormularyEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormVaccineDefSetup.resx">
       <DependentUpon>FormVaccineDefSetup.cs</DependentUpon>

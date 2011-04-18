@@ -230,7 +230,7 @@ namespace OpenDental{
 		public static object FormEHR;
 		private MenuItem menuItemEHR;
 		//<summary>This will be null if EHR didn't load up.</summary>
-		//public static Assembly AssemblyEHR;
+		public static Assembly AssemblyEHR;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
