@@ -160,21 +160,21 @@ namespace OpenDentBusiness.HL7 {
 		//This set of methods is ONLY for ECW, and will have to be renamed and grouped if any other DFT bridge is built.
 		//=======================================================================================================================================
 
-		private string ConvertRace(PatientRace race) {
+		private string ConvertRace(PatientRaceOld race) {
 			switch(race) {
-				case PatientRace.AmericanIndian:
+				case PatientRaceOld.AmericanIndian:
 					return "American Indian Or Alaska Native";
-				case PatientRace.Asian:
+				case PatientRaceOld.Asian:
 					return "Asian";
-				case PatientRace.HawaiiOrPacIsland:
+				case PatientRaceOld.HawaiiOrPacIsland:
 					return "Native Hawaiian or Other Pacific";
-				case PatientRace.AfricanAmerican:
+				case PatientRaceOld.AfricanAmerican:
 					return "Black or African American";
-				case PatientRace.White:
+				case PatientRaceOld.White:
 					return "White";
-				case PatientRace.HispanicLatino:
+				case PatientRaceOld.HispanicLatino:
 					return "Hispanic";
-				case PatientRace.Other:
+				case PatientRaceOld.Other:
 					return "Other Race";
 				default:
 					return "Other Race";

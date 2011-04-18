@@ -107,28 +107,28 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 			return "U";
 		}
 
-		private string ConvertRace(PatientRace race) {
+		private string ConvertRace(PatientRaceOld race) {
 			switch(race) {
-				case PatientRace.AmericanIndian:
+				case PatientRaceOld.AmericanIndian:
 					return "1002-5^American Indian Or Alaska Native^HL70005";
-				case PatientRace.Asian:
+				case PatientRaceOld.Asian:
 					return "2028-9^Asian^HL70005";
-				case PatientRace.AfricanAmerican:
+				case PatientRaceOld.AfricanAmerican:
 					return "2054-5^Black or African American^HL70005";
-				case PatientRace.HawaiiOrPacIsland:
+				case PatientRaceOld.HawaiiOrPacIsland:
 					return "2076-8^Native Hawaiian or Other Pacific Islander^HL70005";
-				case PatientRace.White:
+				case PatientRaceOld.White:
 					return "2106-3^White^HL70005";
-				case PatientRace.Other:
+				case PatientRaceOld.Other:
 					return "2131-1^Other Race^HL70005";
 				default://including hispanic
 					return "2131-1^Other Race^HL70005";
 			}
 		}
 
-		private string ConvertEthnicGroup(PatientRace race) {
+		private string ConvertEthnicGroup(PatientRaceOld race) {
 			switch(race) {
-				case PatientRace.HispanicLatino:
+				case PatientRaceOld.HispanicLatino:
 					return "H^Hispanic or Latino^HL70189";
 				default:
 					return "N^Not Hispanic or Latino^HL70189";

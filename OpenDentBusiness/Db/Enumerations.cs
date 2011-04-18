@@ -721,8 +721,8 @@ namespace OpenDentBusiness{
 		CAL
 	}
 
-	///<summary>Race and ethnicity for patient. Used by public health.</summary>
-	public enum PatientRace{
+	///<summary>Race and ethnicity for patient. Used by public health.  The problem is that everyone seems to want different choices.  If we give these choices their own table, then we also need to include mapping functions.  These are currently used in ArizonaReports, HL7 w ECW, and EHR.  Foreign users would like their own mappings.</summary>
+	public enum PatientRaceOld{
 		///<summary>0</summary>
 		Unknown,
 		///<summary>1</summary>

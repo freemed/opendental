@@ -1004,7 +1004,7 @@ namespace OpenDental{
 							break;
 						case "race":
 							tableOut.Rows[i][j]
-								=((PatientRace)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
+								=((PatientRaceOld)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "gradelevel":
 							tableOut.Rows[i][j]

@@ -150,24 +150,24 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
-		public static PatientRace RaceParse(string str) {
+		public static PatientRaceOld RaceParse(string str) {
 			switch(str) {
 				case "American Indian Or Alaska Native":
-					return PatientRace.AmericanIndian;
+					return PatientRaceOld.AmericanIndian;
 				case "Asian":
-					return PatientRace.Asian;
+					return PatientRaceOld.Asian;
 				case "Native Hawaiian or Other Pacific":
-					return PatientRace.HawaiiOrPacIsland;
+					return PatientRaceOld.HawaiiOrPacIsland;
 				case "Black or African American":
-					return PatientRace.AfricanAmerican;
+					return PatientRaceOld.AfricanAmerican;
 				case "White":
-					return PatientRace.White;
+					return PatientRaceOld.White;
 				case "Hispanic":
-					return PatientRace.HispanicLatino;
+					return PatientRaceOld.HispanicLatino;
 				case "Other Race":
-					return PatientRace.Other;
+					return PatientRaceOld.Other;
 				default:
-					return PatientRace.Other;
+					return PatientRaceOld.Other;
 			}
 		}
 

@@ -23,7 +23,7 @@ namespace OpenDental.Bridges{
 				MessageBox.Show("Please select a patient first.");
 				return;
 			}
-			if(pat.Race==PatientRace.Unknown) {
+			if(pat.Race==PatientRaceOld.Unknown) {
 				MessageBox.Show("Race must be entered first.");
 				return;
 			}

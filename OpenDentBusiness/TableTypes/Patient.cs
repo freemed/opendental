@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 		/// <summary>Not used since version 2.8.</summary>
 		public string EmploymentNote;
 		/// <summary>Enum:PatientRace Race and ethnicity.</summary>
-		public PatientRace Race;
+		public PatientRaceOld Race;
 		/// <summary>FK to county.CountyName, although it will not crash if key absent.</summary>
 		public string County;
 		/// <summary>Enum:PatientGrade Gradelevel.</summary>
