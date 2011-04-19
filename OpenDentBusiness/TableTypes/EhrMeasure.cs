@@ -15,10 +15,10 @@ namespace OpenDentBusiness {
 		public int Numerator;
 		///<summary>0-100, -1 indicates not entered yet.</summary>
 		public int Denominator;
-		///<summary></summary>
+		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string Objective;
-		///<summary></summary>
+		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string Measure;
 
