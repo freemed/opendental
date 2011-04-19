@@ -609,7 +609,14 @@ namespace OpenDentBusiness {
 			else{
 				//Because it would change the sum on a deposit slip, can't easily delete these if attached to a deposit.
 				//Only delete claimpayments that are not attached to deposit slips.  Others, no action.
-
+				//Above query might have more results than we can fix because of the deposit slips.
+				command="DELETE FROM claimpayment WHERE ClaimPaymentNum NOT IN ("
+					+"SELECT ClaimPaymentNum FROM claimproc) "
+					+"AND claimpayment.DepositNum=0";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","ClaimPayments with with no splits fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
