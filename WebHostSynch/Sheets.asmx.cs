@@ -70,9 +70,7 @@ namespace WebHostSynch {
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				if(DentalOfficeID==0) {
 				}
-				var wspObj=from wsp in db.webforms_preference
-						   where wsp.DentalOfficeID==DentalOfficeID
-						   select wsp;
+				var wspObj=db.webforms_preference.Where(wsp => wsp.DentalOfficeID==DentalOfficeID);
 				//update preference
 				if(wspObj.Count()>0) {
 					wspObj.First().ColorBorder=prefObj.ColorBorder;
@@ -80,12 +78,6 @@ namespace WebHostSynch {
 				}
 				// if there is no entry for that dental office make a new entry.
 				if(wspObj.Count()==0) {
-					/*
-					webforms_preference wspNewObj=new webforms_preference();
-					wspNewObj.DentalOfficeID=DentalOfficeID;
-					wspNewObj.ColorBorder=ColorBorder;
-					db.AddTowebforms_preference(wspNewObj);
-					*/
 					prefObj.DentalOfficeID=DentalOfficeID;
 					db.AddTowebforms_preference(prefObj);
 				}

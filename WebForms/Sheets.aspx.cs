@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections;
 using System.Drawing.Text;
+using System.Globalization;
 using OpenDentBusiness;
 
 namespace WebForms {
@@ -45,8 +46,7 @@ namespace WebForms {
 		}
 
 		private void GeneratePage(long DentalOfficeID,long WebSheetDefID) {
-			try {
-					int FormXOffset=37;
+			try {	int FormXOffset=37;
 					int FormYOffset=26;
 					int ImageXOffset=0;
 					int ImageYOffset=0;
@@ -118,7 +118,9 @@ namespace WebForms {
 						if(FieldType==SheetFieldType.StaticText) {
 							Label lb=new Label();
 							if(FieldValue.Contains("[dateToday]")) {
-								FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
+								//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
+								FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",System.Threading.Thread.CurrentThread.CurrentCulture));//culture of the browser
+								AddHiddenField(WebSheetFieldDefID);
 							}
 							lb.Text=FieldValue;
 							wc=lb;
@@ -194,7 +196,7 @@ namespace WebForms {
 							}
 							Panel1.Controls.Add(wc);
 						}
-					}
+					}//for loop end here
 					AssignTabOrder();
 					//position the submit button at the end of the page.
 					Button1.Style["position"]="absolute";
@@ -231,6 +233,13 @@ namespace WebForms {
 			Panel1.Controls.Add(mecb);
 			wc=cb;
 			return wc;
+		}
+
+		private void AddHiddenField(long WebSheetFieldDefID) {
+			HiddenField hf= new HiddenField();
+			hf.Value=""+WebSheetFieldDefID;
+			hf.ID="dateToday";
+			Panel1.Controls.Add(hf);
 		}
 
 		private void AssignTabOrder() {
@@ -323,7 +332,7 @@ namespace WebForms {
 		}
 
 		/// <summary>
-		/// This is a recursive function which searches through nested controls on a  webpage
+		/// This is a recursive function which searches through nested controls on a  webpage and stores the values in FormValuesHashTable 
 		/// </summary>
 		private void FindControls(Control c) {
 			try {
@@ -412,11 +421,23 @@ namespace WebForms {
 					if(FormValuesHashTable.ContainsKey(WebSheetFieldDefID+"")) {
 						NewSheetfieldObj.FieldValue=FormValuesHashTable[WebSheetFieldDefID+""].ToString();
 					}
-					string FieldValue=SheetFieldDefObj.FieldValue; 
-					if(FieldValue.Contains("[dateToday]")) {
-						FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
-						NewSheetfieldObj.FieldValue=FieldValue;
-					}
+					#region  saving dates in right formats
+						string FieldValue=NewSheetfieldObj.FieldValue;
+						string FieldName=NewSheetfieldObj.FieldName;
+						string CultureName=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID).First().CultureName;
+						if(FieldValue.Contains("[dateToday]")) {
+							//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
+							FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",new CultureInfo(CultureName,false)));
+							NewSheetfieldObj.FieldValue=FieldValue;
+						}
+						if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
+							//use the browsers culture to get correct date.
+							DateTime birthdate=DateTime.Parse(FieldValue,System.Threading.Thread.CurrentThread.CurrentCulture);
+							//now convert the birthdate into a string using the culture of the corresponding opendental installation.
+							FieldValue= birthdate.ToString("d",new CultureInfo(CultureName,false));
+							NewSheetfieldObj.FieldValue=FieldValue;
+						}
+					#endregion
 					NewSheetObj.webforms_sheetfield.Add(NewSheetfieldObj);
 				}
 				var PrefObj=db.webforms_preference.Where(wp=>wp.DentalOfficeID==DentalOfficeID);

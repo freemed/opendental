@@ -7,6 +7,8 @@
 <title></title>
 	<script type="text/javascript">
 		function pageLoad() {
+			$get("" + $get("dateToday").value).innerHTML = new Date().localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern);
+			
 		}		
 	</script>
 </head>
