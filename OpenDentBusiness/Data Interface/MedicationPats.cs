@@ -53,6 +53,7 @@ namespace OpenDentBusiness{
 			string command = "DELETE from medicationpat WHERE medicationpatNum = '"
 				+Cur.MedicationPatNum.ToString()+"'";
 			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.MedicationPat,Cur.MedicationPatNum);
 		}
 
 		public static List<long> GetChangedSinceMedicationPatNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {

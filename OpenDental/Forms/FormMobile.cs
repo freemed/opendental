@@ -15,7 +15,6 @@ using OpenDentBusiness.Mobile;
 namespace OpenDental {
 	public partial class FormMobile:Form {
 		private static MobileWeb.Mobile mb=new MobileWeb.Mobile();
-		private static PatientPortal.PatientPortal pp=new PatientPortal.PatientPortal();
 		private static int BatchSize=100;
 		///<summary>This variable prevents the synching methods from being called when a previous synch is in progress.</summary>
 		private static bool IsSynching;
@@ -346,9 +345,10 @@ namespace OpenDental {
 			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-			// change this to accomodate more objects
-			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSince).Where(d=>d.ObjectType==DeletedObjectType.Appointment).ToList();
-			int totalCount=medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count+dO.Count;
+			//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSince).Where(d=>d.ObjectType==DeletedObjectType.Appointment).ToList();
+			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSince);
+			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
+							+medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count+dO.Count;
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
 			DeleteObjects(dO,ref FormP);
@@ -396,31 +396,31 @@ namespace OpenDental {
 					break;
 					case SynchEntity.medication:
 						List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
-						pp.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
+						mb.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
 					break;
 					case SynchEntity.medicationpat:
 						List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
-						pp.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
+						mb.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
 					break;
 					case SynchEntity.allergy:
 						List<Allergym> ChangedAllergyList=Allergyms.GetMultAllergyms(BlockPKNumList);
-						pp.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
+						mb.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
 					break;
 					case SynchEntity.allergydef:
 						List<AllergyDefm> ChangedAllergyDefList=AllergyDefms.GetMultAllergyDefms(BlockPKNumList);
-						pp.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
+						mb.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
 					break;
 					case SynchEntity.disease:
 						List<Diseasem> ChangedDiseaseList=Diseasems.GetMultDiseasems(BlockPKNumList);
-						pp.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
+						mb.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
 					break;
 					case SynchEntity.diseasedef:
 						List<DiseaseDefm> ChangedDiseaseDefList=DiseaseDefms.GetMultDiseaseDefms(BlockPKNumList);
-						pp.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
+						mb.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
 					break;
 					case SynchEntity.icd9:
 						List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
-						pp.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
+						mb.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
 					break;
 
 				}

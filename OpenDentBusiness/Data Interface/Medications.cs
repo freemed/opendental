@@ -74,6 +74,7 @@ namespace OpenDentBusiness{
 			}
 			string command = "DELETE from medication WHERE medicationNum = '"+Cur.MedicationNum.ToString()+"'";
 			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.Medication,Cur.MedicationNum);
 		}
 
 		///<summary>Returns a list of all patients using this medication.</summary>

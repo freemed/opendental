@@ -107,6 +107,7 @@ namespace OpenDentBusiness{
 			}
 			command= "DELETE FROM icd9 WHERE ICD9Num = "+POut.Long(icd9Num);
 			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.ICD9,icd9Num);
 		}
 
 		public static List<long> GetChangedSinceICD9Nums(DateTime changedSince) {
