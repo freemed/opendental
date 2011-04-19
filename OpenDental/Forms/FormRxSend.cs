@@ -89,10 +89,17 @@ namespace OpenDental {
 			//Ask Jordan about information like Clinic ID and where we will get/store this stuff.
 			//Add special logic for adding multiple perscriptions to one SCRIPT.
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				//Collect all information needed
 				RxPat rx=listRx[gridMain.SelectedIndices[i]];
 				Patient pat=Patients.GetPat(rx.PatNum);
 				Provider prov=Providers.GetProv(rx.ProvNum);
+				PatPlan patPlan=PatPlans.GetPatPlan(pat.PatNum,1);
+				Family fam=Patients.GetFamily(pat.PatNum);
+				List<InsSub> subList=InsSubs.RefreshForFam(fam);
+				List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+				InsPlan ins=InsPlans.GetPlan(patPlan.PlanNum,planList);
+				InsSub sub=InsSubs.GetOne(patPlan.InsSubNum);
+				Carrier car=Carriers.GetCarrier(ins.CarrierNum);
+				DateTime msgTimeSent=DateTime.Now;
 				//Use pharmacy object that was set above because all perscriptions sent MUST have the same pharmacy.
 				StringBuilder strb=new StringBuilder();
 				//These characters will be replaced in a production by unprintable characters, but hardcoded for debugging.
@@ -130,63 +137,69 @@ namespace OpenDental {
 				strb.Append("UIB"+e);//000
 				strb.Append("UNOA"+f+"0"+e);//010 Syntax identifier and version 
 				strb.Append(e);//020 not used
-				strb.Append("1234567"+e);//030 Transaction reference
+				strb.Append("1234567"+e);//030 Transaction reference (Clinic system trace number.)
 				strb.Append(e);//040 not used 
 				strb.Append(e);//050 not used
-				strb.Append("77777777"+f+"C"+f+"PASSWORDQ"+e);//060 Sender identification
-				strb.Append("7701630"+f+"P"+e);//070 Recipient ID
-				strb.Append("19971001"+f+"081522"+s);//080 Date of initiation CCYYMMDD:HHMMSS,S
+				strb.Append("77777777"+f+"C"+f+"PASSWORDQ"+e);//060 Sender identification (This is the Clinic ID of the sender; C means it is a Clinic.)
+				strb.Append("7701630"+f+"P"+e);//070 Recipient ID (NCPDP Provider ID Number of pharmacy; P means it is a pharmacy.)
+				strb.Append(msgTimeSent.ToString("yyyyMMdd")+f+msgTimeSent.ToString("HHmmss")+s);//080 Date of initiation CCYYMMDD:HHMMSS,S 
 				//UIH+SCRIPT:Ø1Ø:ØØ6:NEWRX+11ØØ72+++19971ØØ1:Ø81522’-------------------------------------------------------
 				strb.Append("UIH"+e);//000
 				strb.Append("SCRIPT"+f+"010"+f+"006"+f+"NEWRX"+e);//010 Message type:version:release:function.
-				strb.Append("110072"+e);//020 Message reference number
+				//Clinic’s reference number for message. Usually this is the folio number for the patient. However, this is the ID by which the clinic will be able to refer to this prescription.
+				strb.Append("110072"+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
 				strb.Append(e);//030 conditional Dialogue Reference
 				strb.Append(e);//040 not used
-				strb.Append("19971001"+f+"081522"+s);//050 Date of initiation
+				strb.Append(msgTimeSent.ToString("yyyyMMdd")+f+msgTimeSent.ToString("HHmmss")+s);//050 Date of initiation
 				//PVD+P1+77Ø163Ø:D3+++++MAIN STREET PHARMACY++61522Ø5656:TE’-----------------------------------------------
 				strb.Append("PVD"+e);//000
-				strb.Append("P1"+e);//010 Provider coded (see external code list in data dictionary)
-				strb.Append("7701630"+f+"D3"+e);//020 Reference number and qualifier (ID for facility)
+				strb.Append("P1"+e);//010 Provider coded (see external code list pg.231)
+				strb.Append("7701630"+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
 				strb.Append(e);//030 not used
 				strb.Append(e);//040 conditional Provider specialty
 				strb.Append(e);//050 conditional The name of the prescriber or pharmacist or supervisor
 				strb.Append(e);//060 not used 
 				strb.Append(e);//070 conditional The clinic or pharmacy name
-				strb.Append("MAIN STREET PHARMACY"+e);//080 Address
-				strb.Append("6152205656"+f+"TE"+s);//090 Communication number and qualifier
+				strb.Append(Sout(pharmacy.Address)+e);//080 Address
+				strb.Append(Regex.Replace(Sout(pharmacy.Phone),@"[-()]",string.Empty)+f+"TE"+s);//090 Communication number and qualifier
 				//PVD+PC+6666666:ØB+++JONES:MARK++++61522198ØØ:TE’---------------------------------------------------------
 				strb.Append("PVD"+e);//000 
 				strb.Append("PC"+e);//010 Provider coded
-				strb.Append("6666666"+f+"0B"+e);//020 Reference number and qualifier (ID for facility)
+				strb.Append("6666666"+f+"0B"+e);//020 Reference number and qualifier (0B: Provider State License Number)
 				strb.Append(e);//030 not used
 				strb.Append(e);//040 conditional Provider specialty
-				strb.Append("JONES"+f+"MARK"+e);//050 The name of the prescriber or pharmacist or supervisor
+				strb.Append(Sout(prov.LName)+f+Sout(prov.FName)+e);//050 The name of the prescriber or pharmacist or supervisor
 				strb.Append(e);//060 not used
 				strb.Append(e);//070 conditional The clinic or pharmacy name
 				strb.Append(e);//080 conditional Address
-				strb.Append("6152205656"+f+"TE"+s);//090 Communication number and qualifier
+				strb.Append(Regex.Replace(Sout(PrefC.GetString(PrefName.PracticePhone)),@"[-()]",string.Empty)+f+"TE"+s);//090 Communication number and qualifier
 				//PTT++19541225+SMITH:MARY+F+333445555:SY’-----------------------------------------------------------------
 				strb.Append("PTT"+e);//000
 				strb.Append(e);//010 conditional Individual relationship
-				strb.Append("19541225"+e);//020 Birth date of patient
-				strb.Append("SMITH"+f+"MARY"+e);//030 Name
-				strb.Append("F"+e);//040 Gender (M,F,U)
-				strb.Append("333445555"+f+"SY"+s);//050 Patient ID and/or SSN and qualifier
+				strb.Append(pat.Birthdate.ToString("yyyyMMdd")+e);//020 Birth date of patient YYYYMMDD
+				strb.Append(Sout(pat.LName)+f+Sout(pat.FName)+e);//030 Name
+				strb.Append(pat.Gender.ToString().Substring(0,1)+e);//040 Gender (M,F,U)
+				strb.Append(Sout(pat.SSN)+f+"SY"+s);//050 Patient ID and/or SSN and qualifier
 				//COO+123456:BO+INSURANCE COMPANY NAME++123456789++AA112’--------------------------------------------------
 				strb.Append("COO"+e);//000
-				strb.Append("123456"+f+"BO"+e);//010 Payer ID Information and qualifier
-				strb.Append("INSURANCE COMPANY NAME"+e);//020 Payer name
+				strb.Append("123456"+f+"BO"+e);//010 Payer ID Information and qualifier (Primary Payer's identification number? BO is for BIN Location Number.)
+				strb.Append(Sout(car.CarrierName)+e);//020 Payer name
 				strb.Append(e);//030 conditional Service type, coded
-				strb.Append("123456789"+e);//040 Cardholder ID
+				strb.Append(Sout(sub.SubscriberID)+e);//040 Cardholder ID
 				strb.Append(e);//050 conditional Cardholder name
-				strb.Append("AA112"+s);//060 Group ID
+				strb.Append(Sout(ins.GroupNum)+s);//060 Group ID
 				//DRU------------------------------------------------------------------------------------------------------
 				//DRU+P:CALAN SR 24ØMG::::24Ø:::::::AA:C42998:AB:C28253+::6Ø:38:AC:C48542+:1 TID -TAKE ONE TABLET TWO TIMES A DAY UNTIL GONE+85:19971ØØ1:1Ø2*ZDS:3Ø:8Ø4+Ø+R:1’
 				strb.Append("DRU"+e);//000
-				strb.Append("P"+f+"CALAN SR 24ØMG"+f+f+f+f+"24Ø"+f+f+f+f+f+f+f+"AA"+f+"C42998"+f+"AB"+f+"C28253"+e);//010 Item Description Identification
+				//P means prescribed. Drug prescribed is Calan Sr 240mg. 
+				//24Ø is the strength; AA is the Source for NCI Pharmaceutical Dosage Form. C42998 is the code for “Tablet dosing form”.
+				//AB is the Source for NCI Units of Presentation. C28253 is the code for “Milligram”. So this means the prescription is for 24Ømg tablets.
+				strb.Append("P"+f+rx.Drug+f+f+f+f+"24Ø"+f+f+f+f+f+f+f+"AA"+f+"C42998"+f+"AB"+f+"C28253"+e);//010 Item Description Identification
+				//This means dispense 6Ø tablets. 38 is the code value for Original Qty. AC is the Source for NCI Potency Units. C48542 is the code for “Tablet dosing unit”.
 				strb.Append(f+f+"6Ø"+f+"38"+f+"AC"+f+"C48542"+e);//020 Quantity
-				strb.Append(f+"1 TID -TAKE ONE TABLET TWO TIMES A DAY UNTIL GONE"+e);//030 Directions
-				strb.Append("85"+f+"19971ØØ1"+f+"1Ø2"+p+"ZDS"+f+"3Ø"+f+"8Ø4"+e);//040 Date Note: It is strongly recommended that Days Supply (value “ZDS”) be supported.
+				strb.Append(f+Sout(rx.Sig)+e);//030 Directions
+				//ZDS is the qualifier for Days Supply. 3Ø is the number of days supply. 8Ø4 is the qualifier for Quantity of Days.
+				strb.Append("85"+f+"19971ØØ1"+f+"1Ø2"+p+"ZDS"+f+"3Ø"+f+"8Ø4"+e);//040 Date Note: It is strongly recommended that Days Supply (value “ZDS”) be supported. YYYYMMDD
 				strb.Append("0"+e);//050 Product/Service substitution, coded
 				strb.Append("R"+f+"1"+s);//060 Refill and quantity
 				//UIT+11ØØ72+6’---------------------------------------------------------------------------------------------
