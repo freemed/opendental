@@ -12,7 +12,7 @@ namespace OpenDental
 			MessageBox.Show(Lan.g(sender.GetType().Name,text));
 		}
 
-		///<summary>This is a more efficient version of the MS MessageBox. It also automates the language translation.</summary>
+		///<summary>This is a more efficient version of the MS MessageBox. It also automates the language translation. Returns true if result is OK or Yes.</summary>
 		public static bool Show(System.Object sender,MsgBoxButtons buttons,string question) {
 			if(buttons==MsgBoxButtons.OKCancel) {
 				if(MessageBox.Show(Lan.g(sender.GetType().Name,question),"",MessageBoxButtons.OKCancel)==DialogResult.OK) {

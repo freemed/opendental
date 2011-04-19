@@ -15,7 +15,23 @@ namespace OpenDental {
 		}
 
 		private void FormDrugManufacturerSetup_Load(object sender,EventArgs e) {
+			FillGrid();
+		}
 
+		private void FillGrid() {
+			DrugManufacturers.RefreshCache();
+			listMain.Items.Clear();
+			for(int i=0;i<DrugManufacturers.Listt.Count;i++) {
+				listMain.Items.Add(DrugManufacturers.Listt[i].ManufacturerName);
+			}
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			FormDrugManufacturerEdit FormD=new FormDrugManufacturerEdit();
+			FormD.DrugManufacturerCur=new DrugManufacturer();
+			FormD.IsNew=true;
+			FormD.ShowDialog();
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

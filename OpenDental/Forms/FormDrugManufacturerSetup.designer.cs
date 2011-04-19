@@ -33,7 +33,7 @@ namespace OpenDental{
 			this.listMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.listMain.Location = new System.Drawing.Point(28,30);
+			this.listMain.Location = new System.Drawing.Point(28,32);
 			this.listMain.Name = "listMain";
 			this.listMain.Size = new System.Drawing.Size(268,251);
 			this.listMain.TabIndex = 12;
@@ -48,11 +48,12 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(28,308);
+			this.butAdd.Location = new System.Drawing.Point(28,310);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(79,24);
 			this.butAdd.TabIndex = 13;
 			this.butAdd.Text = "&Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butClose
 			// 
@@ -62,7 +63,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(221,308);
+			this.butClose.Location = new System.Drawing.Point(221,310);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 11;
@@ -78,7 +79,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butClose);
 			this.Name = "FormDrugManufacturerSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = " ";
+			this.Text = " Drug Manufacturer Setup";
 			this.Load += new System.EventHandler(this.FormDrugManufacturerSetup_Load);
 			this.ResumeLayout(false);
 

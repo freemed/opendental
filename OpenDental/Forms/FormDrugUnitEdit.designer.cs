@@ -26,9 +26,9 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
-			this.textVaccineName = new System.Windows.Forms.TextBox();
+			this.textUnitText = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textCVXCode = new System.Windows.Forms.TextBox();
+			this.textUnitIdentifier = new System.Windows.Forms.TextBox();
 			this.labelCVXCode = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
@@ -79,12 +79,12 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// textVaccineName
+			// textUnitText
 			// 
-			this.textVaccineName.Location = new System.Drawing.Point(113,53);
-			this.textVaccineName.Name = "textVaccineName";
-			this.textVaccineName.Size = new System.Drawing.Size(228,20);
-			this.textVaccineName.TabIndex = 113;
+			this.textUnitText.Location = new System.Drawing.Point(113,53);
+			this.textUnitText.Name = "textUnitText";
+			this.textUnitText.Size = new System.Drawing.Size(228,20);
+			this.textUnitText.TabIndex = 113;
 			// 
 			// label1
 			// 
@@ -95,12 +95,12 @@ namespace OpenDental{
 			this.label1.Text = "Unit Text";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textCVXCode
+			// textUnitIdentifier
 			// 
-			this.textCVXCode.Location = new System.Drawing.Point(113,27);
-			this.textCVXCode.Name = "textCVXCode";
-			this.textCVXCode.Size = new System.Drawing.Size(77,20);
-			this.textCVXCode.TabIndex = 111;
+			this.textUnitIdentifier.Location = new System.Drawing.Point(113,27);
+			this.textUnitIdentifier.Name = "textUnitIdentifier";
+			this.textUnitIdentifier.Size = new System.Drawing.Size(77,20);
+			this.textUnitIdentifier.TabIndex = 111;
 			// 
 			// labelCVXCode
 			// 
@@ -115,9 +115,9 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(366,149);
-			this.Controls.Add(this.textVaccineName);
+			this.Controls.Add(this.textUnitText);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textCVXCode);
+			this.Controls.Add(this.textUnitIdentifier);
 			this.Controls.Add(this.labelCVXCode);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOK);
@@ -136,9 +136,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private UI.Button butDelete;
-		private System.Windows.Forms.TextBox textVaccineName;
+		private System.Windows.Forms.TextBox textUnitText;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textCVXCode;
+		private System.Windows.Forms.TextBox textUnitIdentifier;
 		private System.Windows.Forms.Label labelCVXCode;
 	}
 }

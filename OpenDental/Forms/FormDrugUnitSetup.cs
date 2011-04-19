@@ -15,11 +15,23 @@ namespace OpenDental {
 		}
 
 		private void FormDrugUnitSetup_Load(object sender,EventArgs e) {
+			FillGrid();
+		}
 
+		private void FillGrid() {
+			DrugUnits.RefreshCache();
+			listMain.Items.Clear();
+			for(int i=0;i<DrugUnits.Listt.Count;i++) {
+				listMain.Items.Add(DrugUnits.Listt[i].UnitText);
+			}
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-
+			FormDrugUnitEdit FormD=new FormDrugUnitEdit();
+			FormD.DrugUnitCur=new DrugUnit();
+			FormD.IsNew=true;
+			FormD.ShowDialog();
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

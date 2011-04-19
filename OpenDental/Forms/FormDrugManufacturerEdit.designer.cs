@@ -125,6 +125,7 @@ namespace OpenDental{
 			this.Name = "FormDrugManufacturerEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Drug Manufacturer Edit";
+			this.Load += new System.EventHandler(this.FormDrugManufacturerEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

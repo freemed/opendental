@@ -195,7 +195,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(ToolButItems.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Vaccines) || isAll) {
-				
+				ds.Tables.Add(VaccineDefs.RefreshCache());
+				ds.Tables.Add(DrugManufacturers.RefreshCache());
+				ds.Tables.Add(DrugUnits.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll){
 				ds.Tables.Add(ApptViews.RefreshCache());

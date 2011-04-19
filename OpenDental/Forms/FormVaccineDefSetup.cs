@@ -15,11 +15,23 @@ namespace OpenDental {
 		}
 
 		private void FormVaccineDefSetup_Load(object sender,EventArgs e) {
-
+			FillGrid();
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void FillGrid() {
+			VaccineDefs.RefreshCache();
+			listMain.Items.Clear();
+			for(int i=0;i<VaccineDefs.Listt.Count;i++) {
+				listMain.Items.Add(VaccineDefs.Listt[i].VaccineName);
+			}
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			FormVaccineDefEdit FormV=new FormVaccineDefEdit();
+			FormV.VaccineDefCur=new VaccineDef();
+			FormV.IsNew=true;
+			FormV.ShowDialog();
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

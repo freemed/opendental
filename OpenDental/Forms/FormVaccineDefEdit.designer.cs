@@ -129,6 +129,7 @@ namespace OpenDental{
 			this.butDelete.Size = new System.Drawing.Size(79,24);
 			this.butDelete.TabIndex = 109;
 			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// FormVaccineDefEdit
 			// 
@@ -146,6 +147,7 @@ namespace OpenDental{
 			this.Name = "FormVaccineDefEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Vaccine Definition Edit";
+			this.Load += new System.EventHandler(this.FormVaccineDefEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

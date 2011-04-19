@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
+		//to the Cache.cs file with all the other Cache types. (Done.)
 
 		///<summary>A list of all DrugUnits.</summary>
 		private static List<DrugUnit> listt;
@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM drugunit ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM drugunit ORDER BY UnitText";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="DrugUnit";
 			FillCache(table);
@@ -44,26 +44,6 @@ namespace OpenDentBusiness{
 			listt=Crud.DrugUnitCrud.TableToList(table);
 		}
 		#endregion
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<DrugUnit> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<DrugUnit>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM drugunit WHERE PatNum = "+POut.Long(patNum);
-			return Crud.DrugUnitCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one DrugUnit from the db.</summary>
-		public static DrugUnit GetOne(long drugUnitNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<DrugUnit>(MethodBase.GetCurrentMethod(),drugUnitNum);
-			}
-			return Crud.DrugUnitCrud.SelectOne(drugUnitNum);
-		}
 
 		///<summary></summary>
 		public static long Insert(DrugUnit drugUnit){
@@ -91,6 +71,26 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM drugunit WHERE DrugUnitNum = "+POut.Long(drugUnitNum);
 			Db.NonQ(command);
+		}
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		///<summary></summary>
+		public static List<DrugUnit> Refresh(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<DrugUnit>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM drugunit WHERE PatNum = "+POut.Long(patNum);
+			return Crud.DrugUnitCrud.SelectMany(command);
+		}
+
+		///<summary>Gets one DrugUnit from the db.</summary>
+		public static DrugUnit GetOne(long drugUnitNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<DrugUnit>(MethodBase.GetCurrentMethod(),drugUnitNum);
+			}
+			return Crud.DrugUnitCrud.SelectOne(drugUnitNum);
 		}
 		*/
 
