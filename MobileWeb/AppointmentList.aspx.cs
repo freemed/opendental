@@ -40,6 +40,21 @@ namespace MobileWeb {
 				else {
 					if(CustomerNum==util.GetDemoDentalOfficeID()) {
 						AppointmentDate=util.GetDemoTodayDate();//for demo only. The date is set to a preset date in webconfig.
+						//dennis set cookies here this would be read by javascript on the client browser.
+						HttpCookie DemoDateCookieY=new HttpCookie("DemoDateCookieY");
+						HttpCookie DemoDateCookieM=new HttpCookie("DemoDateCookieM");
+						HttpCookie DemoDateCookieD=new HttpCookie("DemoDateCookieD");
+						DemoDateCookieY.Value=AppointmentDate.Year+"";
+						DemoDateCookieM.Value=AppointmentDate.Month+"";
+						DemoDateCookieD.Value=AppointmentDate.Day+"";
+						//DemoDateCookieY.Expires=DateTime.Now.AddDays(1);
+						//DemoDateCookieM.Expires=DateTime.Now.AddDays(1);
+						//DemoDateCookieD.Expires=DateTime.Now.AddDays(1);
+						// if expiry is not specifeid the cookie lasts till the end of seesion
+						Response.Cookies.Add(DemoDateCookieY);
+						Response.Cookies.Add(DemoDateCookieM);
+						Response.Cookies.Add(DemoDateCookieD);
+						
 					}
 					else {
 						AppointmentDate=DateTime.Today;

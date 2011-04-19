@@ -111,6 +111,13 @@ function TraversePage(){
         */
 		var MoveToURL = '#FilterPicker';
 		jQT.goTo(MoveToURL, 'slide');
+        //for demo only
+		var DemoDateCookieY = parseInt(getCookie("DemoDateCookieY"));
+		var DemoDateCookieM = parseInt(getCookie("DemoDateCookieM"));
+		var DemoDateCookieD = parseInt(getCookie("DemoDateCookieD"));
+		if (DemoDateCookieY != null && DemoDateCookieY != "" && !isNaN(DemoDateCookieY)) {
+		    $('#datepicker').datepicker("setDate", new Date(DemoDateCookieY, DemoDateCookieM - 1, DemoDateCookieD));
+		}
 	});
 
 	$('#next').tap(function(e) {
@@ -138,6 +145,40 @@ function TraversePage(){
 		var MoveToURL='#PatientList';
 		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
     });
+
+    /*Dennis: this overrides the default behavior of clicking the today button in jqueryui*/
+    var _gotoToday = jQuery.datepicker._gotoToday;
+    // datepicker is directly inside the jQuery object, so override that
+    jQuery.datepicker._gotoToday = function (a) {
+        var target = jQuery(a);
+        var inst = this._getInst(target[0]);
+        var DemoDateCookieY = parseInt(getCookie("DemoDateCookieY"));
+        var DemoDateCookieM = parseInt(getCookie("DemoDateCookieM"));
+        var DemoDateCookieD = parseInt(getCookie("DemoDateCookieD"));
+        if (DemoDateCookieY != null && DemoDateCookieY != "" && !isNaN(DemoDateCookieY)) {
+            inst.selectedYear = DemoDateCookieY;
+            inst.selectedMonth = DemoDateCookieM - 1;
+            inst.selectedDay = DemoDateCookieD;
+        }
+        // Dennis: if the default behaviour of the "Today" button is needed, uncomment next line
+        // _gotoToday.call(this, a);
+        // now do an additional call to _selectDate which will set the date and close
+        // close the datepicker (if it is not inline)
+        jQuery.datepicker._selectDate(a,
+        jQuery.datepicker._formatDate(inst, inst.selectedDay, inst.selectedMonth, inst.selectedYear));
+    }
+
+    function getCookie(c_name) {
+        var i, x, y, ARRcookies = document.cookie.split(";");
+        for (i = 0; i < ARRcookies.length; i++) {
+            x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+            y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+            x = x.replace(/^\s+|\s+$/g, "");
+            if (x == c_name) {
+                return unescape(y);
+            }
+        }
+    }
 
     $("#datepicker").datepicker({
         onSelect: function (dateText, datePickerInstance) {

@@ -98,7 +98,7 @@
 		 <div id="FilterPicker">
             <div class="toolbar">
                 <h1>Date Picker</h1>
-                <a class="home" href="#">Home</a>
+                <a class="appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
             </div>
             <div id="FilterPickerContents">
 				<div id="datepicker"></div>
