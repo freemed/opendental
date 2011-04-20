@@ -37,6 +37,7 @@ namespace OpenDental{
 			this.listMain.Name = "listMain";
 			this.listMain.Size = new System.Drawing.Size(268,251);
 			this.listMain.TabIndex = 9;
+			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// butAdd
 			// 

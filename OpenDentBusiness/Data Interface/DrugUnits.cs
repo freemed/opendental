@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM drugunit ORDER BY UnitText";
+			string command="SELECT * FROM drugunit ORDER BY UnitIdentifier";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="DrugUnit";
 			FillCache(table);
@@ -44,6 +44,14 @@ namespace OpenDentBusiness{
 			listt=Crud.DrugUnitCrud.TableToList(table);
 		}
 		#endregion
+
+		///<summary>Gets one DrugUnit from the db.</summary>
+		public static DrugUnit GetOne(long drugUnitNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<DrugUnit>(MethodBase.GetCurrentMethod(),drugUnitNum);
+			}
+			return Crud.DrugUnitCrud.SelectOne(drugUnitNum);
+		}
 
 		///<summary></summary>
 		public static long Insert(DrugUnit drugUnit){
@@ -83,14 +91,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM drugunit WHERE PatNum = "+POut.Long(patNum);
 			return Crud.DrugUnitCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one DrugUnit from the db.</summary>
-		public static DrugUnit GetOne(long drugUnitNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<DrugUnit>(MethodBase.GetCurrentMethod(),drugUnitNum);
-			}
-			return Crud.DrugUnitCrud.SelectOne(drugUnitNum);
 		}
 		*/
 

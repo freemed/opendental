@@ -22,8 +22,18 @@ namespace OpenDental {
 			VaccineDefs.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<VaccineDefs.Listt.Count;i++) {
-				listMain.Items.Add(VaccineDefs.Listt[i].VaccineName);
+				listMain.Items.Add(VaccineDefs.Listt[i].CVXCode + " - " + VaccineDefs.Listt[i].VaccineName);
 			}
+		}
+
+		private void listMain_DoubleClick(object sender,EventArgs e) {
+			if(listMain.SelectedIndex==-1) {
+				return;
+			}
+			FormVaccineDefEdit FormV=new FormVaccineDefEdit();
+			FormV.VaccineDefCur=VaccineDefs.Listt[listMain.SelectedIndex];
+			FormV.ShowDialog();
+			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {

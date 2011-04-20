@@ -43,7 +43,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(218,115);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 3;
+			this.butOK.TabIndex = 2;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -58,7 +58,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(299,115);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 2;
+			this.butCancel.TabIndex = 3;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -75,7 +75,7 @@ namespace OpenDental{
 			this.butDelete.Location = new System.Drawing.Point(26,115);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(79,24);
-			this.butDelete.TabIndex = 108;
+			this.butDelete.TabIndex = 4;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.textManufacturerName.Location = new System.Drawing.Point(137,28);
 			this.textManufacturerName.Name = "textManufacturerName";
 			this.textManufacturerName.Size = new System.Drawing.Size(237,20);
-			this.textManufacturerName.TabIndex = 112;
+			this.textManufacturerName.TabIndex = 0;
 			// 
 			// labelManufacturerName
 			// 
@@ -100,7 +100,7 @@ namespace OpenDental{
 			this.textManufacturerCode.Location = new System.Drawing.Point(137,53);
 			this.textManufacturerCode.Name = "textManufacturerCode";
 			this.textManufacturerCode.Size = new System.Drawing.Size(82,20);
-			this.textManufacturerCode.TabIndex = 110;
+			this.textManufacturerCode.TabIndex = 1;
 			// 
 			// labelManufacturerCode
 			// 

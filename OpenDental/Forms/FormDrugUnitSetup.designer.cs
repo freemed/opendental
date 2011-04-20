@@ -37,6 +37,7 @@ namespace OpenDental{
 			this.listMain.Name = "listMain";
 			this.listMain.Size = new System.Drawing.Size(268,251);
 			this.listMain.TabIndex = 12;
+			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// butAdd
 			// 
@@ -68,7 +69,7 @@ namespace OpenDental{
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 11;
 			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click_1);
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// FormDrugUnitSetup
 			// 

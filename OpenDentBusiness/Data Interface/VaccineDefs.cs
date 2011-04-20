@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM vaccinedef ORDER BY VaccineName";//stub query probably needs to be changed
+			string command="SELECT * FROM vaccinedef ORDER BY CVXCode";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="VaccineDef";
 			FillCache(table);
@@ -44,18 +44,6 @@ namespace OpenDentBusiness{
 			listt=Crud.VaccineDefCrud.TableToList(table);
 		}
 		#endregion
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<VaccineDef> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<VaccineDef>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM vaccinedef WHERE PatNum = "+POut.Long(patNum);
-			return Crud.VaccineDefCrud.SelectMany(command);
-		}
 
 		///<summary>Gets one VaccineDef from the db.</summary>
 		public static VaccineDef GetOne(long vaccineDefNum){
@@ -91,6 +79,18 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM vaccinedef WHERE VaccineDefNum = "+POut.Long(vaccineDefNum);
 			Db.NonQ(command);
+		}
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		///<summary></summary>
+		public static List<VaccineDef> Refresh(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<VaccineDef>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM vaccinedef WHERE PatNum = "+POut.Long(patNum);
+			return Crud.VaccineDefCrud.SelectMany(command);
 		}
 		*/
 

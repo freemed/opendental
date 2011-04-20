@@ -18,24 +18,43 @@ namespace OpenDental {
 		}
 
 		private void FormDrugManufacturerEdit_Load(object sender,EventArgs e) {
-			textManufacturerName.Text=DrugManufacturerCur.ManufacturerName.ToString();
-			textManufacturerCode.Text=DrugManufacturerCur.ManufacturerCode.ToString();
+			textManufacturerName.Text=DrugManufacturerCur.ManufacturerName;
+			textManufacturerCode.Text=DrugManufacturerCur.ManufacturerCode;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
-			if(IsNew) {
-				DialogResult=DialogResult.Cancel;
-			}
 			else {
 				DrugManufacturers.Delete(DrugManufacturerCur.DrugManufacturerNum);
-				DialogResult=DialogResult.OK;
+				DialogResult=DialogResult.Cancel;
 			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textManufacturerName.Text=="" || textManufacturerCode.Text=="") {
+				MsgBox.Show(this,"Bank fields are not allowed.");
+				return;
+			}
+			DrugManufacturerCur.ManufacturerName=textManufacturerName.Text;
+			DrugManufacturerCur.ManufacturerCode=textManufacturerCode.Text;
+			if(IsNew) {
+				for(int i=0;i<DrugManufacturers.Listt.Count;i++) {
+					if(DrugManufacturers.Listt[i].ManufacturerCode==textManufacturerCode.Text) {
+						MsgBox.Show(this,"Manufacturer with this code already exists.");
+						return;
+					}
+				}
+				DrugManufacturers.Insert(DrugManufacturerCur);
+			}
+			else {
+				DrugManufacturers.Update(DrugManufacturerCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

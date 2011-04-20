@@ -43,7 +43,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(185,98);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 3;
+			this.butOK.TabIndex = 2;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -58,7 +58,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(266,98);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 2;
+			this.butCancel.TabIndex = 3;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -75,7 +75,7 @@ namespace OpenDental{
 			this.butDelete.Location = new System.Drawing.Point(26,98);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(79,24);
-			this.butDelete.TabIndex = 109;
+			this.butDelete.TabIndex = 4;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.textUnitText.Location = new System.Drawing.Point(113,53);
 			this.textUnitText.Name = "textUnitText";
 			this.textUnitText.Size = new System.Drawing.Size(228,20);
-			this.textUnitText.TabIndex = 113;
+			this.textUnitText.TabIndex = 1;
 			// 
 			// label1
 			// 
@@ -100,7 +100,7 @@ namespace OpenDental{
 			this.textUnitIdentifier.Location = new System.Drawing.Point(113,27);
 			this.textUnitIdentifier.Name = "textUnitIdentifier";
 			this.textUnitIdentifier.Size = new System.Drawing.Size(77,20);
-			this.textUnitIdentifier.TabIndex = 111;
+			this.textUnitIdentifier.TabIndex = 0;
 			// 
 			// labelCVXCode
 			// 

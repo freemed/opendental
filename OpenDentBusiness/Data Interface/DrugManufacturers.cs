@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM drugmanufacturer ORDER BY ManufacturerName";
+			string command="SELECT * FROM drugmanufacturer ORDER BY ManufacturerCode";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="DrugManufacturer";
 			FillCache(table);
@@ -44,6 +44,14 @@ namespace OpenDentBusiness{
 			listt=Crud.DrugManufacturerCrud.TableToList(table);
 		}
 		#endregion
+
+		///<summary>Gets one DrugManufacturer from the db.</summary>
+		public static DrugManufacturer GetOne(long drugManufacturerNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<DrugManufacturer>(MethodBase.GetCurrentMethod(),drugManufacturerNum);
+			}
+			return Crud.DrugManufacturerCrud.SelectOne(drugManufacturerNum);
+		}
 
 		///<summary></summary>
 		public static long Insert(DrugManufacturer drugManufacturer){
@@ -83,14 +91,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM drugmanufacturer WHERE PatNum = "+POut.Long(patNum);
 			return Crud.DrugManufacturerCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one DrugManufacturer from the db.</summary>
-		public static DrugManufacturer GetOne(long drugManufacturerNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<DrugManufacturer>(MethodBase.GetCurrentMethod(),drugManufacturerNum);
-			}
-			return Crud.DrugManufacturerCrud.SelectOne(drugManufacturerNum);
 		}
 		*/
 

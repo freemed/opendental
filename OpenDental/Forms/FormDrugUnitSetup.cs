@@ -22,8 +22,18 @@ namespace OpenDental {
 			DrugUnits.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<DrugUnits.Listt.Count;i++) {
-				listMain.Items.Add(DrugUnits.Listt[i].UnitText);
+				listMain.Items.Add(DrugUnits.Listt[i].UnitIdentifier + " - " + DrugUnits.Listt[i].UnitText);
 			}
+		}
+
+		private void listMain_DoubleClick(object sender,EventArgs e) {
+			if(listMain.SelectedIndex==-1) {
+				return;
+			}
+			FormDrugUnitEdit FormD=new FormDrugUnitEdit();
+			FormD.DrugUnitCur=DrugUnits.Listt[listMain.SelectedIndex];
+			FormD.ShowDialog();
+			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -35,10 +45,6 @@ namespace OpenDental {
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
-
-		}
-
-		private void butClose_Click_1(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 	}

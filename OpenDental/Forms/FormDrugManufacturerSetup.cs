@@ -22,8 +22,18 @@ namespace OpenDental {
 			DrugManufacturers.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<DrugManufacturers.Listt.Count;i++) {
-				listMain.Items.Add(DrugManufacturers.Listt[i].ManufacturerName);
+				listMain.Items.Add(DrugManufacturers.Listt[i].ManufacturerCode + " - " + DrugManufacturers.Listt[i].ManufacturerName);
 			}
+		}
+
+		private void listMain_DoubleClick(object sender,EventArgs e) {
+			if(listMain.SelectedIndex==-1) {
+				return;
+			}
+			FormDrugManufacturerEdit FormD=new FormDrugManufacturerEdit();
+			FormD.DrugManufacturerCur=DrugManufacturers.Listt[listMain.SelectedIndex];
+			FormD.ShowDialog();
+			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {

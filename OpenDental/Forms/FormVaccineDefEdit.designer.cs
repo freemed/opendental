@@ -60,7 +60,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(255,135);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 2;
+			this.butCancel.TabIndex = 4;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -80,14 +80,14 @@ namespace OpenDental{
 			this.comboManufacturer.Location = new System.Drawing.Point(101,83);
 			this.comboManufacturer.Name = "comboManufacturer";
 			this.comboManufacturer.Size = new System.Drawing.Size(173,21);
-			this.comboManufacturer.TabIndex = 21;
+			this.comboManufacturer.TabIndex = 2;
 			// 
 			// textVaccineName
 			// 
 			this.textVaccineName.Location = new System.Drawing.Point(101,57);
 			this.textVaccineName.Name = "textVaccineName";
 			this.textVaccineName.Size = new System.Drawing.Size(229,20);
-			this.textVaccineName.TabIndex = 20;
+			this.textVaccineName.TabIndex = 1;
 			// 
 			// label1
 			// 
@@ -103,7 +103,7 @@ namespace OpenDental{
 			this.textCVXCode.Location = new System.Drawing.Point(101,31);
 			this.textCVXCode.Name = "textCVXCode";
 			this.textCVXCode.Size = new System.Drawing.Size(77,20);
-			this.textCVXCode.TabIndex = 18;
+			this.textCVXCode.TabIndex = 0;
 			// 
 			// labelCVXCode
 			// 
@@ -127,7 +127,7 @@ namespace OpenDental{
 			this.butDelete.Location = new System.Drawing.Point(25,135);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(79,24);
-			this.butDelete.TabIndex = 109;
+			this.butDelete.TabIndex = 5;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
