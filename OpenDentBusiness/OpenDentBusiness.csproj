@@ -206,6 +206,8 @@
     <Compile Include="Crud\JournalEntryCrud.cs" />
     <Compile Include="Crud\LabCaseCrud.cs" />
     <Compile Include="Crud\LaboratoryCrud.cs" />
+    <Compile Include="Crud\LabPanelCrud.cs" />
+    <Compile Include="Crud\LabResultCrud.cs" />
     <Compile Include="Crud\LabTurnaroundCrud.cs" />
     <Compile Include="Crud\LanguageCrud.cs" />
     <Compile Include="Crud\LanguageForeignCrud.cs" />
@@ -335,6 +337,8 @@
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\ICD9s.cs" />
     <Compile Include="Data Interface\InsSubs.cs" />
+    <Compile Include="Data Interface\LabPanels.cs" />
+    <Compile Include="Data Interface\LabResults.cs" />
     <Compile Include="Data Interface\MedicalOrders.cs" />
     <Compile Include="Data Interface\OrionProcs.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />

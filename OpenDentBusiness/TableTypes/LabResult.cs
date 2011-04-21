@@ -16,6 +16,7 @@ namespace OpenDentBusiness{
 		///<summary>From OBX-3.</summary>
 		public string TestPerformed;
 		///<summary>To be used for synch with web server.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 
 		///<summary></summary>

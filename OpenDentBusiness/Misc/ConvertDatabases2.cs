@@ -4468,15 +4468,69 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To8_0_0() {
 			if(FromVersion<new Version("8.0.0.0")) {
 				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS labpanel";
+					Db.NonQ(command);
+					command=@"CREATE TABLE labpanel (
+						LabPanelNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						MedicalOrderNum bigint NOT NULL,
+						RawMessage text NOT NULL,
+						LabNameAddress varchar(255) NOT NULL,
+						DateTStamp timestamp,
+						INDEX(PatNum),
+						INDEX(MedicalOrderNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE labpanel'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE labpanel (
+						LabPanelNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						MedicalOrderNum number(20) NOT NULL,
+						RawMessage clob,
+						LabNameAddress varchar2(255),
+						DateTStamp timestamp,
+						CONSTRAINT labpanel_LabPanelNum PRIMARY KEY (LabPanelNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX labpanel_PatNum ON labpanel (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX labpanel_MedicalOrderNum ON labpanel (MedicalOrderNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS labresult";
+					Db.NonQ(command);
+					command=@"CREATE TABLE labresult (
+						LabResultNum bigint NOT NULL auto_increment PRIMARY KEY,
+						LabPanelNum bigint NOT NULL,
+						DateTest date NOT NULL DEFAULT '0001-01-01',
+						TestPerformed varchar(255) NOT NULL,
+						DateTStamp timestamp,
+						INDEX(LabPanelNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE labresult'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE labresult (
+						LabResultNum number(20) NOT NULL,
+						LabPanelNum number(20) NOT NULL,
+						DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						TestPerformed varchar2(255),
+						DateTStamp timestamp,
+						CONSTRAINT labresult_LabResultNum PRIMARY KEY (LabResultNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX labresult_LabPanelNum ON labresult (LabPanelNum)";
+					Db.NonQ(command);
+				}
 
-
-
-
-
-
-
-
-
+				
 
 
 
@@ -4503,28 +4557,16 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 }
 
 
+
+
+
+
+
+
+
+
+
+				
+				
+
 			
-
-
-
-				
-
-
-				
-
-
-
-
-
-				
-
-
-
-
-	
-
-
-
-
-
-

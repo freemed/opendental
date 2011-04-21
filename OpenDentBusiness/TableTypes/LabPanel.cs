@@ -14,10 +14,12 @@ namespace OpenDentBusiness{
 		///<summary>FK to medicalorder.MedicalOrderNum.</summary>
 		public long MedicalOrderNum;
 		///<summary>The entire raw HL7 message</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string RawMessage;
 		///<summary>Both name and address in a single field.  From OBR-20</summary>
-		public string Length;
+		public string LabNameAddress;
 		///<summary>To be used for synch with web server.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 
 		///<summary></summary>
