@@ -1336,18 +1336,19 @@ namespace OpenDentBusiness{
 
 				CREATE TABLE tempannualmax(
 				PlanNum bigint unsigned NOT NULL,
-				AnnualMax double NOT NULL,
+				AnnualMax double,
 				PRIMARY KEY (PlanNum));";
 			Db.NonQ(command);
+			DateTime renewDate=BenefitLogic.ComputeRenewDate(DateTime.Now,monthStart);
 			command=@"INSERT INTO tempused
 SELECT patplan.PatPlanNum,
 SUM(IFNULL(claimproc.InsPayAmt,0))
 FROM claimproc
 LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
-AND patplan.PlanNum = claimproc.PlanNum
+AND patplan.InsSubNum = claimproc.InsSubNum
 WHERE claimproc.Status IN (1, 3, 4)
-AND claimproc.ProcDate BETWEEN makedate("+DbHelper.Year(DbHelper.Now())+", 1) "
-+"AND makedate("+DbHelper.Year(DbHelper.Now())+"+1, 1) "/*current calendar year*/
+AND claimproc.ProcDate >= "+POut.Date(renewDate)+" "  //  MAKEDATE("+renewDate.Year+", "+renewDate.Month+") "
++"AND claimproc.ProcDate < "+POut.Date(renewDate.AddYears(1))+" "   //MAKEDATE("+renewDate.Year+"+1, "+renewDate.Month+") "
 +"GROUP BY patplan.PatPlanNum";
 			Db.NonQ(command);
 			command=@"INSERT INTO tempplanned
@@ -1356,25 +1357,30 @@ FROM procedurelog
 LEFT JOIN procedurecode ON procedurecode.CodeNum = procedurelog.CodeNum
 WHERE ProcStatus = 1 /*treatment planned*/";
 			if(code1!="") {
-				command+=@" AND (((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=-1))
-				AND (((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=1))";
+				command+=" AND procedurecode.ProcCode >= '"+POut.String(code1)+"' "
+					+" AND procedurecode.ProcCode <= '"+POut.String(code2)+"' ";
+				//command+=@" AND (((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code1)+@"', ProcCode))=-1))
+				//AND (((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=0) OR ((SELECT STRCMP('"+POut.String(code2)+@"', ProcCode))=1))";
 			}
 			command+="AND procedurelog.ProcDate>"+POut.DateT(dateSince)+" "
 				+"GROUP BY PatNum";
 			Db.NonQ(command);
 			command=@"INSERT INTO tempannualmax
-SELECT benefit.PlanNum, MAX(benefit.MonetaryAmt) /*for oracle in case there's more than one*/
-FROM benefit, covcat, insplan
-WHERE benefit.CovCatNum = covcat.CovCatNum
-AND benefit.PlanNum=insplan.PlanNum 
-AND benefit.BenefitType = 5 /* limitation */
+SELECT insplan.PlanNum, 
+(SELECT MAX(MonetaryAmt)/*for oracle in case there's more than one*/
+FROM benefit
+LEFT JOIN covcat ON benefit.CovCatNum=covcat.CovCatNum
+WHERE benefit.PlanNum=insplan.PlanNum 
 AND (covcat.EbenefitCat=1 OR ISNULL(covcat.EbenefitCat))
+AND benefit.BenefitType = 5 /* limitation */
 AND benefit.MonetaryAmt > 0
-AND benefit.QuantityQualifier=0 ";
-			if(monthStart!=13) {
-				command+="AND insplan.MonthRenew='"+POut.Int(monthStart)+"' ";
-			}
-			command+="GROUP BY benefit.PlanNum ORDER BY benefit.PlanNum";
+AND benefit.QuantityQualifier=0
+GROUP BY insplan.PlanNum)
+FROM insplan"; 
+			//WHERE insplan.MonthRenew='"+POut.Int(monthStart)+"'";
+			//if(monthStart!=13) {//belongs further down, in the WHERE of the final query
+			//	command+="AND insplan.MonthRenew='"+POut.Int(monthStart)+"' ";
+			//}
 			Db.NonQ(command);
 			command=@"SELECT patient.PatNum, patient.LName, patient.FName,
 				patient.Email, patient.HmPhone, patient.PreferRecallMethod,
@@ -1388,16 +1394,17 @@ AND benefit.QuantityQualifier=0 ";
 				FROM patient
 				LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
 				LEFT JOIN patplan ON patient.PatNum=patplan.PatNum
+				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
 				LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
 				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
-					AND tempannualmax.AnnualMax>0
-					/*AND tempannualmax.AnnualMax-tempused.AmtUsed>0*/
+				AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0)/*may not be necessary*/
 				WHERE tempplanned.AmtPlanned>0 ";
 			if(!noIns) {//if we don't want patients without insurance
-				command+="AND AnnualMax > 0 AND patplan.Ordinal=1 ";
+				command+=@"AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0) AND patplan.Ordinal=1 "	
+				+"AND insplan.MonthRenew="+POut.Int(monthStart)+" ";
 			}
 			if(!(aboveAmount==0 && noIns)){
-				command+="AND tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+" ";
+				command+=@"AND tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+" ";
 			}
 			for(int i=0;i<providerFilter.Count;i++) {
 				if(i==0) {
