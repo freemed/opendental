@@ -97,6 +97,9 @@ namespace OpenDental {
 		private bool TestWebServiceExists() {
 			try {
 				wh.Url=textboxWebHostAddress.Text;
+				if(textboxWebHostAddress.Text.Contains("192.168.0.196") || textboxWebHostAddress.Text.Contains("localhost")) {
+					IgnoreCertificateErrors();// done so that TestWebServiceExists() does not thow an error.
+				}
 				if(wh.ServiceExists()){
 					return true;
 				}

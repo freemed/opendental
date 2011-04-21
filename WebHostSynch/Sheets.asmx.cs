@@ -32,6 +32,7 @@ namespace WebHostSynch {
 		public bool SetPreferences(string RegistrationKey,int ColorBorder) {
 			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
+				/*
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				if(DentalOfficeID==0) {
 				}
@@ -47,10 +48,17 @@ namespace WebHostSynch {
 					webforms_preference wspNewObj=new webforms_preference();
 					wspNewObj.DentalOfficeID=DentalOfficeID;
 					wspNewObj.ColorBorder=ColorBorder;
+					wspNewObj.CultureName="";//empty string because null is not allowed
 					db.AddTowebforms_preference(wspNewObj);
 				}
 				db.SaveChanges();
 				Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
+				*/
+				webforms_preference wspNewObj=new webforms_preference();
+				wspNewObj.DentalOfficeID=DentalOfficeID;
+				wspNewObj.ColorBorder=ColorBorder;
+				wspNewObj.CultureName="";//empty string because null is not allowed
+				SetPreferencesV2(RegistrationKey,wspNewObj);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
@@ -60,12 +68,11 @@ namespace WebHostSynch {
 		}
 
 		/// <summary>
-		/// Cannot easily overload a method in webservices hence the suffix V2
+		/// Newer version of SetPreferences. From OD version 7.9. Note: Cannot easily overload a method in webservices hence the suffix V2
 		/// </summary>
 		[WebMethod]
 		public bool SetPreferencesV2(string RegistrationKey,webforms_preference prefObj) {
 			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
-			int ColorBorder;
 			try {
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				if(DentalOfficeID==0) {
@@ -93,7 +100,6 @@ namespace WebHostSynch {
 
 		[WebMethod]
 		public webforms_preference GetPreferences(string RegistrationKey) {
-				
 			Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKey);
             ODWebServiceEntities db=new ODWebServiceEntities();
 			webforms_preference wspObj=null;
@@ -112,17 +118,17 @@ namespace WebHostSynch {
 					wspObj=new webforms_preference();
 					wspObj.DentalOfficeID=DentalOfficeID;
 					wspObj.ColorBorder=DefaultColorBorder;
-					db.AddTowebforms_preference(wspObj);
+					wspObj.CultureName="";//empty string because null is not allowed
+					SetPreferencesV2(RegistrationKey,wspObj);
 					Logger.Information("new entry IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 				}
-				db.SaveChanges();
 				Logger.Information("In GetPreferences IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
-				return wspObj;;
+				return wspObj;
 			}
-			return wspObj;;
+			return wspObj;
 		}
 
 		[WebMethod]
@@ -131,6 +137,7 @@ namespace WebHostSynch {
 			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
 				if(DentalOfficeID==0) {
+					return sAndsfList;
 				}
 				ODWebServiceEntities db=new ODWebServiceEntities();
 				var wsRes=from wsf in db.webforms_sheet

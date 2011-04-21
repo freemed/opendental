@@ -7,9 +7,25 @@
 <title></title>
 	<script type="text/javascript">
 		function pageLoad() {
-			$get("" + $get("dateToday").value).innerHTML = new Date().localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern);
-			
-		}		
+			//change date on the form which is visible to the user
+			if ($get("dateToday") != null && $get("" + $get("dateToday").value) != null) {
+				var str = $get("" + $get("dateToday").value).innerHTML;
+				var strBrowserDateToday = (new Date()).localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern);
+				$get("" + $get("dateToday").value).innerHTML = str.replace("[dateToday]", strBrowserDateToday);
+				//set local date on cookie to be read by server
+				var today = new Date();
+				setCookie("DateCookieY", today.getFullYear(), 1);
+				setCookie("DateCookieM", today.getMonth() + 1, 1);
+				setCookie("DateCookieD", today.getDate(), 1);
+			}			
+		}
+
+		function setCookie(c_name, value, exdays) {
+			var exdate = new Date();
+			exdate.setDate(exdate.getDate() + exdays);
+			var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+			document.cookie = c_name + "=" + c_value;
+		}	
 	</script>
 </head>
 <body id="bodytag" runat="server">

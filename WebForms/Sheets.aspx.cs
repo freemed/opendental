@@ -46,7 +46,8 @@ namespace WebForms {
 		}
 
 		private void GeneratePage(long DentalOfficeID,long WebSheetDefID) {
-			try {	int FormXOffset=37;
+			try {	
+					int FormXOffset=37;
 					int FormYOffset=26;
 					int ImageXOffset=0;
 					int ImageYOffset=0;
@@ -118,9 +119,8 @@ namespace WebForms {
 						if(FieldType==SheetFieldType.StaticText) {
 							Label lb=new Label();
 							if(FieldValue.Contains("[dateToday]")) {
-								//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
-								FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",System.Threading.Thread.CurrentThread.CurrentCulture));//culture of the browser
-								AddHiddenField(WebSheetFieldDefID);
+								//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",System.Threading.Thread.CurrentThread.CurrentCulture));//culture of the browser
+								AddHiddenField(WebSheetFieldDefID);// the replacing is done at the client side using javascript via a hidden variable.
 							}
 							lb.Text=FieldValue;
 							wc=lb;
@@ -377,6 +377,13 @@ namespace WebForms {
 						FormValuesHashTable.Add(FieldName,"X");
 					}
 				}
+				if(c.GetType()==typeof(HiddenField)) {
+					HiddenField hf=((HiddenField)c);
+					string FieldName=hf.ID;
+					if(hf.Value.Trim()!="") {
+						FormValuesHashTable.Add(FieldName,hf.Value.Trim());
+					}
+				}
 			}
 			catch(Exception ex) {
 				Logger.Information(ex.Message.ToString()+" IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
@@ -424,17 +431,17 @@ namespace WebForms {
 					#region  saving dates in right formats
 						string FieldValue=NewSheetfieldObj.FieldValue;
 						string FieldName=NewSheetfieldObj.FieldName;
-						string CultureName=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID).First().CultureName;
+						string CultureName=db.webforms_preference.Where(pref=>pref.DentalOfficeID==DentalOfficeID).First().CultureName;// culture of the opendental installation
+						if(String.IsNullOrEmpty(CultureName)) {
+							CultureName="en-US";
+						}
 						if(FieldValue.Contains("[dateToday]")) {
-							//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("M/d/yyyy"));
-							FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",new CultureInfo(CultureName,false)));
+							FieldValue=FieldValue.Replace("[dateToday]",ExtractBrowserDate().ToString("d",new CultureInfo(CultureName,false)));
 							NewSheetfieldObj.FieldValue=FieldValue;
 						}
 						if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
-							//use the browsers culture to get correct date.
-							DateTime birthdate=DateTime.Parse(FieldValue,System.Threading.Thread.CurrentThread.CurrentCulture);
-							//now convert the birthdate into a string using the culture of the corresponding opendental installation.
-							FieldValue= birthdate.ToString("d",new CultureInfo(CultureName,false));
+							DateTime birthdate=DateTime.Parse(FieldValue,System.Threading.Thread.CurrentThread.CurrentCulture);//use the browsers culture to get correct date.
+							FieldValue= birthdate.ToString("d",new CultureInfo(CultureName,false));//now convert the birthdate into a string using the culture of the corresponding opendental installation.
 							NewSheetfieldObj.FieldValue=FieldValue;
 						}
 					#endregion
@@ -453,6 +460,26 @@ namespace WebForms {
 				Panel1.Visible=false;
 				DisplayMessage("There has been a problem submitting your details. <br /> We apologize for the inconvenience.");
 			}
+		}
+
+		private DateTime ExtractBrowserDate() {
+			DateTime BrowserDateToday=DateTime.Today;
+			try {
+				if(Request.Cookies["DateCookieY"] != null && Request.Cookies["DateCookieM"] != null &&Request.Cookies["DateCookieD"] != null) {
+					int y=0;
+					int m=0;
+					int d=0;
+					int.TryParse(Request.Cookies["DateCookieY"].Value,out y) ;
+					int.TryParse(Request.Cookies["DateCookieM"].Value,out m) ;
+					int.TryParse(Request.Cookies["DateCookieD"].Value,out d) ;
+					BrowserDateToday= new DateTime(y,m,d);
+				}
+			}
+			catch(Exception ex) {
+				//default to todays date
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
+			}
+			return BrowserDateToday;
 		}
 
 		private void DisplayMessage(String Message) {
