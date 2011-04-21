@@ -647,6 +647,8 @@
     <Compile Include="TableTypes\EhrMeasure.cs" />
     <Compile Include="TableTypes\Formulary.cs" />
     <Compile Include="TableTypes\FormularyMed.cs" />
+    <Compile Include="TableTypes\LabPanel.cs" />
+    <Compile Include="TableTypes\LabResult.cs" />
     <Compile Include="TableTypes\MedicalOrder.cs" />
     <Compile Include="TableTypes\CreditCard.cs" />
     <Compile Include="TableTypes\ICD9.cs" />
