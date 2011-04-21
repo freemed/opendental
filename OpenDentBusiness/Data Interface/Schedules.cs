@@ -440,7 +440,7 @@ namespace OpenDentBusiness{
 			dateSched=dateStart;
 			while(dateSched<=dateEnd){
 				table.Rows[GetRowCal(dateStart,dateSched)][(int)dateSched.DayOfWeek]=
-					dateSched.ToString("MMM d");
+					dateSched.ToString("MMM d, yyyy");
 				dateSched=dateSched.AddDays(1);
 			}
 			int rowI;

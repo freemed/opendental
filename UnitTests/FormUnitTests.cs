@@ -119,6 +119,18 @@ namespace UnitTests {
 			else {
 				textResults.Text+=DatabaseTools.ClearDb();
 			}
+			try{
+				textResults.Text+=BenefitT.BenefitComputeRenewDate();
+			}
+			catch(Exception ex) {
+				textResults.Text+=ex.Message;//failed
+			}
+			try {
+				textResults.Text+=ToothT.FormatRanges();
+			}
+			catch(Exception ex) {
+				textResults.Text+=ex.Message;//failed
+			}
 			int specificTest=0;
 			try {
 				Application.DoEvents();
@@ -200,16 +212,6 @@ namespace UnitTests {
 			}
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
-
-
-
-			//SetDbConnection();
-			/*
-			BenefitComputeRenewDate();
-			ToothFormatRanges();
-			textResults.Text+="Done.";
-			textResults.SelectionStart=textResults.Text.Length;
-			*/
 		}
 
 	
