@@ -153,6 +153,8 @@ namespace OpenDentBusiness {
 		MainWindowTitle,
 		MedicalEclaimsEnabled,
 		MobileSyncDateTimeLastRun,
+		///<summary>Used one time after the conversion to 7.9 for initial synch of the provider table.</summary>
+		MobileSynchNewTables79,
 		MobileSyncIntervalMinutes,
 		MobileSyncServerURL,
 		MobileSyncWorkstationName,

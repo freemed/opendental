@@ -4462,6 +4462,23 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.9.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_9_2();
+		}
+
+		private static void To7_9_2() {
+			if(FromVersion<new Version("7.9.2.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSynchNewTables79','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MobileSynchNewTables79','0')";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '7.9.2.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To8_0_0();
 		}
 
