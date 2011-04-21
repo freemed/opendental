@@ -331,11 +331,16 @@ namespace OpenDental {
 
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
 		private static void UploadWorker(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
+			
+			DateTime changedSinceForMobileSynchNewTables79=changedSince;
+			if(PrefC.GetInt(PrefName.MobileSynchNewTables79)==0) {
+				changedSinceForMobileSynchNewTables79=DateTime.MinValue;// this is a one time thing
+			}
 			//MobileWeb
 			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSince);
+			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSinceForMobileSynchNewTables79);
 			//Pat portal
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
@@ -345,13 +350,11 @@ namespace OpenDental {
 			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-			//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSince).Where(d=>d.ObjectType==DeletedObjectType.Appointment).ToList();
-			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSince);
+			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSinceForMobileSynchNewTables79);
 			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
 							+medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count+dO.Count;
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
-			DeleteObjects(dO,ref FormP);
 			SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
 			SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
 			SynchGeneric(rxNumList,SynchEntity.prescription,ref FormP);
@@ -363,6 +366,8 @@ namespace OpenDental {
 			SynchGeneric(diseaseDefNumList,SynchEntity.disease,ref FormP);
 			SynchGeneric(diseaseNumList,SynchEntity.diseasedef,ref FormP);
 			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
+			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
+			Prefs.UpdateInt(PrefName.MobileSynchNewTables79,1);
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 			IsSynching=false;
 		}
@@ -371,60 +376,65 @@ namespace OpenDental {
 		/// a general function to reduce the amount of code for uploading
 		/// </summary>
 		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,ref FormProgress progressIndicator) {
-			int LocalBatchSize=BatchSize;
-			for(int start=0;start<PKNumList.Count;start+=LocalBatchSize) {
-				if((start+LocalBatchSize)>PKNumList.Count) {
-					LocalBatchSize=PKNumList.Count-start;
-				}
-				List<long> BlockPKNumList=PKNumList.GetRange(start,LocalBatchSize);
-				switch(entity) {
-					case SynchEntity.patient:
-						List<Patientm> changedPatientmList=Patientms.GetMultPats(BlockPKNumList);
-						mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
-					break;
-					case SynchEntity.appointment:
-						List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(BlockPKNumList);
-						mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
-					break;
-					case SynchEntity.prescription:
-						List<RxPatm> changedRxList=RxPatms.GetMultRxPats(BlockPKNumList);
-						mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
-					break;
-					case SynchEntity.provider:
-						List<Providerm> changedProvList=Providerms.GetMultProviderms(BlockPKNumList);
-						mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
-					break;
-					case SynchEntity.medication:
-						List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
-						mb.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
-					break;
-					case SynchEntity.medicationpat:
-						List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
-						mb.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
-					break;
-					case SynchEntity.allergy:
-						List<Allergym> ChangedAllergyList=Allergyms.GetMultAllergyms(BlockPKNumList);
-						mb.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
-					break;
-					case SynchEntity.allergydef:
-						List<AllergyDefm> ChangedAllergyDefList=AllergyDefms.GetMultAllergyDefms(BlockPKNumList);
-						mb.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
-					break;
-					case SynchEntity.disease:
-						List<Diseasem> ChangedDiseaseList=Diseasems.GetMultDiseasems(BlockPKNumList);
-						mb.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
-					break;
-					case SynchEntity.diseasedef:
-						List<DiseaseDefm> ChangedDiseaseDefList=DiseaseDefms.GetMultDiseaseDefms(BlockPKNumList);
-						mb.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
-					break;
-					case SynchEntity.icd9:
-						List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
-						mb.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
-					break;
+			try{ //Dennis: try catch may not work: Does not work in threads not sure about this
+				int LocalBatchSize=BatchSize;
+				for(int start=0;start<PKNumList.Count;start+=LocalBatchSize) {
+					if((start+LocalBatchSize)>PKNumList.Count) {
+						LocalBatchSize=PKNumList.Count-start;
+					}
+					List<long> BlockPKNumList=PKNumList.GetRange(start,LocalBatchSize);
+					switch(entity) {
+						case SynchEntity.patient:
+							List<Patientm> changedPatientmList=Patientms.GetMultPats(BlockPKNumList);
+							mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
+						break;
+						case SynchEntity.appointment:
+							List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(BlockPKNumList);
+							mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
+						break;
+						case SynchEntity.prescription:
+							List<RxPatm> changedRxList=RxPatms.GetMultRxPats(BlockPKNumList);
+							mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
+						break;
+						case SynchEntity.provider:
+							List<Providerm> changedProvList=Providerms.GetMultProviderms(BlockPKNumList);
+							mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
+						break;
+						case SynchEntity.medication:
+							List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
+							mb.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
+						break;
+						case SynchEntity.medicationpat:
+							List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
+							mb.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
+						break;
+						case SynchEntity.allergy:
+							List<Allergym> ChangedAllergyList=Allergyms.GetMultAllergyms(BlockPKNumList);
+							mb.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
+						break;
+						case SynchEntity.allergydef:
+							List<AllergyDefm> ChangedAllergyDefList=AllergyDefms.GetMultAllergyDefms(BlockPKNumList);
+							mb.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
+						break;
+						case SynchEntity.disease:
+							List<Diseasem> ChangedDiseaseList=Diseasems.GetMultDiseasems(BlockPKNumList);
+							mb.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
+						break;
+						case SynchEntity.diseasedef:
+							List<DiseaseDefm> ChangedDiseaseDefList=DiseaseDefms.GetMultDiseaseDefms(BlockPKNumList);
+							mb.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
+						break;
+						case SynchEntity.icd9:
+							List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
+							mb.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
+						break;
 
+					}
+					progressIndicator.CurrentVal+=BatchSize;
 				}
-				progressIndicator.CurrentVal+=BatchSize;
+			}
+			catch(Exception e) {
+				MessageBox.Show(e.Message);
 			}
 		}
 
