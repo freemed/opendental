@@ -53,6 +53,7 @@ namespace OpenDental {
 			}
 			VaccineDefCur.CVXCode=textCVXCode.Text;
 			VaccineDefCur.VaccineName=textVaccineName.Text;
+			VaccineDefCur.DrugManufacturerNum=DrugManufacturers.Listt[comboManufacturer.SelectedIndex].DrugManufacturerNum;
 			if(IsNew) {
 				for(int i=0;i<VaccineDefs.Listt.Count;i++) {
 					if(VaccineDefs.Listt[i].CVXCode==textCVXCode.Text) {

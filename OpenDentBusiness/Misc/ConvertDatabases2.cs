@@ -4546,7 +4546,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX labresult_LabPanelNum ON labresult (LabPanelNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD PatNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat ADD INDEX (PatNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD PatNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET PatNum = 0 WHERE PatNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY PatNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccinepat_PatNum ON vaccinepat (PatNum)";
+					Db.NonQ(command);
+				}
 				
 
 
@@ -4587,3 +4602,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+
+				/*				
+				*/

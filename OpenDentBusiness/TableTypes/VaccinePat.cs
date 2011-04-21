@@ -21,6 +21,8 @@ namespace OpenDentBusiness {
 		public long DrugUnitNum;
 		///<summary></summary>
 		public string LotNumber;
+		///<summary>FK to patient.PatNum.</summary>
+		public long PatNum;
 
 		///<summary></summary>
 		public VaccinePat Copy() {

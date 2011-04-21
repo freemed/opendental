@@ -99,14 +99,18 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				     POut.Long  (labPanel.PatNum)+","
 				+    POut.Long  (labPanel.MedicalOrderNum)+","
-				+"'"+POut.String(labPanel.RawMessage)+"',"
+				+DbHelper.ParamChar+"paramRawMessage,"
 				+"'"+POut.String(labPanel.LabNameAddress)+"')";
 				//DateTStamp can only be set by MySQL
+			if(labPanel.RawMessage==null) {
+				labPanel.RawMessage="";
+			}
+			OdSqlParameter paramRawMessage=new OdSqlParameter("paramRawMessage",OdDbType.Text,labPanel.RawMessage);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramRawMessage);
 			}
 			else {
-				labPanel.LabPanelNum=Db.NonQ(command,true);
+				labPanel.LabPanelNum=Db.NonQ(command,true,paramRawMessage);
 			}
 			return labPanel.LabPanelNum;
 		}
@@ -116,11 +120,15 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE labpanel SET "
 				+"PatNum         =  "+POut.Long  (labPanel.PatNum)+", "
 				+"MedicalOrderNum=  "+POut.Long  (labPanel.MedicalOrderNum)+", "
-				+"RawMessage     = '"+POut.String(labPanel.RawMessage)+"', "
+				+"RawMessage     =  "+DbHelper.ParamChar+"paramRawMessage, "
 				+"LabNameAddress = '"+POut.String(labPanel.LabNameAddress)+"' "
 				//DateTStamp can only be set by MySQL
 				+"WHERE LabPanelNum = "+POut.Long(labPanel.LabPanelNum);
-			Db.NonQ(command);
+			if(labPanel.RawMessage==null) {
+				labPanel.RawMessage="";
+			}
+			OdSqlParameter paramRawMessage=new OdSqlParameter("paramRawMessage",OdDbType.Text,labPanel.RawMessage);
+			Db.NonQ(command,paramRawMessage);
 		}
 
 		///<summary>Updates one LabPanel in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -136,7 +144,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(labPanel.RawMessage != oldLabPanel.RawMessage) {
 				if(command!=""){ command+=",";}
-				command+="RawMessage = '"+POut.String(labPanel.RawMessage)+"'";
+				command+="RawMessage = "+DbHelper.ParamChar+"paramRawMessage";
 			}
 			if(labPanel.LabNameAddress != oldLabPanel.LabNameAddress) {
 				if(command!=""){ command+=",";}
@@ -146,9 +154,13 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			if(labPanel.RawMessage==null) {
+				labPanel.RawMessage="";
+			}
+			OdSqlParameter paramRawMessage=new OdSqlParameter("paramRawMessage",OdDbType.Text,labPanel.RawMessage);
 			command="UPDATE labpanel SET "+command
 				+" WHERE LabPanelNum = "+POut.Long(labPanel.LabPanelNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramRawMessage);
 		}
 
 		///<summary>Deletes one LabPanel from the database.</summary>

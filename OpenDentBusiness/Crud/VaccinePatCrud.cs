@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				vaccinePat.AdministeredAmt= PIn.Float (table.Rows[i]["AdministeredAmt"].ToString());
 				vaccinePat.DrugUnitNum    = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
 				vaccinePat.LotNumber      = PIn.String(table.Rows[i]["LotNumber"].ToString());
+				vaccinePat.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				retVal.Add(vaccinePat);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VaccinePatNum,";
 			}
-			command+="VaccineDefNum,DateTimeStart,DateTimeEnd,AdministeredAmt,DrugUnitNum,LotNumber) VALUES(";
+			command+="VaccineDefNum,DateTimeStart,DateTimeEnd,AdministeredAmt,DrugUnitNum,LotNumber,PatNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vaccinePat.VaccinePatNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (vaccinePat.DateTimeEnd)+","
 				+    POut.Float (vaccinePat.AdministeredAmt)+","
 				+    POut.Long  (vaccinePat.DrugUnitNum)+","
-				+"'"+POut.String(vaccinePat.LotNumber)+"')";
+				+"'"+POut.String(vaccinePat.LotNumber)+"',"
+				+    POut.Long  (vaccinePat.PatNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"DateTimeEnd    =  "+POut.Date  (vaccinePat.DateTimeEnd)+", "
 				+"AdministeredAmt=  "+POut.Float (vaccinePat.AdministeredAmt)+", "
 				+"DrugUnitNum    =  "+POut.Long  (vaccinePat.DrugUnitNum)+", "
-				+"LotNumber      = '"+POut.String(vaccinePat.LotNumber)+"' "
+				+"LotNumber      = '"+POut.String(vaccinePat.LotNumber)+"', "
+				+"PatNum         =  "+POut.Long  (vaccinePat.PatNum)+" "
 				+"WHERE VaccinePatNum = "+POut.Long(vaccinePat.VaccinePatNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(vaccinePat.LotNumber != oldVaccinePat.LotNumber) {
 				if(command!=""){ command+=",";}
 				command+="LotNumber = '"+POut.String(vaccinePat.LotNumber)+"'";
+			}
+			if(vaccinePat.PatNum != oldVaccinePat.PatNum) {
+				if(command!=""){ command+=",";}
+				command+="PatNum = "+POut.Long(vaccinePat.PatNum)+"";
 			}
 			if(command==""){
 				return;
