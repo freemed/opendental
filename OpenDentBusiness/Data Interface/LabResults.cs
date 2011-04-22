@@ -44,6 +44,33 @@ namespace OpenDentBusiness{
 			listt=Crud.LabResultCrud.TableToList(table);
 		}
 		#endregion
+		public static List<LabResult> Refresh(long LPNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabResult>>(MethodBase.GetCurrentMethod(),LPNum);
+			}
+			string command="SELECT * FROM labresult WHERE LabPanelNum = "+POut.Long(LPNum);
+			return Crud.LabResultCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static void Delete(long labResultNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labResultNum);
+				return;
+			}
+			string command= "DELETE FROM labresult WHERE LabResultNum = "+POut.Long(labResultNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Deletes all Lab Results associated with Lab Panel.</summary>
+		public static void DeletePanel(long labPanelNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labPanelNum);
+				return;
+			}
+			string command= "DELETE FROM labresult WHERE labPanelNum = "+POut.Long(labPanelNum);
+			Db.NonQ(command);
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
@@ -83,15 +110,6 @@ namespace OpenDentBusiness{
 			Crud.LabResultCrud.Update(labResult);
 		}
 
-		///<summary></summary>
-		public static void Delete(long labResultNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),labResultNum);
-				return;
-			}
-			string command= "DELETE FROM labresult WHERE LabResultNum = "+POut.Long(labResultNum);
-			Db.NonQ(command);
-		}
 		*/
 
 
