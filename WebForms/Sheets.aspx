@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Sheets.aspx.cs" Inherits="WebForms.Sheets" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Sheets.aspx.cs" Inherits="WebForms.Sheets" Culture="auto"%>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -30,7 +30,7 @@
 </head>
 <body id="bodytag" runat="server">
 <form id="form1" runat="server">
-<asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
+<asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" EnableScriptGlobalization="true"/>
 <asp:Panel ID="Panel1" runat="server">
 <div>
 
