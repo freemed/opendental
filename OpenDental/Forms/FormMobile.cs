@@ -331,16 +331,20 @@ namespace OpenDental {
 
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
 		private static void UploadWorker(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
-			
-			DateTime changedSinceForMobileSynchNewTables79=changedSince;
-			if(PrefC.GetInt(PrefName.MobileSynchNewTables79)==0) {
-				changedSinceForMobileSynchNewTables79=DateTime.MinValue;// this is a one time thing
+			//The handling of PrefName.MobileSynchNewTables79 should never be removed in future versions
+			DateTime changedProv=changedSince;
+			DateTime changedDeleted=changedSince;
+			if(PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
+				changedProv=DateTime.MinValue;
+				changedDeleted=DateTime.MinValue;
+				Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			//MobileWeb
 			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSinceForMobileSynchNewTables79);
+			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
 			//Pat portal
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
@@ -350,7 +354,7 @@ namespace OpenDental {
 			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedSinceForMobileSynchNewTables79);
+			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
 			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
 							+medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count+dO.Count;
 			FormP.MaxVal=(double)totalCount;
@@ -367,7 +371,6 @@ namespace OpenDental {
 			SynchGeneric(diseaseNumList,SynchEntity.diseasedef,ref FormP);
 			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
 			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
-			Prefs.UpdateInt(PrefName.MobileSynchNewTables79,1);
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 			IsSynching=false;
 		}
