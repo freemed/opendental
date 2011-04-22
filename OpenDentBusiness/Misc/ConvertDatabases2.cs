@@ -4562,7 +4562,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX vaccinepat_PatNum ON vaccinepat (PatNum)";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailToAddress','Hidden pref: Email for sending EHR email.')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailToAddress','Hidden pref: Email for sending EHR email.')";
+					Db.NonQ(command);
+				}
+
+
+
+
+
 
 
 

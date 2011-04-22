@@ -119,6 +119,7 @@ namespace OpenDentBusiness {
 		EasyHideRepeatCharges,
 		EasyNoClinics,
 		EclaimsSeparateTreatProv,
+		EHREmailToAddress,
 		EmailPassword,
 		EmailPort,
 		EmailSenderAddress,
