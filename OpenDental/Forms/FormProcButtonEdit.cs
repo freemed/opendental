@@ -391,6 +391,11 @@ namespace OpenDental{
 				return;
 			}
 			try{
+				Image importedImg=Image.FromFile(dlg.FileName);
+				if(importedImg.Size!=new Size(20,20)) {
+					MessageBox.Show(Lan.g(this,"Image should be 20x20. Image selected was: ")+importedImg.Size.Width+"x"+importedImg.Size.Height);
+					return;
+				}
 				pictureBox.Image=Image.FromFile(dlg.FileName);
 			}
 			catch{
