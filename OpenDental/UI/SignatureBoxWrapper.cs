@@ -88,6 +88,7 @@ namespace OpenDental.UI {
 						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
 							labelInvalidSig.Visible=true;
 						}
+						CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
 					}
 				}
 			}
