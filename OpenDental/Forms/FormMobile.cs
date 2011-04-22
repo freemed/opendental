@@ -369,7 +369,7 @@ namespace OpenDental {
 			SynchGeneric(diseaseNumList,SynchEntity.diseasedef,ref FormP);
 			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
 			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
-			if(PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
+			if(PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 				Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
