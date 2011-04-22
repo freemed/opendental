@@ -27,16 +27,27 @@ namespace OpenDentBusiness{
 
 	public enum AutoCondField {
 		///<summary>Typically specify Equals the exact name/description of the sheet.</summary>
-		SheetNotCompletedTodayWithName
+		SheetNotCompletedTodayWithName,
+		///<summary>disease</summary>
+		Problem,
+		Medication,
+		Allergy,
+		///<summary>Example, 23</summary>
+		Age,
+		///<summary>Allowed values are M or F.  Enforce at entry time.</summary>
+		Gender,
+		Labresult
 	}
 
 	public enum AutoCondComparison{
-		///<summary></summary>
-		Equals
+		///<summary>Not sensitive to capitalization.</summary>
+		Equals,
+		GreaterThan,
+		LessThan,
+		///<summary>aka Like</summary>
+		Contains
 		//Exists,
 		//NotEquals,
-		//Contains,
-		//GreaterThan,
-		//LessThan
+		//
 	}
 }

@@ -88,6 +88,8 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Detailed Financial Transaction - P03</summary>
 		DFT,
 		///<summary>Unsolicited Vaccination Record Update - V04</summary>
-		VXU
+		VXU,
+		///<summary>Unsolicited Observation Message - R01</summary>
+		ORU
 	}
 }

@@ -39,7 +39,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		BreakAppointment,
 		///<summary></summary>
-		CreateApptNewPat
+		CreateApptNewPat,
+		///<summary>Regardless of module.  Usually only used with conditions.</summary>
+		OpenPatient
 		//<summary>Either a single statement or as part of the billing process.  Either print or </summary>
 		//CreateStatement
 	}
@@ -53,7 +55,9 @@ namespace OpenDentBusiness{
 		///<summary>If a referral does not exist for this patient, then notify user instead.</summary>
 		PrintReferralLetter,
 		///<summary></summary>
-		ShowExamSheet
+		ShowExamSheet,
+		///<summary></summary>
+		PopUp
 		//<summary></summary>
 		//AddStatementNoteBold
 	}

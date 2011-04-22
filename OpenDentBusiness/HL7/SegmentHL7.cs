@@ -200,6 +200,10 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Common Order</summary>
 		ORC,
 		///<summary>Pharmacy Administration Segment</summary>
-		RXA
+		RXA,
+		///<summary>Observations Request</summary>
+		OBR,
+		///<summary>Observation Related to OBR</summary>
+		OBX
 	}
 }
