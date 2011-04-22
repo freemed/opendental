@@ -87,6 +87,7 @@ namespace WebHostSynch {
 				RxPatms.DeleteAll(customerNum);
 				Providerms.DeleteAll(customerNum);
 				//pat portal
+				/*
 				Medicationms.DeleteAll(customerNum);
 				MedicationPatms.DeleteAll(customerNum);
 				AllergyDefms.DeleteAll(customerNum);
@@ -94,6 +95,7 @@ namespace WebHostSynch {
 				DiseaseDefms.DeleteAll(customerNum);
 				Diseasems.DeleteAll(customerNum);
 				ICD9ms.DeleteAll(customerNum);
+				*/
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);

@@ -153,6 +153,7 @@ namespace OpenDental {
 			MsgBox.Show(this,"Done");
 		}
 
+		///<summary>Old code. May be deleted later</summary>
 		private void butFullSync_ClickOld(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
@@ -213,7 +214,7 @@ namespace OpenDental {
 			changed=true;
 		}
 
-
+		///<summary>Old code. May be deleted later</summary>
 		private void butSync_ClickOld(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
@@ -274,7 +275,8 @@ namespace OpenDental {
 			}
 			changed=true;
 		}
-		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
+		
+		///<summary>Old code. May be deleted later</summary>
 		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,List<long> provNumList,ref FormProgress progressIndicator,DateTime timeSynchStarted) {
 			IsSynching=true;
 			//patients--------------------------------------------------------------------
@@ -482,7 +484,7 @@ namespace OpenDental {
 			return true;
 		}
 
-		///<summary>Only called from FormOpenDental</summary>
+		///<summary>Old code. May be deleted later</summary>
 		public static void SynchFromMainOld() {
 			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
 				return;
