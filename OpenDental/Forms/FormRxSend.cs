@@ -227,7 +227,9 @@ namespace OpenDental {
 			message.IsBodyHtml=false;
 			client.Send(message);
 			//}//End of selected Rx loop
-			//Remove the Rx from the grid somehow.
+			//Remove the Rx from the grid.
+			//rx.IsElectQueue=false;
+			//RxPats.Update(rx);
 			FillGrid();//Refresh the screen so that sent Rx's go away.
 		}
 

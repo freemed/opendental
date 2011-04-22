@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				medicalOrder.MedOrderType   = (MedicalOrderType)PIn.Int(table.Rows[i]["MedOrderType"].ToString());
 				medicalOrder.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				medicalOrder.DateTimeOrder  = PIn.DateT (table.Rows[i]["DateTimeOrder"].ToString());
+				medicalOrder.Description    = PIn.String(table.Rows[i]["Description"].ToString());
 				retVal.Add(medicalOrder);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicalOrderNum,";
 			}
-			command+="MedOrderType,PatNum,DateTimeOrder) VALUES(";
+			command+="MedOrderType,PatNum,DateTimeOrder,Description) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicalOrder.MedicalOrderNum)+",";
 			}
 			command+=
 				     POut.Int   ((int)medicalOrder.MedOrderType)+","
 				+    POut.Long  (medicalOrder.PatNum)+","
-				+    POut.DateT (medicalOrder.DateTimeOrder)+")";
+				+    POut.DateT (medicalOrder.DateTimeOrder)+","
+				+"'"+POut.String(medicalOrder.Description)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE medicalorder SET "
 				+"MedOrderType   =  "+POut.Int   ((int)medicalOrder.MedOrderType)+", "
 				+"PatNum         =  "+POut.Long  (medicalOrder.PatNum)+", "
-				+"DateTimeOrder  =  "+POut.DateT (medicalOrder.DateTimeOrder)+" "
+				+"DateTimeOrder  =  "+POut.DateT (medicalOrder.DateTimeOrder)+", "
+				+"Description    = '"+POut.String(medicalOrder.Description)+"' "
 				+"WHERE MedicalOrderNum = "+POut.Long(medicalOrder.MedicalOrderNum);
 			Db.NonQ(command);
 		}
@@ -131,6 +134,10 @@ namespace OpenDentBusiness.Crud{
 			if(medicalOrder.DateTimeOrder != oldMedicalOrder.DateTimeOrder) {
 				if(command!=""){ command+=",";}
 				command+="DateTimeOrder = "+POut.DateT(medicalOrder.DateTimeOrder)+"";
+			}
+			if(medicalOrder.Description != oldMedicalOrder.Description) {
+				if(command!=""){ command+=",";}
+				command+="Description = '"+POut.String(medicalOrder.Description)+"'";
 			}
 			if(command==""){
 				return;
