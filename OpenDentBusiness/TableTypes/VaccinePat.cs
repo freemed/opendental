@@ -12,8 +12,10 @@ namespace OpenDentBusiness {
 		///<summary>FK to vaccinedef.VaccineDefNum.</summary>
 		public long VaccineDefNum;
 		///<summary></summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeStart;
 		///<summary></summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEnd;
 		///<summary>Size of the dose of the vaccine.  999 indicates unknown.</summary>
 		public float AdministeredAmt;

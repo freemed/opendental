@@ -48,8 +48,8 @@ namespace OpenDentBusiness.Crud{
 				vaccinePat=new VaccinePat();
 				vaccinePat.VaccinePatNum  = PIn.Long  (table.Rows[i]["VaccinePatNum"].ToString());
 				vaccinePat.VaccineDefNum  = PIn.Long  (table.Rows[i]["VaccineDefNum"].ToString());
-				vaccinePat.DateTimeStart  = PIn.Date  (table.Rows[i]["DateTimeStart"].ToString());
-				vaccinePat.DateTimeEnd    = PIn.Date  (table.Rows[i]["DateTimeEnd"].ToString());
+				vaccinePat.DateTimeStart  = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
+				vaccinePat.DateTimeEnd    = PIn.DateT (table.Rows[i]["DateTimeEnd"].ToString());
 				vaccinePat.AdministeredAmt= PIn.Float (table.Rows[i]["AdministeredAmt"].ToString());
 				vaccinePat.DrugUnitNum    = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
 				vaccinePat.LotNumber      = PIn.String(table.Rows[i]["LotNumber"].ToString());
@@ -100,8 +100,8 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				     POut.Long  (vaccinePat.VaccineDefNum)+","
-				+    POut.Date  (vaccinePat.DateTimeStart)+","
-				+    POut.Date  (vaccinePat.DateTimeEnd)+","
+				+    POut.DateT (vaccinePat.DateTimeStart)+","
+				+    POut.DateT (vaccinePat.DateTimeEnd)+","
 				+    POut.Float (vaccinePat.AdministeredAmt)+","
 				+    POut.Long  (vaccinePat.DrugUnitNum)+","
 				+"'"+POut.String(vaccinePat.LotNumber)+"',"
@@ -119,8 +119,8 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(VaccinePat vaccinePat){
 			string command="UPDATE vaccinepat SET "
 				+"VaccineDefNum  =  "+POut.Long  (vaccinePat.VaccineDefNum)+", "
-				+"DateTimeStart  =  "+POut.Date  (vaccinePat.DateTimeStart)+", "
-				+"DateTimeEnd    =  "+POut.Date  (vaccinePat.DateTimeEnd)+", "
+				+"DateTimeStart  =  "+POut.DateT (vaccinePat.DateTimeStart)+", "
+				+"DateTimeEnd    =  "+POut.DateT (vaccinePat.DateTimeEnd)+", "
 				+"AdministeredAmt=  "+POut.Float (vaccinePat.AdministeredAmt)+", "
 				+"DrugUnitNum    =  "+POut.Long  (vaccinePat.DrugUnitNum)+", "
 				+"LotNumber      = '"+POut.String(vaccinePat.LotNumber)+"', "
@@ -138,11 +138,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(vaccinePat.DateTimeStart != oldVaccinePat.DateTimeStart) {
 				if(command!=""){ command+=",";}
-				command+="DateTimeStart = "+POut.Date(vaccinePat.DateTimeStart)+"";
+				command+="DateTimeStart = "+POut.DateT(vaccinePat.DateTimeStart)+"";
 			}
 			if(vaccinePat.DateTimeEnd != oldVaccinePat.DateTimeEnd) {
 				if(command!=""){ command+=",";}
-				command+="DateTimeEnd = "+POut.Date(vaccinePat.DateTimeEnd)+"";
+				command+="DateTimeEnd = "+POut.DateT(vaccinePat.DateTimeEnd)+"";
 			}
 			if(vaccinePat.AdministeredAmt != oldVaccinePat.AdministeredAmt) {
 				if(command!=""){ command+=",";}

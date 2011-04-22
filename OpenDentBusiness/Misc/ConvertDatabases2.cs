@@ -4598,6 +4598,16 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX medicalorder_PatNum ON medicalorder (PatNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat MODIFY DateTimeStart DATETIME";
+					command="ALTER TABLE vaccinepat MODIFY DateTimeEnd DATETIME";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat MODIFY (DateTimeStart DATETIME);";
+					command="ALTER TABLE vaccinepat MODIFY (DateTimeEnd DATETIME);";
+					Db.NonQ(command);
+				}
 
 
 
