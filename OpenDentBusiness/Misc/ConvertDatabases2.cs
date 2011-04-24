@@ -4580,11 +4580,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE vaccinepat MODIFY DateTimeStart DATETIME";
+					Db.NonQ(command);
 					command="ALTER TABLE vaccinepat MODIFY DateTimeEnd DATETIME";
 					Db.NonQ(command);
 				}
 				else {//oracle
 					command="ALTER TABLE vaccinepat MODIFY (DateTimeStart DATETIME);";
+					Db.NonQ(command);
 					command="ALTER TABLE vaccinepat MODIFY (DateTimeEnd DATETIME);";
 					Db.NonQ(command);
 				}
@@ -4620,16 +4622,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-
-
-
-
-
+	
 
 				
-				
-
-			
-
-			
