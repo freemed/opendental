@@ -71,12 +71,23 @@ namespace OpenDentBusiness{
 			Crud.DrugUnitCrud.Update(drugUnit);
 		}
 
-		///<summary></summary>
+		///<summary>Surround with a try/catch.  Will fail if drug unit is in use.</summary>
 		public static void Delete(long drugUnitNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),drugUnitNum);
 				return;
 			}
+			//validation
+			string command;
+			command="SELECT COUNT(*) FROM labresult WHERE DrugUnitNum="+POut.Long(drugUnitNum);
+			if(Db.GetCount(command)!="0") {
+				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Not allowed to delete because of attached labresults."));
+			}
+			command="SELECT COUNT(*) FROM vaccinepat WHERE DrugUnitNum="+POut.Long(drugUnitNum);
+			if(Db.GetCount(command)!="0") {
+				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Not allowed to delete because of attached vaccinepats."));
+			}
+			//delete
 			string command= "DELETE FROM drugunit WHERE DrugUnitNum = "+POut.Long(drugUnitNum);
 			Db.NonQ(command);
 		}
