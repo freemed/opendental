@@ -74,6 +74,24 @@ namespace OpenDentBusiness{
 			return LabResultList;
 		}
 
+		///<summary>Insert new lab results.</summary>
+		public static long Insert(LabResult labResult) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				labResult.LabResultNum=Meth.GetLong(MethodBase.GetCurrentMethod(),labResult);
+				return labResult.LabResultNum;
+			}
+			return Crud.LabResultCrud.Insert(labResult);
+		}
+
+		///<summary>Update existing lab results.</summary>
+		public static void Update(LabResult labResult){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labResult);
+				return;
+			}
+			Crud.LabResultCrud.Update(labResult);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -94,23 +112,7 @@ namespace OpenDentBusiness{
 			return Crud.LabResultCrud.SelectOne(labResultNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(LabResult labResult){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				labResult.LabResultNum=Meth.GetLong(MethodBase.GetCurrentMethod(),labResult);
-				return labResult.LabResultNum;
-			}
-			return Crud.LabResultCrud.Insert(labResult);
-		}
-
-		///<summary></summary>
-		public static void Update(LabResult labResult){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),labResult);
-				return;
-			}
-			Crud.LabResultCrud.Update(labResult);
-		}
+		
 
 		*/
 

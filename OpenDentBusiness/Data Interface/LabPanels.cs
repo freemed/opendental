@@ -65,6 +65,23 @@ namespace OpenDentBusiness{
 			return LabPanelList;
 		}
 
+		///<summary></summary>
+		public static long Insert(LabPanel labPanel) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				labPanel.LabPanelNum=Meth.GetLong(MethodBase.GetCurrentMethod(),labPanel);
+				return labPanel.LabPanelNum;
+			}
+			return Crud.LabPanelCrud.Insert(labPanel);
+		}
+
+		///<summary></summary>
+		public static void Update(LabPanel labPanel) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labPanel);
+				return;
+			}
+			Crud.LabPanelCrud.Update(labPanel);
+		}
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -87,23 +104,7 @@ namespace OpenDentBusiness{
 			return Crud.LabPanelCrud.SelectMany(command);
 		}
 
-		///<summary></summary>
-		public static long Insert(LabPanel labPanel){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				labPanel.LabPanelNum=Meth.GetLong(MethodBase.GetCurrentMethod(),labPanel);
-				return labPanel.LabPanelNum;
-			}
-			return Crud.LabPanelCrud.Insert(labPanel);
-		}
-
-		///<summary></summary>
-		public static void Update(LabPanel labPanel){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),labPanel);
-				return;
-			}
-			Crud.LabPanelCrud.Update(labPanel);
-		}
+		
 
 		///<summary></summary>
 		public static void Delete(long labPanelNum) {
