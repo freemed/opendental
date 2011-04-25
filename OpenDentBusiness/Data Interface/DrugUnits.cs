@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Not allowed to delete because of attached vaccinepats."));
 			}
 			//delete
-			string command= "DELETE FROM drugunit WHERE DrugUnitNum = "+POut.Long(drugUnitNum);
+			command= "DELETE FROM drugunit WHERE DrugUnitNum = "+POut.Long(drugUnitNum);
 			Db.NonQ(command);
 		}
 
