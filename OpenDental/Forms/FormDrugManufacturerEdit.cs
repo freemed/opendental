@@ -30,10 +30,14 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
-			else {
-				DrugManufacturers.Delete(DrugManufacturerCur.DrugManufacturerNum);
-				DialogResult=DialogResult.Cancel;
+			try {
+					DrugManufacturers.Delete(DrugManufacturerCur.DrugManufacturerNum);
 			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

@@ -36,10 +36,14 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
-			else {
+			try {
 				VaccineDefs.Delete(VaccineDefCur.VaccineDefNum);
-				DialogResult=DialogResult.Cancel;
 			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

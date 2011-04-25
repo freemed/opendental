@@ -77,7 +77,13 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),vaccineDefNum);
 				return;
 			}
-			string command= "DELETE FROM vaccinedef WHERE VaccineDefNum = "+POut.Long(vaccineDefNum);
+			//validation
+			string command;
+			command="SELECT COUNT(*) FROM VaccinePat WHERE VaccineDefNum="+POut.Long(vaccineDefNum);
+			if(Db.GetCount(command)!="0") {
+				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Cannot delete: VaccineDef is in use by VaccinePat."));
+			}
+			command= "DELETE FROM vaccinedef WHERE VaccineDefNum = "+POut.Long(vaccineDefNum);
 			Db.NonQ(command);
 		}
 

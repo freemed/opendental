@@ -81,13 +81,12 @@ namespace OpenDentBusiness{
 			string command;
 			command="SELECT COUNT(*) FROM labresult WHERE DrugUnitNum="+POut.Long(drugUnitNum);
 			if(Db.GetCount(command)!="0") {
-				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Not allowed to delete because of attached labresults."));
+				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Cannot delete: DrugUnit is in use by LabResult."));
 			}
 			command="SELECT COUNT(*) FROM vaccinepat WHERE DrugUnitNum="+POut.Long(drugUnitNum);
 			if(Db.GetCount(command)!="0") {
-				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Not allowed to delete because of attached vaccinepats."));
+				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Cannot delete: DrugUnit is in use by VaccinePat."));
 			}
-			//delete
 			command= "DELETE FROM drugunit WHERE DrugUnitNum = "+POut.Long(drugUnitNum);
 			Db.NonQ(command);
 		}

@@ -126,6 +126,8 @@ namespace OpenDentBusiness {
 		EmailSMTPserver,
 		EmailUsername,
 		EmailUseSSL,
+		/// <summary>Boolean. 0 means false and means it is not an EHR Emergency, and emergency access to the family module is not granted.</summary>
+		EhrEmergencyNow,
 		EnableAnesthMod,
 		ExportPath,
 		FinanceChargeAdjustmentType,
