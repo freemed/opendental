@@ -407,6 +407,8 @@
     <Compile Include="Mobile\Crud\DiseaseDefmCrud.cs" />
     <Compile Include="Mobile\Crud\DiseasemCrud.cs" />
     <Compile Include="Mobile\Crud\ICD9mCrud.cs" />
+    <Compile Include="Mobile\Crud\LabPanelmCrud.cs" />
+    <Compile Include="Mobile\Crud\LabResultmCrud.cs" />
     <Compile Include="Mobile\Crud\MedicationmCrud.cs" />
     <Compile Include="Mobile\Crud\MedicationPatmCrud.cs" />
     <Compile Include="Mobile\Crud\ProvidermCrud.cs" />
@@ -417,6 +419,8 @@
     <Compile Include="Mobile\Data Interface\DiseaseDefms.cs" />
     <Compile Include="Mobile\Data Interface\Diseasems.cs" />
     <Compile Include="Mobile\Data Interface\ICD9ms.cs" />
+    <Compile Include="Mobile\Data Interface\LabPanelms.cs" />
+    <Compile Include="Mobile\Data Interface\LabResultms.cs" />
     <Compile Include="Mobile\Data Interface\Medicationms.cs" />
     <Compile Include="Mobile\Data Interface\MedicationPatms.cs" />
     <Compile Include="Mobile\Data Interface\Providerms.cs" />

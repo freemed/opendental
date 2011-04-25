@@ -200,6 +200,37 @@ namespace WebHostSynch {
 		#endregion
 
 		#region PatientPortal
+
+			[WebMethod]
+			public void SynchLabPanels(String RegistrationKey,List<LabPanelm> labPanelmList) {
+				try {
+					Logger.Information("In SynchLabPanels");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					LabPanelms.UpdateFromChangeList(labPanelmList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchLabResults(String RegistrationKey,List<LabResultm> labResultmList) {
+				try {
+					Logger.Information("In SynchLabResults");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					LabResultms.UpdateFromChangeList(labResultmList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
 			[WebMethod]
 			public void SynchMedications(String RegistrationKey,List<Medicationm> medicationmList) {
 				try {

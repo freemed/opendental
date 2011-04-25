@@ -54,6 +54,10 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SetMobileWebUserPasswordOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SynchLabPanelsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchLabResultsOperationCompleted;
+        
         private System.Threading.SendOrPostCallback SynchMedicationsOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchMedicationPatsOperationCompleted;
@@ -138,6 +142,12 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SetMobileWebUserPasswordCompletedEventHandler SetMobileWebUserPasswordCompleted;
+        
+        /// <remarks/>
+        public event SynchLabPanelsCompletedEventHandler SynchLabPanelsCompleted;
+        
+        /// <remarks/>
+        public event SynchLabResultsCompletedEventHandler SynchLabResultsCompleted;
         
         /// <remarks/>
         public event SynchMedicationsCompletedEventHandler SynchMedicationsCompleted;
@@ -481,6 +491,66 @@ namespace OpenDental.MobileWeb {
             if ((this.SetMobileWebUserPasswordCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.SetMobileWebUserPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchLabPanels", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchLabPanels(string RegistrationKey, LabPanelm[] labPanelmList) {
+            this.Invoke("SynchLabPanels", new object[] {
+                        RegistrationKey,
+                        labPanelmList});
+        }
+        
+        /// <remarks/>
+        public void SynchLabPanelsAsync(string RegistrationKey, LabPanelm[] labPanelmList) {
+            this.SynchLabPanelsAsync(RegistrationKey, labPanelmList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchLabPanelsAsync(string RegistrationKey, LabPanelm[] labPanelmList, object userState) {
+            if ((this.SynchLabPanelsOperationCompleted == null)) {
+                this.SynchLabPanelsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchLabPanelsOperationCompleted);
+            }
+            this.InvokeAsync("SynchLabPanels", new object[] {
+                        RegistrationKey,
+                        labPanelmList}, this.SynchLabPanelsOperationCompleted, userState);
+        }
+        
+        private void OnSynchLabPanelsOperationCompleted(object arg) {
+            if ((this.SynchLabPanelsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchLabPanelsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchLabResults", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchLabResults(string RegistrationKey, LabResultm[] labResultmList) {
+            this.Invoke("SynchLabResults", new object[] {
+                        RegistrationKey,
+                        labResultmList});
+        }
+        
+        /// <remarks/>
+        public void SynchLabResultsAsync(string RegistrationKey, LabResultm[] labResultmList) {
+            this.SynchLabResultsAsync(RegistrationKey, labResultmList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchLabResultsAsync(string RegistrationKey, LabResultm[] labResultmList, object userState) {
+            if ((this.SynchLabResultsOperationCompleted == null)) {
+                this.SynchLabResultsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchLabResultsOperationCompleted);
+            }
+            this.InvokeAsync("SynchLabResults", new object[] {
+                        RegistrationKey,
+                        labResultmList}, this.SynchLabResultsOperationCompleted, userState);
+        }
+        
+        private void OnSynchLabResultsOperationCompleted(object arg) {
+            if ((this.SynchLabResultsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchLabResultsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -844,6 +914,14 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SetMobileWebUserPasswordCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchLabPanelsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchLabResultsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

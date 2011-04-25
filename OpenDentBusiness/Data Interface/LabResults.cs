@@ -36,6 +36,44 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static List<long> GetChangedSinceLabResultNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT LabResultNum FROM labresult WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> labresultNums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				labresultNums.Add(PIn.Long(dt.Rows[i]["LabResultNum"].ToString()));
+			}
+			return labresultNums;
+		}
+
+		///<summary>Used along with GetChangedSinceLabResultNums</summary>
+		public static List<LabResult> GetMultLabResults(List<long> labresultNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabResult>>(MethodBase.GetCurrentMethod(),labresultNums);
+			}
+			string strLabResultNums="";
+			DataTable table;
+			if(labresultNums.Count>0) {
+				for(int i=0;i<labresultNums.Count;i++) {
+					if(i>0) {
+						strLabResultNums+="OR ";
+					}
+					strLabResultNums+="LabResultNum='"+labresultNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM labresult WHERE "+strLabResultNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			LabResult[] multLabResults=Crud.LabResultCrud.TableToList(table).ToArray();
+			List<LabResult> LabResultList=new List<LabResult>(multLabResults);
+			return LabResultList;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

@@ -75,6 +75,14 @@
           <s:enumeration value="Appointment" />
           <s:enumeration value="ScheduleProv" />
           <s:enumeration value="RecallPatNum" />
+          <s:enumeration value="RxPat" />
+          <s:enumeration value="Medication" />
+          <s:enumeration value="MedicationPat" />
+          <s:enumeration value="Allergy" />
+          <s:enumeration value="AllergyDef" />
+          <s:enumeration value="Disease" />
+          <s:enumeration value="DiseaseDef" />
+          <s:enumeration value="ICD9" />
         </s:restriction>
       </s:simpleType>
       <s:element name="DeleteObjectsResponse">
@@ -131,6 +139,7 @@
               <s:element minOccurs="0" maxOccurs="1" name="AddrNote" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="ClinicNum" type="s:long" />
               <s:element minOccurs="1" maxOccurs="1" name="PreferContactMethod" type="tns:ContactMethod" />
+              <s:element minOccurs="0" maxOccurs="1" name="OnlinePassword" type="s:string" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -316,6 +325,77 @@
         </s:complexType>
       </s:element>
       <s:element name="SetMobileWebUserPasswordResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchLabPanels">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="labPanelmList" type="tns:ArrayOfLabPanelm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfLabPanelm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="LabPanelm" nillable="true" type="tns:LabPanelm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LabPanelm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="LabPanelNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="MedicalOrderNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="RawMessage" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="LabNameAddress" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SpecimenCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SpecimenDesc" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchLabPanelsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchLabResults">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="labResultmList" type="tns:ArrayOfLabResultm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfLabResultm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="LabResultm" nillable="true" type="tns:LabResultm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LabResultm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="LabResultNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="LabPanelNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateTimeTest" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="TestName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="TestID" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ValueType" type="tns:LabObsValueType" />
+              <s:element minOccurs="0" maxOccurs="1" name="ObsValue" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="DrugUnitNum" type="s:long" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="LabObsValueType">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="NM" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SynchLabResultsResponse">
         <s:complexType />
       </s:element>
       <s:element name="SynchMedications">
@@ -594,6 +674,18 @@
   <wsdl:message name="SetMobileWebUserPasswordSoapOut">
     <wsdl:part name="parameters" element="tns:SetMobileWebUserPasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="SynchLabPanelsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchLabPanels" />
+  </wsdl:message>
+  <wsdl:message name="SynchLabPanelsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchLabPanelsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SynchLabResultsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchLabResults" />
+  </wsdl:message>
+  <wsdl:message name="SynchLabResultsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchLabResultsResponse" />
+  </wsdl:message>
   <wsdl:message name="SynchMedicationsSoapIn">
     <wsdl:part name="parameters" element="tns:SynchMedications" />
   </wsdl:message>
@@ -680,6 +772,14 @@
     <wsdl:operation name="SetMobileWebUserPassword">
       <wsdl:input message="tns:SetMobileWebUserPasswordSoapIn" />
       <wsdl:output message="tns:SetMobileWebUserPasswordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchLabPanels">
+      <wsdl:input message="tns:SynchLabPanelsSoapIn" />
+      <wsdl:output message="tns:SynchLabPanelsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchLabResults">
+      <wsdl:input message="tns:SynchLabResultsSoapIn" />
+      <wsdl:output message="tns:SynchLabResultsSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="SynchMedications">
       <wsdl:input message="tns:SynchMedicationsSoapIn" />
@@ -804,6 +904,24 @@
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebUserPassword">
       <soap:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchLabPanels">
+      <soap:operation soapAction="http://opendental.com/SynchLabPanels" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchLabResults">
+      <soap:operation soapAction="http://opendental.com/SynchLabResults" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -969,6 +1087,24 @@
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebUserPassword">
       <soap12:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchLabPanels">
+      <soap12:operation soapAction="http://opendental.com/SynchLabPanels" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchLabResults">
+      <soap12:operation soapAction="http://opendental.com/SynchLabResults" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

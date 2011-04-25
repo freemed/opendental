@@ -409,9 +409,14 @@ namespace OpenDental {
 							List<Providerm> changedProvList=Providerms.GetMultProviderms(BlockPKNumList);
 							mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
 						break;
-						// lab test results
-						//1) labpanel
-						// 2) labresults
+						case SynchEntity.labpanel:
+							//List<LabPanelm> ChangedLabPanelList=Medicationms.GetMultLabPanelms(BlockPKNumList);
+							//mb.SynchLabPanels(PrefC.GetString(PrefName.RegistrationKey),ChangedLabPanelList.ToArray());
+						break;
+						case SynchEntity.labresult:
+							//List<Medicationm> ChangedLabResultList=Medicationms.GetMultLabResultms(BlockPKNumList);
+							//mb.SynchLabResults(PrefC.GetString(PrefName.RegistrationKey),ChangedLabResultList.ToArray());
+						break;
 						case SynchEntity.medication:
 							List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
 							mb.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());

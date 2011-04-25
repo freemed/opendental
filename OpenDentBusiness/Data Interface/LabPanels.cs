@@ -27,6 +27,44 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static List<long> GetChangedSinceLabPanelNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT LabPanelNum FROM labpanel WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> labpanelNums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				labpanelNums.Add(PIn.Long(dt.Rows[i]["LabPanelNum"].ToString()));
+			}
+			return labpanelNums;
+		}
+
+		///<summary>Used along with GetChangedSinceLabPanelNums</summary>
+		public static List<LabPanel> GetMultLabPanels(List<long> labpanelNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabPanel>>(MethodBase.GetCurrentMethod(),labpanelNums);
+			}
+			string strLabPanelNums="";
+			DataTable table;
+			if(labpanelNums.Count>0) {
+				for(int i=0;i<labpanelNums.Count;i++) {
+					if(i>0) {
+						strLabPanelNums+="OR ";
+					}
+					strLabPanelNums+="LabPanelNum='"+labpanelNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM labpanel WHERE "+strLabPanelNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			LabPanel[] multLabPanels=Crud.LabPanelCrud.TableToList(table).ToArray();
+			List<LabPanel> LabPanelList=new List<LabPanel>(multLabPanels);
+			return LabPanelList;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
