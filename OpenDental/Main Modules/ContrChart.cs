@@ -3509,7 +3509,7 @@ namespace OpenDental{
 				FormRS.ShowDialog();
 				if(FormRS.DialogResult!=DialogResult.OK) return;
 				ModuleSelected(PatCur.PatNum);
-				SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
+				SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,"Created prescription.");
 			}
 		}
 

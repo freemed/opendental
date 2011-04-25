@@ -232,6 +232,7 @@ namespace OpenDental{
 			// 
 			// grid
 			// 
+			this.grid.AllowSortingByColumn = true;
 			this.grid.HScrollVisible = false;
 			this.grid.Location = new System.Drawing.Point(8,54);
 			this.grid.Name = "grid";
@@ -367,11 +368,19 @@ namespace OpenDental{
 			}
 			grid.BeginUpdate();
 			grid.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableAudit","Date Time"),120);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableAudit","Date"),70);
+			col.SortingStrategy=GridSortingStrategy.DateParse;
+			grid.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAudit","Time"),50);
+			col.SortingStrategy=GridSortingStrategy.DateParse;
+			grid.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAudit","Patient"),100);
 			grid.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAudit","User"),70);
 			grid.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAudit","Permission"),110);
+			grid.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAudit","Computer"),70);
 			grid.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAudit","Log Text"),570);
 			grid.Columns.Add(col);
@@ -380,7 +389,15 @@ namespace OpenDental{
 			Userod user;
 			for(int i=0;i<logList.Length;i++){
 				row=new ODGridRow();
-				row.Cells.Add(logList[i].LogDateTime.ToShortDateString()+" "+logList[i].LogDateTime.ToShortTimeString());
+				row.Cells.Add(logList[i].LogDateTime.ToShortDateString());
+				row.Cells.Add(logList[i].LogDateTime.ToShortTimeString());
+				if(logList[i].PatNum>0) {
+					Patient p=Patients.GetPat(logList[i].PatNum);
+					row.Cells.Add(Patients.GetNameLF(p.LName,p.FName,p.Preferred,p.MiddleI));
+				}
+				else {
+					row.Cells.Add("");
+				}
 				user=Userods.GetUser(logList[i].UserNum);
 				//user might be null due to old bugs.
 				if(user==null) {
@@ -390,6 +407,7 @@ namespace OpenDental{
 					row.Cells.Add(Userods.GetUser(logList[i].UserNum).UserName);
 				}
 				row.Cells.Add(logList[i].PermType.ToString());
+				row.Cells.Add(logList[i].CompName);
 				row.Cells.Add(logList[i].LogText);
 				grid.Rows.Add(row);
 			}

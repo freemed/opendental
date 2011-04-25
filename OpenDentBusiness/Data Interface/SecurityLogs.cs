@@ -82,7 +82,8 @@ namespace OpenDentBusiness{
 			SecurityLog securityLog=new SecurityLog();
 			securityLog.PermType=permType;
 			securityLog.UserNum=Security.CurUser.UserNum;
-			securityLog.LogText="From: "+Environment.MachineName+" - "+logText;
+			securityLog.LogText=logText;//"From: "+Environment.MachineName+" - "+logText;
+			securityLog.CompName=Environment.MachineName;
 			securityLog.PatNum=patNum;
 			SecurityLogs.Insert(securityLog);
 		}	
