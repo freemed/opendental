@@ -4602,6 +4602,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE vaccinepat MODIFY (DateTimeEnd DATETIME);";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE securitylog ADD CompName varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE securitylog ADD CompName varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4639,3 +4647,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 	
 
 				
+
+				
+
+
+

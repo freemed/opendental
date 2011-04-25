@@ -52,6 +52,7 @@ namespace OpenDentBusiness.Crud{
 				securityLog.LogDateTime   = PIn.DateT (table.Rows[i]["LogDateTime"].ToString());
 				securityLog.LogText       = PIn.String(table.Rows[i]["LogText"].ToString());
 				securityLog.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				securityLog.CompName      = PIn.String(table.Rows[i]["CompName"].ToString());
 				retVal.Add(securityLog);
 			}
 			return retVal;
@@ -92,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="SecurityLogNum,";
 			}
-			command+="PermType,UserNum,LogDateTime,LogText,PatNum) VALUES(";
+			command+="PermType,UserNum,LogDateTime,LogText,PatNum,CompName) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(securityLog.SecurityLogNum)+",";
 			}
@@ -101,7 +102,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (securityLog.UserNum)+","
 				+    DbHelper.Now()+","
 				+"'"+POut.String(securityLog.LogText)+"',"
-				+    POut.Long  (securityLog.PatNum)+")";
+				+    POut.Long  (securityLog.PatNum)+","
+				+"'"+POut.String(securityLog.CompName)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,7 +120,8 @@ namespace OpenDentBusiness.Crud{
 				+"UserNum       =  "+POut.Long  (securityLog.UserNum)+", "
 				//LogDateTime not allowed to change
 				+"LogText       = '"+POut.String(securityLog.LogText)+"', "
-				+"PatNum        =  "+POut.Long  (securityLog.PatNum)+" "
+				+"PatNum        =  "+POut.Long  (securityLog.PatNum)+", "
+				+"CompName      = '"+POut.String(securityLog.CompName)+"' "
 				+"WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum);
 			Db.NonQ(command);
 		}
@@ -142,6 +145,10 @@ namespace OpenDentBusiness.Crud{
 			if(securityLog.PatNum != oldSecurityLog.PatNum) {
 				if(command!=""){ command+=",";}
 				command+="PatNum = "+POut.Long(securityLog.PatNum)+"";
+			}
+			if(securityLog.CompName != oldSecurityLog.CompName) {
+				if(command!=""){ command+=",";}
+				command+="CompName = '"+POut.String(securityLog.CompName)+"'";
 			}
 			if(command==""){
 				return;

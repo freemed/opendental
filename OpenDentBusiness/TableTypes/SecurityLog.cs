@@ -20,6 +20,8 @@ namespace OpenDentBusiness{
 		public string LogText;
 		///<summary>FK to patient.PatNum.  Can be 0 if not applicable.</summary>
 		public long PatNum;
+		///<summary></summary>
+		public string CompName;
 
 		
 
