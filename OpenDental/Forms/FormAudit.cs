@@ -371,7 +371,7 @@ namespace OpenDental{
 			ODGridColumn col=new ODGridColumn(Lan.g("TableAudit","Date"),70);
 			col.SortingStrategy=GridSortingStrategy.DateParse;
 			grid.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAudit","Time"),50);
+			col=new ODGridColumn(Lan.g("TableAudit","Time"),60);
 			col.SortingStrategy=GridSortingStrategy.DateParse;
 			grid.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAudit","Patient"),100);
@@ -382,7 +382,7 @@ namespace OpenDental{
 			grid.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAudit","Computer"),70);
 			grid.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAudit","Log Text"),570);
+			col=new ODGridColumn(Lan.g("TableAudit","Log Text"),560);
 			grid.Columns.Add(col);
 			grid.Rows.Clear();
 			ODGridRow row;
@@ -391,13 +391,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(logList[i].LogDateTime.ToShortDateString());
 				row.Cells.Add(logList[i].LogDateTime.ToShortTimeString());
-				if(logList[i].PatNum>0) {
-					Patient p=Patients.GetPat(logList[i].PatNum);
-					row.Cells.Add(Patients.GetNameLF(p.LName,p.FName,p.Preferred,p.MiddleI));
-				}
-				else {
-					row.Cells.Add("");
-				}
+				row.Cells.Add(logList[i].PatientName);
 				user=Userods.GetUser(logList[i].UserNum);
 				//user might be null due to old bugs.
 				if(user==null) {

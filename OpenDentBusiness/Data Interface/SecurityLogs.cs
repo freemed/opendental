@@ -14,7 +14,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,permType,patNum,userNum);
 			}
-			string command="SELECT * FROM securitylog "
+			string command="SELECT securitylog.*,LName,FName,Preferred,MiddleI FROM securitylog "
+				+"LEFT JOIN patient ON patient.PatNum=securitylog.PatNum "
 				+"WHERE LogDateTime >= "+POut.Date(dateFrom)+" "
 				+"AND LogDateTime <= "+POut.Date(dateTo.AddDays(1));
 			if(patNum !=0) {
@@ -27,7 +28,20 @@ namespace OpenDentBusiness{
 				command+=" AND UserNum="+POut.Long(userNum);
 			}
 			command+=" ORDER BY LogDateTime";
-			return Crud.SecurityLogCrud.SelectMany(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			List<SecurityLog> list=Crud.SecurityLogCrud.TableToList(table);
+			for(int i=0;i<list.Count;i++) {
+				if(table.Rows[i]["PatNum"].ToString()=="0") {
+					list[i].PatientName="";
+				}
+				else {
+					list[i].PatientName=Patients.GetNameLF(table.Rows[i]["LName"].ToString()
+						,table.Rows[i]["FName"].ToString()
+						,table.Rows[i]["Preferred"].ToString()
+						,table.Rows[i]["MiddleI"].ToString());
+				}
+			}
+			return list.ToArray();
 		}
 
 		///<summary></summary>
