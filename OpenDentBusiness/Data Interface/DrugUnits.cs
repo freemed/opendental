@@ -81,20 +81,15 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<DrugUnit> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<DrugUnit>>(MethodBase.GetCurrentMethod(),patNum);
+		///<summary>For example, mL</summary>
+		public static string GetIdentifier(long drugUnitNum) {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			for(int i=0;i<Listt.Count;i++) {//using public Listt in case it's null.
+				if(Listt[i].DrugUnitNum==drugUnitNum) {
+					return Listt[i].UnitIdentifier;
+				}
 			}
-			string command="SELECT * FROM drugunit WHERE PatNum = "+POut.Long(patNum);
-			return Crud.DrugUnitCrud.SelectMany(command);
+			return "";//should never happen
 		}
-		*/
-
-
-
 	}
 }

@@ -14,18 +14,28 @@ namespace OpenDentBusiness.HL7 {
 			
 		}
 		
-		///<summary>Creates the Message object and fills it with data.  Just for one patient.</summary>
-		public void Initialize(Patient pat,List<VaccinePat> vaccines){
-			if(vaccines.Count==0) {
-				throw new ApplicationException("Must be at least one vaccine.");
+		///<summary>Creates the Message object and fills it with data.  Just for one patient/labresult.</summary>
+		public void Initialize(Patient pat){
+			//if(vaccines.Count==0) {
+			//	throw new ApplicationException("Must be at least one vaccine.");
+			//}
+			List<LabPanel> panelList=LabPanels.Refresh(pat.PatNum);
+			if(panelList.Count!=1) {
+				throw new ApplicationException("Patient must have exactly one lab panel.");
 			}
+			LabPanel panel=panelList[0];
+			List<LabResult> labresultList=LabResults.GetForPanel(panel.LabPanelNum);
+			if(labresultList.Count!=1) {
+				throw new ApplicationException("Lab panel must have exactly one lab result.");
+			}
+			LabResult labresult=labresultList[0];
 			msg=new MessageHL7(MessageType.ORU);
 			MSH();
 			PID(pat);
-			//for(int i=0;i<vaccines.Count;i++) {
-				OBR();
-				OBX(vaccines[0]);
-			//}
+			OBR(panel,labresult);
+			//although OBX can loop, we will not for the test.
+			OBX(labresult);
+			SPM(panel);
 		}
 
 		///<summary>Message Header Segment</summary>
@@ -56,29 +66,53 @@ namespace OpenDentBusiness.HL7 {
 			msg.Segments.Add(seg);
 		}
 
-		private void OBR() {
+		/* This is example #6, but I don't think a stool sample qualifies as public health info.
+		MSH|^~\&|EHR Application^2.16.840.1.113883.3.72.7.1^HL7|EHR Facility^2.16.840.1.113883.3.72.7.2^HL7|PH Application^2.16.840.1.113883.3.72.7.3^HL7|PH Facility^2.16.840.1.113883.3.72.7.4^HL7|20110316102420||ORU^R01^ORU_R01|NIST-110316102420132|P|2.5.1|||||||||PHLabReport-NoAck^^2.16.840.1.114222.4.10.3^ISO
+		SFT|NIST Lab, Inc.|3.6.23|A-1 Lab System|6742873-12||20080303
+		PID|||987488015^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||Whiteagle^Adam||19800321|M||1002-5^American Indian or Alaska Native^HL70005|354 Glacier Road^^Anchorage^Alaska^99505^USA^M||^PRN^^^^907^7552189|||||||||N^Not Hispanic or Latino^HL70189
+		ORC|RE||||||||||||||||||||Level Seven Healthcare^L^^^^ABC Medical Center&2.16.840.1.113883.19.4.6&ISO^XX^^^1234|1005 Healthcare Drive^^Ann Arbor^MI^48103^^B|^^^^^734^5553001
+		OBR|1||2233817^Lab^2.16.840.1.113883.19.3.1.6^ISO|625-4^Stool culture^LN^8835327^Stool Culture Test^99USI|||201007261100||||||Diarrhea X 4 days|||||||||201007291500|||F||||||787.91^DIARRHEA^I9CDX
+		OBX|1|ST|6331-3^Campylobacter Jejuni AB^LN|1|Isolated||||||F|||201007261100|||||201007291500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
+		OBX|1|ST|20955-1^Salmonella^LN|1|Isolated||||||F|||201007261100|||||201007291500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
+		OBX|1|ST|17576-0^Shigella^LN|1|Not Isolated||||||F|||201007261100|||||201007291500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
+		SPM||||119339001^Stool specimen^SCT^STL^Stool^HL70487^20080131^2.5.1
+		*/
+		/*This is example #5.  Hepatitis C is a legitimate reportable syndrome which would be reported to public health
+		MSH|^~\&|EHR Application^2.16.840.1.113883.3.72.7.1^HL7|EHR Facility^2.16.840.1.113883.3.72.7.2^HL7|PH Application^2.16.840.1.113883.3.72.7.3^HL7|PH Facility^2.16.840.1.113883.3.72.7.4^HL7|20110316102334||ORU^R01^ORU_R01|NIST-110316102333943|P|2.5.1|||||||||PHLabReport-Ack^^2.16.840.1.114222.4.10.3^ISO
+		SFT|NIST Lab, Inc.|3.6.23|A-1 Lab System|6742873-12||20080303
+		PID|||686774009^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||Takamura^Michael||19820815|M||2028-9^Asian^HL70005|3567 Maple Street^^Oakland^CA^94605^USA^M||^PRN^^^^510^6658876|||||||||N^Not Hispanic or Latino^HL70189
+		OBR|1||7564832^Lab^2.16.840.1.113883.19.3.1.6^ISO|10676-5^Hepatitis C Virus RNA^LN^1198112^Hepatitis C Test^99USI|||201007281400||||||Nausea, vomiting, abdominal pain|||1234^Admit^Alan^^^^^^ABC Medical Center&2.16.840.1.113883.19.4.6&ISO||||||201007301500|||F||||||787.01^Nausea and vomiting^I9CDX~789.0^Abdominal pain^I9CDX
+		OBX|1|NM|10676-5^Hepatitis C Virus RNA^LN|1|850000|iU/mL^international units per mililiter^UCUM|High Viral Load > or = 850000iU/mL|H|||F|||201007281400|||||200807301500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
+		SPM||||122555007^Venous blood specimen^SCT^BLDV^Blood venous^HL70487^20080131^2.5.1
+		*/
+
+		private void OBR(LabPanel panel, LabResult labresult) {
 			seg=new SegmentHL7(SegmentName.OBR);
-			//seg.SetField(1,"1");
-			//seg.SetField(,"");
-			//seg.SetField(,"");
-			//seg.SetField(,"");
-			//seg.SetField(,"");
-			//seg.SetField(,"");
-
-
-
-
+			seg.SetField(1,"1");
+			seg.SetField(3,"2233817^Lab^2.16.840.1.113883.19.3.1.6^ISO");
+			seg.SetField(4,"10676-5^Hepatitis C Virus RNA^LN^1198112^Hepatitis C Test^99USI");
+			seg.SetField(7,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
+			//The rest of the fields seem to be optional.  According to Drummond, OBR-15 is important to capture when importing.  It's blank in examples above.
 			msg.Segments.Add(seg);
 		}
 
-		private void OBX(VaccinePat vaccine) {
+		private void OBX(LabResult labresult) {
 			seg=new SegmentHL7(SegmentName.OBX);
-			//seg.SetField(1,"0");//fixed
-			//seg.SetField(2,"1");//fixed
-			//seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));
-			//seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));
-			//etc.  (see the patterns above.  Skip fields as necessary)
+			seg.SetField(1,"1");
+			seg.SetField(2,ConvertValueType(labresult.ValueType));//ValueType. NM=numeric, referring to the value that will follow in OBX-5
+			seg.SetField(3,labresult.TestID,labresult.TestName,"LN");//TestPerformed  ID^text^codingSystem.  eg. 10676-5^Hepatitis C Virus RNA^LN
+			seg.SetField(4,"1");
+			seg.SetField(5,labresult.ObsValue);//Value. Type based on OBX-2.  eg. 850000.
+			seg.SetField(6,DrugUnits.GetIdentifier(labresult.DrugUnitNum));//Units. The first component can be used alone. ISO+ is default.
+			//7,8,9,10 optional
+			seg.SetField(11,"F");//OBX-11 is required.  F means final.
+			seg.SetField(14,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));//OBX-14 datetime
+			msg.Segments.Add(seg);
+		}
 
+		private void SPM(LabPanel panel) {
+			seg=new SegmentHL7(SegmentName.SPM);
+			seg.SetField(4,panel.SpecimenCode,panel.SpecimenDesc,"SCT");//4-type, required, SCT=snomed, example:122555007=venous blood specimen
 			msg.Segments.Add(seg);
 		}
 
@@ -147,6 +181,12 @@ namespace OpenDentBusiness.HL7 {
 			return retVal;
 		}
 
+		private string ConvertValueType(LabObsValueType valueType) {
+			if(valueType==LabObsValueType.None) {
+				return "";
+			}
+			return valueType.ToString();
+		}
 
 
 

@@ -46,11 +46,15 @@ namespace OpenDentBusiness.Crud{
 			LabResult labResult;
 			for(int i=0;i<table.Rows.Count;i++) {
 				labResult=new LabResult();
-				labResult.LabResultNum = PIn.Long  (table.Rows[i]["LabResultNum"].ToString());
-				labResult.LabPanelNum  = PIn.Long  (table.Rows[i]["LabPanelNum"].ToString());
-				labResult.DateTest     = PIn.Date  (table.Rows[i]["DateTest"].ToString());
-				labResult.TestPerformed= PIn.String(table.Rows[i]["TestPerformed"].ToString());
-				labResult.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				labResult.LabResultNum= PIn.Long  (table.Rows[i]["LabResultNum"].ToString());
+				labResult.LabPanelNum = PIn.Long  (table.Rows[i]["LabPanelNum"].ToString());
+				labResult.DateTimeTest= PIn.DateT (table.Rows[i]["DateTimeTest"].ToString());
+				labResult.TestName    = PIn.String(table.Rows[i]["TestName"].ToString());
+				labResult.DateTStamp  = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				labResult.TestID      = PIn.String(table.Rows[i]["TestID"].ToString());
+				labResult.ValueType   = (LabObsValueType)PIn.Int(table.Rows[i]["ValueType"].ToString());
+				labResult.ObsValue    = PIn.String(table.Rows[i]["ObsValue"].ToString());
+				labResult.DrugUnitNum = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
 				retVal.Add(labResult);
 			}
 			return retVal;
@@ -91,15 +95,19 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabResultNum,";
 			}
-			command+="LabPanelNum,DateTest,TestPerformed) VALUES(";
+			command+="LabPanelNum,DateTimeTest,TestName,TestID,ValueType,ObsValue,DrugUnitNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labResult.LabResultNum)+",";
 			}
 			command+=
 				     POut.Long  (labResult.LabPanelNum)+","
-				+    POut.Date  (labResult.DateTest)+","
-				+"'"+POut.String(labResult.TestPerformed)+"')";
+				+    POut.DateT (labResult.DateTimeTest)+","
+				+"'"+POut.String(labResult.TestName)+"',"
 				//DateTStamp can only be set by MySQL
+				+"'"+POut.String(labResult.TestID)+"',"
+				+    POut.Int   ((int)labResult.ValueType)+","
+				+"'"+POut.String(labResult.ObsValue)+"',"
+				+    POut.Long  (labResult.DrugUnitNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,10 +120,14 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one LabResult in the database.</summary>
 		internal static void Update(LabResult labResult){
 			string command="UPDATE labresult SET "
-				+"LabPanelNum  =  "+POut.Long  (labResult.LabPanelNum)+", "
-				+"DateTest     =  "+POut.Date  (labResult.DateTest)+", "
-				+"TestPerformed= '"+POut.String(labResult.TestPerformed)+"' "
+				+"LabPanelNum =  "+POut.Long  (labResult.LabPanelNum)+", "
+				+"DateTimeTest=  "+POut.DateT (labResult.DateTimeTest)+", "
+				+"TestName    = '"+POut.String(labResult.TestName)+"', "
 				//DateTStamp can only be set by MySQL
+				+"TestID      = '"+POut.String(labResult.TestID)+"', "
+				+"ValueType   =  "+POut.Int   ((int)labResult.ValueType)+", "
+				+"ObsValue    = '"+POut.String(labResult.ObsValue)+"', "
+				+"DrugUnitNum =  "+POut.Long  (labResult.DrugUnitNum)+" "
 				+"WHERE LabResultNum = "+POut.Long(labResult.LabResultNum);
 			Db.NonQ(command);
 		}
@@ -127,15 +139,31 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="LabPanelNum = "+POut.Long(labResult.LabPanelNum)+"";
 			}
-			if(labResult.DateTest != oldLabResult.DateTest) {
+			if(labResult.DateTimeTest != oldLabResult.DateTimeTest) {
 				if(command!=""){ command+=",";}
-				command+="DateTest = "+POut.Date(labResult.DateTest)+"";
+				command+="DateTimeTest = "+POut.DateT(labResult.DateTimeTest)+"";
 			}
-			if(labResult.TestPerformed != oldLabResult.TestPerformed) {
+			if(labResult.TestName != oldLabResult.TestName) {
 				if(command!=""){ command+=",";}
-				command+="TestPerformed = '"+POut.String(labResult.TestPerformed)+"'";
+				command+="TestName = '"+POut.String(labResult.TestName)+"'";
 			}
 			//DateTStamp can only be set by MySQL
+			if(labResult.TestID != oldLabResult.TestID) {
+				if(command!=""){ command+=",";}
+				command+="TestID = '"+POut.String(labResult.TestID)+"'";
+			}
+			if(labResult.ValueType != oldLabResult.ValueType) {
+				if(command!=""){ command+=",";}
+				command+="ValueType = "+POut.Int   ((int)labResult.ValueType)+"";
+			}
+			if(labResult.ObsValue != oldLabResult.ObsValue) {
+				if(command!=""){ command+=",";}
+				command+="ObsValue = '"+POut.String(labResult.ObsValue)+"'";
+			}
+			if(labResult.DrugUnitNum != oldLabResult.DrugUnitNum) {
+				if(command!=""){ command+=",";}
+				command+="DrugUnitNum = "+POut.Long(labResult.DrugUnitNum)+"";
+			}
 			if(command==""){
 				return;
 			}

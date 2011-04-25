@@ -7,48 +7,12 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class LabResults{
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
-		///<summary>A list of all LabResults.</summary>
-		private static List<LabResult> listt;
-
-		///<summary>A list of all LabResults.</summary>
-		public static List<LabResult> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
-
-		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM labresult ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="LabResult";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.LabResultCrud.TableToList(table);
-		}
-		#endregion
-		public static List<LabResult> Refresh(long LPNum) {
+	
+		public static List<LabResult> GetForPanel(long labPanelNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<LabResult>>(MethodBase.GetCurrentMethod(),LPNum);
+				return Meth.GetObject<List<LabResult>>(MethodBase.GetCurrentMethod(),labPanelNum);
 			}
-			string command="SELECT * FROM labresult WHERE LabPanelNum = "+POut.Long(LPNum);
+			string command="SELECT * FROM labresult WHERE LabPanelNum = "+POut.Long(labPanelNum);
 			return Crud.LabResultCrud.SelectMany(command);
 		}
 
@@ -63,12 +27,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes all Lab Results associated with Lab Panel.</summary>
-		public static void DeletePanel(long labPanelNum) {
+		public static void DeleteForPanel(long labPanelNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labPanelNum);
 				return;
 			}
-			string command= "DELETE FROM labresult WHERE labPanelNum = "+POut.Long(labPanelNum);
+			string command= "DELETE FROM labresult WHERE LabPanelNum = "+POut.Long(labPanelNum);
 			Db.NonQ(command);
 		}
 

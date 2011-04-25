@@ -204,6 +204,8 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Observations Request</summary>
 		OBR,
 		///<summary>Observation Related to OBR</summary>
-		OBX
+		OBX,
+		///<summary>Specimen used for observation</summary>
+		SPM
 	}
 }

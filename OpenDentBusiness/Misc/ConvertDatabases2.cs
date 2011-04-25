@@ -4495,6 +4495,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						RawMessage text NOT NULL,
 						LabNameAddress varchar(255) NOT NULL,
 						DateTStamp timestamp,
+						SpecimenCode varchar(255) NOT NULL,
+						SpecimenDesc varchar(255) NOT NULL,
 						INDEX(PatNum),
 						INDEX(MedicalOrderNum)
 						) DEFAULT CHARSET=utf8";
@@ -4510,6 +4512,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						RawMessage clob,
 						LabNameAddress varchar2(255),
 						DateTStamp timestamp,
+						SpecimenCode varchar2(255),
+						SpecimenDesc varchar2(255),
 						CONSTRAINT labpanel_LabPanelNum PRIMARY KEY (LabPanelNum)
 						)";
 					Db.NonQ(command);
@@ -4524,9 +4528,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE labresult (
 						LabResultNum bigint NOT NULL auto_increment PRIMARY KEY,
 						LabPanelNum bigint NOT NULL,
-						DateTest date NOT NULL DEFAULT '0001-01-01',
-						TestPerformed varchar(255) NOT NULL,
+						DateTimeTest datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						TestName varchar(255) NOT NULL,
 						DateTStamp timestamp,
+						TestID varchar(255) NOT NULL,
+						ValueType tinyint NOT NULL,
+						ObsValue varchar(255) NOT NULL,
+						DrugUnitNum bigint NOT NULL,
 						INDEX(LabPanelNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -4537,9 +4545,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE labresult (
 						LabResultNum number(20) NOT NULL,
 						LabPanelNum number(20) NOT NULL,
-						DateTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-						TestPerformed varchar2(255),
+						DateTimeTest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						TestName varchar2(255),
 						DateTStamp timestamp,
+						TestID varchar2(255),
+						ValueType number(3) NOT NULL,
+						ObsValue varchar2(255),
+						DrugUnitNum number(20) NOT NULL,
 						CONSTRAINT labresult_LabResultNum PRIMARY KEY (LabResultNum)
 						)";
 					Db.NonQ(command);
@@ -4618,6 +4630,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
+
 
 
 
