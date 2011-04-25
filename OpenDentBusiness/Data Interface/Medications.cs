@@ -181,6 +181,16 @@ namespace OpenDentBusiness{
 			return Crud.MedicationCrud.SelectMany(command);
 		}
 
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all medications of a patient</summary>
+		public static void ResetTimeStamps(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			string command="UPDATE medication SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			Db.NonQ(command);
+		}
+
 	}
 
 	

@@ -116,6 +116,16 @@ namespace OpenDentBusiness{
 			List<Allergy> allergyList=new List<Allergy>(multAllergies);
 			return allergyList;
 		}
+
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all allergies of a patient</summary>
+		public static void ResetTimeStamps(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			string command="UPDATE allergy SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			Db.NonQ(command);
+		}
 		
 
 	}

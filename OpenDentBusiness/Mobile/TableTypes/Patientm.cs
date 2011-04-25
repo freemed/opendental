@@ -57,6 +57,8 @@ namespace OpenDentBusiness.Mobile{
 		public long ClinicNum;
 		/// <summary>Enum:ContactMethod</summary>
 		public ContactMethod PreferContactMethod;
+		///<summary>If this is blank, then the chart info for this patient will not be uploaded.  If this has a value, then this is the password that a patient must use to access their info online.</summary>
+		public string OnlinePassword;
 		
 		///<summary>Returns a copy of this Patientm.</summary>
 		public Patientm Copy(){

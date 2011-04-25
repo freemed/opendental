@@ -69,6 +69,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 				patientm.AddrNote           = PIn.String(table.Rows[i]["AddrNote"].ToString());
 				patientm.ClinicNum          = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
 				patientm.PreferContactMethod= (ContactMethod)PIn.Int(table.Rows[i]["PreferContactMethod"].ToString());
+				patientm.OnlinePassword     = PIn.String(table.Rows[i]["OnlinePassword"].ToString());
 				retVal.Add(patientm);
 			}
 			return retVal;
@@ -81,7 +82,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO patientm (";
 			command+="PatNum,";
-			command+="CustomerNum,LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,Email,AddrNote,ClinicNum,PreferContactMethod) VALUES(";
+			command+="CustomerNum,LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,Email,AddrNote,ClinicNum,PreferContactMethod,OnlinePassword) VALUES(";
 			command+=POut.Long(patientm.PatNum)+",";
 			command+=
 				     POut.Long  (patientm.CustomerNum)+","
@@ -105,7 +106,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"'"+POut.String(patientm.Email)+"',"
 				+"'"+POut.String(patientm.AddrNote)+"',"
 				+    POut.Long  (patientm.ClinicNum)+","
-				+    POut.Int   ((int)patientm.PreferContactMethod)+")";
+				+    POut.Int   ((int)patientm.PreferContactMethod)+","
+				+"'"+POut.String(patientm.OnlinePassword)+"')";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return patientm.PatNum;
 		}
@@ -133,7 +135,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"Email              = '"+POut.String(patientm.Email)+"', "
 				+"AddrNote           = '"+POut.String(patientm.AddrNote)+"', "
 				+"ClinicNum          =  "+POut.Long  (patientm.ClinicNum)+", "
-				+"PreferContactMethod=  "+POut.Int   ((int)patientm.PreferContactMethod)+" "
+				+"PreferContactMethod=  "+POut.Int   ((int)patientm.PreferContactMethod)+", "
+				+"OnlinePassword     = '"+POut.String(patientm.OnlinePassword)+"' "
 				+"WHERE CustomerNum = "+POut.Long(patientm.CustomerNum)+" AND PatNum = "+POut.Long(patientm.PatNum);
 			Db.NonQ(command);
 		}
@@ -171,6 +174,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			patientm.AddrNote           =patient.AddrNote;
 			patientm.ClinicNum          =patient.ClinicNum;
 			patientm.PreferContactMethod=patient.PreferContactMethod;
+			patientm.OnlinePassword     =patient.OnlinePassword;
 			return patientm;
 		}
 
