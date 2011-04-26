@@ -4624,7 +4624,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference (PrefNum,PrefName, ValueString,Comments) VALUES ((SELECT MAX(PrefNum)+1 FROM preference),'SecurityLogOffAfterMinutes','0','Minutes after user is automatically logged off. Set to 0 to disable.')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD PreferContactConfidential tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD PreferContactConfidential number(3)";
+					Db.NonQ(command);
+					command="UPDATE patient SET PreferContactConfidential = 0 WHERE PreferContactConfidential IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patient MODIFY PreferContactConfidential NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4665,3 +4676,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+
+				
