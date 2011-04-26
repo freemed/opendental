@@ -62,6 +62,12 @@ namespace OpenDentBusiness.Mobile{
 			string command= "DELETE FROM allergym WHERE CustomerNum = "+POut.Long(customerNum); ;
 			Db.NonQ(command);
 		}
+
+		///<summary></summary>
+		public static void Delete(long customerNum,long allergyNum) {
+			string command= "DELETE FROM allergym WHERE CustomerNum = "+POut.Long(customerNum)+" AND AllergyNum = "+POut.Long(allergyNum);
+			Db.NonQ(command);
+		}
 		#endregion
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
@@ -87,11 +93,7 @@ namespace OpenDentBusiness.Mobile{
 			Crud.AllergymCrud.Update(allergym);
 		}
 
-		///<summary></summary>
-		public static void Delete(long customerNum,long allergyNum) {
-			string command= "DELETE FROM allergym WHERE CustomerNum = "+POut.Long(customerNum)+" AND AllergyNum = "+POut.Long(allergyNum);
-			Db.NonQ(command);
-		}
+
 
 
 

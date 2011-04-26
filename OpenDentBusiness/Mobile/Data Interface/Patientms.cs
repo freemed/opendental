@@ -54,6 +54,11 @@ namespace OpenDentBusiness.Mobile {
 			public static List<long> GetPatNumsEligibleForSynch() {
 				return Patients.GetPatNumsEligibleForSynch();
 			}
+
+			/// <summary>Gets PatNums of patients whose online password is blank</summary>
+			public static List<long> GetPatNumsForDeletion() {
+				return Patients.GetPatNumsForDeletion();
+			}
 		#endregion
 
 		#region Used only on the Mobile webservice server for  synching.

@@ -72,6 +72,8 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SynchICD9sOperationCompleted;
         
+        private System.Threading.SendOrPostCallback DeletePatientsRecordsOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -169,6 +171,9 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SynchICD9sCompletedEventHandler SynchICD9sCompleted;
+        
+        /// <remarks/>
+        public event DeletePatientsRecordsCompletedEventHandler DeletePatientsRecordsCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/ServiceExists", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -765,6 +770,36 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/DeletePatientsRecords", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void DeletePatientsRecords(string RegistrationKey, long[] patNumList) {
+            this.Invoke("DeletePatientsRecords", new object[] {
+                        RegistrationKey,
+                        patNumList});
+        }
+        
+        /// <remarks/>
+        public void DeletePatientsRecordsAsync(string RegistrationKey, long[] patNumList) {
+            this.DeletePatientsRecordsAsync(RegistrationKey, patNumList, null);
+        }
+        
+        /// <remarks/>
+        public void DeletePatientsRecordsAsync(string RegistrationKey, long[] patNumList, object userState) {
+            if ((this.DeletePatientsRecordsOperationCompleted == null)) {
+                this.DeletePatientsRecordsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeletePatientsRecordsOperationCompleted);
+            }
+            this.InvokeAsync("DeletePatientsRecords", new object[] {
+                        RegistrationKey,
+                        patNumList}, this.DeletePatientsRecordsOperationCompleted, userState);
+        }
+        
+        private void OnDeletePatientsRecordsOperationCompleted(object arg) {
+            if ((this.DeletePatientsRecordsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.DeletePatientsRecordsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -950,6 +985,10 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SynchICD9sCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void DeletePatientsRecordsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591

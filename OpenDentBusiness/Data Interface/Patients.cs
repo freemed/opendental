@@ -157,6 +157,20 @@ namespace OpenDentBusiness{
 			return patnums;
 		}
 
+		/// <summary>Gets PatNums of patients whose online password is  blank</summary>
+		public static List<long> GetPatNumsForDeletion() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT PatNum From patient where OnlinePassword=''";
+			DataTable dt=Db.GetTable(command);
+			List<long> patnums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				patnums.Add(PIn.Long(dt.Rows[i]["PatNum"].ToString()));
+			}
+			return patnums;
+		}
+
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Used in HL7.  Otherwise, uses InsertID to fill PatNum.</summary>
 		public static long Insert(Patient pat,bool useExistingPK) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

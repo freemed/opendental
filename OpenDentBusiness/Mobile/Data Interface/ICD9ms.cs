@@ -28,7 +28,6 @@ namespace OpenDentBusiness.Mobile{
 		}
 
 		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
-		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
 		public static List<ICD9m> ConvertListToM(List<ICD9> list) {
 			List<ICD9m> retVal=new List<ICD9m>();
 			for(int i=0;i<list.Count;i++) {

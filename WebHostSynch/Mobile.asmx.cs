@@ -87,7 +87,8 @@ namespace WebHostSynch {
 				RxPatms.DeleteAll(customerNum);
 				Providerms.DeleteAll(customerNum);
 				//pat portal
-				/*
+				LabPanelms.DeleteAll(customerNum);
+				LabResultms.DeleteAll(customerNum);
 				Medicationms.DeleteAll(customerNum);
 				MedicationPatms.DeleteAll(customerNum);
 				AllergyDefms.DeleteAll(customerNum);
@@ -95,7 +96,7 @@ namespace WebHostSynch {
 				DiseaseDefms.DeleteAll(customerNum);
 				Diseasems.DeleteAll(customerNum);
 				ICD9ms.DeleteAll(customerNum);
-				*/
+			
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -335,6 +336,21 @@ namespace WebHostSynch {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 				}
 			}
+			
+		/// <summary>
+		/// Deletes records assoicated with the PatNums
+		/// </summary>
+		[WebMethod]
+			public void DeletePatientsRecords(String RegistrationKey,List<long> patNumList) {
+
+				for(int i=0;i<patNumList.Count;i++) {//Dennis: an inefficient loop but will work fine for the small number of records and will use existing default methods of the ms class
+					LabPanelms.Delete(customerNum,patNumList[i]);
+					MedicationPatms.Delete(customerNum,patNumList[i]);
+					Allergyms.Delete(customerNum,patNumList[i]);
+					Diseasems.Delete(customerNum,patNumList[i]);
+				}
+		}
+
 		#endregion
 	}
 }
