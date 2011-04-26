@@ -34,8 +34,8 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.</summary>
-		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,long patNum) {
+		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.  Returns</summary>
+		public static bool AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			//add current patient
 			if(buttonLastFivePatNums==null) {
@@ -44,16 +44,23 @@ namespace OpenDental{
 			if(buttonLastFiveNames==null) {
 				buttonLastFiveNames=new List<string>();
 			}
-			if(patNum!=0) {
-				if(buttonLastFivePatNums.Count==0	|| patNum!=buttonLastFivePatNums[0]) {//different patient selected
-					buttonLastFivePatNums.Insert(0,patNum);
-					buttonLastFiveNames.Insert(0,nameLF);
-					if(buttonLastFivePatNums.Count>5) {
-						buttonLastFivePatNums.RemoveAt(5);
-						buttonLastFiveNames.RemoveAt(5);
-					}
-				}
+			if(patNum==0) {
+				return false;
 			}
+			if(buttonLastFivePatNums.Count>0 && patNum==buttonLastFivePatNums[0]) {//same patient selected
+				return false;
+			}
+			//Patient has changed
+			buttonLastFivePatNums.Insert(0,patNum);
+			buttonLastFiveNames.Insert(0,nameLF);
+			if(buttonLastFivePatNums.Count>5) {
+				buttonLastFivePatNums.RemoveAt(5);
+				buttonLastFiveNames.RemoveAt(5);
+			}
+			if(AutomationL.Trigger(AutomationTrigger.OpenPatient,null,patNum)) {
+				return true;//Will cause MouseUpForced if in ApptModule
+			}
+			return false;
 			//fill menu
 			//menu.MenuItems.Clear();
 			//for(int i=0;i<buttonLastFiveNames.Count;i++) {

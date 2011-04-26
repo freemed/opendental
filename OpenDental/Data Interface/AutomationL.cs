@@ -8,8 +8,12 @@ using System.Windows.Forms;
 
 namespace OpenDental {
 	public class AutomationL {
-		///<summary>ProcCodes will be null unless trigger is CompleteProcedure.  This routine will generally fail silently.</summary>
-		public static void Trigger(AutomationTrigger trigger,List<string> procCodes,long patNum) {
+		///<summary>ProcCodes will be null unless trigger is CompleteProcedure.  This routine will generally fail silently.  Will return true if a trigger happened.</summary>
+		public static bool Trigger(AutomationTrigger trigger,List<string> procCodes,long patNum) {
+			if(patNum==0) {//Could happen for OpenPatient trigger
+				return false;
+			}
+			bool automationHappened=false;
 			for(int i=0;i<Automations.Listt.Count;i++) {
 				if(Automations.Listt[i].Autotrigger!=trigger) {
 					continue;
@@ -51,6 +55,7 @@ namespace OpenDental {
 					FormCommItem FormCI=new FormCommItem(CommlogCur);
 					FormCI.IsNew=true;
 					FormCI.ShowDialog();
+					automationHappened=true;
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.PopUp) {
 					if(autoConditionsList.Count>0) {
@@ -58,7 +63,8 @@ namespace OpenDental {
 							continue;
 						}
 					}
-					MessageBox.Show(Lan.g(typeof(AutomationL),Automations.Listt[i].MessageContent));
+					MessageBox.Show(Automations.Listt[i].MessageContent);
+					automationHappened=true;
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.PrintPatientLetter) {
 					if(autoConditionsList.Count>0) {
@@ -78,6 +84,7 @@ namespace OpenDental {
 					}
 					FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
 					FormSF.ShowDialog();
+					automationHappened=true;
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.PrintReferralLetter) {
 					if(autoConditionsList.Count>0) {
@@ -88,6 +95,7 @@ namespace OpenDental {
 					long referralNum=RefAttaches.GetReferralNum(patNum);
 					if(referralNum==0) {
 						MsgBox.Show("Automations","This patient has no referral source entered.");
+						automationHappened=true;
 						continue;
 					}
 					SheetDef sheetDef=SheetDefs.GetSheetDef(Automations.Listt[i].SheetDefNum);
@@ -102,6 +110,7 @@ namespace OpenDental {
 					}
 					FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
 					FormSF.ShowDialog();
+					automationHappened=true;
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.ShowExamSheet) {
 					if(autoConditionsList.Count>0) {
@@ -120,8 +129,10 @@ namespace OpenDental {
 					}
 					FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
 					FormSF.ShowDialog();
+					automationHappened=true;
 				}
 			}
+			return automationHappened;
 		}
 
 		private static bool CheckAutomationConditions(List<AutomationCondition> autoConditionsList,long patNum) {
@@ -275,9 +286,9 @@ namespace OpenDental {
 			Patient pat=Patients.GetLim(patNum);
 			switch(autoCond.Comparison) {
 				case AutoCondComparison.Equals:
-					return (pat.Gender.ToString()==autoCond.CompareString);
+					return (pat.Gender.ToString().Substring(0,1).ToLower()==autoCond.CompareString.ToLower());
 				case AutoCondComparison.Contains:
-					return (pat.Gender.ToString().ToLower().Contains(autoCond.CompareString.ToLower()));
+					return (pat.Gender.ToString().Substring(0,1).ToLower().Contains(autoCond.CompareString.ToLower()));
 				default:
 					return false;
 			}

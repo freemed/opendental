@@ -38,7 +38,7 @@ namespace OpenDental {
 		private bool ReasonableLogic() {
 			AutoCondComparison comp=(AutoCondComparison)listComparison.SelectedIndex;
 			AutoCondField cond=(AutoCondField)listCompareField.SelectedIndex;
-			//So far Age is only thing that can be GreaterThan or LessThan.
+			//So far Age is only thing that allows GreaterThan or LessThan.
 			if(cond!=AutoCondField.Age) {
 				if(comp==AutoCondComparison.GreaterThan || comp==AutoCondComparison.LessThan) {
 					return false;
@@ -71,6 +71,12 @@ namespace OpenDental {
 			}
 			if(!ReasonableLogic()) {
 				MsgBox.Show(this,"Comparison does not make sense with chosen field.");
+				return;
+			}
+			if(!((AutoCondField)listCompareField.SelectedIndex==AutoCondField.Gender
+				&& (textCompareString.Text.ToLower()=="m" || textCompareString.Text.ToLower()=="f"))) 
+			{
+				MsgBox.Show(this,"Allowed gender values are M or F.");
 				return;
 			}
 			ConditionCur.CompareString=textCompareString.Text;

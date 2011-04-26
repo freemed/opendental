@@ -1965,7 +1965,11 @@ namespace OpenDental{
 
 		///<Summary>Serves four functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text. 4. Displays any popup.</Summary>
 		private void FillPatientButton(long patNum,string patName,bool hasEmail,string chartNumber,long siteNum) {
-			PatientL.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
+			if(PatientL.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum)) {
+				if(ContrAppt2.Visible) {
+					ContrAppt2.MouseUpForced();
+				}
+			}
 			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
 				return;
 			}
@@ -2014,7 +2018,7 @@ namespace OpenDental{
 				List<Popup> popList=Popups.CreateObjects(patNum);
 				if(popList.Count>0 && !popList[0].IsDisabled) {
 					if(ContrAppt2.Visible) {
-						ContrAppt2.MouseUpForced();
+					  ContrAppt2.MouseUpForced();
 					}
 					//MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
 					FormPopupDisplay FormP=new FormPopupDisplay();

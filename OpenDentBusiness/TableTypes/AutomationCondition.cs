@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		Allergy,
 		///<summary>Example, 23</summary>
 		Age,
-		///<summary>Allowed values are M or F.  Enforce at entry time.</summary>
+		///<summary>Allowed values are M or F, not case sensitive.  Enforce at entry time.</summary>
 		Gender,
 		Labresult
 	}
