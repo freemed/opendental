@@ -2130,6 +2130,9 @@ namespace OpenDental{
 					case "P7ToothNumOrArea":
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",7+startProc);
 						break;
+					case "P7TreatProvNPI":
+						displayStrings[i]=GetProcInfo("TreatProvNPI",7+startProc);
+						break;
 					case "P7RevCode":
 						displayStrings[i]=GetProcInfo("RevCode",7+startProc);
 						break;
@@ -2214,6 +2217,9 @@ namespace OpenDental{
 						break;
 					case "P8ToothNumOrArea":
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",8+startProc);
+						break;
+					case "P8TreatProvNPI":
+						displayStrings[i]=GetProcInfo("TreatProvNPI",8+startProc);
 						break;
 					case "P8RevCode":
 						displayStrings[i]=GetProcInfo("RevCode",8+startProc);
@@ -2300,6 +2306,9 @@ namespace OpenDental{
 					case "P9ToothNumOrArea":
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",9+startProc);
 						break;
+					case "P9TreatProvNPI":
+						displayStrings[i]=GetProcInfo("TreatProvNPI",9+startProc);
+						break;
 					case "P9RevCode":
 						displayStrings[i]=GetProcInfo("RevCode",9+startProc);
 						break;
@@ -2384,6 +2393,9 @@ namespace OpenDental{
 						break;
 					case "P10ToothNumOrArea":
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",10+startProc);
+						break;
+					case "P10TreatProvNPI":
+						displayStrings[i]=GetProcInfo("TreatProvNPI",10+startProc);
 						break;
 					case "P10RevCode":
 						displayStrings[i]=GetProcInfo("RevCode",10+startProc);
