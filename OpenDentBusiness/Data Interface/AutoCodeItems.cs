@@ -30,6 +30,11 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		public static void ClearCache() {
+			AutoCodeItemC.HList=null;
+			AutoCodeItemC.List=null;
+		}
+
 		///<summary></summary>
 		public static long Insert(AutoCodeItem Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

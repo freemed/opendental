@@ -37,6 +37,10 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.AccountingAutoPayCrud.TableToList(table);
 		}
+
+		public static void ClearCache() {
+			listt=null;
+		}
 		
 		///<summary></summary>
 		public static long Insert(AccountingAutoPay pay) {

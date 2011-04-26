@@ -23,6 +23,10 @@ namespace OpenDentBusiness{
 			AutoCodeCondC.List=Crud.AutoCodeCondCrud.TableToList(table).ToArray();
 		}
 
+		public static void ClearCache() {
+			AutoCodeCondC.List=null;
+		}
+
 		///<summary></summary>
 		public static long Insert(AutoCodeCond Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

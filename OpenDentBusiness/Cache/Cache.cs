@@ -32,6 +32,23 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>This gets used when switching databases.  Switching databases is allowed from ClientWeb in the sense that the user can connect to a different server.</summary>
+		public static void ClearAllCache() {
+			//AccountingAutoPays
+			AccountingAutoPays.ClearCache();
+			//AutoCodes
+			AutoCodes.ClearCache();
+			AutoCodeItems.ClearCache();
+			AutoCodeConds.ClearCache();
+
+
+
+
+
+
+
+		}
+
 		///<summary>If ClientWeb, then this method is instead run on the server, and the result passed back to the client.  And since it's ClientWeb, FillCache will be run on the client.</summary>
 		public static DataSet GetCacheDs(string itypesStr){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
