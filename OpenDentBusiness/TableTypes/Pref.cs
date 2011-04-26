@@ -153,6 +153,7 @@ namespace OpenDentBusiness {
 		LabelPatientDefaultSheetDefNum,
 		LanguagesUsedByPatients,
 		LetterMergePath,
+		SecurityLogOffAfterMinutes,
 		MainWindowTitle,
 		MedicalEclaimsEnabled,
 		MobileSyncDateTimeLastRun,
