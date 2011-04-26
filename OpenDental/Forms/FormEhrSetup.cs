@@ -17,58 +17,55 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void butICD9s_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
+		private void FormEhrSetup_Load(object sender,EventArgs e) {
+			if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {
+				panelEmergencyNow.BackColor=Color.Red;
 			}
+			else {
+				panelEmergencyNow.BackColor=SystemColors.Control;
+			}
+		}
+
+		private void butICD9s_Click(object sender,EventArgs e) {
 			FormIcd9s FormE=new FormIcd9s();
 			FormE.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"ICD9s");
 		}
 
 		private void butAllergies_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			} 
 			FormAllergySetup FAS=new FormAllergySetup();
 			FAS.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"AllergySetup");
 		}
 
 		private void butFormularies_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
 			FormFormularies FormE=new FormFormularies();
 			FormE.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Formularies");
 		}
 
 		private void butVaccineDef_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
 			FormVaccineDefSetup FormE=new FormVaccineDefSetup();
 			FormE.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"VaccineDefSetup");
 		}
 
 		private void butDrugManufacturer_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
 			FormDrugManufacturerSetup FormE=new FormDrugManufacturerSetup();
 			FormE.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"FormDrugManufacturerSetup");
 		}
 
 		private void butDrugUnit_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
 			FormDrugUnitSetup FormE=new FormDrugUnitSetup();
 			FormE.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"FormDrugUnitSetup");
+		}
+
+		private void butEmergencyNow_Click(object sender,EventArgs e) {
+			if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {
+				panelEmergencyNow.BackColor=SystemColors.Control;
+				Prefs.UpdateBool(PrefName.EhrEmergencyNow,false);
+			}
+			else {
+				panelEmergencyNow.BackColor=Color.Red;
+				Prefs.UpdateBool(PrefName.EhrEmergencyNow,true);
+			}
+			DataValid.SetInvalid(InvalidType.Prefs);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

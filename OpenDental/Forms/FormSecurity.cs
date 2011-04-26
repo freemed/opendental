@@ -480,6 +480,10 @@ namespace OpenDental{
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.FamilyModule);
+#if DEBUG
+				node2=SetNode(Permissions.EhrEmergencyAccess);//Node doesn't get any text as is.
+					node.Nodes.Add(node2);
+#endif
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.AccountModule);
 				node2=SetNode(Permissions.ClaimSentEdit);

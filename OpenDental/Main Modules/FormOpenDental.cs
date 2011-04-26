@@ -2950,9 +2950,14 @@ namespace OpenDental{
 					}
 					break;
 				case 1:
-					if(!Security.IsAuthorized(Permissions.FamilyModule)){
-						e.Cancel=true;
-						return;
+					if(PrefC.GetBool(PrefName.EhrEmergencyNow) && Security.IsAuthorized(Permissions.EhrEmergencyAccess)) {
+						break;
+					}
+					else {
+						if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+							e.Cancel=true;
+							return;
+						}
 					}
 					break;
 				case 2:

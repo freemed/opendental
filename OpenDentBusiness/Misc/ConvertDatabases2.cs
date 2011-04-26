@@ -4612,9 +4612,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('EhrEmergencyNow','0','Boolean. 0 means false. 1 grants emergency access to the family module.')";
+					Db.NonQ(command);
 				}
 				else{//oracle
 					command="INSERT INTO preference (PrefNum,PrefName, ValueString,Comments) VALUES ((SELECT MAX(PrefNum)+1 FROM preference),'EhrEmergencyNow','0','Boolean. 0 means false. 1 grants emergency access to the family module.')";
+					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('SecurityLogOffAfterMinutes','0','')";

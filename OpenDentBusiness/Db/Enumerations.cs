@@ -1083,7 +1083,9 @@ namespace OpenDentBusiness{
 		///<summary>46</summary>
 		ProcEditShowFee,
 		///<summary>47</summary>
-		AdjustmentEditZero
+		AdjustmentEditZero,
+		///<summary>48</summary>
+		EhrEmergencyAccess
 	}
 
 	///<summary>The type of signal being sent.</summary>
