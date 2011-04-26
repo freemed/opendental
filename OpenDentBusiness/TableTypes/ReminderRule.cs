@@ -22,21 +22,23 @@ namespace OpenDentBusiness{
 			return (ReminderRule)this.MemberwiseClone();
 		}
 
-		///<summary>EhrCriterion: Problem,Medication,Allergy,Age,Gender,LabResult</summary>
-		public enum EhrCriterion {
-			///<summary>0-Problem</summary>
-			Problem,
-			///<summary>1-Medication</summary>
-			Medication,
-			///<summary>2-Allergy</summary>
-			Allergy,
-			///<summary>3-Age</summary>
-			Age,
-			///<summary>4-Gender</summary>
-			Gender,
-			///<summary>5-LabResult</summary>
-			LabResult
-		}
+		
 
+	}
+
+	///<summary>EhrCriterion: Problem,Medication,Allergy,Age,Gender,LabResult</summary>
+	public enum EhrCriterion {
+		///<summary>0-Problem</summary>
+		Problem,
+		///<summary>1-Medication</summary>
+		Medication,
+		///<summary>2-Allergy</summary>
+		Allergy,
+		///<summary>3-Age</summary>
+		Age,
+		///<summary>4-Gender</summary>
+		Gender,
+		///<summary>5-LabResult</summary>
+		LabResult
 	}
 }
