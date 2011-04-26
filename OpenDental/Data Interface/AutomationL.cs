@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using OpenDentBusiness;
+using System.Windows.Forms;
 
 namespace OpenDental {
 	public class AutomationL {
@@ -50,6 +51,14 @@ namespace OpenDental {
 					FormCommItem FormCI=new FormCommItem(CommlogCur);
 					FormCI.IsNew=true;
 					FormCI.ShowDialog();
+				}
+				else if(Automations.Listt[i].AutoAction==AutomationAction.PopUp) {
+					if(autoConditionsList.Count>0) {
+						if(!CheckAutomationConditions(autoConditionsList,patNum)) {
+							continue;
+						}
+					}
+					MessageBox.Show(Lan.g(typeof(AutomationL),Automations.Listt[i].MessageContent));
 				}
 				else if(Automations.Listt[i].AutoAction==AutomationAction.PrintPatientLetter) {
 					if(autoConditionsList.Count>0) {
@@ -124,11 +133,42 @@ namespace OpenDental {
 							return false;
 						}
 						break;
+					case AutoCondField.Problem:
+						if(!ProblemComparison(autoConditionsList[i],patNum))	{
+							return false;
+						}
+						break;
+					case AutoCondField.Medication:
+						if(!MedicationComparison(autoConditionsList[i],patNum))	{
+							return false;
+						}
+						break;
+					case AutoCondField.Allergy:
+						if(!AllergyComparison(autoConditionsList[i],patNum))	{
+							return false;
+						}
+						break;
+					case AutoCondField.Age:
+						if(!AgeComparison(autoConditionsList[i],patNum)) {
+							return false;
+						}
+						break;
+					case AutoCondField.Gender:
+						if(!GenderComparison(autoConditionsList[i],patNum)) {
+							return false;
+						}
+						break;
+					case AutoCondField.Labresult:
+						if(!LabresultComparison(autoConditionsList[i],patNum)) {
+							return false;
+						}
+						break;
 				}
 			}
 			return true;
 		}
 
+		#region Comparisons
 		private static bool SheetNotCompletedTodayWithName(AutomationCondition autoCond, long patNum) {
 			List<Sheet> sheetList=Sheets.GetForPatientForToday(patNum);
 			switch(autoCond.Comparison) {//Find out what operand to use.
@@ -140,11 +180,130 @@ namespace OpenDental {
 						}
 					}
 					break;
+				case AutoCondComparison.Contains:
+					for(int i=0;i<sheetList.Count;i++) {
+						if(sheetList[i].Description.ToLower().Contains(autoCond.CompareString.ToLower())) {
+							return true;
+						}
+					}
+					break;
 			}
 			return false;
 		}
 
+		private static bool ProblemComparison(AutomationCondition autoCond,long patNum) {
+			List<Disease> problemList=Diseases.Refresh(patNum);
+			switch(autoCond.Comparison) {//Find out what operand to use.
+				case AutoCondComparison.Equals:
+					for(int i=0;i<problemList.Count;i++) {//Includes hidden
+						if(DiseaseDefs.GetName(problemList[i].DiseaseDefNum)==autoCond.CompareString) {
+							return true;
+						}
+					}
+					break;
+				case AutoCondComparison.Contains:
+					for(int i=0;i<problemList.Count;i++) {
+						if(DiseaseDefs.GetName(problemList[i].DiseaseDefNum).ToLower().Contains(autoCond.CompareString.ToLower())) {
+							return true;
+						}
+					}
+					break;
+			}
+			return false;
+		}
 
+		private static bool MedicationComparison(AutomationCondition autoCond,long patNum) {
+			List<Medication> medList=Medications.GetMedicationsByPat(patNum);
+			switch(autoCond.Comparison) {
+				case AutoCondComparison.Equals:
+					for(int i=0;i<medList.Count;i++) {
+						if(medList[i].MedName==autoCond.CompareString) {
+							return true;
+						}
+					}
+					break;
+				case AutoCondComparison.Contains:
+					for(int i=0;i<medList.Count;i++) {
+						if(medList[i].MedName.ToLower().Contains(autoCond.CompareString.ToLower())) {
+							return true;
+						}
+					}
+					break;
+			}
+			return false;
+		}
+
+		private static bool AllergyComparison(AutomationCondition autoCond,long patNum) {
+			List<Allergy> allergyList=Allergies.GetAll(patNum,false);
+			switch(autoCond.Comparison) {
+				case AutoCondComparison.Equals:
+					for(int i=0;i<allergyList.Count;i++) {
+						if(AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description==autoCond.CompareString) {
+							return true;
+						}
+					}
+					break;
+				case AutoCondComparison.Contains:
+					for(int i=0;i<allergyList.Count;i++) {
+						if(AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description.ToLower().Contains(autoCond.CompareString.ToLower())) {
+							return true;
+						}
+					}
+					break;
+			}
+			return false;
+		}
+
+		private static bool AgeComparison(AutomationCondition autoCond,long patNum) {
+			Patient pat=Patients.GetPat(patNum);
+			int age=pat.Age;
+			switch(autoCond.Comparison) {
+				case AutoCondComparison.Equals:
+					return (age==PIn.Int(autoCond.CompareString));
+				case AutoCondComparison.Contains:
+					return (age.ToString().Contains(autoCond.CompareString));
+				case AutoCondComparison.GreaterThan:
+					return (age>PIn.Int(autoCond.CompareString));
+				case AutoCondComparison.LessThan:
+					return (age<PIn.Int(autoCond.CompareString));
+				default:
+					return false;
+			}
+		}
+
+		private static bool GenderComparison(AutomationCondition autoCond,long patNum) {
+			Patient pat=Patients.GetLim(patNum);
+			switch(autoCond.Comparison) {
+				case AutoCondComparison.Equals:
+					return (pat.Gender.ToString()==autoCond.CompareString);
+				case AutoCondComparison.Contains:
+					return (pat.Gender.ToString().ToLower().Contains(autoCond.CompareString.ToLower()));
+				default:
+					return false;
+			}
+		}
+
+		private static bool LabresultComparison(AutomationCondition autoCond,long patNum) {
+			List<LabResult> listResults=LabResults.GetAllForPatient(patNum);
+			switch(autoCond.Comparison) {
+				case AutoCondComparison.Equals:
+					for(int i=0;i<listResults.Count;i++) {
+						if(listResults[i].TestName==autoCond.CompareString) {
+							return true;
+						}
+					}
+					break;
+				case AutoCondComparison.Contains:
+					for(int i=0;i<listResults.Count;i++) {
+						if(listResults[i].TestName.ToLower().Contains(autoCond.CompareString.ToLower())) {
+							return true;
+						}
+					}
+					break;
+			}
+			return false;
+		}
+		#endregion
 
 
 

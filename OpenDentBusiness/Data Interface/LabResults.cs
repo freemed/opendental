@@ -74,6 +74,15 @@ namespace OpenDentBusiness{
 			return LabResultList;
 		}
 
+		///<summary>Get all lab results for one patient.</summary>
+		public static List<LabResult> GetAllForPatient(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabResult>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM labresult WHERE LabResultNum IN (SELECT LabResultNum FROM labpanel WHERE PatNum="+POut.Long(patNum)+")";
+			return Crud.LabResultCrud.SelectMany(command);
+		}
+
 		///<summary>Insert new lab results.</summary>
 		public static long Insert(LabResult labResult) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

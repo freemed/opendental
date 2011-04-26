@@ -422,6 +422,14 @@ namespace OpenDental{
 				labelMessage.Visible=true;
 				textMessage.Visible=true;
 			}
+			else if(comboAction.SelectedIndex==(int)AutomationAction.PopUp) {
+				labelSheetDef.Visible=false;
+				comboSheetDef.Visible=false;
+				labelCommType.Visible=false;
+				comboCommType.Visible=false;
+				labelMessage.Visible=true;
+				textMessage.Visible=true;
+			}
 			else {
 				labelSheetDef.Visible=true;
 				comboSheetDef.Visible=true;
@@ -507,6 +515,12 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(comboAction.SelectedIndex==(int)AutomationAction.PopUp) {
+				if(textMessage.Text.Trim()==string.Empty) {
+					MsgBox.Show(this,"Message cannot be blank.");
+					return;
+				}
+			}
 			if(comboAction.SelectedIndex==(int)AutomationAction.PrintPatientLetter){
 				if(comboSheetDef.SelectedIndex==-1){
 					MsgBox.Show(this,"A SheetDef must be selected.");
@@ -563,6 +577,9 @@ namespace OpenDental{
 				AutoCur.CommType=0;
 				AutoCur.MessageContent="";
 			}
+			if(comboAction.SelectedIndex==(int)AutomationAction.PopUp) {
+				AutoCur.MessageContent=textMessage.Text;
+			}//MessageContent was already set blank if not PopUp or Commlog above.
 			Automations.Update(AutoCur);//Because always inserted before opening this form.
 			DialogResult=DialogResult.OK;
 		}

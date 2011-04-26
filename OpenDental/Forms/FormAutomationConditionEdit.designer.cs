@@ -75,7 +75,6 @@ namespace OpenDental{
 			this.listCompareField.FormattingEnabled = true;
 			this.listCompareField.Location = new System.Drawing.Point(24,43);
 			this.listCompareField.Name = "listCompareField";
-			this.listCompareField.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listCompareField.Size = new System.Drawing.Size(181,212);
 			this.listCompareField.TabIndex = 71;
 			// 
@@ -86,7 +85,6 @@ namespace OpenDental{
 			this.listComparison.FormattingEnabled = true;
 			this.listComparison.Location = new System.Drawing.Point(234,43);
 			this.listComparison.Name = "listComparison";
-			this.listComparison.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listComparison.Size = new System.Drawing.Size(138,212);
 			this.listComparison.TabIndex = 72;
 			// 

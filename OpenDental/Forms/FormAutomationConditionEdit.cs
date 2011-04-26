@@ -34,6 +34,19 @@ namespace OpenDental {
 			}
 		}
 
+		///<summary>Logic might get more complex as fields and comparisons are added so a seperate function was made.</summary>
+		private bool ReasonableLogic() {
+			AutoCondComparison comp=(AutoCondComparison)listComparison.SelectedIndex;
+			AutoCondField cond=(AutoCondField)listCompareField.SelectedIndex;
+			//So far Age is only thing that can be GreaterThan or LessThan.
+			if(cond!=AutoCondField.Age) {
+				if(comp==AutoCondComparison.GreaterThan || comp==AutoCondComparison.LessThan) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -54,6 +67,10 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textCompareString.Text.Trim()=="") {
 				MsgBox.Show(this,"Text not allowed to be blank.");
+				return;
+			}
+			if(!ReasonableLogic()) {
+				MsgBox.Show(this,"Comparison does not make sense with chosen field.");
 				return;
 			}
 			ConditionCur.CompareString=textCompareString.Text;
