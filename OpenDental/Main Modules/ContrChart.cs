@@ -7599,7 +7599,7 @@ namespace OpenDental{
 		}
 
 		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
-			Rectangle bounds=new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Rectangle bounds=new Rectangle(50,40,800,1000);//1035);//Some printers can handle up to 1042
 			Graphics g=e.Graphics;
 			string text;
 			Font headingFont=new Font("Arial",13,FontStyle.Bold);
@@ -7658,7 +7658,7 @@ namespace OpenDental{
 		}
 
 		private void pd2_PrintPageDay(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			Rectangle bounds=new Rectangle(50,40,800,1020);//Some printers can handle up to 1042
+			Rectangle bounds=new Rectangle(50,40,800,1000);//Some printers can handle up to 1042
 			Graphics g=e.Graphics;
 			string text;
 			Font headingFont=new Font("Arial",13,FontStyle.Bold);
