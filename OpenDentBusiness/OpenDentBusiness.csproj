@@ -267,6 +267,7 @@
     <Compile Include="Crud\RefAttachCrud.cs" />
     <Compile Include="Crud\ReferralCrud.cs" />
     <Compile Include="Crud\RegistrationKeyCrud.cs" />
+    <Compile Include="Crud\ReminderRuleCrud.cs" />
     <Compile Include="Crud\RepeatChargeCrud.cs" />
     <Compile Include="Crud\ReplicationServerCrud.cs" />
     <Compile Include="Crud\ReqNeededCrud.cs" />
@@ -343,6 +344,7 @@
     <Compile Include="Data Interface\OrionProcs.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
     <Compile Include="Data Interface\ProcGroupItems.cs" />
+    <Compile Include="Data Interface\ReminderRuleCrud.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
@@ -668,6 +670,7 @@
     <Compile Include="TableTypes\ProcGroupItem.cs" />
     <Compile Include="TableTypes\ProcApptColor.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
+    <Compile Include="TableTypes\ReminderRule.cs" />
     <Compile Include="TableTypes\Signalod.cs" />
     <Compile Include="TableTypes\TaskNote.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />

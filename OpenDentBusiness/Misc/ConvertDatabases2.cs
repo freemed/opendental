@@ -4636,7 +4636,34 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE patient MODIFY PreferContactConfidential NOT NULL";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS reminderrule";
+					Db.NonQ(command);
+					command=@"CREATE TABLE reminderrule (
+						ReminderRuleNum bigint NOT NULL auto_increment PRIMARY KEY,
+						ReminderCriterion tinyint NOT NULL,
+						CriterionFK bigint NOT NULL,
+						CriterionValue varchar(255) NOT NULL,
+						Message varchar(255) NOT NULL,
+						INDEX(CriterionFK)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE reminderrule'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE reminderrule (
+						ReminderRuleNum number(20) NOT NULL,
+						ReminderCriterion number(3) NOT NULL,
+						CriterionFK number(20) NOT NULL,
+						CriterionValue varchar2(255),
+						Message varchar2(255),
+						CONSTRAINT reminderrule_ReminderRuleNum PRIMARY KEY (ReminderRuleNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX reminderrule_CriterionFK ON reminderrule (CriterionFK)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4678,5 +4705,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
+
+				
 
 				
