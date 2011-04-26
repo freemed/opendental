@@ -4617,11 +4617,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference (PrefNum,PrefName, ValueString,Comments) VALUES ((SELECT MAX(PrefNum)+1 FROM preference),'EhrEmergencyNow','0','Boolean. 0 means false. 1 grants emergency access to the family module.')";
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('SecurityLogOffAfterMinutes','0','Minutes after user is automatically logged off. Set to 0 to disable.')";
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('SecurityLogOffAfterMinutes','0','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference (PrefNum,PrefName, ValueString,Comments) VALUES ((SELECT MAX(PrefNum)+1 FROM preference),'SecurityLogOffAfterMinutes','0','Minutes after user is automatically logged off. Set to 0 to disable.')";
+					command="INSERT INTO preference (PrefNum,PrefName, ValueString,Comments) VALUES ((SELECT MAX(PrefNum)+1 FROM preference),'SecurityLogOffAfterMinutes','0','')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {

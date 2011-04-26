@@ -345,7 +345,7 @@ namespace OpenDental{
 			// 
 			// textLogOffAfterMinutes
 			// 
-			this.textLogOffAfterMinutes.Location = new System.Drawing.Point(391,563);
+			this.textLogOffAfterMinutes.Location = new System.Drawing.Point(391,581);
 			this.textLogOffAfterMinutes.Name = "textLogOffAfterMinutes";
 			this.textLogOffAfterMinutes.Size = new System.Drawing.Size(29,20);
 			this.textLogOffAfterMinutes.TabIndex = 100;
@@ -353,9 +353,9 @@ namespace OpenDental{
 			// label3
 			// 
 			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label3.Location = new System.Drawing.Point(271,563);
+			this.label3.Location = new System.Drawing.Point(304,581);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(123,18);
+			this.label3.Size = new System.Drawing.Size(90,18);
 			this.label3.TabIndex = 101;
 			this.label3.Text = "Log off after ";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -363,9 +363,9 @@ namespace OpenDental{
 			// label4
 			// 
 			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label4.Location = new System.Drawing.Point(422,563);
+			this.label4.Location = new System.Drawing.Point(422,581);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(99,18);
+			this.label4.Size = new System.Drawing.Size(71,18);
 			this.label4.TabIndex = 102;
 			this.label4.Text = "minutes.";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

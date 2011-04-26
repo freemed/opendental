@@ -344,7 +344,7 @@
     <Compile Include="Data Interface\OrionProcs.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
     <Compile Include="Data Interface\ProcGroupItems.cs" />
-    <Compile Include="Data Interface\ReminderRuleCrud.cs" />
+    <Compile Include="Data Interface\ReminderRules.cs" />
     <Compile Include="Data Interface\ReplicationServers.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />

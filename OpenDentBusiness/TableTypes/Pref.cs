@@ -153,7 +153,6 @@ namespace OpenDentBusiness {
 		LabelPatientDefaultSheetDefNum,
 		LanguagesUsedByPatients,
 		LetterMergePath,
-		SecurityLogOffAfterMinutes,
 		MainWindowTitle,
 		MedicalEclaimsEnabled,
 		MobileSyncDateTimeLastRun,
@@ -259,6 +258,8 @@ namespace OpenDentBusiness {
 		///<summary>Set to 0 to always grant permission. 1 means only today.</summary>
 		SecurityLockDays,
 		SecurityLockIncludesAdmin,
+		///<summary>Set to 0 to disable auto logoff.</summary>
+		SecurityLogOffAfterMinutes,
 		SecurityLogOffWithWindows,
 		ShowAccountFamilyCommEntries,
 		ShowFeatureMedicalInsurance,
