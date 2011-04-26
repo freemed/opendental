@@ -37,6 +37,9 @@ namespace OpenDental{
 		private TextBox textDaysLock;
 		private Label label2;
 		private CheckBox checkLogOffWindows;
+		private TextBox textLogOffAfterMinutes;
+		private Label label3;
+		private Label label4;
 		//private DataTable table;
 		private List<Userod> ListUser;
 
@@ -94,6 +97,9 @@ namespace OpenDental{
 			this.textDaysLock = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkLogOffWindows = new System.Windows.Forms.CheckBox();
+			this.textLogOffAfterMinutes = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// treePermissions
@@ -109,8 +115,8 @@ namespace OpenDental{
 			this.treePermissions.ShowRootLines = false;
 			this.treePermissions.Size = new System.Drawing.Size(362,637);
 			this.treePermissions.TabIndex = 6;
-			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
 			this.treePermissions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treePermissions_AfterSelect);
+			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
 			this.treePermissions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treePermissions_MouseDown);
 			// 
 			// imageListPerm
@@ -243,8 +249,8 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// butSetAll
 			// 
@@ -337,10 +343,40 @@ namespace OpenDental{
 			this.checkLogOffWindows.Text = "Log off with Windows";
 			this.checkLogOffWindows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textLogOffAfterMinutes
+			// 
+			this.textLogOffAfterMinutes.Location = new System.Drawing.Point(391,563);
+			this.textLogOffAfterMinutes.Name = "textLogOffAfterMinutes";
+			this.textLogOffAfterMinutes.Size = new System.Drawing.Size(29,20);
+			this.textLogOffAfterMinutes.TabIndex = 100;
+			// 
+			// label3
+			// 
+			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label3.Location = new System.Drawing.Point(271,563);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(123,18);
+			this.label3.TabIndex = 101;
+			this.label3.Text = "Log off after ";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label4.Location = new System.Drawing.Point(422,563);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(99,18);
+			this.label4.TabIndex = 102;
+			this.label4.Text = "minutes.";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,700);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textLogOffAfterMinutes);
 			this.Controls.Add(this.checkLogOffWindows);
 			this.Controls.Add(this.textDaysLock);
 			this.Controls.Add(this.label2);
