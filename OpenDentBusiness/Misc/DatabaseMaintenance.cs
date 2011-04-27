@@ -937,6 +937,27 @@ namespace OpenDentBusiness {
 			}
 			else{
 				//Take no action.  Use descriptive explanation.
+				command=@"SELECT patient.LName,patient.FName,patient.MiddleI,claimproc.CodeSent,procedurelog.ProcFee,procedurelog.ProcDate,claimproc.WriteOff
+					FROM claimproc 
+					LEFT JOIN patient ON claimproc.PatNum=patient.PatNum
+					LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum 
+					WHERE WriteOff<0";
+				table=Db.GetTable(command);
+				string patientName;
+				string codeSent;
+				decimal writeOff;
+				decimal procFee;
+				DateTime procDate;
+				log+=Lans.g("FormDatabaseMaintenance","List of patients with procedures that have negative writeoffs:\r\n");
+				for(int i=0;i<table.Rows.Count;i++) {
+					patientName=table.Rows[i]["LName"].ToString() + ", " + table.Rows[i]["FName"].ToString() + " " + table.Rows[i]["MiddleI"].ToString();
+					codeSent=table.Rows[i]["CodeSent"].ToString();
+					procDate=PIn.Date(table.Rows[i]["ProcDate"].ToString());
+					writeOff=PIn.Decimal(table.Rows[i]["WriteOff"].ToString());
+					procFee=PIn.Decimal(table.Rows[i]["ProcFee"].ToString());
+					log+=patientName+" "+codeSent+" fee:"+procFee.ToString("c")+" date:"+procDate.ToShortDateString()+" writeoff:"+writeOff.ToString("c")+"\r\n";
+				}
+				log+=Lans.g("FormDatabaseMaintenance","Go to the patients listed above and manually correct the writeoffs.\r\n");
 			}
 			return log;
 		}
