@@ -10,9 +10,8 @@ using OpenDentBusiness.Mobile;
 namespace ODWebsite {
 	public partial class PatientInformation:System.Web.UI.Page {
 		protected void Page_Load(object sender,EventArgs e) {
-			Patientm pat=Patientms.GetOne(6219,7);
-			Session["Patient"]=pat;
-			
+			//Patientm pat=Patientms.GetOne(6219,7);
+			//Session["Patient"]=pat;
 			if(Session["Patient"]==null) {
 				Response.Redirect("~/Login.aspx");
 			}

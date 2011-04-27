@@ -62,9 +62,9 @@ namespace OpenDentBusiness.Mobile{
 			Db.NonQ(command);
 		}
 
-		///<summary></summary>
-		public static void Delete(long customerNum,long medicationPatNum) {
-			string command= "DELETE FROM medicationpatm WHERE CustomerNum = "+POut.Long(customerNum)+" AND MedicationPatNum = "+POut.Long(medicationPatNum);
+		///<summary>Delete all medicationpats of a particular patient</summary>
+		public static void Delete(long customerNum,long PatNum) {
+			string command= "DELETE FROM medicationpatm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(PatNum);
 			Db.NonQ(command);
 		}
 
@@ -93,7 +93,11 @@ namespace OpenDentBusiness.Mobile{
 			Crud.MedicationPatmCrud.Update(medicationPatm);
 		}
 
-
+		///<summary></summary>
+		public static void Delete(long customerNum,long medicationPatNum) {
+			string command= "DELETE FROM medicationpatm WHERE CustomerNum = "+POut.Long(customerNum)+" AND MedicationPatNum = "+POut.Long(medicationPatNum);
+			Db.NonQ(command);
+		}
 
 
 		*/

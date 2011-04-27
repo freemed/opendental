@@ -342,12 +342,21 @@ namespace WebHostSynch {
 		/// </summary>
 		[WebMethod]
 			public void DeletePatientsRecords(String RegistrationKey,List<long> patNumList) {
-
-				for(int i=0;i<patNumList.Count;i++) {//Dennis: an inefficient loop but will work fine for the small number of records and will use existing default methods of the ms class
-					LabPanelms.Delete(customerNum,patNumList[i]);
-					MedicationPatms.Delete(customerNum,patNumList[i]);
-					Allergyms.Delete(customerNum,patNumList[i]);
-					Diseasems.Delete(customerNum,patNumList[i]);
+				try {
+					Logger.Information("In DeletePatientsRecords");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}	
+					for(int i=0;i<patNumList.Count;i++) {//Dennis: an inefficient loop but will work fine for the small number of records and will use existing default methods of the ms class
+							LabPanelms.Delete(customerNum,patNumList[i]);
+							MedicationPatms.Delete(customerNum,patNumList[i]);
+							Allergyms.Delete(customerNum,patNumList[i]);
+							Diseasems.Delete(customerNum,patNumList[i]);
+					}
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 				}
 		}
 

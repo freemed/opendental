@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using OpenDentBusiness.Mobile;
 
 namespace ODWebsite {
 	public partial class Site:System.Web.UI.MasterPage {
@@ -19,8 +20,9 @@ namespace ODWebsite {
 
 		protected void LinkButtonLoginStatus_Click(object sender,EventArgs e) {
 			if(LinkButtonLoginStatus.Text=="Logout") {
+				long DentalOfficeID=((Patientm)Session["Patient"]).CustomerNum;
 				Session["Patient"]=null;
-				Response.Redirect("~/Login.aspx");
+				Response.Redirect("~/Login.aspx?DentalOfficeID="+DentalOfficeID);
 			}
 			if(LinkButtonLoginStatus.Text=="Login") {
 				Response.Redirect("~/Login.aspx");

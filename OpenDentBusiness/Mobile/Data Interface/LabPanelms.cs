@@ -60,10 +60,10 @@ namespace OpenDentBusiness.Mobile{
 			string command= "DELETE FROM labpanelm WHERE CustomerNum = "+POut.Long(customerNum); ;
 			Db.NonQ(command);
 		}
-		
-		///<summary></summary>
-		public static void Delete(long customerNum,long labPanelNum) {
-			string command= "DELETE FROM labpanelm WHERE CustomerNum = "+POut.Long(customerNum)+" AND LabPanelNum = "+POut.Long(labPanelNum);
+
+		///<summary>Delete all labpanels of a particular patient</summary>
+		public static void Delete(long customerNum,long PatNum) {
+			string command= "DELETE FROM labpanelm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(PatNum);
 			Db.NonQ(command);
 		}
 		#endregion
@@ -86,7 +86,11 @@ namespace OpenDentBusiness.Mobile{
 			Crud.LabPanelmCrud.Update(labPanelm);
 		}
 
-
+		///<summary></summary>
+		public static void Delete(long customerNum,long labPanelNum) {
+			string command= "DELETE FROM labpanelm WHERE CustomerNum = "+POut.Long(customerNum)+" AND LabPanelNum = "+POut.Long(labPanelNum);
+			Db.NonQ(command);
+		}
 
 
 		*/

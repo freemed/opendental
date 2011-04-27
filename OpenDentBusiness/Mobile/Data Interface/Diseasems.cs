@@ -62,9 +62,9 @@ namespace OpenDentBusiness.Mobile{
 			Db.NonQ(command);
 		}
 
-		///<summary></summary>
-		public static void Delete(long customerNum,long diseaseNum) {
-			string command= "DELETE FROM diseasem WHERE CustomerNum = "+POut.Long(customerNum)+" AND DiseaseNum = "+POut.Long(diseaseNum);
+		///<summary>Delete all diseases of a particular patient</summary>
+		public static void Delete(long customerNum,long PatNum) {
+			string command= "DELETE FROM diseasem WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(PatNum);
 			Db.NonQ(command);
 		}
 		#endregion
@@ -92,7 +92,11 @@ namespace OpenDentBusiness.Mobile{
 			Crud.DiseasemCrud.Update(diseasem);
 		}
 
-
+		///<summary></summary>
+		public static void Delete(long customerNum,long diseaseNum) {
+			string command= "DELETE FROM diseasem WHERE CustomerNum = "+POut.Long(customerNum)+" AND DiseaseNum = "+POut.Long(diseaseNum);
+			Db.NonQ(command);
+		}
 
 
 

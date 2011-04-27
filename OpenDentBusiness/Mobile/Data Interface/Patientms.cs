@@ -14,6 +14,19 @@ namespace OpenDentBusiness.Mobile {
 				return Crud.PatientmCrud.SelectOne(customerNum,patNum);
 			}
 
+			///<summary>Gets one Patientm from the db based on username.</summary>
+			public static Patientm GetOne(long customerNum,string patUserName,string OnlinePassword) {
+				string command="SELECT * FROM patientm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)+ " "
+					+" AND OnlinePassword= '"+POut.String(OnlinePassword)+"' "
+					+" AND LCASE(Concat(FName,PatNum))= '"+POut.String(patUserName.ToLower())+"'";
+				List<Patientm> list= Crud.PatientmCrud.SelectMany(command);
+				if(list.Count>0) {
+					return list[0];
+				}
+				return null;
+			}
+
 			///<summary>Gets Patientms from the db as specified by the search string. Limit to 20 </summary>
 			public static List<Patientm> GetPatientms(long customerNum,string searchterm) {
 				string command="SELECT * FROM patientm "
