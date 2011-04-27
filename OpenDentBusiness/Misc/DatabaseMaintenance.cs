@@ -715,6 +715,27 @@ namespace OpenDentBusiness {
 			}
 			else{
 				//We can't touch those claimprocs because it would mess up the accounting.  So the only option, if we decide to fix automatically, is going to be to create some sort of claim that has the specific ClaimNum that seems to be missing.
+				command="SELECT * FROM claimproc WHERE claimproc.ClaimNum!=0 "
+				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
+					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) "
+					+"GROUP BY ClaimNum";
+				table=Db.GetTable(command);
+				List<ClaimProc> cpList=Crud.ClaimProcCrud.TableToList(table);
+				Claim claim;
+				for(int i=0;i<cpList.Count;i++) {
+					claim=new Claim();
+					claim.ClaimNum=cpList[i].ClaimNum;
+					claim.PatNum=cpList[i].PatNum;
+					claim.ClinicNum=cpList[i].ClinicNum;
+					claim.ClaimStatus="R";//Status received because we know it's been paid on
+					claim.PlanNum=cpList[i].PlanNum;
+					claim.InsSubNum=cpList[i].InsSubNum;
+					claim.ProvTreat=cpList[i].ProvNum;
+					Crud.ClaimCrud.Insert(claim,true);//Allows us to use a primary key that was "used".
+					Patient pat=Patients.GetLim(claim.PatNum);
+					log+=Lans.g("FormDatabaseMaintenance","Claim created due to claimprocs with invalid ClaimNums for patient: ")
+						+pat.PatNum+" - "+Patients.GetNameFL(pat.LName,pat.FName,pat.Preferred,pat.MiddleI)+"\r\n";
+				}
 			}
 			return log;
 		}
