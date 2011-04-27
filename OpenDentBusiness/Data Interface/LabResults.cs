@@ -24,6 +24,7 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM labresult WHERE LabResultNum = "+POut.Long(labResultNum);
 			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.LabResult,labResultNum);
 		}
 
 		///<summary>Deletes all Lab Results associated with Lab Panel.</summary>

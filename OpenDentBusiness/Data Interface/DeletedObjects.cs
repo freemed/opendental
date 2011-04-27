@@ -36,6 +36,12 @@ namespace OpenDentBusiness{
 					Mobile.Crud.RxPatmCrud.Delete(customerNum,list[i].ObjectNum);
 				}
 				//pat portal
+				if(list[i].ObjectType==DeletedObjectType.LabPanel) {
+					Mobile.Crud.LabPanelmCrud.Delete(customerNum,list[i].ObjectNum);
+				}
+				if(list[i].ObjectType==DeletedObjectType.LabResult) {
+					Mobile.Crud.LabResultmCrud.Delete(customerNum,list[i].ObjectNum);
+				}
 				if(list[i].ObjectType==DeletedObjectType.Medication) {
 					Mobile.Crud.MedicationmCrud.Delete(customerNum,list[i].ObjectNum);
 				}

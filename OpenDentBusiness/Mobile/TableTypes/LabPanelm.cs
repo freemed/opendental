@@ -17,9 +17,6 @@ namespace OpenDentBusiness.Mobile {
 		public long PatNum;
 		///<summary>FK to medicalorder.MedicalOrderNum.</summary>
 		public long MedicalOrderNum;
-		///<summary>The entire raw HL7 message</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string RawMessage;
 		///<summary>Both name and address in a single field.  OBR-20</summary>
 		public string LabNameAddress;
 		///<summary>Snomed code for the type of specimen.  SPM-4.</summary>

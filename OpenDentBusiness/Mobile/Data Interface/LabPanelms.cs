@@ -8,16 +8,20 @@ namespace OpenDentBusiness.Mobile{
 	///<summary></summary>
 	public class LabPanelms{
 		#region Only used for webserver for Patient Portal.
-		///<summary>Gets one LabPanelm from the db.</summary>
-		public static LabPanelm GetOne(long customerNum,long labPanelNum) {
-			return Crud.LabPanelmCrud.SelectOne(customerNum,labPanelNum);
+		///<summary>Gets all LabPanelm for a single patient </summary>
+		public static List<LabPanelm> GetLabPanelms(long customerNum,long patNum) {
+			string command=
+					"SELECT * from labpanelm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)
+					+" AND PatNum = "+POut.Long(patNum);
+			return Crud.LabPanelmCrud.SelectMany(command);
 		}
 		#endregion
 
 		#region Used only on OD
 		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<long> GetChangedSinceLabPanelNums(DateTime changedSince) {
-			return LabPanels.GetChangedSinceLabPanelNums(changedSince);
+		public static List<long> GetChangedSinceLabPanelNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+			return LabPanels.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
 		}
 
 		///<summary>The values returned are sent to the webserver.</summary>

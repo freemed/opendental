@@ -17,6 +17,9 @@ namespace ODWebsite {
 				Response.Redirect("~/Login.aspx");
 			}
 			LabelPatientName.Text=((Patientm)Session["Patient"]).LName + " " +((Patientm)Session["Patient"]).FName;
+			List<LabPanelm> mLabPanelmList= LabPanelms.GetLabPanelms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
+			GridViewLabPanel.DataSource = mLabPanelmList;
+			GridViewLabPanel.DataBind();
 			List<MedicationPatm> mMedicationPatmList= MedicationPatms.GetMedicationPatms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
 			GridViewMedication.DataSource = mMedicationPatmList;
 			GridViewMedication.DataBind();

@@ -22,6 +22,24 @@ namespace ODWebsite {
         protected global::System.Web.UI.WebControls.Label LabelPatientName;
         
         /// <summary>
+        /// LabelLabPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelLabPanel;
+        
+        /// <summary>
+        /// GridViewLabPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GridViewLabPanel;
+        
+        /// <summary>
         /// LabelMedication control.
         /// </summary>
         /// <remarks>

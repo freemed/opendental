@@ -50,7 +50,6 @@ namespace OpenDentBusiness.Mobile.Crud{
 				labPanelm.LabPanelNum    = PIn.Long  (table.Rows[i]["LabPanelNum"].ToString());
 				labPanelm.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				labPanelm.MedicalOrderNum= PIn.Long  (table.Rows[i]["MedicalOrderNum"].ToString());
-				labPanelm.RawMessage     = PIn.String(table.Rows[i]["RawMessage"].ToString());
 				labPanelm.LabNameAddress = PIn.String(table.Rows[i]["LabNameAddress"].ToString());
 				labPanelm.SpecimenCode   = PIn.String(table.Rows[i]["SpecimenCode"].ToString());
 				labPanelm.SpecimenDesc   = PIn.String(table.Rows[i]["SpecimenDesc"].ToString());
@@ -66,21 +65,16 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO labpanelm (";
 			command+="LabPanelNum,";
-			command+="CustomerNum,PatNum,MedicalOrderNum,RawMessage,LabNameAddress,SpecimenCode,SpecimenDesc) VALUES(";
+			command+="CustomerNum,PatNum,MedicalOrderNum,LabNameAddress,SpecimenCode,SpecimenDesc) VALUES(";
 			command+=POut.Long(labPanelm.LabPanelNum)+",";
 			command+=
 				     POut.Long  (labPanelm.CustomerNum)+","
 				+    POut.Long  (labPanelm.PatNum)+","
 				+    POut.Long  (labPanelm.MedicalOrderNum)+","
-				+DbHelper.ParamChar+"paramRawMessage,"
 				+"'"+POut.String(labPanelm.LabNameAddress)+"',"
 				+"'"+POut.String(labPanelm.SpecimenCode)+"',"
 				+"'"+POut.String(labPanelm.SpecimenDesc)+"')";
-			if(labPanelm.RawMessage==null) {
-				labPanelm.RawMessage="";
-			}
-			OdSqlParameter paramRawMessage=new OdSqlParameter("paramRawMessage",OdDbType.Text,labPanelm.RawMessage);
-			Db.NonQ(command,paramRawMessage);//There is no autoincrement in the mobile server.
+			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return labPanelm.LabPanelNum;
 		}
 
@@ -89,16 +83,11 @@ namespace OpenDentBusiness.Mobile.Crud{
 			string command="UPDATE labpanelm SET "
 				+"PatNum         =  "+POut.Long  (labPanelm.PatNum)+", "
 				+"MedicalOrderNum=  "+POut.Long  (labPanelm.MedicalOrderNum)+", "
-				+"RawMessage     =  "+DbHelper.ParamChar+"paramRawMessage, "
 				+"LabNameAddress = '"+POut.String(labPanelm.LabNameAddress)+"', "
 				+"SpecimenCode   = '"+POut.String(labPanelm.SpecimenCode)+"', "
 				+"SpecimenDesc   = '"+POut.String(labPanelm.SpecimenDesc)+"' "
 				+"WHERE CustomerNum = "+POut.Long(labPanelm.CustomerNum)+" AND LabPanelNum = "+POut.Long(labPanelm.LabPanelNum);
-			if(labPanelm.RawMessage==null) {
-				labPanelm.RawMessage="";
-			}
-			OdSqlParameter paramRawMessage=new OdSqlParameter("paramRawMessage",OdDbType.Text,labPanelm.RawMessage);
-			Db.NonQ(command,paramRawMessage);
+			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one LabPanelm from the database.</summary>
@@ -115,7 +104,6 @@ namespace OpenDentBusiness.Mobile.Crud{
 			labPanelm.LabPanelNum    =labPanel.LabPanelNum;
 			labPanelm.PatNum         =labPanel.PatNum;
 			labPanelm.MedicalOrderNum=labPanel.MedicalOrderNum;
-			labPanelm.RawMessage     =labPanel.RawMessage;
 			labPanelm.LabNameAddress =labPanel.LabNameAddress;
 			labPanelm.SpecimenCode   =labPanel.SpecimenCode;
 			labPanelm.SpecimenDesc   =labPanel.SpecimenDesc;

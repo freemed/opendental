@@ -350,6 +350,8 @@ namespace OpenDental {
 			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
 			//Pat portal
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
+			List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
+			List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
 			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
@@ -360,7 +362,7 @@ namespace OpenDental {
 			List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
 			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
-							+medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
+							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
 							+dO.Count+delPatNumList.Count;
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
@@ -368,12 +370,15 @@ namespace OpenDental {
 			SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
 			SynchGeneric(rxNumList,SynchEntity.prescription,ref FormP);
 			SynchGeneric(provNumList,SynchEntity.provider,ref FormP);
+			//pat portal
+			SynchGeneric(labPanelNumList,SynchEntity.labpanel,ref FormP);
+			SynchGeneric(labResultNumList,SynchEntity.labresult,ref FormP);
 			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
-			SynchGeneric(allergyDefNumList,SynchEntity.allergy,ref FormP);
-			SynchGeneric(allergyNumList,SynchEntity.allergydef,ref FormP);
-			SynchGeneric(diseaseDefNumList,SynchEntity.disease,ref FormP);
-			SynchGeneric(diseaseNumList,SynchEntity.diseasedef,ref FormP);
+			SynchGeneric(allergyDefNumList,SynchEntity.allergydef,ref FormP);
+			SynchGeneric(allergyNumList,SynchEntity.allergy,ref FormP);
+			SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,ref FormP);
+			SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
 			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
 			SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
 			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.

@@ -4,6 +4,35 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 	Patient Name:<br /><asp:Label ID="LabelPatientName" runat="server"></asp:Label>
+	
+		<br />
+	<br />
+	<asp:Label ID="LabelLabPanel" runat="server" Text="Lab Panel:"></asp:Label>
+	<br />
+	<asp:GridView ID="GridViewLabPanel" runat="server" 
+		AutoGenerateColumns="False">
+		<Columns>
+			<asp:TemplateField HeaderText="SpecimenCode">
+			<ItemTemplate>
+			<%#((LabPanelm)Container.DataItem).SpecimenCode%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="SpecimenDesc">
+			<ItemTemplate>
+			<%#((LabPanelm)Container.DataItem).SpecimenDesc%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="LabNameAddress">
+			<ItemTemplate>
+			<%#((LabPanelm)Container.DataItem).LabNameAddress%>
+			</ItemTemplate>
+			</asp:TemplateField>
+		</Columns>
+	</asp:GridView>
+	<br />
+	<br />
+	<br />
+	
 	<br />
 	<br />
 	<asp:Label ID="LabelMedication" runat="server" Text="List of Medications:"></asp:Label>

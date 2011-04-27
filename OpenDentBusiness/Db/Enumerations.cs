@@ -1458,6 +1458,8 @@ namespace OpenDentBusiness{
 		///<summary>2 - When a recall row is deleted, this records the PatNum for which it was deleted.</summary>
 		RecallPatNum,
 		RxPat,
+		LabPanel,
+		LabResult,		
 		Medication,
 		MedicationPat,
 		Allergy,

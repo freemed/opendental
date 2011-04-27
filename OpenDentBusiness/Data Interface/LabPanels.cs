@@ -25,19 +25,33 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM labpanel WHERE LabPanelNum = "+POut.Long(labPanelNum);
 			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.LabPanel,labPanelNum);
 		}
 
-		public static List<long> GetChangedSinceLabPanelNums(DateTime changedSince) {
+		public static List<long> GetChangedSinceLabPanelNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,eligibleForUploadPatNumList);
 			}
-			string command="SELECT LabPanelNum FROM labpanel WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable dt=Db.GetTable(command);
-			List<long> labpanelNums = new List<long>(dt.Rows.Count);
-			for(int i=0;i<dt.Rows.Count;i++) {
-				labpanelNums.Add(PIn.Long(dt.Rows[i]["LabPanelNum"].ToString()));
+			string strEligibleForUploadPatNums="";
+			DataTable table;
+			if(eligibleForUploadPatNumList.Count>0) {
+				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
+					if(i>0) {
+						strEligibleForUploadPatNums+="OR ";
+					}
+					strEligibleForUploadPatNums+="PatNum='"+eligibleForUploadPatNumList[i].ToString()+"' ";
+				}
+				string command="SELECT LabPanelNum FROM labpanel WHERE DateTStamp > "+POut.DateT(changedSince)+" AND ("+strEligibleForUploadPatNums+")";
+				table=Db.GetTable(command);
 			}
-			return labpanelNums;
+			else {
+				table=new DataTable();
+			}
+			List<long> labPanelnums = new List<long>(table.Rows.Count);
+			for(int i=0;i<table.Rows.Count;i++) {
+				labPanelnums.Add(PIn.Long(table.Rows[i]["LabPanelNum"].ToString()));
+			}
+			return labPanelnums;
 		}
 
 		///<summary>Used along with GetChangedSinceLabPanelNums</summary>
@@ -81,6 +95,16 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.LabPanelCrud.Update(labPanel);
+		}
+
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all labpanels of a patient</summary>
+		public static void ResetTimeStamps(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			string command="UPDATE labpanel SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			Db.NonQ(command);
 		}
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
