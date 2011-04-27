@@ -2950,14 +2950,16 @@ namespace OpenDental{
 					}
 					break;
 				case 1:
-					if(PrefC.GetBool(PrefName.EhrEmergencyNow) && Security.IsAuthorized(Permissions.EhrEmergencyAccess)) {
-						break;
-					}
-					else {
-						if(!Security.IsAuthorized(Permissions.FamilyModule)) {
-							e.Cancel=true;
-							return;
+					if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {//if red emergency button is on
+						if(Security.IsAuthorized(Permissions.EhrEmergencyAccess,true)) {//if no permission, the message is suppressed
+							break;//no need to check any other permission
 						}
+					}
+					//Whether or not they were authorized by the special situation above,
+					//they can get into the Family module with the ordinary permissions.
+					if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+						e.Cancel=true;
+						return;
 					}
 					break;
 				case 2:
