@@ -210,6 +210,7 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("toothNum"));
+				list.Add(NewInput("misc"));
 			}
 			else if(outInCheck==OutInCheck.Check) {
 				list.Add(NewCheck("misc"));
