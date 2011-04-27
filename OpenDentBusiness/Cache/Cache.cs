@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>This gets used when switching databases.  Switching databases is allowed from ClientWeb in the sense that the user can connect to a different server.</summary>
+		///<summary>This is an incomplete stub and should not be used yet.  This will get used when switching databases.  Switching databases is allowed from ClientWeb in the sense that the user can connect to a different server from the ChooseDatabase window.</summary>
 		public static void ClearAllCache() {
 			//AccountingAutoPays
 			AccountingAutoPays.ClearCache();
@@ -40,12 +40,7 @@ namespace OpenDentBusiness {
 			AutoCodes.ClearCache();
 			AutoCodeItems.ClearCache();
 			AutoCodeConds.ClearCache();
-
-
-
-
-
-
+			//etc...
 
 		}
 
