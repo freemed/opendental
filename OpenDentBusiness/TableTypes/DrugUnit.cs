@@ -13,6 +13,9 @@ namespace OpenDentBusiness {
 		public string UnitIdentifier;//VARCHAR(20)/VARCHAR2(20).
 		///<summary>Example milliliter.</summary>
 		public string UnitText;
+		///<summary>The last date and time this row was altered.  Not user editable.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 
 		///<summary></summary>
 		public DrugUnit Copy() {

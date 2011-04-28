@@ -49,6 +49,7 @@ namespace OpenDentBusiness.Crud{
 				drugUnit.DrugUnitNum   = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
 				drugUnit.UnitIdentifier= PIn.String(table.Rows[i]["UnitIdentifier"].ToString());
 				drugUnit.UnitText      = PIn.String(table.Rows[i]["UnitText"].ToString());
+				drugUnit.DateTStamp    = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(drugUnit);
 			}
 			return retVal;
@@ -96,6 +97,7 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				 "'"+POut.String(drugUnit.UnitIdentifier)+"',"
 				+"'"+POut.String(drugUnit.UnitText)+"')";
+				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -110,6 +112,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE drugunit SET "
 				+"UnitIdentifier= '"+POut.String(drugUnit.UnitIdentifier)+"', "
 				+"UnitText      = '"+POut.String(drugUnit.UnitText)+"' "
+				//DateTStamp can only be set by MySQL
 				+"WHERE DrugUnitNum = "+POut.Long(drugUnit.DrugUnitNum);
 			Db.NonQ(command);
 		}
@@ -125,6 +128,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="UnitText = '"+POut.String(drugUnit.UnitText)+"'";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

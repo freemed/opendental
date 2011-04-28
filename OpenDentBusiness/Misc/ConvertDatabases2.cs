@@ -4666,7 +4666,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX reminderrule_CriterionFK ON reminderrule (CriterionFK)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE drugunit ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE drugunit SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE drugunit ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE drugunit SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4707,8 +4718,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-				
 
 				
 
