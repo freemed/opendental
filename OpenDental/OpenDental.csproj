@@ -341,6 +341,18 @@
     <Compile Include="Forms\FormFormularyEdit.Designer.cs">
       <DependentUpon>FormFormularyEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormReminderRuleEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReminderRuleEdit.Designer.cs">
+      <DependentUpon>FormReminderRuleEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormReminderRules.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReminderRules.Designer.cs">
+      <DependentUpon>FormReminderRules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormVaccineDefSetup.cs">
       <SubType>Form</SubType>
     </Compile>
