@@ -23,8 +23,9 @@ namespace OpenDental {
 			int allergyIndex=0;
 			allergyList=AllergyDefs.GetAll(false);
 			if(allergyList.Count<1) {
-				MsgBox.Show(this,"Need to setup at least one Allergy from EHR setup window.");
+				MsgBox.Show(this,"Need to set up at least one Allergy from EHR setup window.");
 				DialogResult=DialogResult.Cancel;
+				return;
 			}
 			for(int i=0;i<allergyList.Count;i++) {
 				comboAllergies.Items.Add(allergyList[i].Description);
