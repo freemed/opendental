@@ -2180,6 +2180,12 @@
     <EmbeddedResource Include="Forms\FormFormularyEdit.resx">
       <DependentUpon>FormFormularyEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReminderRuleEdit.resx">
+      <DependentUpon>FormReminderRuleEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReminderRules.resx">
+      <DependentUpon>FormReminderRules.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormVaccineDefSetup.resx">
       <DependentUpon>FormVaccineDefSetup.cs</DependentUpon>
       <SubType>Designer</SubType>

@@ -8,6 +8,44 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ReminderRules{
 
+		///<summary></summary>
+		public static long Insert(ReminderRule reminderRule) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				reminderRule.ReminderRuleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),reminderRule);
+				return reminderRule.ReminderRuleNum;
+			}
+			return Crud.ReminderRuleCrud.Insert(reminderRule);
+		}
+
+		///<summary></summary>
+		public static void Update(ReminderRule reminderRule) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reminderRule);
+				return;
+			}
+			Crud.ReminderRuleCrud.Update(reminderRule);
+		}
+
+		///<summary></summary>
+		public static void Delete(long reminderRuleNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reminderRuleNum);
+				return;
+			}
+			string command= "DELETE FROM reminderrule WHERE ReminderRuleNum = "+POut.Long(reminderRuleNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static List<ReminderRule> SelectAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ReminderRule>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM reminderrule";
+			return Crud.ReminderRuleCrud.SelectMany(command);
+		}
+
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -28,33 +66,7 @@ namespace OpenDentBusiness{
 			return Crud.ReminderRuleCrud.SelectOne(reminderRuleNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(ReminderRule reminderRule){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				reminderRule.ReminderRuleNum=Meth.GetLong(MethodBase.GetCurrentMethod(),reminderRule);
-				return reminderRule.ReminderRuleNum;
-			}
-			return Crud.ReminderRuleCrud.Insert(reminderRule);
-		}
 
-		///<summary></summary>
-		public static void Update(ReminderRule reminderRule){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),reminderRule);
-				return;
-			}
-			Crud.ReminderRuleCrud.Update(reminderRule);
-		}
-
-		///<summary></summary>
-		public static void Delete(long reminderRuleNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),reminderRuleNum);
-				return;
-			}
-			string command= "DELETE FROM reminderrule WHERE ReminderRuleNum = "+POut.Long(reminderRuleNum);
-			Db.NonQ(command);
-		}
 		*/
 
 

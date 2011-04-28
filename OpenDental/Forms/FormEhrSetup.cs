@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 #if DEBUG
 using EHR;
+using OpenDental.Forms;
 #endif
 
 namespace OpenDental {
@@ -71,5 +72,11 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		private void butReminderRules_Click(object sender,EventArgs e) {
+			FormReminderRules FormRR = new FormReminderRules();
+			FormRR.ShowDialog();
+		}
+
 	}
 }
