@@ -42,6 +42,12 @@ namespace OpenDentBusiness {
 			AutoCodeConds.ClearCache();
 			//etc...
 
+
+
+			Prefs.ClearCache();
+			//etc...
+
+
 		}
 
 		///<summary>If ClientWeb, then this method is instead run on the server, and the result passed back to the client.  And since it's ClientWeb, FillCache will be run on the client.</summary>

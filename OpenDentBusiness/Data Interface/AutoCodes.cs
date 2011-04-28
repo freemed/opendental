@@ -35,6 +35,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary></summary>
 		public static void ClearCache() {
 			AutoCodeC.HList=null;
 			AutoCodeC.List=null;

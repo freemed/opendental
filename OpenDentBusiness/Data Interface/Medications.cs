@@ -36,6 +36,11 @@ namespace OpenDentBusiness{
 			Listt=list.ToArray();
 		}
 
+		public static List<Medication> TableToList(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			return Crud.MedicationCrud.TableToList(table);
+		}
+
 		public static List<Medication> GetList(string str) {
 			//No need to check RemotingRole; no call to db.
 			Refresh();

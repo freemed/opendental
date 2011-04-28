@@ -23,6 +23,7 @@ namespace OpenDentBusiness{
 			AutoCodeCondC.List=Crud.AutoCodeCondCrud.TableToList(table).ToArray();
 		}
 
+		///<summary></summary>
 		public static void ClearCache() {
 			AutoCodeCondC.List=null;
 		}

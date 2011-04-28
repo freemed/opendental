@@ -37,6 +37,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static void ClearCache() {
+			PrefC.Dict=null;
+		}
+
+		///<summary></summary>
 		public static void Update(Pref pref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pref);

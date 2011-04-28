@@ -38,6 +38,7 @@ namespace OpenDentBusiness{
 			listt=Crud.AccountingAutoPayCrud.TableToList(table);
 		}
 
+		///<summary></summary>
 		public static void ClearCache() {
 			listt=null;
 		}

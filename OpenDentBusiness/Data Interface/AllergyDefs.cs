@@ -7,14 +7,6 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class AllergyDefs{
-		///<summary></summary>
-		public static List<AllergyDef> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<AllergyDef>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM allergydef WHERE PatNum = "+POut.Long(patNum);
-			return Crud.AllergyDefCrud.SelectMany(command);
-		}
 
 		///<summary>Gets one AllergyDef from the db.</summary>
 		public static AllergyDef GetOne(long allergyDefNum){
@@ -40,6 +32,12 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.AllergyDefCrud.Update(allergyDef);
+		}
+
+		///<summary></summary>
+		public static List<AllergyDef> TableToList(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			return Crud.AllergyDefCrud.TableToList(table);
 		}
 
 		///<summary></summary>
