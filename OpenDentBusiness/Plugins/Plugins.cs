@@ -11,6 +11,16 @@ namespace OpenDentBusiness{
 	public class Plugins {
 		private static List<PluginContainer> PluginList;
 		//public static bool Active=false;
+		public static bool PluginsAreLoaded {
+			get {
+				if(PluginList==null) {
+					return false;
+				}
+				else {
+					return true;
+				}
+			}
+		}
 
 		public static void LoadAllPlugins(Form host) {
 			//No need to check RemotingRole; no call to db.
