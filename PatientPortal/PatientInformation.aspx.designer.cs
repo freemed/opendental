@@ -58,6 +58,15 @@ namespace ODWebsite {
         protected global::System.Web.UI.WebControls.GridView GridViewMedication;
         
         /// <summary>
+        /// LabelProblem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelProblem;
+        
+        /// <summary>
         /// GridViewProblem control.
         /// </summary>
         /// <remarks>
@@ -65,6 +74,15 @@ namespace ODWebsite {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView GridViewProblem;
+        
+        /// <summary>
+        /// LabelAllergy control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelAllergy;
         
         /// <summary>
         /// GridViewAllergy control.

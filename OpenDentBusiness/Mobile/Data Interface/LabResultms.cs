@@ -12,6 +12,14 @@ namespace OpenDentBusiness.Mobile{
 		public static LabResultm GetOne(long customerNum,long labResultNum) {
 			return Crud.LabResultmCrud.SelectOne(customerNum,labResultNum);
 		}
+		///<summary>Gets one LabResultm from the db.</summary>
+		public static List<LabResultm> GetLabResultms(long customerNum,long labPanelNum) {
+			string command=
+					"SELECT * from labresultm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)
+					+" AND LabPanelNum = "+POut.Long(labPanelNum);
+			return Crud.LabResultmCrud.SelectMany(command);
+		}
 		#endregion
 
 		#region Used only on OD

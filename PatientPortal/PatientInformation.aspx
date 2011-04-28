@@ -3,30 +3,56 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-	Patient Name:<br /><asp:Label ID="LabelPatientName" runat="server"></asp:Label>
+	Patient Name: <asp:Label ID="LabelPatientName" runat="server" Font-Bold="True"></asp:Label>
 	
 		<br />
 	<br />
 	<asp:Label ID="LabelLabPanel" runat="server" Text="Lab Panel:"></asp:Label>
 	<br />
 	<asp:GridView ID="GridViewLabPanel" runat="server" 
-		AutoGenerateColumns="False">
+		AutoGenerateColumns="False" onrowdatabound="GridViewLabPanel_RowDataBound">
 		<Columns>
-			<asp:TemplateField HeaderText="SpecimenCode">
+			<asp:TemplateField HeaderText="" Visible="false">
 			<ItemTemplate>
-			<%#((LabPanelm)Container.DataItem).SpecimenCode%>
+			<%#((LabPanelm)Container.DataItem).LabPanelNum%>
 			</ItemTemplate>
 			</asp:TemplateField>
-			<asp:TemplateField HeaderText="SpecimenDesc">
-			<ItemTemplate>
-			<%#((LabPanelm)Container.DataItem).SpecimenDesc%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="LabNameAddress">
+			<asp:TemplateField HeaderText="Lab Name & Address">
 			<ItemTemplate>
 			<%#((LabPanelm)Container.DataItem).LabNameAddress%>
 			</ItemTemplate>
 			</asp:TemplateField>
+			<asp:TemplateField HeaderText="Specimen Code">
+			<ItemTemplate>
+			<%#((LabPanelm)Container.DataItem).SpecimenCode%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="Specimen Description">
+			<ItemTemplate>
+			<%#((LabPanelm)Container.DataItem).SpecimenDesc%>
+			</ItemTemplate>
+			</asp:TemplateField>
+
+			<asp:TemplateField HeaderText="Lab Results">
+			<ItemTemplate>
+			<asp:GridView ID="GridViewLabResult" runat="server" 
+				AutoGenerateColumns="False">
+				<Columns>
+					<asp:TemplateField HeaderText="Date Time">
+							<ItemTemplate>
+							<%#((LabResultm)Container.DataItem).DateTimeTest%>
+							</ItemTemplate>
+					</asp:TemplateField>
+					<asp:TemplateField HeaderText="Test Name">
+							<ItemTemplate>
+							<%#((LabResultm)Container.DataItem).TestName%>
+							</ItemTemplate>
+					</asp:TemplateField>
+			</Columns>
+			</asp:GridView>
+			</ItemTemplate>
+			</asp:TemplateField>
+
 		</Columns>
 	</asp:GridView>
 	<br />
@@ -40,19 +66,19 @@
 	<asp:GridView ID="GridViewMedication" runat="server" 
 		AutoGenerateColumns="False">
 		<Columns>
-			<asp:TemplateField HeaderText="Notes">
+			<asp:TemplateField HeaderText="Medication Name">
 			<ItemTemplate>
 			<%#Medicationms.GetOne(((MedicationPatm)Container.DataItem).CustomerNum,((MedicationPatm)Container.DataItem).MedicationNum).MedName%>
 			</ItemTemplate>
 			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Medication Name">
+			<asp:TemplateField HeaderText="Patient Notes">
 			<ItemTemplate>
 			<%#((MedicationPatm)Container.DataItem).PatNote%>
 			</ItemTemplate>
 			</asp:TemplateField>
 			<asp:TemplateField HeaderText="Discontinued">
 			<ItemTemplate>
-			<%#GetDiscontinued(((MedicationPatm)Container.DataItem).IsDiscontinued)%>
+			<%#((MedicationPatm)Container.DataItem).IsDiscontinued==true?"Discontinued":""%>
 			</ItemTemplate>
 			</asp:TemplateField>
 		</Columns>
@@ -60,26 +86,30 @@
 	<br />
 	<br />
 	<br />
-
-	Problems:
+	<asp:Label ID="LabelProblem" runat="server" Text="List of Problems:"></asp:Label>
 	<br />
 
 	<asp:GridView ID="GridViewProblem" runat="server" 
 		AutoGenerateColumns="False">
 		<Columns>
-		<asp:TemplateField HeaderText="ICD">
-			<ItemTemplate>
-			<%#ICD9ms.GetOne(((Diseasem)Container.DataItem).CustomerNum,((Diseasem)Container.DataItem).DiseaseDefNum).Description%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Problem">
+			<asp:TemplateField HeaderText="Name">
 			<ItemTemplate>
 			<%#DiseaseDefms.GetOne(((Diseasem)Container.DataItem).CustomerNum,((Diseasem)Container.DataItem).DiseaseDefNum).DiseaseName%>
 			</ItemTemplate>
 			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Notes">
+			<asp:TemplateField HeaderText="Patient Note">
 			<ItemTemplate>
 			<%#((Diseasem)Container.DataItem).PatNote%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="Status">
+			<ItemTemplate>
+			<%#((Diseasem)Container.DataItem).ProbStatus.ToString("G")%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="ICD">
+			<ItemTemplate>
+			<%#ICD9ms.GetOne(((Diseasem)Container.DataItem).CustomerNum,((Diseasem)Container.DataItem).DiseaseDefNum).Description%>
 			</ItemTemplate>
 			</asp:TemplateField>
 		</Columns>
@@ -87,7 +117,7 @@
 	<br />
 	<br />
 	<br />
-		Allergies:
+		<asp:Label ID="LabelAllergy" runat="server" Text="List of Allergies:"></asp:Label>
 	<br />
 
 	<asp:GridView ID="GridViewAllergy" runat="server" 
@@ -101,6 +131,11 @@
 			<asp:TemplateField HeaderText="Reaction">
 			<ItemTemplate>
 			<%#((Allergym)Container.DataItem).Reaction%>
+			</ItemTemplate>
+			</asp:TemplateField>
+			<asp:TemplateField HeaderText="Status">
+			<ItemTemplate>
+			<%#((Allergym)Container.DataItem).StatusIsActive==true?"Active":"Inactive"%>
 			</ItemTemplate>
 			</asp:TemplateField>
 		</Columns>
