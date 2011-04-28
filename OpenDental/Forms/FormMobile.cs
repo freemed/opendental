@@ -384,7 +384,7 @@ namespace OpenDental {
 			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 			if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 				Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
-				DataValid.SetInvalid(InvalidType.Prefs);
+				//DataValid.SetInvalid(InvalidType.Prefs);//not allowed from another thread
 			}
 			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 			IsSynching=false;
