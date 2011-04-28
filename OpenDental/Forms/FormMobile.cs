@@ -339,7 +339,7 @@ namespace OpenDental {
 			//The handling of PrefName.MobileSynchNewTables79 should never be removed in future versions
 			DateTime changedProv=changedSince;
 			DateTime changedDeleted=changedSince;
-			if(PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
+			if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 				changedProv=DateTime.MinValue;
 				changedDeleted=DateTime.MinValue;
 			}
@@ -382,7 +382,7 @@ namespace OpenDental {
 			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
 			SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
 			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
-			if(PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
+			if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 				Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
