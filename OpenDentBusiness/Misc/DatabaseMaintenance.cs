@@ -1271,7 +1271,7 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid patplan PlanNums fixed: ")+numFixed+"\r\n";
 				}
 				//claimproc.PlanNum-------------------------------------------------------------------------------------------------
-				command="DELETE FROM claimproc WHERE PlanNum=0 AND ClaimNum=0 AND InsPayAmt=0 AND Status=6";
+				command="DELETE FROM claimproc WHERE NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=claimproc.PlanNum) AND ClaimNum=0 AND InsPayAmt=0 AND Status=6";//estimate
 				numFixed=Db.NonQ(command);
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid claimproc PlanNums fixed: ")+numFixed+"\r\n";
