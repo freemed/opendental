@@ -969,16 +969,18 @@ namespace OpenDentBusiness {
 				decimal writeOff;
 				decimal procFee;
 				DateTime procDate;
-				log+=Lans.g("FormDatabaseMaintenance","List of patients with procedures that have negative writeoffs:\r\n");
-				for(int i=0;i<table.Rows.Count;i++) {
-					patientName=table.Rows[i]["LName"].ToString() + ", " + table.Rows[i]["FName"].ToString() + " " + table.Rows[i]["MiddleI"].ToString();
-					codeSent=table.Rows[i]["CodeSent"].ToString();
-					procDate=PIn.Date(table.Rows[i]["ProcDate"].ToString());
-					writeOff=PIn.Decimal(table.Rows[i]["WriteOff"].ToString());
-					procFee=PIn.Decimal(table.Rows[i]["ProcFee"].ToString());
-					log+=patientName+" "+codeSent+" fee:"+procFee.ToString("c")+" date:"+procDate.ToShortDateString()+" writeoff:"+writeOff.ToString("c")+"\r\n";
+				if(table.Rows.Count>0) {
+					log+=Lans.g("FormDatabaseMaintenance","List of patients with procedures that have negative writeoffs:\r\n");
+					for(int i=0;i<table.Rows.Count;i++) {
+						patientName=table.Rows[i]["LName"].ToString() + ", " + table.Rows[i]["FName"].ToString() + " " + table.Rows[i]["MiddleI"].ToString();
+						codeSent=table.Rows[i]["CodeSent"].ToString();
+						procDate=PIn.Date(table.Rows[i]["ProcDate"].ToString());
+						writeOff=PIn.Decimal(table.Rows[i]["WriteOff"].ToString());
+						procFee=PIn.Decimal(table.Rows[i]["ProcFee"].ToString());
+						log+=patientName+" "+codeSent+" fee:"+procFee.ToString("c")+" date:"+procDate.ToShortDateString()+" writeoff:"+writeOff.ToString("c")+"\r\n";
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Go to the patients listed above and manually correct the writeoffs.\r\n");
 				}
-				log+=Lans.g("FormDatabaseMaintenance","Go to the patients listed above and manually correct the writeoffs.\r\n");
 			}
 			return log;
 		}
