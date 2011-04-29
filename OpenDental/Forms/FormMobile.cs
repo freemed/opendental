@@ -28,6 +28,7 @@ namespace OpenDental {
 			provider,
 			labpanel,
 			labresult,
+			drugunit,
 			medication,
 			medicationpat,
 			allergy,
@@ -352,6 +353,7 @@ namespace OpenDental {
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
 			List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
+			List<long> drugUnitNumList=DrugUnitms.GetChangedSinceDrugUnitNums(changedSince);
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
 			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
@@ -373,6 +375,7 @@ namespace OpenDental {
 			//pat portal
 			SynchGeneric(labPanelNumList,SynchEntity.labpanel,ref FormP);
 			SynchGeneric(labResultNumList,SynchEntity.labresult,ref FormP);
+			SynchGeneric(drugUnitNumList,SynchEntity.drugunit,ref FormP);
 			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
 			SynchGeneric(allergyDefNumList,SynchEntity.allergydef,ref FormP);
@@ -425,6 +428,10 @@ namespace OpenDental {
 						case SynchEntity.labresult:
 							List<LabResultm> ChangedLabResultList=LabResultms.GetMultLabResultms(BlockPKNumList);
 							mb.SynchLabResults(PrefC.GetString(PrefName.RegistrationKey),ChangedLabResultList.ToArray());
+						break;
+						case SynchEntity.drugunit:
+						List<DrugUnitm> ChangedDrugUnitList=DrugUnitms.GetMultDrugUnitms(BlockPKNumList);
+						mb.SynchDrugUnits(PrefC.GetString(PrefName.RegistrationKey),ChangedDrugUnitList.ToArray());
 						break;
 						case SynchEntity.medication:
 							List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);

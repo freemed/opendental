@@ -87,6 +87,7 @@ namespace WebHostSynch {
 				RxPatms.DeleteAll(customerNum);
 				Providerms.DeleteAll(customerNum);
 				//pat portal
+				DrugUnitms.DeleteAll(customerNum);
 				LabPanelms.DeleteAll(customerNum);
 				LabResultms.DeleteAll(customerNum);
 				Medicationms.DeleteAll(customerNum);
@@ -231,7 +232,21 @@ namespace WebHostSynch {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
 				}
 			}
-
+			
+		[WebMethod]
+			public void SynchDrugUnits(String RegistrationKey,List<DrugUnitm> drugUnitmList) {
+				try {
+					Logger.Information("In SynchDrugUnits");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					DrugUnitms.UpdateFromChangeList(drugUnitmList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
 			[WebMethod]
 			public void SynchMedications(String RegistrationKey,List<Medicationm> medicationmList) {
 				try {
@@ -349,6 +364,8 @@ namespace WebHostSynch {
 						return;
 					}	
 					for(int i=0;i<patNumList.Count;i++) {//Dennis: an inefficient loop but will work fine for the small number of records and will use existing default methods of the ms class
+							// on OD if a labpanel is deleted the corresponding labresults are also deleted. This will ensure that on the webserver labresults are deleted via 	the DeleteObjects function
+							// a similar situation would be true for  medications, allergydefs and disease defs.
 							LabPanelms.Delete(customerNum,patNumList[i]);
 							MedicationPatms.Delete(customerNum,patNumList[i]);
 							Allergyms.Delete(customerNum,patNumList[i]);

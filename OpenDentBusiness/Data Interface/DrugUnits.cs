@@ -89,6 +89,7 @@ namespace OpenDentBusiness{
 			}
 			command= "DELETE FROM drugunit WHERE DrugUnitNum = "+POut.Long(drugUnitNum);
 			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.DrugUnit,drugUnitNum);
 		}
 
 		///<summary>For example, mL</summary>
@@ -100,6 +101,44 @@ namespace OpenDentBusiness{
 				}
 			}
 			return "";//should never happen
+		}
+
+		public static List<long> GetChangedSinceDrugUnitNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT DrugUnitNum FROM drugunit WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> drugUnitNums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				drugUnitNums.Add(PIn.Long(dt.Rows[i]["DrugUnitNum"].ToString()));
+			}
+			return drugUnitNums;
+		}
+
+		///<summary>Used along with GetChangedSinceDrugUnitNums</summary>
+		public static List<DrugUnit> GetMultDrugUnits(List<long> drugUnitNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<DrugUnit>>(MethodBase.GetCurrentMethod(),drugUnitNums);
+			}
+			string strDrugUnitNums="";
+			DataTable table;
+			if(drugUnitNums.Count>0) {
+				for(int i=0;i<drugUnitNums.Count;i++) {
+					if(i>0) {
+						strDrugUnitNums+="OR ";
+					}
+					strDrugUnitNums+="DrugUnitNum='"+drugUnitNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM drugunit WHERE "+strDrugUnitNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			DrugUnit[] multDrugUnits=Crud.DrugUnitCrud.TableToList(table).ToArray();
+			List<DrugUnit> DrugUnitList=new List<DrugUnit>(multDrugUnits);
+			return DrugUnitList;
 		}
 	}
 }

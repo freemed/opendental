@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Mobile{
 
 		///<summary>used in tandem with Full synch</summary>
 		public static void DeleteAll(long customerNum) {
-			string command= "DELETE FROM diseasedefm WHERE CustomerNum = "+POut.Long(customerNum); ;
+			string command= "DELETE FROM diseasedefm WHERE CustomerNum = "+POut.Long(customerNum);
 			Db.NonQ(command);
 		}
 		#endregion
