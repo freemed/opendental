@@ -2455,7 +2455,9 @@ namespace OpenDental{
 			ContrAppt2.Location=position;
 			ContrAppt2.Width=width;
 			ContrAppt2.Height=height;
-			Plugins.HookAddCode(ContrAppt2,"FormOpenDental.LayoutControls_bottom");
+			if(Plugins.PluginsAreLoaded) {
+				Plugins.HookAddCode(ContrAppt2,"FormOpenDental.LayoutControls_bottom");
+			}
 			ContrChart2.Location=position;
 			ContrChart2.Width=width;
 			ContrChart2.Height=height;
