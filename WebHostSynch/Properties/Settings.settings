@@ -5,9 +5,15 @@
     <Setting Name="DBMobileWeb" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;server=localhost;User Id=dennis;database=mobile_dev;Persist Security Info=True&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;server=localhost;User Id=root;database=mobile_dev;Persist Security Info=True&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">server=localhost;User Id=dennis;database=mobile_dev;Persist Security Info=True</Value>
+      <Value Profile="(Default)">server=localhost;User Id=root;database=mobile_dev;Persist Security Info=True</Value>
+    </Setting>
+    <Setting Name="SheetDefAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2330/Sheets.aspx</Value>
+    </Setting>
+    <Setting Name="PatientPortalAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2193/Login.aspx</Value>
     </Setting>
   </Settings>
 </SettingsFile>

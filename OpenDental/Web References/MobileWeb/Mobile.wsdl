@@ -330,6 +330,20 @@
       <s:element name="SetMobileWebUserPasswordResponse">
         <s:complexType />
       </s:element>
+      <s:element name="GetPatientPortalAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPatientPortalAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPatientPortalAddressResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="SynchLabPanels">
         <s:complexType>
           <s:sequence>
@@ -720,6 +734,12 @@
   <wsdl:message name="SetMobileWebUserPasswordSoapOut">
     <wsdl:part name="parameters" element="tns:SetMobileWebUserPasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="GetPatientPortalAddressSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPatientPortalAddress" />
+  </wsdl:message>
+  <wsdl:message name="GetPatientPortalAddressSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPatientPortalAddressResponse" />
+  </wsdl:message>
   <wsdl:message name="SynchLabPanelsSoapIn">
     <wsdl:part name="parameters" element="tns:SynchLabPanels" />
   </wsdl:message>
@@ -830,6 +850,10 @@
     <wsdl:operation name="SetMobileWebUserPassword">
       <wsdl:input message="tns:SetMobileWebUserPasswordSoapIn" />
       <wsdl:output message="tns:SetMobileWebUserPasswordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPatientPortalAddress">
+      <wsdl:input message="tns:GetPatientPortalAddressSoapIn" />
+      <wsdl:output message="tns:GetPatientPortalAddressSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="SynchLabPanels">
       <wsdl:input message="tns:SynchLabPanelsSoapIn" />
@@ -970,6 +994,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebUserPassword">
       <soap:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPatientPortalAddress">
+      <soap:operation soapAction="http://opendental.com/GetPatientPortalAddress" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1171,6 +1204,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebUserPassword">
       <soap12:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPatientPortalAddress">
+      <soap12:operation soapAction="http://opendental.com/GetPatientPortalAddress" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

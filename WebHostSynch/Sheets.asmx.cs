@@ -32,28 +32,6 @@ namespace WebHostSynch {
 		public bool SetPreferences(string RegistrationKey,int ColorBorder) {
 			long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 			try {
-				/*
-				ODWebServiceEntities db=new ODWebServiceEntities();
-				if(DentalOfficeID==0) {
-				}
-				var wspObj=from wsp in db.webforms_preference
-					where wsp.DentalOfficeID==DentalOfficeID
-					select wsp;
-				//update preference
-				if(wspObj.Count()>0) {
-					wspObj.First().ColorBorder=ColorBorder;
-				}
-				// if there is no entry for that dental office make a new entry.
-				if(wspObj.Count()==0) {
-					webforms_preference wspNewObj=new webforms_preference();
-					wspNewObj.DentalOfficeID=DentalOfficeID;
-					wspNewObj.ColorBorder=ColorBorder;
-					wspNewObj.CultureName="";//empty string because null is not allowed
-					db.AddTowebforms_preference(wspNewObj);
-				}
-				db.SaveChanges();
-				Logger.Information("Preferences saved IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID);
-				*/
 				webforms_preference wspNewObj=new webforms_preference();
 				wspNewObj.DentalOfficeID=DentalOfficeID;
 				wspNewObj.ColorBorder=ColorBorder;
@@ -232,7 +210,8 @@ namespace WebHostSynch {
 			}
 			string SheetDefAddress="";
 			try {
-				SheetDefAddress=ConfigurationManager.AppSettings["SheetDefAddress"];
+				//SheetDefAddress=ConfigurationManager.AppSettings["SheetDefAddress"];
+				SheetDefAddress=Properties.Settings.Default.SheetDefAddress;
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);

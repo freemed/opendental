@@ -54,6 +54,8 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SetMobileWebUserPasswordOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetPatientPortalAddressOperationCompleted;
+        
         private System.Threading.SendOrPostCallback SynchLabPanelsOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchLabResultsOperationCompleted;
@@ -146,6 +148,9 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SetMobileWebUserPasswordCompletedEventHandler SetMobileWebUserPasswordCompleted;
+        
+        /// <remarks/>
+        public event GetPatientPortalAddressCompletedEventHandler GetPatientPortalAddressCompleted;
         
         /// <remarks/>
         public event SynchLabPanelsCompletedEventHandler SynchLabPanelsCompleted;
@@ -501,6 +506,35 @@ namespace OpenDental.MobileWeb {
             if ((this.SetMobileWebUserPasswordCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.SetMobileWebUserPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetPatientPortalAddress", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string GetPatientPortalAddress(string RegistrationKey) {
+            object[] results = this.Invoke("GetPatientPortalAddress", new object[] {
+                        RegistrationKey});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetPatientPortalAddressAsync(string RegistrationKey) {
+            this.GetPatientPortalAddressAsync(RegistrationKey, null);
+        }
+        
+        /// <remarks/>
+        public void GetPatientPortalAddressAsync(string RegistrationKey, object userState) {
+            if ((this.GetPatientPortalAddressOperationCompleted == null)) {
+                this.GetPatientPortalAddressOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPatientPortalAddressOperationCompleted);
+            }
+            this.InvokeAsync("GetPatientPortalAddress", new object[] {
+                        RegistrationKey}, this.GetPatientPortalAddressOperationCompleted, userState);
+        }
+        
+        private void OnGetPatientPortalAddressOperationCompleted(object arg) {
+            if ((this.GetPatientPortalAddressCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetPatientPortalAddressCompleted(this, new GetPatientPortalAddressCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -984,6 +1018,32 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SetMobileWebUserPasswordCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void GetPatientPortalAddressCompletedEventHandler(object sender, GetPatientPortalAddressCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetPatientPortalAddressCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetPatientPortalAddressCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

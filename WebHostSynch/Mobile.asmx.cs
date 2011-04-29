@@ -204,6 +204,23 @@ namespace WebHostSynch {
 		#region PatientPortal
 
 			[WebMethod]
+			public string GetPatientPortalAddress(string RegistrationKey) {
+				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
+				if(DentalOfficeID==0) {
+					return "";
+				}
+				string PatientPortalAddress="";
+				try {
+					PatientPortalAddress=Properties.Settings.Default.PatientPortalAddress;
+				}
+				catch(Exception ex) {
+					Logger.LogError(ex);
+				}
+				Logger.Information("In GetPatientPortalAddress PatientPortalAddress="+PatientPortalAddress);
+				return PatientPortalAddress;
+			}	
+		
+			[WebMethod]
 			public void SynchLabPanels(String RegistrationKey,List<LabPanelm> labPanelmList) {
 				try {
 					Logger.Information("In SynchLabPanels");
@@ -364,8 +381,11 @@ namespace WebHostSynch {
 						return;
 					}	
 					for(int i=0;i<patNumList.Count;i++) {//Dennis: an inefficient loop but will work fine for the small number of records and will use existing default methods of the ms class
-							// on OD if a labpanel is deleted the corresponding labresults are also deleted. This will ensure that on the webserver labresults are deleted via 	the DeleteObjects function
-							// a similar situation would be true for  medications, allergydefs and disease defs.
+						/* on OD if a labpanel is deleted the corresponding labresults are also deleted. This will ensure that on the webserver labresults are deleted via 	the DeleteObjects function
+						 * a similar situation would be true for  medications, allergydefs and disease defs.
+						 * If however the patient password is set to blank then the corresponding deletes of labresults, medications, allergydefs and disease defs will not occur causing some unnecessary records to be present on the webserver. 
+						 * Given the current level of coding it's important to leave these unnecessary records onthe webserver because the moment a patient password is not blank they will be needed again.
+						*/
 							LabPanelms.Delete(customerNum,patNumList[i]);
 							MedicationPatms.Delete(customerNum,patNumList[i]);
 							Allergyms.Delete(customerNum,patNumList[i]);
