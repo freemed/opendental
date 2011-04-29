@@ -4683,7 +4683,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
-					
+					command="ALTER TABLE patplan DROP COLUMN PlanNum";
+					Db.NonQ(command);
 				}
 
 
