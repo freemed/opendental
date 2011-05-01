@@ -3905,8 +3905,9 @@ namespace OpenDental{
 							//delete original plan.
 							InsPlans.Delete(PlanNumOriginal);//doesn't touch any other objects.
 							//do not need to update PlanCur because no changes were made.
-							PatPlanCur.PlanNum=PlanCur.PlanNum;
-							PatPlans.Update(PatPlanCur);
+							SubCur.PlanNum=PlanCur.PlanNum;
+							//PatPlanCur.PlanNum=PlanCur.PlanNum;
+							//PatPlans.Update(PatPlanCur);
 							//When 'pick from list' button was pushed, benfitList was filled with benefits from the picked plan.
 							//Then, those benefits may or may not have been changed.  
 							//benefitListOld will still contain the original defaults for a new plan, but they will be orphaned.
@@ -3922,8 +3923,9 @@ namespace OpenDental{
 							if(radioChangeAll.Checked) {
 								InsPlans.Update(PlanCur);//they might not realize that they would be changing an existing plan. Oh well.
 								InsPlans.Delete(PlanNumOriginal);//quick delete doesn't affect other objects.
-								PatPlanCur.PlanNum=PlanCur.PlanNum;
-								PatPlans.Update(PatPlanCur);
+								SubCur.PlanNum=PlanCur.PlanNum;
+								//PatPlanCur.PlanNum=PlanCur.PlanNum;
+								//PatPlans.Update(PatPlanCur);
 								//Same logic applies to benefit list as the section above.
 							}
 							else {//option is checked for "create new plan if needed"
@@ -3951,8 +3953,9 @@ namespace OpenDental{
 					if(InsPlans.AreEqualValue(PlanCur,PlanCurOriginal)) {//If no changes
 						if(PlanCur.PlanNum != PlanNumOriginal) {//clicked 'pick from list' button, then made no changes
 							//do not need to update PlanCur because no changes were made.
-							PatPlanCur.PlanNum=PlanCur.PlanNum;
-							PatPlans.Update(PatPlanCur);
+							SubCur.PlanNum=PlanCur.PlanNum;
+							//PatPlanCur.PlanNum=PlanCur.PlanNum;
+							//PatPlans.Update(PatPlanCur);
 							//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
 							//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 						}
@@ -3965,23 +3968,26 @@ namespace OpenDental{
 							if(radioChangeAll.Checked) {
 								//warn user here?
 								InsPlans.Update(PlanCur);
-								PatPlanCur.PlanNum=PlanCur.PlanNum;
-								PatPlans.Update(PatPlanCur);
+								SubCur.PlanNum=PlanCur.PlanNum;
+								//PatPlanCur.PlanNum=PlanCur.PlanNum;
+								//PatPlans.Update(PatPlanCur);
 								//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
 								//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 							}
 							else {//option is checked for "create new plan if needed"
 								if(comboLinked.Items.Count==0) {//if this is the only subscriber
 									InsPlans.Update(PlanCur);
-									PatPlanCur.PlanNum=PlanCur.PlanNum;
-									PatPlans.Update(PatPlanCur);
+									SubCur.PlanNum=PlanCur.PlanNum;
+									//PatPlanCur.PlanNum=PlanCur.PlanNum;
+									//PatPlans.Update(PatPlanCur);
 									//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
 									//So if any benefits were changed, the synch further down will trigger updates for the benefits on the picked plan.
 								}
 								else {//if there are other subscribers
 									InsPlans.Insert(PlanCur);//this gives it a new primary key.
-									PatPlanCur.PlanNum=PlanCur.PlanNum;
-									PatPlans.Update(PatPlanCur);
+									SubCur.PlanNum=PlanCur.PlanNum;
+									//PatPlanCur.PlanNum=PlanCur.PlanNum;
+									//PatPlans.Update(PatPlanCur);
 									//When 'pick from list' button was pushed, benefitListOld was filled with a shallow copy of the benefits from the picked list.
 									//We must clear the benefitListOld to prevent deletion of those benefits.
 									benefitListOld=new List<Benefit>();
@@ -4005,8 +4011,9 @@ namespace OpenDental{
 								}
 								else {//if there are other subscribers
 									InsPlans.Insert(PlanCur);//this gives it a new primary key.
-									PatPlanCur.PlanNum=PlanCur.PlanNum;
-									PatPlans.Update(PatPlanCur);
+									SubCur.PlanNum=PlanCur.PlanNum;
+									//PatPlanCur.PlanNum=PlanCur.PlanNum;
+									//PatPlans.Update(PatPlanCur);
 									//make copies of all the benefits
 									benefitListOld=new List<Benefit>();
 									for(int i=0;i<benefitList.Count;i++) {
@@ -4026,7 +4033,7 @@ namespace OpenDental{
 			Benefits.UpdateList(benefitListOld,benefitList);
 			//Update SubCur if needed-------------------------------------------------------------------------------------
 			if(SubCur!=null) {
-				SubCur.PlanNum=PlanCur.PlanNum;
+				//SubCur.PlanNum=PlanCur.PlanNum;//done above
 				InsSubs.Update(SubCur);//also saves the other fields besides PlanNum
 				InsPlans.ComputeEstimatesForSubscriber(SubCur.Subscriber);
 			}

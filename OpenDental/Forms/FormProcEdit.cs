@@ -2271,7 +2271,7 @@ namespace OpenDental{
 			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			ClaimProcsForProc=ClaimProcs.RefreshForProc(ProcCur.ProcNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			BenefitList=Benefits.Refresh(PatPlanList);
+			BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			if(Procedures.IsAttachedToClaim(ProcCur,ClaimProcsForProc)){
 				StartedAttachedToClaim=true;
 				//however, this doesn't stop someone from creating a claim while this window is open,
@@ -2968,7 +2968,7 @@ namespace OpenDental{
 		}
 
 		private void gridIns_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList,true);
+			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList,true,SubList);
 			if(!butOK.Enabled){
 				FormC.NoPermissionProc=true;
 			}
@@ -2988,7 +2988,7 @@ namespace OpenDental{
 			}
 			InsPlan plan=FormIS.SelectedPlan;
 			InsSub sub=FormIS.SelectedSub;
-			List <Benefit> benList=Benefits.Refresh(PatPlanList);
+			List <Benefit> benList=Benefits.Refresh(PatPlanList,SubList);
 			ClaimProc cp=new ClaimProc();
 			ClaimProcs.CreateEst(cp,ProcCur,plan,sub);
 			if(plan.PlanType=="c") {//capitation
@@ -3009,14 +3009,14 @@ namespace OpenDental{
 				cp.WriteOff=cp.WriteOffEst;
 				ClaimProcs.Update(cp);
 			}
-			long patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,plan.PlanNum);
+			long patPlanNum=PatPlans.GetPatPlanNum(sub.InsSubNum,PatPlanList);
 			if(patPlanNum > 0){
 				double paidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(cp,PatPlanList);
 				double writeOffOtherIns=ClaimProcs.GetWriteOffOtherIns(cp,PatPlanList);
 				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benList,
 					HistList,LoopList,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns);	
 			}
-			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList,true);
+			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList,true,SubList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled
 			FormC.ShowDialog();
 			if(FormC.DialogResult==DialogResult.Cancel){
@@ -3165,9 +3165,11 @@ namespace OpenDental{
       ProcCur.CodeNum=FormP.SelectedCodeNum;
       ProcedureCode2=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
       textDesc.Text=ProcedureCode2.Descript;
-			long priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
-			InsPlan priplan=InsPlans.GetPlan(priPlanNum,PlanList);//can handle a plannum=0
-			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+			long priSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
+			InsSub prisub=InsSubs.GetSub(priSubNum,SubList);//can handle an inssubnum=0
+			//long priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+			InsPlan priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);//can handle a plannum=0
+			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList,SubList));
 			if(priplan!=null && priplan.PlanType=="p") {//PPO
 				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 				if(standardfee>insfee) {
@@ -3224,7 +3226,7 @@ namespace OpenDental{
 				ProcCur.ProcStatus=ProcStat.TP;
 				//fee starts out 0 if EO, EC, etc.  This updates fee if changing to TP so it won't stay 0.
 				if(ProcCur.ProcFee==0) {
-					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList,SubList));
 					textProcFee.Text=ProcCur.ProcFee.ToString("f");
 				}
 			}
@@ -4296,11 +4298,13 @@ namespace OpenDental{
 				ProcCur.CodeNum=verifyCode;
 				//ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 				//ProcCur.Code=verifyCode;
+				InsSub prisub=null;
 				InsPlan priplan=null;
 				if(PatPlanList.Count>0) {
-					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+					prisub=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+					priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
 				}
-				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList,SubList));
 				if(priplan!=null && priplan.PlanType=="p") {//PPO
 					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 					if(standardfee>insfee) {

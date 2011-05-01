@@ -455,7 +455,7 @@ namespace OpenDental.Bridges{
 				if(patPlanList.Count>0){
 					patplan=patPlanList[0];
 					sub=InsSubs.GetSub(patplan.InsSubNum,subList);
-					plan=InsPlans.GetPlan(patplan.PlanNum,planList);
+					plan=InsPlans.GetPlan(sub.PlanNum,planList);
 					carrier=Carriers.GetCarrier(plan.CarrierNum);
 					if(plan.EmployerNum!=0){
 						emp=Employers.GetEmployer(plan.EmployerNum);

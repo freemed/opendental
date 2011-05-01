@@ -11,8 +11,6 @@ namespace OpenDentBusiness{
 		public long PatPlanNum;
 		/// <summary>FK to  patient.PatNum.  The patient who currently has the insurance.  Not the same as the subscriber.</summary>
 		public long PatNum;
-		///<summary>FK to insplan.PlanNum.  The insurance plan attached to the patient.</summary>
-		public long PlanNum;
 		///<summary>Number like 1, 2, 3, etc.  Represents primary ins, secondary ins, tertiary ins, etc. 0 is not used</summary>
 		public byte Ordinal;
 		///<summary>For informational purposes only. For now, we lose the previous feature which let us set isPending without entering a plan.  Now, you have to enter the plan in order to check this box.</summary>

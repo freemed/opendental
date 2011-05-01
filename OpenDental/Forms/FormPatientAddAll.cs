@@ -1654,7 +1654,6 @@ namespace OpenDental {
 					patplan.Ordinal=1;
 				}
 				patplan.PatNum=guar.PatNum;
-				patplan.PlanNum=selectedPlan1.PlanNum;
 				patplan.InsSubNum=sub1.InsSubNum;
 				if(comboSubscriber1.SelectedIndex==1){
 					patplan.Relationship=Relat.Self;
@@ -1680,7 +1679,6 @@ namespace OpenDental {
 					patplan.Ordinal=2;
 				}
 				patplan.PatNum=guar.PatNum;
-				patplan.PlanNum=selectedPlan2.PlanNum;
 				patplan.InsSubNum=sub2.InsSubNum;
 				if(comboSubscriber2.SelectedIndex==1){
 					patplan.Relationship=Relat.Self;
@@ -1704,7 +1702,6 @@ namespace OpenDental {
 					patplan.Ordinal=1;
 				}
 				patplan.PatNum=pat2.PatNum;
-				patplan.PlanNum=selectedPlan1.PlanNum;
 				patplan.InsSubNum=sub1.InsSubNum;
 				if(comboSubscriber1.SelectedIndex==2){
 					patplan.Relationship=Relat.Self;
@@ -1730,7 +1727,6 @@ namespace OpenDental {
 					patplan.Ordinal=2;
 				}
 				patplan.PatNum=pat2.PatNum;
-				patplan.PlanNum=selectedPlan2.PlanNum;
 				patplan.InsSubNum=sub2.InsSubNum;
 				if(comboSubscriber2.SelectedIndex==2){
 					patplan.Relationship=Relat.Self;
@@ -1748,7 +1744,6 @@ namespace OpenDental {
 				patplan=new PatPlan();
 				patplan.Ordinal=1;
 				patplan.PatNum=pat3.PatNum;
-				patplan.PlanNum=selectedPlan1.PlanNum;
 				patplan.InsSubNum=sub1.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
@@ -1763,7 +1758,6 @@ namespace OpenDental {
 					patplan.Ordinal=2;
 				}
 				patplan.PatNum=pat3.PatNum;
-				patplan.PlanNum=selectedPlan2.PlanNum;
 				patplan.InsSubNum=sub2.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
@@ -1773,7 +1767,6 @@ namespace OpenDental {
 				patplan=new PatPlan();
 				patplan.Ordinal=1;
 				patplan.PatNum=pat4.PatNum;
-				patplan.PlanNum=selectedPlan1.PlanNum;
 				patplan.InsSubNum=sub1.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
@@ -1788,7 +1781,6 @@ namespace OpenDental {
 					patplan.Ordinal=2;
 				}
 				patplan.PatNum=pat4.PatNum;
-				patplan.PlanNum=selectedPlan2.PlanNum;
 				patplan.InsSubNum=sub2.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
@@ -1798,7 +1790,6 @@ namespace OpenDental {
 				patplan=new PatPlan();
 				patplan.Ordinal=1;
 				patplan.PatNum=pat5.PatNum;
-				patplan.PlanNum=selectedPlan1.PlanNum;
 				patplan.InsSubNum=sub1.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);
@@ -1813,7 +1804,6 @@ namespace OpenDental {
 					patplan.Ordinal=2;
 				}
 				patplan.PatNum=pat5.PatNum;
-				patplan.PlanNum=selectedPlan2.PlanNum;
 				patplan.InsSubNum=sub2.InsSubNum;
 				patplan.Relationship=Relat.Child;
 				PatPlans.Insert(patplan);

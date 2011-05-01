@@ -136,8 +136,8 @@ namespace OpenDental {
 			}
 			else {
 				patPlan1=patPlanList[0];
-				plan1=InsPlans.GetPlan(patPlan1.PlanNum,planList);
 				sub1=InsSubs.GetSub(patPlan1.InsSubNum,subList);
+				plan1=InsPlans.GetPlan(sub1.PlanNum,planList);
 				ins1Relat=patPlan1.Relationship;
 				carrier1=Carriers.GetCarrier(plan1.CarrierNum);
 			}
@@ -150,8 +150,8 @@ namespace OpenDental {
 			}
 			else {
 				patPlan2=patPlanList[1];
-				plan2=InsPlans.GetPlan(patPlan2.PlanNum,planList);
 				sub2=InsSubs.GetSub(patPlan2.InsSubNum,subList);
+				plan2=InsPlans.GetPlan(sub2.PlanNum,planList);
 				ins2Relat=patPlan2.Relationship;
 				carrier2=Carriers.GetCarrier(plan2.CarrierNum);
 			}

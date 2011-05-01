@@ -3300,7 +3300,7 @@ namespace OpenDental{
 			SubList=InsSubs.RefreshForFam(FamCur);
 			PlanList=InsPlans.RefreshForSubList(SubList);
 			PatPlanList=PatPlans.Refresh(patNum);
-			BenefitList=Benefits.Refresh(PatPlanList);
+			BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			PatientNoteCur=PatientNotes.Refresh(patNum,PatCur.Guarantor);
 			if(PrefC.UsingAtoZfolder) {
 				patFolder=ImageStore.GetPatientFolder(PatCur);//GetImageFolder();
@@ -3771,7 +3771,8 @@ namespace OpenDental{
 					case "Pri Ins":
 						string name;
 						if(PatPlanList.Count>0) {
-							name=InsPlans.GetCarrierName(PatPlans.GetPlanNum(PatPlanList,1),PlanList);
+							InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+							name=InsPlans.GetCarrierName(sub.PlanNum,PlanList);
 							if(PatPlanList[0].IsPending) {
 								name+=Lan.g("TableChartPtInfo"," (pending)");
 							}
@@ -3784,7 +3785,8 @@ namespace OpenDental{
 						break;
 					case "Sec Ins":
 						if(PatPlanList.Count>1) {
-							name=InsPlans.GetCarrierName(PatPlans.GetPlanNum(PatPlanList,2),PlanList);
+							InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+							name=InsPlans.GetCarrierName(sub.PlanNum,PlanList);
 							if(PatPlanList[1].IsPending) {
 								name+=Lan.g("TableChartPtInfo"," (pending)");
 							}
@@ -5183,8 +5185,10 @@ namespace OpenDental{
 			else {
 				//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
 				InsPlan priplan=null;
+				InsSub prisub=null;
 				if(PatPlanList.Count>0) {
-					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+					prisub=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+					priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
 				}
 				//check to see if it is a med code
 				double insfee;
@@ -5195,10 +5199,10 @@ namespace OpenDental{
 				//get fee schedule for medical ins or dental
 				long feeSch;
 				if(isMed){
-					feeSch = Fees.GetMedFeeSched(PatCur, PlanList, PatPlanList);
+					feeSch = Fees.GetMedFeeSched(PatCur, PlanList, PatPlanList,SubList);
 				} 
 				else {
-					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
+					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList,SubList);
 				}
 				insfee = Fees.GetAmount0(ProcCur.CodeNum, feeSch);
 				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO
@@ -5315,8 +5319,10 @@ namespace OpenDental{
 			}
 			else {
 				InsPlan priplan=null;
+				InsSub prisub=null;
 				if(PatPlanList.Count>0) {
-					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+					prisub=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+					priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
 				}
 				//check to see if it is a med code
 				double insfee;
@@ -5327,10 +5333,10 @@ namespace OpenDental{
 				//get fee schedule for medical ins or dental
 				long feeSch;
 				if(isMed){
-					feeSch = Fees.GetMedFeeSched(PatCur, PlanList, PatPlanList);
+					feeSch = Fees.GetMedFeeSched(PatCur, PlanList, PatPlanList,SubList);
 				} 
 				else {
-					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
+					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList,SubList);
 				}
 				insfee = Fees.GetAmount0(ProcCur.CodeNum, feeSch);
 				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO
@@ -7283,7 +7289,9 @@ namespace OpenDental{
 				else if(!MsgBox.Show(this,true,"Set appointment complete?")){
 					return;
 				}
-				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
+				InsSub sub1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+				InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+				Appointments.SetAptStatusComplete(apt.AptNum,sub1.PlanNum,sub2.PlanNum);
 				ProcedureL.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age,SubList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					PatCur.GetNameLF() + ", "

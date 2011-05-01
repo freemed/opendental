@@ -128,15 +128,17 @@ namespace OpenDental {
 			ProcCur.DateTP=ProcCur.ProcDate;
 			//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
 			InsPlan priplan=null;
+			InsSub prisub=null;
 			Family fam=Patients.GetFamily(AptCur.PatNum);
 			Patient pat=fam.GetPatient(AptCur.PatNum);
 			List<InsSub> subList=InsSubs.RefreshForFam(fam);
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			if(patPlanList.Count>0) {
-				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
+				prisub=InsSubs.GetSub(patPlanList[0].InsSubNum,subList);
+				priplan=InsPlans.GetPlan(prisub.PlanNum,planList);
 			}
-			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,planList,patPlanList));
+			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,planList,patPlanList,subList));
 			if(priplan!=null && priplan.PlanType=="p") {//PPO
 				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
 				if(standardfee>insfee) {
@@ -171,7 +173,7 @@ namespace OpenDental {
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
-			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
+			List <Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
 			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,planList,patPlanList,benefitList,pat.Age,subList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;

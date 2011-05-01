@@ -10,19 +10,21 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Benefits {
 		///<summary>Gets a list of all benefits for a given list of patplans for one patient.</summary>
-		public static List <Benefit> Refresh(List<PatPlan> listForPat) {
+		public static List <Benefit> Refresh(List<PatPlan> listForPat,List<InsSub> subList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),listForPat);
+				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),listForPat,subList);
 			} 
 			if(listForPat.Count==0) {
 				return new List <Benefit> ();
 			}
+			InsSub sub;
 			string s="";
 			for(int i=0;i<listForPat.Count;i++) {
 				if(i>0) {
 					s+=" OR";
 				}
-				s+=" PlanNum="+POut.Long(listForPat[i].PlanNum);
+				sub=InsSubs.GetSub(listForPat[i].InsSubNum,subList);
+				s+=" PlanNum="+POut.Long(sub.PlanNum);
 				s+=" OR";
 				s+=" PatPlanNum="+POut.Long(listForPat[i].PatPlanNum);
 			}
@@ -1497,18 +1499,20 @@ namespace OpenDentBusiness {
 		}*/
 
 		///<summary>Used in family module display to get a list of benefits.  The main purpose of this function is to group similar benefits for each plan on the same row, making it easier to display in a simple grid.  Supply a list of all benefits for the patient, and the patPlans for the patient.</summary>
-		public static Benefit[,] GetDisplayMatrix(List <Benefit> bensForPat,List <PatPlan> patPlanList){
+		public static Benefit[,] GetDisplayMatrix(List <Benefit> bensForPat,List<PatPlan> patPlanList,List<InsSub> subList){
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();//each object is a Benefit[]
 			Benefit[] row;
 			ArrayList refAL=new ArrayList();//each object is a Benefit from any random column. Used when searching for a type.
 			int col;
+			InsSub sub;
 			for(int i=0;i<bensForPat.Count;i++){
 				//determine the column
 				col=-1;
 				for(int j=0;j<patPlanList.Count;j++){
+					sub=InsSubs.GetSub(patPlanList[j].InsSubNum,subList);
 					if(patPlanList[j].PatPlanNum==bensForPat[i].PatPlanNum
-						|| patPlanList[j].PlanNum==bensForPat[i].PlanNum)
+						|| sub.PlanNum==bensForPat[i].PlanNum)
 					{
 						col=j;
 						break;

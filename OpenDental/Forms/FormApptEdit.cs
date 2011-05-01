@@ -1550,14 +1550,16 @@ namespace OpenDental{
 			ProcCur.DateTP=ProcCur.ProcDate;
 			//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
 			InsPlan priplan=null;
+			InsSub prisub=null;
 			//Family fam=Patients.GetFamily(AptCur.PatNum);
 			//Patient pat=fam.GetPatient(AptCur.PatNum);
 			//InsPlan[] planList=InsPlans.Refresh(fam);
 			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			if(patPlanList.Count>0) {
-				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,PlanList);
+				prisub=InsSubs.GetSub(patPlanList[0].InsSubNum,SubList);
+				priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
 			}
-			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,patPlanList));
+			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,patPlanList,SubList));
 			if(priplan!=null && priplan.PlanType=="p") {//PPO
 				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
 				if(standardfee>insfee) {
@@ -1601,7 +1603,7 @@ namespace OpenDental{
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
-			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
+			List <Benefit> benefitList=Benefits.Refresh(patPlanList,SubList);
 			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList,pat.Age,SubList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
@@ -1869,7 +1871,7 @@ namespace OpenDental{
 			}
 			Procedures.SetDateFirstVisit(AptCur.AptDateTime.Date,1,pat);
 			List<PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-			List<Benefit> benefitList=Benefits.Refresh(PatPlanList);
+			List<Benefit> benefitList=Benefits.Refresh(PatPlanList,SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
 			string[] codes=DefC.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
 			for(int i=0;i<codes.Length;i++) {
@@ -1888,10 +1890,12 @@ namespace OpenDental{
 				ProcCur.ProcDate=AptCur.AptDateTime.Date;
 				ProcCur.DateTP=AptCur.AptDateTime.Date;
 				InsPlan priplan=null;
+				InsSub prisub=null;
 				if(PatPlanList.Count>0) {
-					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+					prisub=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+					priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
 				}
-				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,PatPlanList));
+				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,PatPlanList,SubList));
 				if(priplan!=null && priplan.PlanType=="p") {//PPO
 					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
 					if(standardfee>insfee) {

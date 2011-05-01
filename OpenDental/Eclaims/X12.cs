@@ -617,7 +617,7 @@ namespace OpenDental.Eclaims
 					string patID=patient.SSN;
 					List <PatPlan> patPlans=PatPlans.Refresh(patient.PatNum);
 					for(int p=0;p<patPlans.Count;p++){
-						if(patPlans[p].PlanNum==claim.PlanNum){
+						if(patPlans[p].InsSubNum==claim.InsSubNum){
 							patID=patPlans[p].PatID.Replace("-","");
 						}
 					}

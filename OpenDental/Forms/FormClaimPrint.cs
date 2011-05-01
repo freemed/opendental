@@ -760,7 +760,7 @@ namespace OpenDental{
 						break;
 					case "SubscrID":
 						List <PatPlan> patPlans=PatPlans.Refresh(ThisPatNum);
-						string patID=PatPlans.GetPatID(patPlans,planCur.PlanNum);
+						string patID=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
 						if(patID==""){
 							displayStrings[i]=subCur.SubscriberID;
 						}
@@ -2708,7 +2708,7 @@ namespace OpenDental{
 			for(int i=0;i<PatInsPlans.Count;i++){ //fill med ins plans
 				PatPlan tempPatPlan = (PatPlan)PatInsPlans[i];
 				InsSub tempSub = InsSubs.GetSub(tempPatPlan.InsSubNum,SubList);
-				InsPlan tempInsPlan = InsPlans.GetPlan(tempPatPlan.PlanNum, PlanList);
+				InsPlan tempInsPlan = InsPlans.GetPlan(tempSub.PlanNum, PlanList);
 				if(tempInsPlan.IsMedical) {
 					MedSubList.Add(tempSub);
 				}

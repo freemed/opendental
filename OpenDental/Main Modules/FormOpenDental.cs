@@ -2288,8 +2288,10 @@ namespace OpenDental{
 			List<InsPlan> PlanList=InsPlans.RefreshForSubList(subList);
 			Carrier carrier;
 			InsPlan plan;
+			InsSub sub;
 			for(int i=0;i<PatPlanList.Count;i++) {
-				plan=InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList);
+				sub=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
+				plan=InsPlans.GetPlan(sub.PlanNum,PlanList);
 				carrier=Carriers.GetCarrier(plan.CarrierNum);
 				menuItem=new MenuItem(carrier.CarrierName,menuLabel_Click);
 				menuItem.Tag=carrier;

@@ -24,7 +24,7 @@ namespace OpenDental{
 			if(plan==null){
 				return;
 			}
-			long patPlanNum=PatPlans.GetPatPlanNum(patPlans,claimCur.PlanNum);
+			long patPlanNum=PatPlans.GetPatPlanNum(claimCur.InsSubNum,patPlans);
 			//first loop handles totals for received items.
 			for(int i=0;i<ClaimProcsForClaim.Count;i++){
 				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.Received){
@@ -40,7 +40,7 @@ namespace OpenDental{
 			//And for preauth.
 			Procedure ProcCur;
 			//InsPlan plan=InsPlans.GetPlan(claimCur.PlanNum,planList);
-			List<ClaimProcHist> histList=ClaimProcs.GetHistList(claimCur.PatNum,benefitList,patPlans,planList,claimCur.ClaimNum,claimCur.DateService);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(claimCur.PatNum,benefitList,patPlans,planList,claimCur.ClaimNum,claimCur.DateService,subList);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();//make a copy
 			for(int i=0;i<ClaimProcsAll.Count;i++) {
 				claimProcListOld.Add(ClaimProcsAll[i].Copy());

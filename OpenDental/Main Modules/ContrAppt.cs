@@ -4579,15 +4579,17 @@ namespace OpenDental{
 			List<InsSub> SubList=InsSubs.RefreshForFam(fam);
 			List<InsPlan> PlanList=InsPlans.RefreshForSubList(SubList);
 			List<PatPlan> PatPlanList = PatPlans.Refresh(apt.PatNum);
-			if (apt.AptStatus == ApptStatus.PtNote) {
+			if(apt.AptStatus == ApptStatus.PtNote) {
 				Appointments.SetAptStatus(apt.AptNum,ApptStatus.PtNoteCompleted);
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ apt.AptDateTime.ToString() + ", "
 					+ "Pt NOTE Set Complete");//shouldn't ever happen, but don't allow procedures to be completed from notes
 			}
-			else {
-				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
+			else{
+				InsSub sub1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+				InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+				Appointments.SetAptStatusComplete(apt.AptNum,sub1.PlanNum,sub2.PlanNum);
 				ProcedureL.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum,pat.Age,SubList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "

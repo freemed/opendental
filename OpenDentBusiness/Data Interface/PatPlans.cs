@@ -37,6 +37,7 @@ namespace OpenDentBusiness{
 			return Crud.PatPlanCrud.Insert(patPlan);
 		}
 
+		/*
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the plan num of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
 		public static long GetPlanNum(List<PatPlan> list,int ordinal) {
 			//No need to check RemotingRole; no call to db.
@@ -46,7 +47,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			return 0;
-		}
+		}*/
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the insSubNum of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
 		public static long GetInsSubNum(List<PatPlan> list,int ordinal) {
@@ -70,10 +71,10 @@ namespace OpenDentBusiness{
 			return Relat.Self;
 		}
 
-		public static string GetPatID(List<PatPlan> patPlans,long planNum) {
+		public static string GetPatID(long subNum,List<PatPlan> patPlans) {
 			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
-				if(patPlans[p].PlanNum==planNum) {
+				if(patPlans[p].InsSubNum==subNum) {
 					return patPlans[p].PatID;
 				}
 			}
@@ -81,21 +82,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return 1 for primary insurance, etc.  Will return 0 if planNum not found in the list.</summary>
-		public static int GetOrdinal(List<PatPlan> patPlans,long planNum) {
+		public static int GetOrdinal(long subNum,List<PatPlan> patPlans) {
 			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
-				if(patPlans[p].PlanNum==planNum) {
+				if(patPlans[p].InsSubNum==subNum) {
 					return patPlans[p].Ordinal;
 				}
 			}
 			return 0;
 		}
 
-		///<summary>Will return null if planNum not found in the list.</summary>
-		public static PatPlan GetFromList(List<PatPlan> patPlans,long planNum,long subNum) {
+		///<summary>Will return null if subNum not found in the list.</summary>
+		public static PatPlan GetFromList(List<PatPlan> patPlans,long subNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
-				if(patPlans[p].PlanNum==planNum && patPlans[p].InsSubNum==subNum) {
+				if(patPlans[p].InsSubNum==subNum) {
 					return patPlans[p];
 				}
 			}
@@ -152,16 +153,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the supplied list to find the one patplanNum needed based on the planNum.  Returns 0 if patient is not currently covered by the planNum supplied.</summary>
-		public static long GetPatPlanNum(List<PatPlan> patPlanList,long planNum) {
+		public static long GetPatPlanNum(long subNum,List<PatPlan> patPlanList) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<patPlanList.Count;i++) {
-				if(patPlanList[i].PlanNum==planNum) {
+				if(patPlanList[i].InsSubNum==subNum) {
 					return patPlanList[i].PatPlanNum;
 				}
 			}
 			return 0;
 		}
 
+		/*Deprecated
 		///<summary>Gets one patPlanNum directly from database.  Only used once in FormClaimProc.</summary>
 		public static long GetPatPlanNum(long patNum,long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -169,7 +171,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT PatPlanNum FROM patplan WHERE PatNum="+POut.Long(patNum)+" AND PlanNum="+POut.Long(planNum);
 			return PIn.Long(Db.GetScalar(command));
-		}
+		}*/
 
 		///<summary>Gets directly from database.  Used by Trojan.</summary>
 		public static PatPlan[] GetByPlanNum(long planNum) {
@@ -235,7 +237,7 @@ namespace OpenDentBusiness{
 			patPlans=PatPlans.Refresh(patNum);
 			List<InsSub> subList=InsSubs.RefreshForFam(fam);
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
-			List<Benefit> benList=Benefits.Refresh(patPlans);
+			List<Benefit> benList=Benefits.Refresh(patPlans,subList);
 			Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,planList,patPlans,benList,pat.Age,subList);
 			Patients.SetHasIns(patNum);
 		}

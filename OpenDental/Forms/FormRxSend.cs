@@ -149,9 +149,9 @@ namespace OpenDental {
 			Family fam=Patients.GetFamily(pat.PatNum);
 			List<InsSub> subList=InsSubs.RefreshForFam(fam);
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
-			InsPlan ins=InsPlans.GetPlan(patPlan.PlanNum,planList);
 			InsSub sub=InsSubs.GetOne(patPlan.InsSubNum);
-			Carrier car=Carriers.GetCarrier(ins.CarrierNum);
+			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,planList);
+			Carrier car=Carriers.GetCarrier(plan.CarrierNum);
 			//PVD+P1+7701630:D3+++++MAIN STREET PHARMACY++6152205656:TE'-----------------------------------------------
 			strb.Append("PVD"+e);//000
 			strb.Append("P1"+e);//010 Provider coded (see external code list pg.231)
@@ -188,7 +188,7 @@ namespace OpenDental {
 			strb.Append(e);//030 conditional Service type, coded
 			strb.Append(Sout(sub.SubscriberID)+e);//040 Cardholder ID
 			strb.Append(e);//050 conditional Cardholder name
-			strb.Append(Sout(ins.GroupNum)+s);//060 Group ID
+			strb.Append(Sout(plan.GroupNum)+s);//060 Group ID
 			//DRU------------------------------------------------------------------------------------------------------
 			//DRU+P:CALAN SR 240MG::::240:::::::AA:C42998:AB:C28253+::60:38:AC:C48542+:1 TID -TAKE ONE TABLET TWO TIMES A DAY UNTIL GONE+85:19971001:102*ZDS:30:804+0+R:1'
 			strb.Append("DRU"+e);//000

@@ -4678,7 +4678,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE drugunit SET DateTStamp = SYSTIMESTAMP";
 					Db.NonQ(command);
 				}
-				/*
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE patplan DROP PlanNum";
 					Db.NonQ(command);
@@ -4686,7 +4685,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					command="ALTER TABLE patplan DROP COLUMN PlanNum";
 					Db.NonQ(command);
-				}*/
+				}
 
 
 
@@ -4725,8 +4724,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-
-				
-
-				

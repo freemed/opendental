@@ -683,13 +683,13 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
-		///<summary>Only used in ContrAccount.OnInsClick to automate selection of procedures.  Returns true if this procedure should be selected.  This happens if there is at least one claimproc attached for this plan that is an estimate, and it is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. The plan is the primary plan.</summary>
-		public static bool NeedsSent(long procNum,List<ClaimProc> claimProcList,long planNum) {
+		///<summary>Only used in ContrAccount.OnInsClick to automate selection of procedures.  Returns true if this procedure should be selected.  This happens if there is at least one claimproc attached for this inssub that is an estimate, and it is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. The plan is the primary plan.</summary>
+		public static bool NeedsSent(long procNum,long insSubNum,List<ClaimProc> claimProcList) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==procNum
 					&& !claimProcList[i].NoBillIns
-					&& claimProcList[i].PlanNum==planNum
+					&& claimProcList[i].InsSubNum==insSubNum
 					&& claimProcList[i].Status==ClaimProcStatus.Estimate) 
 				{
 					return true;
@@ -974,7 +974,7 @@ namespace OpenDentBusiness {
 				}
 				bool planIsCurrent=false;
 				for(int p=0;p<patPlans.Count;p++) {
-					if(patPlans[p].PlanNum==claimProcs[i].PlanNum) {
+					if(patPlans[p].InsSubNum==claimProcs[i].InsSubNum) {
 						planIsCurrent=true;
 						break;
 					}
@@ -1029,8 +1029,8 @@ namespace OpenDentBusiness {
 				cp.ProcNum=proc.ProcNum;
 				cp.PatNum=patNum;
 				cp.ProvNum=proc.ProvNum;
-				PlanCur=InsPlans.GetPlan(patPlans[p].PlanNum,PlanList);
 				SubCur=InsSubs.GetSub(patPlans[p].InsSubNum,subList);
+				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,PlanList);
 				if(PlanCur==null || SubCur==null) {//??
 					continue;//??
 				}
@@ -1089,7 +1089,8 @@ namespace OpenDentBusiness {
 				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
 			//At this point, for a PPO with secondary, the sum of all estimates plus primary writeoff might be greater than fee.
 			if(patPlans.Count>1){
-				PlanCur=InsPlans.GetPlan(patPlans[0].PlanNum,PlanList);
+				SubCur=InsSubs.GetSub(patPlans[0].InsSubNum,subList);
+				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,PlanList);
 				if(PlanCur.PlanType=="p") {
 					//claimProcs=ClaimProcs.Refresh(patNum);
 					//ClaimProc priClaimProc=null;
@@ -1156,7 +1157,7 @@ namespace OpenDentBusiness {
 					//example:cap estimate changed to cap complete, and if estimate, then provnum set
 					//but I don't see how PlanCur could ever be null
 				}
-				patplan=PatPlans.GetFromList(patPlans,claimProcs[i].PlanNum,claimProcs[i].InsSubNum);
+				patplan=PatPlans.GetFromList(patPlans,claimProcs[i].InsSubNum);
 				//the cp is altered within ComputeBaseEst, but not saved.
 				if(patplan==null) {//the plan for this claimproc was dropped 
 					if(ordinal!=4) {//only process on the fourth round
@@ -1261,7 +1262,7 @@ namespace OpenDentBusiness {
 			}
 			List<Procedure> ProcList=Procedures.Refresh(apt.PatNum);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
-			List<Benefit> benefitList=Benefits.Refresh(patPlans);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
 			//this query could be improved slightly to only get notes of interest.
 			string command="SELECT * FROM procnote WHERE PatNum="+POut.Long(apt.PatNum)+" ORDER BY EntryDateTime";
 			DataTable rawNotes=Db.GetTable(command);

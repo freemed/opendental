@@ -914,7 +914,7 @@ namespace OpenDentBusiness {
 				List<InsSub> subs=InsSubs.RefreshForFam(fam);
 				List<InsPlan> plans=InsPlans.RefreshForSubList(subs);
 				List<PatPlan> patPlans=PatPlans.Refresh(patNum);
-				List<Benefit> benefitList=Benefits.Refresh(patPlans);
+				List<Benefit> benefitList=Benefits.Refresh(patPlans,subs);
 				Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList,pat.Age,subs);
 				Patients.SetHasIns(patNum);
 			}

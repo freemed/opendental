@@ -176,16 +176,15 @@ namespace OpenDental{
 				}
 				//Insurance-------------------------------------------------------------------------------------------------------------------
 				List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-				long planNum=PatPlans.GetPlanNum(patPlanList,1);
 				long subNum=PatPlans.GetInsSubNum(patPlanList,1);
-				long patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
+				long patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
 				List<InsSub> subList=InsSubs.RefreshForFam(fam);
 				List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
-				InsPlan plan=InsPlans.GetPlan(planNum,planList);
 				InsSub sub=InsSubs.GetSub(subNum,subList);
+				InsPlan plan=InsPlans.GetPlan(sub.PlanNum,planList);
 				Carrier carrier=null;
-				List<Benefit> benefitList=Benefits.Refresh(patPlanList);
-				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today);
+				List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
+				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today,subList);
 				double doubAnnualMax;
 				double doubDeductible;
 				double doubDeductibleUsed;
@@ -246,11 +245,10 @@ namespace OpenDental{
 						insPercentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
 					}
 				}
-				planNum=PatPlans.GetPlanNum(patPlanList,2);
 				subNum=PatPlans.GetInsSubNum(patPlanList,2);
-				patPlanNum=PatPlans.GetPatPlanNum(patPlanList,planNum);
-				plan=InsPlans.GetPlan(planNum,planList);
+				patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
 				sub=InsSubs.GetSub(subNum,subList);
+				plan=InsPlans.GetPlan(sub.PlanNum,planList);
 				if(plan!=null) {
 					carrier=Carriers.GetCarrier(plan.CarrierNum);
 					carrier2Name=carrier.CarrierName;
@@ -931,16 +929,16 @@ namespace OpenDental{
 			InsSub sub1=null;
 			Carrier carrier1=null;
 			if(patPlanList.Count>0){
-				insplan1=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
 				sub1=InsSubs.GetSub(patPlanList[0].InsSubNum,subList);
+				insplan1=InsPlans.GetPlan(sub1.PlanNum,planList);
 				carrier1=Carriers.GetCarrier(insplan1.CarrierNum);
 			}
 			InsPlan insplan2=null;
 			InsSub sub2=null;
 			Carrier carrier2=null;
 			if(patPlanList.Count>1) {
-				insplan2=InsPlans.GetPlan(patPlanList[1].PlanNum,planList);
 				sub2=InsSubs.GetSub(patPlanList[1].InsSubNum,subList);
+				insplan2=InsPlans.GetPlan(sub2.PlanNum,planList);
 				carrier2=Carriers.GetCarrier(insplan2.CarrierNum);
 			}
 			foreach(SheetField field in sheet.SheetFields) {

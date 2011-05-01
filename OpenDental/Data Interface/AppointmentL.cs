@@ -261,10 +261,12 @@ namespace OpenDental{
 			Appointments.Insert(AptCur);	
 			Procedure ProcCur;
 			List <PatPlan> patPlanList=PatPlans.Refresh(patCur.PatNum);
-			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
+			List <Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
 			InsPlan priplan=null;
+			InsSub prisub=null;
 			if(patPlanList.Count>0) {
-				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
+				prisub=InsSubs.GetSub(patPlanList[0].InsSubNum,subList);
+				priplan=InsPlans.GetPlan(prisub.PlanNum,planList);
 			}
 			double insfee;
 			double standardfee;
@@ -276,7 +278,7 @@ namespace OpenDental{
 				ProcCur.CodeNum=ProcedureCodes.GetCodeNum(procs[i]);
 				ProcCur.ProcDate=DateTime.Now;
 				ProcCur.DateTP=DateTime.Now;
-				insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(patCur,planList,patPlanList));
+				insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(patCur,planList,patPlanList,subList));
 				if(priplan!=null && priplan.PlanType=="p") {//PPO
 					standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(patCur)).FeeSched);
 					if(standardfee>insfee) {

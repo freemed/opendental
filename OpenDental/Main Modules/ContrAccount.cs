@@ -2372,15 +2372,17 @@ namespace OpenDental {
 			double remain=0;
 			double pend=0;
 			double used=0;
-			InsPlan PlanCur;//=new InsPlan();
+			InsPlan PlanCur;
+			InsSub SubCur;
 			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			List<Benefit> BenefitList=Benefits.Refresh(PatPlanList);
+			List<Benefit> BenefitList=Benefits.Refresh(PatPlanList,subList);
 			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
-			List<ClaimProcHist> HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today);
+			List<ClaimProcHist> HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today,subList);
 			if(PatPlanList.Count>0) {
-				PlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
+				SubCur=InsSubs.GetSub(PatPlanList[0].InsSubNum,subList);
+				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);
 				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,PatCur.PatNum,PatPlanList[0].InsSubNum);
 				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList,PatCur.PatNum,PatPlanList[0].InsSubNum);
 				textPriPend.Text=pend.ToString("F");
@@ -2420,7 +2422,8 @@ namespace OpenDental {
 				}
 			}
 			if(PatPlanList.Count>1) {
-				PlanCur=InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
+				SubCur=InsSubs.GetSub(PatPlanList[1].InsSubNum,subList);
+				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);
 				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,PatCur.PatNum,PatPlanList[1].InsSubNum);
 				textSecPend.Text=pend.ToString("F");
 				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList,PatCur.PatNum,PatPlanList[1].InsSubNum);
@@ -2666,7 +2669,7 @@ namespace OpenDental {
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Count==0){
 				MsgBox.Show(this,"Patient does not have insurance.");
@@ -2675,6 +2678,8 @@ namespace OpenDental {
 			int countSelected=0;
 			bool countIsOverMaxCanadian=false;
 			DataTable table=DataSetMain.Tables["account"];
+			InsPlan plan;
+			InsSub sub;
 			if(gridAccount.SelectedIndices.Length==0){
 				//autoselect procedures
 				for(int i=0;i<table.Rows.Count;i++){//loop through every line showing on screen
@@ -2684,7 +2689,8 @@ namespace OpenDental {
 					if((double)table.Rows[i]["chargesDouble"]==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
-					if(Procedures.NeedsSent(PIn.Long(table.Rows[i]["ProcNum"].ToString()),ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
+					sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+					if(Procedures.NeedsSent(PIn.Long(table.Rows[i]["ProcNum"].ToString()),sub.InsSubNum,ClaimProcList)){
 						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && countSelected==7) {//Canadian. en-CA or fr-CA
 							countIsOverMaxCanadian=true;
 							continue;//only send 7.  
@@ -2735,8 +2741,9 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;//will have already been deleted
 			}
-			if(PatPlans.GetPlanNum(PatPlanList,2)>0 && !CultureInfo.CurrentCulture.Name.EndsWith("CA")){//don't create secondary claim for Canada
-				InsPlan plan=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
+			if(PatPlans.GetInsSubNum(PatPlanList,2)>0 && !CultureInfo.CurrentCulture.Name.EndsWith("CA")){//don't create secondary claim for Canada
+				sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+				plan=InsPlans.GetPlan(sub.PlanNum,InsPlanList);
 				if(!plan.IsMedical){
 					ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 					if(ClaimCur.ClaimNum==0){
@@ -2760,19 +2767,21 @@ namespace OpenDental {
 			Relat relatOther=Relat.Self;
 			switch(claimType){
 				case "P":
-					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),planList);
 					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),subList);
+					PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
 					break;
 				case "S":
-					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),planList);
 					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),subList);
+					PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
 					break;
 				case "Med":
 					//It's already been verified that a med plan exists
 					for(int i=0;i<PatPlanList.Count;i++){
-						if(InsPlans.GetPlan(PatPlanList[i].PlanNum,planList).IsMedical) {
-							PlanCur=InsPlans.GetPlan(PatPlanList[i].PlanNum,planList);
+						InsSub subTemp=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
+						InsPlan planTemp=InsPlans.GetPlan(subTemp.PlanNum,planList);
+						if(planTemp.IsMedical) {
 							SubCur=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
+							PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
 							break;
 						}
 					}
@@ -2858,29 +2867,34 @@ namespace OpenDental {
 			//datesent
 			ClaimCur.ClaimStatus="U";
 			//datereceived
+			InsSub sub;
 			switch(claimType){
 				case "P":
-					ClaimCur.PlanNum=PatPlans.GetPlanNum(PatPlanList,1);
 					ClaimCur.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
+					sub=InsSubs.GetSub(ClaimCur.InsSubNum,subList);
+					ClaimCur.PlanNum=sub.PlanNum;
 					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,1);
 					ClaimCur.ClaimType="P";
-					ClaimCur.PlanNum2=PatPlans.GetPlanNum(PatPlanList,2);//might be 0 if no sec ins
 					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,2);
+					sub=InsSubs.GetSub(ClaimCur.InsSubNum2,subList);
+					ClaimCur.PlanNum2=sub.PlanNum;//might be 0 if no sec ins
 					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
 					break;
 				case "S":
-					ClaimCur.PlanNum=PatPlans.GetPlanNum(PatPlanList,2);
 					ClaimCur.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,2);
+					sub=InsSubs.GetSub(ClaimCur.InsSubNum,subList);
+					ClaimCur.PlanNum=sub.PlanNum;
 					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,2);
 					ClaimCur.ClaimType="S";
-					ClaimCur.PlanNum2=PatPlans.GetPlanNum(PatPlanList,1);
 					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,1);
+					sub=InsSubs.GetSub(ClaimCur.InsSubNum2,subList);
+					ClaimCur.PlanNum2=sub.PlanNum;
 					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,1);
 					break;
 				case "Med":
 					ClaimCur.PlanNum=PlanCur.PlanNum;
 					ClaimCur.InsSubNum=SubCur.InsSubNum;
-					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,PlanCur.PlanNum,SubCur.InsSubNum).Relationship;
+					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,SubCur.InsSubNum).Relationship;
 					ClaimCur.ClaimType="Other";
 					break;
 				case "Other":
@@ -2969,7 +2983,7 @@ namespace OpenDental {
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Count==0){
 				MessageBox.Show(Lan.g(this,"Patient does not have insurance."));
@@ -3010,7 +3024,7 @@ namespace OpenDental {
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Count<2){
 				MessageBox.Show(Lan.g(this,"Patient does not have secondary insurance."));
@@ -3050,16 +3064,17 @@ namespace OpenDental {
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
-			long medPlanNum=0;
+			long medSubNum=0;
 			for(int i=0;i<PatPlanList.Count;i++){
-				if(InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList).IsMedical){
-					medPlanNum=PatPlanList[i].PlanNum;
+				InsSub sub=InsSubs.GetSub(PatPlanList[i].InsSubNum,SubList);
+				if(InsPlans.GetPlan(sub.PlanNum,InsPlanList).IsMedical){
+					medSubNum=sub.InsSubNum;
 					break;
 				}
 			}
-			if(medPlanNum==0){
+			if(medSubNum==0){
 				MsgBox.Show(this,"Patient does not have medical insurance.");
 				return;
 			}
@@ -3078,7 +3093,7 @@ namespace OpenDental {
 					if(proc.MedicalCode==""){
 						continue;//ignore non-medical procedures
 					}
-					if(Procedures.NeedsSent(proc.ProcNum,ClaimProcList,medPlanNum)){
+					if(Procedures.NeedsSent(proc.ProcNum,medSubNum,ClaimProcList)) {
 						gridAccount.SetSelected(i,true);
 					}
 				}
@@ -3117,7 +3132,7 @@ namespace OpenDental {
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(gridAccount.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"Please select procedures first."));

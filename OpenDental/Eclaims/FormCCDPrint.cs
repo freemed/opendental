@@ -155,7 +155,7 @@ namespace OpenDental.Eclaims {
 					insSub=InsSubs.GetSub(etrans.InsSubNum,new List<InsSub>());
 					subscriber=Patients.GetPat(insSub.Subscriber);
 					insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
-					patPlanPri=PatPlans.GetFromList(patPlansForPat,insplan.PlanNum,insSub.InsSubNum);
+					patPlanPri=PatPlans.GetFromList(patPlansForPat,insSub.InsSubNum);
 					//Provider info
 					provTreat=Providers.GetProv(Patients.GetProvNum(patient));
 					provBill=Providers.GetProv(Patients.GetProvNum(patient));
@@ -165,11 +165,11 @@ namespace OpenDental.Eclaims {
 					insSub=InsSubs.GetSub(claim.InsSubNum,new List<InsSub>());
 					subscriber=Patients.GetPat(insSub.Subscriber);
 					insplan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
-					patPlanPri=PatPlans.GetFromList(patPlansForPat,claim.PlanNum,insSub.InsSubNum);
+					patPlanPri=PatPlans.GetFromList(patPlansForPat,insSub.InsSubNum);
 					//Get secondary info
 					if(etrans.CarrierNum2!=0) {
 						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
-						patPlanSec=PatPlans.GetFromList(patPlansForPat,claim.PlanNum2,claim.InsSubNum2);
+						patPlanSec=PatPlans.GetFromList(patPlansForPat,claim.InsSubNum2);
 						insSub2=InsSubs.GetSub(claim.InsSubNum2,new List<InsSub>());
 						subscriber2=Patients.GetPat(insSub2.Subscriber);
 						insplan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());

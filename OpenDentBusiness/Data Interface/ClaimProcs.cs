@@ -733,22 +733,22 @@ namespace OpenDentBusiness{
 			if(cp.ProcNum==0) {
 				return 0;
 			}
-			int thisOrdinal=PatPlans.GetOrdinal(patPlanList,cp.PlanNum);
+			int thisOrdinal=PatPlans.GetOrdinal(cp.InsSubNum,patPlanList);
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,InsEstTotal,InsEstTotalOverride,InsPayAmt,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
+			string command="SELECT InsSubNum,InsEstTotal,InsEstTotalOverride,InsPayAmt,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
-			long planNum;
+			long subNum;
 			int ordinal;
 			double insEstTotal;
 			double insEstTotalOverride;
 			double insPayAmt;
 			ClaimProcStatus status;
 			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
-				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
+				subNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+				ordinal=PatPlans.GetOrdinal(subNum,patPlanList);
 				if(ordinal >= thisOrdinal) {
 					continue;
 				}
@@ -781,21 +781,21 @@ namespace OpenDentBusiness{
 			if(cp.ProcNum==0) {
 				return 0;
 			}
-			int thisOrdinal=PatPlans.GetOrdinal(patPlanList,cp.PlanNum);
+			int thisOrdinal=PatPlans.GetOrdinal(cp.InsSubNum,patPlanList);
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,BaseEst,InsPayAmt,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
+			string command="SELECT InsSubNum,BaseEst,InsPayAmt,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
-			long planNum;
+			long subNum;
 			int ordinal;
 			double baseEst;
 			double insPayAmt;
 			ClaimProcStatus status;
 			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
-				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
+				subNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+				ordinal=PatPlans.GetOrdinal(subNum,patPlanList);
 				if(ordinal >= thisOrdinal) {
 					continue;
 				}
@@ -820,22 +820,22 @@ namespace OpenDentBusiness{
 			if(cp.ProcNum==0) {
 				return 0;
 			}
-			int thisOrdinal=PatPlans.GetOrdinal(patPlanList,cp.PlanNum);
+			int thisOrdinal=PatPlans.GetOrdinal(cp.InsSubNum,patPlanList);
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,WriteOffEst,WriteOffEstOverride,WriteOff,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
+			string command="SELECT InsSubNum,WriteOffEst,WriteOffEstOverride,WriteOff,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
-			long planNum;
+			long subNum;
 			int ordinal;
 			double writeOffEst;
 			double writeOffEstOverride;
 			double writeOff;
 			ClaimProcStatus status;
 			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
-				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
+				subNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+				ordinal=PatPlans.GetOrdinal(subNum,patPlanList);
 				if(ordinal >= thisOrdinal) {
 					continue;
 				}
@@ -999,17 +999,18 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		public static List<ClaimProcHist> GetHistList(long patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList,DateTime procDate) {
+		public static List<ClaimProcHist> GetHistList(long patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList,DateTime procDate,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
-			return GetHistList(patNum,benList,patPlanList,planList,-1,procDate);
+			return GetHistList(patNum,benList,patPlanList,planList,-1,procDate,subList);
 		}
 
 		///<summary>We pass in the benefit list so that we know whether to include family.  We are getting a simplified list of claimprocs.  History of payments and pending payments.  If the patient has multiple insurance, then this info will be for all of their insurance plans.  It runs a separate query for each plan because that's the only way to handle family history.  For some plans, the benefits will indicate entire family, but not for other plans.  And the date ranges can be different as well.   When this list is processed later, it is again filtered, but it can't have missing information.  Use excludeClaimNum=-1 to not exclude a claim.  A claim is excluded if editing from inside that claim.</summary>
-		public static List<ClaimProcHist> GetHistList(long patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList,long excludeClaimNum,DateTime procDate) {
+		public static List<ClaimProcHist> GetHistList(long patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList,long excludeClaimNum,DateTime procDate,List<InsSub> subList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProcHist>>(MethodBase.GetCurrentMethod(),patNum,benList,patPlanList,planList,excludeClaimNum,procDate);
 			}
 			List<ClaimProcHist> retVal=new List<ClaimProcHist>();
+			InsSub sub;
 			InsPlan plan;
 			bool isFam;
 			bool isLife;
@@ -1017,8 +1018,9 @@ namespace OpenDentBusiness{
 			DataTable table;
 			ClaimProcHist cph;
 			for(int p=0;p<patPlanList.Count;p++) {//loop through each plan that this patient is covered by
+				sub=InsSubs.GetSub(patPlanList[p].InsSubNum,subList);
 				//get the plan for the given patPlan
-				plan=InsPlans.GetPlan(patPlanList[p].PlanNum,planList);
+				plan=InsPlans.GetPlan(sub.PlanNum,planList);
 				//test benefits for fam and life
 				isFam=false;
 				isLife=false;
@@ -1047,8 +1049,8 @@ namespace OpenDentBusiness{
 				string command="SELECT claimproc.ProcDate,CodeNum,InsPayEst,InsPayAmt,DedApplied,claimproc.PatNum,Status,ClaimNum,claimproc.InsSubNum "
 					+"FROM claimproc "
 					+"LEFT JOIN procedurelog on claimproc.ProcNum=procedurelog.ProcNum "//to get the codenum
-					+"WHERE claimproc.PlanNum="+POut.Long(plan.PlanNum)
-					+" AND claimproc.InsSubNum="+POut.Long(patPlanList[p].InsSubNum)
+					+"WHERE "//claimproc.PlanNum="+POut.Long(plan.PlanNum)
+					+"claimproc.InsSubNum="+POut.Long(patPlanList[p].InsSubNum)
 					+" AND claimproc.ProcDate >= "+POut.Date(dateStart)//no upper limit on date.
 					+" AND claimproc.Status IN("
 					+POut.Long((int)ClaimProcStatus.NotReceived)+","

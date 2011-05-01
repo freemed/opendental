@@ -59,7 +59,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
@@ -104,7 +103,6 @@ namespace TestCanada {
 			long subNum_pat2_pri=sub.InsSubNum;
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
@@ -127,7 +125,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
@@ -156,7 +153,6 @@ namespace TestCanada {
 			//primary coverage------------------------------
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=planNum_pat2_pri;
 			patplan.InsSubNum=subNum_pat2_pri;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
@@ -178,7 +174,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="00";
@@ -207,7 +202,6 @@ namespace TestCanada {
 			//primary coverage------------------------------
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=planNum_pat2_pri;
 			patplan.InsSubNum=subNum_pat2_pri;
 			patplan.Relationship=Relat.Child;//3
 			patplan.PatID="02";
@@ -229,7 +223,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Child;//3
 			patplan.PatID="00";
@@ -275,7 +268,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
@@ -336,7 +328,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum6;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
@@ -358,7 +349,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum6;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
@@ -419,7 +409,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum7;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
@@ -441,7 +430,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum7;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
@@ -502,7 +490,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum8;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="00";
@@ -524,7 +511,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=PatNum8;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Spouse;//2
 			patplan.PatID="01";
@@ -567,7 +553,6 @@ namespace TestCanada {
 			InsSubs.Insert(sub);
 			patplan=new PatPlan();
 			patplan.PatNum=pat.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;//1
 			patplan.PatID="";

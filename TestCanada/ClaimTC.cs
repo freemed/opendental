@@ -383,20 +383,21 @@ namespace TestCanada {
 			List<InsSub> subList=InsSubs.RefreshForFam(fam);
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-			List<Benefit> benefitList=Benefits.Refresh(patPlanList);
+			List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(pat.PatNum);
 			List<Procedure> procsForPat=Procedures.Refresh(pat.PatNum);
-			InsPlan insPlan=InsPlans.GetPlan(PatPlans.GetPlanNum(patPlanList,1),planList);
-			//InsPlan insPlan2=InsPlans.GetPlan(PatPlans.GetPlanNum(patPlanList,2),planList);
 			InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,1),subList);
+			InsPlan insPlan=InsPlans.GetPlan(sub.PlanNum,planList);
+			InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,2),subList);
+			InsPlan insPlan2=InsPlans.GetPlan(sub2.PlanNum,planList);
 			Claim claim=new Claim();
 			Claims.Insert(claim);//to retreive a key for new Claim.ClaimNum
 			claim.PatNum=pat.PatNum;
 			claim.DateService=procList[0].ProcDate;
 			claim.DateSent=DateTime.Today;
 			claim.ClaimStatus="W";
-			claim.PlanNum=PatPlans.GetPlanNum(patPlanList,1);
-			claim.PlanNum2=PatPlans.GetPlanNum(patPlanList,2);
+			claim.PlanNum=insPlan.PlanNum;
+			claim.PlanNum2=insPlan2.PlanNum;
 			claim.InsSubNum=PatPlans.GetInsSubNum(patPlanList,1);
 			claim.InsSubNum2=PatPlans.GetInsSubNum(patPlanList,2);
 			claim.PatRelat=PatPlans.GetRelat(patPlanList,1);

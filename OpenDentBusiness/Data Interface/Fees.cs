@@ -127,12 +127,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the fee schedule from the priinsplan, the patient, or the provider in that order.  Either returns a fee schedule (fk to definition.DefNum) or 0.</summary>
-		public static long GetFeeSched(Patient pat,List<InsPlan> PlanList,List<PatPlan> patPlans) {
+		public static long GetFeeSched(Patient pat,List<InsPlan> planList,List<PatPlan> patPlans,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
 			//there's not really a good place to put this function, so it's here.
 			long retVal=0;
-			if(PatPlans.GetPlanNum(patPlans,1)!=0){
-				InsPlan PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(patPlans,1),PlanList);
+			if(PatPlans.GetInsSubNum(patPlans,1)!=0){
+				InsSub SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlans,1),subList);
+				InsPlan PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
 				if(PlanCur==null){
 					retVal=0;
 				}
@@ -170,18 +171,21 @@ namespace OpenDentBusiness{
 		}
 
         ///<summary>Gets the fee schedule from the primary MEDICAL insurance plan, the patient, or the provider in that order.</summary>
-		public static long GetMedFeeSched(Patient pat,List<InsPlan> PlanList,List<PatPlan> patPlans) {
+		public static long GetMedFeeSched(Patient pat,List<InsPlan> planList,List<PatPlan> patPlans,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db. ??
 			long retVal = 0;
-			if (PatPlans.GetPlanNum(patPlans, 1) != 0){
+			if(PatPlans.GetInsSubNum(patPlans,1) != 0){
 				//Pick the medinsplan with the ordinal closest to zero
 				int planOrdinal=10; //This is a hack, but I doubt anyone would have more than 10 plans
-				foreach(PatPlan plan in patPlans){
-					if(plan.Ordinal<planOrdinal && InsPlans.GetPlan(plan.PlanNum,PlanList).IsMedical) {
-						planOrdinal=plan.Ordinal;
+				InsSub subCur;
+				foreach(PatPlan patplan in patPlans){
+					subCur=InsSubs.GetSub(patplan.InsSubNum,subList);
+					if(patplan.Ordinal<planOrdinal && InsPlans.GetPlan(subCur.PlanNum,planList).IsMedical) {
+						planOrdinal=patplan.Ordinal;
 					}
 				}
-				InsPlan PlanCur = InsPlans.GetPlan(PatPlans.GetPlanNum(patPlans, planOrdinal), PlanList);
+				subCur=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlans,planOrdinal),subList);
+				InsPlan PlanCur = InsPlans.GetPlan(subCur.PlanNum, planList);
 				if (PlanCur == null){
 					retVal = 0;
 				} 

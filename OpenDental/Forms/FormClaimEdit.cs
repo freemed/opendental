@@ -3808,7 +3808,7 @@ namespace OpenDental{
 			if(!ClaimIsValid()){
 				return;
 			}
-			List <Benefit> benefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> benefitList=Benefits.Refresh(PatPlanList,SubList);
 			ClaimL.CalculateAndUpdate(ProcList,PlanList,ClaimCur,PatPlanList,benefitList,PatCur.Age,SubList);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
@@ -3996,7 +3996,7 @@ namespace OpenDental{
 			}
 			List<ClaimProcHist> histList=null;
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList,true);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList,true,SubList);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
@@ -4103,7 +4103,7 @@ namespace OpenDental{
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway
 			ClaimProcs.Insert(ClaimProcCur);
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList,PatPlanList,true);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList,PatPlanList,true,SubList);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
@@ -4205,7 +4205,7 @@ namespace OpenDental{
 				cpList[i].DateCP=DateTime.Today;
 			}
 			if(ClaimCur.ClaimType=="PreAuth") {
-				FormClaimPayPreAuth FormCPP=new FormClaimPayPreAuth(PatCur,FamCur,PlanList,PatPlanList);
+				FormClaimPayPreAuth FormCPP=new FormClaimPayPreAuth(PatCur,FamCur,PlanList,PatPlanList,SubList);
 				FormCPP.ClaimProcsToEdit=cpList;
 				FormCPP.ShowDialog();
 				if(FormCPP.DialogResult!=DialogResult.OK) {
@@ -4219,7 +4219,7 @@ namespace OpenDental{
 				}
 			}
 			else {
-				FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList,PatPlanList);
+				FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList,PatPlanList,SubList);
 				FormCPT.ClaimProcsToEdit=cpList.ToArray();
 				FormCPT.ShowDialog();
 				if(FormCPT.DialogResult!=DialogResult.OK){
@@ -4272,7 +4272,7 @@ namespace OpenDental{
 				ClaimProcs.Insert(ClaimProcCur);//this inserts a copy of the original with the changes as above.
 				cpList.Add(ClaimProcCur);
 			}
-			FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList,PatPlanList);
+			FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList,PatPlanList,SubList);
 			FormCPT.ClaimProcsToEdit=cpList.ToArray();
 			FormCPT.ShowDialog();
 			if(FormCPT.DialogResult!=DialogResult.OK) {
@@ -4688,7 +4688,7 @@ namespace OpenDental{
 				for(int i=0;i<etransHistory.Count;i++) {
 					Etranss.Delete(etransHistory[i].EtransNum);
 				}
-				List<Benefit> benList=Benefits.Refresh(PatPlanList);
+				List<Benefit> benList=Benefits.Refresh(PatPlanList,SubList);
 				InsPlan plan=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				for(int i=0;i<ClaimProcsForClaim.Count;i++) { //Set claimprocs back to estimates.
 					ClaimProcsForClaim[i].Status=ClaimProcStatus.Estimate;
@@ -4750,7 +4750,7 @@ namespace OpenDental{
 				}
 			}
 			else{//all other claim types use original estimate claimproc.
-				List <Benefit> benList=Benefits.Refresh(PatPlanList);
+				List<Benefit> benList=Benefits.Refresh(PatPlanList,SubList);
 				InsPlan plan=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				for(int i=0;i<ClaimProcsForClaim.Count;i++){
 					//ClaimProcs.Cur=ClaimProcs.ForClaim[i];

@@ -7,7 +7,7 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class InsSubs{
-		///<summary>It's fastest if you supply a sub list that contains the sub, but it also works just fine if it can't initally locate the sub in the list.  You can supply an empty list.  If still not found, returns a new InsSub (probably bad behavior).</summary>
+		///<summary>It's fastest if you supply a sub list that contains the sub, but it also works just fine if it can't initally locate the sub in the list.  You can supply an empty list.  If still not found, returns a new InsSub. The reason for the new InsSub is because it is common to immediately get an insplan using inssub.InsSubNum.  And, of course, that would fail if inssub was null.</summary>
 		public static InsSub GetSub(long insSubNum,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
 			InsSub retVal=new InsSub();

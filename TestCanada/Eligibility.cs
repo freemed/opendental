@@ -18,8 +18,8 @@ namespace TestCanada {
 				Patients.Update(pat,oldPat);
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
-			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
 			InsSub sub=InsSubs.GetOne(patplan.InsSubNum);
+			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
 			//the UI would block this due to carrier not supporting this transaction type.
 			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms,sub);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
@@ -43,8 +43,8 @@ namespace TestCanada {
 				Patients.Update(pat,oldPat);
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
-			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
 			InsSub sub=InsSubs.GetOne(patplan.InsSubNum);
+			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
 			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms,sub);
 			//should print Eligibility response on Dentaide Form
 			Etrans etrans=Etranss.GetEtrans(etransNum);
@@ -68,8 +68,8 @@ namespace TestCanada {
 				Patients.Update(pat,oldPat);
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,2);
-			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
 			InsSub sub=InsSubs.GetOne(patplan.InsSubNum);
+			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
 			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms,sub);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
@@ -92,8 +92,8 @@ namespace TestCanada {
 				Patients.Update(pat,oldPat);
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
-			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
 			InsSub sub=InsSubs.GetOne(patplan.InsSubNum);
+			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
 			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms,sub);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
@@ -116,8 +116,8 @@ namespace TestCanada {
 				Patients.Update(pat,oldPat);
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
-			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
 			InsSub sub=InsSubs.GetOne(patplan.InsSubNum);
+			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
 			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms,sub);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
@@ -140,8 +140,8 @@ namespace TestCanada {
 				Patients.Update(pat,oldPat);
 			}
 			PatPlan patplan=PatPlans.GetPatPlan(pat.PatNum,1);
-			InsPlan plan=InsPlans.GetPlan(patplan.PlanNum,new List<InsPlan>());
 			InsSub sub=InsSubs.GetOne(patplan.InsSubNum);
+			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
 			long etransNum=CanadianOutput.SendElegibility(pat.PatNum,plan,new DateTime(1999,1,1),patplan.Relationship,patplan.PatID,showForms,sub);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);

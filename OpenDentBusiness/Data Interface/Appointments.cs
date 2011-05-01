@@ -650,7 +650,7 @@ namespace OpenDentBusiness{
 				+"COUNT(DiseaseNum) hasDisease,"
 				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
-				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
+				+"Pattern,patplan.InsSubNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
 				+"ProcDescript,ProcsColored,ProvHyg,appointment.ProvNum,"
 				+"patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
@@ -687,7 +687,7 @@ namespace OpenDentBusiness{
 				+"DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
 				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
-				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
+				+"Pattern,patplan.InsSubNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
 				+"ProcDescript,ProcsColored,ProvHyg,appointment.ProvNum,"
 				+"patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip ";
@@ -885,7 +885,7 @@ namespace OpenDentBusiness{
 					}
 				}
 				row["hasIns[I]"]="";
-				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
+				if(raw.Rows[i]["InsSubNum"].ToString()!="" && raw.Rows[i]["InsSubNum"].ToString()!="0") {
 					row["hasIns[I]"]+="I";
 				}
 				row["hmPhone"]=Lans.g("Appointments","Hm: ")+raw.Rows[i]["HmPhone"].ToString();

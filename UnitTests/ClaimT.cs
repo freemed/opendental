@@ -11,17 +11,23 @@ namespace UnitTests {
 			//Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			long claimFormNum = 0;
 			EtransType eFormat = 0;
-			InsPlan PlanCur=new InsPlan();
-			InsSub SubCur=new InsSub();
+			InsPlan PlanCur1=new InsPlan();
+			InsSub SubCur1=new InsSub();
+			InsPlan PlanCur2=new InsPlan();
+			InsSub SubCur2=new InsSub();
 			Relat relatOther=Relat.Self;
 			switch(claimType) {
 				case "P":
-					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),InsPlanList);
-					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+					SubCur1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+					PlanCur1=InsPlans.GetPlan(SubCur1.PlanNum,InsPlanList);
+					SubCur2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+					//PlanCur2=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);//can end up null
 					break;
 				case "S":
-					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
-					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+					SubCur1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+					PlanCur1=InsPlans.GetPlan(SubCur1.PlanNum,InsPlanList);
+					SubCur2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+					//PlanCur2=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);//can end up null
 					break;
 			}
 			//DataTable table=DataSetMain.Tables["account"];
@@ -33,14 +39,14 @@ namespace UnitTests {
 			for(int i=0;i<procsForClaim.Count;i++) {//loop through selected procs
 				//and try to find an estimate that can be used
 				procNum=procsForClaim[i].ProcNum;
-				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur,SubCur.InsSubNum);
+				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur1,SubCur1.InsSubNum);
 			}
 			for(int i=0;i<claimProcs.Length;i++) {//loop through each claimProc
 				//and create any missing estimates. This handles claims to 3rd and 4th ins co's.
 				if(claimProcs[i]==null) {
 					claimProcs[i]=new ClaimProc();
 					proc=procsForClaim[i];
-					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur,SubCur);
+					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur1,SubCur1);
 				}
 			}
 			Claim claim=new Claim();
@@ -53,20 +59,20 @@ namespace UnitTests {
 			//datereceived
 			switch(claimType) {
 				case "P":
-					claim.PlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+					claim.PlanNum=SubCur1.PlanNum;
 					claim.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
 					claim.PatRelat=PatPlans.GetRelat(PatPlanList,1);
 					claim.ClaimType="P";
-					claim.PlanNum2=PatPlans.GetPlanNum(PatPlanList,2);//might be 0 if no sec ins
+					claim.PlanNum2=SubCur2.PlanNum;//might be 0 if no sec ins
 					claim.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,2);
 					claim.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
 					break;
 				case "S":
-					claim.PlanNum=PatPlans.GetPlanNum(PatPlanList,2);
+					claim.PlanNum=SubCur1.PlanNum;
 					claim.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,2);
 					claim.PatRelat=PatPlans.GetRelat(PatPlanList,2);
 					claim.ClaimType="S";
-					claim.PlanNum2=PatPlans.GetPlanNum(PatPlanList,1);
+					claim.PlanNum2=SubCur2.PlanNum;
 					claim.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,1);
 					claim.PatRelat2=PatPlans.GetRelat(PatPlanList,1);
 					break;

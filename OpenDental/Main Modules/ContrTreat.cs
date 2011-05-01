@@ -849,9 +849,9 @@ namespace OpenDental{
 				SubList=InsSubs.RefreshForFam(FamCur);
 				InsPlanList=InsPlans.RefreshForSubList(SubList);
 				PatPlanList=PatPlans.Refresh(patNum);
-				BenefitList=Benefits.Refresh(PatPlanList);
+				BenefitList=Benefits.Refresh(PatPlanList,SubList);
 				ClaimList=Claims.Refresh(PatCur.PatNum);
-				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today);
+				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today,SubList);
 			}
 		}
 
@@ -879,7 +879,8 @@ namespace OpenDental{
 							if(!checkShowInsNotAutomatic){
 								checkShowIns.Checked=true;
 							}
-							InsPlan plan=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
+							InsSub sub=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+							InsPlan plan=InsPlans.GetPlan(sub.PlanNum,InsPlanList);
 							if(plan.PlanType=="p" || plan.PlanType=="c"){//ppo or cap
 								checkShowDiscount.Checked=true;
 							}
@@ -1021,12 +1022,16 @@ namespace OpenDental{
 			#region currentTP
 			if(gridPlans.SelectedIndices[0]==0){//current treatplan selected
 				InsPlan	PriPlanCur=null;
+				InsSub PriSubCur=null;
 				if(PatPlanList.Count>0) {//primary
-					PriPlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
+					PriSubCur=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+					PriPlanCur=InsPlans.GetPlan(PriSubCur.PlanNum,InsPlanList);
 				}
 				InsPlan SecPlanCur=null;
+				InsSub SecSubCur=null;
 				if(PatPlanList.Count>1) {//secondary
-					SecPlanCur=InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
+					SecSubCur=InsSubs.GetSub(PatPlanList[1].InsSubNum,SubList);
+					SecPlanCur=InsPlans.GetPlan(SecSubCur.PlanNum,InsPlanList);
 				}
 				ClaimProc claimproc;//holds the estimate.
 				string descript;
@@ -1504,8 +1509,10 @@ namespace OpenDental{
 			double pend=0;
 			double used=0;
 			InsPlan PlanCur;//=new InsPlan();
+			InsSub SubCur;
 			if(PatPlanList.Count>0){
-				PlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
+				SubCur=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);
 				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,PatCur.PatNum,PatPlanList[0].InsSubNum);
 				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList,PatCur.PatNum,PatPlanList[0].InsSubNum);
 				textPriPend.Text=pend.ToString("F");
@@ -1545,7 +1552,8 @@ namespace OpenDental{
 				}
 			}
 			if(PatPlanList.Count>1){
-				PlanCur=InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
+				SubCur=InsSubs.GetSub(PatPlanList[1].InsSubNum,SubList);
+				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);
 				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,PatCur.PatNum,PatPlanList[1].InsSubNum);
 				textSecPend.Text=pend.ToString("F");
 				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList,PatCur.PatNum,PatPlanList[1].InsSubNum);
@@ -2451,7 +2459,9 @@ namespace OpenDental{
 			Procedure procCur;
 			//Procedure procOld
 			//Find the primary plan------------------------------------------------------------------
-			long priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+			long priSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
+			InsSub prisub=InsSubs.GetSub(priSubNum,SubList);
+			long priPlanNum=prisub.PlanNum;
 			InsPlan priplan=InsPlans.GetPlan(priPlanNum,InsPlanList);//can handle a plannum=0
 			double standardfee;
 			double insfee;
@@ -2469,10 +2479,10 @@ namespace OpenDental{
 				//get fee schedule for medical ins or Fees.GetFeeSched if dental
 				long feeSch;
 				if(isMed){
-					feeSch=Fees.GetMedFeeSched(PatCur,InsPlanList,PatPlanList);
+					feeSch=Fees.GetMedFeeSched(PatCur,InsPlanList,PatPlanList,SubList);
 				} 
 				else{
-					feeSch=Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList);
+					feeSch=Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList,SubList);
 				}
 				insfee=Fees.GetAmount0(procCur.CodeNum,feeSch);
 				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO

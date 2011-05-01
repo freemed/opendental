@@ -48,7 +48,6 @@ namespace OpenDentBusiness.Crud{
 				patPlan=new PatPlan();
 				patPlan.PatPlanNum  = PIn.Long  (table.Rows[i]["PatPlanNum"].ToString());
 				patPlan.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				patPlan.PlanNum     = PIn.Long  (table.Rows[i]["PlanNum"].ToString());
 				patPlan.Ordinal     = PIn.Byte  (table.Rows[i]["Ordinal"].ToString());
 				patPlan.IsPending   = PIn.Bool  (table.Rows[i]["IsPending"].ToString());
 				patPlan.Relationship= (Relat)PIn.Int(table.Rows[i]["Relationship"].ToString());
@@ -94,13 +93,12 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatPlanNum,";
 			}
-			command+="PatNum,PlanNum,Ordinal,IsPending,Relationship,PatID,InsSubNum) VALUES(";
+			command+="PatNum,Ordinal,IsPending,Relationship,PatID,InsSubNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patPlan.PatPlanNum)+",";
 			}
 			command+=
 				     POut.Long  (patPlan.PatNum)+","
-				+    POut.Long  (patPlan.PlanNum)+","
 				+    POut.Byte  (patPlan.Ordinal)+","
 				+    POut.Bool  (patPlan.IsPending)+","
 				+    POut.Int   ((int)patPlan.Relationship)+","
@@ -119,7 +117,6 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(PatPlan patPlan){
 			string command="UPDATE patplan SET "
 				+"PatNum      =  "+POut.Long  (patPlan.PatNum)+", "
-				+"PlanNum     =  "+POut.Long  (patPlan.PlanNum)+", "
 				+"Ordinal     =  "+POut.Byte  (patPlan.Ordinal)+", "
 				+"IsPending   =  "+POut.Bool  (patPlan.IsPending)+", "
 				+"Relationship=  "+POut.Int   ((int)patPlan.Relationship)+", "
@@ -135,10 +132,6 @@ namespace OpenDentBusiness.Crud{
 			if(patPlan.PatNum != oldPatPlan.PatNum) {
 				if(command!=""){ command+=",";}
 				command+="PatNum = "+POut.Long(patPlan.PatNum)+"";
-			}
-			if(patPlan.PlanNum != oldPatPlan.PlanNum) {
-				if(command!=""){ command+=",";}
-				command+="PlanNum = "+POut.Long(patPlan.PlanNum)+"";
 			}
 			if(patPlan.Ordinal != oldPatPlan.Ordinal) {
 				if(command!=""){ command+=",";}

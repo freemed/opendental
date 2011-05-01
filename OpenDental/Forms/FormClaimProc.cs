@@ -130,15 +130,17 @@ namespace OpenDental
 		///<summary>This value is obtained by a query when this window first opens.  It includes both actual writeoffs and estimated writeoffs.  Will be 0 if this is a primary estimate.</summary>
 		private double WriteOffOtherIns;
 		private bool SaveToDb;
+		private List<InsSub> SubList;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.  If the save is to happen within this window, then set saveToDb true.  If the object is to be altered here, but saved in a different window, then saveToDb=false.</summary>
-		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List<InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList,List<PatPlan> patPlanList,bool saveToDb) {
+		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List<InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList,List<PatPlan> patPlanList,bool saveToDb,List<InsSub> subList) {
 			ClaimProcCur=claimProcCur;//always work directly with the original object.  Revert if we change our mind.
 			ClaimProcOld=ClaimProcCur.Copy();
 			proc=procCur;
 			FamCur=famCur;
 			PatCur=patCur;
 			PlanList=planList;
+			SubList=subList;
 			HistList=histList;
 			LoopList=loopList;
 			PatPlanList=patPlanList;
@@ -1218,8 +1220,9 @@ namespace OpenDental
 					butDelete.Enabled=false;
 				}
 			}
-			Plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
-			PatPlanNum=PatPlans.GetPatPlanNum(PatPlanList,Plan.PlanNum);
+			InsSub sub=InsSubs.GetSub(ClaimProcCur.InsSubNum,SubList);
+			Plan=InsPlans.GetPlan(sub.PlanNum,PlanList);
+			PatPlanNum=PatPlans.GetPatPlanNum(sub.InsSubNum,PatPlanList);
 			BenefitList=null;//only fill it if proc
 			PaidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(ClaimProcCur,PatPlanList);
 			PaidOtherInsBaseEst=ClaimProcs.GetPaidOtherInsBaseEst(ClaimProcCur,PatPlanList);
@@ -1429,7 +1432,7 @@ namespace OpenDental
 			if(IsProc){
 				textFee.Text=proc.ProcFee.ToString("f");
 				InsPlan plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
-				long insFeeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
+				long insFeeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList,SubList);
 				long standFeeSch = Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
 				if(plan.PlanType=="p"){//if ppo
 					double insFee = Fees.GetAmount0(proc.CodeNum, insFeeSch);

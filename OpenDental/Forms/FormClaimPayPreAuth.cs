@@ -30,13 +30,15 @@ namespace OpenDental
 		private OpenDental.UI.ODGrid gridMain;
 		private List<InsPlan> PlanList;
 		private List<PatPlan> PatPlanList;
+		private List<InsSub> SubList;
 
 		///<summary></summary>
-		public FormClaimPayPreAuth(Patient patCur,Family famCur,List <InsPlan> planList,List<PatPlan> patPlanList) {
+		public FormClaimPayPreAuth(Patient patCur,Family famCur,List<InsPlan> planList,List<PatPlan> patPlanList,List<InsSub> subList) {
 			InitializeComponent();// Required for Windows Form Designer support
 			FamCur=famCur;
 			PatCur=patCur;
 			PlanList=planList;
+			SubList=subList;
 			PatPlanList=patPlanList;
 			Lan.F(this);
 		}
@@ -219,7 +221,7 @@ namespace OpenDental
 			}
 			List<ClaimProcHist> histList=null;
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsToEdit[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList,false);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsToEdit[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList,false,SubList);
 			FormCP.IsInClaim=true;
 			//no need to worry about permissions here
 			FormCP.ShowDialog();

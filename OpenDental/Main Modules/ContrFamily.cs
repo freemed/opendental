@@ -222,7 +222,7 @@ namespace OpenDental{
 			SubList=InsSubs.RefreshForFam(FamCur);
 			PlanList=InsPlans.RefreshForSubList(SubList);
 			PatPlanList=PatPlans.Refresh(patNum);
-			BenefitList=Benefits.Refresh(PatPlanList);
+			BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
 			PatFieldList=PatFields.Refresh(patNum);
 		}
@@ -1292,7 +1292,6 @@ namespace OpenDental{
 			PatPlan patplan=new PatPlan();
 			patplan.Ordinal=(byte)(PatPlanList.Count+1);//so the ordinal of the first entry will be 1, NOT 0.
 			patplan.PatNum=PatCur.PatNum;
-			patplan.PlanNum=plan.PlanNum;
 			patplan.InsSubNum=sub.InsSubNum;
 			patplan.Relationship=Relat.Self;
 			PatPlans.Insert(patplan);
@@ -1316,9 +1315,11 @@ namespace OpenDental{
 			}
 			List<InsSub> subArray=new List<InsSub>();//prevents repeated calls to db.
 			List<InsPlan> planArray=new List<InsPlan>();
+			InsSub sub;
 			for(int i=0;i<PatPlanList.Count;i++){
-				subArray.Add(InsSubs.GetSub(PatPlanList[i].InsSubNum,SubList));
-				planArray.Add(InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList));
+				sub=InsSubs.GetSub(PatPlanList[i].InsSubNum,SubList);
+				subArray.Add(sub);
+				planArray.Add(InsPlans.GetPlan(sub.PlanNum,PlanList));
 			}
 			gridIns.BeginUpdate();
 			gridIns.Columns.Clear();
@@ -1401,7 +1402,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Carrier"));
 			for(int i=0;i<PatPlanList.Count;i++) {
-				row.Cells.Add(InsPlans.GetCarrierName(PatPlanList[i].PlanNum,planArray));
+				row.Cells.Add(InsPlans.GetCarrierName(planArray[i].PlanNum,planArray));
 			}
 			gridIns.Rows.Add(row);
 			//group name
@@ -1463,8 +1464,8 @@ namespace OpenDental{
 			}
 			gridIns.Rows.Add(row);
 			//Benefits-----------------------------------------------------------------------------------------------------
-			List <Benefit> bensForPat=Benefits.Refresh(PatPlanList);
-			Benefit[,] benMatrix=Benefits.GetDisplayMatrix(bensForPat,PatPlanList);
+			List <Benefit> bensForPat=Benefits.Refresh(PatPlanList,SubList);
+			Benefit[,] benMatrix=Benefits.GetDisplayMatrix(bensForPat,PatPlanList,SubList);
 			string desc;
 			string val;
 			ProcedureCode proccode=null;
@@ -1648,8 +1649,8 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			PatPlan patPlan=PatPlanList[e.Col-1];
-			InsPlan insPlan=InsPlans.GetPlan(patPlan.PlanNum,PlanList);
 			InsSub insSub=InsSubs.GetSub(patPlan.InsSubNum,SubList);
+			InsPlan insPlan=InsPlans.GetPlan(insSub.PlanNum,PlanList);
 			FormInsPlan FormIP=new FormInsPlan(insPlan,patPlan,insSub);
 			FormIP.ShowDialog();
 			Cursor=Cursors.Default;
