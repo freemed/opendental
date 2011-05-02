@@ -10,14 +10,17 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormRxAlertEdit:Form {
 		private RxAlert rxAlertCur;
+		private string RxName;
 
-		public FormRxAlertEdit(RxAlert RxAlertCur) {
+		public FormRxAlertEdit(RxAlert RxAlertCur,string rxName) {
 			InitializeComponent();
 			Lan.F(this);
 			rxAlertCur=RxAlertCur;
+			RxName=rxName;
 		}
 
 		private void FormRxAlertEdit_Load(object sender,EventArgs e) {
+			textRxName.Text=RxName;
 			if(rxAlertCur.DiseaseDefNum>0) {
 				labelName.Text="Problem";
 				textName.Text=DiseaseDefs.GetName(rxAlertCur.DiseaseDefNum);
