@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -398,8 +399,8 @@ namespace OpenDental.UI {
 		}
 
 		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
-		private void ComputeRows() {
-			using(Graphics g=this.CreateGraphics()) {
+		private void ComputeRows(Graphics g) {
+			//using(Graphics g=this.CreateGraphics()) {
 				using(Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize)) {
 					RowHeights=new int[rows.Count];
 					NoteHeights=new int[rows.Count];
@@ -434,7 +435,7 @@ namespace OpenDental.UI {
 							//find the tallest col
 							for(int j=0;j<rows[i].Cells.Count;j++) {
 								if(rows[i].Height==0) {//not set
-									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height+1;
+									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth,StringFormat.GenericTypographic).Height+1;
 								}
 								else {
 									cellH=rows[i].Height;
@@ -446,7 +447,7 @@ namespace OpenDental.UI {
 						}
 						else {
 							if(rows[i].Height==0) {//not set
-								RowHeights[i]=(int)g.MeasureString("Any",cellFont).Height+1;
+								RowHeights[i]=(int)g.MeasureString("Any",cellFont,100,StringFormat.GenericTypographic).Height+1;
 							}
 							else {
 								RowHeights[i]=rows[i].Height;
@@ -456,7 +457,7 @@ namespace OpenDental.UI {
 							RowHeights[i]=imageH;
 						}
 						if(noteW>0 && rows[i].Note!="") {
-							NoteHeights[i]=(int)g.MeasureString(rows[i].Note,cellFont,noteW).Height;
+							NoteHeights[i]=(int)g.MeasureString(rows[i].Note,cellFont,noteW,StringFormat.GenericTypographic).Height;
 						}
 						if(i==0) {
 							RowLocs[i]=0;
@@ -467,7 +468,7 @@ namespace OpenDental.UI {
 						GridH+=RowHeights[i]+NoteHeights[i];
 					}
 				}
-			}
+			//}
 		}
 
 		///<summary>Returns row. -1 if no valid row.  Supply the y position in pixels.</summary>
@@ -520,6 +521,9 @@ namespace OpenDental.UI {
 			Bitmap doubleBuffer=new Bitmap(Width,Height,e.Graphics);
 			using(Graphics g=Graphics.FromImage(doubleBuffer)) {
 				g.SmoothingMode=SmoothingMode.HighQuality;//for the up/down triangles
+				//g.TextRenderingHint=TextRenderingHint.AntiAlias;//for accurate string measurements. Didn't work
+				//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;
+				float pagescale=g.PageScale;
 				DrawBackG(g);
 				DrawRows(g);
 				DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
@@ -869,7 +873,9 @@ namespace OpenDental.UI {
 		///<summary>Must be called after adding rows.  This computes the columns, computes the rows, lays out the scrollbars, clears SelectedIndices, and invalidates.  Does not zero out scrollVal.  Sometimes, it seems like scrollVal needs to be reset somehow because it's an inappropriate number, and when you first grab the scrollbar, it jumps.  No time to investigate.</summary>
 		public void EndUpdate() {
 			ComputeColumns();
-			ComputeRows();
+			using(Graphics g=this.CreateGraphics()) {
+				ComputeRows(g);
+			}
 			LayoutScrollBars();
 			//ScrollValue=0;
 			selectedIndices=new ArrayList();
@@ -886,6 +892,19 @@ namespace OpenDental.UI {
 		#region Printing
 		///<summary>If there are more pages to print, it returns -1.  If this is the last page, it returns the yPos of where the printing stopped.  Graphics will be paper, pageNumber resets some class level variables at page 0, bounds are used to contain the grid drawing, and marginTopFirstPage leaves room so as to not overwrite the title and subtitle.</summary>
 		public int PrintPage(Graphics g,int pageNumber,Rectangle bounds,int marginTopFirstPage) {
+			//Printers ignore TextRenderingHint.AntiAlias.  
+			//And they ignore SmoothingMode.HighQuality.
+			//They seem to do font themselves instead of letting us have control.
+			//g.TextRenderingHint=TextRenderingHint.AntiAlias;//an attempt to fix the printing measurements.
+			//g.SmoothingMode=SmoothingMode.HighQuality;
+			//g.PageUnit=GraphicsUnit.Display;
+			//float pagescale=g.PageScale;
+			//g.PixelOffsetMode=PixelOffsetMode.HighQuality;
+			//g.
+			if(RowsPrinted==0) {
+				//set row heights 4% larger when printing:
+				ComputeRows(g);
+			}
 			int xPos=bounds.Left;
 			//now, try to center in bounds
 			if((float)GridW<bounds.Width) {
@@ -924,7 +943,9 @@ namespace OpenDental.UI {
 				}
 				using(Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold)) {
 					for(int i=0;i<columns.Count;i++) {
-						g.DrawString(columns[i].Heading,headerFont,Brushes.Black,xPos+(float)ColPos[i],yPos);
+						g.DrawString(columns[i].Heading,headerFont,Brushes.Black,
+							xPos+(float)ColPos[i]+columns[i].ColWidth/2-g.MeasureString(columns[i].Heading,headerFont).Width/2,
+							yPos);
 					}
 				}
 				yPos+=headerHeight;
@@ -1013,10 +1034,11 @@ namespace OpenDental.UI {
 									(float)columns[i].ColWidth+2,
 									(float)RowHeights[RowsPrinted]);
 								//shift the rect to account for MS issue with strings of different lengths
+								//js- 5/2/11,I don't understand this.  I would like to research it.
 								textRect.Location=new PointF
 									(textRect.X+g.MeasureString(rows[RowsPrinted].Cells[i].Text,cellFont).Width/textRect.Width,
 									textRect.Y);
-								g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+								//g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
 
 							}
 							else {
@@ -1025,7 +1047,7 @@ namespace OpenDental.UI {
 									yPos,
 									(float)columns[i].ColWidth,
 									(float)RowHeights[RowsPrinted]);
-								g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
+								//g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
 							}
 							g.DrawString(rows[RowsPrinted].Cells[i].Text,cellFont,textBrush,textRect,format);
 						}
@@ -1046,7 +1068,7 @@ namespace OpenDental.UI {
 					if(NoteRemaining=="") {//We are not in the middle of a note.
 						NoteRemaining=rows[RowsPrinted].Note;//The note remaining is the whole note.
 					}
-					noteHeight=(int)g.MeasureString(NoteRemaining,cellFont,noteW).Height; //This is how much height the rest of the note will take.
+					noteHeight=(int)g.MeasureString(NoteRemaining,cellFont,noteW,StringFormat.GenericTypographic).Height; //This is how much height the rest of the note will take.
 					bool roomForRestOfNote=false;
 					//Test to see if there's enough room on the page for the rest of the note.
 					if(yPos+noteHeight<bounds.Bottom) {
@@ -1118,6 +1140,7 @@ namespace OpenDental.UI {
 						int charactersFitted;
 						int linesFilled;
 						string noteFitted;//This is the part of the note we will print.
+						//js- I'd like to incorporate ,StringFormat.GenericTypographic into the MeasureString, but can't find the overload.
 						sizeF=g.MeasureString(NoteRemaining,cellFont,new SizeF(noteW,noteHeight-15),format,out charactersFitted,out linesFilled);//Text that fits will be NoteRemaining.Substring(0,charactersFitted).
 						noteFitted=NoteRemaining.Substring(0,charactersFitted);
 						//draw lines for the part of the note that fits on this page
@@ -1182,7 +1205,11 @@ namespace OpenDental.UI {
 			if(RowsPrinted==rows.Count) {
 				return yPos;
 			}
-			else{
+			else{//done printing
+				//set row heights back to screen heights.
+				using(Graphics gfx=this.CreateGraphics()) {
+					ComputeRows(gfx);
+				}
 				return -1;
 			}
 		}
