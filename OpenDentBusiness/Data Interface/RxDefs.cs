@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -32,6 +33,12 @@ namespace OpenDentBusiness{
 				return def.RxDefNum;
 			}
 			return Crud.RxDefCrud.Insert(def);
+		}
+
+		///<summary></summary>
+		public static List<RxDef> TableToList(DataTable table) {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			return Crud.RxDefCrud.TableToList(table);
 		}
 
 		///<summary>Also deletes all RxAlerts that were attached.</summary>

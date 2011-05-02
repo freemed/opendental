@@ -17,7 +17,12 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.Long(rxDefNum);
 			return Crud.RxAlertCrud.SelectMany(command);
 		}
-	
+
+		///<summary></summary>
+		public static List<RxAlert> TableToList(DataTable table) {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			return Crud.RxAlertCrud.TableToList(table);
+		}
 
 		///<summary></summary>
 		public static void Update(RxAlert alert) {
