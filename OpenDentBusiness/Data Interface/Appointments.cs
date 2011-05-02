@@ -900,7 +900,7 @@ namespace OpenDentBusiness{
 						row["insurance"]+=raw.Rows[i]["carrierName2"].ToString();
 					}
 				}
-				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
+				else if(raw.Rows[i]["InsSubNum"].ToString()!="" && raw.Rows[i]["InsSubNum"].ToString()!="0") {
 					row["insurance"]=Lans.g("Appointments","Insured");
 				}
 				row["insToSend[!]"]="";
