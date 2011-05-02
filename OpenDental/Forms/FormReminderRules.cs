@@ -33,15 +33,21 @@ namespace OpenDental.Forms {
 			ODGridRow row;
 			for(int i=0;i<listReminders.Count;i++) {
 				row=new ODGridRow();
-				switch(listReminders[i].ReminderCriterion) {
+				switch(listReminders[i].ReminderCriterion) {//TODO: The querries below should work, once the FormReminderRuleEdit is functioning.
 					case EhrCriterion.Problem:
-						row.Cells.Add("Problem = ");//+DiseaseDefs.GetName(listReminders[i].CriterionFK));
+						row.Cells.Add("Problem = "+DiseaseDefs.GetName(listReminders[i].CriterionFK));
 						break;
 					case EhrCriterion.Medication:
-						row.Cells.Add("Medication = ");//+Medications.GetGenericName(listReminders[i].CriterionFK));
+						Medication tempMed = Medications.GetMedication(listReminders[i].CriterionFK);
+						if(tempMed.MedicationNum==tempMed.GenericNum) {//handle generic medication names.
+							row.Cells.Add("Medication = "+tempMed.MedName);
+						}
+						else {
+							row.Cells.Add("Medication = "+tempMed.MedName+" / "+Medications.GetGenericName(tempMed.GenericNum));
+						}
 						break;
 					case EhrCriterion.Allergy:
-						row.Cells.Add("Allergy = ");//+Allergies.GetOne(listReminders[i].CriterionFK).Reaction);
+						row.Cells.Add("Allergy = "+AllergyDefs.GetOne(listReminders[i].CriterionFK).Description);
 						break;
 					case EhrCriterion.Age:
 						row.Cells.Add("Age "+listReminders[i].CriterionValue);

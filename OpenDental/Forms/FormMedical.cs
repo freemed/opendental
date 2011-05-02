@@ -452,14 +452,14 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			//select medication from list.  Additional meds can be added to the list from within that dlg
 			FormMedications FormM=new FormMedications();
-			FormM.SelectMode=true;
+			FormM.IsSelectionMode=true;
 			FormM.ShowDialog();
 			if(FormM.DialogResult!=DialogResult.OK){
 				return;
 			}
 			MedicationPat MedicationPatCur=new MedicationPat();
 			MedicationPatCur.PatNum=PatCur.PatNum;
-			MedicationPatCur.MedicationNum=FormM.MedicationNum;
+			MedicationPatCur.MedicationNum=FormM.SelectedMedicationNum;
 			FormMedPat FormMP=new FormMedPat();
 			FormMP.MedicationPatCur=MedicationPatCur;
 			FormMP.IsNew=true;

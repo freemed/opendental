@@ -28,11 +28,11 @@ namespace OpenDentBusiness{
 
 	///<summary>EhrCriterion: Problem,Medication,Allergy,Age,Gender,LabResult</summary>
 	public enum EhrCriterion {
-		///<summary>0-Problem</summary>
+		///<summary>0-Problem (diseaseDef)</summary>
 		Problem,
 		///<summary>1-Medication</summary>
 		Medication,
-		///<summary>2-Allergy</summary>
+		///<summary>2-AllergyDef</summary>
 		Allergy,
 		///<summary>3-Age</summary>
 		Age,

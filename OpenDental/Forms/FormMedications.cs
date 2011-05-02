@@ -17,7 +17,7 @@ namespace OpenDental{
 		/// <summary>Required designer variable.</summary>
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
-		public bool SelectMode;
+		public bool IsSelectionMode;
 		private OpenDental.UI.Button butAddGeneric;
 		private OpenDental.UI.Button butAddBrand;
 		private System.Windows.Forms.Button butLexiComp;
@@ -26,7 +26,7 @@ namespace OpenDental{
 		private TextBox textSearch;
 		private Label label1;
 		///<summary>the number returned if using select mode.</summary>
-		public long MedicationNum;
+		public long SelectedMedicationNum;
 		private List<Medication> medList;
 
 		///<summary></summary>
@@ -225,7 +225,7 @@ namespace OpenDental{
 			//	this.Text=Lan.g(this,"Select Generic Medication");
 				//butAdd.Visible=false;//visible, but it ONLY lets you add a generic
 			//}
-			if(SelectMode){
+			if(IsSelectionMode){
 				this.Text=Lan.g(this,"Select Medication");
 			}
 		}
@@ -294,8 +294,8 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(SelectMode){
-				MedicationNum=medList[e.Row].MedicationNum;
+			if(IsSelectionMode){
+				SelectedMedicationNum=medList[e.Row].MedicationNum;
 				DialogResult=DialogResult.OK;
 			}
 			else{//normal mode from main menu
@@ -312,12 +312,12 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(SelectMode){
+			if(IsSelectionMode){
 				if(gridMain.GetSelectedIndex()==-1){
 					MessageBox.Show(Lan.g(this,"Please select an item first."));
 					return;
 				}
-				MedicationNum=medList[gridMain.GetSelectedIndex()].MedicationNum;
+				SelectedMedicationNum=medList[gridMain.GetSelectedIndex()].MedicationNum;
 			}
 			else{//normal mode from main menu
 				//just close

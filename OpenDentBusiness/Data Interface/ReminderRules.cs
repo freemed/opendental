@@ -45,6 +45,15 @@ namespace OpenDentBusiness{
 			return Crud.ReminderRuleCrud.SelectMany(command);
 		}
 
+		public static List<ReminderRule> SelectForPatient(Patient Pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ReminderRule>>(MethodBase.GetCurrentMethod());
+			}
+			string command;
+			command = "";
+			return Crud.ReminderRuleCrud.SelectMany(command);
+		}
+
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

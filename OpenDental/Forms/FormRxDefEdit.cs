@@ -391,13 +391,13 @@ namespace OpenDental{
 
 		private void butAddMedication_Click(object sender,EventArgs e) {
 			FormMedications FormMED=new FormMedications();
-			FormMED.SelectMode=true;
+			FormMED.IsSelectionMode=true;
 			FormMED.ShowDialog();
 			if(FormMED.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			RxAlert alert=new RxAlert();
-			alert.MedicationNum=FormMED.MedicationNum;
+			alert.MedicationNum=FormMED.SelectedMedicationNum;
 			alert.RxDefNum=RxDefCur.RxDefNum;
 			RxAlerts.Insert(alert);
 			FillAlerts();
@@ -405,13 +405,13 @@ namespace OpenDental{
 
 		private void butAddAllergy_Click(object sender,EventArgs e) {
 			FormAllergySetup FormAS=new FormAllergySetup();
-			FormAS.SelectMode=true;
+			FormAS.IsSelectionMode=true;
 			FormAS.ShowDialog();
 			if(FormAS.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			RxAlert alert=new RxAlert();
-			alert.AllergyDefNum=FormAS.AllergyNum;
+			alert.AllergyDefNum=FormAS.SelectedAllergyDefNum;
 			alert.RxDefNum=RxDefCur.RxDefNum;
 			RxAlerts.Insert(alert);
 			FillAlerts();

@@ -11,8 +11,8 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormAllergySetup:Form {
 		private List<AllergyDef> listAllergyDefs;
-		public bool SelectMode;
-		public long AllergyNum;
+		public bool IsSelectionMode;
+		public long SelectedAllergyDefNum;
 
 		public FormAllergySetup() {
 			InitializeComponent();
@@ -20,7 +20,7 @@ namespace OpenDental {
 		}
 
 		private void FormAllergySetup_Load(object sender,EventArgs e) {
-			if(SelectMode) {
+			if(IsSelectionMode) {
 				butOK.Visible=true;
 				butClose.Text="Cancel";
 			}
@@ -56,37 +56,33 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Select at least one allergy.");
-				return;
-			}
-			if(SelectMode) {
-				AllergyNum=listAllergyDefs[gridMain.GetSelectedIndex()].AllergyDefNum;
+			if(IsSelectionMode) {
+				SelectedAllergyDefNum=listAllergyDefs[e.Row].AllergyDefNum;
 				DialogResult=DialogResult.OK;
 			}
 			else {
-				FormAllergyDefEdit FADE=new FormAllergyDefEdit();
-				FADE.AllergyDefCur=listAllergyDefs[gridMain.GetSelectedIndex()];
-				FADE.ShowDialog();
+				FormAllergyDefEdit formA=new FormAllergyDefEdit();
+				formA.AllergyDefCur=listAllergyDefs[gridMain.GetSelectedIndex()];
+				formA.ShowDialog();
 				FillGrid();
 			}
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormAllergyDefEdit FADE=new FormAllergyDefEdit();
-			FADE.AllergyDefCur=new AllergyDef();
-			FADE.AllergyDefCur.IsNew=true;
-			FADE.ShowDialog();
+			FormAllergyDefEdit formA=new FormAllergyDefEdit();
+			formA.AllergyDefCur=new AllergyDef();
+			formA.AllergyDefCur.IsNew=true;
+			formA.ShowDialog();
 			FillGrid();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			//Only visible in SelectMode.
+			//Only visible in IsSelectionMode.
 			if(gridMain.GetSelectedIndex()==-1) {
 				MsgBox.Show(this,"Select at least one allergy.");
 				return;
 			}
-			AllergyNum=listAllergyDefs[gridMain.GetSelectedIndex()].AllergyDefNum;
+			SelectedAllergyDefNum=listAllergyDefs[gridMain.GetSelectedIndex()].AllergyDefNum;
 			DialogResult=DialogResult.OK;
 		}
 
