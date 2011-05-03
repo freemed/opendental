@@ -27,14 +27,31 @@ namespace OpenDental {
 			}
 		}
 
+		private void checkGetForAllCarriers_Click(object sender,EventArgs e) {
+			groupCarrier.Enabled=!checkGetForAllCarriers.Checked;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
-			if(listCarriers.SelectedIndex<0) {
-				MsgBox.Show(this,"You must first choose a carrier.");
-				return;
+			if(!checkGetForAllCarriers.Checked) {
+				if(listCarriers.SelectedIndex<0) {
+					MsgBox.Show(this,"You must first choose a carrier.");
+					return;
+				}
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				CanadianOutput.GetOutstandingTransactions(carriers[listCarriers.SelectedIndex]);
+				Carrier carrier=null;
+				if(checkGetForAllCarriers.Checked) {
+					carrier=new Carrier();
+					carrier.CDAnetVersion="04";
+					carrier.ElectID="999999";//The whole ITRANS network.
+					carrier.CanadianEncryptionMethod=1;//No encryption.
+					carrier.CanadianTransactionPrefix="";
+				}
+				else {
+					carrier=carriers[listCarriers.SelectedIndex];
+				}
+				CanadianOutput.GetOutstandingTransactions(carrier);
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Done.");
 			}
