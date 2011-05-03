@@ -33,7 +33,7 @@ namespace OpenDental.Forms {
 			ODGridRow row;
 			for(int i=0;i<listReminders.Count;i++) {
 				row=new ODGridRow();
-				switch(listReminders[i].ReminderCriterion) {//TODO: The querries below should work, once the FormReminderRuleEdit is functioning.
+				switch(listReminders[i].ReminderCriterion) {
 					case EhrCriterion.Problem:
 						row.Cells.Add("Problem = "+DiseaseDefs.GetName(listReminders[i].CriterionFK));
 						break;
@@ -53,7 +53,7 @@ namespace OpenDental.Forms {
 						row.Cells.Add("Age "+listReminders[i].CriterionValue);
 						break;
 					case EhrCriterion.Gender:
-						row.Cells.Add("Gender "+listReminders[i].CriterionValue);
+						row.Cells.Add("Gender is "+listReminders[i].CriterionValue);
 						break;
 					case EhrCriterion.LabResult:
 						row.Cells.Add("LabResult "+listReminders[i].CriterionValue);
