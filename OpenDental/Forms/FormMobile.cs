@@ -89,6 +89,8 @@ namespace OpenDental {
 			if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
 				IgnoreCertificateErrors();// done so that TestWebServiceExists() does not thow an error.
 			}
+			// if this is not done then an old non-functional url prevents any new url from being saved.
+			Prefs.UpdateString(PrefName.MobileSyncServerURL,textMobileSyncServerURL.Text);
 			if(!TestWebServiceExists()) {
 				MsgBox.Show(this,"Web service not found.");
 				return false;
@@ -364,8 +366,9 @@ namespace OpenDental {
 			List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
 			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
-							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-							+dO.Count+delPatNumList.Count;
+							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count+drugUnitNumList.Count
+							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
+							+delPatNumList.Count+dO.Count;
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
 			SynchGeneric(patNumList,SynchEntity.patient,ref FormP);

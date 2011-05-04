@@ -224,19 +224,38 @@ namespace OpenDental {
 
 		private void LoadImagesToSheetDef(SheetDef sheetDefCur){
 			for(int j=0;j<sheetDefCur.SheetFieldDefs.Count;j++) {
-				if(sheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Image) {
-					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),sheetDefCur.SheetFieldDefs[j].FieldName);
-					Image img=null;
-					if(sheetDefCur.SheetFieldDefs[j].FieldName=="Patient Info.gif") {
-						img=Properties.Resources.Patient_Info;
+				try {
+					if(sheetDefCur.SheetFieldDefs[j].FieldType==SheetFieldType.Image) {
+						string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),sheetDefCur.SheetFieldDefs[j].FieldName);
+						Image img=null;
+						if(sheetDefCur.SheetFieldDefs[j].FieldName=="Patient Info.gif") {
+							img=Properties.Resources.Patient_Info;
+						}
+						else if(File.Exists(filePathAndName)) {
+							img=Image.FromFile(filePathAndName);
+						}
+						//sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),ImageFormat.Png);//Because that's what we did before. Review this later. 
+						MemoryStream ms = new MemoryStream();
+						img.Save(ms,img.RawFormat); // done solely to compute the file size of the image
+						long fileByteSize = ms.Length;
+						ms=null;
+						if(fileByteSize>2000000) {
+							//for large images greater that ~2MB use jpeg format for compression. Large images in the 4MB + range have difficulty being displayed. It could be an issue with MYSQL or ASP.NET
+							sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),ImageFormat.Jpeg);
+						}
+						else {
+							sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),img.RawFormat);
+						}
+						
+						
 					}
-					else if(File.Exists(filePathAndName)) {
-						img=Image.FromFile(filePathAndName);
+					else {
+						sheetDefCur.SheetFieldDefs[j].ImageData="";// because null is not allowed
 					}
-					sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),ImageFormat.Png);//Because that's what we did before. Review this later. 
 				}
-				else{
-					sheetDefCur.SheetFieldDefs[j].ImageData="";// because null is not allowed
+				catch(Exception ex) {
+					sheetDefCur.SheetFieldDefs[j].ImageData="";
+					MessageBox.Show(ex.Message);
 				}
 			}
 		}
@@ -257,6 +276,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {
 				LoadImagesToSheetDef(FormS.SelectedSheetDefs[i]);
+				wh.Timeout=300000; //for slow connections more timeout is provided.The  default is 100 seconds i.e 100000
 				wh.UpLoadSheetDef(RegistrationKey,FormS.SelectedSheetDefs[i]);
 			}
 			FillGrid();
