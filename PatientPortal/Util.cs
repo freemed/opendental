@@ -9,7 +9,7 @@ using WebHostSynch;
 using OpenDentBusiness;
 using OpenDentBusiness.Mobile;
 
-namespace ODWebsite {
+namespace PatientPortal {
 	public class Util {
 
 		public void SetDbConnection() {

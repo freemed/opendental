@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PatientInformation.aspx.cs" Inherits="ODWebsite.PatientInformation" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PatientInformation.aspx.cs" Inherits="PatientPortal.PatientInformation" %>
 <%@ Import namespace="OpenDentBusiness.Mobile" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -22,17 +22,6 @@
 			<%#((LabPanelm)Container.DataItem).LabNameAddress%>
 			</ItemTemplate>
 			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Specimen Code">
-			<ItemTemplate>
-			<%#((LabPanelm)Container.DataItem).SpecimenCode%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Specimen Description">
-			<ItemTemplate>
-			<%#((LabPanelm)Container.DataItem).SpecimenDesc%>
-			</ItemTemplate>
-			</asp:TemplateField>
-
 			<asp:TemplateField HeaderText="Lab Results">
 			<ItemTemplate>
 			<asp:GridView ID="GridViewLabResult" runat="server" 
@@ -58,9 +47,6 @@
 	<br />
 	<br />
 	<br />
-	
-	<br />
-	<br />
 	<asp:Label ID="LabelMedication" runat="server" Text="List of Medications:"></asp:Label>
 	<br />
 	<asp:GridView ID="GridViewMedication" runat="server" 
@@ -69,16 +55,6 @@
 			<asp:TemplateField HeaderText="Medication Name">
 			<ItemTemplate>
 			<%#Medicationms.GetOne(((MedicationPatm)Container.DataItem).CustomerNum,((MedicationPatm)Container.DataItem).MedicationNum).MedName%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Patient Notes">
-			<ItemTemplate>
-			<%#((MedicationPatm)Container.DataItem).PatNote%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Discontinued">
-			<ItemTemplate>
-			<%#((MedicationPatm)Container.DataItem).IsDiscontinued==true?"Discontinued":""%>
 			</ItemTemplate>
 			</asp:TemplateField>
 		</Columns>
@@ -95,16 +71,6 @@
 			<asp:TemplateField HeaderText="Name">
 			<ItemTemplate>
 			<%#DiseaseDefms.GetOne(((Diseasem)Container.DataItem).CustomerNum,((Diseasem)Container.DataItem).DiseaseDefNum).DiseaseName%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Patient Note">
-			<ItemTemplate>
-			<%#((Diseasem)Container.DataItem).PatNote%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Status">
-			<ItemTemplate>
-			<%#((Diseasem)Container.DataItem).ProbStatus.ToString("G")%>
 			</ItemTemplate>
 			</asp:TemplateField>
 			<asp:TemplateField HeaderText="ICD">
@@ -131,11 +97,6 @@
 			<asp:TemplateField HeaderText="Reaction">
 			<ItemTemplate>
 			<%#((Allergym)Container.DataItem).Reaction%>
-			</ItemTemplate>
-			</asp:TemplateField>
-			<asp:TemplateField HeaderText="Status">
-			<ItemTemplate>
-			<%#((Allergym)Container.DataItem).StatusIsActive==true?"Active":"Inactive"%>
 			</ItemTemplate>
 			</asp:TemplateField>
 		</Columns>

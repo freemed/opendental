@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ODWebsite {
+namespace PatientPortal {
     
     
     public partial class PatientInformation {
