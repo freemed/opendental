@@ -1117,7 +1117,7 @@ namespace OpenDentBusiness {
 					long insSubNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
 					command="SELECT COUNT(*) FROM claim WHERE InsSubNum="+POut.Long(insSubNum);
 					int countUsed=PIn.Int(Db.GetCount(command));
-					command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum="+POut.Long(insSubNum);
+					command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum="+POut.Long(insSubNum)+" AND (ClaimNum<>0 OR Status<>6)";//attached to a claim or not an estimate
 					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM etrans WHERE InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
@@ -1126,6 +1126,8 @@ namespace OpenDentBusiness {
 					command="SELECT COUNT(*) FROM payplan WHERE InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
 					if(countUsed==0) {
+						command="DELETE FROM claimproc WHERE InsSubNum="+POut.Long(insSubNum)+" AND ClaimNum=0 AND Status=6";//ok to delete because no claim and just an estimate
+						Db.NonQ(command);
 						command="DELETE FROM inssub WHERE InsSubNum="+POut.Long(insSubNum);
 						Db.NonQ(command);
 						numFixed++;
