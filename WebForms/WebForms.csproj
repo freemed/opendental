@@ -90,6 +90,7 @@
   <ItemGroup>
     <Content Include="app_offlineRemoveThisSuffix.htm" />
     <Content Include="App_Themes\Theme1\Stylesheet1.css" />
+    <Content Include="db\sheetsdb.sql" />
     <Content Include="Sheets.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -122,7 +123,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="db\db.sql" />
     <Content Include="Handler1.ashx" />
     <EntityDeploy Include="ODWebServiceModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
