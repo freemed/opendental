@@ -73,52 +73,11 @@ namespace OpenDentBusiness.HL7 {
 					field=new FieldHL7(fields[i]);
 					Fields.Add(field);
 				}
-				switch(Fields[0].FullText) {
-					default:
-						Name=SegmentName.Unknown;
-						break;
-					case "MSH":
-						Name=SegmentName.MSH;
-						break;
-					case "EVN":
-						Name=SegmentName.EVN;
-						break;
-					case "PID":
-						Name=SegmentName.PID;
-						break;
-					case "PV1":
-						Name=SegmentName.PV1;
-						break;
-					case "PD1":
-						Name=SegmentName.PD1;
-						break;
-					case "GT1":
-						Name=SegmentName.GT1;
-						break;
-					case "IN1":
-						Name=SegmentName.IN1;
-						break;
-					case "SCH":
-						Name=SegmentName.SCH;
-						break;
-					case "AIG":
-						Name=SegmentName.AIG;
-						break;
-					case "AIL":
-						Name=SegmentName.AIL;
-						break;
-					case "AIP":
-						Name=SegmentName.AIP;
-						break;
-					case "FT1":
-						Name=SegmentName.FT1;
-						break;
-					case "DG1":
-						Name=SegmentName.DG1;
-						break;
-					case "ZX1":
-						Name=SegmentName.ZX1;
-						break;
+				try {
+					Name=(SegmentName)Enum.Parse(typeof(SegmentName),Fields[0].FullText);
+				}
+				catch {
+					Name=SegmentName.Unknown;
 				}
 			}
 		}
@@ -197,7 +156,7 @@ namespace OpenDentBusiness.HL7 {
 		DG1,
 		///<summary>We use for PDF Data</summary>
 		ZX1,
-		///<summary>Common Order</summary>
+		///<summary>Common Order.  Used in outgoing vaccinations VXUs as well as incoming lab result ORUs.</summary>
 		ORC,
 		///<summary>Pharmacy Administration Segment</summary>
 		RXA,

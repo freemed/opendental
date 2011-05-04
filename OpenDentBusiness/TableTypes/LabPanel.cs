@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		///<summary>The entire raw HL7 message</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string RawMessage;
-		///<summary>Both name and address in a single field.  OBR-20</summary>
+		///<summary>Both name and address in a single field.  OBR-20. OBX-26? ORC?</summary>
 		public string LabNameAddress;
 		///<summary>To be used for synch with web server.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]

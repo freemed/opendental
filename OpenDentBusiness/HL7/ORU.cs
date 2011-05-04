@@ -86,6 +86,8 @@ namespace OpenDentBusiness.HL7 {
 		SPM||||122555007^Venous blood specimen^SCT^BLDV^Blood venous^HL70487^20080131^2.5.1
 		*/
 
+		//ORC?  Where's lab name and address?
+
 		private void OBR(LabPanel panel, LabResult labresult) {
 			seg=new SegmentHL7(SegmentName.OBR);
 			seg.SetField(1,"1");
