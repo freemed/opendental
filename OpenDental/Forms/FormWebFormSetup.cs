@@ -235,10 +235,11 @@ namespace OpenDental {
 							img=Image.FromFile(filePathAndName);
 						}
 						//sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),ImageFormat.Png);//Because that's what we did before. Review this later. 
-						MemoryStream ms = new MemoryStream();
-						img.Save(ms,img.RawFormat); // done solely to compute the file size of the image
-						long fileByteSize = ms.Length;
-						ms=null;
+						long fileByteSize=0;
+						using(MemoryStream ms = new MemoryStream()) {
+							img.Save(ms,img.RawFormat); // done solely to compute the file size of the image
+							fileByteSize = ms.Length;
+						}
 						if(fileByteSize>2000000) {
 							//for large images greater that ~2MB use jpeg format for compression. Large images in the 4MB + range have difficulty being displayed. It could be an issue with MYSQL or ASP.NET
 							sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),ImageFormat.Jpeg);
