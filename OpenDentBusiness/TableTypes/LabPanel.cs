@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public long LabPanelNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
-		///<summary>FK to medicalorder.MedicalOrderNum.</summary>
+		///<summary>FK to medicalorder.MedicalOrderNum.  Every lab panel can be attached to one medical order.  If a medical order of type lab does not have an attached lab panel, then it is still pending.</summary>
 		public long MedicalOrderNum;
 		///<summary>The entire raw HL7 message</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]

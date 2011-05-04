@@ -16,6 +16,16 @@ namespace OpenDentBusiness{
 			return Crud.MedicalOrderCrud.SelectMany(command);
 		}
 
+		///<summary></summary>
+		public static List<MedicalOrder> GetPendingLabs() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<MedicalOrder>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM medicalorder WHERE MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+				+"AND NOT EXISTS(SELECT * FROM labpanel WHERE labpanel.MedicalOrderNum=medicalorder.MedicalOrderNum)";
+			return Crud.MedicalOrderCrud.SelectMany(command);
+		}
+
 		///<summary>Gets one MedicalOrder from the db.</summary>
 		public static MedicalOrder GetOne(long medicalOrderNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -51,6 +61,8 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM medicalorder WHERE MedicalOrderNum = "+POut.Long(medicalOrderNum);
 			Db.NonQ(command);
 		}
+
+		
 
 
 
