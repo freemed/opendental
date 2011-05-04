@@ -3604,12 +3604,20 @@ namespace OpenDental{
 				//so we can step through for debugging.
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
 				((FormEHR)FormOpenDental.FormEHR).ShowDialog();
+				if(((FormEHR)FormOpenDental.FormEHR).LaunchRx) {
+					FormRxSelect FormRS=new FormRxSelect(PatCur);
+					FormRS.ShowDialog();
+				}
 			#else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
 				object[] args=new object[] {PatCur.PatNum};
 				type.InvokeMember("PatNum",System.Reflection.BindingFlags.SetField,null,FormOpenDental.FormEHR,args);
 				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,null);
-			#endif
+				if((bool)type.InvokeMember("LaunchRx",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null)) {
+					FormRxSelect FormRS=new FormRxSelect(PatCur);
+					FormRS.ShowDialog();
+				}
+#endif
 		}
 
 		private void menuConsent_Popup(object sender,EventArgs e) {
