@@ -103,10 +103,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 			//CustomerNum cannot be set.  Remains 0.
 			labPanelm.LabPanelNum    =labPanel.LabPanelNum;
 			labPanelm.PatNum         =labPanel.PatNum;
-			labPanelm.MedicalOrderNum=labPanel.MedicalOrderNum;
 			labPanelm.LabNameAddress =labPanel.LabNameAddress;
-			labPanelm.SpecimenCode   =labPanel.SpecimenCode;
-			labPanelm.SpecimenDesc   =labPanel.SpecimenDesc;
+			//labPanelm.SpecimenCode   =labPanel.SpecimenCode;
+			//labPanelm.SpecimenDesc   =labPanel.SpecimenDesc;
 			return labPanelm;
 		}
 

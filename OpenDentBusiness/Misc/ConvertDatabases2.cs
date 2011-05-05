@@ -4491,14 +4491,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE labpanel (
 						LabPanelNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
-						MedicalOrderNum bigint NOT NULL,
 						RawMessage text NOT NULL,
 						LabNameAddress varchar(255) NOT NULL,
 						DateTStamp timestamp,
-						SpecimenCode varchar(255) NOT NULL,
-						SpecimenDesc varchar(255) NOT NULL,
-						INDEX(PatNum),
-						INDEX(MedicalOrderNum)
+						SpecimenCondition varchar(255) NOT NULL,
+						SpecimenSource varchar(255) NOT NULL,
+						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -4508,18 +4506,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE labpanel (
 						LabPanelNum number(20) NOT NULL,
 						PatNum number(20) NOT NULL,
-						MedicalOrderNum number(20) NOT NULL,
 						RawMessage clob,
 						LabNameAddress varchar2(255),
 						DateTStamp timestamp,
-						SpecimenCode varchar2(255),
-						SpecimenDesc varchar2(255),
+						SpecimenCondition varchar2(255),
+						SpecimenSource varchar2(255),
 						CONSTRAINT labpanel_LabPanelNum PRIMARY KEY (LabPanelNum)
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX labpanel_PatNum ON labpanel (PatNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX labpanel_MedicalOrderNum ON labpanel (MedicalOrderNum)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -4686,7 +4681,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE patplan DROP COLUMN PlanNum";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicalorder ADD IsLabPending tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicalorder ADD IsLabPending number(3)";
+					Db.NonQ(command);
+					command="UPDATE medicalorder SET IsLabPending = 0 WHERE IsLabPending IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicalorder MODIFY IsLabPending NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4724,3 +4730,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				
+				

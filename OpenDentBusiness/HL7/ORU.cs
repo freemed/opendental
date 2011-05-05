@@ -114,7 +114,7 @@ namespace OpenDentBusiness.HL7 {
 
 		private void SPM(LabPanel panel) {
 			seg=new SegmentHL7(SegmentName.SPM);
-			seg.SetField(4,panel.SpecimenCode,panel.SpecimenDesc,"SCT");//4-type, required, SCT=snomed, example:122555007=venous blood specimen
+			//seg.SetField(4,panel.SpecimenCode,panel.SpecimenDesc,"SCT");//4-type, required, SCT=snomed, example:122555007=venous blood specimen
 			msg.Segments.Add(seg);
 		}
 

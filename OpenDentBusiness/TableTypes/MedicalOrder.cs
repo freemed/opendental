@@ -18,6 +18,8 @@ namespace OpenDentBusiness {
     public DateTime DateTimeOrder;
 		///<summary>User will be required to type entire order out from scratch.</summary>
 		public string Description;
+		///<summary>If this is true, then this order will show in list of all pending orders to let user attach lab results to a patient.  This flag gets cleared when lab result is attached to a patient.</summary>
+		public bool IsLabPending;
 
     ///<summary></summary>
     public MedicalOrder Copy() {

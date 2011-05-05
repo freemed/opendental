@@ -46,14 +46,13 @@ namespace OpenDentBusiness.Crud{
 			LabPanel labPanel;
 			for(int i=0;i<table.Rows.Count;i++) {
 				labPanel=new LabPanel();
-				labPanel.LabPanelNum    = PIn.Long  (table.Rows[i]["LabPanelNum"].ToString());
-				labPanel.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				labPanel.MedicalOrderNum= PIn.Long  (table.Rows[i]["MedicalOrderNum"].ToString());
-				labPanel.RawMessage     = PIn.String(table.Rows[i]["RawMessage"].ToString());
-				labPanel.LabNameAddress = PIn.String(table.Rows[i]["LabNameAddress"].ToString());
-				labPanel.DateTStamp     = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				labPanel.SpecimenCode   = PIn.String(table.Rows[i]["SpecimenCode"].ToString());
-				labPanel.SpecimenDesc   = PIn.String(table.Rows[i]["SpecimenDesc"].ToString());
+				labPanel.LabPanelNum      = PIn.Long  (table.Rows[i]["LabPanelNum"].ToString());
+				labPanel.PatNum           = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				labPanel.RawMessage       = PIn.String(table.Rows[i]["RawMessage"].ToString());
+				labPanel.LabNameAddress   = PIn.String(table.Rows[i]["LabNameAddress"].ToString());
+				labPanel.DateTStamp       = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				labPanel.SpecimenCondition= PIn.String(table.Rows[i]["SpecimenCondition"].ToString());
+				labPanel.SpecimenSource   = PIn.String(table.Rows[i]["SpecimenSource"].ToString());
 				retVal.Add(labPanel);
 			}
 			return retVal;
@@ -94,18 +93,17 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabPanelNum,";
 			}
-			command+="PatNum,MedicalOrderNum,RawMessage,LabNameAddress,SpecimenCode,SpecimenDesc) VALUES(";
+			command+="PatNum,RawMessage,LabNameAddress,SpecimenCondition,SpecimenSource) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labPanel.LabPanelNum)+",";
 			}
 			command+=
 				     POut.Long  (labPanel.PatNum)+","
-				+    POut.Long  (labPanel.MedicalOrderNum)+","
 				+DbHelper.ParamChar+"paramRawMessage,"
 				+"'"+POut.String(labPanel.LabNameAddress)+"',"
 				//DateTStamp can only be set by MySQL
-				+"'"+POut.String(labPanel.SpecimenCode)+"',"
-				+"'"+POut.String(labPanel.SpecimenDesc)+"')";
+				+"'"+POut.String(labPanel.SpecimenCondition)+"',"
+				+"'"+POut.String(labPanel.SpecimenSource)+"')";
 			if(labPanel.RawMessage==null) {
 				labPanel.RawMessage="";
 			}
@@ -122,13 +120,12 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one LabPanel in the database.</summary>
 		internal static void Update(LabPanel labPanel){
 			string command="UPDATE labpanel SET "
-				+"PatNum         =  "+POut.Long  (labPanel.PatNum)+", "
-				+"MedicalOrderNum=  "+POut.Long  (labPanel.MedicalOrderNum)+", "
-				+"RawMessage     =  "+DbHelper.ParamChar+"paramRawMessage, "
-				+"LabNameAddress = '"+POut.String(labPanel.LabNameAddress)+"', "
+				+"PatNum           =  "+POut.Long  (labPanel.PatNum)+", "
+				+"RawMessage       =  "+DbHelper.ParamChar+"paramRawMessage, "
+				+"LabNameAddress   = '"+POut.String(labPanel.LabNameAddress)+"', "
 				//DateTStamp can only be set by MySQL
-				+"SpecimenCode   = '"+POut.String(labPanel.SpecimenCode)+"', "
-				+"SpecimenDesc   = '"+POut.String(labPanel.SpecimenDesc)+"' "
+				+"SpecimenCondition= '"+POut.String(labPanel.SpecimenCondition)+"', "
+				+"SpecimenSource   = '"+POut.String(labPanel.SpecimenSource)+"' "
 				+"WHERE LabPanelNum = "+POut.Long(labPanel.LabPanelNum);
 			if(labPanel.RawMessage==null) {
 				labPanel.RawMessage="";
@@ -144,10 +141,6 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="PatNum = "+POut.Long(labPanel.PatNum)+"";
 			}
-			if(labPanel.MedicalOrderNum != oldLabPanel.MedicalOrderNum) {
-				if(command!=""){ command+=",";}
-				command+="MedicalOrderNum = "+POut.Long(labPanel.MedicalOrderNum)+"";
-			}
 			if(labPanel.RawMessage != oldLabPanel.RawMessage) {
 				if(command!=""){ command+=",";}
 				command+="RawMessage = "+DbHelper.ParamChar+"paramRawMessage";
@@ -157,13 +150,13 @@ namespace OpenDentBusiness.Crud{
 				command+="LabNameAddress = '"+POut.String(labPanel.LabNameAddress)+"'";
 			}
 			//DateTStamp can only be set by MySQL
-			if(labPanel.SpecimenCode != oldLabPanel.SpecimenCode) {
+			if(labPanel.SpecimenCondition != oldLabPanel.SpecimenCondition) {
 				if(command!=""){ command+=",";}
-				command+="SpecimenCode = '"+POut.String(labPanel.SpecimenCode)+"'";
+				command+="SpecimenCondition = '"+POut.String(labPanel.SpecimenCondition)+"'";
 			}
-			if(labPanel.SpecimenDesc != oldLabPanel.SpecimenDesc) {
+			if(labPanel.SpecimenSource != oldLabPanel.SpecimenSource) {
 				if(command!=""){ command+=",";}
-				command+="SpecimenDesc = '"+POut.String(labPanel.SpecimenDesc)+"'";
+				command+="SpecimenSource = '"+POut.String(labPanel.SpecimenSource)+"'";
 			}
 			if(command==""){
 				return;
