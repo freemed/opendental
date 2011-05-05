@@ -3601,22 +3601,34 @@ namespace OpenDental{
 		}
 
 		private void OnEHR_Click() {
-			#if DEBUG
+#if DEBUG
 				//so we can step through for debugging.
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
 				((FormEHR)FormOpenDental.FormEHR).ShowDialog();
-				if(((FormEHR)FormOpenDental.FormEHR).LaunchRx) {
-					FormRxSelect FormRS=new FormRxSelect(PatCur);
-					FormRS.ShowDialog();
+				if(((FormEHR)FormOpenDental.FormEHR).LaunchRx){
+					if(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum==0) {
+						FormRxSelect FormRS=new FormRxSelect(PatCur);
+						FormRS.ShowDialog();
+					}
+					else {
+						FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
+						FormRXE.ShowDialog();
+					}
 				}
-			#else
+#else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
 				object[] args=new object[] {PatCur.PatNum};
 				type.InvokeMember("PatNum",System.Reflection.BindingFlags.SetField,null,FormOpenDental.FormEHR,args);
 				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,null);
-				if((bool)type.InvokeMember("LaunchRx",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null)) {
-					FormRxSelect FormRS=new FormRxSelect(PatCur);
-					FormRS.ShowDialog();
+				if((bool)type.InvokeMember("LaunchRx",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null)){ 
+					if((int)type.InvokeMember("LaunchRxNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null)==0) {
+						FormRxSelect FormRS=new FormRxSelect(PatCur);
+						FormRS.ShowDialog();
+					}
+					else {
+						FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
+						FormRXE.ShowDialog();
+					}
 				}
 #endif
 		}

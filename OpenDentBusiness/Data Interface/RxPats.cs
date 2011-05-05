@@ -7,7 +7,15 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class RxPats {
-		
+		///<summary>Used in Ehr.</summary>
+		public static List<RxPat> Refresh(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM rxpat WHERE PatNum="+POut.Long(patNum);
+			return Crud.RxPatCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static RxPat GetRx(long rxNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -91,6 +99,8 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM rxpat WHERE IsElectQueue=1";
 			return Crud.RxPatCrud.SelectMany(command);
 		}
+
+		
 
 	}
 
