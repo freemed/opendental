@@ -3368,7 +3368,8 @@ namespace OpenDental{
 						labelECWerror.Visible=true;
 					}
 				}
-				if(FormOpenDental.FormEHR!=null) {
+				if(FormOpenDental.FormEHR!=null) { //didn't work either
+				//if(ToolBarMain.Buttons["EHR"]!=null) {
 					ToolBarMain.Buttons["EHR"].Enabled=true;
 				}
 				tabProc.Enabled=true;

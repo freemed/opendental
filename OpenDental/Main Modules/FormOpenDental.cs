@@ -1559,6 +1559,7 @@ namespace OpenDental{
 			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
 			#if DEBUG
 				FormEHR=new FormEHR();
+				ContrChart2.InitializeLocalData();//because toolbar is now missing the EHR button.  Only a problem if a db conversion is done when opening the program.
 				/*
 				dllPathEHR=@"..\..\..\..\..\Shared Projects Subversion\EHR\EHR_";
 				Version versionApp=new Version(Application.ProductVersion);
