@@ -8,9 +8,10 @@ using OpenDental.Eclaims;
 namespace TestCanada {
 	class OutstandingTrans {
 
-		private static string Run(int scriptNum,Carrier carrier,out List <Etrans> etransRequests) { 
+		private static string Run(int scriptNum,bool version2,bool sendToItrans,Carrier carrier,out List <Etrans> etransRequests) { 
 			string retVal="";
-			etransRequests=CanadianOutput.GetOutstandingTransactions(carrier);
+			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			etransRequests=CanadianOutput.GetOutstandingTransactions(version2,sendToItrans,carrier,prov);
 			retVal+="Outstanding Transactions#"+scriptNum.ToString()+" successful.\r\n";
 			return retVal;
 		}
@@ -20,7 +21,7 @@ namespace TestCanada {
 			//Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[0]);
 			Carrier carrier=Carriers.GetCanadian("666666");
 			carrier.CanadianEncryptionMethod=1;
-			string retval=Run(1,carrier,out etransRequests);
+			string retval=Run(1,false,false,carrier,out etransRequests);
 			////EOB
 			//etransRequests[0].PatNum=claim.PatNum;
 			//etransRequests[0].PlanNum=claim.PlanNum;
@@ -42,7 +43,7 @@ namespace TestCanada {
 			List<Etrans> etransRequests;
 			//Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[6]);
 			Carrier carrier=Carriers.GetCanadian("888888");
-			string retval=Run(2,carrier,out etransRequests);
+			string retval=Run(2,false,false,carrier,out etransRequests);
 			////EOB
 			//etransRequests[0].PatNum=claim.PatNum;
 			//etransRequests[0].PlanNum=claim.PlanNum;
@@ -57,7 +58,7 @@ namespace TestCanada {
 			List<Etrans> etransRequests;
 			//Claim claim=Claims.GetClaim(ClaimTC.ClaimNums[]);
 			Carrier carrier=Carriers.GetCanadian("777777");
-			string retval=Run(3,carrier,out etransRequests);
+			string retval=Run(3,false,false,carrier,out etransRequests);
 			////EOB
 			//etransRequests[0].PatNum=claim.PatNum;
 			//etransRequests[0].PlanNum=claim.PlanNum;

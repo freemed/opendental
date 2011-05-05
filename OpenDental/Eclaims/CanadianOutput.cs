@@ -242,7 +242,7 @@ namespace OpenDental.Eclaims {
 			string result="";
 			bool resultIsError=false;
 			try {
-				result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+				result=Canadian.PassToIca(strb.ToString(),clearhouse);
 			}
 			catch(ApplicationException ex) {
 				result=ex.Message;
@@ -442,7 +442,7 @@ namespace OpenDental.Eclaims {
 			string result="";
 			bool resultIsError=false;
 			try {
-			  result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+			  result=Canadian.PassToIca(strb.ToString(),clearhouse);
 			}
 			catch(ApplicationException ex) {
 			  result=ex.Message;
@@ -485,8 +485,8 @@ namespace OpenDental.Eclaims {
 			return etransAck.EtransNum;
 		}
 
-		///<summary>Returns the list of etrans requests. The etrans.AckEtransNum can be used to get the etrans ack. The following are the only possible formats that can be returned in the acks: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response</summary>
-		public static List <Etrans> GetOutstandingTransactions(Carrier carrier) {
+		///<summary>Returns the list of etrans requests. The etrans.AckEtransNum can be used to get the etrans ack. The following are the only possible formats that can be returned in the acks: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response. Set version2 to true if version 02 request and false for version 04 request. Set sendToItrans to true only when sending to carrier 999999 representing the entire ITRANS network. When version2 is false and sendToItrans is false then carrier must be set to a valid Canadian carrier, otherwise it can be set to null.</summary>
+		public static List <Etrans> GetOutstandingTransactions(bool version2,bool sendToItrans,Carrier carrier,Provider prov) {
 			List<Etrans> etransAcks=new List<Etrans>();
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null) {
@@ -496,29 +496,44 @@ namespace OpenDental.Eclaims {
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
-			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			//We are required to send the request for outstanding transactions over and over until we get back an outstanding transactions ack format (Transaction type 14), because
 			//there may be more than one item in the mailbox and we can only get one item at time.
 			do {
 				StringBuilder strb=new StringBuilder();
-				Etrans etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
-					clearhouse.ClearinghouseNum,EtransType.RequestOutstand_CA,0,0);				
+				Etrans etrans=null;
+				if(version2 || sendToItrans) {
+					etrans=Etranss.CreateCanadianOutput(0,0,0,clearhouse.ClearinghouseNum,EtransType.RequestOutstand_CA,0,0);
+				}
+				else {
+					etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
+						clearhouse.ClearinghouseNum,EtransType.RequestOutstand_CA,0,0);
+				}
 				//A01 transaction prefix 12 AN
-				strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+				if(version2 || sendToItrans) {
+					strb.Append("            ");
+				}
+				else {
+					strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+				}
 				//A02 office sequence number 6 N
 				strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 				//A03 format version number 2 N
-				if(carrier.CDAnetVersion=="") {
-					strb.Append("04");
+				if(version2) {
+					strb.Append("02");
 				}
 				else {
-					strb.Append(carrier.CDAnetVersion);
+					strb.Append("04");
 				}
 				//A04 transaction code 2 N
 				strb.Append("04");//outstanding transactions request
-				if(carrier.CDAnetVersion!="02") {//version 04
+				if(!version2) {//version 04
 					//A05 carrier id number 6 N
-					strb.Append(carrier.ElectID);//already validated as 6 digit number.
+					if(sendToItrans) {
+						strb.Append("999999");
+					}
+					else {
+						strb.Append(carrier.ElectID);//already validated as 6 digit number.
+					}
 				}
 				//A06 software system id 3 AN  The third character is for version of OD.
 				//todo
@@ -527,13 +542,23 @@ namespace OpenDental.Eclaims {
 	#else
 				strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
 	#endif
-				if(carrier.CDAnetVersion!="02") { //version 04
+				if(!version2) { //version 04
 					//A10 encryption method 1 N
-					strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
+					if(sendToItrans) {
+						strb.Append("1");
+					}
+					else {
+						strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
+					}
 				}
 				//A07 message length N4
-				strb.Append(Canadian.TidyN("64",5));
-				if(carrier.CDAnetVersion!="02") { //version 04
+				if(!version2) { //version 04
+					strb.Append(Canadian.TidyN("64",5));
+				}
+				else {
+					strb.Append(Canadian.TidyN("42",4));
+				}
+				if(!version2) { //version 04
 					//A09 carrier transaction counter 5 N
 					strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 				}
@@ -544,7 +569,7 @@ namespace OpenDental.Eclaims {
 				strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
 				//B02 (treating) provider office number 4 AN
 				strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
-				if(carrier.CDAnetVersion!="02") { //version 04
+				if(!version2) { //version 04
 					//B03 billing provider number 9 AN
 					//might need to account for possible 5 digit prov id assigned by carrier
 					strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
@@ -552,7 +577,7 @@ namespace OpenDental.Eclaims {
 				string result="";
 				bool resultIsError=false;
 				try {
-					result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+					result=Canadian.PassToIca(strb.ToString(),clearhouse);
 				}
 				catch(ApplicationException ex) {
 					result=ex.Message;
@@ -590,7 +615,7 @@ namespace OpenDental.Eclaims {
 					throw new ApplicationException(result);
 				}
 				CCDField fieldA04=fieldInputter.GetFieldById("A04");//message format
-				if(carrier.CDAnetVersion=="02") {
+				if(version2) {
 					//In this case, there are only 4 possible responses: EOB, Claim Ack, Claim Ack with an error code, or Claim Ack with literal "NO MORE ITEMS" starting at character 13.
 					if(fieldA04.valuestr=="11") {
 						CCDField fieldG08=fieldInputter.GetFieldById("G08");
@@ -712,10 +737,10 @@ namespace OpenDental.Eclaims {
 				bool resultIsError=false;
 				try {
 					if(carrier!=null) {
-						result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+						result=Canadian.PassToIca(strb.ToString(),clearhouse);
 					}
 					else { //Assume network!=null
-						result=Canadian.PassToIca(strb.ToString(),network.CanadianNetworkNum,clearhouse);
+						result=Canadian.PassToIca(strb.ToString(),clearhouse);
 					}
 				}
 				catch(ApplicationException ex) {
@@ -831,10 +856,10 @@ namespace OpenDental.Eclaims {
 			bool resultIsError=false;
 			try {
 				if(carrier!=null) {
-					result=Canadian.PassToIca(strb.ToString(),carrier.CanadianNetworkNum,clearhouse);
+					result=Canadian.PassToIca(strb.ToString(),clearhouse);
 				}
 				else { //Assume network!=null
-					result=Canadian.PassToIca(strb.ToString(),network.CanadianNetworkNum,clearhouse);
+					result=Canadian.PassToIca(strb.ToString(),clearhouse);
 				}
 			}
 			catch(ApplicationException ex) {
