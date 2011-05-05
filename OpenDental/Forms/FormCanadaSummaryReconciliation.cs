@@ -39,6 +39,10 @@ namespace OpenDental {
 			textDateReconciliation.Text=DateTime.Today.ToShortDateString();
 		}
 
+		private void checkGetForAllCarriers_Click(object sender,EventArgs e) {
+			groupCarrierOrNetwork.Enabled=!checkGetForAllCarriers.Checked;
+		}
+
 		private void listCarriers_Click(object sender,EventArgs e) {
 			listNetworks.SelectedIndex=-1;
 		}
@@ -48,9 +52,11 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(listCarriers.SelectedIndex<0 && listNetworks.SelectedIndex<0) {
-				MsgBox.Show(this,"You must first choose one carrier or one network.");
-				return;
+			if(!checkGetForAllCarriers.Checked) {
+				if(listCarriers.SelectedIndex<0 && listNetworks.SelectedIndex<0) {
+					MsgBox.Show(this,"You must first choose one carrier or one network.");
+					return;
+				}
 			}
 			if(listTreatingProvider.SelectedIndex<0) {
 				MsgBox.Show(this,"You must first choose a treating provider.");
@@ -66,11 +72,21 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				if(listCarriers.SelectedIndex>=0) {
-					CanadianOutput.GetSummaryReconciliation(carriers[listCarriers.SelectedIndex],null,ProviderC.List[listTreatingProvider.SelectedIndex],reconciliationDate);
+				if(checkGetForAllCarriers.Checked) {
+					Carrier carrier=new Carrier();
+					carrier.CDAnetVersion="04";
+					carrier.ElectID="999999";//The whole ITRANS network.
+					carrier.CanadianEncryptionMethod=1;//No encryption.
+					carrier.CanadianTransactionPrefix="";
+					CanadianOutput.GetSummaryReconciliation(carrier,null,ProviderC.List[listTreatingProvider.SelectedIndex],reconciliationDate);
 				}
 				else {
-					CanadianOutput.GetSummaryReconciliation(null,CanadianNetworks.Listt[listNetworks.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],reconciliationDate);
+					if(listCarriers.SelectedIndex>=0) {
+						CanadianOutput.GetSummaryReconciliation(carriers[listCarriers.SelectedIndex],null,ProviderC.List[listTreatingProvider.SelectedIndex],reconciliationDate);
+					}
+					else {
+						CanadianOutput.GetSummaryReconciliation(null,CanadianNetworks.Listt[listNetworks.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],reconciliationDate);
+					}
 				}
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Done.");

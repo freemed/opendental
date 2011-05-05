@@ -206,7 +206,7 @@ namespace OpenDental.Eclaims {
 					isFrench=true;
 				}
 			}
-			else if(subscriber.Language=="fr") {
+			else if(subscriber!=null && subscriber.Language=="fr") {
 				isFrench=true;
 			}
 		}
@@ -332,34 +332,36 @@ namespace OpenDental.Eclaims {
 				else if(transactionCode=="15") {
 					PrintSummaryReconciliation_15(e.Graphics);
 				}
-				switch(formId){
-					default:
-						DefaultPrint(e.Graphics);
-						break;
-					case "01"://CDA EOB Form
-						PrintEOB(e.Graphics);
-						break;
-					case "02"://Dentaide Form
-						PrintDentaide(e.Graphics);
-						break;
-					case "03"://Claim Acknowledgement Form
-						PrintClaimAck(e.Graphics);
-						break;
-					case "04"://Employer Certified Form
-						PrintEmployerCertified(e.Graphics);
-						break;
-					case "05"://Plan Paper Claim Form
-						PrintPaperClaim(e.Graphics);
-						break;
-					case "06"://Predetermination Acknowledgement Form
-						PrintPredeterminationAck(e.Graphics);
-						break;
-					case "07"://Predetermination EOB Form
-						PrintEOB(e.Graphics);
-						break;
-					case "08"://Eligibility Form
-						PrintEligibility(e.Graphics);
-						break;
+				else {
+					switch(formId) {
+						default:
+							DefaultPrint(e.Graphics);
+							break;
+						case "01"://CDA EOB Form
+							PrintEOB(e.Graphics);
+							break;
+						case "02"://Dentaide Form
+							PrintDentaide(e.Graphics);
+							break;
+						case "03"://Claim Acknowledgement Form
+							PrintClaimAck(e.Graphics);
+							break;
+						case "04"://Employer Certified Form
+							PrintEmployerCertified(e.Graphics);
+							break;
+						case "05"://Plan Paper Claim Form
+							PrintPaperClaim(e.Graphics);
+							break;
+						case "06"://Predetermination Acknowledgement Form
+							PrintPredeterminationAck(e.Graphics);
+							break;
+						case "07"://Predetermination EOB Form
+							PrintEOB(e.Graphics);
+							break;
+						case "08"://Eligibility Form
+							PrintEligibility(e.Graphics);
+							break;
+					}
 				}
 				x=doc.StartElement();//Be sure to end last element always.
 				totalPages=doc.CalcTotalPages(e.Graphics);
