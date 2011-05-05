@@ -101,7 +101,7 @@ namespace OpenDentBusiness.HL7 {
 		private void OBX(LabResult labresult) {
 			seg=new SegmentHL7(SegmentName.OBX);
 			seg.SetField(1,"1");
-			seg.SetField(2,ConvertValueType(labresult.ValueType));//ValueType. NM=numeric, referring to the value that will follow in OBX-5
+			seg.SetField(2,"NM");//ValueType. NM=numeric, referring to the value that will follow in OBX-5
 			seg.SetField(3,labresult.TestID,labresult.TestName,"LN");//TestPerformed  ID^text^codingSystem.  eg. 10676-5^Hepatitis C Virus RNA^LN
 			seg.SetField(4,"1");
 			seg.SetField(5,labresult.ObsValue);//Value. Type based on OBX-2.  eg. 850000.
@@ -183,12 +183,7 @@ namespace OpenDentBusiness.HL7 {
 			return retVal;
 		}
 
-		private string ConvertValueType(LabObsValueType valueType) {
-			if(valueType==LabObsValueType.None) {
-				return "";
-			}
-			return valueType.ToString();
-		}
+		
 
 
 

@@ -52,7 +52,6 @@ namespace OpenDentBusiness.Crud{
 				labResult.TestName    = PIn.String(table.Rows[i]["TestName"].ToString());
 				labResult.DateTStamp  = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				labResult.TestID      = PIn.String(table.Rows[i]["TestID"].ToString());
-				labResult.ValueType   = (LabObsValueType)PIn.Int(table.Rows[i]["ValueType"].ToString());
 				labResult.ObsValue    = PIn.String(table.Rows[i]["ObsValue"].ToString());
 				labResult.DrugUnitNum = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
 				retVal.Add(labResult);
@@ -95,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabResultNum,";
 			}
-			command+="LabPanelNum,DateTimeTest,TestName,TestID,ValueType,ObsValue,DrugUnitNum) VALUES(";
+			command+="LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,DrugUnitNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labResult.LabResultNum)+",";
 			}
@@ -105,7 +104,6 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(labResult.TestName)+"',"
 				//DateTStamp can only be set by MySQL
 				+"'"+POut.String(labResult.TestID)+"',"
-				+    POut.Int   ((int)labResult.ValueType)+","
 				+"'"+POut.String(labResult.ObsValue)+"',"
 				+    POut.Long  (labResult.DrugUnitNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -125,7 +123,6 @@ namespace OpenDentBusiness.Crud{
 				+"TestName    = '"+POut.String(labResult.TestName)+"', "
 				//DateTStamp can only be set by MySQL
 				+"TestID      = '"+POut.String(labResult.TestID)+"', "
-				+"ValueType   =  "+POut.Int   ((int)labResult.ValueType)+", "
 				+"ObsValue    = '"+POut.String(labResult.ObsValue)+"', "
 				+"DrugUnitNum =  "+POut.Long  (labResult.DrugUnitNum)+" "
 				+"WHERE LabResultNum = "+POut.Long(labResult.LabResultNum);
@@ -151,10 +148,6 @@ namespace OpenDentBusiness.Crud{
 			if(labResult.TestID != oldLabResult.TestID) {
 				if(command!=""){ command+=",";}
 				command+="TestID = '"+POut.String(labResult.TestID)+"'";
-			}
-			if(labResult.ValueType != oldLabResult.ValueType) {
-				if(command!=""){ command+=",";}
-				command+="ValueType = "+POut.Int   ((int)labResult.ValueType)+"";
 			}
 			if(labResult.ObsValue != oldLabResult.ObsValue) {
 				if(command!=""){ command+=",";}

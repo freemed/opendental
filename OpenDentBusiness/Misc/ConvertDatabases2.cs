@@ -4527,7 +4527,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						TestName varchar(255) NOT NULL,
 						DateTStamp timestamp,
 						TestID varchar(255) NOT NULL,
-						ValueType tinyint NOT NULL,
 						ObsValue varchar(255) NOT NULL,
 						DrugUnitNum bigint NOT NULL,
 						INDEX(LabPanelNum)
@@ -4544,7 +4543,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						TestName varchar2(255),
 						DateTStamp timestamp,
 						TestID varchar2(255),
-						ValueType number(3) NOT NULL,
 						ObsValue varchar2(255),
 						DrugUnitNum number(20) NOT NULL,
 						CONSTRAINT labresult_LabResultNum PRIMARY KEY (LabResultNum)

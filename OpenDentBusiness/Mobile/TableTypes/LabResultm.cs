@@ -22,8 +22,8 @@ namespace OpenDentBusiness.Mobile {
 		public string TestName;
 		///<summary>OBX-3 id portion, LOINC.  For example, 10676-5.</summary>
 		public string TestID;
-		///<summary>Enum:LabObsValueType as defined in HL7 docs. NM=numeric.</summary>
-		public LabObsValueType ValueType;
+		//<summary>Enum:LabObsValueType as defined in HL7 docs. NM=numeric.</summary>
+		//public LabObsValueType ValueType;
 		///<summary>Value always stored as a string because the type can vary.</summary>
 		public string ObsValue;
 		///<summary>FK to drugunit.DrugUnitNum.  For example, mL.</summary>
