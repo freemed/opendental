@@ -79,10 +79,11 @@ namespace OpenDentBusiness{
 			}
 			//validation
 			string command;
-			command="SELECT COUNT(*) FROM labresult WHERE DrugUnitNum="+POut.Long(drugUnitNum);
-			if(Db.GetCount(command)!="0") {
-				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Cannot delete: DrugUnit is in use by LabResult."));
-			}
+			//no longer used in labresult
+			//command="SELECT COUNT(*) FROM labresult WHERE DrugUnitNum="+POut.Long(drugUnitNum);
+			//if(Db.GetCount(command)!="0") {
+			//	throw new ApplicationException(Lans.g("FormDrugUnitEdit","Cannot delete: DrugUnit is in use by LabResult."));
+			//}
 			command="SELECT COUNT(*) FROM vaccinepat WHERE DrugUnitNum="+POut.Long(drugUnitNum);
 			if(Db.GetCount(command)!="0") {
 				throw new ApplicationException(Lans.g("FormDrugUnitEdit","Cannot delete: DrugUnit is in use by VaccinePat."));
@@ -92,6 +93,7 @@ namespace OpenDentBusiness{
 			DeletedObjects.SetDeleted(DeletedObjectType.DrugUnit,drugUnitNum);
 		}
 
+		/*
 		///<summary>For example, mL</summary>
 		public static string GetIdentifier(long drugUnitNum) {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
@@ -101,7 +103,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			return "";//should never happen
-		}
+		}*/
 
 		public static List<long> GetChangedSinceDrugUnitNums(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -121,24 +123,19 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<DrugUnit>>(MethodBase.GetCurrentMethod(),drugUnitNums);
 			}
+			if(drugUnitNums.Count==0) {
+				return new List<DrugUnit>();
+			}
 			string strDrugUnitNums="";
-			DataTable table;
-			if(drugUnitNums.Count>0) {
-				for(int i=0;i<drugUnitNums.Count;i++) {
-					if(i>0) {
-						strDrugUnitNums+="OR ";
-					}
-					strDrugUnitNums+="DrugUnitNum='"+drugUnitNums[i].ToString()+"' ";
+			for(int i=0;i<drugUnitNums.Count;i++) {
+				if(i>0) {
+					strDrugUnitNums+="OR ";
 				}
-				string command="SELECT * FROM drugunit WHERE "+strDrugUnitNums;
-				table=Db.GetTable(command);
+				strDrugUnitNums+="DrugUnitNum='"+drugUnitNums[i].ToString()+"' ";
 			}
-			else {
-				table=new DataTable();
-			}
-			DrugUnit[] multDrugUnits=Crud.DrugUnitCrud.TableToList(table).ToArray();
-			List<DrugUnit> DrugUnitList=new List<DrugUnit>(multDrugUnits);
-			return DrugUnitList;
+			string command="SELECT * FROM drugunit WHERE "+strDrugUnitNums;
+			DataTable table=Db.GetTable(command);
+			return Crud.DrugUnitCrud.TableToList(table);
 		}
 	}
 }

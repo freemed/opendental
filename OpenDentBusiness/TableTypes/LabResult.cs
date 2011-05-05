@@ -21,12 +21,12 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>OBX-3, id portion, LOINC.  For example, 10676-5.</summary>
 		public string TestID;
-		//<summary>Enum:LabObsValueType as defined in HL7 docs. OBX-2. NM=numeric.</summary>
-		//public LabObsValueType ValueType;
 		///<summary>OBX-5. Value always stored as a string because the type might vary in the future.</summary>
 		public string ObsValue;
-		///<summary>FK to drugunit.DrugUnitNum.  OBX-6  For example, mL.</summary>
-		public long DrugUnitNum;
+		///<summary>OBX-6  For example, mL.  Was FK to drugunit.DrugUnitNum, but that would make reliable import problematic, so now it's just text.</summary>
+		public string ObsUnits;
+		///<summary>OBX-7  For example, &lt;200 or &gt;=40.</summary>
+		public string ObsRange;
 
 		///<summary></summary>
 		public LabResult Copy() {

@@ -105,7 +105,7 @@ namespace OpenDentBusiness.HL7 {
 			seg.SetField(3,labresult.TestID,labresult.TestName,"LN");//TestPerformed  ID^text^codingSystem.  eg. 10676-5^Hepatitis C Virus RNA^LN
 			seg.SetField(4,"1");
 			seg.SetField(5,labresult.ObsValue);//Value. Type based on OBX-2.  eg. 850000.
-			seg.SetField(6,DrugUnits.GetIdentifier(labresult.DrugUnitNum));//Units. The first component can be used alone. ISO+ is default.
+			seg.SetField(6,labresult.ObsUnits);//Units. ISO+ is default.
 			//7,8,9,10 optional
 			seg.SetField(11,"F");//OBX-11 is required.  F means final.
 			seg.SetField(14,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));//OBX-14 datetime

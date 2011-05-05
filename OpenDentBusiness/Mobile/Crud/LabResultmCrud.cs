@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			labResultm.TestID      =labResult.TestID;
 			//labResultm.ValueType   =labResult.ValueType;
 			labResultm.ObsValue    =labResult.ObsValue;
-			labResultm.DrugUnitNum =labResult.DrugUnitNum;
+			//labResultm.DrugUnitNum =labResult.DrugUnitNum;
 			return labResultm;
 		}
 

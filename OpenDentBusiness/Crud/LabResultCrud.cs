@@ -53,7 +53,8 @@ namespace OpenDentBusiness.Crud{
 				labResult.DateTStamp  = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				labResult.TestID      = PIn.String(table.Rows[i]["TestID"].ToString());
 				labResult.ObsValue    = PIn.String(table.Rows[i]["ObsValue"].ToString());
-				labResult.DrugUnitNum = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
+				labResult.ObsUnits    = PIn.String(table.Rows[i]["ObsUnits"].ToString());
+				labResult.ObsRange    = PIn.String(table.Rows[i]["ObsRange"].ToString());
 				retVal.Add(labResult);
 			}
 			return retVal;
@@ -94,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabResultNum,";
 			}
-			command+="LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,DrugUnitNum) VALUES(";
+			command+="LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,ObsUnits,ObsRange) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labResult.LabResultNum)+",";
 			}
@@ -105,7 +106,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"'"+POut.String(labResult.TestID)+"',"
 				+"'"+POut.String(labResult.ObsValue)+"',"
-				+    POut.Long  (labResult.DrugUnitNum)+")";
+				+"'"+POut.String(labResult.ObsUnits)+"',"
+				+"'"+POut.String(labResult.ObsRange)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,7 +126,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"TestID      = '"+POut.String(labResult.TestID)+"', "
 				+"ObsValue    = '"+POut.String(labResult.ObsValue)+"', "
-				+"DrugUnitNum =  "+POut.Long  (labResult.DrugUnitNum)+" "
+				+"ObsUnits    = '"+POut.String(labResult.ObsUnits)+"', "
+				+"ObsRange    = '"+POut.String(labResult.ObsRange)+"' "
 				+"WHERE LabResultNum = "+POut.Long(labResult.LabResultNum);
 			Db.NonQ(command);
 		}
@@ -153,9 +156,13 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="ObsValue = '"+POut.String(labResult.ObsValue)+"'";
 			}
-			if(labResult.DrugUnitNum != oldLabResult.DrugUnitNum) {
+			if(labResult.ObsUnits != oldLabResult.ObsUnits) {
 				if(command!=""){ command+=",";}
-				command+="DrugUnitNum = "+POut.Long(labResult.DrugUnitNum)+"";
+				command+="ObsUnits = '"+POut.String(labResult.ObsUnits)+"'";
+			}
+			if(labResult.ObsRange != oldLabResult.ObsRange) {
+				if(command!=""){ command+=",";}
+				command+="ObsRange = '"+POut.String(labResult.ObsRange)+"'";
 			}
 			if(command==""){
 				return;

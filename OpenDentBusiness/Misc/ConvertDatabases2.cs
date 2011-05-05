@@ -4528,7 +4528,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DateTStamp timestamp,
 						TestID varchar(255) NOT NULL,
 						ObsValue varchar(255) NOT NULL,
-						DrugUnitNum bigint NOT NULL,
+						ObsUnits varchar(255) NOT NULL,
+						ObsRange varchar(255) NOT NULL,
 						INDEX(LabPanelNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -4544,7 +4545,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DateTStamp timestamp,
 						TestID varchar2(255),
 						ObsValue varchar2(255),
-						DrugUnitNum number(20) NOT NULL,
+						ObsUnits varchar2(255) NOT NULL,
+						ObsRange varchar2(255) NOT NULL,
 						CONSTRAINT labresult_LabResultNum PRIMARY KEY (LabResultNum)
 						)";
 					Db.NonQ(command);
