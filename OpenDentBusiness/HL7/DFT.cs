@@ -71,22 +71,7 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Financial transaction segment.</summary>
 		private void FT1(Appointment apt,bool justPDF){
 			if(justPDF){
-				seg=new SegmentHL7(SegmentName.FT1);
-				seg.SetField(0,"FT1");
-				seg.SetField(1,"0");
-				seg.SetField(4,DateTime.Now.ToString("yyyyMMddHHmmss"));
-				seg.SetField(5,DateTime.Now.ToString("yyyyMMddHHmmss"));
-				seg.SetField(6,"CG");
-				seg.SetField(10,"1.0");
-				seg.SetField(16,"");//location code and description???
-				Provider prov=Providers.GetProv(apt.ProvNum);
-				seg.SetField(20,prov.Abbr,prov.LName,prov.FName,prov.MI);//performed by provider.
-				seg.SetField(21,prov.Abbr,prov.LName,prov.FName,prov.MI);//ordering provider.
-				seg.SetField(22,"0.00");//fee
-				seg.SetField(25,"D0999");
-				seg.SetField(26,"","");//no tooth ranges
-				msg.Segments.Add(seg);
-				return;
+				return;//FT1 segment is not necessary when sending only a PDF.
 			}
 			List<Procedure> procs=Procedures.GetProcsForSingle(apt.AptNum,false);
 			ProcedureCode procCode;
