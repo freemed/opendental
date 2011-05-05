@@ -247,8 +247,6 @@ namespace OpenDental {
 						else {
 							sheetDefCur.SheetFieldDefs[j].ImageData=POut.Bitmap(new Bitmap(img),img.RawFormat);
 						}
-						
-						
 					}
 					else {
 						sheetDefCur.SheetFieldDefs[j].ImageData="";// because null is not allowed
@@ -277,7 +275,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {
 				LoadImagesToSheetDef(FormS.SelectedSheetDefs[i]);
-				wh.Timeout=300000; //for slow connections more timeout is provided.The  default is 100 seconds i.e 100000
+				wh.Timeout=300000; //for slow connections more timeout is provided. The  default is 100 seconds i.e 100000
 				wh.UpLoadSheetDef(RegistrationKey,FormS.SelectedSheetDefs[i]);
 			}
 			FillGrid();

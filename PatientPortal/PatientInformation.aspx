@@ -67,15 +67,11 @@
 
 	<asp:GridView ID="GridViewProblem" runat="server" 
 		AutoGenerateColumns="False">
+		<%--for purposes of certification only the ICD9 col is required. Further ICD9NUM and DiseaseDefNum are mutually exculsive. If one is zero the other is not.--%>
 		<Columns>
-			<asp:TemplateField HeaderText="Name">
-			<ItemTemplate>
-			<%#DiseaseDefms.GetOne(((Diseasem)Container.DataItem).CustomerNum,((Diseasem)Container.DataItem).DiseaseDefNum).DiseaseName%>
-			</ItemTemplate>
-			</asp:TemplateField>
 			<asp:TemplateField HeaderText="ICD">
 			<ItemTemplate>
-			<%#ICD9ms.GetOne(((Diseasem)Container.DataItem).CustomerNum,((Diseasem)Container.DataItem).DiseaseDefNum).Description%>
+			<%#ICD9ms.GetOne(((Diseasem)Container.DataItem).CustomerNum,((Diseasem)Container.DataItem).ICD9Num).Description%>
 			</ItemTemplate>
 			</asp:TemplateField>
 		</Columns>

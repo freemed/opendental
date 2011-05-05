@@ -30,14 +30,6 @@ namespace PatientPortal {
 						Session["Patient"]=pat;
 						Response.Redirect("~/PatientInformation.aspx");
 					}
-			
-				//if(user=="dennis") {
-					//SetPatient();
-					//Response.Redirect("~/PatientInformation.aspx");
-				//}
-				//else {
-					//LabelMessage.Text="Login Failed, Please Try Again";
-				//}
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);
@@ -47,11 +39,6 @@ namespace PatientPortal {
 
 
 
-		public void SetPatient() {
-			//if authenticated
-			Patientm pat=Patientms.GetOne(6219,7);
-			Session["Patient"]=pat;
-		}
 
 
 

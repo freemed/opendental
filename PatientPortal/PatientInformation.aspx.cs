@@ -12,8 +12,6 @@ namespace PatientPortal {
 	public partial class PatientInformation:System.Web.UI.Page {
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				//Patientm pat=Patientms.GetOne(6219,7);
-				//Session["Patient"]=pat;
 				if(Session["Patient"]==null) {
 					Response.Redirect("~/Login.aspx");
 				}
@@ -25,22 +23,22 @@ namespace PatientPortal {
 					LabelLabPanel.Text="Lab Panels: No Lab Panels found";
 				}
 				List<MedicationPatm> mMedicationPatmList= MedicationPatms.GetMedicationPatms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
-				mMedicationPatmList=mMedicationPatmList.Where(mp => mp.IsDiscontinued==false).ToList();// filter out discontinued medications.
-				GridViewMedication.DataSource = mMedicationPatmList;
+				mMedicationPatmList=mMedicationPatmList.Where(mp=>mp.IsDiscontinued==false).ToList();// filter out discontinued medications.
+				GridViewMedication.DataSource=mMedicationPatmList;
 				GridViewMedication.DataBind();
 				if(mMedicationPatmList.Count==0) {
 					LabelMedication.Text="Medications: No Medications found";
 				}
 				List<Diseasem> mDiseasemList= Diseasems.GetDiseasems(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
-				mDiseasemList=mDiseasemList.Where(d => d.ProbStatus==ProblemStatus.Active).ToList();// get only active diseases
-				GridViewProblem.DataSource = mDiseasemList;
+				mDiseasemList=mDiseasemList.Where(d=>d.ProbStatus==ProblemStatus.Active & d.ICD9Num!=0).ToList();// get only active diseases and ones where the ICD9NUM is not zero. ICD9NUM and DiseaseDefNum are mutually exculsive. If one is zero the other is not.
+				GridViewProblem.DataSource=mDiseasemList;
 				GridViewProblem.DataBind();
 				if(mDiseasemList.Count==0) {
 					LabelProblem.Text="Problems: No Problems found";
 				}
-				List<Allergym> mAllergymList= Allergyms.GetAllergyms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
-				mAllergymList=mAllergymList.Where(a => a.StatusIsActive==true).ToList();// get only active allergies
-				GridViewAllergy.DataSource = mAllergymList;
+				List<Allergym> mAllergymList=Allergyms.GetAllergyms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
+				mAllergymList=mAllergymList.Where(a=>a.StatusIsActive==true).ToList();// get only active allergies
+				GridViewAllergy.DataSource=mAllergymList;
 				GridViewAllergy.DataBind();
 				if(mAllergymList.Count==0) {
 					LabelAllergy.Text="Allergies: No Allergies found";
