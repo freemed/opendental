@@ -498,6 +498,7 @@ namespace OpenDental.Eclaims {
 			}
 			//We are required to send the request for outstanding transactions over and over until we get back an outstanding transactions ack format (Transaction type 14), because
 			//there may be more than one item in the mailbox and we can only get one item at time.
+			bool exit=false;
 			do {
 				StringBuilder strb=new StringBuilder();
 				Etrans etrans=null;
@@ -598,12 +599,17 @@ namespace OpenDental.Eclaims {
 					etrans.Note="failed";
 				}
 				else {
-					fieldInputter=new CCDFieldInputter(result);
-					CCDField fieldG05=fieldInputter.GetFieldById("G05");
-					if(fieldG05!=null) {
-						etransAck.AckCode=fieldG05.valuestr;
+					if(result.Substring(12).StartsWith("NO MORE ITEMS")) {
+						exit=true;
 					}
-					etransAck.Etype=fieldInputter.GetEtransType();
+					else {
+						fieldInputter=new CCDFieldInputter(result);
+						CCDField fieldG05=fieldInputter.GetFieldById("G05");
+						if(fieldG05!=null) {
+							etransAck.AckCode=fieldG05.valuestr;
+						}
+						etransAck.Etype=fieldInputter.GetEtransType();
+					}
 				}
 				Etranss.Insert(etransAck);
 				Etranss.SetMessage(etransAck.EtransNum,result);
@@ -614,13 +620,16 @@ namespace OpenDental.Eclaims {
 				if(resultIsError) {
 					throw new ApplicationException(result);
 				}
+				if(fieldInputter==null) { //happens in version 02 when a terminating message containing the text "NO MORE ITEMS" is received.
+					break;
+				}
 				CCDField fieldA04=fieldInputter.GetFieldById("A04");//message format
 				if(version2) {
 					//In this case, there are only 4 possible responses: EOB, Claim Ack, Claim Ack with an error code, or Claim Ack with literal "NO MORE ITEMS" starting at character 13.
 					if(fieldA04.valuestr=="11") {
 						CCDField fieldG08=fieldInputter.GetFieldById("G08");
-						if(fieldG08.valuestr=="004" || fieldG08.valuestr=="049" || result.Substring(12,13)=="NO MORE ITEMS") { //Exit conditions specified in the documentation.
-							break;
+						if(fieldG08.valuestr=="004" || fieldG08.valuestr=="049") { //Exit conditions specified in the documentation.
+							exit=true;
 						}
 					}
 				}
@@ -634,7 +643,7 @@ namespace OpenDental.Eclaims {
 							MessageBox.Show(Lan.g("","Failed to receive outstanding transactions. Messages from CDANet")+": "+Environment.NewLine+
 								fieldG07.valuestr.Trim()+Environment.NewLine+CCDerror.message(Convert.ToInt32(fieldG08.valuestr),false));
 						}
-						break;
+						exit=true;
 					}
 				}
 				//Field A02 exists in all of the possible formats (21,11,23,13,24).
@@ -650,10 +659,12 @@ namespace OpenDental.Eclaims {
 					etransAck.PlanNum=etranOriginal.PlanNum;
 					etransAck.InsSubNum=etranOriginal.InsSubNum;
 					Etranss.Update(etransAck);
-					FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form. 
-					FormP.Print();
+					if(!exit) {
+						FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form. 
+						FormP.Print();
+					}
 				}
-			} while(true);
+			} while(!exit);
 			return etransAcks;
 		}
 
