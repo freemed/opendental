@@ -600,6 +600,7 @@ namespace OpenDental.Eclaims {
 				}
 				else {
 					if(result.Substring(12).StartsWith("NO MORE ITEMS")) {
+						etransAck.Etype=EtransType.OutstandingAck_CA;
 						exit=true;
 					}
 					else {
@@ -628,7 +629,8 @@ namespace OpenDental.Eclaims {
 					//In this case, there are only 4 possible responses: EOB, Claim Ack, Claim Ack with an error code, or Claim Ack with literal "NO MORE ITEMS" starting at character 13.
 					if(fieldA04.valuestr=="11") {
 						CCDField fieldG08=fieldInputter.GetFieldById("G08");
-						if(fieldG08.valuestr=="004" || fieldG08.valuestr=="049") { //Exit conditions specified in the documentation.
+						if(fieldG08!=null && (fieldG08.valuestr=="004" || fieldG08.valuestr=="049")) { //Exit conditions specified in the documentation.
+							etransAck.Etype=EtransType.OutstandingAck_CA;
 							exit=true;
 						}
 					}
@@ -641,8 +643,9 @@ namespace OpenDental.Eclaims {
 							CCDField fieldG07=fieldInputter.GetFieldById("G07");//disposition message
 							CCDField fieldG08=fieldInputter.GetFieldById("G08");//error code
 							MessageBox.Show(Lan.g("","Failed to receive outstanding transactions. Messages from CDANet")+": "+Environment.NewLine+
-								fieldG07.valuestr.Trim()+Environment.NewLine+CCDerror.message(Convert.ToInt32(fieldG08.valuestr),false));
+								fieldG07.valuestr.Trim()+Environment.NewLine+((fieldG08!=null)?CCDerror.message(Convert.ToInt32(fieldG08.valuestr),false):""));
 						}
+						etransAck.Etype=EtransType.OutstandingAck_CA;
 						exit=true;
 					}
 				}
@@ -654,10 +657,12 @@ namespace OpenDental.Eclaims {
 					etrans.PatNum=etranOriginal.PatNum;
 					etrans.PlanNum=etranOriginal.PlanNum;
 					etrans.InsSubNum=etranOriginal.InsSubNum;
+					etrans.ClaimNum=etranOriginal.ClaimNum;
 					Etranss.Update(etrans);
 					etransAck.PatNum=etranOriginal.PatNum;
 					etransAck.PlanNum=etranOriginal.PlanNum;
 					etransAck.InsSubNum=etranOriginal.InsSubNum;
+					etransAck.ClaimNum=etranOriginal.ClaimNum;
 					Etranss.Update(etransAck);
 					if(!exit) {
 						FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form. 
