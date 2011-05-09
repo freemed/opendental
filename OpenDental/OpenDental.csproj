@@ -329,6 +329,12 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormEmailSetupEHR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEmailSetupEHR.designer.cs">
+      <DependentUpon>FormEmailSetupEHR.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormFormularies.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2172,6 +2178,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEmailSetupEHR.resx">
+      <DependentUpon>FormEmailSetupEHR.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormFormularies.resx">

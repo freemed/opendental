@@ -57,6 +57,11 @@ namespace OpenDental {
 			FormE.ShowDialog();
 		}
 
+		private void butInboundEmail_Click(object sender,EventArgs e) {
+			FormEmailSetupEHR FormES=new FormEmailSetupEHR();
+			FormES.ShowDialog();
+		}
+
 		private void butEmergencyNow_Click(object sender,EventArgs e) {
 			if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {
 				panelEmergencyNow.BackColor=SystemColors.Control;

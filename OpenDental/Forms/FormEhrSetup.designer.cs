@@ -33,6 +33,7 @@ namespace OpenDental{
 			this.butEmergencyNow = new OpenDental.UI.Button();
 			this.panelEmergencyNow = new OpenDental.UI.PanelOD();
 			this.butReminderRules = new OpenDental.UI.Button();
+			this.butInboundEmail = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butICD9s
@@ -171,10 +172,25 @@ namespace OpenDental{
 			this.butReminderRules.Text = "Reminder Rules";
 			this.butReminderRules.Click += new System.EventHandler(this.butReminderRules_Click);
 			// 
+			// butInboundEmail
+			// 
+			this.butInboundEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInboundEmail.Autosize = true;
+			this.butInboundEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInboundEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInboundEmail.CornerRadius = 4F;
+			this.butInboundEmail.Location = new System.Drawing.Point(27,340);
+			this.butInboundEmail.Name = "butInboundEmail";
+			this.butInboundEmail.Size = new System.Drawing.Size(128,24);
+			this.butInboundEmail.TabIndex = 127;
+			this.butInboundEmail.Text = "Inbound Email";
+			this.butInboundEmail.Click += new System.EventHandler(this.butInboundEmail_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(606,489);
+			this.Controls.Add(this.butInboundEmail);
 			this.Controls.Add(this.butReminderRules);
 			this.Controls.Add(this.panelEmergencyNow);
 			this.Controls.Add(this.butEmergencyNow);
@@ -205,5 +221,6 @@ namespace OpenDental{
 		private UI.Button butEmergencyNow;
 		private UI.PanelOD panelEmergencyNow;
 		private UI.Button butReminderRules;
+		private UI.Button butInboundEmail;
 	}
 }
