@@ -4662,18 +4662,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE drugunit ADD DateTStamp timestamp";
-					Db.NonQ(command);
-					command="UPDATE drugunit SET DateTStamp = NOW()";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE drugunit ADD DateTStamp timestamp";
-					Db.NonQ(command);
-					command="UPDATE drugunit SET DateTStamp = SYSTIMESTAMP";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE patplan DROP PlanNum";
 					Db.NonQ(command);
 				}

@@ -15,14 +15,12 @@ namespace OpenDentBusiness.Mobile {
 		public long LabPanelNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
-		///<summary>FK to medicalorder.MedicalOrderNum.</summary>
-		public long MedicalOrderNum;
 		///<summary>Both name and address in a single field.  OBR-20</summary>
 		public string LabNameAddress;
-		///<summary>Snomed code for the type of specimen.  SPM-4.</summary>
-		public string SpecimenCode;
-		///<summary>Description of the specimen.  Example, Blood venous. SPM-4.</summary>
-		public string SpecimenDesc;
+		///<summary>OBR-13.  Usually blank.  Example: hemolyzed.</summary>
+		public string SpecimenCondition;
+		///<summary>OBR-15-1.  Usually blank.  Example: LNA&Arterial Catheter&HL70070.</summary>
+		public string SpecimenSource;
 
 
 		///<summary></summary>

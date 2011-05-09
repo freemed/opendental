@@ -52,9 +52,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 				labResultm.DateTimeTest= PIn.DateT (table.Rows[i]["DateTimeTest"].ToString());
 				labResultm.TestName    = PIn.String(table.Rows[i]["TestName"].ToString());
 				labResultm.TestID      = PIn.String(table.Rows[i]["TestID"].ToString());
-				//labResultm.ValueType   = (LabObsValueType)PIn.Int(table.Rows[i]["ValueType"].ToString());
 				labResultm.ObsValue    = PIn.String(table.Rows[i]["ObsValue"].ToString());
-				labResultm.DrugUnitNum = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
+				labResultm.ObsUnits    = PIn.String(table.Rows[i]["ObsUnits"].ToString());
+				labResultm.ObsRange    = PIn.String(table.Rows[i]["ObsRange"].ToString());
 				retVal.Add(labResultm);
 			}
 			return retVal;
@@ -67,7 +67,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO labresultm (";
 			command+="LabResultNum,";
-			command+="CustomerNum,LabPanelNum,DateTimeTest,TestName,TestID,ValueType,ObsValue,DrugUnitNum) VALUES(";
+			command+="CustomerNum,LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,ObsUnits,ObsRange) VALUES(";
 			command+=POut.Long(labResultm.LabResultNum)+",";
 			command+=
 				     POut.Long  (labResultm.CustomerNum)+","
@@ -75,9 +75,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+    POut.DateT (labResultm.DateTimeTest)+","
 				+"'"+POut.String(labResultm.TestName)+"',"
 				+"'"+POut.String(labResultm.TestID)+"',"
-				//+    POut.Int   ((int)labResultm.ValueType)+","
 				+"'"+POut.String(labResultm.ObsValue)+"',"
-				+    POut.Long  (labResultm.DrugUnitNum)+")";
+				+"'"+POut.String(labResultm.ObsUnits)+"',"
+				+"'"+POut.String(labResultm.ObsRange)+"')";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return labResultm.LabResultNum;
 		}
@@ -89,9 +89,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"DateTimeTest=  "+POut.DateT (labResultm.DateTimeTest)+", "
 				+"TestName    = '"+POut.String(labResultm.TestName)+"', "
 				+"TestID      = '"+POut.String(labResultm.TestID)+"', "
-				//+"ValueType   =  "+POut.Int   ((int)labResultm.ValueType)+", "
 				+"ObsValue    = '"+POut.String(labResultm.ObsValue)+"', "
-				+"DrugUnitNum =  "+POut.Long  (labResultm.DrugUnitNum)+" "
+				+"ObsUnits    = '"+POut.String(labResultm.ObsUnits)+"', "
+				+"ObsRange    = '"+POut.String(labResultm.ObsRange)+"' "
 				+"WHERE CustomerNum = "+POut.Long(labResultm.CustomerNum)+" AND LabResultNum = "+POut.Long(labResultm.LabResultNum);
 			Db.NonQ(command);
 		}
@@ -112,9 +112,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 			labResultm.DateTimeTest=labResult.DateTimeTest;
 			labResultm.TestName    =labResult.TestName;
 			labResultm.TestID      =labResult.TestID;
-			//labResultm.ValueType   =labResult.ValueType;
 			labResultm.ObsValue    =labResult.ObsValue;
-			//labResultm.DrugUnitNum =labResult.DrugUnitNum;
+			labResultm.ObsUnits    =labResult.ObsUnits;
+			labResultm.ObsRange    =labResult.ObsRange;
 			return labResultm;
 		}
 

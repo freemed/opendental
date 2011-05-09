@@ -46,13 +46,12 @@ namespace OpenDentBusiness.Mobile.Crud{
 			LabPanelm labPanelm;
 			for(int i=0;i<table.Rows.Count;i++) {
 				labPanelm=new LabPanelm();
-				labPanelm.CustomerNum    = PIn.Long  (table.Rows[i]["CustomerNum"].ToString());
-				labPanelm.LabPanelNum    = PIn.Long  (table.Rows[i]["LabPanelNum"].ToString());
-				labPanelm.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				labPanelm.MedicalOrderNum= PIn.Long  (table.Rows[i]["MedicalOrderNum"].ToString());
-				labPanelm.LabNameAddress = PIn.String(table.Rows[i]["LabNameAddress"].ToString());
-				labPanelm.SpecimenCode   = PIn.String(table.Rows[i]["SpecimenCode"].ToString());
-				labPanelm.SpecimenDesc   = PIn.String(table.Rows[i]["SpecimenDesc"].ToString());
+				labPanelm.CustomerNum      = PIn.Long  (table.Rows[i]["CustomerNum"].ToString());
+				labPanelm.LabPanelNum      = PIn.Long  (table.Rows[i]["LabPanelNum"].ToString());
+				labPanelm.PatNum           = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				labPanelm.LabNameAddress   = PIn.String(table.Rows[i]["LabNameAddress"].ToString());
+				labPanelm.SpecimenCondition= PIn.String(table.Rows[i]["SpecimenCondition"].ToString());
+				labPanelm.SpecimenSource   = PIn.String(table.Rows[i]["SpecimenSource"].ToString());
 				retVal.Add(labPanelm);
 			}
 			return retVal;
@@ -65,15 +64,14 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO labpanelm (";
 			command+="LabPanelNum,";
-			command+="CustomerNum,PatNum,MedicalOrderNum,LabNameAddress,SpecimenCode,SpecimenDesc) VALUES(";
+			command+="CustomerNum,PatNum,LabNameAddress,SpecimenCondition,SpecimenSource) VALUES(";
 			command+=POut.Long(labPanelm.LabPanelNum)+",";
 			command+=
 				     POut.Long  (labPanelm.CustomerNum)+","
 				+    POut.Long  (labPanelm.PatNum)+","
-				+    POut.Long  (labPanelm.MedicalOrderNum)+","
 				+"'"+POut.String(labPanelm.LabNameAddress)+"',"
-				+"'"+POut.String(labPanelm.SpecimenCode)+"',"
-				+"'"+POut.String(labPanelm.SpecimenDesc)+"')";
+				+"'"+POut.String(labPanelm.SpecimenCondition)+"',"
+				+"'"+POut.String(labPanelm.SpecimenSource)+"')";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return labPanelm.LabPanelNum;
 		}
@@ -81,11 +79,10 @@ namespace OpenDentBusiness.Mobile.Crud{
 		///<summary>Updates one LabPanelm in the database.</summary>
 		internal static void Update(LabPanelm labPanelm){
 			string command="UPDATE labpanelm SET "
-				+"PatNum         =  "+POut.Long  (labPanelm.PatNum)+", "
-				+"MedicalOrderNum=  "+POut.Long  (labPanelm.MedicalOrderNum)+", "
-				+"LabNameAddress = '"+POut.String(labPanelm.LabNameAddress)+"', "
-				+"SpecimenCode   = '"+POut.String(labPanelm.SpecimenCode)+"', "
-				+"SpecimenDesc   = '"+POut.String(labPanelm.SpecimenDesc)+"' "
+				+"PatNum           =  "+POut.Long  (labPanelm.PatNum)+", "
+				+"LabNameAddress   = '"+POut.String(labPanelm.LabNameAddress)+"', "
+				+"SpecimenCondition= '"+POut.String(labPanelm.SpecimenCondition)+"', "
+				+"SpecimenSource   = '"+POut.String(labPanelm.SpecimenSource)+"' "
 				+"WHERE CustomerNum = "+POut.Long(labPanelm.CustomerNum)+" AND LabPanelNum = "+POut.Long(labPanelm.LabPanelNum);
 			Db.NonQ(command);
 		}
@@ -101,11 +98,11 @@ namespace OpenDentBusiness.Mobile.Crud{
 		internal static LabPanelm ConvertToM(LabPanel labPanel){
 			LabPanelm labPanelm=new LabPanelm();
 			//CustomerNum cannot be set.  Remains 0.
-			labPanelm.LabPanelNum    =labPanel.LabPanelNum;
-			labPanelm.PatNum         =labPanel.PatNum;
-			labPanelm.LabNameAddress =labPanel.LabNameAddress;
-			//labPanelm.SpecimenCode   =labPanel.SpecimenCode;
-			//labPanelm.SpecimenDesc   =labPanel.SpecimenDesc;
+			labPanelm.LabPanelNum      =labPanel.LabPanelNum;
+			labPanelm.PatNum           =labPanel.PatNum;
+			labPanelm.LabNameAddress   =labPanel.LabNameAddress;
+			labPanelm.SpecimenCondition=labPanel.SpecimenCondition;
+			labPanelm.SpecimenSource   =labPanel.SpecimenSource;
 			return labPanelm;
 		}
 

@@ -28,7 +28,6 @@ namespace OpenDental {
 			provider,
 			labpanel,
 			labresult,
-			drugunit,
 			medication,
 			medicationpat,
 			allergy,
@@ -355,7 +354,6 @@ namespace OpenDental {
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
 			List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
-			List<long> drugUnitNumList=DrugUnitms.GetChangedSinceDrugUnitNums(changedSince);
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
 			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
@@ -366,7 +364,7 @@ namespace OpenDental {
 			List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
 			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
-							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count+drugUnitNumList.Count
+							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
 							+delPatNumList.Count+dO.Count;
 			FormP.MaxVal=(double)totalCount;
@@ -378,7 +376,6 @@ namespace OpenDental {
 			//pat portal
 			SynchGeneric(labPanelNumList,SynchEntity.labpanel,ref FormP);
 			SynchGeneric(labResultNumList,SynchEntity.labresult,ref FormP);
-			SynchGeneric(drugUnitNumList,SynchEntity.drugunit,ref FormP);
 			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
 			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
 			SynchGeneric(allergyDefNumList,SynchEntity.allergydef,ref FormP);
@@ -386,7 +383,9 @@ namespace OpenDental {
 			SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,ref FormP);
 			SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
 			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
-			SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
+			if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour!=timeSynchStarted.Hour) {
+				SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);// this is time consuming and it's mostly the same records that have to be deleted every time a synch happens. So it's done only hourly
+			}
 			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 			if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 				Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
@@ -432,10 +431,6 @@ namespace OpenDental {
 							List<LabResultm> ChangedLabResultList=LabResultms.GetMultLabResultms(BlockPKNumList);
 							mb.SynchLabResults(PrefC.GetString(PrefName.RegistrationKey),ChangedLabResultList.ToArray());
 						break;
-						case SynchEntity.drugunit:
-						List<DrugUnitm> ChangedDrugUnitList=DrugUnitms.GetMultDrugUnitms(BlockPKNumList);
-						mb.SynchDrugUnits(PrefC.GetString(PrefName.RegistrationKey),ChangedDrugUnitList.ToArray());
-						break;
 						case SynchEntity.medication:
 							List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
 							mb.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
@@ -468,7 +463,7 @@ namespace OpenDental {
 						mb.DeletePatientsRecords(PrefC.GetString(PrefName.RegistrationKey),BlockPKNumList.ToArray());
 						break;
 					}
-					progressIndicator.CurrentVal+=BatchSize;
+					progressIndicator.CurrentVal+=LocalBatchSize;
 				}
 			}
 			catch(Exception e) {

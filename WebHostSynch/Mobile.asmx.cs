@@ -87,7 +87,6 @@ namespace WebHostSynch {
 				RxPatms.DeleteAll(customerNum);
 				Providerms.DeleteAll(customerNum);
 				//pat portal
-				DrugUnitms.DeleteAll(customerNum);
 				LabPanelms.DeleteAll(customerNum);
 				LabResultms.DeleteAll(customerNum);
 				Medicationms.DeleteAll(customerNum);
@@ -250,20 +249,6 @@ namespace WebHostSynch {
 				}
 			}
 			
-		[WebMethod]
-			public void SynchDrugUnits(String RegistrationKey,List<DrugUnitm> drugUnitmList) {
-				try {
-					Logger.Information("In SynchDrugUnits");
-					customerNum=util.GetDentalOfficeID(RegistrationKey);
-					if(customerNum==0) {
-						return;
-					}
-					DrugUnitms.UpdateFromChangeList(drugUnitmList,customerNum);
-				}
-				catch(Exception ex) {
-					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
-				}
-			}
 			[WebMethod]
 			public void SynchMedications(String RegistrationKey,List<Medicationm> medicationmList) {
 				try {

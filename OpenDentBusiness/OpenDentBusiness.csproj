@@ -408,7 +408,6 @@
     <Compile Include="Mobile\Crud\AllergymCrud.cs" />
     <Compile Include="Mobile\Crud\DiseaseDefmCrud.cs" />
     <Compile Include="Mobile\Crud\DiseasemCrud.cs" />
-    <Compile Include="Mobile\Crud\DrugUnitmCrud.cs" />
     <Compile Include="Mobile\Crud\ICD9mCrud.cs" />
     <Compile Include="Mobile\Crud\LabPanelmCrud.cs" />
     <Compile Include="Mobile\Crud\LabResultmCrud.cs" />
@@ -421,7 +420,6 @@
     <Compile Include="Mobile\Data Interface\Allergyms.cs" />
     <Compile Include="Mobile\Data Interface\DiseaseDefms.cs" />
     <Compile Include="Mobile\Data Interface\Diseasems.cs" />
-    <Compile Include="Mobile\Data Interface\DrugUnitms.cs" />
     <Compile Include="Mobile\Data Interface\ICD9ms.cs" />
     <Compile Include="Mobile\Data Interface\LabPanelms.cs" />
     <Compile Include="Mobile\Data Interface\LabResultms.cs" />
@@ -438,7 +436,6 @@
     <Compile Include="Mobile\TableTypes\Diseasem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mobile\TableTypes\DrugUnitm.cs" />
     <Compile Include="Mobile\TableTypes\ICD9m.cs" />
     <Compile Include="Mobile\TableTypes\LabPanelm.cs" />
     <Compile Include="Mobile\TableTypes\LabResultm.cs" />

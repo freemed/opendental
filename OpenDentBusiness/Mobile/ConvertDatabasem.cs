@@ -925,3 +925,139 @@ namespace OpenDentBusiness.Mobile {
 					Db.NonQ(command);
 				}
 				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsUnits varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsUnits varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsRange varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsRange varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsUnits varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsUnits varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsRange varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsRange varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsUnits varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsUnits varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsRange varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsRange varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenCondition varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD SpecimenSource varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsUnits varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsUnits varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD ObsRange varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD ObsRange varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
