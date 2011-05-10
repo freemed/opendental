@@ -1,22 +1,4 @@
-﻿/*
-SQLyog Community Edition- MySQL GUI v8.0 
-MySQL - 5.1.53-community : Database - mobile_dev
-*********************************************************************
-*/
-
-
-/*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`mobile_dev` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-/*Table structure for table `allergydefm` */
-
-DROP TABLE IF EXISTS `allergydefm`;
+﻿DROP TABLE IF EXISTS `allergydefm`;
 
 CREATE TABLE `allergydefm` (
   `CustomerNum` bigint(20) NOT NULL,
@@ -102,20 +84,6 @@ CREATE TABLE `diseasem` (
   KEY `ICD9Num` (`ICD9Num`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-/*Table structure for table `drugunitm` */
-
-DROP TABLE IF EXISTS `drugunitm`;
-
-CREATE TABLE `drugunitm` (
-  `CustomerNum` bigint(20) NOT NULL,
-  `DrugUnitNum` bigint(20) NOT NULL,
-  `UnitIdentifier` varchar(255) NOT NULL,
-  `UnitText` varchar(255) NOT NULL,
-  PRIMARY KEY (`CustomerNum`,`DrugUnitNum`),
-  KEY `CustomerNum` (`CustomerNum`),
-  KEY `DrugUnitNum` (`DrugUnitNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 /*Table structure for table `icd9m` */
 
 DROP TABLE IF EXISTS `icd9m`;
@@ -138,15 +106,13 @@ CREATE TABLE `labpanelm` (
   `CustomerNum` bigint(20) NOT NULL,
   `LabPanelNum` bigint(20) NOT NULL,
   `PatNum` bigint(20) NOT NULL,
-  `MedicalOrderNum` bigint(20) NOT NULL,
   `LabNameAddress` varchar(255) NOT NULL,
-  `SpecimenCode` varchar(255) NOT NULL,
-  `SpecimenDesc` varchar(255) NOT NULL,
+  `SpecimenCondition` varchar(255) NOT NULL,
+  `SpecimenSource` varchar(255) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`LabPanelNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `LabPanelNum` (`LabPanelNum`),
-  KEY `PatNum` (`PatNum`),
-  KEY `MedicalOrderNum` (`MedicalOrderNum`)
+  KEY `PatNum` (`PatNum`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Table structure for table `labresultm` */
@@ -160,14 +126,13 @@ CREATE TABLE `labresultm` (
   `DateTimeTest` datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
   `TestName` varchar(255) NOT NULL,
   `TestID` varchar(255) NOT NULL,
-  `ValueType` tinyint(4) NOT NULL,
   `ObsValue` varchar(255) NOT NULL,
-  `DrugUnitNum` bigint(20) NOT NULL,
+  `ObsUnits` varchar(255) NOT NULL,
+  `ObsRange` varchar(255) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`LabResultNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `LabResultNum` (`LabResultNum`),
-  KEY `LabPanelNum` (`LabPanelNum`),
-  KEY `DrugUnitNum` (`DrugUnitNum`)
+  KEY `LabPanelNum` (`LabPanelNum`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Table structure for table `medicationm` */
@@ -291,6 +256,3 @@ CREATE TABLE `userm` (
   `Password` varchar(255) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`UsermNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -37,6 +37,11 @@
 							<%#((LabResultm)Container.DataItem).TestName%>
 							</ItemTemplate>
 					</asp:TemplateField>
+					<asp:TemplateField HeaderText="Observed Value">
+							<ItemTemplate>
+							<%#((LabResultm)Container.DataItem).ObsValue%>
+							</ItemTemplate>
+					</asp:TemplateField>
 			</Columns>
 			</asp:GridView>
 			</ItemTemplate>

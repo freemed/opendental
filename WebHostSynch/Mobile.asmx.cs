@@ -95,8 +95,7 @@ namespace WebHostSynch {
 				Allergyms.DeleteAll(customerNum);
 				DiseaseDefms.DeleteAll(customerNum);
 				Diseasems.DeleteAll(customerNum);
-				ICD9ms.DeleteAll(customerNum);
-			
+				ICD9ms.DeleteAll(customerNum);			
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -366,7 +365,7 @@ namespace WebHostSynch {
 						return;
 					}	
 					for(int i=0;i<patNumList.Count;i++) {//Dennis: an inefficient loop but will work fine for the small number of records and will use existing default methods of the ms class
-						/* on OD if a labpanel is deleted the corresponding labresults are also deleted. This will ensure that on the webserver labresults are deleted via 	the DeleteObjects function
+						/* On OD if a labpanel is deleted the corresponding labresults are also deleted. This will ensure that on the webserver labresults are deleted via 	the DeleteObjects function
 						 * a similar situation would be true for  medications, allergydefs and disease defs.
 						 * If however the patient password is set to blank then the corresponding deletes of labresults, medications, allergydefs and disease defs will not occur causing some unnecessary records to be present on the webserver. 
 						 * Given the current level of coding it's important to leave these unnecessary records onthe webserver because the moment a patient password is not blank they will be needed again.

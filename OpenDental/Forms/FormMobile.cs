@@ -345,6 +345,11 @@ namespace OpenDental {
 				changedProv=DateTime.MinValue;
 				changedDeleted=DateTime.MinValue;
 			}
+			bool synchDelPat=true;
+			if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) { 
+				synchDelPat=false;// synching delPatNumList is time consuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
+			}
+
 			//MobileWeb
 			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
@@ -366,7 +371,10 @@ namespace OpenDental {
 			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
 							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-							+delPatNumList.Count+dO.Count;
+							+dO.Count;
+			if(synchDelPat){
+				totalCount+=delPatNumList.Count;
+			}
 			FormP.MaxVal=(double)totalCount;
 			IsSynching=true;
 			SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
@@ -383,8 +391,8 @@ namespace OpenDental {
 			SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,ref FormP);
 			SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
 			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
-			if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour!=timeSynchStarted.Hour) {
-				SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);// this is time consuming and it's mostly the same records that have to be deleted every time a synch happens. So it's done only hourly
+			if(synchDelPat) { 
+				SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
 			}
 			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 			if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
