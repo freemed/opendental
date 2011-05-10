@@ -29,7 +29,7 @@ namespace OpenDental{
 		public bool IsNew;
 		private System.Windows.Forms.CheckBox checkShowUn;
 		private OpenDental.UI.Button butDelete;
-		private double splitTot;
+		private decimal splitTot;
 		///<summary>The list of splits to display in the grid.</summary>
 		private List<ClaimPaySplit> splits;
 		private System.Windows.Forms.ComboBox comboClinic;
@@ -366,7 +366,7 @@ namespace OpenDental{
 				gridMain.SetSelected(true);
 				splitTot=0;
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-					splitTot+=splits[gridMain.SelectedIndices[i]].InsPayAmt;
+					splitTot+=(decimal)splits[gridMain.SelectedIndices[i]].InsPayAmt;
 				}
 				textAmount.Text=splitTot.ToString("F");
 			}
@@ -401,7 +401,7 @@ namespace OpenDental{
 				row.Cells.Add(splits[i].InsPayAmt.ToString("F"));
 				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum){
 					gridMain.SetSelected(i,true);
-					splitTot+=splits[i].InsPayAmt;
+					splitTot+=(decimal)splits[i].InsPayAmt;
 				}
 				if(splits[i].ClaimNum==OriginatingClaimNum){
 					row.Bold=true;
@@ -415,7 +415,7 @@ namespace OpenDental{
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			splitTot=0;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				splitTot+=splits[gridMain.SelectedIndices[i]].InsPayAmt;
+				splitTot+=(decimal)splits[gridMain.SelectedIndices[i]].InsPayAmt;
 			}
 			textAmount.Text=splitTot.ToString("F");
 		}
