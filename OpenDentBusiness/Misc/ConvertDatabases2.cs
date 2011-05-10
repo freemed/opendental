@@ -4681,6 +4681,41 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE medicalorder MODIFY IsLabPending NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailFromAddress','Email for receiving EHR email.')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailFromAddress','Email for receiving EHR email.')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailPOPserver','POP3 server of email client.')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPOPserver','POP3 server of EHR email client.')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailPort','Port for incoming EHR email client.')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPort','Port for incoming EHR email client.')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailPassword','Password for incoming EHR email.')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPassword','Password for incoming EHR email.')";
+					Db.NonQ(command);
+				}
+
+
+
 
 
 
