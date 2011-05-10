@@ -14,7 +14,24 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormEmailSetupEHR_Load(object sender,EventArgs e) {
+			textPOPserver.Text=PrefC.GetString(PrefName.EHREmailPOPserver);
+			textUsername.Text=PrefC.GetString(PrefName.EHREmailFromAddress);
+			textPassword.Text=PrefC.GetString(PrefName.EHREmailPassword);
+			textPort.Text=PrefC.GetString(PrefName.EHREmailPort);
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
+			Prefs.UpdateString(PrefName.EHREmailPOPserver,textPOPserver.Text);
+			Prefs.UpdateString(PrefName.EHREmailFromAddress,textUsername.Text);
+			Prefs.UpdateString(PrefName.EHREmailPassword,textPassword.Text);
+			try{
+				Prefs.UpdateLong(PrefName.EHREmailPort,PIn.Long(textPort.Text));
+			}
+			catch{
+				MsgBox.Show(this,"invalid port number.");
+			}
+			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
 
