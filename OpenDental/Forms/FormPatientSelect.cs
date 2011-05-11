@@ -350,6 +350,8 @@ namespace OpenDental{
 			// 
 			// checkShowProspectiveOnly
 			// 
+			this.checkShowProspectiveOnly.Checked = true;
+			this.checkShowProspectiveOnly.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowProspectiveOnly.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkShowProspectiveOnly.Location = new System.Drawing.Point(11,363);
 			this.checkShowProspectiveOnly.Name = "checkShowProspectiveOnly";

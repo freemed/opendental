@@ -42,7 +42,8 @@ namespace OpenDentBusiness{
 			if(siteNum>0) {
 				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
 			}
-			command+="HAVING patient.PatStatus= "+POut.Long((int)PatientStatus.Patient)+" ";			
+			command+="HAVING patient.PatStatus= "+POut.Long((int)PatientStatus.Patient)+" "
+				+" OR patient.PatStatus= "+POut.Long((int)PatientStatus.Prospective)+" ";	
 			if(orderby=="status") {
 				command+="ORDER BY UnschedStatus,AptDateTime";
 			}
