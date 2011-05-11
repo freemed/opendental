@@ -173,8 +173,8 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(recallCur==null || recallCur.DateDue.Year<1880){
-				throw new ApplicationException(Lan.g("AppointmentL","No recall is due."));
+			if(recallCur==null){// || recallCur.DateDue.Year<1880){
+				throw new ApplicationException(Lan.g("AppointmentL","No recall is due."));//should never happen because everyone has a recall.
 			}
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=patCur.PatNum;
