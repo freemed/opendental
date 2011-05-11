@@ -9,9 +9,9 @@ namespace OpenDentBusiness {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long VaccineDefNum;
-		///<summary></summary>
+		///<summary>RXA-5-1.</summary>
 		public string CVXCode;
-		///<summary>Name of vaccine.</summary>
+		///<summary>Name of vaccine.  RXA-5-2.</summary>
 		public string VaccineName;
 		///<summary>FK to drugmanufacturer.DrugManufacturerNum.</summary>
 		public long DrugManufacturerNum;

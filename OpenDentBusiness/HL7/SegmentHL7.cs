@@ -19,6 +19,7 @@ namespace OpenDentBusiness.HL7 {
 			Fields=new List<FieldHL7>();
 			//remember that the "field quantity" is one more than the last index, because 0-based.
 			//All fields are initially added with just one component
+			//This can all probably be removed now since we add fields dynamically as needed:
 			if(name==SegmentName.MSH) {
 				AddFields(12);
 			}
@@ -26,7 +27,7 @@ namespace OpenDentBusiness.HL7 {
 				AddFields(4);
 			}
 			if(name==SegmentName.PID) {
-				AddFields(20);
+				AddFields(23);
 			}
 			if(name==SegmentName.PV1) {
 				AddFields(51);
@@ -53,7 +54,6 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Use this constructor when we have a message to parse.</summary>
 		public SegmentHL7(string rowtext) {
 			FullText=rowtext;
-
 		}
 
 		public override string ToString() {
@@ -113,6 +113,9 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Pass in one val to set the whole field.  Pass in multiple vals to set multiple components.  It also sets the fullText of the segment.</summary>
 		public void SetField(int fieldIndex,params string[] vals) {
+			if(fieldIndex>Fields.Count-1) {
+				AddFields(fieldIndex-(Fields.Count-1));
+			}
 			Fields[fieldIndex].SetVals(vals);
 			//kind of repetitive to recalc the whole segment again here, but it goes very fast.
 			fullText="";

@@ -78,18 +78,32 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 
 		private void ORC() {
 			seg=new SegmentHL7(SegmentName.ORC);
+			seg.SetField(0,"ORC");
 			seg.SetField(1,"RE");//fixed
 			msg.Segments.Add(seg);
 		}
 
 		private void RXA(VaccinePat vaccine) {
+			VaccineDef vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
 			seg=new SegmentHL7(SegmentName.RXA);
+			seg.SetField(0,"RXA");
 			seg.SetField(1,"0");//fixed
 			seg.SetField(2,"1");//fixed
 			seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));
 			seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));
-			//etc.  (see the patterns above.  Skip fields as necessary)
-
+			seg.SetField(5,vaccineDef.CVXCode,vaccineDef.VaccineName,"HL70292");
+			seg.SetField(6,vaccine.AdministeredAmt.ToString());
+			if(vaccine.DrugUnitNum!=0){
+				DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
+				seg.SetField(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"ISO+");
+			}
+			seg.SetField(15,vaccine.LotNumber);//seems to be optional in the examples.
+			//17-Manufacturer.  Is this really optional?
+			if(vaccineDef.DrugManufacturerNum!=0) {//always?
+				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
+				seg.SetField(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"HL70227");
+			}
+			seg.SetField(21,"A");//21-Action code, A=Add
 			msg.Segments.Add(seg);
 		}
 

@@ -341,7 +341,7 @@ namespace OpenDentBusiness{
 		PhoneAsteriskReload,
 		///<summary>51</summary>
 		TimeCardRules,
-		///<summary>52</summary>
+		///<summary>52. Includes DrugManufacturers and DrugUnits.</summary>
 		Vaccines
 	}
 	//<summary></summary>
