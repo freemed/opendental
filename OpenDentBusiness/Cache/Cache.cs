@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>This is an incomplete stub and should not be used yet.  This will get used when switching databases.  Switching databases is allowed from ClientWeb in the sense that the user can connect to a different server from the ChooseDatabase window.</summary>
+		///<summary>This is an incomplete stub and should not be used very much yet.  This will get used when switching databases.  Switching databases is allowed from ClientWeb in the sense that the user can connect to a different server from the ChooseDatabase window.</summary>
 		public static void ClearAllCache() {
 			//AccountingAutoPays
 			AccountingAutoPays.ClearCache();
@@ -385,7 +385,9 @@ namespace OpenDentBusiness {
 				ToolButItems.FillCache(ds.Tables["ToolButItem"]);
 			}
 			if(itypes.Contains((int)InvalidType.Vaccines) || isAll) {
-				
+				VaccineDefs.FillCache(ds.Tables["VaccineDef"]);
+				DrugManufacturers.FillCache(ds.Tables["DrugManufacturer"]);
+				DrugUnits.FillCache(ds.Tables["DrugUnit"]);
 			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll) {
 				ApptViews.FillCache(ds.Tables["ApptView"]);
