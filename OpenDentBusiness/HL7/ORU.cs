@@ -35,17 +35,20 @@ namespace OpenDentBusiness.HL7 {
 			OBR(panel,labresult);
 			//although OBX can loop, we will not for the test.
 			OBX(labresult);
-			SPM(panel);
+			//SPM(panel);
 		}
 
 		///<summary>Message Header Segment</summary>
 		private void MSH(){
 			seg=new SegmentHL7(@"MSH|^~\&|Open Dental|"//MSH-3: Sending application
-				+"|||"+DateTime.Now.ToString("yyyyMMddHHmmss")+"||"
+				+"OD|"//MSH-4: Sending Facility. Dummy.
+				+"Y|"//MSH-5: Receiving Application.  Dummy.
+				+"OU|"//MSH-6: Receiving Facility. Dummy.
+				+DateTime.Now.ToString("yyyyMMddHHmmss")+"||"
 				+"ORU^R01^ORU_R01|"//MSH-9: fixed
-				+"OD-110316102457113|"//MSH-10: Control Id, str20. Fixed is ok for testing.
+				+DateTime.Now.ToString("yyyyMMddHHmmss")+"|"//MSH-10: Control Id, str20. Fixed is ok for testing. We'll send date
 				+"P|"//MSH-11: P=production
-				+"2.5.1");
+				+"2.3.1");
 			msg.Segments.Add(seg);
 		}
 
@@ -53,6 +56,7 @@ namespace OpenDentBusiness.HL7 {
 		private void PID(Patient pat){
 			seg=new SegmentHL7(SegmentName.PID);
 			seg.SetField(0,"PID");
+
 			seg.SetField(3,pat.PatNum.ToString());
 			seg.SetField(5,pat.LName,pat.FName);
 			if(pat.Birthdate.Year>1880) {//7: dob optional
@@ -65,6 +69,16 @@ namespace OpenDentBusiness.HL7 {
 			seg.SetField(22,ConvertEthnicGroup(pat.Race));
 			msg.Segments.Add(seg);
 		}
+
+		/*This is the example that we are using for incorporating lab results in our other test.
+		  It is simpler than the above examples.  We might want to use it instead.
+		MSH|^~\&|KAM|DGI|Y|OU|20100920093000||ORU^R01^ORU_R01|20100920093000|P|2.3.1
+PID||405979410 |405979410^^^&2.16.840.1.113883.19.3.2.1&ISO^MR||Lewis^Frank ||19500101|M||2106-3^White^HL70005|622 Chestnut^^Springfield^Tennessee^37026^^M||^^^^^615^3826396|||||405979410 ||||N^Not Hispanic or Latino^HL70189
+OBR|1|OrderNum-1001|FillOrder-1001|24331-1^Lipid Panel^LN||20100920083000|20100920083000|20100920083000|||||Hemolyzed ||| ProviderIDNum-100^Crow^Tom^Black^III^Dr.||||Aloha Laboratories 575 Luau Street Honolulu Hawaii 96813 ||||CH|F|
+OBX|1|NM|14647-2^Total cholesterol^LN |134465|162|mg/dl |<200| N|||F|||20100920083000 
+OBX|2|NM|14646-4^HDL cholesterol^LN|333123|43|mg/dl|>=40| N|||F|||20100920083000
+OBX|3|NM|2089-1^LDL cholesterol^LN|333123|84|mg/dl|<100| N|||F|||20100920083000
+OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*/
 
 		/* This is example #6, but I don't think a stool sample qualifies as public health info.
 		MSH|^~\&|EHR Application^2.16.840.1.113883.3.72.7.1^HL7|EHR Facility^2.16.840.1.113883.3.72.7.2^HL7|PH Application^2.16.840.1.113883.3.72.7.3^HL7|PH Facility^2.16.840.1.113883.3.72.7.4^HL7|20110316102420||ORU^R01^ORU_R01|NIST-110316102420132|P|2.5.1|||||||||PHLabReport-NoAck^^2.16.840.1.114222.4.10.3^ISO
@@ -85,8 +99,7 @@ namespace OpenDentBusiness.HL7 {
 		OBX|1|NM|10676-5^Hepatitis C Virus RNA^LN|1|850000|iU/mL^international units per mililiter^UCUM|High Viral Load > or = 850000iU/mL|H|||F|||201007281400|||||200807301500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
 		SPM||||122555007^Venous blood specimen^SCT^BLDV^Blood venous^HL70487^20080131^2.5.1
 		*/
-
-		//ORC?  Where's lab name and address?
+		
 
 		private void OBR(LabPanel panel, LabResult labresult) {
 			seg=new SegmentHL7(SegmentName.OBR);

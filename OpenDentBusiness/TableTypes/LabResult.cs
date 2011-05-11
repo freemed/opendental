@@ -14,12 +14,12 @@ namespace OpenDentBusiness{
 		///<summary>OBX-14.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeTest;
-		///<summary>OBX-3, text portion.</summary>
+		///<summary>OBX-3-1, text portion.</summary>
 		public string TestName;
 		///<summary>To be used for synch with web server.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>OBX-3, id portion, LOINC.  For example, 10676-5.</summary>
+		///<summary>OBX-3-0, id portion, LOINC.  For example, 10676-5.</summary>
 		public string TestID;
 		///<summary>OBX-5. Value always stored as a string because the type might vary in the future.</summary>
 		public string ObsValue;

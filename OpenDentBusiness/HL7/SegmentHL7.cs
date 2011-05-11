@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace OpenDentBusiness.HL7 {
@@ -36,7 +37,7 @@ namespace OpenDentBusiness.HL7 {
 			if(name==SegmentName.DG1) {
 				AddFields(5);
 			}
-			if(name==SegmentName.ZX1){
+			if(name==SegmentName.ZX1) {
 				AddFields(6);
 			}
 		}
@@ -52,7 +53,7 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Use this constructor when we have a message to parse.</summary>
 		public SegmentHL7(string rowtext) {
 			FullText=rowtext;
-			
+
 		}
 
 		public override string ToString() {
@@ -121,6 +122,26 @@ namespace OpenDentBusiness.HL7 {
 				}
 				fullText+=Fields[i].FullText;
 			}
+		}
+
+		///<summary>yyyyMMdd[HHmmss].  If not in that format, it returns minVal.</summary>
+		public DateTime GetDateTime(int fieldIndex) {
+			if(fieldIndex > Fields.Count-1) {
+				return DateTime.MinValue;
+			}
+			string str=Fields[fieldIndex].FullText.Trim();//trailing space was causing problems.
+			try {
+				if(str.Length==8) {
+					return DateTime.ParseExact(str,"yyyyMMdd",DateTimeFormatInfo.InvariantInfo);
+				}
+				if(str.Length==14) {
+					return DateTime.ParseExact(str,"yyyyMMddHHmmss",DateTimeFormatInfo.InvariantInfo);
+				}
+			}
+			catch {
+				return DateTime.MinValue;
+			}
+			return DateTime.MinValue;
 		}
 
 	}
