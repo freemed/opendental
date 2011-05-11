@@ -113,12 +113,14 @@ namespace OpenDentBusiness {
 				}
 				strb.Append("Billing Prov NPI");
 			}
+			/* This was causing problems when dummy providers were used for office and no license number was applicable.
+			 * Delta carriers key off this number and start assigning to wrong provider. Customer: ATD.
 			if(billProv.StateLicense=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Billing Prov Lic #");
-			}
+			}*/
 		}
 
 		public static void PracticeAddress(StringBuilder strb) {
