@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>OBR-13.  Usually blank.  Example: hemolyzed.</summary>
 		public string SpecimenCondition;
-		///<summary>OBR-15-1.  Usually blank.  Example: LNA&amp;Arterial Catheter&amp;HL70070.</summary>
+		///<summary>OBR-15.  Usually blank.  Example: LNA&amp;Arterial Catheter&amp;HL70070.</summary>
 		public string SpecimenSource;
 
 		///<summary></summary>
