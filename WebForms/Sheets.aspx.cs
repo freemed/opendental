@@ -18,7 +18,7 @@ using OpenDentBusiness;
 
 namespace WebForms {
 	/// <summary>
-	/// For the next version of webforms -This is work in progress.
+	/// Displays the Open Dental sheets on a web page.
 	/// </summary>
 	public partial class Sheets:System.Web.UI.Page {
 		private long DentalOfficeID=0;
@@ -34,12 +34,12 @@ namespace WebForms {
 				if(Request["WebSheetDefID"]!=null) {
 					Int64.TryParse(Request["WebSheetDefID"].ToString().Trim(),out WebSheetDefID);
 				}
-				Logger.Information("Page requested from IpAddress="+HttpContext.Current.Request.UserHostAddress+"for  DentalOfficeID="+DentalOfficeID);
+				Logger.Information("Page requested from IpAddress="+HttpContext.Current.Request.UserHostAddress+" for  DentalOfficeID="+DentalOfficeID);
 				Panel2.Visible=true;
 				GeneratePage(DentalOfficeID,WebSheetDefID);
 			}
 			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" WebSheetDefID="+WebSheetDefID,ex);
 				DisplayMessage("Error: Your form is not available. Please contact your Dental Office");
 			}
 			
@@ -111,7 +111,7 @@ namespace WebForms {
 								tb.Rows=rowcount;
 							}
 							tb.Text=FieldValue;
-							wc=tb;						
+							wc=tb;
 						}
 						if(FieldType==SheetFieldType.CheckBox) {
 							wc=AddCheckBox(SheetFieldDefList.ElementAt(j));
@@ -436,10 +436,12 @@ namespace WebForms {
 							CultureName="en-US";
 						}
 						if(FieldValue.Contains("[dateToday]")) {
+							Logger.Information("FieldName="+FieldName+" FieldValue="+FieldValue);
 							FieldValue=FieldValue.Replace("[dateToday]",ExtractBrowserDate().ToString("d",new CultureInfo(CultureName,false)));
 							NewSheetfieldObj.FieldValue=FieldValue;
 						}
 						if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
+							Logger.Information("FieldName="+FieldName+" FieldValue="+FieldValue);
 							DateTime birthdate=DateTime.Parse(FieldValue,System.Threading.Thread.CurrentThread.CurrentCulture);//use the browsers culture to get correct date.
 							FieldValue= birthdate.ToString("d",new CultureInfo(CultureName,false));//now convert the birthdate into a string using the culture of the corresponding opendental installation.
 							NewSheetfieldObj.FieldValue=FieldValue;
@@ -456,7 +458,7 @@ namespace WebForms {
 				}
 			}
 			catch(Exception ex) {
-				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" WebSheetDefID="+WebSheetDefID,ex);
 				Panel1.Visible=false;
 				DisplayMessage("There has been a problem submitting your details. <br /> We apologize for the inconvenience.");
 			}

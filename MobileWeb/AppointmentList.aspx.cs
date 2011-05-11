@@ -91,7 +91,7 @@ namespace MobileWeb {
 				return HexColor;
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
+				Logger.LogError("CustomerNum="+CustomerNum+ " ap.ProvNum="+ap.ProvNum,ex);
 				return HexColor;
 			}
 		}
