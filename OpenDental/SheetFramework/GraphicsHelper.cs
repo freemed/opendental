@@ -9,17 +9,26 @@ using PdfSharp.Drawing.Layout;
 
 namespace OpenDental {
 	public class GraphicsHelper {
-		///<summary>This line spacing is specifically picked to match the RichTextBox.</summary>
-		private static float lineSpacing=1.05f;
 		private static int topPad=2;
 		private static int rightPad=5;//helps get measurements better.
 		//private static float hScale=.983f;
+
+		///<summary>This line spacing is specifically picked to match the RichTextBox.</summary>
+		private static float LineSpacingForFont(string fontName) {
+			if(fontName.ToLower()=="arial") {
+				return 1.08f;
+			}
+			else if(fontName.ToLower()=="courier new") {
+				return 1.08f;
+			}
+			return 1.05f;
+		}
 
 		///<summary>Since Graphics doesn't have a line height property.  The second graphics object is used for measurement purposes.</summary>
 		public static void DrawString(Graphics g,Graphics gfx,string str,Font font,Brush brush,Rectangle bounds) {
 			SizeF fit=new SizeF(bounds.Width-rightPad,font.Height);
 			StringFormat format=StringFormat.GenericTypographic;
-			float pixelsPerLine=lineSpacing * (float)font.Height;
+			float pixelsPerLine=LineSpacingForFont(font.Name) * (float)font.Height;
 			float lineIdx=0;
 			int chars;
 			int lines;
@@ -66,7 +75,7 @@ namespace OpenDental {
 			SizeF fit=new SizeF((float)(bounds.Width-rightPad),(float)(font.Height));
 			StringFormat format=StringFormat.GenericTypographic;
 			//pixels:
-			float pixelsPerLine=lineSpacing * (float)font.Height;
+			float pixelsPerLine=LineSpacingForFont(font.Name) * (float)font.Height;
 			float lineIdx=0;
 			int chars;
 			int lines;
@@ -105,7 +114,7 @@ namespace OpenDental {
 		///<summary>This also differs from the regular MeasureString in that it will correctly measure trailing carriage returns as requiring another line.</summary>
 		public static SizeF MeasureString(Graphics g,string text,Font font,int width) {
 			StringFormat format=StringFormat.GenericTypographic;
-			float pixelsPerLine=lineSpacing * (float)font.Height;
+			float pixelsPerLine=LineSpacingForFont(font.Name) * (float)font.Height;
 			int chars;
 			int lines;
 			SizeF fit=new SizeF(width-rightPad,float.MaxValue);//arbitrarily large height
