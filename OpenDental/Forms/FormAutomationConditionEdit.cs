@@ -73,8 +73,8 @@ namespace OpenDental {
 				MsgBox.Show(this,"Comparison does not make sense with chosen field.");
 				return;
 			}
-			if(!((AutoCondField)listCompareField.SelectedIndex==AutoCondField.Gender
-				&& (textCompareString.Text.ToLower()=="m" || textCompareString.Text.ToLower()=="f"))) 
+			if(((AutoCondField)listCompareField.SelectedIndex==AutoCondField.Gender
+				&& !(textCompareString.Text.ToLower()=="m" || textCompareString.Text.ToLower()=="f"))) 
 			{
 				MsgBox.Show(this,"Allowed gender values are M or F.");
 				return;
