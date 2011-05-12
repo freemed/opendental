@@ -526,34 +526,30 @@ namespace OpenDental{
 		}
 
 		private void butAddProblem_Click(object sender,EventArgs e) {
-			Disease disease=new Disease();
-			disease.PatNum=PatCur.PatNum;
 			FormDiseaseDefs formDD=new FormDiseaseDefs();
 			formDD.IsSelectionMode=true;
 			formDD.ShowDialog();
 			if(formDD.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			Disease disease=new Disease();
+			disease.PatNum=PatCur.PatNum;
 			disease.DiseaseDefNum=formDD.SelectedDiseaseDefNum;
-			FormDiseaseEdit FormD=new FormDiseaseEdit(disease);
-			FormD.IsNew=true;
-			FormD.ShowDialog();
+			Diseases.Insert(disease);
 			FillProblems();
 		}
 
 		private void butIcd9_Click(object sender,EventArgs e) {
-			Disease disease=new Disease();
-			disease.PatNum=PatCur.PatNum;
 			FormIcd9s formI=new FormIcd9s();
 			formI.IsSelectionMode=true;
 			formI.ShowDialog();
 			if(formI.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			Disease disease=new Disease();
+			disease.PatNum=PatCur.PatNum;
 			disease.ICD9Num=formI.SelectedIcd9Num;
-			FormDiseaseEdit FormD=new FormDiseaseEdit(disease);
-			FormD.IsNew=true;
-			FormD.ShowDialog();
+			Diseases.Insert(disease);
 			FillProblems();
 		}
 

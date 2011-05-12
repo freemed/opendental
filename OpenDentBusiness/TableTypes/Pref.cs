@@ -159,6 +159,8 @@ namespace OpenDentBusiness {
 		LetterMergePath,
 		MainWindowTitle,
 		MedicalEclaimsEnabled,
+		///<summary>FK to medication.MedicationNum</summary>
+		MedicationsIndicateNone,
 		MobileSyncDateTimeLastRun,
 		///<summary>Used one time after the conversion to 7.9 for initial synch of the provider table.</summary>
 		MobileSynchNewTables79Done,
