@@ -14,28 +14,28 @@ namespace OpenDentBusiness.HL7 {
 			
 		}
 		
-		///<summary>Creates the Message object and fills it with data.  Just for one patient/labresult.</summary>
-		public void Initialize(Patient pat){
-			//if(vaccines.Count==0) {
-			//	throw new ApplicationException("Must be at least one vaccine.");
+		///<summary>Creates the Message object and fills it with data.  All panels will be for the same patient.</summary>
+		public void Initialize(List<LabPanel> panels) {
+			if(panels.Count==0) {
+				throw new ApplicationException("Must be at least one lab panel.");
+			}
+			//LabPanel panel=panelList[0];
+			//List<LabResult> labresultList=LabResults.GetForPanel(panel.LabPanelNum);
+			//if(labresultList.Count!=1) {
+			//	throw new ApplicationException("Lab panel must have exactly one lab result.");
 			//}
-			List<LabPanel> panelList=LabPanels.Refresh(pat.PatNum);
-			if(panelList.Count!=1) {
-				throw new ApplicationException("Patient must have exactly one lab panel.");
-			}
-			LabPanel panel=panelList[0];
-			List<LabResult> labresultList=LabResults.GetForPanel(panel.LabPanelNum);
-			if(labresultList.Count!=1) {
-				throw new ApplicationException("Lab panel must have exactly one lab result.");
-			}
-			LabResult labresult=labresultList[0];
+			//LabResult labresult=labresultList[0];
+			Patient pat=Patients.GetPat(panels[0].PatNum);
 			msg=new MessageHL7(MessageType.ORU);
 			MSH();
 			PID(pat);
-			OBR(panel,labresult);
-			//although OBX can loop, we will not for the test.
-			OBX(labresult);
-			//SPM(panel);
+			for(int p=0;p<panels.Count;p++) {
+				List<LabResult> results=LabResults.GetForPanel(panels[p].LabPanelNum);
+				OBR(panels[p],results[0].DateTimeTest);
+				for(int r=0;r<results.Count;r++) {
+					OBX(results[r],r);
+				}
+			}
 		}
 
 		///<summary>Message Header Segment</summary>
@@ -90,16 +90,16 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 		*/
 		
 
-		private void OBR(LabPanel panel, LabResult labresult) {
+		private void OBR(LabPanel panel, DateTime datetime) {
 			seg=new SegmentHL7(SegmentName.OBR);
 			seg.SetField(0,"OBR");
 			seg.SetField(1,"1");
 			seg.SetField(2,"OrderNum-1001");
 			seg.SetField(3,"FillOrder-1001");
 			seg.SetField(4,panel.ServiceId,panel.ServiceName,"LN");
-			seg.SetField(6,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
-			seg.SetField(7,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
-			seg.SetField(8,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
+			seg.SetField(6,datetime.ToString("yyyyMMddhhmm"));
+			seg.SetField(7,datetime.ToString("yyyyMMddhhmm"));
+			seg.SetField(8,datetime.ToString("yyyyMMddhhmm"));
 			seg.SetField(13,panel.SpecimenCondition);
 			seg.SetField(15,panel.SpecimenSource);
 			seg.SetField(20,panel.LabNameAddress);
@@ -108,10 +108,11 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			msg.Segments.Add(seg);
 		}
 
-		private void OBX(LabResult labresult) {
+		/// <summary>idx passed in will be zero-based. Will be converted to 1-based.</summary>
+		private void OBX(LabResult labresult,int idx) {
 			seg=new SegmentHL7(SegmentName.OBX);
 			seg.SetField(0,"OBX");
-			seg.SetField(1,"1");//would normally increment.
+			seg.SetField(1,(idx+1).ToString());
 			seg.SetField(2,"NM");//ValueType. NM=numeric, referring to the value that will follow in OBX-5
 			seg.SetField(3,labresult.TestID,labresult.TestName,"LN");//TestPerformed  ID^text^codingSystem.  eg. 10676-5^Hepatitis C Virus RNA^LN
 			seg.SetField(4,"1");//?
