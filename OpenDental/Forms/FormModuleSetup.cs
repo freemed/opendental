@@ -85,6 +85,9 @@ namespace OpenDental{
 		private TextBox textProblemsIndicateNone;
 		private Label label8;
 		private List<Def> posAdjTypes;
+		private UI.Button butMedicationsIndicateNone;
+		private TextBox textMedicationsIndicateNone;
+		private Label label9;
 		private bool changed;
 
 		///<summary></summary>
@@ -121,7 +124,6 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkClaimFormTreatDentSaysSigOnFile = new System.Windows.Forms.CheckBox();
 			this.checkStatementSummaryShowInsInfo = new System.Windows.Forms.CheckBox();
-			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textClaimAttachPath = new System.Windows.Forms.TextBox();
 			this.label20 = new System.Windows.Forms.Label();
@@ -136,7 +138,6 @@ namespace OpenDental{
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkInsurancePlansShared = new System.Windows.Forms.CheckBox();
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
@@ -165,8 +166,6 @@ namespace OpenDental{
 			this.checkInsDefaultShowUCRonClaims = new System.Windows.Forms.CheckBox();
 			this.checkCoPayFeeScheduleBlankLikeZero = new System.Windows.Forms.CheckBox();
 			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.checkImagesModuleTreeIsCollapsed = new System.Windows.Forms.CheckBox();
 			this.checkRxSendNewToQueue = new System.Windows.Forms.CheckBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -179,7 +178,14 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.label8 = new System.Windows.Forms.Label();
 			this.textProblemsIndicateNone = new System.Windows.Forms.TextBox();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.butProblemsIndicateNone = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butMedicationsIndicateNone = new OpenDental.UI.Button();
+			this.textMedicationsIndicateNone = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -327,16 +333,6 @@ namespace OpenDental{
 			this.checkStatementSummaryShowInsInfo.Text = "Show insurance pending and related balance info on statement summary";
 			this.checkStatementSummaryShowInsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textPayPlansBillInAdvanceDays
-			// 
-			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(381,141);
-			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
-			this.textPayPlansBillInAdvanceDays.MinVal = 0;
-			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
-			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
-			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
 			// label18
 			// 
 			this.label18.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -480,16 +476,6 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			this.checkBalancesDontSubtractIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(381,109);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label2
 			// 
@@ -799,37 +785,6 @@ namespace OpenDental{
 			this.checkAllowedFeeSchedsAutomate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAllowedFeeSchedsAutomate.Click += new System.EventHandler(this.checkAllowedFeeSchedsAutomate_Click);
 			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(441,498);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 8;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(336,498);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 7;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
 			// checkImagesModuleTreeIsCollapsed
 			// 
 			this.checkImagesModuleTreeIsCollapsed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -916,7 +871,6 @@ namespace OpenDental{
 			this.tabAccount.Controls.Add(this.checkStatementShowNotes);
 			this.tabAccount.Controls.Add(this.label2);
 			this.tabAccount.Controls.Add(this.checkIntermingleDefault);
-			this.tabAccount.Controls.Add(this.textStatementsCalcDueDate);
 			this.tabAccount.Controls.Add(this.comboBillingChargeAdjType);
 			this.tabAccount.Controls.Add(this.checkBalancesDontSubtractIns);
 			this.tabAccount.Controls.Add(this.label4);
@@ -925,7 +879,6 @@ namespace OpenDental{
 			this.tabAccount.Controls.Add(this.comboUseChartNum);
 			this.tabAccount.Controls.Add(this.checkStatementSummaryShowInsInfo);
 			this.tabAccount.Controls.Add(this.checkStoreCCnumbers);
-			this.tabAccount.Controls.Add(this.textPayPlansBillInAdvanceDays);
 			this.tabAccount.Controls.Add(this.label10);
 			this.tabAccount.Controls.Add(this.label18);
 			this.tabAccount.Controls.Add(this.comboFinanceChargeAdjType);
@@ -935,6 +888,8 @@ namespace OpenDental{
 			this.tabAccount.Controls.Add(this.checkEclaimsSeparateTreatProv);
 			this.tabAccount.Controls.Add(this.checkShowFamilyCommByDefault);
 			this.tabAccount.Controls.Add(this.checkProviderIncomeShows);
+			this.tabAccount.Controls.Add(this.textStatementsCalcDueDate);
+			this.tabAccount.Controls.Add(this.textPayPlansBillInAdvanceDays);
 			this.tabAccount.Location = new System.Drawing.Point(4,22);
 			this.tabAccount.Name = "tabAccount";
 			this.tabAccount.Size = new System.Drawing.Size(466,438);
@@ -957,6 +912,9 @@ namespace OpenDental{
 			// 
 			// tabChart
 			// 
+			this.tabChart.Controls.Add(this.butMedicationsIndicateNone);
+			this.tabChart.Controls.Add(this.textMedicationsIndicateNone);
+			this.tabChart.Controls.Add(this.label9);
 			this.tabChart.Controls.Add(this.butProblemsIndicateNone);
 			this.tabChart.Controls.Add(this.textProblemsIndicateNone);
 			this.tabChart.Controls.Add(this.label8);
@@ -1011,6 +969,26 @@ namespace OpenDental{
 			this.textProblemsIndicateNone.Size = new System.Drawing.Size(145,20);
 			this.textProblemsIndicateNone.TabIndex = 198;
 			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(381,109);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textPayPlansBillInAdvanceDays
+			// 
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(381,141);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// butProblemsIndicateNone
 			// 
 			this.butProblemsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -1024,6 +1002,69 @@ namespace OpenDental{
 			this.butProblemsIndicateNone.TabIndex = 199;
 			this.butProblemsIndicateNone.Text = "...";
 			this.butProblemsIndicateNone.Click += new System.EventHandler(this.butProblemsIndicateNone_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(441,498);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 8;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(336,498);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 7;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butMedicationsIndicateNone
+			// 
+			this.butMedicationsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMedicationsIndicateNone.Autosize = true;
+			this.butMedicationsIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMedicationsIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMedicationsIndicateNone.CornerRadius = 4F;
+			this.butMedicationsIndicateNone.Location = new System.Drawing.Point(419,132);
+			this.butMedicationsIndicateNone.Name = "butMedicationsIndicateNone";
+			this.butMedicationsIndicateNone.Size = new System.Drawing.Size(22,21);
+			this.butMedicationsIndicateNone.TabIndex = 202;
+			this.butMedicationsIndicateNone.Text = "...";
+			this.butMedicationsIndicateNone.Click += new System.EventHandler(this.butMedicationsIndicateNone_Click);
+			// 
+			// textMedicationsIndicateNone
+			// 
+			this.textMedicationsIndicateNone.Location = new System.Drawing.Point(270,133);
+			this.textMedicationsIndicateNone.Name = "textMedicationsIndicateNone";
+			this.textMedicationsIndicateNone.ReadOnly = true;
+			this.textMedicationsIndicateNone.Size = new System.Drawing.Size(145,20);
+			this.textMedicationsIndicateNone.TabIndex = 201;
+			// 
+			// label9
+			// 
+			this.label9.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label9.Location = new System.Drawing.Point(19,136);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(246,16);
+			this.label9.TabIndex = 200;
+			this.label9.Text = "Indicator that patient has No Medications";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormModuleSetup
 			// 
@@ -1159,6 +1200,7 @@ namespace OpenDental{
 			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool(PrefName.ChartQuickAddHideAmalgam);
 			checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
 			textProblemsIndicateNone.Text=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone));
+			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone));
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
@@ -1198,6 +1240,19 @@ namespace OpenDental{
 				changed=true;
 			}
 			textProblemsIndicateNone.Text=DiseaseDefs.GetName(formD.SelectedDiseaseDefNum);
+		}
+
+		private void butMedicationsIndicateNone_Click(object sender,EventArgs e) {
+			FormMedications formM=new FormMedications();
+			formM.IsSelectionMode=true;
+			formM.ShowDialog();
+			if(formM.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(Prefs.UpdateLong(PrefName.MedicationsIndicateNone,formM.SelectedMedicationNum)) {
+				changed=true;
+			}
+			textMedicationsIndicateNone.Text=Medications.GetDescription(formM.SelectedMedicationNum);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -1308,6 +1363,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
+
+		
 
 		
 

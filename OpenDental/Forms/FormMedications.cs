@@ -228,6 +228,10 @@ namespace OpenDental{
 			if(IsSelectionMode){
 				this.Text=Lan.g(this,"Select Medication");
 			}
+			else{
+				butOK.Visible=false;
+				butCancel.Text=Lan.g(this,"Close");
+			}
 		}
 
 		private void FillGrid(){
@@ -312,16 +316,12 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(IsSelectionMode){
-				if(gridMain.GetSelectedIndex()==-1){
-					MessageBox.Show(Lan.g(this,"Please select an item first."));
-					return;
-				}
-				SelectedMedicationNum=medList[gridMain.GetSelectedIndex()].MedicationNum;
+			//this button is not visible if not selection mode.
+			if(gridMain.GetSelectedIndex()==-1) {
+				MessageBox.Show(Lan.g(this,"Please select an item first."));
+				return;
 			}
-			else{//normal mode from main menu
-				//just close
-			}
+			SelectedMedicationNum=medList[gridMain.GetSelectedIndex()].MedicationNum;
 			DialogResult=DialogResult.OK;
 		}
 

@@ -128,6 +128,24 @@ namespace OpenDentBusiness{
 			return (Medication)HList[((Medication)HList[medNum]).GenericNum];
 		}
 
+		///<summary>Gets the medication name.  Also, generic in () if applicable.</summary>
+		public static string GetDescription(long medNum) {
+			//No need to check RemotingRole; no call to db.
+			if(!HList.ContainsKey(medNum)) {
+				return "";
+			}
+			Medication med=(Medication)HList[medNum];
+			string retVal=med.MedName;
+			if(med.GenericNum==med.MedicationNum){//this is generic
+				return retVal;
+			}
+			if(!HList.ContainsKey(med.GenericNum)) {
+				return retVal;
+			}
+			Medication generic=(Medication)HList[med.GenericNum];
+			return retVal+"("+generic.MedName+")";
+		}
+
 		///<summary>Gets the generic medication name, given it's generic Num.</summary>
 		public static string GetGenericName(long genericNum) {
 			//No need to check RemotingRole; no call to db.
