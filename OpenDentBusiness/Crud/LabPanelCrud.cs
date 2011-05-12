@@ -53,6 +53,8 @@ namespace OpenDentBusiness.Crud{
 				labPanel.DateTStamp       = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				labPanel.SpecimenCondition= PIn.String(table.Rows[i]["SpecimenCondition"].ToString());
 				labPanel.SpecimenSource   = PIn.String(table.Rows[i]["SpecimenSource"].ToString());
+				labPanel.ServiceId        = PIn.String(table.Rows[i]["ServiceId"].ToString());
+				labPanel.ServiceName      = PIn.String(table.Rows[i]["ServiceName"].ToString());
 				retVal.Add(labPanel);
 			}
 			return retVal;
@@ -93,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabPanelNum,";
 			}
-			command+="PatNum,RawMessage,LabNameAddress,SpecimenCondition,SpecimenSource) VALUES(";
+			command+="PatNum,RawMessage,LabNameAddress,SpecimenCondition,SpecimenSource,ServiceId,ServiceName) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labPanel.LabPanelNum)+",";
 			}
@@ -103,7 +105,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(labPanel.LabNameAddress)+"',"
 				//DateTStamp can only be set by MySQL
 				+"'"+POut.String(labPanel.SpecimenCondition)+"',"
-				+"'"+POut.String(labPanel.SpecimenSource)+"')";
+				+"'"+POut.String(labPanel.SpecimenSource)+"',"
+				+"'"+POut.String(labPanel.ServiceId)+"',"
+				+"'"+POut.String(labPanel.ServiceName)+"')";
 			if(labPanel.RawMessage==null) {
 				labPanel.RawMessage="";
 			}
@@ -125,7 +129,9 @@ namespace OpenDentBusiness.Crud{
 				+"LabNameAddress   = '"+POut.String(labPanel.LabNameAddress)+"', "
 				//DateTStamp can only be set by MySQL
 				+"SpecimenCondition= '"+POut.String(labPanel.SpecimenCondition)+"', "
-				+"SpecimenSource   = '"+POut.String(labPanel.SpecimenSource)+"' "
+				+"SpecimenSource   = '"+POut.String(labPanel.SpecimenSource)+"', "
+				+"ServiceId        = '"+POut.String(labPanel.ServiceId)+"', "
+				+"ServiceName      = '"+POut.String(labPanel.ServiceName)+"' "
 				+"WHERE LabPanelNum = "+POut.Long(labPanel.LabPanelNum);
 			if(labPanel.RawMessage==null) {
 				labPanel.RawMessage="";
@@ -157,6 +163,14 @@ namespace OpenDentBusiness.Crud{
 			if(labPanel.SpecimenSource != oldLabPanel.SpecimenSource) {
 				if(command!=""){ command+=",";}
 				command+="SpecimenSource = '"+POut.String(labPanel.SpecimenSource)+"'";
+			}
+			if(labPanel.ServiceId != oldLabPanel.ServiceId) {
+				if(command!=""){ command+=",";}
+				command+="ServiceId = '"+POut.String(labPanel.ServiceId)+"'";
+			}
+			if(labPanel.ServiceName != oldLabPanel.ServiceName) {
+				if(command!=""){ command+=",";}
+				command+="ServiceName = '"+POut.String(labPanel.ServiceName)+"'";
 			}
 			if(command==""){
 				return;
