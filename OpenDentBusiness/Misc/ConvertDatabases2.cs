@@ -4717,7 +4717,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPassword','Password for incoming EHR email.')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,Comments) VALUES('ProblemsIndicateNone','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ProblemsIndicateNone','')";
+					Db.NonQ(command);
+				}
 
 
 

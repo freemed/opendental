@@ -34,9 +34,7 @@ namespace OpenDentBusiness {
 		///<Summary>13-Requires SheetParameter for PatNum.</Summary>
 		ExamSheet,
 		///<summary>14-Requires SheetParameter for PatNum.</summary>
-		DepositSlip,
-		///<summary>15-Requires SheetParameter for PatNum.</summary>
-		EhrEducation
+		DepositSlip
 		/*StatementHeader,
 		TxPlanHeader,
 		Postcard*/
