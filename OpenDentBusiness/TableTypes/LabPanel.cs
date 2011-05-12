@@ -23,6 +23,10 @@ namespace OpenDentBusiness{
 		public string SpecimenCondition;
 		///<summary>OBR-15.  Usually blank.  Example: LNA&amp;Arterial Catheter&amp;HL70070.</summary>
 		public string SpecimenSource;
+		///<summary>OBR-4-0, Service performed, id portion, LOINC.  For example, 24331-1.</summary>
+		public string ServiceId;
+		///<summary>OBR-4-1, Service performed description.  Example, Lipid Panel.</summary>
+		public string ServiceName;
 
 		///<summary></summary>
 		public LabPanel Copy() {

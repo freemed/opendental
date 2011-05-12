@@ -4496,6 +4496,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DateTStamp timestamp,
 						SpecimenCondition varchar(255) NOT NULL,
 						SpecimenSource varchar(255) NOT NULL,
+						ServiceId varchar(255) NOT NULL,
+						ServiceName varchar(255) NOT NULL,
 						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -4511,6 +4513,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DateTStamp timestamp,
 						SpecimenCondition varchar2(255),
 						SpecimenSource varchar2(255),
+						ServiceId varchar2(255),
+						ServiceName varchar2(255),
 						CONSTRAINT labpanel_LabPanelNum PRIMARY KEY (LabPanelNum)
 						)";
 					Db.NonQ(command);

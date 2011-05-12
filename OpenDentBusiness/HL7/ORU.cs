@@ -56,7 +56,7 @@ namespace OpenDentBusiness.HL7 {
 		private void PID(Patient pat){
 			seg=new SegmentHL7(SegmentName.PID);
 			seg.SetField(0,"PID");
-
+			seg.SetField(2,pat.PatNum.ToString());
 			seg.SetField(3,pat.PatNum.ToString());
 			seg.SetField(5,pat.LName,pat.FName);
 			if(pat.Birthdate.Year>1880) {//7: dob optional
@@ -80,17 +80,6 @@ OBX|2|NM|14646-4^HDL cholesterol^LN|333123|43|mg/dl|>=40| N|||F|||20100920083000
 OBX|3|NM|2089-1^LDL cholesterol^LN|333123|84|mg/dl|<100| N|||F|||20100920083000
 OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*/
 
-		/* This is example #6, but I don't think a stool sample qualifies as public health info.
-		MSH|^~\&|EHR Application^2.16.840.1.113883.3.72.7.1^HL7|EHR Facility^2.16.840.1.113883.3.72.7.2^HL7|PH Application^2.16.840.1.113883.3.72.7.3^HL7|PH Facility^2.16.840.1.113883.3.72.7.4^HL7|20110316102420||ORU^R01^ORU_R01|NIST-110316102420132|P|2.5.1|||||||||PHLabReport-NoAck^^2.16.840.1.114222.4.10.3^ISO
-		SFT|NIST Lab, Inc.|3.6.23|A-1 Lab System|6742873-12||20080303
-		PID|||987488015^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||Whiteagle^Adam||19800321|M||1002-5^American Indian or Alaska Native^HL70005|354 Glacier Road^^Anchorage^Alaska^99505^USA^M||^PRN^^^^907^7552189|||||||||N^Not Hispanic or Latino^HL70189
-		ORC|RE||||||||||||||||||||Level Seven Healthcare^L^^^^ABC Medical Center&2.16.840.1.113883.19.4.6&ISO^XX^^^1234|1005 Healthcare Drive^^Ann Arbor^MI^48103^^B|^^^^^734^5553001
-		OBR|1||2233817^Lab^2.16.840.1.113883.19.3.1.6^ISO|625-4^Stool culture^LN^8835327^Stool Culture Test^99USI|||201007261100||||||Diarrhea X 4 days|||||||||201007291500|||F||||||787.91^DIARRHEA^I9CDX
-		OBX|1|ST|6331-3^Campylobacter Jejuni AB^LN|1|Isolated||||||F|||201007261100|||||201007291500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
-		OBX|1|ST|20955-1^Salmonella^LN|1|Isolated||||||F|||201007261100|||||201007291500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
-		OBX|1|ST|17576-0^Shigella^LN|1|Not Isolated||||||F|||201007261100|||||201007291500||||Lab^L^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^1236|3434 Industrial Lane^^Ann Arbor^MI^48103^^B
-		SPM||||119339001^Stool specimen^SCT^STL^Stool^HL70487^20080131^2.5.1
-		*/
 		/*This is example #5.  Hepatitis C is a legitimate reportable syndrome which would be reported to public health
 		MSH|^~\&|EHR Application^2.16.840.1.113883.3.72.7.1^HL7|EHR Facility^2.16.840.1.113883.3.72.7.2^HL7|PH Application^2.16.840.1.113883.3.72.7.3^HL7|PH Facility^2.16.840.1.113883.3.72.7.4^HL7|20110316102334||ORU^R01^ORU_R01|NIST-110316102333943|P|2.5.1|||||||||PHLabReport-Ack^^2.16.840.1.114222.4.10.3^ISO
 		SFT|NIST Lab, Inc.|3.6.23|A-1 Lab System|6742873-12||20080303
@@ -103,8 +92,10 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 
 		private void OBR(LabPanel panel, LabResult labresult) {
 			seg=new SegmentHL7(SegmentName.OBR);
+			seg.SetField(0,"OBR");
 			seg.SetField(1,"1");
-			seg.SetField(3,"2233817^Lab^2.16.840.1.113883.19.3.1.6^ISO");
+			seg.SetField(2,"OrderNum-1001");
+			seg.SetField(3,"FillOrder-1001");
 			seg.SetField(4,"10676-5^Hepatitis C Virus RNA^LN^1198112^Hepatitis C Test^99USI");
 			seg.SetField(7,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
 			//The rest of the fields seem to be optional.  According to Drummond, OBR-15 is important to capture when importing.  It's blank in examples above.
@@ -122,12 +113,6 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			//7,8,9,10 optional
 			seg.SetField(11,"F");//OBX-11 is required.  F means final.
 			seg.SetField(14,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));//OBX-14 datetime
-			msg.Segments.Add(seg);
-		}
-
-		private void SPM(LabPanel panel) {
-			seg=new SegmentHL7(SegmentName.SPM);
-			//seg.SetField(4,panel.SpecimenCode,panel.SpecimenDesc,"SCT");//4-type, required, SCT=snomed, example:122555007=venous blood specimen
 			msg.Segments.Add(seg);
 		}
 
