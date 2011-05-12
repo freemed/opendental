@@ -15,11 +15,16 @@ namespace MobileWeb {
 		private static bool IsMobileDBSet=false;
 		string previousConnectStr="";
 		
-		public void SetMobileDbConnection() {
+		public void SetMobileDbConnectionOld() {
 			Logger.Information("In SetMobileDbConnection()");
 			DbInit.Init();
 		}
 
+		public void SetMobileDbConnection() {
+			string connectStr=Properties.Settings.Default.DBMobileWeb;
+			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
+			dc.SetDb(connectStr,"",DatabaseType.MySql,true);
+		}
 
 		public long GetDentalOfficeID(string username,string password) {
 			long DentalOfficeID=0;

@@ -17,7 +17,7 @@ namespace MobileWeb {
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				util.SetMobileDbConnection();//connects to db if not already connected.
+				//delete later util.SetMobileDbConnection();//connects to db if not already connected.
 				String username="";
 				String password="";
 				bool RememberMe=false; 

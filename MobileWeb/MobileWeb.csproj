@@ -96,6 +96,7 @@
     <Content Include="css\themes\apple\img\whiteButton.png" />
     <Content Include="css\themes\apple\theme.css" />
     <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
     <Content Include="Mob.png" />
     <Content Include="PatientList.aspx" />
     <Content Include="ProcessLogout.aspx" />
@@ -133,7 +134,9 @@
     <Compile Include="AppointmentList.aspx.designer.cs">
       <DependentUpon>AppointmentList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DbInit.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="PatientList.aspx.cs">
       <DependentUpon>PatientList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
