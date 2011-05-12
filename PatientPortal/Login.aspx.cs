@@ -23,13 +23,13 @@ namespace PatientPortal {
 				if(Request["DentalOfficeID"]!=null) {
 					Int64.TryParse(Request["DentalOfficeID"].ToString().Trim(),out DentalOfficeID);
 				}
-					Patientm pat=Patientms.GetOne(DentalOfficeID,user,pwd);
-					if(pat==null) {
-						LabelMessage.Text="Login Failed, Please Try Again";
-					}else{
-						Session["Patient"]=pat;
-						Response.Redirect("~/PatientInformation.aspx");
-					}
+				Patientm pat=Patientms.GetOne(DentalOfficeID,user,pwd);
+				if(pat==null) {
+					LabelMessage.Text="Login Failed, Please Try Again";
+				}else{
+					Session["Patient"]=pat;
+					Response.Redirect("~/PatientInformation.aspx",false);// the second parameter ensures that an ThreadAbortException is not thrown and further lines of code(if any) are executed.
+				}
 			}
 			catch(Exception ex) {
 				Logger.LogError(ex);

@@ -436,8 +436,8 @@ namespace WebForms {
 							CultureName="en-US";
 						}
 						if(FieldValue.Contains("[dateToday]")) {
-							Logger.Information("FieldName="+FieldName+" FieldValue="+FieldValue);
 							FieldValue=FieldValue.Replace("[dateToday]",ExtractBrowserDate().ToString("d",new CultureInfo(CultureName,false)));
+							Logger.Information("FieldName="+FieldName+" FieldValue="+FieldValue);
 							NewSheetfieldObj.FieldValue=FieldValue;
 						}
 						if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
