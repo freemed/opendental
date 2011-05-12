@@ -96,21 +96,29 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			seg.SetField(1,"1");
 			seg.SetField(2,"OrderNum-1001");
 			seg.SetField(3,"FillOrder-1001");
-			seg.SetField(4,"10676-5^Hepatitis C Virus RNA^LN^1198112^Hepatitis C Test^99USI");
+			seg.SetField(4,panel.ServiceId,panel.ServiceName,"LN");
+			seg.SetField(6,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
 			seg.SetField(7,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
-			//The rest of the fields seem to be optional.  According to Drummond, OBR-15 is important to capture when importing.  It's blank in examples above.
+			seg.SetField(8,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));
+			seg.SetField(13,panel.SpecimenCondition);
+			seg.SetField(15,panel.SpecimenSource);
+			seg.SetField(20,panel.LabNameAddress);
+			seg.SetField(24,"CH");
+			seg.SetField(25,"F");
 			msg.Segments.Add(seg);
 		}
 
 		private void OBX(LabResult labresult) {
 			seg=new SegmentHL7(SegmentName.OBX);
-			seg.SetField(1,"1");
+			seg.SetField(0,"OBX");
+			seg.SetField(1,"1");//would normally increment.
 			seg.SetField(2,"NM");//ValueType. NM=numeric, referring to the value that will follow in OBX-5
 			seg.SetField(3,labresult.TestID,labresult.TestName,"LN");//TestPerformed  ID^text^codingSystem.  eg. 10676-5^Hepatitis C Virus RNA^LN
-			seg.SetField(4,"1");
-			seg.SetField(5,labresult.ObsValue);//Value. Type based on OBX-2.  eg. 850000.
-			seg.SetField(6,labresult.ObsUnits);//Units. ISO+ is default.
-			//7,8,9,10 optional
+			seg.SetField(4,"1");//?
+			seg.SetField(5,labresult.ObsValue);//Value. Type based on OBX-2.  eg. 43.
+			seg.SetField(6,labresult.ObsUnits);//Units. Example ml/dl.
+			seg.SetField(7,labresult.ObsRange);//Range. Example <100
+			seg.SetField(8,"N");//?
 			seg.SetField(11,"F");//OBX-11 is required.  F means final.
 			seg.SetField(14,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));//OBX-14 datetime
 			msg.Segments.Add(seg);
