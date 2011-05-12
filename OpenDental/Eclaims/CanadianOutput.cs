@@ -665,8 +665,20 @@ namespace OpenDental.Eclaims {
 					etransAck.ClaimNum=etranOriginal.ClaimNum;
 					Etranss.Update(etransAck);
 					if(!exit) {
-						FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form. 
-						FormP.Print();
+						if(etransAck.ClaimNum!=0) {
+							Claim claim=Claims.GetClaim(etransAck.ClaimNum);
+							if(etransAck.AckCode=="A") {
+								claim.ClaimStatus="R";
+								claim.DateReceived=MiscData.GetNowDateTime();
+							}
+							else if(etransAck.AckCode=="H" || etransAck.AckCode=="B" || etransAck.AckCode=="C" || etransAck.AckCode=="N") {
+								claim.ClaimStatus="S";
+							}
+							else if(etransAck.AckCode=="M") {
+								//TODO: Handle manual claim form submission
+							}
+							Claims.Update(claim);
+						}						
 					}
 				}
 			} while(!exit);

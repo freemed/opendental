@@ -434,12 +434,10 @@ namespace OpenDentBusiness{
 					etrans.CarrierTransCounter2++;
 				}
 			}
-			else {//not Canadian
-				command="UPDATE claim SET ClaimStatus = 'S',"
-					+"DateSent= "+POut.Date(MiscData.GetNowDateTime())
-					+" WHERE claimnum = "+POut.Long(claimNum);
-				Db.NonQ(command);
-			}
+			command="UPDATE claim SET ClaimStatus = 'S',"
+				+"DateSent= "+POut.Date(MiscData.GetNowDateTime())
+				+" WHERE claimnum = "+POut.Long(claimNum);
+			Db.NonQ(command);
 			EtransMessageText etransMessageText=new EtransMessageText();
 			etransMessageText.MessageText="";
 			EtransMessageTexts.Insert(etransMessageText);
