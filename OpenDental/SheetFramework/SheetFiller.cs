@@ -181,7 +181,10 @@ namespace OpenDental{
 				List<InsSub> subList=InsSubs.RefreshForFam(fam);
 				List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 				InsSub sub=InsSubs.GetSub(subNum,subList);
-				InsPlan plan=InsPlans.GetPlan(sub.PlanNum,planList);
+				InsPlan plan=null;
+				if(sub!=null) {
+					plan=InsPlans.GetPlan(sub.PlanNum,planList);
+				}
 				Carrier carrier=null;
 				List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
 				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today,subList);
@@ -248,7 +251,9 @@ namespace OpenDental{
 				subNum=PatPlans.GetInsSubNum(patPlanList,2);
 				patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
 				sub=InsSubs.GetSub(subNum,subList);
-				plan=InsPlans.GetPlan(sub.PlanNum,planList);
+				if(sub!=null) {
+					plan=InsPlans.GetPlan(sub.PlanNum,planList);
+				}
 				if(plan!=null) {
 					carrier=Carriers.GetCarrier(plan.CarrierNum);
 					carrier2Name=carrier.CarrierName;
