@@ -81,10 +81,11 @@ namespace OpenDental{
 		private TabPage tabChart;
 		private TabPage tabImages;
 		private TabPage tabManage;
-		private UI.Button button1;
-		private TextBox textBox1;
+		private UI.Button butProblemsIndicateNone;
+		private TextBox textProblemsIndicateNone;
 		private Label label8;
 		private List<Def> posAdjTypes;
+		private bool changed;
 
 		///<summary></summary>
 		public FormModuleSetup() {
@@ -177,8 +178,8 @@ namespace OpenDental{
 			this.tabImages = new System.Windows.Forms.TabPage();
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.label8 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.button1 = new OpenDental.UI.Button();
+			this.textProblemsIndicateNone = new System.Windows.Forms.TextBox();
+			this.butProblemsIndicateNone = new OpenDental.UI.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -956,8 +957,8 @@ namespace OpenDental{
 			// 
 			// tabChart
 			// 
-			this.tabChart.Controls.Add(this.button1);
-			this.tabChart.Controls.Add(this.textBox1);
+			this.tabChart.Controls.Add(this.butProblemsIndicateNone);
+			this.tabChart.Controls.Add(this.textProblemsIndicateNone);
 			this.tabChart.Controls.Add(this.label8);
 			this.tabChart.Controls.Add(this.checkToothChartMoveMenuToRight);
 			this.tabChart.Controls.Add(this.checkAutoClearEntryStatus);
@@ -1002,26 +1003,27 @@ namespace OpenDental{
 			this.label8.Text = "Indicator that patient has No Problems";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textBox1
+			// textProblemsIndicateNone
 			// 
-			this.textBox1.Location = new System.Drawing.Point(270,110);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(145,20);
-			this.textBox1.TabIndex = 198;
+			this.textProblemsIndicateNone.Location = new System.Drawing.Point(270,110);
+			this.textProblemsIndicateNone.Name = "textProblemsIndicateNone";
+			this.textProblemsIndicateNone.ReadOnly = true;
+			this.textProblemsIndicateNone.Size = new System.Drawing.Size(145,20);
+			this.textProblemsIndicateNone.TabIndex = 198;
 			// 
-			// button1
+			// butProblemsIndicateNone
 			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(419,109);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(22,21);
-			this.button1.TabIndex = 199;
-			this.button1.Text = "...";
+			this.butProblemsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butProblemsIndicateNone.Autosize = true;
+			this.butProblemsIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProblemsIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProblemsIndicateNone.CornerRadius = 4F;
+			this.butProblemsIndicateNone.Location = new System.Drawing.Point(419,109);
+			this.butProblemsIndicateNone.Name = "butProblemsIndicateNone";
+			this.butProblemsIndicateNone.Size = new System.Drawing.Size(22,21);
+			this.butProblemsIndicateNone.TabIndex = 199;
+			this.butProblemsIndicateNone.Text = "...";
+			this.butProblemsIndicateNone.Click += new System.EventHandler(this.butProblemsIndicateNone_Click);
 			// 
 			// FormModuleSetup
 			// 
@@ -1037,6 +1039,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Module Setup";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormModuleSetup_FormClosing);
 			this.Load += new System.EventHandler(this.FormModuleSetup_Load);
 			this.tabControl1.ResumeLayout(false);
 			this.tabAppts.ResumeLayout(false);
@@ -1055,6 +1058,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormModuleSetup_Load(object sender, System.EventArgs e) {
+			changed=false;
 			//Appointment module---------------------------------------------------------------
 			checkSolidBlockouts.Checked=PrefC.GetBool(PrefName.SolidBlockouts);
 			checkBrokenApptNote.Checked=PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment);
@@ -1154,6 +1158,7 @@ namespace OpenDental{
 			checkAllowSettingProcsComplete.Checked=PrefC.GetBool(PrefName.AllowSettingProcsComplete);
 			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool(PrefName.ChartQuickAddHideAmalgam);
 			checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
+			textProblemsIndicateNone.Text=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone));
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
@@ -1182,6 +1187,19 @@ namespace OpenDental{
 			MessageBox.Show(Lan.g(this,"Plans affected: ")+plansAffected.ToString());
 		}
 
+		private void butProblemsIndicateNone_Click(object sender,EventArgs e) {
+			FormDiseaseDefs formD=new FormDiseaseDefs();
+			formD.IsSelectionMode=true;
+			formD.ShowDialog();
+			if(formD.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(Prefs.UpdateLong(PrefName.ProblemsIndicateNone,formD.SelectedDiseaseDefNum)) {
+				changed=true;
+			}
+			textProblemsIndicateNone.Text=DiseaseDefs.GetName(formD.SelectedDiseaseDefNum);
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(comboBrokenApptAdjType.SelectedIndex==-1){
 				MsgBox.Show(this,"Please enter an adjustment type for broken appointments.");
@@ -1201,7 +1219,6 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			bool changed=false;
 			if( Prefs.UpdateString(PrefName.TreatmentPlanNote,textTreatNote.Text)
 				| Prefs.UpdateBool(PrefName.TreatPlanShowGraphics,checkTreatPlanShowGraphics.Checked)
 				| Prefs.UpdateBool(PrefName.TreatPlanShowCompleted,checkTreatPlanShowCompleted.Checked)
@@ -1279,15 +1296,20 @@ namespace OpenDental{
 			if(Prefs.UpdateLong(PrefName.AppointmentTimeDismissedTrigger,timeDismissedTrigger)){
 				changed=true;
 			}
-			if(changed){
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		private void FormModuleSetup_FormClosing(object sender,FormClosingEventArgs e) {
+			if(changed){
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
+		}
+
+		
 
 		
 

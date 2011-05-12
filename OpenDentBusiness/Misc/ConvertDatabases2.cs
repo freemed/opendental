@@ -4686,43 +4686,43 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailFromAddress','Email for receiving EHR email.')";
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('EHREmailFromAddress','','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailFromAddress','Email for receiving EHR email.')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailFromAddress','','')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailPOPserver','POP3 server of email client.')";
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('EHREmailPOPserver','','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPOPserver','POP3 server of EHR email client.')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPOPserver','','')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailPort','Port for incoming EHR email client.')";
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('EHREmailPort','','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPort','Port for incoming EHR email client.')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPort','','')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,Comments) VALUES('EHREmailPassword','Password for incoming EHR email.')";
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('EHREmailPassword','','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPassword','Password for incoming EHR email.')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EHREmailPassword','','')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,Comments) VALUES('ProblemsIndicateNone','')";
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('ProblemsIndicateNone','','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ProblemsIndicateNone','')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ProblemsIndicateNone','','')";
 					Db.NonQ(command);
 				}
 

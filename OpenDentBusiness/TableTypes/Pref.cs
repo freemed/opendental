@@ -204,7 +204,7 @@ namespace OpenDentBusiness {
 		PracticeST,
 		PracticeTitle,
 		PracticeZip,
-		///<summary>FK to disease.DiseaseDef</summary>
+		///<summary>FK to diseasedef.DiseaseDefNum</summary>
 		ProblemsIndicateNone,
 		ProcessSigsIntervalInSecs,
 		ProgramVersion,
