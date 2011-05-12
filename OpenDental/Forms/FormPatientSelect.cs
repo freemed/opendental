@@ -70,7 +70,6 @@ namespace OpenDental{
 		private TextBox selectedTxtBox;
 		private TextBox textSubscriberID;
 		private Label label13;
-		private CheckBox checkShowProspectiveOnly;
 		private List<DisplayField> fields;
 
 		///<summary></summary>
@@ -115,7 +114,6 @@ namespace OpenDental{
 			this.comboBillingType = new System.Windows.Forms.ComboBox();
 			this.textBirthdate = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.checkShowProspectiveOnly = new System.Windows.Forms.CheckBox();
 			this.checkShowArchived = new System.Windows.Forms.CheckBox();
 			this.textChartNumber = new System.Windows.Forms.TextBox();
 			this.textSSN = new System.Windows.Forms.TextBox();
@@ -251,7 +249,6 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.comboBillingType);
 			this.groupBox2.Controls.Add(this.textBirthdate);
 			this.groupBox2.Controls.Add(this.label2);
-			this.groupBox2.Controls.Add(this.checkShowProspectiveOnly);
 			this.groupBox2.Controls.Add(this.checkShowArchived);
 			this.groupBox2.Controls.Add(this.textChartNumber);
 			this.groupBox2.Controls.Add(this.textSSN);
@@ -347,18 +344,6 @@ namespace OpenDental{
 			this.label2.TabIndex = 27;
 			this.label2.Text = "Birthdate";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkShowProspectiveOnly
-			// 
-			this.checkShowProspectiveOnly.Checked = true;
-			this.checkShowProspectiveOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowProspectiveOnly.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowProspectiveOnly.Location = new System.Drawing.Point(11,363);
-			this.checkShowProspectiveOnly.Name = "checkShowProspectiveOnly";
-			this.checkShowProspectiveOnly.Size = new System.Drawing.Size(161,17);
-			this.checkShowProspectiveOnly.TabIndex = 25;
-			this.checkShowProspectiveOnly.Text = "Show/Hide Prospective";
-			this.checkShowProspectiveOnly.CheckedChanged += new System.EventHandler(this.textSubscriberID_TextChanged);
 			// 
 			// checkShowArchived
 			// 
@@ -999,7 +984,7 @@ namespace OpenDental{
 			PtDataTable=Patients.GetPtDataTable(limit,textLName.Text,textFName.Text,textHmPhone.Text,
 				textAddress.Text,checkHideInactive.Checked,textCity.Text,textState.Text,
 				textSSN.Text,textPatNum.Text,textChartNumber.Text,billingType,
-				checkGuarantors.Checked,checkShowArchived.Checked,checkShowProspectiveOnly.Checked,
+				checkGuarantors.Checked,checkShowArchived.Checked,//checkShowProspectiveOnly.Checked,
 				Security.CurUser.ClinicNum,birthdate,siteNum,textSubscriberID.Text);
 			gridMain.BeginUpdate();
 			gridMain.Rows.Clear();
