@@ -11,6 +11,7 @@ namespace OpenDental {
 	public partial class FormXchargeTrans:Form {
 		public int TransactionType;
 		public decimal CashBackAmount;
+		public bool SaveToken;
 
 		public FormXchargeTrans() {
 			InitializeComponent();
@@ -20,36 +21,40 @@ namespace OpenDental {
 		private void FormXchargeTrans_Load(object sender,EventArgs e) {
 			CashBackAmount=0;
 			textCashBackAmt.Text=CashBackAmount.ToString("F2");
-			comboTransType.Items.Clear();
-			comboTransType.Items.Add("Purchase");
-			comboTransType.Items.Add("Return");
-			comboTransType.Items.Add("Debit Purchase");
-			comboTransType.Items.Add("Debit Return");
-			comboTransType.Items.Add("Force");
-			comboTransType.Items.Add("Pre-Authorization");
-			comboTransType.Items.Add("Adjustment");
-			comboTransType.Items.Add("Void");
-			comboTransType.SelectedIndex=0;
+			listTransType.Items.Clear();
+			listTransType.Items.Add("Purchase");
+			listTransType.Items.Add("Return");
+			listTransType.Items.Add("Debit Purchase");
+			listTransType.Items.Add("Debit Return");
+			listTransType.Items.Add("Force");
+			listTransType.Items.Add("Pre-Authorization");
+			listTransType.Items.Add("Adjustment");
+			listTransType.Items.Add("Void");
+			listTransType.SelectedIndex=0;
+			checkSaveToken.Checked=PrefC.GetBool(PrefName.StoreCCtokens);
 		}
 
-		private void comboTransType_SelectionChangeCommitted(object sender,EventArgs e) {
-			textCashBackAmt.Visible=false;
-			labelCashBackAmt.Visible=false;
-			if(comboTransType.SelectedIndex==2) { //Debit Purchase
-				textCashBackAmt.Visible=true;
-				labelCashBackAmt.Visible=true;
+		private void listTransType_MouseClick(object sender,MouseEventArgs e) {
+			if(listTransType.IndexFromPoint(e.Location)!=-1) {
+				textCashBackAmt.Visible=false;
+				labelCashBackAmt.Visible=false;
+				if(listTransType.SelectedIndex==2) { //Debit Purchase
+					textCashBackAmt.Visible=true;
+					labelCashBackAmt.Visible=true;
+				}
 			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(comboTransType.SelectedIndex==2) { //Debit Purchase
+			if(listTransType.SelectedIndex==2) { //Debit Purchase
 				if(textCashBackAmt.errorProvider1.GetError(textCashBackAmt)!="") {
 					MsgBox.Show(this,"Please fix data entry errors first.");
 					return;
 				}
 				CashBackAmount=PIn.Decimal(textCashBackAmt.Text);
 			}
-			TransactionType=comboTransType.SelectedIndex;
+			TransactionType=listTransType.SelectedIndex;
+			SaveToken=checkSaveToken.Checked;
 			DialogResult=DialogResult.OK;
 		}
 

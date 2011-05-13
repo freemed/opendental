@@ -1411,18 +1411,20 @@ namespace OpenDental{
 					CreditCards.Update(CCard);
 				}
 				if(newCard) {
-					if(xChargeToken=="") {
+					if(xChargeToken=="") {//Shouldn't happen again but leaving just in case.
 						MsgBox.Show(this,"X-Charge didn't return a token so credit card information couldn't be saved.");
 					}
 					else {
-						CCard=new CreditCard();
-						List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
-						CCard.ItemOrder=itemOrderCount.Count;
-						CCard.PatNum=PatCur.PatNum;
-						CCard.CCExpiration=new DateTime(Convert.ToInt32("20"+expiration.Substring(2,2)),Convert.ToInt32(expiration.Substring(0,2)),1);
-						CCard.XChargeToken=xChargeToken;
-						CCard.CCNumberMasked=accountMasked;
-						CreditCards.Insert(CCard);
+						if(FormXT.SaveToken) {
+							CCard=new CreditCard();
+							List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
+							CCard.ItemOrder=itemOrderCount.Count;
+							CCard.PatNum=PatCur.PatNum;
+							CCard.CCExpiration=new DateTime(Convert.ToInt32("20"+expiration.Substring(2,2)),Convert.ToInt32(expiration.Substring(0,2)),1);
+							CCard.XChargeToken=xChargeToken;
+							CCard.CCNumberMasked=accountMasked;
+							CreditCards.Insert(CCard);
+						}
 					}
 				}
 			}
