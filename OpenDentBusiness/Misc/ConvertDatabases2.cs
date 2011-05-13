@@ -4733,6 +4733,44 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MedicationsIndicateNone','','')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS eduresource";
+					Db.NonQ(command);
+					command=@"CREATE TABLE eduresource (
+						EduResourceNum bigint NOT NULL auto_increment PRIMARY KEY,
+						DiseaseDefNum bigint NOT NULL,
+						MedicationNum bigint NOT NULL,
+						LabResultID varchar(255) NOT NULL,
+						LabResultName varchar(255) NOT NULL,
+						LabResultCompare varchar(255) NOT NULL,
+						ResourceUrl varchar(255) NOT NULL,
+						INDEX(DiseaseDefNum),
+						INDEX(MedicationNum),
+						INDEX(LabResultID)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE eduresource'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE eduresource (
+						EduResourceNum number(20) NOT NULL,
+						DiseaseDefNum number(20) NOT NULL,
+						MedicationNum number(20) NOT NULL,
+						LabResultID varchar2(255),
+						LabResultName varchar2(255),
+						LabResultCompare varchar2(255),
+						ResourceUrl varchar2(255),
+						CONSTRAINT eduresource_EduResourceNum PRIMARY KEY (EduResourceNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX eduresource_DiseaseDefNum ON eduresource (DiseaseDefNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX eduresource_MedicationNum ON eduresource (MedicationNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX eduresource_LabResultID ON eduresource (LabResultID)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4774,4 +4812,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+				
+
+				
+
 				

@@ -180,6 +180,7 @@
     <Compile Include="Crud\DrugManufacturerCrud.cs" />
     <Compile Include="Crud\DrugUnitCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
+    <Compile Include="Crud\EduResourceCrud.cs" />
     <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
     <Compile Include="Crud\EmailAttachCrud.cs" />
@@ -331,6 +332,7 @@
     </Compile>
     <Compile Include="Data Interface\DrugManufacturers.cs" />
     <Compile Include="Data Interface\DrugUnits.cs" />
+    <Compile Include="Data Interface\EduResources.cs" />
     <Compile Include="Data Interface\EhrMeasures.cs" />
     <Compile Include="Data Interface\Formularies.cs" />
     <Compile Include="Data Interface\FormularyMeds.cs" />
@@ -657,6 +659,7 @@
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\DrugManufacturer.cs" />
     <Compile Include="TableTypes\DrugUnit.cs" />
+    <Compile Include="TableTypes\EduResource.cs" />
     <Compile Include="TableTypes\EhrMeasure.cs" />
     <Compile Include="TableTypes\Formulary.cs" />
     <Compile Include="TableTypes\FormularyMed.cs" />
