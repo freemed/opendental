@@ -22,6 +22,7 @@ namespace PatientPortal {
 			if(LinkButtonLoginStatus.Text=="Logout") {
 				long DentalOfficeID=((Patientm)Session["Patient"]).CustomerNum;
 				Session["Patient"]=null;
+				Session.Abandon();
 				Response.Redirect("~/Login.aspx?DentalOfficeID="+DentalOfficeID);
 			}
 			if(LinkButtonLoginStatus.Text=="Login") {
