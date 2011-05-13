@@ -417,6 +417,7 @@ namespace OpenDental{
 		private void FormConfig_Load(object sender, System.EventArgs e) {
 			if(IsAccessedFromMainMenu) {
 				comboDatabase.Enabled=false;
+				comboDatabase.Text=DataConnection.GetDatabaseName();
 			}
 			listType.Items.Add("MySql");
 			listType.Items.Add("Oracle");
@@ -622,7 +623,9 @@ namespace OpenDental{
 					//If there is a DatabaseConnection, then use it.
 					groupServer.Enabled=false;
 					comboComputerName.Text=nav.SelectSingleNode("ComputerName").Value;
-					comboDatabase.Text=nav.SelectSingleNode("Database").Value;
+					if(!IsAccessedFromMainMenu) {
+						comboDatabase.Text=nav.SelectSingleNode("Database").Value;
+					}
 					textUser.Text=nav.SelectSingleNode("User").Value;
 					textPassword.Text=nav.SelectSingleNode("Password").Value;
 					XPathNavigator noshownav=nav.SelectSingleNode("NoShowOnStartup");
