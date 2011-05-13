@@ -4771,7 +4771,30 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX eduresource_LabResultID ON eduresource (LabResultID)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicalorder ADD IsDiscontinued tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicalorder ADD IsDiscontinued number(3)";
+					Db.NonQ(command);
+					command="UPDATE medicalorder SET IsDiscontinued = 0 WHERE IsDiscontinued IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicalorder MODIFY IsDiscontinued NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxpat ADD IsDiscontinued tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxpat ADD IsDiscontinued number(3)";
+					Db.NonQ(command);
+					command="UPDATE rxpat SET IsDiscontinued = 0 WHERE IsDiscontinued IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxpat MODIFY IsDiscontinued NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -4817,3 +4840,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 				
+
+				
+

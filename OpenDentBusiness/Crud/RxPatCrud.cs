@@ -46,19 +46,20 @@ namespace OpenDentBusiness.Crud{
 			RxPat rxPat;
 			for(int i=0;i<table.Rows.Count;i++) {
 				rxPat=new RxPat();
-				rxPat.RxNum       = PIn.Long  (table.Rows[i]["RxNum"].ToString());
-				rxPat.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				rxPat.RxDate      = PIn.Date  (table.Rows[i]["RxDate"].ToString());
-				rxPat.Drug        = PIn.String(table.Rows[i]["Drug"].ToString());
-				rxPat.Sig         = PIn.String(table.Rows[i]["Sig"].ToString());
-				rxPat.Disp        = PIn.String(table.Rows[i]["Disp"].ToString());
-				rxPat.Refills     = PIn.String(table.Rows[i]["Refills"].ToString());
-				rxPat.ProvNum     = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
-				rxPat.Notes       = PIn.String(table.Rows[i]["Notes"].ToString());
-				rxPat.PharmacyNum = PIn.Long  (table.Rows[i]["PharmacyNum"].ToString());
-				rxPat.IsControlled= PIn.Bool  (table.Rows[i]["IsControlled"].ToString());
-				rxPat.DateTStamp  = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				rxPat.IsElectQueue= PIn.Bool  (table.Rows[i]["IsElectQueue"].ToString());
+				rxPat.RxNum         = PIn.Long  (table.Rows[i]["RxNum"].ToString());
+				rxPat.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				rxPat.RxDate        = PIn.Date  (table.Rows[i]["RxDate"].ToString());
+				rxPat.Drug          = PIn.String(table.Rows[i]["Drug"].ToString());
+				rxPat.Sig           = PIn.String(table.Rows[i]["Sig"].ToString());
+				rxPat.Disp          = PIn.String(table.Rows[i]["Disp"].ToString());
+				rxPat.Refills       = PIn.String(table.Rows[i]["Refills"].ToString());
+				rxPat.ProvNum       = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				rxPat.Notes         = PIn.String(table.Rows[i]["Notes"].ToString());
+				rxPat.PharmacyNum   = PIn.Long  (table.Rows[i]["PharmacyNum"].ToString());
+				rxPat.IsControlled  = PIn.Bool  (table.Rows[i]["IsControlled"].ToString());
+				rxPat.DateTStamp    = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				rxPat.IsElectQueue  = PIn.Bool  (table.Rows[i]["IsElectQueue"].ToString());
+				rxPat.IsDiscontinued= PIn.Bool  (table.Rows[i]["IsDiscontinued"].ToString());
 				retVal.Add(rxPat);
 			}
 			return retVal;
@@ -99,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RxNum,";
 			}
-			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,IsElectQueue) VALUES(";
+			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,IsElectQueue,IsDiscontinued) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(rxPat.RxNum)+",";
 			}
@@ -115,7 +116,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (rxPat.PharmacyNum)+","
 				+    POut.Bool  (rxPat.IsControlled)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Bool  (rxPat.IsElectQueue)+")";
+				+    POut.Bool  (rxPat.IsElectQueue)+","
+				+    POut.Bool  (rxPat.IsDiscontinued)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -128,18 +130,19 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one RxPat in the database.</summary>
 		internal static void Update(RxPat rxPat){
 			string command="UPDATE rxpat SET "
-				+"PatNum      =  "+POut.Long  (rxPat.PatNum)+", "
-				+"RxDate      =  "+POut.Date  (rxPat.RxDate)+", "
-				+"Drug        = '"+POut.String(rxPat.Drug)+"', "
-				+"Sig         = '"+POut.String(rxPat.Sig)+"', "
-				+"Disp        = '"+POut.String(rxPat.Disp)+"', "
-				+"Refills     = '"+POut.String(rxPat.Refills)+"', "
-				+"ProvNum     =  "+POut.Long  (rxPat.ProvNum)+", "
-				+"Notes       = '"+POut.String(rxPat.Notes)+"', "
-				+"PharmacyNum =  "+POut.Long  (rxPat.PharmacyNum)+", "
-				+"IsControlled=  "+POut.Bool  (rxPat.IsControlled)+", "
+				+"PatNum        =  "+POut.Long  (rxPat.PatNum)+", "
+				+"RxDate        =  "+POut.Date  (rxPat.RxDate)+", "
+				+"Drug          = '"+POut.String(rxPat.Drug)+"', "
+				+"Sig           = '"+POut.String(rxPat.Sig)+"', "
+				+"Disp          = '"+POut.String(rxPat.Disp)+"', "
+				+"Refills       = '"+POut.String(rxPat.Refills)+"', "
+				+"ProvNum       =  "+POut.Long  (rxPat.ProvNum)+", "
+				+"Notes         = '"+POut.String(rxPat.Notes)+"', "
+				+"PharmacyNum   =  "+POut.Long  (rxPat.PharmacyNum)+", "
+				+"IsControlled  =  "+POut.Bool  (rxPat.IsControlled)+", "
 				//DateTStamp can only be set by MySQL
-				+"IsElectQueue=  "+POut.Bool  (rxPat.IsElectQueue)+" "
+				+"IsElectQueue  =  "+POut.Bool  (rxPat.IsElectQueue)+", "
+				+"IsDiscontinued=  "+POut.Bool  (rxPat.IsDiscontinued)+" "
 				+"WHERE RxNum = "+POut.Long(rxPat.RxNum);
 			Db.NonQ(command);
 		}
@@ -191,6 +194,10 @@ namespace OpenDentBusiness.Crud{
 			if(rxPat.IsElectQueue != oldRxPat.IsElectQueue) {
 				if(command!=""){ command+=",";}
 				command+="IsElectQueue = "+POut.Bool(rxPat.IsElectQueue)+"";
+			}
+			if(rxPat.IsDiscontinued != oldRxPat.IsDiscontinued) {
+				if(command!=""){ command+=",";}
+				command+="IsDiscontinued = "+POut.Bool(rxPat.IsDiscontinued)+"";
 			}
 			if(command==""){
 				return;

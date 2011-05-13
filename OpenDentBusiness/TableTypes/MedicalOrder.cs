@@ -20,6 +20,8 @@ namespace OpenDentBusiness {
 		public string Description;
 		///<summary>If this is true, then this order will show in list of all pending orders to let user attach lab results to a patient.  This flag gets cleared when lab result is attached to a patient.</summary>
 		public bool IsLabPending;
+		///<summary>EHR requires Active/Discontinued status. 0=Active, 1=Discontinued.</summary>
+		public bool IsDiscontinued;
 
     ///<summary></summary>
     public MedicalOrder Copy() {

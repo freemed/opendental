@@ -33,6 +33,8 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>If true, then this Rx will be visible in the electronic Rx Send window.  Once sent, this gets changed to false.</summary>
 		public bool IsElectQueue;
+		///<summary>EHR requires Active/Discontinued status. 0=Active, 1=Discontinued.</summary>
+		public bool IsDiscontinued;
 
 		///<summary></summary>
 		public RxPat Copy() {
