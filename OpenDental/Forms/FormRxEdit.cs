@@ -48,6 +48,8 @@ namespace OpenDental{
 		private RxPat RxPatCur;
 		private UI.Button butSend;
 		private CheckBox checkIsElectQueue;
+		private Label labelStatus;
+		private ListBox listBoxStatus;
 		Sheet sheet;
 
 		///<summary></summary>
@@ -103,6 +105,8 @@ namespace OpenDental{
 			this.labelView = new System.Windows.Forms.Label();
 			this.butSend = new OpenDental.UI.Button();
 			this.checkIsElectQueue = new System.Windows.Forms.CheckBox();
+			this.labelStatus = new System.Windows.Forms.Label();
+			this.listBoxStatus = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -383,12 +387,31 @@ namespace OpenDental{
 			this.checkIsElectQueue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsElectQueue.UseVisualStyleBackColor = true;
 			// 
+			// labelStatus
+			// 
+			this.labelStatus.Location = new System.Drawing.Point(66,357);
+			this.labelStatus.Name = "labelStatus";
+			this.labelStatus.Size = new System.Drawing.Size(70,17);
+			this.labelStatus.TabIndex = 250;
+			this.labelStatus.Text = "Status";
+			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// listBoxStatus
+			// 
+			this.listBoxStatus.FormattingEnabled = true;
+			this.listBoxStatus.Location = new System.Drawing.Point(138,356);
+			this.listBoxStatus.Name = "listBoxStatus";
+			this.listBoxStatus.Size = new System.Drawing.Size(116,30);
+			this.listBoxStatus.TabIndex = 249;
+			// 
 			// FormRxEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,460);
+			this.Controls.Add(this.labelStatus);
+			this.Controls.Add(this.listBoxStatus);
 			this.Controls.Add(this.checkIsElectQueue);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.labelView);
@@ -430,6 +453,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRxEdit_Load(object sender, System.EventArgs e) {
+			listBoxStatus.Visible=false;
+			labelStatus.Visible=false;
+			listBoxStatus.Items.Add("Active");
+			listBoxStatus.Items.Add("Discontinued");
+			if(true) {//TODO:formOpenDental.FormEhr!=null) {
+				listBoxStatus.Visible=true;
+				labelStatus.Visible=true;
+			}
 			if(IsNew){
 				butView.Visible=false;
 				labelView.Visible=false;
@@ -487,6 +518,12 @@ namespace OpenDental{
 			}
 			if(listProv.SelectedIndex!=-1){
 				RxPatCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
+			}
+			if(listBoxStatus.SelectedIndex==1) {
+				RxPatCur.IsDiscontinued=true;
+			}
+			else {
+				RxPatCur.IsDiscontinued=false;
 			}
 			RxPatCur.RxDate=PIn.Date(textDate.Text);
 			RxPatCur.Drug=textDrug.Text;
