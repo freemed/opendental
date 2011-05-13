@@ -283,6 +283,7 @@ namespace OpenDentBusiness {
 		StatementShowReturnAddress,
 		StatementSummaryShowInsInfo,
 		StoreCCnumbers,
+		StoreCCtokens,
 		SubscriberAllowChangeAlways,
 		TaskAncestorsAllSetInVersion55,
 		TaskListAlwaysShowsAtBottom,
