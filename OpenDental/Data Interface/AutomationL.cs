@@ -283,7 +283,7 @@ namespace OpenDental {
 		}
 
 		private static bool GenderComparison(AutomationCondition autoCond,long patNum) {
-			Patient pat=Patients.GetLim(patNum);
+			Patient pat=Patients.GetPat(patNum);
 			switch(autoCond.Comparison) {
 				case AutoCondComparison.Equals:
 					return (pat.Gender.ToString().Substring(0,1).ToLower()==autoCond.CompareString.ToLower());
