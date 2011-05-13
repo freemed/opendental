@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PatientDetails.aspx.cs" Inherits="MobileWeb.PatientDetails" %>
-
+<%@ Import namespace="OpenDentBusiness.Mobile" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,10 +41,10 @@
 				<ItemTemplate>
 					<li class="arrow style1">
 						<div class="elladjust">
-							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
+							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
-								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptDateTime.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;&nbsp;
-								<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).ProcDescript%>
+								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;&nbsp;
+								<%#((Appointmentm)Container.DataItem).ProcDescript%>
 								</a>
 						</div>
 					</li>

@@ -12,6 +12,7 @@ namespace MobileWeb {
 		protected void Page_Load(object sender,EventArgs e) {
 			//Thread.Sleep(500);
 			Session["CustomerNum"]=null;
+			Session.Abandon();
 			Message.Text="LoggedOut";
 		}
 	}

@@ -18,7 +18,7 @@ function hijackLinks() {
 
 */
 var MessageLoad='<div id="progress"><p>&nbsp;</p><p>Loading...</p><p>&nbsp;</p></div>';
-var MessageError='<div class="styleError">There has been an error while processing your page. Please try again.</div>';
+var MessageError = '<div class="styleError">There has been an error while processing your page. Please try again.<br />If the error persists, please refresh this page using the browser address bar and try again.</div>';
 
 $(document).ready(function () {
     TraversePage();
@@ -51,7 +51,7 @@ function TraversePage(){
 	$('a[href="#AppointmentList"]').click(function (e) {
 		//e.preventDefault();
 		//console.log('AppointmentList clicked');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
+		var UrlForFetchingData = this.attributes["linkattib"].value+"gg"; 
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
@@ -101,14 +101,9 @@ function TraversePage(){
 	    var SectionToFill='#AppointmentListContents';
 	    ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
-	
-	$('#today').tap(function(e) {
-		//console.log('Today button tapped');
-		/*
-        var UrlForFetchingData = 'AppointmentList.aspx'; 
-		var SectionToFill='#AppointmentListContents';
-		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
-        */
+
+	$('#datepickerbutton').tap(function (e) {
+	    //console.log('datepickerbutton tapped');
 		var MoveToURL = '#FilterPicker';
 		jQT.goTo(MoveToURL, 'slide');
         //for demo only
@@ -116,6 +111,7 @@ function TraversePage(){
 		var DemoDateCookieM = parseInt(getCookie("DemoDateCookieM"));
 		var DemoDateCookieD = parseInt(getCookie("DemoDateCookieD"));
 		if (DemoDateCookieY != null && DemoDateCookieY != "" && !isNaN(DemoDateCookieY)) {
+		    //console.log('in this if statement ' + DemoDateCookieY + " " + (DemoDateCookieM - 1) + " " + DemoDateCookieD);
 		    $('#datepicker').datepicker("setDate", new Date(DemoDateCookieY, DemoDateCookieM - 1, DemoDateCookieD));
 		}
 	});
@@ -155,13 +151,21 @@ function TraversePage(){
         var DemoDateCookieY = parseInt(getCookie("DemoDateCookieY"));
         var DemoDateCookieM = parseInt(getCookie("DemoDateCookieM"));
         var DemoDateCookieD = parseInt(getCookie("DemoDateCookieD"));
-        if (DemoDateCookieY != null && DemoDateCookieY != "" && !isNaN(DemoDateCookieY)) {
+        if (DemoDateCookieY != null && DemoDateCookieY != "" && !isNaN(DemoDateCookieY)) {//for demo
             inst.selectedYear = DemoDateCookieY;
             inst.selectedMonth = DemoDateCookieM - 1;
             inst.selectedDay = DemoDateCookieD;
+            //console.log("In here " + inst.selectedDay + " " + inst.selectedMonth + " " + inst.selectedYear);
         }
+        else {//for all other cases
+            var today = new Date();
+            inst.selectedYear = today.getFullYear();
+            inst.selectedMonth = today.getMonth();
+            inst.selectedDay = today.getDate();
+        }
+        //console.log('today button tapped' + inst.selectedDay + " " + inst.selectedMonth + " " + inst.selectedYear);
         // Dennis: if the default behaviour of the "Today" button is needed, uncomment next line
-        // _gotoToday.call(this, a);
+        //_gotoToday.call(this, a);
         // now do an additional call to _selectDate which will set the date and close
         // close the datepicker (if it is not inline)
         jQuery.datepicker._selectDate(a,

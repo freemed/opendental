@@ -30,7 +30,7 @@ namespace MobileWeb {
 				int Year=0;
 				int Month=0; 
 				int Day=0;
-				DateTime AppointmentDate;
+				DateTime AppointmentDate=DateTime.MinValue;
 				if(Request["year"]!=null && Request["month"]!=null && Request["day"]!=null) {
 					Int32.TryParse(Request["year"].ToString().Trim(),out Year);
 					Int32.TryParse(Request["month"].ToString().Trim(),out Month);
@@ -38,28 +38,28 @@ namespace MobileWeb {
 					AppointmentDate= new DateTime(Year,Month,Day);
 				}
 				else {
+					//dennis set cookies here this would be read by javascript on the client browser.
+					HttpCookie DemoDateCookieY=new HttpCookie("DemoDateCookieY");
+					HttpCookie DemoDateCookieM=new HttpCookie("DemoDateCookieM");
+					HttpCookie DemoDateCookieD=new HttpCookie("DemoDateCookieD");
 					if(CustomerNum==util.GetDemoDentalOfficeID()) {
 						AppointmentDate=util.GetDemoTodayDate();//for demo only. The date is set to a preset date in webconfig.
-						//dennis set cookies here this would be read by javascript on the client browser.
-						HttpCookie DemoDateCookieY=new HttpCookie("DemoDateCookieY");
-						HttpCookie DemoDateCookieM=new HttpCookie("DemoDateCookieM");
-						HttpCookie DemoDateCookieD=new HttpCookie("DemoDateCookieD");
 						DemoDateCookieY.Value=AppointmentDate.Year+"";
 						DemoDateCookieM.Value=AppointmentDate.Month+"";
 						DemoDateCookieD.Value=AppointmentDate.Day+"";
-						//DemoDateCookieY.Expires=DateTime.Now.AddDays(1);
-						//DemoDateCookieM.Expires=DateTime.Now.AddDays(1);
-						//DemoDateCookieD.Expires=DateTime.Now.AddDays(1);
-						// if expiry is not specifeid the cookie lasts till the end of seesion
-						Response.Cookies.Add(DemoDateCookieY);
-						Response.Cookies.Add(DemoDateCookieM);
-						Response.Cookies.Add(DemoDateCookieD);
-						
 					}
 					else {
+						DemoDateCookieY.Value="";// these are explicitely set to empty because javascript at on the browser picking values from previously set cookies
+						DemoDateCookieM.Value="";
+						DemoDateCookieD.Value="";
 						AppointmentDate=DateTime.Today;
 					}
-				}
+					Response.Cookies.Add(DemoDateCookieY);// if expiry is not specified the cookie lasts till the end of session
+					Response.Cookies.Add(DemoDateCookieM);
+					Response.Cookies.Add(DemoDateCookieD);
+
+
+				} Logger.Information("not demo CustomerNum="+CustomerNum);
 				DayLabel.Text=AppointmentDate.ToString("ddd")+", "+AppointmentDate.ToString("MMM")+AppointmentDate.ToString("dd");
 				DateTime PreviousDate=AppointmentDate.AddDays(-1);
 				PreviousDateDay=PreviousDate.Day;

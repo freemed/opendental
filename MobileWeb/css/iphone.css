@@ -39,7 +39,7 @@ min-height: 480px;
     height:33px;
 }
 /* multiple style don't work in some cases android hence some styles had to be written all over again*/
-#previous, #next, #today{
+#previous, #next, #datepickerbutton{
     position: relative;
     overflow: hidden;
     top: 10px;
@@ -70,7 +70,7 @@ min-height: 480px;
     float: right;
 }
 
-#today{
+#datepickerbutton{
     top: 8px;
     margin-left:15px;
     width: auto;
