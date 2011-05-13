@@ -4803,7 +4803,232 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'StoreCCtokens','1')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					//Create a temporary table to hold all of the canadian network information that we know of.
+					command="DROP TABLE IF EXISTS `tempcanadiannetwork`";
+					Db.NonQ(command);
+					command="CREATE TABLE `tempcanadiannetwork` ("
+						+"`CanadianNetworkNum` bigint(20) NOT NULL auto_increment,"
+						+"`Abbrev` varchar(20) default '',"
+						+"`Descript` varchar(255) default '',"
+						+"`CanadianTransactionPrefix` varchar(255) default '',"
+						+"PRIMARY KEY  (`CanadianNetworkNum`)"
+						+") ENGINE=MyISAM DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcanadiannetwork`(`CanadianNetworkNum`,`Abbrev`,`Descript`,`CanadianTransactionPrefix`) VALUES (7,'TELUS B','TELUS Group B','HD*         ')";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcanadiannetwork`(`CanadianNetworkNum`,`Abbrev`,`Descript`,`CanadianTransactionPrefix`) VALUES (8,'CSI','Continovation Services Inc.','CSI         ')";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcanadiannetwork`(`CanadianNetworkNum`,`Abbrev`,`Descript`,`CanadianTransactionPrefix`) VALUES (9,'CDCS','CDCS','CDCS        ')";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcanadiannetwork`(`CanadianNetworkNum`,`Abbrev`,`Descript`,`CanadianTransactionPrefix`) VALUES (10,'TELUS A','TELUS Group A','1111111119  ')";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcanadiannetwork`(`CanadianNetworkNum`,`Abbrev`,`Descript`,`CanadianTransactionPrefix`) VALUES (11,'MBC','Manitoba Blue Cross','MBC         ')";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcanadiannetwork`(`CanadianNetworkNum`,`Abbrev`,`Descript`,`CanadianTransactionPrefix`) VALUES (12,'PBC','Pacific Blue Cross','PBC         ')";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcanadiannetwork`(`CanadianNetworkNum`,`Abbrev`,`Descript`,`CanadianTransactionPrefix`) VALUES (13,'ABC','Alberta Blue Cross','ABC         ')";
+					Db.NonQ(command);
+					//Create a column to associate already created canadian networks to our temporary canadian network table.
+					command="ALTER TABLE tempcanadiannetwork ADD COLUMN CanadianNetworkNumExisting bigint default 0";
+					Db.NonQ(command);
+					command="UPDATE tempcanadiannetwork t,canadiannetwork n SET t.CanadianNetworkNumExisting=n.CanadianNetworkNum WHERE TRIM(LOWER(t.Abbrev))=TRIM(LOWER(n.Abbrev))";
+					Db.NonQ(command);
+					//Create a column to associate our temporary canadian networks to their new primary key in the canadian network table.
+					command="ALTER TABLE tempcanadiannetwork ADD COLUMN CanadianNetworkNumNew bigint default 0";
+					Db.NonQ(command);
+					command="UPDATE tempcanadiannetwork t "
+						+"SET t.CanadianNetworkNumNew=CASE "
+							+"WHEN t.CanadianNetworkNumExisting<>0 THEN t.CanadianNetworkNumExisting "
+							+"ELSE t.CanadianNetworkNum+(SELECT MAX(n.CanadianNetworkNum) FROM canadiannetwork n) END";
+					Db.NonQ(command);
+					//Update the live canadiannetwork table and set the CanadianTransactionPrefix to known values for networks that were already in the database.
+					command="UPDATE canadiannetwork n,tempcanadiannetwork t SET n.CanadianTransactionPrefix=t.CanadianTransactionPrefix WHERE n.CanadianNetworkNum=t.CanadianNetworkNumExisting";
+					Db.NonQ(command);
+					//Add any missing canadian networks from the temporary canadian network table for those networks that are not already present.
+					command="INSERT INTO canadiannetwork (CanadianNetworkNum,Abbrev,Descript,CanadianTransactionPrefix) "
+						+"SELECT CanadianNetworkNumNew,Abbrev,Descript,CanadianTransactionPrefix "
+						+"FROM tempcanadiannetwork "
+						+"WHERE CanadianNetworkNumExisting=0";
+					Db.NonQ(command);
+					//Remove the CanadianTransactionPrefix column from the carrier table, since it will now be part of the canadiannetwork table.
+					command="ALTER TABLE carrier DROP COLUMN CanadianTransactionPrefix";
+					Db.NonQ(command);
+					//Create a temporary carrier table to hold all of the most recent canadian carrier information that we know about.
+					command="DROP TABLE IF EXISTS `tempcarriercanada`";
+					Db.NonQ(command);
+					command="CREATE TABLE `tempcarriercanada` ("
+						+"`CarrierNum` bigint(20) NOT NULL auto_increment,"
+						+"`CarrierName` varchar(255) default '',"
+						+"`Address` varchar(255) default '',"
+						+"`Address2` varchar(255) default '',"
+						+"`City` varchar(255) default '',"
+						+"`State` varchar(255) default '',"
+						+"`Zip` varchar(255) default '',"
+						+"`Phone` varchar(255) default '',"
+						+"`ElectID` varchar(255) default '',"
+						+"`NoSendElect` tinyint(1) unsigned NOT NULL default '0',"
+						+"`IsCDA` tinyint(3) unsigned NOT NULL,"
+						+"`CDAnetVersion` varchar(100) default '',"
+						+"`CanadianNetworkNum` bigint(20) NOT NULL,"
+						+"`IsHidden` tinyint(4) NOT NULL,"
+						+"`CanadianEncryptionMethod` tinyint(4) NOT NULL,"
+						+"`CanadianSupportedTypes` int(11) NOT NULL,"
+						+"PRIMARY KEY  (`CarrierNum`)"
+						+") ENGINE=MyISAM DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (1,'Accerta','P.O. Box 310','Station \\'P\\'','Toronto','ON','M5S 2S8','1-800-505-7430','311140',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (2,'ADSC - AB Social Services QuikCard','200 Quikcard Centre','17010 103 Avenue','Edmonton','AB','T5S 1K7','1-800-232-1997','000105',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (3,'AGA Financial Group - Groupe Cloutier','525 René-Lévesque Blvd E 6th Floor','P.O. Box 17100','Quebec','QC','G1K 9E2','1 800 461-0770','610226',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (4,'Association des policières et policiers (APPQ)','1981, Léonard-De Vinci','','Ste-Julie','QC','J3E 1Y9','(450) 922-5414','628112',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (5,'Assumption Life','P. O. Box 160','','Moncton','NB','E1C 8L1','1-800-455-7337','610191',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (6,'Autoben','212 King Street West','Suite 203','Toronto','ON','M5H 1K5','1.866.647.1147','628151',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (7,'Benecaid Health Benefit Solutions (ESI)','185 The West Mall','Suite 1700','Toronto','ON','M9C 5L5','1.877.797.7448','610708',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (8,'Benefits Trust (The)','3800 Steeles Ave. West','Suite #102W','Vaughan','ON','L4L 4G9','1-800-487-2993','610146',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (9,'Beneplan','150 Ferrand Drive','Suite 500','Toronto','ON','M3C 3E5','1-800-387-1670','400008',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (10,'Capitale','525 René-Lévesque Blvd E 6th Floor','P.O. Box 17100','Quebec','QC','G1K 9E2','1 800 461-0770','600502',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (12,'Claimsecure','1 City Centre Drive','Suite 620','Mississauga','ON','L5B 1M2','1-888-479-7587','610099',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (11,'CDCS','P.O. Box 156 Stn. \"B\"','','Sudbury','ON','P3E 4N5','(705) 675-2222','610129',0,1,'04',9,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (13,'Commision de la construction du Quebec (CCQ)','3530, rue Jean-Talon Ouest','','Montréal','QC','H3R 2G3','1 888 842-8282','000036',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (14,'Co-operators (The)','Service Quality Department','130 Macdonell Street','Guelph','ON','N1H 6P8','1-800-265-2662','606258',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (15,'Coughlin & Associates','466 Tremblay Road','','Ottawa','ON','K1G 3R1','1-888-613-1234','610105',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (16,'Cowan Wright Beauchamps','705 Fountain Street North','PO Box 1510','Cambridge','ON','N1R 5T2','1-866-912-6926','610153',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (17,'Desjardins Financial Security','200 des Commandeurs','','Lévis','QC','G6V 6R2','1-866-838-7553','000051',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (18,'Empire Life Insurance Company (The)','259 King Street East','','Kingston','ON','K7L 3A8','1 800 561-1268','000033',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (19,'Equitable Life','One Westmount Road North','P.O. Box 1603, Stn Waterloo','Waterloo','ON','N2J 4C7','1-800-265-4556 x601','000029',0,1,'02',10,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (20,'Esorse Corporation','234 Eglinton Avenue East','Suite 502','Toronto','ON','M4P 1K5','(416)-483-3265','610650',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (21,'FAS Administrators','9707 - 110 Street','9th Floor','Edmonton','AB','T5K 3T4','1-800-770-2998','610614',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (22,'Great West Life Assurance Company (The)','100 Osborne Street North','','Winnipeg','MB','R3C 3A5','204-946-1190','000011',0,1,'02',10,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (23,'Green Shield Canada','8677 Anchor Drive','P.O Box 1606','Windsor','ON','N9A 6W1','1-800-265-5615','000102',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (24,'Group Medical Services (GMS - ESI)','2055 Albert Street','PO Box 1949','Regina','SK','S4P 0E3','1.800.667.3699','610217',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (25,'Group Medical Services (GMS - ESI - Saskatchewan)','2055 Albert Street','PO Box 1949','Regina','SK','S4P 0E3','1.800.667.3699','610218',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (26,'groupSource','1550 - 5th Street SW','Suite 400','Calgary','AB','T2R 1K3','1-800-661-6195','605064',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (27,'Industrial Alliance','1080 Grande Allée West','PO Box 1907, Station Terminus','Quebec City','QC','G1K 7M3','1-800-463-6236','000060',0,1,'02',10,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (28,'Industrial Alliance Pacific Insurance and Financial','2165 Broadway West','P.O. Box 5900','Vancouver','BC','V6B 5H6','(604) 734-1667','000024',0,1,'02',10,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (29,'Internationale Compagnie D\\'assurance vie','142 Heriot','P.O. Box 696','Drummondville','QC','J2B 6W9','1 888 864-6684','610643',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (30,'Johnson Inc.','','','','','','1-877-221-2127','627265',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (31,'Johnston Group','','','','','','800-990-4476','627223',0,1,'02',10,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (32,'Lee-Power & Associates Inc.','616 Cooper St.','','Ottawa','ON','K1R 5J2','(613) 236-9007','627585',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (33,'Manion Wilkins','500 - 21 Four Seasons Place','','Etobicoke','ON','M9B 0A5','1-800-263-5621','610158',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (34,'Manitoba Blue Cross','P.O. Box 1046','','Winnipeg','MB','R3C 2X7','1-800-873-2583','000094',0,1,'04',11,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (35,'Manufacturers Life Insurance Company (The)','500 King Street. N.','P.O. Box 1669','Waterloo','ON','N2J 4Z6','1-888-626-8543','000034',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (36,'Manulife Financial','500 King Street. N.','P.O. Box 1669','Waterloo','ON','N2J 4Z6','1-888-626-8543','610059',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (37,'Maritime Life Assurance Company','500 King Street. N.','P.O. Box 1669','Waterloo','ON','N2J 4Z6','1-888-626-8543','311113',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (38,'Maritime Life Assurance Company','500 King Street. N.','P.O. Box 1669','Waterloo','ON','N2J 4Z6','1-888-626-8543','610070',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (39,'McAteer Group of Companies','45 McIntosh Drive','','Markham','ON','L3R 8C7','(800) 263-3564','000112',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (40,'MDM','MD Management Limited','1870, Alta Vista Drive','Ottawa','ON','K1G 6R7','1 800 267-4022','601052',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (41,'Medavie Blue Cross','644 Main Street','PO Box 220','Moncton','NB','E1C 8L3','1-800-667-4511','610047',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (42,'NexGenRX','145 The West Mall','P.O. Box 110 U','Toronto','ON','M8Z 5M4','1-866-424-0257','610634',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (43,'NIHB','Health Canada','Address Locator 0900C2','Ottawa','ON','K1A 0K9','1-866-225-0709','610124',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (44,'Nova Scotia Community Services','10 Webster Street','Suite 202','Kentville','NS','B4N 1H7','(902) 679-6715','000109',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (45,'Nova Scotia Medical Services Insurance','1741 Brunswick Street, Suite 110A','PO Box 1535','Halifax','NS','B3J 2Y3','1-877-292-9597','000108',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (46,'Nunatsiavut Government Department of Health','25 Ikajuktauvik Road','P.O. Box 70','Nain','NL','A0P 1L0','(709) 922-2942','610172',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (47,'Pacific Blue Cross','Pacific Blue Cross/ BC Life','PO Box 7000','Vancouver','BC','V6B 4E1','604 419-2300','000064',0,1,'04',12,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (48,'Quikcard','200 Quikcard Centre','17010 103 Avenue','Edmonton','AB','T5S 1K7','(780) 426-7526','000103',0,1,'04',8,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (49,'RWAM Insurance','49 Industrial Drive','','Elmira','ON','N3B 3B1','(519) 669-1632','610616',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (50,'Saskatchewan Blue Cross','516 2nd Avenue N','PO Box 4030','Saskatoon','SK','S7K 3T2','306.244.1192','000096',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (51,'SES Benefits','2800 Skymark Avenue','Suite 307','Mississauga','ON','L4W 5A6','1-888-939-8885','610196',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (52,'SSQ SOCIÉTÉ d\\'assurance-vie inc.','2525 Laurier Boulevard','P.O. Box 10500, Stn Sainte-Foy','Quebec City','QC','G1V 4H6','1-888-900-3457','000079',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (53,'Standard Life Assurance Company (The)','639 - 5th Avenue South West','Suite 1500','Calgary','AB','T2P 0M9','403-296-9477','000020',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (54,'Sun Life of Canada','','','','','','1-877-786-5433','000016',0,1,'02',10,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (55,'Survivance','1555 Girouard Street West','P.O. Box 10,000','Saint-Hyacinthe','QC','J2S 7C8','450 773-6051','000080',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (56,'Syndicat des fonctionnaires municipaux MTL','429, rue de La Gauchetière Est','','Montréal','QC','H2L 2M7','514 842-9463','610677',0,1,'04',7,0,1,262143)";
+					Db.NonQ(command);
+					command="INSERT INTO `tempcarriercanada`(`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) VALUES (57,'Wawanesa','900-191 Broadway','','Winnipeg','MB','R3C 3P1','(204) 985-3923','311109',0,1,'02',7,0,1,262143)";
+					Db.NonQ(command);
+					//Update the CanadianNetworkNum values in the temporary carrier table because the networks in the live canadiannetwork table are different.
+					command="UPDATE tempcarriercanada tc,tempcanadiannetwork tn SET tc.CanadianNetworkNum=tn.CanadianNetworkNumNew WHERE tc.CanadianNetworkNum=tn.CanadianNetworkNum";
+					Db.NonQ(command);
+					//Clear all CanadianNetworkNum foreign keys from the carrier table so that for those carriers which we cannot match to a network, the users will be notified that no network is associated with the carrier.
+					command="UPDATE carrier c SET c.CanadianNetworkNum=0";
+					Db.NonQ(command);
+					//Create a column in the temporary carrier table to link up the existing carriers by electronic ID.
+					command="ALTER TABLE tempcarriercanada ADD COLUMN CarrierNumExisting bigint default 0";
+					Db.NonQ(command);
+					command="UPDATE tempcarriercanada t,carrier c SET t.CarrierNumExisting=c.CarrierNum WHERE c.IsCDA=1 AND t.ElectID=c.ElectID";
+					Db.NonQ(command);
+					//For those carriers that were already in the live data before this conversion that match a known carrier, update their CanadianNetworkNum to match the temporary canadian network data.
+					command="UPDATE carrier c,tempcarriercanada tc SET c.CanadianNetworkNum=tc.CanadianNetworkNum WHERE c.CarrierNum=tc.CarrierNumExisting";
+					Db.NonQ(command);
+					//Create a column to figure out what the new carriernums will need to be for the new carriers that we are going to add to the carrier table.
+					command="ALTER TABLE tempcarriercanada ADD COLUMN CarrierNumNew bigint default 0";
+					Db.NonQ(command);
+					command="UPDATE tempcarriercanada t SET t.CarrierNumNew=CASE WHEN t.CarrierNumExisting<>0 THEN t.CarrierNumExisting ELSE t.CarrierNum+(SELECT MAX(c.CarrierNum) FROM carrier c) END";
+					Db.NonQ(command);
+					//Add carriers from the temporary carrier table which do not already exist in the live carrier table.
+					//We only want to insert these carriers if in Canada because they are of no use elsewhere.
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+						command="INSERT INTO carrier (`CarrierNum`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,"
+							+"`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes`) "
+							+"SELECT `CarrierNumNew`,`CarrierName`,`Address`,`Address2`,`City`,`State`,`Zip`,`Phone`,`ElectID`,`NoSendElect`,`IsCDA`,"
+							+"`CDAnetVersion`,`CanadianNetworkNum`,`IsHidden`,`CanadianEncryptionMethod`,`CanadianSupportedTypes` "
+							+"FROM tempcarriercanada "
+							+"WHERE CarrierNumExisting=0";
+						Db.NonQ(command);
+					}
+					command="DROP TABLE IF EXISTS `tempcanadiannetwork`";
+					Db.NonQ(command);
+					command="DROP TABLE IF EXISTS `tempcarriercanada`";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					//At this point, there should not be anyone in Canada using Oracle, so these statements have been skipped because they would be a bit of work to create.
+				}
 
 
 

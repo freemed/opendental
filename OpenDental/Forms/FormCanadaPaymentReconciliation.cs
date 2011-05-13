@@ -83,7 +83,6 @@ namespace OpenDental {
 					carrier.CDAnetVersion="04";
 					carrier.ElectID="999999";//The whole ITRANS network.
 					carrier.CanadianEncryptionMethod=1;//No encryption.
-					carrier.CanadianTransactionPrefix="";
 					CanadianOutput.GetPaymentReconciliations(carrier,null,ProviderC.List[listTreatingProvider.SelectedIndex],
 							ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
 				}

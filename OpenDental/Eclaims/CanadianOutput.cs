@@ -15,6 +15,7 @@ namespace OpenDental.Eclaims {
 			//Note: This might be the only class of this kind that returns a string.  It's a special situation.
 			//We are simply not going to bother with language translation here.
 			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
+			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 			if(carrier==null){
 				throw new ApplicationException("Invalid carrier.");
 			}
@@ -100,7 +101,7 @@ namespace OpenDental.Eclaims {
 			StringBuilder strb=new StringBuilder();
 			//create message----------------------------------------------------------------------------------------------
 			//A01 transaction prefix 12 AN
-			strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+			strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
 			//A02 office sequence number 6 N
 			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 			//A03 format version number 2 N
@@ -328,6 +329,7 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
 			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
+			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 			Etrans etrans=Etranss.CreateCanadianOutput(claim.PatNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
 				clearhouse.ClearinghouseNum,EtransType.ReverseResponse_CA,plan.PlanNum,insSub.InsSubNum);
 			Patient patient=Patients.GetPat(claim.PatNum);
@@ -337,7 +339,7 @@ namespace OpenDental.Eclaims {
 			Patient subscriber=Patients.GetPat(insSub.Subscriber);
 			//create message----------------------------------------------------------------------------------------------
 			//A01 transaction prefix 12 AN
-			strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+			strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
 			//A02 office sequence number 6 N
 			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 			//A03 format version number 2 N
@@ -514,7 +516,8 @@ namespace OpenDental.Eclaims {
 					strb.Append("            ");
 				}
 				else {
-					strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
+					CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
+					strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
 				}
 				//A02 office sequence number 6 N
 				strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
@@ -710,12 +713,7 @@ namespace OpenDental.Eclaims {
 						clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
 				}
 				//A01 transaction prefix 12 AN
-				if(carrier!=null) {
-					strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
-				}
-				else { //Assume network!=null
-					strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
-				}
+				strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
 				//A02 office sequence number 6 N
 				strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 				//A03 format version number 2 N
@@ -836,12 +834,7 @@ namespace OpenDental.Eclaims {
 					clearhouse.ClearinghouseNum,EtransType.RequestSumm_CA,0,0);
 			}
 			//A01 transaction prefix 12 AN
-			if(carrier!=null) {
-				strb.Append(Canadian.TidyAN(carrier.CanadianTransactionPrefix,12));
-			}
-			else { //Assume network!=null
-				strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
-			}
+			strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
 			//A02 office sequence number 6 N
 			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 			//A03 format version number 2 N

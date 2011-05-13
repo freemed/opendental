@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command="SELECT * FROM canadiannetwork";
+			string command="SELECT * FROM canadiannetwork ORDER BY Descript";
 			DataTable table=Db.GetTable(command);
 			listt=Crud.CanadianNetworkCrud.SelectMany(command);
 		}

@@ -462,7 +462,6 @@ namespace OpenDental{
 			this.textRadiographs = new OpenDental.ValidNum();
 			this.groupAttachedImages = new System.Windows.Forms.GroupBox();
 			this.butExport = new OpenDental.UI.Button();
-			this.textNote = new OpenDental.ODtextBox();
 			this.butAttachAdd = new OpenDental.UI.Button();
 			this.butAttachPerio = new OpenDental.UI.Button();
 			this.label61 = new System.Windows.Forms.Label();
@@ -477,6 +476,7 @@ namespace OpenDental{
 			this.textRefNum = new System.Windows.Forms.TextBox();
 			this.label46 = new System.Windows.Forms.Label();
 			this.comboEmployRelated = new System.Windows.Forms.ComboBox();
+			this.textNote = new OpenDental.ODtextBox();
 			this.comboPlaceService = new System.Windows.Forms.ComboBox();
 			this.label48 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
@@ -2476,7 +2476,6 @@ namespace OpenDental{
 			this.label76.TabIndex = 146;
 			this.label76.Text = "Trans Ref Num";
 			this.label76.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.label76.Visible = false;
 			// 
 			// butReverse
 			// 
@@ -3262,6 +3261,7 @@ namespace OpenDental{
 			this.groupValueCodes.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tabGeneral.ResumeLayout(false);
+			this.tabGeneral.PerformLayout();
 			this.groupAccident.ResumeLayout(false);
 			this.groupAccident.PerformLayout();
 			this.groupAttachments.ResumeLayout(false);

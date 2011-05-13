@@ -61,7 +61,6 @@ namespace OpenDentBusiness.Crud{
 				carrier.CanadianNetworkNum       = PIn.Long  (table.Rows[i]["CanadianNetworkNum"].ToString());
 				carrier.IsHidden                 = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
 				carrier.CanadianEncryptionMethod = PIn.Byte  (table.Rows[i]["CanadianEncryptionMethod"].ToString());
-				carrier.CanadianTransactionPrefix= PIn.String(table.Rows[i]["CanadianTransactionPrefix"].ToString());
 				carrier.CanadianSupportedTypes   = (CanSupTransTypes)PIn.Int(table.Rows[i]["CanadianSupportedTypes"].ToString());
 				retVal.Add(carrier);
 			}
@@ -122,7 +121,6 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (carrier.CanadianNetworkNum)+","
 				+    POut.Bool  (carrier.IsHidden)+","
 				+    POut.Byte  (carrier.CanadianEncryptionMethod)+","
-				+"'"+POut.String(carrier.CanadianTransactionPrefix)+"',"
 				+    POut.Int   ((int)carrier.CanadianSupportedTypes)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -150,7 +148,6 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianNetworkNum       =  "+POut.Long  (carrier.CanadianNetworkNum)+", "
 				+"IsHidden                 =  "+POut.Bool  (carrier.IsHidden)+", "
 				+"CanadianEncryptionMethod =  "+POut.Byte  (carrier.CanadianEncryptionMethod)+", "
-				+"CanadianTransactionPrefix= '"+POut.String(carrier.CanadianTransactionPrefix)+"', "
 				+"CanadianSupportedTypes   =  "+POut.Int   ((int)carrier.CanadianSupportedTypes)+" "
 				+"WHERE CarrierNum = "+POut.Long(carrier.CarrierNum);
 			Db.NonQ(command);
@@ -214,10 +211,6 @@ namespace OpenDentBusiness.Crud{
 			if(carrier.CanadianEncryptionMethod != oldCarrier.CanadianEncryptionMethod) {
 				if(command!=""){ command+=",";}
 				command+="CanadianEncryptionMethod = "+POut.Byte(carrier.CanadianEncryptionMethod)+"";
-			}
-			if(carrier.CanadianTransactionPrefix != oldCarrier.CanadianTransactionPrefix) {
-				if(command!=""){ command+=",";}
-				command+="CanadianTransactionPrefix = '"+POut.String(carrier.CanadianTransactionPrefix)+"'";
 			}
 			if(carrier.CanadianSupportedTypes != oldCarrier.CanadianSupportedTypes) {
 				if(command!=""){ command+=",";}

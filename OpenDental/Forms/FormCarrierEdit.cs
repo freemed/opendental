@@ -75,8 +75,6 @@ namespace OpenDental{
 		private Label label12;
 		private TextBox textEncryptionMethod;
 		private Label label13;
-		private TextBox textTransactionPrefix;
-		private Label label14;
 		private Label label15;
 		public Carrier CarrierCur;
 
@@ -133,8 +131,6 @@ namespace OpenDental{
 			this.labelCitySt = new System.Windows.Forms.Label();
 			this.checkIsCDAnet = new System.Windows.Forms.CheckBox();
 			this.groupCDAnet = new System.Windows.Forms.GroupBox();
-			this.textTransactionPrefix = new System.Windows.Forms.TextBox();
-			this.label14 = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
 			this.textEncryptionMethod = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
@@ -362,8 +358,6 @@ namespace OpenDental{
 			// 
 			// groupCDAnet
 			// 
-			this.groupCDAnet.Controls.Add(this.textTransactionPrefix);
-			this.groupCDAnet.Controls.Add(this.label14);
 			this.groupCDAnet.Controls.Add(this.label12);
 			this.groupCDAnet.Controls.Add(this.textEncryptionMethod);
 			this.groupCDAnet.Controls.Add(this.label13);
@@ -385,22 +379,6 @@ namespace OpenDental{
 			this.groupCDAnet.TabIndex = 99;
 			this.groupCDAnet.TabStop = false;
 			this.groupCDAnet.Text = "CDAnet";
-			// 
-			// textTransactionPrefix
-			// 
-			this.textTransactionPrefix.Location = new System.Drawing.Point(191,91);
-			this.textTransactionPrefix.Name = "textTransactionPrefix";
-			this.textTransactionPrefix.Size = new System.Drawing.Size(121,20);
-			this.textTransactionPrefix.TabIndex = 116;
-			// 
-			// label14
-			// 
-			this.label14.Location = new System.Drawing.Point(38,96);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(151,17);
-			this.label14.TabIndex = 117;
-			this.label14.Text = "Transaction Prefix";
-			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label12
 			// 
@@ -870,33 +848,29 @@ namespace OpenDental{
 			}
 			textVersion.Text=CarrierCur.CDAnetVersion;
 			if(CarrierCur.CanadianEncryptionMethod==(byte)0) {
-				textEncryptionMethod.Text="";
+				textEncryptionMethod.Text="1";
 			}
 			else {
 				textEncryptionMethod.Text=CarrierCur.CanadianEncryptionMethod.ToString();
 			}
-			textTransactionPrefix.Text=CarrierCur.CanadianTransactionPrefix;
-			check08.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityTransaction_08) == CanSupTransTypes.EligibilityTransaction_08;
-			check18.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityResponse_18) == CanSupTransTypes.EligibilityResponse_18;
-			check07.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.CobClaimTransaction_07) == CanSupTransTypes.CobClaimTransaction_07;
-			check11e.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimAckEmbedded_11e) == CanSupTransTypes.ClaimAckEmbedded_11e;
-			check21e.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimEobEmbedded_21e) == CanSupTransTypes.ClaimEobEmbedded_21e;
-			check02.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversal_02) == CanSupTransTypes.ClaimReversal_02;
-			check12.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversalResponse_12) == CanSupTransTypes.ClaimReversalResponse_12;
-			check03.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationSinglePage_03) == CanSupTransTypes.PredeterminationSinglePage_03;
-			check03m.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationMultiPage_03) == CanSupTransTypes.PredeterminationMultiPage_03;
-			check13.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationAck_13) == CanSupTransTypes.PredeterminationAck_13;
-			check13e.Checked
-				=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationAckEmbedded_13e) == CanSupTransTypes.PredeterminationAckEmbedded_13e;
-			check04.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForOutstandingTrans_04) == CanSupTransTypes.RequestForOutstandingTrans_04;
-			check14.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.OutstandingTransAck_14) == CanSupTransTypes.OutstandingTransAck_14;
-			check24.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EmailTransaction_24) == CanSupTransTypes.EmailTransaction_24;
-			check05.Checked
-				=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForSummaryReconciliation_05) == CanSupTransTypes.RequestForSummaryReconciliation_05;
-			check15.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.SummaryReconciliation_15) == CanSupTransTypes.SummaryReconciliation_15;
-			check06.Checked
-				=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForPaymentReconciliation_06) == CanSupTransTypes.RequestForPaymentReconciliation_06;
-			check16.Checked=(CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PaymentReconciliation_16) == CanSupTransTypes.PaymentReconciliation_16;
+			check08.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityTransaction_08) == CanSupTransTypes.EligibilityTransaction_08);
+			check18.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityResponse_18) == CanSupTransTypes.EligibilityResponse_18);
+			check07.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.CobClaimTransaction_07) == CanSupTransTypes.CobClaimTransaction_07);
+			check11e.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimAckEmbedded_11e) == CanSupTransTypes.ClaimAckEmbedded_11e);
+			check21e.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimEobEmbedded_21e) == CanSupTransTypes.ClaimEobEmbedded_21e);
+			check02.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversal_02) == CanSupTransTypes.ClaimReversal_02);
+			check12.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversalResponse_12) == CanSupTransTypes.ClaimReversalResponse_12);
+			check03.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationSinglePage_03) == CanSupTransTypes.PredeterminationSinglePage_03);
+			check03m.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationMultiPage_03) == CanSupTransTypes.PredeterminationMultiPage_03);
+			check13.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationAck_13) == CanSupTransTypes.PredeterminationAck_13);
+			check13e.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationAckEmbedded_13e) == CanSupTransTypes.PredeterminationAckEmbedded_13e);
+			check04.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForOutstandingTrans_04) == CanSupTransTypes.RequestForOutstandingTrans_04);
+			check14.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.OutstandingTransAck_14) == CanSupTransTypes.OutstandingTransAck_14);
+			check24.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EmailTransaction_24) == CanSupTransTypes.EmailTransaction_24);
+			check05.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForSummaryReconciliation_05) == CanSupTransTypes.RequestForSummaryReconciliation_05);
+			check15.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.SummaryReconciliation_15) == CanSupTransTypes.SummaryReconciliation_15);
+			check06.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForPaymentReconciliation_06) == CanSupTransTypes.RequestForPaymentReconciliation_06);
+			check16.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PaymentReconciliation_16) == CanSupTransTypes.PaymentReconciliation_16);
 		}
 
 		private void textCarrierName_TextChanged(object sender, System.EventArgs e) {
@@ -986,10 +960,6 @@ namespace OpenDental{
 					MsgBox.Show(this,"Encryption method must be 1, 2, or 3.");
 					return;
 				}
-				if(textTransactionPrefix.Text=="") {
-					MsgBox.Show(this,"Transaction prefix must not be blank.");
-					return;
-				}
 			}
 			CarrierCur.CarrierName=textCarrierName.Text;
 			CarrierCur.Phone=textPhone.Text;
@@ -1011,7 +981,6 @@ namespace OpenDental{
 				}
 				CarrierCur.CDAnetVersion=textVersion.Text;
 				CarrierCur.CanadianEncryptionMethod=PIn.Byte(textEncryptionMethod.Text);//validated.
-				CarrierCur.CanadianTransactionPrefix=textTransactionPrefix.Text;
 				CarrierCur.CanadianSupportedTypes=CanSupTransTypes.None;
 				if(check08.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.EligibilityTransaction_08;
@@ -1073,7 +1042,6 @@ namespace OpenDental{
 				CarrierCur.CanadianNetworkNum=0;
 				CarrierCur.CDAnetVersion="";
 				CarrierCur.CanadianEncryptionMethod=0;
-				CarrierCur.CanadianTransactionPrefix="";
 				CarrierCur.CanadianSupportedTypes=CanSupTransTypes.None;
 			}
 			if(IsNew){

@@ -38,8 +38,6 @@ namespace OpenDentBusiness{
 		public bool IsHidden;
 		///<summary>1=No Encryption, 2=CDAnet standard #1, 3=CDAnet standard #2.  Field A10.</summary>
 		public byte CanadianEncryptionMethod;
-		///<summary>A01.  Up to 12 char.</summary>
-		public string CanadianTransactionPrefix;
 		///<summary>Bit flags.</summary>
 		public CanSupTransTypes CanadianSupportedTypes; 
 
