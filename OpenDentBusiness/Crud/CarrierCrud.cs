@@ -46,22 +46,22 @@ namespace OpenDentBusiness.Crud{
 			Carrier carrier;
 			for(int i=0;i<table.Rows.Count;i++) {
 				carrier=new Carrier();
-				carrier.CarrierNum               = PIn.Long  (table.Rows[i]["CarrierNum"].ToString());
-				carrier.CarrierName              = PIn.String(table.Rows[i]["CarrierName"].ToString());
-				carrier.Address                  = PIn.String(table.Rows[i]["Address"].ToString());
-				carrier.Address2                 = PIn.String(table.Rows[i]["Address2"].ToString());
-				carrier.City                     = PIn.String(table.Rows[i]["City"].ToString());
-				carrier.State                    = PIn.String(table.Rows[i]["State"].ToString());
-				carrier.Zip                      = PIn.String(table.Rows[i]["Zip"].ToString());
-				carrier.Phone                    = PIn.String(table.Rows[i]["Phone"].ToString());
-				carrier.ElectID                  = PIn.String(table.Rows[i]["ElectID"].ToString());
-				carrier.NoSendElect              = PIn.Bool  (table.Rows[i]["NoSendElect"].ToString());
-				carrier.IsCDA                    = PIn.Bool  (table.Rows[i]["IsCDA"].ToString());
-				carrier.CDAnetVersion            = PIn.String(table.Rows[i]["CDAnetVersion"].ToString());
-				carrier.CanadianNetworkNum       = PIn.Long  (table.Rows[i]["CanadianNetworkNum"].ToString());
-				carrier.IsHidden                 = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
-				carrier.CanadianEncryptionMethod = PIn.Byte  (table.Rows[i]["CanadianEncryptionMethod"].ToString());
-				carrier.CanadianSupportedTypes   = (CanSupTransTypes)PIn.Int(table.Rows[i]["CanadianSupportedTypes"].ToString());
+				carrier.CarrierNum              = PIn.Long  (table.Rows[i]["CarrierNum"].ToString());
+				carrier.CarrierName             = PIn.String(table.Rows[i]["CarrierName"].ToString());
+				carrier.Address                 = PIn.String(table.Rows[i]["Address"].ToString());
+				carrier.Address2                = PIn.String(table.Rows[i]["Address2"].ToString());
+				carrier.City                    = PIn.String(table.Rows[i]["City"].ToString());
+				carrier.State                   = PIn.String(table.Rows[i]["State"].ToString());
+				carrier.Zip                     = PIn.String(table.Rows[i]["Zip"].ToString());
+				carrier.Phone                   = PIn.String(table.Rows[i]["Phone"].ToString());
+				carrier.ElectID                 = PIn.String(table.Rows[i]["ElectID"].ToString());
+				carrier.NoSendElect             = PIn.Bool  (table.Rows[i]["NoSendElect"].ToString());
+				carrier.IsCDA                   = PIn.Bool  (table.Rows[i]["IsCDA"].ToString());
+				carrier.CDAnetVersion           = PIn.String(table.Rows[i]["CDAnetVersion"].ToString());
+				carrier.CanadianNetworkNum      = PIn.Long  (table.Rows[i]["CanadianNetworkNum"].ToString());
+				carrier.IsHidden                = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
+				carrier.CanadianEncryptionMethod= PIn.Byte  (table.Rows[i]["CanadianEncryptionMethod"].ToString());
+				carrier.CanadianSupportedTypes  = (CanSupTransTypes)PIn.Int(table.Rows[i]["CanadianSupportedTypes"].ToString());
 				retVal.Add(carrier);
 			}
 			return retVal;
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CarrierNum,";
 			}
-			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianTransactionPrefix,CanadianSupportedTypes) VALUES(";
+			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(carrier.CarrierNum)+",";
 			}
@@ -134,21 +134,21 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Carrier in the database.</summary>
 		internal static void Update(Carrier carrier){
 			string command="UPDATE carrier SET "
-				+"CarrierName              = '"+POut.String(carrier.CarrierName)+"', "
-				+"Address                  = '"+POut.String(carrier.Address)+"', "
-				+"Address2                 = '"+POut.String(carrier.Address2)+"', "
-				+"City                     = '"+POut.String(carrier.City)+"', "
-				+"State                    = '"+POut.String(carrier.State)+"', "
-				+"Zip                      = '"+POut.String(carrier.Zip)+"', "
-				+"Phone                    = '"+POut.String(carrier.Phone)+"', "
-				+"ElectID                  = '"+POut.String(carrier.ElectID)+"', "
-				+"NoSendElect              =  "+POut.Bool  (carrier.NoSendElect)+", "
-				+"IsCDA                    =  "+POut.Bool  (carrier.IsCDA)+", "
-				+"CDAnetVersion            = '"+POut.String(carrier.CDAnetVersion)+"', "
-				+"CanadianNetworkNum       =  "+POut.Long  (carrier.CanadianNetworkNum)+", "
-				+"IsHidden                 =  "+POut.Bool  (carrier.IsHidden)+", "
-				+"CanadianEncryptionMethod =  "+POut.Byte  (carrier.CanadianEncryptionMethod)+", "
-				+"CanadianSupportedTypes   =  "+POut.Int   ((int)carrier.CanadianSupportedTypes)+" "
+				+"CarrierName             = '"+POut.String(carrier.CarrierName)+"', "
+				+"Address                 = '"+POut.String(carrier.Address)+"', "
+				+"Address2                = '"+POut.String(carrier.Address2)+"', "
+				+"City                    = '"+POut.String(carrier.City)+"', "
+				+"State                   = '"+POut.String(carrier.State)+"', "
+				+"Zip                     = '"+POut.String(carrier.Zip)+"', "
+				+"Phone                   = '"+POut.String(carrier.Phone)+"', "
+				+"ElectID                 = '"+POut.String(carrier.ElectID)+"', "
+				+"NoSendElect             =  "+POut.Bool  (carrier.NoSendElect)+", "
+				+"IsCDA                   =  "+POut.Bool  (carrier.IsCDA)+", "
+				+"CDAnetVersion           = '"+POut.String(carrier.CDAnetVersion)+"', "
+				+"CanadianNetworkNum      =  "+POut.Long  (carrier.CanadianNetworkNum)+", "
+				+"IsHidden                =  "+POut.Bool  (carrier.IsHidden)+", "
+				+"CanadianEncryptionMethod=  "+POut.Byte  (carrier.CanadianEncryptionMethod)+", "
+				+"CanadianSupportedTypes  =  "+POut.Int   ((int)carrier.CanadianSupportedTypes)+" "
 				+"WHERE CarrierNum = "+POut.Long(carrier.CarrierNum);
 			Db.NonQ(command);
 		}
