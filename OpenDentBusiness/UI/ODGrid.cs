@@ -435,7 +435,7 @@ namespace OpenDental.UI {
 							//find the tallest col
 							for(int j=0;j<rows[i].Cells.Count;j++) {
 								if(rows[i].Height==0) {//not set
-									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth,StringFormat.GenericTypographic).Height+1;
+									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height+1;
 								}
 								else {
 									cellH=rows[i].Height;
@@ -447,7 +447,7 @@ namespace OpenDental.UI {
 						}
 						else {
 							if(rows[i].Height==0) {//not set
-								RowHeights[i]=(int)g.MeasureString("Any",cellFont,100,StringFormat.GenericTypographic).Height+1;
+								RowHeights[i]=(int)g.MeasureString("Any",cellFont,100).Height+1;
 							}
 							else {
 								RowHeights[i]=rows[i].Height;
@@ -457,7 +457,7 @@ namespace OpenDental.UI {
 							RowHeights[i]=imageH;
 						}
 						if(noteW>0 && rows[i].Note!="") {
-							NoteHeights[i]=(int)g.MeasureString(rows[i].Note,cellFont,noteW,StringFormat.GenericTypographic).Height;
+							NoteHeights[i]=(int)g.MeasureString(rows[i].Note,cellFont,noteW).Height;
 						}
 						if(i==0) {
 							RowLocs[i]=0;
@@ -523,7 +523,7 @@ namespace OpenDental.UI {
 				g.SmoothingMode=SmoothingMode.HighQuality;//for the up/down triangles
 				//g.TextRenderingHint=TextRenderingHint.AntiAlias;//for accurate string measurements. Didn't work
 				//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;
-				float pagescale=g.PageScale;
+				//float pagescale=g.PageScale;
 				DrawBackG(g);
 				DrawRows(g);
 				DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
