@@ -174,11 +174,13 @@ namespace OpenDental.Eclaims
 			List<ClaimProc> claimProcs;
 			List<Procedure> procList;
 			List<ToothInitial> initialList;
+			List<PatPlan> patPlans;
 			Procedure proc;
 			ProcedureCode procCode;
 			Provider provTreat;//might be different for each proc
 			Provider billProv=null;
 			Clinic clinic=null;
+			bool isSecondaryPreauth=false;
 			int seg=0;//segments for a particular ST-SE transaction
 			for(int i=0;i<claimItems.Count;i++){
 				#region Transaction Set Header
@@ -421,6 +423,7 @@ namespace OpenDental.Eclaims
 				claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 				procList=Procedures.Refresh(claim.PatNum);
 				initialList=ToothInitials.Refresh(claim.PatNum);
+				patPlans=PatPlans.Refresh(patient.PatNum);
 				#region Attachments
 				/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0){//If Tesia and has attachments
 					claim.ClaimNote="TESIA#"+claim.ClaimNum.ToString()+" "+claim.ClaimNote;
@@ -456,15 +459,21 @@ namespace OpenDental.Eclaims
 					seg++;
 					sw.Write("SBR*");
 					if(claim.ClaimType=="PreAuth") {
-						sw.Write("P*");
+						if(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)==2 && claim.PlanNum2!=0) {
+							isSecondaryPreauth=true;
+							sw.Write("S*");
+						}
+						else {
+							sw.Write("P*");
+						}
 					}
 					else if(claim.ClaimType=="P") {
 						sw.Write("P*");//SBR01: Payer responsibility code
 					}
-					else if(claim.ClaimType=="S"){
+					else if(claim.ClaimType=="S") {
 						sw.Write("S*");
 					}
-					else{
+					else {
 						sw.Write("T*");//T=Tertiary
 					}
 //todo: what about Cap?
@@ -618,7 +627,6 @@ namespace OpenDental.Eclaims
 						+Sout(patient.LName,35)+"*"//NM103: Lname
 						+Sout(patient.FName,25));//NM104: Fname
 					string patID=patient.SSN;
-					List <PatPlan> patPlans=PatPlans.Refresh(patient.PatNum);
 					for(int p=0;p<patPlans.Count;p++){
 						if(patPlans[p].InsSubNum==claim.InsSubNum){
 							patID=patPlans[p].PatID.Replace("-","");
@@ -1008,7 +1016,12 @@ namespace OpenDental.Eclaims
 					seg++;
 					sw.Write("SBR*");
 					if(claim.ClaimType=="PreAuth") {
-						sw.Write("S*");
+						if(isSecondaryPreauth){
+							sw.Write("P*");
+						}
+						else {
+							sw.Write("S*");
+						}
 					}
 					else if(claim.ClaimType=="S"){
 						sw.Write("P*");//SBR01: Payer responsibility code
