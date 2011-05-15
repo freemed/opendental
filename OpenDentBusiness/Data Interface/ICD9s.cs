@@ -168,5 +168,16 @@ namespace OpenDentBusiness{
 			}
 			return false;
 		}
+
+		///<summary>Returns the ICD9 of the code passed in by looking in cache.  If code does not exist, returns null.</summary>
+		public static ICD9 GetByCode(string icd9Code) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].ICD9Code==icd9Code) {
+					return Listt[i];
+				}
+			}
+			return null;
+		}
 	}
 }

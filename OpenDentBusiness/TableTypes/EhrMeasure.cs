@@ -21,6 +21,15 @@ namespace OpenDentBusiness {
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string Measure;
+		///<summary>Not a database column.  More than this percent for meaningful use.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public int PercentThreshold;
+		///<summary>Not a database column.  An explanation of which patients qualify for enumerator.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string NumeratorExplain;
+		///<summary>Not a database column.  An explanation of which patients qualify for denominator.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string DenominatorExplain;
 
 		///<summary></summary>
 		public EhrMeasure Copy() {
@@ -61,7 +70,7 @@ namespace OpenDentBusiness {
 		///<summary>14</summary>
 		MedReconcile,
 		///<summary>15- Summary of care record for transition or referral.</summary>
-		Exchange
+		Summary
 
 	}
 }

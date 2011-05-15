@@ -192,6 +192,17 @@ namespace OpenDentBusiness {
 			return 0;
 		}
 
+		///<summary>Returns the diseasedef that has a name exactly matching the specified string. Returns null if no match.  Does not match hidden diseases.</summary>
+		public static DiseaseDef GetFromName(string diseaseName) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Length;i++) {
+				if(diseaseName==List[i].DiseaseName) {
+					return List[i];
+				}
+			}
+			return null;
+		}
+
 		public static List<long> GetChangedSinceDiseaseDefNums(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);

@@ -89,6 +89,9 @@ namespace OpenDental{
 		private TextBox textMedicationsIndicateNone;
 		private Label label9;
 		private CheckBox checkStoreCCTokens;
+		private UI.Button butAllergiesIndicateNone;
+		private TextBox textAllergiesIndicateNone;
+		private Label label14;
 		private bool changed;
 
 		///<summary></summary>
@@ -173,6 +176,7 @@ namespace OpenDental{
 			this.tabAppts = new System.Windows.Forms.TabPage();
 			this.tabFamily = new System.Windows.Forms.TabPage();
 			this.tabAccount = new System.Windows.Forms.TabPage();
+			this.checkStoreCCTokens = new System.Windows.Forms.CheckBox();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
@@ -187,7 +191,9 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkStoreCCTokens = new System.Windows.Forms.CheckBox();
+			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
+			this.textAllergiesIndicateNone = new System.Windows.Forms.TextBox();
+			this.label14 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -900,6 +906,18 @@ namespace OpenDental{
 			this.tabAccount.Text = "Account";
 			this.tabAccount.UseVisualStyleBackColor = true;
 			// 
+			// checkStoreCCTokens
+			// 
+			this.checkStoreCCTokens.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkStoreCCTokens.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkStoreCCTokens.Location = new System.Drawing.Point(72,220);
+			this.checkStoreCCTokens.Name = "checkStoreCCTokens";
+			this.checkStoreCCTokens.Size = new System.Drawing.Size(368,17);
+			this.checkStoreCCTokens.TabIndex = 203;
+			this.checkStoreCCTokens.Text = "Automatically store X-Charge Tokens";
+			this.checkStoreCCTokens.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkStoreCCTokens.UseVisualStyleBackColor = true;
+			// 
 			// textStatementsCalcDueDate
 			// 
 			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(381,109);
@@ -935,6 +953,9 @@ namespace OpenDental{
 			// 
 			// tabChart
 			// 
+			this.tabChart.Controls.Add(this.butAllergiesIndicateNone);
+			this.tabChart.Controls.Add(this.textAllergiesIndicateNone);
+			this.tabChart.Controls.Add(this.label14);
 			this.tabChart.Controls.Add(this.butMedicationsIndicateNone);
 			this.tabChart.Controls.Add(this.textMedicationsIndicateNone);
 			this.tabChart.Controls.Add(this.label9);
@@ -1069,17 +1090,37 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkStoreCCTokens
+			// butAllergiesIndicateNone
 			// 
-			this.checkStoreCCTokens.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkStoreCCTokens.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStoreCCTokens.Location = new System.Drawing.Point(72,220);
-			this.checkStoreCCTokens.Name = "checkStoreCCTokens";
-			this.checkStoreCCTokens.Size = new System.Drawing.Size(368,17);
-			this.checkStoreCCTokens.TabIndex = 203;
-			this.checkStoreCCTokens.Text = "Automatically store X-Charge Tokens";
-			this.checkStoreCCTokens.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkStoreCCTokens.UseVisualStyleBackColor = true;
+			this.butAllergiesIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAllergiesIndicateNone.Autosize = true;
+			this.butAllergiesIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAllergiesIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAllergiesIndicateNone.CornerRadius = 4F;
+			this.butAllergiesIndicateNone.Location = new System.Drawing.Point(419,155);
+			this.butAllergiesIndicateNone.Name = "butAllergiesIndicateNone";
+			this.butAllergiesIndicateNone.Size = new System.Drawing.Size(22,21);
+			this.butAllergiesIndicateNone.TabIndex = 205;
+			this.butAllergiesIndicateNone.Text = "...";
+			this.butAllergiesIndicateNone.Click += new System.EventHandler(this.butAllergiesIndicateNone_Click);
+			// 
+			// textAllergiesIndicateNone
+			// 
+			this.textAllergiesIndicateNone.Location = new System.Drawing.Point(270,156);
+			this.textAllergiesIndicateNone.Name = "textAllergiesIndicateNone";
+			this.textAllergiesIndicateNone.ReadOnly = true;
+			this.textAllergiesIndicateNone.Size = new System.Drawing.Size(145,20);
+			this.textAllergiesIndicateNone.TabIndex = 204;
+			// 
+			// label14
+			// 
+			this.label14.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label14.Location = new System.Drawing.Point(19,159);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(246,16);
+			this.label14.TabIndex = 203;
+			this.label14.Text = "Indicator that patient has No Allergies";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormModuleSetup
 			// 
@@ -1217,6 +1258,7 @@ namespace OpenDental{
 			checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
 			textProblemsIndicateNone.Text=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone));
 			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone));
+			textAllergiesIndicateNone.Text=AllergyDefs.GetOne(PrefC.GetLong(PrefName.AllergiesIndicateNone)).Description;
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
@@ -1269,6 +1311,19 @@ namespace OpenDental{
 				changed=true;
 			}
 			textMedicationsIndicateNone.Text=Medications.GetDescription(formM.SelectedMedicationNum);
+		}
+
+		private void butAllergiesIndicateNone_Click(object sender,EventArgs e) {
+			FormAllergySetup formA=new FormAllergySetup();
+			formA.IsSelectionMode=true;
+			formA.ShowDialog();
+			if(formA.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(Prefs.UpdateLong(PrefName.AllergiesIndicateNone,formA.SelectedAllergyDefNum)) {
+				changed=true;
+			}
+			textAllergiesIndicateNone.Text=AllergyDefs.GetOne(formA.SelectedAllergyDefNum).Description;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -1380,6 +1435,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
+
+		
 
 		
 

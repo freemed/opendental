@@ -458,7 +458,7 @@ namespace OpenDental.Eclaims
 					//2000B SBR:
 					seg++;
 					sw.Write("SBR*");
-					if(claim.ClaimType=="PreAuth") {
+					if(claim.ClaimType=="PreAuth"){
 						if(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)==2 && claim.PlanNum2!=0) {
 							isSecondaryPreauth=true;
 							sw.Write("S*");
@@ -467,10 +467,10 @@ namespace OpenDental.Eclaims
 							sw.Write("P*");
 						}
 					}
-					else if(claim.ClaimType=="P") {
+					else if(claim.ClaimType=="P"){
 						sw.Write("P*");//SBR01: Payer responsibility code
 					}
-					else if(claim.ClaimType=="S") {
+					else if(claim.ClaimType=="S"){
 						sw.Write("S*");
 					}
 					else {

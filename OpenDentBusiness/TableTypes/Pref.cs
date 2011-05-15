@@ -34,6 +34,8 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		ADAdescriptionsReset,
 		AgingCalculatedMonthlyInsteadOfDaily,
+		///<summary>FK to allergydef.AllergyDefNum</summary>
+		AllergiesIndicateNone,
 		AllowedFeeSchedsAutomate,
 		AllowSettingProcsComplete,
 		AppointmentBubblesDisabled,
@@ -155,6 +157,7 @@ namespace OpenDentBusiness {
 		InsurancePlansShared,
 		IntermingleFamilyDefault,
 		LabelPatientDefaultSheetDefNum,
+		///<summary>Comma-delimited list of two-letter language names.</summary>
 		LanguagesUsedByPatients,
 		LetterMergePath,
 		MainWindowTitle,

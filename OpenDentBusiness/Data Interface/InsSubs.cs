@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			InsSub retVal=new InsSub();
 			if(insSubNum==0) {
-				return null;
+				return new InsSub();
 			}
 			if(subList==null) {
 				subList=new List<InsSub>();

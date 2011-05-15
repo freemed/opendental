@@ -425,7 +425,7 @@ namespace OpenDentBusiness{
 		Male,
 		///<summary>1</summary>
 		Female,
-		///<summary>2- This is not a joke. Required by HIPAA for privacy.</summary>
+		///<summary>2- This is not a joke. Required by HIPAA for privacy.  Required by ehr to track missing entries.</summary>
 		Unknown}
 	///<summary></summary>
 	public enum PatientPosition{

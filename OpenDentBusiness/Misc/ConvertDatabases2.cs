@@ -5029,7 +5029,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					//At this point, there should not be anyone in Canada using Oracle, so these statements have been skipped because they would be a bit of work to create.
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('AllergiesIndicateNone','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'AllergiesIndicateNone','','')";
+					Db.NonQ(command);
+				}
 
 
 
