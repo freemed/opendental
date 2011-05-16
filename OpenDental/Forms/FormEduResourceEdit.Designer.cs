@@ -23,9 +23,18 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
+			this.SuspendLayout();
+			// 
+			// FormEduResourceEdit
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(292,273);
+			this.Name = "FormEduResourceEdit";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "FormEduResourceEdit";
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion

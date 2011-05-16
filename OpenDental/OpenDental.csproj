@@ -2192,6 +2192,12 @@
       <DependentUpon>FormTerminal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEduResourceEdit.resx">
+      <DependentUpon>FormEduResourceEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEduResourceSetup.resx">
+      <DependentUpon>FormEduResourceSetup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEmailSetupEHR.resx">
       <DependentUpon>FormEmailSetupEHR.cs</DependentUpon>
       <SubType>Designer</SubType>

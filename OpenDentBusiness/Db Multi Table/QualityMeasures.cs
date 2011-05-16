@@ -44,10 +44,22 @@ namespace OpenDentBusiness {
 
 		private static string GetId(QualityType qtype){
 			switch(qtype) {
-				case QualityType.WeightAdultOver65:
-					return "421a";
+				case QualityType.WeightOver65:
+					return "0421a";
 				case QualityType.WeightAdult:
-					return "421b";
+					return "0421b";
+				case QualityType.Hypertension:
+					return "0013";
+				case QualityType.TobaccoUse:
+					return "0028a";
+				case QualityType.TobaccoCessation:
+					return "0028b";
+				case QualityType.InfluenzaAdult:
+					return "0041";
+				case QualityType.WeightChild:
+					return "0024";
+				case QualityType.ImmunizeChild:
+					return "0038";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -55,10 +67,22 @@ namespace OpenDentBusiness {
 
 		private static string GetDescript(QualityType qtype) {
 			switch(qtype) {
-				case QualityType.WeightAdultOver65:
-					return "Weight, Adult, 65 or older";
+				case QualityType.WeightOver65:
+					return "Weight, Adult, 65+";
 				case QualityType.WeightAdult:
-					return "Weight, Adult, 18 to 64 years old";
+					return "Weight, Adult, 18 to 64";
+				case QualityType.Hypertension:
+					return "Hypertension";
+				case QualityType.TobaccoUse:
+					return "Tobacco Use Assessment";
+				case QualityType.TobaccoCessation:
+					return "Tobacco Cessation Intervention";
+				case QualityType.InfluenzaAdult:
+					return "Influenza Immunization, 50+";
+				case QualityType.WeightChild:
+					return "Weight, Child";
+				case QualityType.ImmunizeChild:
+					return "Immunization Status, Child";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -72,7 +96,7 @@ namespace OpenDentBusiness {
 			string command="";
 			DataTable tableRaw=new DataTable();
 			switch(qtype) {
-				case QualityType.WeightAdultOver65:
+				case QualityType.WeightOver65:
 					command="DROP TABLE IF EXISTS tempehrquality";
 					Db.NonQ(command);
 					command=@"CREATE TABLE tempehrquality (
@@ -110,7 +134,60 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					break;
 				case QualityType.WeightAdult:
-					command="";
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						DateVisit date NOT NULL DEFAULT '0001-01-01',
+						Height float NOT NULL,
+						Weight float NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit) SELECT patient.PatNum,LName,FName,"
+						+"MAX(ProcDate) "//on the first pass, all we can obtain is the date of the visit
+						+"FROM patient "
+						+"INNER JOIN procedurelog "//because we want to restrict to only results with procedurelog
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
+						+"AND Birthdate > "+POut.Date(DateTime.Today.AddYears(-65))+" "//less than 65
+						+"GROUP BY patient.PatNum";//there will frequently be multiple procedurelog events
+					Db.NonQ(command);
+					//now, find BMIs within 6 months of each visit date. No logic for picking one of multiple BMIs.
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.Height=vitalsign.Height, "
+						+"tempehrquality.Weight=vitalsign.Weight "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken <= tempehrquality.DateVisit "
+						+"AND vitalsign.DateTaken >= DATE_SUB(tempehrquality.DateVisit,INTERVAL 6 MONTH)";
+					Db.NonQ(command);
+					//todo
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					break;
+				case QualityType.Hypertension:
+
+					break;
+				case QualityType.TobaccoUse:
+
+					break;
+				case QualityType.TobaccoCessation:
+
+					break;
+				case QualityType.InfluenzaAdult:
+
+					break;
+				case QualityType.WeightChild:
+
+					break;
+				case QualityType.ImmunizeChild:
+
 					break;
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -137,11 +214,14 @@ namespace OpenDentBusiness {
 				row["numerator"]="";
 				row["exclusion"]="";
 				row["explanation"]="";
+				float weight=0;
+				float height=0;
+				float bmi=0;
 				switch(qtype) {
-					case QualityType.WeightAdultOver65:
-						float weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
-						float height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
-						float bmi=Vitalsigns.CalcBMI(weight,height);
+					case QualityType.WeightOver65:
+						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
+						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
+						bmi=Vitalsigns.CalcBMI(weight,height);
 						if(bmi==0){
 							row["explanation"]="No BMI";
 						}
@@ -157,7 +237,41 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case QualityType.WeightAdult:
-						
+						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
+						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
+						bmi=Vitalsigns.CalcBMI(weight,height);
+						if(bmi==0){
+							row["explanation"]="No BMI";
+						}
+						else if(bmi < 18.5f) {
+							row["explanation"]="Underweight";
+						}
+						else if(bmi < 25) {
+							row["numerator"]="X";
+							row["explanation"]="Normal weight";
+						}
+						else {
+							row["explanation"]="Overweight";
+						}
+						break;
+						break;
+					case QualityType.Hypertension:
+
+						break;
+					case QualityType.TobaccoUse:
+
+						break;
+					case QualityType.TobaccoCessation:
+
+						break;
+					case QualityType.InfluenzaAdult:
+
+						break;
+					case QualityType.WeightChild:
+
+						break;
+					case QualityType.ImmunizeChild:
+
 						break;
 					default:
 						throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -197,9 +311,21 @@ namespace OpenDentBusiness {
 		private static string GetDenominatorExplain(QualityType qtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
-				case QualityType.WeightAdultOver65:
+				case QualityType.WeightOver65:
 					return "All patients 65 and older with at least one completed procedure during the measurement period.";
 				case QualityType.WeightAdult:
+					return "";
+				case QualityType.Hypertension:
+					return "";
+				case QualityType.TobaccoUse:
+					return "";
+				case QualityType.TobaccoCessation:
+					return "";
+				case QualityType.InfluenzaAdult:
+					return "";
+				case QualityType.WeightChild:
+					return "";
+				case QualityType.ImmunizeChild:
 					return "";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -209,10 +335,22 @@ namespace OpenDentBusiness {
 		private static string GetNumeratorExplain(QualityType qtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
-				case QualityType.WeightAdultOver65:
+				case QualityType.WeightOver65:
 					return @"BMI < 22 or > 30 with care goal of follow-up BMI, or with dietary consultation order.
 BMI 22-30.";
 				case QualityType.WeightAdult:
+					return "";
+				case QualityType.Hypertension:
+					return "";
+				case QualityType.TobaccoUse:
+					return "";
+				case QualityType.TobaccoCessation:
+					return "";
+				case QualityType.InfluenzaAdult:
+					return "";
+				case QualityType.WeightChild:
+					return "";
+				case QualityType.ImmunizeChild:
 					return "";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -222,9 +360,21 @@ BMI 22-30.";
 		private static string GetExclusionsExplain(QualityType qtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
-				case QualityType.WeightAdultOver65:
+				case QualityType.WeightOver65:
 					return "Terminal illness; pregnancy; physical exam not done for patient, medical, or system reason.";
 				case QualityType.WeightAdult:
+					return "";
+				case QualityType.Hypertension:
+					return "";
+				case QualityType.TobaccoUse:
+					return "";
+				case QualityType.TobaccoCessation:
+					return "";
+				case QualityType.InfluenzaAdult:
+					return "";
+				case QualityType.WeightChild:
+					return "";
+				case QualityType.ImmunizeChild:
 					return "";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());

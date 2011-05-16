@@ -8,11 +8,14 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class MedicalOrders{
 		///<summary></summary>
-		public static List<MedicalOrder> Refresh(long patNum){
+		public static List<MedicalOrder> Refresh(long patNum,bool includeDiscontinued){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<MedicalOrder>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<MedicalOrder>>(MethodBase.GetCurrentMethod(),patNum,includeDiscontinued);
 			}
 			string command="SELECT * FROM medicalorder WHERE PatNum = "+POut.Long(patNum);
+			if(!includeDiscontinued) {
+				command+=" AND IsDiscontinued=0";
+			}
 			return Crud.MedicalOrderCrud.SelectMany(command);
 		}
 

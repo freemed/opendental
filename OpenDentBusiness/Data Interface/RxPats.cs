@@ -8,11 +8,14 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class RxPats {
 		///<summary>Used in Ehr.</summary>
-		public static List<RxPat> Refresh(long patNum) {
+		public static List<RxPat> Refresh(long patNum,bool includeDiscontinued) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),patNum,includeDiscontinued);
 			}
 			string command="SELECT * FROM rxpat WHERE PatNum="+POut.Long(patNum);
+			if(!includeDiscontinued) {
+				command+=" AND IsDiscontinued=0";
+			}
 			return Crud.RxPatCrud.SelectMany(command);
 		}
 

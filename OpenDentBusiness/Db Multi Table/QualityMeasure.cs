@@ -23,12 +23,12 @@ namespace OpenDentBusiness {
 	}
 
 	public enum QualityType {
-		WeightAdultOver65,
+		WeightOver65,
 		WeightAdult,
 		Hypertension,
 		TobaccoUse,
 		TobaccoCessation,
-		InfluenzaImmunize,
+		InfluenzaAdult,
 		WeightChild,
 		ImmunizeChild
 
