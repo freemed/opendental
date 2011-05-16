@@ -142,6 +142,7 @@ namespace TestCanada {
 				| CanSupTransTypes.ClaimReversal_02
 				| CanSupTransTypes.ClaimReversalResponse_12
 				| CanSupTransTypes.PredeterminationSinglePage_03
+				| CanSupTransTypes.PredeterminationMultiPage_03
 				| CanSupTransTypes.PredeterminationAck_13;
 			Carriers.Insert(carrier);
 			//---------------------------------------------------------
@@ -160,6 +161,92 @@ namespace TestCanada {
 			carrier.CanadianSupportedTypes
 				= CanSupTransTypes.PaymentReconciliation_16
 				| CanSupTransTypes.RequestForSummaryReconciliation_05;
+			Carriers.Insert(carrier);
+			//Carrier 111111
+			network=new CanadianNetwork();
+			network.Abbrev="CDANET14";
+			network.Descript="CDANET14";
+			network.CanadianTransactionPrefix="CDANET14";
+			carrier=new Carrier();
+			carrier.IsCDA=true;
+			carrier.CarrierName="111111";
+			carrier.CanadianNetworkNum=network.CanadianNetworkNum;
+			carrier.CDAnetVersion="04";
+			carrier.ElectID="111111";
+			carrier.CanadianEncryptionMethod=2;
+			carrier.CanadianSupportedTypes
+				//claim_01 is implied
+				= CanSupTransTypes.CobClaimTransaction_07
+				//claimAck_11 is implied
+				| CanSupTransTypes.ClaimAckEmbedded_11e
+				//claimEob_21 is implied
+				| CanSupTransTypes.ClaimEobEmbedded_21e
+				| CanSupTransTypes.ClaimReversal_02
+				| CanSupTransTypes.ClaimReversalResponse_12
+				| CanSupTransTypes.PredeterminationSinglePage_03
+				| CanSupTransTypes.PredeterminationMultiPage_03
+				| CanSupTransTypes.PredeterminationAck_13
+				| CanSupTransTypes.PredeterminationAckEmbedded_13e
+				| CanSupTransTypes.RequestForOutstandingTrans_04
+				| CanSupTransTypes.EmailTransaction_24
+				| CanSupTransTypes.RequestForSummaryReconciliation_05
+				| CanSupTransTypes.RequestForPaymentReconciliation_06
+				| CanSupTransTypes.SummaryReconciliation_15;
+			Carriers.Insert(carrier);
+			//Carrier 222222
+			network=new CanadianNetwork();
+			network.Abbrev="9403";
+			network.Descript="9403";
+			network.CanadianTransactionPrefix="9403";
+			carrier=new Carrier();
+			carrier.IsCDA=true;
+			carrier.CarrierName="222222";
+			carrier.CanadianNetworkNum=network.CanadianNetworkNum;
+			carrier.CDAnetVersion="04";
+			carrier.ElectID="222222";
+			carrier.CanadianEncryptionMethod=1;
+			carrier.CanadianSupportedTypes
+				= CanSupTransTypes.EligibilityTransaction_08
+				| CanSupTransTypes.EligibilityResponse_18
+				//claim_01 is implied
+				//claimAck_11 is implied
+				//claimEob_21 is implied
+				| CanSupTransTypes.ClaimReversal_02
+				| CanSupTransTypes.ClaimReversalResponse_12
+				| CanSupTransTypes.PredeterminationSinglePage_03
+				| CanSupTransTypes.PredeterminationAck_13
+				| CanSupTransTypes.RequestForOutstandingTrans_04
+				| CanSupTransTypes.EmailTransaction_24
+				| CanSupTransTypes.RequestForPaymentReconciliation_06
+				| CanSupTransTypes.PaymentReconciliation_16;
+			Carriers.Insert(carrier);
+			//Carrier 444444
+			network=new CanadianNetwork();
+			network.Abbrev="TEST4";
+			network.Descript="TEST4";
+			network.CanadianTransactionPrefix="TEST4";
+			carrier=new Carrier();
+			carrier.IsCDA=true;
+			carrier.CarrierName="444444";
+			carrier.CanadianNetworkNum=network.CanadianNetworkNum;
+			carrier.CDAnetVersion="04";
+			carrier.ElectID="444444";
+			carrier.CanadianEncryptionMethod=2;
+			carrier.CanadianSupportedTypes
+				= CanSupTransTypes.EligibilityTransaction_08
+				| CanSupTransTypes.EligibilityResponse_18
+				//claim_01 is implied
+				| CanSupTransTypes.CobClaimTransaction_07
+				//claimAck_11 is implied
+				//claimEob_21 is implied
+				| CanSupTransTypes.ClaimReversal_02
+				| CanSupTransTypes.ClaimReversalResponse_12
+				| CanSupTransTypes.PredeterminationSinglePage_03
+				| CanSupTransTypes.PredeterminationAck_13
+				| CanSupTransTypes.RequestForOutstandingTrans_04
+				| CanSupTransTypes.EmailTransaction_24
+				| CanSupTransTypes.RequestForPaymentReconciliation_06
+				| CanSupTransTypes.PaymentReconciliation_16;
 			Carriers.Insert(carrier);
 			Carriers.RefreshCache();
 			return "Carrier objects set.\r\n";

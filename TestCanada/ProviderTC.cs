@@ -7,50 +7,49 @@ using OpenDentBusiness;
 namespace TestCanada {
 	public class ProviderTC {
 		public static string SetInitialProviders() {
-			//Dentist #1----------------------------------
+			//Hide any existing providers.
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				ProviderC.List[i].IsHidden=true;
+			}
+			//Dr. A1---------------------------------
 			Provider prov;
-			if(ProviderC.List.Length>0) {
-				prov=ProviderC.List[0];
-				prov.FName="A.";
-				prov.LName="Dentist";
-				prov.NationalProvID="530123401";
-				prov.CanadianOfficeNum="1234";
-				prov.ItemOrder=0;
-				prov.Abbr="DocA";
-				Providers.Update(prov);
-			}
-			else {
-				prov=new Provider();
-				prov.FName="A.";
-				prov.LName="Dentist";
-				prov.NationalProvID="530123401";
-				prov.CanadianOfficeNum="1234";
-				prov.ItemOrder=0;
-				prov.Abbr="DocA";
-				Providers.Insert(prov);
-			}
-			if(ProviderC.List.Length>1) {
-				prov=ProviderC.List[1];
-				prov.FName="B.";
-				prov.LName="Dentist";
-				prov.NationalProvID="035678900";
-				prov.CanadianOfficeNum="1234";
-				prov.ItemOrder=1;
-				prov.Abbr="DocB";
-				prov.FeeSched=53;
-				Providers.Update(prov);
-			}
-			else {
-				prov=new Provider();
-				prov.FName="B.";
-				prov.LName="Dentist";
-				prov.NationalProvID="035678900";
-				prov.CanadianOfficeNum="1234";
-				prov.ItemOrder=1;
-				prov.Abbr="DocB";
-				prov.FeeSched=53;
-				Providers.Insert(prov);
-			}
+			prov=new Provider();
+			prov.FName="A.";
+			prov.LName="Dentist";
+			prov.NationalProvID="530123401";
+			prov.CanadianOfficeNum="1234";
+			prov.ItemOrder=0;
+			prov.Abbr="DocA";
+			Providers.Insert(prov);
+			//Dr. B1---------------------------------
+			prov=new Provider();
+			prov.FName="B.";
+			prov.LName="Dentist";
+			prov.NationalProvID="035678900";
+			prov.CanadianOfficeNum="1234";
+			prov.ItemOrder=1;
+			prov.Abbr="DocB";
+			prov.FeeSched=53;
+			Providers.Insert(prov);
+			//Dr. A2---------------------------------
+			prov=new Provider();
+			prov.FName="A.";
+			prov.LName="Dentist";
+			prov.NationalProvID="600567801";
+			prov.CanadianOfficeNum="1234";
+			prov.ItemOrder=0;
+			prov.Abbr="DocA2";
+			Providers.Insert(prov);
+			//Dr. B1---------------------------------
+			prov=new Provider();
+			prov.FName="B.";
+			prov.LName="Dentist";
+			prov.NationalProvID="035123400";
+			prov.CanadianOfficeNum="1234";
+			prov.ItemOrder=1;
+			prov.Abbr="DocB2";
+			prov.FeeSched=53;
+			Providers.Insert(prov);
 			Providers.RefreshCache();
 			//The billing provider for both is Dr. A.
 			Prefs.UpdateLong(PrefName.InsBillingProv,0);//since Dr. A is also the default practice provider.
