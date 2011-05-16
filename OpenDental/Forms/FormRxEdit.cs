@@ -457,6 +457,12 @@ namespace OpenDental{
 			labelStatus.Visible=false;
 			listBoxStatus.Items.Add("Active");
 			listBoxStatus.Items.Add("Discontinued");
+			if(RxPatCur.IsDiscontinued) {
+				listBoxStatus.SelectedIndex=1;
+			}
+			else {
+				listBoxStatus.SelectedIndex=0;
+			}
 			if(true) {//TODO:formOpenDental.FormEhr!=null) {
 				listBoxStatus.Visible=true;
 				labelStatus.Visible=true;
