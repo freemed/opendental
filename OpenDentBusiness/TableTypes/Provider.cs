@@ -64,6 +64,8 @@ namespace OpenDentBusiness{
 		public long AnesthProvType;
 		///<summary>If none of the supplied taxonomies works.  This will show on claims.</summary>
 		public string TaxonomyCodeOverride;
+		///<summary>For Canada. Set to true if CDA Net provider.</summary>
+		public bool IsCDAnet;
 
 		//Need: StateRxNum varchar255
 

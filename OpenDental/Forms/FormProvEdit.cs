@@ -66,6 +66,7 @@ namespace OpenDental{
 		private RadioButton radNone;
 		private Label label4;
 		private TextBox textTaxonomyOverride;
+		private CheckBox checkIsCDAnet;
 		public Provider ProvCur;
 
 		///<summary></summary>
@@ -148,6 +149,7 @@ namespace OpenDental{
 			this.labelAnesthProvs = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textTaxonomyOverride = new System.Windows.Forms.TextBox();
+			this.checkIsCDAnet = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupAnesthProvType.SuspendLayout();
@@ -164,7 +166,7 @@ namespace OpenDental{
 			// 
 			// labelColor
 			// 
-			this.labelColor.Location = new System.Drawing.Point(6,387);
+			this.labelColor.Location = new System.Drawing.Point(5,393);
 			this.labelColor.Name = "labelColor";
 			this.labelColor.Size = new System.Drawing.Size(129,16);
 			this.labelColor.TabIndex = 10;
@@ -174,7 +176,7 @@ namespace OpenDental{
 			// butColor
 			// 
 			this.butColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butColor.Location = new System.Drawing.Point(136,384);
+			this.butColor.Location = new System.Drawing.Point(135,390);
 			this.butColor.Name = "butColor";
 			this.butColor.Size = new System.Drawing.Size(30,20);
 			this.butColor.TabIndex = 13;
@@ -527,7 +529,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(6,412);
+			this.label14.Location = new System.Drawing.Point(5,418);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(129,16);
 			this.label14.TabIndex = 45;
@@ -537,7 +539,7 @@ namespace OpenDental{
 			// butOutlineColor
 			// 
 			this.butOutlineColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butOutlineColor.Location = new System.Drawing.Point(136,409);
+			this.butOutlineColor.Location = new System.Drawing.Point(135,415);
 			this.butOutlineColor.Name = "butOutlineColor";
 			this.butOutlineColor.Size = new System.Drawing.Size(30,20);
 			this.butOutlineColor.TabIndex = 14;
@@ -546,7 +548,7 @@ namespace OpenDental{
 			// comboSchoolClass
 			// 
 			this.comboSchoolClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSchoolClass.Location = new System.Drawing.Point(136,437);
+			this.comboSchoolClass.Location = new System.Drawing.Point(135,443);
 			this.comboSchoolClass.MaxDropDownItems = 30;
 			this.comboSchoolClass.Name = "comboSchoolClass";
 			this.comboSchoolClass.Size = new System.Drawing.Size(130,21);
@@ -554,7 +556,7 @@ namespace OpenDental{
 			// 
 			// labelSchoolClass
 			// 
-			this.labelSchoolClass.Location = new System.Drawing.Point(9,440);
+			this.labelSchoolClass.Location = new System.Drawing.Point(8,446);
 			this.labelSchoolClass.Name = "labelSchoolClass";
 			this.labelSchoolClass.Size = new System.Drawing.Size(125,16);
 			this.labelSchoolClass.TabIndex = 89;
@@ -667,12 +669,23 @@ namespace OpenDental{
 			this.textTaxonomyOverride.Size = new System.Drawing.Size(154,20);
 			this.textTaxonomyOverride.TabIndex = 97;
 			// 
+			// checkIsCDAnet
+			// 
+			this.checkIsCDAnet.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsCDAnet.Location = new System.Drawing.Point(333,364);
+			this.checkIsCDAnet.Name = "checkIsCDAnet";
+			this.checkIsCDAnet.Size = new System.Drawing.Size(168,17);
+			this.checkIsCDAnet.TabIndex = 99;
+			this.checkIsCDAnet.Text = "Is CDAnet Carrier";
+			this.checkIsCDAnet.Visible = false;
+			// 
 			// FormProvEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(849,668);
+			this.Controls.Add(this.checkIsCDAnet);
 			this.Controls.Add(this.textTaxonomyOverride);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.groupAnesthProvType);
@@ -721,8 +734,8 @@ namespace OpenDental{
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Provider";
-			this.Load += new System.EventHandler(this.FormProvEdit_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProvEdit_Closing);
+			this.Load += new System.EventHandler(this.FormProvEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
@@ -806,7 +819,10 @@ namespace OpenDental{
 			{
 				radAsstCirc.Checked = true;
 			}
-			
+			checkIsCDAnet.Checked=ProvCur.IsCDAnet;
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				checkIsCDAnet.Visible=true;
+			}
 		}
 
 		private void textCanadianOfficeNum_Validating(object sender,CancelEventArgs e) {
@@ -918,6 +934,7 @@ namespace OpenDental{
 			ProvCur.IsSecondary=checkIsSecondary.Checked;
 			ProvCur.SigOnFile=checkSigOnFile.Checked;
 			ProvCur.IsHidden=checkIsHidden.Checked;
+			ProvCur.IsCDAnet=checkIsCDAnet.Checked;
 			ProvCur.ProvColor=butColor.BackColor;
 			ProvCur.OutlineColor=butOutlineColor.BackColor;
 			if(comboSchoolClass.SelectedIndex==0){//none
