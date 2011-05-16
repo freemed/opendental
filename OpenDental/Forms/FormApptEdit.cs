@@ -1888,7 +1888,7 @@ namespace OpenDental{
 				}
 				ProcCur.CodeNum=ProcedureCodes.GetProcCode(codes[i]).CodeNum;
 				ProcCur.ProcDate=AptCur.AptDateTime.Date;
-				ProcCur.DateTP=AptCur.AptDateTime.Date;
+				ProcCur.DateTP=DateTime.Today;
 				InsPlan priplan=null;
 				InsSub prisub=null;
 				if(PatPlanList.Count>0) {
