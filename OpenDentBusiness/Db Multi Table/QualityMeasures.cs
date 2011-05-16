@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
 					measure.ReportingRate=100;
 					measure.PerformanceRate=0;
 					if(measure.Numerator > 0) {
-						measure.PerformanceRate=(int)((float)(measure.Numerator)/(float)(measure.Numerator+measure.NotMet));
+						measure.PerformanceRate=(int)((float)(measure.Numerator*100)/(float)(measure.Numerator+measure.NotMet));
 					}
 					measure.DenominatorExplain=GetDenominatorExplain(measure.Type);
 					measure.NumeratorExplain=GetNumeratorExplain(measure.Type);
@@ -44,9 +44,9 @@ namespace OpenDentBusiness {
 
 		private static string GetId(QualityType qtype){
 			switch(qtype) {
-				case QualityType.WeightAdult_a:
+				case QualityType.WeightAdultOver65:
 					return "421a";
-				case QualityType.WeightAdult_b:
+				case QualityType.WeightAdult:
 					return "421b";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -55,9 +55,9 @@ namespace OpenDentBusiness {
 
 		private static string GetDescript(QualityType qtype) {
 			switch(qtype) {
-				case QualityType.WeightAdult_a:
+				case QualityType.WeightAdultOver65:
 					return "Weight, Adult, 65 or older";
-				case QualityType.WeightAdult_b:
+				case QualityType.WeightAdult:
 					return "Weight, Adult, 18 to 64 years old";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -70,8 +70,9 @@ namespace OpenDentBusiness {
 			}
 			//these queries only work for mysql
 			string command="";
+			DataTable tableRaw=new DataTable();
 			switch(qtype) {
-				case QualityType.WeightAdult_a:
+				case QualityType.WeightAdultOver65:
 					command="DROP TABLE IF EXISTS tempehrquality";
 					Db.NonQ(command);
 					command=@"CREATE TABLE tempehrquality (
@@ -102,21 +103,17 @@ namespace OpenDentBusiness {
 						+"AND vitalsign.DateTaken <= tempehrquality.DateVisit "
 						+"AND vitalsign.DateTaken >= DATE_SUB(tempehrquality.DateVisit,INTERVAL 6 MONTH)";
 					Db.NonQ(command);
-
-
+					//todo
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
 					break;
-				case QualityType.WeightAdult_b:
+				case QualityType.WeightAdult:
 					command="";
 					break;
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
-			}
-			DataTable tableRaw=null;
-			if(command=="") {
-				tableRaw=new DataTable();
-			}
-			else {
-				tableRaw=Db.GetTable(command);
 			}
 			//PatNum, PatientName, Numerator(X), and Exclusion(X).
 			DataTable table=new DataTable("audit");
@@ -125,6 +122,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("patientName");
 			table.Columns.Add("numerator");
 			table.Columns.Add("exclusion");
+			table.Columns.Add("explanation");
 			List<DataRow> rows=new List<DataRow>();
 			Patient pat;
 			//string explanation;
@@ -138,22 +136,27 @@ namespace OpenDentBusiness {
 				row["patientName"]=pat.GetNameLF();
 				row["numerator"]="";
 				row["exclusion"]="";
+				row["explanation"]="";
 				switch(qtype) {
-					case QualityType.WeightAdult_a:
-						/*
-						if(tableRaw.Rows[i]["problemsNone"].ToString()!="0") {
-							explanation="Problems indicated 'None'";
-							row["met"]="X";
+					case QualityType.WeightAdultOver65:
+						float weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
+						float height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
+						float bmi=Vitalsigns.CalcBMI(weight,height);
+						if(bmi==0){
+							row["explanation"]="No BMI";
 						}
-						else if(tableRaw.Rows[i]["problemsAll"].ToString()!="0") {
-							explanation="Problems entered: "+tableRaw.Rows[i]["problemsAll"].ToString();
-							row["met"]="X";
+						else if(bmi < 22) {
+							row["explanation"]="Underweight";
+						}
+						else if(bmi < 30) {
+							row["numerator"]="X";
+							row["explanation"]="Normal weight";
 						}
 						else {
-							explanation="No Problems entered";
-						}*/
+							row["explanation"]="Overweight";
+						}
 						break;
-					case QualityType.WeightAdult_b:
+					case QualityType.WeightAdult:
 						
 						break;
 					default:
@@ -194,9 +197,9 @@ namespace OpenDentBusiness {
 		private static string GetDenominatorExplain(QualityType qtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
-				case QualityType.WeightAdult_a:
+				case QualityType.WeightAdultOver65:
 					return "All patients 65 and older with at least one completed procedure during the measurement period.";
-				case QualityType.WeightAdult_b:
+				case QualityType.WeightAdult:
 					return "";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -206,10 +209,10 @@ namespace OpenDentBusiness {
 		private static string GetNumeratorExplain(QualityType qtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
-				case QualityType.WeightAdult_a:
+				case QualityType.WeightAdultOver65:
 					return @"BMI < 22 or > 30 with care goal of follow-up BMI, or with dietary consultation order.
 BMI 22-30.";
-				case QualityType.WeightAdult_b:
+				case QualityType.WeightAdult:
 					return "";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -219,9 +222,9 @@ BMI 22-30.";
 		private static string GetExclusionsExplain(QualityType qtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
-				case QualityType.WeightAdult_a:
+				case QualityType.WeightAdultOver65:
 					return "Terminal illness; pregnancy; physical exam not done for patient, medical, or system reason.";
-				case QualityType.WeightAdult_b:
+				case QualityType.WeightAdult:
 					return "";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());

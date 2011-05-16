@@ -13,7 +13,9 @@ namespace OpenDentBusiness {
 		public int Numerator;
 		public int Exclusions;
 		public int NotMet;
+		///<summary>Always 100</summary>
 		public int ReportingRate;
+		///<summary>Numerator/(Numerator+NotMet)</summary>
 		public int PerformanceRate;
 		public string DenominatorExplain;
 		public string NumeratorExplain;
@@ -21,7 +23,14 @@ namespace OpenDentBusiness {
 	}
 
 	public enum QualityType {
-		WeightAdult_a,
-		WeightAdult_b
+		WeightAdultOver65,
+		WeightAdult,
+		Hypertension,
+		TobaccoUse,
+		TobaccoCessation,
+		InfluenzaImmunize,
+		WeightChild,
+		ImmunizeChild
+
 	}
 }
