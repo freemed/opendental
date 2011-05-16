@@ -31,7 +31,11 @@ namespace OpenDentBusiness {
 					if(measure.Numerator > 0) {
 						measure.PerformanceRate=(int)((float)(measure.Numerator)/(float)(measure.Numerator+measure.NotMet));
 					}
+					measure.DenominatorExplain=GetDenominatorExplain(measure.Type);
+					measure.NumeratorExplain=GetNumeratorExplain(measure.Type);
+					measure.ExclusionsExplain=GetExclusionsExplain(measure.Type);
 				}
+				list.Add(measure);
 			}
 			return list;
 			//measure.Id="421a";
@@ -64,19 +68,42 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),qtype,dateStart,dateEnd);
 			}
+			//these queries only work for mysql
 			string command="";
 			switch(qtype) {
 				case QualityType.WeightAdult_a:
-					/*
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM disease WHERE PatNum=patient.PatNum AND DiseaseDefNum="
-							+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+") AS problemsNone, "
-						+"(SELECT COUNT(*) FROM disease WHERE PatNum=patient.PatNum) AS problemsAll "
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						DateVisit date NOT NULL DEFAULT '0001-01-01',
+						Height float NOT NULL,
+						Weight float NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit) SELECT patient.PatNum,LName,FName,"
+						+"MAX(ProcDate) "//on the first pass, all we can obtain is the date of the visit
 						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+						+"INNER JOIN procedurelog "//because we want to restrict to only results with procedurelog
+						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";*/
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate > '1880-01-01' AND Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+" "//65 or older
+						+"GROUP BY patient.PatNum";//there will frequently be multiple procedurelog events
+					Db.NonQ(command);
+					//now, find BMIs within 6 months of each visit date. No logic for picking one of multiple BMIs.
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.Height=vitalsign.Height, "
+						+"tempehrquality.Weight=vitalsign.Weight "//we could also easily get the BMI date if we wanted.
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken <= tempehrquality.DateVisit "
+						+"AND vitalsign.DateTaken >= DATE_SUB(tempehrquality.DateVisit,INTERVAL 6 MONTH)";
+					Db.NonQ(command);
+
+
 					break;
 				case QualityType.WeightAdult_b:
 					command="";
@@ -100,7 +127,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("exclusion");
 			List<DataRow> rows=new List<DataRow>();
 			Patient pat;
-			string explanation;
+			//string explanation;
 			for(int i=0;i<tableRaw.Rows.Count;i++) {
 				row=table.NewRow();
 				row["PatNum"]=tableRaw.Rows[i]["PatNum"].ToString();
@@ -164,6 +191,42 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		private static string GetDenominatorExplain(QualityType qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType.WeightAdult_a:
+					return "All patients 65 and older with at least one completed procedure during the measurement period.";
+				case QualityType.WeightAdult_b:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetNumeratorExplain(QualityType qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType.WeightAdult_a:
+					return @"BMI < 22 or > 30 with care goal of follow-up BMI, or with dietary consultation order.
+BMI 22-30.";
+				case QualityType.WeightAdult_b:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetExclusionsExplain(QualityType qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType.WeightAdult_a:
+					return "Terminal illness; pregnancy; physical exam not done for patient, medical, or system reason.";
+				case QualityType.WeightAdult_b:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
 
 	}
 }

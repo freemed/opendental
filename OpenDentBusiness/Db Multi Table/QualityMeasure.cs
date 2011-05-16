@@ -15,6 +15,9 @@ namespace OpenDentBusiness {
 		public int NotMet;
 		public int ReportingRate;
 		public int PerformanceRate;
+		public string DenominatorExplain;
+		public string NumeratorExplain;
+		public string ExclusionsExplain;
 	}
 
 	public enum QualityType {
