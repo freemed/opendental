@@ -1261,7 +1261,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns a list of patients that match last and first name.</summary>
 		public static List<Patient> GetListByName(string lName,string fName,long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),lName,fName);
+				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),lName,fName,PatNum);
 			}
 			string command="SELECT * FROM patient WHERE "
 				+"LOWER(LName)=LOWER('"+POut.String(lName)+"') "
