@@ -84,7 +84,8 @@ namespace OpenDental {
 		}
 
 		private void butEducationalResources_Click(object sender,EventArgs e) {
-
+			FormEduResourceSetup FormEDUSetup = new FormEduResourceSetup();
+			FormEDUSetup.ShowDialog();
 		}
 
 	}

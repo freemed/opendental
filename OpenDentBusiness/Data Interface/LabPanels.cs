@@ -106,18 +106,20 @@ namespace OpenDentBusiness{
 			string command="UPDATE labpanel SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
 			Db.NonQ(command);
 		}
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-
-
-		///<summary>Gets one LabPanel from the db.</summary>
+		
+				///<summary>Gets one LabPanel from the db.</summary>
 		public static LabPanel GetOne(long labPanelNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<LabPanel>(MethodBase.GetCurrentMethod(),labPanelNum);
 			}
 			return Crud.LabPanelCrud.SelectOne(labPanelNum);
 		}
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+
+
 		 
 				///<summary></summary>
 		public static List<LabPanel> Refresh(long patNum){

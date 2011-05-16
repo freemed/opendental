@@ -45,6 +45,42 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+		///<summary></summary>
+		public static List<EduResource> SelectAllForPatient(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EduResource>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			List<Disease> diseaseList = Diseases.Refresh(patNum);
+			List<MedicationPat> medicationPatList = MedicationPats.GetList(patNum);
+			List<LabResult> labResultList = LabResults.GetAllForPatient(patNum);
+			List<EduResource> eduResourceListAll = Crud.EduResourceCrud.SelectMany("SELECT * FROM eduresource");
+			List<EduResource> retVal = new List<EduResource>();
+			for(int i=0;i<eduResourceListAll.Count;i++) {
+				if(eduResourceListAll[i].DiseaseDefNum!=0) {
+					for(int j=0;j<diseaseList.Count;j++) {
+						if(eduResourceListAll[i].DiseaseDefNum==diseaseList[j].DiseaseDefNum) {
+							retVal.Add(eduResourceListAll[i]);
+						}
+					}
+				}
+				else if(eduResourceListAll[i].MedicationNum!=0) {
+					for(int j=0;j<medicationPatList.Count;j++) {
+						if(eduResourceListAll[i].MedicationNum==medicationPatList[j].MedicationNum) {
+							retVal.Add(eduResourceListAll[i]);
+						}
+					}
+				}
+				else if(eduResourceListAll[i].LabResultID!="") {
+					for(int j=0;j<labResultList.Count;j++) {
+						if(eduResourceListAll[i].LabResultID==labResultList[j].TestName) {//TODO: How do we match vs labresults
+							retVal.Add(eduResourceListAll[i]);
+						}
+					}
+				}
+			}
+			return retVal;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
