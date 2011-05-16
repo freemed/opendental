@@ -83,5 +83,9 @@ namespace OpenDental {
 			FormRR.ShowDialog();
 		}
 
+		private void butEducationalResources_Click(object sender,EventArgs e) {
+
+		}
+
 	}
 }

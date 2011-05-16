@@ -34,6 +34,7 @@ namespace OpenDental{
 			this.panelEmergencyNow = new OpenDental.UI.PanelOD();
 			this.butReminderRules = new OpenDental.UI.Button();
 			this.butInboundEmail = new OpenDental.UI.Button();
+			this.butEducationalResources = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butICD9s
@@ -186,10 +187,25 @@ namespace OpenDental{
 			this.butInboundEmail.Text = "Inbound Email";
 			this.butInboundEmail.Click += new System.EventHandler(this.butInboundEmail_Click);
 			// 
+			// butEducationalResources
+			// 
+			this.butEducationalResources.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEducationalResources.Autosize = true;
+			this.butEducationalResources.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEducationalResources.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEducationalResources.CornerRadius = 4F;
+			this.butEducationalResources.Location = new System.Drawing.Point(27,380);
+			this.butEducationalResources.Name = "butEducationalResources";
+			this.butEducationalResources.Size = new System.Drawing.Size(128,24);
+			this.butEducationalResources.TabIndex = 128;
+			this.butEducationalResources.Text = "Educational Resources";
+			this.butEducationalResources.Click += new System.EventHandler(this.butEducationalResources_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(606,489);
+			this.Controls.Add(this.butEducationalResources);
 			this.Controls.Add(this.butInboundEmail);
 			this.Controls.Add(this.butReminderRules);
 			this.Controls.Add(this.panelEmergencyNow);
@@ -222,5 +238,6 @@ namespace OpenDental{
 		private UI.PanelOD panelEmergencyNow;
 		private UI.Button butReminderRules;
 		private UI.Button butInboundEmail;
+		private UI.Button butEducationalResources;
 	}
 }

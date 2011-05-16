@@ -329,6 +329,18 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormEduResourceEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEduResourceEdit.Designer.cs">
+      <DependentUpon>FormEduResourceEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEduResourceSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEduResourceSetup.Designer.cs">
+      <DependentUpon>FormEduResourceSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEmailSetupEHR.cs">
       <SubType>Form</SubType>
     </Compile>
