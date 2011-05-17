@@ -1157,8 +1157,6 @@ namespace OpenDentBusiness {
 					countUsed=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM claimproc WHERE PlanNum="+POut.Long(planNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
-					command="SELECT COUNT(*) FROM patplan WHERE PlanNum="+POut.Long(planNum);
-					countUsed+=PIn.Int(Db.GetCount(command));
 					if(countUsed==0) {
 						command="DELETE FROM inssub WHERE InsSubNum="+POut.Long(insSubNum);
 						Db.NonQ(command);
@@ -1208,35 +1206,35 @@ namespace OpenDentBusiness {
 				//Can't do inssub because that's what we're comparing against.  That's the one that's assumed to be correct.
 				//claim.PlanNum -----------------------------------------------------------------------------------------------------
 				command="SELECT COUNT(*) FROM claim "
-					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
+					+"WHERE PlanNum NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum values: ")+numFound+"\r\n";
 				}
 				//claim.PlanNum2---------------------------------------------------------------------------------------------------
 				command="SELECT COUNT(*) FROM claim WHERE PlanNum2 != 0 "//not really necessary; just a reminder
-					+"AND PlanNum2 != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum2)";
+					+"AND PlanNum2 NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum2)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum2/PlanNum2 values: ")+numFound+"\r\n";
 				}
 				//claimproc---------------------------------------------------------------------------------------------------
 				command="SELECT COUNT(*) FROM claimproc "
-					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claimproc.InsSubNum)";
+					+"WHERE PlanNum NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claimproc.InsSubNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claimproc InsSubNum/PlanNum values: ")+numFound+"\r\n";
 				}
 				//etrans---------------------------------------------------------------------------------------------------
 				command="SELECT COUNT(*) FROM etrans "
-					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
+					+"WHERE PlanNum NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched etrans InsSubNum/PlanNum values: ")+numFound+"\r\n";
 				}
 				//payplan---------------------------------------------------------------------------------------------------
 				command="SELECT COUNT(*) FROM payplan "
-					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum)";
+					+"WHERE PlanNum NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched payplan InsSubNum/PlanNum values: ")+numFound+"\r\n";
@@ -1252,6 +1250,14 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum fixed: ")+numFixed+"\r\n";
 				}
 				numFixed=0;
+				////claim.PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
+				////Will leave orphaned claimprocs. No finanicals to check.
+				//command="DELETE FROM claim c WHERE c.PlanNum=0 AND c.ClaimStatus IN ('PreAuth','W','U') AND NOT EXISTS(SELECT * FROM inssub i WHERE i.InsSubNum=c.InsSubNum)";
+				//numFixed=Db.NonQ(command);
+				//if(numFixed>0 || verbose) {
+				//  log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum values fixed: ")+numFixed+"\r\n";
+				//}
+				//numFixed=0;
 				//claim.PlanNum2---------------------------------------------------------------------------------------------------
 				command="UPDATE claim SET PlanNum2 = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum2) "
 					+"WHERE PlanNum2 != 0 "
@@ -1269,6 +1275,16 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claimproc InsSubNum/PlanNum fixed: ")+numFixed+"\r\n";
 				}
 				numFixed=0;
+				////claimproc.PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
+				//command="DELETE FROM claimproc WHERE PlanNum=0 AND NOT EXISTS(SELECT * FROM inssub i WHERE i.InsSubNum=InsSubNum)"
+				//  +" AND InsPayAmount=0 AND WriteOff=0"//Make sure this deletion will not affect financials.
+				//  +" AND Status IN (6,2)";//OK to delete because no claim and just an estimate (6) or preauth (2) claimproc
+				//Db.NonQ(command);
+				//numFixed=PIn.Int(Db.GetCount(command));
+				//if(numFixed>0 || verbose) {
+				//  log+=Lans.g("FormDatabaseMaintenance","Mismatched claimproc InsSubNum/PlanNum values fixed: ")+numFixed+"\r\n";
+				//}
+				//numFixed=0;
 				//etrans---------------------------------------------------------------------------------------------------
 				command="UPDATE etrans SET PlanNum = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum) "
 					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
