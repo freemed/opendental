@@ -7,52 +7,17 @@ using OpenDentBusiness;
 namespace TestCanada {
 	public class ProviderTC {
 		public static string SetInitialProviders() {
-			//Hide any existing providers.
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				ProviderC.List[i].IsHidden=true;
-			}
 			//Dr. A1---------------------------------
-			Provider prov;
-			prov=new Provider();
-			prov.FName="A.";
-			prov.LName="Dentist";
-			prov.NationalProvID="530123401";
-			prov.CanadianOfficeNum="1234";
-			prov.ItemOrder=0;
-			prov.Abbr="DocA";
-			Providers.Insert(prov);
+			Provider priProv=CreateProvider("A.","Dentist","530123401","1234","DocA");
 			//Dr. B1---------------------------------
-			prov=new Provider();
-			prov.FName="B.";
-			prov.LName="Dentist";
-			prov.NationalProvID="035678900";
-			prov.CanadianOfficeNum="1234";
-			prov.ItemOrder=1;
-			prov.Abbr="DocB";
-			prov.FeeSched=53;
-			Providers.Insert(prov);
+			CreateProvider("B.","Dentist","035678900","1234","DocB");
 			//Dr. A2---------------------------------
-			prov=new Provider();
-			prov.FName="A.";
-			prov.LName="Dentist";
-			prov.NationalProvID="600567801";
-			prov.CanadianOfficeNum="1234";
-			prov.ItemOrder=0;
-			prov.Abbr="DocA2";
-			Providers.Insert(prov);
-			//Dr. B1---------------------------------
-			prov=new Provider();
-			prov.FName="B.";
-			prov.LName="Dentist";
-			prov.NationalProvID="035123400";
-			prov.CanadianOfficeNum="1234";
-			prov.ItemOrder=1;
-			prov.Abbr="DocB2";
-			prov.FeeSched=53;
-			Providers.Insert(prov);
-			Providers.RefreshCache();
+			CreateProvider("A.","Dentist","600567801","1234","DocA2");
+			//Dr. B2---------------------------------
+			CreateProvider("B.","Dentist","035123400","1234","DocB2");
 			//The billing provider for both is Dr. A.
-			Prefs.UpdateLong(PrefName.InsBillingProv,0);//since Dr. A is also the default practice provider.
+			Prefs.UpdateLong(PrefName.PracticeDefaultProv,priProv.ProvNum);
+			Prefs.UpdateLong(PrefName.InsBillingProv,priProv.ProvNum);
 			//We create a fake test address for the practice, so that forms looks correct when printed, even though no such test address is provided by CDANet.
 			Prefs.UpdateString(PrefName.PracticeAddress,"123 Test Ave");
 			Prefs.UpdateString(PrefName.PracticeAddress2,"Suite 100");
@@ -63,6 +28,35 @@ namespace TestCanada {
 			Prefs.RefreshCache();
 			return "Dentist objects set.\r\n";
 		}
+
+		private static Provider CreateProvider(string fName,string lName,string npi,string officeNum,string abbr) {
+			Provider prov=null;
+			int maxItemOrder=0;
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				if(ProviderC.List[i].NationalProvID==npi) {
+					prov=ProviderC.List[i];
+				}
+				if(ProviderC.ListLong[i].ItemOrder>maxItemOrder) {
+					maxItemOrder=ProviderC.ListLong[i].ItemOrder;
+				}
+			}
+			if(prov==null) {
+				prov=new Provider();
+				prov.IsHidden=false;
+				prov.IsCDAnet=true;
+				prov.FName=fName;
+				prov.LName=lName;
+				prov.NationalProvID=npi;
+				prov.CanadianOfficeNum=officeNum;
+				prov.Abbr=abbr;
+				prov.FeeSched=53;
+				prov.ItemOrder=maxItemOrder;
+				Providers.Insert(prov);
+				Providers.RefreshCache();
+			}
+			return prov;
+		}
+
 
 	}
 }

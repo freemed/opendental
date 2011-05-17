@@ -389,7 +389,10 @@ namespace TestCanada {
 			InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,1),subList);
 			InsPlan insPlan=InsPlans.GetPlan(sub.PlanNum,planList);
 			InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,2),subList);
-			InsPlan insPlan2=InsPlans.GetPlan(sub2.PlanNum,planList);
+			InsPlan insPlan2=null;
+			if(sub2.InsSubNum!=0) {
+				insPlan2=InsPlans.GetPlan(sub2.PlanNum,planList);
+			}
 			Claim claim=new Claim();
 			Claims.Insert(claim);//to retreive a key for new Claim.ClaimNum
 			claim.PatNum=pat.PatNum;
@@ -397,7 +400,9 @@ namespace TestCanada {
 			claim.DateSent=DateTime.Today;
 			claim.ClaimStatus="W";
 			claim.PlanNum=insPlan.PlanNum;
-			claim.PlanNum2=insPlan2.PlanNum;
+			if(insPlan2!=null) {
+				claim.PlanNum2=insPlan2.PlanNum;
+			}
 			claim.InsSubNum=PatPlans.GetInsSubNum(patPlanList,1);
 			claim.InsSubNum2=PatPlans.GetInsSubNum(patPlanList,2);
 			claim.PatRelat=PatPlans.GetRelat(patPlanList,1);

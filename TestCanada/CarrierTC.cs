@@ -12,6 +12,7 @@ namespace TestCanada {
 			network.Abbrev="CDANET14";
 			network.Descript="CDANET14";
 			network.CanadianTransactionPrefix="CDANET14";
+			CanadianNetworks.Insert(network);
 			Carrier carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="Carrier 1";
@@ -43,6 +44,7 @@ namespace TestCanada {
 			network.Abbrev="A";
 			network.Descript="A";
 			network.CanadianTransactionPrefix="A";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="Carrier 2";
@@ -70,6 +72,7 @@ namespace TestCanada {
 			network.Abbrev="AB";
 			network.Descript="AB";
 			network.CanadianTransactionPrefix="AB";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="Carrier 3";
@@ -98,6 +101,7 @@ namespace TestCanada {
 			network.Abbrev="ABC";
 			network.Descript="ABC";
 			network.CanadianTransactionPrefix="ABC";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="Carrier 4";
@@ -126,6 +130,7 @@ namespace TestCanada {
 			network.Abbrev="V2CAR";
 			network.Descript="V2CAR";
 			network.CanadianTransactionPrefix="V2CAR";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="Carrier 5";
@@ -151,6 +156,7 @@ namespace TestCanada {
 			network.Abbrev="ABC";
 			network.Descript="ABC";
 			network.CanadianTransactionPrefix="ABC";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="111555";
@@ -167,6 +173,7 @@ namespace TestCanada {
 			network.Abbrev="CDANET14";
 			network.Descript="CDANET14";
 			network.CanadianTransactionPrefix="CDANET14";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="111111";
@@ -198,6 +205,7 @@ namespace TestCanada {
 			network.Abbrev="9403";
 			network.Descript="9403";
 			network.CanadianTransactionPrefix="9403";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="222222";
@@ -220,11 +228,41 @@ namespace TestCanada {
 				| CanSupTransTypes.RequestForPaymentReconciliation_06
 				| CanSupTransTypes.PaymentReconciliation_16;
 			Carriers.Insert(carrier);
+			//Carrier 333333
+			network=new CanadianNetwork();
+			network.Abbrev="TEST3";
+			network.Descript="TEST3";
+			network.CanadianTransactionPrefix="TEST3";
+			CanadianNetworks.Insert(network);
+			carrier=new Carrier();
+			carrier.IsCDA=true;
+			carrier.CarrierName="333333";
+			carrier.CanadianNetworkNum=network.CanadianNetworkNum;
+			carrier.CDAnetVersion="04";
+			carrier.ElectID="333333";
+			carrier.CanadianEncryptionMethod=2;
+			carrier.CanadianSupportedTypes
+				= CanSupTransTypes.EligibilityTransaction_08
+				| CanSupTransTypes.EligibilityResponse_18
+				//claim_01 is implied
+				| CanSupTransTypes.CobClaimTransaction_07
+				//claimAck_11 is implied
+				//claimEob_21 is implied
+				| CanSupTransTypes.ClaimReversal_02
+				| CanSupTransTypes.ClaimReversalResponse_12
+				| CanSupTransTypes.PredeterminationSinglePage_03
+				| CanSupTransTypes.PredeterminationAck_13
+				| CanSupTransTypes.RequestForOutstandingTrans_04
+				| CanSupTransTypes.EmailTransaction_24
+				| CanSupTransTypes.RequestForPaymentReconciliation_06
+				| CanSupTransTypes.PaymentReconciliation_16;
+			Carriers.Insert(carrier);
 			//Carrier 444444
 			network=new CanadianNetwork();
 			network.Abbrev="TEST4";
 			network.Descript="TEST4";
 			network.CanadianTransactionPrefix="TEST4";
+			CanadianNetworks.Insert(network);
 			carrier=new Carrier();
 			carrier.IsCDA=true;
 			carrier.CarrierName="444444";

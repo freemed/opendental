@@ -96,7 +96,7 @@ namespace OpenDental.Eclaims {
 			if(error!="") {
 				throw new ApplicationException(error);
 			}
-			Etrans etrans=Etranss.CreateCanadianOutput(patNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
+			Etrans etrans=Etranss.CreateCanadianOutput(patNum,carrier.CarrierNum,0,
 				clearhouse.ClearinghouseNum,EtransType.Eligibility_CA,plan.PlanNum,insSub.InsSubNum);
 			StringBuilder strb=new StringBuilder();
 			//create message----------------------------------------------------------------------------------------------
