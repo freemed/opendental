@@ -52,6 +52,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				labPanelm.LabNameAddress   = PIn.String(table.Rows[i]["LabNameAddress"].ToString());
 				labPanelm.SpecimenCondition= PIn.String(table.Rows[i]["SpecimenCondition"].ToString());
 				labPanelm.SpecimenSource   = PIn.String(table.Rows[i]["SpecimenSource"].ToString());
+				labPanelm.ServiceId        = PIn.String(table.Rows[i]["ServiceId"].ToString());
+				labPanelm.ServiceName      = PIn.String(table.Rows[i]["ServiceName"].ToString());
 				retVal.Add(labPanelm);
 			}
 			return retVal;
@@ -64,14 +66,16 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO labpanelm (";
 			command+="LabPanelNum,";
-			command+="CustomerNum,PatNum,LabNameAddress,SpecimenCondition,SpecimenSource) VALUES(";
+			command+="CustomerNum,PatNum,LabNameAddress,SpecimenCondition,SpecimenSource,ServiceId,ServiceName) VALUES(";
 			command+=POut.Long(labPanelm.LabPanelNum)+",";
 			command+=
 				     POut.Long  (labPanelm.CustomerNum)+","
 				+    POut.Long  (labPanelm.PatNum)+","
 				+"'"+POut.String(labPanelm.LabNameAddress)+"',"
 				+"'"+POut.String(labPanelm.SpecimenCondition)+"',"
-				+"'"+POut.String(labPanelm.SpecimenSource)+"')";
+				+"'"+POut.String(labPanelm.SpecimenSource)+"',"
+				+"'"+POut.String(labPanelm.ServiceId)+"',"
+				+"'"+POut.String(labPanelm.ServiceName)+"')";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return labPanelm.LabPanelNum;
 		}
@@ -82,7 +86,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"PatNum           =  "+POut.Long  (labPanelm.PatNum)+", "
 				+"LabNameAddress   = '"+POut.String(labPanelm.LabNameAddress)+"', "
 				+"SpecimenCondition= '"+POut.String(labPanelm.SpecimenCondition)+"', "
-				+"SpecimenSource   = '"+POut.String(labPanelm.SpecimenSource)+"' "
+				+"SpecimenSource   = '"+POut.String(labPanelm.SpecimenSource)+"', "
+				+"ServiceId        = '"+POut.String(labPanelm.ServiceId)+"', "
+				+"ServiceName      = '"+POut.String(labPanelm.ServiceName)+"' "
 				+"WHERE CustomerNum = "+POut.Long(labPanelm.CustomerNum)+" AND LabPanelNum = "+POut.Long(labPanelm.LabPanelNum);
 			Db.NonQ(command);
 		}
@@ -103,6 +109,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 			labPanelm.LabNameAddress   =labPanel.LabNameAddress;
 			labPanelm.SpecimenCondition=labPanel.SpecimenCondition;
 			labPanelm.SpecimenSource   =labPanel.SpecimenSource;
+			labPanelm.ServiceId        =labPanel.ServiceId;
+			labPanelm.ServiceName      =labPanel.ServiceName;
 			return labPanelm;
 		}
 

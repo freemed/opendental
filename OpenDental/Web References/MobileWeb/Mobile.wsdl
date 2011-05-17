@@ -367,6 +367,8 @@
               <s:element minOccurs="0" maxOccurs="1" name="LabNameAddress" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="SpecimenCondition" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="SpecimenSource" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServiceId" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServiceName" type="s:string" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
