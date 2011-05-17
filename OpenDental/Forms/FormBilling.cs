@@ -903,6 +903,8 @@ namespace OpenDental{
 							rowsChanged++;
 						}
 					}
+					//This is not an accurate permission type.
+					SecurityLogs.MakeLogEntry(Permissions.Accounting,0,"Billing: Unsent statements were deleted.");
 					MessageBox.Show(Lan.g(this,"Unsent statements deleted: ")+rowsChanged.ToString());
 				}
 				else if(result==DialogResult.No){

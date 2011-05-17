@@ -132,8 +132,8 @@ namespace OpenDental {
 			strb.Append(e);//040 not used 
 			strb.Append(e);//050 not used
 			strb.Append("77777777"+f+"C"+f+"PASSWORDQ"+e);//060 Sender identification (This is the Clinic ID of the sender; C means it is a Clinic.)
-			strb.Append("7701630"+f+"P"+e);//070 Recipient ID (NCPDP Provider ID Number of pharmacy; P means it is a pharmacy.)
-			strb.Append(msgTimeSent.ToString("yyyyMMdd")+f+msgTimeSent.ToString("HHmmss")+s);//080 Date of initiation CCYYMMDD:HHMMSS,S 
+			strb.Append(Sout(pharmacy.PharmID)+f+"P"+e);//070 Recipient ID (NCPDP Provider ID Number of pharmacy; P means it is a pharmacy.)
+			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//080 Date of initiation CCYYMMDD:HHMMSS,S 
 			//UIH+SCRIPT:010:006:NEWRX+110072+++19971001:081522'-------------------------------------------------------
 			strb.Append("UIH"+e);//000
 			strb.Append("SCRIPT"+f+"010"+f+"006"+f+"NEWRX"+e);//010 Message type:version:release:function.
@@ -141,7 +141,7 @@ namespace OpenDental {
 			strb.Append("110072"+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
 			strb.Append(e);//030 conditional Dialogue Reference
 			strb.Append(e);//040 not used
-			strb.Append(msgTimeSent.ToString("yyyyMMdd")+f+msgTimeSent.ToString("HHmmss")+s);//050 Date of initiation
+			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//050 Date of initiation
 			RxPat rx=listRx[gridMain.SelectedIndices[0]];
 			Patient pat=Patients.GetPat(rx.PatNum);
 			Provider prov=Providers.GetProv(rx.ProvNum);
@@ -155,7 +155,7 @@ namespace OpenDental {
 			//PVD+P1+7701630:D3+++++MAIN STREET PHARMACY++6152205656:TE'-----------------------------------------------
 			strb.Append("PVD"+e);//000
 			strb.Append("P1"+e);//010 Provider coded (see external code list pg.231)
-			strb.Append("7701630"+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
+			strb.Append(Sout(pharmacy.PharmID)+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
 			strb.Append(e);//030 not used
 			strb.Append(e);//040 conditional Provider specialty
 			strb.Append(e);//050 conditional The name of the prescriber or pharmacist or supervisor
@@ -166,7 +166,7 @@ namespace OpenDental {
 			//PVD+PC+6666666:0B+++JONES:MARK++++6152219800:TE'---------------------------------------------------------
 			strb.Append("PVD"+e);//000 
 			strb.Append("PC"+e);//010 Provider coded
-			strb.Append("6666666"+f+"0B"+e);//020 Reference number and qualifier (0B: Provider State License Number)
+			strb.Append(Sout(prov.NationalProvID)+f+"0B"+e);//020 Reference number and qualifier (0B: Provider State License Number)
 			strb.Append(e);//030 not used
 			strb.Append(e);//040 conditional Provider specialty
 			strb.Append(Sout(prov.LName)+f+Sout(prov.FName)+e);//050 The name of the prescriber or pharmacist or supervisor
@@ -195,9 +195,9 @@ namespace OpenDental {
 			//P means prescribed. Drug prescribed is Calan Sr 240mg. 
 			//240 is the strength; AA is the Source for NCI Pharmaceutical Dosage Form. C42998 is the code for “Tablet dosing form”.
 			//AB is the Source for NCI Units of Presentation. C28253 is the code for “Milligram”. So this means the prescription is for 240mg tablets.
-			strb.Append("P"+f+rx.Drug+f+f+f+f+"240"+f+f+f+f+f+f+f+"AA"+f+"C42998"+f+"AB"+f+"C28253"+e);//010 Item Description Identification
+			strb.Append("P"+f+Sout(rx.Drug)+f+f+f+f+"240"+f+f+f+f+f+f+f+"AA"+f+"C42998"+f+"AB"+f+"C28253"+e);//010 Item Description Identification
 			//This means dispense 60 tablets. 38 is the code value for Original Qty. AC is the Source for NCI Potency Units. C48542 is the code for “Tablet dosing unit”.
-			strb.Append(f+f+"60"+f+"38"+f+"AC"+f+"C48542"+e);//020 Quantity
+			strb.Append(f+f+Sout(rx.Disp)+f+"38"+f+"AC"+f+"C48542"+e);//020 Quantity
 			strb.Append(f+Sout(rx.Sig)+e);//030 Directions
 			//ZDS is the qualifier for Days Supply. 30 is the number of days supply. 804 is the qualifier for Quantity of Days.
 			strb.Append("85"+f+"19971001"+f+"102"+p+"ZDS"+f+"30"+f+"804"+e);//040 Date Note: It is strongly recommended that Days Supply (value “ZDS”) be supported. YYYYMMDD
