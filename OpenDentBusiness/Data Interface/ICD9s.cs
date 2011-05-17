@@ -45,24 +45,34 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
 		///<summary></summary>
-		public static List<ICD9> Refresh(long patNum){
+		public static List<ICD9> GetByCodeOrDescription(string searchTxt){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ICD9>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<ICD9>>(MethodBase.GetCurrentMethod(),searchTxt);
 			}
-			string command="SELECT * FROM icd9 WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM icd9 WHERE ICD9Code LIKE '%"+POut.String(searchTxt)+"%' "
+				+"OR Description LIKE '%"+POut.String(searchTxt)+"%'";
 			return Crud.ICD9Crud.SelectMany(command);
 		}
-		*/
+		
 		///<summary>Gets one ICD9 from the db.</summary>
 		public static ICD9 GetOne(long iCD9Num){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<ICD9>(MethodBase.GetCurrentMethod(),iCD9Num);
 			}
 			return Crud.ICD9Crud.SelectOne(iCD9Num);
+		}
+
+		public static bool CodeExists(string iCD9Code) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),iCD9Code);
+			}
+			string command="SELECT COUNT(*) FROM icd9 WHERE ICD9Code = '"+POut.String(iCD9Code)+"'";
+			string count=Db.GetCount(command);
+			if(count=="0") {
+				return false;
+			}
+			return true;
 		}
 
 		///<summary></summary>
@@ -148,25 +158,15 @@ namespace OpenDentBusiness{
 			return icd9List;
 		}
 
-		///<summary>Returns the name of the disease, whether hidden or not.</summary>
+		///<summary>Returns the code and description of the icd9.</summary>
 		public static string GetDescription(long icd9Num) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].ICD9Num==icd9Num) {
-					return Listt[i].Description;
+					return Listt[i].ICD9Code+"-"+Listt[i].Description;
 				}
 			}
 			return "";
-		}
-
-		public static bool IsInList(string iCD9Code) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].ICD9Code==iCD9Code) {
-					return true;
-				}
-			}
-			return false;
 		}
 
 		///<summary>Returns the ICD9 of the code passed in by looking in cache.  If code does not exist, returns null.</summary>

@@ -47,7 +47,7 @@ namespace OpenDental {
 			Icd9Cur.ICD9Code=textCode.Text;
 			Icd9Cur.Description=textDescription.Text;
 			if(IsNew) {//Used the "+Add" button to open this form.
-				if(ICD9s.IsInList(Icd9Cur.ICD9Code)) {//Must enter a unique code.
+				if(ICD9s.CodeExists(Icd9Cur.ICD9Code)) {//Must enter a unique code.
 					MsgBox.Show(this,"You must choose a unique code.");
 					return;
 				}

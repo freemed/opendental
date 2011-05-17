@@ -23,30 +23,24 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.label1 = new System.Windows.Forms.Label();
 			this.listMain = new System.Windows.Forms.ListBox();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.textCode = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.butSearch = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(17,12);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(335,20);
-			this.label1.TabIndex = 17;
-			this.label1.Text = "This is a list of ICD9 disease classifications.";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// listMain
 			// 
 			this.listMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.listMain.Location = new System.Drawing.Point(20,35);
+			this.listMain.IntegralHeight = false;
+			this.listMain.Location = new System.Drawing.Point(20,36);
 			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(342,628);
+			this.listMain.Size = new System.Drawing.Size(501,627);
 			this.listMain.TabIndex = 15;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
@@ -60,9 +54,9 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(390,516);
+			this.butAdd.Location = new System.Drawing.Point(549,516);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,26);
+			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 16;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -75,7 +69,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(390,598);
+			this.butOK.Location = new System.Drawing.Point(549,598);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -90,18 +84,50 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(390,639);
+			this.butClose.Location = new System.Drawing.Point(549,639);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textCode
+			// 
+			this.textCode.Location = new System.Drawing.Point(180,10);
+			this.textCode.Name = "textCode";
+			this.textCode.Size = new System.Drawing.Size(100,20);
+			this.textCode.TabIndex = 17;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(5,13);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(172,16);
+			this.label1.TabIndex = 18;
+			this.label1.Text = "Code or Description";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butSearch
+			// 
+			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSearch.Autosize = true;
+			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.CornerRadius = 4F;
+			this.butSearch.Location = new System.Drawing.Point(286,8);
+			this.butSearch.Name = "butSearch";
+			this.butSearch.Size = new System.Drawing.Size(75,24);
+			this.butSearch.TabIndex = 19;
+			this.butSearch.Text = "Search";
+			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
+			// 
 			// FormIcd9s
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(490,690);
+			this.ClientSize = new System.Drawing.Size(649,690);
+			this.Controls.Add(this.butSearch);
 			this.Controls.Add(this.label1);
+			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butOK);
@@ -111,6 +137,7 @@ namespace OpenDental{
 			this.Text = "ICD9s";
 			this.Load += new System.EventHandler(this.FormIcd9s_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -118,8 +145,10 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butClose;
-		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox listMain;
 		private UI.Button butAdd;
+		private System.Windows.Forms.TextBox textCode;
+		private System.Windows.Forms.Label label1;
+		private UI.Button butSearch;
 	}
 }

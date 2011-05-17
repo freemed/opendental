@@ -58,7 +58,7 @@ namespace OpenDentBusiness {
 					return "0041";
 				case QualityType.WeightChild:
 					return "0024";
-				case QualityType.ImmunizeChild:
+				case QualityType.ImmunizeChild://break this into 12
 					return "0038";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -97,6 +97,7 @@ namespace OpenDentBusiness {
 			DataTable tableRaw=new DataTable();
 			switch(qtype) {
 				case QualityType.WeightOver65:
+					//WeightOver65-------------------------------------------------------------------------------------------------------------------
 					command="DROP TABLE IF EXISTS tempehrquality";
 					Db.NonQ(command);
 					command=@"CREATE TABLE tempehrquality (
@@ -134,6 +135,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					break;
 				case QualityType.WeightAdult:
+					//WeightAdult---------------------------------------------------------------------------------------------------------------------
 					command="DROP TABLE IF EXISTS tempehrquality";
 					Db.NonQ(command);
 					command=@"CREATE TABLE tempehrquality (
@@ -172,7 +174,46 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					break;
 				case QualityType.Hypertension:
-
+					//Hypertension---------------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						DateVisit date NOT NULL DEFAULT '0001-01-01',
+						VisitCount int NOT NULL,
+						Icd9Code varchar(255) NOT NULL,
+						DateBpEntered date NOT NULL DEFAULT '0001-01-01'
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit,VisitCount,Icd9Code) "
+						+"SELECT patient.PatNum,LName,FName,"
+						+"MAX(ProcDate), "// most recent visit
+						+"COUNT(DISTINCT ProcDate),icd9.ICD9Code "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						//+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						//+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN disease ON disease.PatNum=patient.PatNum "
+						+"LEFT JOIN icd9 ON icd9.ICD9Num=disease.ICD9Num "
+						+"AND icd9.ICD9Code REGEXP '^40[1-4]' "//starts with 401 through 404
+						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					//now, find BMIs in measurement period.
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.DateBpEntered=vitalsign.DateTaken "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd);
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					//command="DROP TABLE IF EXISTS tempehrquality";
+					//Db.NonQ(command);
 					break;
 				case QualityType.TobaccoUse:
 
@@ -254,9 +295,28 @@ namespace OpenDentBusiness {
 							row["explanation"]="Overweight";
 						}
 						break;
-						break;
 					case QualityType.Hypertension:
-
+						//Hypertension---------------------------------------------------------------------------------------------------------------------
+						DateTime dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
+						int visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						string icd9code=tableRaw.Rows[i]["Icd9Code"].ToString();
+						DateTime datePbEntered=PIn.Date(tableRaw.Rows[i]["DateBpEntered"].ToString());
+						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
+							continue;//don't add this row.  Not part of denominator.
+						}
+						if(visitCount<2) {
+							continue;
+						}
+						if(icd9code=="") {
+							continue;
+						}
+						if(datePbEntered.Year<1880) {//no bp entered
+							row["explanation"]="No BP entered";
+						}
+						else {
+							row["numerator"]="X";
+							row["explanation"]="BP entered";
+						}
 						break;
 					case QualityType.TobaccoUse:
 
@@ -314,9 +374,9 @@ namespace OpenDentBusiness {
 				case QualityType.WeightOver65:
 					return "All patients 65 and older with at least one completed procedure during the measurement period.";
 				case QualityType.WeightAdult:
-					return "";
+					return "All patients 18 to 64 with at least one completed procedure during the measurement period.";
 				case QualityType.Hypertension:
-					return "";
+					return "All patients 18+ with ICD9 hypertension(401-404) and at least two visits, one during the measurement period.";
 				case QualityType.TobaccoUse:
 					return "";
 				case QualityType.TobaccoCessation:
@@ -336,12 +396,13 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType.WeightOver65:
-					return @"BMI < 22 or > 30 with care goal of follow-up BMI, or with dietary consultation order.
+					return @"BMI < 22 or >= 30 with care goal of follow-up BMI, or with dietary consultation order.
 BMI 22-30.";
 				case QualityType.WeightAdult:
-					return "";
+					return @"BMI < 18.5 or >= 25 with care goal of follow-up BMI, or with dietary consultation order.
+BMI 18.5-25.";
 				case QualityType.Hypertension:
-					return "";
+					return "Blood pressure entered during measurement period.";
 				case QualityType.TobaccoUse:
 					return "";
 				case QualityType.TobaccoCessation:

@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 		TobaccoCessation,
 		InfluenzaAdult,
 		WeightChild,
-		ImmunizeChild
+		ImmunizeChild//break this into 12
 
 	}
 }

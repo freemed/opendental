@@ -3892,14 +3892,19 @@ namespace OpenDental{
 							row=new ODGridRow(); 
 							if(DiseaseList[i].DiseaseDefNum!=0) {
 								cell=new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+								cell.ColorText=Color.Red;
+								cell.Bold=YN.Yes;
+								row.Cells.Add(cell);
+								row.Cells.Add(DiseaseList[i].PatNote);
 							}
 							else {
+								row.Cells.Add("");
 								cell=new ODGridCell(ICD9s.GetDescription(DiseaseList[i].ICD9Num));
+								cell.ColorText=Color.Red;
+								cell.Bold=YN.Yes;
+								row.Cells.Add(cell);
+								//row.Cells.Add(DiseaseList[i].PatNote);//no place to show a pat note
 							}
-							cell.ColorText=Color.Red;
-							cell.Bold=YN.Yes;
-							row.Cells.Add(cell);
-							row.Cells.Add(DiseaseList[i].PatNote);
 							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 							row.Tag="med";
 							if(i!=DiseaseList.Count-1) {
