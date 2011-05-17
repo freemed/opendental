@@ -55,6 +55,43 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static List<EduResource> SelectAll(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EduResource>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM eduresource";
+			return Crud.EduResourceCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static void Delete(long eduResourceNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),eduResourceNum);
+				return;
+			}
+			string command= "DELETE FROM eduresource WHERE EduResourceNum = "+POut.Long(eduResourceNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EduResource eduResource) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				eduResource.EduResourceNum=Meth.GetLong(MethodBase.GetCurrentMethod(),eduResource);
+				return eduResource.EduResourceNum;
+			}
+			return Crud.EduResourceCrud.Insert(eduResource);
+		}
+
+		///<summary></summary>
+		public static void Update(EduResource eduResource) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),eduResource);
+				return;
+			}
+			Crud.EduResourceCrud.Update(eduResource);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -75,33 +112,8 @@ namespace OpenDentBusiness{
 			return Crud.EduResourceCrud.SelectOne(eduResourceNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(EduResource eduResource){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				eduResource.EduResourceNum=Meth.GetLong(MethodBase.GetCurrentMethod(),eduResource);
-				return eduResource.EduResourceNum;
-			}
-			return Crud.EduResourceCrud.Insert(eduResource);
-		}
 
-		///<summary></summary>
-		public static void Update(EduResource eduResource){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),eduResource);
-				return;
-			}
-			Crud.EduResourceCrud.Update(eduResource);
-		}
 
-		///<summary></summary>
-		public static void Delete(long eduResourceNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),eduResourceNum);
-				return;
-			}
-			string command= "DELETE FROM eduresource WHERE EduResourceNum = "+POut.Long(eduResourceNum);
-			Db.NonQ(command);
-		}
 		*/
 
 
