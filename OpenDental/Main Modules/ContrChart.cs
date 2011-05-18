@@ -3973,6 +3973,38 @@ namespace OpenDental{
 							}
 						}
 						break;
+					case "Allergies":
+						List<Allergy> allergyList=Allergies.GetAll(PatCur.PatNum,false);
+						row=new ODGridRow();
+						cell=new ODGridCell();
+						if(fields[f].Description=="") {
+							cell.Text=fields[f].InternalName;
+						}
+						else {
+							cell.Text=fields[f].Description;
+						}
+						cell.Bold=YN.Yes;
+						row.Cells.Add(cell);
+						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+						row.Tag="med";
+						if(allergyList.Count>0) {
+							row.Cells.Add("");
+							gridPtInfo.Rows.Add(row);
+						}
+						else {
+							row.Cells.Add(Lan.g("TableChartPtInfo","none"));
+						}
+						for(int i=0;allergyList.Count>i;i++) {
+							row=new ODGridRow();
+							row.Cells.Add(AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description);
+							row.Cells.Add(allergyList[i].Reaction);
+							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+							row.Tag="med";
+							if(i!=allergyList.Count-1) {
+								gridPtInfo.Rows.Add(row);
+							}
+						}
+						break;
 					case "PatFields":
 						PatField field;
 						for(int i=0;i<PatFieldDefs.List.Length;i++) {

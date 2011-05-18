@@ -218,6 +218,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Medical Summary",0,category));
 					list.Add(new DisplayField("Service Notes",0,category));
 					list.Add(new DisplayField("Medications",0,category));
+					list.Add(new DisplayField("Allergies",0,category));
 				}
 				//list.Add(new DisplayField("PatFields",0,category));
 			}
@@ -390,6 +391,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Medical Summary",0,category));
 				list.Add(new DisplayField("Service Notes",0,category));
 				list.Add(new DisplayField("Medications",0,category));
+				list.Add(new DisplayField("Allergies",0,category));
 				list.Add(new DisplayField("PatFields",0,category));
 			}
 			else if(category==DisplayFieldCategory.ProcedureGroupNote) {

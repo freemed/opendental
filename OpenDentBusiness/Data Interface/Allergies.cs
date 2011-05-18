@@ -58,10 +58,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Allergy>>(MethodBase.GetCurrentMethod(),patNum,showInactive);
 			}
-			string command="SELECT * FROM allergy WHERE PatNum = "+POut.Long(patNum)
-				+" AND StatusIsActive<>0";
-			if(showInactive) {
-				command="SELECT * FROM allergy WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM allergy WHERE PatNum = "+POut.Long(patNum);
+			if(!showInactive) {
+				command+=" AND StatusIsActive<>0";
 			}
 			return Crud.AllergyCrud.SelectMany(command);
 		}
