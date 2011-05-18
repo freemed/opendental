@@ -19,11 +19,20 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all Diseases for a given patient.  Includes hidden. Sorted by diseasedef.ItemOrder.</summary>
 		public static List<Disease> Refresh(long patNum) {
+			//No need to check RemotingRole; no call to db.
+			return Refresh(patNum,false);
+		}
+
+		///<summary>Gets a list of all Diseases for a given patient. Set showActive true to only show active Diseases.</summary>
+		public static List<Disease> Refresh(long patNum,bool showActiveOnly) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Disease>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<Disease>>(MethodBase.GetCurrentMethod(),patNum,showActiveOnly);
 			}
 			string command="SELECT disease.* FROM disease "
 				+"WHERE PatNum="+POut.Long(patNum);
+			if(showActiveOnly) {
+				command+=" AND ProbStatus=0";
+			}
 			return Crud.DiseaseCrud.SelectMany(command);
 		}
 

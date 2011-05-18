@@ -213,7 +213,7 @@ namespace OpenDentBusiness {
 				//different default list for eCW:
 				if(!Programs.UsingEcwTight()) {
 					list.Add(new DisplayField("Premedicate",0,category));
-					list.Add(new DisplayField("Diseases",0,category));
+					list.Add(new DisplayField("Problems",0,category));
 					list.Add(new DisplayField("Med Urgent",0,category));
 					list.Add(new DisplayField("Medical Summary",0,category));
 					list.Add(new DisplayField("Service Notes",0,category));
@@ -386,7 +386,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Registration Keys",0,category));
 				}
 				list.Add(new DisplayField("Premedicate",0,category));
-				list.Add(new DisplayField("Diseases",0,category));
+				list.Add(new DisplayField("Problems",0,category));
 				list.Add(new DisplayField("Med Urgent",0,category));
 				list.Add(new DisplayField("Medical Summary",0,category));
 				list.Add(new DisplayField("Service Notes",0,category));

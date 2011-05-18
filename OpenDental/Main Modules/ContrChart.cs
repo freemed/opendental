@@ -3866,8 +3866,8 @@ namespace OpenDental{
 							gridPtInfo.Rows.Add(row);
 						}
 						break;
-					case "Diseases":
-						List<Disease> DiseaseList=Diseases.Refresh(PatCur.PatNum);
+					case "Problems":
+						List<Disease> DiseaseList=Diseases.Refresh(PatCur.PatNum,true);
 						row=new ODGridRow();
 						cell=new ODGridCell();
 						if(fields[f].Description=="") {
