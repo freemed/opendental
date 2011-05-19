@@ -463,7 +463,7 @@ namespace OpenDental{
 			else {
 				listBoxStatus.SelectedIndex=0;
 			}
-			if(true) {//TODO:formOpenDental.FormEhr!=null) {
+			if(FormOpenDental.FormEHR!=null) {
 				listBoxStatus.Visible=true;
 				labelStatus.Visible=true;
 			}

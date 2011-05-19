@@ -39,13 +39,21 @@ namespace OpenDentBusiness{
 						}
 						//TODO: How do we match vs labresults
 						if(eduResourceListAll[i].LabResultCompare.StartsWith("<")){
-
+							try{
+								if(int.Parse(labResultList[j].ObsValue)<int.Parse(eduResourceListAll[i].LabResultCompare.Substring(1))){
+									retVal.Add(eduResourceListAll[i]);
+								}
+							}
+							catch{
+								//Because LabResult.ObsValue can only be stored as > or < followed by an int, this case should never be reached. fail silently
+							}
 							//labResultList[j].ObsValue
 						}
 						else if(eduResourceListAll[i].LabResultCompare.StartsWith(">")){
 
 						}
 						else{
+							//Might be used in the future to match with non < or > ...TODO:
 							//error?
 						}
 						//retVal.Add(eduResourceListAll[i]);

@@ -13,6 +13,9 @@ namespace OpenDental.Forms {
 	public partial class FormEduResourceEdit:Form {
 		public bool IsNew;
 		private long tempID;
+		private bool IsProblem;
+		private bool IsMedication;
+		private bool IsLab;
 		public EduResource EduResourceCur;
 
 		public FormEduResourceEdit() {
@@ -38,6 +41,9 @@ namespace OpenDental.Forms {
 			FormDD.IsSelectionMode=true;
 			FormDD.ShowDialog();
 			if(FormDD.DialogResult==DialogResult.OK) {
+				IsProblem=true;
+				IsMedication=false;
+				IsLab=false;
 				tempID=FormDD.SelectedDiseaseDefNum;
 				textProblem.Text=DiseaseDefs.GetName(FormDD.SelectedDiseaseDefNum);
 				textMedication.Text="";
@@ -51,17 +57,23 @@ namespace OpenDental.Forms {
 			FormMedications FormM=new FormMedications();
 			FormM.IsSelectionMode=true;
 			FormM.ShowDialog();
-			//if(FormM.DialogResult==DialogResult.OK) {
+			if(FormM.DialogResult==DialogResult.OK) {
+				IsProblem=false;
+				IsMedication=true;
+				IsLab=false;
 				tempID=FormM.SelectedMedicationNum;
 				textProblem.Text="";
 				textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
 				textLabResultsID.Text="";
 				textLabTestName.Text="";
 				textCompareValue.Text="";
-			//}
+			}
 		}
 
 		private void textLabResults_Click(object sender,EventArgs e) {
+			IsProblem=false;
+			IsMedication=false;
+			IsLab=true; 
 			tempID=0;
 			textProblem.Text="";
 			textMedication.Text="";
@@ -86,12 +98,13 @@ namespace OpenDental.Forms {
 			EduResource tempResource = new EduResource();
 			tempResource.EduResourceNum=EduResourceCur.EduResourceNum;
 			//validate
-			if(textProblem.Text!="" && tempID!=0) {//Disease/Problem
+			if(IsProblem) {
 				tempResource.DiseaseDefNum=tempID;
 			}
-			else if(textMedication.Text!="" && tempID!=0) {//Medication
+			else if(IsMedication) {
+				tempResource.MedicationNum=tempID;
 			}
-			else if(textLabResultsID.Text!="" && tempID==0) {//LabResults
+			else if(IsLab) {
 				tempResource.LabResultID=textLabResultsID.Text;
 				if(textLabTestName.Text==""){
 					MessageBox.Show("Invalid test name for lab result.");
