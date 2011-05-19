@@ -44,57 +44,60 @@ namespace OpenDental.Forms {
 			FormDiseaseDefs FormDD = new FormDiseaseDefs();
 			FormDD.IsSelectionMode=true;
 			FormDD.ShowDialog();
-			if(FormDD.DialogResult==DialogResult.OK) {
-				IsProblem=true;
-				IsICD9=false;
-				IsMedication=false;
-				IsLab=false;
-				tempID=FormDD.SelectedDiseaseDefNum;
-				textProblem.Text=DiseaseDefs.GetName(FormDD.SelectedDiseaseDefNum);
-				textICD9.Text="";
-				textMedication.Text="";
-				textLabResultsID.Text="";
-				textLabTestName.Text="";
-				textCompareValue.Text="";
+			if(FormDD.DialogResult!=DialogResult.OK) {
+				return;
 			}
+			IsProblem=true;
+			IsICD9=false;
+			IsMedication=false;
+			IsLab=false;
+			tempID=FormDD.SelectedDiseaseDefNum;
+			textProblem.Text=DiseaseDefs.GetName(FormDD.SelectedDiseaseDefNum);
+			textICD9.Text="";
+			textMedication.Text="";
+			textLabResultsID.Text="";
+			textLabTestName.Text="";
+			textCompareValue.Text="";
 		}
 
 		private void butICD9Select_Click(object sender,EventArgs e) {
 			FormIcd9s FormICD9=new FormIcd9s();
 			FormICD9.IsSelectionMode=true;
 			FormICD9.ShowDialog();
-			if(FormICD9.DialogResult==DialogResult.OK) {
-				IsProblem=false;
-				IsICD9=true;
-				IsMedication=false;
-				IsLab=false;
-				tempID=FormICD9.SelectedIcd9Num;
-				textProblem.Text="";
-				textICD9.Text="ICD9: "+ICD9s.GetDescription(FormICD9.SelectedIcd9Num); ;
-				textMedication.Text="";
-				textLabResultsID.Text="";
-				textLabTestName.Text="";
-				textCompareValue.Text="";
+			if(FormICD9.DialogResult!=DialogResult.OK) {
+				return;
 			}
+			IsProblem=false;
+			IsICD9=true;
+			IsMedication=false;
+			IsLab=false;
+			tempID=FormICD9.SelectedIcd9Num;
+			textProblem.Text="";
+			textICD9.Text="ICD9: "+ICD9s.GetDescription(FormICD9.SelectedIcd9Num); ;
+			textMedication.Text="";
+			textLabResultsID.Text="";
+			textLabTestName.Text="";
+			textCompareValue.Text="";
 		}
 
 		private void butMedicationSelect_Click(object sender,EventArgs e) {
 			FormMedications FormM=new FormMedications();
 			FormM.IsSelectionMode=true;
 			FormM.ShowDialog();
-			if(FormM.DialogResult==DialogResult.OK) {
-				IsProblem=false;
-				IsICD9=false;
-				IsMedication=true;
-				IsLab=false;
-				tempID=FormM.SelectedMedicationNum;
-				textProblem.Text="";
-				textICD9.Text="";
-				textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
-				textLabResultsID.Text="";
-				textLabTestName.Text="";
-				textCompareValue.Text="";
+			if(FormM.DialogResult!=DialogResult.OK) {
+				return;
 			}
+			IsProblem=false;
+			IsICD9=false;
+			IsMedication=true;
+			IsLab=false;
+			tempID=FormM.SelectedMedicationNum;
+			textProblem.Text="";
+			textICD9.Text="";
+			textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
+			textLabResultsID.Text="";
+			textLabTestName.Text="";
+			textCompareValue.Text="";
 		}
 
 		private void textLabResults_Click(object sender,EventArgs e) {
@@ -108,15 +111,12 @@ namespace OpenDental.Forms {
 			textMedication.Text="";
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(IsNew) {
 				DialogResult=DialogResult.Cancel;
+				return;
 			}
-			if(MessageBox.Show("Delete this educational resource?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this educational resource?")) {
 				return;
 			}
 			EduResources.Delete(EduResourceCur.EduResourceNum);
@@ -124,30 +124,14 @@ namespace OpenDental.Forms {
 		}
 
 		private void butOk_Click(object sender,EventArgs e) {
-			EduResource tempResource = new EduResource();
-			tempResource.EduResourceNum=EduResourceCur.EduResourceNum;
-			tempResource.LabResultCompare="";
-			tempResource.LabResultID="";
-			tempResource.LabResultName="";
-			//validate
-			if(IsProblem) {
-				tempResource.DiseaseDefNum=tempID;
-			}
-			else if(IsICD9) {
-				tempResource.Icd9Num=tempID;
-			}
-			else if(IsMedication) {
-				tempResource.MedicationNum=tempID;
-			}
-			else if(IsLab) {
-				tempResource.LabResultID=textLabResultsID.Text;
+			//validation
+			if(IsLab) {
 				if(textLabTestName.Text=="") {
 					MessageBox.Show("Invalid test name for lab result.");
 					return;
 				}
-				tempResource.LabResultName=textLabTestName.Text;
 				if(textCompareValue.Text.Length<2) {
-					MessageBox.Show("Compare value must be comparator followed by an age. eg. \"<18\".");
+					MessageBox.Show("Compare value must be comparator followed by a number. eg. \">120\".");
 					return;
 				}
 				if(textCompareValue.Text[0]!='<' && textCompareValue.Text[0]!='>') {
@@ -155,31 +139,48 @@ namespace OpenDental.Forms {
 					return;
 				}
 				try {
-					int.Parse(textCompareValue.Text.Substring(1,textCompareValue.Text.Length-1));
+					int.Parse(textCompareValue.Text.Substring(1));
 				}
 				catch {
 					MessageBox.Show("Compare value is not a valid number.");
 					return;
 				}
-				tempResource.LabResultCompare=textCompareValue.Text;
 			}
-			else {//error, Not a valid problem, medication, or lab result.
+			if(!IsProblem && !IsICD9 && !IsMedication && !IsLab){
 				MessageBox.Show("Please Select a valid problem, medication, or lab result.");
 				return;
 			}
-			if(textUrl.Text==""){
+			if(textUrl.Text=="") {
 				MessageBox.Show("Please input a valid recource URL.");
 				return;
 			}
-			tempResource.ResourceUrl=textUrl.Text;
-			//save
+			//done validating
+			if(IsProblem) {
+				EduResourceCur.DiseaseDefNum=tempID;
+			}
+			else if(IsICD9) {
+				EduResourceCur.Icd9Num=tempID;
+			}
+			else if(IsMedication) {
+				EduResourceCur.MedicationNum=tempID;
+			}
+			else if(IsLab) {
+				EduResourceCur.LabResultID=textLabResultsID.Text;
+				EduResourceCur.LabResultName=textLabTestName.Text;
+				EduResourceCur.LabResultCompare=textCompareValue.Text;
+			}
+			EduResourceCur.ResourceUrl=textUrl.Text;
 			if(IsNew) {
-				EduResources.Insert(tempResource);
+				EduResources.Insert(EduResourceCur);
 			}
 			else {
-				EduResources.Update(tempResource);
+				EduResources.Update(EduResourceCur);
 			}
 			DialogResult=DialogResult.OK;
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 

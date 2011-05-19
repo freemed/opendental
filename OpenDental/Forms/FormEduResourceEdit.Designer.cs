@@ -122,7 +122,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(384,308);
+			this.butCancel.Location = new System.Drawing.Point(384,267);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,23);
 			this.butCancel.TabIndex = 9;
@@ -133,7 +133,7 @@
 			// butOk
 			// 
 			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOk.Location = new System.Drawing.Point(303,308);
+			this.butOk.Location = new System.Drawing.Point(303,267);
 			this.butOk.Name = "butOk";
 			this.butOk.Size = new System.Drawing.Size(75,23);
 			this.butOk.TabIndex = 10;
@@ -144,7 +144,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12,308);
+			this.butDelete.Location = new System.Drawing.Point(12,267);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,23);
 			this.butDelete.TabIndex = 11;
@@ -256,7 +256,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(471,343);
+			this.ClientSize = new System.Drawing.Size(471,302);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.textICD9);
 			this.Controls.Add(this.butICD9Select);

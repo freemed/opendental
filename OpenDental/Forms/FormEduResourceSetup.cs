@@ -34,10 +34,9 @@ namespace OpenDental.Forms {
 			for(int i=0;i<eduResourceList.Count;i++) {
 				row=new ODGridRow();
 				if(eduResourceList[i].DiseaseDefNum!=0) {
-					//Todo: what about icd9s?
-						row.Cells.Add("Problem: "+DiseaseDefs.GetItem(eduResourceList[i].DiseaseDefNum).DiseaseName);
+					row.Cells.Add("Problem: "+DiseaseDefs.GetItem(eduResourceList[i].DiseaseDefNum).DiseaseName);
 				}
-				if(eduResourceList[i].Icd9Num!=0) {
+				else if(eduResourceList[i].Icd9Num!=0) {
 				  row.Cells.Add("ICD9: "+ICD9s.GetDescription(eduResourceList[i].Icd9Num));
 				}
 				else if(eduResourceList[i].MedicationNum!=0) {
