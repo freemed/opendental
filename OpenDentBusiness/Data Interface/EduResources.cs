@@ -34,30 +34,23 @@ namespace OpenDentBusiness{
 				}
 				else if(eduResourceListAll[i].LabResultID!="") {
 					for(int j=0;j<labResultList.Count;j++) {
-						if(eduResourceListAll[i].LabResultID!=labResultList[j].TestID) {
+						if(eduResourceListAll[i].LabResultID != labResultList[j].TestID) {
 							continue;
 						}
-						//TODO: How do we match vs labresults
 						if(eduResourceListAll[i].LabResultCompare.StartsWith("<")){
+							//PIn.Int not used because blank not allowed.
 							try{
-								if(int.Parse(labResultList[j].ObsValue)<int.Parse(eduResourceListAll[i].LabResultCompare.Substring(1))){
+								if(int.Parse(labResultList[j].ObsValue) < int.Parse(eduResourceListAll[i].LabResultCompare.Substring(1))){
 									retVal.Add(eduResourceListAll[i]);
 								}
 							}
 							catch{
-								//Because LabResult.ObsValue can only be stored as > or < followed by an int, this case should never be reached. fail silently
-								//In the future there may be non intiger values that we would not want this to fail on.
+								//This could only happen if the validation in either input didn't work.
 							}
-							//labResultList[j].ObsValue
 						}
 						else if(eduResourceListAll[i].LabResultCompare.StartsWith(">")){
 
 						}
-						else{
-							//Might be used in the future to match with non < or > ...TODO:
-							//error?
-						}
-						//retVal.Add(eduResourceListAll[i]);
 					}
 				}
 			}
