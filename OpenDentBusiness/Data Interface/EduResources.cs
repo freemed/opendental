@@ -49,7 +49,14 @@ namespace OpenDentBusiness{
 							}
 						}
 						else if(eduResourceListAll[i].LabResultCompare.StartsWith(">")){
-
+							try {
+								if(int.Parse(labResultList[j].ObsValue) > int.Parse(eduResourceListAll[i].LabResultCompare.Substring(1))) {
+									retVal.Add(eduResourceListAll[i]);
+								}
+							}
+							catch {
+								//This could only happen if the validation in either input didn't work.
+							}
 						}
 					}
 				}
