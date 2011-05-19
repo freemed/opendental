@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EduResources{
 		///<summary></summary>
-		public static List<EduResource> SelectAllForPatient(long patNum){
+		public static List<EduResource> GenerateForPatient(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EduResource>>(MethodBase.GetCurrentMethod(),patNum);
 			}

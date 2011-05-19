@@ -75,7 +75,7 @@
 			this.Controls.Add(this.butClose);
 			this.Name = "FormEduResourceSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "FormEduResourceSetup";
+			this.Text = "Education Resources Setup";
 			this.Load += new System.EventHandler(this.FormEduResourceSetup_Load);
 			this.ResumeLayout(false);
 

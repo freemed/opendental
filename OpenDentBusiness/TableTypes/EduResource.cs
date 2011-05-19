@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary>EHR education resource.  Only one of the 3 FK fields will be used at a time.  The other two will be blank.   Displays a clickable URL if the patient meets certain criteria.  </summary>
+	///<summary>EHR education resource.  Only one of the 4 FK fields will be used at a time.  The other two will be blank.   Displays a clickable URL if the patient meets certain criteria.  </summary>
 	[Serializable]
 	public class EduResource:TableBase {
 		///<summary>Primary key.</summary>
@@ -21,6 +21,8 @@ namespace OpenDentBusiness {
 		public string LabResultCompare;
 		///<summary></summary>
 		public string ResourceUrl;
+		///<summary>FK to icd9.ICD9Num.</summary>
+		public long Icd9Num;
 
 		///<summary></summary>
 		public EduResource Copy() {

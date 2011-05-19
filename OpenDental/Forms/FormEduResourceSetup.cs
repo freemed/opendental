@@ -18,10 +18,10 @@ namespace OpenDental.Forms {
 		}
 
 		private void FormEduResourceSetup_Load(object sender,EventArgs e) {
-			fillMedOrderGrid();
+			FillGrid();
 		}
 
-		private void fillMedOrderGrid() {
+		private void FillGrid() {
 			gridEdu.BeginUpdate();
 			gridEdu.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Criteria",150);
@@ -34,13 +34,14 @@ namespace OpenDental.Forms {
 			for(int i=0;i<eduResourceList.Count;i++) {
 				row=new ODGridRow();
 				if(eduResourceList[i].DiseaseDefNum!=0) {
+					//Todo: what about icd9s?
 					row.Cells.Add("Problem: "+DiseaseDefs.GetItem(eduResourceList[i].DiseaseDefNum).DiseaseName);
 				}
 				else if(eduResourceList[i].MedicationNum!=0) {
 					row.Cells.Add("Medication: "+Medications.GetDescription(eduResourceList[i].MedicationNum));
 				}
 				else {
-					row.Cells.Add("Lab Results: "+eduResourceList[i].LabResultName);
+					row.Cells.Add("Lab Results: "+eduResourceList[i].LabResultName+" "+eduResourceList[i].LabResultCompare);
 				}
 				row.Cells.Add(eduResourceList[i].ResourceUrl);
 				gridEdu.Rows.Add(row);
@@ -48,23 +49,25 @@ namespace OpenDental.Forms {
 			gridEdu.EndUpdate();
 		}
 
+		private void gridEdu_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormEduResourceEdit FormERE = new FormEduResourceEdit();
+			FormERE.EduResourceCur=eduResourceList[e.Row];
+			FormERE.ShowDialog();
+			FillGrid();
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormEduResourceEdit FormERE = new FormEduResourceEdit();
 			FormERE.IsNew=true;
 			FormERE.ShowDialog();
-			fillMedOrderGrid();
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void gridEdu_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEduResourceEdit FormERE = new FormEduResourceEdit();
-			FormERE.EduResourceCur=eduResourceList[e.Row];
-			FormERE.ShowDialog();
-			fillMedOrderGrid();
-		}
+	
 
 
 	}
