@@ -49,7 +49,7 @@ namespace MobileWeb {
 						DemoDateCookieD.Value=AppointmentDate.Day+"";
 					}
 					else {
-						DemoDateCookieY.Value="";// these are explicitely set to empty because javascript at on the browser picking values from previously set cookies
+						DemoDateCookieY.Value="";// these are explicitely set to empty because javascript on the browser is picking values from previously set cookies
 						DemoDateCookieM.Value="";
 						DemoDateCookieD.Value="";
 						AppointmentDate=DateTime.Today;
@@ -57,9 +57,7 @@ namespace MobileWeb {
 					Response.Cookies.Add(DemoDateCookieY);// if expiry is not specified the cookie lasts till the end of session
 					Response.Cookies.Add(DemoDateCookieM);
 					Response.Cookies.Add(DemoDateCookieD);
-
-
-				} Logger.Information("not demo CustomerNum="+CustomerNum);
+				}
 				DayLabel.Text=AppointmentDate.ToString("ddd")+", "+AppointmentDate.ToString("MMM")+AppointmentDate.ToString("dd");
 				DateTime PreviousDate=AppointmentDate.AddDays(-1);
 				PreviousDateDay=PreviousDate.Day;

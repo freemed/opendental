@@ -24,11 +24,9 @@
 
 <ul>
 <li> <span class="style1"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
-<div><%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%></div><br />
-<div><%Response.Write(apt.ProcDescript);%></div><br />
-<!--dentist, hygienist <br />-->
-<!--confirmation status from definition table <br />-->
-<div><%Response.Write(apt.Note);%></div><br />
+<div><%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%></div>
+<div style="padding-top:4px"><%Response.Write(apt.ProcDescript);%></div>
+<div style="padding-top:4px"><%Response.Write(apt.Note);%></div>
 </span>
 </li>
 </ul>

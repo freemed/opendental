@@ -249,7 +249,7 @@
                 return false;
             }
         }
-        //dennis I added this function
+        //dennis: I added this function
         function goToReverse(toPage, animation) {
             var fromPage = hist[0].page; //current page
             if (typeof (toPage) === 'string') {
@@ -264,7 +264,7 @@
                 }
             }
             if (animatePages(fromPage, toPage, animation, true)) {
-                addPageToHistory(toPage, animation);// this seems neccesary for this function.
+                addPageToHistory(toPage, animation);// dennis: this seems neccesary for this function.
                 return publicObj;
             }
             else {

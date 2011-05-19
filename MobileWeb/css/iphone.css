@@ -30,9 +30,22 @@ min-height: 480px;
     top: 120px;
     width: 200px;
 }
+#progresslogout {
+    -webkit-border-radius: 10px;
+    background-color: rgba(0,0,0,.7);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    top: 120px;
+    width: 200px;
+    margin-left: auto;
+	margin-right: auto;
+
+}
 .logout{
-     left: 6px;
-     right: auto;
+     right: 6px;
+     left: auto;
      z-index: 1;
 }
 .datenavigation{
@@ -187,6 +200,9 @@ ul li input[type="checkbox"]:after {
 
 /*top and bottom padding adjusted*/
 ul li {
+    padding: 10px 10px 10px 10px;
+}
+.normalheight {
     padding: 5px 10px 5px 10px;
 }
 
@@ -199,4 +215,8 @@ ul li {
     text-align:center;
      margin-left:50px;
      margin-right:50px
+}
+.narrowul{
+    margin-right:60px;
+    margin-left:60px; 
 }

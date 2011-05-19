@@ -30,9 +30,9 @@
 								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("hh:mm tt")%>&nbsp;&nbsp;&nbsp;&nbsp;
 								</div>
 								<div style="float:left; width:65%;">
-								<div><%#GetPatientName(((Appointmentm)Container.DataItem).PatNum)%></div> <br />
-								<div style="word-wrap:break-word;white-space: normal;"><%#((Appointmentm)Container.DataItem).ProcDescript%></div> <br />
-								<div style="word-wrap:break-word;white-space: normal;"><%#((Appointmentm)Container.DataItem).Note%></div>
+								<div><%#GetPatientName(((Appointmentm)Container.DataItem).PatNum)%></div>
+								<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%#((Appointmentm)Container.DataItem).ProcDescript%></div>
+								<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%#((Appointmentm)Container.DataItem).Note%></div>
 								</div>
 								</a>
 								

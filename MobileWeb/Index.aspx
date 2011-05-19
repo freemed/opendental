@@ -6,25 +6,25 @@
     <head  runat="server">
         <title>Open Dental Mobile</title>
 		<% if (HttpContext.Current.IsDebuggingEnabled) { %>
-        <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.css">
-        <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css">
-		<link type="text/css" rel="stylesheet" media="screen" href="css/jqueryui/jquery.ui.all.css">
-		<link type="text/css" rel="stylesheet" media="screen" href="css/iphone.css">
-        <script type="text/javascript" src="scripts/jquery.js"></script>
-		<script type="text/javascript" src="scripts/jqtouch.js"></script>
-		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.core.js"></script>
-		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.datepicker.js"></script>
-		<script type="text/javascript" src="scripts/iphone.js"></script>
+        <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.css?v=<%Response.Write(""+random.Next());%>">
+        <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css?v=<%Response.Write(""+random.Next());%>">
+		<link type="text/css" rel="stylesheet" media="screen" href="css/jqueryui/jquery.ui.all.css?v=<%Response.Write(""+random.Next());%>">
+		<link type="text/css" rel="stylesheet" media="screen" href="css/iphone.css?v=<%Response.Write(""+random.Next());%>">
+        <script type="text/javascript" src="scripts/jquery.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/jqtouch.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.core.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.datepicker.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/iphone.js?v=<%Response.Write(""+random.Next());%>"></script>
 		<% } else { %>
-          <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.min.css">
-        <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css"><%--no minified version for this file--%>
-        <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.min.css">
-		<link type="text/css" rel="stylesheet" media="screen" href="css/jqueryui/jquery.ui.all.min.css">
-        <script type="text/javascript" src="scripts/jquery.min.js"></script>
-		<script type="text/javascript" src="scripts/jqtouch.min.js"></script>
-		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.core.min.js"></script>
-		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.datepicker.min.js"></script>
-		<script type="text/javascript" src="scripts/iphone.min.js"></script>
+          <link type="text/css" rel="stylesheet" media="screen" href="css/themes/apple/theme.min.css?v=<%Response.Write(""+random.Next());%>">
+        <link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css?v=<%Response.Write(""+random.Next());%>"><%--no minified version for this file--%>
+        <link type="text/css" rel="stylesheet" media="screen" href="css/iphone.min.css?v=<%Response.Write(""+random.Next());%>">
+		<link type="text/css" rel="stylesheet" media="screen" href="css/jqueryui/jquery.ui.all.min.css?v=<%Response.Write(""+random.Next());%>">
+        <script type="text/javascript" src="scripts/jquery.min.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/jqtouch.min.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.core.min.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/jqueryui/jquery.ui.datepicker.min.js?v=<%Response.Write(""+random.Next());%>"></script>
+		<script type="text/javascript" src="scripts/iphone.min.js?v=<%Response.Write(""+random.Next());%>"></script>
 		<% } %>
 		<script type="text/javascript">
 			/*Dennis: the default slide animation is disabled on anchor tags with arrowless style and id searchbutton*/
@@ -47,41 +47,46 @@
             <form id="form1" method="post" runat="server">
 			<span class="style1" style="font-weight:bold;position:relative;left:15px;">User name</span><br />
                 <ul style="margin-top:4px">
-                    <%--<li><input type="text" runat="server" placeholder="Username" name="username" id="username" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>--%>
-					<%--<li><input type="submit" class="submit" name="action" value="Login" /></li>--%>
-					<%--				<ul style="width:80%;margin:auto;">
-					<li style="text-align:center;padding-top:0px;padding-bottom:0px;"><input style="padding-top:0px;padding-bottom:0px;height:24px;font-weight:bold;" type="submit" class="submit" name="action" value="Login" /></li>
-					</ul>--%>
-					<li><asp:TextBox placeholder="" ID="username" runat="server"></asp:TextBox></li>
+					<li class="normalheight"><asp:TextBox placeholder="" ID="username" runat="server"></asp:TextBox></li>
                 </ul>
 				<span class="style1" style="font-weight:bold;position:relative;left:15px;">Password</span>
                 <ul style="margin-top:4px">
-					<li><input type="password" placeholder="" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
+					<li class="normalheight"><input type="password" placeholder="" name="password" id="password" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
                 </ul>
                 <div style="margin-left:15px;margin-bottom:10px">  
 					<asp:CheckBox ID="rememberusername" title="Remember username" runat="server" /><span class="style1" style="margin-left:15px;font-weight:bold;position:relative;top:0px;left:0px;">Remember username</span>
                 </div>	
-
-							 <ul class="rounded page1">
-                <li><a id="loginbutton" class="arrowless" href="#">Login</a></li>
-            </ul>
+				<ul class="rounded page1">
+					<li class="normalheight"><a id="loginbutton" class="arrowless" href="#">Login</a></li>
+				</ul>
 				 <div class="styleError" style="margin-left:15px;">  
 				 <asp:Label ID="LabelMessage" runat="server" Text="" ForeColor="Red"></asp:Label>
 				 </div>	
             </form>
         </div>
+
+		<div id="logout">
+			<div class="toolbar">
+			</div>
+			<div style="height: 170px">
+			</div>
+			<div id="logoutmessage">
+			<div class="style1" style="font-weight:bold;text-align:center;">You have been logged out.</div>
+            </div>
+			
+		</div>
+
 		<div id="home">
 			<div class="toolbar">
+				<h1>Home</h1>
 				<a class="button logout" href="#">Logout</a>
-				<h1>
-					Home</h1>
 			</div>
 			<div style="height: 70px">
 			</div>
-			<ul class="rounded page1">
+			<ul class="rounded page1 narrowul">
 				<li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
 			</ul>
-			<ul class="rounded page1">
+			<ul class="rounded page1 narrowul">
 				<li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
 			</ul>
 		</div>
@@ -90,6 +95,7 @@
             <div class="toolbar">
                 <h1>Appointments</h1>
                 <a class="home" href="#">Home</a>
+				<a class="button logout" href="#">Logout</a>
             </div>
             <div id="AppointmentListContents">
             </div>
@@ -97,10 +103,12 @@
 
 		 <div id="FilterPicker">
             <div class="toolbar">
-                <h1>Date Picker</h1>
+                <h1>Appointment View</h1>
                 <a class="appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
+				<a class="button logout" href="#">Logout</a>
             </div>
             <div id="FilterPickerContents">
+			<h1>Date Picker</h1>
 				<div id="datepicker"></div>
             </div>
         </div>
@@ -109,9 +117,10 @@
             <div class="toolbar">
                 <h1>Patients</h1>
                 <a class="home" href="#">Home</a>
+				<a class="button logout" href="#">Logout</a>
             </div>
 			 <ul style="width:71%; display:inline-block;">
-                <li>
+                <li class="normalheight">
 				<input type="text" placeholder="Search Patient" name="searchpatientbox" id="searchpatientbox" autocapitalize="off" autocorrect="off" autocomplete="off" />
 				</li>
 			</ul>
@@ -125,6 +134,7 @@
         <div class="toolbar">
         <h1>Patient</h1>
         <a class="patients" linkattib="PatientList.aspx" href="#">Patients</a>
+		<a class="button logout" href="#">Logout</a>
     </div>
    <div id="PatientDetailsContents">
    </div>
@@ -135,6 +145,7 @@
 		<div class="toolbar">
 		<h1>Appointment</h1>
 		<a class="appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
+		<a class="button logout" href="#">Logout</a>
 		</div>
 	   <div id="AppointmentDetailsContents">
 	   </div>

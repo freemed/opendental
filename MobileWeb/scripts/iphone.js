@@ -18,6 +18,7 @@ function hijackLinks() {
 
 */
 var MessageLoad='<div id="progress"><p>&nbsp;</p><p>Loading...</p><p>&nbsp;</p></div>';
+var MessageLoadLogout = '<div><div id="progresslogout"><p>&nbsp;</p><p>Logging out...</p><p>&nbsp;</p></div></div>';
 var MessageError = '<div class="styleError">There has been an error while processing your page. Please try again.<br />If the error persists, please refresh this page using the browser address bar and try again.</div>';
 
 $(document).ready(function () {
@@ -37,8 +38,20 @@ function TraversePage(){
             document.location.href='www.yourdomain.com/iphone_index.html';  
         } 
     */
-	//Process Login
-	//$('#login form').submit(ProcessLogin);
+
+    //Password is retained on some browsers- so it's got to be erased
+    $('#password').focus(function () {
+        //alert('Handler for password.focus() called.');
+        $('#password').val(''); //because password field tends to retain the keyed in password.
+    });
+    $('#password').click(function (e) {
+        //alert('Handler for password.click() called.');
+        $('#password').val(''); //because password field tends to retain the keyed in password.
+    });
+    $('#password').tap(function (e) {
+        //alert('Handler for password.tap() called.'); 
+        $('#password').val(''); //because password field tends to retain the keyed in password.
+    });
 
     //Process Login
     $('#loginbutton').tap(function (e) { ProcessLogin(); });
@@ -51,7 +64,7 @@ function TraversePage(){
 	$('a[href="#AppointmentList"]').click(function (e) {
 		//e.preventDefault();
 		//console.log('AppointmentList clicked');
-		var UrlForFetchingData = this.attributes["linkattib"].value+"gg"; 
+		var UrlForFetchingData = this.attributes["linkattib"].value; 
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
@@ -124,12 +137,12 @@ function TraversePage(){
 	});
 	
 	/*home, appt, patient buttons*/
-	$('.appts').tap(function(e) {
-		//console.log('Next button tapped');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
-		var SectionToFill='#AppointmentListContents';
-		var MoveToURL='#AppointmentList';
-		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+	$('.appts').tap(function (e) {
+	    //console.log('Next button tapped');
+	    var UrlForFetchingData = this.attributes["linkattib"].value;
+	    var SectionToFill = '#AppointmentListContents';
+	    var MoveToURL = '#AppointmentList';
+	    ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);	    
 	});
 	
 	$('.patients').tap(function(e) {
@@ -138,8 +151,9 @@ function TraversePage(){
 		//console.log('searchterm is ' + searchterm);
 		var UrlForFetchingData='PatientList.aspx?searchterm='+searchterm; 
 		var SectionToFill='#PatientListContents';
-		var MoveToURL='#PatientList';
+		var MoveToURL = '#PatientList'; 
 		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+		//var today = new Date(); console.log("in patients" + today);
     });
 
     /*Dennis: this overrides the default behavior of clicking the today button in jqueryui*/
@@ -237,15 +251,15 @@ function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
 
 function ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill){
     $(SectionToFill).append(MessageLoad);
-	jQT.goToReverse(MoveToURL,'slide'); 
-	FetchPage(UrlForFetchingData, SectionToFill)
+    jQT.goToReverse(MoveToURL, 'slide'); //var today = new Date(); console.log("in ProcessReversePageLink 1a" + today);
+    FetchPage(UrlForFetchingData, SectionToFill); //console.log("in ProcessReversePageLink 1b" + today);
 }
 
 function ProcessPreviousNextButton(e,UrlForFetchingData, SectionToFill){
 	e.preventDefault();
 	//console.log(' UrlForFetchingData =' + UrlForFetchingData );
 	$(SectionToFill).append(MessageLoad);
-	FetchPage(UrlForFetchingData, SectionToFill)
+	FetchPage(UrlForFetchingData, SectionToFill);
 }
 	
 function FetchPage(UrlForFetchingData, SectionToFill){
@@ -300,19 +314,22 @@ function ProcessLogin() {
 
 function ProcessLogout(e) {
 		//console.log('log out clicked');
-		e.preventDefault();
-		$('#home').append(MessageLoad);
+    e.preventDefault();
+    var logoutConfirmation=$('#logoutmessage').html();
+		$('#logoutmessage').append(MessageLoadLogout);
+		jQT.goTo('#logout');
 		$.ajax({
-			type: "GET",
-			url: "ProcessLogout.aspx",
-			data: "",
-			success: function (msg) {
-				if (msg == "LoggedOut") {
-					$('#progress').replaceWith('');
-					//console.log('in LoggedOut');
-					jQT.goTo('#login');// no 'Not able to tap element' error.
-				}
-			}
+		    type: "GET",
+		    url: "ProcessLogout.aspx",
+		    data: "",
+		    success: function (msg) {
+		        if (msg == "LoggedOut") {
+		            $('#progresslogout').replaceWith('');
+		            //console.log('in LoggedOut');
+		            $('#password').val(''); //because password field tend to retain the keyed in password, its made blank on logout.
+		            //jQT.goTo('#logout'); // no 'Not able to tap element' error.
+		        }
+		    }
 		});
 
 }
