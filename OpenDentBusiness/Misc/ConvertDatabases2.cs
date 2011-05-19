@@ -4479,6 +4479,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.9.2.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_9_8();
+		}
+
+		private static void To7_9_8() {
+			if(FromVersion<new Version("7.9.8.0")) {
+				string command;
+				command=@"UPDATE clearinghouse SET ExportPath='C:\\Program Files\\Renaissance\\dotr\\upload\\' WHERE Description='Renaissance'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.9.8.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_0_0();
 		}
 
