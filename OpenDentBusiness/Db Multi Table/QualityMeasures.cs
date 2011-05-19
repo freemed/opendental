@@ -207,27 +207,87 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality,vitalsign "
 						+"SET tempehrquality.DateBpEntered=vitalsign.DateTaken "
 						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.BpSystolic != 0 "
+						+"AND vitalsign.BpDiastolic != 0 "
 						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
 						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd);
 					Db.NonQ(command);
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
-					//command="DROP TABLE IF EXISTS tempehrquality";
-					//Db.NonQ(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
 					break;
 				case QualityType.TobaccoUse:
-
+					//TobaccoUse---------------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						DateVisit date NOT NULL DEFAULT '0001-01-01',
+						VisitCount int NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit,VisitCount) "
+						+"SELECT patient.PatNum,LName,FName,"
+						+"MAX(ProcDate), "// most recent visit
+						+"COUNT(DISTINCT ProcDate) "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					//now, find tobacco use recorded in 24 months prior to last visit date.
+					//Todo: unfortunately, tobacco use is not a dated field yet.
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
 					break;
 				case QualityType.TobaccoCessation:
-
+					//TobaccoCessation-------------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						DateVisit date NOT NULL DEFAULT '0001-01-01',
+						VisitCount int NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit,VisitCount) "
+						+"SELECT patient.PatNum,LName,FName,"
+						+"MAX(ProcDate), "// most recent visit
+						+"COUNT(DISTINCT ProcDate) "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					//now, find tobacco use recorded in 24 months prior to last visit date.
+					//Todo: unfortunately, tobacco use is not a dated field yet.
+					//Also todo: counseling, medication, or orders.
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
 					break;
 				case QualityType.InfluenzaAdult:
+					//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
 
 					break;
 				case QualityType.WeightChild:
+					//WeightChild------------------------------------------------------------------------------------------------------------------
 
 					break;
 				case QualityType.ImmunizeChild:
+					//ImmunizeChild----------------------------------------------------------------------------------------------------------------
 
 					break;
 				default:
@@ -258,8 +318,11 @@ namespace OpenDentBusiness {
 				float weight=0;
 				float height=0;
 				float bmi=0;
+				DateTime dateVisit;
+				int visitCount;
 				switch(qtype) {
 					case QualityType.WeightOver65:
+						//WeightOver65---------------------------------------------------------------------------------------------------------------------
 						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
 						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
 						bmi=Vitalsigns.CalcBMI(weight,height);
@@ -278,6 +341,7 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case QualityType.WeightAdult:
+						//WeightAdult---------------------------------------------------------------------------------------------------------------------
 						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
 						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
 						bmi=Vitalsigns.CalcBMI(weight,height);
@@ -297,8 +361,8 @@ namespace OpenDentBusiness {
 						break;
 					case QualityType.Hypertension:
 						//Hypertension---------------------------------------------------------------------------------------------------------------------
-						DateTime dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
-						int visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
+						visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
 						string icd9code=tableRaw.Rows[i]["Icd9Code"].ToString();
 						DateTime datePbEntered=PIn.Date(tableRaw.Rows[i]["DateBpEntered"].ToString());
 						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
@@ -319,18 +383,39 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case QualityType.TobaccoUse:
-
+						//TobaccoUse---------------------------------------------------------------------------------------------------------------------
+						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
+						visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
+							continue;//don't add this row.  Not part of denominator.
+						}
+						if(visitCount<2) {
+							continue;
+						}
+						//incomplete						
 						break;
 					case QualityType.TobaccoCessation:
-
+						//TobaccoCessation----------------------------------------------------------------------------------------------------------------
+						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
+						visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
+							continue;//don't add this row.  Not part of denominator.
+						}
+						if(visitCount<2) {
+							continue;
+						}
+						//incomplete			
 						break;
 					case QualityType.InfluenzaAdult:
+						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
 
 						break;
 					case QualityType.WeightChild:
+						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
 
 						break;
 					case QualityType.ImmunizeChild:
+						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
 
 						break;
 					default:
@@ -372,15 +457,17 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType.WeightOver65:
-					return "All patients 65 and older with at least one completed procedure during the measurement period.";
+					return "All patients 65+ with at least one visit during the measurement period.";
 				case QualityType.WeightAdult:
-					return "All patients 18 to 64 with at least one completed procedure during the measurement period.";
+					return "All patients 18 to 64 with at least one visit during the measurement period.";
 				case QualityType.Hypertension:
 					return "All patients 18+ with ICD9 hypertension(401-404) and at least two visits, one during the measurement period.";
 				case QualityType.TobaccoUse:
-					return "";
+					return "All patients 18+ with at least two visits, one during the measurement period.";
 				case QualityType.TobaccoCessation:
-					return "";
+					//It's inconsistent.  Sometimes it says 24 months from now (which doesn't make sense).  
+					//Other times it says 24 months from last visit.  We're going with that.
+					return "All patients 18+ with at least two visits, one during the measurement period; and identified as tobacco users within the 24 months prior to the last visit.";
 				case QualityType.InfluenzaAdult:
 					return "";
 				case QualityType.WeightChild:
@@ -404,9 +491,9 @@ BMI 18.5-25.";
 				case QualityType.Hypertension:
 					return "Blood pressure entered during measurement period.";
 				case QualityType.TobaccoUse:
-					return "";
+					return "Tobacco use recorded within the 24 months prior to the last visit.";
 				case QualityType.TobaccoCessation:
-					return "";
+					return "Tobacco cessation counseling (CPT 99406/7), smoking cessation medication active, or medication order within the 24 months prior to the last visit.";
 				case QualityType.InfluenzaAdult:
 					return "";
 				case QualityType.WeightChild:
@@ -424,9 +511,9 @@ BMI 18.5-25.";
 				case QualityType.WeightOver65:
 					return "Terminal illness; pregnancy; physical exam not done for patient, medical, or system reason.";
 				case QualityType.WeightAdult:
-					return "";
+					return "Terminal illness; pregnancy; physical exam not done for patient, medical, or system reason.";
 				case QualityType.Hypertension:
-					return "";
+					return "N/A";
 				case QualityType.TobaccoUse:
 					return "";
 				case QualityType.TobaccoCessation:
