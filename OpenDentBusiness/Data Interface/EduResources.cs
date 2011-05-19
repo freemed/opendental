@@ -25,6 +25,13 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
+				else if(eduResourceListAll[i].Icd9Num!=0) {//checks against same list as Diseases/Problems
+					for(int j=0;j<diseaseList.Count;j++) {
+						if(eduResourceListAll[i].Icd9Num==diseaseList[j].ICD9Num) {
+							retVal.Add(eduResourceListAll[i]);
+						}
+					}
+				}
 				else if(eduResourceListAll[i].MedicationNum!=0) {
 					for(int j=0;j<medicationPatList.Count;j++) {
 						if(eduResourceListAll[i].MedicationNum==medicationPatList[j].MedicationNum) {

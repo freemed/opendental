@@ -42,6 +42,9 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.labelCriterionValue = new System.Windows.Forms.Label();
 			this.textCompareValue = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.textICD9 = new System.Windows.Forms.TextBox();
+			this.butICD9Select = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -74,7 +77,7 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(43,88);
+			this.label2.Location = new System.Drawing.Point(43,72);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100,17);
 			this.label2.TabIndex = 5;
@@ -83,7 +86,7 @@
 			// 
 			// textMedication
 			// 
-			this.textMedication.Location = new System.Drawing.Point(144,87);
+			this.textMedication.Location = new System.Drawing.Point(144,71);
 			this.textMedication.Name = "textMedication";
 			this.textMedication.ReadOnly = true;
 			this.textMedication.Size = new System.Drawing.Size(234,20);
@@ -91,7 +94,7 @@
 			// 
 			// butMedicationSelect
 			// 
-			this.butMedicationSelect.Location = new System.Drawing.Point(384,85);
+			this.butMedicationSelect.Location = new System.Drawing.Point(384,69);
 			this.butMedicationSelect.Name = "butMedicationSelect";
 			this.butMedicationSelect.Size = new System.Drawing.Size(29,23);
 			this.butMedicationSelect.TabIndex = 3;
@@ -151,7 +154,7 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(43,247);
+			this.label4.Location = new System.Drawing.Point(43,211);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100,17);
 			this.label4.TabIndex = 13;
@@ -160,7 +163,7 @@
 			// 
 			// textUrl
 			// 
-			this.textUrl.Location = new System.Drawing.Point(144,246);
+			this.textUrl.Location = new System.Drawing.Point(144,210);
 			this.textUrl.Name = "textUrl";
 			this.textUrl.Size = new System.Drawing.Size(234,20);
 			this.textUrl.TabIndex = 12;
@@ -190,7 +193,7 @@
 			this.groupBox1.Controls.Add(this.label5);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.textLabTestName);
-			this.groupBox1.Location = new System.Drawing.Point(28,132);
+			this.groupBox1.Location = new System.Drawing.Point(28,96);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(367,100);
 			this.groupBox1.TabIndex = 16;
@@ -222,11 +225,41 @@
 			this.textCompareValue.Size = new System.Drawing.Size(100,20);
 			this.textCompareValue.TabIndex = 16;
 			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(43,46);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(100,17);
+			this.label7.TabIndex = 19;
+			this.label7.Text = "ICD9";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textICD9
+			// 
+			this.textICD9.Location = new System.Drawing.Point(144,45);
+			this.textICD9.Name = "textICD9";
+			this.textICD9.ReadOnly = true;
+			this.textICD9.Size = new System.Drawing.Size(234,20);
+			this.textICD9.TabIndex = 18;
+			// 
+			// butICD9Select
+			// 
+			this.butICD9Select.Location = new System.Drawing.Point(384,43);
+			this.butICD9Select.Name = "butICD9Select";
+			this.butICD9Select.Size = new System.Drawing.Size(29,23);
+			this.butICD9Select.TabIndex = 17;
+			this.butICD9Select.Text = "...";
+			this.butICD9Select.UseVisualStyleBackColor = true;
+			this.butICD9Select.Click += new System.EventHandler(this.butICD9Select_Click);
+			// 
 			// FormEduResourceEdit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(471,343);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.textICD9);
+			this.Controls.Add(this.butICD9Select);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textUrl);
@@ -271,5 +304,8 @@
 		private System.Windows.Forms.Label labelCriterionValue;
 		private System.Windows.Forms.TextBox textCompareValue;
 		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.TextBox textICD9;
+		private System.Windows.Forms.Button butICD9Select;
 	}
 }

@@ -14,6 +14,7 @@ namespace OpenDental.Forms {
 		public bool IsNew;
 		private long tempID;
 		private bool IsProblem;
+		private bool IsICD9;
 		private bool IsMedication;
 		private bool IsLab;
 		public EduResource EduResourceCur;
@@ -26,6 +27,9 @@ namespace OpenDental.Forms {
 		private void FormEduResourceEdit_Load(object sender,EventArgs e) {
 			if(EduResourceCur.DiseaseDefNum!=0) {
 				textProblem.Text=DiseaseDefs.GetName(EduResourceCur.DiseaseDefNum);
+			}
+			if(EduResourceCur.Icd9Num!=0) {
+				textICD9.Text=ICD9s.GetDescription(EduResourceCur.Icd9Num);
 			}
 			if(EduResourceCur.MedicationNum!=0) {
 				textMedication.Text=Medications.GetDescription(EduResourceCur.MedicationNum);
@@ -42,10 +46,31 @@ namespace OpenDental.Forms {
 			FormDD.ShowDialog();
 			if(FormDD.DialogResult==DialogResult.OK) {
 				IsProblem=true;
+				IsICD9=false;
 				IsMedication=false;
 				IsLab=false;
 				tempID=FormDD.SelectedDiseaseDefNum;
 				textProblem.Text=DiseaseDefs.GetName(FormDD.SelectedDiseaseDefNum);
+				textICD9.Text="";
+				textMedication.Text="";
+				textLabResultsID.Text="";
+				textLabTestName.Text="";
+				textCompareValue.Text="";
+			}
+		}
+
+		private void butICD9Select_Click(object sender,EventArgs e) {
+			FormIcd9s FormICD9=new FormIcd9s();
+			FormICD9.IsSelectionMode=true;
+			FormICD9.ShowDialog();
+			if(FormICD9.DialogResult==DialogResult.OK) {
+				IsProblem=false;
+				IsICD9=true;
+				IsMedication=false;
+				IsLab=false;
+				tempID=FormICD9.SelectedIcd9Num;
+				textProblem.Text="";
+				textICD9.Text="ICD9: "+ICD9s.GetDescription(FormICD9.SelectedIcd9Num); ;
 				textMedication.Text="";
 				textLabResultsID.Text="";
 				textLabTestName.Text="";
@@ -59,10 +84,12 @@ namespace OpenDental.Forms {
 			FormM.ShowDialog();
 			if(FormM.DialogResult==DialogResult.OK) {
 				IsProblem=false;
+				IsICD9=false;
 				IsMedication=true;
 				IsLab=false;
 				tempID=FormM.SelectedMedicationNum;
 				textProblem.Text="";
+				textICD9.Text="";
 				textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
 				textLabResultsID.Text="";
 				textLabTestName.Text="";
@@ -72,10 +99,12 @@ namespace OpenDental.Forms {
 
 		private void textLabResults_Click(object sender,EventArgs e) {
 			IsProblem=false;
+			IsICD9=false;
 			IsMedication=false;
 			IsLab=true; 
 			tempID=0;
 			textProblem.Text="";
+			textICD9.Text="";
 			textMedication.Text="";
 		}
 
@@ -97,16 +126,22 @@ namespace OpenDental.Forms {
 		private void butOk_Click(object sender,EventArgs e) {
 			EduResource tempResource = new EduResource();
 			tempResource.EduResourceNum=EduResourceCur.EduResourceNum;
+			tempResource.LabResultCompare="";
+			tempResource.LabResultID="";
+			tempResource.LabResultName="";
 			//validate
 			if(IsProblem) {
 				tempResource.DiseaseDefNum=tempID;
+			}
+			else if(IsICD9) {
+				tempResource.Icd9Num=tempID;
 			}
 			else if(IsMedication) {
 				tempResource.MedicationNum=tempID;
 			}
 			else if(IsLab) {
 				tempResource.LabResultID=textLabResultsID.Text;
-				if(textLabTestName.Text==""){
+				if(textLabTestName.Text=="") {
 					MessageBox.Show("Invalid test name for lab result.");
 					return;
 				}
@@ -119,10 +154,10 @@ namespace OpenDental.Forms {
 					MessageBox.Show("Compare value must begin with either \"<\" or \">\".");
 					return;
 				}
-				try{
+				try {
 					int.Parse(textCompareValue.Text.Substring(1,textCompareValue.Text.Length-1));
 				}
-				catch{
+				catch {
 					MessageBox.Show("Compare value is not a valid number.");
 					return;
 				}
@@ -146,6 +181,7 @@ namespace OpenDental.Forms {
 			}
 			DialogResult=DialogResult.OK;
 		}
+
 
 
 
