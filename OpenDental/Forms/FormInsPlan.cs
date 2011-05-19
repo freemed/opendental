@@ -471,7 +471,7 @@ namespace OpenDental{
 			this.textPhone.MaxLength = 30;
 			this.textPhone.Name = "textPhone";
 			this.textPhone.Size = new System.Drawing.Size(157,20);
-			this.textPhone.TabIndex = 0;
+			this.textPhone.TabIndex = 1;
 			this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
 			// 
 			// textGroupName
@@ -480,7 +480,7 @@ namespace OpenDental{
 			this.textGroupName.MaxLength = 50;
 			this.textGroupName.Name = "textGroupName";
 			this.textGroupName.Size = new System.Drawing.Size(193,20);
-			this.textGroupName.TabIndex = 1;
+			this.textGroupName.TabIndex = 2;
 			// 
 			// textGroupNum
 			// 
@@ -488,7 +488,7 @@ namespace OpenDental{
 			this.textGroupNum.MaxLength = 20;
 			this.textGroupNum.Name = "textGroupNum";
 			this.textGroupNum.Size = new System.Drawing.Size(129,20);
-			this.textGroupNum.TabIndex = 2;
+			this.textGroupNum.TabIndex = 3;
 			// 
 			// textAddress
 			// 
@@ -496,7 +496,7 @@ namespace OpenDental{
 			this.textAddress.MaxLength = 60;
 			this.textAddress.Name = "textAddress";
 			this.textAddress.Size = new System.Drawing.Size(291,20);
-			this.textAddress.TabIndex = 1;
+			this.textAddress.TabIndex = 2;
 			this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
 			// 
 			// textCity
@@ -505,7 +505,7 @@ namespace OpenDental{
 			this.textCity.MaxLength = 40;
 			this.textCity.Name = "textCity";
 			this.textCity.Size = new System.Drawing.Size(155,20);
-			this.textCity.TabIndex = 3;
+			this.textCity.TabIndex = 4;
 			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
 			// 
 			// textState
@@ -514,7 +514,7 @@ namespace OpenDental{
 			this.textState.MaxLength = 2;
 			this.textState.Name = "textState";
 			this.textState.Size = new System.Drawing.Size(65,20);
-			this.textState.TabIndex = 4;
+			this.textState.TabIndex = 5;
 			this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
 			// 
 			// textZip
@@ -523,7 +523,7 @@ namespace OpenDental{
 			this.textZip.MaxLength = 10;
 			this.textZip.Name = "textZip";
 			this.textZip.Size = new System.Drawing.Size(71,20);
-			this.textZip.TabIndex = 5;
+			this.textZip.TabIndex = 6;
 			// 
 			// textElectID
 			// 
@@ -540,7 +540,7 @@ namespace OpenDental{
 			this.textEmployer.MaxLength = 40;
 			this.textEmployer.Name = "textEmployer";
 			this.textEmployer.Size = new System.Drawing.Size(291,20);
-			this.textEmployer.TabIndex = 4;
+			this.textEmployer.TabIndex = 0;
 			this.textEmployer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
 			this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
 			// 
@@ -559,7 +559,7 @@ namespace OpenDental{
 			this.textAddress2.MaxLength = 60;
 			this.textAddress2.Name = "textAddress2";
 			this.textAddress2.Size = new System.Drawing.Size(291,20);
-			this.textAddress2.TabIndex = 2;
+			this.textAddress2.TabIndex = 3;
 			this.textAddress2.TextChanged += new System.EventHandler(this.textAddress2_TextChanged);
 			// 
 			// label21
@@ -622,7 +622,7 @@ namespace OpenDental{
 			this.checkAlternateCode.Location = new System.Drawing.Point(112,293);
 			this.checkAlternateCode.Name = "checkAlternateCode";
 			this.checkAlternateCode.Size = new System.Drawing.Size(275,16);
-			this.checkAlternateCode.TabIndex = 3;
+			this.checkAlternateCode.TabIndex = 2;
 			this.checkAlternateCode.Text = "Use Alternate Code (for some Medicaid plans)";
 			// 
 			// checkClaimsUseUCR
@@ -670,7 +670,7 @@ namespace OpenDental{
 			this.groupSubscriber.Location = new System.Drawing.Point(468,94);
 			this.groupSubscriber.Name = "groupSubscriber";
 			this.groupSubscriber.Size = new System.Drawing.Size(502,176);
-			this.groupSubscriber.TabIndex = 9;
+			this.groupSubscriber.TabIndex = 2;
 			this.groupSubscriber.TabStop = false;
 			this.groupSubscriber.Text = "Subscriber Information";
 			// 
@@ -776,7 +776,7 @@ namespace OpenDental{
 			this.comboPlanType.Location = new System.Drawing.Point(112,270);
 			this.comboPlanType.Name = "comboPlanType";
 			this.comboPlanType.Size = new System.Drawing.Size(212,21);
-			this.comboPlanType.TabIndex = 2;
+			this.comboPlanType.TabIndex = 1;
 			this.comboPlanType.SelectionChangeCommitted += new System.EventHandler(this.comboPlanType_SelectionChangeCommitted);
 			// 
 			// checkIsMedical
@@ -812,7 +812,7 @@ namespace OpenDental{
 			this.comboClaimForm.MaxDropDownItems = 30;
 			this.comboClaimForm.Name = "comboClaimForm";
 			this.comboClaimForm.Size = new System.Drawing.Size(212,21);
-			this.comboClaimForm.TabIndex = 6;
+			this.comboClaimForm.TabIndex = 7;
 			// 
 			// comboFeeSched
 			// 
@@ -821,7 +821,7 @@ namespace OpenDental{
 			this.comboFeeSched.MaxDropDownItems = 30;
 			this.comboFeeSched.Name = "comboFeeSched";
 			this.comboFeeSched.Size = new System.Drawing.Size(212,21);
-			this.comboFeeSched.TabIndex = 5;
+			this.comboFeeSched.TabIndex = 6;
 			// 
 			// groupCoPay
 			// 
@@ -834,7 +834,7 @@ namespace OpenDental{
 			this.groupCoPay.Location = new System.Drawing.Point(5,404);
 			this.groupCoPay.Name = "groupCoPay";
 			this.groupCoPay.Size = new System.Drawing.Size(404,99);
-			this.groupCoPay.TabIndex = 7;
+			this.groupCoPay.TabIndex = 8;
 			this.groupCoPay.TabStop = false;
 			this.groupCoPay.Text = "Other Fee Schedules";
 			// 
@@ -1268,7 +1268,7 @@ namespace OpenDental{
 			this.groupCarrier.Location = new System.Drawing.Point(10,44);
 			this.groupCarrier.Name = "groupCarrier";
 			this.groupCarrier.Size = new System.Drawing.Size(402,155);
-			this.groupCarrier.TabIndex = 154;
+			this.groupCarrier.TabIndex = 1;
 			this.groupCarrier.TabStop = false;
 			this.groupCarrier.Text = "Carrier";
 			// 
@@ -1326,7 +1326,7 @@ namespace OpenDental{
 			this.panelPlan.Location = new System.Drawing.Point(8,116);
 			this.panelPlan.Name = "panelPlan";
 			this.panelPlan.Size = new System.Drawing.Size(454,438);
-			this.panelPlan.TabIndex = 157;
+			this.panelPlan.TabIndex = 0;
 			// 
 			// groupCanadian
 			// 
@@ -1338,7 +1338,7 @@ namespace OpenDental{
 			this.groupCanadian.Location = new System.Drawing.Point(5,574);
 			this.groupCanadian.Name = "groupCanadian";
 			this.groupCanadian.Size = new System.Drawing.Size(404,62);
-			this.groupCanadian.TabIndex = 168;
+			this.groupCanadian.TabIndex = 12;
 			this.groupCanadian.TabStop = false;
 			this.groupCanadian.Text = "Canadian";
 			// 
@@ -1366,7 +1366,7 @@ namespace OpenDental{
 			this.textPlanFlag.MaxLength = 20;
 			this.textPlanFlag.Name = "textPlanFlag";
 			this.textPlanFlag.Size = new System.Drawing.Size(37,20);
-			this.textPlanFlag.TabIndex = 166;
+			this.textPlanFlag.TabIndex = 1;
 			// 
 			// textDentaide
 			// 
@@ -1375,7 +1375,7 @@ namespace OpenDental{
 			this.textDentaide.MinVal = 0;
 			this.textDentaide.Name = "textDentaide";
 			this.textDentaide.Size = new System.Drawing.Size(37,20);
-			this.textDentaide.TabIndex = 161;
+			this.textDentaide.TabIndex = 0;
 			// 
 			// labelDentaide
 			// 
@@ -1393,7 +1393,7 @@ namespace OpenDental{
 			this.comboFilingCodeSubtype.MaxDropDownItems = 30;
 			this.comboFilingCodeSubtype.Name = "comboFilingCodeSubtype";
 			this.comboFilingCodeSubtype.Size = new System.Drawing.Size(212,21);
-			this.comboFilingCodeSubtype.TabIndex = 167;
+			this.comboFilingCodeSubtype.TabIndex = 10;
 			// 
 			// label15
 			// 
@@ -1410,7 +1410,7 @@ namespace OpenDental{
 			this.checkIsHidden.Location = new System.Drawing.Point(112,341);
 			this.checkIsHidden.Name = "checkIsHidden";
 			this.checkIsHidden.Size = new System.Drawing.Size(275,16);
-			this.checkIsHidden.TabIndex = 165;
+			this.checkIsHidden.TabIndex = 5;
 			this.checkIsHidden.Text = "Hidden";
 			// 
 			// checkCodeSubst
@@ -1419,7 +1419,7 @@ namespace OpenDental{
 			this.checkCodeSubst.Location = new System.Drawing.Point(112,309);
 			this.checkCodeSubst.Name = "checkCodeSubst";
 			this.checkCodeSubst.Size = new System.Drawing.Size(275,16);
-			this.checkCodeSubst.TabIndex = 164;
+			this.checkCodeSubst.TabIndex = 3;
 			this.checkCodeSubst.Text = "Don\'t Substitute Codes (e.g. posterior composites)";
 			// 
 			// checkShowBaseUnits
@@ -1427,7 +1427,7 @@ namespace OpenDental{
 			this.checkShowBaseUnits.Location = new System.Drawing.Point(112,556);
 			this.checkShowBaseUnits.Name = "checkShowBaseUnits";
 			this.checkShowBaseUnits.Size = new System.Drawing.Size(289,17);
-			this.checkShowBaseUnits.TabIndex = 162;
+			this.checkShowBaseUnits.TabIndex = 11;
 			this.checkShowBaseUnits.Text = "Claims show base units (Does not affect billed amount)";
 			this.checkShowBaseUnits.UseVisualStyleBackColor = true;
 			// 
@@ -1438,7 +1438,7 @@ namespace OpenDental{
 			this.comboFilingCode.MaxDropDownItems = 30;
 			this.comboFilingCode.Name = "comboFilingCode";
 			this.comboFilingCode.Size = new System.Drawing.Size(212,21);
-			this.comboFilingCode.TabIndex = 159;
+			this.comboFilingCode.TabIndex = 9;
 			this.comboFilingCode.SelectionChangeCommitted += new System.EventHandler(this.comboFilingCode_SelectionChangeCommitted);
 			// 
 			// label13
@@ -1475,7 +1475,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(810,673);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 13;
+			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -1582,7 +1582,7 @@ namespace OpenDental{
 			this.textPlanNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
 			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textPlanNote.Size = new System.Drawing.Size(395,85);
-			this.textPlanNote.TabIndex = 8;
+			this.textPlanNote.TabIndex = 1;
 			this.textPlanNote.Text = "1 - InsPlan\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 " +
     "vert.\r\n5 lines in 72 vert\r\n6 in 85";
 			// 
