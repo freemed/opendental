@@ -46,6 +46,7 @@ namespace OpenDentBusiness{
 							}
 							catch{
 								//Because LabResult.ObsValue can only be stored as > or < followed by an int, this case should never be reached. fail silently
+								//In the future there may be non intiger values that we would not want this to fail on.
 							}
 							//labResultList[j].ObsValue
 						}
