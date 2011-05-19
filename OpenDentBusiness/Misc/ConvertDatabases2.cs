@@ -4738,12 +4738,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command=@"CREATE TABLE eduresource (
 						EduResourceNum bigint NOT NULL auto_increment PRIMARY KEY,
+						Icd9Num bigint NOT NULL,
 						DiseaseDefNum bigint NOT NULL,
 						MedicationNum bigint NOT NULL,
 						LabResultID varchar(255) NOT NULL,
 						LabResultName varchar(255) NOT NULL,
 						LabResultCompare varchar(255) NOT NULL,
 						ResourceUrl varchar(255) NOT NULL,
+						INDEX(Icd9Num),
 						INDEX(DiseaseDefNum),
 						INDEX(MedicationNum),
 						INDEX(LabResultID)
@@ -4755,6 +4757,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command=@"CREATE TABLE eduresource (
 						EduResourceNum number(20) NOT NULL,
+						Icd9Num number(20) NOT NULL,
 						DiseaseDefNum number(20) NOT NULL,
 						MedicationNum number(20) NOT NULL,
 						LabResultID varchar2(255),
@@ -4763,6 +4766,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						ResourceUrl varchar2(255),
 						CONSTRAINT eduresource_EduResourceNum PRIMARY KEY (EduResourceNum)
 						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX eduresource_Icd9Num ON eduresource (Icd9Num)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX eduresource_DiseaseDefNum ON eduresource (DiseaseDefNum)";
 					Db.NonQ(command);
@@ -5094,3 +5099,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
+
+
+
+				
