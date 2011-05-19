@@ -1250,14 +1250,14 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum fixed: ")+numFixed+"\r\n";
 				}
 				numFixed=0;
-				////claim.PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
-				////Will leave orphaned claimprocs. No finanicals to check.
-				//command="DELETE FROM claim c WHERE c.PlanNum=0 AND c.ClaimStatus IN ('PreAuth','W','U') AND NOT EXISTS(SELECT * FROM inssub i WHERE i.InsSubNum=c.InsSubNum)";
-				//numFixed=Db.NonQ(command);
-				//if(numFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum values fixed: ")+numFixed+"\r\n";
-				//}
-				//numFixed=0;
+				//claim.PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
+				//Will leave orphaned claimprocs. No finanicals to check.
+				command="DELETE FROM claim WHERE PlanNum=0 AND ClaimStatus IN ('PreAuth','W','U') AND NOT EXISTS(SELECT * FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
+				numFixed=Db.NonQ(command);
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims deleted with invalid InsSubNum and PlanNum=0: ")+numFixed+"\r\n";
+				}
+				numFixed=0;
 				//claim.PlanNum2---------------------------------------------------------------------------------------------------
 				command="UPDATE claim SET PlanNum2 = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum2) "
 					+"WHERE PlanNum2 != 0 "
@@ -1275,16 +1275,15 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claimproc InsSubNum/PlanNum fixed: ")+numFixed+"\r\n";
 				}
 				numFixed=0;
-				////claimproc.PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
-				//command="DELETE FROM claimproc WHERE PlanNum=0 AND NOT EXISTS(SELECT * FROM inssub i WHERE i.InsSubNum=InsSubNum)"
-				//  +" AND InsPayAmount=0 AND WriteOff=0"//Make sure this deletion will not affect financials.
-				//  +" AND Status IN (6,2)";//OK to delete because no claim and just an estimate (6) or preauth (2) claimproc
-				//Db.NonQ(command);
-				//numFixed=PIn.Int(Db.GetCount(command));
-				//if(numFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","Mismatched claimproc InsSubNum/PlanNum values fixed: ")+numFixed+"\r\n";
-				//}
-				//numFixed=0;
+				//claimproc.PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
+				command="DELETE FROM claimproc WHERE PlanNum=0 AND NOT EXISTS(SELECT * FROM inssub WHERE inssub.InsSubNum=claimproc.InsSubNum)"
+				  +" AND InsPayAmt=0 AND WriteOff=0"//Make sure this deletion will not affect financials.
+				  +" AND Status IN (6,2)";//OK to delete because no claim and just an estimate (6) or preauth (2) claimproc
+				numFixed=Db.NonQ(command);
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted with invalid InsSubNum and PlanNum=0: ")+numFixed+"\r\n";
+				}
+				numFixed=0;
 				//etrans---------------------------------------------------------------------------------------------------
 				command="UPDATE etrans SET PlanNum = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum) "
 					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
