@@ -32,28 +32,34 @@ namespace TestCanada {
 		private static Provider CreateProvider(string fName,string lName,string npi,string officeNum,string abbr) {
 			Provider prov=null;
 			int maxItemOrder=0;
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				if(ProviderC.List[i].NationalProvID==npi) {
-					prov=ProviderC.List[i];
+			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+				if(ProviderC.ListLong[i].NationalProvID=="" || ProviderC.ListLong[i].NationalProvID==npi) {
+					prov=ProviderC.ListLong[i];
 				}
 				if(ProviderC.ListLong[i].ItemOrder>maxItemOrder) {
 					maxItemOrder=ProviderC.ListLong[i].ItemOrder;
 				}
 			}
+			bool updateProv=(prov!=null);
 			if(prov==null) {
 				prov=new Provider();
-				prov.IsHidden=false;
-				prov.IsCDAnet=true;
-				prov.FName=fName;
-				prov.LName=lName;
-				prov.NationalProvID=npi;
-				prov.CanadianOfficeNum=officeNum;
-				prov.Abbr=abbr;
-				prov.FeeSched=53;
-				prov.ItemOrder=maxItemOrder;
-				Providers.Insert(prov);
-				Providers.RefreshCache();
 			}
+			prov.IsHidden=false;
+			prov.IsCDAnet=true;
+			prov.FName=fName;
+			prov.LName=lName;
+			prov.NationalProvID=npi;
+			prov.CanadianOfficeNum=officeNum;
+			prov.Abbr=abbr;
+			prov.FeeSched=53;
+			prov.ItemOrder=maxItemOrder+1;
+			if(updateProv) {
+				Providers.Update(prov);
+			}
+			else {
+				Providers.Insert(prov);
+			}
+			Providers.RefreshCache();
 			return prov;
 		}
 

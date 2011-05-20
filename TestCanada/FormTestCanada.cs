@@ -140,6 +140,24 @@ namespace TestCanada {
 				else if(singleScript==6){
 					textResults.Text+=Eligibility.RunSix(checkShowForms.Checked);
 				}
+				else if(singleScript==7) {
+					textResults.Text+=Eligibility.RunSeven(checkShowForms.Checked);
+				}
+				else if(singleScript==8) {
+					textResults.Text+=Eligibility.RunEight(checkShowForms.Checked);
+				}
+				else if(singleScript==9) {
+					textResults.Text+=Eligibility.RunNine(checkShowForms.Checked);
+				}
+				else if(singleScript==10) {
+					textResults.Text+=Eligibility.RunTen(checkShowForms.Checked);
+				}
+				else if(singleScript==11) {
+					textResults.Text+=Eligibility.RunEleven(checkShowForms.Checked);
+				}
+				else if(singleScript==12) {
+					textResults.Text+=Eligibility.RunTwelve(checkShowForms.Checked);
+				}
 				else{
 					MessageBox.Show("Script number not found.");
 					return;
