@@ -5065,7 +5065,34 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE provider MODIFY IsCDAnet NOT NULL";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrmeasureevent";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrmeasureevent (
+						EhrMeasureEventNum bigint NOT NULL auto_increment PRIMARY KEY,
+						DateTEvent datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						EventType tinyint NOT NULL,
+						PatNum bigint NOT NULL,
+						MoreInfo varchar(255) NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrmeasureevent'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrmeasureevent (
+						EhrMeasureEventNum number(20) NOT NULL,
+						DateTEvent date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						EventType number(3) NOT NULL,
+						PatNum number(20) NOT NULL,
+						MoreInfo varchar2(255),
+						CONSTRAINT ehrmeasureevent_EhrMeasureEventNum PRIMARY KEY (EhrMeasureEventNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrmeasureevent_PatNum ON ehrmeasureevent (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5112,5 +5139,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
+
+				
 
 				

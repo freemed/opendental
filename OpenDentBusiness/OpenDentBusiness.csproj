@@ -663,6 +663,7 @@
     <Compile Include="TableTypes\DrugUnit.cs" />
     <Compile Include="TableTypes\EduResource.cs" />
     <Compile Include="TableTypes\EhrMeasure.cs" />
+    <Compile Include="TableTypes\EhrMeasureEvent.cs" />
     <Compile Include="TableTypes\Formulary.cs" />
     <Compile Include="TableTypes\FormularyMed.cs" />
     <Compile Include="TableTypes\LabPanel.cs" />
