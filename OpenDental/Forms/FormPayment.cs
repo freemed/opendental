@@ -10,6 +10,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -88,6 +89,8 @@ namespace OpenDental{
 		private Label labelCreditCards;
 		///<summary>This table gets created and filled once at the beginning.  After that, only the last column gets carefully updated.</summary>
 		private DataTable tableBalances;
+		private Program prog;
+		private ProgramProperty prop;
 
 		///<summary>PatCur and FamCur are not for the PatCur of the payment.  They are for the patient and family from which this window was accessed.</summary>
 		public FormPayment(Patient patCur,Family famCur,Payment paymentCur){
@@ -1176,31 +1179,12 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter an amount first.");
 				return;
 			}
-			Program prog=Programs.GetCur(ProgramName.Xcharge);
-			if(prog==null){
-				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
-				return;
-			}
-			if(!prog.Enabled){
-				if(Security.IsAuthorized(Permissions.Setup)){
-					FormXchargeSetup FormX=new FormXchargeSetup();
-					FormX.ShowDialog();
-				}
-				return;
-			}
-			if(!File.Exists(prog.Path)){
-				MsgBox.Show(this,"Path is not valid.");
-				if(Security.IsAuthorized(Permissions.Setup)){
-					FormXchargeSetup FormX=new FormXchargeSetup();
-					FormX.ShowDialog();
-				}
-				return;
-			}
+			HasXCharge();
 			bool needToken=false;
 			bool newCard=false;
 			bool hasXToken=false;
 			bool notRecurring=false;
-			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
+			prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.Long(prop.PropertyValue));
 			SetComboDepositAccounts();
@@ -1231,6 +1215,8 @@ namespace OpenDental{
 			if(FormXT.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			int tranType=FormXT.TransactionType;
+			string cashBack=FormXT.CashBackAmount.ToString("F2");
 			if(CCard!=null) {
 				//Have credit card on file
 				if(CCard.XChargeToken!="") {//Recurring charge
@@ -1253,57 +1239,7 @@ namespace OpenDental{
 			else {//Add card option was selected in credit card drop down. No other possibility.
 				newCard=true;
 			}
-			switch(FormXT.TransactionType) {
-				case 0:
-					info.Arguments+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
-					if(hasXToken) {
-						info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
-						info.Arguments+="/AUTOPROCESS ";
-					}
-					if(notRecurring) {
-						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
-						info.Arguments+="/AUTOPROCESS ";
-					}
-					break;
-				case 1:
-					info.Arguments+="/TRANSACTIONTYPE:RETURN /LOCKTRANTYPE ";
-					if(hasXToken) {
-						info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
-						info.Arguments+="/AUTOPROCESS ";
-					}
-					if(notRecurring) {
-						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
-						info.Arguments+="/AUTOPROCESS ";
-					}
-					break;
-				case 2:
-					info.Arguments+="/TRANSACTIONTYPE:DEBITPURCHASE /LOCKTRANTYPE ";
-					info.Arguments+="/CASHBACK:"+FormXT.CashBackAmount.ToString("F2")+" ";
-					break;
-				case 3:
-					info.Arguments+="/TRANSACTIONTYPE:DEBITRETURN /LOCKTRANTYPE ";
-					break;
-				case 4:
-					info.Arguments+="/TRANSACTIONTYPE:FORCE /LOCKTRANTYPE ";
-					break;
-				case 5:
-					info.Arguments+="/TRANSACTIONTYPE:PREAUTH /LOCKTRANTYPE ";
-					if(hasXToken) {
-						info.Arguments+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
-						info.Arguments+="/AUTOPROCESS ";
-					}
-					if(notRecurring) {
-						info.Arguments+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
-						info.Arguments+="/AUTOPROCESS ";
-					}
-					break;
-				case 6:
-					info.Arguments+="/TRANSACTIONTYPE:ADJUSTMENT /LOCKTRANTYPE ";
-					break;
-				case 7:
-					info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
-					break;
-			}
+			info.Arguments+=GetXChargeTransactionTypeCommands(tranType,hasXToken,notRecurring,CCard,cashBack);
 			if(newCard) {
 				info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 				info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
@@ -1352,6 +1288,8 @@ namespace OpenDental{
 			string resulttext="";
 			string line="";
 			bool showApprovedAmtNotice=false;
+			bool xAdjust=false;
+			bool xVoid=false;
 			double approvedAmt=0;
 			string xChargeToken="";
 			string accountMasked="";
@@ -1383,6 +1321,12 @@ namespace OpenDental{
 							needToken=false;//Don't update CCard due to failure
 							newCard=false;//Don't insert CCard due to failure
 							break;
+						}
+						if(tranType==6) {
+							xAdjust=true;
+						}
+						if(tranType==7) {
+							xVoid=true;
 						}
 					}
 					if(line.StartsWith("APPROVEDAMOUNT=")) {
@@ -1432,13 +1376,141 @@ namespace OpenDental{
 				textNote.Text+="\r\n";
 			}
 			textNote.Text+=resulttext;
-			if(showApprovedAmtNotice) {
+			if(showApprovedAmtNotice && (!xVoid && !xAdjust)) {
 				if(MessageBox.Show(Lan.g(this,"The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the approved amount returned: ")+approvedAmt.ToString("C")
 					+"\r\n"+Lan.g(this,"Change the amount to match?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)==DialogResult.OK) 
 				{
 					textAmount.Text=approvedAmt.ToString("F");
 				}
 			}
+			if(xAdjust) {
+				MessageBox.Show(Lan.g(this,"The amount will be changed to the X-Charge approved amount: ")+approvedAmt.ToString("C"));
+				textAmount.Text=approvedAmt.ToString("F");
+			}
+			if(xVoid) {
+				if(IsNew) {
+					textAmount.Text="-"+approvedAmt.ToString("F");
+				}
+			}
+		}
+		
+		private void VoidXChargeTransaction(string transID,string amount) {
+			ProcessStartInfo info=new ProcessStartInfo(prog.Path);
+			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+			File.Delete(resultfile);//delete the old result file.
+			info.Arguments="";
+			info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
+			info.Arguments+="/XCTRANSACTIONID:"+transID+" /LOCKXCTRANSACTIONID ";
+			info.Arguments+="/AMOUNT:"+amount+" /LOCKAMOUNT ";
+			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
+			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
+			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+			info.Arguments+="/AUTOCLOSE ";
+			info.Arguments+="/HIDEMAINWINDOW ";
+			info.Arguments+="/AUTOPROCESS ";
+			Cursor=Cursors.WaitCursor;
+			Process process=new Process();
+			process.StartInfo=info;
+			process.EnableRaisingEvents=true;
+			process.Start();
+			while(!process.HasExited) {
+				Application.DoEvents();
+			}
+			Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
+			Cursor=Cursors.Default;
+			textNote.Text+="\r\n"+resultfile;
+		}
+
+		private bool HasXCharge() {
+			prog=Programs.GetCur(ProgramName.Xcharge);
+			if(prog==null){
+				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
+				return false;
+			}
+			if(!prog.Enabled){
+				if(Security.IsAuthorized(Permissions.Setup)){
+					FormXchargeSetup FormX=new FormXchargeSetup();
+					FormX.ShowDialog();
+				}
+				return false;
+			}
+			if(!File.Exists(prog.Path)){
+				MsgBox.Show(this,"Path is not valid.");
+				if(Security.IsAuthorized(Permissions.Setup)){
+					FormXchargeSetup FormX=new FormXchargeSetup();
+					FormX.ShowDialog();
+				}
+				return false;
+			}
+			return true;
+		}
+
+		private string GetXChargeTransactionTypeCommands(int tranType,bool hasXToken,bool notRecurring,CreditCard CCard,string cashBack) {
+			string tranText="";
+			switch(tranType) {
+				case 0:
+					tranText+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
+					if(hasXToken) {
+						tranText+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+						tranText+="/AUTOPROCESS ";
+					}
+					if(notRecurring) {
+						tranText+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
+						tranText+="/AUTOPROCESS ";
+					}
+					break;
+				case 1:
+					tranText+="/TRANSACTIONTYPE:RETURN /LOCKTRANTYPE ";
+					if(hasXToken) {
+						tranText+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+						tranText+="/AUTOPROCESS ";
+					}
+					if(notRecurring) {
+						tranText+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
+						tranText+="/AUTOPROCESS ";
+					}
+					break;
+				case 2:
+					tranText+="/TRANSACTIONTYPE:DEBITPURCHASE /LOCKTRANTYPE ";
+					tranText+="/CASHBACK:"+cashBack+" ";
+					break;
+				case 3:
+					tranText+="/TRANSACTIONTYPE:DEBITRETURN /LOCKTRANTYPE ";
+					break;
+				case 4:
+					tranText+="/TRANSACTIONTYPE:FORCE /LOCKTRANTYPE ";
+					break;
+				case 5:
+					tranText+="/TRANSACTIONTYPE:PREAUTH /LOCKTRANTYPE ";
+					if(hasXToken) {
+						tranText+="/XCACCOUNTID:"+CCard.XChargeToken+" ";
+						tranText+="/AUTOPROCESS ";
+					}
+					if(notRecurring) {
+						tranText+="/ACCOUNT:"+CCard.CCNumberMasked+" ";
+						tranText+="/AUTOPROCESS ";
+					}
+					break;
+				case 6:
+					tranText+="/TRANSACTIONTYPE:ADJUSTMENT /LOCKTRANTYPE ";
+					string adjustTransactionID="";
+					string[] noteSplit=Regex.Split(textNote.Text,"\r\n");
+					foreach(string XCTrans in noteSplit) {
+						if(XCTrans.StartsWith("XCTRANSACTIONID="))	{
+							adjustTransactionID=XCTrans.Substring(16);
+						}
+					}
+					if(adjustTransactionID!="")	{
+						tranText+="/XCTRANSACTIONID:"+adjustTransactionID+" ";
+						tranText+="/AUTOPROCESS ";
+					}
+					break;
+				case 7:
+					tranText+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
+					break;
+			}
+			return tranText;
 		}
 
 		private void butPayConnect_Click(object sender,EventArgs e) {
@@ -1751,7 +1823,7 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butCancel_Click(object sender, System.EventArgs e) {			
+		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
@@ -1761,6 +1833,23 @@ namespace OpenDental{
 			}
 			if(IsNew){ 
 				Payments.Delete(PaymentCur);
+				//Void the transaction in X-Charge if there was one.
+				string transactionID="";
+				string amount="";
+				string[] noteSplit=Regex.Split(textNote.Text,"\r\n");
+				foreach(string XCTrans in noteSplit) {
+					if(XCTrans.StartsWith("XCTRANSACTIONID="))	{
+						transactionID=XCTrans.Substring(16);
+					}
+					if(XCTrans.StartsWith("AMOUNT=")) {
+						amount=XCTrans.Substring(7);
+					}
+				}
+				if(transactionID!="")	{
+					if(HasXCharge()) {
+						VoidXChargeTransaction(transactionID,amount);
+					}
+				}
 			}
 			//else if(PaymentCur.PayAmt!=tot){
 			//	MessageBox.Show(Lan.g(this,"Splits have been altered.  Payment must match splits."));
