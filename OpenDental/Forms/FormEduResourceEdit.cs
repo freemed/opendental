@@ -27,12 +27,18 @@ namespace OpenDental.Forms {
 		private void FormEduResourceEdit_Load(object sender,EventArgs e) {
 			if(EduResourceCur.DiseaseDefNum!=0) {
 				textProblem.Text=DiseaseDefs.GetName(EduResourceCur.DiseaseDefNum);
+				IsProblem=true;
 			}
-			if(EduResourceCur.Icd9Num!=0) {
+			else if(EduResourceCur.Icd9Num!=0) {
 				textICD9.Text=ICD9s.GetDescription(EduResourceCur.Icd9Num);
+				IsICD9=true;
 			}
-			if(EduResourceCur.MedicationNum!=0) {
+			else if(EduResourceCur.MedicationNum!=0) {
 				textMedication.Text=Medications.GetDescription(EduResourceCur.MedicationNum);
+				IsMedication=true;
+			}
+			else {
+				IsLab=true;
 			}
 			textLabResultsID.Text=EduResourceCur.LabResultID;
 			textLabTestName.Text=EduResourceCur.LabResultName;

@@ -53,7 +53,7 @@
 			this.butProblemSelect.Location = new System.Drawing.Point(540,18);
 			this.butProblemSelect.Name = "butProblemSelect";
 			this.butProblemSelect.Size = new System.Drawing.Size(29,23);
-			this.butProblemSelect.TabIndex = 0;
+			this.butProblemSelect.TabIndex = 1;
 			this.butProblemSelect.Text = "...";
 			this.butProblemSelect.UseVisualStyleBackColor = true;
 			this.butProblemSelect.Click += new System.EventHandler(this.butProblemSelect_Click);
@@ -64,7 +64,7 @@
 			this.textProblem.Name = "textProblem";
 			this.textProblem.ReadOnly = true;
 			this.textProblem.Size = new System.Drawing.Size(393,20);
-			this.textProblem.TabIndex = 1;
+			this.textProblem.TabIndex = 0;
 			// 
 			// label1
 			// 
@@ -97,7 +97,7 @@
 			this.butMedicationSelect.Location = new System.Drawing.Point(540,70);
 			this.butMedicationSelect.Name = "butMedicationSelect";
 			this.butMedicationSelect.Size = new System.Drawing.Size(29,23);
-			this.butMedicationSelect.TabIndex = 3;
+			this.butMedicationSelect.TabIndex = 5;
 			this.butMedicationSelect.Text = "...";
 			this.butMedicationSelect.UseVisualStyleBackColor = true;
 			this.butMedicationSelect.Click += new System.EventHandler(this.butMedicationSelect_Click);
@@ -116,8 +116,10 @@
 			this.textLabResultsID.Location = new System.Drawing.Point(116,16);
 			this.textLabResultsID.Name = "textLabResultsID";
 			this.textLabResultsID.Size = new System.Drawing.Size(111,20);
-			this.textLabResultsID.TabIndex = 7;
+			this.textLabResultsID.TabIndex = 0;
+			this.textLabResultsID.TabStop = false;
 			this.textLabResultsID.Click += new System.EventHandler(this.textLabResults_Click);
+			this.textLabResultsID.Enter += new System.EventHandler(this.textLabResults_Click);
 			// 
 			// butCancel
 			// 
@@ -125,7 +127,7 @@
 			this.butCancel.Location = new System.Drawing.Point(536,288);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,23);
-			this.butCancel.TabIndex = 9;
+			this.butCancel.TabIndex = 8;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -136,7 +138,7 @@
 			this.butOk.Location = new System.Drawing.Point(455,288);
 			this.butOk.Name = "butOk";
 			this.butOk.Size = new System.Drawing.Size(75,23);
-			this.butOk.TabIndex = 10;
+			this.butOk.TabIndex = 7;
 			this.butOk.Text = "Ok";
 			this.butOk.UseVisualStyleBackColor = true;
 			this.butOk.Click += new System.EventHandler(this.butOk_Click);
@@ -147,7 +149,7 @@
 			this.butDelete.Location = new System.Drawing.Point(12,288);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,23);
-			this.butDelete.TabIndex = 11;
+			this.butDelete.TabIndex = 9;
 			this.butDelete.Text = "Delete";
 			this.butDelete.UseVisualStyleBackColor = true;
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -166,7 +168,7 @@
 			this.textUrl.Location = new System.Drawing.Point(12,231);
 			this.textUrl.Name = "textUrl";
 			this.textUrl.Size = new System.Drawing.Size(596,20);
-			this.textUrl.TabIndex = 12;
+			this.textUrl.TabIndex = 6;
 			// 
 			// label5
 			// 
@@ -182,7 +184,9 @@
 			this.textLabTestName.Location = new System.Drawing.Point(116,42);
 			this.textLabTestName.Name = "textLabTestName";
 			this.textLabTestName.Size = new System.Drawing.Size(357,20);
-			this.textLabTestName.TabIndex = 14;
+			this.textLabTestName.TabIndex = 1;
+			this.textLabTestName.TabStop = false;
+			this.textLabTestName.Enter += new System.EventHandler(this.textLabResults_Click);
 			// 
 			// groupBox1
 			// 
@@ -196,7 +200,7 @@
 			this.groupBox1.Location = new System.Drawing.Point(28,96);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(541,100);
-			this.groupBox1.TabIndex = 16;
+			this.groupBox1.TabIndex = 10;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Lab Results";
 			// 
@@ -223,7 +227,9 @@
 			this.textCompareValue.Location = new System.Drawing.Point(116,68);
 			this.textCompareValue.Name = "textCompareValue";
 			this.textCompareValue.Size = new System.Drawing.Size(100,20);
-			this.textCompareValue.TabIndex = 16;
+			this.textCompareValue.TabIndex = 2;
+			this.textCompareValue.TabStop = false;
+			this.textCompareValue.Enter += new System.EventHandler(this.textLabResults_Click);
 			// 
 			// label7
 			// 
@@ -240,14 +246,14 @@
 			this.textICD9.Name = "textICD9";
 			this.textICD9.ReadOnly = true;
 			this.textICD9.Size = new System.Drawing.Size(393,20);
-			this.textICD9.TabIndex = 18;
+			this.textICD9.TabIndex = 2;
 			// 
 			// butICD9Select
 			// 
 			this.butICD9Select.Location = new System.Drawing.Point(540,44);
 			this.butICD9Select.Name = "butICD9Select";
 			this.butICD9Select.Size = new System.Drawing.Size(29,23);
-			this.butICD9Select.TabIndex = 17;
+			this.butICD9Select.TabIndex = 3;
 			this.butICD9Select.Text = "...";
 			this.butICD9Select.UseVisualStyleBackColor = true;
 			this.butICD9Select.Click += new System.EventHandler(this.butICD9Select_Click);
