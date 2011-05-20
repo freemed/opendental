@@ -82,6 +82,8 @@ namespace OpenDentBusiness {
 		public bool Met;
 		///<summary></summary>
 		public string Details;
+		///<summary></summary>
+		public string Action;
 	}
 
 }

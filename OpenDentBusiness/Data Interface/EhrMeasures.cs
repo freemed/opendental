@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.ProblemList:
 					return "Maintain an up-to-date problem list of current and active diagnoses.";
 				case EhrMeasureType.MedicationList:
-					return "Maintain active medication list";
+					return "Maintain active medication list.";
 				case EhrMeasureType.AllergyList:
 					return "Maintain active medication allergy list";
 				case EhrMeasureType.Demographics:
@@ -506,5 +506,93 @@ namespace OpenDentBusiness{
 			throw new ApplicationException("Type not found: "+mtype.ToString());
 		}
 
+		///<summary></summary>
+		public static List<EhrMu> GetMu(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrMu>>(MethodBase.GetCurrentMethod(),pat);
+			}
+			List<EhrMu> list=new List<EhrMu>();
+			//add one of each type
+			EhrMu mu;
+			for(int i=0;i<Enum.GetValues(typeof(EhrMeasureType)).Length;i++) {
+				mu=new EhrMu();
+				mu.MeasureType=(EhrMeasureType)i;
+				switch(mu.MeasureType) {
+					case EhrMeasureType.ProblemList:
+						List<Disease> listDisease=Diseases.Refresh(pat.PatNum);
+						if(listDisease.Count==0){
+							mu.Details="No problems entered.";
+						}
+						else{
+							mu.Met=true;
+							bool diseasesNone=false;
+							if(listDisease.Count==1 && listDisease[0].DiseaseDefNum==PrefC.GetLong(PrefName.ProblemsIndicateNone)){
+								diseasesNone=true;
+							}
+							if(diseasesNone){
+								mu.Details="Problems marked 'none'.";
+							}
+							else{
+								mu.Details="Problems entered: "+listDisease.Count.ToString();
+							}
+						}
+						mu.Action="Enter problems";
+						break;
+					case EhrMeasureType.MedicationList:
+
+						break;
+					case EhrMeasureType.AllergyList:
+
+						break;
+					case EhrMeasureType.Demographics:
+
+						break;
+					case EhrMeasureType.Education:
+
+						break;
+					case EhrMeasureType.TimelyAccess:
+
+						break;
+					case EhrMeasureType.ProvOrderEntry:
+
+						break;
+					case EhrMeasureType.Rx:
+
+						break;
+					case EhrMeasureType.VitalSigns:
+
+						break;
+					case EhrMeasureType.Smoking:
+
+						break;
+					case EhrMeasureType.Lab:
+
+						break;
+					case EhrMeasureType.ElectronicCopy:
+
+						break;
+					case EhrMeasureType.ClinicalSummaries:
+
+						break;
+					case EhrMeasureType.Reminders:
+
+						break;
+					case EhrMeasureType.MedReconcile:
+
+						break;
+				}
+				list.Add(mu);
+			}
+			return list;
+		}
+
+	}
+
+	///<summary>When FormEHR closes, the result will be one of these.  Different results will lead to different behaviors.</summary>
+	public enum EhrFormResult {
+		None,
+		RxSelect,
+		RxEdit,
+		Medical
 	}
 }

@@ -3605,7 +3605,7 @@ namespace OpenDental{
 				//so we can step through for debugging.
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
 				((FormEHR)FormOpenDental.FormEHR).ShowDialog();
-				if(((FormEHR)FormOpenDental.FormEHR).LaunchRx){
+				/*if(((FormEHR)FormOpenDental.FormEHR).LaunchRx){
 					if(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum==0) {
 						FormRxSelect FormRS=new FormRxSelect(PatCur);
 						FormRS.ShowDialog();
@@ -3614,7 +3614,7 @@ namespace OpenDental{
 						FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
 						FormRXE.ShowDialog();
 					}
-				}
+				}*/
 #else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
 				object[] args=new object[] {PatCur.PatNum};
