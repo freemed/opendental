@@ -3608,10 +3608,22 @@ namespace OpenDental{
 				if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.RxEdit) {
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
 					FormRXE.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.RxSelect) {
 					FormRxSelect FormRS=new FormRxSelect(PatCur);
 					FormRS.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Medical) {
+					FormMedical formM=new FormMedical(PatientNoteCur,PatCur);
+					formM.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.PatientEdit) {
+					FormPatientEdit formP=new FormPatientEdit(PatCur,FamCur);
+					formP.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
 				}
 #else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
@@ -3621,10 +3633,22 @@ namespace OpenDental{
 				if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxEdit) {
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
 					FormRXE.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxSelect) {
 					FormRxSelect FormRS=new FormRxSelect(PatCur);
 					FormRS.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Medical) {
+					FormMedical formM=new FormMedical(PatientNoteCur,PatCur);
+					formM.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.PatientEdit) {
+					FormPatientEdit formP=new FormPatientEdit(PatCur,FamCur);
+					formP.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
 				}
 #endif
 		}

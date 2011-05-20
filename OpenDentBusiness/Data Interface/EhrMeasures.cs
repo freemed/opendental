@@ -211,7 +211,8 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					break;
 				case EhrMeasureType.Education:
-					command="SELECT PatNum,LName,FName "
+					command="SELECT PatNum,LName,FName, "
+						+"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.EducationProvided)+") AS edCount "
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
@@ -367,7 +368,13 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.Education:
-						//todo
+						if(tableRaw.Rows[i]["edCount"].ToString()=="0") {
+							explanation="No education resources";
+						}
+						else {
+							explanation="Education resources provided";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.TimelyAccess:
 						//todo
@@ -539,16 +546,87 @@ namespace OpenDentBusiness{
 						mu.Action="Enter problems";
 						break;
 					case EhrMeasureType.MedicationList:
-
+						List<MedicationPat> medList=MedicationPats.GetList(pat.PatNum);
+						if(medList.Count==0) {
+							mu.Details="No medications entered.";
+						}
+						else{
+							mu.Met=true;
+							bool medsNone=false;
+							if(medList.Count==1 && medList[0].MedicationNum==PrefC.GetLong(PrefName.MedicationsIndicateNone)) {
+								medsNone=true;
+							}
+							if(medsNone) {
+								mu.Details="Medications marked 'none'.";
+							}
+							else{
+								mu.Details="Medications entered: "+medList.Count.ToString();
+							}
+						}
+						mu.Action="Enter medications";
 						break;
 					case EhrMeasureType.AllergyList:
-
+						List<Allergy> listAllergies=Allergies.Refresh(pat.PatNum);
+						if(listAllergies.Count==0) {
+							mu.Details="No allergies entered.";
+						}
+						else{
+							mu.Met=true;
+							bool allergiesNone=false;
+							if(listAllergies.Count==1 && listAllergies[0].AllergyDefNum==PrefC.GetLong(PrefName.AllergiesIndicateNone)) {
+								allergiesNone=true;
+							}
+							if(allergiesNone) {
+								mu.Details="Allergies marked 'none'.";
+							}
+							else{
+								mu.Details="Allergies entered: "+listAllergies.Count.ToString();
+							}
+						}
+						mu.Action="Enter allergies";
 						break;
 					case EhrMeasureType.Demographics:
-
+						string explanation="";
+						if(pat.Birthdate.Year<1880) {
+							explanation+="birthdate";//missing
+						}
+						if(pat.Language=="") {
+							if(explanation!="") {
+								explanation+=", ";
+							}
+							explanation+="language";
+						}
+						if(pat.Gender==PatientGender.Unknown) {
+							if(explanation!="") {
+								explanation+=", ";
+							}
+							explanation+="gender";
+						}
+						if(pat.Race==PatientRace.Unknown) {
+							if(explanation!="") {
+								explanation+=", ";
+							}
+							explanation+="race, ethnicity";
+						}
+						if(explanation=="") {
+							mu.Details="All demographic elements recorded";
+							mu.Met=true;
+						}
+						else {
+							mu.Details="Missing: "+explanation;
+						}
+						mu.Action="Enter demographics";
 						break;
 					case EhrMeasureType.Education:
-
+						List<EhrMeasureEvent> listEd=EhrMeasureEvents.GetByType(EhrMeasureEventType.EducationProvided,pat.PatNum);
+						if(listEd.Count==0) {
+							mu.Details="No education resources provided.";
+						}
+						else {
+							mu.Details="Education resources provided: "+listEd.Count.ToString();
+							mu.Met=true;
+						}
+						mu.Action="Provide education resources";
 						break;
 					case EhrMeasureType.TimelyAccess:
 
@@ -593,6 +671,7 @@ namespace OpenDentBusiness{
 		None,
 		RxSelect,
 		RxEdit,
-		Medical
+		Medical,
+		PatientEdit
 	}
 }

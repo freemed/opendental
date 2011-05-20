@@ -61,6 +61,7 @@ namespace OpenDental.Forms {
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormEduResourceEdit FormERE = new FormEduResourceEdit();
 			FormERE.IsNew=true;
+			FormERE.EduResourceCur=new EduResource();
 			FormERE.ShowDialog();
 			FillGrid();
 		}
