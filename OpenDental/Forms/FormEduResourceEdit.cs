@@ -16,7 +16,6 @@ namespace OpenDental.Forms {
 
 		public FormEduResourceEdit() {
 			InitializeComponent();
-			EduResourceCur=new EduResource();
 		}
 
 		private void FormEduResourceEdit_Load(object sender,EventArgs e) {
@@ -60,10 +59,12 @@ namespace OpenDental.Forms {
 			if(FormICD9.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//tempID=FormICD9.SelectedIcd9Num;
 			textProblem.Text="";
-			textICD9.Text="ICD9: "+ICD9s.GetDescription(FormICD9.SelectedIcd9Num); ;
+			EduResourceCur.DiseaseDefNum=0;
+			textICD9.Text="ICD9: "+ICD9s.GetDescription(FormICD9.SelectedIcd9Num);
+			EduResourceCur.Icd9Num=FormICD9.SelectedIcd9Num;
 			textMedication.Text="";
+			EduResourceCur.MedicationNum=0;
 			textLabResultsID.Text="";
 			textLabTestName.Text="";
 			textCompareValue.Text="";
@@ -76,20 +77,25 @@ namespace OpenDental.Forms {
 			if(FormM.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//tempID=FormM.SelectedMedicationNum;
 			textProblem.Text="";
+			EduResourceCur.DiseaseDefNum=0;
 			textICD9.Text="";
+			EduResourceCur.Icd9Num=0;
 			textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
+			EduResourceCur.MedicationNum=FormM.SelectedMedicationNum;
 			textLabResultsID.Text="";
 			textLabTestName.Text="";
 			textCompareValue.Text="";
 		}
 
 		private void textLabResults_Click(object sender,EventArgs e) {
+			//attached to click for 3 different text boxes.
 			textProblem.Text="";
 			EduResourceCur.DiseaseDefNum=0;
 			textICD9.Text="";
+			EduResourceCur.Icd9Num=0;
 			textMedication.Text="";
+			EduResourceCur.MedicationNum=0;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -106,12 +112,11 @@ namespace OpenDental.Forms {
 
 		private void butOk_Click(object sender,EventArgs e) {
 			//validation
-			//if(!IsProblem && !IsICD9 && !IsMedication && !IsLab){
-			//	MessageBox.Show("Please Select a valid problem, medication, or lab result.");
-			//	return;
-			//}
-			/*
-			if(IsLab) {
+			if(EduResourceCur.DiseaseDefNum==0 && EduResourceCur.Icd9Num==0 && EduResourceCur.MedicationNum==0 && textLabResultsID.Text=="" && textLabTestName.Text=="" && textCompareValue.Text=="") {
+				MessageBox.Show("Please Select a valid problem, medication, or lab result.");
+				return;
+			}
+			if(EduResourceCur.DiseaseDefNum==0 && EduResourceCur.Icd9Num==0 && EduResourceCur.MedicationNum==0) {
 				if(textLabTestName.Text=="") {
 					MessageBox.Show("Invalid test name for lab result.");
 					return;
@@ -131,41 +136,15 @@ namespace OpenDental.Forms {
 					MessageBox.Show("Compare value is not a valid number.");
 					return;
 				}
-			}*/
+			}
 			if(textUrl.Text=="") {
 				MessageBox.Show("Please input a valid recource URL.");
 				return;
 			}
 			//done validating
-			/*
-			if(!IsProblem) {
-				EduResourceCur.DiseaseDefNum=0;
-			}
-			if(!IsICD9) {
-				EduResourceCur.Icd9Num=0;
-			}
-			if(!IsMedication) {
-				EduResourceCur.MedicationNum=0;
-			}
-			if(!IsLab) {
-				EduResourceCur.LabResultCompare="";
-				EduResourceCur.LabResultID="";
-				EduResourceCur.LabResultName="";
-			}
-			if(IsProblem) {
-				EduResourceCur.DiseaseDefNum=tempID;
-			}
-			else if(IsICD9) {
-				EduResourceCur.Icd9Num=tempID;
-			}
-			else if(IsMedication) {
-				EduResourceCur.MedicationNum=tempID;
-			}
-			else if(IsLab) {
-				EduResourceCur.LabResultID=textLabResultsID.Text;
-				EduResourceCur.LabResultName=textLabTestName.Text;
-				EduResourceCur.LabResultCompare=textCompareValue.Text;
-			}*/
+			EduResourceCur.LabResultID=textLabResultsID.Text;
+			EduResourceCur.LabResultName=textLabTestName.Text;
+			EduResourceCur.LabResultCompare=textCompareValue.Text;
 			EduResourceCur.ResourceUrl=textUrl.Text;
 			if(IsNew) {
 				EduResources.Insert(EduResourceCur);

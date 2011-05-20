@@ -119,7 +119,6 @@
 			this.textLabResultsID.TabIndex = 0;
 			this.textLabResultsID.TabStop = false;
 			this.textLabResultsID.Click += new System.EventHandler(this.textLabResults_Click);
-			this.textLabResultsID.Enter += new System.EventHandler(this.textLabResults_Click);
 			// 
 			// butCancel
 			// 
@@ -186,7 +185,7 @@
 			this.textLabTestName.Size = new System.Drawing.Size(357,20);
 			this.textLabTestName.TabIndex = 1;
 			this.textLabTestName.TabStop = false;
-			this.textLabTestName.Enter += new System.EventHandler(this.textLabResults_Click);
+			this.textLabTestName.Click += new System.EventHandler(this.textLabResults_Click);
 			// 
 			// groupBox1
 			// 
@@ -229,7 +228,7 @@
 			this.textCompareValue.Size = new System.Drawing.Size(100,20);
 			this.textCompareValue.TabIndex = 2;
 			this.textCompareValue.TabStop = false;
-			this.textCompareValue.Enter += new System.EventHandler(this.textLabResults_Click);
+			this.textCompareValue.Click += new System.EventHandler(this.textLabResults_Click);
 			// 
 			// label7
 			// 
