@@ -65,6 +65,7 @@ namespace OpenDental.Forms {
 				labelCriterionFK.Text=RuleCur.ReminderCriterion.ToString();
 				textCriterionValue.Visible=false;
 				labelCriterionValue.Visible=false;
+				labelExample.Visible=false;
 				labelCriterionFK.Visible=true;
 				textCriterionFK.Visible=true;
 				butSelectFK.Visible=true;
@@ -72,6 +73,7 @@ namespace OpenDental.Forms {
 			else {//field only used when Age, Gender, or Labresult are selected.
 				textCriterionValue.Visible=true;
 				labelCriterionValue.Visible=true;
+				labelExample.Visible=true;
 				labelCriterionFK.Visible=false;
 				textCriterionFK.Visible=false;
 				butSelectFK.Visible=false;

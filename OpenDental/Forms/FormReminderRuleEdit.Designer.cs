@@ -35,7 +35,7 @@
 			this.labelCriterionFK = new System.Windows.Forms.Label();
 			this.textCriterionFK = new System.Windows.Forms.TextBox();
 			this.butSelectFK = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
+			this.labelExample = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butDelete
@@ -150,21 +150,21 @@
 			this.butSelectFK.UseVisualStyleBackColor = true;
 			this.butSelectFK.Click += new System.EventHandler(this.butSelectFK_Click);
 			// 
-			// label2
+			// labelExample
 			// 
-			this.label2.Location = new System.Drawing.Point(220,56);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(107,17);
-			this.label2.TabIndex = 12;
-			this.label2.Text = "For example, <18";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelExample.Location = new System.Drawing.Point(220,56);
+			this.labelExample.Name = "labelExample";
+			this.labelExample.Size = new System.Drawing.Size(107,17);
+			this.labelExample.TabIndex = 12;
+			this.labelExample.Text = "For example, <18";
+			this.labelExample.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormReminderRuleEdit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(446,207);
-			this.Controls.Add(this.label2);
+			this.Controls.Add(this.labelExample);
 			this.Controls.Add(this.butSelectFK);
 			this.Controls.Add(this.labelCriterionFK);
 			this.Controls.Add(this.textCriterionFK);
@@ -200,6 +200,6 @@
 		private System.Windows.Forms.Label labelCriterionFK;
 		private System.Windows.Forms.TextBox textCriterionFK;
 		private System.Windows.Forms.Button butSelectFK;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelExample;
 	}
 }
