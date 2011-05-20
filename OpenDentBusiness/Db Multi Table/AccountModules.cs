@@ -586,10 +586,10 @@ namespace OpenDentBusiness {
 				if(qty==0){
 					qty=1;
 				}
-				amt=PIn.Double(rawProc.Rows[i]["ProcFee"].ToString());
+				amt=PIn.Double(rawProc.Rows[i]["ProcFee"].ToString())*qty;
 				writeOffCap=PIn.Double(rawProc.Rows[i]["writeOffCap_"].ToString());
 				amt-=writeOffCap;
-				row["chargesDouble"]=amt*qty;
+				row["chargesDouble"]=amt;//*qty;
 				row["charges"]=((double)row["chargesDouble"]).ToString("n");
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
@@ -831,7 +831,7 @@ namespace OpenDentBusiness {
 			DataTable rawClaim;
 			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,claim.ClinicNum,DateReceived,DateService,"
 				+"claim.DedApplied,claim.InsPayEst,"
-				+"claim.InsPayAmt,claim.PatNum,SUM(ProcFee) procAmt_,"
+				+"claim.InsPayAmt,claim.PatNum,SUM(ProcFee*(BaseUnits+(CASE WHEN UnitQty<1 THEN 1 ELSE UnitQty END))) procAmt_,"
 				+DbHelper.GroupConcat("claimproc.ProcNum")+" ProcNums_,ProvTreat,"
 				+"claim.ReasonUnderPaid,claim.WriteOff "
 				+"FROM claim "

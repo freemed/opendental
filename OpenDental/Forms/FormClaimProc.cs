@@ -1430,7 +1430,7 @@ namespace OpenDental
 		///<summary>All text boxes will be blank before this is run.  It is only run once.</summary>
 		private void FillInitialAmounts(){
 			if(IsProc){
-				textFee.Text=proc.ProcFee.ToString("f");
+				textFee.Text=(proc.ProcFee*(proc.BaseUnits+proc.UnitQty)).ToString("f");
 				InsPlan plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
 				long insFeeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList,SubList);
 				long standFeeSch = Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
@@ -1694,7 +1694,7 @@ namespace OpenDental
 			}
 			double patPortion=0;
 			if(IsProc) {
-				patPortion=proc.ProcFee;
+				patPortion=proc.ProcFee*(proc.BaseUnits+proc.UnitQty);
 				if(ClaimProcCur.InsEstTotalOverride != -1) {
 					patPortion-=ClaimProcCur.InsEstTotalOverride;
 				}
@@ -1719,13 +1719,13 @@ namespace OpenDental
 				//for PPO's the writeoff now replaces consideration of allowed fee
 				if(IsProc) {
 					if(ClaimProcCur.Status==ClaimProcStatus.NotReceived) {//not received.
-						patPortion=proc.ProcFee-ClaimProcCur.InsPayEst-ClaimProcCur.WriteOff;
+						patPortion=proc.ProcFee*(proc.BaseUnits+proc.UnitQty)-ClaimProcCur.InsPayEst-ClaimProcCur.WriteOff;
 					}
 					else if(ClaimProcCur.Status==ClaimProcStatus.CapEstimate || ClaimProcCur.Status==ClaimProcStatus.CapComplete) {
-						patPortion=proc.ProcFee-ClaimProcCur.WriteOff;
+						patPortion=proc.ProcFee*(proc.BaseUnits+proc.UnitQty)-ClaimProcCur.WriteOff;
 					}
 					else {
-						patPortion=proc.ProcFee-ClaimProcCur.InsPayAmt-ClaimProcCur.WriteOff;
+						patPortion=proc.ProcFee*(proc.BaseUnits+proc.UnitQty)-ClaimProcCur.InsPayAmt-ClaimProcCur.WriteOff;
 					}
 					textPatPortion2.Text=patPortion.ToString("f");
 					textPatPortion1.Visible=false;
