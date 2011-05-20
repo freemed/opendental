@@ -5093,6 +5093,40 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX ehrmeasureevent_PatNum ON ehrmeasureevent (PatNum)";
 					Db.NonQ(command);
 				}
+				//EvaSoft link-----------------------------------------------------------------------
+				//This insert statement is compatible with both MySQL and Oracle.
+				command="SELECT MAX(ProgramNum)+1 FROM program";
+				long programNum=PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"',"
+						+"'EvaSoft', "
+						+"'EvaSoft from www.imageworkscorporation.com', "
+						+"'0', "
+						+"'', "
+						+"'', "
+						+"'"+POut.String(@"No command line or path is needed.")+"')";
+				Db.NonQ(command);
+				//This insert statement is compatible with both MySQL and Oracle.
+				command="SELECT MAX(ProgramPropertyNum)+1 FROM programproperty";
+				long programPropertyNum=PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.Long(programPropertyNum)+"',"
+					+"'"+programNum.ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
+				//This insert statement is compatible with both MySQL and Oracle.
+				command="SELECT MAX(ToolButItemNum)+1 FROM toolbutitem";
+				long toolButItemNum=PIn.Long(Db.GetScalar(command));
+				command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.Long(toolButItemNum)+"',"
+					+"'"+programNum.ToString()+"', "
+					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
+					+"'EvaSoft')";
+				Db.NonQ32(command);
 
 
 

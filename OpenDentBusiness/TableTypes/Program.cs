@@ -47,6 +47,7 @@ namespace OpenDentBusiness{
 		Dxis,
 		EasyNotesPro,
 		eClinicalWorks,
+		EvaSoft,
 		EwooEZDent,
 		FloridaProbe,
 		HouseCalls,

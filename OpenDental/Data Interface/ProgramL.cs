@@ -85,6 +85,10 @@ namespace OpenDental{
 				Dxis.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName==ProgramName.EvaSoft.ToString()) {
+				EvaSoft.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName==ProgramName.EwooEZDent.ToString()) {
 				Ewoo.SendData(prog,pat);
 				return;
