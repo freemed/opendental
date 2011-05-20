@@ -73,4 +73,15 @@ namespace OpenDentBusiness {
 		Summary
 
 	}
+
+	///<summary>Helps track whether the current patient has met the measurement objectives.</summary>
+	public class EhrMu {
+		///<summary></summary>
+		public EhrMeasureType MeasureType;
+		///<summary></summary>
+		public bool Met;
+		///<summary></summary>
+		public string Details;
+	}
+
 }
