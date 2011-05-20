@@ -218,10 +218,11 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
-					//todo: finish
+					//todo: test
 					break;
 				case EhrMeasureType.TimelyAccess:
-					command="SELECT PatNum,LName,FName "
+					command="SELECT PatNum,LName,FName, "
+
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
@@ -672,6 +673,7 @@ namespace OpenDentBusiness{
 		RxSelect,
 		RxEdit,
 		Medical,
-		PatientEdit
+		PatientEdit,
+		Online
 	}
 }

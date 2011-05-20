@@ -3605,6 +3605,9 @@ namespace OpenDental{
 				//so we can step through for debugging.
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
 				((FormEHR)FormOpenDental.FormEHR).ShowDialog();
+				if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.None) {
+					return;
+				}
 				if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.RxEdit) {
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
 					FormRXE.ShowDialog();
@@ -3625,11 +3628,21 @@ namespace OpenDental{
 					formP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
 				}
+				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Online) {
+					FormEhrOnlineAccess formO=new FormEhrOnlineAccess();
+					formO.PatCur=PatCur;
+					formO.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				OnEHR_Click();//recursive.  The only way out of the loop is EhrFormResult.None.
 #else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
 				object[] args=new object[] {PatCur.PatNum};
 				type.InvokeMember("PatNum",System.Reflection.BindingFlags.SetField,null,FormOpenDental.FormEHR,args);
 				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,null);
+				if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.None) {
+					return;
+				}
 				if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxEdit) {
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
 					FormRXE.ShowDialog();
@@ -3650,6 +3663,13 @@ namespace OpenDental{
 					formP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
 				}
+				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Online) {
+					FormOnlineAccess formO=new FormOnlineAccess();
+					formO.PatCur=PatCur;
+					formO.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				OnEHR_Click();
 #endif
 		}
 

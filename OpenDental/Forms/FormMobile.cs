@@ -80,10 +80,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
-			if(textMobileSynchWorkStation.Text=="") {
-				MsgBox.Show(this,"WorkStation cannot be empty");
-				return false;
-			}
+			//yes, workstation is allowed to be blank.  That's one way for user to turn off auto synch.
+			//if(textMobileSynchWorkStation.Text=="") {
+			//	MsgBox.Show(this,"WorkStation cannot be empty");
+			//	return false;
+			//}
 			// the text field is read because the keyed in values have not been saved yet
 			if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
 				IgnoreCertificateErrors();// done so that TestWebServiceExists() does not thow an error.
@@ -106,25 +107,27 @@ namespace OpenDental {
 			//So I rewrote it all.  New error messages say exactly what's wrong with it.
 //to do: Dennis, make sure that ANY character is allowed on the server end.  
 			//For example, a space, a {, and a Chinese character would all be allowed in username.
-			if(textMobileUserName.Text.Length<10){
-				MsgBox.Show(this,"User Name must be at least 10 characters long.");
-				return false;
-			}
-			if(!Regex.IsMatch(textMobileUserName.Text,"[A-Z]+")){
-				MsgBox.Show(this,"User Name must contain an uppercase letter.");
-				return false;
-			}
-			if(!Regex.IsMatch(textMobileUserName.Text,"[a-z]+")){
-				MsgBox.Show(this,"User Name must contain an lowercase letter.");
-				return false;
-			}
-			if(!Regex.IsMatch(textMobileUserName.Text,"[0-9]+")){
-				MsgBox.Show(this,"User Name must contain a number.");
-				return false;
-			}
-			if(!Regex.IsMatch(textMobileUserName.Text,"[^0-9a-zA-Z]+")){//absolutely anything except number, lower or upper.
-				MsgBox.Show(this,"User Name must contain punctuation or symbols.");
-				return false;
+			if(textMobileUserName.Text!="") {//allowed to be blank
+				if(textMobileUserName.Text.Length<10) {
+					MsgBox.Show(this,"User Name must be at least 10 characters long.");
+					return false;
+				}
+				if(!Regex.IsMatch(textMobileUserName.Text,"[A-Z]+")) {
+					MsgBox.Show(this,"User Name must contain an uppercase letter.");
+					return false;
+				}
+				if(!Regex.IsMatch(textMobileUserName.Text,"[a-z]+")) {
+					MsgBox.Show(this,"User Name must contain an lowercase letter.");
+					return false;
+				}
+				if(!Regex.IsMatch(textMobileUserName.Text,"[0-9]+")) {
+					MsgBox.Show(this,"User Name must contain a number.");
+					return false;
+				}
+				if(!Regex.IsMatch(textMobileUserName.Text,"[^0-9a-zA-Z]+")) {//absolutely anything except number, lower or upper.
+					MsgBox.Show(this,"User Name must contain punctuation or symbols.");
+					return false;
+				}
 			}
 			if(textDateBefore.Text==""){//default to one year if empty
 				textDateBefore.Text=DateTime.Today.AddYears(-1).ToShortDateString();
@@ -552,7 +555,7 @@ namespace OpenDental {
 			workerThread.Start();
 		}
 
-		///<summary>Only called from FormOpenDental</summary>
+		///<summary>Called from FormOpenDental and from Ehr FormOnlineAccess.</summary>
 		public static void SynchFromMain() {
 			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
 				return;
