@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class EhrMeasureEvents{
 
 		///<summary></summary>
-		public static List<EhrMeasureEvents> GetByType(EhrMeasureEventType ehrMeasureEventType,long patNum){
+		public static List<EhrMeasureEvent> GetByType(EhrMeasureEventType ehrMeasureEventType,long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),ehrMeasureEventType,patNum);
 			}
