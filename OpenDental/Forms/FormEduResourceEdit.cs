@@ -190,20 +190,6 @@ namespace OpenDental.Forms {
 				EduResourceCur.LabResultCompare=textCompareValue.Text;
 			}
 			EduResourceCur.ResourceUrl=textUrl.Text;
-			if(!IsProblem) {
-				EduResourceCur.DiseaseDefNum=0;
-			}
-			if(!IsICD9) {
-				EduResourceCur.Icd9Num=0;
-			}
-			if(!IsMedication) {
-				EduResourceCur.MedicationNum=0;
-			}
-			if(!IsLab) {
-				EduResourceCur.LabResultCompare="";
-				EduResourceCur.LabResultID="";
-				EduResourceCur.LabResultName="";
-			}
 			if(IsNew) {
 				EduResources.Insert(EduResourceCur);
 			}
