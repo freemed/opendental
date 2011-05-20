@@ -50,7 +50,7 @@
 			// 
 			// butProblemSelect
 			// 
-			this.butProblemSelect.Location = new System.Drawing.Point(384,17);
+			this.butProblemSelect.Location = new System.Drawing.Point(540,18);
 			this.butProblemSelect.Name = "butProblemSelect";
 			this.butProblemSelect.Size = new System.Drawing.Size(29,23);
 			this.butProblemSelect.TabIndex = 0;
@@ -63,7 +63,7 @@
 			this.textProblem.Location = new System.Drawing.Point(144,19);
 			this.textProblem.Name = "textProblem";
 			this.textProblem.ReadOnly = true;
-			this.textProblem.Size = new System.Drawing.Size(234,20);
+			this.textProblem.Size = new System.Drawing.Size(393,20);
 			this.textProblem.TabIndex = 1;
 			// 
 			// label1
@@ -89,12 +89,12 @@
 			this.textMedication.Location = new System.Drawing.Point(144,71);
 			this.textMedication.Name = "textMedication";
 			this.textMedication.ReadOnly = true;
-			this.textMedication.Size = new System.Drawing.Size(234,20);
+			this.textMedication.Size = new System.Drawing.Size(393,20);
 			this.textMedication.TabIndex = 4;
 			// 
 			// butMedicationSelect
 			// 
-			this.butMedicationSelect.Location = new System.Drawing.Point(384,69);
+			this.butMedicationSelect.Location = new System.Drawing.Point(540,70);
 			this.butMedicationSelect.Name = "butMedicationSelect";
 			this.butMedicationSelect.Size = new System.Drawing.Size(29,23);
 			this.butMedicationSelect.TabIndex = 3;
@@ -122,7 +122,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(384,267);
+			this.butCancel.Location = new System.Drawing.Point(536,288);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,23);
 			this.butCancel.TabIndex = 9;
@@ -133,7 +133,7 @@
 			// butOk
 			// 
 			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOk.Location = new System.Drawing.Point(303,267);
+			this.butOk.Location = new System.Drawing.Point(455,288);
 			this.butOk.Name = "butOk";
 			this.butOk.Size = new System.Drawing.Size(75,23);
 			this.butOk.TabIndex = 10;
@@ -144,7 +144,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12,267);
+			this.butDelete.Location = new System.Drawing.Point(12,288);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,23);
 			this.butDelete.TabIndex = 11;
@@ -154,18 +154,18 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(43,211);
+			this.label4.Location = new System.Drawing.Point(12,211);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100,17);
 			this.label4.TabIndex = 13;
 			this.label4.Text = "Resource URL";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textUrl
 			// 
-			this.textUrl.Location = new System.Drawing.Point(144,210);
+			this.textUrl.Location = new System.Drawing.Point(12,231);
 			this.textUrl.Name = "textUrl";
-			this.textUrl.Size = new System.Drawing.Size(234,20);
+			this.textUrl.Size = new System.Drawing.Size(596,20);
 			this.textUrl.TabIndex = 12;
 			// 
 			// label5
@@ -181,7 +181,7 @@
 			// 
 			this.textLabTestName.Location = new System.Drawing.Point(116,42);
 			this.textLabTestName.Name = "textLabTestName";
-			this.textLabTestName.Size = new System.Drawing.Size(230,20);
+			this.textLabTestName.Size = new System.Drawing.Size(357,20);
 			this.textLabTestName.TabIndex = 14;
 			// 
 			// groupBox1
@@ -195,7 +195,7 @@
 			this.groupBox1.Controls.Add(this.textLabTestName);
 			this.groupBox1.Location = new System.Drawing.Point(28,96);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(367,100);
+			this.groupBox1.Size = new System.Drawing.Size(541,100);
 			this.groupBox1.TabIndex = 16;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Lab Results";
@@ -239,12 +239,12 @@
 			this.textICD9.Location = new System.Drawing.Point(144,45);
 			this.textICD9.Name = "textICD9";
 			this.textICD9.ReadOnly = true;
-			this.textICD9.Size = new System.Drawing.Size(234,20);
+			this.textICD9.Size = new System.Drawing.Size(393,20);
 			this.textICD9.TabIndex = 18;
 			// 
 			// butICD9Select
 			// 
-			this.butICD9Select.Location = new System.Drawing.Point(384,43);
+			this.butICD9Select.Location = new System.Drawing.Point(540,44);
 			this.butICD9Select.Name = "butICD9Select";
 			this.butICD9Select.Size = new System.Drawing.Size(29,23);
 			this.butICD9Select.TabIndex = 17;
@@ -256,7 +256,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(471,302);
+			this.ClientSize = new System.Drawing.Size(623,323);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.textICD9);
 			this.Controls.Add(this.butICD9Select);

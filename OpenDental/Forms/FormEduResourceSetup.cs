@@ -24,9 +24,9 @@ namespace OpenDental.Forms {
 		private void FillGrid() {
 			gridEdu.BeginUpdate();
 			gridEdu.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Criteria",150);
+			ODGridColumn col=new ODGridColumn("Criteria",300);
 			gridEdu.Columns.Add(col);
-			col=new ODGridColumn("Url",100);
+			col=new ODGridColumn("Url",700);
 			gridEdu.Columns.Add(col);
 			eduResourceList=EduResources.SelectAll();
 			gridEdu.Rows.Clear();

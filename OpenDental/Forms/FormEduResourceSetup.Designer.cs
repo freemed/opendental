@@ -31,7 +31,7 @@
 			// butClose
 			// 
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(386,330);
+			this.butClose.Location = new System.Drawing.Point(805,496);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,23);
 			this.butClose.TabIndex = 2;
@@ -41,8 +41,8 @@
 			// 
 			// butAdd
 			// 
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Location = new System.Drawing.Point(12,330);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAdd.Location = new System.Drawing.Point(337,496);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,23);
 			this.butAdd.TabIndex = 4;
@@ -59,7 +59,7 @@
 			this.gridEdu.Location = new System.Drawing.Point(12,12);
 			this.gridEdu.Name = "gridEdu";
 			this.gridEdu.ScrollValue = 0;
-			this.gridEdu.Size = new System.Drawing.Size(449,312);
+			this.gridEdu.Size = new System.Drawing.Size(868,478);
 			this.gridEdu.TabIndex = 3;
 			this.gridEdu.Title = "Educational Resources";
 			this.gridEdu.TranslationName = null;
@@ -69,7 +69,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(473,365);
+			this.ClientSize = new System.Drawing.Size(892,531);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridEdu);
 			this.Controls.Add(this.butClose);

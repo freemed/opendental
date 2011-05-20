@@ -217,12 +217,27 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//todo: finish
 					break;
 				case EhrMeasureType.TimelyAccess:
-					command="";
+					command="SELECT PatNum,LName,FName "
+						+"FROM patient "
+						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//todo: finish
 					break;
-				case EhrMeasureType.ProvOrderEntry:
-					command="";
+				case EhrMeasureType.ProvOrderEntry: 
+					command="SELECT PatNum,LName,FName "
+						+"FROM patient "
+						//todo: finish
+						//Patients with a medication order entered using CPOE
+						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
+						+"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
 					break;
 				case EhrMeasureType.Rx:
 					command="";
@@ -352,10 +367,10 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.Education:
-						
+						//todo
 						break;
 					case EhrMeasureType.TimelyAccess:
-						
+						//todo
 						break;
 					case EhrMeasureType.ProvOrderEntry:
 						
