@@ -161,6 +161,7 @@ namespace OpenDental {
 			MsgBox.Show(this,"Done");
 		}
 
+		/*
 		///<summary>Old code. May be deleted later</summary>
 		private void butFullSync_ClickOld(object sender,EventArgs e) {
 			if(!SavePrefs()) {
@@ -194,7 +195,7 @@ namespace OpenDental {
 			}
 			IsSynching=false;
 			changed=true;
-		}
+		}*/
 
 		private void butFullSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
@@ -220,8 +221,10 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 			changed=true;
+			textDateTimeLastRun.Text=timeSynchStarted.ToShortDateString()+" "+timeSynchStarted.ToShortTimeString();
 		}
 
+		/*
 		///<summary>Old code. May be deleted later</summary>
 		private void butSync_ClickOld(object sender,EventArgs e) {
 			if(!SavePrefs()) {
@@ -255,7 +258,7 @@ namespace OpenDental {
 			}
 			IsSynching=false;
 			changed=true;
-		}
+		}*/
 
 		private void butSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
@@ -282,8 +285,10 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 			changed=true;
+			textDateTimeLastRun.Text=timeSynchStarted.ToShortDateString()+" "+timeSynchStarted.ToShortTimeString();
 		}
 		
+		/*
 		///<summary>Old code. May be deleted later</summary>
 		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,List<long> provNumList,ref FormProgress progressIndicator,DateTime timeSynchStarted) {
 			IsSynching=true;
@@ -337,7 +342,7 @@ namespace OpenDental {
 				//would be troublesome with threading anyway
 			//}
 			IsSynching=false;
-		}
+		}*/
 
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
 		private static void UploadWorker(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
@@ -406,9 +411,7 @@ namespace OpenDental {
 			IsSynching=false;
 		}
 
-		/// <summary>
-		/// a general function to reduce the amount of code for uploading
-		/// </summary>
+		///<summary>a general function to reduce the amount of code for uploading</summary>
 		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,ref FormProgress progressIndicator) {
 			try{ //Dennis: try catch may not work: Does not work in threads not sure about this
 				int LocalBatchSize=BatchSize;
@@ -521,6 +524,7 @@ namespace OpenDental {
 			return true;
 		}
 
+		/*
 		///<summary>Old code. May be deleted later</summary>
 		public static void SynchFromMainOld() {
 			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
@@ -553,9 +557,9 @@ namespace OpenDental {
 			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
-		}
+		}*/
 
-		///<summary>Called from FormOpenDental and from Ehr FormOnlineAccess.</summary>
+		///<summary>Called from FormOpenDental and from FormEhrOnlineAccess.</summary>
 		public static void SynchFromMain() {
 			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
 				return;
