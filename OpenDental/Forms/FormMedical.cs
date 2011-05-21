@@ -560,7 +560,7 @@ namespace OpenDental{
 		}
 
 		private void gridAllergies_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormAllergyEdit FAE=new FormAllergyEdit(PatCur);
+			FormAllergyEdit FAE=new FormAllergyEdit();
 			FAE.AllergyCur=allergyList[gridAllergies.GetSelectedIndex()];
 			FAE.ShowDialog();
 			FillAllergies();
@@ -598,10 +598,12 @@ namespace OpenDental{
 		}
 
 		private void butAddAllergy_Click(object sender,EventArgs e) {
-			FormAllergyEdit FAE=new FormAllergyEdit(PatCur);
-			FAE.AllergyCur=new Allergy();
-			FAE.AllergyCur.IsNew=true;
-			FAE.ShowDialog();
+			FormAllergyEdit formA=new FormAllergyEdit();
+			formA.AllergyCur=new Allergy();
+			formA.AllergyCur.StatusIsActive=true;
+			formA.AllergyCur.PatNum=PatCur.PatNum;
+			formA.AllergyCur.IsNew=true;
+			formA.ShowDialog();
 			FillAllergies();
 		}
 

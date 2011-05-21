@@ -20,6 +20,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static int GetCountMedical(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT COUNT(*) FROM medicalorder WHERE MedOrderType="+POut.Int((int)MedicalOrderType.Medication)+" "
+				+"AND PatNUm="+POut.Long(patNum);
+			return PIn.Int(Db.GetCount(command));
+		}
+
+		///<summary></summary>
 		public static List<MedicalOrder> GetPendingLabs() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<MedicalOrder>>(MethodBase.GetCurrentMethod());

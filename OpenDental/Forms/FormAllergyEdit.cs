@@ -10,26 +10,24 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAllergyEdit:Form {
 		public Allergy AllergyCur;
-		private Patient patCur;
-		private List<AllergyDef> allergyList;
+		private List<AllergyDef> allergyDefList;
 
-		public FormAllergyEdit(Patient PatCur) {
+		public FormAllergyEdit() {
 			InitializeComponent();
 			Lan.F(this);
-			patCur=PatCur;
 		}
 
 		private void FormAllergyEdit_Load(object sender,EventArgs e) {
 			int allergyIndex=0;
-			allergyList=AllergyDefs.GetAll(false);
-			if(allergyList.Count<1) {
+			allergyDefList=AllergyDefs.GetAll(false);
+			if(allergyDefList.Count<1) {
 				MsgBox.Show(this,"Need to set up at least one Allergy from EHR setup window.");
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			for(int i=0;i<allergyList.Count;i++) {
-				comboAllergies.Items.Add(allergyList[i].Description);
-				if(!AllergyCur.IsNew && allergyList[i].AllergyDefNum==AllergyCur.AllergyDefNum) {
+			for(int i=0;i<allergyDefList.Count;i++) {
+				comboAllergies.Items.Add(allergyDefList[i].Description);
+				if(!AllergyCur.IsNew && allergyDefList[i].AllergyDefNum==AllergyCur.AllergyDefNum) {
 					allergyIndex=i;
 				}
 			}
@@ -43,25 +41,29 @@ namespace OpenDental {
 			}
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(AllergyCur.IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")){
+				return;
+			}
+			Allergies.Delete(AllergyCur.AllergyNum);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
-			AllergyCur.AllergyDefNum=allergyList[comboAllergies.SelectedIndex].AllergyDefNum;
+			AllergyCur.AllergyDefNum=allergyDefList[comboAllergies.SelectedIndex].AllergyDefNum;
 			AllergyCur.Reaction=textReaction.Text;
 			AllergyCur.StatusIsActive=checkActive.Checked;
 			if(AllergyCur.IsNew) {
-				AllergyCur.PatNum=patCur.PatNum;
 				Allergies.Insert(AllergyCur);
 			}
 			else {
 				Allergies.Update(AllergyCur);
 			}
 			DialogResult=DialogResult.OK;
-		}
-
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(!AllergyCur.IsNew) {
-				Allergies.Delete(AllergyCur.AllergyNum);
-			}
-			DialogResult=DialogResult.Cancel;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

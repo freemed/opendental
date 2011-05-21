@@ -218,23 +218,21 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
-					//todo: test
 					break;
 				case EhrMeasureType.TimelyAccess:
 					command="SELECT PatNum,LName,FName, "
-
+						+"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.OnlineAccessProvided)+") AS onlineCount "
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
-					//todo: finish
 					break;
 				case EhrMeasureType.ProvOrderEntry: 
-					command="SELECT PatNum,LName,FName "
+					command="SELECT PatNum,LName,FName, "
+						+"(SELECT COUNT(*) FROM medicalorder WHERE medicalorder.PatNum=patient.PatNum "
+						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Medication)+") AS medOrderCount "
 						+"FROM patient "
-						//todo: finish
-						//Patients with a medication order entered using CPOE
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
@@ -378,10 +376,22 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.TimelyAccess:
-						//todo
+						if(tableRaw.Rows[i]["onlineCount"].ToString()=="0") {
+							explanation="No online access provided";
+						}
+						else {
+							explanation="Online access provided";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.ProvOrderEntry:
-						
+						if(tableRaw.Rows[i]["medOrderCount"].ToString()=="0") {
+							explanation="No medication through CPOE";
+						}
+						else {
+							explanation="Medication order in CPOE";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.Rx:
 						
@@ -630,34 +640,55 @@ namespace OpenDentBusiness{
 						mu.Action="Provide education resources";
 						break;
 					case EhrMeasureType.TimelyAccess:
-
+						List<EhrMeasureEvent> listOnline=EhrMeasureEvents.GetByType(EhrMeasureEventType.OnlineAccessProvided,pat.PatNum);
+						if(listOnline.Count==0) {
+							mu.Details="No online access provided.";
+						}
+						else {
+							mu.Details="Online access provided: "+listOnline[listOnline.Count-1].DateTEvent.ToShortDateString();//most recent
+							mu.Met=true;
+						}
+						mu.Action="Provide online Access";
 						break;
 					case EhrMeasureType.ProvOrderEntry:
-
+						int medOrderCount=MedicalOrders.GetCountMedical(pat.PatNum);
+						if(medOrderCount==0) {
+							mu.Details="No medication in CPOE.";
+						}
+						else {
+							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
+							mu.Met=true;
+						}
+						mu.Action="CPOE";
 						break;
 					case EhrMeasureType.Rx:
-
+						//todo
+						mu.Action="";
 						break;
 					case EhrMeasureType.VitalSigns:
 
+						mu.Action="Enter vital signs";
 						break;
 					case EhrMeasureType.Smoking:
-
+						mu.Action="";
 						break;
 					case EhrMeasureType.Lab:
-
+						mu.Action="";
 						break;
 					case EhrMeasureType.ElectronicCopy:
-
+						mu.Action="";
 						break;
 					case EhrMeasureType.ClinicalSummaries:
-
+						mu.Action="";
 						break;
 					case EhrMeasureType.Reminders:
-
+						mu.Action="Send reminders";
 						break;
 					case EhrMeasureType.MedReconcile:
-
+						mu.Action="Reconcile medications";
+						break;
+					case EhrMeasureType.Summary:
+						mu.Action="Create summary of care";
 						break;
 				}
 				list.Add(mu);

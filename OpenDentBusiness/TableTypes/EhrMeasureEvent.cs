@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
 		///<summary>0</summary>
 		EducationProvided,
 		///<summary>1</summary>
-		TimelyAccessProvided,
+		OnlineAccessProvided,
 		///<summary>2</summary>
 		CopyHealthRequested,
 		///<summary>3</summary>

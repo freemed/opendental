@@ -4540,7 +4540,7 @@ namespace OpenDental{
 			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
 				return;
 			}
-			 if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
+			if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
 				//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
 				return;
 			}
@@ -4548,7 +4548,7 @@ namespace OpenDental{
 				//full synch never run
 				return;
 			}
-			FormMobile.SynchFromMain();
+			FormMobile.SynchFromMain(false);
 		}
 
 		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {

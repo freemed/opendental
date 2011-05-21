@@ -559,8 +559,8 @@ namespace OpenDental {
 			workerThread.Start();
 		}*/
 
-		///<summary>Called from FormOpenDental and from FormEhrOnlineAccess.</summary>
-		public static void SynchFromMain() {
+		///<summary>Called from FormOpenDental and from FormEhrOnlineAccess.  doForce is set to false to follow regular synching interval.</summary>
+		public static void SynchFromMain(bool doForce) {
 			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
 				return;
 			}
@@ -568,8 +568,10 @@ namespace OpenDental {
 				return;
 			}
 			DateTime timeSynchStarted=MiscData.GetNowDateTime();
-			if(timeSynchStarted < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
-				return;
+			if(!doForce) {//if doForce, we skip checking the interval
+				if(timeSynchStarted < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
+					return;
+				}
 			}
 			if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("192.168.0.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
 				IgnoreCertificateErrors();

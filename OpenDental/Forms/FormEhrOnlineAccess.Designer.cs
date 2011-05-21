@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrOnlineAccess));
 			this.butGiveAccess = new System.Windows.Forms.Button();
 			this.textOnlineUsername = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
@@ -36,6 +37,10 @@
 			this.butOpen = new System.Windows.Forms.Button();
 			this.butPrint = new System.Windows.Forms.Button();
 			this.butGetLink = new System.Windows.Forms.Button();
+			this.butSynch = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butGiveAccess
@@ -44,7 +49,7 @@
 			this.butGiveAccess.Name = "butGiveAccess";
 			this.butGiveAccess.Size = new System.Drawing.Size(140,23);
 			this.butGiveAccess.TabIndex = 30;
-			this.butGiveAccess.Text = "Give Online Access";
+			this.butGiveAccess.Text = "Provide Online Access";
 			this.butGiveAccess.UseVisualStyleBackColor = true;
 			this.butGiveAccess.Click += new System.EventHandler(this.butGiveAccess_Click);
 			// 
@@ -94,10 +99,10 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(871,412);
+			this.butCancel.Location = new System.Drawing.Point(780,310);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,23);
-			this.butCancel.TabIndex = 31;
+			this.butCancel.TabIndex = 1;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -123,10 +128,10 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(790,412);
+			this.butOK.Location = new System.Drawing.Point(699,310);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,23);
-			this.butOK.TabIndex = 35;
+			this.butOK.TabIndex = 0;
 			this.butOK.Text = "OK";
 			this.butOK.UseVisualStyleBackColor = true;
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -144,7 +149,7 @@
 			// butPrint
 			// 
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butPrint.Location = new System.Drawing.Point(341,412);
+			this.butPrint.Location = new System.Drawing.Point(341,310);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(75,23);
 			this.butPrint.TabIndex = 37;
@@ -162,11 +167,41 @@
 			this.butGetLink.UseVisualStyleBackColor = true;
 			this.butGetLink.Click += new System.EventHandler(this.butGetLink_Click);
 			// 
+			// butSynch
+			// 
+			this.butSynch.Location = new System.Drawing.Point(6,19);
+			this.butSynch.Name = "butSynch";
+			this.butSynch.Size = new System.Drawing.Size(73,23);
+			this.butSynch.TabIndex = 39;
+			this.butSynch.Text = "Synch";
+			this.butSynch.UseVisualStyleBackColor = true;
+			this.butSynch.Click += new System.EventHandler(this.butSynch_Click);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(8,48);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(301,61);
+			this.label1.TabIndex = 40;
+			this.label1.Text = resources.GetString("label1.Text");
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.butSynch);
+			this.groupBox1.Location = new System.Drawing.Point(39,148);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(351,120);
+			this.groupBox1.TabIndex = 41;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Force Synch";
+			// 
 			// FormEhrOnlineAccess
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(958,447);
+			this.ClientSize = new System.Drawing.Size(867,345);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butGetLink);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butOpen);
@@ -184,6 +219,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Online Access";
 			this.Load += new System.EventHandler(this.FormOnlineAccess_Load);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -204,6 +240,9 @@
 		private System.Windows.Forms.Button butOpen;
 		private System.Windows.Forms.Button butPrint;
 		private System.Windows.Forms.Button butGetLink;
+		private System.Windows.Forms.Button butSynch;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.GroupBox groupBox1;
 
 	}
 }

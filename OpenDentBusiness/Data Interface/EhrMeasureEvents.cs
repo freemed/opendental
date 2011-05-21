@@ -8,12 +8,14 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrMeasureEvents{
 
-		///<summary></summary>
+		///<summary>Ordered by dateT</summary>
 		public static List<EhrMeasureEvent> GetByType(EhrMeasureEventType ehrMeasureEventType,long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),ehrMeasureEventType,patNum);
 			}
-			string command="SELECT * FROM ehrmeasureevent WHERE EventType = "+POut.Int((int)ehrMeasureEventType)+" AND PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM ehrmeasureevent WHERE EventType = "+POut.Int((int)ehrMeasureEventType)+" "
+				+"AND PatNum = "+POut.Long(patNum)+" "
+				+"ORDER BY DateTEvent";
 			return Crud.EhrMeasureEventCrud.SelectMany(command);
 		}
 
