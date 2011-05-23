@@ -1179,7 +1179,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter an amount first.");
 				return;
 			}
-			HasXCharge();
+			if(!HasXCharge()) {
+				return;
+			}
 			bool needToken=false;
 			bool newCard=false;
 			bool hasXToken=false;
@@ -1372,11 +1374,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(textNote.Text!="") {
-				textNote.Text+="\r\n";
-			}
-			textNote.Text+=resulttext;
-			if(showApprovedAmtNotice && (!xVoid && !xAdjust)) {
+			if(showApprovedAmtNotice && !xVoid && !xAdjust) {
 				if(MessageBox.Show(Lan.g(this,"The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the approved amount returned: ")+approvedAmt.ToString("C")
 					+"\r\n"+Lan.g(this,"Change the amount to match?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)==DialogResult.OK) 
 				{
@@ -1385,6 +1383,7 @@ namespace OpenDental{
 			}
 			if(xAdjust) {
 				MessageBox.Show(Lan.g(this,"The amount will be changed to the X-Charge approved amount: ")+approvedAmt.ToString("C"));
+				textNote.Text="";
 				textAmount.Text=approvedAmt.ToString("F");
 			}
 			if(xVoid) {
@@ -1392,6 +1391,10 @@ namespace OpenDental{
 					textAmount.Text="-"+approvedAmt.ToString("F");
 				}
 			}
+			if(textNote.Text!="") {
+				textNote.Text+="\r\n";
+			}
+			textNote.Text+=resulttext;
 		}
 		
 		private void VoidXChargeTransaction(string transID,string amount) {
@@ -1429,7 +1432,7 @@ namespace OpenDental{
 				return false;
 			}
 			if(!prog.Enabled){
-				if(Security.IsAuthorized(Permissions.Setup)){
+				if(Security.IsAuthorized(Permissions.Setup)) {
 					FormXchargeSetup FormX=new FormXchargeSetup();
 					FormX.ShowDialog();
 				}
@@ -1437,7 +1440,7 @@ namespace OpenDental{
 			}
 			if(!File.Exists(prog.Path)){
 				MsgBox.Show(this,"Path is not valid.");
-				if(Security.IsAuthorized(Permissions.Setup)){
+				if(Security.IsAuthorized(Permissions.Setup)) {
 					FormXchargeSetup FormX=new FormXchargeSetup();
 					FormX.ShowDialog();
 				}
