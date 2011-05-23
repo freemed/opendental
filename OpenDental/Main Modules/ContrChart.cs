@@ -4036,7 +4036,10 @@ namespace OpenDental{
 						}
 						for(int i=0;allergyList.Count>i;i++) {
 							row=new ODGridRow();
-							row.Cells.Add(AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description);
+							cell=new ODGridCell(AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description);
+							cell.Bold=YN.Yes;
+							cell.ColorText=Color.Red;
+							row.Cells.Add(cell);
 							row.Cells.Add(allergyList[i].Reaction);
 							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 							row.Tag="med";
