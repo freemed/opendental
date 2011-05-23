@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ReminderRule>>(MethodBase.GetCurrentMethod(),PatCur);
 			}
-			//Problem,Medication,Allergy,Age,Gender,LabResult
+			//Problem,Medication,Allergy,Age,Gender,LabResult, ICD9
 			List<ReminderRule> fullListReminders = Crud.ReminderRuleCrud.SelectMany("SELECT * FROM reminderrule");
 			List<ReminderRule> retVal = new List<ReminderRule>();
 			List<Disease> listProblems = Diseases.Refresh(PatCur.PatNum);
@@ -105,6 +105,14 @@ namespace OpenDentBusiness{
 					case EhrCriterion.LabResult:
 						for(int j=0;j<listLabResults.Count;j++) {
 							if(listLabResults[j].TestName.ToLower().Contains(fullListReminders[i].CriterionValue.ToLower())) {//revisit when running scripts.					
+								retVal.Add(fullListReminders[i]);
+								break;
+							}
+						}
+						break;
+					case EhrCriterion.ICD9:
+						for(int j=0;j<listProblems.Count;j++) {
+							if(fullListReminders[i].CriterionFK==listProblems[j].ICD9Num) {
 								retVal.Add(fullListReminders[i]);
 								break;
 							}

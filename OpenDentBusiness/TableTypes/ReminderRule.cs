@@ -39,6 +39,8 @@ namespace OpenDentBusiness{
 		///<summary>4-Gender</summary>
 		Gender,
 		///<summary>5-LabResult</summary>
-		LabResult
+		LabResult,
+		///<summary>6-ICD9</summary>
+		ICD9
 	}
 }

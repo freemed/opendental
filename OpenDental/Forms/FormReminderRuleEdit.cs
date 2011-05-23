@@ -37,6 +37,9 @@ namespace OpenDental.Forms {
 				case EhrCriterion.Problem:
 					textCriterionFK.Text=DiseaseDefs.GetName(RuleCur.CriterionFK);
 					break;
+				case EhrCriterion.ICD9:
+					textCriterionFK.Text=ICD9s.GetDescription(RuleCur.CriterionFK);
+					break;
 				case EhrCriterion.Medication:
 					Medication tempMed = Medications.GetMedication(RuleCur.CriterionFK);
 					if(tempMed.MedicationNum==tempMed.GenericNum) {//handle generic medication names.
@@ -61,7 +64,7 @@ namespace OpenDental.Forms {
 				FillFK();
 			}
 			RuleCur.ReminderCriterion=(EhrCriterion)comboReminderCriterion.SelectedIndex;
-			if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy) {
+			if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy || RuleCur.ReminderCriterion==EhrCriterion.ICD9) {
 				labelCriterionFK.Text=RuleCur.ReminderCriterion.ToString();
 				textCriterionValue.Visible=false;
 				labelCriterionValue.Visible=false;
@@ -112,6 +115,16 @@ namespace OpenDental.Forms {
 					}
 					RuleCur.CriterionFK=formA.SelectedAllergyDefNum;
 					break;
+				case EhrCriterion.ICD9:
+					FormIcd9s FormICD9Select = new FormIcd9s();
+					FormICD9Select.IsSelectionMode=true;
+					FormICD9Select.ShowDialog();
+					if(FormICD9Select.DialogResult!=DialogResult.OK){
+						RuleCur.CriterionFK=-1;
+						return;
+					}
+					RuleCur.CriterionFK=FormICD9Select.SelectedIcd9Num;
+					break;
 				default:
 					MessageBox.Show("You should never see this error message. Something has stopped working properly.");
 					break;
@@ -132,7 +145,7 @@ namespace OpenDental.Forms {
 		private void butOk_Click(object sender,EventArgs e) {
 			//Validate
 			RuleCur.ReminderCriterion=(EhrCriterion)comboReminderCriterion.SelectedIndex;
-			if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy) {
+			if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy || RuleCur.ReminderCriterion==EhrCriterion.ICD9) {
 				RuleCur.CriterionValue="";
 				if(RuleCur.CriterionFK==-1 || RuleCur.CriterionFK==0) {
 					MessageBox.Show("Please select a valid "+RuleCur.ReminderCriterion.ToString().ToLower()+".");
