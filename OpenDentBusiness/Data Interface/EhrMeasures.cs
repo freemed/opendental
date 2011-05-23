@@ -251,7 +251,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
-						+"AND patient.Birthdate < "+POut.Date(DateTime.Today.AddYears(-2));
+						+"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2));//2 and older
 					break;
 				case EhrMeasureType.Smoking:
 					command="";
@@ -266,7 +266,16 @@ namespace OpenDentBusiness{
 					command="";
 					break;
 				case EhrMeasureType.Reminders:
-					command="";
+					command="SELECT PatNum,LName,FName, "
+						+"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+" "
+						+") AS reminderCount "
+						+"FROM patient "
+						+"WHERE patient.Birthdate > '1880-01-01' "//a birthdate is entered
+						+"AND (patient.Birthdate > "+POut.Date(DateTime.Today.AddYears(-6))+" "//5 years or younger
+						+"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
+						+"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient);
 					break;
 				case EhrMeasureType.MedReconcile:
 					command="";
@@ -435,7 +444,13 @@ namespace OpenDentBusiness{
 						
 						break;
 					case EhrMeasureType.Reminders:
-						
+						if(tableRaw.Rows[i]["reminderCount"].ToString()=="0") {
+							explanation="No reminders sent";
+						}
+						else {
+							explanation="Reminders sent";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.MedReconcile:
 						
@@ -560,6 +575,7 @@ namespace OpenDentBusiness{
 			List<EhrMeasureEvent> listMeasureEvents=EhrMeasureEvents.Refresh(pat.PatNum);
 			for(int i=0;i<Enum.GetValues(typeof(EhrMeasureType)).Length;i++) {
 				mu=new EhrMu();
+				mu.Met=MuMet.False;
 				mu.MeasureType=(EhrMeasureType)i;
 				switch(mu.MeasureType) {
 					case EhrMeasureType.ProblemList:
@@ -568,7 +584,7 @@ namespace OpenDentBusiness{
 							mu.Details="No problems entered.";
 						}
 						else{
-							mu.Met=true;
+							mu.Met=MuMet.True;
 							bool diseasesNone=false;
 							if(listDisease.Count==1 && listDisease[0].DiseaseDefNum==PrefC.GetLong(PrefName.ProblemsIndicateNone)){
 								diseasesNone=true;
@@ -587,7 +603,7 @@ namespace OpenDentBusiness{
 							mu.Details="No medications entered.";
 						}
 						else{
-							mu.Met=true;
+							mu.Met=MuMet.True;
 							bool medsNone=false;
 							if(medList.Count==1 && medList[0].MedicationNum==PrefC.GetLong(PrefName.MedicationsIndicateNone)) {
 								medsNone=true;
@@ -607,7 +623,7 @@ namespace OpenDentBusiness{
 							mu.Details="No allergies entered.";
 						}
 						else{
-							mu.Met=true;
+							mu.Met=MuMet.True;
 							bool allergiesNone=false;
 							if(listAllergies.Count==1 && listAllergies[0].AllergyDefNum==PrefC.GetLong(PrefName.AllergiesIndicateNone)) {
 								allergiesNone=true;
@@ -646,7 +662,7 @@ namespace OpenDentBusiness{
 						}
 						if(explanation=="") {
 							mu.Details="All demographic elements recorded";
-							mu.Met=true;
+							mu.Met=MuMet.True;
 						}
 						else {
 							mu.Details="Missing: "+explanation;
@@ -660,7 +676,7 @@ namespace OpenDentBusiness{
 						}
 						else {
 							mu.Details="Education resources provided: "+listEd.Count.ToString();
-							mu.Met=true;
+							mu.Met=MuMet.True;
 						}
 						mu.Action="Provide education resources";
 						break;
@@ -671,21 +687,22 @@ namespace OpenDentBusiness{
 						}
 						else {
 							mu.Details="Online access provided: "+listOnline[listOnline.Count-1].DateTEvent.ToShortDateString();//most recent
-							mu.Met=true;
+							mu.Met=MuMet.True;
 						}
 						mu.Action="Provide online Access";
 						break;
 					case EhrMeasureType.ProvOrderEntry:
 						int medOrderCount=MedicalOrders.GetCountMedical(pat.PatNum);
 						if(medList.Count==0) {
-							mu.Details="N/A. No meds.";
+							mu.Met=MuMet.NA;
+							mu.Details="No meds.";
 						}
 						else if(medOrderCount==0) {
 							mu.Details="No medication in CPOE.";
 						}
 						else {
 							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
-							mu.Met=true;
+							mu.Met=MuMet.True;
 						}
 						mu.Action="CPOE";
 						break;
@@ -731,7 +748,7 @@ namespace OpenDentBusiness{
 							}
 							if(explanation=="") {
 								mu.Details="Vital signs entered";
-								mu.Met=true;
+								mu.Met=MuMet.True;
 							}
 							else {
 								mu.Details="Missing: "+explanation;
@@ -753,10 +770,16 @@ namespace OpenDentBusiness{
 						break;
 					case EhrMeasureType.Reminders:
 						if(pat.PatStatus!=PatientStatus.Patient) {
-							mu.Details="N/A. Status not patient.";
+							mu.Met=MuMet.NA;
+							mu.Details="Status not patient.";
+						}
+						else if(pat.Age==0) {
+							mu.Met=MuMet.NA;
+							mu.Details="Age not entered.";
 						}
 						else if(pat.Age>5 && pat.Age<65) {
-							mu.Details="N/A for patient age.";
+							mu.Met=MuMet.NA;
+							mu.Details="Patient age not 65+ or 5-.";
 						}
 						else {
 							List<EhrMeasureEvent> listReminders=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ReminderSent);
@@ -768,10 +791,11 @@ namespace OpenDentBusiness{
 								}
 							}
 							if(withinLastYear) {
-
+								mu.Details="Reminder sent within the last year.";
+								mu.Met=MuMet.True;
 							}
 							else {
-
+								mu.Details="No reminders sent within the last year for patient age 65+ or 5-.";
 							}
 						}
 						mu.Action="Send reminders";

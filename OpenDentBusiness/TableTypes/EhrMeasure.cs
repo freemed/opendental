@@ -79,11 +79,17 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public EhrMeasureType MeasureType;
 		///<summary></summary>
-		public bool Met;
+		public MuMet Met;
 		///<summary></summary>
 		public string Details;
 		///<summary></summary>
 		public string Action;
+	}
+
+	public enum MuMet {
+		False,
+		True,
+		NA
 	}
 
 }
