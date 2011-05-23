@@ -243,7 +243,15 @@ namespace OpenDentBusiness{
 					command="";
 					break;
 				case EhrMeasureType.VitalSigns:
-					command="";
+					command="SELECT PatNum,LName,FName, "
+						+"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND Height>0 AND Weight>0) AS hwCount, "
+						+"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND BpSystolic>0 AND BpDiastolic>0) AS bpCount "
+						+"FROM patient "
+						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
+						+"AND patient.Birthdate < "+POut.Date(DateTime.Today.AddYears(-2));
 					break;
 				case EhrMeasureType.Smoking:
 					command="";
@@ -397,7 +405,22 @@ namespace OpenDentBusiness{
 						
 						break;
 					case EhrMeasureType.VitalSigns:
-						
+						if(tableRaw.Rows[i]["hwCount"].ToString()=="0") {
+							explanation+="height, weight";
+						}
+						if(tableRaw.Rows[i]["bpCount"].ToString()=="0") {
+							if(explanation!="") {
+								explanation+=", ";
+							}
+							explanation+="blood pressure";
+						}
+						if(explanation=="") {
+							explanation="Vital signs entered";
+							row["met"]="X";
+						}
+						else {
+							explanation="Missing: "+explanation;
+						}
 						break;
 					case EhrMeasureType.Smoking:
 						
@@ -515,7 +538,7 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.ClinicalSummaries:
 					return "All office visits during the reporting period.  An office visit is calculated as any number of completed procedures for a given date.";
 				case EhrMeasureType.Reminders:
-					return "All unique patients 65 years or older or 5 years old or younger.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
+					return "All unique patients 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
 				case EhrMeasureType.MedReconcile:
 					return "Number of transitions of care from another provider to here during the reporting period.";
 				case EhrMeasureType.Summary:
@@ -532,6 +555,9 @@ namespace OpenDentBusiness{
 			List<EhrMu> list=new List<EhrMu>();
 			//add one of each type
 			EhrMu mu;
+			string explanation;
+			List<MedicationPat> medList=MedicationPats.GetList(pat.PatNum);
+			List<EhrMeasureEvent> listMeasureEvents=EhrMeasureEvents.Refresh(pat.PatNum);
 			for(int i=0;i<Enum.GetValues(typeof(EhrMeasureType)).Length;i++) {
 				mu=new EhrMu();
 				mu.MeasureType=(EhrMeasureType)i;
@@ -557,7 +583,6 @@ namespace OpenDentBusiness{
 						mu.Action="Enter problems";
 						break;
 					case EhrMeasureType.MedicationList:
-						List<MedicationPat> medList=MedicationPats.GetList(pat.PatNum);
 						if(medList.Count==0) {
 							mu.Details="No medications entered.";
 						}
@@ -597,7 +622,7 @@ namespace OpenDentBusiness{
 						mu.Action="Enter allergies";
 						break;
 					case EhrMeasureType.Demographics:
-						string explanation="";
+						explanation="";
 						if(pat.Birthdate.Year<1880) {
 							explanation+="birthdate";//missing
 						}
@@ -629,7 +654,7 @@ namespace OpenDentBusiness{
 						mu.Action="Enter demographics";
 						break;
 					case EhrMeasureType.Education:
-						List<EhrMeasureEvent> listEd=EhrMeasureEvents.GetByType(EhrMeasureEventType.EducationProvided,pat.PatNum);
+						List<EhrMeasureEvent> listEd=EhrMeasureEvents.RefreshByType(EhrMeasureEventType.EducationProvided,pat.PatNum);
 						if(listEd.Count==0) {
 							mu.Details="No education resources provided.";
 						}
@@ -640,7 +665,7 @@ namespace OpenDentBusiness{
 						mu.Action="Provide education resources";
 						break;
 					case EhrMeasureType.TimelyAccess:
-						List<EhrMeasureEvent> listOnline=EhrMeasureEvents.GetByType(EhrMeasureEventType.OnlineAccessProvided,pat.PatNum);
+						List<EhrMeasureEvent> listOnline=EhrMeasureEvents.RefreshByType(EhrMeasureEventType.OnlineAccessProvided,pat.PatNum);
 						if(listOnline.Count==0) {
 							mu.Details="No online access provided.";
 						}
@@ -652,7 +677,10 @@ namespace OpenDentBusiness{
 						break;
 					case EhrMeasureType.ProvOrderEntry:
 						int medOrderCount=MedicalOrders.GetCountMedical(pat.PatNum);
-						if(medOrderCount==0) {
+						if(medList.Count==0) {
+							mu.Details="N/A. No meds.";
+						}
+						else if(medOrderCount==0) {
 							mu.Details="No medication in CPOE.";
 						}
 						else {
@@ -666,7 +694,49 @@ namespace OpenDentBusiness{
 						mu.Action="";
 						break;
 					case EhrMeasureType.VitalSigns:
-
+						List<Vitalsign> vitalsignList=Vitalsigns.Refresh(pat.PatNum);
+						if(vitalsignList.Count==0) {
+							mu.Details="No vital signs entered.";
+						}
+						else {
+							bool hFound=false;
+							bool wFound=false;
+							bool bpFound=false;
+							for(int v=0;v<vitalsignList.Count;v++) {
+								if(vitalsignList[v].Height>0) {
+									hFound=true;
+								}
+								if(vitalsignList[v].Weight>0) {
+									wFound=true;
+								}
+								if(vitalsignList[v].BpDiastolic>0 && vitalsignList[v].BpSystolic>0) {
+									bpFound=true;
+								}
+							}
+							explanation="";
+							if(!hFound) {
+								explanation+="height";//missing
+							}
+							if(!wFound) {
+								if(explanation!="") {
+									explanation+=", ";
+								}
+								explanation+="weight";
+							}
+							if(!bpFound) {
+								if(explanation!="") {
+									explanation+=", ";
+								}
+								explanation+="blood pressure";
+							}
+							if(explanation=="") {
+								mu.Details="Vital signs entered";
+								mu.Met=true;
+							}
+							else {
+								mu.Details="Missing: "+explanation;
+							}
+						}
 						mu.Action="Enter vital signs";
 						break;
 					case EhrMeasureType.Smoking:
@@ -682,6 +752,28 @@ namespace OpenDentBusiness{
 						mu.Action="";
 						break;
 					case EhrMeasureType.Reminders:
+						if(pat.PatStatus!=PatientStatus.Patient) {
+							mu.Details="N/A. Status not patient.";
+						}
+						else if(pat.Age>5 && pat.Age<65) {
+							mu.Details="N/A for patient age.";
+						}
+						else {
+							List<EhrMeasureEvent> listReminders=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ReminderSent);
+							//during reporting period.
+							bool withinLastYear=false;
+							for(int r=0;r<listReminders.Count;r++) {
+								if(listReminders[r].DateTEvent > DateTime.Now.AddYears(-1)) {
+									withinLastYear=true;
+								}
+							}
+							if(withinLastYear) {
+
+							}
+							else {
+
+							}
+						}
 						mu.Action="Send reminders";
 						break;
 					case EhrMeasureType.MedReconcile:

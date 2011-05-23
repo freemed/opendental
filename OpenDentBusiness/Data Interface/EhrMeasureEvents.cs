@@ -7,9 +7,18 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrMeasureEvents{
+		///<summary>Ordered by dateT</summary>
+		public static List<EhrMeasureEvent> Refresh(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM ehrmeasureevent WHERE PatNum = "+POut.Long(patNum)+" "
+				+"ORDER BY DateTEvent";
+			return Crud.EhrMeasureEventCrud.SelectMany(command);
+		}
 
 		///<summary>Ordered by dateT</summary>
-		public static List<EhrMeasureEvent> GetByType(EhrMeasureEventType ehrMeasureEventType,long patNum){
+		public static List<EhrMeasureEvent> RefreshByType(EhrMeasureEventType ehrMeasureEventType,long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),ehrMeasureEventType,patNum);
 			}
@@ -36,6 +45,18 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM ehrmeasureevent WHERE EhrMeasureEventNum = "+POut.Long(ehrMeasureEventNum);
 			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static List<EhrMeasureEvent> GetByType(List<EhrMeasureEvent> listMeasures,EhrMeasureEventType eventType) {
+			//No need to check RemotingRole; no call to db.
+			List<EhrMeasureEvent> retVal=new List<EhrMeasureEvent>();
+			for(int i=0;i<listMeasures.Count;i++) {
+				if(listMeasures[i].EventType==eventType) {
+					retVal.Add(listMeasures[i]);
+				}
+			}
+			return retVal;
 		}
 
 		/*
