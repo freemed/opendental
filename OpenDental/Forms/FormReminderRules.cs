@@ -58,6 +58,9 @@ namespace OpenDental.Forms {
 					case EhrCriterion.LabResult:
 						row.Cells.Add("LabResult "+listReminders[i].CriterionValue);
 						break;
+					case EhrCriterion.ICD9:
+						row.Cells.Add("ICD9 "+ICD9s.GetDescription(listReminders[i].CriterionFK));
+						break;
 				}
 				row.Cells.Add(listReminders[i].Message);
 				gridMain.Rows.Add(row);
