@@ -291,7 +291,7 @@ namespace OpenDental.Eclaims{
 			Fill(237,"TreatingDentistAddress");//Address Where Procedure Performed - Will accept any text string
 			Fill(238,"TreatingDentistCity");//City Where Procedure Performed - Will accept any text string
 			Fill(239,"TreatingDentistST");//State Where Procedure Performed - Will accept any text string
-			Fill(240,"");
+			Fill(240,"TreatingDentistZip");//Zip Code Where Procedure Performed - Expecting 5 digit
 			ClaimFormItem[] listForForm=new ClaimFormItem[241];
 			//items.CopyTo(ClaimFormItems.ListForForm,0);
 			FormClaimPrint FormCP=new FormClaimPrint();
