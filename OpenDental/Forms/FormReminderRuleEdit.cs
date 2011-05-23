@@ -145,7 +145,11 @@ namespace OpenDental.Forms {
 		private void butOk_Click(object sender,EventArgs e) {
 			//Validate
 			RuleCur.ReminderCriterion=(EhrCriterion)comboReminderCriterion.SelectedIndex;
-			if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy || RuleCur.ReminderCriterion==EhrCriterion.ICD9) {
+			if(RuleCur.ReminderCriterion==EhrCriterion.Problem 
+				|| RuleCur.ReminderCriterion==EhrCriterion.Medication 
+				|| RuleCur.ReminderCriterion==EhrCriterion.Allergy 
+				|| RuleCur.ReminderCriterion==EhrCriterion.ICD9) 
+			{
 				RuleCur.CriterionValue="";
 				if(RuleCur.CriterionFK==-1 || RuleCur.CriterionFK==0) {
 					MessageBox.Show("Please select a valid "+RuleCur.ReminderCriterion.ToString().ToLower()+".");
