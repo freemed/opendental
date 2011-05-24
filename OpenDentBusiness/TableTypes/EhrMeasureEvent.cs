@@ -31,15 +31,17 @@ namespace OpenDentBusiness {
 		///<summary>1</summary>
 		OnlineAccessProvided,
 		///<summary>2</summary>
-		CopyHealthRequested,
+		ElectronicCopyRequested,
 		///<summary>3</summary>
-		CopyHealthProvided,
+		ElectronicCopyProvidedToPt,
 		///<summary>4, For one office visit.</summary>
-		ClinicalSummaryProvided,
+		ClinicalSummaryProvidedToPt,
 		///<summary>5</summary>
 		ReminderSent,
 		///<summary>6</summary>
-		MedicationReconcile
+		MedicationReconcile,
+		///<summary>7</summary>
+		SummaryOfCareProvidedToDr
 	}
 
 }

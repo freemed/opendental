@@ -802,10 +802,10 @@ namespace OpenDentBusiness{
 						mu.Action="";
 						break;
 					case EhrMeasureType.ElectronicCopy:
-						mu.Action="";
+						mu.Action="Create summary of care";
 						break;
 					case EhrMeasureType.ClinicalSummaries:
-						mu.Action="";
+						mu.Action="Create clinical summary";
 						break;
 					case EhrMeasureType.Reminders:
 						if(pat.PatStatus!=PatientStatus.Patient) {
