@@ -673,5 +673,54 @@ namespace UnitTests {
 			retVal+="12: Passed.  Once family max is reached, additional procs show 0 coverage.\r\n";
 			return retVal;
 		}
+
+		///<summary></summary>
+		public static string TestThirteen(int specificTest) {
+			if(specificTest != 0 && specificTest !=13){
+				return"";
+			}
+			string suffix="13";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
+			BenefitT.CreateAnnualMax(plan.PlanNum,100);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
+			BenefitT.CreateLimitation(plan.PlanNum,EbenefitCategory.Orthodontics,500);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
+			//procs - D0140 (limEx), D8090 (comprehensive ortho)
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0140",ProcStat.TP,"",59);
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D8090",ProcStat.TP,"",348);
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure> procList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(procList);
+			//Set complete and attach to claim
+			ProcedureT.SetComplete(proc1,pat,planList,patPlans,claimProcs,benefitList,subList);
+			ProcedureT.SetComplete(proc2,pat,planList,patPlans,claimProcs,benefitList,subList);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<Procedure> procsForClaim=new List<Procedure>();
+			procsForClaim.Add(proc1);
+			Claim claim1=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
+			procsForClaim=new List<Procedure>();
+			procsForClaim.Add(proc2);
+			Claim claim2=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
+			//
+			//string retVal="";
+			//if(claim.WriteOff!=500) {
+			//  throw new Exception("Should be 500. \r\n");
+			//}
+			//retVal+="8: Passed.  Completed writeoffs same as estimates for dual PPO ins when Allowed2 greater than Allowed1.\r\n";
+			//return retVal;
+		}
 	}
 }
