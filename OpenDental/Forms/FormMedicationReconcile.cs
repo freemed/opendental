@@ -12,6 +12,7 @@ namespace OpenDental {
 	public partial class FormMedicationReconcile:Form {
 		public Patient PatCur;
 		private Bitmap BitmapOriginal;
+		private List<EhrMeasureEvent> ehrMeasureEventsList;
 
 		public FormMedicationReconcile() {
 			InitializeComponent();
@@ -20,6 +21,7 @@ namespace OpenDental {
 
 		private void BasicTemplate_Load(object sender,EventArgs e) {
 			FillMeds();
+			FillReconcilesGrid();
 		}
 
 		private void FillMeds() {
@@ -91,6 +93,26 @@ namespace OpenDental {
 			FillMeds();
 		}
 
+		private void FillReconcilesGrid() {
+			gridReconcileEvents.BeginUpdate();
+			gridReconcileEvents.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("DateTime",130);
+			gridReconcileEvents.Columns.Add(col);
+			col=new ODGridColumn("Details",600);
+			gridReconcileEvents.Columns.Add(col);
+			ehrMeasureEventsList=EhrMeasureEvents.RefreshByType(EhrMeasureEventType.MedicationReconcile,PatCur.PatNum);
+			gridReconcileEvents.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ehrMeasureEventsList.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(ehrMeasureEventsList[i].DateTEvent.ToString());
+				row.Cells.Add(ehrMeasureEventsList[i].MoreInfo);
+				gridReconcileEvents.Rows.Add(row);
+			}
+			gridReconcileEvents.EndUpdate();
+		}
+
+
 		private void gridMeds_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormMedPat FormMP=new FormMedPat();
 			FormMP.MedicationPatCur=MedicationPats.List[e.Row];
@@ -146,6 +168,29 @@ namespace OpenDental {
 			FillMeds();
 		}
 
+		private void butAddEvent_Click(object sender,EventArgs e) {
+			//TODO: Whatever this button should do other than adding an ehr measure event.
+
+			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
+			newMeasureEvent.DateTEvent=DateTime.Now;
+			newMeasureEvent.EventType=EhrMeasureEventType.MedicationReconcile;
+			newMeasureEvent.PatNum=PatCur.PatNum;
+			newMeasureEvent.MoreInfo="Medication Reconcile";
+			EhrMeasureEvents.Insert(newMeasureEvent);
+			FillReconcilesGrid();
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(gridReconcileEvents.SelectedIndices.Length<1) {
+				MessageBox.Show("Please select at least one record to delete.");
+				return;
+			}
+			for(int i=0;i<gridReconcileEvents.SelectedIndices.Length;i++) {
+				EhrMeasureEvents.Delete(ehrMeasureEventsList[gridReconcileEvents.SelectedIndices[i]].EhrMeasureEventNum);
+			}
+			FillReconcilesGrid();
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
@@ -153,8 +198,7 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-
 		
+
 	}
 }
