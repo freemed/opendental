@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 		EducationProvided,
 		///<summary>1</summary>
 		OnlineAccessProvided,
-		///<summary>2</summary>
+		///<summary>2-not tracked yet.</summary>
 		ElectronicCopyRequested,
 		///<summary>3</summary>
 		ElectronicCopyProvidedToPt,
