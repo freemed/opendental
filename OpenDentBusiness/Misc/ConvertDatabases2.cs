@@ -4364,8 +4364,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DrugManufacturerNum number(20) NOT NULL,
 						ManufacturerName varchar2(255),
 						ManufacturerCode varchar2(20),
-						CONSTRAINT drugmanufacturer_DrugManufacturerNum PRIMARY KEY (DrugManufacturerNum)
-						)";
+						CONSTRAINT drugmanufacturer_DrugManNum PRIMARY KEY (DrugManufacturerNum) 
+						)"; //Changed drugmanufacturer_DrugManufacturerNum to DrugManNum: Max identifier for Oracle is 30 characters.
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -4453,12 +4453,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//eCW bridge enhancements
 				command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
 				int programNum=PIn.Int(Db.GetScalar(command));
-				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+POut.Long(programNum)+"', "
 					+"'FeeSchedulesSetManually', "
 					+"'0')";
-				Db.NonQ32(command);
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES((SELECT MAX(ProgramPropertyNum)+1 FROM programproperty),"
+					+"'"+POut.Long(programNum)+"', "
+					+"'FeeSchedulesSetManually', "
+					+"'0')";
+					Db.NonQ32(command);
+				}
 				command="UPDATE preference SET ValueString = '7.9.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
@@ -4482,6 +4492,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To7_9_8();
 		}
 
+		///<summary>Oracle compatible: 5/24/2011</summary>
 		private static void To7_9_8() {
 			if(FromVersion<new Version("7.9.8.0")) {
 				string command;
@@ -4607,9 +4618,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE vaccinepat MODIFY (DateTimeStart DATETIME);";
+					command="ALTER TABLE vaccinepat MODIFY (DateTimeStart DATE);";
 					Db.NonQ(command);
-					command="ALTER TABLE vaccinepat MODIFY (DateTimeEnd DATETIME);";
+					command="ALTER TABLE vaccinepat MODIFY (DateTimeEnd DATE);";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -5087,7 +5098,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						EventType number(3) NOT NULL,
 						PatNum number(20) NOT NULL,
 						MoreInfo varchar2(255),
-						CONSTRAINT ehrmeasureevent_EhrMeasureEventNum PRIMARY KEY (EhrMeasureEventNum)
+						CONSTRAINT ehrmeasureevent_EhrMeasureNum PRIMARY KEY (EhrMeasureEventNum)
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrmeasureevent_PatNum ON ehrmeasureevent (PatNum)";
