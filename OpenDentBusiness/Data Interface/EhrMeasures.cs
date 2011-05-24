@@ -167,6 +167,7 @@ namespace OpenDentBusiness{
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),mtype,dateStart,dateEnd);
 			}
 			string command="";
+			DataTable tableRaw=new DataTable();
 			switch(mtype) {
 				case EhrMeasureType.ProblemList:
 					command="SELECT PatNum,LName,FName, "
@@ -178,6 +179,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.MedicationList:
 					command="SELECT PatNum,LName,FName, "
@@ -189,6 +191,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.AllergyList:
 					command="SELECT PatNum,LName,FName, "
@@ -200,6 +203,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Demographics:
 					//language, gender, race, ethnicity, and birthdate
@@ -209,6 +213,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Education:
 					command="SELECT PatNum,LName,FName, "
@@ -218,6 +223,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.TimelyAccess:
 					command="SELECT PatNum,LName,FName, "
@@ -227,6 +233,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.ProvOrderEntry: 
 					command="SELECT PatNum,LName,FName, "
@@ -238,6 +245,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 						+"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Rx:
 					command="";
@@ -252,6 +260,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 						+"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2));//2 and older
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Smoking:
 					command="";
@@ -276,22 +285,43 @@ namespace OpenDentBusiness{
 						+"AND (patient.Birthdate > "+POut.Date(DateTime.Today.AddYears(-6))+" "//5 years or younger
 						+"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
 						+"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient);
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.MedReconcile:
-					command="";
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrmeasure (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						RefCount int NOT NULL,
+						ReconcileCount int NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
+						+"FROM refattach "
+						+"LEFT JOIN patient ON patient.PatNum=refattach.PatNum "
+						+"WHERE RefDate >= "+POut.Date(dateStart)+" "
+						+"AND RefDate <= "+POut.Date(dateEnd)+" "
+						+"AND IsFrom=1 AND IsTransitionOfCare=1 "
+						+"GROUP BY refattach.PatNum";
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure "
+						+"SET ReconcileCount = (SELECT COUNT(*) FROM ehrmeasureevent "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.MedicationReconcile)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrmeasure";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
 					break;
 				case EhrMeasureType.Summary:
 					command="";
 					break;
 				default:
 					throw new ApplicationException("Type not found: "+mtype.ToString());
-			}
-			DataTable tableRaw=null;
-			if(command=="") {
-				tableRaw=new DataTable();
-			}
-			else{
-				tableRaw=Db.GetTable(command);
 			}
 			//PatNum, PatientName, Explanation, and Met (X).
 			DataTable table=new DataTable("audit");
@@ -453,7 +483,15 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.MedReconcile:
-						
+						int refCount=PIn.Int(tableRaw.Rows[i]["refCount"].ToString());//this will always be greater than zero
+						int reconcileCount=PIn.Int(tableRaw.Rows[i]["reconcileCount"].ToString());
+						if(reconcileCount<refCount) {
+							explanation="Transitions of Care:"+refCount.ToString()+", Reconciles:"+reconcileCount.ToString();
+						}
+						else {
+							explanation="Reconciles performed for each transition of care.";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.Summary:
 						
@@ -821,7 +859,17 @@ namespace OpenDentBusiness{
 							mu.Details="Referral 'from' not entered within the last year.";
 						}
 						else if(countFromRefPeriod > 0) {
-
+							List<EhrMeasureEvent> listReconciles=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.MedicationReconcile);
+							int countReconciles=0;//during reporting period.
+							for(int r=0;r<listReconciles.Count;r++) {
+								if(listReconciles[r].DateTEvent > DateTime.Now.AddYears(-1)) {//within the same period as the count for referrals.
+									countReconciles++;
+								}
+							}
+							mu.Details="Referrals:"+countFromRefPeriod.ToString()+", Reconciles:"+countReconciles.ToString();
+							if(countReconciles>=countFromRefPeriod) {
+								mu.Met=MuMet.True;
+							}
 						}
 						mu.Action="Reconcile medications";
 						mu.Action2="Enter Referrals";
