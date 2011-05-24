@@ -5116,7 +5116,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
 				//This insert statement is compatible with both MySQL and Oracle.
 				command="SELECT MAX(ToolButItemNum)+1 FROM toolbutitem";
 				long toolButItemNum=PIn.Long(Db.GetScalar(command));
@@ -5124,9 +5124,36 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					+"VALUES ("
 					+"'"+POut.Long(toolButItemNum)+"',"
 					+"'"+programNum.ToString()+"', "
-					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
+					+"'"+POut.Int((int)ToolBarsAvail.ChartModule)+"', "
 					+"'EvaSoft')";
-				Db.NonQ32(command);
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE refattach ADD IsTransitionOfCare tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE refattach ADD IsTransitionOfCare number(3)";
+					Db.NonQ(command);
+					command="UPDATE refattach SET IsTransitionOfCare = 0 WHERE IsTransitionOfCare IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE refattach MODIFY IsTransitionOfCare NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE referral ADD IsDoctor tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE referral ADD IsDoctor number(3)";
+					Db.NonQ(command);
+					command="UPDATE referral SET IsDoctor = 0 WHERE IsDoctor IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE referral MODIFY IsDoctor NOT NULL";
+					Db.NonQ(command);
+				}
+				command="UPDATE referral SET IsDoctor=1 WHERE PatNum != 0";
+				Db.NonQ(command);
+				
 
 
 
@@ -5179,3 +5206,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 				
+
+			

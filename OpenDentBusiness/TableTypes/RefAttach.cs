@@ -22,6 +22,8 @@ namespace OpenDentBusiness{
 		public ReferralToStatus RefToStatus;
 		///<summary>Why the patient was referred out, or less commonly, the circumstances of the referral source.</summary>
 		public string Note;
+		///<summary>Used to track ehr events.  All outgoing referrals default to true.  The incoming ones get a popup asking if it's a transition of care.</summary>
+		public bool IsTransitionOfCare;
 
 		///<summary>Returns a copy of this RefAttach.</summary>
 		public RefAttach Copy(){

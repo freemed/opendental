@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary></summary>
+		///<summary>Includes title like DMD on the end.</summary>
 		public static string GetNameLF(long referralNum) {
 			//No need to check RemotingRole; no call to db.
 			if(referralNum==0) {
@@ -98,6 +98,10 @@ namespace OpenDentBusiness{
 			if(referral.FName!="") {
 				retVal+=", "+referral.FName+" "+referral.MName;
 			}
+			if(referral.Title !="") {
+				retVal+=", "+referral.Title;
+			}
+			//specialty seems to wordy to add here
 			return retVal;
 		}
 
@@ -165,8 +169,8 @@ namespace OpenDentBusiness{
 		///<summary>Gets the first referral "from" for the given patient.  Will return null if no "from" found for patient.</summary>
 		public static Referral GetReferralForPat(long patNum) {
 			//No need to check RemotingRole; no call to db.
-			RefAttach[] RefAttachList=RefAttaches.Refresh(patNum);
-			for(int i=0;i<RefAttachList.Length;i++) {
+			List<RefAttach> RefAttachList=RefAttaches.Refresh(patNum);
+			for(int i=0;i<RefAttachList.Count;i++) {
 				if(RefAttachList[i].IsFrom) {
 					return GetReferral(RefAttachList[i].ReferralNum);
 				}

@@ -1,6 +1,7 @@
 #if !DISABLE_WINDOWS_BRIDGES
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
@@ -48,7 +49,7 @@ namespace OpenDental.Bridges{
 				patID=pat.ChartNumber;
 			}
 			try{
-				RefAttach[] referalList=RefAttaches.Refresh(pat.PatNum);
+				List<RefAttach> referalList=RefAttaches.Refresh(pat.PatNum);
 				Provider prov=Providers.GetProv(Patients.GetProvNum(pat));
 				string provName=prov.FName+" "+prov.MI+" "+prov.LName+" "+prov.Suffix;
 				Family fam=Patients.GetFamily(pat.PatNum);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -8,15 +9,15 @@ namespace OpenDentBusiness{
 	public class RefAttaches{
 
 		///<summary>For one patient</summary>
-		public static RefAttach[] Refresh(long patNum) {
+		public static List<RefAttach> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<RefAttach[]>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<RefAttach>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command=
 				"SELECT * FROM refattach"
 				+" WHERE PatNum = "+POut.Long(patNum)
 				+" ORDER BY itemorder";
-			return Crud.RefAttachCrud.SelectMany(command).ToArray();
+			return Crud.RefAttachCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

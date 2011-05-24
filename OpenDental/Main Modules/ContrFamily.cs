@@ -689,8 +689,8 @@ namespace OpenDental{
 						row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
 						break;
 					case "Referrals":
-						RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);
-						if(RefList.Length==0){
+						List<RefAttach> RefList=RefAttaches.Refresh(PatCur.PatNum);
+						if(RefList.Count==0){
 							row.Cells.Add(Lan.g("TablePatient","None"));
 							row.Tag="Referral";
 							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
@@ -700,7 +700,7 @@ namespace OpenDental{
 						//	row.Tag="Referral";
 						//	row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
 						//}
-						for(int i=0;i<RefList.Length;i++) {
+						for(int i=0;i<RefList.Count;i++) {
 							row=new ODGridRow();
 							if(RefList[i].IsFrom){
 								row.Cells.Add(Lan.g("TablePatient","Referred From"));
@@ -721,7 +721,7 @@ namespace OpenDental{
 							}
 							row.Tag="Referral";
 							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
-							if(i<RefList.Length-1){
+							if(i<RefList.Count-1){
 								gridPat.Rows.Add(row);
 							}
 						}
@@ -901,7 +901,7 @@ namespace OpenDental{
 			List<MedicationPat> medList=MedicationPats.GetList(PatCur.PatNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);
-			RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
+			List<RefAttach> RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
 			bool hasProcs=procList.Count>0;
 			bool hasClaims=claimList.Count>0;
 			bool hasAdj=AdjustmentList.Length>0;
@@ -916,7 +916,7 @@ namespace OpenDental{
 					hasInsPlans=true;
 				}
 			}
-			bool hasRef=RefAttachList.Length>0;
+			bool hasRef=RefAttachList.Count>0;
 			if(hasProcs || hasClaims || hasAdj || hasPay || hasClaimProcs || hasComm || hasPayPlans
 				|| hasInsPlans || hasRef || hasMeds)
 			{

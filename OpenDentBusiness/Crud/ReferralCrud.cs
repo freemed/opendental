@@ -68,6 +68,7 @@ namespace OpenDentBusiness.Crud{
 				referral.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				referral.NationalProvID= PIn.String(table.Rows[i]["NationalProvID"].ToString());
 				referral.Slip          = PIn.Long  (table.Rows[i]["Slip"].ToString());
+				referral.IsDoctor      = PIn.Bool  (table.Rows[i]["IsDoctor"].ToString());
 				retVal.Add(referral);
 			}
 			return retVal;
@@ -108,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ReferralNum,";
 			}
-			command+="LName,FName,MName,SSN,UsingTIN,Specialty,ST,Telephone,Address,Address2,City,Zip,Note,Phone2,IsHidden,NotPerson,Title,EMail,PatNum,NationalProvID,Slip) VALUES(";
+			command+="LName,FName,MName,SSN,UsingTIN,Specialty,ST,Telephone,Address,Address2,City,Zip,Note,Phone2,IsHidden,NotPerson,Title,EMail,PatNum,NationalProvID,Slip,IsDoctor) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(referral.ReferralNum)+",";
 			}
@@ -133,7 +134,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(referral.EMail)+"',"
 				+    POut.Long  (referral.PatNum)+","
 				+"'"+POut.String(referral.NationalProvID)+"',"
-				+    POut.Long  (referral.Slip)+")";
+				+    POut.Long  (referral.Slip)+","
+				+    POut.Bool  (referral.IsDoctor)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -166,7 +168,8 @@ namespace OpenDentBusiness.Crud{
 				+"EMail         = '"+POut.String(referral.EMail)+"', "
 				+"PatNum        =  "+POut.Long  (referral.PatNum)+", "
 				+"NationalProvID= '"+POut.String(referral.NationalProvID)+"', "
-				+"Slip          =  "+POut.Long  (referral.Slip)+" "
+				+"Slip          =  "+POut.Long  (referral.Slip)+", "
+				+"IsDoctor      =  "+POut.Bool  (referral.IsDoctor)+" "
 				+"WHERE ReferralNum = "+POut.Long(referral.ReferralNum);
 			Db.NonQ(command);
 		}
@@ -257,6 +260,10 @@ namespace OpenDentBusiness.Crud{
 			if(referral.Slip != oldReferral.Slip) {
 				if(command!=""){ command+=",";}
 				command+="Slip = "+POut.Long(referral.Slip)+"";
+			}
+			if(referral.IsDoctor != oldReferral.IsDoctor) {
+				if(command!=""){ command+=",";}
+				command+="IsDoctor = "+POut.Bool(referral.IsDoctor)+"";
 			}
 			if(command==""){
 				return;

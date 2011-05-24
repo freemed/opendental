@@ -4375,11 +4375,12 @@ namespace OpenDental{
 			FormReferralSelect FormR=new FormReferralSelect();
 			FormR.IsSelectionMode=true;
 			FormR.ShowDialog();
-			if(FormR.DialogResult==DialogResult.OK) {
-				ClaimCur.ReferringProv=FormR.SelectedReferral.ReferralNum;
-				textRefProv.Text=Referrals.GetNameLF(FormR.SelectedReferral.ReferralNum);
-				butReferralEdit.Enabled=true;
+			if(FormR.DialogResult!=DialogResult.OK) {
+				return;
 			}
+			ClaimCur.ReferringProv=FormR.SelectedReferral.ReferralNum;
+			textRefProv.Text=Referrals.GetNameLF(FormR.SelectedReferral.ReferralNum);
+			butReferralEdit.Enabled=true;
 		}
 
 		private void butReferralEdit_Click(object sender,EventArgs e) {

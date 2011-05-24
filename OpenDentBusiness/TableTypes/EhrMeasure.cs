@@ -84,6 +84,8 @@ namespace OpenDentBusiness {
 		public string Details;
 		///<summary></summary>
 		public string Action;
+		///<summary></summary>
+		public string Action2;
 	}
 
 	public enum MuMet {

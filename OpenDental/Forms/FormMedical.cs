@@ -350,7 +350,7 @@ namespace OpenDental{
 			this.butMedicationReconcile.Name = "butMedicationReconcile";
 			this.butMedicationReconcile.Size = new System.Drawing.Size(154,23);
 			this.butMedicationReconcile.TabIndex = 66;
-			this.butMedicationReconcile.Text = "Reconcile Medication";
+			this.butMedicationReconcile.Text = "Reconcile Medications";
 			this.butMedicationReconcile.Click += new System.EventHandler(this.butMedicationReconcile_Click);
 			// 
 			// FormMedical

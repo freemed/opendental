@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Smoking:
 					return "More than 50% of all unique patients 13 years old or older seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) have smoking status recorded as structured data.";
 				case EhrMeasureType.Lab:
-					return "More than 50% of all unique patients 65 years old or older admitted to the eligible hospital have an indication of an advance directive status recorded.";
+					return "More than 40% of all clinical lab tests results ordered by the EP or by an authorized provider of the eligible hospital or CAH for patients admitted to its inpatient or emergency department (POS 21 or 23) during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
 				case EhrMeasureType.ElectronicCopy:
 					return "More than 40% of all clinical lab tests results ordered by the EP or by an authorized provider of the eligible hospital or CAH for patients admitted to its inpatient or emergency department (POS 21 or 23) during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
 				case EhrMeasureType.ClinicalSummaries:
@@ -147,7 +147,7 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Smoking:
 					return 50;
 				case EhrMeasureType.Lab:
-					return 50;
+					return 40;
 				case EhrMeasureType.ElectronicCopy:
 					return 40;
 				case EhrMeasureType.ClinicalSummaries:
@@ -555,9 +555,9 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Reminders:
 					return "All unique patients 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
 				case EhrMeasureType.MedReconcile:
-					return "Number of transitions of care from another provider to here during the reporting period.";
+					return "Number of incoming transitions of care from another provider during the reporting period.";
 				case EhrMeasureType.Summary:
-					return "Number of transitions of care and referrals during the reporting period for which the provider was the transferring or referring provider.";
+					return "Number of outgoing transitions of care and referrals during the reporting period.";
 			}
 			throw new ApplicationException("Type not found: "+mtype.ToString());
 		}
@@ -573,6 +573,7 @@ namespace OpenDentBusiness{
 			string explanation;
 			List<MedicationPat> medList=MedicationPats.GetList(pat.PatNum);
 			List<EhrMeasureEvent> listMeasureEvents=EhrMeasureEvents.Refresh(pat.PatNum);
+			List<RefAttach> listRefAttach=RefAttaches.Refresh(pat.PatNum);
 			for(int i=0;i<Enum.GetValues(typeof(EhrMeasureType)).Length;i++) {
 				mu=new EhrMu();
 				mu.Met=MuMet.False;
@@ -801,10 +802,34 @@ namespace OpenDentBusiness{
 						mu.Action="Send reminders";
 						break;
 					case EhrMeasureType.MedReconcile:
+						int countFromRef=0;
+						int countFromRefPeriod=0;
+						for(int c=0;c<listRefAttach.Count;c++) {
+//todo:
+							//if(listRefAttach[c].IsFrom && Referrals.GetReferral(listRefAttach[c].ReferralNum).Specialty>-1) {//it would be better if we had a bool for IsProfessional or something
+							//	countFromRef++;
+							//	if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
+							//		countFromRefPeriod++;
+							//	}
+							//}
+						}
+						if(countFromRef==0) {
+							mu.Met=MuMet.NA;
+							mu.Details="Referral 'from' not entered.";
+						}
+						else if(countFromRefPeriod==0) {
+							mu.Met=MuMet.NA;
+							mu.Details="Referral 'from' not entered within the last year.";
+						}
+						else if(countFromRefPeriod > 0) {
+
+						}
 						mu.Action="Reconcile medications";
+						mu.Action2="Enter Referrals";
 						break;
 					case EhrMeasureType.Summary:
 						mu.Action="Create summary of care";
+						mu.Action2="Enter Referrals";
 						break;
 				}
 				list.Add(mu);
@@ -821,6 +846,8 @@ namespace OpenDentBusiness{
 		RxEdit,
 		Medical,
 		PatientEdit,
-		Online
+		Online,
+		MedReconcile,
+		Referrals
 	}
 }

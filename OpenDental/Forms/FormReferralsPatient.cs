@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -10,7 +11,7 @@ namespace OpenDental{
 	/// <summary></summary>
 	public class FormReferralsPatient : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butClose;
-		private OpenDental.UI.Button butAdd;
+		private OpenDental.UI.Button butAddFrom;
 		private OpenDental.UI.ODGrid gridMain;
 		/// <summary>
 		/// Required designer variable.
@@ -18,7 +19,8 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		public long PatNum;
 		private OpenDental.UI.Button butSlip;
-		private RefAttach[] RefAttachList;
+		private UI.Button butAddTo;
+		private List<RefAttach> RefAttachList;
 
 		///<summary></summary>
 		public FormReferralsPatient()
@@ -54,39 +56,39 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReferralsPatient));
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAdd = new OpenDental.UI.Button();
+			this.butAddFrom = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butSlip = new OpenDental.UI.Button();
+			this.butAddTo = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,12);
+			this.gridMain.Location = new System.Drawing.Point(12,42);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(655,229);
+			this.gridMain.Size = new System.Drawing.Size(655,261);
 			this.gridMain.TabIndex = 74;
 			this.gridMain.Title = "Referrals Attached";
 			this.gridMain.TranslationName = "TableRefList";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// butAdd
+			// butAddFrom
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(12,266);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,24);
-			this.butAdd.TabIndex = 72;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			this.butAddFrom.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddFrom.Autosize = true;
+			this.butAddFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddFrom.CornerRadius = 4F;
+			this.butAddFrom.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddFrom.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddFrom.Location = new System.Drawing.Point(12,10);
+			this.butAddFrom.Name = "butAddFrom";
+			this.butAddFrom.Size = new System.Drawing.Size(109,24);
+			this.butAddFrom.TabIndex = 72;
+			this.butAddFrom.Text = "Referred From";
+			this.butAddFrom.Click += new System.EventHandler(this.butAddFrom_Click);
 			// 
 			// butClose
 			// 
@@ -96,7 +98,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(592,266);
+			this.butClose.Location = new System.Drawing.Point(592,317);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
@@ -112,20 +114,37 @@ namespace OpenDental{
 			this.butSlip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSlip.CornerRadius = 4F;
 			this.butSlip.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSlip.Location = new System.Drawing.Point(214,266);
+			this.butSlip.Location = new System.Drawing.Point(12,317);
 			this.butSlip.Name = "butSlip";
 			this.butSlip.Size = new System.Drawing.Size(86,24);
 			this.butSlip.TabIndex = 90;
 			this.butSlip.Text = "Referral Slip";
 			this.butSlip.Click += new System.EventHandler(this.butSlip_Click);
 			// 
+			// butAddTo
+			// 
+			this.butAddTo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddTo.Autosize = true;
+			this.butAddTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddTo.CornerRadius = 4F;
+			this.butAddTo.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddTo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddTo.Location = new System.Drawing.Point(127,10);
+			this.butAddTo.Name = "butAddTo";
+			this.butAddTo.Size = new System.Drawing.Size(94,24);
+			this.butAddTo.TabIndex = 91;
+			this.butAddTo.Text = "Refer To";
+			this.butAddTo.Click += new System.EventHandler(this.butAddTo_Click);
+			// 
 			// FormReferralsPatient
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(695,309);
+			this.ClientSize = new System.Drawing.Size(695,352);
+			this.Controls.Add(this.butAddTo);
 			this.Controls.Add(this.butSlip);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butAdd);
+			this.Controls.Add(this.butAddFrom);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -142,7 +161,7 @@ namespace OpenDental{
 
 		private void FormReferralsPatient_Load(object sender,EventArgs e) {
 			FillGrid();
-			if(RefAttachList.Length>0){
+			if(RefAttachList.Count>0){
 				gridMain.SetSelected(0,true);
 			}
 		}
@@ -164,7 +183,7 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			//Referral referral;
-			for(int i=0;i<RefAttachList.Length;i++){
+			for(int i=0;i<RefAttachList.Count;i++){
 				row=new ODGridRow();
 				if(RefAttachList[i].IsFrom){
 					row.Cells.Add(Lan.g(this,"From"));
@@ -194,14 +213,14 @@ namespace OpenDental{
 			FormRAE2.ShowDialog();
 			FillGrid();
 			//reselect
-			for(int i=0;i<RefAttachList.Length;i++){
+			for(int i=0;i<RefAttachList.Count;i++){
 				if(RefAttachList[i].ReferralNum==refattach.ReferralNum){
 					gridMain.SetSelected(i,true);
 				}
 			}
 		}
 
-		private void butAdd_Click(object sender,System.EventArgs e) {
+		private void butAddFrom_Click(object sender,System.EventArgs e) {
 			FormReferralSelect FormRS=new FormReferralSelect();
 			FormRS.IsSelectionMode=true;
 			FormRS.ShowDialog();
@@ -215,22 +234,54 @@ namespace OpenDental{
 			refattach.IsFrom=true;
 			refattach.RefDate=DateTime.Today;
 			int order=0;
-			for(int i=0;i<RefAttachList.Length;i++) {
+			for(int i=0;i<RefAttachList.Count;i++) {
 				if(RefAttachList[i].ItemOrder > order) {
 					order=RefAttachList[i].ItemOrder;
 				}
 			}
 			refattach.ItemOrder=order+1;
+			RefAttaches.Insert(refattach);
+			/*
 			FormRA.RefAttachCur=refattach;
 			FormRA.IsNew=true;
 			FormRA.ShowDialog();
 			if(FormRA.DialogResult!=DialogResult.OK) {
 				return;
-			}
+			}*/
 			FillGrid();
 			//select
-			for(int i=0;i<RefAttachList.Length;i++){
+			for(int i=0;i<RefAttachList.Count;i++){
 				if(RefAttachList[i].ReferralNum==refattach.ReferralNum){
+					gridMain.SetSelected(i,true);
+				}
+			}
+		}
+
+		private void butAddTo_Click(object sender,EventArgs e) {
+			FormReferralSelect FormRS=new FormReferralSelect();
+			FormRS.IsSelectionMode=true;
+			FormRS.ShowDialog();
+			if(FormRS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			FormRefAttachEdit FormRA=new FormRefAttachEdit();
+			RefAttach refattach=new RefAttach();
+			refattach.ReferralNum=FormRS.SelectedReferral.ReferralNum;
+			refattach.PatNum=PatNum;
+			refattach.IsFrom=false;
+			refattach.RefDate=DateTime.Today;
+			int order=0;
+			for(int i=0;i<RefAttachList.Count;i++) {
+				if(RefAttachList[i].ItemOrder > order) {
+					order=RefAttachList[i].ItemOrder;
+				}
+			}
+			refattach.ItemOrder=order+1;
+			RefAttaches.Insert(refattach);
+			FillGrid();
+			//select
+			for(int i=0;i<RefAttachList.Count;i++) {
+				if(RefAttachList[i].ReferralNum==refattach.ReferralNum) {
 					gridMain.SetSelected(i,true);
 				}
 			}
@@ -263,6 +314,8 @@ namespace OpenDental{
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 

@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public string SSN;
 		///<summary>Specificies if SSN is real SSN.</summary>
 		public bool UsingTIN;
-		///<summary>Enum:DentalSpecialty</summary>
+		///<summary>Enum:DentalSpecialty -1 is allowed to indicate no specialty.  -1 is what all non-professionals will be set to.</summary>
 		public DentalSpecialty Specialty;
 		///<summary>State</summary>
 		public string ST;
@@ -51,6 +51,8 @@ namespace OpenDentBusiness{
 		public string NationalProvID;
 		///<summary>FK to sheetdef.SheetDefNum.  Referral slips can be set for individual referral sources.  If zero, then the default internal referral slip will be used instead of a custom referral slip.</summary>
 		public long Slip;
+		///<summary>True if another dentist or physician.  Cannot be a patient.</summary>
+		public bool IsDoctor;
 
 		///<summary>Returns a copy of this Referral.</summary>
 		public Referral Copy(){

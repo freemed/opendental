@@ -3634,6 +3634,18 @@ namespace OpenDental{
 					formO.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
 				}
+				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedReconcile) {
+					FormMedicationReconcile FormMR=new FormMedicationReconcile();
+					FormMR.PatCur=PatCur;
+					FormMR.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Referrals) {
+					FormReferralsPatient formRP=new FormReferralsPatient();
+					formRP.PatNum=PatCur.PatNum;
+					formRP.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
 				OnEHR_Click();//recursive.  The only way out of the loop is EhrFormResult.None.
 #else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
@@ -3667,6 +3679,18 @@ namespace OpenDental{
 					FormOnlineAccess formO=new FormOnlineAccess();
 					formO.PatCur=PatCur;
 					formO.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedReconcile) {
+					FormMedicationReconcile FormMR=new FormMedicationReconcile();
+					FormMR.PatCur=PatCur;
+					FormMR.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Referrals) {
+					FormReferralsPatient formRP=new FormReferralsPatient();
+					formRP.PatNum=PatCur.PatNum;
+					formRP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
 				}
 				OnEHR_Click();
@@ -3794,9 +3818,9 @@ namespace OpenDental{
 						row.Cells.Add(DefC.GetName(DefCat.BillingTypes,PatCur.BillingType));
 						break;
 					case "Referred From":
-						RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
+						List<RefAttach> RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
 						string referral="";
-						for(int i=0;i<RefAttachList.Length;i++) {
+						for(int i=0;i<RefAttachList.Count;i++) {
 							if(RefAttachList[i].IsFrom) {
 								referral=Referrals.GetNameLF(RefAttachList[i].ReferralNum);
 								break;

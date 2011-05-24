@@ -2057,10 +2057,10 @@ namespace OpenDental{
 			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
 			menuItem.Tag=null;
 			menuEmail.MenuItems.Add(menuItem);
-			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
+			List<RefAttach> refAttaches=RefAttaches.Refresh(CurPatNum);
 			Referral refer;
 			string str;
-			for(int i=0;i<refAttaches.Length;i++) {
+			for(int i=0;i<refAttaches.Count;i++) {
 				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
 				if(refAttaches[i].IsFrom) {
 					str=Lan.g(this,"From ");
@@ -2161,10 +2161,10 @@ namespace OpenDental{
 			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
 			menuItem.Tag=null;
 			menuLetter.MenuItems.Add(menuItem);
-			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
+			List<RefAttach> refAttaches=RefAttaches.Refresh(CurPatNum);
 			Referral refer;
 			string str;
-			for(int i=0;i<refAttaches.Length;i++) {
+			for(int i=0;i<refAttaches.Count;i++) {
 				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
 				if(refAttaches[i].IsFrom) {
 					str=Lan.g(this,"From ");
@@ -2303,10 +2303,10 @@ namespace OpenDental{
 			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
 			menuItem.Tag=null;
 			menuLabel.MenuItems.Add(menuItem);
-			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
+			List<RefAttach> refAttaches=RefAttaches.Refresh(CurPatNum);
 			Referral refer;
 			string str;
-			for(int i=0;i<refAttaches.Length;i++){
+			for(int i=0;i<refAttaches.Count;i++){
 				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
 				if(refAttaches[i].IsFrom){
 					str=Lan.g(this,"From ");

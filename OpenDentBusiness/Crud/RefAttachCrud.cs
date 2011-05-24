@@ -46,14 +46,15 @@ namespace OpenDentBusiness.Crud{
 			RefAttach refAttach;
 			for(int i=0;i<table.Rows.Count;i++) {
 				refAttach=new RefAttach();
-				refAttach.RefAttachNum= PIn.Long  (table.Rows[i]["RefAttachNum"].ToString());
-				refAttach.ReferralNum = PIn.Long  (table.Rows[i]["ReferralNum"].ToString());
-				refAttach.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				refAttach.ItemOrder   = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
-				refAttach.RefDate     = PIn.Date  (table.Rows[i]["RefDate"].ToString());
-				refAttach.IsFrom      = PIn.Bool  (table.Rows[i]["IsFrom"].ToString());
-				refAttach.RefToStatus = (ReferralToStatus)PIn.Int(table.Rows[i]["RefToStatus"].ToString());
-				refAttach.Note        = PIn.String(table.Rows[i]["Note"].ToString());
+				refAttach.RefAttachNum      = PIn.Long  (table.Rows[i]["RefAttachNum"].ToString());
+				refAttach.ReferralNum       = PIn.Long  (table.Rows[i]["ReferralNum"].ToString());
+				refAttach.PatNum            = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				refAttach.ItemOrder         = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
+				refAttach.RefDate           = PIn.Date  (table.Rows[i]["RefDate"].ToString());
+				refAttach.IsFrom            = PIn.Bool  (table.Rows[i]["IsFrom"].ToString());
+				refAttach.RefToStatus       = (ReferralToStatus)PIn.Int(table.Rows[i]["RefToStatus"].ToString());
+				refAttach.Note              = PIn.String(table.Rows[i]["Note"].ToString());
+				refAttach.IsTransitionOfCare= PIn.Bool  (table.Rows[i]["IsTransitionOfCare"].ToString());
 				retVal.Add(refAttach);
 			}
 			return retVal;
@@ -94,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RefAttachNum,";
 			}
-			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note) VALUES(";
+			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note,IsTransitionOfCare) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(refAttach.RefAttachNum)+",";
 			}
@@ -105,7 +106,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (refAttach.RefDate)+","
 				+    POut.Bool  (refAttach.IsFrom)+","
 				+    POut.Int   ((int)refAttach.RefToStatus)+","
-				+"'"+POut.String(refAttach.Note)+"')";
+				+"'"+POut.String(refAttach.Note)+"',"
+				+    POut.Bool  (refAttach.IsTransitionOfCare)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,13 +120,14 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one RefAttach in the database.</summary>
 		internal static void Update(RefAttach refAttach){
 			string command="UPDATE refattach SET "
-				+"ReferralNum =  "+POut.Long  (refAttach.ReferralNum)+", "
-				+"PatNum      =  "+POut.Long  (refAttach.PatNum)+", "
-				+"ItemOrder   =  "+POut.Int   (refAttach.ItemOrder)+", "
-				+"RefDate     =  "+POut.Date  (refAttach.RefDate)+", "
-				+"IsFrom      =  "+POut.Bool  (refAttach.IsFrom)+", "
-				+"RefToStatus =  "+POut.Int   ((int)refAttach.RefToStatus)+", "
-				+"Note        = '"+POut.String(refAttach.Note)+"' "
+				+"ReferralNum       =  "+POut.Long  (refAttach.ReferralNum)+", "
+				+"PatNum            =  "+POut.Long  (refAttach.PatNum)+", "
+				+"ItemOrder         =  "+POut.Int   (refAttach.ItemOrder)+", "
+				+"RefDate           =  "+POut.Date  (refAttach.RefDate)+", "
+				+"IsFrom            =  "+POut.Bool  (refAttach.IsFrom)+", "
+				+"RefToStatus       =  "+POut.Int   ((int)refAttach.RefToStatus)+", "
+				+"Note              = '"+POut.String(refAttach.Note)+"', "
+				+"IsTransitionOfCare=  "+POut.Bool  (refAttach.IsTransitionOfCare)+" "
 				+"WHERE RefAttachNum = "+POut.Long(refAttach.RefAttachNum);
 			Db.NonQ(command);
 		}
@@ -159,6 +162,10 @@ namespace OpenDentBusiness.Crud{
 			if(refAttach.Note != oldRefAttach.Note) {
 				if(command!=""){ command+=",";}
 				command+="Note = '"+POut.String(refAttach.Note)+"'";
+			}
+			if(refAttach.IsTransitionOfCare != oldRefAttach.IsTransitionOfCare) {
+				if(command!=""){ command+=",";}
+				command+="IsTransitionOfCare = "+POut.Bool(refAttach.IsTransitionOfCare)+"";
 			}
 			if(command==""){
 				return;
