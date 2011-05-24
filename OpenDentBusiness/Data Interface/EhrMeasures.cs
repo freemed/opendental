@@ -318,7 +318,34 @@ namespace OpenDentBusiness{
 					Db.NonQ(command);
 					break;
 				case EhrMeasureType.SummaryOfCare:
-					command="";
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrmeasure (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						RefCount int NOT NULL,
+						CcdCount int NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
+						+"FROM refattach "
+						+"LEFT JOIN patient ON patient.PatNum=refattach.PatNum "
+						+"WHERE RefDate >= "+POut.Date(dateStart)+" "
+						+"AND RefDate <= "+POut.Date(dateEnd)+" "
+						+"AND IsFrom=0 AND IsTransitionOfCare=1 "
+						+"GROUP BY refattach.PatNum";
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure "
+						+"SET CcdCount = (SELECT COUNT(*) FROM ehrmeasureevent "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrmeasure";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
 					break;
 				default:
 					throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -483,8 +510,8 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.MedReconcile:
-						int refCount=PIn.Int(tableRaw.Rows[i]["refCount"].ToString());//this will always be greater than zero
-						int reconcileCount=PIn.Int(tableRaw.Rows[i]["reconcileCount"].ToString());
+						int refCount=PIn.Int(tableRaw.Rows[i]["RefCount"].ToString());//this will always be greater than zero
+						int reconcileCount=PIn.Int(tableRaw.Rows[i]["ReconcileCount"].ToString());
 						if(reconcileCount<refCount) {
 							explanation="Transitions of Care:"+refCount.ToString()+", Reconciles:"+reconcileCount.ToString();
 						}
@@ -494,7 +521,15 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.SummaryOfCare:
-						
+						int refCount2=PIn.Int(tableRaw.Rows[i]["RefCount"].ToString());//this will always be greater than zero
+						int ccdCount=PIn.Int(tableRaw.Rows[i]["CcdCount"].ToString());
+						if(ccdCount<refCount2) {
+							explanation="Transitions of Care:"+refCount2.ToString()+", Summaries provided:"+ccdCount.ToString();
+						}
+						else {
+							explanation="Summaries provided for each transition of care.";
+							row["met"]="X";
+						}
 						break;
 					default:
 						throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -802,10 +837,10 @@ namespace OpenDentBusiness{
 						mu.Action="";
 						break;
 					case EhrMeasureType.ElectronicCopy:
-						mu.Action="Create summary of care";
+						mu.Action="Provide elect copy to Pt";
 						break;
 					case EhrMeasureType.ClinicalSummaries:
-						mu.Action="Create clinical summary";
+						mu.Action="Send clinical summary to Pt";
 						break;
 					case EhrMeasureType.Reminders:
 						if(pat.PatStatus!=PatientStatus.Patient) {
@@ -875,7 +910,32 @@ namespace OpenDentBusiness{
 						mu.Action2="Enter Referrals";
 						break;
 					case EhrMeasureType.SummaryOfCare:
-						mu.Action="Create summary of care";
+						int countToRefPeriod=0;
+						for(int c=0;c<listRefAttach.Count;c++) {
+							if(!listRefAttach[c].IsFrom && listRefAttach[c].IsTransitionOfCare) {
+								if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
+									countToRefPeriod++;
+								}
+							}
+						}
+						if(countToRefPeriod==0) {
+							mu.Met=MuMet.NA;
+							mu.Details="No outgoing transitions of care within the last year.";
+						}
+						else{// > 0
+							List<EhrMeasureEvent> listCcds=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.SummaryOfCareProvidedToDr);
+							int countCcds=0;//during reporting period.
+							for(int r=0;r<listCcds.Count;r++) {
+								if(listCcds[r].DateTEvent > DateTime.Now.AddYears(-1)) {//within the same period as the count for referrals.
+									countCcds++;
+								}
+							}
+							mu.Details="Referrals:"+countToRefPeriod.ToString()+", Summaries:"+countCcds.ToString();
+							if(countCcds>=countToRefPeriod) {
+								mu.Met=MuMet.True;
+							}
+						}
+						mu.Action="Send summary of care to Dr";
 						mu.Action2="Enter Referrals";
 						break;
 				}
