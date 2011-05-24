@@ -1398,7 +1398,8 @@ namespace OpenDentBusiness{
 					+"AND "+DbHelper.DateColumn("ProcDate")+"="+POut.Date(aptDate)+")";//same date
 			}
 			command+=") "
-				+"AND ProcStatus<>6";//Not deleted.
+				+"AND ProcStatus<>6 "//Not deleted.
+				+"AND IsCanadianLab=0";
 			DataTable rawProc=Db.GetTable(command);
 			for(int i=0;i<rawProc.Rows.Count;i++) {
 				row=table.NewRow();

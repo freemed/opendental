@@ -820,7 +820,7 @@ namespace OpenDentBusiness {
 			return extracted;
 		}
 
-		///<summary>Takes the list of all procedures for the patient, and finds any that are attaches as lab procs to that proc.</summary>
+		///<summary>Takes the list of all procedures for the patient, and finds any that are attached as lab procs to that proc.</summary>
 		public static List<Procedure> GetCanadianLabFees(long procNum,List<Procedure> procList){
 			//No need to check RemotingRole; no call to db.
 			List<Procedure> retVal=new List<Procedure>();
@@ -1345,6 +1345,16 @@ namespace OpenDentBusiness {
 			return PIn.Long(Db.GetScalar(command));
 		}
 
+		public static bool IsUsingCode(long codeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),codeNum);
+			}
+			string command="SELECT COUNT(*) FROM procedurelog WHERE CodeNum="+POut.Long(codeNum);
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
+		}
 
 	}
 

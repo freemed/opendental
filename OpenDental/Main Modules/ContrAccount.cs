@@ -2689,8 +2689,13 @@ namespace OpenDental {
 					if((double)table.Rows[i]["chargesDouble"]==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
+					Procedure proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[i]["ProcNum"].ToString()));
+					ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(proc.CodeNum);
+					if(procCode.IsCanadianLab) {
+						continue;
+					}
 					sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
-					if(Procedures.NeedsSent(PIn.Long(table.Rows[i]["ProcNum"].ToString()),sub.InsSubNum,ClaimProcList)){
+					if(Procedures.NeedsSent(proc.ProcNum,sub.InsSubNum,ClaimProcList)){
 						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && countSelected==7) {//Canadian. en-CA or fr-CA
 							countIsOverMaxCanadian=true;
 							continue;//only send 7.  
@@ -2714,9 +2719,23 @@ namespace OpenDental {
 				MsgBox.Show(this,"You can only select procedures.");
 				return;
 			}
+			//At this point, all selected items are procedures.
+			int labProcsUnselected=0;
+			List<int> selectedIndicies=new List<int>(gridAccount.SelectedIndices);
+			for(int i=0;i<selectedIndicies.Count;i++) {
+				Procedure proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[selectedIndicies[i]]["ProcNum"].ToString()));
+				ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(proc.CodeNum);
+				if(procCode.IsCanadianLab) {
+					gridAccount.SetSelected(selectedIndicies[i],false);
+					labProcsUnselected++;
+				}
+			}
+			if(labProcsUnselected>0) {
+				MessageBox.Show(Lan.g(this,"Number of lab fee procedures automatically unselected")+": "+labProcsUnselected.ToString());
+			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && gridAccount.SelectedIndices.Length>7) {//Canadian. en-CA or fr-CA
 				countIsOverMaxCanadian=true;
-				List<int> selectedIndicies=new List<int>(gridAccount.SelectedIndices);
+				selectedIndicies=new List<int>(gridAccount.SelectedIndices);
 				selectedIndicies.Sort();
 				for(int i=0;i<selectedIndicies.Count;i++) { //Unselect all but the first 7 procedures with the smallest index numbers.
 					gridAccount.SetSelected(selectedIndicies[i],(i<7));

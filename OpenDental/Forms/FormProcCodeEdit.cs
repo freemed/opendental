@@ -702,6 +702,9 @@ namespace OpenDental{
 			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Not Canadian. en-CA or fr-CA
 				checkIsCanadianLab.Visible=false;
 			}
+			else {
+				checkIsCanadianLab.Enabled=IsNew || !Procedures.IsUsingCode(ProcCode.CodeNum);
+			}
 			checkIsCanadianLab.Checked=ProcCode.IsCanadianLab;
 			textNote.Text=ProcCode.DefaultNote;
 			listTreatArea.Items.Clear();
