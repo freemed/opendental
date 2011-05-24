@@ -714,13 +714,15 @@ namespace UnitTests {
 			procsForClaim=new List<Procedure>();
 			procsForClaim.Add(proc2);
 			Claim claim2=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
-			//
+			//Enter payment
+			//claimProcs
+			//claimProcs[1].i
 			//string retVal="";
 			//if(claim.WriteOff!=500) {
 			//  throw new Exception("Should be 500. \r\n");
 			//}
 			//retVal+="8: Passed.  Completed writeoffs same as estimates for dual PPO ins when Allowed2 greater than Allowed1.\r\n";
-			//return retVal;
+			return "";
 		}
 	}
 }
