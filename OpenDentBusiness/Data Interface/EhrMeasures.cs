@@ -875,7 +875,7 @@ namespace OpenDentBusiness{
 						mu.Action2="Enter Referrals";
 						break;
 					case EhrMeasureType.SummaryOfCare:
-						//mu.Action="Create summary of care";//need a window for this, I think
+						mu.Action="Create summary of care";
 						mu.Action2="Enter Referrals";
 						break;
 				}
