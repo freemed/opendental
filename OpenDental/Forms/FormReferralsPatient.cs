@@ -227,12 +227,16 @@ namespace OpenDental{
 			if(FormRS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			FormRefAttachEdit FormRA=new FormRefAttachEdit();
 			RefAttach refattach=new RefAttach();
 			refattach.ReferralNum=FormRS.SelectedReferral.ReferralNum;
 			refattach.PatNum=PatNum;
 			refattach.IsFrom=true;
 			refattach.RefDate=DateTime.Today;
+			if(FormRS.SelectedReferral.IsDoctor) {//whether using ehr or not
+				//we're not going to ask.  That's stupid.
+				//if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Is this an incoming transition of care from another provider?")){
+				refattach.IsTransitionOfCare=true;
+			}
 			int order=0;
 			for(int i=0;i<RefAttachList.Count;i++) {
 				if(RefAttachList[i].ItemOrder > order) {
@@ -241,15 +245,7 @@ namespace OpenDental{
 			}
 			refattach.ItemOrder=order+1;
 			RefAttaches.Insert(refattach);
-			/*
-			FormRA.RefAttachCur=refattach;
-			FormRA.IsNew=true;
-			FormRA.ShowDialog();
-			if(FormRA.DialogResult!=DialogResult.OK) {
-				return;
-			}*/
 			FillGrid();
-			//select
 			for(int i=0;i<RefAttachList.Count;i++){
 				if(RefAttachList[i].ReferralNum==refattach.ReferralNum){
 					gridMain.SetSelected(i,true);
@@ -264,12 +260,14 @@ namespace OpenDental{
 			if(FormRS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			FormRefAttachEdit FormRA=new FormRefAttachEdit();
 			RefAttach refattach=new RefAttach();
 			refattach.ReferralNum=FormRS.SelectedReferral.ReferralNum;
 			refattach.PatNum=PatNum;
 			refattach.IsFrom=false;
 			refattach.RefDate=DateTime.Today;
+			if(FormRS.SelectedReferral.IsDoctor) {
+				refattach.IsTransitionOfCare=true;
+			}
 			int order=0;
 			for(int i=0;i<RefAttachList.Count;i++) {
 				if(RefAttachList[i].ItemOrder > order) {
@@ -279,7 +277,6 @@ namespace OpenDental{
 			refattach.ItemOrder=order+1;
 			RefAttaches.Insert(refattach);
 			FillGrid();
-			//select
 			for(int i=0;i<RefAttachList.Count;i++) {
 				if(RefAttachList[i].ReferralNum==refattach.ReferralNum) {
 					gridMain.SetSelected(i,true);

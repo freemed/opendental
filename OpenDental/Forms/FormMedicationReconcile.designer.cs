@@ -26,14 +26,18 @@ namespace OpenDental{
 			this.textDocDateDesc = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.pictBox = new System.Windows.Forms.PictureBox();
 			this.gridMeds = new OpenDental.UI.ODGrid();
 			this.butPickRxListImage = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.tableLayoutPanel1.SuspendLayout();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.label2 = new System.Windows.Forms.Label();
+			this.odGrid1 = new OpenDental.UI.ODGrid();
 			((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
+			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
+			this.splitContainer1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textDocDateDesc
@@ -56,7 +60,7 @@ namespace OpenDental{
 			// checkDiscontinued
 			// 
 			this.checkDiscontinued.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.checkDiscontinued.Location = new System.Drawing.Point(608,5);
+			this.checkDiscontinued.Location = new System.Drawing.Point(609,5);
 			this.checkDiscontinued.Name = "checkDiscontinued";
 			this.checkDiscontinued.Size = new System.Drawing.Size(212,23);
 			this.checkDiscontinued.TabIndex = 70;
@@ -66,51 +70,29 @@ namespace OpenDental{
 			this.checkDiscontinued.KeyUp += new System.Windows.Forms.KeyEventHandler(this.checkDiscontinued_KeyUp);
 			this.checkDiscontinued.MouseUp += new System.Windows.Forms.MouseEventHandler(this.checkDiscontinued_MouseUp);
 			// 
-			// tableLayoutPanel1
-			// 
-			this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent,50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent,50F));
-			this.tableLayoutPanel1.Controls.Add(this.pictBox,0,0);
-			this.tableLayoutPanel1.Controls.Add(this.gridMeds,1,0);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(7,30);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 1;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent,50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(914,569);
-			this.tableLayoutPanel1.TabIndex = 69;
-			// 
 			// pictBox
 			// 
-			this.pictBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.pictBox.BackColor = System.Drawing.SystemColors.Window;
 			this.pictBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.pictBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.pictBox.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.pictBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pictBox.InitialImage = null;
-			this.pictBox.Location = new System.Drawing.Point(3,3);
+			this.pictBox.Location = new System.Drawing.Point(0,0);
 			this.pictBox.Name = "pictBox";
-			this.pictBox.Size = new System.Drawing.Size(451,563);
+			this.pictBox.Size = new System.Drawing.Size(460,600);
 			this.pictBox.TabIndex = 66;
 			this.pictBox.TabStop = false;
 			// 
 			// gridMeds
 			// 
-			this.gridMeds.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.gridMeds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMeds.AutoSize = true;
-			this.gridMeds.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.gridMeds.HScrollVisible = false;
-			this.gridMeds.Location = new System.Drawing.Point(460,3);
+			this.gridMeds.Location = new System.Drawing.Point(0,0);
 			this.gridMeds.Name = "gridMeds";
 			this.gridMeds.ScrollValue = 0;
-			this.gridMeds.Size = new System.Drawing.Size(451,563);
+			this.gridMeds.Size = new System.Drawing.Size(445,391);
 			this.gridMeds.TabIndex = 65;
 			this.gridMeds.Title = "Medications";
 			this.gridMeds.TranslationName = "TableMedications";
@@ -140,7 +122,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(467,4);
+			this.butAdd.Location = new System.Drawing.Point(468,4);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(123,23);
 			this.butAdd.TabIndex = 75;
@@ -155,32 +137,74 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(843,605);
+			this.butClose.Location = new System.Drawing.Point(838,640);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.Location = new System.Drawing.Point(4,34);
+			this.splitContainer1.Name = "splitContainer1";
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.pictBox);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.odGrid1);
+			this.splitContainer1.Panel2.Controls.Add(this.label2);
+			this.splitContainer1.Panel2.Controls.Add(this.gridMeds);
+			this.splitContainer1.Size = new System.Drawing.Size(909,600);
+			this.splitContainer1.SplitterDistance = 460;
+			this.splitContainer1.TabIndex = 77;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(68,394);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(309,27);
+			this.label2.TabIndex = 66;
+			this.label2.Text = "This is a historical record of medication reconciles for this patient.  Delete an" +
+    "y entries that are inaccurate.";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			// 
+			// odGrid1
+			// 
+			this.odGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.odGrid1.HScrollVisible = false;
+			this.odGrid1.Location = new System.Drawing.Point(0,425);
+			this.odGrid1.Name = "odGrid1";
+			this.odGrid1.ScrollValue = 0;
+			this.odGrid1.Size = new System.Drawing.Size(445,175);
+			this.odGrid1.TabIndex = 67;
+			this.odGrid1.Title = "Reconciles";
+			this.odGrid1.TranslationName = "gridReconcile";
+			// 
 			// FormMedicationReconcile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(923,641);
+			this.ClientSize = new System.Drawing.Size(918,676);
+			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.butPickRxListImage);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.textDocDateDesc);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkDiscontinued);
-			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormMedicationReconcile";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Reconcile Medications";
+			this.Text = "Medication Reconcile";
 			this.Load += new System.EventHandler(this.BasicTemplate_Load);
 			this.Resize += new System.EventHandler(this.FormMedicationReconcile_Resize);
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictBox)).EndInit();
+			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -192,10 +216,12 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textDocDateDesc;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckBox checkDiscontinued;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.PictureBox pictBox;
 		private UI.ODGrid gridMeds;
 		private UI.Button butAdd;
 		private UI.Button butPickRxListImage;
+		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.Label label2;
+		private UI.ODGrid odGrid1;
 	}
 }

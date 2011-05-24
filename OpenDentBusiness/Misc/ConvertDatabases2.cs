@@ -5151,7 +5151,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE referral MODIFY IsDoctor NOT NULL";
 					Db.NonQ(command);
 				}
-				command="UPDATE referral SET IsDoctor=1 WHERE PatNum != 0";
+				command="UPDATE referral SET IsDoctor=1 WHERE PatNum = 0";
 				Db.NonQ(command);
 				
 

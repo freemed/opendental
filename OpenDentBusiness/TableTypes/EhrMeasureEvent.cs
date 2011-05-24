@@ -39,9 +39,7 @@ namespace OpenDentBusiness {
 		///<summary>5</summary>
 		ReminderSent,
 		///<summary>6</summary>
-		TransitionCareIn,
-		///<summary>7, Includes referrals.</summary>
-		TransitionCareOut
+		MedicationReconcile
 	}
 
 }

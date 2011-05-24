@@ -805,13 +805,12 @@ namespace OpenDentBusiness{
 						int countFromRef=0;
 						int countFromRefPeriod=0;
 						for(int c=0;c<listRefAttach.Count;c++) {
-//todo:
-							//if(listRefAttach[c].IsFrom && Referrals.GetReferral(listRefAttach[c].ReferralNum).Specialty>-1) {//it would be better if we had a bool for IsProfessional or something
-							//	countFromRef++;
-							//	if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
-							//		countFromRefPeriod++;
-							//	}
-							//}
+							if(listRefAttach[c].IsFrom && listRefAttach[c].IsTransitionOfCare) {
+								countFromRef++;
+								if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
+									countFromRefPeriod++;
+								}
+							}
 						}
 						if(countFromRef==0) {
 							mu.Met=MuMet.NA;

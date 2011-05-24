@@ -36,6 +36,7 @@ namespace OpenDental{
 		private Label label8;
 		private ListBox listFromTo;
 		private CheckBox checkIsTransitionOfCare;
+		private Label label4;
 		///<summary>List of referral slips for this pat/ref combo.</summary>
 		private List<Sheet> SheetList; 
 
@@ -81,6 +82,7 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.listFromTo = new System.Windows.Forms.ListBox();
 			this.checkIsTransitionOfCare = new System.Windows.Forms.CheckBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -307,10 +309,20 @@ namespace OpenDental{
 			this.checkIsTransitionOfCare.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsTransitionOfCare.UseVisualStyleBackColor = true;
 			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(166,355);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(195,14);
+			this.label4.TabIndex = 94;
+			this.label4.Text = "(From or To another doctor)";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormRefAttachEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(689,427);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.checkIsTransitionOfCare);
 			this.Controls.Add(this.listFromTo);
 			this.Controls.Add(this.label8);
