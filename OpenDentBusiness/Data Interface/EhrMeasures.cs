@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 					return "Send reminders to patients per patient preference for preventive/ follow up care.";
 				case EhrMeasureType.MedReconcile:
 					return "The EP, eligible hospital or CAH who receives a patient from another setting of care or provider of care or believes an encounter is relevant should perform medication reconciliation.";
-				case EhrMeasureType.Summary:
+				case EhrMeasureType.SummaryOfCare:
 					return "The EP, eligible hospital or CAH who transitions their patient to another setting of care or provider of care or refers their patient to another provider of care should provide summary of care record for each transition of care or referral.";
 			}
 			throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 					return "More than 20% of all unique patients 65 years or older or 5 years old or younger were sent an appropriate reminder during the EHR reporting period.";
 				case EhrMeasureType.MedReconcile:
 					return "The EP, eligible hospital or CAH performs medication reconciliation for more than 50% of transitions of care in which the patient is transitioned into the care of the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23).";
-				case EhrMeasureType.Summary:
+				case EhrMeasureType.SummaryOfCare:
 					return "The EP, eligible hospital or CAH who transitions or refers their patient to another setting of care or provider of care provides a summary of care record for more than 50% of transitions of care and referrals.";
 			}
 			throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -156,7 +156,7 @@ namespace OpenDentBusiness{
 					return 20;
 				case EhrMeasureType.MedReconcile:
 					return 50;
-				case EhrMeasureType.Summary:
+				case EhrMeasureType.SummaryOfCare:
 					return 50;
 			}
 			throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -317,7 +317,7 @@ namespace OpenDentBusiness{
 					command="DROP TABLE IF EXISTS tempehrmeasure";
 					Db.NonQ(command);
 					break;
-				case EhrMeasureType.Summary:
+				case EhrMeasureType.SummaryOfCare:
 					command="";
 					break;
 				default:
@@ -493,7 +493,7 @@ namespace OpenDentBusiness{
 							row["met"]="X";
 						}
 						break;
-					case EhrMeasureType.Summary:
+					case EhrMeasureType.SummaryOfCare:
 						
 						break;
 					default:
@@ -554,7 +554,7 @@ namespace OpenDentBusiness{
 					return "Appropriate reminders sent during the reporting period.";
 				case EhrMeasureType.MedReconcile:
 					return "Medication reconciliation was performed for each transition of care.";
-				case EhrMeasureType.Summary:
+				case EhrMeasureType.SummaryOfCare:
 					return "Summary of care record was provided for each transition or referral.";
 			}
 			throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -594,7 +594,7 @@ namespace OpenDentBusiness{
 					return "All unique patients 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
 				case EhrMeasureType.MedReconcile:
 					return "Number of incoming transitions of care from another provider during the reporting period.";
-				case EhrMeasureType.Summary:
+				case EhrMeasureType.SummaryOfCare:
 					return "Number of outgoing transitions of care and referrals during the reporting period.";
 			}
 			throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -874,8 +874,8 @@ namespace OpenDentBusiness{
 						mu.Action="Reconcile medications";
 						mu.Action2="Enter Referrals";
 						break;
-					case EhrMeasureType.Summary:
-						mu.Action="Create summary of care";
+					case EhrMeasureType.SummaryOfCare:
+						//mu.Action="Create summary of care";//need a window for this, I think
 						mu.Action2="Enter Referrals";
 						break;
 				}

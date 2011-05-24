@@ -70,7 +70,7 @@ namespace OpenDentBusiness {
 		///<summary>14</summary>
 		MedReconcile,
 		///<summary>15- Summary of care record for transition or referral.</summary>
-		Summary
+		SummaryOfCare
 
 	}
 
