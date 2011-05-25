@@ -24,7 +24,7 @@
 				<ItemTemplate>
 					<li class="arrow style1" style="background-color:<%#GetProviderColor((Appointmentm)Container.DataItem)%>;">
 						<div>
-							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((OpenDentBusiness.Mobile.Appointmentm)Container.DataItem).AptNum %>"
+							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
 								<div style="float:left; width:25%;">
 								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("hh:mm tt")%>&nbsp;&nbsp;&nbsp;&nbsp;

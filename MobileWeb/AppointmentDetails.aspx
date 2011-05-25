@@ -23,12 +23,26 @@
 
 
 <ul>
-<li> <span class="style1"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
-<div><%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%></div>
-<div style="padding-top:4px"><%Response.Write(apt.ProcDescript);%></div>
-<div style="padding-top:4px"><%Response.Write(apt.Note);%></div>
-</span>
-</li>
+	<%--<li> <span class="style1"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
+	<div><%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%></div>
+	<div style="padding-top:4px"><%Response.Write(apt.ProcDescript);%></div>
+	<div style="padding-top:4px"><%Response.Write(apt.Note);%></div>
+	</span>
+	</li>--%>
+
+	<li class="style1">
+		<div>
+			<div style="float:left; width:35%;">
+				<%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
+					<div><%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%></div>
+			</div>
+			<div style="float:left;width:60%;padding-left:20px">
+					<div style="word-wrap:break-word;white-space:normal;"><%Response.Write(apt.ProcDescript);%></div>
+					<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%Response.Write(apt.Note);%></div>
+			</div>
+			<div style='clear:both'></div>								
+		</div>			
+	</li>
 </ul>
 </div>
 

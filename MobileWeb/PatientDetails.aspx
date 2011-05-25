@@ -23,9 +23,8 @@
 </li>
 </ul>
 
-		<ul class="contact">
+<ul class="contact">
 <li><span class="style1">Home: <%Response.Write(pat.HmPhone);%> <%Response.Write(DialLinkHmPhone);%>
-	
 </span></li>
 <li><span class="style1">Work: <%Response.Write(pat.WkPhone);%><%Response.Write(DialLinkWkPhone);%>
 </span></li>
@@ -36,16 +35,28 @@
 
 	<h2>Appointments</h2>
 
-		<ul>
+<ul>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
 					<li class="arrow style1">
-						<div class="elladjust">
+						<%--<div class="elladjust">
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
 								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;&nbsp;
 								<%#((Appointmentm)Container.DataItem).ProcDescript%>
 								</a>
+						</div>--%>
+						<div>
+							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((Appointmentm)Container.DataItem).AptNum %>"
+								href="#AppointmentDetails">
+								<div style="float:left; width:25%;">
+								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("MM/dd/yyyy")%>
+								</div>
+								<div style="float:left; width:65%;">
+								<div style="word-wrap:break-word;white-space:normal;"><%#((Appointmentm)Container.DataItem).ProcDescript%></div>
+								<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%#((Appointmentm)Container.DataItem).Note%></div>
+								</div>
+							</a>
 						</div>
 					</li>
 				</ItemTemplate>
