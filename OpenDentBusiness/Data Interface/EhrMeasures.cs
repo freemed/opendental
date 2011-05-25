@@ -272,7 +272,40 @@ namespace OpenDentBusiness{
 					command="";
 					break;
 				case EhrMeasureType.ClinicalSummaries:
-					command="";
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrmeasure (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						visitDate date NOT NULL,
+						deadlineDate date NOT NULL,
+						summaryProvided tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,VisitDate) SELECT patient.PatNum,LName,FName,ProcDate "
+						+"FROM procedurelog "
+						+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
+						+"WHERE ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND ProcDate <= "+POut.Date(dateEnd)+" "
+						+"GROUP BY procedurelog.PatNum,ProcDate";
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure "
+						+"SET DeadlineDate = ADDDATE(VisitDate, INTERVAL 3 DAY)";
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure "
+						+"SET DeadlineDate = ADDDate(DeadlineDate, INTERVAL 2 DAY) "//add 2 more days for weekend
+						+"WHERE DAYOFWEEK(VisitDate) IN(4,5,6)";//wed, thur, fri
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure,ehrmeasureevent SET summaryProvided = 1 "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ClinicalSummaryProvidedToPt)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) >= visitDate "
+						+"AND DATE(ehrmeasureevent.DateTEvent) <= deadlineDate";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrmeasure";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
 					break;
 				case EhrMeasureType.Reminders:
 					command="SELECT PatNum,LName,FName, "
@@ -498,7 +531,14 @@ namespace OpenDentBusiness{
 						
 						break;
 					case EhrMeasureType.ClinicalSummaries:
-						
+						DateTime visitDate=PIn.Date(tableRaw.Rows[i]["visitDate"].ToString());
+						if(tableRaw.Rows[i]["summaryProvided"].ToString()=="0") {
+							explanation=visitDate.ToShortDateString()+" no summary provided to patient";
+						}
+						else {
+							explanation=visitDate.ToShortDateString()+" summary provided to patient";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.Reminders:
 						if(tableRaw.Rows[i]["reminderCount"].ToString()=="0") {
@@ -840,6 +880,52 @@ namespace OpenDentBusiness{
 						mu.Action="Provide elect copy to Pt";
 						break;
 					case EhrMeasureType.ClinicalSummaries:
+						List<DateTime> listVisits=new List<DateTime>();//for this year
+						List<Procedure> listProcs=Procedures.Refresh(pat.PatNum);
+						for(int p=0;p<listProcs.Count;p++) {
+							if(listProcs[p].ProcDate < DateTime.Now.AddYears(-1)) {//not within the last year
+								continue;
+							}
+							if(!listVisits.Contains(listProcs[p].ProcDate)) {
+								listVisits.Add(listProcs[p].ProcDate);
+							}
+						}
+						if(listVisits.Count==0){
+							mu.Met=MuMet.NA;
+							mu.Details="No visits within the last year.";
+						}
+						else{
+							int countMissing=0;
+							bool summaryProvidedinTime;
+							List<EhrMeasureEvent> listClinSum=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ClinicalSummaryProvidedToPt);
+							for(int p=0;p<listVisits.Count;p++) {
+								summaryProvidedinTime=false;
+								DateTime deadlineDate=listVisits[p].AddDays(3);
+								if(listVisits[p].DayOfWeek==DayOfWeek.Wednesday || listVisits[p].DayOfWeek==DayOfWeek.Thursday || listVisits[p].DayOfWeek==DayOfWeek.Friday){
+									deadlineDate.AddDays(2);//add two days for the weekend
+								}
+								for(int r=0;r<listClinSum.Count;r++) {
+									if(listClinSum[r].DateTEvent > deadlineDate) {
+										continue;
+									}
+									if(listClinSum[r].DateTEvent < listVisits[p]) {
+										continue;
+									}
+									summaryProvidedinTime=true;
+								}
+								if(!summaryProvidedinTime) {
+									countMissing++;
+								}
+							}
+							if(countMissing==0) {
+								mu.Met=MuMet.True;
+								mu.Details="Clinical summary provided to Pt within 3 business days of each visit.";
+							}
+							else {
+								mu.Met=MuMet.False;
+								mu.Details="Clinical summaries not provided to Pt within 3 business days of a visit:"+countMissing.ToString();
+							}
+						}
 						mu.Action="Send clinical summary to Pt";
 						break;
 					case EhrMeasureType.Reminders:
