@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness.Mobile{
-	
 	///<summary>Appointments can show in the Appointments module, or they can be on the unscheduled list.  An appointment object is also used to store the Planned appointment.  The planned appointment never gets scheduled, but instead gets copied.</summary>
 	[Serializable()]
 	[CrudTable(IsMobile=true)]

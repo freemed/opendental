@@ -67,8 +67,9 @@
 
 		<div id="logout">
 			<div class="toolbar">
+			<h1>Open Dental</h1>
 			</div>
-			<div style="height: 170px">
+			<div style="height: 100px">
 			</div>
 			<div id="logoutmessage">
 			<div class="style1" style="font-weight:bold;text-align:center;">You have been logged out.</div>
@@ -88,6 +89,9 @@
 			</ul>
 			<ul class="rounded page1 narrowul">
 				<li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
+			</ul>
+			<ul class="rounded page1 narrowul">
+				<li><a class="arrowless" linkattib="PharmacyList.aspx" href="#PharmacyList">Pharmacies</a></li>
 			</ul>
 		</div>
 

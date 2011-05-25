@@ -68,8 +68,26 @@ function TraversePage(){
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
-	}); 
-	
+});
+
+    $('a[href="#PharmacyList"]').click(function (e) {
+        //e.preventDefault();
+        //console.log('PharmacyList clicked');
+        var UrlForFetchingData = this.attributes["linkattib"].value;
+        var SectionToFill = '#PharmacyListContents';
+        var MoveToURL = '#PharmacyList';
+        ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+    });
+
+    $('a[href="#PatientList"]').tap(function (e) {
+        //e.preventDefault();
+        //console.log('PatientList clicked');
+        var UrlForFetchingData = this.attributes["linkattib"].value;
+        var SectionToFill = '#PatientListContents';
+        var MoveToURL = '#PatientList';
+        ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+        $('#searchpatientbox').val('');
+    });
 	
 	$('#searchbutton').tap(function(e) {
 		var searchterm=$('#searchpatientbox').val();
@@ -79,15 +97,7 @@ function TraversePage(){
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 		
-	$('a[href="#PatientList"]').tap(function (e) {
-		//e.preventDefault();
-		//console.log('PatientList clicked');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
-		var SectionToFill='#PatientListContents';
-		var MoveToURL='#PatientList';
-		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
-		$('#searchpatientbox').val('');
-	});
+
 
 	// a tap function is used instead of .live() for elements loaded by AJAX
 	// here the tap does not give an error with jQT.goTo(MoveToURL, 'slide')
@@ -315,8 +325,9 @@ function ProcessLogin() {
 function ProcessLogout(e) {
 		//console.log('log out clicked');
     e.preventDefault();
-    var logoutConfirmation=$('#logoutmessage').html();
-		$('#logoutmessage').append(MessageLoadLogout);
+    var logoutConfirmation = $('#logoutmessage').html();
+    $('#logoutmessage').html('');
+    $('#logoutmessage').append(MessageLoadLogout);
 		jQT.goTo('#logout');
 		$.ajax({
 		    type: "GET",
@@ -325,6 +336,7 @@ function ProcessLogout(e) {
 		    success: function (msg) {
 		        if (msg == "LoggedOut") {
 		            $('#progresslogout').replaceWith('');
+		            $('#logoutmessage').html(logoutConfirmation);
 		            //console.log('in LoggedOut');
 		            $('#password').val(''); //because password field tend to retain the keyed in password, its made blank on logout.
 		            //jQT.goTo('#logout'); // no 'Not able to tap element' error.

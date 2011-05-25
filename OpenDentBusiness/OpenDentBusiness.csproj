@@ -447,6 +447,7 @@
     <Compile Include="Mobile\TableTypes\LabResultm.cs" />
     <Compile Include="Mobile\TableTypes\Medicationm.cs" />
     <Compile Include="Mobile\TableTypes\MedicationPatm.cs" />
+    <Compile Include="Mobile\TableTypes\Pharmacym.cs" />
     <Compile Include="Mobile\TableTypes\Providerm.cs" />
     <Compile Include="Mobile\TableTypes\Userm.cs" />
     <Compile Include="Mobile\TableTypes\RxPatm.cs" />
