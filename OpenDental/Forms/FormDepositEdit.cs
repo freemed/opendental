@@ -500,9 +500,7 @@ namespace OpenDental{
 			//Fill Patient Payment Grid---------------------------------------
 			List<long> patNums=new List<long>();
 			for(int i=0;i<PatPayList.Count;i++){
-                if(!patNums.Contains(PatPayList[i].PatNum)){
-				    patNums.Add(PatPayList[i].PatNum);
-                }
+				patNums.Add(PatPayList[i].PatNum);
 			}
 			Patient[] pats=Patients.GetMultPats(patNums);
 			gridPat.BeginUpdate();
