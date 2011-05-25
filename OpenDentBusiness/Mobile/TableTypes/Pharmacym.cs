@@ -13,8 +13,6 @@ namespace OpenDentBusiness.Mobile.TableTypes {
 		///<summary>Primary key 2.</summary>
 		[CrudColumn(IsPriKeyMobile2=true)]
 		public long PharmacyNum;
-		///<summary>NCPDPID assigned by NCPDP.  Not used yet.</summary>
-		public string PharmID;
 		///<summary>For now, it can just be a common description.  Later, it might have to be an official designation.</summary>
 		public string StoreName;
 		///<summary>Includes all punctuation.</summary>
