@@ -5,7 +5,7 @@ using OpenDentBusiness;
 
 namespace UnitTests {
 	public class ProcedureT {
-		/// <summary>Returns the procNum</summary>
+		/// <summary>Returns the proc</summary>
 		public static Procedure CreateProcedure(Patient pat,string procCodeStr,ProcStat procStatus,string toothNum,double procFee){
 			Procedure proc=new Procedure();
 			proc.CodeNum=ProcedureCodes.GetCodeNum(procCodeStr);

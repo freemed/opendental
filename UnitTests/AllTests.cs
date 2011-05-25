@@ -685,44 +685,28 @@ namespace UnitTests {
 			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
 			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
 			long subNum=sub.InsSubNum;
+			PatPlan patPlan=PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
 			BenefitT.CreateAnnualMax(plan.PlanNum,100);
+			BenefitT.CreateOrthoMax(plan.PlanNum,500);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
-			BenefitT.CreateLimitation(plan.PlanNum,EbenefitCategory.Orthodontics,500);
-			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
-			//procs - D0140 (limEx), D8090 (comprehensive ortho)
-			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0140",ProcStat.TP,"",59);
-			Procedure proc2=ProcedureT.CreateProcedure(pat,"D8090",ProcStat.TP,"",348);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Orthodontics,100);
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0140",ProcStat.C,"",59);//limEx
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D8090",ProcStat.C,"",348);//Comprehensive ortho
+			ClaimProcT.AddInsPaid(pat.PatNum,plan.PlanNum,proc1.ProcNum,59,subNum);
+			ClaimProcT.AddInsPaid(pat.PatNum,plan.PlanNum,proc2.ProcNum,348,subNum);
 			//Lists
-			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
-			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
 			Family fam=Patients.GetFamily(pat.PatNum);
 			List<InsSub> subList=InsSubs.RefreshForFam(fam);
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
-			List<ClaimProcHist> histList=new List<ClaimProcHist>();
-			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
-			List<Procedure> procList=Procedures.Refresh(pat.PatNum);
-			Procedure[] ProcListTP=Procedures.GetListTP(procList);
-			//Set complete and attach to claim
-			ProcedureT.SetComplete(proc1,pat,planList,patPlans,claimProcs,benefitList,subList);
-			ProcedureT.SetComplete(proc2,pat,planList,patPlans,claimProcs,benefitList,subList);
-			claimProcs=ClaimProcs.Refresh(pat.PatNum);
-			List<Procedure> procsForClaim=new List<Procedure>();
-			procsForClaim.Add(proc1);
-			Claim claim1=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
-			procsForClaim=new List<Procedure>();
-			procsForClaim.Add(proc2);
-			Claim claim2=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
-			//Enter payment
-			//claimProcs
-			//claimProcs[1].i
-			//string retVal="";
-			//if(claim.WriteOff!=500) {
-			//  throw new Exception("Should be 500. \r\n");
-			//}
-			//retVal+="8: Passed.  Completed writeoffs same as estimates for dual PPO ins when Allowed2 greater than Allowed1.\r\n";
-			return "";
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlans,planList,DateTime.Today,subList);
+			//Validate
+			double insUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlan.PatPlanNum,-1,planList,benefitList,pat.PatNum,subNum);
+			if(insUsed!=59) {
+				throw new Exception("Should be 59. \r\n");
+			}
+			return "13: Passed.  Ortho procedures should not affect insurance used section at lower right of TP module.\r\n"; 
 		}
 	}
 }

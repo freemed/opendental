@@ -107,6 +107,17 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
+		public static void CreateOrthoMax(long planNum,double amt) {
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Limitations;
+			ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.Lifetime;
+			Benefits.Insert(ben);
+		}
+
 		
 		public static string BenefitComputeRenewDate(){
 			DateTime asofDate=new DateTime(2006,3,19);

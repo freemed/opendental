@@ -210,6 +210,13 @@ namespace UnitTests {
 			catch(Exception ex) {
 				textResults.Text+="12: Failed. "+ex.Message;
 			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestThirteen(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="13: Failed. "+ex.Message;
+			}
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 		}

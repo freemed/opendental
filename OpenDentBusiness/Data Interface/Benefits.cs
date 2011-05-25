@@ -1168,7 +1168,10 @@ namespace OpenDentBusiness {
 				if(benList[i].QuantityQualifier!=BenefitQuantity.None) {
 					continue;
 				}
-				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear && benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
+				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear 
+					&& benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear
+					&& benList[i].TimePeriod!=BenefitTimePeriod.Lifetime)//allows ortho max to be caught further down 
+				{
 					continue;
 				}
 				//coverage level?

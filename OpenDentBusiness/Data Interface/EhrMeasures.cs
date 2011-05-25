@@ -528,7 +528,7 @@ namespace OpenDentBusiness{
 						
 						break;
 					case EhrMeasureType.ElectronicCopy:
-						
+						//can't do this without UI for tracking when a patient requests a copy of their health information.
 						break;
 					case EhrMeasureType.ClinicalSummaries:
 						DateTime visitDate=PIn.Date(tableRaw.Rows[i]["visitDate"].ToString());
