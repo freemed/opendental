@@ -32,11 +32,11 @@
 
 	<li class="style1">
 		<div>
-			<div style="float:left; width:35%;">
+			<div style="float:left;margin-right:15px;display:table-cell;">
 				<%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
 					<div><%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%></div>
 			</div>
-			<div style="float:left;width:60%;padding-left:20px">
+			<div style="display:table-cell;">
 					<div style="word-wrap:break-word;white-space:normal;"><%Response.Write(apt.ProcDescript);%></div>
 					<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%Response.Write(apt.Note);%></div>
 			</div>

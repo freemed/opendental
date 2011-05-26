@@ -419,6 +419,7 @@
     <Compile Include="Mobile\Crud\LabResultmCrud.cs" />
     <Compile Include="Mobile\Crud\MedicationmCrud.cs" />
     <Compile Include="Mobile\Crud\MedicationPatmCrud.cs" />
+    <Compile Include="Mobile\Crud\PharmacymCrud.cs" />
     <Compile Include="Mobile\Crud\ProvidermCrud.cs" />
     <Compile Include="Mobile\Crud\RxPatmCrud.cs" />
     <Compile Include="Mobile\Crud\UsermCrud.cs" />
@@ -431,6 +432,7 @@
     <Compile Include="Mobile\Data Interface\LabResultms.cs" />
     <Compile Include="Mobile\Data Interface\Medicationms.cs" />
     <Compile Include="Mobile\Data Interface\MedicationPatms.cs" />
+    <Compile Include="Mobile\Data Interface\Pharmacyms.cs" />
     <Compile Include="Mobile\Data Interface\Providerms.cs" />
     <Compile Include="Mobile\Data Interface\RxPatms.cs" />
     <Compile Include="Mobile\Data Interface\Userms.cs" />

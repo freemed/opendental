@@ -49,10 +49,10 @@
 						<div>
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
-								<div style="float:left; width:25%;">
+								<div style="float:left;margin-right:15px;display:table-cell;">
 								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("MM/dd/yyyy")%>
 								</div>
-								<div style="float:left; width:65%;">
+								<div style="display:table-cell;padding-right:30px">
 								<div style="word-wrap:break-word;white-space:normal;"><%#((Appointmentm)Container.DataItem).ProcDescript%></div>
 								<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%#((Appointmentm)Container.DataItem).Note%></div>
 								</div>
