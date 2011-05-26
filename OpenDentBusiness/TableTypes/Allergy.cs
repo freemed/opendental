@@ -20,6 +20,8 @@ namespace OpenDentBusiness {
 		///<summary>To be used for synch with web server for CertTimelyAccess.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		///<summary>The historical date that the patient had the adverse reaction to this agent.</summary>
+		public DateTime DateAdverseReaction;
 
 		///<summary></summary>
 		public Allergy Copy() {
