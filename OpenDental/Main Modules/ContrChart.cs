@@ -7500,6 +7500,9 @@ namespace OpenDental{
 					ToothInitials.SetValue(PatCur.PatNum,procCur.ToothNum,ToothInitialType.Missing);
 				}
 				procCur.ProcStatus=ProcStat.C;
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canada
+					Procedures.SetCanadianLabFeesCompleteForProc(procCur);
+				}
 				Plugins.HookAddCode(this,"ContrChart.menuItemSetComplete_Click_procLoop",procCur,procOld);
 				Procedures.Update(procCur,procOld);
 				//Tried to move it to the business layer, but too complex for now.

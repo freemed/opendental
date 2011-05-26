@@ -4006,7 +4006,7 @@ namespace OpenDental{
 			ProcCur.UnitQty = PIn.Int(textUnitQty.Text);
 			ProcCur.StartTime=PIn.Int(textStart.Text);
 			ProcCur.StopTime=PIn.Int(textStop.Text);
-			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
+			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//Proc set complete.
 				ProcCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 			}
 			ProcCur.DateTP=PIn.Date(this.textDateTP.Text);
@@ -4325,6 +4325,9 @@ namespace OpenDental{
 						PatCur.GetNameLF()+", "+ProcedureCode2.ProcCode+", "
 						+ProcCur.ProcFee.ToString("c"));
 				}
+			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//Canada
+				Procedures.SetCanadianLabFeesCompleteForProc(ProcCur);
 			}
       DialogResult=DialogResult.OK;
 			//it is assumed that we will do an immediate refresh after closing this window.

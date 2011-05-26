@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 
@@ -1322,6 +1323,9 @@ namespace OpenDentBusiness {
 				if(oldProc.ProcStatus!=ProcStat.C) {
 					ProcList[i].Note+=ProcCodeNotes.GetNote(ProcList[i].ProvNum,ProcList[i].CodeNum);
 				}
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canada
+					Procedures.SetCanadianLabFeesCompleteForProc(ProcList[i]);
+				}
 				Plugins.HookAddCode(null,"Procedures.SetCompleteInAppt_procLoop",ProcList[i],oldProc);
 				Procedures.Update(ProcList[i],oldProc);
 				Procedures.ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList,patientAge,subList);
@@ -1354,6 +1358,31 @@ namespace OpenDentBusiness {
 				return false;
 			}
 			return true;
+		}
+
+		public static void SetCanadianLabFeesCompleteForProc(Procedure proc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
+				return;
+			}
+			//If this gets run on a lab fee itself, nothing will happen because result will be zero procs.
+			string command="SELECT * FROM procedurelog WHERE ProcNumLab="+proc.ProcNum;
+			List <Procedure> labFeesForProc=Crud.ProcedureCrud.SelectMany(command);
+			for(int i=0;i<labFeesForProc.Count;i++) {
+				Procedure labFeeNew=labFeesForProc[i];
+				Procedure labFeeOld=labFeeNew.Copy();
+				labFeeNew.AptNum=proc.AptNum;
+				labFeeNew.CanadianTypeCodes=proc.CanadianTypeCodes;
+				labFeeNew.ClinicNum=proc.ClinicNum;
+				labFeeNew.DateEntryC=proc.DateEntryC;
+				labFeeNew.PlaceService=proc.PlaceService;
+				labFeeNew.ProcDate=proc.ProcDate;
+				labFeeNew.ProcStatus=ProcStat.C;
+				labFeeNew.ProvNum=proc.ProvNum;
+				labFeeNew.SiteNum=proc.SiteNum;
+				labFeeNew.UserNum=proc.UserNum;
+				Procedures.Update(labFeeNew,labFeeOld);
+			}
 		}
 
 	}
