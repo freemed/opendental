@@ -1121,14 +1121,16 @@ namespace OpenDentBusiness {
 					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM etrans WHERE InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
-					command="SELECT COUNT(*) FROM patplan WHERE InsSubNum="+POut.Long(insSubNum);
-					countUsed+=PIn.Int(Db.GetCount(command));
+					//command="SELECT COUNT(*) FROM patplan WHERE InsSubNum="+POut.Long(insSubNum);
+					//countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM payplan WHERE InsSubNum="+POut.Long(insSubNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
 					if(countUsed==0) {
 						command="DELETE FROM claimproc WHERE InsSubNum="+POut.Long(insSubNum)+" AND ClaimNum=0 AND Status=6";//ok to delete because no claim and just an estimate
 						Db.NonQ(command);
 						command="DELETE FROM inssub WHERE InsSubNum="+POut.Long(insSubNum);
+						Db.NonQ(command);
+						command="DELETE FROM patplan WHERE InsSubNum="+POut.Long(insSubNum);//It's very safe to "drop coverage" for a patient.
 						Db.NonQ(command);
 						numFixed++;
 						continue;
