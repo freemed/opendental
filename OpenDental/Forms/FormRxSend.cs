@@ -119,8 +119,7 @@ namespace OpenDental {
 				//s='';
 			#endif
 			DateTime msgTimeSent=DateTime.Now;
-			//for(int i=0;i<gridMain.SelectedIndices.Length;i++) {//Loop through and send all rx's
-			//Hardcoded values should never change. Ex:Message type, version, release should always be SCRIPT:010:006
+			//Hardcoded values should never change. Ex:Message type, version, release should always be SCRIPT:008:001
 			//Hardcoded values allowed to change until released version.
 			//UNA:+./*'------------------------------------------------------------------------------------------------
 			strb.Append("UNA"+f+e+d+r+p+s);
@@ -128,7 +127,7 @@ namespace OpenDental {
 			strb.Append("UIB"+e);//000
 			strb.Append("UNOA"+f+"0"+e);//010 Syntax identifier and version 
 			strb.Append(e);//020 not used
-			strb.Append("1234567"+e);//030 Transaction reference (Clinic system trace number.)
+			strb.Append("1234567"+e);//030 Transaction reference (Clinic system trace number.) Sender creates a Unique Trace number for each message sent.
 			strb.Append(e);//040 not used 
 			strb.Append(e);//050 not used
 			strb.Append("77777777"+f+"C"+f+"PASSWORDQ"+e);//060 Sender identification (This is the Clinic ID of the sender; C means it is a Clinic.)
@@ -136,7 +135,7 @@ namespace OpenDental {
 			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//080 Date of initiation CCYYMMDD:HHMMSS,S 
 			//UIH+SCRIPT:010:006:NEWRX+110072+++19971001:081522'-------------------------------------------------------
 			strb.Append("UIH"+e);//000
-			strb.Append("SCRIPT"+f+"010"+f+"006"+f+"NEWRX"+e);//010 Message type:version:release:function.
+			strb.Append("SCRIPT"+f+"008"+f+"001"+f+"NEWRX"+e);//010 Message type:version:release:function.
 			//Clinic's reference number for message. Usually this is the folio number for the patient. However, this is the ID by which the clinic will be able to refer to this prescription.
 			strb.Append("110072"+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
 			strb.Append(e);//030 conditional Dialogue Reference
@@ -154,14 +153,14 @@ namespace OpenDental {
 			Carrier car=Carriers.GetCarrier(plan.CarrierNum);
 			//PVD+P1+7701630:D3+++++MAIN STREET PHARMACY++6152205656:TE'-----------------------------------------------
 			strb.Append("PVD"+e);//000
-			strb.Append("P1"+e);//010 Provider coded (see external code list pg.231)
+			strb.Append("P1"+e);//010 Provider coded (see external code list pg.109)
 			strb.Append(Sout(pharmacy.PharmID)+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
 			strb.Append(e);//030 not used
 			strb.Append(e);//040 conditional Provider specialty
 			strb.Append(e);//050 conditional The name of the prescriber or pharmacist or supervisor
 			strb.Append(e);//060 not used 
 			strb.Append(e);//070 conditional The clinic or pharmacy name
-			strb.Append(Sout(pharmacy.Address)+e);//080 Address
+			strb.Append(Sout(pharmacy.Address)+f+Sout(pharmacy.City)+f+Sout(pharmacy.State)+f+Sout(pharmacy.Zip)+e);//080 Address
 			strb.Append(Regex.Replace(Sout(pharmacy.Phone),@"[-()]",string.Empty)+f+"TE"+s);//090 Communication number and qualifier
 			//PVD+PC+6666666:0B+++JONES:MARK++++6152219800:TE'---------------------------------------------------------
 			strb.Append("PVD"+e);//000 
@@ -226,7 +225,6 @@ namespace OpenDental {
 			message.Body=strb.ToString();
 			message.IsBodyHtml=false;
 			client.Send(message);
-			//}//End of selected Rx loop
 			//Remove the Rx from the grid.
 			//rx.IsElectQueue=false;
 			//RxPats.Update(rx);
