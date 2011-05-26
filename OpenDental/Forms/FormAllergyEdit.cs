@@ -32,6 +32,12 @@ namespace OpenDental {
 				}
 			}
 			if(!AllergyCur.IsNew) {
+				if(AllergyCur.DateAdverseReaction<DateTime.Parse("01-01-1880")) {
+					textDate.Text="";
+				}
+				else {
+					textDate.Text=AllergyCur.DateAdverseReaction.ToShortDateString();
+				}
 				comboAllergies.SelectedIndex=allergyIndex;
 				textReaction.Text=AllergyCur.Reaction;
 				checkActive.Checked=AllergyCur.StatusIsActive;
@@ -54,6 +60,23 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			//Validate
+			if(textDate.Text!="") {
+				try {
+					DateTime.Parse(textDate.Text);
+				}
+				catch {
+					MessageBox.Show("Please input a valid date.");
+					return;
+				}
+			}
+			//Save
+			if(textDate.Text!="") {
+				AllergyCur.DateAdverseReaction=DateTime.Parse(textDate.Text);
+			}
+			else {
+				AllergyCur.DateAdverseReaction=DateTime.MinValue;
+			}
 			AllergyCur.AllergyDefNum=allergyDefList[comboAllergies.SelectedIndex].AllergyDefNum;
 			AllergyCur.Reaction=textReaction.Text;
 			AllergyCur.StatusIsActive=checkActive.Checked;

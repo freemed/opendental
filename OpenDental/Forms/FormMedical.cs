@@ -513,7 +513,12 @@ namespace OpenDental{
 				row=new ODGridRow();
 				AllergyDef allergyDef=AllergyDefs.GetOne(allergyList[i].AllergyDefNum);
 				row.Cells.Add(allergyDef.Description);
-				row.Cells.Add(allergyList[i].Reaction);
+				if(allergyList[i].DateAdverseReaction<DateTime.Parse("1-1-1800")) {
+					row.Cells.Add(allergyList[i].Reaction);
+				}
+				else {
+					row.Cells.Add(allergyList[i].Reaction+" "+allergyList[i].DateAdverseReaction.ToShortDateString());
+				}
 				if(allergyList[i].StatusIsActive) {
 					row.Cells.Add("X");
 				}
