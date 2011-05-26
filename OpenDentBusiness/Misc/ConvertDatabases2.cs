@@ -5164,8 +5164,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="UPDATE referral SET IsDoctor=1 WHERE PatNum = 0";
 				Db.NonQ(command);
-				
-
+				if(DataConnection.DBtype == DatabaseType.MySql) {
+					command = "ALTER TABLE allergy ADD DateAdverseReaction date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command = "ALTER TABLE allergy ADD DateAdverseReaction date";
+					Db.NonQ(command);
+					command = "UPDATE allergy SET DateAdverseReaction = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateAdverseReaction IS NULL";
+					Db.NonQ(command);
+					command = "ALTER TABLE allergy MODIFY DateAdverseReaction NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5219,3 +5229,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+
+			
+				
