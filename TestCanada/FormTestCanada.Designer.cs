@@ -122,7 +122,7 @@
 			this.checkEligibility.Name = "checkEligibility";
 			this.checkEligibility.Size = new System.Drawing.Size(161,18);
 			this.checkEligibility.TabIndex = 17;
-			this.checkEligibility.Text = "Eligibility 1-6, 7-12";
+			this.checkEligibility.Text = "Eligibility 1-6";
 			this.checkEligibility.UseVisualStyleBackColor = true;
 			this.checkEligibility.Click += new System.EventHandler(this.checkEligibility_Click);
 			// 

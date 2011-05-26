@@ -7,14 +7,10 @@ using OpenDentBusiness;
 namespace TestCanada {
 	public class ProviderTC {
 		public static string SetInitialProviders() {
-			//Dr. A1---------------------------------
+			//Dr. A---------------------------------
 			Provider priProv=CreateProvider("A.","Dentist","530123401","1234","DocA");
-			//Dr. B1---------------------------------
+			//Dr. B---------------------------------
 			CreateProvider("B.","Dentist","035678900","1234","DocB");
-			//Dr. A2---------------------------------
-			CreateProvider("A.","Dentist","600567801","1234","DocA2");
-			//Dr. B2---------------------------------
-			CreateProvider("B.","Dentist","035123400","1234","DocB2");
 			//The billing provider for both is Dr. A.
 			Prefs.UpdateLong(PrefName.PracticeDefaultProv,priProv.ProvNum);
 			Prefs.UpdateLong(PrefName.InsBillingProv,priProv.ProvNum);

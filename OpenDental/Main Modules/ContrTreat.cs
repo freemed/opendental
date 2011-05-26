@@ -15,6 +15,7 @@ using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using OpenDental.UI;
@@ -2646,6 +2647,23 @@ namespace OpenDental{
 			if(gridPlans.SelectedIndices[0]!=0){
 				MsgBox.Show(this,"You can only send a preauth from the current TP, not a saved TP.");
 				return;
+			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canada
+				int numLabProcsUnselected=0;
+				List<int> selectedIndices=new List<int>(gridMain.SelectedIndices);
+				for(int i=0;i<selectedIndices.Count;i++) {
+					Procedure proc=((Procedure)gridMain.Rows[selectedIndices[i]].Tag);
+					if(proc!=null) {
+						ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(proc.CodeNum);
+						if(procCode.IsCanadianLab) {
+							gridMain.SetSelected(selectedIndices[i],false);//deselect
+							numLabProcsUnselected++;
+						}
+					}
+				}
+				if(numLabProcsUnselected>0) {
+					MessageBox.Show(Lan.g(this,"Number of lab fee procedures unselected")+": "+numLabProcsUnselected.ToString());
+				}
 			}
 		  if(gridMain.SelectedIndices.Length==0){
         MessageBox.Show(Lan.g(this,"Please select procedures first."));
