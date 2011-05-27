@@ -59,8 +59,11 @@ namespace WebHostSynch {
 		public bool IsPaidCustomer(long customerNum) {
 			int count=0;
 			string connectStr=ConfigurationManager.ConnectionStrings["DBRegKey"].ConnectionString;
-			string command ="SELECT COUNT(*) FROM repeatcharge WHERE PatNum="+POut.Long(customerNum)+
-						" AND ProcCode='027' AND (DateStop='0001-01-01' OR DateStop > NOW())";
+			//This query is seeing if any family member of the patient with the registration key has a specific repeating charge
+			string command ="SELECT COUNT(*) FROM repeatcharge,patient "
+				+"WHERE repeatcharge.PatNum=patient.PatNum "
+				+"AND patient.Guarantor=(SELECT patkey.Guarantor FROM patient patkey WHERE patkey.PatNum="+POut.Long(customerNum)+") "
+				+"AND ProcCode='027' AND (DateStop='0001-01-01' OR DateStop > NOW())";
 			WebHostSynch.Db db = new WebHostSynch.Db();
 			db.setConn(connectStr);
 			DataTable table=db.GetTable(command);
