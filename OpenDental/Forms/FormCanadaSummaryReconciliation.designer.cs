@@ -176,6 +176,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "FormCanadaSummaryReconciliation";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Summary Reconciliation Request";

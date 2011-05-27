@@ -18,10 +18,10 @@ namespace OpenDental.Eclaims {
 			if(carrier==null) {
 				throw new ApplicationException("Invalid carrier.");
 			}
-			if((carrier.CanadianSupportedTypes|CanSupTransTypes.EligibilityTransaction_08)!=CanSupTransTypes.EligibilityTransaction_08) {
+			if((carrier.CanadianSupportedTypes&CanSupTransTypes.EligibilityTransaction_08)!=CanSupTransTypes.EligibilityTransaction_08) {
 				throw new ApplicationException("The carrier does not support eligibility transactions.");
 			}
-			if((carrier.CanadianSupportedTypes|CanSupTransTypes.EligibilityResponse_18)!=CanSupTransTypes.EligibilityResponse_18) {
+			if((carrier.CanadianSupportedTypes&CanSupTransTypes.EligibilityResponse_18)!=CanSupTransTypes.EligibilityResponse_18) {
 				throw new ApplicationException("The carrier does not support eligibility transactions response.");
 			}
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
@@ -335,10 +335,10 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
 			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
-			if((carrier.CanadianSupportedTypes|CanSupTransTypes.ClaimReversal_02)!=CanSupTransTypes.ClaimReversal_02) {
+			if((carrier.CanadianSupportedTypes&CanSupTransTypes.ClaimReversal_02)!=CanSupTransTypes.ClaimReversal_02) {
 				throw new ApplicationException("The carrier does not support reversal transactions.");
 			}
-			if((carrier.CanadianSupportedTypes|CanSupTransTypes.ClaimReversalResponse_12)!=CanSupTransTypes.ClaimReversalResponse_12) {
+			if((carrier.CanadianSupportedTypes&CanSupTransTypes.ClaimReversalResponse_12)!=CanSupTransTypes.ClaimReversalResponse_12) {
 				throw new ApplicationException("The carrier does not support reversal transactions response.");
 			}
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
@@ -520,10 +520,10 @@ namespace OpenDental.Eclaims {
 					etrans=Etranss.CreateCanadianOutput(0,0,0,clearhouse.ClearinghouseNum,EtransType.RequestOutstand_CA,0,0);
 				}
 				else {
-					if((carrier.CanadianSupportedTypes|CanSupTransTypes.RequestForOutstandingTrans_04)!=CanSupTransTypes.RequestForOutstandingTrans_04) {
+					if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForOutstandingTrans_04)!=CanSupTransTypes.RequestForOutstandingTrans_04) {
 						throw new ApplicationException("The carrier does not support request for outstanding transactions.");
 					}
-					if((carrier.CanadianSupportedTypes|CanSupTransTypes.OutstandingTransAck_14)!=CanSupTransTypes.OutstandingTransAck_14) {
+					if((carrier.CanadianSupportedTypes&CanSupTransTypes.OutstandingTransAck_14)!=CanSupTransTypes.OutstandingTransAck_14) {
 						throw new ApplicationException("The carrier does not support request for outstanding transactions response.");
 					}
 					etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
@@ -706,8 +706,8 @@ namespace OpenDental.Eclaims {
 			return etransAcks;
 		}
 
-		///<summary>Each payment reconciliation request can return up to 9 pages. This function will return one etrans ack for each page in the result, since each page must be requested individually. Only for version 04, no such transaction exists for version 02.  Usually pass in a carrier with network null.  If sending to a network, carrier will be null and we still don't see anywhere in the message format to specify network.  We expect to get clarification on this issue later.</summary>
-		public static List <Etrans> GetPaymentReconciliations(Carrier carrier,CanadianNetwork network,Provider provTreat,Provider provBilling,DateTime reconciliationDate) {
+		///<summary>Each payment reconciliation request can return up to 9 pages. This function will return one etrans ack for each page in the result, since each page must be requested individually. Only for version 04, no such transaction exists for version 02. Set sendToItrans=true and carrier=null if the request is to be sent to the entire ITRANS network. Set sentToItrans=false and provide a valid carrier object if the request is to be sent to a specific carrier.</summary>
+		public static List<Etrans> GetPaymentReconciliations(bool sendToItrans,Carrier carrier,Provider provTreat,Provider provBilling,DateTime reconciliationDate) {
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null) {
 				throw new ApplicationException("Canadian clearinghouse not found.");
@@ -722,22 +722,28 @@ namespace OpenDental.Eclaims {
 			do{
 				StringBuilder strb=new StringBuilder();
 				Etrans etrans=null;
-				if(carrier!=null) {
-					if((carrier.CanadianSupportedTypes|CanSupTransTypes.RequestForPaymentReconciliation_06)!=CanSupTransTypes.RequestForPaymentReconciliation_06) {
+				CanadianNetwork network=null;
+				if(sendToItrans) {
+					etrans=Etranss.CreateCanadianOutput(0,0,0,clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
+				}
+				else {
+					if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForPaymentReconciliation_06)!=CanSupTransTypes.RequestForPaymentReconciliation_06) {
 						throw new ApplicationException("The carrier does not support payment reconciliation transactions.");
 					}
-					if((carrier.CanadianSupportedTypes|CanSupTransTypes.PaymentReconciliation_16)!=CanSupTransTypes.PaymentReconciliation_16) {
+					if((carrier.CanadianSupportedTypes&CanSupTransTypes.PaymentReconciliation_16)!=CanSupTransTypes.PaymentReconciliation_16) {
 						throw new ApplicationException("The carrier does not support payment reconciliation transactions response.");
 					}
 					etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
 						clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
-				}
-				else {//Assume network!=null
-					etrans=Etranss.CreateCanadianOutput(0,0,network.CanadianNetworkNum,
-						clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
+					network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 				}
 				//A01 transaction prefix 12 AN
-				strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
+				if(sendToItrans) {
+					strb.Append("            ");
+				}
+				else {
+					strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
+				}
 				//A02 office sequence number 6 N
 				strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 				//A03 format version number 2 N
@@ -745,11 +751,11 @@ namespace OpenDental.Eclaims {
 				//A04 transaction code 2 N
 				strb.Append("06");//payment reconciliation request
 				//A05 carrier id number 6 N
-				if(carrier!=null) {
-					strb.Append(carrier.ElectID);//already validated as 6 digit number.
+				if(sendToItrans) {
+					strb.Append("999999");//Always 999999 when sending to a ITRANS network.
 				}
-				else { //Assume network!=null
-					strb.Append("999999");//Always 999999 when sending to a network.
+				else {
+					strb.Append(carrier.ElectID);//already validated as 6 digit number.
 				}
 				//A06 software system id 3 AN  The third character is for version of OD.
 				//todo
@@ -762,7 +768,7 @@ namespace OpenDental.Eclaims {
 				if(carrier!=null) {
 					strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
 				}
-				else { //Assume network!=null
+				else {
 					strb.Append("1");//No encryption when sending to a network.
 				}
 				//A07 message length N4
@@ -786,12 +792,7 @@ namespace OpenDental.Eclaims {
 				string result="";
 				bool resultIsError=false;
 				try {
-					if(carrier!=null) {
-						result=Canadian.PassToIca(strb.ToString(),clearhouse);
-					}
-					else { //Assume network!=null
-						result=Canadian.PassToIca(strb.ToString(),clearhouse);
-					}
+					result=Canadian.PassToIca(strb.ToString(),clearhouse);
 				}
 				catch(ApplicationException ex) {
 					result=ex.Message;
@@ -837,6 +838,7 @@ namespace OpenDental.Eclaims {
 			return etransAcks;
 		}
 
+		//THIS TRANSACTION TYPE IS NOT USED BY ANY CANADIAN CARRIERS, AND IS NOT PART OF CERTIFICATION, EVEN THOUGH IT IS IN THE SPECIFICATIONS. WE NEED TO FIX BELOW COMMENTS AND MAKE THIS CODE FUNCTION MORE LIKE THE GetPaymentReconciliations() FUNCTION ABOVE.
 		///<summary>Does not exist in version 02 so only supported for version 04. Returns the request Etrans record. Usually pass in a carrier with network null.  If sending to a network, carrier will be null and we still don't see anywhere in the message format to specify network.  We expect to get clarification on this issue later.</summary>
 		public static Etrans GetSummaryReconciliation(Carrier carrier,CanadianNetwork network,Provider provTreat,DateTime reconciliationDate) {
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
@@ -850,10 +852,10 @@ namespace OpenDental.Eclaims {
 			StringBuilder strb=new StringBuilder();
 			Etrans etrans=null;
 			if(carrier!=null) {
-				if((carrier.CanadianSupportedTypes|CanSupTransTypes.RequestForSummaryReconciliation_05)!=CanSupTransTypes.RequestForSummaryReconciliation_05) {
+				if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForSummaryReconciliation_05)!=CanSupTransTypes.RequestForSummaryReconciliation_05) {
 					throw new ApplicationException("The carrier does not support summary reconciliation transactions.");
 				}
-				if((carrier.CanadianSupportedTypes|CanSupTransTypes.SummaryReconciliation_15)!=CanSupTransTypes.SummaryReconciliation_15) {
+				if((carrier.CanadianSupportedTypes&CanSupTransTypes.SummaryReconciliation_15)!=CanSupTransTypes.SummaryReconciliation_15) {
 					throw new ApplicationException("The carrier does not support summary reconciliation transactions response.");
 				}
 				etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,

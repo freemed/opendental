@@ -8,9 +8,9 @@ using OpenDental.Eclaims;
 namespace TestCanada {
 	class PaymentReconciliation {
 
-		private static string Run(int scriptNum,Carrier carrier,CanadianNetwork network,Provider prov,Provider billingProv,out List <Etrans> etransAcks,DateTime reconciliationDate) { 
+		private static string Run(int scriptNum,bool sendToItrans,Carrier carrier,Provider treatProv,Provider billingProv,DateTime reconciliationDate,out List<Etrans> etransAcks) { 
 			string retVal="";
-			etransAcks=CanadianOutput.GetPaymentReconciliations(carrier,network,prov,billingProv,reconciliationDate);
+			etransAcks=CanadianOutput.GetPaymentReconciliations(sendToItrans,carrier,treatProv,billingProv,reconciliationDate);
 			retVal+="Payment Reconciliation#"+scriptNum.ToString()+" successful.\r\n";
 			return retVal;
 		}
@@ -20,7 +20,7 @@ namespace TestCanada {
 			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			List <Etrans> etransAcks;
-			return Run(1,carrier,null,prov,prov,out etransAcks,new DateTime(1999,6,16));
+			return Run(1,false,carrier,prov,prov,new DateTime(1999,6,16),out etransAcks);
 		}
 
 		public static string RunTwo() {
@@ -31,7 +31,7 @@ namespace TestCanada {
 			network.CanadianTransactionPrefix="A";
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			List<Etrans> etransAcks;
-			return Run(2,null,network,prov,prov,out etransAcks,new DateTime(1999,6,16));
+			return Run(2,true,null,prov,prov,new DateTime(1999,6,16),out etransAcks);
 		}
 
 		public static string RunThree() {
@@ -39,7 +39,7 @@ namespace TestCanada {
 			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			List<Etrans> etransAcks;
-			return Run(3,carrier,null,prov,prov,out etransAcks,new DateTime(1999,6,16));
+			return Run(3,false,carrier,prov,prov,new DateTime(1999,6,16),out etransAcks);
 		}
 
 	}

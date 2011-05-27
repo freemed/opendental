@@ -19,9 +19,6 @@ namespace OpenDental {
 		}
 
 		private void FormCanadaPaymentReconciliation_Load(object sender,EventArgs e) {
-			for(int i=0;i<CanadianNetworks.Listt.Count;i++) {
-				listNetworks.Items.Add(CanadianNetworks.Listt[i].Abbrev+" - "+CanadianNetworks.Listt[i].Descript);
-			}
 			for(int i=0;i<Carriers.Listt.Length;i++) {
 				if(Carriers.Listt[i].CDAnetVersion!="02" &&//This transaction does not exist in version 02.
 					(Carriers.Listt[i].CanadianSupportedTypes&CanSupTransTypes.RequestForPaymentReconciliation_06)==CanSupTransTypes.RequestForPaymentReconciliation_06) {
@@ -35,28 +32,38 @@ namespace OpenDental {
 				listTreatingProvider.Items.Add(ProviderC.List[i].Abbr);
 				if(ProviderC.List[i].ProvNum==defaultProvNum) {
 					listBillingProvider.SelectedIndex=i;
+					textBillingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
 					listTreatingProvider.SelectedIndex=i;
+					textTreatingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
 				}
 			}
 			textDateReconciliation.Text=DateTime.Today.ToShortDateString();
 		}
 
-		private void checkGetForAllCarriers_Click(object sender,EventArgs e) {
-			groupCarrierOrNetwork.Enabled=!checkGetForAllCarriers.Checked;
+		private void radioVersion4Itrans_Click(object sender,EventArgs e) {
+			radioVersion4Itrans.Checked=true;
+			radioVersion4ToCarrier.Checked=false;
+			listCarriers.Enabled=false;
 		}
 
-		private void listCarriers_Click(object sender,EventArgs e) {
-			listNetworks.SelectedIndex=-1;
+		private void radioVersion4ToCarrier_Click(object sender,EventArgs e) {
+			radioVersion4Itrans.Checked=false;
+			radioVersion4ToCarrier.Checked=true;
+			listCarriers.Enabled=true;
 		}
 
-		private void listNetwork_Click(object sender,EventArgs e) {
-			listCarriers.SelectedIndex=-1;
+		private void listBillingProvider_Click(object sender,EventArgs e) {
+			textBillingOfficeNumber.Text=ProviderC.List[listBillingProvider.SelectedIndex].CanadianOfficeNum;
+		}
+
+		private void listTreatingProvider_Click(object sender,EventArgs e) {
+			textTreatingOfficeNumber.Text=ProviderC.List[listTreatingProvider.SelectedIndex].CanadianOfficeNum;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(!checkGetForAllCarriers.Checked) {
-				if(listCarriers.SelectedIndex<0 && listNetworks.SelectedIndex<0) {
-					MsgBox.Show(this,"You must first choose one carrier or one network.");
+			if(radioVersion4ToCarrier.Checked) {
+				if(listCarriers.SelectedIndex<0) {
+					MsgBox.Show(this,"You must first choose a carrier.");
 					return;
 				}
 			}
@@ -78,23 +85,13 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				if(checkGetForAllCarriers.Checked) {
-					Carrier carrier=new Carrier();
-					carrier.CDAnetVersion="04";
-					carrier.ElectID="999999";//The whole ITRANS network.
-					carrier.CanadianEncryptionMethod=1;//No encryption.
-					CanadianOutput.GetPaymentReconciliations(carrier,null,ProviderC.List[listTreatingProvider.SelectedIndex],
-							ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
+				if(radioVersion4Itrans.Checked) {
+					CanadianOutput.GetPaymentReconciliations(true,null,ProviderC.List[listTreatingProvider.SelectedIndex],
+						ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
 				}
 				else {
-					if(listCarriers.SelectedIndex>=0) {
-						CanadianOutput.GetPaymentReconciliations(carriers[listCarriers.SelectedIndex],null,ProviderC.List[listTreatingProvider.SelectedIndex],
-							ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
-					}
-					else {
-						CanadianOutput.GetPaymentReconciliations(null,CanadianNetworks.Listt[listNetworks.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],
-							ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
-					}
+					CanadianOutput.GetPaymentReconciliations(false,carriers[listCarriers.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],
+						ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
 				}
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Done.");

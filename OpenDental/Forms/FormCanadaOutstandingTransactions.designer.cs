@@ -150,6 +150,7 @@ namespace OpenDental{
 			this.Controls.Add(this.groupCarrier);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "FormCanadaOutstandingTransactions";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Outstanding Transactions Request";
