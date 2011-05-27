@@ -5176,7 +5176,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command = "ALTER TABLE allergy MODIFY DateAdverseReaction NOT NULL";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE pharmacy ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE pharmacy SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE pharmacy ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE pharmacy SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5233,16 +5244,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 				
 
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE pharmacy ADD DateTStamp timestamp";
-					Db.NonQ(command);
-					command="UPDATE pharmacy SET DateTStamp = NOW()";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE pharmacy ADD DateTStamp timestamp";
-					Db.NonQ(command);
-					command="UPDATE pharmacy SET DateTStamp = SYSTIMESTAMP";
-					Db.NonQ(command);
-				}
+				/*				
 				*/
