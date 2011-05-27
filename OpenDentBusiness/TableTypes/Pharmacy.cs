@@ -28,6 +28,9 @@ namespace OpenDentBusiness{
 		public string Zip;
 		///<summary>A freeform note for any info that is needed about the pharmacy, such as hours.</summary>
 		public string Note;
+		///<summary>The last date and time this row was altered.  Not user editable.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 		
 		public Pharmacy Copy(){
 			return (Pharmacy)this.MemberwiseClone();
