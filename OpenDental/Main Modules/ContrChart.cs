@@ -3656,7 +3656,8 @@ namespace OpenDental{
 					return;
 				}
 				if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxEdit) {
-					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
+					long launchRxNum=(long)type.InvokeMember("LaunchRxNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null);
+					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(launchRxNum));
 					FormRXE.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
 				}
@@ -3676,7 +3677,7 @@ namespace OpenDental{
 					ModuleSelected(PatCur.PatNum);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Online) {
-					FormOnlineAccess formO=new FormOnlineAccess();
+					FormEhrOnlineAccess formO=new FormEhrOnlineAccess();
 					formO.PatCur=PatCur;
 					formO.ShowDialog();
 					ModuleSelected(PatCur.PatNum);

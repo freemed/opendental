@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 
-namespace OpenDental.Forms {
+namespace OpenDental {
 	public partial class FormReminderRules:Form {
 		public List<ReminderRule> listReminders;
 		public FormReminderRules() {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental.Forms {
+namespace OpenDental {
 	public partial class FormReminderRuleEdit:Form {
 		public ReminderRule RuleCur = new ReminderRule();
 		//both the RuleCur.ReminderCriterion and RuleCur.CriterionFK will be altered below in response to user actions.

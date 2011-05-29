@@ -1,4 +1,4 @@
-﻿namespace OpenDental.Forms {
+﻿namespace OpenDental {
 	partial class FormEduResourceEdit {
 		/// <summary>
 		/// Required designer variable.

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OpenDental;
 using OpenDentBusiness;
 
-namespace OpenDental.Forms {
+namespace OpenDental {
 	public partial class FormEduResourceEdit:Form {
 		public bool IsNew;
 		public EduResource EduResourceCur;

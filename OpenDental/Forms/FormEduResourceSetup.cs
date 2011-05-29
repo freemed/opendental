@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 
-namespace OpenDental.Forms {
+namespace OpenDental {
 	public partial class FormEduResourceSetup:Form {
 		private List<EduResource> eduResourceList;
 

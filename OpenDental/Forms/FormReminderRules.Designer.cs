@@ -1,4 +1,4 @@
-﻿namespace OpenDental.Forms {
+﻿namespace OpenDental {
 	partial class FormReminderRules {
 		/// <summary>
 		/// Required designer variable.
