@@ -4811,18 +4811,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE rxpat ADD IsDiscontinued tinyint NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE rxpat ADD IsDiscontinued number(3)";
-					Db.NonQ(command);
-					command="UPDATE rxpat SET IsDiscontinued = 0 WHERE IsDiscontinued IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE rxpat MODIFY IsDiscontinued NOT NULL";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString) VALUES('StoreCCtokens','1')";
 					Db.NonQ(command);
 				}

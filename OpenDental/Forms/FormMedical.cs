@@ -34,7 +34,6 @@ namespace OpenDental{
 		private UI.Button butAddAllergy;
 		private PatientNote PatientNoteCur;
 		private CheckBox checkShowInactiveAllergies;
-		private UI.Button butMedicationReconcile;
 		private List<Allergy> allergyList; 
 
 		///<summary></summary>
@@ -86,7 +85,6 @@ namespace OpenDental{
 			this.gridAllergies = new OpenDental.UI.ODGrid();
 			this.butAddAllergy = new OpenDental.UI.Button();
 			this.checkShowInactiveAllergies = new System.Windows.Forms.CheckBox();
-			this.butMedicationReconcile = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -338,28 +336,12 @@ namespace OpenDental{
 			this.checkShowInactiveAllergies.UseVisualStyleBackColor = true;
 			this.checkShowInactiveAllergies.CheckedChanged += new System.EventHandler(this.checkShowInactiveAllergies_CheckedChanged);
 			// 
-			// butMedicationReconcile
-			// 
-			this.butMedicationReconcile.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butMedicationReconcile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butMedicationReconcile.Autosize = true;
-			this.butMedicationReconcile.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMedicationReconcile.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butMedicationReconcile.CornerRadius = 4F;
-			this.butMedicationReconcile.Location = new System.Drawing.Point(805,2);
-			this.butMedicationReconcile.Name = "butMedicationReconcile";
-			this.butMedicationReconcile.Size = new System.Drawing.Size(154,23);
-			this.butMedicationReconcile.TabIndex = 66;
-			this.butMedicationReconcile.Text = "Reconcile Medications";
-			this.butMedicationReconcile.Click += new System.EventHandler(this.butMedicationReconcile_Click);
-			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964,683);
-			this.Controls.Add(this.butMedicationReconcile);
 			this.Controls.Add(this.checkShowInactiveAllergies);
 			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.gridAllergies);
@@ -396,7 +378,7 @@ namespace OpenDental{
 
 		private void FormMedical_Load(object sender, System.EventArgs e){
 			if(FormOpenDental.FormEHR==null) {
-				butMedicationReconcile.Visible=false;
+				//butMedicationReconcile.Visible=false;
 			}
 			checkPremed.Checked=PatCur.Premed;
 			textMedUrgNote.Text=PatCur.MedUrgNote;
