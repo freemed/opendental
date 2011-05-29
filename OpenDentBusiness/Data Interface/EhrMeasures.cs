@@ -269,7 +269,40 @@ namespace OpenDentBusiness{
 					command="";
 					break;
 				case EhrMeasureType.ElectronicCopy:
-					command="";
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrmeasure (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						dateRequested date NOT NULL,
+						dateDeadline date NOT NULL,
+						copyProvided tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,dateRequested) SELECT patient.PatNum,LName,FName,DATE(DateTEvent) "
+						+"FROM ehrmeasureevent "
+						+"LEFT JOIN patient ON patient.PatNum=ehrmeasureevent.PatNum "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
+						+"AND DATE(DateTEvent) >= "+POut.Date(dateStart)+" "
+						+"AND DATE(DateTEvent) <= "+POut.Date(dateEnd);
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure "
+						+"SET dateDeadline = ADDDATE(dateRequested, INTERVAL 3 DAY)";
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure "
+						+"SET dateDeadline = ADDDate(dateDeadline, INTERVAL 2 DAY) "//add 2 more days for weekend
+						+"WHERE DAYOFWEEK(dateRequested) IN(4,5,6)";//wed, thur, fri
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure,ehrmeasureevent SET copyProvided = 1 "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyProvidedToPt)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) >= dateRequested "
+						+"AND DATE(ehrmeasureevent.DateTEvent) <= dateDeadline";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrmeasure";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
 					break;
 				case EhrMeasureType.ClinicalSummaries:
 					command="DROP TABLE IF EXISTS tempehrmeasure";
@@ -283,7 +316,7 @@ namespace OpenDentBusiness{
 						summaryProvided tinyint NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,VisitDate) SELECT patient.PatNum,LName,FName,ProcDate "
+					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,visitDate) SELECT patient.PatNum,LName,FName,ProcDate "
 						+"FROM procedurelog "
 						+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
 						+"WHERE ProcDate >= "+POut.Date(dateStart)+" "
@@ -291,11 +324,11 @@ namespace OpenDentBusiness{
 						+"GROUP BY procedurelog.PatNum,ProcDate";
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure "
-						+"SET DeadlineDate = ADDDATE(VisitDate, INTERVAL 3 DAY)";
+						+"SET deadlineDate = ADDDATE(visitDate, INTERVAL 3 DAY)";
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure "
-						+"SET DeadlineDate = ADDDate(DeadlineDate, INTERVAL 2 DAY) "//add 2 more days for weekend
-						+"WHERE DAYOFWEEK(VisitDate) IN(4,5,6)";//wed, thur, fri
+						+"SET DeadlineDate = ADDDate(deadlineDate, INTERVAL 2 DAY) "//add 2 more days for weekend
+						+"WHERE DAYOFWEEK(visitDate) IN(4,5,6)";//wed, thur, fri
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure,ehrmeasureevent SET summaryProvided = 1 "
 						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ClinicalSummaryProvidedToPt)+" "
@@ -528,7 +561,15 @@ namespace OpenDentBusiness{
 						
 						break;
 					case EhrMeasureType.ElectronicCopy:
-						//can't do this without UI for tracking when a patient requests a copy of their health information.
+						DateTime dateRequested=PIn.Date(tableRaw.Rows[i]["dateRequested"].ToString());
+						if(tableRaw.Rows[i]["copyProvided"].ToString()=="0") {
+							explanation=dateRequested.ToShortDateString()+" no copy provided to patient";
+						}
+						else {
+							explanation=dateRequested.ToShortDateString()+" copy provided to patient";
+							row["met"]="X";
+						}
+						break;
 						break;
 					case EhrMeasureType.ClinicalSummaries:
 						DateTime visitDate=PIn.Date(tableRaw.Rows[i]["visitDate"].ToString());
@@ -877,6 +918,53 @@ namespace OpenDentBusiness{
 						mu.Action="";
 						break;
 					case EhrMeasureType.ElectronicCopy:
+						List<EhrMeasureEvent> listRequests=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ElectronicCopyRequested);
+						List<EhrMeasureEvent> listRequestsPeriod=new List<EhrMeasureEvent>();
+						for(int r=0;r<listRequests.Count;r++) {
+							if(listRequests[r].DateTEvent < DateTime.Now.AddYears(-1)) {//not within the last year
+								continue;
+							}
+							listRequestsPeriod.Add(listRequests[r]);
+						}
+						if(listRequestsPeriod.Count==0) {
+							mu.Met=MuMet.NA;
+							mu.Details="No requests within the last year.";
+						}
+						else {
+							int countMissingCopies=0;
+							bool copyProvidedinTime;
+							List<EhrMeasureEvent> listCopiesProvided=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ElectronicCopyProvidedToPt);
+							for(int rp=0;rp<listRequestsPeriod.Count;rp++) {
+								copyProvidedinTime=false;
+								DateTime deadlineDateCopy=listRequestsPeriod[rp].DateTEvent.Date.AddDays(3);
+								if(listRequestsPeriod[rp].DateTEvent.DayOfWeek==DayOfWeek.Wednesday 
+									|| listRequestsPeriod[rp].DateTEvent.DayOfWeek==DayOfWeek.Thursday 
+									|| listRequestsPeriod[rp].DateTEvent.DayOfWeek==DayOfWeek.Friday) 
+								{
+									deadlineDateCopy.AddDays(2);//add two days for the weekend
+								}
+								for(int cp=0;cp<listCopiesProvided.Count;cp++) {
+									if(listCopiesProvided[cp].DateTEvent.Date > deadlineDateCopy) {
+										continue;
+									}
+									if(listCopiesProvided[cp].DateTEvent.Date < listRequestsPeriod[rp].DateTEvent.Date) {
+										continue;
+									}
+									copyProvidedinTime=true;
+								}
+								if(!copyProvidedinTime) {
+									countMissingCopies++;
+								}
+							}
+							if(countMissingCopies==0) {
+								mu.Met=MuMet.True;
+								mu.Details="Electronic copy provided to Pt within 3 business days of each request.";
+							}
+							else {
+								mu.Met=MuMet.False;
+								mu.Details="Electronic copies not provided to Pt within 3 business days of a request:"+countMissingCopies.ToString();
+							}
+						}
 						mu.Action="Provide elect copy to Pt";
 						break;
 					case EhrMeasureType.ClinicalSummaries:
@@ -905,10 +993,10 @@ namespace OpenDentBusiness{
 									deadlineDate.AddDays(2);//add two days for the weekend
 								}
 								for(int r=0;r<listClinSum.Count;r++) {
-									if(listClinSum[r].DateTEvent > deadlineDate) {
+									if(listClinSum[r].DateTEvent.Date > deadlineDate) {
 										continue;
 									}
-									if(listClinSum[r].DateTEvent < listVisits[p]) {
+									if(listClinSum[r].DateTEvent.Date < listVisits[p]) {
 										continue;
 									}
 									summaryProvidedinTime=true;
