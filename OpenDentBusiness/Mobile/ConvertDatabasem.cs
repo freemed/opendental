@@ -52,3 +52,43 @@ namespace OpenDentBusiness.Mobile {
 					Db.NonQ(command);
 				}
 				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD ServiceId varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD ServiceId varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD ServiceName varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD ServiceName varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS pharmacym";
+					Db.NonQ(command);
+					command=@"CREATE TABLE pharmacym (
+						CustomerNum bigint NOT NULL,
+						PharmacyNum bigint NOT NULL,
+						StoreName varchar(255) NOT NULL,
+						Phone varchar(255) NOT NULL,
+						Fax varchar(255) NOT NULL,
+						Address varchar(255) NOT NULL,
+						Address2 varchar(255) NOT NULL,
+						City varchar(255) NOT NULL,
+						State varchar(255) NOT NULL,
+						Zip varchar(255) NOT NULL,
+						Note varchar(255) NOT NULL,
+						INDEX(CustomerNum),
+						INDEX(PharmacyNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/

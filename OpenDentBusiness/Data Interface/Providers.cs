@@ -59,6 +59,7 @@ namespace OpenDentBusiness{
 			}
 			string command="DELETE from provider WHERE provnum = '"+prov.ProvNum.ToString()+"'";
  			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.Provider,prov.ProvNum);
 		}
 
 		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>

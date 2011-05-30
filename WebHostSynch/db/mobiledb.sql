@@ -1,4 +1,21 @@
-﻿DROP TABLE IF EXISTS `allergydefm`;
+﻿/*
+SQLyog Community Edition- MySQL GUI v8.0 
+MySQL - 5.5.9 : Database - mobile_dev
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`mobile_dev` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+/*Table structure for table `allergydefm` */
+
+DROP TABLE IF EXISTS `allergydefm`;
 
 CREATE TABLE `allergydefm` (
   `CustomerNum` bigint(20) NOT NULL,
@@ -109,6 +126,8 @@ CREATE TABLE `labpanelm` (
   `LabNameAddress` varchar(255) NOT NULL,
   `SpecimenCondition` varchar(255) NOT NULL,
   `SpecimenSource` varchar(255) NOT NULL,
+  `ServiceId` varchar(255) NOT NULL,
+  `ServiceName` varchar(255) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`LabPanelNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `LabPanelNum` (`LabPanelNum`),
@@ -202,6 +221,27 @@ CREATE TABLE `patientm` (
   KEY `ClinicNum` (`ClinicNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*Table structure for table `pharmacym` */
+
+DROP TABLE IF EXISTS `pharmacym`;
+
+CREATE TABLE `pharmacym` (
+  `CustomerNum` bigint(20) NOT NULL,
+  `PharmacyNum` bigint(20) NOT NULL,
+  `StoreName` varchar(255) NOT NULL,
+  `Phone` varchar(255) NOT NULL,
+  `Fax` varchar(255) NOT NULL,
+  `Address` varchar(255) NOT NULL,
+  `Address2` varchar(255) NOT NULL,
+  `City` varchar(255) NOT NULL,
+  `State` varchar(255) NOT NULL,
+  `Zip` varchar(255) NOT NULL,
+  `Note` varchar(255) NOT NULL,
+  PRIMARY KEY (`CustomerNum`,`PharmacyNum`),
+  KEY `CustomerNum` (`CustomerNum`),
+  KEY `PharmacyNum` (`PharmacyNum`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 /*Table structure for table `preference` */
 
 DROP TABLE IF EXISTS `preference`;
@@ -222,6 +262,7 @@ CREATE TABLE `providerm` (
   `Abbr` varchar(255) NOT NULL,
   `IsSecondary` tinyint(4) NOT NULL,
   `ProvColor` int(11) NOT NULL,
+  PRIMARY KEY (`CustomerNum`,`ProvNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `ProvNum` (`ProvNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -256,3 +297,6 @@ CREATE TABLE `userm` (
   `Password` varchar(255) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`UsermNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

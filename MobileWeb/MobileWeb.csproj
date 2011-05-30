@@ -99,6 +99,8 @@
     <Content Include="Global.asax" />
     <Content Include="Mob.png" />
     <Content Include="PatientList.aspx" />
+    <Content Include="PharmacyDetails.aspx" />
+    <Content Include="PharmacyList.aspx" />
     <Content Include="ProcessLogout.aspx" />
     <Content Include="css\jqtouch.css" />
     <Content Include="Index.aspx" />
@@ -143,6 +145,20 @@
     </Compile>
     <Compile Include="PatientList.aspx.designer.cs">
       <DependentUpon>PatientList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PharmacyDetails.aspx.cs">
+      <DependentUpon>PharmacyDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PharmacyDetails.aspx.designer.cs">
+      <DependentUpon>PharmacyDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PharmacyList.aspx.cs">
+      <DependentUpon>PharmacyList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PharmacyList.aspx.designer.cs">
+      <DependentUpon>PharmacyList.aspx</DependentUpon>
     </Compile>
     <Compile Include="ProcessLogout.aspx.cs">
       <DependentUpon>ProcessLogout.aspx</DependentUpon>

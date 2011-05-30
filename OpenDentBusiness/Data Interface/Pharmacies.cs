@@ -56,6 +56,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.PharmacyCrud.Delete(pharmacyNum);
+			DeletedObjects.SetDeleted(DeletedObjectType.Pharmacy,pharmacyNum);
 		}
 
 		public static string GetDescription(long PharmacyNum) {
@@ -70,6 +71,45 @@ namespace OpenDentBusiness{
 			}
 			return "";
 		}
+
+		public static List<long> GetChangedSincePharmacyNums(DateTime changedSince) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
+			string command="SELECT PharmacyNum FROM pharmacy WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> provnums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				provnums.Add(PIn.Long(dt.Rows[i]["PharmacyNum"].ToString()));
+			}
+			return provnums;
+		}
+
+		///<summary>Used along with GetChangedSincePharmacyNums</summary>
+		public static List<Pharmacy> GetMultPharmacies(List<long> pharmacyNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Pharmacy>>(MethodBase.GetCurrentMethod(),pharmacyNums);
+			}
+			string strPharmacyNums="";
+			DataTable table;
+			if(pharmacyNums.Count>0) {
+				for(int i=0;i<pharmacyNums.Count;i++) {
+					if(i>0) {
+						strPharmacyNums+="OR ";
+					}
+					strPharmacyNums+="PharmacyNum='"+pharmacyNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM pharmacy WHERE "+strPharmacyNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			Pharmacy[] multPharmacys=Crud.PharmacyCrud.TableToList(table).ToArray();
+			List<Pharmacy> pharmacyList=new List<Pharmacy>(multPharmacys);
+			return pharmacyList;
+		}
+
 
 	}
 }

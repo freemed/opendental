@@ -26,6 +26,7 @@ namespace OpenDental {
 			appointment,
 			prescription,
 			provider,
+			pharmacy,
 			labpanel,
 			labresult,
 			medication,
@@ -363,6 +364,7 @@ namespace OpenDental {
 			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
 			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
+			List<long> pharNumList=Pharmacyms.GetChangedSincePharmacyNums(changedSince);
 			//Pat portal
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
@@ -376,7 +378,7 @@ namespace OpenDental {
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 			List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
-			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count
+			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
 							+dO.Count;
@@ -389,6 +391,7 @@ namespace OpenDental {
 			SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
 			SynchGeneric(rxNumList,SynchEntity.prescription,ref FormP);
 			SynchGeneric(provNumList,SynchEntity.provider,ref FormP);
+			SynchGeneric(pharNumList,SynchEntity.pharmacy,ref FormP);
 			//pat portal
 			SynchGeneric(labPanelNumList,SynchEntity.labpanel,ref FormP);
 			SynchGeneric(labResultNumList,SynchEntity.labresult,ref FormP);
@@ -436,6 +439,10 @@ namespace OpenDental {
 						case SynchEntity.provider:
 							List<Providerm> changedProvList=Providerms.GetMultProviderms(BlockPKNumList);
 							mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
+						break;
+						case SynchEntity.pharmacy:
+						List<Pharmacym> changedPharmacyList=Pharmacyms.GetMultPharmacyms(BlockPKNumList);
+						mb.SynchPharmacies(PrefC.GetString(PrefName.RegistrationKey),changedPharmacyList.ToArray());
 						break;
 						case SynchEntity.labpanel:
 							List<LabPanelm> ChangedLabPanelList=LabPanelms.GetMultLabPanelms(BlockPKNumList);

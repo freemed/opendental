@@ -86,6 +86,7 @@ namespace WebHostSynch {
 				Appointmentms.DeleteAll(customerNum);
 				RxPatms.DeleteAll(customerNum);
 				Providerms.DeleteAll(customerNum);
+				Pharmacyms.DeleteAll(customerNum);
 				//pat portal
 				LabPanelms.DeleteAll(customerNum);
 				LabResultms.DeleteAll(customerNum);
@@ -158,6 +159,21 @@ namespace WebHostSynch {
 						return;
 					}
 					Providerms.UpdateFromChangeList(providerList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+			
+			[WebMethod]
+			public void SynchPharmacies(String RegistrationKey,List<Pharmacym> pharmacyList) {
+				try {
+					Logger.Information("In SynchPharmacies");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Pharmacyms.UpdateFromChangeList(pharmacyList,customerNum);
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);

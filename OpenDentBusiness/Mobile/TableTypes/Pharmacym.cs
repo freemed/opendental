@@ -6,7 +6,7 @@ using System.Text;
 namespace OpenDentBusiness.Mobile {
 	[Serializable()]
 	[CrudTable(IsMobile=true)]
-	class Pharmacym:TableBase {
+	public class Pharmacym:TableBase {
 		///<summary>Primary key 1.</summary>
 		[CrudColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;

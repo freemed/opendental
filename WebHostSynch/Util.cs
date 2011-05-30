@@ -96,8 +96,7 @@ namespace WebHostSynch {
 				}
 			}
 			catch(Exception ex) {
-				Logger.LogError(ex);
-				Logger.Information("Exception thrown. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice);
+				Logger.LogError("Exception thrown. IpAddress="+HttpContext.Current.Request.UserHostAddress+" RegistrationKey="+RegistrationKeyFromDentalOffice,ex);
 				return 0;
 			}
 			return RegistrationKeyFromDb.PatNum;
