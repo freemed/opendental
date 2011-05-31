@@ -104,6 +104,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butLabel;
 		private OpenDental.UI.Button butSplit;
 		//private User user;
+		///<summary>When user first opens form, if the claim is S or R, and the user does not have permission, the user is informed, and this is set to true.</summary>
 		private bool notAuthorized;
 		private List <PatPlan> PatPlanList;
 		private OpenDental.UI.ODGrid gridProc;
@@ -4622,8 +4623,10 @@ namespace OpenDental{
 			if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,pd.PrinterSettings.Copies)) {
 				return;
 			}
-			//also changes claimstatus to sent, and date:
-			Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0);
+			if(!notAuthorized) {//if already sent, we want to block users from changing sent date without permission.
+				//also changes claimstatus to sent, and date:
+				Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0);
+			}
 			//ClaimCur.ClaimStatus="S";
 			//ClaimCur.DateSent=DateTime.Today;
 			//Claims.Update(ClaimCur);
