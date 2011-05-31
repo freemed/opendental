@@ -1229,7 +1229,7 @@ namespace OpenDentBusiness {
 				}
 				//etrans---------------------------------------------------------------------------------------------------
 				command="SELECT COUNT(*) FROM etrans "
-					+"WHERE PlanNum NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
+					+"WHERE PlanNum!=0 AND PlanNum NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched etrans InsSubNum/PlanNum values: ")+numFound+"\r\n";
@@ -1263,7 +1263,8 @@ namespace OpenDentBusiness {
 				//claim.PlanNum2---------------------------------------------------------------------------------------------------
 				command="UPDATE claim SET PlanNum2 = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum2) "
 					+"WHERE PlanNum2 != 0 "
-					+"AND PlanNum2 != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum2)";
+					+"AND PlanNum2 NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum2)";
+				//if InsSubNum2 was completely invalid, then PlanNum2 gets set to zero here.
 				numFixed=Db.NonQ(command);
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum2/PlanNum2 fixed: ")+numFixed+"\r\n";
@@ -1288,7 +1289,7 @@ namespace OpenDentBusiness {
 				numFixed=0;
 				//etrans---------------------------------------------------------------------------------------------------
 				command="UPDATE etrans SET PlanNum = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum) "
-					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
+					+"WHERE PlanNum!=0 AND PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=etrans.InsSubNum)";
 				numFixed=Db.NonQ(command);
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched etrans InsSubNum/PlanNum fixed: ")+numFixed+"\r\n";
