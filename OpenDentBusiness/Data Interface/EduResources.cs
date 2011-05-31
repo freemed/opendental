@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<EduResource>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			List<Disease> diseaseList = Diseases.Refresh(patNum);
-			List<MedicationPat> medicationPatList = MedicationPats.GetList(patNum);
+			List<MedicationPat> medicationPatList = MedicationPats.Refresh(patNum,false);
 			List<LabResult> labResultList = LabResults.GetAllForPatient(patNum);
 			List<EduResource> eduResourceListAll = Crud.EduResourceCrud.SelectMany("SELECT * FROM eduresource");
 			List<EduResource> retVal = new List<EduResource>();

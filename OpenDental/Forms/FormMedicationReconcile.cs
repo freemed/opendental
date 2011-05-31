@@ -13,6 +13,7 @@ namespace OpenDental {
 		public Patient PatCur;
 		private Bitmap BitmapOriginal;
 		private List<EhrMeasureEvent> ehrMeasureEventsList;
+		private List<MedicationPat> medList;
 
 		public FormMedicationReconcile() {
 			InitializeComponent();
@@ -26,7 +27,7 @@ namespace OpenDental {
 
 		private void FillMeds() {
 			Medications.Refresh();
-			MedicationPats.Refresh(PatCur.PatNum);
+			medList=MedicationPats.Refresh(PatCur.PatNum,checkDiscontinued.Checked);
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),140);
@@ -37,19 +38,21 @@ namespace OpenDental {
 			gridMeds.Columns.Add(col);
 			gridMeds.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<MedicationPats.List.Length;i++) {
-				if(!checkDiscontinued.Checked && MedicationPats.List[i].IsDiscontinued) {
-					continue;
-				}
+			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
-				Medication generic=Medications.GetGeneric(MedicationPats.List[i].MedicationNum);
-				string medName=Medications.GetMedication(MedicationPats.List[i].MedicationNum).MedName;
-				if(generic.MedicationNum!=MedicationPats.List[i].MedicationNum) {//not generic
+				Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
+				string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
+				if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
 					medName+=" ("+generic.MedName+")";
 				}
 				row.Cells.Add(medName);
-				row.Cells.Add(MedicationPats.List[i].PatNote);
-				row.Cells.Add(MedicationPats.List[i].IsDiscontinued?"X":"");
+				row.Cells.Add(medList[i].PatNote);
+				if(medList[i].DateStop.Year>1880) {
+					row.Cells.Add("X");
+				}
+				else {
+					row.Cells.Add("");
+				}
 				gridMeds.Rows.Add(row);
 			}
 			gridMeds.EndUpdate();
@@ -115,7 +118,7 @@ namespace OpenDental {
 
 		private void gridMeds_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormMedPat FormMP=new FormMedPat();
-			FormMP.MedicationPatCur=MedicationPats.List[e.Row];
+			FormMP.MedicationPatCur=medList[e.Row];
 			FormMP.ShowDialog();
 			FillMeds();
 		}

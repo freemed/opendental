@@ -17,8 +17,10 @@ namespace OpenDentBusiness{
 		///<summary>The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>If true, not a current medication.</summary>
-		public bool IsDiscontinued;
+		///<summary>Date that the medication was started.  Can be minval if unknown.</summary>
+		public DateTime DateStart;
+		///<summary>Date that the medication was stopped.  Can be minval if unknown.  If not minval, then this medication is "discontinued".</summary>
+		public DateTime DateStop;
 
 	}
 

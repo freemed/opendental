@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			medicationPatm.PatNum          =medicationPat.PatNum;
 			medicationPatm.MedicationNum   =medicationPat.MedicationNum;
 			medicationPatm.PatNote         =medicationPat.PatNote;
-			medicationPatm.IsDiscontinued  =medicationPat.IsDiscontinued;
+			//medicationPatm.IsDiscontinued  =medicationPat.IsDiscontinued;
 			return medicationPatm;
 		}
 

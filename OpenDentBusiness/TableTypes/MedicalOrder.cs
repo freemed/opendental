@@ -33,8 +33,8 @@ namespace OpenDentBusiness {
     ///<summary>0- Laboratory</summary>
     Laboratory,
     ///<summary>1- Radiology</summary>
-    Radiology,
-    ///<summary>2- Medication</summary>
-    Medication
+    Radiology
+    //<summary>2- Medication</summary>
+    //Medication
   }
 }

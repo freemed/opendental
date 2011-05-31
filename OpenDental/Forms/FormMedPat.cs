@@ -19,7 +19,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label labelPatNote;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label6;
@@ -35,8 +35,12 @@ namespace OpenDental{
 		private OpenDental.ODtextBox textPatNote;
 		///<summary></summary>
 		public bool IsNew;
-		private CheckBox checkDiscontinued;
 		private UI.Button butFormulary;
+		private GroupBox groupOrder;
+		private ValidDate textDateStop;
+		private Label label7;
+		private ValidDate textDateStart;
+		private Label label4;
 		public MedicationPat MedicationPatCur;
 
 		///<summary></summary>
@@ -80,16 +84,21 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.textMedNote = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
+			this.labelPatNote = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.butEdit = new OpenDental.UI.Button();
 			this.butRemove = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textPatNote = new OpenDental.ODtextBox();
-			this.checkDiscontinued = new System.Windows.Forms.CheckBox();
 			this.butFormulary = new OpenDental.UI.Button();
+			this.groupOrder = new System.Windows.Forms.GroupBox();
+			this.textDateStop = new OpenDental.ValidDate();
+			this.label7 = new System.Windows.Forms.Label();
+			this.textDateStart = new OpenDental.ValidDate();
+			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
+			this.groupOrder.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -125,7 +134,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(38,25);
+			this.label1.Location = new System.Drawing.Point(38,23);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(145,17);
 			this.label1.TabIndex = 2;
@@ -134,7 +143,7 @@ namespace OpenDental{
 			// 
 			// textMedName
 			// 
-			this.textMedName.Location = new System.Drawing.Point(183,22);
+			this.textMedName.Location = new System.Drawing.Point(183,20);
 			this.textMedName.Name = "textMedName";
 			this.textMedName.ReadOnly = true;
 			this.textMedName.Size = new System.Drawing.Size(348,20);
@@ -142,7 +151,7 @@ namespace OpenDental{
 			// 
 			// textGenericName
 			// 
-			this.textGenericName.Location = new System.Drawing.Point(183,57);
+			this.textGenericName.Location = new System.Drawing.Point(183,45);
 			this.textGenericName.Name = "textGenericName";
 			this.textGenericName.ReadOnly = true;
 			this.textGenericName.Size = new System.Drawing.Size(348,20);
@@ -150,7 +159,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(19,60);
+			this.label2.Location = new System.Drawing.Point(19,48);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(163,17);
 			this.label2.TabIndex = 4;
@@ -159,7 +168,7 @@ namespace OpenDental{
 			// 
 			// textMedNote
 			// 
-			this.textMedNote.Location = new System.Drawing.Point(183,92);
+			this.textMedNote.Location = new System.Drawing.Point(183,70);
 			this.textMedNote.Multiline = true;
 			this.textMedNote.Name = "textMedNote";
 			this.textMedNote.ReadOnly = true;
@@ -168,21 +177,21 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(9,96);
+			this.label3.Location = new System.Drawing.Point(8,74);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(174,17);
 			this.label3.TabIndex = 6;
 			this.label3.Text = "Medication Notes";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// label4
+			// labelPatNote
 			// 
-			this.label4.Location = new System.Drawing.Point(63,307);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(182,17);
-			this.label4.TabIndex = 8;
-			this.label4.Text = "Notes for this Patient";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelPatNote.Location = new System.Drawing.Point(6,24);
+			this.labelPatNote.Name = "labelPatNote";
+			this.labelPatNote.Size = new System.Drawing.Size(175,43);
+			this.labelPatNote.TabIndex = 8;
+			this.labelPatNote.Text = "Notes for this Patient";
+			this.labelPatNote.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// groupBox1
 			// 
@@ -195,16 +204,16 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(71,34);
+			this.groupBox1.Location = new System.Drawing.Point(36,13);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(565,253);
+			this.groupBox1.Size = new System.Drawing.Size(565,228);
 			this.groupBox1.TabIndex = 10;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Medication";
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(266,212);
+			this.label6.Location = new System.Drawing.Point(266,190);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(128,28);
 			this.label6.TabIndex = 11;
@@ -217,7 +226,7 @@ namespace OpenDental{
 			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEdit.CornerRadius = 4F;
-			this.butEdit.Location = new System.Drawing.Point(183,212);
+			this.butEdit.Location = new System.Drawing.Point(183,190);
 			this.butEdit.Name = "butEdit";
 			this.butEdit.Size = new System.Drawing.Size(75,24);
 			this.butEdit.TabIndex = 9;
@@ -250,22 +259,13 @@ namespace OpenDental{
 			// textPatNote
 			// 
 			this.textPatNote.AcceptsReturn = true;
-			this.textPatNote.Location = new System.Drawing.Point(254,307);
+			this.textPatNote.Location = new System.Drawing.Point(183,24);
 			this.textPatNote.Multiline = true;
 			this.textPatNote.Name = "textPatNote";
 			this.textPatNote.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicationPat;
 			this.textPatNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textPatNote.Size = new System.Drawing.Size(352,129);
+			this.textPatNote.Size = new System.Drawing.Size(348,111);
 			this.textPatNote.TabIndex = 11;
-			// 
-			// checkDiscontinued
-			// 
-			this.checkDiscontinued.Location = new System.Drawing.Point(254,442);
-			this.checkDiscontinued.Name = "checkDiscontinued";
-			this.checkDiscontinued.Size = new System.Drawing.Size(317,23);
-			this.checkDiscontinued.TabIndex = 62;
-			this.checkDiscontinued.Text = "Discontinued (patient is no longer taking this medication)";
-			this.checkDiscontinued.UseVisualStyleBackColor = true;
 			// 
 			// butFormulary
 			// 
@@ -281,17 +281,61 @@ namespace OpenDental{
 			this.butFormulary.Text = "Check &Formulary";
 			this.butFormulary.Click += new System.EventHandler(this.butFormulary_Click);
 			// 
+			// groupOrder
+			// 
+			this.groupOrder.Controls.Add(this.textDateStop);
+			this.groupOrder.Controls.Add(this.label7);
+			this.groupOrder.Controls.Add(this.textDateStart);
+			this.groupOrder.Controls.Add(this.label4);
+			this.groupOrder.Controls.Add(this.labelPatNote);
+			this.groupOrder.Controls.Add(this.textPatNote);
+			this.groupOrder.Location = new System.Drawing.Point(36,248);
+			this.groupOrder.Name = "groupOrder";
+			this.groupOrder.Size = new System.Drawing.Size(565,193);
+			this.groupOrder.TabIndex = 64;
+			this.groupOrder.TabStop = false;
+			// 
+			// textDateStop
+			// 
+			this.textDateStop.Location = new System.Drawing.Point(183,163);
+			this.textDateStop.Name = "textDateStop";
+			this.textDateStop.Size = new System.Drawing.Size(100,20);
+			this.textDateStop.TabIndex = 15;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(18,164);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(163,17);
+			this.label7.TabIndex = 14;
+			this.label7.Text = "Date Stop";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(183,139);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(100,20);
+			this.textDateStart.TabIndex = 13;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(18,140);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(163,17);
+			this.label4.TabIndex = 12;
+			this.label4.Text = "Date Start";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormMedPat
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(685,540);
+			this.Controls.Add(this.groupOrder);
 			this.Controls.Add(this.butFormulary);
-			this.Controls.Add(this.checkDiscontinued);
-			this.Controls.Add(this.textPatNote);
 			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butRemove);
@@ -306,8 +350,9 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormMedPat_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupOrder.ResumeLayout(false);
+			this.groupOrder.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 		#endregion
@@ -316,15 +361,20 @@ namespace OpenDental{
 			if(FormOpenDental.FormEHR==null) {
 				butFormulary.Visible=false;
 			}
-			FillForm();
-		}
-
-		private void FillForm(){
+			else {
+				labelPatNote.Text="Count, Instructions, and Refills";
+				groupOrder.Text="Medication Order";
+			}
 			textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;
 			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
 			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
 			textPatNote.Text=MedicationPatCur.PatNote;
-			checkDiscontinued.Checked=MedicationPatCur.IsDiscontinued;
+			if(MedicationPatCur.DateStart.Year>1880) {
+				textDateStart.Text=MedicationPatCur.DateStart.ToShortDateString();
+			}
+			if(MedicationPatCur.DateStop.Year>1880) {
+				textDateStop.Text=MedicationPatCur.DateStop.ToShortDateString();
+			}
 		}
 
 		private void butFormulary_Click(object sender,EventArgs e) {
@@ -358,14 +408,17 @@ namespace OpenDental{
 			if(FormME.DialogResult!=DialogResult.OK){
 				return;
 			}
-			FillForm();
+			textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;
+			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
+			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
 		}
 
 		private void butRemove_Click(object sender, System.EventArgs e) {
-			if(MessageBox.Show(Lan.g
-				(this,"Remove this medication from this patient?  Patient notes will be lost.")
-				,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-			{
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Remove this medication from this patient?  Patient notes will be lost.")){
 				return;
 			}
 			MedicationPats.Delete(MedicationPatCur);
@@ -373,8 +426,16 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
+				|| textDateStop.errorProvider1.GetError(textDateStop)!=""
+				) {
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
+			//MedicationPatCur.MedicationNum is already set before entering this window, or else changed up above.
 			MedicationPatCur.PatNote=textPatNote.Text;
-			MedicationPatCur.IsDiscontinued=checkDiscontinued.Checked;
+			MedicationPatCur.DateStart=PIn.Date(textDateStart.Text);
+			MedicationPatCur.DateStop=PIn.Date(textDateStop.Text);
 			if(IsNew){
 				MedicationPats.Insert(MedicationPatCur);
 			}

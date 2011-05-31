@@ -19,6 +19,7 @@ namespace OpenDentBusiness{
 			return Crud.MedicalOrderCrud.SelectMany(command);
 		}
 
+		/*
 		///<summary></summary>
 		public static int GetCountMedical(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -27,7 +28,7 @@ namespace OpenDentBusiness{
 			string command="SELECT COUNT(*) FROM medicalorder WHERE MedOrderType="+POut.Int((int)MedicalOrderType.Medication)+" "
 				+"AND PatNUm="+POut.Long(patNum);
 			return PIn.Int(Db.GetCount(command));
-		}
+		}*/
 
 		///<summary></summary>
 		public static List<MedicalOrder> GetPendingLabs() {

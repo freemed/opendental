@@ -898,7 +898,7 @@ namespace OpenDental{
 			int payPlanCount=PayPlans.GetDependencyCount(PatCur.PatNum);
 			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
-			List<MedicationPat> medList=MedicationPats.GetList(PatCur.PatNum);
+			List<MedicationPat> medList=MedicationPats.Refresh(PatCur.PatNum,false);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);
 			List<RefAttach> RefAttachList=RefAttaches.Refresh(PatCur.PatNum);

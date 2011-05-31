@@ -34,7 +34,8 @@ namespace OpenDental{
 		private UI.Button butAddAllergy;
 		private PatientNote PatientNoteCur;
 		private CheckBox checkShowInactiveAllergies;
-		private List<Allergy> allergyList; 
+		private List<Allergy> allergyList;
+		private List<MedicationPat> medList;
 
 		///<summary></summary>
 		public FormMedical(PatientNote patientNoteCur,Patient patCur){
@@ -392,7 +393,7 @@ namespace OpenDental{
 
 		private void FillMeds(){
 			Medications.Refresh();
-			MedicationPats.Refresh(PatCur.PatNum);
+			medList=MedicationPats.Refresh(PatCur.PatNum,checkDiscontinued.Checked);
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
@@ -405,20 +406,22 @@ namespace OpenDental{
 			gridMeds.Columns.Add(col);
 			gridMeds.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<MedicationPats.List.Length;i++){
-				if(!checkDiscontinued.Checked && MedicationPats.List[i].IsDiscontinued) {
-					continue;
-				}
+			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
-				Medication generic=Medications.GetGeneric(MedicationPats.List[i].MedicationNum);
-				string medName=Medications.GetMedication(MedicationPats.List[i].MedicationNum).MedName;
-				if(generic.MedicationNum!=MedicationPats.List[i].MedicationNum) {//not generic
+				Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
+				string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
+				if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
 					medName+=" ("+generic.MedName+")";
 				}
 				row.Cells.Add(medName);
-				row.Cells.Add(Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes);
-				row.Cells.Add(MedicationPats.List[i].PatNote);
-				row.Cells.Add(MedicationPats.List[i].IsDiscontinued?"X":"");
+				row.Cells.Add(Medications.GetGeneric(medList[i].MedicationNum).Notes);
+				row.Cells.Add(medList[i].PatNote);
+				if(medList[i].DateStop.Year>1880) {
+					row.Cells.Add("X");
+				}
+				else {
+					row.Cells.Add("");
+				}
 				gridMeds.Rows.Add(row);
 			}
 			gridMeds.EndUpdate();
@@ -426,7 +429,7 @@ namespace OpenDental{
 
 		private void gridMeds_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormMedPat FormMP=new FormMedPat();
-			FormMP.MedicationPatCur=MedicationPats.List[e.Row];
+			FormMP.MedicationPatCur=medList[e.Row];
 			FormMP.ShowDialog();
 			FillMeds();
 		}

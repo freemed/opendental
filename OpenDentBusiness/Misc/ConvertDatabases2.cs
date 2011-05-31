@@ -5176,6 +5176,47 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE pharmacy SET DateTStamp = SYSTIMESTAMP";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD DateStart date NOT NULL DEFAULT '0001-01-01'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD DateStart date";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET DateStart = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStart IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat MODIFY DateStart NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD DateStop date NOT NULL DEFAULT '0001-01-01'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD DateStop date";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET DateStop = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStop IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat MODIFY DateStop NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="UPDATE medicationpat SET DateStop = CURDATE() WHERE IsDiscontinued=1";
+					Db.NonQ(command);
+				}
+				else{
+					command="UPDATE medicationpat SET DateStop = SYSDATE WHERE IsDiscontinued=1";
+					Db.NonQ(command);
+				}
+				command="ALTER TABLE medicationpat DROP COLUMN IsDiscontinued";//both oracle and mysql
+				Db.NonQ(command);
+				
+
+
+
+
+
+
 
 
 
@@ -5204,25 +5245,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
-
-
-
-
-				
-				
-
-				
-
-				
-
-				
-
-
-
-
-
-				
-
-				
 
 	

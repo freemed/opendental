@@ -51,7 +51,8 @@ namespace OpenDentBusiness.Crud{
 				medicationPat.MedicationNum   = PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
 				medicationPat.PatNote         = PIn.String(table.Rows[i]["PatNote"].ToString());
 				medicationPat.DateTStamp      = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				medicationPat.IsDiscontinued  = PIn.Bool  (table.Rows[i]["IsDiscontinued"].ToString());
+				medicationPat.DateStart       = PIn.Date  (table.Rows[i]["DateStart"].ToString());
+				medicationPat.DateStop        = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				retVal.Add(medicationPat);
 			}
 			return retVal;
@@ -92,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicationPatNum,";
 			}
-			command+="PatNum,MedicationNum,PatNote,IsDiscontinued) VALUES(";
+			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicationPat.MedicationPatNum)+",";
 			}
@@ -101,7 +102,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (medicationPat.MedicationNum)+","
 				+"'"+POut.String(medicationPat.PatNote)+"',"
 				//DateTStamp can only be set by MySQL
-				+    POut.Bool  (medicationPat.IsDiscontinued)+")";
+				+    POut.Date  (medicationPat.DateStart)+","
+				+    POut.Date  (medicationPat.DateStop)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,7 +120,8 @@ namespace OpenDentBusiness.Crud{
 				+"MedicationNum   =  "+POut.Long  (medicationPat.MedicationNum)+", "
 				+"PatNote         = '"+POut.String(medicationPat.PatNote)+"', "
 				//DateTStamp can only be set by MySQL
-				+"IsDiscontinued  =  "+POut.Bool  (medicationPat.IsDiscontinued)+" "
+				+"DateStart       =  "+POut.Date  (medicationPat.DateStart)+", "
+				+"DateStop        =  "+POut.Date  (medicationPat.DateStop)+" "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPat.MedicationPatNum);
 			Db.NonQ(command);
 		}
@@ -139,9 +142,13 @@ namespace OpenDentBusiness.Crud{
 				command+="PatNote = '"+POut.String(medicationPat.PatNote)+"'";
 			}
 			//DateTStamp can only be set by MySQL
-			if(medicationPat.IsDiscontinued != oldMedicationPat.IsDiscontinued) {
+			if(medicationPat.DateStart != oldMedicationPat.DateStart) {
 				if(command!=""){ command+=",";}
-				command+="IsDiscontinued = "+POut.Bool(medicationPat.IsDiscontinued)+"";
+				command+="DateStart = "+POut.Date(medicationPat.DateStart)+"";
+			}
+			if(medicationPat.DateStop != oldMedicationPat.DateStop) {
+				if(command!=""){ command+=",";}
+				command+="DateStop = "+POut.Date(medicationPat.DateStop)+"";
 			}
 			if(command==""){
 				return;

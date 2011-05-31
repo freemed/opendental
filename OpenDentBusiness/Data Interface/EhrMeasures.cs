@@ -236,6 +236,8 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.ProvOrderEntry: 
+//todo: revise:
+					/*
 					command="SELECT PatNum,LName,FName, "
 						+"(SELECT COUNT(*) FROM medicalorder WHERE medicalorder.PatNum=patient.PatNum "
 						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Medication)+") AS medOrderCount "
@@ -245,7 +247,7 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 						+"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
-					tableRaw=Db.GetTable(command);
+					tableRaw=Db.GetTable(command);*/
 					break;
 				case EhrMeasureType.Rx:
 					command="";
@@ -725,7 +727,7 @@ namespace OpenDentBusiness{
 			//add one of each type
 			EhrMu mu;
 			string explanation;
-			List<MedicationPat> medList=MedicationPats.GetList(pat.PatNum);
+			List<MedicationPat> medList=MedicationPats.Refresh(pat.PatNum,true);
 			List<EhrMeasureEvent> listMeasureEvents=EhrMeasureEvents.Refresh(pat.PatNum);
 			List<RefAttach> listRefAttach=RefAttaches.Refresh(pat.PatNum);
 			for(int i=0;i<Enum.GetValues(typeof(EhrMeasureType)).Length;i++) {
@@ -847,6 +849,8 @@ namespace OpenDentBusiness{
 						mu.Action="Provide online Access";
 						break;
 					case EhrMeasureType.ProvOrderEntry:
+//todo: revise:
+						/*
 						int medOrderCount=MedicalOrders.GetCountMedical(pat.PatNum);
 						if(medList.Count==0) {
 							mu.Met=MuMet.NA;
@@ -859,7 +863,7 @@ namespace OpenDentBusiness{
 							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE";
+						mu.Action="CPOE";*/
 						break;
 					case EhrMeasureType.Rx:
 						//todo

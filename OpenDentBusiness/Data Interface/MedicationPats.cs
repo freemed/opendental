@@ -5,24 +5,17 @@ using System.Data;
 using System.Reflection;
 
 namespace OpenDentBusiness{
-
 	///<summary></summary>
 	public class MedicationPats{
-		///<summary>For current pat.  Only used by UI, not business layer.</summary>
-		public static MedicationPat[] List;
-
 		///<summary></summary>
-		public static void Refresh(long patNum) {
-			//No need to check RemotingRole; no call to db.
-			List<MedicationPat> list=GetList(patNum);
-			List=list.ToArray();
-		}
-
-		public static List<MedicationPat> GetList(long patNum) {
+		public static List<MedicationPat> Refresh(long patNum,bool includeDiscontinued) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum,includeDiscontinued);
 			}
-			string command ="SELECT * from medicationpat WHERE patnum = '"+patNum+"'";
+			string command ="SELECT * FROM medicationpat WHERE PatNum = "+POut.Long(patNum);
+			if(!includeDiscontinued) {
+				command+=" AND DateStop < "+POut.Date(new DateTime(1880,1,1));
+			}
 			return Crud.MedicationPatCrud.SelectMany(command);
 		}
 

@@ -3998,7 +3998,7 @@ namespace OpenDental{
 						break;
 					case "Medications":
 						Medications.Refresh();
-						MedicationPats.Refresh(PatCur.PatNum);
+						List<MedicationPat> medList=MedicationPats.Refresh(PatCur.PatNum,false);
 						row=new ODGridRow();
 						cell=new ODGridCell();
 						if(fields[f].Description=="") {
@@ -4011,7 +4011,7 @@ namespace OpenDental{
 						row.Cells.Add(cell);
 						row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 						row.Tag="med";
-						if(MedicationPats.List.Length>0) {
+						if(medList.Count>0) {
 							row.Cells.Add("");
 							gridPtInfo.Rows.Add(row);
 						}
@@ -4020,20 +4020,20 @@ namespace OpenDental{
 						}
 						string text;
 						Medication med;
-						for(int i=0;i<MedicationPats.List.Length;i++) {
+						for(int i=0;i<medList.Count;i++) {
 							row=new ODGridRow();
-							med=Medications.GetMedication(MedicationPats.List[i].MedicationNum);
+							med=Medications.GetMedication(medList[i].MedicationNum);
 							text=med.MedName;
 							if(med.MedicationNum != med.GenericNum) {
 								text+="("+Medications.GetMedication(med.GenericNum).MedName+")";
 							}
 							row.Cells.Add(text);
-							text=MedicationPats.List[i].PatNote
-								+"("+Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes+")";
+							text=medList[i].PatNote
+								+"("+Medications.GetGeneric(medList[i].MedicationNum).Notes+")";
 							row.Cells.Add(text);
 							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 							row.Tag="med";
-							if(i!=MedicationPats.List.Length-1) {
+							if(i!=medList.Count-1) {
 								gridPtInfo.Rows.Add(row);
 							}
 						}
