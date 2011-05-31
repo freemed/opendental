@@ -13,6 +13,8 @@ namespace CodeBase {
 
 		public static void ClearTopaz(Control topaz) {
 			((Topaz.SigPlusNET)topaz).ClearTablet();
+			((Topaz.SigPlusNET)topaz).SetTabletLogicalXSize(2000);
+			((Topaz.SigPlusNET)topaz).SetTabletLogicalYSize(600);
 		}
 
 		public static void SetTopazCompressionMode(Control topaz,int compressionMode) {
