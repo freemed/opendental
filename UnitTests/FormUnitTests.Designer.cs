@@ -40,6 +40,8 @@ namespace UnitTests {
 			this.butSchema = new System.Windows.Forms.Button();
 			this.radioSchema1 = new System.Windows.Forms.RadioButton();
 			this.radioSchema2 = new System.Windows.Forms.RadioButton();
+			this.label6 = new System.Windows.Forms.Label();
+			this.butRxNorm = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// textResults
@@ -47,10 +49,10 @@ namespace UnitTests {
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,158);
+			this.textResults.Location = new System.Drawing.Point(12,183);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(733,637);
+			this.textResults.Size = new System.Drawing.Size(733,612);
 			this.textResults.TabIndex = 1;
 			// 
 			// label1
@@ -64,7 +66,7 @@ namespace UnitTests {
 			// 
 			// butNewDb
 			// 
-			this.butNewDb.Location = new System.Drawing.Point(12,104);
+			this.butNewDb.Location = new System.Drawing.Point(12,129);
 			this.butNewDb.Name = "butNewDb";
 			this.butNewDb.Size = new System.Drawing.Size(75,23);
 			this.butNewDb.TabIndex = 0;
@@ -74,7 +76,7 @@ namespace UnitTests {
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(92,106);
+			this.label2.Location = new System.Drawing.Point(92,131);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(505,18);
 			this.label2.TabIndex = 6;
@@ -84,7 +86,7 @@ namespace UnitTests {
 			// 
 			// butRun
 			// 
-			this.butRun.Location = new System.Drawing.Point(12,129);
+			this.butRun.Location = new System.Drawing.Point(12,154);
 			this.butRun.Name = "butRun";
 			this.butRun.Size = new System.Drawing.Size(75,23);
 			this.butRun.TabIndex = 7;
@@ -94,7 +96,7 @@ namespace UnitTests {
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(92,131);
+			this.label3.Location = new System.Drawing.Point(92,156);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(90,18);
 			this.label3.TabIndex = 8;
@@ -103,7 +105,7 @@ namespace UnitTests {
 			// 
 			// textSpecificTest
 			// 
-			this.textSpecificTest.Location = new System.Drawing.Point(177,131);
+			this.textSpecificTest.Location = new System.Drawing.Point(177,156);
 			this.textSpecificTest.Name = "textSpecificTest";
 			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
 			this.textSpecificTest.TabIndex = 9;
@@ -196,11 +198,32 @@ namespace UnitTests {
 			this.radioSchema2.Text = "Compare proposed to generated";
 			this.radioSchema2.UseVisualStyleBackColor = true;
 			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(93,107);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(547,18);
+			this.label6.TabIndex = 27;
+			this.label6.Text = "Checks specific drugs in the RxNorm table for matching expected results.";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butRxNorm
+			// 
+			this.butRxNorm.Location = new System.Drawing.Point(12,104);
+			this.butRxNorm.Name = "butRxNorm";
+			this.butRxNorm.Size = new System.Drawing.Size(75,23);
+			this.butRxNorm.TabIndex = 26;
+			this.butRxNorm.Text = "RxNorm";
+			this.butRxNorm.UseVisualStyleBackColor = true;
+			this.butRxNorm.Click += new System.EventHandler(this.butRxNorm_Click);
+			// 
 			// FormUnitTests
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(757,807);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.butRxNorm);
 			this.Controls.Add(this.radioSchema2);
 			this.Controls.Add(this.radioSchema1);
 			this.Controls.Add(this.butSchema);
@@ -245,6 +268,8 @@ namespace UnitTests {
 		private System.Windows.Forms.Button butSchema;
 		private System.Windows.Forms.RadioButton radioSchema1;
 		private System.Windows.Forms.RadioButton radioSchema2;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Button butRxNorm;
 	}
 }
 

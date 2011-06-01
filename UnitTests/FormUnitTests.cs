@@ -93,6 +93,14 @@ namespace UnitTests {
 			Cursor=Cursors.Default;
 		}
 
+		private void butRxNorm_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			textResults.Text="";
+			Application.DoEvents();
+			textResults.Text+=RxNormT.RunAll();
+			Cursor=Cursors.Default;
+		}
+
 		private void butNewDb_Click(object sender,EventArgs e) {
 			textResults.Text="";
 			Application.DoEvents();
@@ -220,6 +228,8 @@ namespace UnitTests {
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 		}
+
+	
 
 	
 
