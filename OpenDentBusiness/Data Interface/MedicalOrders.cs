@@ -8,15 +8,78 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class MedicalOrders{
 		///<summary></summary>
-		public static List<MedicalOrder> Refresh(long patNum,bool includeDiscontinued){
+		public static DataTable GetOrderTable(long patNum,bool includeDiscontinued){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<MedicalOrder>>(MethodBase.GetCurrentMethod(),patNum,includeDiscontinued);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,includeDiscontinued);
 			}
-			string command="SELECT * FROM medicalorder WHERE PatNum = "+POut.Long(patNum);
-			if(!includeDiscontinued) {
-				command+=" AND IsDiscontinued=0";
+			DataTable table=new DataTable("orders");
+			DataRow row;
+			table.Columns.Add("date");
+			table.Columns.Add("type");
+			table.Columns.Add("description");
+			table.Columns.Add("status");
+			List<DataRow> rows=new List<DataRow>();
+			string command="SELECT DateTimeOrder,IsDiscontinued,MedOrderType FROM medicalorder WHERE PatNum = "+POut.Long(patNum);
+			if(!includeDiscontinued) {//only include current orders
+				command+=" AND IsDiscontinued=0";//false
 			}
-			return Crud.MedicalOrderCrud.SelectMany(command);
+			DataTable rawOrder=Db.GetTable(command);
+			DateTime dateT;
+			MedicalOrderType medOrderType;
+			bool isDiscontinued;
+			for(int i=0;i<rawOrder.Rows.Count;i++) {
+				row=table.NewRow();
+				dateT=PIn.DateT(rawOrder.Rows[i]["DateTimeOrder"].ToString());
+				row["date"]=dateT.ToShortDateString();
+				medOrderType=(MedicalOrderType)PIn.Int(rawOrder.Rows[i]["MedOrderType"].ToString());
+				row["type"]=medOrderType.ToString();
+				row["description"]=PIn.String(rawOrder.Rows[i]["Description"].ToString());
+				isDiscontinued=PIn.Bool(rawOrder.Rows[i]["IsDiscontinued"].ToString());
+				if(isDiscontinued) {
+					row["status"]="Discontinued";
+				}
+				else {
+					row["status"]="Active";
+				}
+				rows.Add(row);
+			}
+			//Medications
+			command="SELECT DateStart,DateStop,MedName,PatNote "
+				+"FROM medicationpat "
+				+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
+				+"WHERE PatNum = "+POut.Long(patNum);
+			if(!includeDiscontinued) {//exclude invalid orders
+				command+=" AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" AND PatNote !=''";
+			}
+			DataTable rawMed=Db.GetTable(command);
+			DateTime dateStop;
+			for(int i=0;i<rawMed.Rows.Count;i++) {
+				row=table.NewRow();
+				dateT=PIn.DateT(rawMed.Rows[i]["DateStart"].ToString());
+				if(dateT.Year<1880) {
+					row["date"]="";
+				}
+				else {
+					row["date"]=dateT.ToShortDateString();
+				}
+				row["type"]="Medication";
+				row["description"]=PIn.String(rawMed.Rows[i]["MedName"].ToString())+", "
+					+PIn.String(rawMed.Rows[i]["PatNote"].ToString());
+				dateStop=PIn.DateT(rawMed.Rows[i]["DateStop"].ToString());
+				if(dateStop.Year<1880) {//not stopped
+					row["status"]="Active";
+				}
+				else {
+					row["status"]="Discontinued";
+				}
+				rows.Add(row);
+			}
+			//Sorting-----------------------------------------------------------------------------------------
+			rows.Sort(new MedicalOrderLineComparer());
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			return table;
 		}
 
 		/*
@@ -81,5 +144,13 @@ namespace OpenDentBusiness{
 
 
 
+	}
+
+	///<summary>The supplied DataRows must include the following columns: date</summary>
+	class MedicalOrderLineComparer:IComparer<DataRow> {
+		///<summary></summary>
+		public int Compare(DataRow x,DataRow y) {
+			return (((DateTime)x["date"]).Date).CompareTo(((DateTime)y["date"]).Date);
+		}
 	}
 }

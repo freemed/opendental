@@ -235,19 +235,17 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					tableRaw=Db.GetTable(command);
 					break;
-				case EhrMeasureType.ProvOrderEntry: 
-//todo: revise:
-					/*
+				case EhrMeasureType.ProvOrderEntry:
 					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM medicalorder WHERE medicalorder.PatNum=patient.PatNum "
-						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Medication)+") AS medOrderCount "
+						+"(SELECT COUNT(*) FROM medicationpat mp2 WHERE mp2.PatNum=patient.PatNum "
+						+"AND mp2.PatNote != '' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+") AS countOrders "
 						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "//at least one procedure in the period
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 						+"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
-					tableRaw=Db.GetTable(command);*/
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Rx:
 					command="";
@@ -527,8 +525,8 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.ProvOrderEntry:
-						if(tableRaw.Rows[i]["medOrderCount"].ToString()=="0") {
-							explanation="No medication through CPOE";
+						if(tableRaw.Rows[i]["countOrders"].ToString()=="0") {
+							explanation="No medication order through CPOE";
 						}
 						else {
 							explanation="Medication order in CPOE";
@@ -849,21 +847,24 @@ namespace OpenDentBusiness{
 						mu.Action="Provide online Access";
 						break;
 					case EhrMeasureType.ProvOrderEntry:
-//todo: revise:
-						/*
-						int medOrderCount=MedicalOrders.GetCountMedical(pat.PatNum);
+						int medOrderCount=0;
+						for(int mo=0;mo<medList.Count;mo++){
+							if(medList[mo].DateStart.Year>1880 && medList[mo].PatNote!=""){
+								medOrderCount++;
+							}
+						}
 						if(medList.Count==0) {
 							mu.Met=MuMet.NA;
 							mu.Details="No meds.";
 						}
 						else if(medOrderCount==0) {
-							mu.Details="No medication in CPOE.";
+							mu.Details="No medication order in CPOE.";
 						}
 						else {
 							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE";*/
+						mu.Action="CPOE";
 						break;
 					case EhrMeasureType.Rx:
 						//todo

@@ -2,7 +2,7 @@ using System;
 
 namespace OpenDentBusiness{
 
-	///<summary>Links medications to patients.</summary>
+	///<summary>Links medications to patients.  For ehr, some of these can be considered 'medication orders', but only if they contain a PatNote (instructions) as well as a DateStart.</summary>
 	[Serializable]
 	public class MedicationPat:TableBase {
 		///<summary>Primary key.</summary>
