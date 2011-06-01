@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Crud{
 				labResult.ObsValue    = PIn.String(table.Rows[i]["ObsValue"].ToString());
 				labResult.ObsUnits    = PIn.String(table.Rows[i]["ObsUnits"].ToString());
 				labResult.ObsRange    = PIn.String(table.Rows[i]["ObsRange"].ToString());
+				labResult.AbnormalFlag= (LabResult.LabAbnormalFlag)PIn.Int(table.Rows[i]["AbnormalFlag"].ToString());
 				retVal.Add(labResult);
 			}
 			return retVal;
@@ -95,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabResultNum,";
 			}
-			command+="LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,ObsUnits,ObsRange) VALUES(";
+			command+="LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,ObsUnits,ObsRange,AbnormalFlag) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labResult.LabResultNum)+",";
 			}
@@ -107,7 +108,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(labResult.TestID)+"',"
 				+"'"+POut.String(labResult.ObsValue)+"',"
 				+"'"+POut.String(labResult.ObsUnits)+"',"
-				+"'"+POut.String(labResult.ObsRange)+"')";
+				+"'"+POut.String(labResult.ObsRange)+"',"
+				+    POut.Int   ((int)labResult.AbnormalFlag)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +129,8 @@ namespace OpenDentBusiness.Crud{
 				+"TestID      = '"+POut.String(labResult.TestID)+"', "
 				+"ObsValue    = '"+POut.String(labResult.ObsValue)+"', "
 				+"ObsUnits    = '"+POut.String(labResult.ObsUnits)+"', "
-				+"ObsRange    = '"+POut.String(labResult.ObsRange)+"' "
+				+"ObsRange    = '"+POut.String(labResult.ObsRange)+"', "
+				+"AbnormalFlag=  "+POut.Int   ((int)labResult.AbnormalFlag)+" "
 				+"WHERE LabResultNum = "+POut.Long(labResult.LabResultNum);
 			Db.NonQ(command);
 		}
@@ -163,6 +166,10 @@ namespace OpenDentBusiness.Crud{
 			if(labResult.ObsRange != oldLabResult.ObsRange) {
 				if(command!=""){ command+=",";}
 				command+="ObsRange = '"+POut.String(labResult.ObsRange)+"'";
+			}
+			if(labResult.AbnormalFlag != oldLabResult.AbnormalFlag) {
+				if(command!=""){ command+=",";}
+				command+="AbnormalFlag = "+POut.Int   ((int)labResult.AbnormalFlag)+"";
 			}
 			if(command==""){
 				return;

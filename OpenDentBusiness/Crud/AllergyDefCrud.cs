@@ -50,6 +50,8 @@ namespace OpenDentBusiness.Crud{
 				allergyDef.Description  = PIn.String(table.Rows[i]["Description"].ToString());
 				allergyDef.IsHidden     = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
 				allergyDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				allergyDef.Snomed       = (AllergyDef.SnomedAllergy)PIn.Int(table.Rows[i]["Snomed"].ToString());
+				allergyDef.RxCui        = PIn.Long  (table.Rows[i]["RxCui"].ToString());
 				retVal.Add(allergyDef);
 			}
 			return retVal;
@@ -90,14 +92,16 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AllergyDefNum,";
 			}
-			command+="Description,IsHidden) VALUES(";
+			command+="Description,IsHidden,Snomed,RxCui) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(allergyDef.AllergyDefNum)+",";
 			}
 			command+=
 				 "'"+POut.String(allergyDef.Description)+"',"
-				+    POut.Bool  (allergyDef.IsHidden)+")";
+				+    POut.Bool  (allergyDef.IsHidden)+","
 				//DateTStamp can only be set by MySQL
+				+    POut.Int   ((int)allergyDef.Snomed)+","
+				+    POut.Long  (allergyDef.RxCui)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -111,8 +115,10 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(AllergyDef allergyDef){
 			string command="UPDATE allergydef SET "
 				+"Description  = '"+POut.String(allergyDef.Description)+"', "
-				+"IsHidden     =  "+POut.Bool  (allergyDef.IsHidden)+" "
+				+"IsHidden     =  "+POut.Bool  (allergyDef.IsHidden)+", "
 				//DateTStamp can only be set by MySQL
+				+"Snomed       =  "+POut.Int   ((int)allergyDef.Snomed)+", "
+				+"RxCui        =  "+POut.Long  (allergyDef.RxCui)+" "
 				+"WHERE AllergyDefNum = "+POut.Long(allergyDef.AllergyDefNum);
 			Db.NonQ(command);
 		}
@@ -129,6 +135,14 @@ namespace OpenDentBusiness.Crud{
 				command+="IsHidden = "+POut.Bool(allergyDef.IsHidden)+"";
 			}
 			//DateTStamp can only be set by MySQL
+			if(allergyDef.Snomed != oldAllergyDef.Snomed) {
+				if(command!=""){ command+=",";}
+				command+="Snomed = "+POut.Int   ((int)allergyDef.Snomed)+"";
+			}
+			if(allergyDef.RxCui != oldAllergyDef.RxCui) {
+				if(command!=""){ command+=",";}
+				command+="RxCui = "+POut.Long(allergyDef.RxCui)+"";
+			}
 			if(command==""){
 				return;
 			}

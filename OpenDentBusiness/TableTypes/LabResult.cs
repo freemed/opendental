@@ -27,10 +27,23 @@ namespace OpenDentBusiness{
 		public string ObsUnits;
 		///<summary>OBX-7  For example, &lt;200 or &gt;=40.</summary>
 		public string ObsRange;
+		///<summary>Below normal, normal, or above high normal.</summary>
+		public LabAbnormalFlag AbnormalFlag;
 
 		///<summary></summary>
 		public LabResult Copy() {
 			return (LabResult)this.MemberwiseClone();
+		}
+
+		public enum LabAbnormalFlag{
+			///<summary>0- No AbnormalFlag value has been set.</summary>
+			None,
+			///<summary>1- Below normal.</summary>
+			Below,
+			///<summary>2- Normal.</summary>
+			Normal,
+			///<summary>3- Above high normal.</summary>
+			Above
 		}
 
 	}

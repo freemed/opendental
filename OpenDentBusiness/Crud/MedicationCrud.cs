@@ -51,6 +51,7 @@ namespace OpenDentBusiness.Crud{
 				medication.GenericNum   = PIn.Long  (table.Rows[i]["GenericNum"].ToString());
 				medication.Notes        = PIn.String(table.Rows[i]["Notes"].ToString());
 				medication.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				medication.RxCui        = PIn.Long  (table.Rows[i]["RxCui"].ToString());
 				retVal.Add(medication);
 			}
 			return retVal;
@@ -91,15 +92,16 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicationNum,";
 			}
-			command+="MedName,GenericNum,Notes) VALUES(";
+			command+="MedName,GenericNum,Notes,RxCui) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medication.MedicationNum)+",";
 			}
 			command+=
 				 "'"+POut.String(medication.MedName)+"',"
 				+    POut.Long  (medication.GenericNum)+","
-				+"'"+POut.String(medication.Notes)+"')";
+				+"'"+POut.String(medication.Notes)+"',"
 				//DateTStamp can only be set by MySQL
+				+    POut.Long  (medication.RxCui)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -114,8 +116,9 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE medication SET "
 				+"MedName      = '"+POut.String(medication.MedName)+"', "
 				+"GenericNum   =  "+POut.Long  (medication.GenericNum)+", "
-				+"Notes        = '"+POut.String(medication.Notes)+"' "
+				+"Notes        = '"+POut.String(medication.Notes)+"', "
 				//DateTStamp can only be set by MySQL
+				+"RxCui        =  "+POut.Long  (medication.RxCui)+" "
 				+"WHERE MedicationNum = "+POut.Long(medication.MedicationNum);
 			Db.NonQ(command);
 		}
@@ -136,6 +139,10 @@ namespace OpenDentBusiness.Crud{
 				command+="Notes = '"+POut.String(medication.Notes)+"'";
 			}
 			//DateTStamp can only be set by MySQL
+			if(medication.RxCui != oldMedication.RxCui) {
+				if(command!=""){ command+=",";}
+				command+="RxCui = "+POut.Long(medication.RxCui)+"";
+			}
 			if(command==""){
 				return;
 			}

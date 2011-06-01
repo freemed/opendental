@@ -5210,7 +5210,61 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="ALTER TABLE medicationpat DROP COLUMN IsDiscontinued";//both oracle and mysql
 				Db.NonQ(command);
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergydef ADD Snomed tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergydef ADD Snomed number(3)";
+					Db.NonQ(command);
+					command="UPDATE allergydef SET Snomed = 0 WHERE Snomed IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydef MODIFY Snomed NOT NULL";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergydef ADD RxCui bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydef ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergydef ADD RxCui number(20)";
+					Db.NonQ(command);
+					command="UPDATE allergydef SET RxCui = 0 WHERE RxCui IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydef MODIFY RxCui NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX allergydef_RxCui ON allergydef (RxCui)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresult ADD AbnormalFlag tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresult ADD AbnormalFlag number(3)";
+					Db.NonQ(command);
+					command="UPDATE labresult SET AbnormalFlag = 0 WHERE AbnormalFlag IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE labresult MODIFY AbnormalFlag NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medication ADD RxCui bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medication ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medication ADD RxCui number(20)";
+					Db.NonQ(command);
+					command="UPDATE medication SET RxCui = 0 WHERE RxCui IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medication MODIFY RxCui NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX medication_RxCui ON medication (RxCui)";
+					Db.NonQ(command);
+				}
 
 
 

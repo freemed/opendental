@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long MedicationNum;
-		///<summary>Name of the medication.</summary>
+		///<summary>Name of the medication.  User can change this.  If an RxCui is present, the RxNorm string can be pulled from the in-memory table for UI display in addition to the MedName.</summary>
 		public string MedName;
 		///<summary>FK to medication.MedicationNum.  If this is a generic drug, then the GenericNum will be the same as the MedicationNum.</summary>
 		public long GenericNum;
@@ -17,6 +17,8 @@ namespace OpenDentBusiness{
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		///<summary>RxNorm Code identifier.  FK to an in-memory dictionary of RxCui/RxNorm mappings.</summary>
+		public long RxCui;
 	}
 	
 
