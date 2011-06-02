@@ -300,7 +300,12 @@ namespace OpenDental{
 			RxPatCur.Sig=RxDefCur.Sig;
 			RxPatCur.Disp=RxDefCur.Disp;
 			RxPatCur.Refills=RxDefCur.Refills;
-			RxPatCur.IsElectQueue=PrefC.GetBool(PrefName.RxSendNewToQueue);
+			if(PrefC.GetBool(PrefName.RxSendNewToQueue)) {
+				RxPatCur.SendStatus=RxSendStatus.InElectQueue;
+			}
+			else {
+				RxPatCur.SendStatus=RxSendStatus.Unsent;
+			}
 			//Notes not copied: we don't want these kinds of notes cluttering things
 			FormRxEdit FormE=new FormRxEdit(PatCur,RxPatCur);
 			FormE.IsNew=true;
@@ -315,7 +320,12 @@ namespace OpenDental{
 			RxPat RxPatCur=new RxPat();
 			RxPatCur.RxDate=DateTime.Today;
 			RxPatCur.PatNum=PatCur.PatNum;
-			RxPatCur.IsElectQueue=PrefC.GetBool(PrefName.RxSendNewToQueue);
+			if(PrefC.GetBool(PrefName.RxSendNewToQueue)) {
+				RxPatCur.SendStatus=RxSendStatus.InElectQueue;
+			}
+			else {
+				RxPatCur.SendStatus=RxSendStatus.Unsent;
+			}
 			FormRxEdit FormE=new FormRxEdit(PatCur,RxPatCur);
 			FormE.IsNew=true;
 			FormE.ShowDialog();

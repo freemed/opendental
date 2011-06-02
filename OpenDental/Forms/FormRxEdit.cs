@@ -47,7 +47,8 @@ namespace OpenDental{
 		//private User user;
 		private RxPat RxPatCur;
 		private UI.Button butSend;
-		private CheckBox checkIsElectQueue;
+		private Label label9;
+		private ComboBox comboSendStatus;
 		Sheet sheet;
 
 		///<summary></summary>
@@ -102,7 +103,8 @@ namespace OpenDental{
 			this.butView = new OpenDental.UI.Button();
 			this.labelView = new System.Windows.Forms.Label();
 			this.butSend = new OpenDental.UI.Button();
-			this.checkIsElectQueue = new System.Windows.Forms.CheckBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.comboSendStatus = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -372,16 +374,23 @@ namespace OpenDental{
 			this.butSend.Text = "Send";
 			this.butSend.Click += new System.EventHandler(this.butSend_Click);
 			// 
-			// checkIsElectQueue
+			// label9
 			// 
-			this.checkIsElectQueue.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsElectQueue.Location = new System.Drawing.Point(7,330);
-			this.checkIsElectQueue.Name = "checkIsElectQueue";
-			this.checkIsElectQueue.Size = new System.Drawing.Size(145,20);
-			this.checkIsElectQueue.TabIndex = 248;
-			this.checkIsElectQueue.Text = "In Electronic Queue";
-			this.checkIsElectQueue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsElectQueue.UseVisualStyleBackColor = true;
+			this.label9.Location = new System.Drawing.Point(39,330);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(99,14);
+			this.label9.TabIndex = 250;
+			this.label9.Text = "Send Status";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboSendStatus
+			// 
+			this.comboSendStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSendStatus.FormattingEnabled = true;
+			this.comboSendStatus.Location = new System.Drawing.Point(138,327);
+			this.comboSendStatus.Name = "comboSendStatus";
+			this.comboSendStatus.Size = new System.Drawing.Size(198,21);
+			this.comboSendStatus.TabIndex = 251;
 			// 
 			// FormRxEdit
 			// 
@@ -389,7 +398,8 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,460);
-			this.Controls.Add(this.checkIsElectQueue);
+			this.Controls.Add(this.comboSendStatus);
+			this.Controls.Add(this.label9);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.labelView);
 			this.Controls.Add(this.butView);
@@ -457,7 +467,10 @@ namespace OpenDental{
 			}
 			textDate.Text=RxPatCur.RxDate.ToString("d");
 			checkControlled.Checked=RxPatCur.IsControlled;
-			checkIsElectQueue.Checked=RxPatCur.IsElectQueue; 
+			for(int i=0;i<Enum.GetNames(typeof(RxSendStatus)).Length;i++) {
+				comboSendStatus.Items.Add(Enum.GetNames(typeof(RxSendStatus))[i]);
+			}
+			comboSendStatus.SelectedIndex=(int)RxPatCur.SendStatus;
 			textDrug.Text=RxPatCur.Drug;
 			textSig.Text=RxPatCur.Sig;
 			textDisp.Text=RxPatCur.Disp;
@@ -495,7 +508,7 @@ namespace OpenDental{
 			RxPatCur.Disp=textDisp.Text;
 			RxPatCur.Refills=textRefills.Text;
 			RxPatCur.Notes=textNotes.Text;
-			RxPatCur.IsElectQueue=checkIsElectQueue.Checked;
+			RxPatCur.SendStatus=(RxSendStatus)comboSendStatus.SelectedIndex;
 			//pharmacy is set when using pick button.
 			if(IsNew){
 				RxPatCur.RxNum=RxPats.Insert(RxPatCur);
