@@ -31,17 +31,16 @@ namespace OpenDentBusiness{
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>If true, then this Rx will be visible in the electronic Rx Send window.  Once sent, this gets changed to false.</summary>
+		///<summary>Deprecated.  Remove soon.  If true, then this Rx will be visible in the electronic Rx Send window.  Once sent, this gets changed to false.</summary>
 		public bool IsElectQueue;
-		
+		///<summary>Enum:RxSendStatus </summary>
+		public RxSendStatus SendStatus;
 
 		///<summary></summary>
 		public RxPat Copy() {
 			return (RxPat)this.MemberwiseClone();
 		}
 
-
-		
 	}
 
 	public enum RxSendStatus {
