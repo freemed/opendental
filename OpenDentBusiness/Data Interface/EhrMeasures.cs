@@ -940,7 +940,10 @@ namespace OpenDentBusiness{
 						mu.Action="Edit smoking status";
 						break;
 					case EhrMeasureType.Lab:
-						mu.Action="";
+
+
+						mu.Action="Edit lab panels";
+						mu.Action2="Import lab results";
 						break;
 					case EhrMeasureType.ElectronicCopy:
 						List<EhrMeasureEvent> listRequests=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ElectronicCopyRequested);
