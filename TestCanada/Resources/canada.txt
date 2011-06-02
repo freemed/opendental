@@ -1129,9 +1129,10 @@ CREATE TABLE `covcat` (
 
 /*Data for the table `covcat` */
 
-insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (1,'General',-1,0,0,0);
-insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (2,'X-Ray',100,2,0,13);
-insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (3,'Adjunctive',-1,3,0,14);
+insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (1,'Part A',0,1,0,1);
+insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (2,'Part B',0,2,0,1);
+insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (3,'Part C',0,3,0,9);
+insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (4,'Endo',0,4,0,5);
 
 /*Table structure for table `covspan` */
 
@@ -1147,10 +1148,13 @@ CREATE TABLE `covspan` (
 
 /*Data for the table `covspan` */
 
-insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (1,1,'D0000','D9999');
-insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (2,2,'D0200','D0399');
-insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (4,3,'D0000','D7999');
-insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (5,3,'D9000','D9999');
+insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (1,1,'00001','23515');
+insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (2,1,'40000','49999');
+insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (3,1,'70000','79999');
+insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (4,2,'23601','29999');
+insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (5,2,'50000','69999');
+insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (6,3,'80000','89999');
+insert  into `covspan`(`CovSpanNum`,`CovCatNum`,`FromCode`,`ToCode`) values (7,4,'30000','39999');
 
 /*Table structure for table `definition` */
 
@@ -6074,6 +6078,12 @@ CREATE TABLE `recalltrigger` (
 
 /*Data for the table `recalltrigger` */
 
+insert  into `recalltrigger`(`RecallTriggerNum`,`RecallTypeNum`,`CodeNum`) values (1,1,400);
+insert  into `recalltrigger`(`RecallTriggerNum`,`RecallTypeNum`,`CodeNum`) values (2,1,401);
+insert  into `recalltrigger`(`RecallTriggerNum`,`RecallTypeNum`,`CodeNum`) values (3,1,402);
+insert  into `recalltrigger`(`RecallTriggerNum`,`RecallTypeNum`,`CodeNum`) values (4,1,403);
+insert  into `recalltrigger`(`RecallTriggerNum`,`RecallTypeNum`,`CodeNum`) values (5,1,404);
+
 /*Table structure for table `recalltype` */
 
 DROP TABLE IF EXISTS `recalltype`;
@@ -6089,11 +6099,9 @@ CREATE TABLE `recalltype` (
 
 /*Data for the table `recalltype` */
 
-insert  into `recalltype`(`RecallTypeNum`,`Description`,`DefaultInterval`,`TimePattern`,`Procedures`) values (1,'Prophy',393216,'//XX/','');
-insert  into `recalltype`(`RecallTypeNum`,`Description`,`DefaultInterval`,`TimePattern`,`Procedures`) values (2,'Child Prophy',0,'','');
+insert  into `recalltype`(`RecallTypeNum`,`Description`,`DefaultInterval`,`TimePattern`,`Procedures`) values (1,'Prophy',393216,'//XX/','01202,11101');
+insert  into `recalltype`(`RecallTypeNum`,`Description`,`DefaultInterval`,`TimePattern`,`Procedures`) values (2,'Child Prophy',0,'//XX/','01202');
 insert  into `recalltype`(`RecallTypeNum`,`Description`,`DefaultInterval`,`TimePattern`,`Procedures`) values (3,'Perio',262144,'','');
-insert  into `recalltype`(`RecallTypeNum`,`Description`,`DefaultInterval`,`TimePattern`,`Procedures`) values (4,'4BW',16777216,'','D0274');
-insert  into `recalltype`(`RecallTypeNum`,`Description`,`DefaultInterval`,`TimePattern`,`Procedures`) values (5,'Pano',83886080,'','D0330');
 
 /*Table structure for table `reconcile` */
 
