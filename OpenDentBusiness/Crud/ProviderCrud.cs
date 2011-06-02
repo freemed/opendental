@@ -73,6 +73,7 @@ namespace OpenDentBusiness.Crud{
 				provider.AnesthProvType      = PIn.Long  (table.Rows[i]["AnesthProvType"].ToString());
 				provider.TaxonomyCodeOverride= PIn.String(table.Rows[i]["TaxonomyCodeOverride"].ToString());
 				provider.IsCDAnet            = PIn.Bool  (table.Rows[i]["IsCDAnet"].ToString());
+				provider.EcwID               = PIn.String(table.Rows[i]["EcwID"].ToString());
 				retVal.Add(provider);
 			}
 			return retVal;
@@ -113,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProvNum,";
 			}
-			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,UsingTIN,BlueCrossID,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,NationalProvID,CanadianOfficeNum,AnesthProvType,TaxonomyCodeOverride,IsCDAnet) VALUES(";
+			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,UsingTIN,BlueCrossID,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,NationalProvID,CanadianOfficeNum,AnesthProvType,TaxonomyCodeOverride,IsCDAnet,EcwID) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(provider.ProvNum)+",";
 			}
@@ -143,7 +144,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Long  (provider.AnesthProvType)+","
 				+"'"+POut.String(provider.TaxonomyCodeOverride)+"',"
-				+    POut.Bool  (provider.IsCDAnet)+")";
+				+    POut.Bool  (provider.IsCDAnet)+","
+				+"'"+POut.String(provider.EcwID)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -181,7 +183,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"AnesthProvType      =  "+POut.Long  (provider.AnesthProvType)+", "
 				+"TaxonomyCodeOverride= '"+POut.String(provider.TaxonomyCodeOverride)+"', "
-				+"IsCDAnet            =  "+POut.Bool  (provider.IsCDAnet)+" "
+				+"IsCDAnet            =  "+POut.Bool  (provider.IsCDAnet)+", "
+				+"EcwID               = '"+POut.String(provider.EcwID)+"' "
 				+"WHERE ProvNum = "+POut.Long(provider.ProvNum);
 			Db.NonQ(command);
 		}
@@ -289,6 +292,10 @@ namespace OpenDentBusiness.Crud{
 			if(provider.IsCDAnet != oldProvider.IsCDAnet) {
 				if(command!=""){ command+=",";}
 				command+="IsCDAnet = "+POut.Bool(provider.IsCDAnet)+"";
+			}
+			if(provider.EcwID != oldProvider.EcwID) {
+				if(command!=""){ command+=",";}
+				command+="EcwID = '"+POut.String(provider.EcwID)+"'";
 			}
 			if(command==""){
 				return;
