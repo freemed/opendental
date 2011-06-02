@@ -44,7 +44,12 @@ namespace OpenDentBusiness{
 		
 	}
 
-	
+	public enum RxSendStatus {
+		Unsent,
+		InElectQueue,
+		SentElect,
+		Printed
+	}
 
 
 }
