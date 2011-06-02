@@ -39,6 +39,8 @@ namespace OpenDental{
 		private Label label7;
 		private ValidDate textDateStart;
 		private Label label4;
+		private UI.Button butTodayStop;
+		private UI.Button butTodayStart;
 		public MedicationPat MedicationPatCur;
 
 		///<summary></summary>
@@ -95,6 +97,8 @@ namespace OpenDental{
 			this.label7 = new System.Windows.Forms.Label();
 			this.textDateStart = new OpenDental.ValidDate();
 			this.label4 = new System.Windows.Forms.Label();
+			this.butTodayStart = new OpenDental.UI.Button();
+			this.butTodayStop = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupOrder.SuspendLayout();
 			this.SuspendLayout();
@@ -281,6 +285,8 @@ namespace OpenDental{
 			// 
 			// groupOrder
 			// 
+			this.groupOrder.Controls.Add(this.butTodayStop);
+			this.groupOrder.Controls.Add(this.butTodayStart);
 			this.groupOrder.Controls.Add(this.textDateStop);
 			this.groupOrder.Controls.Add(this.label7);
 			this.groupOrder.Controls.Add(this.textDateStart);
@@ -295,14 +301,14 @@ namespace OpenDental{
 			// 
 			// textDateStop
 			// 
-			this.textDateStop.Location = new System.Drawing.Point(183,163);
+			this.textDateStop.Location = new System.Drawing.Point(183,164);
 			this.textDateStop.Name = "textDateStop";
 			this.textDateStop.Size = new System.Drawing.Size(100,20);
 			this.textDateStop.TabIndex = 15;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(18,164);
+			this.label7.Location = new System.Drawing.Point(18,165);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(163,17);
 			this.label7.TabIndex = 14;
@@ -324,6 +330,34 @@ namespace OpenDental{
 			this.label4.TabIndex = 12;
 			this.label4.Text = "Date Start";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butTodayStart
+			// 
+			this.butTodayStart.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTodayStart.Autosize = true;
+			this.butTodayStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayStart.CornerRadius = 4F;
+			this.butTodayStart.Location = new System.Drawing.Point(288,138);
+			this.butTodayStart.Name = "butTodayStart";
+			this.butTodayStart.Size = new System.Drawing.Size(64,23);
+			this.butTodayStart.TabIndex = 16;
+			this.butTodayStart.Text = "Today";
+			this.butTodayStart.Click += new System.EventHandler(this.butTodayStart_Click);
+			// 
+			// butTodayStop
+			// 
+			this.butTodayStop.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTodayStop.Autosize = true;
+			this.butTodayStop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayStop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayStop.CornerRadius = 4F;
+			this.butTodayStop.Location = new System.Drawing.Point(288,162);
+			this.butTodayStop.Name = "butTodayStop";
+			this.butTodayStop.Size = new System.Drawing.Size(64,23);
+			this.butTodayStop.TabIndex = 17;
+			this.butTodayStop.Text = "Today";
+			this.butTodayStop.Click += new System.EventHandler(this.butTodayStop_Click);
 			// 
 			// FormMedPat
 			// 
@@ -373,6 +407,14 @@ namespace OpenDental{
 			if(MedicationPatCur.DateStop.Year>1880) {
 				textDateStop.Text=MedicationPatCur.DateStop.ToShortDateString();
 			}
+		}
+
+		private void butTodayStart_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.ToShortDateString();
+		}
+
+		private void butTodayStop_Click(object sender,EventArgs e) {
+			textDateStop.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void butFormulary_Click(object sender,EventArgs e) {
@@ -446,6 +488,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
