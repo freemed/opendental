@@ -20,6 +20,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static MedicationPat GetOne(long medicationPatNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<MedicationPat>(MethodBase.GetCurrentMethod(),medicationPatNum);
+			}
+			string command ="SELECT * FROM medicationpat WHERE MedicationPatNum = "+POut.Long(medicationPatNum);
+			return Crud.MedicationPatCrud.SelectOne(command);
+		}
+
+		///<summary></summary>
 		public static void Update(MedicationPat Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);

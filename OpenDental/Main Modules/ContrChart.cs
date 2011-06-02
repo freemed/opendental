@@ -3468,7 +3468,7 @@ namespace OpenDental{
 						OnExamSheet_Click();
 						break;
 					case "EHR":
-						OnEHR_Click();
+						OnEHR_Click(false);
 						break;
 				}
 			}
@@ -3600,10 +3600,11 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnEHR_Click() {
+		private void OnEHR_Click(bool onLoadShowOrders) {
 #if DEBUG
 				//so we can step through for debugging.
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
+				((FormEHR)FormOpenDental.FormEHR).OnShowLaunchOrders=onLoadShowOrders;
 				((FormEHR)FormOpenDental.FormEHR).ShowDialog();
 				if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.None) {
 					return;
@@ -3612,41 +3613,72 @@ namespace OpenDental{
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
 					FormRXE.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(false);//recursive.  The only way out of the loop is EhrFormResult.None.
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.RxSelect) {
 					FormRxSelect FormRS=new FormRxSelect(PatCur);
 					FormRS.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Medical) {
 					FormMedical formM=new FormMedical(PatientNoteCur,PatCur);
 					formM.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.PatientEdit) {
 					FormPatientEdit formP=new FormPatientEdit(PatCur,FamCur);
 					formP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Online) {
 					FormEhrOnlineAccess formO=new FormEhrOnlineAccess();
 					formO.PatCur=PatCur;
 					formO.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedReconcile) {
 					FormMedicationReconcile FormMR=new FormMedicationReconcile();
 					FormMR.PatCur=PatCur;
 					FormMR.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Referrals) {
 					FormReferralsPatient formRP=new FormReferralsPatient();
 					formRP.PatNum=PatCur.PatNum;
 					formRP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(false);
 				}
-				OnEHR_Click();//recursive.  The only way out of the loop is EhrFormResult.None.
+				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedicationPatEdit) {
+					FormMedPat formMP=new FormMedPat();
+					formMP.MedicationPatCur=MedicationPats.GetOne(((FormEHR)FormOpenDental.FormEHR).LaunchMedicationPatNum);
+					formMP.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+					OnEHR_Click(true);
+				}
+				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedicationPatNew) {
+					FormMedications FormM=new FormMedications();
+					FormM.IsSelectionMode=true;
+					FormM.ShowDialog();
+					if(FormM.DialogResult==DialogResult.OK) {
+						MedicationPat medicationPat=new MedicationPat();
+						medicationPat.PatNum=PatCur.PatNum;
+						medicationPat.MedicationNum=FormM.SelectedMedicationNum;
+						FormMedPat FormMP=new FormMedPat();
+						FormMP.MedicationPatCur=medicationPat;
+						FormMP.IsNew=true;
+						FormMP.ShowDialog();
+						if(FormMP.DialogResult==DialogResult.OK) {
+							ModuleSelected(PatCur.PatNum);
+						}
+					}
+					OnEHR_Click(true);
+				}
 #else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
 				object[] args=new object[] {PatCur.PatNum};
@@ -3693,6 +3725,30 @@ namespace OpenDental{
 					formRP.PatNum=PatCur.PatNum;
 					formRP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatEdit) {
+					long medicationPatNum=(long)type.InvokeMember("LaunchMedicationPatNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null);
+					FormMedPat formMP=new FormMedPat();
+					formMP.MedicationPatCur=MedicationPats.GetOne(medicationPatNum);
+					formMP.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
+				}
+				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatNew) {
+					FormMedications FormM=new FormMedications();
+					FormM.IsSelectionMode=true;
+					FormM.ShowDialog();
+					if(FormM.DialogResult==DialogResult.OK) {
+						MedicationPat medicationPat=new MedicationPat();
+						medicationPat.PatNum=PatCur.PatNum;
+						medicationPat.MedicationNum=FormM.SelectedMedicationNum;
+						FormMedPat FormMP=new FormMedPat();
+						FormMP.MedicationPatCur=medicationPat;
+						FormMP.IsNew=true;
+						FormMP.ShowDialog();
+						if(FormMP.DialogResult==DialogResult.OK) {
+							ModuleSelected(PatCur.PatNum);
+						}
+					}
 				}
 				OnEHR_Click();
 #endif

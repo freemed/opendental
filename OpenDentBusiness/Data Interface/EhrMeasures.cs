@@ -1134,6 +1134,8 @@ namespace OpenDentBusiness{
 		PatientEdit,
 		Online,
 		MedReconcile,
-		Referrals
+		Referrals,
+		MedicationPatNew,
+		MedicationPatEdit
 	}
 }
