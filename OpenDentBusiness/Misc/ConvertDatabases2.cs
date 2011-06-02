@@ -5309,6 +5309,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE provider ADD EcwID varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanel ADD MedicalOrderNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE labpanel ADD INDEX (MedicalOrderNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanel ADD MedicalOrderNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE labpanel SET MedicalOrderNum = 0 WHERE MedicalOrderNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE labpanel MODIFY MedicalOrderNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX labpanel_MedicalOrderNum ON labpanel (MedicalOrderNum)";
+					Db.NonQ(command);
+				}
+
+
 
 
 
@@ -5318,7 +5336,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To8_1_0();
+			//To11_1_0();
 		}
 
 

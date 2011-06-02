@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Crud{
 				labPanel.SpecimenSource   = PIn.String(table.Rows[i]["SpecimenSource"].ToString());
 				labPanel.ServiceId        = PIn.String(table.Rows[i]["ServiceId"].ToString());
 				labPanel.ServiceName      = PIn.String(table.Rows[i]["ServiceName"].ToString());
+				labPanel.MedicalOrderNum  = PIn.Long  (table.Rows[i]["MedicalOrderNum"].ToString());
 				retVal.Add(labPanel);
 			}
 			return retVal;
@@ -95,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LabPanelNum,";
 			}
-			command+="PatNum,RawMessage,LabNameAddress,SpecimenCondition,SpecimenSource,ServiceId,ServiceName) VALUES(";
+			command+="PatNum,RawMessage,LabNameAddress,SpecimenCondition,SpecimenSource,ServiceId,ServiceName,MedicalOrderNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(labPanel.LabPanelNum)+",";
 			}
@@ -107,7 +108,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(labPanel.SpecimenCondition)+"',"
 				+"'"+POut.String(labPanel.SpecimenSource)+"',"
 				+"'"+POut.String(labPanel.ServiceId)+"',"
-				+"'"+POut.String(labPanel.ServiceName)+"')";
+				+"'"+POut.String(labPanel.ServiceName)+"',"
+				+    POut.Long  (labPanel.MedicalOrderNum)+")";
 			if(labPanel.RawMessage==null) {
 				labPanel.RawMessage="";
 			}
@@ -131,7 +133,8 @@ namespace OpenDentBusiness.Crud{
 				+"SpecimenCondition= '"+POut.String(labPanel.SpecimenCondition)+"', "
 				+"SpecimenSource   = '"+POut.String(labPanel.SpecimenSource)+"', "
 				+"ServiceId        = '"+POut.String(labPanel.ServiceId)+"', "
-				+"ServiceName      = '"+POut.String(labPanel.ServiceName)+"' "
+				+"ServiceName      = '"+POut.String(labPanel.ServiceName)+"', "
+				+"MedicalOrderNum  =  "+POut.Long  (labPanel.MedicalOrderNum)+" "
 				+"WHERE LabPanelNum = "+POut.Long(labPanel.LabPanelNum);
 			if(labPanel.RawMessage==null) {
 				labPanel.RawMessage="";
@@ -171,6 +174,10 @@ namespace OpenDentBusiness.Crud{
 			if(labPanel.ServiceName != oldLabPanel.ServiceName) {
 				if(command!=""){ command+=",";}
 				command+="ServiceName = '"+POut.String(labPanel.ServiceName)+"'";
+			}
+			if(labPanel.MedicalOrderNum != oldLabPanel.MedicalOrderNum) {
+				if(command!=""){ command+=",";}
+				command+="MedicalOrderNum = "+POut.Long(labPanel.MedicalOrderNum)+"";
 			}
 			if(command==""){
 				return;
