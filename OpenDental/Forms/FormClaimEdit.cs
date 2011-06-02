@@ -4861,6 +4861,7 @@ namespace OpenDental{
 					PaymentCur.PatNum=PatCur.PatNum;
 					PaymentCur.ClinicNum=PatCur.ClinicNum;
 					PaymentCur.PayType=0;//txfr
+					PaymentCur.DateEntry=DateTime.Today;//So that it will show properly in the new window.
 					Payments.Insert(PaymentCur);
 					FormPayment Formp=new FormPayment(PatCur,FamCur,PaymentCur);
 					Formp.IsNew=true;

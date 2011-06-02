@@ -4501,6 +4501,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '7.9.8.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To7_9_10();
+		}
+
+		private static void To7_9_10() {
+			if(FromVersion<new Version("7.9.10.0")) {
+				string command;
+				command="UPDATE payment SET DateEntry=PayDate WHERE DateEntry < "+POut.Date(new DateTime(1880,1,1));
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '7.9.10.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_0_0();
 		}
 

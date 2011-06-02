@@ -113,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (payment.IsSplit)+","
 				+    POut.Long  (payment.PatNum)+","
 				+    POut.Long  (payment.ClinicNum)+","
-				+    POut.Date  (payment.DateEntry)+","
+				+    DbHelper.Now()+","
 				+    POut.Long  (payment.DepositNum)+","
 				+DbHelper.ParamChar+"paramReceipt)";
 			if(payment.Receipt==null) {
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsSplit   =  "+POut.Bool  (payment.IsSplit)+", "
 				+"PatNum    =  "+POut.Long  (payment.PatNum)+", "
 				+"ClinicNum =  "+POut.Long  (payment.ClinicNum)+", "
-				+"DateEntry =  "+POut.Date  (payment.DateEntry)+", "
+				//DateEntry not allowed to change
 				//DepositNum excluded from update
 				+"Receipt   =  "+DbHelper.ParamChar+"paramReceipt "
 				+"WHERE PayNum = "+POut.Long(payment.PayNum);
@@ -191,10 +191,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="ClinicNum = "+POut.Long(payment.ClinicNum)+"";
 			}
-			if(payment.DateEntry != oldPayment.DateEntry) {
-				if(command!=""){ command+=",";}
-				command+="DateEntry = "+POut.Date(payment.DateEntry)+"";
-			}
+			//DateEntry not allowed to change
 			//DepositNum excluded from update
 			if(payment.Receipt != oldPayment.Receipt) {
 				if(command!=""){ command+=",";}

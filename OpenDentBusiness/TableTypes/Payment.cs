@@ -28,6 +28,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to clinic.ClinicNum.  Can be 0. Copied from patient.ClinicNum when creating payment, but user can override.  Not used in provider income transfers.  Cannot be used in financial reporting when grouping by clinic, because payments may be split between clinics.</summary>
 		public long ClinicNum;
 		///<summary>The date that this payment was entered.  Not user editable.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime DateEntry;
 		///<summary>FK to deposit.DepositNum.  0 if not attached to any deposits.  Cash does not usually get attached to a deposit; only checks.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]

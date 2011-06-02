@@ -2639,6 +2639,7 @@ namespace OpenDental {
 			PaymentCur.PayDate=DateTime.Today;
 			PaymentCur.PatNum=PatCur.PatNum;
 			PaymentCur.ClinicNum=PatCur.ClinicNum;
+			PaymentCur.DateEntry=DateTime.Today;//So that it will show properly in the new window.
 			if(DefC.Short[(int)DefCat.PaymentTypes].Length>0){
 				PaymentCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][0].DefNum;
 			}
