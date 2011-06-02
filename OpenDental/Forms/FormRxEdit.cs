@@ -457,7 +457,7 @@ namespace OpenDental{
 			}
 			textDate.Text=RxPatCur.RxDate.ToString("d");
 			checkControlled.Checked=RxPatCur.IsControlled;
-			checkIsElectQueue.Checked=PrefC.GetBool(PrefName.RxSendNewToQueue);
+			checkIsElectQueue.Checked=RxPatCur.IsElectQueue; 
 			textDrug.Text=RxPatCur.Drug;
 			textSig.Text=RxPatCur.Sig;
 			textDisp.Text=RxPatCur.Disp;
