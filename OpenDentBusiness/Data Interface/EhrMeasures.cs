@@ -263,7 +263,14 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Smoking:
-					command="";
+					command="SELECT PatNum,LName,FName,SmokeStatus "
+						+"FROM patient "
+						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
+						+"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13));//13 and older
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Lab:
 					command="";
@@ -555,7 +562,14 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.Smoking:
-						
+						SmokingStatus smokeStatus=(SmokingStatus)PIn.Int(tableRaw.Rows[i]["SmokeStatus"].ToString());
+						if(smokeStatus==SmokingStatus.UnknownIfEver) {
+							explanation+="Smoking status not entered.";
+						}
+						else{
+							explanation="Smoking status entered.";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.Lab:
 						
@@ -569,7 +583,6 @@ namespace OpenDentBusiness{
 							explanation=dateRequested.ToShortDateString()+" copy provided to patient";
 							row["met"]="X";
 						}
-						break;
 						break;
 					case EhrMeasureType.ClinicalSummaries:
 						DateTime visitDate=PIn.Date(tableRaw.Rows[i]["visitDate"].ToString());
@@ -917,7 +930,14 @@ namespace OpenDentBusiness{
 						mu.Action="Enter vital signs";
 						break;
 					case EhrMeasureType.Smoking:
-						mu.Action="";
+						if(pat.SmokeStatus==SmokingStatus.UnknownIfEver) {
+							mu.Details="Smoking status not entered";
+						}
+						else {
+							mu.Details="Smoking status entered";
+							mu.Met=MuMet.True;
+						}
+						mu.Action="Edit smoking status";
 						break;
 					case EhrMeasureType.Lab:
 						mu.Action="";

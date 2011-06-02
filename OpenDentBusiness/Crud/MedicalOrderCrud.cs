@@ -51,7 +51,6 @@ namespace OpenDentBusiness.Crud{
 				medicalOrder.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				medicalOrder.DateTimeOrder  = PIn.DateT (table.Rows[i]["DateTimeOrder"].ToString());
 				medicalOrder.Description    = PIn.String(table.Rows[i]["Description"].ToString());
-				medicalOrder.IsLabPending   = PIn.Bool  (table.Rows[i]["IsLabPending"].ToString());
 				medicalOrder.IsDiscontinued = PIn.Bool  (table.Rows[i]["IsDiscontinued"].ToString());
 				retVal.Add(medicalOrder);
 			}
@@ -93,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicalOrderNum,";
 			}
-			command+="MedOrderType,PatNum,DateTimeOrder,Description,IsLabPending,IsDiscontinued) VALUES(";
+			command+="MedOrderType,PatNum,DateTimeOrder,Description,IsDiscontinued) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicalOrder.MedicalOrderNum)+",";
 			}
@@ -102,7 +101,6 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (medicalOrder.PatNum)+","
 				+    POut.DateT (medicalOrder.DateTimeOrder)+","
 				+"'"+POut.String(medicalOrder.Description)+"',"
-				+    POut.Bool  (medicalOrder.IsLabPending)+","
 				+    POut.Bool  (medicalOrder.IsDiscontinued)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -120,7 +118,6 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum         =  "+POut.Long  (medicalOrder.PatNum)+", "
 				+"DateTimeOrder  =  "+POut.DateT (medicalOrder.DateTimeOrder)+", "
 				+"Description    = '"+POut.String(medicalOrder.Description)+"', "
-				+"IsLabPending   =  "+POut.Bool  (medicalOrder.IsLabPending)+", "
 				+"IsDiscontinued =  "+POut.Bool  (medicalOrder.IsDiscontinued)+" "
 				+"WHERE MedicalOrderNum = "+POut.Long(medicalOrder.MedicalOrderNum);
 			Db.NonQ(command);
@@ -144,10 +141,6 @@ namespace OpenDentBusiness.Crud{
 			if(medicalOrder.Description != oldMedicalOrder.Description) {
 				if(command!=""){ command+=",";}
 				command+="Description = '"+POut.String(medicalOrder.Description)+"'";
-			}
-			if(medicalOrder.IsLabPending != oldMedicalOrder.IsLabPending) {
-				if(command!=""){ command+=",";}
-				command+="IsLabPending = "+POut.Bool(medicalOrder.IsLabPending)+"";
 			}
 			if(medicalOrder.IsDiscontinued != oldMedicalOrder.IsDiscontinued) {
 				if(command!=""){ command+=",";}

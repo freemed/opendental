@@ -4696,18 +4696,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE medicalorder ADD IsLabPending tinyint NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE medicalorder ADD IsLabPending number(3)";
-					Db.NonQ(command);
-					command="UPDATE medicalorder SET IsLabPending = 0 WHERE IsLabPending IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE medicalorder MODIFY IsLabPending NOT NULL";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('EHREmailFromAddress','','')";
 					Db.NonQ(command);
 				}
@@ -5290,8 +5278,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE disease MODIFY DateStop NOT NULL";
 					Db.NonQ(command);
 				}
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxpat ADD SendStatus tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxpat ADD SendStatus number(3)";
+					Db.NonQ(command);
+					command="UPDATE rxpat SET SendStatus = 0 WHERE SendStatus IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxpat MODIFY SendStatus NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5325,7 +5323,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 	
-
-
-			
-
