@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				allergyDef.Description  = PIn.String(table.Rows[i]["Description"].ToString());
 				allergyDef.IsHidden     = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
 				allergyDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				allergyDef.Snomed       = (AllergyDef.SnomedAllergy)PIn.Int(table.Rows[i]["Snomed"].ToString());
+				allergyDef.Snomed       = (SnomedAllergy)PIn.Int(table.Rows[i]["Snomed"].ToString());
 				allergyDef.RxCui        = PIn.Long  (table.Rows[i]["RxCui"].ToString());
 				retVal.Add(allergyDef);
 			}

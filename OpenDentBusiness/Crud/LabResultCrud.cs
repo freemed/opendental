@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 				labResult.ObsValue    = PIn.String(table.Rows[i]["ObsValue"].ToString());
 				labResult.ObsUnits    = PIn.String(table.Rows[i]["ObsUnits"].ToString());
 				labResult.ObsRange    = PIn.String(table.Rows[i]["ObsRange"].ToString());
-				labResult.AbnormalFlag= (LabResult.LabAbnormalFlag)PIn.Int(table.Rows[i]["AbnormalFlag"].ToString());
+				labResult.AbnormalFlag= (LabAbnormalFlag)PIn.Int(table.Rows[i]["AbnormalFlag"].ToString());
 				retVal.Add(labResult);
 			}
 			return retVal;

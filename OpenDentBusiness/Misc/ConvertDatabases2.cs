@@ -5266,7 +5266,29 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX medication_RxCui ON medication (RxCui)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE disease ADD DateStart date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE disease ADD DateStart date";
+					Db.NonQ(command);
+					command="UPDATE disease SET DateStart = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStart IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE disease MODIFY DateStart NOT NULL";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE disease ADD DateStop date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE disease ADD DateStop date";
+					Db.NonQ(command);
+					command="UPDATE disease SET DateStop = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStop IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE disease MODIFY DateStop NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5302,3 +5324,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 	
+
+
+			
+

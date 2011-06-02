@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>SNOMED Allergy Type Code</summary>
+		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.</summary>
 		public SnomedAllergy Snomed;
 		///<summary>RxNorm Code identifier.  FK to an in-memory dictionary of RxCui/RxNorm mappings.</summary>
 		public long RxCui;
@@ -26,25 +26,29 @@ namespace OpenDentBusiness {
 			return (AllergyDef)this.MemberwiseClone();
 		}
 
-		public enum SnomedAllergy{
-			///<summary>0-</summary>
-			_416098002,
-			///<summary>1- </summary>
-			_420134006,
-			///<summary>2- </summary>
-			_418038007,
-			///<summary>3- </summary>
-			_419511003,
-			///<summary>4- </summary>
-			_418471000,
-			///<summary>5- </summary>
-			_419199007,
-			///<summary>6- </summary>
-			_414285001,
-			///<summary>7- </summary>
-			_59037007,
-			///<summary>8- </summary>
-			_235719002
-		}
+		
+	}
+
+	public enum SnomedAllergy{
+		///<summary>0-No SNOMED allergy type code has been assigned.</summary>
+		None,
+		///<summary>1-Allergy to substance (disorder), code number 418038007.</summary>
+		AllergyToSubstance,
+		///<summary>2-Drug allergy (disorder), code number 416098002.</summary>
+		DrugAllergy,
+		///<summary>3-Drug intolerance (disorder), code number 59037007.</summary>
+		DrugIntolerance,
+		///<summary>4-Food allergy (disorder), code number 414285001.</summary>
+		FoodAllergy,
+		///<summary>5-Food intolerance (disorder), code number 235719002.</summary>
+		FoodIntolerance,
+		///<summary>6-Propensity to adverse reactions (disorder), code number 420134006.</summary>
+		AdverseReactions,
+		///<summary>7-Propensity to adverse reactions to drug (disorder), code number 419511003</summary>
+		AdverseReactionsToDrug,
+		///<summary>8-Propensity to adverse reactions to food (disorder), code number 418471000.</summary>
+		AdverseReactionsToFood,
+		///<summary>9-Propensity to adverse reactions to substance (disorder), code number 419199007.</summary>
+		AdverseReactionsToSubstance
 	}
 }

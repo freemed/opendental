@@ -53,6 +53,8 @@ namespace OpenDentBusiness.Crud{
 				disease.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				disease.ICD9Num      = PIn.Long  (table.Rows[i]["ICD9Num"].ToString());
 				disease.ProbStatus   = (ProblemStatus)PIn.Int(table.Rows[i]["ProbStatus"].ToString());
+				disease.DateStart    = PIn.Date  (table.Rows[i]["DateStart"].ToString());
+				disease.DateStop     = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				retVal.Add(disease);
 			}
 			return retVal;
@@ -93,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DiseaseNum,";
 			}
-			command+="PatNum,DiseaseDefNum,PatNote,ICD9Num,ProbStatus) VALUES(";
+			command+="PatNum,DiseaseDefNum,PatNote,ICD9Num,ProbStatus,DateStart,DateStop) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(disease.DiseaseNum)+",";
 			}
@@ -103,7 +105,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(disease.PatNote)+"',"
 				//DateTStamp can only be set by MySQL
 				+    POut.Long  (disease.ICD9Num)+","
-				+    POut.Int   ((int)disease.ProbStatus)+")";
+				+    POut.Int   ((int)disease.ProbStatus)+","
+				+    POut.Date  (disease.DateStart)+","
+				+    POut.Date  (disease.DateStop)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +125,9 @@ namespace OpenDentBusiness.Crud{
 				+"PatNote      = '"+POut.String(disease.PatNote)+"', "
 				//DateTStamp can only be set by MySQL
 				+"ICD9Num      =  "+POut.Long  (disease.ICD9Num)+", "
-				+"ProbStatus   =  "+POut.Int   ((int)disease.ProbStatus)+" "
+				+"ProbStatus   =  "+POut.Int   ((int)disease.ProbStatus)+", "
+				+"DateStart    =  "+POut.Date  (disease.DateStart)+", "
+				+"DateStop     =  "+POut.Date  (disease.DateStop)+" "
 				+"WHERE DiseaseNum = "+POut.Long(disease.DiseaseNum);
 			Db.NonQ(command);
 		}
@@ -149,6 +155,14 @@ namespace OpenDentBusiness.Crud{
 			if(disease.ProbStatus != oldDisease.ProbStatus) {
 				if(command!=""){ command+=",";}
 				command+="ProbStatus = "+POut.Int   ((int)disease.ProbStatus)+"";
+			}
+			if(disease.DateStart != oldDisease.DateStart) {
+				if(command!=""){ command+=",";}
+				command+="DateStart = "+POut.Date(disease.DateStart)+"";
+			}
+			if(disease.DateStop != oldDisease.DateStop) {
+				if(command!=""){ command+=",";}
+				command+="DateStop = "+POut.Date(disease.DateStop)+"";
 			}
 			if(command==""){
 				return;
