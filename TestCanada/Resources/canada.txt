@@ -1129,9 +1129,9 @@ CREATE TABLE `covcat` (
 
 /*Data for the table `covcat` */
 
-insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (1,'Part A',0,1,0,1);
-insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (2,'Part B',0,2,0,1);
-insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (3,'Part C',0,3,0,9);
+insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (1,'Part A',100,1,0,1);
+insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (2,'Part B',50,2,0,1);
+insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (3,'Part C',50,3,0,9);
 insert  into `covcat`(`CovCatNum`,`Description`,`DefaultPercent`,`CovOrder`,`IsHidden`,`EbenefitCat`) values (4,'Endo',0,4,0,5);
 
 /*Table structure for table `covspan` */
