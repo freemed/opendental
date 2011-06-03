@@ -51,7 +51,7 @@ namespace OpenDentBusiness.Crud{
 				allergyDef.IsHidden     = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
 				allergyDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				allergyDef.Snomed       = (SnomedAllergy)PIn.Int(table.Rows[i]["Snomed"].ToString());
-				allergyDef.RxCui        = PIn.Long  (table.Rows[i]["RxCui"].ToString());
+				allergyDef.MedicationNum= PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
 				retVal.Add(allergyDef);
 			}
 			return retVal;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AllergyDefNum,";
 			}
-			command+="Description,IsHidden,Snomed,RxCui) VALUES(";
+			command+="Description,IsHidden,Snomed,MedicationNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(allergyDef.AllergyDefNum)+",";
 			}
@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (allergyDef.IsHidden)+","
 				//DateTStamp can only be set by MySQL
 				+    POut.Int   ((int)allergyDef.Snomed)+","
-				+    POut.Long  (allergyDef.RxCui)+")";
+				+    POut.Long  (allergyDef.MedicationNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+"IsHidden     =  "+POut.Bool  (allergyDef.IsHidden)+", "
 				//DateTStamp can only be set by MySQL
 				+"Snomed       =  "+POut.Int   ((int)allergyDef.Snomed)+", "
-				+"RxCui        =  "+POut.Long  (allergyDef.RxCui)+" "
+				+"MedicationNum=  "+POut.Long  (allergyDef.MedicationNum)+" "
 				+"WHERE AllergyDefNum = "+POut.Long(allergyDef.AllergyDefNum);
 			Db.NonQ(command);
 		}
@@ -139,9 +139,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Snomed = "+POut.Int   ((int)allergyDef.Snomed)+"";
 			}
-			if(allergyDef.RxCui != oldAllergyDef.RxCui) {
+			if(allergyDef.MedicationNum != oldAllergyDef.MedicationNum) {
 				if(command!=""){ command+=",";}
-				command+="RxCui = "+POut.Long(allergyDef.RxCui)+"";
+				command+="MedicationNum = "+POut.Long(allergyDef.MedicationNum)+"";
 			}
 			if(command==""){
 				return;

@@ -21,6 +21,10 @@ namespace OpenDental {
 				textDescription.Text=AllergyDefCur.Description;
 				checkHidden.Checked=AllergyDefCur.IsHidden;
 			}
+			for(int i=0;i<Enum.GetNames(typeof(SnomedAllergy)).Length;i++) {
+				comboSnomedAllergyType.Items.Add(Enum.GetNames(typeof(SnomedAllergy))[i]);
+			}
+			comboSnomedAllergyType.SelectedIndex=(int)AllergyDefCur.Snomed;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -30,6 +34,11 @@ namespace OpenDental {
 			}
 			AllergyDefCur.Description=textDescription.Text;
 			AllergyDefCur.IsHidden=checkHidden.Checked;
+			AllergyDefCur.Snomed=(SnomedAllergy)comboSnomedAllergyType.SelectedIndex;
+			if(textRxCui.errorProvider1.GetError(textRxCui)!=""){
+				MsgBox.Show(this,"You may only enter a number for RxNorm CUI.");
+			}
+			//AllergyDefCur.RxCui=PIn.Long(textRxCui.Text);	
 			if(AllergyDefCur.IsNew) {
 				AllergyDefs.Insert(AllergyDefCur);
 			}

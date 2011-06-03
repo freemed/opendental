@@ -18,8 +18,8 @@ namespace OpenDentBusiness {
 		public DateTime DateTStamp;
 		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.</summary>
 		public SnomedAllergy Snomed;
-		///<summary>RxNorm Code identifier.  FK to an in-memory dictionary of RxCui/RxNorm mappings.</summary>
-		public long RxCui;
+		///<summary>FK to Medication.MedicationNum. Optional.</summary>
+		public long MedicationNum;
 
 		///<summary></summary>
 		public AllergyDef Copy() {

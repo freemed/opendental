@@ -5250,22 +5250,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE medication ADD RxCui bigint NOT NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE medication ADD INDEX (RxCui)";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE medication ADD RxCui number(20)";
-					Db.NonQ(command);
-					command="UPDATE medication SET RxCui = 0 WHERE RxCui IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE medication MODIFY RxCui NOT NULL";
-					Db.NonQ(command);
-					command=@"CREATE INDEX medication_RxCui ON medication (RxCui)";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE disease ADD DateStart date NOT NULL DEFAULT '0001-01-01'";
 					Db.NonQ(command);
 				}
@@ -5323,6 +5307,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE labpanel MODIFY MedicalOrderNum NOT NULL";
 					Db.NonQ(command);
 					command=@"CREATE INDEX labpanel_MedicalOrderNum ON labpanel (MedicalOrderNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergydef ADD MedicationNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydef ADD INDEX (MedicationNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergydef ADD MedicationNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE allergydef SET MedicationNum = 0 WHERE MedicationNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydef MODIFY MedicationNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX allergydef_MedicationNum ON allergydef (MedicationNum)";
 					Db.NonQ(command);
 				}
 

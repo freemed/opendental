@@ -35,6 +35,8 @@ namespace OpenDental{
 		private string[] PatNames;
 		///<summary></summary>
 		private string[] Brands;
+		private Label label5;
+		private ODR.ValidNumber textRxCui;
 		public Medication MedicationCur;
 
 		///<summary></summary>
@@ -85,6 +87,8 @@ namespace OpenDental{
 			this.labelBrands = new System.Windows.Forms.Label();
 			this.comboBrands = new System.Windows.Forms.ComboBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textRxCui = new ODR.ValidNumber();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -97,7 +101,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(535,401);
+			this.butCancel.Location = new System.Drawing.Point(535,408);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 3;
@@ -112,7 +116,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(535,363);
+			this.butOK.Location = new System.Drawing.Point(535,370);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 2;
@@ -155,7 +159,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(21,66);
+			this.label3.Location = new System.Drawing.Point(21,92);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(127,47);
 			this.label3.TabIndex = 8;
@@ -165,7 +169,7 @@ namespace OpenDental{
 			// textNotes
 			// 
 			this.textNotes.AcceptsReturn = true;
-			this.textNotes.Location = new System.Drawing.Point(148,67);
+			this.textNotes.Location = new System.Drawing.Point(148,93);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicationEdit;
@@ -182,7 +186,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(43,398);
+			this.butDelete.Location = new System.Drawing.Point(43,401);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(84,26);
 			this.butDelete.TabIndex = 32;
@@ -240,25 +244,45 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.labelBrands);
 			this.groupBox1.Controls.Add(this.comboBrands);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(43,279);
+			this.groupBox1.Location = new System.Drawing.Point(43,303);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(423,86);
 			this.groupBox1.TabIndex = 38;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Dependencies";
 			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(20,70);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(127,17);
+			this.label5.TabIndex = 6;
+			this.label5.Text = "RxNorm CUI";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textRxCui
+			// 
+			this.textRxCui.Location = new System.Drawing.Point(148,68);
+			this.textRxCui.MaxVal = 999999999;
+			this.textRxCui.MinVal = 0;
+			this.textRxCui.Name = "textRxCui";
+			this.textRxCui.Size = new System.Drawing.Size(86,20);
+			this.textRxCui.TabIndex = 39;
+			// 
 			// FormMedicationEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(653,444);
+			this.ClientSize = new System.Drawing.Size(653,448);
+			this.Controls.Add(this.textRxCui);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textMedName);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textGenericName);
 			this.Controls.Add(this.label1);
@@ -271,8 +295,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Medication";
-			this.Load += new System.EventHandler(this.MedicationEdit_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormMedicationEdit_Closing);
+			this.Load += new System.EventHandler(this.MedicationEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -315,8 +339,14 @@ namespace OpenDental{
 			if(PatNames.Length>0){
 				comboPatients.SelectedIndex=0;
 			}
+			if(MedicationCur.RxCui==-1){
+				textRxCui.Text="";
+			}
+			else{
+				textRxCui.Text=MedicationCur.RxCui.ToString();
+			}
 		}
-
+	
 		private void textMedName_TextChanged(object sender, System.EventArgs e) {
 			//this causes immediate display update with each keypress
 			if(MedicationCur.MedicationNum==MedicationCur.GenericNum){
@@ -349,8 +379,15 @@ namespace OpenDental{
 			if(MedicationCur.MedicationNum==MedicationCur.GenericNum){
 				MedicationCur.Notes=textNotes.Text;
 			}
-			else{
-				MedicationCur.Notes="";
+			if(textRxCui.errorProvider1.GetError(textRxCui)!=""){
+				MsgBox.Show(this,"Invalid RxNorm CUI.\r\n"+textRxCui.errorProvider1.GetError(textRxCui));
+				return;
+			}
+			if(textRxCui.Text==""){
+				MedicationCur.RxCui=-1;
+			}
+			else {
+				MedicationCur.RxCui=PIn.Long(textRxCui.Text);	
 			}
 			Medications.Update(MedicationCur);
 			DialogResult=DialogResult.OK;
