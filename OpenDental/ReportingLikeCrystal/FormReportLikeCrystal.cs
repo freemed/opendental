@@ -288,7 +288,7 @@ namespace OpenDental.ReportingOld2
 			}
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pd2.OriginAtMargins=true;//the actual margins are taken into consideration in the printpage event, and if the user specifies 0,0 for margins, then the report will reliably print on a preprinted form. Origin is ALWAYS the corner of the paper.
-			if(pd2.DefaultPageSettings.PaperSize.Height==0) {
+			if(pd2.DefaultPageSettings.PrintableArea.Height==0) {
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 		}

@@ -107,7 +107,7 @@ namespace OpenDental.UI{
 
 		private void FormPrintPreview_Load(object sender, System.EventArgs e) {
 			LayoutToolBar();
-			if(Document.DefaultPageSettings.PaperSize.Height==0) {
+			if(Document.DefaultPageSettings.PrintableArea.Height==0) {
 				Document.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			//if document fits within window, then don't zoom it bigger; leave it at 100%

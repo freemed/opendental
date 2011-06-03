@@ -129,7 +129,7 @@ namespace CodeBase{
 			pd.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around.
 			//This prevents a bug caused by some printer drivers not reporting their papersize.
 			//But remember that other countries use A4 paper instead of 8 1/2 x 11.
-			if(pd.DefaultPageSettings.PaperSize.Height==0){
+			if(pd.DefaultPageSettings.PrintableArea.Height==0){
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			pd.PrinterSettings.Duplex=Duplex.Horizontal;//Print double sided when possible.

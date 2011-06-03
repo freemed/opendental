@@ -271,8 +271,8 @@ namespace OpenDental{
 			}
 			//pd.OriginAtMargins=true;
 			//fixes a bug if user has label printer as default printer on their computer:
-			if(pd.DefaultPageSettings.PaperSize.Height<1000
-				|| pd.DefaultPageSettings.PaperSize.Width<750)
+			if(pd.DefaultPageSettings.PrintableArea.Height<1000
+				|| pd.DefaultPageSettings.PrintableArea.Width<750)
 			{
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}

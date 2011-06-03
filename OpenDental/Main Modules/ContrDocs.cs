@@ -1052,8 +1052,8 @@ namespace OpenDental{
 				PrintDialog1.ShowNetwork=true;
 				PrintDialog1.UseEXDialog=true; //needed because PrintDialog was not showing on 64 bit Vista systems
 				if(PrintDialog1.ShowDialog()==DialogResult.OK) {
-					if(printDocument.DefaultPageSettings.PaperSize.Width==0||
-							printDocument.DefaultPageSettings.PaperSize.Height==0) {
+					if(printDocument.DefaultPageSettings.PrintableArea.Width==0||
+							printDocument.DefaultPageSettings.PrintableArea.Height==0) {
 						printDocument.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 					}
 					printDocument.OriginAtMargins=true;

@@ -260,7 +260,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons["FullPage"].Pushed=true;
 			previewContr.Location=new Point(0,ToolBarMain.Bottom);
 			previewContr.Size=new Size(ClientRectangle.Width,ClientRectangle.Height-ToolBarMain.Height-panelSig.Height);
-			if(Document.DefaultPageSettings.PaperSize.Height==0) {
+			if(Document.DefaultPageSettings.PrintableArea.Height==0) {
 				Document.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			SetSize();

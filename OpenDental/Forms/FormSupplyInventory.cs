@@ -580,7 +580,7 @@ namespace OpenDental {
 			else{//one order
 				pd2.PrintPage += new PrintPageEventHandler(pd2_PrintPageOrder);
 			}
-			if(pd2.DefaultPageSettings.PaperSize.Height==0) {
+			if(pd2.DefaultPageSettings.PrintableArea.Height==0) {
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			#if DEBUG

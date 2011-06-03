@@ -430,7 +430,7 @@ namespace OpenDental{
 			pd2=new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.DefaultPageSettings.Margins=new Margins(75,75,50,100);
-			if(pd2.DefaultPageSettings.PaperSize.Height==0) {
+			if(pd2.DefaultPageSettings.PrintableArea.Height==0) {
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			linesPrinted=0;

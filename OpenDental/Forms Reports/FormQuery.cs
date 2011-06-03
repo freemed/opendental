@@ -1137,7 +1137,7 @@ namespace OpenDental{
 				pd2.DefaultPageSettings.Landscape=true;
 				pd2.DefaultPageSettings.Margins=new Margins(25,120,50,60);
 			}
-			if(pd2.DefaultPageSettings.PaperSize.Height==0){
+			if(pd2.DefaultPageSettings.PrintableArea.Height==0){
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			pagesPrinted=0;

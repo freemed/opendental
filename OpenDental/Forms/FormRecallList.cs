@@ -1670,7 +1670,7 @@ namespace OpenDental{
 			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
 			//pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Landscape=true;
-			if(pd.DefaultPageSettings.PaperSize.Height==0) {
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			headingPrinted=false;
