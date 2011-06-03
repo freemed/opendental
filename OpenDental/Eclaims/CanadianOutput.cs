@@ -27,7 +27,7 @@ namespace OpenDental.Eclaims {
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 			Patient patient=Patients.GetPat(patNum);
 			Patient subscriber=Patients.GetPat(insSub.Subscriber);
-			Provider prov=Providers.GetProv(Patients.GetProvNum(patient));
+			Provider provDefaultTreat=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null){
 				throw new ApplicationException("Canadian clearinghouse not found.");
@@ -47,11 +47,11 @@ namespace OpenDental.Eclaims {
 				error+="CarrierId 6 digits";
 			}
 
-			if(prov.NationalProvID.Length!=9) {
+			if(provDefaultTreat.NationalProvID.Length!=9) {
 				if(error!="")	error+=", ";
 				error+="Prov CDA num 9 digits";
 			}
-			if(prov.CanadianOfficeNum.Length!=4) {
+			if(provDefaultTreat.CanadianOfficeNum.Length!=4) {
 				if(error!="") error+=", ";
 				error+="Prov office num 4 char";
 			}
@@ -152,15 +152,12 @@ namespace OpenDental.Eclaims {
 				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 			}
 			//B01 CDA provider number 9 AN
-			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+			strb.Append(Canadian.TidyAN(provDefaultTreat.NationalProvID,9));//already validated
 			//B02 provider office number 4 AN
-			strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
+			strb.Append(Canadian.TidyAN(provDefaultTreat.CanadianOfficeNum,4));//already validated
 			if(carrier.CDAnetVersion=="04"){
 				//B03 billing provider number 9 AN
-				//Might need to account for possible 5 digit prov id assigned by carrier
-				//But the testing scripts do not supply any billing provider numbers, so we'll ignore this for now.
-				//The testing scripts seem to indicate that the billing provider is always the default practice provider.
-				Provider provBilling=Providers.GetProv(Providers.GetBillingProvNum(prov.ProvNum,patient.ClinicNum));
+				Provider provBilling=Providers.GetProv(Providers.GetBillingProvNum(provDefaultTreat.ProvNum,patient.ClinicNum));
 				strb.Append(Canadian.TidyAN(provBilling.NationalProvID,9));//already validated
 			}
 			if(carrier.CDAnetVersion=="02") {

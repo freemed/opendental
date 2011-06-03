@@ -2961,7 +2961,7 @@ namespace OpenDental{
 			//string result="";
 			DateTime date=DateTime.Today;
 #if DEBUG
-			date=new DateTime(1999,1,1);
+			date=new DateTime(1999,1,4);//TODO: Remove after Canadian claim certification is complete.
 #endif
 			Relat relat=(Relat)comboRelationship.SelectedIndex;
 			string patID=textPatID.Text;
