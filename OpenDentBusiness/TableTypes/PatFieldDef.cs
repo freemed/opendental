@@ -31,7 +31,9 @@ namespace OpenDentBusiness{
 		///<summary>1</summary>
 		PickList,
 		///<summary>2</summary>
-		Date
+		Date,
+		///<summary>3</summary>
+		Checkbox
 	}
 
 

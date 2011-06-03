@@ -4147,7 +4147,12 @@ namespace OpenDental{
 								row.Cells.Add("");
 							}
 							else {
-								row.Cells.Add(field.FieldValue);
+								if(PatFieldDefs.List[i].FieldType==PatFieldType.Checkbox) {
+									row.Cells.Add("X");
+								}
+								else {
+									row.Cells.Add(field.FieldValue);
+								}
 							}
 							row.Tag="PatField"+i.ToString();
 							gridPtInfo.Rows.Add(row);
@@ -7262,6 +7267,11 @@ namespace OpenDental{
 							FormPF.IsNew=true;
 							FormPF.ShowDialog();
 						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Checkbox) {
+							FormPatFieldCheckEdit FormPF=new FormPatFieldCheckEdit(field);
+							FormPF.IsNew=true;
+							FormPF.ShowDialog();
+						}
 					}
 					else {
 						if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
@@ -7274,6 +7284,10 @@ namespace OpenDental{
 						}
 						if(PatFieldDefs.List[index].FieldType==PatFieldType.Date) {
 							FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+							FormPF.ShowDialog();
+						}
+						if(PatFieldDefs.List[index].FieldType==PatFieldType.Checkbox) {
+							FormPatFieldCheckEdit FormPF=new FormPatFieldCheckEdit(field);
 							FormPF.ShowDialog();
 						}
 					}

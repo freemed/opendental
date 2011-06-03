@@ -3,13 +3,14 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormPatFieldEdit : System.Windows.Forms.Form{
+	public class FormPatFieldCheckEdit:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		/// <summary>
@@ -20,10 +21,10 @@ namespace OpenDental{
 		public bool IsNew;
 		private PatField Field;
 		private Label labelName;
-		private TextBox textValue;
+		private CheckBox checkFieldValue;
 
 		///<summary></summary>
-		public FormPatFieldEdit(PatField field)
+		public FormPatFieldCheckEdit(PatField field)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -55,11 +56,10 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPatFieldEdit));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkFieldValue = new System.Windows.Forms.CheckBox();
 			this.labelName = new System.Windows.Forms.Label();
-			this.textValue = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -71,7 +71,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(280,146);
+			this.butCancel.Location = new System.Drawing.Point(212,93);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 2;
@@ -86,67 +86,60 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(186,146);
+			this.butOK.Location = new System.Drawing.Point(118,93);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// checkFieldValue
+			// 
+			this.checkFieldValue.Location = new System.Drawing.Point(22,40);
+			this.checkFieldValue.Name = "checkFieldValue";
+			this.checkFieldValue.Size = new System.Drawing.Size(16,16);
+			this.checkFieldValue.TabIndex = 4;
+			this.checkFieldValue.UseVisualStyleBackColor = true;
+			// 
 			// labelName
 			// 
-			this.labelName.Location = new System.Drawing.Point(19,17);
+			this.labelName.Location = new System.Drawing.Point(42,34);
 			this.labelName.Name = "labelName";
-			this.labelName.Size = new System.Drawing.Size(335,20);
+			this.labelName.Size = new System.Drawing.Size(253,20);
 			this.labelName.TabIndex = 3;
 			this.labelName.Text = "Field Name";
 			this.labelName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// textValue
-			// 
-			this.textValue.Location = new System.Drawing.Point(21,40);
-			this.textValue.Multiline = true;
-			this.textValue.Name = "textValue";
-			this.textValue.Size = new System.Drawing.Size(333,74);
-			this.textValue.TabIndex = 0;
-			// 
-			// FormPatFieldEdit
+			// FormPatFieldCheckEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(375,193);
-			this.Controls.Add(this.textValue);
+			this.ClientSize = new System.Drawing.Size(307,140);
+			this.Controls.Add(this.checkFieldValue);
 			this.Controls.Add(this.labelName);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormPatFieldEdit";
+			this.Name = "FormPatFieldCheckEdit";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Patient Field";
-			this.Load += new System.EventHandler(this.FormPatFieldEdit_Load);
+			this.Text = "Edit Patient Field Checkbox";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPatFieldDefEdit_FormClosing);
+			this.Load += new System.EventHandler(this.FormPatFieldCheckEdit_Load);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 		#endregion
 
-		private void FormPatFieldEdit_Load(object sender, System.EventArgs e) {
+		private void FormPatFieldCheckEdit_Load(object sender, System.EventArgs e) {
 			labelName.Text=Field.FieldName;
-			textValue.Text=Field.FieldValue;
+			checkFieldValue.Checked=PIn.Bool(Field.FieldValue);
 		}
 
-		/*private void buttonDelete_Click(object sender,EventArgs e) {
-			
-		}*/
-
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Field.FieldValue=textValue.Text;
-			if(Field.FieldValue==""){//if blank, then delete
+			if(!checkFieldValue.Checked){//if blank, then delete
 				if(IsNew) {
 					DialogResult=DialogResult.Cancel;
 					return;
@@ -155,10 +148,12 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
+			Field.FieldValue="1";
 			if(IsNew){
 				PatFields.Insert(Field);
 			}
 			else{
+				//this should never happen
 				PatFields.Update(Field);
 			}
 			DialogResult=DialogResult.OK;
