@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("status");
 			table.Columns.Add("type");
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT DateTimeOrder,IsDiscontinued,MedicalOrderNum,MedOrderType "
+			string command="SELECT DateTimeOrder,Description,IsDiscontinued,MedicalOrderNum,MedOrderType "
 				+"FROM medicalorder WHERE PatNum = "+POut.Long(patNum);
 			if(!includeDiscontinued) {//only include current orders
 				command+=" AND IsDiscontinued=0";//false
@@ -114,6 +114,20 @@ namespace OpenDentBusiness{
 			return Crud.MedicalOrderCrud.SelectMany(command);
 		}
 
+		///<summary></summary>
+		public static bool LabHasResultsAttached(long medicalOrderNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),medicalOrderNum);
+			}
+			string command= "SELECT COUNT(*) FROM labpanel WHERE MedicalOrderNum = "+POut.Long(medicalOrderNum);
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+
 		///<summary>Gets one MedicalOrder from the db.</summary>
 		public static MedicalOrder GetOne(long medicalOrderNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -146,7 +160,23 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),medicalOrderNum);
 				return;
 			}
-			string command= "DELETE FROM medicalorder WHERE MedicalOrderNum = "+POut.Long(medicalOrderNum);
+			string command;
+			//validation
+			/*
+			command="SELECT COUNT(*) FROM labpanel WHERE DepositNum,PayAmt FROM payment WHERE PayNum="+POut.Long(pay.PayNum);
+			DataTable table=Db.GetTable(command);
+			if(table.Rows.Count==0) {
+				return;
+			}
+			if(table.Rows[0]["DepositNum"].ToString()!="0"//if payment is already attached to a deposit
+				&& PIn.Double(table.Rows[0]["PayAmt"].ToString())!=0)//and it's not new
+			{
+				throw new ApplicationException(Lans.g("Payments","Not allowed to delete a payment attached to a deposit."));
+			}
+
+
+			*/
+			command = "DELETE FROM medicalorder WHERE MedicalOrderNum = "+POut.Long(medicalOrderNum);
 			Db.NonQ(command);
 		}
 
