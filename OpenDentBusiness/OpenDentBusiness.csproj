@@ -225,6 +225,7 @@
     <Compile Include="Crud\MountItemDefCrud.cs" />
     <Compile Include="Crud\OperatoryCrud.cs" />
     <Compile Include="Crud\OrionProcCrud.cs" />
+    <Compile Include="Crud\OrthoChartCrud.cs" />
     <Compile Include="Crud\PatFieldCrud.cs" />
     <Compile Include="Crud\PatFieldDefCrud.cs" />
     <Compile Include="Crud\PatientCrud.cs" />
@@ -346,6 +347,7 @@
     <Compile Include="Data Interface\LabResults.cs" />
     <Compile Include="Data Interface\MedicalOrders.cs" />
     <Compile Include="Data Interface\OrionProcs.cs" />
+    <Compile Include="Data Interface\OrthoCharts.cs" />
     <Compile Include="Data Interface\ProcApptColors.cs" />
     <Compile Include="Data Interface\ProcGroupItems.cs" />
     <Compile Include="Data Interface\ReminderRules.cs" />
