@@ -64,6 +64,7 @@ namespace MobileWeb {
 		public DateTime GetDemoTodayDate() {
 			return Properties.Settings.Default.DemoTodayDate;
 		}
+
 		public string GetPatientName(long PatNum,long CustomerNum) {
 			try{
 				String PatName="";
@@ -96,7 +97,30 @@ namespace MobileWeb {
 			}
 		}
 
+		public bool SetCustomerNum(long CustomerNum,System.Web.UI.WebControls.Literal Message) {
+			Message.Text="";
+			if(HttpContext.Current.Session["CustomerNum"]==null) {
+				return false;
+			}
+			Int64.TryParse(HttpContext.Current.Session["CustomerNum"].ToString(),out CustomerNum);
+			if(CustomerNum!=0) {
+				Message.Text="LoggedIn";
+			}
+			return true;
+		}
 
+		public long GetCustomerNum(System.Web.UI.WebControls.Literal Message) {
+			Message.Text="";
+			long CustomerNum=0;
+			if(HttpContext.Current.Session["CustomerNum"]==null) {
+				return 0;
+			}
+			Int64.TryParse(HttpContext.Current.Session["CustomerNum"].ToString(),out CustomerNum);
+			if(CustomerNum!=0) {
+				Message.Text="LoggedIn";
+			}
+			return CustomerNum;
+		}
 
 	}
 }

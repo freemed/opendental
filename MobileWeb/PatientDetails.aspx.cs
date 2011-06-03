@@ -22,7 +22,8 @@ namespace MobileWeb {
 		private Util util=new Util();
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				if(!SetCustomerNum()) {
+				CustomerNum=util.GetCustomerNum(Message);
+				if(CustomerNum==0) {
 					return;
 				}
 				if(Request["PatNum"]!=null) {

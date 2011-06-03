@@ -13,6 +13,12 @@ namespace OpenDentBusiness.Mobile{
 		public static Pharmacym GetOne(long customerNum,long pharmacyNum) {
 			return Crud.PharmacymCrud.SelectOne(customerNum,pharmacyNum);
 		}
+		///<summary>Gets all Appointmentm for a single patient.</summary>
+		public static List<Pharmacym> GetPharmacyms(long customerNum) {
+			string command="SELECT * from pharmacym "
+					+"WHERE CustomerNum = "+POut.Long(customerNum);
+			return Crud.PharmacymCrud.SelectMany(command);
+		}
 		#endregion
 
 		#region Used only on OD

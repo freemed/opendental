@@ -115,7 +115,15 @@ function TraversePage(){
 		var SectionToFill='#PatientDetailsContents';
 		var MoveToURL='#PatientDetails';
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
-	});
+    });
+
+    $('a[href="#PharmacyDetails"]').tap(function (e) {
+        //console.log('PharmacyPatientDetails tapped');
+        var UrlForFetchingData = this.attributes["linkattib"].value;
+        var SectionToFill = '#PharmacyDetailsContents';
+        var MoveToURL = '#PharmacyDetails';
+        ProcessNormalPageLink(e, UrlForFetchingData, MoveToURL, SectionToFill);
+    });
 	
 	/*previous, today and next buttons*/
 	$('#previous').tap(function(e) {
@@ -273,7 +281,7 @@ function ProcessPreviousNextButton(e,UrlForFetchingData, SectionToFill){
 }
 	
 function FetchPage(UrlForFetchingData, SectionToFill){
-	$.ajax({
+    $.ajax({
 		type: "GET",
 		url: UrlForFetchingData,
 		success: function (msg) {
@@ -288,8 +296,8 @@ function FetchPage(UrlForFetchingData, SectionToFill){
              jQT.goTo('#login', 'flip');
 			}
 		},
-        error: function(){
-            $(SectionToFill).replaceWith(MessageError);// this takes care of a page not found or page not responding situation.
+     error: function () {     
+         $(SectionToFill).html(MessageError); // this takes care of a page not found or page not responding situation.
         }
 	});
 

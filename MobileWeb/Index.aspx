@@ -134,6 +134,16 @@
              </div>
         </div>
 
+		<div id="PharmacyList">
+        <div class="toolbar">
+            <h1>Pharmacies</h1>
+            <a class="home" href="#">Home</a>
+			<a class="button logout" href="#">Logout</a>
+        </div>
+        <div id="PharmacyListContents">
+        </div>
+    </div>
+
    <div id="PatientDetails">
         <div class="toolbar">
         <h1>Patient</h1>
@@ -152,6 +162,16 @@
 		<a class="button logout" href="#">Logout</a>
 		</div>
 	   <div id="AppointmentDetailsContents">
+	   </div>
+   </div>
+
+      <div id="PharmacyDetails">
+		<div class="toolbar">
+		<h1>Pharmacy</h1>
+		<a class="appts" linkattib="PharmacyList.aspx" href="#">Pharms</a>
+		<a class="button logout" href="#">Logout</a>
+		</div>
+	   <div id="PharmacyDetailsContents">
 	   </div>
    </div>
     </body>

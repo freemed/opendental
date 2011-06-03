@@ -20,13 +20,13 @@ namespace MobileWeb {
 		
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				if(!SetCustomerNum()) {
+				CustomerNum=util.GetCustomerNum(Message);
+				if(CustomerNum==0) {
 					return;
 				}
 				if(Request["AptNum"]!=null) {
 					Int64.TryParse(Request["AptNum"].ToString().Trim(),out AptNum);
 				}
-				Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
 				apt=Appointmentms.GetOne(CustomerNum,AptNum);
 				pat=Patientms.GetOne(CustomerNum,apt.PatNum);
 				PatName=util.GetPatientName(pat);

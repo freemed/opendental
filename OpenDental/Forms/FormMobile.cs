@@ -586,7 +586,6 @@ namespace OpenDental {
 			if(!TestWebServiceExists()) {
 				return;
 			}
-			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);			
 			FormProgress FormP=new FormProgress();//but we won't display it.
 			FormP.NumberFormat="";

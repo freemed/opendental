@@ -24,7 +24,8 @@ namespace MobileWeb {
 
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				if(!SetCustomerNum()) {
+				CustomerNum=util.GetCustomerNum(Message);
+				if(CustomerNum==0) {
 					return;
 				}
 				int Year=0;

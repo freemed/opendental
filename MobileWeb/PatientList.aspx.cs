@@ -18,8 +18,9 @@ namespace MobileWeb {
 		
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
-				if(!SetCustomerNum()) {
-						return;
+				CustomerNum=util.GetCustomerNum(Message);
+				if(CustomerNum==0) {
+					return;
 				}
 				if(Request["searchterm"]!=null) {
 					searchterm=Request["searchterm"].Trim();

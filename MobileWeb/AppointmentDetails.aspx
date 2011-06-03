@@ -21,15 +21,7 @@
 		</li>
 	</ul>
 
-
 <ul>
-	<%--<li> <span class="style1"><%Response.Write(apt.AptDateTime.ToShortDateString());%>&nbsp;&nbsp;<%Response.Write(apt.AptDateTime.ToString("dddd"));%><br />
-	<div><%Response.Write(apt.AptDateTime.ToString("hh:mm tt"));%>, <%Response.Write((apt.Pattern.Length*5).ToString()+" min");%></div>
-	<div style="padding-top:4px"><%Response.Write(apt.ProcDescript);%></div>
-	<div style="padding-top:4px"><%Response.Write(apt.Note);%></div>
-	</span>
-	</li>--%>
-
 	<li class="style1">
 		<div>
 			<div style="float:left;margin-right:15px;display:table-cell;">
