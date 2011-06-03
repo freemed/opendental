@@ -5325,6 +5325,34 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX allergydef_MedicationNum ON allergydef (MedicationNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS orthochart";
+					Db.NonQ(command);
+					command=@"CREATE TABLE orthochart (
+						OrthoChartNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						DateService date NOT NULL DEFAULT '0001-01-01',
+						FieldName varchar(255) NOT NULL,
+						FieldValue varchar(255) NOT NULL
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE orthochart'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE orthochart (
+						OrthoChartNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						DateService date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						FieldName varchar2(255),
+						FieldValue varchar2(255),
+						CONSTRAINT orthochart_OrthoChartNum PRIMARY KEY (OrthoChartNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX orthochart_PatNum ON orthochart (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5362,3 +5390,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
+
+
