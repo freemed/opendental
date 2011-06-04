@@ -30,14 +30,28 @@ namespace OpenDentBusiness{
 			DataTable rawOrder=Db.GetTable(command);
 			DateTime dateT;
 			MedicalOrderType medOrderType;
+			long medicalOrderNum;
 			bool isDiscontinued;
 			for(int i=0;i<rawOrder.Rows.Count;i++) {
 				row=table.NewRow();
 				dateT=PIn.DateT(rawOrder.Rows[i]["DateTimeOrder"].ToString());
+				medOrderType=(MedicalOrderType)PIn.Int(rawOrder.Rows[i]["MedOrderType"].ToString());
+				medicalOrderNum=PIn.Long(rawOrder.Rows[i]["MedicalOrderNum"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
 				row["description"]=PIn.String(rawOrder.Rows[i]["Description"].ToString());
-				row["MedicalOrderNum"]=rawOrder.Rows[i]["MedicalOrderNum"].ToString();
+				if(medOrderType==MedicalOrderType.Laboratory) {
+					List<LabPanel> listPanelsForOrder=LabPanels.GetPanelsForOrder(medicalOrderNum);
+					for(int p=0;p<listPanelsForOrder.Count;p++){
+						row["description"]+="\r\n     ";//new row for each panel
+						List<LabResult> listResults=LabResults.GetForPanel(listPanelsForOrder[p].LabPanelNum);
+						if(listResults.Count>0){
+							row["description"]+=listResults[0].DateTimeTest.ToShortDateString()+" - ";
+						}
+						row["description"]+=listPanelsForOrder[p].ServiceName;
+					}
+				}
+				row["MedicalOrderNum"]=medicalOrderNum.ToString();
 				row["MedicationPatNum"]="0";
 				isDiscontinued=PIn.Bool(rawOrder.Rows[i]["IsDiscontinued"].ToString());
 				if(isDiscontinued) {
@@ -46,7 +60,6 @@ namespace OpenDentBusiness{
 				else {
 					row["status"]="Active";
 				}
-				medOrderType=(MedicalOrderType)PIn.Int(rawOrder.Rows[i]["MedOrderType"].ToString());
 				row["type"]=medOrderType.ToString();
 				rows.Add(row);
 			}
@@ -162,20 +175,11 @@ namespace OpenDentBusiness{
 			}
 			string command;
 			//validation
-			/*
-			command="SELECT COUNT(*) FROM labpanel WHERE DepositNum,PayAmt FROM payment WHERE PayNum="+POut.Long(pay.PayNum);
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0) {
-				return;
+			command="SELECT COUNT(*) FROM labpanel WHERE MedicalOrderNum="+POut.Long(medicalOrderNum);
+			if(Db.GetCount(command)!="0") {
+				throw new ApplicationException(Lans.g("MedicalOrders","Not allowed to delete a lab order that has attached lab panels."));
 			}
-			if(table.Rows[0]["DepositNum"].ToString()!="0"//if payment is already attached to a deposit
-				&& PIn.Double(table.Rows[0]["PayAmt"].ToString())!=0)//and it's not new
-			{
-				throw new ApplicationException(Lans.g("Payments","Not allowed to delete a payment attached to a deposit."));
-			}
-
-
-			*/
+			//end of validation
 			command = "DELETE FROM medicalorder WHERE MedicalOrderNum = "+POut.Long(medicalOrderNum);
 			Db.NonQ(command);
 		}

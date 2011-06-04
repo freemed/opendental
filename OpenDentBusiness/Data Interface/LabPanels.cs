@@ -18,6 +18,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static List<LabPanel> GetPanelsForOrder(long medicalOrderNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabPanel>>(MethodBase.GetCurrentMethod(),medicalOrderNum);
+			}
+			string command="SELECT * FROM labpanel WHERE MedicalOrderNum="+POut.Long(medicalOrderNum);
+			return Crud.LabPanelCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
 		public static void Delete(long labPanelNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labPanelNum);
