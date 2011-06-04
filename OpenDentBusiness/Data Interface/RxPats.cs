@@ -7,15 +7,15 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class RxPats {
-		///<summary>Used in Ehr.</summary>
-		public static List<RxPat> Refresh(long patNum,bool includeDiscontinued) {
+		///<summary>Used in Ehr.  Excludes controlled substances.</summary>
+		public static List<RxPat> GetPermissableForDateRange(long patNum,DateTime dateStart,DateTime dateStop) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),patNum,includeDiscontinued);
+				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod(),patNum,dateStart,dateStop);
 			}
-			string command="SELECT * FROM rxpat WHERE PatNum="+POut.Long(patNum);
-			if(!includeDiscontinued) {
-				command+=" AND IsDiscontinued=0";
-			}
+			string command="SELECT * FROM rxpat WHERE PatNum="+POut.Long(patNum)+" "
+				+"AND RxDate >= "+POut.Date(dateStart)+" "
+				+"AND RxDate <= "+POut.Date(dateStop)+" "
+				+"AND IsControlled = 0";
 			return Crud.RxPatCrud.SelectMany(command);
 		}
 

@@ -49,7 +49,8 @@ namespace OpenDental{
 		private UI.Button butSend;
 		private Label label9;
 		private ComboBox comboSendStatus;
-		Sheet sheet;
+		///<summary>If the Rx has already been printed, this will contain the archived sheet. The print button will be not visible, and the view button will be visible.</summary>
+		private Sheet sheet;
 
 		///<summary></summary>
 		public FormRxEdit(Patient patCur,RxPat rxPatCur){
@@ -540,6 +541,14 @@ namespace OpenDental{
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
 			//only visible if sheet==null.
+			if(comboSendStatus.SelectedIndex==(int)RxSendStatus.InElectQueue
+				|| comboSendStatus.SelectedIndex==(int)RxSendStatus.SentElect) 
+			{
+				//do not change status
+			}
+			else {
+				comboSendStatus.SelectedIndex=(int)RxSendStatus.Printed;
+			}
 			if(!SaveRx()){
 				return;
 			}
@@ -575,6 +584,7 @@ namespace OpenDental{
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
+			comboSendStatus.SelectedIndex=(int)RxSendStatus.InElectQueue;
 			if(!SaveRx()){
 				return;
 			}

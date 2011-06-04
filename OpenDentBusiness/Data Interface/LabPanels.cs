@@ -22,6 +22,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<LabPanel>>(MethodBase.GetCurrentMethod(),medicalOrderNum);
 			}
+			if(medicalOrderNum==0) {
+				return new List<LabPanel>();
+			}
 			string command="SELECT * FROM labpanel WHERE MedicalOrderNum="+POut.Long(medicalOrderNum);
 			return Crud.LabPanelCrud.SelectMany(command);
 		}

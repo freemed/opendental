@@ -248,7 +248,13 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Rx:
-					command="";
+					command="SELECT patient.PatNum,LName,FName,SendStatus,RxDate "
+						+"FROM rxpat,patient "
+						+"WHERE rxpat.PatNum=patient.PatNum "
+						+"AND IsControlled = 0 "
+						+"AND RxDate >= "+POut.Date(dateStart)+" "
+						+"AND RxDate <= "+POut.Date(dateEnd);
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.VitalSigns:
 					command="SELECT PatNum,LName,FName, "
@@ -273,7 +279,14 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Lab:
-					command="";
+					command="SELECT patient.PatNum,LName,FName,DateTimeOrder, "
+						+"(SELECT COUNT(*) FROM labpanel WHERE labpanel.MedicalOrderNum=medicalorder.MedicalOrderNum) AS panelCount "
+						+"FROM medicalorder,patient "
+						+"WHERE medicalorder.PatNum=patient.PatNum "
+						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+						+"AND DATE(DateTimeOrder) >= "+POut.Date(dateStart)+" "
+						+"AND DATE(DateTimeOrder) <= "+POut.Date(dateEnd);
+					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.ElectronicCopy:
 					command="DROP TABLE IF EXISTS tempehrmeasure";
@@ -541,7 +554,15 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.Rx:
-						
+						RxSendStatus sendStatus=(RxSendStatus)PIn.Int(tableRaw.Rows[i]["SendStatus"].ToString());
+						DateTime rxDate=PIn.Date(tableRaw.Rows[i]["rxDate"].ToString());
+						if(sendStatus==RxSendStatus.SentElect) {
+							explanation=rxDate.ToShortDateString()+" Rx sent electronically.";
+							row["met"]="X";
+						}
+						else {
+							explanation=rxDate.ToShortDateString()+" Rx not sent electronically.";
+						}
 						break;
 					case EhrMeasureType.VitalSigns:
 						if(tableRaw.Rows[i]["hwCount"].ToString()=="0") {
@@ -572,7 +593,15 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.Lab:
-						
+						int panelCount=PIn.Int(tableRaw.Rows[i]["panelCount"].ToString());
+						DateTime dateOrder=PIn.Date(tableRaw.Rows[i]["DateTimeOrder"].ToString());
+						if(panelCount==0) {
+							explanation+=dateOrder.ToShortDateString()+" results not attached.";
+						}
+						else {
+							explanation=dateOrder.ToShortDateString()+" results attached.";
+							row["met"]="X";
+						}
 						break;
 					case EhrMeasureType.ElectronicCopy:
 						DateTime dateRequested=PIn.Date(tableRaw.Rows[i]["dateRequested"].ToString());
@@ -880,8 +909,32 @@ namespace OpenDentBusiness{
 						mu.Action="CPOE";
 						break;
 					case EhrMeasureType.Rx:
-						//todo
-						mu.Action="";
+						List<RxPat> listRx=RxPats.GetPermissableForDateRange(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
+						if(listRx.Count==0){
+							mu.Met=MuMet.NA;
+							mu.Details="No Rxs entered.";
+						}
+						else{
+							explanation="";
+							for(int rx=0;rx<listRx.Count;rx++) {
+								if(listRx[rx].SendStatus==RxSendStatus.SentElect){
+									continue;
+								}
+								if(explanation!="") {
+									explanation+=", ";
+								}
+								explanation+=listRx[rx].RxDate.ToShortDateString();
+							}
+							if(explanation=="") {
+								mu.Met=MuMet.True;
+								mu.Details="All Rxs sent electronically.";
+							}
+							else {
+								mu.Met=MuMet.False;
+								mu.Details="Rxs not sent electronically: "+explanation;
+							}
+						}
+						mu.Action="(edit Rxs from Chart)";//no action
 						break;
 					case EhrMeasureType.VitalSigns:
 						List<Vitalsign> vitalsignList=Vitalsigns.Refresh(pat.PatNum);
@@ -940,8 +993,27 @@ namespace OpenDentBusiness{
 						mu.Action="Edit smoking status";
 						break;
 					case EhrMeasureType.Lab:
-
-
+						List<MedicalOrder> listLabOrders=MedicalOrders.GetLabsByDate(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
+						if(listLabOrders.Count==0) {
+							mu.Details="No lab orders";
+							mu.Met=MuMet.NA;
+						}
+						else {
+							int labPanelCount=0;
+							for(int lo=0;lo<listLabOrders.Count;lo++) {
+								List<LabPanel> listLabPanels=LabPanels.GetPanelsForOrder(listLabOrders[lo].MedicalOrderNum);
+								if(listLabPanels.Count>0) {
+									labPanelCount++;
+								}
+							}
+							if(labPanelCount<listLabOrders.Count) {
+								mu.Details="Lab orders missing results: "+(listLabOrders.Count-labPanelCount).ToString();
+							}
+							else {
+								mu.Details="Lab results entered for each lab order.";
+								mu.Met=MuMet.True;
+							}
+						}
 						mu.Action="Edit lab panels";
 						mu.Action2="Import lab results";
 						break;

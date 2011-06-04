@@ -5333,7 +5333,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						PatNum bigint NOT NULL,
 						DateService date NOT NULL DEFAULT '0001-01-01',
 						FieldName varchar(255) NOT NULL,
-						FieldValue varchar(255) NOT NULL
+						FieldValue text NOT NULL,
 						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -5346,6 +5346,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						PatNum number(20) NOT NULL,
 						DateService date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						FieldName varchar2(255),
+/*Ryan: Discuss type with Jordan for this next line.  Needs to be more like 2000 to 4000 instead of 255:*/
 						FieldValue varchar2(255),
 						CONSTRAINT orthochart_OrthoChartNum PRIMARY KEY (OrthoChartNum)
 						)";
@@ -5353,7 +5354,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX orthochart_PatNum ON orthochart (PatNum)";
 					Db.NonQ(command);
 				}
-
+				command="ALTER TABLE rxpat DROP COLUMN IsElectQueue";//both oracle and mysql
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medication ADD RxCui bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medication ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medication ADD RxCui number(20)";
+					Db.NonQ(command);
+					command="UPDATE medication SET RxCui = 0 WHERE RxCui IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medication MODIFY RxCui NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX medication_RxCui ON medication (RxCui)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5387,9 +5405,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 	
-
-
-				
-
-
 

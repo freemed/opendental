@@ -128,6 +128,19 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static List<MedicalOrder> GetLabsByDate(long patNum,DateTime dateStart,DateTime dateStop) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<MedicalOrder>>(MethodBase.GetCurrentMethod(),patNum,dateStart,dateStop);
+			}
+			string command="SELECT * FROM medicalorder WHERE MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+				+"AND PatNum="+POut.Long(patNum)+" "
+				+"AND DATE(DateTimeOrder) >= "+POut.Date(dateStart)+" "
+				+"AND DATE(DateTimeOrder) <= "+POut.Date(dateStop);
+			//NOT EXISTS(SELECT * FROM labpanel WHERE labpanel.MedicalOrderNum=medicalorder.MedicalOrderNum)";
+			return Crud.MedicalOrderCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
 		public static bool LabHasResultsAttached(long medicalOrderNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),medicalOrderNum);
@@ -196,7 +209,7 @@ namespace OpenDentBusiness{
 		public int Compare(DataRow x,DataRow y) {
 			DateTime dt1=(DateTime)x["DateTime"];
 			DateTime dt2=(DateTime)y["DateTime"];
-			return (dt1.Date).CompareTo(dt2.Date);
+			return dt1.CompareTo(dt2);
 		}
 	}
 }

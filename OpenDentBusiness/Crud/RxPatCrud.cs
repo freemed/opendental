@@ -58,7 +58,6 @@ namespace OpenDentBusiness.Crud{
 				rxPat.PharmacyNum = PIn.Long  (table.Rows[i]["PharmacyNum"].ToString());
 				rxPat.IsControlled= PIn.Bool  (table.Rows[i]["IsControlled"].ToString());
 				rxPat.DateTStamp  = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				rxPat.IsElectQueue= PIn.Bool  (table.Rows[i]["IsElectQueue"].ToString());
 				rxPat.SendStatus  = (RxSendStatus)PIn.Int(table.Rows[i]["SendStatus"].ToString());
 				retVal.Add(rxPat);
 			}
@@ -100,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RxNum,";
 			}
-			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,IsElectQueue,SendStatus) VALUES(";
+			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,SendStatus) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(rxPat.RxNum)+",";
 			}
@@ -116,7 +115,6 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (rxPat.PharmacyNum)+","
 				+    POut.Bool  (rxPat.IsControlled)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Bool  (rxPat.IsElectQueue)+","
 				+    POut.Int   ((int)rxPat.SendStatus)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -141,7 +139,6 @@ namespace OpenDentBusiness.Crud{
 				+"PharmacyNum =  "+POut.Long  (rxPat.PharmacyNum)+", "
 				+"IsControlled=  "+POut.Bool  (rxPat.IsControlled)+", "
 				//DateTStamp can only be set by MySQL
-				+"IsElectQueue=  "+POut.Bool  (rxPat.IsElectQueue)+", "
 				+"SendStatus  =  "+POut.Int   ((int)rxPat.SendStatus)+" "
 				+"WHERE RxNum = "+POut.Long(rxPat.RxNum);
 			Db.NonQ(command);
@@ -191,10 +188,6 @@ namespace OpenDentBusiness.Crud{
 				command+="IsControlled = "+POut.Bool(rxPat.IsControlled)+"";
 			}
 			//DateTStamp can only be set by MySQL
-			if(rxPat.IsElectQueue != oldRxPat.IsElectQueue) {
-				if(command!=""){ command+=",";}
-				command+="IsElectQueue = "+POut.Bool(rxPat.IsElectQueue)+"";
-			}
 			if(rxPat.SendStatus != oldRxPat.SendStatus) {
 				if(command!=""){ command+=",";}
 				command+="SendStatus = "+POut.Int   ((int)rxPat.SendStatus)+"";
