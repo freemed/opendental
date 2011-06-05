@@ -88,18 +88,18 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDateLock = new System.Windows.Forms.TextBox();
 			this.checkPasswordsMustBeStrong = new System.Windows.Forms.CheckBox();
-			this.butChange = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butSetAll = new OpenDental.UI.Button();
-			this.butAddUser = new OpenDental.UI.Button();
-			this.butAddGroup = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
 			this.textDaysLock = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkLogOffWindows = new System.Windows.Forms.CheckBox();
 			this.textLogOffAfterMinutes = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
+			this.butChange = new OpenDental.UI.Button();
+			this.butSetAll = new OpenDental.UI.Button();
+			this.butAddUser = new OpenDental.UI.Button();
+			this.butAddGroup = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// treePermissions
@@ -222,21 +222,6 @@ namespace OpenDental{
 			this.checkPasswordsMustBeStrong.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkPasswordsMustBeStrong.Click += new System.EventHandler(this.checkPasswordsMustBeStrong_Click);
 			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(304,664);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(70,24);
-			this.butChange.TabIndex = 95;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
-			// 
 			// gridMain
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -251,6 +236,80 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableSecurity";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			// 
+			// textDaysLock
+			// 
+			this.textDaysLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textDaysLock.Location = new System.Drawing.Point(219,677);
+			this.textDaysLock.Name = "textDaysLock";
+			this.textDaysLock.ReadOnly = true;
+			this.textDaysLock.Size = new System.Drawing.Size(82,20);
+			this.textDaysLock.TabIndex = 98;
+			// 
+			// label2
+			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label2.Location = new System.Drawing.Point(95,677);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(123,18);
+			this.label2.TabIndex = 97;
+			this.label2.Text = "Lock Days";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkLogOffWindows
+			// 
+			this.checkLogOffWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkLogOffWindows.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkLogOffWindows.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkLogOffWindows.Location = new System.Drawing.Point(238,606);
+			this.checkLogOffWindows.Name = "checkLogOffWindows";
+			this.checkLogOffWindows.Size = new System.Drawing.Size(224,16);
+			this.checkLogOffWindows.TabIndex = 99;
+			this.checkLogOffWindows.Text = "Log off when Windows logs off";
+			this.checkLogOffWindows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textLogOffAfterMinutes
+			// 
+			this.textLogOffAfterMinutes.Location = new System.Drawing.Point(325,581);
+			this.textLogOffAfterMinutes.Name = "textLogOffAfterMinutes";
+			this.textLogOffAfterMinutes.Size = new System.Drawing.Size(29,20);
+			this.textLogOffAfterMinutes.TabIndex = 100;
+			this.textLogOffAfterMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// label3
+			// 
+			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label3.Location = new System.Drawing.Point(235,581);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(90,18);
+			this.label3.TabIndex = 101;
+			this.label3.Text = "Log off after ";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label4.Location = new System.Drawing.Point(358,581);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(130,18);
+			this.label4.TabIndex = 102;
+			this.label4.Text = "minutes.  0 to disable.";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(304,664);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(70,24);
+			this.butChange.TabIndex = 95;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// butSetAll
 			// 
@@ -312,71 +371,13 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// textDaysLock
-			// 
-			this.textDaysLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textDaysLock.Location = new System.Drawing.Point(219,677);
-			this.textDaysLock.Name = "textDaysLock";
-			this.textDaysLock.ReadOnly = true;
-			this.textDaysLock.Size = new System.Drawing.Size(82,20);
-			this.textDaysLock.TabIndex = 98;
-			// 
-			// label2
-			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label2.Location = new System.Drawing.Point(95,677);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(123,18);
-			this.label2.TabIndex = 97;
-			this.label2.Text = "Lock Days";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkLogOffWindows
-			// 
-			this.checkLogOffWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkLogOffWindows.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkLogOffWindows.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkLogOffWindows.Location = new System.Drawing.Point(238,606);
-			this.checkLogOffWindows.Name = "checkLogOffWindows";
-			this.checkLogOffWindows.Size = new System.Drawing.Size(224,16);
-			this.checkLogOffWindows.TabIndex = 99;
-			this.checkLogOffWindows.Text = "Log off with Windows";
-			this.checkLogOffWindows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textLogOffAfterMinutes
-			// 
-			this.textLogOffAfterMinutes.Location = new System.Drawing.Point(391,581);
-			this.textLogOffAfterMinutes.Name = "textLogOffAfterMinutes";
-			this.textLogOffAfterMinutes.Size = new System.Drawing.Size(29,20);
-			this.textLogOffAfterMinutes.TabIndex = 100;
-			// 
-			// label3
-			// 
-			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label3.Location = new System.Drawing.Point(304,581);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(90,18);
-			this.label3.TabIndex = 101;
-			this.label3.Text = "Log off after ";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label4
-			// 
-			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label4.Location = new System.Drawing.Point(422,581);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(71,18);
-			this.label4.TabIndex = 102;
-			this.label4.Text = "minutes.";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,700);
+			this.Controls.Add(this.textLogOffAfterMinutes);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textLogOffAfterMinutes);
 			this.Controls.Add(this.checkLogOffWindows);
 			this.Controls.Add(this.textDaysLock);
 			this.Controls.Add(this.label2);
@@ -403,6 +404,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Security";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSecurity_FormClosing);
 			this.Load += new System.EventHandler(this.FormSecurity_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -430,6 +432,7 @@ namespace OpenDental{
 			FillTreePermissionsInitial();
 			FillUsers();
 			FillTreePerm();
+			textLogOffAfterMinutes.Text=PrefC.GetInt(PrefName.SecurityLogOffAfterMinutes).ToString();
 			checkPasswordsMustBeStrong.Checked=PrefC.GetBool(PrefName.PasswordsMustBeStrong);
 			checkTimecardSecurityEnabled.Checked=PrefC.GetBool(PrefName.TimecardSecurityEnabled);
 			checkCannotEditOwn.Checked=PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
@@ -898,17 +901,32 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
+			Close();
+		}
+
+		private void FormSecurity_FormClosing(object sender,FormClosingEventArgs e) {
+			if(textLogOffAfterMinutes.Text!="") {
+				try {
+					Int32.Parse(textLogOffAfterMinutes.Text);
+				}
+				catch {
+					MsgBox.Show(this,"Log off after minutes is invalid.");
+					e.Cancel=true;
+					return;
+				}
+			}
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Security);
 			}
 			if(	//Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked) //handled when box clicked.
-				Prefs.UpdateBool(PrefName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked) ||
-				Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked) ||
-				Prefs.UpdateBool(PrefName.SecurityLogOffWithWindows,checkLogOffWindows.Checked))
+				Prefs.UpdateBool(PrefName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked) 
+				| Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked) 
+				| Prefs.UpdateBool(PrefName.SecurityLogOffWithWindows,checkLogOffWindows.Checked)
+				| Prefs.UpdateInt(PrefName.SecurityLogOffAfterMinutes,PIn.Int(textLogOffAfterMinutes.Text))
+				)
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-			Close();
 		}
 
 		

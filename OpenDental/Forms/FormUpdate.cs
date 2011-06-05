@@ -600,8 +600,8 @@ namespace OpenDental{
 			this.Name = "FormUpdate";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Update";
-			this.Load += new System.EventHandler(this.FormUpdate_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormUpdate_FormClosing);
+			this.Load += new System.EventHandler(this.FormUpdate_Load);
 			this.panelClassic.ResumeLayout(false);
 			this.panelClassic.PerformLayout();
 			this.groupBuild.ResumeLayout(false);

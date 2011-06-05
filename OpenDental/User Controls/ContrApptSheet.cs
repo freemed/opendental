@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -102,13 +103,16 @@ namespace OpenDental{
 		#region Component Designer generated code
 
 		private void InitializeComponent(){
+			this.SuspendLayout();
 			// 
 			// ContrApptSheet
 			// 
 			this.Name = "ContrApptSheet";
-			this.Size = new System.Drawing.Size(482, 540);
+			this.Size = new System.Drawing.Size(482,540);
 			this.Load += new System.EventHandler(this.ContrApptSheet_Load);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ContrApptSheet_Layout);
+			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet_MouseMove);
+			this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -258,6 +262,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		protected override void OnPaint(PaintEventArgs pea){
+			//Debug.WriteLine("DrawShadow:"+DateTime.Now.ToLongTimeString());
 			DrawShadow();
 		}
 
@@ -567,6 +572,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private void DrawRedTimeIndicator(Graphics g){
+			//Debug.WriteLine("DrawRedTimeIndicator:"+DateTime.Now.ToLongTimeString());
 			int curTimeY=(int)(DateTime.Now.Hour*Lh*RowsPerHr+DateTime.Now.Minute/60f*(float)Lh*RowsPerHr);
 			g.DrawLine(new Pen(Color.Red),0,curTimeY
 				,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curTimeY);
@@ -700,8 +706,15 @@ namespace OpenDental{
 				MessageBox.Show("error computing width");
 			}
 		}
-		
 
+		private void ContrApptSheet_MouseMove(object sender,MouseEventArgs e) {
+			//Debug.WriteLine("ContrApptSheet_MouseMove:"+DateTime.Now.ToLongTimeString()+", loc:"+e.Location.ToString());
+		}
+
+		//protected override void OnMouseMove(MouseEventArgs e) {
+		//	Debug.WriteLine("ContrApptSheet_MouseMove:"+DateTime.Now.ToLongTimeString()+", sender:"+);
+		//	base.OnMouseMove(e);
+		//}
 
 	}
 }

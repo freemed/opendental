@@ -229,8 +229,13 @@ namespace OpenDental{
 		///<summary>This will be null if EHR didn't load up.</summary>
 		public static object FormEHR;
 		private MenuItem menuItemEHR;
+		private System.Windows.Forms.Timer timerLogoff;
 		//<summary>This will be null if EHR didn't load up.</summary>
 		public static Assembly AssemblyEHR;
+		///<summary>The last local datetime that there was any mouse or keyboard activity.  Used for auto logoff comparison.</summary>
+		private DateTime dateTimeLastActivity;
+		private Form FormRecentlyOpenForLogoff;
+		private Point locationMouseForLogoff;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -457,6 +462,7 @@ namespace OpenDental{
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
+			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1322,6 +1328,11 @@ namespace OpenDental{
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
+			// timerLogoff
+			// 
+			this.timerLogoff.Interval = 15000;
+			this.timerLogoff.Tick += new System.EventHandler(this.timerLogoff_Tick);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,585);
@@ -1340,6 +1351,7 @@ namespace OpenDental{
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormOpenDental_FormClosed);
 			this.Load += new System.EventHandler(this.FormOpenDental_Load);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormOpenDental_KeyDown);
+			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormOpenDental_MouseMove);
 			this.Resize += new System.EventHandler(this.FormOpenDental_Resize);
 			this.ResumeLayout(false);
 
@@ -1465,7 +1477,7 @@ namespace OpenDental{
 			//Choose a default DirectX format when no DirectX format has been specified and running in DirectX tooth chart mode.
 			//ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
 			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.DirectX && ComputerPrefs.LocalComputer.DirectXFormat=="") {
-				MessageBox.Show(Lan.g(this,"Optimizing tooth chart graphics. This may take a few minutes. You will be notified when the process is complete."));
+				//MessageBox.Show(Lan.g(this,"Optimizing tooth chart graphics. This may take a few minutes. You will be notified when the process is complete."));
 				ComputerPrefs.LocalComputer.DirectXFormat=FormGraphics.GetPreferredDirectXFormat(this);
 				if(ComputerPrefs.LocalComputer.DirectXFormat=="invalid") {
 					//No valid local DirectX format could be found.
@@ -1474,7 +1486,7 @@ namespace OpenDental{
 				}
 				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 				ContrChart2.InitializeOnStartup();
-				MsgBox.Show(this,"Done optimizing tooth chart graphics.");
+				//MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
 			if(Security.CurUser==null) {//It could already be set if using web service because login from ChooseDatabase window.
 				if(Programs.UsingEcwTight()) {
@@ -1579,6 +1591,8 @@ namespace OpenDental{
 					FormEHR=Activator.CreateInstance(type);
 				}
 			#endif
+			dateTimeLastActivity=DateTime.Now;
+			timerLogoff.Enabled=true;
 			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
 		}
 
@@ -3321,36 +3335,7 @@ namespace OpenDental{
 
 		#region MenuEvents
 		private void menuItemLogOff_Click(object sender, System.EventArgs e) {
-			LastModule=myOutlookBar.SelectedIndex;
-			myOutlookBar.SelectedIndex=-1;
-			myOutlookBar.Invalidate();
-			UnselectActive();
-			allNeutral();
-			if(userControlTasks1.Visible) {
-				userControlTasks1.ClearLogOff();
-			}
-			FormLogOn FormL=new FormLogOn();
-			FormL.ShowDialog(this);
-			if(FormL.DialogResult==DialogResult.Cancel){
-				Application.Exit();
-				return;
-			}
-			myOutlookBar.SelectedIndex=Security.GetModule(LastModule);
-			myOutlookBar.Invalidate();
-			SetModuleSelected();
-			if(CurPatNum==0){
-				Text=PatientL.GetMainTitle("",0,"",0);
-			}
-			else{
-				Patient pat=Patients.GetPat(CurPatNum);
-				Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
-			}
-			if(userControlTasks1.Visible) {
-				userControlTasks1.InitializeOnStartup();
-			}
-			if(myOutlookBar.SelectedIndex==-1) {
-				MsgBox.Show(this,"You do not have permission to use any modules.");
-			}
+			LogOffNow();
 		}
 
 		//File
@@ -4551,6 +4536,192 @@ namespace OpenDental{
 			FormMobile.SynchFromMain(false);
 		}
 
+		#region Logoff
+		///<summary>This is set to 15 seconds.  This interval must be longer than the interval of the timer in FormLogoffWarning (10s), or it will go into a loop.</summary>
+		private void timerLogoff_Tick(object sender,EventArgs e) {
+			if(PrefC.GetInt(PrefName.SecurityLogOffAfterMinutes)==0) {
+				return;
+			}
+			//Warning.  When debugging this, the ActiveForm will be impossible to determine by setting breakpoints.
+			//string activeFormText=Form.ActiveForm.Text;
+			//If a breakpoint is set below here, ActiveForm will erroneously show as null.
+			if(Form.ActiveForm==null) {//some other program has focus
+				FormRecentlyOpenForLogoff=null;
+			}
+			else if(Form.ActiveForm==this) {//main form active
+				FormRecentlyOpenForLogoff=null;
+			}
+			else{//A different form is active, some dialog.
+				if(Form.ActiveForm==FormRecentlyOpenForLogoff) {
+					//The same form is active as last time, so don't add events again.
+					//The active form will now be constantly resetting the dateTimeLastActivity
+				}
+				else {//this is the first time this form has been encountered, so attach events and don't do anything else
+					AttachMouseMoveToForm(Form.ActiveForm);
+					FormRecentlyOpenForLogoff=Form.ActiveForm;
+					dateTimeLastActivity=DateTime.Now;
+					return;
+				}
+			}
+			DateTime dtDeadline=dateTimeLastActivity+TimeSpan.FromMinutes((double)PrefC.GetInt(PrefName.SecurityLogOffAfterMinutes));
+			//Debug.WriteLine("Now:"+DateTime.Now.ToLongTimeString()+", Deadline:"+dtDeadline.ToLongTimeString());
+			if(DateTime.Now<dtDeadline) {
+				return;
+			}
+			if(Security.CurUser==null) {//nobody logged on
+				return;
+			}
+			FormLogoffWarning formW=new FormLogoffWarning();
+			formW.ShowDialog();
+			if(formW.DialogResult!=DialogResult.OK) {
+				dateTimeLastActivity=DateTime.Now;
+				return;//user hit cancel, so don't log off
+			}
+			try {
+				LogOffNow();
+			}
+			catch { }
+		}
+
+		private void FormOpenDental_MouseMove(object sender,MouseEventArgs e) {
+			//This has a few extra lines because my mouse during testing was firing a MouseMove every second,
+			//even if no movement.  So this tests to see if there was actually movement.
+			if(locationMouseForLogoff==e.Location) {
+				//mouse hasn't moved
+				return;
+			}
+			locationMouseForLogoff=e.Location;
+			dateTimeLastActivity=DateTime.Now;
+		}
+
+		private void LogOffNow() {
+			LastModule=myOutlookBar.SelectedIndex;
+			myOutlookBar.SelectedIndex=-1;
+			myOutlookBar.Invalidate();
+			UnselectActive();
+			allNeutral();
+			if(userControlTasks1.Visible) {
+				userControlTasks1.ClearLogOff();
+			}
+			Security.CurUser=null;
+			if(CurPatNum==0) {
+				Text=PatientL.GetMainTitle("",0,"",0);
+			}
+			else {
+				Patient pat=Patients.GetPat(CurPatNum);
+				Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
+			}
+			//Iterating through OpenForms with foreach did not work, probably because we were altering the collection when closing forms.
+			//So we make a copy of the collection before iterating through to close each form.
+			List<Form> listForms=new List<Form>();
+			for(int f=0;f<Application.OpenForms.Count;f++) {
+				listForms.Add(Application.OpenForms[f]);
+			}
+			for(int f=0;f<listForms.Count;f++) {
+				if(listForms[f]!=this) {//don't close the main form
+					listForms[f].Close();
+					listForms[f].Dispose();
+				}
+			}
+			Application.DoEvents();//so that the window background will refresh.
+			FormLogOn FormL=new FormLogOn();
+			FormL.ShowDialog(this);
+			if(FormL.DialogResult==DialogResult.Cancel) {
+				Application.Exit();
+				return;
+			}
+			myOutlookBar.SelectedIndex=Security.GetModule(LastModule);
+			myOutlookBar.Invalidate();
+			SetModuleSelected();
+			if(CurPatNum==0) {
+				Text=PatientL.GetMainTitle("",0,"",0);
+			}
+			else {
+				Patient pat=Patients.GetPat(CurPatNum);
+				Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
+			}
+			if(userControlTasks1.Visible) {
+				userControlTasks1.InitializeOnStartup();
+			}
+			dateTimeLastActivity=DateTime.Now;
+			if(myOutlookBar.SelectedIndex==-1) {
+				MsgBox.Show(this,"You do not have permission to use any modules.");
+			}
+		}
+
+		//The purpose of the 11 methods below is to have every child control and child form report MouseMove events to this parent form.
+		//It must be dynamic and recursive.
+		protected override void OnControlAdded(ControlEventArgs e) {
+			AttachMouseMoveToControl(e.Control);
+			base.OnControlAdded(e);
+		}
+
+		protected override void OnControlRemoved(ControlEventArgs e) {
+			DetachMouseMoveFromControl(e.Control);
+			base.OnControlRemoved(e);
+		}
+
+		private void AttachMouseMoveToForm(Form form) {
+			form.MouseMove += new MouseEventHandler(ChildForm_MouseMove);
+			AttachMouseMoveToChildren(form);
+		}
+
+		private void AttachMouseMoveToControl(Control control) {
+			control.MouseMove += new MouseEventHandler(Child_MouseMove);
+			control.ControlAdded += new ControlEventHandler(Child_ControlAdded);
+			control.ControlRemoved += new ControlEventHandler(Child_ControlRemoved);
+			AttachMouseMoveToChildren(control);
+		}
+
+		private void AttachMouseMoveToChildren(Control parent) {
+			foreach(Control child in parent.Controls) {
+				AttachMouseMoveToControl(child);
+			}
+		}
+
+		private void DetachMouseMoveFromControl(Control control) {
+			DetachMouseMoveFromChildren(control);
+			control.MouseMove -= new MouseEventHandler(Child_MouseMove);
+			control.ControlAdded -= new ControlEventHandler(Child_ControlAdded);
+			control.ControlRemoved -= new ControlEventHandler(Child_ControlRemoved);
+		}
+
+		private void DetachMouseMoveFromChildren(Control parent) {
+			foreach(Control child in parent.Controls) {
+				DetachMouseMoveFromControl(child);
+			}
+		}
+
+		private void Child_ControlAdded(object sender,ControlEventArgs e) {
+			AttachMouseMoveToControl(e.Control);
+		}
+
+		private void Child_ControlRemoved(object sender,ControlEventArgs e) {
+			DetachMouseMoveFromControl(e.Control);
+		}
+
+		private void Child_MouseMove(object sender,MouseEventArgs e) {
+			Point loc=e.Location;
+			Control child=(Control)sender;
+			//Debug.WriteLine("Child_MouseMove:"+DateTime.Now.ToLongTimeString()+", sender:"+child.Name);
+			do {
+				loc.Offset(child.Left,child.Top);
+				child = child.Parent;
+			}
+			while(child.Parent != null);//When it hits a form, either this one or any other active form.
+			MouseEventArgs newArgs = new MouseEventArgs(e.Button,e.Clicks,loc.X,loc.Y,e.Delta);
+			OnMouseMove(newArgs);
+		}
+
+		private void ChildForm_MouseMove(object sender,MouseEventArgs e) {
+			Point loc=e.Location;
+			Form childForm=(Form)sender;
+			loc.Offset(childForm.Left,childForm.Top);
+			MouseEventArgs newArgs = new MouseEventArgs(e.Button,e.Clicks,loc.X,loc.Y,e.Delta);
+			OnMouseMove(newArgs);
+		}
+		#endregion Logoff
+
 		private void SystemEvents_SessionSwitch(object sender,SessionSwitchEventArgs e) {
 			if(e.Reason!=SessionSwitchReason.SessionLock) {
 				return;
@@ -4610,6 +4781,10 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+		
+
+		
 
 
 	
