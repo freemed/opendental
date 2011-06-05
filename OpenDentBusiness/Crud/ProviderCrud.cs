@@ -74,6 +74,7 @@ namespace OpenDentBusiness.Crud{
 				provider.TaxonomyCodeOverride= PIn.String(table.Rows[i]["TaxonomyCodeOverride"].ToString());
 				provider.IsCDAnet            = PIn.Bool  (table.Rows[i]["IsCDAnet"].ToString());
 				provider.EcwID               = PIn.String(table.Rows[i]["EcwID"].ToString());
+				provider.EhrKey              = PIn.String(table.Rows[i]["EhrKey"].ToString());
 				retVal.Add(provider);
 			}
 			return retVal;
@@ -114,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProvNum,";
 			}
-			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,UsingTIN,BlueCrossID,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,NationalProvID,CanadianOfficeNum,AnesthProvType,TaxonomyCodeOverride,IsCDAnet,EcwID) VALUES(";
+			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,UsingTIN,BlueCrossID,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,NationalProvID,CanadianOfficeNum,AnesthProvType,TaxonomyCodeOverride,IsCDAnet,EcwID,EhrKey) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(provider.ProvNum)+",";
 			}
@@ -145,7 +146,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (provider.AnesthProvType)+","
 				+"'"+POut.String(provider.TaxonomyCodeOverride)+"',"
 				+    POut.Bool  (provider.IsCDAnet)+","
-				+"'"+POut.String(provider.EcwID)+"')";
+				+"'"+POut.String(provider.EcwID)+"',"
+				+"'"+POut.String(provider.EhrKey)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -184,7 +186,8 @@ namespace OpenDentBusiness.Crud{
 				+"AnesthProvType      =  "+POut.Long  (provider.AnesthProvType)+", "
 				+"TaxonomyCodeOverride= '"+POut.String(provider.TaxonomyCodeOverride)+"', "
 				+"IsCDAnet            =  "+POut.Bool  (provider.IsCDAnet)+", "
-				+"EcwID               = '"+POut.String(provider.EcwID)+"' "
+				+"EcwID               = '"+POut.String(provider.EcwID)+"', "
+				+"EhrKey              = '"+POut.String(provider.EhrKey)+"' "
 				+"WHERE ProvNum = "+POut.Long(provider.ProvNum);
 			Db.NonQ(command);
 		}
@@ -296,6 +299,10 @@ namespace OpenDentBusiness.Crud{
 			if(provider.EcwID != oldProvider.EcwID) {
 				if(command!=""){ command+=",";}
 				command+="EcwID = '"+POut.String(provider.EcwID)+"'";
+			}
+			if(provider.EhrKey != oldProvider.EhrKey) {
+				if(command!=""){ command+=",";}
+				command+="EhrKey = '"+POut.String(provider.EhrKey)+"'";
 			}
 			if(command==""){
 				return;

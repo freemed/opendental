@@ -274,6 +274,7 @@ namespace OpenDentBusiness {
 		SecurityLogOffAfterMinutes,
 		SecurityLogOffWithWindows,
 		ShowAccountFamilyCommEntries,
+		ShowFeatureEhr,
 		ShowFeatureMedicalInsurance,
 		ShowIDinTitleBar,
 		ShowProgressNotesInsteadofCommLog,

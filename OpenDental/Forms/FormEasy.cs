@@ -24,6 +24,7 @@ namespace OpenDental{
 		private CheckBox checkInsurance;
 		private CheckBox checkHospitals;
 		private CheckBox checkMedicalIns;
+		private CheckBox checkEhr;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -76,6 +77,7 @@ namespace OpenDental{
 			this.checkInsurance = new System.Windows.Forms.CheckBox();
 			this.checkHospitals = new System.Windows.Forms.CheckBox();
 			this.checkMedicalIns = new System.Windows.Forms.CheckBox();
+			this.checkEhr = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -241,11 +243,23 @@ namespace OpenDental{
 			this.checkMedicalIns.Text = "Medical Insurance";
 			this.checkMedicalIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkEhr
+			// 
+			this.checkEhr.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkEhr.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkEhr.Location = new System.Drawing.Point(12,303);
+			this.checkEhr.Name = "checkEhr";
+			this.checkEhr.Size = new System.Drawing.Size(258,19);
+			this.checkEhr.TabIndex = 14;
+			this.checkEhr.Text = "EHR";
+			this.checkEhr.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormEasy
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(467,362);
+			this.Controls.Add(this.checkEhr);
 			this.Controls.Add(this.checkMedicalIns);
 			this.Controls.Add(this.checkHospitals);
 			this.Controls.Add(this.checkInsurance);
@@ -286,33 +300,23 @@ namespace OpenDental{
 			checkNoClinics.Checked=!PrefC.GetBool(PrefName.EasyNoClinics);
 			checkRepeatCharges.Checked=!PrefC.GetBool(PrefName.EasyHideRepeatCharges);
 			checkMedicalIns.Checked=PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance);
+			checkEhr.Checked=PrefC.GetBool(PrefName.ShowFeatureEhr);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			Prefs.UpdateBool(PrefName.EasyHideCapitation,!checkCapitation.Checked);
-			
 			Prefs.UpdateBool(PrefName.EasyHideMedicaid,!checkMedicaid.Checked);
-			
 			Prefs.UpdateBool(PrefName.EasyHidePublicHealth,!checkPublicHealth.Checked);
-
 			Prefs.UpdateBool(PrefName.EasyHideDentalSchools,!checkDentalSchools.Checked);
-
 			Prefs.UpdateBool(PrefName.EasyHideHospitals,!checkHospitals.Checked);
-
 			Prefs.UpdateBool(PrefName.EasyHideAdvancedIns,!checkAdvancedIns.Checked);
-
 			Prefs.UpdateBool(PrefName.EasyHideInsurance,!checkInsurance.Checked);
-			
 			Prefs.UpdateBool(PrefName.EasyHideClinical,!checkClinical.Checked);
-			
 			Prefs.UpdateBool(PrefName.EasyBasicModules,checkBasicModules.Checked);
-
 			Prefs.UpdateBool(PrefName.EasyNoClinics,!checkNoClinics.Checked);
-
 			Prefs.UpdateBool(PrefName.EasyHideRepeatCharges,!checkRepeatCharges.Checked);
-
 			Prefs.UpdateBool(PrefName.ShowFeatureMedicalInsurance,checkMedicalIns.Checked);
-
+			Prefs.UpdateBool(PrefName.ShowFeatureEhr,checkEhr.Checked);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}

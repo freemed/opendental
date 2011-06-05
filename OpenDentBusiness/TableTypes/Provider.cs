@@ -68,6 +68,8 @@ namespace OpenDentBusiness{
 		public bool IsCDAnet;
 		///<summary>UserID from eCW so that prov abbreviations can be human readable.</summary>
 		public string EcwID;
+		///<summary>Allows using ehr module for this provider.  Tied to provider fname and lname.</summary>
+		public string EhrKey;
 
 		//Need: StateRxNum varchar255
 
