@@ -258,25 +258,29 @@ namespace OpenDentBusiness{
 			command+="WHERE PatStatus != '4' ";//not status 'deleted'
 			if(DataConnection.DBtype==DatabaseType.MySql) {//LIKE is case insensitive in mysql.
 				if(lname.Length>0) {
-					if(lname.Length<4) {
+					if(limit) {//normal behavior is fast
 						command+="AND LName LIKE '"+POut.String(lname)+"%' ";
 					}
-					else {
+					else {//slower, but more inclusive.  User explicitly looking for all matches.
 						command+="AND LName LIKE '%"+POut.String(lname)+"%' ";
 					}
 				}
-				command+=(fname.Length>0?"AND FName LIKE '%"+POut.String(fname)+"%' ":"");
+				if(fname.Length>0){
+					command+="AND FName LIKE '"+POut.String(fname)+"%' ";
+				}
 			}
 			else {//oracle, case matters in a like statement
 				if(lname.Length>0) {
-					if(lname.Length<4) {
+					if(limit) {
 						command+="AND LOWER(LName) LIKE '"+POut.String(lname)+"%' ";
 					}
 					else {
 						command+="AND LOWER(LName) LIKE '%"+POut.String(lname)+"%' ";
 					}
 				}
-				command+=(fname.Length>0?"AND LOWER(FName) LIKE '%"+POut.String(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+				if(fname.Length>0) {
+					command+="AND LOWER(FName) LIKE '"+POut.String(fname)+"%' ";
+				}
 			}
 			if(regexp!="") {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
