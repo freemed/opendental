@@ -1254,9 +1254,17 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),lName,fName,birthdate);
 			}
+			int subStrIndexlName=2;
+			int subStrIndexfName=2;
+			if(lName.Length==1) {
+				subStrIndexlName=1;
+			}
+			if(fName.Length==1) {
+				subStrIndexfName=1;
+			}
 			string command="SELECT * FROM patient WHERE "
-				+"LName LIKE '"+POut.String(lName.Substring(0,2))+"%' "
-				+"AND FName LIKE '"+POut.String(fName.Substring(0,2))+"%' "
+				+"LName LIKE '"+POut.String(lName.Substring(0,subStrIndexlName))+"%' "
+				+"AND FName LIKE '"+POut.String(fName.Substring(0,subStrIndexfName))+"%' "
 				+"AND Birthdate="+POut.Date(birthdate)+" "
 				+"AND PatStatus!=4";//not deleted
 			return Crud.PatientCrud.SelectMany(command);
