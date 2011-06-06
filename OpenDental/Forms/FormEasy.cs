@@ -253,6 +253,7 @@ namespace OpenDental{
 			this.checkEhr.TabIndex = 14;
 			this.checkEhr.Text = "EHR";
 			this.checkEhr.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkEhr.Click += new System.EventHandler(this.checkEhr_Click);
 			// 
 			// FormEasy
 			// 
@@ -303,6 +304,10 @@ namespace OpenDental{
 			checkEhr.Checked=PrefC.GetBool(PrefName.ShowFeatureEhr);
 		}
 
+		private void checkEhr_Click(object sender,EventArgs e) {
+			MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			Prefs.UpdateBool(PrefName.EasyHideCapitation,!checkCapitation.Checked);
 			Prefs.UpdateBool(PrefName.EasyHideMedicaid,!checkMedicaid.Checked);
@@ -324,6 +329,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

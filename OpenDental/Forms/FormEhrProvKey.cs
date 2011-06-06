@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+#if DEBUG
+using EHR;
+#endif
 
 namespace OpenDental {
 	public partial class FormEhrProvKey:Form {
@@ -23,8 +26,18 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			//todo: validate key
-
+			bool provKeyIsValid=false;
+			#if DEBUG
+				provKeyIsValid=((FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(ProvCur.LName,ProvCur.FName,textEhrKey.Text);
+			#else
+				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+				object[] args=new object[] { ProvCur.LName,ProvCur.FName,textEhrKey.Text };
+				provKeyIsValid=(bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args);
+			#endif
+			if(!provKeyIsValid) {
+				MsgBox.Show(this,"Invalid provider key");
+				return;
+			}
 			ProvCur.EhrKey=textEhrKey.Text;
 			DialogResult=DialogResult.OK;
 		}

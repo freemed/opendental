@@ -829,14 +829,17 @@ namespace OpenDental{
 				labelEcwID.Visible=false;
 				textEcwID.Visible=false;
 			}
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				labelEhrKey.Visible=false;
-				textEhrKey.Visible=false;
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				if(!String.IsNullOrEmpty(ProvCur.EhrKey)) {
 					textEhrKey.Text=ProvCur.EhrKey;
 					textLName.Enabled=false;
 					textFName.Enabled=false;
 				}
+			}
+			else{
+				labelEhrKey.Visible=false;
+				textEhrKey.Visible=false;
+				butEhrKey.Visible=false;
 			}
 			//We'll just always show the Anesthesia fields since they are part of the standard database.
 			textAbbr.Text=ProvCur.Abbr;

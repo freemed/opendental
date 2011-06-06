@@ -378,9 +378,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMedical_Load(object sender, System.EventArgs e){
-			if(FormOpenDental.FormEHR==null) {
-				//butMedicationReconcile.Visible=false;
-			}
 			checkPremed.Checked=PatCur.Premed;
 			textMedUrgNote.Text=PatCur.MedUrgNote;
 			textMedical.Text=PatientNoteCur.Medical;

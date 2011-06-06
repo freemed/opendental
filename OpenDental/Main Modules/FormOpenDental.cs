@@ -1569,28 +1569,20 @@ namespace OpenDental{
 			}
 			catch { }
 			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
-			#if DEBUG
-				FormEHR=new FormEHR();
-				ContrChart2.InitializeLocalData();//because toolbar is now missing the EHR button.  Only a problem if a db conversion is done when opening the program.
-				/*
-				dllPathEHR=@"..\..\..\..\..\Shared Projects Subversion\EHR\EHR_";
-				Version versionApp=new Version(Application.ProductVersion);
-				if(versionApp.Build==0) {//must be head
-					dllPathEHR+=@"head\EHR\bin\Debug\EHR.dll";
-				}
-				else{
-					dllPathEHR+=versionApp.Major.ToString()+"_"+versionApp.Minor.ToString()+@"\EHR\bin\Debug\EHR.dll";
-				}
-				dllPathEHR=Path.GetFullPath(dllPathEHR);*/
-			#else
-				FormEHR=null;
-				AssemblyEHR=null;
-				if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
-					AssemblyEHR=Assembly.LoadFile(dllPathEHR);
-					Type type=AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
-					FormEHR=Activator.CreateInstance(type);
-				}
-			#endif
+			if(PrefC.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
+				#if DEBUG
+					FormEHR=new FormEHR();
+					ContrChart2.InitializeLocalData();//because toolbar is now missing the EHR button.  Only a problem if a db conversion is done when opening the program.
+				#else
+					FormEHR=null;
+					AssemblyEHR=null;
+					if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+						AssemblyEHR=Assembly.LoadFile(dllPathEHR);
+						Type type=AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+						FormEHR=Activator.CreateInstance(type);
+					}
+				#endif
+			}
 			dateTimeLastActivity=DateTime.Now;
 			timerLogoff.Enabled=true;
 			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
