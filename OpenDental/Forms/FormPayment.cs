@@ -91,6 +91,7 @@ namespace OpenDental{
 		private DataTable tableBalances;
 		private Program prog;
 		private ProgramProperty prop;
+		private bool payConnectWarn;
 
 		///<summary>PatCur and FamCur are not for the PatCur of the payment.  They are for the patient and family from which this window was accessed.</summary>
 		public FormPayment(Patient patCur,Family famCur,Payment paymentCur){
@@ -1554,6 +1555,7 @@ namespace OpenDental{
 				textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+Lan.g(this,"Transaction Type")+": "+Enum.GetName(typeof(PayConnectService.transType),FormP.TranType)+Environment.NewLine+
 					Lan.g(this,"Status")+": "+FormP.Response.Status.description;
 				if(FormP.Response.Status.code==0) { //The transaction succeeded.
+					payConnectWarn=true;//Show a warning if user cancels out of window.
 					textNote.Text+=Environment.NewLine
 						+Lan.g(this,"Amount")+": "+FormP.AmountCharged+Environment.NewLine
 						+Lan.g(this,"Auth Code")+": "+FormP.Response.AuthCode+Environment.NewLine
@@ -1833,6 +1835,12 @@ namespace OpenDental{
 		private void FormPayment_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(DialogResult==DialogResult.OK) {
 				return;
+			}
+			if(payConnectWarn) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"The credit card payment that was already processed will have to be voided manually through the web interface.  Continue anyway?")) {
+					e.Cancel=true;
+					return;
+				}
 			}
 			if(IsNew){ 
 				Payments.Delete(PaymentCur);
