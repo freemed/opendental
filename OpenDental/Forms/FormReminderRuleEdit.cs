@@ -16,6 +16,7 @@ namespace OpenDental {
 
 		public FormReminderRuleEdit() {
 			InitializeComponent();
+			Lan.F(this);
 		}
 
 		private void FormReminderRuleEdit_Load(object sender,EventArgs e) {

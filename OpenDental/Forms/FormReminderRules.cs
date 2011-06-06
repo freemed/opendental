@@ -14,6 +14,7 @@ namespace OpenDental {
 		public List<ReminderRule> listReminders;
 		public FormReminderRules() {
 			InitializeComponent();
+			Lan.F(this);
 		}
 
 		private void FormReminderRules_Load(object sender,EventArgs e) {

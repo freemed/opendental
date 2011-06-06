@@ -6,9 +6,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	/// <summary>
-	/// Summary description for FormBasicTemplate.
-	/// </summary>
+	/// <summary></summary>
 	public class FormOperatoryEdit : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
