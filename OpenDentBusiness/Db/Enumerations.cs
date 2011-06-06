@@ -1499,7 +1499,7 @@ namespace OpenDentBusiness{
 		CurrentEveryDay
 	}
 
-	///<summary>0=Active, 1=Resolved, 2=Inactive
+	///<summary>0=Active, 1=Resolved, 2=Inactive</summary>
 	public enum ProblemStatus{
 		/// <summary>0</summary>
 		Active,

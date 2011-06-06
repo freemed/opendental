@@ -25,6 +25,18 @@ namespace OpenDental {
 				comboSnomedAllergyType.Items.Add(Enum.GetNames(typeof(SnomedAllergy))[i]);
 			}
 			comboSnomedAllergyType.SelectedIndex=(int)AllergyDefCur.Snomed;
+			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
+		}
+
+		private void butMedicationSelect_Click(object sender,EventArgs e) {
+			FormMedications FormM=new FormMedications();
+			FormM.IsSelectionMode=true;
+			FormM.ShowDialog();
+			if(FormM.DialogResult!=DialogResult.OK){
+				return;
+			}
+			AllergyDefCur.MedicationNum=FormM.SelectedMedicationNum;
+			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -35,10 +47,6 @@ namespace OpenDental {
 			AllergyDefCur.Description=textDescription.Text;
 			AllergyDefCur.IsHidden=checkHidden.Checked;
 			AllergyDefCur.Snomed=(SnomedAllergy)comboSnomedAllergyType.SelectedIndex;
-			if(textRxCui.errorProvider1.GetError(textRxCui)!=""){
-				MsgBox.Show(this,"You may only enter a number for RxNorm CUI.");
-			}
-			//AllergyDefCur.RxCui=PIn.Long(textRxCui.Text);	
 			if(AllergyDefCur.IsNew) {
 				AllergyDefs.Insert(AllergyDefCur);
 			}

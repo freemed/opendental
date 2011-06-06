@@ -36,7 +36,9 @@ namespace OpenDental{
 		///<summary></summary>
 		private string[] Brands;
 		private Label label5;
-		private ODR.ValidNumber textRxCui;
+		private TextBox textRxNormCui;
+		private TextBox textRxNormDesc;
+		private UI.Button butRxNormSelect;
 		public Medication MedicationCur;
 
 		///<summary></summary>
@@ -88,7 +90,9 @@ namespace OpenDental{
 			this.comboBrands = new System.Windows.Forms.ComboBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.textRxCui = new ODR.ValidNumber();
+			this.textRxNormCui = new System.Windows.Forms.TextBox();
+			this.textRxNormDesc = new System.Windows.Forms.TextBox();
+			this.butRxNormSelect = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -257,17 +261,41 @@ namespace OpenDental{
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(127,17);
 			this.label5.TabIndex = 6;
-			this.label5.Text = "RxNorm CUI";
+			this.label5.Text = "RxNorm";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textRxCui
+			// textRxNormCui
 			// 
-			this.textRxCui.Location = new System.Drawing.Point(148,68);
-			this.textRxCui.MaxVal = 999999999;
-			this.textRxCui.MinVal = 0;
-			this.textRxCui.Name = "textRxCui";
-			this.textRxCui.Size = new System.Drawing.Size(86,20);
-			this.textRxCui.TabIndex = 39;
+			this.textRxNormCui.Location = new System.Drawing.Point(148,67);
+			this.textRxNormCui.Name = "textRxNormCui";
+			this.textRxNormCui.ReadOnly = true;
+			this.textRxNormCui.Size = new System.Drawing.Size(83,20);
+			this.textRxNormCui.TabIndex = 0;
+			this.textRxNormCui.TextChanged += new System.EventHandler(this.textMedName_TextChanged);
+			// 
+			// textRxNormDesc
+			// 
+			this.textRxNormDesc.Location = new System.Drawing.Point(237,67);
+			this.textRxNormDesc.Name = "textRxNormDesc";
+			this.textRxNormDesc.ReadOnly = true;
+			this.textRxNormDesc.Size = new System.Drawing.Size(345,20);
+			this.textRxNormDesc.TabIndex = 0;
+			this.textRxNormDesc.TextChanged += new System.EventHandler(this.textMedName_TextChanged);
+			// 
+			// butRxNormSelect
+			// 
+			this.butRxNormSelect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRxNormSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRxNormSelect.Autosize = true;
+			this.butRxNormSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRxNormSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRxNormSelect.CornerRadius = 4F;
+			this.butRxNormSelect.Location = new System.Drawing.Point(585,66);
+			this.butRxNormSelect.Name = "butRxNormSelect";
+			this.butRxNormSelect.Size = new System.Drawing.Size(22,22);
+			this.butRxNormSelect.TabIndex = 2;
+			this.butRxNormSelect.Text = "...";
+			this.butRxNormSelect.Click += new System.EventHandler(this.butRxNorm_Click);
 			// 
 			// FormMedicationEdit
 			// 
@@ -275,17 +303,19 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(653,448);
-			this.Controls.Add(this.textRxCui);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textRxNormDesc);
+			this.Controls.Add(this.textRxNormCui);
 			this.Controls.Add(this.textMedName);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textGenericName);
 			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butRxNormSelect);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -339,12 +369,7 @@ namespace OpenDental{
 			if(PatNames.Length>0){
 				comboPatients.SelectedIndex=0;
 			}
-			if(MedicationCur.RxCui==-1){
-				textRxCui.Text="";
-			}
-			else{
-				textRxCui.Text=MedicationCur.RxCui.ToString();
-			}
+			//Todo: Set RxNorm CUI and RxNorm Description.
 		}
 	
 		private void textMedName_TextChanged(object sender, System.EventArgs e) {
@@ -352,6 +377,11 @@ namespace OpenDental{
 			if(MedicationCur.MedicationNum==MedicationCur.GenericNum){
 				textGenericName.Text=textMedName.Text;
 			}
+		}
+
+		private void butRxNorm_Click(object sender,EventArgs e) {
+			FormRxNorms FormRN=new FormRxNorms();
+
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -379,16 +409,10 @@ namespace OpenDental{
 			if(MedicationCur.MedicationNum==MedicationCur.GenericNum){
 				MedicationCur.Notes=textNotes.Text;
 			}
-			if(textRxCui.errorProvider1.GetError(textRxCui)!=""){
-				MsgBox.Show(this,"Invalid RxNorm CUI.\r\n"+textRxCui.errorProvider1.GetError(textRxCui));
-				return;
+			else{
+				MedicationCur.Notes="";
 			}
-			if(textRxCui.Text==""){
-				MedicationCur.RxCui=-1;
-			}
-			else {
-				MedicationCur.RxCui=PIn.Long(textRxCui.Text);	
-			}
+			//MedicationCur has its RxCui set when the butRxNormSelect button is pressed.
 			Medications.Update(MedicationCur);
 			DialogResult=DialogResult.OK;
 		}

@@ -25,9 +25,9 @@ namespace OpenDental{
 		private Label labelStatus;
 		private ComboBox comboStatus;
 		private Label label4;
-		private TextBox textDateStart;
 		private Label label5;
-		private TextBox textDateStop;
+		private ValidDate textDateStart;
+		private ValidDate textDateStop;
 		///<summary></summary>
 		public bool IsNew;
 
@@ -71,20 +71,20 @@ namespace OpenDental{
 			this.textProblem = new System.Windows.Forms.TextBox();
 			this.textIcd9 = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.labelStatus = new System.Windows.Forms.Label();
 			this.comboStatus = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textDateStart = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.textDateStop = new System.Windows.Forms.TextBox();
+			this.textDateStop = new OpenDental.ValidDate();
+			this.textDateStart = new OpenDental.ValidDate();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(116,155);
+			this.textNote.Location = new System.Drawing.Point(117,143);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(322,120);
@@ -92,7 +92,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,156);
+			this.label1.Location = new System.Drawing.Point(12,144);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100,17);
 			this.label1.TabIndex = 4;
@@ -133,6 +133,57 @@ namespace OpenDental{
 			this.label3.Text = "ICD9";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// labelStatus
+			// 
+			this.labelStatus.Location = new System.Drawing.Point(5,67);
+			this.labelStatus.Name = "labelStatus";
+			this.labelStatus.Size = new System.Drawing.Size(111,15);
+			this.labelStatus.TabIndex = 82;
+			this.labelStatus.Text = "Status";
+			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboStatus
+			// 
+			this.comboStatus.Cursor = System.Windows.Forms.Cursors.Default;
+			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStatus.Location = new System.Drawing.Point(118,64);
+			this.comboStatus.MaxDropDownItems = 10;
+			this.comboStatus.Name = "comboStatus";
+			this.comboStatus.Size = new System.Drawing.Size(126,21);
+			this.comboStatus.TabIndex = 83;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(13,91);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(100,19);
+			this.label4.TabIndex = 5;
+			this.label4.Text = "Start Date";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(13,117);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(100,19);
+			this.label5.TabIndex = 5;
+			this.label5.Text = "Stop Date";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDateStop
+			// 
+			this.textDateStop.Location = new System.Drawing.Point(118,117);
+			this.textDateStop.Name = "textDateStop";
+			this.textDateStop.Size = new System.Drawing.Size(126,20);
+			this.textDateStop.TabIndex = 84;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(118,91);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(126,20);
+			this.textDateStart.TabIndex = 84;
+			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -143,7 +194,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12,337);
+			this.butDelete.Location = new System.Drawing.Point(12,305);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(83,26);
 			this.butDelete.TabIndex = 6;
@@ -158,7 +209,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(323,337);
+			this.butOK.Location = new System.Drawing.Point(327,305);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -173,74 +224,23 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(404,337);
+			this.butCancel.Location = new System.Drawing.Point(408,305);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// labelStatus
-			// 
-			this.labelStatus.Location = new System.Drawing.Point(3,71);
-			this.labelStatus.Name = "labelStatus";
-			this.labelStatus.Size = new System.Drawing.Size(111,15);
-			this.labelStatus.TabIndex = 82;
-			this.labelStatus.Text = "Status";
-			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboStatus
-			// 
-			this.comboStatus.Cursor = System.Windows.Forms.Cursors.Default;
-			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatus.Location = new System.Drawing.Point(116,68);
-			this.comboStatus.MaxDropDownItems = 10;
-			this.comboStatus.Name = "comboStatus";
-			this.comboStatus.Size = new System.Drawing.Size(126,21);
-			this.comboStatus.TabIndex = 83;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(12,97);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(100,19);
-			this.label4.TabIndex = 5;
-			this.label4.Text = "Start Date";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDateStart
-			// 
-			this.textDateStart.Location = new System.Drawing.Point(116,96);
-			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(199,20);
-			this.textDateStart.TabIndex = 7;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(12,125);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(100,19);
-			this.label5.TabIndex = 5;
-			this.label5.Text = "Stop Date";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDateStop
-			// 
-			this.textDateStop.Location = new System.Drawing.Point(116,124);
-			this.textDateStop.Name = "textDateStop";
-			this.textDateStop.Size = new System.Drawing.Size(199,20);
-			this.textDateStop.TabIndex = 7;
-			// 
 			// FormDiseaseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(491,375);
+			this.ClientSize = new System.Drawing.Size(495,343);
+			this.Controls.Add(this.textDateStop);
+			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.labelStatus);
 			this.Controls.Add(this.comboStatus);
 			this.Controls.Add(this.textIcd9);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textDateStop);
-			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.textProblem);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label5);
@@ -278,8 +278,12 @@ namespace OpenDental{
 			}
 			comboStatus.SelectedIndex=(int)DiseaseCur.ProbStatus;
 			textNote.Text=DiseaseCur.PatNote;
-			textDateStart.Text=DiseaseCur.DateStart.ToShortDateString();
+			if(DiseaseCur.DateStart>DateTime.Parse("01/01/1880")) {
+				textDateStart.Text=DiseaseCur.DateStart.ToShortDateString();
+			}
+			if(DiseaseCur.DateStop>DateTime.Parse("01/01/1880")) {
 			textDateStop.Text=DiseaseCur.DateStop.ToShortDateString();
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -295,6 +299,20 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""){
+				MsgBox.Show(this,"You have entered an invalid start date.");
+				return;
+			}
+			else{
+				DiseaseCur.DateStart=DateTime.Parse(textDateStart.Text);
+			}
+			if(textDateStop.errorProvider1.GetError(textDateStop)!=""){
+				MsgBox.Show(this,"You have entered an invalid stop date.");
+				return;
+			}
+			else{
+				DiseaseCur.DateStop=DateTime.Parse(textDateStop.Text);
+			}
 			DiseaseCur.ProbStatus=(ProblemStatus)comboStatus.SelectedIndex;
 			DiseaseCur.PatNote=textNote.Text;
 			//Todo: Save DateStop and DateStart values.
