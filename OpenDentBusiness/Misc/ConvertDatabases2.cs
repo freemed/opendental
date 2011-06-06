@@ -5388,7 +5388,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE provider ADD EhrKey varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				bool usingECW=true;
+				command="SELECT COUNT(*) FROM program WHERE ProgName='eClinicalWorks' AND Enabled=1";
+				if(Db.GetCount(command)=="0") {
+					usingECW=false;
+				}
+				if(usingECW) {
+					command="UPDATE provider SET EcwID=Abbr";
+					Db.NonQ(command);
+				}
 
 
 

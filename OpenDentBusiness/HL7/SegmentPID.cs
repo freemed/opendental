@@ -197,19 +197,19 @@ namespace OpenDentBusiness.HL7 {
 			if(field==null) {
 				return 0;
 			}
-			string provAbbr=field.GetComponentVal(0);
-			provAbbr=provAbbr.TrimStart(' ');
-			provAbbr=provAbbr.TrimEnd(' ');
-			if(provAbbr=="") {
+			string eID=field.GetComponentVal(0);
+			eID=eID.Trim();
+			if(eID=="") {
 				return 0;
 			}
-			Provider prov=Providers.GetProvByAbbr(provAbbr);
+			Provider prov=Providers.GetProvByEcwID(eID);
 			bool isNewProv=false;
 			bool provChanged=false;
 			if(prov==null) {
 				isNewProv=true;
 				prov=new Provider();
-				prov.Abbr=provAbbr;
+				prov.Abbr=eID;//They can manually change this later.
+				prov.EcwID=eID;
 			}
 			if(prov.LName!=field.GetComponentVal(1)) {
 				provChanged=true;

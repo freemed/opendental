@@ -199,17 +199,17 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary>Gets a provider from the List.  If abbr is not found, then it returns null.</summary>
-		public static Provider GetProvByAbbr(string abbr) {
+		///<summary>Gets a provider from the List.  If EcwID is not found, then it returns null.</summary>
+		public static Provider GetProvByEcwID(string eID) {
 			//No need to check RemotingRole; no call to db.
-			if(abbr=="") {
+			if(eID=="") {
 				return null;
 			}
 			if(ProviderC.ListLong==null) {
 				RefreshCache();
 			}
 			for(int i=0;i<ProviderC.ListLong.Length;i++) {
-				if(ProviderC.ListLong[i].Abbr==abbr) {
+				if(ProviderC.ListLong[i].EcwID==eID) {
 					return ProviderC.ListLong[i].Copy();
 				}
 			}
@@ -217,9 +217,8 @@ namespace OpenDentBusiness{
 			//The UI layer won't know about the addition.
 			//So we need to refresh if we can't initially find the prov.
 			RefreshCache();
-			//and try again
 			for(int i=0;i<ProviderC.ListLong.Length;i++) {
-				if(ProviderC.ListLong[i].Abbr==abbr) {
+				if(ProviderC.ListLong[i].EcwID==eID) {
 					return ProviderC.ListLong[i].Copy();
 				}
 			}
