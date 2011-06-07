@@ -28,6 +28,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private Label labelCategory;
 		private List<DisplayField> ListShowing;
+		private Label labelCustomField;
+		private TextBox textCustomField;
 		//private List<DisplayField> ListAvailable;
 		public DisplayFieldCategory category;
 
@@ -73,9 +75,11 @@ namespace OpenDental{
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
 			this.butDefault = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
 			this.labelCategory = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.labelCustomField = new System.Windows.Forms.Label();
+			this.textCustomField = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -195,19 +199,6 @@ namespace OpenDental{
 			this.butDefault.Text = "Set to Default";
 			this.butDefault.Click += new System.EventHandler(this.butDefault_Click);
 			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,76);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(292,425);
-			this.gridMain.TabIndex = 3;
-			this.gridMain.Title = "Fields Showing";
-			this.gridMain.TranslationName = "FormDisplayFields";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -232,10 +223,41 @@ namespace OpenDental{
 			this.labelCategory.TabIndex = 57;
 			this.labelCategory.Text = "Category Description";
 			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,76);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(292,425);
+			this.gridMain.TabIndex = 3;
+			this.gridMain.Title = "Fields Showing";
+			this.gridMain.TranslationName = "FormDisplayFields";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// labelCustomField
+			// 
+			this.labelCustomField.Location = new System.Drawing.Point(361,319);
+			this.labelCustomField.Name = "labelCustomField";
+			this.labelCustomField.Size = new System.Drawing.Size(213,17);
+			this.labelCustomField.TabIndex = 58;
+			this.labelCustomField.Text = "Custom Field";
+			this.labelCustomField.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textCustomField
+			// 
+			this.textCustomField.Location = new System.Drawing.Point(364,339);
+			this.textCustomField.Name = "textCustomField";
+			this.textCustomField.Size = new System.Drawing.Size(210,20);
+			this.textCustomField.TabIndex = 59;
+			// 
 			// FormDisplayFields
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(664,556);
+			this.Controls.Add(this.textCustomField);
+			this.Controls.Add(this.labelCustomField);
 			this.Controls.Add(this.labelCategory);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butRight);
@@ -255,15 +277,24 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Setup Display Fields";
-			this.Load += new System.EventHandler(this.FormDisplayFields_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDisplayFields_FormClosing);
+			this.Load += new System.EventHandler(this.FormDisplayFields_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
 
 		private void FormDisplayFields_Load(object sender,EventArgs e) {
 			labelCategory.Text=category.ToString();
+			textCustomField.Visible=false;
+			labelCustomField.Visible=false;
+			listAvailable.Height=412;
+			if(category==DisplayFieldCategory.OrthoChart) {
+				textCustomField.Visible=true;
+				labelCustomField.Visible=true;
+				listAvailable.Height=227;//227px for short, 412px for tall
+			}
 			DisplayFields.RefreshCache();
 			ListShowing=DisplayFields.GetForCategory(category);
 			FillGrids();

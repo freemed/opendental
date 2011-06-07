@@ -8,6 +8,15 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class OrthoCharts{
 
+		///<summary></summary>
+		public static List<OrthoChart> GetAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<OrthoChart>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM orthochart";
+			return Crud.OrthoChartCrud.SelectMany(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

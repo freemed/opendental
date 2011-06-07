@@ -254,6 +254,10 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Prognosis",60,category));
 				//list.Add(new DisplayField("Dx",28,category));
 			}
+			else if(category==DisplayFieldCategory.OrthoChart) {
+				//TODO:
+			}
+			
 			return list;
 		}
 
@@ -425,6 +429,9 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Pat",50,category));
 				list.Add(new DisplayField("Prognosis",60,category));
 				list.Add(new DisplayField("Dx",28,category));
+			}
+			else if(category==DisplayFieldCategory.OrthoChart) {
+				//TODO:loop through existing fields after Querying DB for columns
 			}
 			return list;
 		}
