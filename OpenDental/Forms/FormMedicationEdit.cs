@@ -381,7 +381,11 @@ namespace OpenDental{
 
 		private void butRxNorm_Click(object sender,EventArgs e) {
 			FormRxNorms FormRN=new FormRxNorms();
-
+			FormRN.ShowDialog();
+			if(FormRN.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			MedicationCur.RxCui=FormRN.RxCui;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
