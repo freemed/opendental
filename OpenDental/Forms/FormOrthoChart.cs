@@ -26,6 +26,7 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
+			//listDisplayFields=DisplayFields.
 			/*			ODGridColumn col;
 						//TODO : 
 						col=new ODGridColumn("Reminder Criterion",135);
