@@ -39,6 +39,11 @@ namespace OpenDental {
 			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
 		}
 
+		private void butNone_Click(object sender,EventArgs e) {
+			AllergyDefCur.MedicationNum=0;
+			textMedication.Text="";
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textDescription.Text.Trim()=="") {
 				MsgBox.Show(this,"Description cannot be blank.");

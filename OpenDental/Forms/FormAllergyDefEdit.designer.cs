@@ -34,6 +34,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.textMedication = new System.Windows.Forms.TextBox();
 			this.butMedicationSelect = new OpenDental.UI.Button();
+			this.butNone = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// labelDescription
@@ -158,6 +159,21 @@ namespace OpenDental{
 			this.butMedicationSelect.Text = "...";
 			this.butMedicationSelect.Click += new System.EventHandler(this.butMedicationSelect_Click);
 			// 
+			// butNone
+			// 
+			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butNone.Autosize = true;
+			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNone.CornerRadius = 4F;
+			this.butNone.Location = new System.Drawing.Point(460,80);
+			this.butNone.Name = "butNone";
+			this.butNone.Size = new System.Drawing.Size(51,22);
+			this.butNone.TabIndex = 9;
+			this.butNone.Text = "None";
+			this.butNone.Click += new System.EventHandler(this.butNone_Click);
+			// 
 			// FormAllergyDefEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -165,6 +181,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboSnomedAllergyType);
 			this.Controls.Add(this.label3);
+			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.checkHidden);
 			this.Controls.Add(this.textMedication);
@@ -195,5 +212,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textMedication;
 		private UI.Button butMedicationSelect;
+		private UI.Button butNone;
 	}
 }
