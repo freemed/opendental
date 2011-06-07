@@ -5397,7 +5397,34 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE provider SET EcwID=Abbr";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrprovkey";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrprovkey (
+						EhrProvKeyNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						ProvKey varchar(255) NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrprovkey'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrprovkey (
+						EhrProvKeyNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						LName varchar2(255),
+						FName varchar2(255),
+						ProvKey varchar2(255),
+						CONSTRAINT ehrprovkey_EhrProvKeyNum PRIMARY KEY (EhrProvKeyNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrprovkey_PatNum ON ehrprovkey (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5432,7 +5459,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 	
-
-
-
-				

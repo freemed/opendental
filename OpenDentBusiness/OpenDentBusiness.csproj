@@ -183,6 +183,7 @@
     <Compile Include="Crud\EduResourceCrud.cs" />
     <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\EhrMeasureEventCrud.cs" />
+    <Compile Include="Crud\EhrProvKeyCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
     <Compile Include="Crud\EmailAttachCrud.cs" />
     <Compile Include="Crud\EmailMessageCrud.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="Data Interface\EduResources.cs" />
     <Compile Include="Data Interface\EhrMeasureEvents.cs" />
     <Compile Include="Data Interface\EhrMeasures.cs" />
+    <Compile Include="Data Interface\EhrProvKeys.cs" />
     <Compile Include="Data Interface\Formularies.cs" />
     <Compile Include="Data Interface\FormularyMeds.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
@@ -666,6 +668,7 @@
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
+    <Compile Include="TableTypes\EhrProvKey.cs" />
     <Compile Include="TableTypes\DrugManufacturer.cs" />
     <Compile Include="TableTypes\DrugUnit.cs" />
     <Compile Include="TableTypes\EduResource.cs" />
