@@ -47,6 +47,7 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+		///<summary></summary>
 		public static void CreateFreshRxNormTableFromZip() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
@@ -59,11 +60,41 @@ namespace OpenDentBusiness{
 			}
 			StreamReader reader=new StreamReader(ms);
 			ms.Position=0;
-			string command="DROP TABLE IF EXISTS rxnorm";
-			Db.NonQ(command);
-			//Make insert statements from contents of file.
+			StringBuilder command=new StringBuilder();
+			command.AppendLine("TRUNCATE TABLE rxnorm;");
+			string line;
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				while((line=reader.ReadLine())!=null) {
+					string[] lineSplit=line.Split('\t');
+					command.AppendLine("INSERT INTO rxnorm(RxCui,MmslCode,Description) VALUES('"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
+				}
+			}
+			else {//oracle
+				long count=0;
+				while((line=reader.ReadLine())!=null) {
+					string[] lineSplit=line.Split('\t');
+					if(count<1) {//Hardcode first insert for oracle.
+						command.AppendLine("INSERT INTO rxnorm(RxNormNum,RxCui,MmslCode,Description) "
+						+"VALUES(1,'"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
+					}
+					else {
+						command.AppendLine("INSERT INTO rxnorm(RxNormNum,RxCui,MmslCode,Description) "
+						+"VALUES((SELECT MAX(RxNormNum)+1 FROM rxnorm),'"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
+					}
+					count++;
+				}
+			}
+			Db.NonQ(command.ToString());
 			ms.Close();
 			reader.Close();
+		}
+
+		///<summary>Gets one RxNorm from the db.</summary>
+		public static RxNorm GetOne(long rxNormNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<RxNorm>(MethodBase.GetCurrentMethod(),rxNormNum);
+			}
+			return Crud.RxNormCrud.SelectOne(rxNormNum);
 		}
 
 		/*
@@ -76,42 +107,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM rxnorm WHERE PatNum = "+POut.Long(patNum);
 			return Crud.RxNormCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one RxNorm from the db.</summary>
-		public static RxNorm GetOne(long rxNormNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<RxNorm>(MethodBase.GetCurrentMethod(),rxNormNum);
-			}
-			return Crud.RxNormCrud.SelectOne(rxNormNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(RxNorm rxNorm){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				rxNorm.RxNormNum=Meth.GetLong(MethodBase.GetCurrentMethod(),rxNorm);
-				return rxNorm.RxNormNum;
-			}
-			return Crud.RxNormCrud.Insert(rxNorm);
-		}
-
-		///<summary></summary>
-		public static void Update(RxNorm rxNorm){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),rxNorm);
-				return;
-			}
-			Crud.RxNormCrud.Update(rxNorm);
-		}
-
-		///<summary></summary>
-		public static void Delete(long rxNormNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),rxNormNum);
-				return;
-			}
-			string command= "DELETE FROM rxnorm WHERE RxNormNum = "+POut.Long(rxNormNum);
-			Db.NonQ(command);
 		}
 		*/
 
