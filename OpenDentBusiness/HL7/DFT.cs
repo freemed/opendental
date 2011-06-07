@@ -15,13 +15,13 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Creates the Message object and fills it with data.</summary>
-		public void InitializeEcw(Appointment apt,Patient pat,string pdfDataAsBase64,string pdfDescription,bool justPDF){
+		public void InitializeEcw(long aptNum,long provNum,Patient pat,string pdfDataAsBase64,string pdfDescription,bool justPDF){
 			msg=new MessageHL7(MessageType.DFT);
 			MSH();
 			EVN();
 			PID(pat);
-			PV1(apt);
-			FT1(apt,justPDF);
+			PV1(aptNum,provNum);
+			FT1(aptNum,justPDF);
 			DG1();
 			ZX1(pdfDataAsBase64,pdfDescription);
 		}
@@ -59,21 +59,21 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Patient visit.</summary>
-		private void PV1(Appointment apt){
+		private void PV1(long aptNum,long provNum){
 			seg=new SegmentHL7(SegmentName.PV1);
 			seg.SetField(0,"PV1");
-			Provider prov=Providers.GetProv(apt.ProvNum);
-			seg.SetField(7,prov.Abbr,prov.LName,prov.FName,prov.MI);
-			seg.SetField(19,apt.AptNum.ToString());
+			Provider prov=Providers.GetProv(provNum);
+			seg.SetField(7,prov.EcwID,prov.LName,prov.FName,prov.MI);
+			seg.SetField(19,aptNum.ToString());
 			msg.Segments.Add(seg);
 		}
 
 		///<summary>Financial transaction segment.</summary>
-		private void FT1(Appointment apt,bool justPDF){
+		private void FT1(long aptNum,bool justPDF){
 			if(justPDF){
 				return;//FT1 segment is not necessary when sending only a PDF.
 			}
-			List<Procedure> procs=Procedures.GetProcsForSingle(apt.AptNum,false);
+			List<Procedure> procs=Procedures.GetProcsForSingle(aptNum,false);
 			ProcedureCode procCode;
 			for(int i=0;i<procs.Count;i++) {
 				seg=new SegmentHL7(SegmentName.FT1);
@@ -86,8 +86,8 @@ namespace OpenDentBusiness.HL7 {
 				seg.SetField(16,"");//location code and description???
 				seg.SetField(19,procs[i].DiagnosticCode);
 				Provider prov=Providers.GetProv(procs[i].ProvNum);
-				seg.SetField(20,prov.Abbr,prov.LName,prov.FName,prov.MI);//performed by provider.
-				seg.SetField(21,prov.Abbr,prov.LName,prov.FName,prov.MI);//ordering provider.
+				seg.SetField(20,prov.EcwID,prov.LName,prov.FName,prov.MI);//performed by provider.
+				seg.SetField(21,prov.EcwID,prov.LName,prov.FName,prov.MI);//ordering provider.
 				seg.SetField(22,procs[i].ProcFee.ToString("F2"));
 				procCode=ProcedureCodes.GetProcCode(procs[i].CodeNum);
 				seg.SetField(25,procCode.ProcCode);
