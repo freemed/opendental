@@ -23,11 +23,56 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.butRxNorm = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.button1 = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.button1 = new OpenDental.UI.Button();
-			this.odGrid1 = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
+			// 
+			// butRxNorm
+			// 
+			this.butRxNorm.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRxNorm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butRxNorm.Autosize = true;
+			this.butRxNorm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRxNorm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRxNorm.CornerRadius = 4F;
+			this.butRxNorm.Location = new System.Drawing.Point(139,651);
+			this.butRxNorm.Name = "butRxNorm";
+			this.butRxNorm.Size = new System.Drawing.Size(98,24);
+			this.butRxNorm.TabIndex = 5;
+			this.butRxNorm.Text = "Create rxnorm";
+			this.butRxNorm.Click += new System.EventHandler(this.butRxNorm_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(26,34);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(642,599);
+			this.gridMain.TabIndex = 4;
+			this.gridMain.Title = "RxNorm Codes";
+			this.gridMain.TranslationName = null;
+			// 
+			// button1
+			// 
+			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button1.Autosize = true;
+			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button1.CornerRadius = 4F;
+			this.button1.Location = new System.Drawing.Point(26,651);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75,24);
+			this.button1.TabIndex = 3;
+			this.button1.Text = "&None";
+			this.button1.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butOK
 			// 
@@ -37,7 +82,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(284,484);
+			this.butOK.Location = new System.Drawing.Point(512,651);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -52,54 +97,26 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(365,484);
+			this.butCancel.Location = new System.Drawing.Point(593,651);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(26,484);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75,24);
-			this.button1.TabIndex = 3;
-			this.button1.Text = "&None";
-			this.button1.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// odGrid1
-			// 
-			this.odGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.odGrid1.HScrollVisible = false;
-			this.odGrid1.Location = new System.Drawing.Point(26,34);
-			this.odGrid1.Name = "odGrid1";
-			this.odGrid1.ScrollValue = 0;
-			this.odGrid1.Size = new System.Drawing.Size(414,432);
-			this.odGrid1.TabIndex = 4;
-			this.odGrid1.Title = "RxNorm Codes";
-			this.odGrid1.TranslationName = null;
-			// 
 			// FormRxNorms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(465,535);
-			this.Controls.Add(this.odGrid1);
+			this.ClientSize = new System.Drawing.Size(693,702);
+			this.Controls.Add(this.butRxNorm);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormRxNorms";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "RxNorms";
-			this.Load += new System.EventHandler(this.BasicTemplate_Load);
+			this.Load += new System.EventHandler(this.FormRxNorms_Load);
 			this.ResumeLayout(false);
 
 		}
@@ -109,6 +126,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private UI.Button button1;
-		private UI.ODGrid odGrid1;
+		private UI.ODGrid gridMain;
+		private UI.Button butRxNorm;
 	}
 }

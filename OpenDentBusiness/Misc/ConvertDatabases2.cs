@@ -5425,6 +5425,29 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX ehrprovkey_PatNum ON ehrprovkey (PatNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS rxnorm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE rxnorm (
+						RxNormNum bigint NOT NULL auto_increment PRIMARY KEY,
+						RxCui varchar(255) NOT NULL,
+						MmslCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE rxnorm'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE rxnorm (
+						RxNormNum number(20) NOT NULL,
+						RxCui varchar2(255),
+						MmslCode varchar2(255),
+						Description varchar2(255),
+						CONSTRAINT rxnorm_RxNormNum PRIMARY KEY (RxNormNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 

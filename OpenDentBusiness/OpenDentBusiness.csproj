@@ -278,6 +278,7 @@
     <Compile Include="Crud\ReqStudentCrud.cs" />
     <Compile Include="Crud\RxAlertCrud.cs" />
     <Compile Include="Crud\RxDefCrud.cs" />
+    <Compile Include="Crud\RxNormCrud.cs" />
     <Compile Include="Crud\RxPatCrud.cs" />
     <Compile Include="Crud\ScheduleCrud.cs" />
     <Compile Include="Crud\ScheduleOpCrud.cs" />
@@ -357,6 +358,7 @@
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
     <Compile Include="Data Interface\InsFilingCodeSubtypes.cs" />
+    <Compile Include="Data Interface\RxNorms.cs" />
     <Compile Include="Data Interface\Signalods.cs" />
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />
@@ -688,6 +690,7 @@
     <Compile Include="TableTypes\ProcApptColor.cs" />
     <Compile Include="TableTypes\Guardian.cs" />
     <Compile Include="TableTypes\ReminderRule.cs" />
+    <Compile Include="TableTypes\RxNorm.cs" />
     <Compile Include="TableTypes\Signalod.cs" />
     <Compile Include="TableTypes\TaskNote.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
