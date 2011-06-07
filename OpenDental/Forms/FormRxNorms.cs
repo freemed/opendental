@@ -41,6 +41,8 @@ namespace OpenDental {
 			RxNorms.CreateFreshRxNormTableFromZip();
 			RxNorm rxNorm=RxNorms.GetOne(1);
 			MsgBox.Show(this,rxNorm.RxNormNum+" "+rxNorm.RxCui+" "+rxNorm.MmslCode+" "+rxNorm.Description);
+			MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000005")+" <-- should be 26420");
+			MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000002")+" <-- should be blank");
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

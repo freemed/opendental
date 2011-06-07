@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		///<summary></summary>
+		///<summary>Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
 		public static void CreateFreshRxNormTableFromZip() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
@@ -87,6 +87,25 @@ namespace OpenDentBusiness{
 			Db.NonQ(command.ToString());
 			ms.Close();
 			reader.Close();
+		}
+
+		///<summary>Never returns multums, only used for displaying after a search.</summary>
+		public static List<RxNorm> GetListByCodeOrDesc(string codeOrDesc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<List<RxNorm>>(MethodBase.GetCurrentMethod(),codeOrDesc);
+			}
+			string command="SELECT * FROM rxnorm WHERE (RxCui LIKE '%"+codeOrDesc+"%' OR Description LIKE '%"+codeOrDesc+"%') "
+				+"AND MmslCode=''";
+			return Crud.RxNormCrud.SelectMany(command);
+		}
+
+		///<summary>Used to return the multum code based on RxCui.  If blank, use the Description instead.</summary>
+		public static string GetMmslCodeByRxCui(string rxCui) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetString(MethodBase.GetCurrentMethod(),rxCui);
+			}
+			string command="SELECT MmslCode FROM rxnorm WHERE MmslCode!='' AND RxCui="+rxCui;
+			return Db.GetScalar(command);
 		}
 
 		///<summary>Gets one RxNorm from the db.</summary>
