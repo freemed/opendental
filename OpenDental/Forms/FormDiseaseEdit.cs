@@ -28,6 +28,8 @@ namespace OpenDental{
 		private Label label5;
 		private ValidDate textDateStart;
 		private ValidDate textDateStop;
+		private UI.Button butTodayStart;
+		private UI.Button butTodayStop;
 		///<summary></summary>
 		public bool IsNew;
 
@@ -80,6 +82,8 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butTodayStart = new OpenDental.UI.Button();
+			this.butTodayStop = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textNote
@@ -231,10 +235,40 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butTodayStart
+			// 
+			this.butTodayStart.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTodayStart.Autosize = true;
+			this.butTodayStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayStart.CornerRadius = 4F;
+			this.butTodayStart.Location = new System.Drawing.Point(264,89);
+			this.butTodayStart.Name = "butTodayStart";
+			this.butTodayStart.Size = new System.Drawing.Size(65,23);
+			this.butTodayStart.TabIndex = 85;
+			this.butTodayStart.Text = "Today";
+			this.butTodayStart.Click += new System.EventHandler(this.butTodayStart_Click);
+			// 
+			// butTodayStop
+			// 
+			this.butTodayStop.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTodayStop.Autosize = true;
+			this.butTodayStop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayStop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayStop.CornerRadius = 4F;
+			this.butTodayStop.Location = new System.Drawing.Point(264,115);
+			this.butTodayStop.Name = "butTodayStop";
+			this.butTodayStop.Size = new System.Drawing.Size(64,23);
+			this.butTodayStop.TabIndex = 86;
+			this.butTodayStop.Text = "Today";
+			this.butTodayStop.Click += new System.EventHandler(this.butTodayStop_Click);
+			// 
 			// FormDiseaseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(495,343);
+			this.Controls.Add(this.butTodayStop);
+			this.Controls.Add(this.butTodayStart);
 			this.Controls.Add(this.textDateStop);
 			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.labelStatus);
@@ -278,12 +312,22 @@ namespace OpenDental{
 			}
 			comboStatus.SelectedIndex=(int)DiseaseCur.ProbStatus;
 			textNote.Text=DiseaseCur.PatNote;
-			if(DiseaseCur.DateStart>DateTime.Parse("01/01/1880")) {
+			if(DiseaseCur.DateStart.Year>1880) {
 				textDateStart.Text=DiseaseCur.DateStart.ToShortDateString();
 			}
-			if(DiseaseCur.DateStop>DateTime.Parse("01/01/1880")) {
-			textDateStop.Text=DiseaseCur.DateStop.ToShortDateString();
+			if(DiseaseCur.DateStop.Year>1880) {
+				textDateStop.Text=DiseaseCur.DateStop.ToShortDateString();
 			}
+		}
+
+		private void butTodayStart_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Now.ToShortDateString();
+			DiseaseCur.DateStart=DateTime.Now;
+		}
+
+		private void butTodayStop_Click(object sender,EventArgs e) {
+			textDateStop.Text=DateTime.Now.ToShortDateString();
+			DiseaseCur.DateStop=DateTime.Now;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -299,20 +343,14 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textDateStart.errorProvider1.GetError(textDateStart)!=""){
-				MsgBox.Show(this,"You have entered an invalid start date.");
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
+				|| textDateStop.errorProvider1.GetError(textDateStop)!="")
+			{
+				MsgBox.Show(this,"Please fix date.");
 				return;
 			}
-			else{
-				DiseaseCur.DateStart=DateTime.Parse(textDateStart.Text);
-			}
-			if(textDateStop.errorProvider1.GetError(textDateStop)!=""){
-				MsgBox.Show(this,"You have entered an invalid stop date.");
-				return;
-			}
-			else{
-				DiseaseCur.DateStop=DateTime.Parse(textDateStop.Text);
-			}
+			DiseaseCur.DateStart=PIn.Date(textDateStart.Text);
+			DiseaseCur.DateStop=PIn.Date(textDateStop.Text);
 			DiseaseCur.ProbStatus=(ProblemStatus)comboStatus.SelectedIndex;
 			DiseaseCur.PatNote=textNote.Text;
 			//Todo: Save DateStop and DateStart values.
