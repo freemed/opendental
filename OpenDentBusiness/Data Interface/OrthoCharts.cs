@@ -17,6 +17,18 @@ namespace OpenDentBusiness{
 			return Crud.OrthoChartCrud.SelectMany(command);
 		}
 
+		///<summary>Useful for distinct display fields.</summary>
+		public static List<OrthoChart> GetByDistinctFieldNames() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<OrthoChart>>(MethodBase.GetCurrentMethod());
+			}
+			//This is the simple querry that doesn't work with oracle
+			//string command="SELECT * FROM orthochart GROUP BY FieldName";
+			//This query was rewritten for Oracle support, it will provide the same results weather it is run in MySql or Oracle.
+			string command="SELECT * FROM orthochart, (SELECT MAX(OrthoChartNum) OrthoChartNum, FieldName FROM orthochart GROUP BY FieldName) uniqueSubTable WHERE orthochart.OrthoChartNum = uniqueSubTable.OrthoChartNum";
+			return Crud.OrthoChartCrud.SelectMany(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
