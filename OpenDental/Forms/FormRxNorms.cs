@@ -38,39 +38,7 @@ namespace OpenDental {
 		}
 
 		private void butRxNorm_Click(object sender,EventArgs e) {
-			//byte[] rxByte=RxNorms.GetRxNormByteArray();
-			//MemoryStream ms=new MemoryStream();
-			//using(ZipFile unzipped=ZipFile.Read(rxByte)) {
-			//  ZipEntry ze=unzipped["rxnorm.txt"];
-			//  ze.Extract(ms);
-			//}
-			//StreamReader reader=new StreamReader(ms);
-			//ms.Position=0;
-			//FillGrid(reader);
-
-
-			//string line;
-			//while((line=reader.ReadLine())!=null) {
-			//  string[] lineSplit=line.Split('\t');
-			//  row=new ODGridRow();
-			//  row.Cells.Add(lineSplit[0]);
-			//  row.Cells.Add(lineSplit[1]);
-			//  row.Cells.Add(lineSplit[2]);
-			//  gridMain.Rows.Add(row);
-			//}
-
-
-			//byte[] rxByte=RxNorms.GetRxNormByteArray();
-			//MemoryStream ms=new MemoryStream();
-			//using(ZipFile unzipped=ZipFile.Read(rxByte)) {
-			//  ZipEntry ze=unzipped["rxnorm.txt"];
-			//  ze.Extract(ms);
-			//}
-			//StreamReader reader=new StreamReader(ms);
-			//ms.Position=0;
-			//string test=reader.ReadToEnd();
-			//reader.Close();
-			//ms.Close();
+			
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

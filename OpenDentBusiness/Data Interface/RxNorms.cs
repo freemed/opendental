@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Reflection;
 using System.Text;
+using Ionic.Zip;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -44,6 +46,25 @@ namespace OpenDentBusiness{
 			listt=Crud.RxNormCrud.TableToList(table);
 		}
 		#endregion
+
+		public static void CreateFreshRxNormTableFromZip() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			MemoryStream ms=new MemoryStream();
+			using(ZipFile unzipped=ZipFile.Read(Properties.Resources.rxnorm)) {
+			  ZipEntry ze=unzipped["rxnorm.txt"];
+			  ze.Extract(ms);
+			}
+			StreamReader reader=new StreamReader(ms);
+			ms.Position=0;
+			string command="DROP TABLE IF EXISTS rxnorm";
+			Db.NonQ(command);
+			//Make insert statements from contents of file.
+			ms.Close();
+			reader.Close();
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
