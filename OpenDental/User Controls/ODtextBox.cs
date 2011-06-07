@@ -131,12 +131,12 @@ namespace OpenDental
 					Clipboard.SetDataObject(SelectedText);
 					break;
 				case 5://paste
-					IDataObject iData=Clipboard.GetDataObject();
-					int caret=SelectionStart;
-					if(!iData.GetDataPresent(DataFormats.Text)){
-						MessageBox.Show(Lan.g(this,"Could not retrieve data off the clipboard."));
-						break;
+					if(!Clipboard.ContainsText()) {
+					  MsgBox.Show(this,"There is no text on the clipboard.");
+					  break;
 					}
+					int caret=SelectionStart;
+					IDataObject iData=Clipboard.GetDataObject();					
 					if(SelectionLength>0){
 						Text=Text.Remove(SelectionStart,SelectionLength);
 						SelectionLength=0;
