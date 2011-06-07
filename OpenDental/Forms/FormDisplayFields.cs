@@ -21,7 +21,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDown;
 		private OpenDental.UI.Button butUp;
 		private ListBox listAvailable;
-		private Label label3;
+		private Label labelAvailable;
 		private OpenDental.UI.Button butRight;
 		private OpenDental.UI.Button butLeft;
 		private bool changed;
@@ -32,6 +32,7 @@ namespace OpenDental{
 		private TextBox textCustomField;
 		//private List<DisplayField> ListAvailable;
 		public DisplayFieldCategory category;
+		private List<DisplayField> AvailList;
 
 		///<summary></summary>
 		public FormDisplayFields()
@@ -68,7 +69,11 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDisplayFields));
 			this.label2 = new System.Windows.Forms.Label();
 			this.listAvailable = new System.Windows.Forms.ListBox();
-			this.label3 = new System.Windows.Forms.Label();
+			this.labelAvailable = new System.Windows.Forms.Label();
+			this.labelCategory = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.labelCustomField = new System.Windows.Forms.Label();
+			this.textCustomField = new System.Windows.Forms.TextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butRight = new OpenDental.UI.Button();
 			this.butLeft = new OpenDental.UI.Button();
@@ -76,10 +81,6 @@ namespace OpenDental{
 			this.butUp = new OpenDental.UI.Button();
 			this.butDefault = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.labelCategory = new System.Windows.Forms.Label();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.labelCustomField = new System.Windows.Forms.Label();
-			this.textCustomField = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -99,15 +100,55 @@ namespace OpenDental{
 			this.listAvailable.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listAvailable.Size = new System.Drawing.Size(158,412);
 			this.listAvailable.TabIndex = 15;
+			this.listAvailable.Click += new System.EventHandler(this.listAvailable_Click);
 			// 
-			// label3
+			// labelAvailable
 			// 
-			this.label3.Location = new System.Drawing.Point(370,69);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(213,17);
-			this.label3.TabIndex = 16;
-			this.label3.Text = "Available Fields";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelAvailable.Location = new System.Drawing.Point(370,69);
+			this.labelAvailable.Name = "labelAvailable";
+			this.labelAvailable.Size = new System.Drawing.Size(213,17);
+			this.labelAvailable.TabIndex = 16;
+			this.labelAvailable.Text = "Available Fields";
+			this.labelAvailable.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// labelCategory
+			// 
+			this.labelCategory.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelCategory.Location = new System.Drawing.Point(12,9);
+			this.labelCategory.Name = "labelCategory";
+			this.labelCategory.Size = new System.Drawing.Size(213,25);
+			this.labelCategory.TabIndex = 57;
+			this.labelCategory.Text = "Category Description";
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,76);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(292,425);
+			this.gridMain.TabIndex = 3;
+			this.gridMain.Title = "Fields Showing";
+			this.gridMain.TranslationName = "FormDisplayFields";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// labelCustomField
+			// 
+			this.labelCustomField.Location = new System.Drawing.Point(371,319);
+			this.labelCustomField.Name = "labelCustomField";
+			this.labelCustomField.Size = new System.Drawing.Size(213,17);
+			this.labelCustomField.TabIndex = 58;
+			this.labelCustomField.Text = "New Field";
+			this.labelCustomField.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textCustomField
+			// 
+			this.textCustomField.Location = new System.Drawing.Point(373,339);
+			this.textCustomField.Name = "textCustomField";
+			this.textCustomField.Size = new System.Drawing.Size(158,20);
+			this.textCustomField.TabIndex = 59;
+			this.textCustomField.Click += new System.EventHandler(this.textCustomField_Click);
 			// 
 			// butOK
 			// 
@@ -214,44 +255,6 @@ namespace OpenDental{
 			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// labelCategory
-			// 
-			this.labelCategory.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelCategory.Location = new System.Drawing.Point(12,9);
-			this.labelCategory.Name = "labelCategory";
-			this.labelCategory.Size = new System.Drawing.Size(213,25);
-			this.labelCategory.TabIndex = 57;
-			this.labelCategory.Text = "Category Description";
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,76);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(292,425);
-			this.gridMain.TabIndex = 3;
-			this.gridMain.Title = "Fields Showing";
-			this.gridMain.TranslationName = "FormDisplayFields";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
-			// labelCustomField
-			// 
-			this.labelCustomField.Location = new System.Drawing.Point(361,319);
-			this.labelCustomField.Name = "labelCustomField";
-			this.labelCustomField.Size = new System.Drawing.Size(213,17);
-			this.labelCustomField.TabIndex = 58;
-			this.labelCustomField.Text = "Custom Field";
-			this.labelCustomField.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textCustomField
-			// 
-			this.textCustomField.Location = new System.Drawing.Point(364,339);
-			this.textCustomField.Name = "textCustomField";
-			this.textCustomField.Size = new System.Drawing.Size(210,20);
-			this.textCustomField.TabIndex = 59;
-			// 
 			// FormDisplayFields
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -262,7 +265,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butRight);
 			this.Controls.Add(this.butLeft);
-			this.Controls.Add(this.label3);
+			this.Controls.Add(this.labelAvailable);
 			this.Controls.Add(this.listAvailable);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
@@ -294,9 +297,11 @@ namespace OpenDental{
 				textCustomField.Visible=true;
 				labelCustomField.Visible=true;
 				listAvailable.Height=227;//227px for short, 412px for tall
+				labelAvailable.Text=Lan.g(this,"Previously Used Fields");
 			}
 			DisplayFields.RefreshCache();
 			ListShowing=DisplayFields.GetForCategory(category);
+			AvailList=DisplayFields.GetAllAvailableList(category);
 			FillGrids();
 		}
 
@@ -319,18 +324,17 @@ namespace OpenDental{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			List<DisplayField> availList=DisplayFields.GetAllAvailableList(category);
 			for(int i=0;i<ListShowing.Count;i++){
-				for(int j=0;j<availList.Count;j++){
-					if(ListShowing[i].InternalName==availList[j].InternalName){
-						availList.RemoveAt(j);
+				for(int j=0;j<AvailList.Count;j++){
+					if(ListShowing[i].InternalName==AvailList[j].InternalName){
+						AvailList.RemoveAt(j);
 						break;
 					}
 				}
 			}
 			listAvailable.Items.Clear();
-			for(int i=0;i<availList.Count;i++){
-				listAvailable.Items.Add(availList[i]);
+			for(int i=0;i<AvailList.Count;i++){
+				listAvailable.Items.Add(AvailList[i]);
 			}
 		}
 
@@ -418,6 +422,15 @@ namespace OpenDental{
 			changed=true;
 		}
 
+		private void listAvailable_Click(object sender,EventArgs e) {
+
+		}
+
+		private void textCustomField_Click(object sender,EventArgs e) {
+
+		}
+
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(!changed) {
 				DialogResult=DialogResult.OK;
@@ -436,6 +449,7 @@ namespace OpenDental{
 
 		}
 
+		
 		
 
 		

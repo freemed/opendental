@@ -255,9 +255,8 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Dx",28,category));
 			}
 			else if(category==DisplayFieldCategory.OrthoChart) {
-				//TODO:
+				//Ortho chart has no columns until user explicitly sets up columns.
 			}
-			
 			return list;
 		}
 
@@ -432,6 +431,8 @@ namespace OpenDentBusiness {
 			}
 			else if(category==DisplayFieldCategory.OrthoChart) {
 				//TODO:loop through existing fields after Querying DB for columns
+				DisplayField disp=new DisplayField("",20,category);
+				//disp.Description=etc.
 			}
 			return list;
 		}
