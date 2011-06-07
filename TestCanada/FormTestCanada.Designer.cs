@@ -42,6 +42,16 @@
 			this.textSingleScript = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.butShowEtrans = new System.Windows.Forms.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radioCompareInput = new System.Windows.Forms.RadioButton();
+			this.radioCompareOutput = new System.Windows.Forms.RadioButton();
+			this.textCompareFilePath = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.buttonCompFileBrowse = new System.Windows.Forms.Button();
+			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.butCompare = new System.Windows.Forms.Button();
+			this.richTextCompare = new System.Windows.Forms.RichTextBox();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butObjects
@@ -111,7 +121,8 @@
 			this.textResults.Location = new System.Drawing.Point(12,211);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(759,644);
+			this.textResults.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textResults.Size = new System.Drawing.Size(759,207);
 			this.textResults.TabIndex = 16;
 			// 
 			// checkEligibility
@@ -231,11 +242,106 @@
 			this.butShowEtrans.UseVisualStyleBackColor = true;
 			this.butShowEtrans.Click += new System.EventHandler(this.butShowEtrans_Click);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.richTextCompare);
+			this.groupBox1.Controls.Add(this.butCompare);
+			this.groupBox1.Controls.Add(this.buttonCompFileBrowse);
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.textCompareFilePath);
+			this.groupBox1.Controls.Add(this.radioCompareOutput);
+			this.groupBox1.Controls.Add(this.radioCompareInput);
+			this.groupBox1.Location = new System.Drawing.Point(13,424);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(758,431);
+			this.groupBox1.TabIndex = 30;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Compare Output";
+			// 
+			// radioCompareInput
+			// 
+			this.radioCompareInput.AutoSize = true;
+			this.radioCompareInput.Checked = true;
+			this.radioCompareInput.Location = new System.Drawing.Point(36,19);
+			this.radioCompareInput.Name = "radioCompareInput";
+			this.radioCompareInput.Size = new System.Drawing.Size(166,17);
+			this.radioCompareInput.TabIndex = 0;
+			this.radioCompareInput.TabStop = true;
+			this.radioCompareInput.Text = "Compare to C:\\iCA\\_nput.000";
+			this.radioCompareInput.UseVisualStyleBackColor = true;
+			this.radioCompareInput.Click += new System.EventHandler(this.radioCompareInput_Click);
+			// 
+			// radioCompareOutput
+			// 
+			this.radioCompareOutput.AutoSize = true;
+			this.radioCompareOutput.Location = new System.Drawing.Point(218,19);
+			this.radioCompareOutput.Name = "radioCompareOutput";
+			this.radioCompareOutput.Size = new System.Drawing.Size(169,17);
+			this.radioCompareOutput.TabIndex = 1;
+			this.radioCompareOutput.Text = "Compare to C:\\iCA\\output.000";
+			this.radioCompareOutput.UseVisualStyleBackColor = true;
+			this.radioCompareOutput.Click += new System.EventHandler(this.radioCompareOutput_Click);
+			// 
+			// textCompareFilePath
+			// 
+			this.textCompareFilePath.Location = new System.Drawing.Point(20,74);
+			this.textCompareFilePath.Name = "textCompareFilePath";
+			this.textCompareFilePath.Size = new System.Drawing.Size(640,20);
+			this.textCompareFilePath.TabIndex = 2;
+			this.textCompareFilePath.Text = "\\\\serverfiles\\storage\\OPEN DENTAL\\Programmers Documents\\Standards (X12, ADA, etc)" +
+    "\\Canada CDAnet\\Certification\\Test Transactions 2\\C_E1.NET";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(17,58);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(153,13);
+			this.label5.TabIndex = 3;
+			this.label5.Text = "Path to .NET file to compare to";
+			// 
+			// buttonCompFileBrowse
+			// 
+			this.buttonCompFileBrowse.Location = new System.Drawing.Point(666,72);
+			this.buttonCompFileBrowse.Name = "buttonCompFileBrowse";
+			this.buttonCompFileBrowse.Size = new System.Drawing.Size(75,23);
+			this.buttonCompFileBrowse.TabIndex = 4;
+			this.buttonCompFileBrowse.Text = "Browse";
+			this.buttonCompFileBrowse.UseVisualStyleBackColor = true;
+			this.buttonCompFileBrowse.Click += new System.EventHandler(this.buttonCompFileBrowse_Click);
+			// 
+			// openFileDialog1
+			// 
+			this.openFileDialog1.FileName = "openFileDialog1";
+			// 
+			// butCompare
+			// 
+			this.butCompare.Location = new System.Drawing.Point(334,119);
+			this.butCompare.Name = "butCompare";
+			this.butCompare.Size = new System.Drawing.Size(75,23);
+			this.butCompare.TabIndex = 5;
+			this.butCompare.Text = "Compare";
+			this.butCompare.UseVisualStyleBackColor = true;
+			this.butCompare.Click += new System.EventHandler(this.butCompare_Click);
+			// 
+			// richTextCompare
+			// 
+			this.richTextCompare.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.richTextCompare.HideSelection = false;
+			this.richTextCompare.Location = new System.Drawing.Point(20,160);
+			this.richTextCompare.Name = "richTextCompare";
+			this.richTextCompare.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedHorizontal;
+			this.richTextCompare.Size = new System.Drawing.Size(721,250);
+			this.richTextCompare.TabIndex = 6;
+			this.richTextCompare.Text = "";
+			this.richTextCompare.WordWrap = false;
+			// 
 			// FormTestCanada
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(783,867);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butShowEtrans);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textSingleScript);
@@ -258,6 +364,8 @@
 			this.Name = "FormTestCanada";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "FormTestCanada";
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -284,6 +392,15 @@
 		private System.Windows.Forms.TextBox textSingleScript;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button butShowEtrans;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.RadioButton radioCompareOutput;
+		private System.Windows.Forms.RadioButton radioCompareInput;
+		private System.Windows.Forms.Button buttonCompFileBrowse;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.TextBox textCompareFilePath;
+		private System.Windows.Forms.OpenFileDialog openFileDialog1;
+		private System.Windows.Forms.RichTextBox richTextCompare;
+		private System.Windows.Forms.Button butCompare;
 	}
 }
 

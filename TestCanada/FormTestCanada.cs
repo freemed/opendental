@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -406,6 +407,71 @@ namespace TestCanada {
 			FormE.EtransCur=etransList[0];
 			FormE.ShowDialog();
 		}
+
+		private void radioCompareInput_Click(object sender,EventArgs e) {
+			radioCompareInput.Checked=true;
+			radioCompareOutput.Checked=false;
+		}
+
+		private void radioCompareOutput_Click(object sender,EventArgs e) {
+			radioCompareInput.Checked=false;
+			radioCompareOutput.Checked=true;
+		}
+
+		private void buttonCompFileBrowse_Click(object sender,EventArgs e) {
+			openFileDialog1.FileName=textCompareFilePath.Text;
+			if(openFileDialog1.ShowDialog()==DialogResult.OK) {
+				textCompareFilePath.Text=openFileDialog1.FileName;
+			}
+		}
+
+		private void butCompare_Click(object sender,EventArgs e) {
+			if(!File.Exists(textCompareFilePath.Text)) {
+				MessageBox.Show("The specified file path of file to compare either doesn't exist or is inaccessible.");
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			string outputToCompare="";
+			if(radioCompareInput.Checked) {
+				outputToCompare=File.ReadAllText(@"C:\iCA\_nput.000",Encoding.GetEncoding(850));
+			}
+			else { //radioCompareOutput.Checked
+				outputToCompare=File.ReadAllText(@"C:\iCA\output.000",Encoding.GetEncoding(850));
+			}
+			string[] fileLines=File.ReadAllLines(textCompareFilePath.Text,Encoding.GetEncoding(850));
+			richTextCompare.Text="";
+			for(int i=0;i<fileLines.Length;i++) {
+				string line=fileLines[i];
+				if(line.Trim()=="") {
+					continue;
+				}
+				//Display the top line
+				for(int j=0;j<outputToCompare.Length;j++) {
+					richTextCompare.SelectionColor=Color.Red;
+					if(j<line.Length) {
+						if(outputToCompare[j]==line[j]) {
+							richTextCompare.SelectionColor=Color.Gray;
+						}
+					}
+					richTextCompare.SelectedText+=outputToCompare[j];
+				}
+				richTextCompare.SelectedText+=Environment.NewLine;
+				//Display the bottom line
+				for(int j=0;j<line.Length;j++) {
+					richTextCompare.SelectionColor=Color.Green;
+					if(j<outputToCompare.Length) {
+						if(line[j]==outputToCompare[j]) {
+							richTextCompare.SelectionColor=Color.Black;
+						}
+					}
+					richTextCompare.SelectedText+=line[j];
+				}
+				richTextCompare.SelectedText+=Environment.NewLine;				
+			}
+			Cursor=Cursors.Default;
+		}
+
+		
 
 		/*
 		private void SetCheckAll() {
