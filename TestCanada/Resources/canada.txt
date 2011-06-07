@@ -4614,7 +4614,7 @@ insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('EmailPas
 insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('EmailPort','587','');
 insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('BankRouting','','');
 insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('BankAddress','','');
-insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('LanguagesUsedByPatients','','');
+insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('LanguagesUsedByPatients','en,fr','');
 insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('OracleInsertId','','');
 insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('DefaultClaimForm','7','');
 insert  into `preference`(`PrefName`,`ValueString`,`Comments`) values ('RegistrationNumberClaim','','');
