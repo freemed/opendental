@@ -3976,6 +3976,20 @@ namespace OpenDental{
 							gridPtInfo.Rows.Add(row);
 						}
 						break;
+					case "Ehr Provider Keys":
+						//Not even available to most users.
+						List<EhrProvKey> listProvKeys=EhrProvKeys.RefreshForFam(PatCur.Guarantor);
+						string desc="";
+						for(int i=0;i<listProvKeys.Count;i++) {
+							if(i>0) {
+								desc+="\r\n";
+							}
+							desc+=listProvKeys[i].LName+", "+listProvKeys[i].FName+", "+listProvKeys[i].ProvKey;
+						}
+						row.Cells.Add(desc);
+						row.ColorBackG=Color.PowderBlue;
+						row.Tag="EhrProvKeys";
+						break;
 					case "Premedicate":
 						if(PatCur.Premed) {
 							row=new ODGridRow();
@@ -7237,11 +7251,16 @@ namespace OpenDental{
 					FillPtInfo();
 					return;
 				}
+				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="EhrProvKeys") {
+					
+					return;
+				}
 				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="Referral") {
 					//RefAttach refattach=(RefAttach)gridPat.Rows[e.Row].Tag;
 					FormReferralsPatient FormRE=new FormReferralsPatient();
 					FormRE.PatNum=PatCur.PatNum;
 					FormRE.ShowDialog();
+					return;
 				}
 				else {//patfield
 					string tag=gridPtInfo.Rows[e.Row].Tag.ToString();

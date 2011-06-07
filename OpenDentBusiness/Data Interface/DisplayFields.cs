@@ -209,6 +209,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Sec Ins",0,category));
 				if(PrefC.GetBool(PrefName.DistributorKey)) {
 					list.Add(new DisplayField("Registration Keys",0,category));
+					list.Add(new DisplayField("Ehr Provider Keys",0,category));
 				}
 				//different default list for eCW:
 				if(!Programs.UsingEcwTight()) {
@@ -387,6 +388,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Sec Ins",0,category));
 				if(PrefC.GetBool(PrefName.DistributorKey)) {
 					list.Add(new DisplayField("Registration Keys",0,category));
+					list.Add(new DisplayField("Ehr Provider Keys",0,category));
 				}
 				list.Add(new DisplayField("Premedicate",0,category));
 				list.Add(new DisplayField("Problems",0,category));

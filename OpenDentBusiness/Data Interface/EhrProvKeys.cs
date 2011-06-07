@@ -7,19 +7,20 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrProvKeys{
-	
+		///<summary></summary>
+		public static List<EhrProvKey> RefreshForFam(long guarantor){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrProvKey>>(MethodBase.GetCurrentMethod(),guarantor);
+			}
+//todo: fix
+			string command="SELECT * FROM ehrprovkey WHERE PatNum = "+POut.Long(guarantor);
+			return Crud.EhrProvKeyCrud.SelectMany(command);
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
-		///<summary></summary>
-		public static List<EhrProvKey> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrProvKey>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM ehrprovkey WHERE PatNum = "+POut.Long(patNum);
-			return Crud.EhrProvKeyCrud.SelectMany(command);
-		}
+		
 
 		///<summary>Gets one EhrProvKey from the db.</summary>
 		public static EhrProvKey GetOne(long ehrProvKeyNum){
