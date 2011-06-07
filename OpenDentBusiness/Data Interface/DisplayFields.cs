@@ -432,9 +432,19 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Dx",28,category));
 			}
 			else if(category==DisplayFieldCategory.OrthoChart) {
-				//TODO:loop through existing fields after Querying DB for columns
-				DisplayField disp=new DisplayField("",20,category);
-				//disp.Description=etc.
+				list=GetForCategory(DisplayFieldCategory.OrthoChart);
+				List<OrthoChart> listDistinctOrthoCharts=OrthoCharts.GetByDistinctFieldNames();
+				foreach(OrthoChart orthoChart in listDistinctOrthoCharts) {
+					bool addToList=true;
+					foreach(DisplayField field in list) {
+						if(field.Description==orthoChart.FieldName) {
+							addToList=false;
+						}
+					}
+					if(addToList) {
+						list.Add(new DisplayField(orthoChart.FieldName,20,DisplayFieldCategory.OrthoChart));
+					}	
+				}
 			}
 			return list;
 		}
