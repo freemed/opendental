@@ -5346,8 +5346,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						PatNum number(20) NOT NULL,
 						DateService date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						FieldName varchar2(255),
-/*Ryan: Discuss type with Jordan for this next line.  Needs to be more like 2000 to 4000 instead of 255:*/
-						FieldValue varchar2(255),
+						FieldValue varchar2(4000),
 						CONSTRAINT orthochart_OrthoChartNum PRIMARY KEY (OrthoChartNum)
 						)";
 					Db.NonQ(command);
@@ -5398,34 +5397,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS ehrprovkey";
-					Db.NonQ(command);
-					command=@"CREATE TABLE ehrprovkey (
-						EhrProvKeyNum bigint NOT NULL auto_increment PRIMARY KEY,
-						PatNum bigint NOT NULL,
-						LName varchar(255) NOT NULL,
-						FName varchar(255) NOT NULL,
-						ProvKey varchar(255) NOT NULL,
-						INDEX(PatNum)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrprovkey'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE ehrprovkey (
-						EhrProvKeyNum number(20) NOT NULL,
-						PatNum number(20) NOT NULL,
-						LName varchar2(255),
-						FName varchar2(255),
-						ProvKey varchar2(255),
-						CONSTRAINT ehrprovkey_EhrProvKeyNum PRIMARY KEY (EhrProvKeyNum)
-						)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrprovkey_PatNum ON ehrprovkey (PatNum)";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS rxnorm";
 					Db.NonQ(command);
 					command=@"CREATE TABLE rxnorm (
@@ -5448,6 +5419,47 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrprovkey";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrprovkey (
+						EhrProvKeyNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						ProvKey varchar(255) NOT NULL,
+						ProcNum bigint NOT NULL,
+						FullTimeEquiv float NOT NULL,
+						Notes text NOT NULL,
+						INDEX(PatNum),
+						INDEX(ProcNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrprovkey'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrprovkey (
+						EhrProvKeyNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						LName varchar2(255),
+						FName varchar2(255),
+						ProvKey varchar2(255),
+						ProcNum number(20) NOT NULL,
+						FullTimeEquiv number(38,8) NOT NULL,
+						Notes varchar2(4000),
+						CONSTRAINT ehrprovkey_EhrProvKeyNum PRIMARY KEY (EhrProvKeyNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrprovkey_PatNum ON ehrprovkey (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrprovkey_ProcNum ON ehrprovkey (ProcNum)";
+					Db.NonQ(command);
+				}
+
+
+
+
 
 
 
@@ -5472,13 +5484,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-	
-
-				
-
-				
-
-
-
-	

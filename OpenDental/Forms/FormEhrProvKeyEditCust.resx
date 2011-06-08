@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label1.Text" xml:space="preserve">
+    <value>You must create an provider key for each provider who will be making use of the EHR functionality.  The key is tied to the first name and last name of the provider.  A new key is required if the name changes.  A single key may be shared by multiple providers with the same name in order to handle dummy providers.  The keys are complex, and it's easiest for the customer to paste them in.</value>
+  </data>
 </root>

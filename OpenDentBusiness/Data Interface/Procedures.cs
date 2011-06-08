@@ -8,7 +8,32 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class Procedures {
-		
+		///<summary>Gets all procedures for a single patient, without notes.  Does not include deleted procedures.</summary>
+		public static List<Procedure> Refresh(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.Long(patNum)
+				+" AND ProcStatus !=6"//don't include deleted
+				+" ORDER BY ProcDate";
+			return Crud.ProcedureCrud.SelectMany(command);
+		}
+
+		///<summary>It shows all completed procs for the family that are not already attached to a provkey. No notes.</summary>
+		public static List<Procedure> GetForProvKey(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT procedurelog.* FROM procedurelog,patient "
+				+"WHERE procedurelog.PatNum=patient.PatNum "
+				+"AND patient.Guarantor=(SELECT patkey.Guarantor FROM patient patkey WHERE patkey.PatNum="+POut.Long(patNum)+") "
+				+"WHERE AND ProcStatus = "+POut.Int((int)ProcStat.C)+" "
+				+"AND NOT EXISTS (SELECT * FROM ehrprovkey WHERE ehrprovkey.ProcNum=procedurelog.ProcNum) "
+				+"GROUP BY procedurelog.ProcNum "
+				+"ORDER BY ProcDate";
+			return Crud.ProcedureCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(Procedure procedure){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -150,17 +175,6 @@ namespace OpenDentBusiness {
 			string command="UPDATE procedurelog SET ProcFee = "+POut.Double(newFee)
 				+" WHERE ProcNum = "+POut.Long(procNum);
 			Db.NonQ(command);
-		}
-
-		///<summary>Gets all procedures for a single patient, without notes.  Does not include deleted procedures.</summary>
-		public static List<Procedure> Refresh(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.Long(patNum)
-				+" AND ProcStatus !=6"//don't include deleted
-				+" ORDER BY ProcDate";
-			return Crud.ProcedureCrud.SelectMany(command);
 		}
 
 		///<summary>Gets one procedure directly from the db.  Option to include the note.</summary>

@@ -22,6 +22,8 @@ namespace OpenDental{
 		private ODGrid gridMain;
 		///<summary>If form closes with OK, this contains selected proc num.</summary>
 		public long SelectedProcNum;
+		///<summary>When this is set to true, it shows a different list of procs.  It shows all completed procs for the family that are not already attached to a provkey.</summary>
+		public bool IsForProvKeys;
 
 		///<summary>This form only displays completed procedures to pick from.</summary>
 		public FormProcSelect(long patNum)
@@ -140,11 +142,16 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcSelect_Load(object sender, System.EventArgs e) {
-			List<Procedure> entireList=Procedures.Refresh(PatNum);
-			ProcList=new List<Procedure>();
-			for(int i=0;i<entireList.Count;i++){
-				if(entireList[i].ProcStatus==ProcStat.C){
-					ProcList.Add(entireList[i]);
+			if(IsForProvKeys) {
+				ProcList=Procedures.GetForProvKey(PatNum);
+			}
+			else {
+				List<Procedure> entireList=Procedures.Refresh(PatNum);
+				ProcList=new List<Procedure>();
+				for(int i=0;i<entireList.Count;i++) {
+					if(entireList[i].ProcStatus==ProcStat.C) {
+						ProcList.Add(entireList[i]);
+					}
 				}
 			}
 			FillGrid();
@@ -173,7 +180,13 @@ namespace OpenDental{
 				row.Cells.Add(Providers.GetAbbr(ProcList[i].ProvNum));
 				row.Cells.Add(ProcedureCodes.GetStringProcCode(ProcList[i].CodeNum));
 				row.Cells.Add(Tooth.ToInternat(ProcList[i].ToothNum));
-				row.Cells.Add(ProcedureCodes.GetProcCode(ProcList[i].CodeNum).Descript);
+				string descript="";
+				if(ProcList[i].PatNum!=PatNum) {//when IsForProvKeys
+					Patient pat=Patients.GetLim(ProcList[i].PatNum);
+					descript+=pat.GetNameLF()+" - ";
+				}
+				descript+=ProcedureCodes.GetProcCode(ProcList[i].CodeNum).Descript;
+				row.Cells.Add(descript);
 				row.Cells.Add(ProcList[i].ProcFee.ToString("F"));
 				gridMain.Rows.Add(row);
 			}

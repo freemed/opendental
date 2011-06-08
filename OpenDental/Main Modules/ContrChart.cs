@@ -7252,7 +7252,10 @@ namespace OpenDental{
 					return;
 				}
 				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="EhrProvKeys") {
-					
+					FormEhrProvKeysCustomer FormPK=new FormEhrProvKeysCustomer();
+					FormPK.Guarantor=PatCur.Guarantor;
+					FormPK.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
 					return;
 				}
 				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="Referral") {
@@ -7260,6 +7263,7 @@ namespace OpenDental{
 					FormReferralsPatient FormRE=new FormReferralsPatient();
 					FormRE.PatNum=PatCur.PatNum;
 					FormRE.ShowDialog();
+					ModuleSelected(PatCur.PatNum);
 					return;
 				}
 				else {//patfield

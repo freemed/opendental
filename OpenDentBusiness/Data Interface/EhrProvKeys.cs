@@ -17,19 +17,6 @@ namespace OpenDentBusiness{
 			return Crud.EhrProvKeyCrud.SelectMany(command);
 		}
 
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		
-
-		///<summary>Gets one EhrProvKey from the db.</summary>
-		public static EhrProvKey GetOne(long ehrProvKeyNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<EhrProvKey>(MethodBase.GetCurrentMethod(),ehrProvKeyNum);
-			}
-			return Crud.EhrProvKeyCrud.SelectOne(ehrProvKeyNum);
-		}
-
 		///<summary></summary>
 		public static long Insert(EhrProvKey ehrProvKey){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -57,6 +44,21 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM ehrprovkey WHERE EhrProvKeyNum = "+POut.Long(ehrProvKeyNum);
 			Db.NonQ(command);
 		}
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		
+
+		///<summary>Gets one EhrProvKey from the db.</summary>
+		public static EhrProvKey GetOne(long ehrProvKeyNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<EhrProvKey>(MethodBase.GetCurrentMethod(),ehrProvKeyNum);
+			}
+			return Crud.EhrProvKeyCrud.SelectOne(ehrProvKeyNum);
+		}
+
+		
 		*/
 
 
