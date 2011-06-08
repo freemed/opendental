@@ -24,85 +24,25 @@ namespace OpenDental {
 			textLName.Text=KeyCur.LName;
 			textFName.Text=KeyCur.FName;
 			textEhrKey.Text=KeyCur.ProvKey;
+			FillProcedure();
+			textFullTimeEquiv.Text=KeyCur.FullTimeEquiv.ToString();
+			textNotes.Text=KeyCur.Notes;
 		}
 
 		private void FillProcedure() {
-			/*
-			if(PaySplitCur.ProcNum==0) {
-				textProcDate2.Text="";
-				textProcProv.Text="";
-				textProcTooth.Text="";
-				textProcDescription.Text="";
-				ProcFee=0;
-				textProcFee.Text="";
-				ProcWriteoff=0;
-				textProcWriteoff.Text="";
-				ProcInsPaid=0;
-				textProcInsPaid.Text="";
-				ProcInsEst=0;
-				textProcInsEst.Text="";
-				ProcAdj=0;
-				textProcAdj.Text="";
-				ProcPrevPaid=0;
-				textProcPrevPaid.Text="";
-				ProcPaidHere=0;
-				textProcPaidHere.Text="";
-				labelProcRemain.Text="";
-				//butAttach.Enabled=true;
-				//butDetach.Enabled=false;
-				//ComputeProcTotals();
+			if(KeyCur.ProcNum==0) {
+				textProcDate.Text="";
+				textCustomer.Text="";
+				textDescription.Text="";
+				textFee.Text="";
 				return;
 			}
-			Procedure ProcCur=Procedures.GetOneProc(PaySplitCur.ProcNum,false);
-			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(ProcCur.PatNum);
-			Adjustment[] AdjustmentList=Adjustments.Refresh(ProcCur.PatNum);
-			PaySplit[] PaySplitList=PaySplits.Refresh(ProcCur.PatNum);
-			//textProcDate.Text=ProcCur.ProcDate.ToShortDateString();
-			textProcDate2.Text=ProcCur.ProcDate.ToShortDateString();
-			textProcProv.Text=Providers.GetAbbr(ProcCur.ProvNum);
-			textProcTooth.Text=Tooth.ToInternat(ProcCur.ToothNum);
-			textProcDescription.Text=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
-			ProcFee=ProcCur.ProcFee;
-			ProcWriteoff=-ClaimProcs.ProcWriteoff(ClaimProcList,ProcCur.ProcNum);
-			ProcInsPaid=-ClaimProcs.ProcInsPay(ClaimProcList,ProcCur.ProcNum);
-			ProcInsEst=-ClaimProcs.ProcEstNotReceived(ClaimProcList,ProcCur.ProcNum);
-			ProcAdj=Adjustments.GetTotForProc(ProcCur.ProcNum,AdjustmentList);
-			//next line will still work even if IsNew
-			ProcPrevPaid=-PaySplits.GetTotForProc(ProcCur.ProcNum,PaySplitList,PaySplitCur.SplitNum);
-			textProcFee.Text=ProcFee.ToString("F");
-			if(ProcWriteoff==0) {
-				textProcWriteoff.Text="";
-			}
-			else {
-				textProcWriteoff.Text=ProcWriteoff.ToString("F");
-			}
-			if(ProcInsPaid==0) {
-				textProcInsPaid.Text="";
-			}
-			else {
-				textProcInsPaid.Text=ProcInsPaid.ToString("F");
-			}
-			if(ProcInsEst==0) {
-				textProcInsEst.Text="";
-			}
-			else {
-				textProcInsEst.Text=ProcInsEst.ToString("F");
-			}
-			if(ProcAdj==0) {
-				textProcAdj.Text="";
-			}
-			else {
-				textProcAdj.Text=ProcAdj.ToString("F");
-			}
-			if(ProcPrevPaid==0) {
-				textProcPrevPaid.Text="";
-			}
-			else {
-				textProcPrevPaid.Text=ProcPrevPaid.ToString("F");
-			}
-			ComputeProcTotals();
-			//butAttach.Enabled=false;
-			//butDetach.Enabled=true;*/
+			Procedure ProcCur=Procedures.GetOneProc(KeyCur.ProcNum,false);
+			Patient cust=Patients.GetLim(ProcCur.PatNum);
+			textProcDate.Text=ProcCur.ProcDate.ToShortDateString();
+			textCustomer.Text=cust.GetNameLF();
+			textDescription.Text=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
+			textFee.Text=ProcCur.ProcFee.ToString("n");
 		}
 
 		private void butGenerate_Click(object sender,EventArgs e) {
@@ -129,12 +69,33 @@ namespace OpenDental {
 			if(FormPS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//PaySplitCur.ProcNum=FormPS.SelectedProcNum;
+			KeyCur.ProcNum=FormPS.SelectedProcNum;
 			FillProcedure();
 		}
 
 		private void butDetach_Click(object sender,EventArgs e) {
-			//PaySplitCur.ProcNum=0;
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Detach procedure from provkey?")) {
+				return;
+			}
+			KeyCur.ProcNum=0;
+			FillProcedure();
+		}
+
+		private void butEdit_Click(object sender,EventArgs e) {
+			if(KeyCur.ProcNum==0){
+				MessageBox.Show("No procedure to edit.");
+				return;
+			}
+			Family fam=Patients.GetFamily(KeyCur.PatNum);
+			Patient pat=fam.GetPatient(KeyCur.PatNum);
+			Procedure proc=Procedures.GetOneProc(KeyCur.ProcNum,false);
+			FormProcEdit FormP=new FormProcEdit(proc,pat,fam);
+			FormP.ShowDialog();
+			//user might have deleted proc
+			proc=Procedures.GetOneProc(KeyCur.ProcNum,false);
+			if(proc.ProcNum==0) {
+				KeyCur.ProcNum=0;
+			}
 			FillProcedure();
 		}
 
@@ -155,6 +116,22 @@ namespace OpenDental {
 			//	MessageBox.Show("Key must not be blank");
 			//	return;
 			//}
+			try{
+				float fte=float.Parse(textFullTimeEquiv.Text);
+				if(fte<=0) {
+					MessageBox.Show("FTE must be greater than 0.");
+					return;
+				}
+				if(fte>1) {
+					MessageBox.Show("FTE must be 1 or less.");
+					return;
+				}
+			}
+			catch{
+				//not allowed to be blank. Usually 1.
+				MessageBox.Show("Invalid FTE.");
+				return;
+			}
 			if(textEhrKey.Text!="") {
 				bool provKeyIsValid=false;
 				#if DEBUG
@@ -172,6 +149,9 @@ namespace OpenDental {
 			KeyCur.LName=textLName.Text;
 			KeyCur.FName=textFName.Text;
 			KeyCur.ProvKey=textEhrKey.Text;
+			//KeyCur.ProcNum already handled.
+			KeyCur.FullTimeEquiv=PIn.Float(textFullTimeEquiv.Text);
+			KeyCur.Notes=textNotes.Text;
 			if(KeyCur.IsNew) {
 				EhrProvKeys.Insert(KeyCur);
 			}
@@ -184,6 +164,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 

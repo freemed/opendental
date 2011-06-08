@@ -12,8 +12,11 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrProvKey>>(MethodBase.GetCurrentMethod(),guarantor);
 			}
-//todo: fix
-			string command="SELECT * FROM ehrprovkey WHERE PatNum = "+POut.Long(guarantor);
+			string command="SELECT ehrprovkey.* FROM ehrprovkey,patient "
+				+"WHERE ehrprovkey.PatNum=patient.PatNum "
+				+"AND patient.Guarantor="+POut.Long(guarantor)+" "
+				+"GROUP BY ehrprovkey.EhrProvKeyNum "
+				+"ORDER BY ehrprovkey.LName,ehrprovkey.FName";
 			return Crud.EhrProvKeyCrud.SelectMany(command);
 		}
 

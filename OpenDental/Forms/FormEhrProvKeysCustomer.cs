@@ -25,11 +25,17 @@ namespace OpenDental {
 		private void FillGrid(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"LName"),120);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"LName"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"FName"),120);
+			col=new ODGridColumn(Lan.g(this,"FName"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Key"),120);
+			col=new ODGridColumn(Lan.g(this,"Key"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"ProcFee"),60,HorizontalAlignment.Right);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"FTE"),35,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Notes"),100);
 			gridMain.Columns.Add(col);
 			//todo: add more columns	
 			listKeys=EhrProvKeys.RefreshForFam(Guarantor);
@@ -40,6 +46,15 @@ namespace OpenDental {
 				row.Cells.Add(listKeys[i].LName);
 				row.Cells.Add(listKeys[i].FName);
 				row.Cells.Add(listKeys[i].ProvKey);
+				if(listKeys[i].ProcNum==0) {
+					row.Cells.Add("");
+				}
+				else {
+					Procedure proc=Procedures.GetOneProc(listKeys[i].ProcNum,false);
+					row.Cells.Add(proc.ProcFee.ToString("c"));
+				}
+				row.Cells.Add(listKeys[i].FullTimeEquiv.ToString());
+				row.Cells.Add(listKeys[i].Notes);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -56,6 +71,7 @@ namespace OpenDental {
 			FormEhrProvKeyEditCust formK=new FormEhrProvKeyEditCust();
 			formK.KeyCur=new EhrProvKey();
 			formK.KeyCur.PatNum=Guarantor;
+			formK.KeyCur.FullTimeEquiv=1;
 			formK.KeyCur.IsNew=true;
 			formK.ShowDialog();
 			FillGrid();

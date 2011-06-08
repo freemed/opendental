@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 			string command="SELECT procedurelog.* FROM procedurelog,patient "
 				+"WHERE procedurelog.PatNum=patient.PatNum "
 				+"AND patient.Guarantor=(SELECT patkey.Guarantor FROM patient patkey WHERE patkey.PatNum="+POut.Long(patNum)+") "
-				+"WHERE AND ProcStatus = "+POut.Int((int)ProcStat.C)+" "
+				+"AND ProcStatus = "+POut.Int((int)ProcStat.C)+" "
 				+"AND NOT EXISTS (SELECT * FROM ehrprovkey WHERE ehrprovkey.ProcNum=procedurelog.ProcNum) "
 				+"GROUP BY procedurelog.ProcNum "
 				+"ORDER BY ProcDate";

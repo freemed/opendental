@@ -36,21 +36,22 @@ namespace OpenDental{
 			this.butGenerate = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.groupProcedure = new System.Windows.Forms.GroupBox();
-			this.textProcDescription = new System.Windows.Forms.TextBox();
-			this.textProcDate2 = new System.Windows.Forms.TextBox();
-			this.textProcFee = new System.Windows.Forms.TextBox();
+			this.textDescription = new System.Windows.Forms.TextBox();
+			this.textProcDate = new System.Windows.Forms.TextBox();
+			this.textFee = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.butDetach = new OpenDental.UI.Button();
 			this.butAttach = new OpenDental.UI.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textFullTimeEquiv = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textNotes = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.textCustomer = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
+			this.butEdit = new OpenDental.UI.Button();
 			this.groupProcedure.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -62,7 +63,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(499,587);
+			this.butOK.Location = new System.Drawing.Point(511,513);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -77,7 +78,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(594,587);
+			this.butCancel.Location = new System.Drawing.Point(606,513);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -167,7 +168,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(30,587);
+			this.butDelete.Location = new System.Drawing.Point(30,513);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 120;
@@ -176,11 +177,12 @@ namespace OpenDental{
 			// 
 			// groupProcedure
 			// 
-			this.groupProcedure.Controls.Add(this.textBox2);
+			this.groupProcedure.Controls.Add(this.butEdit);
+			this.groupProcedure.Controls.Add(this.textCustomer);
 			this.groupProcedure.Controls.Add(this.label9);
-			this.groupProcedure.Controls.Add(this.textProcDescription);
-			this.groupProcedure.Controls.Add(this.textProcDate2);
-			this.groupProcedure.Controls.Add(this.textProcFee);
+			this.groupProcedure.Controls.Add(this.textDescription);
+			this.groupProcedure.Controls.Add(this.textProcDate);
+			this.groupProcedure.Controls.Add(this.textFee);
 			this.groupProcedure.Controls.Add(this.label6);
 			this.groupProcedure.Controls.Add(this.label5);
 			this.groupProcedure.Controls.Add(this.label7);
@@ -194,29 +196,29 @@ namespace OpenDental{
 			this.groupProcedure.TabStop = false;
 			this.groupProcedure.Text = "Procedure";
 			// 
-			// textProcDescription
+			// textDescription
 			// 
-			this.textProcDescription.Location = new System.Drawing.Point(131,97);
-			this.textProcDescription.Name = "textProcDescription";
-			this.textProcDescription.ReadOnly = true;
-			this.textProcDescription.Size = new System.Drawing.Size(241,20);
-			this.textProcDescription.TabIndex = 43;
+			this.textDescription.Location = new System.Drawing.Point(131,97);
+			this.textDescription.Name = "textDescription";
+			this.textDescription.ReadOnly = true;
+			this.textDescription.Size = new System.Drawing.Size(241,20);
+			this.textDescription.TabIndex = 43;
 			// 
-			// textProcDate2
+			// textProcDate
 			// 
-			this.textProcDate2.Location = new System.Drawing.Point(131,51);
-			this.textProcDate2.Name = "textProcDate2";
-			this.textProcDate2.ReadOnly = true;
-			this.textProcDate2.Size = new System.Drawing.Size(76,20);
-			this.textProcDate2.TabIndex = 42;
+			this.textProcDate.Location = new System.Drawing.Point(131,51);
+			this.textProcDate.Name = "textProcDate";
+			this.textProcDate.ReadOnly = true;
+			this.textProcDate.Size = new System.Drawing.Size(76,20);
+			this.textProcDate.TabIndex = 42;
 			// 
-			// textProcFee
+			// textFee
 			// 
-			this.textProcFee.Location = new System.Drawing.Point(131,120);
-			this.textProcFee.Name = "textProcFee";
-			this.textProcFee.ReadOnly = true;
-			this.textProcFee.Size = new System.Drawing.Size(76,20);
-			this.textProcFee.TabIndex = 35;
+			this.textFee.Location = new System.Drawing.Point(131,120);
+			this.textFee.Name = "textFee";
+			this.textFee.ReadOnly = true;
+			this.textFee.Size = new System.Drawing.Size(76,20);
+			this.textFee.TabIndex = 35;
 			// 
 			// label6
 			// 
@@ -273,13 +275,13 @@ namespace OpenDental{
 			this.butAttach.Text = "Attach";
 			this.butAttach.Click += new System.EventHandler(this.butAttach_Click);
 			// 
-			// textBox1
+			// textFullTimeEquiv
 			// 
-			this.textBox1.Location = new System.Drawing.Point(188,366);
-			this.textBox1.MaxLength = 15;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(46,20);
-			this.textBox1.TabIndex = 122;
+			this.textFullTimeEquiv.Location = new System.Drawing.Point(188,366);
+			this.textFullTimeEquiv.MaxLength = 15;
+			this.textFullTimeEquiv.Name = "textFullTimeEquiv";
+			this.textFullTimeEquiv.Size = new System.Drawing.Size(46,20);
+			this.textFullTimeEquiv.TabIndex = 122;
 			// 
 			// label2
 			// 
@@ -314,16 +316,17 @@ namespace OpenDental{
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(463,14);
 			this.label4.TabIndex = 126;
-			this.label4.Text = "For example, half-time would be .5 and 1 day a week would be about .25";
+			this.label4.Text = "Usually 1. For example, half-time would be .5 and 1 day a week would be about .25" +
+    "";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textBox2
+			// textCustomer
 			// 
-			this.textBox2.Location = new System.Drawing.Point(131,74);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(241,20);
-			this.textBox2.TabIndex = 45;
+			this.textCustomer.Location = new System.Drawing.Point(131,74);
+			this.textCustomer.Name = "textCustomer";
+			this.textCustomer.ReadOnly = true;
+			this.textCustomer.Size = new System.Drawing.Size(241,20);
+			this.textCustomer.TabIndex = 45;
 			// 
 			// label9
 			// 
@@ -334,14 +337,28 @@ namespace OpenDental{
 			this.label9.Text = "Customer";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butEdit
+			// 
+			this.butEdit.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEdit.Autosize = true;
+			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEdit.CornerRadius = 4F;
+			this.butEdit.Location = new System.Drawing.Point(289,21);
+			this.butEdit.Name = "butEdit";
+			this.butEdit.Size = new System.Drawing.Size(75,24);
+			this.butEdit.TabIndex = 46;
+			this.butEdit.Text = "Edit";
+			this.butEdit.Click += new System.EventHandler(this.butEdit_Click);
+			// 
 			// FormEhrProvKeyEditCust
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(694,631);
+			this.ClientSize = new System.Drawing.Size(706,557);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.textFullTimeEquiv);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupProcedure);
 			this.Controls.Add(this.butDelete);
@@ -380,20 +397,21 @@ namespace OpenDental{
 		private UI.Button butGenerate;
 		private UI.Button butDelete;
 		private System.Windows.Forms.GroupBox groupProcedure;
-		private System.Windows.Forms.TextBox textProcDescription;
-		private System.Windows.Forms.TextBox textProcDate2;
-		private System.Windows.Forms.TextBox textProcFee;
+		private System.Windows.Forms.TextBox textDescription;
+		private System.Windows.Forms.TextBox textProcDate;
+		private System.Windows.Forms.TextBox textFee;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label7;
 		private UI.Button butDetach;
 		private UI.Button butAttach;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textFullTimeEquiv;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textNotes;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox textCustomer;
 		private System.Windows.Forms.Label label9;
+		private UI.Button butEdit;
 	}
 }

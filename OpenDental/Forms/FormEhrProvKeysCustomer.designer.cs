@@ -37,7 +37,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(625,483);
+			this.butClose.Location = new System.Drawing.Point(659,496);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
@@ -51,10 +51,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,67);
+			this.gridMain.Location = new System.Drawing.Point(9,37);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(585,440);
+			this.gridMain.Size = new System.Drawing.Size(641,483);
 			this.gridMain.TabIndex = 193;
 			this.gridMain.Title = "Provider Keys";
 			this.gridMain.TranslationName = "";
@@ -70,7 +70,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(625,265);
+			this.butAdd.Location = new System.Drawing.Point(659,263);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 194;
@@ -81,7 +81,7 @@ namespace OpenDental{
 			// 
 			this.label1.Location = new System.Drawing.Point(12,9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(585,43);
+			this.label1.Size = new System.Drawing.Size(585,25);
 			this.label1.TabIndex = 195;
 			this.label1.Text = "If you add a provider key, you must add a completed procedure to the Account in o" +
     "rder to charge the customer.";
@@ -89,7 +89,7 @@ namespace OpenDental{
 			// FormEhrProvKeysCustomer
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,534);
+			this.ClientSize = new System.Drawing.Size(746,532);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
