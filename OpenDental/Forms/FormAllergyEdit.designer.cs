@@ -73,6 +73,7 @@ namespace OpenDental{
 			// 
 			// comboAllergies
 			// 
+			this.comboAllergies.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboAllergies.FormattingEnabled = true;
 			this.comboAllergies.Location = new System.Drawing.Point(96,48);
 			this.comboAllergies.Name = "comboAllergies";
