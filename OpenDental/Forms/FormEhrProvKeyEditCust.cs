@@ -50,7 +50,9 @@ namespace OpenDental {
 				MessageBox.Show("Please enter firstname and lastname.");
 				return;
 			}
-			string progPath=@"E:\My Documents\Shared Projects Subversion\EhrProvKeyGenerator\EhrProvKeyGenerator\bin\Debug\EhrProvKeyGenerator.exe";
+			//Path for testing:
+			//@"E:\My Documents\Shared Projects Subversion\EhrProvKeyGenerator\EhrProvKeyGenerator\bin\Debug\EhrProvKeyGenerator.exe"
+			string progPath=PrefC.GetString(PrefName.EhrProvKeyGeneratorPath);
 			ProcessStartInfo startInfo=new ProcessStartInfo(progPath);
 			startInfo.Arguments="\""+textLName.Text.Replace("\"","")+"\" \""+textFName.Text.Replace("\"","")+"\"";
 			startInfo.UseShellExecute=false;

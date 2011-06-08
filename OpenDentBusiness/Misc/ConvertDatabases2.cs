@@ -5456,7 +5456,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX ehrprovkey_ProcNum ON ehrprovkey (ProcNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('EhrProvKeyGeneratorPath','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EhrProvKeyGeneratorPath','','')";
+					Db.NonQ(command);
+				}
 
 
 
