@@ -31,8 +31,8 @@
 								</div>
 								<div style="float:left; width:65%;">
 								<div><%#GetPatientName(((Appointmentm)Container.DataItem).PatNum)%></div>
-								<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%#((Appointmentm)Container.DataItem).ProcDescript%></div>
-								<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%#((Appointmentm)Container.DataItem).Note%></div>
+								<div class="infocolumn"><%#((Appointmentm)Container.DataItem).ProcDescript%></div>
+								<div class="infocolumn"><%#((Appointmentm)Container.DataItem).Note%></div>
 								</div>
 								</a>
 								

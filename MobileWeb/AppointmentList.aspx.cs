@@ -28,47 +28,62 @@ namespace MobileWeb {
 				if(CustomerNum==0) {
 					return;
 				}
-				int Year=0;
-				int Month=0; 
-				int Day=0;
-				DateTime AppointmentDate=DateTime.MinValue;
-				if(Request["year"]!=null && Request["month"]!=null && Request["day"]!=null) {
-					Int32.TryParse(Request["year"].ToString().Trim(),out Year);
-					Int32.TryParse(Request["month"].ToString().Trim(),out Month);
-					Int32.TryParse(Request["day"].ToString().Trim(),out Day);
-					AppointmentDate= new DateTime(Year,Month,Day);
-				}
-				else {
-					//dennis set cookies here this would be read by javascript on the client browser.
-					HttpCookie DemoDateCookieY=new HttpCookie("DemoDateCookieY");
-					HttpCookie DemoDateCookieM=new HttpCookie("DemoDateCookieM");
-					HttpCookie DemoDateCookieD=new HttpCookie("DemoDateCookieD");
-					if(CustomerNum==util.GetDemoDentalOfficeID()) {
-						AppointmentDate=util.GetDemoTodayDate();//for demo only. The date is set to a preset date in webconfig.
-						DemoDateCookieY.Value=AppointmentDate.Year+"";
-						DemoDateCookieM.Value=AppointmentDate.Month+"";
-						DemoDateCookieD.Value=AppointmentDate.Day+"";
+				#region process dates
+					int Year=0;
+					int Month=0; 
+					int Day=0;
+					DateTime AppointmentDate=DateTime.MinValue;
+					if(Request["year"]!=null && Request["month"]!=null && Request["day"]!=null) {
+						Int32.TryParse(Request["year"].ToString().Trim(),out Year);
+						Int32.TryParse(Request["month"].ToString().Trim(),out Month);
+						Int32.TryParse(Request["day"].ToString().Trim(),out Day);
+						AppointmentDate= new DateTime(Year,Month,Day);
 					}
 					else {
-						DemoDateCookieY.Value="";// these are explicitely set to empty because javascript on the browser is picking values from previously set cookies
-						DemoDateCookieM.Value="";
-						DemoDateCookieD.Value="";
-						AppointmentDate=DateTime.Today;
+						//dennis set cookies here this would be read by javascript on the client browser.
+						HttpCookie DemoDateCookieY=new HttpCookie("DemoDateCookieY");
+						HttpCookie DemoDateCookieM=new HttpCookie("DemoDateCookieM");
+						HttpCookie DemoDateCookieD=new HttpCookie("DemoDateCookieD");
+						if(CustomerNum==util.GetDemoDentalOfficeID()) {
+							AppointmentDate=util.GetDemoTodayDate();//for demo only. The date is set to a preset date in webconfig.
+							DemoDateCookieY.Value=AppointmentDate.Year+"";
+							DemoDateCookieM.Value=AppointmentDate.Month+"";
+							DemoDateCookieD.Value=AppointmentDate.Day+"";
+						}
+						else {
+							DemoDateCookieY.Value="";// these are explicitely set to empty because javascript on the browser is picking values from previously set cookies
+							DemoDateCookieM.Value="";
+							DemoDateCookieD.Value="";
+							AppointmentDate=DateTime.Today;
+						}
+						Response.Cookies.Add(DemoDateCookieY);// if expiry is not specified the cookie lasts till the end of session
+						Response.Cookies.Add(DemoDateCookieM);
+						Response.Cookies.Add(DemoDateCookieD);
 					}
-					Response.Cookies.Add(DemoDateCookieY);// if expiry is not specified the cookie lasts till the end of session
-					Response.Cookies.Add(DemoDateCookieM);
-					Response.Cookies.Add(DemoDateCookieD);
+					DayLabel.Text=AppointmentDate.ToString("ddd")+", "+AppointmentDate.ToString("MMM")+AppointmentDate.ToString("dd");
+					DateTime PreviousDate=AppointmentDate.AddDays(-1);
+					PreviousDateDay=PreviousDate.Day;
+					PreviousDateMonth=PreviousDate.Month;
+					PreviousDateYear=PreviousDate.Year;
+					DateTime NextDate=AppointmentDate.AddDays(1);
+					NextDateDay=NextDate.Day;
+					NextDateMonth=NextDate.Month;
+					NextDateYear=NextDate.Year;
+				#endregion
+
+				#region process providers
+					long ProvNum=0;
+					if(Request["ProvNum"]!=null) {
+						Int64.TryParse(Request["ProvNum"].ToString().Trim(),out ProvNum);
+					}
+				#endregion
+					List<Appointmentm> appointmentmList;
+				if(ProvNum==0){
+					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
+				}else{
+					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,ProvNum,AppointmentDate,AppointmentDate);
 				}
-				DayLabel.Text=AppointmentDate.ToString("ddd")+", "+AppointmentDate.ToString("MMM")+AppointmentDate.ToString("dd");
-				DateTime PreviousDate=AppointmentDate.AddDays(-1);
-				PreviousDateDay=PreviousDate.Day;
-				PreviousDateMonth=PreviousDate.Month;
-				PreviousDateYear=PreviousDate.Year;
-				DateTime NextDate=AppointmentDate.AddDays(1);
-				NextDateDay=NextDate.Day;
-				NextDateMonth=NextDate.Month;
-				NextDateYear=NextDate.Year;
-				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
+				
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
 			}

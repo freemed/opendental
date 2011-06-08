@@ -54,7 +54,7 @@
 								</div>
 								<div style="display:table-cell;padding-right:30px">
 								<div style="word-wrap:break-word;white-space:normal;"><%#((Appointmentm)Container.DataItem).ProcDescript%></div>
-								<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%#((Appointmentm)Container.DataItem).Note%></div>
+								<div class="infocolumn"><%#((Appointmentm)Container.DataItem).Note%></div>
 								</div>
 							</a>
 						</div>
@@ -69,7 +69,7 @@
 				<ItemTemplate>
 					<li class="style1">
 						<div class="elladjust">
-							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).RxDate.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;&nbsp;
+							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).RxDate.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;
 							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Drug%>, <%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Disp%>
 						</div>
 					</li>

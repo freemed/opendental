@@ -111,9 +111,13 @@
                 <a class="appts" linkattib="AppointmentList.aspx" href="#">Appts</a>
 				<a class="button logout" href="#">Logout</a>
             </div>
-            <div id="FilterPickerContents">
-			<h1>Date Picker</h1>
+				<h1>Date Picker</h1>
 				<div id="datepicker"></div>
+            <div id="FilterPickerContents">
+		
+				
+				
+
             </div>
         </div>
 
@@ -168,7 +172,7 @@
       <div id="PharmacyDetails">
 		<div class="toolbar">
 		<h1>Pharmacy</h1>
-		<a class="appts" linkattib="PharmacyList.aspx" href="#">Pharms</a>
+		<a class="pharmacies" linkattib="PharmacyList.aspx" href="#">Pharmacies</a>
 		<a class="button logout" href="#">Logout</a>
 		</div>
 	   <div id="PharmacyDetailsContents">

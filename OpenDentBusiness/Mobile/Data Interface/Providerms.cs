@@ -13,6 +13,14 @@ namespace OpenDentBusiness.Mobile{
 			public static Providerm GetOne(long customerNum,long provNum) {
 				return Crud.ProvidermCrud.SelectOne(customerNum,provNum);
 			}
+
+			public static List<Providerm> GetProviderms(long customerNum) {
+				string command="SELECT * from providerm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)+" "
+					+"ORDER BY Abbr";
+				return Crud.ProvidermCrud.SelectMany(command);
+			}
+
 		#endregion
 
 		#region Used only on OD

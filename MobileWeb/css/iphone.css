@@ -110,6 +110,24 @@ min-height: 480px;
   word-wrap:break-word;
   white-space: normal;
 }
+.leftcolumn{
+    float:left;
+    display:table-cell;
+    width:63px;
+}
+.coloncolumn{
+    display:table-cell; 
+    width:10px;
+}
+.rightcolumn{
+    display:table-cell;
+    padding-right:10px
+}
+.infocolumn{
+    word-wrap:break-word;
+    white-space:normal;
+    padding-top:4px
+}
 .styleError{
     margin-left:10px;
     text-align:center; 
@@ -130,8 +148,8 @@ h2{
     -webkit-border-image: url(themes/apple/img/backButton.png) 0 8 0 14;    
 }
 */
-/* multiple style don't work in some cases android hence some styles had to be written all over again*/
-.appts, .home, .patients
+/* multiple style don't work in some cases in android hence some styles had to be written all over again*/
+.appts, .home, .patients, .pharmacies
 {
     left: 6px;
     right: auto;
@@ -160,6 +178,10 @@ h2{
 
 .patients{
     max-width: 50px;
+}
+
+.pharmacies{
+    max-width: 70px;
 }
 
 #searchbutton{
@@ -196,7 +218,6 @@ ul li input[type="checkbox"]:after {
     color: #777;
     margin: -0px 0px 0px 27px;
 }
-/* end overides existing checkbox css in theme.css*/
 
 /*top and bottom padding adjusted*/
 ul li {

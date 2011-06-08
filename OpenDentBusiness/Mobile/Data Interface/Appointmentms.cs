@@ -16,6 +16,16 @@ namespace OpenDentBusiness.Mobile {
 			}
 
 			///<summary>Gets Appointmentm from the db as specified by the date range.</summary>
+			public static List<Appointmentm> GetAppointmentms(long customerNum,long provNum,DateTime startDate,DateTime endDate) {
+				string command=
+					"SELECT * from appointmentm "
+					+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"' "
+					+"AND CustomerNum = "+POut.Long(customerNum)+" AND ProvNum = "+POut.Long(provNum)+" "
+					+"ORDER BY AptDateTime";
+				return Crud.AppointmentmCrud.SelectMany(command);
+			}
+
+			///<summary>Gets Appointmentm from the db as specified by the date range and provider</summary>
 			public static List<Appointmentm> GetAppointmentms(long customerNum,DateTime startDate,DateTime endDate) {
 				string command=
 					"SELECT * from appointmentm "
@@ -24,7 +34,6 @@ namespace OpenDentBusiness.Mobile {
 					+"ORDER BY AptDateTime";
 				return Crud.AppointmentmCrud.SelectMany(command);
 			}
-
 			///<summary>Gets all Appointmentm for a single patient.</summary>
 			public static List<Appointmentm> GetAppointmentms(long customerNum,long patNum) {
 				string command=

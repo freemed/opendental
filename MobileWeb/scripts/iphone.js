@@ -132,7 +132,7 @@ function TraversePage(){
 	    var SectionToFill='#AppointmentListContents';
 	    ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
-
+/*
 	$('#datepickerbutton').tap(function (e) {
 	    //console.log('datepickerbutton tapped');
 		var MoveToURL = '#FilterPicker';
@@ -145,7 +145,24 @@ function TraversePage(){
 		    //console.log('in this if statement ' + DemoDateCookieY + " " + (DemoDateCookieM - 1) + " " + DemoDateCookieD);
 		    $('#datepicker').datepicker("setDate", new Date(DemoDateCookieY, DemoDateCookieM - 1, DemoDateCookieD));
 		}
-	});
+    });
+    */
+	$('#datepickerbutton').tap(function (e) {
+	    var UrlForFetchingData = "AppointmentFilter.aspx";
+	    var SectionToFill = '#FilterPickerContents';
+	    var MoveToURL = '#FilterPicker';
+	    ProcessNormalPageLink(e, UrlForFetchingData, MoveToURL, SectionToFill);
+	    var DemoDateCookieY = parseInt(getCookie("DemoDateCookieY"));
+	    var DemoDateCookieM = parseInt(getCookie("DemoDateCookieM"));
+	    var DemoDateCookieD = parseInt(getCookie("DemoDateCookieD"));
+	    if (DemoDateCookieY != null && DemoDateCookieY != "" && !isNaN(DemoDateCookieY)) {
+	        //console.log('in this if statement ' + DemoDateCookieY + " " + (DemoDateCookieM - 1) + " " + DemoDateCookieD);
+	        $('#datepicker').datepicker("setDate", new Date(DemoDateCookieY, DemoDateCookieM - 1, DemoDateCookieD));
+	    }
+
+    });
+
+
 
 	$('#next').tap(function(e) {
 		//console.log('Next button tapped');
@@ -154,7 +171,7 @@ function TraversePage(){
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
-	/*home, appt, patient buttons*/
+	/*home, appt, patient, pharmacies buttons*/
 	$('.appts').tap(function (e) {
 	    //console.log('Next button tapped');
 	    var UrlForFetchingData = this.attributes["linkattib"].value;
@@ -173,6 +190,14 @@ function TraversePage(){
 		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
 		//var today = new Date(); console.log("in patients" + today);
     });
+
+$('.pharmacies').tap(function (e) {
+    //console.log('pharmacies button tapped');
+    var UrlForFetchingData = this.attributes["linkattib"].value;
+    var SectionToFill = '#PharmacyListContents';
+    var MoveToURL = '#PharmacyList';
+    ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+});
 
     /*Dennis: this overrides the default behavior of clicking the today button in jqueryui*/
     var _gotoToday = jQuery.datepicker._gotoToday;
@@ -225,14 +250,15 @@ function TraversePage(){
 
     $("#datepicker").datepicker({
         onSelect: function (dateText, datePickerInstance) {
-			var SelectedDate=$.datepicker.parseDate('mm/dd/yy', dateText);
-			var d=SelectedDate.getDate();
-			var m=SelectedDate.getMonth()+1; //getMonth() return 0 to 11
-			var y=SelectedDate.getFullYear();
-			var UrlForFetchingData = 'AppointmentList.aspx?year='+y+'&month='+m+'&day='+d; 
-			var SectionToFill='#AppointmentListContents';
-			var MoveToURL='#AppointmentList';
-			ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+            var SelectedDate = $.datepicker.parseDate('mm/dd/yy', dateText);
+            var d = SelectedDate.getDate();
+            var m = SelectedDate.getMonth()+1; //getMonth() return 0 to 11
+            var y = SelectedDate.getFullYear();
+            var provnum = $("#provlist option:selected").val();
+            var UrlForFetchingData='AppointmentList.aspx?year='+y+'&month='+m+'&day='+d+'&ProvNum='+provnum;
+            var SectionToFill='#AppointmentListContents';
+            var MoveToURL='#AppointmentList';
+            ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
         },
         showButtonPanel: true
     });
@@ -290,7 +316,7 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 			var Content = $response.filter('#content').html();
 			if(IsLoggedIn=='LoggedIn'){
 				//console.log('still in session');
-				$(SectionToFill).html(Content);
+			    $(SectionToFill).html(Content);
 			}else{
             //console.log('session ended,about to flip');
              jQT.goTo('#login', 'flip');

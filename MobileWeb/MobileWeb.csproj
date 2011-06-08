@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppointmentDetails.aspx" />
+    <Content Include="AppointmentFilter.aspx" />
     <Content Include="AppointmentList.aspx" />
     <Content Include="css\iphone.css" />
     <Content Include="css\jqueryui\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -128,6 +129,13 @@
     </Compile>
     <Compile Include="AppointmentDetails.aspx.designer.cs">
       <DependentUpon>AppointmentDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppointmentFilter.aspx.cs">
+      <DependentUpon>AppointmentFilter.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppointmentFilter.aspx.designer.cs">
+      <DependentUpon>AppointmentFilter.aspx</DependentUpon>
     </Compile>
     <Compile Include="AppointmentList.aspx.cs">
       <DependentUpon>AppointmentList.aspx</DependentUpon>

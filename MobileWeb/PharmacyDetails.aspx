@@ -15,17 +15,43 @@
 </div>
 
 <ul class="contact">
-<li><span class="style1">Home: <%Response.Write(phar.StoreName);%>
+<li><span class="style1"><%Response.Write(phar.StoreName);%>
 </span></li>
-<%if(String.IsNullOrEmpty(phar.Address)) {%>
-<li><span class="style1">Address: <%Response.Write(phar.Address);%>
-</span></li>
-<%}%>
-<li><span class="style1">Mobile: <%Response.Write(phar.Address2);%>
-</span></li>
-
+	<li class="style1">
+		<div>
+			<div class="leftcolumn">
+			Address
+			</div>
+			<div class="coloncolumn">:</div>
+			<div class="rightcolumn">
+					<div style="word-wrap:break-word;white-space:normal;"><%Response.Write(phar.Address);%></div>
+					<%if(String.IsNullOrEmpty(phar.Address2)) {%>
+					<div class="info"><%Response.Write(phar.Address2);%></div>
+					<%}%>
+					<div class="infocolumn"><%Response.Write(phar.City);%></div>
+					<div class="infocolumn"><%Response.Write(phar.State);%></div>
+			</div>
+			<div style='clear:both'></div>								
+		</div>			
+	</li>
+	<li class="style1">
+		<div class="leftcolumn">Phone</div>
+		<div class="coloncolumn">:</div>
+		<div class="rightcolumn"><%Response.Write(phar.Phone);%> <%Response.Write(DialLinkPhone);%></div>
+	</li>
+	<li class="style1">
+		<div class="leftcolumn">Fax </div>
+		<div class="coloncolumn">:</div>
+		<div class="rightcolumn"><%Response.Write(phar.Fax);%></div>
+	</li>
+	<li class="style1">
+		<div class="leftcolumn">Note </div>
+		<div class="coloncolumn">:</div>
+		<div class="rightcolumn">
+			<div style="word-wrap:break-word;white-space:normal;"><%Response.Write(phar.Note);%></div>
+		</div>
+	</li>
 </ul>
-
 </div>
 </body>
 </html>

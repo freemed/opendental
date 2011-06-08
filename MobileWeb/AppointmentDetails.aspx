@@ -30,7 +30,7 @@
 			</div>
 			<div style="display:table-cell;">
 					<div style="word-wrap:break-word;white-space:normal;"><%Response.Write(apt.ProcDescript);%></div>
-					<div style="word-wrap:break-word;white-space:normal;padding-top:4px"><%Response.Write(apt.Note);%></div>
+					<div class="infocolumn"><%Response.Write(apt.Note);%></div>
 			</div>
 			<div style='clear:both'></div>								
 		</div>			
