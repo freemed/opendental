@@ -296,19 +296,17 @@ namespace OpenDental{
 			listAvailable.Height=412;
 			DisplayFields.RefreshCache();
 			ListShowing=DisplayFields.GetForCategory(category);
-			AvailList=DisplayFields.GetAllAvailableList(category);
 			if(category==DisplayFieldCategory.OrthoChart) {
 				textCustomField.Visible=true;
 				labelCustomField.Visible=true;
 				listAvailable.Height=227;//227px for short, 412px for tall
 				labelAvailable.Text=Lan.g(this,"Previously Used Fields");
 			}
-			
 			FillGrids();
 		}
 
 		private void FillGrids(){
-			//Used to update lists here but doesn't anymore... it is now broken because we do not refresh the list.
+			AvailList=DisplayFields.GetAllAvailableList(category);//This one needs to be called repeatedly.
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormDisplayFields","FieldName"),110);
@@ -328,9 +326,9 @@ namespace OpenDental{
 			}
 			gridMain.EndUpdate();
 			for(int i=0;i<ListShowing.Count;i++){
-				for(int j=0;j<AvailList.Count;j++){
+				for(int j=AvailList.Count-1;j>=0;j--) {//go backwards because we are removing items from the list.
 					if(category==DisplayFieldCategory.OrthoChart) {
-						//compare Descriptions instead of InternalNames.
+						//OrthoChart category does not use InternalNames.
 						if(ListShowing[i].Description==AvailList[j].Description) {
 							AvailList.RemoveAt(j);
 						}

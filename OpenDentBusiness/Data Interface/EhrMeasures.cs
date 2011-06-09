@@ -906,7 +906,7 @@ namespace OpenDentBusiness{
 							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE";
+						mu.Action="Provider Order Entry";
 						break;
 					case EhrMeasureType.Rx:
 						List<RxPat> listRx=RxPats.GetPermissableForDateRange(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);

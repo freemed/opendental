@@ -51,7 +51,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		///<Summary>Returns an ordered list for just one category</Summary>
+		///<Summary>Returns an ordered list for just one category.  These are display fields that the user has entered, which are stored in the db, and then are pulled into the cache.</Summary>
 		public static List<DisplayField> GetForCategory(DisplayFieldCategory category){
 			//No need to check RemotingRole; no call to db.
 			List<DisplayField> retVal=new List<DisplayField>();
@@ -256,7 +256,7 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Dx",28,category));
 			}
 			else if(category==DisplayFieldCategory.OrthoChart) {
-				//Ortho chart has no columns until user explicitly sets up columns.
+				//Ortho chart has no default columns.  User must explicitly set up columns.
 			}
 			return list;
 		}
@@ -433,7 +433,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Dx",28,category));
 			}
 			else if(category==DisplayFieldCategory.OrthoChart) {
-				list=GetForCategory(DisplayFieldCategory.OrthoChart);
+				list=GetForCategory(DisplayFieldCategory.OrthoChart);//The ones that the user has already saved
 				List<OrthoChart> listDistinctOrthoCharts=OrthoCharts.GetByDistinctFieldNames();
 				foreach(OrthoChart orthoChart in listDistinctOrthoCharts) {
 					bool addToList=true;
