@@ -385,7 +385,7 @@ namespace OpenDental{
 			if(FormRN.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			MedicationCur.RxCui=PIn.Long(FormRN.selectedRxNorm.RxCui);
+			MedicationCur.RxCui=PIn.Long(FormRN.SelectedRxNorm.RxCui);
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {

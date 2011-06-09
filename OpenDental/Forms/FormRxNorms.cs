@@ -13,7 +13,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormRxNorms:Form {
 		private List<RxNorm> rxList;
-		public RxNorm selectedRxNorm;
+		public RxNorm SelectedRxNorm;
 
 		public FormRxNorms() {
 			InitializeComponent();
@@ -24,6 +24,10 @@ namespace OpenDental {
 			#if DEBUG
 			butRxNorm.Visible=true;
 			#endif
+		}
+		
+		private void butSearch_Click(object sender,EventArgs e) {
+			FillGrid();
 		}
 
 		private void FillGrid() {
@@ -45,20 +49,15 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 		}
 
-		private void gridMain_DoubleClick(object sender,EventArgs e) {
-			if(gridMain.GetSelectedIndex()<0) {
-				return;
-			}
-			selectedRxNorm=rxList[gridMain.GetSelectedIndex()];
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			SelectedRxNorm=rxList[e.Row];
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butSearch_Click(object sender,EventArgs e) {
-			FillGrid();
-		}
-
 		private void butRxNorm_Click(object sender,EventArgs e) {
+			//only visible in debug
 			RxNorms.CreateFreshRxNormTableFromZip();
+			//just making sure it worked:
 			RxNorm rxNorm=RxNorms.GetOne(1);
 			MsgBox.Show(this,rxNorm.RxNormNum+" "+rxNorm.RxCui+" "+rxNorm.MmslCode+" "+rxNorm.Description);
 			MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000005")+" <-- should be 26420");
@@ -70,12 +69,14 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			selectedRxNorm=rxList[gridMain.GetSelectedIndex()];
+			SelectedRxNorm=rxList[gridMain.GetSelectedIndex()];
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 	}
 }
