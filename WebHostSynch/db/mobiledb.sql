@@ -21,10 +21,13 @@ CREATE TABLE `allergydefm` (
   `CustomerNum` bigint(20) NOT NULL,
   `AllergyDefNum` bigint(20) NOT NULL,
   `Description` varchar(255) NOT NULL,
+  `Snomed` tinyint(4) NOT NULL,
+  `MedicationNum` bigint(20) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`AllergyDefNum`),
   KEY `CustomerNum` (`CustomerNum`),
-  KEY `AllergyDefNum` (`AllergyDefNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `AllergyDefNum` (`AllergyDefNum`),
+  KEY `MedicationNum` (`MedicationNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `allergym` */
 
@@ -37,12 +40,13 @@ CREATE TABLE `allergym` (
   `PatNum` bigint(20) NOT NULL,
   `Reaction` varchar(255) NOT NULL,
   `StatusIsActive` tinyint(4) NOT NULL,
+  `DateAdverseReaction` date NOT NULL DEFAULT '0001-01-01',
   PRIMARY KEY (`CustomerNum`,`AllergyNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `AllergyNum` (`AllergyNum`),
   KEY `AllergyDefNum` (`AllergyDefNum`),
   KEY `PatNum` (`PatNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `appointmentm` */
 
@@ -79,7 +83,7 @@ CREATE TABLE `diseasedefm` (
   PRIMARY KEY (`CustomerNum`,`DiseaseDefNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `DiseaseDefNum` (`DiseaseDefNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `diseasem` */
 
@@ -93,13 +97,15 @@ CREATE TABLE `diseasem` (
   `PatNote` varchar(255) NOT NULL,
   `ICD9Num` bigint(20) NOT NULL,
   `ProbStatus` tinyint(4) NOT NULL,
+  `DateStart` date NOT NULL DEFAULT '0001-01-01',
+  `DateStop` date NOT NULL DEFAULT '0001-01-01',
   PRIMARY KEY (`CustomerNum`,`DiseaseNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `DiseaseNum` (`DiseaseNum`),
   KEY `PatNum` (`PatNum`),
   KEY `DiseaseDefNum` (`DiseaseDefNum`),
   KEY `ICD9Num` (`ICD9Num`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `icd9m` */
 
@@ -113,7 +119,7 @@ CREATE TABLE `icd9m` (
   PRIMARY KEY (`CustomerNum`,`ICD9Num`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `ICD9Num` (`ICD9Num`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `labpanelm` */
 
@@ -128,11 +134,13 @@ CREATE TABLE `labpanelm` (
   `SpecimenSource` varchar(255) NOT NULL,
   `ServiceId` varchar(255) NOT NULL,
   `ServiceName` varchar(255) NOT NULL,
+  `MedicalOrderNum` bigint(20) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`LabPanelNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `LabPanelNum` (`LabPanelNum`),
-  KEY `PatNum` (`PatNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `PatNum` (`PatNum`),
+  KEY `MedicalOrderNum` (`MedicalOrderNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `labresultm` */
 
@@ -148,11 +156,12 @@ CREATE TABLE `labresultm` (
   `ObsValue` varchar(255) NOT NULL,
   `ObsUnits` varchar(255) NOT NULL,
   `ObsRange` varchar(255) NOT NULL,
+  `AbnormalFlag` tinyint(4) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`LabResultNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `LabResultNum` (`LabResultNum`),
   KEY `LabPanelNum` (`LabPanelNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `medicationm` */
 
@@ -163,11 +172,13 @@ CREATE TABLE `medicationm` (
   `MedicationNum` bigint(20) NOT NULL,
   `MedName` varchar(255) NOT NULL,
   `GenericNum` bigint(20) NOT NULL,
+  `RxCui` bigint(20) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`MedicationNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `MedicationNum` (`MedicationNum`),
-  KEY `GenericNum` (`GenericNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `GenericNum` (`GenericNum`),
+  KEY `RxCui` (`RxCui`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `medicationpatm` */
 
@@ -180,12 +191,14 @@ CREATE TABLE `medicationpatm` (
   `MedicationNum` bigint(20) NOT NULL,
   `PatNote` varchar(255) NOT NULL,
   `IsDiscontinued` tinyint(4) NOT NULL,
+  `DateStart` date NOT NULL DEFAULT '0001-01-01',
+  `DateStop` date NOT NULL DEFAULT '0001-01-01',
   PRIMARY KEY (`CustomerNum`,`MedicationPatNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `MedicationPatNum` (`MedicationPatNum`),
   KEY `PatNum` (`PatNum`),
   KEY `MedicationNum` (`MedicationNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `patientm` */
 
@@ -240,7 +253,7 @@ CREATE TABLE `pharmacym` (
   PRIMARY KEY (`CustomerNum`,`PharmacyNum`),
   KEY `CustomerNum` (`CustomerNum`),
   KEY `PharmacyNum` (`PharmacyNum`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `preference` */
 

@@ -51,7 +51,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				medicationPatm.PatNum          = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				medicationPatm.MedicationNum   = PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
 				medicationPatm.PatNote         = PIn.String(table.Rows[i]["PatNote"].ToString());
-				medicationPatm.IsDiscontinued  = PIn.Bool  (table.Rows[i]["IsDiscontinued"].ToString());
+				medicationPatm.DateStart       = PIn.Date  (table.Rows[i]["DateStart"].ToString());
+				medicationPatm.DateStop        = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				retVal.Add(medicationPatm);
 			}
 			return retVal;
@@ -64,14 +65,15 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO medicationpatm (";
 			command+="MedicationPatNum,";
-			command+="CustomerNum,PatNum,MedicationNum,PatNote,IsDiscontinued) VALUES(";
+			command+="CustomerNum,PatNum,MedicationNum,PatNote,DateStart,DateStop) VALUES(";
 			command+=POut.Long(medicationPatm.MedicationPatNum)+",";
 			command+=
 				     POut.Long  (medicationPatm.CustomerNum)+","
 				+    POut.Long  (medicationPatm.PatNum)+","
 				+    POut.Long  (medicationPatm.MedicationNum)+","
 				+"'"+POut.String(medicationPatm.PatNote)+"',"
-				+    POut.Bool  (medicationPatm.IsDiscontinued)+")";
+				+    POut.Date  (medicationPatm.DateStart)+","
+				+    POut.Date  (medicationPatm.DateStop)+")";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return medicationPatm.MedicationPatNum;
 		}
@@ -82,7 +84,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"PatNum          =  "+POut.Long  (medicationPatm.PatNum)+", "
 				+"MedicationNum   =  "+POut.Long  (medicationPatm.MedicationNum)+", "
 				+"PatNote         = '"+POut.String(medicationPatm.PatNote)+"', "
-				+"IsDiscontinued  =  "+POut.Bool  (medicationPatm.IsDiscontinued)+" "
+				+"DateStart       =  "+POut.Date  (medicationPatm.DateStart)+", "
+				+"DateStop        =  "+POut.Date  (medicationPatm.DateStop)+" "
 				+"WHERE CustomerNum = "+POut.Long(medicationPatm.CustomerNum)+" AND MedicationPatNum = "+POut.Long(medicationPatm.MedicationPatNum);
 			Db.NonQ(command);
 		}
@@ -102,7 +105,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 			medicationPatm.PatNum          =medicationPat.PatNum;
 			medicationPatm.MedicationNum   =medicationPat.MedicationNum;
 			medicationPatm.PatNote         =medicationPat.PatNote;
-			//medicationPatm.IsDiscontinued  =medicationPat.IsDiscontinued;
+			medicationPatm.DateStart       =medicationPat.DateStart;
+			medicationPatm.DateStop        =medicationPat.DateStop;
 			return medicationPatm;
 		}
 

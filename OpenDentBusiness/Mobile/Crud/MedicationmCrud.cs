@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 				medicationm.MedicationNum= PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
 				medicationm.MedName      = PIn.String(table.Rows[i]["MedName"].ToString());
 				medicationm.GenericNum   = PIn.Long  (table.Rows[i]["GenericNum"].ToString());
+				medicationm.RxCui        = PIn.Long  (table.Rows[i]["RxCui"].ToString());
 				retVal.Add(medicationm);
 			}
 			return retVal;
@@ -62,12 +63,13 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO medicationm (";
 			command+="MedicationNum,";
-			command+="CustomerNum,MedName,GenericNum) VALUES(";
+			command+="CustomerNum,MedName,GenericNum,RxCui) VALUES(";
 			command+=POut.Long(medicationm.MedicationNum)+",";
 			command+=
 				     POut.Long  (medicationm.CustomerNum)+","
 				+"'"+POut.String(medicationm.MedName)+"',"
-				+    POut.Long  (medicationm.GenericNum)+")";
+				+    POut.Long  (medicationm.GenericNum)+","
+				+    POut.Long  (medicationm.RxCui)+")";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return medicationm.MedicationNum;
 		}
@@ -76,7 +78,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 		internal static void Update(Medicationm medicationm){
 			string command="UPDATE medicationm SET "
 				+"MedName      = '"+POut.String(medicationm.MedName)+"', "
-				+"GenericNum   =  "+POut.Long  (medicationm.GenericNum)+" "
+				+"GenericNum   =  "+POut.Long  (medicationm.GenericNum)+", "
+				+"RxCui        =  "+POut.Long  (medicationm.RxCui)+" "
 				+"WHERE CustomerNum = "+POut.Long(medicationm.CustomerNum)+" AND MedicationNum = "+POut.Long(medicationm.MedicationNum);
 			Db.NonQ(command);
 		}
@@ -95,6 +98,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			medicationm.MedicationNum=medication.MedicationNum;
 			medicationm.MedName      =medication.MedName;
 			medicationm.GenericNum   =medication.GenericNum;
+			medicationm.RxCui        =medication.RxCui;
 			return medicationm;
 		}
 

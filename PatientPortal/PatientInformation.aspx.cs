@@ -23,7 +23,7 @@ namespace PatientPortal {
 					LabelLabPanel.Text="Lab Panels: No Lab Panels found";
 				}
 				List<MedicationPatm> mMedicationPatmList= MedicationPatms.GetMedicationPatms(((Patientm)Session["Patient"]).CustomerNum,((Patientm)Session["Patient"]).PatNum);
-				mMedicationPatmList=mMedicationPatmList.Where(mp=>mp.IsDiscontinued==false).ToList();// filter out discontinued medications.
+				mMedicationPatmList=mMedicationPatmList.Where(mp=>mp.DateStop==DateTime.MinValue).ToList();// filter out discontinued medications.
 				GridViewMedication.DataSource=mMedicationPatmList;
 				GridViewMedication.DataBind();
 				if(mMedicationPatmList.Count==0) {

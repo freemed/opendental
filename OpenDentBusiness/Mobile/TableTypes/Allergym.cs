@@ -23,6 +23,8 @@ namespace OpenDentBusiness.Mobile {
 		public string Reaction;
 		///<summary></summary>
 		public bool StatusIsActive;
+		///<summary>The historical date that the patient had the adverse reaction to this agent.</summary>
+		public DateTime DateAdverseReaction;
 
 		///<summary></summary>
 		public Allergym Copy() {

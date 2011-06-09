@@ -18,8 +18,10 @@ namespace OpenDentBusiness.Mobile {
 		public long MedicationNum;
 		///<summary>Medication notes specific to this patient.</summary>
 		public string PatNote;
-		///<summary>If true, not a current medication.</summary>
-		public bool IsDiscontinued;
+		///<summary>Date that the medication was started.  Can be minval if unknown.</summary>
+		public DateTime DateStart;
+		///<summary>Date that the medication was stopped.  Can be minval if unknown.  If not minval, then this medication is "discontinued".</summary>
+		public DateTime DateStop;
 
 		///<summary></summary>
 		public MedicationPatm Copy() {

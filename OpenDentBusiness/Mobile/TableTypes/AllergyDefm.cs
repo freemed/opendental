@@ -17,6 +17,10 @@ namespace OpenDentBusiness.Mobile {
 		public long AllergyDefNum;
 		///<summary></summary>
 		public string Description;
+		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.</summary>
+		public SnomedAllergy Snomed;
+		///<summary>FK to Medication.MedicationNum. Optional.</summary>
+		public long MedicationNum;
 
 		///<summary></summary>
 		public AllergyDefm Copy() {

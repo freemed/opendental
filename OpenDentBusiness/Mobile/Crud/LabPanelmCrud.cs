@@ -54,6 +54,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 				labPanelm.SpecimenSource   = PIn.String(table.Rows[i]["SpecimenSource"].ToString());
 				labPanelm.ServiceId        = PIn.String(table.Rows[i]["ServiceId"].ToString());
 				labPanelm.ServiceName      = PIn.String(table.Rows[i]["ServiceName"].ToString());
+				labPanelm.MedicalOrderNum  = PIn.Long  (table.Rows[i]["MedicalOrderNum"].ToString());
 				retVal.Add(labPanelm);
 			}
 			return retVal;
@@ -66,7 +67,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO labpanelm (";
 			command+="LabPanelNum,";
-			command+="CustomerNum,PatNum,LabNameAddress,SpecimenCondition,SpecimenSource,ServiceId,ServiceName) VALUES(";
+			command+="CustomerNum,PatNum,LabNameAddress,SpecimenCondition,SpecimenSource,ServiceId,ServiceName,MedicalOrderNum) VALUES(";
 			command+=POut.Long(labPanelm.LabPanelNum)+",";
 			command+=
 				     POut.Long  (labPanelm.CustomerNum)+","
@@ -75,7 +76,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"'"+POut.String(labPanelm.SpecimenCondition)+"',"
 				+"'"+POut.String(labPanelm.SpecimenSource)+"',"
 				+"'"+POut.String(labPanelm.ServiceId)+"',"
-				+"'"+POut.String(labPanelm.ServiceName)+"')";
+				+"'"+POut.String(labPanelm.ServiceName)+"',"
+				+    POut.Long  (labPanelm.MedicalOrderNum)+")";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return labPanelm.LabPanelNum;
 		}
@@ -88,7 +90,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"SpecimenCondition= '"+POut.String(labPanelm.SpecimenCondition)+"', "
 				+"SpecimenSource   = '"+POut.String(labPanelm.SpecimenSource)+"', "
 				+"ServiceId        = '"+POut.String(labPanelm.ServiceId)+"', "
-				+"ServiceName      = '"+POut.String(labPanelm.ServiceName)+"' "
+				+"ServiceName      = '"+POut.String(labPanelm.ServiceName)+"', "
+				+"MedicalOrderNum  =  "+POut.Long  (labPanelm.MedicalOrderNum)+" "
 				+"WHERE CustomerNum = "+POut.Long(labPanelm.CustomerNum)+" AND LabPanelNum = "+POut.Long(labPanelm.LabPanelNum);
 			Db.NonQ(command);
 		}
@@ -111,6 +114,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			labPanelm.SpecimenSource   =labPanel.SpecimenSource;
 			labPanelm.ServiceId        =labPanel.ServiceId;
 			labPanelm.ServiceName      =labPanel.ServiceName;
+			labPanelm.MedicalOrderNum  =labPanel.MedicalOrderNum;
 			return labPanelm;
 		}
 

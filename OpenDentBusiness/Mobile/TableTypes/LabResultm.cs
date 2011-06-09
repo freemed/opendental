@@ -28,6 +28,8 @@ namespace OpenDentBusiness.Mobile {
 		public string ObsUnits;
 		///<summary>OBX-7  For example, &lt;200 or &gt;=40.</summary>
 		public string ObsRange;
+		///<summary>Enum:LabAbnormalFlag 0-No value, 1-Below normal, 2-Normal, 3-Above high normal.</summary>
+		public LabAbnormalFlag AbnormalFlag;
 
 		///<summary></summary>
 		public LabResultm Copy() {

@@ -14,41 +14,69 @@ namespace OpenDentBusiness.Mobile {
 
 
 				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE labpanelm ADD ServiceId varchar(255) NOT NULL";
+					command="ALTER TABLE allergydefm ADD Snomed tinyint NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE labpanelm ADD ServiceId varchar2(255)";
+					command="ALTER TABLE allergydefm ADD Snomed number(3)";
+					Db.NonQ(command);
+					command="UPDATE allergydefm SET Snomed = 0 WHERE Snomed IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydefm MODIFY Snomed NOT NULL";
 					Db.NonQ(command);
 				}				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE labpanelm ADD ServiceName varchar(255) NOT NULL";
+					command="ALTER TABLE allergydefm ADD MedicationNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydefm ADD INDEX (MedicationNum)";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE labpanelm ADD ServiceName varchar2(255)";
+					command="ALTER TABLE allergydefm ADD MedicationNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE allergydefm SET MedicationNum = 0 WHERE MedicationNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergydefm MODIFY MedicationNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX allergydefm_MedicationNum ON allergydefm (MedicationNum)";
 					Db.NonQ(command);
 				}
 				*/
 
-				/*
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS pharmacym";
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergym ADD DateAdverseReaction date NOT NULL DEFAULT '0001-01-01')";
 					Db.NonQ(command);
-					command=@"CREATE TABLE pharmacym (
-						CustomerNum bigint NOT NULL,
-						PharmacyNum bigint NOT NULL,
-						StoreName varchar(255) NOT NULL,
-						Phone varchar(255) NOT NULL,
-						Fax varchar(255) NOT NULL,
-						Address varchar(255) NOT NULL,
-						Address2 varchar(255) NOT NULL,
-						City varchar(255) NOT NULL,
-						State varchar(255) NOT NULL,
-						Zip varchar(255) NOT NULL,
-						Note varchar(255) NOT NULL,
-						INDEX(CustomerNum),
-						INDEX(PharmacyNum)
-						) DEFAULT CHARSET=utf8";
+				}
+				else {//oracle
+					command="ALTER TABLE allergym ADD DateAdverseReaction date";
+					Db.NonQ(command);
+					command="UPDATE allergym SET DateAdverseReaction = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateAdverseReaction IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE allergym MODIFY DateAdverseReaction NOT NULL";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE diseasem ADD DateStart date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE diseasem ADD DateStart date";
+					Db.NonQ(command);
+					command="UPDATE diseasem SET DateStart = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStart IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE diseasem MODIFY DateStart NOT NULL";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE diseasem ADD DateStop date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE diseasem ADD DateStop date";
+					Db.NonQ(command);
+					command="UPDATE diseasem SET DateStop = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStop IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE diseasem MODIFY DateStop NOT NULL";
 					Db.NonQ(command);
 				}
 				*/
@@ -66,6 +94,78 @@ namespace OpenDentBusiness.Mobile {
 				}
 				else {//oracle
 					command="ALTER TABLE labpanelm ADD ServiceName varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labpanelm ADD MedicalOrderNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE labpanelm ADD INDEX (MedicalOrderNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labpanelm ADD MedicalOrderNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE labpanelm SET MedicalOrderNum = 0 WHERE MedicalOrderNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE labpanelm MODIFY MedicalOrderNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX labpanelm_MedicalOrderNum ON labpanelm (MedicalOrderNum)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE labresultm ADD AbnormalFlag tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE labresultm ADD AbnormalFlag number(3)";
+					Db.NonQ(command);
+					command="UPDATE labresultm SET AbnormalFlag = 0 WHERE AbnormalFlag IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE labresultm MODIFY AbnormalFlag NOT NULL";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationm ADD RxCui bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationm ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationm ADD RxCui number(20)";
+					Db.NonQ(command);
+					command="UPDATE medicationm SET RxCui = 0 WHERE RxCui IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationm MODIFY RxCui NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX medicationm_RxCui ON medicationm (RxCui)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpatm ADD DateStart date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpatm ADD DateStart date";
+					Db.NonQ(command);
+					command="UPDATE medicationpatm SET DateStart = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStart IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpatm MODIFY DateStart NOT NULL";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpatm ADD DateStop date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpatm ADD DateStop date";
+					Db.NonQ(command);
+					command="UPDATE medicationpatm SET DateStop = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateStop IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpatm MODIFY DateStop NOT NULL";
 					Db.NonQ(command);
 				}
 				*/

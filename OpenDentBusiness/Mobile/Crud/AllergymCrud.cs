@@ -46,12 +46,13 @@ namespace OpenDentBusiness.Mobile.Crud{
 			Allergym allergym;
 			for(int i=0;i<table.Rows.Count;i++) {
 				allergym=new Allergym();
-				allergym.CustomerNum   = PIn.Long  (table.Rows[i]["CustomerNum"].ToString());
-				allergym.AllergyNum    = PIn.Long  (table.Rows[i]["AllergyNum"].ToString());
-				allergym.AllergyDefNum = PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
-				allergym.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				allergym.Reaction      = PIn.String(table.Rows[i]["Reaction"].ToString());
-				allergym.StatusIsActive= PIn.Bool  (table.Rows[i]["StatusIsActive"].ToString());
+				allergym.CustomerNum        = PIn.Long  (table.Rows[i]["CustomerNum"].ToString());
+				allergym.AllergyNum         = PIn.Long  (table.Rows[i]["AllergyNum"].ToString());
+				allergym.AllergyDefNum      = PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
+				allergym.PatNum             = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				allergym.Reaction           = PIn.String(table.Rows[i]["Reaction"].ToString());
+				allergym.StatusIsActive     = PIn.Bool  (table.Rows[i]["StatusIsActive"].ToString());
+				allergym.DateAdverseReaction= PIn.Date  (table.Rows[i]["DateAdverseReaction"].ToString());
 				retVal.Add(allergym);
 			}
 			return retVal;
@@ -64,14 +65,15 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO allergym (";
 			command+="AllergyNum,";
-			command+="CustomerNum,AllergyDefNum,PatNum,Reaction,StatusIsActive) VALUES(";
+			command+="CustomerNum,AllergyDefNum,PatNum,Reaction,StatusIsActive,DateAdverseReaction) VALUES(";
 			command+=POut.Long(allergym.AllergyNum)+",";
 			command+=
 				     POut.Long  (allergym.CustomerNum)+","
 				+    POut.Long  (allergym.AllergyDefNum)+","
 				+    POut.Long  (allergym.PatNum)+","
 				+"'"+POut.String(allergym.Reaction)+"',"
-				+    POut.Bool  (allergym.StatusIsActive)+")";
+				+    POut.Bool  (allergym.StatusIsActive)+","
+				+    POut.Date  (allergym.DateAdverseReaction)+")";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return allergym.AllergyNum;
 		}
@@ -79,10 +81,11 @@ namespace OpenDentBusiness.Mobile.Crud{
 		///<summary>Updates one Allergym in the database.</summary>
 		internal static void Update(Allergym allergym){
 			string command="UPDATE allergym SET "
-				+"AllergyDefNum =  "+POut.Long  (allergym.AllergyDefNum)+", "
-				+"PatNum        =  "+POut.Long  (allergym.PatNum)+", "
-				+"Reaction      = '"+POut.String(allergym.Reaction)+"', "
-				+"StatusIsActive=  "+POut.Bool  (allergym.StatusIsActive)+" "
+				+"AllergyDefNum      =  "+POut.Long  (allergym.AllergyDefNum)+", "
+				+"PatNum             =  "+POut.Long  (allergym.PatNum)+", "
+				+"Reaction           = '"+POut.String(allergym.Reaction)+"', "
+				+"StatusIsActive     =  "+POut.Bool  (allergym.StatusIsActive)+", "
+				+"DateAdverseReaction=  "+POut.Date  (allergym.DateAdverseReaction)+" "
 				+"WHERE CustomerNum = "+POut.Long(allergym.CustomerNum)+" AND AllergyNum = "+POut.Long(allergym.AllergyNum);
 			Db.NonQ(command);
 		}
@@ -98,11 +101,12 @@ namespace OpenDentBusiness.Mobile.Crud{
 		internal static Allergym ConvertToM(Allergy allergy){
 			Allergym allergym=new Allergym();
 			//CustomerNum cannot be set.  Remains 0.
-			allergym.AllergyNum    =allergy.AllergyNum;
-			allergym.AllergyDefNum =allergy.AllergyDefNum;
-			allergym.PatNum        =allergy.PatNum;
-			allergym.Reaction      =allergy.Reaction;
-			allergym.StatusIsActive=allergy.StatusIsActive;
+			allergym.AllergyNum         =allergy.AllergyNum;
+			allergym.AllergyDefNum      =allergy.AllergyDefNum;
+			allergym.PatNum             =allergy.PatNum;
+			allergym.Reaction           =allergy.Reaction;
+			allergym.StatusIsActive     =allergy.StatusIsActive;
+			allergym.DateAdverseReaction=allergy.DateAdverseReaction;
 			return allergym;
 		}
 

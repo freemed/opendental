@@ -25,6 +25,8 @@ namespace OpenDentBusiness.Mobile {
 		public string ServiceId;
 		///<summary>OBR-4-1, Service performed description.  Example, Lipid Panel.</summary>
 		public string ServiceName;
+		///<summary>FK to medicalorder.MedicalOrderNum.  Used to attach in imported lab panel to a lab order.  Multiple panels may be attached to an order.</summary>
+		public long MedicalOrderNum;
 
 		///<summary></summary>
 		public LabPanelm Copy() {

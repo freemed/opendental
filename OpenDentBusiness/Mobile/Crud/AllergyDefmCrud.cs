@@ -49,6 +49,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				allergyDefm.CustomerNum  = PIn.Long  (table.Rows[i]["CustomerNum"].ToString());
 				allergyDefm.AllergyDefNum= PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
 				allergyDefm.Description  = PIn.String(table.Rows[i]["Description"].ToString());
+				allergyDefm.Snomed       = (SnomedAllergy)PIn.Int(table.Rows[i]["Snomed"].ToString());
+				allergyDefm.MedicationNum= PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
 				retVal.Add(allergyDefm);
 			}
 			return retVal;
@@ -61,11 +63,13 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO allergydefm (";
 			command+="AllergyDefNum,";
-			command+="CustomerNum,Description) VALUES(";
+			command+="CustomerNum,Description,Snomed,MedicationNum) VALUES(";
 			command+=POut.Long(allergyDefm.AllergyDefNum)+",";
 			command+=
 				     POut.Long  (allergyDefm.CustomerNum)+","
-				+"'"+POut.String(allergyDefm.Description)+"')";
+				+"'"+POut.String(allergyDefm.Description)+"',"
+				+    POut.Int   ((int)allergyDefm.Snomed)+","
+				+    POut.Long  (allergyDefm.MedicationNum)+")";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return allergyDefm.AllergyDefNum;
 		}
@@ -73,7 +77,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 		///<summary>Updates one AllergyDefm in the database.</summary>
 		internal static void Update(AllergyDefm allergyDefm){
 			string command="UPDATE allergydefm SET "
-				+"Description  = '"+POut.String(allergyDefm.Description)+"' "
+				+"Description  = '"+POut.String(allergyDefm.Description)+"', "
+				+"Snomed       =  "+POut.Int   ((int)allergyDefm.Snomed)+", "
+				+"MedicationNum=  "+POut.Long  (allergyDefm.MedicationNum)+" "
 				+"WHERE CustomerNum = "+POut.Long(allergyDefm.CustomerNum)+" AND AllergyDefNum = "+POut.Long(allergyDefm.AllergyDefNum);
 			Db.NonQ(command);
 		}
@@ -91,6 +97,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 			//CustomerNum cannot be set.  Remains 0.
 			allergyDefm.AllergyDefNum=allergyDef.AllergyDefNum;
 			allergyDefm.Description  =allergyDef.Description;
+			allergyDefm.Snomed       =allergyDef.Snomed;
+			allergyDefm.MedicationNum=allergyDef.MedicationNum;
 			return allergyDefm;
 		}
 

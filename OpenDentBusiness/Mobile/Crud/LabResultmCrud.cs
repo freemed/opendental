@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 				labResultm.ObsValue    = PIn.String(table.Rows[i]["ObsValue"].ToString());
 				labResultm.ObsUnits    = PIn.String(table.Rows[i]["ObsUnits"].ToString());
 				labResultm.ObsRange    = PIn.String(table.Rows[i]["ObsRange"].ToString());
+				labResultm.AbnormalFlag= (LabAbnormalFlag)PIn.Int(table.Rows[i]["AbnormalFlag"].ToString());
 				retVal.Add(labResultm);
 			}
 			return retVal;
@@ -67,7 +68,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO labresultm (";
 			command+="LabResultNum,";
-			command+="CustomerNum,LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,ObsUnits,ObsRange) VALUES(";
+			command+="CustomerNum,LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,ObsUnits,ObsRange,AbnormalFlag) VALUES(";
 			command+=POut.Long(labResultm.LabResultNum)+",";
 			command+=
 				     POut.Long  (labResultm.CustomerNum)+","
@@ -77,7 +78,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"'"+POut.String(labResultm.TestID)+"',"
 				+"'"+POut.String(labResultm.ObsValue)+"',"
 				+"'"+POut.String(labResultm.ObsUnits)+"',"
-				+"'"+POut.String(labResultm.ObsRange)+"')";
+				+"'"+POut.String(labResultm.ObsRange)+"',"
+				+    POut.Int   ((int)labResultm.AbnormalFlag)+")";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return labResultm.LabResultNum;
 		}
@@ -91,7 +93,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"TestID      = '"+POut.String(labResultm.TestID)+"', "
 				+"ObsValue    = '"+POut.String(labResultm.ObsValue)+"', "
 				+"ObsUnits    = '"+POut.String(labResultm.ObsUnits)+"', "
-				+"ObsRange    = '"+POut.String(labResultm.ObsRange)+"' "
+				+"ObsRange    = '"+POut.String(labResultm.ObsRange)+"', "
+				+"AbnormalFlag=  "+POut.Int   ((int)labResultm.AbnormalFlag)+" "
 				+"WHERE CustomerNum = "+POut.Long(labResultm.CustomerNum)+" AND LabResultNum = "+POut.Long(labResultm.LabResultNum);
 			Db.NonQ(command);
 		}
@@ -115,6 +118,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			labResultm.ObsValue    =labResult.ObsValue;
 			labResultm.ObsUnits    =labResult.ObsUnits;
 			labResultm.ObsRange    =labResult.ObsRange;
+			labResultm.AbnormalFlag=labResult.AbnormalFlag;
 			return labResultm;
 		}
 

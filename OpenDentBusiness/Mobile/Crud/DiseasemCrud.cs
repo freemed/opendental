@@ -53,6 +53,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				diseasem.PatNote      = PIn.String(table.Rows[i]["PatNote"].ToString());
 				diseasem.ICD9Num      = PIn.Long  (table.Rows[i]["ICD9Num"].ToString());
 				diseasem.ProbStatus   = (ProblemStatus)PIn.Int(table.Rows[i]["ProbStatus"].ToString());
+				diseasem.DateStart    = PIn.Date  (table.Rows[i]["DateStart"].ToString());
+				diseasem.DateStop     = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				retVal.Add(diseasem);
 			}
 			return retVal;
@@ -65,7 +67,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO diseasem (";
 			command+="DiseaseNum,";
-			command+="CustomerNum,PatNum,DiseaseDefNum,PatNote,ICD9Num,ProbStatus) VALUES(";
+			command+="CustomerNum,PatNum,DiseaseDefNum,PatNote,ICD9Num,ProbStatus,DateStart,DateStop) VALUES(";
 			command+=POut.Long(diseasem.DiseaseNum)+",";
 			command+=
 				     POut.Long  (diseasem.CustomerNum)+","
@@ -73,7 +75,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+    POut.Long  (diseasem.DiseaseDefNum)+","
 				+"'"+POut.String(diseasem.PatNote)+"',"
 				+    POut.Long  (diseasem.ICD9Num)+","
-				+    POut.Int   ((int)diseasem.ProbStatus)+")";
+				+    POut.Int   ((int)diseasem.ProbStatus)+","
+				+    POut.Date  (diseasem.DateStart)+","
+				+    POut.Date  (diseasem.DateStop)+")";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
 			return diseasem.DiseaseNum;
 		}
@@ -85,7 +89,9 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"DiseaseDefNum=  "+POut.Long  (diseasem.DiseaseDefNum)+", "
 				+"PatNote      = '"+POut.String(diseasem.PatNote)+"', "
 				+"ICD9Num      =  "+POut.Long  (diseasem.ICD9Num)+", "
-				+"ProbStatus   =  "+POut.Int   ((int)diseasem.ProbStatus)+" "
+				+"ProbStatus   =  "+POut.Int   ((int)diseasem.ProbStatus)+", "
+				+"DateStart    =  "+POut.Date  (diseasem.DateStart)+", "
+				+"DateStop     =  "+POut.Date  (diseasem.DateStop)+" "
 				+"WHERE CustomerNum = "+POut.Long(diseasem.CustomerNum)+" AND DiseaseNum = "+POut.Long(diseasem.DiseaseNum);
 			Db.NonQ(command);
 		}
@@ -107,6 +113,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 			diseasem.PatNote      =disease.PatNote;
 			diseasem.ICD9Num      =disease.ICD9Num;
 			diseasem.ProbStatus   =disease.ProbStatus;
+			diseasem.DateStart    =disease.DateStart;
+			diseasem.DateStop     =disease.DateStop;
 			return diseasem;
 		}
 

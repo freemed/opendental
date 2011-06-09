@@ -16,6 +16,8 @@ namespace OpenDentBusiness.Mobile {
 		public string MedName;
 		///<summary>FK to medication.MedicationNum.  If this is a generic drug, then the GenericNum will be the same as the MedicationNum.</summary>
 		public long GenericNum;
+		///<summary>RxNorm Code identifier.  FK to an in-memory dictionary of RxCui/RxNorm mappings.</summary>
+		public long RxCui;
 
 		///<summary></summary>
 		public Medicationm Copy() {

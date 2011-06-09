@@ -25,6 +25,10 @@ namespace OpenDentBusiness.Mobile {
 		public long ICD9Num;
 		///<summary>Enum: ProblemStatus: Active=0, Resolved=1, Inactive=2.</summary>
 		public ProblemStatus ProbStatus;
+		///<summary>Date that the disease was diagnosed.  Can be minval if unknown.</summary>
+		public DateTime DateStart;
+		///<summary>Date that the disease was set resolved or inactive.  Will be minval if still active.  ProbStatus should be used to determine if it is active or not.</summary>
+		public DateTime DateStop;
 
 		///<summary></summary>
 		public Diseasem Copy() {
