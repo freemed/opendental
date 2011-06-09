@@ -4183,8 +4183,9 @@ namespace OpenDental{
 			try {
 				Process.Start("http://www.opendental.com/contact.html");
 			}
-			catch {
-				MessageBox.Show(Lan.g(this,"Could not find")+" http://www.opendental.com/contact.html");
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Could not find")+" http://www.opendental.com/contact.html" + "\r\n"
+					+"Please set up a default web browser.");
 			}
 			/*
 			if(!MsgBox.Show(this,true,"A remote connection will now be attempted. Do NOT continue unless you are already on the phone with us.  Do you want to continue?"))

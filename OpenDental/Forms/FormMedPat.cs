@@ -442,6 +442,7 @@ namespace OpenDental{
 		}
 
 		private void butEdit_Click(object sender, System.EventArgs e) {
+			Medications.Refresh();
 			FormMedicationEdit FormME=new FormMedicationEdit();
 			FormME.MedicationCur=Medications.GetMedication(MedicationPatCur.MedicationNum);
 			FormME.ShowDialog();

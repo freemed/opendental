@@ -20,17 +20,9 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command ="SELECT * from medication ORDER BY MedName";// WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
-			DataTable table=Db.GetTable(command);
+			List<Medication> list=Crud.MedicationCrud.SelectMany(command);
 			HList=new Hashtable();
-			List<Medication> list=new List<Medication>();
-			Medication med;
-			for(int i=0;i<table.Rows.Count;i++) {
-				med=new Medication();
-				med.MedicationNum=PIn.Long(table.Rows[i][0].ToString());
-				med.MedName      =PIn.String(table.Rows[i][1].ToString());
-				med.GenericNum   =PIn.Long(table.Rows[i][2].ToString());
-				med.Notes        =PIn.String(table.Rows[i][3].ToString());
-				list.Add(med);
+			for(int i=0;i<list.Count;i++) {
 				HList.Add(list[i].MedicationNum,list[i]);
 			}
 			Listt=list.ToArray();
