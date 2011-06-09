@@ -108,6 +108,15 @@ namespace OpenDentBusiness{
 			return Db.GetScalar(command);
 		}
 
+		///<summary>Used to return the multum code based on RxCui.  If blank, use the Description instead.</summary>
+		public static string GetDescByRxCui(string rxCui) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetString(MethodBase.GetCurrentMethod(),rxCui);
+			}
+			string command="SELECT Description FROM rxnorm WHERE MmslCode='' AND RxCui="+rxCui;
+			return Db.GetScalar(command);
+		}
+
 		///<summary>Gets one RxNorm from the db.</summary>
 		public static RxNorm GetOne(long rxNormNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
