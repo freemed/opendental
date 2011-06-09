@@ -35,15 +35,6 @@ namespace OpenDentBusiness{
 			this.Category=category;
 		}
 
-		///<summary>Used by Ortho Chart to create a display field without an internal name.</summary>
-		public DisplayField(string internalName,string description, int columnWidth,DisplayFieldCategory category) {
-			this.InternalName=internalName;
-			this.Description=description;
-			this.ColumnWidth=columnWidth;
-			this.Description="";
-			this.Category=category;
-		}
-
 		///<summary>Returns a copy.</summary>
 		public DisplayField Copy() {
 			return (DisplayField)this.MemberwiseClone();

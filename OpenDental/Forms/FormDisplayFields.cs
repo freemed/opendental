@@ -327,7 +327,7 @@ namespace OpenDental{
 			gridMain.EndUpdate();
 			for(int i=0;i<ListShowing.Count;i++){
 				for(int j=0;j<AvailList.Count;j++) {
-					//Only removing one item from AvailList per iteration of i.
+					//Only removing one item from AvailList per iteration of i, so RemoveAt() is safe without going backwards.
 					if(category==DisplayFieldCategory.OrthoChart) {
 						//OrthoChart category does not use InternalNames.
 						if(ListShowing[i].Description==AvailList[j].Description) {
@@ -352,15 +352,28 @@ namespace OpenDental{
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormDisplayFieldEdit formD=new FormDisplayFieldEdit();
 			formD.FieldCur=ListShowing[e.Row];
+			DisplayField tempField=ListShowing[e.Row].Copy();
 			formD.ShowDialog();
+			for(int i=0;i<ListShowing.Count;i++) {
+				if(ListShowing[e.Row].Description==ListShowing[i].Description || ListShowing[e.Row].InternalName==ListShowing[i].InternalName) {
+					ListShowing[e.Row]=tempField;
+					MsgBox.Show(this,"That field name already exists.");
+					return;
+				}
+			}
+			for(int i=0;i<AvailList.Count;i++) {
+				if(ListShowing[e.Row].Description==AvailList[i].Description || ListShowing[e.Row].InternalName==AvailList[i].InternalName) {
+					ListShowing[e.Row]=tempField;
+					MsgBox.Show(this,"That field name already exists.");
+					return;
+				}
+			}
 			FillGrids();
 			changed=true;
 		}
 
 		private void butDefault_Click(object sender,EventArgs e) {
-//todo: if ortho, clear ListShowing.
-//No changes needed.
-			ListShowing=DisplayFields.GetDefaultList(category);
+			ListShowing=DisplayFields.GetDefaultList(category);//empty for ortho
 			FillGrids();
 			changed=true;
 		}
@@ -373,13 +386,13 @@ namespace OpenDental{
 				}
 				if(textCustomField.Text!="") {//Add new ortho chart field
 					for(int i=0;i<ListShowing.Count;i++) {
-						if(textCustomField.Text==ListShowing[i].InternalName) {
+						if(textCustomField.Text==ListShowing[i].Description) {
 							MsgBox.Show(this,"The \""+textCustomField.Text+"\" field is already displaying.");
 							return;
 						}
 					}
 					for(int i=0;i<AvailList.Count;i++) {
-						if(textCustomField.Text==AvailList[i].InternalName) {
+						if(textCustomField.Text==AvailList[i].Description) {
 							ListShowing.Add(AvailList[i]);
 							textCustomField.Text="";
 							changed=true;
@@ -387,7 +400,9 @@ namespace OpenDental{
 							return;
 						}
 					}
-					ListShowing.Add(new DisplayField(textCustomField.Text,20,DisplayFieldCategory.OrthoChart));
+					DisplayField df=new DisplayField("",20,DisplayFieldCategory.OrthoChart);
+					df.Description=textCustomField.Text;
+					ListShowing.Add(df);
 					textCustomField.Text="";
 				}
 				else {//add existing ortho chart field(s)
@@ -487,8 +502,6 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
-//todo: This will need lots of careful work: 
-//No changes needed.
 			if(category==DisplayFieldCategory.OrthoChart) {
 				DisplayFields.SaveListForOrthoChart(ListShowing);
 			}

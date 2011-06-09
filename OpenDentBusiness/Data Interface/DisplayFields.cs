@@ -263,7 +263,6 @@ namespace OpenDentBusiness {
 
 		public static List<DisplayField> GetAllAvailableList(DisplayFieldCategory category){
 			//No need to check RemotingRole; no call to db. 
-//TODO: there is now a call to the DB if category is DisplayFieldCategory.OrthoChart.
 			List<DisplayField> list=new List<DisplayField>();
 			if(category==DisplayFieldCategory.None) {
 				list.Add(new DisplayField("Date",67,category));
@@ -433,18 +432,20 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Dx",28,category));
 			}
 			else if(category==DisplayFieldCategory.OrthoChart) {
-				list=GetForCategory(DisplayFieldCategory.OrthoChart);//The ones that the user has already saved
+				list=GetForCategory(DisplayFieldCategory.OrthoChart);//The display fields that the user has already saved
 				List<OrthoChart> listDistinctOrthoCharts=OrthoCharts.GetByDistinctFieldNames();
-				foreach(OrthoChart orthoChart in listDistinctOrthoCharts) {
+				for(int i=0;i<listDistinctOrthoCharts.Count;i++) {
 					bool addToList=true;
-					foreach(DisplayField field in list) {
-						if(field.Description==orthoChart.FieldName) {
+					for(int j=0;j<list.Count;j++) {
+						if(list[j].Description==listDistinctOrthoCharts[i].FieldName) {
 							addToList=false;
 						}
 					}
 					if(addToList) {
-						list.Add(new DisplayField("",orthoChart.FieldName,20,DisplayFieldCategory.OrthoChart));
-					}	
+						DisplayField df=new DisplayField("",20,DisplayFieldCategory.OrthoChart);
+						df.Description=listDistinctOrthoCharts[i].FieldName;
+						list.Add(df);
+					}
 				}
 			}
 			return list;
