@@ -63,7 +63,6 @@ namespace OpenDental{
 			this.gridMain.Title = "RxNorm Codes";
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.DoubleClick += new System.EventHandler(this.gridMain_DoubleClick);
 			// 
 			// button1
 			// 
