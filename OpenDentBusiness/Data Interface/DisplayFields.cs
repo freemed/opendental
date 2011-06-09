@@ -262,7 +262,8 @@ namespace OpenDentBusiness {
 		}
 
 		public static List<DisplayField> GetAllAvailableList(DisplayFieldCategory category){
-			//No need to check RemotingRole; no call to db.
+			//No need to check RemotingRole; no call to db. 
+//TODO: there is now a call to the DB if category is DisplayFieldCategory.OrthoChart.
 			List<DisplayField> list=new List<DisplayField>();
 			if(category==DisplayFieldCategory.None) {
 				list.Add(new DisplayField("Date",67,category));
@@ -481,6 +482,20 @@ namespace OpenDentBusiness {
 				return;
 			}
 			for(int i=0;i<ListShowing.Count;i++){
+				ListShowing[i].ItemOrder=i;
+				Insert(ListShowing[i]);
+			}
+		}
+
+		///<summary>This is for use with saving Ortho Chart display fields ONLY.</summary>
+		public static void SaveListForOrthoChart(List<DisplayField> ListShowing) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ListShowing);
+				return;
+			}
+			string command="DELETE FROM displayfield WHERE Category="+POut.Long((int)DisplayFieldCategory.OrthoChart);
+			Db.NonQ(command);
+			for(int i=0;i<ListShowing.Count;i++) {
 				ListShowing[i].ItemOrder=i;
 				Insert(ListShowing[i]);
 			}

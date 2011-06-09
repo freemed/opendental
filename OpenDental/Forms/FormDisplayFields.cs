@@ -302,26 +302,13 @@ namespace OpenDental{
 				labelCustomField.Visible=true;
 				listAvailable.Height=227;//227px for short, 412px for tall
 				labelAvailable.Text=Lan.g(this,"Previously Used Fields");
-				/*
-				//List<DisplayField> listMasterOrthoDisplayFields = DisplayFields.GetForCategory(DisplayFieldCategory.OrthoChart);
-				List<OrthoChart> listDistinctOrthoCharts=OrthoCharts.GetByDistinctFieldNames();
-				foreach(OrthoChart orthoChart in listDistinctOrthoCharts) {
-					bool addToList=true;
-					foreach(DisplayField field in ListShowing) {
-						if(field.Description==orthoChart.FieldName) {
-							addToList=false;
-						}
-					}
-					if(addToList) {
-						ListShowing.Add(new DisplayField(orthoChart.FieldName,20,DisplayFieldCategory.OrthoChart));
-					}
-				}*/
 			}
 			
 			FillGrids();
 		}
 
 		private void FillGrids(){
+			//Used to update lists here but doesn't anymore... it is now broken because we do not refresh the list.
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormDisplayFields","FieldName"),110);
@@ -344,6 +331,9 @@ namespace OpenDental{
 				for(int j=0;j<AvailList.Count;j++){
 					if(category==DisplayFieldCategory.OrthoChart) {
 						//compare Descriptions instead of InternalNames.
+						if(ListShowing[i].Description==AvailList[j].Description) {
+							AvailList.RemoveAt(j);
+						}
 					}
 					else {
 						if(ListShowing[i].InternalName==AvailList[j].InternalName) {
@@ -480,8 +470,13 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
-//todo: This will need lots of careful work:
-			DisplayFields.SaveListForCategory(ListShowing,category);
+//todo: This will need lots of careful work: I think I fixed it.
+			if(category==DisplayFieldCategory.OrthoChart) {
+				DisplayFields.SaveListForOrthoChart(ListShowing);
+			}
+			else {
+				DisplayFields.SaveListForCategory(ListShowing,category);
+			}
 			DataValid.SetInvalid(InvalidType.DisplayFields);
 			DialogResult=DialogResult.OK;
 		}
