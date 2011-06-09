@@ -28,6 +28,9 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butSearch = new OpenDental.UI.Button();
+			this.labelCodeOrDesc = new System.Windows.Forms.Label();
+			this.textCode = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butRxNorm
@@ -43,6 +46,7 @@ namespace OpenDental{
 			this.butRxNorm.Size = new System.Drawing.Size(98,24);
 			this.butRxNorm.TabIndex = 5;
 			this.butRxNorm.Text = "Create rxnorm";
+			this.butRxNorm.Visible = false;
 			this.butRxNorm.Click += new System.EventHandler(this.butRxNorm_Click);
 			// 
 			// gridMain
@@ -58,6 +62,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "RxNorm Codes";
 			this.gridMain.TranslationName = null;
+			this.gridMain.DoubleClick += new System.EventHandler(this.gridMain_DoubleClick);
 			// 
 			// button1
 			// 
@@ -104,10 +109,43 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butSearch
+			// 
+			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSearch.Autosize = true;
+			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.CornerRadius = 4F;
+			this.butSearch.Location = new System.Drawing.Point(284,5);
+			this.butSearch.Name = "butSearch";
+			this.butSearch.Size = new System.Drawing.Size(75,24);
+			this.butSearch.TabIndex = 22;
+			this.butSearch.Text = "Search";
+			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
+			// 
+			// labelCodeOrDesc
+			// 
+			this.labelCodeOrDesc.Location = new System.Drawing.Point(3,10);
+			this.labelCodeOrDesc.Name = "labelCodeOrDesc";
+			this.labelCodeOrDesc.Size = new System.Drawing.Size(172,16);
+			this.labelCodeOrDesc.TabIndex = 21;
+			this.labelCodeOrDesc.Text = "Code or Description";
+			this.labelCodeOrDesc.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textCode
+			// 
+			this.textCode.Location = new System.Drawing.Point(178,7);
+			this.textCode.Name = "textCode";
+			this.textCode.Size = new System.Drawing.Size(100,20);
+			this.textCode.TabIndex = 20;
+			// 
 			// FormRxNorms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(693,702);
+			this.Controls.Add(this.butSearch);
+			this.Controls.Add(this.labelCodeOrDesc);
+			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.butRxNorm);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.button1);
@@ -118,6 +156,7 @@ namespace OpenDental{
 			this.Text = "RxNorms";
 			this.Load += new System.EventHandler(this.FormRxNorms_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -128,5 +167,8 @@ namespace OpenDental{
 		private UI.Button button1;
 		private UI.ODGrid gridMain;
 		private UI.Button butRxNorm;
+		private UI.Button butSearch;
+		private System.Windows.Forms.Label labelCodeOrDesc;
+		private System.Windows.Forms.TextBox textCode;
 	}
 }

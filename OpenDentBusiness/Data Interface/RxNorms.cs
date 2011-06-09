@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<List<RxNorm>>(MethodBase.GetCurrentMethod(),codeOrDesc);
 			}
-			string command="SELECT * FROM rxnorm WHERE (RxCui LIKE '%"+codeOrDesc+"%' OR Description LIKE '%"+codeOrDesc+"%') "
+			string command="SELECT * FROM rxnorm WHERE (RxCui LIKE '%"+POut.String(codeOrDesc)+"%' OR Description LIKE '%"+POut.String(codeOrDesc)+"%') "
 				+"AND MmslCode=''";
 			return Crud.RxNormCrud.SelectMany(command);
 		}
