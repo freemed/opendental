@@ -830,7 +830,16 @@ namespace OpenDentBusiness {
 				if(procCode.PaintType!=ToothPaintingType.Extraction) {
 					continue;
 				}
-				extracted.Add(procList[i].Copy());
+#if DEBUG //Needed for certification so that we can manually change the order that extrated teeth are sent, even throuh this won't matter in production.
+				int j=0;
+				while(j<extracted.Count) {
+					if(extracted[j].DateTStamp>=procList[i].DateTStamp) {
+						break;
+					}
+					j++;
+				}
+				extracted.Insert(j,procList[i].Copy());
+#endif
 			}
 			return extracted;
 		}
