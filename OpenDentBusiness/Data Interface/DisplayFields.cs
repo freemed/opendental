@@ -443,7 +443,7 @@ namespace OpenDentBusiness {
 						}
 					}
 					if(addToList) {
-						list.Add(new DisplayField(orthoChart.FieldName,20,DisplayFieldCategory.OrthoChart));
+						list.Add(new DisplayField("",orthoChart.FieldName,20,DisplayFieldCategory.OrthoChart));
 					}	
 				}
 			}

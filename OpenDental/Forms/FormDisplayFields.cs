@@ -326,11 +326,13 @@ namespace OpenDental{
 			}
 			gridMain.EndUpdate();
 			for(int i=0;i<ListShowing.Count;i++){
-				for(int j=AvailList.Count-1;j>=0;j--) {//go backwards because we are removing items from the list.
+				for(int j=0;j<AvailList.Count;j++) {
+					//Only removing one item from AvailList per iteration of i.
 					if(category==DisplayFieldCategory.OrthoChart) {
 						//OrthoChart category does not use InternalNames.
 						if(ListShowing[i].Description==AvailList[j].Description) {
 							AvailList.RemoveAt(j);
+							break;
 						}
 					}
 					else {
@@ -357,6 +359,7 @@ namespace OpenDental{
 
 		private void butDefault_Click(object sender,EventArgs e) {
 //todo: if ortho, clear ListShowing.
+//No changes needed.
 			ListShowing=DisplayFields.GetDefaultList(category);
 			FillGrids();
 			changed=true;
@@ -368,11 +371,26 @@ namespace OpenDental{
 					MsgBox.Show(this,"Please select an item in the list on the right or create a new field first.");
 					return;
 				}
-				if(textCustomField.Text!="") {//Add new custom field
+				if(textCustomField.Text!="") {//Add new ortho chart field
+					for(int i=0;i<ListShowing.Count;i++) {
+						if(textCustomField.Text==ListShowing[i].InternalName) {
+							MsgBox.Show(this,"The \""+textCustomField.Text+"\" field is already displaying.");
+							return;
+						}
+					}
+					for(int i=0;i<AvailList.Count;i++) {
+						if(textCustomField.Text==AvailList[i].InternalName) {
+							ListShowing.Add(AvailList[i]);
+							textCustomField.Text="";
+							changed=true;
+							FillGrids();
+							return;
+						}
+					}
 					ListShowing.Add(new DisplayField(textCustomField.Text,20,DisplayFieldCategory.OrthoChart));
 					textCustomField.Text="";
 				}
-				else {//add field from available fields list
+				else {//add existing ortho chart field(s)
 					DisplayField field;
 					for(int i=0;i<listAvailable.SelectedItems.Count;i++) {
 						field=(DisplayField)listAvailable.SelectedItems[i];
@@ -400,6 +418,7 @@ namespace OpenDental{
 			//1. Remove from listShowing.
 			//2. If it's not on AvailList, then it just goes away
 			//3. FillGrid seems to be intelligent enough to decide whether it should show in the list at the right.
+//No changes needed.
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select an item in the grid on the left first.");
 				return;
@@ -468,7 +487,8 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
-//todo: This will need lots of careful work: I think I fixed it.
+//todo: This will need lots of careful work: 
+//No changes needed.
 			if(category==DisplayFieldCategory.OrthoChart) {
 				DisplayFields.SaveListForOrthoChart(ListShowing);
 			}
