@@ -354,15 +354,25 @@ namespace OpenDental{
 			formD.FieldCur=ListShowing[e.Row];
 			DisplayField tempField=ListShowing[e.Row].Copy();
 			formD.ShowDialog();
-			for(int i=0;i<ListShowing.Count;i++) {
-				if(ListShowing[e.Row].Description==ListShowing[i].Description || ListShowing[e.Row].InternalName==ListShowing[i].InternalName) {
+			if(formD.DialogResult!=DialogResult.OK) {
+				ListShowing[e.Row]=tempField;
+				return;
+			}
+			if(ListShowing[e.Row].InternalName==ListShowing[e.Row].Description) {//Disallows fields with empty or matching names.
+				ListShowing[e.Row]=tempField;
+				MsgBox.Show(this,"Field name and description cannot be the same.");
+				return;
+			}
+			for(int i=0;i<ListShowing.Count;i++) {//Check against ListShowing only
+				if(ListShowing[e.Row].Description==ListShowing[i].Description && e.Row!=i//Disallows matching names.
+					|| ListShowing[e.Row].Description==ListShowing[i].InternalName) {//Disallows descriptions that match internal names
 					ListShowing[e.Row]=tempField;
 					MsgBox.Show(this,"That field name already exists.");
 					return;
 				}
 			}
-			for(int i=0;i<AvailList.Count;i++) {
-				if(ListShowing[e.Row].Description==AvailList[i].Description || ListShowing[e.Row].InternalName==AvailList[i].InternalName) {
+			for(int i=0;i<AvailList.Count;i++) {//check against AvailList only
+				if(ListShowing[e.Row].Description==AvailList[i].Description || ListShowing[e.Row].Description==AvailList[i].InternalName) {
 					ListShowing[e.Row]=tempField;
 					MsgBox.Show(this,"That field name already exists.");
 					return;
