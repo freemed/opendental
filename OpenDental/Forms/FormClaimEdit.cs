@@ -2493,7 +2493,6 @@ namespace OpenDental{
 			this.butReverse.Size = new System.Drawing.Size(59,24);
 			this.butReverse.TabIndex = 138;
 			this.butReverse.Text = "Reverse";
-			this.butReverse.Visible = false;
 			this.butReverse.Click += new System.EventHandler(this.butReverse_Click);
 			// 
 			// textMissingTeeth
@@ -4683,11 +4682,14 @@ namespace OpenDental{
 		}
 
 		private void butReverse_Click(object sender,EventArgs e) {
+			bool claimDeleted=false;
+			Cursor=Cursors.WaitCursor;
 			InsPlan insPlan=InsPlans.GetPlan(ClaimCur.PlanNum,null);
 			InsSub insSub=InsSubs.GetOne(ClaimCur.InsSubNum);
 			try {
 				CanadianOutput.SendClaimReversal(ClaimCur,insPlan,insSub);
 				Claims.Delete(ClaimCur);
+				claimDeleted=true;
 				List <Etrans> etransHistory=Etranss.GetAllForOneClaim(ClaimCur.ClaimNum);
 				for(int i=0;i<etransHistory.Count;i++) {
 					Etranss.Delete(etransHistory[i].EtransNum);
@@ -4704,7 +4706,13 @@ namespace OpenDental{
 				}
 			}
 			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"Failed to reverse claim")+": "+ex.Message);
+				if(!claimDeleted) {
+					MessageBox.Show(Lan.g(this,"Failed to reverse claim")+": "+ex.Message);
+				}
+			}
+			Cursor=Cursors.Default;
+			if(claimDeleted) {
+				Close();//The claim has been deleted so we need to close this claim edit window.
 			}
 		}
 
