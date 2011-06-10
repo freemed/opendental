@@ -32,7 +32,7 @@ namespace OpenDental{
 		public DisplayFieldCategory category;
 		///<summary>When this form opens, this is the list of display fields that the user has already explicitly set to be showing.  If the user did not set any to be showing yet, then this will start out as the default list.  Except in ortho, where there is no default list.  For non-ortho categories, this is a subset of AvailList.  As this window is used, items are added to this list but not saved until window closes with OK.  For ortho category, items are also added to this list as the window is used.</summary>
 		private List<DisplayField> ListShowing;
-		///<summary>This is the list of all possible display fields.  If ortho, this list is a combination of current display fields and historical orthochart.FieldNames.</summary>
+		///<summary>This is the list of all possible display fields.  If ortho, this list is a combination of current display fields and historical orthochart.FieldNames.  Once the grids on the form are filled, this AvailList is only the items showing in the list at the right.</summary>
 		private List<DisplayField> AvailList;
 
 		///<summary></summary>
@@ -355,27 +355,31 @@ namespace OpenDental{
 			DisplayField tempField=ListShowing[e.Row].Copy();
 			formD.ShowDialog();
 			if(formD.DialogResult!=DialogResult.OK) {
-				ListShowing[e.Row]=tempField;
+				ListShowing[e.Row]=tempField.Copy();
 				return;
 			}
-			if(ListShowing[e.Row].InternalName==ListShowing[e.Row].Description) {//Disallows fields with empty or matching names.
-				ListShowing[e.Row]=tempField;
-				MsgBox.Show(this,"Field name and description cannot be the same.");
-				return;
-			}
-			for(int i=0;i<ListShowing.Count;i++) {//Check against ListShowing only
-				if(ListShowing[e.Row].Description==ListShowing[i].Description && e.Row!=i//Disallows matching names.
-					|| ListShowing[e.Row].Description==ListShowing[i].InternalName) {//Disallows descriptions that match internal names
-					ListShowing[e.Row]=tempField;
-					MsgBox.Show(this,"That field name already exists.");
+			if(category==DisplayFieldCategory.OrthoChart) {
+				if(ListShowing[e.Row].Description=="") {
+					ListShowing[e.Row]=tempField.Copy();
+					MsgBox.Show(this,"Description cannot be blank.");
 					return;
 				}
-			}
-			for(int i=0;i<AvailList.Count;i++) {//check against AvailList only
-				if(ListShowing[e.Row].Description==AvailList[i].Description || ListShowing[e.Row].Description==AvailList[i].InternalName) {
-					ListShowing[e.Row]=tempField;
-					MsgBox.Show(this,"That field name already exists.");
-					return;
+				for(int i=0;i<ListShowing.Count;i++) {//Check against ListShowing only
+					if(i==e.Row) {
+						continue;
+					}
+					if(ListShowing[e.Row].Description==ListShowing[i].Description) {
+						ListShowing[e.Row]=tempField;
+						MsgBox.Show(this,"That field name already exists.");
+						return;
+					}
+				}
+				for(int i=0;i<AvailList.Count;i++) {//check against AvailList only
+					if(ListShowing[e.Row].Description==AvailList[i].Description) {
+						ListShowing[e.Row]=tempField;
+						MsgBox.Show(this,"That field name already exists.");
+						return;
+					}
 				}
 			}
 			FillGrids();
@@ -397,7 +401,7 @@ namespace OpenDental{
 				if(textCustomField.Text!="") {//Add new ortho chart field
 					for(int i=0;i<ListShowing.Count;i++) {
 						if(textCustomField.Text==ListShowing[i].Description) {
-							MsgBox.Show(this,"The \""+textCustomField.Text+"\" field is already displaying.");
+							MsgBox.Show(this,"That field is already displaying.");
 							return;
 						}
 					}
@@ -439,11 +443,6 @@ namespace OpenDental{
 		}
 
 		private void butRight_Click(object sender,EventArgs e) {
-//todo: ortho.
-			//1. Remove from listShowing.
-			//2. If it's not on AvailList, then it just goes away
-			//3. FillGrid seems to be intelligent enough to decide whether it should show in the list at the right.
-//No changes needed.
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select an item in the grid on the left first.");
 				return;

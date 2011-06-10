@@ -19,6 +19,8 @@ namespace OpenDental {
 		private OpenDental.UI.Button butAdd;
 		private List<Referral> listRef;
 		private UI.ODGrid gridMain;
+		private TextBox textSearch;
+		private Label label1;
 		///<summary>This will contain the referral that was selected.</summary>
 		public Referral SelectedReferral;
 
@@ -50,6 +52,8 @@ namespace OpenDental {
 			this.checkHidden = new System.Windows.Forms.CheckBox();
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textSearch = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -62,7 +66,7 @@ namespace OpenDental {
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.butCancel.Location = new System.Drawing.Point(872,646);
+			this.butCancel.Location = new System.Drawing.Point(872,658);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(82,26);
 			this.butCancel.TabIndex = 6;
@@ -77,7 +81,7 @@ namespace OpenDental {
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(872,614);
+			this.butOK.Location = new System.Drawing.Point(784,658);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(82,26);
 			this.butOK.TabIndex = 5;
@@ -99,14 +103,14 @@ namespace OpenDental {
 			// butAdd
 			// 
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(872,464);
+			this.butAdd.Location = new System.Drawing.Point(8,658);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(80,26);
 			this.butAdd.TabIndex = 12;
@@ -119,19 +123,38 @@ namespace OpenDental {
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(8,12);
+			this.gridMain.Location = new System.Drawing.Point(8,52);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(829,672);
+			this.gridMain.Size = new System.Drawing.Size(940,600);
 			this.gridMain.TabIndex = 15;
 			this.gridMain.Title = "Select Referral";
 			this.gridMain.TranslationName = "TableSelectReferral";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// textSearch
+			// 
+			this.textSearch.Location = new System.Drawing.Point(103,24);
+			this.textSearch.Name = "textSearch";
+			this.textSearch.Size = new System.Drawing.Size(201,20);
+			this.textSearch.TabIndex = 16;
+			this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(5,27);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(100,17);
+			this.label1.TabIndex = 17;
+			this.label1.Text = "Search";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormReferralSelect
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,696);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.textSearch);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.checkHidden);
@@ -147,6 +170,7 @@ namespace OpenDental {
 			this.Text = "Referrals";
 			this.Load += new System.EventHandler(this.FormReferralSelect_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -190,6 +214,28 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<listRef.Count;i++) {
 				row=new ODGridRow();
+				if(textSearch.Text!="") {
+					if(!listRef[i].Address.Contains(textSearch.Text)
+						&&!listRef[i].Address2.Contains(textSearch.Text)
+						&&!listRef[i].City.Contains(textSearch.Text)
+						&&!listRef[i].EMail.Contains(textSearch.Text)
+						&&!listRef[i].FName.Contains(textSearch.Text)
+						&&!listRef[i].LName.Contains(textSearch.Text)
+						&&!listRef[i].MName.Contains(textSearch.Text)
+						&&!listRef[i].NationalProvID.Contains(textSearch.Text)
+						&&!listRef[i].Note.Contains(textSearch.Text)
+						&&!listRef[i].PatNum.ToString().Contains(textSearch.Text)
+						&&!listRef[i].Phone2.Contains(textSearch.Text)
+						&&!listRef[i].ReferralNum.ToString().Contains(textSearch.Text)
+						&&!listRef[i].Specialty.ToString().Contains(textSearch.Text)
+						&&!listRef[i].SSN.Contains(textSearch.Text)
+						&&!listRef[i].ST.Contains(textSearch.Text)
+						&&!listRef[i].Telephone.Contains(textSearch.Text)
+						&&!listRef[i].Title.Contains(textSearch.Text)
+						&&!listRef[i].Zip.Contains(textSearch.Text)) {
+						continue;
+					}
+				}
 				row.Cells.Add(listRef[i].LName);
 				row.Cells.Add(listRef[i].FName);
 				if(listRef[i].MName!="") {
@@ -275,6 +321,10 @@ namespace OpenDental {
 		}
 
 		private void checkHidden_Click(object sender,System.EventArgs e) {
+			FillTable();
+		}
+
+		private void textSearch_TextChanged(object sender,EventArgs e) {
 			FillTable();
 		}
 
