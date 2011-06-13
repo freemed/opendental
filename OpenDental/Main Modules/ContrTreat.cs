@@ -2690,10 +2690,12 @@ namespace OpenDental{
 				FormIPS.SelectedSub=InsSubs.GetOne(patPlan1.InsSubNum);
 				FormIPS.SelectedPlan=InsPlans.GetPlan(FormIPS.SelectedSub.PlanNum,null);
 				PatPlan patPlan2=PatPlans.GetPatPlan(PatCur.PatNum,2);
-				InsSub insSub2=InsSubs.GetOne(patPlan2.InsSubNum);
-				ClaimCur.PlanNum2=insSub2.PlanNum;
-				ClaimCur.InsSubNum2=insSub2.InsSubNum;
-				ClaimCur.PatRelat2=patPlan2.Relationship;
+				if(patPlan2!=null) {
+					InsSub insSub2=InsSubs.GetOne(patPlan2.InsSubNum);
+					ClaimCur.PlanNum2=insSub2.PlanNum;
+					ClaimCur.InsSubNum2=insSub2.InsSubNum;
+					ClaimCur.PatRelat2=patPlan2.Relationship;
+				}
 			}
 			else {
 				FormIPS.ShowDialog();
