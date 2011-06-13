@@ -53,6 +53,9 @@ namespace MobileWeb {
 				List<RxPatm> rxList=RxPatms.GetRxPatms(CustomerNum,PatNum);
 				Repeater2.DataSource=rxList;
 				Repeater2.DataBind();
+				List<Allergym> allergyList=Allergyms.GetAllergyms(CustomerNum,PatNum);
+				Repeater3.DataSource=allergyList;
+				Repeater3.DataBind();
 			}
 			catch(Exception ex) {
 				LabelError.Text=Util.ErrorMessage;

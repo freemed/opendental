@@ -174,7 +174,9 @@ function TraversePage(){
 	/*home, appt, patient, pharmacies buttons*/
 	$('.appts').tap(function (e) {
 	    //console.log('Next button tapped');
-	    var UrlForFetchingData = this.attributes["linkattib"].value;
+	    var provnum = $("#provlist option:selected").val();
+	    var UrlForFetchingData = 'AppointmentList.aspx?ProvNum=' + provnum;
+	   // var UrlForFetchingData = this.attributes["linkattib"].value;
 	    var SectionToFill = '#AppointmentListContents';
 	    var MoveToURL = '#AppointmentList';
 	    ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);	    

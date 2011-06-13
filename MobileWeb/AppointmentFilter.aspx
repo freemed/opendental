@@ -7,6 +7,7 @@
     <title></title>
 </head>
 <body>
+
 	<div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
 	<div id="content">
 	<div class="styleError">  
@@ -18,11 +19,12 @@
 		<option value="0">All</option>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
-				<option value="<%#((Providerm)Container.DataItem).ProvNum %>"><%#((Providerm)Container.DataItem).Abbr%></option>
+				<option value="<%#((Providerm)Container.DataItem).ProvNum %>"<%#GetSelected((Providerm)Container.DataItem)%>"><%#((Providerm)Container.DataItem).Abbr%></option>
 				</ItemTemplate>
 			</asp:Repeater>
 	</select>
 	<div style="height:100px"></div>
 	</div>
+	
 </body>
 </html>

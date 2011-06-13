@@ -73,9 +73,14 @@ namespace MobileWeb {
 
 				#region process providers
 					long ProvNum=0;
-					if(Request["ProvNum"]!=null) {
+					if(Request["ProvNum"]==null) {
+						if(Session["ProvNum"]!=null) {
+							Int64.TryParse(Session["ProvNum"].ToString(),out ProvNum);
+						}
+					}else{
 						Int64.TryParse(Request["ProvNum"].ToString().Trim(),out ProvNum);
-					}
+						Session["ProvNum"]=ProvNum.ToString();
+						}
 				#endregion
 					List<Appointmentm> appointmentmList;
 				if(ProvNum==0){
@@ -109,19 +114,6 @@ namespace MobileWeb {
 				return HexColor;
 			}
 		}
-		private bool SetCustomerNum(){
-			Message.Text="";
-			if(Session["CustomerNum"]==null) {
-				return false;
-			}
-			Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-			if(CustomerNum!=0) {
-				Message.Text="LoggedIn";
-			}
-			return true;
-		}
-
-
 
 
 
