@@ -491,7 +491,7 @@ namespace OpenDental.Eclaims {
 			}
 			CCDField field=fieldInputter.GetFieldById("G05");//response status
 			if(field.valuestr=="R") {
-				throw new ApplicationException(Lan.g("CanadianOutput","Reversal was rejected by clearinghouse."));
+				throw new ApplicationException(Lan.g("CanadianOutput","Reversal was rejected by clearinghouse. The claim must be reversed manually."));
 			}
 			return etransAck.EtransNum;
 		}

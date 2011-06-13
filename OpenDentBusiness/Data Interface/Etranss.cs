@@ -366,7 +366,7 @@ namespace OpenDentBusiness{
 			//	X837 x837=new X837(messageText);
 			//	etrans.TransSetNum=x837.GetTransNum(claimNum);
 			//}
-			if(etype==EtransType.Claim_CA || etype==EtransType.ClaimCOB_CA) {
+			if(etype==EtransType.Claim_CA || etype==EtransType.ClaimCOB_CA || etype==EtransType.Predeterm_CA || etype==EtransType.PredetermEOB_CA) {
 				etrans.OfficeSequenceNumber=0;
 				//find the next officeSequenceNumber
 				command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
