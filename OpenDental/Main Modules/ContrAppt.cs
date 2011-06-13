@@ -2100,6 +2100,9 @@ namespace OpenDental{
 			if(pinBoard.SelectedIndex==-1){
 				return;
 			}
+			if(mouseIsDown){//User right clicked while draging appt around.
+				return;
+			}
 			if(e.Button==MouseButtons.Right) {
 				ContextMenu cmen=new ContextMenu();
 				MenuItem menuItemProv=new MenuItem(Lan.g(this,"Change Provider"));
