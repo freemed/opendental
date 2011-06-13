@@ -92,6 +92,7 @@ namespace OpenDental{
 		private UI.Button butAllergiesIndicateNone;
 		private TextBox textAllergiesIndicateNone;
 		private Label label14;
+		private UI.Button butApptPrintSetup;
 		private bool changed;
 
 		///<summary></summary>
@@ -181,6 +182,9 @@ namespace OpenDental{
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
 			this.tabChart = new System.Windows.Forms.TabPage();
+			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
+			this.textAllergiesIndicateNone = new System.Windows.Forms.TextBox();
+			this.label14 = new System.Windows.Forms.Label();
 			this.butMedicationsIndicateNone = new OpenDental.UI.Button();
 			this.textMedicationsIndicateNone = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
@@ -191,9 +195,7 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
-			this.textAllergiesIndicateNone = new System.Windows.Forms.TextBox();
-			this.label14 = new System.Windows.Forms.Label();
+			this.butApptPrintSetup = new OpenDental.UI.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -832,6 +834,7 @@ namespace OpenDental{
 			// 
 			// tabAppts
 			// 
+			this.tabAppts.Controls.Add(this.butApptPrintSetup);
 			this.tabAppts.Controls.Add(this.checkApptRefreshEveryMinute);
 			this.tabAppts.Controls.Add(this.checkAppointmentBubblesDisabled);
 			this.tabAppts.Controls.Add(this.label6);
@@ -975,6 +978,38 @@ namespace OpenDental{
 			this.tabChart.Text = "Chart";
 			this.tabChart.UseVisualStyleBackColor = true;
 			// 
+			// butAllergiesIndicateNone
+			// 
+			this.butAllergiesIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAllergiesIndicateNone.Autosize = true;
+			this.butAllergiesIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAllergiesIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAllergiesIndicateNone.CornerRadius = 4F;
+			this.butAllergiesIndicateNone.Location = new System.Drawing.Point(419,155);
+			this.butAllergiesIndicateNone.Name = "butAllergiesIndicateNone";
+			this.butAllergiesIndicateNone.Size = new System.Drawing.Size(22,21);
+			this.butAllergiesIndicateNone.TabIndex = 205;
+			this.butAllergiesIndicateNone.Text = "...";
+			this.butAllergiesIndicateNone.Click += new System.EventHandler(this.butAllergiesIndicateNone_Click);
+			// 
+			// textAllergiesIndicateNone
+			// 
+			this.textAllergiesIndicateNone.Location = new System.Drawing.Point(270,156);
+			this.textAllergiesIndicateNone.Name = "textAllergiesIndicateNone";
+			this.textAllergiesIndicateNone.ReadOnly = true;
+			this.textAllergiesIndicateNone.Size = new System.Drawing.Size(145,20);
+			this.textAllergiesIndicateNone.TabIndex = 204;
+			// 
+			// label14
+			// 
+			this.label14.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label14.Location = new System.Drawing.Point(19,159);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(246,16);
+			this.label14.TabIndex = 203;
+			this.label14.Text = "Indicator that patient has No Allergies";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// butMedicationsIndicateNone
 			// 
 			this.butMedicationsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -1090,37 +1125,20 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// butAllergiesIndicateNone
+			// butApptPrintSetup
 			// 
-			this.butAllergiesIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAllergiesIndicateNone.Autosize = true;
-			this.butAllergiesIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAllergiesIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAllergiesIndicateNone.CornerRadius = 4F;
-			this.butAllergiesIndicateNone.Location = new System.Drawing.Point(419,155);
-			this.butAllergiesIndicateNone.Name = "butAllergiesIndicateNone";
-			this.butAllergiesIndicateNone.Size = new System.Drawing.Size(22,21);
-			this.butAllergiesIndicateNone.TabIndex = 205;
-			this.butAllergiesIndicateNone.Text = "...";
-			this.butAllergiesIndicateNone.Click += new System.EventHandler(this.butAllergiesIndicateNone_Click);
-			// 
-			// textAllergiesIndicateNone
-			// 
-			this.textAllergiesIndicateNone.Location = new System.Drawing.Point(270,156);
-			this.textAllergiesIndicateNone.Name = "textAllergiesIndicateNone";
-			this.textAllergiesIndicateNone.ReadOnly = true;
-			this.textAllergiesIndicateNone.Size = new System.Drawing.Size(145,20);
-			this.textAllergiesIndicateNone.TabIndex = 204;
-			// 
-			// label14
-			// 
-			this.label14.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label14.Location = new System.Drawing.Point(19,159);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(246,16);
-			this.label14.TabIndex = 203;
-			this.label14.Text = "Indicator that patient has No Allergies";
-			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.butApptPrintSetup.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butApptPrintSetup.Autosize = true;
+			this.butApptPrintSetup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butApptPrintSetup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butApptPrintSetup.CornerRadius = 4F;
+			this.butApptPrintSetup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butApptPrintSetup.Location = new System.Drawing.Point(312,211);
+			this.butApptPrintSetup.Name = "butApptPrintSetup";
+			this.butApptPrintSetup.Size = new System.Drawing.Size(128,24);
+			this.butApptPrintSetup.TabIndex = 199;
+			this.butApptPrintSetup.Text = "Appt Print Setup";
+			this.butApptPrintSetup.Click += new System.EventHandler(this.butApptPrintSetup_Click);
 			// 
 			// FormModuleSetup
 			// 
@@ -1324,6 +1342,12 @@ namespace OpenDental{
 				changed=true;
 			}
 			textAllergiesIndicateNone.Text=AllergyDefs.GetOne(formA.SelectedAllergyDefNum).Description;
+		}
+		
+
+		private void butApptPrintSetup_Click(object sender,EventArgs e) {
+			FormApptPrintSetup FormAPS=new FormApptPrintSetup();
+			FormAPS.ShowDialog();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
