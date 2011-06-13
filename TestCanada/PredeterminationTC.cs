@@ -417,8 +417,7 @@ namespace TestCanada {
 		  }
 #if DEBUG
 			Canadian.testNumber=scriptNum;
-			Canadian.currentPredeterminationPageNumber=pageNumber;
-			Canadian.lastPredeterminationPageNumber=lastPageNumber;
+			claim.PreAuthString=""+pageNumber+","+lastPageNumber;
 #endif
 		  long etransNum=Canadian.SendClaim(queueItem,showForms,"");
 		  Etrans etrans=Etranss.GetEtrans(etransNum);
