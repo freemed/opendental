@@ -26,6 +26,9 @@ namespace OpenDental{
 		private ContextMenu contextMenu1;
 		private MenuItem menuItemGoTo;
 		private CheckBox checkShowUnattached;
+		private ComboBox comboSortBy;
+		private Label label3;
+		private ComboBox comboSortOrder;
 		//<summary>Set this to the selected date on the schedule, and date range will start out based on this date.</summary>
 		//public DateTime DateViewing;
 		///<summary>If this is zero, then it's an ordinary close.</summary>
@@ -75,6 +78,9 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
 			this.checkShowUnattached = new System.Windows.Forms.CheckBox();
+			this.comboSortBy = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.comboSortOrder = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -179,10 +185,42 @@ namespace OpenDental{
 			this.checkShowUnattached.Text = "Show Unattached";
 			this.checkShowUnattached.UseVisualStyleBackColor = true;
 			// 
+			// comboSortBy
+			// 
+			this.comboSortBy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboSortBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSortBy.FormattingEnabled = true;
+			this.comboSortBy.Location = new System.Drawing.Point(574,9);
+			this.comboSortBy.Name = "comboSortBy";
+			this.comboSortBy.Size = new System.Drawing.Size(156,21);
+			this.comboSortBy.TabIndex = 9;
+			// 
+			// label3
+			// 
+			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label3.Location = new System.Drawing.Point(470,12);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(100,18);
+			this.label3.TabIndex = 10;
+			this.label3.Text = "Sort By";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboSortOrder
+			// 
+			this.comboSortOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSortOrder.FormattingEnabled = true;
+			this.comboSortOrder.Location = new System.Drawing.Point(736,9);
+			this.comboSortOrder.Name = "comboSortOrder";
+			this.comboSortOrder.Size = new System.Drawing.Size(64,21);
+			this.comboSortOrder.TabIndex = 11;
+			// 
 			// FormLabCases
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(812,517);
+			this.Controls.Add(this.comboSortOrder);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.comboSortBy);
 			this.Controls.Add(this.checkShowUnattached);
 			this.Controls.Add(this.checkShowAll);
 			this.Controls.Add(this.butRefresh);
@@ -208,6 +246,9 @@ namespace OpenDental{
 
 		private void FormLabCases_Load(object sender,EventArgs e) {
 			gridMain.ContextMenu=contextMenu1;
+			comboSortOrder.Items.Add("ASC");
+			comboSortOrder.Items.Add("DESC");
+			comboSortOrder.SelectedIndex=0;
 			textDateFrom.Text="";//DateViewing.ToShortDateString();
 			textDateTo.Text="";//DateViewing.AddDays(5).ToShortDateString();
 			//checkShowAll.Checked=false
@@ -240,6 +281,22 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableLabCases","Lab Phone"),100);
 			gridMain.Columns.Add(col);
+//todo: this code technically only needs to be run once when the form opens, but running it here means less redundant code, and it does not querry the database. 
+			if(comboSortBy.Items.Count==0) {
+				for(int i=0;i<gridMain.Columns.Count;i++) {
+					comboSortBy.Items.Add(gridMain.Columns[i].Heading);
+				}
+			}
+			if(comboSortBy.SelectedIndex>-1) {
+				try {
+					table.DefaultView.Sort = "aptDateTime "+comboSortOrder.SelectedItem.ToString();//need to find column name.
+					//table.DefaultView.Sort = comboSortBy.SelectedItem.ToString()+" "+comboSortOrder.SelectedItem.ToString();
+					table=table.DefaultView.ToTable();
+				}
+				catch {
+					MsgBox.Show(this,Lan.g(this,"Column contains empty values."));
+				}
+			}
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++){
