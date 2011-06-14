@@ -46,6 +46,12 @@ namespace OpenDentBusiness {
 		ApptBubbleDelay,
 		ApptExclamationShowForUnsentIns,
 		ApptModuleRefreshesEveryMinute,
+		///<summary>Integer</summary>
+		ApptPrintColumnsPerPage,
+		///<summary>Float</summary>
+		ApptPrintFontSize,
+		ApptPrintTimeStart,
+		ApptPrintTimeStop,
 		AtoZfolderNotRequired,
 		AutoResetTPEntryStatus,
 		BackupExcludeImageFolder,

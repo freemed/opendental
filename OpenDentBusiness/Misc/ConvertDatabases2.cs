@@ -5464,6 +5464,38 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EhrProvKeyGeneratorPath','','')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('ApptPrintColumnsPerPage','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ApptPrintColumnsPerPage','','')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('ApptPrintFontSize','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ApptPrintFontSize','','')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('ApptPrintTimeStart','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ApptPrintTimeStart','','')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString,Comments) VALUES('ApptPrintTimeStop','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString,Comments) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ApptPrintTimeStop','','')";
+					Db.NonQ(command);
+				}
 
 
 
