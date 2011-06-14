@@ -25,10 +25,11 @@ namespace OpenDentBusiness{
 			table.Columns.Add("phone");
 			table.Columns.Add("ProcDescript");
 			table.Columns.Add("status");
+			table.Columns.Add("Instructions");
 			List<DataRow> rows=new List<DataRow>();
 			//the first query only gets labcases that are attached to scheduled appointments
 			string command="SELECT AptDateTime,appointment.AptNum,DateTimeChecked,DateTimeRecd,DateTimeSent,"
-				+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone,ProcDescript "
+				+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone,ProcDescript,Instructions "
 				+"FROM labcase "
 				+"LEFT JOIN appointment ON labcase.AptNum=appointment.AptNum "
 				+"LEFT JOIN patient ON labcase.PatNum=patient.PatNum "
@@ -57,6 +58,7 @@ namespace OpenDentBusiness{
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["phone"]=raw.Rows[i]["Phone"].ToString();
 				row["ProcDescript"]=raw.Rows[i]["ProcDescript"].ToString();
+				row["Instructions"]=raw.Rows[i]["Instructions"].ToString();
 				date=PIn.DateT(raw.Rows[i]["DateTimeChecked"].ToString());
 				if(date.Year>1880) {
 					row["status"]=Lans.g("FormLabCases","Quality Checked");
@@ -81,7 +83,7 @@ namespace OpenDentBusiness{
 			if(ShowUnattached) {
 				//Then, this second query gets labcases not attached to appointments.  No date filter.  No date displayed.
 				command="SELECT DateTimeChecked,DateTimeRecd,DateTimeSent,"
-					+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone "
+					+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone,Instructions "
 					+"FROM labcase "
 					+"LEFT JOIN patient ON labcase.PatNum=patient.PatNum "
 					+"LEFT JOIN laboratory ON labcase.LaboratoryNum=laboratory.LaboratoryNum "
@@ -99,6 +101,7 @@ namespace OpenDentBusiness{
 					row["phone"]=raw.Rows[i]["Phone"].ToString();
 					row["ProcDescript"]="";
 					row["status"]="";
+					row["Instructions"]=raw.Rows[i]["Instructions"].ToString();
 					date=PIn.DateT(raw.Rows[i]["DateTimeChecked"].ToString());
 					if(date.Year>1880) {
 						row["status"]=Lans.g("FormLabCases","Quality Checked");

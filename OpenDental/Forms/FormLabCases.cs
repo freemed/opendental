@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using System.Drawing.Printing;
 
 namespace OpenDental{
 	/// <summary>
@@ -26,13 +27,14 @@ namespace OpenDental{
 		private ContextMenu contextMenu1;
 		private MenuItem menuItemGoTo;
 		private CheckBox checkShowUnattached;
-		private ComboBox comboSortBy;
-		private Label label3;
-		private ComboBox comboSortOrder;
+		private UI.Button butPrint;
 		//<summary>Set this to the selected date on the schedule, and date range will start out based on this date.</summary>
 		//public DateTime DateViewing;
 		///<summary>If this is zero, then it's an ordinary close.</summary>
 		public long GoToAptNum;
+		public bool headingPrinted;
+		public int headingPrintH;
+		public int pagesPrinted;
 
 		///<summary></summary>
 		public FormLabCases()
@@ -72,15 +74,13 @@ namespace OpenDental{
 			this.checkShowAll = new System.Windows.Forms.CheckBox();
 			this.contextMenu1 = new System.Windows.Forms.ContextMenu();
 			this.menuItemGoTo = new System.Windows.Forms.MenuItem();
+			this.checkShowUnattached = new System.Windows.Forms.CheckBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.textDateFrom = new OpenDental.ValidDate();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
-			this.checkShowUnattached = new System.Windows.Forms.CheckBox();
-			this.comboSortBy = new System.Windows.Forms.ComboBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.comboSortOrder = new System.Windows.Forms.ComboBox();
+			this.butPrint = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -121,6 +121,30 @@ namespace OpenDental{
 			this.menuItemGoTo.Text = "Go To Appointment";
 			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
 			// 
+			// checkShowUnattached
+			// 
+			this.checkShowUnattached.Location = new System.Drawing.Point(361,14);
+			this.checkShowUnattached.Name = "checkShowUnattached";
+			this.checkShowUnattached.Size = new System.Drawing.Size(131,18);
+			this.checkShowUnattached.TabIndex = 8;
+			this.checkShowUnattached.Text = "Show Unattached";
+			this.checkShowUnattached.UseVisualStyleBackColor = true;
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(17,67);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(916,420);
+			this.gridMain.TabIndex = 1;
+			this.gridMain.Title = "Lab Cases";
+			this.gridMain.TranslationName = "TableLabCases";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// butRefresh
 			// 
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -149,18 +173,6 @@ namespace OpenDental{
 			this.textDateFrom.Size = new System.Drawing.Size(100,20);
 			this.textDateFrom.TabIndex = 3;
 			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(17,67);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(783,404);
-			this.gridMain.TabIndex = 1;
-			this.gridMain.Title = "Lab Cases";
-			this.gridMain.TranslationName = "TableLabCases";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
 			// butClose
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -169,58 +181,35 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(725,481);
+			this.butClose.Location = new System.Drawing.Point(858,497);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// checkShowUnattached
+			// butPrint
 			// 
-			this.checkShowUnattached.Location = new System.Drawing.Point(361,14);
-			this.checkShowUnattached.Name = "checkShowUnattached";
-			this.checkShowUnattached.Size = new System.Drawing.Size(131,18);
-			this.checkShowUnattached.TabIndex = 8;
-			this.checkShowUnattached.Text = "Show Unattached";
-			this.checkShowUnattached.UseVisualStyleBackColor = true;
-			// 
-			// comboSortBy
-			// 
-			this.comboSortBy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboSortBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSortBy.FormattingEnabled = true;
-			this.comboSortBy.Location = new System.Drawing.Point(574,9);
-			this.comboSortBy.Name = "comboSortBy";
-			this.comboSortBy.Size = new System.Drawing.Size(156,21);
-			this.comboSortBy.TabIndex = 9;
-			// 
-			// label3
-			// 
-			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.Location = new System.Drawing.Point(470,12);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(100,18);
-			this.label3.TabIndex = 10;
-			this.label3.Text = "Sort By";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboSortOrder
-			// 
-			this.comboSortOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSortOrder.FormattingEnabled = true;
-			this.comboSortOrder.Location = new System.Drawing.Point(736,9);
-			this.comboSortOrder.Name = "comboSortOrder";
-			this.comboSortOrder.Size = new System.Drawing.Size(64,21);
-			this.comboSortOrder.TabIndex = 11;
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(413,497);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(79,24);
+			this.butPrint.TabIndex = 53;
+			this.butPrint.Text = "Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// FormLabCases
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(812,517);
-			this.Controls.Add(this.comboSortOrder);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.comboSortBy);
+			this.ClientSize = new System.Drawing.Size(945,533);
+			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkShowUnattached);
 			this.Controls.Add(this.checkShowAll);
 			this.Controls.Add(this.butRefresh);
@@ -246,9 +235,6 @@ namespace OpenDental{
 
 		private void FormLabCases_Load(object sender,EventArgs e) {
 			gridMain.ContextMenu=contextMenu1;
-			comboSortOrder.Items.Add("ASC");
-			comboSortOrder.Items.Add("DESC");
-			comboSortOrder.SelectedIndex=0;
 			textDateFrom.Text="";//DateViewing.ToShortDateString();
 			textDateTo.Text="";//DateViewing.AddDays(5).ToShortDateString();
 			//checkShowAll.Checked=false
@@ -277,26 +263,12 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableLabCases","Status"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableLabCases","Lab"),100);
+			col=new ODGridColumn(Lan.g("TableLabCases","Lab"),75);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableLabCases","Lab Phone"),100);
 			gridMain.Columns.Add(col);
-//todo: this code technically only needs to be run once when the form opens, but running it here means less redundant code, and it does not querry the database. 
-			if(comboSortBy.Items.Count==0) {
-				for(int i=0;i<gridMain.Columns.Count;i++) {
-					comboSortBy.Items.Add(gridMain.Columns[i].Heading);
-				}
-			}
-			if(comboSortBy.SelectedIndex>-1) {
-				try {
-					table.DefaultView.Sort = "aptDateTime "+comboSortOrder.SelectedItem.ToString();//need to find column name.
-					//table.DefaultView.Sort = comboSortBy.SelectedItem.ToString()+" "+comboSortOrder.SelectedItem.ToString();
-					table=table.DefaultView.ToTable();
-				}
-				catch {
-					MsgBox.Show(this,Lan.g(this,"Column contains empty values."));
-				}
-			}
+			col=new ODGridColumn(Lan.g("TableLabCases","Instructions"),100);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -307,8 +279,11 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["status"].ToString());
 				row.Cells.Add(table.Rows[i]["lab"].ToString());
 				row.Cells.Add(table.Rows[i]["phone"].ToString());
+				row.Cells.Add(table.Rows[i]["Instructions"].ToString());
 				gridMain.Rows.Add(row);
 			}
+			gridMain.Columns[0].SortingStrategy=GridSortingStrategy.DateParse;
+			gridMain.AllowSortingByColumn=true;
 			gridMain.EndUpdate();
 		}
 
@@ -350,9 +325,62 @@ namespace OpenDental{
 			Close();
 		}
 
+		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			if(!headingPrinted) {
+				text=Lan.g(this,"Lab Cases");
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			g.Dispose();
+		}
+
+		private void butPrint_Click(object sender,EventArgs e) {
+			pagesPrinted=0;
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			pd.DefaultPageSettings.Landscape=true;
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			headingPrinted=false;
+			try {
+#if DEBUG
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd;
+				pView.ShowDialog();
+#else
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+						pd.Print();
+					}
+#endif
+			}
+			catch {
+				MessageBox.Show(Lan.g(this,"Printer not available"));
+			}
+		}
+
+
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
 
 	
 
