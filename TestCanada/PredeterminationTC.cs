@@ -407,7 +407,7 @@ namespace TestCanada {
 		  return claim;
 		}
 
-		public static string Run(int scriptNum,string responseExpected,string responseTypeExpected,Claim claim,bool showForms,int pageNumber,int lastPageNumber) {
+		public static string Run(int scriptNum,string responseExpected,string responseTypeExpected,Claim claim,bool showForms,int pageNumber,int lastPageNumber,double firstExamFee,double diagnosticPhaseFee) {
 		  string retVal="";
 		  ClaimSendQueueItem queueItem=Claims.GetQueueList(claim.ClaimNum,claim.ClinicNum)[0];
 		  string warnings;
@@ -417,7 +417,7 @@ namespace TestCanada {
 		  }
 #if DEBUG
 			Canadian.testNumber=scriptNum;
-			claim.PreAuthString=""+pageNumber+","+lastPageNumber;
+			claim.PreAuthString=""+pageNumber+","+lastPageNumber+","+firstExamFee+","+diagnosticPhaseFee;
 #endif
 		  long etransNum=Canadian.SendClaim(queueItem,showForms,"");
 		  Etrans etrans=Etranss.GetEtrans(etransNum);
@@ -446,46 +446,46 @@ namespace TestCanada {
 			Claim claim=Claims.GetClaim(ClaimNums[0]);
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(1,"C","13",claim,showForms,1,1);
+			return Run(1,"C","13",claim,showForms,1,1,0,0);
 		}
 
 		public static string RunTwo(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[1]);
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(2,"","23",claim,showForms,1,1);
+			return Run(2,"","23",claim,showForms,1,1,0,0);
 		}
 
 		public static string RunThree(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[2]);
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(3,"","23",claim,showForms,1,1);
+			return Run(3,"","23",claim,showForms,1,1,350,250);
 		}
 
 		public static string RunFour(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[3]);
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,2);
-			return Run(4,"","23",claim,showForms,1,1);
+			return Run(4,"","23",claim,showForms,1,1,0,0);
 		}
 
 		public static string RunFive(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[4]);
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(5,"","13",claim,showForms,1,1);
+			return Run(5,"","13",claim,showForms,1,1,0,0);
 		}
 
 		public static string RunSix(bool showForms) {
 			Claim claim=Claims.GetClaim(ClaimNums[5]);//Claim 6 page 1
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			string result=Run(6,"","13",claim,showForms,1,2);
+			string result=Run(6,"","13",claim,showForms,1,2,0,0);
 			claim=Claims.GetClaim(ClaimNums[6]);//Claim 6 page 2
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			result+=Environment.NewLine+Run(6,"","13",claim,showForms,2,2);
+			result+=Environment.NewLine+Run(6,"","13",claim,showForms,2,2,0,0);
 			return result;
 		}
 
@@ -493,11 +493,11 @@ namespace TestCanada {
 			Claim claim=Claims.GetClaim(ClaimNums[7]);//Claim 7 page 1
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			string result=Run(7,"","13",claim,showForms,1,2);
+			string result=Run(7,"","13",claim,showForms,1,2,0,0);
 			claim=Claims.GetClaim(ClaimNums[8]);//Claim 7 page 2
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			result+=Environment.NewLine+Run(7,"","13",claim,showForms,2,2);
+			result+=Environment.NewLine+Run(7,"","13",claim,showForms,2,2,0,0);
 			return result;
 		}
 
@@ -505,7 +505,7 @@ namespace TestCanada {
 			Claim claim=Claims.GetClaim(ClaimNums[9]);
 			InsSubTC.SetAssignBen(false,claim.InsSubNum);
 			CarrierTC.SetEncryptionMethod(claim.PlanNum,1);
-			return Run(8,"C","13",claim,showForms,1,1);
+			return Run(8,"C","13",claim,showForms,1,1,0,0);
 		}
 
 	}

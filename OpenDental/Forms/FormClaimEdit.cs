@@ -2539,7 +2539,6 @@ namespace OpenDental{
 			this.checkCanadianIsOrtho.Size = new System.Drawing.Size(216,17);
 			this.checkCanadianIsOrtho.TabIndex = 140;
 			this.checkCanadianIsOrtho.Text = "Treatment Required for Ortho";
-			this.checkCanadianIsOrtho.Click += new System.EventHandler(this.checkCanadianIsOrtho_Click);
 			// 
 			// label43
 			// 
@@ -3584,7 +3583,7 @@ namespace OpenDental{
 				checkIsOrtho.Checked=ClaimCur.IsOrtho;
 			}
 			textCanadaTransRefNum.Text=ClaimCur.CanadaTransRefNum;
-			groupCanadaOrthoPredeterm.Enabled=(ClaimCur.ClaimType=="PreAuth" && ClaimCur.IsOrtho);
+			groupCanadaOrthoPredeterm.Enabled=(ClaimCur.ClaimType=="PreAuth");
 			if(ClaimCur.CanadaEstTreatStartDate.Year<1880) {
 				textDateCanadaEstTreatStartDate.Text="";
 			}
@@ -4716,10 +4715,6 @@ namespace OpenDental{
 			}
 		}
 
-		private void checkCanadianIsOrtho_Click(object sender,EventArgs e) {
-			groupCanadaOrthoPredeterm.Enabled=(ClaimCur.ClaimType=="PreAuth" && checkCanadianIsOrtho.Checked);
-		}
-
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;//jump straight to Closing, where the claimprocs will be changed
@@ -5052,7 +5047,10 @@ namespace OpenDental{
 				}
 			}
 			//Ortho Treatment------------------------------------------------------------------------------------------------------
-			if(groupCanadaOrthoPredeterm.Enabled) {
+			if(groupCanadaOrthoPredeterm.Enabled && textDateCanadaEstTreatStartDate.Text!="" && 
+				textCanadaInitialPayment.Text!="" && textCanadaExpectedPayCycle.Text!="" &&
+				textCanadaTreatDuration.Text!="" && textCanadaNumPaymentsAnticipated.Text!="" && 
+				textCanadaAnticipatedPayAmount.Text!="") {
 				if(textDateCanadaEstTreatStartDate.errorProvider1.GetError(textDateCanadaEstTreatStartDate)!="") {
 					MsgBox.Show(this,"Please fix data entry errors first.");
 					return false;
@@ -5275,13 +5273,24 @@ namespace OpenDental{
 				ClaimCur.CanadianDateInitialLower=PIn.Date(textDateInitialLower.Text);
 				ClaimCur.CanadianMandProsthMaterial=(byte)comboMandProsthMaterial.SelectedIndex;
 				//ortho treatment
-				if(groupCanadaOrthoPredeterm.Enabled) {
+				if(groupCanadaOrthoPredeterm.Enabled && textDateCanadaEstTreatStartDate.Text!="" && 
+					textCanadaInitialPayment.Text!="" && textCanadaExpectedPayCycle.Text!="" &&
+					textCanadaTreatDuration.Text!="" && textCanadaNumPaymentsAnticipated.Text!="" && 
+					textCanadaAnticipatedPayAmount.Text!="") {
 					ClaimCur.CanadaEstTreatStartDate=DateTime.Parse(textDateCanadaEstTreatStartDate.Text);
 					ClaimCur.CanadaInitialPayment=Double.Parse(textCanadaInitialPayment.Text);
 					ClaimCur.CanadaPaymentMode=byte.Parse(textCanadaExpectedPayCycle.Text);
 					ClaimCur.CanadaTreatDuration=byte.Parse(textCanadaTreatDuration.Text);
 					ClaimCur.CanadaNumAnticipatedPayments=byte.Parse(textCanadaNumPaymentsAnticipated.Text);
 					ClaimCur.CanadaAnticipatedPayAmount=Double.Parse(textCanadaAnticipatedPayAmount.Text);
+				}
+				else {
+					ClaimCur.CanadaEstTreatStartDate=DateTime.MinValue;
+					ClaimCur.CanadaInitialPayment=0;
+					ClaimCur.CanadaPaymentMode=0;
+					ClaimCur.CanadaTreatDuration=0;
+					ClaimCur.CanadaNumAnticipatedPayments=0;
+					ClaimCur.CanadaAnticipatedPayAmount=0;
 				}
 			}//End Canadian-----------------------------------------------------------------------------
 			else {
