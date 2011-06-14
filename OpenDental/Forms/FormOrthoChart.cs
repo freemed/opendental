@@ -10,8 +10,8 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormOrthoChart:Form {
-		//public List<OrthoChart> listOrthoCharts;
 		private List<DisplayField> listDisplayFields;
+		private List<OrthoChart> listOrthoCharts;
 
 		public FormOrthoChart() {
 			InitializeComponent();
@@ -26,65 +26,75 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			//listDisplayFields=DisplayFields.
-			/*			ODGridColumn col;
-						//TODO : 
-						col=new ODGridColumn("Reminder Criterion",135);
-						gridMain.Columns.Add(col);
-						col=new ODGridColumn("Message",200);
-						gridMain.Columns.Add(col);
-						listReminders=ReminderRules.SelectAll();
-						gridMain.Rows.Clear();
-						ODGridRow row;
-						for(int i=0;i<listReminders.Count;i++) {
-							row=new ODGridRow();
-							switch(listReminders[i].ReminderCriterion) {
-								case EhrCriterion.Problem:
-									row.Cells.Add("Problem = "+DiseaseDefs.GetName(listReminders[i].CriterionFK));
-									break;
-								case EhrCriterion.Medication:
-									Medication tempMed = Medications.GetMedication(listReminders[i].CriterionFK);
-									if(tempMed.MedicationNum==tempMed.GenericNum) {//handle generic medication names.
-										row.Cells.Add("Medication = "+tempMed.MedName);
-									}
-									else {
-										row.Cells.Add("Medication = "+tempMed.MedName+" / "+Medications.GetGenericName(tempMed.GenericNum));
-									}
-									break;
-								case EhrCriterion.Allergy:
-									row.Cells.Add("Allergy = "+AllergyDefs.GetOne(listReminders[i].CriterionFK).Description);
-									break;
-								case EhrCriterion.Age:
-									row.Cells.Add("Age "+listReminders[i].CriterionValue);
-									break;
-								case EhrCriterion.Gender:
-									row.Cells.Add("Gender is "+listReminders[i].CriterionValue);
-									break;
-								case EhrCriterion.LabResult:
-									row.Cells.Add("LabResult "+listReminders[i].CriterionValue);
-									break;
-								case EhrCriterion.ICD9:
-									row.Cells.Add("ICD9 "+ICD9s.GetDescription(listReminders[i].CriterionFK));
-									break;
+			ODGridColumn col;
+			for(int i=0;i<listDisplayFields.Count;i++) {
+				col=new ODGridColumn(listDisplayFields[i].Description,listDisplayFields[i].ColumnWidth);
+				gridMain.Columns.Add(col);
+			}
+			listOrthoCharts=OrthoCharts.GetAll();
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<listOrthoCharts.Count;i++) {
+				//check all existing rows if date matches insert into proper column of that row
+				//if date doesn't match add a new row into the grid with all cells containing blank data except the new one.
+				for(int j=0;j<gridMain.Rows.Count;j++) {
+					if(listOrthoCharts[i].DateService.ToShortDateString()==gridMain.Rows[j].Cells[0].Text) {//record matches an existing date
+						for(int k=1;k<listDisplayFields.Count;k++) {//start at k=1 because first column "Date" is already added
+							if(listOrthoCharts[i].FieldName==gridMain.Columns[k].Heading) {
+								gridMain.Rows[j].Cells[k].Text=listOrthoCharts[i].FieldValue;
 							}
-							row.Cells.Add(listReminders[i].Message);
-							gridMain.Rows.Add(row);
-						}*/
+						}
+						break;//moves on to next ortho chart
+					}
+					else {//no matching dates for ortho chart, make a new row
+						row=new ODGridRow();
+						row.Cells.Add(listOrthoCharts[i].DateService.ToShortDateString());
+						for(int k=1;k<listDisplayFields.Count;k++) {//start at k=1 because first column "Date" is already added
+							if(listDisplayFields[k].Description==listOrthoCharts[i].FieldName){
+								row.Cells.Add(listOrthoCharts[i].FieldValue);
+							}
+							else{
+								row.Cells.Add("");//place holders for each cell in each row.
+							}
+						}
+						gridMain.Rows.Add(row);//added only if row doesn't match an existing date.
+					}
+				}
+			}
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//create an orthoChart that has this date and this type
+			//FormOrthoChartEdit FormOCE = new FormOrthoChartEdit();
+			//FormOCE.OrthoCur.DateService = DateTime.Parse(gridMain.Rows[e.Row].Cells[0]);
+			//FormOCE.OrthoCur.FieldName = gridMain.Columns[e.Col].Heading;
+			//FormOCE.OrthoCur.FieldValue = gridMain.Rows[e.Row].Cells[e.Col].Text;
+			//FormOCE.ShowDialog();
+			//if(FormOCE.DialogResult!=DialogResult.OK) {
+			//  return;
+			//}
+			//OrthoCharts.InsertOrUpdate(FormOCE.OrthoCur);
+			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			//create a new orthochart and allow the user to choose a new date and a new type
+			//FormOrthoChartEdit FormOCE = new FormOrthoChartEdit();
+			//FormOCE.ShowDialog();
+			//if(FormOCE.DialogResult!=DialogResult.OK) {
+			//  return;
+			//}
+			//OrthoCharts.InsertOrUpdate(FormOCE.OrthoCur);
+			FillGrid();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
-
+			DialogResult=DialogResult.Cancel;
 		}
 
 		
