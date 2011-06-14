@@ -15,11 +15,54 @@ namespace OpenDental {
 		}
 
 		private void FormApptPrintSetup_Load(object sender,EventArgs e) {
-			//Load the prefs.
+			textStartTime.Text=PrefC.GetDateT(PrefName.ApptPrintTimeStart).ToShortTimeString();
+			textStopTime.Text=PrefC.GetDateT(PrefName.ApptPrintTimeStop).ToShortTimeString();
+			textFontSize.Text=PrefC.GetString(PrefName.ApptPrintFontSize);
+			textColumnsPerPage.Text=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage).ToString();
+		}
+
+		private void butSave_Click(object sender,EventArgs e) {
+			if(!ValidEntries()) {
+				return;
+			}
+			SaveChanges();
+		}
+
+		private bool ValidEntries() {
+			//Test the time text boxes here:
+			if(textColumnsPerPage.errorProvider1.GetError(textColumnsPerPage)!=""
+				|| textFontSize.errorProvider1.GetError(textFontSize)!="") 
+			{
+				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				return false;
+			}
+			return true;
+		}
+
+		private void SaveChanges() {
+			Prefs.UpdateString(PrefName.ApptPrintTimeStart,textStartTime.Text);
+			Prefs.UpdateString(PrefName.ApptPrintTimeStop,textStopTime.Text);
+			Prefs.UpdateString(PrefName.ApptPrintFontSize,textFontSize.Text);
+			Prefs.UpdateInt(PrefName.ApptPrintColumnsPerPage,PIn.Int(textColumnsPerPage.Text));
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			//Save the changes.
+			bool changed=false;
+			if(!ValidEntries()) {
+				return;
+			}
+			if(textStartTime.Text!=PrefC.GetDateT(PrefName.ApptPrintTimeStart).ToShortTimeString()
+				|| textStopTime.Text!=PrefC.GetDateT(PrefName.ApptPrintTimeStop).ToShortTimeString()
+				|| textFontSize.Text!=PrefC.GetString(PrefName.ApptPrintFontSize)
+				|| textColumnsPerPage.Text!=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage).ToString())
+			{
+				changed=true;
+			}
+			if(changed) {
+				if(MsgBox.Show(this,true,"Save the changes that were made?")) {
+					SaveChanges();
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 

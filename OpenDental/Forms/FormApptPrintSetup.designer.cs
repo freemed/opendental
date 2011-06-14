@@ -23,17 +23,101 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.labelPagesAcross = new System.Windows.Forms.Label();
-			this.textAcross = new OpenDental.ValidNumber();
-			this.textTall = new OpenDental.ValidNumber();
-			this.labelPagesTall = new System.Windows.Forms.Label();
+			this.labelColumnsPerPage = new System.Windows.Forms.Label();
+			this.labelFontSize = new System.Windows.Forms.Label();
 			this.labelStartTime = new System.Windows.Forms.Label();
 			this.labelStopTime = new System.Windows.Forms.Label();
-			this.textStartTime = new OpenDental.ValidDate();
-			this.textStopTime = new OpenDental.ValidDate();
+			this.textStopTime = new System.Windows.Forms.TextBox();
+			this.textStartTime = new System.Windows.Forms.TextBox();
+			this.textFontSize = new ODR.ValidDouble();
+			this.butSave = new OpenDental.UI.Button();
+			this.textColumnsPerPage = new OpenDental.ValidNumber();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// labelColumnsPerPage
+			// 
+			this.labelColumnsPerPage.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.labelColumnsPerPage.Location = new System.Drawing.Point(152,24);
+			this.labelColumnsPerPage.Name = "labelColumnsPerPage";
+			this.labelColumnsPerPage.Size = new System.Drawing.Size(128,15);
+			this.labelColumnsPerPage.TabIndex = 72;
+			this.labelColumnsPerPage.Text = "Columns per page";
+			// 
+			// labelFontSize
+			// 
+			this.labelFontSize.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.labelFontSize.Location = new System.Drawing.Point(152,66);
+			this.labelFontSize.Name = "labelFontSize";
+			this.labelFontSize.Size = new System.Drawing.Size(95,15);
+			this.labelFontSize.TabIndex = 74;
+			this.labelFontSize.Text = "Font size";
+			// 
+			// labelStartTime
+			// 
+			this.labelStartTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.labelStartTime.Location = new System.Drawing.Point(29,65);
+			this.labelStartTime.Name = "labelStartTime";
+			this.labelStartTime.Size = new System.Drawing.Size(95,15);
+			this.labelStartTime.TabIndex = 76;
+			this.labelStartTime.Text = "Start time";
+			// 
+			// labelStopTime
+			// 
+			this.labelStopTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.labelStopTime.Location = new System.Drawing.Point(29,24);
+			this.labelStopTime.Name = "labelStopTime";
+			this.labelStopTime.Size = new System.Drawing.Size(95,15);
+			this.labelStopTime.TabIndex = 78;
+			this.labelStopTime.Text = "Stop time";
+			// 
+			// textStopTime
+			// 
+			this.textStopTime.Location = new System.Drawing.Point(27,40);
+			this.textStopTime.Name = "textStopTime";
+			this.textStopTime.Size = new System.Drawing.Size(100,20);
+			this.textStopTime.TabIndex = 83;
+			// 
+			// textStartTime
+			// 
+			this.textStartTime.Location = new System.Drawing.Point(27,82);
+			this.textStartTime.Name = "textStartTime";
+			this.textStartTime.Size = new System.Drawing.Size(100,20);
+			this.textStartTime.TabIndex = 84;
+			// 
+			// textFontSize
+			// 
+			this.textFontSize.Location = new System.Drawing.Point(150,82);
+			this.textFontSize.Name = "textFontSize";
+			this.textFontSize.Size = new System.Drawing.Size(100,20);
+			this.textFontSize.TabIndex = 85;
+			// 
+			// butSave
+			// 
+			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSave.Autosize = true;
+			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSave.CornerRadius = 4F;
+			this.butSave.Location = new System.Drawing.Point(12,164);
+			this.butSave.Name = "butSave";
+			this.butSave.Size = new System.Drawing.Size(75,24);
+			this.butSave.TabIndex = 82;
+			this.butSave.Text = "Save";
+			this.butSave.Click += new System.EventHandler(this.butSave_Click);
+			// 
+			// textColumnsPerPage
+			// 
+			this.textColumnsPerPage.Location = new System.Drawing.Point(150,40);
+			this.textColumnsPerPage.MaxVal = 255;
+			this.textColumnsPerPage.MinVal = 0;
+			this.textColumnsPerPage.Name = "textColumnsPerPage";
+			this.textColumnsPerPage.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.textColumnsPerPage.Size = new System.Drawing.Size(100,20);
+			this.textColumnsPerPage.TabIndex = 73;
+			this.textColumnsPerPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// butOK
 			// 
@@ -43,7 +127,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(141,174);
+			this.butOK.Location = new System.Drawing.Point(205,134);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -58,95 +142,26 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(222,174);
+			this.butCancel.Location = new System.Drawing.Point(204,164);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// labelPagesAcross
-			// 
-			this.labelPagesAcross.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelPagesAcross.Location = new System.Drawing.Point(29,41);
-			this.labelPagesAcross.Name = "labelPagesAcross";
-			this.labelPagesAcross.Size = new System.Drawing.Size(95,15);
-			this.labelPagesAcross.TabIndex = 72;
-			this.labelPagesAcross.Text = "Pages Across";
-			// 
-			// textAcross
-			// 
-			this.textAcross.Location = new System.Drawing.Point(27,57);
-			this.textAcross.MaxVal = 255;
-			this.textAcross.MinVal = 0;
-			this.textAcross.Name = "textAcross";
-			this.textAcross.Size = new System.Drawing.Size(100,20);
-			this.textAcross.TabIndex = 73;
-			this.textAcross.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// textTall
-			// 
-			this.textTall.Location = new System.Drawing.Point(27,98);
-			this.textTall.MaxVal = 255;
-			this.textTall.MinVal = 0;
-			this.textTall.Name = "textTall";
-			this.textTall.Size = new System.Drawing.Size(100,20);
-			this.textTall.TabIndex = 75;
-			this.textTall.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// labelPagesTall
-			// 
-			this.labelPagesTall.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelPagesTall.Location = new System.Drawing.Point(29,82);
-			this.labelPagesTall.Name = "labelPagesTall";
-			this.labelPagesTall.Size = new System.Drawing.Size(95,15);
-			this.labelPagesTall.TabIndex = 74;
-			this.labelPagesTall.Text = "Pages Tall";
-			// 
-			// labelStartTime
-			// 
-			this.labelStartTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStartTime.Location = new System.Drawing.Point(176,82);
-			this.labelStartTime.Name = "labelStartTime";
-			this.labelStartTime.Size = new System.Drawing.Size(95,15);
-			this.labelStartTime.TabIndex = 76;
-			this.labelStartTime.Text = "Start Time";
-			// 
-			// labelStopTime
-			// 
-			this.labelStopTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStopTime.Location = new System.Drawing.Point(176,41);
-			this.labelStopTime.Name = "labelStopTime";
-			this.labelStopTime.Size = new System.Drawing.Size(95,15);
-			this.labelStopTime.TabIndex = 78;
-			this.labelStopTime.Text = "Stop Time";
-			// 
-			// textStartTime
-			// 
-			this.textStartTime.Location = new System.Drawing.Point(174,98);
-			this.textStartTime.Name = "textStartTime";
-			this.textStartTime.Size = new System.Drawing.Size(100,20);
-			this.textStartTime.TabIndex = 80;
-			// 
-			// textStopTime
-			// 
-			this.textStopTime.Location = new System.Drawing.Point(174,57);
-			this.textStopTime.Name = "textStopTime";
-			this.textStopTime.Size = new System.Drawing.Size(100,20);
-			this.textStopTime.TabIndex = 81;
-			// 
 			// FormApptPrintSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(309,210);
-			this.Controls.Add(this.textStopTime);
+			this.ClientSize = new System.Drawing.Size(291,200);
+			this.Controls.Add(this.textFontSize);
 			this.Controls.Add(this.textStartTime);
+			this.Controls.Add(this.textStopTime);
+			this.Controls.Add(this.butSave);
 			this.Controls.Add(this.labelStopTime);
 			this.Controls.Add(this.labelStartTime);
-			this.Controls.Add(this.textTall);
-			this.Controls.Add(this.labelPagesTall);
-			this.Controls.Add(this.textAcross);
-			this.Controls.Add(this.labelPagesAcross);
+			this.Controls.Add(this.labelFontSize);
+			this.Controls.Add(this.textColumnsPerPage);
+			this.Controls.Add(this.labelColumnsPerPage);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormApptPrintSetup";
@@ -162,13 +177,14 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.Label labelPagesAcross;
-		private ValidNumber textAcross;
-		private ValidNumber textTall;
-		private System.Windows.Forms.Label labelPagesTall;
+		private System.Windows.Forms.Label labelColumnsPerPage;
+		private ValidNumber textColumnsPerPage;
+		private System.Windows.Forms.Label labelFontSize;
 		private System.Windows.Forms.Label labelStartTime;
 		private System.Windows.Forms.Label labelStopTime;
-		private ValidDate textStartTime;
-		private ValidDate textStopTime;
+		private UI.Button butSave;
+		private System.Windows.Forms.TextBox textStopTime;
+		private System.Windows.Forms.TextBox textStartTime;
+		private ODR.ValidDouble textFontSize;
 	}
 }
