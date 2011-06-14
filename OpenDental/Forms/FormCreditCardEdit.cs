@@ -154,7 +154,17 @@ namespace OpenDental {
 					ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 					string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
 					File.Delete(resultfile);//delete the old result file.
-					if(creditCardOld.CCExpiration!=CreditCardCur.CCExpiration) {//We can only change exp date for X-Charge via ARCHIVEAULTUPDATE.
+					if(creditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked) {//They changed card number which we have to delete archived token which will create a new one next time card is charged.
+						info.Arguments+="/TRANSACTIONTYPE:ARCHIVEVAULTDELETE ";
+						info.Arguments+="/XCACCOUNTID:"+CreditCardCur.XChargeToken+" ";
+						info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+						info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
+						info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
+						info.Arguments+="/AUTOPROCESS ";
+						info.Arguments+="/AUTOCLOSE ";
+						CreditCardCur.XChargeToken="";//Clear the XChargeToken in our db.
+					}
+					else {//We can only change exp date for X-Charge via ARCHIVEAULTUPDATE.
 						info.Arguments+="/TRANSACTIONTYPE:ARCHIVEVAULTUPDATE ";
 						info.Arguments+="/XCACCOUNTID:"+CreditCardCur.XChargeToken+" ";
 						if(CreditCardCur.CCExpiration!=null && CreditCardCur.CCExpiration.Year>2005) {
@@ -165,16 +175,6 @@ namespace OpenDental {
 						info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
 						info.Arguments+="/AUTOPROCESS ";
 						info.Arguments+="/AUTOCLOSE ";
-					}
-					else {//They changed card number which we have to delete archived token which will create a new one next time card is charged.
-						info.Arguments+="/TRANSACTIONTYPE:ARCHIVEVAULTDELETE ";
-						info.Arguments+="/XCACCOUNTID:"+CreditCardCur.XChargeToken+" ";
-						info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-						info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
-						info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
-						info.Arguments+="/AUTOPROCESS ";
-						info.Arguments+="/AUTOCLOSE ";
-						CreditCardCur.XChargeToken="";//Clear the XChargeToken in our db.
 					}
 					Cursor=Cursors.WaitCursor;
 					Process process=new Process();
