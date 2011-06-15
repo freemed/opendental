@@ -57,7 +57,7 @@ namespace OpenDental{
 			// labelStartTime
 			// 
 			this.labelStartTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStartTime.Location = new System.Drawing.Point(29,65);
+			this.labelStartTime.Location = new System.Drawing.Point(27,24);
 			this.labelStartTime.Name = "labelStartTime";
 			this.labelStartTime.Size = new System.Drawing.Size(95,15);
 			this.labelStartTime.TabIndex = 76;
@@ -66,7 +66,7 @@ namespace OpenDental{
 			// labelStopTime
 			// 
 			this.labelStopTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStopTime.Location = new System.Drawing.Point(29,24);
+			this.labelStopTime.Location = new System.Drawing.Point(27,66);
 			this.labelStopTime.Name = "labelStopTime";
 			this.labelStopTime.Size = new System.Drawing.Size(95,15);
 			this.labelStopTime.TabIndex = 78;
@@ -74,14 +74,14 @@ namespace OpenDental{
 			// 
 			// textStopTime
 			// 
-			this.textStopTime.Location = new System.Drawing.Point(27,40);
+			this.textStopTime.Location = new System.Drawing.Point(25,82);
 			this.textStopTime.Name = "textStopTime";
 			this.textStopTime.Size = new System.Drawing.Size(100,20);
 			this.textStopTime.TabIndex = 83;
 			// 
 			// textStartTime
 			// 
-			this.textStartTime.Location = new System.Drawing.Point(27,82);
+			this.textStartTime.Location = new System.Drawing.Point(25,41);
 			this.textStartTime.Name = "textStartTime";
 			this.textStartTime.Size = new System.Drawing.Size(100,20);
 			this.textStartTime.TabIndex = 84;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -29,11 +30,23 @@ namespace OpenDental {
 		}
 
 		private bool ValidEntries() {
-			//Test the time text boxes here:
+			string timePattern="^([1-9]|1[0-2]|0[1-9]){1}(:[0-5][0-9]\\s[aApP][mM]){1}$";
+			if(!Regex.IsMatch(textStartTime.Text,timePattern)) {
+				MsgBox.Show(this,"Start time invalid. Example of correct format - 5:00 AM");
+				return false;
+			}
+			if(!Regex.IsMatch(textStopTime.Text,timePattern)) {
+				MsgBox.Show(this,"Stop time invalid. Example of correct format - 5:00 PM");
+				return false;
+			}
+			if(PIn.DateT(textStartTime.Text)>PIn.DateT(textStopTime.Text)) {
+				MsgBox.Show(this,"Start time cannot excede stop time.");
+				return false;
+			}
 			if(textColumnsPerPage.errorProvider1.GetError(textColumnsPerPage)!=""
 				|| textFontSize.errorProvider1.GetError(textFontSize)!="") 
 			{
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
 			return true;
