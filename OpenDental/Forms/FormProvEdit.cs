@@ -601,7 +601,6 @@ namespace OpenDental{
 			this.textCanadianOfficeNum.Name = "textCanadianOfficeNum";
 			this.textCanadianOfficeNum.Size = new System.Drawing.Size(100,20);
 			this.textCanadianOfficeNum.TabIndex = 9;
-			this.textCanadianOfficeNum.Validating += new System.ComponentModel.CancelEventHandler(this.textCanadianOfficeNum_Validating);
 			// 
 			// labelCanadianOfficeNum
 			// 
@@ -690,7 +689,7 @@ namespace OpenDental{
 			this.checkIsCDAnet.Name = "checkIsCDAnet";
 			this.checkIsCDAnet.Size = new System.Drawing.Size(168,17);
 			this.checkIsCDAnet.TabIndex = 99;
-			this.checkIsCDAnet.Text = "Is CDAnet Carrier";
+			this.checkIsCDAnet.Text = "Is CDAnet Member";
 			this.checkIsCDAnet.Visible = false;
 			// 
 			// textEcwID
@@ -933,18 +932,6 @@ namespace OpenDental{
 			}
 		}
 
-		private void textCanadianOfficeNum_Validating(object sender,CancelEventArgs e) {
-			if(textCanadianOfficeNum.Text==""){
-				return;
-			}
-			if(textCanadianOfficeNum.Text.Length==4) {
-				return;
-			}
-			if(!MsgBox.Show(this,true,"Office Number should be 4 characters.  Continue anyway?")){
-				e.Cancel=true;
-			}
-		}
-
 		private void butColor_Click(object sender, System.EventArgs e) {
 			colorDialog1.Color=butColor.BackColor;
 			colorDialog1.ShowDialog();
@@ -1043,6 +1030,16 @@ namespace OpenDental{
 					if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")){
 						return;
 					}
+				}
+			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked) {
+				if(textNationalProvID.Text!=Eclaims.Canadian.TidyAN(textNationalProvID.Text,9)) {
+					MsgBox.Show(this,"CDA number must be 9 characters long and composed of numbers and letters only.");
+					return;
+				}
+				if(textCanadianOfficeNum.Text!=Eclaims.Canadian.TidyAN(textCanadianOfficeNum.Text,4)) {
+					MsgBox.Show(this,"Office sequence number must be 4 characters long and composed of numbers and letters only.");
+					return;
 				}
 			}
 			ProvCur.Abbr=textAbbr.Text;

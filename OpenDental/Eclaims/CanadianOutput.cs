@@ -21,9 +21,6 @@ namespace OpenDental.Eclaims {
 			if((carrier.CanadianSupportedTypes&CanSupTransTypes.EligibilityTransaction_08)!=CanSupTransTypes.EligibilityTransaction_08) {
 				throw new ApplicationException("The carrier does not support eligibility transactions.");
 			}
-			if((carrier.CanadianSupportedTypes&CanSupTransTypes.EligibilityResponse_18)!=CanSupTransTypes.EligibilityResponse_18) {
-				throw new ApplicationException("The carrier does not support eligibility transactions response.");
-			}
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 			Patient patient=Patients.GetPat(patNum);
 			Patient subscriber=Patients.GetPat(insSub.Subscriber);
@@ -335,9 +332,6 @@ namespace OpenDental.Eclaims {
 			if((carrier.CanadianSupportedTypes&CanSupTransTypes.ClaimReversal_02)!=CanSupTransTypes.ClaimReversal_02) {
 				throw new ApplicationException("The carrier does not support reversal transactions.");
 			}
-			if((carrier.CanadianSupportedTypes&CanSupTransTypes.ClaimReversalResponse_12)!=CanSupTransTypes.ClaimReversalResponse_12) {
-				throw new ApplicationException("The carrier does not support reversal transactions response.");
-			}
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 			Etrans etrans=Etranss.CreateCanadianOutput(claim.PatNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
 				clearhouse.ClearinghouseNum,EtransType.ReverseResponse_CA,plan.PlanNum,insSub.InsSubNum);
@@ -519,9 +513,6 @@ namespace OpenDental.Eclaims {
 				else {
 					if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForOutstandingTrans_04)!=CanSupTransTypes.RequestForOutstandingTrans_04) {
 						throw new ApplicationException("The carrier does not support request for outstanding transactions.");
-					}
-					if((carrier.CanadianSupportedTypes&CanSupTransTypes.OutstandingTransAck_14)!=CanSupTransTypes.OutstandingTransAck_14) {
-						throw new ApplicationException("The carrier does not support request for outstanding transactions response.");
 					}
 					etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
 						clearhouse.ClearinghouseNum,EtransType.RequestOutstand_CA,0,0);
@@ -727,9 +718,6 @@ namespace OpenDental.Eclaims {
 					if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForPaymentReconciliation_06)!=CanSupTransTypes.RequestForPaymentReconciliation_06) {
 						throw new ApplicationException("The carrier does not support payment reconciliation transactions.");
 					}
-					if((carrier.CanadianSupportedTypes&CanSupTransTypes.PaymentReconciliation_16)!=CanSupTransTypes.PaymentReconciliation_16) {
-						throw new ApplicationException("The carrier does not support payment reconciliation transactions response.");
-					}
 					etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
 						clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
 					network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
@@ -851,9 +839,6 @@ namespace OpenDental.Eclaims {
 			if(carrier!=null) {
 				if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForSummaryReconciliation_05)!=CanSupTransTypes.RequestForSummaryReconciliation_05) {
 					throw new ApplicationException("The carrier does not support summary reconciliation transactions.");
-				}
-				if((carrier.CanadianSupportedTypes&CanSupTransTypes.SummaryReconciliation_15)!=CanSupTransTypes.SummaryReconciliation_15) {
-					throw new ApplicationException("The carrier does not support summary reconciliation transactions response.");
 				}
 				etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
 					clearhouse.ClearinghouseNum,EtransType.RequestSumm_CA,0,0);

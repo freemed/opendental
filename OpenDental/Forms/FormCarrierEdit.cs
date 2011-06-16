@@ -61,16 +61,6 @@ namespace OpenDental{
 		private CheckBox check02;
 		private CheckBox checkIsHidden;
 		private Label label11;
-		private CheckBox check11e;
-		private CheckBox check18;
-		private CheckBox check21e;
-		private CheckBox check12;
-		private CheckBox check16;
-		private CheckBox check15;
-		private CheckBox check24;
-		private CheckBox check14;
-		private CheckBox check13e;
-		private CheckBox check13;
 		private CheckBox check03m;
 		private Label label12;
 		private TextBox textEncryptionMethod;
@@ -137,17 +127,7 @@ namespace OpenDental{
 			this.label11 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label15 = new System.Windows.Forms.Label();
-			this.check16 = new System.Windows.Forms.CheckBox();
-			this.check15 = new System.Windows.Forms.CheckBox();
-			this.check24 = new System.Windows.Forms.CheckBox();
-			this.check14 = new System.Windows.Forms.CheckBox();
-			this.check13e = new System.Windows.Forms.CheckBox();
-			this.check13 = new System.Windows.Forms.CheckBox();
 			this.check03m = new System.Windows.Forms.CheckBox();
-			this.check12 = new System.Windows.Forms.CheckBox();
-			this.check21e = new System.Windows.Forms.CheckBox();
-			this.check11e = new System.Windows.Forms.CheckBox();
-			this.check18 = new System.Windows.Forms.CheckBox();
 			this.check03 = new System.Windows.Forms.CheckBox();
 			this.check07 = new System.Windows.Forms.CheckBox();
 			this.check06 = new System.Windows.Forms.CheckBox();
@@ -417,17 +397,7 @@ namespace OpenDental{
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.label15);
-			this.groupBox3.Controls.Add(this.check16);
-			this.groupBox3.Controls.Add(this.check15);
-			this.groupBox3.Controls.Add(this.check24);
-			this.groupBox3.Controls.Add(this.check14);
-			this.groupBox3.Controls.Add(this.check13e);
-			this.groupBox3.Controls.Add(this.check13);
 			this.groupBox3.Controls.Add(this.check03m);
-			this.groupBox3.Controls.Add(this.check12);
-			this.groupBox3.Controls.Add(this.check21e);
-			this.groupBox3.Controls.Add(this.check11e);
-			this.groupBox3.Controls.Add(this.check18);
 			this.groupBox3.Controls.Add(this.check03);
 			this.groupBox3.Controls.Add(this.check07);
 			this.groupBox3.Controls.Add(this.check06);
@@ -448,111 +418,21 @@ namespace OpenDental{
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(284,17);
 			this.label15.TabIndex = 118;
-			this.label15.Text = "(in addition to Claim, Ack, and Eob)";
+			this.label15.Text = "(in addition to Claim)";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// check16
-			// 
-			this.check16.Location = new System.Drawing.Point(16,340);
-			this.check16.Name = "check16";
-			this.check16.Size = new System.Drawing.Size(299,18);
-			this.check16.TabIndex = 19;
-			this.check16.Text = "Payment Reconciliation";
-			this.check16.UseVisualStyleBackColor = true;
-			// 
-			// check15
-			// 
-			this.check15.Location = new System.Drawing.Point(16,304);
-			this.check15.Name = "check15";
-			this.check15.Size = new System.Drawing.Size(299,18);
-			this.check15.TabIndex = 18;
-			this.check15.Text = "Summary Reconciliation";
-			this.check15.UseVisualStyleBackColor = true;
-			// 
-			// check24
-			// 
-			this.check24.Location = new System.Drawing.Point(16,268);
-			this.check24.Name = "check24";
-			this.check24.Size = new System.Drawing.Size(299,18);
-			this.check24.TabIndex = 17;
-			this.check24.Text = "E-mail Transaction";
-			this.check24.UseVisualStyleBackColor = true;
-			// 
-			// check14
-			// 
-			this.check14.Location = new System.Drawing.Point(16,250);
-			this.check14.Name = "check14";
-			this.check14.Size = new System.Drawing.Size(299,18);
-			this.check14.TabIndex = 16;
-			this.check14.Text = "Outstanding Transaction Ack";
-			this.check14.UseVisualStyleBackColor = true;
-			// 
-			// check13e
-			// 
-			this.check13e.Location = new System.Drawing.Point(16,214);
-			this.check13e.Name = "check13e";
-			this.check13e.Size = new System.Drawing.Size(299,18);
-			this.check13e.TabIndex = 15;
-			this.check13e.Text = "Predetermination Ack Embedded";
-			this.check13e.UseVisualStyleBackColor = true;
-			// 
-			// check13
-			// 
-			this.check13.Location = new System.Drawing.Point(16,196);
-			this.check13.Name = "check13";
-			this.check13.Size = new System.Drawing.Size(299,18);
-			this.check13.TabIndex = 14;
-			this.check13.Text = "Predetermination Ack";
-			this.check13.UseVisualStyleBackColor = true;
 			// 
 			// check03m
 			// 
-			this.check03m.Location = new System.Drawing.Point(16,178);
+			this.check03m.Location = new System.Drawing.Point(16,106);
 			this.check03m.Name = "check03m";
 			this.check03m.Size = new System.Drawing.Size(299,18);
 			this.check03m.TabIndex = 13;
 			this.check03m.Text = "Predetermination Multi-page";
 			this.check03m.UseVisualStyleBackColor = true;
 			// 
-			// check12
-			// 
-			this.check12.Location = new System.Drawing.Point(16,142);
-			this.check12.Name = "check12";
-			this.check12.Size = new System.Drawing.Size(299,18);
-			this.check12.TabIndex = 12;
-			this.check12.Text = "Claim Reversal Response";
-			this.check12.UseVisualStyleBackColor = true;
-			// 
-			// check21e
-			// 
-			this.check21e.Location = new System.Drawing.Point(16,106);
-			this.check21e.Name = "check21e";
-			this.check21e.Size = new System.Drawing.Size(299,18);
-			this.check21e.TabIndex = 11;
-			this.check21e.Text = "Claim EOB Embedded";
-			this.check21e.UseVisualStyleBackColor = true;
-			// 
-			// check11e
-			// 
-			this.check11e.Location = new System.Drawing.Point(16,88);
-			this.check11e.Name = "check11e";
-			this.check11e.Size = new System.Drawing.Size(299,18);
-			this.check11e.TabIndex = 10;
-			this.check11e.Text = "Claim Ack Embedded";
-			this.check11e.UseVisualStyleBackColor = true;
-			// 
-			// check18
-			// 
-			this.check18.Location = new System.Drawing.Point(16,52);
-			this.check18.Name = "check18";
-			this.check18.Size = new System.Drawing.Size(299,18);
-			this.check18.TabIndex = 9;
-			this.check18.Text = "Eligibility Response";
-			this.check18.UseVisualStyleBackColor = true;
-			// 
 			// check03
 			// 
-			this.check03.Location = new System.Drawing.Point(16,160);
+			this.check03.Location = new System.Drawing.Point(16,88);
 			this.check03.Name = "check03";
 			this.check03.Size = new System.Drawing.Size(299,18);
 			this.check03.TabIndex = 8;
@@ -561,7 +441,7 @@ namespace OpenDental{
 			// 
 			// check07
 			// 
-			this.check07.Location = new System.Drawing.Point(16,70);
+			this.check07.Location = new System.Drawing.Point(16,52);
 			this.check07.Name = "check07";
 			this.check07.Size = new System.Drawing.Size(299,18);
 			this.check07.TabIndex = 5;
@@ -570,7 +450,7 @@ namespace OpenDental{
 			// 
 			// check06
 			// 
-			this.check06.Location = new System.Drawing.Point(16,322);
+			this.check06.Location = new System.Drawing.Point(16,160);
 			this.check06.Name = "check06";
 			this.check06.Size = new System.Drawing.Size(299,18);
 			this.check06.TabIndex = 4;
@@ -579,7 +459,7 @@ namespace OpenDental{
 			// 
 			// check04
 			// 
-			this.check04.Location = new System.Drawing.Point(16,232);
+			this.check04.Location = new System.Drawing.Point(16,124);
 			this.check04.Name = "check04";
 			this.check04.Size = new System.Drawing.Size(299,18);
 			this.check04.TabIndex = 3;
@@ -588,7 +468,7 @@ namespace OpenDental{
 			// 
 			// check05
 			// 
-			this.check05.Location = new System.Drawing.Point(16,286);
+			this.check05.Location = new System.Drawing.Point(16,142);
 			this.check05.Name = "check05";
 			this.check05.Size = new System.Drawing.Size(299,18);
 			this.check05.TabIndex = 2;
@@ -597,7 +477,7 @@ namespace OpenDental{
 			// 
 			// check02
 			// 
-			this.check02.Location = new System.Drawing.Point(16,124);
+			this.check02.Location = new System.Drawing.Point(16,70);
 			this.check02.Name = "check02";
 			this.check02.Size = new System.Drawing.Size(299,18);
 			this.check02.TabIndex = 1;
@@ -854,23 +734,13 @@ namespace OpenDental{
 				textEncryptionMethod.Text=CarrierCur.CanadianEncryptionMethod.ToString();
 			}
 			check08.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityTransaction_08) == CanSupTransTypes.EligibilityTransaction_08);
-			check18.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityResponse_18) == CanSupTransTypes.EligibilityResponse_18);
 			check07.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.CobClaimTransaction_07) == CanSupTransTypes.CobClaimTransaction_07);
-			check11e.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimAckEmbedded_11e) == CanSupTransTypes.ClaimAckEmbedded_11e);
-			check21e.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimEobEmbedded_21e) == CanSupTransTypes.ClaimEobEmbedded_21e);
 			check02.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversal_02) == CanSupTransTypes.ClaimReversal_02);
-			check12.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversalResponse_12) == CanSupTransTypes.ClaimReversalResponse_12);
 			check03.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationSinglePage_03) == CanSupTransTypes.PredeterminationSinglePage_03);
 			check03m.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationMultiPage_03) == CanSupTransTypes.PredeterminationMultiPage_03);
-			check13.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationAck_13) == CanSupTransTypes.PredeterminationAck_13);
-			check13e.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationAckEmbedded_13e) == CanSupTransTypes.PredeterminationAckEmbedded_13e);
 			check04.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForOutstandingTrans_04) == CanSupTransTypes.RequestForOutstandingTrans_04);
-			check14.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.OutstandingTransAck_14) == CanSupTransTypes.OutstandingTransAck_14);
-			check24.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EmailTransaction_24) == CanSupTransTypes.EmailTransaction_24);
 			check05.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForSummaryReconciliation_05) == CanSupTransTypes.RequestForSummaryReconciliation_05);
-			check15.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.SummaryReconciliation_15) == CanSupTransTypes.SummaryReconciliation_15);
 			check06.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForPaymentReconciliation_06) == CanSupTransTypes.RequestForPaymentReconciliation_06);
-			check16.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PaymentReconciliation_16) == CanSupTransTypes.PaymentReconciliation_16);
 		}
 
 		private void textCarrierName_TextChanged(object sender, System.EventArgs e) {
@@ -985,23 +855,11 @@ namespace OpenDental{
 				if(check08.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.EligibilityTransaction_08;
 				}
-				if(check18.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.EligibilityResponse_18;
-				}
 				if(check07.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.CobClaimTransaction_07;
 				}
-				if(check11e.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.ClaimAckEmbedded_11e;
-				}
-				if(check21e.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.ClaimEobEmbedded_21e;
-				}
 				if(check02.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.ClaimReversal_02;
-				}
-				if(check12.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.ClaimReversalResponse_12;
 				}
 				if(check03.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.PredeterminationSinglePage_03;
@@ -1009,32 +867,14 @@ namespace OpenDental{
 				if(check03m.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.PredeterminationMultiPage_03;
 				}
-				if(check13.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.PredeterminationAck_13;
-				}
-				if(check13e.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.PredeterminationAckEmbedded_13e;
-				}
 				if(check04.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.RequestForOutstandingTrans_04;
-				}
-				if(check14.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.OutstandingTransAck_14;
-				}
-				if(check24.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.EmailTransaction_24;
 				}
 				if(check05.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.RequestForSummaryReconciliation_05;
 				}
-				if(check15.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.SummaryReconciliation_15;
-				}
 				if(check06.Checked) {
 					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.RequestForPaymentReconciliation_06;
-				}
-				if(check16.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.PaymentReconciliation_16;
 				}
 			}
 			else{

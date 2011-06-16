@@ -28,7 +28,6 @@ namespace OpenDental.Eclaims {
 
 		#region Internal Variables
 
-		PrintDocument pd;
 		///<summary>Total pages in the printed document.</summary>
 		int totalPages;
 		///<summary>Keeps track of the number of pages which have already been completely printed.</summary>
@@ -91,24 +90,6 @@ namespace OpenDental.Eclaims {
 		PatPlan patPlanSec;
 		Clinic clinic;
 		string responseStatus;
-
-		#endregion
-
-		#region Form Controls
-
-		private void butBack_Click(object sender,EventArgs e) {
-			if(printPreviewControl1.StartPage==0)
-				return;
-			printPreviewControl1.StartPage--;
-			labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
-		}
-
-		private void butFwd_Click(object sender,EventArgs e) {
-			if(printPreviewControl1.StartPage==totalPages-1)
-				return;
-			printPreviewControl1.StartPage++;
-			labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
-		}
 
 		#endregion
 
@@ -211,6 +192,55 @@ namespace OpenDental.Eclaims {
 			}
 		}
 
+		private void FormCCDPrint_Resize(object sender,EventArgs e) {
+			labelPage.Location=new Point((Width-butPrint.Width-labelPage.Width)/2,labelPage.Location.Y);
+			butBack.Location=new Point(labelPage.Left-butBack.Width-6,butBack.Location.Y);
+			butForward.Location=new Point(labelPage.Right+6,butForward.Location.Y);
+		}
+
+		///<summary>Prints the Canadian form.</summary>
+		private void FormCCDPrint_Load(object sender,EventArgs e) {
+			try {
+				//have any signatures on the same piece of paper as the rest of the info.
+				PrintDocument pd=new PrintDocument();
+				pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+				pd.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around.
+				//This prevents a bug caused by some printer drivers not reporting their papersize.
+				//But remember that other countries use A4 paper instead of 8 1/2 x 11.
+				if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+					pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+				}
+				pd.PrinterSettings.Duplex=Duplex.Horizontal;//Print double sided when possible, so that forms which are 1-2 pages will
+#if DEBUG
+				printPreviewControl1.Document=pd;//Setting the document causes system to call pd_PrintPage, which will print the document in the preview window.
+#else
+				pd.Print();//Sends the print job automatically to the printer. The user can reprint by hitting the print button if necessary.
+#endif
+				pd.Dispose();
+			}
+			catch(Exception ex) {
+				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
+			}
+		}
+
+		private void butBack_Click(object sender,EventArgs e) {
+			if(printPreviewControl1.StartPage==0)
+				return;
+			printPreviewControl1.StartPage--;
+			labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
+		}
+
+		private void butFwd_Click(object sender,EventArgs e) {
+			if(printPreviewControl1.StartPage==totalPages-1)
+				return;
+			printPreviewControl1.StartPage++;
+			labelPage.Text=(printPreviewControl1.StartPage+1).ToString()+" / "+totalPages.ToString();
+		}
+
+		private void butPrint_Click(object sender,EventArgs e) {
+			
+		}
+
 		public void ShowDisplayMessages(){
 			StringBuilder message=new StringBuilder();
 			CCDField[] displayMessageFields=formData.GetFieldsById("G32");
@@ -281,31 +311,6 @@ namespace OpenDental.Eclaims {
 			if(embeddedTransaction!=null) {
 				FormCCDPrint embeddedForm=new FormCCDPrint(etrans.Copy(),true,assigned,embeddedTransaction.valuestr);
 				embeddedForm.Print();
-			}
-		}
-
-		///<summary>Prints the Canadian form.</summary>
-		private void FormCCDPrint_Load(object sender,EventArgs e){
-			try{
-				pd=new PrintDocument();
-				pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
-				pd.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around.
-				//This prevents a bug caused by some printer drivers not reporting their papersize.
-				//But remember that other countries use A4 paper instead of 8 1/2 x 11.
-				if(pd.DefaultPageSettings.PrintableArea.Height==0){
-					pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
-				}
-				pd.PrinterSettings.Duplex=Duplex.Horizontal;//Print double sided when possible, so that forms which are 1-2 pages will
-																										//have any signatures on the same piece of paper as the rest of the info.
-				#if DEBUG
-					printPreviewControl1.Document=pd;//Setting the document causes system to call pd_PrintPage.
-				#else
-					pd.Print();
-					DialogResult=DialogResult.OK;
-				#endif
-			}
-			catch(Exception ex){
-				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
 			}
 		}
 
