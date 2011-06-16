@@ -317,11 +317,6 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(PrefC.GetBool(PrefName.ReportsShowPatNum)) {
-				this.Width=824;//Add 60 to form width for new column.
-				col=new ODGridColumn(Lan.g(this,"PatNum"),60);
-				gridMain.Columns.Add(col);
-			}
 			col=new ODGridColumn(Lan.g(this,"Carrier"),180);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Phone"),103);
@@ -342,9 +337,6 @@ namespace OpenDental {
 			total=0;
 			for(int i=0;i<Table.Rows.Count;i++){
 				row=new ODGridRow();
-				if(PrefC.GetBool(PrefName.ReportsShowPatNum)) {
-					row.Cells.Add(Table.Rows[i]["PatNum"].ToString());
-				}
 				row.Cells.Add(Table.Rows[i]["CarrierName"].ToString());
 				row.Cells.Add(Table.Rows[i]["Phone"].ToString());
 				type=Table.Rows[i]["ClaimType"].ToString();
@@ -372,7 +364,12 @@ namespace OpenDental {
 						break;
 				}
 				row.Cells.Add(type);
-				row.Cells.Add(Table.Rows[i]["LName"].ToString()+", "+Table.Rows[i]["FName"].ToString()+" "+Table.Rows[i]["MiddleI"].ToString());
+				if(PrefC.GetBool(PrefName.ReportsShowPatNum)) {
+					row.Cells.Add(Table.Rows[i]["PatNum"].ToString()+"-"+Table.Rows[i]["LName"].ToString()+", "+Table.Rows[i]["FName"].ToString()+" "+Table.Rows[i]["MiddleI"].ToString());
+				}
+				else {
+					row.Cells.Add(Table.Rows[i]["LName"].ToString()+", "+Table.Rows[i]["FName"].ToString()+" "+Table.Rows[i]["MiddleI"].ToString());
+				}
 				DateTime dateService=PIn.Date(Table.Rows[i]["DateService"].ToString());
 				if(dateService.Year<1880) {
 					row.Cells.Add("");
