@@ -330,6 +330,12 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormOrthoChartEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormOrthoChartEdit.designer.cs">
+      <DependentUpon>FormOrthoChartEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormApptPrintSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2239,6 +2245,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormOrthoChartEdit.resx">
+      <DependentUpon>FormOrthoChartEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormApptPrintSetup.resx">

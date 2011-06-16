@@ -17,6 +17,15 @@ namespace OpenDentBusiness{
 			return Crud.OrthoChartCrud.SelectMany(command);
 		}
 
+		///<summary></summary>
+		public static List<OrthoChart> GetAllForPatient(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<OrthoChart>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM orthochart where patnum ="+patNum.ToString();
+			return Crud.OrthoChartCrud.SelectMany(command);
+		}
+
 		///<summary>Useful for distinct display fields.</summary>
 		public static List<OrthoChart> GetByDistinctFieldNames() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -27,6 +36,24 @@ namespace OpenDentBusiness{
 			//This query was rewritten for Oracle support, it will provide the same results weather it is run in MySql or Oracle.
 			string command="SELECT * FROM orthochart, (SELECT MAX(OrthoChartNum) OrthoChartNum, FieldName FROM orthochart GROUP BY FieldName) uniqueSubTable WHERE orthochart.OrthoChartNum = uniqueSubTable.OrthoChartNum";
 			return Crud.OrthoChartCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(OrthoChart orthoChart) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				orthoChart.OrthoChartNum=Meth.GetLong(MethodBase.GetCurrentMethod(),orthoChart);
+				return orthoChart.OrthoChartNum;
+			}
+			return Crud.OrthoChartCrud.Insert(orthoChart);
+		}
+
+		///<summary></summary>
+		public static void Update(OrthoChart orthoChart) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),orthoChart);
+				return;
+			}
+			Crud.OrthoChartCrud.Update(orthoChart);
 		}
 
 		/*
@@ -47,24 +74,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<OrthoChart>(MethodBase.GetCurrentMethod(),orthoChartNum);
 			}
 			return Crud.OrthoChartCrud.SelectOne(orthoChartNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(OrthoChart orthoChart){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				orthoChart.OrthoChartNum=Meth.GetLong(MethodBase.GetCurrentMethod(),orthoChart);
-				return orthoChart.OrthoChartNum;
-			}
-			return Crud.OrthoChartCrud.Insert(orthoChart);
-		}
-
-		///<summary></summary>
-		public static void Update(OrthoChart orthoChart){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),orthoChart);
-				return;
-			}
-			Crud.OrthoChartCrud.Update(orthoChart);
 		}
 
 		///<summary></summary>
