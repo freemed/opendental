@@ -208,6 +208,11 @@ namespace OpenDental {
 				}
 				listRef.Add(Referrals.List[i]);
 			}
+			int scrollValue=gridMain.ScrollValue;
+			long selectedRefNum=-1;
+			if(gridMain.GetSelectedIndex()!=-1) {
+				selectedRefNum=((Referral)gridMain.Rows[gridMain.GetSelectedIndex()].Tag).ReferralNum;
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lans.g("TableSelectRefferal","LastName"),150);
@@ -253,10 +258,18 @@ namespace OpenDental {
 				if(listRef[i].IsHidden) {
 					row.ColorText=Color.Gray;
 				}
+				row.Tag=listRef[i];
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
 			labelResultCount.Text=gridMain.Rows.Count.ToString()+" results found.";
+			gridMain.ScrollValue=scrollValue;
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				if(((Referral)gridMain.Rows[i].Tag).ReferralNum==selectedRefNum) {
+					gridMain.SetSelected(i,true);
+					break;
+				}
+			}
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -265,11 +278,14 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a referral first");
 				return;
 			}
-			FormReferralEdit FormRE = new FormReferralEdit((Referral)listRef[e.Row]);
+			FormReferralEdit FormRE = new FormReferralEdit(listRef[e.Row]);
 			FormRE.ShowDialog();
-			int selectedIndex=gridMain.GetSelectedIndex();
+			if(FormRE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			//int selectedIndex=gridMain.GetSelectedIndex();
 			FillTable();
-			gridMain.SetSelected(selectedIndex,true);
+			//gridMain.SetSelected(selectedIndex,true);
 		}
 
 		private void butAdd_Click(object sender,System.EventArgs e) {
@@ -306,7 +322,7 @@ namespace OpenDental {
 			else {
 				FillTable();
 				for(int i=0;i<listRef.Count;i++) {
-					if(((Referral)(listRef[i])).ReferralNum==FormRE2.RefCur.ReferralNum) {
+					if(listRef[i].ReferralNum==FormRE2.RefCur.ReferralNum) {
 						gridMain.SetSelected(i,true);
 					}
 				}
