@@ -3208,6 +3208,7 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Rx"].Enabled=false;
 					ToolBarMain.Buttons["LabCase"].Enabled=false;
 					ToolBarMain.Buttons["Perio"].Enabled = false;
+					ToolBarMain.Buttons["Ortho"].Enabled = false;
 					ToolBarMain.Buttons["Consent"].Enabled = false;
 					ToolBarMain.Buttons["ToothChart"].Enabled = false;
 					ToolBarMain.Buttons["ExamSheet"].Enabled=false;
@@ -3234,6 +3235,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ortho Chart"),-1,"","Ortho"));
 			button=new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuConsent;
@@ -3322,6 +3324,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
+				ToolBarMain.Buttons["Ortho"].Enabled = false;
 				ToolBarMain.Buttons["Consent"].Enabled = false;
 				ToolBarMain.Buttons["ToothChart"].Enabled = false;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=false;
@@ -3346,6 +3349,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled = true;
+				ToolBarMain.Buttons["Ortho"].Enabled = true;
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=true;
@@ -3444,31 +3448,34 @@ namespace OpenDental{
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
 					case "Rx":
-						OnRx_Click();
+						Tool_Rx_Click();
 						break;
 					case "LabCase":
-						OnLabCase_Click();
+						Tool_LabCase_Click();
 						break;
 					case "Perio":
-						OnPerio_Click();
+						Tool_Perio_Click();
+						break;
+					case "Ortho":
+						Tool_Ortho_Click();
 						break;
 					case "Anesthesia":
-						OnAnesthesia_Click();
+						Tool_Anesthesia_Click();
 						break;
 					case "Consent":
-						OnConsent_Click();
+						Tool_Consent_Click();
 						break;
 					case "Commlog"://only for eCW
-						OnCommlog_Click();
+						Tool_Commlog_Click();
 						break;
 					case "ToothChart":
-						OnToothChart_Click();
+						Tool_ToothChart_Click();
 						break;
 					case "ExamSheet":
-						OnExamSheet_Click();
+						Tool_ExamSheet_Click();
 						break;
 					case "EHR":
-						OnEHR_Click(false);
+						Tool_EHR_Click(false);
 						break;
 				}
 			}
@@ -3485,7 +3492,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnRx_Click(){
+		private void Tool_Rx_Click(){
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
@@ -3514,7 +3521,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnLabCase_Click() {
+		private void Tool_LabCase_Click() {
 			LabCase lab=new LabCase();
 			lab.PatNum=PatCur.PatNum;
 			lab.ProvNum=Patients.GetProvNum(PatCur);
@@ -3531,12 +3538,17 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void OnPerio_Click(){
+		private void Tool_Perio_Click(){
 			FormPerio FormP=new FormPerio(PatCur);
 			FormP.ShowDialog();
 		}
 
-		private void OnAnesthesia_Click(){
+		private void Tool_Ortho_Click() {
+			FormOrthoChart FormOC=new FormOrthoChart(PatCur);
+			FormOC.ShowDialog();
+		}
+
+		private void Tool_Anesthesia_Click() {
 			/*
 			AnestheticData AnestheticDataCur;
 			AnestheticDataCur = new AnestheticData();
@@ -3549,7 +3561,7 @@ namespace OpenDental{
 			return;*/
 		}
 
-		private void OnConsent_Click() {
+		private void Tool_Consent_Click() {
 			List<SheetDef> listSheets=SheetDefs.GetCustomForType(SheetTypeEnum.Consent);
 			if(listSheets.Count>0){
 				MsgBox.Show(this,"Please use dropdown list.");
@@ -3567,7 +3579,7 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void OnToothChart_Click() {
+		private void Tool_ToothChart_Click() {
 			if(Programs.UsingOrion) {
 				menuItemChartSave_Click(this,new EventArgs());
 				return;
@@ -3576,7 +3588,7 @@ namespace OpenDental{
 			return;
 		}
 
-		private void OnExamSheet_Click(){
+		private void Tool_ExamSheet_Click(){
 			FormExamSheets fes=new FormExamSheets();
 			fes.PatNum=PatCur.PatNum;
 			fes.ShowDialog();
@@ -3584,7 +3596,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used for eCW.  Everyone else has the commlog button up in the main toolbar.</summary>
-		private void OnCommlog_Click() {
+		private void Tool_Commlog_Click() {
 			Commlog CommlogCur = new Commlog();
 			CommlogCur.PatNum = PatCur.PatNum;
 			CommlogCur.CommDateTime = DateTime.Now;
@@ -3600,7 +3612,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnEHR_Click(bool onLoadShowOrders) {
+		private void Tool_EHR_Click(bool onLoadShowOrders) {
 #if DEBUG
 				//so we can step through for debugging.
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
@@ -3613,53 +3625,53 @@ namespace OpenDental{
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));
 					FormRXE.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(false);//recursive.  The only way out of the loop is EhrFormResult.None.
+					Tool_EHR_Click(false);//recursive.  The only way out of the loop is EhrFormResult.None.
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.RxSelect) {
 					FormRxSelect FormRS=new FormRxSelect(PatCur);
 					FormRS.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(false);
+					Tool_EHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Medical) {
 					FormMedical formM=new FormMedical(PatientNoteCur,PatCur);
 					formM.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(false);
+					Tool_EHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.PatientEdit) {
 					FormPatientEdit formP=new FormPatientEdit(PatCur,FamCur);
 					formP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(false);
+					Tool_EHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Online) {
 					FormEhrOnlineAccess formO=new FormEhrOnlineAccess();
 					formO.PatCur=PatCur;
 					formO.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(false);
+					Tool_EHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedReconcile) {
 					FormMedicationReconcile FormMR=new FormMedicationReconcile();
 					FormMR.PatCur=PatCur;
 					FormMR.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(false);
+					Tool_EHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.Referrals) {
 					FormReferralsPatient formRP=new FormReferralsPatient();
 					formRP.PatNum=PatCur.PatNum;
 					formRP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(false);
+					Tool_EHR_Click(false);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedicationPatEdit) {
 					FormMedPat formMP=new FormMedPat();
 					formMP.MedicationPatCur=MedicationPats.GetOne(((FormEHR)FormOpenDental.FormEHR).LaunchMedicationPatNum);
 					formMP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
-					OnEHR_Click(true);
+					Tool_EHR_Click(true);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedicationPatNew) {
 					FormMedications FormM=new FormMedications();
@@ -3677,7 +3689,7 @@ namespace OpenDental{
 							ModuleSelected(PatCur.PatNum);
 						}
 					}
-					OnEHR_Click(true);
+					Tool_EHR_Click(true);
 				}
 #else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class

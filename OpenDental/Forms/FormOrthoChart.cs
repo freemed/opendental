@@ -12,10 +12,10 @@ namespace OpenDental {
 	public partial class FormOrthoChart:Form {
 		private List<DisplayField> listDisplayFields;
 		private List<OrthoChart> listOrthoCharts;
-		public Patient patCur;
+		public Patient PatCur;
 
-		public FormOrthoChart() {
-			patCur = new Patient();
+		public FormOrthoChart(Patient patCur) {
+			PatCur = patCur;
 			InitializeComponent();
 			Lan.F(this);
 		}
