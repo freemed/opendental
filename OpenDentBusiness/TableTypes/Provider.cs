@@ -70,8 +70,8 @@ namespace OpenDentBusiness{
 		public string EcwID;
 		///<summary>Allows using ehr module for this provider.  Tied to provider fname and lname.</summary>
 		public string EhrKey;
-
-		//Need: StateRxNum varchar255
+		///<summary></summary>
+		public string StateRxID;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("ProvColor",typeof(int))]

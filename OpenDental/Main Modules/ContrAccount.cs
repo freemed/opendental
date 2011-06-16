@@ -2916,20 +2916,6 @@ namespace OpenDental {
 					ClaimCur.InsSubNum=SubCur.InsSubNum;
 					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,SubCur.InsSubNum).Relationship;
 					ClaimCur.ClaimType="Other";
-					for(int i=0;i<PatPlanList.Count;i++){
-						InsSub subTemp=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
-						InsPlan planTemp=InsPlans.GetPlan(subTemp.PlanNum,planList);
-						if(planTemp.IsMedical) {
-							if(planTemp.PlanNum==PlanCur.PlanNum) {//Already added primary med ins.
-								continue;
-							}
-							//Grab the next medical ins as secondary.
-							ClaimCur.InsSubNum2=subTemp.InsSubNum;
-							ClaimCur.PlanNum2=subTemp.PlanNum;
-							ClaimCur.PatRelat2=PatPlanList[i].Relationship;
-							break;
-						}
-					}
 					break;
 				case "Other":
 					ClaimCur.PlanNum=PlanCur.PlanNum;

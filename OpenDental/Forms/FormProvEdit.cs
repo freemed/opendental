@@ -72,6 +72,8 @@ namespace OpenDental{
 		private UI.Button butEhrKey;
 		private TextBox textEhrKey;
 		private Label labelEhrKey;
+		private TextBox textStateRxID;
+		private Label label12;
 		public Provider ProvCur;
 
 		///<summary></summary>
@@ -160,6 +162,8 @@ namespace OpenDental{
 			this.butEhrKey = new OpenDental.UI.Button();
 			this.textEhrKey = new System.Windows.Forms.TextBox();
 			this.labelEhrKey = new System.Windows.Forms.Label();
+			this.textStateRxID = new System.Windows.Forms.TextBox();
+			this.label12 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupAnesthProvType.SuspendLayout();
@@ -168,7 +172,7 @@ namespace OpenDental{
 			// checkIsHidden
 			// 
 			this.checkIsHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsHidden.Location = new System.Drawing.Point(371,436);
+			this.checkIsHidden.Location = new System.Drawing.Point(371,441);
 			this.checkIsHidden.Name = "checkIsHidden";
 			this.checkIsHidden.Size = new System.Drawing.Size(158,17);
 			this.checkIsHidden.TabIndex = 12;
@@ -176,7 +180,7 @@ namespace OpenDental{
 			// 
 			// labelColor
 			// 
-			this.labelColor.Location = new System.Drawing.Point(5,395);
+			this.labelColor.Location = new System.Drawing.Point(5,400);
 			this.labelColor.Name = "labelColor";
 			this.labelColor.Size = new System.Drawing.Size(129,16);
 			this.labelColor.TabIndex = 10;
@@ -186,7 +190,7 @@ namespace OpenDental{
 			// butColor
 			// 
 			this.butColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butColor.Location = new System.Drawing.Point(135,392);
+			this.butColor.Location = new System.Drawing.Point(135,397);
 			this.butColor.Name = "butColor";
 			this.butColor.Size = new System.Drawing.Size(30,20);
 			this.butColor.TabIndex = 13;
@@ -276,7 +280,7 @@ namespace OpenDental{
 			// checkIsSecondary
 			// 
 			this.checkIsSecondary.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsSecondary.Location = new System.Drawing.Point(371,398);
+			this.checkIsSecondary.Location = new System.Drawing.Point(371,403);
 			this.checkIsSecondary.Name = "checkIsSecondary";
 			this.checkIsSecondary.Size = new System.Drawing.Size(155,17);
 			this.checkIsSecondary.TabIndex = 10;
@@ -447,7 +451,7 @@ namespace OpenDental{
 			// checkSigOnFile
 			// 
 			this.checkSigOnFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSigOnFile.Location = new System.Drawing.Point(371,417);
+			this.checkSigOnFile.Location = new System.Drawing.Point(371,422);
 			this.checkSigOnFile.Name = "checkSigOnFile";
 			this.checkSigOnFile.Size = new System.Drawing.Size(121,17);
 			this.checkSigOnFile.TabIndex = 11;
@@ -455,7 +459,7 @@ namespace OpenDental{
 			// 
 			// textMedicaidID
 			// 
-			this.textMedicaidID.Location = new System.Drawing.Point(136,281);
+			this.textMedicaidID.Location = new System.Drawing.Point(136,304);
 			this.textMedicaidID.MaxLength = 20;
 			this.textMedicaidID.Name = "textMedicaidID";
 			this.textMedicaidID.Size = new System.Drawing.Size(100,20);
@@ -463,7 +467,7 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(5,285);
+			this.label13.Location = new System.Drawing.Point(5,308);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(130,14);
 			this.label13.TabIndex = 42;
@@ -489,7 +493,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label2);
 			this.groupBox2.Controls.Add(this.tbProvIdent);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(128,471);
+			this.groupBox2.Location = new System.Drawing.Point(128,476);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(496,157);
 			this.groupBox2.TabIndex = 16;
@@ -539,7 +543,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(5,420);
+			this.label14.Location = new System.Drawing.Point(5,425);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(129,16);
 			this.label14.TabIndex = 45;
@@ -549,7 +553,7 @@ namespace OpenDental{
 			// butOutlineColor
 			// 
 			this.butOutlineColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butOutlineColor.Location = new System.Drawing.Point(135,417);
+			this.butOutlineColor.Location = new System.Drawing.Point(135,422);
 			this.butOutlineColor.Name = "butOutlineColor";
 			this.butOutlineColor.Size = new System.Drawing.Size(30,20);
 			this.butOutlineColor.TabIndex = 14;
@@ -558,7 +562,7 @@ namespace OpenDental{
 			// comboSchoolClass
 			// 
 			this.comboSchoolClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSchoolClass.Location = new System.Drawing.Point(135,442);
+			this.comboSchoolClass.Location = new System.Drawing.Point(135,447);
 			this.comboSchoolClass.MaxDropDownItems = 30;
 			this.comboSchoolClass.Name = "comboSchoolClass";
 			this.comboSchoolClass.Size = new System.Drawing.Size(130,21);
@@ -566,7 +570,7 @@ namespace OpenDental{
 			// 
 			// labelSchoolClass
 			// 
-			this.labelSchoolClass.Location = new System.Drawing.Point(8,445);
+			this.labelSchoolClass.Location = new System.Drawing.Point(8,450);
 			this.labelSchoolClass.Name = "labelSchoolClass";
 			this.labelSchoolClass.Size = new System.Drawing.Size(125,16);
 			this.labelSchoolClass.TabIndex = 89;
@@ -575,7 +579,7 @@ namespace OpenDental{
 			// 
 			// textNationalProvID
 			// 
-			this.textNationalProvID.Location = new System.Drawing.Point(136,304);
+			this.textNationalProvID.Location = new System.Drawing.Point(136,327);
 			this.textNationalProvID.MaxLength = 20;
 			this.textNationalProvID.Name = "textNationalProvID";
 			this.textNationalProvID.Size = new System.Drawing.Size(100,20);
@@ -583,7 +587,7 @@ namespace OpenDental{
 			// 
 			// labelNPI
 			// 
-			this.labelNPI.Location = new System.Drawing.Point(5,308);
+			this.labelNPI.Location = new System.Drawing.Point(5,331);
 			this.labelNPI.Name = "labelNPI";
 			this.labelNPI.Size = new System.Drawing.Size(130,14);
 			this.labelNPI.TabIndex = 92;
@@ -592,7 +596,7 @@ namespace OpenDental{
 			// 
 			// textCanadianOfficeNum
 			// 
-			this.textCanadianOfficeNum.Location = new System.Drawing.Point(136,327);
+			this.textCanadianOfficeNum.Location = new System.Drawing.Point(136,350);
 			this.textCanadianOfficeNum.MaxLength = 20;
 			this.textCanadianOfficeNum.Name = "textCanadianOfficeNum";
 			this.textCanadianOfficeNum.Size = new System.Drawing.Size(100,20);
@@ -601,7 +605,7 @@ namespace OpenDental{
 			// 
 			// labelCanadianOfficeNum
 			// 
-			this.labelCanadianOfficeNum.Location = new System.Drawing.Point(5,331);
+			this.labelCanadianOfficeNum.Location = new System.Drawing.Point(5,354);
 			this.labelCanadianOfficeNum.Name = "labelCanadianOfficeNum";
 			this.labelCanadianOfficeNum.Size = new System.Drawing.Size(130,14);
 			this.labelCanadianOfficeNum.TabIndex = 94;
@@ -682,7 +686,7 @@ namespace OpenDental{
 			// checkIsCDAnet
 			// 
 			this.checkIsCDAnet.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsCDAnet.Location = new System.Drawing.Point(371,379);
+			this.checkIsCDAnet.Location = new System.Drawing.Point(371,384);
 			this.checkIsCDAnet.Name = "checkIsCDAnet";
 			this.checkIsCDAnet.Size = new System.Drawing.Size(168,17);
 			this.checkIsCDAnet.TabIndex = 99;
@@ -714,7 +718,7 @@ namespace OpenDental{
 			this.butEhrKey.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEhrKey.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEhrKey.CornerRadius = 4F;
-			this.butEhrKey.Location = new System.Drawing.Point(239,349);
+			this.butEhrKey.Location = new System.Drawing.Point(239,372);
 			this.butEhrKey.Name = "butEhrKey";
 			this.butEhrKey.Size = new System.Drawing.Size(25,22);
 			this.butEhrKey.TabIndex = 102;
@@ -723,7 +727,7 @@ namespace OpenDental{
 			// 
 			// textEhrKey
 			// 
-			this.textEhrKey.Location = new System.Drawing.Point(136,350);
+			this.textEhrKey.Location = new System.Drawing.Point(136,373);
 			this.textEhrKey.MaxLength = 15;
 			this.textEhrKey.Name = "textEhrKey";
 			this.textEhrKey.ReadOnly = true;
@@ -732,12 +736,29 @@ namespace OpenDental{
 			// 
 			// labelEhrKey
 			// 
-			this.labelEhrKey.Location = new System.Drawing.Point(48,354);
+			this.labelEhrKey.Location = new System.Drawing.Point(48,377);
 			this.labelEhrKey.Name = "labelEhrKey";
 			this.labelEhrKey.Size = new System.Drawing.Size(88,14);
 			this.labelEhrKey.TabIndex = 104;
 			this.labelEhrKey.Text = "EHR Key";
 			this.labelEhrKey.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textStateRxID
+			// 
+			this.textStateRxID.Location = new System.Drawing.Point(136,281);
+			this.textStateRxID.MaxLength = 15;
+			this.textStateRxID.Name = "textStateRxID";
+			this.textStateRxID.Size = new System.Drawing.Size(100,20);
+			this.textStateRxID.TabIndex = 105;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(8,285);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(126,14);
+			this.label12.TabIndex = 106;
+			this.label12.Text = "State Rx ID";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormProvEdit
 			// 
@@ -745,6 +766,8 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(849,653);
+			this.Controls.Add(this.textStateRxID);
+			this.Controls.Add(this.label12);
 			this.Controls.Add(this.textEhrKey);
 			this.Controls.Add(this.labelEhrKey);
 			this.Controls.Add(this.butEhrKey);
@@ -856,6 +879,7 @@ namespace OpenDental{
 			}
 			textStateLicense.Text=ProvCur.StateLicense;
 			textDEANum.Text=ProvCur.DEANum;
+			textStateRxID.Text=ProvCur.StateRxID;
 			//textBlueCrossID.Text=ProvCur.BlueCrossID;
 			textMedicaidID.Text=ProvCur.MedicaidID;
 			textNationalProvID.Text=ProvCur.NationalProvID;
@@ -1029,6 +1053,7 @@ namespace OpenDental{
 			ProvCur.SSN=textSSN.Text;
 			ProvCur.StateLicense=textStateLicense.Text;
 			ProvCur.DEANum=textDEANum.Text;
+			ProvCur.StateRxID=textStateRxID.Text;
 			//ProvCur.BlueCrossID=textBlueCrossID.Text;
 			ProvCur.MedicaidID=textMedicaidID.Text;
 			ProvCur.NationalProvID=textNationalProvID.Text;
