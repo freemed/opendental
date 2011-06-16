@@ -121,11 +121,7 @@ namespace OpenDental {
 			InsSub sub=InsSubs.GetOne(patPlan.InsSubNum);
 			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,planList);
 			Carrier car=Carriers.GetCarrier(plan.CarrierNum);
-			string transactionNum=GetTransactionReferenceNum();
-			string messageRefNum=GetMessageReferenceNumber();
-			string pharmNCPDPID=GetNcpdpIdPharmacy();
-			string provStateID=GetStateID();
-			string insBINLocNum=GetInsBINLocationNum();
+			string insBINLocNum=GetInsBINLocationNum(car);
 			DateTime msgTimeSent=DateTime.Now;
 			//Hardcoded values should never change. Ex:Message type, version, release should always be SCRIPT:010:006
 			//Hardcoded values allowed to change until released version.
@@ -135,24 +131,24 @@ namespace OpenDental {
 			strb.Append("UIB"+e);//000
 			strb.Append("UNOA"+f+"0"+e);//010 Syntax identifier and version 
 			strb.Append(e);//020 not used
-			strb.Append(transactionNum+e);//030 Transaction reference (Clinic system trace number.) Sender creates a Unique Trace number for each message sent.
+			strb.Append(rx.RxNum+e);//030 Transaction reference (Clinic system trace number.) Sender creates a Unique Trace number for each message sent.
 			strb.Append(e);//040 not used 
 			strb.Append(e);//050 not used
-			strb.Append("77777777"+f+"C"+f+"PASSWORDQ"+e);//060 Sender identification (This is the Clinic ID of the sender; C means it is a Clinic.)
-			strb.Append(pharmNCPDPID+f+"P"+e);//070 Recipient ID (NCPDP Provider ID Number of pharmacy; P means it is a pharmacy.)
+			strb.Append("56873771"+f+"C"+f+"PASSWORDQ"+e);//060 Sender identification (This is the Clinic ID of the sender; C means it is a Clinic.)
+			strb.Append(pharmacy.PharmID+f+"P"+e);//070 Recipient ID (NCPDP Provider ID Number of pharmacy; P means it is a pharmacy.)
 			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//080 Date of initiation CCYYMMDD:HHMMSS,S 
 			//UIH+SCRIPT:010:006:NEWRX+110072+++19971001:081522'-------------------------------------------------------
 			strb.Append("UIH"+e);//000
 			strb.Append("SCRIPT"+f+"010"+f+"006"+f+"NEWRX"+e);//010 Message type:version:release:function.
 			//Clinic's reference number for message. Usually this is the folio number for the patient. However, this is the ID by which the clinic will be able to refer to this prescription.
-			strb.Append(messageRefNum+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
+			strb.Append(rx.RxNum+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
 			strb.Append(e);//030 conditional Dialogue Reference
 			strb.Append(e);//040 not used
 			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//050 Date of initiation
 			//PVD+P1+7701630:D3+++++MAIN STREET PHARMACY++6152205656:TE'-----------------------------------------------
 			strb.Append("PVD"+e);//000
 			strb.Append("P1"+e);//010 Provider coded (see external code list pg.109)
-			strb.Append(pharmNCPDPID+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
+			strb.Append(pharmacy.PharmID+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
 			strb.Append(e);//030 not used
 			strb.Append(e);//040 conditional Provider specialty
 			strb.Append(e);//050 conditional The name of the prescriber or pharmacist or supervisor
@@ -163,7 +159,7 @@ namespace OpenDental {
 			//PVD+PC+6666666:0B+++JONES:MARK++++6152219800:TE'---------------------------------------------------------
 			strb.Append("PVD"+e);//000 
 			strb.Append("PC"+e);//010 Provider coded
-			strb.Append(provStateID+f+"0B"+e);//020 Reference number and qualifier (0B: Provider State License Number)
+			strb.Append(Sout(prov.StateRxID)+f+"0B"+e);//020 Reference number and qualifier (0B: Provider State License Number)
 			strb.Append(e);//030 not used
 			strb.Append(e);//040 conditional Provider specialty
 			strb.Append(Sout(prov.LName)+f+Sout(prov.FName)+e);//050 The name of the prescriber or pharmacist or supervisor
@@ -180,7 +176,7 @@ namespace OpenDental {
 			strb.Append(Sout(pat.SSN)+f+"SY"+s);//050 Patient ID and/or SSN and qualifier
 			//COO+123456:BO+INSURANCE COMPANY NAME++123456789++AA112'--------------------------------------------------
 			strb.Append("COO"+e);//000
-			strb.Append("123456"+f+"BO"+e);//010 Payer ID Information and qualifier (Primary Payer's identification number? BO is for BIN Location Number.)
+			strb.Append(insBINLocNum+f+"BO"+e);//010 Payer ID Information and qualifier (Primary Payer's identification number? BO is for BIN Location Number.)
 			strb.Append(Sout(car.CarrierName)+e);//020 Payer name
 			strb.Append(e);//030 conditional Service type, coded
 			strb.Append(Sout(sub.SubscriberID)+e);//040 Cardholder ID
@@ -200,12 +196,12 @@ namespace OpenDental {
 			strb.Append(f+Sout(rx.Sig)+e);//030 Directions
 			//85 qualifier for Date Issued (Written date) 102 is qualifier for CCYYMMDD format.
 			//ZDS is the qualifier for Days Supply. 30 is the number of days supply. 804 is the qualifier for Quantity of Days. 
-			strb.Append("85"+f+Sout(rx.RxDate.ToString("yyyyMMdd"))+f+"102"+p+"ZDS"+f+"30"+f+"804"+e);//040 Date Note: It is strongly recommended that Days Supply (value “ZDS”) be supported.
+			strb.Append("85"+f+Sout(rx.RxDate.ToString("yyyyMMdd"))+f+"102"+e);//+p+"ZDS"+f+"30"+f+"804"+e);//040 Date Note: It is strongly recommended that Days Supply (value “ZDS”) be supported.
 			strb.Append("0"+e);//050 Product/Service substitution, coded
 			strb.Append("R"+f+Sout(rx.Refills)+s);//060 Refill and quantity
 			//UIT+110072+6'---------------------------------------------------------------------------------------------
 			strb.Append("UIT"+e);//000
-			strb.Append(messageRefNum+e);//010 Message reference number
+			strb.Append(rx.RxNum+e);//010 Message reference number
 			strb.Append("5"+s);//020 Mandatory field. This is the count of the number of segments in the message including the UIH and UIT
 			//UIZ++1'---------------------------------------------------------------------------------------------------
 			strb.Append("UIZ"+e);//000
@@ -281,35 +277,20 @@ namespace OpenDental {
 					return "C48512";//Milliequivalent 
 				case "Atrov":
 				case "ProAi":
-					return "C42887";//Aerosol Dosage Form
+					return "C43181";//Canister Dosage Form
 				default:
 					return "C42998";//Tablet Dosage Form
 			}
 		}
 
-		///<summary>Get unique message reference number.</summary>
-		private string GetMessageReferenceNumber() {
-			return Sout("");
-		}
-
-		///<summary>Get unique Transaction reference number.  Sender creates a Unique Trace number for each message sent.</summary>
-		private string GetTransactionReferenceNum() {
-			return Sout("");
-		}
-
-		///<summary>Get random state id.</summary>
-		private string GetStateID() {
-			return Sout("");
-		}
-
-		///<summary>Get NCPDP Provider ID Number of pharmacy.</summary>
-		private string GetNcpdpIdPharmacy() {
-			return Sout("");
-		}
-
 		///<summary></summary>
-		private string GetInsBINLocationNum() {
-			return Sout("");
+		private string GetInsBINLocationNum(Carrier carrier) {
+			//Create a couple BINs for insurances
+			string insBIN="452316";
+			if(carrier.CarrierName=="Carrier2") {
+				insBIN="312645";
+			}
+			return Sout(insBIN);
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
