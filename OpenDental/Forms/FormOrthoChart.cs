@@ -33,7 +33,7 @@ namespace OpenDental {
 				col=new ODGridColumn(listDisplayFields[i].Description,listDisplayFields[i].ColumnWidth);
 				gridMain.Columns.Add(col);
 			}
-			listOrthoCharts=OrthoCharts.GetAllForPatient(patCur.PatNum);
+			listOrthoCharts=OrthoCharts.GetAllForPatient(PatCur.PatNum);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<listOrthoCharts.Count;i++) {
