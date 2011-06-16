@@ -21,7 +21,7 @@ namespace OpenDental {
 		private UI.ODGrid gridMain;
 		private TextBox textSearch;
 		private Label label1;
-		private Label labelResults;
+		private Label labelResultCount;
 		///<summary>This will contain the referral that was selected.</summary>
 		public Referral SelectedReferral;
 
@@ -52,17 +52,17 @@ namespace OpenDental {
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textSearch = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
+			this.labelResultCount = new System.Windows.Forms.Label();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.labelResults = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// checkHidden
 			// 
 			this.checkHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkHidden.Location = new System.Drawing.Point(844,22);
+			this.checkHidden.Location = new System.Drawing.Point(844,6);
 			this.checkHidden.Name = "checkHidden";
 			this.checkHidden.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.checkHidden.Size = new System.Drawing.Size(104,24);
@@ -76,10 +76,10 @@ namespace OpenDental {
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(8,52);
+			this.gridMain.Location = new System.Drawing.Point(8,34);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(940,600);
+			this.gridMain.Size = new System.Drawing.Size(940,618);
 			this.gridMain.TabIndex = 15;
 			this.gridMain.Title = "Select Referral";
 			this.gridMain.TranslationName = "TableSelectReferral";
@@ -87,20 +87,29 @@ namespace OpenDental {
 			// 
 			// textSearch
 			// 
-			this.textSearch.Location = new System.Drawing.Point(106,24);
+			this.textSearch.Location = new System.Drawing.Point(106,8);
 			this.textSearch.Name = "textSearch";
 			this.textSearch.Size = new System.Drawing.Size(201,20);
-			this.textSearch.TabIndex = 16;
+			this.textSearch.TabIndex = 0;
 			this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(5,27);
+			this.label1.Location = new System.Drawing.Point(5,10);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100,17);
 			this.label1.TabIndex = 17;
 			this.label1.Text = "Search";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelResultCount
+			// 
+			this.labelResultCount.Location = new System.Drawing.Point(313,10);
+			this.labelResultCount.Name = "labelResultCount";
+			this.labelResultCount.Size = new System.Drawing.Size(129,17);
+			this.labelResultCount.TabIndex = 18;
+			this.labelResultCount.Text = "# results found";
+			this.labelResultCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butAdd
 			// 
@@ -112,9 +121,9 @@ namespace OpenDental {
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(8,658);
+			this.butAdd.Location = new System.Drawing.Point(8,661);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80,26);
+			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 12;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -129,9 +138,9 @@ namespace OpenDental {
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.butCancel.Location = new System.Drawing.Point(872,658);
+			this.butCancel.Location = new System.Drawing.Point(873,661);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(82,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 6;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -144,27 +153,18 @@ namespace OpenDental {
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(784,658);
+			this.butOK.Location = new System.Drawing.Point(785,661);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(82,26);
-			this.butOK.TabIndex = 5;
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// labelResults
-			// 
-			this.labelResults.Location = new System.Drawing.Point(313,25);
-			this.labelResults.Name = "labelResults";
-			this.labelResults.Size = new System.Drawing.Size(100,17);
-			this.labelResults.TabIndex = 18;
-			this.labelResults.Text = "# results found";
-			this.labelResults.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormReferralSelect
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,696);
-			this.Controls.Add(this.labelResults);
+			this.Controls.Add(this.labelResultCount);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textSearch);
 			this.Controls.Add(this.gridMain);
@@ -189,23 +189,24 @@ namespace OpenDental {
 
 		private void FormReferralSelect_Load(object sender,System.EventArgs e) {
 			FillTable();
-			labelResults.Text="";
+			//labelResultCount.Text="";
 		}
 
 		private void FillTable() {
 			Referrals.RefreshCache(); 
 			listRef=new List<Referral>();
-			if(!checkHidden.Checked) {
-				for(int i=0;i<Referrals.List.Length;i++) {
-					if(!Referrals.List[i].IsHidden) {
-						listRef.Add(Referrals.List[i]);
+			for(int i=0;i<Referrals.List.Length;i++) {
+				if(!checkHidden.Checked) {//don't include hidden
+					if(Referrals.List[i].IsHidden) {//if hidden
+						continue;
 					}
 				}
-			}
-			else {
-				for(int i=0;i<Referrals.List.Length;i++) {
-					listRef.Add(Referrals.List[i]);
+				if(textSearch.Text != "") {
+					if(!Referrals.List[i].LName.ToLower().StartsWith(textSearch.Text.ToLower())) {//no match
+						continue;
+					}
 				}
+				listRef.Add(Referrals.List[i]);
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -227,29 +228,6 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<listRef.Count;i++) {
 				row=new ODGridRow();
-				if(textSearch.Text!="") {
-					string str = textSearch.Text.ToLower();
-					if(!listRef[i].Address.ToLower().Contains(str)
-						&&!listRef[i].Address2.ToLower().Contains(str)
-						&&!listRef[i].City.ToLower().Contains(str)
-						&&!listRef[i].EMail.ToLower().Contains(str)
-						&&!listRef[i].FName.ToLower().Contains(str)
-						&&!listRef[i].LName.ToLower().Contains(str)
-						&&!listRef[i].MName.ToLower().Contains(str)
-						&&!listRef[i].NationalProvID.ToLower().Contains(str)
-						&&!listRef[i].Note.ToLower().Contains(str)
-						&&!listRef[i].PatNum.ToString().ToLower().Contains(str)
-						&&!listRef[i].Phone2.ToLower().Contains(str)
-						&&!listRef[i].ReferralNum.ToString().ToLower().Contains(str)
-						&&!listRef[i].Specialty.ToString().ToLower().Contains(str)
-						&&!listRef[i].SSN.ToLower().Contains(str)
-						&&!listRef[i].ST.ToLower().Contains(str)
-						&&!listRef[i].Telephone.ToLower().Contains(str)
-						&&!listRef[i].Title.ToLower().Contains(str)
-						&&!listRef[i].Zip.ToLower().Contains(str)) {
-						continue;
-					}
-				}
 				row.Cells.Add(listRef[i].LName);
 				row.Cells.Add(listRef[i].FName);
 				if(listRef[i].MName!="") {
@@ -278,7 +256,7 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			labelResults.Text=gridMain.Rows.Count.ToString()+" results found.";
+			labelResultCount.Text=gridMain.Rows.Count.ToString()+" results found.";
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {

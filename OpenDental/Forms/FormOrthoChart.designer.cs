@@ -42,7 +42,7 @@ namespace OpenDental{
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,23);
 			this.butAdd.TabIndex = 9;
-			this.butAdd.Text = "Add";
+			this.butAdd.Text = "Add Date";
 			this.butAdd.UseVisualStyleBackColor = true;
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
