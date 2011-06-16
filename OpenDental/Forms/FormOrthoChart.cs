@@ -13,6 +13,8 @@ namespace OpenDental {
 		private List<DisplayField> listDisplayFields;
 		private List<OrthoChart> listOrthoCharts;
 		public Patient PatCur;
+		///<summary>Usually only 1 item in this list: today's date.</summary>
+		private List<DateTime> DatesAdditional;
 
 		public FormOrthoChart(Patient patCur) {
 			PatCur = patCur;
@@ -22,6 +24,7 @@ namespace OpenDental {
 
 		private void FormOrthoChart_Load(object sender,EventArgs e) {
 			listDisplayFields=DisplayFields.GetForCategory(DisplayFieldCategory.OrthoChart);
+			//Add today's date to DatesAdditional if it's not already in the listDisplayFields.
 			FillGrid();
 		}
 
@@ -30,7 +33,7 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			for(int i=0;i<listDisplayFields.Count;i++) {
-				col=new ODGridColumn(listDisplayFields[i].Description,listDisplayFields[i].ColumnWidth);
+				col=new ODGridColumn(listDisplayFields[i].Description,listDisplayFields[i].ColumnWidth,true);
 				gridMain.Columns.Add(col);
 			}
 			listOrthoCharts=OrthoCharts.GetAllForPatient(PatCur.PatNum);
@@ -100,6 +103,15 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			//enter date in new form
+			//if date not valid, return.
+			//if date conflicts with existing date, notify user and return.
+			//Add date to DatesAdditional.
+			//FillGrid.
+
+
+
+
 			//create a new orthochart and allow the user to choose a new date and a new type
 			FormOrthoChartEdit FormOCE = new FormOrthoChartEdit();
 			FormOCE.ShowDialog();

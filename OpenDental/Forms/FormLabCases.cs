@@ -255,7 +255,9 @@ namespace OpenDental{
 			table=LabCases.Refresh(PIn.Date(textDateFrom.Text),dateMax,checkShowAll.Checked,checkShowUnattached.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCases","Appt Date Time"),120);
+			ODGridColumn col;
+			col=new ODGridColumn(Lan.g("TableLabCases","Appt Date Time"),120);
+			col.SortingStrategy=GridSortingStrategy.DateParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableLabCases","Procedures"),200);
 			gridMain.Columns.Add(col);
@@ -280,18 +282,22 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["lab"].ToString());
 				row.Cells.Add(table.Rows[i]["phone"].ToString());
 				row.Cells.Add(table.Rows[i]["Instructions"].ToString());
+				row.Tag=table.Rows[i];
 				gridMain.Rows.Add(row);
 			}
-			gridMain.Columns[0].SortingStrategy=GridSortingStrategy.DateParse;
 			gridMain.AllowSortingByColumn=true;
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			long selectedLabCase=PIn.Long(table.Rows[e.Row]["LabCaseNum"].ToString());
+			DataRow row=(DataRow)gridMain.Rows[e.Row].Tag;
+			long selectedLabCase=PIn.Long(row["LabCaseNum"].ToString());
 			FormLabCaseEdit FormL=new FormLabCaseEdit();
 			FormL.CaseCur=LabCases.GetOne(selectedLabCase);
 			FormL.ShowDialog();
+			if(FormL.DialogResult!=DialogResult.OK) {
+				return;//don't refresh unless we have to.  It messes up the user's ordering.
+			}
 			FillGrid();
 			for(int i=0;i<table.Rows.Count;i++){
 				if(table.Rows[i]["LabCaseNum"].ToString()==selectedLabCase.ToString()){
