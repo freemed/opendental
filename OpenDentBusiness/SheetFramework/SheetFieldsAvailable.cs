@@ -195,6 +195,7 @@ namespace OpenDentBusiness{
 				list.Add(NewOutput("Disp"));
 				list.Add(NewOutput("Sig"));
 				list.Add(NewOutput("Refills"));			
+				list.Add(NewOutput("prov.stateRxID"));
 			}
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("notes"));

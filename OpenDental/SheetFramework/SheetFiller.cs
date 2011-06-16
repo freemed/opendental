@@ -809,7 +809,10 @@ namespace OpenDental{
 						break;
 					case "Refills":
 						field.FieldValue=rx.Refills;
-						break;					
+						break;	
+					case "prov.stateRxID":
+						field.FieldValue=prov.StateRxID;
+						break;
 				}
 			}
 		}
