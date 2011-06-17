@@ -414,7 +414,7 @@ namespace OpenDental{
 							return;
 						}
 					}
-					DisplayField df=new DisplayField("",20,DisplayFieldCategory.OrthoChart);
+					DisplayField df=new DisplayField("",100,DisplayFieldCategory.OrthoChart);
 					df.Description=textCustomField.Text;
 					ListShowing.Add(df);
 					textCustomField.Text="";

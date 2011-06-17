@@ -14,7 +14,7 @@ namespace OpenDental {
 		private List<OrthoChart> listOrthoCharts;
 		public Patient PatCur;
 		///<summary>Usually only 1 item in this list: today's date.</summary>
-		private List<DateTime> DatesAdditional;
+		private List<DateTime> listDatesAdditional;
 
 		public FormOrthoChart(Patient patCur) {
 			PatCur = patCur;
@@ -23,8 +23,20 @@ namespace OpenDental {
 		}
 
 		private void FormOrthoChart_Load(object sender,EventArgs e) {
+			listOrthoCharts=OrthoCharts.GetAllForPatient(PatCur.PatNum);
 			listDisplayFields=DisplayFields.GetForCategory(DisplayFieldCategory.OrthoChart);
-			//Add today's date to DatesAdditional if it's not already in the listDisplayFields.
+			listDatesAdditional=new List<DateTime>();
+			bool addTodaysDate=true;
+			for(int i=0;i<listOrthoCharts.Count;i++) {
+				if(listOrthoCharts[i].DateService.ToShortDateString()==DateTime.Today.ToShortDateString()) {
+					addTodaysDate=false;
+					break;
+				}
+			}
+			if(addTodaysDate) {
+				listDatesAdditional.Add(DateTime.Today);
+			}
+			//Add today's date to DatesAdditional if it's not already in the listOrthoCharts.
 			FillGrid();
 		}
 
@@ -32,6 +44,9 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
+			//Add and define columns-------------------------------------------------------------------------------------------------------------------------------------------
+			col=new ODGridColumn("Date",70);
+			gridMain.Columns.Add(col);
 			for(int i=0;i<listDisplayFields.Count;i++) {
 				col=new ODGridColumn(listDisplayFields[i].Description,listDisplayFields[i].ColumnWidth,true);
 				gridMain.Columns.Add(col);
@@ -39,66 +54,91 @@ namespace OpenDental {
 			listOrthoCharts=OrthoCharts.GetAllForPatient(PatCur.PatNum);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			//add blank rows with dates in the first column dates--------------------------------------------------------------------------------------------------------------
 			for(int i=0;i<listOrthoCharts.Count;i++) {
-				//check all existing rows if date matches insert into proper column of that row
-				//if date doesn't match add a new row into the grid with all cells containing blank data except the new one.
+				bool addRow=true;
 				for(int j=0;j<gridMain.Rows.Count;j++) {
-					if(listOrthoCharts[i].DateService.ToShortDateString()==gridMain.Rows[j].Cells[0].Text) {//record matches an existing date
-						for(int k=1;k<listDisplayFields.Count;k++) {//start at k=1 because first column "Date" is already added
-							if(listOrthoCharts[i].FieldName==gridMain.Columns[k].Heading) {
-								gridMain.Rows[j].Cells[k].Text=listOrthoCharts[i].FieldValue;
-							}
-						}
-						break;//moves on to next ortho chart
-					}
-					else {//no matching dates for ortho chart, make a new row
-						row=new ODGridRow();
-						row.Cells.Add(listOrthoCharts[i].DateService.ToShortDateString());
-						for(int k=1;k<listDisplayFields.Count;k++) {//start at k=1 because first column "Date" is already added
-							if(listDisplayFields[k].Description==listOrthoCharts[i].FieldName){
-								row.Cells.Add(listOrthoCharts[i].FieldValue);
-							}
-							else{
-								row.Cells.Add("");//place holders for each cell in each row.
-							}
-						}
-						gridMain.Rows.Add(row);//added only if row doesn't match an existing date.
+					if(listOrthoCharts[i].DateService.ToShortDateString()==gridMain.Rows[j].Cells[0].Text) {
+						addRow=false;
+						break;
 					}
 				}
+				if(addRow) {
+					row=new ODGridRow();
+					row.Cells.Add(listOrthoCharts[i].DateService.ToShortDateString());
+					for(int j=0;j<listDisplayFields.Count;j++) {//add blank cells for all display fields after date column
+						row.Cells.Add(" ");
+					}
+					gridMain.Rows.Add(row);
+				}
 			}
+			//add from additional dates which has already been checked for duplicate dates.
+			for(int i=0;i<listDatesAdditional.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(listDatesAdditional[i].ToShortDateString());
+				for(int j=0;j<listDisplayFields.Count;j++) {//add blank cells for all display fields after date column
+					row.Cells.Add(" ");
+				}
+				gridMain.Rows.Add(row);
+			}
+			//add ortho charts data to cells-----------------------------------------------------------------------------------------------------------------------------------
+			for(int i=0;i<listOrthoCharts.Count;i++) {
+				for(int j=0;j<gridMain.Rows.Count;j++) {//check for date
+					if(listOrthoCharts[i].DateService.ToShortDateString()==gridMain.Rows[j].Cells[0].Text) {
+						for(int k=0;k<listDisplayFields.Count;k++) {//check for column
+							if(listOrthoCharts[i].FieldName.ToLower()==gridMain.Columns[k].Heading.ToLower()) {//add to cell
+								gridMain.Rows[j].Cells[k].Text=listOrthoCharts[i].FieldValue;
+							}
+						}//end check column
+					}
+				}//end check row/date
+			}//end check orthoChart
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(e.Col==0){//cannot edit a date
-				return;
-			}
-			//create an orthoChart that has this date and this type
-			FormOrthoChartEdit FormOCE = new FormOrthoChartEdit();
-			if(gridMain.Rows[e.Row].Cells[e.Col].Text=="") {//new ortho chart
-				FormOCE.OrthoCur.DateService = DateTime.Parse(gridMain.Rows[e.Row].Cells[0].Text);
-				FormOCE.OrthoCur.FieldName = gridMain.Columns[e.Col].Heading;
-				FormOCE.IsNew=true;
-			}
-			else {//existing ortho chart
-				for(int i=0;i<listOrthoCharts.Count;i++) {
-					if(listOrthoCharts[i].DateService.ToShortDateString()==gridMain.Rows[e.Row].Cells[0].Text
-					&& listOrthoCharts[i].FieldName==gridMain.Columns[e.Col].Heading) {
-						FormOCE.OrthoCur=listOrthoCharts[i];
-						break;
+				FormOrthoChartAddDate FormOCAD = new FormOrthoChartAddDate();
+				FormOCAD.ShowDialog();
+				if(FormOCAD.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				for(int i=0;i<gridMain.Rows.Count;i++) {
+					if(FormOCAD.newDate.ToShortDateString()==gridMain.Rows[i].Cells[0].Text) {
+						MsgBox.Show(this,"That date already exists.");
+						return;
 					}
 				}
-			}
-			FormOCE.ShowDialog();
-			if(FormOCE.DialogResult!=DialogResult.OK) {
+				listDatesAdditional.Add(FormOCAD.newDate);
+				FillGrid();
 				return;
 			}
-			if(FormOCE.IsNew) {
-				OrthoCharts.Insert(FormOCE.OrthoCur);
-			}
-			else {
-				OrthoCharts.Update(FormOCE.OrthoCur);
-			}
+			////create an orthoChart that has this date and this type
+			//FormOrthoChartEdit FormOCE = new FormOrthoChartEdit();
+			//if(gridMain.Rows[e.Row].Cells[e.Col].Text==" ") {//new ortho chart
+			//  FormOCE.OrthoCur.DateService = DateTime.Parse(gridMain.Rows[e.Row].Cells[0].Text);
+			//  FormOCE.OrthoCur.FieldName = gridMain.Columns[e.Col].Heading;
+			//  FormOCE.IsNew=true;
+			//}
+			//else {//existing ortho chart
+			//  for(int i=0;i<listOrthoCharts.Count;i++) {
+			//    if(listOrthoCharts[i].DateService.ToShortDateString()==gridMain.Rows[e.Row].Cells[0].Text
+			//    && listOrthoCharts[i].FieldName==gridMain.Columns[e.Col].Heading) {
+			//      FormOCE.OrthoCur=listOrthoCharts[i];
+			//      break;
+			//    }
+			//  }
+			//}
+			//FormOCE.ShowDialog();
+			//if(FormOCE.DialogResult!=DialogResult.OK) {
+			//  return;
+			//}
+			//if(FormOCE.IsNew) {
+			//  OrthoCharts.Insert(FormOCE.OrthoCur);
+			//}
+			//else {
+			//  OrthoCharts.Update(FormOCE.OrthoCur);
+			//}
 			FillGrid();
 		}
 
@@ -108,23 +148,20 @@ namespace OpenDental {
 			//if date conflicts with existing date, notify user and return.
 			//Add date to DatesAdditional.
 			//FillGrid.
-
-
-
-
-			//create a new orthochart and allow the user to choose a new date and a new type
-			FormOrthoChartEdit FormOCE = new FormOrthoChartEdit();
-			FormOCE.ShowDialog();
-			if(FormOCE.DialogResult!=DialogResult.OK) {
+			FormOrthoChartAddDate FormOCAD = new FormOrthoChartAddDate();
+			FormOCAD.ShowDialog();
+			if(FormOCAD.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//Todo: check for existing date and type
-				//if exists, show dialog for replace append or cancel
-					//update if replace is selected
-					//append(new querry) is append is selected
-					//cancel save if replace or append is not selected
-				//if there is no match for date and type, insert.
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				if(FormOCAD.newDate.ToShortDateString()==gridMain.Rows[i].Cells[0].Text) {
+					MsgBox.Show(this,"That date already exists.");
+					return;
+				}
+			}
+			listDatesAdditional.Add(FormOCAD.newDate);
 			FillGrid();
+			return;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

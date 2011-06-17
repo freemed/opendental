@@ -23,12 +23,41 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.gridPat = new OpenDental.UI.ODGrid();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.gridPat = new OpenDental.UI.ODGrid();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
+			// 
+			// gridPat
+			// 
+			this.gridPat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridPat.HScrollVisible = false;
+			this.gridPat.Location = new System.Drawing.Point(10,9);
+			this.gridPat.Name = "gridPat";
+			this.gridPat.ScrollValue = 0;
+			this.gridPat.Size = new System.Drawing.Size(916,194);
+			this.gridPat.TabIndex = 6;
+			this.gridPat.Title = "Patient Fields";
+			this.gridPat.TranslationName = null;
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(10,209);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMain.Size = new System.Drawing.Size(916,418);
+			this.gridMain.TabIndex = 5;
+			this.gridMain.Title = "Ortho Chart";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd
 			// 
@@ -77,33 +106,6 @@ namespace OpenDental{
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// gridPat
-			// 
-			this.gridPat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridPat.HScrollVisible = false;
-			this.gridPat.Location = new System.Drawing.Point(10,9);
-			this.gridPat.Name = "gridPat";
-			this.gridPat.ScrollValue = 0;
-			this.gridPat.Size = new System.Drawing.Size(916,194);
-			this.gridPat.TabIndex = 6;
-			this.gridPat.Title = "Patient Fields";
-			this.gridPat.TranslationName = null;
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(10,209);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(916,418);
-			this.gridMain.TabIndex = 5;
-			this.gridMain.Title = "Ortho Chart";
-			this.gridMain.TranslationName = null;
 			// 
 			// FormOrthoChart
 			// 
