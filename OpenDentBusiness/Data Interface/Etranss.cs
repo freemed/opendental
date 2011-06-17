@@ -34,8 +34,17 @@ namespace OpenDentBusiness{
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitInquiry270)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitResponse271)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.AckError)+" "
-				+"AND Etype!="+POut.Long((int)EtransType.ClaimAck_CA)+" "
-				+"AND Etype!="+POut.Long((int)EtransType.ClaimEOB_CA)+" "
+				//We exclude canadian transaction response types, since the responses can be accessed from the request transaction inside of the claim history portion of FormSendClaims.
+				+"AND Etype!="+POut.Long((int)EtransType.ClaimAck_CA)+" "//Could be attached to a claim, cob claim or ROT.
+				+"AND Etype!="+POut.Long((int)EtransType.ClaimEOB_CA)+" "//Could be attached to a claim, cob claim or ROT.
+				+"AND Etype!="+POut.Long((int)EtransType.EligResponse_CA)+" "//Will always be attached to an Eligibility request.
+				+"AND Etype!="+POut.Long((int)EtransType.EmailResponse_CA)+" "//Will always be attached to a Request for Outstanding Transactions (ROT).
+				+"AND Etype!="+POut.Long((int)EtransType.OutstandingAck_CA)+" "//Will always be attached to an ROT.
+				+"AND Etype!="+POut.Long((int)EtransType.PaymentResponse_CA)+" "//Will always be attached to a Request for Payment Reconciliation (RPR).
+				+"AND Etype!="+POut.Long((int)EtransType.PredetermAck_CA)+" "//Could be attached to a Predetermination request or an ROT.
+				+"AND Etype!="+POut.Long((int)EtransType.PredetermEOB_CA)+" "//Could be attached to a Predetermination request or an ROT.
+				+"AND Etype!="+POut.Long((int)EtransType.ReverseResponse_CA)+" "//Will always be attached to a Reversal request.
+				+"AND Etype!="+POut.Long((int)EtransType.SummaryResponse_CA)+" "//Will always be attached to a Request for Summary Reconciliation (RSR).
 				+"ORDER BY DateTimeTrans";
 			DataTable table=Db.GetTable(command);
 			DataTable tHist=new DataTable("Table");

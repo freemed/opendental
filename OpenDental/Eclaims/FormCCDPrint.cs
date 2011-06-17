@@ -212,6 +212,11 @@ namespace OpenDental.Eclaims {
 					throw new Exception("Unhandled transactionCode '"+transactionCode+"' for version 02 message.");
 				}
 			}
+			CCDField status=formData.GetFieldById("G05");
+			if(status!=null && status.valuestr!=null) {
+				responseStatus=status.valuestr.ToUpper();
+			}
+			transactionCode=formData.GetFieldById("A04").valuestr;
 			predetermination=(transactionCode=="23"||transactionCode=="13");//Be sure to list all predetermination response types here!
 			//We are required to print 2 copies of the Dentaide form when it is not a predetermination form. Everything else requires only 1 copy.
 			if(copiesToPrint<=0) { //Show the form on screen if there are no copies to print.
@@ -220,22 +225,24 @@ namespace OpenDental.Eclaims {
 				printPreviewControl1.Document=pd;//Setting the document causes system to call pd_PrintPage, which will print the document in the preview window.
 				Show();
 				if(autoPrint) {
-					int numPrintCopies=((formId=="02" && !predetermination)?2:1);
-					//Print patient copies.
-					new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,true);
-					//Print dentist copies for assigned claims, but only for certain forms.
-					if(insSub.AssignBen && (formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07")) {
-						new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,false);
+					if(responseStatus!="R") { //We are not required to automatically print rejection notices.
+						int numPrintCopies=((formId=="02" && !predetermination)?2:1);
+						//Print patient copies.
+						new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,true);
+						//Print dentist copies for assigned claims, but only for certain forms.
+						if(insSub.AssignBen && (formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07")) {
+							new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,false);
+						}
 					}
 				}
 			}
 			else {
 				pd=CreatePrintDocument();
-//#if DEBUG
-				//new FormCCDPrint(etrans.Copy(),MessageText,0,false,patientCopy);//Show the form on the screen.
-//#else
+#if DEBUG
+				new FormCCDPrint(etrans.Copy(),MessageText,0,false,patientCopy);//Show the form on the screen.
+#else
 				pd.Print();//Send the print job to the physical printer.
-//#endif
+#endif
 				//Print the remaining copies recursively.
 				if(copiesToPrint>=2) {
 					new FormCCDPrint(etrans.Copy(),MessageText,copiesToPrint-1,false,patientCopy);
@@ -293,10 +300,38 @@ namespace OpenDental.Eclaims {
 			StringBuilder message=new StringBuilder();
 			CCDField[] displayMessageFields=formData.GetFieldsById("G32");
 			for(int i=0;i<displayMessageFields.Length;i++){
-				if(i>0){
-					message.Append(Environment.NewLine+Environment.NewLine);
+				if(message.Length>0){
+					message.Append(Environment.NewLine);
 				}
 				message.Append(displayMessageFields[i].valuestr);
+			}
+			CCDField[] noteOutputFlags=formData.GetFieldsById("G41");
+			CCDField[] noteNumbers=formData.GetFieldsById("G45");
+			CCDField[] noteTexts=formData.GetFieldsById("G26");
+			List<string> displayMessages=new List<string>();
+			List<int> displayMessageNumbers=new List<int>();
+			for(int i=0;i<noteOutputFlags.Length;i++) {
+				//We display notes on screen if they are marked as such or if they are marked to prompt the user for a decision.
+				if(PIn.Int(noteOutputFlags[i].valuestr)!=0 && PIn.Int(noteOutputFlags[i].valuestr)!=1) { 
+					continue;
+				}
+				displayMessages.Add(noteTexts[i].valuestr);
+				displayMessageNumbers.Add(PIn.Int(noteNumbers[i].valuestr));
+			}
+			while(displayMessages.Count>0) {
+				int indexOfMinVal=0;
+				for(int j=1;j<displayMessageNumbers.Count;j++) {
+					if(displayMessageNumbers[j]<displayMessageNumbers[indexOfMinVal]) {
+						indexOfMinVal=j;
+					}
+				}
+				doc.StartElement();
+				if(message.Length>0) {
+					message.Append(Environment.NewLine);
+				}
+				message.Append(displayMessages[indexOfMinVal]);
+				displayMessages.RemoveAt(indexOfMinVal);
+				displayMessageNumbers.RemoveAt(indexOfMinVal);
 			}
 			string msg=message.ToString();
 			if(msg.Length>0){
@@ -318,11 +353,6 @@ namespace OpenDental.Eclaims {
 				doc.bounds=e.MarginBounds;
 				center=doc.bounds.X+doc.bounds.Width/2;
 				x=doc.StartElement();//Every printed page always starts on the first row and can choose to skip rows later if desired.
-				CCDField status=formData.GetFieldById("G05");
-				if(status!=null && status.valuestr!=null) {
-					responseStatus=status.valuestr.ToUpper();
-				}
-				transactionCode=formData.GetFieldById("A04").valuestr;
 				if(transactionCode=="16") {
 					PrintPaymentReconciliation_16(e.Graphics);
 				}
@@ -1290,7 +1320,6 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			bool isEOB=transactionCode=="21" || transactionCode=="23";
 			CCDField[] noteNumbers=formData.GetFieldsById("G45");//Used to looking up note reference numbers.
-			CCDField[] noteTexts=formData.GetFieldsById("G26");
 			//The rest of the CCDField[] object should all be the same length, since they come bundled together as part 
 			//of each procedure.
 			CCDField[] procedureLineNumbers=formData.GetFieldsById("F07");
@@ -1431,13 +1460,7 @@ namespace OpenDental.Eclaims {
 			if(isEOB){
 				doc.StartElement();
 				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-				doc.DrawString(g,"NOTE",x,0);
-				doc.StartElement(verticalLine);
-				for(int j=0;j<noteNumbers.Length;j++){
-					doc.StartElement();
-					doc.DrawString(g,noteNumbers[j].valuestr,noteCol,0);
-					doc.DrawString(g,noteTexts[j].valuestr,100,0);
-				}
+				PrintNoteList(g);
 			}
 		}
 
@@ -1766,30 +1789,7 @@ namespace OpenDental.Eclaims {
 				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			}
 			x=doc.StartElement();
-			CCDField[] notes=formData.GetFieldsById("G26");//Get all G26s (will match the number in field G11).
-			doc.DrawString(g,"Notes:",x,0,headingFont);
-			x=doc.StartElement();
-			for(int i=0;i<notes.Length;i++){
-				doc.DrawString(g,i.ToString().PadLeft(2,'0')+notes[i].valuestr,x,0);
-				//There is a 32 note max, so printing will max out at two pages. Therefore, we may only need to print one extra header.
-				if(i==10) {//Max out at 10 notes on the first page. TODO: Decide the right number by testing, 10 might not be right.
-					doc.NextPage();
-					//reprint header on the second page where the notes overflow as required in the documentation.
-					PrintEOBHeader(g);
-					x=doc.StartElement();
-					PrintTransactionReferenceNumber(g,x,0);
-					PrintTransactionDate(g,x+450,0);
-					x=doc.StartElement(verticalLine);
-					PrintProcedureListEOB(g,GetPayableToString(insSub.AssignBen));
-					x=doc.StartElement(verticalLine);
-					PrintPaymentSummary(g);
-					x=doc.StartElement(verticalLine);
-					doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
-				}
-				else {
-					x=doc.StartElement();
-				}
-			}
+			PrintNoteList(g);
 			x=doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
@@ -2529,13 +2529,37 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintNoteList(Graphics g) {
+			CCDField[] noteOutputFlags=formData.GetFieldsById("G41");
+			CCDField[] noteNumbers=formData.GetFieldsById("G45");
 			CCDField[] noteTexts=formData.GetFieldsById("G26");
-			doc.DrawString(g,"NOTES ("+noteTexts.Length.ToString()+")",x,0,headingFont);
+			List<string> displayMessages=new List<string>();
+			List<int> displayMessageNumbers=new List<int>();
+			doc.DrawString(g,"NOTES: ",x,0,headingFont);
 			doc.StartElement(verticalLine);
 			for(int i=0;i<noteTexts.Length;i++) {//noteTexts.Length<=32
+				if(i<noteOutputFlags.Length) {//Sometimes G26 exists without the output flags or the note numbers.
+					if(PIn.Int(noteOutputFlags[i].valuestr)!=2) {
+						continue;//Output flag of 2 means print. So, don't print this note.
+					}
+					displayMessageNumbers.Add(PIn.Int(noteNumbers[i].valuestr));
+				}
+				else {
+					displayMessageNumbers.Add(i+1);
+				}
+				displayMessages.Add(noteTexts[i].valuestr);
+			}
+			while(displayMessages.Count>0) {
+				int indexOfMinVal=0;
+				for(int j=1;j<displayMessageNumbers.Count;j++) {
+					if(displayMessageNumbers[j]<displayMessageNumbers[indexOfMinVal]) {
+						indexOfMinVal=j;
+					}
+				}
 				doc.StartElement();
-				doc.DrawString(g,(i+1).ToString().PadLeft(2,'0'),x,0);
-				doc.DrawString(g,noteTexts[i].valuestr,x+50,0);
+				doc.DrawString(g,displayMessageNumbers[indexOfMinVal].ToString().PadLeft(2,'0'),x,0);
+				doc.DrawString(g,displayMessages[indexOfMinVal],x+50,0);
+				displayMessages.RemoveAt(indexOfMinVal);
+				displayMessageNumbers.RemoveAt(indexOfMinVal);
 			}
 		}
 
