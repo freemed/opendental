@@ -29,6 +29,7 @@ namespace OpenDental{
 		private Label label3;
 		private CheckBox checkProvAll;
 		private CheckBox checkBillTypesAll;
+		private CheckBox checkBadAddress;
 		private System.Windows.Forms.RadioButton radioAny; 
 
 		///<summary></summary>
@@ -70,6 +71,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkProvAll = new System.Windows.Forms.CheckBox();
 			this.checkBillTypesAll = new System.Windows.Forms.CheckBox();
+			this.checkBadAddress = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -271,12 +273,22 @@ namespace OpenDental{
 			this.checkBillTypesAll.Text = "All";
 			this.checkBillTypesAll.Click += new System.EventHandler(this.checkBillTypesAll_Click);
 			// 
+			// checkBadAddress
+			// 
+			this.checkBadAddress.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBadAddress.Location = new System.Drawing.Point(66,390);
+			this.checkBadAddress.Name = "checkBadAddress";
+			this.checkBadAddress.Size = new System.Drawing.Size(248,18);
+			this.checkBadAddress.TabIndex = 43;
+			this.checkBadAddress.Text = "Exclude bad addresses (no zipcode)";
+			// 
 			// FormRpAging
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(742,450);
+			this.Controls.Add(this.checkBadAddress);
 			this.Controls.Add(this.checkBillTypesAll);
 			this.Controls.Add(this.checkProvAll);
 			this.Controls.Add(this.listProv);
@@ -403,6 +415,9 @@ namespace OpenDental{
 				+"WHERE ";
 			if(checkExcludeInactive.Checked) {
 				cmd+="(patstatus != 2) AND ";
+			}
+			if(checkBadAddress.Checked) {
+				cmd+="(zip !='') AND ";
 			}
 			if(checkOnlyNeg.Checked){
 				cmd+="BalTotal < '-.005' ";
