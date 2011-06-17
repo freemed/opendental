@@ -280,8 +280,7 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException(result);
 			}
 			if(doPrint) {
-				FormCCDPrint FormP=new FormCCDPrint(etrans,result);//Print the form.
-				FormP.Print();
+				new FormCCDPrint(etrans,result,true);//Print the form.
 			}
 			//Now we will process the 'result' here to extract the important data.  Basically Yes or No on the eligibility.
 			//We might not do this for any other trans type besides eligibility.
@@ -816,8 +815,7 @@ namespace OpenDental.Eclaims {
 				}
 				CCDField fieldG62=fieldInputter.GetFieldById("G62");//Last reconciliation page number.
 				totalPages=PIn.Int(fieldG62.valuestr);
-				FormCCDPrint formcp=new FormCCDPrint(etrans,result);
-				formcp.ShowDialog();
+				new FormCCDPrint(etrans,result,true);
 				pageNumber++;
 			} while(pageNumber<=totalPages);
 			return etransAcks;
@@ -931,8 +929,7 @@ namespace OpenDental.Eclaims {
 			if(resultIsError) {
 				throw new ApplicationException(result);
 			}
-			FormCCDPrint formcp=new FormCCDPrint(etrans,result);
-			formcp.ShowDialog();
+			new FormCCDPrint(etrans,result,true);
 			return etrans;
 		}
 

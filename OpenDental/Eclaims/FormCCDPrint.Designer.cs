@@ -29,6 +29,7 @@ namespace OpenDental.Eclaims {
 			this.butForward = new OpenDental.UI.Button();
 			this.butBack = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
+			this.butPrintDentist = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// printPreviewControl1
@@ -91,19 +92,36 @@ namespace OpenDental.Eclaims {
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Location = new System.Drawing.Point(801,662);
+			this.butPrint.Location = new System.Drawing.Point(638,663);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(75,23);
+			this.butPrint.Size = new System.Drawing.Size(116,23);
 			this.butPrint.TabIndex = 4;
-			this.butPrint.Text = "Print";
+			this.butPrint.Text = "Print Patient Copy";
 			this.butPrint.UseVisualStyleBackColor = true;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
+			// butPrintDentist
+			// 
+			this.butPrintDentist.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrintDentist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrintDentist.Autosize = true;
+			this.butPrintDentist.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrintDentist.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintDentist.CornerRadius = 4F;
+			this.butPrintDentist.Location = new System.Drawing.Point(760,663);
+			this.butPrintDentist.Name = "butPrintDentist";
+			this.butPrintDentist.Size = new System.Drawing.Size(116,23);
+			this.butPrintDentist.TabIndex = 7;
+			this.butPrintDentist.Text = "Print Dentist Copy";
+			this.butPrintDentist.UseVisualStyleBackColor = true;
+			this.butPrintDentist.Click += new System.EventHandler(this.butPrintDentist_Click);
 			// 
 			// FormCCDPrint
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(888,690);
+			this.Controls.Add(this.butPrintDentist);
 			this.Controls.Add(this.butForward);
 			this.Controls.Add(this.butBack);
 			this.Controls.Add(this.butPrint);
@@ -113,8 +131,8 @@ namespace OpenDental.Eclaims {
 			this.Name = "FormCCDPrint";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Form1";
+			this.TopMost = true;
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Load += new System.EventHandler(this.FormCCDPrint_Load);
 			this.Resize += new System.EventHandler(this.FormCCDPrint_Resize);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -128,6 +146,7 @@ namespace OpenDental.Eclaims {
 		private UI.Button butPrint;
 		private UI.Button butBack;
 		private UI.Button butForward;
+		private UI.Button butPrintDentist;
 	}
 }
 

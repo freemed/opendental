@@ -1090,10 +1090,7 @@ namespace OpenDental{
 			}
 			//does not yet handle multiple selections
 			Etrans etrans=Etranss.GetEtrans(PIn.Long(tableHistory.Rows[gridHistory.SelectedIndices[0]]["EtransNum"].ToString()));
-			//blah blah blah
-			bool assigned=false;//TODO: set to true in the case of assigned claims, whatever that means.
-			FormCCDPrint FormP=new FormCCDPrint(etrans,assigned,EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum));//Print the form.
-			FormP.Print();
+			new FormCCDPrint(etrans,EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum),false);//Print the form.
 			//MessageBox.Show(etrans.MessageText);
 		}
 

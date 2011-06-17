@@ -481,8 +481,7 @@ namespace OpenDental{
 
 		private void butPrintAck_Click(object sender,EventArgs e) {
 			//only visible if Canadian
-			FormCCDPrint FormP=new FormCCDPrint(AckCur,textAckMessage.Text);//Print the form.
-			FormP.Print();
+			new FormCCDPrint(AckCur,textAckMessage.Text,false);//Show the form on screen and make the user print manually if they desire to print.
 		}
 
 		//private void butDelete_Click(object sender,EventArgs e) {

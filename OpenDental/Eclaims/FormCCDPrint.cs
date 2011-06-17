@@ -28,6 +28,7 @@ namespace OpenDental.Eclaims {
 
 		#region Internal Variables
 
+		private PrintDocument pd=null;
 		///<summary>Total pages in the printed document.</summary>
 		int totalPages;
 		///<summary>Keeps track of the number of pages which have already been completely printed.</summary>
@@ -36,15 +37,12 @@ namespace OpenDental.Eclaims {
 		bool printPageNumbers;
 		///<summary>Set to true when the document has not been renderd into the local container.</summary>
 		bool dirty=true;
-		///<summary>This form is printable until there is a critical failure (if one arises).</summary>
-		bool printable=true;
 		///<summary>English by default (represented by false). Set to true later if using French.</summary>
 		bool isFrench=false;
 		string formatVersionNumber;
-		bool embedded;
-		bool assigned;
+		bool autoPrint;
+		int copiesToPrint;
 		bool predetermination;
-		///<summary>Keeps track of wether we are printing the dentist or patient form.</summary>
 		bool patientCopy=true;
 		Font headingFont=new Font(FontFamily.GenericMonospace,10,FontStyle.Bold);
 		Font standardUnderline=new Font(FontFamily.GenericMonospace,10,FontStyle.Underline);
@@ -95,32 +93,29 @@ namespace OpenDental.Eclaims {
 
 		#region Constructors and System Print Handlers
 
-		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null. This constructor is used to print embedded transactions of an etrans message text. Set assigned to true in the case of assigned claims.</summary>
-		protected FormCCDPrint(Etrans pEtrans,bool pEmbedded,bool pAssigned,string messageText){
+		///<summary>Called externally to display and/or print the messageText as a form.</summary>
+		public FormCCDPrint(Etrans pEtrans,string messageText,bool pAutoPrint) {
 			etrans=pEtrans;
-			embedded=pEmbedded;
-			assigned=pAssigned;
 			MessageText=messageText;
-			patientCopy=!pAssigned;
+			copiesToPrint=0;
+			autoPrint=pAutoPrint;
 			Init();
 		}
 
-		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null. Set assigned to true in the case of assigned claims.</summary>
-		public FormCCDPrint(Etrans pEtrans,bool pAssigned,string messageText) {
+		///<summary>Only called internally.</summary>
+		protected FormCCDPrint(Etrans pEtrans,string messageText,int pCopiesToPrint,bool pAutoPrint,bool pPatientCopy) {
 			etrans=pEtrans;
-			assigned=pAssigned;
 			MessageText=messageText;
-			patientCopy=!pAssigned;
+			copiesToPrint=pCopiesToPrint;
+			autoPrint=pAutoPrint;
+			patientCopy=pPatientCopy;
 			Init();
-			ShowDisplayMessages();
 		}
 
-		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null.  Claim can be null if eligibility request or response.</summary>
-		public FormCCDPrint(Etrans pEtrans,string messageText) {
-			etrans=pEtrans;
-			MessageText=messageText;
-			Init();
-			ShowDisplayMessages();
+		protected override void OnFormClosed(FormClosedEventArgs e) {
+			if(pd!=null) {
+				pd.Dispose();
+			}
 		}
 
 		private void Init(){
@@ -178,7 +173,7 @@ namespace OpenDental.Eclaims {
 				extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
 			}
 			if(MessageText==null || MessageText.Length<23) {
-				throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
+				throw new Exception("CCD message format too short: "+MessageText);
 			}
 			formData=new CCDFieldInputter(MessageText);//Input the fields of the given message.
 			CCDField languageOfInsured=formData.GetFieldById("G27");
@@ -190,37 +185,86 @@ namespace OpenDental.Eclaims {
 			else if(subscriber!=null && subscriber.Language=="fr") {
 				isFrench=true;
 			}
+			formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
+			transactionCode=formData.GetFieldById("A04").valuestr;//Must always exist so no error checking here.
+			if(formatVersionNumber=="04") {//FormId field does not exist in version 02 in any of the message texts.
+				formId=formData.GetFieldById("G42").valuestr;//Always exists in version 04 message responses.
+			}
+			else {//Version 02
+				//Since there is no FormID field in version 02, we figure out what the formId should be based on the transaction type.
+				if(transactionCode=="10") {//Eligibility Response.
+					formId="08";//Eligibility Form
+				}
+				else if(transactionCode=="11") {//Claim Response.
+					formId="03";//Claim Acknowledgement Form
+				}
+				else if(transactionCode=="21") {//EOB
+					formId="01";//EOB Form
+					CCDField g02=formData.GetFieldById("G02");
+					if(g02!=null && g02.valuestr=="Y") {
+						formId="04";//Employer Certified.
+					}
+				}
+				else if(transactionCode=="13") {//Response to Pre-Determination.
+					formId="06";//Pre-Determination Acknowledgement Form
+				}
+				else {
+					throw new Exception("Unhandled transactionCode '"+transactionCode+"' for version 02 message.");
+				}
+			}
+			predetermination=(transactionCode=="23"||transactionCode=="13");//Be sure to list all predetermination response types here!
+			//We are required to print 2 copies of the Dentaide form when it is not a predetermination form. Everything else requires only 1 copy.
+			if(copiesToPrint<=0) { //Show the form on screen if there are no copies to print.
+				ShowDisplayMessages();
+				pd=CreatePrintDocument();
+				printPreviewControl1.Document=pd;//Setting the document causes system to call pd_PrintPage, which will print the document in the preview window.
+				Show();
+				if(autoPrint) {
+					int numPrintCopies=((formId=="02" && !predetermination)?2:1);
+					//Print patient copies.
+					new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,true);
+					//Print dentist copies for assigned claims, but only for certain forms.
+					if(insSub.AssignBen && (formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07")) {
+						new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,false);
+					}
+				}
+			}
+			else {
+				pd=CreatePrintDocument();
+//#if DEBUG
+				//new FormCCDPrint(etrans.Copy(),MessageText,0,false,patientCopy);//Show the form on the screen.
+//#else
+				pd.Print();//Send the print job to the physical printer.
+//#endif
+				//Print the remaining copies recursively.
+				if(copiesToPrint>=2) {
+					new FormCCDPrint(etrans.Copy(),MessageText,copiesToPrint-1,false,patientCopy);
+				}
+			}
+			CCDField embeddedTransaction=formData.GetFieldById("G40");
+			if(embeddedTransaction!=null) {
+				new FormCCDPrint(etrans.Copy(),embeddedTransaction.valuestr,copiesToPrint,autoPrint,patientCopy);
+			}
+		}
+
+		private PrintDocument CreatePrintDocument() {
+			//have any signatures on the same piece of paper as the rest of the info.
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around.
+			//This prevents a bug caused by some printer drivers not reporting their papersize.
+			//But remember that other countries use A4 paper instead of 8 1/2 x 11.
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			pd.PrinterSettings.Duplex=Duplex.Horizontal;//Print double sided when possible, since forms are usually 1-2 pages.
+			return pd;
 		}
 
 		private void FormCCDPrint_Resize(object sender,EventArgs e) {
 			labelPage.Location=new Point((Width-butPrint.Width-labelPage.Width)/2,labelPage.Location.Y);
 			butBack.Location=new Point(labelPage.Left-butBack.Width-6,butBack.Location.Y);
 			butForward.Location=new Point(labelPage.Right+6,butForward.Location.Y);
-		}
-
-		///<summary>Prints the Canadian form.</summary>
-		private void FormCCDPrint_Load(object sender,EventArgs e) {
-			try {
-				//have any signatures on the same piece of paper as the rest of the info.
-				PrintDocument pd=new PrintDocument();
-				pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
-				pd.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around.
-				//This prevents a bug caused by some printer drivers not reporting their papersize.
-				//But remember that other countries use A4 paper instead of 8 1/2 x 11.
-				if(pd.DefaultPageSettings.PrintableArea.Height==0) {
-					pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
-				}
-				pd.PrinterSettings.Duplex=Duplex.Horizontal;//Print double sided when possible, so that forms which are 1-2 pages will
-#if DEBUG
-				printPreviewControl1.Document=pd;//Setting the document causes system to call pd_PrintPage, which will print the document in the preview window.
-#else
-				pd.Print();//Sends the print job automatically to the printer. The user can reprint by hitting the print button if necessary.
-#endif
-				pd.Dispose();
-			}
-			catch(Exception ex) {
-				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
-			}
 		}
 
 		private void butBack_Click(object sender,EventArgs e) {
@@ -238,7 +282,11 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
-			
+			new FormCCDPrint(etrans.Copy(),MessageText,1,false,true);
+		}
+
+		private void butPrintDentist_Click(object sender,EventArgs e) {
+			new FormCCDPrint(etrans.Copy(),MessageText,1,false,false);
 		}
 
 		public void ShowDisplayMessages(){
@@ -255,62 +303,6 @@ namespace OpenDental.Eclaims {
 				MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(msg);
 				msgBox.Text="Messages";//Same in both english and french, according to translate.google.com.
 				msgBox.ShowDialog();
-			}
-		}
-
-		///<summary>This is the function that must be called to properly print the form.</summary>
-		public void Print(){
-			//try{  The try/catch is just annoying while debugging.  We can uncomment it later.
-				formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
-				transactionCode=formData.GetFieldById("A04").valuestr;//Must always exist so no error checking here.
-				if(formatVersionNumber=="04"){//FormId field does not exist in version 02 in any of the message texts.
-					formId=formData.GetFieldById("G42").valuestr;//Always exists in version 04 message responses.
-				}else{//Version 02
-					//Since there is no FormID field in version 02, we figure out what the formId should be based on the transaction type.
-					if(transactionCode=="10"){//Eligibility Response.
-						formId="08";//Eligibility Form
-					}else if(transactionCode=="11"){//Claim Response.
-						formId="03";//Claim Acknowledgement Form
-					}else if(transactionCode=="21"){//EOB
-						formId="01";//EOB Form
-						CCDField g02=formData.GetFieldById("G02");
-						if(g02!=null && g02.valuestr=="Y"){
-							formId="04";//Employer Certified.
-						}
-					}else if(transactionCode=="13"){//Response to Pre-Determination.
-						formId="06";//Pre-Determination Acknowledgement Form
-					}else{
-						throw new Exception("Unhandled transactionCode '"+transactionCode+"' for version 02 message.");
-					}
-				}
-				predetermination=(transactionCode=="23"||transactionCode=="13");//Be sure to list all predetermination response types here!
-				//We are required to print 2 copies of the Dentaide form when it is not a predetermination form.
-				//Everything else requires only 1 copy. Here we add the stipulation that only a patient form can print 2 copies
-				//so that recursive calls to print other copies for the transaction do not also print extra copies.
-				int numCopies=((formId=="02" && !predetermination && patientCopy)?2:1);
-				while(numCopies>0){
-					if(!patientCopy){//A dentist copy is to be printed.
-						//We cannot simply print two copies of this form, because the dentist and patient forms are slightly different.
-						FormCCDPrint patientForm=new FormCCDPrint(etrans.Copy(),false,assigned,MessageText);//Print out a patient copy seperately.
-						patientForm.Print();
-					}
-					//Always print a patient copy, but only print dentist copies for those forms to which it applies.
-					if(patientCopy || formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07") {
-						if(printable){
-							this.ShowDialog();//Trigger the actual printing process, which calls FormCCDPrint_Load.
-						}
-					}
-					numCopies--;
-				}
-			/*}
-			catch(Exception ex){
-				Logger.openlog.Log(ex.ToString(),Logger.Severity.ERROR);
-			}*/
-			//Check for embedded messages.
-			CCDField embeddedTransaction=formData.GetFieldById("G40");
-			if(embeddedTransaction!=null) {
-				FormCCDPrint embeddedForm=new FormCCDPrint(etrans.Copy(),true,assigned,embeddedTransaction.valuestr);
-				embeddedForm.Print();
 			}
 		}
 
