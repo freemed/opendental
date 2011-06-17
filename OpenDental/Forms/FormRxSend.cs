@@ -131,24 +131,24 @@ namespace OpenDental {
 			strb.Append("UIB"+e);//000
 			strb.Append("UNOA"+f+"0"+e);//010 Syntax identifier and version 
 			strb.Append(e);//020 not used
-			strb.Append(rx.RxNum+e);//030 Transaction reference (Clinic system trace number.) Sender creates a Unique Trace number for each message sent.
+			strb.Append(Sout(POut.Long(rx.RxNum))+e);//030 Transaction reference (Clinic system trace number.) Sender creates a Unique Trace number for each message sent.
 			strb.Append(e);//040 not used 
 			strb.Append(e);//050 not used
 			strb.Append("56873771"+f+"C"+f+"PASSWORDQ"+e);//060 Sender identification (This is the Clinic ID of the sender; C means it is a Clinic.)
-			strb.Append(pharmacy.PharmID+f+"P"+e);//070 Recipient ID (NCPDP Provider ID Number of pharmacy; P means it is a pharmacy.)
+			strb.Append(Sout(pharmacy.PharmID)+f+"P"+e);//070 Recipient ID (NCPDP Provider ID Number of pharmacy; P means it is a pharmacy.)
 			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//080 Date of initiation CCYYMMDD:HHMMSS,S 
 			//UIH+SCRIPT:010:006:NEWRX+110072+++19971001:081522'-------------------------------------------------------
 			strb.Append("UIH"+e);//000
 			strb.Append("SCRIPT"+f+"010"+f+"006"+f+"NEWRX"+e);//010 Message type:version:release:function.
 			//Clinic's reference number for message. Usually this is the folio number for the patient. However, this is the ID by which the clinic will be able to refer to this prescription.
-			strb.Append(rx.RxNum+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
+			strb.Append(Sout(POut.Long(rx.RxNum))+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
 			strb.Append(e);//030 conditional Dialogue Reference
 			strb.Append(e);//040 not used
 			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//050 Date of initiation
 			//PVD+P1+7701630:D3+++++MAIN STREET PHARMACY++6152205656:TE'-----------------------------------------------
 			strb.Append("PVD"+e);//000
 			strb.Append("P1"+e);//010 Provider coded (see external code list pg.109)
-			strb.Append(pharmacy.PharmID+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
+			strb.Append(Sout(pharmacy.PharmID)+f+"D3"+e);//020 Reference number and qualifier (Pharmacy ID)
 			strb.Append(e);//030 not used
 			strb.Append(e);//040 conditional Provider specialty
 			strb.Append(e);//050 conditional The name of the prescriber or pharmacist or supervisor
@@ -170,13 +170,13 @@ namespace OpenDental {
 			//PTT++19541225+SMITH:MARY+F+333445555:SY'-----------------------------------------------------------------
 			strb.Append("PTT"+e);//000
 			strb.Append(e);//010 conditional Individual relationship
-			strb.Append(pat.Birthdate.ToString("yyyyMMdd")+e);//020 Birth date of patient YYYYMMDD
+			strb.Append(Sout(pat.Birthdate.ToString("yyyyMMdd"))+e);//020 Birth date of patient YYYYMMDD
 			strb.Append(Sout(pat.LName)+f+Sout(pat.FName)+e);//030 Name
-			strb.Append(pat.Gender.ToString().Substring(0,1)+e);//040 Gender (M,F,U)
-			strb.Append(Sout(pat.SSN)+f+"SY"+s);//050 Patient ID and/or SSN and qualifier
+			strb.Append(Sout(pat.Gender.ToString().Substring(0,1))+e);//040 Gender (M,F,U)
+			strb.Append(Sout(pat.SSN.Replace("-",""))+f+"SY"+s);//050 Patient ID and/or SSN and qualifier
 			//COO+123456:BO+INSURANCE COMPANY NAME++123456789++AA112'--------------------------------------------------
 			strb.Append("COO"+e);//000
-			strb.Append(insBINLocNum+f+"BO"+e);//010 Payer ID Information and qualifier (Primary Payer's identification number? BO is for BIN Location Number.)
+			strb.Append(Sout(insBINLocNum)+f+"BO"+e);//010 Payer ID Information and qualifier (Primary Payer's identification number? BO is for BIN Location Number.)
 			strb.Append(Sout(car.CarrierName)+e);//020 Payer name
 			strb.Append(e);//030 conditional Service type, coded
 			strb.Append(Sout(sub.SubscriberID)+e);//040 Cardholder ID
@@ -201,7 +201,7 @@ namespace OpenDental {
 			strb.Append("R"+f+Sout(rx.Refills)+s);//060 Refill and quantity
 			//UIT+110072+6'---------------------------------------------------------------------------------------------
 			strb.Append("UIT"+e);//000
-			strb.Append(rx.RxNum+e);//010 Message reference number
+			strb.Append(Sout(POut.Long(rx.RxNum))+e);//010 Message reference number
 			strb.Append("5"+s);//020 Mandatory field. This is the count of the number of segments in the message including the UIH and UIT
 			//UIZ++1'---------------------------------------------------------------------------------------------------
 			strb.Append("UIZ"+e);//000
@@ -223,8 +223,8 @@ namespace OpenDental {
 			message.IsBodyHtml=false;
 			client.Send(message);
 			//Remove the Rx from the grid.
-			//rx.IsElectQueue=false;
-			//RxPats.Update(rx);
+			rx.SendStatus=RxSendStatus.SentElect;
+			RxPats.Update(rx);
 			FillGrid();//Refresh the screen so that sent Rx's look to have been sent.
 		}
 

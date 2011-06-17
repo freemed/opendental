@@ -49,6 +49,10 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
+			if(textColumnsPerPage.Text=="0") {
+				MsgBox.Show(this,"Columns per page cannot be 0.");
+				return false;
+			}
 			return true;
 		}
 

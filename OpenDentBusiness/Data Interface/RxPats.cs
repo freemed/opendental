@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<RxPat>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM rxpat WHERE IsElectQueue=1";
+			string command="SELECT * FROM rxpat WHERE SendStatus=1";
 			return Crud.RxPatCrud.SelectMany(command);
 		}
 
