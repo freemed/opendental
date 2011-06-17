@@ -10,11 +10,11 @@ using OpenDentBusiness;
 namespace OpenDental {
 	///<summary>Cannot return OK without a proper date.</summary>
 	public partial class FormOrthoChartAddDate:Form {
-		public DateTime newDate;
+		public DateTime SelectedDate;
 
 		public FormOrthoChartAddDate() {
 			InitializeComponent();
-			newDate=new DateTime();
+			SelectedDate=new DateTime();
 			Lan.F(this);
 		}
 
@@ -23,7 +23,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(!DateTime.TryParse(textNewDate.Text,out newDate)) {
+			if(!DateTime.TryParse(textNewDate.Text,out SelectedDate)) {
 				MsgBox.Show(this,"Please fix date entry.");
 				return;
 			}
