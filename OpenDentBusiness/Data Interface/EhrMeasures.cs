@@ -295,7 +295,6 @@ namespace OpenDentBusiness{
 						+"WHERE medicalorder.PatNum=patient.PatNum "
 						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
 						+"AND medicalorder.ProvNum="+POut.Long(provNum)+" "
-
 						+"AND DATE(DateTimeOrder) >= "+POut.Date(dateStart)+" "
 						+"AND DATE(DateTimeOrder) <= "+POut.Date(dateEnd);
 					tableRaw=Db.GetTable(command);
@@ -313,11 +312,12 @@ namespace OpenDentBusiness{
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,dateRequested) SELECT patient.PatNum,LName,FName,DATE(DateTEvent) "
-						+"FROM ehrmeasureevent "
-						+"LEFT JOIN patient ON patient.PatNum=ehrmeasureevent.PatNum "
-						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
+						+"FROM ehrmeasureevent,patient "
+						+"WHERE patient.PatNum=ehrmeasureevent.PatNum "
+						+"AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
 						+"AND DATE(DateTEvent) >= "+POut.Date(dateStart)+" "
-						+"AND DATE(DateTEvent) <= "+POut.Date(dateEnd);
+						+"AND DATE(DateTEvent) <= "+POut.Date(dateEnd)+" "
+						+"AND patient.PriProv="+POut.Long(provNum);
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure "
 						+"SET dateDeadline = ADDDATE(dateRequested, INTERVAL 3 DAY)";
@@ -353,6 +353,7 @@ namespace OpenDentBusiness{
 						+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
 						+"WHERE ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND ProcDate <= "+POut.Date(dateEnd)+" "
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"GROUP BY procedurelog.PatNum,ProcDate";
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure "
@@ -382,7 +383,8 @@ namespace OpenDentBusiness{
 						+"WHERE patient.Birthdate > '1880-01-01' "//a birthdate is entered
 						+"AND (patient.Birthdate > "+POut.Date(DateTime.Today.AddYears(-6))+" "//5 years or younger
 						+"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
-						+"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient);
+						+"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient)+" "
+						+"AND patient.PriProv="+POut.Long(provNum);
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.MedReconcile:
@@ -397,9 +399,10 @@ namespace OpenDentBusiness{
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
-						+"FROM refattach "
-						+"LEFT JOIN patient ON patient.PatNum=refattach.PatNum "
-						+"WHERE RefDate >= "+POut.Date(dateStart)+" "
+						+"FROM refattach,patient "
+						+"WHERE patient.PatNum=refattach.PatNum "
+						+"AND patient.PriProv="+POut.Long(provNum)+" "
+						+"AND RefDate >= "+POut.Date(dateStart)+" "
 						+"AND RefDate <= "+POut.Date(dateEnd)+" "
 						+"AND IsFrom=1 AND IsTransitionOfCare=1 "
 						+"GROUP BY refattach.PatNum";
@@ -427,9 +430,10 @@ namespace OpenDentBusiness{
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
-						+"FROM refattach "
-						+"LEFT JOIN patient ON patient.PatNum=refattach.PatNum "
-						+"WHERE RefDate >= "+POut.Date(dateStart)+" "
+						+"FROM refattach,patient "
+						+"WHERE patient.PatNum=refattach.PatNum "
+						+"AND patient.PriProv="+POut.Long(provNum)+" "
+						+"AND RefDate >= "+POut.Date(dateStart)+" "
 						+"AND RefDate <= "+POut.Date(dateEnd)+" "
 						+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 						+"GROUP BY refattach.PatNum";
