@@ -5504,6 +5504,39 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE provider ADD StateRxID varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicalorder ADD ProvNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicalorder ADD INDEX (ProvNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicalorder ADD ProvNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE medicalorder SET ProvNum = 0 WHERE ProvNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicalorder MODIFY ProvNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX medicalorder_ProvNum ON medicalorder (ProvNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD ProvNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat ADD INDEX (ProvNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD ProvNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET ProvNum = 0 WHERE ProvNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat MODIFY ProvNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX medicationpat_ProvNum ON medicationpat (ProvNum)";
+					Db.NonQ(command);
+				}
+				
 
 
 
@@ -5530,7 +5563,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-
-
-				

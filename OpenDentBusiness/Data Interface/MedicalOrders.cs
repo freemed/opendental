@@ -19,10 +19,11 @@ namespace OpenDentBusiness{
 			table.Columns.Add("description");
 			table.Columns.Add("MedicalOrderNum");
 			table.Columns.Add("MedicationPatNum");
+			table.Columns.Add("prov");
 			table.Columns.Add("status");
 			table.Columns.Add("type");
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT DateTimeOrder,Description,IsDiscontinued,MedicalOrderNum,MedOrderType "
+			string command="SELECT DateTimeOrder,Description,IsDiscontinued,MedicalOrderNum,MedOrderType,ProvNum "
 				+"FROM medicalorder WHERE PatNum = "+POut.Long(patNum);
 			if(!includeDiscontinued) {//only include current orders
 				command+=" AND IsDiscontinued=0";//false
@@ -53,6 +54,7 @@ namespace OpenDentBusiness{
 				}
 				row["MedicalOrderNum"]=medicalOrderNum.ToString();
 				row["MedicationPatNum"]="0";
+				row["prov"]=Providers.GetAbbr(PIn.Long(rawOrder.Rows[i]["ProvNum"].ToString()));
 				isDiscontinued=PIn.Bool(rawOrder.Rows[i]["IsDiscontinued"].ToString());
 				if(isDiscontinued) {
 					row["status"]="Discontinued";
@@ -64,7 +66,7 @@ namespace OpenDentBusiness{
 				rows.Add(row);
 			}
 			//MedicationPats
-			command="SELECT DateStart,DateStop,MedicationPatNum,MedName,PatNote "
+			command="SELECT DateStart,DateStop,MedicationPatNum,MedName,PatNote,ProvNum "
 				+"FROM medicationpat "
 				+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
 				+"WHERE PatNum = "+POut.Long(patNum);
@@ -87,6 +89,7 @@ namespace OpenDentBusiness{
 					+PIn.String(rawMed.Rows[i]["PatNote"].ToString());
 				row["MedicalOrderNum"]="0";
 				row["MedicationPatNum"]=rawMed.Rows[i]["MedicationPatNum"].ToString();
+				row["prov"]=Providers.GetAbbr(PIn.Long(rawMed.Rows[i]["ProvNum"].ToString()));
 				dateStop=PIn.DateT(rawMed.Rows[i]["DateStop"].ToString());
 				if(dateStop.Year<1880) {//not stopped
 					row["status"]="Active";

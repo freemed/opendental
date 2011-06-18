@@ -52,6 +52,7 @@ namespace OpenDentBusiness.Crud{
 				medicalOrder.DateTimeOrder  = PIn.DateT (table.Rows[i]["DateTimeOrder"].ToString());
 				medicalOrder.Description    = PIn.String(table.Rows[i]["Description"].ToString());
 				medicalOrder.IsDiscontinued = PIn.Bool  (table.Rows[i]["IsDiscontinued"].ToString());
+				medicalOrder.ProvNum        = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				retVal.Add(medicalOrder);
 			}
 			return retVal;
@@ -92,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicalOrderNum,";
 			}
-			command+="MedOrderType,PatNum,DateTimeOrder,Description,IsDiscontinued) VALUES(";
+			command+="MedOrderType,PatNum,DateTimeOrder,Description,IsDiscontinued,ProvNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicalOrder.MedicalOrderNum)+",";
 			}
@@ -101,7 +102,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (medicalOrder.PatNum)+","
 				+    POut.DateT (medicalOrder.DateTimeOrder)+","
 				+"'"+POut.String(medicalOrder.Description)+"',"
-				+    POut.Bool  (medicalOrder.IsDiscontinued)+")";
+				+    POut.Bool  (medicalOrder.IsDiscontinued)+","
+				+    POut.Long  (medicalOrder.ProvNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,7 +120,8 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum         =  "+POut.Long  (medicalOrder.PatNum)+", "
 				+"DateTimeOrder  =  "+POut.DateT (medicalOrder.DateTimeOrder)+", "
 				+"Description    = '"+POut.String(medicalOrder.Description)+"', "
-				+"IsDiscontinued =  "+POut.Bool  (medicalOrder.IsDiscontinued)+" "
+				+"IsDiscontinued =  "+POut.Bool  (medicalOrder.IsDiscontinued)+", "
+				+"ProvNum        =  "+POut.Long  (medicalOrder.ProvNum)+" "
 				+"WHERE MedicalOrderNum = "+POut.Long(medicalOrder.MedicalOrderNum);
 			Db.NonQ(command);
 		}
@@ -145,6 +148,10 @@ namespace OpenDentBusiness.Crud{
 			if(medicalOrder.IsDiscontinued != oldMedicalOrder.IsDiscontinued) {
 				if(command!=""){ command+=",";}
 				command+="IsDiscontinued = "+POut.Bool(medicalOrder.IsDiscontinued)+"";
+			}
+			if(medicalOrder.ProvNum != oldMedicalOrder.ProvNum) {
+				if(command!=""){ command+=",";}
+				command+="ProvNum = "+POut.Long(medicalOrder.ProvNum)+"";
 			}
 			if(command==""){
 				return;

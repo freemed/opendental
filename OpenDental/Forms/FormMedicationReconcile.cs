@@ -109,7 +109,7 @@ namespace OpenDental {
 			for(int i=0;i<ehrMeasureEventsList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(ehrMeasureEventsList[i].DateTEvent.ToString());
-				row.Cells.Add(ehrMeasureEventsList[i].MoreInfo);
+				row.Cells.Add(ehrMeasureEventsList[i].EventType.ToString());
 				gridReconcileEvents.Rows.Add(row);
 			}
 			gridReconcileEvents.EndUpdate();
@@ -161,6 +161,7 @@ namespace OpenDental {
 			MedicationPat MedicationPatCur=new MedicationPat();
 			MedicationPatCur.PatNum=PatCur.PatNum;
 			MedicationPatCur.MedicationNum=FormM.SelectedMedicationNum;
+			MedicationPatCur.ProvNum=PatCur.PriProv;
 			FormMedPat FormMP=new FormMedPat();
 			FormMP.MedicationPatCur=MedicationPatCur;
 			FormMP.IsNew=true;
@@ -172,13 +173,11 @@ namespace OpenDental {
 		}
 
 		private void butAddEvent_Click(object sender,EventArgs e) {
-			//TODO: Whatever this button should do other than adding an ehr measure event.
-
 			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
 			newMeasureEvent.DateTEvent=DateTime.Now;
 			newMeasureEvent.EventType=EhrMeasureEventType.MedicationReconcile;
 			newMeasureEvent.PatNum=PatCur.PatNum;
-			newMeasureEvent.MoreInfo="Medication Reconcile";
+			newMeasureEvent.MoreInfo="";
 			EhrMeasureEvents.Insert(newMeasureEvent);
 			FillReconcilesGrid();
 		}

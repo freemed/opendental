@@ -87,9 +87,9 @@ namespace Crud {
 			if(typeClassName=="Etrans") {
 				return "Etranss";
 			}
-			if(typeClassName=="RegistrationKey") {
-				return "RegistrationKeys";
-			}
+			//if(typeClassName=="RegistrationKey") {
+			//	return "RegistrationKeys";
+			//}
 			if(typeClassName=="Language") {
 				return "Lans";
 			}
@@ -100,6 +100,9 @@ namespace Crud {
 				Sname=Sname+"es";
 			}
 			else if(Sname.EndsWith("ay")) {
+				Sname=Sname+"s";
+			}
+			else if(Sname.EndsWith("ey")) {//eg key
 				Sname=Sname+"s";
 			}
 			else if(Sname.EndsWith("y")) {

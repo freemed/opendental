@@ -442,6 +442,7 @@ namespace OpenDental{
 			MedicationPat MedicationPatCur=new MedicationPat();
 			MedicationPatCur.PatNum=PatCur.PatNum;
 			MedicationPatCur.MedicationNum=FormM.SelectedMedicationNum;
+			MedicationPatCur.ProvNum=PatCur.PriProv;
 			FormMedPat FormMP=new FormMedPat();
 			FormMP.MedicationPatCur=MedicationPatCur;
 			FormMP.IsNew=true;

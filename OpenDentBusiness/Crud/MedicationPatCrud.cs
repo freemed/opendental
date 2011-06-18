@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				medicationPat.DateTStamp      = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				medicationPat.DateStart       = PIn.Date  (table.Rows[i]["DateStart"].ToString());
 				medicationPat.DateStop        = PIn.Date  (table.Rows[i]["DateStop"].ToString());
+				medicationPat.ProvNum         = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				retVal.Add(medicationPat);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicationPatNum,";
 			}
-			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop) VALUES(";
+			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop,ProvNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicationPat.MedicationPatNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(medicationPat.PatNote)+"',"
 				//DateTStamp can only be set by MySQL
 				+    POut.Date  (medicationPat.DateStart)+","
-				+    POut.Date  (medicationPat.DateStop)+")";
+				+    POut.Date  (medicationPat.DateStop)+","
+				+    POut.Long  (medicationPat.ProvNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"PatNote         = '"+POut.String(medicationPat.PatNote)+"', "
 				//DateTStamp can only be set by MySQL
 				+"DateStart       =  "+POut.Date  (medicationPat.DateStart)+", "
-				+"DateStop        =  "+POut.Date  (medicationPat.DateStop)+" "
+				+"DateStop        =  "+POut.Date  (medicationPat.DateStop)+", "
+				+"ProvNum         =  "+POut.Long  (medicationPat.ProvNum)+" "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPat.MedicationPatNum);
 			Db.NonQ(command);
 		}
@@ -149,6 +152,10 @@ namespace OpenDentBusiness.Crud{
 			if(medicationPat.DateStop != oldMedicationPat.DateStop) {
 				if(command!=""){ command+=",";}
 				command+="DateStop = "+POut.Date(medicationPat.DateStop)+"";
+			}
+			if(medicationPat.ProvNum != oldMedicationPat.ProvNum) {
+				if(command!=""){ command+=",";}
+				command+="ProvNum = "+POut.Long(medicationPat.ProvNum)+"";
 			}
 			if(command==""){
 				return;

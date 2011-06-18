@@ -2,7 +2,7 @@ using System;
 
 namespace OpenDentBusiness{
 
-	///<summary>Links medications to patients.  For ehr, some of these can be considered 'medication orders', but only if they contain a PatNote (instructions) as well as a DateStart.</summary>
+	///<summary>Links medications to patients.  For ehr, some of these can be considered 'medication orders', but only if they contain a PatNote (instructions), a ProvNum, and a DateStart.</summary>
 	[Serializable]
 	public class MedicationPat:TableBase {
 		///<summary>Primary key.</summary>
@@ -21,7 +21,8 @@ namespace OpenDentBusiness{
 		public DateTime DateStart;
 		///<summary>Date that the medication was stopped.  Can be minval if unknown.  If not minval, then this medication is "discontinued".</summary>
 		public DateTime DateStop;
-
+		///<summary>FK to provider.ProvNum.</summary>
+		public long ProvNum;
 	}
 
 

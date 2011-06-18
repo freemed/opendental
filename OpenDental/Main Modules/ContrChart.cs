@@ -3674,6 +3674,7 @@ namespace OpenDental{
 					Tool_EHR_Click(true);
 				}
 				else if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.MedicationPatNew) {
+					//This cannot happen unless a provider is logged in with a valid ehr key
 					FormMedications FormM=new FormMedications();
 					FormM.IsSelectionMode=true;
 					FormM.ShowDialog();
@@ -3681,6 +3682,7 @@ namespace OpenDental{
 						MedicationPat medicationPat=new MedicationPat();
 						medicationPat.PatNum=PatCur.PatNum;
 						medicationPat.MedicationNum=FormM.SelectedMedicationNum;
+						medicationPat.ProvNum=Security.CurUser.ProvNum;
 						FormMedPat FormMP=new FormMedPat();
 						FormMP.MedicationPatCur=medicationPat;
 						FormMP.IsNew=true;
@@ -3754,6 +3756,7 @@ namespace OpenDental{
 					OnEHR_Click(true);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatNew) {
+					//This cannot happen unless a provider is logged in with a valid ehr key
 					FormMedications FormM=new FormMedications();
 					FormM.IsSelectionMode=true;
 					FormM.ShowDialog();
@@ -3761,6 +3764,7 @@ namespace OpenDental{
 						MedicationPat medicationPat=new MedicationPat();
 						medicationPat.PatNum=PatCur.PatNum;
 						medicationPat.MedicationNum=FormM.SelectedMedicationNum;
+						medicationPat.ProvNum=Security.CurUser.ProvNum;
 						FormMedPat FormMP=new FormMedPat();
 						FormMP.MedicationPatCur=medicationPat;
 						FormMP.IsNew=true;

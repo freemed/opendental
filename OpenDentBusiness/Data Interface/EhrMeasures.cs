@@ -8,9 +8,9 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrMeasures{
 		///<summary>Select All EHRMeasures from combination of db, static data, and complex calculations.</summary>
-		public static List<EhrMeasure> SelectAll(DateTime dateStart, DateTime dateEnd) {
+		public static List<EhrMeasure> SelectAll(DateTime dateStart, DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
+				return Meth.GetObject<List<EhrMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNum);
 			}
 			string command="SELECT * FROM ehrmeasure ORDER BY MeasureType";
 			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 				retVal[i].Objective=GetObjective(retVal[i].MeasureType);
 				retVal[i].Measure=GetMeasure(retVal[i].MeasureType);
 				retVal[i].PercentThreshold=GetThreshold(retVal[i].MeasureType);
-				DataTable table=GetTable(retVal[i].MeasureType,dateStart,dateEnd);
+				DataTable table=GetTable(retVal[i].MeasureType,dateStart,dateEnd,provNum);
 				if(table==null) {
 					retVal[i].Numerator=-1;
 					retVal[i].Denominator=-1;
@@ -87,37 +87,37 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			switch(mtype) {
 				case EhrMeasureType.ProblemList:
-					return "More than 80% of all unique patients seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) have at least one entry or an indication that no problems are known for the patient recorded as structured data.";
+					return "More than 80% of all unique patients seen by the Provider have at least one entry or an indication that no problems are known for the patient recorded as structured data.";
 				case EhrMeasureType.MedicationList:
-					return "More than 80% of all unique patients seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) have at least one entry (or an indication that the patient is not currently prescribed any medication) recorded as structured data.";
+					return "More than 80% of all unique patients seen by the Provider have at least one entry (or an indication that the patient is not currently prescribed any medication) recorded as structured data.";
 				case EhrMeasureType.AllergyList:
-					return "More than 80% of all unique patients seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) have at least one entry (or an indication that the patient has no known medication allergies) recorded as structured data.";
+					return "More than 80% of all unique patients seen by the Provider have at least one entry (or an indication that the patient has no known medication allergies) recorded as structured data.";
 				case EhrMeasureType.Demographics:
-					return "More than 50% of all unique patients seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) have demographics recorded as structured data.";
+					return "More than 50% of all unique patients seen by the Provider have demographics recorded as structured data.";
 				case EhrMeasureType.Education:
-					return "More than 10% of all unique patients seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) during the EHR reporting period are provided patient-specific education resources.";
+					return "More than 10% of all unique patients seen by the Provider during the EHR reporting period are provided patient-specific education resources.";
 				case EhrMeasureType.TimelyAccess:
-					return "More than 10% of all unique patients seen by the EP are provided timely (available to the patient within four business days of being updated in the certified EHR technology) electronic access to their health information subject to the EP’s discretion to withhold certain information.";
+					return "More than 10% of all unique patients seen by the Provider are provided timely (available to the patient within four business days of being updated in the certified EHR technology) electronic access to their health information subject to the Provider’s discretion to withhold certain information.";
 				case EhrMeasureType.ProvOrderEntry:
-					return "More than 30% of unique patients with at least one medication in their medication list seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) have at least one medication order entered using CPOE.";
+					return "More than 30% of unique patients with at least one medication in their medication list seen by the Provider have at least one medication order entered using CPOE.";
 				case EhrMeasureType.Rx:
-					return "More than 40% of all permissible prescriptions written by the EP are transmitted electronically using certified EHR technology.";
+					return "More than 40% of all permissible prescriptions written by the Provider are transmitted electronically using certified EHR technology.";
 				case EhrMeasureType.VitalSigns:
-					return "More than 50% of all unique patients age 2 and over seen by the EP or admitted to eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23), height, weight and blood pressure are recorded as structured data.";
+					return "More than 50% of all unique patients age 2 and over seen by the Provider, height, weight and blood pressure are recorded as structured data.";
 				case EhrMeasureType.Smoking:
-					return "More than 50% of all unique patients 13 years old or older seen by the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23) have smoking status recorded as structured data.";
+					return "More than 50% of all unique patients 13 years old or older seen by the Provider have smoking status recorded as structured data.";
 				case EhrMeasureType.Lab:
-					return "More than 40% of all clinical lab tests results ordered by the EP or by an authorized provider of the eligible hospital or CAH for patients admitted to its inpatient or emergency department (POS 21 or 23) during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
+					return "More than 40% of all clinical lab tests results ordered by the Provider during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
 				case EhrMeasureType.ElectronicCopy:
-					return "More than 40% of all clinical lab tests results ordered by the EP or by an authorized provider of the eligible hospital or CAH for patients admitted to its inpatient or emergency department (POS 21 or 23) during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
+					return "More than 40% of all clinical lab tests results ordered by the Provider during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
 				case EhrMeasureType.ClinicalSummaries:
 					return "Clinical summaries provided to patients for more than 50% of all office visits within 3 business days.";
 				case EhrMeasureType.Reminders:
 					return "More than 20% of all unique patients 65 years or older or 5 years old or younger were sent an appropriate reminder during the EHR reporting period.";
 				case EhrMeasureType.MedReconcile:
-					return "The EP, eligible hospital or CAH performs medication reconciliation for more than 50% of transitions of care in which the patient is transitioned into the care of the EP or admitted to the eligible hospital’s or CAH’s inpatient or emergency department (POS 21 or 23).";
+					return "The Provider performs medication reconciliation for more than 50% of transitions of care in which the patient is transitioned into the care of the Provider.";
 				case EhrMeasureType.SummaryOfCare:
-					return "The EP, eligible hospital or CAH who transitions or refers their patient to another setting of care or provider of care provides a summary of care record for more than 50% of transitions of care and referrals.";
+					return "The Provider who transitions or refers their patient to another setting of care or provider of care provides a summary of care record for more than 50% of transitions of care and referrals.";
 			}
 			throw new ApplicationException("Type not found: "+mtype.ToString());
 		}
@@ -162,9 +162,9 @@ namespace OpenDentBusiness{
 			throw new ApplicationException("Type not found: "+mtype.ToString());
 		}
 
-		public static DataTable GetTable(EhrMeasureType mtype,DateTime dateStart,DateTime dateEnd) {
+		public static DataTable GetTable(EhrMeasureType mtype,DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),mtype,dateStart,dateEnd);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),mtype,dateStart,dateEnd,provNum);
 			}
 			string command="";
 			DataTable tableRaw=new DataTable();
@@ -177,6 +177,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					tableRaw=Db.GetTable(command);
@@ -189,6 +190,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					tableRaw=Db.GetTable(command);
@@ -201,6 +203,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					tableRaw=Db.GetTable(command);
@@ -211,6 +214,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					tableRaw=Db.GetTable(command);
@@ -221,6 +225,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					tableRaw=Db.GetTable(command);
@@ -231,6 +236,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					tableRaw=Db.GetTable(command);
@@ -242,6 +248,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "//at least one procedure in the period
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 						+"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
@@ -252,6 +259,7 @@ namespace OpenDentBusiness{
 						+"FROM rxpat,patient "
 						+"WHERE rxpat.PatNum=patient.PatNum "
 						+"AND IsControlled = 0 "
+						+"AND rxpat.ProvNum="+POut.Long(provNum)+" "
 						+"AND RxDate >= "+POut.Date(dateStart)+" "
 						+"AND RxDate <= "+POut.Date(dateEnd);
 					tableRaw=Db.GetTable(command);
@@ -263,6 +271,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 						+"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2));//2 and older
@@ -273,6 +282,7 @@ namespace OpenDentBusiness{
 						+"FROM patient "
 						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 						+"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13));//13 and older
@@ -284,6 +294,8 @@ namespace OpenDentBusiness{
 						+"FROM medicalorder,patient "
 						+"WHERE medicalorder.PatNum=patient.PatNum "
 						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+						+"AND medicalorder.ProvNum="+POut.Long(provNum)+" "
+
 						+"AND DATE(DateTimeOrder) >= "+POut.Date(dateStart)+" "
 						+"AND DATE(DateTimeOrder) <= "+POut.Date(dateEnd);
 					tableRaw=Db.GetTable(command);
@@ -723,33 +735,33 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			switch(mtype) {
 				case EhrMeasureType.ProblemList:
-					return "All unique patients with at least one completed procedure during the reporting period.";
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.MedicationList:
-					return "All unique patients with at least one completed procedure during the reporting period.";
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.AllergyList:
-					return "All unique patients with at least one completed procedure during the reporting period.";
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.Demographics:
-					return "All unique patients with at least one completed procedure during the reporting period.";
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.Education:
-					return "All unique patients with at least one completed procedure during the reporting period.";
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.TimelyAccess:
-					return "All unique patients with at least one completed procedure during the reporting period.";
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.ProvOrderEntry:
-					return "All unique patients with at least one completed procedure during the reporting period and with at least one medication in their medication list.";
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period and with at least one medication in their medication list.";
 				case EhrMeasureType.Rx:
-					return "All permissible prescriptions during the reporting period.";
+					return "All permissible prescriptions by the Provider during the reporting period.";
 				case EhrMeasureType.VitalSigns:
-					return "All unique patients age 2 and over with at least one completed procedure during the reporting period.";
+					return "All unique patients age 2 and over with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.Smoking:
-					return "All unique patients 13 years or older with at least one completed procedure during the reporting period.";
+					return "All unique patients 13 years or older with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.Lab:
-					return "All lab orders during the reporting period.";
+					return "All lab orders by the Provider during the reporting period.";
 				case EhrMeasureType.ElectronicCopy:
-					return "All patients who request an electronic copy of their health information during the reporting period.";
+					return "All patients of the Provider who request an electronic copy of their health information during the reporting period.";
 				case EhrMeasureType.ClinicalSummaries:
-					return "All office visits during the reporting period.  An office visit is calculated as any number of completed procedures for a given date.";
+					return "All office visits during the reporting period.  An office visit is calculated as any number of completed procedures by the Provider for a given date.";
 				case EhrMeasureType.Reminders:
-					return "All unique patients 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
+					return "All unique patients of the Provider 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
 				case EhrMeasureType.MedReconcile:
 					return "Number of incoming transitions of care from another provider during the reporting period.";
 				case EhrMeasureType.SummaryOfCare:
