@@ -172,6 +172,11 @@ namespace OpenDental{
 		private GroupBox groupChanges;
 		private RadioButton radioCreateNew;
 		private UI.Button butChange;
+		private Label label19;
+		private TextBox textCanadianInstCode;
+		private Label label9;
+		private TextBox textCanadianDiagCode;
+		private CheckBox checkIsPMP;
 		private CheckBox checkIsHidden;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
@@ -340,6 +345,11 @@ namespace OpenDental{
 			this.butSearch = new OpenDental.UI.Button();
 			this.panelPlan = new System.Windows.Forms.Panel();
 			this.groupCanadian = new System.Windows.Forms.GroupBox();
+			this.label19 = new System.Windows.Forms.Label();
+			this.textCanadianInstCode = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.textCanadianDiagCode = new System.Windows.Forms.TextBox();
+			this.checkIsPMP = new System.Windows.Forms.CheckBox();
 			this.label24 = new System.Windows.Forms.Label();
 			this.label22 = new System.Windows.Forms.Label();
 			this.textPlanFlag = new System.Windows.Forms.TextBox();
@@ -1330,6 +1340,11 @@ namespace OpenDental{
 			// 
 			// groupCanadian
 			// 
+			this.groupCanadian.Controls.Add(this.label19);
+			this.groupCanadian.Controls.Add(this.textCanadianInstCode);
+			this.groupCanadian.Controls.Add(this.label9);
+			this.groupCanadian.Controls.Add(this.textCanadianDiagCode);
+			this.groupCanadian.Controls.Add(this.checkIsPMP);
 			this.groupCanadian.Controls.Add(this.label24);
 			this.groupCanadian.Controls.Add(this.label22);
 			this.groupCanadian.Controls.Add(this.textPlanFlag);
@@ -1337,10 +1352,55 @@ namespace OpenDental{
 			this.groupCanadian.Controls.Add(this.labelDentaide);
 			this.groupCanadian.Location = new System.Drawing.Point(5,574);
 			this.groupCanadian.Name = "groupCanadian";
-			this.groupCanadian.Size = new System.Drawing.Size(404,62);
+			this.groupCanadian.Size = new System.Drawing.Size(404,129);
 			this.groupCanadian.TabIndex = 12;
 			this.groupCanadian.TabStop = false;
 			this.groupCanadian.Text = "Canadian";
+			// 
+			// label19
+			// 
+			this.label19.Location = new System.Drawing.Point(37,106);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(140,19);
+			this.label19.TabIndex = 173;
+			this.label19.Text = "Institution Code";
+			this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textCanadianInstCode
+			// 
+			this.textCanadianInstCode.Location = new System.Drawing.Point(181,103);
+			this.textCanadianInstCode.MaxLength = 20;
+			this.textCanadianInstCode.Name = "textCanadianInstCode";
+			this.textCanadianInstCode.Size = new System.Drawing.Size(88,20);
+			this.textCanadianInstCode.TabIndex = 172;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(37,85);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(140,19);
+			this.label9.TabIndex = 171;
+			this.label9.Text = "Diagnostic Code";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textCanadianDiagCode
+			// 
+			this.textCanadianDiagCode.Location = new System.Drawing.Point(181,82);
+			this.textCanadianDiagCode.MaxLength = 20;
+			this.textCanadianDiagCode.Name = "textCanadianDiagCode";
+			this.textCanadianDiagCode.Size = new System.Drawing.Size(88,20);
+			this.textCanadianDiagCode.TabIndex = 170;
+			// 
+			// checkIsPMP
+			// 
+			this.checkIsPMP.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsPMP.Location = new System.Drawing.Point(18,62);
+			this.checkIsPMP.Name = "checkIsPMP";
+			this.checkIsPMP.Size = new System.Drawing.Size(178,17);
+			this.checkIsPMP.TabIndex = 169;
+			this.checkIsPMP.Text = "Is Provincial Medical Plan";
+			this.checkIsPMP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsPMP.UseVisualStyleBackColor = true;
 			// 
 			// label24
 			// 

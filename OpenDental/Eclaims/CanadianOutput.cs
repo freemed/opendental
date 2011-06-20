@@ -371,13 +371,11 @@ namespace OpenDental.Eclaims {
 			}
 			if(carrier.CDAnetVersion!="02") { //version 04
 				//A09 carrier transaction counter 5 N
-				string transCounter="11111";
-				List <Etrans> etransHist=Etranss.GetAllForOneClaim(claim.ClaimNum);
-				if(etransHist.Count>0) {
-					//The transactions are always in chronological order, so we can just take the counter from the last transaction.
-					transCounter=etransHist[etransHist.Count-1].CarrierTransCounter.ToString();
-				}
-				strb.Append(Canadian.TidyN(transCounter,5));
+#if DEBUG
+				strb.Append("11111");
+#else				
+				strb.Append(TidyN(etrans.CarrierTransCounter,5));
+#endif
 			}
 			//B01 CDA provider number 9 AN
 			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
@@ -484,6 +482,7 @@ namespace OpenDental.Eclaims {
 			}
 			CCDField field=fieldInputter.GetFieldById("G05");//response status
 			if(field.valuestr=="R") {
+				new FormCCDPrint(etrans,result,true);
 				throw new ApplicationException(Lan.g("CanadianOutput","Reversal was rejected by clearinghouse. The claim must be reversed manually."));
 			}
 			return etransAck.EtransNum;
@@ -657,7 +656,10 @@ namespace OpenDental.Eclaims {
 						exit=true;
 					}
 				}
-				//Field A02 exists in all of the possible formats (21,11,23,13,24).
+				if(!exit) {
+					new FormCCDPrint(etrans,result,true);
+				}
+				//Field A02 exists in all of the possible formats (21,11,14,23,13,24).
 				CCDField fieldA02=fieldInputter.GetFieldById("A02");//office sequence number
 				//We use the Office Sequence Number to find the original etrans entry so that we can discover which patient the response is referring to.
 				Etrans etranOriginal=Etranss.GetForSequenceNumberCanada(fieldA02.valuestr);

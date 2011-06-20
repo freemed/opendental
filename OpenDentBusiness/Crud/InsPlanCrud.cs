@@ -46,30 +46,32 @@ namespace OpenDentBusiness.Crud{
 			InsPlan insPlan;
 			for(int i=0;i<table.Rows.Count;i++) {
 				insPlan=new InsPlan();
-				insPlan.PlanNum             = PIn.Long  (table.Rows[i]["PlanNum"].ToString());
-				insPlan.GroupName           = PIn.String(table.Rows[i]["GroupName"].ToString());
-				insPlan.GroupNum            = PIn.String(table.Rows[i]["GroupNum"].ToString());
-				insPlan.PlanNote            = PIn.String(table.Rows[i]["PlanNote"].ToString());
-				insPlan.FeeSched            = PIn.Long  (table.Rows[i]["FeeSched"].ToString());
-				insPlan.PlanType            = PIn.String(table.Rows[i]["PlanType"].ToString());
-				insPlan.ClaimFormNum        = PIn.Long  (table.Rows[i]["ClaimFormNum"].ToString());
-				insPlan.UseAltCode          = PIn.Bool  (table.Rows[i]["UseAltCode"].ToString());
-				insPlan.ClaimsUseUCR        = PIn.Bool  (table.Rows[i]["ClaimsUseUCR"].ToString());
-				insPlan.CopayFeeSched       = PIn.Long  (table.Rows[i]["CopayFeeSched"].ToString());
-				insPlan.EmployerNum         = PIn.Long  (table.Rows[i]["EmployerNum"].ToString());
-				insPlan.CarrierNum          = PIn.Long  (table.Rows[i]["CarrierNum"].ToString());
-				insPlan.AllowedFeeSched     = PIn.Long  (table.Rows[i]["AllowedFeeSched"].ToString());
-				insPlan.TrojanID            = PIn.String(table.Rows[i]["TrojanID"].ToString());
-				insPlan.DivisionNo          = PIn.String(table.Rows[i]["DivisionNo"].ToString());
-				insPlan.IsMedical           = PIn.Bool  (table.Rows[i]["IsMedical"].ToString());
-				insPlan.FilingCode          = PIn.Long  (table.Rows[i]["FilingCode"].ToString());
-				insPlan.DentaideCardSequence= PIn.Byte  (table.Rows[i]["DentaideCardSequence"].ToString());
-				insPlan.ShowBaseUnits       = PIn.Bool  (table.Rows[i]["ShowBaseUnits"].ToString());
-				insPlan.CodeSubstNone       = PIn.Bool  (table.Rows[i]["CodeSubstNone"].ToString());
-				insPlan.IsHidden            = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
-				insPlan.MonthRenew          = PIn.Byte  (table.Rows[i]["MonthRenew"].ToString());
-				insPlan.FilingCodeSubtype   = PIn.Long  (table.Rows[i]["FilingCodeSubtype"].ToString());
-				insPlan.CanadianPlanFlag    = PIn.String(table.Rows[i]["CanadianPlanFlag"].ToString());
+				insPlan.PlanNum                = PIn.Long  (table.Rows[i]["PlanNum"].ToString());
+				insPlan.GroupName              = PIn.String(table.Rows[i]["GroupName"].ToString());
+				insPlan.GroupNum               = PIn.String(table.Rows[i]["GroupNum"].ToString());
+				insPlan.PlanNote               = PIn.String(table.Rows[i]["PlanNote"].ToString());
+				insPlan.FeeSched               = PIn.Long  (table.Rows[i]["FeeSched"].ToString());
+				insPlan.PlanType               = PIn.String(table.Rows[i]["PlanType"].ToString());
+				insPlan.ClaimFormNum           = PIn.Long  (table.Rows[i]["ClaimFormNum"].ToString());
+				insPlan.UseAltCode             = PIn.Bool  (table.Rows[i]["UseAltCode"].ToString());
+				insPlan.ClaimsUseUCR           = PIn.Bool  (table.Rows[i]["ClaimsUseUCR"].ToString());
+				insPlan.CopayFeeSched          = PIn.Long  (table.Rows[i]["CopayFeeSched"].ToString());
+				insPlan.EmployerNum            = PIn.Long  (table.Rows[i]["EmployerNum"].ToString());
+				insPlan.CarrierNum             = PIn.Long  (table.Rows[i]["CarrierNum"].ToString());
+				insPlan.AllowedFeeSched        = PIn.Long  (table.Rows[i]["AllowedFeeSched"].ToString());
+				insPlan.TrojanID               = PIn.String(table.Rows[i]["TrojanID"].ToString());
+				insPlan.DivisionNo             = PIn.String(table.Rows[i]["DivisionNo"].ToString());
+				insPlan.IsMedical              = PIn.Bool  (table.Rows[i]["IsMedical"].ToString());
+				insPlan.FilingCode             = PIn.Long  (table.Rows[i]["FilingCode"].ToString());
+				insPlan.DentaideCardSequence   = PIn.Byte  (table.Rows[i]["DentaideCardSequence"].ToString());
+				insPlan.ShowBaseUnits          = PIn.Bool  (table.Rows[i]["ShowBaseUnits"].ToString());
+				insPlan.CodeSubstNone          = PIn.Bool  (table.Rows[i]["CodeSubstNone"].ToString());
+				insPlan.IsHidden               = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
+				insPlan.MonthRenew             = PIn.Byte  (table.Rows[i]["MonthRenew"].ToString());
+				insPlan.FilingCodeSubtype      = PIn.Long  (table.Rows[i]["FilingCodeSubtype"].ToString());
+				insPlan.CanadianPlanFlag       = PIn.String(table.Rows[i]["CanadianPlanFlag"].ToString());
+				insPlan.CanadianDiagnosticCode = PIn.String(table.Rows[i]["CanadianDiagnosticCode"].ToString());
+				insPlan.CanadianInstitutionCode= PIn.String(table.Rows[i]["CanadianInstitutionCode"].ToString());
 				retVal.Add(insPlan);
 			}
 			return retVal;
@@ -110,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PlanNum,";
 			}
-			command+="GroupName,GroupNum,PlanNote,FeeSched,PlanType,ClaimFormNum,UseAltCode,ClaimsUseUCR,CopayFeeSched,EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,IsMedical,FilingCode,DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype,CanadianPlanFlag) VALUES(";
+			command+="GroupName,GroupNum,PlanNote,FeeSched,PlanType,ClaimFormNum,UseAltCode,ClaimsUseUCR,CopayFeeSched,EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,IsMedical,FilingCode,DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype,CanadianPlanFlag,CanadianDiagnosticCode,CanadianInstitutionCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(insPlan.PlanNum)+",";
 			}
@@ -137,7 +139,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (insPlan.IsHidden)+","
 				+    POut.Byte  (insPlan.MonthRenew)+","
 				+    POut.Long  (insPlan.FilingCodeSubtype)+","
-				+"'"+POut.String(insPlan.CanadianPlanFlag)+"')";
+				+"'"+POut.String(insPlan.CanadianPlanFlag)+"',"
+				+"'"+POut.String(insPlan.CanadianDiagnosticCode)+"',"
+				+"'"+POut.String(insPlan.CanadianInstitutionCode)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -150,29 +154,31 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one InsPlan in the database.</summary>
 		internal static void Update(InsPlan insPlan){
 			string command="UPDATE insplan SET "
-				+"GroupName           = '"+POut.String(insPlan.GroupName)+"', "
-				+"GroupNum            = '"+POut.String(insPlan.GroupNum)+"', "
-				+"PlanNote            = '"+POut.String(insPlan.PlanNote)+"', "
-				+"FeeSched            =  "+POut.Long  (insPlan.FeeSched)+", "
-				+"PlanType            = '"+POut.String(insPlan.PlanType)+"', "
-				+"ClaimFormNum        =  "+POut.Long  (insPlan.ClaimFormNum)+", "
-				+"UseAltCode          =  "+POut.Bool  (insPlan.UseAltCode)+", "
-				+"ClaimsUseUCR        =  "+POut.Bool  (insPlan.ClaimsUseUCR)+", "
-				+"CopayFeeSched       =  "+POut.Long  (insPlan.CopayFeeSched)+", "
-				+"EmployerNum         =  "+POut.Long  (insPlan.EmployerNum)+", "
-				+"CarrierNum          =  "+POut.Long  (insPlan.CarrierNum)+", "
-				+"AllowedFeeSched     =  "+POut.Long  (insPlan.AllowedFeeSched)+", "
-				+"TrojanID            = '"+POut.String(insPlan.TrojanID)+"', "
-				+"DivisionNo          = '"+POut.String(insPlan.DivisionNo)+"', "
-				+"IsMedical           =  "+POut.Bool  (insPlan.IsMedical)+", "
-				+"FilingCode          =  "+POut.Long  (insPlan.FilingCode)+", "
-				+"DentaideCardSequence=  "+POut.Byte  (insPlan.DentaideCardSequence)+", "
-				+"ShowBaseUnits       =  "+POut.Bool  (insPlan.ShowBaseUnits)+", "
-				+"CodeSubstNone       =  "+POut.Bool  (insPlan.CodeSubstNone)+", "
-				+"IsHidden            =  "+POut.Bool  (insPlan.IsHidden)+", "
-				+"MonthRenew          =  "+POut.Byte  (insPlan.MonthRenew)+", "
-				+"FilingCodeSubtype   =  "+POut.Long  (insPlan.FilingCodeSubtype)+", "
-				+"CanadianPlanFlag    = '"+POut.String(insPlan.CanadianPlanFlag)+"' "
+				+"GroupName              = '"+POut.String(insPlan.GroupName)+"', "
+				+"GroupNum               = '"+POut.String(insPlan.GroupNum)+"', "
+				+"PlanNote               = '"+POut.String(insPlan.PlanNote)+"', "
+				+"FeeSched               =  "+POut.Long  (insPlan.FeeSched)+", "
+				+"PlanType               = '"+POut.String(insPlan.PlanType)+"', "
+				+"ClaimFormNum           =  "+POut.Long  (insPlan.ClaimFormNum)+", "
+				+"UseAltCode             =  "+POut.Bool  (insPlan.UseAltCode)+", "
+				+"ClaimsUseUCR           =  "+POut.Bool  (insPlan.ClaimsUseUCR)+", "
+				+"CopayFeeSched          =  "+POut.Long  (insPlan.CopayFeeSched)+", "
+				+"EmployerNum            =  "+POut.Long  (insPlan.EmployerNum)+", "
+				+"CarrierNum             =  "+POut.Long  (insPlan.CarrierNum)+", "
+				+"AllowedFeeSched        =  "+POut.Long  (insPlan.AllowedFeeSched)+", "
+				+"TrojanID               = '"+POut.String(insPlan.TrojanID)+"', "
+				+"DivisionNo             = '"+POut.String(insPlan.DivisionNo)+"', "
+				+"IsMedical              =  "+POut.Bool  (insPlan.IsMedical)+", "
+				+"FilingCode             =  "+POut.Long  (insPlan.FilingCode)+", "
+				+"DentaideCardSequence   =  "+POut.Byte  (insPlan.DentaideCardSequence)+", "
+				+"ShowBaseUnits          =  "+POut.Bool  (insPlan.ShowBaseUnits)+", "
+				+"CodeSubstNone          =  "+POut.Bool  (insPlan.CodeSubstNone)+", "
+				+"IsHidden               =  "+POut.Bool  (insPlan.IsHidden)+", "
+				+"MonthRenew             =  "+POut.Byte  (insPlan.MonthRenew)+", "
+				+"FilingCodeSubtype      =  "+POut.Long  (insPlan.FilingCodeSubtype)+", "
+				+"CanadianPlanFlag       = '"+POut.String(insPlan.CanadianPlanFlag)+"', "
+				+"CanadianDiagnosticCode = '"+POut.String(insPlan.CanadianDiagnosticCode)+"', "
+				+"CanadianInstitutionCode= '"+POut.String(insPlan.CanadianInstitutionCode)+"' "
 				+"WHERE PlanNum = "+POut.Long(insPlan.PlanNum);
 			Db.NonQ(command);
 		}
@@ -271,6 +277,14 @@ namespace OpenDentBusiness.Crud{
 			if(insPlan.CanadianPlanFlag != oldInsPlan.CanadianPlanFlag) {
 				if(command!=""){ command+=",";}
 				command+="CanadianPlanFlag = '"+POut.String(insPlan.CanadianPlanFlag)+"'";
+			}
+			if(insPlan.CanadianDiagnosticCode != oldInsPlan.CanadianDiagnosticCode) {
+				if(command!=""){ command+=",";}
+				command+="CanadianDiagnosticCode = '"+POut.String(insPlan.CanadianDiagnosticCode)+"'";
+			}
+			if(insPlan.CanadianInstitutionCode != oldInsPlan.CanadianInstitutionCode) {
+				if(command!=""){ command+=",";}
+				command+="CanadianInstitutionCode = '"+POut.String(insPlan.CanadianInstitutionCode)+"'";
 			}
 			if(command==""){
 				return;

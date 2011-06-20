@@ -53,8 +53,12 @@ namespace OpenDentBusiness{
 		public byte MonthRenew;
 		///<summary>FK to insfilingcodesubtype.insfilingcodesubtypenum</summary>
 		public long FilingCodeSubtype;
-		///<summary>Canadian C12.  Single char, usually blank.  A=Newfoundland MCP Plan - Provincial Medical Plan.  V=Veteran's Affairs Plan.  N=NIHB(poorly documented).  If N, then it does not go out in messages, blank is sent instead.  At least that's the way to make in comply with the scripts; see Elig5.</summary>
+		///<summary>Canadian C12.  Single char, usually blank.  If non-blank, then it's one of three kinds of Provincial Medical Plans.  A=Newfoundland MCP Plan.  V=Veteran's Affairs Plan.  N=NIHB.  N and V are not yet in use, so they will result in blank being sent instead.  See Elig5.</summary>
 		public string CanadianPlanFlag;
+		///<summary>Canadian C39. Required when CanadianPlanFlag is 'A'.</summary>
+		public string CanadianDiagnosticCode;
+		///<summary>Canadian C40. Required when CanadianPlanFlag is 'A'.</summary>
+		public string CanadianInstitutionCode;
 		
 
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>

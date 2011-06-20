@@ -143,12 +143,12 @@ namespace OpenDental.Eclaims {
 					insplan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
 					patPlanPri=PatPlans.GetFromList(patPlansForPat,insSub.InsSubNum);
 					//Get secondary info
-					if(etrans.CarrierNum2!=0) {
-						secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
+					if(claim.InsSubNum2!=0) {
 						patPlanSec=PatPlans.GetFromList(patPlansForPat,claim.InsSubNum2);
 						insSub2=InsSubs.GetSub(claim.InsSubNum2,new List<InsSub>());
 						subscriber2=Patients.GetPat(insSub2.Subscriber);
 						insplan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
+						secondaryCarrier=Carriers.GetCarrier(insplan2.CarrierNum);
 					}
 					//Provider info
 					provTreat=Providers.GetProv(claim.ProvTreat);
@@ -1452,6 +1452,10 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			doc.DrawString(g,"TOTAL:",toothCol,0);
 			if(isEOB){
+				CCDField totalPayable=formData.GetFieldById("G55");
+				if(totalPayable!=null) {
+					totalPaid=PIn.Double(totalPayable.valuestr);
+				}
 				doc.DrawString(g,totalPaid.ToString("F"),dentaidePaysCol,0);
 			}
 			doc.DrawString(g,totalFee.ToString("F"),feeCol,0);

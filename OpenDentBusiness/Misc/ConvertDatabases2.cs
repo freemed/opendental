@@ -5568,7 +5568,21 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE vitalsign ADD Documentation varchar2(4000)";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE insplan ADD CanadianDiagnosticCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE insplan ADD CanadianDiagnosticCode varchar2(255)";
+					Db.NonQ(command);
+				} if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE insplan ADD CanadianInstitutionCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE insplan ADD CanadianInstitutionCode varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5595,6 +5609,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
+
 
 
 
