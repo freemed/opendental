@@ -19,6 +19,12 @@ namespace OpenDentBusiness {
 		public int BpDiastolic;
 		///<summary>The date that the vitalsigns were taken.</summary>
 		public DateTime DateTaken;
+		///<summary>For an abnormal BMI measurement this must be true in order to meet quality measurement.</summary>
+		public bool HasFollowupPlan;
+		///<summary>If a BMI was not recored, this must be true in order to meed quality measurement.</summary>
+		public bool IsIneligible;
+		///<summary>For HasFollowupPlan or IsIneligible, this documents the specifics.</summary>
+		public string Documentation;
 
 		///<summary></summary>
 		public Vitalsign Copy() {

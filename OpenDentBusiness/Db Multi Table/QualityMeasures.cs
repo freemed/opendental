@@ -8,7 +8,7 @@ namespace OpenDentBusiness {
 	///<summary>Used in Ehr quality measures.</summary>
 	public class QualityMeasures {
 		///<summary>Generates a list of all the quality measures.  Performs all calculations and manipulations.  Returns list for viewing/output.</summary>
-		public static List<QualityMeasure> GetAll(DateTime dateStart,DateTime dateEnd) {
+		public static List<QualityMeasure> GetAll(DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<QualityMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
 			}
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 				measure.Type=(QualityType)i;
 				measure.Id=GetId(measure.Type);
 				measure.Descript=GetDescript(measure.Type);
-				DataTable table=GetTable(measure.Type,dateStart,dateEnd);
+				DataTable table=GetTable(measure.Type,dateStart,dateEnd,provNum);
 				if(table!=null) {
 					measure.Denominator=table.Rows.Count;
 					measure.Numerator=CalcNumerator(table);
@@ -38,8 +38,6 @@ namespace OpenDentBusiness {
 				list.Add(measure);
 			}
 			return list;
-			//measure.Id="421a";
-			//measure.Descript=";
 		}
 
 		private static string GetId(QualityType qtype){
@@ -88,7 +86,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static DataTable GetTable(QualityType qtype,DateTime dateStart,DateTime dateEnd) {
+		public static DataTable GetTable(QualityType qtype,DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),qtype,dateStart,dateEnd);
 			}
@@ -106,7 +104,9 @@ namespace OpenDentBusiness {
 						FName varchar(255) NOT NULL,
 						DateVisit date NOT NULL DEFAULT '0001-01-01',
 						Height float NOT NULL,
-						Weight float NOT NULL
+						Weight float NOT NULL,
+						HasFollowupPlan tinyint NOT NULL,
+						IsIneligible tinyint NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit) SELECT patient.PatNum,LName,FName,"
@@ -115,6 +115,7 @@ namespace OpenDentBusiness {
 						+"INNER JOIN procedurelog "//because we want to restrict to only results with procedurelog
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
 						+"WHERE Birthdate > '1880-01-01' AND Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+" "//65 or older
@@ -123,11 +124,19 @@ namespace OpenDentBusiness {
 					//now, find BMIs within 6 months of each visit date. No logic for picking one of multiple BMIs.
 					command="UPDATE tempehrquality,vitalsign "
 						+"SET tempehrquality.Height=vitalsign.Height, "
-						+"tempehrquality.Weight=vitalsign.Weight "//we could also easily get the BMI date if we wanted.
+						+"tempehrquality.Weight=vitalsign.Weight, "//we could also easily get the BMI date if we wanted.
+						+"tempehrquality.HasFollowupPlan=vitalsign.HasFollowupPlan, "
+						+"tempehrquality.IsIneligible=vitalsign.IsIneligible "
 						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
 						+"AND vitalsign.DateTaken <= tempehrquality.DateVisit "
 						+"AND vitalsign.DateTaken >= DATE_SUB(tempehrquality.DateVisit,INTERVAL 6 MONTH)";
 					Db.NonQ(command);
+
+
+
+
+
+
 					//todo
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
@@ -153,6 +162,7 @@ namespace OpenDentBusiness {
 						+"INNER JOIN procedurelog "//because we want to restrict to only results with procedurelog
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
@@ -195,6 +205,7 @@ namespace OpenDentBusiness {
 						+"INNER JOIN procedurelog "
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						//+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						//+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
 						+"LEFT JOIN disease ON disease.PatNum=patient.PatNum "
@@ -237,6 +248,7 @@ namespace OpenDentBusiness {
 						+"INNER JOIN procedurelog "
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
 						+"GROUP BY patient.PatNum";
 					Db.NonQ(command);
@@ -267,6 +279,7 @@ namespace OpenDentBusiness {
 						+"INNER JOIN procedurelog "
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
 						+"GROUP BY patient.PatNum";
 					Db.NonQ(command);
@@ -298,8 +311,8 @@ namespace OpenDentBusiness {
 			DataRow row;
 			table.Columns.Add("PatNum");
 			table.Columns.Add("patientName");
-			table.Columns.Add("numerator");
-			table.Columns.Add("exclusion");
+			table.Columns.Add("numerator");//X
+			table.Columns.Add("exclusion");//X
 			table.Columns.Add("explanation");
 			List<DataRow> rows=new List<DataRow>();
 			Patient pat;
@@ -313,7 +326,7 @@ namespace OpenDentBusiness {
 				pat.Preferred="";
 				row["patientName"]=pat.GetNameLF();
 				row["numerator"]="";
-				row["exclusion"]="";
+				row[""]="";
 				row["explanation"]="";
 				float weight=0;
 				float height=0;
@@ -326,11 +339,17 @@ namespace OpenDentBusiness {
 						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
 						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
 						bmi=Vitalsigns.CalcBMI(weight,height);
+						bool hasFollowupPlan=PIn.Bool(tableRaw.Rows[i]["HasFollowupPlan"].ToString());
+						bool isIneligible=PIn.Bool(tableRaw.Rows[i]["IsIneligible"].ToString());
 						if(bmi==0){
 							row["explanation"]="No BMI";
 						}
 						else if(bmi < 22) {
 							row["explanation"]="Underweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan.";
+								row["numerator"]="X";
+							}
 						}
 						else if(bmi < 30) {
 							row["numerator"]="X";
@@ -338,6 +357,13 @@ namespace OpenDentBusiness {
 						}
 						else {
 							row["explanation"]="Overweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan.";
+								row["numerator"]="X";
+							}
+						}
+						if(isIneligible) {
+							row["exclusion"]="X";
 						}
 						break;
 					case QualityType.WeightAdult:
@@ -483,7 +509,7 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType.WeightOver65:
-					return @"BMI < 22 or >= 30 with care goal of follow-up BMI, or with dietary consultation order.
+					return @"BMI < 22 or >= 30 with Followup documented.
 BMI 22-30.";
 				case QualityType.WeightAdult:
 					return @"BMI < 18.5 or >= 25 with care goal of follow-up BMI, or with dietary consultation order.

@@ -46,13 +46,16 @@ namespace OpenDentBusiness.Crud{
 			Vitalsign vitalsign;
 			for(int i=0;i<table.Rows.Count;i++) {
 				vitalsign=new Vitalsign();
-				vitalsign.VitalsignNum= PIn.Long  (table.Rows[i]["VitalsignNum"].ToString());
-				vitalsign.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				vitalsign.Height      = PIn.Float (table.Rows[i]["Height"].ToString());
-				vitalsign.Weight      = PIn.Float (table.Rows[i]["Weight"].ToString());
-				vitalsign.BpSystolic  = PIn.Int   (table.Rows[i]["BpSystolic"].ToString());
-				vitalsign.BpDiastolic = PIn.Int   (table.Rows[i]["BpDiastolic"].ToString());
-				vitalsign.DateTaken   = PIn.Date  (table.Rows[i]["DateTaken"].ToString());
+				vitalsign.VitalsignNum   = PIn.Long  (table.Rows[i]["VitalsignNum"].ToString());
+				vitalsign.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				vitalsign.Height         = PIn.Float (table.Rows[i]["Height"].ToString());
+				vitalsign.Weight         = PIn.Float (table.Rows[i]["Weight"].ToString());
+				vitalsign.BpSystolic     = PIn.Int   (table.Rows[i]["BpSystolic"].ToString());
+				vitalsign.BpDiastolic    = PIn.Int   (table.Rows[i]["BpDiastolic"].ToString());
+				vitalsign.DateTaken      = PIn.Date  (table.Rows[i]["DateTaken"].ToString());
+				vitalsign.HasFollowupPlan= PIn.Bool  (table.Rows[i]["HasFollowupPlan"].ToString());
+				vitalsign.IsIneligible   = PIn.Bool  (table.Rows[i]["IsIneligible"].ToString());
+				vitalsign.Documentation  = PIn.String(table.Rows[i]["Documentation"].ToString());
 				retVal.Add(vitalsign);
 			}
 			return retVal;
@@ -93,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VitalsignNum,";
 			}
-			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken) VALUES(";
+			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vitalsign.VitalsignNum)+",";
 			}
@@ -103,7 +106,10 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Float (vitalsign.Weight)+","
 				+    POut.Int   (vitalsign.BpSystolic)+","
 				+    POut.Int   (vitalsign.BpDiastolic)+","
-				+    POut.Date  (vitalsign.DateTaken)+")";
+				+    POut.Date  (vitalsign.DateTaken)+","
+				+    POut.Bool  (vitalsign.HasFollowupPlan)+","
+				+    POut.Bool  (vitalsign.IsIneligible)+","
+				+"'"+POut.String(vitalsign.Documentation)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -116,12 +122,15 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Vitalsign in the database.</summary>
 		internal static void Update(Vitalsign vitalsign){
 			string command="UPDATE vitalsign SET "
-				+"PatNum      =  "+POut.Long  (vitalsign.PatNum)+", "
-				+"Height      =  "+POut.Float (vitalsign.Height)+", "
-				+"Weight      =  "+POut.Float (vitalsign.Weight)+", "
-				+"BpSystolic  =  "+POut.Int   (vitalsign.BpSystolic)+", "
-				+"BpDiastolic =  "+POut.Int   (vitalsign.BpDiastolic)+", "
-				+"DateTaken   =  "+POut.Date  (vitalsign.DateTaken)+" "
+				+"PatNum         =  "+POut.Long  (vitalsign.PatNum)+", "
+				+"Height         =  "+POut.Float (vitalsign.Height)+", "
+				+"Weight         =  "+POut.Float (vitalsign.Weight)+", "
+				+"BpSystolic     =  "+POut.Int   (vitalsign.BpSystolic)+", "
+				+"BpDiastolic    =  "+POut.Int   (vitalsign.BpDiastolic)+", "
+				+"DateTaken      =  "+POut.Date  (vitalsign.DateTaken)+", "
+				+"HasFollowupPlan=  "+POut.Bool  (vitalsign.HasFollowupPlan)+", "
+				+"IsIneligible   =  "+POut.Bool  (vitalsign.IsIneligible)+", "
+				+"Documentation  = '"+POut.String(vitalsign.Documentation)+"' "
 				+"WHERE VitalsignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +161,18 @@ namespace OpenDentBusiness.Crud{
 			if(vitalsign.DateTaken != oldVitalsign.DateTaken) {
 				if(command!=""){ command+=",";}
 				command+="DateTaken = "+POut.Date(vitalsign.DateTaken)+"";
+			}
+			if(vitalsign.HasFollowupPlan != oldVitalsign.HasFollowupPlan) {
+				if(command!=""){ command+=",";}
+				command+="HasFollowupPlan = "+POut.Bool(vitalsign.HasFollowupPlan)+"";
+			}
+			if(vitalsign.IsIneligible != oldVitalsign.IsIneligible) {
+				if(command!=""){ command+=",";}
+				command+="IsIneligible = "+POut.Bool(vitalsign.IsIneligible)+"";
+			}
+			if(vitalsign.Documentation != oldVitalsign.Documentation) {
+				if(command!=""){ command+=",";}
+				command+="Documentation = '"+POut.String(vitalsign.Documentation)+"'";
 			}
 			if(command==""){
 				return;

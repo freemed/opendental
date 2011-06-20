@@ -5536,6 +5536,42 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX medicationpat_ProvNum ON medicationpat (ProvNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD HasFollowupPlan tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD HasFollowupPlan number(3)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET HasFollowupPlan = 0 WHERE HasFollowupPlan IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY HasFollowupPlan NOT NULL";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD IsIneligible tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD IsIneligible number(3)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET IsIneligible = 0 WHERE IsIneligible IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY IsIneligible NOT NULL";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD Documentation text NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD Documentation varchar2(4000)";
+					Db.NonQ(command);
+				}
+				
+
+
+
 				
 
 
