@@ -1932,6 +1932,8 @@ namespace OpenDental{
 				textDentaide.Text=PlanCur.DentaideCardSequence.ToString();
 			}
 			textPlanFlag.Text=PlanCur.CanadianPlanFlag;
+			textCanadianDiagCode.Text=PlanCur.CanadianDiagnosticCode;
+			textCanadianInstCode.Text=PlanCur.CanadianInstitutionCode;
 			//if(PlanCur.BenefitNotes==""){
 			//	butBenefitNotes.Enabled=false;
 			//}
@@ -3786,8 +3788,30 @@ namespace OpenDental{
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(textPlanFlag.Text!="" && textPlanFlag.Text!="A" && textPlanFlag.Text!="V" && textPlanFlag.Text!="N") {
-					MsgBox.Show(this,"Plan Flag must be A, V, N, or blank.");
+					MsgBox.Show(this,"Plan flag must be A, V, N, or blank.");
 					return false;
+				}
+				if(textPlanFlag.Text=="") {
+					if(checkIsPMP.Checked) {
+						MsgBox.Show(this,"The provincial medical plan checkbox must be unchecked when the plan flag is blank.");
+						return false;
+					}
+				}
+				else {
+					if(!checkIsPMP.Checked) {
+						MsgBox.Show(this,"The provincial medical plan checkbox must be checked when the plan flag is not blank.");
+						return false;
+					}
+					if(textPlanFlag.Text=="A") {
+						if(textCanadianDiagCode.Text!=Eclaims.Canadian.TidyAN(textCanadianDiagCode.Text,6,true)) {
+							MsgBox.Show(this,"When plan flag is set to A, diagnostic code must be set and must be 6 characters long.");
+							return false;
+						}
+						if(textCanadianInstCode.Text!=Eclaims.Canadian.TidyAN(textCanadianInstCode.Text,6,true)) {
+							MsgBox.Show(this,"When plan flag is set to A, institution code must be set and must be 6 characters long.");
+							return false;
+						}
+					}
 				}
 			}
 			if(textSubscriberID.Text=="" && SubCur!=null) {
@@ -3913,6 +3937,8 @@ namespace OpenDental{
 			//Canadian------------------------------------------------------------------------------------------
 			PlanCur.DentaideCardSequence=PIn.Byte(textDentaide.Text);
 			PlanCur.CanadianPlanFlag=textPlanFlag.Text;//validated
+			PlanCur.CanadianDiagnosticCode=textCanadianDiagCode.Text;//validated
+			PlanCur.CanadianInstitutionCode=textCanadianInstCode.Text;//validated
 			//Canadian end---------------------------------------------------------------------------------------
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
