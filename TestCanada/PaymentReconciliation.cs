@@ -8,9 +8,9 @@ using OpenDental.Eclaims;
 namespace TestCanada {
 	class PaymentReconciliation {
 
-		private static string Run(int scriptNum,bool sendToItrans,Carrier carrier,Provider treatProv,Provider billingProv,DateTime reconciliationDate,out List<Etrans> etransAcks) { 
+		private static string Run(int scriptNum,Carrier carrier,Provider treatProv,Provider billingProv,DateTime reconciliationDate,out List<Etrans> etransAcks) { 
 			string retVal="";
-			etransAcks=CanadianOutput.GetPaymentReconciliations(sendToItrans,carrier,treatProv,billingProv,reconciliationDate);
+			etransAcks=CanadianOutput.GetPaymentReconciliations(carrier,treatProv,billingProv,reconciliationDate);
 			retVal+="Payment Reconciliation#"+scriptNum.ToString()+" successful.\r\n";
 			return retVal;
 		}
@@ -20,18 +20,15 @@ namespace TestCanada {
 			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			List <Etrans> etransAcks;
-			return Run(1,false,carrier,prov,prov,new DateTime(1999,6,16),out etransAcks);
+			return Run(1,carrier,prov,prov,new DateTime(1999,6,16),out etransAcks);
 		}
 
 		public static string RunTwo() {
-			CanadianNetwork network=new CanadianNetwork();
-			network.Descript="Network 2";
-			network.Abbrev="Network 2";
-			network.CanadianNetworkNum=2;
-			network.CanadianTransactionPrefix="A";
+			long carrierNum=CarrierTC.GetCarrierNumById("777777");
+			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			List<Etrans> etransAcks;
-			return Run(2,true,null,prov,prov,new DateTime(1999,6,16),out etransAcks);
+			return Run(1,carrier,prov,prov,new DateTime(1999,6,16),out etransAcks);
 		}
 
 		public static string RunThree() {
@@ -39,7 +36,7 @@ namespace TestCanada {
 			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			List<Etrans> etransAcks;
-			return Run(3,false,carrier,prov,prov,new DateTime(1999,6,16),out etransAcks);
+			return Run(1,carrier,prov,prov,new DateTime(1999,6,16),out etransAcks);
 		}
 
 	}

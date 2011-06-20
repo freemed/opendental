@@ -5583,7 +5583,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE insplan ADD CanadianInstitutionCode varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE canadiannetwork ADD CanadianIsRprHandler tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE canadiannetwork ADD CanadianIsRprHandler number(3)";
+					Db.NonQ(command);
+					command="UPDATE canadiannetwork SET CanadianIsRprHandler = 0 WHERE CanadianIsRprHandler IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE canadiannetwork MODIFY CanadianIsRprHandler NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 				
@@ -5615,3 +5626,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				

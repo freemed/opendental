@@ -40,18 +40,6 @@ namespace OpenDental {
 			textDateReconciliation.Text=DateTime.Today.ToShortDateString();
 		}
 
-		private void radioVersion4Itrans_Click(object sender,EventArgs e) {
-			radioVersion4Itrans.Checked=true;
-			radioVersion4ToCarrier.Checked=false;
-			listCarriers.Enabled=false;
-		}
-
-		private void radioVersion4ToCarrier_Click(object sender,EventArgs e) {
-			radioVersion4Itrans.Checked=false;
-			radioVersion4ToCarrier.Checked=true;
-			listCarriers.Enabled=true;
-		}
-
 		private void listBillingProvider_Click(object sender,EventArgs e) {
 			textBillingOfficeNumber.Text=ProviderC.List[listBillingProvider.SelectedIndex].CanadianOfficeNum;
 		}
@@ -61,11 +49,9 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(radioVersion4ToCarrier.Checked) {
-				if(listCarriers.SelectedIndex<0) {
-					MsgBox.Show(this,"You must first choose a carrier.");
-					return;
-				}
+			if(listCarriers.SelectedIndex<0) {
+				MsgBox.Show(this,"You must first choose a carrier.");
+				return;
 			}
 			if(listBillingProvider.SelectedIndex<0) {
 				MsgBox.Show(this,"You must first choose a billing provider.");
@@ -85,14 +71,8 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				if(radioVersion4Itrans.Checked) {
-					CanadianOutput.GetPaymentReconciliations(true,null,ProviderC.List[listTreatingProvider.SelectedIndex],
-						ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
-				}
-				else {
-					CanadianOutput.GetPaymentReconciliations(false,carriers[listCarriers.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],
-						ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
-				}
+				CanadianOutput.GetPaymentReconciliations(carriers[listCarriers.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],
+					ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Done.");
 			}

@@ -695,8 +695,8 @@ namespace OpenDental.Eclaims {
 			return etransAcks;
 		}
 
-		///<summary>Each payment reconciliation request can return up to 9 pages. This function will return one etrans ack for each page in the result, since each page must be requested individually. Only for version 04, no such transaction exists for version 02. Set sendToItrans=true and carrier=null if the request is to be sent to the entire ITRANS network. Set sentToItrans=false and provide a valid carrier object if the request is to be sent to a specific carrier.</summary>
-		public static List<Etrans> GetPaymentReconciliations(bool sendToItrans,Carrier carrier,Provider provTreat,Provider provBilling,DateTime reconciliationDate) {
+		///<summary>Each payment reconciliation request can return up to 9 pages. This function will return one etrans ack for each page in the result, since each page must be requested individually. Only for version 04, no such transaction exists for version 02.</summary>
+		public static List<Etrans> GetPaymentReconciliations(Carrier carrier,Provider provTreat,Provider provBilling,DateTime reconciliationDate) {
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null) {
 				throw new ApplicationException("Canadian clearinghouse not found.");
@@ -710,26 +710,13 @@ namespace OpenDental.Eclaims {
 			int totalPages=1;
 			do{
 				StringBuilder strb=new StringBuilder();
-				Etrans etrans=null;
-				CanadianNetwork network=null;
-				if(sendToItrans) {
-					etrans=Etranss.CreateCanadianOutput(0,0,0,clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
+				if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForPaymentReconciliation_06)!=CanSupTransTypes.RequestForPaymentReconciliation_06) {
+					throw new ApplicationException("The carrier does not support payment reconciliation transactions.");
 				}
-				else {
-					if((carrier.CanadianSupportedTypes&CanSupTransTypes.RequestForPaymentReconciliation_06)!=CanSupTransTypes.RequestForPaymentReconciliation_06) {
-						throw new ApplicationException("The carrier does not support payment reconciliation transactions.");
-					}
-					etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,
-						clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
-					network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
-				}
+				CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
+				Etrans etrans=Etranss.CreateCanadianOutput(0,carrier.CarrierNum,carrier.CanadianNetworkNum,clearhouse.ClearinghouseNum,EtransType.RequestPay_CA,0,0);
 				//A01 transaction prefix 12 AN
-				if(sendToItrans) {
-					strb.Append("            ");
-				}
-				else {
-					strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
-				}
+				strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
 				//A02 office sequence number 6 N
 				strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 				//A03 format version number 2 N
@@ -737,8 +724,8 @@ namespace OpenDental.Eclaims {
 				//A04 transaction code 2 N
 				strb.Append("06");//payment reconciliation request
 				//A05 carrier id number 6 N
-				if(sendToItrans) {
-					strb.Append("999999");//Always 999999 when sending to a ITRANS network.
+				if(network.CanadianIsRprHandler) {
+					strb.Append("999999");//Always 999999 if the network handles the RPR requests instead of the carriers in the network.
 				}
 				else {
 					strb.Append(carrier.ElectID);//already validated as 6 digit number.

@@ -188,7 +188,12 @@ namespace OpenDental.Eclaims {
 			formatVersionNumber=formData.GetFieldById("A03").valuestr;//Must always exist so no error checking here.
 			transactionCode=formData.GetFieldById("A04").valuestr;//Must always exist so no error checking here.
 			if(formatVersionNumber=="04") {//FormId field does not exist in version 02 in any of the message texts.
-				formId=formData.GetFieldById("G42").valuestr;//Always exists in version 04 message responses.
+				CCDField formIdField=formData.GetFieldById("G42");//Usually exists in version 04 response messages.
+				//Only a few response transactions don't define field G42. So far, those are transactions 15 (Summary Reconciliation), 16 (Payment Reconciliation) and 24 (Email).
+				//In these cases, we simply do not use the formId field later on in the display code.
+				if(formIdField!=null) {
+					formId=formIdField.valuestr;
+				}
 			}
 			else {//Version 02
 				//Since there is no FormID field in version 02, we figure out what the formId should be based on the transaction type.

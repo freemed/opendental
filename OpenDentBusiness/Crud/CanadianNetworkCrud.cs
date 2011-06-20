@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				canadianNetwork.Abbrev                   = PIn.String(table.Rows[i]["Abbrev"].ToString());
 				canadianNetwork.Descript                 = PIn.String(table.Rows[i]["Descript"].ToString());
 				canadianNetwork.CanadianTransactionPrefix= PIn.String(table.Rows[i]["CanadianTransactionPrefix"].ToString());
+				canadianNetwork.CanadianIsRprHandler     = PIn.Bool  (table.Rows[i]["CanadianIsRprHandler"].ToString());
 				retVal.Add(canadianNetwork);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CanadianNetworkNum,";
 			}
-			command+="Abbrev,Descript,CanadianTransactionPrefix) VALUES(";
+			command+="Abbrev,Descript,CanadianTransactionPrefix,CanadianIsRprHandler) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(canadianNetwork.CanadianNetworkNum)+",";
 			}
 			command+=
 				 "'"+POut.String(canadianNetwork.Abbrev)+"',"
 				+"'"+POut.String(canadianNetwork.Descript)+"',"
-				+"'"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"')";
+				+"'"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"',"
+				+    POut.Bool  (canadianNetwork.CanadianIsRprHandler)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE canadiannetwork SET "
 				+"Abbrev                   = '"+POut.String(canadianNetwork.Abbrev)+"', "
 				+"Descript                 = '"+POut.String(canadianNetwork.Descript)+"', "
-				+"CanadianTransactionPrefix= '"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"' "
+				+"CanadianTransactionPrefix= '"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"', "
+				+"CanadianIsRprHandler     =  "+POut.Bool  (canadianNetwork.CanadianIsRprHandler)+" "
 				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetwork.CanadianNetworkNum);
 			Db.NonQ(command);
 		}
@@ -131,6 +134,10 @@ namespace OpenDentBusiness.Crud{
 			if(canadianNetwork.CanadianTransactionPrefix != oldCanadianNetwork.CanadianTransactionPrefix) {
 				if(command!=""){ command+=",";}
 				command+="CanadianTransactionPrefix = '"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"'";
+			}
+			if(canadianNetwork.CanadianIsRprHandler != oldCanadianNetwork.CanadianIsRprHandler) {
+				if(command!=""){ command+=",";}
+				command+="CanadianIsRprHandler = "+POut.Bool(canadianNetwork.CanadianIsRprHandler)+"";
 			}
 			if(command==""){
 				return;
