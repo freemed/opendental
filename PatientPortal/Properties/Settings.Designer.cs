@@ -26,7 +26,8 @@ namespace PatientPortal.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;User Id=root;database=mobile_dev;Persist Security Info=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;User Id=root;CharSet=utf8;database=mobile_dev;Persist Security I" +
+            "nfo=True")]
         public string DBPatientPortal {
             get {
                 return ((string)(this["DBPatientPortal"]));
