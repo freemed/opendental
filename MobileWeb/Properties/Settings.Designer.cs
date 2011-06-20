@@ -34,20 +34,21 @@ namespace MobileWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;User Id=root;database=mobile_dev;Persist Security Info=True")]
-        public string DBMobileWeb {
+        [global::System.Configuration.DefaultSettingValueAttribute("6219")]
+        public long DemoDentalOfficeID {
             get {
-                return ((string)(this["DBMobileWeb"]));
+                return ((long)(this["DemoDentalOfficeID"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("6219")]
-        public long DemoDentalOfficeID {
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;CharSet=utf8;User Id=root;password=;database=mobile_dev;Persist " +
+            "Security Info=True")]
+        public string DBMobileWeb {
             get {
-                return ((long)(this["DemoDentalOfficeID"]));
+                return ((string)(this["DBMobileWeb"]));
             }
         }
     }

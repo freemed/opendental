@@ -65,28 +65,15 @@ namespace OpenDentBusiness{
 			return Crud.AllergyCrud.SelectMany(command);
 		}
 
-		public static List<long> GetChangedSinceAllergyNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+		public static List<long> GetChangedSinceAllergyNums(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,eligibleForUploadPatNumList);
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
-			string strEligibleForUploadPatNums="";
-			DataTable table;
-			if(eligibleForUploadPatNumList.Count>0) {
-				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
-					if(i>0) {
-						strEligibleForUploadPatNums+="OR ";
-					}
-					strEligibleForUploadPatNums+="PatNum='"+eligibleForUploadPatNumList[i].ToString()+"' ";
-				}
-				string command="SELECT AllergyNum FROM allergy WHERE DateTStamp > "+POut.DateT(changedSince)+" AND ("+strEligibleForUploadPatNums+")";
-				table=Db.GetTable(command);
-			}
-			else {
-				table=new DataTable();
-			}
-			List<long> allergynums = new List<long>(table.Rows.Count);
-			for(int i=0;i<table.Rows.Count;i++) {
-				allergynums.Add(PIn.Long(table.Rows[i]["AllergyNum"].ToString()));
+			string command="SELECT AllergyNum FROM allergy WHERE DateTStamp > "+POut.DateT(changedSince);
+			DataTable dt=Db.GetTable(command);
+			List<long> allergynums = new List<long>(dt.Rows.Count);
+			for(int i=0;i<dt.Rows.Count;i++) {
+				allergynums.Add(PIn.Long(dt.Rows[i]["AllergyNum"].ToString()));
 			}
 			return allergynums;
 		}

@@ -80,9 +80,9 @@
 	<ul>
 			<asp:Repeater ID="Repeater3" runat="server">
 				<ItemTemplate>
-					<li class="style1">
+					<li class="style1" style="color:Red">
 						<div class="elladjust">
-							<%#((OpenDentBusiness.Mobile.Allergym)Container.DataItem).Reaction%>
+							<%#AllergyDefms.GetOne(((Allergym)Container.DataItem).CustomerNum,((Allergym)Container.DataItem).AllergyDefNum).Description%>
 						</div>
 					</li>
 				</ItemTemplate>

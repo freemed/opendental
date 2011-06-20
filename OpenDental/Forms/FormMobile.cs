@@ -108,6 +108,7 @@ namespace OpenDental {
 			//So I rewrote it all.  New error messages say exactly what's wrong with it.
 //to do: Dennis, make sure that ANY character is allowed on the server end.  
 			//For example, a space, a {, and a Chinese character would all be allowed in username.
+			//Dennis: There is a low priority bug here - very odd characters (like arabic) are simply ingored when inserted into the db. However this does not cause a noticible problem since while comparing usernames the very same characters are ignored for the keyed in username. right now I'm not sure how to solve this problem. Jordan has indicated that he doesn't know either.
 			if(textMobileUserName.Text!="") {//allowed to be blank
 				if(textMobileUserName.Text.Length<10) {
 					MsgBox.Show(this,"User Name must be at least 10 characters long.");
@@ -146,8 +147,6 @@ namespace OpenDental {
 			}
 			//Username and password-----------------------------------------------------------------------------
 			mb.SetMobileWebUserPassword(PrefC.GetString(PrefName.RegistrationKey),textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
-//todo: Dennis, if password is blank, you need to make the server not update the password for this user.
-//That is changed behavior.
 			return true;
 		}
 
@@ -364,14 +363,14 @@ namespace OpenDental {
 			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
 			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
 			List<long> pharNumList=Pharmacyms.GetChangedSincePharmacyNums(changedSince);
-			//Pat portal
+			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
+			List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
+			//exclusively Pat portal
 			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 			List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
 			List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
 			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
 			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
-			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
-			List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince,eligibleForUploadPatNumList);
 			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
