@@ -226,20 +226,20 @@ namespace OpenDental.Eclaims {
 			//We are required to print 2 copies of the Dentaide form when it is not a predetermination form. Everything else requires only 1 copy.
 			if(copiesToPrint<=0) { //Show the form on screen if there are no copies to print.
 				ShowDisplayMessages();
-				pd=CreatePrintDocument();
-				printPreviewControl1.Document=pd;//Setting the document causes system to call pd_PrintPage, which will print the document in the preview window.
-				Show();
 				if(autoPrint) {
 					if(responseStatus!="R") { //We are not required to automatically print rejection notices.
 						int numPrintCopies=((formId=="02" && !predetermination)?2:1);
 						//Print patient copies.
 						new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,true);
 						//Print dentist copies for assigned claims, but only for certain forms.
-						if(insSub.AssignBen && (formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07")) {
+						if(insSub!=null && insSub.AssignBen && (formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07")) {
 							new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,false);
 						}
 					}
 				}
+				pd=CreatePrintDocument();
+				printPreviewControl1.Document=pd;//Setting the document causes system to call pd_PrintPage, which will print the document in the preview window.
+				ShowDialog();
 			}
 			else {
 				pd=CreatePrintDocument();
@@ -321,7 +321,12 @@ namespace OpenDental.Eclaims {
 					continue;
 				}
 				displayMessages.Add(noteTexts[i].valuestr);
-				displayMessageNumbers.Add(PIn.Int(noteNumbers[i].valuestr));
+				if(i<noteNumbers.Length) {
+					displayMessageNumbers.Add(PIn.Int(noteNumbers[i].valuestr));
+				}
+				else {
+					displayMessageNumbers.Add(i+1);
+				}
 			}
 			while(displayMessages.Count>0) {
 				int indexOfMinVal=0;
@@ -1861,6 +1866,7 @@ namespace OpenDental.Eclaims {
 			//First start by listing the procedures originally attached to the claim.
 			CCDField[] procedureLineNumbers=formData.GetFieldsById("F07");
 			CCDField[] eligibleAmounts=formData.GetFieldsById("G12");
+			CCDField[] deductibleAmounts=formData.GetFieldsById("G13");
 			CCDField[] eligiblePercentage=formData.GetFieldsById("G14");
 			CCDField[] benefitAmountForTheProcedures=formData.GetFieldsById("G15");
 			CCDField[] explainationNotes1=formData.GetFieldsById("G16");
@@ -1892,6 +1898,7 @@ namespace OpenDental.Eclaims {
 					doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 					text=RawMoneyStrToDisplayMoney(eligibleAmounts[p].valuestr);//Field G12
 					doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+					text=RawMoneyStrToDisplayMoney(deductibleAmounts[p].valuestr);//Field G13
 					doc.DrawString(g,text,procedureDeductCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 					text=RawPercentToDisplayPercent(eligiblePercentage[p].valuestr);//Field G14
 					doc.DrawString(g,text,procedureAtCol,0);
@@ -1919,17 +1926,19 @@ namespace OpenDental.Eclaims {
 			CCDField[] carrierNotes1=formData.GetFieldsById("G24");
 			CCDField[] carrierNotes2=formData.GetFieldsById("G25");
 			for(int p=0;p<carrierProcs.Length;p++){
+				x=doc.StartElement();
 				text=carrierProcs[p].valuestr.PadLeft(6,' ');//Field G19
 				doc.DrawString(g,text,x,0);
 				text=ProcedureCodes.GetProcCode(ProcedureCodes.GetCodeNum(text)).Descript;
 				doc.DrawString(g,text,procedureCodeCol+procCodeWidth,0,doc.standardFont,(int)(procedureToothCol-procedureCodeCol-procCodeWidth-10));
 				text=RawMoneyStrToDisplayMoney(carrierEligibleAmts[p].valuestr);//Field G20
-				doc.DrawString(g,text,procedureEligibleCol,0);
+				doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 				text=RawMoneyStrToDisplayMoney(carrierDeductAmts[p].valuestr);//Field G21
-				doc.DrawString(g,text,procedureDeductCol,0);
+				doc.DrawString(g,text,procedureDeductCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 				text=RawPercentToDisplayPercent(carrierAts[p].valuestr);//Field G22
 				doc.DrawString(g,text,procedureAtCol,0);
 				text=RawMoneyStrToDisplayMoney(carrierBenefitAmts[p].valuestr);//Field G23
+				doc.DrawString(g,text,procedureBenefitCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 				text="";
 				if(carrierNotes1[p].valuestr!="00"){
 					text+=carrierNotes1[p].valuestr;
@@ -2550,6 +2559,8 @@ namespace OpenDental.Eclaims {
 					if(PIn.Int(noteOutputFlags[i].valuestr)!=2) {
 						continue;//Output flag of 2 means print. So, don't print this note.
 					}
+				}
+				if(i<noteNumbers.Length) {
 					displayMessageNumbers.Add(PIn.Int(noteNumbers[i].valuestr));
 				}
 				else {
