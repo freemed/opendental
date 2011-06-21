@@ -776,6 +776,9 @@ namespace OpenDental{
 						if(subsc.StudentStatus=="P")
 							displayStrings[i]="X";
 						break;
+					case "GroupName":
+						displayStrings[i]=planCur.GroupName;
+						break;
 					case "GroupNum":
 						displayStrings[i]=planCur.GroupNum;
 						break;

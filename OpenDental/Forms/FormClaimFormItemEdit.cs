@@ -268,6 +268,7 @@ namespace OpenDental{
 				"SubscrIsPTStudent",
 				"SubscrGender",
 				"GroupNum",
+				"GroupName",
 				"DivisionNo",
 				"EmployerName",
 				"RelatIsSelf",
