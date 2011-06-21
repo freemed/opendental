@@ -1464,7 +1464,7 @@ namespace OpenDental.Eclaims {
 			if(isEOB){
 				CCDField totalPayable=formData.GetFieldById("G55");
 				if(totalPayable!=null) {
-					totalPaid=PIn.Double(totalPayable.valuestr);
+					totalPaid=PIn.Double(RawMoneyStrToDisplayMoney(totalPayable.valuestr));
 				}
 				doc.DrawString(g,totalPaid.ToString("F"),dentaidePaysCol,0);
 			}

@@ -43,7 +43,9 @@ namespace OpenDental.Eclaims {
 				if(error!="") error+=", ";
 				error+="CarrierId 6 digits";
 			}
-
+			if(!provDefaultTreat.IsCDAnet) {
+				error+="Prov not setup as CDA provider";
+			}
 			if(provDefaultTreat.NationalProvID.Length!=9) {
 				if(error!="")	error+=", ";
 				error+="Prov CDA num 9 digits";
@@ -335,8 +337,14 @@ namespace OpenDental.Eclaims {
 			Etrans etrans=Etranss.CreateCanadianOutput(claim.PatNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
 				clearhouse.ClearinghouseNum,EtransType.ReverseResponse_CA,plan.PlanNum,insSub.InsSubNum);
 			Patient patient=Patients.GetPat(claim.PatNum);
-			Provider prov=Providers.GetProv(Patients.GetProvNum(patient));
+			Provider prov=Providers.GetProv(claim.ProvTreat);
+			if(!prov.IsCDAnet) {
+				throw new ApplicationException("Treating provider is not setup to use CDANet.");
+			}
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
+			if(!billProv.IsCDAnet) {
+				throw new ApplicationException("Billing provider is not setup to use CDANet.");
+			}
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
 			Patient subscriber=Patients.GetPat(insSub.Subscriber);
 			//create message----------------------------------------------------------------------------------------------
@@ -488,7 +496,7 @@ namespace OpenDental.Eclaims {
 			return etransAck.EtransNum;
 		}
 
-		///<summary>Returns the list of etrans requests. The etrans.AckEtransNum can be used to get the etrans ack. The following are the only possible formats that can be returned in the acks: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response. Set version2 to true if version 02 request and false for version 04 request. Set sendToItrans to true only when sending to carrier 999999 representing the entire ITRANS network. When version2 is false and sendToItrans is false then carrier must be set to a valid Canadian carrier, otherwise it can be set to null.</summary>
+		///<summary>Returns the list of etrans requests. The etrans.AckEtransNum can be used to get the etrans ack. The following are the only possible formats that can be returned in the acks: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response. Set version2 to true if version 02 request and false for version 04 request. Set sendToItrans to true only when sending to carrier 999999 representing the entire ITRANS network. When version2 is false and sendToItrans is false then carrier must be set to a valid Canadian carrier, otherwise it can be set to null. Prov must be validated as a CDANet provider before calling this function.</summary>
 		public static List <Etrans> GetOutstandingTransactions(bool version2,bool sendToItrans,Carrier carrier,Provider prov) {
 			List<Etrans> etransAcks=new List<Etrans>();
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
