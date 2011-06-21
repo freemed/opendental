@@ -56,6 +56,15 @@ namespace OpenDentBusiness{
 			Crud.OrthoChartCrud.Update(orthoChart);
 		}
 
+		///<summary></summary>
+		public static void Delete(long orthoChartNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),orthoChartNum);
+				return;
+			}
+			string command= "DELETE FROM orthochart WHERE OrthoChartNum = "+POut.Long(orthoChartNum);
+			Db.NonQ(command);
+		}
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -76,15 +85,7 @@ namespace OpenDentBusiness{
 			return Crud.OrthoChartCrud.SelectOne(orthoChartNum);
 		}
 
-		///<summary></summary>
-		public static void Delete(long orthoChartNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),orthoChartNum);
-				return;
-			}
-			string command= "DELETE FROM orthochart WHERE OrthoChartNum = "+POut.Long(orthoChartNum);
-			Db.NonQ(command);
-		}
+		
 		*/
 
 

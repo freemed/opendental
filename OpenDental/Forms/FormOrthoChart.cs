@@ -13,9 +13,9 @@ namespace OpenDental {
 		private List<DisplayField> listDisplayFields;
 		private List<OrthoChart> listOrthoCharts;
 		public Patient PatCur;
-		///<summary>Usually only 1 item in this list: today's date.</summary>
-		private List<DateTime> listDatesAdditional;
-		///<summary>Each row in this table has a date as the first cell.  There will be additional rows that are not yet in the db.  Each blank cell will be an empty string.  It will also store changes made by the user prior to closing the form.  When the form is closed, this table will be compared with the original listOrthoCharts and a synch process will take place to save to db.  An empty string in a cell will result in no db row or a deletion of existing db row.</summary>
+		//<summary>Usually only 1 item in this list: today's date.</summary>
+		//private List<DateTime> listDatesAdditional;
+		//<summary>Each row in this table has a date as the first cell.  There will be additional rows that are not yet in the db.  Each blank cell will be an empty string.  It will also store changes made by the user prior to closing the form.  When the form is closed, this table will be compared with the original listOrthoCharts and a synch process will take place to save to db.  An empty string in a cell will result in no db row or a deletion of existing db row.</summary>
 		DataTable table;
 
 		public FormOrthoChart(Patient patCur) {
@@ -31,7 +31,7 @@ namespace OpenDental {
 			table.Columns.Add("Date",typeof(DateTime));
 			listDisplayFields = DisplayFields.GetForCategory(DisplayFieldCategory.OrthoChart);
 			for(int i=0;i<listDisplayFields.Count;i++) {
-				table.Columns.Add(listDisplayFields[i].Description,typeof(string));//column names
+				table.Columns.Add((i+1).ToString());//named by number, but probably refer to by index
 			}
 			//define rows------------------------------------------------------------------------------------------------------------
 			listOrthoCharts=OrthoCharts.GetAllForPatient(PatCur.PatNum);
@@ -50,21 +50,21 @@ namespace OpenDental {
 					datesShowing.Add(listOrthoCharts[i].DateService);
 				}
 			}
-			//List<DataRow> rows=new List<DataRow>();
+			datesShowing.Sort();
+			//We now have a list of dates.
 			//add all blank cells to each row except for the date.
 			DataRow row;
 			//create and add row for each date in date showing
 			for(int i=0;i<datesShowing.Count;i++) {
 				row=table.NewRow();
-				//row.BeginEdit();
-				row[0]=datesShowing[i];
+				row["Date"]=datesShowing[i];
 				for(int j=0;j<listDisplayFields.Count;j++) {
-					row[j+1]=" ";//j+1 because first row is date field.
+					row[j+1]="";//j+1 because first row is date field.
 				}
-				//row.AcceptChanges();
-				//row.EndEdit();
 				table.Rows.Add(row);
 			}
+			//We now have a table with all empty strings in cells except dates.
+			//Fill with data as necessary.
 			for(int i=0;i<listOrthoCharts.Count;i++) {//loop
 				if(!datesShowing.Contains(listOrthoCharts[i].DateService)){
 					continue;
@@ -74,7 +74,7 @@ namespace OpenDental {
 				}
 				for(int j=0;j<table.Rows.Count;j++) {
 					if(listOrthoCharts[i].DateService==(DateTime)table.Rows[j]["Date"]) {
-						table.Rows[j][listOrthoCharts[i].FieldName]=listOrthoCharts[i].FieldValue;
+						table.Rows[j][listDisplayFieldNames.IndexOf(listOrthoCharts[i].FieldName)+1]=listOrthoCharts[i].FieldValue;
 					}
 				}
 			}
@@ -96,11 +96,11 @@ namespace OpenDental {
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Height=19;//fixes isEditable look and feel
-				DateTime tempDate=(DateTime)table.Rows[i][0];
+				DateTime tempDate=(DateTime)table.Rows[i]["Date"];
 				row.Cells.Add(tempDate.ToShortDateString());
+				row.Tag=tempDate;
 				for(int j=0;j<listDisplayFields.Count;j++) {
-					string tempString=(string)table.Rows[i][j+1];
-					row.Cells.Add(tempString);
+					row.Cells.Add(table.Rows[i][j+1].ToString());
 				}
 				gridMain.Rows.Add(row);
 			}
@@ -151,7 +151,7 @@ namespace OpenDental {
 			//else {
 			//  OrthoCharts.Update(FormOCE.OrthoCur);
 			//}*/
-			FillGrid();
+			//FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -161,29 +161,95 @@ namespace OpenDental {
 				return;
 			}
 			for(int i=0;i<table.Rows.Count;i++) {
-				if(FormOCAD.SelectedDate==(DateTime)table.Rows[i][0]) {
+				if(FormOCAD.SelectedDate==(DateTime)table.Rows[i]["Date"]) {
 					MsgBox.Show(this,"That date already exists.");
 					return;
 				}
 			}
 			//listDatesAdditional.Add(FormOCAD.SelectedDate);
+			//Move data from grid to table, add new date row to datatable, then fill grid from table.
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				table.Rows[i]["Date"]=gridMain.Rows[i].Tag;//store date
+				for(int j=0;j<listDisplayFields.Count;j++) {
+					table.Rows[i][j+1]=gridMain.Rows[i].Cells[j+1].Text;
+				}
+			}
 			DataRow row;
 			row=table.NewRow();
-			row[0]=FormOCAD.SelectedDate;
-			for(int j=0;j<listDisplayFields.Count;j++) {
-				row[j+1]="";//j+1 because first row is date field.
+			row["Date"]=FormOCAD.SelectedDate;
+			for(int i=0;i<listDisplayFields.Count;i++) {
+				row[i+1]="";//j+1 because first row is date field.
 			}
-			table.Rows.Add(row);
-//TODO:save grid data to table
+			//insert new row in proper ascending datetime order to dataTable
+			for(int i=0;i<=table.Rows.Count;i++){
+				if(i==table.Rows.Count){
+					table.Rows.InsertAt(row,i);
+					break;
+				}
+				if((DateTime)row["Date"]>(DateTime)table.Rows[i]["Date"]){
+					continue;
+				}
+				table.Rows.InsertAt(row,i);
+				break;
+			}
 			FillGrid();
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void butClose_Click(object sender,EventArgs e) {
+			Close();
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+		private void FormOrthoChart_FormClosing(object sender,FormClosingEventArgs e) {
+			//Save data from grid to table
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				table.Rows[i]["Date"]=gridMain.Rows[i].Tag;//store date
+				for(int j=0;j<listDisplayFields.Count;j++) {
+					table.Rows[i][j+1]=gridMain.Rows[i].Cells[j+1].Text;
+				}
+			} 
+			List<OrthoChart> tempOrthoChartsFromDB=OrthoCharts.GetAllForPatient(PatCur.PatNum);
+			List<OrthoChart> tempOrthoChartsFromTable=new List<OrthoChart>();
+			for(int r=0;r<table.Rows.Count;r++) {
+				for(int c=1;c<table.Columns.Count;c++) {//skip col 0
+					OrthoChart tempChart = new OrthoChart();
+					tempChart.DateService=(DateTime)table.Rows[r]["Date"];
+					tempChart.FieldName=listDisplayFields[c-1].Description;
+					tempChart.FieldValue=table.Rows[r][c].ToString();
+					tempChart.PatNum=PatCur.PatNum;
+					tempOrthoChartsFromTable.Add(tempChart);
+				}
+			}
+			//Check table list vs DB list for inserts, updates, and deletes.
+			for(int i=0;i<tempOrthoChartsFromTable.Count;i++) {
+				//Either delete an existing record from the DB or ignore this non-entry.
+				if(tempOrthoChartsFromTable[i].FieldValue=="") {
+					for(int j=0;j<tempOrthoChartsFromDB.Count;j++) {
+						if(tempOrthoChartsFromDB[j].DateService==tempOrthoChartsFromTable[i].DateService 
+							&& tempOrthoChartsFromDB[j].FieldName==tempOrthoChartsFromTable[i].FieldName) 
+						{
+							OrthoCharts.Delete(tempOrthoChartsFromDB[j].OrthoChartNum);
+							break;
+						}
+					}
+					continue;//i loop
+				}
+				//Update the Record if it already exists or Insert if it's new.
+				for(int j=0;j<=tempOrthoChartsFromDB.Count;j++) {
+					//Insert if you've made it through the whole list.
+					if(j==tempOrthoChartsFromDB.Count) {
+						OrthoCharts.Insert(tempOrthoChartsFromTable[i]);
+						break;
+					}
+					//Update if type and date match
+					if(tempOrthoChartsFromDB[j].DateService==tempOrthoChartsFromTable[i].DateService 
+							&& tempOrthoChartsFromDB[j].FieldName==tempOrthoChartsFromTable[i].FieldName) 
+					{
+						tempOrthoChartsFromTable[i].OrthoChartNum=tempOrthoChartsFromDB[j].OrthoChartNum;
+						OrthoCharts.Update(tempOrthoChartsFromTable[i]);
+						break;
+					}
+				}
+			}
 		}
 
 		
