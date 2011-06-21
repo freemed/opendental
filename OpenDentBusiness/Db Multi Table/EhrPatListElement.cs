@@ -18,11 +18,13 @@ namespace OpenDentBusiness {
 		public bool OrderBy;
 	}
 
+	///<summary>Add to end of list, do not change the order.</summary>
 	public enum EhrRestrictionType {
 		Birthdate,
 		Disease,
 		Medication,
-		LabResult
+		LabResult,
+		Gender
 	}
 
 	public enum EhrOperand {

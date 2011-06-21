@@ -22,13 +22,16 @@ namespace OpenDentBusiness {
 						command+=",patient.Birthdate ";
 						break;
 					case EhrRestrictionType.Disease:
-						command+=",(SELECT COUNT(*) FROM disease WHERE disease.PatNum=patient.PatNum AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%')) `"+compStr+"` ";
+						command+=",(SELECT disease.ICD9Num FROM disease WHERE disease.PatNum=patient.PatNum AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%')) `"+compStr+"` ";
 						break;
 					case EhrRestrictionType.LabResult:
 						command+=",(SELECT IFNULL(MAX(ObsValue),0) FROM labresult,labpanel WHERE labresult.LabPanelNum=labpanel.LabPanelNum AND labpanel.PatNum=patient.PatNum AND labresult.TestName='"+compStr+"') `"+compStr+"` ";
 						break;
 					case EhrRestrictionType.Medication:
 						command+=",(SELECT COUNT(*) FROM medication,medicationpat WHERE medicationpat.PatNum=patient.PatNum AND medication.MedicationNum=medicationpat.MedicationNum AND medication.MedName LIKE '%"+compStr+"%') `"+compStr+"` ";
+						break;
+					case EhrRestrictionType.Gender:
+						command+=",patient.Gender ";
 						break;
 				}
 			}
@@ -46,6 +49,9 @@ namespace OpenDentBusiness {
 				if(elementList[i].OrderBy) {
 					if(elementList[i].Restriction==EhrRestrictionType.Birthdate) {
 						order="ORDER BY Birthdate"+GetOrderBy(isAsc);
+					}
+					else if(elementList[i].Restriction==EhrRestrictionType.Gender) {
+						order="ORDER BY Gender"+GetOrderBy(isAsc);
 					}
 					else {
 						order="ORDER BY `"+POut.String(elementList[i].CompareString)+"`"+GetOrderBy(isAsc);
@@ -93,13 +99,16 @@ namespace OpenDentBusiness {
 					filter="DATE_SUB(CURDATE(),INTERVAL "+compStr+" YEAR)"+GetOperandText(element.Operand)+"Birthdate ";
 					break;
 				case EhrRestrictionType.Disease:
-					filter=compStr+">0 ";//Count greater than 0 (has the disease)
+					filter="`"+compStr+"`"+" IS NOT NULL ";//Has the disease.
 					break;
 				case EhrRestrictionType.LabResult:
 					filter="`"+compStr+"`"+GetOperandText(element.Operand)+labStr+" ";
 					break;
 				case EhrRestrictionType.Medication:
-					filter="`"+compStr+"`"+">0 ";//Count greater than 0 (is taking the med)
+					filter="`"+compStr+"`"+">0 ";//Count greater than 0 (is taking the med).
+					break;
+				case EhrRestrictionType.Gender:
+					filter="Gender!='' ";
 					break;
 			}
 			return filter;
