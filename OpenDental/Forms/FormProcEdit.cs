@@ -3819,9 +3819,9 @@ namespace OpenDental{
 			try{
 				Procedures.Delete(ProcCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
 				Recalls.Synch(ProcCur.PatNum);//needs to be moved into Procedures.Delete
-				//TODO: Use new permission for procdelete.
-				SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,ProcCur.PatNum,
-					"Deleted: "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "+ProcCur.ProcFee.ToString("c"));
+				SecurityLogs.MakeLogEntry(Permissions.ProcDelete,ProcCur.PatNum,ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "+ProcCur.ProcFee.ToString("c"));
+				//SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,ProcCur.PatNum,
+				//  "Deleted: "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "+ProcCur.ProcFee.ToString("c"));
 				DialogResult=DialogResult.OK;
 				Plugins.HookAddCode(this,"FormProcEdit.butDelete_Click_end",ProcCur);
 			}

@@ -5812,7 +5812,7 @@ namespace OpenDental{
 					else{
 						try{
 							Procedures.Delete(PIn.Long(row["ProcNum"].ToString()));//also deletes the claimprocs
-							SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,PatCur.PatNum,"Delete for: "+PatCur.GetNameLF()+", "+row["ProcCode"].ToString()+", $"+row["procFee"].ToString());
+							SecurityLogs.MakeLogEntry(Permissions.ProcDelete,PatCur.PatNum,row["ProcCode"].ToString()+", "+PIn.Double(row["procFee"].ToString()).ToString("c"));
 						}
 						catch(Exception ex){
 							MessageBox.Show(ex.Message);
