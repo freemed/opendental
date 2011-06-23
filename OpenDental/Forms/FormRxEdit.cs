@@ -56,6 +56,8 @@ namespace OpenDental{
 		private TextBox textRxNorm;
 		///<summary>If the Rx has already been printed, this will contain the archived sheet. The print button will be not visible, and the view button will be visible.</summary>
 		private Sheet sheet;
+		///<summary>Used to prevent infinite loop of windows when called from FormRxSend.</summary>
+		public bool HideSendBut;
 
 		///<summary></summary>
 		public FormRxEdit(Patient patCur,RxPat rxPatCur){
@@ -506,6 +508,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRxEdit_Load(object sender, System.EventArgs e) {
+			if(HideSendBut) {
+				butSend.Visible=false;
+			}
 			if(IsNew){
 				butView.Visible=false;
 				labelView.Visible=false;

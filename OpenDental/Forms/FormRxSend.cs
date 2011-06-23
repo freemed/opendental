@@ -60,6 +60,7 @@ namespace OpenDental {
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			Patient patCur=Patients.GetLim(listRx[e.Row].PatNum);
 			FormRxEdit FormRE=new FormRxEdit(patCur,listRx[e.Row]);
+			FormRE.HideSendBut=true;
 			FormRE.ShowDialog();
 			FillGrid();
 		}
@@ -209,18 +210,7 @@ namespace OpenDental {
 			//Uncomment if you want to see the message text:
 			//MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strb.ToString());
 			//msgbox.ShowDialog();
-			SmtpClient client=new SmtpClient(PrefC.GetString(PrefName.EmailSMTPserver),PrefC.GetInt(PrefName.EmailPort));
-			client.Credentials=new NetworkCredential(PrefC.GetString(PrefName.EmailUsername),PrefC.GetString(PrefName.EmailPassword));
-			client.DeliveryMethod=SmtpDeliveryMethod.Network;
-			client.EnableSsl=PrefC.GetBool(PrefName.EmailUseSSL);
-			client.Timeout=180000;//Timeout of 3 minutes (in milliseconds).
-			MailMessage message=new MailMessage();
-			message.From=new MailAddress(PrefC.GetString(PrefName.EmailSenderAddress));
-			message.To.Add(PrefC.GetString(PrefName.EHREmailToAddress));
-			message.Subject="SCRIPT for NEWRX";
-			message.Body=strb.ToString();
-			message.IsBodyHtml=false;
-			client.Send(message);
+			EHR.EhrEmail.Send("10.6 SCRIPT for NEWRX","SCRIPT.txt",strb.ToString());
 			//Remove the Rx from the grid.
 			rx.SendStatus=RxSendStatus.SentElect;
 			RxPats.Update(rx);
