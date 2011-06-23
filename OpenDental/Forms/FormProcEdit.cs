@@ -3819,6 +3819,7 @@ namespace OpenDental{
 			try{
 				Procedures.Delete(ProcCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
 				Recalls.Synch(ProcCur.PatNum);//needs to be moved into Procedures.Delete
+				//TODO: Use new permission for procdelete.
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,ProcCur.PatNum,
 					"Deleted: "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "+ProcCur.ProcFee.ToString("c"));
 				DialogResult=DialogResult.OK;

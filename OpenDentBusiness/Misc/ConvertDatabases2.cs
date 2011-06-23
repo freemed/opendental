@@ -5669,7 +5669,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX ehrsummaryccd_PatNum ON ehrsummaryccd (PatNum)";
 					Db.NonQ(command);
 				}
-
+				//Add ProcDelete permission to all who had ProcComplEdit------------------------------------------------------
+				command="SELECT UserGroupNum FROM usergroup WHERE UserGroupNum IN (SELECT UserGroupNum FROM grouppermission WHERE PermType=10)";
+				DataTable table=Db.GetTable(command);
+				long groupNum;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
+						command="INSERT INTO grouppermission (NewerDays,UserGroupNum,PermType) "
+							+"VALUES(0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcDelete)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcDelete)+")";
+						Db.NonQ32(command);
+					}
+				}
 
 
 

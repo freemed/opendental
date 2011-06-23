@@ -1085,7 +1085,9 @@ namespace OpenDentBusiness{
 		///<summary>47</summary>
 		AdjustmentEditZero,
 		///<summary>48</summary>
-		EhrEmergencyAccess
+		EhrEmergencyAccess,
+		///<summary>49</summary>
+		ProcDelete
 	}
 
 	///<summary>The type of signal being sent.</summary>
