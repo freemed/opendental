@@ -675,6 +675,7 @@
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
+    <Compile Include="TableTypes\EhrSummaryCcd.cs" />
     <Compile Include="TableTypes\EhrProvKey.cs" />
     <Compile Include="TableTypes\DrugManufacturer.cs" />
     <Compile Include="TableTypes\DrugUnit.cs" />
