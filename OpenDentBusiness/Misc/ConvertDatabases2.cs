@@ -5635,7 +5635,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE rxpat ADD DosageCode varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE insplan ADD RxBIN varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE insplan ADD RxBIN varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5670,6 +5677,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
 
 				
 

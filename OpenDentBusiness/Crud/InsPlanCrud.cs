@@ -72,6 +72,7 @@ namespace OpenDentBusiness.Crud{
 				insPlan.CanadianPlanFlag       = PIn.String(table.Rows[i]["CanadianPlanFlag"].ToString());
 				insPlan.CanadianDiagnosticCode = PIn.String(table.Rows[i]["CanadianDiagnosticCode"].ToString());
 				insPlan.CanadianInstitutionCode= PIn.String(table.Rows[i]["CanadianInstitutionCode"].ToString());
+				insPlan.RxBIN                  = PIn.String(table.Rows[i]["RxBIN"].ToString());
 				retVal.Add(insPlan);
 			}
 			return retVal;
@@ -112,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PlanNum,";
 			}
-			command+="GroupName,GroupNum,PlanNote,FeeSched,PlanType,ClaimFormNum,UseAltCode,ClaimsUseUCR,CopayFeeSched,EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,IsMedical,FilingCode,DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype,CanadianPlanFlag,CanadianDiagnosticCode,CanadianInstitutionCode) VALUES(";
+			command+="GroupName,GroupNum,PlanNote,FeeSched,PlanType,ClaimFormNum,UseAltCode,ClaimsUseUCR,CopayFeeSched,EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,IsMedical,FilingCode,DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype,CanadianPlanFlag,CanadianDiagnosticCode,CanadianInstitutionCode,RxBIN) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(insPlan.PlanNum)+",";
 			}
@@ -141,7 +142,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (insPlan.FilingCodeSubtype)+","
 				+"'"+POut.String(insPlan.CanadianPlanFlag)+"',"
 				+"'"+POut.String(insPlan.CanadianDiagnosticCode)+"',"
-				+"'"+POut.String(insPlan.CanadianInstitutionCode)+"')";
+				+"'"+POut.String(insPlan.CanadianInstitutionCode)+"',"
+				+"'"+POut.String(insPlan.RxBIN)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -178,7 +180,8 @@ namespace OpenDentBusiness.Crud{
 				+"FilingCodeSubtype      =  "+POut.Long  (insPlan.FilingCodeSubtype)+", "
 				+"CanadianPlanFlag       = '"+POut.String(insPlan.CanadianPlanFlag)+"', "
 				+"CanadianDiagnosticCode = '"+POut.String(insPlan.CanadianDiagnosticCode)+"', "
-				+"CanadianInstitutionCode= '"+POut.String(insPlan.CanadianInstitutionCode)+"' "
+				+"CanadianInstitutionCode= '"+POut.String(insPlan.CanadianInstitutionCode)+"', "
+				+"RxBIN                  = '"+POut.String(insPlan.RxBIN)+"' "
 				+"WHERE PlanNum = "+POut.Long(insPlan.PlanNum);
 			Db.NonQ(command);
 		}
@@ -285,6 +288,10 @@ namespace OpenDentBusiness.Crud{
 			if(insPlan.CanadianInstitutionCode != oldInsPlan.CanadianInstitutionCode) {
 				if(command!=""){ command+=",";}
 				command+="CanadianInstitutionCode = '"+POut.String(insPlan.CanadianInstitutionCode)+"'";
+			}
+			if(insPlan.RxBIN != oldInsPlan.RxBIN) {
+				if(command!=""){ command+=",";}
+				command+="RxBIN = '"+POut.String(insPlan.RxBIN)+"'";
 			}
 			if(command==""){
 				return;

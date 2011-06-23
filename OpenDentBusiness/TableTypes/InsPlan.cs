@@ -59,6 +59,8 @@ namespace OpenDentBusiness{
 		public string CanadianDiagnosticCode;
 		///<summary>Canadian C40. Required when CanadianPlanFlag is 'A'.</summary>
 		public string CanadianInstitutionCode;
+		///<summary>BIN location number.  Only used with EHR.</summary>
+		public string RxBIN;
 		
 
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>

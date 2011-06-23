@@ -33,6 +33,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddMedication;
 		private CheckBox checkControlled;
 		private UI.Button butAddAllergy;
+		private Label labelRxNorm;
+		private UI.Button butRxNormSelect;
+		private TextBox textRxCui;
 		private List<RxAlert> RxAlertList;
 
 		///<summary>Must have already saved it to db so that we have a RxDefNum to work with.</summary>
@@ -76,11 +79,14 @@ namespace OpenDental{
 			this.butAddMedication = new OpenDental.UI.Button();
 			this.checkControlled = new System.Windows.Forms.CheckBox();
 			this.butAddAllergy = new OpenDental.UI.Button();
+			this.labelRxNorm = new System.Windows.Forms.Label();
+			this.butRxNormSelect = new OpenDental.UI.Button();
+			this.textRxCui = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(52,20);
+			this.label1.Location = new System.Drawing.Point(52,26);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(82,14);
 			this.label1.TabIndex = 0;
@@ -89,7 +95,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(20,196);
+			this.label3.Location = new System.Drawing.Point(20,203);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(114,37);
 			this.label3.TabIndex = 2;
@@ -98,7 +104,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(46,162);
+			this.label4.Location = new System.Drawing.Point(46,150);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(88,14);
 			this.label4.TabIndex = 3;
@@ -107,7 +113,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(46,128);
+			this.label5.Location = new System.Drawing.Point(46,124);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(88,14);
 			this.label5.TabIndex = 4;
@@ -116,7 +122,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(56,72);
+			this.label6.Location = new System.Drawing.Point(56,74);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(78,14);
 			this.label6.TabIndex = 5;
@@ -125,7 +131,7 @@ namespace OpenDental{
 			// 
 			// textDrug
 			// 
-			this.textDrug.Location = new System.Drawing.Point(134,18);
+			this.textDrug.Location = new System.Drawing.Point(134,24);
 			this.textDrug.Name = "textDrug";
 			this.textDrug.Size = new System.Drawing.Size(254,20);
 			this.textDrug.TabIndex = 0;
@@ -133,7 +139,7 @@ namespace OpenDental{
 			// textNotes
 			// 
 			this.textNotes.AcceptsReturn = true;
-			this.textNotes.Location = new System.Drawing.Point(134,192);
+			this.textNotes.Location = new System.Drawing.Point(134,199);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.Size = new System.Drawing.Size(386,92);
@@ -141,22 +147,22 @@ namespace OpenDental{
 			// 
 			// textRefills
 			// 
-			this.textRefills.Location = new System.Drawing.Point(134,158);
+			this.textRefills.Location = new System.Drawing.Point(134,146);
 			this.textRefills.Name = "textRefills";
 			this.textRefills.Size = new System.Drawing.Size(114,20);
 			this.textRefills.TabIndex = 3;
 			// 
 			// textDisp
 			// 
-			this.textDisp.Location = new System.Drawing.Point(134,124);
+			this.textDisp.Location = new System.Drawing.Point(134,120);
 			this.textDisp.Name = "textDisp";
-			this.textDisp.Size = new System.Drawing.Size(112,20);
+			this.textDisp.Size = new System.Drawing.Size(114,20);
 			this.textDisp.TabIndex = 2;
 			// 
 			// textSig
 			// 
 			this.textSig.AcceptsReturn = true;
-			this.textSig.Location = new System.Drawing.Point(134,68);
+			this.textSig.Location = new System.Drawing.Point(134,70);
 			this.textSig.Multiline = true;
 			this.textSig.Name = "textSig";
 			this.textSig.Size = new System.Drawing.Size(254,44);
@@ -195,7 +201,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(50,298);
+			this.label2.Location = new System.Drawing.Point(50,305);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(84,14);
 			this.label2.TabIndex = 7;
@@ -205,7 +211,7 @@ namespace OpenDental{
 			// listAlerts
 			// 
 			this.listAlerts.FormattingEnabled = true;
-			this.listAlerts.Location = new System.Drawing.Point(134,297);
+			this.listAlerts.Location = new System.Drawing.Point(134,304);
 			this.listAlerts.Name = "listAlerts";
 			this.listAlerts.Size = new System.Drawing.Size(120,95);
 			this.listAlerts.TabIndex = 8;
@@ -220,7 +226,7 @@ namespace OpenDental{
 			this.butAddProblem.CornerRadius = 4F;
 			this.butAddProblem.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddProblem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddProblem.Location = new System.Drawing.Point(260,297);
+			this.butAddProblem.Location = new System.Drawing.Point(260,304);
 			this.butAddProblem.Name = "butAddProblem";
 			this.butAddProblem.Size = new System.Drawing.Size(117,24);
 			this.butAddProblem.TabIndex = 9;
@@ -263,7 +269,7 @@ namespace OpenDental{
 			this.butAddMedication.CornerRadius = 4F;
 			this.butAddMedication.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddMedication.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddMedication.Location = new System.Drawing.Point(260,332);
+			this.butAddMedication.Location = new System.Drawing.Point(260,339);
 			this.butAddMedication.Name = "butAddMedication";
 			this.butAddMedication.Size = new System.Drawing.Size(117,24);
 			this.butAddMedication.TabIndex = 18;
@@ -273,7 +279,7 @@ namespace OpenDental{
 			// checkControlled
 			// 
 			this.checkControlled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkControlled.Location = new System.Drawing.Point(3,44);
+			this.checkControlled.Location = new System.Drawing.Point(3,47);
 			this.checkControlled.Name = "checkControlled";
 			this.checkControlled.Size = new System.Drawing.Size(145,20);
 			this.checkControlled.TabIndex = 19;
@@ -291,12 +297,43 @@ namespace OpenDental{
 			this.butAddAllergy.CornerRadius = 4F;
 			this.butAddAllergy.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddAllergy.Location = new System.Drawing.Point(260,368);
+			this.butAddAllergy.Location = new System.Drawing.Point(260,375);
 			this.butAddAllergy.Name = "butAddAllergy";
 			this.butAddAllergy.Size = new System.Drawing.Size(117,24);
 			this.butAddAllergy.TabIndex = 20;
 			this.butAddAllergy.Text = "Add Allergy";
 			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
+			// 
+			// labelRxNorm
+			// 
+			this.labelRxNorm.Location = new System.Drawing.Point(46,176);
+			this.labelRxNorm.Name = "labelRxNorm";
+			this.labelRxNorm.Size = new System.Drawing.Size(88,14);
+			this.labelRxNorm.TabIndex = 21;
+			this.labelRxNorm.Text = "RxNorm";
+			this.labelRxNorm.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butRxNormSelect
+			// 
+			this.butRxNormSelect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRxNormSelect.Autosize = true;
+			this.butRxNormSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRxNormSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRxNormSelect.CornerRadius = 4F;
+			this.butRxNormSelect.Location = new System.Drawing.Point(254,172);
+			this.butRxNormSelect.Name = "butRxNormSelect";
+			this.butRxNormSelect.Size = new System.Drawing.Size(22,22);
+			this.butRxNormSelect.TabIndex = 260;
+			this.butRxNormSelect.Text = "...";
+			this.butRxNormSelect.Click += new System.EventHandler(this.butRxNormSelect_Click);
+			// 
+			// textRxCui
+			// 
+			this.textRxCui.Location = new System.Drawing.Point(134,173);
+			this.textRxCui.Name = "textRxCui";
+			this.textRxCui.ReadOnly = true;
+			this.textRxCui.Size = new System.Drawing.Size(114,20);
+			this.textRxCui.TabIndex = 261;
 			// 
 			// FormRxDefEdit
 			// 
@@ -304,6 +341,9 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(634,496);
+			this.Controls.Add(this.textRxCui);
+			this.Controls.Add(this.butRxNormSelect);
+			this.Controls.Add(this.labelRxNorm);
 			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.checkControlled);
 			this.Controls.Add(this.butAddMedication);
@@ -344,6 +384,7 @@ namespace OpenDental{
 			textSig.Text=RxDefCur.Sig;
 			textDisp.Text=RxDefCur.Disp;
 			textRefills.Text=RxDefCur.Refills;
+			textRxCui.Text=RxDefCur.RxCui.ToString();
 			textNotes.Text=RxDefCur.Notes;
 			checkControlled.Checked=RxDefCur.IsControlled;
 			FillAlerts();
@@ -417,6 +458,16 @@ namespace OpenDental{
 			FillAlerts();
 		}
 
+		private void butRxNormSelect_Click(object sender,EventArgs e) {
+			FormRxNorms FormRN=new FormRxNorms();
+			FormRN.ShowDialog();
+			if(FormRN.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			RxDefCur.RxCui=PIn.Long(FormRN.SelectedRxNorm.RxCui);
+			textRxCui.Text=RxDefCur.RxCui.ToString();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,true,"Delete this prescription template?")){
 				return;
@@ -426,6 +477,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			//RxCui was set when butRxNormSelect was clicked.
 			RxDefCur.Drug=textDrug.Text;
 			RxDefCur.Sig=textSig.Text;
 			RxDefCur.Disp=textDisp.Text;

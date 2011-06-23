@@ -121,7 +121,6 @@ namespace OpenDental {
 			InsSub sub=InsSubs.GetOne(patPlan.InsSubNum);
 			InsPlan plan=InsPlans.GetPlan(sub.PlanNum,planList);
 			Carrier car=Carriers.GetCarrier(plan.CarrierNum);
-			string insBINLocNum=GetInsBINLocationNum(car);
 			DateTime msgTimeSent=DateTime.Now;
 			//Hardcoded values should never change. Ex:Message type, version, release should always be SCRIPT:010:006
 			//Hardcoded values allowed to change until released version.
@@ -141,7 +140,7 @@ namespace OpenDental {
 			strb.Append("UIH"+e);//000
 			strb.Append("SCRIPT"+f+"010"+f+"006"+f+"NEWRX"+e);//010 Message type:version:release:function.
 			//Clinic's reference number for message. Usually this is the folio number for the patient. However, this is the ID by which the clinic will be able to refer to this prescription.
-			strb.Append(Sout(POut.Long(rx.RxNum))+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
+			strb.Append(Sout(rx.RxNum.ToString())+e);//020 Message reference number (Must match number in UIT segment below, must be unique. Recommend using rx num) 
 			strb.Append(e);//030 conditional Dialogue Reference
 			strb.Append(e);//040 not used
 			strb.Append(Sout(msgTimeSent.ToString("yyyyMMdd"))+f+Sout(msgTimeSent.ToString("HHmmss"))+s);//050 Date of initiation
@@ -176,7 +175,7 @@ namespace OpenDental {
 			strb.Append(Sout(pat.SSN.Replace("-",""))+f+"SY"+s);//050 Patient ID and/or SSN and qualifier
 			//COO+123456:BO+INSURANCE COMPANY NAME++123456789++AA112'--------------------------------------------------
 			strb.Append("COO"+e);//000
-			strb.Append(Sout(insBINLocNum)+f+"BO"+e);//010 Payer ID Information and qualifier (Primary Payer's identification number? BO is for BIN Location Number.)
+			strb.Append(Sout(plan.RxBIN)+f+"BO"+e);//010 Payer ID Information and qualifier (Primary Payer's identification number? BO is for BIN Location Number.)
 			strb.Append(Sout(car.CarrierName)+e);//020 Payer name
 			strb.Append(e);//030 conditional Service type, coded
 			strb.Append(Sout(sub.SubscriberID)+e);//040 Cardholder ID
@@ -190,9 +189,9 @@ namespace OpenDental {
 			//AB is the Source for NCI Units of Presentation. C28253 is the code for “Milligram”. So this means the prescription is for 240mg tablets.
 			//There's AA, AB and AC - AC is Potency Unit
 			//The definitions for C42998 and C28253 and be found @ http://nciterms.nci.nih.gov/ncitbrowser/pages/vocabulary.jsf?dictionary=NCI_Thesaurus
-			strb.Append("P"+f+Sout(rx.Drug)+f+f+f+f+f+f+GetRxCui(rx.Drug)+f+"SBD"+e);//f+f+f+f+"AA"+f+"C42998"+f+"AB"+f+"C28253"+e);//010 Item Description Identification
+			strb.Append("P"+f+Sout(rx.Drug)+f+f+f+f+f+f+Sout(rx.RxCui.ToString())+f+"SBD"+e);//f+f+f+f+"AA"+f+"C42998"+f+"AB"+f+"C28253"+e);//010 Item Description Identification
 			//This means dispense 60 tablets. 38 is the code value for Original Qty. AC is the Source for NCI Potency Units. C48542 is the code for “Tablet dosing unit”.
-			strb.Append(f+f+Sout(rx.Disp)+f+f+"AA"+f+GetDosageCode(rx.Drug)+e);//020 Quantity
+			strb.Append(f+f+Sout(rx.Disp)+f+f+"AA"+f+Sout(rx.DosageCode)+e);//020 Quantity
 			strb.Append(f+Sout(rx.Sig)+e);//030 Directions
 			//85 qualifier for Date Issued (Written date) 102 is qualifier for CCYYMMDD format.
 			//ZDS is the qualifier for Days Supply. 30 is the number of days supply. 804 is the qualifier for Quantity of Days. 
@@ -201,7 +200,7 @@ namespace OpenDental {
 			strb.Append("R"+f+Sout(rx.Refills)+s);//060 Refill and quantity
 			//UIT+110072+6'---------------------------------------------------------------------------------------------
 			strb.Append("UIT"+e);//000
-			strb.Append(Sout(POut.Long(rx.RxNum))+e);//010 Message reference number
+			strb.Append(Sout(rx.RxNum.ToString())+e);//010 Message reference number
 			strb.Append("5"+s);//020 Mandatory field. This is the count of the number of segments in the message including the UIH and UIT
 			//UIZ++1'---------------------------------------------------------------------------------------------------
 			strb.Append("UIZ"+e);//000
@@ -226,71 +225,6 @@ namespace OpenDental {
 			rx.SendStatus=RxSendStatus.SentElect;
 			RxPats.Update(rx);
 			FillGrid();//Refresh the screen so that sent Rx's look to have been sent.
-		}
-
-		///<summary>Get RxCui based on description of drug.</summary>
-		private string GetRxCui(string desc) {
-			switch(desc.Substring(0,5)) {
-				case "Hydro":
-					return "207940";
-				case "Catap":
-					return "884175";
-				case "Cardu":
-					return "104369";
-				case "Capot":
-					return "201372";
-				case "Aldac":
-					return "200820";
-				case "Lanox":
-					return "309888";
-				case "Azith":
-					return "226827";
-				case "Atrov":
-					return "836368";
-				case "ProAi":
-					return "745752";
-				case "Lipit":
-					return "617314";
-				case "Lasix":
-					return "200801";
-				case "Klor-":
-					return "628956";
-				case "Colac":
-					return "209834";
-				case "Zestr":
-					return "213482";
-				case "Norva":
-					return "212549";
-				case "Macro":
-					return "539712";
-			}
-			return "";//Should never happen during test.
-		}
-
-		///<summary>Get the dosage code.</summary>
-		private string GetDosageCode(string desc) {
-			switch(desc.Substring(0,5)) {
-				case "Colac":
-				case "Macro":
-					return "C25158";//Capsule Dosage Form
-				case "Klor-":
-					return "C48512";//Milliequivalent 
-				case "Atrov":
-				case "ProAi":
-					return "C43181";//Canister Dosage Form
-				default:
-					return "C42998";//Tablet Dosage Form
-			}
-		}
-
-		///<summary></summary>
-		private string GetInsBINLocationNum(Carrier carrier) {
-			//Create a couple BINs for insurances
-			string insBIN="452316";
-			if(carrier.CarrierName=="Carrier2") {
-				insBIN="312645";
-			}
-			return Sout(insBIN);
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

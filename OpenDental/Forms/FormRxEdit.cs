@@ -49,6 +49,11 @@ namespace OpenDental{
 		private UI.Button butSend;
 		private Label label9;
 		private ComboBox comboSendStatus;
+		private Label labelRxNorm;
+		private TextBox textDosageCode;
+		private Label labelDosageCode;
+		private UI.Button butRxNormSelect;
+		private TextBox textRxNorm;
 		///<summary>If the Rx has already been printed, this will contain the archived sheet. The print button will be not visible, and the view button will be visible.</summary>
 		private Sheet sheet;
 
@@ -106,6 +111,11 @@ namespace OpenDental{
 			this.butSend = new OpenDental.UI.Button();
 			this.label9 = new System.Windows.Forms.Label();
 			this.comboSendStatus = new System.Windows.Forms.ComboBox();
+			this.labelRxNorm = new System.Windows.Forms.Label();
+			this.textDosageCode = new System.Windows.Forms.TextBox();
+			this.labelDosageCode = new System.Windows.Forms.Label();
+			this.butRxNormSelect = new OpenDental.UI.Button();
+			this.textRxNorm = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -142,7 +152,7 @@ namespace OpenDental{
 			// textSig
 			// 
 			this.textSig.AcceptsReturn = true;
-			this.textSig.Location = new System.Drawing.Point(138,90);
+			this.textSig.Location = new System.Drawing.Point(138,83);
 			this.textSig.Multiline = true;
 			this.textSig.Name = "textSig";
 			this.textSig.Size = new System.Drawing.Size(254,44);
@@ -150,28 +160,28 @@ namespace OpenDental{
 			// 
 			// textDisp
 			// 
-			this.textDisp.Location = new System.Drawing.Point(138,139);
+			this.textDisp.Location = new System.Drawing.Point(138,132);
 			this.textDisp.Name = "textDisp";
-			this.textDisp.Size = new System.Drawing.Size(112,20);
+			this.textDisp.Size = new System.Drawing.Size(114,20);
 			this.textDisp.TabIndex = 3;
 			// 
 			// textRefills
 			// 
-			this.textRefills.Location = new System.Drawing.Point(138,164);
+			this.textRefills.Location = new System.Drawing.Point(138,156);
 			this.textRefills.Name = "textRefills";
 			this.textRefills.Size = new System.Drawing.Size(114,20);
 			this.textRefills.TabIndex = 4;
 			// 
 			// textDrug
 			// 
-			this.textDrug.Location = new System.Drawing.Point(138,65);
+			this.textDrug.Location = new System.Drawing.Point(138,58);
 			this.textDrug.Name = "textDrug";
 			this.textDrug.Size = new System.Drawing.Size(254,20);
 			this.textDrug.TabIndex = 1;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(49,94);
+			this.label6.Location = new System.Drawing.Point(49,87);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(89,14);
 			this.label6.TabIndex = 17;
@@ -180,7 +190,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(39,143);
+			this.label5.Location = new System.Drawing.Point(39,136);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(99,14);
 			this.label5.TabIndex = 16;
@@ -189,7 +199,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(39,168);
+			this.label4.Location = new System.Drawing.Point(39,160);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(99,14);
 			this.label4.TabIndex = 15;
@@ -198,7 +208,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(31,190);
+			this.label3.Location = new System.Drawing.Point(31,205);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(107,36);
 			this.label3.TabIndex = 14;
@@ -207,7 +217,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(45,67);
+			this.label1.Location = new System.Drawing.Point(45,60);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(93,14);
 			this.label1.TabIndex = 13;
@@ -216,7 +226,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(34,20);
+			this.label2.Location = new System.Drawing.Point(34,15);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(105,14);
 			this.label2.TabIndex = 25;
@@ -225,7 +235,7 @@ namespace OpenDental{
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(138,16);
+			this.textDate.Location = new System.Drawing.Point(138,11);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(100,20);
 			this.textDate.TabIndex = 0;
@@ -282,7 +292,7 @@ namespace OpenDental{
 			// textNotes
 			// 
 			this.textNotes.AcceptsReturn = true;
-			this.textNotes.Location = new System.Drawing.Point(138,189);
+			this.textNotes.Location = new System.Drawing.Point(138,204);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.Rx;
@@ -292,7 +302,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(39,307);
+			this.label8.Location = new System.Drawing.Point(39,322);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(99,14);
 			this.label8.TabIndex = 32;
@@ -306,7 +316,7 @@ namespace OpenDental{
 			this.butPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPick.CornerRadius = 4F;
-			this.butPick.Location = new System.Drawing.Point(338,302);
+			this.butPick.Location = new System.Drawing.Point(338,317);
 			this.butPick.Name = "butPick";
 			this.butPick.Size = new System.Drawing.Size(58,23);
 			this.butPick.TabIndex = 65;
@@ -317,7 +327,7 @@ namespace OpenDental{
 			// textPharmacy
 			// 
 			this.textPharmacy.AcceptsReturn = true;
-			this.textPharmacy.Location = new System.Drawing.Point(138,304);
+			this.textPharmacy.Location = new System.Drawing.Point(138,319);
 			this.textPharmacy.Name = "textPharmacy";
 			this.textPharmacy.ReadOnly = true;
 			this.textPharmacy.Size = new System.Drawing.Size(198,20);
@@ -326,7 +336,7 @@ namespace OpenDental{
 			// checkControlled
 			// 
 			this.checkControlled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkControlled.Location = new System.Drawing.Point(7,41);
+			this.checkControlled.Location = new System.Drawing.Point(7,35);
 			this.checkControlled.Name = "checkControlled";
 			this.checkControlled.Size = new System.Drawing.Size(145,20);
 			this.checkControlled.TabIndex = 66;
@@ -353,6 +363,7 @@ namespace OpenDental{
 			// 
 			// labelView
 			// 
+			this.labelView.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.labelView.Location = new System.Drawing.Point(462,439);
 			this.labelView.Name = "labelView";
 			this.labelView.Size = new System.Drawing.Size(199,14);
@@ -377,7 +388,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(39,330);
+			this.label9.Location = new System.Drawing.Point(39,345);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(99,14);
 			this.label9.TabIndex = 250;
@@ -388,10 +399,59 @@ namespace OpenDental{
 			// 
 			this.comboSendStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboSendStatus.FormattingEnabled = true;
-			this.comboSendStatus.Location = new System.Drawing.Point(138,327);
+			this.comboSendStatus.Location = new System.Drawing.Point(138,342);
 			this.comboSendStatus.Name = "comboSendStatus";
 			this.comboSendStatus.Size = new System.Drawing.Size(198,21);
 			this.comboSendStatus.TabIndex = 251;
+			// 
+			// labelRxNorm
+			// 
+			this.labelRxNorm.Location = new System.Drawing.Point(12,184);
+			this.labelRxNorm.Name = "labelRxNorm";
+			this.labelRxNorm.Size = new System.Drawing.Size(126,14);
+			this.labelRxNorm.TabIndex = 253;
+			this.labelRxNorm.Text = "RxNorm";
+			this.labelRxNorm.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textDosageCode
+			// 
+			this.textDosageCode.Location = new System.Drawing.Point(377,180);
+			this.textDosageCode.Name = "textDosageCode";
+			this.textDosageCode.Size = new System.Drawing.Size(114,20);
+			this.textDosageCode.TabIndex = 256;
+			this.textDosageCode.Visible = false;
+			// 
+			// labelDosageCode
+			// 
+			this.labelDosageCode.Location = new System.Drawing.Point(283,184);
+			this.labelDosageCode.Name = "labelDosageCode";
+			this.labelDosageCode.Size = new System.Drawing.Size(94,14);
+			this.labelDosageCode.TabIndex = 257;
+			this.labelDosageCode.Text = "Dosage Code";
+			this.labelDosageCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelDosageCode.Visible = false;
+			// 
+			// butRxNormSelect
+			// 
+			this.butRxNormSelect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRxNormSelect.Autosize = true;
+			this.butRxNormSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRxNormSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRxNormSelect.CornerRadius = 4F;
+			this.butRxNormSelect.Location = new System.Drawing.Point(255,179);
+			this.butRxNormSelect.Name = "butRxNormSelect";
+			this.butRxNormSelect.Size = new System.Drawing.Size(22,22);
+			this.butRxNormSelect.TabIndex = 259;
+			this.butRxNormSelect.Text = "...";
+			this.butRxNormSelect.Click += new System.EventHandler(this.butRxNormSelect_Click);
+			// 
+			// textRxNorm
+			// 
+			this.textRxNorm.Location = new System.Drawing.Point(138,180);
+			this.textRxNorm.Name = "textRxNorm";
+			this.textRxNorm.ReadOnly = true;
+			this.textRxNorm.Size = new System.Drawing.Size(113,20);
+			this.textRxNorm.TabIndex = 260;
 			// 
 			// FormRxEdit
 			// 
@@ -399,6 +459,11 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,460);
+			this.Controls.Add(this.textRxNorm);
+			this.Controls.Add(this.butRxNormSelect);
+			this.Controls.Add(this.textDosageCode);
+			this.Controls.Add(this.labelDosageCode);
+			this.Controls.Add(this.labelRxNorm);
 			this.Controls.Add(this.comboSendStatus);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.butSend);
@@ -476,6 +541,12 @@ namespace OpenDental{
 			textSig.Text=RxPatCur.Sig;
 			textDisp.Text=RxPatCur.Disp;
 			textRefills.Text=RxPatCur.Refills;
+			textRxNorm.Text=RxPatCur.RxCui.ToString();
+			if(FormOpenDental.FormEHR!=null) {
+				labelDosageCode.Visible=true;
+				textDosageCode.Visible=true;
+				textDosageCode.Text=RxPatCur.DosageCode;
+			}
 			textNotes.Text=RxPatCur.Notes;
 			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);
 		}
@@ -494,7 +565,7 @@ namespace OpenDental{
 
 		private bool SaveRx(){
 			if(  textDate.errorProvider1.GetError(textDate)!=""
-				//|| textAmount.errorProvider1.GetError(textAmount)!=""
+				//|| textRxNorm.errorProvider1.GetError(textRxNorm)!=""
 				){
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return false;
@@ -502,12 +573,14 @@ namespace OpenDental{
 			if(listProv.SelectedIndex!=-1){
 				RxPatCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
 			}
+			//RxCui was set when butRxNormSelect was clicked.
 			RxPatCur.RxDate=PIn.Date(textDate.Text);
 			RxPatCur.Drug=textDrug.Text;
 			RxPatCur.IsControlled=checkControlled.Checked;
 			RxPatCur.Sig=textSig.Text;
 			RxPatCur.Disp=textDisp.Text;
 			RxPatCur.Refills=textRefills.Text;
+			RxPatCur.DosageCode=textDosageCode.Text;
 			RxPatCur.Notes=textNotes.Text;
 			RxPatCur.SendStatus=(RxSendStatus)comboSendStatus.SelectedIndex;
 			//pharmacy is set when using pick button.
@@ -524,6 +597,16 @@ namespace OpenDental{
 			}
 			IsNew=false;//so that we can save it again after printing if needed.
 			return true;
+		}
+
+		private void butRxNormSelect_Click(object sender,EventArgs e) {
+			FormRxNorms FormRN=new FormRxNorms();
+			FormRN.ShowDialog();
+			if(FormRN.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			RxPatCur.RxCui=PIn.Long(FormRN.SelectedRxNorm.RxCui);
+			textRxNorm.Text=RxPatCur.RxCui.ToString();
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {

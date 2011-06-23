@@ -7,7 +7,7 @@ namespace OpenDentBusiness {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long RxNormNum;
-		///<summary>RxNorm Concept universal ID.</summary>
+		///<summary>RxNorm Concept universal ID.  Throughout the program, this is actually used as the Primary Key of this table rather than the RxNormNum.</summary>
 		public string RxCui;
 		///<summary>Multum code.  Only used for import/export with electronic Rx program.  User cannot see multum codes.</summary>
 		public string MmslCode;
