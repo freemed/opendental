@@ -5643,6 +5643,32 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE insplan ADD RxBIN varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrsummaryccd";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrsummaryccd (
+						EhrSummaryCcdNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						DateSummary date NOT NULL DEFAULT '0001-01-01',
+						ContentSummary text NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrsummaryccd'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrsummaryccd (
+						EhrSummaryCcdNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						DateSummary date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						ContentSummary clob,
+						CONSTRAINT ehrsummaryccd_EhrSummaryCcdNum PRIMARY KEY (EhrSummaryCcdNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrsummaryccd_PatNum ON ehrsummaryccd (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -5676,10 +5702,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-
-				
-
-				
-
-				
