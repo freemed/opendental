@@ -191,7 +191,7 @@ namespace OpenDental {
 			//The definitions for C42998 and C28253 and be found @ http://nciterms.nci.nih.gov/ncitbrowser/pages/vocabulary.jsf?dictionary=NCI_Thesaurus
 			strb.Append("P"+f+Sout(rx.Drug)+f+f+f+f+f+f+Sout(rx.RxCui.ToString())+f+"SBD"+e);//f+f+f+f+"AA"+f+"C42998"+f+"AB"+f+"C28253"+e);//010 Item Description Identification
 			//This means dispense 60 tablets. 38 is the code value for Original Qty. AC is the Source for NCI Potency Units. C48542 is the code for “Tablet dosing unit”.
-			strb.Append(f+f+Sout(rx.Disp)+f+f+"AA"+f+Sout(rx.DosageCode)+e);//020 Quantity
+			strb.Append(""+f+f+Sout(rx.Disp)+f+f+"AA"+f+Sout(rx.DosageCode)+e);//020 Quantity
 			strb.Append(f+Sout(rx.Sig)+e);//030 Directions
 			//85 qualifier for Date Issued (Written date) 102 is qualifier for CCYYMMDD format.
 			//ZDS is the qualifier for Days Supply. 30 is the number of days supply. 804 is the qualifier for Quantity of Days. 
