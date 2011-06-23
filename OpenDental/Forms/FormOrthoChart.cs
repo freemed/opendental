@@ -10,12 +10,11 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormOrthoChart:Form {
-		private List<DisplayField> listDisplayFields;
+		private PatField[] listPatientFields;
+		private List<DisplayField> listOrthDisplayFields;
 		private List<OrthoChart> listOrthoCharts;
 		public Patient PatCur;
-		//<summary>Usually only 1 item in this list: today's date.</summary>
-		//private List<DateTime> listDatesAdditional;
-		//<summary>Each row in this table has a date as the first cell.  There will be additional rows that are not yet in the db.  Each blank cell will be an empty string.  It will also store changes made by the user prior to closing the form.  When the form is closed, this table will be compared with the original listOrthoCharts and a synch process will take place to save to db.  An empty string in a cell will result in no db row or a deletion of existing db row.</summary>
+		///<summary>Each row in this table has a date as the first cell.  There will be additional rows that are not yet in the db.  Each blank cell will be an empty string.  It will also store changes made by the user prior to closing the form.  When the form is closed, this table will be compared with the original listOrthoCharts and a synch process will take place to save to db.  An empty string in a cell will result in no db row or a deletion of existing db row.</summary>
 		DataTable table;
 
 		public FormOrthoChart(Patient patCur) {
@@ -29,16 +28,16 @@ namespace OpenDental {
 			table=new DataTable("OrthoChartForPatient");
 			//define columns----------------------------------------------------------------------------------------------------------
 			table.Columns.Add("Date",typeof(DateTime));
-			listDisplayFields = DisplayFields.GetForCategory(DisplayFieldCategory.OrthoChart);
-			for(int i=0;i<listDisplayFields.Count;i++) {
+			listOrthDisplayFields = DisplayFields.GetForCategory(DisplayFieldCategory.OrthoChart);
+			for(int i=0;i<listOrthDisplayFields.Count;i++) {
 				table.Columns.Add((i+1).ToString());//named by number, but probably refer to by index
 			}
 			//define rows------------------------------------------------------------------------------------------------------------
 			listOrthoCharts=OrthoCharts.GetAllForPatient(PatCur.PatNum);
 			List<DateTime> datesShowing=new List<DateTime>();
 			List<string> listDisplayFieldNames=new List<string>();
-			for(int i=0;i<listDisplayFields.Count;i++) {//fill listDisplayFieldNames to be used in comparison
-				listDisplayFieldNames.Add(listDisplayFields[i].Description);
+			for(int i=0;i<listOrthDisplayFields.Count;i++) {//fill listDisplayFieldNames to be used in comparison
+				listDisplayFieldNames.Add(listOrthDisplayFields[i].Description);
 			}
 			//start adding dates starting with today's date
 			datesShowing.Add(DateTime.Today);
@@ -58,7 +57,7 @@ namespace OpenDental {
 			for(int i=0;i<datesShowing.Count;i++) {
 				row=table.NewRow();
 				row["Date"]=datesShowing[i];
-				for(int j=0;j<listDisplayFields.Count;j++) {
+				for(int j=0;j<listOrthDisplayFields.Count;j++) {
 					row[j+1]="";//j+1 because first row is date field.
 				}
 				table.Rows.Add(row);
@@ -79,6 +78,7 @@ namespace OpenDental {
 				}
 			}
 			FillGrid();
+			FillGridPat();
 		}
 
 		private void FillGrid() {
@@ -87,8 +87,8 @@ namespace OpenDental {
 			ODGridColumn col;
 			col=new ODGridColumn("Date",70);
 			gridMain.Columns.Add(col);
-			for(int i=0;i<listDisplayFields.Count;i++) {
-				col=new ODGridColumn(listDisplayFields[i].Description,listDisplayFields[i].ColumnWidth,true);
+			for(int i=0;i<listOrthDisplayFields.Count;i++) {
+				col=new ODGridColumn(listOrthDisplayFields[i].Description,listOrthDisplayFields[i].ColumnWidth,true);
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();
@@ -99,12 +99,43 @@ namespace OpenDental {
 				DateTime tempDate=(DateTime)table.Rows[i]["Date"];
 				row.Cells.Add(tempDate.ToShortDateString());
 				row.Tag=tempDate;
-				for(int j=0;j<listDisplayFields.Count;j++) {
+				for(int j=0;j<listOrthDisplayFields.Count;j++) {
 					row.Cells.Add(table.Rows[i][j+1].ToString());
 				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void FillGridPat() {
+			gridPat.BeginUpdate();
+			gridPat.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn("Field",150);
+			gridPat.Columns.Add(col);
+			col=new ODGridColumn("Value",200);
+			gridPat.Columns.Add(col);
+			gridPat.Rows.Clear();
+			listPatientFields=PatFields.Refresh(PatCur.PatNum);
+			PatFieldDefs.RefreshCache();
+			ODGridRow row;
+			//define and fill rows in grid at the same time.
+			for(int i=0;i<PatFieldDefs.List.Length;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(PatFieldDefs.List[i].FieldName);
+				for(int j=0;j<=listPatientFields.Length;j++) {
+					if(j==listPatientFields.Length) {//no matches in the list
+						row.Cells.Add("");
+						break;
+					}
+					if(listPatientFields[j].FieldName==PatFieldDefs.List[i].FieldName) {
+						row.Cells.Add(listPatientFields[j].FieldValue);
+						break;
+					}
+				}
+				gridPat.Rows.Add(row);
+			}
+			gridPat.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -154,6 +185,54 @@ namespace OpenDental {
 			//FillGrid();
 		}
 
+		private void gridPat_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			PatField field=PatFields.GetByName(PatFieldDefs.List[e.Row].FieldName,listPatientFields);
+			if(field==null) {
+				field=new PatField();
+				field.PatNum=PatCur.PatNum;
+				field.FieldName=PatFieldDefs.List[e.Row].FieldName;
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Text) {
+					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.PickList) {
+					FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Date) {
+					FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Checkbox) {
+					FormPatFieldCheckEdit FormPF=new FormPatFieldCheckEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
+			}
+			else {
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Text) {
+					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.PickList) {
+					FormPatFieldPickEdit FormPF=new FormPatFieldPickEdit(field);
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Date) {
+					FormPatFieldDateEdit FormPF=new FormPatFieldDateEdit(field);
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Checkbox) {
+					FormPatFieldCheckEdit FormPF=new FormPatFieldCheckEdit(field);
+					FormPF.ShowDialog();
+				}
+			}
+			FillGridPat();
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormOrthoChartAddDate FormOCAD = new FormOrthoChartAddDate();
 			FormOCAD.ShowDialog();
@@ -170,14 +249,14 @@ namespace OpenDental {
 			//Move data from grid to table, add new date row to datatable, then fill grid from table.
 			for(int i=0;i<gridMain.Rows.Count;i++) {
 				table.Rows[i]["Date"]=gridMain.Rows[i].Tag;//store date
-				for(int j=0;j<listDisplayFields.Count;j++) {
+				for(int j=0;j<listOrthDisplayFields.Count;j++) {
 					table.Rows[i][j+1]=gridMain.Rows[i].Cells[j+1].Text;
 				}
 			}
 			DataRow row;
 			row=table.NewRow();
 			row["Date"]=FormOCAD.SelectedDate;
-			for(int i=0;i<listDisplayFields.Count;i++) {
+			for(int i=0;i<listOrthDisplayFields.Count;i++) {
 				row[i+1]="";//j+1 because first row is date field.
 			}
 			//insert new row in proper ascending datetime order to dataTable
@@ -203,7 +282,7 @@ namespace OpenDental {
 			//Save data from grid to table
 			for(int i=0;i<gridMain.Rows.Count;i++) {
 				table.Rows[i]["Date"]=gridMain.Rows[i].Tag;//store date
-				for(int j=0;j<listDisplayFields.Count;j++) {
+				for(int j=0;j<listOrthDisplayFields.Count;j++) {
 					table.Rows[i][j+1]=gridMain.Rows[i].Cells[j+1].Text;
 				}
 			} 
@@ -213,7 +292,7 @@ namespace OpenDental {
 				for(int c=1;c<table.Columns.Count;c++) {//skip col 0
 					OrthoChart tempChart = new OrthoChart();
 					tempChart.DateService=(DateTime)table.Rows[r]["Date"];
-					tempChart.FieldName=listDisplayFields[c-1].Description;
+					tempChart.FieldName=listOrthDisplayFields[c-1].Description;
 					tempChart.FieldValue=table.Rows[r][c].ToString();
 					tempChart.PatNum=PatCur.PatNum;
 					tempOrthoChartsFromTable.Add(tempChart);

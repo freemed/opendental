@@ -42,6 +42,7 @@ namespace OpenDental{
 			this.gridPat.TabIndex = 6;
 			this.gridPat.Title = "Patient Fields";
 			this.gridPat.TranslationName = null;
+			this.gridPat.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellDoubleClick);
 			// 
 			// gridMain
 			// 
@@ -93,6 +94,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
+			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label6.Location = new System.Drawing.Point(722,630);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(123,27);

@@ -3546,6 +3546,7 @@ namespace OpenDental{
 		private void Tool_Ortho_Click() {
 			FormOrthoChart FormOC=new FormOrthoChart(PatCur);
 			FormOC.ShowDialog();
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void Tool_Anesthesia_Click() {
