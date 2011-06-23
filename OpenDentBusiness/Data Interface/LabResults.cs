@@ -126,6 +126,29 @@ namespace OpenDentBusiness{
 
 		*/
 
+		/// <summary>Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.</summary>
+		public static string GetAbnormalFlagDesc(LabAbnormalFlag abnormalFlag) {
+			string result;
+			switch(abnormalFlag){
+				case LabAbnormalFlag.Above:
+					result="above high normal";
+					break;
+				case LabAbnormalFlag.Normal:
+					result="normal";
+					break;
+				case LabAbnormalFlag.Below:
+					result="below normal";
+					break;
+				case LabAbnormalFlag.None:
+					result="";
+					break;
+				default:
+					result="Error";
+					break;
+			}
+			return result;
+		}
+
 
 
 	}

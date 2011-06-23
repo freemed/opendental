@@ -117,5 +117,46 @@ namespace OpenDentBusiness{
 			return allergyDefList;
 		}
 
+		/// <summary>Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.</summary>
+		public static string GetSnomedAllergyDesc(SnomedAllergy snomed) {
+			string result;
+			switch(snomed){
+				case SnomedAllergy.AdverseReactions:
+					result="420134006 - Propensity to adverse reactions (disorder)";
+					break;
+				case SnomedAllergy.AdverseReactionsToDrug:
+					result="419511003 - Propensity to adverse reactions to drug (disorder)";
+					break;
+				case SnomedAllergy.AdverseReactionsToFood:
+					result="418471000 - Propensity to adverse reactions to food (disorder)";
+					break;
+				case SnomedAllergy.AdverseReactionsToSubstance:
+					result="419199007 - Propensity to adverse reactions to substance (disorder)";
+					break;
+				case SnomedAllergy.AllergyToSubstance:
+					result="418038007 - Allergy to substance (disorder)";
+					break;
+				case SnomedAllergy.DrugAllergy:
+					result="416098002 - Drug allergy (disorder)";
+					break;
+				case SnomedAllergy.DrugIntolerance:
+					result="59037007 - Drug intolerance (disorder)";
+					break;
+				case SnomedAllergy.FoodAllergy:
+					result="235719002 - Food allergy (disorder)";
+					break;
+				case SnomedAllergy.FoodIntolerance:
+					result="420134006 - Food intolerance (disorder)";
+					break;
+				case SnomedAllergy.None:
+					result="";
+					break;
+				default:
+					result="Error";
+					break;
+			}
+			return result;
+		}
+
 	}
 }
