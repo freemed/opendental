@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				rxDef.Refills     = PIn.String(table.Rows[i]["Refills"].ToString());
 				rxDef.Notes       = PIn.String(table.Rows[i]["Notes"].ToString());
 				rxDef.IsControlled= PIn.Bool  (table.Rows[i]["IsControlled"].ToString());
+				rxDef.RxCui       = PIn.Long  (table.Rows[i]["RxCui"].ToString());
 				retVal.Add(rxDef);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RxDefNum,";
 			}
-			command+="Drug,Sig,Disp,Refills,Notes,IsControlled) VALUES(";
+			command+="Drug,Sig,Disp,Refills,Notes,IsControlled,RxCui) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(rxDef.RxDefNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(rxDef.Disp)+"',"
 				+"'"+POut.String(rxDef.Refills)+"',"
 				+"'"+POut.String(rxDef.Notes)+"',"
-				+    POut.Bool  (rxDef.IsControlled)+")";
+				+    POut.Bool  (rxDef.IsControlled)+","
+				+    POut.Long  (rxDef.RxCui)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"Disp        = '"+POut.String(rxDef.Disp)+"', "
 				+"Refills     = '"+POut.String(rxDef.Refills)+"', "
 				+"Notes       = '"+POut.String(rxDef.Notes)+"', "
-				+"IsControlled=  "+POut.Bool  (rxDef.IsControlled)+" "
+				+"IsControlled=  "+POut.Bool  (rxDef.IsControlled)+", "
+				+"RxCui       =  "+POut.Long  (rxDef.RxCui)+" "
 				+"WHERE RxDefNum = "+POut.Long(rxDef.RxDefNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(rxDef.IsControlled != oldRxDef.IsControlled) {
 				if(command!=""){ command+=",";}
 				command+="IsControlled = "+POut.Bool(rxDef.IsControlled)+"";
+			}
+			if(rxDef.RxCui != oldRxDef.RxCui) {
+				if(command!=""){ command+=",";}
+				command+="RxCui = "+POut.Long(rxDef.RxCui)+"";
 			}
 			if(command==""){
 				return;

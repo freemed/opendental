@@ -59,6 +59,8 @@ namespace OpenDentBusiness.Crud{
 				rxPat.IsControlled= PIn.Bool  (table.Rows[i]["IsControlled"].ToString());
 				rxPat.DateTStamp  = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				rxPat.SendStatus  = (RxSendStatus)PIn.Int(table.Rows[i]["SendStatus"].ToString());
+				rxPat.RxCui       = PIn.Long  (table.Rows[i]["RxCui"].ToString());
+				rxPat.DosageCode  = PIn.String(table.Rows[i]["DosageCode"].ToString());
 				retVal.Add(rxPat);
 			}
 			return retVal;
@@ -99,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RxNum,";
 			}
-			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,SendStatus) VALUES(";
+			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,SendStatus,RxCui,DosageCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(rxPat.RxNum)+",";
 			}
@@ -115,7 +117,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (rxPat.PharmacyNum)+","
 				+    POut.Bool  (rxPat.IsControlled)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Int   ((int)rxPat.SendStatus)+")";
+				+    POut.Int   ((int)rxPat.SendStatus)+","
+				+    POut.Long  (rxPat.RxCui)+","
+				+"'"+POut.String(rxPat.DosageCode)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -139,7 +143,9 @@ namespace OpenDentBusiness.Crud{
 				+"PharmacyNum =  "+POut.Long  (rxPat.PharmacyNum)+", "
 				+"IsControlled=  "+POut.Bool  (rxPat.IsControlled)+", "
 				//DateTStamp can only be set by MySQL
-				+"SendStatus  =  "+POut.Int   ((int)rxPat.SendStatus)+" "
+				+"SendStatus  =  "+POut.Int   ((int)rxPat.SendStatus)+", "
+				+"RxCui       =  "+POut.Long  (rxPat.RxCui)+", "
+				+"DosageCode  = '"+POut.String(rxPat.DosageCode)+"' "
 				+"WHERE RxNum = "+POut.Long(rxPat.RxNum);
 			Db.NonQ(command);
 		}
@@ -191,6 +197,14 @@ namespace OpenDentBusiness.Crud{
 			if(rxPat.SendStatus != oldRxPat.SendStatus) {
 				if(command!=""){ command+=",";}
 				command+="SendStatus = "+POut.Int   ((int)rxPat.SendStatus)+"";
+			}
+			if(rxPat.RxCui != oldRxPat.RxCui) {
+				if(command!=""){ command+=",";}
+				command+="RxCui = "+POut.Long(rxPat.RxCui)+"";
+			}
+			if(rxPat.DosageCode != oldRxPat.DosageCode) {
+				if(command!=""){ command+=",";}
+				command+="DosageCode = '"+POut.String(rxPat.DosageCode)+"'";
 			}
 			if(command==""){
 				return;

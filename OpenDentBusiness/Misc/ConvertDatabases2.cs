@@ -5595,6 +5595,49 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE canadiannetwork MODIFY CanadianIsRprHandler NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxdef ADD RxCui bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxdef ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxdef ADD RxCui number(20)";
+					Db.NonQ(command);
+					command="UPDATE rxdef SET RxCui = 0 WHERE RxCui IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxdef MODIFY RxCui NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX rxdef_RxCui ON rxdef (RxCui)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxpat ADD RxCui bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxpat ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxpat ADD RxCui number(20)";
+					Db.NonQ(command);
+					command="UPDATE rxpat SET RxCui = 0 WHERE RxCui IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE rxpat MODIFY RxCui NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX rxpat_RxCui ON rxpat (RxCui)";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxpat ADD DosageCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxpat ADD DosageCode varchar2(255)";
+					Db.NonQ(command);
+				}
+
+
+
 
 
 				
@@ -5627,5 +5670,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
 
 				

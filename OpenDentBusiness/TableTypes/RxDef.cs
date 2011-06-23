@@ -21,6 +21,8 @@ namespace OpenDentBusiness{
 		public string Notes;
 		///<summary>Is a controlled substance.  This will affect the way it prints.</summary>
 		public bool IsControlled;
+		///<summary>RxNorm Code identifier.</summary>
+		public long RxCui;
 
 		///<summary></summary>
 		public RxDef Copy() {

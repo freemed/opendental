@@ -33,6 +33,10 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>Enum:RxSendStatus </summary>
 		public RxSendStatus SendStatus;
+		///<summary>RxNorm Code identifier.</summary>
+		public long RxCui;
+		///<summary>NCI Pharmaceutical Dosage Form code.  Only used with ehr.</summary>
+		public string DosageCode;
 
 		///<summary></summary>
 		public RxPat Copy() {

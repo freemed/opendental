@@ -108,7 +108,7 @@ namespace OpenDentBusiness {
 					filter="`"+compStr+"`"+">0 ";//Count greater than 0 (is taking the med).
 					break;
 				case EhrRestrictionType.Gender:
-					filter="Gender!='' ";
+					filter="Gender>-1 ";//Just so WHERE clause won't fail.
 					break;
 			}
 			return filter;
