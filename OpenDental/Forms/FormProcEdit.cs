@@ -3820,9 +3820,7 @@ namespace OpenDental{
 				Procedures.Delete(ProcCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
 				Recalls.Synch(ProcCur.PatNum);//needs to be moved into Procedures.Delete
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,ProcCur.PatNum,
-					"Delete for: "
-					+PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
-					+ProcCur.ProcFee.ToString("c"));
+					"Deleted: "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "+ProcCur.ProcFee.ToString("c"));
 				DialogResult=DialogResult.OK;
 				Plugins.HookAddCode(this,"FormProcEdit.butDelete_Click_end",ProcCur);
 			}
@@ -4216,7 +4214,7 @@ namespace OpenDental{
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
 				//if status was changed to complete
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-					PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
+					ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
 					+ProcCur.ProcFee.ToString("c"));
 				List<string> procCodeList=new List<string>();
 				procCodeList.Add(ProcedureCodes.GetStringProcCode(ProcCur.CodeNum));
@@ -4225,13 +4223,13 @@ namespace OpenDental{
 			else if(IsNew && ProcCur.ProcStatus==ProcStat.C){
 				//if new procedure is complete
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-					PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
+					ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
 					+ProcCur.ProcFee.ToString("c"));
 			}
 			else if(!IsNew){
 				if(ProcOld.ProcStatus==ProcStat.C){
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,PatCur.PatNum,
-						PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
+						ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
 						+ProcCur.ProcFee.ToString("c"));
 				}
 			}

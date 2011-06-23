@@ -326,7 +326,7 @@ namespace OpenDentBusiness {
 				pat.Preferred="";
 				row["patientName"]=pat.GetNameLF();
 				row["numerator"]="";
-				row[""]="";
+				row["exclusion"]="";
 				row["explanation"]="";
 				float weight=0;
 				float height=0;

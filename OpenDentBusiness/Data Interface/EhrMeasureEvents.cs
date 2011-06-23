@@ -28,15 +28,14 @@ namespace OpenDentBusiness{
 			return Crud.EhrMeasureEventCrud.SelectMany(command);
 		}
 
-		///<summary>Gets three different types, all intermingled. Ordered by dateT.</summary>
-		public static List<EhrMeasureEvent> RefreshForSummaryOfCare(long patNum) {
+		///<summary>Gets two different types, intermingled. Ordered by dateT.</summary>
+		public static List<EhrMeasureEvent> RefreshForElectronicCopy(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM ehrmeasureevent "
 				+"WHERE (EventType = "+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
-				+"OR EventType = "+POut.Int((int)EhrMeasureEventType.ElectronicCopyProvidedToPt)+" "
-				+"OR EventType = "+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+") "
+				+"OR EventType = "+POut.Int((int)EhrMeasureEventType.ElectronicCopyProvidedToPt)+") "
 				+"AND PatNum = "+POut.Long(patNum)+" "
 				+"ORDER BY DateTEvent";
 			return Crud.EhrMeasureEventCrud.SelectMany(command);

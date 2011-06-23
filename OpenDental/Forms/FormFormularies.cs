@@ -19,7 +19,6 @@ namespace OpenDental {
 		}
 
 		private void FormFormularies_Load(object sender,EventArgs e) {
-			butAdd.Visible=false;
 			if(!IsSelectionMode) {
 				labelSelect.Visible=false;
 			}
@@ -54,6 +53,7 @@ namespace OpenDental {
 			FillList();
 		}
 
+		/*
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormFormularyEdit FormF=new FormFormularyEdit();
 			FormF.FormularyCur=new Formulary();
@@ -63,7 +63,7 @@ namespace OpenDental {
 				return;
 			}
 			FillList();
-		}
+		}*/
 
 		private void butClose_Click(object sender,EventArgs e) {
 			this.Close();

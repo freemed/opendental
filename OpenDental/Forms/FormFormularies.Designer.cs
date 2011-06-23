@@ -23,22 +23,10 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butAdd = new System.Windows.Forms.Button();
 			this.butClose = new System.Windows.Forms.Button();
 			this.listMain = new System.Windows.Forms.ListBox();
 			this.labelSelect = new System.Windows.Forms.Label();
 			this.SuspendLayout();
-			// 
-			// butAdd
-			// 
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAdd.Location = new System.Drawing.Point(28,268);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,23);
-			this.butAdd.TabIndex = 1;
-			this.butAdd.Text = "Add";
-			this.butAdd.UseVisualStyleBackColor = true;
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butClose
 			// 
@@ -79,7 +67,6 @@
 			this.Controls.Add(this.labelSelect);
 			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butClose);
-			this.Controls.Add(this.butAdd);
 			this.Name = "FormFormularies";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Formularies";
@@ -90,7 +77,6 @@
 
 		#endregion
 
-		private System.Windows.Forms.Button butAdd;
 		private System.Windows.Forms.Button butClose;
 		private System.Windows.Forms.ListBox listMain;
 		private System.Windows.Forms.Label labelSelect;

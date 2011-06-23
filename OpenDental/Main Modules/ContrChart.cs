@@ -5908,7 +5908,7 @@ namespace OpenDental{
 				autoCodeList=ProcButtonItems.GetAutoListForButton(procButtonNum);
 				//if(codeList.
 			}
-			Procedure ProcCur;
+			Procedure ProcCur=null;
 			for(int i=0;i<codeList.Length;i++){
 				//needs to loop at least once, regardless of whether any teeth are selected.	
 				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {
@@ -6100,9 +6100,12 @@ namespace OpenDental{
 			}//for i
 			ModuleSelected(PatCur.PatNum);
 			if(newStatus==ProcStat.C){
+				string descript="";
+				if(ProcCur!=null) {//probably overkill
+					descript=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
+				}
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-					PatCur.GetNameLF()+", "
-					+DateTime.Today.ToShortDateString());
+					descript+", "+DateTime.Today.ToShortDateString());
 			}
 		}
 

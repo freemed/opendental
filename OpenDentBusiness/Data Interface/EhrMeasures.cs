@@ -1225,7 +1225,7 @@ namespace OpenDentBusiness{
 								mu.Met=MuMet.True;
 							}
 						}
-						mu.Action="Send summary of care to Dr";
+						mu.Action="Send/Receive summary of care";
 						mu.Action2="Enter Referrals";
 						break;
 				}
