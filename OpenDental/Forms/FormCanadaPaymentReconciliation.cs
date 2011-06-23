@@ -28,13 +28,15 @@ namespace OpenDental {
 			}
 			long defaultProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
 			for(int i=0;i<ProviderC.List.Length;i++) {
-				listBillingProvider.Items.Add(ProviderC.List[i].Abbr);
-				listTreatingProvider.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==defaultProvNum) {
-					listBillingProvider.SelectedIndex=i;
-					textBillingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
-					listTreatingProvider.SelectedIndex=i;
-					textTreatingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
+				if(ProviderC.List[i].IsCDAnet) {
+					listBillingProvider.Items.Add(ProviderC.List[i].Abbr);
+					listTreatingProvider.Items.Add(ProviderC.List[i].Abbr);
+					if(ProviderC.List[i].ProvNum==defaultProvNum) {
+						listBillingProvider.SelectedIndex=i;
+						textBillingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
+						listTreatingProvider.SelectedIndex=i;
+						textTreatingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
+					}
 				}
 			}
 			textDateReconciliation.Text=DateTime.Today.ToShortDateString();

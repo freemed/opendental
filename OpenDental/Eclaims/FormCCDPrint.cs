@@ -369,6 +369,9 @@ namespace OpenDental.Eclaims {
 				else if(transactionCode=="15") {
 					PrintSummaryReconciliation_15(e.Graphics);
 				}
+				else if(transactionCode=="12") {
+					PrintReversalResponse(e.Graphics);
+				}
 				else {
 					switch(formId) {
 						default:
@@ -1964,6 +1967,34 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,text,procedureBenefitCol,0);
 			}
 			doc.standardFont=tempFont;
+		}
+
+		private void PrintReversalResponse(Graphics g) {
+			PrintCarrier(g);
+			x=doc.StartElement();
+			text=isFrench?"RÉPONSE INVERSION RÉCLAMATION":"CLAIM REVERSAL RESPONSE";
+			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
+			x=doc.StartElement();
+			PrintStatus(g,x,0);
+			x=doc.StartElement();
+			PrintDisposition(g,x,0);
+			x=doc.StartElement();
+			PrintTransactionReferenceNumber(g,x,0);
+			x=doc.StartElement();
+			text=isFrench?"MONTANT TOTAL DE SERVICE: ":"TOTAL AMOUNT OF SERVICE: ";
+			x+=doc.DrawString(g,text,x,0).Width+10;
+			text=RawMoneyStrToDisplayMoney(formData.GetFieldById("G04").valuestr);
+			doc.DrawString(g,text,x,0);
+			x=doc.StartElement();
+			float rightCol=450;
+			PrintDentistName(g,x,0);
+			PrintTreatmentProviderID(g,x+rightCol,0);
+			x=doc.StartElement();
+			PrintOfficeSequenceNumber(g,x,0);
+			PrintTreatmentProviderOfficeNumber(g,x+rightCol,0);
+			x=doc.StartElement();
+			x=doc.StartElement();	
+			PrintErrorList(g);	
 		}
 
 		#endregion
