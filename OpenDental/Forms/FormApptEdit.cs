@@ -1487,11 +1487,12 @@ namespace OpenDental{
 		}*/
 
 		private void butDeleteProc_Click(object sender,EventArgs e) {
-			//this button will not be visible if user does not have permission
+			//this button will not be enabled if user does not have permission for AppointmentEdit
 			if(gridProc.SelectedIndices.Length==0){
 				MsgBox.Show(this,"Please select one or more procedures first.");
 				return;
 			}
+			//TODO: ProcDelete security check.
 			if(!MsgBox.Show(this,true,"Permanently delete all selected procedure(s)?")){
 				return;
 			}
@@ -1506,8 +1507,7 @@ namespace OpenDental{
 					}
 					//also deletes the claimProcs and adjustments. Might throw exception.
 					Procedures.Delete(PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString()));
-					//SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,AptCur.PatNum,Lan.g(this,"Completed procedure deleted: ")+DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcCode"].ToString());
-					SecurityLogs.MakeLogEntry(Permissions.ProcDelete,AptCur.PatNum,Lan.g(this,"Procedure deleted: ")+DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcCode"].ToString());
+					SecurityLogs.MakeLogEntry(Permissions.ProcDelete,AptCur.PatNum,DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcCode"].ToString());
 				}
 			}
 			catch(Exception ex){

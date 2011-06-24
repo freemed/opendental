@@ -5800,6 +5800,7 @@ namespace OpenDental{
 				!=DialogResult.OK){
 				return;
 			}
+			//TODO: Create skippedSecurity
 			int skippedC=0;
 			int skippedComlog=0;
 			DataRow row;
@@ -5811,6 +5812,7 @@ namespace OpenDental{
 					}
 					else{
 						try{
+							//TODO: Check if user has security to delete procs
 							Procedures.Delete(PIn.Long(row["ProcNum"].ToString()));//also deletes the claimprocs
 							SecurityLogs.MakeLogEntry(Permissions.ProcDelete,PatCur.PatNum,row["ProcCode"].ToString()+", "+PIn.Double(row["procFee"].ToString()).ToString("c"));
 						}
@@ -5835,6 +5837,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Not allowed to delete commlog entries from here.")+"\r"
 					+skippedComlog.ToString()+" "+Lan.g(this,"item(s) skipped."));
 			}
+			//TODO: Add pop up for procedures skipped due to security.
 			ModuleSelected(PatCur.PatNum);
 		}
 

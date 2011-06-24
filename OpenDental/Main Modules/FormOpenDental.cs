@@ -2991,6 +2991,7 @@ namespace OpenDental{
 						e.Cancel=true;
 						return;
 					}
+					SecurityLogs.MakeLogEntry(Permissions.ChartModule,CurPatNum,"Viewed.");
 					break;
 				case 5:
 					if(!Security.IsAuthorized(Permissions.ImagesModule)){

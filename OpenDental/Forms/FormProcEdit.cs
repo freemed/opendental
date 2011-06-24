@@ -3813,6 +3813,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;//verified that this triggers a delete when window closed from all places where FormProcEdit is used, and where proc could be new.
 				return;
 			}
+			//TODO: Add ProcDelete security check.
 			if(MessageBox.Show(Lan.g(this,"Delete Procedure?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
@@ -3820,8 +3821,6 @@ namespace OpenDental{
 				Procedures.Delete(ProcCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
 				Recalls.Synch(ProcCur.PatNum);//needs to be moved into Procedures.Delete
 				SecurityLogs.MakeLogEntry(Permissions.ProcDelete,ProcCur.PatNum,ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "+ProcCur.ProcFee.ToString("c"));
-				//SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,ProcCur.PatNum,
-				//  "Deleted: "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "+ProcCur.ProcFee.ToString("c"));
 				DialogResult=DialogResult.OK;
 				Plugins.HookAddCode(this,"FormProcEdit.butDelete_Click_end",ProcCur);
 			}
