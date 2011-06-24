@@ -80,7 +80,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<LabResult>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM labresult WHERE LabResultNum IN (SELECT LabResultNum FROM labpanel WHERE PatNum="+POut.Long(patNum)+")";
+			string command="SELECT * FROM labresult WHERE LabPanelNum IN (SELECT LabPanelNum FROM labpanel WHERE PatNum="+POut.Long(patNum)+")";
 			return Crud.LabResultCrud.SelectMany(command);
 		}
 
