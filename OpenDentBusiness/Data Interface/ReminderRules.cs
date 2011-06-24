@@ -104,7 +104,7 @@ namespace OpenDentBusiness{
 						break;
 					case EhrCriterion.LabResult:
 						for(int j=0;j<listLabResults.Count;j++) {
-							if(listLabResults[j].TestName.ToLower().Contains(fullListReminders[i].CriterionValue.ToLower())) {//revisit when running scripts.					
+							if(listLabResults[j].TestName.ToLower().Contains(fullListReminders[i].CriterionValue.ToLower())) {				
 								retVal.Add(fullListReminders[i]);
 								break;
 							}
