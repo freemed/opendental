@@ -13,7 +13,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	public partial class FormRecurringCharges:Form {
+	public partial class FormCreditRecurringCharges:Form {
 		private DataTable table;
 		private PrintDocument pd;
 		private int pagesPrinted;
@@ -25,7 +25,7 @@ namespace OpenDental {
 		private DateTime nowDateTime;
 
 		///<summary>Only works for XCharge so far.</summary>
-		public FormRecurringCharges() {
+		public FormCreditRecurringCharges() {
 			InitializeComponent();
 			Lan.F(this);
 		}
@@ -277,7 +277,13 @@ namespace OpenDental {
 					PaySplits.Insert(split);
 				}
 			}
+			//TODO: Create a loop to compute aging for successful charges.
+			//Ledgers.ComputeAging(0,DateTime.Now,false);
+			//if(Prefs.UpdateString(PrefName.DateLastAging,POut.Date(PIn.Date(textDateCalc.Text),false))){
+			//  DataValid.SetInvalid(InvalidType.Prefs);
+			//}
 			FillGrid();
+			MsgBox.Show(this,"Done. Patients remaining list failed to charge the card.");
 			labelCharged.Text=Lan.g(this,"Charged=")+success;
 			labelFailed.Text=Lan.g(this,"Failed=")+failed;
 		}

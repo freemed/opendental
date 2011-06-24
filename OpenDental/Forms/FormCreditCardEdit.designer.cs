@@ -238,7 +238,7 @@ namespace OpenDental{
 			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClear.CornerRadius = 4F;
 			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClear.Location = new System.Drawing.Point(239,17);
+			this.butClear.Location = new System.Drawing.Point(220,17);
 			this.butClear.Name = "butClear";
 			this.butClear.Size = new System.Drawing.Size(68,24);
 			this.butClear.TabIndex = 76;
@@ -265,9 +265,9 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(236,48);
+			this.label6.Location = new System.Drawing.Point(294,16);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(235,39);
+			this.label6.Size = new System.Drawing.Size(177,71);
 			this.label6.TabIndex = 73;
 			this.label6.Text = "Date Stop will be blank if the charges will be repeated indefinitely.  Clear all " +
     "these values if no further recurring charges are planned.";

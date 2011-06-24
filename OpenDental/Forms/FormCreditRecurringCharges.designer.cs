@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormRecurringCharges {
+	partial class FormCreditRecurringCharges {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -197,7 +197,7 @@ namespace OpenDental{
 			this.butPrintList.Text = "Print List";
 			this.butPrintList.Click += new System.EventHandler(this.butPrintList_Click);
 			// 
-			// FormRecurringCharges
+			// FormCreditRecurringCharges
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,534);
@@ -209,9 +209,9 @@ namespace OpenDental{
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.butCancel);
-			this.Name = "FormRecurringCharges";
+			this.Name = "FormCreditRecurringCharges";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Recurring Charges";
+			this.Text = "Credit Card Recurring Charges";
 			this.Load += new System.EventHandler(this.FormRecurringCharges_Load);
 			this.groupCounts.ResumeLayout(false);
 			this.ResumeLayout(false);

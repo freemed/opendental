@@ -209,6 +209,7 @@ namespace OpenDentBusiness{
 			if(  permType==Permissions.AdjustmentEdit
 				|| permType==Permissions.PaymentEdit
 				|| permType==Permissions.ProcComplEdit
+				|| permType==Permissions.ProcDelete
 				|| permType==Permissions.InsPayEdit
 				|| permType==Permissions.ClaimSentEdit
 				|| permType==Permissions.AccountingEdit

@@ -543,11 +543,11 @@
     <Compile Include="Forms\FormPatientPickWebForm.designer.cs">
       <DependentUpon>FormPatientPickWebForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormRecurringCharges.cs">
+    <Compile Include="Forms\FormCreditRecurringCharges.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormRecurringCharges.designer.cs">
-      <DependentUpon>FormRecurringCharges.cs</DependentUpon>
+    <Compile Include="Forms\FormCreditRecurringCharges.designer.cs">
+      <DependentUpon>FormCreditRecurringCharges.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormRxSend.cs">
       <SubType>Form</SubType>
@@ -2393,8 +2393,8 @@
       <DependentUpon>FormPatientPickWebForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormRecurringCharges.resx">
-      <DependentUpon>FormRecurringCharges.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormCreditRecurringCharges.resx">
+      <DependentUpon>FormCreditRecurringCharges.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormRxSend.resx">
