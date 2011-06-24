@@ -290,7 +290,7 @@ namespace OpenDental {
 			FillGrid();
 			labelCharged.Text=Lan.g(this,"Charged=")+success;
 			labelFailed.Text=Lan.g(this,"Failed=")+failed;
-			MsgBox.Show(this,"Done charging cards./r/nIf there are any patients remaining in list, print the list and handle each one manually.");
+			MsgBox.Show(this,"Done charging cards.\r\nIf there are any patients remaining in list, print the list and handle each one manually.");
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
