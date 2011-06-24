@@ -1333,177 +1333,174 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement(verticalLine);
 			bool isEOB=transactionCode=="21" || transactionCode=="23";
 			CCDField[] noteNumbers=formData.GetFieldsById("G45");//Used to looking up note reference numbers.
-			//The rest of the CCDField[] object should all be the same length, since they come bundled together as part 
-			//of each procedure.
-			CCDField[] procedureLineNumbers=formData.GetFieldsById("F07");
-			CCDField[] eligibleAmounts=formData.GetFieldsById("G12");
-			CCDField[] deductibleAmounts=formData.GetFieldsById("G13");
-			CCDField[] eligiblePercentages=formData.GetFieldsById("G14");
-			CCDField[] dentaidePayAmounts=formData.GetFieldsById("G15");
-			CCDField[] explainationNoteNumbers1=formData.GetFieldsById("G16");
-			CCDField[] explainationNoteNumbers2=formData.GetFieldsById("G17");
-			CCDField[] eligibleLabAmounts1=formData.GetFieldsById("G43");
-			CCDField[] deductibleLabAmounts1=formData.GetFieldsById("G56");
-			CCDField[] eligibleLabPercentage1=formData.GetFieldsById("G57");
-			CCDField[] benefitLabAmount1=formData.GetFieldsById("G58");
-			CCDField[] eligibleLabAmounts2=formData.GetFieldsById("G02");
-			CCDField[] deductibleLabAmounts2=formData.GetFieldsById("G59");
-			CCDField[] eligibleLabPercentage2=formData.GetFieldsById("G60");
-			CCDField[] benefitLabAmount2=formData.GetFieldsById("G61");
-			float noteCol=x;
-			float noteColWidth=(isEOB?65:0);
-			float procedureCol=noteCol+noteColWidth;
-			float procedureColWidth=40;
-			float toothCol=procedureCol+procedureColWidth;
-			float toothColWidth=45;
-			float surfaceCol=toothCol+toothColWidth;
-			float surfaceColWidth=55;
-			float feeCol=surfaceCol+surfaceColWidth;
-			float feeColWidth=75;
-			float eligibleFeeCol=feeCol+feeColWidth;
-			float eligibleFeeColWidth=(isEOB?75:0);
-			float labCol=eligibleFeeCol+eligibleFeeColWidth;
-			float labColWidth=80;
-			float eligibleLabCol=labCol+labColWidth;
-			float eligibleLabColWidth=(isEOB?75:0);
-			float deductibleCol=eligibleLabCol+eligibleLabColWidth;
-			float deductibleColWidth=(isEOB?75:0);
-			float percentCoveredCol=deductibleCol+deductibleColWidth;
-			float percentCoveredColWidth=(isEOB?90:0);
-			float dentaidePaysCol=percentCoveredCol+percentCoveredColWidth;
-			float dentaidePaysColWidth=(isEOB?65:0);
-			float endNoteCol=dentaidePaysCol+dentaidePaysColWidth;
-			Font tempFont=doc.standardFont;
-			doc.standardFont=standardSmall;
-			double totalFee=0;
-			double totalLab=0;
-			double totalPaid=0;
-			int numProcsPrinted=0;
-			do{
-				if(isEOB){
-					doc.DrawString(g,"Note",noteCol,0);
-					doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleFeeCol,0);
-					doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleLabCol,0);
-					doc.DrawString(g,isFrench?"Franchise":"Deductible",deductibleCol,0);
-					doc.DrawString(g,isFrench?"%Couvertrem.":"Percent\nCovered",percentCoveredCol,0);
-					doc.DrawString(g,isFrench?"Dentaide":"Detaide\nPays",dentaidePaysCol,0);
-				}
-				doc.DrawString(g,isFrench?"Acte":"Proc",procedureCol,0);
-				doc.DrawString(g,isFrench?"Dent":"Tooth",toothCol,0);
-				doc.DrawString(g,"Surface",surfaceCol,0);
-				doc.DrawString(g,isFrench?"Honoraires":"Fee",feeCol,0);
-				doc.DrawString(g,isFrench?"Labo.":"Lab",labCol,0);
-				for(int p=1;p<=7;p++){
-					int procLineNum=numProcsPrinted+p;
-					if(numProcsPrinted>0){
-						//Begin a new page.
-						doc.NextPage();
+			if(claimprocs!=null) {
+				List <Procedure> procListAll=Procedures.Refresh(claim.PatNum);
+				float amountWidth=g.MeasureString("****.**",doc.standardFont).Width;
+				//The rest of the CCDField[] object should all be the same length, since they come bundled together as part 
+				//of each procedure.
+				CCDField[] procedureLineNumbers=formData.GetFieldsById("F07");
+				CCDField[] eligibleAmounts=formData.GetFieldsById("G12");
+				CCDField[] deductibleAmounts=formData.GetFieldsById("G13");
+				CCDField[] eligiblePercentages=formData.GetFieldsById("G14");
+				CCDField[] dentaidePayAmounts=formData.GetFieldsById("G15");
+				CCDField[] explainationNoteNumbers1=formData.GetFieldsById("G16");
+				CCDField[] explainationNoteNumbers2=formData.GetFieldsById("G17");
+				CCDField[] eligibleLabAmounts1=formData.GetFieldsById("G43");
+				CCDField[] deductibleLabAmounts1=formData.GetFieldsById("G56");
+				CCDField[] eligibleLabPercentage1=formData.GetFieldsById("G57");
+				CCDField[] benefitLabAmount1=formData.GetFieldsById("G58");
+				CCDField[] eligibleLabAmounts2=formData.GetFieldsById("G02");
+				CCDField[] deductibleLabAmounts2=formData.GetFieldsById("G59");
+				CCDField[] eligibleLabPercentage2=formData.GetFieldsById("G60");
+				CCDField[] benefitLabAmount2=formData.GetFieldsById("G61");
+				float noteCol=x;
+				float noteColWidth=(isEOB?65:0);
+				float procedureCol=noteCol+noteColWidth;
+				float procedureColWidth=40;
+				float toothCol=procedureCol+procedureColWidth;
+				float toothColWidth=45;
+				float surfaceCol=toothCol+toothColWidth;
+				float surfaceColWidth=55;
+				float feeCol=surfaceCol+surfaceColWidth;
+				float feeColWidth=75;
+				float eligibleFeeCol=feeCol+feeColWidth;
+				float eligibleFeeColWidth=(isEOB?75:0);
+				float labCol=eligibleFeeCol+eligibleFeeColWidth;
+				float labColWidth=80;
+				float eligibleLabCol=labCol+labColWidth;
+				float eligibleLabColWidth=(isEOB?75:0);
+				float deductibleCol=eligibleLabCol+eligibleLabColWidth;
+				float deductibleColWidth=(isEOB?75:0);
+				float percentCoveredCol=deductibleCol+deductibleColWidth;
+				float percentCoveredColWidth=(isEOB?90:0);
+				float dentaidePaysCol=percentCoveredCol+percentCoveredColWidth;
+				float dentaidePaysColWidth=(isEOB?65:0);
+				float endNoteCol=dentaidePaysCol+dentaidePaysColWidth;
+				Font tempFont=doc.standardFont;
+				doc.standardFont=standardSmall;
+				double totalFee=0;
+				double totalLab=0;
+				double totalPaid=0;
+				int numProcsPrinted=0;
+				do {
+					if(isEOB) {
+						doc.DrawString(g,"Note",noteCol,0);
+						doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleFeeCol,0);
+						doc.DrawString(g,isFrench?"Admissible":"Eligible",eligibleLabCol,0);
+						doc.DrawString(g,isFrench?"Franchise":"Deductible",deductibleCol,0);
+						doc.DrawString(g,isFrench?"%Couvertrem.":"Percent\nCovered",percentCoveredCol,0);
+						doc.DrawString(g,isFrench?"Dentaide":"Detaide\nPays",dentaidePaysCol,0);
 					}
-					x=doc.StartElement();
-					if(isEOB){
-						for(int j=0;j<procedureLineNumbers.Length;j++){
-							if(Convert.ToInt32(procedureLineNumbers[j].valuestr)==procLineNum){
-								//Display the procedure information on its own line.
-								//For any procLineNum>0, there will only be one matching carrier procedure, by definition.
-								size1=new SizeF(0,0);
-								int noteIndex=Convert.ToInt32(explainationNoteNumbers1[j].valuestr);
-								if(noteIndex>0){
-									size1=doc.DrawString(g,noteNumbers[noteIndex].valuestr,noteCol,0);
-								}
-								noteIndex=Convert.ToInt32(explainationNoteNumbers2[j].valuestr);
-								if(noteIndex>0){
-									doc.DrawString(g,Environment.NewLine+noteNumbers[noteIndex].valuestr,noteCol+size1.Width,0);
-								}
-								text=RawMoneyStrToDisplayMoney(eligibleAmounts[j].valuestr);
-								doc.DrawString(g,text,eligibleFeeCol,0);
-								text=RawMoneyStrToDisplayMoney(deductibleAmounts[j].valuestr);
-								doc.DrawString(g,text,deductibleCol,0);
-								text=RawPercentToDisplayPercent(eligiblePercentages[j].valuestr);
-								doc.DrawString(g,text,percentCoveredCol,0);
-								text=RawMoneyStrToDisplayMoney(dentaidePayAmounts[j].valuestr);
-								doc.DrawString(g,text,dentaidePaysCol,0);
-								totalPaid+=Convert.ToDouble(text);
-								//Display the Lab1 information on its own line.
-								x=doc.StartElement();
-								text=" LAB1";
-								doc.DrawString(g,text,procedureCol,0);
-								text=RawMoneyStrToDisplayMoney(eligibleLabAmounts1[j].valuestr);
-								doc.DrawString(g,text,eligibleLabCol,0);
-								text=RawMoneyStrToDisplayMoney(deductibleLabAmounts1[j].valuestr);
-								doc.DrawString(g,text,deductibleCol,0);
-								text=RawMoneyStrToDisplayMoney(eligibleLabPercentage1[j].valuestr);
-								doc.DrawString(g,text,percentCoveredCol,0);
-								text=RawMoneyStrToDisplayMoney(benefitLabAmount1[j].valuestr);
-								doc.DrawString(g,text,dentaidePaysCol,0);
-								//Display the Lab2 information on its own line.
-								x=doc.StartElement();
-								text=" LAB2";
-								doc.DrawString(g,text,procedureCol,0);
-								text=RawMoneyStrToDisplayMoney(eligibleLabAmounts2[j].valuestr);
-								doc.DrawString(g,text,eligibleLabCol,0);
-								text=RawMoneyStrToDisplayMoney(deductibleLabAmounts2[j].valuestr);
-								doc.DrawString(g,text,deductibleCol,0);
-								text=RawMoneyStrToDisplayMoney(eligibleLabPercentage2[j].valuestr);
-								doc.DrawString(g,text,percentCoveredCol,0);
-								text=RawMoneyStrToDisplayMoney(benefitLabAmount2[j].valuestr);
-								doc.DrawString(g,text,dentaidePaysCol,0);
+					doc.DrawString(g,isFrench?"Acte":"Proc",procedureCol,0);
+					doc.DrawString(g,isFrench?"Dent":"Tooth",toothCol,0);
+					doc.DrawString(g,"Surface",surfaceCol,0);
+					doc.DrawString(g,isFrench?"Honoraires":"Fee",feeCol,0);
+					doc.DrawString(g,isFrench?"Labo.":"Lab",labCol,0);
+					for(int p=1;p<=7;p++) {
+						if(numProcsPrinted>0) {
+							//Begin a new page.
+							doc.NextPage();
+						}
+						x=doc.StartElement();
+						int procLineNum=numProcsPrinted+p;
+						if(procLineNum>claimprocs.Count) {
+							continue;
+						}
+						ClaimProc claimproc=null;
+						for(int i=0;i<claimprocs.Count;i++) {
+							if(claimprocs[i].LineNumber==procLineNum) {
+								claimproc=claimprocs[i];
+								break;
 							}
 						}
-					}
-					//The following code assumes that procedures and associated labs were sent out in the
-					//same order that they were returned from the query.
-					//Print info for procedure procLineNum if it exists.
-					if(claimprocs!=null){
-						for(int k=0,n=0;k<claimprocs.Count;k++){
-							Procedure proc;
-							ClaimProc claimproc=claimprocs[k];
-							if(claimproc.ProcNum!=0){//Is this a valid claim procedure?
-								proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-								if(proc.ProcNumLab==0){//We are only looking for non-lab procedures.
-									n++;
-									if(n==procLineNum){//Procedure found.
-										text=claimproc.CodeSent.PadLeft(5,'0');//Field F08
+						Procedure proc=Procedures.GetOneProc(claimproc.ProcNum,true);
+						text=claimproc.CodeSent.PadLeft(5,'0');//Field F08
+						doc.DrawString(g,text,procedureCol,0);
+						text=Tooth.ToInternat(proc.ToothNum);//Field F10
+						doc.DrawString(g,text,toothCol,0);
+						text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
+						doc.DrawString(g,text,surfaceCol,0);
+						text=proc.ProcFee.ToString("F");//Field F12
+						doc.DrawString(g,text,feeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+						totalFee+=proc.ProcFee;
+						if(isEOB) {
+							List <Procedure> labProcs=Procedures.GetCanadianLabFees(proc.ProcNum,procListAll);
+							for(int j=0;j<procedureLineNumbers.Length;j++) {
+								if(Convert.ToInt32(procedureLineNumbers[j].valuestr)==procLineNum) {
+									//Display the procedure information on its own line.
+									//For any procLineNum>0, there will only be one matching carrier procedure, by definition.
+									size1=new SizeF(0,0);
+									int noteIndex=Convert.ToInt32(explainationNoteNumbers1[j].valuestr);
+									if(noteIndex>0) {
+										size1=doc.DrawString(g,noteNumbers[noteIndex].valuestr,noteCol,0);
+									}
+									noteIndex=Convert.ToInt32(explainationNoteNumbers2[j].valuestr);
+									if(noteIndex>0) {
+										doc.DrawString(g,Environment.NewLine+noteNumbers[noteIndex].valuestr,noteCol+size1.Width,0);
+									}
+									text=RawMoneyStrToDisplayMoney(eligibleAmounts[j].valuestr);
+									doc.DrawString(g,text,eligibleFeeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+									text=RawMoneyStrToDisplayMoney(deductibleAmounts[j].valuestr);
+									doc.DrawString(g,text,deductibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+									text=RawPercentToDisplayPercent(eligiblePercentages[j].valuestr);
+									doc.DrawString(g,text,percentCoveredCol,0);
+									text=RawMoneyStrToDisplayMoney(dentaidePayAmounts[j].valuestr);
+									doc.DrawString(g,text,dentaidePaysCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+									totalPaid+=Convert.ToDouble(text);
+									if(labProcs.Count>0) {
+										//Display the Lab1 information on its own line.
+										x=doc.StartElement();
+										text=" LAB1";
 										doc.DrawString(g,text,procedureCol,0);
-										text=Tooth.ToInternat(proc.ToothNum);//Field F10
-										doc.DrawString(g,text,toothCol,0);
-										text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
-										doc.DrawString(g,text,surfaceCol,0);
-										text=proc.ProcFee.ToString("F");//Field F12
-										doc.DrawString(g,text,feeCol,0);
-										totalFee+=proc.ProcFee;
-										//Find the lab fee associated with the above procedure.
-										for(int m=0;m<claimprocs.Count;m++) {
-											ClaimProc claimlab=claimprocs[m];
-											if(claimlab.ProcNum!=0){//Is this a valid claim procedure/lab fee?
-												Procedure lab=Procedures.GetOneProc(claimlab.ProcNum,true);
-												if(lab.ProcNumLab==proc.ProcNum){//This lab fee is for the above procedure.
-													text=lab.ProcFee.ToString("F");//Field F13
-													doc.DrawString(g,text,labCol,0);
-													totalLab+=lab.ProcFee;
-												}
-											}
-										}
+										text=labProcs[0].ProcFee.ToString("F");
+										totalLab+=labProcs[0].ProcFee;
+										doc.DrawString(g,text,labCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+										text=RawMoneyStrToDisplayMoney(eligibleLabAmounts1[j].valuestr);
+										doc.DrawString(g,text,eligibleLabCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+										text=RawMoneyStrToDisplayMoney(deductibleLabAmounts1[j].valuestr);
+										doc.DrawString(g,text,deductibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+										text=RawPercentToDisplayPercent(eligibleLabPercentage1[j].valuestr);
+										doc.DrawString(g,text,percentCoveredCol,0);
+										text=RawMoneyStrToDisplayMoney(benefitLabAmount1[j].valuestr);
+										doc.DrawString(g,text,dentaidePaysCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+									}
+									if(labProcs.Count>1) {
+										//Display the Lab2 information on its own line.
+										x=doc.StartElement();
+										text=" LAB2";
+										doc.DrawString(g,text,procedureCol,0);
+										text=labProcs[1].ProcFee.ToString("F");
+										totalLab+=labProcs[1].ProcFee;
+										doc.DrawString(g,text,labCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+										text=RawMoneyStrToDisplayMoney(eligibleLabAmounts2[j].valuestr);
+										doc.DrawString(g,text,eligibleLabCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+										text=RawMoneyStrToDisplayMoney(deductibleLabAmounts2[j].valuestr);
+										doc.DrawString(g,text,deductibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+										text=RawPercentToDisplayPercent(eligibleLabPercentage2[j].valuestr);
+										doc.DrawString(g,text,percentCoveredCol,0);
+										text=RawMoneyStrToDisplayMoney(benefitLabAmount2[j].valuestr);
+										doc.DrawString(g,text,dentaidePaysCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 									}
 								}
 							}
 						}
 					}
+					numProcsPrinted+=7;
+				} while(numProcsPrinted<claimprocs.Count);
+				doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size+1,FontStyle.Bold);
+				x=doc.StartElement(verticalLine);
+				doc.DrawString(g,"TOTAL:",toothCol,0);
+				if(isEOB) {
+					CCDField totalPayable=formData.GetFieldById("G55");
+					if(totalPayable!=null) {
+						totalPaid=PIn.Double(RawMoneyStrToDisplayMoney(totalPayable.valuestr));
+					}
+					doc.DrawString(g,totalPaid.ToString("F"),dentaidePaysCol,0);
 				}
-				numProcsPrinted+=7;
-			}while(numProcsPrinted<procedureLineNumbers.Length);
-			doc.standardFont=new Font(doc.standardFont.FontFamily,doc.standardFont.Size+1,FontStyle.Bold);
-			x=doc.StartElement(verticalLine);
-			doc.DrawString(g,"TOTAL:",toothCol,0);
-			if(isEOB){
-				CCDField totalPayable=formData.GetFieldById("G55");
-				if(totalPayable!=null) {
-					totalPaid=PIn.Double(RawMoneyStrToDisplayMoney(totalPayable.valuestr));
-				}
-				doc.DrawString(g,totalPaid.ToString("F"),dentaidePaysCol,0);
+				doc.DrawString(g,totalFee.ToString("F"),feeCol,0);
+				doc.DrawString(g,totalLab.ToString("F"),labCol,0);
+				doc.standardFont=tempFont;
 			}
-			doc.DrawString(g,totalFee.ToString("F"),feeCol,0);
-			doc.DrawString(g,totalLab.ToString("F"),labCol,0);
-			doc.standardFont=tempFont;
 			if(isEOB){
 				doc.StartElement();
 				doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
@@ -1872,6 +1869,7 @@ namespace OpenDental.Eclaims {
 		}
 
 		private void PrintProcedureListEOB(Graphics g,string payableToStr) {
+			List<Procedure> procListAll=Procedures.Refresh(claim.PatNum);
 			Font tempFont=doc.standardFont;
 			doc.standardFont=standardSmall;
 			float procedureCodeCol=x;
@@ -1921,9 +1919,6 @@ namespace OpenDental.Eclaims {
 				while(i<claimprocs.Count && claimprocs[i].LineNumber!=procedureLineNumber){
 					i++;
 				}
-				if(i<claimprocs.Count){//Should always be true, but just to be sure.
-					continue;
-				}
 				//List the current procedure.
 				ClaimProc claimproc=claimprocs[i];
 				x=doc.StartElement();
@@ -1959,40 +1954,51 @@ namespace OpenDental.Eclaims {
 					text+=explainationNotes2[p].valuestr;
 				}
 				doc.DrawString(g,text,procedureNotesCol,0,doc.standardFont,(int)(doc.bounds.Right-procedureNotesCol));
-				//List the first lab info for the current procedure on its own line.
-				x=doc.StartElement();
-				text="  LAB1";
-				doc.DrawString(g,text,procedureCodeCol,0);//proc code
-				text=RawMoneyStrToDisplayMoney(eligibleLabAmounts1[i].valuestr);//G43
-				doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-				text=RawMoneyStrToDisplayMoney(deductibleLabAmounts1[i].valuestr);//G56
-				doc.DrawString(g,text,procedureDeductCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-				text=RawMoneyStrToDisplayMoney(eligibleLabPercentage1[i].valuestr);//G57
-				doc.DrawString(g,text,procedureAtCol,0);
-				text=RawMoneyStrToDisplayMoney(benefitLabAmount1[i].valuestr);//G58
-				doc.DrawString(g,text,procedureBenefitCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-				//List the second lab info for the current procedure on its own line.
-				x=doc.StartElement();
-				text="  LAB2";
-				doc.DrawString(g,text,procedureCodeCol,0);//proc code
-				text=RawMoneyStrToDisplayMoney(eligibleLabAmounts2[i].valuestr);//G02
-				doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-				text=RawMoneyStrToDisplayMoney(deductibleLabAmounts2[i].valuestr);//G59
-				doc.DrawString(g,text,procedureDeductCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-				text=RawMoneyStrToDisplayMoney(eligibleLabPercentage2[i].valuestr);//G60
-				doc.DrawString(g,text,procedureAtCol,0);
-				text=RawMoneyStrToDisplayMoney(benefitLabAmount2[i].valuestr);//G61
-				doc.DrawString(g,text,procedureBenefitCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				List<Procedure> labProcs=Procedures.GetCanadianLabFees(proc.ProcNum,procListAll);
+				if(labProcs.Count>0) {
+					//List the first lab info for the current procedure on its own line.
+					x=doc.StartElement();
+					text="  LAB1";
+					doc.DrawString(g,text,procedureCodeCol,0);//proc code
+					text=labProcs[0].ProcFee.ToString("F");
+					doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);//proc fee
+					text=RawMoneyStrToDisplayMoney(eligibleLabAmounts1[i].valuestr);//G43
+					doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+					text=RawMoneyStrToDisplayMoney(deductibleLabAmounts1[i].valuestr);//G56
+					doc.DrawString(g,text,procedureDeductCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+					text=RawPercentToDisplayPercent(eligibleLabPercentage1[i].valuestr);//G57
+					doc.DrawString(g,text,procedureAtCol,0);
+					text=RawMoneyStrToDisplayMoney(benefitLabAmount1[i].valuestr);//G58
+					doc.DrawString(g,text,procedureBenefitCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				}
+				if(labProcs.Count>1) {
+					//List the second lab info for the current procedure on its own line.
+					x=doc.StartElement();
+					text="  LAB2";
+					doc.DrawString(g,text,procedureCodeCol,0);//proc code
+					text=labProcs[1].ProcFee.ToString("F");
+					doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);//proc fee
+					text=RawMoneyStrToDisplayMoney(eligibleLabAmounts2[i].valuestr);//G02
+					doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+					text=RawMoneyStrToDisplayMoney(deductibleLabAmounts2[i].valuestr);//G59
+					doc.DrawString(g,text,procedureDeductCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+					text=RawPercentToDisplayPercent(eligibleLabPercentage2[i].valuestr);//G60
+					doc.DrawString(g,text,procedureAtCol,0);
+					text=RawMoneyStrToDisplayMoney(benefitLabAmount2[i].valuestr);//G61
+					doc.DrawString(g,text,procedureBenefitCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				}
 			}
 			//List the carrier inserted procedures into the procedure list.
 			CCDField[] carrierProcs=formData.GetFieldsById("G19");
 			CCDField[] carrierEligibleAmts=formData.GetFieldsById("G20");
+			CCDField[] carrierEligibleLabAmts=formData.GetFieldsById("G44");
 			CCDField[] carrierDeductAmts=formData.GetFieldsById("G21");
 			CCDField[] carrierAts=formData.GetFieldsById("G22");
 			CCDField[] carrierBenefitAmts=formData.GetFieldsById("G23");
 			CCDField[] carrierNotes1=formData.GetFieldsById("G24");
 			CCDField[] carrierNotes2=formData.GetFieldsById("G25");
 			for(int p=0;p<carrierProcs.Length;p++){
+				//Display the eligible proc info.
 				x=doc.StartElement();
 				text=carrierProcs[p].valuestr.PadLeft(6,' ');//Field G19
 				doc.DrawString(g,text,x,0);
@@ -2017,6 +2023,12 @@ namespace OpenDental.Eclaims {
 					text+=carrierNotes2[p].valuestr;
 				}
 				doc.DrawString(g,text,procedureNotesCol,0);
+				//Display the eligible lab info for the proc but on a separate line.
+				x=doc.StartElement();
+				text="   LAB";
+				doc.DrawString(g,text,procedureCodeCol,0);
+				text=RawMoneyStrToDisplayMoney(carrierEligibleLabAmts[p].valuestr);
+				doc.DrawString(g,text,procedureEligibleCol,0);
 			}
 			//Handle the unallocated deductible amount if it exists. 
 			//This happens when a carrier will not supply deductibles on a procedural basis.
