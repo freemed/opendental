@@ -92,6 +92,10 @@ namespace OpenDental {
 			textNote.Text="";
 		}
 
+		private void butToday_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.ToShortDateString();
+		}
+
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}

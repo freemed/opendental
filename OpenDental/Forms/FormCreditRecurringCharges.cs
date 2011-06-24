@@ -275,17 +275,22 @@ namespace OpenDental {
 					split.ProvNum=Patients.GetProvNum(patCur);
 					split.SplitAmt=paymentCur.PayAmt;
 					PaySplits.Insert(split);
+					if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+						Ledgers.ComputeAging(patCur.Guarantor,PrefC.GetDate(PrefName.DateLastAging),false);
+					}
+					else {
+						Ledgers.ComputeAging(patCur.Guarantor,DateTime.Today,false);
+						if(PrefC.GetDate(PrefName.DateLastAging) != DateTime.Today) {
+							Prefs.UpdateString(PrefName.DateLastAging,POut.Date(DateTime.Today,false));
+							//Since this is always called from UI, the above line works fine to keep the prefs cache current.
+						}
+					}
 				}
 			}
-			//TODO: Create a loop to compute aging for successful charges.
-			//Ledgers.ComputeAging(0,DateTime.Now,false);
-			//if(Prefs.UpdateString(PrefName.DateLastAging,POut.Date(PIn.Date(textDateCalc.Text),false))){
-			//  DataValid.SetInvalid(InvalidType.Prefs);
-			//}
 			FillGrid();
-			MsgBox.Show(this,"Done. Patients remaining list failed to charge the card.");
 			labelCharged.Text=Lan.g(this,"Charged=")+success;
 			labelFailed.Text=Lan.g(this,"Failed=")+failed;
+			MsgBox.Show(this,"Done charging cards./r/nIf there are any patients remaining in list, print the list and handle each one manually.");
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

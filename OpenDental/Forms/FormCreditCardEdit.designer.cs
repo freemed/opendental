@@ -43,6 +43,7 @@ namespace OpenDental{
 			this.textChargeAmt = new OpenDental.ValidDouble();
 			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butToday = new OpenDental.UI.Button();
 			this.butClear = new OpenDental.UI.Button();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
@@ -213,6 +214,7 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.butToday);
 			this.groupBox1.Controls.Add(this.butClear);
 			this.groupBox1.Controls.Add(this.textNote);
 			this.groupBox1.Controls.Add(this.label7);
@@ -230,6 +232,21 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Authorized Recurring Charges";
 			// 
+			// butToday
+			// 
+			this.butToday.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butToday.Autosize = true;
+			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butToday.CornerRadius = 4F;
+			this.butToday.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butToday.Location = new System.Drawing.Point(218,44);
+			this.butToday.Name = "butToday";
+			this.butToday.Size = new System.Drawing.Size(63,22);
+			this.butToday.TabIndex = 77;
+			this.butToday.Text = "Today";
+			this.butToday.Click += new System.EventHandler(this.butToday_Click);
+			// 
 			// butClear
 			// 
 			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -238,9 +255,9 @@ namespace OpenDental{
 			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClear.CornerRadius = 4F;
 			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClear.Location = new System.Drawing.Point(220,17);
+			this.butClear.Location = new System.Drawing.Point(218,18);
 			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(68,24);
+			this.butClear.Size = new System.Drawing.Size(63,22);
 			this.butClear.TabIndex = 76;
 			this.butClear.Text = "Clear";
 			this.butClear.Click += new System.EventHandler(this.butClear_Click);
@@ -265,9 +282,9 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(294,16);
+			this.label6.Location = new System.Drawing.Point(318,20);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(177,71);
+			this.label6.Size = new System.Drawing.Size(146,71);
 			this.label6.TabIndex = 73;
 			this.label6.Text = "Date Stop will be blank if the charges will be repeated indefinitely.  Clear all " +
     "these values if no further recurring charges are planned.";
@@ -325,5 +342,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label label7;
 		private UI.Button butClear;
+		private UI.Button butToday;
 	}
 }
