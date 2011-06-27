@@ -3,7 +3,7 @@
 /// The following code has being pieced together from the web uses the of Enterprise Library Logging Application Block without the hassle of configuration setting in the config file.
 /// There is only one flat listener in this code.The other listenr in the code i.e event log listener has been commented.
 ///To compile this code the Enterprise library should installed from http://www.microsoft.com/downloads/details.aspx?familyid=1643758B-2986-47F7-B529-3E41584B6CE5&displaylang=en
-
+///Update: Added 2 Microsoft Enterprise Library dlls which previously had to be installed into the system from the Microsoft site. This means that each developer need not install the Microsoft enterprise library for the code to compile.
 
 
 using System;
