@@ -97,6 +97,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM etrans WHERE ClaimNum="+POut.Long(claimNum)+" "
 				+"AND (Etype="+POut.Int((int)EtransType.Claim_CA)+" "
+				+"OR Etype="+POut.Int((int)EtransType.ClaimCOB_CA)+" "
 				+"OR Etype="+POut.Int((int)EtransType.ClaimSent)+")";
 			return Crud.EtransCrud.SelectMany(command);
 		}
