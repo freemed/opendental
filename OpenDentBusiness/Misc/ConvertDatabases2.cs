@@ -5695,6 +5695,27 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ32(command);
 					}
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD NotGiven tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD NotGiven number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET NotGiven = 0 WHERE NotGiven IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY NotGiven NOT NULL";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD Note text NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD Note varchar2(4000)";
+					Db.NonQ(command);
+				}
+				
 
 
 
@@ -5721,8 +5742,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
-
 
 
 

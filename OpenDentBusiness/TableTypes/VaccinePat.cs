@@ -25,6 +25,10 @@ namespace OpenDentBusiness {
 		public string LotNumber;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
+		///<summary>Set to true if no vaccine given.  Documentation required in the Note.</summary>
+		public bool NotGiven;
+		///<summary></summary>
+		public string Note;
 
 		///<summary></summary>
 		public VaccinePat Copy() {
