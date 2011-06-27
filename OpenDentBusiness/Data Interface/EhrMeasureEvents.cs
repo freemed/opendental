@@ -18,25 +18,18 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Ordered by dateT</summary>
-		public static List<EhrMeasureEvent> RefreshByType(EhrMeasureEventType ehrMeasureEventType,long patNum){
+		public static List<EhrMeasureEvent> RefreshByType(long patNum,params EhrMeasureEventType[] ehrMeasureEventTypes) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),ehrMeasureEventType,patNum);
+				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),patNum,ehrMeasureEventTypes);
 			}
-			string command="SELECT * FROM ehrmeasureevent WHERE EventType = "+POut.Int((int)ehrMeasureEventType)+" "
-				+"AND PatNum = "+POut.Long(patNum)+" "
-				+"ORDER BY DateTEvent";
-			return Crud.EhrMeasureEventCrud.SelectMany(command);
-		}
-
-		///<summary>Gets two different types, intermingled. Ordered by dateT.</summary>
-		public static List<EhrMeasureEvent> RefreshForElectronicCopy(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrMeasureEvent>>(MethodBase.GetCurrentMethod(),patNum);
+			string command="SELECT * FROM ehrmeasureevent WHERE (";
+			for(int i=0;i<ehrMeasureEventTypes.Length;i++) {
+				if(i>0) {
+					command+="OR ";
+				}
+				command+="EventType = "+POut.Int((int)ehrMeasureEventTypes[i])+" ";
 			}
-			string command="SELECT * FROM ehrmeasureevent "
-				+"WHERE (EventType = "+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
-				+"OR EventType = "+POut.Int((int)EhrMeasureEventType.ElectronicCopyProvidedToPt)+") "
-				+"AND PatNum = "+POut.Long(patNum)+" "
+			command+=") AND PatNum = "+POut.Long(patNum)+" "
 				+"ORDER BY DateTEvent";
 			return Crud.EhrMeasureEventCrud.SelectMany(command);
 		}
@@ -48,6 +41,15 @@ namespace OpenDentBusiness{
 				return ehrMeasureEvent.EhrMeasureEventNum;
 			}
 			return Crud.EhrMeasureEventCrud.Insert(ehrMeasureEvent);
+		}
+
+		///<summary></summary>
+		public static void Update(EhrMeasureEvent ehrMeasureEvent) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrMeasureEvent);
+				return;
+			}
+			Crud.EhrMeasureEventCrud.Update(ehrMeasureEvent);
 		}
 
 		///<summary></summary>
@@ -73,8 +75,7 @@ namespace OpenDentBusiness{
 		}
 
 		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out
-
+		
 		///<summary>Gets one EhrMeasureEvent from the db.</summary>
 		public static EhrMeasureEvent GetOne(long ehrMeasureEventNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -83,14 +84,7 @@ namespace OpenDentBusiness{
 			return Crud.EhrMeasureEventCrud.SelectOne(ehrMeasureEventNum);
 		}
 
-		///<summary></summary>
-		public static void Update(EhrMeasureEvent ehrMeasureEvent){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrMeasureEvent);
-				return;
-			}
-			Crud.EhrMeasureEventCrud.Update(ehrMeasureEvent);
-		}
+		
 
 		*/
 

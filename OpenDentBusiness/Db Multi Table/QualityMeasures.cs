@@ -106,7 +106,8 @@ namespace OpenDentBusiness {
 						Height float NOT NULL,
 						Weight float NOT NULL,
 						HasFollowupPlan tinyint NOT NULL,
-						IsIneligible tinyint NOT NULL
+						IsIneligible tinyint NOT NULL,
+						Documentation varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit) SELECT patient.PatNum,LName,FName,"
@@ -126,18 +127,12 @@ namespace OpenDentBusiness {
 						+"SET tempehrquality.Height=vitalsign.Height, "
 						+"tempehrquality.Weight=vitalsign.Weight, "//we could also easily get the BMI date if we wanted.
 						+"tempehrquality.HasFollowupPlan=vitalsign.HasFollowupPlan, "
-						+"tempehrquality.IsIneligible=vitalsign.IsIneligible "
+						+"tempehrquality.IsIneligible=vitalsign.IsIneligible, "
+						+"tempehrquality.Documentation=vitalsign.Documentation "
 						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
 						+"AND vitalsign.DateTaken <= tempehrquality.DateVisit "
 						+"AND vitalsign.DateTaken >= DATE_SUB(tempehrquality.DateVisit,INTERVAL 6 MONTH)";
 					Db.NonQ(command);
-
-
-
-
-
-
-					//todo
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
 					command="DROP TABLE IF EXISTS tempehrquality";
@@ -153,7 +148,10 @@ namespace OpenDentBusiness {
 						FName varchar(255) NOT NULL,
 						DateVisit date NOT NULL DEFAULT '0001-01-01',
 						Height float NOT NULL,
-						Weight float NOT NULL
+						Weight float NOT NULL,
+						HasFollowupPlan tinyint NOT NULL,
+						IsIneligible tinyint NOT NULL,
+						Documentation varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit) SELECT patient.PatNum,LName,FName,"
@@ -172,12 +170,14 @@ namespace OpenDentBusiness {
 					//now, find BMIs within 6 months of each visit date. No logic for picking one of multiple BMIs.
 					command="UPDATE tempehrquality,vitalsign "
 						+"SET tempehrquality.Height=vitalsign.Height, "
-						+"tempehrquality.Weight=vitalsign.Weight "
+						+"tempehrquality.Weight=vitalsign.Weight, "
+						+"tempehrquality.HasFollowupPlan=vitalsign.HasFollowupPlan, "
+						+"tempehrquality.IsIneligible=vitalsign.IsIneligible, "
+						+"tempehrquality.Documentation=vitalsign.Documentation "
 						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
 						+"AND vitalsign.DateTaken <= tempehrquality.DateVisit "
 						+"AND vitalsign.DateTaken >= DATE_SUB(tempehrquality.DateVisit,INTERVAL 6 MONTH)";
 					Db.NonQ(command);
-					//todo
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
 					command="DROP TABLE IF EXISTS tempehrquality";
@@ -206,8 +206,6 @@ namespace OpenDentBusiness {
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						//+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						//+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
 						+"LEFT JOIN disease ON disease.PatNum=patient.PatNum "
 						+"LEFT JOIN icd9 ON icd9.ICD9Num=disease.ICD9Num "
 						+"AND icd9.ICD9Code REGEXP '^40[1-4]' "//starts with 401 through 404
@@ -237,7 +235,8 @@ namespace OpenDentBusiness {
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
 						DateVisit date NOT NULL DEFAULT '0001-01-01',
-						VisitCount int NOT NULL
+						VisitCount int NOT NULL,
+						DateAssessment date NOT NULL DEFAULT '0001-01-01'
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit,VisitCount) "
@@ -252,8 +251,15 @@ namespace OpenDentBusiness {
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
 						+"GROUP BY patient.PatNum";
 					Db.NonQ(command);
-					//now, find tobacco use recorded in 24 months prior to last visit date.
-					//Todo: unfortunately, tobacco use is not a dated field yet.
+					//now, find most recent tobacco assessment date.  We will check later that it is within 2 years of last exam.
+					command="UPDATE tempehrquality "//,ehrmeasureevent "
+						+"SET tempehrquality.DateAssessment=(SELECT MAX(DATE(ehrmeasureevent.DateTEvent)) "
+						+"FROM ehrmeasureevent "
+						+"WHERE tempehrquality.PatNum=ehrmeasureevent.PatNum "
+						+"AND ehrmeasureevent.EventType="+POut.Int((int)EhrMeasureEventType.TobaccoUseAssessed)+")";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality SET DateAssessment='0001-01-01' WHERE DateAssessment='0000-00-00'";
+					Db.NonQ(command);
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
 					command="DROP TABLE IF EXISTS tempehrquality";
@@ -268,24 +274,50 @@ namespace OpenDentBusiness {
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
 						DateVisit date NOT NULL DEFAULT '0001-01-01',
-						VisitCount int NOT NULL
+						DateAssessment date NOT NULL DEFAULT '0001-01-01',
+						DateCessation date NOT NULL DEFAULT '0001-01-01'
+						Documentation varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
-					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit,VisitCount) "
+					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit) "
 						+"SELECT patient.PatNum,LName,FName,"
-						+"MAX(ProcDate), "// most recent visit
-						+"COUNT(DISTINCT ProcDate) "
+						+"MAX(ProcDate) "// most recent visit
 						+"FROM patient "
 						+"INNER JOIN procedurelog "
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
+						+"AND patient.SmokeStatus IN("+POut.Int((int)SmokingStatus.CurrentEveryDay)+","+POut.Int((int)SmokingStatus.CurrentSomeDay)+") "
 						+"GROUP BY patient.PatNum";
 					Db.NonQ(command);
-					//now, find tobacco use recorded in 24 months prior to last visit date.
-					//Todo: unfortunately, tobacco use is not a dated field yet.
-					//Also todo: counseling, medication, or orders.
+					//find most recent tobacco assessment date.
+					command="UPDATE tempehrquality "
+						+"SET tempehrquality.DateAssessment=(SELECT MAX(DATE(ehrmeasureevent.DateTEvent)) "
+						+"FROM ehrmeasureevent "
+						+"WHERE tempehrquality.PatNum=ehrmeasureevent.PatNum "
+						+"AND ehrmeasureevent.EventType="+POut.Int((int)EhrMeasureEventType.TobaccoUseAssessed)+")";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality SET DateAssessment='0001-01-01' WHERE DateAssessment='0000-00-00'";
+					Db.NonQ(command);
+					//find most recent tobacco cessation date.
+					command="UPDATE tempehrquality "
+						+"SET tempehrquality.DateCessation=(SELECT MAX(DATE(ehrmeasureevent.DateTEvent)) "
+						+"FROM ehrmeasureevent "
+						+"WHERE tempehrquality.PatNum=ehrmeasureevent.PatNum "
+						+"AND ehrmeasureevent.EventType="+POut.Int((int)EhrMeasureEventType.TobaccoCessation)+")";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality SET DateCessation='0001-01-01' WHERE DateCessation='0000-00-00'";
+					Db.NonQ(command);
+					//Pull the documentation based on date
+					command="UPDATE tempehrquality "
+						+"SET Documentation=(SELECT ehrmeasureevent.Documentation "
+						+"FROM ehrmeasureevent "
+						+"WHERE tempehrquality.PatNum=ehrmeasureevent.PatNum "
+						+"AND ehrmeasureevent.EventType="+POut.Int((int)EhrMeasureEventType.TobaccoCessation)+" "
+						+"AND DATE(ehrmeasurement.DateTEvent)=tempehrquality.DateCessation) "
+						+"WHERE DateCessation > '1880-01-01'";
+					Db.NonQ(command);
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
 					command="DROP TABLE IF EXISTS tempehrquality";
@@ -335,19 +367,20 @@ namespace OpenDentBusiness {
 				int visitCount;
 				switch(qtype) {
 					case QualityType.WeightOver65:
-						//WeightOver65---------------------------------------------------------------------------------------------------------------------
+						//WeightOver65-----------------------------------------------------------------------------------------------------------------
 						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
 						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
 						bmi=Vitalsigns.CalcBMI(weight,height);
 						bool hasFollowupPlan=PIn.Bool(tableRaw.Rows[i]["HasFollowupPlan"].ToString());
 						bool isIneligible=PIn.Bool(tableRaw.Rows[i]["IsIneligible"].ToString());
+						string documentation=tableRaw.Rows[i]["Documentation"].ToString();
 						if(bmi==0){
 							row["explanation"]="No BMI";
 						}
 						else if(bmi < 22) {
 							row["explanation"]="Underweight";
 							if(hasFollowupPlan) {
-								row["explanation"]+=", has followup plan.";
+								row["explanation"]+=", has followup plan: "+documentation;
 								row["numerator"]="X";
 							}
 						}
@@ -358,24 +391,32 @@ namespace OpenDentBusiness {
 						else {
 							row["explanation"]="Overweight";
 							if(hasFollowupPlan) {
-								row["explanation"]+=", has followup plan.";
+								row["explanation"]+=", has followup plan: "+documentation;
 								row["numerator"]="X";
 							}
 						}
 						if(isIneligible) {
 							row["exclusion"]="X";
+							row["explanation"]+=", "+documentation;
 						}
 						break;
 					case QualityType.WeightAdult:
-						//WeightAdult---------------------------------------------------------------------------------------------------------------------
+						//WeightAdult-----------------------------------------------------------------------------------------------------------------
 						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
 						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
 						bmi=Vitalsigns.CalcBMI(weight,height);
+						hasFollowupPlan=PIn.Bool(tableRaw.Rows[i]["HasFollowupPlan"].ToString());
+						isIneligible=PIn.Bool(tableRaw.Rows[i]["IsIneligible"].ToString());
+						documentation=tableRaw.Rows[i]["Documentation"].ToString();
 						if(bmi==0){
 							row["explanation"]="No BMI";
 						}
 						else if(bmi < 18.5f) {
 							row["explanation"]="Underweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan: "+documentation;
+								row["numerator"]="X";
+							}
 						}
 						else if(bmi < 25) {
 							row["numerator"]="X";
@@ -383,6 +424,14 @@ namespace OpenDentBusiness {
 						}
 						else {
 							row["explanation"]="Overweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan: "+documentation;
+								row["numerator"]="X";
+							}
+						}
+						if(isIneligible) {
+							row["exclusion"]="X";
+							row["explanation"]+=", "+documentation;
 						}
 						break;
 					case QualityType.Hypertension:
@@ -412,13 +461,23 @@ namespace OpenDentBusiness {
 						//TobaccoUse---------------------------------------------------------------------------------------------------------------------
 						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
 						visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						DateTime dateAssessment=PIn.Date(tableRaw.Rows[i]["DateAssessment"].ToString());
 						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
 							continue;//don't add this row.  Not part of denominator.
 						}
-						if(visitCount<2) {
-							continue;
+						//if(visitCount<2) {//no, as explained in comments in GetDenominatorExplain().
+						//	continue;
+						//}
+						if(dateAssessment.Year<1880) {
+							row["explanation"]="No tobacco use entered.";
 						}
-						//incomplete						
+						else if(dateAssessment < dateVisit.AddYears(-2)) {
+							row["explanation"]="No tobacco use entered within timeframe.";
+						}
+						else{
+							row["numerator"]="X";
+							row["explanation"]="Tobacco use entered.";
+						}
 						break;
 					case QualityType.TobaccoCessation:
 						//TobaccoCessation----------------------------------------------------------------------------------------------------------------
@@ -427,10 +486,10 @@ namespace OpenDentBusiness {
 						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
 							continue;//don't add this row.  Not part of denominator.
 						}
-						if(visitCount<2) {
-							continue;
-						}
-						//incomplete			
+						
+						//DateCessation date NOT NULL DEFAULT '0001-01-01'
+						//Documentation 
+
 						break;
 					case QualityType.InfluenzaAdult:
 						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
@@ -489,11 +548,13 @@ namespace OpenDentBusiness {
 				case QualityType.Hypertension:
 					return "All patients 18+ with ICD9 hypertension(401-404) and at least two visits, one during the measurement period.";
 				case QualityType.TobaccoUse:
-					return "All patients 18+ with at least two visits, one during the measurement period.";
+					//The original manual that these specs came from stated ALL patients seen during the period, and did not say anything about needing two visits.
+					return "All patients 18+ with at least one visit during the measurement period.";
 				case QualityType.TobaccoCessation:
 					//It's inconsistent.  Sometimes it says 24 months from now (which doesn't make sense).  
 					//Other times it says 24 months from last visit.  We're going with that.
-					return "All patients 18+ with at least two visits, one during the measurement period; and identified as tobacco users within the 24 months prior to the last visit.";
+					//Again, we will ignore the part about needing two visits.
+					return "All patients 18+ with at least one visit during the measurement period; and identified as tobacco users within the 24 months prior to the last visit.";
 				case QualityType.InfluenzaAdult:
 					return "";
 				case QualityType.WeightChild:
@@ -512,14 +573,14 @@ namespace OpenDentBusiness {
 					return @"BMI < 22 or >= 30 with Followup documented.
 BMI 22-30.";
 				case QualityType.WeightAdult:
-					return @"BMI < 18.5 or >= 25 with care goal of follow-up BMI, or with dietary consultation order.
+					return @"BMI < 18.5 or >= 25 with Followup documented.
 BMI 18.5-25.";
 				case QualityType.Hypertension:
 					return "Blood pressure entered during measurement period.";
 				case QualityType.TobaccoUse:
 					return "Tobacco use recorded within the 24 months prior to the last visit.";
 				case QualityType.TobaccoCessation:
-					return "Tobacco cessation counseling (CPT 99406/7), smoking cessation medication active, or medication order within the 24 months prior to the last visit.";
+					return "Tobacco cessation entry within the 24 months prior to the last visit.";
 				case QualityType.InfluenzaAdult:
 					return "";
 				case QualityType.WeightChild:
@@ -535,15 +596,15 @@ BMI 18.5-25.";
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType.WeightOver65:
-					return "Terminal illness; pregnancy; physical exam not done for patient, medical, or system reason.";
+					return "Marked ineligible within 6 months prior to the last visit.";
 				case QualityType.WeightAdult:
-					return "Terminal illness; pregnancy; physical exam not done for patient, medical, or system reason.";
+					return "Terminal ineligible within 6 months prior to the last visit.";
 				case QualityType.Hypertension:
 					return "N/A";
 				case QualityType.TobaccoUse:
-					return "";
+					return "N/A";
 				case QualityType.TobaccoCessation:
-					return "";
+					return "N/A";
 				case QualityType.InfluenzaAdult:
 					return "";
 				case QualityType.WeightChild:

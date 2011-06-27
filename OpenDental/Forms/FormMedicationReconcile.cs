@@ -103,7 +103,7 @@ namespace OpenDental {
 			gridReconcileEvents.Columns.Add(col);
 			col=new ODGridColumn("Details",600);
 			gridReconcileEvents.Columns.Add(col);
-			ehrMeasureEventsList=EhrMeasureEvents.RefreshByType(EhrMeasureEventType.MedicationReconcile,PatCur.PatNum);
+			ehrMeasureEventsList=EhrMeasureEvents.RefreshByType(PatCur.PatNum,EhrMeasureEventType.MedicationReconcile);
 			gridReconcileEvents.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ehrMeasureEventsList.Count;i++) {

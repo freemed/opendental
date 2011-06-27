@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		public EhrMeasureEventType EventType;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
-		///<summary></summary>
+		///<summary>Only used for some types: EducationProvided, TobaccoCessation.</summary>
 		public string MoreInfo;
 
 		///<summary></summary>
@@ -41,7 +41,11 @@ namespace OpenDentBusiness {
 		///<summary>6</summary>
 		MedicationReconcile,
 		///<summary>7</summary>
-		SummaryOfCareProvidedToDr
+		SummaryOfCareProvidedToDr,
+		///<summary>8</summary>
+		TobaccoUseAssessed,
+		///<summary>9</summary>
+		TobaccoCessation
 	}
 
 }

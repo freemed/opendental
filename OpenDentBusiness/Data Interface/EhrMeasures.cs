@@ -883,7 +883,7 @@ namespace OpenDentBusiness{
 						mu.Action="Enter demographics";
 						break;
 					case EhrMeasureType.Education:
-						List<EhrMeasureEvent> listEd=EhrMeasureEvents.RefreshByType(EhrMeasureEventType.EducationProvided,pat.PatNum);
+						List<EhrMeasureEvent> listEd=EhrMeasureEvents.RefreshByType(pat.PatNum,EhrMeasureEventType.EducationProvided);
 						if(listEd.Count==0) {
 							mu.Details="No education resources provided.";
 						}
@@ -894,7 +894,7 @@ namespace OpenDentBusiness{
 						mu.Action="Provide education resources";
 						break;
 					case EhrMeasureType.TimelyAccess:
-						List<EhrMeasureEvent> listOnline=EhrMeasureEvents.RefreshByType(EhrMeasureEventType.OnlineAccessProvided,pat.PatNum);
+						List<EhrMeasureEvent> listOnline=EhrMeasureEvents.RefreshByType(pat.PatNum,EhrMeasureEventType.OnlineAccessProvided);
 						if(listOnline.Count==0) {
 							mu.Details="No online access provided.";
 						}
