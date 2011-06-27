@@ -29,7 +29,15 @@ namespace OpenDentBusiness {
 		TobaccoUse,
 		TobaccoCessation,
 		InfluenzaAdult,
-		WeightChild,
+		WeightChild_1_1,
+		WeightChild_1_2,
+		WeightChild_1_3,
+		WeightChild_2_1,
+		WeightChild_2_2,
+		WeightChild_2_3,
+		WeightChild_3_1,
+		WeightChild_3_2,
+		WeightChild_3_3,
 		ImmunizeChild//break this into 12
 
 	}

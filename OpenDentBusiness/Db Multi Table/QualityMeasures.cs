@@ -54,8 +54,12 @@ namespace OpenDentBusiness {
 					return "0028b";
 				case QualityType.InfluenzaAdult:
 					return "0041";
-				case QualityType.WeightChild:
+				case QualityType.WeightChild_1_1:
 					return "0024";
+
+
+
+
 				case QualityType.ImmunizeChild://break this into 12
 					return "0038";
 				default:
@@ -77,7 +81,7 @@ namespace OpenDentBusiness {
 					return "Tobacco Cessation Intervention";
 				case QualityType.InfluenzaAdult:
 					return "Influenza Immunization, 50+";
-				case QualityType.WeightChild:
+				case QualityType.WeightChild_1_1:
 					return "Weight, Child";
 				case QualityType.ImmunizeChild:
 					return "Immunization Status, Child";
@@ -266,7 +270,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					break;
 				case QualityType.TobaccoCessation:
-					//TobaccoCessation-------------------------------------------------------------------------------------------------------------------
+					//TobaccoCessation----------------------------------------------------------------------------------------------------------------
 					command="DROP TABLE IF EXISTS tempehrquality";
 					Db.NonQ(command);
 					command=@"CREATE TABLE tempehrquality (
@@ -275,7 +279,7 @@ namespace OpenDentBusiness {
 						FName varchar(255) NOT NULL,
 						DateVisit date NOT NULL DEFAULT '0001-01-01',
 						DateAssessment date NOT NULL DEFAULT '0001-01-01',
-						DateCessation date NOT NULL DEFAULT '0001-01-01'
+						DateCessation date NOT NULL DEFAULT '0001-01-01',
 						Documentation varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -311,11 +315,11 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					//Pull the documentation based on date
 					command="UPDATE tempehrquality "
-						+"SET Documentation=(SELECT ehrmeasureevent.Documentation "
+						+"SET Documentation=(SELECT ehrmeasureevent.MoreInfo "
 						+"FROM ehrmeasureevent "
 						+"WHERE tempehrquality.PatNum=ehrmeasureevent.PatNum "
 						+"AND ehrmeasureevent.EventType="+POut.Int((int)EhrMeasureEventType.TobaccoCessation)+" "
-						+"AND DATE(ehrmeasurement.DateTEvent)=tempehrquality.DateCessation) "
+						+"AND DATE(ehrmeasureevent.DateTEvent)=tempehrquality.DateCessation) "
 						+"WHERE DateCessation > '1880-01-01'";
 					Db.NonQ(command);
 					command="SELECT * FROM tempehrquality";
@@ -325,9 +329,53 @@ namespace OpenDentBusiness {
 					break;
 				case QualityType.InfluenzaAdult:
 					//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
-
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						DateVaccine date NOT NULL,
+						NotGiven tinyint NOT NULL,
+						Documentation varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName) SELECT patient.PatNum,LName,FName "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate > '1880-01-01' AND Birthdate <= "+POut.Date(DateTime.Today.AddYears(-50))+" "//50 or older
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					//find most recent vaccine date
+					command="UPDATE tempehrquality "
+						+"SET tempehrquality.DateVaccine=(SELECT MAX(DATE(vaccinepat.DateTimeStart)) "
+						+"FROM vaccinepat,vaccinedef "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND vaccinedef.CVXCode IN('135','15'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality SET DateVaccine='0001-01-01' WHERE DateVaccine='0000-00-00'";
+					Db.NonQ(command);
+					//pull documentation on vaccine exclusions based on date.
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET Documentation=Note, "
+						+"tempehrquality.NotGiven=vaccinepat.NotGiven "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND vaccinepat.DateTimeStart=tempehrquality.DateVaccine "
+						+"AND vaccinedef.CVXCode IN('135','15')";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
 					break;
-				case QualityType.WeightChild:
+				case QualityType.WeightChild_1_1:
 					//WeightChild------------------------------------------------------------------------------------------------------------------
 
 					break;
@@ -460,7 +508,7 @@ namespace OpenDentBusiness {
 					case QualityType.TobaccoUse:
 						//TobaccoUse---------------------------------------------------------------------------------------------------------------------
 						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
-						visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						//visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
 						DateTime dateAssessment=PIn.Date(tableRaw.Rows[i]["DateAssessment"].ToString());
 						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
 							continue;//don't add this row.  Not part of denominator.
@@ -482,20 +530,44 @@ namespace OpenDentBusiness {
 					case QualityType.TobaccoCessation:
 						//TobaccoCessation----------------------------------------------------------------------------------------------------------------
 						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
-						visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						dateAssessment=PIn.Date(tableRaw.Rows[i]["DateAssessment"].ToString());
+						DateTime DateCessation=PIn.Date(tableRaw.Rows[i]["DateCessation"].ToString());
+						documentation=tableRaw.Rows[i]["Documentation"].ToString();
 						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
 							continue;//don't add this row.  Not part of denominator.
 						}
-						
-						//DateCessation date NOT NULL DEFAULT '0001-01-01'
-						//Documentation 
-
+						else if(dateAssessment < dateVisit.AddYears(-2)) {
+							continue;//no assessment within 24 months, so not part of denominator.
+						}
+						else if(DateCessation.Year<1880) {
+							row["explanation"]="No tobacco cessation entered.";
+						}
+						else if(DateCessation < dateVisit.AddYears(-2)) {
+							row["explanation"]="No tobacco cessation entered within timeframe.";
+						}
+						else {
+							row["numerator"]="X";
+							row["explanation"]="Tobacco cessation: "+documentation;
+						}
 						break;
 					case QualityType.InfluenzaAdult:
 						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
-
+						DateTime DateVaccine=PIn.Date(tableRaw.Rows[i]["DateVaccine"].ToString());
+						bool notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven"].ToString());
+						documentation=tableRaw.Rows[i]["Documentation"].ToString();
+						if(DateVaccine.Year<1880) {
+							row["explanation"]="No influenza vaccine given";
+						}
+						else if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No influenza vaccine given, "+documentation;
+						}
+						else {
+							row["numerator"]="X";
+							row["explanation"]="Influenza vaccine given";
+						}
 						break;
-					case QualityType.WeightChild:
+					case QualityType.WeightChild_1_1:
 						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
 
 						break;
@@ -556,8 +628,9 @@ namespace OpenDentBusiness {
 					//Again, we will ignore the part about needing two visits.
 					return "All patients 18+ with at least one visit during the measurement period; and identified as tobacco users within the 24 months prior to the last visit.";
 				case QualityType.InfluenzaAdult:
-					return "";
-				case QualityType.WeightChild:
+					//the documentation is very sloppy.  It's including a flu season daterange in the denominator that is completely illogical.
+					return "All patients 50+ with a visit during the measurement period.";
+				case QualityType.WeightChild_1_1:
 					return "";
 				case QualityType.ImmunizeChild:
 					return "";
@@ -582,8 +655,8 @@ BMI 18.5-25.";
 				case QualityType.TobaccoCessation:
 					return "Tobacco cessation entry within the 24 months prior to the last visit.";
 				case QualityType.InfluenzaAdult:
-					return "";
-				case QualityType.WeightChild:
+					return "Influenza vaccine administered.";
+				case QualityType.WeightChild_1_1:
 					return "";
 				case QualityType.ImmunizeChild:
 					return "";
@@ -606,8 +679,8 @@ BMI 18.5-25.";
 				case QualityType.TobaccoCessation:
 					return "N/A";
 				case QualityType.InfluenzaAdult:
-					return "";
-				case QualityType.WeightChild:
+					return "A valid reason was entered for medication not given.";
+				case QualityType.WeightChild_1_1:
 					return "";
 				case QualityType.ImmunizeChild:
 					return "";

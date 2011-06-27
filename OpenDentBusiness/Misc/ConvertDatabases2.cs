@@ -5715,6 +5715,30 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE vaccinepat ADD Note varchar2(4000)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD ChildGotNutrition tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD ChildGotNutrition number(3)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET ChildGotNutrition = 0 WHERE ChildGotNutrition IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY ChildGotNutrition NOT NULL";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD ChildGotPhysCouns tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD ChildGotPhysCouns number(3)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET ChildGotPhysCouns = 0 WHERE ChildGotPhysCouns IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY ChildGotPhysCouns NOT NULL";
+					Db.NonQ(command);
+				}
 				
 
 
@@ -5742,7 +5766,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
 
 
 
