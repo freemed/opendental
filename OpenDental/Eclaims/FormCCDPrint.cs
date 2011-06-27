@@ -1354,9 +1354,9 @@ namespace OpenDental.Eclaims {
 				CCDField[] eligibleLabPercentage2=formData.GetFieldsById("G60");
 				CCDField[] benefitLabAmount2=formData.GetFieldsById("G61");
 				float noteCol=x;
-				float noteColWidth=(isEOB?65:0);
+				float noteColWidth=(isEOB?55:0);
 				float procedureCol=noteCol+noteColWidth;
-				float procedureColWidth=40;
+				float procedureColWidth=50;
 				float toothCol=procedureCol+procedureColWidth;
 				float toothColWidth=45;
 				float surfaceCol=toothCol+toothColWidth;
@@ -1414,7 +1414,7 @@ namespace OpenDental.Eclaims {
 							}
 						}
 						Procedure proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-						text=claimproc.CodeSent.PadLeft(5,'0');//Field F08
+						text=claimproc.CodeSent.PadLeft(6,' ');//Field F08
 						doc.DrawString(g,text,procedureCol,0);
 						text=Tooth.ToInternat(proc.ToothNum);//Field F10
 						doc.DrawString(g,text,toothCol,0);
@@ -1450,7 +1450,7 @@ namespace OpenDental.Eclaims {
 									if(labProcs.Count>0) {
 										//Display the Lab1 information on its own line.
 										x=doc.StartElement();
-										text=" LAB1";
+										text=ProcedureCodes.GetProcCodeFromDb(labProcs[0].CodeNum).ProcCode.PadLeft(6,' ');
 										doc.DrawString(g,text,procedureCol,0);
 										text=labProcs[0].ProcFee.ToString("F");
 										totalLab+=labProcs[0].ProcFee;
@@ -1467,7 +1467,7 @@ namespace OpenDental.Eclaims {
 									if(labProcs.Count>1) {
 										//Display the Lab2 information on its own line.
 										x=doc.StartElement();
-										text=" LAB2";
+										text=ProcedureCodes.GetProcCodeFromDb(labProcs[1].CodeNum).ProcCode.PadLeft(6,' ');
 										doc.DrawString(g,text,procedureCol,0);
 										text=labProcs[1].ProcFee.ToString("F");
 										totalLab+=labProcs[1].ProcFee;
@@ -1958,7 +1958,7 @@ namespace OpenDental.Eclaims {
 				if(labProcs.Count>0) {
 					//List the first lab info for the current procedure on its own line.
 					x=doc.StartElement();
-					text="  LAB1";
+					text=ProcedureCodes.GetProcCodeFromDb(labProcs[0].CodeNum).ProcCode.PadLeft(6,' ');
 					doc.DrawString(g,text,procedureCodeCol,0);//proc code
 					text=labProcs[0].ProcFee.ToString("F");
 					doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);//proc fee
@@ -1974,7 +1974,7 @@ namespace OpenDental.Eclaims {
 				if(labProcs.Count>1) {
 					//List the second lab info for the current procedure on its own line.
 					x=doc.StartElement();
-					text="  LAB2";
+					text=ProcedureCodes.GetProcCodeFromDb(labProcs[1].CodeNum).ProcCode.PadLeft(6,' ');
 					doc.DrawString(g,text,procedureCodeCol,0);//proc code
 					text=labProcs[1].ProcFee.ToString("F");
 					doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);//proc fee
@@ -2025,10 +2025,10 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,text,procedureNotesCol,0);
 				//Display the eligible lab info for the proc but on a separate line.
 				x=doc.StartElement();
-				text="   LAB";
+				text="LAB(S)";
 				doc.DrawString(g,text,procedureCodeCol,0);
 				text=RawMoneyStrToDisplayMoney(carrierEligibleLabAmts[p].valuestr);
-				doc.DrawString(g,text,procedureEligibleCol,0);
+				doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 			}
 			//Handle the unallocated deductible amount if it exists. 
 			//This happens when a carrier will not supply deductibles on a procedural basis.
