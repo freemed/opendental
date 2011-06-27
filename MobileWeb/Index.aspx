@@ -56,8 +56,8 @@
                 <div style="margin-left:15px;margin-bottom:10px">  
 					<asp:CheckBox ID="rememberusername" title="Remember username" runat="server" /><span class="style1" style="margin-left:15px;font-weight:bold;position:relative;top:0px;left:0px;">Remember username</span>
                 </div>	
-				<ul class="rounded page1">
-					<li class="normalheight"><a id="loginbutton" class="arrowless" href="#">Login</a></li>
+				<ul class="rounded narrowul">
+					<li><a id="loginbutton" class="arrowless" href="#">Login</a></li>
 				</ul>
 				 <div class="styleError" style="margin-left:15px;">  
 				 <asp:Label ID="LabelMessage" runat="server" Text="" ForeColor="Red"></asp:Label>
@@ -84,13 +84,13 @@
 			</div>
 			<div style="height: 70px">
 			</div>
-			<ul class="rounded page1 narrowul">
+			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
 			</ul>
-			<ul class="rounded page1 narrowul">
+			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
 			</ul>
-			<ul class="rounded page1 narrowul">
+			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="PharmacyList.aspx" href="#PharmacyList">Pharmacies</a></li>
 			</ul>
 		</div>

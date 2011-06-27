@@ -229,15 +229,12 @@ ul li {
 
 /*right padding to adjust postion of the ellipse*/
 .elladjust{
- padding-right:15px;
+    padding-right:15px;
  
 }
-.page1{
-    text-align:center;
-     margin-left:50px;
-     margin-right:50px
-}
+
 .narrowul{
-    margin-right:60px;
-    margin-left:60px; 
+    text-align:center;
+    margin-right:75px;
+    margin-left:75px; 
 }

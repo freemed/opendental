@@ -63,31 +63,35 @@
 			</asp:Repeater>
 </ul>
 
-<h2>Prescriptions</h2>
-	<ul>
-			<asp:Repeater ID="Repeater2" runat="server">
-				<ItemTemplate>
-					<li class="style1">
-						<div class="elladjust">
-							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).RxDate.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;
-							<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Drug%>, <%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Disp%>
-						</div>
-					</li>
-				</ItemTemplate>
-			</asp:Repeater>
-</ul>
 <h2>Allergies</h2>
-	<ul>
-			<asp:Repeater ID="Repeater3" runat="server">
-				<ItemTemplate>
-					<li class="style1" style="color:Red">
-						<div class="elladjust">
-							<%#AllergyDefms.GetOne(((Allergym)Container.DataItem).CustomerNum,((Allergym)Container.DataItem).AllergyDefNum).Description%>
-						</div>
-					</li>
-				</ItemTemplate>
-			</asp:Repeater>
+<ul>
+		<asp:Repeater ID="Repeater3" runat="server">
+			<ItemTemplate>
+				<li class="style1" style="color:Red">
+					<div class="elladjust">
+						<%#AllergyDefms.GetOne(((Allergym)Container.DataItem).CustomerNum,((Allergym)Container.DataItem).AllergyDefNum).Description%>.
+						Reaction:
+						<%#((Allergym)Container.DataItem).Reaction%>
+					</div>
+				</li>
+			</ItemTemplate>
+		</asp:Repeater>
 </ul>
+
+<h2>Prescriptions</h2>
+<ul>
+		<asp:Repeater ID="Repeater2" runat="server">
+			<ItemTemplate>
+				<li class="style1">
+					<div class="elladjust">
+						<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).RxDate.ToString("MM/dd/yyyy")%>&nbsp;&nbsp;&nbsp;
+						<%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Drug%>, <%#((OpenDentBusiness.Mobile.RxPatm)Container.DataItem).Disp%>
+					</div>
+				</li>
+			</ItemTemplate>
+		</asp:Repeater>
+</ul>
+
 </div>
 
 </body>
