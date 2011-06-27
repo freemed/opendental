@@ -419,7 +419,7 @@ namespace TestCanada {
 			Canadian.testNumber=scriptNum;
 			claim.PreAuthString=""+pageNumber+","+lastPageNumber+","+firstExamFee+","+diagnosticPhaseFee;
 #endif
-		  long etransNum=Canadian.SendClaim(queueItem,showForms,"");
+		  long etransNum=Canadian.SendClaim(queueItem,showForms);
 		  Etrans etrans=Etranss.GetEtrans(etransNum);
 		  string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 		  CCDFieldInputter formData=new CCDFieldInputter(message);

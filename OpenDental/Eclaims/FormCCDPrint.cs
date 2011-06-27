@@ -370,7 +370,7 @@ namespace OpenDental.Eclaims {
 					PrintSummaryReconciliation_15(e.Graphics);
 				}
 				else if(transactionCode=="12") {
-					PrintReversalResponse(e.Graphics);
+					PrintReversalResponse_12(e.Graphics);
 				}
 				else {
 					switch(formId) {
@@ -2045,10 +2045,10 @@ namespace OpenDental.Eclaims {
 			doc.standardFont=tempFont;
 		}
 
-		private void PrintReversalResponse(Graphics g) {
+		private void PrintReversalResponse_12(Graphics g) {
 			PrintCarrier(g);
 			x=doc.StartElement();
-			text=isFrench?"RÉPONSE INVERSION RÉCLAMATION":"CLAIM REVERSAL RESPONSE";
+			text=(isFrench?"Réponse d'annulation de réclamation":"CLAIM REVERSAL RESPONSE").ToUpper();
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement();
 			PrintStatus(g,x,0);

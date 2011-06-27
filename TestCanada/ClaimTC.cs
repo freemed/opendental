@@ -449,7 +449,7 @@ namespace TestCanada {
 #if DEBUG
 			Canadian.testNumber=scriptNum;
 #endif
-			long etransNum=Canadian.SendClaim(queueItem,showForms,"");
+			long etransNum=Canadian.SendClaim(queueItem,showForms);
 			Etrans etrans=Etranss.GetEtrans(etransNum);
 			string message=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
 			CCDFieldInputter formData=new CCDFieldInputter(message);
