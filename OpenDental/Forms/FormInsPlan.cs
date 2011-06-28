@@ -222,7 +222,8 @@ namespace OpenDental{
 				butSearch.Visible=false;
 				labelElectronicID.Text="EDI Code";
 				comboElectIDdescript.Visible=false;
-				labelGroupNum.Text=Lan.g(this,"Plan Num-Div");
+				labelGroupNum.Text=Lan.g(this,"Plan Number");
+				checkIsPMP.Checked=(planCur.CanadianPlanFlag!="");
 			}
 			else{
 				labelDivisionDash.Visible=false;
@@ -3833,12 +3834,12 @@ namespace OpenDental{
 						return false;
 					}
 					if(textPlanFlag.Text=="A") {
-						if(textCanadianDiagCode.Text!=Eclaims.Canadian.TidyAN(textCanadianDiagCode.Text,6,true)) {
-							MsgBox.Show(this,"When plan flag is set to A, diagnostic code must be set and must be 6 characters long.");
+						if(textCanadianDiagCode.Text=="" || textCanadianDiagCode.Text!=Eclaims.Canadian.TidyAN(textCanadianDiagCode.Text,textCanadianDiagCode.Text.Length,true)) {
+							MsgBox.Show(this,"When plan flag is set to A, diagnostic code must be set and must be 6 characters or less in length.");
 							return false;
 						}
-						if(textCanadianInstCode.Text!=Eclaims.Canadian.TidyAN(textCanadianInstCode.Text,6,true)) {
-							MsgBox.Show(this,"When plan flag is set to A, institution code must be set and must be 6 characters long.");
+						if(textCanadianInstCode.Text=="" || textCanadianInstCode.Text!=Eclaims.Canadian.TidyAN(textCanadianInstCode.Text,textCanadianInstCode.Text.Length,true)) {
+							MsgBox.Show(this,"When plan flag is set to A, institution code must be set and must be 6 characters or less in length.");
 							return false;
 						}
 					}

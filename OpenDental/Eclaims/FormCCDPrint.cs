@@ -132,9 +132,6 @@ namespace OpenDental.Eclaims {
 					subscriber=Patients.GetPat(insSub.Subscriber);
 					insplan=InsPlans.GetPlan(etrans.PlanNum,new List<InsPlan>());
 					patPlanPri=PatPlans.GetFromList(patPlansForPat,insSub.InsSubNum);
-					//Provider info
-					provTreat=Providers.GetProv(Patients.GetProvNum(patient));
-					provBill=Providers.GetProv(Patients.GetProvNum(patient));
 				}
 				else {
 					//Get primary info
@@ -168,6 +165,12 @@ namespace OpenDental.Eclaims {
 					else if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0) {
 						clinic=Clinics.List[0];
 					}
+				}
+				if(provTreat==null) {
+					provTreat=Providers.GetProv(Patients.GetProvNum(patient));
+				}
+				if(provBill==null) {
+					provBill=Providers.GetProv(Patients.GetProvNum(patient));
 				}
 				List<Procedure> procsAll=Procedures.Refresh(etrans.PatNum);
 				extracted=Procedures.GetCanadianExtractedTeeth(procsAll);
@@ -363,7 +366,10 @@ namespace OpenDental.Eclaims {
 				doc.bounds=e.MarginBounds;
 				center=doc.bounds.X+doc.bounds.Width/2;
 				x=doc.StartElement();//Every printed page always starts on the first row and can choose to skip rows later if desired.
-				if(transactionCode=="16") {
+				if(responseStatus=="R") {
+					PrintClaimAck(e.Graphics);//TODO: make unique rejection form.
+				}
+				else if(transactionCode=="16") {
 					PrintPaymentReconciliation_16(e.Graphics);
 				}
 				else if(transactionCode=="15") {
@@ -1588,10 +1594,10 @@ namespace OpenDental.Eclaims {
 			PrintCarrier(g);
 			x=doc.StartElement(verticalLine);
 			if(patientCopy){
-				text=isFrench?"RECONNAISSANCE DE PRÉDÉTERMINATION - COPIE DU PATIENT":
+				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UN PRÉDÉTERMINATION - COPIE DU PATIENT":
 											"PREDETERMINATION ACKNOWLEDGMENT - PATIENT COPY";
 			}else{
-				text=isFrench?"RECONNAISSANCE DE PRÉDÉTERMINATION - COPIE DE DENTISTE":
+				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UN PRÉDÉTERMINATION - COPIE DU DENTISTE":
 											"PREDETERMINATION ACKNOWLEDGMENT - DENTIST COPY";
 			}
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);

@@ -665,7 +665,12 @@ namespace OpenDental.Eclaims {
 					}
 				}
 				if(!exit) {
-					new FormCCDPrint(etrans,result,true);
+					try {
+						new FormCCDPrint(etrans,result,true);
+					}
+					catch(Exception ex) {
+						MessageBox.Show(Lan.g("CanadianOutput","Failed to display one of the ROT responses")+": "+ex.Message);
+					}
 				}
 				//Field A02 exists in all of the possible formats (21,11,14,23,13,24).
 				CCDField fieldA02=fieldInputter.GetFieldById("A02");//office sequence number

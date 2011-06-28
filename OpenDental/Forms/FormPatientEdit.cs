@@ -57,7 +57,7 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioStudentN;
 		private System.Windows.Forms.RadioButton radioStudentP;
 		private System.Windows.Forms.RadioButton radioStudentF;
-		private System.Windows.Forms.Label label30;
+		private System.Windows.Forms.Label labelSchoolName;
 		private System.Windows.Forms.Label label29;
 		private System.Windows.Forms.TextBox textChartNumber;
 		//private OpenDental.ValidDate textBirthdate2;
@@ -281,7 +281,7 @@ namespace OpenDental{
 			this.radioStudentN = new System.Windows.Forms.RadioButton();
 			this.radioStudentP = new System.Windows.Forms.RadioButton();
 			this.radioStudentF = new System.Windows.Forms.RadioButton();
-			this.label30 = new System.Windows.Forms.Label();
+			this.labelSchoolName = new System.Windows.Forms.Label();
 			this.label29 = new System.Windows.Forms.Label();
 			this.textChartNumber = new System.Windows.Forms.TextBox();
 			this.textBirthdate = new OpenDental.ValidDate();
@@ -313,6 +313,8 @@ namespace OpenDental{
 			this.textEmployer = new System.Windows.Forms.TextBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.groupPH = new System.Windows.Forms.GroupBox();
+			this.comboEthnicity = new System.Windows.Forms.ComboBox();
+			this.labelEthnicity = new System.Windows.Forms.Label();
 			this.butClearResponsParty = new OpenDental.UI.Button();
 			this.butPickResponsParty = new OpenDental.UI.Button();
 			this.textResponsParty = new System.Windows.Forms.TextBox();
@@ -357,8 +359,6 @@ namespace OpenDental{
 			this.label42 = new System.Windows.Forms.Label();
 			this.checkArriveEarlySame = new System.Windows.Forms.CheckBox();
 			this.label43 = new System.Windows.Forms.Label();
-			this.comboEthnicity = new System.Windows.Forms.ComboBox();
-			this.labelEthnicity = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -744,7 +744,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.radioStudentN);
 			this.groupBox2.Controls.Add(this.radioStudentP);
 			this.groupBox2.Controls.Add(this.radioStudentF);
-			this.groupBox2.Controls.Add(this.label30);
+			this.groupBox2.Controls.Add(this.labelSchoolName);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(472,397);
 			this.groupBox2.Name = "groupBox2";
@@ -811,14 +811,14 @@ namespace OpenDental{
 			this.radioStudentF.Text = "Fulltime";
 			this.radioStudentF.Click += new System.EventHandler(this.radioStudentF_Click);
 			// 
-			// label30
+			// labelSchoolName
 			// 
-			this.label30.Location = new System.Drawing.Point(5,41);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(116,16);
-			this.label30.TabIndex = 9;
-			this.label30.Text = "College Name";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelSchoolName.Location = new System.Drawing.Point(5,41);
+			this.labelSchoolName.Name = "labelSchoolName";
+			this.labelSchoolName.Size = new System.Drawing.Size(116,16);
+			this.labelSchoolName.TabIndex = 9;
+			this.labelSchoolName.Text = "College Name";
+			this.labelSchoolName.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label29
 			// 
@@ -1162,6 +1162,24 @@ namespace OpenDental{
 			this.groupPH.TabIndex = 23;
 			this.groupPH.TabStop = false;
 			this.groupPH.Text = "Public Health";
+			// 
+			// comboEthnicity
+			// 
+			this.comboEthnicity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboEthnicity.Location = new System.Drawing.Point(149,36);
+			this.comboEthnicity.MaxDropDownItems = 20;
+			this.comboEthnicity.Name = "comboEthnicity";
+			this.comboEthnicity.Size = new System.Drawing.Size(156,21);
+			this.comboEthnicity.TabIndex = 69;
+			// 
+			// labelEthnicity
+			// 
+			this.labelEthnicity.Location = new System.Drawing.Point(6,37);
+			this.labelEthnicity.Name = "labelEthnicity";
+			this.labelEthnicity.Size = new System.Drawing.Size(141,17);
+			this.labelEthnicity.TabIndex = 68;
+			this.labelEthnicity.Text = "Ethnicity";
+			this.labelEthnicity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butClearResponsParty
 			// 
@@ -1586,24 +1604,6 @@ namespace OpenDental{
 			this.label43.Text = "(minutes)";
 			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// comboEthnicity
-			// 
-			this.comboEthnicity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboEthnicity.Location = new System.Drawing.Point(149,36);
-			this.comboEthnicity.MaxDropDownItems = 20;
-			this.comboEthnicity.Name = "comboEthnicity";
-			this.comboEthnicity.Size = new System.Drawing.Size(156,21);
-			this.comboEthnicity.TabIndex = 69;
-			// 
-			// labelEthnicity
-			// 
-			this.labelEthnicity.Location = new System.Drawing.Point(6,37);
-			this.labelEthnicity.Name = "labelEthnicity";
-			this.labelEthnicity.Size = new System.Drawing.Size(141,17);
-			this.labelEthnicity.TabIndex = 68;
-			this.labelEthnicity.Text = "Ethnicity";
-			this.labelEthnicity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormPatientEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -1898,6 +1898,7 @@ namespace OpenDental{
 			}
 			textSchool.Text=PatCur.SchoolName;
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				labelSchoolName.Text=Lan.g(this,"Name of School");
 				comboCanadianEligibilityCode.Items.Add("0 - Please Choose");
 				comboCanadianEligibilityCode.Items.Add("1 - Full-time student");
 				comboCanadianEligibilityCode.Items.Add("2 - Disabled");
@@ -2802,9 +2803,9 @@ namespace OpenDental{
 					return;
 				}
 				if(comboCanadianEligibilityCode.SelectedIndex==1//FT student
-					&& textSchool.Text=="")
+					&& textSchool.Text=="" && PIn.Date(textBirthdate.Text).AddYears(18)<=DateTime.Today)
 				{
-					MsgBox.Show(this,"School should be entered if full-time student.");
+					MsgBox.Show(this,"School should be entered if full-time student and patient is 18 or older.");
 					return;
 				}
 			}

@@ -1038,7 +1038,7 @@ namespace OpenDental{
 					return;
 				}
 				if(textCanadianOfficeNum.Text!=Eclaims.Canadian.TidyAN(textCanadianOfficeNum.Text,4)) {
-					MsgBox.Show(this,"Office sequence number must be 4 characters long and composed of numbers and letters only.");
+					MsgBox.Show(this,"Office number must be 4 characters long and composed of numbers and letters only.");
 					return;
 				}
 			}
