@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 		public DateTime DateTaken;
 		///<summary>For an abnormal BMI measurement this must be true in order to meet quality measurement.</summary>
 		public bool HasFollowupPlan;
-		///<summary>If a BMI was not recored, this must be true in order to meed quality measurement.</summary>
+		///<summary>If a BMI was not recored, this must be true in order to meet quality measurement.  For children, this is used as an IsPregnant flag, the only valid reason for not taking BMI on children.</summary>
 		public bool IsIneligible;
 		///<summary>For HasFollowupPlan or IsIneligible, this documents the specifics.</summary>
 		public string Documentation;

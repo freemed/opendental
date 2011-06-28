@@ -38,7 +38,17 @@ namespace OpenDentBusiness {
 		WeightChild_3_1,
 		WeightChild_3_2,
 		WeightChild_3_3,
-		ImmunizeChild//break this into 12
-
+		ImmunizeChild_1,
+		ImmunizeChild_2,
+		ImmunizeChild_3,
+		ImmunizeChild_4,
+		ImmunizeChild_5,
+		ImmunizeChild_6,
+		ImmunizeChild_7,
+		ImmunizeChild_8,
+		ImmunizeChild_9,
+		ImmunizeChild_10,
+		ImmunizeChild_11,
+		ImmunizeChild_12,
 	}
 }

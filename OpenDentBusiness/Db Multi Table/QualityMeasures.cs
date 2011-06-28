@@ -55,13 +55,47 @@ namespace OpenDentBusiness {
 				case QualityType.InfluenzaAdult:
 					return "0041";
 				case QualityType.WeightChild_1_1:
-					return "0024";
-
-
-
-
-				case QualityType.ImmunizeChild://break this into 12
-					return "0038";
+					return "0024-1.1";
+				case QualityType.WeightChild_1_2:
+					return "0024-1.2";
+				case QualityType.WeightChild_1_3:
+					return "0024-1.3";
+				case QualityType.WeightChild_2_1:
+					return "0024-2.1";
+				case QualityType.WeightChild_2_2:
+					return "0024-2.2";
+				case QualityType.WeightChild_2_3:
+					return "0024-2.3";
+				case QualityType.WeightChild_3_1:
+					return "0024-3.1";
+				case QualityType.WeightChild_3_2:
+					return "0024-3.2";
+				case QualityType.WeightChild_3_3:
+					return "0024-3.3";
+				case QualityType.ImmunizeChild_1:
+					return "0038-1";
+				case QualityType.ImmunizeChild_2:
+					return "0038-2";
+				case QualityType.ImmunizeChild_3:
+					return "0038-3";
+				case QualityType.ImmunizeChild_4:
+					return "0038-4";
+				case QualityType.ImmunizeChild_5:
+					return "0038-5";
+				case QualityType.ImmunizeChild_6:
+					return "0038-6";
+				case QualityType.ImmunizeChild_7:
+					return "0038-7";
+				case QualityType.ImmunizeChild_8:
+					return "0038-8";
+				case QualityType.ImmunizeChild_9:
+					return "0038-9";
+				case QualityType.ImmunizeChild_10:
+					return "0038-10";
+				case QualityType.ImmunizeChild_11:
+					return "0038-11";
+				case QualityType.ImmunizeChild_12:
+					return "0038-12";				
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -82,9 +116,48 @@ namespace OpenDentBusiness {
 				case QualityType.InfluenzaAdult:
 					return "Influenza Immunization, 50+";
 				case QualityType.WeightChild_1_1:
-					return "Weight, Child";
-				case QualityType.ImmunizeChild:
-					return "Immunization Status, Child";
+					return "Weight, Child, pop 1, num 1";
+				case QualityType.WeightChild_1_2:
+					return "Weight, Child, pop 1, num 2";
+				case QualityType.WeightChild_1_3:
+					return "Weight, Child, pop 1, num 3";
+				case QualityType.WeightChild_2_1:
+					return "Weight, Child, pop 2, num 1";
+				case QualityType.WeightChild_2_2:
+					return "Weight, Child, pop 2, num 2";
+				case QualityType.WeightChild_2_3:
+					return "Weight, Child, pop 2, num 3";
+				case QualityType.WeightChild_3_1:
+					return "Weight, Child, pop 3, num 1";
+				case QualityType.WeightChild_3_2:
+					return "Weight, Child, pop 3, num 2";
+				case QualityType.WeightChild_3_3:
+					return "Weight, Child, pop 3, num 3";
+				case QualityType.ImmunizeChild_1:
+					return "Immun Status, Child, num 1";
+				case QualityType.ImmunizeChild_2:
+					return "Immun Status, Child, num 2";
+				case QualityType.ImmunizeChild_3:
+					return "Immun Status, Child, num 3";
+				case QualityType.ImmunizeChild_4:
+					return "Immun Status, Child, num 4";
+				case QualityType.ImmunizeChild_5:
+					return "Immun Status, Child, num 5";
+				case QualityType.ImmunizeChild_6:
+					return "Immun Status, Child, num 6";
+				case QualityType.ImmunizeChild_7:
+					return "Immun Status, Child, num 7";
+				case QualityType.ImmunizeChild_8:
+					return "Immun Status, Child, num 8";
+				case QualityType.ImmunizeChild_9:
+					return "Immun Status, Child, num 9";
+				case QualityType.ImmunizeChild_10:
+					return "Immun Status, Child, num 10";
+				case QualityType.ImmunizeChild_11:
+					return "Immun Status, Child, num 11";
+				case QualityType.ImmunizeChild_12:
+					return "Immun Status, Child, num 12";
+
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -376,11 +449,279 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					break;
 				case QualityType.WeightChild_1_1:
-					//WeightChild------------------------------------------------------------------------------------------------------------------
-
+				case QualityType.WeightChild_1_2:
+				case QualityType.WeightChild_1_3:
+					//WeightChild_1-----------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						IsPregnant tinyint NOT NULL,
+						HasBMI tinyint NOT NULL,
+						ChildGotNutrition tinyint NOT NULL,
+						ChildGotPhysCouns tinyint NOT NULL				
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName) SELECT patient.PatNum,LName,FName "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2))+" "//2+
+						+"AND Birthdate > "+POut.Date(DateTime.Today.AddYears(-17))+" "//less than 17
+						+"GROUP BY patient.PatNum";//there will frequently be multiple procedurelog events
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate pregnancy
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.IsPregnant=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.IsIneligible=1";
+					Db.NonQ(command);
+					//find any BMIs within the period with a valid BMI
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.HasBMI=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.Height > 0 "
+						+"AND vitalsign.Weight > 0";
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate ChildGotNutrition
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.ChildGotNutrition=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.ChildGotNutrition=1";
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate ChildGotPhysCouns
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.ChildGotPhysCouns=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.ChildGotPhysCouns=1";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
 					break;
-				case QualityType.ImmunizeChild:
+				case QualityType.WeightChild_2_1:
+				case QualityType.WeightChild_2_2:
+				case QualityType.WeightChild_2_3:
+					//WeightChild_2-----------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						IsPregnant tinyint NOT NULL,
+						HasBMI tinyint NOT NULL,
+						ChildGotNutrition tinyint NOT NULL,
+						ChildGotPhysCouns tinyint NOT NULL				
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName) SELECT patient.PatNum,LName,FName "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2))+" "//2+
+						+"AND Birthdate > "+POut.Date(DateTime.Today.AddYears(-11))+" "//less than 11
+						+"GROUP BY patient.PatNum";//there will frequently be multiple procedurelog events
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate pregnancy
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.IsPregnant=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.IsIneligible=1";
+					Db.NonQ(command);
+					//find any BMIs within the period with a valid BMI
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.HasBMI=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.Height > 0 "
+						+"AND vitalsign.Weight > 0";
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate ChildGotNutrition
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.ChildGotNutrition=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.ChildGotNutrition=1";
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate ChildGotPhysCouns
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.ChildGotPhysCouns=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.ChildGotPhysCouns=1";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					break;
+				case QualityType.WeightChild_3_1:
+				case QualityType.WeightChild_3_2:
+				case QualityType.WeightChild_3_3:
+					//WeightChild_3-----------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						IsPregnant tinyint NOT NULL,
+						HasBMI tinyint NOT NULL,
+						ChildGotNutrition tinyint NOT NULL,
+						ChildGotPhysCouns tinyint NOT NULL			
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName) SELECT patient.PatNum,LName,FName "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-11))+" "//11+
+						+"AND Birthdate > "+POut.Date(DateTime.Today.AddYears(-17))+" "//less than 17
+						+"GROUP BY patient.PatNum";//there will frequently be multiple procedurelog events
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate pregnancy
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.IsPregnant=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.IsIneligible=1";
+					Db.NonQ(command);
+					//find any BMIs within the period with a valid BMI
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.HasBMI=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.Height > 0 "
+						+"AND vitalsign.Weight > 0";
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate ChildGotNutrition
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.ChildGotNutrition=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.ChildGotNutrition=1";
+					Db.NonQ(command);
+					//find any BMIs within the period that indicate ChildGotPhysCouns
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET tempehrquality.ChildGotPhysCouns=1 "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.DateTaken >= "+POut.Date(dateStart)+" "
+						+"AND vitalsign.DateTaken <= "+POut.Date(dateEnd)+" "
+						+"AND vitalsign.ChildGotPhysCouns=1";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					break;
+				case QualityType.ImmunizeChild_1:
+				case QualityType.ImmunizeChild_2:
+				case QualityType.ImmunizeChild_3:
+				case QualityType.ImmunizeChild_4:
+				case QualityType.ImmunizeChild_5:
+				case QualityType.ImmunizeChild_6:
+				case QualityType.ImmunizeChild_7:
+				case QualityType.ImmunizeChild_8:
+				case QualityType.ImmunizeChild_9:
+				case QualityType.ImmunizeChild_10:
+				case QualityType.ImmunizeChild_11:
+				case QualityType.ImmunizeChild_12:
 					//ImmunizeChild----------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						Birthdate date NOT NULL,
+						Count1 tinyint NOT NULL,
+						NotGivenDate1 date NOT NULL,
+						Documentation1 varchar(255) NOT NULL
+
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName,Birthdate) SELECT patient.PatNum,LName,FName,Birthdate "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE DATE_ADD(Birthdate,INTERVAL 2 YEAR) >= "+POut.Date(dateStart)+" "//second birthdate is in meas period
+						+"AND DATE_ADD(Birthdate,INTERVAL 2 YEAR) <= "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					/*
+					//Count1, DTaP
+					command="UPDATE tempehrquality "
+						+"SET Count1=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND vaccinedef.CVXCode IN('135','15'))";
+					Db.NonQ(command);
+
+
+
+
+					command="UPDATE tempehrquality "
+						+"SET tempehrquality.DateVaccine=(SELECT MAX(DATE(vaccinepat.DateTimeStart)) "
+						+"FROM vaccinepat,vaccinedef "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND vaccinedef.CVXCode IN('135','15'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality SET DateVaccine='0001-01-01' WHERE DateVaccine='0000-00-00'";
+					Db.NonQ(command);
+					//pull documentation on vaccine exclusions based on date.
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET Documentation=Note, "
+						+"tempehrquality.NotGiven=vaccinepat.NotGiven "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND vaccinepat.DateTimeStart=tempehrquality.DateVaccine "
+						+"AND vaccinedef.CVXCode IN('135','15')";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);*/
+
+
+
+
 
 					break;
 				default:
@@ -568,11 +909,157 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case QualityType.WeightChild_1_1:
-						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
-
+						//WeightChild_1_1----------------------------------------------------------------------------------------------------------------
+						bool isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						bool hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(hasBMI) {
+							row["numerator"]="X";
+							row["explanation"]="BMI entered";
+						}
+						else {
+							row["explanation"]="No BMI entered";
+						}
 						break;
-					case QualityType.ImmunizeChild:
-						//InfluenzaAdult----------------------------------------------------------------------------------------------------------------
+					case QualityType.WeightChild_1_2:
+						//WeightChild_1_2----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						bool ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotNutrition) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for nutrition";
+						}
+						else {
+							row["explanation"]="Not counseled for nutrition";
+						}
+						break;
+					case QualityType.WeightChild_1_3:
+						//WeightChild_1_3----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						bool ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotPhysCouns) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for physical activity";
+						}
+						else {
+							row["explanation"]="Not counseled for physical activity";
+						}
+						break;
+					case QualityType.WeightChild_2_1:
+						//WeightChild_2_1----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(hasBMI) {
+							row["numerator"]="X";
+							row["explanation"]="BMI entered";
+						}
+						else {
+							row["explanation"]="No BMI entered";
+						}
+						break;
+					case QualityType.WeightChild_2_2:
+						//WeightChild_2_2----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotNutrition) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for nutrition";
+						}
+						else {
+							row["explanation"]="Not counseled for nutrition";
+						}
+						break;
+					case QualityType.WeightChild_2_3:
+						//WeightChild_2_3----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotPhysCouns) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for physical activity";
+						}
+						else {
+							row["explanation"]="Not counseled for physical activity";
+						}
+						break;
+					case QualityType.WeightChild_3_1:
+						//WeightChild_3_1----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(hasBMI) {
+							row["numerator"]="X";
+							row["explanation"]="BMI entered";
+						}
+						else {
+							row["explanation"]="No BMI entered";
+						}
+						break;
+					case QualityType.WeightChild_3_2:
+						//WeightChild_3_2----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotNutrition) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for nutrition";
+						}
+						else {
+							row["explanation"]="Not counseled for nutrition";
+						}
+						break;
+					case QualityType.WeightChild_3_3:
+						//WeightChild_3_3----------------------------------------------------------------------------------------------------------------
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotPhysCouns) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for physical activity";
+						}
+						else {
+							row["explanation"]="Not counseled for physical activity";
+						}
+						break;
+					case QualityType.ImmunizeChild_1:
+					case QualityType.ImmunizeChild_2:
+					case QualityType.ImmunizeChild_3:
+					case QualityType.ImmunizeChild_4:
+					case QualityType.ImmunizeChild_5:
+					case QualityType.ImmunizeChild_6:
+					case QualityType.ImmunizeChild_7:
+					case QualityType.ImmunizeChild_8:
+					case QualityType.ImmunizeChild_9:
+					case QualityType.ImmunizeChild_10:
+					case QualityType.ImmunizeChild_11:
+					case QualityType.ImmunizeChild_12:
+						//ImmunizeChild----------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 						break;
 					default:
@@ -631,9 +1118,30 @@ namespace OpenDentBusiness {
 					//the documentation is very sloppy.  It's including a flu season daterange in the denominator that is completely illogical.
 					return "All patients 50+ with a visit during the measurement period.";
 				case QualityType.WeightChild_1_1:
-					return "";
-				case QualityType.ImmunizeChild:
-					return "";
+				case QualityType.WeightChild_1_2:
+				case QualityType.WeightChild_1_3:
+					return "All patients 2-16 with a visit during the measurement period, unless pregnant.";
+				case QualityType.WeightChild_2_1:
+				case QualityType.WeightChild_2_2:
+				case QualityType.WeightChild_2_3:
+					return "All patients 2-10 with a visit during the measurement period, unless pregnant.";
+				case QualityType.WeightChild_3_1:
+				case QualityType.WeightChild_3_2:
+				case QualityType.WeightChild_3_3:
+					return "All patients 11-16 with a visit during the measurement period, unless pregnant.";
+				case QualityType.ImmunizeChild_1:
+				case QualityType.ImmunizeChild_2:
+				case QualityType.ImmunizeChild_3:
+				case QualityType.ImmunizeChild_4:
+				case QualityType.ImmunizeChild_5:
+				case QualityType.ImmunizeChild_6:
+				case QualityType.ImmunizeChild_7:
+				case QualityType.ImmunizeChild_8:
+				case QualityType.ImmunizeChild_9:
+				case QualityType.ImmunizeChild_10:
+				case QualityType.ImmunizeChild_11:
+				case QualityType.ImmunizeChild_12:
+					return "All patients with a visit during the measurement period who turned 2 during the measurement period.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -657,9 +1165,49 @@ BMI 18.5-25.";
 				case QualityType.InfluenzaAdult:
 					return "Influenza vaccine administered.";
 				case QualityType.WeightChild_1_1:
-					return "";
-				case QualityType.ImmunizeChild:
-					return "";
+					return "BMI recorded during measurement period.";
+				case QualityType.WeightChild_1_2:
+					return "Counseling for nutrition during measurement period.";
+				case QualityType.WeightChild_1_3:
+					return "Counseling for physical activity during measurement period.";
+				case QualityType.WeightChild_2_1:
+					return "BMI recorded during measurement period.";
+				case QualityType.WeightChild_2_2:
+					return "Counseling for nutrition during measurement period.";
+				case QualityType.WeightChild_2_3:
+					return "Counseling for physical activity during measurement period.";
+				case QualityType.WeightChild_3_1:
+					return "BMI recorded during measurement period.";
+				case QualityType.WeightChild_3_2:
+					return "Counseling for nutrition during measurement period.";
+				case QualityType.WeightChild_3_3:
+					return "Counseling for physical activity during measurement period.";
+				case QualityType.ImmunizeChild_1:
+					return "4 DTaP vaccinations between 42 days and 2 years of age.";
+				case QualityType.ImmunizeChild_2:
+					return "3 IPV vaccinations between 42 days and 2 years of age.";
+				case QualityType.ImmunizeChild_3:
+					return "1 MMR vaccination before 2 years of age.\r\n"
+						+"OR 1 measles, 1 mumps, and 1 rubella.";
+				case QualityType.ImmunizeChild_4:
+					//the intro paragraph states 4 HiB.  They have a typo someplace.
+					return "2 HiB vaccinations between 42 days and 2 years of age.";
+				case QualityType.ImmunizeChild_5:
+					return "3 hepatitis B vaccinations before 2 years of age.";
+				case QualityType.ImmunizeChild_6:
+					return "1 VZV vaccination before 2 years of age.";
+				case QualityType.ImmunizeChild_7:
+					return "4 pneumococcal vaccinations between 42 days and 2 years of age.";
+				case QualityType.ImmunizeChild_8:
+					return "2 hepatitis A vaccinations before 2 years of age.";
+				case QualityType.ImmunizeChild_9:
+					return "2 rotavirus vaccinations between 42 days and 2 years of age.";
+				case QualityType.ImmunizeChild_10:
+					return "2 influenza vaccinations between 180 days and 2 years of age.";
+				case QualityType.ImmunizeChild_11:
+					return "All vaccinations 1-6.";
+				case QualityType.ImmunizeChild_12:
+					return "All vaccinations 1-7.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -681,9 +1229,28 @@ BMI 18.5-25.";
 				case QualityType.InfluenzaAdult:
 					return "A valid reason was entered for medication not given.";
 				case QualityType.WeightChild_1_1:
-					return "";
-				case QualityType.ImmunizeChild:
-					return "";
+				case QualityType.WeightChild_1_2:
+				case QualityType.WeightChild_1_3:
+				case QualityType.WeightChild_2_1:
+				case QualityType.WeightChild_2_2:
+				case QualityType.WeightChild_2_3:
+				case QualityType.WeightChild_3_1:
+				case QualityType.WeightChild_3_2:
+				case QualityType.WeightChild_3_3:
+					return "N/A";
+				case QualityType.ImmunizeChild_1:
+				case QualityType.ImmunizeChild_2:
+				case QualityType.ImmunizeChild_3:
+				case QualityType.ImmunizeChild_4:
+				case QualityType.ImmunizeChild_5:
+				case QualityType.ImmunizeChild_6:
+				case QualityType.ImmunizeChild_7:
+				case QualityType.ImmunizeChild_8:
+				case QualityType.ImmunizeChild_9:
+				case QualityType.ImmunizeChild_10:
+				case QualityType.ImmunizeChild_11:
+				case QualityType.ImmunizeChild_12:
+					return "Contraindicated due to specific allergy or disease.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}

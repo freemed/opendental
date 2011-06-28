@@ -174,6 +174,7 @@ namespace OpenDentBusiness{
 			byte[] rawData=Convert.FromBase64String(sound);
 			FileStream stream=new FileStream(filename,FileMode.Create,FileAccess.Write);
 			stream.Write(rawData,0,rawData.Length);
+			stream.Close();
 		}
 		
 		///<summary>Currently does nothing.</summary>
