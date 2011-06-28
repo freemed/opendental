@@ -79,6 +79,44 @@ namespace OpenDentBusiness.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:n3=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:n1=&quot;urn:hl7-org:v3&quot; xmlns:n2=&quot;urn:hl7-org:v3/meta/voc&quot; xmlns:voc=&quot;urn:hl7-org:v3/voc&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+        ///&lt;xsl:output method=&quot;html&quot; indent=&quot;yes&quot; version=&quot;4.01&quot; encoding=&quot;ISO-8859-1&quot; doctype-public=&quot;-//W3C//DTD HTML 4.01//EN&quot;/&gt;
+        ///
+        ///&lt;!-- CDA document --&gt;
+        ///
+        ///&lt;xsl:variable name=&quot;tableWidth&quot;&gt;50%&lt;/xsl:variable&gt;
+        ///
+        ///&lt;xsl:variable name= [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CCD {
+            get {
+                return ResourceManager.GetString("CCD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;!-- 
+        ///
+        ///   Copyright 2007 American Academy of Family Physicians 
+        ///   
+        ///   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); 
+        ///   you may not use this file except in compliance with the License. 
+        ///   You may obtain a copy of the License at 
+        ///   
+        ///   http://www.apache.org/licenses/LICENSE-2.0 
+        ///   
+        ///   Unless required by applicable law or agreed to in writing, software distributed
+        ///   under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIE [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CCR {
+            get {
+                return ResourceManager.GetString("CCR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The current data type is not supported by the PIn class..
         /// </summary>
         internal static string DataTypeNotSupportedByPIn {

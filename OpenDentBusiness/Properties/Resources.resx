@@ -154,8 +154,14 @@
   <data name="TooManyDataFieldAttributes" xml:space="preserve">
     <value>An attribute of type "DataFieldAttribute" can only be specified once.</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="rxnorm" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\rxnorm.zip;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CCD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CCD.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="CCR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CCR.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
