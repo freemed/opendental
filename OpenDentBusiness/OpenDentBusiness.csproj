@@ -187,6 +187,7 @@
     <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\EhrMeasureEventCrud.cs" />
     <Compile Include="Crud\EhrProvKeyCrud.cs" />
+    <Compile Include="Crud\EhrSummaryCcdCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
     <Compile Include="Crud\EmailAttachCrud.cs" />
     <Compile Include="Crud\EmailMessageCrud.cs" />
@@ -343,6 +344,7 @@
     <Compile Include="Data Interface\EhrMeasureEvents.cs" />
     <Compile Include="Data Interface\EhrMeasures.cs" />
     <Compile Include="Data Interface\EhrProvKeys.cs" />
+    <Compile Include="Data Interface\EhrSummaryCcds.cs" />
     <Compile Include="Data Interface\Formularies.cs" />
     <Compile Include="Data Interface\FormularyMeds.cs" />
     <Compile Include="Data Interface\Guardians.cs" />

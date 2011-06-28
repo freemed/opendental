@@ -44,25 +44,14 @@ namespace OpenDentBusiness{
 			listt=Crud.EhrSummaryCcdCrud.TableToList(table);
 		}
 		#endregion
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
+		
 		///<summary></summary>
 		public static List<EhrSummaryCcd> Refresh(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrSummaryCcd>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM ehrsummaryccd WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM ehrsummaryccd WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DateSummary ASC";
 			return Crud.EhrSummaryCcdCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one EhrSummaryCcd from the db.</summary>
-		public static EhrSummaryCcd GetOne(long ehrSummaryCcdNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<EhrSummaryCcd>(MethodBase.GetCurrentMethod(),ehrSummaryCcdNum);
-			}
-			return Crud.EhrSummaryCcdCrud.SelectOne(ehrSummaryCcdNum);
 		}
 
 		///<summary></summary>
@@ -72,6 +61,17 @@ namespace OpenDentBusiness{
 				return ehrSummaryCcd.EhrSummaryCcdNum;
 			}
 			return Crud.EhrSummaryCcdCrud.Insert(ehrSummaryCcd);
+		}
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+
+		///<summary>Gets one EhrSummaryCcd from the db.</summary>
+		public static EhrSummaryCcd GetOne(long ehrSummaryCcdNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<EhrSummaryCcd>(MethodBase.GetCurrentMethod(),ehrSummaryCcdNum);
+			}
+			return Crud.EhrSummaryCcdCrud.SelectOne(ehrSummaryCcdNum);
 		}
 
 		///<summary></summary>
