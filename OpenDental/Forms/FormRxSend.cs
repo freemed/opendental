@@ -210,11 +210,20 @@ namespace OpenDental {
 			//Uncomment if you want to see the message text:
 			//MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strb.ToString());
 			//msgbox.ShowDialog();
-			EHR.EhrEmail.Send("10.6 SCRIPT for NEWRX","SCRIPT.txt",strb.ToString());
-			//Remove the Rx from the grid.
-			rx.SendStatus=RxSendStatus.SentElect;
+			Cursor=Cursors.WaitCursor;
+			try {
+				EHR.EhrEmail.Send("10.6 SCRIPT for NEWRX","SCRIPT.txt",strb.ToString());
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			Cursor=Cursors.Default;
+			MessageBox.Show("Sent");
+			rx.SendStatus=RxSendStatus.SentElect;//Removes the Rx from the grid.
 			RxPats.Update(rx);
-			FillGrid();//Refresh the screen so that sent Rx's look to have been sent.
+			FillGrid();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
