@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrSummaryCcd>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM ehrsummaryccd WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DateSummary ASC";
+			string command="SELECT * FROM ehrsummaryccd WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DateSummary";
 			return Crud.EhrSummaryCcdCrud.SelectMany(command);
 		}
 
