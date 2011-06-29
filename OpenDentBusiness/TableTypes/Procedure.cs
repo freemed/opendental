@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 		public DateTime DateOriginalProsth;
 		///<summary>This note will go on e-claim. For By Report, prep dates, or initial endo date.</summary>
 		public string ClaimNote;
-		///<summary>This is the date this procedure was entered or set complete.  If not status C, then the value is ignored, so it might be minValue 0001-01-01 or any other date.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later.</summary>
+		///<summary>This is the date this procedure was entered or set complete.  If not status C, then the value is ignored.  This date is set automatically when Insert, but older data or converted data might not have this value set.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateEntryEditable)]
 		public DateTime DateEntryC;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>

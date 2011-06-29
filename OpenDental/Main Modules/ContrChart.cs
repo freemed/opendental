@@ -5800,7 +5800,7 @@ namespace OpenDental{
 				!=DialogResult.OK){
 				return;
 			}
-			//TODO: Create skippedSecurity
+			int skippedSecurity=0;
 			int skippedC=0;
 			int skippedComlog=0;
 			DataRow row;
@@ -5812,7 +5812,14 @@ namespace OpenDental{
 					}
 					else{
 						try{
-							//TODO: Check if user has security to delete procs
+							DateTime dateEntryC=DateTime.MinValue;
+							if(row["dateEntryC"].ToString()!="") {
+								dateEntryC=DateTime.Parse(row["dateEntryC"].ToString());
+							}
+							if(!Security.IsAuthorized(Permissions.ProcDelete,dateEntryC,true)) {
+								skippedSecurity++;
+								continue;
+							}
 							Procedures.Delete(PIn.Long(row["ProcNum"].ToString()));//also deletes the claimprocs
 							SecurityLogs.MakeLogEntry(Permissions.ProcDelete,PatCur.PatNum,row["ProcCode"].ToString()+", "+PIn.Double(row["procFee"].ToString()).ToString("c"));
 						}
@@ -5837,7 +5844,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Not allowed to delete commlog entries from here.")+"\r"
 					+skippedComlog.ToString()+" "+Lan.g(this,"item(s) skipped."));
 			}
-			//TODO: Add pop up for procedures skipped due to security.
+			if(skippedSecurity>0) {
+				MessageBox.Show(Lan.g(this,"Not allowed to delete procedures due to security.")+"\r"
+					+skippedSecurity.ToString()+" "+Lan.g(this,"item(s) skipped."));
+			}
 			ModuleSelected(PatCur.PatNum);
 		}
 

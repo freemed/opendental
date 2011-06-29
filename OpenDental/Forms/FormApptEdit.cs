@@ -1492,18 +1492,23 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select one or more procedures first.");
 				return;
 			}
-			//TODO: ProcDelete security check.
 			if(!MsgBox.Show(this,true,"Permanently delete all selected procedure(s)?")){
 				return;
 			}
 			int skipped=0;
+			int skippedSecurity=0;
 			try{
-				for(int i=0;i<gridProc.SelectedIndices.Length;i++){
-					if(!Security.IsAuthorized(Permissions.ProcComplEdit,AptCur.AptDateTime.Date,true)) {
-						if(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcStatus"].ToString()==((int)ProcStat.C).ToString()) {
+				for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+					Procedure proc=Procedures.GetOneProc(PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString()),false);
+					if(!Security.IsAuthorized(Permissions.ProcComplEdit,proc.DateEntryC,true)) {
+						if(proc.ProcStatus==ProcStat.C) {
 							skipped++;
 							continue;
 						}
+					}
+					if(!Security.IsAuthorized(Permissions.ProcDelete,proc.DateEntryC,true)) {
+						skippedSecurity++;
+						continue;
 					}
 					//also deletes the claimProcs and adjustments. Might throw exception.
 					Procedures.Delete(PIn.Long(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString()));
@@ -1525,6 +1530,9 @@ namespace OpenDental{
 			FillTime();
 			if(skipped>0) {
 				MessageBox.Show(Lan.g(this,"Procedures skipped due to lack of permission to edit completed procedures: ")+skipped.ToString());
+			}
+			if(skippedSecurity>0) {
+				MessageBox.Show(Lan.g(this,"Procedures skipped due to lack of permission to delete procedures: ")+skippedSecurity.ToString());
 			}
 		}
 
