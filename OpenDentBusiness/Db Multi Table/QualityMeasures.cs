@@ -116,47 +116,47 @@ namespace OpenDentBusiness {
 				case QualityType.InfluenzaAdult:
 					return "Influenza Immunization, 50+";
 				case QualityType.WeightChild_1_1:
-					return "Weight, Child, pop 1, num 1";
+					return "Weight, Child 2-16, BMI";
 				case QualityType.WeightChild_1_2:
-					return "Weight, Child, pop 1, num 2";
+					return "Weight, Child 2-16, nutrition";
 				case QualityType.WeightChild_1_3:
-					return "Weight, Child, pop 1, num 3";
+					return "Weight, Child 2-16, physical";
 				case QualityType.WeightChild_2_1:
-					return "Weight, Child, pop 2, num 1";
+					return "Weight, Child 2-10, BMI";
 				case QualityType.WeightChild_2_2:
-					return "Weight, Child, pop 2, num 2";
+					return "Weight, Child 2-10, nutrition";
 				case QualityType.WeightChild_2_3:
-					return "Weight, Child, pop 2, num 3";
+					return "Weight, Child 2-10, physical";
 				case QualityType.WeightChild_3_1:
-					return "Weight, Child, pop 3, num 1";
+					return "Weight, Child 11-16, BMI";
 				case QualityType.WeightChild_3_2:
-					return "Weight, Child, pop 3, num 2";
+					return "Weight, Child 11-16, nutrition";
 				case QualityType.WeightChild_3_3:
-					return "Weight, Child, pop 3, num 3";
+					return "Weight, Child 11-16, physical";
 				case QualityType.ImmunizeChild_1:
-					return "Immun Status, Child, num 1";
+					return "Immun Status, Child, DTaP";
 				case QualityType.ImmunizeChild_2:
-					return "Immun Status, Child, num 2";
+					return "Immun Status, Child, IPV";
 				case QualityType.ImmunizeChild_3:
-					return "Immun Status, Child, num 3";
+					return "Immun Status, Child, MMR";
 				case QualityType.ImmunizeChild_4:
-					return "Immun Status, Child, num 4";
+					return "Immun Status, Child, HiB";
 				case QualityType.ImmunizeChild_5:
-					return "Immun Status, Child, num 5";
+					return "Immun Status, Child, hep B";
 				case QualityType.ImmunizeChild_6:
-					return "Immun Status, Child, num 6";
+					return "Immun Status, Child, VZV";
 				case QualityType.ImmunizeChild_7:
-					return "Immun Status, Child, num 7";
+					return "Immun Status, Child, pneumococcal";
 				case QualityType.ImmunizeChild_8:
-					return "Immun Status, Child, num 8";
+					return "Immun Status, Child, hep A";
 				case QualityType.ImmunizeChild_9:
-					return "Immun Status, Child, num 9";
+					return "Immun Status, Child, rotavirus";
 				case QualityType.ImmunizeChild_10:
-					return "Immun Status, Child, num 10";
+					return "Immun Status, Child, influenza";
 				case QualityType.ImmunizeChild_11:
-					return "Immun Status, Child, num 11";
+					return "Immun Status, Child, 1-6";
 				case QualityType.ImmunizeChild_12:
-					return "Immun Status, Child, num 12";
+					return "Immun Status, Child, 1-7";
 
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -667,9 +667,35 @@ namespace OpenDentBusiness {
 						FName varchar(255) NOT NULL,
 						Birthdate date NOT NULL,
 						Count1 tinyint NOT NULL,
-						NotGivenDate1 date NOT NULL,
-						Documentation1 varchar(255) NOT NULL
-
+						NotGiven1 tinyint NOT NULL,
+						Documentation1 varchar(255) NOT NULL,
+						Count2 tinyint NOT NULL,
+						NotGiven2 tinyint NOT NULL,
+						Documentation2 varchar(255) NOT NULL,
+						Count3 tinyint NOT NULL,
+						NotGiven3 tinyint NOT NULL,
+						Documentation3 varchar(255) NOT NULL,
+						Count4 tinyint NOT NULL,
+						NotGiven4 tinyint NOT NULL,
+						Documentation4 varchar(255) NOT NULL,
+						Count5 tinyint NOT NULL,
+						NotGiven5 tinyint NOT NULL,
+						Documentation5 varchar(255) NOT NULL,
+						Count6 tinyint NOT NULL,
+						NotGiven6 tinyint NOT NULL,
+						Documentation6 varchar(255) NOT NULL,
+						Count7 tinyint NOT NULL,
+						NotGiven7 tinyint NOT NULL,
+						Documentation7 varchar(255) NOT NULL,
+						Count8 tinyint NOT NULL,
+						NotGiven8 tinyint NOT NULL,
+						Documentation8 varchar(255) NOT NULL,
+						Count9 tinyint NOT NULL,
+						NotGiven9 tinyint NOT NULL,
+						Documentation9 varchar(255) NOT NULL,
+						Count10 tinyint NOT NULL,
+						NotGiven10 tinyint NOT NULL,
+						Documentation10 varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrquality (PatNum,LName,FName,Birthdate) SELECT patient.PatNum,LName,FName,Birthdate "
@@ -684,45 +710,179 @@ namespace OpenDentBusiness {
 						+"AND DATE_ADD(Birthdate,INTERVAL 2 YEAR) <= "+POut.Date(dateEnd)+" "
 						+"GROUP BY patient.PatNum";
 					Db.NonQ(command);
-					/*
 					//Count1, DTaP
 					command="UPDATE tempehrquality "
 						+"SET Count1=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
 						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
 						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
-						+"AND vaccinedef.CVXCode IN('135','15'))";
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) >= DATE_ADD(tempehrquality.Birthdate,INTERVAL 42 DAY) "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('110','120','20','50'))";
 					Db.NonQ(command);
-
-
-
-
-					command="UPDATE tempehrquality "
-						+"SET tempehrquality.DateVaccine=(SELECT MAX(DATE(vaccinepat.DateTimeStart)) "
-						+"FROM vaccinepat,vaccinedef "
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven1=1,Documentation1=Note "
 						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
 						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('110','120','20','50')";
+					Db.NonQ(command);
+					//Count2, IPV
+					command="UPDATE tempehrquality "
+						+"SET Count2=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) >= DATE_ADD(tempehrquality.Birthdate,INTERVAL 42 DAY) "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('10','120'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven2=1,Documentation2=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('10','120')";
+					Db.NonQ(command);
+					//Count3, MMR
+					command="UPDATE tempehrquality "
+						+"SET Count3=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('03','94'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven3=1,Documentation3=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('03','94')";
+					Db.NonQ(command);
+
+					//todo 3a,b,c
+
+					//Count4, HiB
+					command="UPDATE tempehrquality "
+						+"SET Count4=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) >= DATE_ADD(tempehrquality.Birthdate,INTERVAL 42 DAY) "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('120','46','47','48','49','50','51'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven4=1,Documentation4=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('120','46','47','48','49','50','51')";
+					Db.NonQ(command);
+					//Count5, Hep B
+					command="UPDATE tempehrquality "
+						+"SET Count5=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('08','110','44','51'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven5=1,Documentation5=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('08','110','44','51')";
+					Db.NonQ(command);
+					//Count6, VZV
+					command="UPDATE tempehrquality "
+						+"SET Count6=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('21','94'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven6=1,Documentation6=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('21','94')";
+					Db.NonQ(command);
+					//Count7, pneumococcal
+					command="UPDATE tempehrquality "
+						+"SET Count7=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) >= DATE_ADD(tempehrquality.Birthdate,INTERVAL 42 DAY) "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('100','133'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven7=1,Documentation7=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('100','133')";
+					Db.NonQ(command);
+					//Count8, hep A
+					command="UPDATE tempehrquality "
+						+"SET Count8=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('83'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven8=1,Documentation8=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('83')";
+					Db.NonQ(command);
+					//Count9, rotavirus
+					command="UPDATE tempehrquality "
+						+"SET Count9=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) >= DATE_ADD(tempehrquality.Birthdate,INTERVAL 42 DAY) "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('116','119'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven9=1,Documentation9=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('116','119')";
+					Db.NonQ(command);
+					//Count10, influenza
+					command="UPDATE tempehrquality "
+						+"SET Count10=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) >= DATE_ADD(tempehrquality.Birthdate,INTERVAL 180 DAY) "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
 						+"AND vaccinedef.CVXCode IN('135','15'))";
 					Db.NonQ(command);
-					command="UPDATE tempehrquality SET DateVaccine='0001-01-01' WHERE DateVaccine='0000-00-00'";
-					Db.NonQ(command);
-					//pull documentation on vaccine exclusions based on date.
 					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
-						+"SET Documentation=Note, "
-						+"tempehrquality.NotGiven=vaccinepat.NotGiven "
-						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
-						+"AND vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
-						+"AND vaccinepat.DateTimeStart=tempehrquality.DateVaccine "
+						+"SET NotGiven10=1,Documentation10=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
 						+"AND vaccinedef.CVXCode IN('135','15')";
 					Db.NonQ(command);
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
 					command="DROP TABLE IF EXISTS tempehrquality";
-					Db.NonQ(command);*/
-
-
-
-
-
+					Db.NonQ(command);
 					break;
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -1044,23 +1204,228 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case QualityType.ImmunizeChild_1:
+						//ImmunizeChild_1--------------------------------------------------------------------------------------------------------------
+						int count=PIn.Int(tableRaw.Rows[i]["Count1"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven1"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation1"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No DTaP vaccine given, "+documentation;
+						}
+						else if(count>=4) {
+							row["numerator"]="X";
+							row["explanation"]="DTaP vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="DTaP vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_2:
+						//ImmunizeChild_2--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count2"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven2"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation2"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No IPV vaccine given, "+documentation;
+						}
+						else if(count>=3) {
+							row["numerator"]="X";
+							row["explanation"]="IPV vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="IPV vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_3:
+						//ImmunizeChild_3--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count3"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven3"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation3"].ToString());
+						//todo split vaccine
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No MMR vaccine given, "+documentation;
+						}
+						else if(count>=1) {
+							row["numerator"]="X";
+							row["explanation"]="MMR vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="MMR vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_4:
+						//ImmunizeChild_4--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count4"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven4"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation4"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No HiB vaccine given, "+documentation;
+						}
+						else if(count>=2) {
+							row["numerator"]="X";
+							row["explanation"]="HiB vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="HiB vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_5:
+						//ImmunizeChild_5--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count5"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven5"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation5"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No hepatitis B vaccine given, "+documentation;
+						}
+						else if(count>=3) {
+							row["numerator"]="X";
+							row["explanation"]="hepatitis B vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="hepatitis B vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_6:
+						//ImmunizeChild_6--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count6"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven6"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation6"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No VZV vaccine given, "+documentation;
+						}
+						else if(count>=1) {
+							row["numerator"]="X";
+							row["explanation"]="VZV vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="VZV vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_7:
+						//ImmunizeChild_7--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count7"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven7"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation7"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No pneumococcal vaccine given, "+documentation;
+						}
+						else if(count>=4) {
+							row["numerator"]="X";
+							row["explanation"]="pneumococcal vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="pneumococcal vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_8:
+						//ImmunizeChild_8--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count8"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven8"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation8"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No hepatitis A vaccine given, "+documentation;
+						}
+						else if(count>=2) {
+							row["numerator"]="X";
+							row["explanation"]="hepatitis A vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="hepatitis A vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_9:
+						//ImmunizeChild_9--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count9"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven9"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation9"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No rotavirus vaccine given, "+documentation;
+						}
+						else if(count>=2) {
+							row["numerator"]="X";
+							row["explanation"]="rotavirus vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="rotavirus vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_10:
+						//ImmunizeChild_10--------------------------------------------------------------------------------------------------------------
+						count=PIn.Int(tableRaw.Rows[i]["Count10"].ToString());
+						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven10"].ToString());
+						documentation=PIn.String(tableRaw.Rows[i]["Documentation10"].ToString());
+						if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No influenza vaccine given, "+documentation;
+						}
+						else if(count>=2) {
+							row["numerator"]="X";
+							row["explanation"]="influenza vaccinations: "+count.ToString();
+						}
+						else {
+							row["explanation"]="influenza vaccinations: "+count.ToString();
+						}
+						break;
 					case QualityType.ImmunizeChild_11:
+						int count1=PIn.Int(tableRaw.Rows[i]["Count1"].ToString());
+						int count2=PIn.Int(tableRaw.Rows[i]["Count2"].ToString());
+						int count3=PIn.Int(tableRaw.Rows[i]["Count3"].ToString());
+						int count4=PIn.Int(tableRaw.Rows[i]["Count4"].ToString());
+						int count5=PIn.Int(tableRaw.Rows[i]["Count5"].ToString());
+						int count6=PIn.Int(tableRaw.Rows[i]["Count6"].ToString());
+						bool notGiven1=PIn.Bool(tableRaw.Rows[i]["NotGiven1"].ToString());
+						bool notGiven2=PIn.Bool(tableRaw.Rows[i]["NotGiven2"].ToString());
+						bool notGiven3=PIn.Bool(tableRaw.Rows[i]["NotGiven3"].ToString());
+						bool notGiven4=PIn.Bool(tableRaw.Rows[i]["NotGiven4"].ToString());
+						bool notGiven5=PIn.Bool(tableRaw.Rows[i]["NotGiven5"].ToString());
+						bool notGiven6=PIn.Bool(tableRaw.Rows[i]["NotGiven6"].ToString());
+						if(notGiven1 || notGiven2 || notGiven3 || notGiven4 || notGiven5 || notGiven6) {
+							row["exclusion"]="X";
+							row["explanation"]+="Not given.";//too complicated to document.
+						}
+						else if(count1>=4 && count2>=3 && count3>=1 && count4>=2 && count5>=3 && count6>=1 ) {
+							row["numerator"]="X";
+							row["explanation"]="All vaccinations given.";
+						}
+						else {
+							row["explanation"]="Missing vaccinations.";
+						}
+						break;
 					case QualityType.ImmunizeChild_12:
-						//ImmunizeChild----------------------------------------------------------------------------------------------------------------
-
-
-
-
-
+						//ImmunizeChild_12--------------------------------------------------------------------------------------------------------------
+						count1=PIn.Int(tableRaw.Rows[i]["Count1"].ToString());
+						count2=PIn.Int(tableRaw.Rows[i]["Count2"].ToString());
+						count3=PIn.Int(tableRaw.Rows[i]["Count3"].ToString());
+						count4=PIn.Int(tableRaw.Rows[i]["Count4"].ToString());
+						count5=PIn.Int(tableRaw.Rows[i]["Count5"].ToString());
+						count6=PIn.Int(tableRaw.Rows[i]["Count6"].ToString());
+						int count7=PIn.Int(tableRaw.Rows[i]["Count7"].ToString());
+						notGiven1=PIn.Bool(tableRaw.Rows[i]["NotGiven1"].ToString());
+						notGiven2=PIn.Bool(tableRaw.Rows[i]["NotGiven2"].ToString());
+						notGiven3=PIn.Bool(tableRaw.Rows[i]["NotGiven3"].ToString());
+						notGiven4=PIn.Bool(tableRaw.Rows[i]["NotGiven4"].ToString());
+						notGiven5=PIn.Bool(tableRaw.Rows[i]["NotGiven5"].ToString());
+						notGiven6=PIn.Bool(tableRaw.Rows[i]["NotGiven6"].ToString());
+						bool notGiven7=PIn.Bool(tableRaw.Rows[i]["NotGiven7"].ToString());
+						if(notGiven1 || notGiven2 || notGiven3 || notGiven4 || notGiven5 || notGiven6 || notGiven7) {
+							row["exclusion"]="X";
+							row["explanation"]+="Not given.";//too complicated to document.
+						}
+						else if(count1>=4 && count2>=3 && count3>=1 && count4>=2 && count5>=3 && count6>=1 && count7>=4) {
+							row["numerator"]="X";
+							row["explanation"]="All vaccinations given.";
+						}
+						else {
+							row["explanation"]="Missing vaccinations.";
+						}
 						break;
 					default:
 						throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -1183,27 +1548,27 @@ BMI 18.5-25.";
 				case QualityType.WeightChild_3_3:
 					return "Counseling for physical activity during measurement period.";
 				case QualityType.ImmunizeChild_1:
-					return "4 DTaP vaccinations between 42 days and 2 years of age.";
+					return "4 DTaP vaccinations between 42 days and 2 years of age. CVX=110,120,20,50";
 				case QualityType.ImmunizeChild_2:
-					return "3 IPV vaccinations between 42 days and 2 years of age.";
+					return "3 IPV vaccinations between 42 days and 2 years of age. CVX=10,120";
 				case QualityType.ImmunizeChild_3:
-					return "1 MMR vaccination before 2 years of age.\r\n"
-						+"OR 1 measles, 1 mumps, and 1 rubella.";
+					return "1 MMR vaccination before 2 years of age. CVX=03,94\r\n"
+						+"OR 1 measles(05), 1 mumps(07), and 1 rubella(06).";
 				case QualityType.ImmunizeChild_4:
 					//the intro paragraph states 4 HiB.  They have a typo someplace.
-					return "2 HiB vaccinations between 42 days and 2 years of age.";
+					return "2 HiB vaccinations between 42 days and 2 years of age. CVX=120,46,47,48,49,50,51";
 				case QualityType.ImmunizeChild_5:
-					return "3 hepatitis B vaccinations before 2 years of age.";
+					return "3 hepatitis B vaccinations before 2 years of age. CVX=08,110,44,51";
 				case QualityType.ImmunizeChild_6:
-					return "1 VZV vaccination before 2 years of age.";
+					return "1 VZV vaccination before 2 years of age. CVX=21,94";
 				case QualityType.ImmunizeChild_7:
-					return "4 pneumococcal vaccinations between 42 days and 2 years of age.";
+					return "4 pneumococcal vaccinations between 42 days and 2 years of age. CVX=100,133";
 				case QualityType.ImmunizeChild_8:
-					return "2 hepatitis A vaccinations before 2 years of age.";
+					return "2 hepatitis A vaccinations before 2 years of age. CVX=83";
 				case QualityType.ImmunizeChild_9:
-					return "2 rotavirus vaccinations between 42 days and 2 years of age.";
+					return "2 rotavirus vaccinations between 42 days and 2 years of age. CVX=116,119";
 				case QualityType.ImmunizeChild_10:
-					return "2 influenza vaccinations between 180 days and 2 years of age.";
+					return "2 influenza vaccinations between 180 days and 2 years of age. CVX=135,15";
 				case QualityType.ImmunizeChild_11:
 					return "All vaccinations 1-6.";
 				case QualityType.ImmunizeChild_12:
