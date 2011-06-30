@@ -323,7 +323,7 @@ namespace OpenDental.Eclaims {
 			StringBuilder strb=new StringBuilder();
 			Clearinghouse clearhouse=Canadian.GetClearinghouse();
 			if(clearhouse==null) {
-				throw new ApplicationException("Canadian clearinghouse not found.");
+				throw new ApplicationException(Lan.g("CanadianOutput","Canadian clearinghouse not found."));
 			}
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)) {
@@ -331,7 +331,7 @@ namespace OpenDental.Eclaims {
 			}
 			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
 			if((carrier.CanadianSupportedTypes&CanSupTransTypes.ClaimReversal_02)!=CanSupTransTypes.ClaimReversal_02) {
-				throw new ApplicationException("The carrier does not support reversal transactions.");
+				throw new ApplicationException(Lan.g("CanadianOutput","The carrier does not support reversal transactions."));
 			}
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 			Etrans etrans=Etranss.CreateCanadianOutput(claim.PatNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
@@ -339,11 +339,11 @@ namespace OpenDental.Eclaims {
 			Patient patient=Patients.GetPat(claim.PatNum);
 			Provider prov=Providers.GetProv(claim.ProvTreat);
 			if(!prov.IsCDAnet) {
-				throw new ApplicationException("Treating provider is not setup to use CDANet.");
+				throw new ApplicationException(Lan.g("CanadianOutput","Treating provider is not setup to use CDANet."));
 			}
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
 			if(!billProv.IsCDAnet) {
-				throw new ApplicationException("Billing provider is not setup to use CDANet.");
+				throw new ApplicationException(Lan.g("CanadianOutput","Billing provider is not setup to use CDANet."));
 			}
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
 			Patient subscriber=Patients.GetPat(insSub.Subscriber);
@@ -351,6 +351,26 @@ namespace OpenDental.Eclaims {
 			//A01 transaction prefix 12 AN
 			strb.Append(Canadian.TidyAN(network.CanadianTransactionPrefix,12));
 			//A02 office sequence number 6 N
+			//We are required to use the same office sequence number as the original claim.
+			etrans.OfficeSequenceNumber=0;//Clear the randomly generated office sequence number.
+			List<Etrans> claimTransactions=Etranss.GetAllForOneClaim(claim.ClaimNum);
+			DateTime originalEtransDateTime=DateTime.MinValue;//So we can get the latest matching transaction.
+			for(int i=0;i<claimTransactions.Count;i++) {
+				if(claimTransactions[i].Etype==EtransType.Claim_CA || claimTransactions[i].Etype==EtransType.ClaimCOB_CA) {
+					Etrans ack=Etranss.GetEtrans(claimTransactions[i].AckEtransNum);
+					string messageText=EtransMessageTexts.GetMessageText(ack.EtransMessageTextNum);
+					CCDFieldInputter messageData=new CCDFieldInputter(messageText);
+					CCDField transRefNum=messageData.GetFieldById("G01");
+					if(transRefNum!=null && transRefNum.valuestr==claim.CanadaTransRefNum && claimTransactions[i].DateTimeTrans>originalEtransDateTime) {
+						etrans.OfficeSequenceNumber=PIn.Int(messageData.GetFieldById("A02").valuestr);
+						originalEtransDateTime=claimTransactions[i].DateTimeTrans;
+					}
+				}
+			}
+			DateTime serverDate=MiscData.GetNowDateTime().Date;
+			if(originalEtransDateTime.Date!=serverDate) {
+				throw new ApplicationException(Lan.g("CanadianOutput","Claims can only be reversed on the day that they were sent. The claim can only be manually reversed."));
+			}
 			strb.Append(Canadian.TidyN(etrans.OfficeSequenceNumber,6));
 			//A03 format version number 2 N
 			strb.Append(carrier.CDAnetVersion);//eg. "04", validated in UI

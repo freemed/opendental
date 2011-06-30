@@ -367,7 +367,7 @@ namespace OpenDental.Eclaims {
 				center=doc.bounds.X+doc.bounds.Width/2;
 				x=doc.StartElement();//Every printed page always starts on the first row and can choose to skip rows later if desired.
 				if(responseStatus=="R") {
-					PrintClaimAck(e.Graphics);//TODO: make unique rejection form.
+					PrintClaimAck(e.Graphics);//Print rejection notice. The rejection form is almost exactly the same as the claim ack so the same function is used.
 				}
 				else if(transactionCode=="16") {
 					PrintPaymentReconciliation_16(e.Graphics);
@@ -642,37 +642,27 @@ namespace OpenDental.Eclaims {
 		private void PrintEligibility(Graphics g){
 			PrintCarrier(g);
 			x=doc.StartElement();
-			if(responseStatus=="R") {
-				text=isFrench?"REFUS D'UNE DEMANDE DE PRESTATIONS":"CLAIM REJECTION NOTICE";
+			if(patientCopy) {
+				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU PATIENT":
+												"ELIGIBILITY RESPONSE - PATIENT COPY";
 			}
 			else {
-				if(patientCopy) {
-					text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU PATIENT":
-												"ELIGIBILITY RESPONSE - PATIENT COPY";
-				}
-				else {
-					text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU DENTISTE":
+				text=isFrench?"ACCUSÉ DE RÉCEPTION D'UNE DEMANDE D'ÉLIGIBILITÉ - COPIE DU DENTISTE":
 											"ELIGIBILITY RESPONSE - DENTIST COPY";
-				}
 			}
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement();
 			text=isFrench?
 				"Nous avons utilisé les renseignements du présent formulaire pour traiter votre demande par ordinateur. Veuillez en vérifier l'exactitude et aviser votre dentiste en cas d'erreur. Prière de ne pas poster à l'assureur/administrateur du régime.":"The information contained on this form has been used to process your claim electronically. Please verify the accuracy of this data and report any discrepancies to your dental office. Do not mail this form to the insurer/plan administrator.";
 			PrintClaimAckBody(g,text);
-			if(responseStatus=="R") {
-				text=isFrench?"VEUILLEZ CORRIGER LES ERREURS AVANT DE RESOUMETTRE LA DEMANDE.":"PLEASE CORRECT ERRORS AS SHOWN, PRIOR TO RE-SUBMITTING THE CLAIM.";
+			if(isFrench) {
+				text="La présente demande de prestations a été transmise par ordinateur.".ToUpper();
+				doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
+				x=doc.StartElement();
+				text="Elle sert de reçu seulement.".ToUpper();
 			}
 			else {
-				if(isFrench) {
-					text="La présente demande de prestations a été transmise par ordinateur.".ToUpper();
-					doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
-					x=doc.StartElement();
-					text="Elle sert de reçu seulement.".ToUpper();
-				}
-				else {
-					text="THIS CLAIM HAS BEEN SUBMITTED ELECTRONICALLY - THIS IS A RECEIPT ONLY";
-				}
+				text="THIS CLAIM HAS BEEN SUBMITTED ELECTRONICALLY - THIS IS A RECEIPT ONLY";
 			}
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 		}

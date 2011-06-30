@@ -802,7 +802,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Gets a list of procedures representing extracted teeth.  Status of C,EC,orEO. Includes procs with toothNum "1"-"32".  Will not include procs with unreasonable dates.  Used for Canadian e-claims instead of the usual ToothInitials.GetMissingOrHiddenTeeth, because Canada requires dates on the extracted teeth.  Supply all procedures for the patient.</summary>
+		///<summary>Gets a list of procedures representing extracted teeth.  Status of C,EC,orEO. Includes procs with toothNum "1"-"32".  Will not include procs with procdate before 1880.  Used for Canadian e-claims instead of the usual ToothInitials.GetMissingOrHiddenTeeth, because Canada requires dates on the extracted teeth.  Supply all procedures for the patient.</summary>
 		public static List<Procedure> GetCanadianExtractedTeeth(List<Procedure> procList) {
 			//No need to check RemotingRole; no call to db.
 			List<Procedure> extracted=new List<Procedure>();
@@ -820,7 +820,7 @@ namespace OpenDentBusiness {
 				if(Tooth.IsPrimary(procList[i].ToothNum)) {
 					continue;
 				}
-				if(procList[i].ProcDate.Year<1880 || procList[i].ProcDate>DateTime.Today) {
+				if(procList[i].ProcDate.Year<1880) {
 					continue;
 				}
 				procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
