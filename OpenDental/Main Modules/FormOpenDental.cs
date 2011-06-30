@@ -2963,9 +2963,12 @@ namespace OpenDental{
 					break;
 				case 1:
 					if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {//if red emergency button is on
-						if(!Security.IsAuthorized(Permissions.EhrEmergencyAccess)) {//Show message for proof of security.
+						if(!Security.IsAuthorized(Permissions.EhrEmergencyAccess)) {
 							e.Cancel=true;
 							return;
+						}
+						else {//Has permission during emergency.
+							break;//No need to check other permissions.
 						}
 					}
 					//Whether or not they were authorized by the special situation above,
