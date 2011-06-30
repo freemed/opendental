@@ -2963,8 +2963,9 @@ namespace OpenDental{
 					break;
 				case 1:
 					if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {//if red emergency button is on
-						if(Security.IsAuthorized(Permissions.EhrEmergencyAccess,true)) {//if no permission, the message is suppressed
-							break;//no need to check any other permission
+						if(!Security.IsAuthorized(Permissions.EhrEmergencyAccess)) {//Show message for proof of security.
+							e.Cancel=true;
+							return;
 						}
 					}
 					//Whether or not they were authorized by the special situation above,
@@ -3527,9 +3528,9 @@ namespace OpenDental{
 		}
 
 		private void menuItemEHR_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
+			//if(!Security.IsAuthorized(Permissions.Setup)) {
+			//  return;
+			//}
 			FormEhrSetup FormE=new FormEhrSetup();
 			FormE.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"EHR");

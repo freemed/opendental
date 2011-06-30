@@ -25,6 +25,18 @@ namespace OpenDental {
 			else {
 				panelEmergencyNow.BackColor=SystemColors.Control;
 			}
+			if(!Security.IsAuthorized(Permissions.Setup,true)) {
+				//Hide all the buttons except Emergency Now and Close.
+				butICD9s.Visible=false;
+				butAllergies.Visible=false;
+				butFormularies.Visible=false;
+				butVaccineDef.Visible=false;
+				butDrugManufacturer.Visible=false;
+				butDrugUnit.Visible=false;
+				butInboundEmail.Visible=false;
+				butReminderRules.Visible=false;
+				butEducationalResources.Visible=false;
+			}
 		}
 
 		private void butICD9s_Click(object sender,EventArgs e) {
