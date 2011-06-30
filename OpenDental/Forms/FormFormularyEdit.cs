@@ -41,7 +41,7 @@ namespace OpenDental {
 				medication=Medications.GetMedication(ListMeds[i].MedicationNum);
 				row=new ODGridRow();
 				row.Cells.Add(medication.MedName.ToString());
-				row.Cells.Add(medication.Notes.ToString());
+				row.Cells.Add(Medications.GetMedication(medication.GenericNum).Notes.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
