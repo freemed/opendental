@@ -330,6 +330,12 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormFormularyMedEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormFormularyMedEdit.designer.cs">
+      <DependentUpon>FormFormularyMedEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormOrthoChartAddDate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2251,6 +2257,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFormularyMedEdit.resx">
+      <DependentUpon>FormFormularyMedEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormOrthoChartAddDate.resx">
