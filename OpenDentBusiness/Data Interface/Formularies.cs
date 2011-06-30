@@ -27,6 +27,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static void Delete(long formularyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),formularyNum);
+				return;
+			}
+			string command= "DELETE FROM formulary WHERE FormularyNum = "+POut.Long(formularyNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
 		public static void Update(Formulary formulary){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),formulary);
@@ -43,16 +53,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Formulary>(MethodBase.GetCurrentMethod(),formularyNum);
 			}
 			return Crud.FormularyCrud.SelectOne(formularyNum);
-		}
-
-		///<summary></summary>
-		public static void Delete(long formularyNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),formularyNum);
-				return;
-			}
-			string command= "DELETE FROM formulary WHERE FormularyNum = "+POut.Long(formularyNum);
-			Db.NonQ(command);
 		}
 		*/
 

@@ -18,15 +18,6 @@ namespace OpenDentBusiness{
 			return Crud.FormularyMedCrud.SelectMany(command);
 		}
 
-		/*
-		///<summary>Gets one FormularyMed from the db.</summary>
-		public static FormularyMed GetOne(long formularyMedNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<FormularyMed>(MethodBase.GetCurrentMethod(),formularyMedNum);
-			}
-			return Crud.FormularyMedCrud.SelectOne(formularyMedNum);
-		}
-
 		///<summary></summary>
 		public static long Insert(FormularyMed formularyMed){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -37,15 +28,6 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Update(FormularyMed formularyMed){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),formularyMed);
-				return;
-			}
-			Crud.FormularyMedCrud.Update(formularyMed);
-		}
-
-		///<summary></summary>
 		public static void Delete(long formularyMedNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),formularyMedNum);
@@ -53,6 +35,34 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM formularymed WHERE FormularyMedNum = "+POut.Long(formularyMedNum);
 			Db.NonQ(command);
+		}
+
+		///<summary>Deletes all FormularyMeds attached to Formulary.  Used only when a formulary is deleted.</summary>
+		public static void DeleteMedsForFormulary(long formularyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),formularyNum);
+				return;
+			}
+			string command= "DELETE FROM formularymed WHERE FormularyNum = "+POut.Long(formularyNum);
+			Db.NonQ(command);
+		}
+
+		/*
+		///<summary>Gets one FormularyMed from the db.</summary>
+		public static FormularyMed GetOne(long formularyMedNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<FormularyMed>(MethodBase.GetCurrentMethod(),formularyMedNum);
+			}
+			return Crud.FormularyMedCrud.SelectOne(formularyMedNum);
+		}
+
+		///<summary></summary>
+		public static void Update(FormularyMed formularyMed){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),formularyMed);
+				return;
+			}
+			Crud.FormularyMedCrud.Update(formularyMed);
 		}
 		*/
 

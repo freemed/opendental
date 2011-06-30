@@ -48,21 +48,47 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 		}
 
-		//private void butAdd_Click(object sender,EventArgs e) {
-			//FormMedications FormM=new FormMedications();
-			//FormM.FormularyCur=new Formulary();
-			//FormM.IsSelectionMode=true;
-			//FormM.ShowDialog();
-			//if(FormM.DialogResult!=DialogResult.OK) {
-			//  return;
-			//}
-			//FillGrid();
-		//}
+		private void butAdd_Click(object sender,EventArgs e) {
+			FormFormularyMedEdit FormFME=new FormFormularyMedEdit();
+			FormFME.ForMed=new FormularyMed();
+			FormFME.IsNew=true;
+			FormFME.ShowDialog();
+			if(FormFME.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			FormFME.ForMed.FormularyNum=FormularyCur.FormularyNum;
+			FormularyMeds.Insert(FormFME.ForMed);
+			FillGrid();
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Delete this formulary?")) {
+				return;
+			}
+			FormularyMeds.DeleteMedsForFormulary(FormularyCur.FormularyNum);
+			Formularies.Delete(FormularyCur.FormularyNum);
+			DialogResult=DialogResult.OK;
+		}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormFormularyMedEdit FormFME=new FormFormularyMedEdit();
+			FormFME.ForMed=ListMeds[e.Row];
+			FormFME.ShowDialog();
+			FillGrid();
+		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textDescription.Text.Trim()=="") {
+				MsgBox.Show(this,"Please enter a description.");
+				return;
+			}
 			FormularyCur.Description=textDescription.Text;
-			//if(IsNew) {//Used the "+Add" button to open this form. (Add button never visible)
-			//	Formularies.Insert(FormularyCur);
+			//if(IsNew) {
+			//  Formularies.Insert(FormularyCur);
 			//}
 			//else {
 			Formularies.Update(FormularyCur);

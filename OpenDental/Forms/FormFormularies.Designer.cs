@@ -26,6 +26,7 @@
 			this.butClose = new System.Windows.Forms.Button();
 			this.listMain = new System.Windows.Forms.ListBox();
 			this.labelSelect = new System.Windows.Forms.Label();
+			this.butAdd = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -59,11 +60,23 @@
 			this.labelSelect.Text = "Please select a formulary";
 			this.labelSelect.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// butAdd
+			// 
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Location = new System.Drawing.Point(28,268);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75,23);
+			this.butAdd.TabIndex = 75;
+			this.butAdd.Text = "Add";
+			this.butAdd.UseVisualStyleBackColor = true;
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
 			// FormFormularies
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(333,313);
+			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.labelSelect);
 			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butClose);
@@ -80,6 +93,7 @@
 		private System.Windows.Forms.Button butClose;
 		private System.Windows.Forms.ListBox listMain;
 		private System.Windows.Forms.Label labelSelect;
+		private System.Windows.Forms.Button butAdd;
 
 
 	}

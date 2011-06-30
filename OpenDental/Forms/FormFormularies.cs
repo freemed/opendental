@@ -53,17 +53,18 @@ namespace OpenDental {
 			FillList();
 		}
 
-		/*
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormFormularyEdit FormF=new FormFormularyEdit();
 			FormF.FormularyCur=new Formulary();
+			Formularies.Insert(FormF.FormularyCur);
 			FormF.IsNew=true;
 			FormF.ShowDialog();
 			if(FormF.DialogResult!=DialogResult.OK) {
+				Formularies.Delete(FormF.FormularyCur.FormularyNum);
 				return;
 			}
 			FillList();
-		}*/
+		}
 
 		private void butClose_Click(object sender,EventArgs e) {
 			this.Close();

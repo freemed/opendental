@@ -24,36 +24,24 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.butCancel = new System.Windows.Forms.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.butOK = new System.Windows.Forms.Button();
+			this.butDelete = new System.Windows.Forms.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.button1 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(372,317);
+			this.butCancel.Location = new System.Drawing.Point(372,337);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(25,61);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(422,229);
-			this.gridMain.TabIndex = 3;
-			this.gridMain.Title = "Medications";
-			this.gridMain.TranslationName = null;
 			// 
 			// textDescription
 			// 
@@ -74,7 +62,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(280,317);
+			this.butOK.Location = new System.Drawing.Point(280,337);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
@@ -82,11 +70,50 @@
 			this.butOK.UseVisualStyleBackColor = true;
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// butDelete
+			// 
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Location = new System.Drawing.Point(25,337);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 9;
+			this.butDelete.Text = "Delete";
+			this.butDelete.UseVisualStyleBackColor = true;
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(25,77);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(422,233);
+			this.gridMain.TabIndex = 3;
+			this.gridMain.Title = "Medications";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// button1
+			// 
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Location = new System.Drawing.Point(372,48);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75,24);
+			this.button1.TabIndex = 10;
+			this.button1.Text = "Add Med";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.butAdd_Click);
+			// 
 			// FormFormularyEdit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(474,362);
+			this.ClientSize = new System.Drawing.Size(474,382);
+			this.Controls.Add(this.button1);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.label2);
@@ -108,6 +135,8 @@
 		private System.Windows.Forms.TextBox textDescription;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Button butOK;
+		private System.Windows.Forms.Button butDelete;
+		private System.Windows.Forms.Button button1;
 
 
 	}
