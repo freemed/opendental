@@ -1044,10 +1044,10 @@ namespace OpenDentBusiness {
 						+"WHERE disease.ICD9Num=icd9.ICD9Num "
 						+"AND disease.PatNum=tempehrquality.PatNum "
 						+"AND (icd9.ICD9Code LIKE '250%' "
-						+"OR icd9.ICD9Code LIKE '3572' "
-						+"OR icd9.ICD9Code LIKE '3620%' "
-						+"OR icd9.ICD9Code LIKE '36641' "
-						+"OR icd9.ICD9Code LIKE '6480%') "
+						+"OR icd9.ICD9Code LIKE '357.2' "
+						+"OR icd9.ICD9Code LIKE '362.0%' "
+						+"OR icd9.ICD9Code LIKE '366.41' "
+						+"OR icd9.ICD9Code LIKE '648.0%') "
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there is a start date, it can't be after the period end.
 						+"OR disease.DateStart < '1880-01-01') "//no startdate
 						+"AND (disease.DateStop >= "+POut.Date(dateEnd.AddYears(-2))+" "//if there's a datestop, it can't have stopped more than 2 years ago.
@@ -1080,7 +1080,7 @@ namespace OpenDentBusiness {
 						+"FROM disease,icd9 "
 						+"WHERE disease.ICD9Num=icd9.ICD9Num "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND icd9.ICD9Code = '2564' "
+						+"AND icd9.ICD9Code = '256.4' "
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there's a datestart, it can't be after period end
 						+"OR disease.DateStart < '1880-01-01') "
 						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
@@ -1093,8 +1093,8 @@ namespace OpenDentBusiness {
 						+"FROM disease,icd9 "
 						+"WHERE disease.ICD9Num=icd9.ICD9Num "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND (icd9.ICD9Code LIKE '249%' OR icd9.ICD9Code='2518' OR icd9.ICD9Code='9620' "//steroid induced
-						+"OR icd9.ICD9Code LIKE '6488%') "//gestational
+						+"AND (icd9.ICD9Code LIKE '249%' OR icd9.ICD9Code='251.8' OR icd9.ICD9Code='962.0' "//steroid induced
+						+"OR icd9.ICD9Code LIKE '648.8%') "//gestational
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there's a datestart, it can't be after period end
 						+"OR disease.DateStart < '1880-01-01') "
 						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
