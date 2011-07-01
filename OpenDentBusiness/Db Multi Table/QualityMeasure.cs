@@ -50,5 +50,8 @@ namespace OpenDentBusiness {
 		ImmunizeChild_10,
 		ImmunizeChild_11,
 		ImmunizeChild_12,
+		Pneumonia,
+		DiabetesBloodPressure,
+		BloodPressureManage
 	}
 }

@@ -95,7 +95,13 @@ namespace OpenDentBusiness {
 				case QualityType.ImmunizeChild_11:
 					return "0038-11";
 				case QualityType.ImmunizeChild_12:
-					return "0038-12";				
+					return "0038-12";		
+				case QualityType.Pneumonia:
+					return "0043";
+				case QualityType.DiabetesBloodPressure:
+					return "0061";
+				case QualityType.BloodPressureManage:
+					return "0018";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -157,7 +163,12 @@ namespace OpenDentBusiness {
 					return "Immun Status, Child, 1-6";
 				case QualityType.ImmunizeChild_12:
 					return "Immun Status, Child, 1-7";
-
+				case QualityType.Pneumonia:
+					return "Pneumonia immunization, 64+";
+				case QualityType.DiabetesBloodPressure:
+					return "Diabetes: BP Management";
+				case QualityType.BloodPressureManage:
+					return "Controlling high BP";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -675,6 +686,15 @@ namespace OpenDentBusiness {
 						Count3 tinyint NOT NULL,
 						NotGiven3 tinyint NOT NULL,
 						Documentation3 varchar(255) NOT NULL,
+						Count3a tinyint NOT NULL,
+						NotGiven3a tinyint NOT NULL,
+						Documentation3a varchar(255) NOT NULL,
+						Count3b tinyint NOT NULL,
+						NotGiven3b tinyint NOT NULL,
+						Documentation3b varchar(255) NOT NULL,
+						Count3c tinyint NOT NULL,
+						NotGiven3c tinyint NOT NULL,
+						Documentation3c varchar(255) NOT NULL,
 						Count4 tinyint NOT NULL,
 						NotGiven4 tinyint NOT NULL,
 						Documentation4 varchar(255) NOT NULL,
@@ -760,9 +780,54 @@ namespace OpenDentBusiness {
 						+"AND NotGiven=1 "
 						+"AND vaccinedef.CVXCode IN('03','94')";
 					Db.NonQ(command);
-
-					//todo 3a,b,c
-
+					//Count3a, measles
+					command="UPDATE tempehrquality "
+						+"SET Count3a=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('05'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven3a=1,Documentation3a=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('05')";
+					Db.NonQ(command);
+					//Count3b, mumps
+					command="UPDATE tempehrquality "
+						+"SET Count3b=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('07'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven3b=1,Documentation3b=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('07')";
+					Db.NonQ(command);
+					//Count3c, rubella
+					command="UPDATE tempehrquality "
+						+"SET Count3c=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
+						+"LEFT JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=0 "
+						+"AND DATE(DateTimeStart) < DATE_ADD(tempehrquality.Birthdate,INTERVAL 2 YEAR) "
+						+"AND vaccinedef.CVXCode IN('06'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality,vaccinepat,vaccinedef "
+						+"SET NotGiven3c=1,Documentation3c=Note "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND NotGiven=1 "
+						+"AND vaccinedef.CVXCode IN('06')";
+					Db.NonQ(command);
 					//Count4, HiB
 					command="UPDATE tempehrquality "
 						+"SET Count4=(SELECT COUNT(DISTINCT VaccinePatNum) FROM vaccinepat "
@@ -879,6 +944,278 @@ namespace OpenDentBusiness {
 						+"AND NotGiven=1 "
 						+"AND vaccinedef.CVXCode IN('135','15')";
 					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					break;
+				case QualityType.Pneumonia:
+					//Pneumonia----------------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						DateVaccine date NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName) SELECT patient.PatNum,LName,FName "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateEnd.AddYears(-1))+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate > '1880-01-01' AND Birthdate <= "+POut.Date(dateStart.AddYears(-65))+" "//65 or older as of dateEnd
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					//find most recent vaccine date
+					command="UPDATE tempehrquality "
+						+"SET tempehrquality.DateVaccine=(SELECT MAX(DATE(vaccinepat.DateTimeStart)) "
+						+"FROM vaccinepat,vaccinedef "
+						+"WHERE vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+						+"AND tempehrquality.PatNum=vaccinepat.PatNum "
+						+"AND vaccinepat.NotGiven=0 "
+						+"AND vaccinedef.CVXCode IN('33','100','133'))";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality SET DateVaccine='0001-01-01' WHERE DateVaccine='0000-00-00'";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					break;
+				case QualityType.DiabetesBloodPressure:
+					//DiabetesBloodPressure-------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						HasMedication tinyint NOT NULL,
+						HasDiagnosisDiabetes tinyint NOT NULL,
+						DateBP date NOT NULL,
+						Systolic int NOT NULL,
+						Diastolic int NOT NULL,
+						HasDiagnosisPolycystic tinyint NOT NULL,
+						HasDiagnosisAcuteDiabetes tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName) SELECT patient.PatNum,LName,FName "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate <= "+POut.Date(dateStart.AddYears(-17))+" "
+						+"AND Birthdate >= "+POut.Date(dateStart.AddYears(-74))+" "//17-74 before dateStart
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					//Medication
+					command="UPDATE tempehrquality "
+						+"SET HasMedication = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM medicationpat,medication "
+						+"WHERE medicationpat.MedicationNum=medication.MedicationNum "
+						+"AND medicationpat.PatNum=tempehrquality.PatNum "
+						+"AND medication.RxCui IN(199149, 199150, 200132, 205329, 205330, 205331, 401938,"//alph-glucosidas
+						+"200256, 200257, 200258, 311919, 314142, 389139, 861035, 861039, 861042, 861044, 861787, 861790,"//amylin analogs
+						+"744863 , 847910 , 847915,"//antidiabetic
+						+"602544, 602549, 602550, 647237, 647239, 706895, 706896, 861731, 861736, 861740, 861743, 861748, 861753, 861760, 861763, 861769, 861783, 861787, 861790, 861795, 861806, 861816, 861819, 861822,"//antidiabetic combos
+						+"665033, 665038, 665042, 860975, 860978, 860981, 860984, 860996, 860999, 861004, 861007, 861010, 861021, 861025, 861731, 861736, 861740, 861743, 861748, 861753, 861760, 861763, 861769, 861783, 861787, 861790, 861795, 861806, 861816, 861819, 861822,"//Biguanides
+						+"205314, 237527, 242120, 242916, 242917, 259111, 260265, 283394, 311040, 311041, 311053, 311054, 311055, 311056, 311057, 311058, 311059, 311060, 311061, 314038, 317800, 351297, 358349, 484322, 485210, 544614, 763002, 763007, 763013, 763014, 833159, 847191, 847207, 847211, 847230, 847239, 847252, 847259, 847263, 847416,"//insulin
+						+"200256, 200257, 200258, 311919, 314142, 389139,"//meglitinides
+						+"105374, 153842, 197306, 197307, 197495, 197496, 197737, 198291, 198292, 198293, 198294, 199245, 199246, 199247, 199825, 199984, 199985, 200065, 252960, 310488, 310489, 310490, 310534, 310536, 310537, 310539, 312440, 312441, 312859, 312860, 312861, 313418, 313419, 314000, 314006, 315107, 315239, 317573, 379804, 389137, 602544, 602549, 602550, 647237, 647239, 706895, 706896, 757710, 757712, 844809, 844824, 844827, 861731, 861736, 861740, 861743, 861748, 861753, 861760, 861763, 861783, 861795, 861806, 861816, 861822,"//Sulfonylureas
+						+"312440, 312441, 312859, 312860, 312861, 317573) "//Thiazolidinediones
+						+"AND (DateStop >= "+POut.Date(dateEnd.AddYears(-2))+" "//med active <= 2 years before or simultaneous to end date
+						+"OR DateStop < '1880-01-01') "//or still active
+						+") > 0";
+					Db.NonQ(command);
+					//HasDiagnosisDiabetes
+					command="UPDATE tempehrquality "
+						+"SET HasDiagnosisDiabetes = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM disease,icd9 "
+						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"AND disease.PatNum=tempehrquality.PatNum "
+						+"AND (icd9.ICD9Code LIKE '250%' "
+						+"OR icd9.ICD9Code LIKE '3572' "
+						+"OR icd9.ICD9Code LIKE '3620%' "
+						+"OR icd9.ICD9Code LIKE '36641' "
+						+"OR icd9.ICD9Code LIKE '6480%') "
+						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there is a start date, it can't be after the period end.
+						+"OR disease.DateStart < '1880-01-01') "//no startdate
+						+"AND (disease.DateStop >= "+POut.Date(dateEnd.AddYears(-2))+" "//if there's a datestop, it can't have stopped more than 2 years ago.
+							//Specs say: diagnosis active <= 2 years before or simultaneous to end date
+						+"OR disease.DateStop < '1880-01-01') "//or still active
+						+") > 0";
+					Db.NonQ(command);
+					//DateBP
+					command="UPDATE tempehrquality "
+						+"SET tempehrquality.DateBP=(SELECT MAX(vitalsign.DateTaken) "
+						+"FROM vitalsign "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.BpSystolic != 0 "
+						+"AND vitalsign.BpDiastolic != 0 "
+						+"GROUP BY vitalsign.PatNum)";
+					Db.NonQ(command);
+					command="UPDATE tempehrquality SET DateBP='0001-01-01' WHERE DateBP='0000-00-00'";
+					Db.NonQ(command);
+					//Systolic and diastolic
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET Systolic=BpSystolic, "
+						+"Diastolic=BpDiastolic "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND tempehrquality.DateBP=vitalsign.DateTaken";
+					Db.NonQ(command);
+					//HasDiagnosisPolycystic
+					command="UPDATE tempehrquality "
+						+"SET HasDiagnosisPolycystic = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM disease,icd9 "
+						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"AND disease.PatNum=tempehrquality.PatNum "
+						+"AND icd9.ICD9Code = '2564' "
+						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there's a datestart, it can't be after period end
+						+"OR disease.DateStart < '1880-01-01') "
+						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
+						+") > 0";
+					Db.NonQ(command);
+					//HasDiagnosisAcuteDiabetes
+					command="UPDATE tempehrquality "
+						+"SET HasDiagnosisAcuteDiabetes = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM disease,icd9 "
+						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"AND disease.PatNum=tempehrquality.PatNum "
+						+"AND (icd9.ICD9Code LIKE '249%' OR icd9.ICD9Code='2518' OR icd9.ICD9Code='9620' "//steroid induced
+						+"OR icd9.ICD9Code LIKE '6488%') "//gestational
+						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there's a datestart, it can't be after period end
+						+"OR disease.DateStart < '1880-01-01') "
+						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
+						+") > 0";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrquality";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					break;
+				case QualityType.BloodPressureManage:
+					//DiabetesBloodPressure-------------------------------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS tempehrquality";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrquality (
+						PatNum bigint NOT NULL PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						HasDiagnosisHypertension tinyint NOT NULL,
+						HasProcedureESRD tinyint NOT NULL,
+						HasDiagnosisPregnancy tinyint NOT NULL,
+						HasDiagnosisESRD tinyint NOT NULL,
+						DateBP date NOT NULL,
+						Systolic int NOT NULL,
+						Diastolic int NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					command="INSERT INTO tempehrquality (PatNum,LName,FName) SELECT patient.PatNum,LName,FName "
+						+"FROM patient "
+						+"INNER JOIN procedurelog "
+						+"ON Patient.PatNum=procedurelog.PatNum "
+						+"AND procedurelog.ProcStatus=2 "//complete
+						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"WHERE Birthdate <= "+POut.Date(dateStart.AddYears(-17))+" "
+						+"AND Birthdate >= "+POut.Date(dateStart.AddYears(-74))+" "//17-74 before dateStart
+						+"GROUP BY patient.PatNum";
+					Db.NonQ(command);
+					//HasDiagnosisHypertension
+					command="UPDATE tempehrquality "
+						+"SET HasDiagnosisHypertension = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM disease,icd9 "
+						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"AND disease.PatNum=tempehrquality.PatNum "
+						+"AND icd9.ICD9Code LIKE '401%' "
+						+"AND (disease.DateStart <= "+POut.Date(dateStart.AddMonths(6))+" "//if there is a start date, it can't be after this point
+						+"OR disease.DateStart < '1880-01-01') "//no startdate
+						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
+						+") > 0";
+					Db.NonQ(command);
+					command="DELETE FROM tempehrquality WHERE HasDiagnosisHypertension=0";//for speed
+					Db.NonQ(command);
+					//HasProcedureESRD
+					command="UPDATE tempehrquality "
+						+"SET HasProcedureESRD = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM procedurelog,procedurecode "
+						+"WHERE procedurelog.CodeNum=procedurecode.CodeNum "
+						+"AND procedurelog.PatNum=tempehrquality.PatNum "
+						+"AND procedurecode.ProcCode IN ('36145','36147','36148','36800', '36810','36815','36818','36819','36820', '36821','36831', '36832', '36833', '50300', '50320','50340','50360','50365','50370', '50380','90920','90921','90924','90925', '90935','90937', '90940','90945', '90947', '90957', '90958','90959','90960','90961','90962','90965','90966','90969','90970','90989','90993','90997','90999','99512') "//ESRD
+						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+") > 0";
+					Db.NonQ(command);
+					//HasDiagnosisPregnancy
+					command="UPDATE tempehrquality "
+						+"SET HasDiagnosisPregnancy = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM disease,icd9 "
+						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"AND disease.PatNum=tempehrquality.PatNum "
+						+"AND (icd9.ICD9Code LIKE '63%' "
+						+"OR icd9.ICD9Code LIKE '64%' "
+						+"OR icd9.ICD9Code LIKE '65%' "
+						+"OR icd9.ICD9Code LIKE '66%' "
+						+"OR icd9.ICD9Code LIKE '67%' "
+						+"OR icd9.ICD9Code LIKE 'V22%' "
+						+"OR icd9.ICD9Code LIKE 'V23%' "
+						+"OR icd9.ICD9Code LIKE 'V28%') "
+						//active during the period
+						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there is a start date, it can't be after the period end.
+						+"OR disease.DateStart < '1880-01-01') "//no startdate
+						+"AND (disease.DateStop >= "+POut.Date(dateStart)+" "//if there's a datestop, it can't have stopped before the period.
+						+"OR disease.DateStop < '1880-01-01') "//or still active
+						+") > 0";
+					Db.NonQ(command);
+					//HasDiagnosisESRD
+					command="UPDATE tempehrquality "
+						+"SET HasDiagnosisESRD = 1 "
+						+"WHERE (SELECT COUNT(*) "
+						+"FROM disease,icd9 "
+						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"AND disease.PatNum=tempehrquality.PatNum "
+						+"AND (icd9.ICD9Code LIKE '63%' "
+						+"OR icd9.ICD9Code LIKE '64%' "
+						+"OR icd9.ICD9Code LIKE '65%' "
+						+"OR icd9.ICD9Code LIKE '66%' "
+						+"OR icd9.ICD9Code LIKE '67%' "
+						+"OR icd9.ICD9Code LIKE 'V22%' "
+						+"OR icd9.ICD9Code LIKE 'V23%' "
+						+"OR icd9.ICD9Code LIKE 'V28%') "
+						//active during the period
+						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "
+						+"OR disease.DateStart < '1880-01-01') "
+						+"AND (disease.DateStop >= "+POut.Date(dateStart)+" "
+						+"OR disease.DateStop < '1880-01-01') "
+						+") > 0";
+					Db.NonQ(command);
+
+
+
+
+
+
+					command="UPDATE tempehrquality SET DateBP='0001-01-01' WHERE DateBP='0000-00-00'";
+					Db.NonQ(command);
+
+
+
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
 					command="DROP TABLE IF EXISTS tempehrquality";
@@ -1242,17 +1579,41 @@ namespace OpenDentBusiness {
 						count=PIn.Int(tableRaw.Rows[i]["Count3"].ToString());
 						notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven3"].ToString());
 						documentation=PIn.String(tableRaw.Rows[i]["Documentation3"].ToString());
-						//todo split vaccine
+						int count3a=PIn.Int(tableRaw.Rows[i]["Count3a"].ToString());
+						bool notGiven3a=PIn.Bool(tableRaw.Rows[i]["NotGiven3a"].ToString());
+						string documentation3a=PIn.String(tableRaw.Rows[i]["Documentation3a"].ToString());
+						int count3b=PIn.Int(tableRaw.Rows[i]["Count3b"].ToString());
+						bool notGiven3b=PIn.Bool(tableRaw.Rows[i]["NotGiven3b"].ToString());
+						string documentation3b=PIn.String(tableRaw.Rows[i]["Documentation3b"].ToString());
+						int count3c=PIn.Int(tableRaw.Rows[i]["Count3c"].ToString());
+						bool notGiven3c=PIn.Bool(tableRaw.Rows[i]["NotGiven3c"].ToString());
+						string documentation3c=PIn.String(tableRaw.Rows[i]["Documentation3c"].ToString());
 						if(notGiven) {
 							row["exclusion"]="X";
 							row["explanation"]+="No MMR vaccine given, "+documentation;
+						}
+						else if(notGiven3a) {
+							row["exclusion"]="X";
+							row["explanation"]+="No measles vaccine given, "+documentation3a;
+						}
+						else if(notGiven3b) {
+							row["exclusion"]="X";
+							row["explanation"]+="No mumps vaccine given, "+documentation3b;
+						}
+						else if(notGiven3c) {
+							row["exclusion"]="X";
+							row["explanation"]+="No rubella vaccine given, "+documentation3c;
 						}
 						else if(count>=1) {
 							row["numerator"]="X";
 							row["explanation"]="MMR vaccinations: "+count.ToString();
 						}
+						else if(count3a>=1 && count3b>=1 && count3c>=1) {
+							row["numerator"]="X";
+							row["explanation"]="MMR individual vaccinations given.";
+						}
 						else {
-							row["explanation"]="MMR vaccinations: "+count.ToString();
+							row["explanation"]="MMR vaccination not given";
 						}
 						break;
 					case QualityType.ImmunizeChild_4:
@@ -1378,20 +1739,27 @@ namespace OpenDentBusiness {
 						int count1=PIn.Int(tableRaw.Rows[i]["Count1"].ToString());
 						int count2=PIn.Int(tableRaw.Rows[i]["Count2"].ToString());
 						int count3=PIn.Int(tableRaw.Rows[i]["Count3"].ToString());
+						count3a=PIn.Int(tableRaw.Rows[i]["Count3a"].ToString());
+						count3b=PIn.Int(tableRaw.Rows[i]["Count3b"].ToString());
+						count3c=PIn.Int(tableRaw.Rows[i]["Count3c"].ToString());
 						int count4=PIn.Int(tableRaw.Rows[i]["Count4"].ToString());
 						int count5=PIn.Int(tableRaw.Rows[i]["Count5"].ToString());
 						int count6=PIn.Int(tableRaw.Rows[i]["Count6"].ToString());
 						bool notGiven1=PIn.Bool(tableRaw.Rows[i]["NotGiven1"].ToString());
 						bool notGiven2=PIn.Bool(tableRaw.Rows[i]["NotGiven2"].ToString());
 						bool notGiven3=PIn.Bool(tableRaw.Rows[i]["NotGiven3"].ToString());
+						notGiven3a=PIn.Bool(tableRaw.Rows[i]["NotGiven3a"].ToString());
+						notGiven3b=PIn.Bool(tableRaw.Rows[i]["NotGiven3b"].ToString());
+						notGiven3c=PIn.Bool(tableRaw.Rows[i]["NotGiven3c"].ToString());
 						bool notGiven4=PIn.Bool(tableRaw.Rows[i]["NotGiven4"].ToString());
 						bool notGiven5=PIn.Bool(tableRaw.Rows[i]["NotGiven5"].ToString());
 						bool notGiven6=PIn.Bool(tableRaw.Rows[i]["NotGiven6"].ToString());
-						if(notGiven1 || notGiven2 || notGiven3 || notGiven4 || notGiven5 || notGiven6) {
+						if(notGiven1 || notGiven2 || notGiven3 || notGiven3a || notGiven3b || notGiven3c || notGiven4 || notGiven5 || notGiven6) {
 							row["exclusion"]="X";
 							row["explanation"]+="Not given.";//too complicated to document.
 						}
-						else if(count1>=4 && count2>=3 && count3>=1 && count4>=2 && count5>=3 && count6>=1 ) {
+						else if(count1>=4 && count2>=3 
+							&& (count3>=1 || (count3a>=1 && count3b>=1 && count3c>=1)) && count4>=2 && count5>=3 && count6>=1) {
 							row["numerator"]="X";
 							row["explanation"]="All vaccinations given.";
 						}
@@ -1404,6 +1772,9 @@ namespace OpenDentBusiness {
 						count1=PIn.Int(tableRaw.Rows[i]["Count1"].ToString());
 						count2=PIn.Int(tableRaw.Rows[i]["Count2"].ToString());
 						count3=PIn.Int(tableRaw.Rows[i]["Count3"].ToString());
+						count3a=PIn.Int(tableRaw.Rows[i]["Count3a"].ToString());
+						count3b=PIn.Int(tableRaw.Rows[i]["Count3b"].ToString());
+						count3c=PIn.Int(tableRaw.Rows[i]["Count3c"].ToString());
 						count4=PIn.Int(tableRaw.Rows[i]["Count4"].ToString());
 						count5=PIn.Int(tableRaw.Rows[i]["Count5"].ToString());
 						count6=PIn.Int(tableRaw.Rows[i]["Count6"].ToString());
@@ -1411,21 +1782,90 @@ namespace OpenDentBusiness {
 						notGiven1=PIn.Bool(tableRaw.Rows[i]["NotGiven1"].ToString());
 						notGiven2=PIn.Bool(tableRaw.Rows[i]["NotGiven2"].ToString());
 						notGiven3=PIn.Bool(tableRaw.Rows[i]["NotGiven3"].ToString());
+						notGiven3a=PIn.Bool(tableRaw.Rows[i]["NotGiven3a"].ToString());
+						notGiven3b=PIn.Bool(tableRaw.Rows[i]["NotGiven3b"].ToString());
+						notGiven3c=PIn.Bool(tableRaw.Rows[i]["NotGiven3c"].ToString());
 						notGiven4=PIn.Bool(tableRaw.Rows[i]["NotGiven4"].ToString());
 						notGiven5=PIn.Bool(tableRaw.Rows[i]["NotGiven5"].ToString());
 						notGiven6=PIn.Bool(tableRaw.Rows[i]["NotGiven6"].ToString());
 						bool notGiven7=PIn.Bool(tableRaw.Rows[i]["NotGiven7"].ToString());
-						if(notGiven1 || notGiven2 || notGiven3 || notGiven4 || notGiven5 || notGiven6 || notGiven7) {
+						if(notGiven1 || notGiven2 || notGiven3 || notGiven3a || notGiven3b || notGiven3c || notGiven4 || notGiven5 || notGiven6 || notGiven7) {
 							row["exclusion"]="X";
 							row["explanation"]+="Not given.";//too complicated to document.
 						}
-						else if(count1>=4 && count2>=3 && count3>=1 && count4>=2 && count5>=3 && count6>=1 && count7>=4) {
+						else if(count1>=4 && count2>=3 
+							&& (count3>=1 || (count3a>=1 && count3b>=1 && count3c>=1)) && count4>=2 && count5>=3 && count6>=1 && count7>=4) {
 							row["numerator"]="X";
 							row["explanation"]="All vaccinations given.";
 						}
 						else {
 							row["explanation"]="Missing vaccinations.";
 						}
+						break;
+					case QualityType.Pneumonia:
+						//Pneumonia----------------------------------------------------------------------------------------------------------------
+						DateVaccine=PIn.Date(tableRaw.Rows[i]["DateVaccine"].ToString());
+						if(DateVaccine.Year<1880) {
+							row["explanation"]="No pneumococcal vaccine given";
+						}
+						else {
+							row["numerator"]="X";
+							row["explanation"]="Pneumococcal vaccine given";
+						}
+						break;
+					case QualityType.DiabetesBloodPressure:
+						//DiabetesBloodPressure---------------------------------------------------------------------------------------------------
+						bool hasMedication=PIn.Bool(tableRaw.Rows[i]["HasMedication"].ToString());
+						bool HasDiagnosisDiabetes=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisDiabetes"].ToString());
+						DateTime DateBP=PIn.Date(tableRaw.Rows[i]["DateBP"].ToString());
+						int systolic=PIn.Int(tableRaw.Rows[i]["Systolic"].ToString());
+						int diastolic=PIn.Int(tableRaw.Rows[i]["Diastolic"].ToString());
+						bool HasDiagnosisPolycystic=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisPolycystic"].ToString());
+						bool HasDiagnosisAcuteDiabetes=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisAcuteDiabetes"].ToString());
+						if(!hasMedication && !HasDiagnosisDiabetes) {
+							continue;//not part of denominator
+						}
+						if(HasDiagnosisPolycystic && !HasDiagnosisDiabetes) {
+							row["exclusion"]="X";
+							row["explanation"]+="polycystic ovaries";
+						}
+						else if(HasDiagnosisAcuteDiabetes && hasMedication && !HasDiagnosisDiabetes) {
+							row["exclusion"]="X";
+							row["explanation"]+="gestational or steroid induced diabetes";
+						}
+						else if(DateBP.Year<1880) {
+							row["explanation"]="No BP entered";
+						}
+						else if(systolic < 90 && diastolic < 140) {
+							row["numerator"]="X";
+							row["explanation"]="Controlled blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
+						}
+						else {
+							row["explanation"]="High blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
+						}
+						break;
+					case QualityType.BloodPressureManage:
+						//BloodPressureManage-------------------------------------------------------------------------------------------------------
+						/*
+						DateBP date NOT NULL,
+						Systolic int NOT NULL,
+						Diastolic int NOT NULL*/
+						bool HasDiagnosisHypertension=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisHypertension"].ToString());
+						bool HasProcedureESRD=PIn.Bool(tableRaw.Rows[i]["HasProcedureESRD"].ToString());
+						bool HasDiagnosisPregnancy=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisPregnancy"].ToString());
+						bool HasDiagnosisESRD=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisESRD"].ToString());
+						if(!HasDiagnosisHypertension) {
+							continue;//not part of denominator
+						}
+						if(HasProcedureESRD || HasDiagnosisPregnancy || HasDiagnosisESRD) {
+							continue;//not part of denominator
+						}
+
+
+
+
+
+
 						break;
 					default:
 						throw new ApplicationException("Type not found: "+qtype.ToString());
@@ -1507,6 +1947,12 @@ namespace OpenDentBusiness {
 				case QualityType.ImmunizeChild_11:
 				case QualityType.ImmunizeChild_12:
 					return "All patients with a visit during the measurement period who turned 2 during the measurement period.";
+				case QualityType.Pneumonia:
+					return "All patients 65+ during the measurement period with a visit within 1 year before the measurement end date.";
+				case QualityType.DiabetesBloodPressure:
+					return "All patients 17-74 before the measurement period, who either have a diabetes-related medication dispensed, or who have an active diagnosis of diabetes.";
+				case QualityType.BloodPressureManage:
+					return "All patients 17-74 before the measurement period who have an active diagnosis of hypertension and who are not pregnant or have ESRD.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -1573,6 +2019,12 @@ BMI 18.5-25.";
 					return "All vaccinations 1-6.";
 				case QualityType.ImmunizeChild_12:
 					return "All vaccinations 1-7.";
+				case QualityType.Pneumonia:
+					return "Pneumococcal vaccine before measurement end date. CVX=33,100,133";
+				case QualityType.DiabetesBloodPressure:
+					return "Diastolic < 90 and systolic < 140 at most recent encounter.";
+				case QualityType.BloodPressureManage:
+					return "Diastolic < 90 and systolic < 140 at most recent encounter.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -1616,6 +2068,13 @@ BMI 18.5-25.";
 				case QualityType.ImmunizeChild_11:
 				case QualityType.ImmunizeChild_12:
 					return "Contraindicated due to specific allergy or disease.";
+				case QualityType.Pneumonia:
+					return "N/A";
+				case QualityType.DiabetesBloodPressure:
+					return "1. Diagnosis polycystic ovaries and not active diagnosis of diabetes.\r\n"
+						+"or 2. Medication was due to an accute episode, and not active diagnosis of diabetes.";
+				case QualityType.BloodPressureManage:
+					return "N/A";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
