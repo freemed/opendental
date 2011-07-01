@@ -223,7 +223,7 @@ namespace OpenDental{
 				labelElectronicID.Text="EDI Code";
 				comboElectIDdescript.Visible=false;
 				labelGroupNum.Text=Lan.g(this,"Plan Number");
-				checkIsPMP.Checked=(planCur.CanadianPlanFlag!="");
+				checkIsPMP.Checked=(planCur.CanadianPlanFlag!=null && planCur.CanadianPlanFlag!="");
 			}
 			else{
 				labelDivisionDash.Visible=false;

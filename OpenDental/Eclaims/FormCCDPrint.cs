@@ -13,14 +13,7 @@ using CodeBase;
 
 /*
  * TODOS: (not in any particular order)
- * *Fix bullets 18 through 22 on the Dentaide form to use the secondary information under the secondary inurance plan section. Might be done. Check alignments when printing.
- * *Be sure all fields have been processed in each form, either directly or indirectly.
- * *Merge predetermination forms into existing forms? (see pages 48 and 122 in message formats).
- * *Add option in UI to print dentist copy.
  * *Claim Ack print out does not yet align procedure amounts by decimal (they are currently left aligned).
- * 
- * *After we pass testing:
- * -Do not let the user send eligibility checks to carriers which do not support such inquiries.
  */
 
 namespace OpenDental.Eclaims {
@@ -229,9 +222,16 @@ namespace OpenDental.Eclaims {
 			//We are required to print 2 copies of the Dentaide form when it is not a predetermination form. Everything else requires only 1 copy.
 			if(copiesToPrint<=0) { //Show the form on screen if there are no copies to print.
 				ShowDisplayMessages();
+				CCDField fieldPayTo=formData.GetFieldById("F01");
+				if(fieldPayTo!=null) {
+					bool paySubscriber=(fieldPayTo.valuestr=="1");//same for version 02 and version 04
+					if(insSub.AssignBen==paySubscriber) {
+						MsgBox.Show("Canadian","The carrier changed the payee.");
+					}
+				}
 				CCDField paymentAdjustmentAmount=formData.GetFieldById("G33");
 				if(paymentAdjustmentAmount!=null) {
-					if(paymentAdjustmentAmount.valuestr!="0000000") {
+					if(paymentAdjustmentAmount.valuestr.Substring(1)!="000000") {
 						MessageBox.Show(Lan.g(this,"Payment adjustment amount")+": "+RawMoneyStrToDisplayMoney(paymentAdjustmentAmount.valuestr));
 					}
 				}

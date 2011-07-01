@@ -2341,6 +2341,7 @@ namespace OpenDental{
 			// 
 			this.textCanadaTransRefNum.Location = new System.Drawing.Point(96,122);
 			this.textCanadaTransRefNum.Name = "textCanadaTransRefNum";
+			this.textCanadaTransRefNum.ReadOnly = true;
 			this.textCanadaTransRefNum.Size = new System.Drawing.Size(100,20);
 			this.textCanadaTransRefNum.TabIndex = 148;
 			// 
@@ -3308,10 +3309,12 @@ namespace OpenDental{
 				groupAccident.Visible=false;
 				labelNote.Text="Claim Note (will only show on printed claims)";
 				tabMain.SelectedTab=tabCanadian;
+				listClaimStatus.Enabled=(ClaimCur.CanadaTransRefNum=="");
 				if(ClaimCur.DateSent.Date==MiscData.GetNowDateTime().Date) { //Reversal can only happen on the same day that the claim was originally sent.
-					textCanadaTransRefNum.Enabled=true;
-					butReverse.Enabled=true;
+					butReverse.Enabled=(ClaimCur.CanadaTransRefNum!="");
 				}
+				butSend.Enabled=(ClaimCur.CanadaTransRefNum=="");
+				butOK.Enabled=(ClaimCur.CanadaTransRefNum=="");
 			}
 			else {
 				tabMain.TabPages.Remove(tabCanadian);
