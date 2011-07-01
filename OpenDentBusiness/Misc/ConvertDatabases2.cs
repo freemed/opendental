@@ -5739,9 +5739,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE vitalsign MODIFY ChildGotPhysCouns NOT NULL";
 					Db.NonQ(command);
 				}
-				
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="UPDATE icd9 SET ICD9Code=CONCAT(SUBSTR(ICD9Code,1,3),'.',SUBSTR(ICD9Code,4)) WHERE ICD9Code REGEXP '^[VE0-9]{3}[^.]?[0-9]+'";
+					//explanation of the regular expression: All codes where the first three characters are V, E, or 0-9.  The fourth character must not be a period , so [^.]? means zero or more characters that are not a period.  And then [0-9]+ indicates 1 or more numbers after that. That's a complicated way of saying that we will not include codes that have already been converted to period format, and that we will not stick a period on codes that are only 3 numbers long.
+					Db.NonQ(command);
+				}
+				else {//oracle
+//todo: Jason, please create a query for oracle that is functionally equivalent.
+				}
 
 				
 
