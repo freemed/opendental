@@ -4944,6 +4944,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
+			if(textCanadianAccidentDate.Text!="" && DateTime.Parse(textCanadianAccidentDate.Text).Date>DateTime.Today) {
+				MsgBox.Show(this,"Accident date cannot be a date in the future.");
+				return false;
+			}
 			string warning="";
 			if(textReferralProvider.Text!="" && comboReferralReason.SelectedIndex==0){
 				if(warning!=""){

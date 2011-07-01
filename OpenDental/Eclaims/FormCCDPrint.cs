@@ -229,6 +229,12 @@ namespace OpenDental.Eclaims {
 			//We are required to print 2 copies of the Dentaide form when it is not a predetermination form. Everything else requires only 1 copy.
 			if(copiesToPrint<=0) { //Show the form on screen if there are no copies to print.
 				ShowDisplayMessages();
+				CCDField paymentAdjustmentAmount=formData.GetFieldById("G33");
+				if(paymentAdjustmentAmount!=null) {
+					if(paymentAdjustmentAmount.valuestr!="0000000") {
+						MessageBox.Show(Lan.g(this,"Payment adjustment amount")+": "+RawMoneyStrToDisplayMoney(paymentAdjustmentAmount.valuestr));
+					}
+				}
 				if(autoPrint) {
 					if(responseStatus!="R") { //We are not required to automatically print rejection notices.
 						int numPrintCopies=((formId=="02" && !predetermination)?2:1);
