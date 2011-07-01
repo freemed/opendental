@@ -154,7 +154,7 @@ namespace OpenDental{
 		///<summary>When a popup happens durring attempted drag off pinboard, this helps cancel the drag.</summary>
 		private bool CancelPinMouseDown;
 		/*
-		//Work for new way of printing appt sched.
+		//Working on a new way to print the sched
 		private SolidBrush openBrush;
 		private SolidBrush closedBrush;
 		private SolidBrush holidayBrush;
@@ -171,8 +171,8 @@ namespace OpenDental{
 		private float MinPerRow;
 		private int RowsPerIncr;
 		private int MinPerIncr;
-		private Rectangle curMargins;
-		*/
+		private Rectangle curMargins; 
+		 */
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -3666,7 +3666,11 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Printer not installed"));
 			}
 			else{
-				PrintReport();
+				//FormApptPrintSetup FormAPS=new FormApptPrintSetup();
+				//FormAPS.ShowDialog();
+				//if(FormAPS.DialogResult==DialogResult.OK) {
+					PrintReport();
+				//}
 			}
 		}
 
@@ -3696,7 +3700,6 @@ namespace OpenDental{
 
 		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			PrintScreenShot(sender,e);
-			//ComputeColWidth(margins.Width);//Figure out widths based on numbers of pages user chose to print.
 			//PrintSchedulePage(e.Graphics,e.MarginBounds);
 		}
 
@@ -3831,31 +3834,26 @@ namespace OpenDental{
       e.Graphics.DrawImage(imageTemp,xPos,yPos); 
 		}
 
-		//Working on new way of printing appt sched.
 		/*
 		///<summary>The new printing method for the appointment schedule. Will be phased in when complete.</summary>
 		private void PrintSchedulePage(Graphics g,Rectangle margins) {
 			curMargins=margins;
-			curMargins.Height=margins.Height+60;
-			//Only use header on first page and then blank header on rest of row
+			curMargins.Height=margins.Height;
+			//Very concise header on all pages: just date/day in small font.
 			int yPos=(int)27.5;//starting pos
-			//if(printingRow==1){ do title region }
 			#region title
 			string title;
-			string date;
 			if(ContrApptSheet.IsWeeklyView) {
-				title=Lan.g(this,"Weekly Appointments");
-				date=WeekStartDate.DayOfWeek.ToString()+" "+WeekStartDate.ToShortDateString()
-					+" - "+WeekEndDate.DayOfWeek.ToString()+" "+WeekEndDate.ToShortDateString();
+				title=WeekStartDate.DayOfWeek.ToString()+" "+WeekStartDate.ToShortDateString()+" - "+WeekEndDate.DayOfWeek.ToString()+" "+WeekEndDate.ToShortDateString();
 			}
 			else {
-				title=Lan.g(this,"Daily Appointments");
-				date=AppointmentL.DateSelected.DayOfWeek.ToString()+"   "+AppointmentL.DateSelected.ToShortDateString();
+				title=AppointmentL.DateSelected.DayOfWeek.ToString()+"   "+AppointmentL.DateSelected.ToShortDateString();
 			}
-			Font titleFont=new Font("Arial",14,FontStyle.Bold);
+			Font titleFont=new Font("Arial",10,FontStyle.Bold);
 			float xTitle = (float)(400-((g.MeasureString(title,titleFont).Width/2)));
 			g.DrawString(title,titleFont,Brushes.Black,xTitle,yPos);//centered
 			#endregion			
+			#region Brushes
 			try {
 			  openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
 			  closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
@@ -3866,11 +3864,13 @@ namespace OpenDental{
 			  closedBrush=new SolidBrush(Color.LightGray);
 			  holidayBrush=new SolidBrush(Color.FromArgb(255,128,128));
 			}
+			SolidBrush timeBarBrush=new SolidBrush(Color.LightGray);
+			#endregion
 			TimeWidth=37;
 			ProvWidth=8;
-			Lh=12;
+			//Use the font preference to determine Line height somehow.
+			Lh=20;
 			//const float printTimeWidth=37.0f;
-			SolidBrush timeBarBrush=new SolidBrush(Color.LightGray);
 			//REMOVE ME LATER: Code commented out below copied from ContrApptSheet.CreateShadow() around line 265.
 			//Code to draw a single appointment is contained in ContrApptSingle.cs.
 			//background
@@ -3887,7 +3887,7 @@ namespace OpenDental{
 			//}
 			//DrawGridLines(g);
 			//DrawRedTimeIndicator(g);
-			//DrawMinutes(g);
+			DrawMinutes(g);
 			timeBarBrush.Dispose();
 			//Increment page numbers.
 			//printPageHorizontal++;
@@ -3998,16 +3998,15 @@ namespace OpenDental{
 		}
 
 		public void ComputeColWidth(int totalWidth){
-			//TODO: Read variables from preferences in DB. Testing values used for now.
-			//float printNumPagesHorizontal=1.5f;
-			//float printNumPagesVertical=2.0f;
+			//Jason: I'm not sure what these null checks are for.
 			if(ApptViewItemL.VisOps==null || ApptViewItemL.VisProvs==null){
 				return;
 			}
 			try{
-				if(RowsPerIncr==0)
+				if(RowsPerIncr==0) {
 					RowsPerIncr=1;
-				ColCount=ApptViewItemL.VisOps.Count;
+				}
+				ColCount=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage);
 				if(ContrApptSheet.IsWeeklyView){
 					ProvCount=0;
 				}
@@ -4019,17 +4018,19 @@ namespace OpenDental{
 				}
 				else {
 					if(ContrApptSheet.IsWeeklyView){
-						ColDayWidth=(totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
+						//Jason: Going to worry about week after daily done
+						ColDayWidth=(totalWidth)/NumOfWeekDaysToDisplay;
 						ColAptWidth=(float)(ColDayWidth-1)/(float)ColCount;
-						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+						ColWidth=(totalWidth-ProvWidth*ProvCount)/ColCount;
 					}
 					else{
-						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+						ColWidth=(totalWidth-ProvWidth*ProvCount)/ColCount;
 					}
 				}
 				MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
 				MinPerRow=(float)MinPerIncr/(float)RowsPerIncr;
 				RowsPerHr=60/MinPerIncr*RowsPerIncr;
+				//Jason: Need logic here for ending on the hour and where to continue on following pages.
 				//Height=Lh*24*RowsPerHr;
 				//if(ContrApptSheet.IsWeeklyView){
 				//  Width=TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay;
@@ -4154,8 +4155,9 @@ namespace OpenDental{
 		//}
 
 		private void DrawGridLines(Graphics g){
-		  //Vert
-		  if(ContrApptSheet.IsWeeklyView){
+			//Vert
+			//Jason: Going to worry about week after daily done
+			if(ContrApptSheet.IsWeeklyView){
 		    g.DrawLine(new Pen(Color.Red),curMargins.Left,curMargins.Top,curMargins.Left,curMargins.Bottom);
 		    g.DrawLine(new Pen(Color.White),TimeWidth-1,0,TimeWidth-1,curMargins.Height);
 		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth,0,TimeWidth,curMargins.Height);
@@ -4169,113 +4171,107 @@ namespace OpenDental{
 		      ,TimeWidth*2+1+ColDayWidth*NumOfWeekDaysToDisplay,curMargins.Height);
 		  }
 		  else{
-		    g.DrawLine(new Pen(Color.DarkGray),0,0,0,curMargins.Height);
-		    g.DrawLine(new Pen(Color.White),TimeWidth-2,0,TimeWidth-2,curMargins.Height);
-		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth-1,0,TimeWidth-1,curMargins.Height);
+		    g.DrawLine(new Pen(Color.DarkGray),curMargins.Left-TimeWidth,curMargins.Top,curMargins.Left-TimeWidth,curMargins.Bottom);
+		    g.DrawLine(new Pen(Color.White),curMargins.Left-TimeWidth-2,curMargins.Top,curMargins.Left-TimeWidth-2,curMargins.Bottom);
+		    g.DrawLine(new Pen(Color.DarkGray),curMargins.Left-TimeWidth-1,curMargins.Top,curMargins.Left-TimeWidth-1,curMargins.Bottom);
 		    for(int i=0;i<ProvCount;i++){
-		      g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*i,0,TimeWidth+ProvWidth*i,curMargins.Height);
+		      g.DrawLine(new Pen(Color.DarkGray),curMargins.Left+ProvWidth*i,curMargins.Top,curMargins.Left+ProvWidth*i,curMargins.Bottom);
 		    }
 		    for(int i=0;i<ColCount;i++){
-		      g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*ProvCount+ColWidth*i,0
-		        ,TimeWidth+ProvWidth*ProvCount+ColWidth*i,curMargins.Height);
+		      g.DrawLine(new Pen(Color.DarkGray),curMargins.Left+ProvWidth*ProvCount+ColWidth*i,curMargins.Top
+		        ,curMargins.Left+ProvWidth*ProvCount+ColWidth*i,curMargins.Bottom);//TimeWidth+ProvWidth*ProvCount+ColWidth
 		    }
-		    g.DrawLine(new Pen(Color.DarkGray), TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,0
-		      ,TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,curMargins.Height);
-		    g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,0
-		      ,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curMargins.Height);
+		    g.DrawLine(new Pen(Color.DarkGray),curMargins.Right,curMargins.Top
+		      ,curMargins.Right,curMargins.Bottom);
+		    g.DrawLine(new Pen(Color.DarkGray),curMargins.Right+TimeWidth,curMargins.Top
+		      ,curMargins.Right+TimeWidth,curMargins.Bottom);
 		  }
-		  //horiz gray
-		  for(int i=0;i<(curMargins.Height);i+=Lh*RowsPerIncr){
-		    g.DrawLine(new Pen(Color.LightGray),TimeWidth,i
-		      ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i);
-		  }
-		  //horiz Hour lines
-		  for(int i=0;i<curMargins.Height;i+=Lh*RowsPerHr){
-		    g.DrawLine(new Pen(Color.LightGray),0,i-1//was white
-		      ,TimeWidth*2+ColWidth*ColCount+ProvWidth*ProvCount,i-1);
-		    g.DrawLine(new Pen(Color.DarkSlateGray),0,i,TimeWidth,i);
-		    g.DrawLine(new Pen(Color.Black),TimeWidth,i
-		      ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i);
-		    g.DrawLine(new Pen(Color.DarkSlateGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i
-		      ,TimeWidth*2+ColWidth*ColCount+ProvWidth*ProvCount,i);
-		  }
+			//horiz gray
+			for(int i=0;i<(curMargins.Height);i+=Lh*RowsPerIncr){
+			  g.DrawLine(new Pen(Color.LightGray),curMargins.Left,curMargins.Top+i
+			    ,curMargins.Left+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i);
+			}
+			//horiz Hour lines
+			for(int i=0;i<curMargins.Height;i+=Lh*RowsPerHr){
+			  g.DrawLine(new Pen(Color.LightGray),curMargins.Left-TimeWidth,curMargins.Top+i-1//was white
+			    ,curMargins.Right,curMargins.Top+i-1);
+				g.DrawLine(new Pen(Color.DarkSlateGray),curMargins.Left-TimeWidth,curMargins.Top+i,curMargins.Right+TimeWidth,curMargins.Top+i);
+				g.DrawLine(new Pen(Color.Black),curMargins.Left+ProvWidth*ProvCount,curMargins.Top+i
+				  ,curMargins.Right,curMargins.Top+i);
+				g.DrawLine(new Pen(Color.DarkSlateGray),curMargins.Left+ProvWidth*ProvCount,curMargins.Top+i
+				  ,curMargins.Right,curMargins.Top+i);
+			}
 		}
 
-		//private void DrawRedTimeIndicator(Graphics g){
-		//  int curTimeY=(int)(DateTime.Now.Hour*Lh*RowsPerHr+DateTime.Now.Minute/60f*(float)Lh*RowsPerHr);
-		//  g.DrawLine(new Pen(Color.Red),0,curTimeY
-		//    ,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curTimeY);
-		//  g.DrawLine(new Pen(Color.Red),0,curTimeY+1
-		//    ,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curTimeY+1);
-		//}
-
-		//private void DrawMinutes(Graphics g){
-		//  Font font=new Font(FontFamily.GenericSansSerif,8);//was msSans
-		//  Font bfont=new Font(FontFamily.GenericSansSerif,8,FontStyle.Bold);//was Arial
-		//  g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
-		//  DateTime hour;
-		//  CultureInfo ci=(CultureInfo)CultureInfo.CurrentCulture.Clone();
-		//  string hFormat=Lans.GetShortTimeFormat(ci);
-		//  string sTime;
-		//  for(int i=0;i<24;i++){
-		//    hour=new DateTime(2000,1,1,i,0,0);//hour is the only important part of this time.
-		//    sTime=hour.ToString(hFormat,ci);
-		//    SizeF sizef=g.MeasureString(sTime,bfont);
-		//    g.DrawString(sTime,bfont,new SolidBrush(Color.Black),TimeWidth-sizef.Width-2,i*Lh*RowsPerHr+1);
-		//    g.DrawString(sTime,bfont,new SolidBrush(Color.Black)
-		//      ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+1);
-		//    if(MinPerIncr==5) {
-		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
-		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
-		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
-		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
-		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
-		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
-		//    }
-		//    else if(MinPerIncr==10){
-		//      g.DrawString(":10",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr);
-		//      g.DrawString(":20",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
-		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
-		//      g.DrawString(":40",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*4);
-		//      g.DrawString(":50",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*5);
-		//      g.DrawString(":10",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr);
-		//      g.DrawString(":20",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
-		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
-		//      g.DrawString(":40",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*4);
-		//      g.DrawString(":50",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*5);
-		//    }
-		//    else{//15
-		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr);
-		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
-		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth-19,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
-		//      g.DrawString(":15",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr);
-		//      g.DrawString(":30",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
-		//      g.DrawString(":45",font,new SolidBrush(Color.Black)
-		//        ,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
-		//    }
-		//  }
-		//}
+		private void DrawMinutes(Graphics g){
+		  Font font=new Font(FontFamily.GenericSansSerif,8);//was msSans
+		  Font bfont=new Font(FontFamily.GenericSansSerif,8,FontStyle.Bold);//was Arial
+		  g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
+		  DateTime hour=PrefC.GetDateT(PrefName.ApptPrintTimeStart);
+		  CultureInfo ci=(CultureInfo)CultureInfo.CurrentCulture.Clone();
+		  string hFormat=Lans.GetShortTimeFormat(ci);
+		  string sTime;
+			//Put logic here for using start and stop time prefs.
+			int elapsed=((TimeSpan)(PrefC.GetDateT(PrefName.ApptPrintTimeStop)-PrefC.GetDateT(PrefName.ApptPrintTimeStart))).Hours;
+		  for(int i=0;i<elapsed;i++){
+		    hour=new DateTime(2000,1,1,i,0,0);//hour is the only important part of this time.
+		    sTime=hour.ToString(hFormat,ci);
+		    SizeF sizef=g.MeasureString(sTime,bfont);
+		    g.DrawString(sTime,bfont,new SolidBrush(Color.Black),curMargins.Left-sizef.Width-2,curMargins.Top+i*Lh*RowsPerHr+1);
+		    g.DrawString(sTime,bfont,new SolidBrush(Color.Black)
+		      ,2+curMargins.Left+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+1);
+		    if(MinPerIncr==5) {
+		      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
+		      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
+		      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		        ,2+TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		        ,2+TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*6);
+		      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		        ,2+TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*9);
+		    }
+		    else if(MinPerIncr==10){
+		      g.DrawString(":10",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		      g.DrawString(":20",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		      g.DrawString(":40",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*4);
+		      g.DrawString(":50",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*5);
+		      g.DrawString(":10",font,new SolidBrush(Color.Black)
+		        ,2+curMargins.Left+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		      g.DrawString(":20",font,new SolidBrush(Color.Black)
+		        ,2+curMargins.Left+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		        ,2+curMargins.Left+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		      g.DrawString(":40",font,new SolidBrush(Color.Black)
+		        ,2+curMargins.Left+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*4);
+		      g.DrawString(":50",font,new SolidBrush(Color.Black)
+		        ,2+curMargins.Left+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*5);
+		    }
+		    else{//15
+		      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		        ,curMargins.Left-19,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		      g.DrawString(":15",font,new SolidBrush(Color.Black)
+		        ,2+TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr);
+		      g.DrawString(":30",font,new SolidBrush(Color.Black)
+		        ,2+TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*2);
+		      g.DrawString(":45",font,new SolidBrush(Color.Black)
+		        ,2+TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,curMargins.Top+i*Lh*RowsPerHr+Lh*RowsPerIncr*3);
+		    }
+		  }
+		}
 
 		//public void DrawShadow(){
 		//  if(Shadow!=null){
