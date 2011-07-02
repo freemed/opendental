@@ -1190,14 +1190,14 @@ namespace OpenDentBusiness {
 						+"FROM disease,icd9 "
 						+"WHERE disease.ICD9Num=icd9.ICD9Num "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND (icd9.ICD9Code LIKE '63%' "
-						+"OR icd9.ICD9Code LIKE '64%' "
-						+"OR icd9.ICD9Code LIKE '65%' "
-						+"OR icd9.ICD9Code LIKE '66%' "
-						+"OR icd9.ICD9Code LIKE '67%' "
-						+"OR icd9.ICD9Code LIKE 'V22%' "
-						+"OR icd9.ICD9Code LIKE 'V23%' "
-						+"OR icd9.ICD9Code LIKE 'V28%') "
+						+"AND (icd9.ICD9Code LIKE '38.95' "
+						+"OR icd9.ICD9Code LIKE '39%' "
+						+"OR icd9.ICD9Code LIKE '54.98' "
+						+"OR icd9.ICD9Code LIKE '55.6%' "
+						+"OR icd9.ICD9Code LIKE '585%' "
+						+"OR icd9.ICD9Code LIKE 'V42.0%' "
+						+"OR icd9.ICD9Code LIKE 'V45.1%' "
+						+"OR icd9.ICD9Code LIKE 'V56%') "
 						//active during the period
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "
 						+"OR disease.DateStart < '1880-01-01') "
@@ -1205,17 +1205,24 @@ namespace OpenDentBusiness {
 						+"OR disease.DateStop < '1880-01-01') "
 						+") > 0";
 					Db.NonQ(command);
-
-
-
-
-
-
+					//DateBP
+					command="UPDATE tempehrquality "
+						+"SET tempehrquality.DateBP=(SELECT MAX(vitalsign.DateTaken) "
+						+"FROM vitalsign "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND vitalsign.BpSystolic != 0 "
+						+"AND vitalsign.BpDiastolic != 0 "
+						+"GROUP BY vitalsign.PatNum)";
+					Db.NonQ(command);
 					command="UPDATE tempehrquality SET DateBP='0001-01-01' WHERE DateBP='0000-00-00'";
 					Db.NonQ(command);
-
-
-
+					//Systolic and diastolic
+					command="UPDATE tempehrquality,vitalsign "
+						+"SET Systolic=BpSystolic, "
+						+"Diastolic=BpDiastolic "
+						+"WHERE tempehrquality.PatNum=vitalsign.PatNum "
+						+"AND tempehrquality.DateBP=vitalsign.DateTaken";
+					Db.NonQ(command);
 					command="SELECT * FROM tempehrquality";
 					tableRaw=Db.GetTable(command);
 					command="DROP TABLE IF EXISTS tempehrquality";
@@ -1846,26 +1853,29 @@ namespace OpenDentBusiness {
 						break;
 					case QualityType.BloodPressureManage:
 						//BloodPressureManage-------------------------------------------------------------------------------------------------------
-						/*
-						DateBP date NOT NULL,
-						Systolic int NOT NULL,
-						Diastolic int NOT NULL*/
 						bool HasDiagnosisHypertension=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisHypertension"].ToString());
 						bool HasProcedureESRD=PIn.Bool(tableRaw.Rows[i]["HasProcedureESRD"].ToString());
 						bool HasDiagnosisPregnancy=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisPregnancy"].ToString());
 						bool HasDiagnosisESRD=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisESRD"].ToString());
+						DateBP=PIn.Date(tableRaw.Rows[i]["DateBP"].ToString());
+						systolic=PIn.Int(tableRaw.Rows[i]["Systolic"].ToString());
+						diastolic=PIn.Int(tableRaw.Rows[i]["Diastolic"].ToString());
 						if(!HasDiagnosisHypertension) {
 							continue;//not part of denominator
 						}
 						if(HasProcedureESRD || HasDiagnosisPregnancy || HasDiagnosisESRD) {
 							continue;//not part of denominator
 						}
-
-
-
-
-
-
+						if(DateBP.Year<1880) {
+							row["explanation"]="No BP entered";
+						}
+						else if(systolic < 90 && diastolic < 140) {
+							row["numerator"]="X";
+							row["explanation"]="Controlled blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
+						}
+						else {
+							row["explanation"]="High blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
+						}
 						break;
 					default:
 						throw new ApplicationException("Type not found: "+qtype.ToString());
