@@ -107,6 +107,32 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Used in reporting, and only for certain types.</summary>
+		public static string GetPQRIMeasureNumber(QualityType qtype) {
+			switch(qtype) {
+				case QualityType.WeightOver65:
+					return "128";//"0421";
+				case QualityType.Hypertension:
+					return "0013";
+				case QualityType.TobaccoUse:
+					return "114";//"0028";
+				case QualityType.InfluenzaAdult:
+					return "110";//"0041";
+				case QualityType.WeightChild_1_1:
+					return "0024";
+				case QualityType.ImmunizeChild_1:
+					return "0038";
+				case QualityType.Pneumonia:
+					return "111";//"0043";
+				case QualityType.DiabetesBloodPressure:
+					return "3";//"0061";
+				case QualityType.BloodPressureManage:
+					return "0018";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
 		private static string GetDescript(QualityType qtype) {
 			switch(qtype) {
 				case QualityType.WeightOver65:
