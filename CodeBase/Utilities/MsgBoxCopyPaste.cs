@@ -17,6 +17,7 @@ namespace CodeBase{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private Button butCopyAll;
 		private int pagesPrinted;
 
 		///<summary>This presents a message box to the user, but is better because it allows us to copy the text and paste it into another program for testing.  Especially useful for queries.</summary>
@@ -56,6 +57,7 @@ namespace CodeBase{
 			this.butOK = new System.Windows.Forms.Button();
 			this.textMain = new System.Windows.Forms.TextBox();
 			this.butPrint = new System.Windows.Forms.Button();
+			this.butCopyAll = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -94,15 +96,26 @@ namespace CodeBase{
 			this.butPrint.Text = "    &Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
+			// butCopyAll
+			// 
+			this.butCopyAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCopyAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCopyAll.Location = new System.Drawing.Point(126,606);
+			this.butCopyAll.Name = "butCopyAll";
+			this.butCopyAll.Size = new System.Drawing.Size(79,26);
+			this.butCopyAll.TabIndex = 4;
+			this.butCopyAll.Text = "Copy All";
+			this.butCopyAll.Click += new System.EventHandler(this.butCopyAll_Click);
+			// 
 			// MsgBoxCopyPaste
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(702,644);
+			this.Controls.Add(this.butCopyAll);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.textMain);
 			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "MsgBoxCopyPaste";
 			this.ShowInTaskbar = false;
@@ -116,11 +129,6 @@ namespace CodeBase{
 
 		private void MsgBoxCopyPaste_Load(object sender,EventArgs e) {
 
-		}
-
-		private void butOK_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.OK;
-			Close();//have to have this also because sometimes this box is non-modal.
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -194,6 +202,17 @@ namespace CodeBase{
 			}
 			return isLastPage;
 		}
+
+		private void butCopyAll_Click(object sender,EventArgs e) {
+			Clipboard.SetData("Text",textMain.Text);
+		}
+
+		private void butOK_Click(object sender, System.EventArgs e) {
+			DialogResult=DialogResult.OK;
+			Close();//have to have this also because sometimes this box is non-modal.
+		}
+
+	
 		
 
 

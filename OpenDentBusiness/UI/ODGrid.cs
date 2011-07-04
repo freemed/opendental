@@ -925,6 +925,7 @@ namespace OpenDental.UI {
 				RowsPrinted=0;
 				NoteRemaining="";
 			}
+			bool isFirstRowOnPage=true;//helps with handling a very tall first row
 			if(RowsPrinted==rows.Count-1) {//last row
 				lowerPen=new Pen(Color.FromArgb(120,120,120));
 			}
@@ -956,7 +957,12 @@ namespace OpenDental.UI {
 					if(NoteRemaining=="") {//We are not in the middle of a note from a previous page. If we are in the middle of a note that will get printed next, as it is the next region of code (RowNotePart).
 						//Go to next page if it doesn't fit.
 						if(yPos+(float)RowHeights[RowsPrinted] > bounds.Bottom) {//The row is too tall to fit
-							break;//Go to next page.
+							if(isFirstRowOnPage) {
+								//todo some day: handle very tall first rows.  For now, print what we can.
+							}
+							else {
+								break;//Go to next page.
+							}
 						}
 						//There is enough room to print this row.
 						//Draw the left vertical gridline
@@ -1057,6 +1063,7 @@ namespace OpenDental.UI {
 					#region NotePart
 					if(rows[RowsPrinted].Note=="") {
 						RowsPrinted++;//There is no note. Go to next row.
+						isFirstRowOnPage=false;
 						continue; 
 					}
 					//Figure out how much vertical distance the rest of the note will take up.
@@ -1126,6 +1133,7 @@ namespace OpenDental.UI {
 						}
 						NoteRemaining="";
 						RowsPrinted++;
+						isFirstRowOnPage=false;
 						yPos+=noteHeight;
 					}
 					#endregion PrintRestOfNote
@@ -1202,14 +1210,15 @@ namespace OpenDental.UI {
 					cellFont.Dispose();
 				}
 			}
-			if(RowsPrinted==rows.Count) {
-				return yPos;
-			}
-			else{//done printing
+			if(RowsPrinted==rows.Count) {//done printing
 				//set row heights back to screen heights.
 				using(Graphics gfx=this.CreateGraphics()) {
 					ComputeRows(gfx);
 				}
+				return yPos;
+				
+			}
+			else{//more pages to print
 				return -1;
 			}
 		}
