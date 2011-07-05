@@ -754,7 +754,7 @@ namespace OpenDentBusiness{
 				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
 				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
 				AND CommType="+POut.Long(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
-				+"AND SentOrReceived = "+POut.Long((int)CommSentOrReceived.Sent)+" "
+				//+"AND SentOrReceived = "+POut.Long((int)CommSentOrReceived.Sent)+" "
 				+"AND CommDateTime > recall.DatePrevious "
 				+"LEFT JOIN temprecallmaxdate ON temprecallmaxdate.Guarantor=patient.Guarantor "
 				+"WHERE ";
