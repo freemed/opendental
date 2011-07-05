@@ -35,7 +35,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(372,337);
+			this.butCancel.Location = new System.Drawing.Point(372,350);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -62,7 +62,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(280,337);
+			this.butOK.Location = new System.Drawing.Point(280,350);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
@@ -73,7 +73,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDelete.Location = new System.Drawing.Point(25,337);
+			this.butDelete.Location = new System.Drawing.Point(25,350);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 9;
@@ -90,7 +90,7 @@
 			this.gridMain.Location = new System.Drawing.Point(25,77);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(422,233);
+			this.gridMain.Size = new System.Drawing.Size(422,254);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Medications";
 			this.gridMain.TranslationName = null;

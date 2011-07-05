@@ -48,16 +48,23 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 		}
 
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormFormularyMedEdit FormFME=new FormFormularyMedEdit();
+			FormFME.FormularyMedCur=ListMeds[e.Row];
+			FormFME.ShowDialog();
+			FillGrid();
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormFormularyMedEdit FormFME=new FormFormularyMedEdit();
-			FormFME.ForMed=new FormularyMed();
+			FormFME.FormularyMedCur=new FormularyMed();
+			FormFME.FormularyMedCur.FormularyNum=FormularyCur.FormularyNum;
 			FormFME.IsNew=true;
 			FormFME.ShowDialog();
 			if(FormFME.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			FormFME.ForMed.FormularyNum=FormularyCur.FormularyNum;
-			FormularyMeds.Insert(FormFME.ForMed);
+			FormularyMeds.Insert(FormFME.FormularyMedCur);
 			FillGrid();
 		}
 
@@ -74,25 +81,13 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormFormularyMedEdit FormFME=new FormFormularyMedEdit();
-			FormFME.ForMed=ListMeds[e.Row];
-			FormFME.ShowDialog();
-			FillGrid();
-		}
-
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textDescription.Text.Trim()=="") {
 				MsgBox.Show(this,"Please enter a description.");
 				return;
 			}
 			FormularyCur.Description=textDescription.Text;
-			//if(IsNew) {
-			//  Formularies.Insert(FormularyCur);
-			//}
-			//else {
-			Formularies.Update(FormularyCur);
-			//}
+			Formularies.Update(FormularyCur);//always created before opening this form
 			DialogResult=DialogResult.OK;
 		}
 

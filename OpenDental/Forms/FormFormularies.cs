@@ -60,6 +60,7 @@ namespace OpenDental {
 			FormF.IsNew=true;
 			FormF.ShowDialog();
 			if(FormF.DialogResult!=DialogResult.OK) {
+				FormularyMeds.DeleteMedsForFormulary(FormF.FormularyCur.FormularyNum);
 				Formularies.Delete(FormF.FormularyCur.FormularyNum);
 				return;
 			}
