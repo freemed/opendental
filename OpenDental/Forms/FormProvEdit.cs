@@ -1033,11 +1033,11 @@ namespace OpenDental{
 				}
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked) {
-				if(textNationalProvID.Text!=Eclaims.Canadian.TidyAN(textNationalProvID.Text,9)) {
+				if(textNationalProvID.Text!=Eclaims.Canadian.TidyAN(textNationalProvID.Text,9,true)) {
 					MsgBox.Show(this,"CDA number must be 9 characters long and composed of numbers and letters only.");
 					return;
 				}
-				if(textCanadianOfficeNum.Text!=Eclaims.Canadian.TidyAN(textCanadianOfficeNum.Text,4)) {
+				if(textCanadianOfficeNum.Text!=Eclaims.Canadian.TidyAN(textCanadianOfficeNum.Text,4,true)) {
 					MsgBox.Show(this,"Office number must be 4 characters long and composed of numbers and letters only.");
 					return;
 				}

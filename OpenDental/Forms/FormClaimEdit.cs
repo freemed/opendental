@@ -3309,12 +3309,12 @@ namespace OpenDental{
 				groupAccident.Visible=false;
 				labelNote.Text="Claim Note (will only show on printed claims)";
 				tabMain.SelectedTab=tabCanadian;
-				listClaimStatus.Enabled=(ClaimCur.CanadaTransRefNum=="");
+				listClaimStatus.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
 				if(ClaimCur.DateSent.Date==MiscData.GetNowDateTime().Date) { //Reversal can only happen on the same day that the claim was originally sent.
-					butReverse.Enabled=(ClaimCur.CanadaTransRefNum!="");
+					butReverse.Enabled=(ClaimCur.CanadaTransRefNum!=null && ClaimCur.CanadaTransRefNum!="");
 				}
-				butSend.Enabled=(ClaimCur.CanadaTransRefNum=="");
-				butOK.Enabled=(ClaimCur.CanadaTransRefNum=="");
+				butSend.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
+				butOK.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
 			}
 			else {
 				tabMain.TabPages.Remove(tabCanadian);

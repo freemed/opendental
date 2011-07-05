@@ -120,13 +120,8 @@ namespace OpenDental.Eclaims {
 			}
 			//A05 carrier id number 6 N
 			strb.Append(carrier.ElectID);//already validated as 6 digit number.
-			//A06 software system id 3 AN  The third character is for version of OD.
-//todo
-#if DEBUG
-			strb.Append("TS1");
-#else
-			strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
-#endif
+			//A06 software system id 3 AN
+			strb.Append(Canadian.softwareSystemId);
 			if(carrier.CDAnetVersion=="04") {
 				//A10 encryption method 1 N
 				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
@@ -378,13 +373,8 @@ namespace OpenDental.Eclaims {
 			strb.Append("02");//Same for both versions 02 and 04.
 			//A05 carrier id number 6 N
 			strb.Append(carrier.ElectID);//already validated as 6 digit number.
-			//A06 software system id 3 AN  The third character is for version of OD.
-			//todo
-#if DEBUG
-			strb.Append("TS1");
-#else
-			strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
-#endif
+			//A06 software system id 3 AN
+			strb.Append(Canadian.softwareSystemId);
 			if(carrier.CDAnetVersion!="02") { //version 04
 				//A10 encryption method 1 N
 				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
@@ -508,9 +498,8 @@ namespace OpenDental.Eclaims {
 			if(resultIsError) {
 			  throw new ApplicationException(result);
 			}
-			CCDField field=fieldInputter.GetFieldById("G05");//response status
-			if(field.valuestr=="R") {
-				new FormCCDPrint(etrans,result,true);
+			new FormCCDPrint(etrans,result,true);//Print the response.
+			if(etrans.AckCode=="R") {
 				throw new ApplicationException(Lan.g("CanadianOutput","Reversal was rejected by clearinghouse. The claim must be reversed manually."));
 			}
 			return etransAck.EtransNum;
@@ -571,13 +560,8 @@ namespace OpenDental.Eclaims {
 						strb.Append(carrier.ElectID);//already validated as 6 digit number.
 					}
 				}
-				//A06 software system id 3 AN  The third character is for version of OD.
-				//todo
-	#if DEBUG
-				strb.Append("TS1");
-	#else
-				strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
-	#endif
+				//A06 software system id 3 AN
+				strb.Append(Canadian.softwareSystemId);
 				if(!version2) { //version 04
 					//A10 encryption method 1 N
 					if(sendToItrans) {
@@ -763,13 +747,8 @@ namespace OpenDental.Eclaims {
 				else {
 					strb.Append(carrier.ElectID);//already validated as 6 digit number.
 				}
-				//A06 software system id 3 AN  The third character is for version of OD.
-				//todo
-#if DEBUG
-				strb.Append("TS1");
-#else
-				strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
-#endif
+				//A06 software system id 3 AN
+				strb.Append(Canadian.softwareSystemId);
 				//A10 encryption method 1 N
 				if(carrier!=null) {
 					strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
@@ -882,13 +861,8 @@ namespace OpenDental.Eclaims {
 			else { //Assume network!=null
 				strb.Append("999999");//Always 999999 when sending to a network.
 			}
-			//A06 software system id 3 AN  The third character is for version of OD.
-			//todo
-#if DEBUG
-			strb.Append("TS1");
-#else
-			strb.Append("OD1");//To be later supplied by CDAnet staff to uniquely identify OD.
-#endif
+			//A06 software system id 3 AN
+			strb.Append(Canadian.softwareSystemId);
 			//A10 encryption method 1 N
 			if(carrier!=null) {
 				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
