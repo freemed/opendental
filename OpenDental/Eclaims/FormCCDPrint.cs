@@ -1767,30 +1767,41 @@ namespace OpenDental.Eclaims {
 			}
 			doc.DrawString(g,isFrench?"HONS":"CHARGE",procedureChargeCol,0);
 			x=doc.StartElement();
-			//TODO: Ensure that the ordering of the procedures meets the Canadian standard.
 			Procedure proc;
 			float procCodeWidth=g.MeasureString("*******",doc.standardFont).Width;
 			float amountWidth=g.MeasureString("****.**",doc.standardFont).Width;
+			List<ClaimProc> claimProcsOrdered=new List<ClaimProc>();
 			for(int i=0;i<claimprocs.Count;i++) {
 				ClaimProc claimproc=claimprocs[i];
-				if(claimproc.ProcNum!=0) {//Is this a valid procedure?
-					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
-					text=claimproc.CodeSent.PadLeft(6,' ');
-					doc.DrawString(g,text,x,0);
-					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
-					doc.DrawString(g,text,procedureCodeCol+procCodeWidth,0,doc.standardFont,(int)(procedureToothCol-procedureCodeCol-procCodeWidth-10));
-					text=Tooth.ToInternat(proc.ToothNum);//Field F10
-					doc.DrawString(g,text,procedureToothCol,0);
-					text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
-					doc.DrawString(g,text,procedureSurfaceCol,0);
-					if(!predetermination) {//Used to remove service dates in a predetermination ack.
-						text=proc.ProcDate.ToShortDateString();//Field F09
-						doc.DrawString(g,text,procedureDateCol,0);
-					}
-					text=proc.ProcFee.ToString("F");//Field F12
-					doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-					x=doc.StartElement();
+				if(claimproc.ProcNum==0) {
+					continue;
 				}
+				int j=0;
+				for(;j<claimProcsOrdered.Count;j++) {
+					if(claimProcsOrdered[j].LineNumber>claimproc.LineNumber) {
+						break;
+					}
+				}
+				claimProcsOrdered.Insert(j,claimproc);
+			}
+			for(int i=0;i<claimProcsOrdered.Count;i++) {
+				ClaimProc claimproc=claimProcsOrdered[i];
+				proc=Procedures.GetOneProc(claimproc.ProcNum,true);
+				text=claimproc.CodeSent.PadLeft(6,' ');
+				doc.DrawString(g,text,x,0);
+				text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
+				doc.DrawString(g,text,procedureCodeCol+procCodeWidth,0,doc.standardFont,(int)(procedureToothCol-procedureCodeCol-procCodeWidth-10));
+				text=Tooth.ToInternat(proc.ToothNum);//Field F10
+				doc.DrawString(g,text,procedureToothCol,0);
+				text=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);//Field F11
+				doc.DrawString(g,text,procedureSurfaceCol,0);
+				if(!predetermination) {//Used to remove service dates in a predetermination ack.
+					text=proc.ProcDate.ToShortDateString();//Field F09
+					doc.DrawString(g,text,procedureDateCol,0);
+				}
+				text=proc.ProcFee.ToString("F");//Field F12
+				doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				x=doc.StartElement();
 			}
 			x=doc.StartElement();
 			doc.DrawField(g,isFrench?"DESTINATAIRE DU PAIEMENT":"BENEFIT AMOUNT PAYABLE TO",payableToStr,true,x,0);

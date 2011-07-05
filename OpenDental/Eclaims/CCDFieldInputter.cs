@@ -23,6 +23,9 @@ namespace OpenDental.Eclaims {
 			string msgType=message.Substring(20,2);
 			if(version=="04") {
 				switch(msgType) {
+					case "01":
+						ParseClaimRequest_01(message);
+						break;
 					case "11":
 						ParseClaimAck_11(message);
 						break;
@@ -60,6 +63,9 @@ namespace OpenDental.Eclaims {
 			else {//version 02
 				isVersion2=true;
 				switch(msgType) {
+					case "01"://claim transaction
+						ParseClaimRequest_v2_01(message);
+						break;
 					case "10"://eligibility response
 						ParseElegibilityResponse_v2_10(message);
 						break;
@@ -98,9 +104,9 @@ namespace OpenDental.Eclaims {
 				return message;
 			}
 			string substr=message.Substring(0,len);
-			if(!field.CheckValue(this,substr)){
-				throw new ApplicationException("Invalid value for CCD message field '"+field.fieldName+"'"+((substr==null)?"":(": "+substr)));
-			}
+			//if(!field.CheckValue(this,substr)){
+			//  throw new ApplicationException("Invalid value for CCD message field '"+field.fieldName+"'"+((substr==null)?"":(": "+substr)));
+			//}
 			field.valuestr=substr;
 			fieldList.Add(field);
 			return message.Substring(substr.Length,message.Length-substr.Length);//Skip text that has already been read in.
@@ -181,6 +187,48 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException("Internal error, invalid use of ambiguous CCD field id"+((fieldId==null)?"":(": "+fieldId)));
 			}
 			return fields[0].valuestr;
+		}
+
+		///<summary>Used to read data that has already been sent out to CDAnet for processing.</summary>
+		private void ParseClaimRequest_01(string message) {
+			message=InputFields(message,"A01A02A03A04A05A06A10A07A08A09B01B02B03B04B05B06C01C11C02C17C03C04"+
+				"C05C06C07C08C09C10C12C18D01D02D03D04D05D06D07D08D09D10D11E18E20F06F22");
+			if(message==null) {
+				return;//error, but print what we have.
+			}
+			CCDField fieldE20=GetFieldById("E20");
+			int e20Val=0;
+			if(fieldE20!=null) {
+				e20Val=Convert.ToInt32(fieldE20.valuestr);
+			}
+			if(e20Val==1) {
+				message=InputFields(message,"E19E01E02E05E03E17E06E04E08E09E10E11E12E13E14E15E16E07");
+			}
+			message=InputFields(message,"F01F02F03F15F04F18F19F05F20F21");
+			CCDField fieldF22=GetFieldById("F22");
+			int f22Val=0;
+			if(fieldF22!=null) {
+				f22Val=Convert.ToInt32(fieldF22.valuestr);
+			}
+			for(int i=0;i<f22Val;i++) {
+				message=InputFields(message,"F23F24");
+			}
+			CCDField fieldF06=GetFieldById("F06");
+			int f06Val=0;
+			if(fieldF06!=null) {
+				f06Val=Convert.ToInt32(fieldF06.valuestr);
+			}
+			for(int i=0;i<f06Val;i++) {
+				message=InputFields(message,"F07F08F09F10F11F12F34F13F35F36F16F17");
+			}
+			CCDField fieldC18=GetFieldById("C18");
+			int c18Val=0;
+			if(fieldC18!=null) {
+				c18Val=Convert.ToInt32(fieldC18.valuestr);
+			}
+			if(c18Val==1) {
+				message=InputFields(message,"C19");
+			}
 		}
 
 		private void ParseClaimAck_11(string message) {
@@ -386,6 +434,22 @@ namespace OpenDental.Eclaims {
 			return;
 		}
 
+		private void ParseClaimRequest_v2_01(string message) {
+			message=InputFields(message,"A01A02A03A04A05A06A07A08B01B02C01C11C02C03C04C05C06C07C08C09C10D01D02D03D04D05D06D07D08D09D10E01E02E05E03E04"+
+				"F01F02F03F15F04F05F06");
+			if(message==null) {
+				return;//error, but print what we have.
+			}
+			CCDField fieldF06=GetFieldById("F06");
+			int f06Val=0;
+			if(fieldF06!=null) {
+				f06Val=Convert.ToInt32(fieldF06.valuestr);
+			}
+			for(int i=0;i<f06Val;i++) {
+				message=InputFields(message,"F07F08F09F10F11F12F13F14");
+			}
+		}
+
 		private void ParseElegibilityResponse_v2_10(string message) {
 			message=this.InputFields(message,"A01A02A03A04A05A07B01B02G01G05G06G07G02"+
 																				"###G06G08");
@@ -458,6 +522,8 @@ namespace OpenDental.Eclaims {
 			string msgType=GetValue("A04");
 			if(!isVersion2) {//version 4
 				switch(msgType) {
+					case "01":
+						return EtransType.Claim_CA;
 					case "11":
 						return EtransType.ClaimAck_CA;
 					case "21":
@@ -484,6 +550,8 @@ namespace OpenDental.Eclaims {
 			}
 			else {//version 02
 				switch(msgType) {
+					case "01":
+						return EtransType.Claim_CA; 
 					case "10"://eligibility response
 						return EtransType.EligResponse_CA;
 					case "11"://claim response

@@ -956,7 +956,7 @@ namespace OpenDental.Eclaims {
 					lengthRequirement=new ConstLengthRequirement(1);
 					fieldName="Materials Forwarded";
 					frenchFieldName="Les matériaux ont expédié";
-					valueRequirements.Add(new DiscreteValueRequirement(new string[] {"E","C","M","X","I","A","B","D","F","G",
+					valueRequirements.Add(new DiscreteValueRequirement(new string[] {" ","E","C","M","X","I","A","B","D","F","G",
 						"H","J","K","L","N","O","P","Q","R","T","U"}));
 					break;
 				case "A09"://Not in version 2.
@@ -1016,7 +1016,7 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Code complémentaire de référence";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(2);
-					valueRequirements.Add(new RangeValueRequirement(1,13));
+					valueRequirements.Add(new RangeValueRequirement(0,13));
 					break;
 				case "B07"://Not in version 2.
 					fieldName="Receiving Provider Number";
@@ -1109,7 +1109,7 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Drapeau de plan";
 					format="A";
 					lengthRequirement=new ConstLengthRequirement(1);
-					valueRequirements.Add(new DiscreteValueRequirement(new string[] {"A","V"}));
+					valueRequirements.Add(new DiscreteValueRequirement(new string[] {" ","A","V","N"}));
 					break;
 				case "C13"://Not in version 2.
 					fieldName="Band Number";
