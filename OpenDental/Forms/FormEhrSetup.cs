@@ -36,6 +36,7 @@ namespace OpenDental {
 				butInboundEmail.Visible=false;
 				butReminderRules.Visible=false;
 				butEducationalResources.Visible=false;
+				butRxNorm.Visible=false;
 			}
 		}
 
@@ -85,11 +86,7 @@ namespace OpenDental {
 			}
 			DataValid.SetInvalid(InvalidType.Prefs);
 		}
-
-		private void butClose_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
+		
 		private void butReminderRules_Click(object sender,EventArgs e) {
 			FormReminderRules FormRR = new FormReminderRules();
 			FormRR.ShowDialog();
@@ -98,6 +95,15 @@ namespace OpenDental {
 		private void butEducationalResources_Click(object sender,EventArgs e) {
 			FormEduResourceSetup FormEDUSetup = new FormEduResourceSetup();
 			FormEDUSetup.ShowDialog();
+		}
+
+		private void butRxNorm_Click(object sender,EventArgs e) {
+			FormRxNorms formR=new FormRxNorms();
+			formR.ShowDialog();
+		}
+
+		private void butClose_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 	}

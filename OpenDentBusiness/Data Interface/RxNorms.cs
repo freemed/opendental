@@ -9,6 +9,7 @@ using Ionic.Zip;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class RxNorms{
+		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
@@ -45,7 +46,15 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.RxNormCrud.TableToList(table);
 		}
-		#endregion
+		#endregion*/
+
+		public static bool IsRxNormTableEmpty() {
+			string command="SELECT COUNT(*) FROM rxnorm";
+			if(Db.GetCount(command)=="0") {
+				return true;
+			}
+			return false;
+		}
 
 		///<summary>Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
 		public static void CreateFreshRxNormTableFromZip() {
@@ -90,12 +99,19 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Never returns multums, only used for displaying after a search.</summary>
-		public static List<RxNorm> GetListByCodeOrDesc(string codeOrDesc) {
+		public static List<RxNorm> GetListByCodeOrDesc(string codeOrDesc,bool isExact) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<List<RxNorm>>(MethodBase.GetCurrentMethod(),codeOrDesc);
 			}
-			string command="SELECT * FROM rxnorm WHERE (RxCui LIKE '%"+POut.String(codeOrDesc)+"%' OR Description LIKE '%"+POut.String(codeOrDesc)+"%') "
-				+"AND MmslCode=''";
+			string command="";
+			if(isExact) {
+				command="SELECT * FROM rxnorm WHERE (RxCui LIKE '"+POut.String(codeOrDesc)+"' OR Description LIKE '"+POut.String(codeOrDesc)+"') "
+					+"AND MmslCode=''";
+			}
+			else {
+				command="SELECT * FROM rxnorm WHERE (RxCui LIKE '%"+POut.String(codeOrDesc)+"%' OR Description LIKE '%"+POut.String(codeOrDesc)+"%') "
+					+"AND MmslCode=''";
+			}
 			return Crud.RxNormCrud.SelectMany(command);
 		}
 

@@ -35,6 +35,7 @@ namespace OpenDental{
 			this.butReminderRules = new OpenDental.UI.Button();
 			this.butInboundEmail = new OpenDental.UI.Button();
 			this.butEducationalResources = new OpenDental.UI.Button();
+			this.butRxNorm = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butICD9s
@@ -73,7 +74,7 @@ namespace OpenDental{
 			this.butAllergies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAllergies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAllergies.CornerRadius = 4F;
-			this.butAllergies.Location = new System.Drawing.Point(27,100);
+			this.butAllergies.Location = new System.Drawing.Point(27,98);
 			this.butAllergies.Name = "butAllergies";
 			this.butAllergies.Size = new System.Drawing.Size(128,24);
 			this.butAllergies.TabIndex = 120;
@@ -87,7 +88,7 @@ namespace OpenDental{
 			this.butFormularies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFormularies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFormularies.CornerRadius = 4F;
-			this.butFormularies.Location = new System.Drawing.Point(27,140);
+			this.butFormularies.Location = new System.Drawing.Point(27,136);
 			this.butFormularies.Name = "butFormularies";
 			this.butFormularies.Size = new System.Drawing.Size(128,24);
 			this.butFormularies.TabIndex = 121;
@@ -101,7 +102,7 @@ namespace OpenDental{
 			this.butVaccineDef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butVaccineDef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butVaccineDef.CornerRadius = 4F;
-			this.butVaccineDef.Location = new System.Drawing.Point(27,180);
+			this.butVaccineDef.Location = new System.Drawing.Point(27,174);
 			this.butVaccineDef.Name = "butVaccineDef";
 			this.butVaccineDef.Size = new System.Drawing.Size(128,24);
 			this.butVaccineDef.TabIndex = 122;
@@ -115,7 +116,7 @@ namespace OpenDental{
 			this.butDrugManufacturer.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDrugManufacturer.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDrugManufacturer.CornerRadius = 4F;
-			this.butDrugManufacturer.Location = new System.Drawing.Point(27,220);
+			this.butDrugManufacturer.Location = new System.Drawing.Point(27,212);
 			this.butDrugManufacturer.Name = "butDrugManufacturer";
 			this.butDrugManufacturer.Size = new System.Drawing.Size(128,24);
 			this.butDrugManufacturer.TabIndex = 123;
@@ -129,7 +130,7 @@ namespace OpenDental{
 			this.butDrugUnit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDrugUnit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDrugUnit.CornerRadius = 4F;
-			this.butDrugUnit.Location = new System.Drawing.Point(27,260);
+			this.butDrugUnit.Location = new System.Drawing.Point(27,250);
 			this.butDrugUnit.Name = "butDrugUnit";
 			this.butDrugUnit.Size = new System.Drawing.Size(128,24);
 			this.butDrugUnit.TabIndex = 124;
@@ -166,7 +167,7 @@ namespace OpenDental{
 			this.butReminderRules.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReminderRules.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReminderRules.CornerRadius = 4F;
-			this.butReminderRules.Location = new System.Drawing.Point(27,300);
+			this.butReminderRules.Location = new System.Drawing.Point(27,288);
 			this.butReminderRules.Name = "butReminderRules";
 			this.butReminderRules.Size = new System.Drawing.Size(128,24);
 			this.butReminderRules.TabIndex = 126;
@@ -180,7 +181,7 @@ namespace OpenDental{
 			this.butInboundEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butInboundEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butInboundEmail.CornerRadius = 4F;
-			this.butInboundEmail.Location = new System.Drawing.Point(27,340);
+			this.butInboundEmail.Location = new System.Drawing.Point(27,326);
 			this.butInboundEmail.Name = "butInboundEmail";
 			this.butInboundEmail.Size = new System.Drawing.Size(128,24);
 			this.butInboundEmail.TabIndex = 127;
@@ -194,17 +195,32 @@ namespace OpenDental{
 			this.butEducationalResources.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEducationalResources.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEducationalResources.CornerRadius = 4F;
-			this.butEducationalResources.Location = new System.Drawing.Point(27,380);
+			this.butEducationalResources.Location = new System.Drawing.Point(27,364);
 			this.butEducationalResources.Name = "butEducationalResources";
 			this.butEducationalResources.Size = new System.Drawing.Size(128,24);
 			this.butEducationalResources.TabIndex = 128;
 			this.butEducationalResources.Text = "Educational Resources";
 			this.butEducationalResources.Click += new System.EventHandler(this.butEducationalResources_Click);
 			// 
+			// butRxNorm
+			// 
+			this.butRxNorm.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRxNorm.Autosize = true;
+			this.butRxNorm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRxNorm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRxNorm.CornerRadius = 4F;
+			this.butRxNorm.Location = new System.Drawing.Point(27,402);
+			this.butRxNorm.Name = "butRxNorm";
+			this.butRxNorm.Size = new System.Drawing.Size(128,24);
+			this.butRxNorm.TabIndex = 129;
+			this.butRxNorm.Text = "RxNorms";
+			this.butRxNorm.Click += new System.EventHandler(this.butRxNorm_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(606,489);
+			this.Controls.Add(this.butRxNorm);
 			this.Controls.Add(this.butEducationalResources);
 			this.Controls.Add(this.butInboundEmail);
 			this.Controls.Add(this.butReminderRules);
@@ -239,5 +255,6 @@ namespace OpenDental{
 		private UI.Button butReminderRules;
 		private UI.Button butInboundEmail;
 		private UI.Button butEducationalResources;
+		private UI.Button butRxNorm;
 	}
 }
