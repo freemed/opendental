@@ -10,7 +10,7 @@ namespace CodeBase{
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
 	public class MsgBoxCopyPaste:System.Windows.Forms.Form {
-		private Button butOK;//I know this is not the "good" button.
+		private Button butOK;
 		public TextBox textMain;
 		private Button butPrint;//this way, the text will be available on close.
 		/// <summary>

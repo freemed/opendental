@@ -600,7 +600,7 @@ namespace OpenDentBusiness{
 						break;
 					case EhrMeasureType.Smoking:
 						SmokingStatus smokeStatus=(SmokingStatus)PIn.Int(tableRaw.Rows[i]["SmokeStatus"].ToString());
-						if(smokeStatus==SmokingStatus.UnknownIfEver) {
+						if(smokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
 							explanation+="Smoking status not entered.";
 						}
 						else{
@@ -999,7 +999,7 @@ namespace OpenDentBusiness{
 						mu.Action="Enter vital signs";
 						break;
 					case EhrMeasureType.Smoking:
-						if(pat.SmokeStatus==SmokingStatus.UnknownIfEver) {
+						if(pat.SmokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
 							mu.Details="Smoking status not entered";
 						}
 						else {

@@ -402,7 +402,7 @@ namespace OpenDentBusiness {
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
-						+"AND patient.SmokeStatus IN("+POut.Int((int)SmokingStatus.CurrentEveryDay)+","+POut.Int((int)SmokingStatus.CurrentSomeDay)+") "
+						+"AND patient.SmokeStatus IN("+POut.Int((int)SmokingStatus.CurrentEveryDay_Recode1)+","+POut.Int((int)SmokingStatus.CurrentSomeDay_Recode2)+") "
 						+"GROUP BY patient.PatNum";
 					Db.NonQ(command);
 					//find most recent tobacco assessment date.
