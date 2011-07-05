@@ -684,14 +684,6 @@ namespace OpenDental.Eclaims {
 						exit=true;
 					}
 				}
-				if(!exit) {
-					try {
-						new FormCCDPrint(etrans,result,true);
-					}
-					catch(Exception ex) {
-						MessageBox.Show(Lan.g("CanadianOutput","Failed to display one of the ROT responses")+": "+ex.Message);
-					}
-				}
 				//Field A02 exists in all of the possible formats (21,11,14,23,13,24).
 				CCDField fieldA02=fieldInputter.GetFieldById("A02");//office sequence number
 				//We use the Office Sequence Number to find the original etrans entry so that we can discover which patient the response is referring to.
@@ -718,10 +710,18 @@ namespace OpenDental.Eclaims {
 								claim.ClaimStatus="S";
 							}
 							else if(etransAck.AckCode=="M") {
-								//TODO: Handle manual claim form submission
+								Canadian.PrintManualClaimForm(claim);
 							}
 							Claims.Update(claim);
 						}						
+					}
+				}
+				if(!exit) {
+					try {
+						new FormCCDPrint(etrans,result,true);
+					}
+					catch(Exception ex) {
+						MessageBox.Show(Lan.g("CanadianOutput","Failed to display one of the ROT responses")+": "+ex.Message);
 					}
 				}
 			} while(!exit);

@@ -373,16 +373,19 @@ namespace OpenDental.Eclaims {
 				center=doc.bounds.X+doc.bounds.Width/2;
 				x=doc.StartElement();//Every printed page always starts on the first row and can choose to skip rows later if desired.
 				if(responseStatus=="R") {
-					PrintClaimAck(e.Graphics);//Print rejection notice. The rejection form is almost exactly the same as the claim ack so the same function is used.
+					PrintRejection(e.Graphics);
 				}
-				else if(transactionCode=="16") {
-					PrintPaymentReconciliation_16(e.Graphics);
+				else if(transactionCode=="12") {
+					PrintReversalResponse_12(e.Graphics);
 				}
 				else if(transactionCode=="15") {
 					PrintSummaryReconciliation_15(e.Graphics);
 				}
-				else if(transactionCode=="12") {
-					PrintReversalResponse_12(e.Graphics);
+				else if(transactionCode=="16") {
+					PrintPaymentReconciliation_16(e.Graphics);
+				}				
+				else if(transactionCode=="24") {
+					PrintEmail_24(e.Graphics);
 				}
 				else {
 					switch(formId) {
@@ -438,6 +441,10 @@ namespace OpenDental.Eclaims {
 		#endregion
 
 		#region Individual Form Printers
+
+		private void PrintRejection(Graphics g) {
+			PrintClaimAck(g);//The rejection form is almost exactly the same as the claim ack so the same function is used, at least for now.
+		}
 
 		private void PrintEmail_24(Graphics g){
 			text=isFrench?"RÉPONSE PAR COURRIER ÉLECTRONIQUE":"E-MAIL";
@@ -2749,7 +2756,7 @@ namespace OpenDental.Eclaims {
 		#region Printing Information Translators
 
 		private Carrier GetCarrier(){
-			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Always exists in every possible message format.
+			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Exists in all formats but 24-Email, and 16-Payment Reconciliation Response
 			if(primaryCarrier!=null && primaryCarrier.ElectID==carrierIdentificationNumber){
 				return primaryCarrier;
 			}else if(secondaryCarrier!=null && secondaryCarrier.ElectID==carrierIdentificationNumber){
@@ -2759,12 +2766,12 @@ namespace OpenDental.Eclaims {
 		}
 
 		private bool ThisIsPrimary(){
-			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Always exists in every possible message format.
+			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Exists in all formats but 24-Email, and 16-Payment Reconciliation Response
 			return(primaryCarrier!=null && primaryCarrier.ElectID==carrierIdentificationNumber);
 		}
 
 		private bool ThisIsSecondary(){
-			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Always exists in every possible message format.
+			string carrierIdentificationNumber=formData.GetFieldById("A05").valuestr;//Exists in all formats but 24-Email, and 16-Payment Reconciliation Response
 			return(secondaryCarrier!=null && secondaryCarrier.ElectID==carrierIdentificationNumber);
 		}
 
