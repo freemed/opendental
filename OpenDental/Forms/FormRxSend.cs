@@ -91,7 +91,7 @@ namespace OpenDental {
 			char d='.';//decimal notation
 			char r='/';//release indicator
 			char p='*';//repetition separator
-			char s='\'';//segment separator
+			string s="'\r\n";//segment separator
 			#if DEBUG
 				if(true){
 					//Set false if you want to use unprintable characters to simulate running in release mode. 
