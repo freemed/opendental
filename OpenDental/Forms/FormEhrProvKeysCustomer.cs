@@ -31,33 +31,31 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Key"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"ProcFee"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g(this,"Charge"),60,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"FTE"),35,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Notes"),100);
 			gridMain.Columns.Add(col);
-			//todo: add more columns	
 			listKeys=EhrProvKeys.RefreshForFam(Guarantor);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			decimal feeTotal=0;
+			decimal fee=0;
 			for(int i=0;i<listKeys.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listKeys[i].LName);
 				row.Cells.Add(listKeys[i].FName);
 				row.Cells.Add(listKeys[i].ProvKey);
-				if(listKeys[i].ProcNum==0) {
-					row.Cells.Add("");
-				}
-				else {
-					Procedure proc=Procedures.GetOneProc(listKeys[i].ProcNum,false);
-					row.Cells.Add(proc.ProcFee.ToString("c"));
-				}
+				fee=(decimal)(60f*listKeys[i].FullTimeEquiv);
+				feeTotal+=fee;
+				row.Cells.Add(fee.ToString("c"));
 				row.Cells.Add(listKeys[i].FullTimeEquiv.ToString());
 				row.Cells.Add(listKeys[i].Notes);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			textCharge.Text=feeTotal.ToString("c");
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {

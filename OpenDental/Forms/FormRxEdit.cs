@@ -421,7 +421,6 @@ namespace OpenDental{
 			this.textDosageCode.Name = "textDosageCode";
 			this.textDosageCode.Size = new System.Drawing.Size(114,20);
 			this.textDosageCode.TabIndex = 256;
-			this.textDosageCode.Visible = false;
 			// 
 			// labelDosageCode
 			// 
@@ -431,7 +430,6 @@ namespace OpenDental{
 			this.labelDosageCode.TabIndex = 257;
 			this.labelDosageCode.Text = "Dosage Code";
 			this.labelDosageCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.labelDosageCode.Visible = false;
 			// 
 			// butRxNormSelect
 			// 
@@ -547,10 +545,12 @@ namespace OpenDental{
 			textDisp.Text=RxPatCur.Disp;
 			textRefills.Text=RxPatCur.Refills;
 			textRxNorm.Text=RxPatCur.RxCui.ToString();
-			if(FormOpenDental.FormEHR!=null) {
-				labelDosageCode.Visible=true;
-				textDosageCode.Visible=true;
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)){
 				textDosageCode.Text=RxPatCur.DosageCode;
+			}
+			else{
+				labelDosageCode.Visible=false;
+				textDosageCode.Visible=false;
 			}
 			textNotes.Text=RxPatCur.Notes;
 			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);

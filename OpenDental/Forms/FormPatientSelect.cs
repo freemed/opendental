@@ -1095,7 +1095,7 @@ namespace OpenDental{
 			PatCur.PatStatus=PatientStatus.Patient;
 			PatCur.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 			PatCur.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			if(FormOpenDental.FormEHR!=null) {
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				PatCur.Gender=PatientGender.Unknown;
 			}
 			Patients.Insert(PatCur,false);

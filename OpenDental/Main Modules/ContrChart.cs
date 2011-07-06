@@ -3216,7 +3216,7 @@ namespace OpenDental{
 						ToolBarMain.Buttons["Commlog"].Enabled=false;
 						webBrowserEcw.Url=null;
 					}
-					if(FormOpenDental.FormEHR!=null) {
+					if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 						ToolBarMain.Buttons["EHR"].Enabled=false;
 					}
 				}
@@ -3253,7 +3253,7 @@ namespace OpenDental{
 			if(UsingEcwTight()) {//button will show in this toolbar instead of the usual one.
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
 			}
-			if(FormOpenDental.FormEHR!=null) {
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				ToolBarMain.Buttons.Add(new ODToolBarButton("EHR",-1,"","EHR"));
 			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
@@ -3372,7 +3372,7 @@ namespace OpenDental{
 						labelECWerror.Visible=true;
 					}
 				}
-				if(FormOpenDental.FormEHR!=null) { //didn't work either
+				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) { //didn't work either
 				//if(ToolBarMain.Buttons["EHR"]!=null) {
 					ToolBarMain.Buttons["EHR"].Enabled=true;
 				}

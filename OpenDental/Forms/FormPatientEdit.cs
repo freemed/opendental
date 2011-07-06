@@ -1919,7 +1919,7 @@ namespace OpenDental{
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			if(FormOpenDental.FormEHR!=null) {
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				labelRaceEthnicity.Text="Race";
 				comboRace.Items.Add("unknown");//0
 				comboRace.Items.Add("White");//1
@@ -2911,7 +2911,7 @@ namespace OpenDental{
 			else{
 				PatCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			if(FormOpenDental.FormEHR!=null) {
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				switch(comboRace.SelectedIndex) {
 					case 0://unknown
 						PatCur.Race=PatientRace.Unknown;

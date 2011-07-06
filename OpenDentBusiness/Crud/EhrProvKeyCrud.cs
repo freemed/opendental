@@ -51,7 +51,6 @@ namespace OpenDentBusiness.Crud{
 				ehrProvKey.LName        = PIn.String(table.Rows[i]["LName"].ToString());
 				ehrProvKey.FName        = PIn.String(table.Rows[i]["FName"].ToString());
 				ehrProvKey.ProvKey      = PIn.String(table.Rows[i]["ProvKey"].ToString());
-				ehrProvKey.ProcNum      = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
 				ehrProvKey.FullTimeEquiv= PIn.Float (table.Rows[i]["FullTimeEquiv"].ToString());
 				ehrProvKey.Notes        = PIn.String(table.Rows[i]["Notes"].ToString());
 				retVal.Add(ehrProvKey);
@@ -94,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrProvKeyNum,";
 			}
-			command+="PatNum,LName,FName,ProvKey,ProcNum,FullTimeEquiv,Notes) VALUES(";
+			command+="PatNum,LName,FName,ProvKey,FullTimeEquiv,Notes) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrProvKey.EhrProvKeyNum)+",";
 			}
@@ -103,7 +102,6 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrProvKey.LName)+"',"
 				+"'"+POut.String(ehrProvKey.FName)+"',"
 				+"'"+POut.String(ehrProvKey.ProvKey)+"',"
-				+    POut.Long  (ehrProvKey.ProcNum)+","
 				+    POut.Float (ehrProvKey.FullTimeEquiv)+","
 				+"'"+POut.String(ehrProvKey.Notes)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -122,7 +120,6 @@ namespace OpenDentBusiness.Crud{
 				+"LName        = '"+POut.String(ehrProvKey.LName)+"', "
 				+"FName        = '"+POut.String(ehrProvKey.FName)+"', "
 				+"ProvKey      = '"+POut.String(ehrProvKey.ProvKey)+"', "
-				+"ProcNum      =  "+POut.Long  (ehrProvKey.ProcNum)+", "
 				+"FullTimeEquiv=  "+POut.Float (ehrProvKey.FullTimeEquiv)+", "
 				+"Notes        = '"+POut.String(ehrProvKey.Notes)+"' "
 				+"WHERE EhrProvKeyNum = "+POut.Long(ehrProvKey.EhrProvKeyNum);
@@ -147,10 +144,6 @@ namespace OpenDentBusiness.Crud{
 			if(ehrProvKey.ProvKey != oldEhrProvKey.ProvKey) {
 				if(command!=""){ command+=",";}
 				command+="ProvKey = '"+POut.String(ehrProvKey.ProvKey)+"'";
-			}
-			if(ehrProvKey.ProcNum != oldEhrProvKey.ProcNum) {
-				if(command!=""){ command+=",";}
-				command+="ProcNum = "+POut.Long(ehrProvKey.ProcNum)+"";
 			}
 			if(ehrProvKey.FullTimeEquiv != oldEhrProvKey.FullTimeEquiv) {
 				if(command!=""){ command+=",";}

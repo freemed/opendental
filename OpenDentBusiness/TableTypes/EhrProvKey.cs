@@ -17,8 +17,6 @@ namespace OpenDentBusiness {
 		public string FName;
 		///<summary>The key assigned to the provider</summary>
 		public string ProvKey;
-		///<summary>FK to procedurelog.ProcNum. Every provkey should have a corresponding charge in the Account.</summary>
-		public long ProcNum;
 		///<summary>Usually 1.  Can be less, like .5 or .25 to indicate possible discount is justified.</summary>
 		public float FullTimeEquiv;
 		///<summary>Any notes that the tech wishes to include regarding this situation.</summary>

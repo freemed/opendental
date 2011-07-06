@@ -5428,11 +5428,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
 						ProvKey varchar(255) NOT NULL,
-						ProcNum bigint NOT NULL,
 						FullTimeEquiv float NOT NULL,
 						Notes text NOT NULL,
-						INDEX(PatNum),
-						INDEX(ProcNum)
+						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -5445,15 +5443,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						LName varchar2(255),
 						FName varchar2(255),
 						ProvKey varchar2(255),
-						ProcNum number(20) NOT NULL,
 						FullTimeEquiv number(38,8) NOT NULL,
 						Notes varchar2(4000),
 						CONSTRAINT ehrprovkey_EhrProvKeyNum PRIMARY KEY (EhrProvKeyNum)
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrprovkey_PatNum ON ehrprovkey (PatNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrprovkey_ProcNum ON ehrprovkey (ProcNum)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {

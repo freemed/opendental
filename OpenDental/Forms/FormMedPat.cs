@@ -419,12 +419,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMedPat_Load(object sender, System.EventArgs e) {
-			if(FormOpenDental.FormEHR==null) {
-				butFormulary.Visible=false;
-			}
-			else {
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				labelPatNote.Text="Count, Instructions, and Refills";
 				groupOrder.Text="Medication Order";
+			}
+			else {
+				butFormulary.Visible=false;
 			}
 			textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;
 			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
