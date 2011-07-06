@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Security.Cryptography;
 using System.Text;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -339,16 +341,62 @@ namespace OpenDental {
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
+			if(textOnlineLink.Text=="") {
+				MsgBox.Show(this,"Online Access Link required. Please press Get Link.");
+				return;
+			}
 			if(textOnlinePassword.Text==""){
-				MessageBox.Show("Please use the Provide Online Access button first.");
+				MessageBox.Show("Password required. Please generate a new password.");
 				return;
 			}
-			if(!PasswordIsValid()) {
+			if(!PasswordIsValid()) {//this gives a messagebox if invalid
 				return;
 			}
-			//do not force a synch
-			//if textOnlineLink is blank, fill it.
 			//Then, print the info that the patient will be given in order for them to log in online.
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			try {
+				#if !DEBUG
+					FormRpPrintPreview pView = new FormRpPrintPreview();
+					pView.printPreviewControl2.Document=pd;
+					pView.ShowDialog();
+				#else
+						if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+							pd.Print();
+						}
+				#endif
+			}
+			catch {
+				MessageBox.Show(Lan.g(this,"Printer not available"));
+			}
+		}
+
+		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font font=new Font("Arial",10,FontStyle.Regular);
+			int yPos=bounds.Top+100;
+			int center=bounds.X+bounds.Width/2;
+			text="Online Access";
+			g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,font).Width/2,yPos);
+			yPos+=50;
+			text="Website: "+textOnlineLink.Text;
+			g.DrawString(text,font,Brushes.Black,bounds.Left+100,yPos);
+			yPos+=25;
+			text="Username: "+textOnlineUsername.Text;
+			g.DrawString(text,font,Brushes.Black,bounds.Left+100,yPos);
+			yPos+=25;
+			text="Password: "+textOnlinePassword.Text;
+			g.DrawString(text,font,Brushes.Black,bounds.Left+100,yPos);
+			g.Dispose();
+			e.HasMorePages=false;
 		}
 
 		///<summary>Used when click OK, and also when the Synch or Print buttons are clicked.</summary>
