@@ -31,46 +31,51 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.textName = new System.Windows.Forms.TextBox();
 			this.textRxName = new System.Windows.Forms.TextBox();
+			this.labelRx = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
+			this.textRxNorm = new System.Windows.Forms.TextBox();
+			this.labelRxNorm = new System.Windows.Forms.Label();
+			this.groupBox = new System.Windows.Forms.GroupBox();
+			this.groupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelName
 			// 
-			this.labelName.Location = new System.Drawing.Point(11,39);
+			this.labelName.Location = new System.Drawing.Point(67,18);
 			this.labelName.Name = "labelName";
-			this.labelName.Size = new System.Drawing.Size(95,20);
+			this.labelName.Size = new System.Drawing.Size(241,20);
 			this.labelName.TabIndex = 7;
-			this.labelName.Text = "Name";
+			this.labelName.Text = "If the patient is already taking this medication";
 			this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMessage
 			// 
-			this.textMessage.Location = new System.Drawing.Point(112,66);
+			this.textMessage.Location = new System.Drawing.Point(312,161);
 			this.textMessage.Multiline = true;
 			this.textMessage.Name = "textMessage";
-			this.textMessage.Size = new System.Drawing.Size(308,159);
+			this.textMessage.Size = new System.Drawing.Size(308,91);
 			this.textMessage.TabIndex = 8;
 			// 
 			// labelMessage
 			// 
-			this.labelMessage.Location = new System.Drawing.Point(1,66);
+			this.labelMessage.Location = new System.Drawing.Point(11,158);
 			this.labelMessage.Name = "labelMessage";
-			this.labelMessage.Size = new System.Drawing.Size(105,20);
+			this.labelMessage.Size = new System.Drawing.Size(297,20);
 			this.labelMessage.TabIndex = 9;
-			this.labelMessage.Text = "Custom Message";
+			this.labelMessage.Text = "Or this alternate custom message may be shown instead";
 			this.labelMessage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12,256);
+			this.butDelete.Location = new System.Drawing.Point(12,274);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(85,24);
 			this.butDelete.TabIndex = 4;
@@ -85,7 +90,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(281,256);
+			this.butOK.Location = new System.Drawing.Point(529,274);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -100,7 +105,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(362,256);
+			this.butCancel.Location = new System.Drawing.Point(610,274);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -109,7 +114,7 @@ namespace OpenDental{
 			// 
 			// textName
 			// 
-			this.textName.Location = new System.Drawing.Point(112,39);
+			this.textName.Location = new System.Drawing.Point(312,18);
 			this.textName.Name = "textName";
 			this.textName.ReadOnly = true;
 			this.textName.Size = new System.Drawing.Size(308,20);
@@ -117,26 +122,65 @@ namespace OpenDental{
 			// 
 			// textRxName
 			// 
-			this.textRxName.Location = new System.Drawing.Point(112,13);
+			this.textRxName.Location = new System.Drawing.Point(303,19);
 			this.textRxName.Name = "textRxName";
 			this.textRxName.ReadOnly = true;
 			this.textRxName.Size = new System.Drawing.Size(308,20);
 			this.textRxName.TabIndex = 12;
 			// 
+			// labelRx
+			// 
+			this.labelRx.Location = new System.Drawing.Point(5,19);
+			this.labelRx.Name = "labelRx";
+			this.labelRx.Size = new System.Drawing.Size(294,20);
+			this.labelRx.TabIndex = 11;
+			this.labelRx.Text = "This Rx is entered";
+			this.labelRx.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,13);
+			this.label1.Location = new System.Drawing.Point(56,130);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(95,20);
-			this.label1.TabIndex = 11;
-			this.label1.Text = "Rx Name";
+			this.label1.Size = new System.Drawing.Size(252,20);
+			this.label1.TabIndex = 13;
+			this.label1.Text = "Then the user will see a default alert message.";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textRxNorm
+			// 
+			this.textRxNorm.Location = new System.Drawing.Point(303,45);
+			this.textRxNorm.Name = "textRxNorm";
+			this.textRxNorm.ReadOnly = true;
+			this.textRxNorm.Size = new System.Drawing.Size(308,20);
+			this.textRxNorm.TabIndex = 15;
+			// 
+			// labelRxNorm
+			// 
+			this.labelRxNorm.Location = new System.Drawing.Point(5,45);
+			this.labelRxNorm.Name = "labelRxNorm";
+			this.labelRxNorm.Size = new System.Drawing.Size(294,20);
+			this.labelRxNorm.TabIndex = 14;
+			this.labelRxNorm.Text = "or a Medication Order with this RxNorm code is entered";
+			this.labelRxNorm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox
+			// 
+			this.groupBox.Controls.Add(this.textRxName);
+			this.groupBox.Controls.Add(this.textRxNorm);
+			this.groupBox.Controls.Add(this.labelRx);
+			this.groupBox.Controls.Add(this.labelRxNorm);
+			this.groupBox.Location = new System.Drawing.Point(9,44);
+			this.groupBox.Name = "groupBox";
+			this.groupBox.Size = new System.Drawing.Size(636,75);
+			this.groupBox.TabIndex = 16;
+			this.groupBox.TabStop = false;
+			this.groupBox.Text = "And then,";
 			// 
 			// FormRxAlertEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(449,292);
-			this.Controls.Add(this.textRxName);
+			this.ClientSize = new System.Drawing.Size(697,310);
+			this.Controls.Add(this.groupBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textName);
 			this.Controls.Add(this.labelMessage);
@@ -149,6 +193,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Rx Alert Edit";
 			this.Load += new System.EventHandler(this.FormRxAlertEdit_Load);
+			this.groupBox.ResumeLayout(false);
+			this.groupBox.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -164,6 +210,10 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelMessage;
 		private System.Windows.Forms.TextBox textName;
 		private System.Windows.Forms.TextBox textRxName;
+		private System.Windows.Forms.Label labelRx;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textRxNorm;
+		private System.Windows.Forms.Label labelRxNorm;
+		private System.Windows.Forms.GroupBox groupBox;
 	}
 }

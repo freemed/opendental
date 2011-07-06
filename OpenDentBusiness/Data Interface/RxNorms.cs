@@ -124,7 +124,7 @@ namespace OpenDentBusiness{
 			return Db.GetScalar(command);
 		}
 
-		///<summary>Used to return the multum code based on RxCui.  If blank, use the Description instead.</summary>
+		///<summary></summary>
 		public static string GetDescByRxCui(string rxCui) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetString(MethodBase.GetCurrentMethod(),rxCui);

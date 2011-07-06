@@ -22,15 +22,15 @@ namespace OpenDental {
 		private void FormRxAlertEdit_Load(object sender,EventArgs e) {
 			textRxName.Text=RxName;
 			if(rxAlertCur.DiseaseDefNum>0) {
-				labelName.Text="Problem";
+				labelName.Text=Lan.g(this,"If the patient already has this Problem");
 				textName.Text=DiseaseDefs.GetName(rxAlertCur.DiseaseDefNum);
 			}
 			if(rxAlertCur.AllergyDefNum>0) {
-				labelName.Text="Allergy";
+				labelName.Text=Lan.g(this,"If the patient already has this Allergy");
 				textName.Text=AllergyDefs.GetOne(rxAlertCur.AllergyDefNum).Description;
 			}
 			if(rxAlertCur.MedicationNum>0) {
-				labelName.Text="Medication";
+				labelName.Text=Lan.g(this,"If the patient is already taking this medication");
 				Medications.Refresh();
 				textName.Text=Medications.GetMedication(rxAlertCur.MedicationNum).MedName;
 			}

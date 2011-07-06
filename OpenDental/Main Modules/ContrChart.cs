@@ -3680,16 +3680,18 @@ namespace OpenDental{
 					FormM.IsSelectionMode=true;
 					FormM.ShowDialog();
 					if(FormM.DialogResult==DialogResult.OK) {
-						MedicationPat medicationPat=new MedicationPat();
-						medicationPat.PatNum=PatCur.PatNum;
-						medicationPat.MedicationNum=FormM.SelectedMedicationNum;
-						medicationPat.ProvNum=Security.CurUser.ProvNum;
-						FormMedPat FormMP=new FormMedPat();
-						FormMP.MedicationPatCur=medicationPat;
-						FormMP.IsNew=true;
-						FormMP.ShowDialog();
-						if(FormMP.DialogResult==DialogResult.OK) {
-							ModuleSelected(PatCur.PatNum);
+						if(RxAlertL.DisplayAlerts(0)){//user sees alert and wants to continue
+							MedicationPat medicationPat=new MedicationPat();
+							medicationPat.PatNum=PatCur.PatNum;
+							medicationPat.MedicationNum=FormM.SelectedMedicationNum;
+							medicationPat.ProvNum=Security.CurUser.ProvNum;
+							FormMedPat FormMP=new FormMedPat();
+							FormMP.MedicationPatCur=medicationPat;
+							FormMP.IsNew=true;
+							FormMP.ShowDialog();
+							if(FormMP.DialogResult==DialogResult.OK) {
+								ModuleSelected(PatCur.PatNum);
+							}
 						}
 					}
 					Tool_EHR_Click(true);

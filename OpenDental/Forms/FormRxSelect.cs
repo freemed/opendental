@@ -240,7 +240,7 @@ namespace OpenDental{
 			{
 				string alert="";
 				for(int i=0;i<diseaseMatches.Count;i++) {
-					if(i<1) {
+					if(i==0) {
 						alert+=Lan.g(this,"This patient has the following medical problems: ");
 					}
 					alert+=diseaseMatches[i];
@@ -252,10 +252,10 @@ namespace OpenDental{
 					}
 				}
 				for(int i=0;i<allergiesMatches.Count;i++) {
-					if(i<1 && diseaseMatches.Count>0) {
+					if(i==0 && diseaseMatches.Count>0) {
 						alert+="and the following allergies: ";
 					}
-					else if(i<1) {
+					else if(i==0) {
 						alert=Lan.g(this,"This patient has the following allergies: ");
 					}
 					alert+=allergiesMatches[i];
@@ -267,10 +267,10 @@ namespace OpenDental{
 					}
 				}
 				for(int i=0;i<medicationsMatches.Count;i++) {
-					if(i<1 && (diseaseMatches.Count>0 || allergiesMatches.Count>0)) {
+					if(i==0 && (diseaseMatches.Count>0 || allergiesMatches.Count>0)) {
 						alert+="and is taking the following medications: ";
 					}
-					else if(i<1) {
+					else if(i==0) {
 						alert=Lan.g(this,"This patient is taking the following medications: ");
 					}
 					alert+=medicationsMatches[i];

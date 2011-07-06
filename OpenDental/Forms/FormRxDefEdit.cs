@@ -320,7 +320,7 @@ namespace OpenDental{
 			this.butRxNormSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRxNormSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRxNormSelect.CornerRadius = 4F;
-			this.butRxNormSelect.Location = new System.Drawing.Point(254,172);
+			this.butRxNormSelect.Location = new System.Drawing.Point(498,172);
 			this.butRxNormSelect.Name = "butRxNormSelect";
 			this.butRxNormSelect.Size = new System.Drawing.Size(22,22);
 			this.butRxNormSelect.TabIndex = 260;
@@ -332,7 +332,7 @@ namespace OpenDental{
 			this.textRxCui.Location = new System.Drawing.Point(134,173);
 			this.textRxCui.Name = "textRxCui";
 			this.textRxCui.ReadOnly = true;
-			this.textRxCui.Size = new System.Drawing.Size(114,20);
+			this.textRxCui.Size = new System.Drawing.Size(358,20);
 			this.textRxCui.TabIndex = 261;
 			// 
 			// FormRxDefEdit
@@ -384,10 +384,19 @@ namespace OpenDental{
 			textSig.Text=RxDefCur.Sig;
 			textDisp.Text=RxDefCur.Disp;
 			textRefills.Text=RxDefCur.Refills;
-			textRxCui.Text=RxDefCur.RxCui.ToString();
 			textNotes.Text=RxDefCur.Notes;
 			checkControlled.Checked=RxDefCur.IsControlled;
 			FillAlerts();
+			FillRxCui();
+		}
+
+		private void FillRxCui() {
+			if(RxDefCur.RxCui==0) {
+				textRxCui.Text="";
+			}
+			else {
+				textRxCui.Text=RxDefCur.RxCui.ToString()+" - "+RxNorms.GetDescByRxCui(RxDefCur.RxCui.ToString());
+			}
 		}
 
 		private void FillAlerts(){
@@ -465,7 +474,7 @@ namespace OpenDental{
 				return;
 			}
 			RxDefCur.RxCui=PIn.Long(FormRN.SelectedRxNorm.RxCui);
-			textRxCui.Text=RxDefCur.RxCui.ToString();
+			FillRxCui();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

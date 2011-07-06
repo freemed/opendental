@@ -300,6 +300,7 @@
     <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
     <Compile Include="Data Interface\RefAttachL.cs" />
+    <Compile Include="Data Interface\RxAlertL.cs" />
     <Compile Include="Eclaims\AOS.cs" />
     <Compile Include="Eclaims\BCBSGA.cs" />
     <Compile Include="Eclaims\Canadian.cs" />

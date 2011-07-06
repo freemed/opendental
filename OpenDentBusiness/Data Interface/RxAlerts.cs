@@ -18,6 +18,18 @@ namespace OpenDentBusiness {
 			return Crud.RxAlertCrud.SelectMany(command);
 		}
 
+		///<summary>Gets a list of all RxAlerts for one RxCui.</summary>
+		public static List<RxAlert> RefreshByRxCui(long rxCui) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<RxAlert>>(MethodBase.GetCurrentMethod(),rxCui);
+			}
+			string command="SELECT rxalert.* FROM rxalert,rxdef "
+				+"WHERE rxalert.RxDefNum=rxdef.RxDefNum "
+				+"AND rxdef.RxCui="+POut.Long(rxCui)+" "
+				+"GROUP BY rxalert.RxAlertNum";
+			return Crud.RxAlertCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static List<RxAlert> TableToList(DataTable table) {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
