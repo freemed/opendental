@@ -9,37 +9,44 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormRxAlertEdit:Form {
-		private RxAlert rxAlertCur;
+		private RxAlert RxAlertCur;
+		private RxDef RxDefCur;
 		private string RxName;
 
-		public FormRxAlertEdit(RxAlert RxAlertCur,string rxName) {
+		public FormRxAlertEdit(RxAlert rxAlertCur,RxDef rxDefCur) {
 			InitializeComponent();
 			Lan.F(this);
-			rxAlertCur=RxAlertCur;
-			RxName=rxName;
+			RxAlertCur=rxAlertCur;
+			RxDefCur=rxDefCur;
+			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)){
+				textRxNorm.Visible=false;
+				labelRxNorm.Visible=false;
+			}
 		}
 
 		private void FormRxAlertEdit_Load(object sender,EventArgs e) {
-			textRxName.Text=RxName;
-			if(rxAlertCur.DiseaseDefNum>0) {
+			textRxName.Text=RxDefCur.Drug;
+			if(RxAlertCur.DiseaseDefNum>0) {
 				labelName.Text=Lan.g(this,"If the patient already has this Problem");
-				textName.Text=DiseaseDefs.GetName(rxAlertCur.DiseaseDefNum);
+				textName.Text=DiseaseDefs.GetName(RxAlertCur.DiseaseDefNum);
 			}
-			if(rxAlertCur.AllergyDefNum>0) {
+			if(RxAlertCur.AllergyDefNum>0) {
 				labelName.Text=Lan.g(this,"If the patient already has this Allergy");
-				textName.Text=AllergyDefs.GetOne(rxAlertCur.AllergyDefNum).Description;
+				textName.Text=AllergyDefs.GetOne(RxAlertCur.AllergyDefNum).Description;
 			}
-			if(rxAlertCur.MedicationNum>0) {
+			if(RxAlertCur.MedicationNum>0) {
 				labelName.Text=Lan.g(this,"If the patient is already taking this medication");
-				Medications.Refresh();
-				textName.Text=Medications.GetMedication(rxAlertCur.MedicationNum).MedName;
+				textName.Text=Medications.GetMedicationFromDb(RxAlertCur.MedicationNum).MedName;
 			}
-			textMessage.Text=rxAlertCur.NotificationMsg;
+			if(RxDefCur.RxCui!=0){
+				textRxNorm.Text=RxDefCur.RxCui.ToString()+" - "+RxNorms.GetDescByRxCui(RxDefCur.RxCui.ToString());
+			}
+			textMessage.Text=RxAlertCur.NotificationMsg;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			rxAlertCur.NotificationMsg=PIn.String(textMessage.Text);
-			RxAlerts.Update(rxAlertCur);
+			RxAlertCur.NotificationMsg=PIn.String(textMessage.Text);
+			RxAlerts.Update(RxAlertCur);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -48,7 +55,7 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			RxAlerts.Delete(rxAlertCur);
+			RxAlerts.Delete(RxAlertCur);
 			DialogResult=DialogResult.OK;
 		}
 	}

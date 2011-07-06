@@ -3680,14 +3680,19 @@ namespace OpenDental{
 					FormM.IsSelectionMode=true;
 					FormM.ShowDialog();
 					if(FormM.DialogResult==DialogResult.OK) {
-						if(RxAlertL.DisplayAlerts(0)){//user sees alert and wants to continue
+						Medication med=Medications.GetMedicationFromDb(FormM.SelectedMedicationNum);
+						if(med.RxCui==0 //if the med has no Cui, it won't trigger an alert
+							|| RxAlertL.DisplayAlerts(PatCur.PatNum,med.RxCui,0))//user sees alert and wants to continue
+						{
 							MedicationPat medicationPat=new MedicationPat();
 							medicationPat.PatNum=PatCur.PatNum;
 							medicationPat.MedicationNum=FormM.SelectedMedicationNum;
 							medicationPat.ProvNum=Security.CurUser.ProvNum;
+							medicationPat.DateStart=DateTime.Today;
 							FormMedPat FormMP=new FormMedPat();
 							FormMP.MedicationPatCur=medicationPat;
 							FormMP.IsNew=true;
+							FormMP.IsNewMedOrder=true;
 							FormMP.ShowDialog();
 							if(FormMP.DialogResult==DialogResult.OK) {
 								ModuleSelected(PatCur.PatNum);
@@ -3764,16 +3769,21 @@ namespace OpenDental{
 					FormM.IsSelectionMode=true;
 					FormM.ShowDialog();
 					if(FormM.DialogResult==DialogResult.OK) {
-						MedicationPat medicationPat=new MedicationPat();
-						medicationPat.PatNum=PatCur.PatNum;
-						medicationPat.MedicationNum=FormM.SelectedMedicationNum;
-						medicationPat.ProvNum=Security.CurUser.ProvNum;
-						FormMedPat FormMP=new FormMedPat();
-						FormMP.MedicationPatCur=medicationPat;
-						FormMP.IsNew=true;
-						FormMP.ShowDialog();
-						if(FormMP.DialogResult==DialogResult.OK) {
-							ModuleSelected(PatCur.PatNum);
+						Medication med=Medications.GetMedicationFromDb(FormM.SelectedMedicationNum);
+						if(med.RxCui==0 //if the med has no Cui, it won't trigger an alert
+							|| RxAlertL.DisplayAlerts(PatCur.PatNum,med.RxCui,0))//user sees alert and wants to continue
+						{
+							MedicationPat medicationPat=new MedicationPat();
+							medicationPat.PatNum=PatCur.PatNum;
+							medicationPat.MedicationNum=FormM.SelectedMedicationNum;
+							medicationPat.ProvNum=Security.CurUser.ProvNum;
+							FormMedPat FormMP=new FormMedPat();
+							FormMP.MedicationPatCur=medicationPat;
+							FormMP.IsNew=true;
+							FormMP.ShowDialog();
+							if(FormMP.DialogResult==DialogResult.OK) {
+								ModuleSelected(PatCur.PatNum);
+							}
 						}
 					}
 					OnEHR_Click(true);

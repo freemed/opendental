@@ -420,7 +420,7 @@ namespace OpenDental{
 			if(listAlerts.SelectedIndex<0) {
 				MsgBox.Show(this,"Select at least one Alert.");
 			}
-			FormRxAlertEdit FormRAE=new FormRxAlertEdit(RxAlertList[listAlerts.SelectedIndex],textDrug.Text);
+			FormRxAlertEdit FormRAE=new FormRxAlertEdit(RxAlertList[listAlerts.SelectedIndex],RxDefCur);
 			FormRAE.ShowDialog();
 			FillAlerts();
 		}

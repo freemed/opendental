@@ -114,6 +114,15 @@ namespace OpenDentBusiness{
 			return (Medication)HList[medNum];
 		}
 
+		///<summary></summary>
+		public static Medication GetMedicationFromDb(long medicationNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Medication>(MethodBase.GetCurrentMethod(),medicationNum);
+			}
+			string command="SELECT * FROM medication WHERE MedicationNum="+POut.Long(medicationNum);
+			return Crud.MedicationCrud.SelectOne(command);
+		}
+
 		///<summary>Gets the generic medication for the specified medication Num.</summary>
 		public static Medication GetGeneric(long medNum) {
 			//No need to check RemotingRole; no call to db.

@@ -44,6 +44,8 @@ namespace OpenDental{
 		private Label label8;
 		private ComboBox comboProv;
 		public MedicationPat MedicationPatCur;
+		///<summary>Helps enforce the note and start date that must be present for a med order to be valid.</summary>
+		public bool IsNewMedOrder;
 
 		///<summary></summary>
 		public FormMedPat()
@@ -506,6 +508,12 @@ namespace OpenDental{
 				) {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
+			}
+			if(IsNewMedOrder) {
+				if(textPatNote.Text=="" || textDateStart.Text=="") {
+					MsgBox.Show(this,"For a new medical order, instructions and a start date are required.");
+					return;
+				}
 			}
 			//MedicationPatCur.MedicationNum is already set before entering this window, or else changed up above.
 			if(comboProv.SelectedIndex==-1) {
