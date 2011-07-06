@@ -71,7 +71,9 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
 				+"WHERE PatNum = "+POut.Long(patNum);
 			if(!includeDiscontinued) {//exclude invalid orders
-				command+=" AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" AND PatNote !=''";
+				command+=" AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" AND PatNote !='' "
+					+"AND (DateStop < "+POut.Date(new DateTime(1880,1,1))+" "//no date stop
+					+"OR DateStop > "+POut.Date(DateTime.Today)+")";//date stop hasn't happened yet
 			}
 			DataTable rawMed=Db.GetTable(command);
 			DateTime dateStop;
@@ -90,8 +92,8 @@ namespace OpenDentBusiness{
 				row["MedicalOrderNum"]="0";
 				row["MedicationPatNum"]=rawMed.Rows[i]["MedicationPatNum"].ToString();
 				row["prov"]=Providers.GetAbbr(PIn.Long(rawMed.Rows[i]["ProvNum"].ToString()));
-				dateStop=PIn.DateT(rawMed.Rows[i]["DateStop"].ToString());
-				if(dateStop.Year<1880) {//not stopped
+				dateStop=PIn.Date(rawMed.Rows[i]["DateStop"].ToString());
+				if(dateStop.Year<1880 || dateStop>DateTime.Today) {//not stopped or in the future
 					row["status"]="Active";
 				}
 				else {
