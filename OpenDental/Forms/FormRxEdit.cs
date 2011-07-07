@@ -551,6 +551,7 @@ namespace OpenDental{
 			else{
 				labelDosageCode.Visible=false;
 				textDosageCode.Visible=false;
+				butSend.Visible=false;
 			}
 			textNotes.Text=RxPatCur.Notes;
 			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);
@@ -568,6 +569,7 @@ namespace OpenDental{
 			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);
 		}
 
+		///<summary>Attempts to save, returning true if successful.</summary>
 		private bool SaveRx(){
 			if(  textDate.errorProvider1.GetError(textDate)!=""
 				//|| textRxNorm.errorProvider1.GetError(textRxNorm)!=""
