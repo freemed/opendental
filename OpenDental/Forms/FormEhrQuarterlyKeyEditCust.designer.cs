@@ -35,7 +35,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(625,442);
+			this.butOK.Location = new System.Drawing.Point(467,256);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -50,7 +50,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,483);
+			this.butCancel.Location = new System.Drawing.Point(467,297);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -60,11 +60,12 @@ namespace OpenDental{
 			// FormEhrQuarterlyKeyEditCust
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,534);
+			this.ClientSize = new System.Drawing.Size(567,348);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormEhrQuarterlyKeyEditCust";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Edit Ehr Quarterly Key for Customer";
 			this.ResumeLayout(false);
 
 		}

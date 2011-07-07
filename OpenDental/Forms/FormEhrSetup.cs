@@ -37,6 +37,7 @@ namespace OpenDental {
 				butReminderRules.Visible=false;
 				butEducationalResources.Visible=false;
 				butRxNorm.Visible=false;
+				butKeys.Visible=false;
 			}
 		}
 
@@ -103,7 +104,8 @@ namespace OpenDental {
 		}
 
 		private void butKeys_Click(object sender,EventArgs e) {
-
+			FormEhrQuarterlyKeys formK=new FormEhrQuarterlyKeys();
+			formK.ShowDialog();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

@@ -65,6 +65,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormEhrQuarterlyKeysCustomer";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Ehr Quarterly Keys for Customer";
 			this.ResumeLayout(false);
 
 		}

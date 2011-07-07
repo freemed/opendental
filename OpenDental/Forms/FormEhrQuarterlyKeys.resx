@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label1.Text" xml:space="preserve">
+    <value>The ehr features will not work without a key entered for the current quarter.  Quarterly keys are obtained directly from tech support by phone or email and are released no more than one month in advance.  The keys are tied to the practice title as entered in the practice setup window.  Changing the practice title will cause the keys to not work.</value>
+  </data>
 </root>

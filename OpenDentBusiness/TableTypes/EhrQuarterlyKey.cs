@@ -9,9 +9,9 @@ namespace OpenDentBusiness {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long EhrQuarterlyKeyNum;
-		///<summary></summary>
+		///<summary>Example 11</summary>
 		public int YearValue;
-		///<summary></summary>
+		///<summary>Example 2</summary>
 		public int QuarterValue;
 		///<summary>The customer must have this exact practice name entered in practice setup.</summary>
 		public string PracticeName;
