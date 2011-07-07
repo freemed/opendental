@@ -37,6 +37,8 @@ namespace OpenDental{
 			// 
 			// checkActive
 			// 
+			this.checkActive.Checked = true;
+			this.checkActive.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkActive.Location = new System.Drawing.Point(12,173);
 			this.checkActive.Name = "checkActive";
 			this.checkActive.RightToLeft = System.Windows.Forms.RightToLeft.Yes;

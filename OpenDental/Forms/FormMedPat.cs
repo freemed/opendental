@@ -459,6 +459,7 @@ namespace OpenDental{
 			FormF.ShowDialog();
 			Cursor=Cursors.WaitCursor;
 			if(FormF.DialogResult!=DialogResult.OK) {
+				Cursor=Cursors.Default;
 				return;
 			}
 			List<FormularyMed> ListMeds=FormularyMeds.GetMedsForFormulary(FormF.SelectedFormularyNum);
