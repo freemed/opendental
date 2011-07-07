@@ -1182,6 +1182,25 @@ namespace OpenDentBusiness {
 					//but I don't see how PlanCur could ever be null
 				}
 				patplan=PatPlans.GetFromList(patPlans,claimProcs[i].InsSubNum);
+				//capitation estimates are always forced to follow the status of the procedure
+				if(PlanCur.PlanType=="c"
+					&& (claimProcs[i].Status==ClaimProcStatus.CapComplete	|| claimProcs[i].Status==ClaimProcStatus.CapEstimate)) 
+				{
+					if(isInitialEntry) {
+						//this will be switched to CapComplete further down if applicable.
+						//This makes ComputeBaseEst work properly on new cap procs w status Complete
+						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
+					}
+					else if(proc.ProcStatus==ProcStat.C) {
+						claimProcs[i].Status=ClaimProcStatus.CapComplete;
+					}
+					else {
+						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
+					}
+				}
+				//ignored: adjustment
+				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
+				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
 				//the cp is altered within ComputeBaseEst, but not saved.
 				if(patplan==null) {//the plan for this claimproc was dropped 
 					if(ordinal!=4) {//only process on the fourth round
@@ -1234,25 +1253,6 @@ namespace OpenDentBusiness {
 				//Wish we could do this, but it might change history.  It's needed when changing a completed proc to a different provider.
 				//Can't do it here, though, because some people intentionally set provider different on claimprocs.
 				//claimProcs[i].ProvNum=proc.ProvNum;
-				//capitation estimates are always forced to follow the status of the procedure
-				if(PlanCur.PlanType=="c"
-					&& (claimProcs[i].Status==ClaimProcStatus.CapComplete	|| claimProcs[i].Status==ClaimProcStatus.CapEstimate)) 
-				{
-					if(isInitialEntry) {
-						//this will be switched to CapComplete further down if applicable.
-						//This makes ComputeBaseEst work properly on new cap procs w status Complete
-						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
-					}
-					else if(proc.ProcStatus==ProcStat.C) {
-						claimProcs[i].Status=ClaimProcStatus.CapComplete;
-					}
-					else {
-						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
-					}
-				}
-				//ignored: adjustment
-				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
-				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
 				if(isInitialEntry
 					&&claimProcs[i].Status==ClaimProcStatus.CapEstimate
 					&&proc.ProcStatus==ProcStat.C) 
