@@ -4055,7 +4055,6 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			//TODO: open form for latency-------------------------------------------------------------------------------------------------------------------------------------------
 			FormTestLatency formTL=new FormTestLatency();
 			formTL.ShowDialog();
 		}
