@@ -331,6 +331,30 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormEhrQuarterlyKeyEditCust.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrQuarterlyKeyEditCust.designer.cs">
+      <DependentUpon>FormEhrQuarterlyKeyEditCust.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrQuarterlyKeysCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrQuarterlyKeysCustomer.designer.cs">
+      <DependentUpon>FormEhrQuarterlyKeysCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrQuarterlyKeyEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrQuarterlyKeyEdit.designer.cs">
+      <DependentUpon>FormEhrQuarterlyKeyEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrQuarterlyKeys.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrQuarterlyKeys.designer.cs">
+      <DependentUpon>FormEhrQuarterlyKeys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormFormularyMedEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2258,6 +2282,22 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrQuarterlyKeyEditCust.resx">
+      <DependentUpon>FormEhrQuarterlyKeyEditCust.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrQuarterlyKeysCustomer.resx">
+      <DependentUpon>FormEhrQuarterlyKeysCustomer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrQuarterlyKeyEdit.resx">
+      <DependentUpon>FormEhrQuarterlyKeyEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrQuarterlyKeys.resx">
+      <DependentUpon>FormEhrQuarterlyKeys.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormFormularyMedEdit.resx">

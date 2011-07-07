@@ -23,8 +23,8 @@ namespace OpenDentBusiness {
 		public string Notes;
 
 		///<summary></summary>
-		public EhrMeasure Copy() {
-			return (EhrMeasure)MemberwiseClone();
+		public EhrProvKey Copy() {
+			return (EhrProvKey)MemberwiseClone();
 		}
 
 	}

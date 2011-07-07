@@ -5746,7 +5746,39 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					//See above for explanation of the regular expression.
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrquarterlykey";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrquarterlykey (
+						EhrQuarterlyKeyNum bigint NOT NULL auto_increment PRIMARY KEY,
+						YearValue int NOT NULL,
+						QuarterValue int NOT NULL,
+						PracticeName varchar(255) NOT NULL,
+						KeyValue varchar(255) NOT NULL,
+						PatNum bigint NOT NULL,
+						Notes text NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrquarterlykey'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrquarterlykey (
+						EhrQuarterlyKeyNum number(20) NOT NULL,
+						YearValue number(11) NOT NULL,
+						QuarterValue number(11) NOT NULL,
+						PracticeName varchar2(255),
+						KeyValue varchar2(255),
+						PatNum number(20) NOT NULL,
+						Notes varchar2(4000),
+						CONSTRAINT ehrquarterlykey_EhrQuarterlyKeyNum PRIMARY KEY (EhrQuarterlyKeyNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrquarterlykey_PatNum ON ehrquarterlykey (PatNum)";
+					Db.NonQ(command);
+				}
+				
 				
 
 
@@ -5770,6 +5802,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
 
 
 

@@ -102,9 +102,15 @@ namespace OpenDental {
 			formR.ShowDialog();
 		}
 
+		private void butKeys_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	}
 }
