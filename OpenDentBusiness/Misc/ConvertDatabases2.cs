@@ -4503,7 +4503,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 			To7_9_10();
 		}
-
+		
+		///<summary>Oracle compatible: 7/7/2011</summary>
 		private static void To7_9_10() {
 			if(FromVersion<new Version("7.9.10.0")) {
 				string command;
@@ -4515,6 +4516,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To11_0_0();
 		}
 
+		///<summary>Oracle compatible: 7/7/2011 around line:5748</summary>
 		private static void To11_0_0() {
 			if(FromVersion<new Version("11.0.0.0")) {
 				string command;
@@ -5740,7 +5742,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
-//todo: Jason, please create a query for oracle that is functionally equivalent.
+					command="UPDATE icd9 SET ICD9Code=CONCAT(SUBSTR(ICD9Code,1,3),CONCAT('.',SUBSTR(ICD9Code,4))) WHERE REGEXP_LIKE(ICD9Code, '^[VE0-9]{3}[^.]?[0-9]+')";
+					//See above for explanation of the regular expression.
+					Db.NonQ(command);
 				}
 
 				
