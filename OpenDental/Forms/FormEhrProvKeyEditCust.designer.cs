@@ -50,7 +50,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(511,325);
+			this.butOK.Location = new System.Drawing.Point(511,350);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -65,7 +65,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(606,325);
+			this.butCancel.Location = new System.Drawing.Point(606,350);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -155,7 +155,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(30,325);
+			this.butDelete.Location = new System.Drawing.Point(30,350);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 120;
@@ -181,7 +181,7 @@ namespace OpenDental{
 			// 
 			// textNotes
 			// 
-			this.textNotes.Location = new System.Drawing.Point(188,216);
+			this.textNotes.Location = new System.Drawing.Point(188,232);
 			this.textNotes.MaxLength = 15;
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
@@ -190,7 +190,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(100,220);
+			this.label3.Location = new System.Drawing.Point(100,236);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(88,14);
 			this.label3.TabIndex = 125;
@@ -201,16 +201,15 @@ namespace OpenDental{
 			// 
 			this.label4.Location = new System.Drawing.Point(238,197);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(463,14);
+			this.label4.Size = new System.Drawing.Size(463,32);
 			this.label4.TabIndex = 126;
 			this.label4.Text = "Usually 1. For example, half-time would be .5 and 1 day a week would be about .25" +
-    "";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+    "\r\n0 may be used if the provider is no longer working";
 			// 
 			// FormEhrProvKeyEditCust
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(706,369);
+			this.ClientSize = new System.Drawing.Size(706,394);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.label3);

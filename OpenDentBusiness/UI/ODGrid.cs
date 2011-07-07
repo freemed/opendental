@@ -1219,6 +1219,7 @@ namespace OpenDental.UI {
 				
 			}
 			else{//more pages to print
+				
 				return -1;
 			}
 		}

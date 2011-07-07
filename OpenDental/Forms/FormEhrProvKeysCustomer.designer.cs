@@ -28,6 +28,8 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butSave = new OpenDental.UI.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -53,9 +55,6 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.AllowSortingByColumn = true;
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(9,12);
 			this.gridMain.Name = "gridMain";
@@ -98,10 +97,38 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butSave
+			// 
+			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSave.Autosize = true;
+			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSave.CornerRadius = 4F;
+			this.butSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSave.Location = new System.Drawing.Point(405,503);
+			this.butSave.Name = "butSave";
+			this.butSave.Size = new System.Drawing.Size(94,24);
+			this.butSave.TabIndex = 197;
+			this.butSave.Text = "Save To Images";
+			this.butSave.Click += new System.EventHandler(this.butSave_Click);
+			// 
+			// label2
+			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label2.Location = new System.Drawing.Point(505,493);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(125,49);
+			this.label2.TabIndex = 198;
+			this.label2.Text = "To help archive any changes to this list";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormEhrProvKeysCustomer
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(746,541);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.butSave);
 			this.Controls.Add(this.textCharge);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butAdd);
@@ -123,5 +150,7 @@ namespace OpenDental{
 		private UI.Button butAdd;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textCharge;
+		private UI.Button butSave;
+		private System.Windows.Forms.Label label2;
 	}
 }

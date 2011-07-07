@@ -75,9 +75,26 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void butSave_Click(object sender,EventArgs e) {
+			long defNum=DefC.GetList(DefCat.ImageCats)[0].DefNum;
+			Bitmap bitmap=new Bitmap(this.Width,this.Height);
+			this.DrawToBitmap(bitmap,new Rectangle(0,0,this.Width,this.Height));
+			Patient guar=Patients.GetPat(Guarantor);
+			try {
+				ImageStore.Import(bitmap,defNum,ImageType.Photo,guar);
+			}
+			catch(Exception ex) {
+				MessageBox.Show("Unable to save file: "+ex.Message);
+				return;
+			}
+			MsgBox.Show(this,"Saved.");
+		}
+
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+	
 
 	
 
