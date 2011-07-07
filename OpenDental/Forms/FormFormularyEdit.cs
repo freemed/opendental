@@ -26,14 +26,13 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			Cursor=Cursors.WaitCursor;
-			Medications.Refresh();
 			ListMeds=FormularyMeds.GetMedsForFormulary(FormularyCur.FormularyNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Name",150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Notes",250);
-			gridMain.Columns.Add(col);
+			//col=new ODGridColumn("Notes",250);
+			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			Medication medication;
@@ -41,7 +40,7 @@ namespace OpenDental {
 				medication=Medications.GetMedication(ListMeds[i].MedicationNum);
 				row=new ODGridRow();
 				row.Cells.Add(medication.MedName.ToString());
-				row.Cells.Add(Medications.GetMedication(medication.GenericNum).Notes.ToString());
+				//row.Cells.Add(Medications.GetMedication(medication.GenericNum).Notes.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

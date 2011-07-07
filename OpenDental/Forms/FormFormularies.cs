@@ -22,6 +22,7 @@ namespace OpenDental {
 			if(!IsSelectionMode) {
 				labelSelect.Visible=false;
 			}
+			Medications.Refresh();
 			FillList();
 		}
 
