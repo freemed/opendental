@@ -121,7 +121,7 @@ namespace OpenDental.Eclaims {
 			//A05 carrier id number 6 N
 			strb.Append(carrier.ElectID);//already validated as 6 digit number.
 			//A06 software system id 3 AN
-			strb.Append(Canadian.softwareSystemId);
+			strb.Append(Canadian.SoftwareSystemId());
 			if(carrier.CDAnetVersion=="04") {
 				//A10 encryption method 1 N
 				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
@@ -374,7 +374,7 @@ namespace OpenDental.Eclaims {
 			//A05 carrier id number 6 N
 			strb.Append(carrier.ElectID);//already validated as 6 digit number.
 			//A06 software system id 3 AN
-			strb.Append(Canadian.softwareSystemId);
+			strb.Append(Canadian.SoftwareSystemId());
 			if(carrier.CDAnetVersion!="02") { //version 04
 				//A10 encryption method 1 N
 				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
@@ -561,7 +561,7 @@ namespace OpenDental.Eclaims {
 					}
 				}
 				//A06 software system id 3 AN
-				strb.Append(Canadian.softwareSystemId);
+				strb.Append(Canadian.SoftwareSystemId());
 				if(!version2) { //version 04
 					//A10 encryption method 1 N
 					if(sendToItrans) {
@@ -748,7 +748,7 @@ namespace OpenDental.Eclaims {
 					strb.Append(carrier.ElectID);//already validated as 6 digit number.
 				}
 				//A06 software system id 3 AN
-				strb.Append(Canadian.softwareSystemId);
+				strb.Append(Canadian.SoftwareSystemId());
 				//A10 encryption method 1 N
 				if(carrier!=null) {
 					strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
@@ -862,7 +862,7 @@ namespace OpenDental.Eclaims {
 				strb.Append("999999");//Always 999999 when sending to a network.
 			}
 			//A06 software system id 3 AN
-			strb.Append(Canadian.softwareSystemId);
+			strb.Append(Canadian.SoftwareSystemId());
 			//A10 encryption method 1 N
 			if(carrier!=null) {
 				strb.Append(carrier.CanadianEncryptionMethod);//validated in UI
