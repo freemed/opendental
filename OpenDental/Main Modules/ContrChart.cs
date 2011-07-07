@@ -5683,7 +5683,10 @@ namespace OpenDental{
 			FormProcCodes FormP=new FormProcCodes();
 			FormP.IsSelectionMode=true;
 			FormP.ShowDialog();
-			if(FormP.DialogResult!=DialogResult.OK) return;
+			if(FormP.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			List<string> procCodes=new List<string>();
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			Procedure ProcCur;
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++){
@@ -5784,12 +5787,12 @@ namespace OpenDental{
 					//Procedures.Cur=ProcCur;
 					AddQuick(ProcCur);
 				}
+				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//for n
 			ModuleSelected(PatCur.PatNum);
 			if(newStatus==ProcStat.C){
-				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-					PatCur.GetNameLF()+", "
-					+DateTime.Today.ToShortDateString());
+				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,DateTime.Today.ToShortDateString());
+				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
 			}
 		}
 		
@@ -5934,6 +5937,7 @@ namespace OpenDental{
 				autoCodeList=ProcButtonItems.GetAutoListForButton(procButtonNum);
 				//if(codeList.
 			}
+			List<string> procCodes=new List<string>();
 			Procedure ProcCur=null;
 			for(int i=0;i<codeList.Length;i++){
 				//needs to loop at least once, regardless of whether any teeth are selected.	
@@ -6022,6 +6026,7 @@ namespace OpenDental{
 					else{//mouth
 						AddQuick(ProcCur);
 					}
+					procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 				}//n selected teeth
 			}//end Part 1 checking for ProcCodes, now will check for AutoCodes
 			string toothNum;
@@ -6121,6 +6126,7 @@ namespace OpenDental{
 					else{//mouth
 						AddQuick(ProcCur);
 					}
+					procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 				}//n selected teeth
 				//orionProvNum=ProcCur.ProvNum;
 			}//for i
@@ -6132,6 +6138,7 @@ namespace OpenDental{
 				}
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
 					descript+", "+DateTime.Today.ToShortDateString());
+				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
 			}
 		}
 
@@ -6177,6 +6184,7 @@ namespace OpenDental{
 				textProcCode.SelectionStart=textProcCode.Text.Length;
 				return;
 			}
+			List<string> procCodes=new List<string>();
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			TreatmentArea tArea;
 			Procedure ProcCur;
@@ -6266,6 +6274,7 @@ namespace OpenDental{
 				else {//mouth
 					AddQuick(ProcCur);
 				}
+				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//n selected teeth
 			ModuleSelected(PatCur.PatNum);
 			textProcCode.Text="";
@@ -6274,6 +6283,7 @@ namespace OpenDental{
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
 					PatCur.GetNameLF()+", "
 					+DateTime.Today.ToShortDateString());
+				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
 			}
 		}
 		#endregion EnterTx
