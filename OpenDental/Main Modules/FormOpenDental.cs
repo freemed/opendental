@@ -236,6 +236,7 @@ namespace OpenDental{
 		private DateTime dateTimeLastActivity;
 		private Form FormRecentlyOpenForLogoff;
 		private Point locationMouseForLogoff;
+		private MenuItem menuItemTestLatency;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -463,6 +464,7 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
+			this.menuItemTestLatency = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1028,6 +1030,7 @@ namespace OpenDental{
             this.menuItemImportXML,
             this.menuItemMergePatients,
             this.menuItemDuplicateBlockouts,
+						this.menuItemTestLatency,
             this.menuItemShutdown});
 			this.menuItem1.Text = "Misc Tools";
 			// 
@@ -1061,9 +1064,15 @@ namespace OpenDental{
 			this.menuItemDuplicateBlockouts.Text = "Clear Duplicate Blockouts";
 			this.menuItemDuplicateBlockouts.Click += new System.EventHandler(this.menuItemDuplicateBlockouts_Click);
 			// 
+			// menuItemTestLatency
+			// 
+			this.menuItemTestLatency.Index = 5;
+			this.menuItemTestLatency.Text = "Test Latency";
+			this.menuItemTestLatency.Click += new System.EventHandler(this.menuItemTestLatency_Click);
+			// 
 			// menuItemShutdown
 			// 
-			this.menuItemShutdown.Index = 5;
+			this.menuItemShutdown.Index = 6;
 			this.menuItemShutdown.Text = "Shutdown All Workstations";
 			this.menuItemShutdown.Click += new System.EventHandler(this.menuItemShutdown_Click);
 			// 
@@ -4040,6 +4049,15 @@ namespace OpenDental{
 			FormBlockoutDuplicatesFix form=new FormBlockoutDuplicatesFix();
 			form.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Clear duplicate blockouts.");
+		}
+
+		private void menuItemTestLatency_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			//TODO: open form for latency-------------------------------------------------------------------------------------------------------------------------------------------
+			FormTestLatency formTL=new FormTestLatency();
+			formTL.ShowDialog();
 		}
 
 		private void menuItemShutdown_Click(object sender,EventArgs e) {
