@@ -842,7 +842,10 @@ namespace OpenDental {
 				}
 				else if(control.GetType()==typeof(SheetCheckBox)){//Radio button groups.
 					SheetField field=(SheetField)control.Tag;
-					if(field.IsRequired && field.RadioButtonGroup!=""){
+					if(field.IsRequired 
+						&& (field.RadioButtonGroup!="" //specific to custom radiobutton groups where all are misc
+						|| field.RadioButtonValue!=""))//specific to internally predefined groups where each button has a value.
+					{
 						if(field.FieldValue!="X"){//This group is required but this radio button is not checked.
 							//All radio buttons within a group must either all be marked required or all be marked not required. 
 							//Not the most efficient check, but there won't usually be more than a few hundred items so the user will not ever notice. We can speed up later if needed.

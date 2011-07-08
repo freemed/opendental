@@ -753,16 +753,21 @@ namespace OpenDental {
 			//Verify radio button groups.
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
 				SheetFieldDef field=SheetDefCur.SheetFieldDefs[i];
-				if(field.FieldType==SheetFieldType.CheckBox && field.IsRequired && field.RadioButtonGroup!=""){
+				if(field.FieldType==SheetFieldType.CheckBox && field.IsRequired 
+					&& (field.RadioButtonGroup!="" //for misc radio groups
+					|| field.RadioButtonValue!=""))//for built-in radio groups
+				{
 					//All radio buttons within a group must either all be marked required or all be marked not required. 
 					//Not the most efficient check, but there won't usually be more than a few hundred items so the user will not ever notice. We can speed up later if needed.
 					for(int j=0;j<SheetDefCur.SheetFieldDefs.Count;j++){
 						SheetFieldDef field2=SheetDefCur.SheetFieldDefs[j];
 						if(field2.FieldType==SheetFieldType.CheckBox && !field2.IsRequired &&
-							field2.RadioButtonGroup.ToLower()==field.RadioButtonGroup.ToLower()){
-								MessageBox.Show(Lan.g(this,"Radio buttons in radio button group")+" '"+field.RadioButtonGroup+"' "
-									+Lan.g(this,"must all be marked required or all be marked not required."));
-								return false;
+							field2.RadioButtonGroup.ToLower()==field.RadioButtonGroup.ToLower() //for misc groups
+							&& field2.FieldName.ToLower()==field.FieldName.ToLower()) //for misc groups
+						{
+							MessageBox.Show(Lan.g(this,"Radio buttons in radio button group")+" '"+(field.RadioButtonGroup==""?field.FieldName:field.RadioButtonGroup)+"' "
+								+Lan.g(this,"must all be marked required or all be marked not required."));
+							return false;
 						}
 					}
 				}
