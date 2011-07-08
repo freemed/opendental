@@ -280,7 +280,7 @@ namespace OpenDentBusiness {
 			return doc;
 		}
 
-		/// <summary></summary>
+		/// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will differ depending on imageType.</summary>
 		public static Document Import(Bitmap image,long docCategory,ImageType imageType,Patient pat) {
 			string patFolder=GetPatientFolder(pat);
 			Document doc = new Document();
@@ -318,7 +318,7 @@ namespace OpenDentBusiness {
 			try {
 				SaveDocument(doc,image,myImageCodecInfo,myEncoderParameters,patFolder);
 				if(!PrefC.UsingAtoZfolder) {
-					Documents.Update(doc);
+					Documents.Update(doc);//because SaveDocument stuck the image in doc.RawBase64.
 					//no thumbnail yet
 				}
 			}
@@ -409,14 +409,14 @@ namespace OpenDentBusiness {
 
 		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string patFolder) {
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.UsingAtoZfolder) {//if saving to db
 				using(MemoryStream stream=new MemoryStream()) {
 					image.Save(stream,codec,encoderParameters);
 					byte[] rawData=stream.ToArray();
 					doc.RawBase64=Convert.ToBase64String(rawData);
 				}
 			}
-			else {
+			else {//if saving to AtoZ folder
 				image.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),codec,encoderParameters);
 			}
 		}

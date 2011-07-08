@@ -247,43 +247,30 @@ namespace OpenDental {
 			Bitmap bitmap=null;
 			Graphics g=null;
 			Document doc=new Document();
-			bool docSaved=false;
+			bitmap=new Bitmap(750,1000);
+			g=Graphics.FromImage(bitmap);
+			g.Clear(Color.White);
+			g.CompositingQuality=System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+			g.SmoothingMode=System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+			RenderPerioPrintout(g,PatCur,new Rectangle(0,0,bitmap.Width,bitmap.Height));
 			try {
-				bitmap=new Bitmap(750,1000);
-				g=Graphics.FromImage(bitmap);
-				g.Clear(Color.White);
-				g.CompositingQuality=System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-				g.SmoothingMode=System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-				RenderPerioPrintout(g,PatCur,new Rectangle(0,0,bitmap.Width,bitmap.Height));
-				string patImagePath=ImageStore.GetPatientFolder(PatCur);
-				doc.DateCreated=MiscData.GetNowDateTime();
-				doc.FileName=".jpg";
-				doc.PatNum=PatCur.PatNum;
-				doc.ImgType=ImageType.Photo;
-				doc.DocCategory=defNumToothCharts;
-				doc.Description="Perio Exam";
-				Documents.Insert(doc,PatCur);
-				doc=Documents.GetByNum(doc.DocNum);
-				string filePath=ODFileUtils.CombinePaths(patImagePath,doc.FileName);
-				bitmap.Save(filePath);
-				docSaved=true;
-				MessageBox.Show(Lan.g(this,"Image saved."));
-			} 
+				ImageStore.Import(bitmap,defNumToothCharts,ImageType.Photo,PatCur);
+			}
 			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"Image failed to save: "+Environment.NewLine+ex.ToString()));
-				if(docSaved) {
-					Documents.Delete(doc);
-				}
-			} 
-			finally {
-				if(g!=null) {
-					g.Dispose();
-					g=null;
-				}
-				if(bitmap!=null) {
-					bitmap.Dispose();
-					bitmap=null;
-				}
+				MessageBox.Show(Lan.g(this,"Unable to save file: ") + ex.Message);
+				bitmap.Dispose();
+				bitmap=null;
+				g.Dispose();
+				return;
+			}
+			MsgBox.Show(this,"Saved.");
+			if(g!=null) {
+				g.Dispose();
+				g=null;
+			}
+			if(bitmap!=null) {
+				bitmap.Dispose();
+				bitmap=null;
 			}
 		}
 

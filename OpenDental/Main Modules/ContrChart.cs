@@ -3834,14 +3834,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemChartSave_Click(object sender,EventArgs e) {
-			long defNum=0;
-			Def[] defs=DefC.GetList(DefCat.ImageCats);
-			for(int i=0;i<defs.Length;i++){
-				if(defs[i].ItemValue.Contains("T")){
-					defNum=defs[i].DefNum;
-					break;
-				}
-			}
+			long defNum=DefC.GetImageCat(ImageCategorySpecial.T);
 			if(defNum==0){//no category set for Tooth Charts.
 				MessageBox.Show(Lan.g(this,"No Def set for Tooth Charts."));
 				return;
@@ -3852,14 +3845,17 @@ namespace OpenDental{
 			g.CopyFromScreen(origin,new Point(0,0),toothChart.Size,CopyPixelOperation.SourceCopy);
 			g.Dispose();
 			try {
-				//OpenDental.Imaging.ImageStoreBase imageStore=OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
 				ImageStore.Import(chartBitmap,defNum,ImageType.Photo,PatCur);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Unable to save file: ") + ex.Message);
+				chartBitmap.Dispose();
+				chartBitmap=null;
 				return;
 			}
 			MsgBox.Show(this,"Saved.");
+			chartBitmap.Dispose();
+			chartBitmap=null;
 		}
 
 		public void FillPtInfo() {
