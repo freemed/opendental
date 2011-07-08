@@ -438,6 +438,16 @@ namespace OpenDentBusiness{
 				|| cp.Status==ClaimProcStatus.Supplemental) {
 				return;//never compute estimates for those types listed above.
 			}
+			if(plan.PlanType=="c"//if capitation plan
+				&& cp.Status==ClaimProcStatus.Estimate)//and ordinary estimate
+			{
+				cp.Status=ClaimProcStatus.CapEstimate;
+			}
+			if(plan.PlanType!="c"//if not capitation plan
+				&& cp.Status==ClaimProcStatus.CapEstimate)//and estimate is a capitation estimate
+			{
+				cp.Status=ClaimProcStatus.Estimate;
+			}
 			//NoBillIns is only calculated when creating the claimproc, even if resetAll is true.
 			//If user then changes a procCode, it does not cause an update of all procedures with that code.
 			if(cp.NoBillIns) {
