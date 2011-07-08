@@ -264,6 +264,7 @@ namespace OpenDental{
 				"SubscrIsMarried",
 				"SubscrIsSingle",
 				"SubscrID",
+				"SubscrIDStrict",
 				"SubscrIsFTStudent",
 				"SubscrIsPTStudent",
 				"SubscrGender",

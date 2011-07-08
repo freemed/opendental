@@ -768,6 +768,9 @@ namespace OpenDental{
 							displayStrings[i]=patID;
 						}
 						break;
+					case "SubscrIDStrict":
+						displayStrings[i]=subCur.SubscriberID;
+						break;
 					case "SubscrIsFTStudent":
 						if(subsc.StudentStatus=="F")
 							displayStrings[i]="X";
