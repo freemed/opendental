@@ -483,11 +483,18 @@ namespace OpenDental{
 		}
 
 		private void radioAtoZfolderNotRequired_Click(object sender,EventArgs e) {
-			if(radioAtoZfolderNotRequired.Checked 
-				&& !MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning! This is not recommended.  Only for advanced users.  Continue anyway?")) 
-			{
-				radioUseFolder.Checked=true;
-				return;
+			if(radioAtoZfolderNotRequired.Checked){//user attempting to use db to store images
+				InputBox inputbox=new InputBox("Please enter password");
+				inputbox.ShowDialog();
+				if(inputbox.DialogResult!=DialogResult.OK){
+					radioUseFolder.Checked=true;
+					return;
+				}
+				if(inputbox.textResult.Text!="abracadabra"){//to keep ignorant people from clicking this box.
+					radioUseFolder.Checked=true;
+					MsgBox.Show(this,"Wrong password");
+					return;
+				}
 			}
 		}
 
