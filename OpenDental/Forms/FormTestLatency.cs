@@ -38,6 +38,7 @@ namespace OpenDental {
 			long min=long.MaxValue;
 			long max=-1;
 			long total = 0;
+			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<loopCount;i++) {
 				watch.Reset();
 				watch.Start();
@@ -54,6 +55,7 @@ namespace OpenDental {
 			textMin.Text=min.ToString();
 			textAverage.Text=((float)total/(float)loopCount).ToString();
 			textMax.Text=max.ToString();
+			Cursor=Cursors.Default;
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
