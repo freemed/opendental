@@ -299,6 +299,7 @@ namespace OpenDental{
 				"PatientGenderLetter",
 				"PatientIsMarried",
 				"PatientIsSingle",
+				"PatIDFromPatPlan",//Dependant Code in Canada
 				"PatientSSN",
 				"PatientMedicaidID",
 				"PatientID-MedicaidOrSSN",

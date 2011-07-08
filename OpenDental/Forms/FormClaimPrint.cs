@@ -550,6 +550,7 @@ namespace OpenDental{
 					ClaimFormCur=ClaimForms.GetClaimForm(planCur.ClaimFormNum);
 				}
 			}
+			List<PatPlan> patPlans=null;
 			displayStrings=new string[ClaimFormCur.Items.Length];
 			//a value is set for every item, but not every case will have a matching claimform item.
 			for(int i=0;i<ClaimFormCur.Items.Length;i++){
@@ -759,7 +760,7 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "SubscrID":
-						List <PatPlan> patPlans=PatPlans.Refresh(ThisPatNum);
+						patPlans=PatPlans.Refresh(ThisPatNum);
 						string patID=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
 						if(patID==""){
 							displayStrings[i]=subCur.SubscriberID;
@@ -903,6 +904,10 @@ namespace OpenDental{
 							|| PatCur.Position==PatientPosition.Child
 							|| PatCur.Position==PatientPosition.Widowed)
 							displayStrings[i]="X";
+						break;
+					case "PatIDFromPatPlan": //Dependant Code in Canada
+						patPlans=PatPlans.Refresh(ThisPatNum);
+						displayStrings[i]=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
 						break;
 					case "PatientSSN":
 						if(PatCur.SSN.Length==9) {

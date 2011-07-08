@@ -5784,6 +5784,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					long claimFormNum=PIn.Long(tableClaimFormNum.Rows[0][0].ToString());
 					command="UPDATE claimformitem SET FieldName='SubscrIDStrict' WHERE FieldName='SubscrID' AND ClaimFormNum="+POut.Long(claimFormNum);
 					Db.NonQ(command);
+					command="UPDATE claimformitem SET FieldName='PatIDFromPatPlan' WHERE FieldName='PatientID-MedicaidOrSSN' AND ClaimFormNum="+POut.Long(claimFormNum);
+					Db.NonQ(command);
 				}
 				
 
