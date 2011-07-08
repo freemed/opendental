@@ -2,8 +2,10 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 	/// <summary>
@@ -302,9 +304,15 @@ namespace OpenDental{
 			checkRepeatCharges.Checked=!PrefC.GetBool(PrefName.EasyHideRepeatCharges);
 			checkMedicalIns.Checked=PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance);
 			checkEhr.Checked=PrefC.GetBool(PrefName.ShowFeatureEhr);
+			
 		}
 
 		private void checkEhr_Click(object sender,EventArgs e) {
+			if(checkEhr.Checked && !File.Exists(ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll"))){
+				checkEhr.Checked=false;
+				MsgBox.Show(this,"EHR.dll could not be found.");
+				return;
+			}
 			MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
 		}
 

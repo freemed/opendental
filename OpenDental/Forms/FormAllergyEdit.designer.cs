@@ -39,7 +39,7 @@ namespace OpenDental{
 			// 
 			this.checkActive.Checked = true;
 			this.checkActive.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkActive.Location = new System.Drawing.Point(12,173);
+			this.checkActive.Location = new System.Drawing.Point(59,124);
 			this.checkActive.Name = "checkActive";
 			this.checkActive.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.checkActive.Size = new System.Drawing.Size(100,24);
@@ -49,15 +49,15 @@ namespace OpenDental{
 			// 
 			// textReaction
 			// 
-			this.textReaction.Location = new System.Drawing.Point(96,74);
+			this.textReaction.Location = new System.Drawing.Point(144,45);
 			this.textReaction.Multiline = true;
 			this.textReaction.Name = "textReaction";
-			this.textReaction.Size = new System.Drawing.Size(272,93);
+			this.textReaction.Size = new System.Drawing.Size(272,53);
 			this.textReaction.TabIndex = 10;
 			// 
 			// labelReaction
 			// 
-			this.labelReaction.Location = new System.Drawing.Point(9,74);
+			this.labelReaction.Location = new System.Drawing.Point(60,45);
 			this.labelReaction.Name = "labelReaction";
 			this.labelReaction.Size = new System.Drawing.Size(81,20);
 			this.labelReaction.TabIndex = 9;
@@ -66,7 +66,7 @@ namespace OpenDental{
 			// 
 			// labelAllergy
 			// 
-			this.labelAllergy.Location = new System.Drawing.Point(9,47);
+			this.labelAllergy.Location = new System.Drawing.Point(60,18);
 			this.labelAllergy.Name = "labelAllergy";
 			this.labelAllergy.Size = new System.Drawing.Size(81,20);
 			this.labelAllergy.TabIndex = 12;
@@ -77,7 +77,7 @@ namespace OpenDental{
 			// 
 			this.comboAllergies.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboAllergies.FormattingEnabled = true;
-			this.comboAllergies.Location = new System.Drawing.Point(96,48);
+			this.comboAllergies.Location = new System.Drawing.Point(144,19);
 			this.comboAllergies.Name = "comboAllergies";
 			this.comboAllergies.Size = new System.Drawing.Size(272,21);
 			this.comboAllergies.TabIndex = 13;
@@ -90,7 +90,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(326,226);
+			this.butCancel.Location = new System.Drawing.Point(362,191);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 14;
@@ -105,7 +105,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(245,226);
+			this.butOK.Location = new System.Drawing.Point(281,191);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -122,7 +122,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(19,226);
+			this.butDelete.Location = new System.Drawing.Point(19,191);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 2;
@@ -131,24 +131,24 @@ namespace OpenDental{
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(96,22);
+			this.textDate.Location = new System.Drawing.Point(144,104);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(100,20);
 			this.textDate.TabIndex = 15;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(9,21);
+			this.label1.Location = new System.Drawing.Point(4,103);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(81,20);
+			this.label1.Size = new System.Drawing.Size(137,20);
 			this.label1.TabIndex = 16;
-			this.label1.Text = "Date";
+			this.label1.Text = "Date Adverse Reaction";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormAllergyEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(413,262);
+			this.ClientSize = new System.Drawing.Size(449,227);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.butCancel);

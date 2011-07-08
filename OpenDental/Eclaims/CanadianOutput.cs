@@ -392,7 +392,7 @@ namespace OpenDental.Eclaims {
 #if DEBUG
 				strb.Append("11111");
 #else				
-				strb.Append(TidyN(etrans.CarrierTransCounter,5));
+				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 #endif
 			}
 			//B01 CDA provider number 9 AN
