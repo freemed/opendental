@@ -99,50 +99,55 @@ namespace OpenDental {
 				}
 				//loop through all incoming sheets
 				for(int i=0;i<arraySheets.Length;i++) {
-					long patNum=0;
-					string lName="";
-					string fName="";
-					DateTime bDate=DateTime.MinValue;
-					//loop through each field in this sheet to find First name, last name, and DOB
-					for(int j=0;j<arraySheets[i].web_sheetfieldlist.Count();j++) {
-						if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lname")
-							|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lastname")) 
-						{
-							lName=arraySheets[i].web_sheetfieldlist[j].FieldValue;
+					try { //this try catch is put code modified so that a defective downloaded sheet does not stop other sheets from being downloaded.
+						long patNum=0;
+						string lName="";
+						string fName="";
+						DateTime bDate=DateTime.MinValue;
+						//loop through each field in this sheet to find First name, last name, and DOB
+						for(int j=0;j<arraySheets[i].web_sheetfieldlist.Count();j++) {
+							if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lname")
+								|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("lastname")) 
+							{
+								lName=arraySheets[i].web_sheetfieldlist[j].FieldValue;
+							}
+							if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("fname")
+								|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("firstname")) 
+							{
+								fName=arraySheets[i].web_sheetfieldlist[j].FieldValue;
+							}
+							if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("bdate")
+								|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("birthdate")) 
+							{
+								bDate=PIn.Date(arraySheets[i].web_sheetfieldlist[j].FieldValue);
+							}
 						}
-						if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("fname")
-							|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("firstname")) 
-						{
-							fName=arraySheets[i].web_sheetfieldlist[j].FieldValue;
+						if(bDate.Year<1880) {
+							//log invalid birth date  format. Shouldn't happen, though.
 						}
-						if(arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("bdate")
-							|| arraySheets[i].web_sheetfieldlist[j].FieldName.ToLower().Contains("birthdate")) 
-						{
-							bDate=PIn.Date(arraySheets[i].web_sheetfieldlist[j].FieldValue);
+						patNum=Patients.GetPatNumByNameAndBirthday(lName,fName,bDate);
+						if(patNum==0) {
+							FormPatientPickWebForm FormPpw=new FormPatientPickWebForm();
+							FormPpw.LnameEntered=lName;
+							FormPpw.FnameEntered=fName;
+							FormPpw.BdateEntered=bDate;
+							FormPpw.ShowDialog();
+							if(FormPpw.DialogResult!=DialogResult.OK) {
+								break;//out of loop
+							}
+							patNum=FormPpw.SelectedPatNum;//might be zero to indicate new patient
+						}
+						if(patNum==0) {
+							Patient newPat=CreatePatient(lName,fName,bDate,arraySheets[i]);
+							patNum=newPat.PatNum;
+						}
+						Sheet newSheet=CreateSheet(patNum,arraySheets[i]);
+						if(DataExistsInDb(newSheet)) {
+							SheetsForDeletion.Add(arraySheets[i].web_sheet.SheetID);
 						}
 					}
-					if(bDate.Year<1880) {
-						//log invalid birth date  format. Shouldn't happen, though.
-					}
-					patNum=Patients.GetPatNumByNameAndBirthday(lName,fName,bDate);
-					if(patNum==0) {
-						FormPatientPickWebForm FormPpw=new FormPatientPickWebForm();
-						FormPpw.LnameEntered=lName;
-						FormPpw.FnameEntered=fName;
-						FormPpw.BdateEntered=bDate;
-						FormPpw.ShowDialog();
-						if(FormPpw.DialogResult!=DialogResult.OK) {
-							break;//out of loop
-						}
-						patNum=FormPpw.SelectedPatNum;//might be zero to indicate new patient
-					}
-					if(patNum==0) {
-						Patient newPat=CreatePatient(lName,fName,bDate,arraySheets[i]);
-						patNum=newPat.PatNum;
-					}
-					Sheet newSheet=CreateSheet(patNum,arraySheets[i]);
-					if(DataExistsInDb(newSheet)) {
-						SheetsForDeletion.Add(arraySheets[i].web_sheet.SheetID);
+					catch(Exception e) {
+						MessageBox.Show(e.Message);
 					}
 				}// end of for loop
 				wh.DeleteSheetData(RegistrationKey,SheetsForDeletion.ToArray());
