@@ -314,13 +314,39 @@ CREATE TABLE `userm` (
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 
-/* data for mobile demo*/
 
-insert  into `allergy`(`AllergyNum`,`AllergyDefNum`,`PatNum`,`Reaction`,`StatusIsActive`,`DateTStamp`,`DateAdverseReaction`) values (1,1,1,'reaction2 ',1,'2011-06-14 11:51:45','2003-05-05'),(2,2,7,'reaction2 ',1,'2011-06-14 11:51:46','2004-03-03'),(3,1,7,'reaction1 ',1,'2011-06-14 11:51:46','0001-01-01'),(5,3,7,'reaction1 ',1,'2011-06-14 11:51:46','2003-05-05'),(6,2,1,'reaction2 ',1,'2011-06-14 11:51:46','2004-03-03'),(7,1,10,'reaction1',1,'2011-06-14 11:51:49','2003-05-05'),(8,2,10,'reaction2',1,'2011-06-14 11:51:46','2004-03-03'),(9,1,11,'reaction1',1,'2011-06-14 11:51:47','2003-05-05'),(10,2,11,'reaction2',1,'2011-06-14 11:51:47','2004-03-03'),(11,1,12,'reaction1',1,'2011-06-14 11:51:47','2003-05-05'),(12,1,13,'reaction1',1,'2011-06-14 11:51:50','2003-05-05'),(13,2,13,'reaction2',1,'2011-06-14 11:51:51','2003-05-05'),(14,3,13,'reaction3',1,'2011-06-14 11:51:51','2003-05-05'),(15,1,14,'reaction4',1,'2011-06-14 11:51:51','2003-05-05'),(16,2,14,'reaction5',1,'2011-06-14 11:51:51','2003-05-05'),(17,3,14,'reaction6',1,'2011-06-14 11:51:51','2003-05-05'),(18,1,15,'reaction7',1,'2011-06-14 11:51:52','2003-05-05'),(19,2,8,'reaction8',1,'2011-06-14 11:51:53','2003-05-05'),(20,1,9,'reaction9',1,'2011-06-14 11:51:54','2003-05-05');
+/* to enable registrationkey related stuff use below statements*/
+
+INSERT INTO `registrationkey` (`RegistrationKeyNum`, `PatNum`, `RegKey`, `Note`, `DateStarted`, `DateDisabled`, `DateEnded`, `IsForeign`, `UsesServerVersion`, `IsFreeVersion`, `IsOnlyForTesting`, `VotesAllotted`) VALUES('1604','6219','CWX7HIOQBJ73GMFU','','2011-03-01','0001-01-01','0001-01-01','0','0','0','1','100');
+INSERT INTO `registrationkey` (`RegistrationKeyNum`, `PatNum`, `RegKey`, `Note`, `DateStarted`, `DateDisabled`, `DateEnded`, `IsForeign`, `UsesServerVersion`, `IsFreeVersion`, `IsOnlyForTesting`, `VotesAllotted`) VALUES('1672','6566','3QTNG1DFX680P50V','','2011-04-16','0001-01-01','0001-01-01','0','0','0','1','100');
+
+INSERT INTO `repeatcharge` (`RepeatChargeNum`, `PatNum`, `ProcCode`, `ChargeAmt`, `DateStart`, `DateStop`, `Note`) VALUES('3767','6219','027','0','2011-03-01','0001-01-01','');
+INSERT INTO `repeatcharge` (`RepeatChargeNum`, `PatNum`, `ProcCode`, `ChargeAmt`, `DateStart`, `DateStop`, `Note`) VALUES('3931','6566','027','0','2011-04-16','0001-01-01','');
+
+INSERT INTO `patient` (`PatNum`, `LName`, `FName`, `MiddleI`, `Preferred`, `PatStatus`, `Gender`, `Position`, `Birthdate`, `SSN`, `Address`, `Address2`, `City`, `State`, `Zip`, `HmPhone`, `WkPhone`, `WirelessPhone`, `Guarantor`, `CreditType`, `Email`, `Salutation`, `EstBalance`, `PriProv`, `SecProv`, `FeeSched`, `BillingType`, `ImageFolder`, `AddrNote`, `FamFinUrgNote`, `MedUrgNote`, `ApptModNote`, `StudentStatus`, `SchoolName`, `ChartNumber`, `MedicaidID`, `Bal_0_30`, `Bal_31_60`, `Bal_61_90`, `BalOver90`, `InsEst`, `BalTotal`, `EmployerNum`, `EmploymentNote`, `Race`, `County`, `GradeLevel`, `Urgency`, `DateFirstVisit`, `ClinicNum`, `HasIns`, `TrophyFolder`, `PlannedIsDone`, `Premed`, `Ward`, `PreferConfirmMethod`, `PreferContactMethod`, `PreferRecallMethod`, `SchedBeforeTime`, `SchedAfterTime`, `SchedDayOfWeek`, `Language`, `AdmitDate`, `Title`, `PayPlanDue`, `SiteNum`, `DateTStamp`, `ResponsParty`, `CanadianEligibilityCode`, `AskToArriveEarly`, `OnlinePassword`, `SmokeStatus`) VALUES('6219','MobileDemo','MobileDemo','','','0','0','0','0001-01-01','','','','','','','','','','6219','','','','0','1','0','0','164','MobileDemoMobileDemo6219','','','','','','','','','0','0','0','0','0','0','0','','0','','0','0','0001-01-01','0','','','0','0','','0','0','0','00:00:00','00:00:00','0','','0001-01-01','','0','0','2011-03-01 15:30:12','0','0','0','','0');
+INSERT INTO `patient` (`PatNum`, `LName`, `FName`, `MiddleI`, `Preferred`, `PatStatus`, `Gender`, `Position`, `Birthdate`, `SSN`, `Address`, `Address2`, `City`, `State`, `Zip`, `HmPhone`, `WkPhone`, `WirelessPhone`, `Guarantor`, `CreditType`, `Email`, `Salutation`, `EstBalance`, `PriProv`, `SecProv`, `FeeSched`, `BillingType`, `ImageFolder`, `AddrNote`, `FamFinUrgNote`, `MedUrgNote`, `ApptModNote`, `StudentStatus`, `SchoolName`, `ChartNumber`, `MedicaidID`, `Bal_0_30`, `Bal_31_60`, `Bal_61_90`, `BalOver90`, `InsEst`, `BalTotal`, `EmployerNum`, `EmploymentNote`, `Race`, `County`, `GradeLevel`, `Urgency`, `DateFirstVisit`, `ClinicNum`, `HasIns`, `TrophyFolder`, `PlannedIsDone`, `Premed`, `Ward`, `PreferConfirmMethod`, `PreferContactMethod`, `PreferRecallMethod`, `SchedBeforeTime`, `SchedAfterTime`, `SchedDayOfWeek`, `Language`, `AdmitDate`, `Title`, `PayPlanDue`, `SiteNum`, `DateTStamp`, `ResponsParty`, `CanadianEligibilityCode`, `AskToArriveEarly`, `OnlinePassword`, `SmokeStatus`) VALUES('6566','OnlineTest','','','','0','0','0','0001-01-01','','','','','','','','','','6566','','','','0','1','0','0','164','MobileTest6566','','','','','','','','','0','0','0','0','0','0','0','','0','','0','0','0001-01-01','0','','','0','0','','0','0','0','00:00:00','00:00:00','0','','0001-01-01','','0','0','2011-04-16 22:04:56','0','0','0','','0');
+
+/* data for mobile demo*/
+delete from  allergy;
+delete from  allergydef;
+delete from  appointment;
+delete from  disease;
+delete from  diseasedef;
+delete from  labpanel;
+delete from  labresult;
+delete from  medication;
+delete from  medicationpat;
+delete from  patient;
+delete from  pharmacy;
+delete from  rxpat;
+
+
+
+insert  into `allergy`(`AllergyNum`,`AllergyDefNum`,`PatNum`,`Reaction`,`StatusIsActive`,`DateTStamp`,`DateAdverseReaction`) values (1,1,1,'Nausea ',1,'2011-06-14 11:51:45','2003-05-05'),(2,2,7,'Hives ',1,'2011-06-14 11:51:46','2004-03-03'),(3,1,7,'Wheezing ',1,'2011-06-14 11:51:46','0001-01-01'),(5,3,7,'Wheezing ',1,'2011-06-14 11:51:46','2003-05-05'),(6,2,1,'Hives ',1,'2011-06-14 11:51:46','2004-03-03'),(7,1,10,'Wheezing',1,'2011-06-14 11:51:49','2003-05-05'),(8,2,10,'Hives',1,'2011-06-14 11:51:46','2004-03-03'),(9,1,11,'Wheezing',1,'2011-06-14 11:51:47','2003-05-05'),(10,2,11,'Hives',1,'2011-06-14 11:51:47','2004-03-03'),(11,1,12,'Wheezing',1,'2011-06-14 11:51:47','2003-05-05'),(12,1,13,'Nausea',1,'2011-06-14 11:51:50','2003-05-05'),(13,2,13,'Hives',1,'2011-06-14 11:51:51','2003-05-05'),(14,3,13,'Wheezing',1,'2011-06-14 11:51:51','2003-05-05'),(15,1,14,'Nausea',1,'2011-06-14 11:51:51','2003-05-05'),(16,2,14,'Nausea',1,'2011-06-14 11:51:51','2003-05-05'),(17,3,14,'Wheezing',1,'2011-06-14 11:51:51','2003-05-05'),(18,1,15,'Nausea',1,'2011-06-14 11:51:52','2003-05-05'),(19,2,8,'Hives',1,'2011-06-14 11:51:53','2003-05-05'),(20,1,9,'Wheezing',1,'2011-06-14 11:51:54','2003-05-05');
 
 /*Data for the table `allergydef` */
 
-insert  into `allergydef`(`AllergyDefNum`,`Description`,`IsHidden`,`DateTStamp`,`Snomed`,`RxCui`,`MedicationNum`) values (1,'allergy 1',0,'2011-06-14 10:06:34',0,0,0),(2,'allergy 2',0,'2011-06-14 10:06:38',0,0,0),(3,'allergy 3',0,'2011-06-14 10:59:20',0,0,0);
+insert  into `allergydef`(`AllergyDefNum`,`Description`,`IsHidden`,`DateTStamp`,`Snomed`,`RxCui`,`MedicationNum`) values (1,'Penicillin',0,'2011-06-14 10:06:34',0,0,0),(2,'Aspirin',0,'2011-06-14 10:06:38',0,0,0),(3,'Codeine',0,'2011-06-14 10:59:20',0,0,0);
 
 /*Data for the table `appointment` */
 
@@ -360,8 +386,22 @@ insert  into `pharmacy`(`PharmacyNum`,`PharmID`,`StoreName`,`Phone`,`Fax`,`Addre
 
 /*Data for the table `provider` */
 
+/*
 insert  into `provider`(`ProvNum`,`Abbr`,`ItemOrder`,`LName`,`FName`,`MI`,`Suffix`,`FeeSched`,`Specialty`,`SSN`,`StateLicense`,`DEANum`,`IsSecondary`,`ProvColor`,`IsHidden`,`UsingTIN`,`BlueCrossID`,`SigOnFile`,`MedicaidID`,`OutlineColor`,`SchoolClassNum`,`NationalProvID`,`CanadianOfficeNum`,`DateTStamp`,`AnesthProvType`,`TaxonomyCodeOverride`,`IsCDAnet`,`EcwID`,`EhrKey`) values (5,'DOC1',2,'Priestly','Martin','','',53,0,'','','',0,-8355585,0,0,'',0,'',-2830136,0,'','','2011-06-14 10:04:55',0,'',0,'',''),(2,'HYG',1,'Jones','Tina','','',53,1,'','','',1,-17956,0,0,'',1,'',-11711155,0,'','','2008-12-04 11:16:42',0,'',0,'',''),(1,'DOC',0,'Albert','Brian','L','',53,0,'1522864182','52186144','TL12265',0,-4602138,0,1,'',1,'',-11711155,0,'51236994785','','2008-12-19 16:16:07',0,'',0,'','');
-
+*/
 /*Data for the table `rxpat` */
 
 insert  into `rxpat`(`RxNum`,`PatNum`,`RxDate`,`Drug`,`Sig`,`Disp`,`Refills`,`ProvNum`,`Notes`,`PharmacyNum`,`IsControlled`,`DateTStamp`,`SendStatus`) values (1,9,'2011-02-03','Penicillin VK','','40','3',1,'Notes 1',0,0,'2011-02-08 20:34:51',0),(2,9,'2011-02-03','Vicodin','','16 (sixteen)','12',1,'',0,1,'2011-02-03 17:38:26',0),(6,9,'2011-02-03','Peridex','','1','12',1,'',0,1,'2011-02-08 22:06:03',0),(7,10,'2011-02-03','Vicodin','','16 (sixteen)','12',1,'',0,1,'2011-02-03 17:38:32',0),(8,10,'2011-02-03','Peridex','','1','12',1,'',0,1,'2011-02-08 22:06:04',0),(9,11,'2011-02-03','Vicodin','','16 (sixteen)','12',1,'',0,1,'2011-02-03 17:38:37',0),(10,12,'2011-02-03','Peridex','','1','12',1,'',0,1,'2011-02-08 22:06:05',0),(11,13,'2011-02-03','Vicodin','','20 (twenty)','12',1,'',0,1,'2011-02-08 20:34:13',0),(12,14,'2011-02-03','Penicillin VK','','20','12',1,'',0,1,'2011-02-08 22:06:31',0),(13,15,'2011-02-03','Vicodin','','16 (sixteen)','12',1,'',0,1,'2011-02-08 22:28:54',0),(14,16,'2011-02-03','Penicillin VK','','18','12',1,'',0,1,'2011-02-08 22:28:57',0),(15,17,'2011-02-03','Penicillin VK','','20','12',1,'',0,1,'2011-02-08 22:29:01',0),(16,18,'2011-02-03','Vicodin','','16 (sixteen)','12',1,'',0,1,'2011-02-08 22:29:03',0),(17,19,'2011-02-03','Penicillin VK','','10','12',1,'',0,1,'2011-02-08 22:29:06',0);
+
+UPDATE allergy SET DateTStamp=NOW();
+UPDATE allergydef SET DateTStamp=NOW();
+UPDATE appointment SET DateTStamp=NOW();
+UPDATE disease SET DateTStamp=NOW();
+UPDATE diseasedef SET DateTStamp=NOW();
+UPDATE labpanel SET DateTStamp=NOW();
+UPDATE labresult SET DateTStamp=NOW();
+UPDATE medication SET DateTStamp=NOW();
+UPDATE medicationpat SET DateTStamp=NOW();
+UPDATE patient SET DateTStamp=NOW();
+UPDATE pharmacy SET DateTStamp=NOW();
+UPDATE rxpat SET DateTStamp=NOW();
