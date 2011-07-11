@@ -41,7 +41,10 @@ namespace OpenDental {
 			if(PrefC.UsingAtoZfolder) {
 				comboFieldName.Items.Clear();
 				string[] files=Directory.GetFiles(SheetUtil.GetImagePath());
-				for(int i=0;i<files.Length;i++){
+				for(int i=0;i<files.Length;i++) {//remove offending file types (non image files)
+					if(files[i].EndsWith("db")) {
+						continue;
+					}
 					comboFieldName.Items.Add(Path.GetFileName(files[i]));
 				}
 				//comboFieldName.Items.Add("Patient Info.gif");
