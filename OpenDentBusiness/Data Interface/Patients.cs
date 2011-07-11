@@ -252,8 +252,8 @@ namespace OpenDentBusiness{
 			command+="FROM patient ";
 			if(subscriberId!=""){
 				command+="LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
-					+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
-					+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum ";
+					+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum "
+					+"LEFT JOIN insplan ON inssub.PlanNum=insplan.PlanNum ";
 			}
 			command+="WHERE PatStatus != '4' ";//not status 'deleted'
 			if(DataConnection.DBtype==DatabaseType.MySql) {//LIKE is case insensitive in mysql.
