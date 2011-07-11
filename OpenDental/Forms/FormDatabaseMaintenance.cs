@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -29,6 +30,7 @@ namespace OpenDental {
 		private UI.Button butFix;
 		private UI.Button butInsPayFix;
 		private UI.Button butOptimize;
+		private UI.Button butApptProcs;
 		private OpenDental.UI.Button butPrint;
 
 		///<summary></summary>
@@ -74,6 +76,7 @@ namespace OpenDental {
 			this.butFix = new OpenDental.UI.Button();
 			this.butInsPayFix = new OpenDental.UI.Button();
 			this.butOptimize = new OpenDental.UI.Button();
+			this.butApptProcs = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -87,7 +90,7 @@ namespace OpenDental {
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butClose.Location = new System.Drawing.Point(787,631);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(87,26);
+			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -112,9 +115,9 @@ namespace OpenDental {
 			this.buttonCheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.buttonCheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonCheck.CornerRadius = 4F;
-			this.buttonCheck.Location = new System.Drawing.Point(555,631);
+			this.buttonCheck.Location = new System.Drawing.Point(598,631);
 			this.buttonCheck.Name = "buttonCheck";
-			this.buttonCheck.Size = new System.Drawing.Size(87,26);
+			this.buttonCheck.Size = new System.Drawing.Size(75,26);
 			this.buttonCheck.TabIndex = 5;
 			this.buttonCheck.Text = "C&heck";
 			this.buttonCheck.Click += new System.EventHandler(this.buttonCheck_Click);
@@ -157,7 +160,7 @@ namespace OpenDental {
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(190,631);
+			this.butPrint.Location = new System.Drawing.Point(460,631);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(87,26);
 			this.butPrint.TabIndex = 18;
@@ -172,9 +175,9 @@ namespace OpenDental {
 			this.butFix.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFix.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFix.CornerRadius = 4F;
-			this.butFix.Location = new System.Drawing.Point(648,631);
+			this.butFix.Location = new System.Drawing.Point(678,631);
 			this.butFix.Name = "butFix";
-			this.butFix.Size = new System.Drawing.Size(87,26);
+			this.butFix.Size = new System.Drawing.Size(75,26);
 			this.butFix.TabIndex = 20;
 			this.butFix.Text = "Fix";
 			this.butFix.Click += new System.EventHandler(this.butFix_Click);
@@ -202,12 +205,27 @@ namespace OpenDental {
 			this.butOptimize.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOptimize.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOptimize.CornerRadius = 4F;
-			this.butOptimize.Location = new System.Drawing.Point(343,631);
+			this.butOptimize.Location = new System.Drawing.Point(120,631);
 			this.butOptimize.Name = "butOptimize";
 			this.butOptimize.Size = new System.Drawing.Size(87,26);
 			this.butOptimize.TabIndex = 23;
 			this.butOptimize.Text = "Optimize";
 			this.butOptimize.Click += new System.EventHandler(this.butOptimize_Click);
+			// 
+			// butApptProcs
+			// 
+			this.butApptProcs.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butApptProcs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butApptProcs.Autosize = true;
+			this.butApptProcs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butApptProcs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butApptProcs.CornerRadius = 4F;
+			this.butApptProcs.Location = new System.Drawing.Point(213,631);
+			this.butApptProcs.Name = "butApptProcs";
+			this.butApptProcs.Size = new System.Drawing.Size(87,26);
+			this.butApptProcs.TabIndex = 24;
+			this.butApptProcs.Text = "Appt Procs";
+			this.butApptProcs.Click += new System.EventHandler(this.butApptProcs_Click);
 			// 
 			// FormDatabaseMaintenance
 			// 
@@ -215,6 +233,7 @@ namespace OpenDental {
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(895,667);
+			this.Controls.Add(this.butApptProcs);
 			this.Controls.Add(this.butOptimize);
 			this.Controls.Add(this.butInsPayFix);
 			this.Controls.Add(this.butFix);
@@ -458,6 +477,59 @@ namespace OpenDental {
 		private void butInsPayFix_Click(object sender,EventArgs e) {
 			FormInsPayFix formIns=new FormInsPayFix();
 			formIns.ShowDialog();
+		}
+
+		private void butApptProcs_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will fix procedure descriptions in the Appt module that aren't correctly showing tooth numbers.\r\nContinue?")) 
+			{
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			List<long> aptNums=new List<long>();
+			Appointment[] aptList=Appointments.GetForPeriod(DateTime.Now.Date,DateTime.MaxValue.AddDays(-10));
+			for(int i=0;i<aptList.Length;i++) {
+				aptNums.Add(aptList[i].AptNum);
+			}
+			List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
+			for(int i=0;i<aptList.Length;i++) {
+				Appointment newApt=aptList[i].Clone();
+				newApt.ProcDescript="";
+				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptList[i].AptNum,procsMultApts);
+				string procDescript="";
+				for(int j=0;j<procsForOne.Length;j++) {
+					ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(procsForOne[j].CodeNum);
+					if(j>0) {
+						procDescript+=", ";
+					}
+					switch(procCode.TreatArea) {
+						case TreatmentArea.Surf:
+							procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-"
+							+procsForOne[j].Surf+"-";//""#12-MOD-"
+							break;
+						case TreatmentArea.Tooth:
+							procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-";//"#12-"
+							break;
+						case TreatmentArea.Quad:
+							procDescript+=procsForOne[j].Surf+"-";//"UL-"
+							break;
+						case TreatmentArea.Sextant:
+							procDescript+="S"+procsForOne[j].Surf+"-";//"S2-"
+							break;
+						case TreatmentArea.Arch:
+							procDescript+=procsForOne[j].Surf+"-";//"U-"
+							break;
+						case TreatmentArea.ToothRange:
+							break;
+						default://area 3 or 0 (mouth)
+							break;
+					}
+					procDescript+=procCode.AbbrDesc;
+				}
+				newApt.ProcDescript=procDescript;
+				Appointments.Update(newApt,aptList[i]);
+			}
+			Cursor=Cursors.Default;
+			MsgBox.Show(this,"Done. Please refresh Appt module to see the changes.");
 		}
 
 
