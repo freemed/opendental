@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 				+"WHERE LogDateTime >= "+POut.Date(dateFrom)+" "
 				+"AND LogDateTime <= "+POut.Date(dateTo.AddDays(1));
 			if(patNum !=0) {
-				command+=" AND PatNum= '"+POut.Long(patNum)+"'";
+				command+=" AND securitylog.PatNum= '"+POut.Long(patNum)+"'";
 			}
 			if(permType!=Permissions.None) {
 				command+=" AND PermType="+POut.Long((int)permType);
