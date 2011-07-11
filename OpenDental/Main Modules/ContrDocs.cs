@@ -138,7 +138,7 @@ namespace OpenDental{
 		Document[] mountDocs=null;
 		///<summary>The hot document number of a mount image when it is copied.</summary>
 		int copyDocumentNumber=-1;
-    private bool allowTopaz;
+    //private bool allowTopaz;
 		DateTime treeDocumentMouseMoveTime=new DateTime(1,1,1);
 		///<summary></summary>
 		private Patient PatCur;
@@ -196,9 +196,6 @@ namespace OpenDental{
 			if( disposing ){
 				if(components != null){
 					components.Dispose();
-				}
-				if(sigBoxTopaz!=null) {
-					sigBoxTopaz.Dispose();
 				}
 				xRayImageController.KillXRayThread();
 			}
@@ -1184,7 +1181,7 @@ namespace OpenDental{
 			//Topaz box is not supported in Unix, since the required dll is Windows native.
 			if(selectionDoc.SigIsTopaz){
 				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
-					if(allowTopaz) {	
+					//if(allowTopaz) {	
 						sigBox.Visible=false;
 						sigBoxTopaz.Visible=true;
                         CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
@@ -1199,15 +1196,15 @@ namespace OpenDental{
 						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
 							labelInvalidSig.Visible=true;
 						}
-					}
+					//}
 				}
 			}
 			else {//not topaz
 				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
 					sigBox.Visible=true;
-					if(allowTopaz) {	
+					//if(allowTopaz) {	
 						sigBoxTopaz.Visible=false;
-					}
+					//}
 					sigBox.ClearTablet();
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
