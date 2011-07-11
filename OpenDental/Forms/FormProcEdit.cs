@@ -165,7 +165,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butTopazSign;
 		private Label labelInvalidSig;
 		private Control sigBoxTopaz;
-    private bool allowTopaz;
+    //private bool allowTopaz;
 		private OpenDental.UI.Button butPickSite;
 		private TextBox textSite;
 		private Label labelSite;
@@ -233,13 +233,13 @@ namespace OpenDental{
 			//LoopList=null;
 			InitializeComponent();
 			Lan.F(this);
-			allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+			//allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
 			sigBox.SetTabletState(1);
-			if(!allowTopaz) {
-				butTopazSign.Visible=false;
-				sigBox.Visible=true;
-			}
-			else{
+			//if(!allowTopaz) {
+			//	butTopazSign.Visible=false;
+			//	sigBox.Visible=true;
+			//}
+			//else{
 				//Add signature box for Topaz signatures.
 				sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
@@ -251,10 +251,17 @@ namespace OpenDental{
 				Controls.Add(sigBoxTopaz);
 				//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
-			}
+			//}
 			if(!PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
 				groupMedical.Visible=false;
 			}
+		}
+
+		protected override void Dispose(bool disposing) {
+			if(disposing && (components != null)) {
+				components.Dispose();
+			}
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
@@ -2527,7 +2534,7 @@ namespace OpenDental{
 			sigBox.Visible=true;
 			if(ProcCur.SigIsTopaz){
 				if(ProcCur.Signature!=""){
-					if(allowTopaz){
+					//if(allowTopaz){
 						sigBox.Visible=false;
 						sigBoxTopaz.Visible=true;
 						CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
@@ -2547,7 +2554,7 @@ namespace OpenDental{
 						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
 							labelInvalidSig.Visible=true;
 						}
-					}
+					//}
 				}
 			}
 			else{
@@ -3391,10 +3398,10 @@ namespace OpenDental{
 				&& !SigChanged)//and the original signature is still showing.
 			{
 				sigBox.ClearTablet();
-				if(allowTopaz){
+				//if(allowTopaz){
 					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 					sigBoxTopaz.Visible=false;//until user explicitly starts it.
-				}
+				//}
 				sigBox.SetTabletState(1);//on-screen box is now accepting input.
 				SigChanged=true;
 				ProcCur.UserNum=Security.CurUser.UserNum;
@@ -3415,10 +3422,10 @@ namespace OpenDental{
 		private void butClearSig_Click(object sender,EventArgs e) {
 			sigBox.ClearTablet();
 			sigBox.Visible=true;
-			if(allowTopaz) {
+			//if(allowTopaz) {
 				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 				sigBoxTopaz.Visible=false;//until user explicitly starts it.
-			}
+			//}
 			sigBox.SetTabletState(1);//on-screen box is now accepting input.
 			SigChanged=true;
 			labelInvalidSig.Visible=false;
@@ -3429,11 +3436,11 @@ namespace OpenDental{
 		private void butTopazSign_Click(object sender,EventArgs e) {
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
-			if(allowTopaz){
+			//if(allowTopaz){
 				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz); 
 				CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
-			}
+			//}
 			SigChanged=true;
 			labelInvalidSig.Visible=false;
 			ProcCur.UserNum=Security.CurUser.UserNum;
@@ -4336,7 +4343,8 @@ namespace OpenDental{
 		private void SaveSignature(){
 			if(SigChanged){
 				//Topaz boxes are written in Windows native code.
-				if(allowTopaz && sigBoxTopaz.Visible){
+				//if(allowTopaz && sigBoxTopaz.Visible){
+				if(sigBoxTopaz.Visible){
 					ProcCur.SigIsTopaz=true;
 					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0){
 						ProcCur.Signature="";
@@ -4368,9 +4376,11 @@ namespace OpenDental{
 		}
 
 		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			if(allowTopaz){
-				sigBoxTopaz.Dispose();
-			}
+			//if(allowTopaz){
+			//	if(sigBoxTopaz!=null) {
+			//		sigBoxTopaz.Dispose();
+			//	}
+			//}
 			if(DialogResult==DialogResult.OK){
 				//this catches date,prov,fee,status,etc for all claimProcs attached to this proc.
 				if(!StartedAttachedToClaim

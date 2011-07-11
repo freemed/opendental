@@ -11,7 +11,7 @@ namespace OpenDental.UI {
 	///<summary>Wraps the Topaz SigPlusNET control and the alternate SignatureBox control.  Also includes both needed buttons.  Should vastly simplify using signature boxes throughout the program.</summary>
 	public partial class SignatureBoxWrapper:UserControl {
 		private bool sigChanged;
-		private bool allowTopaz;
+		//private bool allowTopaz;
 		private Control sigBoxTopaz;
 		private string labelText;
 		///<summary>The reason for this event is so that if a different user is signing, that it properly records the change in users.  See the example pattern in FormProcGroup.</summary>
@@ -20,13 +20,13 @@ namespace OpenDental.UI {
 
 		public SignatureBoxWrapper() {
 			InitializeComponent();
-			allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+			//allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
 			sigBox.SetTabletState(1);
-			if(!allowTopaz) {
-				butTopazSign.Visible=false;
-				sigBox.Visible=true;
-			}
-			else{
+			//if(!allowTopaz) {
+			//  butTopazSign.Visible=false;
+			//  sigBox.Visible=true;
+			//}
+			//else{
 				//Add signature box for Topaz signatures.
 				sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
@@ -42,7 +42,7 @@ namespace OpenDental.UI {
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 				butTopazSign.BringToFront();
 				butClearSig.BringToFront();
-			}
+			//}
 		}
 
 		protected void OnSignatureChanged() {
@@ -68,7 +68,7 @@ namespace OpenDental.UI {
 			sigBox.Visible=true;
 			if(sigIsTopaz){
 				if(signature!=""){
-					if(allowTopaz){
+					//if(allowTopaz){
 						sigBox.Visible=false;
 						sigBoxTopaz.Visible=true;
 						CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
@@ -89,7 +89,7 @@ namespace OpenDental.UI {
 							labelInvalidSig.Visible=true;
 						}
 						CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
-					}
+					//}
 				}
 			}
 			else{
@@ -119,7 +119,8 @@ namespace OpenDental.UI {
 
 		///<summary>This should NOT be used unless GetSigChanged returns true.</summary>
 		public bool GetSigIsTopaz(){
-			if(allowTopaz && sigBoxTopaz.Visible){
+			//if(allowTopaz && sigBoxTopaz.Visible){
+			if(sigBoxTopaz.Visible){
 				return true;
 			}
 			return false;
@@ -136,7 +137,8 @@ namespace OpenDental.UI {
 
 		///<summary>This should happen a lot before the box is signed.  Once it's signed, if this happens, then the signature will be invalidated.  The user would have to clear the invalidation manually.  This "invalidation" is just a visual cue; nothing actually happens to the data.</summary>
 		public void SetInvalid(){
-			if(allowTopaz && sigBoxTopaz.Visible){
+			//if(allowTopaz && sigBoxTopaz.Visible){
+			if(sigBoxTopaz.Visible){
 				if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0){
 					return;//no need to do anything because no signature
 				}
@@ -155,7 +157,8 @@ namespace OpenDental.UI {
 
 		public bool SigIsBlank{
 			get{ 
-				if(allowTopaz && sigBoxTopaz.Visible){
+				//if(allowTopaz && sigBoxTopaz.Visible){
+				if(sigBoxTopaz.Visible){
 					return(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0);
 				}
 				return(sigBox.NumberOfTabletPoints()==0);
@@ -165,7 +168,8 @@ namespace OpenDental.UI {
 		///<summary>This should NOT be used unless GetSigChanged returns true.</summary>
 		public string GetSignature(string keyData){
 			//Topaz boxes are written in Windows native code.
-			if(allowTopaz && sigBoxTopaz.Visible){
+			//if(allowTopaz && sigBoxTopaz.Visible){
+			if(sigBoxTopaz.Visible){
 				//ProcCur.SigIsTopaz=true;
 				if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0){
 					return "";
@@ -202,11 +206,11 @@ namespace OpenDental.UI {
 			//this button is not even visible if Topaz is not allowed
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
-			if(allowTopaz){
+			//if(allowTopaz){
 				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 				CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
-			}
+			//}
 			labelInvalidSig.Visible=false;
 			sigBoxTopaz.Focus();
 			OnSignatureChanged();
@@ -232,10 +236,11 @@ namespace OpenDental.UI {
 		public Bitmap GetSigImage(){
 			Bitmap sigBitmap=new Bitmap(Width-2,Height-2);
 			//no outline
-			if(allowTopaz && sigBoxTopaz.Visible){
+			//if(allowTopaz && sigBoxTopaz.Visible){
+			if(sigBoxTopaz.Visible) {
 				sigBoxTopaz.DrawToBitmap(sigBitmap,new Rectangle(0,0,Width-2,Height-2));//GetBitmap would probably work.
 			}
-			else{
+			else {
 				sigBitmap=(Bitmap)sigBox.GetSigImage(false);
 			}
 			return sigBitmap;
@@ -245,10 +250,10 @@ namespace OpenDental.UI {
 		public void ClearSignature(){
 			sigBox.ClearTablet();
 			sigBox.Visible=true;
-			if(allowTopaz) {
+			//if(allowTopaz) {
 			  CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 			  sigBoxTopaz.Visible=false;//until user explicitly starts it.
-			}
+			//}
 			sigBox.SetTabletState(1);//on-screen box is now accepting input.
 			sigChanged=true;
 			labelInvalidSig.Visible=false;

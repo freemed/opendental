@@ -161,13 +161,13 @@ namespace OpenDental{
 			//the creation code for the topaz box in CodeBase.TopazWrapper.GetTopaz() so that
 			//the native code does not exist or get called anywhere in the program unless we are running on a 
 			//32-bit version of Windows.
-			bool is64=CodeBase.ODEnvironment.Is64BitOperatingSystem();
+			//bool is64=CodeBase.ODEnvironment.Is64BitOperatingSystem();
 			bool platformUnix=Environment.OSVersion.Platform==PlatformID.Unix;
-      allowTopaz=(!platformUnix && !is64);
+			//allowTopaz=(!platformUnix && !is64);
 			if(platformUnix) {
 				TreeDocuments.ContextMenu=null;
 			}
-			if(allowTopaz){//Windows OS
+			//if(allowTopaz){//Windows OS
 				try {
 					sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 					panelNote.Controls.Add(sigBoxTopaz);
@@ -180,7 +180,7 @@ namespace OpenDental{
 					CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
 				}
 				catch { }
-			}
+			//}
 			//We always capture with a Suni device for now.
 			//TODO: In the future use a device locator in the xImagingDeviceManager
 			//project to return the appropriate general device control.
