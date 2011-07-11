@@ -307,7 +307,8 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM task WHERE TaskNum="+POut.Long(task.TaskNum);
 			Task oldtask=Crud.TaskCrud.SelectOne(command);
-			if(oldtask.DateTask!=task.DateTask
+			if(oldtask==null
+				|| oldtask.DateTask!=task.DateTask
 				|| oldtask.DateType!=task.DateType
 				|| oldtask.Descript!=task.Descript
 				|| oldtask.FromNum!=task.FromNum
