@@ -127,7 +127,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
-		///<summary>yyyyMMdd[HHmmss].  If not in that format, it returns minVal.</summary>
+		///<summary>yyyyMMdd[HHmm[ss]].  If not in that format, it returns minVal.</summary>
 		public DateTime GetDateTime(int fieldIndex) {
 			if(fieldIndex > Fields.Count-1) {
 				return DateTime.MinValue;
@@ -136,6 +136,9 @@ namespace OpenDentBusiness.HL7 {
 			try {
 				if(str.Length==8) {
 					return DateTime.ParseExact(str,"yyyyMMdd",DateTimeFormatInfo.InvariantInfo);
+				}
+				if(str.Length==12) {
+					return DateTime.ParseExact(str,"yyyyMMddHHmm",DateTimeFormatInfo.InvariantInfo);
 				}
 				if(str.Length==14) {
 					return DateTime.ParseExact(str,"yyyyMMddHHmmss",DateTimeFormatInfo.InvariantInfo);

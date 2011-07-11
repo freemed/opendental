@@ -506,6 +506,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRxEdit_Load(object sender, System.EventArgs e) {
+			butSend.Visible=false;//this is here temporarily until we actually have Rx send capability.
 			if(HideSendBut) {
 				butSend.Visible=false;
 			}
@@ -551,7 +552,6 @@ namespace OpenDental{
 			else{
 				labelDosageCode.Visible=false;
 				textDosageCode.Visible=false;
-				butSend.Visible=false;
 			}
 			textNotes.Text=RxPatCur.Notes;
 			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);

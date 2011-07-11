@@ -695,9 +695,6 @@ namespace OpenDental{
 				});
 			RefreshFullMessages();//after this, messages just get added to the list.
 			//But if checkIncludeAck is clicked,then it does RefreshMessages again.
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				butSendRx.Visible=false;
-			}
 		}
 
 		///<summary></summary>
@@ -724,6 +721,12 @@ namespace OpenDental{
 			textTime.Text=(DateTime.Now+TimeDelta).ToLongTimeString();
 			FillEmps();
 			FillMessageDefs();
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				butSendRx.Visible=true;
+			}
+			else{
+				butSendRx.Visible=false;
+			}
 		}
 		/*
 		///<summary>Here so it's parallel with other modules.</summary>

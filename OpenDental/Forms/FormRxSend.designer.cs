@@ -23,9 +23,11 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRxSend));
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -37,7 +39,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(650,429);
+			this.gridMain.Size = new System.Drawing.Size(650,388);
 			this.gridMain.TabIndex = 33;
 			this.gridMain.Title = "Rx Waiting to Send";
 			this.gridMain.TranslationName = "TableQueue";
@@ -74,10 +76,20 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label1
+			// 
+			this.label1.ForeColor = System.Drawing.Color.DarkRed;
+			this.label1.Location = new System.Drawing.Point(12,411);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(650,37);
+			this.label1.TabIndex = 250;
+			this.label1.Text = resources.GetString("label1.Text");
+			// 
 			// FormRxSend
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(675,493);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
@@ -94,5 +106,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
 		private UI.Button butSend;
+		private System.Windows.Forms.Label label1;
 	}
 }

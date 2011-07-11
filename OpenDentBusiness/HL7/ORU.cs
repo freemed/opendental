@@ -97,9 +97,9 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			seg.SetField(2,"OrderNum-1001");
 			seg.SetField(3,"FillOrder-1001");
 			seg.SetField(4,panel.ServiceId,panel.ServiceName,"LN");
-			seg.SetField(6,datetime.ToString("yyyyMMddhhmm"));
-			seg.SetField(7,datetime.ToString("yyyyMMddhhmm"));
-			seg.SetField(8,datetime.ToString("yyyyMMddhhmm"));
+			seg.SetField(6,datetime.ToString("yyyyMMddhhmmss"));
+			seg.SetField(7,datetime.ToString("yyyyMMddhhmmss"));
+			seg.SetField(8,datetime.ToString("yyyyMMddhhmmss"));
 			seg.SetField(13,panel.SpecimenCondition);
 			seg.SetField(15,panel.SpecimenSource);
 			seg.SetField(20,panel.LabNameAddress);
@@ -121,7 +121,7 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			seg.SetField(7,labresult.ObsRange);//Range. Example <100
 			seg.SetField(8,"N");//?
 			seg.SetField(11,"F");//OBX-11 is required.  F means final.
-			seg.SetField(14,labresult.DateTimeTest.ToString("yyyyMMddhhmm"));//OBX-14 datetime
+			seg.SetField(14,labresult.DateTimeTest.ToString("yyyyMMddhhmmss"));//OBX-14 datetime
 			msg.Segments.Add(seg);
 		}
 

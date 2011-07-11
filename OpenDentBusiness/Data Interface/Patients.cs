@@ -1249,6 +1249,19 @@ namespace OpenDentBusiness{
 			return PIn.Long(Db.GetScalar(command));
 		}
 
+		///<summary>Will return 0 if can't find an exact matching pat.  Because it does not include birthdate, it's not specific enough for most situations.</summary>
+		public static long GetPatNumByName(string lName,string fName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),lName,fName);
+			}
+			string command="SELECT PatNum FROM patient WHERE "
+				+"LName='"+POut.String(lName)+"' "
+				+"AND FName='"+POut.String(fName)+"' "
+				+"AND PatStatus!=4 "//not deleted
+				+"LIMIT 1";
+			return PIn.Long(Db.GetScalar(command));
+		}
+
 		/// <summary>When importing webforms, if it can't find an exact match, this method attempts a similar match.</summary>
 		public static List<Patient> GetSimilarList(string lName,string fName,DateTime birthdate) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

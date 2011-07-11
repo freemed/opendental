@@ -63,6 +63,7 @@ namespace OpenDentBusiness{
 			return Crud.ICD9Crud.SelectOne(iCD9Num);
 		}
 
+		///<summary>Directly from db.</summary>
 		public static bool CodeExists(string iCD9Code) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),iCD9Code);
