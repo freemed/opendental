@@ -111,6 +111,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static Medication GetMedication(long medNum) {
 			//No need to check RemotingRole; no call to db.
+			//If this ever fails some place, it's probably an indicator that we should consider using GetMedicationFromDb instead.
 			return (Medication)HList[medNum];
 		}
 
@@ -132,6 +133,9 @@ namespace OpenDentBusiness{
 		///<summary>Gets the medication name.  Also, generic in () if applicable.</summary>
 		public static string GetDescription(long medNum) {
 			//No need to check RemotingRole; no call to db.
+			if(HList==null) {
+				Refresh();
+			}
 			if(!HList.ContainsKey(medNum)) {
 				return "";
 			}
