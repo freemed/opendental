@@ -1433,9 +1433,10 @@ FROM insplan";
 				FROM patient
 				LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
 				LEFT JOIN patplan ON patient.PatNum=patplan.PatNum
-				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
+				LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum
+				LEFT JOIN insplan ON insplan.PlanNum=inssub.PlanNum
 				LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
-				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
+				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=inssub.PlanNum
 				AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0)/*may not be necessary*/
 				WHERE tempplanned.AmtPlanned>0 ";
 			if(!noIns) {//if we don't want patients without insurance
