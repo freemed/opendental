@@ -214,7 +214,6 @@ namespace OpenDental.Eclaims {
 			}
 			transactionCode=formData.GetFieldById("A04").valuestr;
 			predetermination=(transactionCode=="23"||transactionCode=="13");//Be sure to list all predetermination response types here!
-			//We are required to print 2 copies of the Dentaide form when it is not a predetermination form. Everything else requires only 1 copy.
 			if(copiesToPrint<=0) { //Show the form on screen if there are no copies to print.
 				ShowDisplayMessages();
 				CCDField fieldPayTo=formData.GetFieldById("F01");
@@ -232,13 +231,8 @@ namespace OpenDental.Eclaims {
 				}
 				if(autoPrint) {
 					if(responseStatus!="R") { //We are not required to automatically print rejection notices.
-						int numPrintCopies=((formId=="02" && !predetermination)?2:1);
-						//Print patient copies.
-						new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,true);
-						//Print dentist copies for assigned claims, but only for certain forms.
-						if(insSub!=null && insSub.AssignBen && (formId=="01" || formId=="03" || formId=="04" || formId=="06" || formId=="07")) {
-							new FormCCDPrint(etrans.Copy(),MessageText,numPrintCopies,false,false);
-						}
+						//Automatically print a patient copy only. We are never required to autoprint a dentist copy, but it can be done manually instead.
+						new FormCCDPrint(etrans.Copy(),MessageText,1,false,true);
 					}
 				}
 				if(formId=="05") { //Manual claim form
