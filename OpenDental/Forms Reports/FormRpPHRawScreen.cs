@@ -128,10 +128,10 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=@"SELECT ScreenDate,ProvName,County,county.CountyCode,
-				GradeSchool,school.SchoolCode,PlaceService,GradeLevel,Age,Birthdate,Race,Gender,Urgency,
+				site.Description AS schoolName,site.Note AS schoolCode,PlaceService,GradeLevel,Age,Birthdate,Race,Gender,Urgency,
 				HasCaries,EarlyChildCaries,CariesExperience,ExistingSealants,NeedsSealants,MissingAllTeeth,
 				Comments FROM screen
-				LEFT JOIN school ON screen.GradeSchool=school.SchoolName
+				LEFT JOIN site ON screen.GradeSchool=site.Description
 				LEFT JOIN county ON screen.County=county.CountyName
 				WHERE ScreenDate >= "+POut.Date(date1.SelectionStart)+" "
 				+"AND ScreenDate <= " +POut.Date(date2.SelectionStart);

@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		public long ScreenNum;
 		///<summary>The date of the screening.</summary>
 		public DateTime ScreenDate;
-		///<summary>FK to school.SchoolName, although it will not crash if key absent.</summary>
+		///<summary>FK to site.Description, although it will not crash if key absent.</summary>
 		public string GradeSchool;
 		///<summary>FK to county.CountyName, although it will not crash if key absent.</summary>
 		public string County;
