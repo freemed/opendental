@@ -975,6 +975,7 @@ namespace OpenDental{
 							Recalls.Update(RecallList[i]);
 						}
 					}
+					OnPatientSelected(0,"",false,"");
 					ModuleSelected(0);
 					//does not delete notes or plans, etc.
 				}
