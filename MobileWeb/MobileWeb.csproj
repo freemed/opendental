@@ -55,6 +55,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="a.aspx" />
     <Content Include="AppointmentDetails.aspx" />
     <Content Include="AppointmentFilter.aspx" />
     <Content Include="AppointmentList.aspx" />
@@ -123,6 +124,13 @@
     <Content Include="PatientDetails.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="a.aspx.cs">
+      <DependentUpon>a.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="a.aspx.designer.cs">
+      <DependentUpon>a.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AppointmentDetails.aspx.cs">
       <DependentUpon>AppointmentDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

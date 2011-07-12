@@ -99,7 +99,7 @@
             }
             // Set viewport
             if (jQTSettings.fixedViewport) {
-                hairextensions += '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"/>';
+                hairextensions += '<meta id="testViewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=10.0"/>';
             }
             // Set full-screen
             if (jQTSettings.fullScreen) {

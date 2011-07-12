@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+	<title></title>
 </head>
 <body>
 	<div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>

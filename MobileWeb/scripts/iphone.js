@@ -68,7 +68,29 @@ function TraversePage(){
 		var SectionToFill='#AppointmentListContents';
 		var MoveToURL='#AppointmentList';
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
-});
+    });
+
+
+    $('a[href="#AppointmentImage"]').click(function (e) {
+        //var UrlForFetchingData = this.attributes["linkattib"].value;
+        //var SectionToFill = '#AppointmentListContents';
+        var MoveToURL = '#AppointmentImage';
+        //ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+        // $(SectionToFill).append(MessageLoad);
+        //no slide effect
+        jQT.goTo(MoveToURL, ''); //do not use this line with tap event, it gives a 'Not able to tap element' error.
+        //FetchPage(UrlForFetchingData, SectionToFill)
+        //alert(window.innerWidth);
+        //window.innerWidth=500;
+        //alert(window.innerWidth);
+        //var mvp = document.getElementById('testViewport');
+        //mvp.removeAttribute('content');
+        //mvp.setAttribute('content', 'width=device-width, initial-scale=2.0, maximum-scale=10.0');
+        
+        
+
+    });
+   
 
     $('a[href="#PharmacyList"]').click(function (e) {
         //e.preventDefault();
@@ -264,8 +286,11 @@ $('.pharmacies').tap(function (e) {
         },
         showButtonPanel: true
     });
-	
-	$('.home').click(function(e) { // tap event logs out the user on ipod.
+
+    $('.home').click(function (e) { // tap event logs out the user on ipod.
+        //var mvp = document.getElementById('testViewport');
+       // mvp.removeAttribute('content');
+       // mvp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0');
 		jQT.goToReverse('#home','slide');	
 	});
 	

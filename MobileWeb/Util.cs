@@ -12,8 +12,6 @@ using OpenDentBusiness.Mobile;
 namespace MobileWeb {
 	public class Util {
 		public static string ErrorMessage="There has been an error in processing your request.";
-		private static bool IsMobileDBSet=false;
-		string previousConnectStr="";
 		
 		public void SetMobileDbConnectionOld() {
 			Logger.Information("In SetMobileDbConnection()");

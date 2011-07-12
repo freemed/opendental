@@ -88,7 +88,6 @@ namespace MobileWeb {
 				}else{
 					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,ProvNum,AppointmentDate,AppointmentDate);
 				}
-				
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
 			}
@@ -105,7 +104,15 @@ namespace MobileWeb {
 		public string GetProviderColor(Appointmentm ap) {
 			string HexColor="#FFFFFF";
 			try {
-				Providerm pv=Providerms.GetOne(CustomerNum,ap.ProvNum);
+				Providerm pv;
+				if(ap.IsHygiene) {
+					if(ap.ProvHyg==0) { //no hygenist
+						return HexColor;
+					}
+					pv=Providerms.GetOne(CustomerNum,ap.ProvHyg);
+				}else{
+					pv=Providerms.GetOne(CustomerNum,ap.ProvNum);
+				}
 				HexColor=ColorTranslator.ToHtml(pv.ProvColor);
 				return HexColor;
 			}
