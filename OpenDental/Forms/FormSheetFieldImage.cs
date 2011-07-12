@@ -41,9 +41,14 @@ namespace OpenDental {
 			if(PrefC.UsingAtoZfolder) {
 				comboFieldName.Items.Clear();
 				string[] files=Directory.GetFiles(SheetUtil.GetImagePath());
-				for(int i=0;i<files.Length;i++) {//remove offending file types (non image files)
-					if(files[i].EndsWith("db")) {
-						continue;
+				for(int i=0;i<files.Length;i++) {
+					//remove some common offending file types (non image files)
+					if(files[i].EndsWith("db")
+					  ||files[i].EndsWith("doc")
+					  ||files[i].EndsWith("pdf")
+					  ) 
+					{
+					  continue;
 					}
 					comboFieldName.Items.Add(Path.GetFileName(files[i]));
 				}
@@ -96,7 +101,16 @@ namespace OpenDental {
 		private void FillImage(){
 			textFullPath.Text=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),comboFieldName.Text);
 			if(File.Exists(textFullPath.Text)){
-				pictureBox.Image=Image.FromFile(textFullPath.Text);
+				try {
+					pictureBox.Image=Image.FromFile(textFullPath.Text);
+				}
+				catch {
+					pictureBox.Image=null;
+					textWidth2.Text="";
+					textHeight2.Text="";
+					MessageBox.Show("Invalid image type.");
+					return;
+				}
 				textWidth2.Text=pictureBox.Image.Width.ToString();
 				textHeight2.Text=pictureBox.Image.Height.ToString();
 			}
@@ -202,6 +216,13 @@ namespace OpenDental {
 			}
 			if(comboFieldName.Text==""){
 				MsgBox.Show(this,"Please enter a file name first.");
+				return;
+			}
+			try {//catch valid files that are not valid images.
+				Image.FromFile(textFullPath.Text);
+			}
+			catch {
+				MsgBox.Show(this,"Not a valid image type.");
 				return;
 			}
 			if(!File.Exists(textFullPath.Text)
