@@ -541,6 +541,7 @@ namespace OpenDental{
 			using(StreamReader sr=new StreamReader(Dlg.FileName)){
 				string line=sr.ReadLine();
 				while(line!=null){
+					Cursor=Cursors.WaitCursor;
 					fields=line.Split(new string[1] {"\t"},StringSplitOptions.None);
 					if(fields.Length>1 && fields[1]!=""){//skips blank fees
 						feeAmt=PIn.Double(fields[1]);

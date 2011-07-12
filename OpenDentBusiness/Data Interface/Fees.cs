@@ -274,6 +274,7 @@ namespace OpenDentBusiness{
 			fee.FeeSched=feeSchedNum;
 			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
 			Insert(fee);
+			RefreshCache();
 		}
 
 	}
