@@ -490,6 +490,61 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ClaimWithInvalidInsSubNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				//check 2 situations:
+				//1. claim.PlanNum=0 and inssub.PlanNum=0
+				command=@"SELECT COUNT(*) FROM claim,inssub WHERE claim.InsSubNum=inssub.InsSubNum AND claim.PlanNum=0 AND inssub.PlanNum=0 ";
+				int planCount=PIn.Int(Db.GetCount(command));
+				//2. claim.PlanNum=0 and inssub does not exist
+				command=@"SELECT COUNT(*) FROM claim WHERE PlanNum=0 AND InsSubNum NOT IN (SELECT InsSubNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
+				int existCount=PIn.Int(Db.GetCount(command));
+				int numFound=planCount+existCount;
+				if(numFound!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims with invalid InsSubNum: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command=@"SELECT claim.ClaimNum,claim.PatNum FROM claim,inssub WHERE claim.InsSubNum=inssub.InsSubNum AND claim.PlanNum=0 AND inssub.PlanNum=0 "
+					+"UNION "
+					+"SELECT ClaimNum,PatNum FROM claim WHERE PlanNum=0 AND InsSubNum NOT IN (SELECT InsSubNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
+				table=Db.GetTable(command);
+				long numberFixed=table.Rows.Count;
+				InsPlan plan=null;
+				InsSub sub=null;
+				if(numberFixed>0) {
+					log+=Lans.g("FormDatabaseMaintenance","List of patients who will need insurance information reentered:")+"\r\n";
+				}
+				for(int i=0;i<numberFixed;i++) {
+					plan=new InsPlan();//Create a dummy plan and carrier to attach claims and claim procs to.
+					plan.IsHidden=true;
+					plan.CarrierNum=Carriers.GetByNameAndPhone("UNKNOWN CARRIER","").CarrierNum;
+					InsPlans.Insert(plan);
+					long claimNum=PIn.Long(table.Rows[i]["ClaimNum"].ToString());
+					long patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+					sub=new InsSub();//Create inssubs and attach claim and procs to both plan and inssub.
+					sub.PlanNum=plan.PlanNum;
+					sub.Subscriber=PIn.Long(table.Rows[i]["PatNum"].ToString());
+					sub.SubscriberID="unknown";
+					InsSubs.Insert(sub);
+					command="UPDATE claim SET PlanNum="+plan.PlanNum+",InsSubNum="+sub.InsSubNum+" WHERE ClaimNum="+claimNum;
+					Db.NonQ(command);
+					command="UPDATE claimproc SET PlanNum="+plan.PlanNum+",InsSubNum="+sub.InsSubNum+" WHERE ClaimNum="+claimNum;
+					Db.NonQ(command);
+					Patient pat=Patients.GetLim(patNum);
+					log+="PatNum: "+pat.PatNum+" - "+Patients.GetNameFL(pat.LName,pat.FName,pat.Preferred,pat.MiddleI)+"\r\n";
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims with invalid InsSubNum fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ClaimWriteoffSum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);

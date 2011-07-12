@@ -317,6 +317,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ClaimWithInvalidInsSubNum(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimWriteoffSum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimPaymentCheckAmt(verbose,isCheck);//also fixes resulting deposit misbalances.
