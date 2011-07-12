@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 	///<summary>Add to end of list, do not change the order.</summary>
 	public enum EhrRestrictionType {
 		Birthdate,
-		Disease,
+		Problem,
 		Medication,
 		LabResult,
 		Gender

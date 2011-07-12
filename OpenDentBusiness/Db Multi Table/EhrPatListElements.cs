@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 					case EhrRestrictionType.Birthdate:
 						command+=",patient.Birthdate ";
 						break;
-					case EhrRestrictionType.Disease:
+					case EhrRestrictionType.Problem:
 						command+=",(SELECT disease.ICD9Num FROM disease WHERE disease.PatNum=patient.PatNum AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%')) `"+compStr+"` ";
 						break;
 					case EhrRestrictionType.LabResult:
@@ -98,7 +98,7 @@ namespace OpenDentBusiness {
 				case EhrRestrictionType.Birthdate:
 					filter="DATE_SUB(CURDATE(),INTERVAL "+compStr+" YEAR)"+GetOperandText(element.Operand)+"Birthdate ";
 					break;
-				case EhrRestrictionType.Disease:
+				case EhrRestrictionType.Problem:
 					filter="`"+compStr+"`"+" IS NOT NULL ";//Has the disease.
 					break;
 				case EhrRestrictionType.LabResult:

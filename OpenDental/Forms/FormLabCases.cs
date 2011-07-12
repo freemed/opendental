@@ -351,6 +351,12 @@ namespace OpenDental{
 			#endregion
 			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
 			pagesPrinted++;
+			if(yPos==-1) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
 			g.Dispose();
 		}
 
