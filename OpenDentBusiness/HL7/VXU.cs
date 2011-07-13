@@ -63,7 +63,7 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 		private void PID(Patient pat){
 			seg=new SegmentHL7(SegmentName.PID);
 			seg.SetField(0,"PID");
-			seg.SetField(3,pat.PatNum.ToString());
+			seg.SetField(3,pat.PatNum.ToString(),"","","","MR");//component 5 is "identifier type code".  See table 0203. MR=medical record number
 			seg.SetField(5,pat.LName,pat.FName);
 			if(pat.Birthdate.Year>1880) {//7: dob optional
 				seg.SetField(7,pat.Birthdate.ToString("yyyyMMdd"));
@@ -92,12 +92,17 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 			seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));
 			seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));
 			seg.SetField(5,vaccineDef.CVXCode,vaccineDef.VaccineName,"HL70292");
-			seg.SetField(6,vaccine.AdministeredAmt.ToString());
+			if(vaccine.AdministeredAmt==0){
+				seg.SetField(6,"999");
+			}
+			else{
+				seg.SetField(6,vaccine.AdministeredAmt.ToString());
+			}
 			if(vaccine.DrugUnitNum!=0){
 				DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
 				seg.SetField(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"ISO+");
 			}
-			seg.SetField(15,vaccine.LotNumber);//seems to be optional in the examples.
+			seg.SetField(15,vaccine.LotNumber);//optional.
 			//17-Manufacturer.  Is this really optional?
 			if(vaccineDef.DrugManufacturerNum!=0) {//always?
 				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);

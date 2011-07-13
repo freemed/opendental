@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		public long PatNum;
 		///<summary></summary>
 		public string CompName;
-		///<summary>NameLF</summary>
+		///<summary>PatNum-NameLF</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string PatientName;
 

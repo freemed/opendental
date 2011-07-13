@@ -70,6 +70,39 @@ namespace OpenDentBusiness.HL7 {
 			msg.Segments.Add(seg);
 		}
 
+		/*From	http://www.dt7.com/cdc/sampmsgs.html  example 1:
+		Vaccine Adverse Event Report (VAERS form) (unfortunately, does not seem adaptable to our situation)
+		MSH|^~\&||GA0000||VAERS PROCESSOR|20010331605||ORU^RO1|20010422GA03|T|2.3.1|||AL|
+		PID|||1234^^^^SR~1234-12^^^^LR~00725^^^^MR||Doe^John^Fitzgerald^JR^^^L||20001007|M||2106-3^White^HL70005|123 Peachtree St^APT 3B^Atlanta^GA^30210^^M^^GA067||(678) 555-1212^^PRN|
+		NK1|1|Jones^Jane^Lee^^RN|VAB^Vaccine administered by (Name)^HL70063|
+		NK1|2|Jones^Jane^Lee^^RN|FVP^Form completed by (Name)-Vaccine provider^HL70063|101 Main Street^^Atlanta^GA^38765^^O^^GA121||(404) 554-9097^^WPN|
+		ORC|CN|||||||||||1234567^Welby^Marcus^J^Jr^Dr.^MD^L|||||||||Peachtree Clinic|101 Main Street^^Atlanta^GA^38765^^O^^GA121|(404) 554-9097^^WPN|101 Main Street^^Atlanta^GA^38765^^O^^GA121|
+		OBR|1|||^CDC VAERS-1 (FDA) Report|||20010316|
+		OBX|1|NM|21612-7^Reported Patient Age^LN||05|mo^month^ANSI|
+		OBX|1|TS|30947-6^Date form completed^LN||20010316|
+		OBX|2|FT|30948-4^Vaccination adverse events and treatment, if any^LN|1|fever of 106F, with vomiting, seizures, persistent crying lasting over 3 hours, loss of appetite|
+		OBX|3|CE|30949-2^Vaccination adverse event outcome^LN|1|E^required emergency room/doctor visit^NIP005|
+		OBX|4|CE|30949-2^Vaccination adverse event outcome^LN|1|H^required hospitalization^NIP005|
+		OBX|5|NM|30950-0^Number of days hospitalized due to vaccination adverse event^LN|1|02|d^day^ANSI|
+		OBX|6|CE|30951-8^Patient recovered^LN||Y^Yes^ HL70239|
+		OBX|7|TS|30952-6^Date of vaccination^LN||20010216|
+		OBX|8|TS|30953-4^Adverse event onset date and time^LN||200102180900|
+		OBX|9|FT|30954-2^Relevant diagnostic tests/lab data^LN||Electrolytes, CBC, Blood culture|
+		OBR|2|||30955-9^All vaccines given on date listed in #10^LN|
+		OBX|1|CE30955-9&30956-7^Vaccine type^LN|1|08^HepB-Adolescent/pediatric^CVX|
+		OBX|2|CE|30955-9&30957-5^Manufacturer^LN|1|MSD^Merck^MVX|
+		OBX|3|ST|30955-9&30959-1^Lot number^LN|1|MRK12345|
+		OBX|4|CE|30955-9&30958-3^ Route^LN|1|IM^Intramuscular ^HL70162|
+		OBX|5|CE|30955-9&31034-2^Site^LN|1|LA^Left arm^ HL70163|
+		OBX|6|NM|30955-9&30960-9^Number of previous doses^LN|1|01I
+		OBX|7|CE|CE|30955-9&30956-7^Vaccine type^LN|2|50^DTaP-Hib^CVX|
+		OBX|8|CE|30955-9&30957-5^ Manufacturer^LN|2|WAL^Wyeth_Ayerst^MVX|
+		OBX|9|ST|30955-9&30959-1^Lot number^LN|2|W46932777|
+		OBX|10|CE|30955-9&30958-3^ Route^LN|2|IM^Intramuscular^HL70162|
+		  
+		 */
+
+
 		/*This is the example that we are using for incorporating lab results in our other test.
 		  It is simpler than the above examples.  We might want to use it instead.
 		MSH|^~\&|KAM|DGI|Y|OU|20100920093000||ORU^R01^ORU_R01|20100920093000|P|2.3.1
@@ -80,7 +113,7 @@ OBX|2|NM|14646-4^HDL cholesterol^LN|333123|43|mg/dl|>=40| N|||F|||20100920083000
 OBX|3|NM|2089-1^LDL cholesterol^LN|333123|84|mg/dl|<100| N|||F|||20100920083000
 OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*/
 
-		/*This is example #5.  Hepatitis C is a legitimate reportable syndrome which would be reported to public health
+		/*This is example #5 from the mu site.  Hepatitis C is a legitimate reportable syndrome which would be reported to public health
 		MSH|^~\&|EHR Application^2.16.840.1.113883.3.72.7.1^HL7|EHR Facility^2.16.840.1.113883.3.72.7.2^HL7|PH Application^2.16.840.1.113883.3.72.7.3^HL7|PH Facility^2.16.840.1.113883.3.72.7.4^HL7|20110316102334||ORU^R01^ORU_R01|NIST-110316102333943|P|2.5.1|||||||||PHLabReport-Ack^^2.16.840.1.114222.4.10.3^ISO
 		SFT|NIST Lab, Inc.|3.6.23|A-1 Lab System|6742873-12||20080303
 		PID|||686774009^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||Takamura^Michael||19820815|M||2028-9^Asian^HL70005|3567 Maple Street^^Oakland^CA^94605^USA^M||^PRN^^^^510^6658876|||||||||N^Not Hispanic or Latino^HL70189
@@ -96,7 +129,7 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			seg.SetField(1,"1");
 			seg.SetField(2,"OrderNum-1001");
 			seg.SetField(3,"FillOrder-1001");
-			seg.SetField(4,panel.ServiceId,panel.ServiceName,"LN");
+			seg.SetField(4,panel.ServiceId,panel.ServiceName,"LN");//eg 10676-5, Hepatitis C Virus RNA 
 			seg.SetField(6,datetime.ToString("yyyyMMddhhmmss"));
 			seg.SetField(7,datetime.ToString("yyyyMMddhhmmss"));
 			seg.SetField(8,datetime.ToString("yyyyMMddhhmmss"));
@@ -108,6 +141,9 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			msg.Segments.Add(seg);
 		}
 
+		//OBR|1|||30955-9^Vaccine Given^LN|
+		//OBX|1|CE30955-9&30956-7^Vaccine type^LN|1|08^HepB-Adolescent/pediatric^CVX|
+
 		/// <summary>idx passed in will be zero-based. Will be converted to 1-based.</summary>
 		private void OBX(LabResult labresult,int idx) {
 			seg=new SegmentHL7(SegmentName.OBX);
@@ -116,9 +152,9 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 			seg.SetField(2,"NM");//ValueType. NM=numeric, referring to the value that will follow in OBX-5
 			seg.SetField(3,labresult.TestID,labresult.TestName,"LN");//TestPerformed  ID^text^codingSystem.  eg. 10676-5^Hepatitis C Virus RNA^LN
 			seg.SetField(4,"1");//?
-			seg.SetField(5,labresult.ObsValue);//Value. Type based on OBX-2.  eg. 43.
-			seg.SetField(6,labresult.ObsUnits);//Units. Example ml/dl.
-			seg.SetField(7,labresult.ObsRange);//Range. Example <100
+			seg.SetField(5,labresult.ObsValue);//Value. Type based on OBX-2.  eg. 850000.
+			seg.SetField(6,labresult.ObsUnits);//Units. Example iU/mL^international units per mililiter
+			seg.SetField(7,labresult.ObsRange);//Range. Example High Viral Load >= 850000iU/mL
 			seg.SetField(8,"N");//?
 			seg.SetField(11,"F");//OBX-11 is required.  F means final.
 			seg.SetField(14,labresult.DateTimeTest.ToString("yyyyMMddhhmmss"));//OBX-14 datetime
