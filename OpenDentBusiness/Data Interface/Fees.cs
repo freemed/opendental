@@ -259,7 +259,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>schedI is the currently displayed index of the fee schedule to save to.  Empty fees never even make it this far and should be skipped earlier in the process.</summary>
+		///<summary>schedI is the currently displayed index of the fee schedule to save to.  If an amt of -1 is passed in, then it indicates a "blank" entry which will cause deletion of any existing fee.</summary>
 		public static void Import(string codeText,double amt,long feeSchedNum) {
 			//No need to check RemotingRole; no call to db.
 			if(!ProcedureCodes.IsValidCode(codeText)){
@@ -268,6 +268,10 @@ namespace OpenDentBusiness{
 			Fee fee=GetFee(ProcedureCodes.GetCodeNum(codeText),feeSchedNum);
 			if(fee!=null){
 				Delete(fee);
+			}
+			if(amt==-1) {
+				RefreshCache();
+				return;
 			}
 			fee=new Fee();
 			fee.Amount=amt;

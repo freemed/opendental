@@ -543,8 +543,13 @@ namespace OpenDental{
 				while(line!=null){
 					Cursor=Cursors.WaitCursor;
 					fields=line.Split(new string[1] {"\t"},StringSplitOptions.None);
-					if(fields.Length>1 && fields[1]!=""){//skips blank fees
-						feeAmt=PIn.Double(fields[1]);
+					if(fields.Length>1){// && fields[1]!=""){//we no longer skip blank fees
+						if(fields[1]=="") {
+							feeAmt=-1;
+						}
+						else {
+							feeAmt=PIn.Double(fields[1]);
+						}
 						Fees.Import(fields[0],feeAmt,SchedNum);
 					}
 					line=sr.ReadLine();
