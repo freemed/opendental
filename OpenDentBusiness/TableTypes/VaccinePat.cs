@@ -17,11 +17,11 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEnd;
-		///<summary>Size of the dose of the vaccine.  999 indicates unknown.</summary>
+		///<summary>Size of the dose of the vaccine.  0 indicates unknown and gets converted to 999 on HL7 output.</summary>
 		public float AdministeredAmt;
 		///<summary>FK to drugunit.DrugUnitNum. Unit of measurement of the AdministeredAmt.  0 represents null.</summary>
 		public long DrugUnitNum;
-		///<summary></summary>
+		///<summary>Optional</summary>
 		public string LotNumber;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
