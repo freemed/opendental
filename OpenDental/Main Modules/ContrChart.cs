@@ -20,7 +20,7 @@ using Tao.Platform.Windows;
 using SparksToothChart;
 using OpenDentBusiness;
 using CodeBase;
-#if DEBUG
+#if EHRTEST
 using EHR;
 #endif
 
@@ -3614,7 +3614,7 @@ namespace OpenDental{
 		}
 
 		private void Tool_EHR_Click(bool onLoadShowOrders) {
-#if DEBUG
+#if EHRTEST
 				//so we can step through for debugging.
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
 				((FormEHR)FormOpenDental.FormEHR).OnShowLaunchOrders=onLoadShowOrders;
@@ -3702,7 +3702,7 @@ namespace OpenDental{
 					Tool_EHR_Click(true);
 				}
 #else
-				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+			Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
 				object[] args=new object[] {PatCur.PatNum};
 				type.InvokeMember("PatNum",System.Reflection.BindingFlags.SetField,null,FormOpenDental.FormEHR,args);
 				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,null);

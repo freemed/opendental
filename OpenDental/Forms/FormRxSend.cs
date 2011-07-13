@@ -212,7 +212,11 @@ namespace OpenDental {
 			//msgbox.ShowDialog();
 			Cursor=Cursors.WaitCursor;
 			try {
-				EHR.EhrEmail.Send("10.6 SCRIPT for NEWRX","SCRIPT.txt",strb.ToString());
+				#if EHRTEST
+					EHR.EhrEmail.Send("10.6 SCRIPT for NEWRX","SCRIPT.txt",strb.ToString());
+				#else
+					//can't send email unless in debug/ehrtest mode.
+				#endif
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
