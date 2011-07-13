@@ -3111,13 +3111,14 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,System.EventArgs e) {
+			//this is a dual purpose button.  It sometimes deletes subscribers (inssubs), and sometimes the plan itself. 
 			if(IsNewPlan) {
 				DialogResult=DialogResult.Cancel;//original plan will get deleted in closing event.
 				return;
 			}
 			if(comboLinked.Items.Count>0) {//Other subscribers are present.  
 				if(SubCur==null) {//viewing from big list
-					MsgBox.Show(this,"Subscribers must be removed individually before deleting plan.");
+					MsgBox.Show(this,"Subscribers must be removed individually before deleting plan.");//by dropping, then using this same delete button.
 					return;
 				}
 				else {//Just detach subscriber.
@@ -3135,7 +3136,8 @@ namespace OpenDental{
 					return;
 				}
 			}
-			//this is the only subscriber, or this is the big list and there are no subscribers.
+			//This is the only subscriber, so delete inssub and insplan
+			//Or this is the big list and there are no subscribers, so just delete the insplan.
 			if(!MsgBox.Show(this,true,"Delete Plan?")) {
 				return;
 			}

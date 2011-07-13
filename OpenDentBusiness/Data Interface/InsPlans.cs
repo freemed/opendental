@@ -942,14 +942,21 @@ namespace OpenDentBusiness {
 			if(table.Rows.Count!=0) {
 				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a plan attached to procedures."));
 			}
-			//get a list of all patplans with this planNum
-			command="SELECT PatPlanNum FROM patplan "
-				+"WHERE PlanNum = "+plan.PlanNum.ToString();
+			//throw error if more than one inssub
+			command="SELECT InsSubNum FROM inssub WHERE PlanNum = "+POut.Long(plan.PlanNum);
 			table=Db.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++) {
-				//benefits with this PatPlanNum are also deleted here
-				PatPlans.Delete(PIn.Long(table.Rows[i][0].ToString()));
+			if(table.Rows.Count>1) {
+				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a plan with more than one subscriber."));
 			}
+			else if(table.Rows.Count==1) {//if there's only one inssub, delete it.
+				long insSubNum=PIn.Long(table.Rows[0]["InsSubNum"].ToString());
+				command="SELECT PatPlanNum FROM patplan WHERE InsSubNum = "+POut.Long(insSubNum);
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					//benefits with this PatPlanNum are also deleted here
+					PatPlans.Delete(PIn.Long(table.Rows[i]["PatPlanNum"].ToString()));
+				}
+			}		
 			command="DELETE FROM benefit WHERE PlanNum="+POut.Long(plan.PlanNum);
 			Db.NonQ(command);
 			command="DELETE FROM claimproc WHERE PlanNum="+POut.Long(plan.PlanNum);//just estimates
