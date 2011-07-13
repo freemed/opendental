@@ -35,7 +35,8 @@ namespace OpenDentBusiness{
 					list[i].PatientName="";
 				}
 				else {
-					list[i].PatientName=Patients.GetNameLF(table.Rows[i]["LName"].ToString()
+					list[i].PatientName=table.Rows[i]["PatNum"].ToString()+"-"
+						+Patients.GetNameLF(table.Rows[i]["LName"].ToString()
 						,table.Rows[i]["FName"].ToString()
 						,table.Rows[i]["Preferred"].ToString()
 						,table.Rows[i]["MiddleI"].ToString());

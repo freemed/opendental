@@ -400,7 +400,12 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(Userods.GetUser(logList[i].UserNum).UserName);
 				}
-				row.Cells.Add(logList[i].PermType.ToString());
+				if(logList[i].PermType==Permissions.ChartModule) {
+					row.Cells.Add("ChartModuleViewed");
+				}
+				else {
+					row.Cells.Add(logList[i].PermType.ToString());
+				}
 				row.Cells.Add(logList[i].CompName);
 				row.Cells.Add(logList[i].LogText);
 				grid.Rows.Add(row);

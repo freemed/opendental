@@ -3009,7 +3009,7 @@ namespace OpenDental{
 						e.Cancel=true;
 						return;
 					}
-					SecurityLogs.MakeLogEntry(Permissions.ChartModule,CurPatNum,"Viewed.");
+					SecurityLogs.MakeLogEntry(Permissions.ChartModule,CurPatNum,"");
 					break;
 				case 5:
 					if(!Security.IsAuthorized(Permissions.ImagesModule)){
