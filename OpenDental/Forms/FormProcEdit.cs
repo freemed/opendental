@@ -2532,32 +2532,37 @@ namespace OpenDental{
 			textUser.Text=Userods.GetName(ProcCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
-			if(ProcCur.SigIsTopaz){
-				if(ProcCur.Signature!=""){
+			if(ProcCur.SigIsTopaz) {
+				if(ProcCur.Signature!="") {
 					//if(allowTopaz){
-						sigBox.Visible=false;
-						sigBoxTopaz.Visible=true;
-						CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
-						CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
-						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
-						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+					sigBox.Visible=false;
+					sigBoxTopaz.Visible=true;
+					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+					CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,ProcCur.Signature);
+					//older notes may have been signed with zeros due to a bug.  We still want to show the sig in that case.
+					//but if a sig is not showing, then set the key string to try to get it to show.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
 						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,ProcCur.Signature);
-						//older notes may have been signed with zeros due to a bug.  We still want to show the sig in that case.
-						//but if a sig is not showing, then set the key string to try to get it to show.
-						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
-							CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
-							CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,ProcCur.Signature);
-						}
-						//if still not showing, then it must be invalid
-						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
-							labelInvalidSig.Visible=true;
-						}
+					}
+					//If sig is not showing, then try encryption mode 3 for signatures signed with old SigPlusNet.dll.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,3);//Unknown mode (told to use via TopazSystems)
+						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,ProcCur.Signature);
+					}
+					//if still not showing, then it must be invalid
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						labelInvalidSig.Visible=true;
+					}
 					//}
 				}
 			}
-			else{
+			else {
 				if(ProcCur.Signature!=null && ProcCur.Signature!="") {
 					sigBox.Visible=true;
 					if(sigBoxTopaz!=null) {

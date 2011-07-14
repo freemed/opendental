@@ -93,11 +93,11 @@ namespace UnitTests {
 			Cursor=Cursors.Default;
 		}
 
-		private void butRxNorm_Click(object sender,EventArgs e) {
+		private void butTopaz_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			textResults.Text="";
 			Application.DoEvents();
-			textResults.Text+=RxNormT.RunAll();
+			textResults.Text+=TopazT.RunAll();
 			Cursor=Cursors.Default;
 		}
 

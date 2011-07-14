@@ -1179,23 +1179,28 @@ namespace OpenDental{
 			sigBox.Visible=true;
 			sigBox.SetTabletState(0);//never accepts input here
 			//Topaz box is not supported in Unix, since the required dll is Windows native.
-			if(selectionDoc.SigIsTopaz){
+			if(selectionDoc.SigIsTopaz) {
 				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
 					//if(allowTopaz) {	
-						sigBox.Visible=false;
-						sigBoxTopaz.Visible=true;
-                        CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-                        CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-                        CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
-                        string keystring=GetHashString(selectionDoc);
-                        CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
-                        CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
-                        CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
-                        CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,selectionDoc.Signature);						
-						sigBoxTopaz.Refresh();
-						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
-							labelInvalidSig.Visible=true;
-						}
+					sigBox.Visible=false;
+					sigBoxTopaz.Visible=true;
+					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+					string keystring=GetHashString(selectionDoc);
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+					CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,selectionDoc.Signature);
+					sigBoxTopaz.Refresh();
+					//If sig is not showing, then try encryption mode 3 for signatures signed with old SigPlusNet.dll.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,3);//Unknown mode (told to use via TopazSystems)
+						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,selectionDoc.Signature);
+					}
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						labelInvalidSig.Visible=true;
+					}
 					//}
 				}
 			}
@@ -1203,7 +1208,7 @@ namespace OpenDental{
 				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
 					sigBox.Visible=true;
 					//if(allowTopaz) {	
-						sigBoxTopaz.Visible=false;
+					sigBoxTopaz.Visible=false;
 					//}
 					sigBox.ClearTablet();
 					//sigBox.SetSigCompressionMode(0);

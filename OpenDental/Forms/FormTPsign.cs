@@ -270,23 +270,28 @@ namespace OpenDental{
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
 			proctpList=ProcTPs.RefreshForTP(TPcur.TreatPlanNum);
-			if(TPcur.SigIsTopaz){
+			if(TPcur.SigIsTopaz) {
 				if(TPcur.Signature!="") {
 					//if(allowTopaz) {
-						sigBox.Visible=false;
-						sigBoxTopaz.Visible=true;
-                        CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);						
-						string keystring=TreatPlans.GetHashString(TPcur,proctpList);
-                        CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
-						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
-						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high encryption
+					sigBox.Visible=false;
+					sigBoxTopaz.Visible=true;
+					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+					string keystring=TreatPlans.GetHashString(TPcur,proctpList);
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high encryption
+					CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,TPcur.Signature);
+					sigBoxTopaz.Refresh();
+					//If sig is not showing, then try encryption mode 3 for signatures signed with old SigPlusNet.dll.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,3);//Unknown mode (told to use via TopazSystems)
 						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,TPcur.Signature);
-						sigBoxTopaz.Refresh();
-						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
-							labelInvalidSig.Visible=true;
-						}
+					}
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						labelInvalidSig.Visible=true;
+					}
 					//}
 				}
 			}

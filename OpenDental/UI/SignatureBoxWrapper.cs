@@ -63,36 +63,41 @@ namespace OpenDental.UI {
 			}
 		}
 
-		public void FillSignature(bool sigIsTopaz,string keyData,string signature){
+		public void FillSignature(bool sigIsTopaz,string keyData,string signature) {
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
-			if(sigIsTopaz){
-				if(signature!=""){
+			if(sigIsTopaz) {
+				if(signature!="") {
 					//if(allowTopaz){
-						sigBox.Visible=false;
-						sigBoxTopaz.Visible=true;
-						CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
-						CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
-						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
-						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+					sigBox.Visible=false;
+					sigBoxTopaz.Visible=true;
+					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+					CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,signature);
+					//older items may have been signed with zeros due to a bug.  We still want to show the sig in that case.
+					//but if a sig is not showing, then set the key string to try to get it to show.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,keyData);
 						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,signature);
-						//older items may have been signed with zeros due to a bug.  We still want to show the sig in that case.
-						//but if a sig is not showing, then set the key string to try to get it to show.
-						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
-							CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,keyData);
-							CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,signature);
-						}
-						//if still not showing, then it must be invalid
-						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
-							labelInvalidSig.Visible=true;
-						}
-						CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
+					}
+					//If sig is not showing, then try encryption mode 3 for signatures signed with old SigPlusNet.dll.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,3);//Unknown mode (told to use via TopazSystems)
+						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,signature);
+					}
+					//If sig still not showing it must be invalid.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						labelInvalidSig.Visible=true;
+					}
+					CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
 					//}
 				}
 			}
-			else{
+			else {
 				if(signature!=null && signature!="") {
 					sigBox.Visible=true;
 					sigBoxTopaz.Visible=false;

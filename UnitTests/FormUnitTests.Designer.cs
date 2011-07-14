@@ -41,7 +41,7 @@ namespace UnitTests {
 			this.radioSchema1 = new System.Windows.Forms.RadioButton();
 			this.radioSchema2 = new System.Windows.Forms.RadioButton();
 			this.label6 = new System.Windows.Forms.Label();
-			this.butRxNorm = new System.Windows.Forms.Button();
+			this.butTopaz = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// textResults
@@ -204,18 +204,18 @@ namespace UnitTests {
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(547,18);
 			this.label6.TabIndex = 27;
-			this.label6.Text = "Checks specific drugs in the RxNorm table for matching expected results.";
+			this.label6.Text = "Checks signatures from both old and new Topaz dlls.";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// butRxNorm
+			// butTopaz
 			// 
-			this.butRxNorm.Location = new System.Drawing.Point(12,104);
-			this.butRxNorm.Name = "butRxNorm";
-			this.butRxNorm.Size = new System.Drawing.Size(75,23);
-			this.butRxNorm.TabIndex = 26;
-			this.butRxNorm.Text = "RxNorm";
-			this.butRxNorm.UseVisualStyleBackColor = true;
-			this.butRxNorm.Click += new System.EventHandler(this.butRxNorm_Click);
+			this.butTopaz.Location = new System.Drawing.Point(12,104);
+			this.butTopaz.Name = "butTopaz";
+			this.butTopaz.Size = new System.Drawing.Size(75,23);
+			this.butTopaz.TabIndex = 26;
+			this.butTopaz.Text = "Topaz";
+			this.butTopaz.UseVisualStyleBackColor = true;
+			this.butTopaz.Click += new System.EventHandler(this.butTopaz_Click);
 			// 
 			// FormUnitTests
 			// 
@@ -223,7 +223,7 @@ namespace UnitTests {
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(757,807);
 			this.Controls.Add(this.label6);
-			this.Controls.Add(this.butRxNorm);
+			this.Controls.Add(this.butTopaz);
 			this.Controls.Add(this.radioSchema2);
 			this.Controls.Add(this.radioSchema1);
 			this.Controls.Add(this.butSchema);
@@ -269,7 +269,7 @@ namespace UnitTests {
 		private System.Windows.Forms.RadioButton radioSchema1;
 		private System.Windows.Forms.RadioButton radioSchema2;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Button butRxNorm;
+		private System.Windows.Forms.Button butTopaz;
 	}
 }
 

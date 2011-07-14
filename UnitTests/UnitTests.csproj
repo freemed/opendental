@@ -100,7 +100,7 @@
     <Compile Include="BenefitT.cs" />
     <Compile Include="CarrierT.cs" />
     <Compile Include="ClaimT.cs" />
-    <Compile Include="RxNormT.cs" />
+    <Compile Include="TopazT.cs" />
     <Compile Include="InsSubT.cs" />
     <Compile Include="CoreTypesT.cs" />
     <Compile Include="FeeSchedT.cs" />

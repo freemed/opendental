@@ -2201,6 +2201,11 @@ namespace OpenDental{
 					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
 					CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,PlanList[gridPlans.SelectedIndices[0]-1].Signature);
 					sigBoxTopaz.Refresh();
+					//If sig is not showing, then try encryption mode 3 for signatures signed with old SigPlusNet.dll.
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,3);//Unknown mode (told to use via TopazSystems)
+						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,PlanList[gridPlans.SelectedIndices[0]-1].Signature);
+					}
 					sigBitmap=new Bitmap(362,79);
 					sigBoxTopaz.DrawToBitmap(sigBitmap,new Rectangle(0,0,362,79));//GetBitmap would probably work.
 					Controls.Remove(sigBoxTopaz);
