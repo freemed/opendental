@@ -1276,7 +1276,7 @@ namespace OpenDental{
 			checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
 			textProblemsIndicateNone.Text=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone));
 			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone));
-			textAllergiesIndicateNone.Text=AllergyDefs.GetOne(PrefC.GetLong(PrefName.AllergiesIndicateNone)).Description;
+			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {

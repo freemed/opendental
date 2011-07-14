@@ -117,7 +117,7 @@ namespace OpenDentBusiness{
 			return allergyDefList;
 		}
 
-		/// <summary>Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.</summary>
+		///<summary>Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.</summary>
 		public static string GetSnomedAllergyDesc(SnomedAllergy snomed) {
 			string result;
 			switch(snomed){
@@ -156,6 +156,17 @@ namespace OpenDentBusiness{
 					break;
 			}
 			return result;
+		}
+
+		///<summary>Returns the name of the allergy. Returns an empty string if allergyDefNum=0.</summary>
+		public static string GetDescription(long allergyDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),allergyDefNum);
+			}
+			if(allergyDefNum==0) {
+				return "";
+			}
+			return Crud.AllergyDefCrud.SelectOne(allergyDefNum).Description;
 		}
 
 	}
