@@ -954,6 +954,7 @@ namespace OpenDental{
 			List<long> pinAptNums=new List<long>();
 			pinAptNums.Add(apt.AptNum);
 			GotoModule.PinToAppt(pinAptNums,SelectedPatNum);
+			//no securitylog entry.  It will happen when they drag off pinboard.
 			gridMain.SetSelected(false);
 			List<long> excludePatNums=new List<long>();
 			excludePatNums.Add(SelectedPatNum);
@@ -997,6 +998,7 @@ namespace OpenDental{
 			}
 			WindowState=FormWindowState.Minimized;
 			GotoModule.PinToAppt(pinAptNums,SelectedPatNum);
+			//no securitylog entry needed.  It will be made as each appt is dragged off pinboard.
 			gridMain.SetSelected(false);
 			FillMain(excludePatNums);
 		}

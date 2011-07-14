@@ -625,6 +625,7 @@ namespace OpenDental{
 				apt.ClinicNum=curOp.ClinicNum;
 				Appointments.Update(apt,oldApt);
 				oResult=OtherResult.CreateNew;
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString());
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -637,6 +638,7 @@ namespace OpenDental{
 			else{
 				DateJumpToString=recall.DateDue.ToShortDateString();
 			}
+			//no securitylog entry needed here.  That will happen when it's dragged off pinboard.
 			DialogResult=DialogResult.OK;
 		}
 
@@ -683,6 +685,7 @@ namespace OpenDental{
 				else {
 					DateJumpToString=recall.DateDue.ToShortDateString();
 				}
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString());
 			}
 			string userMsg="";
 			if(noRecalls > 0){
