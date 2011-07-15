@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace OpenDentBusiness{
 
-	///<summary>Since users not allowed to edit, Refresh only gets run the first time it's needed.</summary>
 	public class ElectIDs{
 		private static ElectID[] list;
 
@@ -36,17 +35,16 @@ namespace OpenDentBusiness{
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			list=Crud.ElectIDCrud.TableToList(table).ToArray();
-			/* Commented out so that Ryan can refer back to it. This comment should be deleted.
-			List=new ElectID[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new ElectID();
-				List[i].ElectIDNum   = PIn.Long   (table.Rows[i][0].ToString());
-				List[i].PayorID      = PIn.String(table.Rows[i][1].ToString());
-				List[i].CarrierName  = PIn.String(table.Rows[i][2].ToString());
-				List[i].IsMedicaid   = PIn.Bool  (table.Rows[i][3].ToString());
-				List[i].ProviderTypes= PIn.String(table.Rows[i][4].ToString());
-				List[i].Comments     = PIn.String(table.Rows[i][5].ToString());
-			}*/
+		}
+
+		public static void Insert(ElectID electID) {
+			//No need to check RemotingRole; no call to db.
+			Crud.ElectIDCrud.Insert(electID);
+		}
+
+		public static void Update(ElectID electID) {
+			//No need to check RemotingRole; no call to db.
+			Crud.ElectIDCrud.Update(electID);
 		}
 
 		///<summary></summary>

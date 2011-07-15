@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 
-	///<summary>Corresponds to the electid table in the database. Never editable by users.  We keep this table updated with new numbers as part of upgrades, so never edit this table as it will mess up our primary keys.  Helps with entering elecronic/payor id's as well as keeping track of the specific carrier requirements. Only used by the X12 format.</summary>
+	///<summary>Corresponds to the electid table in the database. Helps with entering elecronic/payor id's as well as keeping track of the specific carrier requirements. Only used by the X12 format.</summary>
 	[Serializable]
 	public class ElectID:TableBase{
 		///<summary>Primary key.</summary>
@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public long ElectIDNum;
 		///<summary>aka Electronic ID.  A simple string.</summary>
 		public string PayorID;
-		///<summary>As published. Not editable. Used when doing a search.</summary>
+		///<summary>Used when doing a search.</summary>
 		public string CarrierName;
 		///<summary>True if medicaid. Then, the billing and treating providers will have their Medicaid ID's attached.</summary>
 		public bool IsMedicaid;

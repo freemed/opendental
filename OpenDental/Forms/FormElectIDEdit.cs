@@ -10,6 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormElectIDEdit:Form {
 
+		///<summary>Must be set before calling Show() or ShowDialog().</summary>
 		public ElectID electIDCur;
 
 		public FormElectIDEdit() {
@@ -17,7 +18,32 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormElectIDEdit_Load(object sender,EventArgs e) {
+			textPayerID.Text=electIDCur.PayorID;
+			textCarrierName.Text=electIDCur.CarrierName;
+			textComments.Text=electIDCur.Comments;
+			checkIsMedicaid.Checked=electIDCur.IsMedicaid;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textPayerID.Text=="") {
+				MsgBox.Show(this,"Payer ID cannot be blank.");
+				return;
+			}
+			if(textCarrierName.Text=="") {
+				MsgBox.Show(this,"Carrier name cannot be blank.");
+				return;
+			}
+			electIDCur.PayorID=textPayerID.Text;
+			electIDCur.CarrierName=textCarrierName.Text;
+			electIDCur.Comments=textComments.Text;
+			electIDCur.IsMedicaid=checkIsMedicaid.Checked;
+			if(electIDCur.ElectIDNum==0) {
+				ElectIDs.Insert(electIDCur);
+			}
+			else {
+				ElectIDs.Update(electIDCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

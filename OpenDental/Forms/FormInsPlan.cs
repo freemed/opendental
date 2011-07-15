@@ -219,7 +219,7 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelPatID.Text=Lan.g(this,"Dependant Code");
 				labelCitySTZip.Text=Lan.g(this,"City,Prov,Post");   //Postal Code";
-				//butSearch.Visible=false;
+				butSearch.Visible=false;
 				labelElectronicID.Text="EDI Code";
 				comboElectIDdescript.Visible=false;
 				labelGroupNum.Text=Lan.g(this,"Plan Number");

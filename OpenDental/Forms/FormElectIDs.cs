@@ -25,8 +25,7 @@ namespace OpenDental{
 		public ElectID selectedID;
 
 		///<summary></summary>
-		public FormElectIDs()
-		{
+		public FormElectIDs() {
 			//
 			// Required for Windows Form Designer support
 			//
@@ -37,8 +36,7 @@ namespace OpenDental{
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
+		protected override void Dispose( bool disposing )	{
 			if( disposing )
 			{
 				if(components != null)
@@ -146,10 +144,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormElectIDs_Load(object sender, System.EventArgs e) {
-			FillElectIDs();
+			FillElectIDs(0);
+			butAdd.Visible=(!IsSelectMode);
 		}
 
-		private void FillElectIDs() {
+		private void FillElectIDs(long electIDSelect) {
+			ElectIDs.RefreshCache();
 			gridElectIDs.BeginUpdate();
 			gridElectIDs.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableApptProcs","Carrier"),320);
@@ -162,6 +162,7 @@ namespace OpenDental{
 			gridElectIDs.Columns.Add(col);
 			gridElectIDs.Rows.Clear();
 			ODGridRow row;
+			int selectedIndex=-1;
 			for(int i=0;i<ElectIDs.List.Length;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(ElectIDs.List[i].CarrierName);
@@ -169,8 +170,12 @@ namespace OpenDental{
 				row.Cells.Add(ElectIDs.List[i].IsMedicaid?"X":"");
 				row.Cells.Add(ElectIDs.List[i].Comments);
 				gridElectIDs.Rows.Add(row);
+				if(ElectIDs.List[i].ElectIDNum==electIDSelect) {
+					selectedIndex=i;
+				}
 			}
 			gridElectIDs.EndUpdate();
+			gridElectIDs.SetSelected(selectedIndex,true);
 		}
 
 		private void gridElectIDs_CellClick(object sender,ODGridClickEventArgs e) {
@@ -185,15 +190,19 @@ namespace OpenDental{
 			else {
 				FormElectIDEdit FormEdit=new FormElectIDEdit();
 				FormEdit.electIDCur=ElectIDs.List[e.Row];
-				FormEdit.ShowDialog();
+				if(FormEdit.ShowDialog()==DialogResult.OK) {
+					FillElectIDs(FormEdit.electIDCur.ElectIDNum);
+				}
 			}
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormElectIDEdit FormEdit=new FormElectIDEdit();
 			FormEdit.electIDCur=new ElectID();
-			FormEdit.electIDCur.IsNew=true;			
-			FormEdit.ShowDialog();
+			FormEdit.electIDCur.IsNew=true;
+			if(FormEdit.ShowDialog()==DialogResult.OK) {
+				FillElectIDs(FormEdit.electIDCur.ElectIDNum);
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -208,8 +217,6 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-
 
 
 	}
