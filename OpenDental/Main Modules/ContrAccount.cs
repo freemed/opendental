@@ -2212,6 +2212,7 @@ namespace OpenDental {
 				return;
 			}
 			panelCommButs.Enabled = true;
+			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
 			gridComm.BeginUpdate();
 			gridComm.Columns.Clear();
 			ODGridColumn col = new ODGridColumn(Lan.g("TableCommLogAccount", "Date"), 70);
@@ -2231,15 +2232,29 @@ namespace OpenDental {
 			gridComm.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
 			DataTable table = DataSetMain.Tables["Commlog"];
-			for (int i = 0; i < table.Rows.Count; i++) {
+			for(int i=0;i<table.Rows.Count;i++) {
 				//Skip commlog entries which belong to other family members per user option.
-				if(!this.checkShowFamilyComm.Checked && table.Rows[i]["patName"].ToString()!=""){
+				if(!this.checkShowFamilyComm.Checked										//show family not checked
+					&& !isSelectingFamily																	//family not selected
+					&& table.Rows[i]["patName"].ToString()!=PatCur.FName	//not this patient
+					&& table.Rows[i]["patName"].ToString()!=""						//No name; table only returns patient specific materials. i.e. Sheets
+					) {
 					continue;
 				}
 				row = new ODGridRow();
 				row.Cells.Add(table.Rows[i]["commDate"].ToString());
 				row.Cells.Add(table.Rows[i]["commTime"].ToString());
-				row.Cells.Add(table.Rows[i]["patName"].ToString());
+				if(isSelectingFamily) {
+					row.Cells.Add(table.Rows[i]["patName"].ToString());
+				}
+				else {//one patient
+					if(table.Rows[i]["patName"].ToString()==PatCur.FName) {//if this patient
+						row.Cells.Add("");
+					}
+					else {//other patient
+						row.Cells.Add(table.Rows[i]["patName"].ToString());
+					}
+				}
 				row.Cells.Add(table.Rows[i]["commType"].ToString());
 				row.Cells.Add(table.Rows[i]["mode"].ToString());
 				//row.Cells.Add(table.Rows[i]["sentOrReceived"].ToString());

@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
 			}
 			pat=fam.GetPatient(patNum);
 			retVal=new DataSet();
-			if(viewingInRecall) {
+			if(viewingInRecall) {//always false
 				retVal.Tables.Add(ChartModules.GetProgNotes(patNum, false));
 			}
 			else {
@@ -305,10 +305,10 @@ namespace OpenDentBusiness {
 					row["mode"]=Lans.g("enumCommItemMode",((CommItemMode)PIn.Long(rawComm.Rows[i]["Mode_"].ToString())).ToString());
 				}
 				row["Note"]=rawComm.Rows[i]["Note"].ToString();
-				row["patName"]="";
-				if(rawComm.Rows[i]["PatNum"].ToString()!=patNum.ToString()){
-					row["patName"]=rawComm.Rows[i]["FName"].ToString();
-				}
+				//row["patName"]="";
+				//if(rawComm.Rows[i]["PatNum"].ToString()!=patNum.ToString()){
+				row["patName"]=rawComm.Rows[i]["FName"].ToString();
+				//}
 				row["SheetNum"]="0";
 				//row["sentOrReceived"]=Lans.g("enumCommSentOrReceived",
 				//	((CommSentOrReceived)PIn.PInt(rawComm.Rows[i]["SentOrReceived"].ToString())).ToString());
