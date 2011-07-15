@@ -8,8 +8,8 @@
 	<script type="text/javascript">
 		function pageLoad() {
 			//change date on the form which is visible to the user
-			if ($get("dateToday") != null && $get("" + $get("dateToday").value) != null) {
-				var str = $get("" + $get("dateToday").value).innerHTML;
+			if ($get("dateToday") != null && $get("" + $get("dateToday").value) != null) {// dateToday is a hidden field set form the server code
+				var str = $get("" + $get("dateToday").value).innerHTML; 
 				var strBrowserDateToday = (new Date()).localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern);
 				$get("" + $get("dateToday").value).innerHTML = str.replace("[dateToday]", strBrowserDateToday);
 				//set local date on cookie to be read by server
@@ -25,7 +25,24 @@
 			exdate.setDate(exdate.getDate() + exdays);
 			var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
 			document.cookie = c_name + "=" + c_value;
-		}	
+		}
+
+		function CheckItem(sender, args) {
+			var chk = document.getElementById("591");
+
+			var ischecked = false;
+			args.IsValid = false;
+
+			if (chk.checked) {
+				ischecked = true;
+				args.IsValid = true;
+			}
+			else {
+				ischecked = false;
+				args.IsValid = false;
+			}
+		}
+
 	</script>
 </head>
 <body id="bodytag" runat="server">

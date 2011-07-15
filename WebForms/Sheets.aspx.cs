@@ -54,8 +54,8 @@ namespace WebForms {
 					int ImageZIndex=1;
 					int DrawingZIndex=2;
 					int ElementZIndex=3;
-					int SubmitButtonWidth=70;//-150
-					int SubmitButtonYoffset=10;//-50
+					int SubmitButtonWidth=70;
+					int SubmitButtonYoffset=10;
 					int RadioButtonXOffset=-4;
 					int RadioButtonYOffset=-5;
 					int RadioButtonXOffsetIE=0;
@@ -122,7 +122,7 @@ namespace WebForms {
 								//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",System.Threading.Thread.CurrentThread.CurrentCulture));//culture of the browser
 								AddHiddenField(WebSheetFieldDefID);// the replacing is done at the client side using javascript via a hidden variable.
 							}
-							lb.Text=FieldValue;
+							lb.Text=FieldValue.Replace(Environment.NewLine,"<br />").Replace("\n","<br />"); //it appears that the text contains only "\n" as the newline character and not Environment.NewLine (i.e "\n\r") as the line break, so the code takes into account both cases.
 							wc=lb;
 						}
 						if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
@@ -184,6 +184,9 @@ namespace WebForms {
 							if(wc.GetType()==typeof(CheckBox)) {
 								wc.Style["top"]=YPos+CheckBoxYOffset+"px";
 								wc.Style["left"]=XPos+CheckBoxXOffset+"px";
+								if(FieldName=="misc") {
+									AddChkBoxValidator(SheetFieldDefList.ElementAt(j));
+								}
 								WControl wcobj=new WControl(XPos,YPos,wc);
 								listwc.Add(wcobj);
 							}
@@ -197,6 +200,7 @@ namespace WebForms {
 							Panel1.Controls.Add(wc);
 						}
 					}//for loop end here
+					MarkChkBoxValidators();//make a list of  checkboxes to be validated
 					AssignTabOrder();
 					//position the submit button at the end of the page.
 					Button1.Style["position"]="absolute";
@@ -247,6 +251,22 @@ namespace WebForms {
 			for(short i=0;i<sortedlist.Count();i++){
 				sortedlist[i].wc.TabIndex=(short)(i+1);
 			}
+		}
+
+		private void MarkChkBoxValidators() {
+			//Panel1.Controls.OfType(AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender);
+
+			IEnumerable<AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender> ListAll =
+                Panel1.Controls.OfType<AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender>();
+			
+
+			IEnumerable<string> uniquelist =ListAll.Select(la => la.Key).Distinct();
+
+			int a=5;
+
+			//foreach(string fruit in query2) {
+			//	Console.WriteLine(fruit);
+			//}
 		}
 
 		/// <summary>
@@ -312,6 +332,43 @@ namespace WebForms {
 				Panel1.Controls.Add(vc1);
 				
 			}
+		}
+
+		private void AddChkBoxValidator(webforms_sheetfielddef sfd) {
+			if(sfd.IsRequired!=(sbyte)1) {
+				return;
+			}
+			int XPos=sfd.XPos;
+			int YPos=sfd.YPos;
+			//add dummy textbox to get around the limitation of checkboxes not having validators and call outs.
+			TextBox tb=new TextBox();
+			tb.Rows=1;
+			tb.Text=".";// ther has to be some character here the least visible is the period.
+			tb.ID="LoneChkBx"+sfd.WebSheetFieldDefID;
+			tb.Style["position"]="absolute";
+			tb.Style["top"]=YPos+"px";
+			tb.Style["left"]=XPos+"px";
+			tb.Style["z-index"]="-2";
+			tb.ReadOnly=true;
+			tb.BorderWidth=Unit.Pixel(0);
+			Panel1.Controls.Add(tb);
+			String ErrorMessage="This is a required Check box field";
+
+
+			CustomValidator cv=new CustomValidator();
+			cv.ControlToValidate="LoneChkBx"+sfd.WebSheetFieldDefID;
+			cv.ErrorMessage=ErrorMessage;
+			cv.Display=ValidatorDisplay.None;
+			cv.SetFocusOnError=true;
+			cv.ID="RequiredFieldValidator"+cv.ControlToValidate;
+			cv.ClientValidationFunction="CheckItem";
+			
+			//callout extender
+			AjaxControlToolkit.ValidatorCalloutExtender vc=new AjaxControlToolkit.ValidatorCalloutExtender();
+			vc.TargetControlID=cv.ID;
+			vc.ID="ValidatorCalloutExtender"+cv.ID;
+			Panel1.Controls.Add(cv);
+			Panel1.Controls.Add(vc);
 		}
 
 		private void LoopThroughControls(Page p) {
