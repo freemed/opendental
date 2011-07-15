@@ -109,7 +109,7 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Lab:
 					return "More than 40% of all clinical lab tests results ordered by the Provider during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
 				case EhrMeasureType.ElectronicCopy:
-					return "More than 40% of all clinical lab tests results ordered by the Provider during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in certified EHR technology as structured data.";
+					return "More than 50% of patients who request an electronic copy of their health information are provided it within 3 business days";
 				case EhrMeasureType.ClinicalSummaries:
 					return "Clinical summaries provided to patients for more than 50% of all office visits within 3 business days.";
 				case EhrMeasureType.Reminders:
@@ -149,7 +149,7 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Lab:
 					return 40;
 				case EhrMeasureType.ElectronicCopy:
-					return 40;
+					return 50;
 				case EhrMeasureType.ClinicalSummaries:
 					return 50;
 				case EhrMeasureType.Reminders:
@@ -231,15 +231,47 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.TimelyAccess:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.OnlineAccessProvided)+") AS onlineCount "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//denominator is patients
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
+					command=@"CREATE TABLE tempehrmeasure (
+						PatNum bigint NOT NULL auto_increment PRIMARY KEY,
+						LName varchar(255) NOT NULL,
+						FName varchar(255) NOT NULL,
+						lastVisitDate date NOT NULL,
+						deadlineDate date NOT NULL,
+						accessProvided tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+					//get all patients who have been seen during the period, along with the most recent visit date during the period
+					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,lastVisitDate) SELECT patient.PatNum,LName,FName, "
+						+"MAX(procedurelog.ProcDate) "
+						+"FROM patient,procedurelog "
+						+"WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
+					//calculate the deadlineDate
+					command="UPDATE tempehrmeasure "
+						+"SET deadlineDate = ADDDATE(lastVisitDate, INTERVAL 4 DAY)";
+					Db.NonQ(command);
+					command="UPDATE tempehrmeasure "
+						+"SET deadlineDate = ADDDate(lastVisitDate, INTERVAL 2 DAY) "//add 2 more days for weekend
+						+"WHERE DAYOFWEEK(lastVisitDate) IN(3,4,5,6)";//tues, wed, thur, fri
+					Db.NonQ(command);
+					//date provided could be any date before deadline date if there was more than one visit
+					command="UPDATE tempehrmeasure,ehrmeasureevent SET accessProvided = 1 "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum "
+						+"AND EventType="+POut.Int((int)EhrMeasureEventType.OnlineAccessProvided)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) <= deadlineDate";
+					Db.NonQ(command);
+					command="SELECT * FROM tempehrmeasure";
+					tableRaw=Db.GetTable(command);
+					command="DROP TABLE IF EXISTS tempehrmeasure";
+					Db.NonQ(command);
 					break;
 				case EhrMeasureType.ProvOrderEntry:
 					command="SELECT PatNum,LName,FName, "
@@ -303,12 +335,14 @@ namespace OpenDentBusiness{
 					command="DROP TABLE IF EXISTS tempehrmeasure";
 					Db.NonQ(command);
 					command=@"CREATE TABLE tempehrmeasure (
-						PatNum bigint NOT NULL PRIMARY KEY,
+						TempEhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
 						dateRequested date NOT NULL,
 						dateDeadline date NOT NULL,
-						copyProvided tinyint NOT NULL
+						copyProvided tinyint NOT NULL,
+						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,dateRequested) SELECT patient.PatNum,LName,FName,DATE(DateTEvent) "
@@ -340,12 +374,14 @@ namespace OpenDentBusiness{
 					command="DROP TABLE IF EXISTS tempehrmeasure";
 					Db.NonQ(command);
 					command=@"CREATE TABLE tempehrmeasure (
-						PatNum bigint NOT NULL PRIMARY KEY,
+						TempEhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
 						visitDate date NOT NULL,
 						deadlineDate date NOT NULL,
-						summaryProvided tinyint NOT NULL
+						summaryProvided tinyint NOT NULL,
+						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,visitDate) SELECT patient.PatNum,LName,FName,ProcDate "
@@ -552,11 +588,13 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.TimelyAccess:
-						if(tableRaw.Rows[i]["onlineCount"].ToString()=="0") {
-							explanation="No online access provided";
+						DateTime lastVisitDate=PIn.Date(tableRaw.Rows[i]["lastVisitDate"].ToString());
+						DateTime deadlineDate=PIn.Date(tableRaw.Rows[i]["deadlineDate"].ToString());
+						if(tableRaw.Rows[i]["accessProvided"].ToString()=="0") {
+							explanation=lastVisitDate.ToShortDateString()+" no online access provided";
 						}
 						else {
-							explanation="Online access provided";
+							explanation="Online access provided before "+deadlineDate.ToShortDateString();
 							row["met"]="X";
 						}
 						break;
@@ -761,7 +799,7 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Lab:
 					return "All lab orders by the Provider during the reporting period.";
 				case EhrMeasureType.ElectronicCopy:
-					return "All patients of the Provider who request an electronic copy of their health information during the reporting period.";
+					return "All requests for electronic copies of health information during the reporting period.";
 				case EhrMeasureType.ClinicalSummaries:
 					return "All office visits during the reporting period.  An office visit is calculated as any number of completed procedures by the Provider for a given date.";
 				case EhrMeasureType.Reminders:
@@ -922,7 +960,7 @@ namespace OpenDentBusiness{
 							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="Provider Order Entry";
+						mu.Action="CPOE - Provider Order Entry";
 						break;
 					case EhrMeasureType.Rx:
 						List<RxPat> listRx=RxPats.GetPermissableForDateRange(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
