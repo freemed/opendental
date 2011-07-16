@@ -121,7 +121,7 @@ namespace WebForms {
 							Label lb=new Label();
 							if(FieldValue.Contains("[dateToday]")) {
 								//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",System.Threading.Thread.CurrentThread.CurrentCulture));//culture of the browser
-								AddHiddenField(WebSheetFieldDefID);// the replacing is done at the client side using javascript via a hidden variable.
+								AddHiddenFieldForDate(WebSheetFieldDefID);// the replacing is done at the client side using javascript via a hidden variable.
 							}
 							lb.Text=FieldValue.Replace(Environment.NewLine,"<br />").Replace("\n","<br />"); //it appears that the text contains only "\n" as the newline character and not Environment.NewLine (i.e "\n\r") as the line break, so the code takes into account both cases.
 							wc=lb;
@@ -173,7 +173,7 @@ namespace WebForms {
 								}
 								wc.BorderWidth=Unit.Pixel(0);
 								wc.BackColor=Color.LightYellow;
-								AddValidator(SheetFieldDefList.ElementAt(j));
+								AddTextBoxValidator(SheetFieldDefList.ElementAt(j));
 								WControl wcobj=new WControl(XPos,YPos,wc);
 								listwc.Add(wcobj);
 							}
@@ -185,7 +185,7 @@ namespace WebForms {
 							if(wc.GetType()==typeof(CheckBox)) {
 								wc.Style["top"]=YPos+CheckBoxYOffset+"px";
 								wc.Style["left"]=XPos+CheckBoxXOffset+"px";
-								AddChkBoxValidator(SheetFieldDefList.ElementAt(j));
+								AddRequiredChkBoxValidator(SheetFieldDefList.ElementAt(j));
 								WControl wcobj=new WControl(XPos,YPos,wc);
 								listwc.Add(wcobj);
 							}
@@ -243,7 +243,8 @@ namespace WebForms {
 			return ChkBoxGroupName;
 		}
 
-		private void AddHiddenField(long WebSheetFieldDefID) {
+		///<summary></summary>
+		private void AddHiddenFieldForDate(long WebSheetFieldDefID) {
 			HiddenField hf= new HiddenField();
 			hf.Value=""+WebSheetFieldDefID;
 			hf.ID="dateToday";
@@ -270,26 +271,6 @@ namespace WebForms {
 				}
 				hfAllGroupsList.Value=hfAllGroupsList.Value.Trim();
 				Panel1.Controls.Add(hfAllGroupsList);
-				/*
-				HiddenField hfAllGroupsList= new HiddenField();
-				hfAllGroupsList.ID="hfAllGroupsList";
-				IEnumerable<AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender> ListAll =
-                Panel1.Controls.OfType<AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender>();
-				IEnumerable<string> uniquelist=ListAll.Select(la=>la.Key).Distinct();
-				foreach(string groupkey in uniquelist.ToList()) {// or each group create a hidden field with comma sepearted values
-					HiddenField hf= new HiddenField();
-					hf.ID="hiddenChkBoxGroup"+groupkey;
-					var groupmembers=ListAll.Where(la=>la.Key==groupkey);
-					for(int i=0;i<groupmembers.Count();i++) {
-						hf.Value+=" "+groupmembers.ElementAt(i).ID.Substring(0,groupmembers.ElementAt(i).ID.IndexOf("MutuallyExclusiveCheckBoxExtender"));
-					}
-					hfAllGroupsList.Value+=" "+hf.ID;
-					hf.Value=hf.Value.Trim();
-					Panel1.Controls.Add(hf);
-				}
-				hfAllGroupsList.Value=hfAllGroupsList.Value.Trim();
-				Panel1.Controls.Add(hfAllGroupsList);
-				*/
 			}catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" WebSheetDefID="+WebSheetDefID,ex);
 			}
@@ -309,7 +290,7 @@ namespace WebForms {
 			}
 		}
 
-		private void AddValidator(webforms_sheetfielddef sfd ) {
+		private void AddTextBoxValidator(webforms_sheetfielddef sfd ) {
 			String FieldName=sfd.FieldName;
 			String ErrorMessage="";
 			if(FieldName.ToLower()=="fname" || FieldName.ToLower()=="firstname") {
@@ -360,7 +341,7 @@ namespace WebForms {
 			}
 		}
 
-		private void AddChkBoxValidator(webforms_sheetfielddef sfd) {
+		private void AddRequiredChkBoxValidator(webforms_sheetfielddef sfd) {
 			if(sfd.IsRequired!=(sbyte)1) {
 				return;
 			}
@@ -392,10 +373,14 @@ namespace WebForms {
 			vc.ID="ValidatorCalloutExtender"+cv.ID;
 			Panel1.Controls.Add(cv);
 			Panel1.Controls.Add(vc);
-			AddChkBoxToHashTable(sfd);
+			AddChkBoxIdsToHashTable(sfd);
 		}
-
-		private void AddChkBoxToHashTable(webforms_sheetfielddef sfd) {
+		
+		/// <summary>
+		/// All checkboxes that require validation are stored in the format:
+		/// key=hiddenChkBoxGroup+(ChkBoxGroupName) and value= "chkbxid1 chkbxid1 chkbxid1"
+		/// </summary>
+		private void AddChkBoxIdsToHashTable(webforms_sheetfielddef sfd) {
 			String ChkBoxGroupName=GetChkBoxGroupName(sfd);
 			String Key="hiddenChkBoxGroup"+ChkBoxGroupName;
 			String Value=""+sfd.WebSheetFieldDefID;
@@ -557,6 +542,7 @@ namespace WebForms {
 			}
 		}
 
+		///<summary> The browser date is extracted via cookies set by the browser</summary>
 		private DateTime ExtractBrowserDate() {
 			DateTime BrowserDateToday=DateTime.Today;
 			try {
@@ -589,7 +575,7 @@ namespace WebForms {
 		}
 
 		protected void Button1_Click(object sender,EventArgs e) {
-			LoopThroughControls(this.Page);
+			LoopThroughControls(this.Page);// Fills FormValuesHashTable here
 			SaveFieldValuesInDB(DentalOfficeID,WebSheetDefID);
 		}
 

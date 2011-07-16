@@ -7,17 +7,27 @@
 <title></title>
 	<script type="text/javascript">
 		function pageLoad() {
-			//change date on the form which is visible to the user
-			if ($get("dateToday") != null && $get("" + $get("dateToday").value) != null) {// dateToday is a hidden field set form the server code
-				var str = $get("" + $get("dateToday").value).innerHTML; 
-				var strBrowserDateToday = (new Date()).localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern);
-				$get("" + $get("dateToday").value).innerHTML = str.replace("[dateToday]", strBrowserDateToday);
-				//set local date on cookie to be read by server
-				var today = new Date();
-				setCookie("DateCookieY", today.getFullYear(), 1);
-				setCookie("DateCookieM", today.getMonth() + 1, 1);
-				setCookie("DateCookieD", today.getDate(), 1);
-			}			
+			setDateToday();
+			setDatesInCookies();
+		}
+
+		///<summary> The visible date seen by the patient on the webform is set here, if it exists. This text is static is cannot be changed by the patient</summary>
+		function setDateToday() {
+			// dateToday is a hiddenfield, set from the server code. The date however is not set on the server.
+			// This existance of this variable merely indicates that the form contains a visible static today's Date.
+			if ($get("dateToday") != null && $get("" + $get("dateToday").value) != null) {
+				var str = $get("" + $get("dateToday").value).innerHTML;
+				var strBrowserDateToday = (new Date()).localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern);// read browser date
+				$get("" + $get("dateToday").value).innerHTML = str.replace("[dateToday]", strBrowserDateToday); // set static date text here
+			}
+		}
+
+		///<summary>Set browser's date in cookies to be read by server</summary>
+		function setDatesInCookies() {
+			var today = new Date();
+			setCookie("DateCookieY", today.getFullYear(), 1);
+			setCookie("DateCookieM", today.getMonth() + 1, 1);
+			setCookie("DateCookieD", today.getDate(), 1);
 		}
 
 		function setCookie(c_name, value, exdays) {
@@ -27,6 +37,15 @@
 			document.cookie = c_name + "=" + c_value;
 		}
 
+		///<summary> this is the one of the client validation methods which is triggered when when the submit button is hit.
+		///The client validation method in this case  is tied down to textboxes (and not checkboxes) because one cannot easily do a validation on a checkbox using conventional procedures. 
+		///Ultimately however it's the required checkboex that are validated. The information regarding the required checkbox fields are found in hidden variables
+		/// See example below. There are 4 hidden variable. The hfAllGroupsList hidden variable holds the ids of the other 3 hidden variable. The 3 hidden variable contain the ids of the checkboxes that are mutually exculsive (only one can be selected at a time)
+		/// type="hidden" name="hfAllGroupsList" id="hfAllGroupsList" value="hiddenChkBoxGroupGender hiddenChkBoxGroupPosition hiddenChkBoxGroupSingleCheckbox"
+		///input type="hidden" name="hiddenChkBoxGroupGender" id="hiddenChkBoxGroupGender" value="622 628"
+		///input type="hidden" name="hiddenChkBoxGroupPosition" id="hiddenChkBoxGroupPosition" value="611 612 615 619 630"
+		///type="hidden" name="hiddenChkBoxGroupSingleCheckbox" id="hiddenChkBoxGroupSingleCheckbox" value="613"
+		///</summary>
 		function CheckCheckBoxes(sender, args) {
 			var AllGroupsArray = $get("hfAllGroupsList").value.split(" ");
 			args.IsValid = false;
@@ -36,7 +55,7 @@
 				for (var j = 0; j < ChkBoxArray.length; j++) {
 					if (sender.id == "CustomValidatorTextBoxForCheckbox" + ChkBoxArray[j]) { // detect which textbox fired called this function
 						ChkBoxGroupToBeChecked=AllGroupsArray[i];
-						break;// break out of j loop
+						break;// break out of j loop if a match is found
 					}
 				}
 				if (ChkBoxGroupToBeChecked != "") { // if a match is found
@@ -55,9 +74,7 @@
 					break;
 				}
 			}
-
 		}
-
 	</script>
 </head>
 <body id="bodytag" runat="server">
