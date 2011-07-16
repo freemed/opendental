@@ -35,8 +35,9 @@ namespace OpenDental {
 					return;
 				}
 			}*/
+			Application.SetCompatibleTextRenderingDefault(false);//designer uses new text rendering.  This makes the exe use matching text rendering.  Before this was added, it was common for labels to be longer in the running program than they were in the designer.
 			Application.EnableVisualStyles();//changes appearance to XP
-			Application.DoEvents();//workaround for a known MS bug in the line above
+			Application.DoEvents();
 			string[] cla=new string[args.Length];
 			args.CopyTo(cla,0);
 			FormOpenDental formOD=new FormOpenDental(cla);
