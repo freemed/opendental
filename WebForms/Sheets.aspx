@@ -27,20 +27,35 @@
 			document.cookie = c_name + "=" + c_value;
 		}
 
-		function CheckItem(sender, args) {
-			var chk = document.getElementById("591");
-
-			var ischecked = false;
+		function CheckCheckBoxes(sender, args) {
+			var AllGroupsArray = $get("hfAllGroupsList").value.split(" ");
 			args.IsValid = false;
-
-			if (chk.checked) {
-				ischecked = true;
+			ChkBoxGroupToBeChecked="";
+			for (var i = 0; i < AllGroupsArray.length; i++) {
+				var ChkBoxArray = $get(AllGroupsArray[i]).value.split(" ");
+				for (var j = 0; j < ChkBoxArray.length; j++) {
+					if (sender.id == "CustomValidatorTextBoxForCheckbox" + ChkBoxArray[j]) { // detect which textbox fired called this function
+						ChkBoxGroupToBeChecked=AllGroupsArray[i];
+						break;// break out of j loop
+					}
+				}
+				if (ChkBoxGroupToBeChecked != "") { // if a match is found
+				break; // break out of i loop
+				}
+			}
+			if (ChkBoxGroupToBeChecked == "") {
 				args.IsValid = true;
+				return;
 			}
-			else {
-				ischecked = false;
-				args.IsValid = false;
+			var ChkBoxArray = $get(ChkBoxGroupToBeChecked).value.split(" ");
+			for (var j = 0; j < ChkBoxArray.length; j++) {
+				var chk = document.getElementById(ChkBoxArray[j]);
+				if (chk.checked) {
+					args.IsValid = true;
+					break;
+				}
 			}
+
 		}
 
 	</script>

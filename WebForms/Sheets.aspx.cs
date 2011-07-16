@@ -24,6 +24,7 @@ namespace WebForms {
 		private long DentalOfficeID=0;
 		private long WebSheetDefID=0;
 		private Hashtable FormValuesHashTable=new Hashtable();
+		private Hashtable hiddenChkBoxGroupHashTable=new Hashtable();
 		List<WControl> listwc=new List<WControl>();
 		
 		protected void Page_Load(object sender,EventArgs e) {
@@ -184,9 +185,7 @@ namespace WebForms {
 							if(wc.GetType()==typeof(CheckBox)) {
 								wc.Style["top"]=YPos+CheckBoxYOffset+"px";
 								wc.Style["left"]=XPos+CheckBoxXOffset+"px";
-								if(FieldName=="misc") {
-									AddChkBoxValidator(SheetFieldDefList.ElementAt(j));
-								}
+								AddChkBoxValidator(SheetFieldDefList.ElementAt(j));
 								WControl wcobj=new WControl(XPos,YPos,wc);
 								listwc.Add(wcobj);
 							}
@@ -200,7 +199,7 @@ namespace WebForms {
 							Panel1.Controls.Add(wc);
 						}
 					}//for loop end here
-					MarkChkBoxValidators();//make a list of  checkboxes to be validated
+					CreateChkBoxValidatorsHiddenFields();
 					AssignTabOrder();
 					//position the submit button at the end of the page.
 					Button1.Style["position"]="absolute";
@@ -217,26 +216,31 @@ namespace WebForms {
 				}
 		}
 
-		private WebControl AddCheckBox(webforms_sheetfielddef sfd)
-        {
-			String FieldName=sfd.FieldName;
-			String RadioButtonValue=sfd.RadioButtonValue;
-			String RadioButtonGroup=sfd.RadioButtonGroup;
+		private WebControl AddCheckBox(webforms_sheetfielddef sfd){
 			WebControl wc=null;
 			CheckBox cb=new CheckBox();
 			cb.ID=""+sfd.WebSheetFieldDefID;
 			AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender mecb=new AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender();
 			mecb.ID=cb.ID+"MutuallyExclusiveCheckBoxExtender";
 			mecb.TargetControlID=cb.ID;
-            if (!String.IsNullOrEmpty(RadioButtonGroup) && FieldName=="misc"){
-				mecb.Key=RadioButtonGroup;
-			}
-			else if(!String.IsNullOrEmpty(RadioButtonValue)) {// cases like gender, position etc that have no value for RadioButtonGroup but have RadioButtonValue
-				mecb.Key=FieldName;
-			}
+			mecb.Key=GetChkBoxGroupName(sfd);
 			Panel1.Controls.Add(mecb);
 			wc=cb;
 			return wc;
+		}
+
+		private string GetChkBoxGroupName(webforms_sheetfielddef sfd) {
+			String FieldName=sfd.FieldName;
+			String RadioButtonValue=sfd.RadioButtonValue;
+			String RadioButtonGroup=sfd.RadioButtonGroup;
+			String ChkBoxGroupName=null;
+			if(!String.IsNullOrEmpty(RadioButtonGroup) && FieldName=="misc") {
+				ChkBoxGroupName=RadioButtonGroup;
+			}
+			else if(!String.IsNullOrEmpty(RadioButtonValue)) {// cases like gender, position etc that have no value for RadioButtonGroup but have RadioButtonValue
+				ChkBoxGroupName=FieldName;
+			}
+			return ChkBoxGroupName;
 		}
 
 		private void AddHiddenField(long WebSheetFieldDefID) {
@@ -253,20 +257,42 @@ namespace WebForms {
 			}
 		}
 
-		private void MarkChkBoxValidators() {
-			//Panel1.Controls.OfType(AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender);
-
-			IEnumerable<AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender> ListAll =
+		private void CreateChkBoxValidatorsHiddenFields() {
+			try{
+				HiddenField hfAllGroupsList= new HiddenField();
+				hfAllGroupsList.ID="hfAllGroupsList";
+				foreach(string strkey in hiddenChkBoxGroupHashTable.Keys) {
+					HiddenField hf= new HiddenField();
+					hf.ID=strkey;
+					hf.Value=(string)hiddenChkBoxGroupHashTable[strkey];
+					Panel1.Controls.Add(hf);
+					hfAllGroupsList.Value+=" "+hf.ID;
+				}
+				hfAllGroupsList.Value=hfAllGroupsList.Value.Trim();
+				Panel1.Controls.Add(hfAllGroupsList);
+				/*
+				HiddenField hfAllGroupsList= new HiddenField();
+				hfAllGroupsList.ID="hfAllGroupsList";
+				IEnumerable<AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender> ListAll =
                 Panel1.Controls.OfType<AjaxControlToolkit.MutuallyExclusiveCheckBoxExtender>();
-			
-
-			IEnumerable<string> uniquelist =ListAll.Select(la => la.Key).Distinct();
-
-			int a=5;
-
-			//foreach(string fruit in query2) {
-			//	Console.WriteLine(fruit);
-			//}
+				IEnumerable<string> uniquelist=ListAll.Select(la=>la.Key).Distinct();
+				foreach(string groupkey in uniquelist.ToList()) {// or each group create a hidden field with comma sepearted values
+					HiddenField hf= new HiddenField();
+					hf.ID="hiddenChkBoxGroup"+groupkey;
+					var groupmembers=ListAll.Where(la=>la.Key==groupkey);
+					for(int i=0;i<groupmembers.Count();i++) {
+						hf.Value+=" "+groupmembers.ElementAt(i).ID.Substring(0,groupmembers.ElementAt(i).ID.IndexOf("MutuallyExclusiveCheckBoxExtender"));
+					}
+					hfAllGroupsList.Value+=" "+hf.ID;
+					hf.Value=hf.Value.Trim();
+					Panel1.Controls.Add(hf);
+				}
+				hfAllGroupsList.Value=hfAllGroupsList.Value.Trim();
+				Panel1.Controls.Add(hfAllGroupsList);
+				*/
+			}catch(Exception ex) {
+				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID+" WebSheetDefID="+WebSheetDefID,ex);
+			}
 		}
 
 		/// <summary>
@@ -343,8 +369,8 @@ namespace WebForms {
 			//add dummy textbox to get around the limitation of checkboxes not having validators and call outs.
 			TextBox tb=new TextBox();
 			tb.Rows=1;
-			tb.Text=".";// ther has to be some character here the least visible is the period.
-			tb.ID="LoneChkBx"+sfd.WebSheetFieldDefID;
+			tb.Text=".";// there has to be some character here the least visible is the period.
+			tb.ID="TextBoxForCheckbox"+sfd.WebSheetFieldDefID;
 			tb.Style["position"]="absolute";
 			tb.Style["top"]=YPos+"px";
 			tb.Style["left"]=XPos+"px";
@@ -352,23 +378,33 @@ namespace WebForms {
 			tb.ReadOnly=true;
 			tb.BorderWidth=Unit.Pixel(0);
 			Panel1.Controls.Add(tb);
-			String ErrorMessage="This is a required Check box field";
-
-
+			String ErrorMessage="This is a required field";
 			CustomValidator cv=new CustomValidator();
-			cv.ControlToValidate="LoneChkBx"+sfd.WebSheetFieldDefID;
+			cv.ControlToValidate=tb.ID;
 			cv.ErrorMessage=ErrorMessage;
 			cv.Display=ValidatorDisplay.None;
 			cv.SetFocusOnError=true;
-			cv.ID="RequiredFieldValidator"+cv.ControlToValidate;
-			cv.ClientValidationFunction="CheckItem";
-			
+			cv.ID="CustomValidator"+cv.ControlToValidate;
+			cv.ClientValidationFunction="CheckCheckBoxes";
 			//callout extender
 			AjaxControlToolkit.ValidatorCalloutExtender vc=new AjaxControlToolkit.ValidatorCalloutExtender();
 			vc.TargetControlID=cv.ID;
 			vc.ID="ValidatorCalloutExtender"+cv.ID;
 			Panel1.Controls.Add(cv);
 			Panel1.Controls.Add(vc);
+			AddChkBoxToHashTable(sfd);
+		}
+
+		private void AddChkBoxToHashTable(webforms_sheetfielddef sfd) {
+			String ChkBoxGroupName=GetChkBoxGroupName(sfd);
+			String Key="hiddenChkBoxGroup"+ChkBoxGroupName;
+			String Value=""+sfd.WebSheetFieldDefID;
+			if(hiddenChkBoxGroupHashTable.ContainsKey(Key)) {
+				hiddenChkBoxGroupHashTable[Key]+=" "+Value;
+			}
+			else {
+				hiddenChkBoxGroupHashTable.Add(Key,Value);
+			}
 		}
 
 		private void LoopThroughControls(Page p) {
@@ -407,7 +443,7 @@ namespace WebForms {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 			}
 		}
-
+		
 		/// <summary>
 		/// Fill the FormValuesHashTable here.
 		/// </summary>
