@@ -175,6 +175,7 @@ namespace OpenDental{
 			this.checkRxSendNewToQueue = new System.Windows.Forms.CheckBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabAppts = new System.Windows.Forms.TabPage();
+			this.butApptPrintSetup = new OpenDental.UI.Button();
 			this.tabFamily = new System.Windows.Forms.TabPage();
 			this.tabAccount = new System.Windows.Forms.TabPage();
 			this.checkStoreCCTokens = new System.Windows.Forms.CheckBox();
@@ -195,7 +196,6 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.butApptPrintSetup = new OpenDental.UI.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -834,6 +834,7 @@ namespace OpenDental{
 			// 
 			// tabAppts
 			// 
+			this.tabAppts.BackColor = System.Drawing.SystemColors.Window;
 			this.tabAppts.Controls.Add(this.butApptPrintSetup);
 			this.tabAppts.Controls.Add(this.checkApptRefreshEveryMinute);
 			this.tabAppts.Controls.Add(this.checkAppointmentBubblesDisabled);
@@ -855,10 +856,25 @@ namespace OpenDental{
 			this.tabAppts.Size = new System.Drawing.Size(466,438);
 			this.tabAppts.TabIndex = 0;
 			this.tabAppts.Text = "Appts";
-			this.tabAppts.UseVisualStyleBackColor = true;
+			// 
+			// butApptPrintSetup
+			// 
+			this.butApptPrintSetup.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butApptPrintSetup.Autosize = true;
+			this.butApptPrintSetup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butApptPrintSetup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butApptPrintSetup.CornerRadius = 4F;
+			this.butApptPrintSetup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butApptPrintSetup.Location = new System.Drawing.Point(312,211);
+			this.butApptPrintSetup.Name = "butApptPrintSetup";
+			this.butApptPrintSetup.Size = new System.Drawing.Size(128,24);
+			this.butApptPrintSetup.TabIndex = 199;
+			this.butApptPrintSetup.Text = "Appt Print Setup";
+			this.butApptPrintSetup.Click += new System.EventHandler(this.butApptPrintSetup_Click);
 			// 
 			// tabFamily
 			// 
+			this.tabFamily.BackColor = System.Drawing.SystemColors.Window;
 			this.tabFamily.Controls.Add(this.checkInsDefaultShowUCRonClaims);
 			this.tabFamily.Controls.Add(this.checkMedicalEclaimsEnabled);
 			this.tabFamily.Controls.Add(this.checkCoPayFeeScheduleBlankLikeZero);
@@ -871,10 +887,10 @@ namespace OpenDental{
 			this.tabFamily.Size = new System.Drawing.Size(466,438);
 			this.tabFamily.TabIndex = 1;
 			this.tabFamily.Text = "Family";
-			this.tabFamily.UseVisualStyleBackColor = true;
 			// 
 			// tabAccount
 			// 
+			this.tabAccount.BackColor = System.Drawing.SystemColors.Window;
 			this.tabAccount.Controls.Add(this.checkStoreCCTokens);
 			this.tabAccount.Controls.Add(this.checkClaimsValidateACN);
 			this.tabAccount.Controls.Add(this.checkStatementShowReturnAddress);
@@ -907,7 +923,6 @@ namespace OpenDental{
 			this.tabAccount.Size = new System.Drawing.Size(466,438);
 			this.tabAccount.TabIndex = 2;
 			this.tabAccount.Text = "Account";
-			this.tabAccount.UseVisualStyleBackColor = true;
 			// 
 			// checkStoreCCTokens
 			// 
@@ -956,6 +971,7 @@ namespace OpenDental{
 			// 
 			// tabChart
 			// 
+			this.tabChart.BackColor = System.Drawing.SystemColors.Window;
 			this.tabChart.Controls.Add(this.butAllergiesIndicateNone);
 			this.tabChart.Controls.Add(this.textAllergiesIndicateNone);
 			this.tabChart.Controls.Add(this.label14);
@@ -976,7 +992,6 @@ namespace OpenDental{
 			this.tabChart.Size = new System.Drawing.Size(466,438);
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
-			this.tabChart.UseVisualStyleBackColor = true;
 			// 
 			// butAllergiesIndicateNone
 			// 
@@ -1124,21 +1139,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butApptPrintSetup
-			// 
-			this.butApptPrintSetup.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butApptPrintSetup.Autosize = true;
-			this.butApptPrintSetup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butApptPrintSetup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butApptPrintSetup.CornerRadius = 4F;
-			this.butApptPrintSetup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butApptPrintSetup.Location = new System.Drawing.Point(312,211);
-			this.butApptPrintSetup.Name = "butApptPrintSetup";
-			this.butApptPrintSetup.Size = new System.Drawing.Size(128,24);
-			this.butApptPrintSetup.TabIndex = 199;
-			this.butApptPrintSetup.Text = "Appt Print Setup";
-			this.butApptPrintSetup.Click += new System.EventHandler(this.butApptPrintSetup_Click);
 			// 
 			// FormModuleSetup
 			// 

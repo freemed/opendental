@@ -395,11 +395,11 @@ namespace OpenDental{
 			gridMeds.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes"),205);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes"),200);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),205);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),200);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Disc"),10,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableMedications","Status"),60,HorizontalAlignment.Center);
 			gridMeds.Columns.Add(col);
 			gridMeds.Rows.Clear();
 			ODGridRow row;
@@ -414,10 +414,10 @@ namespace OpenDental{
 				row.Cells.Add(Medications.GetGeneric(medList[i].MedicationNum).Notes);
 				row.Cells.Add(medList[i].PatNote);
 				if(medList[i].DateStop.Year>1880) {
-					row.Cells.Add("X");
+					row.Cells.Add("Inactive");
 				}
 				else {
-					row.Cells.Add("");
+					row.Cells.Add("Active");
 				}
 				gridMeds.Rows.Add(row);
 			}
@@ -486,9 +486,9 @@ namespace OpenDental{
 			gridAllergies.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
 			gridAllergies.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),195);
+			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),180);
 			gridAllergies.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAllergies","Active"),60,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableAllergies","Status"),60,HorizontalAlignment.Center);
 			gridAllergies.Columns.Add(col);
 			gridAllergies.Rows.Clear();
 			ODGridRow row;
@@ -503,10 +503,10 @@ namespace OpenDental{
 					row.Cells.Add(allergyList[i].Reaction+" "+allergyList[i].DateAdverseReaction.ToShortDateString());
 				}
 				if(allergyList[i].StatusIsActive) {
-					row.Cells.Add("X");
+					row.Cells.Add("Active");
 				}
 				else {
-					row.Cells.Add("");
+					row.Cells.Add("Inactive");
 				}
 				gridAllergies.Rows.Add(row);
 			}
