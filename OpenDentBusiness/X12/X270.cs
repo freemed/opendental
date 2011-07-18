@@ -226,6 +226,13 @@ namespace OpenDentBusiness
 			strb.AppendLine("EQ*38~");//Ortho
 			seg++;
 			strb.AppendLine("EQ*28~");//Adjunctive
+			//
+			//2000D If we add a dependent loop it would go here.  It would be about 20 lines.
+			//2100D, etc
+			//EQ series, etc.
+			//Not allowed to send this unless subscriber and dependent are different
+			//We would also have to add code to process the EBs which distinguishes between subscribers and dependents.
+			//
 			//Transaction Trailer
 			seg++;
 			strb.AppendLine("SE*"
