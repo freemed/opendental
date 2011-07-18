@@ -10,8 +10,8 @@ using OpenDental.UI;
 
 namespace OpenDental{
 ///<summary></summary>
-	public class FormUnsched : System.Windows.Forms.Form{
-		private System.ComponentModel.Container components = null;
+	public class FormUnsched:System.Windows.Forms.Form {
+		private IContainer components;
 		private OpenDental.UI.Button butClose;
 		///<summary></summary>
 		public bool PinClicked=false;		
@@ -36,6 +36,7 @@ namespace OpenDental{
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public long SelectedPatNum;
 		private CheckBox checkBrokenAppts;
+		private ContextMenuStrip menuDelete;
 		private Dictionary<long,string> patientNames;
 
 		///<summary></summary>
@@ -61,6 +62,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUnsched));
 			this.butClose = new OpenDental.UI.Button();
 			this.grid = new OpenDental.UI.ODGrid();
@@ -73,6 +75,7 @@ namespace OpenDental{
 			this.comboSite = new System.Windows.Forms.ComboBox();
 			this.labelSite = new System.Windows.Forms.Label();
 			this.checkBrokenAppts = new System.Windows.Forms.CheckBox();
+			this.menuDelete = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -96,11 +99,14 @@ namespace OpenDental{
 			this.grid.Location = new System.Drawing.Point(10,56);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
+			this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.grid.Size = new System.Drawing.Size(734,599);
 			this.grid.TabIndex = 8;
 			this.grid.Title = "Unscheduled List";
 			this.grid.TranslationName = "TableUnsched";
 			this.grid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellDoubleClick);
+			this.grid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.grid_MouseDown);
+			this.grid.MouseUp += new System.Windows.Forms.MouseEventHandler(this.grid_MouseUp);
 			// 
 			// butPrint
 			// 
@@ -200,6 +206,11 @@ namespace OpenDental{
 			this.checkBrokenAppts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBrokenAppts.UseVisualStyleBackColor = true;
 			// 
+			// menuDelete
+			// 
+			this.menuDelete.Name = "menuDelete";
+			this.menuDelete.Size = new System.Drawing.Size(61,4);
+			// 
 			// FormUnsched
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -255,9 +266,41 @@ namespace OpenDental{
 				}
 			}
 			FillGrid();
+			menuDelete.Items.Clear();
+			menuDelete.Items.Add(Lan.g(this,"Delete"),null,new EventHandler(menuDelete_click));
 		}
 
-		private void FillGrid(){
+		private void menuDelete_click(object sender,System.EventArgs e) {
+			switch(menuDelete.Items.IndexOf((ToolStripMenuItem)sender)) {
+				case 0:
+					Delete_Click();
+					break;
+			}
+		}
+
+		private void grid_MouseDown(object sender,MouseEventArgs e) {
+			
+		}
+
+		private void grid_MouseUp(object sender,MouseEventArgs e) {
+			if(e.Button==MouseButtons.Right) {
+				if(grid.SelectedIndices.Length>0) {
+					menuDelete.Show(grid,new Point(e.X,e.Y));
+				}
+			}
+		}
+
+		private void Delete_Click() {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete appointments?")) {
+				return;
+			}
+			for(int i=0;i<grid.SelectedIndices.Length;i++) {
+				Appointments.Delete(ListUn[grid.SelectedIndices[i]].AptNum);
+			}
+			FillGrid();
+		}
+
+		private void FillGrid() {
 			this.Cursor=Cursors.WaitCursor;
 			string order="";
 			switch(comboOrder.SelectedIndex) {
@@ -414,6 +457,10 @@ namespace OpenDental{
 				SelectedPatNum=ListUn[grid.SelectedIndices[0]].PatNum;
 			}
 		}
+
+		
+
+		
 
 		
 

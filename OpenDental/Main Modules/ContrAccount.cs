@@ -2234,6 +2234,7 @@ namespace OpenDental {
 			DataTable table = DataSetMain.Tables["Commlog"];
 			for(int i=0;i<table.Rows.Count;i++) {
 				//Skip commlog entries which belong to other family members per user option.
+//TODO: This does not handle jr./sr. family members. i.e. When there is a John and John Jr.
 				if(!this.checkShowFamilyComm.Checked										//show family not checked
 					&& !isSelectingFamily																	//family not selected
 					&& table.Rows[i]["patName"].ToString()!=PatCur.FName	//not this patient
