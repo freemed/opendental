@@ -91,7 +91,7 @@ namespace OpenDental {
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
 			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPage);
-			if(pd.DefaultPageSettings.PaperSize.Width==0){
+			if(pd.DefaultPageSettings.PrintableArea.Width==0) {
 				//prevents bug in some printers that do not specify paper size
 				pd.DefaultPageSettings.PaperSize=new PaperSize("paper",850,1100);
 			}
