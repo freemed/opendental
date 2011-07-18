@@ -6,10 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-#if DEBUG
-using EHR;
 using OpenDental.Forms;
-#endif
 
 namespace OpenDental {
 	public partial class FormEhrSetup:Form {

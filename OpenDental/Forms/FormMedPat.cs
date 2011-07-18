@@ -5,9 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
-#if DEBUG
-using EHR;
-#endif
 
 namespace OpenDental{
 	/// <summary></summary>

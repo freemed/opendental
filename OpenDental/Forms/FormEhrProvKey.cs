@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-#if DEBUG
+#if EHRTEST
 using EHR;
 #endif
 
@@ -27,7 +27,7 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			bool provKeyIsValid=false;
-			#if DEBUG
+			#if EHRTEST
 				provKeyIsValid=((FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(ProvCur.LName,ProvCur.FName,textEhrKey.Text);
 			#else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class

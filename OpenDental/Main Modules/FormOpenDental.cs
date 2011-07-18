@@ -49,7 +49,7 @@ using System.Xml.Serialization;
 using SparksToothChart;
 using OpenDental.SmartCards;
 using OpenDental.UI;
-#if DEBUG
+#if EHRTEST
 using EHR;
 #endif
 
