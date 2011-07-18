@@ -185,7 +185,7 @@ namespace WebForms {
 							if(wc.GetType()==typeof(CheckBox)) {
 								wc.Style["top"]=YPos+CheckBoxYOffset+"px";
 								wc.Style["left"]=XPos+CheckBoxXOffset+"px";
-								AddRequiredChkBoxValidator(SheetFieldDefList.ElementAt(j));
+								AddRequiredChkBoxValidator(SheetFieldDefList.ElementAt(j),CheckBoxXOffset,CheckBoxYOffset);
 								WControl wcobj=new WControl(XPos,YPos,wc);
 								listwc.Add(wcobj);
 							}
@@ -199,6 +199,7 @@ namespace WebForms {
 							Panel1.Controls.Add(wc);
 						}
 					}//for loop end here
+					AssignErrorMessageForChkBoxes();	
 					CreateChkBoxValidatorsHiddenFields();
 					AssignTabOrder();
 					//position the submit button at the end of the page.
@@ -241,6 +242,25 @@ namespace WebForms {
 				ChkBoxGroupName=FieldName;
 			}
 			return ChkBoxGroupName;
+		}
+
+		/// <summary>
+		/// A single check boxes which are 'required' have a different error message as opposed to a 'required' group of check boxes
+		/// </summary>
+		private void AssignErrorMessageForChkBoxes() {
+			IEnumerable<CustomValidator> ListAll=Panel1.Controls.OfType<CustomValidator>();
+			foreach(string strkey in hiddenChkBoxGroupHashTable.Keys) {
+				String Value=(string)hiddenChkBoxGroupHashTable[strkey];
+				long ControlID=0;
+				Int64.TryParse(Value.Trim(),out ControlID);
+				if(ControlID!=0) {
+					var CvResult =ListAll.Where(cv=>cv.ID=="CustomValidatorTextBoxForCheckbox"+ControlID);
+					if(CvResult.Count()>0) {
+						CvResult.ElementAt(0).ErrorMessage="This is a required Check Box";
+					}
+				}
+			}
+
 		}
 
 		///<summary></summary>
@@ -315,11 +335,11 @@ namespace WebForms {
 			rv.Display=ValidatorDisplay.None;
 			rv.SetFocusOnError=true;
 			rv.ID="RequiredFieldValidator"+rv.ControlToValidate;
+			Panel1.Controls.Add(rv);
 			//callout extender
 			AjaxControlToolkit.ValidatorCalloutExtender vc=new AjaxControlToolkit.ValidatorCalloutExtender();
 			vc.TargetControlID=rv.ID;
 			vc.ID="ValidatorCalloutExtender"+rv.ID;
-			Panel1.Controls.Add(rv);
 			Panel1.Controls.Add(vc);
 			if(FieldName.ToLower()=="birthdate" || FieldName.ToLower()=="bdate") {
 				//compare validator
@@ -341,25 +361,25 @@ namespace WebForms {
 			}
 		}
 
-		private void AddRequiredChkBoxValidator(webforms_sheetfielddef sfd) {
+		private void AddRequiredChkBoxValidator(webforms_sheetfielddef sfd,float CheckBoxXOffset,float CheckBoxYOffset) {
 			if(sfd.IsRequired!=(sbyte)1) {
 				return;
 			}
 			int XPos=sfd.XPos;
 			int YPos=sfd.YPos;
+			String ErrorMessage="This is a required section. Please check one of the Check Boxes";
 			//add dummy textbox to get around the limitation of checkboxes not having validators and call outs.
 			TextBox tb=new TextBox();
 			tb.Rows=1;
 			tb.Text=".";// there has to be some character here the least visible is the period.
 			tb.ID="TextBoxForCheckbox"+sfd.WebSheetFieldDefID;
 			tb.Style["position"]="absolute";
-			tb.Style["top"]=YPos+"px";
-			tb.Style["left"]=XPos+"px";
+			tb.Style["top"]=YPos+CheckBoxYOffset+"px";
+			tb.Style["left"]=XPos+CheckBoxXOffset+"px";
 			tb.Style["z-index"]="-2";
 			tb.ReadOnly=true;
 			tb.BorderWidth=Unit.Pixel(0);
 			Panel1.Controls.Add(tb);
-			String ErrorMessage="This is a required field";
 			CustomValidator cv=new CustomValidator();
 			cv.ControlToValidate=tb.ID;
 			cv.ErrorMessage=ErrorMessage;
@@ -367,13 +387,13 @@ namespace WebForms {
 			cv.SetFocusOnError=true;
 			cv.ID="CustomValidator"+cv.ControlToValidate;
 			cv.ClientValidationFunction="CheckCheckBoxes";
+			Panel1.Controls.Add(cv);
 			//callout extender
 			AjaxControlToolkit.ValidatorCalloutExtender vc=new AjaxControlToolkit.ValidatorCalloutExtender();
 			vc.TargetControlID=cv.ID;
 			vc.ID="ValidatorCalloutExtender"+cv.ID;
-			Panel1.Controls.Add(cv);
 			Panel1.Controls.Add(vc);
-			AddChkBoxIdsToHashTable(sfd);
+			AddChkBoxIdsToHashTable(sfd);			
 		}
 		
 		/// <summary>
