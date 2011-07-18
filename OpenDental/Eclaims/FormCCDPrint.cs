@@ -359,7 +359,7 @@ namespace OpenDental.Eclaims {
 			string msg=message.ToString();
 			if(msg.Length>0){
 				MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(msg);
-				msgBox.Text="Messages";//Same in both english and french, according to translate.google.com.
+				msgBox.Text="Messages";
 				msgBox.ShowDialog();
 			}
 		}
@@ -472,11 +472,6 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"LIGNE":"LINE",x,0);
 			text="MESSAGE";
-			CCDField indicator=formData.GetFieldById("A11");
-			if(indicator!=null && indicator.valuestr!=null && indicator.valuestr!="N"){
-				text+=" - ("+(isFrench?"CE MESSAGE A ÉTÉ EN OUTRE ENVOYÉ À L'EMAIL ADDRESS CI-DESSUS"://Translated by google. Probably not good.
-					"THIS MESSAGE WAS ALSO SENT TO THE EMAIL ADDRESS ABOVE")+")";
-			}
 			float lineCol=x+55;
 			doc.DrawString(g,text,lineCol,0);
 			x=doc.StartElement(verticalLine);
@@ -1258,18 +1253,17 @@ namespace OpenDental.Eclaims {
 				}
 				text=formData.GetFieldById("F29").valuestr;//Payment mode or expected payment cycle as an enumeration value.
 				if(text!="0"){
-					//No french translations were given for the values of this enumeration so google translator was used for the French text.
 					if(text=="1"){
 						text=isFrench?"Mensuel":"Monthly";
 					}
 					else if(text=="2"){
-						text=isFrench?"Bimensuel":"Bimonthly";
+						text=isFrench?"Bimestriel":"Bimonthly";
 					}
 					else if(text=="3"){
 						text=isFrench?"Trimestriel":"Quarterly";
 					}
 					else{//4
-						text=isFrench?"Tous les quatre mois":"Every four months";
+						text=isFrench?"Aux quatre mois":"Every four months";
 					}
 					doc.DrawField(g,isFrench?"Mode de paiement: ":"Payment mode: ",text,true,x,0);
 				}
@@ -2314,7 +2308,6 @@ namespace OpenDental.Eclaims {
 			//For NIHB claims, print the Band (Field C13) and Family (Field C14) numbers as required.
 			//If they have NIHB, then it is probably their primary and they probably don't have any other plan.
 			if(fieldC12!=null && fieldC12.valuestr=="N" && fieldC13!=null && fieldC13.valuestr.Trim()!="" && fieldC14!=null && fieldC14.valuestr.Trim()!="") {
-				//The French here was provided by google translator. Probably useless but at least it's something.
 				return doc.DrawString(g,isFrench?("BANDE: "+fieldC13.valuestr+"  FAMILLE: "+fieldC14.valuestr):("BAND: "+fieldC13.valuestr+"  FAMILY: "+fieldC14.valuestr),X,Y);
 			}
 			return doc.DrawField(g,isFrench?"NO DE CERTIFICAT":"CERTIFICATE NO",text,true,X,Y);
@@ -2859,22 +2852,21 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Convet a code from fields F20 and F21 into a human-readable string.</summary>
 		private string GetMaterialDescription(int materialCode) {
-			//English to french translations provided by google translator. Probably not good.
 			switch(materialCode) {
 				case 1:
 					return isFrench?"Pont fixe":"Fixed Bridge";
 				case 2:
-					return isFrench?"Pont du Maryland":"Maryland Bridge";
+					return isFrench?"Pont Maryland":"Maryland Bridge";
 				case 3:
-					return isFrench?"Dentier (acrylique)":"Denture (Acrylic)";
+					return isFrench?"Prothèse (acrylique)":"Denture (Acrylic)";
 				case 4:
-					return isFrench?"Dentier (cobalt de chrome)":"Denture (Chrome Cobalt)";
+					return isFrench?"Prothèse (chrome cobalt)":"Denture (Chrome Cobalt)";
 				case 5:
-					return isFrench?"Implant (fixé)":"Implant (Fixed)";
+					return isFrench?"Implant (fixe)":"Implant (Fixed)";
 				case 6:
 					return isFrench?"Implant (démontable)":"Implant (Removable)";
 				case 7:
-					return isFrench?"Couronne":"Crown";
+					return isFrench?"Implant (amovible)":"Crown";
 				default:
 					break;
 			}
@@ -2883,24 +2875,23 @@ namespace OpenDental.Eclaims {
 
 		///<summary>Convert one of the type codes from field F16 into a human-readable string.</summary>
 		private string GetProcedureTypeCodeDescription(char procedureTypeCode) {
-			//English to french translations provided by google translator. Probably not good.
 			switch(procedureTypeCode) {
 				case 'A':
-					return isFrench?"Réparation d'un service ou d'une installation antérieur.":
+					return isFrench?"Réparation d’un traitement ou appareil; si non spécifié, il s’agit d’une mise en bouche initiale.":
 						"Repair of a prior service or installation.";
 				case 'B':
-					return isFrench?"Placement ou service provisoire.":"Temporary placement or service.";
+					return isFrench?"Mise en bouche ou traitement temporaire; si non spécifié, il s’agit d’une mise en bouche ou traitement permanent.":"Temporary placement or service.";
 				case 'C':
-					return isFrench?"Service pour la correction de TMJ.":"Service for correction of TMJ.";
+					return isFrench?"Correction d’un appareil ATM.":"Service for correction of TMJ.";
 				case 'E':
-					return isFrench?"Le service est un implant ou est exécuté en même temps que des implants.":
+					return isFrench?"Traitement est un implant ou est exécuté conjointement avec un implant.":
 						"Service is an implant or is performed in conjunction with implants.";
 				case 'L':
 					return isFrench?"Appareil perdu.":"Appliance lost.";
 				case 'S':
 					return isFrench?"Appareil volé.":"Appliance stolen.";
 				case 'X':
-					return isFrench?"Circonstances anormales.":"Abnormal circumstances.";
+					return isFrench?"Aucun de ces choix.":"Abnormal circumstances.";
 				default:
 					break;
 			}

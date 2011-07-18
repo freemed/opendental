@@ -412,7 +412,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="NO DE POLICE";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check embedded blanks and leading zeros.
 					break;
 				case "C02":
 					//Subscriber Identification Number
@@ -420,7 +419,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="NO DE CERTIFICAT";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(11);
-					//TODO: check requirements.
 					break;
 				case "C03":
 					fieldName="Relationship Code";
@@ -441,7 +439,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="L'anniversaire du patient";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check date is within last 150 years.
 					break;
 				case "C06":
 					fieldName="Patient's Last Name";
@@ -560,14 +557,12 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Politique/plan secondaires";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check for embedded blanks and justification.
 					break;
 				case "E03":
 					fieldName="Secondary Plan Subscriber ID";
 					frenchFieldName="Identification secondaire d'abonné de plan";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(11);
-					//TODO: check for embedded blanks and justification.
 					break;
 				case "E04":
 					//Spouse/Significant Other Birtday
@@ -575,7 +570,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="L'anniversaire de l'abonné secondaire";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check date is reasonable.
 					break;
 				case "E05":
 					fieldName="Secondary Division/Section Number";
@@ -602,7 +596,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Date d'accidents";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: Check that date is reasonable.
 					break;
 				case "F03":
 					fieldName="Predetermination Number";
@@ -615,7 +608,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Date de haut initial de placement";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: Check that date is reasonable and in the past.
 					break;
 				case "F05":
 					fieldName="Treatment Required for orthodontic";
@@ -643,7 +635,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Code de procédé";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO: Check that the number is valid.
 					break;
 				case "F09":
 					fieldName="Date of Service";
@@ -656,7 +647,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Dent, sextant, quadruple ou voûte international";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(2);
-					//TODO: value must be zero or a valid tooth number.
 					break;
 				case "F11":
 					fieldName="Tooth Surface";
@@ -709,7 +699,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Date prévue de paiement";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: Check date reasonable?
 					break;
 				case "G04":
 					fieldName="Total Amount of Service";
@@ -814,7 +803,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Code additionnel de procédé";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO: Check that code value is valid.
 					break;
 				case "G20":
 					fieldName="Eligible Amount for the Additional Procedure";
@@ -827,7 +815,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="";
 					format="D";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO:?
 					break;
 				case "G22":
 					fieldName="Eligible Percentage";
@@ -1036,7 +1023,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="NO DE POLICE";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(12);
-					//TODO: check embedded blanks and leading zeros.
 					break;
 				case "C02":
 					//Subscriber Identification Number
@@ -1044,7 +1030,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="NO DE CERTIFICAT";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(12);
-					//TODO: check requirements.
 					break;
 				case "C03":
 					fieldName="Relationship Code";
@@ -1065,7 +1050,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="L'anniversaire du patient";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check date is within last 150 years.
 					break;
 				case "C06":
 					fieldName="Patient's Last Name";
@@ -1116,21 +1100,18 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Nombre de bande";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(3);
-					//TODO: add value requirements.
 					break;
 				case "C14"://Not in version 2.
 					fieldName="Family Number";
 					frenchFieldName="Nombre de famille";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO: check value requirements.
 					break;
 				case "C15"://Not in version 2.
 					fieldName="Missing Teeth";
 					frenchFieldName="Dents absentes";
 					format="A";
 					lengthRequirement=new ConstLengthRequirement(11);
-					//TODO: chech value requirements.
 					break;
 				case "C16"://Not in version 2.
 					fieldName="Eligibility Date";
@@ -1158,14 +1139,12 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Disque de plan";
 					format="AN";
 					lengthRequirement=new ConstLengthRequirement(30);
-					//TODO: Check format requirements.
 					break;
 				case "D01":
 					fieldName="Subscriber's Birthday";
 					frenchFieldName="L'anniversaire de l'abonné";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check date is within last 150 years.
 					break;
 				case "D02":
 					fieldName="Subscriber's Last Name";
@@ -1241,21 +1220,18 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Politique/plan secondaires";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(12);
-					//TODO: check for embedded blanks and justification.
 					break;
 				case "E03":
 					fieldName="Secondary Plan Subscriber ID";
 					frenchFieldName="Identification secondaire d'abonné de plan";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(12);
-					//TODO: check for embedded blanks and justification.
 					break;
 				case "E04":
 					fieldName="Secondary Subscriber's Birthday";
 					frenchFieldName="L'anniversaire de l'abonné secondaire";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: check date is reasonable.
 					break;
 				case "E05":
 					fieldName="Secondary Division/Section Number";
@@ -1324,7 +1300,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Code du Postal/ZIP de l'abonné secondaire";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(9);
-					//TODO: check justification.
 					break;
 				case "E16"://Not in version 2.
 					fieldName="Secondary Language";
@@ -1373,7 +1348,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Date d'accidents";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: Check that date is reasonable.
 					break;
 				case "F03":
 					fieldName="Predetermination Number";
@@ -1386,7 +1360,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Date de haut initial de placement";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: Check that date is reasonable and in the past.
 					break;
 				case "F05":
 					fieldName="Treatment Required for orthodontic";
@@ -1414,7 +1387,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Code de procédé";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO: Check that the number is valid.
 					break;
 				case "F09":
 					fieldName="Date of Service";
@@ -1427,7 +1399,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Dent, sextant, quadruple ou voûte international";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(2);
-					//TODO: value must be zero or a valid tooth number.
 					break;
 				case "F11":
 					fieldName="Tooth Surface";
@@ -1482,7 +1453,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="La date du placement initial s'abaissent";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: if F18 is "N", must be past date. Check reasonability of date.
 					break;
 				case "F20"://Not in version 2.
 					fieldName="Maxillary Prosthesis Material";
@@ -1510,14 +1480,12 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Nombre extrait de dent";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(2);
-					//TODO: Check for valid tooth code.
 					break;
 				case "F24"://Not in version 2.
 					fieldName="Extraction Date";
 					frenchFieldName="Date d'extraction";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: Check date is reasonable?
 					break;
 				case "F25"://Not in version 2.
 					fieldName="Orthodontic Record Flag";
@@ -1580,14 +1548,12 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Code # 1 de procédé de laboratoire";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO: Check validity of code.
 					break;
 				case "F35"://Not in version 2.
 					fieldName="Lab Procedure Code # 2";
 					frenchFieldName="Code # 2 de procédé de laboratoire";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO: Check validity of code.
 					break;
 				case "F36"://Not in version 2.
 					fieldName="Lab Procedure Fee # 2";
@@ -1600,7 +1566,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Date estimée de début de traitement";
 					format="N";
 					lengthRequirement=new ConstLengthWhenOtherFieldHasValue("F25","1",8);
-					//TODO: Check date reasonable?
 					break;
 				case "F38"://Not in version 2.
 					fieldName="Current Reconciliation Page Number";
@@ -1696,7 +1661,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Date prévue de paiement";
 					format="N";
 					lengthRequirement=new ConstLengthRequirement(8);
-					//TODO: Check date reasonable?
 					break;
 				case "G04":
 					fieldName="Total Amount of Service";
@@ -1796,7 +1760,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="Code additionnel de procédé";
 					format="A/N";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO: Check that code value is valid.
 					break;
 				case "G20":
 					fieldName="Eligible Amount for the Additional Procedure";
@@ -1809,7 +1772,6 @@ namespace OpenDental.Eclaims {
 					frenchFieldName="";
 					format="D";
 					lengthRequirement=new ConstLengthRequirement(5);
-					//TODO:?
 					break;
 				case "G22":
 					fieldName="Eligible Percentage";
