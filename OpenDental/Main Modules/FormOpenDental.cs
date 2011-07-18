@@ -2408,6 +2408,9 @@ namespace OpenDental{
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
 			LayoutControls();
+			if(Plugins.PluginsAreLoaded) {
+				Plugins.HookAddCode(this,"FormOpenDental.FormOpenDental_Resize_end");
+			}
 		}
 
 		///<summary>This used to be called much more frequently when it was an actual layout event.</summary>
@@ -2482,9 +2485,6 @@ namespace OpenDental{
 			ContrAppt2.Location=position;
 			ContrAppt2.Width=width;
 			ContrAppt2.Height=height;
-			if(Plugins.PluginsAreLoaded) {
-				Plugins.HookAddCode(ContrAppt2,"FormOpenDental.LayoutControls_bottom");
-			}
 			ContrChart2.Location=position;
 			ContrChart2.Width=width;
 			ContrChart2.Height=height;
