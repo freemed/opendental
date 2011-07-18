@@ -1355,6 +1355,7 @@ namespace OpenDental{
 					//Also will delete the credit card number and replace it with secure masked number.
 					CCard.XChargeToken=xChargeToken;
 					CCard.CCNumberMasked=accountMasked;
+					CCard.CCExpiration=new DateTime(Convert.ToInt32("20"+expiration.Substring(2,2)),Convert.ToInt32(expiration.Substring(0,2)),1);
 					CreditCards.Update(CCard);
 				}
 				if(newCard) {
