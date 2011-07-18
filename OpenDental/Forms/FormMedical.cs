@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,7 +36,13 @@ namespace OpenDental{
 		private PatientNote PatientNoteCur;
 		private CheckBox checkShowInactiveAllergies;
 		private List<Allergy> allergyList;
+		private UI.Button butPrint;
 		private List<MedicationPat> medList;
+		private int pagesPrinted;
+		private PrintDocument pd;
+		private bool headingPrinted;
+		private int headingPrintH;
+
 
 		///<summary></summary>
 		public FormMedical(PatientNote patientNoteCur,Patient patCur){
@@ -86,6 +93,7 @@ namespace OpenDental{
 			this.gridAllergies = new OpenDental.UI.ODGrid();
 			this.butAddAllergy = new OpenDental.UI.Button();
 			this.checkShowInactiveAllergies = new System.Windows.Forms.CheckBox();
+			this.butPrint = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -135,6 +143,8 @@ namespace OpenDental{
 			// textService
 			// 
 			this.textService.AcceptsReturn = true;
+			this.textService.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.textService.Location = new System.Drawing.Point(115,558);
 			this.textService.Multiline = true;
 			this.textService.Name = "textService";
@@ -209,6 +219,9 @@ namespace OpenDental{
 			// textMedicalComp
 			// 
 			this.textMedicalComp.AcceptsReturn = true;
+			this.textMedicalComp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textMedicalComp.Location = new System.Drawing.Point(374,262);
 			this.textMedicalComp.Multiline = true;
 			this.textMedicalComp.Name = "textMedicalComp";
@@ -235,6 +248,8 @@ namespace OpenDental{
 			// 
 			// gridMeds
 			// 
+			this.gridMeds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMeds.HScrollVisible = false;
 			this.gridMeds.Location = new System.Drawing.Point(374,26);
 			this.gridMeds.Name = "gridMeds";
@@ -298,8 +313,6 @@ namespace OpenDental{
 			// 
 			// gridAllergies
 			// 
-			this.gridAllergies.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridAllergies.HScrollVisible = false;
 			this.gridAllergies.Location = new System.Drawing.Point(4,278);
 			this.gridAllergies.Name = "gridAllergies";
@@ -337,12 +350,30 @@ namespace OpenDental{
 			this.checkShowInactiveAllergies.UseVisualStyleBackColor = true;
 			this.checkShowInactiveAllergies.CheckedChanged += new System.EventHandler(this.checkShowInactiveAllergies_CheckedChanged);
 			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(843,1);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(116,24);
+			this.butPrint.TabIndex = 66;
+			this.butPrint.Text = "Print Medications";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964,683);
+			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkShowInactiveAllergies);
 			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.gridAllergies);
@@ -451,6 +482,65 @@ namespace OpenDental{
 				return;
 			}
 			FillMeds();
+		}
+
+		private void butPrint_Click(object sender,EventArgs e) {
+			pagesPrinted=0;
+			pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			//pd.DefaultPageSettings.Landscape=true;
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			headingPrinted=false;
+			try {
+#if DEBUG
+        FormRpPrintPreview pView = new FormRpPrintPreview();
+        pView.printPreviewControl2.Document=pd;
+        pView.ShowDialog();
+#else
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+						pd.Print();
+					}
+#endif
+			}
+			catch {
+				MessageBox.Show(Lan.g(this,"Printer not available"));
+			}
+		}
+
+		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			if(!headingPrinted) {
+				text=Lan.g(this,"Medications List For ")+PatCur.FName+" "+PatCur.LName;
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				text=Lan.g(this,"Created ")+DateTime.Now.ToString();
+				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=20;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			yPos=gridMeds.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(yPos==-1) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		private void FillProblems(){
@@ -610,7 +700,6 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
 
 
 		
