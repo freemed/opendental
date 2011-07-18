@@ -322,6 +322,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a lab case first.");
 				return;
 			}
+			if(table.Rows[gridMain.GetSelectedIndex()]["AptNum"].ToString()=="0") {
+				MsgBox.Show(this,"There are no appointments for unattached lab cases.");
+				return;
+			}
 			Appointment apt=Appointments.GetOneApt(PIn.Long(table.Rows[gridMain.GetSelectedIndex()]["AptNum"].ToString()));
 			if(apt.AptStatus==ApptStatus.UnschedList){
 				MsgBox.Show(this,"Cannot go to an unscheduled appointment");
