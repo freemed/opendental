@@ -561,10 +561,15 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
 				+"WHERE ProcStatus=2 "//complete
 				+"AND procedurelog.PatNum IN ("
-				+familyPatNums
-				+") GROUP BY procedurelog.ClinicNum,procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,ProcCode,"
-				+DbHelper.DateColumn("procedurelog.ProcDate")+",ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,procedurelog.ProvNum,ToothNum,"
-				+"ToothRange,UnitQty ";
+				+familyPatNums;
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				command+=") GROUP BY procedurelog.ClinicNum,procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,ProcCode,"
+					+DbHelper.DateColumn("procedurelog.ProcDate")+",ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,procedurelog.ProvNum,ToothNum,"
+					+"ToothRange,UnitQty ";
+			}
+			else{//mysql. Including Descript in the GROUP BY causes mysql to lock up sometimes.  Unsure why.
+				command+=") GROUP BY procedurelog.ProcNum ";
+			}
 			command+="ORDER BY procDate_";
 			DataTable rawProc=dcon.GetTable(command);
 			double insPayAmt;
