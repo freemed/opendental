@@ -399,16 +399,18 @@ namespace OpenDental{
 				row.Cells.Add(splits[i].Carrier);
 				row.Cells.Add(splits[i].FeeBilled.ToString("F"));
 				row.Cells.Add(splits[i].InsPayAmt.ToString("F"));
-				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum){
-					gridMain.SetSelected(i,true);
-					splitTot+=(decimal)splits[i].InsPayAmt;
-				}
 				if(splits[i].ClaimNum==OriginatingClaimNum){
 					row.Bold=true;
 				}  
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			for(int i=0;i<splits.Count;i++) {
+				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum) {
+					gridMain.SetSelected(i,true);
+					splitTot+=(decimal)splits[i].InsPayAmt;
+				}
+			}
 			textAmount.Text=splitTot.ToString("F");
 		}
 
