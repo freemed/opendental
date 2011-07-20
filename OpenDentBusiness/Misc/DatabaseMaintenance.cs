@@ -1482,6 +1482,38 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string PatientPriProvHidden(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command=@"SELECT ProvNum,Abbr FROM provider WHERE ProvNum IN (SELECT PriProv FROM patient WHERE patient.PriProv=provider.ProvNum) AND IsHidden=1";
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Hidden providers with patients: ")+table.Rows.Count+"\r\n";
+					DataTable patTable;
+					for(int i=0;i<table.Rows.Count;i++) {
+						log+="     "+table.Rows[i]["Abbr"].ToString()+": ";
+						command=@"SELECT PatNum,LName,FName FROM patient WHERE PriProv=(SELECT ProvNum FROM provider WHERE ProvNum="
+							+table.Rows[i]["ProvNum"].ToString()+" AND IsHidden=1) LIMIT 10";
+						patTable=Db.GetTable(command);
+						for(int j=0;j<patTable.Rows.Count;j++) {
+							if(j>0) {
+								log+=", ";
+							}
+							log+=patTable.Rows[j]["PatNum"].ToString()+"-"+patTable.Rows[j]["FName"].ToString()+" "+patTable.Rows[j]["LName"].ToString();
+						}
+						log+="\r\n";
+					}
+				}
+			}
+			else {//Currently no fix.
+				//Proposed fix is to add a tool to Lists>Providers and allow quick reassigning of patients and their providers.
+			}
+			return log;
+		}
+
 		public static string PatientPriProvMissing(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
