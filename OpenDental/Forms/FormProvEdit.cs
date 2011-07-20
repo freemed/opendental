@@ -1013,21 +1013,25 @@ namespace OpenDental{
 			FillProvIdent();
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e){
-			if(textAbbr.Text==""){
+		private void butOK_Click(object sender,System.EventArgs e) {
+			if(textAbbr.Text=="") {
 				MessageBox.Show(Lan.g(this,"Abbreviation not allowed to be blank."));
 				return;
 			}
-			if(textSSN.Text.Contains("-")){
+			if(textSSN.Text.Contains("-")) {
 				MsgBox.Show(this,"SSN/TIN not allowed to have dash.");
 				return;
 			}
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
-				if(ProviderC.ListLong[i].ProvNum==ProvCur.ProvNum){
+			if(checkIsHidden.Checked && PrefC.GetLong(PrefName.PracticeDefaultProv)==ProvCur.ProvNum) {
+				MsgBox.Show(this,"Not allowed to hide practice default provider.");
+				return;
+			}
+			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+				if(ProviderC.ListLong[i].ProvNum==ProvCur.ProvNum) {
 					continue;
 				}
-				if(ProviderC.ListLong[i].Abbr==textAbbr.Text){
-					if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")){
+				if(ProviderC.ListLong[i].Abbr==textAbbr.Text) {
+					if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")) {
 						return;
 					}
 				}
@@ -1061,30 +1065,30 @@ namespace OpenDental{
 			ProvCur.IsCDAnet=checkIsCDAnet.Checked;
 			ProvCur.ProvColor=butColor.BackColor;
 			ProvCur.OutlineColor=butOutlineColor.BackColor;
-			if(comboSchoolClass.SelectedIndex==0){//none
+			if(comboSchoolClass.SelectedIndex==0) {//none
 				ProvCur.SchoolClassNum=0;
 			}
-			else{
+			else {
 				ProvCur.SchoolClassNum=SchoolClasses.List[comboSchoolClass.SelectedIndex-1].SchoolClassNum;
 			}
-			if(listFeeSched.SelectedIndex!=-1){
+			if(listFeeSched.SelectedIndex!=-1) {
 				ProvCur.FeeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
 			}
 			ProvCur.Specialty=(DentalSpecialty)listSpecialty.SelectedIndex;
 			ProvCur.TaxonomyCodeOverride=textTaxonomyOverride.Text;
-			if(radAnesthSurg.Checked){
+			if(radAnesthSurg.Checked) {
 				ProvCur.AnesthProvType=1;
 			}
-			else if(radAsstCirc.Checked){
+			else if(radAsstCirc.Checked) {
 				ProvCur.AnesthProvType=2;
 			}
-			else{
+			else {
 				ProvCur.AnesthProvType=0;
 			}
-			if(IsNew){
+			if(IsNew) {
 				Providers.Insert(ProvCur);
 			}
-			else{
+			else {
 				Providers.Update(ProvCur);
 			}
 			DialogResult = DialogResult.OK;
