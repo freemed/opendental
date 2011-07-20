@@ -2232,6 +2232,7 @@ namespace OpenDental {
 			gridComm.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
 			DataTable table = DataSetMain.Tables["Commlog"];
+//TODO: transition this to using the Tag object.
 			for(int i=0;i<table.Rows.Count;i++) {
 				//Skip commlog entries which belong to other family members per user option.
 //TODO: This does not handle jr./sr. family members. i.e. When there is a John and John Jr.
@@ -2249,6 +2250,7 @@ namespace OpenDental {
 					row.Cells.Add(table.Rows[i]["patName"].ToString());
 				}
 				else {//one patient
+					//Matching FName is not perfect because children can have the same names as parents.
 					if(table.Rows[i]["patName"].ToString()==PatCur.FName) {//if this patient
 						row.Cells.Add("");
 					}
@@ -3639,21 +3641,23 @@ namespace OpenDental {
 			FormT.ShowDialog();
 		}
 
-		private void gridComm_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			//string commlognum=DataSetMain.Tables["Commlog"].Rows[e.Row]["CommlogNum"].ToString();
+		private void gridComm_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
+			//TODO: transition this to checking the Tag object.
 			int row=e.Row;
-			if(!this.checkShowFamilyComm.Checked){
+			if(!this.checkShowFamilyComm.Checked) {
 				int i;
-				for(row=0,i=0;row<DataSetMain.Tables["Commlog"].Rows.Count;row++){
-					if(DataSetMain.Tables["Commlog"].Rows[row]["patName"].ToString()==""){
-						if(i==e.Row){
+				for(row=0,i=0;row<DataSetMain.Tables["Commlog"].Rows.Count;row++) {
+					//Matching FName is not perfect because children can have the same names as parents.
+					//But it does currently match the logic for display, so it will at least select the right row when double clicked.
+					if(DataSetMain.Tables["Commlog"].Rows[row]["patName"].ToString()==PatCur.FName) {
+						if(i==e.Row) {
 							break;
 						}
 						i++;
 					}
 				}
 			}
-			if(DataSetMain.Tables["Commlog"].Rows[row]["CommlogNum"].ToString()!="0"){
+			if(DataSetMain.Tables["Commlog"].Rows[row]["CommlogNum"].ToString()!="0") {
 				Commlog CommlogCur=
 					Commlogs.GetOne(PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["CommlogNum"].ToString()));
 				FormCommItem FormCI=new FormCommItem(CommlogCur);
