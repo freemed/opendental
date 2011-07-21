@@ -281,7 +281,7 @@ namespace OpenDental {
 
 		private void FillProvs() {
 			comboBoxMultiProv.Items.Add("All");
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboBoxMultiProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			comboBoxMultiProv.SetSelected(0,true);

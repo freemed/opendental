@@ -251,7 +251,7 @@ namespace OpenDental{
 			comboOrder.SelectedIndex=0;
 			comboProv.Items.Add(Lan.g(this,"All"));
 			comboProv.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){

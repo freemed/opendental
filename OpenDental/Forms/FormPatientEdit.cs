@@ -1828,7 +1828,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboPriProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==PatCur.PriProv) {
 					comboPriProv.SelectedIndex=i;
@@ -1847,7 +1847,7 @@ namespace OpenDental{
 			comboSecProv.Items.Clear();
 			comboSecProv.Items.Add(Lan.g(this,"none"));
 			comboSecProv.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboSecProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==PatCur.SecProv)
 					comboSecProv.SelectedIndex=i+1;

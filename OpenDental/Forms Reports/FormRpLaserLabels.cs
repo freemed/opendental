@@ -961,7 +961,7 @@ namespace OpenDental {
 		// Load initial data for providers and patient status
 		//
 		private void FormLaserLabels_Load(object sender,System.EventArgs e) {
-			for(int i = 0;i < ProviderC.ListShort.Length;i++) {
+			for(int i = 0;i < ProviderC.ListShort.Count;i++) {
 				listProviders.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(listProviders.Items.Count > 0) {

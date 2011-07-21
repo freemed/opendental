@@ -1359,7 +1359,7 @@ namespace OpenDental
 				textDateEntry.Visible=false;
 			}
 			comboProvider.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvider.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ClaimProcCur.ProvNum==ProviderC.ListShort[i].ProvNum){
 					comboProvider.SelectedIndex=i;

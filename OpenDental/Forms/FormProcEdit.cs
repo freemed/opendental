@@ -2427,7 +2427,7 @@ namespace OpenDental{
 				ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);//Returns 0 if logged in as non provider.
 			}//ProvNum of 0 will be required to change before closing form.
 			comboProvNum.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvNum.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==ProcCur.ProvNum) {
 					comboProvNum.SelectedIndex=i;

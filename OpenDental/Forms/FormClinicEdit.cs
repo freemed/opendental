@@ -406,7 +406,7 @@ namespace OpenDental{
 			comboPlaceService.Items.Clear();
 			comboPlaceService.Items.AddRange(Enum.GetNames(typeof(PlaceOfService)));
 			comboPlaceService.SelectedIndex=(int)ClinicCur.DefaultPlaceService;
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboInsBillingProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(ClinicCur.InsBillingProv==0){

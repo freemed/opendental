@@ -293,7 +293,7 @@ namespace OpenDental{
 		private void FormPaymentSheet_Load(object sender, System.EventArgs e) {
 			date1.SelectionStart=DateTime.Today;
 			date2.SelectionStart=DateTime.Today;
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {

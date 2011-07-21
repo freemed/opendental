@@ -226,7 +226,7 @@ namespace OpenDental {
 		private void FormRpReceivablesBreakdown_Load(object sender,EventArgs e) {
 			radioWriteoffPay.Checked = true;
 			listProv.Items.Add(Lan.g(this,"Practice"));
-			for(int i = 0;i < ProviderC.ListShort.Length;i++) {
+			for(int i = 0;i < ProviderC.ListShort.Count;i++) {
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			listProv.SetSelected(0,true);

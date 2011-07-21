@@ -762,7 +762,7 @@ namespace OpenDental
 					comboUnearnedTypes.SelectedIndex=i+1;
 				}
 			}
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvider.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==PaySplitCur.ProvNum) {
 					comboProvider.SelectedIndex=i;

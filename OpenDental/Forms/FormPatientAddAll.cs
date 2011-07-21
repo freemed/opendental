@@ -124,7 +124,7 @@ namespace OpenDental {
 			comboSecProv4.SelectedIndex=0;
 			comboSecProv5.Items.Add(Lan.g(this,"none"));
 			comboSecProv5.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboPriProv1.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				comboSecProv1.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				comboPriProv2.Items.Add(ProviderC.ListShort[i].GetLongDesc());

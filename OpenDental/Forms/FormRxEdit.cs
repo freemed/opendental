@@ -526,7 +526,7 @@ namespace OpenDental{
 				}
 			}
 			//security is handled on the Rx button click in the Chart module
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				this.listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				if(ProviderC.ListShort[i].ProvNum==RxPatCur.ProvNum){
 					listProv.SelectedIndex=i;

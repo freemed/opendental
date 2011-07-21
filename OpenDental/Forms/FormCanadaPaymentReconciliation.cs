@@ -27,7 +27,7 @@ namespace OpenDental {
 				}
 			}
 			long defaultProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				if(ProviderC.ListShort[i].IsCDAnet) {
 					listBillingProvider.Items.Add(ProviderC.ListShort[i].Abbr);
 					listTreatingProvider.Items.Add(ProviderC.ListShort[i].Abbr);

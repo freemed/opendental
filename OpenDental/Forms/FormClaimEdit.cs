@@ -3509,7 +3509,7 @@ namespace OpenDental{
 					break;
 			}
 			comboProvBill.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvBill.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==ClaimCur.ProvBill) {
 					comboProvBill.SelectedIndex=i;
@@ -3518,7 +3518,7 @@ namespace OpenDental{
 			if(comboProvBill.Items.Count>0 && comboProvBill.SelectedIndex==-1)
 				comboProvBill.SelectedIndex=0;
 			comboProvTreat.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvTreat.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==ClaimCur.ProvTreat) {
 					comboProvTreat.SelectedIndex=i;

@@ -600,7 +600,7 @@ namespace OpenDental{
 				groupSwiss.Visible=false;
 			}
 			listProvider.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProvider.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				if(ProviderC.ListShort[i].ProvNum==PrefC.GetLong(PrefName.PracticeDefaultProv)){
 					listProvider.SelectedIndex=i;
@@ -621,7 +621,7 @@ namespace OpenDental{
 				listPlaceService.Items.Add(Lan.g("enumPlaceOfService",Enum.GetNames(typeof(PlaceOfService))[i]));
 			}
 			listPlaceService.SelectedIndex=PrefC.GetInt(PrefName.DefaultProcedurePlaceService);
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboInsBillingProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetLong(PrefName.InsBillingProv)==0){
@@ -693,7 +693,7 @@ namespace OpenDental{
 				}
 			}
 			if(listProvider.SelectedIndex==-1//practice really needs a default prov
-				&& ProviderC.ListShort.Length > 0)
+				&& ProviderC.ListShort.Count > 0)
 			{
 				listProvider.SelectedIndex=0;
 			}

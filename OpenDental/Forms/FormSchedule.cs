@@ -446,7 +446,7 @@ namespace OpenDental{
 			//textDateTo.Text=dateFrom.AddDays(6).ToShortDateString();
 			//listProv.Items.Add(Lan.g(this,"(Practice)"));
 			//listProv.SetSelected(0,true);
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				listProv.SetSelected(i,true);
 			}

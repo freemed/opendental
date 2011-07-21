@@ -30,7 +30,7 @@ namespace OpenDental {
 				}
 			}
 			long defaultProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				listTreatingProvider.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==defaultProvNum) {
 					listTreatingProvider.SelectedIndex=i;

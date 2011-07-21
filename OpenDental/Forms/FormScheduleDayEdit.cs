@@ -312,7 +312,7 @@ namespace OpenDental{
 			labelDate.Text=SchedCurDate.ToString("dddd")+" "+SchedCurDate.ToShortDateString();
 			SchedList=Schedules.RefreshDayEdit(SchedCurDate);//only does this on startup
 			//listProv
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				//listProv.SetSelected(i,true);
 			}
@@ -321,7 +321,7 @@ namespace OpenDental{
 				//listEmp.SetSelected(i,true);
 			}
       FillGrid();
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==PrefC.GetLong(PrefName.ScheduleProvUnassigned)) {
 					comboProv.SelectedIndex=i;

@@ -131,7 +131,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(ProviderC.ListShort[i].Abbr);
 				row.Cells.Add(ProviderC.ListShort[i].LName);

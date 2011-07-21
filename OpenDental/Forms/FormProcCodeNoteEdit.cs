@@ -243,7 +243,7 @@ namespace OpenDental{
 
 		private void FormProcCodeNoteEdit_Load(object sender,EventArgs e) {
 			strBTime=new StringBuilder(NoteCur.ProcTime);
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				if(NoteCur.ProvNum==ProviderC.ListShort[i].ProvNum){
 					listProv.SelectedIndex=i;

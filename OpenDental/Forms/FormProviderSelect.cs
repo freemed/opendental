@@ -407,7 +407,7 @@ namespace OpenDental{
 			changed=true;
 			FillGrid();
 			gridMain.ScrollToEnd();
-			for(int i=0;i<table.Rows.Count;i++){//ProviderC.ListLong.Length;i++) {
+			for(int i=0;i<table.Rows.Count;i++){//ProviderC.ListLong.Count;i++) {
 				if(table.Rows[i]["ProvNum"].ToString()==FormP.ProvCur.ProvNum.ToString()){
 					//ProviderC.ListLong[i].ProvNum==FormP.ProvCur.ProvNum) {
 					gridMain.SetSelected(i,true);
@@ -444,7 +444,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select exactly one provider first.");
 				return;
 			}
-			if(gridMain.SelectedIndices[0]==ProviderC.ListLong.Length-1) {//already at bottom
+			if(gridMain.SelectedIndices[0]==ProviderC.ListLong.Count-1) {//already at bottom
 				return;
 			}
 			Provider prov=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));

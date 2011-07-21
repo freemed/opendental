@@ -239,7 +239,7 @@ namespace OpenDental
 		#endregion
 
 		private void FormRpApptWithPhones_Load(object sender, System.EventArgs e){
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}

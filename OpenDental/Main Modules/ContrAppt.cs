@@ -4465,7 +4465,7 @@ namespace OpenDental{
 			textBefore.Text="";
 			textAfter.Text="";
 			listProviders.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProviders.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(pinBoard.SelectedAppt.DataRoww["IsHygiene"].ToString()=="1"
 					&& ProviderC.ListShort[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvHyg"].ToString())

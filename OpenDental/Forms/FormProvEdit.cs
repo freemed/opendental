@@ -1026,7 +1026,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to hide practice default provider.");
 				return;
 			}
-			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+			for(int i=0;i<ProviderC.ListLong.Count;i++) {
 				if(ProviderC.ListLong[i].ProvNum==ProvCur.ProvNum) {
 					continue;
 				}

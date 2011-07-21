@@ -1135,14 +1135,14 @@ namespace OpenDental{
 				//Try to auto-select a provider when in Orion mode. Only for new appointments so we don't change historical data.
 				AptCur.ProvNum=Providers.GetOrionProvNum(AptCur.ProvNum);
 			}
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProvNum.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==AptCur.ProvNum)
 					comboProvNum.SelectedIndex=i;
 			}
 			comboProvHyg.Items.Add(Lan.g(this,"none"));
 			comboProvHyg.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProvHyg.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==AptCur.ProvHyg)
 					comboProvHyg.SelectedIndex=i+1;

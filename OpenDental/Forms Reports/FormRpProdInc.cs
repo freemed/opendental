@@ -425,7 +425,7 @@ namespace OpenDental{
 		#endregion
 		private void FormProduction_Load(object sender, System.EventArgs e) {
 			textToday.Text=DateTime.Today.ToShortDateString();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics)){

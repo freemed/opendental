@@ -151,7 +151,7 @@ namespace OpenDental{
 		private void FormPerioEdit_Load(object sender, System.EventArgs e) {
 			textDate.Text=PerioExamCur.ExamDate.ToShortDateString();
 			listProv.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==PerioExamCur.ProvNum){
 					listProv.SelectedIndex=i;

@@ -348,7 +348,7 @@ namespace OpenDental{
 			textDateTo.Text=AddWorkDays(2,DateTime.Today).ToShortDateString();
 			comboProv.Items.Add(Lan.g(this,"All"));
 			comboProv.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			//textPostcardMessage.Text=PrefC.GetString(PrefName.ConfirmPostcardMessage");

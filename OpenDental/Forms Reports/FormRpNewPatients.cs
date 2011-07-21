@@ -283,7 +283,7 @@ namespace OpenDental{
 			textDateTo.Text=new DateTime(DateTime.Today.Year,DateTime.Today.Month
 				,DateTime.DaysInMonth(DateTime.Today.Year,DateTime.Today.Month)).ToShortDateString();
 			listProv.Items.Add(Lan.g(this,"all"));
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			listProv.SetSelected(0,true);

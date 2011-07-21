@@ -399,7 +399,7 @@ namespace OpenDental{
 			}
 			comboInstructor.Items.Add(Lan.g(this,"None"));
 			comboInstructor.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboInstructor.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				if(ProviderC.ListShort[i].ProvNum==ReqCur.InstructorNum) {
 					comboInstructor.SelectedIndex=i+1;

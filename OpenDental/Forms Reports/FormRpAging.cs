@@ -337,7 +337,7 @@ namespace OpenDental{
 			}
 			listBillType.Visible=false;
 			checkBillTypesAll.Checked=true;
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(listProv.Items.Count>0) {

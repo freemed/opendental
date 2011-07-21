@@ -28,7 +28,7 @@ namespace TestCanada {
 		private static Provider CreateProvider(string fName,string lName,string npi,string officeNum,string abbr) {
 			Provider prov=null;
 			int maxItemOrder=0;
-			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+			for(int i=0;i<ProviderC.ListLong.Count;i++) {
 				if(ProviderC.ListLong[i].NationalProvID=="" || ProviderC.ListLong[i].NationalProvID==npi) {
 					prov=ProviderC.ListLong[i];
 				}

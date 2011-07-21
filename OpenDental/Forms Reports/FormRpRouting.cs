@@ -244,7 +244,7 @@ namespace OpenDental
 				DialogResult=DialogResult.OK;
 				return;
 			}
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}

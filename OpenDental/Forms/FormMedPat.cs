@@ -426,7 +426,7 @@ namespace OpenDental{
 			textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;
 			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
 			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
-			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				if(MedicationPatCur.ProvNum==ProviderC.ListShort[i].ProvNum) {
 					comboProv.SelectedIndex=i;

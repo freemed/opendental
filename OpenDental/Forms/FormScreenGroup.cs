@@ -469,7 +469,7 @@ namespace OpenDental{
 			textScreenDate.Text=ScreenGroupCur.SGDate.ToShortDateString();
 			textDescription.Text=ScreenGroupCur.Description;
 			textProvName.Text=ScreenGroupCur.ProvName;//has to be filled before provnum
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ScreenGroupCur.ProvNum==ProviderC.ListShort[i].ProvNum){
 					comboProv.SelectedIndex=i;

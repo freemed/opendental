@@ -1081,7 +1081,7 @@ namespace OpenDental{
         case "SecProv":
           SetListBoxConditions();
 					ComboBox.Items.Clear();
-          for(int i=0;i<ProviderC.ListLong.Length;i++){
+          for(int i=0;i<ProviderC.ListLong.Count;i++){
 						sItem=ProviderC.ListLong[i].LName+", "
 							+ProviderC.ListLong[i].MI+" "+ProviderC.ListLong[i].FName;
 						if(ProviderC.ListLong[i].IsHidden)

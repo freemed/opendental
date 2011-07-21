@@ -23,14 +23,14 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			ProviderC.ListLong=Crud.ProviderCrud.TableToList(table).ToArray();
+			ProviderC.ListLong=Crud.ProviderCrud.TableToList(table);
 			List<Provider> listShort=new List<Provider>();
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(!ProviderC.ListLong[i].IsHidden){
 					listShort.Add(ProviderC.ListLong[i]);	
 				}
 			}
-			ProviderC.ListShort=listShort.ToArray();
+			ProviderC.ListShort=listShort;
 		}
 
 		///<summary></summary>
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 			if(ProviderC.ListLong==null){
 				RefreshCache();
 			}
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					return ProviderC.ListLong[i].Abbr;
 				}
@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 		public static string GetLName(long provNum){
 			//No need to check RemotingRole; no call to db.
 			string retStr="";
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					retStr=ProviderC.ListLong[i].LName;
 				}
@@ -123,7 +123,7 @@ namespace OpenDentBusiness{
 		public static string GetFormalName(long provNum){
 			//No need to check RemotingRole; no call to db.
 			string retStr="";
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					retStr=ProviderC.ListLong[i].FName+" "
 						+ProviderC.ListLong[i].LName;
@@ -138,7 +138,7 @@ namespace OpenDentBusiness{
 		///<summary>Abbr - LName, FName (hidden).</summary>
 		public static string GetLongDesc(long provNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+			for(int i=0;i<ProviderC.ListLong.Count;i++) {
 				if(ProviderC.ListLong[i].ProvNum==provNum) {
 					return ProviderC.ListLong[i].GetLongDesc();
 				}
@@ -150,7 +150,7 @@ namespace OpenDentBusiness{
 		public static Color GetColor(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			Color retCol=Color.White;
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					retCol=ProviderC.ListLong[i].ProvColor;
 				}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness{
 		public static Color GetOutlineColor(long provNum){
 			//No need to check RemotingRole; no call to db.
 			Color retCol=Color.Black;
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					retCol=ProviderC.ListLong[i].OutlineColor;
 				}
@@ -174,7 +174,7 @@ namespace OpenDentBusiness{
 		public static bool GetIsSec(long provNum){
 			//No need to check RemotingRole; no call to db.
 			bool retVal=false;
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					retVal=ProviderC.ListLong[i].IsSecondary;
 				}
@@ -191,7 +191,7 @@ namespace OpenDentBusiness{
 			if(ProviderC.ListLong==null) {
 				RefreshCache();
 			}
-			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+			for(int i=0;i<ProviderC.ListLong.Count;i++) {
 				if(ProviderC.ListLong[i].ProvNum==provNum) {
 					return ProviderC.ListLong[i].Copy();
 				}
@@ -208,7 +208,7 @@ namespace OpenDentBusiness{
 			if(ProviderC.ListLong==null) {
 				RefreshCache();
 			}
-			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+			for(int i=0;i<ProviderC.ListLong.Count;i++) {
 				if(ProviderC.ListLong[i].EcwID==eID) {
 					return ProviderC.ListLong[i].Copy();
 				}
@@ -217,7 +217,7 @@ namespace OpenDentBusiness{
 			//The UI layer won't know about the addition.
 			//So we need to refresh if we can't initially find the prov.
 			RefreshCache();
-			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+			for(int i=0;i<ProviderC.ListLong.Count;i++) {
 				if(ProviderC.ListLong[i].EcwID==eID) {
 					return ProviderC.ListLong[i].Copy();
 				}
@@ -245,7 +245,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static int GetIndexLong(long provNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<ProviderC.ListLong.Length;i++){
+			for(int i=0;i<ProviderC.ListLong.Count;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					return i;
 				}
@@ -256,7 +256,7 @@ namespace OpenDentBusiness{
 		///<summary>Within the regular list of visible providers.  Will return -1 if the specified provider is not in the list.</summary>
 		public static int GetIndex(long provNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				if(ProviderC.ListShort[i].ProvNum==provNum){
 					return i;
 				}

@@ -384,7 +384,7 @@ namespace OpenDental{
 			else{//neg
 				textAmount.Text=(-AdjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
 			}
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				if(ProviderC.ListShort[i].ProvNum==AdjustmentCur.ProvNum) {
 					comboProv.SelectedIndex=i;

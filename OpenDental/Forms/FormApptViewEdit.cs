@@ -575,7 +575,7 @@ namespace OpenDental{
 					listOps.SetSelected(i,true);
 				}
 			}
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				if(ApptViewItemL.ProvIsInView(ProviderC.ListShort[i].ProvNum)){
 					listProv.SetSelected(i,true);
@@ -1156,7 +1156,7 @@ namespace OpenDental{
 					ApptViewItems.Insert(item);
 				}
 			}
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				if(listProv.SelectedIndices.Contains(i)){
 					item=new ApptViewItem();
 					item.ApptViewNum=ApptViewCur.ApptViewNum;

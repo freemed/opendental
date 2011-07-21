@@ -44,7 +44,7 @@ namespace OpenDental{
 					VisOps.Add(OperatoryC.ListShort[i]);
 				}
 				//make visible provs exactly the same as the prov list (all except hidden)
-				for(int i=0;i<ProviderC.ListShort.Length;i++){
+				for(int i=0;i<ProviderC.ListShort.Count;i++){
 					VisProvs.Add(i);
 				}
 				//Hard coded elements showing

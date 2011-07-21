@@ -316,14 +316,14 @@ namespace OpenDental{
 			}
 			comboProvDentist.Items.Add(Lan.g(this,"none"));
 			comboProvDentist.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvDentist.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==OpCur.ProvDentist)
 					comboProvDentist.SelectedIndex=i+1;
 			}
 			comboProvHygienist.Items.Add(Lan.g(this,"none"));
 			comboProvHygienist.SelectedIndex=0;
-			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvHygienist.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(ProviderC.ListShort[i].ProvNum==OpCur.ProvHygienist)
 					comboProvHygienist.SelectedIndex=i+1;
