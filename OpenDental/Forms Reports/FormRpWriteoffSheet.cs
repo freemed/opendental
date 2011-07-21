@@ -253,8 +253,8 @@ namespace OpenDental{
 		private void FormDailyWriteoff_Load(object sender, System.EventArgs e) {
 			date1.SelectionStart=DateTime.Today;
 			date2.SelectionStart=DateTime.Today;
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				listClin.Visible=false;
@@ -317,7 +317,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -416,7 +416,7 @@ namespace OpenDental{
 					if(i>0) {
 						provNames+=", ";
 					}
-					provNames+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+					provNames+=ProviderC.ListShort[listProv.SelectedIndices[i]].Abbr;
 				}
 				report.SubTitle.Add(provNames);
 			}

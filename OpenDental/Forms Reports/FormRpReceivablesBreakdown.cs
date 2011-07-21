@@ -226,8 +226,8 @@ namespace OpenDental {
 		private void FormRpReceivablesBreakdown_Load(object sender,EventArgs e) {
 			radioWriteoffPay.Checked = true;
 			listProv.Items.Add(Lan.g(this,"Practice"));
-			for(int i = 0;i < ProviderC.List.Length;i++) {
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i = 0;i < ProviderC.ListShort.Length;i++) {
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			listProv.SetSelected(0,true);
 			//if(PrefC.GetBool(PrefName.EasyNoClinics")){
@@ -306,7 +306,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "procedurelog.ProvNum = "
-                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -330,7 +330,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "claimproc.ProvNum = "
-                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -366,7 +366,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "ProvNum = "
-                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -401,7 +401,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "paysplit.ProvNum = "
-                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -422,7 +422,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "claimproc.ProvNum = "
-                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -444,7 +444,7 @@ namespace OpenDental {
 							whereProv += "OR ";
 						}
 						whereProv += "ProvNum = "
-                            + POut.Long(ProviderC.List[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
+                            + POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i] - 1].ProvNum) + " ";
 					}
 					whereProv += ") ";
 				}
@@ -576,10 +576,10 @@ namespace OpenDental {
 						whereProv = "Report Includes:  ";
 						for(int i = 0;i < listProv.SelectedIndices.Count;i++) {
 							if(nameCount < 3) {
-								whereProv += " "+ProviderC.List[listProv.SelectedIndices[i] - 1].GetFormalName()+" /";
+								whereProv += " "+ProviderC.ListShort[listProv.SelectedIndices[i] - 1].GetFormalName()+" /";
 							}
 							else {
-								whereProvx += " "+ProviderC.List[listProv.SelectedIndices[i] - 1].GetFormalName()+" /";
+								whereProvx += " "+ProviderC.ListShort[listProv.SelectedIndices[i] - 1].GetFormalName()+" /";
 							}
 							nameCount += 1;
 						}

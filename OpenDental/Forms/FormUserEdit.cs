@@ -287,9 +287,9 @@ namespace OpenDental{
 			listProv.Items.Clear();
 			listProv.Items.Add(Lan.g(this,"none"));
 			listProv.SelectedIndex=0;
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(UserCur.ProvNum==ProviderC.List[i].ProvNum) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				if(UserCur.ProvNum==ProviderC.ListShort[i].ProvNum) {
 					listProv.SelectedIndex=i+1;
 				}
 			}
@@ -371,7 +371,7 @@ namespace OpenDental{
 				UserCur.ProvNum=0;
 			}
 			else {
-				UserCur.ProvNum=ProviderC.List[listProv.SelectedIndex-1].ProvNum;
+				UserCur.ProvNum=ProviderC.ListShort[listProv.SelectedIndex-1].ProvNum;
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics) || listClinic.SelectedIndex==0) {
 				UserCur.ClinicNum=0;

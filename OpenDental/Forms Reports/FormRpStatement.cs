@@ -632,7 +632,7 @@ namespace OpenDental{
 			int legendOffset=0;
 			if(CultureInfo.CurrentCulture.Name=="en-AU") {//English (Australia)
 				Providers.RefreshCache();
-				legendOffset=25+15*(1+ProviderC.List.Length);
+				legendOffset=25+15*(1+ProviderC.ListShort.Length);
 				MigraDocHelper.InsertSpacer(section,legendOffset);
 				frame=MigraDocHelper.CreateContainer(section,45,390,250,legendOffset);
 				par=frame.AddParagraph();
@@ -641,8 +641,8 @@ namespace OpenDental{
 				par.AddText("PROVIDERS:");
 				par=frame.AddParagraph();
 				par.Format.Font=MigraDocHelper.CreateFont(8,false);
-				for(int i=0;i<ProviderC.List.Length;i++) {//All non-hidden providers are added to the legend.
-					Provider prov=ProviderC.List[i];
+				for(int i=0;i<ProviderC.ListShort.Length;i++) {//All non-hidden providers are added to the legend.
+					Provider prov=ProviderC.ListShort[i];
 					string suffix="";
 					if(prov.Suffix.Trim()!=""){
 						suffix=", "+prov.Suffix.Trim();

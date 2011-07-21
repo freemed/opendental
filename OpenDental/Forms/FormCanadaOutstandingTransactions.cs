@@ -25,12 +25,12 @@ namespace OpenDental {
 					listCarriers.Items.Add(Carriers.Listt[i].CarrierName);
 				}
 			}
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				if(!ProviderC.List[i].IsCDAnet || ProviderC.List[i].NationalProvID=="" || ProviderC.List[i].CanadianOfficeNum=="") {
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				if(!ProviderC.ListShort[i].IsCDAnet || ProviderC.ListShort[i].NationalProvID=="" || ProviderC.ListShort[i].CanadianOfficeNum=="") {
 					continue;
 				}
-				if(!listOfficeNumbers.Items.Contains(ProviderC.List[i].CanadianOfficeNum)) {
-					listOfficeNumbers.Items.Add(ProviderC.List[i].CanadianOfficeNum);
+				if(!listOfficeNumbers.Items.Contains(ProviderC.ListShort[i].CanadianOfficeNum)) {
+					listOfficeNumbers.Items.Add(ProviderC.ListShort[i].CanadianOfficeNum);
 				}
 			}
 			if(listOfficeNumbers.Items.Count<1) {
@@ -73,10 +73,10 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			Provider prov=null;
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				if(ProviderC.List[i].CanadianOfficeNum==listOfficeNumbers.Items[listOfficeNumbers.SelectedIndex].ToString() 
-					&& ProviderC.List[i].NationalProvID!="" && ProviderC.List[i].IsCDAnet) {
-					prov=ProviderC.List[i];
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				if(ProviderC.ListShort[i].CanadianOfficeNum==listOfficeNumbers.Items[listOfficeNumbers.SelectedIndex].ToString() 
+					&& ProviderC.ListShort[i].NationalProvID!="" && ProviderC.ListShort[i].IsCDAnet) {
+					prov=ProviderC.ListShort[i];
 					break;
 				}
 			}

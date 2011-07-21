@@ -131,11 +131,11 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<ProviderC.List.Length;i++){
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
 				row=new ODGridRow();
-				row.Cells.Add(ProviderC.List[i].Abbr);
-				row.Cells.Add(ProviderC.List[i].LName);
-				row.Cells.Add(ProviderC.List[i].FName);
+				row.Cells.Add(ProviderC.ListShort[i].Abbr);
+				row.Cells.Add(ProviderC.ListShort[i].LName);
+				row.Cells.Add(ProviderC.ListShort[i].FName);
 				//wanted to do a background color here, but grid couldn't handle it.
 				gridMain.Rows.Add(row);
 			}
@@ -143,7 +143,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			SelectedProvNum=ProviderC.List[e.Row].ProvNum;
+			SelectedProvNum=ProviderC.ListShort[e.Row].ProvNum;
 			DialogResult=DialogResult.OK;
 		}
 
@@ -152,7 +152,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a provider first.");
 				return;
 			}
-			SelectedProvNum=ProviderC.List[gridMain.GetSelectedIndex()].ProvNum;
+			SelectedProvNum=ProviderC.ListShort[gridMain.GetSelectedIndex()].ProvNum;
 			DialogResult=DialogResult.OK;
 		}
 

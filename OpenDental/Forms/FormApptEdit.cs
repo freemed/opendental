@@ -1135,16 +1135,16 @@ namespace OpenDental{
 				//Try to auto-select a provider when in Orion mode. Only for new appointments so we don't change historical data.
 				AptCur.ProvNum=Providers.GetOrionProvNum(AptCur.ProvNum);
 			}
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboProvNum.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==AptCur.ProvNum)
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				comboProvNum.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==AptCur.ProvNum)
 					comboProvNum.SelectedIndex=i;
 			}
 			comboProvHyg.Items.Add(Lan.g(this,"none"));
 			comboProvHyg.SelectedIndex=0;
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboProvHyg.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==AptCur.ProvHyg)
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				comboProvHyg.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==AptCur.ProvHyg)
 					comboProvHyg.SelectedIndex=i+1;
 			}
 			checkIsHygiene.Checked=AptCur.IsHygiene;
@@ -1247,7 +1247,7 @@ namespace OpenDental{
 		private void butPickDentist_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
 			if(comboProvNum.SelectedIndex>-1) {
-				formp.SelectedProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				formp.SelectedProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
@@ -1259,7 +1259,7 @@ namespace OpenDental{
 		private void butPickHyg_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
 			if(comboProvHyg.SelectedIndex>0) {
-				formp.SelectedProvNum=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
+				formp.SelectedProvNum=ProviderC.ListShort[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
@@ -1588,13 +1588,13 @@ namespace OpenDental{
 			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
 			ProcCur.Priority=0;
 			ProcCur.ProcStatus=ProcStat.TP;
-			long aptProvNum=ProviderC.List[0].ProvNum;
+			long aptProvNum=ProviderC.ListShort[0].ProvNum;
 			if(comboProvNum.SelectedIndex!=-1) {
-				aptProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				aptProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 			}
 			long aptProvHyg=0;
 			if(comboProvHyg.SelectedIndex>0) {
-				aptProvHyg=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
+				aptProvHyg=ProviderC.ListShort[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
 				&& aptProvHyg != 0)
@@ -1618,7 +1618,7 @@ namespace OpenDental{
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
 			if(Programs.UsingOrion){
-				FormPE.OrionProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				FormPE.OrionProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 				FormPE.OrionDentist=true;
 			}
 			FormPE.ShowDialog();
@@ -1757,7 +1757,7 @@ namespace OpenDental{
 		private void FillTime() {
 			System.Drawing.Color provColor=System.Drawing.Color.Gray;
 			if(comboProvNum.SelectedIndex!=-1) {
-				provColor=ProviderC.List[comboProvNum.SelectedIndex].ProvColor;
+				provColor=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvColor;
 			}
 			if(strBTime.Length > tbTime.MaxRows) {
 				strBTime.Remove(tbTime.MaxRows-1,strBTime.Length-tbTime.MaxRows+1);//example: Remove(40-1,78-40+1), start at 39, remove 39.
@@ -1790,11 +1790,11 @@ namespace OpenDental{
 			long provDent=Patients.GetProvNum(pat);
 			long provHyg=Patients.GetProvNum(pat);
 			if(comboProvNum.SelectedIndex!=-1){
-				provDent=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
-				provHyg=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				provDent=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
+				provHyg=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 			}
 			if(comboProvHyg.SelectedIndex!=0) {
-				provHyg=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
+				provHyg=ProviderC.ListShort[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
 			List<long> codeNums=new List<long>();
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
@@ -1924,7 +1924,7 @@ namespace OpenDental{
 				//priority
 				ProcCur.ProcStatus=ProcStat.TP;
 				//procnote
-				ProcCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				ProcCur.ProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 				//Dx
 				ProcCur.ClinicNum=AptCur.ClinicNum;
 				ProcCur.SiteNum=pat.SiteNum;
@@ -2166,16 +2166,16 @@ namespace OpenDental{
 			}
 			//there should always be a non-hidden primary provider for an appt.
 			if(comboProvNum.SelectedIndex==-1) {
-				AptCur.ProvNum=ProviderC.List[0].ProvNum;
+				AptCur.ProvNum=ProviderC.ListShort[0].ProvNum;
 			}
 			else {
-				AptCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				AptCur.ProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 			}
 			if(comboProvHyg.SelectedIndex==0) {//none
 				AptCur.ProvHyg=0;
 			}
 			else {
-				AptCur.ProvHyg=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
+				AptCur.ProvHyg=ProviderC.ListShort[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
 			AptCur.IsHygiene=checkIsHygiene.Checked;
 			if(comboAssistant.SelectedIndex==0) {//none

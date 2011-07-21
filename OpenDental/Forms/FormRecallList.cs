@@ -672,8 +672,8 @@ namespace OpenDental{
 			}
 			comboProv.Items.Add(Lan.g(this,"All"));
 			comboProv.SelectedIndex=0;
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				comboClinic.Visible=false;
@@ -734,7 +734,7 @@ namespace OpenDental{
 			}
 			long provNum=0;
 			if(comboProv.SelectedIndex!=0){
-				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
+				provNum=ProviderC.ListShort[comboProv.SelectedIndex-1].ProvNum;
 			}
 			long clinicNum=0;
 			if(!PrefC.GetBool(PrefName.EasyNoClinics) && comboClinic.SelectedIndex!=0) {

@@ -243,9 +243,9 @@ namespace OpenDental{
 
 		private void FormProcCodeNoteEdit_Load(object sender,EventArgs e) {
 			strBTime=new StringBuilder(NoteCur.ProcTime);
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(NoteCur.ProvNum==ProviderC.List[i].ProvNum){
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				if(NoteCur.ProvNum==ProviderC.ListShort[i].ProvNum){
 					listProv.SelectedIndex=i;
 				}
 			}
@@ -332,7 +332,7 @@ namespace OpenDental{
 				return;
 			}
 			NoteCur.ProcTime=strBTime.ToString();
-			NoteCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
+			NoteCur.ProvNum=ProviderC.ListShort[listProv.SelectedIndex].ProvNum;
 			NoteCur.Note=textNote.Text;
 			if(IsNew){
 				ProcCodeNotes.Insert(NoteCur);

@@ -10,7 +10,7 @@ namespace TestCanada {
 		
 		public static string RunOne(bool showForms) {
 			string retVal="";
-			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist #1
 			Patient pat=Patients.GetPat(PatientTC.PatNum1);//patient#1
 			if(pat.PriProv!=provNum){
 				Patient oldPat=pat.Copy();
@@ -35,7 +35,7 @@ namespace TestCanada {
 
 		public static string RunTwo(bool showForms) {
 			string retVal="";
-			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist #1
 			Patient pat=Patients.GetPat(PatientTC.PatNum7);//patient#7
 			if(pat.PriProv!=provNum){
 				Patient oldPat=pat.Copy();
@@ -60,7 +60,7 @@ namespace TestCanada {
 
 		public static string RunThree(bool showForms) {
 			string retVal="";
-			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist #1
 			Patient pat=Patients.GetPat(PatientTC.PatNum6);//patient#6
 			if(pat.PriProv!=provNum){
 				Patient oldPat=pat.Copy();
@@ -84,7 +84,7 @@ namespace TestCanada {
 
 		public static string RunFour(bool showForms) {
 			string retVal="";
-			long provNum=ProviderC.List[1].ProvNum;//dentist #2
+			long provNum=ProviderC.ListShort[1].ProvNum;//dentist #2
 			Patient pat=Patients.GetPat(PatientTC.PatNum6);//patient#6
 			if(pat.PriProv!=provNum){
 				Patient oldPat=pat.Copy();
@@ -108,7 +108,7 @@ namespace TestCanada {
 
 		public static string RunFive(bool showForms) {
 			string retVal="";
-			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist #1
 			Patient pat=Patients.GetPat(PatientTC.PatNum5);//patient#5
 			if(pat.PriProv!=provNum){
 				Patient oldPat=pat.Copy();
@@ -132,7 +132,7 @@ namespace TestCanada {
 
 		public static string RunSix(bool showForms) {
 			string retVal="";
-			long provNum=ProviderC.List[0].ProvNum;//dentist #1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist #1
 			Patient pat=Patients.GetPat(PatientTC.PatNum9);//patient#9
 			if(pat.PriProv!=provNum){
 				Patient oldPat=pat.Copy();

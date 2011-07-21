@@ -762,9 +762,9 @@ namespace OpenDental
 					comboUnearnedTypes.SelectedIndex=i+1;
 				}
 			}
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboProvider.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==PaySplitCur.ProvNum) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboProvider.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==PaySplitCur.ProvNum) {
 					comboProvider.SelectedIndex=i;
 				}
 			}
@@ -1010,7 +1010,7 @@ namespace OpenDental
 		private void butPickProv_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
 			if(comboProvider.SelectedIndex>-1) {
-				formp.SelectedProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
+				formp.SelectedProvNum=ProviderC.ListShort[comboProvider.SelectedIndex].ProvNum;
 			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
@@ -1053,7 +1053,7 @@ namespace OpenDental
 			PaySplitCur.ProcDate=procDate;
 			PaySplitCur.SplitAmt=amount;
 			if(comboProvider.SelectedIndex > -1) {//if none selected, we won't silently change
-				PaySplitCur.ProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
+				PaySplitCur.ProvNum=ProviderC.ListShort[comboProvider.SelectedIndex].ProvNum;
 			}
 			if(comboUnearnedTypes.SelectedIndex==0) {
 				PaySplitCur.UnearnedType=0;

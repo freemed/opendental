@@ -1234,7 +1234,7 @@ namespace OpenDental{
 			panelOps.Controls.Clear();
 			for(int i=0;i<ContrApptSheet.ProvCount;i++) {
 				Panel panProv=new Panel();
-				panProv.BackColor=ProviderC.List[ApptViewItemL.VisProvs[i]].ProvColor;
+				panProv.BackColor=ProviderC.ListShort[ApptViewItemL.VisProvs[i]].ProvColor;
 				panProv.Location=new Point(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*i,0);
 				panProv.Width=ContrApptSheet.ProvWidth;
 				if(i==0) {//just looks a little nicer:
@@ -1245,7 +1245,7 @@ namespace OpenDental{
 				panProv.BorderStyle=BorderStyle.Fixed3D;
 				panProv.ForeColor=Color.DarkGray;
 				panelOps.Controls.Add(panProv);
-				toolTip1.SetToolTip(panProv,ProviderC.List[ApptViewItemL.VisProvs[i]].Abbr);
+				toolTip1.SetToolTip(panProv,ProviderC.ListShort[ApptViewItemL.VisProvs[i]].Abbr);
 			}
 			Operatory curOp;
 			if(ContrApptSheet.IsWeeklyView) {
@@ -1277,7 +1277,7 @@ namespace OpenDental{
 				for(int i=0;i<ContrApptSheet.ColCount;i++) {
 					Panel panOpName=new Panel();
 					Label labOpName=new Label();
-					curOp=OperatoryC.ListShort[ApptViewItemL.VisOps[i]];
+					curOp=ApptViewItemL.VisOps[i];
 					labOpName.Text=curOp.OpName;
 					if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {
 						panOpName.BackColor=Providers.GetColor(curOp.ProvDentist);
@@ -2265,8 +2265,8 @@ namespace OpenDental{
 					}
 				}
 			}
-			Operatory curOp=OperatoryC.ListShort[ApptViewItemL.VisOps
-				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
+			Operatory curOp=ApptViewItemL.VisOps
+				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)];
 			aptCur.Op=curOp.OperatoryNum;
 			long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,aptCur.AptDateTime);
 			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
@@ -2335,7 +2335,7 @@ namespace OpenDental{
 				int startingOp=ApptViewItemL.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItemL.VisOps.Count;i++) {
-					aptCur.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
+					aptCur.Op=ApptViewItemL.VisOps[i].OperatoryNum;
 					if(!DoesOverlap(aptCur)){
 						stillOverlaps=false;
 						break;
@@ -2343,7 +2343,7 @@ namespace OpenDental{
 				}
 				if(stillOverlaps){
 					for(int i=startingOp;i>=0;i--){
-						aptCur.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
+						aptCur.Op=ApptViewItemL.VisOps[i].OperatoryNum;
 						if(!DoesOverlap(aptCur)){
 							stillOverlaps=false;
 							break;
@@ -2539,7 +2539,7 @@ namespace OpenDental{
 				}
 			}
 			//if operatories were just hidden and VisOps is mismatched with ListShort
-			int xOp=ApptViewItemL.VisOps[ContrApptSheet.XPosToOp(point.X)];
+			int xOp=ContrApptSheet.XPosToOpIdx(point.X);
 			if(xOp>OperatoryC.ListShort.Count-1){
 				return 0;
 			}
@@ -2605,7 +2605,7 @@ namespace OpenDental{
 			SheetClickedonMin=ContrApptSheet.YPosToMin(e.Y);
 			TimeSpan sheetClickedOnTime=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
 			ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);
-			SheetClickedonOp=OperatoryC.ListShort[ApptViewItemL.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
+			SheetClickedonOp=ApptViewItemL.VisOps[ContrApptSheet.XPosToOpIdx(e.X)].OperatoryNum;
 			SheetClickedonDay=ContrApptSheet.XPosToDay(e.X);
 			if(!ContrApptSheet.IsWeeklyView) {
 				SheetClickedonDay=((int)AppointmentL.DateSelected.DayOfWeek)-1;
@@ -2961,8 +2961,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			Operatory curOp=OperatoryC.ListShort
-				[ApptViewItemL.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
+			Operatory curOp=ApptViewItemL.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)];
 			apt.Op=curOp.OperatoryNum;
 			//Set providers----------------------
 			long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,apt.AptDateTime);
@@ -3036,7 +3035,7 @@ namespace OpenDental{
 				int startingOp=ApptViewItemL.GetIndexOp(apt.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItemL.VisOps.Count;i++) {
-					apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
+					apt.Op=ApptViewItemL.VisOps[i].OperatoryNum;
 					if(!DoesOverlap(apt)) {
 						stillOverlaps=false;
 						break;
@@ -3044,7 +3043,7 @@ namespace OpenDental{
 				}
 				if(stillOverlaps) {
 					for(int i=startingOp;i>=0;i--) {
-						apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
+						apt.Op=ApptViewItemL.VisOps[i].OperatoryNum;
 						if(!DoesOverlap(apt)) {
 							stillOverlaps=false;
 							break;
@@ -3802,7 +3801,7 @@ namespace OpenDental{
       xPos+=(int)(ContrApptSheet.TimeWidth+(ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount)*(100/imageTemp.HorizontalResolution));  // x position
 			int xCenter=0;
 			for(int i=0;i<ContrApptSheet.ColCount;i++){
-				headers[i]=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OpName;	
+				headers[i]=ApptViewItemL.VisOps[i].OpName;	
 				xCenter=(int)((ContrApptSheet.ColWidth/2)-(e.Graphics.MeasureString(headers[i],headerFont).Width/2));
 			  e.Graphics.DrawString(headers[i],headerFont,Brushes.Black,(int)((xPos+xCenter)*(100/imageTemp.HorizontalResolution)),yPos);
         xPos+=ContrApptSheet.ColWidth;
@@ -4466,15 +4465,15 @@ namespace OpenDental{
 			textBefore.Text="";
 			textAfter.Text="";
 			listProviders.Items.Clear();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProviders.Items.Add(ProviderC.List[i].Abbr);
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProviders.Items.Add(ProviderC.ListShort[i].Abbr);
 				if(pinBoard.SelectedAppt.DataRoww["IsHygiene"].ToString()=="1"
-					&& ProviderC.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvHyg"].ToString())
+					&& ProviderC.ListShort[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvHyg"].ToString())
 				{
 					listProviders.SetSelected(i,true);
 				}
 				else if(pinBoard.SelectedAppt.DataRoww["IsHygiene"].ToString()=="0"
-					&& ProviderC.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvNum"].ToString())
+					&& ProviderC.ListShort[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvNum"].ToString())
 				{
 					listProviders.SelectedIndex=i;
 				}
@@ -4553,7 +4552,7 @@ namespace OpenDental{
 			}
 			long[] providers=new long[listProviders.SelectedIndices.Count];
 			for(int i=0;i<providers.Length;i++){
-				providers[i]=ProviderC.List[listProviders.SelectedIndices[i]].ProvNum;
+				providers[i]=ProviderC.ListShort[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
 			SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),

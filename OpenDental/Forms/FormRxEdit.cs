@@ -526,9 +526,9 @@ namespace OpenDental{
 				}
 			}
 			//security is handled on the Rx button click in the Chart module
-			for(int i=0;i<ProviderC.List.Length;i++){
-				this.listProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(ProviderC.List[i].ProvNum==RxPatCur.ProvNum){
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				this.listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				if(ProviderC.ListShort[i].ProvNum==RxPatCur.ProvNum){
 					listProv.SelectedIndex=i;
 				}
 			}
@@ -578,7 +578,7 @@ namespace OpenDental{
 				return false;
 			}
 			if(listProv.SelectedIndex!=-1){
-				RxPatCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
+				RxPatCur.ProvNum=ProviderC.ListShort[listProv.SelectedIndex].ProvNum;
 			}
 			//RxCui was set when butRxNormSelect was clicked.
 			RxPatCur.RxDate=PIn.Date(textDate.Text);

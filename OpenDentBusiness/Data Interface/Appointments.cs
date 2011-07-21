@@ -318,7 +318,7 @@ namespace OpenDentBusiness{
 				appt.Confirmed=DefC.GetList(DefCat.ApptConfirmed)[0].DefNum;
 			}
 			if(appt.ProvNum==0){
-				appt.ProvNum=ProviderC.List[0].ProvNum;
+				appt.ProvNum=ProviderC.ListShort[0].ProvNum;
 			}
 			return Crud.AppointmentCrud.Insert(appt,useExistingPK);
 		}

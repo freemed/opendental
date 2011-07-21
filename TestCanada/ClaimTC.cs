@@ -29,7 +29,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateOne() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum1);//patient#1, Lisa Fête"
 			List<Procedure> procList=new List<Procedure>();
 			procList.Add(ProcTC.AddProc("01201",pat.PatNum,new DateTime(1999,1,1),"","",27.5,"X",provNum));
@@ -54,7 +54,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateTwo() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum1);//patient#1, Lisa Fête"
 			Procedure proc;
 			Procedure procLab;
@@ -93,7 +93,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateThree() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum2);//patient#2, John Smith
 			Procedure proc;
 			Procedure procLab;
@@ -125,7 +125,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateFour() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum4);//patient#4, John Smith, Jr.
 			//Procedure proc;
 			List<Procedure> procList=new List<Procedure>();
@@ -152,7 +152,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateFive() {
-			long provNum=ProviderC.List[1].ProvNum;//dentist#2
+			long provNum=ProviderC.ListShort[1].ProvNum;//dentist#2
 			Patient pat=Patients.GetPat(PatientTC.PatNum5);//patient#5, Bob Howard
 			//Procedure proc;
 			List<Procedure> procList=new List<Procedure>();
@@ -179,7 +179,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateSix() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum5);//patient#5, Bob Howard
 			//Procedure proc;
 			List<Procedure> procList=new List<Procedure>();
@@ -206,7 +206,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateSeven() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum5);//patient#5, Bob Howard
 			//Procedure proc;
 			List<Procedure> procList=new List<Procedure>();
@@ -233,7 +233,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateEight() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum6);//patient#6, Martha West
 			Procedure proc;
 			Procedure procLab;
@@ -264,7 +264,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateNine() {
-			long provNum=ProviderC.List[1].ProvNum;//dentist#2
+			long provNum=ProviderC.ListShort[1].ProvNum;//dentist#2
 			Patient pat=Patients.GetPat(PatientTC.PatNum7);//patient#7, Madeleine Arpege
 			Procedure proc;
 			Procedure procLab;
@@ -295,7 +295,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateTen() {
-			long provNum=ProviderC.List[1].ProvNum;//dentist#2
+			long provNum=ProviderC.ListShort[1].ProvNum;//dentist#2
 			Patient pat=Patients.GetPat(PatientTC.PatNum8);//patient#8, Fred Jones
 			Procedure proc;
 			List<Procedure> procList=new List<Procedure>();
@@ -323,7 +323,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateEleven() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum9);//patient#9, Fred Smith
 			Procedure proc;
 			List<Procedure> procList=new List<Procedure>();
@@ -351,7 +351,7 @@ namespace TestCanada {
 		}
 
 		private static void CreateTwelve() {
-			long provNum=ProviderC.List[0].ProvNum;//dentist#1
+			long provNum=ProviderC.ListShort[0].ProvNum;//dentist#1
 			Patient pat=Patients.GetPat(PatientTC.PatNum9);//patient#9, Fred Smith
 			Procedure proc;
 			List<Procedure> procList=new List<Procedure>();

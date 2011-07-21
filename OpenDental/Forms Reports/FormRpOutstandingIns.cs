@@ -281,8 +281,8 @@ namespace OpenDental {
 
 		private void FillProvs() {
 			comboBoxMultiProv.Items.Add("All");
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboBoxMultiProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				comboBoxMultiProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			comboBoxMultiProv.SetSelected(0,true);
 			comboBoxMultiProv.RefreshText();
@@ -309,7 +309,7 @@ namespace OpenDental {
 				isAllProv=false;
 				provNumList=new List<long>();
 				for(int i=0;i<comboBoxMultiProv.SelectedIndices.Count;i++) {
-					provNumList.Add((long)ProviderC.List[(int)comboBoxMultiProv.SelectedIndices[i]-1].ProvNum);
+					provNumList.Add((long)ProviderC.ListShort[(int)comboBoxMultiProv.SelectedIndices[i]-1].ProvNum);
 				}
 			}
 			isPreauth=checkPreauth.Checked;

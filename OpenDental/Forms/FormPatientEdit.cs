@@ -1828,9 +1828,9 @@ namespace OpenDental{
 					}
 				}
 			}
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboPriProv.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==PatCur.PriProv) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboPriProv.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==PatCur.PriProv) {
 					comboPriProv.SelectedIndex=i;
 				}
 			}
@@ -1847,9 +1847,9 @@ namespace OpenDental{
 			comboSecProv.Items.Clear();
 			comboSecProv.Items.Add(Lan.g(this,"none"));
 			comboSecProv.SelectedIndex=0;
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboSecProv.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==PatCur.SecProv)
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboSecProv.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==PatCur.SecProv)
 					comboSecProv.SelectedIndex=i+1;
 			}
 			comboFeeSched.Items.Clear();
@@ -2888,13 +2888,13 @@ namespace OpenDental{
 			PatCur.DateFirstVisit=PIn.Date(textDateFirstVisit.Text);
 			PatCur.AskToArriveEarly=PIn.Int(textAskToArriveEarly.Text);
 			if(comboPriProv.SelectedIndex!=-1) {
-				PatCur.PriProv=ProviderC.List[comboPriProv.SelectedIndex].ProvNum;
+				PatCur.PriProv=ProviderC.ListShort[comboPriProv.SelectedIndex].ProvNum;
 			}
 			if(comboSecProv.SelectedIndex==0){
 				PatCur.SecProv=0;
 			}
 			else{
-				PatCur.SecProv=ProviderC.List[comboSecProv.SelectedIndex-1].ProvNum;
+				PatCur.SecProv=ProviderC.ListShort[comboSecProv.SelectedIndex-1].ProvNum;
 			}
 			if(comboFeeSched.SelectedIndex==0){
 				PatCur.FeeSched=0;

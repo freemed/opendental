@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 					listShort.Add(ProviderC.ListLong[i]);	
 				}
 			}
-			ProviderC.List=listShort.ToArray();
+			ProviderC.ListShort=listShort.ToArray();
 		}
 
 		///<summary></summary>
@@ -256,8 +256,8 @@ namespace OpenDentBusiness{
 		///<summary>Within the regular list of visible providers.  Will return -1 if the specified provider is not in the list.</summary>
 		public static int GetIndex(long provNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<ProviderC.List.Length;i++){
-				if(ProviderC.List[i].ProvNum==provNum){
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				if(ProviderC.ListShort[i].ProvNum==provNum){
 					return i;
 				}
 			}

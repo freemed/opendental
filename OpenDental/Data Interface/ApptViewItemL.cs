@@ -11,10 +11,10 @@ namespace OpenDental{
 		///<summary>A list of the ApptViewItems for the current view.</summary>
 		public static List<ApptViewItem> ForCurView;
 		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.
-		///<summary>Visible provider bars in appt module.  List of indices to ProviderC.List(short).  Also see VisOps.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
+		///<summary>Visible provider bars in appt module.  List of indices to ProviderC.List(short).  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
 		public static List<int> VisProvs;
-		///<summary>Visible ops in appt module.  List of indices to Operatories.ListShort[ops].  Also see VisProvs.  This is a subset of the available ops.  You can't include a hidden op in this list.  If user has set View.OnlyScheduledProvs, and not isWeekly, then the only opsto show will be for providers that have schedules for the day and ops with no provs assigned.</summary>
-		public static List<int> VisOps;
+		///<summary>Visible ops in appt module.  List of visible operatories.  This is a subset of the available ops.  You can't include a hidden op in this list.  If user has set View.OnlyScheduledProvs, and not isWeekly, then the only ops to show will be for providers that have schedules for the day and ops with no provs assigned.</summary>
+		public static List<Operatory> VisOps;
 		///<summary>Subset of ForCurView. Just items for rowElements, including apptfielddefs. If no view is selected, then the elements are filled with default info.</summary>
 		public static List<ApptViewItem> ApptRows;
 		public static ApptView ApptViewCur;
@@ -33,7 +33,7 @@ namespace OpenDental{
 			ApptViewCur=av;
 			ForCurView=new List<ApptViewItem>();
 			VisProvs=new List<int>();
-			VisOps=new List<int>();
+			VisOps=new List<Operatory>();
 			ApptRows=new List<ApptViewItem>();
 			int index;
 			//If there are no appointment views set up (therefore, none selected), then use a hard-coded default view.
@@ -41,10 +41,10 @@ namespace OpenDental{
 				//MessageBox.Show("apptcategorynum:"+ApptCategories.Cur.ApptCategoryNum.ToString());
 				//make visible ops exactly the same as the short ops list (all except hidden)
 				for(int i=0;i<OperatoryC.ListShort.Count;i++){
-					VisOps.Add(i);
+					VisOps.Add(OperatoryC.ListShort[i]);
 				}
 				//make visible provs exactly the same as the prov list (all except hidden)
-				for(int i=0;i<ProviderC.List.Length;i++){
+				for(int i=0;i<ProviderC.ListShort.Length;i++){
 					VisProvs.Add(i);
 				}
 				//Hard coded elements showing
@@ -68,7 +68,7 @@ namespace OpenDental{
 							}
 							index=Operatories.GetOrder(ApptViewItemC.List[i].OpNum);
 							if(index!=-1){
-								VisOps.Add(index);
+								VisOps.Add(OperatoryC.ListShort[index]);
 							}
 						}
 						else if(ApptViewItemC.List[i].ProvNum>0){//prov
@@ -125,9 +125,10 @@ namespace OpenDental{
 						//Add all the ops for this 'sched' to the list of visible ops
 						for(int p=0;p<listSchedOps.Count;p++) {
 							if(listSchedOps[p]==OperatoryC.ListShort[i].OperatoryNum) {
+								Operatory op=OperatoryC.ListShort[i];
 								indexOp=Operatories.GetOrder(listSchedOps[p]);
-								if(indexOp!=-1 && !VisOps.Contains(indexOp)) {//prevents adding duplicate ops
-									VisOps.Add(indexOp);
+								if(indexOp!=-1 && !VisOps.Contains(op)) {//prevents adding duplicate ops
+									VisOps.Add(op);
 									opAdded=true;
 									break;
 								}
@@ -136,8 +137,8 @@ namespace OpenDental{
 						//Also add any ops that are assigned to this dentist by default.
 						if(OperatoryC.ListShort[i].ProvDentist==dailySched[s].ProvNum) {
 							indexOp=Operatories.GetOrder(OperatoryC.ListShort[i].OperatoryNum);
-							if(indexOp!=-1 && !VisOps.Contains(indexOp)) {
-								VisOps.Add(indexOp);
+							if(indexOp!=-1 && !VisOps.Contains(OperatoryC.ListShort[i])) {
+								VisOps.Add(OperatoryC.ListShort[i]);
 								opAdded=true;
 							}
 							//index=Providers.GetIndex(OperatoryC.ListShort[i].ProvDentist);
@@ -151,15 +152,13 @@ namespace OpenDental{
 					}
 				}
 			}
-			VisOps.Sort();
-			VisProvs.Sort();
 		}
 
 		///<summary>Returns the index of the provNum within VisProvs.</summary>
 		public static int GetIndexProv(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisProvs.Count;i++) {
-				if(ProviderC.List[VisProvs[i]].ProvNum==provNum)
+				if(ProviderC.ListShort[VisProvs[i]].ProvNum==provNum)
 					return i;
 			}
 			return -1;
@@ -189,7 +188,7 @@ namespace OpenDental{
 		public static int GetIndexOp(long opNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisOps.Count;i++) {
-				if(OperatoryC.ListShort[VisOps[i]].OperatoryNum==opNum)
+				if(VisOps[i].OperatoryNum==opNum)
 					return i;
 			}
 			return -1;

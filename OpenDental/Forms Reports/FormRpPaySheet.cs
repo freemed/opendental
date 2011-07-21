@@ -293,8 +293,8 @@ namespace OpenDental{
 		private void FormPaymentSheet_Load(object sender, System.EventArgs e) {
 			date1.SelectionStart=DateTime.Today;
 			date2.SelectionStart=DateTime.Today;
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				listClin.Visible=false;
@@ -370,7 +370,7 @@ namespace OpenDental{
 					else {
 						whereProv+="OR ";
 					}
-					whereProv+="claimproc.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="claimproc.ProvNum = "+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -431,7 +431,7 @@ clinic.Description,claimpayment.CheckNum";
 					else {
 						whereProv+="OR ";
 					}
-					whereProv+="paysplit.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="paysplit.ProvNum = "+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -504,7 +504,7 @@ WHERE 1 "
 					if(i>0) {
 						provNames+=", ";
 					}
-					provNames+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+					provNames+=ProviderC.ListShort[listProv.SelectedIndices[i]].Abbr;
 				}
 				row[0]=provNames;
 			}

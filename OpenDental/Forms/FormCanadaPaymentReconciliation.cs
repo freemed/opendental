@@ -27,15 +27,15 @@ namespace OpenDental {
 				}
 			}
 			long defaultProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				if(ProviderC.List[i].IsCDAnet) {
-					listBillingProvider.Items.Add(ProviderC.List[i].Abbr);
-					listTreatingProvider.Items.Add(ProviderC.List[i].Abbr);
-					if(ProviderC.List[i].ProvNum==defaultProvNum) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				if(ProviderC.ListShort[i].IsCDAnet) {
+					listBillingProvider.Items.Add(ProviderC.ListShort[i].Abbr);
+					listTreatingProvider.Items.Add(ProviderC.ListShort[i].Abbr);
+					if(ProviderC.ListShort[i].ProvNum==defaultProvNum) {
 						listBillingProvider.SelectedIndex=i;
-						textBillingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
+						textBillingOfficeNumber.Text=ProviderC.ListShort[i].CanadianOfficeNum;
 						listTreatingProvider.SelectedIndex=i;
-						textTreatingOfficeNumber.Text=ProviderC.List[i].CanadianOfficeNum;
+						textTreatingOfficeNumber.Text=ProviderC.ListShort[i].CanadianOfficeNum;
 					}
 				}
 			}
@@ -43,11 +43,11 @@ namespace OpenDental {
 		}
 
 		private void listBillingProvider_Click(object sender,EventArgs e) {
-			textBillingOfficeNumber.Text=ProviderC.List[listBillingProvider.SelectedIndex].CanadianOfficeNum;
+			textBillingOfficeNumber.Text=ProviderC.ListShort[listBillingProvider.SelectedIndex].CanadianOfficeNum;
 		}
 
 		private void listTreatingProvider_Click(object sender,EventArgs e) {
-			textTreatingOfficeNumber.Text=ProviderC.List[listTreatingProvider.SelectedIndex].CanadianOfficeNum;
+			textTreatingOfficeNumber.Text=ProviderC.ListShort[listTreatingProvider.SelectedIndex].CanadianOfficeNum;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -73,8 +73,8 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				CanadianOutput.GetPaymentReconciliations(carriers[listCarriers.SelectedIndex],ProviderC.List[listTreatingProvider.SelectedIndex],
-					ProviderC.List[listBillingProvider.SelectedIndex],reconciliationDate);
+				CanadianOutput.GetPaymentReconciliations(carriers[listCarriers.SelectedIndex],ProviderC.ListShort[listTreatingProvider.SelectedIndex],
+					ProviderC.ListShort[listBillingProvider.SelectedIndex],reconciliationDate);
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Done.");
 			}

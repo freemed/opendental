@@ -312,8 +312,8 @@ namespace OpenDental{
 			labelDate.Text=SchedCurDate.ToString("dddd")+" "+SchedCurDate.ToShortDateString();
 			SchedList=Schedules.RefreshDayEdit(SchedCurDate);//only does this on startup
 			//listProv
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].Abbr);
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProv.Items.Add(ProviderC.ListShort[i].Abbr);
 				//listProv.SetSelected(i,true);
 			}
 			for(int i=0;i<Employees.ListShort.Length;i++) {
@@ -321,9 +321,9 @@ namespace OpenDental{
 				//listEmp.SetSelected(i,true);
 			}
       FillGrid();
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboProv.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==PrefC.GetLong(PrefName.ScheduleProvUnassigned)) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				comboProv.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==PrefC.GetLong(PrefName.ScheduleProvUnassigned)) {
 					comboProv.SelectedIndex=i;
 				}
 			}
@@ -466,7 +466,7 @@ namespace OpenDental{
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
 				schedTemp.SchedType=ScheduleType.Provider;
-				schedTemp.ProvNum=ProviderC.List[listProv.SelectedIndices[i]].ProvNum;
+				schedTemp.ProvNum=ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum;
 				SchedList.Add(schedTemp);
 			}
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
@@ -495,7 +495,7 @@ namespace OpenDental{
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
 				schedTemp.SchedType=ScheduleType.Provider;
-				schedTemp.ProvNum=ProviderC.List[listProv.SelectedIndices[i]].ProvNum;
+				schedTemp.ProvNum=ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum;
 				SchedList.Add(schedTemp);
 			}
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
@@ -562,7 +562,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender,EventArgs e) {
 			Schedules.SetForDay(SchedList,SchedCurDate);
 			if(comboProv.SelectedIndex!=-1
-				&& Prefs.UpdateLong(PrefName.ScheduleProvUnassigned,ProviderC.List[comboProv.SelectedIndex].ProvNum))
+				&& Prefs.UpdateLong(PrefName.ScheduleProvUnassigned,ProviderC.ListShort[comboProv.SelectedIndex].ProvNum))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

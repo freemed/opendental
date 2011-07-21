@@ -1118,7 +1118,7 @@ namespace OpenDentBusiness{
 				return pat.PriProv;
 			if(PrefC.GetLong(PrefName.PracticeDefaultProv)==0) {
 				MessageBox.Show(Lans.g("Patients","Please set a default provider in the practice setup window."));
-				return ProviderC.List[0].ProvNum;
+				return ProviderC.ListShort[0].ProvNum;
 			}
 			return PrefC.GetLong(PrefName.PracticeDefaultProv);
 		}
@@ -1453,7 +1453,7 @@ FROM insplan";
 				else {
 					command+=" OR patient.PriProv=";
 				}
-				command+=POut.Long(ProviderC.List[(int)providerFilter[i]-1].ProvNum);
+				command+=POut.Long(ProviderC.ListShort[(int)providerFilter[i]-1].ProvNum);
 				if(i==providerFilter.Count-1) {
 					command+=") ";
 				}

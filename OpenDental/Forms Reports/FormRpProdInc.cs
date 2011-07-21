@@ -425,8 +425,8 @@ namespace OpenDental{
 		#endregion
 		private void FormProduction_Load(object sender, System.EventArgs e) {
 			textToday.Text=DateTime.Today.ToShortDateString();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				listClin.Visible=false;
@@ -619,7 +619,7 @@ namespace OpenDental{
 					else{
 						whereProv+="OR ";
 					}
-					whereProv+="procedurelog.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="procedurelog.ProvNum = "+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -688,7 +688,7 @@ namespace OpenDental{
 					else{
 						whereProv+="OR ";
 					}
-					whereProv+="adjustment.ProvNum = "+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="adjustment.ProvNum = "+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -742,7 +742,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -825,7 +825,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -885,7 +885,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1001,7 +1001,7 @@ namespace OpenDental{
 					if(i>0) {
 						provNames+=", ";
 					}
-					provNames+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+					provNames+=ProviderC.ListShort[listProv.SelectedIndices[i]].Abbr;
 				}
 				report.SubTitle.Add(provNames);
 			}
@@ -1105,7 +1105,7 @@ Group By procdate Order by procdate desc
 						whereProv+="OR ";
 					}
 					whereProv+="procedurelog.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1156,7 +1156,7 @@ GROUP BY DateCP Order by DateCP
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1205,7 +1205,7 @@ GROUP BY DateCP Order by DateCP
 						whereProv+="OR ";
 					}
 					whereProv+="ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1268,7 +1268,7 @@ GROUP BY SchedDate
 						whereProv+="OR ";
 					}
 					whereProv+="procedurelog.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1329,7 +1329,7 @@ group by claimpayment.checkdate order by procdate
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1378,7 +1378,7 @@ group by claimpayment.checkdate order by procdate
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1431,7 +1431,7 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1569,7 +1569,7 @@ ORDER BY adjdate DESC
 					if(i>0){
 						str+=", ";
 					}
-					str+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+					str+=ProviderC.ListShort[listProv.SelectedIndices[i]].Abbr;
 				}
 				report.SubTitle.Add(str);
 			}
@@ -1671,7 +1671,7 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="procedurelog.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1718,7 +1718,7 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="adjustment.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1761,7 +1761,7 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1819,7 +1819,7 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1863,7 +1863,7 @@ ORDER BY adjdate DESC
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -1991,7 +1991,7 @@ ORDER BY adjdate DESC
 					if(i>0){
 						str+=", ";
 					}
-					str+=ProviderC.List[listProv.SelectedIndices[i]].Abbr;
+					str+=ProviderC.ListShort[listProv.SelectedIndices[i]].Abbr;
 				}
 				report.SubTitle.Add(str);
 			}

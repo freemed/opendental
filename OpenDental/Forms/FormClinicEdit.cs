@@ -406,8 +406,8 @@ namespace OpenDental{
 			comboPlaceService.Items.Clear();
 			comboPlaceService.Items.AddRange(Enum.GetNames(typeof(PlaceOfService)));
 			comboPlaceService.SelectedIndex=(int)ClinicCur.DefaultPlaceService;
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboInsBillingProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboInsBillingProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(ClinicCur.InsBillingProv==0){
 				radioInsBillingProvDefault.Checked=true;//default=0
@@ -483,7 +483,7 @@ namespace OpenDental{
 				ClinicCur.InsBillingProv=-1;
 			}
 			else{
-				ClinicCur.InsBillingProv=ProviderC.List[comboInsBillingProv.SelectedIndex].ProvNum;
+				ClinicCur.InsBillingProv=ProviderC.ListShort[comboInsBillingProv.SelectedIndex].ProvNum;
 			}
 			if(IsNew){
 				Clinics.Insert(ClinicCur);

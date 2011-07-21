@@ -3509,18 +3509,18 @@ namespace OpenDental{
 					break;
 			}
 			comboProvBill.Items.Clear();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboProvBill.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==ClaimCur.ProvBill) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboProvBill.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==ClaimCur.ProvBill) {
 					comboProvBill.SelectedIndex=i;
 				}
 			}
 			if(comboProvBill.Items.Count>0 && comboProvBill.SelectedIndex==-1)
 				comboProvBill.SelectedIndex=0;
 			comboProvTreat.Items.Clear();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboProvTreat.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==ClaimCur.ProvTreat) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboProvTreat.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==ClaimCur.ProvTreat) {
 					comboProvTreat.SelectedIndex=i;
 				}
 			}
@@ -5153,7 +5153,7 @@ namespace OpenDental{
 			ClaimCur.PatRelat=(Relat)comboPatRelat.SelectedIndex;
 			ClaimCur.PatRelat2=(Relat)comboPatRelat2.SelectedIndex;
 			if(comboProvTreat.SelectedIndex!=-1){
-				ClaimCur.ProvTreat=ProviderC.List[comboProvTreat.SelectedIndex].ProvNum;
+				ClaimCur.ProvTreat=ProviderC.ListShort[comboProvTreat.SelectedIndex].ProvNum;
 			}
 			ClaimCur.PreAuthString=textPreAuth.Text;
 			//isprosthesis handled earlier
@@ -5162,7 +5162,7 @@ namespace OpenDental{
 			ClaimCur.ClaimNote=textNote.Text;
 			//ispreauth
 			if(comboProvBill.SelectedIndex!=-1){
-				ClaimCur.ProvBill=ProviderC.List[comboProvBill.SelectedIndex].ProvNum;
+				ClaimCur.ProvBill=ProviderC.ListShort[comboProvBill.SelectedIndex].ProvNum;
 			}
 			ClaimCur.IsOrtho=checkIsOrtho.Checked;
 			ClaimCur.OrthoRemainM=PIn.Byte(textOrthoRemainM.Text);

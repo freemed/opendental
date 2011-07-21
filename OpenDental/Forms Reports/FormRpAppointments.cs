@@ -239,8 +239,8 @@ namespace OpenDental
 		#endregion
 
 		private void FormRpApptWithPhones_Load(object sender, System.EventArgs e){
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
 			SetTomorrow();
@@ -300,7 +300,7 @@ namespace OpenDental
 				if(i>0){
 					whereProv+=",";
 				}
-				whereProv+="'"+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+="'"+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv += ") ";
 			whereProv+="OR appointment.ProvHyg IN (";
@@ -308,7 +308,7 @@ namespace OpenDental
 				if(i>0) {
 					whereProv+=",";
 				}
-				whereProv+="'"+POut.Long(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+="'"+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv += ")) ";
 			//create the report

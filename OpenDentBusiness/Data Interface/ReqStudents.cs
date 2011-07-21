@@ -140,9 +140,9 @@ namespace OpenDentBusiness{
 		public static List<Provider> GetStudents(long classNum) {
 			//No need to check RemotingRole; no call to db.
 			List<Provider> retVal=new List<Provider>();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				if(ProviderC.List[i].SchoolClassNum==classNum){
-					retVal.Add(ProviderC.List[i]);
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				if(ProviderC.ListShort[i].SchoolClassNum==classNum){
+					retVal.Add(ProviderC.ListShort[i]);
 				}
 			}
 			return retVal;

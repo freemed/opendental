@@ -848,9 +848,9 @@ namespace OpenDental{
 		private void FormPayPlan_Load(object sender, System.EventArgs e) {
 			textPatient.Text=Patients.GetLim(PayPlanCur.PatNum).GetNameLF();
 			textGuarantor.Text=Patients.GetLim(PayPlanCur.Guarantor).GetNameLF();
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(IsNew && ProviderC.List[i].ProvNum==PatCur.PriProv) {//new payment plans default to pri prov
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				if(IsNew && ProviderC.ListShort[i].ProvNum==PatCur.PriProv) {//new payment plans default to pri prov
 					comboProv.SelectedIndex=i;
 				}
 				//but if not new, then the provider will be selected in FillCharges().
@@ -1414,7 +1414,7 @@ namespace OpenDental{
 			PayPlanCur.CompletedAmt=PIn.Double(textCompletedAmt.Text);
 			//PlanNum set already
 			PayPlans.Update(PayPlanCur);//always saved to db before opening this form
-			long provNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;//already verified that there's a provider selected
+			long provNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;//already verified that there's a provider selected
 			long clinicNum=0;
 			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
 				if(comboClinic.SelectedIndex==0) {

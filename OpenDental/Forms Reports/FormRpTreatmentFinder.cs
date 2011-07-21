@@ -498,8 +498,8 @@ namespace OpenDental{
 			//date1.SelectionStart=new DateTime(today.Year,today.Month,1).AddMonths(-1);
 			//date2.SelectionStart=new DateTime(today.Year,today.Month,1).AddDays(-1);
 			comboBoxMultiProv.Items.Add("All");
-			for(int i=0;i<ProviderC.List.Length;i++){
-			  comboBoxMultiProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+			  comboBoxMultiProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			comboBoxMultiProv.SetSelected(0,true);
 			comboBoxMultiProv.RefreshText();

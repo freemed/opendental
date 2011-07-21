@@ -2427,9 +2427,9 @@ namespace OpenDental{
 				ProcCur.ProvNum=Providers.GetOrionProvNum(ProcCur.ProvNum);//Returns 0 if logged in as non provider.
 			}//ProvNum of 0 will be required to change before closing form.
 			comboProvNum.Items.Clear();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboProvNum.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==ProcCur.ProvNum) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboProvNum.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==ProcCur.ProvNum) {
 					comboProvNum.SelectedIndex=i;
 				}
 			}
@@ -3794,7 +3794,7 @@ namespace OpenDental{
 		private void butPickProv_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
 			if(comboProvNum.SelectedIndex > -1) {
-				formp.SelectedProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				formp.SelectedProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
@@ -3805,7 +3805,7 @@ namespace OpenDental{
 		}
 
 		private void comboProvNum_SelectionChangeCommitted(object sender,EventArgs e) {
-			ProcCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			ProcCur.ProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {

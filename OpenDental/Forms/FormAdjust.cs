@@ -384,9 +384,9 @@ namespace OpenDental{
 			else{//neg
 				textAmount.Text=(-AdjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
 			}
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(ProviderC.List[i].ProvNum==AdjustmentCur.ProvNum) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				if(ProviderC.ListShort[i].ProvNum==AdjustmentCur.ProvNum) {
 					comboProv.SelectedIndex=i;
 				}
 			}
@@ -433,7 +433,7 @@ namespace OpenDental{
 		private void butPickProv_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
 			if(comboProv.SelectedIndex > -1) {
-				formp.SelectedProvNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;
+				formp.SelectedProvNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;
 			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
@@ -495,7 +495,7 @@ namespace OpenDental{
 				//	AdjustmentCur.ProvNum=PatCur.PriProv;
 			}
 			else{
-				AdjustmentCur.ProvNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;
+				AdjustmentCur.ProvNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;
 			}
 			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
 				if(comboClinic.SelectedIndex==0) {

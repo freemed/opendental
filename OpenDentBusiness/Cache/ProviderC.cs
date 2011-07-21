@@ -22,7 +22,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>This is the list used most often. It does not include hidden providers.</summary>
-		public static Provider[] List {
+		public static Provider[] ListShort {
 			get {
 				if(list==null) {
 					Providers.RefreshCache();

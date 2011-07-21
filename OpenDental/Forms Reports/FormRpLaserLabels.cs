@@ -961,8 +961,8 @@ namespace OpenDental {
 		// Load initial data for providers and patient status
 		//
 		private void FormLaserLabels_Load(object sender,System.EventArgs e) {
-			for(int i = 0;i < ProviderC.List.Length;i++) {
-				listProviders.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i = 0;i < ProviderC.ListShort.Length;i++) {
+				listProviders.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			if(listProviders.Items.Count > 0) {
 				listProviders.SelectedIndex = 0;
@@ -1006,7 +1006,7 @@ namespace OpenDental {
 						if(i > 0) {
 							whereProv += ",";
 						}
-						whereProv += "'" + POut.Long(ProviderC.List[listProviders.SelectedIndices[i]].ProvNum) + "'";
+						whereProv += "'" + POut.Long(ProviderC.ListShort[listProviders.SelectedIndices[i]].ProvNum) + "'";
 					}
 					whereProv += ") ";
 					patStat = BuildPatStatList(checkActiveOnly.Checked);

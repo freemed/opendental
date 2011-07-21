@@ -147,7 +147,7 @@ namespace OpenDentBusiness{
 				}
 				else{
 					if(pat.PriProv==0){
-						retVal=ProviderC.List[0].FeeSched;
+						retVal=ProviderC.ListShort[0].FeeSched;
 					}
 					else{
             //MessageBox.Show(Providers.GetIndex(Patients.Cur.PriProv).ToString());   
@@ -199,7 +199,7 @@ namespace OpenDentBusiness{
 				} 
 				else {
 					if (pat.PriProv == 0){
-						retVal = ProviderC.List[0].FeeSched;
+						retVal = ProviderC.ListShort[0].FeeSched;
 					} 
 					else {
 						//MessageBox.Show(Providers.GetIndex(Patients.Cur.PriProv).ToString());   

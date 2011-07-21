@@ -426,9 +426,9 @@ namespace OpenDental{
 			textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;
 			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
 			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
-			for(int i=0;i<ProviderC.List.Length;i++) {
-				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
-				if(MedicationPatCur.ProvNum==ProviderC.List[i].ProvNum) {
+			for(int i=0;i<ProviderC.ListShort.Length;i++) {
+				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				if(MedicationPatCur.ProvNum==ProviderC.ListShort[i].ProvNum) {
 					comboProv.SelectedIndex=i;
 				}
 			}
@@ -518,7 +518,7 @@ namespace OpenDental{
 				//don't make any changes to provnum.  0 is ok, but should never happen.  ProvNum might also be for a hidden prov.
 			}
 			else {
-				MedicationPatCur.ProvNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;
+				MedicationPatCur.ProvNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;
 			}
 			MedicationPatCur.PatNote=textPatNote.Text;
 			MedicationPatCur.DateStart=PIn.Date(textDateStart.Text);

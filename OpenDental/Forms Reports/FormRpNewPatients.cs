@@ -283,8 +283,8 @@ namespace OpenDental{
 			textDateTo.Text=new DateTime(DateTime.Today.Year,DateTime.Today.Month
 				,DateTime.DaysInMonth(DateTime.Today.Year,DateTime.Today.Month)).ToShortDateString();
 			listProv.Items.Add(Lan.g(this,"all"));
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 			}
 			listProv.SetSelected(0,true);
 		}
@@ -368,7 +368,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="patient.PriProv = "
-						+POut.Long(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.Long(ProviderC.ListShort[listProv.SelectedIndices[i]-1].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}
@@ -419,7 +419,7 @@ SELECT @pos:=@pos+1 patCount,result.* FROM (SELECT dateFirstProc,patient.LName,p
 				report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));
 			}
 			else if(listProv.SelectedIndices.Count==1){
-				report.SubTitle.Add(Lan.g(this,"Prov: ")+ProviderC.List[listProv.SelectedIndices[0]-1].GetLongDesc());
+				report.SubTitle.Add(Lan.g(this,"Prov: ")+ProviderC.ListShort[listProv.SelectedIndices[0]-1].GetLongDesc());
 				report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));
 			}
 			else{

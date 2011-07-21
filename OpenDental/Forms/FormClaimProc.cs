@@ -1359,9 +1359,9 @@ namespace OpenDental
 				textDateEntry.Visible=false;
 			}
 			comboProvider.Items.Clear();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				comboProvider.Items.Add(ProviderC.List[i].Abbr);
-				if(ClaimProcCur.ProvNum==ProviderC.List[i].ProvNum){
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				comboProvider.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ClaimProcCur.ProvNum==ProviderC.ListShort[i].ProvNum){
 					comboProvider.SelectedIndex=i;
 				}
 			}
@@ -1736,7 +1736,7 @@ namespace OpenDental
 		private void butPickProv_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
 			if(comboProvider.SelectedIndex > -1) {
-				formp.SelectedProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
+				formp.SelectedProvNum=ProviderC.ListShort[comboProvider.SelectedIndex].ProvNum;
 			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
@@ -1920,7 +1920,7 @@ namespace OpenDental
 			if(comboProvider.SelectedIndex!=-1) {//if no prov selected, then that prov must simply be hidden,
 				//because all claimprocs are initially created with a prov(except preauth).
 				//So, in this case, don't change.
-				ClaimProcCur.ProvNum=ProviderC.List[comboProvider.SelectedIndex].ProvNum;
+				ClaimProcCur.ProvNum=ProviderC.ListShort[comboProvider.SelectedIndex].ProvNum;
 			}
 			ClaimProcCur.ProcDate=PIn.Date(textProcDate.Text);
 			if(!textDateCP.ReadOnly){

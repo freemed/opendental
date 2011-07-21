@@ -151,9 +151,9 @@ namespace OpenDental{
 		private void FormPerioEdit_Load(object sender, System.EventArgs e) {
 			textDate.Text=PerioExamCur.ExamDate.ToShortDateString();
 			listProv.Items.Clear();
-			for(int i=0;i<ProviderC.List.Length;i++){
-				listProv.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==PerioExamCur.ProvNum){
+			for(int i=0;i<ProviderC.ListShort.Length;i++){
+				listProv.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==PerioExamCur.ProvNum){
 					listProv.SelectedIndex=i;
 				}
 			}
@@ -168,7 +168,7 @@ namespace OpenDental{
 				return;
 			}
 			PerioExamCur.ExamDate=PIn.Date(textDate.Text);
-			PerioExamCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
+			PerioExamCur.ProvNum=ProviderC.ListShort[listProv.SelectedIndex].ProvNum;
 			PerioExams.Update(PerioExamCur);
 			DialogResult=DialogResult.OK;
 		}
