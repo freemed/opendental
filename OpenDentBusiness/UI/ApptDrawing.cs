@@ -203,7 +203,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>The background provider schedules for the provider bars on the left.</summary>
-		public static void DrawProvScheds(Graphics g,int Lh,int RowsPerHr,int TimeWidth,int ProvWidth,int MinPerRow,List<int> VisProvs,List<Schedule> SchedListPeriod) {
+		public static void DrawProvScheds(Graphics g,int Lh,int RowsPerHr,int TimeWidth,int ProvWidth,int MinPerRow,List<Provider> VisProvs,List<Schedule> SchedListPeriod) {
 			Brush openBrush;
 			try {
 				openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
@@ -214,7 +214,7 @@ namespace OpenDentBusiness.UI {
 			Provider provCur;
 			Schedule[] schedForType;
 			for(int j=0;j<VisProvs.Count;j++) {
-				provCur=ProviderC.ListShort[VisProvs[j]];
+				provCur=VisProvs[j];
 				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
 				for(int i=0;i<schedForType.Length;i++) {
 					g.FillRectangle(openBrush
@@ -230,7 +230,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Not the schedule, but just the indicators of scheduling.</summary>
-		public static void DrawProvBars(Graphics g,int Lh,int RowsPerHr,int TimeWidth,int ProvWidth,int[][] ProvBar,List<int> VisProvs) {
+		public static void DrawProvBars(Graphics g,int Lh,int RowsPerHr,int TimeWidth,int ProvWidth,int[][] ProvBar,List<Provider> VisProvs) {
 			for(int j=0;j<ProvBar.Length;j++) {
 				for(int i=0;i<24*RowsPerHr;i++) {
 					switch(ProvBar[j][i]) {
@@ -238,7 +238,7 @@ namespace OpenDentBusiness.UI {
 							break;
 						case 1:
 							try {
-								g.FillRectangle(new SolidBrush(ProviderC.ListShort[VisProvs[j]].ProvColor)
+								g.FillRectangle(new SolidBrush(VisProvs[j].ProvColor)
 									,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
 							}
 							catch {//design-time
@@ -248,7 +248,7 @@ namespace OpenDentBusiness.UI {
 							break;
 						case 2:
 							g.FillRectangle(new HatchBrush(HatchStyle.DarkUpwardDiagonal
-								,Color.Black,ProviderC.ListShort[VisProvs[j]].ProvColor)
+								,Color.Black,VisProvs[j].ProvColor)
 								,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
 							break;
 						default://more than 2

@@ -11,8 +11,8 @@ namespace OpenDental{
 		///<summary>A list of the ApptViewItems for the current view.</summary>
 		public static List<ApptViewItem> ForCurView;
 		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.
-		///<summary>Visible provider bars in appt module.  List of indices to ProviderC.List(short).  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
-		public static List<int> VisProvs;
+		///<summary>Visible provider bars in appt module.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
+		public static List<Provider> VisProvs;
 		///<summary>Visible ops in appt module.  List of visible operatories.  This is a subset of the available ops.  You can't include a hidden op in this list.  If user has set View.OnlyScheduledProvs, and not isWeekly, then the only ops to show will be for providers that have schedules for the day and ops with no provs assigned.</summary>
 		public static List<Operatory> VisOps;
 		///<summary>Subset of ForCurView. Just items for rowElements, including apptfielddefs. If no view is selected, then the elements are filled with default info.</summary>
@@ -32,7 +32,7 @@ namespace OpenDental{
 		public static void GetForCurView(ApptView av,bool isWeekly,List<Schedule> dailySched){
 			ApptViewCur=av;
 			ForCurView=new List<ApptViewItem>();
-			VisProvs=new List<int>();
+			VisProvs=new List<Provider>();
 			VisOps=new List<Operatory>();
 			ApptRows=new List<ApptViewItem>();
 			int index;
@@ -45,7 +45,7 @@ namespace OpenDental{
 				}
 				//make visible provs exactly the same as the prov list (all except hidden)
 				for(int i=0;i<ProviderC.ListShort.Count;i++){
-					VisProvs.Add(i);
+					VisProvs.Add(ProviderC.ListShort[i]);
 				}
 				//Hard coded elements showing
 				ApptRows.Add(new ApptViewItem("PatientName",0,Color.Black));
@@ -74,7 +74,7 @@ namespace OpenDental{
 						else if(ApptViewItemC.List[i].ProvNum>0){//prov
 							index=Providers.GetIndex(ApptViewItemC.List[i].ProvNum);
 							if(index!=-1){
-								VisProvs.Add(index);
+								VisProvs.Add(ProviderC.ListShort[index]);
 							}
 						}
 						else{//element or apptfielddef
@@ -158,7 +158,7 @@ namespace OpenDental{
 		public static int GetIndexProv(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisProvs.Count;i++) {
-				if(ProviderC.ListShort[VisProvs[i]].ProvNum==provNum)
+				if(VisProvs[i].ProvNum==provNum)
 					return i;
 			}
 			return -1;

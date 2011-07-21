@@ -1234,7 +1234,7 @@ namespace OpenDental{
 			panelOps.Controls.Clear();
 			for(int i=0;i<ContrApptSheet.ProvCount;i++) {
 				Panel panProv=new Panel();
-				panProv.BackColor=ProviderC.ListShort[ApptViewItemL.VisProvs[i]].ProvColor;
+				panProv.BackColor=ApptViewItemL.VisProvs[i].ProvColor;
 				panProv.Location=new Point(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*i,0);
 				panProv.Width=ContrApptSheet.ProvWidth;
 				if(i==0) {//just looks a little nicer:
@@ -1245,7 +1245,7 @@ namespace OpenDental{
 				panProv.BorderStyle=BorderStyle.Fixed3D;
 				panProv.ForeColor=Color.DarkGray;
 				panelOps.Controls.Add(panProv);
-				toolTip1.SetToolTip(panProv,ProviderC.ListShort[ApptViewItemL.VisProvs[i]].Abbr);
+				toolTip1.SetToolTip(panProv,ApptViewItemL.VisProvs[i].Abbr);
 			}
 			Operatory curOp;
 			if(ContrApptSheet.IsWeeklyView) {

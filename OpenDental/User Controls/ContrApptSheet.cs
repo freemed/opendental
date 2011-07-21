@@ -475,7 +475,7 @@ namespace OpenDental{
 			//SchedDefault[] schedDefs;//for one type at a time
 			Schedule[] schedForType;
 			for(int j=0;j<ApptViewItemL.VisProvs.Count;j++) {
-				provCur=ProviderC.ListShort[ApptViewItemL.VisProvs[j]];
+				provCur=ApptViewItemL.VisProvs[j];
 				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
 				for(int i=0;i<schedForType.Length;i++){	
 					g.FillRectangle(openBrush
@@ -499,7 +499,7 @@ namespace OpenDental{
 							break;
 						case 1:
 							try{
-								g.FillRectangle(new SolidBrush(ProviderC.ListShort[ApptViewItemL.VisProvs[j]].ProvColor)
+								g.FillRectangle(new SolidBrush(ApptViewItemL.VisProvs[j].ProvColor)
 									,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
 							}
 							catch{//design-time
@@ -509,7 +509,7 @@ namespace OpenDental{
 							break;
 						case 2:
 							g.FillRectangle(new HatchBrush(HatchStyle.DarkUpwardDiagonal
-								,Color.Black,ProviderC.ListShort[ApptViewItemL.VisProvs[j]].ProvColor)
+								,Color.Black,ApptViewItemL.VisProvs[j].ProvColor)
 								,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
 							break;
 						default://more than 2
