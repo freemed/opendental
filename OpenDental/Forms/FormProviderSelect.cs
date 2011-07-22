@@ -26,9 +26,13 @@ namespace OpenDental{
 		private GroupBox groupCreateUsers;
 		private Label label3;
 		private ComboBox comboUserGroup;
+		private GroupBox groupMovePats;
+		private Label label2;
+		private ComboBox comboProv;
+		private UI.Button butMove;
 		//private User user;
 		private DataTable table;
-		
+
 		///<summary>This isn't actually a selection window anymore.  It's just the provider setup list.</summary>
 		public FormProviderSelect(){
 			InitializeComponent();
@@ -62,8 +66,13 @@ namespace OpenDental{
 			this.groupCreateUsers = new System.Windows.Forms.GroupBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.comboUserGroup = new System.Windows.Forms.ComboBox();
+			this.groupMovePats = new System.Windows.Forms.GroupBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.comboProv = new System.Windows.Forms.ComboBox();
+			this.butMove = new OpenDental.UI.Button();
 			this.groupDentalSchools.SuspendLayout();
 			this.groupCreateUsers.SuspendLayout();
+			this.groupMovePats.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -75,7 +84,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(669,628);
+			this.butClose.Location = new System.Drawing.Point(724,628);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(82,26);
 			this.butClose.TabIndex = 3;
@@ -92,7 +101,7 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(669,450);
+			this.butDown.Location = new System.Drawing.Point(724,450);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(82,26);
 			this.butDown.TabIndex = 12;
@@ -109,7 +118,7 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(669,411);
+			this.butUp.Location = new System.Drawing.Point(724,411);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(82,26);
 			this.butUp.TabIndex = 11;
@@ -126,7 +135,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(669,522);
+			this.butAdd.Location = new System.Drawing.Point(724,522);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(82,26);
 			this.butAdd.TabIndex = 10;
@@ -135,12 +144,15 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(16,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(538,642);
+			this.gridMain.Size = new System.Drawing.Size(593,642);
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Providers";
 			this.gridMain.TranslationName = null;
@@ -148,10 +160,11 @@ namespace OpenDental{
 			// 
 			// groupDentalSchools
 			// 
+			this.groupDentalSchools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupDentalSchools.Controls.Add(this.checkAlphabetical);
 			this.groupDentalSchools.Controls.Add(this.label1);
 			this.groupDentalSchools.Controls.Add(this.comboClass);
-			this.groupDentalSchools.Location = new System.Drawing.Point(567,12);
+			this.groupDentalSchools.Location = new System.Drawing.Point(622,12);
 			this.groupDentalSchools.Name = "groupDentalSchools";
 			this.groupDentalSchools.Size = new System.Drawing.Size(184,100);
 			this.groupDentalSchools.TabIndex = 14;
@@ -206,10 +219,11 @@ namespace OpenDental{
 			// 
 			// groupCreateUsers
 			// 
+			this.groupCreateUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupCreateUsers.Controls.Add(this.label3);
 			this.groupCreateUsers.Controls.Add(this.comboUserGroup);
 			this.groupCreateUsers.Controls.Add(this.butCreateUsers);
-			this.groupCreateUsers.Location = new System.Drawing.Point(567,120);
+			this.groupCreateUsers.Location = new System.Drawing.Point(622,120);
 			this.groupCreateUsers.Name = "groupCreateUsers";
 			this.groupCreateUsers.Size = new System.Drawing.Size(184,100);
 			this.groupCreateUsers.TabIndex = 18;
@@ -234,11 +248,58 @@ namespace OpenDental{
 			this.comboUserGroup.Size = new System.Drawing.Size(166,21);
 			this.comboUserGroup.TabIndex = 17;
 			// 
+			// groupMovePats
+			// 
+			this.groupMovePats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupMovePats.Controls.Add(this.label2);
+			this.groupMovePats.Controls.Add(this.comboProv);
+			this.groupMovePats.Controls.Add(this.butMove);
+			this.groupMovePats.Location = new System.Drawing.Point(622,226);
+			this.groupMovePats.Name = "groupMovePats";
+			this.groupMovePats.Size = new System.Drawing.Size(184,100);
+			this.groupMovePats.TabIndex = 18;
+			this.groupMovePats.TabStop = false;
+			this.groupMovePats.Text = "Move Patients";
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(7,14);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(151,18);
+			this.label2.TabIndex = 18;
+			this.label2.Text = "To Provider";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// comboProv
+			// 
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.FormattingEnabled = true;
+			this.comboProv.Location = new System.Drawing.Point(9,35);
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(166,21);
+			this.comboProv.TabIndex = 17;
+			// 
+			// butMove
+			// 
+			this.butMove.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butMove.Autosize = true;
+			this.butMove.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMove.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMove.CornerRadius = 4F;
+			this.butMove.Location = new System.Drawing.Point(93,64);
+			this.butMove.Name = "butMove";
+			this.butMove.Size = new System.Drawing.Size(82,26);
+			this.butMove.TabIndex = 15;
+			this.butMove.Text = "Move";
+			this.butMove.Click += new System.EventHandler(this.butMove_Click);
+			// 
 			// FormProviderSelect
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
-			this.ClientSize = new System.Drawing.Size(772,670);
+			this.ClientSize = new System.Drawing.Size(827,670);
+			this.Controls.Add(this.groupMovePats);
 			this.Controls.Add(this.groupCreateUsers);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butDown);
@@ -257,6 +318,7 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormProviderSelect_Load);
 			this.groupDentalSchools.ResumeLayout(false);
 			this.groupCreateUsers.ResumeLayout(false);
+			this.groupMovePats.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -265,10 +327,14 @@ namespace OpenDental{
 		private void FormProviderSelect_Load(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,DateTime.MinValue,true)){
 				groupCreateUsers.Enabled=false;
+				groupMovePats.Enabled=false;
 			}
 			else{
 				for(int i=0;i<UserGroups.List.Length;i++){
 					comboUserGroup.Items.Add(UserGroups.List[i].Description);
+				}
+				for(int i=0;i<ProviderC.List.Length;i++) {
+					comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
 				}
 			}
 			if(PrefC.GetBool(PrefName.EasyHideDentalSchools)){
@@ -346,9 +412,11 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g("TableProviders","Hidden"),50,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			if(!PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
-				col=new ODGridColumn(Lan.g("TableProviders","Class"),90);
+				col=new ODGridColumn(Lan.g("TableProviders","Class"),100);
 				gridMain.Columns.Add(col);
 			}
+			col=new ODGridColumn(Lan.g("TableProviders","Patients"),50,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -371,6 +439,7 @@ namespace OpenDental{
 						row.Cells.Add("");
 					}
 				}
+				row.Cells.Add(table.Rows[i]["PatCount"].ToString());
 				//row.Tag
 				gridMain.Rows.Add(row);
 			}
@@ -467,6 +536,25 @@ namespace OpenDental{
 			FormP.ShowDialog();
 			if(FormP.DialogResult!=DialogResult.OK) {
 				return;
+			}
+			changed=true;
+			FillGrid();
+		}
+
+		///<summary>Not possible if no security admin.</summary>
+		private void butMove_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length!=1) {
+				MsgBox.Show(this,"You select exactly one provider to move patients from.");
+				return;
+			}
+			if(comboProv.SelectedIndex==-1) {
+				MsgBox.Show(this,"You must select a provider to move patients to.");
+				return;
+			}			
+			Provider provFrom=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
+			Provider provTo=ProviderC.List[comboProv.SelectedIndex];
+			if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Move all patients from "+provFrom.GetLongDesc()+" to "+provTo.GetLongDesc()+"?")) {
+				Patients.ChangeProviders(provFrom.ProvNum,provTo.ProvNum);
 			}
 			changed=true;
 			FillGrid();

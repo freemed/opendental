@@ -1821,7 +1821,17 @@ FROM insplan";
 			return retVal;
 		}
 
-
+		/// <summary>Get all patients with the specified provider.</summary>
+		public static void ChangeProviders(long provNumFrom,long provNumTo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),provNumFrom,provNumTo);
+			}
+			string command= 
+				"UPDATE patient " 
+				+"SET PriProv = '"+provNumTo+"' "
+				+"WHERE PriProv = '"+provNumFrom+"'";
+			Db.NonQ(command); Patient pat=new Patient();
+		}
 
 		
 
