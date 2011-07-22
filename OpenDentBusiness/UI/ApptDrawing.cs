@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Globalization;
 using System.Text;
-using System.Drawing.Drawing2D;
 
 namespace OpenDentBusiness.UI {
 	public class ApptDrawing {
 		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.</summary>
-		public static void DrawAllButAppts(Graphics g,int lineH,int rowsPerIncr,int minPerIncr,int rowsPerHr,int minPerRow,int timeWidth,int colCount,int colWidth,int colDayWidth,int totalWidth,int totalHeight,int provWidth,int provCount,int[][] provBar,int colAptWidth,bool isWeeklyView,int numOfWeekDaysToDisplay,List<Schedule> schedListPeriod,List<Provider> visProvs,List<Operatory> visOps) 
+		public static void DrawAllButAppts(Graphics g,int lineH,int rowsPerIncr,int minPerIncr,int rowsPerHr,float minPerRow,int timeWidth,int colCount,int colWidth,int colDayWidth,int totalWidth,int totalHeight,int provWidth,int provCount,float colAptWidth,bool isWeeklyView,int numOfWeekDaysToDisplay,List<Schedule> schedListPeriod,List<Provider> visProvs,List<Operatory> visOps,int[][] provBar) 
 		{
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,timeWidth,totalHeight);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),timeWidth+colWidth*colCount+provWidth*provCount,0,timeWidth,totalHeight);//R time bar
@@ -19,7 +19,7 @@ namespace OpenDentBusiness.UI {
 				DrawProvScheds(g,lineH,rowsPerHr,timeWidth,provWidth,minPerRow,visProvs,schedListPeriod);
 				DrawProvBars(g,lineH,rowsPerHr,timeWidth,provWidth,provBar,visProvs);
 			}
-			DrawGridLines(g,lineH,rowsPerHr,timeWidth,colWidth,colCount,colDayWidth,provWidth,provCount,rowsPerHr,totalHeight,numOfWeekDaysToDisplay,isWeeklyView);
+			DrawGridLines(g,lineH,rowsPerHr,timeWidth,colWidth,colCount,colDayWidth,provWidth,provCount,rowsPerIncr,totalHeight,numOfWeekDaysToDisplay,isWeeklyView);
 			DrawRedTimeIndicator(g,lineH,rowsPerHr,timeWidth,colWidth,colCount,provWidth,provCount);
 			DrawMinutes(g,lineH,rowsPerHr,timeWidth,colWidth,colCount,provWidth,provCount,minPerIncr,rowsPerIncr);
 		}
@@ -31,7 +31,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Including the practice schedule.</summary>
-		public static void DrawMainBackground(Graphics g,int lineH,int rowsPerHr,int minPerRow,int timeWidth,int colCount,int colWidth,int colDayWidth,int totalHeight,int provWidth,int provCount,int colAptWidth,bool isWeeklyView,int numOfWeekDaysToDisplay,List<Schedule> schedListPeriod,List<Operatory> visOps) {
+		public static void DrawMainBackground(Graphics g,int lineH,int rowsPerHr,float minPerRow,int timeWidth,int colCount,int colWidth,int colDayWidth,int totalHeight,int provWidth,int provCount,float colAptWidth,bool isWeeklyView,int numOfWeekDaysToDisplay,List<Schedule> schedListPeriod,List<Operatory> visOps) {
 			Brush openBrush;
 			Brush closedBrush;
 			Brush holidayBrush;
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Draws all the blockouts for the entire period.</summary>
-		public static void DrawBlockouts(Graphics g,int lineH,int rowsPerHr,int minPerRow,int timeWidth,int colWidth,int colDayWidth,int provWidth,int provCount,int colAptWidth,bool isWeeklyView,List<Schedule> schedListPeriod,List<Operatory> visOps) {
+		public static void DrawBlockouts(Graphics g,int lineH,int rowsPerHr,float minPerRow,int timeWidth,int colWidth,int colDayWidth,int provWidth,int provCount,float colAptWidth,bool isWeeklyView,List<Schedule> schedListPeriod,List<Operatory> visOps) {
 			Schedule[] schedForType;
 			schedForType=Schedules.GetForType(schedListPeriod,ScheduleType.Blockout,0);
 			SolidBrush blockBrush;
@@ -214,7 +214,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>The background provider schedules for the provider bars on the left.</summary>
-		public static void DrawProvScheds(Graphics g,int lineH,int rowsPerHr,int timeWidth,int provWidth,int minPerRow,List<Provider> visProvs,List<Schedule> schedListPeriod) {
+		public static void DrawProvScheds(Graphics g,int lineH,int rowsPerHr,int timeWidth,int provWidth,float minPerRow,List<Provider> visProvs,List<Schedule> schedListPeriod) {
 			Brush openBrush;
 			try {
 				openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);

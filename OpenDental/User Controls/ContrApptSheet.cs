@@ -15,6 +15,7 @@ using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -45,9 +46,9 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsScrolling=false;
 		//public int selectedCat;//selected ApptCategory.
-		private SolidBrush openBrush;
-		private SolidBrush closedBrush;
-    private SolidBrush holidayBrush;
+		//private SolidBrush openBrush;
+		//private SolidBrush closedBrush;
+		//private SolidBrush holidayBrush;
 		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire period.  Includes all types.</summary>
 		public List<Schedule> SchedListPeriod;
 		public static bool IsWeeklyView;
@@ -281,6 +282,10 @@ namespace OpenDental{
 				return;//not sure if this is necessary
 			}
 			using(Graphics g=Graphics.FromImage(Shadow)) {
+				ApptDrawing.DrawAllButAppts(g,Lh,RowsPerIncr,MinPerIncr,RowsPerHr,MinPerRow,TimeWidth,ColCount,
+					ColWidth,ColDayWidth,Width,Height,ProvWidth,ProvCount,ColAptWidth,IsWeeklyView,NumOfWeekDaysToDisplay,
+					SchedListPeriod,ApptViewItemL.VisProvs,ApptViewItemL.VisOps,ContrApptSingle.ProvBar);
+				/* Old code for drawing schedule.  Moved to business layer ApptDrawing.cs
 				//background
 				g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,Height);//L time bar
 				g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,Height);//R time bar
@@ -303,9 +308,11 @@ namespace OpenDental{
 				DrawGridLines(g);
 				DrawRedTimeIndicator(g);
 				DrawMinutes(g);
+				*/
 			}
 		}
 
+		/* Old code for drawing schedule.  Moved to business layer ApptDrawing.cs
 		///<summary>Including the practice schedule</summary>
 		private void DrawMainBackground(Graphics g){
 			//SchedDefault[] schedDefs;//for one type at a time
@@ -648,6 +655,7 @@ namespace OpenDental{
 				}
 			}
 		}
+		*/
 
 		///<summary></summary>
 		public void DrawShadow(){

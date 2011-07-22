@@ -716,6 +716,7 @@
     <Compile Include="TableTypes\VaccinePat.cs" />
     <Compile Include="TableTypes\Vitalsign.cs" />
     <Compile Include="UI\ApptDrawing.cs" />
+    <Compile Include="UI\ApptSingleDrawing.cs" />
     <Compile Include="UI\ODGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
