@@ -840,31 +840,46 @@ namespace OpenDental {
 						return false;
 					}
 				}
-				else if(control.GetType()==typeof(SheetCheckBox)){//Radio button groups.
+				else if(control.GetType()==typeof(SheetCheckBox)){//Radio button groups or misc checkboxes
 					SheetField field=(SheetField)control.Tag;
-					if(field.IsRequired 
-						&& (field.RadioButtonGroup!="" //specific to custom radiobutton groups where all are misc
-						|| field.RadioButtonValue!=""))//specific to internally predefined groups where each button has a value.
-					{
-						if(field.FieldValue!="X"){//This group is required but this radio button is not checked.
-							//All radio buttons within a group must either all be marked required or all be marked not required. 
+					if(field.IsRequired && field.FieldValue!="X"){//required but this one not checked
+						//first, checkboxes that are not radiobuttons.  For example, a checkbox at bottom of web form used in place of signature.
+						if(field.RadioButtonValue=="" //doesn't belong to a built-in group
+							&& field.RadioButtonGroup=="") //doesn't belong to a custom group
+						{
+							//field.FieldName is always "misc"
+							MessageBox.Show(Lan.g(this,"You must check the required checkbox."));
+							return false;
+						}
+						else{//then radiobuttons (of both kinds)
+							//All radio buttons within a group should either all be marked required or all be marked not required. 
 							//Not the most efficient check, but there won't usually be more than a few hundred items so the user will not ever notice. We can speed up later if needed.
-							bool valueSet=false;
-							int numGroupButtons=0;
-							foreach(Control control2 in panelMain.Controls){
-								if(control2.GetType()==typeof(SheetCheckBox)){
-									SheetField field2=(SheetField)control2.Tag;
-									if(field2.RadioButtonGroup.ToLower()==field.RadioButtonGroup.ToLower()){
-										numGroupButtons++;
-										if(field2.FieldValue=="X"){
-											valueSet=true;
-											break;
-										}
+							bool valueSet=false;//we will be checking to see if at least one in the group has a value
+							int numGroupButtons=0;//a count of the buttons in the group
+							foreach(Control control2 in panelMain.Controls){//loop through all controls in the sheet
+								if(control2.GetType()!=typeof(SheetCheckBox)){
+									continue;//skip everything that's not a checkbox
+								}
+								SheetField field2=(SheetField)control2.Tag;
+								//whether built-in or custom, this makes sure it's a match.
+								//the other comparison will also match because they are empty strings
+								if(field2.RadioButtonGroup.ToLower()==field.RadioButtonGroup.ToLower()//if they are in the same group ("" for built-in, some string for custom group)
+									&& field2.FieldName==field.FieldName)//"misc" for custom group, some string for built in groups.
+								{
+									numGroupButtons++;
+									if(field2.FieldValue=="X"){
+										valueSet=true;
+										break;
 									}
 								}
 							}
-							if(numGroupButtons>0 && !valueSet){
-								MessageBox.Show(Lan.g(this,"You must select a value for radio button group")+" '"+field.RadioButtonGroup+"' ");
+							if(numGroupButtons>0 && !valueSet){//there is not at least one radiobutton in the group that's checked.
+								if(field.RadioButtonGroup!="") {//if they are in a custom group
+									MessageBox.Show(Lan.g(this,"You must select a value for radio button group")+" '"+field.RadioButtonGroup+"'. ");
+								}
+								else {
+									MessageBox.Show(Lan.g(this,"You must select a value for radio button group")+" '"+field.FieldName+"'. ");
+								}
 								return false;
 							}
 						}
