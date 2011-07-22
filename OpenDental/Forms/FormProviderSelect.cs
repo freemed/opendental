@@ -333,8 +333,8 @@ namespace OpenDental{
 				for(int i=0;i<UserGroups.List.Length;i++){
 					comboUserGroup.Items.Add(UserGroups.List[i].Description);
 				}
-				for(int i=0;i<ProviderC.List.Length;i++) {
-					comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
+				for(int i=0;i<ProviderC.ListShort.Count;i++) {
+					comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
 				}
 			}
 			if(PrefC.GetBool(PrefName.EasyHideDentalSchools)){
@@ -552,7 +552,7 @@ namespace OpenDental{
 				return;
 			}			
 			Provider provFrom=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
-			Provider provTo=ProviderC.List[comboProv.SelectedIndex];
+			Provider provTo=ProviderC.ListShort[comboProv.SelectedIndex];
 			if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Move all patients from "+provFrom.GetLongDesc()+" to "+provTo.GetLongDesc()+"?")) {
 				Patients.ChangeProviders(provFrom.ProvNum,provTo.ProvNum);
 			}
