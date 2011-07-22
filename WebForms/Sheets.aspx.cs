@@ -199,7 +199,7 @@ namespace WebForms {
 							Panel1.Controls.Add(wc);
 						}
 					}//for loop end here
-					AssignErrorMessageForChkBoxes();	
+					AdjustErrorMessageForChkBoxes();	
 					CreateChkBoxValidatorsHiddenFields();
 					AssignTabOrder();
 					//position the submit button at the end of the page.
@@ -245,22 +245,45 @@ namespace WebForms {
 		}
 
 		/// <summary>
-		/// A single check boxes which are 'required' have a different error message as opposed to a 'required' group of check boxes
+		/// A single check boxes which are 'required' have a different error message as opposed to a 'required' group of check boxes.
+		/// Also the position of the error message is adjusted by reassigning postions of the Textboxes related to each group
 		/// </summary>
-		private void AssignErrorMessageForChkBoxes() {
-			IEnumerable<CustomValidator> ListAll=Panel1.Controls.OfType<CustomValidator>();
-			foreach(string strkey in hiddenChkBoxGroupHashTable.Keys) {
+		private void AdjustErrorMessageForChkBoxes() {
+			IEnumerable<CustomValidator> ListCustomValidators=Panel1.Controls.OfType<CustomValidator>();
+			foreach(string strkey in hiddenChkBoxGroupHashTable.Keys) {//foreach1
 				String Value=(string)hiddenChkBoxGroupHashTable[strkey];
 				long ControlID=0;
 				Int64.TryParse(Value.Trim(),out ControlID);
-				if(ControlID!=0) {
-					var CvResult =ListAll.Where(cv=>cv.ID=="CustomValidatorTextBoxForCheckbox"+ControlID);
+				if(ControlID==0) {// this corresponds to a group of checkboxes. Re-positioning of  error messages  is done here. No need to change the error message itself.
+					string[] ControlIdArray = Value.Split(new char[] { ' ' });
+					int MaxX=0;//this variable will hold the position of the element that is to the extreme right.
+					foreach(string id in ControlIdArray) {//foreach2
+						var TbResult=Panel1.Controls.OfType<TextBox>().Where(tb => tb.ID=="TextBoxForCheckbox"+id);
+						if(TbResult.Count()>0) {
+							string StrXpos=TbResult.ElementAt(0).Style["left"];
+							StrXpos=StrXpos.Substring(0,StrXpos.IndexOf("px")).Trim();
+							int XPos=0;
+							Int32.TryParse(StrXpos,out XPos);
+							if(XPos>MaxX) {
+								MaxX=XPos;
+							}
+						}
+					}// end foreach2
+					// now assign the max value to all textboxes of that group.
+					foreach(string id in ControlIdArray) {//foreach2
+						var TbResult=Panel1.Controls.OfType<TextBox>().Where(tb => tb.ID=="TextBoxForCheckbox"+id);
+						if(TbResult.Count()>0) {
+							TbResult.ElementAt(0).Style["left"]=MaxX+"px";
+						}
+					}// end foreach2
+				}
+				else {// this else corresponds to a single checkbox not part of a group. No re-position of the error message is done here. Only the error message is changed.
+					var CvResult =ListCustomValidators.Where(cv => cv.ID=="CustomValidatorTextBoxForCheckbox"+ControlID);
 					if(CvResult.Count()>0) {
 						CvResult.ElementAt(0).ErrorMessage="This is a required Check Box";
 					}
 				}
-			}
-
+			}// end foreach3
 		}
 
 		///<summary></summary>
@@ -365,6 +388,7 @@ namespace WebForms {
 			if(sfd.IsRequired!=(sbyte)1) {
 				return;
 			}
+			int XPosErrorMessageOffset=2;
 			int XPos=sfd.XPos;
 			int YPos=sfd.YPos;
 			String ErrorMessage="This is a required section. Please check one of the Check Boxes";
@@ -372,10 +396,12 @@ namespace WebForms {
 			TextBox tb=new TextBox();
 			tb.Rows=1;
 			tb.Text=".";// there has to be some character here the least visible is the period.
+			tb.MaxLength=1;
+			tb.Width=Unit.Pixel(1);
 			tb.ID="TextBoxForCheckbox"+sfd.WebSheetFieldDefID;
 			tb.Style["position"]="absolute";
 			tb.Style["top"]=YPos+CheckBoxYOffset+"px";
-			tb.Style["left"]=XPos+CheckBoxXOffset+"px";
+			tb.Style["left"]=XPos+CheckBoxXOffset+XPosErrorMessageOffset+ sfd.Width+"px";
 			tb.Style["z-index"]="-2";
 			tb.ReadOnly=true;
 			tb.BorderWidth=Unit.Pixel(0);
@@ -395,7 +421,7 @@ namespace WebForms {
 			Panel1.Controls.Add(vc);
 			AddChkBoxIdsToHashTable(sfd);			
 		}
-		
+
 		/// <summary>
 		/// All checkboxes that require validation are stored in the format:
 		/// key=hiddenChkBoxGroup+(ChkBoxGroupName) and value= "chkbxid1 chkbxid1 chkbxid1"
