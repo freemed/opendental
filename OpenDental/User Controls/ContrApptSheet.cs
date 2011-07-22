@@ -88,15 +88,15 @@ namespace OpenDental{
 					Shadow.Dispose();
 					Shadow=null;
 				}
-				if(openBrush!=null) {
-					openBrush.Dispose();
-				}
-				if(closedBrush!=null) {
-					closedBrush.Dispose();
-				}
-				if(holidayBrush!=null) {
-					holidayBrush.Dispose();
-				}
+				//if(openBrush!=null) {
+				//  openBrush.Dispose();
+				//}
+				//if(closedBrush!=null) {
+				//  closedBrush.Dispose();
+				//}
+				//if(holidayBrush!=null) {
+				//  holidayBrush.Dispose();
+				//}
 			}
 			base.Dispose( disposing );
 		}
