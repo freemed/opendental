@@ -262,6 +262,18 @@ namespace OpenDental {
 			return true;
 		}
 
+		///<summary>This runs when first opening the program.  If MySql is not at 5.5 or higher, it reminds the user, but does not force them to upgrade.</summary>
+		public static void MySqlVersion55Remind(){
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
+				return;
+			}
+			string thisVersion=MiscData.GetMySqlVersion();
+			float floatVersion=PIn.Float(thisVersion.Substring(0,3));
+			if(floatVersion < 5.5f) {
+				MsgBox.Show("Prefs","You should upgrade to MySQL 5.5 using the installer posted on our website.  It's not urgent, but until you upgrade, you are likely to get a few errors each day which will require restarting the MySQL service.");
+			}
+		}
+
 		///<summary>Essentially no changes have been made to this since version 6.5.</summary>
 		private static bool CheckProgramVersionClassic() {
 			Version storedVersion=new Version(PrefC.GetString(PrefName.ProgramVersion));

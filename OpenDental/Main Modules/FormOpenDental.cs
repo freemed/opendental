@@ -1636,6 +1636,7 @@ namespace OpenDental{
 			if(!PrefL.ConvertDB()){
 				return false;
 			}
+			PrefL.MySqlVersion55Remind();
 			if(PrefC.UsingAtoZfolder) {
 				string prefImagePath=ImageStore.GetPreferredImagePath();
 				if(prefImagePath==null || !Directory.Exists(prefImagePath)) {//AtoZ folder not found
