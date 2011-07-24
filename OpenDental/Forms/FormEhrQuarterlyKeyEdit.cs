@@ -39,10 +39,30 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textYear.Text==""){
+				MessageBox.Show("Please enter a year.");
+				return;
+			}
+			if(textQuarter.Text==""){
+				MessageBox.Show("Please enter a quarter.");
+				return;
+			}
 			if(textYear.errorProvider1.GetError(textYear)!=""
 				|| textQuarter.errorProvider1.GetError(textQuarter)!="") 
 			{
 				MessageBox.Show("Please fix errors first.");
+				return;
+			}
+			bool quarterlyKeyIsValid=false;
+			#if EHRTEST
+				quarterlyKeyIsValid=((EHR.FormEHR)FormOpenDental.FormEHR).QuarterlyKeyIsValid(textYear.Text,textQuarter.Text,PrefC.GetString(PrefName.PracticeTitle),textKey.Text);
+			#else
+				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+				object[] args=new object[] { textYear.Text,textQuarter.Text,PrefC.GetString(PrefName.PracticeTitle),textKey.Text };
+				quarterlyKeyIsValid=(bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args);
+			#endif
+			if(!quarterlyKeyIsValid) {
+				MsgBox.Show(this,"Invalid quarterly key");
 				return;
 			}
 			KeyCur.YearValue=PIn.Int(textYear.Text);
