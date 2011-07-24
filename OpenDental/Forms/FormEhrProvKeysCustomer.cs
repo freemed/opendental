@@ -11,6 +11,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormEhrProvKeysCustomer:Form {
 		private List<EhrProvKey> listKeys;
+		private List<EhrQuarterlyKey> listKeysQ;
 		public long Guarantor;
 
 		public FormEhrProvKeysCustomer() {
@@ -20,6 +21,7 @@ namespace OpenDental {
 
 		private void FormEhrProvKeysCustomer_Load(object sender,EventArgs e) {
 			FillGrid();
+			FillGridQ();
 		}
 
 		private void FillGrid(){
@@ -75,6 +77,49 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void FillGridQ(){
+			gridQ.BeginUpdate();
+			gridQ.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Year"),40);
+			gridQ.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Quarter"),50);
+			gridQ.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Key"),100);
+			gridQ.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Notes"),100);
+			gridQ.Columns.Add(col);
+			listKeysQ=EhrQuarterlyKeys.Refresh(Guarantor);
+			gridQ.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<listKeysQ.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(listKeysQ[i].YearValue.ToString());
+				row.Cells.Add(listKeysQ[i].QuarterValue.ToString());
+				row.Cells.Add(listKeysQ[i].KeyValue);
+				row.Cells.Add(listKeysQ[i].Notes);
+				gridQ.Rows.Add(row);
+			}
+			gridQ.EndUpdate();
+		}
+
+		private void gridQ_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
+			FormEhrQuarterlyKeyEditCust formK=new FormEhrQuarterlyKeyEditCust();
+			/*formK.KeyCur=listKeys[e.Row];
+			formK.ShowDialog();
+			FillGrid();*/
+		}
+
+		private void butAddQuarterly_Click(object sender,EventArgs e) {
+			FormEhrQuarterlyKeyEditCust formK=new FormEhrQuarterlyKeyEditCust();
+			/*
+			formK.KeyCur=new EhrProvKey();
+			formK.KeyCur.PatNum=Guarantor;
+			formK.KeyCur.FullTimeEquiv=1;
+			formK.KeyCur.IsNew=true;
+			formK.ShowDialog();
+			FillGrid();*/
+		}
+
 		private void butSave_Click(object sender,EventArgs e) {
 			long defNum=DefC.GetList(DefCat.ImageCats)[0].DefNum;
 			Bitmap bitmap=new Bitmap(this.Width,this.Height);
@@ -93,6 +138,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 	
 

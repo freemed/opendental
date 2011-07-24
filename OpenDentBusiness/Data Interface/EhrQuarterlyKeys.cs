@@ -7,13 +7,22 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrQuarterlyKeys{
-		///<summary>Pass in a patNum of 0 when not using from OD tech station.</summary>
-		public static List<EhrQuarterlyKey> Refresh(long patNum){
+		///<summary>Pass in a guarantor of 0 when not using from OD tech station.</summary>
+		public static List<EhrQuarterlyKey> Refresh(long guarantor){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrQuarterlyKey>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<EhrQuarterlyKey>>(MethodBase.GetCurrentMethod(),guarantor);
 			}
-			string command="SELECT * FROM ehrquarterlykey WHERE PatNum = "+POut.Long(patNum)+" ";
-
+			string command;
+			if(guarantor==0){//customer looking at their own quarterly keys
+				command="SELECT * FROM ehrquarterlykey";
+			}
+			else{//
+				command="SELECT ehrquarterlykey.* FROM ehrquarterlykey,patient "
+					+"WHERE ehrquarterlykey.PatNum=patient.PatNum "
+					+"AND patient.Guarantor="+POut.Long(guarantor)+" "
+					+"GROUP BY ehrquarterlykey.EhrQuarterlyKeyNum "
+					+"ORDER BY ehrquarterlykey.YearValue,ehrquarterlykey.QuarterValue";
+			}
 			return Crud.EhrQuarterlyKeyCrud.SelectMany(command);
 		}
 

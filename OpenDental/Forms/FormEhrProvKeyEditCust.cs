@@ -48,60 +48,6 @@ namespace OpenDental {
 			textEhrKey.Text=result;
 		}
 
-		/*
-		private void FillProcedure() {
-			if(KeyCur.ProcNum==0) {
-				textProcDate.Text="";
-				textCustomer.Text="";
-				textDescription.Text="";
-				textFee.Text="";
-				return;
-			}
-			Procedure ProcCur=Procedures.GetOneProc(KeyCur.ProcNum,false);
-			Patient cust=Patients.GetLim(ProcCur.PatNum);
-			textProcDate.Text=ProcCur.ProcDate.ToShortDateString();
-			textCustomer.Text=cust.GetNameLF();
-			textDescription.Text=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
-			textFee.Text=ProcCur.ProcFee.ToString("n");
-		}
-		
-		private void butAttach_Click(object sender,EventArgs e) {
-			FormProcSelect FormPS=new FormProcSelect(KeyCur.PatNum);
-			FormPS.IsForProvKeys=true;
-			FormPS.ShowDialog();
-			if(FormPS.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			KeyCur.ProcNum=FormPS.SelectedProcNum;
-			FillProcedure();
-		}
-
-		private void butDetach_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Detach procedure from provkey?")) {
-				return;
-			}
-			KeyCur.ProcNum=0;
-			FillProcedure();
-		}
-
-		private void butEdit_Click(object sender,EventArgs e) {
-			if(KeyCur.ProcNum==0){
-				MessageBox.Show("No procedure to edit.");
-				return;
-			}
-			Family fam=Patients.GetFamily(KeyCur.PatNum);
-			Patient pat=fam.GetPatient(KeyCur.PatNum);
-			Procedure proc=Procedures.GetOneProc(KeyCur.ProcNum,false);
-			FormProcEdit FormP=new FormProcEdit(proc,pat,fam);
-			FormP.ShowDialog();
-			//user might have deleted proc
-			proc=Procedures.GetOneProc(KeyCur.ProcNum,false);
-			if(proc.ProcNum==0) {
-				KeyCur.ProcNum=0;
-			}
-			FillProcedure();
-		}*/
-
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(KeyCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
