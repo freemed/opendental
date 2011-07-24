@@ -343,12 +343,6 @@
     <Compile Include="Forms\FormEhrQuarterlyKeyEditCust.designer.cs">
       <DependentUpon>FormEhrQuarterlyKeyEditCust.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormEhrQuarterlyKeysCustomer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEhrQuarterlyKeysCustomer.designer.cs">
-      <DependentUpon>FormEhrQuarterlyKeysCustomer.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormEhrQuarterlyKeyEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2302,10 +2296,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrQuarterlyKeyEditCust.resx">
       <DependentUpon>FormEhrQuarterlyKeyEditCust.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormEhrQuarterlyKeysCustomer.resx">
-      <DependentUpon>FormEhrQuarterlyKeysCustomer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrQuarterlyKeyEdit.resx">
