@@ -204,6 +204,9 @@ namespace OpenDental.Eclaims {
 				else if(transactionCode=="13") {//Response to Pre-Determination.
 					formId="06";//Pre-Determination Acknowledgement Form
 				}
+				else if(transactionCode=="12") { //Reversal response
+					//There is no standard form for a reversal response, but we print the reversal response later on based on the transactioncode so we don't need to do anything here.
+				}
 				else {
 					throw new Exception("Unhandled transactionCode '"+transactionCode+"' for version 02 message.");
 				}
