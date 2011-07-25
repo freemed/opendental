@@ -152,6 +152,30 @@ namespace OpenDental{
 					}
 				}
 			}
+			VisOps.Sort(CompareOps);
+			VisProvs.Sort(CompareProvs);
+		}
+
+		///<summary>Sorts list of operatories by ItemOrder.</summary>
+		private static int CompareOps(Operatory op1,Operatory op2) {
+			if(op1.ItemOrder<op2.ItemOrder) {
+				return -1;
+			}
+			else if(op1.ItemOrder>op2.ItemOrder) {
+				return 1;
+			}
+			return 0;
+		}
+
+		///<summary>Sorts list of providers by ItemOrder.</summary>
+		private static int CompareProvs(Provider prov1,Provider prov2) {
+			if(prov1.ItemOrder<prov2.ItemOrder) {
+				return -1;
+			}
+			else if(prov1.ItemOrder>prov2.ItemOrder) {
+				return 1;
+			}
+			return 0;
 		}
 
 		///<summary>Returns the index of the provNum within VisProvs.</summary>
