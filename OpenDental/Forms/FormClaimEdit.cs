@@ -2482,7 +2482,6 @@ namespace OpenDental{
 			// butReverse
 			// 
 			this.butReverse.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butReverse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butReverse.Autosize = true;
 			this.butReverse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReverse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
