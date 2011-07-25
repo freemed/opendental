@@ -133,6 +133,8 @@ namespace OpenDental {
 			DrawFields(g);
 			e.Graphics.DrawImage(doubleBuffer,0,0);
 			g.Dispose();
+			doubleBuffer.Dispose();
+			doubleBuffer=null;
 		}
 
 		private void DrawFields(Graphics g){
