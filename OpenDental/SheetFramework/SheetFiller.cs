@@ -103,6 +103,7 @@ namespace OpenDental{
 		private static void FillFieldsInStaticText(Sheet sheet,Patient pat) {
 			string fldval="";
 			string address="";
+			string apptsAllFuture="";
 			string birthdate="";
 			string carrierName="";
 			string carrierAddress="";
@@ -114,6 +115,10 @@ namespace OpenDental{
 			string insDeductibleUsed="";
 			string insPending="";
 			string insPercentages="";
+			string insPlanGroupNumber="";
+			string insPlanGroupName="";
+			string insPlanNote="";
+			string insSubNote="";
 			string insRemaining="";
 			string insUsed="";
 			string carrier2Name="";
@@ -141,6 +146,18 @@ namespace OpenDental{
 			string recallInterval="";
 			string nextSchedApptDateT="";
 			string dateTimeLastAppt="";
+			string nextSchedApptsFam="";
+			string serviceNote="";
+			string insFreqBW="";
+			string insFreqExams="";
+			string insFreqPanoFMX="";
+			string insType=""; //(ppo, etc)
+			string referredFrom=""; //(just one)
+			string referredTo=""; //(typically Drs. could be multiline. Include date)
+			string dateLastBW="";
+			string dateLastExam="";
+			string dateLastPanoFMX="";
+			string dateLastProphy="";
 			Family fam=null;
 			Provider priProv=null;
 			if(pat!=null){
@@ -174,6 +191,29 @@ namespace OpenDental{
 						}
 					}
 				}
+				serviceNote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor).Service;
+				List<RefAttach> RefAttachList=RefAttaches.Refresh(pat.PatNum);
+				Referral tempReferralFrom = Referrals.GetReferralForPat(pat.PatNum);
+				if(Referrals.GetReferralForPat(pat.PatNum)!=null) {
+					if(tempReferralFrom.IsDoctor){
+						referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName+" "+tempReferralFrom.Title+" : "+tempReferralFrom.Specialty.ToString();
+					}
+					else{
+						referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName;
+					}
+				}
+				for(int i=0;i<RefAttachList.Count;i++) {
+					if(RefAttachList[i].IsFrom) {
+						continue;
+					}
+					Referral tempRef = Referrals.GetReferral(RefAttachList[i].ReferralNum);
+					if(tempRef.IsDoctor) {
+						referredTo+=tempRef.FName+" "+tempRef.LName+" "+tempRef.Title+" : "+tempRef.Specialty.ToString()+" "+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
+					}
+					else {
+						referredTo+=tempRef.FName+" "+tempRef.LName+" "+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
+					}
+				}
 				//Insurance-------------------------------------------------------------------------------------------------------------------
 				List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 				long subNum=PatPlans.GetInsSubNum(patPlanList,1);
@@ -184,6 +224,7 @@ namespace OpenDental{
 				InsPlan plan=null;
 				if(sub!=null) {
 					plan=InsPlans.GetPlan(sub.PlanNum,planList);
+					insSubNote=sub.SubscNote;
 				}
 				Carrier carrier=null;
 				List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
@@ -195,6 +236,9 @@ namespace OpenDental{
 				double doubRemain;
 				double doubUsed;
 				if(plan!=null){
+					insPlanGroupName=plan.GroupName;
+					insPlanGroupNumber=plan.GroupNum;
+					insPlanNote=plan.PlanNote;
 					carrier=Carriers.GetCarrier(plan.CarrierNum);
 					carrierName=carrier.CarrierName;
 					carrierAddress=carrier.Address;
@@ -246,6 +290,23 @@ namespace OpenDental{
 							insPercentages+=",  ";
 						}
 						insPercentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
+					}
+					insFreqBW=Benefits.GetFrequencyDisplay(FrequencyType.BW,benefitList);
+					insFreqExams=Benefits.GetFrequencyDisplay(FrequencyType.Exam,benefitList);
+					insFreqPanoFMX=Benefits.GetFrequencyDisplay(FrequencyType.PanoFMX,benefitList);
+					switch(plan.PlanType){//(ppo, etc)
+						case "p":
+							insType="PPO Percentage"; 
+							break;
+						case "f":
+							insType="Medicaid or Flat Copay";
+							break;
+						case "c":
+							insType="Capitation";
+							break;
+						case "":
+							insType="Category Percentage";
+							break;
 					}
 				}
 				subNum=PatPlans.GetInsSubNum(patPlanList,2);
@@ -324,6 +385,57 @@ namespace OpenDental{
 						tpResponsPartyNameFL=patRespParty.GetNameFL();
 					}
 				}
+				//Procedure Log-------------------------------------------------------------------------------------------------------------
+				List<Procedure> proceduresList=Procedures.Refresh(pat.PatNum);
+				Procedure tempProcBW = new Procedure();
+				Procedure tempProcExam = new Procedure();
+				Procedure tempProcPanoFMX = new Procedure();
+				Procedure tempProcProphy = new Procedure();
+				tempProcBW.ProcDate=DateTime.MinValue;
+				tempProcExam.ProcDate=DateTime.MinValue;
+				tempProcPanoFMX.ProcDate=DateTime.MinValue;
+				tempProcProphy.ProcDate=DateTime.MinValue;
+				for(int i=0;i<proceduresList.Count;i++) {
+					Procedure tempProcCur = proceduresList[i];//cache Proc to speed up process
+					if(tempProcCur.ProcStatus!=ProcStat.C
+						&& tempProcCur.ProcStatus!=ProcStat.EC
+						&& tempProcCur.ProcStatus!=ProcStat.EO)
+					{
+						continue;//only look at completed or existing procedures
+					}
+					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0210")//intraoral - complete series (including bitewings) 
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0270")//bitewing - single film
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0272")//bitewings - two films
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0274")//bitewings - four films
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0277")//vertical bitewings - 7 to 8 films
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0273"))//bitewings - three films
+						&&tempProcCur.ProcDate>tempProcBW.ProcDate) {//newest
+						tempProcBW=tempProcCur.Copy();
+						dateLastBW=tempProcBW.ProcDate.ToShortDateString();
+					}
+					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0120")//periodic oral evaluation - established patient
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0140")//limited oral evaluation - problem focused
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0150")//comprehensive oral evaluation - new or established patient
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0160"))//detailed and extensive oral evaluation - problem focused, by report
+						&&tempProcCur.ProcDate>tempProcExam.ProcDate) {//newest
+						tempProcExam=tempProcCur.Copy();
+						dateLastExam=tempProcExam.ProcDate.ToShortDateString();
+					}
+					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0210")//intraoral - complete series (including bitewings)
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0330"))//panoramic film
+						&&tempProcCur.ProcDate>tempProcExam.ProcDate) {//newest
+						tempProcPanoFMX=tempProcCur.Copy();
+						dateLastPanoFMX=tempProcPanoFMX.ProcDate.ToShortDateString();
+					}
+					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1110")//prophylaxis - adult
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1120")//prophylaxis - child
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1201")//Topical Fluoride Including Prophy-Child
+						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1205"))//Topical Fluoride Including Prophy-Adult
+						&&tempProcCur.ProcDate>tempProcExam.ProcDate) {//newest
+						tempProcProphy=tempProcCur.Copy();
+						dateLastProphy=tempProcProphy.ProcDate.ToShortDateString(); ;
+					}
+				}
 				//Recall--------------------------------------------------------------------------------------------------------------------
 				Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
 				if(recall!=null){
@@ -334,6 +446,7 @@ namespace OpenDental{
 				}
 				//Appointments--------------------------------------------------------------------------------------------------------------
 				List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
+				List<Appointment> apptFutureList=Appointments.GetFutureSchedApts(pat.PatNum);
 				for(int i=0;i<apptList.Count;i++) {
 					if(apptList[i].AptStatus != ApptStatus.Scheduled
 						&& apptList[i].AptStatus != ApptStatus.Complete
@@ -351,6 +464,15 @@ namespace OpenDental{
 							nextSchedApptDateT=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
 							break;//we're done with the list now.
 						}
+					}
+				}
+				for(int i=0;i<apptFutureList.Count;i++) {//cannot be combined in loop above because of the break in the loop.
+					apptsAllFuture+=apptFutureList[i].AptDateTime.ToShortDateString()+" "+apptFutureList[i].AptDateTime.ToShortTimeString()+" : "+apptFutureList[i].ProcDescript+"\r\n";
+				}
+				for(int i=0;i<fam.ListPats.Length;i++) {
+					List<Appointment> futAptsList=Appointments.GetFutureSchedApts(fam.ListPats[i].PatNum);
+					if(futAptsList.Count>0) {
+						nextSchedApptsFam+=fam.ListPats[i].FName+": "+futAptsList[0].AptDateTime.ToShortDateString()+" "+futAptsList[0].AptDateTime.ToShortTimeString()+" : "+futAptsList[0].ProcDescript+"\r\n";
 					}
 				}
 				if(Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
@@ -430,6 +552,7 @@ namespace OpenDental{
 				fldval=field.FieldValue;
 				if(pat!=null){
 					fldval=fldval.Replace("[address]",address);
+					fldval=fldval.Replace("[apptsAllFuture]",apptsAllFuture.TrimEnd());
 					fldval=fldval.Replace("[age]",Patients.AgeToString(pat.Age));
 					fldval=fldval.Replace("[balTotal]",fam.ListPats[0].BalTotal.ToString("c"));
 					fldval=fldval.Replace("[bal_0_30]",fam.ListPats[0].Bal_0_30.ToString("c"));
@@ -451,6 +574,10 @@ namespace OpenDental{
 					fldval=fldval.Replace("[clinicCityStZip]",clinicCityStZip);
 					fldval=fldval.Replace("[clinicPhone]",clinicPhone);
 					fldval=fldval.Replace("[DateFirstVisit]",dateFirstVisit);
+					fldval=fldval.Replace("[dateLastBW]",dateLastBW);
+					fldval=fldval.Replace("[dateLastExam]",dateLastExam);
+					fldval=fldval.Replace("[dateLastPanoFMX]",dateLastPanoFMX);
+					fldval=fldval.Replace("[dateLastProphy]",dateLastProphy);
 					fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
 					fldval=fldval.Replace("[dateRecallDue]",dateRecallDue);
 					fldval=fldval.Replace("[dateTimeLastAppt]",dateTimeLastAppt);
@@ -462,8 +589,16 @@ namespace OpenDental{
 					fldval=fldval.Replace("[insAnnualMax]",insAnnualMax);
 					fldval=fldval.Replace("[insDeductible]",insDeductible);
 					fldval=fldval.Replace("[insDeductibleUsed]",insDeductibleUsed);
+					fldval=fldval.Replace("[insFreqBW]", insFreqBW.TrimEnd());
+					fldval=fldval.Replace("[insFreqExams]",insFreqExams.TrimEnd());
+					fldval=fldval.Replace("[insFreqPanoFMX]",insFreqPanoFMX.TrimEnd());
 					fldval=fldval.Replace("[insPending]",insPending);
 					fldval=fldval.Replace("[insPercentages]",insPercentages);
+					fldval=fldval.Replace("[insPlanGroupNumber]",insPlanGroupNumber);
+					fldval=fldval.Replace("[insPlanGroupName]",insPlanGroupName);
+					fldval=fldval.Replace("[insPlanNote]",insPlanNote);
+					fldval=fldval.Replace("[insType]",insType);
+					fldval=fldval.Replace("[insSubNote]",insSubNote);
 					fldval=fldval.Replace("[insRemaining]",insRemaining);
 					fldval=fldval.Replace("[insUsed]",insUsed);
 					fldval=fldval.Replace("[ins2AnnualMax]",ins2AnnualMax);
@@ -480,11 +615,15 @@ namespace OpenDental{
 					fldval=fldval.Replace("[nameL]",pat.LName);
 					fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
 					fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
+					fldval=fldval.Replace("[nextSchedApptsFam]",nextSchedApptsFam.TrimEnd());
 					fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
 					fldval=fldval.Replace("[plannedAppointmentInfo]",plannedAppointmentInfo);
 					fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
 					fldval=fldval.Replace("[recallInterval]",recallInterval);
+					fldval=fldval.Replace("[referredFrom]",referredFrom);
+					fldval=fldval.Replace("[referredTo]",referredTo.TrimEnd());
 					fldval=fldval.Replace("[salutation]",pat.GetSalutation());
+					fldval=fldval.Replace("[serviceNote]",serviceNote);
 					fldval=fldval.Replace("[siteDescription]",Sites.GetDescription(pat.SiteNum));
 					fldval=fldval.Replace("[subscriberID]",subscriberId);
 					fldval=fldval.Replace("[subscriberNameFL]",subscriberNameFL);
