@@ -2629,8 +2629,8 @@ namespace OpenDental.Eclaims {
 			CCDField fieldG03=formData.GetFieldById("G03");
 			if(fieldG03!=null && fieldG03.valuestr!="00000000"){
 				expPayDateStr=DateNumToPrintDate(fieldG03.valuestr);
+				doc.DrawField(g,isFrench?"DATE PRÉVUE DU PAIEMENT":"EXPECTED PAYMENT DATE",expPayDateStr,true,x,0);
 			}
-			doc.DrawField(g,isFrench?"DATE PRÉVUE DU PAIEMENT":"EXPECTED PAYMENT DATE",expPayDateStr,true,x,0);
 			CCDField f01=formData.GetFieldById("F01");
 			if(f01!=null) {
 				string payableTo=f01.valuestr;
