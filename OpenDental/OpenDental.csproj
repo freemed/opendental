@@ -4996,6 +4996,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Forms Agg Reports\" />
     <Folder Include="SmartCards\Linux\" />
   </ItemGroup>
   <ItemGroup>
