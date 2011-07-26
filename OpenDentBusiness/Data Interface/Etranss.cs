@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using OpenDentBusiness;
@@ -98,7 +99,8 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM etrans WHERE ClaimNum="+POut.Long(claimNum)+" "
 				+"AND (Etype="+POut.Int((int)EtransType.Claim_CA)+" "
 				+"OR Etype="+POut.Int((int)EtransType.ClaimCOB_CA)+" "
-				+"OR Etype="+POut.Int((int)EtransType.ClaimSent)+")";
+				+"OR Etype="+POut.Int((int)EtransType.ClaimSent)+") "
+				+(CultureInfo.CurrentCulture.Name.EndsWith("CA")?"ORDER BY DateTimeTrans DESC":""); //Canadian. en-CA or fr-CA
 			return Crud.EtransCrud.SelectMany(command);
 		}
 
