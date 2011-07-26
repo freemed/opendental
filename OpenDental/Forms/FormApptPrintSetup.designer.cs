@@ -30,6 +30,8 @@ namespace OpenDental{
 			this.textStopTime = new System.Windows.Forms.TextBox();
 			this.textStartTime = new System.Windows.Forms.TextBox();
 			this.textFontSize = new ODR.ValidDouble();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.butSave = new OpenDental.UI.Button();
 			this.textColumnsPerPage = new OpenDental.ValidNumber();
 			this.butOK = new OpenDental.UI.Button();
@@ -39,7 +41,7 @@ namespace OpenDental{
 			// labelColumnsPerPage
 			// 
 			this.labelColumnsPerPage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelColumnsPerPage.Location = new System.Drawing.Point(36,86);
+			this.labelColumnsPerPage.Location = new System.Drawing.Point(12,85);
 			this.labelColumnsPerPage.Name = "labelColumnsPerPage";
 			this.labelColumnsPerPage.Size = new System.Drawing.Size(128,15);
 			this.labelColumnsPerPage.TabIndex = 72;
@@ -49,7 +51,7 @@ namespace OpenDental{
 			// labelFontSize
 			// 
 			this.labelFontSize.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelFontSize.Location = new System.Drawing.Point(69,112);
+			this.labelFontSize.Location = new System.Drawing.Point(45,111);
 			this.labelFontSize.Name = "labelFontSize";
 			this.labelFontSize.Size = new System.Drawing.Size(95,15);
 			this.labelFontSize.TabIndex = 74;
@@ -59,7 +61,7 @@ namespace OpenDental{
 			// labelStartTime
 			// 
 			this.labelStartTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStartTime.Location = new System.Drawing.Point(69,33);
+			this.labelStartTime.Location = new System.Drawing.Point(45,33);
 			this.labelStartTime.Name = "labelStartTime";
 			this.labelStartTime.Size = new System.Drawing.Size(95,15);
 			this.labelStartTime.TabIndex = 76;
@@ -69,7 +71,7 @@ namespace OpenDental{
 			// labelStopTime
 			// 
 			this.labelStopTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStopTime.Location = new System.Drawing.Point(69,59);
+			this.labelStopTime.Location = new System.Drawing.Point(45,59);
 			this.labelStopTime.Name = "labelStopTime";
 			this.labelStopTime.Size = new System.Drawing.Size(95,15);
 			this.labelStopTime.TabIndex = 78;
@@ -78,24 +80,44 @@ namespace OpenDental{
 			// 
 			// textStopTime
 			// 
-			this.textStopTime.Location = new System.Drawing.Point(170,57);
+			this.textStopTime.Location = new System.Drawing.Point(146,56);
 			this.textStopTime.Name = "textStopTime";
-			this.textStopTime.Size = new System.Drawing.Size(100,20);
+			this.textStopTime.Size = new System.Drawing.Size(75,20);
 			this.textStopTime.TabIndex = 83;
 			// 
 			// textStartTime
 			// 
-			this.textStartTime.Location = new System.Drawing.Point(170,31);
+			this.textStartTime.Location = new System.Drawing.Point(146,30);
 			this.textStartTime.Name = "textStartTime";
-			this.textStartTime.Size = new System.Drawing.Size(100,20);
+			this.textStartTime.Size = new System.Drawing.Size(75,20);
 			this.textStartTime.TabIndex = 84;
 			// 
 			// textFontSize
 			// 
-			this.textFontSize.Location = new System.Drawing.Point(170,109);
+			this.textFontSize.Location = new System.Drawing.Point(146,108);
 			this.textFontSize.Name = "textFontSize";
 			this.textFontSize.Size = new System.Drawing.Size(50,20);
 			this.textFontSize.TabIndex = 85;
+			// 
+			// label1
+			// 
+			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label1.Location = new System.Drawing.Point(227,33);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(128,15);
+			this.label1.TabIndex = 86;
+			this.label1.Text = "Example: 5:00 AM";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label2
+			// 
+			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label2.Location = new System.Drawing.Point(227,59);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(128,15);
+			this.label2.TabIndex = 87;
+			this.label2.Text = "Example: 8:00 PM";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butSave
 			// 
@@ -114,7 +136,7 @@ namespace OpenDental{
 			// 
 			// textColumnsPerPage
 			// 
-			this.textColumnsPerPage.Location = new System.Drawing.Point(170,83);
+			this.textColumnsPerPage.Location = new System.Drawing.Point(146,82);
 			this.textColumnsPerPage.MaxVal = 255;
 			this.textColumnsPerPage.MinVal = 0;
 			this.textColumnsPerPage.Name = "textColumnsPerPage";
@@ -157,6 +179,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(367,204);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textFontSize);
 			this.Controls.Add(this.textStartTime);
 			this.Controls.Add(this.textStopTime);
@@ -190,5 +214,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textStopTime;
 		private System.Windows.Forms.TextBox textStartTime;
 		private ODR.ValidDouble textFontSize;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
 	}
 }

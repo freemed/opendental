@@ -30,17 +30,22 @@ namespace OpenDental {
 		}
 
 		private bool ValidEntries() {
-			string timePattern="^([1-9]|1[0-2]|0[1-9]){1}(:[0-5][0-9]\\s[aApP][mM]){1}$";
-			if(!Regex.IsMatch(textStartTime.Text,timePattern)) {
-				MsgBox.Show(this,"Start time invalid. Example of correct format - 5:00 AM");
+			DateTime start=PIn.DateT(textStartTime.Text);
+			DateTime stop=PIn.DateT(textStopTime.Text);
+			if(start.Minute>0 || stop.Minute>0) {
+				MsgBox.Show(this,"Please use hours only, no minutes.");
 				return false;
 			}
-			if(!Regex.IsMatch(textStopTime.Text,timePattern)) {
-				MsgBox.Show(this,"Stop time invalid. Example of correct format - 5:00 PM");
-				return false;
-			}
-			if(PIn.DateT(textStartTime.Text)>PIn.DateT(textStopTime.Text)) {
+			if(start.Hour!=0 && stop.Hour<start.Hour) {//If stop time is earlier than start time.
 				MsgBox.Show(this,"Start time cannot excede stop time.");
+				return false;
+			}
+			if(start==DateTime.MinValue) {
+				MsgBox.Show(this,"Please enter a valid start time.");
+				return false;
+			}
+			if(stop==DateTime.MinValue) {
+				MsgBox.Show(this,"Please enter a valid stop time.");
 				return false;
 			}
 			if(textColumnsPerPage.errorProvider1.GetError(textColumnsPerPage)!=""
@@ -49,18 +54,21 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
-			if(textColumnsPerPage.Text=="0") {
-				MsgBox.Show(this,"Columns per page cannot be 0.");
+			if(PIn.Int(textColumnsPerPage.Text)<1) {
+				MsgBox.Show(this,"Columns per page cannot be 0 or less.");
 				return false;
 			}
 			return true;
 		}
 
 		private void SaveChanges() {
-			Prefs.UpdateString(PrefName.ApptPrintTimeStart,textStartTime.Text);
-			Prefs.UpdateString(PrefName.ApptPrintTimeStop,textStopTime.Text);
-			Prefs.UpdateString(PrefName.ApptPrintFontSize,textFontSize.Text);
-			Prefs.UpdateInt(PrefName.ApptPrintColumnsPerPage,PIn.Int(textColumnsPerPage.Text));
+			if(ValidEntries()) {
+				Prefs.UpdateDateT(PrefName.ApptPrintTimeStart,PIn.DateT(textStartTime.Text));
+				Prefs.UpdateDateT(PrefName.ApptPrintTimeStop,PIn.DateT(textStopTime.Text));
+				Prefs.UpdateString(PrefName.ApptPrintFontSize,textFontSize.Text);
+				Prefs.UpdateInt(PrefName.ApptPrintColumnsPerPage,PIn.Int(textColumnsPerPage.Text));
+				MsgBox.Show(this,"Settings saved.");
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -68,8 +76,8 @@ namespace OpenDental {
 			if(!ValidEntries()) {
 				return;
 			}
-			if(textStartTime.Text!=PrefC.GetDateT(PrefName.ApptPrintTimeStart).ToShortTimeString()
-				|| textStopTime.Text!=PrefC.GetDateT(PrefName.ApptPrintTimeStop).ToShortTimeString()
+			if(PIn.DateT(textStartTime.Text)!=PrefC.GetDateT(PrefName.ApptPrintTimeStart)
+				|| PIn.DateT(textStopTime.Text)!=PrefC.GetDateT(PrefName.ApptPrintTimeStop)
 				|| textFontSize.Text!=PrefC.GetString(PrefName.ApptPrintFontSize)
 				|| textColumnsPerPage.Text!=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage).ToString())
 			{
