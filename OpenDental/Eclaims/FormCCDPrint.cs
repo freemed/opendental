@@ -2632,38 +2632,39 @@ namespace OpenDental.Eclaims {
 				doc.DrawField(g,isFrench?"DATE PRÉVUE DU PAIEMENT":"EXPECTED PAYMENT DATE",expPayDateStr,true,x,0);
 			}
 			CCDField f01=formData.GetFieldById("F01");
-			if(f01!=null) {
-				string payableTo=f01.valuestr;
-				if(payableTo=="1") {//Pay the subscriber.
-					text=isFrench?"TOTAL REMBOURSABLE AU TITULAIRE:":"TOTAL PAYABLE TO INSURED:";
-					doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
-					text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
-					doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-					x=doc.StartElement();
-					text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
-					SizeF size1=doc.DrawString(g,text,x,0);
-					text=Patients.GetAddressFull(patient.Address,patient.Address2,patient.City,patient.State,patient.Zip);
-					doc.DrawString(g,text,x+size1.Width+10,0);
-				}
-				else if(payableTo=="2") {//Pay other party.
-					text=isFrench?"TOTAL REMBOURSABLE AU AUTRES:":"TOTAL PAYABLE TO OTHER:";
-					doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
-					text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
-					doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-					x=doc.StartElement();
-				}
-				else if(payableTo=="3") {//Reserved
-				}
-				else if(payableTo=="4" || payableTo=="0") {//Dentist
-					text=isFrench?"TOTAL REMBOURSABLE AU DENTISTE:":"TOTAL PAYABLE TO DENTIST:";
-					doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
-					text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
-					doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
-					x=doc.StartElement();
-					text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
-					SizeF size1=doc.DrawString(g,text,x,0);
-					PrintPracticeAddress(g,x+size1.Width+10);
-				}
+			//For cases when field f01 is not present, we are supposed to grab the value determining who the payment is for from the original claim, 
+			//but we must instead rely on the assignment of benefits flag associated with the primary insurance subscriber because there is no such field
+			//in the claim object itself.
+			string payableTo=(f01==null)?(insSub.AssignBen?"4":"1"):f01.valuestr;
+			if(payableTo=="1") {//Pay the subscriber.
+				text=isFrench?"TOTAL REMBOURSABLE AU TITULAIRE:":"TOTAL PAYABLE TO INSURED:";
+				doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
+				doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				x=doc.StartElement();
+				text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
+				SizeF size1=doc.DrawString(g,text,x,0);
+				text=Patients.GetAddressFull(patient.Address,patient.Address2,patient.City,patient.State,patient.Zip);
+				doc.DrawString(g,text,x+size1.Width+10,0);
+			}
+			else if(payableTo=="2") {//Pay other party.
+				text=isFrench?"TOTAL REMBOURSABLE AU AUTRES:":"TOTAL PAYABLE TO OTHER:";
+				doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
+				doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				x=doc.StartElement();
+			}
+			else if(payableTo=="3") {//Reserved
+			}
+			else if(payableTo=="4" || payableTo=="0") {//Dentist
+				text=isFrench?"TOTAL REMBOURSABLE AU DENTISTE:":"TOTAL PAYABLE TO DENTIST:";
+				doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
+				text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
+				doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				x=doc.StartElement();
+				text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
+				SizeF size1=doc.DrawString(g,text,x,0);
+				PrintPracticeAddress(g,x+size1.Width+10);
 			}
 			x=doc.StartElement();
 		}
