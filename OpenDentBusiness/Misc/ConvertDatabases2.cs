@@ -5797,7 +5797,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To11_1_0() {
 			if(FromVersion<new Version("11.1.0.0")) {
 				string command;
-
+				//Set default appt schedule printing preferences.  Was released when not finished so can't trust current values.
+				command="UPDATE preference SET ValueString="+POut.DateT(new DateTime(2011,1,1,0,0,0))+" WHERE PrefName='ApptPrintTimeStart'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString="+POut.DateT(new DateTime(2011,1,1,23,0,0))+" WHERE PrefName='ApptPrintTimeStop'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString='10' WHERE PrefName='ApptPrintFontSize'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString='10' WHERE PrefName='ApptPrintColumnsPerPage'";
+				Db.NonQ(command);
 
 
 

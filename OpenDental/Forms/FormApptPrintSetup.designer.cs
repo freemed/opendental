@@ -39,69 +39,73 @@ namespace OpenDental{
 			// labelColumnsPerPage
 			// 
 			this.labelColumnsPerPage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelColumnsPerPage.Location = new System.Drawing.Point(152,24);
+			this.labelColumnsPerPage.Location = new System.Drawing.Point(36,86);
 			this.labelColumnsPerPage.Name = "labelColumnsPerPage";
 			this.labelColumnsPerPage.Size = new System.Drawing.Size(128,15);
 			this.labelColumnsPerPage.TabIndex = 72;
 			this.labelColumnsPerPage.Text = "Columns per page";
+			this.labelColumnsPerPage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelFontSize
 			// 
 			this.labelFontSize.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelFontSize.Location = new System.Drawing.Point(152,66);
+			this.labelFontSize.Location = new System.Drawing.Point(69,112);
 			this.labelFontSize.Name = "labelFontSize";
 			this.labelFontSize.Size = new System.Drawing.Size(95,15);
 			this.labelFontSize.TabIndex = 74;
 			this.labelFontSize.Text = "Font size";
+			this.labelFontSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelStartTime
 			// 
 			this.labelStartTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStartTime.Location = new System.Drawing.Point(27,24);
+			this.labelStartTime.Location = new System.Drawing.Point(69,33);
 			this.labelStartTime.Name = "labelStartTime";
 			this.labelStartTime.Size = new System.Drawing.Size(95,15);
 			this.labelStartTime.TabIndex = 76;
 			this.labelStartTime.Text = "Start time";
+			this.labelStartTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelStopTime
 			// 
 			this.labelStopTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelStopTime.Location = new System.Drawing.Point(27,66);
+			this.labelStopTime.Location = new System.Drawing.Point(69,59);
 			this.labelStopTime.Name = "labelStopTime";
 			this.labelStopTime.Size = new System.Drawing.Size(95,15);
 			this.labelStopTime.TabIndex = 78;
 			this.labelStopTime.Text = "Stop time";
+			this.labelStopTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textStopTime
 			// 
-			this.textStopTime.Location = new System.Drawing.Point(25,82);
+			this.textStopTime.Location = new System.Drawing.Point(170,57);
 			this.textStopTime.Name = "textStopTime";
 			this.textStopTime.Size = new System.Drawing.Size(100,20);
 			this.textStopTime.TabIndex = 83;
 			// 
 			// textStartTime
 			// 
-			this.textStartTime.Location = new System.Drawing.Point(25,41);
+			this.textStartTime.Location = new System.Drawing.Point(170,31);
 			this.textStartTime.Name = "textStartTime";
 			this.textStartTime.Size = new System.Drawing.Size(100,20);
 			this.textStartTime.TabIndex = 84;
 			// 
 			// textFontSize
 			// 
-			this.textFontSize.Location = new System.Drawing.Point(150,82);
+			this.textFontSize.Location = new System.Drawing.Point(170,109);
 			this.textFontSize.Name = "textFontSize";
-			this.textFontSize.Size = new System.Drawing.Size(100,20);
+			this.textFontSize.Size = new System.Drawing.Size(50,20);
 			this.textFontSize.TabIndex = 85;
 			// 
 			// butSave
 			// 
 			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butSave.Autosize = true;
 			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSave.CornerRadius = 4F;
-			this.butSave.Location = new System.Drawing.Point(12,164);
+			this.butSave.Location = new System.Drawing.Point(12,168);
 			this.butSave.Name = "butSave";
 			this.butSave.Size = new System.Drawing.Size(75,24);
 			this.butSave.TabIndex = 82;
@@ -110,12 +114,12 @@ namespace OpenDental{
 			// 
 			// textColumnsPerPage
 			// 
-			this.textColumnsPerPage.Location = new System.Drawing.Point(150,40);
+			this.textColumnsPerPage.Location = new System.Drawing.Point(170,83);
 			this.textColumnsPerPage.MaxVal = 255;
 			this.textColumnsPerPage.MinVal = 0;
 			this.textColumnsPerPage.Name = "textColumnsPerPage";
 			this.textColumnsPerPage.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.textColumnsPerPage.Size = new System.Drawing.Size(100,20);
+			this.textColumnsPerPage.Size = new System.Drawing.Size(50,20);
 			this.textColumnsPerPage.TabIndex = 73;
 			this.textColumnsPerPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
@@ -127,7 +131,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(205,134);
+			this.butOK.Location = new System.Drawing.Point(197,168);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -142,7 +146,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(204,164);
+			this.butCancel.Location = new System.Drawing.Point(280,168);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -152,7 +156,7 @@ namespace OpenDental{
 			// FormApptPrintSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(291,200);
+			this.ClientSize = new System.Drawing.Size(367,204);
 			this.Controls.Add(this.textFontSize);
 			this.Controls.Add(this.textStartTime);
 			this.Controls.Add(this.textStopTime);
