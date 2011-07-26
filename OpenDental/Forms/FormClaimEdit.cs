@@ -3313,7 +3313,6 @@ namespace OpenDental{
 					butReverse.Enabled=(ClaimCur.CanadaTransRefNum!=null && ClaimCur.CanadaTransRefNum!="");
 				}
 				butSend.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
-				butOK.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
 			}
 			else {
 				tabMain.TabPages.Remove(tabCanadian);
