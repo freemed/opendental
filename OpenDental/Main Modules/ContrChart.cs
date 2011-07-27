@@ -3614,8 +3614,18 @@ namespace OpenDental{
 		}
 
 		private void Tool_EHR_Click(bool onLoadShowOrders) {
-#if EHRTEST
+			#if EHRTEST
 				//so we can step through for debugging.
+				EhrQuarterlyKey keyThisQ=EhrQuarterlyKeys.GetKeyThisQuarter();
+				if(keyThisQ==null) {
+					MessageBox.Show("No quarterly key entered for this quarter.");
+					return;
+				}
+				if(!((FormEHR)FormOpenDental.FormEHR).QuarterlyKeyIsValid((DateTime.Today.Year-2000).ToString(),EhrQuarterlyKeys.MonthToQuarter(DateTime.Today.Month).ToString(),
+					PrefC.GetString(PrefName.PracticeTitle),keyThisQ.KeyValue)) {
+					MessageBox.Show("Invalid quarterly key.");
+					return;
+				}
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
 				((FormEHR)FormOpenDental.FormEHR).OnShowLaunchOrders=onLoadShowOrders;
 				((FormEHR)FormOpenDental.FormEHR).ShowDialog();
@@ -3701,9 +3711,21 @@ namespace OpenDental{
 					}
 					Tool_EHR_Click(true);
 				}
-#else
-			Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
-				object[] args=new object[] {PatCur.PatNum};
+			#else
+				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+				object[] args;
+				EhrQuarterlyKey keyThisQ=EhrQuarterlyKeys.GetKeyThisQuarter();
+				if(keyThisQ==null) {
+					MessageBox.Show("No quarterly key entered for this quarter.");
+					return;
+				}
+				args=new object[] { (DateTime.Today.Year-2000).ToString(),EhrQuarterlyKeys.MonthToQuarter(DateTime.Today.Month).ToString(),
+					PrefC.GetString(PrefName.PracticeTitle),keyThisQ.KeyValue };
+				if(!(bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args)) {
+					MessageBox.Show("Invalid quarterly key.");
+					return;
+				}
+				args=new object[] {PatCur.PatNum};
 				type.InvokeMember("PatNum",System.Reflection.BindingFlags.SetField,null,FormOpenDental.FormEHR,args);
 				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,null);
 				if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.None) {
@@ -3788,7 +3810,7 @@ namespace OpenDental{
 					}
 					Tool_EHR_Click(true);
 				}
-#endif
+			#endif
 		}
 
 		private void menuConsent_Popup(object sender,EventArgs e) {

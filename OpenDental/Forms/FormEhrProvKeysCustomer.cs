@@ -11,7 +11,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormEhrProvKeysCustomer:Form {
 		private List<EhrProvKey> listKeys;
-		private List<EhrQuarterlyKey> listKeysQ;
+		private List<EhrQuarterlyKey> listKeysQuart;
 		public long Guarantor;
 
 		public FormEhrProvKeysCustomer() {
@@ -88,15 +88,15 @@ namespace OpenDental {
 			gridQ.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Notes"),100);
 			gridQ.Columns.Add(col);
-			listKeysQ=EhrQuarterlyKeys.Refresh(Guarantor);
+			listKeysQuart=EhrQuarterlyKeys.Refresh(Guarantor);
 			gridQ.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<listKeysQ.Count;i++) {
+			for(int i=0;i<listKeysQuart.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listKeysQ[i].YearValue.ToString());
-				row.Cells.Add(listKeysQ[i].QuarterValue.ToString());
-				row.Cells.Add(listKeysQ[i].KeyValue);
-				row.Cells.Add(listKeysQ[i].Notes);
+				row.Cells.Add(listKeysQuart[i].YearValue.ToString());
+				row.Cells.Add(listKeysQuart[i].QuarterValue.ToString());
+				row.Cells.Add(listKeysQuart[i].KeyValue);
+				row.Cells.Add(listKeysQuart[i].Notes);
 				gridQ.Rows.Add(row);
 			}
 			gridQ.EndUpdate();
@@ -104,20 +104,56 @@ namespace OpenDental {
 
 		private void gridQ_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
 			FormEhrQuarterlyKeyEditCust formK=new FormEhrQuarterlyKeyEditCust();
-			/*formK.KeyCur=listKeys[e.Row];
+			formK.KeyCur=listKeysQuart[e.Row];
 			formK.ShowDialog();
-			FillGrid();*/
+			FillGridQ();
 		}
 
 		private void butAddQuarterly_Click(object sender,EventArgs e) {
 			FormEhrQuarterlyKeyEditCust formK=new FormEhrQuarterlyKeyEditCust();
-			/*
-			formK.KeyCur=new EhrProvKey();
+			formK.KeyCur=new EhrQuarterlyKey();
 			formK.KeyCur.PatNum=Guarantor;
-			formK.KeyCur.FullTimeEquiv=1;
+			if(listKeysQuart.Count==0){
+				formK.KeyCur.YearValue=DateTime.Today.Year-2000;
+				int quarter=1;
+				if(DateTime.Today.Month>=4 && DateTime.Today.Month<=6){
+					quarter=2;
+				}
+				if(DateTime.Today.Month>=7 && DateTime.Today.Month<=9){
+					quarter=3;
+				}
+				if(DateTime.Today.Month>=10){
+					quarter=4;
+				}
+				formK.KeyCur.QuarterValue=quarter;
+			}
+			else{
+				formK.KeyCur.PracticeName=listKeysQuart[listKeysQuart.Count-1].PracticeName;
+				formK.KeyCur.YearValue=listKeysQuart[listKeysQuart.Count-1].YearValue;
+				formK.KeyCur.QuarterValue=listKeysQuart[listKeysQuart.Count-1].QuarterValue+1;
+				if(formK.KeyCur.QuarterValue==5){
+					formK.KeyCur.QuarterValue=1;
+					formK.KeyCur.YearValue++;
+				}
+				int monthOfQuarter=1;
+				if(formK.KeyCur.QuarterValue==2){
+					monthOfQuarter=4;
+				}
+				if(formK.KeyCur.QuarterValue==3){
+					monthOfQuarter=7;
+				}
+				if(formK.KeyCur.QuarterValue==4){
+					monthOfQuarter=10;
+				}
+				DateTime firstDayOfQuarter=new DateTime(2000+formK.KeyCur.YearValue,monthOfQuarter,1);
+				DateTime earliestReleaseDate=firstDayOfQuarter.AddMonths(-1);
+				if(DateTime.Today<earliestReleaseDate){
+					MessageBox.Show("Warning!  Quarterly keys cannot be released more than one month in advance.");
+				}
+			}
 			formK.KeyCur.IsNew=true;
 			formK.ShowDialog();
-			FillGrid();*/
+			FillGridQ();
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {

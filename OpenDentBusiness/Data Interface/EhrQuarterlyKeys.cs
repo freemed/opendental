@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			}
 			string command;
 			if(guarantor==0){//customer looking at their own quarterly keys
-				command="SELECT * FROM ehrquarterlykey";
+				command="SELECT * FROM ehrquarterlykey WHERE PatNum=0";
 			}
 			else{//
 				command="SELECT ehrquarterlykey.* FROM ehrquarterlykey,patient "
@@ -24,6 +24,32 @@ namespace OpenDentBusiness{
 					+"ORDER BY ehrquarterlykey.YearValue,ehrquarterlykey.QuarterValue";
 			}
 			return Crud.EhrQuarterlyKeyCrud.SelectMany(command);
+		}
+
+		public static EhrQuarterlyKey GetKeyThisQuarter() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<EhrQuarterlyKey>(MethodBase.GetCurrentMethod());
+			}
+			string command;
+			int quarter=MonthToQuarter(DateTime.Today.Month);
+			command="SELECT * FROM ehrquarterlykey WHERE YearValue="+(DateTime.Today.Year-2000).ToString()+" "
+				+"AND QuarterValue="+quarter.ToString()+" ";//we don't care about practice title in the query
+			return Crud.EhrQuarterlyKeyCrud.SelectOne(command);
+		}
+
+		public static int MonthToQuarter(int month) {
+			//No need to check RemotingRole; no call to db.
+			int quarter=1;
+			if(month>=4 && month<=6) {
+				quarter=2;
+			}
+			if(month>=7 && month<=9) {
+				quarter=3;
+			}
+			if(month>=10) {
+				quarter=4;
+			}
+			return quarter;
 		}
 
 		///<summary></summary>

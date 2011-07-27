@@ -24,7 +24,6 @@ namespace OpenDental {
 			textLName.Text=KeyCur.LName;
 			textFName.Text=KeyCur.FName;
 			textEhrKey.Text=KeyCur.ProvKey;
-			//FillProcedure();
 			textFullTimeEquiv.Text=KeyCur.FullTimeEquiv.ToString();
 			textNotes.Text=KeyCur.Notes;
 		}
@@ -38,7 +37,7 @@ namespace OpenDental {
 			//@"E:\My Documents\Shared Projects Subversion\EhrProvKeyGenerator\EhrProvKeyGenerator\bin\Debug\EhrProvKeyGenerator.exe"
 			string progPath=PrefC.GetString(PrefName.EhrProvKeyGeneratorPath);
 			ProcessStartInfo startInfo=new ProcessStartInfo(progPath);
-			startInfo.Arguments="\""+textLName.Text.Replace("\"","")+"\" \""+textFName.Text.Replace("\"","")+"\"";
+			startInfo.Arguments="P \""+textLName.Text.Replace("\"","")+"\" \""+textFName.Text.Replace("\"","")+"\"";
 			startInfo.UseShellExecute=false;
 			startInfo.RedirectStandardOutput=true;
 			Process process=Process.Start(startInfo);

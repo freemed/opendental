@@ -124,11 +124,11 @@ namespace OpenDental{
 			// 
 			// labelEhrKey
 			// 
-			this.labelEhrKey.Location = new System.Drawing.Point(100,174);
+			this.labelEhrKey.Location = new System.Drawing.Point(49,174);
 			this.labelEhrKey.Name = "labelEhrKey";
-			this.labelEhrKey.Size = new System.Drawing.Size(88,14);
+			this.labelEhrKey.Size = new System.Drawing.Size(139,14);
 			this.labelEhrKey.TabIndex = 113;
-			this.labelEhrKey.Text = "EHR Key";
+			this.labelEhrKey.Text = "Provider EHR Key";
 			this.labelEhrKey.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butGenerate

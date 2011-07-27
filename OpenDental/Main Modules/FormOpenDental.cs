@@ -1588,7 +1588,7 @@ namespace OpenDental{
 			catch { }
 			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
 			if(PrefC.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
-				#if DEBUG
+				#if EHRTEST
 					FormEHR=new FormEHR();
 					ContrChart2.InitializeLocalData();//because toolbar is now missing the EHR button.  Only a problem if a db conversion is done when opening the program.
 				#else
