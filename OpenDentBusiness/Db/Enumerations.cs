@@ -916,7 +916,9 @@ namespace OpenDentBusiness{
 		///<summary>10</summary>
 		Tesia,
 		///<summary>11</summary>
-		MercuryDE
+		MercuryDE,
+		///<summary>12</summary>
+		ClaimX
 	}
 
 	///<summary></summary>

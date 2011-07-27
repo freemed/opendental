@@ -131,6 +131,12 @@ namespace OpenDental.Eclaims
 						continue;
 					}
 				}
+				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.ClaimX) {
+					if(!ClaimX.Launch(Clearinghouses.Listt[i],batchNum)) {
+						MessageBox.Show("Claim file created, but encountered an error while launching ClaimX Client.");
+						//continue;
+					}
+				}
 				//----------------------------------------------------------------------------------------
 				//finally, mark the claims sent. (only if not Canadian)
 				EtransType etype=EtransType.ClaimSent;

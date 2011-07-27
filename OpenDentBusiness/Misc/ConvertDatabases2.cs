@@ -5790,6 +5790,55 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_0_9();
+		}
+
+		///<summary></summary>
+		private static void To11_0_9() {
+			if(FromVersion<new Version("11.0.9.0")) {
+				string command;
+				//ClaimX Clearing House
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO clearinghouse(Description,ExportPath,IsDefault,Payors,Eformat,ResponsePath,CommBridge,ClientProgram,ISA05,ISA07,ISA08,ISA15,GS03) ";
+					command+="VALUES(";
+					command+="'ClaimX'";//Description
+					command+=",'"+POut.String(@"C:\ClaimX\Temp\")+"'";//ExportPath that the X12 is placed into
+					command+=",'0'";//IsDefault
+					command+=",''";//Payors
+					command+=",'1'";//Eformat-1=X12
+					command+=",''";//ResponsePath
+					command+=",'12'";//CommBridge-12=ClaimX
+					command+=",'"+POut.String(@"C:\ProgramFiles\ClaimX\claimxclient.exe")+"'";//ClientProgram
+					command+=",'30'";//ISA05 
+					command+=",'30'";//ISA07 
+					command+=",'351962405'";//ISA08 
+					command+=",'P'";//ISA15-P=Production, T=Test
+					command+=",'351962405'";//GS03
+					command+=")";
+					Db.NonQ(command);
+				}
+				else{//oracle
+					command="INSERT INTO clearinghouse(Description,ExportPath,IsDefault,Payors,Eformat,ResponsePath,CommBridge,ClientProgram,ISA05,ISA07,ISA08,ISA15,GS03) ";
+					command+="VALUES(";
+					command+="'ClaimX'";//Description
+					command+=",'"+POut.String(@"C:\ClaimX\Temp\")+"'";//ExportPath that the X12 is placed into
+					command+=",'0'";//IsDefault
+					command+=",''";//Payors
+					command+=",'1'";//Eformat-1=X12
+					command+=",''";//ResponsePath
+					command+=",'12'";//CommBridge-12=ClaimX
+					command+=",'"+POut.String(@"C:\ProgramFiles\ClaimX\claimxclient.exe")+"'";//ClientProgram
+					command+=",'30'";//ISA05
+					command+=",'30'";//ISA07
+					command+=",'351962405'";//ISA08 
+					command+=",'P'";//ISA15-P=Production, T=Test
+					command+=",'351962405'";//GS03
+					command+=")";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '11.0.9.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_1_0();
 		}
 		
@@ -5806,7 +5855,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString='10' WHERE PrefName='ApptPrintColumnsPerPage'";
 				Db.NonQ(command);
+				
 
+
+					
 
 
 
