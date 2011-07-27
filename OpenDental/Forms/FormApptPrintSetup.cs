@@ -76,8 +76,8 @@ namespace OpenDental {
 			if(!ValidEntries()) {
 				return;
 			}
-			if(PIn.DateT(textStartTime.Text)!=PrefC.GetDateT(PrefName.ApptPrintTimeStart)
-				|| PIn.DateT(textStopTime.Text)!=PrefC.GetDateT(PrefName.ApptPrintTimeStop)
+			if(PIn.DateT(textStartTime.Text).Hour!=PrefC.GetDateT(PrefName.ApptPrintTimeStart).Hour
+				|| PIn.DateT(textStopTime.Text).Hour!=PrefC.GetDateT(PrefName.ApptPrintTimeStop).Hour
 				|| textFontSize.Text!=PrefC.GetString(PrefName.ApptPrintFontSize)
 				|| textColumnsPerPage.Text!=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage).ToString())
 			{

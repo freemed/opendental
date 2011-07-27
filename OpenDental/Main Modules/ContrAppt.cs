@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 using CodeBase;
 
 namespace OpenDental{
@@ -149,8 +150,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butGraph;
 		private Timer timerTests;
 		//private int stressCounter;
-		private int printPageHorizontal=1;
-		private int printPageVertical=1;
 		///<summary>When a popup happens durring attempted drag off pinboard, this helps cancel the drag.</summary>
 		private bool CancelPinMouseDown;
 
@@ -1429,7 +1428,7 @@ namespace OpenDental{
 			pinBoard.Invalidate();
 			ContrApptSheet2.SchedListPeriod=SchedListPeriod;
 			ContrApptSheet2.CreateShadow();
-			CreateAptShadows();
+			CreateAptShadowsOnMain();
 			ContrApptSheet2.DrawShadow();
 			List<LabCase> labCaseList=LabCases.GetForPeriod(startDate,endDate);
 			FillLab(labCaseList);
@@ -1979,8 +1978,8 @@ namespace OpenDental{
 			SetWeeklyView(false);//to refresh
 		}
 
-		///<summary>Creates one bitmap image for each appointment if visible.</summary>
-		private void CreateAptShadows(){
+		///<summary>Creates one bitmap image for each appointment if visible, and draws those bitmaps onto the main appt background image.</summary>
+		private void CreateAptShadowsOnMain(){
 			if(ContrApptSheet2.Shadow==null){//if user resizes window to be very narrow
 				return;
 			}
@@ -2113,7 +2112,7 @@ namespace OpenDental{
 			//RefreshModulePatient(PIn.PInt(PinApptSingle.DataRoww["PatNum"].ToString()));//already done
 			//PinApptSingle.CreateShadow();
 			//PinApptSingle.Refresh();
-			CreateAptShadows();//to clear previous selection
+			CreateAptShadowsOnMain();//to clear previous selection
 			ContrApptSheet2.DrawShadow();
 			//mouseOrigin is in ContrAppt coordinates (essentially, the entire window)
 			mouseOrigin.X=e.X+pinBoard.Location.X+panelCalendar.Location.X;
@@ -2722,7 +2721,7 @@ namespace OpenDental{
 			//	PinApptSingle.CreateShadow();
 			//	PinApptSingle.Refresh();
 			//}
-			CreateAptShadows();
+			CreateAptShadowsOnMain();
 		}
 
 		///<summary></summary>
@@ -2891,7 +2890,7 @@ namespace OpenDental{
 				list.Add(ContrApptSingle.SelectedAptNum);
 				SendToPinBoard(list);//sets selectedAptNum=-1. do before refresh prev
 				if(prevSel!=-1) {
-					CreateAptShadows();
+					CreateAptShadowsOnMain();
 					ContrApptSheet2.DrawShadow();
 				}
 				RefreshModuleDataPatient(PatCur.PatNum);
@@ -3655,8 +3654,6 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintReport(){
-			printPageHorizontal=1;
-			printPageVertical=1;
 			pd2=new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			//pd2.DefaultPageSettings.Margins= new Margins(10,40,40,60);
@@ -3679,6 +3676,50 @@ namespace OpenDental{
 
 		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			PrintScreenShot(sender,e);
+			//PrintApptSchedule(sender,e);
+		}
+
+		private void PrintApptSchedule(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			List<Schedule> schedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
+			List<Provider> visProvs=ApptViewItemL.VisProvs;
+			List<Operatory> visOps=ApptViewItemL.VisOps;
+			DataTable dt=new DataTable();
+			Rectangle bounds=e.PageBounds;
+			DateTime startTime=PrefC.GetDateT(PrefName.ApptPrintTimeStart);
+			DateTime stopTime=PrefC.GetDateT(PrefName.ApptPrintTimeStop);
+			bool isWeeklyView=ContrApptSheet.IsWeeklyView;
+			float colAptWidth=0;
+			int[][] provBars=ContrApptSingle.ProvBar;
+			int totalWidth=bounds.Width;
+			int totalHeight=bounds.Height;//Need to compensate for title and prov labels.
+			int lineH=12;
+			int timeWidth=37;
+			int provWidth=8;
+			int rowsPerIncr=1;
+			int provCount=0;
+			int colDayWidth=0;
+			int colsPerPage=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage);
+			int numOfWeekDaysToDisplay=7;
+			if(isWeeklyView) {
+				colDayWidth=ApptDrawing.ComputeColDayWidth(totalWidth,timeWidth,numOfWeekDaysToDisplay);
+				colAptWidth=ApptDrawing.ComputeColAptWidth(colDayWidth,colsPerPage);
+			}
+			else {
+				provCount=ApptViewItemL.VisProvs.Count;
+			}
+			int colWidth=ApptDrawing.ComputeColWidth(totalWidth,colsPerPage,timeWidth,provWidth,provCount);
+			int minPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
+			float minPerRow=(float)minPerIncr/(float)rowsPerIncr;
+			int rowsPerHr=60/minPerIncr*rowsPerIncr;
+			ApptDrawing.DrawAllButAppts(e.Graphics,lineH,rowsPerIncr,minPerIncr,rowsPerHr,minPerRow,timeWidth,colsPerPage,colWidth,colDayWidth,totalWidth,totalHeight,provWidth,
+			  provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visProvs,visOps,provBars,startTime,stopTime,false);
+			//Now to draw the appointments:
+			//string patternShowing="";
+			//bool isSelected=false;
+			//bool thisIsPinBoard=false;
+			//int selectedAptNum=-1;
+			//ApptSingleDrawing.DrawEntireAppt(e.Graphics,DS.Tables["Appointments"].Rows[0],Width,Height,patternShowing,ContrApptSheet.Lh,ContrApptSheet.RowsPerIncr,
+			//    isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
 		}
 
 		///<summary>The old method for printing the appointment schedule. Being phased out.</summary>
@@ -4417,7 +4458,7 @@ namespace OpenDental{
 			int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
 			SendToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
 			if(prevSel!=-1) {
-				CreateAptShadows();
+				CreateAptShadowsOnMain();
 				ContrApptSheet2.DrawShadow();
 			}
 			//RefreshModulePatient(PatCurNum);
@@ -4644,7 +4685,7 @@ namespace OpenDental{
 				}
 				else{
 					ContrApptSheet2.CreateShadow();
-					CreateAptShadows();
+					CreateAptShadowsOnMain();
 					ContrApptSheet2.DrawShadow();
 				}
 			}
