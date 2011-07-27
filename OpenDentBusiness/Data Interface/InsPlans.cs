@@ -1005,9 +1005,6 @@ namespace OpenDentBusiness {
 			//inssub.PlanNum
 			command="UPDATE inssub SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
 			Db.NonQ(command);
-			//patplan.PlanNum
-			command="UPDATE patplan SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
-			Db.NonQ(command);
 			//payplan.PlanNum
 			command="UPDATE payplan SET PlanNum="+POut.Long(planNumTo)+" WHERE PlanNum="+POut.Long(planNum);
 			Db.NonQ(command);
