@@ -10,6 +10,11 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormApptPrintSetup:Form {
+		public DateTime ApptPrintStartTime;
+		public DateTime ApptPrintStopTime;
+		public int ApptPrintFontSize;
+		public int ApptPrintColsPerPage;
+
 		public FormApptPrintSetup() {
 			InitializeComponent();
 			Lan.F(this);
@@ -84,10 +89,14 @@ namespace OpenDental {
 				changed=true;
 			}
 			if(changed) {
-				if(MsgBox.Show(this,true,"Save the changes that were made?")) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Save the changes that were made?")) {
 					SaveChanges();
 				}
 			}
+			ApptPrintStartTime=PIn.DateT(textStartTime.Text);
+			ApptPrintStopTime=PIn.DateT(textStopTime.Text);
+			ApptPrintFontSize=PIn.Int(textFontSize.Text);
+			ApptPrintColsPerPage=PIn.Int(textColumnsPerPage.Text);
 			DialogResult=DialogResult.OK;
 		}
 

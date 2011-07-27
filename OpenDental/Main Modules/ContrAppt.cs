@@ -152,6 +152,10 @@ namespace OpenDental{
 		//private int stressCounter;
 		///<summary>When a popup happens durring attempted drag off pinboard, this helps cancel the drag.</summary>
 		private bool CancelPinMouseDown;
+		private DateTime apptPrintStartTime;
+		private DateTime apptPrintStopTime;
+		private int apptPrintFontSize;
+		private int apptPrintColsPerPage;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -3647,6 +3651,10 @@ namespace OpenDental{
 				//FormApptPrintSetup FormAPS=new FormApptPrintSetup();
 				//FormAPS.ShowDialog();
 				//if(FormAPS.DialogResult==DialogResult.OK) {
+				//  apptPrintStartTime=FormAPS.ApptPrintStartTime;
+				//  apptPrintStopTime=FormAPS.ApptPrintStopTime;
+				//  apptPrintFontSize=FormAPS.ApptPrintFontSize;
+				//  apptPrintColsPerPage=FormAPS.ApptPrintColsPerPage;
 					PrintReport();
 				//}
 			}
@@ -3685,34 +3693,31 @@ namespace OpenDental{
 			List<Operatory> visOps=ApptViewItemL.VisOps;
 			DataTable dt=new DataTable();
 			Rectangle bounds=e.PageBounds;
-			DateTime startTime=PrefC.GetDateT(PrefName.ApptPrintTimeStart);
-			DateTime stopTime=PrefC.GetDateT(PrefName.ApptPrintTimeStop);
 			bool isWeeklyView=ContrApptSheet.IsWeeklyView;
 			float colAptWidth=0;
 			int[][] provBars=ContrApptSingle.ProvBar;
 			int totalWidth=bounds.Width;
 			int totalHeight=bounds.Height;//Need to compensate for title and prov labels.
-			int lineH=12;
+			int lineH=12;//Measure the font to determine the line height.
 			int timeWidth=37;
 			int provWidth=8;
-			int rowsPerIncr=1;
+			int rowsPerIncr=ContrApptSheet.RowsPerIncr;
 			int provCount=0;
 			int colDayWidth=0;
-			int colsPerPage=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage);
 			int numOfWeekDaysToDisplay=7;
 			if(isWeeklyView) {
 				colDayWidth=ApptDrawing.ComputeColDayWidth(totalWidth,timeWidth,numOfWeekDaysToDisplay);
-				colAptWidth=ApptDrawing.ComputeColAptWidth(colDayWidth,colsPerPage);
+				colAptWidth=ApptDrawing.ComputeColAptWidth(colDayWidth,apptPrintColsPerPage);
 			}
 			else {
 				provCount=ApptViewItemL.VisProvs.Count;
 			}
-			int colWidth=ApptDrawing.ComputeColWidth(totalWidth,colsPerPage,timeWidth,provWidth,provCount);
+			int colWidth=ApptDrawing.ComputeColWidth(totalWidth,apptPrintColsPerPage,timeWidth,provWidth,provCount);
 			int minPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
 			float minPerRow=(float)minPerIncr/(float)rowsPerIncr;
 			int rowsPerHr=60/minPerIncr*rowsPerIncr;
-			ApptDrawing.DrawAllButAppts(e.Graphics,lineH,rowsPerIncr,minPerIncr,rowsPerHr,minPerRow,timeWidth,colsPerPage,colWidth,colDayWidth,totalWidth,totalHeight,provWidth,
-			  provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visProvs,visOps,provBars,startTime,stopTime,false);
+			ApptDrawing.DrawAllButAppts(e.Graphics,lineH,rowsPerIncr,minPerIncr,rowsPerHr,minPerRow,timeWidth,apptPrintColsPerPage,colWidth,colDayWidth,totalWidth,totalHeight,provWidth,
+			  provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visProvs,visOps,provBars,apptPrintStartTime,apptPrintStopTime,false);
 			//Now to draw the appointments:
 			//string patternShowing="";
 			//bool isSelected=false;
