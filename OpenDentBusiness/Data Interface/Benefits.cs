@@ -1574,6 +1574,135 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
+		public static string GetFrequencyDisplay(FrequencyType freqType,List<Benefit> benList) {
+			string retVal="";
+			for(int i=0;i<benList.Count;i++){
+				switch(freqType) {
+					case FrequencyType.BW:
+						if(ProcedureCodes.GetStringProcCode(benList[i].CodeNum)=="D0274"//4BW
+						&& benList[i].BenefitType==InsBenefitType.Limitations
+						//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
+						&& benList[i].MonetaryAmt==-1
+						&& benList[i].PatPlanNum==0
+						&& benList[i].Percent==-1
+						&& (benList[i].QuantityQualifier==BenefitQuantity.Months 
+							|| benList[i].QuantityQualifier==BenefitQuantity.Years
+							|| benList[i].QuantityQualifier==BenefitQuantity.NumberOfServices))
+						//&& ben.TimePeriod might be none, or calYear, or ServiceYear, or Years.
+						{
+							if(benList[i].QuantityQualifier==BenefitQuantity.Months) {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once every month.\r\n");
+								}
+								else {
+									retVal+=Lans.g(null,"Once every ")+benList[i].Quantity+Lans.g(null," months.\r\n");
+								}
+							}
+							else if(benList[i].QuantityQualifier==BenefitQuantity.Years) {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once every year.\r\n");
+								}
+								else {
+									retVal+=Lans.g(null,"Once every ")+benList[i].Quantity+Lans.g(null," years.\r\n");
+								}
+							}
+							else {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once per year.\r\n");
+								}
+								else {
+									retVal+=benList[i].Quantity+Lans.g(null," times per year.\r\n");
+								}
+							}
+						}
+						continue;
+					case FrequencyType.PanoFMX:
+						if(ProcedureCodes.GetStringProcCode(benList[i].CodeNum)=="D0330"//Pano
+						&& benList[i].BenefitType==InsBenefitType.Limitations
+						//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
+						&& benList[i].MonetaryAmt==-1
+						&& benList[i].PatPlanNum==0
+						&& benList[i].Percent==-1
+						&& (benList[i].QuantityQualifier==BenefitQuantity.Months 
+							|| benList[i].QuantityQualifier==BenefitQuantity.Years
+							|| benList[i].QuantityQualifier==BenefitQuantity.NumberOfServices))
+							//&& ben.TimePeriod might be none, or calYear, or ServiceYear, or Years.
+						{
+							if(benList[i].QuantityQualifier==BenefitQuantity.Months) {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once every month.\r\n");
+								}
+								else {
+									retVal+=Lans.g(null,"Once every ")+benList[i].Quantity+Lans.g(null," months.\r\n");
+								}
+							}
+							else if(benList[i].QuantityQualifier==BenefitQuantity.Years) {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once every year.\r\n");
+								}
+								else {
+									retVal+=Lans.g(null,"Once every ")+benList[i].Quantity+Lans.g(null," years.\r\n");
+								}
+							}
+							else {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once per year.\r\n");
+								}
+								else {
+									retVal+=benList[i].Quantity+Lans.g(null," times per year.\r\n");
+								}
+							}
+						}
+						continue;
+					case FrequencyType.Exam:
+						if(benList[i].CodeNum==0
+						&& benList[i].BenefitType==InsBenefitType.Limitations
+						&& benList[i].CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum
+						&& benList[i].MonetaryAmt==-1
+						&& benList[i].PatPlanNum==0
+						&& benList[i].Percent==-1
+						&& (benList[i].QuantityQualifier==BenefitQuantity.Months 
+							|| benList[i].QuantityQualifier==BenefitQuantity.Years
+							|| benList[i].QuantityQualifier==BenefitQuantity.NumberOfServices))
+							//&& ben.TimePeriod might be none, or calYear, or ServiceYear, or Years.
+						{
+							if(benList[i].QuantityQualifier==BenefitQuantity.Months) {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once every month.\r\n");
+								}
+								else {
+									retVal+=Lans.g(null,"Once every ")+benList[i].Quantity+Lans.g(null," months.\r\n");
+								}
+							}
+							else if(benList[i].QuantityQualifier==BenefitQuantity.Years) {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once every year.\r\n");
+								}
+								else {
+									retVal+=Lans.g(null,"Once every ")+benList[i].Quantity+Lans.g(null," years.\r\n");
+								}
+							}
+							else {
+								if(benList[i].Quantity==1) {
+									retVal+=Lans.g(null,"Once per year.\r\n");
+								}
+								else {
+									retVal+=benList[i].Quantity+Lans.g(null," times per year.\r\n");
+								}
+							}
+						}
+						continue;
+				}//end switch
+			}//end i loop
+			return retVal;
+			}
+
+	}
+
+	public enum FrequencyType {
+		BW,
+		PanoFMX,
+		Exam
 	}
 
 
