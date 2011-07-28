@@ -3649,7 +3649,8 @@ namespace OpenDental {
 				for(row=0,i=0;row<DataSetMain.Tables["Commlog"].Rows.Count;row++) {
 					//Matching FName is not perfect because children can have the same names as parents.
 					//But it does currently match the logic for display, so it will at least select the right row when double clicked.
-					if(DataSetMain.Tables["Commlog"].Rows[row]["patName"].ToString()==PatCur.FName) {
+					if(DataSetMain.Tables["Commlog"].Rows[row]["patName"].ToString()==PatCur.FName
+						|| DataSetMain.Tables["Commlog"].Rows[row]["patName"].ToString()=="") {
 						if(i==e.Row) {
 							break;
 						}
