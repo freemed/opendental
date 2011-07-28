@@ -2452,17 +2452,24 @@ namespace OpenDental{
 							+ GetProcInfo("CodeMod4",10+startProc);
 						break;
 					case "TotalFee":
-						double fee=0;//fee only for this page. Each page is treated like a separate claim.
+						decimal fee=0;//fee only for this page. Each page is treated like a separate claim.
 						for(int f=startProc;f<startProc+totProcs;f++){//eg f=0;f<10;f++
-							if(f < claimprocs.Count)
-								fee+=((ClaimProc)claimprocs[f]).FeeBilled;
+							if(f < claimprocs.Count) {
+								fee+=(decimal)((ClaimProc)claimprocs[f]).FeeBilled;
+								if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+									List<Procedure> labProcs=Procedures.GetCanadianLabFees(claimprocs[f].ProcNum,ProcList);
+									for(int j=0;j<labProcs.Count;j++) {
+										fee+=(decimal)labProcs[j].ProcFee;
+									}
+								}
+							}
 						}
 						if(ClaimFormCur.Items[i].FormatString==""){
 							displayStrings[i]=fee.ToString("F");
 						}
 						else if (ClaimFormCur.Items[i].FormatString == "NoDec")
 						{
-							double amt = fee * 100;
+							decimal amt = fee * 100;
 							displayStrings[i] = amt.ToString();
 						} else {
 							displayStrings[i]=fee.ToString(ClaimFormCur.Items[i].FormatString);
@@ -3036,17 +3043,20 @@ namespace OpenDental{
 			if(field=="System")
 				return "JP";
 			if(field=="Fee"){
-				if(stringFormat==""){
-					return claimprocs[procIndex].FeeBilled.ToString("F");
+				decimal totalProcFees=(decimal)claimprocs[procIndex].FeeBilled;
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					List<Procedure> labProcs=Procedures.GetCanadianLabFees(claimprocs[procIndex].ProcNum,ProcList);
+					for(int i=0;i<labProcs.Count;i++) {
+						totalProcFees+=(decimal)labProcs[i].ProcFee;
+					}
 				}
-				else if (stringFormat=="NoDec")
-				{
-					double amt = claimprocs[procIndex].FeeBilled * 100;
-					return amt.ToString();
+				if(stringFormat=="") {
+					return totalProcFees.ToString("F");
 				}
-				else{
-					return claimprocs[procIndex].FeeBilled.ToString(stringFormat);
+				else if(stringFormat=="NoDec") {
+					return (totalProcFees*100).ToString("F");
 				}
+				return totalProcFees.ToString(stringFormat);
 			}
 			Procedure ProcCur=Procedures.GetProcFromList(ProcList,claimprocs[procIndex].ProcNum);
 			ProcedureCode procCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
@@ -3119,9 +3129,35 @@ namespace OpenDental{
 				return ProcCur.DiagnosticCode;
 			}
 			if(field=="Lab"){// && ProcCur.LabFee>0) {
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					List<Procedure> labProcs=Procedures.GetCanadianLabFees(claimprocs[procIndex].ProcNum,ProcList);
+					decimal totalLabFees=0;
+					for(int i=0;i<labProcs.Count;i++) {
+						totalLabFees+=(decimal)labProcs[i].ProcFee;
+					}
+					if(stringFormat=="") {
+						return totalLabFees.ToString("F");
+					}
+					else if(stringFormat=="NoDec") {
+						return (totalLabFees*100).ToString("F");
+					}
+					return totalLabFees.ToString(stringFormat);
+				}
 				return "";//ProcCur.LabFee.ToString("n");
 			}
 			if(field=="FeeMinusLab") {
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					if(stringFormat=="") {
+						return claimprocs[procIndex].FeeBilled.ToString("F");
+					}
+					else if(stringFormat=="NoDec") {
+						double amt = claimprocs[procIndex].FeeBilled * 100;
+						return amt.ToString();
+					}
+					else {
+						return claimprocs[procIndex].FeeBilled.ToString(stringFormat);
+					}
+				}
 				return "";//(((ClaimProc)claimprocs[procIndex]).FeeBilled-ProcCur.LabFee).ToString("n");
 			}
 			string area="";
