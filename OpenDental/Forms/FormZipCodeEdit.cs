@@ -11,8 +11,8 @@ namespace OpenDental{
 	public class FormZipCodeEdit : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelZipCode;
+		private System.Windows.Forms.Label labelState;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textZip;
 		private System.Windows.Forms.TextBox textState;
@@ -48,8 +48,8 @@ namespace OpenDental{
 			this.textZip = new System.Windows.Forms.TextBox();
 			this.textState = new System.Windows.Forms.TextBox();
 			this.textCity = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
+			this.labelZipCode = new System.Windows.Forms.Label();
+			this.labelState = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkIsFrequent = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
@@ -109,23 +109,23 @@ namespace OpenDental{
 			this.textCity.TabIndex = 0;
 			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
 			// 
-			// label1
+			// labelZipCode
 			// 
-			this.label1.Location = new System.Drawing.Point(13,21);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(95,15);
-			this.label1.TabIndex = 5;
-			this.label1.Text = "Zip Code";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelZipCode.Location = new System.Drawing.Point(13,21);
+			this.labelZipCode.Name = "labelZipCode";
+			this.labelZipCode.Size = new System.Drawing.Size(95,15);
+			this.labelZipCode.TabIndex = 5;
+			this.labelZipCode.Text = "Zip Code";
+			this.labelZipCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// label2
+			// labelState
 			// 
-			this.label2.Location = new System.Drawing.Point(31,83);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(77,13);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "ST";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelState.Location = new System.Drawing.Point(31,83);
+			this.labelState.Name = "labelState";
+			this.labelState.Size = new System.Drawing.Size(77,13);
+			this.labelState.TabIndex = 6;
+			this.labelState.Text = "ST";
+			this.labelState.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label3
 			// 
@@ -153,8 +153,8 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(398,227);
 			this.Controls.Add(this.checkIsFrequent);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelState);
+			this.Controls.Add(this.labelZipCode);
 			this.Controls.Add(this.textCity);
 			this.Controls.Add(this.textState);
 			this.Controls.Add(this.textZip);
@@ -175,11 +175,23 @@ namespace OpenDental{
 		#endregion
 
 		private void FormZipCodeEdit_Load(object sender, System.EventArgs e) {
-			if(IsNew){
-	      this.Text=Lan.g(this,"Add Zip Code");
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				if(IsNew) {
+					this.Text="Add Postal Code";
+				}
+				else {
+					this.Text="Edit Postal Code";
+				}
+				labelZipCode.Text="Postal Code";
+				labelState.Text="Province";
 			}
-			else{
-				this.Text=Lan.g(this,"Edit Zip Code");
+			else {
+				if(IsNew) {
+					this.Text=Lan.g(this,"Add Zip Code");
+				}
+				else {
+					this.Text=Lan.g(this,"Edit Zip Code");
+				}
 			}
 			textZip.Text=ZipCodeCur.ZipCodeDigits;
 			textCity.Text=ZipCodeCur.City;
