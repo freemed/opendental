@@ -3697,7 +3697,6 @@ namespace OpenDental{
 			float colAptWidth=0;
 			int[][] provBars=ContrApptSingle.ProvBar;
 			int totalWidth=bounds.Width;
-			int totalHeight=bounds.Height;//Need to compensate for title and prov labels.
 			int lineH=12;//Measure the font to determine the line height.
 			int timeWidth=37;
 			int provWidth=8;
@@ -3716,6 +3715,15 @@ namespace OpenDental{
 			int minPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
 			float minPerRow=(float)minPerIncr/(float)rowsPerIncr;
 			int rowsPerHr=60/minPerIncr*rowsPerIncr;
+			int startHour=apptPrintStartTime.Hour;
+			int stopHour=apptPrintStopTime.Hour;
+			if(stopHour==0) {
+				stopHour=24;
+			}
+			int totalHeight=lineH*rowsPerHr*(stopHour-startHour);
+			//Logic needs to be added here for calculating if printing will fit on the page. Then call drawing in a loop for number of required pages. 
+			DrawPrintingHeader(e.Graphics,colWidth,timeWidth,provWidth,provCount,apptPrintColsPerPage,visOps,isWeeklyView);
+			e.Graphics.TranslateTransform(0,100);
 			ApptDrawing.DrawAllButAppts(e.Graphics,lineH,rowsPerIncr,minPerIncr,rowsPerHr,minPerRow,timeWidth,apptPrintColsPerPage,colWidth,colDayWidth,totalWidth,totalHeight,provWidth,
 			  provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visProvs,visOps,provBars,apptPrintStartTime,apptPrintStopTime,false);
 			//Now to draw the appointments:
@@ -3725,6 +3733,48 @@ namespace OpenDental{
 			//int selectedAptNum=-1;
 			//ApptSingleDrawing.DrawEntireAppt(e.Graphics,DS.Tables["Appointments"].Rows[0],Width,Height,patternShowing,ContrApptSheet.Lh,ContrApptSheet.RowsPerIncr,
 			//    isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
+		}
+
+		private void DrawPrintingHeader(Graphics g,int colWidth,int timeWidth,int provWidth,int provCount,int colsPerPage,List<Operatory> visOps,bool isWeeklyView) {
+			int xPos=0;//starting pos
+			int yPos=(int)27.5;//starting pos
+			//Print Title------------------------------------------------------------------------------
+			string title;
+			string date;
+			if(isWeeklyView) {
+				title=Lan.g(this,"Weekly Appointments");
+				date=WeekStartDate.DayOfWeek.ToString()+" "+WeekStartDate.ToShortDateString()
+					+" - "+WeekEndDate.DayOfWeek.ToString()+" "+WeekEndDate.ToShortDateString();
+			}
+			else {
+				title=Lan.g(this,"Daily Appointments");
+				date=AppointmentL.DateSelected.DayOfWeek.ToString()+"   "+AppointmentL.DateSelected.ToShortDateString();
+			}
+			Font titleFont=new Font("Arial",14,FontStyle.Bold);
+			float xTitle = (float)(400-((g.MeasureString(title,titleFont).Width/2)));
+			g.DrawString(title,titleFont,Brushes.Black,xTitle,yPos);//centered
+			//Print Date--------------------------------------------------------------------------------
+			Font dateFont=new Font("Arial",10,FontStyle.Regular);
+			float xDate = (float)(400-((g.MeasureString(date,dateFont).Width/2)));
+			yPos+=25;
+			g.DrawString(date,dateFont,Brushes.Black,xDate,yPos);//centered
+			//Provider Cols-----------------------------------------------------------------------------
+			if(!isWeeklyView) {//Don't print providers for weekly view.
+				string[] headers = new string[colsPerPage];
+				Font headerFont=new Font("Arial",8);
+				yPos+=30;
+				xPos+=(int)(timeWidth+(provWidth*provCount));
+				int xCenter=0;
+				for(int i=0;i<colsPerPage;i++) {
+					if(i==visOps.Count) {
+						break;
+					}
+					headers[i]=visOps[i].OpName;
+					xCenter=(int)((colWidth/2)-(g.MeasureString(headers[i],headerFont).Width/2));
+					g.DrawString(headers[i],headerFont,Brushes.Black,(int)(xPos+xCenter),yPos);
+					xPos+=colWidth;
+				}
+			}
 		}
 
 		///<summary>The old method for printing the appointment schedule. Being phased out.</summary>
