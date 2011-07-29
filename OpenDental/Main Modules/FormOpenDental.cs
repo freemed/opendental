@@ -4129,7 +4129,7 @@ namespace OpenDental{
 
 		private void menuItemCCRecurring_Click(object sender,EventArgs e) {
 			FormCreditRecurringCharges FormRC=new FormCreditRecurringCharges();
-			FormRC.ShowDialog();
+			FormRC.Show();
 		}
 
 		private void menuItemCustomerManage_Click(object sender,EventArgs e) {
