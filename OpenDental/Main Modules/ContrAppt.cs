@@ -3727,12 +3727,73 @@ namespace OpenDental{
 			ApptDrawing.DrawAllButAppts(e.Graphics,lineH,rowsPerIncr,minPerIncr,rowsPerHr,minPerRow,timeWidth,apptPrintColsPerPage,colWidth,colDayWidth,totalWidth,totalHeight,provWidth,
 			  provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visProvs,visOps,provBars,apptPrintStartTime,apptPrintStopTime,false);
 			//Now to draw the appointments:
-			//string patternShowing="";
-			//bool isSelected=false;
-			//bool thisIsPinBoard=false;
-			//int selectedAptNum=-1;
-			//ApptSingleDrawing.DrawEntireAppt(e.Graphics,DS.Tables["Appointments"].Rows[0],Width,Height,patternShowing,ContrApptSheet.Lh,ContrApptSheet.RowsPerIncr,
-			//    isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
+			//Going to keep using ContrApptSingle controls for now just to get started.
+			if(ContrApptSingle3!=null) {//I think this is not needed.
+				for(int i=0;i<ContrApptSingle3.Length;i++) {
+					if(ContrApptSingle3[i]!=null) {
+						ContrApptSingle3[i].Dispose();
+					}
+					ContrApptSingle3[i]=null;
+				}
+				ContrApptSingle3=null;
+			}
+			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
+			int indexProv;
+			DataRow row;
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+				row=DS.Tables["Appointments"].Rows[i];
+				ContrApptSingle3[i]=new ContrApptSingle();
+				ContrApptSingle3[i].Visible=false;
+				ContrApptSingle3[i].IsSelected=false;//Not sure if needed.
+				ContrApptSingle3[i].DataRoww=row;
+				ContrApptSingle3[i].TableApptFields=DS.Tables["ApptFields"];
+				ContrApptSingle3[i].TablePatFields=DS.Tables["PatFields"];
+				if(!isWeeklyView) {
+					indexProv=-1;
+					if(row["IsHygiene"].ToString()=="1") {
+						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvHyg"].ToString()));
+					}
+					else {
+						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
+					}
+					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
+						string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
+						int startIndex=ContrApptSingle3[i].ConvertToY()/lineH;//rounds down
+						for(int k=0;k<pattern.Length;k++) {
+							if(pattern.Substring(k,1)=="X") {
+								try {
+									ContrApptSingle.ProvBar[indexProv][startIndex+k]++;
+								}
+								catch {
+									//appointment must extend past midnight.  Very rare
+								}
+							}
+						}
+					}
+				}
+				ContrApptSingle3[i].SetLocation();
+			}
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+				int apptWidth=0;
+				if(isWeeklyView) {
+					apptWidth=(colWidth-4)/visOps.Count;
+				}
+				else {
+					apptWidth=colWidth-4;
+				}
+				int apptHeight=ContrApptSingle3[i].Height;
+				bool isSelected=ContrApptSingle3[i].IsSelected;
+				bool thisIsPinBoard=ContrApptSingle3[i].ThisIsPinBoard;
+				int selectedAptNum=-1;//Never select an apt for printing.
+				string patternShowing="";
+				DataRow dataRoww=DS.Tables["Appointments"].Rows[i];
+				Point location=new Point();
+				ApptSingleDrawing.SetLocation(isWeeklyView,colAptWidth,colDayWidth,apptWidth,apptHeight,colWidth,out location,patternShowing,lineH,rowsPerIncr,dataRoww,timeWidth,visOps,provWidth,provCount);
+				e.Graphics.ResetTransform();
+				e.Graphics.TranslateTransform(location.X,location.Y+100);//100 to compensate for print header.
+				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,apptWidth,apptHeight,patternShowing,lineH,rowsPerIncr,
+					isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
+			}
 		}
 
 		private void DrawPrintingHeader(Graphics g,int colWidth,int timeWidth,int provWidth,int provCount,int colsPerPage,List<Operatory> visOps,bool isWeeklyView) {

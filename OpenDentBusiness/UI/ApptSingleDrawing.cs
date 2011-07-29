@@ -588,6 +588,90 @@ namespace OpenDentBusiness.UI {
 			}
 		}
 
+		///<summary></summary>
+		public static void SetLocation(bool isWeeklyView,float colAptWidth,int colDayWidth,int apptWidth,int apptHeight,int colWidth,out Point location,string patternShowing,int lineH,int rowsPerIncr,DataRow dataRoww,int timeWidth,List<Operatory> visOps,int provWidth,int provCount) {
+			if(isWeeklyView) {
+				apptWidth=(int)colAptWidth;
+				location=new Point(ConvertToX(isWeeklyView,dataRoww,timeWidth,colWidth,colAptWidth,colDayWidth,provWidth,provCount,visOps),
+					ConvertToY(lineH,rowsPerIncr,dataRoww));
+			}
+			else {
+				location=new Point(ConvertToX(isWeeklyView,dataRoww,timeWidth,colWidth,colAptWidth,colDayWidth,provWidth,provCount,visOps)+2,
+					ConvertToY(lineH,rowsPerIncr,dataRoww));
+				apptWidth=colWidth-5;
+			}
+			SetSize(patternShowing,lineH,rowsPerIncr,apptHeight,dataRoww);
+		}
+
+		///<summary>Used from SetLocation.</summary>
+		private static void SetSize(string patternShowing,int lineH,int rowsPerIncr,int apptHeight,DataRow dataRoww) {
+			patternShowing=GetPatternShowing(dataRoww["Pattern"].ToString(),rowsPerIncr);
+			//height is based on original 5 minute pattern. Might result in half-rows
+			apptHeight=dataRoww["Pattern"].ToString().Length*lineH*rowsPerIncr;
+			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
+				apptHeight=apptHeight/2;
+			}
+			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
+				apptHeight=apptHeight/3;
+			}
+		}
+
+		///<summary>Called from SetLocation to establish X position of control.</summary>
+		private static int ConvertToX(bool isWeeklyView,DataRow dataRoww,int timeWidth,int colWidth,float colAptWidth,int colDayWidth,int provWidth,int provCount,List<Operatory> visOps) {
+			if(isWeeklyView) {
+				//the next few lines are because we start on Monday instead of Sunday
+				int dayofweek=(int)PIn.DateT(dataRoww["AptDateTime"].ToString()).DayOfWeek-1;
+				if(dayofweek==-1) {
+					dayofweek=6;
+				}
+				return timeWidth
+					+colDayWidth*(dayofweek)+1
+					+(int)(colAptWidth*(float)GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps));
+			}
+			else {
+				return timeWidth+provWidth*provCount+colWidth*(GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps))+1;
+			}
+		}
+
+		///<summary>Called from SetLocation to establish Y position of control.</summary>
+		private static int ConvertToY(int lineH,int rowsPerIncr,DataRow dataRoww) {
+			DateTime aptDateTime=PIn.DateT(dataRoww["AptDateTime"].ToString());
+			int retVal=(int)(((double)aptDateTime.Hour*(double)60
+				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
+				+(double)aptDateTime.Minute
+				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
+				)*(double)lineH*rowsPerIncr);
+			return retVal;
+		}
+
+		///<summary>This converts the dbPattern in 5 minute interval into the pattern that will be viewed based on RowsPerIncrement and AppointmentTimeIncrement.  So it will always depend on the current view.Therefore, it should only be used for visual display purposes rather than within the FormAptEdit. If height of appointment allows a half row, then this includes an increment for that half row.</summary>
+		public static string GetPatternShowing(string dbPattern,int rowsPerIncr) {
+			StringBuilder strBTime=new StringBuilder();
+			for(int i=0;i<dbPattern.Length;i++) {
+				for(int j=0;j<rowsPerIncr;j++) {
+					strBTime.Append(dbPattern.Substring(i,1));
+				}
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
+					i++;//skip
+				}
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
+					i++;
+					i++;//skip two
+				}
+			}
+			return strBTime.ToString();
+		}
+
+		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
+		private static int GetIndexOp(long opNum,List<Operatory> visOps) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<visOps.Count;i++) {
+				if(visOps[i].OperatoryNum==opNum)
+					return i;
+			}
+			return -1;
+		}
+
 
 	}
 }
