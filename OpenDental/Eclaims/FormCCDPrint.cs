@@ -222,7 +222,7 @@ namespace OpenDental.Eclaims {
 				CCDField fieldPayTo=formData.GetFieldById("F01");
 				if(fieldPayTo!=null) {
 					bool paySubscriber=(fieldPayTo.valuestr=="1");//same for version 02 and version 04
-					if(insSub.AssignBen==paySubscriber) {
+					if(AssignmentOfBenefits()==paySubscriber) {
 						MsgBox.Show("Canadian","The carrier changed the payee.");
 					}
 				}
@@ -1705,8 +1705,8 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
-			//Field F01 - Not visible in predetermination
-			PrintProcedureListAck(g,predetermination?"":GetPayableToString(insSub.AssignBen));
+			//Payee not visible in predetermination
+			PrintProcedureListAck(g,predetermination?"":GetPayableToString(AssignmentOfBenefits()));
 			x=doc.StartElement();
 			doc.HorizontalLine(g,breakLinePen,doc.bounds.Left,doc.bounds.Right,0);
 			x=doc.StartElement();
@@ -1858,7 +1858,7 @@ namespace OpenDental.Eclaims {
 			PrintTransactionReferenceNumber(g,x,0);
 			PrintTransactionDate(g,x+450,0);
 			x=doc.StartElement();
-			PrintProcedureListEOB(g,GetPayableToString(insSub.AssignBen));
+			PrintProcedureListEOB(g);
 			x=doc.StartElement();
 			PrintPaymentSummary(g);
 			x=doc.StartElement();
@@ -1927,7 +1927,7 @@ namespace OpenDental.Eclaims {
 			}
 		}
 
-		private void PrintProcedureListEOB(Graphics g,string payableToStr) {
+		private void PrintProcedureListEOB(Graphics g) {
 			List<Procedure> procListAll=Procedures.Refresh(claim.PatNum);
 			Font tempFont=doc.standardFont;
 			doc.standardFont=standardSmall;
@@ -2612,7 +2612,7 @@ namespace OpenDental.Eclaims {
 			x=doc.PopX();//End indentation.
 		}
 
-		private void PrintPaymentSummary(Graphics g){
+		private void PrintPaymentSummary(Graphics g) {
 			float amountWidth=(float)Math.Ceiling((double)g.MeasureString("******.**",doc.standardFont).Width);
 			float valuesBlockOffset=x+566;
 			text=(isFrench?"TOTAL DEMANDÉ:":"TOTAL DENTIST CHARGES:");
@@ -2627,7 +2627,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			string expPayDateStr="";
 			CCDField fieldG03=formData.GetFieldById("G03");
-			if(fieldG03!=null && fieldG03.valuestr!="00000000"){
+			if(fieldG03!=null && fieldG03.valuestr!="00000000") {
 				expPayDateStr=DateNumToPrintDate(fieldG03.valuestr);
 				doc.DrawField(g,isFrench?"DATE PRÉVUE DU PAIEMENT":"EXPECTED PAYMENT DATE",expPayDateStr,true,x,0);
 			}
@@ -2635,7 +2635,7 @@ namespace OpenDental.Eclaims {
 			//For cases when field f01 is not present, we are supposed to grab the value determining who the payment is for from the original claim, 
 			//but we must instead rely on the assignment of benefits flag associated with the primary insurance subscriber because there is no such field
 			//in the claim object itself.
-			string payableTo=(f01==null)?(insSub.AssignBen?"4":"1"):f01.valuestr;
+			string payableTo=(f01==null)?(AssignmentOfBenefits()?"4":"1"):f01.valuestr;
 			if(payableTo=="1") {//Pay the subscriber.
 				text=isFrench?"TOTAL REMBOURSABLE AU TITULAIRE:":"TOTAL PAYABLE TO INSURED:";
 				doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
@@ -2764,6 +2764,20 @@ namespace OpenDental.Eclaims {
 			return errors.Length;
 		}
 
+		private bool AssignmentOfBenefits() {
+			if(claim!=null) {
+				if(claim.ClaimType=="S") {
+					if(insSub2!=null) {
+						return insSub2.AssignBen;
+					}
+				}
+				if(insSub!=null) {
+					return insSub.AssignBen;
+				}
+			}
+			return false;
+		}
+
 		#endregion
 
 		#region Printing Information Translators
@@ -2825,7 +2839,6 @@ namespace OpenDental.Eclaims {
 				number.Substring(number.Length-2,2);
 		}
 
-		///<summary>Convert a payee code from field F01 into a readable string.</summary>
 		private string GetPayableToString(bool assignBen) {
 			if(assignBen) {
 				return isFrench?"DENTISTE":"DENTIST";
