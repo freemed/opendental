@@ -31,7 +31,7 @@
 			var jQT = $.jQTouch({
 				icon: 'Mob.png',
 				statusBar: 'black',
-				slideSelector: 'body > * > ul li a:not(.arrowless, #searchbutton), body > * > area'
+				slideSelector: 'body > * > ul li a:not(.arrowless, #searchbutton)'
 			});
 		</script>
 	</head>
