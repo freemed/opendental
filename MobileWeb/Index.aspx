@@ -31,7 +31,7 @@
 			var jQT = $.jQTouch({
 				icon: 'Mob.png',
 				statusBar: 'black',
-				slideSelector: 'body > * > ul li a:not(.arrowless, #searchbutton)'
+				slideSelector: 'body > * > ul li a:not(.arrowless, #searchbutton), body > * > area'
 			});
 		</script>
 	</head>
@@ -74,6 +74,9 @@
 			<div id="logoutmessage">
 			<div class="style1" style="font-weight:bold;text-align:center;">You have been logged out.</div>
 			</div>
+				<ul class="rounded narrowul">
+					<li><a href="#login">Login</a></li>
+				</ul>
 			
 		</div>
 
@@ -87,9 +90,9 @@
 			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
 			</ul>
-<%--			<ul class="rounded narrowul">
-				<li><a class="arrowless" href="#AppointmentImage">Appointment Image</a></li>
-			</ul>--%>
+			<ul class="rounded narrowul">
+				<li><a class="arrowless" linkattib="AppointmentImage.aspx" href="#AppointmentImage">Appointment Image</a></li>
+			</ul>
 			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
 			</ul>
@@ -115,10 +118,6 @@
 				<a class="button logout" href="#">Logout</a>
 			</div>
 			<div id="AppointmentImageContents">
-			<%--<asp:Image ID="Image1" runat="server" ImageUrl="~/app.jpg" Height="480" Width="320" />--%>
-			hello1
-			<iframe src="app.htm" width="100" height="100" scrolling="auto" frameborder="1"></iframe>
-			hello2
 			</div>
 		</div>
 

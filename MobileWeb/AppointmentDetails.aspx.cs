@@ -41,20 +41,6 @@ namespace MobileWeb {
 			return util.GetPatientName(PatNum,CustomerNum);
 		}
 
-		private bool SetCustomerNum() {
-			Message.Text="";
-			if(Session["CustomerNum"]==null) {
-				return false;
-			}
-			Int64.TryParse(Session["CustomerNum"].ToString(),out CustomerNum);
-			if(CustomerNum!=0) {
-				Message.Text="LoggedIn";
-			}
-			return true;
-		}
-
-
-
 
 	}
 }

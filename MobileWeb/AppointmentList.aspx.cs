@@ -82,7 +82,7 @@ namespace MobileWeb {
 						Session["ProvNum"]=ProvNum.ToString();
 						}
 				#endregion
-					List<Appointmentm> appointmentmList;
+				List<Appointmentm> appointmentmList;
 				if(ProvNum==0){
 					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
 				}else{

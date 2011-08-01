@@ -20,6 +20,12 @@ namespace MobileWeb {
 					return;
 				}
 				List<Providerm> providermList=Providerms.GetProviderms(CustomerNum);
+				//the elements inthe drop down are padded left and right so that they are centered.
+				for(int i=0;i<providermList.Count;i++) {
+					string abbr=providermList[i].Abbr;
+					int PadLength=14-abbr.Length/2;
+					providermList[i].Abbr=abbr.PadLeft(PadLength,' ').PadRight(PadLength,' ').Replace(" ","&nbsp;");
+				}
 				Repeater1.DataSource=providermList;
 				Repeater1.DataBind();
 			}

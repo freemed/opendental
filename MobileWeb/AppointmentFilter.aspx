@@ -13,13 +13,17 @@
 	<div class="styleError">  
 				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
 	</div>
-	<div style="height:10px"></div>
-	<span class="style1" style="font-weight:bold;">Choose Provider:</span>
+	<div style="height:15px;"></div>
+	<span class="style1" style="margin-left:10px;font-weight:bold;">Choose Provider:</span>
 	<select class="style1" style="margin-left:20px;font-weight:bold;"  id="provlist">
-		<option value="0">All</option>
+		<option value="0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</option>
 			<asp:Repeater ID="Repeater1" runat="server">
 				<ItemTemplate>
-				<option value="<%#((Providerm)Container.DataItem).ProvNum %>"<%#GetSelected((Providerm)Container.DataItem)%>"><%#((Providerm)Container.DataItem).Abbr%></option>
+				<option value="<%#((Providerm)Container.DataItem).ProvNum %>"<%#GetSelected((Providerm)Container.DataItem)%>">
+				<%#((Providerm)Container.DataItem).Abbr%>
+				</option>
 				</ItemTemplate>
 			</asp:Repeater>
 	</select>

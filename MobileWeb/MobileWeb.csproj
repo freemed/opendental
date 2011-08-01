@@ -55,10 +55,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="a.aspx" />
     <Content Include="AppointmentDetails.aspx" />
     <Content Include="AppointmentFilter.aspx" />
     <Content Include="AppointmentList.aspx" />
+    <Content Include="AppointmentImage.aspx" />
     <Content Include="css\iphone.css" />
     <Content Include="css\jqueryui\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="css\jqueryui\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -124,13 +124,6 @@
     <Content Include="PatientDetails.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="a.aspx.cs">
-      <DependentUpon>a.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="a.aspx.designer.cs">
-      <DependentUpon>a.aspx</DependentUpon>
-    </Compile>
     <Compile Include="AppointmentDetails.aspx.cs">
       <DependentUpon>AppointmentDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -151,6 +144,13 @@
     </Compile>
     <Compile Include="AppointmentList.aspx.designer.cs">
       <DependentUpon>AppointmentList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppointmentImage.aspx.cs">
+      <DependentUpon>AppointmentImage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppointmentImage.aspx.designer.cs">
+      <DependentUpon>AppointmentImage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

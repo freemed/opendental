@@ -48,6 +48,7 @@ function TraversePage(){
         //alert('Handler for password.click() called.');
         $('#password').val(''); //because password field tends to retain the keyed in password.
     });
+
     $('#password').tap(function (e) {
         //alert('Handler for password.tap() called.'); 
         $('#password').val(''); //because password field tends to retain the keyed in password.
@@ -70,7 +71,14 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
     });
 
-
+    $('a[href="#AppointmentImage"]').click(function (e) {
+        var UrlForFetchingData = this.attributes["linkattib"].value;
+        var SectionToFill = '#AppointmentImageContents';
+        var MoveToURL = '#AppointmentImage';
+        //console.log('AppointmentImage clicked UrlForFetchingData = ' + UrlForFetchingData);
+        ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+    });
+    /*
     $('a[href="#AppointmentImage"]').click(function (e) {
         //var UrlForFetchingData = this.attributes["linkattib"].value;
         //var SectionToFill = '#AppointmentListContents';
@@ -86,11 +94,8 @@ function TraversePage(){
         //var mvp = document.getElementById('testViewport');
         //mvp.removeAttribute('content');
         //mvp.setAttribute('content', 'width=device-width, initial-scale=2.0, maximum-scale=10.0');
-        
-        
-
     });
-   
+    */
 
     $('a[href="#PharmacyList"]').click(function (e) {
         //e.preventDefault();
@@ -130,7 +135,7 @@ function TraversePage(){
 		var MoveToURL='#AppointmentDetails';
 		ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill);
 	});
-	
+
 	$('a[href="#PatientDetails"]').tap(function(e) {
 		//console.log('PatientDetails tapped');
 		var UrlForFetchingData = this.attributes["linkattib"].value; 
@@ -293,10 +298,10 @@ $('.pharmacies').tap(function (e) {
        // mvp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0');
 		jQT.goToReverse('#home','slide');	
 	});
-	
-	
 
-}
+
+
+} //end of TraversePage function
 
 
 function ProcessNormalPageLink(e,UrlForFetchingData, MoveToURL, SectionToFill){
@@ -406,8 +411,17 @@ function ProcessLogout(e) {
 		});
 
 }
-
-		
+/// <summary>This fn had to be used because this does not work:
+///$('area').live('click', function () { 
+///<summary>
+    function areaClicked(url) {
+        //console.log('areaClicked !');
+        UrlForFetchingData=url;
+        var SectionToFill = '#AppointmentDetailsContents';
+        var MoveToURL = '#AppointmentDetails';
+        //console.log('UrlForFetchingData = ' + UrlForFetchingData);
+        ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+    }		
 
 		
 		

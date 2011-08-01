@@ -25,10 +25,9 @@
 
 (function ($) {
     $.jQTouch = function (options) {
-
         // Set support values
         $.support.WebKitCSSMatrix = (typeof WebKitCSSMatrix == "object");
-        $.support.touch = (typeof Touch == "object");
+        $.support.touch = (typeof Touch == "object"); //dennis: The Touch object exists only in iphone (haven't check on android yet) and not for the regular browser 
         $.support.WebKitAnimationEvent = (typeof WebKitTransitionEvent == "object");
 
         // Initialize internal variables
@@ -99,7 +98,7 @@
             }
             // Set viewport
             if (jQTSettings.fixedViewport) {
-                hairextensions += '<meta id="testViewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=10.0"/>';
+                hairextensions += '<meta id="testViewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>';
             }
             // Set full-screen
             if (jQTSettings.fullScreen) {
@@ -125,7 +124,7 @@
                 for (var i in defaultAnimations) {
                     var name = defaultAnimations[i];
                     var selector = jQTSettings[name + 'Selector'];
-                    if (typeof (selector) == 'string') {
+                    if (typeof (selector) == 'string') { 
                         addAnimation({ name: name, selector: selector });
                     }
                 }
@@ -264,7 +263,7 @@
                 }
             }
             if (animatePages(fromPage, toPage, animation, true)) {
-                addPageToHistory(toPage, animation);// dennis: this seems neccesary for this function.
+                addPageToHistory(toPage, animation); // dennis: this seems neccesary for this function.
                 return publicObj;
             }
             else {

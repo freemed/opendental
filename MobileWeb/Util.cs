@@ -95,18 +95,6 @@ namespace MobileWeb {
 			}
 		}
 
-		public bool SetCustomerNum(long CustomerNum,System.Web.UI.WebControls.Literal Message) {
-			Message.Text="";
-			if(HttpContext.Current.Session["CustomerNum"]==null) {
-				return false;
-			}
-			Int64.TryParse(HttpContext.Current.Session["CustomerNum"].ToString(),out CustomerNum);
-			if(CustomerNum!=0) {
-				Message.Text="LoggedIn";
-			}
-			return true;
-		}
-
 		public long GetCustomerNum(System.Web.UI.WebControls.Literal Message) {
 			Message.Text="";
 			long CustomerNum=0;
