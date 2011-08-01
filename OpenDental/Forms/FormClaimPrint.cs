@@ -814,7 +814,26 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "Relationship":
-						displayStrings[i]=ClaimCur.PatRelat.ToString();
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+							if(ClaimCur.PatRelat==Relat.Self) {
+								displayStrings[i]="Self";
+							}
+							else if(ClaimCur.PatRelat==Relat.Spouse) {
+								displayStrings[i]="Spouse";
+							}
+							else if(ClaimCur.PatRelat==Relat.Child) {
+								displayStrings[i]="Child";
+							}
+							else if(ClaimCur.PatRelat==Relat.SignifOther || ClaimCur.PatRelat==Relat.LifePartner) {
+								displayStrings[i]="Common Law Spouse";
+							}
+							else {
+								displayStrings[i]="Other";
+							}
+						}
+						else {
+							displayStrings[i]=ClaimCur.PatRelat.ToString();
+						}
 						break;
 					case "IsFTStudent":
 						if(PatCur.StudentStatus=="F")
@@ -905,9 +924,9 @@ namespace OpenDental{
 							|| PatCur.Position==PatientPosition.Widowed)
 							displayStrings[i]="X";
 						break;
-					case "PatIDFromPatPlan": //Dependant Code in Canada
+					case "PatIDFromPatPlan": //Dependant Code appended to subscriber ID with dash in between for Canada
 						patPlans=PatPlans.Refresh(ThisPatNum);
-						displayStrings[i]=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
+						displayStrings[i]=subCur.SubscriberID+"-"+PatPlans.GetPatID(subCur.InsSubNum,patPlans);
 						break;
 					case "PatientSSN":
 						if(PatCur.SSN.Length==9) {
