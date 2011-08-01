@@ -1077,6 +1077,19 @@ namespace OpenDental{
 						break;
 					case "Remarks":
 						displayStrings[i]="";
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+							if(ClaimCur.ClaimType=="PreAuth") {
+								displayStrings[i]+="Predetermination only."+Environment.NewLine;
+							}
+							else {
+								if(subCur.AssignBen) {
+									displayStrings[i]+="Please pay provider."+Environment.NewLine;
+								}
+								else {
+									displayStrings[i]+="Please pay patient."+Environment.NewLine;
+								}
+							}
+						}
 						if(ClaimCur.AttachmentID!="" && !ClaimCur.ClaimNote.StartsWith(ClaimCur.AttachmentID)){
 							displayStrings[i]=ClaimCur.AttachmentID+" ";
 						}
