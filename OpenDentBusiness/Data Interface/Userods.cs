@@ -60,6 +60,20 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
+		///<summary>Returns null if not found.</summary>
+		public static Userod GetUserByEmployeeNum(long employeeNum) {
+			//No need to check RemotingRole; no call to db.
+			if(UserodC.Listt==null) {
+				RefreshCache();
+			}
+			for(int i=0;i<UserodC.Listt.Count;i++) {
+				if(UserodC.Listt[i].EmployeeNum==employeeNum) {
+					return UserodC.Listt[i];
+				}
+			}
+			return null;
+		}
+
 		public static string GetName(long userNum){
 			//No need to check RemotingRole; no call to db.
 			if(userNum==0){

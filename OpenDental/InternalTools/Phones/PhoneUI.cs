@@ -63,6 +63,9 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			//PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
@@ -74,6 +77,9 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
@@ -85,6 +91,9 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
@@ -96,6 +105,9 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
@@ -108,6 +120,9 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
@@ -119,6 +134,9 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			//Employees.SetUnavailable(extension,employeeNum);
 			//Get an override if it exists
 			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
@@ -157,6 +175,9 @@ namespace OpenDental {
 			//This even works if the person is still clocked out.
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.All);
 		}
 
@@ -164,12 +185,18 @@ namespace OpenDental {
 			//This even works if the person is still clocked in.
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 		}
 
 		public static void RinggroupsDefault(PhoneTile tile) {
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 		}
 
@@ -179,6 +206,9 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
 			Phones.SetPhoneStatus(ClockStatusEnum.Backup,extension);
@@ -190,6 +220,9 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
 				if(Security.CurUser.EmployeeNum!=employeeNum) {
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
@@ -217,6 +250,9 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
 				if(Security.CurUser.EmployeeNum!=employeeNum) {
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
@@ -245,6 +281,9 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(!CheckSelectedUserPassword(employeeNum)) {
+				return;
+			}
 			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
 				if(Security.CurUser.EmployeeNum!=employeeNum) {
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
@@ -296,6 +335,24 @@ namespace OpenDental {
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus="Working";
 			Employees.Update(EmpCur);
+			return true;
+		}
+
+		///<summary>Will ask for password if the current user logged in isn't the user status being manipulated.</summary>
+		private static bool CheckSelectedUserPassword(long employeeNum) {
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				Userod selectedUser=Userods.GetUserByEmployeeNum(employeeNum);
+				InputBox inputPass=new InputBox("Please enter password:");
+				inputPass.textResult.PasswordChar='*';
+				inputPass.ShowDialog();
+				if(inputPass.DialogResult!=DialogResult.OK) {
+					return false;
+				}
+				if(!Userods.CheckTypedPassword(inputPass.textResult.Text,selectedUser.Password)) {
+				  MsgBox.Show("PhoneUI","Wrong password.");
+				  return false;
+				}
+			}
 			return true;
 		}
 
