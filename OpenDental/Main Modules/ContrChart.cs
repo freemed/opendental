@@ -4219,6 +4219,15 @@ namespace OpenDental{
 							gridPtInfo.Rows.Add(row);
 						}
 						break;
+					case "Birthdate":
+						row.Cells.Add(PatCur.Birthdate.ToShortDateString());
+						break;
+					case "City":
+						row.Cells.Add(PatCur.City);
+						break;
+					case "AskToArriveEarly":
+						row.Cells.Add(PatCur.AskToArriveEarly.ToString()+" minute(s)");
+						break;
 				}
 				if(fields[f].InternalName=="PatFields"
 					|| fields[f].InternalName=="Premedicate"
