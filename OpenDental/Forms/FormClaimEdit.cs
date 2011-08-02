@@ -4682,38 +4682,18 @@ namespace OpenDental{
 		}
 
 		private void butReverse_Click(object sender,EventArgs e) {
-			bool claimDeleted=false;
 			Cursor=Cursors.WaitCursor;
 			InsPlan insPlan=InsPlans.GetPlan(ClaimCur.PlanNum,null);
 			InsSub insSub=InsSubs.GetOne(ClaimCur.InsSubNum);
 			try {
 				CanadianOutput.SendClaimReversal(ClaimCur,insPlan,insSub);
-				Claims.Delete(ClaimCur);
-				claimDeleted=true;
-				List <Etrans> etransHistory=Etranss.GetAllForOneClaim(ClaimCur.ClaimNum);
-				for(int i=0;i<etransHistory.Count;i++) {
-					Etranss.Delete(etransHistory[i].EtransNum);
-				}
-				List<Benefit> benList=Benefits.Refresh(PatPlanList,SubList);
-				InsPlan plan=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
-				for(int i=0;i<ClaimProcsForClaim.Count;i++) { //Set claimprocs back to estimates.
-					ClaimProcsForClaim[i].Status=ClaimProcStatus.Estimate;
-					ClaimProcsForClaim[i].ClaimNum=0;
-					Procedure proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
-					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0,PatCur.Age,0);
-					ClaimProcsForClaim[i].InsPayEst=0;
-					ClaimProcs.Update(ClaimProcsForClaim[i]);
-				}
+				ClaimCur.CanadaTransRefNum="";//So the user can resend if desired. Will make the claim look like it was not ever sent, except in send claims window there will be extra history.
+				Claims.Update(ClaimCur);
 			}
 			catch(Exception ex) {
-				if(!claimDeleted) {
-					MessageBox.Show(Lan.g(this,"Failed to reverse claim")+": "+ex.Message);
-				}
+				MessageBox.Show(Lan.g(this,"Failed to reverse claim")+": "+ex.Message);
 			}
 			Cursor=Cursors.Default;
-			if(claimDeleted) {
-				Close();//The claim has been deleted so we need to close this claim edit window.
-			}
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
