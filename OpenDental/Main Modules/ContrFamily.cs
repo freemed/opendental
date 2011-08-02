@@ -1429,7 +1429,12 @@ namespace OpenDental{
 			gridIns.Rows.Add(row);
 			//group number
 			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TableCoverage","Group Number"));
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				row.Cells.Add(Lan.g("TableCoverage","Plan Number"));
+			}
+			else {
+				row.Cells.Add(Lan.g("TableCoverage","Group Number"));
+			}
 			for(int i=0;i<PatPlanList.Count;i++) {
 				row.Cells.Add(planArray[i].GroupNum);
 			}
