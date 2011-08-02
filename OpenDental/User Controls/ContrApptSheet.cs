@@ -282,9 +282,8 @@ namespace OpenDental{
 				return;//not sure if this is necessary
 			}
 			using(Graphics g=Graphics.FromImage(Shadow)) {
-				ApptDrawing.DrawAllButAppts(g,Lh,RowsPerIncr,MinPerIncr,RowsPerHr,MinPerRow,TimeWidth,ColCount,
-					ColWidth,ColDayWidth,Width,Height,ProvWidth,ProvCount,ColAptWidth,IsWeeklyView,NumOfWeekDaysToDisplay,
-					SchedListPeriod,ApptViewItemL.VisProvs,ApptViewItemL.VisOps,ContrApptSingle.ProvBar,new DateTime(2011,1,1,0,0,0),new DateTime(2011,1,1,0,0,0),true);
+				ApptDrawing.DrawAllButAppts(g,8,Lh,RowsPerIncr,RowsPerHr,MinPerIncr,MinPerRow,ColWidth,ColDayWidth,ColAptWidth,ColCount,TimeWidth,Width,Height,ProvWidth,ProvCount,NumOfWeekDaysToDisplay,
+					true,IsWeeklyView,ContrApptSingle.ProvBar,ApptViewItemL.VisProvs,ApptViewItemL.VisOps,SchedListPeriod,new DateTime(2011,1,1,0,0,0),new DateTime(2011,1,1,0,0,0));
 			}
 		}
 

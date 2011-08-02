@@ -3688,16 +3688,18 @@ namespace OpenDental{
 		}
 
 		private void PrintApptSchedule(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			//Logic needs to be added here for calculating if printing will fit on the page. Then call drawing in a loop for number of required pages. 
 			List<Schedule> schedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
 			List<Provider> visProvs=ApptViewItemL.VisProvs;
 			List<Operatory> visOps=ApptViewItemL.VisOps;
 			DataTable dt=new DataTable();
 			Rectangle bounds=e.PageBounds;
+			bool showProvBar=false;
 			bool isWeeklyView=ContrApptSheet.IsWeeklyView;
 			float colAptWidth=0;
 			int[][] provBars=ContrApptSingle.ProvBar;
 			int totalWidth=bounds.Width;
-			int lineH=12;//Measure the font to determine the line height.
+			int lineH=ApptDrawing.ComputeLineHeight(apptPrintFontSize);//Measure the font to determine the line height.
 			int timeWidth=37;
 			int provWidth=8;
 			int rowsPerIncr=ContrApptSheet.RowsPerIncr;
@@ -3711,6 +3713,10 @@ namespace OpenDental{
 			else {
 				provCount=ApptViewItemL.VisProvs.Count;
 			}
+			if(!showProvBar) {
+				provWidth=0;
+				provCount=0;
+			}
 			int colWidth=ApptDrawing.ComputeColWidth(totalWidth,apptPrintColsPerPage,timeWidth,provWidth,provCount);
 			int minPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
 			float minPerRow=(float)minPerIncr/(float)rowsPerIncr;
@@ -3721,11 +3727,10 @@ namespace OpenDental{
 				stopHour=24;
 			}
 			int totalHeight=lineH*rowsPerHr*(stopHour-startHour);
-			//Logic needs to be added here for calculating if printing will fit on the page. Then call drawing in a loop for number of required pages. 
 			DrawPrintingHeader(e.Graphics,colWidth,timeWidth,provWidth,provCount,apptPrintColsPerPage,visOps,isWeeklyView);
 			e.Graphics.TranslateTransform(0,100);
-			ApptDrawing.DrawAllButAppts(e.Graphics,lineH,rowsPerIncr,minPerIncr,rowsPerHr,minPerRow,timeWidth,apptPrintColsPerPage,colWidth,colDayWidth,totalWidth,totalHeight,provWidth,
-			  provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visProvs,visOps,provBars,apptPrintStartTime,apptPrintStopTime,false);
+			ApptDrawing.DrawAllButAppts(e.Graphics,apptPrintFontSize,lineH,rowsPerIncr,rowsPerHr,minPerIncr,minPerRow,colWidth,colDayWidth,colAptWidth,apptPrintColsPerPage,timeWidth,totalWidth,totalHeight,provWidth,
+			  provCount,numOfWeekDaysToDisplay,false,isWeeklyView,provBars,visProvs,visOps,schedListPeriod,apptPrintStartTime,apptPrintStopTime);
 			//Now to draw the appointments:
 			//Going to keep using ContrApptSingle controls for now just to get started.
 			if(ContrApptSingle3!=null) {//I think this is not needed.
@@ -3740,6 +3745,7 @@ namespace OpenDental{
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
 			int indexProv;
 			DataRow row;
+			//Might filter the list of appointments here for showing those within the time frame.
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 				row=DS.Tables["Appointments"].Rows[i];
 				ContrApptSingle3[i]=new ContrApptSingle();
@@ -3771,7 +3777,6 @@ namespace OpenDental{
 						}
 					}
 				}
-				ContrApptSingle3[i].SetLocation();
 			}
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 				int apptWidth=0;
@@ -3787,8 +3792,8 @@ namespace OpenDental{
 				int selectedAptNum=-1;//Never select an apt for printing.
 				string patternShowing="";
 				DataRow dataRoww=DS.Tables["Appointments"].Rows[i];
-				Point location=new Point();
-				ApptSingleDrawing.SetLocation(isWeeklyView,colAptWidth,colDayWidth,apptWidth,apptHeight,colWidth,out location,patternShowing,lineH,rowsPerIncr,dataRoww,timeWidth,visOps,provWidth,provCount);
+				Point location=ApptSingleDrawing.GetLocation(isWeeklyView,colAptWidth,colDayWidth,apptWidth,ref apptHeight,colWidth,
+					ref patternShowing,lineH,rowsPerIncr,dataRoww,timeWidth,visOps,provWidth,provCount,apptPrintStartTime,apptPrintStopTime);
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(location.X,location.Y+100);//100 to compensate for print header.
 				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,apptWidth,apptHeight,patternShowing,lineH,rowsPerIncr,

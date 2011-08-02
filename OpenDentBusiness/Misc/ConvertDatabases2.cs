@@ -5851,7 +5851,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString="+POut.DateT(new DateTime(2011,1,1,23,0,0))+" WHERE PrefName='ApptPrintTimeStop'";
 				Db.NonQ(command);
-				command="UPDATE preference SET ValueString='10' WHERE PrefName='ApptPrintFontSize'";
+				command="UPDATE preference SET ValueString='8' WHERE PrefName='ApptPrintFontSize'";
 				Db.NonQ(command);
 				command="UPDATE preference SET ValueString='10' WHERE PrefName='ApptPrintColumnsPerPage'";
 				Db.NonQ(command);

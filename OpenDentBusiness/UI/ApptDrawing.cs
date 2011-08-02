@@ -9,12 +9,12 @@ using System.Text;
 namespace OpenDentBusiness.UI {
 	public class ApptDrawing {
 		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.</summary>
-		public static void DrawAllButAppts(Graphics g,int lineH,int rowsPerIncr,int minPerIncr,int rowsPerHr,float minPerRow,int timeWidth,int colCount,int colWidth,int colDayWidth,int totalWidth,int totalHeight,int provWidth,int provCount,float colAptWidth,bool isWeeklyView,int numOfWeekDaysToDisplay,List<Schedule> schedListPeriod,List<Provider> visProvs,List<Operatory> visOps,int[][] provBar,DateTime startTime,DateTime stopTime,bool showRedTimeLine) 
+		public static void DrawAllButAppts(Graphics g,int fontSize,int lineH,int rowsPerIncr,int rowsPerHr,int minPerIncr,float minPerRow,int colWidth,int colDayWidth,float colAptWidth,int colCount,int timeWidth,int totalWidth,int totalHeight,int provWidth,int provCount,int numOfWeekDaysToDisplay,bool showRedTimeLine,bool isWeeklyView,int[][] provBar,List<Provider> visProvs,List<Operatory> visOps,List<Schedule> schedListPeriod,DateTime startTime,DateTime stopTime) 
 		{
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,timeWidth,totalHeight);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),timeWidth+colWidth*colCount+provWidth*provCount,0,timeWidth,totalHeight);//R time bar
 			DrawMainBackground(g,lineH,rowsPerHr,minPerRow,timeWidth,colCount,colWidth,colDayWidth,totalHeight,provWidth,provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visOps);
-			DrawBlockouts(g,lineH,rowsPerHr,minPerRow,timeWidth,colWidth,colDayWidth,provWidth,provCount,colAptWidth,isWeeklyView,schedListPeriod,visOps);
+			DrawBlockouts(g,fontSize,lineH,rowsPerHr,minPerRow,timeWidth,colWidth,colDayWidth,provWidth,provCount,colAptWidth,isWeeklyView,schedListPeriod,visOps,startTime,stopTime);
 			if(!isWeeklyView) {
 				DrawProvScheds(g,lineH,rowsPerHr,timeWidth,provWidth,minPerRow,visProvs,schedListPeriod);
 				DrawProvBars(g,lineH,rowsPerHr,timeWidth,provWidth,provBar,visProvs);
@@ -153,26 +153,21 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Draws all the blockouts for the entire period.</summary>
-		public static void DrawBlockouts(Graphics g,int lineH,int rowsPerHr,float minPerRow,int timeWidth,int colWidth,int colDayWidth,int provWidth,int provCount,float colAptWidth,bool isWeeklyView,List<Schedule> schedListPeriod,List<Operatory> visOps) {
+		public static void DrawBlockouts(Graphics g,int fontSize,int lineH,int rowsPerHr,float minPerRow,int timeWidth,int colWidth,int colDayWidth,int provWidth,int provCount,float colAptWidth,bool isWeeklyView,List<Schedule> schedListPeriod,List<Operatory> visOps,DateTime startTime,DateTime stopTime) {
 			Schedule[] schedForType;
 			schedForType=Schedules.GetForType(schedListPeriod,ScheduleType.Blockout,0);
 			SolidBrush blockBrush;
 			Pen blockOutlinePen=new Pen(Color.Black,1);
 			Pen penOutline;
-			Font blockFont=new Font("Arial",8);
+			Font blockFont=new Font("Arial",fontSize);
 			string blockText;
 			RectangleF rect;
-			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
 			for(int i=0;i<schedForType.Length;i++) {
 				blockBrush=new SolidBrush(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
 				penOutline = new Pen(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType),2);
 				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				for(int o=0;o<schedForType[i].Ops.Count;o++) {
 					if(isWeeklyView) {
-						//New list of operatories will always be visible.
-						//if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1) {
-						//  continue;//don't display if op not visible
-						//}
 						//this is a workaround because we start on Monday:
 						int dayofweek=(int)schedForType[i].SchedDate.DayOfWeek-1;
 						if(dayofweek==-1) {
@@ -180,7 +175,7 @@ namespace OpenDentBusiness.UI {
 						}
 						rect=new RectangleF(
 							timeWidth+1+(dayofweek)*colDayWidth
-							+colAptWidth*o+1//ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
+							+colAptWidth*GetIndexOp(schedForType[i].Ops[o],visOps)+1
 							,schedForType[i].StartTime.Hours*lineH*rowsPerHr
 							+schedForType[i].StartTime.Minutes*lineH/minPerRow
 							,colAptWidth-1
@@ -188,13 +183,9 @@ namespace OpenDentBusiness.UI {
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*lineH/minPerRow);
 					}
 					else {
-						//New list of operatories will always be visible.
-						//if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1) {
-						//  continue;//don't display if op not visible
-						//}
 						rect=new RectangleF(
 							timeWidth+provWidth*provCount
-							+colWidth*o+1//ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
+							+colWidth*GetIndexOp(schedForType[i].Ops[o],visOps)+1
 							+provWidth*2//so they don't overlap prov bars
 							,schedForType[i].StartTime.Hours*lineH*rowsPerHr
 							+schedForType[i].StartTime.Minutes*lineH/minPerRow
@@ -218,6 +209,16 @@ namespace OpenDentBusiness.UI {
 			blockOutlinePen.Dispose();
 		}
 
+		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
+		public static int GetIndexOp(long opNum,List<Operatory> visOps) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<visOps.Count;i++) {
+				if(visOps[i].OperatoryNum==opNum)
+					return i;
+			}
+			return -1;
+		}
+		
 		///<summary>The background provider schedules for the provider bars on the left.</summary>
 		public static void DrawProvScheds(Graphics g,int lineH,int rowsPerHr,int timeWidth,int provWidth,float minPerRow,List<Provider> visProvs,List<Schedule> schedListPeriod) {
 			Brush openBrush;
@@ -414,17 +415,23 @@ namespace OpenDentBusiness.UI {
 			if(colsPerPage<1) {
 			  return 0;
 			}
-			else {
-			  return (totalWidth-timeWidth*2-provWidth*provCount)/colsPerPage;
-			}
+			return (totalWidth-timeWidth*2-provWidth*provCount)/colsPerPage;
 		}
-
+		
+		///<summary></summary>
 		public static int ComputeColDayWidth(int totalWidth,int timeWidth,int numOfWeekDaysToDisplay) {
 			return (totalWidth-timeWidth*2)/numOfWeekDaysToDisplay;
 		}
-
+		
+		///<summary></summary>
 		public static float ComputeColAptWidth(int colDayWidth,int colsPerPage) {
 			return (float)(colDayWidth-1)/(float)colsPerPage;
+		}
+		
+		///<summary></summary>
+		public static int ComputeLineHeight(int fontSize) {
+			Font baseFont=new Font("Arial",fontSize);
+			return baseFont.Height;
 		}
 
 	}

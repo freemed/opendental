@@ -589,22 +589,24 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static void SetLocation(bool isWeeklyView,float colAptWidth,int colDayWidth,int apptWidth,int apptHeight,int colWidth,out Point location,string patternShowing,int lineH,int rowsPerIncr,DataRow dataRoww,int timeWidth,List<Operatory> visOps,int provWidth,int provCount) {
+		public static Point GetLocation(bool isWeeklyView,float colAptWidth,int colDayWidth,int apptWidth,ref int apptHeight,int colWidth,ref string patternShowing,int lineH,int rowsPerIncr,DataRow dataRoww,int timeWidth,List<Operatory> visOps,int provWidth,int provCount,DateTime startTime,DateTime stopTime) {
+			Point location;
 			if(isWeeklyView) {
 				apptWidth=(int)colAptWidth;
 				location=new Point(ConvertToX(isWeeklyView,dataRoww,timeWidth,colWidth,colAptWidth,colDayWidth,provWidth,provCount,visOps),
-					ConvertToY(lineH,rowsPerIncr,dataRoww));
+					ConvertToY(lineH,rowsPerIncr,dataRoww,startTime,stopTime));
 			}
 			else {
 				location=new Point(ConvertToX(isWeeklyView,dataRoww,timeWidth,colWidth,colAptWidth,colDayWidth,provWidth,provCount,visOps)+2,
-					ConvertToY(lineH,rowsPerIncr,dataRoww));
+					ConvertToY(lineH,rowsPerIncr,dataRoww,startTime,stopTime));
 				apptWidth=colWidth-5;
 			}
-			SetSize(patternShowing,lineH,rowsPerIncr,apptHeight,dataRoww);
+			SetSize(out patternShowing,lineH,rowsPerIncr,out apptHeight,dataRoww);
+			return location;
 		}
 
 		///<summary>Used from SetLocation.</summary>
-		private static void SetSize(string patternShowing,int lineH,int rowsPerIncr,int apptHeight,DataRow dataRoww) {
+		private static void SetSize(out string patternShowing,int lineH,int rowsPerIncr,out int apptHeight,DataRow dataRoww) {
 			patternShowing=GetPatternShowing(dataRoww["Pattern"].ToString(),rowsPerIncr);
 			//height is based on original 5 minute pattern. Might result in half-rows
 			apptHeight=dataRoww["Pattern"].ToString().Length*lineH*rowsPerIncr;
@@ -634,13 +636,21 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Called from SetLocation to establish Y position of control.</summary>
-		private static int ConvertToY(int lineH,int rowsPerIncr,DataRow dataRoww) {
+		private static int ConvertToY(int lineH,int rowsPerIncr,DataRow dataRoww,DateTime startTime, DateTime stopTime) {
 			DateTime aptDateTime=PIn.DateT(dataRoww["AptDateTime"].ToString());
-			int retVal=(int)(((double)aptDateTime.Hour*(double)60
-				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
-				+(double)aptDateTime.Minute
-				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
-				)*(double)lineH*rowsPerIncr);
+//TODO: Have a way to show appointments for a specific time frame.
+			int retVal=2000;//Off the page. This is temporary to get a feel getting appointments at the corresponding start and stop X,Y locations.
+			int stopHour=stopTime.Hour;
+			if(stopHour==0) {
+				stopHour=24;
+			}
+			if(aptDateTime.Hour>=startTime.Hour && aptDateTime.Hour<stopHour) {
+				retVal=(int)((((double)aptDateTime.Hour-startTime.Hour)*(double)60
+					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
+					+(double)aptDateTime.Minute
+					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
+					)*(double)lineH*rowsPerIncr);
+			}
 			return retVal;
 		}
 
