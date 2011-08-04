@@ -340,18 +340,19 @@ namespace OpenDental {
 
 		///<summary>Will ask for password if the current user logged in isn't the user status being manipulated.</summary>
 		private static bool CheckSelectedUserPassword(long employeeNum) {
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				Userod selectedUser=Userods.GetUserByEmployeeNum(employeeNum);
-				InputBox inputPass=new InputBox("Please enter password:");
-				inputPass.textResult.PasswordChar='*';
-				inputPass.ShowDialog();
-				if(inputPass.DialogResult!=DialogResult.OK) {
-					return false;
-				}
-				if(!Userods.CheckTypedPassword(inputPass.textResult.Text,selectedUser.Password)) {
-				  MsgBox.Show("PhoneUI","Wrong password.");
-				  return false;
-				}
+			if(Security.CurUser.EmployeeNum==employeeNum) {
+				return true;
+			}
+			Userod selectedUser=Userods.GetUserByEmployeeNum(employeeNum);
+			InputBox inputPass=new InputBox("Please enter password:");
+			inputPass.textResult.PasswordChar='*';
+			inputPass.ShowDialog();
+			if(inputPass.DialogResult!=DialogResult.OK) {
+				return false;
+			}
+			if(!Userods.CheckTypedPassword(inputPass.textResult.Text,selectedUser.Password)) {
+				MsgBox.Show("PhoneUI","Wrong password.");
+				return false;
 			}
 			return true;
 		}
