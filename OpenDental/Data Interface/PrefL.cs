@@ -269,7 +269,12 @@ namespace OpenDental {
 			}
 			string thisVersion=MiscData.GetMySqlVersion();
 			float floatVersion=PIn.Float(thisVersion.Substring(0,3));
-			if(floatVersion < 5.5f) {
+			//doing it this way will be needed later to handle two digit version numbers.  
+			//We may then combine them into a single float, remembering to left pad single digit minor versions.
+			//int majVer=int.Parse(thisVersion.Split(',','.')[0]);
+			//int minVer=int.Parse(thisVersion.Split(',','.')[1]);
+			//if((majVer<5 || (majVer=5 && minVer<5))	&& !Programs.IsEnabled(ProgramName.eClinicalWorks)){//Do not show msg if MySQL version is 5.5 or greater or eCW is enabled
+			if(floatVersion < 5.5f	&& !Programs.IsEnabled(ProgramName.eClinicalWorks)){//Do not show msg if MySQL version is 5.5 or greater or eCW is enabled
 				MsgBox.Show("Prefs","You should upgrade to MySQL 5.5 using the installer posted on our website.  It's not urgent, but until you upgrade, you are likely to get a few errors each day which will require restarting the MySQL service.");
 			}
 		}
