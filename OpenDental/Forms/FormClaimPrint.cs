@@ -1353,6 +1353,12 @@ namespace OpenDental{
 						break;
 					case "BillingDentistNPI":
 						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].NationalProvID;
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && //Canadian. en-CA or fr-CA
+							carrier.ElectID=="000064" && //Pacific Blue Cross (PBC)
+							ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].NationalProvID!= ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)].NationalProvID && //Billing and treating providers are different
+							displayStrings[i].Length==9) { //Only for provider numbers which have been entered correctly (to prevent and indexing exception).
+							displayStrings[i]="00"+displayStrings[i].Substring(2,5)+"00";
+						}
 						break;
 					case "BillingDentistLicenseNum":
 						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].StateLicense;
