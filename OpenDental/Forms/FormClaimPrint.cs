@@ -924,9 +924,9 @@ namespace OpenDental{
 							|| PatCur.Position==PatientPosition.Widowed)
 							displayStrings[i]="X";
 						break;
-					case "PatIDFromPatPlan": //Dependant Code appended to subscriber ID with dash in between for Canada
+					case "PatIDFromPatPlan": //Dependant Code for Canada
 						patPlans=PatPlans.Refresh(ThisPatNum);
-						displayStrings[i]=subCur.SubscriberID+"-"+PatPlans.GetPatID(subCur.InsSubNum,patPlans);
+						displayStrings[i]=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
 						break;
 					case "PatientSSN":
 						if(PatCur.SSN.Length==9) {
@@ -2485,7 +2485,7 @@ namespace OpenDental{
 						break;
 					case "TotalFee":
 						decimal fee=0;//fee only for this page. Each page is treated like a separate claim.
-						for(int f=startProc;f<startProc+totProcs;f++){//eg f=0;f<10;f++
+						for(int f=startProc;f<startProc+totProcs;f++) {//eg f=0;f<10;f++
 							if(f < claimprocs.Count) {
 								fee+=(decimal)((ClaimProc)claimprocs[f]).FeeBilled;
 								if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
@@ -2496,14 +2496,14 @@ namespace OpenDental{
 								}
 							}
 						}
-						if(ClaimFormCur.Items[i].FormatString==""){
+						if(ClaimFormCur.Items[i].FormatString=="") {
 							displayStrings[i]=fee.ToString("F");
 						}
-						else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-						{
+						else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 							decimal amt = fee * 100;
 							displayStrings[i] = amt.ToString();
-						} else {
+						}
+						else {
 							displayStrings[i]=fee.ToString(ClaimFormCur.Items[i].FormatString);
 						}
 						break;
@@ -3074,7 +3074,7 @@ namespace OpenDental{
 				return claimprocs[procIndex].CodeSent;
 			if(field=="System")
 				return "JP";
-			if(field=="Fee"){
+			if(field=="Fee") {
 				decimal totalProcFees=(decimal)claimprocs[procIndex].FeeBilled;
 				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					List<Procedure> labProcs=Procedures.GetCanadianLabFees(claimprocs[procIndex].ProcNum,ProcList);
@@ -3160,7 +3160,7 @@ namespace OpenDental{
 				}
 				return ProcCur.DiagnosticCode;
 			}
-			if(field=="Lab"){// && ProcCur.LabFee>0) {
+			if(field=="Lab") {// && ProcCur.LabFee>0) {
 				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					List<Procedure> labProcs=Procedures.GetCanadianLabFees(claimprocs[procIndex].ProcNum,ProcList);
 					decimal totalLabFees=0;

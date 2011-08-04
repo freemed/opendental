@@ -5839,6 +5839,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.9.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_0_10();
+		}
+
+		private static void To11_0_10() {
+			if(FromVersion<new Version("11.0.10.0")) {
+				string command;
+				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6' LIMIT 1";
+				DataTable tableClaimFormNum=Db.GetTable(command);
+				if(tableClaimFormNum.Rows.Count>0) {
+					long claimFormNum=PIn.Long(tableClaimFormNum.Rows[0][0].ToString());
+					command="UPDATE claimformitem SET XPos=388,YPos=869,Width=26,Height=16 WHERE FieldName='PatIDFromPatPlan' AND ClaimFormNum="+POut.Long(claimFormNum);
+					Db.NonQ(command);
+					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES ("+POut.Long(claimFormNum)+",'SubscrIDStrict',131,869,234,16)";
+					Db.NonQ(command);
+					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES ("+POut.Long(claimFormNum)+",'PatientPatNum',494,117,112,16)";
+					Db.NonQ(command);
+					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES ("+POut.Long(claimFormNum)+",'BillingDentistNPI',308,117,103,16)";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '11.0.10.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_1_0();
 		}
 		
