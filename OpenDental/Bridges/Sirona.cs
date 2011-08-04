@@ -54,7 +54,7 @@ namespace OpenDental.Bridges{
 				//each field is terminated by null (byte 0).
 				//Append U token to siomin.sdx file
 				StringBuilder line=new StringBuilder();
-				FileStream fs=new FileStream(sendBox,FileMode.OpenOrCreate);
+				FileStream fs=new FileStream(sendBox,FileMode.Append);
 				using(BinaryWriter bw=new BinaryWriter(fs)){
 					char nTerm=(char)0;//Convert.ToChar(0);
 					line.Append("U");//U signifies Update patient in sidexis. Gets ignored if new patient.
