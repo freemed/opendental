@@ -158,7 +158,7 @@ namespace OpenDental {
 					continue;
 				}
 				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
-				Image img=null;
+				Image img=null;//js consider switching this from an image to a bitmap
 				if(field.FieldName=="Patient Info.gif") {
 					img=Properties.Resources.Patient_Info;
 				}
@@ -169,6 +169,8 @@ namespace OpenDental {
 					continue;
 				}
 				g.DrawImage(img,field.XPos,field.YPos,field.Width,field.Height);
+				img.Dispose();
+				img=null;
 			}
 			//then, drawings--------------------------------------------------------------------------------------------
 			Pen pen=new Pen(Brushes.Black,2f);
@@ -300,17 +302,32 @@ namespace OpenDental {
 					continue;
 				}
 				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
-				XImage img=null;
+				Bitmap bitmapOriginal=null;
 				if(field.FieldName=="Patient Info.gif") {
-					img=XImage.FromGdiPlusImage(Properties.Resources.Patient_Info);
+					bitmapOriginal=Properties.Resources.Patient_Info;
 				}
 				else if(File.Exists(filePathAndName)) {
-					img=XImage.FromFile(filePathAndName);
+					bitmapOriginal=new Bitmap(filePathAndName);
 				}
 				else {
 					continue;
 				}
-				g.DrawImage(img,p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
+				Bitmap bitmapResampled=(Bitmap)bitmapOriginal.Clone();
+				if(bitmapOriginal.HorizontalResolution!=96 || bitmapOriginal.VerticalResolution!=96){//to avoid slowdown for other pdfs
+					//The scaling on the XGraphics.DrawImage() function causes unreadable output unless the image is in 96 DPI native format.
+					//We use GDI here first to convert the image to the correct size and DPI, then pass the second image to XGraphics.DrawImage().
+					bitmapResampled.Dispose();
+					bitmapResampled=null;
+					bitmapResampled=new Bitmap(field.Width,field.Height);
+					Graphics gr=Graphics.FromImage(bitmapResampled);
+					gr.DrawImage(bitmapOriginal,0,0,field.Width,field.Height);
+					gr.Dispose();
+				}
+				g.DrawImage(bitmapResampled,p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
+				bitmapResampled.Dispose();
+				bitmapResampled=null;
+				bitmapOriginal.Dispose();
+				bitmapOriginal=null;
 			}
 			//then, drawings--------------------------------------------------------------------------------------------
 			XPen pen=new XPen(XColors.Black,p(2));
