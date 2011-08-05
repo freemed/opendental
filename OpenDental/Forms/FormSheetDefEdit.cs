@@ -20,7 +20,10 @@ namespace OpenDental {
 		private bool MouseIsDown;
 		private bool CtrlIsDown;
 		private Point MouseOriginalPos;
+		private Point MouseCurrentPos;
 		private List<Point> OriginalControlPositions;
+		///<summary>When you first mouse down, if you clicked on a valid control, this will be false.  For drag selection, this must be true.</summary>
+		private bool ClickedOnBlankSpace;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -62,9 +65,15 @@ namespace OpenDental {
 				butOK.Visible=false;
 				butCancel.Text=Lan.g(this,"Close");
 				groupAddNew.Visible=false;
+				butAlignLeft.Visible=false;
+				butAlignTop.Visible=false;
+				//TODO: make new buttons.Visibale = false;
 			}
 			else{
 				labelInternal.Visible=false;
+				butAlignLeft.Visible=true;
+				butAlignTop.Visible=true;
+				//TODO: make new buttons.Visibale = true;
 			}
 			textDescription.Text=SheetDefCur.Description;
 			if(SheetDefCur.IsLandscape){
@@ -146,6 +155,7 @@ namespace OpenDental {
 			Pen penBlueThick=new Pen(Color.Blue,1.6f);
 			Pen penRedThick=new Pen(Color.Red,1.6f);
 			Pen penBlack=new Pen(Color.Black);
+			Pen penSelection=new Pen(Color.Black);
 			Pen pen;
 			Brush brush;
 			SolidBrush brushBlue=new SolidBrush(Color.Blue);
@@ -252,6 +262,14 @@ namespace OpenDental {
 					str=SheetDefCur.SheetFieldDefs[i].FieldName;
 					//g.DrawString(SheetDefCur.SheetFieldDefs[i].FieldName,font,
 					//	brush,SheetDefCur.SheetFieldDefs[i].Bounds);
+				}
+				if(ClickedOnBlankSpace) {
+					g.DrawRectangle(penSelection,
+						//The math functions are used below to account for users clicking and dragging up, down, left, or right.
+						Math.Min(MouseOriginalPos.X,MouseCurrentPos.X),//X
+						Math.Min(MouseOriginalPos.Y,MouseCurrentPos.Y),//Y
+						Math.Abs(MouseCurrentPos.X-MouseOriginalPos.X),//Width
+						Math.Abs(MouseCurrentPos.Y-MouseOriginalPos.Y));//Height
 				}
 				GraphicsHelper.DrawString(g,g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
 			}
@@ -605,17 +623,18 @@ namespace OpenDental {
 		private void panelMain_MouseDown(object sender,MouseEventArgs e) {
 			panelMain.Select();
 			MouseIsDown=true;
+			ClickedOnBlankSpace=false;
 			MouseOriginalPos=e.Location;
+			MouseCurrentPos=e.Location;
 			SheetFieldDef field=HitTest(e.X,e.Y);
 			if(field==null){
+				ClickedOnBlankSpace=true;
 				if(CtrlIsDown){
-					return;
+					return;//so that you can add more to the previous selection
 				}
-				else{
-					listFields.SelectedIndices.Clear();
-					panelMain.Invalidate();
-					return;
-				}
+				listFields.SelectedIndices.Clear();//clear the existing selection
+				panelMain.Invalidate();
+				return;
 			}
 			int idx=SheetDefCur.SheetFieldDefs.IndexOf(field);
 			if(CtrlIsDown){
@@ -626,7 +645,7 @@ namespace OpenDental {
 					listFields.SetSelected(idx,true);	
 				}
 			}
-			else{
+			else{//Ctrl not down
 				if(listFields.SelectedIndices.Contains(idx)){
 					//clicking on the group, probably to start a drag.
 				}
@@ -652,18 +671,40 @@ namespace OpenDental {
 			if(IsInternal) {
 				return;
 			}
+			if(ClickedOnBlankSpace) {
+				MouseCurrentPos=e.Location;
+				panelMain.Invalidate();
+				return;
+			}
 			for(int i=0;i<listFields.SelectedIndices.Count;i++){
-				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos=
-					OriginalControlPositions[i].X+e.X-MouseOriginalPos.X;
-				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos=
-					OriginalControlPositions[i].Y+e.Y-MouseOriginalPos.Y;
+				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos=OriginalControlPositions[i].X+e.X-MouseOriginalPos.X;
+				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos=OriginalControlPositions[i].Y+e.Y-MouseOriginalPos.Y;
 			}
 			panelMain.Invalidate();
 		}
 
 		private void panelMain_MouseUp(object sender,MouseEventArgs e) {
+			//bool NothingSelected=true;
 			MouseIsDown=false;
 			OriginalControlPositions=null;
+			if(ClickedOnBlankSpace) {//if initial mouse down was not on a control.  ie, if we are dragging to select.
+				Rectangle selectionBounds=new Rectangle(
+					Math.Min(MouseOriginalPos.X,MouseCurrentPos.X),//X
+					Math.Min(MouseOriginalPos.Y,MouseCurrentPos.Y),//Y
+					Math.Abs(MouseCurrentPos.X-MouseOriginalPos.X),//Width
+					Math.Abs(MouseCurrentPos.Y-MouseOriginalPos.Y));//Height
+				for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
+					SheetFieldDef tempDef = SheetDefCur.SheetFieldDefs[i];//to speed this process up instead of referencing the array every time.
+					if(tempDef.FieldType==SheetFieldType.Line || tempDef.FieldType==SheetFieldType.Image) {
+						continue;//lines and images are currently not selectable by drag and drop. will require lots of calculations, completely possible, but complex.
+					}
+					if(tempDef.BoundsF.IntersectsWith(selectionBounds)){
+						listFields.SetSelected(i,true);//Add to selected indicies
+					}
+				}
+			}
+			ClickedOnBlankSpace=false;
+			panelMain.Invalidate();
 		}
 
 		private void panelMain_MouseDoubleClick(object sender,MouseEventArgs e) {
@@ -789,6 +830,60 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
+		//TODO: Move the code below into the proper place in the code above. This is only here until Jordan gets back from vacation.
+
+		/// <summary>When clicked it will set all selected elements' Y coordinates to the smallest Y coordinate in the group, unless two controls have the same X coordinate.</summary>
+		private void butAlignTop_Click(object sender,EventArgs e) {
+			if(listFields.SelectedIndices.Count<2) {
+				return;
+			}
+			float minY=SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[0]].BoundsF.Top;
+			for(int i=0;i<listFields.SelectedIndices.Count;i++) {
+				if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].BoundsF.Top<minY) {//current element is higher up than the current 'highest' element.
+					minY=SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].BoundsF.Top;
+				}
+				for(int j=0;j<listFields.SelectedIndices.Count;j++){
+					if(i==j){//Don't compare element to itself.
+						continue;
+					}
+					if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Bounds.X//compair the int bounds not the boundsF for practical use
+						==SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[j]].Bounds.X) {//compair the int bounds not the boundsF for practical use
+						MsgBox.Show(this,"Cannot align controls. Two or more selected controls will overlap.");
+						return;
+					}
+				}
+			}
+			for(int i=0;i<listFields.SelectedIndices.Count;i++) {//Actually move the controls now
+				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos=(int)minY;
+			}
+			panelMain.Invalidate();
+		}
+
+		private void butAlignLeft_Click(object sender,EventArgs e) {
+			if(listFields.SelectedIndices.Count<2) {
+				return;
+			}
+			float minX=SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[0]].BoundsF.Left;
+			for(int i=0;i<listFields.SelectedIndices.Count;i++) {
+				if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].BoundsF.Left<minX) {//current element is higher up than the current 'highest' element.
+					minX=SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].BoundsF.Left;
+				}
+				for(int j=0;j<listFields.SelectedIndices.Count;j++) {
+					if(i==j) {//Don't compare element to itself.
+						continue;
+					}
+					if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Bounds.Y//compare the int bounds not the boundsF for practical use
+						==SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[j]].Bounds.Y) {//compare the int bounds not the boundsF for practical use
+						MsgBox.Show(this,"Cannot align controls. Two or more selected controls will overlap.");
+						return;
+					}
+				}
+			}
+			for(int i=0;i<listFields.SelectedIndices.Count;i++) {//Actually move the controls now
+				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos=(int)minX;
+			}
+			panelMain.Invalidate();
+		}
 		
 
 		
