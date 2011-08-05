@@ -550,7 +550,7 @@ namespace OpenDental{
 
 		private void butHide_Click(object sender,EventArgs e) {
 			int unusedCount=InsPlans.UnusedGetCount();
-			string msgText=unusedCount.ToString()+" "+Lan.g(this,"plans found that are not in use by any patients.  Hide all of them?");
+			string msgText=unusedCount.ToString()+" "+Lan.g(this,"plans found that are not in use by any subscribers.  Hide all of them?");
 			if(MessageBox.Show(msgText,"",MessageBoxButtons.YesNo)!=DialogResult.Yes){
 				return;
 			}

@@ -775,7 +775,7 @@ namespace OpenDentBusiness {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT COUNT(*) FROM insplan WHERE IsHidden=0 "
-				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
+				+"AND NOT EXISTS (SELECT * FROM inssub WHERE inssub.PlanNum=insplan.PlanNum)";
 			int count=PIn.Int(Db.GetCount(command));
 			return count;
 		}
@@ -787,7 +787,7 @@ namespace OpenDentBusiness {
 			}
 			string command="UPDATE insplan SET IsHidden=1 "
 				+"WHERE IsHidden=0 "
-				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
+				+"AND NOT EXISTS (SELECT * FROM inssub WHERE inssub.PlanNum=insplan.PlanNum)";
 			Db.NonQ(command);
 		}
 
