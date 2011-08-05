@@ -177,7 +177,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butPrintList
