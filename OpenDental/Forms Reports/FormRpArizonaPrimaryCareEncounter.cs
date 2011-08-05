@@ -70,8 +70,8 @@ namespace OpenDental {
 				"'D2932','D2940','D2950','D2970','D3110','D3120','D3220','D3221','D3230','D3240','D7140','D7210','D7220',"+
 				"'D7270','D7285','D7286','D7510','D9110','D9310','D9610'";
 			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
-			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
-				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
+			command="SELECT DISTINCT p.PatNum FROM patplan pp,inssub,insplan i,patient p,carrier c "+
+				"WHERE p.PatNum=pp.PatNum AND inssub.InsSubNum=pp.InsSubNum AND inssub.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
 				"AND LOWER(TRIM(c.CarrierName))='noah'";
 			DataTable primaryCarePatients=Reports.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
@@ -99,8 +99,8 @@ namespace OpenDental {
 						"p.City,"+//city
 						"p.State,"+//state
 						"p.Zip,"+//zipcode
-						"(SELECT CASE pp.Relationship WHEN 0 THEN 1 ELSE 0 END FROM patplan pp,insplan i,carrier c WHERE "+//Relationship to subscriber
-							"pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah' "+DbHelper.LimitAnd(1)+") InsRelat,"+
+						"(SELECT CASE pp.Relationship WHEN 0 THEN 1 ELSE 0 END FROM patplan pp,inssub,insplan i,carrier c WHERE "+//Relationship to subscriber
+							"pp.PatNum="+patNum+" AND inssub.InsSubNum=pp.InsSubNum AND inssub.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah' "+DbHelper.LimitAnd(1)+") InsRelat,"+
 						"(CASE p.Position WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END) MaritalStatus,"+//Marital status
 						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN ("+DbHelper.DateAddYear("p.BirthDate","18")+">"+datesql+") THEN 3 ELSE 2 END) ELSE 1 END) EmploymentStatus,"+
 						"(CASE p.StudentStatus WHEN 'f' THEN 1 WHEN 'p' THEN 2 ELSE 3 END) StudentStatus,"+//student status

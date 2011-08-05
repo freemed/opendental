@@ -66,8 +66,8 @@ namespace OpenDental {
 			}
 			long copayDefNum=PIn.Long(copayDefNumTab.Rows[0][0].ToString());
 			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
-			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
-				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
+			command="SELECT DISTINCT p.PatNum FROM patplan pp,inssub,insplan i,patient p,carrier c "+
+				"WHERE p.PatNum=pp.PatNum AND inssub.InsSubNum=pp.InsSubNum AND inssub.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
 				"AND LOWER(TRIM(c.CarrierName))='noah' AND "+
 				"(SELECT MAX(a.AptDateTime) FROM appointment a WHERE a.PatNum=p.PatNum AND a.AptStatus="+((int)ApptStatus.Complete)+") BETWEEN "+
 					POut.Date(dateTimeFrom.Value)+" AND "+POut.Date(dateTimeTo.Value);
@@ -95,7 +95,7 @@ namespace OpenDental {
 						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') "+DbHelper.LimitAnd(1)+")) HPP, "+//Household % of poverty
 					"("+DbHelper.LimitOrderBy("SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
 						copayDefNum+" ORDER BY AdjDate DESC",1)+") HSFS,"+//Household sliding fee scale
-					"(SELECT i.DateEffective FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum "+DbHelper.LimitAnd(1)+") DES,"+//Date of eligibility status
+					"(SELECT i.DateEffective FROM insplan i,inssub,patplan pp WHERE pp.PatNum="+patNum+" AND inssub.InsSubNum=pp.InsSubNum AND inssub.PlanNum=i.PlanNum "+DbHelper.LimitAnd(1)+") DES,"+//Date of eligibility status
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+statusStr+"') "+DbHelper.LimitAnd(1)+")) CareStatus "+//Status
 					"FROM patient p WHERE "+
