@@ -99,9 +99,9 @@ namespace OpenDentBusiness {
 					+"AND (recall.RecallTypeNum="+POut.Long(PrefC.GetLong(PrefName.RecallTypeSpecialProphy))
 					+" OR recall.RecallTypeNum="+POut.Long(PrefC.GetLong(PrefName.RecallTypeSpecialPerio))+") "
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND Ordinal=1 "
-				+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
-				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 				+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum "
+				+"LEFT JOIN insplan ON inssub.PlanNum=insplan.PlanNum "
+				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 				+"LEFT JOIN patient patSubsc ON patSubsc.PatNum=inssub.Subscriber "
 				+"LEFT JOIN appointment ON appointment.PatNum=patient.PatNum "
 					+"AND AptStatus="+POut.Long((int)ApptStatus.Scheduled)+" "
