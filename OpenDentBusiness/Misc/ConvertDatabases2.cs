@@ -5849,14 +5849,159 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				DataTable tableClaimFormNum=Db.GetTable(command);
 				if(tableClaimFormNum.Rows.Count>0) {
 					long claimFormNum=PIn.Long(tableClaimFormNum.Rows[0][0].ToString());
-					command="UPDATE claimformitem SET XPos=388,YPos=869,Width=26,Height=16 WHERE FieldName='PatIDFromPatPlan' AND ClaimFormNum="+POut.Long(claimFormNum);
-					Db.NonQ(command);
-					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES ("+POut.Long(claimFormNum)+",'SubscrIDStrict',131,869,234,16)";
-					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES ("+POut.Long(claimFormNum)+",'PatientPatNum',494,117,112,16)";
 					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES ("+POut.Long(claimFormNum)+",'BillingDentistNPI',308,117,103,16)";
 					Db.NonQ(command);
+				}
+				//It is OK to run the following queries for all of our customers, because if they are not Canadian, then only the Canadian columns will be changed and will then not ever be used.
+				//We do not want to check the region settings here because sometimes Canadian customers forget to set the region correctly on their computer before installing/upgrading.
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=7 WHERE ElectID='311140'";//accerta
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2469,CanadianNetworkNum=8 WHERE ElectID='000105'";//adsc
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='610226'";//aga
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=420,CanadianNetworkNum=7 WHERE ElectID='628112'";//appq
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2468,CanadianNetworkNum=13 WHERE ElectID='000090'";//alberta blue cross
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=0,CanadianNetworkNum=7 WHERE ElectID='610191'";//assumption life
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='628151'";//autoben
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=8 WHERE ElectID='610708'";//benecaid health benefit solutions
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=384,CanadianNetworkNum=7 WHERE ElectID='610146'";//benefits trust
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='400008'";//beneplan
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=0,CanadianNetworkNum=7 WHERE ElectID='600502'";//capitale
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=9 WHERE ElectID='610129'";//cdcs
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=1,CanadianNetworkNum=7 WHERE ElectID='610099'";//claimsecure
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=32,CanadianNetworkNum=7 WHERE ElectID='000036'";//ccq
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=8 WHERE ElectID='606258'";//co-operators
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2464,CanadianNetworkNum=7 WHERE ElectID='610105'";//coughlin & associates
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=8 WHERE ElectID='610153'";//cowan wright beauchamps
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=384,CanadianNetworkNum=8 WHERE ElectID='000051'";//desjardins financial security
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=384,CanadianNetworkNum=7 WHERE ElectID='000033'";//empire life insurance company
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=10 WHERE ElectID='000029'";//equitable life
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=65956,CanadianNetworkNum=7 WHERE ElectID='610650'";//esorse corporation
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='610614'";//fas administrators
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=10 WHERE ElectID='000011'";//great west life assurance company
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=420,CanadianNetworkNum=7 WHERE ElectID='000102'";//green sheild canada
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=8 WHERE ElectID='610217'";//group medical services
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=8 WHERE ElectID='610218'";//group medical services saskatchewan
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=33,CanadianNetworkNum=8 WHERE ElectID='605064'";//groupsource
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=10 WHERE ElectID='000060'";//industrial alliance
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=10 WHERE ElectID='000024'";//industrial alliance pacific insuarnce and financial
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=8 WHERE ElectID='610643'";//internationale campagnie d'assurance vie
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=0,CanadianNetworkNum=7 WHERE ElectID='627265'";//johnson inc.
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=10 WHERE ElectID='627223'";//johnston group
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=0,CanadianNetworkNum=7 WHERE ElectID='627585'";//lee-power & associates
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=7 WHERE ElectID='610158'";//manion wilkins
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2464,CanadianNetworkNum=11 WHERE ElectID='000094'";//manitoba blue cross
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2432,CanadianNetworkNum=8 WHERE ElectID='000114'";//manitoba cleft palate program
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2048,CanadianNetworkNum=8 WHERE ElectID='000113'";//manitoba health
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='000034'";//manufacturers life insurance company
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='610059'";//manulife financial
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='311113'";//maritime life assurance company
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='610070'";//maritime pro
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=417,CanadianNetworkNum=7 WHERE ElectID='601052'";//mdm
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=384,CanadianNetworkNum=7 WHERE ElectID='610047'";//medavie blue cross
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=8 WHERE ElectID='610634'";//nexgenrx
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=8 WHERE ElectID='610124'";//nihb
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2469,CanadianNetworkNum=8 WHERE ElectID='000109'";//nova scotia community services
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2469,CanadianNetworkNum=8 WHERE ElectID='000108'";//nova scotia medical services insurance
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=8 WHERE ElectID='610172'";//nunatsiavut government department of health
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2432,CanadianNetworkNum=12 WHERE ElectID='000064'";//pacific blue cross
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=2469,CanadianNetworkNum=8 WHERE ElectID='000103'";//quickcard
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=384,CanadianNetworkNum=8 WHERE ElectID='610256'";//pbas
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=7 WHERE ElectID='610616'";//rwam insurance
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=0,CanadianNetworkNum=7 WHERE ElectID='000096'";//saskatchewan blue cross
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=7 WHERE ElectID='610196'";//ses benefits
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=0,CanadianNetworkNum=8 WHERE ElectID='000079'";//ssq societe d'assurance-vie inc.
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='000020'";//standard life assurance company
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=10 WHERE ElectID='000016'";//sun life of canada
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=0,CanadianNetworkNum=8 WHERE ElectID='000080'";//survivance
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='04',CanadianSupportedTypes=32,CanadianNetworkNum=8 WHERE ElectID='610677'";//syndicat des fonctionnaires municipaux mtl
+				Db.NonQ(command);
+				command="UPDATE carrier SET CDAnetVersion='02',CanadianSupportedTypes=416,CanadianNetworkNum=7 WHERE ElectID='311109'";//wawanesa
+				Db.NonQ(command);
+				//We only want to insert these carriers if in Canada because they are of no use elsewhere.
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000090'"; //alberta blue cross
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('Alberta Blue Cross','10009 108th Street NW','','Edmonton','AB','T5J 3C5','1-800-661-6995','000090','0','1','04',13,'0',1,2468)";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000114'"; //manitoba cleft palate program
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('Manitoba Cleft Palate Program','300 Carlton Street','','Winnipeg','MB','R3B 3M9','204-787-4882','000114','0','1','04',8,'0',1,2432)";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000113'"; //manitoba health
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('Manitoba Health','300 Carlton Street','','Winnipeg','MB','R3B 3M9','204-788-2581','000113','0','1','04',8,'0',1,2048)";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='610256'"; //pbas
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('PBAS','318-2099 Lougheed Highway','','Port Coquitlam','BC','V3B 1A8','800-952-9932','610256','0','1','04',8,'0',1,384)";
+						Db.NonQ(command);
+					}
 				}
 				command="UPDATE preference SET ValueString = '11.0.10.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

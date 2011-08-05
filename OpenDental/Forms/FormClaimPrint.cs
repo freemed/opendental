@@ -926,7 +926,14 @@ namespace OpenDental{
 						break;
 					case "PatIDFromPatPlan": //Dependant Code for Canada
 						patPlans=PatPlans.Refresh(ThisPatNum);
-						displayStrings[i]=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
+						if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+							if(carrier.ElectID=="000064") { //Pacific Blue Cross (PBC)
+								displayStrings[i]=subCur.SubscriberID+"-"+PatPlans.GetPatID(subCur.InsSubNum,patPlans);
+							}
+						}
+						else {
+							displayStrings[i]=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
+						}
 						break;
 					case "PatientSSN":
 						if(PatCur.SSN.Length==9) {
