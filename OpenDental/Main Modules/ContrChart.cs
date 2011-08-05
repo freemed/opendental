@@ -4220,13 +4220,23 @@ namespace OpenDental{
 						}
 						break;
 					case "Birthdate":
-						row.Cells.Add(PatCur.Birthdate.ToShortDateString());
+						if(PatCur.Birthdate.Year<1880) {
+							row.Cells.Add("");
+						}
+						else {
+							row.Cells.Add(PatCur.Birthdate.ToShortDateString());
+						}
 						break;
 					case "City":
 						row.Cells.Add(PatCur.City);
 						break;
 					case "AskToArriveEarly":
-						row.Cells.Add(PatCur.AskToArriveEarly.ToString()+" minute(s)");
+						if(PatCur.AskToArriveEarly==0) {
+							row.Cells.Add("");
+						}
+						else {
+							row.Cells.Add(PatCur.AskToArriveEarly.ToString()+" minute(s)");
+						}
 						break;
 				}
 				if(fields[f].InternalName=="PatFields"

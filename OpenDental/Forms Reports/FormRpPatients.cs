@@ -839,8 +839,8 @@ namespace OpenDental{
         }
 				needAnd=true;
       }
-			if(NeedRecall){
-				if(needAnd){
+			if(NeedRecall) {
+				if(needAnd) {
 					SQLwhereRelation+="AND ";
 				}
 				SQLwhereRelation+="recall.PatNum=patient.PatNum ";
@@ -854,7 +854,12 @@ namespace OpenDental{
         SQLwhereComparison="WHERE ";
       }
       else{
-        SQLwhereComparison="";
+				if(SQLwhereRelation!="") {
+					SQLwhereComparison="AND ";
+				}
+				else {
+					SQLwhereComparison="";
+				}
       }
 			
 			for(int i=0;i<ListPrerequisites.Items.Count;i++){
