@@ -489,8 +489,12 @@ namespace OpenDental{
 					return;
 				}
 			}
-			//Patients.ResetAging();
-			//Ledgers.UpdateFinanceCharges(PIn.PDate(textDate.Text));
+			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) && PrefC.GetDate(PrefName.DateLastAging).AddMonths(1)<=DateTime.Today) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"It has been more than a month since aging has been run.  It is recommended that you update the aging date and run aging before continuing.")) {
+					return;
+				}
+				//we might also consider a warning if textDate.Text does not match DateLastAging.  Probably not needed for daily aging, though.
+			}
 			PatAging[] AgingList = Patients.GetAgingListArray();
 			double OverallBalance;
 			int rowsAffected = 0;
