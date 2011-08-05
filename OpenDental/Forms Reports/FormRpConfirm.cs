@@ -170,12 +170,12 @@ namespace OpenDental{
       ALSelect2.Add("PriRelationship");
 			ALSelect2.Add("SecCarrier");
 			ALSelect2.Add("SecRelationship");
-      ALSelect2.Add("RecallInterval"); 
+      //ALSelect2.Add("RecallInterval"); 
 			ALSelect2.Add("StudentStatus");
       ALSelect2.Add("SchoolName"); 
 			ALSelect2.Add("PriProv"); 
       ALSelect2.Add("SecProv");
-			ALSelect2.Add("NextAptNum"); 
+			//ALSelect2.Add("NextAptNum"); 
 			ALSelect2.Add("Guarantor"); 
 			ALSelect2.Add("ImageFolder");
 			for(int i=0;i<ALSelect.Count;i++){
@@ -204,15 +204,15 @@ namespace OpenDental{
 					command+="appointment.AptDateTime";
 				}
 				else if(fieldsSelected[i]=="PriCarrier"){
-					command+="(SELECT carrier.CarrierName FROM patplan,insplan,carrier WHERE patplan.PatNum=patient.PatNum "
-						+"AND patplan.PlanNum=insplan.PlanNum AND insplan.CarrierNum=carrier.CarrierNum AND patplan.Ordinal=1) PriCarrier";
+					command+="(SELECT carrier.CarrierName FROM patplan,inssub,insplan,carrier WHERE patplan.PatNum=patient.PatNum "
+						+"AND patplan.InsSubNum=inssub.InsSubNum AND inssub.PlanNum=insplan.PlanNum AND insplan.CarrierNum=carrier.CarrierNum AND patplan.Ordinal=1) PriCarrier";
 				}
 				else if(fieldsSelected[i]=="PriRelationship") {
 					command+="(SELECT Relationship FROM patplan WHERE patplan.PatNum=patient.PatNum AND patplan.Ordinal=1) PriRelationship";
 				}
 				else if(fieldsSelected[i]=="SecCarrier") {
-					command+="(SELECT carrier.CarrierName FROM patplan,insplan,carrier WHERE patplan.PatNum=patient.PatNum "
-						+"AND patplan.PlanNum=insplan.PlanNum AND insplan.CarrierNum=carrier.CarrierNum AND patplan.Ordinal=2) SecCarrier";
+					command+="(SELECT carrier.CarrierName FROM patplan,inssub,insplan,carrier WHERE patplan.PatNum=patient.PatNum "
+						+"AND patplan.InsSubNum=inssub.InsSubNum AND inssub.PlanNum=insplan.PlanNum AND insplan.CarrierNum=carrier.CarrierNum AND patplan.Ordinal=2) SecCarrier";
 				}
 				else if(fieldsSelected[i]=="SecRelationship") {
 					command+="(SELECT Relationship FROM patplan WHERE patplan.PatNum=patient.PatNum AND patplan.Ordinal=2) SecRelationship";

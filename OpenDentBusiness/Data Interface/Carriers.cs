@@ -479,6 +479,7 @@ namespace OpenDentBusiness{
 			return carrier;
 		}
 
+		/*
 		///<summary>Gets a dictionary of carrier names for the supplied patient list.</summary>
 		public static Dictionary<long,string> GetCarrierNames(List<Patient> patients){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -506,7 +507,7 @@ namespace OpenDentBusiness{
 				retVal.Add(PIn.Long(table.Rows[i]["PatNum"].ToString()),table.Rows[i]["CarrierName"].ToString());
 			}
 			return retVal;
-		}
+		}*/
 
 
 
