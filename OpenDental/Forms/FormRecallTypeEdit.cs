@@ -49,6 +49,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private Label label4;
 		private List<RecallTrigger> TriggerList;
+		private Interval defaultIntervalOld;
 
 		///<summary></summary>
 		public FormRecallTypeEdit()
@@ -494,6 +495,7 @@ namespace OpenDental{
 
 		private void FormRecallTypeEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=RecallCur.Description;
+		 	defaultIntervalOld=RecallCur.DefaultInterval;
 			comboSpecial.Items.Add(Lan.g(this,"none"));
 			comboSpecial.Items.Add(Lan.g(this,"Prophy"));
 			comboSpecial.Items.Add(Lan.g(this,"ChildProphy"));
@@ -777,6 +779,12 @@ namespace OpenDental{
 			DataValid.SetInvalid(InvalidType.RecallTypes);
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Prefs);
+			}
+			//Ask user to update recalls for patients if they changed the DefaultInterval.
+			if(!RecallCur.IsNew && defaultIntervalOld!=RecallCur.DefaultInterval) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Default interval has been changed.  Reset all current patient intervals of this type?")) {
+					Recalls.UpdateDefaultIntervalForPatients(RecallCur.RecallTypeNum,defaultIntervalOld,RecallCur.DefaultInterval);
+				}
 			}
 			DialogResult=DialogResult.OK;
 		}

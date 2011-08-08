@@ -689,6 +689,27 @@ namespace OpenDentBusiness{
 			}*/
 		}
 
+		///<summary>Updates RecallInterval and DueDate for all patients that have the recallTypeNum and defaultIntervalOld to use the defaultIntervalNew.</summary>
+		public static void UpdateDefaultIntervalForPatients(long recallTypeNum,Interval defaultIntervalOld,Interval defaultIntervalNew) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallTypeNum,defaultIntervalOld,defaultIntervalNew);
+				return;
+			}
+			string command="SELECT * FROM recall WHERE IsDisabled=0 AND RecallTypeNum="+POut.Long(recallTypeNum)+" AND RecallInterval="+POut.Int(defaultIntervalOld.ToInt());
+			List<Recall> recallList=Crud.RecallCrud.SelectMany(command);
+			for(int i=0;i<recallList.Count;i++) {
+				if(recallList[i].DateDue!=recallList[i].DateDueCalc) {//User entered a DueDate.
+					//Don't change the DateDue since user already overrode it
+				}
+				else{
+					recallList[i].DateDue=recallList[i].DatePrevious+defaultIntervalNew;
+				}
+				recallList[i].DateDueCalc=recallList[i].DatePrevious+defaultIntervalNew;
+				recallList[i].RecallInterval=defaultIntervalNew;
+				Update(recallList[i]);
+			}
+		}
+
 		public static void DeleteAllOfType(long recallTypeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallTypeNum);
