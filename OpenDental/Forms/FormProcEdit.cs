@@ -2480,7 +2480,10 @@ namespace OpenDental{
 			}
 			textSite.Text=Sites.GetDescription(ProcCur.SiteNum);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
-				if(ProcCur.CanadianTypeCodes!=null){
+				if(ProcCur.CanadianTypeCodes==null || ProcCur.CanadianTypeCodes=="") {
+					checkTypeCodeX.Checked=true;
+				}
+				else {
 					if(ProcCur.CanadianTypeCodes.Contains("A")) {
 						checkTypeCodeA.Checked=true;
 					}
