@@ -4,8 +4,10 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDentalWpf;
 
 namespace OpenDental {
 	/// <summary>
@@ -33,6 +35,7 @@ namespace OpenDental {
 		private OpenDental.UI.ListBoxClickable listArizonaPrimaryCare;
 		private Label labelArizonaPrimaryCare;
 		private OpenDental.UI.ListBoxClickable listMonthly;
+		private UI.Button butDashboard;
 		///<summary>After this form closes, this value is checked to see if any non-modal dialog boxes are needed.</summary>
 		public ReportModalSelection RpModalSelection;
 
@@ -81,6 +84,7 @@ namespace OpenDental {
 			this.listLists = new OpenDental.UI.ListBoxClickable();
 			this.listMonthly = new OpenDental.UI.ListBoxClickable();
 			this.butClose = new OpenDental.UI.Button();
+			this.butDashboard = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -278,10 +282,26 @@ namespace OpenDental {
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butDashboard
+			// 
+			this.butDashboard.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDashboard.Autosize = true;
+			this.butDashboard.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDashboard.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDashboard.CornerRadius = 4F;
+			this.butDashboard.Location = new System.Drawing.Point(558,12);
+			this.butDashboard.Name = "butDashboard";
+			this.butDashboard.Size = new System.Drawing.Size(75,24);
+			this.butDashboard.TabIndex = 21;
+			this.butDashboard.Text = "Dashboard";
+			this.butDashboard.UseVisualStyleBackColor = true;
+			this.butDashboard.Click += new System.EventHandler(this.butDashboard_Click);
+			// 
 			// FormReportsMore
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(680,589);
+			this.Controls.Add(this.butDashboard);
 			this.Controls.Add(this.labelArizonaPrimaryCare);
 			this.Controls.Add(this.listArizonaPrimaryCare);
 			this.Controls.Add(this.butLaserLabels);
@@ -420,7 +440,7 @@ namespace OpenDental {
 				Process.Start("PWReports.exe");
 			}
 			catch {
-				MessageBox.Show("PracticeWeb Reports module unavailable.");
+				System.Windows.Forms.MessageBox.Show("PracticeWeb Reports module unavailable.");
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Practice Web");
 		}
@@ -695,9 +715,16 @@ namespace OpenDental {
 			LaserLabels.ShowDialog();
 		}
 
+		private void butDashboard_Click(object sender,EventArgs e) {
+			WinDashboard win=new WinDashboard();
+			win.Show();
+		}
+
 		private void butClose_Click(object sender,System.EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 

@@ -19,7 +19,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <PublishUrl>http://localhost/SparksToothChart/</PublishUrl>
     <Install>true</Install>
@@ -96,7 +96,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Microsoft.DirectX.Direct3D.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.DirectX.Direct3DX, Version=1.0.2911.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+    <Reference Include="Microsoft.DirectX.Direct3DX, Version=1.0.2910.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Microsoft.DirectX.Direct3DX.dll</HintPath>
     </Reference>
@@ -106,17 +106,17 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tao.FreeGlut, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6e602a6ad6c0d06d">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Tao.FreeGlut, Version=2.4.0.1, Culture=neutral, PublicKeyToken=6e602a6ad6c0d06d, processorArchitecture=MSIL">
       <HintPath>..\Required dlls\Tao.FreeGlut.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.OpenGl, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1ca010269a4501ef">
       <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Tao.OpenGl, Version=2.1.0.4, Culture=neutral, PublicKeyToken=1ca010269a4501ef, processorArchitecture=MSIL">
       <HintPath>..\Required dlls\Tao.OpenGl.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.Platform.Windows, Version=1.0.0.3, Culture=neutral, PublicKeyToken=701104b2da67a104">
       <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Tao.Platform.Windows, Version=1.0.0.4, Culture=neutral, PublicKeyToken=701104b2da67a104, processorArchitecture=MSIL">
       <HintPath>..\Required dlls\Tao.Platform.Windows.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
   <ItemGroup>

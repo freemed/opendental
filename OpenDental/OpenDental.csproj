@@ -21,7 +21,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>http://localhost/OpenDental/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -37,6 +37,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -169,6 +170,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\PdfSharp.Charting.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="RS232, Version=1.18.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\RS232.dll</HintPath>
@@ -192,6 +195,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -209,6 +213,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\VBbridges.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
     <Reference Include="xImageDeviceManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\xImageDeviceManager.dll</HintPath>
@@ -4978,6 +4983,10 @@
     <ProjectReference Include="..\ODR\xODR.csproj">
       <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
       <Name>xODR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenDentalWpf\OpenDentalWpf.csproj">
+      <Project>{FA526250-6F77-4AD6-B496-E945F7472501}</Project>
+      <Name>OpenDentalWpf</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
       <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>

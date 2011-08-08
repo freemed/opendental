@@ -45,6 +45,8 @@ namespace OpenDental {
 				pat=Patients.GetPat(SheetCur.PatNum);
 			}
 			else {
+				throw new NotImplementedException();//js this broke with the move to dot net 4.0.
+				/*
 				pat=Patients.GetPat(DocCur.PatNum);
 				CAcroApp acroApp=null;
 				try {
@@ -109,6 +111,7 @@ namespace OpenDental {
 				//acroApp.Minimize();
 				acroApp.Exit();
 				acroApp=null;
+				*/
 			}
 			fam=Patients.GetFamily(pat.PatNum);
 			AddressSameForFam=true;

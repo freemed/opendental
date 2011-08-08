@@ -414,6 +414,7 @@ namespace OpenDental {
 
 		///<summary>a general function to reduce the amount of code for uploading</summary>
 		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,ref FormProgress progressIndicator) {
+			/*
 			try{ //Dennis: try catch may not work: Does not work in threads not sure about this
 				int LocalBatchSize=BatchSize;
 				for(int start=0;start<PKNumList.Count;start+=LocalBatchSize) {
@@ -487,10 +488,13 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
-			}
+			}*/
+			throw new NotImplementedException();//js the above code broke when moving to dot net 4.0.
 		}
 
 		private static void DeleteObjects(List<DeletedObject> dO,ref FormProgress progressIndicator) {
+			throw new NotImplementedException();//js this broke with the move to dot net 4.0.
+			/*
 			int LocalBatchSize=BatchSize;
 			for(int start=0;start<dO.Count;start+=LocalBatchSize) {
 				if((start+LocalBatchSize)>dO.Count) {
@@ -499,7 +503,9 @@ namespace OpenDental {
 				}
 				progressIndicator.CurrentVal+=BatchSize;
 			}
+			*/ 
 		}
+			 
 		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
 		private static bool TestWebServiceExists() {
 			try {

@@ -260,6 +260,8 @@ namespace OpenDental {
 		}
 		
 		private void butAdd_Click(object sender,EventArgs e) {
+			throw new NotImplementedException();//js this broke with the move to dot net 4.0.
+			/*
 			FormSheetPicker FormS=new FormSheetPicker();
 			FormS.SheetType=SheetTypeEnum.PatientForm;
 			FormS.HideKioskButton=true;
@@ -280,6 +282,7 @@ namespace OpenDental {
 			}
 			FillGrid();
 			Cursor=Cursors.Default;
+			*/
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
