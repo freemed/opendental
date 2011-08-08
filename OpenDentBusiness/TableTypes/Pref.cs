@@ -272,8 +272,8 @@ namespace OpenDentBusiness {
 		RxSendNewToQueue,
 		SalesTaxPercentage,
 		ScannerCompression,
-		ScannerCompressionPhotos,
-		ScannerCompressionRadiographs,
+		ScannerResolution,
+		ScannerSuppressDialog,
 		ScheduleProvUnassigned,
 		SecurityLockDate,
 		///<summary>Set to 0 to always grant permission. 1 means only today.</summary>

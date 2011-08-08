@@ -6026,10 +6026,35 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString='10' WHERE PrefName='ApptPrintColumnsPerPage'";
 				Db.NonQ(command);
 				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ScannerSuppressDialog','1')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ScannerSuppressDialog','1')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ScannerResolution','150')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ScannerResolution','150')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DELETE FROM preference WHERE PrefName = 'ScannerCompressionRadiographs'";
+					command="DELETE FROM preference WHERE PrefName = 'ScannerCompressionPhotos'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="DELETE FROM preference WHERE PrefName = 'ScannerCompressionRadiographs'";
+					command="DELETE FROM preference WHERE PrefName = 'ScannerCompressionPhotos'";
+					Db.NonQ(command);
+				}
 
 
 					
-
 
 
 

@@ -222,7 +222,6 @@ namespace OpenDental{
 			this.menuPrefs = new System.Windows.Forms.MenuItem();
 			this.panelNote = new System.Windows.Forms.Panel();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
-			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
@@ -231,6 +230,7 @@ namespace OpenDental{
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.paintTools = new OpenDental.UI.ODToolBar();
 			this.brightnessContrastSlider = new OpenDental.UI.ContrWindowingSlider();
+			this.sigBox = new OpenDental.UI.SignatureBox();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
 			this.panelNote.SuspendLayout();
 			this.SuspendLayout();
@@ -314,6 +314,7 @@ namespace OpenDental{
 			this.imageListTools2.Images.SetKeyName(16,"scanXray.gif");
 			this.imageListTools2.Images.SetKeyName(17,"copy.gif");
 			this.imageListTools2.Images.SetKeyName(18,"ScanMulti.gif");
+			this.imageListTools2.Images.SetKeyName(19,"Export.gif");
 			// 
 			// PictureBox1
 			// 
@@ -388,14 +389,6 @@ namespace OpenDental{
 			this.labelInvalidSig.Text = "Invalid Signature -  Document or note has changed since it was signed.";
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.labelInvalidSig.DoubleClick += new System.EventHandler(this.labelInvalidSig_DoubleClick);
-			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(308,20);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(362,79);
-			this.sigBox.TabIndex = 90;
-			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
 			// 
 			// label15
 			// 
@@ -476,6 +469,14 @@ namespace OpenDental{
 			this.brightnessContrastSlider.Text = "contrWindowingSlider1";
 			this.brightnessContrastSlider.Scroll += new System.EventHandler(this.brightnessContrastSlider_Scroll);
 			this.brightnessContrastSlider.ScrollComplete += new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
+			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(308,20);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(362,79);
+			this.sigBox.TabIndex = 90;
+			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
 			// 
 			// ContrDocs
 			// 
@@ -559,11 +560,12 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.Label;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",14,Lan.g(this,"Scan Document"),"ScanDoc"));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton("",18,Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("",18,Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",16,Lan.g(this,"Scan Radiograph"),"ScanXRay"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",15,Lan.g(this,"Scan Photo"),"ScanPhoto"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Import"),5,Lan.g(this,"Import From File"),"Import"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),19,Lan.g(this,"Export To File"),"Export"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),17,Lan.g(this,"Copy displayed image to clipboard"),"Copy"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),6,Lan.g(this,"Paste From Clipboard"),"Paste"));
 
@@ -980,6 +982,9 @@ namespace OpenDental{
 					case "Import":
 						OnImport_Click();
 						break;
+					case "Export":
+						OnExport_Click();
+						break;
 					case "Copy":
 						OnCopy_Click();
 						break;
@@ -1299,17 +1304,17 @@ namespace OpenDental{
 		private void OnScanMulti_Click() { // Not ready for release yet.
 			File.Delete("C:\\image.pdf"); 
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
-			EZTwain.SetHideUI(true);
-			EZTwain.SetJpegQuality(75);
-			if(EZTwain.OpenDefaultSource()) {
-				// Not guaranteed to work, check return = 1
-				EZTwain.SetPixelType(2);
-				EZTwain.SetResolution(200);
-				// If you can't get a Window handle, use IntPtr.Zero:
-				EZTwain.AcquireMultipageFile(this.Handle,"c:\\image.pdf");
+			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));
+			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
+			if (EZTwain.OpenDefaultSource()) {
+					// Not guaranteed to work, check return = 1
+					EZTwain.SetPixelType(2);
+					EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
+					// If you can't get a Window handle, use IntPtr.Zero:
+					EZTwain.AcquireMultipageFile(this.Handle, "c:\\image.pdf");
 			}
-			if(EZTwain.LastErrorCode()!=0) {
-				EZTwain.ReportLastError("Unable to scan.");
+			if (EZTwain.LastErrorCode()!=0) {
+					EZTwain.ReportLastError("Unable to scan.");
 			}
 			OpenFileDialog openFileDialog=new OpenFileDialog(); 
 			openFileDialog.FileName = "c:\\image.pdf"; 
@@ -1386,6 +1391,40 @@ namespace OpenDental{
 				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 			}
 			FillDocList(true);
+		}
+		
+		private void OnExport_Click() {
+			TreeNode node=TreeDocuments.SelectedNode;
+			Document selectedDocument=Documents.GetByNum(selectionDoc.DocNum);
+			if(node==null || selectedDocument==null) {
+				MsgBox.Show(this,"Please select a document to export.");
+				return;
+			}
+			SaveFileDialog saveFileDialog=new SaveFileDialog();
+			string[] fileNameExt=selectedDocument.FileName.Split(new char[] {'.'});
+			if(fileNameExt.Length>1) {
+				saveFileDialog.Filter="Document|*."+fileNameExt[1]+"|All|*.*";
+			}
+			else {
+				saveFileDialog.Filter="All|*.*";
+			}
+			saveFileDialog.Title="Export a Document";
+			saveFileDialog.FileName=selectedDocument.FileName;
+			if(saveFileDialog.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			string fileName=saveFileDialog.FileName;
+			if(fileName.Length<1){
+				MsgBox.Show(this,"You must enter a file name.");
+				return;
+			}
+			try {
+				ImageStore.Export(fileName,selectedDocument,PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this, "Unable to export file, May be in use: ") + ex.Message + ": " + fileName);
+			}
+			MsgBox.Show(this,"Document successfully exported to "+fileName);
 		}
 
 		private void OnCopy_Click(){

@@ -293,10 +293,10 @@ namespace OpenDentBusiness {
 			doc=Documents.GetByNum(doc.DocNum);
 			long qualityL = 0;
 			if(imageType == ImageType.Radiograph) {
-				qualityL=100;//Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionRadiographs"]).ValueString);
+				qualityL=100;
 			}
 			else if(imageType == ImageType.Photo) {
-				qualityL=100;//Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionPhotos"]).ValueString);
+				qualityL=100;
 			}
 			else {//Assume document
 				//Possible values 0-100?
@@ -392,6 +392,20 @@ namespace OpenDentBusiness {
 			else {
 				string srcFile = ODFileUtils.CombinePaths(patFolder,doc.FileName);
 				image.Save(srcFile);
+			}
+		}
+
+		/// <summary> Save a Document to annother location on the disk (outside of Open Dental). </summary>
+		/// <param name="path">The path that the file is to be moved to.</param>
+		/// <param name="doc">The document to be moved.</param>
+		/// <param name="pat">The patient the document belongs to.</param>
+		public static void Export(string path,Document doc,Patient pat) {
+			string patFolder=GetPatientFolder(pat);
+			try {
+				File.Copy(ODFileUtils.CombinePaths(patFolder,doc.FileName),path);
+			}
+			catch {
+				throw;
 			}
 		}
 
