@@ -1301,20 +1301,23 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnScanMulti_Click() { // Not ready for release yet.
-			File.Delete("C:\\image.pdf"); 
+		private void OnScanMulti_Click() {
+			File.Delete("C:\\image.pdf");
+			string tempFile=Path.GetTempFileName();
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
 			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));
 			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
-			if (EZTwain.OpenDefaultSource()) {
-					// Not guaranteed to work, check return = 1
-					EZTwain.SetPixelType(2);
-					EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
-					// If you can't get a Window handle, use IntPtr.Zero:
-					EZTwain.AcquireMultipageFile(this.Handle, "c:\\image.pdf");
+			if(EZTwain.OpenDefaultSource()) {
+				// Not guaranteed to work, check return = 1
+				EZTwain.SetPixelType(2);//
+				EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
+				// If you can't get a Window handle, use IntPtr.Zero:
+				EZTwain.AcquireMultipageFile(this.Handle, "c:\\image.pdf");
 			}
-			if (EZTwain.LastErrorCode()!=0) {
-					EZTwain.ReportLastError("Unable to scan.");
+			if(EZTwain.LastErrorCode()!=0) {
+				EZTwain.ReportLastError("Unable to scan.");//??
+				MsgBox.Show(this,"Unable to scan.");
+				return;
 			}
 			OpenFileDialog openFileDialog=new OpenFileDialog(); 
 			openFileDialog.FileName = "c:\\image.pdf"; 
@@ -1327,7 +1330,7 @@ namespace OpenDental{
 			} 
 			string nodeId=""; 
 			Document doc=null; 
-			for(int i=0;i<fileNames.Length;i++){ 
+			for(int i=0;i<fileNames.Length;i++){ //this loop needs to go away or have an explanation.
 				bool copied = true; 
 				try { 
 					doc = ImageStore.Import(fileNames[i], GetCurrentCategory(),PatCur); 
@@ -1345,10 +1348,16 @@ namespace OpenDental{
 						DeleteSelection(false,false); 
 					}
 					else{ 
-						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0"); 
+						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0");
+						selectionDoc=doc.Copy();//this was missing. ??
 					} 
 				} 
 			}
+			//Reselect the last successfully added node when necessary.
+			if(doc!=null && MakeIdentifier(doc.DocNum.ToString(),"0")!=nodeId) {
+				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
+			}
+			FillDocList(true);
 		}
 
 		private void OnImport_Click() {
@@ -1401,13 +1410,6 @@ namespace OpenDental{
 				return;
 			}
 			SaveFileDialog saveFileDialog=new SaveFileDialog();
-			string[] fileNameExt=selectedDocument.FileName.Split(new char[] {'.'});
-			if(fileNameExt.Length>1) {
-				saveFileDialog.Filter="Document|*."+fileNameExt[1]+"|All|*.*";
-			}
-			else {
-				saveFileDialog.Filter="All|*.*";
-			}
 			saveFileDialog.Title="Export a Document";
 			saveFileDialog.FileName=selectedDocument.FileName;
 			if(saveFileDialog.ShowDialog()!=DialogResult.OK) {

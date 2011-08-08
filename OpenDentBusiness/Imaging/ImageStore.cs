@@ -396,16 +396,22 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary> Save a Document to annother location on the disk (outside of Open Dental). </summary>
-		/// <param name="path">The path that the file is to be moved to.</param>
+		/// <param name="saveToPath">The path that the file is to be moved to.</param>
 		/// <param name="doc">The document to be moved.</param>
 		/// <param name="pat">The patient the document belongs to.</param>
-		public static void Export(string path,Document doc,Patient pat) {
-			string patFolder=GetPatientFolder(pat);
-			try {
-				File.Copy(ODFileUtils.CombinePaths(patFolder,doc.FileName),path);
+		public static void Export(string saveToPath,Document doc,Patient pat) {
+			if(PrefC.UsingAtoZfolder) {
+				string patFolder=GetPatientFolder(pat);
+				File.Copy(ODFileUtils.CombinePaths(patFolder,doc.FileName),saveToPath);
 			}
-			catch {
-				throw;
+			else {//image is in database
+				byte[] rawData=Convert.FromBase64String(doc.RawBase64);
+				Image image=null;
+				using(MemoryStream stream=new MemoryStream()) {
+					stream.Read(rawData,0,rawData.Length);
+					image=Image.FromStream(stream);
+				}
+				image.Save(saveToPath);
 			}
 		}
 
