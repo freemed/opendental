@@ -375,6 +375,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientUnDeleteWithBalance(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PatPlanDeleteWithInvalidInsSubNum(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalZeroToOne(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalTwoToOne(verbose,isCheck);

@@ -1571,6 +1571,31 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string PatPlanDeleteWithInvalidInsSubNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT InsSubNum FROM patplan WHERE InsSubNum NOT IN (SELECT InsSubNum FROM inssub)";
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Pat plans found with invalid InsSubNums: ")+table.Rows.Count+"\r\n";
+				}
+			}
+			else {//fix
+				if(table.Rows.Count>0) {
+					long numberFixed=0;
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="DELETE FROM patplan WHERE InsSubNum ="+table.Rows[i]["InsSubNum"];
+						numberFixed+=Db.NonQ(command);
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Pat plans with invalid InsSubNums deleted: ")+numberFixed+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string PatPlanOrdinalZeroToOne(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
