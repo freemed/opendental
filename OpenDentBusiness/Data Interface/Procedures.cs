@@ -999,7 +999,9 @@ namespace OpenDentBusiness {
 				}
 				bool planIsCurrent=false;
 				for(int p=0;p<patPlans.Count;p++) {
-					if(patPlans[p].InsSubNum==claimProcs[i].InsSubNum) {
+					if(patPlans[p].InsSubNum==claimProcs[i].InsSubNum
+						&& InsSubs.GetSub(patPlans[p].InsSubNum,subList).PlanNum==claimProcs[i].PlanNum) 
+					{
 						planIsCurrent=true;
 						break;
 					}
