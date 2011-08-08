@@ -325,6 +325,7 @@ namespace OpenDental{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			//Remove things from AvailList that are in the ListShowing.
 			for(int i=0;i<ListShowing.Count;i++){
 				for(int j=0;j<AvailList.Count;j++) {
 					//Only removing one item from AvailList per iteration of i, so RemoveAt() is safe without going backwards.
@@ -344,8 +345,15 @@ namespace OpenDental{
 				}
 			}
 			listAvailable.Items.Clear();
-			for(int i=0;i<AvailList.Count;i++){
-				listAvailable.Items.Add(AvailList[i]);
+			if(category==DisplayFieldCategory.OrthoChart) {
+				for(int i=0;i<AvailList.Count;i++) {
+					listAvailable.Items.Add(AvailList[i].Description);
+				}
+			}
+			else {
+				for(int i=0;i<AvailList.Count;i++) {
+					listAvailable.Items.Add(AvailList[i]);
+				}
 			}
 		}
 
@@ -422,7 +430,8 @@ namespace OpenDental{
 				else {//add existing ortho chart field(s)
 					DisplayField field;
 					for(int i=0;i<listAvailable.SelectedItems.Count;i++) {
-						field=(DisplayField)listAvailable.SelectedItems[i];
+						field=AvailList[listAvailable.SelectedIndices[i]];
+						field.ColumnWidth=100;
 						ListShowing.Add(field);
 					}
 				}
