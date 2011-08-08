@@ -3709,16 +3709,13 @@ namespace OpenDental{
 			comboReferralReason.SelectedIndex=ClaimCur.CanadianReferralReason;
 			//max prosth-----------------------------------------------------------------------------------------------------
 			switch(ClaimCur.CanadianIsInitialUpper){
-				case "":
-					comboMaxProsth.SelectedIndex=0;
-					break;
 				case "Y":
 					comboMaxProsth.SelectedIndex=1;
 					break;
 				case "N":
 					comboMaxProsth.SelectedIndex=2;
 					break;
-				case "X":
+				default: //"X"
 					comboMaxProsth.SelectedIndex=3;
 					break;
 			}
@@ -3731,16 +3728,13 @@ namespace OpenDental{
 			comboMaxProsthMaterial.SelectedIndex=ClaimCur.CanadianMaxProsthMaterial;
 			//mand prosth-----------------------------------------------------------------------------------------------------
 			switch(ClaimCur.CanadianIsInitialLower) {
-				case "":
-					comboMandProsth.SelectedIndex=0;
-					break;
 				case "Y":
 					comboMandProsth.SelectedIndex=1;
 					break;
 				case "N":
 					comboMandProsth.SelectedIndex=2;
 					break;
-				case "X":
+				default: //"X"
 					comboMandProsth.SelectedIndex=3;
 					break;
 			}
