@@ -84,9 +84,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CDT, Version=7.0.1.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Shared Projects Subversion\CDT\CDT_7_0\bin\Release\CDT.dll</HintPath>
+    <Reference Include="CDT">
+      <HintPath>..\Required dlls\CDT.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
