@@ -24,6 +24,10 @@ namespace OpenDental {
 		private List<Point> OriginalControlPositions;
 		///<summary>When you first mouse down, if you clicked on a valid control, this will be false.  For drag selection, this must be true.</summary>
 		private bool ClickedOnBlankSpace;
+		private bool altIsDown;
+		private List<SheetFieldDef> clipboard;
+		private int pasteOffset=0;
+		private int pasteOffsetY=0;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -67,13 +71,16 @@ namespace OpenDental {
 				groupAddNew.Visible=false;
 				butAlignLeft.Visible=false;
 				butAlignTop.Visible=false;
-				//TODO: make new buttons.Visibale = false;
+				linkLabelTips.Visible=false;
+				butCopy.Visible=false;
+				butPaste.Visible=false;
 			}
 			else{
 				labelInternal.Visible=false;
-				butAlignLeft.Visible=true;
-				butAlignTop.Visible=true;
-				//TODO: make new buttons.Visibale = true;
+				//butAlignLeft.Visible=true;
+				//butAlignTop.Visible=true;
+				//butCopy.Visible=true;
+				//butPaste.Visible=true;
 			}
 			textDescription.Text=SheetDefCur.Description;
 			if(SheetDefCur.IsLandscape){
@@ -622,6 +629,10 @@ namespace OpenDental {
 
 		private void panelMain_MouseDown(object sender,MouseEventArgs e) {
 			panelMain.Select();
+			if(altIsDown) {
+				PasteControlsFromClipboard(e.Location);
+				return;
+			}
 			MouseIsDown=true;
 			ClickedOnBlankSpace=false;
 			MouseOriginalPos=e.Location;
@@ -684,7 +695,6 @@ namespace OpenDental {
 		}
 
 		private void panelMain_MouseUp(object sender,MouseEventArgs e) {
-			//bool NothingSelected=true;
 			MouseIsDown=false;
 			OriginalControlPositions=null;
 			if(ClickedOnBlankSpace) {//if initial mouse down was not on a control.  ie, if we are dragging to select.
@@ -708,6 +718,9 @@ namespace OpenDental {
 		}
 
 		private void panelMain_MouseDoubleClick(object sender,MouseEventArgs e) {
+			if(altIsDown) {
+				return;
+			}
 			SheetFieldDef field=HitTest(e.X,e.Y);
 			if(field==null){
 				return;
@@ -735,6 +748,28 @@ namespace OpenDental {
 			e.Handled=true;
 			if(e.Control){
 				CtrlIsDown=true;
+			}
+			if(e.KeyCode==Keys.C && e.Control) {
+				CopyControlsToClipboard();
+			}
+			else if(e.KeyCode==Keys.V && e.Control) {
+				PasteControlsFromClipboard(new Point(0,0));
+				//Paste controls from 'clipboard'
+			}
+			else if(e.Alt) {
+				Cursor=Cursors.Cross;
+				altIsDown=true;
+				//change cursor to rubber stamp cursor
+			}
+			else if(e.KeyCode==Keys.Delete || e.KeyCode==Keys.Back) {
+				if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete selected fields?")) {
+					for(int i=listFields.SelectedIndices.Count;i>0;i--) {//iterate backwards through list
+						SheetDefCur.SheetFieldDefs.RemoveAt(listFields.SelectedIndices[i-1]);
+					}
+					FillFieldList();
+					panelMain.Invalidate();
+					return;
+				}
 			}
 			for(int i=0;i<listFields.SelectedIndices.Count;i++){
 				switch(e.KeyCode){
@@ -773,6 +808,59 @@ namespace OpenDental {
 			if((e.KeyCode & Keys.ControlKey) == Keys.ControlKey){
 				CtrlIsDown=false;
 			}
+			if(!e.Alt) {
+				Cursor=Cursors.Default;
+				altIsDown=false;
+			}
+		}
+
+		private void CopyControlsToClipboard() {
+			if(listFields.SelectedIndices.Count==0) {
+				return;
+			}
+			else {
+				clipboard=new List<SheetFieldDef>();//empty the clipboard
+				for(int i=0;i<listFields.SelectedIndices.Count;i++) {
+					clipboard.Add(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Copy());//fill clipboard with copies of the controls. 
+					//It would probably be safe to fill the clipboard with the originals. but it is safer to fill it with copies.
+				}
+			}
+		}
+
+		private void PasteControlsFromClipboard(Point origin) {
+			if(clipboard==null || clipboard.Count==0) {
+				return;
+			}
+			if(origin.X==0 && origin.Y==0) {//allows for cascading pastes in the upper right hand corner.
+				origin.X+=pasteOffset;
+				origin.Y+=pasteOffset+pasteOffsetY;
+			}
+			//TODO: check to make sure there isn't a controll exactly at the origin point.
+			listFields.ClearSelected();
+			int minX=int.MaxValue;
+			int minY=int.MaxValue;
+			for(int i=0;i<clipboard.Count;i++) {//calculate offset
+				minX=Math.Min(minX,clipboard[i].XPos);
+				minY=Math.Min(minY,clipboard[i].YPos);
+			} 
+			for(int i=0;i<clipboard.Count;i++) {//create new controls
+				SheetFieldDef tempField=clipboard[i].Copy();
+				tempField.XPos=tempField.XPos-minX+origin.X;
+				tempField.YPos=tempField.YPos-minY+origin.Y;
+				//Changes that need to be made to the new copy should be made here.
+				//for example changing the name fo the field
+				SheetDefCur.SheetFieldDefs.Add(tempField);
+			}
+			if(!altIsDown) {
+				pasteOffsetY+=((pasteOffset+10)/100)*10;//this will shift the pastes down 10 pixels every 10 pastes.
+				pasteOffset=(pasteOffset+10)%100;//cascades and allows for 90 consecutive pastes without overlap
+
+			}
+			FillFieldList();
+			for(int i=0;i<clipboard.Count;i++) {//reselect newly added controls
+				listFields.SetSelected((listFields.Items.Count-1)-i,true);//Add to selected indicies, which will be the newest clipboard.count controls on the bottom of the list.
+			}
+			panelMain.Invalidate();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -818,19 +906,23 @@ namespace OpenDental {
 			return true;
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(!VerifyDesign()){
-				return;
-			}
-			SheetDefs.InsertOrUpdate(SheetDefCur);
-			DialogResult=DialogResult.OK;
+		private void linkLabelTips_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
+			string tips="";
+			tips+="The following shortcuts and hotkeys are supported:\r\n";
+			tips+="\r\n";
+			tips+="CTRL + C : Copy selected field(s).\r\n";
+			tips+="\r\n";
+			tips+="CTRL + V : Paste.\r\n";
+			tips+="\r\n";
+			tips+="ALT + Click : 'Rubber stamp' paste to the cursor position.\r\n";
+			tips+="\r\n";
+			tips+="Click + Drag : Click on a blank space and then drag to group select.\r\n";
+			tips+="\r\n";
+			tips+="CTRL + Click + Drag : Add a group of fields to the selection.\r\n";
+			tips+="\r\n";
+			tips+="Delete or Backspace : Delete selected field(s).\r\n";
+			MessageBox.Show(Lan.g(this,tips));
 		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
-		//TODO: Move the code below into the proper place in the code above. This is only here until Jordan gets back from vacation.
 
 		/// <summary>When clicked it will set all selected elements' Y coordinates to the smallest Y coordinate in the group, unless two controls have the same X coordinate.</summary>
 		private void butAlignTop_Click(object sender,EventArgs e) {
@@ -842,8 +934,8 @@ namespace OpenDental {
 				if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].BoundsF.Top<minY) {//current element is higher up than the current 'highest' element.
 					minY=SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].BoundsF.Top;
 				}
-				for(int j=0;j<listFields.SelectedIndices.Count;j++){
-					if(i==j){//Don't compare element to itself.
+				for(int j=0;j<listFields.SelectedIndices.Count;j++) {
+					if(i==j) {//Don't compare element to itself.
 						continue;
 					}
 					if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Bounds.X//compair the int bounds not the boundsF for practical use
@@ -884,6 +976,30 @@ namespace OpenDental {
 			}
 			panelMain.Invalidate();
 		}
+
+		private void butPaste_Click(object sender,EventArgs e) {
+			PasteControlsFromClipboard(new Point(0,0));
+		}
+
+		private void butCopy_Click(object sender,EventArgs e) {
+			CopyControlsToClipboard();
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			if(!VerifyDesign()){
+				return;
+			}
+			SheetDefs.InsertOrUpdate(SheetDefCur);
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
+		}
+
+	
+
+
 		
 
 		

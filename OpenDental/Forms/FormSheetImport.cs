@@ -1364,12 +1364,12 @@ namespace OpenDental {
 					return false;
 				}
 			}
-			if(row.FieldName.StartsWith("ins1") || row.FieldName.StartsWith("ins2")) {
-				//if(patPlanList.Count>0) {
-				MsgBox.Show(this,"Insurance cannot be imported yet.");
-				return false;
-				//}
-			}
+			//if(row.FieldName.StartsWith("ins1") || row.FieldName.StartsWith("ins2")) {
+			//  //if(patPlanList.Count>0) {
+			//  MsgBox.Show(this,"Insurance cannot be imported yet.");
+			//  return false;
+			//  //}
+			//}
 			return true;
 		}
 
@@ -1644,6 +1644,7 @@ namespace OpenDental {
 					case "HmPhone":
 						pat.HmPhone=rows[i].ImpValDisplay;
 						break;
+					
 					//ins1 and ins2 do not get imported.
 				}
 			}
