@@ -113,6 +113,7 @@ namespace OpenDentalWpf {
 				Label label=new Label();
 				string content=DateStart.AddMonths((int)i).ToString("%M");
 				label.Content=content;
+				label.MaxWidth=100;
 				Canvas.SetTop(label,rectMain.Bottom()-4);
 				Typeface typeface=new Typeface(FontFamily,FontStyle,FontWeight,FontStretch);
 				FormattedText ft=new FormattedText(content,CultureInfo.CurrentCulture,FlowDirection.LeftToRight,typeface,FontSize,Foreground);
@@ -151,6 +152,7 @@ namespace OpenDentalWpf {
 				Label label=new Label();
 				string content=i.ToString()+"0k";
 				label.Content=content;
+				label.MaxWidth=100;
 				Canvas.SetTop(label,rectMain.Bottom()-(i*hRow)-14);
 				label.Width=rectMain.Left();
 				label.HorizontalContentAlignment=HorizontalAlignment.Right;

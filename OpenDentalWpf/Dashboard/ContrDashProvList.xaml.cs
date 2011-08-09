@@ -60,7 +60,8 @@ namespace OpenDentalWpf {
 			//gridMain.ItemsSource=ListProv;
 			DataTemplate template=new DataTemplate(typeof(DashProvider));
 			//template.
-			gridMain.RowDetailsTemplate=template;
+			//gridMain.RowDetailsTemplateSelector
+				//.RowDetailsTemplate=template;
 		}
 
 		

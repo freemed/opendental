@@ -7,7 +7,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Canvas Name="canvasMain">
         <Rectangle Name="rectMain" Canvas.Left="32" Canvas.Top="24" Height="256" Panel.ZIndex="5" Stroke="Black" StrokeThickness="2" Width="261" />
-        <Label Canvas.Left="119" Canvas.Top="3" Content="New Patients" Name="label1" Padding="2" IsEnabled="False" FontWeight="Bold" />
-        <Label Name="labelHover" Canvas.Left="134" Canvas.Top="154" Opacity="0" Background="White" Padding="0">$65,000</Label>
+        <Label Canvas.Left="119" Canvas.Top="3" Content="New Patients" Name="label1" Padding="2" IsEnabled="False" FontWeight="Bold" MaxWidth="200" Foreground="Black" />
+        <Label Name="labelHover" Canvas.Left="134" Canvas.Top="154" Opacity="0" Background="White" Padding="0" MaxWidth="100">$65,000</Label>
     </Canvas>
 </UserControl>
