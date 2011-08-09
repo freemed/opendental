@@ -300,6 +300,7 @@ namespace OpenDental{
 		private TextBox textCanadaAnticipatedPayAmount;
 		private Label label82;
 		private TextBox textCanadaExpectedPayCycle;
+		private ValidDouble textLabFees;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -585,6 +586,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.textLabFees = new OpenDental.ValidDouble();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -743,10 +745,10 @@ namespace OpenDental{
 			// 
 			// textInsPayEst
 			// 
-			this.textInsPayEst.Location = new System.Drawing.Point(494,363);
+			this.textInsPayEst.Location = new System.Drawing.Point(511,363);
 			this.textInsPayEst.Name = "textInsPayEst";
 			this.textInsPayEst.ReadOnly = true;
-			this.textInsPayEst.Size = new System.Drawing.Size(65,20);
+			this.textInsPayEst.Size = new System.Drawing.Size(51,20);
 			this.textInsPayEst.TabIndex = 40;
 			this.textInsPayEst.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
@@ -759,17 +761,17 @@ namespace OpenDental{
 			// 
 			// textClaimFee
 			// 
-			this.textClaimFee.Location = new System.Drawing.Point(364,363);
+			this.textClaimFee.Location = new System.Drawing.Point(349,363);
 			this.textClaimFee.Name = "textClaimFee";
 			this.textClaimFee.ReadOnly = true;
-			this.textClaimFee.Size = new System.Drawing.Size(65,20);
+			this.textClaimFee.Size = new System.Drawing.Size(63,20);
 			this.textClaimFee.TabIndex = 51;
 			this.textClaimFee.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label1
 			// 
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(244,366);
+			this.label1.Location = new System.Drawing.Point(229,366);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(116,15);
 			this.label1.TabIndex = 50;
@@ -3050,28 +3052,28 @@ namespace OpenDental{
 			// 
 			// textWriteOff
 			// 
-			this.textWriteOff.Location = new System.Drawing.Point(624,363);
+			this.textWriteOff.Location = new System.Drawing.Point(611,363);
 			this.textWriteOff.Name = "textWriteOff";
 			this.textWriteOff.ReadOnly = true;
-			this.textWriteOff.Size = new System.Drawing.Size(65,20);
+			this.textWriteOff.Size = new System.Drawing.Size(55,20);
 			this.textWriteOff.TabIndex = 113;
 			this.textWriteOff.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textInsPayAmt
 			// 
-			this.textInsPayAmt.Location = new System.Drawing.Point(559,363);
+			this.textInsPayAmt.Location = new System.Drawing.Point(561,363);
 			this.textInsPayAmt.Name = "textInsPayAmt";
 			this.textInsPayAmt.ReadOnly = true;
-			this.textInsPayAmt.Size = new System.Drawing.Size(65,20);
+			this.textInsPayAmt.Size = new System.Drawing.Size(51,20);
 			this.textInsPayAmt.TabIndex = 6;
 			this.textInsPayAmt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textDedApplied
 			// 
-			this.textDedApplied.Location = new System.Drawing.Point(429,363);
+			this.textDedApplied.Location = new System.Drawing.Point(461,363);
 			this.textDedApplied.Name = "textDedApplied";
 			this.textDedApplied.ReadOnly = true;
-			this.textDedApplied.Size = new System.Drawing.Size(65,20);
+			this.textDedApplied.Size = new System.Drawing.Size(51,20);
 			this.textDedApplied.TabIndex = 4;
 			this.textDedApplied.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
@@ -3185,12 +3187,22 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// textLabFees
+			// 
+			this.textLabFees.Location = new System.Drawing.Point(411,363);
+			this.textLabFees.Name = "textLabFees";
+			this.textLabFees.ReadOnly = true;
+			this.textLabFees.Size = new System.Drawing.Size(51,20);
+			this.textLabFees.TabIndex = 138;
+			this.textLabFees.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// FormClaimEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(984,913);
 			this.ControlBox = false;
+			this.Controls.Add(this.textLabFees);
 			this.Controls.Add(this.butHistory);
 			this.Controls.Add(this.textReasonUnder);
 			this.Controls.Add(this.label7);
@@ -3315,6 +3327,11 @@ namespace OpenDental{
 				butSend.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
 			}
 			else {
+				textLabFees.Visible=false;
+				textDedApplied.Location=textLabFees.Location;
+				textInsPayEst.Location=new Point(textDedApplied.Right-1,textInsPayEst.Location.Y);
+				textInsPayAmt.Location=new Point(textInsPayEst.Right-1,textInsPayEst.Location.Y);
+				textWriteOff.Location=new Point(textInsPayAmt.Right-1,textInsPayEst.Location.Y);
 				tabMain.TabPages.Remove(tabCanadian);
 			}
 			if(IsNew){
@@ -3816,36 +3833,41 @@ namespace OpenDental{
 			double insPayEst=0;
 			double insPayAmt=0;
 			double writeOff=0;
+			decimal labFees=0;
 			gridProc.BeginUpdate();
 			gridProc.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimProc","#"),25);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Date"),70);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Date"),66);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Prov"),50);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Code"),50);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Tth"),35);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Tth"),25);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Description"),130);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Fee Billed"),65,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Fee Billed"),62,HorizontalAlignment.Right);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Deduct"),65,HorizontalAlignment.Right);
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				col=new ODGridColumn(Lan.g("TableClaimProc","Labs"),50,HorizontalAlignment.Right);
+				gridProc.Columns.Add(col);
+			}
+			col=new ODGridColumn(Lan.g("TableClaimProc","Deduct"),50,HorizontalAlignment.Right);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Ins Est"),65,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Ins Est"),50,HorizontalAlignment.Right);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Ins Pay"),65,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Ins Pay"),50,HorizontalAlignment.Right);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","WriteOff"),65,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableClaimProc","WriteOff"),54,HorizontalAlignment.Right);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Status"),50,HorizontalAlignment.Center);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Pmt"),40,HorizontalAlignment.Center);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Remarks"),145);
-			gridProc.Columns.Add(col);			 
+			gridProc.Columns.Add(col);
 			gridProc.Rows.Clear();
 			ODGridRow row;
 			Procedure ProcCur;
@@ -3875,6 +3897,15 @@ namespace OpenDental{
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript);
 				}
 				row.Cells.Add(ClaimProcsForClaim[i].FeeBilled.ToString("F"));
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					decimal labFeesForProc=0;
+					List<Procedure> labFeeProcs=Procedures.GetCanadianLabFees(ClaimProcsForClaim[i].ProcNum,ProcList);
+					for(int j=0;j<labFeeProcs.Count;j++) {
+						labFeesForProc+=(decimal)labFeeProcs[j].ProcFee;
+					}
+					row.Cells.Add(labFeesForProc.ToString("F"));
+					labFees+=labFeesForProc;
+				}
 				row.Cells.Add(ClaimProcsForClaim[i].DedApplied.ToString("F"));
 				row.Cells.Add(ClaimProcsForClaim[i].InsPayEst.ToString("F"));
 				row.Cells.Add(ClaimProcsForClaim[i].InsPayAmt.ToString("F"));
@@ -3947,6 +3978,7 @@ namespace OpenDental{
 			textInsPayEst.Text=ClaimCur.InsPayEst.ToString("F");
 			textInsPayAmt.Text=ClaimCur.InsPayAmt.ToString("F");
 			textWriteOff.Text=writeOff.ToString("F");
+			textLabFees.Text=labFees.ToString("F");
 			//payments
 			gridPay.BeginUpdate();
 			gridPay.Columns.Clear();
