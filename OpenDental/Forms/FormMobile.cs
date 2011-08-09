@@ -288,62 +288,6 @@ namespace OpenDental {
 			textDateTimeLastRun.Text=timeSynchStarted.ToShortDateString()+" "+timeSynchStarted.ToShortTimeString();
 		}
 		
-		/*
-		///<summary>Old code. May be deleted later</summary>
-		private static void UploadWorker(List<long> patNumList,List<long> aptNumList,List<long> rxNumList,List<long> provNumList,ref FormProgress progressIndicator,DateTime timeSynchStarted) {
-			IsSynching=true;
-			//patients--------------------------------------------------------------------
-			int localBatchSize=BatchSize;
-			for(int start=0;start<patNumList.Count;start+=localBatchSize) {
-				if((start+localBatchSize)>patNumList.Count) {
-					localBatchSize=patNumList.Count-start;
-				}
-				List<long> blockPatNumList=patNumList.GetRange(start,localBatchSize);
-				List<Patientm> changedPatientmList=Patientms.GetMultPats(blockPatNumList);
-				mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
-				progressIndicator.CurrentVal+=BatchSize;
-			}
-			//Appointments-----------------------------------------------------------------
-			localBatchSize=BatchSize;
-			for(int start=0;start<aptNumList.Count;start+=localBatchSize) {
-				if((start+localBatchSize)>aptNumList.Count) {
-					localBatchSize=aptNumList.Count-start;
-				}
-				List<long> blockAptNumList=aptNumList.GetRange(start,localBatchSize);
-				List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(blockAptNumList);
-				mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
-				progressIndicator.CurrentVal+=BatchSize;
-			}
-			//Rx----------------------------------------------------------------------------
-			localBatchSize=BatchSize;
-			for(int start=0;start<rxNumList.Count;start+=localBatchSize) {
-				if((start+localBatchSize)>rxNumList.Count) {
-					localBatchSize=rxNumList.Count-start;
-				}
-				List<long> blockRxNumList=rxNumList.GetRange(start,localBatchSize);
-				List<RxPatm> changedRxList=RxPatms.GetMultRxPats(blockRxNumList);
-				mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
-				progressIndicator.CurrentVal+=BatchSize;
-			}
-			//Providers----------------------------------------------------------------------------
-			localBatchSize=BatchSize;
-			for(int start=0;start<provNumList.Count;start+=localBatchSize) {
-				if((start+localBatchSize)>provNumList.Count) {
-					localBatchSize=provNumList.Count-start;
-				}
-				List<long> blockProvNumList=provNumList.GetRange(start,localBatchSize);
-				List<Providerm> changedProvList=Providerms.GetMultProviderms(blockProvNumList);
-				mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
-				progressIndicator.CurrentVal+=BatchSize;
-			}
-			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
-			//if( {//MobileSyncDateTimeLastRunNew)) {
-				//DataValid.SetInvalid(InvalidType.Prefs);// change values on all machines.  No need since this is the only workstation synching
-				//would be troublesome with threading anyway
-			//}
-			IsSynching=false;
-		}*/
-
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
 		private static void UploadWorker(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
 			//The handling of PrefName.MobileSynchNewTables79 should never be removed in future versions
@@ -414,7 +358,7 @@ namespace OpenDental {
 
 		///<summary>a general function to reduce the amount of code for uploading</summary>
 		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,ref FormProgress progressIndicator) {
-			/*
+		
 			try{ //Dennis: try catch may not work: Does not work in threads not sure about this
 				int LocalBatchSize=BatchSize;
 				for(int start=0;start<PKNumList.Count;start+=LocalBatchSize) {
@@ -488,13 +432,10 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
-			}*/
-			throw new NotImplementedException();//js the above code broke when moving to dot net 4.0.
+			}
 		}
 
 		private static void DeleteObjects(List<DeletedObject> dO,ref FormProgress progressIndicator) {
-			throw new NotImplementedException();//js this broke with the move to dot net 4.0.
-			/*
 			int LocalBatchSize=BatchSize;
 			for(int start=0;start<dO.Count;start+=LocalBatchSize) {
 				if((start+LocalBatchSize)>dO.Count) {
@@ -503,7 +444,7 @@ namespace OpenDental {
 				}
 				progressIndicator.CurrentVal+=BatchSize;
 			}
-			*/ 
+			
 		}
 			 
 		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
