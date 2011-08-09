@@ -101,6 +101,9 @@ namespace OpenDental{
 
 		///<summary>Pat can be null sometimes.  For example, in deposit slip.</summary>
 		private static void FillFieldsInStaticText(Sheet sheet,Patient pat) {
+			if(pat==null) {//while is it remotely possible that pat may be null, we certainly wouldn't be interested in filling such a sheet.
+				return;
+			}
 			string fldval="";
 			string address="";
 			string apptsAllFuture="";
@@ -158,391 +161,450 @@ namespace OpenDental{
 			string dateLastExam="";
 			string dateLastPanoFMX="";
 			string dateLastProphy="";
+			string genderHeShe="";
+			string genderheshe="";
+			string genderHimHer="";
+			string genderhimher="";
+			string genderHimselfHerself="";
+			string genderhimselfherself="";
+			string genderHisHer="";
+			string genderhisher="";
+			string genderHisHers="";
+			string genderhishers="";
+			string guarantorNameF="";
+			string guarantorNameFL="";
+			string guarantorNameL="";
+			string guarantorNamePref="";
+			string guarantorNameLF="";
 			Family fam=null;
 			Provider priProv=null;
-			if(pat!=null){
-				address=pat.Address;
-				if(pat.Address2!=""){
-					address+=", "+pat.Address2;
-				}
-				birthdate=pat.Birthdate.ToShortDateString();
-				if(pat.Birthdate.Year<1880){
-					birthdate="";
-				}
-				dateFirstVisit=pat.DateFirstVisit.ToShortDateString();
-				if(pat.DateFirstVisit.Year<1880) {
-					dateFirstVisit="";
-				}
-				fam=Patients.GetFamily(pat.PatNum);
-				List<Procedure> procsList=null;
-				if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs") || Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
-					procsList=Procedures.Refresh(pat.PatNum);
-					if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs")) {
-						for(int i=0;i<procsList.Count;i++) {
-							if(procsList[i].ProcStatus!=ProcStat.TP) {
-								continue;
-							}
-							if(treatmentPlanProcs!="") {
-								treatmentPlanProcs+="\r\n";
-							}
-							treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
-								+Procedures.GetDescription(procsList[i])+", "
-								+procsList[i].ProcFee.ToString("c");
+			switch(pat.Gender) {
+				case PatientGender.Male:
+					genderHeShe="He";
+					genderheshe="he";
+					genderHimHer="Him";
+					genderhimher="him";
+					genderHimselfHerself="Himself";
+					genderhimselfherself="Herself";
+					genderHisHer="His";
+					genderhisher="his";
+					genderHisHers="His";
+					genderhishers="his";
+					break;
+				case PatientGender.Female:
+					genderHeShe="She";
+					genderheshe="she";
+					genderHimHer="Her";
+					genderhimher="her";
+					genderHimselfHerself="Herself";
+					genderhimselfherself="herself";
+					genderHisHer="Her";
+					genderhisher="her";
+					genderHisHers="Hers";
+					genderhishers="hers";
+					break;
+				case PatientGender.Unknown:
+					genderHeShe="The patient";
+					genderheshe="the patient";
+					genderHimHer="The patient";
+					genderhimher="the patient";
+					genderHimselfHerself="The patient";
+					genderhimselfherself="the patient";
+					genderHisHer="The patient's";
+					genderhisher="the patient's";
+					genderHisHers="The patient's";
+					genderhishers="the patient's";
+					break;
+			}
+			Patient guar=Patients.GetPat(pat.Guarantor);
+			if(guar!=null) {
+				guarantorNameF=guar.FName;
+				guarantorNameFL=guar.GetNameFL();
+				guarantorNameL=guar.LName;
+				guarantorNameLF=guar.GetNameLF();
+				guarantorNamePref=guar.Preferred;
+			}
+			address=pat.Address;
+			if(pat.Address2!=""){
+				address+=", "+pat.Address2;
+			}
+			birthdate=pat.Birthdate.ToShortDateString();
+			if(pat.Birthdate.Year<1880){
+				birthdate="";
+			}
+			dateFirstVisit=pat.DateFirstVisit.ToShortDateString();
+			if(pat.DateFirstVisit.Year<1880) {
+				dateFirstVisit="";
+			}
+			fam=Patients.GetFamily(pat.PatNum);
+			List<Procedure> procsList=null;
+			if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs") || Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
+				procsList=Procedures.Refresh(pat.PatNum);
+				if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs")) {
+					for(int i=0;i<procsList.Count;i++) {
+						if(procsList[i].ProcStatus!=ProcStat.TP) {
+							continue;
 						}
+						if(treatmentPlanProcs!="") {
+							treatmentPlanProcs+="\r\n";
+						}
+						treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
+							+Procedures.GetDescription(procsList[i])+", "
+							+procsList[i].ProcFee.ToString("c");
 					}
 				}
-				serviceNote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor).Service;
-				List<RefAttach> RefAttachList=RefAttaches.Refresh(pat.PatNum);
-				Referral tempReferralFrom = Referrals.GetReferralForPat(pat.PatNum);
-				if(Referrals.GetReferralForPat(pat.PatNum)!=null) {
-					if(tempReferralFrom.IsDoctor){
-						referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName+" "+tempReferralFrom.Title+" : "+tempReferralFrom.Specialty.ToString();
-					}
-					else{
-						referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName;
+			}
+			serviceNote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor).Service;
+			List<RefAttach> RefAttachList=RefAttaches.Refresh(pat.PatNum);
+			Referral tempReferralFrom = Referrals.GetReferralForPat(pat.PatNum);
+			if(Referrals.GetReferralForPat(pat.PatNum)!=null) {
+				if(tempReferralFrom.IsDoctor){
+					referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName+" "+tempReferralFrom.Title+" : "+tempReferralFrom.Specialty.ToString();
+				}
+				else{
+					referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName;
+				}
+			}
+			for(int i=0;i<RefAttachList.Count;i++) {
+				if(RefAttachList[i].IsFrom) {
+					continue;
+				}
+				Referral tempRef = Referrals.GetReferral(RefAttachList[i].ReferralNum);
+				if(tempRef.IsDoctor) {
+					referredTo+=tempRef.FName+" "+tempRef.LName+" "+tempRef.Title+" : "+tempRef.Specialty.ToString()+" "+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
+				}
+				else {
+					referredTo+=tempRef.FName+" "+tempRef.LName+" "+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
+				}
+			}
+			//Insurance-------------------------------------------------------------------------------------------------------------------
+			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+			long subNum=PatPlans.GetInsSubNum(patPlanList,1);
+			long patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			InsSub sub=InsSubs.GetSub(subNum,subList);
+			InsPlan plan=null;
+			if(sub!=null) {
+				plan=InsPlans.GetPlan(sub.PlanNum,planList);
+				insSubNote=sub.SubscNote;
+			}
+			Carrier carrier=null;
+			List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today,subList);
+			double doubAnnualMax;
+			double doubDeductible;
+			double doubDeductibleUsed;
+			double doubPending;
+			double doubRemain;
+			double doubUsed;
+			if(plan!=null){
+				insPlanGroupName=plan.GroupName;
+				insPlanGroupNumber=plan.GroupNum;
+				insPlanNote=plan.PlanNote;
+				carrier=Carriers.GetCarrier(plan.CarrierNum);
+				carrierName=carrier.CarrierName;
+				carrierAddress=carrier.Address;
+				if(carrier.Address2!=""){
+					carrierAddress+=", "+carrier.Address2;
+				}
+				carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
+				subscriberId=sub.SubscriberID;
+				subscriberNameFL=Patients.GetLim(sub.Subscriber).GetNameFL();
+				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
+				doubRemain=-1;
+				if(doubAnnualMax!=-1){
+					insAnnualMax=doubAnnualMax.ToString("c");
+					doubRemain=doubAnnualMax;
+				}
+				doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
+				if(doubDeductible!=-1){
+					insDeductible=doubDeductible.ToString("c");
+				}
+				doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
+				if(doubDeductibleUsed!=-1){
+					insDeductibleUsed=doubDeductibleUsed.ToString("c");
+				}
+				doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum,subNum);
+				if(doubPending!=-1) {
+					insPending=doubPending.ToString("c");
+					if(doubRemain!=-1){
+						doubRemain-=doubPending;
 					}
 				}
-				for(int i=0;i<RefAttachList.Count;i++) {
-					if(RefAttachList[i].IsFrom) {
+				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum,subNum);
+				if(doubUsed!=-1) {
+					insUsed=doubUsed.ToString("c");
+					if(doubRemain!=-1){
+						doubRemain-=doubUsed;
+					}
+				}
+				if(doubRemain!=-1){
+					insRemaining=doubRemain.ToString("c");
+				}
+				for(int j=0;j<benefitList.Count;j++) {
+					if(benefitList[j].PlanNum != plan.PlanNum) {
 						continue;
 					}
-					Referral tempRef = Referrals.GetReferral(RefAttachList[i].ReferralNum);
-					if(tempRef.IsDoctor) {
-						referredTo+=tempRef.FName+" "+tempRef.LName+" "+tempRef.Title+" : "+tempRef.Specialty.ToString()+" "+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
+					if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
+						continue;
 					}
-					else {
-						referredTo+=tempRef.FName+" "+tempRef.LName+" "+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
+					if(insPercentages!="") {
+						insPercentages+=",  ";
 					}
+					insPercentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
 				}
-				//Insurance-------------------------------------------------------------------------------------------------------------------
-				List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-				long subNum=PatPlans.GetInsSubNum(patPlanList,1);
-				long patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
-				List<InsSub> subList=InsSubs.RefreshForFam(fam);
-				List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
-				InsSub sub=InsSubs.GetSub(subNum,subList);
-				InsPlan plan=null;
-				if(sub!=null) {
-					plan=InsPlans.GetPlan(sub.PlanNum,planList);
-					insSubNote=sub.SubscNote;
+				insFreqBW=Benefits.GetFrequencyDisplay(FrequencyType.BW,benefitList);
+				insFreqExams=Benefits.GetFrequencyDisplay(FrequencyType.Exam,benefitList);
+				insFreqPanoFMX=Benefits.GetFrequencyDisplay(FrequencyType.PanoFMX,benefitList);
+				switch(plan.PlanType){//(ppo, etc)
+					case "p":
+						insType="PPO Percentage"; 
+						break;
+					case "f":
+						insType="Medicaid or Flat Copay";
+						break;
+					case "c":
+						insType="Capitation";
+						break;
+					case "":
+						insType="Category Percentage";
+						break;
 				}
-				Carrier carrier=null;
-				List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
-				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today,subList);
-				double doubAnnualMax;
-				double doubDeductible;
-				double doubDeductibleUsed;
-				double doubPending;
-				double doubRemain;
-				double doubUsed;
-				if(plan!=null){
-					insPlanGroupName=plan.GroupName;
-					insPlanGroupNumber=plan.GroupNum;
-					insPlanNote=plan.PlanNote;
-					carrier=Carriers.GetCarrier(plan.CarrierNum);
-					carrierName=carrier.CarrierName;
-					carrierAddress=carrier.Address;
-					if(carrier.Address2!=""){
-						carrierAddress+=", "+carrier.Address2;
-					}
-					carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
-					subscriberId=sub.SubscriberID;
-					subscriberNameFL=Patients.GetLim(sub.Subscriber).GetNameFL();
-					doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
-					doubRemain=-1;
-					if(doubAnnualMax!=-1){
-						insAnnualMax=doubAnnualMax.ToString("c");
-						doubRemain=doubAnnualMax;
-					}
-					doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
-					if(doubDeductible!=-1){
-						insDeductible=doubDeductible.ToString("c");
-					}
-					doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
-					if(doubDeductibleUsed!=-1){
-						insDeductibleUsed=doubDeductibleUsed.ToString("c");
-					}
-					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum,subNum);
-					if(doubPending!=-1) {
-						insPending=doubPending.ToString("c");
-						if(doubRemain!=-1){
-							doubRemain-=doubPending;
-						}
-					}
-					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum,subNum);
-					if(doubUsed!=-1) {
-						insUsed=doubUsed.ToString("c");
-						if(doubRemain!=-1){
-							doubRemain-=doubUsed;
-						}
-					}
+			}
+			subNum=PatPlans.GetInsSubNum(patPlanList,2);
+			patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
+			sub=InsSubs.GetSub(subNum,subList);
+			if(sub!=null) {
+				plan=InsPlans.GetPlan(sub.PlanNum,planList);
+			}
+			if(plan!=null) {
+				carrier=Carriers.GetCarrier(plan.CarrierNum);
+				carrier2Name=carrier.CarrierName;
+				//carrierAddress=carrier.Address;
+				//if(carrier.Address2!="") {
+				//	carrierAddress+=", "+carrier.Address2;
+				//}
+				//carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
+				//subscriberId=plan.SubscriberID;
+				subscriber2NameFL=Patients.GetLim(sub.Subscriber).GetNameFL();
+				doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
+				doubRemain=-1;
+				if(doubAnnualMax!=-1) {
+					ins2AnnualMax=doubAnnualMax.ToString("c");
+					doubRemain=doubAnnualMax;
+				}
+				doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
+				if(doubDeductible!=-1) {
+					ins2Deductible=doubDeductible.ToString("c");
+				}
+				doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
+				if(doubDeductibleUsed!=-1) {
+					ins2DeductibleUsed=doubDeductibleUsed.ToString("c");
+				}
+				doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum,subNum);
+				if(doubPending!=-1) {
+					ins2Pending=doubPending.ToString("c");
 					if(doubRemain!=-1){
-						insRemaining=doubRemain.ToString("c");
-					}
-					for(int j=0;j<benefitList.Count;j++) {
-						if(benefitList[j].PlanNum != plan.PlanNum) {
-							continue;
-						}
-						if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
-							continue;
-						}
-						if(insPercentages!="") {
-							insPercentages+=",  ";
-						}
-						insPercentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
-					}
-					insFreqBW=Benefits.GetFrequencyDisplay(FrequencyType.BW,benefitList);
-					insFreqExams=Benefits.GetFrequencyDisplay(FrequencyType.Exam,benefitList);
-					insFreqPanoFMX=Benefits.GetFrequencyDisplay(FrequencyType.PanoFMX,benefitList);
-					switch(plan.PlanType){//(ppo, etc)
-						case "p":
-							insType="PPO Percentage"; 
-							break;
-						case "f":
-							insType="Medicaid or Flat Copay";
-							break;
-						case "c":
-							insType="Capitation";
-							break;
-						case "":
-							insType="Category Percentage";
-							break;
+						doubRemain-=doubPending;
 					}
 				}
-				subNum=PatPlans.GetInsSubNum(patPlanList,2);
-				patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
-				sub=InsSubs.GetSub(subNum,subList);
-				if(sub!=null) {
-					plan=InsPlans.GetPlan(sub.PlanNum,planList);
-				}
-				if(plan!=null) {
-					carrier=Carriers.GetCarrier(plan.CarrierNum);
-					carrier2Name=carrier.CarrierName;
-					//carrierAddress=carrier.Address;
-					//if(carrier.Address2!="") {
-					//	carrierAddress+=", "+carrier.Address2;
-					//}
-					//carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
-					//subscriberId=plan.SubscriberID;
-					subscriber2NameFL=Patients.GetLim(sub.Subscriber).GetNameFL();
-					doubAnnualMax=Benefits.GetAnnualMaxDisplay(benefitList,plan.PlanNum,patPlanNum,false);
-					doubRemain=-1;
-					if(doubAnnualMax!=-1) {
-						ins2AnnualMax=doubAnnualMax.ToString("c");
-						doubRemain=doubAnnualMax;
-					}
-					doubDeductible=Benefits.GetDeductGeneralDisplay(benefitList,plan.PlanNum,patPlanNum,BenefitCoverageLevel.Individual);
-					if(doubDeductible!=-1) {
-						ins2Deductible=doubDeductible.ToString("c");
-					}
-					doubDeductibleUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,BenefitCoverageLevel.Individual,pat.PatNum);
-					if(doubDeductibleUsed!=-1) {
-						ins2DeductibleUsed=doubDeductibleUsed.ToString("c");
-					}
-					doubPending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,pat.PatNum,subNum);
-					if(doubPending!=-1) {
-						ins2Pending=doubPending.ToString("c");
-						if(doubRemain!=-1){
-							doubRemain-=doubPending;
-						}
-					}
-					doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum,subNum);
-					if(doubUsed!=-1) {
-						ins2Used=doubUsed.ToString("c");
-						if(doubRemain!=-1){
-							doubRemain-=doubUsed;
-						}
-					}
+				doubUsed=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,plan.PlanNum,patPlanNum,-1,planList,benefitList,pat.PatNum,subNum);
+				if(doubUsed!=-1) {
+					ins2Used=doubUsed.ToString("c");
 					if(doubRemain!=-1){
-						ins2Remaining=doubRemain.ToString("c");
-					}
-					for(int j=0;j<benefitList.Count;j++) {
-						if(benefitList[j].PlanNum != plan.PlanNum) {
-							continue;
-						}
-						if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
-							continue;
-						}
-						if(ins2Percentages!="") {
-							ins2Percentages+=",  ";
-						}
-						ins2Percentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
+						doubRemain-=doubUsed;
 					}
 				}
-				//Treatment plan-----------------------------------------------------------------------------------------------------------
-				TreatPlan[] treatPlanList=TreatPlans.Refresh(pat.PatNum);
-				TreatPlan treatPlan=null;
-				if(treatPlanList.Length>0){
-					treatPlan=treatPlanList[treatPlanList.Length-1].Copy();
-					dateOfLastSavedTP=treatPlan.DateTP.ToShortDateString();
-					Patient patRespParty=Patients.GetPat(treatPlan.ResponsParty);
-					if(patRespParty!=null){
-						tpResponsPartyAddress=patRespParty.Address;
-						if(patRespParty.Address2!=""){
-							tpResponsPartyAddress+=", "+patRespParty.Address2;
-						}
-						tpResponsPartyCityStZip=patRespParty.City+", "+patRespParty.State+"  "+patRespParty.Zip;
-						tpResponsPartyNameFL=patRespParty.GetNameFL();
+				if(doubRemain!=-1){
+					ins2Remaining=doubRemain.ToString("c");
+				}
+				for(int j=0;j<benefitList.Count;j++) {
+					if(benefitList[j].PlanNum != plan.PlanNum) {
+						continue;
+					}
+					if(benefitList[j].BenefitType != InsBenefitType.CoInsurance) {
+						continue;
+					}
+					if(ins2Percentages!="") {
+						ins2Percentages+=",  ";
+					}
+					ins2Percentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
+				}
+			}
+			//Treatment plan-----------------------------------------------------------------------------------------------------------
+			TreatPlan[] treatPlanList=TreatPlans.Refresh(pat.PatNum);
+			TreatPlan treatPlan=null;
+			if(treatPlanList.Length>0){
+				treatPlan=treatPlanList[treatPlanList.Length-1].Copy();
+				dateOfLastSavedTP=treatPlan.DateTP.ToShortDateString();
+				Patient patRespParty=Patients.GetPat(treatPlan.ResponsParty);
+				if(patRespParty!=null){
+					tpResponsPartyAddress=patRespParty.Address;
+					if(patRespParty.Address2!=""){
+						tpResponsPartyAddress+=", "+patRespParty.Address2;
+					}
+					tpResponsPartyCityStZip=patRespParty.City+", "+patRespParty.State+"  "+patRespParty.Zip;
+					tpResponsPartyNameFL=patRespParty.GetNameFL();
+				}
+			}
+			//Procedure Log-------------------------------------------------------------------------------------------------------------
+			List<Procedure> proceduresList=Procedures.Refresh(pat.PatNum);
+			DateTime dBW=DateTime.MinValue;
+			DateTime dExam=DateTime.MinValue;
+			DateTime dPanoFMX=DateTime.MinValue;
+			DateTime dProphy=DateTime.MinValue;
+			for(int i=0;i<proceduresList.Count;i++) {
+				Procedure proc = proceduresList[i];//cache Proc to speed up process
+				if(proc.ProcStatus!=ProcStat.C
+					&& proc.ProcStatus!=ProcStat.EC
+					&& proc.ProcStatus!=ProcStat.EO)
+				{
+					continue;//only look at completed or existing procedures
+				}
+				if((proc.CodeNum==ProcedureCodes.GetCodeNum("D0210")//intraoral - complete series (including bitewings) 
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0270")//bitewing - single film
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0272")//bitewings - two films
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0274")//bitewings - four films
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0277")//vertical bitewings - 7 to 8 films
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0273"))//bitewings - three films
+					&& proc.ProcDate>dBW) //newest
+				{
+					dBW=proc.ProcDate;
+					dateLastBW=proc.ProcDate.ToShortDateString();
+				}
+				if((proc.CodeNum==ProcedureCodes.GetCodeNum("D0120")//periodic oral evaluation - established patient
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0140")//limited oral evaluation - problem focused
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0150")//comprehensive oral evaluation - new or established patient
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0160"))//detailed and extensive oral evaluation - problem focused, by report
+					&& proc.ProcDate>dExam) //newest
+				{
+					dExam=proc.ProcDate;
+					dateLastExam=proc.ProcDate.ToShortDateString();
+				}
+				if((proc.CodeNum==ProcedureCodes.GetCodeNum("D0210")//intraoral - complete series (including bitewings)
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D0330"))//panoramic film
+					&& proc.ProcDate>dPanoFMX) //newest
+				{
+					dPanoFMX=proc.ProcDate;
+					dateLastPanoFMX=proc.ProcDate.ToShortDateString();
+				}
+				if((proc.CodeNum==ProcedureCodes.GetCodeNum("D1110")//prophylaxis - adult
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D1120")//prophylaxis - child
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D1201")//Topical Fluoride Including Prophy-Child
+					||proc.CodeNum==ProcedureCodes.GetCodeNum("D1205"))//Topical Fluoride Including Prophy-Adult
+					&& proc.ProcDate>dProphy) //newest
+				{
+					dProphy=proc.ProcDate;
+					dateLastProphy=proc.ProcDate.ToShortDateString(); ;
+				}
+			}
+			//Recall--------------------------------------------------------------------------------------------------------------------
+			Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
+			if(recall!=null){
+				if(recall.DateDue.Year>1880){
+					dateRecallDue=recall.DateDue.ToShortDateString();
+				}
+				recallInterval=recall.RecallInterval.ToString();
+			}
+			//Appointments--------------------------------------------------------------------------------------------------------------
+			List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
+			List<Appointment> apptFutureList=Appointments.GetFutureSchedApts(pat.PatNum);
+			for(int i=0;i<apptList.Count;i++) {
+				if(apptList[i].AptStatus != ApptStatus.Scheduled
+					&& apptList[i].AptStatus != ApptStatus.Complete
+					&& apptList[i].AptStatus != ApptStatus.None
+					&& apptList[i].AptStatus != ApptStatus.ASAP) 
+				{
+					continue;
+				}
+				if(apptList[i].AptDateTime < DateTime.Now) {
+					//this will happen repeatedly up until the most recent.
+					dateTimeLastAppt=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
+				}
+				else {//after now
+					if(nextSchedApptDateT=="") {//only the first one found
+						nextSchedApptDateT=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
+						break;//we're done with the list now.
 					}
 				}
-				//Procedure Log-------------------------------------------------------------------------------------------------------------
-				List<Procedure> proceduresList=Procedures.Refresh(pat.PatNum);
-				Procedure tempProcBW = new Procedure();
-				Procedure tempProcExam = new Procedure();
-				Procedure tempProcPanoFMX = new Procedure();
-				Procedure tempProcProphy = new Procedure();
-				tempProcBW.ProcDate=DateTime.MinValue;
-				tempProcExam.ProcDate=DateTime.MinValue;
-				tempProcPanoFMX.ProcDate=DateTime.MinValue;
-				tempProcProphy.ProcDate=DateTime.MinValue;
-				for(int i=0;i<proceduresList.Count;i++) {
-					Procedure tempProcCur = proceduresList[i];//cache Proc to speed up process
-					if(tempProcCur.ProcStatus!=ProcStat.C
-						&& tempProcCur.ProcStatus!=ProcStat.EC
-						&& tempProcCur.ProcStatus!=ProcStat.EO)
-					{
-						continue;//only look at completed or existing procedures
-					}
-					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0210")//intraoral - complete series (including bitewings) 
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0270")//bitewing - single film
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0272")//bitewings - two films
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0274")//bitewings - four films
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0277")//vertical bitewings - 7 to 8 films
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0273"))//bitewings - three films
-						&&tempProcCur.ProcDate>tempProcBW.ProcDate) {//newest
-						tempProcBW=tempProcCur.Copy();
-						dateLastBW=tempProcBW.ProcDate.ToShortDateString();
-					}
-					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0120")//periodic oral evaluation - established patient
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0140")//limited oral evaluation - problem focused
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0150")//comprehensive oral evaluation - new or established patient
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0160"))//detailed and extensive oral evaluation - problem focused, by report
-						&&tempProcCur.ProcDate>tempProcExam.ProcDate) {//newest
-						tempProcExam=tempProcCur.Copy();
-						dateLastExam=tempProcExam.ProcDate.ToShortDateString();
-					}
-					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0210")//intraoral - complete series (including bitewings)
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D0330"))//panoramic film
-						&&tempProcCur.ProcDate>tempProcExam.ProcDate) {//newest
-						tempProcPanoFMX=tempProcCur.Copy();
-						dateLastPanoFMX=tempProcPanoFMX.ProcDate.ToShortDateString();
-					}
-					if((tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1110")//prophylaxis - adult
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1120")//prophylaxis - child
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1201")//Topical Fluoride Including Prophy-Child
-						||tempProcCur.CodeNum==ProcedureCodes.GetCodeNum("D1205"))//Topical Fluoride Including Prophy-Adult
-						&&tempProcCur.ProcDate>tempProcExam.ProcDate) {//newest
-						tempProcProphy=tempProcCur.Copy();
-						dateLastProphy=tempProcProphy.ProcDate.ToShortDateString(); ;
-					}
+			}
+			for(int i=0;i<apptFutureList.Count;i++) {//cannot be combined in loop above because of the break in the loop.
+				apptsAllFuture+=apptFutureList[i].AptDateTime.ToShortDateString()+" "+apptFutureList[i].AptDateTime.ToShortTimeString()+" : "+apptFutureList[i].ProcDescript+"\r\n";
+			}
+			for(int i=0;i<fam.ListPats.Length;i++) {
+				List<Appointment> futAptsList=Appointments.GetFutureSchedApts(fam.ListPats[i].PatNum);
+				if(futAptsList.Count>0) {//just gets one future appt for each person
+					nextSchedApptsFam+=fam.ListPats[i].FName+": "+futAptsList[0].AptDateTime.ToShortDateString()+" "+futAptsList[0].AptDateTime.ToShortTimeString()+" : "+futAptsList[0].ProcDescript+"\r\n";
 				}
-				//Recall--------------------------------------------------------------------------------------------------------------------
-				Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
-				if(recall!=null){
-					if(recall.DateDue.Year>1880){
-						dateRecallDue=recall.DateDue.ToShortDateString();
-					}
-					recallInterval=recall.RecallInterval.ToString();
-				}
-				//Appointments--------------------------------------------------------------------------------------------------------------
-				List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
-				List<Appointment> apptFutureList=Appointments.GetFutureSchedApts(pat.PatNum);
+			}
+			if(Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
+				PlannedAppt plannedAppt=PlannedAppts.GetOneOrderedByItemOrder(pat.PatNum);
 				for(int i=0;i<apptList.Count;i++) {
-					if(apptList[i].AptStatus != ApptStatus.Scheduled
-						&& apptList[i].AptStatus != ApptStatus.Complete
-						&& apptList[i].AptStatus != ApptStatus.None
-						&& apptList[i].AptStatus != ApptStatus.ASAP) 
-					{
-						continue;
-					}
-					if(apptList[i].AptDateTime < DateTime.Now) {
-						//this will happen repeatedly up until the most recent.
-						dateTimeLastAppt=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
-					}
-					else {//after now
-						if(nextSchedApptDateT=="") {//only the first one found
-							nextSchedApptDateT=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
-							break;//we're done with the list now.
+					if(plannedAppt!=null && apptList[i].AptNum==plannedAppt.AptNum) {
+						plannedAppointmentInfo="Procedures: ";
+						plannedAppointmentInfo+=apptList[i].ProcDescript+"\r\n";
+						int minutesTotal=apptList[i].Pattern.Length*5;
+						int hours=minutesTotal/60;//automatically rounds down
+						int minutes=minutesTotal-hours*60;
+						plannedAppointmentInfo+="Appt Length: ";
+						if(hours>0) {
+							plannedAppointmentInfo+=hours.ToString()+" hours, ";
 						}
-					}
-				}
-				for(int i=0;i<apptFutureList.Count;i++) {//cannot be combined in loop above because of the break in the loop.
-					apptsAllFuture+=apptFutureList[i].AptDateTime.ToShortDateString()+" "+apptFutureList[i].AptDateTime.ToShortTimeString()+" : "+apptFutureList[i].ProcDescript+"\r\n";
-				}
-				for(int i=0;i<fam.ListPats.Length;i++) {
-					List<Appointment> futAptsList=Appointments.GetFutureSchedApts(fam.ListPats[i].PatNum);
-					if(futAptsList.Count>0) {
-						nextSchedApptsFam+=fam.ListPats[i].FName+": "+futAptsList[0].AptDateTime.ToShortDateString()+" "+futAptsList[0].AptDateTime.ToShortTimeString()+" : "+futAptsList[0].ProcDescript+"\r\n";
-					}
-				}
-				if(Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
-					PlannedAppt plannedAppt=PlannedAppts.GetOneOrderedByItemOrder(pat.PatNum);
-					for(int i=0;i<apptList.Count;i++) {
-						if(plannedAppt!=null && apptList[i].AptNum==plannedAppt.AptNum) {
-							plannedAppointmentInfo="Procedures: ";
-							plannedAppointmentInfo+=apptList[i].ProcDescript+"\r\n";
-							int minutesTotal=apptList[i].Pattern.Length*5;
-							int hours=minutesTotal/60;//automatically rounds down
-							int minutes=minutesTotal-hours*60;
-							plannedAppointmentInfo+="Appt Length: ";
-							if(hours>0) {
-								plannedAppointmentInfo+=hours.ToString()+" hours, ";
-							}
-							plannedAppointmentInfo+=minutes.ToString()+" min\r\n";
-							if(Programs.UsingOrion) {
-								DateTime newDateSched=new DateTime();
-								for(int p=0;p<procsList.Count;p++) {
-									if(procsList[p].PlannedAptNum==apptList[i].AptNum) {
-										OrionProc op=OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
-										if(op!=null && op.DateScheduleBy.Year>1880) {
-											if(newDateSched.Year<1880) {
+						plannedAppointmentInfo+=minutes.ToString()+" min\r\n";
+						if(Programs.UsingOrion) {
+							DateTime newDateSched=new DateTime();
+							for(int p=0;p<procsList.Count;p++) {
+								if(procsList[p].PlannedAptNum==apptList[i].AptNum) {
+									OrionProc op=OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
+									if(op!=null && op.DateScheduleBy.Year>1880) {
+										if(newDateSched.Year<1880) {
+											newDateSched=op.DateScheduleBy;
+										}
+										else {
+											if(op.DateScheduleBy<newDateSched) {
 												newDateSched=op.DateScheduleBy;
-											}
-											else {
-												if(op.DateScheduleBy<newDateSched) {
-													newDateSched=op.DateScheduleBy;
-												}
 											}
 										}
 									}
 								}
-								if(newDateSched.Year>1880) {
-									plannedAppointmentInfo+="Schedule by: "+newDateSched.ToShortDateString();
-								}
-								else {
-									plannedAppointmentInfo+="No schedule by date.";
-								}
+							}
+							if(newDateSched.Year>1880) {
+								plannedAppointmentInfo+="Schedule by: "+newDateSched.ToShortDateString();
+							}
+							else {
+								plannedAppointmentInfo+="No schedule by date.";
 							}
 						}
 					}
 				}
-				priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
-				//Clinic-------------------------------------------------------------------------------------------------------------
-				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
-				if(clinic==null){
-					clinicDescription=PrefC.GetString(PrefName.PracticeTitle);
-					clinicAddress=PrefC.GetString(PrefName.PracticeAddress);
-					if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
-						clinicAddress+=", "+PrefC.GetString(PrefName.PracticeAddress2);
-					}
-					clinicCityStZip=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip);
-					phone=PrefC.GetString(PrefName.PracticePhone);
+			}
+			priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
+			//Clinic-------------------------------------------------------------------------------------------------------------
+			Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
+			if(clinic==null){
+				clinicDescription=PrefC.GetString(PrefName.PracticeTitle);
+				clinicAddress=PrefC.GetString(PrefName.PracticeAddress);
+				if(PrefC.GetString(PrefName.PracticeAddress2)!="") {
+					clinicAddress+=", "+PrefC.GetString(PrefName.PracticeAddress2);
 				}
-				else{
-					clinicDescription=clinic.Description;
-					clinicAddress=clinic.Address;
-					if(clinic.Address2!=""){
-						clinicAddress+=", "+clinic.Address2;
-					}
-					clinicCityStZip=clinic.City+", "+clinic.State+"  "+clinic.Zip;
-					phone=clinic.Phone;
+				clinicCityStZip=PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+"  "+PrefC.GetString(PrefName.PracticeZip);
+				phone=PrefC.GetString(PrefName.PracticePhone);
+			}
+			else{
+				clinicDescription=clinic.Description;
+				clinicAddress=clinic.Address;
+				if(clinic.Address2!=""){
+					clinicAddress+=", "+clinic.Address2;
 				}
-				if(phone.Length==10 && System.Globalization.CultureInfo.CurrentCulture.Name=="en-US") {
-					clinicPhone="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
-				}
-				else {
-					clinicPhone=phone;
-				}
+				clinicCityStZip=clinic.City+", "+clinic.State+"  "+clinic.Zip;
+				phone=clinic.Phone;
+			}
+			if(phone.Length==10 && System.Globalization.CultureInfo.CurrentCulture.Name=="en-US") {
+				clinicPhone="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
+			}
+			else {
+				clinicPhone=phone;
 			}
 			//Fill fields---------------------------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields) {
@@ -550,91 +612,107 @@ namespace OpenDental{
 					continue;
 				}
 				fldval=field.FieldValue;
-				if(pat!=null){
-					fldval=fldval.Replace("[address]",address);
-					fldval=fldval.Replace("[apptsAllFuture]",apptsAllFuture.TrimEnd());
-					fldval=fldval.Replace("[age]",Patients.AgeToString(pat.Age));
-					fldval=fldval.Replace("[balTotal]",fam.ListPats[0].BalTotal.ToString("c"));
-					fldval=fldval.Replace("[bal_0_30]",fam.ListPats[0].Bal_0_30.ToString("c"));
-					fldval=fldval.Replace("[bal_31_60]",fam.ListPats[0].Bal_31_60.ToString("c"));
-					fldval=fldval.Replace("[bal_61_90]",fam.ListPats[0].Bal_61_90.ToString("c"));
-					fldval=fldval.Replace("[balOver90]",fam.ListPats[0].BalOver90.ToString("c"));
-					fldval=fldval.Replace("[balInsEst]",fam.ListPats[0].InsEst.ToString("c"));
-					fldval=fldval.Replace("[balTotalMinusInsEst]",(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c"));
-					fldval=fldval.Replace("[BillingType]",DefC.GetName(DefCat.BillingTypes,pat.BillingType));
-					fldval=fldval.Replace("[Birthdate]",birthdate);
-					fldval=fldval.Replace("[carrierName]",carrierName);
-					fldval=fldval.Replace("[carrier2Name]",carrier2Name);
-					fldval=fldval.Replace("[ChartNumber]",pat.ChartNumber);
-					fldval=fldval.Replace("[carrierAddress]",carrierAddress);
-					fldval=fldval.Replace("[carrierCityStZip]",carrierCityStZip);
-					fldval=fldval.Replace("[cityStateZip]",pat.City+", "+pat.State+"  "+pat.Zip);
-					fldval=fldval.Replace("[clinicDescription]",clinicDescription);
-					fldval=fldval.Replace("[clinicAddress]",clinicAddress);
-					fldval=fldval.Replace("[clinicCityStZip]",clinicCityStZip);
-					fldval=fldval.Replace("[clinicPhone]",clinicPhone);
-					fldval=fldval.Replace("[DateFirstVisit]",dateFirstVisit);
-					fldval=fldval.Replace("[dateLastBW]",dateLastBW);
-					fldval=fldval.Replace("[dateLastExam]",dateLastExam);
-					fldval=fldval.Replace("[dateLastPanoFMX]",dateLastPanoFMX);
-					fldval=fldval.Replace("[dateLastProphy]",dateLastProphy);
-					fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
-					fldval=fldval.Replace("[dateRecallDue]",dateRecallDue);
-					fldval=fldval.Replace("[dateTimeLastAppt]",dateTimeLastAppt);
-					fldval=fldval.Replace("[Email]",pat.Email);
-					fldval=fldval.Replace("[famFinUrgNote]",fam.ListPats[0].FamFinUrgNote);
-					fldval=fldval.Replace("[gender]",Lan.g("enumPatientGender",pat.Gender.ToString()));
-					fldval=fldval.Replace("[guarantorNameFL]",fam.ListPats[0].GetNameFL());
-					fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
-					fldval=fldval.Replace("[insAnnualMax]",insAnnualMax);
-					fldval=fldval.Replace("[insDeductible]",insDeductible);
-					fldval=fldval.Replace("[insDeductibleUsed]",insDeductibleUsed);
-					fldval=fldval.Replace("[insFreqBW]", insFreqBW.TrimEnd());
-					fldval=fldval.Replace("[insFreqExams]",insFreqExams.TrimEnd());
-					fldval=fldval.Replace("[insFreqPanoFMX]",insFreqPanoFMX.TrimEnd());
-					fldval=fldval.Replace("[insPending]",insPending);
-					fldval=fldval.Replace("[insPercentages]",insPercentages);
-					fldval=fldval.Replace("[insPlanGroupNumber]",insPlanGroupNumber);
-					fldval=fldval.Replace("[insPlanGroupName]",insPlanGroupName);
-					fldval=fldval.Replace("[insPlanNote]",insPlanNote);
-					fldval=fldval.Replace("[insType]",insType);
-					fldval=fldval.Replace("[insSubNote]",insSubNote);
-					fldval=fldval.Replace("[insRemaining]",insRemaining);
-					fldval=fldval.Replace("[insUsed]",insUsed);
-					fldval=fldval.Replace("[ins2AnnualMax]",ins2AnnualMax);
-					fldval=fldval.Replace("[ins2Deductible]",ins2Deductible);
-					fldval=fldval.Replace("[ins2DeductibleUsed]",ins2DeductibleUsed);
-					fldval=fldval.Replace("[ins2Pending]",ins2Pending);
-					fldval=fldval.Replace("[ins2Percentages]",ins2Percentages);
-					fldval=fldval.Replace("[ins2Remaining]",insRemaining);
-					fldval=fldval.Replace("[ins2Used]",ins2Used);
-					fldval=fldval.Replace("[MedUrgNote]",pat.MedUrgNote);
-					fldval=fldval.Replace("[nameF]",pat.FName);
-					fldval=fldval.Replace("[nameFL]",pat.GetNameFL());
-					fldval=fldval.Replace("[nameFLFormal]",pat.GetNameFLFormal());
-					fldval=fldval.Replace("[nameL]",pat.LName);
-					fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
-					fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
-					fldval=fldval.Replace("[nextSchedApptsFam]",nextSchedApptsFam.TrimEnd());
-					fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
-					fldval=fldval.Replace("[plannedAppointmentInfo]",plannedAppointmentInfo);
-					fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
-					fldval=fldval.Replace("[recallInterval]",recallInterval);
-					fldval=fldval.Replace("[referredFrom]",referredFrom);
-					fldval=fldval.Replace("[referredTo]",referredTo.TrimEnd());
-					fldval=fldval.Replace("[salutation]",pat.GetSalutation());
-					fldval=fldval.Replace("[serviceNote]",serviceNote);
-					fldval=fldval.Replace("[siteDescription]",Sites.GetDescription(pat.SiteNum));
-					fldval=fldval.Replace("[subscriberID]",subscriberId);
-					fldval=fldval.Replace("[subscriberNameFL]",subscriberNameFL);
-					fldval=fldval.Replace("[subscriber2NameFL]",subscriber2NameFL);
-					fldval=fldval.Replace("[tpResponsPartyAddress]",tpResponsPartyAddress);
-					fldval=fldval.Replace("[tpResponsPartyCityStZip]",tpResponsPartyCityStZip);
-					fldval=fldval.Replace("[tpResponsPartyNameFL]",tpResponsPartyNameFL);
-					fldval=fldval.Replace("[treatmentPlanProcs]",treatmentPlanProcs);
-					fldval=fldval.Replace("[WirelessPhone]",StripPhoneBeyondSpace(pat.WirelessPhone));
-					fldval=fldval.Replace("[WkPhone]",StripPhoneBeyondSpace(pat.WkPhone));
-				}
+				fldval=fldval.Replace("[address]",address);
+				fldval=fldval.Replace("[apptsAllFuture]",apptsAllFuture.TrimEnd());
+				fldval=fldval.Replace("[age]",Patients.AgeToString(pat.Age));
+				fldval=fldval.Replace("[balTotal]",fam.ListPats[0].BalTotal.ToString("c"));
+				fldval=fldval.Replace("[bal_0_30]",fam.ListPats[0].Bal_0_30.ToString("c"));
+				fldval=fldval.Replace("[bal_31_60]",fam.ListPats[0].Bal_31_60.ToString("c"));
+				fldval=fldval.Replace("[bal_61_90]",fam.ListPats[0].Bal_61_90.ToString("c"));
+				fldval=fldval.Replace("[balOver90]",fam.ListPats[0].BalOver90.ToString("c"));
+				fldval=fldval.Replace("[balInsEst]",fam.ListPats[0].InsEst.ToString("c"));
+				fldval=fldval.Replace("[balTotalMinusInsEst]",(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c"));
+				fldval=fldval.Replace("[BillingType]",DefC.GetName(DefCat.BillingTypes,pat.BillingType));
+				fldval=fldval.Replace("[Birthdate]",birthdate);
+				fldval=fldval.Replace("[carrierName]",carrierName);
+				fldval=fldval.Replace("[carrier2Name]",carrier2Name);
+				fldval=fldval.Replace("[ChartNumber]",pat.ChartNumber);
+				fldval=fldval.Replace("[carrierAddress]",carrierAddress);
+				fldval=fldval.Replace("[carrierCityStZip]",carrierCityStZip);
+				fldval=fldval.Replace("[cityStateZip]",pat.City+", "+pat.State+"  "+pat.Zip);
+				fldval=fldval.Replace("[clinicDescription]",clinicDescription);
+				fldval=fldval.Replace("[clinicAddress]",clinicAddress);
+				fldval=fldval.Replace("[clinicCityStZip]",clinicCityStZip);
+				fldval=fldval.Replace("[clinicPhone]",clinicPhone);
+				fldval=fldval.Replace("[DateFirstVisit]",dateFirstVisit);
+				fldval=fldval.Replace("[dateLastBW]",dateLastBW);
+				fldval=fldval.Replace("[dateLastExam]",dateLastExam);
+				fldval=fldval.Replace("[dateLastPanoFMX]",dateLastPanoFMX);
+				fldval=fldval.Replace("[dateLastProphy]",dateLastProphy);
+				fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
+				fldval=fldval.Replace("[dateRecallDue]",dateRecallDue);
+				fldval=fldval.Replace("[dateTimeLastAppt]",dateTimeLastAppt);
+				fldval=fldval.Replace("[Email]",pat.Email);
+				fldval=fldval.Replace("[famFinUrgNote]",fam.ListPats[0].FamFinUrgNote);
+				fldval=fldval.Replace("[guarantorNameF]",guarantorNameF);
+				fldval=fldval.Replace("[guarantorNameFL]",guarantorNameFL);
+				fldval=fldval.Replace("[guarantorNameL]",guarantorNameL);
+				fldval=fldval.Replace("[guarantorNamePref]",guarantorNamePref);
+				fldval=fldval.Replace("[guarantorNameLF]",guarantorNameLF);
+				fldval=fldval.Replace("[gender]",Lan.g("enumPatientGender",pat.Gender.ToString()));
+				fldval=fldval.Replace("[genderHeShe]",genderHeShe);
+				fldval=fldval.Replace("[genderheshe]",genderheshe);
+				fldval=fldval.Replace("[genderHimHer]",genderHimHer);
+				fldval=fldval.Replace("[genderhimher]",genderhimher);
+				fldval=fldval.Replace("[genderHimselfHerself]",genderHimselfHerself);
+				fldval=fldval.Replace("[genderhimselfherself]",genderhimselfherself);
+				fldval=fldval.Replace("[genderHisHer]",genderHisHer);
+				fldval=fldval.Replace("[genderhisher]",genderhisher);
+				fldval=fldval.Replace("[genderHisHers]",genderHisHers);
+				fldval=fldval.Replace("[genderhishers]",genderhishers);
+				fldval=fldval.Replace("[guarantorNameFL]",fam.ListPats[0].GetNameFL());
+				fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
+				fldval=fldval.Replace("[insAnnualMax]",insAnnualMax);
+				fldval=fldval.Replace("[insDeductible]",insDeductible);
+				fldval=fldval.Replace("[insDeductibleUsed]",insDeductibleUsed);
+				fldval=fldval.Replace("[insFreqBW]", insFreqBW.TrimEnd());
+				fldval=fldval.Replace("[insFreqExams]",insFreqExams.TrimEnd());
+				fldval=fldval.Replace("[insFreqPanoFMX]",insFreqPanoFMX.TrimEnd());
+				fldval=fldval.Replace("[insPending]",insPending);
+				fldval=fldval.Replace("[insPercentages]",insPercentages);
+				fldval=fldval.Replace("[insPlanGroupNumber]",insPlanGroupNumber);
+				fldval=fldval.Replace("[insPlanGroupName]",insPlanGroupName);
+				fldval=fldval.Replace("[insPlanNote]",insPlanNote);
+				fldval=fldval.Replace("[insType]",insType);
+				fldval=fldval.Replace("[insSubNote]",insSubNote);
+				fldval=fldval.Replace("[insRemaining]",insRemaining);
+				fldval=fldval.Replace("[insUsed]",insUsed);
+				fldval=fldval.Replace("[ins2AnnualMax]",ins2AnnualMax);
+				fldval=fldval.Replace("[ins2Deductible]",ins2Deductible);
+				fldval=fldval.Replace("[ins2DeductibleUsed]",ins2DeductibleUsed);
+				fldval=fldval.Replace("[ins2Pending]",ins2Pending);
+				fldval=fldval.Replace("[ins2Percentages]",ins2Percentages);
+				fldval=fldval.Replace("[ins2Remaining]",insRemaining);
+				fldval=fldval.Replace("[ins2Used]",ins2Used);
+				fldval=fldval.Replace("[MedUrgNote]",pat.MedUrgNote);
+				fldval=fldval.Replace("[nameF]",pat.FName);
+				fldval=fldval.Replace("[nameFL]",pat.GetNameFL());
+				fldval=fldval.Replace("[nameFLFormal]",pat.GetNameFLFormal());
+				fldval=fldval.Replace("[nameL]",pat.LName);
+				fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
+				fldval=fldval.Replace("[nameMI]",pat.MiddleI);
+				fldval=fldval.Replace("[namePref]",pat.Preferred);
+				fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
+				fldval=fldval.Replace("[nextSchedApptsFam]",nextSchedApptsFam.TrimEnd());
+				fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
+				fldval=fldval.Replace("[plannedAppointmentInfo]",plannedAppointmentInfo);
+				fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
+				fldval=fldval.Replace("[recallInterval]",recallInterval);
+				fldval=fldval.Replace("[referredFrom]",referredFrom);
+				fldval=fldval.Replace("[referredTo]",referredTo.TrimEnd());
+				fldval=fldval.Replace("[salutation]",pat.GetSalutation());
+				fldval=fldval.Replace("[serviceNote]",serviceNote);
+				fldval=fldval.Replace("[siteDescription]",Sites.GetDescription(pat.SiteNum));
+				fldval=fldval.Replace("[subscriberID]",subscriberId);
+				fldval=fldval.Replace("[subscriberNameFL]",subscriberNameFL);
+				fldval=fldval.Replace("[subscriber2NameFL]",subscriber2NameFL);
+				fldval=fldval.Replace("[timeNow]",DateTime.Now.ToShortTimeString());
+				fldval=fldval.Replace("[tpResponsPartyAddress]",tpResponsPartyAddress);
+				fldval=fldval.Replace("[tpResponsPartyCityStZip]",tpResponsPartyCityStZip);
+				fldval=fldval.Replace("[tpResponsPartyNameFL]",tpResponsPartyNameFL);
+				fldval=fldval.Replace("[treatmentPlanProcs]",treatmentPlanProcs);
+				fldval=fldval.Replace("[WirelessPhone]",StripPhoneBeyondSpace(pat.WirelessPhone));
+				fldval=fldval.Replace("[WkPhone]",StripPhoneBeyondSpace(pat.WkPhone));
 				fldval=fldval.Replace("[dateToday]",DateTime.Today.ToShortDateString());
 				fldval=fldval.Replace("[practiceTitle]",PrefC.GetString(PrefName.PracticeTitle));
 				field.FieldValue=fldval;

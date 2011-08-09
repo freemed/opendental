@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public string InternalName;
 		///<summary>Order to display in the grid or list. Every entry must have a unique itemorder.</summary>
 		public int ItemOrder;
-		///<summary>Optional alternate description to display for field.  Can be in another language.</summary>
+		///<summary>Optional alternate description to display for field.  Can be in another language.  For the ortho category, this is the 'key', since InternalName is blank.</summary>
 		public string Description;
 		///<summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
 		public int ColumnWidth;
