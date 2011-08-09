@@ -1304,22 +1304,29 @@ namespace OpenDental{
 		private void OnScanMulti_Click() {
 			string tempFile=Path.GetTempFileName().Replace(".tmp", ".pdf");
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
-			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));
+			//it will always use the system default scanner.  No mechanism for picking scanner.
+			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));//if true, this will bring up the scanner interface for the selected scanner a few lines down
 			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
-			if(EZTwain.OpenDefaultSource()) {
+			if(EZTwain.OpenDefaultSource()) {//if it opens the scanner successfully
 				EZTwain.SetPixelType(2);//
 				EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
 				EZTwain.AcquireMultipageFile(this.Handle,tempFile);
 			}
-			if(EZTwain.LastErrorCode()!=0) {
-				MsgBox.Show(this,"Unable to scan.");
+			else {
+				MsgBox.Show(this,"Default scanner could not be opened.  Check that the default scanner works from Windows Control Panel and from Windows Fax and Scan.");
+				return;
+			}
+			int errorCode=EZTwain.LastErrorCode();
+			//currently gives errorcode 43.
+			if(errorCode!=0) {//don't know when this happens
+				MessageBox.Show(Lan.g(this,"Unable to scan. Error code:")+errorCode.ToString());
 				return;
 			}
 			string nodeId=""; 
 			Document doc=null; 
 			bool copied = true; 
 			try { 
-				doc = ImageStore.Import(tempFile, GetCurrentCategory(),PatCur); 
+				doc=ImageStore.Import(tempFile, GetCurrentCategory(),PatCur); 
 			} 
 			catch(Exception ex) { 
 				MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + tempFile); 
