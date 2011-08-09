@@ -1302,57 +1302,43 @@ namespace OpenDental{
 		}
 
 		private void OnScanMulti_Click() {
-			File.Delete("C:\\image.pdf");
-			string tempFile=Path.GetTempFileName();
+			string tempFile=Path.GetTempFileName().Replace(".tmp", ".pdf");
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
 			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));
 			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
 			if(EZTwain.OpenDefaultSource()) {
-				// Not guaranteed to work, check return = 1
 				EZTwain.SetPixelType(2);//
 				EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
-				// If you can't get a Window handle, use IntPtr.Zero:
-				EZTwain.AcquireMultipageFile(this.Handle, "c:\\image.pdf");
+				EZTwain.AcquireMultipageFile(this.Handle,tempFile);
 			}
 			if(EZTwain.LastErrorCode()!=0) {
-				EZTwain.ReportLastError("Unable to scan.");//??
 				MsgBox.Show(this,"Unable to scan.");
 				return;
 			}
-			OpenFileDialog openFileDialog=new OpenFileDialog(); 
-			openFileDialog.FileName = "c:\\image.pdf"; 
-			openFileDialog.Filter = "PDF files (*.pdf)|*.pdf"; 
-			openFileDialog.FilterIndex = 1; 
-			openFileDialog.Multiselect=true; 
-			string[] fileNames=openFileDialog.FileNames; 
-			if(fileNames.Length<1){ 
-				return; 
-			} 
 			string nodeId=""; 
 			Document doc=null; 
-			for(int i=0;i<fileNames.Length;i++){ //this loop needs to go away or have an explanation.
-				bool copied = true; 
-				try { 
-					doc = ImageStore.Import(fileNames[i], GetCurrentCategory(),PatCur); 
-				} 
-				catch(Exception ex) { 
-				MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName); 
+			bool copied = true; 
+			try { 
+				doc = ImageStore.Import(tempFile, GetCurrentCategory(),PatCur); 
+			} 
+			catch(Exception ex) { 
+				MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + tempFile); 
 				copied = false; 
+			} 
+			if(copied){ 
+				FillDocList(false); 
+				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0"))); 
+				FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode)); 
+				FormD.ShowDialog();//some of the fields might get changed, but not the filename 
+				if(FormD.DialogResult!=DialogResult.OK){ 
+					DeleteSelection(false,false); 
+				}
+				else{ 
+					nodeId=MakeIdentifier(doc.DocNum.ToString(),"0");
+					selectionDoc=doc.Copy();
 				} 
-				if(copied){ 
-					FillDocList(false); 
-					SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0"))); 
-					FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode)); 
-					FormD.ShowDialog();//some of the fields might get changed, but not the filename 
-					if(FormD.DialogResult!=DialogResult.OK){ 
-						DeleteSelection(false,false); 
-					}
-					else{ 
-						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0");
-						selectionDoc=doc.Copy();//this was missing. ??
-					} 
-				} 
-			}
+			} 
+			File.Delete(tempFile);
 			//Reselect the last successfully added node when necessary.
 			if(doc!=null && MakeIdentifier(doc.DocNum.ToString(),"0")!=nodeId) {
 				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
