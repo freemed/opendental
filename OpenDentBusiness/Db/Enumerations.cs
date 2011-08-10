@@ -1611,7 +1611,7 @@ namespace OpenDentBusiness{
 		EZTEC_GIFCON,
 		///<summary>45</summary>
 		EZTEC_FILE_READ_ERR,
-		///<summary>45</summary>
+		///<summary>46</summary>
 		EZTEC_BAD_REGION,
 		///<summary>47</summary>
 		EZTEC_FILE_WRITE,
