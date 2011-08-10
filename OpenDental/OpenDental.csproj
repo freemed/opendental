@@ -264,7 +264,6 @@
       <DependentUpon>FormPrintReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Bridges\Dxis.cs" />
-    <Compile Include="Bridges\eztwain.cs" />
     <Compile Include="Bridges\Vipersoft.cs" />
     <Compile Include="Bridges\DBSWin.cs" />
     <Compile Include="Bridges\DentalEye.cs" />
@@ -2174,7 +2173,9 @@
     <Compile Include="Misc\ClassConvertDatabase.cs" />
     <Compile Include="Misc\ClassesShared.cs" />
     <Compile Include="Misc\DataConnectionOld.cs" />
-    <Compile Include="Misc\EZTwain.cs" />
+    <Compile Include="Misc\EZTwain.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Misc\MigraDocHelper.cs" />
     <Compile Include="ReportingForRdl\Allocators\Allocator.cs" />
     <Compile Include="ReportingForRdl\Allocators\AllocatorCollection.cs" />

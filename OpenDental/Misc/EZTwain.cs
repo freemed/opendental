@@ -4,8 +4,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace OpenDental
-{
+namespace OpenDental{
 
 	public abstract class EZTwain {
 
