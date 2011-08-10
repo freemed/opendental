@@ -26,6 +26,8 @@ namespace OpenDentBusiness {
 			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return "";
 			}
+			command="DROP TABLE IF EXISTS `signal`";//Signal is keyword for MySQL 5.5.  Was renamed to signalod so drop if exists.
+			Db.NonQ(command);
 			command="SHOW TABLES";
 			table=Db.GetTable(command);
 			string[] tableNames=new string[table.Rows.Count];
