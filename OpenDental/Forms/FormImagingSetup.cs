@@ -374,7 +374,7 @@ namespace OpenDental{
 			// 
 			this.textScanningResolution.Location = new System.Drawing.Point(273,41);
 			this.textScanningResolution.MaxVal = 1000;
-			this.textScanningResolution.MinVal = 50;
+			this.textScanningResolution.MinVal = 51;
 			this.textScanningResolution.Name = "textScanningResolution";
 			this.textScanningResolution.Size = new System.Drawing.Size(68,20);
 			this.textScanningResolution.TabIndex = 20;

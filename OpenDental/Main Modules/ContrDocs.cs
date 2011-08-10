@@ -1317,9 +1317,24 @@ namespace OpenDental{
 				return;
 			}
 			int errorCode=EZTwain.LastErrorCode();
-			//currently gives errorcode 43.
-			if(errorCode!=0) {//don't know when this happens
-				MessageBox.Show(Lan.g(this,"Unable to scan. Error code:")+errorCode.ToString());
+			if(errorCode!=0) {
+				string message="";
+				if(errorCode==(int)EZTwainErrorCode.EZTEC_USER_CANCEL) {//19
+					message="\r\nScanning was cancelled.";
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_JPEG_DLL) {//22
+					message="\r\nRequired file EZJpeg.dll is missing.";
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_0_PAGES) {//38
+					message="\r\nScanning cancelled.";
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_NO_PDF) {//43
+					message="\r\nRequired file EZPdf.dll is missing.";
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_DEVICE_PAPERJAM) {//76
+					message="\r\nPaper jam.";
+				}
+				MessageBox.Show(Lan.g(this,"Unable to scan. Error code" + errorCode + ":") + Enum.GetName(typeof(EZTwainErrorCode),errorCode)+message);
 				return;
 			}
 			string nodeId=""; 
@@ -2635,6 +2650,10 @@ namespace OpenDental{
 			//Update the mount image to reflect the swapped images.
 			InvalidateSettings(ApplyImageSettings.ALL,false,docsToUpdate);
 		}
+
+		
 		
 	}
+
+	
 }
