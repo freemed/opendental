@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AppointmentImage.aspx.cs" Inherits="MobileWeb.AppointmentImage" %>
+<%@ Register Assembly="Microsoft.Web.GeneratedImage" Namespace="Microsoft.Web" TagPrefix="cc1" %>
 <%@ Import namespace="OpenDentBusiness.Mobile" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -13,13 +14,21 @@
 				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
 </div>
 
-<img src="app.jpg" width="724px" height="662px" usemap="#immap" />
-					<map name="immap" id="immap" style="position: relative;">
-					<area shape="rect" coords="272, 84, 369, 172" onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
-					<area shape="rect" coords="375, 557, 482, 622" onclick="areaClicked('AppointmentDetails.aspx?AptNum=23')" alt="box2__"  />
-					</map>
+<%--	<img src="app.jpg" width="724px" height="662px" usemap="#immap" />
+--%>
+
+<%--	<asp:Image ID="Image1" runat="server" />
+	<map name="immap" id="immap" style="position: relative;">
+	<area shape="rect" coords="272, 84, 369, 172" onclick="areaClicked('AppointmentDetails.aspx?AptNum=4')" alt="box1__"  />
+	<area shape="rect" coords="375, 557, 482, 622" onclick="areaClicked('AppointmentDetails.aspx?AptNum=5')" alt="box2__"  />
+	</map>--%>
+
+
+
+<cc1:GeneratedImage ID="GeneratedImage1" runat="server" 
+	ImageHandlerUrl="~/ImageHandler1.ashx">
+</cc1:GeneratedImage>
 
 </div>
-
 </body>
 </html>

@@ -34,6 +34,7 @@ namespace MobileWeb {
 						}
 					}
 					DentalOfficeID=util.GetDentalOfficeID(username,password);
+					//DentalOfficeID=;// !!! or testing only comment out this line on prod
 					if(DentalOfficeID>0) {
 						Session["CustomerNum"]=DentalOfficeID;
 						Message.Text="CorrectLogin";

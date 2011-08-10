@@ -88,6 +88,7 @@ namespace MobileWeb {
 				}else{
 					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,ProvNum,AppointmentDate,AppointmentDate);
 				}
+				appointmentmList=appointmentmList.Where(a=>a.AptStatus==ApptStatus.Scheduled).ToList();//only pick appointments that are scheduled.
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
 			}

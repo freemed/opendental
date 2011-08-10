@@ -25,7 +25,7 @@
 			<div class="coloncolumn">:</div>
 			<div class="rightcolumn">
 					<div style="word-wrap:break-word;white-space:normal;"><%Response.Write(phar.Address);%></div>
-					<%if(String.IsNullOrEmpty(phar.Address2)) {%>
+					<%if(!String.IsNullOrEmpty(phar.Address2)) {%>
 					<div class="info"><%Response.Write(phar.Address2);%></div>
 					<%}%>
 					<div class="infocolumn"><%Response.Write(phar.City);%></div>
