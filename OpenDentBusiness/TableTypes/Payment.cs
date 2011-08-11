@@ -36,6 +36,8 @@ namespace OpenDentBusiness{
 		///<summary>Text of printed receipt if the payment was done electronically. Allows reprinting if needed. Only used for PayConnect at the moment, but plans to use for XCharge as well.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Receipt;
+		///<summary>True if this was an automatically added recurring CC charge rather then one entered by the user.</summary>
+		public bool IsRecurringCC;
 
 
 		
