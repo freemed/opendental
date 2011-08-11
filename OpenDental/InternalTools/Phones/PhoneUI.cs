@@ -220,13 +220,9 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
-			}
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(langThis,"Not authorized.");
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
 						return;
 					}
 				}
@@ -250,13 +246,9 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
-			}
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(langThis,"Not authorized.");
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
 						return;
 					}
 				}
@@ -281,13 +273,9 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
-			}
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(langThis,"Not authorized.");
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
 						return;
 					}
 				}
@@ -317,10 +305,9 @@ namespace OpenDental {
 			if(ClockEvents.IsClockedIn(employeeNum)) {
 				return true;
 			}
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)) {
-				if(Security.CurUser.EmployeeNum!=employeeNum) {
-					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-						MsgBox.Show(langThis,"Not authorized.");
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
 						return false;
 					}
 				}
