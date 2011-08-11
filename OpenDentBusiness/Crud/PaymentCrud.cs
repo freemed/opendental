@@ -46,19 +46,20 @@ namespace OpenDentBusiness.Crud{
 			Payment payment;
 			for(int i=0;i<table.Rows.Count;i++) {
 				payment=new Payment();
-				payment.PayNum    = PIn.Long  (table.Rows[i]["PayNum"].ToString());
-				payment.PayType   = PIn.Long  (table.Rows[i]["PayType"].ToString());
-				payment.PayDate   = PIn.Date  (table.Rows[i]["PayDate"].ToString());
-				payment.PayAmt    = PIn.Double(table.Rows[i]["PayAmt"].ToString());
-				payment.CheckNum  = PIn.String(table.Rows[i]["CheckNum"].ToString());
-				payment.BankBranch= PIn.String(table.Rows[i]["BankBranch"].ToString());
-				payment.PayNote   = PIn.String(table.Rows[i]["PayNote"].ToString());
-				payment.IsSplit   = PIn.Bool  (table.Rows[i]["IsSplit"].ToString());
-				payment.PatNum    = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				payment.ClinicNum = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
-				payment.DateEntry = PIn.Date  (table.Rows[i]["DateEntry"].ToString());
-				payment.DepositNum= PIn.Long  (table.Rows[i]["DepositNum"].ToString());
-				payment.Receipt   = PIn.String(table.Rows[i]["Receipt"].ToString());
+				payment.PayNum       = PIn.Long  (table.Rows[i]["PayNum"].ToString());
+				payment.PayType      = PIn.Long  (table.Rows[i]["PayType"].ToString());
+				payment.PayDate      = PIn.Date  (table.Rows[i]["PayDate"].ToString());
+				payment.PayAmt       = PIn.Double(table.Rows[i]["PayAmt"].ToString());
+				payment.CheckNum     = PIn.String(table.Rows[i]["CheckNum"].ToString());
+				payment.BankBranch   = PIn.String(table.Rows[i]["BankBranch"].ToString());
+				payment.PayNote      = PIn.String(table.Rows[i]["PayNote"].ToString());
+				payment.IsSplit      = PIn.Bool  (table.Rows[i]["IsSplit"].ToString());
+				payment.PatNum       = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				payment.ClinicNum    = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				payment.DateEntry    = PIn.Date  (table.Rows[i]["DateEntry"].ToString());
+				payment.DepositNum   = PIn.Long  (table.Rows[i]["DepositNum"].ToString());
+				payment.Receipt      = PIn.String(table.Rows[i]["Receipt"].ToString());
+				payment.IsRecurringCC= PIn.Bool  (table.Rows[i]["IsRecurringCC"].ToString());
 				retVal.Add(payment);
 			}
 			return retVal;
@@ -99,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PayNum,";
 			}
-			command+="PayType,PayDate,PayAmt,CheckNum,BankBranch,PayNote,IsSplit,PatNum,ClinicNum,DateEntry,DepositNum,Receipt) VALUES(";
+			command+="PayType,PayDate,PayAmt,CheckNum,BankBranch,PayNote,IsSplit,PatNum,ClinicNum,DateEntry,DepositNum,Receipt,IsRecurringCC) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(payment.PayNum)+",";
 			}
@@ -115,7 +116,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (payment.ClinicNum)+","
 				+    DbHelper.Now()+","
 				+    POut.Long  (payment.DepositNum)+","
-				+DbHelper.ParamChar+"paramReceipt)";
+				+DbHelper.ParamChar+"paramReceipt,"
+				+    POut.Bool  (payment.IsRecurringCC)+")";
 			if(payment.Receipt==null) {
 				payment.Receipt="";
 			}
@@ -132,18 +134,19 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Payment in the database.</summary>
 		internal static void Update(Payment payment){
 			string command="UPDATE payment SET "
-				+"PayType   =  "+POut.Long  (payment.PayType)+", "
-				+"PayDate   =  "+POut.Date  (payment.PayDate)+", "
-				+"PayAmt    = '"+POut.Double(payment.PayAmt)+"', "
-				+"CheckNum  = '"+POut.String(payment.CheckNum)+"', "
-				+"BankBranch= '"+POut.String(payment.BankBranch)+"', "
-				+"PayNote   = '"+POut.String(payment.PayNote)+"', "
-				+"IsSplit   =  "+POut.Bool  (payment.IsSplit)+", "
-				+"PatNum    =  "+POut.Long  (payment.PatNum)+", "
-				+"ClinicNum =  "+POut.Long  (payment.ClinicNum)+", "
+				+"PayType      =  "+POut.Long  (payment.PayType)+", "
+				+"PayDate      =  "+POut.Date  (payment.PayDate)+", "
+				+"PayAmt       = '"+POut.Double(payment.PayAmt)+"', "
+				+"CheckNum     = '"+POut.String(payment.CheckNum)+"', "
+				+"BankBranch   = '"+POut.String(payment.BankBranch)+"', "
+				+"PayNote      = '"+POut.String(payment.PayNote)+"', "
+				+"IsSplit      =  "+POut.Bool  (payment.IsSplit)+", "
+				+"PatNum       =  "+POut.Long  (payment.PatNum)+", "
+				+"ClinicNum    =  "+POut.Long  (payment.ClinicNum)+", "
 				//DateEntry not allowed to change
 				//DepositNum excluded from update
-				+"Receipt   =  "+DbHelper.ParamChar+"paramReceipt "
+				+"Receipt      =  "+DbHelper.ParamChar+"paramReceipt, "
+				+"IsRecurringCC=  "+POut.Bool  (payment.IsRecurringCC)+" "
 				+"WHERE PayNum = "+POut.Long(payment.PayNum);
 			if(payment.Receipt==null) {
 				payment.Receipt="";
@@ -196,6 +199,10 @@ namespace OpenDentBusiness.Crud{
 			if(payment.Receipt != oldPayment.Receipt) {
 				if(command!=""){ command+=",";}
 				command+="Receipt = "+DbHelper.ParamChar+"paramReceipt";
+			}
+			if(payment.IsRecurringCC != oldPayment.IsRecurringCC) {
+				if(command!=""){ command+=",";}
+				command+="IsRecurringCC = "+POut.Bool(payment.IsRecurringCC)+"";
 			}
 			if(command==""){
 				return;

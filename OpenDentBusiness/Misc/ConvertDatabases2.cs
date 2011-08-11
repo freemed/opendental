@@ -6086,7 +6086,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="DELETE FROM preference WHERE PrefName = 'ScannerCompressionPhotos'";
 				Db.NonQ(command);
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE payment ADD IsRecurringCC tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE payment ADD IsRecurringCC number(3)";
+					Db.NonQ(command);
+					command="UPDATE payment SET IsRecurringCC = 0 WHERE IsRecurringCC IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE payment MODIFY IsRecurringCC NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 					
@@ -6111,6 +6122,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
+
 
 
 
