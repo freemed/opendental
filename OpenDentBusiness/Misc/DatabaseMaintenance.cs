@@ -1097,26 +1097,26 @@ namespace OpenDentBusiness {
 			return log;
 		}
 		
-		public static string InsPlanCheckNoCarrier(bool verbose,bool isCheck) {
+		public static string InsPlanInvalidCarrier(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
 			//Gets a list of insurance plans that do not have a carrier attached. The list should be blank. If not, then you need to go to the plan listed and add a carrier. Missing carriers will cause the send claims function to give an error.
-			command="SELECT PlanNum FROM insplan WHERE CarrierNum=0";
+			command="SELECT PlanNum FROM insplan WHERE CarrierNum NOT IN (SELECT CarrierNum FROM carrier)";
 			table=Db.GetTable(command);
-			if(isCheck){
-				if(table.Rows.Count>0 || verbose){
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Ins plans with carrier missing found: ")+table.Rows.Count+"\r\n";
 				}
 			}
-			else{
+			else {
 				if(table.Rows.Count>0) {
 					Carrier carrier=new Carrier();
 					carrier.CarrierName="unknown";
 					Carriers.Insert(carrier);
 					command="UPDATE insplan SET CarrierNum="+POut.Long(carrier.CarrierNum)
-				    +" WHERE CarrierNum=0";
+				    +" WHERE CarrierNum NOT IN (SELECT CarrierNum FROM carrier)";
 					Db.NonQ(command);
 				}
 				int numberFixed=table.Rows.Count;

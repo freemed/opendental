@@ -353,7 +353,7 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.DocumentWithNoCategory(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.InsPlanCheckNoCarrier(verbose,isCheck);
+			textLog.Text+=DatabaseMaintenance.InsPlanInvalidCarrier(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanNoClaimForm(verbose,isCheck);
 			Application.DoEvents();
