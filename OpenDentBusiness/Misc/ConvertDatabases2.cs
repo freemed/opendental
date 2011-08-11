@@ -6009,9 +6009,50 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.10.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_0_11();
+		}
+
+		private static void To11_0_11() {
+			if(FromVersion<new Version("11.0.11.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					//Bug fix for disease column (depricated) being in use. This code is identical to the function run again in 11.0 and is safe to run more than once.
+					bool diseasefieldused=false;
+					bool problemfieldused=false;
+					bool allergyfieldused=false;
+					command="SELECT ItemOrder FROM displayfield WHERE InternalName='Diseases'";
+					string str=Db.GetScalar(command);
+					int itemOrder=0;
+					if(!String.IsNullOrEmpty(str)) {
+						diseasefieldused=true;
+						itemOrder=PIn.Int(str);
+					}
+					command="SELECT * FROM displayfield WHERE InternalName='Problems'";
+					if(Db.GetTable(command).Rows.Count>0) {
+						problemfieldused=true;
+					}
+					command="SELECT * FROM displayfield WHERE InternalName='Allergies'";
+					if(Db.GetTable(command).Rows.Count>0) {
+						allergyfieldused=true;
+					}
+					if(diseasefieldused && !problemfieldused && !allergyfieldused) {//disease is used, problems and allergies are not used
+						command="DELETE FROM displayfield WHERE InternalName='Diseases' AND Category=5";
+						Db.NonQ(command);
+						command="INSERT INTO displayfield (InternalName,Description,ItemOrder,ColumnWidth,Category) VALUES ('Problems','',"+POut.Int(itemOrder)+",0,5)";
+						Db.NonQ(command);
+						command="INSERT INTO displayfield (InternalName,Description,ItemOrder,ColumnWidth,Category) VALUES ('Allergies','',"+POut.Int(itemOrder)+",0,5)";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					//do nothing
+				}
+				command="UPDATE preference SET ValueString = '11.0.11.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_1_0();
 		}
-		
+
 		///<summary></summary>
 		private static void To11_1_0() {
 			if(FromVersion<new Version("11.1.0.0")) {
