@@ -1440,11 +1440,10 @@ FROM insplan";
 				AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0)/*may not be necessary*/
 				WHERE tempplanned.AmtPlanned>0 ";
 			if(!noIns) {//if we don't want patients without insurance
-				command+=@"AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0) AND patplan.Ordinal=1 "	
-				+"AND insplan.MonthRenew="+POut.Int(monthStart)+" ";
+				command+=@"AND patplan.Ordinal=1 AND insplan.MonthRenew="+POut.Int(monthStart)+" ";
 			}
-			if(!(aboveAmount==0 && noIns)){
-				command+=@"AND tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+" ";
+			if(aboveAmount>0) {
+				command+=@"AND (tempannualmax.AnnualMax IS NULL OR tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+") ";
 			}
 			for(int i=0;i<providerFilter.Count;i++) {
 				if(i==0) {
