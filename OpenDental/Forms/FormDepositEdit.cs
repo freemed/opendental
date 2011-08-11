@@ -84,8 +84,6 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDepositEdit));
 			this.groupSelect = new System.Windows.Forms.GroupBox();
-			this.butRefresh = new OpenDental.UI.Button();
-			this.textDateStart = new OpenDental.ValidDate();
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
 			this.labelClinic = new System.Windows.Forms.Label();
@@ -98,14 +96,16 @@ namespace OpenDental{
 			this.textAmount = new System.Windows.Forms.TextBox();
 			this.comboDepositAccount = new System.Windows.Forms.ComboBox();
 			this.labelDepositAccount = new System.Windows.Forms.Label();
+			this.textDepositAccount = new System.Windows.Forms.TextBox();
 			this.gridIns = new OpenDental.UI.ODGrid();
+			this.gridPat = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
 			this.textDate = new OpenDental.ValidDate();
 			this.butDelete = new OpenDental.UI.Button();
-			this.gridPat = new OpenDental.UI.ODGrid();
+			this.butRefresh = new OpenDental.UI.Button();
+			this.textDateStart = new OpenDental.ValidDate();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textDepositAccount = new System.Windows.Forms.TextBox();
 			this.groupSelect.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -125,27 +125,6 @@ namespace OpenDental{
 			this.groupSelect.TabIndex = 99;
 			this.groupSelect.TabStop = false;
 			this.groupSelect.Text = "Show";
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(13,307);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75,26);
-			this.butRefresh.TabIndex = 106;
-			this.butRefresh.Text = "Refresh";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
-			// 
-			// textDateStart
-			// 
-			this.textDateStart.Location = new System.Drawing.Point(14,36);
-			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(94,20);
-			this.textDateStart.TabIndex = 105;
 			// 
 			// label5
 			// 
@@ -252,6 +231,14 @@ namespace OpenDental{
 			this.labelDepositAccount.Text = "Deposit into Account";
 			this.labelDepositAccount.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// textDepositAccount
+			// 
+			this.textDepositAccount.Location = new System.Drawing.Point(602,241);
+			this.textDepositAccount.Name = "textDepositAccount";
+			this.textDepositAccount.ReadOnly = true;
+			this.textDepositAccount.Size = new System.Drawing.Size(289,20);
+			this.textDepositAccount.TabIndex = 112;
+			// 
 			// gridIns
 			// 
 			this.gridIns.HScrollVisible = false;
@@ -264,6 +251,21 @@ namespace OpenDental{
 			this.gridIns.Title = "Insurance Payments";
 			this.gridIns.TranslationName = "TableDepositSlipIns";
 			this.gridIns.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridIns_CellClick);
+			this.gridIns.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridIns_MouseUp);
+			// 
+			// gridPat
+			// 
+			this.gridPat.HScrollVisible = false;
+			this.gridPat.Location = new System.Drawing.Point(8,12);
+			this.gridPat.Name = "gridPat";
+			this.gridPat.ScrollValue = 0;
+			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridPat.Size = new System.Drawing.Size(584,299);
+			this.gridPat.TabIndex = 100;
+			this.gridPat.Title = "Patient Payments";
+			this.gridPat.TranslationName = "TableDepositSlipPat";
+			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
+			this.gridPat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridPat_MouseUp);
 			// 
 			// butPrint
 			// 
@@ -306,18 +308,26 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// gridPat
+			// butRefresh
 			// 
-			this.gridPat.HScrollVisible = false;
-			this.gridPat.Location = new System.Drawing.Point(8,12);
-			this.gridPat.Name = "gridPat";
-			this.gridPat.ScrollValue = 0;
-			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridPat.Size = new System.Drawing.Size(584,299);
-			this.gridPat.TabIndex = 100;
-			this.gridPat.Title = "Patient Payments";
-			this.gridPat.TranslationName = "TableDepositSlipPat";
-			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(13,307);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(75,26);
+			this.butRefresh.TabIndex = 106;
+			this.butRefresh.Text = "Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(14,36);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(94,20);
+			this.textDateStart.TabIndex = 105;
 			// 
 			// butOK
 			// 
@@ -348,14 +358,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// textDepositAccount
-			// 
-			this.textDepositAccount.Location = new System.Drawing.Point(602,241);
-			this.textDepositAccount.Name = "textDepositAccount";
-			this.textDepositAccount.ReadOnly = true;
-			this.textDepositAccount.Size = new System.Drawing.Size(289,20);
-			this.textDepositAccount.TabIndex = 112;
 			// 
 			// FormDepositEdit
 			// 
@@ -556,27 +558,35 @@ namespace OpenDental{
 			gridIns.EndUpdate();
 		}
 
-		///<summary>Usually run after any selected items changed. Recalculates amt based on selected items.</summary>
+		///<summary>Usually run after any selected items changed. Recalculates amt based on selected items.  May get fired twice when click and mouse up, harmless.</summary>
 		private void ComputeAmt(){
 			if(!IsNew){
 				return;
 			}
-			double amount=0;
+			decimal amount=0;
 			for(int i=0;i<gridPat.SelectedIndices.Length;i++){
-				amount+=PatPayList[gridPat.SelectedIndices[i]].PayAmt;
+				amount+=(decimal)PatPayList[gridPat.SelectedIndices[i]].PayAmt;
 			}
 			for(int i=0;i<gridIns.SelectedIndices.Length;i++){
-				amount+=ClaimPayList[gridIns.SelectedIndices[i]].CheckAmt;
+				amount+=(decimal)ClaimPayList[gridIns.SelectedIndices[i]].CheckAmt;
 			}
 			textAmount.Text=amount.ToString("F");
-			DepositCur.Amount=amount;
+			DepositCur.Amount=(double)amount;
 		}
 
 		private void gridPat_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			ComputeAmt();
 		}
 
+		private void gridPat_MouseUp(object sender,MouseEventArgs e) {
+			ComputeAmt();
+		}
+
 		private void gridIns_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
+			ComputeAmt();
+		}
+
+		private void gridIns_MouseUp(object sender,MouseEventArgs e) {
 			ComputeAmt();
 		}
 
