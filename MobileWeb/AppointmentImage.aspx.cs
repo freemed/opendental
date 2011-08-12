@@ -20,9 +20,6 @@ namespace MobileWeb {
 				if(CustomerNum==0) {
 					return;
 				}
-
-				
-
 			}
 			catch(Exception ex) {
 				LabelError.Text=Util.ErrorMessage;

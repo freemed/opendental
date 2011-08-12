@@ -87,6 +87,7 @@
 			</div>
 			<div style="height: 70px">
 			</div>
+			
 			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
 			</ul>
@@ -112,11 +113,12 @@
 		</div>
 
 		<div id="AppointmentImage">
-			<div class="toolbar">
+			<div class="toolbar" id="toolbarAppointmentImage" style="">
 				<h1>Appointments</h1>
 				<a class="home" href="#">Home</a>
 				<a class="button logout" href="#">Logout</a>
 			</div>
+		
 			<div id="AppointmentImageContents">
 			</div>
 		</div>

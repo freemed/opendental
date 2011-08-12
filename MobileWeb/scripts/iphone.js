@@ -39,6 +39,28 @@ function TraversePage(){
         } 
     */
 
+    var initialWidth = 0;
+    function resizeAppointmentImageToolbar() {
+        if (initialWidth== 0) {
+            initialWidth = jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
+        }
+        var zoom = window.innerWidth/initialWidth;
+        //console.log("zoom=" + zoom);
+        $('#toolbarAppointmentImage').attr('style', '-webkit-transform: scale('+zoom+')');
+    }
+    setInterval(resizeAppointmentImageToolbar, 1000);
+
+    function resetScreenSize() {
+        var browser=navigator.userAgent.toLowerCase(); 
+        if (browser.indexOf('android')!=-1) {
+            $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0'); //works for android
+        }
+        else {
+            var zoom=window.innerWidth/jQuery(window).width();
+            $('body').attr('style', '-webkit-transform: scale('+zoom+'); -webkit-transform-origin: 0 0;'); //works for iphone
+        }
+    }
+
     //Password is retained on some browsers- so it's got to be erased
     $('#password').focus(function () {
         //alert('Handler for password.focus() called.');
@@ -71,31 +93,14 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
     });
 
-    $('a[href="#AppointmentImage"]').click(function (e) {
+ $('a[href="#AppointmentImage"]').click(function (e) {
         var UrlForFetchingData = this.attributes["linkattib"].value;
         var SectionToFill = '#AppointmentImageContents';
         var MoveToURL = '#AppointmentImage';
         //console.log('AppointmentImage clicked UrlForFetchingData = ' + UrlForFetchingData);
         ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
     });
-    /*
-    $('a[href="#AppointmentImage"]').click(function (e) {
-        //var UrlForFetchingData = this.attributes["linkattib"].value;
-        //var SectionToFill = '#AppointmentListContents';
-        var MoveToURL = '#AppointmentImage';
-        //ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
-        // $(SectionToFill).append(MessageLoad);
-        //no slide effect
-        jQT.goTo(MoveToURL, ''); //do not use this line with tap event, it gives a 'Not able to tap element' error.
-        //FetchPage(UrlForFetchingData, SectionToFill)
-        //alert(window.innerWidth);
-        //window.innerWidth=500;
-        //alert(window.innerWidth);
-        //var mvp = document.getElementById('testViewport');
-        //mvp.removeAttribute('content');
-        //mvp.setAttribute('content', 'width=device-width, initial-scale=2.0, maximum-scale=10.0');
-    });
-    */
+
 
     $('a[href="#PharmacyList"]').click(function (e) {
         //e.preventDefault();
@@ -293,11 +298,9 @@ $('.pharmacies').tap(function (e) {
     });
 
     $('.home').click(function (e) { // tap event logs out the user on ipod.
-        //var mvp = document.getElementById('testViewport');
-       // mvp.removeAttribute('content');
-       // mvp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0');
-		jQT.goToReverse('#home','slide');	
-	});
+        resetScreenSize();
+        jQT.goToReverse('#home', 'slide');
+    });
 
 
 

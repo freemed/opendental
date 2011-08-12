@@ -6,6 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 	<title>Appointment</title>
+	
 </head>
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
@@ -14,20 +15,26 @@
 				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
 </div>
 
-<%--	<img src="app.jpg" width="724px" height="662px" usemap="#immap" />
---%>
 
-<%--	<asp:Image ID="Image1" runat="server" />
-	<map name="immap" id="immap" style="position: relative;">
-	<area shape="rect" coords="272, 84, 369, 172" onclick="areaClicked('AppointmentDetails.aspx?AptNum=4')" alt="box1__"  />
-	<area shape="rect" coords="375, 557, 482, 622" onclick="areaClicked('AppointmentDetails.aspx?AptNum=5')" alt="box2__"  />
+<div id="bd">	
+<img src="app.jpg" width="360px" height="330px" usemap="#immap" />
+</div>
+
+<%--	<asp:Image ID="Image1" runat="server" />--%>
+<%--	<map name="immap" id="immap" style="position: relative;">
+	<area shape="rect" coords="133, 46, 183, 94" 
+			onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
+	<area shape="rect" coords="272, 84, 369, 172" onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
+	<area shape="rect" coords="375, 557, 482, 622" onclick="areaClicked('AppointmentDetails.aspx?AptNum=23')" alt="box2__"  />
 	</map>--%>
 
 
 
+
+<%--
 <cc1:GeneratedImage ID="GeneratedImage1" runat="server" 
 	ImageHandlerUrl="~/ImageHandler1.ashx">
-</cc1:GeneratedImage>
+</cc1:GeneratedImage>--%>
 
 </div>
 </body>
