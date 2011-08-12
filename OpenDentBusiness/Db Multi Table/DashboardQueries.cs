@@ -144,5 +144,84 @@ namespace OpenDentBusiness {
 			return listDec;
 		}
 
+		public static List<decimal> GetInc12Months(DateTime dateFrom,DateTime dateTo) {
+			string command;
+			command="SELECT "
+				+"paysplit.DatePay,"
+				+"SUM(paysplit.SplitAmt) "
+				+"FROM paysplit "
+				+"WHERE paysplit.IsDiscount=0 "
+				+"AND paysplit.DatePay >= "+POut.Date(dateFrom)+" "
+				+"AND paysplit.DatePay <= "+POut.Date(dateTo)+" "
+				+"GROUP BY MONTH(paysplit.DatePay)";
+			DataTable tablePay=Db.GetTable(command);
+			command="SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
+				+"FROM claimpayment,claimproc WHERE "
+				+"claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
+				+"AND claimpayment.CheckDate >= " + POut.Date(dateFrom)+" "
+				+"AND claimpayment.CheckDate <= " + POut.Date(dateTo)+" "
+				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";
+			DataTable tableIns=Db.GetTable(command);
+			List<decimal> listDec=new List<decimal>();
+			for(int i=0;i<12;i++) {
+				decimal ptincome=0;
+				decimal insincome=0;
+				DateTime datePeriod=dateFrom.AddMonths(i);//only the month and year are important
+				for(int j=0;j<tablePay.Rows.Count;j++) {
+					if(datePeriod.Year==PIn.Date(tablePay.Rows[j][0].ToString()).Year
+						&& datePeriod.Month==PIn.Date(tablePay.Rows[j][0].ToString()).Month) 
+					{
+						ptincome+=PIn.Decimal(tablePay.Rows[j][1].ToString());
+					}
+				}
+				for(int j=0;j<tableIns.Rows.Count;j++) {//
+					if(datePeriod.Year==PIn.Date(tableIns.Rows[j][0].ToString()).Year
+						&& datePeriod.Month==PIn.Date(tableIns.Rows[j][0].ToString()).Month) 
+					{
+						insincome+=PIn.Decimal(tableIns.Rows[j][1].ToString());
+					}
+				}
+				listDec.Add(ptincome+insincome);
+			}
+			return listDec;
+		}
+
+		public static List<int> GetNewPatients(DateTime dateFrom,DateTime dateTo) {
+			string command;
+			command="DROP TABLE IF EXISTS tempdash;";
+			Db.NonQ(command);
+			command=@"CREATE TABLE tempdash (
+				PatNum bigint NOT NULL PRIMARY KEY,
+				dateFirstProc datetime NOT NULL
+				) DEFAULT CHARSET=utf8";
+			Db.NonQ(command);
+			//table full of individual patients and their dateFirstProcs.
+			command=@"INSERT INTO tempdash 
+				SELECT PatNum, MIN(ProcDate) dateFirstProc FROM procedurelog
+				WHERE ProcStatus=2 GROUP BY PatNum
+				HAVING dateFirstProc >= "+POut.Date(dateFrom)+" "
+				+"AND dateFirstProc <= "+POut.Date(dateTo);
+			Db.NonQ(command);
+			command="SELECT dateFirstProc,COUNT(*) "
+				+"FROM tempdash "
+				+"GROUP BY MONTH(dateFirstProc)";
+			DataTable tableCounts=Db.GetTable(command);
+			List<int> listInt=new List<int>();
+			for(int i=0;i<12;i++) {
+				int ptcount=0;
+				DateTime datePeriod=dateFrom.AddMonths(i);//only the month and year are important
+				for(int j=0;j<tableCounts.Rows.Count;j++) {
+					if(datePeriod.Year==PIn.Date(tableCounts.Rows[j][0].ToString()).Year
+						&& datePeriod.Month==PIn.Date(tableCounts.Rows[j][0].ToString()).Month)
+					{
+						ptcount+=PIn.Int(tableCounts.Rows[j][1].ToString());
+					}
+				}
+				listInt.Add(ptcount);
+			}
+			return listInt;
+		}
+
+
 	}
 }

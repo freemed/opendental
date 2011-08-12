@@ -33,7 +33,13 @@ namespace OpenDentalWpf {
 			
 		}
 
-		
+		private void butPrint_Click(object sender,RoutedEventArgs e) {
+			
+		}
+
+		private void butClose_Click(object sender,RoutedEventArgs e) {
+			Close();
+		}
 
 
 

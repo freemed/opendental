@@ -14,6 +14,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OpenDentBusiness;
 
 namespace OpenDentalWpf {
 	/// <summary></summary>
@@ -30,6 +31,7 @@ namespace OpenDentalWpf {
 		/// <summary>Each path gets a different color.</summary>
 		private List<Color> ListColors;
 		private DateTime DateStart;
+		private DateTime DateEnd;
 		/// <summary>For a small office, this might be 1 or 10.  Big office might be 100.</summary>
 		private int YIncrement;
 
@@ -43,32 +45,19 @@ namespace OpenDentalWpf {
 		}
 
 		private void GetData() {
-			//simulated for now
+			DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
+			DateEnd=dateFirstThisMonth.AddDays(-1);
+			DateStart=dateFirstThisMonth.AddMonths(-12);
 			//colors-------------------------------------------------------------------------------
 			ListColors=new List<Color>();
 			ListColors.Add(Colors.Brown);
 			//data---------------------------------------------------------------------------------
 			ListData=new List<List<int>>();
-			List<int> listInt=new List<int>();
-			listInt.Add(35);//12 months ago
-			listInt.Add(7);
-			listInt.Add(12);
-			listInt.Add(23);
-			listInt.Add(5);
-			listInt.Add(31);
-			listInt.Add(20);
-			listInt.Add(35);
-			listInt.Add(16);
-			listInt.Add(25);
-			listInt.Add(11);
-			listInt.Add(19);
+			List<int> listInt=DashboardQueries.GetNewPatients(DateStart,DateEnd);
 			ListData.Add(listInt);
 		}
 
 		private void FillGraph() {
-			DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
-			DateTime dateEnd=dateFirstThisMonth.AddDays(-1);
-			DateStart=dateFirstThisMonth.AddMonths(-12);
 			double wCol=rectMain.Width/11d;
 			//vertical lines----------------------------------------------------------------------
 			for(double i=1;i<11;i++) {
@@ -158,9 +147,10 @@ namespace OpenDentalWpf {
 				Label label=new Label();
 				string content=((i+1)*YIncrement).ToString();
 				label.Content=content;
-				label.MaxWidth=100;
+				label.MaxWidth=200;
 				Canvas.SetTop(label,rectMain.Bottom()-((i+1)*hRow)-14);
-				label.Width=rectMain.Left();
+				Canvas.SetLeft(label,-3);
+				label.Width=rectMain.Left()+5;
 				label.HorizontalContentAlignment=HorizontalAlignment.Right;
 				canvasMain.Children.Add(label);
 			}

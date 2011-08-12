@@ -15,7 +15,7 @@
                 <DataGridTemplateColumn Header="Color" Width="45">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Rectangle Width="20">
+                            <Rectangle Width="13">
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="{Binding ProvColor}"></SolidColorBrush>
                                 </Rectangle.Fill>
@@ -23,7 +23,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Production" Width="67" Binding="{Binding Production}">
+                <DataGridTextColumn Header="Production" Width="69" Binding="{Binding Production}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Right"/>

@@ -32,6 +32,8 @@ namespace OpenDentalWpf {
 		private List<Color> ListColors;
 		private DateTime DateStart;
 		private DateTime DateEnd;
+		/// <summary>For a small office, this might be 20k.  Big office might be 200k.</summary>
+		private int YIncrement;
 
 		public ContrDashProdInc() {
 			InitializeComponent();
@@ -46,7 +48,6 @@ namespace OpenDentalWpf {
 			DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
 			DateEnd=dateFirstThisMonth.AddDays(-1);
 			DateStart=dateFirstThisMonth.AddMonths(-12);
-			//simulated for now
 			//colors-------------------------------------------------------------------------------
 			ListColors=new List<Color>();
 			ListColors.Add(Colors.MediumBlue);//production
@@ -55,34 +56,9 @@ namespace OpenDentalWpf {
 			ListData=new List<List<decimal>>();
 			//production
 			List<decimal> listProd=DashboardQueries.GetProd12Months(DateStart,DateEnd);
-				/*new List<decimal>();
-			listDecimal.Add(68000);//12 months ago
-			listDecimal.Add(72000);
-			listDecimal.Add(60000);
-			listDecimal.Add(56000);
-			listDecimal.Add(61000);
-			listDecimal.Add(68000);
-			listDecimal.Add(71000);
-			listDecimal.Add(64000);
-			listDecimal.Add(69000);
-			listDecimal.Add(70000);
-			listDecimal.Add(63000);
-			listDecimal.Add(76000);*/
 			ListData.Add(listProd);
 			//income
-			List<decimal> listInc=new List<decimal>();
-			listInc.Add(62000);
-			listInc.Add(67000);
-			listInc.Add(66000);
-			listInc.Add(62000);
-			listInc.Add(53000);
-			listInc.Add(63000);
-			listInc.Add(67000);
-			listInc.Add(70000);
-			listInc.Add(60000);
-			listInc.Add(68000);
-			listInc.Add(68000);
-			listInc.Add(64000);
+			List<decimal> listInc=DashboardQueries.GetInc12Months(DateStart,DateEnd);
 			ListData.Add(listInc);
 		}
 
@@ -129,35 +105,57 @@ namespace OpenDentalWpf {
 			decimal maxVal=0;
 			for(int p=0;p<ListData.Count;p++) {
 				for(int i=0;i<ListData[p].Count;i++) {
-					if(ListData[p][i]>maxVal) {
-						maxVal=ListData[p][i];
+					if((ListData[p][i]/1000)>maxVal) {
+						maxVal=ListData[p][i]/1000;
 					}
 				}
 			}
-			//round up to nearest 10k
-			decimal remainder=(Decimal)Math.IEEERemainder((double)maxVal,10000);
-			maxVal=maxVal-remainder+10000;
-			int yCount=(int)(maxVal/10000);
-			double hRow=rectMain.Height/(yCount-1);
+			//add 10% for white space
+			maxVal=(int)(1.1*(double)maxVal);
+			//calculate amount for each tick.  No more than 10 ticks
+			//replace the code below later with a more elegant algorithm to handle unlimited scaling
+			YIncrement=1;
+			if(maxVal>10) {
+				YIncrement=2;
+			}
+			if(maxVal>20) {
+				YIncrement=5;
+			}
+			if(maxVal>50) {
+				YIncrement=10;
+			}
+			if(maxVal>100) {
+				YIncrement=20;
+			}
+			if(maxVal>200) {
+				YIncrement=50;
+			}
+			//etc
+			//int yCount=(int)(maxVal/10000);
+			//double hRow=rectMain.Height/(yCount-1);
+			double hRow=rectMain.Height/(double)maxVal*(double)YIncrement;//in pixels
+			int tickCount=(int)(rectMain.Height/hRow);//trunc to int. Does not include the tick at zero.
 			//horizontal lines----------------------------------------------------------------------
-			for(double i=1;i<yCount-1;i++) {
+			for(double i=0;i<tickCount;i++) {
+				//the first tick is not at zero
 				Line line=new Line();
 				line.X1=rectMain.Left();
-				line.Y1=rectMain.Bottom()-(i*hRow);
+				line.Y1=rectMain.Bottom()-((i+1)*hRow);
 				line.X2=rectMain.Right();
-				line.Y2=rectMain.Bottom()-(i*hRow);
+				line.Y2=rectMain.Bottom()-((i+1)*hRow);
 				line.Stroke=Brushes.LightGray;
 				line.StrokeThickness=1;
 				canvasMain.Children.Add(line);
 			}
 			//y axis numbers-----------------------------------------------------------------------
-			for(double i=1;i<yCount;i++) {
+			for(double i=0;i<tickCount;i++) {
 				Label label=new Label();
-				string content=i.ToString()+"0k";
+				string content=((i+1)*YIncrement).ToString()+"k";
 				label.Content=content;
-				label.MaxWidth=100;
-				Canvas.SetTop(label,rectMain.Bottom()-(i*hRow)-14);
-				label.Width=rectMain.Left();
+				label.MaxWidth=200;
+				Canvas.SetTop(label,rectMain.Bottom()-((i+1)*hRow)-14);
+				Canvas.SetLeft(label,-3);
+				label.Width=rectMain.Left()+5;
 				label.HorizontalContentAlignment=HorizontalAlignment.Right;
 				canvasMain.Children.Add(label);
 			}
@@ -171,7 +169,7 @@ namespace OpenDentalWpf {
 				List<Ellipse> listDotsOneType=new List<Ellipse>();
 				List<Ellipse> listDotsBigOneType=new List<Ellipse>();
 				for(int i=0;i<ListData[p].Count;i++) {
-					Point pt=new Point(rectMain.Left()+(i*wCol),rectMain.Bottom()-(double)(ListData[p][i]/10000*(decimal)hRow));
+					Point pt=new Point(rectMain.Left()+(i*wCol),rectMain.Bottom()-(double)((double)ListData[p][i]/1000*hRow/(double)YIncrement));
 					if(i==0) {
 						pt.X+=1;
 					}
