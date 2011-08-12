@@ -34,13 +34,7 @@ namespace OpenDentalWpf {
 		}
 
 		private void GetData() {
-			string command;
-			command="SELECT provider.ProvNum,SUM(ProcFee) production "
-				+"FROM provider "
-				+"LEFT JOIN procedurelog ON procedurelog.ProvNum=provider.ProvNum "
-				+"AND ProcDate="+POut.Date(DateTime.Today)+" "
-				+"GROUP BY provider.ProvNum";
-			table=Reports.GetTable(command);
+			table=DashboardQueries.GetProvList(DateTime.Today);
 		}
 
 		private void FillScreen() {
@@ -51,8 +45,20 @@ namespace OpenDentalWpf {
 				row.ProvName=Providers.GetAbbr(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
 				System.Drawing.Color c1=Providers.GetColor(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
 				row.ProvColor=Color.FromArgb(c1.A,c1.R,c1.G,c1.B);
-				row.Production=PIn.Decimal(table.Rows[i]["production"].ToString()).ToString("c0");
-				row.Income=(0).ToString("c0");
+				decimal production=PIn.Decimal(table.Rows[i]["production"].ToString());
+				if(production==0){
+					row.Production="";
+				}
+				else{
+					row.Production=production.ToString("c0");
+				}
+				decimal income=PIn.Decimal(table.Rows[i]["income"].ToString());
+				if(income==0){
+					row.Income="";
+				}
+				else{
+					row.Income=income.ToString("c0");
+				}
 				ListProv.Add(row);
 			}
 			//Style style=new Style(typeof(TextBlock));

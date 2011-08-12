@@ -404,6 +404,7 @@
     <Compile Include="Data Interface\VaccineDefs.cs" />
     <Compile Include="Data Interface\VaccinePats.cs" />
     <Compile Include="Data Interface\Vitalsigns.cs" />
+    <Compile Include="Db Multi Table\DashboardQueries.cs" />
     <Compile Include="Db Multi Table\EhrPatListElements.cs" />
     <Compile Include="Db Multi Table\EhrPatListElement.cs" />
     <Compile Include="Db Multi Table\QualityMeasure.cs" />

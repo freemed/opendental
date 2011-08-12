@@ -129,6 +129,7 @@ namespace OpenDentBusiness {
 			return "ADDDATE("+date+",INTERVAL "+years+" YEAR)";
 		}
 
+		///<summary>TO_DATE() for datetime columns where we only want the date.</summary>
 		public static string DateColumn(string colName) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "TO_DATE("+colName+")";

@@ -1694,16 +1694,16 @@ ORDER BY adjdate DESC
 				whereClin+=") ";
 			}
 			report.Query="SELECT "
-				+DbHelper.DateColumn("procedurelog.ProcDate")+" ProcDate,"
-				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END))-IFNULL(SUM(claimproc.WriteOff),0) "
+				+"procedurelog.ProcDate,"
+				+"SUM(procedurelog.ProcFee*(procedurelog.UnitQty+procedurelog.BaseUnits))-IFNULL(SUM(claimproc.WriteOff),0) "
 				+"FROM procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
 				+"AND claimproc.Status='7' "//only CapComplete writeoffs are subtracted here.
 				+"WHERE procedurelog.ProcStatus = '2' "
 				+whereProv
 				+whereClin
-				+"AND "+DbHelper.DateColumn("procedurelog.ProcDate")+" >= " +POut.Date(dateFrom)+" "
-				+"AND "+DbHelper.DateColumn("procedurelog.ProcDate")+" <= " +POut.Date(dateTo)+" "
+				+"AND procedurelog.ProcDate >= " +POut.Date(dateFrom)+" "
+				+"AND procedurelog.ProcDate <= " +POut.Date(dateTo)+" "
 				+"GROUP BY MONTH(procedurelog.ProcDate)";
 			//MessageBox.Show(report.Query);
 			TableProduction=report.GetTempTable();

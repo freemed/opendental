@@ -14,6 +14,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OpenDentBusiness;
 
 namespace OpenDentalWpf {
 	/// <summary></summary>
@@ -30,6 +31,7 @@ namespace OpenDentalWpf {
 		/// <summary>Each path gets a different color.</summary>
 		private List<Color> ListColors;
 		private DateTime DateStart;
+		private DateTime DateEnd;
 
 		public ContrDashProdInc() {
 			InitializeComponent();
@@ -41,6 +43,9 @@ namespace OpenDentalWpf {
 		}
 
 		private void GetData() {
+			DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
+			DateEnd=dateFirstThisMonth.AddDays(-1);
+			DateStart=dateFirstThisMonth.AddMonths(-12);
 			//simulated for now
 			//colors-------------------------------------------------------------------------------
 			ListColors=new List<Color>();
@@ -49,7 +54,8 @@ namespace OpenDentalWpf {
 			//data---------------------------------------------------------------------------------
 			ListData=new List<List<decimal>>();
 			//production
-			List<decimal> listDecimal=new List<decimal>();
+			List<decimal> listProd=DashboardQueries.GetProd12Months(DateStart,DateEnd);
+				/*new List<decimal>();
 			listDecimal.Add(68000);//12 months ago
 			listDecimal.Add(72000);
 			listDecimal.Add(60000);
@@ -61,29 +67,26 @@ namespace OpenDentalWpf {
 			listDecimal.Add(69000);
 			listDecimal.Add(70000);
 			listDecimal.Add(63000);
-			listDecimal.Add(76000);
-			ListData.Add(listDecimal);
+			listDecimal.Add(76000);*/
+			ListData.Add(listProd);
 			//income
-			listDecimal=new List<decimal>();
-			listDecimal.Add(62000);
-			listDecimal.Add(67000);
-			listDecimal.Add(66000);
-			listDecimal.Add(62000);
-			listDecimal.Add(53000);
-			listDecimal.Add(63000);
-			listDecimal.Add(67000);
-			listDecimal.Add(70000);
-			listDecimal.Add(60000);
-			listDecimal.Add(68000);
-			listDecimal.Add(68000);
-			listDecimal.Add(64000);
-			ListData.Add(listDecimal);
+			List<decimal> listInc=new List<decimal>();
+			listInc.Add(62000);
+			listInc.Add(67000);
+			listInc.Add(66000);
+			listInc.Add(62000);
+			listInc.Add(53000);
+			listInc.Add(63000);
+			listInc.Add(67000);
+			listInc.Add(70000);
+			listInc.Add(60000);
+			listInc.Add(68000);
+			listInc.Add(68000);
+			listInc.Add(64000);
+			ListData.Add(listInc);
 		}
 
 		private void FillGraph() {
-			DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
-			DateTime dateEnd=dateFirstThisMonth.AddDays(-1);
-			DateStart=dateFirstThisMonth.AddMonths(-12);
 			double wCol=rectMain.Width/11d;
 			//vertical lines----------------------------------------------------------------------
 			for(double i=1;i<11;i++) {
