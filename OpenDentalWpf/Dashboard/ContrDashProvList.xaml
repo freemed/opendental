@@ -7,9 +7,36 @@
              d:DesignHeight="600" d:DesignWidth="300">
     <Canvas Name="canvasMain">
         <Label Canvas.Left="113" Canvas.Top="3" Content="Provider List" Name="label1" Padding="2" IsEnabled="False" FontWeight="Bold" MaxWidth="200" />
-        <DataGrid Name="gridMain" AutoGenerateColumns="False" Canvas.Left="8" Canvas.Top="29" Height="447" Width="284">
+        <DataGrid Name="gridMain" Canvas.Left="8" Canvas.Top="29" Height="447" Width="284"
+                AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Provider" Width="80" Binding="{Binding ProvName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Provider" Width="80" Binding="{Binding ProvName}"/>
+                <DataGridTemplateColumn Header="Color" Width="45">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="20">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding ProvColor}"></SolidColorBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Production" Width="80" Binding="{Binding Production}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Income" Width="*" Binding="{Binding Income}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Canvas>

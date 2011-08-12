@@ -6098,7 +6098,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE payment MODIFY IsRecurringCC NOT NULL";
 					Db.NonQ(command);
 				}
-
+				try{
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE procedurelog ADD INDEX (ProcDate)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command="CREATE INDEX procedurelog_ProcDate ON procedurelog (ProcDate)";
+						Db.NonQ(command);
+					}				
+				}
+				catch{ }
 
 					
 
