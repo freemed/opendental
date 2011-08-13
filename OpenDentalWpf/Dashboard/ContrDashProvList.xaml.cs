@@ -38,10 +38,10 @@ namespace OpenDentalWpf {
 		}
 
 		private void FillScreen() {
-			List<GridRowObj> ListProv=new List<GridRowObj>();
-			GridRowObj row;
+			List<ContrDashProvList_Row> ListProv=new List<ContrDashProvList_Row>();
+			ContrDashProvList_Row row;
 			for(int i=0;i<table.Rows.Count;i++){
-				row=new GridRowObj();
+				row=new ContrDashProvList_Row();
 				row.ProvName=Providers.GetAbbr(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
 				System.Drawing.Color c1=Providers.GetColor(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
 				row.ProvColor=Color.FromArgb(c1.A,c1.R,c1.G,c1.B);
@@ -69,21 +69,20 @@ namespace OpenDentalWpf {
 			gridMain.ItemsSource=ListProv;
 		}
 
-			/// <summary></summary>
-		private class GridRowObj {
-			/// <summary>Abbr</summary>
-			public string ProvName { get; set; }
-			/// <summary>May have to tweak this if Media.Color is different than Drawing.Color</summary>
-			public Color ProvColor { get; set; }
-			/// <summary>Abbr</summary>
-			public string Production { get; set; }
-			/// <summary></summary>
-			public string Income { get; set; }
-		}
+		
 
 	}
 
-	
-	
+	/// <summary></summary>
+	public class ContrDashProvList_Row {
+		/// <summary>Abbr</summary>
+		public string ProvName { get; set; }
+		/// <summary>Media.Color is different than Drawing.Color</summary>
+		public Color ProvColor { get; set; }
+		/// <summary>Abbr</summary>
+		public string Production { get; set; }
+		/// <summary></summary>
+		public string Income { get; set; }
+	}
 
 }

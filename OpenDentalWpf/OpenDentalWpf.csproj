@@ -39,9 +39,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +57,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PrintHelper.cs" />
+    <Compile Include="WinPrintPreview.xaml.cs">
+      <DependentUpon>WinPrintPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XamlHelper.cs" />
     <Page Include="Dashboard\ContrDashNewPat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -89,6 +96,10 @@
       <DependentUpon>WinDashboard.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WinPrintPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

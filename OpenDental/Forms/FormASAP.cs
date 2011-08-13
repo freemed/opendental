@@ -323,8 +323,8 @@ namespace OpenDental{
 				try{
 					pd.Print();
 				}
-				catch {
-					MsgBox.Show(this,"Printer not available");
+				catch(Exception ex){
+					MessageBox.Show(ex.Message);
 				}
 			#endif			
 		}
@@ -336,23 +336,24 @@ namespace OpenDental{
 			string text;
 			Font headingFont=new Font("Arial",13,FontStyle.Bold);
 			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
-			int yPos=bounds.Top;
+			int y=bounds.Top;
 			int center=bounds.X+bounds.Width/2;
 			#region printHeading
+			int headingPrintH=0;
 			if(!headingPrinted) {
 				text=Lan.g(this,"ASAP List");
-				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,y);
 				//yPos+=(int)g.MeasureString(text,headingFont).Height;
 				//text=textDateFrom.Text+" "+Lan.g(this,"to")+" "+textDateTo.Text;
 				//g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=25;
+				y+=25;
 				headingPrinted=true;
-				headingPrintH=yPos;
+				headingPrintH=y;
 			}
 			#endregion
-			yPos=grid.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			y=grid.PrintPage(g,pagesPrinted,bounds,headingPrintH);
 			pagesPrinted++;
-			if(yPos==-1) {
+			if(y==-1) {
 				e.HasMorePages=true;
 			}
 			else {
