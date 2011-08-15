@@ -547,13 +547,22 @@ namespace OpenDental {
 				FormS.PaperCopies=1;
 			}
 			if(SheetCur.PatNum!=0
-				&& SheetCur.SheetType!=SheetTypeEnum.LabSlip
 				&& SheetCur.SheetType!=SheetTypeEnum.DepositSlip) 
 			{
 				Patient pat=Patients.GetPat(SheetCur.PatNum);
-				if(pat.Email!="") {
-					FormS.EmailPatAddress=pat.Email;
-					FormS.EmailPat=true;
+				if(SheetCur.SheetType==SheetTypeEnum.LabSlip) {
+					SheetParameter parameter=SheetParameter.GetParamByName(SheetCur.Parameters,"LabCaseNum");
+					Laboratory lab=Laboratories.GetOne(LabCases.GetOne(PIn.Long(parameter.ParamValue.ToString())).LaboratoryNum);
+					if(lab!=null && lab.Email!="") {
+						FormS.EmailPatOrLabAddress=lab.Email;
+						FormS.IsForLab=true;
+						FormS.EmailPatOrLab=true;
+						FormS.PaperCopies--;
+					}
+				}
+				else if(pat.Email!="") {
+					FormS.EmailPatOrLabAddress=pat.Email;
+					FormS.EmailPatOrLab=true;
 					FormS.PaperCopies--;
 				}
 			}
@@ -592,14 +601,14 @@ namespace OpenDental {
 			string fileName;
 			string filePathAndName;
 			//Graphics g=this.CreateGraphics();
-			if(FormS.EmailPat){
+			if(FormS.EmailPatOrLab){
 				fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
 				SheetPrinting.CreatePdf(SheetCur,filePathAndName);
 				//Process.Start(filePathAndName);
 				message=new EmailMessage();
 				message.PatNum=SheetCur.PatNum;
-				message.ToAddress=FormS.EmailPatAddress;
+				message.ToAddress=FormS.EmailPatOrLabAddress;
 				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 				message.Subject=SheetCur.Description.ToString();//this could be improved
 				EmailAttach attach=new EmailAttach();
