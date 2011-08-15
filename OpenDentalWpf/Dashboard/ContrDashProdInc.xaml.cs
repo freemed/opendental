@@ -118,16 +118,18 @@ namespace OpenDentalWpf {
 				canvasMain.Children.Add(label);
 			}
 			//calculate max y and increments---------------------------------------------------------
-			int maxVal=0;
+			double maxValD=0;
 			for(int p=0;p<ListData.Count;p++) {
 				for(int i=0;i<ListData[p].Count;i++) {
-					if((ListData[p][i]/YMultFactor)>maxVal) {
-						maxVal=(int)(ListData[p][i]/YMultFactor);
+					if((ListData[p][i]/YMultFactor)>maxValD) {
+						maxValD=(double)ListData[p][i]/YMultFactor;
 					}
 				}
 			}
-			//add 10% for white space
-			maxVal=(int)(1.1*(double)maxVal);
+			//add 5% for white space
+			maxValD=1.05*maxValD;
+			//round up to nearest int. This is important if the max is just over 1k.
+			int maxVal=(int)maxValD+1;
 			//calculate amount for each tick.  No more than 10 ticks
 			//replace the code below later with a more elegant algorithm to handle unlimited scaling
 			YIncrement=1;

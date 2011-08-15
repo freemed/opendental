@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+//using System.Windows.Controls;//need a reference for this dll, or get msgbox into UI layer.
 using System.Data;
 using System.Text;
 
@@ -147,20 +148,43 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		public static List<List<int>> GetAR(DateTime dateFrom,DateTime dateTo){
+		///<summary>Only one dimension to the list for now.</summary>
+		public static List<List<int>> GetAR(DateTime dateFrom,DateTime dateTo,List<DashboardAR> listDashAR){
 			//assumes that dateFrom is the first of the month and that there are 12 periods
+			//listDashAR may be empty, in which case, this routine will take about 18 seconds, but the user was warned.
+			//listDashAR may also me incomplete, especially the most recent month(s).
+			string command;
 			List<int> listInt;
 			listInt=new List<int>();
+			bool agingWasRun=false;
 			for(int i=0;i<12;i++) {
 				DateTime dateLastOfMonth=dateFrom.AddMonths(i+1).AddDays(-1);
+				DashboardAR dash=null;
+				for(int d=0;d<listDashAR.Count;d++) {
+					if(listDashAR[d].DateCalc!=dateLastOfMonth) {
+						continue;
+					}
+					dash=listDashAR[d];
+				}
+				if(dash!=null) {//we found a DashboardAR object from the database for this month, so use it.
+					listInt.Add((int)dash.BalTotal);
+					continue;
+				}
+				agingWasRun=true;
 				//run historical aging on all patients based on the date entered.
 				Ledgers.ComputeAging(0,dateLastOfMonth,true);
-				string command;
-				command=@"SELECT SUM(Bal_0_30+Bal_31_60+Bal_61_90+BalOver90) FROM patient";
-				int amt=(int)PIn.Decimal(Db.GetScalar(command));
-				listInt.Add(amt);
+				command=@"SELECT SUM(Bal_0_30+Bal_31_60+Bal_61_90+BalOver90),InsEst FROM patient";
+				DataTable table=Db.GetTable(command);
+				dash=new DashboardAR();
+				dash.DateCalc=dateLastOfMonth;
+				dash.BalTotal=PIn.Double(table.Rows[0][0].ToString());
+				dash.InsEst=PIn.Double(table.Rows[0][1].ToString());
+				DashboardARs.Insert(dash);//save it to the db for later.
+				listInt.Add((int)dash.BalTotal);//and also use it now.
 			}
-			Ledgers.RunAging();//set aging back to normal
+			if(agingWasRun) {
+				Ledgers.RunAging();//set aging back to normal
+			}
 			List<List<int>> retVal=new List<List<int>>();
 			retVal.Add(listInt);
 			return retVal;

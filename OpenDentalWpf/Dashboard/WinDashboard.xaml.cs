@@ -37,7 +37,16 @@ namespace OpenDentalWpf {
 			//A/R
 			List<Color> listColorsAR=new List<Color>();
 			listColorsAR.Add(Colors.Firebrick);
-			List<List<int>> listDataAR=DashboardQueries.GetAR(contrDashAR.DateStart,contrDashAR.DateEnd);
+			List<DashboardAR> listDashAR=DashboardARs.Refresh(contrDashAR.DateStart);
+			if(listDashAR.Count==0) {
+				MessageBoxResult result=MessageBox.Show(Lans.g(this,
+					"A one-time routine needs to be run that will take a few moments."),"",MessageBoxButton.OKCancel);
+				if(result!=MessageBoxResult.OK){
+					Close();
+					return;
+				}
+			}
+			List<List<int>> listDataAR=DashboardQueries.GetAR(contrDashAR.DateStart,contrDashAR.DateEnd,listDashAR);
 			contrDashAR.FillData(Lans.g(this,"Accounts Receivable"),1000,listColorsAR,listDataAR);
 			//ProdInc
 			contrDashProdInc.FillData();
@@ -73,11 +82,15 @@ namespace OpenDentalWpf {
 			Canvas canvas1=PrintHelper.GetCanvas(document);
 			//set up a grid for printing that's the same as the main grid except for the bottom section with the buttons
 			Grid gridPrint=new Grid();
-			gridPrint.Width=603;
+			gridPrint.Width=906;
 			gridPrint.Height=603;
-			//3 columns 
+			//5 columns 
 			gridPrint.ColumnDefinitions.Add(new ColumnDefinition());
 			ColumnDefinition colDef=new ColumnDefinition();
+			colDef.Width=new GridLength(3);
+			gridPrint.ColumnDefinitions.Add(colDef);
+			gridPrint.ColumnDefinitions.Add(new ColumnDefinition());
+			colDef=new ColumnDefinition();
 			colDef.Width=new GridLength(3);
 			gridPrint.ColumnDefinitions.Add(colDef);
 			gridPrint.ColumnDefinitions.Add(new ColumnDefinition());
@@ -88,6 +101,7 @@ namespace OpenDentalWpf {
 			gridPrint.RowDefinitions.Add(rowDef);
 			gridPrint.RowDefinitions.Add(new RowDefinition());
 			//draw rectangles to separate sections
+			//3 vert:
 			Rectangle rect;
 			rect=new Rectangle();
 			rect.Fill=Brushes.LightGray;
@@ -105,17 +119,48 @@ namespace OpenDentalWpf {
 			gridPrint.Children.Add(rect);
 			rect=new Rectangle();
 			rect.Fill=Brushes.LightGray;
+			rect.Width=3;
+			rect.Height=300;
+			Grid.SetRow(rect,2);
+			Grid.SetColumn(rect,1);
+			gridPrint.Children.Add(rect);
+			//1 horiz
+			rect=new Rectangle();
+			rect.Fill=Brushes.LightGray;
 			rect.Width=300;
 			rect.Height=3;
 			Grid.SetRow(rect,1);
 			Grid.SetColumn(rect,2);
+			gridPrint.Children.Add(rect);
+			//3 more vert:
+			rect=new Rectangle();
+			rect.Fill=Brushes.LightGray;
+			rect.Width=3;
+			rect.Height=300;
+			Grid.SetRow(rect,0);
+			Grid.SetColumn(rect,3);
+			gridPrint.Children.Add(rect);
+			rect=new Rectangle();
+			rect.Fill=Brushes.LightGray;
+			rect.Width=3;
+			rect.Height=3;
+			Grid.SetRow(rect,1);
+			Grid.SetColumn(rect,3);
 			gridPrint.Children.Add(rect);
 			rect=new Rectangle();
 			rect.Fill=Brushes.LightGray;
 			rect.Width=3;
 			rect.Height=300;
 			Grid.SetRow(rect,2);
-			Grid.SetColumn(rect,1);
+			Grid.SetColumn(rect,3);
+			gridPrint.Children.Add(rect);
+			//1 more horiz
+			rect=new Rectangle();
+			rect.Fill=Brushes.LightGray;
+			rect.Width=300;
+			rect.Height=3;
+			Grid.SetRow(rect,1);
+			Grid.SetColumn(rect,4);
 			gridPrint.Children.Add(rect);
 			//add the grid to the canvas
 			canvas1.Children.Add(gridPrint);
@@ -125,13 +170,17 @@ namespace OpenDentalWpf {
 			rect=new Rectangle();
 			rect.Stroke=Brushes.DarkGray;
 			rect.StrokeThickness=1;
-			rect.Width=603;
+			rect.Width=906;
 			rect.Height=603;
 			Canvas.SetLeft(rect,(canvas1.Width/2d)-(rect.Width/2));
 			canvas1.Children.Add(rect);
-			//add the three dashboard controls
+			//add the five dashboard controls
 			gridMain.Children.Remove(contrDashProvList);
 			gridPrint.Children.Add(contrDashProvList);
+			gridMain.Children.Remove(contrDashProdProvs);
+			gridPrint.Children.Add(contrDashProdProvs);
+			gridMain.Children.Remove(contrDashAR);
+			gridPrint.Children.Add(contrDashAR);
 			gridMain.Children.Remove(contrDashProdInc);
 			gridPrint.Children.Add(contrDashProdInc);
 			gridMain.Children.Remove(contrDashNewPat);
@@ -155,6 +204,10 @@ namespace OpenDentalWpf {
 			//dlg.PrintVisual(gridMain,"Dashboard");
 			gridPrint.Children.Remove(contrDashProvList);
 			gridMain.Children.Add(contrDashProvList);
+			gridPrint.Children.Remove(contrDashProdProvs);
+			gridMain.Children.Add(contrDashProdProvs);
+			gridPrint.Children.Remove(contrDashAR);
+			gridMain.Children.Add(contrDashAR);
 			gridPrint.Children.Remove(contrDashProdInc);
 			gridMain.Children.Add(contrDashProdInc);
 			gridPrint.Children.Remove(contrDashNewPat);
