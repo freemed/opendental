@@ -175,6 +175,7 @@
     <Compile Include="Crud\CovCatCrud.cs" />
     <Compile Include="Crud\CovSpanCrud.cs" />
     <Compile Include="Crud\CreditCardCrud.cs" />
+    <Compile Include="Crud\DashboardARCrud.cs" />
     <Compile Include="Crud\DefCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
     <Compile Include="Crud\DepositCrud.cs" />
@@ -338,6 +339,7 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
+    <Compile Include="Data Interface\DashboardARs.cs" />
     <Compile Include="Data Interface\DisplayFields.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -682,6 +684,7 @@
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
+    <Compile Include="TableTypes\DashboardAR.cs" />
     <Compile Include="TableTypes\EhrQuarterlyKey.cs" />
     <Compile Include="TableTypes\EhrSummaryCcd.cs" />
     <Compile Include="TableTypes\EhrProvKey.cs" />

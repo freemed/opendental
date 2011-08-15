@@ -6113,7 +6113,30 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					}				
 				}
 				catch{ }
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS dashboardar";
+					Db.NonQ(command);
+					command=@"CREATE TABLE dashboardar (
+						DashboardARNum bigint NOT NULL auto_increment PRIMARY KEY,
+						DateCalc date NOT NULL DEFAULT '0001-01-01',
+						BalTotal double NOT NULL,
+						InsEst double NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE dashboardar'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE dashboardar (
+						DashboardARNum number(20) NOT NULL,
+						DateCalc date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						BalTotal number(38,8) NOT NULL,
+						InsEst number(38,8) NOT NULL,
+						CONSTRAINT dashboardar_DashboardARNum PRIMARY KEY (DashboardARNum)
+						)";
+					Db.NonQ(command);
+				}
+				
 					
 
 
@@ -6142,3 +6165,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				
