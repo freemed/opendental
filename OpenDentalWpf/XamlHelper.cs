@@ -10,7 +10,9 @@ using System.Windows.Markup;
 using System.Xml;
 
 namespace OpenDentalWpf {
+	///<summary>Neither of these copy methods work, but leaving this here for later.</summary>
 	public class XamlHelper {
+		/*
 		public static UIElement DeepCopy(UIElement element){
 			string shapestring = XamlWriter.Save(element);   
 			StringReader stringReader = new StringReader(shapestring);  
@@ -38,7 +40,7 @@ namespace OpenDentalWpf {
 				} 
 			} 
 			return result; 
-		}
+		}*/
 
 		
 

@@ -72,7 +72,101 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
-		public static List<decimal> GetProd12Months(DateTime dateFrom,DateTime dateTo){
+		public static List<System.Windows.Media.Color> GetProdProvColors(){
+			string command=@"SELECT ProvColor
+				FROM provider WHERE IsHidden=0
+				ORDER BY ItemOrder";
+			DataTable table=Db.GetTable(command);
+			List<System.Windows.Media.Color> retVal=new List<System.Windows.Media.Color>();
+			for(int i=0;i<table.Rows.Count;i++){
+				System.Drawing.Color dColor=System.Drawing.Color.FromArgb(PIn.Int(table.Rows[i]["ProvColor"].ToString()));
+				System.Windows.Media.Color mColor=System.Windows.Media.Color.FromArgb(dColor.A,dColor.R,dColor.G,dColor.B);
+				retVal.Add(mColor);
+			}
+			return retVal;
+		}
+
+		public static List<List<int>> GetProdProvs(DateTime dateFrom,DateTime dateTo){
+			string command;
+			command="DROP TABLE IF EXISTS tempdash;";
+			Db.NonQ(command);
+			//this table will contain approx 12x3xProv rows if there was production for each prov in each month.
+			command=@"CREATE TABLE tempdash (
+				DatePeriod date NOT NULL,
+				ProvNum bigint NOT NULL,
+				production decimal NOT NULL
+				) DEFAULT CHARSET=utf8";
+			Db.NonQ(command);
+			//procs. Inserts approx 12xProv rows
+			command=@"INSERT INTO tempdash
+				SELECT procedurelog.ProcDate,procedurelog.ProvNum,
+				SUM(procedurelog.ProcFee*(procedurelog.UnitQty+procedurelog.BaseUnits))-IFNULL(SUM(claimproc.WriteOff),0)
+				FROM procedurelog
+				LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum
+				AND claimproc.Status='7' /*only CapComplete writeoffs are subtracted here*/
+				WHERE procedurelog.ProcStatus = '2'
+				AND procedurelog.ProcDate >= "+POut.Date(dateFrom)+@"
+				AND procedurelog.ProcDate <= "+POut.Date(dateTo)+@"
+				GROUP BY procedurelog.ProvNum,MONTH(procedurelog.ProcDate)";
+			Db.NonQ(command);
+			
+			//todo 2 more tables
+
+
+			//get all the data as 12xProv rows
+			command=@"SELECT DatePeriod,ProvNum,SUM(production) prod
+				FROM tempdash 
+				GROUP BY ProvNum,MONTH(DatePeriod)";//this fails with date issue
+			DataTable tableProd=Db.GetTable(command);
+			command="DROP TABLE IF EXISTS tempdash;";
+			Db.NonQ(command);
+			command=@"SELECT ProvNum
+				FROM provider WHERE IsHidden=0
+				ORDER BY ItemOrder";
+			DataTable tableProv=Db.GetTable(command);
+			List<List<int>> retVal=new List<List<int>>();
+			for(int p=0;p<tableProv.Rows.Count;p++){//loop through each provider
+				long provNum=PIn.Long(tableProv.Rows[p]["ProvNum"].ToString());
+				List<int> listInt=new List<int>();//12 items
+				for(int i=0;i<12;i++) {
+					decimal prod=0;
+					DateTime datePeriod=dateFrom.AddMonths(i);//only the month and year are important
+					for(int j=0;j<tableProd.Rows.Count;j++)  {
+						if(datePeriod.Year==PIn.Date(tableProd.Rows[j]["DatePeriod"].ToString()).Year
+							&& datePeriod.Month==PIn.Date(tableProd.Rows[j]["DatePeriod"].ToString()).Month
+							&& provNum==PIn.Long(tableProd.Rows[j]["ProvNum"].ToString()))
+						{
+		 					prod=PIn.Decimal(tableProd.Rows[j]["prod"].ToString());
+							break;
+						}
+   				}
+					listInt.Add((int)(prod));
+				}
+				retVal.Add(listInt);
+			}
+			return retVal;
+		}
+
+		public static List<List<int>> GetAR(DateTime dateFrom,DateTime dateTo){
+			//assumes that dateFrom is the first of the month and that there are 12 periods
+			List<int> listInt;
+			listInt=new List<int>();
+			for(int i=0;i<12;i++) {
+				DateTime dateLastOfMonth=dateFrom.AddMonths(i+1).AddDays(-1);
+				//run historical aging on all patients based on the date entered.
+				Ledgers.ComputeAging(0,dateLastOfMonth,true);
+				string command;
+				command=@"SELECT SUM(Bal_0_30+Bal_31_60+Bal_61_90+BalOver90) FROM patient";
+				int amt=(int)PIn.Decimal(Db.GetScalar(command));
+				listInt.Add(amt);
+			}
+			Ledgers.RunAging();//set aging back to normal
+			List<List<int>> retVal=new List<List<int>>();
+			retVal.Add(listInt);
+			return retVal;
+		}
+
+		public static List<List<int>> GetProdInc(DateTime dateFrom,DateTime dateTo){
 			string command;
 			command=@"SELECT procedurelog.ProcDate,
 				SUM(procedurelog.ProcFee*(procedurelog.UnitQty+procedurelog.BaseUnits))-IFNULL(SUM(claimproc.WriteOff),0)
@@ -112,7 +206,25 @@ namespace OpenDentBusiness {
 					+"GROUP BY MONTH(claimproc.DateCP)";
 			}
 			DataTable tableWriteoff=Db.GetTable(command);
-			List<decimal> listDec=new List<decimal>();
+			command="SELECT "
+				+"paysplit.DatePay,"
+				+"SUM(paysplit.SplitAmt) "
+				+"FROM paysplit "
+				+"WHERE paysplit.IsDiscount=0 "
+				+"AND paysplit.DatePay >= "+POut.Date(dateFrom)+" "
+				+"AND paysplit.DatePay <= "+POut.Date(dateTo)+" "
+				+"GROUP BY MONTH(paysplit.DatePay)";
+			DataTable tablePay=Db.GetTable(command);
+			command="SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
+				+"FROM claimpayment,claimproc WHERE "
+				+"claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
+				+"AND claimpayment.CheckDate >= " + POut.Date(dateFrom)+" "
+				+"AND claimpayment.CheckDate <= " + POut.Date(dateTo)+" "
+				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";
+			DataTable tableIns=Db.GetTable(command);
+			//production--------------------------------------------------------------------
+			List<int> listInt;
+			listInt=new List<int>();
 			for(int i=0;i<12;i++) {
 				decimal prod=0;
 				decimal adjust=0;
@@ -139,30 +251,12 @@ namespace OpenDentBusiness {
 						inswriteoff-=PIn.Decimal(tableWriteoff.Rows[j][1].ToString());
 					}
 				}
-				listDec.Add(prod+adjust-inswriteoff);
+				listInt.Add((int)(prod+adjust-inswriteoff));
 			}
-			return listDec;
-		}
-
-		public static List<decimal> GetInc12Months(DateTime dateFrom,DateTime dateTo) {
-			string command;
-			command="SELECT "
-				+"paysplit.DatePay,"
-				+"SUM(paysplit.SplitAmt) "
-				+"FROM paysplit "
-				+"WHERE paysplit.IsDiscount=0 "
-				+"AND paysplit.DatePay >= "+POut.Date(dateFrom)+" "
-				+"AND paysplit.DatePay <= "+POut.Date(dateTo)+" "
-				+"GROUP BY MONTH(paysplit.DatePay)";
-			DataTable tablePay=Db.GetTable(command);
-			command="SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
-				+"FROM claimpayment,claimproc WHERE "
-				+"claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
-				+"AND claimpayment.CheckDate >= " + POut.Date(dateFrom)+" "
-				+"AND claimpayment.CheckDate <= " + POut.Date(dateTo)+" "
-				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";
-			DataTable tableIns=Db.GetTable(command);
-			List<decimal> listDec=new List<decimal>();
+			List<List<int>> retVal=new List<List<int>>();
+			retVal.Add(listInt);
+			//income----------------------------------------------------------------------
+			listInt=new List<int>();
 			for(int i=0;i<12;i++) {
 				decimal ptincome=0;
 				decimal insincome=0;
@@ -181,12 +275,13 @@ namespace OpenDentBusiness {
 						insincome+=PIn.Decimal(tableIns.Rows[j][1].ToString());
 					}
 				}
-				listDec.Add(ptincome+insincome);
+				listInt.Add((int)(ptincome+insincome));
 			}
-			return listDec;
+			retVal.Add(listInt);
+			return retVal;
 		}
 
-		public static List<int> GetNewPatients(DateTime dateFrom,DateTime dateTo) {
+		public static List<List<int>> GetNewPatients(DateTime dateFrom,DateTime dateTo) {
 			string command;
 			command="DROP TABLE IF EXISTS tempdash;";
 			Db.NonQ(command);
@@ -219,7 +314,9 @@ namespace OpenDentBusiness {
 				}
 				listInt.Add(ptcount);
 			}
-			return listInt;
+			List<List<int>> retVal=new List<List<int>>();
+			retVal.Add(listInt);
+			return retVal;
 		}
 
 

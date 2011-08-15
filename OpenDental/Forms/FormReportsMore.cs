@@ -716,8 +716,10 @@ namespace OpenDental {
 		}
 
 		private void butDashboard_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
 			WinDashboard win=new WinDashboard();
 			win.Show();
+			Cursor=Cursors.Default;
 		}
 
 		private void butClose_Click(object sender,System.EventArgs e) {

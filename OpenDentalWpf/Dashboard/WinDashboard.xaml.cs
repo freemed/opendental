@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Printing;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,8 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Markup;
+using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
-//using swf=System.Windows.Forms;
+using OpenDentBusiness;
 
 namespace OpenDentalWpf {
 	/// <summary></summary>
@@ -28,20 +30,45 @@ namespace OpenDentalWpf {
 
 		private void Window_Loaded(object sender,RoutedEventArgs e) {
 			contrDashProvList.FillData();
+			//prodProvs
+			List<Color> listColorsProd=DashboardQueries.GetProdProvColors();
+			List<List<int>> listDataProd=DashboardQueries.GetProdProvs(contrDashProdProvs.DateStart,contrDashProdProvs.DateEnd);
+			contrDashProdProvs.FillData(Lans.g(this,"Production by Prov"),1000,listColorsProd,listDataProd);
+			//A/R
+			List<Color> listColorsAR=new List<Color>();
+			listColorsAR.Add(Colors.Firebrick);
+			List<List<int>> listDataAR=DashboardQueries.GetAR(contrDashAR.DateStart,contrDashAR.DateEnd);
+			contrDashAR.FillData(Lans.g(this,"Accounts Receivable"),1000,listColorsAR,listDataAR);
+			//ProdInc
 			contrDashProdInc.FillData();
-			contrDashNewPat.FillData();
+			//new pat
+			List<Color> listColorsNP=new List<Color>();
+			listColorsNP.Add(Colors.Chocolate);
+			List<List<int>> listDataNP=DashboardQueries.GetNewPatients(contrDashNewPat.DateStart,contrDashNewPat.DateEnd);
+			contrDashNewPat.FillData(Lans.g(this,"New Patients"),1,listColorsNP,listDataNP);
 		}
 
 		private void Window_Activated(object sender,EventArgs e) {
 			
 		}
 
+		private void contrDashProvList_SelectionChanged(object sender,SelectionChangedEventArgs e) {
+			contrDashProdProvs.VisibleIndices=contrDashProvList.SelectedIndices;
+		}
+
 		private void butPrint_Click(object sender,RoutedEventArgs e) {
+			//move this first section, including the dlg into PrintHelper, analogous to OpenDental.PrinterL.  Or maybe into OpenDentalWpf.PrinterL?
 			PrintDialog dlg=new PrintDialog();
+			PrintQueue pq=LocalPrintServer.GetDefaultPrintQueue();
+			PrintTicket tick=pq.DefaultPrintTicket;
+			tick.PageOrientation=PageOrientation.Landscape;
+			dlg.PrintTicket=tick;
+			dlg.PrintQueue=pq;
 			if(dlg.ShowDialog()!=true){
 				return;
 			}
 			FixedDocument document=new FixedDocument();
+			document.PrintTicket=dlg.PrintTicket;
 			document.DocumentPaginator.PageSize=new Size(dlg.PrintableAreaWidth, dlg.PrintableAreaHeight);
 			Canvas canvas1=PrintHelper.GetCanvas(document);
 			//set up a grid for printing that's the same as the main grid except for the bottom section with the buttons
@@ -117,7 +144,11 @@ namespace OpenDentalWpf {
 				//warning! Only use the print preview in debug.  It will crash if your mouse moves into the top toolbar.
 				pp.ShowDialog();
 			#else
-				dlg.PrintDocument(document.DocumentPaginator,"Dashboard");
+				//dlg.PrintDocument(document.DocumentPaginator,"Dashboard");//old
+				XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(dlg.PrintQueue);
+				Cursor=Cursors.Wait;
+				writer.Write(document, dlg.PrintTicket);//use WriteAsynch usually, but we can't here because we "borrowed" the controls from the screen.
+				Cursor=Cursors.Arrow;
 			#endif
 			//myPanel.Measure(new Size(dialog.PrintableAreaWidth,dialog.PrintableAreaHeight));
 			//myPanel.Arrange(new Rect(new Point(0, 0),myPanel.DesiredSize));
@@ -133,6 +164,8 @@ namespace OpenDentalWpf {
 		private void butClose_Click(object sender,RoutedEventArgs e) {
 			Close();
 		}
+
+		
 
 
 

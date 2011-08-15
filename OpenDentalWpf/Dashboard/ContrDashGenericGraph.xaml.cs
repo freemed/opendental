@@ -18,7 +18,7 @@ using OpenDentBusiness;
 
 namespace OpenDentalWpf {
 	/// <summary></summary>
-	public partial class ContrDashNewPat:UserControl {
+	public partial class ContrDashGenericGraph:UserControl {
 		///<summary>One path for each provider.  We currently combine all provs, so we just use the first path.</summary>
 		private List<Path> ListPaths;
 		/// <summary>Each item contains a list of dots corresponding to path points.</summary>
@@ -30,31 +30,49 @@ namespace OpenDentalWpf {
 		private List<List<int>> ListData;
 		/// <summary>Each path gets a different color.</summary>
 		private List<Color> ListColors;
-		private DateTime DateStart;
-		private DateTime DateEnd;
-		/// <summary>For a small office, this might be 1 or 10.  Big office might be 100.</summary>
+		/// <summary>Can handle 1 through about 500.  May need to enhance for bigger range.</summary>
 		private int YIncrement;
+		///<summary>Either 1 or 1000.  A factor of 1000 will also trigger $ to show in certain places.</summary>
+		private double YMultFactor;
+		private List<int> visibleIndicesOld;
+		private List<int> visibleIndices;
 
-		public ContrDashNewPat() {
+		public ContrDashGenericGraph() {
 			InitializeComponent();
 		}
 
-		public void FillData() {
-			GetData();
+		///<summary>Also fills the graph.</summary>
+		public void FillData(string title,double yMultFactor,List<Color> listColors,List<List<int>> listData){
+			labelTitle.Content=title;
+			if(yMultFactor!=1 && yMultFactor!=1000){
+				throw new ArgumentOutOfRangeException("yMultFactor can only be 1 or 1000.");
+			}
+			YMultFactor=yMultFactor;
+			ListColors=listColors;
+			ListData=listData;
 			FillGraph();
 		}
 
-		private void GetData() {
-			DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
-			DateEnd=dateFirstThisMonth.AddDays(-1);
-			DateStart=dateFirstThisMonth.AddMonths(-12);
-			//colors-------------------------------------------------------------------------------
-			ListColors=new List<Color>();
-			ListColors.Add(Colors.Brown);
-			//data---------------------------------------------------------------------------------
-			ListData=new List<List<int>>();
-			List<int> listInt=DashboardQueries.GetNewPatients(DateStart,DateEnd);
-			ListData.Add(listInt);
+		/// <summary>This lets us set some paths not visible.  An empty collection means that all data is visible.</summary>
+		public List<int> VisibleIndices{
+			set{
+				visibleIndices=value;
+				FadeInAndOut();
+			}
+		}
+
+		public DateTime DateStart{
+			get{
+				DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
+				return dateFirstThisMonth.AddMonths(-12);
+			}
+		}
+
+		public DateTime DateEnd{
+			get{
+				DateTime dateFirstThisMonth=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
+				return dateFirstThisMonth.AddDays(-1);
+			}
 		}
 
 		private void FillGraph() {
@@ -100,8 +118,8 @@ namespace OpenDentalWpf {
 			int maxVal=0;
 			for(int p=0;p<ListData.Count;p++) {
 				for(int i=0;i<ListData[p].Count;i++) {
-					if(ListData[p][i]>maxVal) {
-						maxVal=ListData[p][i];
+					if((ListData[p][i]/YMultFactor)>maxVal) {
+						maxVal=(int)(ListData[p][i]/YMultFactor);
 					}
 				}
 			}
@@ -146,6 +164,9 @@ namespace OpenDentalWpf {
 			for(double i=0;i<tickCount;i++) {
 				Label label=new Label();
 				string content=((i+1)*YIncrement).ToString();
+				if(YMultFactor==1000){
+					content=content+"k";
+				}
 				label.Content=content;
 				label.MaxWidth=200;
 				Canvas.SetTop(label,rectMain.Bottom()-((i+1)*hRow)-14);
@@ -164,7 +185,7 @@ namespace OpenDentalWpf {
 				List<Ellipse> listDotsOneType=new List<Ellipse>();
 				List<Ellipse> listDotsBigOneType=new List<Ellipse>();
 				for(int i=0;i<ListData[p].Count;i++) {
-					Point pt=new Point(rectMain.Left()+(i*wCol),rectMain.Bottom()-(double)((double)ListData[p][i]*hRow/(double)YIncrement));
+					Point pt=new Point(rectMain.Left()+(i*wCol),rectMain.Bottom()-(double)((double)ListData[p][i]/YMultFactor*hRow/(double)YIncrement));
 					if(i==0) {
 						pt.X+=1;
 					}
@@ -224,6 +245,9 @@ namespace OpenDentalWpf {
 			int idxPath=-1;
 			int idxDot=-1;
 			for(int i=0;i<ListDotsBig.Count;i++) {
+				if(visibleIndices!=null && visibleIndices.Count>0 && !visibleIndices.Contains(i)){
+					continue;
+				}
 				if(ListDotsBig[i].IndexOf((Ellipse)sender)==-1) {
 					continue;
 				}
@@ -234,13 +258,17 @@ namespace OpenDentalWpf {
 				return;
 			}
 			labelHover.Opacity=1;
-			string content=DateStart.AddMonths(idxDot).ToString("MMM")+": "
-				+ListData[idxPath][idxDot].ToString();
+			string numFormat="n0";
+			if(YMultFactor==1000){
+				numFormat="c0";
+			}
+			string content=DateStart.AddMonths(idxDot).ToString("MMM")+": "+ListData[idxPath][idxDot].ToString(numFormat);
 			labelHover.Content=content;
 			double xCenter=Canvas.GetLeft((Ellipse)sender)+7;
 			double yCenter=Canvas.GetTop((Ellipse)sender)+7;
 			Typeface typeface=new Typeface(FontFamily,FontStyle,FontWeight,FontStretch);
-			FormattedText ft=new FormattedText(labelHover.Content.ToString(),CultureInfo.CurrentCulture,FlowDirection.LeftToRight,typeface,FontSize,Foreground);
+			FormattedText ft=new FormattedText(labelHover.Content.ToString(), 
+				CultureInfo.CurrentCulture,FlowDirection.LeftToRight,typeface,FontSize,Foreground);
 			double wText=ft.Width;
 			Canvas.SetLeft(labelHover,xCenter-wText/2d-1);
 			Canvas.SetTop(labelHover,yCenter-23);
@@ -256,6 +284,53 @@ namespace OpenDentalWpf {
 			labelHover.Opacity=0;
 			Panel.SetZIndex(labelHover,0);//send it to the back so it won't interfere with mouse hover
 		}
+
+		private void FadeInAndOut() {
+			if(ListPaths==null) {
+				return;
+			}
+			//Fade out--------------------------------------------------------------------------
+			DoubleAnimation animation=new DoubleAnimation();
+			animation.From=1;
+			animation.To=0;
+			animation.Duration=TimeSpan.FromMilliseconds(200);
+			animation.FillBehavior=FillBehavior.HoldEnd;
+			for(int p=0;p<ListPaths.Count;p++){
+				if(visibleIndices.Count==0 || visibleIndices.Contains(p)){//don't fade out if it's supposed to be currently visible
+					continue;
+				}
+				if(visibleIndicesOld!=null && visibleIndicesOld.Count>0 && !visibleIndicesOld.Contains(p)){//don't fade out if it was already not visible
+					continue;
+				}
+				ListPaths[p].BeginAnimation(OpacityProperty,animation);
+				for(int i=0;i<ListDots[p].Count;i++) {
+					ListDots[p][i].BeginAnimation(OpacityProperty,animation);
+					ListDotsBig[p][i].IsHitTestVisible=false;
+					//the other elements won't interfere with hit test because of z-order.
+				}
+			}
+			//Fade in---------------------------------------------------------------------------
+			animation=new DoubleAnimation();
+			animation.From=0;
+			animation.To=1;
+			animation.Duration=TimeSpan.FromMilliseconds(200);
+			animation.FillBehavior=FillBehavior.HoldEnd;
+			for(int p=0;p<ListPaths.Count;p++){
+				if(visibleIndices.Count>0 && !visibleIndices.Contains(p)){//don't fade in if it's supposed to be currently not visible
+					continue;
+				}
+				if(visibleIndicesOld==null || visibleIndicesOld.Count==0 || visibleIndicesOld.Contains(p)){//don't fade in if it was already visible
+					continue;
+				}
+				ListPaths[p].BeginAnimation(OpacityProperty,animation);
+				for(int i=0;i<ListDots[p].Count;i++) {
+					ListDots[p][i].BeginAnimation(OpacityProperty,animation);
+					ListDotsBig[p][i].IsHitTestVisible=true;
+				}
+			}
+			visibleIndicesOld=new List<int>(visibleIndices);
+		}
+
 
 
 	}

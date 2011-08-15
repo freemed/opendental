@@ -23,18 +23,30 @@ namespace OpenDentalWpf {
 	/// <summary></summary>
 	public partial class ContrDashProvList:UserControl {
 		DataTable table;
+		DateTime DateShowing;
 
 		public ContrDashProvList() {
 			InitializeComponent();
+			DateShowing=DateTime.Today;
+			gridMain.SelectionMode=DataGridSelectionMode.Extended;
+			gridMain.SelectionUnit=DataGridSelectionUnit.FullRow;
 		}
 
 		public void FillData() {
-			GetData();
+			textDate.Text=DateShowing.ToString("ddd")+" "+DateShowing.ToShortDateString();
+			table=DashboardQueries.GetProvList(DateShowing);
 			FillScreen();
+			
 		}
 
-		private void GetData() {
-			table=DashboardQueries.GetProvList(DateTime.Today);
+		public List<int> SelectedIndices{
+			get{
+				List<int> retVal=new List<int>();
+				for(int i=0;i<gridMain.SelectedItems.Count;i++){
+					retVal.Add(gridMain.Items.IndexOf(gridMain.SelectedItems[i]));
+				}
+				return retVal;
+			}
 		}
 
 		private void FillScreen() {
@@ -68,6 +80,20 @@ namespace OpenDentalWpf {
 			//((DataGridTextColumn)gridMain.Columns[2]).Binding.StringFormat="c0";
 			gridMain.ItemsSource=ListProv;
 		}
+
+		private void labelR_MouseDown(object sender,MouseButtonEventArgs e) {
+			DateShowing=DateShowing.AddDays(1);
+			FillData();
+		}
+
+		private void labelL_MouseDown(object sender,MouseButtonEventArgs e) {
+			DateShowing=DateShowing.AddDays(-1);
+			FillData();
+		}
+
+		//private void gridMain_SelectionChanged(object sender,SelectionChangedEventArgs e) {
+			
+		//}
 
 		
 
