@@ -54,6 +54,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butExport;
 		private GroupBox groupProcCodeSetup;
 		private OpenDental.UI.Button butProcTools;
+		private UI.Button butShowHiddenDefault;
 		///<summary>The list of definitions that is currently showing in the category list.</summary>
 		private Def[] CatList;
 
@@ -105,6 +106,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.butShowHiddenDefault = new OpenDental.UI.Button();
 			this.groupFeeScheds.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupProcCodeSetup.SuspendLayout();
@@ -201,6 +203,7 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.butShowHiddenDefault);
 			this.groupBox1.Controls.Add(this.textDescription);
 			this.groupBox1.Controls.Add(this.textAbbreviation);
 			this.groupBox1.Controls.Add(this.textCode);
@@ -269,7 +272,6 @@ namespace OpenDental{
 			// checkShowHidden
 			// 
 			this.checkShowHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkShowHidden.AutoSize = true;
 			this.checkShowHidden.Location = new System.Drawing.Point(10,533);
 			this.checkShowHidden.Name = "checkShowHidden";
 			this.checkShowHidden.Size = new System.Drawing.Size(90,17);
@@ -449,6 +451,22 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// butShowHiddenDefault
+			// 
+			this.butShowHiddenDefault.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowHiddenDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butShowHiddenDefault.Autosize = true;
+			this.butShowHiddenDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowHiddenDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowHiddenDefault.CornerRadius = 4F;
+			this.butShowHiddenDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butShowHiddenDefault.Location = new System.Drawing.Point(100,530);
+			this.butShowHiddenDefault.Name = "butShowHiddenDefault";
+			this.butShowHiddenDefault.Size = new System.Drawing.Size(65,20);
+			this.butShowHiddenDefault.TabIndex = 25;
+			this.butShowHiddenDefault.Text = "set default";
+			this.butShowHiddenDefault.Click += new System.EventHandler(this.butShowHiddenDefault_Click);
+			// 
 			// FormProcCodes
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -469,8 +487,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Codes";
-			this.Load += new System.EventHandler(this.FormProcCodes_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProcedures_Closing);
+			this.Load += new System.EventHandler(this.FormProcCodes_Load);
 			this.groupFeeScheds.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
@@ -482,6 +500,7 @@ namespace OpenDental{
 
 
 		private void FormProcCodes_Load(object sender, System.EventArgs e){
+			checkShowHidden.Checked=PrefC.GetBool(PrefName.ProcCodeListShowHidden);
 			if(!Security.IsAuthorized(Permissions.Setup,DateTime.MinValue,true)) {
 				groupFeeScheds.Visible=false;
 				butEditCategories.Visible=false;
@@ -707,6 +726,18 @@ namespace OpenDental{
 		private void checkShowHidden_Click(object sender,EventArgs e) {
 			FillCats();
 			FillGrid();
+		}
+
+		private void butShowHiddenDefault_Click(object sender,EventArgs e) {
+			Prefs.UpdateBool(PrefName.ProcCodeListShowHidden,checkShowHidden.Checked);
+			string hiddenStatus="";
+			if(checkShowHidden.Checked) {
+				hiddenStatus="checked.";
+			}
+			else {
+				hiddenStatus="unchecked.";
+			}
+			MessageBox.Show(Lan.g(this,"Show Hidden will default to ")+hiddenStatus);
 		}
 
 		private void listFeeSched_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {

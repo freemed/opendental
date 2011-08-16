@@ -221,6 +221,8 @@ namespace OpenDentBusiness {
 		PracticeZip,
 		///<summary>FK to diseasedef.DiseaseDefNum</summary>
 		ProblemsIndicateNone,
+		///<summary>In FormProcCodes, this is the default for the ShowHidden checkbox.</summary>
+		ProcCodeListShowHidden,
 		ProcessSigsIntervalInSecs,
 		ProgramVersion,
 		ProviderIncomeTransferShows,
