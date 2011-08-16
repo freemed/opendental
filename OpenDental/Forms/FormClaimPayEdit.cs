@@ -81,7 +81,6 @@ namespace OpenDental{
 			// 
 			this.textAmount.Location = new System.Drawing.Point(133,63);
 			this.textAmount.Name = "textAmount";
-			this.textAmount.ReadOnly = true;
 			this.textAmount.Size = new System.Drawing.Size(58,20);
 			this.textAmount.TabIndex = 0;
 			this.textAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
