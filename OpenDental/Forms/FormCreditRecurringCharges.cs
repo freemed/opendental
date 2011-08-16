@@ -88,7 +88,22 @@ namespace OpenDental {
 			labelTotal.Text=Lan.g(this,"Total=")+table.Rows.Count.ToString();
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
 		}
-		
+
+		///<summary>Returns a valid DateTime for the payment's PayDate.  Contains logic if payment should be for the previous or current month.</summary>
+		private DateTime GetPayDate(DateTime latestPayment,DateTime dateStart) {
+			//Most common, current day >= dateStart so we use current month and year with the dateStart day.  Will always be a legal DateTime.
+			if(nowDateTime.Day>=dateStart.Day) {
+				return new DateTime(nowDateTime.Year,nowDateTime.Month,dateStart.Day);
+			}
+			//PayDate needs to be for the previous month so we need to determine if using the dateStart day would be a legal DateTime.
+			DateTime nowMinusOneMonth=nowDateTime.AddMonths(-1);
+			int daysInMonth=DateTime.DaysInMonth(nowMinusOneMonth.Year,nowMinusOneMonth.Month);
+			if(daysInMonth<=dateStart.Day) {
+				return new DateTime(nowMinusOneMonth.Year,nowMinusOneMonth.Month,daysInMonth);//Returns the last day of the previous month.
+			}
+			return new DateTime(nowMinusOneMonth.Year,nowMinusOneMonth.Month,dateStart.Day);//Previous month contains a legal date using dateStart's day.
+		}
+
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
 		}
@@ -259,7 +274,9 @@ namespace OpenDental {
 				if(insertPayment) {
 					Patient patCur=Patients.GetPat(patNum);
 					Payment paymentCur=new Payment();
-					paymentCur.PayDate=nowDateTime.Date;
+					paymentCur.DateEntry=nowDateTime.Date;
+					paymentCur.PayDate=GetPayDate(PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["LatestPayment"].ToString()),
+						PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["DateStart"].ToString()));
 					paymentCur.PatNum=patCur.PatNum;
 					paymentCur.ClinicNum=patCur.ClinicNum;
 					paymentCur.PayType=payType;

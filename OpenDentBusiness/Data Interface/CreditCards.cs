@@ -59,9 +59,10 @@ namespace OpenDentBusiness{
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),payType);
 			}
 			DataTable table=new DataTable();
-			//This query will return all patients that:
-			//	-have recurring setup and today's date falls within the start and stop range.
-			//	-have a total balance > recurring charge amount
+			//This query will return patient information and the latest recurring payment whom:
+			//	-have recurring charges setup and today's date falls within the start and stop range they are setup.
+			//	-have a total balance >= recurring charge amount
+			//NOTE: Query will return patients with or without payments regardless of when that payment occurred, filtering is done below.
 			string command="SELECT cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"
 					+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN DATE('0001-01-01') ELSE MAX(pay.PayDate) END LatestPayment,"
 					+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt "
@@ -77,7 +78,7 @@ namespace OpenDentBusiness{
 					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt";
 			table=Db.GetTable(command);
 			DateTime curDate=MiscData.GetNowDateTime();
-			//We need to remove the rows within table that do not belong.
+			//Loop through table and remove patients that do not need to be charged yet.
 			for(int i=0;i<table.Rows.Count;i++) {
 				DateTime latestPayment=PIn.Date(table.Rows[i]["LatestPayment"].ToString());
 				DateTime dateStart=PIn.Date(table.Rows[i]["DateStart"].ToString());
@@ -85,17 +86,30 @@ namespace OpenDentBusiness{
 				if(curDate>latestPayment.AddDays(30)) {
 					continue;
 				}
+				//Not enough days in the current month so show on the last day of the month
+				//Example: DateStart=8/31/2010 and the current month is February 2011 which does not have 31 days.
+				//So the patient needs to show in list if current day is the 28th (or last day of the month).
+				int daysInMonth=DateTime.DaysInMonth(curDate.Year,curDate.Month);
+				if(daysInMonth<=dateStart.Day && daysInMonth==curDate.Day) {
+					continue;
+				}
 				if(curDate.Day>=dateStart.Day) {
-					//If no payment enteries in the same month then charge.
-					if((curDate.Month>latestPayment.Month || curDate.Year>latestPayment.Year)) {//The next month.  For December that will be next year.
-						continue;
-					}
-					//Same month charge but first charge was from previous month due to a weekend, etc.
-					if(curDate.Month==latestPayment.Month && latestPayment.AddDays(21)<new DateTime(curDate.Year,curDate.Month,dateStart.Day)) {
+					//No payment entries in the same month then charge.
+					if(curDate.Month>latestPayment.Month || curDate.Year>latestPayment.Year) {//The next month.  For December that will be next year.
 						continue;
 					}
 				}
-				//Otherwise we need to remove this row because user does not need to be charged just yet for whatever reason.
+				else {//Current date is before the recurring date in the current month.
+					//Check if payment didn't happen last month.
+					if(curDate.AddMonths(-1).Month!=latestPayment.Month){
+						//Charge did not happen last month so the patient needs to show up in list.
+						//Example: Last month had a recurring charge set at the end of the month that fell on a weekend.
+						//Today is the next month and still before the recurring charge date. 
+						//This will allow the charge for the previous month to happen if the 30 day check didn't catch it above.
+						continue;
+					}
+				}
+				//Patient doesn't need to be charged yet so remove from the table.
 				table.Rows.RemoveAt(i);
 				i--;
 			}
