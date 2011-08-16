@@ -69,7 +69,7 @@ namespace OpenDental {
 				listCalls.Add(new PointF(17.5f,0));
 			}
 			buckets=new float[28];//every 30 minutes, starting at 5:15
-			usedLunch=new bool[28];
+			//usedLunch=new bool[28];
 			List<Schedule> scheds=Schedules.GetDayList(dateShowing);
 			TimeSpan time1;
 			TimeSpan time2;
@@ -81,12 +81,12 @@ namespace OpenDental {
 				if(PhoneEmpDefaults.IsNoGraph(scheds[i].EmployeeNum)) {
 					continue;
 				}
-				TimeSpan lunch=scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0);//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
+				//TimeSpan lunch=scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0);//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
 				for(int b=0;b<buckets.Length;b++) {
 					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
 					time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
 					//if the lunchtime is within this bucket
-					if(lunch >= time1 && lunch < time2) {
+					/*if(lunch >= time1 && lunch < time2) {
 						if(usedLunch[b]) {//can't use this bucket for lunch because someone else already did.
 							lunch+=new TimeSpan(0,30,0);//move lunch forward half an hour
 						}
@@ -94,7 +94,7 @@ namespace OpenDental {
 							usedLunch[b]=true;
 							continue;//used this bucket for lunch (don't add a drop to the bucket)
 						}
-					}
+					}*/
 					//situation 1: this bucket is completely within the start and stop times.
 					if(scheds[i].StartTime <= time1 && scheds[i].StopTime >= time2) {
 						buckets[b]+=1;
