@@ -1308,7 +1308,7 @@ namespace OpenDental{
 			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));//if true, this will bring up the scanner interface for the selected scanner a few lines down
 			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
 			if(EZTwain.OpenDefaultSource()) {//if it opens the scanner successfully
-				EZTwain.SetPixelType(2);//
+				EZTwain.SetPixelType(2);//24-bit Color
 				EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
 				EZTwain.AcquireMultipageFile(this.Handle,tempFile);
 			}

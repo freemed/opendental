@@ -3644,7 +3644,7 @@ namespace OpenDental {
 		private void gridComm_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			//TODO: transition this to checking the Tag object.
 			int row=e.Row;
-			if(!this.checkShowFamilyComm.Checked) {
+			if(!this.checkShowFamilyComm.Checked) {//if only showing entries for one patient instead of intermingled family entries
 				int i;
 				for(row=0,i=0;row<DataSetMain.Tables["Commlog"].Rows.Count;row++) {
 					//Matching FName is not perfect because children can have the same names as parents.
