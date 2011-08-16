@@ -4047,7 +4047,7 @@ namespace OpenDental{
 		private void gridPay_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			long tempClaimNum=ClaimCur.ClaimNum;
 			ClaimPayment claimPaymentCur=ClaimPayments.GetOne(PIn.Long(tablePayments.Rows[e.Row]["ClaimPaymentNum"].ToString()));
-			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPaymentCur);
+			FormClaimPayEditOld FormCPE=new FormClaimPayEditOld(claimPaymentCur);
 			//Security handled in that form.  Anyone can view.
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
 			FormCPE.ShowDialog();
@@ -4369,7 +4369,7 @@ namespace OpenDental{
 			ClaimPaymentCur.ClinicNum=PatCur.ClinicNum;
 			ClaimPaymentCur.CarrierName=Carriers.GetName(InsPlans.GetPlan(ClaimCur.PlanNum,PlanList).CarrierNum);
 			ClaimPayments.Insert(ClaimPaymentCur);
-			FormClaimPayEdit FormCPE=new FormClaimPayEdit(ClaimPaymentCur);
+			FormClaimPayEditOld FormCPE=new FormClaimPayEditOld(ClaimPaymentCur);
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
 			FormCPE.IsNew=true;
 			FormCPE.ShowDialog();

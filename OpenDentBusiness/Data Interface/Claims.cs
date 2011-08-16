@@ -344,7 +344,7 @@ namespace OpenDentBusiness{
 		}
 	}
 
-	///<summary>Holds a list of claims to show in the Claim Check Edit window.  Not an actual database table.</summary>
+	///<summary>Holds a list of claims to show in the Claim Pay Edit window.  Not an actual database table.</summary>
 	public class ClaimPaySplit{
 		///<summary></summary>
 		public long ClaimNum;

@@ -9,7 +9,7 @@ using OpenDental.UI;
 
 namespace OpenDental{
 ///<summary></summary>
-	public class FormClaimPayEdit : System.Windows.Forms.Form{
+	public class FormClaimPayEditOld:System.Windows.Forms.Form {
 		private OpenDental.ValidDouble textAmount;
 		private OpenDental.ValidDate textDate;
 		private System.Windows.Forms.TextBox textBankBranch;
@@ -42,7 +42,7 @@ namespace OpenDental{
 		public long OriginatingClaimNum;
 
 		///<summary></summary>
-		public FormClaimPayEdit(ClaimPayment claimPaymentCur){
+		public FormClaimPayEditOld(ClaimPayment claimPaymentCur) {
 			InitializeComponent();// Required for Windows Form Designer support
 			ClaimPaymentCur=claimPaymentCur;
 			splits=new List<ClaimPaySplit>();
@@ -62,7 +62,7 @@ namespace OpenDental{
 		#region Windows Form Designer generated code
 
 		private void InitializeComponent(){
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormClaimPayEdit));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormClaimPayEditOld));
 			this.textAmount = new OpenDental.ValidDouble();
 			this.textDate = new OpenDental.ValidDate();
 			this.textBankBranch = new System.Windows.Forms.TextBox();
@@ -285,7 +285,7 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableClaimPaySplits";
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
-			// FormClaimPayEdit
+			// FormClaimPayEditOld
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -314,12 +314,12 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormClaimPayEdit";
+			this.Name = "FormClaimPayEditOld";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Insurance Claim Check";
-			this.Load += new System.EventHandler(this.FormClaimPayEdit_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClaimPayEdit_FormClosing);
+			this.Load += new System.EventHandler(this.FormClaimPayEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

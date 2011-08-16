@@ -1597,7 +1597,7 @@
     <Compile Include="Forms\FormClaimForms.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormClaimPayEdit.cs">
+    <Compile Include="Forms\FormClaimPayEditOld.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormClaimPayTotal.cs">
@@ -3021,8 +3021,8 @@
       <DependentUpon>FormClaimForms.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormClaimPayEdit.resx">
-      <DependentUpon>FormClaimPayEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormClaimPayEditOld.resx">
+      <DependentUpon>FormClaimPayEditOld.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormClaimPayTotal.resx">
