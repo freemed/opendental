@@ -6098,6 +6098,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE payment MODIFY IsRecurringCC NOT NULL";
 					Db.NonQ(command);
 				}
+				//To keep current functionality, set all payments up to this point as recurring charges.
+				command="UPDATE payment SET IsRecurringCC=1";
+				Db.NonQ(command);
 				try{
 					if(DataConnection.DBtype==DatabaseType.MySql) {
 						command="ALTER TABLE procedurelog ADD INDEX (ProcDate)";

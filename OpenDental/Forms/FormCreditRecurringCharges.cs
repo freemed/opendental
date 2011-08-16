@@ -265,6 +265,7 @@ namespace OpenDental {
 					paymentCur.PayType=payType;
 					paymentCur.PayAmt=amt;
 					paymentCur.PayNote=resulttext;
+					paymentCur.IsRecurringCC=true;
 					Payments.Insert(paymentCur);
 					PaySplit split=new PaySplit();
 					split.PatNum=paymentCur.PatNum;
