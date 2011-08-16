@@ -62,6 +62,7 @@ namespace OpenDentBusiness.Crud{
 				sheetField.RadioButtonValue= PIn.String(table.Rows[i]["RadioButtonValue"].ToString());
 				sheetField.RadioButtonGroup= PIn.String(table.Rows[i]["RadioButtonGroup"].ToString());
 				sheetField.IsRequired      = PIn.Bool  (table.Rows[i]["IsRequired"].ToString());
+				sheetField.TabOrder        = PIn.Int   (table.Rows[i]["TabOrder"].ToString());
 				retVal.Add(sheetField);
 			}
 			return retVal;
@@ -102,7 +103,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="SheetFieldNum,";
 			}
-			command+="SheetNum,FieldType,FieldName,FieldValue,FontSize,FontName,FontIsBold,XPos,YPos,Width,Height,GrowthBehavior,RadioButtonValue,RadioButtonGroup,IsRequired) VALUES(";
+			command+="SheetNum,FieldType,FieldName,FieldValue,FontSize,FontName,FontIsBold,XPos,YPos,Width,Height,GrowthBehavior,RadioButtonValue,RadioButtonGroup,IsRequired,TabOrder) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(sheetField.SheetFieldNum)+",";
 			}
@@ -121,7 +122,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)sheetField.GrowthBehavior)+","
 				+"'"+POut.String(sheetField.RadioButtonValue)+"',"
 				+"'"+POut.String(sheetField.RadioButtonGroup)+"',"
-				+    POut.Bool  (sheetField.IsRequired)+")";
+				+    POut.Bool  (sheetField.IsRequired)+","
+				+    POut.Int   (sheetField.TabOrder)+")";
 			if(sheetField.FieldValue==null) {
 				sheetField.FieldValue="";
 			}
@@ -152,7 +154,8 @@ namespace OpenDentBusiness.Crud{
 				+"GrowthBehavior  =  "+POut.Int   ((int)sheetField.GrowthBehavior)+", "
 				+"RadioButtonValue= '"+POut.String(sheetField.RadioButtonValue)+"', "
 				+"RadioButtonGroup= '"+POut.String(sheetField.RadioButtonGroup)+"', "
-				+"IsRequired      =  "+POut.Bool  (sheetField.IsRequired)+" "
+				+"IsRequired      =  "+POut.Bool  (sheetField.IsRequired)+", "
+				+"TabOrder        =  "+POut.Int   (sheetField.TabOrder)+" "
 				+"WHERE SheetFieldNum = "+POut.Long(sheetField.SheetFieldNum);
 			if(sheetField.FieldValue==null) {
 				sheetField.FieldValue="";
@@ -223,6 +226,10 @@ namespace OpenDentBusiness.Crud{
 			if(sheetField.IsRequired != oldSheetField.IsRequired) {
 				if(command!=""){ command+=",";}
 				command+="IsRequired = "+POut.Bool(sheetField.IsRequired)+"";
+			}
+			if(sheetField.TabOrder != oldSheetField.TabOrder) {
+				if(command!=""){ command+=",";}
+				command+="TabOrder = "+POut.Int(sheetField.TabOrder)+"";
 			}
 			if(command==""){
 				return;
