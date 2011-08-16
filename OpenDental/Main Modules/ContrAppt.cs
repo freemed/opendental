@@ -795,7 +795,6 @@ namespace OpenDental{
 			this.listSearchResults.IntegralHeight = false;
 			this.listSearchResults.Location = new System.Drawing.Point(6,32);
 			this.listSearchResults.Name = "listSearchResults";
-			this.listSearchResults.ScrollAlwaysVisible = true;
 			this.listSearchResults.Size = new System.Drawing.Size(193,134);
 			this.listSearchResults.TabIndex = 87;
 			this.listSearchResults.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listSearchResults_MouseDown);
