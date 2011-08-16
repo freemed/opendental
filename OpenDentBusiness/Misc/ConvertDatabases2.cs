@@ -6212,34 +6212,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-
-				
-
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE sheetfield ADD TabOrder int NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE sheetfield ADD TabOrder number(11)";
-					Db.NonQ(command);
-					command="UPDATE sheetfield SET TabOrder = 0 WHERE TabOrder IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE sheetfield MODIFY TabOrder NOT NULL";
-					Db.NonQ(command);
-				}
-				*/
-
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE sheetfielddef ADD TabOrder int NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE sheetfielddef ADD TabOrder number(11)";
-					Db.NonQ(command);
-					command="UPDATE sheetfielddef SET TabOrder = 0 WHERE TabOrder IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE sheetfielddef MODIFY TabOrder NOT NULL";
-					Db.NonQ(command);
-				}
-				*/
