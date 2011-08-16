@@ -303,6 +303,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimPayEdit_Load(object sender, System.EventArgs e) {
+			/*
 			//ClaimPayment created before opening this form
 			if(IsNew){
 				if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here
@@ -345,11 +346,11 @@ namespace OpenDental{
 					splitTot+=(decimal)splits[gridMain.SelectedIndices[i]].InsPayAmt;
 				}
 				textAmount.Text=splitTot.ToString("F");
-			}
+			}*/
 		}
 
 		private void FillGrid(){
-			splits=Claims.RefreshByCheck(ClaimPaymentCur.ClaimPaymentNum,checkShowUn.Checked);
+			//splits=Claims.RefreshByCheck(ClaimPaymentCur.ClaimPaymentNum,checkShowUn.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPaySplits","Date"),70);
@@ -435,6 +436,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			/*
 			if(textDate.Text=="") {
 				MsgBox.Show(this,"Please enter a date first.");
 				return;
@@ -516,7 +518,7 @@ namespace OpenDental{
 					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,false);
 				}
 			}
-			DialogResult=DialogResult.OK;
+			DialogResult=DialogResult.OK;*/
 		}
 
 		private void FormClaimPayEdit_FormClosing(object sender,FormClosingEventArgs e) {
