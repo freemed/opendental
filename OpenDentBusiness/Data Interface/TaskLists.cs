@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets all task lists for the main trunk.  Pass in the current user.</summary>
 		public static List<TaskList> RefreshMainTrunk(long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),userNum);
 			}
 			string command="SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
