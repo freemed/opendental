@@ -16,12 +16,18 @@ namespace OpenDental {
 		}
 
 		private void FormClaimPayList_Load(object sender,EventArgs e) {
-			textDateFrom.Text=DateTime.Now.AddMonths((int)(-1)).ToShortDateString();
+			textDateFrom.Text=DateTime.Now.AddMonths(-1).ToShortDateString();
 			textDateTo.Text=DateTime.Now.ToShortDateString();
-			comboClinic.Items.Add("All");
-			comboClinic.SelectedIndex=0;
-			for(int i=0;i<Clinics.List.Length;i++) {
-				comboClinic.Items.Add(Clinics.List[i].Description);
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				comboClinic.Visible=false;
+				labelClinic.Visible=false;
+			}
+			else {
+				comboClinic.Items.Add("All");
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+				}
 			}
 			FillMain();
 		}
@@ -58,39 +64,25 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			Clinic clinic;
-			string clinicName;
-			string checkDate;
-			string dateIssued;
 			for(int i=0;i<listClaimPay.Count;i++){
 				row=new ODGridRow();
-				if(listClaimPay[i].CheckDate<new DateTime(1800,1,1)) {
-					checkDate="";
+				if(listClaimPay[i].CheckDate.Year<1800) {
+					row.Cells.Add("");
 				}
 				else{
-					checkDate=listClaimPay[i].CheckDate.ToShortDateString();
+					row.Cells.Add(listClaimPay[i].CheckDate.ToShortDateString());
 				}
-				row.Cells.Add(checkDate);
-				row.Cells.Add(listClaimPay[i].DateIssued.ToShortDateString());
-				if(listClaimPay[i].DateIssued<new DateTime(1800,1,1)) {
-					dateIssued="";
+				if(listClaimPay[i].DateIssued.Year<1800) {
+					row.Cells.Add("");
 				}
 				else{
-					dateIssued=listClaimPay[i].DateIssued.ToShortDateString();
+					row.Cells.Add(listClaimPay[i].DateIssued.ToShortDateString());
 				}
-				row.Cells.Add(dateIssued);
 				row.Cells.Add(listClaimPay[i].CheckAmt.ToString());
 				row.Cells.Add(listClaimPay[i].CheckNum);
 				row.Cells.Add(listClaimPay[i].BankBranch);
 				row.Cells.Add(listClaimPay[i].Note);
-				clinic=Clinics.GetClinic(listClaimPay[i].ClinicNum);
-				if(clinic==null) {
-					clinicName="";
-				}
-				else {
-					clinicName=clinic.Description;
-				}
-				row.Cells.Add(clinicName);
+				row.Cells.Add(Clinics.GetDesc(listClaimPay[i].ClinicNum));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -102,12 +94,8 @@ namespace OpenDental {
 			FillMain();
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+		private void butClose_Click(object sender,EventArgs e) {
+			Close();
 		}
 	}
 }

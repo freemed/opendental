@@ -53,11 +53,11 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPayment>>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,clinicNum);
 			}
-			string command=
-				"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
-				+"Checknum,BankBranch,Note,DepositNum,"
-				+"ClinicNum,DepositNum,CarrierName,DateIssued "
-				+"FROM claimpayment "
+			string command="SELECT * FROM claimpayment "
+				//"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
+				//+"Checknum,BankBranch,Note,DepositNum,"
+				//+"ClinicNum,DepositNum,CarrierName,DateIssued "
+				//+"FROM claimpayment "
 				+"WHERE CheckDate >= "+POut.Date(dateFrom)
 				+"AND CheckDate <= "+POut.Date(dateTo);
 			if(clinicNum!=0){

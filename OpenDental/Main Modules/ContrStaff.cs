@@ -127,6 +127,7 @@ namespace OpenDental{
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.butSendRx = new OpenDental.UI.Button();
 			this.butSupply = new OpenDental.UI.Button();
+			this.butClaimPay = new OpenDental.UI.Button();
 			this.butBilling = new OpenDental.UI.Button();
 			this.butAccounting = new OpenDental.UI.Button();
 			this.butBackup = new OpenDental.UI.Button();
@@ -134,7 +135,6 @@ namespace OpenDental{
 			this.butSendClaims = new OpenDental.UI.Button();
 			this.butTasks = new OpenDental.UI.Button();
 			this.timerSending = new System.Windows.Forms.Timer(this.components);
-			this.butClaimPay = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -541,6 +541,20 @@ namespace OpenDental{
 			this.butSupply.Text = "SupplyInventory";
 			this.butSupply.Click += new System.EventHandler(this.butSupply_Click);
 			// 
+			// butClaimPay
+			// 
+			this.butClaimPay.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClaimPay.Autosize = true;
+			this.butClaimPay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClaimPay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClaimPay.CornerRadius = 4F;
+			this.butClaimPay.Location = new System.Drawing.Point(16,45);
+			this.butClaimPay.Name = "butClaimPay";
+			this.butClaimPay.Size = new System.Drawing.Size(104,26);
+			this.butClaimPay.TabIndex = 25;
+			this.butClaimPay.Text = "EOBs";
+			this.butClaimPay.Click += new System.EventHandler(this.butClaimPay_Click);
+			// 
 			// butBilling
 			// 
 			this.butBilling.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -639,20 +653,6 @@ namespace OpenDental{
 			// 
 			this.timerSending.Interval = 1000;
 			this.timerSending.Tick += new System.EventHandler(this.timerSending_Tick);
-			// 
-			// butClaimPay
-			// 
-			this.butClaimPay.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClaimPay.Autosize = true;
-			this.butClaimPay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClaimPay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClaimPay.CornerRadius = 4F;
-			this.butClaimPay.Location = new System.Drawing.Point(16,45);
-			this.butClaimPay.Name = "butClaimPay";
-			this.butClaimPay.Size = new System.Drawing.Size(104,26);
-			this.butClaimPay.TabIndex = 25;
-			this.butClaimPay.Text = "Claim Payments";
-			this.butClaimPay.Click += new System.EventHandler(this.butClaimPay_Click);
 			// 
 			// ContrStaff
 			// 
@@ -782,10 +782,10 @@ namespace OpenDental{
 			//if(!Security.IsAuthorized(Permissions.ClaimSentEdit,DateTime.Today)){
 			//  return;
 			//}//Not sure if this is required for viewing Claim Payments
-			Cursor=Cursors.WaitCursor;
+			//Cursor=Cursors.WaitCursor;
 			FormClaimPayList FormCPL=new FormClaimPayList();
-			FormCPL.ShowDialog();
-			Cursor=Cursors.Default;
+			FormCPL.Show();
+			//Cursor=Cursors.Default;
 		}
 
 		private void butBilling_Click(object sender,System.EventArgs e) {
