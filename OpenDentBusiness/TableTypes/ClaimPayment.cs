@@ -25,6 +25,8 @@ namespace OpenDentBusiness{
 		public long DepositNum;
 		///<summary>Descriptive name of the carrier just for reporting purposes.</summary>
 		public string CarrierName;
+		///<summary>Date that the carrier issued the check. Date on the check.</summary>
+		public DateTime DateIssued;
 
 		///<summary>Returns a copy of this ClaimPayment.</summary>
 		public ClaimPayment Copy(){

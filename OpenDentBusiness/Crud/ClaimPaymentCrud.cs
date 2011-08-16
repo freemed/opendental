@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Crud{
 				claimPayment.ClinicNum      = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
 				claimPayment.DepositNum     = PIn.Long  (table.Rows[i]["DepositNum"].ToString());
 				claimPayment.CarrierName    = PIn.String(table.Rows[i]["CarrierName"].ToString());
+				claimPayment.DateIssued     = PIn.Date  (table.Rows[i]["DateIssued"].ToString());
 				retVal.Add(claimPayment);
 			}
 			return retVal;
@@ -95,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClaimPaymentNum,";
 			}
-			command+="CheckDate,CheckAmt,CheckNum,BankBranch,Note,ClinicNum,DepositNum,CarrierName) VALUES(";
+			command+="CheckDate,CheckAmt,CheckNum,BankBranch,Note,ClinicNum,DepositNum,CarrierName,DateIssued) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(claimPayment.ClaimPaymentNum)+",";
 			}
@@ -107,7 +108,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(claimPayment.Note)+"',"
 				+    POut.Long  (claimPayment.ClinicNum)+","
 				+    POut.Long  (claimPayment.DepositNum)+","
-				+"'"+POut.String(claimPayment.CarrierName)+"')";
+				+"'"+POut.String(claimPayment.CarrierName)+"',"
+				+    POut.Date  (claimPayment.DateIssued)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +129,8 @@ namespace OpenDentBusiness.Crud{
 				+"Note           = '"+POut.String(claimPayment.Note)+"', "
 				+"ClinicNum      =  "+POut.Long  (claimPayment.ClinicNum)+", "
 				+"DepositNum     =  "+POut.Long  (claimPayment.DepositNum)+", "
-				+"CarrierName    = '"+POut.String(claimPayment.CarrierName)+"' "
+				+"CarrierName    = '"+POut.String(claimPayment.CarrierName)+"', "
+				+"DateIssued     =  "+POut.Date  (claimPayment.DateIssued)+" "
 				+"WHERE ClaimPaymentNum = "+POut.Long(claimPayment.ClaimPaymentNum);
 			Db.NonQ(command);
 		}
@@ -166,6 +169,10 @@ namespace OpenDentBusiness.Crud{
 			if(claimPayment.CarrierName != oldClaimPayment.CarrierName) {
 				if(command!=""){ command+=",";}
 				command+="CarrierName = '"+POut.String(claimPayment.CarrierName)+"'";
+			}
+			if(claimPayment.DateIssued != oldClaimPayment.DateIssued) {
+				if(command!=""){ command+=",";}
+				command+="DateIssued = "+POut.Date(claimPayment.DateIssued)+"";
 			}
 			if(command==""){
 				return;

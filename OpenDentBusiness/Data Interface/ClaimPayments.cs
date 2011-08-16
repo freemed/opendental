@@ -47,6 +47,26 @@ namespace OpenDentBusiness{
 			}
 			return table;
 		}
+		
+		///<summary>Gets all claimpayments within the specified date range and from the specified clinic. 0 means all clinics selected.</summary>
+		public static List<ClaimPayment> GetForDateRange(DateTime dateFrom,DateTime dateTo,long clinicNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimPayment>>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,clinicNum);
+			}
+			string command=
+				"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
+				+"Checknum,BankBranch,Note,DepositNum,"
+				+"ClinicNum,DepositNum,CarrierName "
+				//+",DateIssued"
+				+"FROM claimpayment "
+				+"WHERE CheckDate >= "+POut.Date(dateFrom)
+				+"AND CheckDate <= "+POut.Date(dateTo);
+			if(clinicNum!=0){
+				command+=" AND ClinicNum="+POut.Long(clinicNum);
+			}
+			command+=" ORDER BY CheckDate";
+			return Crud.ClaimPaymentCrud.SelectMany(command);
+		}
 
 		///<summary>Gets all unattached claimpayments for display in a new deposit.  Excludes payments before dateStart.</summary>
 		public static ClaimPayment[] GetForDeposit(DateTime dateStart,long clinicNum) {

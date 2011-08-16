@@ -6147,6 +6147,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ProcCodeListShowHidden','1')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claimpayment ADD DateIssued date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claimpayment ADD DateIssued date";
+					Db.NonQ(command);
+					command="UPDATE claimpayment SET DateIssued = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateIssued IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claimpayment MODIFY DateIssued NOT NULL";
+					Db.NonQ(command);
+				}
 				
 					
 
