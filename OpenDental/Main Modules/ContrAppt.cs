@@ -1369,10 +1369,6 @@ namespace OpenDental{
 				return;
 			}
 			Calendar2.SetSelectionRange(startDate,endDate);
-			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Count][];
-			for(int i=0;i<ApptViewItemL.VisProvs.Count;i++) {
-				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
-			}
 			if(ContrApptSingle3!=null) {//I think this is not needed.
 				for(int i=0;i<ContrApptSingle3.Length;i++) {
 					if(ContrApptSingle3[i]!=null) {
@@ -1388,6 +1384,13 @@ namespace OpenDental{
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
 			int indexProv;
 			DataRow row;
+			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Count][];
+			for(int i=0;i<ApptViewItemL.VisProvs.Count;i++) {
+				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
+			}
+			//for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+//TODO: Try and move if(!isWeeklyView) around lines 1407-1430 here.
+			//}
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 				row=DS.Tables["Appointments"].Rows[i];
 				ContrApptSingle3[i]=new ContrApptSingle();
@@ -3694,7 +3697,7 @@ namespace OpenDental{
 			List<Operatory> visOps=ApptViewItemL.VisOps;
 			DataTable dt=new DataTable();
 			Rectangle bounds=e.PageBounds;
-			bool showProvBar=false;
+			bool showProvBar=true;
 			bool isWeeklyView=ContrApptSheet.IsWeeklyView;
 			float colAptWidth=0;
 			int[][] provBars=ContrApptSingle.ProvBar;
@@ -3727,6 +3730,9 @@ namespace OpenDental{
 				stopHour=24;
 			}
 			int totalHeight=lineH*rowsPerHr*(stopHour-startHour);
+			//Figure out how many pages are needed to print. (maybe do both across and tall)
+			int pagesAcross=(int)Math.Ceiling((double)visOps.Count/(double)apptPrintColsPerPage);
+			int pagesTall=(int)Math.Ceiling((double)totalHeight/(double)(bounds.Height-100));//-100 for the header on every page.
 			DrawPrintingHeader(e.Graphics,colWidth,timeWidth,provWidth,provCount,apptPrintColsPerPage,visOps,isWeeklyView);
 			e.Graphics.TranslateTransform(0,100);
 			ApptDrawing.DrawAllButAppts(e.Graphics,apptPrintFontSize,lineH,rowsPerIncr,rowsPerHr,minPerIncr,minPerRow,colWidth,colDayWidth,colAptWidth,apptPrintColsPerPage,timeWidth,totalWidth,totalHeight,provWidth,
@@ -4737,6 +4743,9 @@ namespace OpenDental{
 		private void butSearchMore_Click(object sender, System.EventArgs e) {
 			if(pinBoard.SelectedAppt==null){
 				MsgBox.Show(this,"There is no appointment on the pinboard.");
+				return;
+			}
+			if(SearchResults.Length<1) {
 				return;
 			}
 			dateSearch.Text=SearchResults[SearchResults.Length-1].ToShortDateString();
