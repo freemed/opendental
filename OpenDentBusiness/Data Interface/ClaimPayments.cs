@@ -56,8 +56,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
 				+"Checknum,BankBranch,Note,DepositNum,"
-				+"ClinicNum,DepositNum,CarrierName "
-				//+",DateIssued"
+				+"ClinicNum,DepositNum,CarrierName,DateIssued "
 				+"FROM claimpayment "
 				+"WHERE CheckDate >= "+POut.Date(dateFrom)
 				+"AND CheckDate <= "+POut.Date(dateTo);

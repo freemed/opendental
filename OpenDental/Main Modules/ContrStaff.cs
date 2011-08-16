@@ -68,6 +68,7 @@ namespace OpenDental{
 		private Employee EmployeeCur;
 		private FormBilling FormB;
 		private UI.Button butSendRx;
+		private UI.Button butClaimPay;
 		private long PatCurNum;
 		//private bool InitializedOnStartup;
 
@@ -124,6 +125,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textMessage = new System.Windows.Forms.TextBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.butSendRx = new OpenDental.UI.Button();
 			this.butSupply = new OpenDental.UI.Button();
 			this.butBilling = new OpenDental.UI.Button();
 			this.butAccounting = new OpenDental.UI.Button();
@@ -132,7 +134,7 @@ namespace OpenDental{
 			this.butSendClaims = new OpenDental.UI.Button();
 			this.butTasks = new OpenDental.UI.Button();
 			this.timerSending = new System.Windows.Forms.Timer(this.components);
-			this.butSendRx = new OpenDental.UI.Button();
+			this.butClaimPay = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -495,6 +497,7 @@ namespace OpenDental{
 			// 
 			this.groupBox3.Controls.Add(this.butSendRx);
 			this.groupBox3.Controls.Add(this.butSupply);
+			this.groupBox3.Controls.Add(this.butClaimPay);
 			this.groupBox3.Controls.Add(this.butBilling);
 			this.groupBox3.Controls.Add(this.butAccounting);
 			this.groupBox3.Controls.Add(this.butBackup);
@@ -504,10 +507,24 @@ namespace OpenDental{
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.Location = new System.Drawing.Point(34,5);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(286,136);
+			this.groupBox3.Size = new System.Drawing.Size(286,166);
 			this.groupBox3.TabIndex = 23;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Daily";
+			// 
+			// butSendRx
+			// 
+			this.butSendRx.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSendRx.Autosize = true;
+			this.butSendRx.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSendRx.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSendRx.CornerRadius = 4F;
+			this.butSendRx.Location = new System.Drawing.Point(148,45);
+			this.butSendRx.Name = "butSendRx";
+			this.butSendRx.Size = new System.Drawing.Size(104,26);
+			this.butSendRx.TabIndex = 27;
+			this.butSendRx.Text = "Send Rx";
+			this.butSendRx.Click += new System.EventHandler(this.butSendRx_Click);
 			// 
 			// butSupply
 			// 
@@ -517,7 +534,7 @@ namespace OpenDental{
 			this.butSupply.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSupply.CornerRadius = 4F;
 			this.butSupply.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSupply.Location = new System.Drawing.Point(16,97);
+			this.butSupply.Location = new System.Drawing.Point(16,123);
 			this.butSupply.Name = "butSupply";
 			this.butSupply.Size = new System.Drawing.Size(104,26);
 			this.butSupply.TabIndex = 26;
@@ -531,7 +548,7 @@ namespace OpenDental{
 			this.butBilling.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBilling.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBilling.CornerRadius = 4F;
-			this.butBilling.Location = new System.Drawing.Point(16,45);
+			this.butBilling.Location = new System.Drawing.Point(16,71);
 			this.butBilling.Name = "butBilling";
 			this.butBilling.Size = new System.Drawing.Size(104,26);
 			this.butBilling.TabIndex = 25;
@@ -579,7 +596,7 @@ namespace OpenDental{
 			this.butDeposit.CornerRadius = 4F;
 			this.butDeposit.Image = ((System.Drawing.Image)(resources.GetObject("butDeposit.Image")));
 			this.butDeposit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeposit.Location = new System.Drawing.Point(16,71);
+			this.butDeposit.Location = new System.Drawing.Point(16,97);
 			this.butDeposit.Name = "butDeposit";
 			this.butDeposit.Size = new System.Drawing.Size(104,26);
 			this.butDeposit.TabIndex = 23;
@@ -623,19 +640,19 @@ namespace OpenDental{
 			this.timerSending.Interval = 1000;
 			this.timerSending.Tick += new System.EventHandler(this.timerSending_Tick);
 			// 
-			// butSendRx
+			// butClaimPay
 			// 
-			this.butSendRx.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSendRx.Autosize = true;
-			this.butSendRx.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSendRx.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSendRx.CornerRadius = 4F;
-			this.butSendRx.Location = new System.Drawing.Point(148,45);
-			this.butSendRx.Name = "butSendRx";
-			this.butSendRx.Size = new System.Drawing.Size(104,26);
-			this.butSendRx.TabIndex = 27;
-			this.butSendRx.Text = "Send Rx";
-			this.butSendRx.Click += new System.EventHandler(this.butSendRx_Click);
+			this.butClaimPay.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClaimPay.Autosize = true;
+			this.butClaimPay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClaimPay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClaimPay.CornerRadius = 4F;
+			this.butClaimPay.Location = new System.Drawing.Point(16,45);
+			this.butClaimPay.Name = "butClaimPay";
+			this.butClaimPay.Size = new System.Drawing.Size(104,26);
+			this.butClaimPay.TabIndex = 25;
+			this.butClaimPay.Text = "Claim Payments";
+			this.butClaimPay.Click += new System.EventHandler(this.butClaimPay_Click);
 			// 
 			// ContrStaff
 			// 
@@ -758,6 +775,16 @@ namespace OpenDental{
 				OnPatientSelected(FormCS.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 				GotoModule.GotoClaim(FormCS.GotoClaimNum);
 			}
+			Cursor=Cursors.Default;
+		}
+		
+		private void butClaimPay_Click(object sender,EventArgs e) {
+			//if(!Security.IsAuthorized(Permissions.ClaimSentEdit,DateTime.Today)){
+			//  return;
+			//}//Not sure if this is required for viewing Claim Payments
+			Cursor=Cursors.WaitCursor;
+			FormClaimPayList FormCPL=new FormClaimPayList();
+			FormCPL.ShowDialog();
 			Cursor=Cursors.Default;
 		}
 
@@ -1339,6 +1366,7 @@ namespace OpenDental{
 		}
 
 		#endregion Messaging
+
 
 		
 

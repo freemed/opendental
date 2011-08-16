@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormClaimPayList:Form {
@@ -15,62 +16,90 @@ namespace OpenDental {
 		}
 
 		private void FormClaimPayList_Load(object sender,EventArgs e) {
+			textDateFrom.Text=DateTime.Now.AddMonths((int)(-1)).ToShortDateString();
+			textDateTo.Text=DateTime.Now.ToShortDateString();
+			comboClinic.Items.Add("All");
+			comboClinic.SelectedIndex=0;
+			for(int i=0;i<Clinics.List.Length;i++) {
+				comboClinic.Items.Add(Clinics.List[i].Description);
+			}
 			FillMain();
 		}
 
 		private void FillMain(){
+			Cursor=Cursors.WaitCursor;
 			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo=PIn.Date(textDateTo.Text);
-			long provNum=0;
+			long clinicNum=0;
 			if(comboClinic.SelectedIndex!=0) {
-				provNum=ProviderC.ListShort[comboClinic.SelectedIndex-1].ProvNum;
+				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			/*
-			DataTable table=ClaimPayments.(dateFrom,dateTo,provNum);
+			List<ClaimPayment> listClaimPay=ClaimPayments.GetForDateRange(dateFrom,dateTo,clinicNum);
 			int scrollVal=gridMain.ScrollValue;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableConfirmList","Date Time"),70);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPayList","Check Date"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Patient"),80);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Date Issued"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Age"),30);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Check Amount"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Contact"),150);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Check Num"),75);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Addr/Ph Note"),100);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Bank Branch"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Status"),80);//confirmed
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Note"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Procs"),110);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Clinic"),75);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Medical"),80);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Deposit Num"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableConfirmList","Appt Note"),204);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Carrier"),75);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			ODGridCell cell;
-			for(int i=0;i<table.Rows.Count;i++){
+			Clinic clinic;
+			string clinicName;
+			string checkDate;
+			string dateIssued;
+			for(int i=0;i<listClaimPay.Count;i++){
 				row=new ODGridRow();
-				//aptDateTime=PIn.PDateT(table.Rows[i][4].ToString());
-				row.Cells.Add(table.Rows[i]["aptDateTime"].ToString());
-				//aptDateTime.ToShortDateString()+"\r\n"+aptDateTime.ToShortTimeString());
-				row.Cells.Add(table.Rows[i]["patientName"].ToString());
-				row.Cells.Add(table.Rows[i]["age"].ToString());
-				row.Cells.Add(table.Rows[i]["contactMethod"].ToString());
-				row.Cells.Add(table.Rows[i]["AddrNote"].ToString());
-				row.Cells.Add(table.Rows[i]["confirmed"].ToString());
-				row.Cells.Add(table.Rows[i]["ProcDescript"].ToString());
-				cell=new ODGridCell(table.Rows[i]["medNotes"].ToString());
-				cell.ColorText=Color.Red;
-				row.Cells.Add(cell);
-				row.Cells.Add(table.Rows[i]["Note"].ToString());
-				grid.Rows.Add(row);
+				if(listClaimPay[i].CheckDate<new DateTime(1800,1,1)) {
+					checkDate="";
+				}
+				else{
+					checkDate=listClaimPay[i].CheckDate.ToShortDateString();
+				}
+				row.Cells.Add(checkDate);
+				row.Cells.Add(listClaimPay[i].DateIssued.ToShortDateString());
+				if(listClaimPay[i].DateIssued<new DateTime(1800,1,1)) {
+					dateIssued="";
+				}
+				else{
+					dateIssued=listClaimPay[i].DateIssued.ToShortDateString();
+				}
+				row.Cells.Add(dateIssued);
+				row.Cells.Add(listClaimPay[i].CheckAmt.ToString());
+				row.Cells.Add(listClaimPay[i].CheckNum);
+				row.Cells.Add(listClaimPay[i].BankBranch);
+				row.Cells.Add(listClaimPay[i].Note);
+				clinic=Clinics.GetClinic(listClaimPay[i].ClinicNum);
+				if(clinic==null) {
+					clinicName="";
+				}
+				else {
+					clinicName=clinic.Description;
+				}
+				row.Cells.Add(clinicName);
+				gridMain.Rows.Add(row);
 			}
-			grid.EndUpdate();
-			grid.ScrollValue=scrollVal;
-			 */
+			gridMain.EndUpdate();
+			gridMain.ScrollValue=scrollVal;
+			Cursor=Cursors.Default;
+		}
+
+		private void butRefresh_Click(object sender,EventArgs e) {
+			FillMain();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

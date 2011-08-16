@@ -33,6 +33,7 @@ namespace OpenDental{
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.labelToDate = new System.Windows.Forms.Label();
 			this.labelFromDate = new System.Windows.Forms.Label();
+			this.butRefresh = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -83,6 +84,7 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.butRefresh);
 			this.groupBox1.Controls.Add(this.comboClinic);
 			this.groupBox1.Controls.Add(this.labelClinic);
 			this.groupBox1.Controls.Add(this.textDateTo);
@@ -92,7 +94,7 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(12,12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(518,63);
+			this.groupBox1.Size = new System.Drawing.Size(713,63);
 			this.groupBox1.TabIndex = 16;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Filter";
@@ -100,7 +102,7 @@ namespace OpenDental{
 			// comboClinic
 			// 
 			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(317,14);
+			this.comboClinic.Location = new System.Drawing.Point(512,12);
 			this.comboClinic.MaxDropDownItems = 40;
 			this.comboClinic.Name = "comboClinic";
 			this.comboClinic.Size = new System.Drawing.Size(181,21);
@@ -108,7 +110,7 @@ namespace OpenDental{
 			// 
 			// labelClinic
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(224,18);
+			this.labelClinic.Location = new System.Drawing.Point(419,16);
 			this.labelClinic.Name = "labelClinic";
 			this.labelClinic.Size = new System.Drawing.Size(91,14);
 			this.labelClinic.TabIndex = 22;
@@ -117,21 +119,21 @@ namespace OpenDental{
 			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(86,37);
+			this.textDateTo.Location = new System.Drawing.Point(285,35);
 			this.textDateTo.Name = "textDateTo";
 			this.textDateTo.Size = new System.Drawing.Size(94,20);
 			this.textDateTo.TabIndex = 14;
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(86,15);
+			this.textDateFrom.Location = new System.Drawing.Point(285,13);
 			this.textDateFrom.Name = "textDateFrom";
 			this.textDateFrom.Size = new System.Drawing.Size(94,20);
 			this.textDateFrom.TabIndex = 13;
 			// 
 			// labelToDate
 			// 
-			this.labelToDate.Location = new System.Drawing.Point(6,39);
+			this.labelToDate.Location = new System.Drawing.Point(205,37);
 			this.labelToDate.Name = "labelToDate";
 			this.labelToDate.Size = new System.Drawing.Size(77,14);
 			this.labelToDate.TabIndex = 12;
@@ -140,12 +142,27 @@ namespace OpenDental{
 			// 
 			// labelFromDate
 			// 
-			this.labelFromDate.Location = new System.Drawing.Point(6,18);
+			this.labelFromDate.Location = new System.Drawing.Point(205,16);
 			this.labelFromDate.Name = "labelFromDate";
 			this.labelFromDate.Size = new System.Drawing.Size(77,14);
 			this.labelFromDate.TabIndex = 11;
 			this.labelFromDate.Text = "From Date";
 			this.labelFromDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(18,32);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(84,24);
+			this.butRefresh.TabIndex = 24;
+			this.butRefresh.Text = "&Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// FormClaimPayList
 			// 
@@ -177,5 +194,6 @@ namespace OpenDental{
 		private ValidDate textDateFrom;
 		private System.Windows.Forms.Label labelToDate;
 		private System.Windows.Forms.Label labelFromDate;
+		private UI.Button butRefresh;
 	}
 }
