@@ -66,8 +66,7 @@ namespace OpenDental {
 			if(!CheckSelectedUserPassword(employeeNum)) {
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
 		}
 
@@ -80,8 +79,7 @@ namespace OpenDental {
 			if(!CheckSelectedUserPassword(employeeNum)) {
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
 		}
 
@@ -94,7 +92,7 @@ namespace OpenDental {
 			if(!CheckSelectedUserPassword(employeeNum)) {
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
 		}
@@ -108,8 +106,7 @@ namespace OpenDental {
 			if(!CheckSelectedUserPassword(employeeNum)) {
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
 			//this is usually an automatic status
 		}
@@ -123,12 +120,13 @@ namespace OpenDental {
 			if(!CheckSelectedUserPassword(employeeNum)) {
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
 		}
 
 		public static void Unavailable(PhoneTile tile) {
+			MessageBox.Show("Not working right now.");
+			/*
 			if(!ClockIn(tile)) {
 				return;
 			}
@@ -163,10 +161,7 @@ namespace OpenDental {
 				if(FormO.DialogResult!=DialogResult.OK) {
 					return;
 				}
-			}
-			//this is now handled within PhoneOverrides.Insert or PhoneOverrides.Update
-			//Employees.SetPhoneStatus("Unavailable",extension);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			}*/
 		}
 
 		//RingGroups---------------------------------------------------
@@ -209,7 +204,7 @@ namespace OpenDental {
 			if(!CheckSelectedUserPassword(employeeNum)) {
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
 			Phones.SetPhoneStatus(ClockStatusEnum.Backup,extension);
 		}
@@ -234,11 +229,10 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Lunch.ToString());
 			Employees.Update(EmpCur);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Lunch,extension);
 		}
 
@@ -260,12 +254,10 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Home.ToString());
 			Employees.Update(EmpCur);
-			//ModuleSelected(PatCurNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Home,extension);
 		}
 
@@ -287,11 +279,10 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Break.ToString());
 			Employees.Update(EmpCur);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Break,extension);
 		}
 

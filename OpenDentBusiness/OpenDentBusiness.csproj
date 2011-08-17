@@ -427,7 +427,6 @@
     <Compile Include="InternalTools\Phones\TableTypes\Phone.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneEmpDefault.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />
-    <Compile Include="InternalTools\Phones\TableTypes\PhoneOverride.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />
     <Compile Include="Mobile\Crud\AllergyDefmCrud.cs" />

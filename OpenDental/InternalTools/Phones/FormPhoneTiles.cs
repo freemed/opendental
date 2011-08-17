@@ -133,8 +133,9 @@ namespace OpenDental {
 		//Phones.SetWebCamImage(intTest+101,(Bitmap)pictureWebCam.Image,PhoneList);
 
 		private void butOverride_Click(object sender,EventArgs e) {
-			FormPhoneOverrides FormO=new FormPhoneOverrides();
-			FormO.ShowDialog();
+			MessageBox.Show("Not working right now.");
+			//FormPhoneOverrides FormO=new FormPhoneOverrides();
+			//FormO.ShowDialog();
 		}
 
 		private void timerMsgs_Tick(object sender,EventArgs e) {

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
+	/*
 	///<summary></summary>
 	public class PhoneOverrides{
 
@@ -205,7 +206,7 @@ namespace OpenDentBusiness{
 		}
 
 
-	}
+	}*/
 
 }
 

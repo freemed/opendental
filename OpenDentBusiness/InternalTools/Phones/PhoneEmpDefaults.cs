@@ -72,6 +72,11 @@ namespace OpenDentBusiness{
 			return AsteriskRingGroups.All;
 		}
 
+		///<summary>Stub.  Was in phoneoverrides.</summary>
+		public static void SetAvailable(int extension,long empNum) {
+
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

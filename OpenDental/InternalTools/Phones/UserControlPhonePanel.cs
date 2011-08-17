@@ -119,28 +119,6 @@ namespace OpenDental {
 			gridEmp.SetSelected(false);
 		}
 
-		/*private void FillMetrics(){
-			gridMetrics.BeginUpdate();
-			gridMetrics.Columns.Clear();
-			ODGridColumn col;
-			col=new ODGridColumn(Lan.g("TablePhoneMetrics","Description"),40);
-			gridMetrics.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePhoneMetrics","#"),60);
-			gridMetrics.Columns.Add(col);
-			gridMetrics.Rows.Clear();
-			UI.ODGridRow row;
-			tablePhone=Employees.GetPhoneMetricTable();
-			for(int i=0;i<tablePhone.Rows.Count;i++){
-				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(tablePhone.Rows[i]["Description"].ToString());
-				row.Cells.Add(tablePhone.Rows[i]["MetricVal"].ToString());
-				row.ColorText=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorText"].ToString()));
-				gridMetrics.Rows.Add(row);
-			}
-			gridMetrics.EndUpdate();
-			gridMetrics.SetSelected(false);
-		}*/
-
 		private void timer1_Tick(object sender,EventArgs e) {
 			//For now, happens once per 1.6 seconds regardless of phone activity.
 			//This might need improvement.
@@ -153,8 +131,9 @@ namespace OpenDental {
 		}
 
 		private void butOverride_Click(object sender,EventArgs e) {
-			FormPhoneOverrides FormO=new FormPhoneOverrides();
-			FormO.ShowDialog();
+			//FormPhoneOverrides FormO=new FormPhoneOverrides();
+			//FormO.ShowDialog();
+			MessageBox.Show("Not working right now.");
 		}
 
 		private void gridEmp_CellClick(object sender,ODGridClickEventArgs e) {
@@ -227,8 +206,7 @@ namespace OpenDental {
 			}
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
 			FillEmps();
 		}
@@ -239,8 +217,7 @@ namespace OpenDental {
 			}
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
 			FillEmps();
 		}
@@ -251,8 +228,7 @@ namespace OpenDental {
 			}
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
 			FillEmps();
 		}
@@ -263,8 +239,7 @@ namespace OpenDental {
 			}
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
 			//this is usually an automatic status
 			FillEmps();
@@ -276,13 +251,14 @@ namespace OpenDental {
 			}
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
 			FillEmps();
 		}
 
 		private void menuItemUnavailable_Click(object sender,EventArgs e) {
+			MessageBox.Show("Not working right now.");
+			/*
 			if(!ClockIn()) {
 				return;
 			}
@@ -315,10 +291,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			//this is now handled within PhoneOverrides.Insert or PhoneOverrides.Update
-			//Employees.SetPhoneStatus("Unavailable",extension);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
-			FillEmps();
+			FillEmps();*/
 		}
 
 		//RingGroups---------------------------------------------------
@@ -349,7 +322,7 @@ namespace OpenDental {
 			}
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
 			Phones.SetPhoneStatus(ClockStatusEnum.Backup,extension);
 			FillEmps();
@@ -376,11 +349,10 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Lunch.ToString());
 			Employees.Update(EmpCur);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Lunch,extension);
 			FillEmps();
 		}
@@ -404,12 +376,10 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Home.ToString());
 			Employees.Update(EmpCur);
-			//ModuleSelected(PatCurNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Home,extension);
 			FillEmps();
 		}
@@ -433,11 +403,10 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
-			PhoneOverrides.SetAvailable(extension,employeeNum);
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Break.ToString());
 			Employees.Update(EmpCur);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.Break,extension);
 			FillEmps();
 		}
