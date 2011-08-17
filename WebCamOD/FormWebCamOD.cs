@@ -16,6 +16,7 @@ namespace WebCamOD {
 	public partial class FormWebCamOD:Form {
 		private IntPtr intPtrVideo;
 		private VideoCapture vidCapt;
+		private string IpAddress192;
 
 		public FormWebCamOD() {
 			InitializeComponent();
@@ -53,31 +54,23 @@ namespace WebCamOD {
 				MessageBox.Show("This tool is not designed for general use.");
 				return;
 			}
+			//get ipaddress on startup
+			IpAddress192="";
+			foreach(IPAddress ipaddress in iphostentry.AddressList) {
+				if(ipaddress.ToString().Contains("192.168")) {
+					IpAddress192=ipaddress.ToString();
+				}
+			}
+			if(IpAddress192=="") {
+				MessageBox.Show("Could not locate ipaddress");
+				Application.Exit();
+			}
 			intPtrVideo=IntPtr.Zero;
 			timerPhoneWebCam.Enabled=true;
 		}
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
 			int extension=0;
-			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
-			foreach(IPAddress ipaddress in iphostentry.AddressList){
-				if(ipaddress.ToString().Contains("192.168.0.2")){
-					extension=PIn.Int(ipaddress.ToString().Substring(10))-100;//eg 205-100=105
-				}
-				else if(ipaddress.ToString().Contains("10.10.20.1")){
-					extension=PIn.Int(ipaddress.ToString().Substring(9));//eg 105
-				}
-				if(ipaddress.ToString()=="192.168.0.186"//hard code Jordans
-					|| ipaddress.ToString()=="10.10.21.186")
-				{
-					extension=104;
-				}
-				if(ipaddress.ToString()=="192.168.0.204"//hard code Jordans
-					|| ipaddress.ToString()=="10.10.20.104") {
-					extension=0;
-				}
-			}
-			//phoneNum=Phones.GetPhoneNum(extension);
 			if(vidCapt==null){
 				if(intPtrVideo != IntPtr.Zero){// Release any previous buffer
 					Marshal.FreeCoTaskMem(intPtrVideo);
@@ -90,11 +83,11 @@ namespace WebCamOD {
 						//image capture will now continue below if successful
 					}
 					catch{
-						Phones.SetWebCamImage(extension,null);
+						Phones.SetWebCamImage(IpAddress192,null);
 						return;//haven't actually seen this happen since we started properly disposing of vidCapt
 					}
 				}
-				Phones.SetWebCamImage(extension,null);
+				Phones.SetWebCamImage(IpAddress192,null);
 			}
 			if(vidCapt!=null){
 				if(intPtrVideo != IntPtr.Zero){// Release any previous buffer
@@ -124,7 +117,7 @@ namespace WebCamOD {
 					//Marshal.FreeCoTaskMem(intPtrVideo);
 				}
 				if(extension!=0){//found entry in phone table matching this machine ip.
-					Phones.SetWebCamImage(extension,bitmapSmall);
+					Phones.SetWebCamImage(IpAddress192,bitmapSmall);
 				}
 				if(bitmapSmall!=null){
 					bitmapSmall.Dispose();

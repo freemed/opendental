@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
-	///<summary>Not a true Cache pattern.  It only loads the cache once on startup and then never again.  No entry in the Cache file.  No InvalidType for PhoneEmpDefault.</summary>
+	///<summary>Not a true Cache pattern.  It only loads the cache once on startup and then never again.  No entry in the Cache file.  No InvalidType for PhoneEmpDefault.  Data is also frequently pulled from this table in realtime rather than depending on the cache.</summary>
 	public class PhoneEmpDefaults{
 		#region CachePattern
 

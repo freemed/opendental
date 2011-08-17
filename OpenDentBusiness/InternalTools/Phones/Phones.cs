@@ -171,15 +171,36 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Can handle null for either parameter.</summary>
-		public static void SetWebCamImage(long extension,Bitmap bitmap) {
+		public static void SetWebCamImage(string ipAddress,Bitmap bitmap) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension,bitmap);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ipAddress,bitmap);
 				return;
+			}
+			if(ipAddress=="") {
+				return;
+			}
+			string command="SELECT * FROM phoneempdefault WHERE IpAddress='"+POut.String(ipAddress)+"'";
+			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
+			if(ped!=null) {//we found that ipaddress entered as an override
+				command="UPDATE phone SET "
+					+"WebCamImage   = '"+POut.Bitmap(bitmap,ImageFormat.Png)+"' "//handles null
+					+"WHERE Extension = "+POut.Long(ped.PhoneExt);
+				Db.NonQ(command);
+				return;
+			}
+			//there is no ipaddress entered by staff, so figure out what the extension should be
+			int extension=0;
+			if(ipAddress.Contains("192.168.0.2")) {
+				extension=PIn.Int(ipAddress.ToString().Substring(10))-100;//eg 205-100=105
+			}
+			else if(ipAddress.ToString().Contains("10.10.20.1")) {
+				extension=PIn.Int(ipAddress.ToString().Substring(9));//eg 105
 			}
 			if(extension==0) {
+				//we don't have a good extension
 				return;
 			}
-			string command="UPDATE phone SET "
+			command="UPDATE phone SET "
 				+"WebCamImage   = '"+POut.Bitmap(bitmap,ImageFormat.Png)+"' "//handles null
 				+"WHERE Extension = "+POut.Long(extension);
 			Db.NonQ(command);
