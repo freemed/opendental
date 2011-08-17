@@ -33,35 +33,29 @@ namespace OpenDental {
 		}
 
 		private void FillMain(){
-			Cursor=Cursors.WaitCursor;
+			//Cursor=Cursors.WaitCursor;
 			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo=PIn.Date(textDateTo.Text);
 			long clinicNum=0;
-			if(comboClinic.SelectedIndex!=0) {
+			if(comboClinic.SelectedIndex>0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			List<ClaimPayment> listClaimPay=ClaimPayments.GetForDateRange(dateFrom,dateTo,clinicNum);
-			int scrollVal=gridMain.ScrollValue;
+			//int scrollVal=gridMain.ScrollValue;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPayList","Check Date"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPayList","Date"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Date Issued"),100);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Amount Pd"),70,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Check Amount"),100);
+			col=new ODGridColumn(Lan.g("TableClaimPayList","Carrier"),250);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Check Num"),75);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Bank Branch"),100);
-			gridMain.Columns.Add(col);
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				col=new ODGridColumn(Lan.g("TableClaimPayList","Clinic"),100);
+				gridMain.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TableClaimPayList","Note"),100);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Clinic"),75);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Deposit Num"),100);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Carrier"),75);
-			gridMain.Columns.Add(col);
+			gridMain.Columns.Add(col);			
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<listClaimPay.Count;i++){
@@ -72,22 +66,18 @@ namespace OpenDental {
 				else{
 					row.Cells.Add(listClaimPay[i].CheckDate.ToShortDateString());
 				}
-				if(listClaimPay[i].DateIssued.Year<1800) {
-					row.Cells.Add("");
+				row.Cells.Add(listClaimPay[i].CheckAmt.ToString("c"));
+				row.Cells.Add(listClaimPay[i].CarrierName);
+				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+					row.Cells.Add(Clinics.GetDesc(listClaimPay[i].ClinicNum));
 				}
-				else{
-					row.Cells.Add(listClaimPay[i].DateIssued.ToShortDateString());
-				}
-				row.Cells.Add(listClaimPay[i].CheckAmt.ToString());
-				row.Cells.Add(listClaimPay[i].CheckNum);
-				row.Cells.Add(listClaimPay[i].BankBranch);
 				row.Cells.Add(listClaimPay[i].Note);
-				row.Cells.Add(Clinics.GetDesc(listClaimPay[i].ClinicNum));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			gridMain.ScrollValue=scrollVal;
-			Cursor=Cursors.Default;
+			//gridMain.ScrollValue=scrollVal;
+			gridMain.ScrollToEnd();
+			//Cursor=Cursors.Default;
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {

@@ -23,45 +23,16 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butClose = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.labelFromDate = new System.Windows.Forms.Label();
 			this.labelToDate = new System.Windows.Forms.Label();
-			this.textDateFrom = new OpenDental.ValidDate();
-			this.textDateTo = new OpenDental.ValidDate();
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butRefresh = new OpenDental.UI.Button();
+			this.textDateTo = new OpenDental.ValidDate();
+			this.butClose = new OpenDental.UI.Button();
+			this.textDateFrom = new OpenDental.ValidDate();
 			this.SuspendLayout();
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(788,576);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
-			this.butClose.TabIndex = 2;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,42);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(851,526);
-			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Claim Payments";
-			this.gridMain.TranslationName = null;
 			// 
 			// labelFromDate
 			// 
@@ -81,20 +52,6 @@ namespace OpenDental{
 			this.labelToDate.Text = "To Date";
 			this.labelToDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textDateFrom
-			// 
-			this.textDateFrom.Location = new System.Drawing.Point(104,15);
-			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(94,20);
-			this.textDateFrom.TabIndex = 13;
-			// 
-			// textDateTo
-			// 
-			this.textDateTo.Location = new System.Drawing.Point(286,15);
-			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(94,20);
-			this.textDateTo.TabIndex = 14;
-			// 
 			// labelClinic
 			// 
 			this.labelClinic.Location = new System.Drawing.Point(419,19);
@@ -113,6 +70,20 @@ namespace OpenDental{
 			this.comboClinic.Size = new System.Drawing.Size(181,21);
 			this.comboClinic.TabIndex = 23;
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,42);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(851,526);
+			this.gridMain.TabIndex = 4;
+			this.gridMain.Title = "Claim Payments (EOBs)";
+			this.gridMain.TranslationName = null;
+			// 
 			// butRefresh
 			// 
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -127,6 +98,35 @@ namespace OpenDental{
 			this.butRefresh.TabIndex = 24;
 			this.butRefresh.Text = "&Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
+			// textDateTo
+			// 
+			this.textDateTo.Location = new System.Drawing.Point(286,15);
+			this.textDateTo.Name = "textDateTo";
+			this.textDateTo.Size = new System.Drawing.Size(94,20);
+			this.textDateTo.TabIndex = 14;
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(788,576);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.TabIndex = 2;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// textDateFrom
+			// 
+			this.textDateFrom.Location = new System.Drawing.Point(104,15);
+			this.textDateFrom.Name = "textDateFrom";
+			this.textDateFrom.Size = new System.Drawing.Size(94,20);
+			this.textDateFrom.TabIndex = 13;
 			// 
 			// FormClaimPayList
 			// 
@@ -143,7 +143,7 @@ namespace OpenDental{
 			this.Controls.Add(this.labelFromDate);
 			this.Name = "FormClaimPayList";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Claim Payment List";
+			this.Text = "Claim Payment (EOB) List";
 			this.Load += new System.EventHandler(this.FormClaimPayList_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
