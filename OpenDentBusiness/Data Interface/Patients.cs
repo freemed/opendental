@@ -1269,11 +1269,11 @@ namespace OpenDentBusiness{
 			}
 			int subStrIndexlName=2;
 			int subStrIndexfName=2;
-			if(lName.Length==1) {
-				subStrIndexlName=1;
+			if(lName.Length<2) {
+				subStrIndexlName=lName.Length;
 			}
-			if(fName.Length==1) {
-				subStrIndexfName=1;
+			if(fName.Length<2) {
+				subStrIndexfName=fName.Length;
 			}
 			string command="SELECT * FROM patient WHERE "
 				+"LName LIKE '"+POut.String(lName.Substring(0,subStrIndexlName))+"%' "
