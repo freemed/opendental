@@ -89,7 +89,7 @@ namespace OpenDental {
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
 		}
 
-		///<summary>Returns a valid DateTime for the payment's PayDate.  Contains logic if payment should be for the previous or current month.</summary>
+		///<summary>Returns a valid DateTime for the payment's PayDate.  Contains logic if payment should be for the previous or the current month.</summary>
 		private DateTime GetPayDate(DateTime latestPayment,DateTime dateStart) {
 			//Most common, current day >= dateStart so we use current month and year with the dateStart day.  Will always be a legal DateTime.
 			if(nowDateTime.Day>=dateStart.Day) {

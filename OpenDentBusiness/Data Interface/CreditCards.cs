@@ -82,24 +82,23 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++) {
 				DateTime latestPayment=PIn.Date(table.Rows[i]["LatestPayment"].ToString());
 				DateTime dateStart=PIn.Date(table.Rows[i]["DateStart"].ToString());
-				//Always charge if more than 30 days has passed since last charge.
-				if(curDate>latestPayment.AddDays(30)) {
-					continue;
+				if(curDate>latestPayment.AddDays(31)) {//if it's been more than a month since they made any sort of payment
+					//if we reduce the days below 31, then slighly more people will be charged, especially from Feb to March.  31 eliminates those false positives.
+					continue;//charge them
 				}
 				//Not enough days in the current month so show on the last day of the month
 				//Example: DateStart=8/31/2010 and the current month is February 2011 which does not have 31 days.
 				//So the patient needs to show in list if current day is the 28th (or last day of the month).
 				int daysInMonth=DateTime.DaysInMonth(curDate.Year,curDate.Month);
-				if(daysInMonth<=dateStart.Day && daysInMonth==curDate.Day) {
-					continue;
+				if(daysInMonth<=dateStart.Day && daysInMonth==curDate.Day) {//if their recurring charge would fall on an invalid day of the month, and this is that last day of the month
+					continue;//we want them to show because the charge should go in on this date.
 				}
-				if(curDate.Day>=dateStart.Day) {
-					//No payment entries in the same month then charge.
-					if(curDate.Month>latestPayment.Month || curDate.Year>latestPayment.Year) {//The next month.  For December that will be next year.
-						continue;
+				if(curDate.Day>=dateStart.Day) {//If the recurring charge date was earlier in this month, then the recurring charge will go in for this month.
+					if(curDate.Month>latestPayment.Month || curDate.Year>latestPayment.Year) {//if the latest payment was last month (or earlier).  The year check catches December
+						continue;//No payments were made this month, so charge.
 					}
 				}
-				else {//Current date is before the recurring date in the current month.
+				else {//Else, current date is before the recurring date in the current month, so the recurring charge will be going in for last month
 					//Check if payment didn't happen last month.
 					if(curDate.AddMonths(-1).Month!=latestPayment.Month){
 						//Charge did not happen last month so the patient needs to show up in list.
