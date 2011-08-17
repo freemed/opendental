@@ -70,7 +70,6 @@ namespace WebCamOD {
 		}
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
-			int extension=0;
 			if(vidCapt==null){
 				if(intPtrVideo != IntPtr.Zero){// Release any previous buffer
 					Marshal.FreeCoTaskMem(intPtrVideo);
@@ -116,7 +115,7 @@ namespace WebCamOD {
 				finally{
 					//Marshal.FreeCoTaskMem(intPtrVideo);
 				}
-				if(extension!=0){//found entry in phone table matching this machine ip.
+				if(IpAddress192!="") {//found entry in phone table matching this machine ip.
 					Phones.SetWebCamImage(IpAddress192,bitmapSmall);
 				}
 				if(bitmapSmall!=null){

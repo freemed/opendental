@@ -54,11 +54,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//
-			string command=@"SELECT EmployeeNum,Description,EmployeeName,
-				IFNULL(IsAvailable,1) isAvail, COUNT(IsAvailable) overridden
-				FROM phone
-				LEFT JOIN phoneoverride ON phone.Extension=phoneoverride.Extension
-				WHERE phone.Extension="+POut.Long(extens)
+			string command=@"SELECT EmployeeNum,Description,EmployeeName "
+				//IFNULL(IsAvailable,1) isAvail, COUNT(IsAvailable) overridden
+				+"FROM phone "
+				//LEFT JOIN phoneoverride ON phone.Extension=phoneoverride.Extension
+				+"WHERE phone.Extension="+POut.Long(extens)
 				//+" phone.Extension";
 				+" GROUP BY EmployeeNum,Description,EmployeeName,phone.Extension";
 			DataTable tablePhone=Db.GetTable(command);
@@ -75,13 +75,13 @@ namespace OpenDentBusiness{
 				empNum=employeeNum;
 				empName=Employees.GetEmp(empNum).FName;
 			}
-			bool isAvailable=PIn.Bool(tablePhone.Rows[0]["isAvail"].ToString());
-			bool overridden=PIn.Bool(tablePhone.Rows[0]["overridden"].ToString());
+			//bool isAvailable=PIn.Bool(tablePhone.Rows[0]["isAvail"].ToString());
+			//bool overridden=PIn.Bool(tablePhone.Rows[0]["overridden"].ToString());
 			bool isInUse=false;
 			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
 				isInUse=true;
 			}
-			Color colorBar=GetColorBar(clockStatus,overridden,isAvailable,empNum,isInUse);
+			Color colorBar=GetColorBar(clockStatus,false,true,empNum,isInUse);
 			string clockStatusStr=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
 				clockStatusStr="";
