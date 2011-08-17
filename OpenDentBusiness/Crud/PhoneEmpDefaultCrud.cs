@@ -46,11 +46,15 @@ namespace OpenDentBusiness.Crud{
 			PhoneEmpDefault phoneEmpDefault;
 			for(int i=0;i<table.Rows.Count;i++) {
 				phoneEmpDefault=new PhoneEmpDefault();
-				phoneEmpDefault.EmployeeNum= PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				phoneEmpDefault.NoGraph    = PIn.Bool  (table.Rows[i]["NoGraph"].ToString());
-				phoneEmpDefault.NoColor    = PIn.Bool  (table.Rows[i]["NoColor"].ToString());
-				phoneEmpDefault.RingGroups = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
-				phoneEmpDefault.EmpName    = PIn.String(table.Rows[i]["EmpName"].ToString());
+				phoneEmpDefault.EmployeeNum  = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
+				phoneEmpDefault.NoGraph      = PIn.Bool  (table.Rows[i]["NoGraph"].ToString());
+				phoneEmpDefault.NoColor      = PIn.Bool  (table.Rows[i]["NoColor"].ToString());
+				phoneEmpDefault.RingGroups   = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
+				phoneEmpDefault.EmpName      = PIn.String(table.Rows[i]["EmpName"].ToString());
+				phoneEmpDefault.PhoneExt     = PIn.Int   (table.Rows[i]["PhoneExt"].ToString());
+				phoneEmpDefault.IsUnavailable= PIn.Bool  (table.Rows[i]["IsUnavailable"].ToString());
+				phoneEmpDefault.Notes        = PIn.String  (table.Rows[i]["Notes"].ToString());
+				phoneEmpDefault.IpAddress    = PIn.String(table.Rows[i]["IpAddress"].ToString());
 				retVal.Add(phoneEmpDefault);
 			}
 			return retVal;
@@ -91,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmployeeNum,";
 			}
-			command+="NoGraph,NoColor,RingGroups,EmpName) VALUES(";
+			command+="NoGraph,NoColor,RingGroups,EmpName,PhoneExt,IsUnavailable,Notes,IpAddress) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(phoneEmpDefault.EmployeeNum)+",";
 			}
@@ -99,7 +103,11 @@ namespace OpenDentBusiness.Crud{
 				     POut.Bool  (phoneEmpDefault.NoGraph)+","
 				+    POut.Bool  (phoneEmpDefault.NoColor)+","
 				+    POut.Int   ((int)phoneEmpDefault.RingGroups)+","
-				+"'"+POut.String(phoneEmpDefault.EmpName)+"')";
+				+"'"+POut.String(phoneEmpDefault.EmpName)+"',"
+				+    POut.Int   (phoneEmpDefault.PhoneExt)+","
+				+    POut.Bool  (phoneEmpDefault.IsUnavailable)+","
+				+    POut.String  (phoneEmpDefault.Notes)+","
+				+"'"+POut.String(phoneEmpDefault.IpAddress)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,10 +120,14 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PhoneEmpDefault in the database.</summary>
 		internal static void Update(PhoneEmpDefault phoneEmpDefault){
 			string command="UPDATE phoneempdefault SET "
-				+"NoGraph    =  "+POut.Bool  (phoneEmpDefault.NoGraph)+", "
-				+"NoColor    =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
-				+"RingGroups =  "+POut.Int   ((int)phoneEmpDefault.RingGroups)+", "
-				+"EmpName    = '"+POut.String(phoneEmpDefault.EmpName)+"' "
+				+"NoGraph      =  "+POut.Bool  (phoneEmpDefault.NoGraph)+", "
+				+"NoColor      =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
+				+"RingGroups   =  "+POut.Int   ((int)phoneEmpDefault.RingGroups)+", "
+				+"EmpName      = '"+POut.String(phoneEmpDefault.EmpName)+"', "
+				+"PhoneExt     =  "+POut.Int   (phoneEmpDefault.PhoneExt)+", "
+				+"IsUnavailable=  "+POut.Bool  (phoneEmpDefault.IsUnavailable)+", "
+				+"Notes        =  "+POut.String  (phoneEmpDefault.Notes)+", "
+				+"IpAddress    = '"+POut.String(phoneEmpDefault.IpAddress)+"' "
 				+"WHERE EmployeeNum = "+POut.Long(phoneEmpDefault.EmployeeNum);
 			Db.NonQ(command);
 		}
@@ -138,6 +150,22 @@ namespace OpenDentBusiness.Crud{
 			if(phoneEmpDefault.EmpName != oldPhoneEmpDefault.EmpName) {
 				if(command!=""){ command+=",";}
 				command+="EmpName = '"+POut.String(phoneEmpDefault.EmpName)+"'";
+			}
+			if(phoneEmpDefault.PhoneExt != oldPhoneEmpDefault.PhoneExt) {
+				if(command!=""){ command+=",";}
+				command+="PhoneExt = "+POut.Int(phoneEmpDefault.PhoneExt)+"";
+			}
+			if(phoneEmpDefault.IsUnavailable != oldPhoneEmpDefault.IsUnavailable) {
+				if(command!=""){ command+=",";}
+				command+="IsUnavailable = "+POut.Bool(phoneEmpDefault.IsUnavailable)+"";
+			}
+			if(phoneEmpDefault.Notes != oldPhoneEmpDefault.Notes) {
+				if(command!=""){ command+=",";}
+				command+="Notes = "+POut.String(phoneEmpDefault.Notes)+"";
+			}
+			if(phoneEmpDefault.IpAddress != oldPhoneEmpDefault.IpAddress) {
+				if(command!=""){ command+=",";}
+				command+="IpAddress = '"+POut.String(phoneEmpDefault.IpAddress)+"'";
 			}
 			if(command==""){
 				return;

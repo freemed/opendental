@@ -4418,7 +4418,7 @@ namespace OpenDental{
 						else {
 							user.Password=passHash;
 						}
-						Userods.Insert(user);//probably no need to try/catch
+						Userods.Insert(user);//This can fail if duplicate username because of capitalization differences.
 						DataValid.SetInvalid(InvalidType.Security);
 					}
 					else {//not using eCW in tight integration mode

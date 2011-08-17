@@ -6050,6 +6050,30 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.11.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_0_13();
+		}
+
+		private static void To11_0_13() {
+			if(FromVersion<new Version("11.0.13.0")) {
+				string command;
+				try {//most users will not have this table
+					command="ALTER TABLE phoneempdefault ADD PhoneExt int NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE phoneempdefault ADD IsUnavailable tinyint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE phoneempdefault ADD Notes text NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE phoneempdefault ADD IpAddress varchar(255) NOT NULL";
+					Db.NonQ(command);
+					command="DROP TABLE phoneoverride";
+					Db.NonQ(command);
+				}
+				catch {
+					//do nothing
+				}
+				command="UPDATE preference SET ValueString = '11.0.13.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_1_0();
 		}
 
@@ -6212,3 +6236,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+			
