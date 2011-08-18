@@ -212,8 +212,8 @@ namespace OpenDental{
 			int days=PIn.Int(textDays.Text);
 			DateTime date=PIn.Date(textDate.Text);
 			if(Prefs.UpdateString(PrefName.SecurityLockDate,POut.Date(date,false))
-				|| Prefs.UpdateInt(PrefName.SecurityLockDays,days)
-				|| Prefs.UpdateBool(PrefName.SecurityLockIncludesAdmin,checkAdmin.Checked)  )
+				| Prefs.UpdateInt(PrefName.SecurityLockDays,days)
+				| Prefs.UpdateBool(PrefName.SecurityLockIncludesAdmin,checkAdmin.Checked)  )
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
