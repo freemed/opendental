@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Imaging;
 using System.Reflection;
 using System.Text;
 
@@ -1681,6 +1682,15 @@ namespace OpenDentBusiness{
 				savePattern=new StringBuilder("/");
 			}
 			return savePattern.ToString();
+		}
+
+		///<summary>Only called from the mobile server, not from any workstation.  Pass in an apptViewNum of 0 for now.  We might use that parameter later.</summary>
+		public static string GetMobileBitmap(DateTime date,long apptViewNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),date,apptViewNum);
+			}
+			//For testing pass a resource image.
+			return POut.Bitmap(new System.Drawing.Bitmap(5,5),ImageFormat.Gif);//Properties.Resources
 		}
 
 	}

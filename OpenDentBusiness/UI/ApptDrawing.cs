@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -8,6 +9,59 @@ using System.Text;
 
 namespace OpenDentBusiness.UI {
 	public class ApptDrawing {
+		///<summary>Set on mouse down or from Appt module</summary>
+		public static long ClickedAptNum;
+		/// <summary>This is not the best place for this, but changing it now would cause bugs.  Set manually</summary>
+		public static long SelectedAptNum;
+		/////<summary>True if this control is on the pinboard</summary>
+		//public bool ThisIsPinBoard;
+		///<summary>Stores the shading info for the provider bars on the left of the appointments module</summary>
+		public static int[][] ProvBar;
+		///<summary>Stores the background bitmap for this control</summary>
+		public Bitmap Shadow;
+		///<summary>This is a datarow that stores most of the info necessary to draw appt.  It comes from the table obtained in Appointments.GetPeriodApptsTable().</summary>
+		public DataRow DataRoww;
+		///<summary>This table contains all appointment fields for all appointments in the period. It's obtained in Appointments.GetApptFields().</summary>
+		public DataTable TableApptFields;
+		///<summary>This table contains all appointment fields for all appointments in the period. It's obtained in Appointments.GetApptFields().</summary>
+		public DataTable TablePatFields;
+		///<summary>Indicator that account has procedures with no ins claim</summary>
+		public bool FamHasInsNotSent;
+		///<Summary>Will show the highlight around the edges.  For now, this is only used for pinboard.  The ordinary selected appt is set with SelectedAptNum.</Summary>
+		public bool IsSelected;
+		///<summary>The width of each operatory.</summary>
+		public static float ColWidth;
+		///<summary></summary>
+		public static float TimeWidth;
+		///<summary></summary>
+		public static float ProvWidth;
+		///<summary>Line height.  This is currently treated like a constant that the user has no control over.</summary>
+		public static float LineH;
+		///<summary>The number of columns.  Stays consistent even if weekly view.  The number of colums showing for one day.</summary>
+		public static float ColCount;
+		///<summary></summary>
+		public static float ProvCount;
+		///<summary>Based on the view.  If no view, then it is set to 1. Different computers can be showing different views.</summary>
+		public static float RowsPerIncr;
+		///<summary>Pulled from Prefs AppointmentTimeIncrement.  Either 5, 10, or 15. An increment can be one or more rows.</summary>
+		public static float MinPerIncr;
+		///<summary>Typical values would be 10,15,5,or 7.5.</summary>
+		public static float MinPerRow;
+		///<summary>Rows per hour, based on RowsPerIncr and MinPerIncr</summary>
+		public static float RowsPerHr;
+		///<summary></summary>
+		public bool IsScrolling=false;
+		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire period.  Includes all types.</summary>
+		public List<Schedule> SchedListPeriod;
+		///<summary></summary>
+		public static bool IsWeeklyView;
+		///<summary>Typically 5 or 7. Only used with weekview.</summary>
+		public static float NumOfWeekDaysToDisplay=7;
+		///<summary>The width of an entire day if using week view.</summary>
+		public static float ColDayWidth;
+		///<summary>Only used with weekview. The width of individual appointments within each day.  There might be rounding errors for now.</summary>
+		public static float ColAptWidth;
+
 		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.</summary>
 		public static void DrawAllButAppts(Graphics g,int fontSize,int lineH,int rowsPerIncr,int rowsPerHr,int minPerIncr,float minPerRow,int colWidth,int colDayWidth,float colAptWidth,int colCount,int timeWidth,int totalWidth,int totalHeight,int provWidth,int provCount,int numOfWeekDaysToDisplay,bool showRedTimeLine,bool isWeeklyView,int[][] provBar,List<Provider> visProvs,List<Operatory> visOps,List<Schedule> schedListPeriod,DateTime startTime,DateTime stopTime) 
 		{
@@ -16,20 +70,14 @@ namespace OpenDentBusiness.UI {
 			DrawMainBackground(g,lineH,rowsPerHr,minPerRow,timeWidth,colCount,colWidth,colDayWidth,totalHeight,provWidth,provCount,colAptWidth,isWeeklyView,numOfWeekDaysToDisplay,schedListPeriod,visOps);
 			DrawBlockouts(g,fontSize,lineH,rowsPerHr,minPerRow,timeWidth,colWidth,colDayWidth,provWidth,provCount,colAptWidth,isWeeklyView,schedListPeriod,visOps,startTime,stopTime);
 			if(!isWeeklyView) {
-				DrawProvScheds(g,lineH,rowsPerHr,timeWidth,provWidth,minPerRow,visProvs,schedListPeriod);
-				DrawProvBars(g,lineH,rowsPerHr,timeWidth,provWidth,provBar,visProvs);
+				DrawProvScheds(g,lineH,rowsPerHr,timeWidth,provWidth,minPerRow,visProvs,schedListPeriod,startTime,stopTime);
+				DrawProvBars(g,lineH,rowsPerHr,timeWidth,provWidth,provBar,visProvs,startTime,stopTime);
 			}
 			DrawGridLines(g,lineH,rowsPerHr,timeWidth,colWidth,colCount,colDayWidth,provWidth,provCount,rowsPerIncr,totalHeight,numOfWeekDaysToDisplay,isWeeklyView);
 			if(showRedTimeLine) {
 				DrawRedTimeIndicator(g,lineH,rowsPerHr,timeWidth,colWidth,colCount,provWidth,provCount);
 			}
 			DrawMinutes(g,lineH,rowsPerHr,timeWidth,colWidth,colCount,provWidth,provCount,minPerIncr,rowsPerIncr,startTime,stopTime);
-		}
-
-		///<summary>Only called from the mobile server, not from any workstation.</summary>
-		public static Bitmap GetMobileBitmap() {
-			//check remoting role?
-			return null;
 		}
 
 		///<summary>Including the practice schedule.</summary>
@@ -167,6 +215,13 @@ namespace OpenDentBusiness.UI {
 				penOutline = new Pen(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType),2);
 				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				for(int o=0;o<schedForType[i].Ops.Count;o++) {
+					//Put logic here for deciding to draw blockout in time frame.
+					//int stopHour=stopTime.Hour;
+					//if(stopHour==0) {
+					//  stopHour=24;
+					//}
+					//if(aptDateTime.Hour>=startTime.Hour && aptDateTime.Hour<stopHour) {
+
 					if(isWeeklyView) {
 						//this is a workaround because we start on Monday:
 						int dayofweek=(int)schedForType[i].SchedDate.DayOfWeek-1;
@@ -220,7 +275,7 @@ namespace OpenDentBusiness.UI {
 		}
 		
 		///<summary>The background provider schedules for the provider bars on the left.</summary>
-		public static void DrawProvScheds(Graphics g,int lineH,int rowsPerHr,int timeWidth,int provWidth,float minPerRow,List<Provider> visProvs,List<Schedule> schedListPeriod) {
+		public static void DrawProvScheds(Graphics g,int lineH,int rowsPerHr,int timeWidth,int provWidth,float minPerRow,List<Provider> visProvs,List<Schedule> schedListPeriod,DateTime startTime,DateTime stopTime) {
 			Brush openBrush;
 			try {
 				openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
@@ -230,10 +285,18 @@ namespace OpenDentBusiness.UI {
 			}
 			Provider provCur;
 			Schedule[] schedForType;
+			int stopHour=stopTime.Hour;
+			if(stopHour==0) {
+				stopHour=24;
+			}
 			for(int j=0;j<visProvs.Count;j++) {
 				provCur=visProvs[j];
 				schedForType=Schedules.GetForType(schedListPeriod,ScheduleType.Provider,provCur.ProvNum);
 				for(int i=0;i<schedForType.Length;i++) {
+					//Put logic here for drawing prov scheds for the time frame.
+					//if(schedForType[i].StartTime.Hour>=startTime.Hour) {
+					//  continue;
+					//}
 					g.FillRectangle(openBrush
 						,timeWidth+provWidth*j
 						,schedForType[i].StartTime.Hours*lineH*rowsPerHr//6
@@ -247,7 +310,16 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Not the schedule, but just the indicators of scheduling.</summary>
-		public static void DrawProvBars(Graphics g,int lineH,int rowsPerHr,int timeWidth,int provWidth,int[][] provBar,List<Provider> visProvs) {
+		public static void DrawProvBars(Graphics g,int lineH,int rowsPerHr,int timeWidth,int provWidth,int[][] provBar,List<Provider> visProvs,DateTime startTime,DateTime stopTime) {
+			//Put logic here for deciding how to draw the provider bars within the time frame.
+			//int stopHour=stopTime.Hour;
+			//if(stopHour==0) {//12AM, but we want to end on the next day so set to 24
+			//  stopHour=24;
+			//}
+			//int index=0;//This will cause drawing times to always start at the top.
+			//for(int i=startTime.Hour;i<stopHour;i++)
+
+
 			for(int j=0;j<provBar.Length;j++) {
 				for(int i=0;i<24*rowsPerHr;i++) {
 					switch(provBar[j][i]) {
