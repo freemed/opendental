@@ -45,6 +45,12 @@ namespace OpenDentBusiness{
 		public string ParentDesc;
 
 		///<summary></summary>
+		public Task() {
+			Descript="";
+			ParentDesc="";//Might not be necessary.
+		}
+
+		///<summary></summary>
 		public Task Copy() {
 			return (Task)MemberwiseClone();
 		}
