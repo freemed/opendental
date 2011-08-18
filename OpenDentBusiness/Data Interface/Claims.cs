@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
+using OpenDentBusiness.Crud;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Claims{
 		
-		///<summary></summary>
+		///<summary>Gets claimpaysplits attached to a claimpayment with the associated patient, insplan, and carrier. If showUnattached it also shows all claimpaysplits that have not been attached to a claimpayment. Pass (0,true) to just get all unattached (outstanding) claimpaysplits.</summary>
 		public static List<ClaimPaySplit> RefreshByCheck(long claimPaymentNum,bool showUnattached) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum,showUnattached);
@@ -36,6 +37,39 @@ namespace OpenDentBusiness{
 			command+=" ORDER BY patName_";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
+		}
+
+		///<summary></summary>
+		public static List<Claim> GetClaimsByCheck(long claimPaymentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Claim>>(MethodBase.GetCurrentMethod(),claimPaymentNum);
+			}
+			string command=
+				"SELECT * "
+				+"FROM claim "
+				+"WHERE claim.ClaimNum IN "
+				+"(SELECT DISTINCT claimproc.ClaimNum "
+				+"FROM claimproc "
+				+"WHERE claimproc.ClaimPaymentNum="+claimPaymentNum+")";
+			return ClaimCrud.SelectMany(command);
+		}
+
+		/// <summary>Gets all claims that are not fully covered by InsPayAmt in attached claimprocs. Will likely need a date range for filtering. DateService/DateSent/DateReceived?.</summary>
+		public static List<Claim> GetOutstandingClaims() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Claim>>(MethodBase.GetCurrentMethod());
+			}
+			string command=
+				"SELECT * "
+				+"FROM claim "
+				+"WHERE claim.ClaimNum IN "
+				+"(SELECT DISTINCT claim.ClaimNum "
+				+"FROM claim JOIN claimproc ON claim.ClaimNum=claimProc.ClaimNum "
+				//+"WHERE claim.DateService>"+POut.Date(dateFrom)+" "
+				//+"AND claim.DateService>"+POut.Date(dateTo)+" "
+				+"GROUP BY claim.ClaimNum "
+				+"HAVING SUM(claimproc.InsPayAmt)<claim.ClaimFee)";
+			return ClaimCrud.SelectMany(command);
 		}
 
 		///<summary></summary>

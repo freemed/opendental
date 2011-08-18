@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		public long ClinicNum;
 		///<summary>FK to deposit.DepositNum.  0 if not attached to any deposits.</summary>
 		public long DepositNum;
-		///<summary>Descriptive name of the carrier just for reporting purposes.</summary>
+		///<summary>Descriptive name of the carrier just for reporting purposes.  We use this because the CarrierNums could conceivably be different for the different claimprocs attached.</summary>
 		public string CarrierName;
 		///<summary>Date that the carrier issued the check. Date on the check.</summary>
 		public DateTime DateIssued;

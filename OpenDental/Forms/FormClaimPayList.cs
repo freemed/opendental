@@ -10,6 +10,8 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormClaimPayList:Form {
+		List<ClaimPayment> ListClaimPay;
+
 		public FormClaimPayList() {
 			InitializeComponent();
 			Lan.F(this);
@@ -33,15 +35,13 @@ namespace OpenDental {
 		}
 
 		private void FillMain(){
-			//Cursor=Cursors.WaitCursor;
 			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo=PIn.Date(textDateTo.Text);
 			long clinicNum=0;
 			if(comboClinic.SelectedIndex>0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			List<ClaimPayment> listClaimPay=ClaimPayments.GetForDateRange(dateFrom,dateTo,clinicNum);
-			//int scrollVal=gridMain.ScrollValue;
+			ListClaimPay=ClaimPayments.GetForDateRange(dateFrom,dateTo,clinicNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPayList","Date"),70);
@@ -58,26 +58,41 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);			
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<listClaimPay.Count;i++){
+			for(int i=0;i<ListClaimPay.Count;i++){
 				row=new ODGridRow();
-				if(listClaimPay[i].CheckDate.Year<1800) {
+				if(ListClaimPay[i].CheckDate.Year<1800) {
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(listClaimPay[i].CheckDate.ToShortDateString());
+					row.Cells.Add(ListClaimPay[i].CheckDate.ToShortDateString());
 				}
-				row.Cells.Add(listClaimPay[i].CheckAmt.ToString("c"));
-				row.Cells.Add(listClaimPay[i].CarrierName);
+				row.Cells.Add(ListClaimPay[i].CheckAmt.ToString("c"));
+				row.Cells.Add(ListClaimPay[i].CarrierName);
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
-					row.Cells.Add(Clinics.GetDesc(listClaimPay[i].ClinicNum));
+					row.Cells.Add(Clinics.GetDesc(ListClaimPay[i].ClinicNum));
 				}
-				row.Cells.Add(listClaimPay[i].Note);
+				row.Cells.Add(ListClaimPay[i].Note);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			//gridMain.ScrollValue=scrollVal;
 			gridMain.ScrollToEnd();
-			//Cursor=Cursors.Default;
+		}
+		
+		private void butAdd_Click(object sender,EventArgs e) {
+			ClaimPayment claimPayment=new ClaimPayment();
+			claimPayment.CheckDate=DateTime.Now;
+			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPayment);
+			FormCPE.IsNew=true;
+			FormCPE.ShowDialog();
+			if(FormCPE.DialogResult==DialogResult.OK) {
+				FormClaimPayBatch FormCPB=new FormClaimPayBatch(claimPayment);
+				FormCPB.ShowDialog();
+			}
+		}               
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormClaimPayBatch FormCPB=new FormClaimPayBatch(ListClaimPay[gridMain.GetSelectedIndex()]);
+			FormCPB.ShowDialog();
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
@@ -87,5 +102,7 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+
 	}
 }

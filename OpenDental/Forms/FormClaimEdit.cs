@@ -170,8 +170,6 @@ namespace OpenDental{
 		private TabPage tabUB04;
 		private TabPage tabGeneral;
 		private ODGrid gridPay;
-		private Label label7;
-		private OpenDental.UI.Button butCheckAdd;
 		private GroupBox groupEnterPayment;
 		private OpenDental.UI.Button butPaySupp;
 		private OpenDental.UI.Button butPayTotal;
@@ -556,7 +554,6 @@ namespace OpenDental{
 			this.comboReferralReason = new System.Windows.Forms.ComboBox();
 			this.textReferralProvider = new System.Windows.Forms.TextBox();
 			this.textCanadianAccidentDate = new OpenDental.ValidDate();
-			this.label7 = new System.Windows.Forms.Label();
 			this.groupEnterPayment = new System.Windows.Forms.GroupBox();
 			this.butPaySupp = new OpenDental.UI.Button();
 			this.butPayTotal = new OpenDental.UI.Button();
@@ -569,7 +566,6 @@ namespace OpenDental{
 			this.menuItemRemove = new System.Windows.Forms.MenuItem();
 			this.butHistory = new OpenDental.UI.Button();
 			this.gridPay = new OpenDental.UI.ODGrid();
-			this.butCheckAdd = new OpenDental.UI.Button();
 			this.butSend = new OpenDental.UI.Button();
 			this.gridProc = new OpenDental.UI.ODGrid();
 			this.butSplit = new OpenDental.UI.Button();
@@ -2828,14 +2824,6 @@ namespace OpenDental{
 			this.textCanadianAccidentDate.Size = new System.Drawing.Size(75,20);
 			this.textCanadianAccidentDate.TabIndex = 138;
 			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(557,421);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(154,54);
-			this.label7.TabIndex = 133;
-			this.label7.Text = "Don\'t create a new check until payments for all claims have been entered.";
-			// 
 			// groupEnterPayment
 			// 
 			this.groupEnterPayment.BackColor = System.Drawing.SystemColors.Control;
@@ -2964,22 +2952,6 @@ namespace OpenDental{
 			this.gridPay.TranslationName = "TableClaimPay";
 			this.gridPay.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPay_CellDoubleClick);
 			this.gridPay.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPay_CellClick);
-			// 
-			// butCheckAdd
-			// 
-			this.butCheckAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCheckAdd.Autosize = true;
-			this.butCheckAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheckAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCheckAdd.CornerRadius = 4F;
-			this.butCheckAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butCheckAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCheckAdd.Location = new System.Drawing.Point(557,389);
-			this.butCheckAdd.Name = "butCheckAdd";
-			this.butCheckAdd.Size = new System.Drawing.Size(114,24);
-			this.butCheckAdd.TabIndex = 134;
-			this.butCheckAdd.Text = "Create C&heck";
-			this.butCheckAdd.Click += new System.EventHandler(this.butCheckAdd_Click);
 			// 
 			// butSend
 			// 
@@ -3205,10 +3177,8 @@ namespace OpenDental{
 			this.Controls.Add(this.textLabFees);
 			this.Controls.Add(this.butHistory);
 			this.Controls.Add(this.textReasonUnder);
-			this.Controls.Add(this.label7);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.gridPay);
-			this.Controls.Add(this.butCheckAdd);
 			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.panelRightEdge);
 			this.Controls.Add(this.panelBottomEdge);
@@ -3335,7 +3305,7 @@ namespace OpenDental{
 				tabMain.TabPages.Remove(tabCanadian);
 			}
 			if(IsNew){
-				butCheckAdd.Enabled=false;
+				//butCheckAdd.Enabled=false; //button was removed.
 				groupEnterPayment.Enabled=false;
 			}
 			else if(ClaimCur.ClaimStatus=="S" || ClaimCur.ClaimStatus=="R"){//sent or received
@@ -3348,7 +3318,7 @@ namespace OpenDental{
 					gridPay.Enabled=false;
 					gridProc.Enabled=false;
 					listClaimStatus.Enabled=false;
-					butCheckAdd.Enabled=false;
+					//butCheckAdd.Enabled=false; //button was removed.
 				}
 			}
 			if(ClaimCur.ClaimType=="PreAuth"){

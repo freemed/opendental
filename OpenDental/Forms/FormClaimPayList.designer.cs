@@ -30,6 +30,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.textDateTo = new OpenDental.ValidDate();
+			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.SuspendLayout();
@@ -83,6 +84,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Claim Payments (EOBs)";
 			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butRefresh
 			// 
@@ -105,6 +107,21 @@ namespace OpenDental{
 			this.textDateTo.Name = "textDateTo";
 			this.textDateTo.Size = new System.Drawing.Size(94,20);
 			this.textDateTo.TabIndex = 14;
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Location = new System.Drawing.Point(12,576);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75,24);
+			this.butAdd.TabIndex = 2;
+			this.butAdd.Text = "Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butClose
 			// 
@@ -137,6 +154,7 @@ namespace OpenDental{
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.textDateTo);
+			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.textDateFrom);
 			this.Controls.Add(this.labelToDate);
@@ -161,5 +179,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelClinic;
 		private System.Windows.Forms.ComboBox comboClinic;
 		private UI.Button butRefresh;
+		private UI.Button butAdd;
 	}
 }

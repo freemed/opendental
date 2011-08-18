@@ -23,25 +23,22 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.ComponentModel.Container components = null;
-		//private bool ControlDown;
 		///<summary></summary>
 		public bool IsNew;
-		private decimal splitTot;
-		///<summary>The list of splits to display in the grid.</summary>
-		private List<ClaimPaySplit> splits;
 		private System.Windows.Forms.ComboBox comboClinic;
 		private System.Windows.Forms.Label labelClinic;
 		private System.Windows.Forms.TextBox textCarrierName;
 		private System.Windows.Forms.Label label7;
 		private ClaimPayment ClaimPaymentCur;
-		///<summary>Set this externally.</summary>
-		public long OriginatingClaimNum;
+		private Label labelDateIssued;
+		private ValidDate textDateIssued;
+		private UI.Button butCarrierSelect;
+		private Label label1;
 
 		///<summary></summary>
 		public FormClaimPayEdit(ClaimPayment claimPaymentCur) {
 			InitializeComponent();// Required for Windows Form Designer support
 			ClaimPaymentCur=claimPaymentCur;
-			splits=new List<ClaimPaySplit>();
 			Lan.F(this);
 		}
 
@@ -75,52 +72,56 @@ namespace OpenDental{
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.textCarrierName = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
+			this.labelDateIssued = new System.Windows.Forms.Label();
+			this.textDateIssued = new OpenDental.ValidDate();
+			this.label1 = new System.Windows.Forms.Label();
+			this.butCarrierSelect = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textAmount
 			// 
-			this.textAmount.Location = new System.Drawing.Point(133,63);
+			this.textAmount.Location = new System.Drawing.Point(134,86);
 			this.textAmount.Name = "textAmount";
-			this.textAmount.Size = new System.Drawing.Size(58,20);
-			this.textAmount.TabIndex = 0;
+			this.textAmount.Size = new System.Drawing.Size(68,20);
+			this.textAmount.TabIndex = 3;
 			this.textAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(133,43);
+			this.textDate.Location = new System.Drawing.Point(134,44);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(68,20);
-			this.textDate.TabIndex = 3;
+			this.textDate.TabIndex = 1;
 			this.textDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textBankBranch
 			// 
-			this.textBankBranch.Location = new System.Drawing.Point(133,103);
+			this.textBankBranch.Location = new System.Drawing.Point(134,128);
 			this.textBankBranch.MaxLength = 25;
 			this.textBankBranch.Name = "textBankBranch";
 			this.textBankBranch.Size = new System.Drawing.Size(100,20);
-			this.textBankBranch.TabIndex = 2;
+			this.textBankBranch.TabIndex = 5;
 			// 
 			// textCheckNum
 			// 
-			this.textCheckNum.Location = new System.Drawing.Point(133,83);
+			this.textCheckNum.Location = new System.Drawing.Point(134,107);
 			this.textCheckNum.MaxLength = 25;
 			this.textCheckNum.Name = "textCheckNum";
 			this.textCheckNum.Size = new System.Drawing.Size(100,20);
-			this.textCheckNum.TabIndex = 1;
+			this.textCheckNum.TabIndex = 4;
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(133,143);
+			this.textNote.Location = new System.Drawing.Point(134,170);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(324,70);
-			this.textNote.TabIndex = 3;
+			this.textNote.TabIndex = 7;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(35,47);
+			this.label6.Location = new System.Drawing.Point(35,48);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(96,16);
 			this.label6.TabIndex = 37;
@@ -129,7 +130,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(36,67);
+			this.label5.Location = new System.Drawing.Point(37,90);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(95,16);
 			this.label5.TabIndex = 36;
@@ -138,7 +139,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(40,85);
+			this.label4.Location = new System.Drawing.Point(41,109);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(90,16);
 			this.label4.TabIndex = 35;
@@ -147,7 +148,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(41,106);
+			this.label3.Location = new System.Drawing.Point(42,131);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(91,16);
 			this.label3.TabIndex = 34;
@@ -156,7 +157,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(12,144);
+			this.label2.Location = new System.Drawing.Point(13,171);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(120,16);
 			this.label2.TabIndex = 33;
@@ -172,10 +173,10 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(433,269);
+			this.butCancel.Location = new System.Drawing.Point(447,278);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 7;
+			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -187,21 +188,21 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(342,269);
+			this.butOK.Location = new System.Drawing.Point(356,278);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 6;
+			this.butOK.TabIndex = 8;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// comboClinic
 			// 
 			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(133,21);
+			this.comboClinic.Location = new System.Drawing.Point(134,21);
 			this.comboClinic.MaxDropDownItems = 30;
 			this.comboClinic.Name = "comboClinic";
 			this.comboClinic.Size = new System.Drawing.Size(209,21);
-			this.comboClinic.TabIndex = 92;
+			this.comboClinic.TabIndex = 0;
 			// 
 			// labelClinic
 			// 
@@ -214,42 +215,86 @@ namespace OpenDental{
 			// 
 			// textCarrierName
 			// 
-			this.textCarrierName.Location = new System.Drawing.Point(133,123);
+			this.textCarrierName.Location = new System.Drawing.Point(134,149);
 			this.textCarrierName.MaxLength = 25;
 			this.textCarrierName.Name = "textCarrierName";
-			this.textCarrierName.Size = new System.Drawing.Size(212,20);
-			this.textCarrierName.TabIndex = 93;
+			this.textCarrierName.Size = new System.Drawing.Size(252,20);
+			this.textCarrierName.TabIndex = 6;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(23,126);
+			this.label7.Location = new System.Drawing.Point(24,152);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(109,16);
 			this.label7.TabIndex = 94;
 			this.label7.Text = "Carrier Name";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// labelDateIssued
+			// 
+			this.labelDateIssued.Location = new System.Drawing.Point(12,69);
+			this.labelDateIssued.Name = "labelDateIssued";
+			this.labelDateIssued.Size = new System.Drawing.Size(120,16);
+			this.labelDateIssued.TabIndex = 37;
+			this.labelDateIssued.Text = "Date Check Issued";
+			this.labelDateIssued.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textDateIssued
+			// 
+			this.textDateIssued.Location = new System.Drawing.Point(134,65);
+			this.textDateIssued.Name = "textDateIssued";
+			this.textDateIssued.Size = new System.Drawing.Size(68,20);
+			this.textDateIssued.TabIndex = 2;
+			this.textDateIssued.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(203,66);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(94,16);
+			this.label1.TabIndex = 95;
+			this.label1.Text = "(optional)";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butCarrierSelect
+			// 
+			this.butCarrierSelect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCarrierSelect.Autosize = true;
+			this.butCarrierSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCarrierSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCarrierSelect.CornerRadius = 4F;
+			this.butCarrierSelect.Location = new System.Drawing.Point(389,147);
+			this.butCarrierSelect.Name = "butCarrierSelect";
+			this.butCarrierSelect.Size = new System.Drawing.Size(69,23);
+			this.butCarrierSelect.TabIndex = 8;
+			this.butCarrierSelect.Text = "Pick";
+			this.butCarrierSelect.Click += new System.EventHandler(this.butCarrierSelect_Click);
+			// 
 			// FormClaimPayEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(528,313);
+			this.ClientSize = new System.Drawing.Size(542,322);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCarrierName);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.comboClinic);
 			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.textAmount);
+			this.Controls.Add(this.textDateIssued);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.textBankBranch);
 			this.Controls.Add(this.textCheckNum);
 			this.Controls.Add(this.textNote);
+			this.Controls.Add(this.labelDateIssued);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butCarrierSelect);
 			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -266,65 +311,60 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimPayEdit_Load(object sender, System.EventArgs e) {
-			/*
-			//ClaimPayment created before opening this form
+			//ClaimPayment gets inserted into db when OK in this form if new
 			if(IsNew){
-				if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here
-					DialogResult=DialogResult.Cancel;//causes claimPayment to be deleted.
+				if(!Security.IsAuthorized(Permissions.InsPayCreate)){
+					DialogResult=DialogResult.Cancel;
 					return;
 				}
 			}
-			else{
+			else{	
 				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimPaymentCur.CheckDate)){
 					butOK.Enabled=false;
-					butDelete.Enabled=false;
 				}
 			}
-			if(IsNew){
-				checkShowUn.Checked=true;
-			}
-			if(PrefC.GetBool(PrefName.EasyNoClinics)){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			comboClinic.Items.Clear();
-			comboClinic.Items.Add(Lan.g(this,"none"));
-			comboClinic.SelectedIndex=0;
-			for(int i=0;i<Clinics.List.Length;i++){
-				comboClinic.Items.Add(Clinics.List[i].Description);
-				if(Clinics.List[i].ClinicNum==ClaimPaymentCur.ClinicNum){
-					comboClinic.SelectedIndex=i+1;
+			else {
+				comboClinic.Items.Add("None");
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
 			}
-			textDate.Text=ClaimPaymentCur.CheckDate.ToShortDateString();
+			if(ClaimPaymentCur.CheckDate.Year>1880) {
+				textDate.Text=ClaimPaymentCur.CheckDate.ToShortDateString();
+			}
+			if(ClaimPaymentCur.DateIssued.Year>1880) {
+				textDateIssued.Text=ClaimPaymentCur.DateIssued.ToShortDateString();
+			}
 			textCheckNum.Text=ClaimPaymentCur.CheckNum;
 			textBankBranch.Text=ClaimPaymentCur.BankBranch;
+			textAmount.Text=ClaimPaymentCur.CheckAmt.ToString("F");
 			textCarrierName.Text=ClaimPaymentCur.CarrierName;
 			textNote.Text=ClaimPaymentCur.Note;
-			FillGrid();
-			if(IsNew){
-				gridMain.SetSelected(true);
-				splitTot=0;
-				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-					splitTot+=(decimal)splits[gridMain.SelectedIndices[i]].InsPayAmt;
-				}
-				textAmount.Text=splitTot.ToString("F");
-			}*/
+		}
+
+		private void butCarrierSelect_Click(object sender,EventArgs e) {
+			FormCarriers formC=new FormCarriers();
+			formC.IsSelectMode=true;
+			formC.ShowDialog();
+			if(formC.DialogResult==DialogResult.OK) {
+				textCarrierName.Text=formC.SelectedCarrier.CarrierName;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			/*
 			if(textDate.Text=="") {
 				MsgBox.Show(this,"Please enter a date first.");
 				return;
 			}
-			if(textDate.errorProvider1.GetError(textDate)!="")
+			if(textDate.errorProvider1.GetError(textDate)!="" 
+				|| textDateIssued.errorProvider1.GetError(textDateIssued)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			if(gridMain.SelectedIndices.Length==0){
-				MessageBox.Show(Lan.g(this,"At least one item must be selected, or use the delete button."));	
 				return;
 			}
 			if(IsNew){
@@ -347,52 +387,26 @@ namespace OpenDental{
 			else{
 				ClaimPaymentCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			ClaimPaymentCur.CheckAmt=PIn.Double(textAmount.Text);
 			ClaimPaymentCur.CheckDate=PIn.Date(textDate.Text);
+			ClaimPaymentCur.DateIssued=PIn.Date(textDateIssued.Text);
+			ClaimPaymentCur.CheckAmt=PIn.Double(textAmount.Text);
 			ClaimPaymentCur.CheckNum=textCheckNum.Text;
 			ClaimPaymentCur.BankBranch=textBankBranch.Text;
 			ClaimPaymentCur.CarrierName=textCarrierName.Text;
 			ClaimPaymentCur.Note=textNote.Text;
 			try{
-				ClaimPayments.Update(ClaimPaymentCur);//error thrown if trying to change amount and already attached to a deposit.
+				if(IsNew) {
+					ClaimPayments.Insert(ClaimPaymentCur);//error thrown if trying to change amount and already attached to a deposit.
+				}
+				else {
+					ClaimPayments.Update(ClaimPaymentCur);//error thrown if trying to change amount and already attached to a deposit.
+				}
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			//this could be optimized to only save changes.
-			//Would require a starting list to compare to.
-			//But this isn't bad, since changes all saved at the very end
-			List<int> selectedRows=new List<int>();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				selectedRows.Add(gridMain.SelectedIndices[i]);
-			}
-			for(int i=0;i<splits.Count;i++){
-				if(selectedRows.Contains(i)){//row is selected
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,true);
-					//Audit trail isn't perfect, since it doesn't make an entry if you remove a claim from a payment.
-					//And it always makes more audit trail entries when you click OK, even if you didn't actually attach new claims.
-					//But since this will cover the vast majority if situations.
-					if(IsNew){
-						SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,splits[i].PatNum,
-							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
-							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
-							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
-					}
-					else{
-						SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,splits[i].PatNum,
-							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
-							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
-							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
-					}
-				}
-				else{//row not selected
-					//If user had not been attaching their inspayments to checks, then this will cause such payments to annoyingly have their
-					//date changed to the current date.  This prompts them to call us.  Then, we tell them to attach to checks.
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,false);
-				}
-			}
-			DialogResult=DialogResult.OK;*/
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {
