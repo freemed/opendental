@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 					+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN DATE('0001-01-01') ELSE MAX(pay.PayDate) END LatestPayment,"
 					+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt "
 					+"FROM (creditcard cc,patient pat,patient guar) "
-					+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.PayType="+payType+" AND cc.DateStart<pay.PayDate AND pay.IsRecurringCC=1 "
+					+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.PayType="+payType+" AND pay.IsRecurringCC=1 "
 					+"WHERE cc.PatNum=pat.PatNum "
 					+"AND pat.Guarantor=guar.PatNum "
 					+"AND cc.ChargeAmt>0 "
@@ -90,7 +90,7 @@ namespace OpenDentBusiness{
 				//Example: DateStart=8/31/2010 and the current month is February 2011 which does not have 31 days.
 				//So the patient needs to show in list if current day is the 28th (or last day of the month).
 				int daysInMonth=DateTime.DaysInMonth(curDate.Year,curDate.Month);
-				if(daysInMonth<=dateStart.Day && daysInMonth==curDate.Day) {//if their recurring charge would fall on an invalid day of the month, and this is that last day of the month
+				if(daysInMonth<=dateStart.Day && daysInMonth==curDate.Day && curDate.Date!=latestPayment.Date) {//if their recurring charge would fall on an invalid day of the month, and this is that last day of the month
 					continue;//we want them to show because the charge should go in on this date.
 				}
 				if(curDate.Day>=dateStart.Day) {//If the recurring charge date was earlier in this month, then the recurring charge will go in for this month.
@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 				}
 				else {//Else, current date is before the recurring date in the current month, so the recurring charge will be going in for last month
 					//Check if payment didn't happen last month.
-					if(curDate.AddMonths(-1).Month!=latestPayment.Month){
+					if(curDate.AddMonths(-1).Month!=latestPayment.Month && curDate.Date!=latestPayment.Date){
 						//Charge did not happen last month so the patient needs to show up in list.
 						//Example: Last month had a recurring charge set at the end of the month that fell on a weekend.
 						//Today is the next month and still before the recurring charge date. 

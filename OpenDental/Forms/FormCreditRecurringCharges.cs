@@ -95,9 +95,15 @@ namespace OpenDental {
 			if(nowDateTime.Day>=dateStart.Day) {
 				return new DateTime(nowDateTime.Year,nowDateTime.Month,dateStart.Day);
 			}
+			//If not enough days in current month to match the dateStart see if on the last day in the month.
+			//Example: dateStart=08/31/2009 and month is February 28th so we need the PayDate to be today not for last day on the last month, which would happen below.
+			int daysInMonth=DateTime.DaysInMonth(nowDateTime.Year,nowDateTime.Month);
+			if(daysInMonth<=dateStart.Day && daysInMonth==nowDateTime.Day) {
+				return nowDateTime;//Today is last day of the month so return today as the PayDate.
+			}
 			//PayDate needs to be for the previous month so we need to determine if using the dateStart day would be a legal DateTime.
 			DateTime nowMinusOneMonth=nowDateTime.AddMonths(-1);
-			int daysInMonth=DateTime.DaysInMonth(nowMinusOneMonth.Year,nowMinusOneMonth.Month);
+			daysInMonth=DateTime.DaysInMonth(nowMinusOneMonth.Year,nowMinusOneMonth.Month);
 			if(daysInMonth<=dateStart.Day) {
 				return new DateTime(nowMinusOneMonth.Year,nowMinusOneMonth.Month,daysInMonth);//Returns the last day of the previous month.
 			}
@@ -210,11 +216,12 @@ namespace OpenDental {
 			string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				insertPayment=false;
+//TODO change me back to false;
+				insertPayment=true;
 				ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 				long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
 				string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
-				File.Delete(resultfile);//delete the old result file.
+				//////File.Delete(resultfile);//delete the old result file.
 				info.Arguments="";
 				double amt=PIn.Double(table.Rows[gridMain.SelectedIndices[i]]["ChargeAmt"].ToString());
 				DateTime exp=PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["CCExpiration"].ToString());
@@ -239,38 +246,38 @@ namespace OpenDental {
 				info.Arguments+="/SMALLWINDOW ";
 				info.Arguments+="/AUTOCLOSE ";
 				info.Arguments+="/NORESULTDIALOG ";
-				Cursor=Cursors.WaitCursor;
-				Process process=new Process();
-				process.StartInfo=info;
-				process.EnableRaisingEvents=true;
-				process.Start();
-				while(!process.HasExited) {
-					Application.DoEvents();
-				}
-				Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
-				Cursor=Cursors.Default;
-				string resulttext="";
-				string line="";
-				using(TextReader reader=new StreamReader(resultfile)) {
-					line=reader.ReadLine();
-					while(line!=null) {
-						if(resulttext!="") {
-							resulttext+="\r\n";
-						}
-						resulttext+=line;
-						if(line.StartsWith("RESULT=")) {
-							if(line!="RESULT=SUCCESS") {
-								failed++;
-								labelFailed.Text=Lan.g(this,"Failed=")+failed;
-								break;
-							}
-							success++;
-							labelCharged.Text=Lan.g(this,"Charged=")+success;
-							insertPayment=true;
-						}
-						line=reader.ReadLine();
-					}
-				}
+				//////Cursor=Cursors.WaitCursor;
+				//////Process process=new Process();
+				//////process.StartInfo=info;
+				//////process.EnableRaisingEvents=true;
+				//////process.Start();
+				//////while(!process.HasExited) {
+				//////  Application.DoEvents();
+				//////}
+				//////Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
+				//////Cursor=Cursors.Default;
+				//////string resulttext="";
+				//////string line="";
+				//////using(TextReader reader=new StreamReader(resultfile)) {
+				//////  line=reader.ReadLine();
+				//////  while(line!=null) {
+				//////    if(resulttext!="") {
+				//////      resulttext+="\r\n";
+				//////    }
+				//////    resulttext+=line;
+				//////    if(line.StartsWith("RESULT=")) {
+				//////      if(line!="RESULT=SUCCESS") {
+				//////        failed++;
+				//////        labelFailed.Text=Lan.g(this,"Failed=")+failed;
+				//////        break;
+				//////      }
+				//////      success++;
+				//////      labelCharged.Text=Lan.g(this,"Charged=")+success;
+				//////      insertPayment=true;
+				//////    }
+				//////    line=reader.ReadLine();
+				//////  }
+				//////}
 				if(insertPayment) {
 					Patient patCur=Patients.GetPat(patNum);
 					Payment paymentCur=new Payment();
@@ -281,7 +288,7 @@ namespace OpenDental {
 					paymentCur.ClinicNum=patCur.ClinicNum;
 					paymentCur.PayType=payType;
 					paymentCur.PayAmt=amt;
-					paymentCur.PayNote=resulttext;
+					//////paymentCur.PayNote=resulttext;
 					paymentCur.IsRecurringCC=true;
 					Payments.Insert(paymentCur);
 					PaySplit split=new PaySplit();
