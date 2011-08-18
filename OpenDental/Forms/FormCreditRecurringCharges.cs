@@ -216,12 +216,11 @@ namespace OpenDental {
 			string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-//TODO change me back to false;
-				insertPayment=true;
+				insertPayment=false;
 				ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 				long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
 				string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
-				//////File.Delete(resultfile);//delete the old result file.
+				File.Delete(resultfile);//delete the old result file.
 				info.Arguments="";
 				double amt=PIn.Double(table.Rows[gridMain.SelectedIndices[i]]["ChargeAmt"].ToString());
 				DateTime exp=PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["CCExpiration"].ToString());
@@ -246,38 +245,38 @@ namespace OpenDental {
 				info.Arguments+="/SMALLWINDOW ";
 				info.Arguments+="/AUTOCLOSE ";
 				info.Arguments+="/NORESULTDIALOG ";
-				//////Cursor=Cursors.WaitCursor;
-				//////Process process=new Process();
-				//////process.StartInfo=info;
-				//////process.EnableRaisingEvents=true;
-				//////process.Start();
-				//////while(!process.HasExited) {
-				//////  Application.DoEvents();
-				//////}
-				//////Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
-				//////Cursor=Cursors.Default;
-				//////string resulttext="";
-				//////string line="";
-				//////using(TextReader reader=new StreamReader(resultfile)) {
-				//////  line=reader.ReadLine();
-				//////  while(line!=null) {
-				//////    if(resulttext!="") {
-				//////      resulttext+="\r\n";
-				//////    }
-				//////    resulttext+=line;
-				//////    if(line.StartsWith("RESULT=")) {
-				//////      if(line!="RESULT=SUCCESS") {
-				//////        failed++;
-				//////        labelFailed.Text=Lan.g(this,"Failed=")+failed;
-				//////        break;
-				//////      }
-				//////      success++;
-				//////      labelCharged.Text=Lan.g(this,"Charged=")+success;
-				//////      insertPayment=true;
-				//////    }
-				//////    line=reader.ReadLine();
-				//////  }
-				//////}
+				Cursor=Cursors.WaitCursor;
+				Process process=new Process();
+				process.StartInfo=info;
+				process.EnableRaisingEvents=true;
+				process.Start();
+				while(!process.HasExited) {
+				  Application.DoEvents();
+				}
+				Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
+				Cursor=Cursors.Default;
+				string resulttext="";
+				string line="";
+				using(TextReader reader=new StreamReader(resultfile)) {
+				  line=reader.ReadLine();
+				  while(line!=null) {
+				    if(resulttext!="") {
+				      resulttext+="\r\n";
+				    }
+				    resulttext+=line;
+				    if(line.StartsWith("RESULT=")) {
+				      if(line!="RESULT=SUCCESS") {
+				        failed++;
+				        labelFailed.Text=Lan.g(this,"Failed=")+failed;
+				        break;
+				      }
+				      success++;
+				      labelCharged.Text=Lan.g(this,"Charged=")+success;
+				      insertPayment=true;
+				    }
+				    line=reader.ReadLine();
+				  }
+				}
 				if(insertPayment) {
 					Patient patCur=Patients.GetPat(patNum);
 					Payment paymentCur=new Payment();
@@ -288,7 +287,7 @@ namespace OpenDental {
 					paymentCur.ClinicNum=patCur.ClinicNum;
 					paymentCur.PayType=payType;
 					paymentCur.PayAmt=amt;
-					//////paymentCur.PayNote=resulttext;
+					paymentCur.PayNote=resulttext;
 					paymentCur.IsRecurringCC=true;
 					Payments.Insert(paymentCur);
 					PaySplit split=new PaySplit();
