@@ -492,9 +492,16 @@ namespace OpenDental{
       ClaimProcsForClaim=ClaimProcs.RefreshForClaim(ClaimCur.ClaimNum); 
 			claimprocs=new List<ClaimProc>();
 			bool includeThis;
+			Procedure proc;
 			for(int i=0;i<ClaimProcsForClaim.Count;i++){//fill the arraylist
 				if(ClaimProcsForClaim[i].ProcNum==0){
 					continue;//skip payments
+				}
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
+					if(proc.ProcNumLab!=0) { //This is a lab fee procedure.
+						continue;//skip lab fee procedures in Canada, because they will show up on the same line as the procedure that they are attached to.
+					}
 				}
 				includeThis=true;
 				for(int j=0;j<claimprocs.Count;j++){//loop through existing claimprocs
@@ -507,7 +514,6 @@ namespace OpenDental{
 				}
 			}
 			List<string> missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
-			Procedure proc;
 			ProcedureCode procCode;
 			for(int j=missingTeeth.Count-1;j>=0;j--) {//loop backwards to keep index accurate as items are removed
 				//if the missing tooth is missing because of an extraction being billed here, then exclude it
