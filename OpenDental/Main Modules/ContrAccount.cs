@@ -2695,7 +2695,6 @@ namespace OpenDental {
 				return;
 			}
 			int countSelected=0;
-			bool countIsOverMaxCanadian=false;
 			DataTable table=DataSetMain.Tables["account"];
 			InsPlan plan;
 			InsSub sub;
@@ -2716,7 +2715,7 @@ namespace OpenDental {
 					sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
 					if(Procedures.NeedsSent(proc.ProcNum,sub.InsSubNum,ClaimProcList)){
 						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && countSelected==7) {//Canadian. en-CA or fr-CA
-							countIsOverMaxCanadian=true;
+							MsgBox.Show(this,"Only the first 7 procedures will be automatically selected.  You will need to create another claim for the remaining procedures.");
 							continue;//only send 7.  
 						}
 						countSelected++;
@@ -2739,30 +2738,7 @@ namespace OpenDental {
 				return;
 			}
 			//At this point, all selected items are procedures.
-			int labProcsUnselected=0;
-			List<int> selectedIndicies=new List<int>(gridAccount.SelectedIndices);
-			for(int i=0;i<selectedIndicies.Count;i++) {
-				Procedure proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[selectedIndicies[i]]["ProcNum"].ToString()));
-				ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(proc.CodeNum);
-				if(procCode.IsCanadianLab) {
-					gridAccount.SetSelected(selectedIndicies[i],false);
-					labProcsUnselected++;
-				}
-			}
-			if(labProcsUnselected>0) {
-				MessageBox.Show(Lan.g(this,"Number of lab fee procedures automatically unselected")+": "+labProcsUnselected.ToString());
-			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && gridAccount.SelectedIndices.Length>7) {//Canadian. en-CA or fr-CA
-				countIsOverMaxCanadian=true;
-				selectedIndicies=new List<int>(gridAccount.SelectedIndices);
-				selectedIndicies.Sort();
-				for(int i=0;i<selectedIndicies.Count;i++) { //Unselect all but the first 7 procedures with the smallest index numbers.
-					gridAccount.SetSelected(selectedIndicies[i],(i<7));
-				}
-			}
-			if(countIsOverMaxCanadian) {
-				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to create a second claim for the remaining procedures.");
-			}
+			InsCanadaValidateProcs(procsForPat,table);
 			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			if(ClaimCur.ClaimNum==0){
@@ -2794,6 +2770,31 @@ namespace OpenDental {
 				}
 			}
 			ModuleSelected(PatCur.PatNum);
+		}
+
+		///<summary>The procsForPat variable is all of the current procedures for the current patient. The tableAccount variable is the table from the DataSetMain object containing the information for the account grid.</summary>
+		private void InsCanadaValidateProcs(List <Procedure> procsForPat,DataTable tableAccount) {
+			int labProcsUnselected=0;
+			List<int> selectedIndicies=new List<int>(gridAccount.SelectedIndices);
+			for(int i=0;i<selectedIndicies.Count;i++) {
+				Procedure proc=Procedures.GetProcFromList(procsForPat,PIn.Long(tableAccount.Rows[selectedIndicies[i]]["ProcNum"].ToString()));
+				ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(proc.CodeNum);
+				if(procCode.IsCanadianLab) {
+					gridAccount.SetSelected(selectedIndicies[i],false);
+					labProcsUnselected++;
+				}
+			}
+			if(labProcsUnselected>0) {
+				MessageBox.Show(Lan.g(this,"Number of lab fee procedures automatically unselected")+": "+labProcsUnselected.ToString());
+			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && gridAccount.SelectedIndices.Length>7) {//Canadian. en-CA or fr-CA
+				selectedIndicies=new List<int>(gridAccount.SelectedIndices);
+				selectedIndicies.Sort();
+				for(int i=0;i<selectedIndicies.Count;i++) { //Unselect all but the first 7 procedures with the smallest index numbers.
+					gridAccount.SetSelected(selectedIndicies[i],(i<7));
+				}
+				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to create another claim for the remaining procedures.");
+			}
 		}
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
@@ -3042,6 +3043,8 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
+			//At this point, all selected items are procedures.
+			InsCanadaValidateProcs(procsForPat,table);
 			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
@@ -3083,6 +3086,8 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
+			//At this point, all selected items are procedures.
+			InsCanadaValidateProcs(procsForPat,table);
 			Claim ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
