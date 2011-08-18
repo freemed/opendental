@@ -2668,11 +2668,15 @@ namespace OpenDental{
 				if(numLabProcsUnselected>0) {
 					MessageBox.Show(Lan.g(this,"Number of lab fee procedures unselected")+": "+numLabProcsUnselected.ToString());
 				}
+				if(gridMain.SelectedIndices.Length>7) {
+					List <int> selectedIndicies=new List<int>(gridMain.SelectedIndices);
+					selectedIndicies.Sort();
+					for(int i=0;i<selectedIndicies.Count;i++) { //Unselect all but the first 7 procedures with the smallest index numbers.
+						gridMain.SetSelected(selectedIndicies[i],(i<7));
+					}
+					MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to create another preauth for the remaining procedures.");
+				}
 			}
-		  if(gridMain.SelectedIndices.Length==0){
-        MessageBox.Show(Lan.g(this,"Please select procedures first."));
-        return;
-      }
 			bool procsSelected=false;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				if(gridMain.Rows[gridMain.SelectedIndices[i]].Tag!=null){
