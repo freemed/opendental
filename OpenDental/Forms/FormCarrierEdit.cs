@@ -65,7 +65,8 @@ namespace OpenDental{
 		private Label label12;
 		private TextBox textEncryptionMethod;
 		private Label label13;
-		private Label label15;
+		private CheckBox check01;
+		private Label label14;
 		public Carrier CarrierCur;
 
 		///<summary></summary>
@@ -126,7 +127,6 @@ namespace OpenDental{
 			this.label13 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.label15 = new System.Windows.Forms.Label();
 			this.check03m = new System.Windows.Forms.CheckBox();
 			this.check03 = new System.Windows.Forms.CheckBox();
 			this.check07 = new System.Windows.Forms.CheckBox();
@@ -146,6 +146,8 @@ namespace OpenDental{
 			this.textVersion = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkIsHidden = new System.Windows.Forms.CheckBox();
+			this.check01 = new System.Windows.Forms.CheckBox();
+			this.label14 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -160,7 +162,7 @@ namespace OpenDental{
 			this.textCarrierName.MaxLength = 255;
 			this.textCarrierName.Name = "textCarrierName";
 			this.textCarrierName.Size = new System.Drawing.Size(226,20);
-			this.textCarrierName.TabIndex = 3;
+			this.textCarrierName.TabIndex = 1;
 			this.textCarrierName.TextChanged += new System.EventHandler(this.textCarrierName_TextChanged);
 			// 
 			// label2
@@ -178,7 +180,7 @@ namespace OpenDental{
 			this.textPhone.MaxLength = 255;
 			this.textPhone.Name = "textPhone";
 			this.textPhone.Size = new System.Drawing.Size(157,20);
-			this.textPhone.TabIndex = 5;
+			this.textPhone.TabIndex = 2;
 			this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
 			// 
 			// label3
@@ -196,7 +198,7 @@ namespace OpenDental{
 			this.textAddress.MaxLength = 255;
 			this.textAddress.Name = "textAddress";
 			this.textAddress.Size = new System.Drawing.Size(291,20);
-			this.textAddress.TabIndex = 7;
+			this.textAddress.TabIndex = 3;
 			this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
 			// 
 			// label4
@@ -214,7 +216,7 @@ namespace OpenDental{
 			this.textAddress2.MaxLength = 255;
 			this.textAddress2.Name = "textAddress2";
 			this.textAddress2.Size = new System.Drawing.Size(291,20);
-			this.textAddress2.TabIndex = 9;
+			this.textAddress2.TabIndex = 4;
 			this.textAddress2.TextChanged += new System.EventHandler(this.textAddress2_TextChanged);
 			// 
 			// label6
@@ -240,7 +242,7 @@ namespace OpenDental{
 			this.textElectID.Location = new System.Drawing.Point(180,112);
 			this.textElectID.Name = "textElectID";
 			this.textElectID.Size = new System.Drawing.Size(59,20);
-			this.textElectID.TabIndex = 19;
+			this.textElectID.TabIndex = 8;
 			// 
 			// groupBox1
 			// 
@@ -251,7 +253,7 @@ namespace OpenDental{
 			this.groupBox1.Location = new System.Drawing.Point(31,161);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(448,49);
-			this.groupBox1.TabIndex = 23;
+			this.groupBox1.TabIndex = 11;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "In Use By";
 			// 
@@ -262,7 +264,7 @@ namespace OpenDental{
 			this.comboPlans.MaxDropDownItems = 30;
 			this.comboPlans.Name = "comboPlans";
 			this.comboPlans.Size = new System.Drawing.Size(238,21);
-			this.comboPlans.TabIndex = 68;
+			this.comboPlans.TabIndex = 2;
 			// 
 			// textPlans
 			// 
@@ -271,14 +273,14 @@ namespace OpenDental{
 			this.textPlans.Name = "textPlans";
 			this.textPlans.ReadOnly = true;
 			this.textPlans.Size = new System.Drawing.Size(35,20);
-			this.textPlans.TabIndex = 67;
+			this.textPlans.TabIndex = 1;
 			// 
 			// label9
 			// 
 			this.label9.Location = new System.Drawing.Point(4,20);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(142,17);
-			this.label9.TabIndex = 66;
+			this.label9.TabIndex = 0;
 			this.label9.Text = "Ins Plan Subscribers";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -288,7 +290,7 @@ namespace OpenDental{
 			this.checkNoSendElect.Location = new System.Drawing.Point(247,115);
 			this.checkNoSendElect.Name = "checkNoSendElect";
 			this.checkNoSendElect.Size = new System.Drawing.Size(246,17);
-			this.checkNoSendElect.TabIndex = 93;
+			this.checkNoSendElect.TabIndex = 9;
 			this.checkNoSendElect.Text = "Don\'t Usually Send Electronically";
 			// 
 			// textCity
@@ -297,7 +299,7 @@ namespace OpenDental{
 			this.textCity.MaxLength = 255;
 			this.textCity.Name = "textCity";
 			this.textCity.Size = new System.Drawing.Size(155,20);
-			this.textCity.TabIndex = 94;
+			this.textCity.TabIndex = 5;
 			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
 			// 
 			// textState
@@ -306,7 +308,7 @@ namespace OpenDental{
 			this.textState.MaxLength = 255;
 			this.textState.Name = "textState";
 			this.textState.Size = new System.Drawing.Size(65,20);
-			this.textState.TabIndex = 96;
+			this.textState.TabIndex = 6;
 			this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
 			// 
 			// textZip
@@ -315,7 +317,7 @@ namespace OpenDental{
 			this.textZip.MaxLength = 255;
 			this.textZip.Name = "textZip";
 			this.textZip.Size = new System.Drawing.Size(71,20);
-			this.textZip.TabIndex = 97;
+			this.textZip.TabIndex = 7;
 			// 
 			// labelCitySt
 			// 
@@ -332,12 +334,15 @@ namespace OpenDental{
 			this.checkIsCDAnet.Location = new System.Drawing.Point(31,214);
 			this.checkIsCDAnet.Name = "checkIsCDAnet";
 			this.checkIsCDAnet.Size = new System.Drawing.Size(168,17);
-			this.checkIsCDAnet.TabIndex = 98;
+			this.checkIsCDAnet.TabIndex = 12;
 			this.checkIsCDAnet.Text = "Is CDAnet Carrier";
 			this.checkIsCDAnet.Click += new System.EventHandler(this.checkIsCDAnet_Click);
 			// 
 			// groupCDAnet
 			// 
+			this.groupCDAnet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupCDAnet.Controls.Add(this.label14);
 			this.groupCDAnet.Controls.Add(this.label12);
 			this.groupCDAnet.Controls.Add(this.textEncryptionMethod);
 			this.groupCDAnet.Controls.Add(this.label13);
@@ -355,8 +360,8 @@ namespace OpenDental{
 			this.groupCDAnet.Controls.Add(this.label1);
 			this.groupCDAnet.Location = new System.Drawing.Point(29,234);
 			this.groupCDAnet.Name = "groupCDAnet";
-			this.groupCDAnet.Size = new System.Drawing.Size(664,402);
-			this.groupCDAnet.TabIndex = 99;
+			this.groupCDAnet.Size = new System.Drawing.Size(620,238);
+			this.groupCDAnet.TabIndex = 0;
 			this.groupCDAnet.TabStop = false;
 			this.groupCDAnet.Text = "CDAnet";
 			// 
@@ -365,23 +370,25 @@ namespace OpenDental{
 			this.label12.Location = new System.Drawing.Point(235,68);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(92,17);
-			this.label12.TabIndex = 115;
+			this.label12.TabIndex = 0;
 			this.label12.Text = "(1, 2, or 3)";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textEncryptionMethod
 			// 
+			this.textEncryptionMethod.Enabled = false;
 			this.textEncryptionMethod.Location = new System.Drawing.Point(191,65);
 			this.textEncryptionMethod.Name = "textEncryptionMethod";
 			this.textEncryptionMethod.Size = new System.Drawing.Size(42,20);
-			this.textEncryptionMethod.TabIndex = 113;
+			this.textEncryptionMethod.TabIndex = 0;
+			this.textEncryptionMethod.TabStop = false;
 			// 
 			// label13
 			// 
 			this.label13.Location = new System.Drawing.Point(38,70);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(151,17);
-			this.label13.TabIndex = 114;
+			this.label13.TabIndex = 0;
 			this.label13.Text = "Encryption Method";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
@@ -390,13 +397,15 @@ namespace OpenDental{
 			this.label11.Location = new System.Drawing.Point(235,42);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(92,17);
-			this.label11.TabIndex = 112;
+			this.label11.TabIndex = 0;
 			this.label11.Text = "(02 or 04)";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Controls.Add(this.label15);
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox3.Controls.Add(this.check01);
 			this.groupBox3.Controls.Add(this.check03m);
 			this.groupBox3.Controls.Add(this.check03);
 			this.groupBox3.Controls.Add(this.check07);
@@ -407,176 +416,190 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.check08);
 			this.groupBox3.Location = new System.Drawing.Point(337,35);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(321,361);
-			this.groupBox3.TabIndex = 111;
+			this.groupBox3.Size = new System.Drawing.Size(273,197);
+			this.groupBox3.TabIndex = 0;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Supported Transaction Types";
 			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(12,15);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(284,17);
-			this.label15.TabIndex = 118;
-			this.label15.Text = "(in addition to Claim)";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// check03m
 			// 
+			this.check03m.Enabled = false;
 			this.check03m.Location = new System.Drawing.Point(16,106);
 			this.check03m.Name = "check03m";
-			this.check03m.Size = new System.Drawing.Size(299,18);
-			this.check03m.TabIndex = 13;
+			this.check03m.Size = new System.Drawing.Size(251,18);
+			this.check03m.TabIndex = 0;
+			this.check03m.TabStop = false;
 			this.check03m.Text = "Predetermination Multi-page";
 			this.check03m.UseVisualStyleBackColor = true;
 			// 
 			// check03
 			// 
+			this.check03.Enabled = false;
 			this.check03.Location = new System.Drawing.Point(16,88);
 			this.check03.Name = "check03";
-			this.check03.Size = new System.Drawing.Size(299,18);
-			this.check03.TabIndex = 8;
+			this.check03.Size = new System.Drawing.Size(251,18);
+			this.check03.TabIndex = 0;
+			this.check03.TabStop = false;
 			this.check03.Text = "Predetermination Single Page";
 			this.check03.UseVisualStyleBackColor = true;
 			// 
 			// check07
 			// 
+			this.check07.Enabled = false;
 			this.check07.Location = new System.Drawing.Point(16,52);
 			this.check07.Name = "check07";
-			this.check07.Size = new System.Drawing.Size(299,18);
-			this.check07.TabIndex = 5;
+			this.check07.Size = new System.Drawing.Size(251,18);
+			this.check07.TabIndex = 0;
+			this.check07.TabStop = false;
 			this.check07.Text = "COB Claim Transaction";
 			this.check07.UseVisualStyleBackColor = true;
 			// 
 			// check06
 			// 
+			this.check06.Enabled = false;
 			this.check06.Location = new System.Drawing.Point(16,160);
 			this.check06.Name = "check06";
-			this.check06.Size = new System.Drawing.Size(299,18);
-			this.check06.TabIndex = 4;
+			this.check06.Size = new System.Drawing.Size(251,18);
+			this.check06.TabIndex = 0;
+			this.check06.TabStop = false;
 			this.check06.Text = "Request for Payment Reconciliation";
 			this.check06.UseVisualStyleBackColor = true;
 			// 
 			// check04
 			// 
+			this.check04.Enabled = false;
 			this.check04.Location = new System.Drawing.Point(16,124);
 			this.check04.Name = "check04";
-			this.check04.Size = new System.Drawing.Size(299,18);
-			this.check04.TabIndex = 3;
+			this.check04.Size = new System.Drawing.Size(251,18);
+			this.check04.TabIndex = 0;
+			this.check04.TabStop = false;
 			this.check04.Text = "Request for Outstanding Transactions [Mailbox]";
 			this.check04.UseVisualStyleBackColor = true;
 			// 
 			// check05
 			// 
+			this.check05.Enabled = false;
 			this.check05.Location = new System.Drawing.Point(16,142);
 			this.check05.Name = "check05";
-			this.check05.Size = new System.Drawing.Size(299,18);
-			this.check05.TabIndex = 2;
+			this.check05.Size = new System.Drawing.Size(251,18);
+			this.check05.TabIndex = 0;
+			this.check05.TabStop = false;
 			this.check05.Text = "Request for Summary Reconciliation";
 			this.check05.UseVisualStyleBackColor = true;
 			// 
 			// check02
 			// 
+			this.check02.Enabled = false;
 			this.check02.Location = new System.Drawing.Point(16,70);
 			this.check02.Name = "check02";
-			this.check02.Size = new System.Drawing.Size(299,18);
-			this.check02.TabIndex = 1;
+			this.check02.Size = new System.Drawing.Size(251,18);
+			this.check02.TabIndex = 0;
+			this.check02.TabStop = false;
 			this.check02.Text = "Claim Reversal";
 			this.check02.UseVisualStyleBackColor = true;
 			// 
 			// check08
 			// 
+			this.check08.Enabled = false;
 			this.check08.Location = new System.Drawing.Point(16,34);
 			this.check08.Name = "check08";
-			this.check08.Size = new System.Drawing.Size(299,18);
+			this.check08.Size = new System.Drawing.Size(251,18);
 			this.check08.TabIndex = 0;
+			this.check08.TabStop = false;
 			this.check08.Text = "Eligibility Transaction";
 			this.check08.UseVisualStyleBackColor = true;
 			// 
 			// textModemReconcile
 			// 
-			this.textModemReconcile.Location = new System.Drawing.Point(191,241);
+			this.textModemReconcile.Location = new System.Drawing.Point(191,188);
 			this.textModemReconcile.Name = "textModemReconcile";
 			this.textModemReconcile.Size = new System.Drawing.Size(121,20);
-			this.textModemReconcile.TabIndex = 109;
+			this.textModemReconcile.TabIndex = 0;
+			this.textModemReconcile.TabStop = false;
 			this.textModemReconcile.Visible = false;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(4,240);
+			this.label10.Location = new System.Drawing.Point(4,187);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(185,32);
-			this.label10.TabIndex = 110;
+			this.label10.TabIndex = 0;
 			this.label10.Text = "Modem Phone Number - Request for Payment Reconciliation";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			this.label10.Visible = false;
 			// 
 			// textModemSummary
 			// 
-			this.textModemSummary.Location = new System.Drawing.Point(191,205);
+			this.textModemSummary.Location = new System.Drawing.Point(191,152);
 			this.textModemSummary.Name = "textModemSummary";
 			this.textModemSummary.Size = new System.Drawing.Size(121,20);
-			this.textModemSummary.TabIndex = 107;
+			this.textModemSummary.TabIndex = 0;
+			this.textModemSummary.TabStop = false;
 			this.textModemSummary.Visible = false;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(1,205);
+			this.label8.Location = new System.Drawing.Point(1,152);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(188,33);
-			this.label8.TabIndex = 108;
+			this.label8.TabIndex = 0;
 			this.label8.Text = "Modem Phone Number - Request for Summary Reconciliation";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			this.label8.Visible = false;
 			// 
 			// textModem
 			// 
-			this.textModem.Location = new System.Drawing.Point(191,179);
+			this.textModem.Location = new System.Drawing.Point(191,126);
 			this.textModem.Name = "textModem";
 			this.textModem.Size = new System.Drawing.Size(121,20);
-			this.textModem.TabIndex = 105;
+			this.textModem.TabIndex = 0;
+			this.textModem.TabStop = false;
 			this.textModem.Visible = false;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(38,184);
+			this.label7.Location = new System.Drawing.Point(38,131);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(151,17);
-			this.label7.TabIndex = 106;
+			this.label7.TabIndex = 0;
 			this.label7.Text = "Modem Phone Number";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			this.label7.Visible = false;
 			// 
 			// comboNetwork
 			// 
+			this.comboNetwork.Enabled = false;
 			this.comboNetwork.FormattingEnabled = true;
 			this.comboNetwork.Location = new System.Drawing.Point(191,11);
 			this.comboNetwork.Name = "comboNetwork";
 			this.comboNetwork.Size = new System.Drawing.Size(259,21);
-			this.comboNetwork.TabIndex = 104;
+			this.comboNetwork.TabIndex = 0;
+			this.comboNetwork.TabStop = false;
 			// 
 			// label5
 			// 
 			this.label5.Location = new System.Drawing.Point(38,14);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(151,17);
-			this.label5.TabIndex = 103;
+			this.label5.TabIndex = 0;
 			this.label5.Text = "Network";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textVersion
 			// 
+			this.textVersion.Enabled = false;
 			this.textVersion.Location = new System.Drawing.Point(191,39);
 			this.textVersion.Name = "textVersion";
 			this.textVersion.Size = new System.Drawing.Size(42,20);
-			this.textVersion.TabIndex = 100;
+			this.textVersion.TabIndex = 0;
+			this.textVersion.TabStop = false;
 			// 
 			// label1
 			// 
 			this.label1.Location = new System.Drawing.Point(38,44);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(151,17);
-			this.label1.TabIndex = 101;
+			this.label1.TabIndex = 0;
 			this.label1.Text = "Version Number";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
@@ -587,9 +610,32 @@ namespace OpenDental{
 			this.checkIsHidden.Location = new System.Drawing.Point(89,137);
 			this.checkIsHidden.Name = "checkIsHidden";
 			this.checkIsHidden.Size = new System.Drawing.Size(104,17);
-			this.checkIsHidden.TabIndex = 100;
+			this.checkIsHidden.TabIndex = 10;
 			this.checkIsHidden.Text = "Hidden";
 			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// check01
+			// 
+			this.check01.Checked = true;
+			this.check01.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.check01.Enabled = false;
+			this.check01.Location = new System.Drawing.Point(16,16);
+			this.check01.Name = "check01";
+			this.check01.Size = new System.Drawing.Size(251,18);
+			this.check01.TabIndex = 0;
+			this.check01.TabStop = false;
+			this.check01.Text = "Claim";
+			this.check01.UseVisualStyleBackColor = true;
+			// 
+			// label14
+			// 
+			this.label14.Location = new System.Drawing.Point(6,89);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(325,34);
+			this.label14.TabIndex = 0;
+			this.label14.Text = "The values in this section can be set by running database maint after manually se" +
+    "tting the carrier identification number above.";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// butDelete
 			// 
@@ -601,7 +647,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(29,642);
+			this.butDelete.Location = new System.Drawing.Point(29,478);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(90,26);
 			this.butDelete.TabIndex = 24;
@@ -616,7 +662,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(512,641);
+			this.butOK.Location = new System.Drawing.Point(512,477);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(78,26);
 			this.butOK.TabIndex = 1;
@@ -632,7 +678,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(614,641);
+			this.butCancel.Location = new System.Drawing.Point(614,477);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(78,26);
 			this.butCancel.TabIndex = 0;
@@ -642,7 +688,7 @@ namespace OpenDental{
 			// FormCarrierEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(722,675);
+			this.ClientSize = new System.Drawing.Size(722,511);
 			this.Controls.Add(this.checkIsHidden);
 			this.Controls.Add(this.groupCDAnet);
 			this.Controls.Add(this.textCity);
@@ -727,20 +773,15 @@ namespace OpenDental{
 				}
 			}
 			textVersion.Text=CarrierCur.CDAnetVersion;
-			if(CarrierCur.CanadianEncryptionMethod==(byte)0) {
-				textEncryptionMethod.Text="1";
-			}
-			else {
-				textEncryptionMethod.Text=CarrierCur.CanadianEncryptionMethod.ToString();
-			}
-			check08.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityTransaction_08) == CanSupTransTypes.EligibilityTransaction_08);
-			check07.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.CobClaimTransaction_07) == CanSupTransTypes.CobClaimTransaction_07);
-			check02.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversal_02) == CanSupTransTypes.ClaimReversal_02);
-			check03.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationSinglePage_03) == CanSupTransTypes.PredeterminationSinglePage_03);
-			check03m.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationMultiPage_03) == CanSupTransTypes.PredeterminationMultiPage_03);
-			check04.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForOutstandingTrans_04) == CanSupTransTypes.RequestForOutstandingTrans_04);
-			check05.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForSummaryReconciliation_05) == CanSupTransTypes.RequestForSummaryReconciliation_05);
-			check06.Checked=IsNew || ((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForPaymentReconciliation_06) == CanSupTransTypes.RequestForPaymentReconciliation_06);
+			textEncryptionMethod.Text=CarrierCur.CanadianEncryptionMethod.ToString();
+			check08.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.EligibilityTransaction_08) == CanSupTransTypes.EligibilityTransaction_08);
+			check07.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.CobClaimTransaction_07) == CanSupTransTypes.CobClaimTransaction_07);
+			check02.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.ClaimReversal_02) == CanSupTransTypes.ClaimReversal_02);
+			check03.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationSinglePage_03) == CanSupTransTypes.PredeterminationSinglePage_03);
+			check03m.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.PredeterminationMultiPage_03) == CanSupTransTypes.PredeterminationMultiPage_03);
+			check04.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForOutstandingTrans_04) == CanSupTransTypes.RequestForOutstandingTrans_04);
+			check05.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForSummaryReconciliation_05) == CanSupTransTypes.RequestForSummaryReconciliation_05);
+			check06.Checked=((CarrierCur.CanadianSupportedTypes & CanSupTransTypes.RequestForPaymentReconciliation_06) == CanSupTransTypes.RequestForPaymentReconciliation_06);
 		}
 
 		private void textCarrierName_TextChanged(object sender, System.EventArgs e) {
@@ -821,16 +862,6 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Carrier Name cannot be blank."));
 				return;
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked) {//Canadian computer and Canadian carrier. en-CA or fr-CA
-				if(textVersion.Text!="02" && textVersion.Text!="04") {
-					MsgBox.Show(this,"Version Number must be 02 or 04.");
-					return;
-				}
-				if(textEncryptionMethod.Text!="1" && textEncryptionMethod.Text!="2" && textEncryptionMethod.Text!="3") {
-					MsgBox.Show(this,"Encryption method must be 1, 2, or 3.");
-					return;
-				}
-			}
 			CarrierCur.CarrierName=textCarrierName.Text;
 			CarrierCur.Phone=textPhone.Text;
 			CarrierCur.Address=textAddress.Text;
@@ -841,49 +872,7 @@ namespace OpenDental{
 			CarrierCur.ElectID=textElectID.Text;
 			CarrierCur.NoSendElect=checkNoSendElect.Checked;
 			CarrierCur.IsHidden=checkIsHidden.Checked;
-			if(checkIsCDAnet.Checked){//even if it's hidden
-				CarrierCur.IsCDA=true;
-				if(comboNetwork.SelectedIndex==0){
-					CarrierCur.CanadianNetworkNum=0;
-				}
-				else{
-					CarrierCur.CanadianNetworkNum=CanadianNetworks.Listt[comboNetwork.SelectedIndex-1].CanadianNetworkNum;
-				}
-				CarrierCur.CDAnetVersion=textVersion.Text;
-				CarrierCur.CanadianEncryptionMethod=PIn.Byte(textEncryptionMethod.Text);//validated.
-				CarrierCur.CanadianSupportedTypes=CanSupTransTypes.None;
-				if(check08.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.EligibilityTransaction_08;
-				}
-				if(check07.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.CobClaimTransaction_07;
-				}
-				if(check02.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.ClaimReversal_02;
-				}
-				if(check03.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.PredeterminationSinglePage_03;
-				}
-				if(check03m.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.PredeterminationMultiPage_03;
-				}
-				if(check04.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.RequestForOutstandingTrans_04;
-				}
-				if(check05.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.RequestForSummaryReconciliation_05;
-				}
-				if(check06.Checked) {
-					CarrierCur.CanadianSupportedTypes=CarrierCur.CanadianSupportedTypes | CanSupTransTypes.RequestForPaymentReconciliation_06;
-				}
-			}
-			else{
-				CarrierCur.IsCDA=false;
-				CarrierCur.CanadianNetworkNum=0;
-				CarrierCur.CDAnetVersion="";
-				CarrierCur.CanadianEncryptionMethod=0;
-				CarrierCur.CanadianSupportedTypes=CanSupTransTypes.None;
-			}
+			CarrierCur.IsCDA=checkIsCDAnet.Checked;
 			if(IsNew){
 				try{
 					Carriers.Insert(CarrierCur);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 
@@ -462,6 +463,192 @@ namespace OpenDentBusiness {
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed!=0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Patients billing type set to default due to being invalid: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string CanadaCarriersCdaMissingInfo(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				return "";
+			}
+			command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='TELUS B' LIMIT 1";
+			long canadianNetworkNumTelusB=PIn.Long(Db.GetScalar(command));
+			command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='CSI' LIMIT 1";
+			long canadianNetworkNumCSI=PIn.Long(Db.GetScalar(command));
+			command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='CDCS' LIMIT 1";
+			long canadianNetworkNumCDCS=PIn.Long(Db.GetScalar(command));
+			command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='TELUS A' LIMIT 1";
+			long canadianNetworkNumTelusA=PIn.Long(Db.GetScalar(command));
+			command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='MBC' LIMIT 1";
+			long canadianNetworkNumMBC=PIn.Long(Db.GetScalar(command));
+			command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='PBC' LIMIT 1";
+			long canadianNetworkNumPBC=PIn.Long(Db.GetScalar(command));
+			command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='ABC' LIMIT 1";
+			long canadianNetworkNumABC=PIn.Long(Db.GetScalar(command));
+			CanSupTransTypes claimTypes=CanSupTransTypes.ClaimAckEmbedded_11e|CanSupTransTypes.ClaimEobEmbedded_21e;//Claim 01, claim ack 11, and claim eob 21 are implied.
+			CanSupTransTypes reversalTypes=CanSupTransTypes.ClaimReversal_02|CanSupTransTypes.ClaimReversalResponse_12;
+			CanSupTransTypes predeterminationTypes=CanSupTransTypes.PredeterminationAck_13|CanSupTransTypes.PredeterminationAckEmbedded_13e|CanSupTransTypes.PredeterminationMultiPage_03|CanSupTransTypes.PredeterminationSinglePage_03;
+			CanSupTransTypes rotTypes=CanSupTransTypes.RequestForOutstandingTrans_04;
+			CanSupTransTypes cobTypes=CanSupTransTypes.CobClaimTransaction_07;
+			CanSupTransTypes eligibilityTypes=CanSupTransTypes.EligibilityTransaction_08|CanSupTransTypes.EligibilityResponse_18;
+			CanSupTransTypes rprTypes=CanSupTransTypes.RequestForPaymentReconciliation_06;
+			//Column order: ElectID,CanadianEncryptionMethod,CDAnetVersion,CanadianSupportedTypes,CanadianNetworkNum
+			object[] carrierInfo=new object[] {
+				//accerta
+				"311140",1,"04",claimTypes|reversalTypes,canadianNetworkNumTelusB,
+				//adsc
+				"000105",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes|eligibilityTypes,canadianNetworkNumCSI,
+				//aga
+				"610226",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//appq
+				"628112",1,"02",claimTypes|reversalTypes|predeterminationTypes|cobTypes,canadianNetworkNumTelusB,
+				//alberta blue cross
+				"000090",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes,canadianNetworkNumABC,
+				//assumption life
+				"610191",1,"04",claimTypes,canadianNetworkNumTelusB,
+				//autoben
+				"628151",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//benecaid health benefit solutions
+				"610708",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//benefits trust
+				"610146",1,"02",claimTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//beneplan
+				"400008",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//capitale
+				"600502",1,"04",claimTypes,canadianNetworkNumTelusB,
+				//cdcs
+				"610129",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumCDCS,
+				//claimsecure
+				"610099",1,"04",claimTypes|eligibilityTypes,canadianNetworkNumTelusB,
+				//ccq
+				"000036",1,"02",claimTypes|reversalTypes,canadianNetworkNumTelusB,
+				//co-operators
+				"606258",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//coughlin & associates
+				"610105",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes,canadianNetworkNumTelusB,
+				//cowan wright beauchamps
+				"610153",1,"04",claimTypes|reversalTypes,canadianNetworkNumCSI,
+				//desjardins financial security
+				"000051",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//empire life insurance company
+				"000033",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//equitable life
+				"000029",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusA,
+				//esorse corporation
+				"610650",1,"04",claimTypes|reversalTypes|predeterminationTypes|rprTypes|cobTypes,canadianNetworkNumTelusB,
+				//fas administrators
+				"610614",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//great west life assurance company
+				"000011",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusA,
+				//green sheild canada
+				"000102",1,"04",claimTypes|reversalTypes|predeterminationTypes|cobTypes,canadianNetworkNumTelusB,
+				//group medical services
+				"610217",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//group medical services saskatchewan
+				"610218",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//groupsource
+				"605064",1,"04",claimTypes|reversalTypes|eligibilityTypes,canadianNetworkNumCSI,
+				//industrial alliance
+				"000060",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusA,
+				//industrial alliance pacific insuarnce and financial
+				"000024",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusA,
+				//internationale campagnie d'assurance vie
+				"610643",1,"04",claimTypes|reversalTypes,canadianNetworkNumCSI,
+				//johnson inc.
+				"627265",1,"04",claimTypes,canadianNetworkNumTelusB,
+				//johnston group
+				"627223",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusA,
+				//lee-power & associates
+				"627585",1,"02",claimTypes,canadianNetworkNumTelusB,
+				//manion wilkins
+				"610158",1,"04",claimTypes|reversalTypes,canadianNetworkNumTelusB,
+				//manitoba blue cross
+				"000094",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes,canadianNetworkNumMBC,
+				//manitoba cleft palate program
+				"000114",1,"04",claimTypes|predeterminationTypes|rotTypes,canadianNetworkNumCSI,
+				//manitoba health
+				"000113",1,"04",claimTypes|rotTypes,canadianNetworkNumCSI,
+				//manufacturers life insurance company
+				"000034",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//manulife financial
+				"610059",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//maritime life assurance company
+				"311113",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//maritime pro
+				"610070",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//mdm
+				"601052",1,"02",claimTypes|reversalTypes|predeterminationTypes|eligibilityTypes,canadianNetworkNumTelusB,
+				//medavie blue cross
+				"610047",1,"02",claimTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//nexgenrx
+				"610634",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//nihb
+				"610124",1,"04",claimTypes|reversalTypes,canadianNetworkNumCSI,
+				//nova scotia community services
+				"000109",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes|eligibilityTypes,canadianNetworkNumCSI,
+				//nova scotia medical services insurance
+				"000108",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes|eligibilityTypes,canadianNetworkNumCSI,
+				//nunatsiavut government department of health
+				"610172",1,"04",claimTypes|reversalTypes,canadianNetworkNumCSI,
+				//pacific blue cross
+				"000064",1,"04",claimTypes|predeterminationTypes|rotTypes,canadianNetworkNumPBC,
+				//quickcard
+				"000103",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes|eligibilityTypes,canadianNetworkNumCSI,
+				//pbas
+				"610256",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//rwam insurance
+				"610616",1,"04",claimTypes|reversalTypes,canadianNetworkNumTelusB,
+				//saskatchewan blue cross
+				"000096",1,"04",claimTypes,canadianNetworkNumTelusB,
+				//ses benefits
+				"610196",1,"04",claimTypes|reversalTypes,canadianNetworkNumTelusB,
+				//ssq societe d'assurance-vie inc.
+				"000079",1,"04",claimTypes,canadianNetworkNumCSI,
+				//standard life assurance company
+				"000020",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//sun life of canada
+				"000016",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusA,
+				//survivance
+				"000080",1,"04",claimTypes,canadianNetworkNumCSI,
+				//syndicat des fonctionnaires municipaux mtl
+				"610677",1,"04",claimTypes|reversalTypes,canadianNetworkNumCSI,
+				//wawanesa
+				"311109",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+			};
+			string log="";
+			if(isCheck) {
+				int numFound=0;
+				for(int i=0;i<carrierInfo.Length;i+=5) {
+					command="SELECT COUNT(*) "+
+						"FROM carrier "+
+						"WHERE IsCDA<>0 AND ElectID='"+POut.String((string)carrierInfo[i])+"' AND "+
+						"(CanadianEncryptionMethod<>"+POut.Int((int)carrierInfo[i+1])+" OR "+
+						"CDAnetVersion<>'"+POut.String((string)carrierInfo[i+2])+"' OR "+
+						"CanadianSupportedTypes<>"+POut.Int((int)carrierInfo[i+3])+" OR "+
+						"CanadianNetworkNum<>"+POut.Long((long)carrierInfo[i+4])+")";
+					numFound+=PIn.Int(Db.GetCount(command));
+				}
+				if(numFound!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","CDANet carriers with incorrect network, encryption method or version, based on carrier identification number: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				int numberFixed=0;
+				for(int i=0;i<carrierInfo.Length;i+=5) {
+					command="UPDATE carrier SET "+
+						"CanadianEncryptionMethod="+POut.Int((int)carrierInfo[i+1])+","+
+						"CDAnetVersion='"+POut.String((string)carrierInfo[i+2])+"',"+
+						"CanadianSupportedTypes="+POut.Int((int)carrierInfo[i+3])+","+
+						"CanadianNetworkNum="+POut.Long((long)carrierInfo[i+4])+" "+
+						"WHERE IsCDA<>0 AND ElectID='"+POut.String((string)carrierInfo[i])+"'";
+					numberFixed+=Db.NonQ32(command);
+				}
+				if(numberFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","CDANet carriers fixed based on carrier identification number: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;

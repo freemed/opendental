@@ -315,6 +315,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.BillingTypesInvalid(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.CanadaCarriersCdaMissingInfo(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimDeleteWithNoClaimProcs(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimWithInvalidInsSubNum(verbose,isCheck);
