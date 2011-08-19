@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 
-namespace OpenDentBusiness.Crud{
+namespace OpenDentBusiness.Crud {
 	internal class PhoneEmpDefaultCrud {
 		///<summary>Gets one PhoneEmpDefault object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PhoneEmpDefault SelectOne(long employeeNum){
+		internal static PhoneEmpDefault SelectOne(long employeeNum) {
 			string command="SELECT * FROM phoneempdefault "
 				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			List<PhoneEmpDefault> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PhoneEmpDefault object from the database using a query.</summary>
-		internal static PhoneEmpDefault SelectOne(string command){
+		internal static PhoneEmpDefault SelectOne(string command) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PhoneEmpDefault objects from the database using a query.</summary>
-		internal static List<PhoneEmpDefault> SelectMany(string command){
+		internal static List<PhoneEmpDefault> SelectMany(string command) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,19 +41,19 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PhoneEmpDefault> TableToList(DataTable table){
+		internal static List<PhoneEmpDefault> TableToList(DataTable table) {
 			List<PhoneEmpDefault> retVal=new List<PhoneEmpDefault>();
 			PhoneEmpDefault phoneEmpDefault;
 			for(int i=0;i<table.Rows.Count;i++) {
 				phoneEmpDefault=new PhoneEmpDefault();
-				phoneEmpDefault.EmployeeNum  = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				phoneEmpDefault.NoGraph      = PIn.Bool  (table.Rows[i]["NoGraph"].ToString());
-				phoneEmpDefault.NoColor      = PIn.Bool  (table.Rows[i]["NoColor"].ToString());
+				phoneEmpDefault.EmployeeNum  = PIn.Long(table.Rows[i]["EmployeeNum"].ToString());
+				phoneEmpDefault.NoGraph      = PIn.Bool(table.Rows[i]["NoGraph"].ToString());
+				phoneEmpDefault.NoColor      = PIn.Bool(table.Rows[i]["NoColor"].ToString());
 				phoneEmpDefault.RingGroups   = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
 				phoneEmpDefault.EmpName      = PIn.String(table.Rows[i]["EmpName"].ToString());
-				phoneEmpDefault.PhoneExt     = PIn.Int   (table.Rows[i]["PhoneExt"].ToString());
-				phoneEmpDefault.IsUnavailable= PIn.Bool  (table.Rows[i]["IsUnavailable"].ToString());
-				phoneEmpDefault.Notes        = PIn.String  (table.Rows[i]["Notes"].ToString());
+				phoneEmpDefault.PhoneExt     = PIn.Int(table.Rows[i]["PhoneExt"].ToString());
+				phoneEmpDefault.IsUnavailable= PIn.Bool(table.Rows[i]["IsUnavailable"].ToString());
+				phoneEmpDefault.Notes        = PIn.String(table.Rows[i]["Notes"].ToString());
 				phoneEmpDefault.IpAddress    = PIn.String(table.Rows[i]["IpAddress"].ToString());
 				retVal.Add(phoneEmpDefault);
 			}
@@ -61,20 +61,20 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PhoneEmpDefault into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PhoneEmpDefault phoneEmpDefault){
+		internal static long Insert(PhoneEmpDefault phoneEmpDefault) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				phoneEmpDefault.EmployeeNum=DbHelper.GetNextOracleKey("phoneempdefault","EmployeeNum");
 				int loopcount=0;
-				while(loopcount<100){
+				while(loopcount<100) {
 					try {
 						return Insert(phoneEmpDefault,true);
 					}
-					catch(Oracle.DataAccess.Client.OracleException ex){
-						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+					catch(Oracle.DataAccess.Client.OracleException ex) {
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")) {
 							phoneEmpDefault.EmployeeNum++;
 							loopcount++;
 						}
-						else{
+						else {
 							throw ex;
 						}
 					}
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PhoneEmpDefault into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PhoneEmpDefault phoneEmpDefault,bool useExistingPK){
+		internal static long Insert(PhoneEmpDefault phoneEmpDefault,bool useExistingPK) {
 			if(!useExistingPK && PrefC.RandomKeys) {
 				phoneEmpDefault.EmployeeNum=ReplicationServers.GetKey("phoneempdefault","EmployeeNum");
 			}
@@ -100,13 +100,13 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(phoneEmpDefault.EmployeeNum)+",";
 			}
 			command+=
-				     POut.Bool  (phoneEmpDefault.NoGraph)+","
-				+    POut.Bool  (phoneEmpDefault.NoColor)+","
-				+    POut.Int   ((int)phoneEmpDefault.RingGroups)+","
+				     POut.Bool(phoneEmpDefault.NoGraph)+","
+				+    POut.Bool(phoneEmpDefault.NoColor)+","
+				+    POut.Int((int)phoneEmpDefault.RingGroups)+","
 				+"'"+POut.String(phoneEmpDefault.EmpName)+"',"
-				+    POut.Int   (phoneEmpDefault.PhoneExt)+","
-				+    POut.Bool  (phoneEmpDefault.IsUnavailable)+","
-				+    POut.String  (phoneEmpDefault.Notes)+","
+				+    POut.Int(phoneEmpDefault.PhoneExt)+","
+				+    POut.Bool(phoneEmpDefault.IsUnavailable)+","
+				+"'"+POut.String(phoneEmpDefault.Notes)+"',"
 				+"'"+POut.String(phoneEmpDefault.IpAddress)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -118,56 +118,56 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PhoneEmpDefault in the database.</summary>
-		internal static void Update(PhoneEmpDefault phoneEmpDefault){
+		internal static void Update(PhoneEmpDefault phoneEmpDefault) {
 			string command="UPDATE phoneempdefault SET "
-				+"NoGraph      =  "+POut.Bool  (phoneEmpDefault.NoGraph)+", "
-				+"NoColor      =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
-				+"RingGroups   =  "+POut.Int   ((int)phoneEmpDefault.RingGroups)+", "
+				+"NoGraph      =  "+POut.Bool(phoneEmpDefault.NoGraph)+", "
+				+"NoColor      =  "+POut.Bool(phoneEmpDefault.NoColor)+", "
+				+"RingGroups   =  "+POut.Int((int)phoneEmpDefault.RingGroups)+", "
 				+"EmpName      = '"+POut.String(phoneEmpDefault.EmpName)+"', "
-				+"PhoneExt     =  "+POut.Int   (phoneEmpDefault.PhoneExt)+", "
-				+"IsUnavailable=  "+POut.Bool  (phoneEmpDefault.IsUnavailable)+", "
-				+"Notes        =  "+POut.String  (phoneEmpDefault.Notes)+", "
+				+"PhoneExt     =  "+POut.Int(phoneEmpDefault.PhoneExt)+", "
+				+"IsUnavailable=  "+POut.Bool(phoneEmpDefault.IsUnavailable)+", "
+				+"Notes        = '"+POut.String(phoneEmpDefault.Notes)+"', "
 				+"IpAddress    = '"+POut.String(phoneEmpDefault.IpAddress)+"' "
 				+"WHERE EmployeeNum = "+POut.Long(phoneEmpDefault.EmployeeNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one PhoneEmpDefault in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PhoneEmpDefault phoneEmpDefault,PhoneEmpDefault oldPhoneEmpDefault){
+		internal static void Update(PhoneEmpDefault phoneEmpDefault,PhoneEmpDefault oldPhoneEmpDefault) {
 			string command="";
 			if(phoneEmpDefault.NoGraph != oldPhoneEmpDefault.NoGraph) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="NoGraph = "+POut.Bool(phoneEmpDefault.NoGraph)+"";
 			}
 			if(phoneEmpDefault.NoColor != oldPhoneEmpDefault.NoColor) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="NoColor = "+POut.Bool(phoneEmpDefault.NoColor)+"";
 			}
 			if(phoneEmpDefault.RingGroups != oldPhoneEmpDefault.RingGroups) {
-				if(command!=""){ command+=",";}
-				command+="RingGroups = "+POut.Int   ((int)phoneEmpDefault.RingGroups)+"";
+				if(command!="") { command+=","; }
+				command+="RingGroups = "+POut.Int((int)phoneEmpDefault.RingGroups)+"";
 			}
 			if(phoneEmpDefault.EmpName != oldPhoneEmpDefault.EmpName) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="EmpName = '"+POut.String(phoneEmpDefault.EmpName)+"'";
 			}
 			if(phoneEmpDefault.PhoneExt != oldPhoneEmpDefault.PhoneExt) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="PhoneExt = "+POut.Int(phoneEmpDefault.PhoneExt)+"";
 			}
 			if(phoneEmpDefault.IsUnavailable != oldPhoneEmpDefault.IsUnavailable) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="IsUnavailable = "+POut.Bool(phoneEmpDefault.IsUnavailable)+"";
 			}
 			if(phoneEmpDefault.Notes != oldPhoneEmpDefault.Notes) {
-				if(command!=""){ command+=",";}
-				command+="Notes = "+POut.String(phoneEmpDefault.Notes)+"";
+				if(command!="") { command+=","; }
+				command+="Notes = '"+POut.String(phoneEmpDefault.Notes)+"'";
 			}
 			if(phoneEmpDefault.IpAddress != oldPhoneEmpDefault.IpAddress) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="IpAddress = '"+POut.String(phoneEmpDefault.IpAddress)+"'";
 			}
-			if(command==""){
+			if(command=="") {
 				return;
 			}
 			command="UPDATE phoneempdefault SET "+command
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PhoneEmpDefault from the database.</summary>
-		internal static void Delete(long employeeNum){
+		internal static void Delete(long employeeNum) {
 			string command="DELETE FROM phoneempdefault "
 				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			Db.NonQ(command);

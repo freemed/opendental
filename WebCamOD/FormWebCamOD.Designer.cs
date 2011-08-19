@@ -31,6 +31,7 @@
 			this.pictBoxVideo = new System.Windows.Forms.PictureBox();
 			this.timerPhoneWebCam = new System.Windows.Forms.Timer(this.components);
 			this.label1 = new System.Windows.Forms.Label();
+			this.timerScreenShots = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.pictBoxVideo)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -56,6 +57,11 @@
 			this.label1.TabIndex = 2;
 			this.label1.Text = resources.GetString("label1.Text");
 			// 
+			// timerScreenShots
+			// 
+			this.timerScreenShots.Interval = 300000;
+			this.timerScreenShots.Tick += new System.EventHandler(this.timerScreenShots_Tick);
+			// 
 			// FormWebCamOD
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -78,6 +84,7 @@
 		private System.Windows.Forms.PictureBox pictBoxVideo;
 		private System.Windows.Forms.Timer timerPhoneWebCam;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Timer timerScreenShots;
 	}
 }
 

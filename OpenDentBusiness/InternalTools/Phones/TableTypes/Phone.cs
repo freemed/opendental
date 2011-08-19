@@ -36,6 +36,10 @@ namespace OpenDentBusiness{
 		public DateTime DateTimeStart;
 		///<summary>The base64 representation of a bitmap.</summary>
 		public string WebCamImage;
+		///<summary>Full path to the most recent screenshot.</summary>
+		public string ScreenshotPath;
+		///<summary>The base64 thumbnail of the most recent screenshot.</summary>
+		public string ScreenshotImage;
 
 		public Phone Copy() {
 			return (Phone)this.MemberwiseClone();

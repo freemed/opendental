@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		public bool IsUnavailable;
 		///<summary>Used to be stored as phoneoverride.Explanation.</summary>
 		public string Notes;
-		///<summary>This is used by the cameras.  Only necessary when the ip address doesn't match the 192.168.0.2xx pattern that we normally use.  For example, if Jordan sets this value to 192.168.0.186, then the camera on .186 will send its images to the phone table where extension=104.  The second consequence is that .204 will not send any camera images.  This is used heavily by remote users working from home.  If a staff floats to another .2xx workstation, then this does not need to be set since it will match their changed extension with their current workstation ip address because if follows the normal pattern.</summary>
+		///<summary>This is used by the cameras.  It's actually used for computer name, not ip address.  Only necessary when the ip address doesn't match the 192.168.0.2xx pattern that we normally use.  For example, if Jordan sets this value to JORDANS, then the camera on JORDANS(.186) will send its images to the phone table where extension=104.  The second consequence is that .204 will not send any camera images.  This is used heavily by remote users working from home.  If a staff floats to another .2xx workstation, then this does not need to be set since it will match their changed extension with their current workstation ip address because if follows the normal pattern.  If there are multiple ip addresses, and the camera picks up the wrong one, setting this field can fix it.</summary>
 		public string IpAddress;
 
 		///<summary></summary>

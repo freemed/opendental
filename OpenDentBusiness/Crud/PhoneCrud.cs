@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 
-namespace OpenDentBusiness.Crud{
+namespace OpenDentBusiness.Crud {
 	internal class PhoneCrud {
 		///<summary>Gets one Phone object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Phone SelectOne(long phoneNum){
+		internal static Phone SelectOne(long phoneNum) {
 			string command="SELECT * FROM phone "
 				+"WHERE PhoneNum = "+POut.Long(phoneNum);
 			List<Phone> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Phone object from the database using a query.</summary>
-		internal static Phone SelectOne(string command){
+		internal static Phone SelectOne(string command) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Phone objects from the database using a query.</summary>
-		internal static List<Phone> SelectMany(string command){
+		internal static List<Phone> SelectMany(string command) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,53 +41,55 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Phone> TableToList(DataTable table){
+		internal static List<Phone> TableToList(DataTable table) {
 			List<Phone> retVal=new List<Phone>();
 			Phone phone;
 			for(int i=0;i<table.Rows.Count;i++) {
 				phone=new Phone();
-				phone.PhoneNum      = PIn.Long  (table.Rows[i]["PhoneNum"].ToString());
-				phone.Extension     = PIn.Int   (table.Rows[i]["Extension"].ToString());
-				phone.EmployeeName  = PIn.String(table.Rows[i]["EmployeeName"].ToString());
+				phone.PhoneNum       = PIn.Long(table.Rows[i]["PhoneNum"].ToString());
+				phone.Extension      = PIn.Int(table.Rows[i]["Extension"].ToString());
+				phone.EmployeeName   = PIn.String(table.Rows[i]["EmployeeName"].ToString());
 				string clockStatus=table.Rows[i]["ClockStatus"].ToString();
-				if(clockStatus==""){
-					phone.ClockStatus =(ClockStatusEnum)0;
+				if(clockStatus=="") {
+					phone.ClockStatus  =(ClockStatusEnum)0;
 				}
-				else try{
-					phone.ClockStatus =(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),clockStatus);
-				}
-				catch{
-					phone.ClockStatus =(ClockStatusEnum)0;
-				}
-				phone.Description   = PIn.String(table.Rows[i]["Description"].ToString());
-				phone.ColorBar      = Color.FromArgb(PIn.Int(table.Rows[i]["ColorBar"].ToString()));
-				phone.ColorText     = Color.FromArgb(PIn.Int(table.Rows[i]["ColorText"].ToString()));
-				phone.EmployeeNum   = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				phone.CustomerNumber= PIn.String(table.Rows[i]["CustomerNumber"].ToString());
-				phone.InOrOut       = PIn.String(table.Rows[i]["InOrOut"].ToString());
-				phone.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				phone.DateTimeStart = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
-				phone.WebCamImage   = PIn.String(table.Rows[i]["WebCamImage"].ToString());
+				else try {
+						phone.ClockStatus  =(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),clockStatus);
+					}
+					catch {
+						phone.ClockStatus  =(ClockStatusEnum)0;
+					}
+				phone.Description    = PIn.String(table.Rows[i]["Description"].ToString());
+				phone.ColorBar       = Color.FromArgb(PIn.Int(table.Rows[i]["ColorBar"].ToString()));
+				phone.ColorText      = Color.FromArgb(PIn.Int(table.Rows[i]["ColorText"].ToString()));
+				phone.EmployeeNum    = PIn.Long(table.Rows[i]["EmployeeNum"].ToString());
+				phone.CustomerNumber = PIn.String(table.Rows[i]["CustomerNumber"].ToString());
+				phone.InOrOut        = PIn.String(table.Rows[i]["InOrOut"].ToString());
+				phone.PatNum         = PIn.Long(table.Rows[i]["PatNum"].ToString());
+				phone.DateTimeStart  = PIn.DateT(table.Rows[i]["DateTimeStart"].ToString());
+				phone.WebCamImage    = PIn.String(table.Rows[i]["WebCamImage"].ToString());
+				phone.ScreenshotPath = PIn.String(table.Rows[i]["ScreenshotPath"].ToString());
+				phone.ScreenshotImage= PIn.String(table.Rows[i]["ScreenshotImage"].ToString());
 				retVal.Add(phone);
 			}
 			return retVal;
 		}
 
 		///<summary>Inserts one Phone into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Phone phone){
+		internal static long Insert(Phone phone) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				phone.PhoneNum=DbHelper.GetNextOracleKey("phone","PhoneNum");
 				int loopcount=0;
-				while(loopcount<100){
+				while(loopcount<100) {
 					try {
 						return Insert(phone,true);
 					}
-					catch(Oracle.DataAccess.Client.OracleException ex){
-						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
+					catch(Oracle.DataAccess.Client.OracleException ex) {
+						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")) {
 							phone.PhoneNum++;
 							loopcount++;
 						}
-						else{
+						else {
 							throw ex;
 						}
 					}
@@ -100,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Phone into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Phone phone,bool useExistingPK){
+		internal static long Insert(Phone phone,bool useExistingPK) {
 			if(!useExistingPK && PrefC.RandomKeys) {
 				phone.PhoneNum=ReplicationServers.GetKey("phone","PhoneNum");
 			}
@@ -108,23 +110,25 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PhoneNum,";
 			}
-			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,WebCamImage) VALUES(";
+			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,WebCamImage,ScreenshotPath,ScreenshotImage) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(phone.PhoneNum)+",";
 			}
 			command+=
-				     POut.Int   (phone.Extension)+","
+				     POut.Int(phone.Extension)+","
 				+"'"+POut.String(phone.EmployeeName)+"',"
 				+    POut.String(phone.ClockStatus.ToString())+","
 				+"'"+POut.String(phone.Description)+"',"
-				+    POut.Int   (phone.ColorBar.ToArgb())+","
-				+    POut.Int   (phone.ColorText.ToArgb())+","
-				+    POut.Long  (phone.EmployeeNum)+","
+				+    POut.Int(phone.ColorBar.ToArgb())+","
+				+    POut.Int(phone.ColorText.ToArgb())+","
+				+    POut.Long(phone.EmployeeNum)+","
 				+"'"+POut.String(phone.CustomerNumber)+"',"
 				+"'"+POut.String(phone.InOrOut)+"',"
-				+    POut.Long  (phone.PatNum)+","
-				+    POut.DateT (phone.DateTimeStart)+","
-				+"'"+POut.String(phone.WebCamImage)+"')";
+				+    POut.Long(phone.PatNum)+","
+				+    POut.DateT(phone.DateTimeStart)+","
+				+"'"+POut.String(phone.WebCamImage)+"',"
+				+"'"+POut.String(phone.ScreenshotPath)+"',"
+				+"'"+POut.String(phone.ScreenshotImage)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -135,76 +139,86 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Phone in the database.</summary>
-		internal static void Update(Phone phone){
+		internal static void Update(Phone phone) {
 			string command="UPDATE phone SET "
-				+"Extension     =  "+POut.Int   (phone.Extension)+", "
-				+"EmployeeName  = '"+POut.String(phone.EmployeeName)+"', "
-				+"ClockStatus   =  "+POut.String(phone.ClockStatus.ToString())+", "
-				+"Description   = '"+POut.String(phone.Description)+"', "
-				+"ColorBar      =  "+POut.Int   (phone.ColorBar.ToArgb())+", "
-				+"ColorText     =  "+POut.Int   (phone.ColorText.ToArgb())+", "
-				+"EmployeeNum   =  "+POut.Long  (phone.EmployeeNum)+", "
-				+"CustomerNumber= '"+POut.String(phone.CustomerNumber)+"', "
-				+"InOrOut       = '"+POut.String(phone.InOrOut)+"', "
-				+"PatNum        =  "+POut.Long  (phone.PatNum)+", "
-				+"DateTimeStart =  "+POut.DateT (phone.DateTimeStart)+", "
-				+"WebCamImage   = '"+POut.String(phone.WebCamImage)+"' "
+				+"Extension      =  "+POut.Int(phone.Extension)+", "
+				+"EmployeeName   = '"+POut.String(phone.EmployeeName)+"', "
+				+"ClockStatus    =  "+POut.String(phone.ClockStatus.ToString())+", "
+				+"Description    = '"+POut.String(phone.Description)+"', "
+				+"ColorBar       =  "+POut.Int(phone.ColorBar.ToArgb())+", "
+				+"ColorText      =  "+POut.Int(phone.ColorText.ToArgb())+", "
+				+"EmployeeNum    =  "+POut.Long(phone.EmployeeNum)+", "
+				+"CustomerNumber = '"+POut.String(phone.CustomerNumber)+"', "
+				+"InOrOut        = '"+POut.String(phone.InOrOut)+"', "
+				+"PatNum         =  "+POut.Long(phone.PatNum)+", "
+				+"DateTimeStart  =  "+POut.DateT(phone.DateTimeStart)+", "
+				+"WebCamImage    = '"+POut.String(phone.WebCamImage)+"', "
+				+"ScreenshotPath = '"+POut.String(phone.ScreenshotPath)+"', "
+				+"ScreenshotImage= '"+POut.String(phone.ScreenshotImage)+"' "
 				+"WHERE PhoneNum = "+POut.Long(phone.PhoneNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one Phone in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Phone phone,Phone oldPhone){
+		internal static void Update(Phone phone,Phone oldPhone) {
 			string command="";
 			if(phone.Extension != oldPhone.Extension) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="Extension = "+POut.Int(phone.Extension)+"";
 			}
 			if(phone.EmployeeName != oldPhone.EmployeeName) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="EmployeeName = '"+POut.String(phone.EmployeeName)+"'";
 			}
 			if(phone.ClockStatus != oldPhone.ClockStatus) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="ClockStatus = "+POut.String(phone.ClockStatus.ToString())+"";
 			}
 			if(phone.Description != oldPhone.Description) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="Description = '"+POut.String(phone.Description)+"'";
 			}
 			if(phone.ColorBar != oldPhone.ColorBar) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="ColorBar = "+POut.Int(phone.ColorBar.ToArgb())+"";
 			}
 			if(phone.ColorText != oldPhone.ColorText) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="ColorText = "+POut.Int(phone.ColorText.ToArgb())+"";
 			}
 			if(phone.EmployeeNum != oldPhone.EmployeeNum) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="EmployeeNum = "+POut.Long(phone.EmployeeNum)+"";
 			}
 			if(phone.CustomerNumber != oldPhone.CustomerNumber) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="CustomerNumber = '"+POut.String(phone.CustomerNumber)+"'";
 			}
 			if(phone.InOrOut != oldPhone.InOrOut) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="InOrOut = '"+POut.String(phone.InOrOut)+"'";
 			}
 			if(phone.PatNum != oldPhone.PatNum) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="PatNum = "+POut.Long(phone.PatNum)+"";
 			}
 			if(phone.DateTimeStart != oldPhone.DateTimeStart) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="DateTimeStart = "+POut.DateT(phone.DateTimeStart)+"";
 			}
 			if(phone.WebCamImage != oldPhone.WebCamImage) {
-				if(command!=""){ command+=",";}
+				if(command!="") { command+=","; }
 				command+="WebCamImage = '"+POut.String(phone.WebCamImage)+"'";
 			}
-			if(command==""){
+			if(phone.ScreenshotPath != oldPhone.ScreenshotPath) {
+				if(command!="") { command+=","; }
+				command+="ScreenshotPath = '"+POut.String(phone.ScreenshotPath)+"'";
+			}
+			if(phone.ScreenshotImage != oldPhone.ScreenshotImage) {
+				if(command!="") { command+=","; }
+				command+="ScreenshotImage = '"+POut.String(phone.ScreenshotImage)+"'";
+			}
+			if(command=="") {
 				return;
 			}
 			command="UPDATE phone SET "+command
@@ -213,7 +227,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Phone from the database.</summary>
-		internal static void Delete(long phoneNum){
+		internal static void Delete(long phoneNum) {
 			string command="DELETE FROM phone "
 				+"WHERE PhoneNum = "+POut.Long(phoneNum);
 			Db.NonQ(command);

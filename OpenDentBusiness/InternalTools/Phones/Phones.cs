@@ -170,25 +170,25 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Can handle null for either parameter.</summary>
-		public static void SetWebCamImage(string ipAddress,Bitmap bitmap) {
+		///<summary>Bitmap can be null.  Computername will override ipAddress.</summary>
+		public static void SetWebCamImage(string ipAddress,Bitmap bitmap,string computerName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ipAddress,bitmap);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ipAddress,bitmap,computerName);
 				return;
 			}
-			if(ipAddress=="") {
-				return;
-			}
-			string command="SELECT * FROM phoneempdefault WHERE IpAddress='"+POut.String(ipAddress)+"'";
+			//if(ipAddress=="") {
+			//	return;
+			//}
+			string command="SELECT * FROM phoneempdefault WHERE IpAddress='"+POut.String(computerName)+"'";
 			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
-			if(ped!=null) {//we found that ipaddress entered as an override
+			if(ped!=null) {//we found that computername entered as an override
 				command="UPDATE phone SET "
 					+"WebCamImage   = '"+POut.Bitmap(bitmap,ImageFormat.Png)+"' "//handles null
 					+"WHERE Extension = "+POut.Long(ped.PhoneExt);
 				Db.NonQ(command);
 				return;
 			}
-			//there is no ipaddress entered by staff, so figure out what the extension should be
+			//there is no computername override entered by staff, so figure out what the extension should be
 			int extension=0;
 			if(ipAddress.Contains("192.168.0.2")) {
 				extension=PIn.Int(ipAddress.ToString().Substring(10))-100;//eg 205-100=105
@@ -202,8 +202,68 @@ namespace OpenDentBusiness{
 			}
 			command="UPDATE phone SET "
 				+"WebCamImage   = '"+POut.Bitmap(bitmap,ImageFormat.Png)+"' "//handles null
-				+"WHERE Extension = "+POut.Long(extension);
+				+"WHERE Extension = "+POut.Long(extension)+" "
+				//Example: this is computer .204, and ext 104 has a computername override. Don't update ext 104.
+				+"AND NOT EXISTS(SELECT * FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension)+" "
+				+"AND IpAddress!='')";//there exists a computername override for the extension
 			Db.NonQ(command);
+		}
+
+		///<summary>Checks the phone.ClockStatus to determine if screenshot should be saved.</summary>
+		public static bool IsOnClock(string ipAddress,string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),ipAddress,computerName);
+			}
+			string command="SELECT * FROM phoneempdefault WHERE IpAddress='"+POut.String(computerName)+"'";
+			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
+			if(ped!=null) {//we found that computername entered as an override
+				command="SELECT ClockStatus FROM phone "
+					+"WHERE Extension = "+POut.Long(ped.PhoneExt);
+				try {
+					ClockStatusEnum status=(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),PIn.String(Db.GetScalar(command)));
+					if(status==ClockStatusEnum.Available
+					|| status==ClockStatusEnum.Backup
+					|| status==ClockStatusEnum.OfflineAssist
+					|| status==ClockStatusEnum.TeamAssist
+					|| status==ClockStatusEnum.Training
+					|| status==ClockStatusEnum.WrapUp) {
+						return true;
+					}
+				}
+				catch {
+					return false;
+				}
+				return false;//on break or clocked out
+			}
+			//there is no computername override entered by staff, so figure out what the extension should be
+			int extension=0;
+			if(ipAddress.Contains("192.168.0.2")) {
+				extension=PIn.Int(ipAddress.ToString().Substring(10))-100;//eg 205-100=105
+			}
+			else if(ipAddress.ToString().Contains("10.10.20.1")) {
+				extension=PIn.Int(ipAddress.ToString().Substring(9));//eg 105
+			}
+			if(extension==0) {
+				//we don't have a good extension
+				return false;
+			}
+			command="SELECT ClockStatus FROM phone "
+					+"WHERE Extension = "+POut.Long(extension);
+			try {
+				ClockStatusEnum status2=(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),PIn.String(Db.GetScalar(command)));
+				if(status2==ClockStatusEnum.Available
+					|| status2==ClockStatusEnum.Backup
+					|| status2==ClockStatusEnum.OfflineAssist
+					|| status2==ClockStatusEnum.TeamAssist
+					|| status2==ClockStatusEnum.Training
+					|| status2==ClockStatusEnum.WrapUp) {
+					return true;
+				}
+			}
+			catch {
+				return false;
+			}
+			return false;//on break or clocked out
 		}
 
 		public static void ClearImages() {

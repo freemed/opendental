@@ -6074,6 +6074,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.13.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_0_15();
+		}
+
+		private static void To11_0_15() {
+			if(FromVersion<new Version("11.0.15.0")) {
+				string command;
+				try {//most users will not have this table
+					command="ALTER TABLE phone ADD ScreenshotPath varchar(255) NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE phone ADD ScreenshotImage varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				catch {
+					//do nothing
+				}
+				command="UPDATE preference SET ValueString = '11.0.15.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_1_0();
 		}
 
