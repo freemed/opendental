@@ -1690,7 +1690,7 @@ namespace OpenDentBusiness{
 				return Meth.GetString(MethodBase.GetCurrentMethod(),date,apptViewNum);
 			}
 			//For testing pass a resource image.
-			return POut.Bitmap(new System.Drawing.Bitmap(5,5),ImageFormat.Gif);//Properties.Resources
+			return POut.Bitmap(Properties.Resources.ApptBackTest,ImageFormat.Gif);
 		}
 
 	}
