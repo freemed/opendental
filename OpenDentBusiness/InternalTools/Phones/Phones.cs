@@ -262,7 +262,7 @@ namespace OpenDentBusiness{
 			//make sure the extension isn't overridden with a computername
 			//Example: this is computer .204, and ext 104 has a computername override. This computer should not save screenshot on behalf of 104.
 			command="SELECT COUNT(*) FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension)+" "
-				+"AND IpAddress!='')";//there exists a computername override for the extension
+				+"AND IpAddress!=''";//there exists a computername override for the extension
 			if(Db.GetScalar(command)!="0") {
 				return 0;
 			}
