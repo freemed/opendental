@@ -32,17 +32,16 @@ namespace OpenDental {
 				}
 			}
 			Cursor=Cursors.Default;
+			listFiles.SelectedIndexChanged+=new EventHandler(listFiles_SelectedIndexChanged);
 		}
 
-		private void listFiles_MouseClick(object sender,MouseEventArgs e) {
-			int idx=listFiles.IndexFromPoint(e.Location);
-			if(idx==-1){
-				return;
-			}
+		void listFiles_SelectedIndexChanged(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			pictureBoxMain.Image=Image.FromFile(files[idx]);
+			pictureBoxMain.Image=Image.FromFile(files[listFiles.SelectedIndex]);
 			Cursor=Cursors.Default;
 		}
+
+		
 
 
 

@@ -36,18 +36,17 @@
 			this.listFiles.IntegralHeight = false;
 			this.listFiles.Location = new System.Drawing.Point(0,0);
 			this.listFiles.Name = "listFiles";
-			this.listFiles.Size = new System.Drawing.Size(190,707);
+			this.listFiles.Size = new System.Drawing.Size(157,707);
 			this.listFiles.TabIndex = 0;
-			this.listFiles.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listFiles_MouseClick);
 			// 
 			// pictureBoxMain
 			// 
 			this.pictureBoxMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.pictureBoxMain.Location = new System.Drawing.Point(190,0);
+			this.pictureBoxMain.Location = new System.Drawing.Point(159,0);
 			this.pictureBoxMain.Name = "pictureBoxMain";
-			this.pictureBoxMain.Size = new System.Drawing.Size(798,707);
+			this.pictureBoxMain.Size = new System.Drawing.Size(829,707);
 			this.pictureBoxMain.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.pictureBoxMain.TabIndex = 1;
 			this.pictureBoxMain.TabStop = false;

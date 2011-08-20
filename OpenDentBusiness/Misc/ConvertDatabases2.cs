@@ -6085,6 +6085,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command="ALTER TABLE phone ADD ScreenshotImage mediumtext NOT NULL";
 					Db.NonQ(command);
+					command="ALTER TABLE phoneempdefault ADD IsPrivateScreen tinyint NOT NULL";
+					Db.NonQ(command);
 				}
 				catch {
 					//do nothing
