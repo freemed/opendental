@@ -6083,7 +6083,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				try {//most users will not have this table
 					command="ALTER TABLE phone ADD ScreenshotPath varchar(255) NOT NULL";
 					Db.NonQ(command);
-					command="ALTER TABLE phone ADD ScreenshotImage varchar(255) NOT NULL";
+					command="ALTER TABLE phone ADD ScreenshotImage mediumtext NOT NULL";
 					Db.NonQ(command);
 				}
 				catch {

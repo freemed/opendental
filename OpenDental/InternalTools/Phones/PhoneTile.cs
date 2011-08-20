@@ -17,6 +17,9 @@ namespace OpenDental {
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when certain controls are selected on this tile related to menu events.")]
 		public event EventHandler SelectedTileChanged=null;
+		///<summary></summary>
+		[Category("Action"),Description("Event raised when user clicks on screenshot.")]
+		public event EventHandler ScreenshotClick=null;
 		///<summary>Object passed in from parent form.  Event will be fired from that form.</summary>
 		public ContextMenuStrip MenuNumbers;
 		///<summary>Object passed in from parent form.  Event will be fired from that form.</summary>
@@ -38,6 +41,7 @@ namespace OpenDental {
 				}
 				phoneCur = value;
 				if(phoneCur==null) {
+					pictureScreen.Image=null;
 					pictureWebCam.Image=null;//or just make it not visible?
 					pictureInUse.Visible=false;
 					labelExtensionName.Text="";
@@ -81,6 +85,16 @@ namespace OpenDental {
 					else{
 						pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
 					}
+					if(phoneCur.ClockStatus==ClockStatusEnum.Home
+						|| phoneCur.ClockStatus==ClockStatusEnum.None
+						|| phoneCur.ClockStatus==ClockStatusEnum.Off
+						|| phoneCur.ClockStatus==ClockStatusEnum.Break
+						|| phoneCur.ClockStatus==ClockStatusEnum.Lunch) {
+						pictureScreen.Image=null;
+					}
+					else {
+						pictureScreen.Image=PIn.Bitmap(phoneCur.ScreenshotImage);
+					}
 					if(phoneCur.Description=="") {
 						pictureInUse.Visible=false;
 					}
@@ -116,19 +130,21 @@ namespace OpenDental {
 			set{
 				layoutHorizontal=value;
 				if(layoutHorizontal){
-					pictureWebCam.Location=new Point(0,0);
-					pictureInUse.Location=new Point(51,18);
-					labelExtensionName.Location=new Point(48,2);
-					labelStatusAndNote.Location=new Point(76,18);
+					//173,7
+					pictureWebCam.Location=new Point(173,7);
+					pictureInUse.Location=new Point(224,25);//51,18);
+					labelExtensionName.Location=new Point(221,9);//48,2);
+					labelStatusAndNote.Location=new Point(249,25);//76,18);
 					labelStatusAndNote.TextAlign=ContentAlignment.MiddleLeft;
 					labelStatusAndNote.Size=new Size(77,16);
-					labelTime.Location=new Point(156,4);
+					labelTime.Location=new Point(329,11);//156,4);
 					labelTime.Size=new Size(56,16);
-					labelCustomer.Location=new Point(159,20);
+					labelCustomer.Location=new Point(332,27);//159,20);
 					labelCustomer.Size=new Size(147,16);
 					labelCustomer.TextAlign=ContentAlignment.MiddleLeft;
 				}
 				else{//vertical
+					pictureScreen.Visible=false;
 					pictureWebCam.Location=new Point(51,3);
 					pictureInUse.Location=new Point(14,43);
 					labelExtensionName.Location=new Point(37,43);
@@ -196,6 +212,12 @@ namespace OpenDental {
 		protected void OnSelectedTileChanged() {
 			if(SelectedTileChanged!=null) {
 				SelectedTileChanged(this,new EventArgs());
+			}
+		}
+
+		private void pictureScreen_Click(object sender,EventArgs e) {
+			if(ScreenshotClick!=null) {
+				ScreenshotClick(this,new EventArgs());
 			}
 		}
 

@@ -2119,6 +2119,10 @@
     <Compile Include="Forms\FormTPsign.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="InternalTools\Phones\FormScreenshotBrowse.cs" />
+    <Compile Include="InternalTools\Phones\FormScreenshotBrowse.designer.cs">
+      <DependentUpon>FormScreenshotBrowse.cs</DependentUpon>
+    </Compile>
     <Compile Include="InternalTools\Phones\VideoCapture.cs" />
     <Compile Include="InternalTools\Phones\FormPhoneTiles.cs">
       <SubType>Form</SubType>
@@ -3722,6 +3726,9 @@
     <EmbeddedResource Include="Forms\FormTPsign.resx">
       <DependentUpon>FormTPsign.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\FormScreenshotBrowse.resx">
+      <DependentUpon>FormScreenshotBrowse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main Modules\ContrAccount.resx">
       <DependentUpon>ContrAccount.cs</DependentUpon>

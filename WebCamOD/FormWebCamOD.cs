@@ -132,10 +132,11 @@ namespace WebCamOD {
 
 		private void timerScreenShots_Tick(object sender,EventArgs e) {
 			//ticks every 5 minutes
-			if(!Phones.IsOnClock(IpAddress192,Environment.MachineName)) {//if this person is on break
+			int extension=Phones.IsOnClock(IpAddress192,Environment.MachineName);
+			if(extension==0) {//if this person is on break
 				return;//don't save a screenshot
 			}
-			string folder=@"\\SERVERFILES\storage\My\Jordan\ScreenshotsByWorkstation\"+Environment.MachineName;
+			string folder=@"\\192.168.0.189\storage\My\Jordan\ScreenshotsByWorkstation\"+Environment.MachineName;
 			if(!Directory.Exists(folder)) {
 				Directory.CreateDirectory(folder);
 			}
@@ -159,7 +160,8 @@ namespace WebCamOD {
 			//all screens together form a giant image.  We just need to know where origin is as well as size.
 			for(int s=0;s<System.Windows.Forms.Screen.AllScreens.Length;s++) {
 				if(System.Windows.Forms.Screen.AllScreens[s].WorkingArea.X < origin.X 
-					|| System.Windows.Forms.Screen.AllScreens[s].WorkingArea.Y < origin.Y) {
+					|| System.Windows.Forms.Screen.AllScreens[s].WorkingArea.Y < origin.Y) 
+				{
 					//screen must be to top or left of primary.  Use its origin.
 					origin=new Point(System.Windows.Forms.Screen.AllScreens[s].WorkingArea.X,System.Windows.Forms.Screen.AllScreens[s].WorkingArea.Y);
 				}
@@ -180,7 +182,16 @@ namespace WebCamOD {
 			}
 			//save the image----------------------------------------------------------------------
 			//I tried a variety of file types.  The resulting file sizes were very similar. 
-			bmp.Save(folder+"\\"+DateTime.Now.ToString("yyyy-MM-dd-hhmmssff")+".jpg");
+			string filename=folder+"\\"+DateTime.Now.ToString("yyyy-MM-dd-hhmmssff")+".jpg";
+			bmp.Save(filename);
+			//make a thumbnail with height of 50
+			int thumbW=(int)((double)bmp.Width/(double)bmp.Height*50d);
+			Bitmap bmpThumb=new Bitmap(thumbW,50);
+			Graphics gThumb=Graphics.FromImage(bmpThumb);
+			gThumb.DrawImage(bmp,0,0,thumbW,50);
+			gThumb.Dispose();
+			gThumb=null;
+			Phones.SetScreenshot(extension,filename,bmpThumb);//IpAddress192,bitmapSmall,Environment.MachineName);
 		}
 
 

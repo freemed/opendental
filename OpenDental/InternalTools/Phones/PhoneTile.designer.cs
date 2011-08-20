@@ -30,15 +30,18 @@
 			this.pictureInUse = new System.Windows.Forms.PictureBox();
 			this.labelCustomer = new System.Windows.Forms.Label();
 			this.labelTime = new System.Windows.Forms.Label();
+			this.pictureScreen = new System.Windows.Forms.PictureBox();
+			this.service11 = new OpenDental.localhost.Service1();
 			((System.ComponentModel.ISupportInitialize)(this.pictureWebCam)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureInUse)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureScreen)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pictureWebCam
 			// 
 			this.pictureWebCam.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pictureWebCam.Image = ((System.Drawing.Image)(resources.GetObject("pictureWebCam.Image")));
-			this.pictureWebCam.Location = new System.Drawing.Point(0,0);
+			this.pictureWebCam.Location = new System.Drawing.Point(173,7);
 			this.pictureWebCam.Name = "pictureWebCam";
 			this.pictureWebCam.Size = new System.Drawing.Size(50,37);
 			this.pictureWebCam.TabIndex = 0;
@@ -48,7 +51,7 @@
 			// 
 			this.labelExtensionName.BackColor = System.Drawing.SystemColors.Control;
 			this.labelExtensionName.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelExtensionName.Location = new System.Drawing.Point(48,2);
+			this.labelExtensionName.Location = new System.Drawing.Point(221,9);
 			this.labelExtensionName.Name = "labelExtensionName";
 			this.labelExtensionName.Size = new System.Drawing.Size(105,16);
 			this.labelExtensionName.TabIndex = 1;
@@ -57,7 +60,7 @@
 			// 
 			// labelStatusAndNote
 			// 
-			this.labelStatusAndNote.Location = new System.Drawing.Point(76,18);
+			this.labelStatusAndNote.Location = new System.Drawing.Point(249,25);
 			this.labelStatusAndNote.Name = "labelStatusAndNote";
 			this.labelStatusAndNote.Size = new System.Drawing.Size(77,16);
 			this.labelStatusAndNote.TabIndex = 2;
@@ -68,7 +71,7 @@
 			// pictureInUse
 			// 
 			this.pictureInUse.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureInUse.BackgroundImage")));
-			this.pictureInUse.Location = new System.Drawing.Point(51,18);
+			this.pictureInUse.Location = new System.Drawing.Point(224,25);
 			this.pictureInUse.Name = "pictureInUse";
 			this.pictureInUse.Size = new System.Drawing.Size(21,17);
 			this.pictureInUse.TabIndex = 3;
@@ -76,7 +79,7 @@
 			// 
 			// labelCustomer
 			// 
-			this.labelCustomer.Location = new System.Drawing.Point(156,20);
+			this.labelCustomer.Location = new System.Drawing.Point(329,27);
 			this.labelCustomer.Name = "labelCustomer";
 			this.labelCustomer.Size = new System.Drawing.Size(147,16);
 			this.labelCustomer.TabIndex = 4;
@@ -88,17 +91,34 @@
 			// labelTime
 			// 
 			this.labelTime.BackColor = System.Drawing.Color.Lime;
-			this.labelTime.Location = new System.Drawing.Point(156,4);
+			this.labelTime.Location = new System.Drawing.Point(329,11);
 			this.labelTime.Name = "labelTime";
 			this.labelTime.Size = new System.Drawing.Size(56,16);
 			this.labelTime.TabIndex = 5;
 			this.labelTime.Text = "01:10:13";
 			this.labelTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// pictureScreen
+			// 
+			this.pictureScreen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pictureScreen.Location = new System.Drawing.Point(0,0);
+			this.pictureScreen.Name = "pictureScreen";
+			this.pictureScreen.Size = new System.Drawing.Size(173,50);
+			this.pictureScreen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.pictureScreen.TabIndex = 6;
+			this.pictureScreen.TabStop = false;
+			this.pictureScreen.Click += new System.EventHandler(this.pictureScreen_Click);
+			// 
+			// service11
+			// 
+			this.service11.Url = "http://localhost:3824/Service1.asmx";
+			this.service11.UseDefaultCredentials = true;
+			// 
 			// PhoneTile
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.pictureScreen);
 			this.Controls.Add(this.pictureInUse);
 			this.Controls.Add(this.pictureWebCam);
 			this.Controls.Add(this.labelTime);
@@ -107,9 +127,10 @@
 			this.Controls.Add(this.labelExtensionName);
 			this.DoubleBuffered = true;
 			this.Name = "PhoneTile";
-			this.Size = new System.Drawing.Size(306,37);
+			this.Size = new System.Drawing.Size(479,50);
 			((System.ComponentModel.ISupportInitialize)(this.pictureWebCam)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureInUse)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureScreen)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -122,5 +143,7 @@
 		private System.Windows.Forms.PictureBox pictureInUse;
 		private System.Windows.Forms.Label labelCustomer;
 		private System.Windows.Forms.Label labelTime;
+		private localhost.Service1 service11;
+		private System.Windows.Forms.PictureBox pictureScreen;
 	}
 }

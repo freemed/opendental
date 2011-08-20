@@ -56,6 +56,7 @@ namespace OpenDental {
 				//((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
 				tile.GoToChanged += new System.EventHandler(this.phoneTile_GoToChanged);
 				tile.SelectedTileChanged += new System.EventHandler(this.phoneTile_SelectedTileChanged);
+				tile.ScreenshotClick += new EventHandler(this.phoneTile_ScreenshotClick);
 				tile.MenuNumbers=menuNumbers;
 				tile.MenuStatus=menuStatus;
 				this.Controls.Add(tile);
@@ -86,7 +87,7 @@ namespace OpenDental {
 			}
 			PhoneTile tile;
 			for(int i=0;i<26;i++) {
-				Application.DoEvents();
+				//Application.DoEvents();
 				Control[] controlMatches=Controls.Find("phoneTile"+(i+1).ToString(),false);
 				if(controlMatches.Length==0) {//no match found for some reason.
 					continue;
@@ -123,6 +124,26 @@ namespace OpenDental {
 
 		private void phoneTile_SelectedTileChanged(object sender,EventArgs e) {
 			selectedTile=(PhoneTile)sender;
+		}
+
+		private void phoneTile_ScreenshotClick(object sender,EventArgs e) {
+			PhoneTile tile=(PhoneTile)sender;
+			if(tile.PhoneCur==null) {
+				return;
+			}
+			if(tile.PhoneCur.ScreenshotPath==""){
+				MessageBox.Show("No screenshots available yet.");
+				return;
+			}
+			if(!File.Exists(tile.PhoneCur.ScreenshotPath)){
+				MessageBox.Show("Could not find file: "+tile.PhoneCur.ScreenshotPath);
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			FormScreenshotBrowse formSB=new FormScreenshotBrowse();
+			formSB.ScreenshotPath=tile.PhoneCur.ScreenshotPath;
+			formSB.ShowDialog();
+			Cursor=Cursors.Default;
 		}
 
 		//private void timerMain_Tick(object sender,EventArgs e) {

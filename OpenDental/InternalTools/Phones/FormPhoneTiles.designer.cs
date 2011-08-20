@@ -214,7 +214,7 @@
 			// checkBoxAll
 			// 
 			this.checkBoxAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkBoxAll.Location = new System.Drawing.Point(508,5);
+			this.checkBoxAll.Location = new System.Drawing.Point(843,5);
 			this.checkBoxAll.Name = "checkBoxAll";
 			this.checkBoxAll.Size = new System.Drawing.Size(104,16);
 			this.checkBoxAll.TabIndex = 28;
@@ -240,16 +240,16 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(619,510);
+			this.ClientSize = new System.Drawing.Size(954,679);
 			this.Controls.Add(this.checkBoxAll);
 			this.Controls.Add(this.labelMsg);
 			this.Controls.Add(this.butOverride);
 			this.Name = "FormPhoneTiles";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Phones";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPhoneTiles_FormClosing);
 			this.Load += new System.EventHandler(this.FormPhoneTiles_Load);
 			this.Shown += new System.EventHandler(this.FormPhoneTiles_Shown);
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPhoneTiles_FormClosing);
 			this.menuNumbers.ResumeLayout(false);
 			this.menuStatus.ResumeLayout(false);
 			this.ResumeLayout(false);

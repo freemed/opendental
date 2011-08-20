@@ -209,10 +209,22 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Checks the phone.ClockStatus to determine if screenshot should be saved.</summary>
-		public static bool IsOnClock(string ipAddress,string computerName) {
+		public static void SetScreenshot(int extension,string path,Bitmap bitmap) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),ipAddress,computerName);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension);
+				return;
+			}
+			string command="UPDATE phone SET "
+				+"ScreenshotPath = '"+POut.String(path)+"', "
+				+"ScreenshotImage   = '"+POut.Bitmap(bitmap,ImageFormat.Png)+"' "//handles null
+				+"WHERE Extension = "+POut.Long(extension);
+			Db.NonQ(command);
+		}
+
+		///<summary>Checks the phone.ClockStatus to determine if screenshot should be saved.  Returns extension if true and zero if false.</summary>
+		public static int IsOnClock(string ipAddress,string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),ipAddress,computerName);
 			}
 			string command="SELECT * FROM phoneempdefault WHERE IpAddress='"+POut.String(computerName)+"'";
 			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
@@ -227,13 +239,13 @@ namespace OpenDentBusiness{
 					|| status==ClockStatusEnum.TeamAssist
 					|| status==ClockStatusEnum.Training
 					|| status==ClockStatusEnum.WrapUp) {
-						return true;
+						return ped.PhoneExt;
 					}
 				}
 				catch {
-					return false;
+					return 0;
 				}
-				return false;//on break or clocked out
+				return 0;//on break or clocked out
 			}
 			//there is no computername override entered by staff, so figure out what the extension should be
 			int extension=0;
@@ -245,7 +257,14 @@ namespace OpenDentBusiness{
 			}
 			if(extension==0) {
 				//we don't have a good extension
-				return false;
+				return 0;
+			}
+			//make sure the extension isn't overridden with a computername
+			//Example: this is computer .204, and ext 104 has a computername override. This computer should not save screenshot on behalf of 104.
+			command="SELECT COUNT(*) FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension)+" "
+				+"AND IpAddress!='')";//there exists a computername override for the extension
+			if(Db.GetScalar(command)!="0") {
+				return 0;
 			}
 			command="SELECT ClockStatus FROM phone "
 					+"WHERE Extension = "+POut.Long(extension);
@@ -257,13 +276,13 @@ namespace OpenDentBusiness{
 					|| status2==ClockStatusEnum.TeamAssist
 					|| status2==ClockStatusEnum.Training
 					|| status2==ClockStatusEnum.WrapUp) {
-					return true;
+						return extension;
 				}
 			}
 			catch {
-				return false;
+				return 0;
 			}
-			return false;//on break or clocked out
+			return 0;//on break or clocked out
 		}
 
 		public static void ClearImages() {
