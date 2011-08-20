@@ -72,6 +72,7 @@ namespace WebCamOD {
 			intPtrVideo=IntPtr.Zero;
 			timerPhoneWebCam.Enabled=true;
 			timerScreenShots.Enabled=true;
+			timerScreenShots_Tick(this,new EventArgs());//force an initial screenshot
 		}
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
