@@ -2119,7 +2119,15 @@
     <Compile Include="Forms\FormTPsign.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InternalTools\Phones\FormScreenshotBrowse.cs" />
+    <Compile Include="InternalTools\Phones\FormPhoneEmpDefaultEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\FormPhoneEmpDefaults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\FormScreenshotBrowse.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="InternalTools\Phones\FormScreenshotBrowse.designer.cs">
       <DependentUpon>FormScreenshotBrowse.cs</DependentUpon>
     </Compile>
@@ -3726,6 +3734,12 @@
     <EmbeddedResource Include="Forms\FormTPsign.resx">
       <DependentUpon>FormTPsign.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\FormPhoneEmpDefaultEdit.resx">
+      <DependentUpon>FormPhoneEmpDefaultEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\FormPhoneEmpDefaults.resx">
+      <DependentUpon>FormPhoneEmpDefaults.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InternalTools\Phones\FormScreenshotBrowse.resx">
       <DependentUpon>FormScreenshotBrowse.cs</DependentUpon>

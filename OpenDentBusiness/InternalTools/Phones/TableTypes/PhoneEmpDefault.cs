@@ -53,30 +53,7 @@ namespace OpenDentBusiness{
 		PRIMARY KEY (EmployeeNum)      
 		) DEFAULT CHARSET=utf8; */
 
-	/*
-Already ran these queries:
-ALTER TABLE phoneempdefault ADD PhoneExt int NOT NULL;
-ALTER TABLE phoneempdefault ADD IsUnavailable tinyint NOT NULL;
-ALTER TABLE phoneempdefault ADD Notes text NOT NULL;
-ALTER TABLE phoneempdefault ADD IpAddress varchar(255) NOT NULL;
-Still need to run:
-UPDATE phoneempdefault SET PhoneExt=(SELECT PhoneExt FROM employee WHERE employee.EmployeeNum=phoneempdefault.EmployeeNum);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(4,'Amber',103);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(10,'Debbie',101);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(13,'Shannon',102);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(16,'Lori',308);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(19,'Richelle',110);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(20,'Brittany',311);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(21,'Natalie',112);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(23,'Luke',113);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(25,'JamesS',307);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(28,'Stacey',115);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(26,'Erica',114);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(30,'Rissa',121);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(31,'Tanya',116);
-INSERT INTO phoneempdefault(EmployeeNum,EmpName,PhoneExt) VALUES(36,'Cameron',122);
-UPDATE phoneempdefault SET IpAddress='192.168.0.250' WHERE EmployeeNum=25;
-			*/
+	
 }
 
 

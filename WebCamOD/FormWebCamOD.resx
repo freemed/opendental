@@ -121,7 +121,7 @@
     <value>17, 17</value>
   </metadata>
   <data name="label1.Text" xml:space="preserve">
-    <value>Please leave this window open at night.  Use 'Switch User' to lock out of Windows without shutting this window down.  Video will continue to be captured for security purposes.  To make this window automatically start every time your computer starts up, I recommend placing a shortcut to it in your Startup folder.
+    <value>Please leave this window open at night.  You can use 'Switch User' to lock out of Windows without shutting this window down.  Video will continue to be captured for security purposes.  To make this window automatically start every time your computer starts up, I recommend placing a shortcut to it in your Startup folder.
 
 Thanks, Jordan</value>
   </data>

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
-	///<summary>Not a true Cache pattern.  It only loads the cache once on startup and then never again.  No entry in the Cache file.  No InvalidType for PhoneEmpDefault.  Data is also frequently pulled from this table in realtime rather than depending on the cache.</summary>
+	///<summary>Not a true Cache pattern.  It only loads the cache once on startup and then never again.  No entry in the Cache file.  No InvalidType for PhoneEmpDefault.  Data is almost always pulled from db in realtime, and this cache is only used for default ringgroups.</summary>
 	public class PhoneEmpDefaults{
 		#region CachePattern
 
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		///<summary>Not part of the true Cache pattern.  See notes above.</summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM phoneempdefault";//stub query probably needs to be changed
+			string command="SELECT * FROM phoneempdefault";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="PhoneEmpDefault";
 			FillCache(table);
@@ -41,26 +41,36 @@ namespace OpenDentBusiness{
 			listt=Crud.PhoneEmpDefaultCrud.TableToList(table);
 		}
 		#endregion
-
-		public static bool IsNoGraph(long employeeNum) {
+		
+		///<summary></summary>
+		public static List<PhoneEmpDefault> Refresh(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PhoneEmpDefault>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM phoneempdefault ORDER BY PhoneExt";//because that's the order we are used to in the phone panel.
+			return Crud.PhoneEmpDefaultCrud.SelectMany(command);
+		}
+		
+		public static bool IsNoGraph(long employeeNum,List<PhoneEmpDefault> listPED) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].EmployeeNum==employeeNum) {
-					return Listt[i].NoGraph;
+			for(int i=0;i<listPED.Count;i++) {
+				if(listPED[i].EmployeeNum==employeeNum) {
+					return listPED[i].NoGraph;
 				}
 			}
 			return false;
 		}
 
-		public static bool IsNoColor(long employeeNum) {
+		/*moved into queries
+		public static bool IsNoColor(long employeeNum,List<PhoneEmpDefault> listPED) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].EmployeeNum==employeeNum) {
-					return Listt[i].NoColor;
+			for(int i=0;i<listPED.Count;i++) {
+				if(listPED[i].EmployeeNum==employeeNum) {
+					return listPED[i].NoColor;
 				}
 			}
 			return false;
-		}
+		}*/
 
 		public static AsteriskRingGroups GetRingGroup(long employeeNum) {
 			//No need to check RemotingRole; no call to db.
@@ -76,34 +86,14 @@ namespace OpenDentBusiness{
 		public static void SetAvailable(int extension,long empNum) {
 
 		}
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<PhoneEmpDefault> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PhoneEmpDefault>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM phoneempdefault WHERE PatNum = "+POut.Long(patNum);
-			return Crud.PhoneEmpDefaultCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one PhoneEmpDefault from the db.</summary>
-		public static PhoneEmpDefault GetOne(long employeeNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),employeeNum);
-			}
-			return Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
-		}
-
+	
 		///<summary></summary>
 		public static long Insert(PhoneEmpDefault phoneEmpDefault){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				phoneEmpDefault.EmployeeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),phoneEmpDefault);
 				return phoneEmpDefault.EmployeeNum;
 			}
-			return Crud.PhoneEmpDefaultCrud.Insert(phoneEmpDefault);
+			return Crud.PhoneEmpDefaultCrud.Insert(phoneEmpDefault,true);//user specifies the PK
 		}
 
 		///<summary></summary>
@@ -124,6 +114,21 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM phoneempdefault WHERE EmployeeNum = "+POut.Long(employeeNum);
 			Db.NonQ(command);
 		}
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		
+
+		///<summary>Gets one PhoneEmpDefault from the db.</summary>
+		public static PhoneEmpDefault GetOne(long employeeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),employeeNum);
+			}
+			return Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
+		}
+
+		
 		*/
 
 

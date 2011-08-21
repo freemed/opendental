@@ -233,7 +233,7 @@
 			this.butOverride.Name = "butOverride";
 			this.butOverride.Size = new System.Drawing.Size(75,24);
 			this.butOverride.TabIndex = 26;
-			this.butOverride.Text = "Override";
+			this.butOverride.Text = "Settings";
 			this.butOverride.Click += new System.EventHandler(this.butOverride_Click);
 			// 
 			// FormPhoneTiles
