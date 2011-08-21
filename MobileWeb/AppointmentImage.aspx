@@ -14,10 +14,18 @@
 <div class="styleError">  
 				 <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
 </div>
+		<div class="datenavigation">
+			<a id="previousApImage" linkattib="AppointmentImage.aspx?year=<%Response.Write(PreviousDateYear);%>&month=<%Response.Write(PreviousDateMonth);%>&day=<%Response.Write(PreviousDateDay);%>"
+				href="#"><img src="css/themes/apple/img/listArrowSelFlipped.png" style="float:left;margin-top:4px;" /></a> <a class="button" id="datepickerbutton" href="#">View</a>
+			<asp:Label ID="DayLabel" runat="server" class="datestring" Text=""></asp:Label>
+			<a id="nextApImage" linkattib="AppointmentImage.aspx?year=<%Response.Write(NextDateYear);%>&month=<%Response.Write(NextDateMonth);%>&day=<%Response.Write(NextDateDay);%>"
+				href="#"><img src="css/themes/apple/img/listArrowSel.png" style="float:right;margin-top:4px" /></a>
+		</div>
+		<br /><br /><br />
 
 
 <div id="bd">	
-<img src="app.jpg" width="360px" height="330px" usemap="#immap" />
+<img src="app.jpg" style=" border: thick solid Green;" width="310px" height="280px" />
 </div>
 
 <%--	<asp:Image ID="Image1" runat="server" />--%>

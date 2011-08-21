@@ -52,7 +52,7 @@ min-height: 480px;
     height:33px;
 }
 /* multiple style don't work in some cases android hence some styles had to be written all over again*/
-#previous, #next, #datepickerbutton{
+#previous, #previousApImage, #next, #nextApImage, #datepickerbutton{
     position: relative;
     overflow: hidden;
     top: 10px;
@@ -75,11 +75,11 @@ min-height: 480px;
     float:left;
 }
 
-#previous  {
+#previous,#previousApImage  {
     left:8px;
 }
 
-#next{
+#next, #nextApImage{
     float: right;
 }
 

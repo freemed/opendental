@@ -20,7 +20,9 @@ function hijackLinks() {
 var MessageLoad='<div id="progress"><p>&nbsp;</p><p>Loading...</p><p>&nbsp;</p></div>';
 var MessageLoadLogout = '<div><div id="progresslogout"><p>&nbsp;</p><p>Logging out...</p><p>&nbsp;</p></div></div>';
 var MessageError = '<div class="styleError">There has been an error while processing your page. Please try again.<br />If the error persists, please refresh this page using the browser address bar and try again.</div>';
-
+var initialWindowWidth = 0;
+//var zoomAppImage=1;
+var appImageWindowWidth=0;
 $(document).ready(function () {
     TraversePage();
 });
@@ -29,37 +31,23 @@ function TraversePage(){
 
     //console.log('in TraversePage');
    // window.scrollTo(0, 0); resizeTo(320, 480);
+    if (initialWindowWidth == 0) {
+    	initialWindowWidth = jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
+    	appImageWindowWidth = window.innerWidth;
+    }
 
-    /* for browser detection use
-       var browser=navigator.userAgent.toLowerCase();  
-        var users_browser = ((browser.indexOf('iPhone')!=-1);  
-        if (users_browser)  
-        {  
-            document.location.href='www.yourdomain.com/iphone_index.html';  
-        } 
-    */
-
-    var initialWidth = 0;
     function resizeAppointmentImageToolbar() {
-        if (initialWidth== 0) {
-            initialWidth = jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
+        if (initialWindowWidth==0) {
+            initialWindowWidth=jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
         }
-        var zoom = window.innerWidth/initialWidth;
-        //console.log("zoom=" + zoom);
-        $('#toolbarAppointmentImage').attr('style', '-webkit-transform: scale('+zoom+')');
+        var zoomL = window.innerWidth/initialWindowWidth;
+       // console.log("window.innerWidth=" + window.innerWidth)
+       // console.log("initialWindowWidth=" + initialWindowWidth)
+       // console.log("jQuery(window).width()=" + jQuery(window).width())
+        $('#toolbarAppointmentImage').attr('style', '-webkit-transform: scale(' + zoomL + ')');
     }
-    setInterval(resizeAppointmentImageToolbar, 1000);
+    //setInterval(resizeAppointmentImageToolbar, 2000);
 
-    function resetScreenSize() {
-        var browser=navigator.userAgent.toLowerCase(); 
-        if (browser.indexOf('android')!=-1) {
-            $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0'); //works for android
-        }
-        else {
-            var zoom=window.innerWidth/jQuery(window).width();
-            $('body').attr('style', '-webkit-transform: scale('+zoom+'); -webkit-transform-origin: 0 0;'); //works for iphone
-        }
-    }
 
     //Password is retained on some browsers- so it's got to be erased
     $('#password').focus(function () {
@@ -97,7 +85,8 @@ function TraversePage(){
         var UrlForFetchingData = this.attributes["linkattib"].value;
         var SectionToFill = '#AppointmentImageContents';
         var MoveToURL = '#AppointmentImage';
-        //console.log('AppointmentImage clicked UrlForFetchingData = ' + UrlForFetchingData);
+		var scale=initialWindowWidth/appImageWindowWidth;
+		$('body').attr('style', '-webkit-transform: scale(1.0); -webkit-transform-origin: 0 0;');
         ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
     });
 
@@ -164,6 +153,13 @@ function TraversePage(){
 	    var SectionToFill='#AppointmentListContents';
 	    ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
+
+	$('#previousApImage').tap(function (e) {
+	    //console.log('Previous button tapped');
+	    var UrlForFetchingData = this.attributes["linkattib"].value;
+	    var SectionToFill = '#AppointmentImageContents';
+	    ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
+	});
 /*
 	$('#datepickerbutton').tap(function (e) {
 	    //console.log('datepickerbutton tapped');
@@ -194,12 +190,17 @@ function TraversePage(){
 
     });
 
+	$('#next').tap(function (e) {
+	    //console.log('Next button tapped');
+	    var UrlForFetchingData = this.attributes["linkattib"].value;
+	    var SectionToFill = '#AppointmentListContents';
+	    ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
+	});
 
-
-	$('#next').tap(function(e) {
+	$('#nextApImage').tap(function (e) {
 		//console.log('Next button tapped');
-		var UrlForFetchingData = this.attributes["linkattib"].value; 
-		var SectionToFill='#AppointmentListContents';
+		var UrlForFetchingData = this.attributes["linkattib"].value;
+		var SectionToFill = '#AppointmentImageContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
 	
@@ -340,6 +341,90 @@ function ProcessPreviousNextButton(e,UrlForFetchingData, SectionToFill){
 	$(SectionToFill).append(MessageLoad);
 	FetchPage(UrlForFetchingData, SectionToFill);
 }
+
+// strt 
+var previousOrientation = 0;
+var checkOrientation = function () {
+	//console.log(window.orientation);
+	//displayWidth();
+	//console.log('orientation changed window.innerWidth=' + window.innerWidth)
+	if (window.orientation != previousOrientation) {
+		previousOrientation = window.orientation;
+		// orientation changed, do stuff here
+		//console.log('orientation changed window.innerWidth=' + window.innerWidth)
+
+		switch (window.orientation) {
+			case 0:
+				//displayStr += "Portrait";
+				resetScreenSizeOr();
+				break;
+			case -90:
+				//displayStr += "Landscape (right, screen turned clockwise)";
+				break;
+			case 90:
+				//displayStr += "Landscape (left, screen turned counterclockwise)";
+				break;
+			case 180:
+				//displayStr += "Portrait (upside-down portrait)";
+				resetScreenSizeOr();
+				break;
+
+		}
+
+
+	}
+
+
+
+};
+
+window.addEventListener("resize", checkOrientation, false);
+window.addEventListener("orientationchange", checkOrientation, false);
+//setInterval(checkOrientation, 2000);
+
+function displayWidth(){
+	//$(window).width();
+	console.log('window width ' + $(window).width());
+	//$(window).width() changes when the orientation changes, window.innerWidth does not change when the orientation changes
+}
+
+function resetScreenSizeOr() {
+	console.log("Adjustion for orientatiion change");
+	scale = appImageWindowWidth / jQuery(window).width();
+	$('body').attr('style', '-webkit-transform: scale(' + scale + '); -webkit-transform-origin: 0 0;');
+
+}
+
+//end
+
+//end
+
+/*This function actually scales the elements giving the illusion of a changing screen size*/
+function resetScreenSize() {
+	//displayWidth();
+	appImageWindowWidth = window.innerWidth; // Dennis: note that window.innerWidth can be changed by a *physical* pinch and zoom only
+	var scale = appImageWindowWidth / initialWindowWidth;
+	//console.log("window.innerWidth a=" + window.innerWidth);
+	$('body').attr('style', '-webkit-transform: scale(' + scale + '); -webkit-transform-origin: 0 0;');
+
+
+    //screen.width = initialWindowWidth;
+    // $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=2.0, maximum-scale=10.0, user-scalable=1');
+
+    /*
+    var browser=navigator.userAgent.toLowerCase(); cc
+    if (browser.indexOf('android')!=-1) {
+    $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0'); //works for android
+    console.log("window.innerWidth a=" + window.innerWidth);
+    }
+    else {//iphone
+    var zoom = window.innerWidth/jQuery(window).width(); console.log("window.innerWidth b=" + window.innerWidth);
+    $('body').attr('style', '-webkit-transform: scale(' + zoom + '); -webkit-transform-origin: 0 0;'); //works for iphone
+    //window.innerWidth=initialWindowWidth;
+    console.log("window.innerWidth c=" + window.innerWidth);
+    }
+    */
+}
 	
 function FetchPage(UrlForFetchingData, SectionToFill){
     $.ajax({
@@ -353,7 +438,8 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 				//console.log('still in session');
 			    $(SectionToFill).html(Content);
 			}else{
-            //console.log('session ended,about to flip');
+			    //console.log('session ended,about to flip');
+			   resetScreenSize();
              jQT.goTo('#login', 'flip');
 			}
 		},
@@ -394,6 +480,7 @@ function ProcessLogin() {
 function ProcessLogout(e) {
 		//console.log('log out clicked');
     e.preventDefault();
+    resetScreenSize();
     var logoutConfirmation = $('#logoutmessage').html();
     $('#logoutmessage').html('');
     $('#logoutmessage').append(MessageLoadLogout);
