@@ -64,11 +64,12 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(784,546);
+			this.butClose.Location = new System.Drawing.Point(823,546);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 11;
 			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butAdd
 			// 
@@ -78,7 +79,7 @@ namespace OpenDental{
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Location = new System.Drawing.Point(364,546);
+			this.butAdd.Location = new System.Drawing.Point(403,546);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 12;
@@ -94,7 +95,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(8,14);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(851,524);
+			this.gridMain.Size = new System.Drawing.Size(890,524);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Phone Settings";
 			this.gridMain.TranslationName = "";
@@ -103,7 +104,7 @@ namespace OpenDental{
 			// FormPhoneEmpDefaults
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(871,582);
+			this.ClientSize = new System.Drawing.Size(910,582);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);
@@ -139,7 +140,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("PhoneExt",55);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Unavail",50,HorizontalAlignment.Center);
+			col=new ODGridColumn("StatusOverride",90);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Notes",250);
 			gridMain.Columns.Add(col);
@@ -158,9 +159,14 @@ namespace OpenDental{
 				row.Cells.Add(ListPED[i].NoColor?"X":"");
 				row.Cells.Add(ListPED[i].RingGroups.ToString());
 				row.Cells.Add(ListPED[i].PhoneExt.ToString());
-				row.Cells.Add(ListPED[i].IsUnavailable?"X":"");
+				if(ListPED[i].StatusOverride==PhoneEmpStatusOverride.None) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(ListPED[i].StatusOverride.ToString());
+				}
 				row.Cells.Add(ListPED[i].Notes);
-				row.Cells.Add(ListPED[i].IpAddress);
+				row.Cells.Add(ListPED[i].ComputerName);
 				row.Cells.Add(ListPED[i].IsPrivateScreen?"X":"");
 				gridMain.Rows.Add(row);
 			}

@@ -27,7 +27,6 @@ namespace OpenDental{
 		private CheckBox checkNoColor;
 		private TextBox textEmpName;
 		private Label label6;
-		private CheckBox checkIsUnavailable;
 		private TextBox textNotes;
 		private Label label3;
 		private TextBox textComputerName;
@@ -45,6 +44,8 @@ namespace OpenDental{
 		private Label label16;
 		private ValidNum textEmployeeNum;
 		private ValidNum textPhoneExt;
+		private ListBox listStatusOverride;
+		private Label label17;
 		public PhoneEmpDefault PedCur;
 
 		///<summary></summary>
@@ -91,7 +92,6 @@ namespace OpenDental{
 			this.checkNoColor = new System.Windows.Forms.CheckBox();
 			this.textEmpName = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.checkIsUnavailable = new System.Windows.Forms.CheckBox();
 			this.textNotes = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textComputerName = new System.Windows.Forms.TextBox();
@@ -109,6 +109,8 @@ namespace OpenDental{
 			this.label16 = new System.Windows.Forms.Label();
 			this.textEmployeeNum = new OpenDental.ValidNum();
 			this.textPhoneExt = new OpenDental.ValidNum();
+			this.listStatusOverride = new System.Windows.Forms.ListBox();
+			this.label17 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -147,7 +149,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(28,432);
+			this.butDelete.Location = new System.Drawing.Point(28,464);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(84,24);
 			this.butDelete.TabIndex = 16;
@@ -162,7 +164,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(539,432);
+			this.butOK.Location = new System.Drawing.Point(539,464);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
@@ -177,7 +179,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(632,432);
+			this.butCancel.Location = new System.Drawing.Point(632,464);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
@@ -231,20 +233,9 @@ namespace OpenDental{
 			this.label6.Text = "Employee First Name";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkIsUnavailable
-			// 
-			this.checkIsUnavailable.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsUnavailable.Location = new System.Drawing.Point(4,231);
-			this.checkIsUnavailable.Name = "checkIsUnavailable";
-			this.checkIsUnavailable.Size = new System.Drawing.Size(155,20);
-			this.checkIsUnavailable.TabIndex = 28;
-			this.checkIsUnavailable.Text = "Is Unavailable";
-			this.checkIsUnavailable.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsUnavailable.UseVisualStyleBackColor = true;
-			// 
 			// textNotes
 			// 
-			this.textNotes.Location = new System.Drawing.Point(144,260);
+			this.textNotes.Location = new System.Drawing.Point(144,292);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.Size = new System.Drawing.Size(352,51);
@@ -252,7 +243,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(40,259);
+			this.label3.Location = new System.Drawing.Point(40,291);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100,20);
 			this.label3.TabIndex = 29;
@@ -261,14 +252,14 @@ namespace OpenDental{
 			// 
 			// textComputerName
 			// 
-			this.textComputerName.Location = new System.Drawing.Point(144,326);
+			this.textComputerName.Location = new System.Drawing.Point(144,358);
 			this.textComputerName.Name = "textComputerName";
 			this.textComputerName.Size = new System.Drawing.Size(213,20);
 			this.textComputerName.TabIndex = 32;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(40,325);
+			this.label4.Location = new System.Drawing.Point(40,357);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100,20);
 			this.label4.TabIndex = 31;
@@ -278,7 +269,7 @@ namespace OpenDental{
 			// checkIsPrivateScreen
 			// 
 			this.checkIsPrivateScreen.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsPrivateScreen.Location = new System.Drawing.Point(4,366);
+			this.checkIsPrivateScreen.Location = new System.Drawing.Point(4,398);
 			this.checkIsPrivateScreen.Name = "checkIsPrivateScreen";
 			this.checkIsPrivateScreen.Size = new System.Drawing.Size(155,20);
 			this.checkIsPrivateScreen.TabIndex = 33;
@@ -345,24 +336,24 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(161,230);
+			this.label13.Location = new System.Drawing.Point(268,235);
 			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(414,20);
+			this.label13.Size = new System.Drawing.Size(321,20);
 			this.label13.TabIndex = 40;
 			this.label13.Text = "Mark yourself unavailable only if approved by manager";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(502,259);
+			this.label14.Location = new System.Drawing.Point(502,291);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(157,28);
+			this.label14.Size = new System.Drawing.Size(157,35);
 			this.label14.TabIndex = 41;
 			this.label14.Text = "Why unavailable?\r\nWhy offline assist?";
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(362,323);
+			this.label15.Location = new System.Drawing.Point(362,355);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(350,46);
 			this.label15.TabIndex = 42;
@@ -372,7 +363,7 @@ namespace OpenDental{
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(162,366);
+			this.label16.Location = new System.Drawing.Point(162,398);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(194,47);
 			this.label16.TabIndex = 43;
@@ -396,10 +387,29 @@ namespace OpenDental{
 			this.textPhoneExt.Size = new System.Drawing.Size(54,20);
 			this.textPhoneExt.TabIndex = 45;
 			// 
+			// listStatusOverride
+			// 
+			this.listStatusOverride.FormattingEnabled = true;
+			this.listStatusOverride.Location = new System.Drawing.Point(144,235);
+			this.listStatusOverride.Name = "listStatusOverride";
+			this.listStatusOverride.Size = new System.Drawing.Size(120,43);
+			this.listStatusOverride.TabIndex = 47;
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(2,237);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(139,20);
+			this.label17.TabIndex = 46;
+			this.label17.Text = "StatusOverride";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormPhoneEmpDefaultEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(724,469);
+			this.ClientSize = new System.Drawing.Size(724,501);
+			this.Controls.Add(this.listStatusOverride);
+			this.Controls.Add(this.label17);
 			this.Controls.Add(this.textPhoneExt);
 			this.Controls.Add(this.textEmployeeNum);
 			this.Controls.Add(this.label16);
@@ -417,7 +427,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.checkIsUnavailable);
 			this.Controls.Add(this.textEmpName);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.checkNoColor);
@@ -456,9 +465,12 @@ namespace OpenDental{
 			}
 			listRingGroup.SelectedIndex=(int)PedCur.RingGroups;
 			textPhoneExt.Text=PedCur.PhoneExt.ToString();
-			checkIsUnavailable.Checked=PedCur.IsUnavailable;
+			for(int i=0;i<Enum.GetNames(typeof(PhoneEmpStatusOverride)).Length;i++) {
+				listStatusOverride.Items.Add(Enum.GetNames(typeof(PhoneEmpStatusOverride))[i]);
+			}
+			listStatusOverride.SelectedIndex=(int)PedCur.StatusOverride;
 			textNotes.Text=PedCur.Notes;
-			textComputerName.Text=PedCur.IpAddress;
+			textComputerName.Text=PedCur.ComputerName;
 			checkIsPrivateScreen.Checked=PedCur.IsPrivateScreen;
 		}
 
@@ -491,9 +503,9 @@ namespace OpenDental{
 			PedCur.NoColor=checkNoColor.Checked;
 			PedCur.RingGroups=(AsteriskRingGroups)listRingGroup.SelectedIndex;
 			PedCur.PhoneExt=PIn.Int(textPhoneExt.Text);
-			PedCur.IsUnavailable=checkIsUnavailable.Checked;
+			PedCur.StatusOverride=(PhoneEmpStatusOverride)listStatusOverride.SelectedIndex;
 			PedCur.Notes=textNotes.Text;
-			PedCur.IpAddress=textComputerName.Text;
+			PedCur.ComputerName=textComputerName.Text;
 			PedCur.IsPrivateScreen=checkIsPrivateScreen.Checked;
 			if(IsNew){
 				PhoneEmpDefaults.Insert(PedCur);

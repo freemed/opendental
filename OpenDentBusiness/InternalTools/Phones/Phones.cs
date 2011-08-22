@@ -8,9 +8,9 @@ using System.Data;
 using System.Reflection;
 using System.Threading;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness {
 	///<summary></summary>
-	public class Phones{
+	public class Phones {
 		public static Color ColorRed=Color.Salmon;
 		public static Color ColorGreen=Color.FromArgb(153,220,153);
 		public static Color ColorYellow=Color.FromArgb(255,255,145);
@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName, "
-				+"IsUnavailable,NoColor "
+				+"NoColor "
 				+"FROM phone "
 				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt "
 				+"WHERE phone.Extension="+POut.Long(extens);
@@ -65,13 +65,13 @@ namespace OpenDentBusiness{
 			long empNum=PIn.Long(tablePhone.Rows[0]["EmployeeNum"].ToString());
 			string empName=PIn.String(tablePhone.Rows[0]["EmpName"].ToString());
 			//if these values are null because of missing phoneempdefault row, they will default to false
-			bool isAvailable=!PIn.Bool(tablePhone.Rows[0]["IsUnavailable"].ToString());
+			//PhoneEmpStatusOverride statusOverride=(PhoneEmpStatusOverride)PIn.Int(tablePhone.Rows[0]["StatusOverride"].ToString());
 			bool isDefaultNoColor=PIn.Bool(tablePhone.Rows[0]["NoColor"].ToString());
 			bool isInUse=false;
 			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
 				isInUse=true;
 			}
-			Color colorBar=GetColorBar(clockStatus,isAvailable,empNum,isInUse,isDefaultNoColor);
+			Color colorBar=GetColorBar(clockStatus,empNum,isInUse,isDefaultNoColor);
 			string clockStatusStr=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
 				clockStatusStr="";
@@ -85,16 +85,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Color GetColorBar(ClockStatusEnum clockStatus,bool isAvailable,long empNum,bool isInUse,bool isDefaultNoColor) {
+		public static Color GetColorBar(ClockStatusEnum clockStatus,long empNum,bool isInUse,bool isDefaultNoColor) {
 			//No need to check RemotingRole; no call to db.
 			Color colorBar=Color.White;
 			if(empNum==0) {
 				//no colors
 			}
-			//else if(overridden && !isAvailable) {
-				//no colors
-			//}
-			//else if(!overridden && isDefaultNoColor) {
 			else if(isDefaultNoColor) {
 				//no colors
 			}
@@ -105,7 +101,9 @@ namespace OpenDentBusiness{
 			else if(clockStatus==ClockStatusEnum.Available) {
 				colorBar=ColorGreen;
 			}
-			//"Unavailable" already handled above
+			else if(clockStatus==ClockStatusEnum.Unavailable) {
+				//no color
+			}
 			else if(clockStatus==ClockStatusEnum.Off) {
 				//colorText=Color.Gray;
 				//no colorBar
@@ -125,7 +123,7 @@ namespace OpenDentBusiness{
 			return colorBar;
 		}
 
-		public static Phone GetPhoneForExtension(List<Phone> phoneList,int extens){
+		public static Phone GetPhoneForExtension(List<Phone> phoneList,int extens) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<phoneList.Count;i++) {
 				if(phoneList[i].Extension==extens) {
@@ -197,7 +195,7 @@ namespace OpenDentBusiness{
 				+"WHERE Extension = "+POut.Long(extension)+" "
 				//Example: this is computer .204, and ext 104 has a computername override. Don't update ext 104.
 				+"AND NOT EXISTS(SELECT * FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension)+" "
-				+"AND IpAddress!='')";//there exists a computername override for the extension
+				+"AND ComputerName!='')";//there exists a computername override for the extension
 			Db.NonQ(command);
 		}
 
@@ -218,7 +216,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),ipAddress,computerName);
 			}
-			string command="SELECT * FROM phoneempdefault WHERE IpAddress='"+POut.String(computerName)+"'";
+			string command="SELECT * FROM phoneempdefault WHERE ComputerName='"+POut.String(computerName)+"'";
 			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
 			if(ped!=null) {//we found that computername entered as an override
 				command="SELECT ClockStatus FROM phone "
@@ -254,7 +252,7 @@ namespace OpenDentBusiness{
 			//make sure the extension isn't overridden with a computername
 			//Example: this is computer .204, and ext 104 has a computername override. This computer should not save screenshot on behalf of 104.
 			command="SELECT COUNT(*) FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension)+" "
-				+"AND IpAddress!=''";//there exists a computername override for the extension
+				+"AND ComputerName!=''";//there exists a computername override for the extension
 			if(Db.GetScalar(command)!="0") {
 				return 0;
 			}
@@ -268,7 +266,7 @@ namespace OpenDentBusiness{
 					|| status2==ClockStatusEnum.TeamAssist
 					|| status2==ClockStatusEnum.Training
 					|| status2==ClockStatusEnum.WrapUp) {
-						return extension;
+					return extension;
 				}
 			}
 			catch {
@@ -288,7 +286,9 @@ namespace OpenDentBusiness{
 
 
 
+
+
 	}
 
-	
+
 }
