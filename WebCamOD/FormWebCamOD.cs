@@ -183,7 +183,7 @@ namespace WebCamOD {
 			}
 			//save the image----------------------------------------------------------------------
 			//I tried a variety of file types.  The resulting file sizes were very similar. 
-			string filename=folder+"\\"+DateTime.Now.ToString("yyyy-MM-dd-hhmmssff")+".jpg";
+			string filename=folder+"\\"+DateTime.Now.ToString("yyyy-MM-dd-HHmmssff")+".jpg";
 			bmp.Save(filename);
 			//make a thumbnail with height of 50
 			int thumbW=(int)((double)bmp.Width/(double)bmp.Height*50d);
