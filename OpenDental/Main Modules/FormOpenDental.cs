@@ -4516,26 +4516,27 @@ namespace OpenDental{
 		}
 
 		private void timerPhoneWebCam_Tick(object sender,EventArgs e) {
+			//every 1.6s.  Performance was not very good when it was synchronous.
 			//This won't even happen unless PrefName.DockPhonePanelShow==true
+			Thread workerThread=new Thread(new ThreadStart(PhoneWebCamTickWorkerThread));
+			workerThread.Start();
+		}
+
+		private void PhoneWebCamTickWorkerThread() {
 			List<Phone> phoneList=Phones.GetPhoneList();
-			phoneSmall.PhoneList=phoneList;
-			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
-				formPhoneTiles.PhoneList=phoneList;
-			}
-			Phone phone=null;
-			int extension=0;
+			string ipaddressStr="";
 			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
-			foreach(IPAddress ipaddress in iphostentry.AddressList){
-				if(ipaddress.ToString().Contains("192.168.0.2")){
-					extension=PIn.Int(ipaddress.ToString().Substring(10))-100;//eg 205-100=105
-				}
-				if(ipaddress.ToString()=="192.168.0.186") {//hard code Jordans
-					extension=104;
-				}
-				if(ipaddress.ToString()=="192.168.0.204") {//hard code Jordans
-					extension=0;
+			foreach(IPAddress ipaddress in iphostentry.AddressList) {
+				if(ipaddress.ToString().Contains("192.168.0.2")) {
+					ipaddressStr=ipaddress.ToString();
 				}
 			}
+			int extension=Phones.GetPhoneExtension(ipaddressStr,Environment.MachineName);
+			//if(extension==0){
+			//	return;
+			//}
+			Phone phone=Phones.GetPhoneForExtension(phoneList,extension);
+			/*
 			if(extension>0) {
 				phone=Phones.GetPhoneForExtension(phoneList,extension);
 				if(Security.CurUser!=null && phone!=null && phone.EmployeeNum!=Security.CurUser.EmployeeNum) {
@@ -4545,8 +4546,27 @@ namespace OpenDental{
 					//phoneList=Phones.GetPhoneList();
 					//phone=Phones.GetPhoneForExtension(phoneList,extension);
 				}
+			}*/
+			//send the results back to the UI layer for action.
+			Invoke(new PhoneWebCamTickDisplayDelegate(PhoneWebCamTickDisplay),new object[] { phoneList,phone });
+		}
+
+		///<summary></summary>
+		protected delegate void PhoneWebCamTickDisplayDelegate(List<Phone> phoneList,Phone phone);
+
+		///<summary>phoneList is the list of all phone rows just pulled from the database.  phone is the one that we should display here, and it can be null.</summary>
+		public void PhoneWebCamTickDisplay(List<Phone> phoneList,Phone phone) {
+			//send the phoneList to the 2 places where it's needed:
+			phoneSmall.PhoneList=phoneList;
+			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
+				formPhoneTiles.PhoneList=phoneList;
 			}
-			phoneSmall.Extension=extension;
+			if(phone==null) {
+				phoneSmall.Extension=0;
+			}
+			else {
+				phoneSmall.Extension=phone.Extension;
+			}
 			phoneSmall.PhoneCur=phone;
 		}
 

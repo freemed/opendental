@@ -199,6 +199,23 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
+		public static int GetPhoneExtension(string ipAddress,string computerName) {
+			string command="SELECT * FROM phoneempdefault WHERE ComputerName='"+POut.String(computerName)+"'";
+			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
+			if(ped!=null) {
+				return ped.PhoneExt;
+			}
+			//there is no computername override entered by staff, so figure out what the extension should be
+			int extension=0;
+			if(ipAddress.Contains("192.168.0.2")) {
+				return PIn.Int(ipAddress.ToString().Substring(10))-100;//eg 205-100=105
+			}
+			else if(ipAddress.ToString().Contains("10.10.20.1")) {
+				return PIn.Int(ipAddress.ToString().Substring(9));//eg 105
+			}
+			return 0;//couldn't find good extension
+		}
+
 		public static void SetScreenshot(int extension,string path,Bitmap bitmap) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension);
