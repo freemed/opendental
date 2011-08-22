@@ -61,17 +61,16 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		/*moved into queries
-		public static bool IsNoColor(long employeeNum,List<PhoneEmpDefault> listPED) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<listPED.Count;i++) {
-				if(listPED[i].EmployeeNum==employeeNum) {
-					return listPED[i].NoColor;
-				}
+		///<summary>Can return null.</summary>
+		public static PhoneEmpDefault GetByExtAndEmp(int extension,long employeeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),extension,employeeNum);
 			}
-			return false;
-		}*/
-
+			string command="SELECT * FROM phoneempdefault WHERE PhoneExt="+POut.Int(extension)+" "
+				+"AND EmployeeNum="+POut.Long(employeeNum);
+			return Crud.PhoneEmpDefaultCrud.SelectOne(command);
+		}
+		
 		public static AsteriskRingGroups GetRingGroup(long employeeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
@@ -82,9 +81,17 @@ namespace OpenDentBusiness{
 			return AsteriskRingGroups.All;
 		}
 
-		///<summary>Stub.  Was in phoneoverrides.</summary>
+		///<summary>Was in phoneoverrides.</summary>
 		public static void SetAvailable(int extension,long empNum) {
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension,empNum);
+				return;
+			}
+			string command="UPDATE phoneempdefault "
+				+"SET IsUnavailable = 0 "
+				+"WHERE PhoneExt="+POut.Int(extension)+" "
+				+"AND EmployeeNum="+POut.Long(empNum);
+			Db.NonQ(command);
 		}
 	
 		///<summary></summary>

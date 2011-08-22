@@ -331,7 +331,7 @@ namespace OpenDental{
 			this.label11.TabIndex = 38;
 			this.label11.Text = "The current phone extension for this employee.  Can change from day to day.  If t" +
     "his employee is not working today, and you need to use their regular extension, " +
-    " set this value to 400.";
+    " set this value to 400+";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label12
@@ -358,7 +358,7 @@ namespace OpenDental{
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(157,28);
 			this.label14.TabIndex = 41;
-			this.label14.Text = "Why unavailable";
+			this.label14.Text = "Why unavailable?\r\nWhy offline assist?";
 			// 
 			// label15
 			// 
@@ -376,7 +376,7 @@ namespace OpenDental{
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(194,47);
 			this.label16.TabIndex = 43;
-			this.label16.Text = "Halts screen captures.  Only used/allowed by managers.  Not functional yet.";
+			this.label16.Text = "Halts screen captures.  Only used/allowed by managers.  May not work yet.";
 			// 
 			// textEmployeeNum
 			// 
@@ -390,7 +390,7 @@ namespace OpenDental{
 			// textPhoneExt
 			// 
 			this.textPhoneExt.Location = new System.Drawing.Point(144,201);
-			this.textPhoneExt.MaxVal = 255;
+			this.textPhoneExt.MaxVal = 1000;
 			this.textPhoneExt.MinVal = 0;
 			this.textPhoneExt.Name = "textPhoneExt";
 			this.textPhoneExt.Size = new System.Drawing.Size(54,20);

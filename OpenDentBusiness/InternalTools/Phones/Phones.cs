@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName, "
-				+"IsUnvailable,NoColor "
+				+"IsUnavailable,NoColor "
 				+"FROM phone "
 				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt "
 				+"WHERE phone.Extension="+POut.Long(extens);
@@ -65,7 +65,7 @@ namespace OpenDentBusiness{
 			long empNum=PIn.Long(tablePhone.Rows[0]["EmployeeNum"].ToString());
 			string empName=PIn.String(tablePhone.Rows[0]["EmpName"].ToString());
 			//if these values are null because of missing phoneempdefault row, they will default to false
-			bool isAvailable=!PIn.Bool(tablePhone.Rows[0]["IsUnvailable"].ToString());
+			bool isAvailable=!PIn.Bool(tablePhone.Rows[0]["IsUnavailable"].ToString());
 			bool isDefaultNoColor=PIn.Bool(tablePhone.Rows[0]["NoColor"].ToString());
 			bool isInUse=false;
 			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {

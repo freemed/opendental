@@ -93,7 +93,6 @@ namespace OpenDental {
 				return;
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			//PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
 		}
 
@@ -125,8 +124,6 @@ namespace OpenDental {
 		}
 
 		public static void Unavailable(PhoneTile tile) {
-			MessageBox.Show("Not working right now.");
-			/*
 			if(!ClockIn(tile)) {
 				return;
 			}
@@ -135,33 +132,15 @@ namespace OpenDental {
 			if(!CheckSelectedUserPassword(employeeNum)) {
 				return;
 			}
-			//Employees.SetUnavailable(extension,employeeNum);
-			//Get an override if it exists
-			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
-			if(phoneOR==null) {//there is no override for that extension/emp combo.
-				phoneOR=new PhoneOverride();
-				phoneOR.EmpCurrent=employeeNum;
-				phoneOR.Extension=extension;
-				phoneOR.IsAvailable=false;
-				FormPhoneOverrideEdit FormO=new FormPhoneOverrideEdit();
-				FormO.phoneCur=phoneOR;
-				FormO.IsNew=true;
-				FormO.ForceUnAndExplanation=true;
-				FormO.ShowDialog();
-				if(FormO.DialogResult!=DialogResult.OK) {
-					return;
-				}
+			PhoneEmpDefault ped=PhoneEmpDefaults.GetByExtAndEmp(extension,employeeNum);
+			if(ped==null) {
+				MessageBox.Show("PhoneEmpDefault (employee setting row) not found for Extension "+extension.ToString()+" and EmployeeNum "+employeeNum.ToString());
+				return;
 			}
-			else {
-				phoneOR.IsAvailable=false;
-				FormPhoneOverrideEdit FormO=new FormPhoneOverrideEdit();
-				FormO.phoneCur=phoneOR;
-				FormO.ForceUnAndExplanation=true;
-				FormO.ShowDialog();
-				if(FormO.DialogResult!=DialogResult.OK) {
-					return;
-				}
-			}*/
+			FormPhoneEmpDefaultEdit formPED=new FormPhoneEmpDefaultEdit();
+			formPED.PedCur=ped;
+			formPED.ShowDialog();
+			Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,extension);
 		}
 
 		//RingGroups---------------------------------------------------
