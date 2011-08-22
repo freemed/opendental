@@ -1411,6 +1411,19 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Gets the number of procedures attached to a claim.</summary>
+		public static int GetCountForClaim(long claimNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),claimNum);
+			}
+			string command=
+				"SELECT COUNT(*) FROM procedurelog p "
+				+"WHERE p.ProcNum IN "
+				+"(SELECT cp.ProcNum FROM claimproc cp "
+				+" WHERE cp.ClaimNum="+claimNum+")";
+			return PIn.Int(Db.GetCount(command));
+		}
+
 	}
 
 	/*================================================================================================================

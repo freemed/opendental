@@ -27,9 +27,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private OpenDental.UI.Button butDelete;
-		private decimal splitTot;
 		///<summary>The list of splits to display in the grid.</summary>
-		private List<ClaimPaySplit> splits;
 		private System.Windows.Forms.Label labelClinic;
 		private System.Windows.Forms.TextBox textCarrierName;
 		private System.Windows.Forms.Label label7;
@@ -41,16 +39,14 @@ namespace OpenDental{
 		private GroupBox groupBox1;
 		private UI.Button butClaimPayEdit;
 		private ODGrid gridOut;
-		///<summary>Set this externally.</summary>
-		public long OriginatingClaimNum;
+		List<ClaimPaySplit> ClaimsAttached;
+		List<ClaimPaySplit> ClaimsOutstanding;
+		List<int> ProcsAttached;
 
 		///<summary></summary>
 		public FormClaimPayBatch(ClaimPayment claimPaymentCur) {
 			InitializeComponent();// Required for Windows Form Designer support
 			ClaimPaymentCur=claimPaymentCur;
-			List<Claim> ClaimsAttached;
-			List<Claim> ClaimsOutstanding;
-			splits=new List<ClaimPaySplit>();
 			Lan.F(this);
 		}
 
@@ -196,7 +192,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(803,631);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 7;
+			this.butCancel.TabIndex = 1;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -210,7 +206,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(803,593);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 6;
+			this.butOK.TabIndex = 0;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -388,9 +384,12 @@ namespace OpenDental{
 
 		private void FillClaimPayment() {
 			textClinic.Text=Clinics.GetDesc(ClaimPaymentCur.ClinicNum);
-			textDate.Text=ClaimPaymentCur.CheckDate.ToShortDateString();
-//todo: check for min date
-			textDateIssued.Text=ClaimPaymentCur.DateIssued.ToShortDateString();
+			if(ClaimPaymentCur.CheckDate.Year<1800) {
+				textDate.Text=ClaimPaymentCur.CheckDate.ToShortDateString();
+			}
+			if(ClaimPaymentCur.DateIssued.Year<1800) {
+				textDateIssued.Text=ClaimPaymentCur.DateIssued.ToShortDateString();
+			}
 			textAmount.Text=ClaimPaymentCur.CheckAmt.ToString("F");
 			textCheckNum.Text=ClaimPaymentCur.CheckNum;
 			textBankBranch.Text=ClaimPaymentCur.BankBranch;
@@ -399,52 +398,68 @@ namespace OpenDental{
 		}
 
 		private void FillGrids(){
+			Cursor.Current=Cursors.WaitCursor;
 			//gridAttached:
 			//Get all claims with claimprocs that have "this check attached" i.e. ClaimPaymentNum matches ClaimPaymentCur
-			//ClaimsAttached=Claims.Re
+			ClaimsAttached=Claims.GetByClaimPayment(ClaimPaymentCur.ClaimPaymentNum);
+			ProcsAttached=new List<int>();
+			for(int i=0;i<ClaimsAttached.Count;i++){
+				ProcsAttached.Add(Procedures.GetCountForClaim(ClaimsAttached[i].ClaimNum));
+			}
+			gridAttached.BeginUpdate();
+			gridAttached.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPayClaims","Service Date"),90);
+			gridAttached.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Patient"),140);
+			gridAttached.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Carrier"),230);
+			gridAttached.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Fee"),65,HorizontalAlignment.Right);
+			gridAttached.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Payment"),65,HorizontalAlignment.Right);
+			gridAttached.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Procs"),65,HorizontalAlignment.Right);
+			gridAttached.Columns.Add(col);		 
+			gridAttached.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ClaimsAttached.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(ClaimsAttached[i].DateClaim.ToShortDateString());
+				row.Cells.Add(ClaimsAttached[i].PatName);
+				row.Cells.Add(ClaimsAttached[i].Carrier);
+				row.Cells.Add(ClaimsAttached[i].FeeBilled.ToString("F"));
+				row.Cells.Add(ClaimsAttached[i].InsPayAmt.ToString("F"));
+				row.Cells.Add(ProcsAttached[i].ToString());
+				gridAttached.Rows.Add(row);
+			}
+			gridAttached.EndUpdate();
 			//gridOutstanding:
 			//Get all claims with claimprocs that have SUM(InsPayAmt)<ClaimFee for that claim
-			//splits=Claims.RefreshByCheck(ClaimPaymentCur.ClaimPaymentNum,checkShowUn.Checked);
-			/*
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPaySplits","Date"),70);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Prov"),40);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Patient"),140);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Carrier"),140);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Fee"),65,HorizontalAlignment.Right);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Payment"),65,HorizontalAlignment.Right);
-			gridMain.Columns.Add(col);			 
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			splitTot=0;
-			for(int i=0;i<splits.Count;i++){
+			ClaimsOutstanding=Claims.GetOutstandingClaims();
+			gridOut.BeginUpdate();
+			gridOut.Columns.Clear();
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Service Date"),90);
+			gridOut.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Patient"),140);
+			gridOut.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Carrier"),300);
+			gridOut.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Fee"),65,HorizontalAlignment.Right);
+			gridOut.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Payment"),65,HorizontalAlignment.Right);
+			gridOut.Columns.Add(col);
+			gridOut.Rows.Clear();
+			for(int i=0;i<ClaimsOutstanding.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(splits[i].DateClaim.ToShortDateString());
-				row.Cells.Add(splits[i].ProvAbbr);
-				row.Cells.Add(splits[i].PatName);
-				row.Cells.Add(splits[i].Carrier);
-				row.Cells.Add(splits[i].FeeBilled.ToString("F"));
-				row.Cells.Add(splits[i].InsPayAmt.ToString("F"));
-				if(splits[i].ClaimNum==OriginatingClaimNum){
-					row.Bold=true;
-				}  
-				gridMain.Rows.Add(row);
+				row.Cells.Add(ClaimsOutstanding[i].DateClaim.ToShortDateString());
+				row.Cells.Add(ClaimsOutstanding[i].PatName);
+				row.Cells.Add(ClaimsOutstanding[i].Carrier);
+				row.Cells.Add(ClaimsOutstanding[i].FeeBilled.ToString("F"));
+				row.Cells.Add(ClaimsOutstanding[i].InsPayAmt.ToString("F"));
+				gridOut.Rows.Add(row);
 			}
-			gridMain.EndUpdate();
-			for(int i=0;i<splits.Count;i++) {
-				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum) {
-					gridMain.SetSelected(i,true);
-					splitTot+=(decimal)splits[i].InsPayAmt;
-				}
-			}
-			textAmount.Text=splitTot.ToString("F");
-			 */
+			gridOut.EndUpdate();
+			Cursor.Current=Cursors.Default;
 		}
 
 
@@ -481,15 +496,6 @@ namespace OpenDental{
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
 				return;
-			}
-			for(int i=0;i<splits.Count;i++){
-				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum){
-					SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,splits[i].PatNum,
-						"Delete for patient: "
-						+Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
-						+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
-						+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
-				}
 			}
 			DialogResult=DialogResult.OK;
 		}

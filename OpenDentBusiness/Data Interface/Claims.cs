@@ -55,21 +55,48 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Gets all claims that are not fully covered by InsPayAmt in attached claimprocs. Will likely need a date range for filtering. DateService/DateSent/DateReceived?.</summary>
-		public static List<Claim> GetOutstandingClaims() {
+		public static List<ClaimPaySplit> GetOutstandingClaims() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Claim>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
 			}
 			string command=
-				"SELECT * "
-				+"FROM claim "
-				+"WHERE claim.ClaimNum IN "
-				+"(SELECT DISTINCT claim.ClaimNum "
-				+"FROM claim JOIN claimproc ON claim.ClaimNum=claimProc.ClaimNum "
-				//+"WHERE claim.DateService>"+POut.Date(dateFrom)+" "
-				//+"AND claim.DateService>"+POut.Date(dateTo)+" "
-				+"GROUP BY claim.ClaimNum "
-				+"HAVING SUM(claimproc.InsPayAmt)<claim.ClaimFee)";
-			return ClaimCrud.SelectMany(command);
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
+				+",claimproc.ClaimPaymentNum,claim.PatNum"
+				+" FROM claim,patient,insplan,carrier,claimproc"
+				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
+				+" AND patient.PatNum = claim.PatNum"
+				+" AND insplan.PlanNum = claim.PlanNum"
+				+" AND insplan.CarrierNum = carrier.CarrierNum"
+				+" AND claim.ClaimStatus IN ('S','P')"
+				+" AND claim.PreAuthString = ''"
+				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
+				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
+				+" ORDER BY claim.DateService";
+			DataTable table=Db.GetTable(command);
+			return ClaimPaySplitTableToList(table);
+		}
+
+		/// <summary>Gets all claims that are not fully covered by InsPayAmt in attached claimprocs. Will likely need a date range for filtering. DateService/DateSent/DateReceived?.</summary>
+		public static List<ClaimPaySplit> GetByClaimPayment(long claimPaymentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
+			}
+			string command=
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
+				+",claimproc.ClaimPaymentNum,claim.PatNum"
+				+" FROM claim,patient,insplan,carrier,claimproc"
+				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
+				+" AND patient.PatNum = claim.PatNum"
+				+" AND insplan.PlanNum = claim.PlanNum"
+				+" AND insplan.CarrierNum = carrier.CarrierNum"
+				+" AND claimproc.ClaimPaymentNum = "+claimPaymentNum
+				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
+				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
+				+" ORDER BY claim.DateService";
+			DataTable table=Db.GetTable(command);
+			return ClaimPaySplitTableToList(table);
 		}
 
 		///<summary></summary>
