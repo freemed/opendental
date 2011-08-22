@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE phoneempdefault "
-				+"SET StatusOverride = "+POut.Int(PhoneEmpStatusOverride.None)+" "
+				+"SET StatusOverride = "+POut.Int((int)PhoneEmpStatusOverride.None)+" "
 				+"WHERE PhoneExt="+POut.Int(extension)+" "
 				+"AND EmployeeNum="+POut.Long(empNum);
 			Db.NonQ(command);
