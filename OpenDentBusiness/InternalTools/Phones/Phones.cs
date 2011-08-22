@@ -169,7 +169,7 @@ namespace OpenDentBusiness {
 			//if(ipAddress=="") {
 			//	return;
 			//}
-			string command="SELECT * FROM phoneempdefault WHERE IpAddress='"+POut.String(computerName)+"'";
+			string command="SELECT * FROM phoneempdefault WHERE ComputerName='"+POut.String(computerName)+"'";
 			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
 			if(ped!=null) {//we found that computername entered as an override
 				command="UPDATE phone SET "
