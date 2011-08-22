@@ -53,32 +53,19 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockStatus,extens,employeeNum);
 				return;
 			}
-			//
-			string command=@"SELECT EmployeeNum,Description,EmpName "
+			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName, "
 				+"IsUnvailable,NoColor "
-				//IFNULL(IsAvailable,1) isAvail, COUNT(IsAvailable) overridden
 				+"FROM phone "
 				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt "
 				+"WHERE phone.Extension="+POut.Long(extens);
-				//+" phone.Extension";
-				//+" GROUP BY EmployeeNum,Description,phone.Extension";
 			DataTable tablePhone=Db.GetTable(command);
 			if(tablePhone.Rows.Count==0) {
 				return;
 			}
 			long empNum=PIn.Long(tablePhone.Rows[0]["EmployeeNum"].ToString());
-			string empName="";//PIn.String(tablePhone.Rows[0]["EmployeeName"].ToString());
-			if(employeeNum==0) {
-				empNum=0;
-				empName="";
-			}
-			else if(employeeNum>0) {
-				empNum=employeeNum;
-				empName=Employees.GetEmp(empNum).FName;
-			}
+			string empName=PIn.String(tablePhone.Rows[0]["EmpName"].ToString());
 			//if these values are null because of missing phoneempdefault row, they will default to false
 			bool isAvailable=!PIn.Bool(tablePhone.Rows[0]["IsUnvailable"].ToString());
-			//bool overridden=PIn.Bool(tablePhone.Rows[0]["overridden"].ToString());
 			bool isDefaultNoColor=PIn.Bool(tablePhone.Rows[0]["NoColor"].ToString());
 			bool isInUse=false;
 			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
