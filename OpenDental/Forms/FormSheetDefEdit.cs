@@ -24,10 +24,13 @@ namespace OpenDental {
 		private List<Point> OriginalControlPositions;
 		///<summary>When you first mouse down, if you clicked on a valid control, this will be false.  For drag selection, this must be true.</summary>
 		private bool ClickedOnBlankSpace;
-		private bool altIsDown;
-		private List<SheetFieldDef> clipboard;
+		private bool AltIsDown;
+		private List<SheetFieldDef> ListSheetFieldDefsCopyPaste;
 		private int pasteOffset=0;
+		/// <summary>After each 10 pastes to the upper left origin, this increments 10 to shift the next 10 down.</summary>
 		private int pasteOffsetY=0;
+		private bool isTabMode;
+		private List<SheetFieldDef> ListSheetFieldDefsTabOrder;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -74,6 +77,7 @@ namespace OpenDental {
 				linkLabelTips.Visible=false;
 				butCopy.Visible=false;
 				butPaste.Visible=false;
+				butTabOrder.Visible=false;
 			}
 			else{
 				labelInternal.Visible=false;
@@ -100,6 +104,7 @@ namespace OpenDental {
 		private void FillFieldList(){
 			listFields.Items.Clear();
 			string txt;
+			SheetDefCur.SheetFieldDefs.Sort(CompareTabOrder);
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.StaticText){
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldValue);
@@ -126,6 +131,7 @@ namespace OpenDental {
 				}
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
 					txt=//Lan.g(this,"Check:")+
+						SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+
 						SheetDefCur.SheetFieldDefs[i].FieldName;
 					if(SheetDefCur.SheetFieldDefs[i].RadioButtonValue!="") {
 						txt+=" - "+SheetDefCur.SheetFieldDefs[i].RadioButtonValue;
@@ -133,9 +139,27 @@ namespace OpenDental {
 					listFields.Items.Add(txt);
 				}
 				else{
-					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
+					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
 			}
+		}
+
+		///<summary>This is a comparator function used by List&lt;T&gt;.Sort() 
+		///When compairing SheetFieldDef.TabOrder it returns a negative number if def1&lt;def2, 0 if def1==def2, and a positive number if def1&gt;def2.
+		///Does not handle null values, but there should never be any instances of null being passed in. 
+		///Must always return 0 when compairing item to itself.
+		///This function should probably be moved to SheetFieldDefs.</summary>
+		private static int CompareTabOrder(SheetFieldDef def1,SheetFieldDef def2) {
+			if(def1.FieldType==def2.FieldType) {
+				//do nothing
+			}
+			else if(def1.FieldType==SheetFieldType.Image) {//Always move images to the top of the list. This is because of the way the sheet is drawn.
+				return -1;
+			}
+			if(def1.TabOrder-def2.TabOrder==0) {
+				return def1.FieldName.CompareTo(def2.FieldName); //If tab orders are the same, alphabetize them.
+			}
+			return def1.TabOrder-def2.TabOrder;
 		}
 
 		private void panelMain_Paint(object sender,PaintEventArgs e) {
@@ -229,6 +253,21 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].XPos,
 						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height-1);
+					if(isTabMode) {
+						Rectangle tabRect = new Rectangle(
+							SheetDefCur.SheetFieldDefs[i].XPos,//X
+							SheetDefCur.SheetFieldDefs[i].YPos,//Y
+							(int)g.MeasureString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont()).Width+1,//Width
+							20);//height
+						if(ListSheetFieldDefsTabOrder.Contains(SheetDefCur.SheetFieldDefs[i])){//blue border, white box, blue letters
+							g.FillRectangle(Brushes.White,tabRect);
+							g.DrawRectangle(Pens.Blue,tabRect);
+							GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
+						}else{//Blue border, blue box, white letters
+						g.FillRectangle(brushBlue,tabRect);
+						GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
+						}
+					}
 					continue;
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox){
@@ -279,6 +318,22 @@ namespace OpenDental {
 						Math.Abs(MouseCurrentPos.Y-MouseOriginalPos.Y));//Height
 				}
 				GraphicsHelper.DrawString(g,g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
+				if(isTabMode) {
+					Rectangle tabRect = new Rectangle(
+						SheetDefCur.SheetFieldDefs[i].XPos,//X
+						SheetDefCur.SheetFieldDefs[i].YPos,//Y
+						(int)g.MeasureString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),font).Width+1,//Width
+						20);//height
+					if(ListSheetFieldDefsTabOrder.Contains(SheetDefCur.SheetFieldDefs[i])) {//blue border, white box, blue letters
+						g.FillRectangle(Brushes.White,tabRect);
+						g.DrawRectangle(Pens.Blue,tabRect);
+						GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
+					}
+					else {//Blue border, blue box, white letters
+						g.FillRectangle(brushBlue,tabRect);
+						GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
+					}
+				}
 			}
 		}
 
@@ -491,7 +546,11 @@ namespace OpenDental {
 			listFields.SetSelected(idx,true);
 			panelMain.Invalidate();
 			SheetFieldDef field=SheetDefCur.SheetFieldDefs[idx];
+			SheetFieldDef fieldold=field.Copy();
 			LaunchEditWindow(field);
+			if(field.TabOrder!=fieldold.TabOrder) {//otherwise a different control will be selected.
+				listFields.SelectedIndices.Clear();
+			}
 		}
 
 		///<summary>Only for editing fields that already exist.</summary>
@@ -620,6 +679,16 @@ namespace OpenDental {
 					}
 					break;
 			}
+			if(isTabMode) {
+				if(ListSheetFieldDefsTabOrder.Contains(field)) {
+					ListSheetFieldDefsTabOrder.RemoveAt(ListSheetFieldDefsTabOrder.IndexOf(field));
+				}
+				if(field.TabOrder>0 && field.TabOrder<=(ListSheetFieldDefsTabOrder.Count+1)) {
+					ListSheetFieldDefsTabOrder.Insert(field.TabOrder-1,field);
+				}
+				RenumberTabOrderHelper();
+				return;
+			}
 			FillFieldList();
 			if(listFields.Items.Count-1>=idx){
 				listFields.SelectedIndex=idx;//reselect the item.
@@ -629,8 +698,8 @@ namespace OpenDental {
 
 		private void panelMain_MouseDown(object sender,MouseEventArgs e) {
 			panelMain.Select();
-			if(altIsDown) {
-				PasteControlsFromClipboard(e.Location);
+			if(AltIsDown) {
+				PasteControlsFromMemory(e.Location);
 				return;
 			}
 			MouseIsDown=true;
@@ -638,11 +707,28 @@ namespace OpenDental {
 			MouseOriginalPos=e.Location;
 			MouseCurrentPos=e.Location;
 			SheetFieldDef field=HitTest(e.X,e.Y);
+			if(isTabMode) {
+				MouseIsDown=false;
+				CtrlIsDown=false;
+				AltIsDown=false;
+				if(field==null) {
+					return;
+				}
+				if(ListSheetFieldDefsTabOrder.Contains(field)) {
+					field.TabOrder=0;
+					ListSheetFieldDefsTabOrder.RemoveAt(ListSheetFieldDefsTabOrder.IndexOf(field));
+				}
+				else {
+					ListSheetFieldDefsTabOrder.Add(field);
+				}
+				RenumberTabOrderHelper();
+				return;
+			}
 			if(field==null){
-				ClickedOnBlankSpace=true;
 				if(CtrlIsDown){
 					return;//so that you can add more to the previous selection
 				}
+				ClickedOnBlankSpace=true;
 				listFields.SelectedIndices.Clear();//clear the existing selection
 				panelMain.Invalidate();
 				return;
@@ -682,6 +768,9 @@ namespace OpenDental {
 			if(IsInternal) {
 				return;
 			}
+			if(isTabMode) {
+				return;
+			}
 			if(ClickedOnBlankSpace) {
 				MouseCurrentPos=e.Location;
 				panelMain.Invalidate();
@@ -718,14 +807,36 @@ namespace OpenDental {
 		}
 
 		private void panelMain_MouseDoubleClick(object sender,MouseEventArgs e) {
-			if(altIsDown) {
+			if(AltIsDown) {
 				return;
 			}
 			SheetFieldDef field=HitTest(e.X,e.Y);
 			if(field==null){
 				return;
 			}
+			SheetFieldDef fieldold=field.Copy();
 			LaunchEditWindow(field);
+			//if(field.TabOrder!=fieldold.TabOrder) {
+			//  listFields.SelectedIndices.Clear();
+			//}
+			//if(isTabMode) {
+			//  if(ListSheetFieldDefsTabOrder.Contains(field)){
+			//    ListSheetFieldDefsTabOrder.RemoveAt(ListSheetFieldDefsTabOrder.IndexOf(field));
+			//  }
+			//  if(field.TabOrder>0 && field.TabOrder<ListSheetFieldDefsTabOrder.Count+1) {
+			//    ListSheetFieldDefsTabOrder.Insert(field.TabOrder-1,field);
+			//  }
+			//  RenumberTabOrderHelper();
+			//}
+		}
+
+		///<summary>Used To renumber TabOrder on controls</summary>
+		private void RenumberTabOrderHelper() {
+			for(int i=0;i<ListSheetFieldDefsTabOrder.Count;i++) {
+				ListSheetFieldDefsTabOrder[i].TabOrder=i+1;
+			}
+			FillFieldList();
+			panelMain.Invalidate();
 		}
 
 		///<summary>Images will be ignored in the hit test since they frequently fill the entire background.  Lines will be ignored too, since a diagonal line could fill a large area.</summary>
@@ -749,27 +860,27 @@ namespace OpenDental {
 			if(e.Control){
 				CtrlIsDown=true;
 			}
-			if(e.KeyCode==Keys.C && e.Control) {
-				CopyControlsToClipboard();
+			if(CtrlIsDown && e.KeyCode==Keys.C) {//CTRL-C
+				CopyControlsToMemory();
 			}
-			else if(e.KeyCode==Keys.V && e.Control) {
-				PasteControlsFromClipboard(new Point(0,0));
-				//Paste controls from 'clipboard'
+			else if(CtrlIsDown && e.KeyCode==Keys.V) {//CTRL-V
+				PasteControlsFromMemory(new Point(0,0));
 			}
 			else if(e.Alt) {
-				Cursor=Cursors.Cross;
-				altIsDown=true;
-				//change cursor to rubber stamp cursor
+				Cursor=Cursors.Cross;//change cursor to rubber stamp cursor
+				AltIsDown=true;
 			}
 			else if(e.KeyCode==Keys.Delete || e.KeyCode==Keys.Back) {
-				if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete selected fields?")) {
-					for(int i=listFields.SelectedIndices.Count;i>0;i--) {//iterate backwards through list
-						SheetDefCur.SheetFieldDefs.RemoveAt(listFields.SelectedIndices[i-1]);
-					}
-					FillFieldList();
-					panelMain.Invalidate();
+				if(listFields.SelectedIndices.Count==0) {
 					return;
 				}
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete selected fields?")) {
+					return;
+				}
+				for(int i=listFields.SelectedIndices.Count-1;i>=0;i--) {//iterate backwards through list
+					SheetDefCur.SheetFieldDefs.RemoveAt(listFields.SelectedIndices[i]);
+				}
+				FillFieldList();
 			}
 			for(int i=0;i<listFields.SelectedIndices.Count;i++){
 				switch(e.KeyCode){
@@ -810,60 +921,100 @@ namespace OpenDental {
 			}
 			if(!e.Alt) {
 				Cursor=Cursors.Default;
-				altIsDown=false;
+				AltIsDown=false;
 			}
 		}
 
-		private void CopyControlsToClipboard() {
+		private void CopyControlsToMemory() {
+			if(isTabMode) {
+				return;
+			}
 			if(listFields.SelectedIndices.Count==0) {
 				return;
 			}
-			else {
-				clipboard=new List<SheetFieldDef>();//empty the clipboard
-				for(int i=0;i<listFields.SelectedIndices.Count;i++) {
-					clipboard.Add(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Copy());//fill clipboard with copies of the controls. 
-					//It would probably be safe to fill the clipboard with the originals. but it is safer to fill it with copies.
+			//List<SheetFieldDef> listDuplicates=new List<SheetFieldDef>();
+			string strPrompt=Lan.g(this,"The following selected fields can cause conflicts if they are copied:\r\n");
+			bool conflictingfield=false;
+			for(int i=0;i<listFields.SelectedIndices.Count;i++) {
+				SheetFieldDef fielddef=SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]];
+				switch(fielddef.FieldType) {
+					case SheetFieldType.Drawing:
+					case SheetFieldType.Image:
+					case SheetFieldType.Line:
+					case SheetFieldType.PatImage:
+					//case SheetFieldType.Parameter://would not be seen on the sheet.
+					case SheetFieldType.Rectangle:
+					case SheetFieldType.SigBox:
+					case SheetFieldType.StaticText:
+						break;//it will always be ok to copy the types of fields above.
+					case SheetFieldType.CheckBox:
+						if(fielddef.FieldName!="misc") {//custom fields should be okay to copy
+							strPrompt+=fielddef.FieldName+"."+fielddef.RadioButtonValue+"\r\n";
+							conflictingfield=true;
+						}
+						break;
+					case SheetFieldType.InputField:
+					case SheetFieldType.OutputText:
+						if(fielddef.FieldName!="misc") {//custom fields should be okay to copy
+							strPrompt+=fielddef.FieldName+"\r\n";
+							conflictingfield=true;
+						}
+						break;
 				}
+			}
+			strPrompt+=Lan.g(this,"Would you like to continue anyways?");
+			if(conflictingfield && MessageBox.Show(strPrompt,Lan.g(this,"Warning"),MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				panelMain.Select();
+				CtrlIsDown=false;
+				return;
+			}
+			ListSheetFieldDefsCopyPaste=new List<SheetFieldDef>();//empty the remembered field list
+			for(int i=0;i<listFields.SelectedIndices.Count;i++) {
+				ListSheetFieldDefsCopyPaste.Add(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Copy());//fill clipboard with copies of the controls. 
+				//It would probably be safe to fill the clipboard with the originals. but it is safer to fill it with copies.
 			}
 		}
 
-		private void PasteControlsFromClipboard(Point origin) {
-			if(clipboard==null || clipboard.Count==0) {
+		private void PasteControlsFromMemory(Point origin) {
+			if(isTabMode) {
+				return;
+			}
+			if(ListSheetFieldDefsCopyPaste==null || ListSheetFieldDefsCopyPaste.Count==0) {
 				return;
 			}
 			if(origin.X==0 && origin.Y==0) {//allows for cascading pastes in the upper right hand corner.
 				origin.X+=pasteOffset;
 				origin.Y+=pasteOffset+pasteOffsetY;
 			}
-			//TODO: check to make sure there isn't a controll exactly at the origin point.
 			listFields.ClearSelected();
 			int minX=int.MaxValue;
 			int minY=int.MaxValue;
-			for(int i=0;i<clipboard.Count;i++) {//calculate offset
-				minX=Math.Min(minX,clipboard[i].XPos);
-				minY=Math.Min(minY,clipboard[i].YPos);
+			for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//calculate offset
+				minX=Math.Min(minX,ListSheetFieldDefsCopyPaste[i].XPos);
+				minY=Math.Min(minY,ListSheetFieldDefsCopyPaste[i].YPos);
 			} 
-			for(int i=0;i<clipboard.Count;i++) {//create new controls
-				SheetFieldDef tempField=clipboard[i].Copy();
-				tempField.XPos=tempField.XPos-minX+origin.X;
-				tempField.YPos=tempField.YPos-minY+origin.Y;
-				//Changes that need to be made to the new copy should be made here.
-				//for example changing the name fo the field
-				SheetDefCur.SheetFieldDefs.Add(tempField);
+			for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//create new controls
+				SheetFieldDef fielddef=ListSheetFieldDefsCopyPaste[i].Copy();
+				fielddef.XPos=fielddef.XPos-minX+origin.X;
+				fielddef.YPos=fielddef.YPos-minY+origin.Y;
+				SheetDefCur.SheetFieldDefs.Add(fielddef);
 			}
-			if(!altIsDown) {
+			if(!AltIsDown) {
 				pasteOffsetY+=((pasteOffset+10)/100)*10;//this will shift the pastes down 10 pixels every 10 pastes.
 				pasteOffset=(pasteOffset+10)%100;//cascades and allows for 90 consecutive pastes without overlap
 
 			}
 			FillFieldList();
-			for(int i=0;i<clipboard.Count;i++) {//reselect newly added controls
+			for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//reselect newly added controls
 				listFields.SetSelected((listFields.Items.Count-1)-i,true);//Add to selected indicies, which will be the newest clipboard.count controls on the bottom of the list.
 			}
 			panelMain.Invalidate();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
+			if(isTabMode) {
+				return;
+			}
 			if(SheetDefCur.IsNew){
 				DialogResult=DialogResult.Cancel;
 				return;
@@ -907,6 +1058,9 @@ namespace OpenDental {
 		}
 
 		private void linkLabelTips_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
+			if(isTabMode) {
+				return;
+			}
 			string tips="";
 			tips+="The following shortcuts and hotkeys are supported:\r\n";
 			tips+="\r\n";
@@ -939,7 +1093,8 @@ namespace OpenDental {
 						continue;
 					}
 					if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Bounds.X//compair the int bounds not the boundsF for practical use
-						==SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[j]].Bounds.X) {//compair the int bounds not the boundsF for practical use
+						==SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[j]].Bounds.X) //compair the int bounds not the boundsF for practical use
+					{
 						MsgBox.Show(this,"Cannot align controls. Two or more selected controls will overlap.");
 						return;
 					}
@@ -965,7 +1120,8 @@ namespace OpenDental {
 						continue;
 					}
 					if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Bounds.Y//compare the int bounds not the boundsF for practical use
-						==SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[j]].Bounds.Y) {//compare the int bounds not the boundsF for practical use
+						==SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[j]].Bounds.Y) //compare the int bounds not the boundsF for practical use
+					{
 						MsgBox.Show(this,"Cannot align controls. Two or more selected controls will overlap.");
 						return;
 					}
@@ -978,11 +1134,39 @@ namespace OpenDental {
 		}
 
 		private void butPaste_Click(object sender,EventArgs e) {
-			PasteControlsFromClipboard(new Point(0,0));
+			PasteControlsFromMemory(new Point(0,0));
 		}
 
 		private void butCopy_Click(object sender,EventArgs e) {
-			CopyControlsToClipboard();
+			CopyControlsToMemory();
+		}
+
+		private void butTabOrder_Click(object sender,EventArgs e) {
+			isTabMode=!isTabMode;
+			if(isTabMode) {
+				butOK.Enabled=false;
+				butCancel.Enabled=false;
+				butDelete.Enabled=false;
+				groupAddNew.Enabled=false;
+				butCopy.Enabled=false;
+				butPaste.Enabled=false;
+				butAlignLeft.Enabled=false;
+				butAlignTop.Enabled=false;
+				butEdit.Enabled=false;
+				ListSheetFieldDefsTabOrder=new List<SheetFieldDef>();//clear or create the list of tab orders.
+			}
+			else {
+				butOK.Enabled=true;
+				butCancel.Enabled=true;
+				butDelete.Enabled=true;
+				groupAddNew.Enabled=true;
+				butCopy.Enabled=true;
+				butPaste.Enabled=true;
+				butAlignLeft.Enabled=true;
+				butAlignTop.Enabled=true;
+				butEdit.Enabled=true;
+			}
+			panelMain.Invalidate();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

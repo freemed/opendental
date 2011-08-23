@@ -44,6 +44,7 @@ namespace OpenDental {
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
 			textRadioGroupName.Text=SheetFieldDefCur.RadioButtonGroup;
 			checkRequired.Checked=SheetFieldDefCur.IsRequired;
+			textTabOrder.Text=SheetFieldDefCur.TabOrder.ToString();
 		}
 
 		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
@@ -98,7 +99,8 @@ namespace OpenDental {
 			if(textXPos.errorProvider1.GetError(textXPos)!=""
 				|| textYPos.errorProvider1.GetError(textYPos)!=""
 				|| textWidth.errorProvider1.GetError(textWidth)!=""
-				|| textHeight.errorProvider1.GetError(textHeight)!="")
+				|| textHeight.errorProvider1.GetError(textHeight)!=""
+				|| textTabOrder.errorProvider1.GetError(textTabOrder)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
@@ -121,6 +123,7 @@ namespace OpenDental {
 				SheetFieldDefCur.RadioButtonGroup=textRadioGroupName.Text;
 			}
 			SheetFieldDefCur.IsRequired=checkRequired.Checked;
+			SheetFieldDefCur.TabOrder=PIn.Int(textTabOrder.Text);
 			//don't save to database here.
 			DialogResult=DialogResult.OK;
 		}

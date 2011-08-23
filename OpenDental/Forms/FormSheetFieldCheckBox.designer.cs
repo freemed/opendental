@@ -44,6 +44,8 @@ namespace OpenDental{
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textTabOrder = new OpenDental.ValidNum();
+			this.labelTabOrder = new System.Windows.Forms.Label();
 			this.groupRadioMisc.SuspendLayout();
 			this.groupRadio.SuspendLayout();
 			this.SuspendLayout();
@@ -62,7 +64,7 @@ namespace OpenDental{
 			this.listFields.FormattingEnabled = true;
 			this.listFields.Location = new System.Drawing.Point(15,37);
 			this.listFields.Name = "listFields";
-			this.listFields.Size = new System.Drawing.Size(142,420);
+			this.listFields.Size = new System.Drawing.Size(142,446);
 			this.listFields.TabIndex = 85;
 			this.listFields.SelectedIndexChanged += new System.EventHandler(this.listFields_SelectedIndexChanged);
 			this.listFields.DoubleClick += new System.EventHandler(this.listFields_DoubleClick);
@@ -192,7 +194,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(16,472);
+			this.butDelete.Location = new System.Drawing.Point(16,492);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(77,24);
 			this.butDelete.TabIndex = 100;
@@ -243,7 +245,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(323,472);
+			this.butOK.Location = new System.Drawing.Point(404,462);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -258,17 +260,37 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(404,472);
+			this.butCancel.Location = new System.Drawing.Point(404,492);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textTabOrder
+			// 
+			this.textTabOrder.Location = new System.Drawing.Point(276,461);
+			this.textTabOrder.MaxVal = 2000;
+			this.textTabOrder.MinVal = -100;
+			this.textTabOrder.Name = "textTabOrder";
+			this.textTabOrder.Size = new System.Drawing.Size(69,20);
+			this.textTabOrder.TabIndex = 109;
+			// 
+			// labelTabOrder
+			// 
+			this.labelTabOrder.Location = new System.Drawing.Point(205,462);
+			this.labelTabOrder.Name = "labelTabOrder";
+			this.labelTabOrder.Size = new System.Drawing.Size(71,16);
+			this.labelTabOrder.TabIndex = 108;
+			this.labelTabOrder.Text = "Tab Order";
+			this.labelTabOrder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSheetFieldCheckBox
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(495,510);
+			this.ClientSize = new System.Drawing.Size(495,530);
+			this.Controls.Add(this.textTabOrder);
+			this.Controls.Add(this.labelTabOrder);
 			this.Controls.Add(this.checkRequired);
 			this.Controls.Add(this.groupRadioMisc);
 			this.Controls.Add(this.groupRadio);
@@ -320,5 +342,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox listRadio;
 		private System.Windows.Forms.GroupBox groupRadio;
+		private ValidNum textTabOrder;
+		private System.Windows.Forms.Label labelTabOrder;
 	}
 }

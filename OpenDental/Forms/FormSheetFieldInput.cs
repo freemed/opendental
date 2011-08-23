@@ -55,6 +55,7 @@ namespace OpenDental {
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
 			checkRequired.Checked=SheetFieldDefCur.IsRequired;
+			textTabOrder.Text=SheetFieldDefCur.TabOrder.ToString();
 		}
 
 		private void listFields_DoubleClick(object sender,EventArgs e) {
@@ -74,7 +75,8 @@ namespace OpenDental {
 			if(textXPos.errorProvider1.GetError(textXPos)!=""
 				|| textYPos.errorProvider1.GetError(textYPos)!=""
 				|| textWidth.errorProvider1.GetError(textWidth)!=""
-				|| textHeight.errorProvider1.GetError(textHeight)!="")
+				|| textHeight.errorProvider1.GetError(textHeight)!=""
+				|| textTabOrder.errorProvider1.GetError(textTabOrder)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
@@ -110,6 +112,7 @@ namespace OpenDental {
 			SheetFieldDefCur.Height=PIn.Int(textHeight.Text);
 			SheetFieldDefCur.GrowthBehavior=(GrowthBehaviorEnum)comboGrowthBehavior.SelectedIndex;
 			SheetFieldDefCur.IsRequired=checkRequired.Checked;
+			SheetFieldDefCur.TabOrder=PIn.Int(textTabOrder.Text);
 			//don't save to database here.
 			DialogResult=DialogResult.OK;
 		}
