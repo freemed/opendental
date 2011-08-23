@@ -336,6 +336,24 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormAggPathSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAggPathSetup.designer.cs">
+      <DependentUpon>FormAggPathSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAggPathEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAggPathEdit.designer.cs">
+      <DependentUpon>FormAggPathEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormReportSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReportSetup.designer.cs">
+      <DependentUpon>FormReportSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormClaimPayBatch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2307,6 +2325,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAggPathSetup.resx">
+      <DependentUpon>FormAggPathSetup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAggPathEdit.resx">
+      <DependentUpon>FormAggPathEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReportSetup.resx">
+      <DependentUpon>FormReportSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormClaimPayBatch.resx">
