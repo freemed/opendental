@@ -21,6 +21,11 @@ namespace UnitTests {
 				throw new Exception("Should be null");
 			}
 			retVal+="GetStringNull: Passed.\r\n";
+			strResult=WebServiceTests.GetStringCarriageReturn("Carriage\r\nReturn");
+			if(strResult!="Carriage\r\nReturn") {
+				throw new Exception("Should be Carriage\r\nReturn");
+			}
+			retVal+="GetStringCarriageReturn: Passed.\r\n";
 			//GetInt
 			int intResult=WebServiceTests.GetInt(1);
 			if(intResult!=2){

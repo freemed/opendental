@@ -22,6 +22,13 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
+		public static string GetStringCarriageReturn(string str) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),str);
+			}
+			return str;
+		}
+
 		public static int GetInt(int intVal){ 
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),intVal);
