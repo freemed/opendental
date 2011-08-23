@@ -683,6 +683,7 @@
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
+    <Compile Include="TableTypes\AggPath.cs" />
     <Compile Include="TableTypes\DashboardAR.cs" />
     <Compile Include="TableTypes\EhrQuarterlyKey.cs" />
     <Compile Include="TableTypes\EhrSummaryCcd.cs" />

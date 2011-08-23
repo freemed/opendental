@@ -6231,15 +6231,29 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE sheetfielddef MODIFY TabOrder NOT NULL";
 					Db.NonQ(command);
 				}
-				
-					
-
-
-
-
-
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS aggpath";
+					Db.NonQ(command);
+					command=@"CREATE TABLE aggpath (
+						AggPathNum bigint NOT NULL auto_increment PRIMARY KEY,
+						RemoteURI varchar(255) NOT NULL,
+						RemoteUserName varchar(255) NOT NULL,
+						RemotePassword varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE aggpath'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE aggpath (
+						AggPathNum number(20) NOT NULL,
+						RemoteURI varchar2(255),
+						RemoteUserName varchar2(255),
+						RemotePassword varchar2(255),
+						CONSTRAINT aggpath_AggPathNum PRIMARY KEY (AggPathNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -6263,3 +6277,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 			
+
+				
+
+
+
+
+
+
+
+
+
+
+
+
