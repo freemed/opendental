@@ -22,8 +22,8 @@ namespace UnitTests {
 			}
 			retVal+="GetStringNull: Passed.\r\n";
 			strResult=WebServiceTests.GetStringCarriageReturn("Carriage\r\nReturn");
-			if(strResult!="Carriage\r\nReturn") {
-				throw new Exception("Should be Carriage\r\nReturn");
+			if(strResult!="Carriage\r\nReturn-Processed") {
+				throw new Exception("Should be Carriage\r\nReturn-Processed");
 			}
 			retVal+="GetStringCarriageReturn: Passed.\r\n";
 			//GetInt
@@ -62,6 +62,12 @@ namespace UnitTests {
 				throw new Exception("Should be cell00");
 			}
 			retVal+="GetTable: Passed.\r\n";
+			//GetTable with carriage return
+			table=WebServiceTests.GetTableCarriageReturn();
+			if(table.Rows[0][0].ToString()!="cell\r\n00"){
+				throw new Exception("Should be cell\r\n00");
+			}
+			retVal+="GetTableCarriageReturn: Passed.\r\n";
 			//GetDataSet
 			DataSet ds=WebServiceTests.GetDataSet();
 			if(ds.Tables[0].TableName!="table0"){

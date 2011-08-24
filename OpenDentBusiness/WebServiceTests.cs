@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),str);
 			}
-			return str;
+			return str+"-Processed";
 		}
 
 		public static int GetInt(int intVal){ 
@@ -73,6 +73,15 @@ namespace OpenDentBusiness {
 				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT 'cell00'";
+			DataTable table=Db.GetTable(command);
+			return table;
+		}
+
+		public static DataTable GetTableCarriageReturn(){ 
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT '"+POut.String("cell\r\n00")+"'";
 			DataTable table=Db.GetTable(command);
 			return table;
 		}
