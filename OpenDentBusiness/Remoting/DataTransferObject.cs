@@ -28,7 +28,8 @@ namespace OpenDentBusiness {
 
 		public static DataTransferObject Deserialize(string data) {
 			StringReader strReader=new StringReader(data);
-			XmlReader reader=XmlReader.Create(strReader);
+			//XmlReader reader=XmlReader.Create(strReader);
+			XmlTextReader reader=new XmlTextReader(strReader);
 			string strNodeName="";
 			while(reader.Read()){
 				if(reader.NodeType!=XmlNodeType.Element){
@@ -37,15 +38,15 @@ namespace OpenDentBusiness {
 				strNodeName=reader.Name;
 				break;
 			}
+			//strReader.Close();
+			//reader.Close();
+			Type type = Type.GetType("OpenDentBusiness." +strNodeName);
+			//StringReader strReader2=new StringReader(data);
+			//XmlReader reader2=XmlReader.Create(strReader2);
+			XmlSerializer serializer = new XmlSerializer(type);
+			DataTransferObject retVal=(DataTransferObject)serializer.Deserialize(reader);
 			strReader.Close();
 			reader.Close();
-			Type type = Type.GetType("OpenDentBusiness." +strNodeName);
-			StringReader strReader2=new StringReader(data);
-			XmlReader reader2=XmlReader.Create(strReader2);
-			XmlSerializer serializer = new XmlSerializer(type);
-			DataTransferObject retVal=(DataTransferObject)serializer.Deserialize(reader2);
-			strReader2.Close();
-			reader2.Close();
 			return retVal;
 		}
 	}

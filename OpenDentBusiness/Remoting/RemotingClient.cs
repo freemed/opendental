@@ -139,6 +139,12 @@ namespace OpenDentBusiness {
 			OpenDentalServer.ServiceMain service=new OpenDentBusiness.OpenDentalServer.ServiceMain();
 			service.Url=ServerURI;
 			string result=service.ProcessRequest(dtoString);
+			//The web service (xml) serializer/deserializer is removing the '\r' portion of our newlines during the data transfer. 
+			//Replacing the string is not the best solution but it works for now. The replacing happens inside ProcessRequest() (server side) and here (client side).
+			//It's done server side for usage purposes within the methods being called (exampe: inserting into db) and then on the client side for displaying purposes.
+			if(result!=null) {
+			  result=result.Replace("\n","\r\n");
+			}
 			return result;
 		}
 

@@ -101,7 +101,8 @@ namespace OpenDentBusiness {
 				type=Type.GetType(TypeName);
 			}
 			XmlSerializer serializer = new XmlSerializer(type);
-			XmlReader reader2=XmlReader.Create(new StringReader(strObj));
+			//XmlReader reader2=XmlReader.Create(new StringReader(strObj));
+			XmlTextReader reader2=new XmlTextReader(new StringReader(strObj));
 			if(TypeName=="System.Drawing.Color") {
 				Obj=Color.FromArgb((int)serializer.Deserialize(reader2));
 			}

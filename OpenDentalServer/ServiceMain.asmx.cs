@@ -22,6 +22,10 @@ namespace OpenDentalServer {
 		/// <summary>Pass in a serialized dto.  It returns a dto which must be deserialized by the client.</summary>
 		[WebMethod]
 		public string ProcessRequest(string dtoString) {
+			//The web service (xml) serializer/deserializer is removing the '\r' portion of our newlines during the data transfer. 
+			//Replacing the string is not the best solution but it works for now. The replacing happens here (server side) and after result is returned on the client side.
+			//It's done server side for usage purposes within the methods being called (exampe: inserting into db) and then on the client side for displaying purposes.
+			dtoString=dtoString.Replace("\n","\r\n");
 			#if DEBUG
 				//System.Threading.Thread.Sleep(100);//to test slowness issues with web service.
 			#endif
@@ -39,7 +43,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetTable.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetTable.MethodName);
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
@@ -66,7 +70,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetDS.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetDS.MethodName);
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
@@ -84,7 +88,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetLong.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetLong.MethodName);
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
@@ -101,7 +105,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetInt.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetInt.MethodName);
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
@@ -118,7 +122,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetVoid.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetVoid.MethodName);
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
@@ -137,7 +141,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetObject.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetObject.MethodName);
 					}
 					if(className=="Security" && methodName=="LogInWeb") {
@@ -160,7 +164,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetString.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetString.MethodName);
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);
@@ -179,7 +183,7 @@ namespace OpenDentalServer {
 					DtoObject[] parameters=dtoGetBool.Params;
 					Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
 					MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-					if(methodInfo==null){
+					if(methodInfo==null) {
 						throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetBool.MethodName);
 					}
 					object[] paramObjs=DtoObject.GenerateObjects(parameters);

@@ -97,7 +97,8 @@ namespace OpenDentBusiness {
 				}
 			}
 			StringReader strReader=new StringReader(xmlData);
-			XmlReader reader=XmlReader.Create(strReader);
+			//XmlReader reader=XmlReader.Create(strReader);
+			XmlTextReader reader=new XmlTextReader(strReader);
 			XmlSerializer serializer;
 			T retVal;
 			if(type==typeof(Color)) {
@@ -139,7 +140,8 @@ namespace OpenDentBusiness {
 
 		public static DataTable XmlToTable(string xmlData) {
 			DataTable table=new DataTable();
-			XmlReader xmlReader=XmlReader.Create(new StringReader(xmlData));
+			//XmlReader xmlReader=XmlReader.Create(new StringReader(xmlData));
+			XmlTextReader xmlReader=new XmlTextReader(new StringReader(xmlData));
 			table.ReadXml(xmlReader);
 			xmlReader.Close();
 			return table;
@@ -147,7 +149,8 @@ namespace OpenDentBusiness {
 
 		public static DataSet XmlToDs(string xmlData) {
 			DataSet ds=new DataSet();
-			XmlReader xmlReader=XmlReader.Create(new StringReader(xmlData));
+			//XmlReader xmlReader=XmlReader.Create(new StringReader(xmlData));
+			XmlTextReader xmlReader=new XmlTextReader(new StringReader(xmlData));
 			ds.ReadXml(xmlReader);
 			xmlReader.Close();
 			return ds;
