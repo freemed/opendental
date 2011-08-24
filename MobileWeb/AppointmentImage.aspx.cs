@@ -69,6 +69,9 @@ namespace MobileWeb {
 				NextDateYear=NextDate.Year;
 				#endregion
 
+				List<String> appointmentmList = new List<String> { "133,46,183,94","272,84,369,172","375,557,482,622" };
+				Repeater1.DataSource=appointmentmList;
+				Repeater1.DataBind();
 
 			}
 			catch(Exception ex) {

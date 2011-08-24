@@ -31,24 +31,6 @@ function TraversePage(){
 
     //console.log('in TraversePage');
    // window.scrollTo(0, 0); resizeTo(320, 480);
-    if (initialWindowWidth == 0) {
-    	initialWindowWidth = jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
-    	appImageWindowWidth = window.innerWidth;
-    }
-
-    function resizeAppointmentImageToolbar() {
-        if (initialWindowWidth==0) {
-            initialWindowWidth=jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
-        }
-        var zoomL = window.innerWidth/initialWindowWidth;
-       // console.log("window.innerWidth=" + window.innerWidth)
-       // console.log("initialWindowWidth=" + initialWindowWidth)
-       // console.log("jQuery(window).width()=" + jQuery(window).width())
-        $('#toolbarAppointmentImage').attr('style', '-webkit-transform: scale(' + zoomL + ')');
-    }
-    //setInterval(resizeAppointmentImageToolbar, 2000);
-
-
     //Password is retained on some browsers- so it's got to be erased
     $('#password').focus(function () {
         //alert('Handler for password.focus() called.');
@@ -81,13 +63,11 @@ function TraversePage(){
 		ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
     });
 
- $('a[href="#AppointmentImage"]').click(function (e) {
-        var UrlForFetchingData = this.attributes["linkattib"].value;
-        var SectionToFill = '#AppointmentImageContents';
-        var MoveToURL = '#AppointmentImage';
-		var scale=initialWindowWidth/appImageWindowWidth;
-		$('body').attr('style', '-webkit-transform: scale(1.0); -webkit-transform-origin: 0 0;');
-        ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
+    $('a[href="#AppointmentImage"]').click(function (e) {
+    	var UrlForFetchingData = this.attributes["linkattib"].value;
+    	var SectionToFill = '#AppointmentImageContents';
+    	var MoveToURL = '#AppointmentImage';
+    	ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
     });
 
 
@@ -160,21 +140,7 @@ function TraversePage(){
 	    var SectionToFill = '#AppointmentImageContents';
 	    ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
-/*
-	$('#datepickerbutton').tap(function (e) {
-	    //console.log('datepickerbutton tapped');
-		var MoveToURL = '#FilterPicker';
-		jQT.goTo(MoveToURL, 'slide');
-        //for demo only
-		var DemoDateCookieY = parseInt(getCookie("DemoDateCookieY"));
-		var DemoDateCookieM = parseInt(getCookie("DemoDateCookieM"));
-		var DemoDateCookieD = parseInt(getCookie("DemoDateCookieD"));
-		if (DemoDateCookieY != null && DemoDateCookieY != "" && !isNaN(DemoDateCookieY)) {
-		    //console.log('in this if statement ' + DemoDateCookieY + " " + (DemoDateCookieM - 1) + " " + DemoDateCookieD);
-		    $('#datepicker').datepicker("setDate", new Date(DemoDateCookieY, DemoDateCookieM - 1, DemoDateCookieD));
-		}
-    });
-    */
+
 	$('#datepickerbutton').tap(function (e) {
 	    var UrlForFetchingData = "AppointmentFilter.aspx";
 	    var SectionToFill = '#FilterPickerContents';
@@ -299,7 +265,6 @@ $('.pharmacies').tap(function (e) {
     });
 
     $('.home').click(function (e) { // tap event logs out the user on ipod.
-        resetScreenSize();
         jQT.goToReverse('#home', 'slide');
     });
 
@@ -342,90 +307,8 @@ function ProcessPreviousNextButton(e,UrlForFetchingData, SectionToFill){
 	FetchPage(UrlForFetchingData, SectionToFill);
 }
 
-// strt 
-var previousOrientation = 0;
-var checkOrientation = function () {
-	//console.log(window.orientation);
-	//displayWidth();
-	//console.log('orientation changed window.innerWidth=' + window.innerWidth)
-	if (window.orientation != previousOrientation) {
-		previousOrientation = window.orientation;
-		// orientation changed, do stuff here
-		//console.log('orientation changed window.innerWidth=' + window.innerWidth)
-
-		switch (window.orientation) {
-			case 0:
-				//displayStr += "Portrait";
-				resetScreenSizeOr();
-				break;
-			case -90:
-				//displayStr += "Landscape (right, screen turned clockwise)";
-				break;
-			case 90:
-				//displayStr += "Landscape (left, screen turned counterclockwise)";
-				break;
-			case 180:
-				//displayStr += "Portrait (upside-down portrait)";
-				resetScreenSizeOr();
-				break;
-
-		}
 
 
-	}
-
-
-
-};
-
-window.addEventListener("resize", checkOrientation, false);
-window.addEventListener("orientationchange", checkOrientation, false);
-//setInterval(checkOrientation, 2000);
-
-function displayWidth(){
-	//$(window).width();
-	console.log('window width ' + $(window).width());
-	//$(window).width() changes when the orientation changes, window.innerWidth does not change when the orientation changes
-}
-
-function resetScreenSizeOr() {
-	console.log("Adjustion for orientatiion change");
-	scale = appImageWindowWidth / jQuery(window).width();
-	$('body').attr('style', '-webkit-transform: scale(' + scale + '); -webkit-transform-origin: 0 0;');
-
-}
-
-//end
-
-//end
-
-/*This function actually scales the elements giving the illusion of a changing screen size*/
-function resetScreenSize() {
-	//displayWidth();
-	appImageWindowWidth = window.innerWidth; // Dennis: note that window.innerWidth can be changed by a *physical* pinch and zoom only
-	var scale = appImageWindowWidth / initialWindowWidth;
-	//console.log("window.innerWidth a=" + window.innerWidth);
-	$('body').attr('style', '-webkit-transform: scale(' + scale + '); -webkit-transform-origin: 0 0;');
-
-
-    //screen.width = initialWindowWidth;
-    // $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=2.0, maximum-scale=10.0, user-scalable=1');
-
-    /*
-    var browser=navigator.userAgent.toLowerCase(); cc
-    if (browser.indexOf('android')!=-1) {
-    $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0'); //works for android
-    console.log("window.innerWidth a=" + window.innerWidth);
-    }
-    else {//iphone
-    var zoom = window.innerWidth/jQuery(window).width(); console.log("window.innerWidth b=" + window.innerWidth);
-    $('body').attr('style', '-webkit-transform: scale(' + zoom + '); -webkit-transform-origin: 0 0;'); //works for iphone
-    //window.innerWidth=initialWindowWidth;
-    console.log("window.innerWidth c=" + window.innerWidth);
-    }
-    */
-}
-	
 function FetchPage(UrlForFetchingData, SectionToFill){
     $.ajax({
 		type: "GET",
@@ -439,12 +322,11 @@ function FetchPage(UrlForFetchingData, SectionToFill){
 			    $(SectionToFill).html(Content);
 			}else{
 			    //console.log('session ended,about to flip');
-			   resetScreenSize();
              jQT.goTo('#login', 'flip');
 			}
 		},
-     error: function () {     
-         $(SectionToFill).html(MessageError); // this takes care of a page not found or page not responding situation.
+        error: function (jqXHR, textStatus, errorThrown) {
+        	$(SectionToFill).html(MessageError + textStatus + errorThrown); // this takes care of a page not found or page not responding situation.
         }
 	});
 
@@ -480,7 +362,6 @@ function ProcessLogin() {
 function ProcessLogout(e) {
 		//console.log('log out clicked');
     e.preventDefault();
-    resetScreenSize();
     var logoutConfirmation = $('#logoutmessage').html();
     $('#logoutmessage').html('');
     $('#logoutmessage').append(MessageLoadLogout);
@@ -511,9 +392,117 @@ function ProcessLogout(e) {
         var MoveToURL = '#AppointmentDetails';
         //console.log('UrlForFetchingData = ' + UrlForFetchingData);
         ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill);
-    }		
+    }
 
-		
+
+    /* Dennis: programatically adjusting zoom (after a pinch zoom) is not possible reliably hence this feature is put on hold
+    if (initialWindowWidth == 0) {
+    initialWindowWidth = jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
+    appImageWindowWidth = window.innerWidth;
+    }
+
+    function resizeAppointmentImageToolbar() {
+    if (initialWindowWidth==0) {
+    initialWindowWidth=jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
+    }
+    var zoomL = window.innerWidth/initialWindowWidth;
+    // console.log("window.innerWidth=" + window.innerWidth)
+    // console.log("initialWindowWidth=" + initialWindowWidth)
+    // console.log("jQuery(window).width()=" + jQuery(window).width())
+    $('#toolbarAppointmentImage').attr('style', '-webkit-transform: scale(' + zoomL + ')');
+    }
+    //setInterval(resizeAppointmentImageToolbar, 2000);
+
+    */
+
+    /* Dennis: programatically adjusting zoom (after a pinch zoom) is not possible reliably hence this feature is put on hold
+    var previousOrientation = 0;
+    var checkOrientation = function () {
+    //console.log(window.orientation);
+    //displayWidth();
+    //console.log('orientation changed window.innerWidth=' + window.innerWidth)
+    if (window.orientation != previousOrientation) {
+    previousOrientation = window.orientation;
+    // orientation changed, do stuff here
+    //console.log('orientation changed window.innerWidth=' + window.innerWidth)
+
+    switch (window.orientation) {
+    case 0:
+    //displayStr += "Portrait";
+    //resetScreenSizeOr();
+    break;
+    case -90:
+    //displayStr += "Landscape (right, screen turned clockwise)";
+    break;
+    case 90:
+    //displayStr += "Landscape (left, screen turned counterclockwise)";
+    break;
+    case 180:
+    //displayStr += "Portrait (upside-down portrait)";
+    //resetScreenSizeOr();
+    break;
+
+    }
+
+
+    }
+
+
+
+    };
+
+    window.addEventListener("resize", checkOrientation, false);
+    window.addEventListener("orientationchange", checkOrientation, false);
+    //setInterval(checkOrientation, 2000);
+
+    function displayWidth(){
+    //$(window).width();
+    console.log('window width ' + $(window).width());
+    //$(window).width() changes when the orientation changes, window.innerWidth does not change when the orientation changes
+    }
+
+    function resetScreenSizeOr() {
+    console.log("Adjustion for orientatiion change");
+    scale = appImageWindowWidth / jQuery(window).width();
+    $('body').attr('style', '-webkit-transform: scale(' + scale + '); -webkit-transform-origin: 0 0;');
+
+    }
+    */
+    //end
+
+
+    /*This function actually scales the elements giving the illusion of a changing screen size*/
+
+    /* Dennis: programatically adjusting zoom (after a pinch zoom) is not possible reliably hence this feature is put on hold
+    function resetScreenSize() {
+    //displayWidth();
+    appImageWindowWidth = window.innerWidth; // Dennis: note that window.innerWidth can be changed by a *physical* pinch and zoom only
+    var scale = appImageWindowWidth / initialWindowWidth;
+    //console.log("window.innerWidth a=" + window.innerWidth);
+    //$('body').attr('style', '-webkit-transform: scale(' + scale + '); -webkit-transform-origin: 0 0;');
+
+    //$('body').attr('style', 'zoom:25%');
+    //screen.width = initialWindowWidth;
+    //observation
+    $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1');
+    console.log("in reset"+ $('meta[name=viewport]').attr("content"));
+
+
+    var browser=navigator.userAgent.toLowerCase(); cc
+    if (browser.indexOf('android')!=-1) {
+    $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0'); //works for android
+    console.log("window.innerWidth a=" + window.innerWidth);
+    }
+    else {//iphone
+    var zoom = window.innerWidth/jQuery(window).width(); console.log("window.innerWidth b=" + window.innerWidth);
+    $('body').attr('style', '-webkit-transform: scale(' + zoom + '); -webkit-transform-origin: 0 0;'); //works for iphone
+    //window.innerWidth=initialWindowWidth;
+    console.log("window.innerWidth c=" + window.innerWidth);
+    }
+  
+    }
+    */		
+
 		
 		
 		

@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 	<title>Appointment</title>
-	
+
 </head>
 <body>
 <div id="loggedin"><asp:Literal runat="server" ID="Message"></asp:Literal></div>
@@ -21,28 +21,51 @@
 			<a id="nextApImage" linkattib="AppointmentImage.aspx?year=<%Response.Write(NextDateYear);%>&month=<%Response.Write(NextDateMonth);%>&day=<%Response.Write(NextDateDay);%>"
 				href="#"><img src="css/themes/apple/img/listArrowSel.png" style="float:right;margin-top:4px" /></a>
 		</div>
-		<br /><br /><br />
 
 
-<div id="bd">	
-<img src="app.jpg" style=" border: thick solid Green;" width="310px" height="280px" />
-</div>
 
-<%--	<asp:Image ID="Image1" runat="server" />--%>
-<%--	<map name="immap" id="immap" style="position: relative;">
-	<area shape="rect" coords="133, 46, 183, 94" 
+
+<%--<div style="width:700px;background-color:Aqua;-webkit-transform: scale(0.25);-webkit-transform-origin: 0 0;" >
+<img src="app.jpg" style=" border: thick solid Green;"  usemap="#immap1" />
+
+<map name="immap1" id="immap1" style="position: relative;">
+	<area shape="rect" coords="0, 1, 16, 17" 
 			onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
 	<area shape="rect" coords="272, 84, 369, 172" onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
-	<area shape="rect" coords="375, 557, 482, 622" onclick="areaClicked('AppointmentDetails.aspx?AptNum=23')" alt="box2__"  />
-	</map>--%>
+	<area shape="rect" coords="372, 558, 479, 623" 
+		onclick="areaClicked('AppointmentDetails.aspx?AptNum=23')" alt="box2__"  />
+	</map>
 
 
-
-
-<%--
+</div>--%>
+ 
+	<div id="divappimage">
+	<br /><br /><br /><br /><br />
 <cc1:GeneratedImage ID="GeneratedImage1" runat="server" 
-	ImageHandlerUrl="~/ImageHandler1.ashx">
-</cc1:GeneratedImage>--%>
+	ImageHandlerUrl="~/ImageHandler1.ashx" usemap="#immap">
+</cc1:GeneratedImage>
+
+
+<map name="immap" id="immap" style="position: relative;">
+	<asp:Repeater ID="Repeater1" runat="server">
+		<ItemTemplate>
+		<area shape="rect" coords="<%#Container.DataItem%>"  onclick="areaClicked('AppointmentDetails.aspx?AptNum=23')" alt="box2__"  />
+		</ItemTemplate>
+	</asp:Repeater>
+	</map>
+	
+	</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#GeneratedImage1").load(function () {
+			var scale = $(window).width()/$(this).width();
+			$('#divappimage').attr('style', '-webkit-transform: scale('+scale+'); -webkit-transform-origin: 0 0;');
+		});
+	});
+			
+</script>	
 
 </div>
 </body>

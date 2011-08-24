@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Drawing;
 using System.Web;
 using Microsoft.Web;
+using OpenDentBusiness;
 
 public class ImageHandler1 : ImageHandler {
     
@@ -14,6 +15,8 @@ public class ImageHandler1 : ImageHandler {
     }
     
     public override ImageInfo GenerateImage(NameValueCollection parameters) {
+		return new ImageInfo(PIn.Bitmap(Appointments.GetMobileBitmap(DateTime.Today,0)));
+		/*
 		// Add image generation logic here and return an instance of ImageInfo
 		Bitmap bit = new Bitmap(600,200);
 		Graphics gra = Graphics.FromImage(bit);
@@ -22,5 +25,6 @@ public class ImageHandler1 : ImageHandler {
 		gra.DrawString("Hello",new Font(FontFamily.GenericSansSerif,16),Brushes.Black,0,0);
 		
 		return new ImageInfo(bit);
+		*/
     }
 }
