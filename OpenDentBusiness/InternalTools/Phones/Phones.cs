@@ -200,6 +200,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static int GetPhoneExtension(string ipAddress,string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),ipAddress,computerName);
+			}
 			string command="SELECT * FROM phoneempdefault WHERE ComputerName='"+POut.String(computerName)+"'";
 			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
 			if(ped!=null) {
