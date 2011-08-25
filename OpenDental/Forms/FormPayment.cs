@@ -1294,6 +1294,7 @@ namespace OpenDental{
 			bool xAdjust=false;
 			bool xVoid=false;
 			double approvedAmt=0;
+			double additionalFunds=0;
 			string xChargeToken="";
 			string accountMasked="";
 			string expiration="";
@@ -1347,6 +1348,9 @@ namespace OpenDental{
 					if(line.StartsWith("EXPIRATION=")) {
 						expiration=PIn.String(line.Substring(11));
 					}
+					if(line.StartsWith("ADDITIONALFUNDSREQUIRED=")) {
+						additionalFunds=PIn.Double(line.Substring(24));
+					}
 					line=reader.ReadLine();
 				}
 				if(needToken && xChargeToken!="") {
@@ -1393,27 +1397,38 @@ namespace OpenDental{
 					textAmount.Text="-"+approvedAmt.ToString("F");
 				}
 			}
+			if(additionalFunds>0) {
+				MessageBox.Show(Lan.g(this,"Additional funds required: ")+additionalFunds.ToString("C"));
+			}
 			if(textNote.Text!="") {
 				textNote.Text+="\r\n";
 			}
 			textNote.Text+=resulttext;
 		}
 		
-		private void VoidXChargeTransaction(string transID,string amount) {
+		private void VoidXChargeTransaction(string transID,string amount,bool isDebit) {
 			ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
 			File.Delete(resultfile);//delete the old result file.
 			info.Arguments="";
-			info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
+			if(isDebit) {
+				info.Arguments+="/TRANSACTIONTYPE:DEBITRETURN /LOCKTRANTYPE ";
+			}
+			else {
+				info.Arguments+="/TRANSACTIONTYPE:VOID /LOCKTRANTYPE ";
+			}
 			info.Arguments+="/XCTRANSACTIONID:"+transID+" /LOCKXCTRANSACTIONID ";
 			info.Arguments+="/AMOUNT:"+amount+" /LOCKAMOUNT ";
+			info.Arguments+="/RECEIPT:Pat"+PaymentCur.PatNum.ToString()+" ";//aka invoice#
 			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Username")+" ";
 			info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
 			info.Arguments+="/AUTOCLOSE ";
-			info.Arguments+="/HIDEMAINWINDOW ";
-			info.Arguments+="/AUTOPROCESS ";
+			info.Arguments+="/HIDEMAINWINDOW /SMALLWINDOW ";
+			if(!isDebit) {
+				info.Arguments+="/AUTOPROCESS ";
+			}
 			Cursor=Cursors.WaitCursor;
 			Process process=new Process();
 			process.StartInfo=info;
@@ -1424,7 +1439,6 @@ namespace OpenDental{
 			}
 			Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
 			Cursor=Cursors.Default;
-			textNote.Text+="\r\n"+resultfile;
 		}
 
 		private bool HasXCharge() {
@@ -1848,18 +1862,24 @@ namespace OpenDental{
 				//Void the transaction in X-Charge if there was one.
 				string transactionID="";
 				string amount="";
+				bool isDebit=false;
 				string[] noteSplit=Regex.Split(textNote.Text,"\r\n");
 				foreach(string XCTrans in noteSplit) {
 					if(XCTrans.StartsWith("XCTRANSACTIONID="))	{
 						transactionID=XCTrans.Substring(16);
 					}
-					if(XCTrans.StartsWith("AMOUNT=")) {
-						amount=XCTrans.Substring(7);
+					if(XCTrans.StartsWith("APPROVEDAMOUNT=")) {
+						amount=XCTrans.Substring(15);
+					}
+					if(XCTrans.StartsWith("TYPE=")) {
+						if(XCTrans.Substring(5)=="Debit Purchase") {
+							isDebit=true;
+						}
 					}
 				}
 				if(transactionID!="")	{
 					if(HasXCharge()) {
-						VoidXChargeTransaction(transactionID,amount);
+						VoidXChargeTransaction(transactionID,amount,isDebit);
 					}
 				}
 			}
