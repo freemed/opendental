@@ -334,7 +334,7 @@
     <Compile Include="Eclaims\ClaimConnect.cs">
     </Compile>
     <Compile Include="Eclaims\WebMD.cs" />
-    <Compile Include="Eclaims\X12.cs" />
+    <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
     <Compile Include="Forms\FormAggPathSetup.cs">
       <SubType>Form</SubType>

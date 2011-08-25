@@ -61,7 +61,7 @@ namespace OpenDental.Eclaims
 			catch(Exception e){
 				MessageBox.Show(e.Message);//+"\r\n"+clearhouse.ClientProgram+" "+arguments);
 				if(batchNum!=0){
-					X12.Rollback(clearhouse,batchNum);
+					x837Controller.Rollback(clearhouse,batchNum);
 				}
 				return false;
 			}

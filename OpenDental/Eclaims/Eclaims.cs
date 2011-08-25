@@ -47,7 +47,7 @@ namespace OpenDental.Eclaims
 				//---------------------------------------------------------------------------------------
 				//Create the claim file(s) for this clearinghouse
 				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.X12){
-					messageText=X12.SendBatch(claimsByCHouse[i],batchNum);
+					messageText=x837Controller.SendBatch(claimsByCHouse[i],batchNum);
 				}
 				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
 					messageText=Renaissance.SendBatch(claimsByCHouse[i],batchNum);
@@ -177,7 +177,7 @@ namespace OpenDental.Eclaims
 				return "";
 			}
 			if(clearhouse.Eformat==ElectronicClaimFormat.X12){
-				string retVal=X12.GetMissingData(queueItem,out warnings);
+				string retVal=X837_4010.Validate(queueItem,out warnings);
 				return retVal;
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.Renaissance){

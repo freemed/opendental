@@ -199,7 +199,7 @@ namespace OpenDental.Eclaims
 			}
 			catch(Exception e){
 				MessageBox.Show(e.Message);
-				X12.Rollback(clearhouse,batchNum);
+				x837Controller.Rollback(clearhouse,batchNum);
 				return false;
 			}
 			return true;

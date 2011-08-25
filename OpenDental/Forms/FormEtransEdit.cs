@@ -404,8 +404,8 @@ namespace OpenDental{
 			textAckCode.Text=EtransCur.AckCode;
 			textNote.Text=EtransCur.Note;
 			if(EtransCur.Etype==EtransType.ClaimSent){
-				if(X837.IsX12(MessageText)) {
-					X837 x837=new X837(MessageText);
+				if(X837_4010.IsX12(MessageText)) {
+					X837_4010 x837=new X837_4010(MessageText);
 					checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);
 				}
 			}

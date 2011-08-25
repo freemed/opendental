@@ -735,6 +735,7 @@
     <Compile Include="UI\ODGridRow.cs" />
     <Compile Include="UI\ODGridRowCollection.cs" />
     <Compile Include="WebServiceTests.cs" />
+    <Compile Include="X12\X837_5010.cs" />
     <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
     <Compile Include="X12\X12Generator.cs" />
@@ -743,7 +744,7 @@
     <Compile Include="X12\X271.cs" />
     <Compile Include="X12\X270.cs" />
     <Compile Include="X12\X277U.cs" />
-    <Compile Include="X12\X837.cs" />
+    <Compile Include="X12\X837_4010.cs" />
     <Compile Include="X12\X997.cs" />
     <Compile Include="ODDataSet\ODDataRow.cs" />
     <Compile Include="ODDataSet\ODDataSet.cs" />
