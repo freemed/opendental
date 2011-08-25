@@ -63,8 +63,12 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
