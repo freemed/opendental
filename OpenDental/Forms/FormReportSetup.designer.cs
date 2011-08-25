@@ -88,9 +88,9 @@ namespace OpenDental{
 			this.butAgg.CornerRadius = 4F;
 			this.butAgg.Location = new System.Drawing.Point(12,91);
 			this.butAgg.Name = "butAgg";
-			this.butAgg.Size = new System.Drawing.Size(75,24);
+			this.butAgg.Size = new System.Drawing.Size(453,24);
 			this.butAgg.TabIndex = 204;
-			this.butAgg.Text = "Agg Setup";
+			this.butAgg.Text = "Aggregation Setup";
 			this.butAgg.Click += new System.EventHandler(this.butAgg_Click);
 			// 
 			// butOK
@@ -101,7 +101,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(377,151);
+			this.butOK.Location = new System.Drawing.Point(390,161);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -116,7 +116,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(377,192);
+			this.butCancel.Location = new System.Drawing.Point(390,191);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -126,7 +126,7 @@ namespace OpenDental{
 			// FormReportSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(477,243);
+			this.ClientSize = new System.Drawing.Size(477,227);
 			this.Controls.Add(this.butAgg);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butOK);
