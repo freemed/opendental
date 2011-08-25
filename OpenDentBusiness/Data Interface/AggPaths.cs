@@ -17,13 +17,14 @@ namespace OpenDentBusiness{
 			return Crud.AggPathCrud.SelectMany(command);
 		}
 
+		/*
 		///<summary>Gets one AggPath from the db.</summary>
 		public static AggPath GetOne(long aggPathNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<AggPath>(MethodBase.GetCurrentMethod(),aggPathNum);
 			}
 			return Crud.AggPathCrud.SelectOne(aggPathNum);
-		}
+		}*/
 
 		///<summary></summary>
 		public static long Insert(AggPath aggPath) {

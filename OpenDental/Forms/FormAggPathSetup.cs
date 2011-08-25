@@ -51,28 +51,25 @@ namespace OpenDental {
 			if(formAPE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			AggPaths.Update(formAPE.AggPathCur);
+			//AggPaths.Update(formAPE.AggPathCur);
 			FillAggPaths();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormAggPathEdit formAPE = new FormAggPathEdit();
-			formAPE.isNew=true;
+			formAPE.IsNew=true;
+			formAPE.AggPathCur=new AggPath();
 			formAPE.ShowDialog();
-			FillAggPaths();//this run twice to handle deletions from FormAggPathEdit
+			FillAggPaths();//this runs twice to handle deletions from FormAggPathEdit
 			if(formAPE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			AggPaths.Insert(formAPE.AggPathCur);
+			//AggPaths.Insert(formAPE.AggPathCur);
 			FillAggPaths();
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
-
 		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+			Close();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

@@ -26,10 +26,10 @@ namespace OpenDental {
 		private bool ClickedOnBlankSpace;
 		private bool AltIsDown;
 		private List<SheetFieldDef> ListSheetFieldDefsCopyPaste;
-		private int pasteOffset=0;
+		private int PasteOffset=0;
 		/// <summary>After each 10 pastes to the upper left origin, this increments 10 to shift the next 10 down.</summary>
-		private int pasteOffsetY=0;
-		private bool isTabMode;
+		private int PasteOffsetY=0;
+		private bool IsTabMode;
 		private List<SheetFieldDef> ListSheetFieldDefsTabOrder;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
@@ -253,7 +253,7 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].XPos,
 						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height-1);
-					if(isTabMode) {
+					if(IsTabMode) {
 						Rectangle tabRect = new Rectangle(
 							SheetDefCur.SheetFieldDefs[i].XPos,//X
 							SheetDefCur.SheetFieldDefs[i].YPos,//Y
@@ -263,9 +263,10 @@ namespace OpenDental {
 							g.FillRectangle(Brushes.White,tabRect);
 							g.DrawRectangle(Pens.Blue,tabRect);
 							GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
-						}else{//Blue border, blue box, white letters
-						g.FillRectangle(brushBlue,tabRect);
-						GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
+						}
+						else{//Blue border, blue box, white letters
+							g.FillRectangle(brushBlue,tabRect);
+							GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
 						}
 					}
 					continue;
@@ -317,21 +318,24 @@ namespace OpenDental {
 						Math.Abs(MouseCurrentPos.X-MouseOriginalPos.X),//Width
 						Math.Abs(MouseCurrentPos.Y-MouseOriginalPos.Y));//Height
 				}
-				GraphicsHelper.DrawString(g,g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
-				if(isTabMode) {
+				g.DrawString(str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
+				//GraphicsHelper.DrawString(g,g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
+				if(IsTabMode) {
 					Rectangle tabRect = new Rectangle(
 						SheetDefCur.SheetFieldDefs[i].XPos,//X
 						SheetDefCur.SheetFieldDefs[i].YPos,//Y
 						(int)g.MeasureString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),font).Width+1,//Width
-						20);//height
+						15);//height
 					if(ListSheetFieldDefsTabOrder.Contains(SheetDefCur.SheetFieldDefs[i])) {//blue border, white box, blue letters
 						g.FillRectangle(Brushes.White,tabRect);
 						g.DrawRectangle(Pens.Blue,tabRect);
-						GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
+						g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect.X,tabRect.Y);
+						//GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
 					}
 					else {//Blue border, blue box, white letters
 						g.FillRectangle(brushBlue,tabRect);
-						GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
+						g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect.X,tabRect.Y);
+						//GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
 					}
 				}
 			}
@@ -679,7 +683,7 @@ namespace OpenDental {
 					}
 					break;
 			}
-			if(isTabMode) {
+			if(IsTabMode) {
 				if(ListSheetFieldDefsTabOrder.Contains(field)) {
 					ListSheetFieldDefsTabOrder.RemoveAt(ListSheetFieldDefsTabOrder.IndexOf(field));
 				}
@@ -707,7 +711,7 @@ namespace OpenDental {
 			MouseOriginalPos=e.Location;
 			MouseCurrentPos=e.Location;
 			SheetFieldDef field=HitTest(e.X,e.Y);
-			if(isTabMode) {
+			if(IsTabMode) {
 				MouseIsDown=false;
 				CtrlIsDown=false;
 				AltIsDown=false;
@@ -768,7 +772,7 @@ namespace OpenDental {
 			if(IsInternal) {
 				return;
 			}
-			if(isTabMode) {
+			if(IsTabMode) {
 				return;
 			}
 			if(ClickedOnBlankSpace) {
@@ -926,7 +930,7 @@ namespace OpenDental {
 		}
 
 		private void CopyControlsToMemory() {
-			if(isTabMode) {
+			if(IsTabMode) {
 				return;
 			}
 			if(listFields.SelectedIndices.Count==0) {
@@ -976,15 +980,15 @@ namespace OpenDental {
 		}
 
 		private void PasteControlsFromMemory(Point origin) {
-			if(isTabMode) {
+			if(IsTabMode) {
 				return;
 			}
 			if(ListSheetFieldDefsCopyPaste==null || ListSheetFieldDefsCopyPaste.Count==0) {
 				return;
 			}
 			if(origin.X==0 && origin.Y==0) {//allows for cascading pastes in the upper right hand corner.
-				origin.X+=pasteOffset;
-				origin.Y+=pasteOffset+pasteOffsetY;
+				origin.X+=PasteOffset;
+				origin.Y+=PasteOffset+PasteOffsetY;
 			}
 			listFields.ClearSelected();
 			int minX=int.MaxValue;
@@ -1000,8 +1004,8 @@ namespace OpenDental {
 				SheetDefCur.SheetFieldDefs.Add(fielddef);
 			}
 			if(!AltIsDown) {
-				pasteOffsetY+=((pasteOffset+10)/100)*10;//this will shift the pastes down 10 pixels every 10 pastes.
-				pasteOffset=(pasteOffset+10)%100;//cascades and allows for 90 consecutive pastes without overlap
+				PasteOffsetY+=((PasteOffset+10)/100)*10;//this will shift the pastes down 10 pixels every 10 pastes.
+				PasteOffset=(PasteOffset+10)%100;//cascades and allows for 90 consecutive pastes without overlap
 
 			}
 			FillFieldList();
@@ -1012,7 +1016,7 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(isTabMode) {
+			if(IsTabMode) {
 				return;
 			}
 			if(SheetDefCur.IsNew){
@@ -1058,7 +1062,7 @@ namespace OpenDental {
 		}
 
 		private void linkLabelTips_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
-			if(isTabMode) {
+			if(IsTabMode) {
 				return;
 			}
 			string tips="";
@@ -1142,8 +1146,8 @@ namespace OpenDental {
 		}
 
 		private void butTabOrder_Click(object sender,EventArgs e) {
-			isTabMode=!isTabMode;
-			if(isTabMode) {
+			IsTabMode=!IsTabMode;
+			if(IsTabMode) {
 				butOK.Enabled=false;
 				butCancel.Enabled=false;
 				butDelete.Enabled=false;

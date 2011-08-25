@@ -10,10 +10,9 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAggPathEdit:Form {
 		public AggPath AggPathCur;
-		public bool isNew;
+		public bool IsNew;
 
 		public FormAggPathEdit() {
-			AggPathCur = new AggPath();
 			InitializeComponent();
 			Lan.F(this);
 		}
@@ -24,9 +23,18 @@ namespace OpenDental {
 			textPassword.Text=AggPathCur.RemotePassword;
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			AggPaths.Delete(AggPathCur.AggPathNum);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textURI.Text=="") {
-				MsgBox.Show(this,"Aggrigation paths cannot have a blank URI.");
+				MsgBox.Show(this,"Please enter a remote URI.");
 				return;
 			}
 			if(textUserName.Text=="") {
@@ -34,13 +42,14 @@ namespace OpenDental {
 				return;
 			}
 			if(textPassword.Text=="") {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Do you want to save this aggregation path with no password?")) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Do you want to save with no password?")) {
 					return;
 				}
 			}
 			AggPathCur.RemoteURI=textURI.Text;
 			AggPathCur.RemoteUserName=textUserName.Text;
 			AggPathCur.RemotePassword=textPassword.Text;
+			//here is where you do insert or update
 			DialogResult=DialogResult.OK;
 		}
 
@@ -48,15 +57,7 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(isNew) {
-				DialogResult=DialogResult.Cancel;
-			}
-			else {
-				AggPaths.Delete(AggPathCur.AggPathNum);
-			}
-			DialogResult=DialogResult.Cancel;
-		}
+		
 
 
 	}

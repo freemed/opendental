@@ -145,7 +145,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormAggPathEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Aggrigation Path";
+			this.Text = "Edit Aggregation Path";
 			this.Load += new System.EventHandler(this.FormAggPathEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
