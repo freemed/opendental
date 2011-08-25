@@ -31,6 +31,7 @@ namespace OpenDental {
 		private int PasteOffsetY=0;
 		private bool IsTabMode;
 		private List<SheetFieldDef> ListSheetFieldDefsTabOrder;
+		public static Font tabOrderFont = new Font("Times New Roman",12f,FontStyle.Regular,GraphicsUnit.Pixel);
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -138,8 +139,11 @@ namespace OpenDental {
 					}
 					listFields.Items.Add(txt);
 				}
-				else{
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.InputField){
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+SheetDefCur.SheetFieldDefs[i].FieldName);
+				}
+				else {
+					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
 			}
 		}
@@ -154,6 +158,9 @@ namespace OpenDental {
 				//do nothing
 			}
 			else if(def1.FieldType==SheetFieldType.Image) {//Always move images to the top of the list. This is because of the way the sheet is drawn.
+				return -1;
+			}
+			else if(def1.FieldType==SheetFieldType.OutputText) {//Move Output text to the top of the list under images.
 				return -1;
 			}
 			if(def1.TabOrder-def2.TabOrder==0) {
@@ -255,18 +262,20 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height-1);
 					if(IsTabMode) {
 						Rectangle tabRect = new Rectangle(
-							SheetDefCur.SheetFieldDefs[i].XPos,//X
-							SheetDefCur.SheetFieldDefs[i].YPos,//Y
-							(int)g.MeasureString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont()).Width+1,//Width
-							20);//height
-						if(ListSheetFieldDefsTabOrder.Contains(SheetDefCur.SheetFieldDefs[i])){//blue border, white box, blue letters
+							SheetDefCur.SheetFieldDefs[i].XPos-1,//X
+							SheetDefCur.SheetFieldDefs[i].YPos-1,//Y
+							(int)g.MeasureString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),tabOrderFont).Width+1,//Width
+							12);//height
+						if(ListSheetFieldDefsTabOrder.Contains(SheetDefCur.SheetFieldDefs[i])) {//blue border, white box, blue letters
 							g.FillRectangle(Brushes.White,tabRect);
 							g.DrawRectangle(Pens.Blue,tabRect);
-							GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
+							g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),tabOrderFont,Brushes.Blue,tabRect.X,tabRect.Y-1);
+							//GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
 						}
-						else{//Blue border, blue box, white letters
+						else {//Blue border, blue box, white letters
 							g.FillRectangle(brushBlue,tabRect);
-							GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
+							g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),tabOrderFont,Brushes.White,tabRect.X,tabRect.Y-1);
+							//GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
 						}
 					}
 					continue;
@@ -320,21 +329,21 @@ namespace OpenDental {
 				}
 				g.DrawString(str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
 				//GraphicsHelper.DrawString(g,g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
-				if(IsTabMode) {
+				if(IsTabMode && SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.InputField) {
 					Rectangle tabRect = new Rectangle(
-						SheetDefCur.SheetFieldDefs[i].XPos,//X
-						SheetDefCur.SheetFieldDefs[i].YPos,//Y
-						(int)g.MeasureString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),font).Width+1,//Width
-						15);//height
+						SheetDefCur.SheetFieldDefs[i].XPos-1,//X
+						SheetDefCur.SheetFieldDefs[i].YPos-1,//Y
+						(int)g.MeasureString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),tabOrderFont).Width+1,//Width
+						12);//height
 					if(ListSheetFieldDefsTabOrder.Contains(SheetDefCur.SheetFieldDefs[i])) {//blue border, white box, blue letters
 						g.FillRectangle(Brushes.White,tabRect);
 						g.DrawRectangle(Pens.Blue,tabRect);
-						g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect.X,tabRect.Y);
+						g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),tabOrderFont,Brushes.Blue,tabRect.X,tabRect.Y-1);
 						//GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.Blue,tabRect);
 					}
 					else {//Blue border, blue box, white letters
 						g.FillRectangle(brushBlue,tabRect);
-						g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect.X,tabRect.Y);
+						g.DrawString(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),tabOrderFont,Brushes.White,tabRect.X,tabRect.Y-1);
 						//GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
 					}
 				}
@@ -715,7 +724,17 @@ namespace OpenDental {
 				MouseIsDown=false;
 				CtrlIsDown=false;
 				AltIsDown=false;
-				if(field==null) {
+				if(field==null
+					//Some of the fields below are redundant and should never be returned from HitTest but are here to explicity exclude them.
+					|| field.FieldType==SheetFieldType.Drawing
+					|| field.FieldType==SheetFieldType.Image
+					|| field.FieldType==SheetFieldType.Line
+					|| field.FieldType==SheetFieldType.OutputText
+					|| field.FieldType==SheetFieldType.Parameter
+					|| field.FieldType==SheetFieldType.PatImage
+					|| field.FieldType==SheetFieldType.Rectangle
+					|| field.FieldType==SheetFieldType.StaticText
+					) {
 					return;
 				}
 				if(ListSheetFieldDefsTabOrder.Contains(field)) {
@@ -1079,6 +1098,9 @@ namespace OpenDental {
 			tips+="CTRL + Click + Drag : Add a group of fields to the selection.\r\n";
 			tips+="\r\n";
 			tips+="Delete or Backspace : Delete selected field(s).\r\n";
+			tips+="\r\n";
+			tips+="When setting tab order of checkboxes click in the upper left corner of the corner.\r\n";
+			tips+="\r\n";
 			MessageBox.Show(Lan.g(this,tips));
 		}
 
