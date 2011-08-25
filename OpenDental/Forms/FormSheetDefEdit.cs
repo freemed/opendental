@@ -1098,9 +1098,6 @@ namespace OpenDental {
 			tips+="CTRL + Click + Drag : Add a group of fields to the selection.\r\n";
 			tips+="\r\n";
 			tips+="Delete or Backspace : Delete selected field(s).\r\n";
-			tips+="\r\n";
-			tips+="When setting tab order of checkboxes click in the upper left corner of the corner.\r\n";
-			tips+="\r\n";
 			MessageBox.Show(Lan.g(this,tips));
 		}
 
