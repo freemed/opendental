@@ -4280,7 +4280,7 @@ namespace OpenDental{
 					return false;
 				}
 			}*/
-			if(checkShowTeeth.Checked) {
+			if(checkShowTeeth.Checked) {//Only show selected teeth
 				bool showProc = false;
 				//ArrayList selectedTeeth = new ArrayList();//integers 1-32
 				//for(int i = 0;i < toothChart.SelectedTeeth.Count;i++) {
@@ -4594,15 +4594,51 @@ namespace OpenDental{
 				return;
 			}
 			DataTable table=DataSetMain.Tables["ProgNotes"];
+			List<ProcGroupItem> procGroupItems=ProcGroupItems.Refresh(PatCur.PatNum);
 			ProcList=new List<DataRow>();
-			for(int i=0;i<table.Rows.Count;i++){
-				if(table.Rows[i]["ProcNum"].ToString()!="0"){//if this is a procedure
-					if(ShouldDisplayProc(table.Rows[i])){
-						ProcList.Add(table.Rows[i]);//show it in the graphical tooth chart
-						//and add it to the grid below.
-					}
-					else{
+			List<long> procNumList=new List<long>();//a list of all procNums of procs that will be visible
+			bool showGroupNote;
+			if(checkShowTeeth.Checked) {
+				//we will want to see groupnotes that are attached to any procs that should be visible.
+				for(int i=0;i<table.Rows.Count;i++){//loop through all rows in table.
+					if(table.Rows[i]["ProcNum"].ToString()=="0") {//if this is not a procedure
 						continue;
+					}
+					if(table.Rows[i]["ProcCode"].ToString()==ProcedureCodes.GroupProcCode) {
+						continue;//skip procgroups
+					}
+					if(ShouldDisplayProc(table.Rows[i])){
+						procNumList.Add(PIn.Long(table.Rows[i]["ProcNum"].ToString()));//remember that procnum
+					}
+				}
+			}
+			for(int i=0;i<table.Rows.Count;i++){
+				if(table.Rows[i]["ProcNum"].ToString()!="0"){//if this is a procedure 
+					//if it's a group note and we are viewing by tooth number
+					if(table.Rows[i]["ProcCode"].ToString()==ProcedureCodes.GroupProcCode && checkShowTeeth.Checked) {
+						//consult the list of previously obtained procedures and ProcGroupItems to see if this procgroup should be visible.
+						showGroupNote=false;
+						for(int j=0;j<procGroupItems.Count;j++) {//loop through all procGroupItems for the patient. 
+							if(procGroupItems[j].GroupNum==PIn.Long(table.Rows[i]["ProcNum"].ToString())) {//if this item is associated with this group note
+								for(int k=0;k<procNumList.Count;k++) {//check all of the visible procs
+									if(procNumList[k]==procGroupItems[j].ProcNum) {//if this group note is associated with a visible proc
+										showGroupNote=true;
+									}
+								}
+							}
+						}
+						if(!showGroupNote) {
+							continue;//don't show it in the grid
+						}
+					}
+					else {//procedure or group note, not viewing by tooth number
+						if(ShouldDisplayProc(table.Rows[i])) {
+							ProcList.Add(table.Rows[i]);//show it in the graphical tooth chart
+							//show it in the grid below
+						}
+						else {
+							continue;//don't show it in the grid
+						}
 					}
 				}
 				else if(table.Rows[i]["CommlogNum"].ToString()!="0"){//if this is a commlog
@@ -5311,7 +5347,7 @@ namespace OpenDental{
 				Procedure proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
 				if(ProcedureCodes.GetStringProcCode(proc.CodeNum)==ProcedureCodes.GroupProcCode){
 					FormProcGroup FormP=new FormProcGroup();		
-					List<ProcGroupItem> groupItemList=ProcGroupItems.Refresh(proc.ProcNum);
+					List<ProcGroupItem> groupItemList=ProcGroupItems.GetForGroup(proc.ProcNum);
 					List<Procedure> procList=new List<Procedure>();
 					for(int i=0;i<groupItemList.Count;i++){
 						procList.Add(Procedures.GetOneProc(groupItemList[i].ProcNum,false));
@@ -8662,18 +8698,27 @@ namespace OpenDental{
 
 		private void gridProg_CellClick(object sender,ODGridClickEventArgs e) {
 			DataTable progNotes=DataSetMain.Tables["ProgNotes"];
-			DataRow rowClicked=progNotes.Rows[e.Row];
+			//DataRow rowClicked=progNotes.Rows[e.Row];
+			DataRow rowClicked=(DataRow)gridProg.Rows[e.Row].Tag;
 			long procNum=PIn.Long(rowClicked["ProcNum"].ToString());
-			if(procNum!=0){//if procedure clicked
-				long codeNum=PIn.Long(rowClicked["CodeNum"].ToString());
-				if(ProcedureCodes.GetStringProcCode(codeNum)==ProcedureCodes.GroupProcCode){
-					List<ProcGroupItem> groupItemList=ProcGroupItems.Refresh(procNum);
-					for(int i=0;i<progNotes.Rows.Count;i++){
-						for(int j=0;j<groupItemList.Count;j++){
-							if(progNotes.Rows[i]["ProcNum"].ToString()==groupItemList[j].ProcNum.ToString()){
-								gridProg.SetSelected(i,true);
-							}
-						}
+			if(procNum==0){//if not a procedure
+				return;
+			}
+			long codeNum=PIn.Long(rowClicked["CodeNum"].ToString());
+			if(ProcedureCodes.GetStringProcCode(codeNum)!=ProcedureCodes.GroupProcCode){//if not a group note
+				return;
+			}
+			List<ProcGroupItem> groupItemList=ProcGroupItems.GetForGroup(procNum);
+			//for(int i=0;i<progNotes.Rows.Count;i++){
+			for(int i=0;i<gridProg.Rows.Count;i++){
+				DataRow row=(DataRow)gridProg.Rows[i].Tag;
+				if(row["ProcNum"].ToString()=="0"){
+					continue;
+				}
+				long procnum=PIn.Long(row["ProcNum"].ToString());
+				for(int j=0;j<groupItemList.Count;j++){
+					if(procnum==groupItemList[j].ProcNum){
+						gridProg.SetSelected(i,true);
 					}
 				}
 			}

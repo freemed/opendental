@@ -7,8 +7,18 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary>In ProcGroupItems the ProcNum is a procedure in a group and GroupNum is the group the procedure is in. GroupNum is a FK to the Procedure table. There is a special type of procedure with the procedure code "~GRP~" that is used to indicate this is a group Procedure.</summary>
 	public class ProcGroupItems{
+
+		///<summary></summary>
+		public static List<ProcGroupItem> Refresh(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ProcGroupItem>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM procgroupitem WHERE GroupNum IN (SELECT ProcNum FROM procedurelog WHERE PatNum = "+POut.Long(patNum)+")";
+			return Crud.ProcGroupItemCrud.SelectMany(command);
+		}
+
 		///<summary>Gets all the ProcGroupItems for a Procedure Group.</summary>
-		public static List<ProcGroupItem> Refresh(long groupNum){
+		public static List<ProcGroupItem> GetForGroup(long groupNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ProcGroupItem>>(MethodBase.GetCurrentMethod(),groupNum);
 			}
@@ -76,14 +86,7 @@ namespace OpenDentBusiness{
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
-		///<summary></summary>
-		public static List<ProcGroupItem> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ProcGroupItem>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM procgroupitem WHERE PatNum = "+POut.Long(patNum);
-			return Crud.ProcGroupItemCrud.SelectMany(command);
-		}
+		
 
 		///<summary>Gets one ProcGroupItem from the db.</summary>
 		public static ProcGroupItem GetOne(long procGroupItemNum){
