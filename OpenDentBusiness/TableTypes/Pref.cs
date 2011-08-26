@@ -15,7 +15,7 @@ namespace OpenDentBusiness {
 		public string PrefName;
 		///<summary>The stored value.</summary>
 		public string ValueString;
-		///<summary>Documentation on usage and values of each pref.</summary>
+		///<summary>Documentation on usage and values of each pref.  Mostly deprecated now in favor of using XML comments in the code.</summary>
 		public string Comments;
 	}
 
@@ -39,6 +39,8 @@ namespace OpenDentBusiness {
 		AllowedFeeSchedsAutomate,
 		AllowSettingProcsComplete,
 		AppointmentBubblesDisabled,
+		///<summary>Enum:SearchBehaviorCriteria 0=ProviderTime, 1=ProviderTimeOperatory</summary>
+		AppointmentSearchBehavior,
 		AppointmentTimeArrivedTrigger,
 		AppointmentTimeDismissedTrigger,
 		AppointmentTimeIncrement,
@@ -342,6 +344,11 @@ namespace OpenDentBusiness {
 		XRayExposureLevel
 	}
 
+	///<summary>Used by pref "SearchBehavior". </summary>
+	public enum SearchBehaviorCriteria {
+		ProviderTime,
+		ProviderTimeOperatory
+	}
 	
 
 
