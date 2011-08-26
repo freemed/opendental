@@ -13,11 +13,6 @@ namespace MobileWeb {
 	public class Util {
 		public static string ErrorMessage="There has been an error in processing your request.";
 		
-		public void SetMobileDbConnectionOld() {
-			Logger.Information("In SetMobileDbConnection()");
-			DbInit.Init();
-		}
-
 		public void SetMobileDbConnection() {
 			string connectStr=Properties.Settings.Default.DBMobileWeb;
 			OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
@@ -96,14 +91,20 @@ namespace MobileWeb {
 		}
 
 		public long GetCustomerNum(System.Web.UI.WebControls.Literal Message) {
-			Message.Text="";
 			long CustomerNum=0;
-			if(HttpContext.Current.Session["CustomerNum"]==null) {
-				return 0;
+			try {
+				Message.Text="";
+				if(HttpContext.Current.Session["CustomerNum"]==null) {
+					return 0;
+				}
+				Int64.TryParse(HttpContext.Current.Session["CustomerNum"].ToString(),out CustomerNum);
+				if(CustomerNum!=0) {
+					Message.Text="LoggedIn";
+				}
 			}
-			Int64.TryParse(HttpContext.Current.Session["CustomerNum"].ToString(),out CustomerNum);
-			if(CustomerNum!=0) {
-				Message.Text="LoggedIn";
+			catch(Exception ex) {
+				Logger.LogError(ex);
+				return CustomerNum;
 			}
 			return CustomerNum;
 		}

@@ -69,17 +69,58 @@ namespace MobileWeb {
 				NextDateYear=NextDate.Year;
 				#endregion
 
-				List<String> appointmentmList = new List<String> { "133,46,183,94","272,84,369,172","375,557,482,622" };
+				#region process providers
+				long ProvNum=0;
+				if(Request["ProvNum"]==null) {
+					if(Session["ProvNum"]!=null) {
+						Int64.TryParse(Session["ProvNum"].ToString(),out ProvNum);
+					}
+				}
+				else {
+					Int64.TryParse(Request["ProvNum"].ToString().Trim(),out ProvNum);
+					Session["ProvNum"]=ProvNum.ToString();
+				}
+				#endregion
+				List<Appointmentm> appointmentmList;
+				if(ProvNum==0) {
+					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,AppointmentDate,AppointmentDate);
+				}
+				else {
+					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,ProvNum,AppointmentDate,AppointmentDate);
+				}
+				appointmentmList=appointmentmList.Where(a=>a.AptStatus==ApptStatus.Scheduled).ToList();//only pick appointments that are scheduled.
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
-
 			}
 			catch(Exception ex) {
 				LabelError.Text=Util.ErrorMessage;
 				Logger.LogError(ex);
 			}
+
 		}
 
+
+		public string GetAppCoordinates(long AptNum) {
+			//List<String> appointmentmList = new List<String> { "133,46,183,94","272,84,369,172","375,557,482,622" };
+			
+			List<String> appointmentmList=new List<String> { "39, 289, 348, 453","6, 22, 345, 234","348, 521, 692, 689" };
+			if(AptNum==6){
+			return appointmentmList[0];
+			}
+			if(AptNum==9){
+			return appointmentmList[1];
+			}
+			if(AptNum==20){
+			return appointmentmList[2];
+			}
+			if(AptNum==22){
+			return appointmentmList[0];
+			}
+			if(AptNum==24){
+			return appointmentmList[0];
+			}
+			return appointmentmList[0];
+		}
 
 	}
 }

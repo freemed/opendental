@@ -24,23 +24,24 @@
 
 
 
-
-<%--<div style="width:700px;background-color:Aqua;-webkit-transform: scale(0.25);-webkit-transform-origin: 0 0;" >
-<img src="app.jpg" style=" border: thick solid Green;"  usemap="#immap1" />
+<%--
+<div style="width:700px;background-color:Aqua;-webkit-transform: scale(0.25);-webkit-transform-origin: 0 0;" >
+<img src="ApptBackTest.gif" style=" border: thick solid Green;"  usemap="#immap1" />
 
 <map name="immap1" id="immap1" style="position: relative;">
-	<area shape="rect" coords="0, 1, 16, 17" 
+	<area shape="rect" coords="39, 289, 348, 453" 
 			onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
-	<area shape="rect" coords="272, 84, 369, 172" onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
-	<area shape="rect" coords="372, 558, 479, 623" 
+	<area shape="rect" coords="6, 22, 345, 234" 
+		onclick="areaClicked('AppointmentDetails.aspx?AptNum=22')" alt="box1__"  />
+	<area shape="rect" coords="348, 521, 692, 689" 
 		onclick="areaClicked('AppointmentDetails.aspx?AptNum=23')" alt="box2__"  />
 	</map>
-
-
 </div>--%>
- 
+
+
+ <br />
 	<div id="divappimage">
-	<br /><br /><br /><br /><br />
+
 <cc1:GeneratedImage ID="GeneratedImage1" runat="server" 
 	ImageHandlerUrl="~/ImageHandler1.ashx" usemap="#immap">
 </cc1:GeneratedImage>
@@ -49,11 +50,11 @@
 <map name="immap" id="immap" style="position: relative;">
 	<asp:Repeater ID="Repeater1" runat="server">
 		<ItemTemplate>
-		<area shape="rect" coords="<%#Container.DataItem%>"  onclick="areaClicked('AppointmentDetails.aspx?AptNum=23')" alt="box2__"  />
+		<area shape="rect" coords="<%#GetAppCoordinates(((Appointmentm)Container.DataItem).AptNum)%>"  onclick="areaClicked('AppointmentDetails.aspx?AptNum=<%#((Appointmentm)Container.DataItem).AptNum%>')" alt="box2__"  />
 		</ItemTemplate>
 	</asp:Repeater>
 	</map>
-	
+	<div style="clear: both;"/>
 	</div>
 
 
@@ -61,11 +62,13 @@
 	$(document).ready(function () {
 		$("#GeneratedImage1").load(function () {
 			var scale = $(window).width()/$(this).width();
-			$('#divappimage').attr('style', '-webkit-transform: scale('+scale+'); -webkit-transform-origin: 0 0;');
+			//$('#divappimage').attr('style', '-webkit-transform: scale('+scale+'); -webkit-transform-origin: 0 0;');
+			$('#divappimage').attr('style', 'zoom:' + scale);
 		});
 	});
 			
 </script>	
+
 
 </div>
 </body>

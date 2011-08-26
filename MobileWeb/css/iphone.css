@@ -5,18 +5,7 @@ min-width: 300px;
 max-width:1500px;
 background-color:#FFFFFF;
 }
-body > * {
-    /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#FFFFFF));*/
-}
-/* dennis some kind of hack for some version of IE
-html>body body
-{
-width: auto;
-height: auto;
-min-width: 320px;
-min-height: 480px;
-}
-*/
+
 #progress {
     -webkit-border-radius: 10px;
     background-color: rgba(0,0,0,.7);
