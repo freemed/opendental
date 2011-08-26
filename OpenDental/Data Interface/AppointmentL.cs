@@ -140,6 +140,139 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		///<summary>Used by appt search function.  Returns same result as GetSearchResults(...) minus the appointments that do not also have provider time and operatory available.</summary>
+		public static DateTime[] GetSearchResults(long aptNum,DateTime afterDate,long[] providers,int resultCount,
+			TimeSpan beforeTime,TimeSpan afterTime,SearchBehaviorCriteria searchBehavior) {
+			Appointment apt=Appointments.GetOneApt(aptNum);
+			DateTime dayEvaluating=afterDate.AddDays(1);
+			Appointment[] aptList;//list of appointments for one day
+			ArrayList ALresults=new ArrayList();//result Date/Times
+			TimeSpan timeFound;
+			int hourFound;
+			int[][] provBar=new int[providers.Length][];//dim 1 is for each provider.  Dim 2is the 10min increment
+			bool[][] provBarSched=new bool[providers.Length][];//keeps track of the schedule of each provider. True means open, false is closed.
+			long aptProv;
+			string pattern;
+			int startIndex;
+			int provIndex;//the index of a provider within providers
+			List<Schedule> schedDay;//all schedule items for a given day.
+			bool aptIsMatch=false;
+			while(ALresults.Count<resultCount//stops when the specified number of results are retrieved
+				&& dayEvaluating<afterDate.AddYears(2)) {
+				for(int i=0;i<providers.Length;i++) {
+					provBar[i]=new int[24*ContrApptSheet.RowsPerHr];//[144]; or 24*6
+					provBarSched[i]=new bool[24*ContrApptSheet.RowsPerHr];
+				}
+				//get appointments for one day
+				aptList=Appointments.GetForPeriod(dayEvaluating,dayEvaluating);
+				//fill provBar
+				for(int i=0;i<aptList.Length;i++) {
+					if(aptList[i].IsHygiene) {
+						aptProv=aptList[i].ProvHyg;
+					}
+					else {
+						aptProv=aptList[i].ProvNum;
+					}
+					provIndex=-1;
+					for(int p=0;p<providers.Length;p++) {
+						if(providers[p]==aptProv) {
+							provIndex=p;
+							break;
+						}
+					}
+					if(provIndex==-1) {
+						continue;
+					}
+					pattern=ContrApptSingle.GetPatternShowing(aptList[i].Pattern);
+					startIndex=(int)(((double)aptList[i].AptDateTime.Hour*(double)60/ContrApptSheet.MinPerRow
+						+(double)aptList[i].AptDateTime.Minute/ContrApptSheet.MinPerRow)
+						*(double)ContrApptSheet.Lh)/ContrApptSheet.Lh;//rounds down
+					for(int k=0;k<pattern.Length;k++) {
+						if(pattern.Substring(k,1)=="X") {
+							provBar[provIndex][startIndex+k]++;
+						}
+					}
+				}
+				//handle all schedules by setting element of provBarSched to true if provider schedule shows open.
+				schedDay=Schedules.GetDayList(dayEvaluating);
+				for(int p=0;p<providers.Length;p++) {
+					for(int i=0;i<schedDay.Count;i++) {
+						if(schedDay[i].SchedType!=ScheduleType.Provider) {
+							continue;
+						}
+						if(providers[p]!=schedDay[i].ProvNum) {
+							continue;
+						}
+						SetProvBarSched(ref provBarSched[p],schedDay[i].StartTime,schedDay[i].StopTime);
+					}
+				}
+				//step through day, one increment at a time, looking for a slot
+				pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);
+				timeFound=new TimeSpan(0);
+				//It's done this way for a plugin that wants to pull all matches for a given day.
+				List<bool> findMoreMatchesToday=new List<bool>();
+				findMoreMatchesToday.Add(true);
+				for(int i=0;findMoreMatchesToday[0] && i<provBar[0].Length;i++) {//144 if using 10 minute increments
+					for(int p=0;findMoreMatchesToday[0] && p<providers.Length;p++) {
+						//assume apt will be placed here
+						aptIsMatch=true;
+						//test all apt increments for prov closed. If any found, continue
+						for(int a=0;a<pattern.Length;a++) {
+							if(provBarSched[p].Length<i+a+1 || !provBarSched[p][i+a]) {
+								aptIsMatch=false;
+								break;
+							}
+						}
+						if(!aptIsMatch) {
+							continue;
+						}
+						//test all apt increments with an X for not scheduled. If scheduled, continue.
+						for(int a=0;a<pattern.Length;a++) {
+							if(pattern.Substring(a,1)=="X" && (provBar[p].Length<i+a+1 || provBar[p][i+a]>0)) {
+								aptIsMatch=false;
+								break;
+							}
+						}
+						if(!aptIsMatch) {
+							continue;
+						}
+						//convert to valid time
+						hourFound=(int)((double)(i)/(float)60*ContrApptSheet.MinPerRow);//8am=48/60*10
+						timeFound=new TimeSpan(
+							hourFound,
+							//minutes. eg. (13-(2*60/10))*10
+							(int)((i-((double)hourFound*(float)60/ContrApptSheet.MinPerRow))*ContrApptSheet.MinPerRow),
+							0);
+						//make sure it's after the time restricted
+						//Debug.WriteLine(timeFound.ToString()+"  "+afterTime.ToString());
+						//apt.AptDateTime.TimeOfDay+"  "+afterTime.ToString());
+						if(afterTime!=TimeSpan.Zero && timeFound<afterTime) {
+							aptIsMatch=false;
+							continue;
+						}
+						if(beforeTime!=TimeSpan.Zero && timeFound>beforeTime) {
+							aptIsMatch=false;
+							continue;
+						}
+						//match found
+						ALresults.Add(dayEvaluating+timeFound);
+						findMoreMatchesToday[0]=false;
+						Plugins.HookAddCode(null,"AppointmentL.GetSearchResults_postfilter",ALresults,providers[p],apt,findMoreMatchesToday);
+					}//for p
+				}
+				dayEvaluating=dayEvaluating.AddDays(1);//move to the next day
+			}
+			if(searchBehavior==SearchBehaviorCriteria.ProviderTime) {
+				//do nothing
+			}
+			else if(searchBehavior==SearchBehaviorCriteria.ProviderTimeOperatory) {
+				//TODO: remove appointments that dont have open operatories.
+			}
+			DateTime[] retVal=new DateTime[ALresults.Count];
+			ALresults.CopyTo(retVal);
+			return retVal;
+		}
+
 		///<summary>Only used in GetSearchResults.  All times between start and stop get set to true in provBarSched.</summary>
 		private static void SetProvBarSched(ref bool[] provBarSched,TimeSpan timeStart,TimeSpan timeStop){
 			int startI=GetProvBarIndex(timeStart);

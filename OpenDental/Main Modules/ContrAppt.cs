@@ -4722,8 +4722,10 @@ namespace OpenDental{
 				providers[i]=ProviderC.ListShort[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
+			//SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
+			//  afterDate,providers,10,beforeTime,afterTime);
 			SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
-				afterDate,providers,10,beforeTime,afterTime);
+				afterDate,providers,10,beforeTime,afterTime,(SearchBehaviorCriteria)PrefC.GetInt(PrefName.AppointmentSearchBehavior));
 			listSearchResults.Items.Clear();
 			for(int i=0;i<SearchResults.Length;i++){
 				listSearchResults.Items.Add(
