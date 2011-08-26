@@ -5225,7 +5225,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command="ALTER TABLE allergydef MODIFY Snomed NOT NULL";
 					Db.NonQ(command);
-				}				
+				}
+				//this was supposed to have been deleted:
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE allergydef ADD RxCui bigint NOT NULL";
 					Db.NonQ(command);
@@ -6096,6 +6097,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					//do nothing
 				}
 				command="UPDATE preference SET ValueString = '11.0.15.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To11_0_24();
+		}
+
+		private static void To11_0_24() {
+			if(FromVersion<new Version("11.0.24.0")) {
+				string command;
+				command="ALTER TABLE allergydef DROP COLUMN RxCui";//both oracle and mysql
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '11.0.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
 			To11_1_0();

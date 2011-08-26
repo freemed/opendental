@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		public long AllergyDefNum;
 		///<summary>Name of the drug.  User can change this.  If an RxCui is present, the RxNorm string can be pulled from the in-memory table for UI display in addition to the Description.</summary>
 		public string Description;
-		///<summary></summary>
+		///<summary>Because user can't delete.</summary>
 		public bool IsHidden;
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
