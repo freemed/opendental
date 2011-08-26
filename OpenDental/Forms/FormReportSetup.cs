@@ -16,6 +16,12 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormReportSetup_Load(object sender,EventArgs e) {
+			//TEMP------------------------------------------------------------------------------------------
+			butAgg.Visible=false;//TODO: THIS IS TEMPORARY. DELETE THIS LINE WHEN THE AGGREGATOR IS WORKING.
+			//TEMP------------------------------------------------------------------------------------------
+		}
+
 		private void butAgg_Click(object sender,EventArgs e) {
 			FormAggPathSetup FormAPS = new FormAggPathSetup();
 			FormAPS.ShowDialog();
