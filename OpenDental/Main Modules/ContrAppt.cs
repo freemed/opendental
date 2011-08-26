@@ -100,7 +100,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listSearchResults;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.DateTimePicker dateSearch;
-		private DateTime[] SearchResults;
+		private List<DateTime> SearchResults;
 		private OpenDental.UI.Button butRefresh;
 		private bool ResizingAppt;
 		private int ResizingOrigH;
@@ -4725,9 +4725,9 @@ namespace OpenDental{
 			//SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
 			//  afterDate,providers,10,beforeTime,afterTime);
 			SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
-				afterDate,providers,10,beforeTime,afterTime,(SearchBehaviorCriteria)PrefC.GetInt(PrefName.AppointmentSearchBehavior));
+				afterDate,providers,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
-			for(int i=0;i<SearchResults.Length;i++){
+			for(int i=0;i<SearchResults.Count;i++){
 				listSearchResults.Items.Add(
 					SearchResults[i].ToString("ddd")+"\t"+SearchResults[i].ToShortDateString()+"     "+SearchResults[i].ToShortTimeString());
 			}
@@ -4746,10 +4746,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"There is no appointment on the pinboard.");
 				return;
 			}
-			if(SearchResults.Length<1) {
+			if(SearchResults.Count<1) {
 				return;
 			}
-			dateSearch.Text=SearchResults[SearchResults.Length-1].ToShortDateString();
+			dateSearch.Text=SearchResults[SearchResults.Count-1].ToShortDateString();
 			DoSearch();
 		}
 
