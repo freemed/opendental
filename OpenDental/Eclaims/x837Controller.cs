@@ -52,29 +52,19 @@ namespace OpenDental.Eclaims
 
 		///<summary>Called from Eclaims and includes multiple claims.  Returns the string that was sent.  The string needs to be parsed to determine the transaction numbers used for each claim.</summary>
 		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum){
-			//js 8/25/11 This method will be rewritten to handle 5010s separately.
-			//It would also be nice if we change the sw to a stringbuilder.
+			//each batch is already guaranteed to be specific to one clearinghouse
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItems[0].ClearinghouseNum);
-			List<ClaimSendQueueItem> functionalGroupDental=new List<ClaimSendQueueItem>();
-			List<ClaimSendQueueItem> functionalGroupMedical=new List<ClaimSendQueueItem>();
-			for(int i=0;i<queueItems.Count;i++){
-				if(queueItems[i].IsMedical){
-					functionalGroupMedical.Add(queueItems[i]);
-				}
-				else{
-					functionalGroupDental.Add(queueItems[i]);
-				}
-			}
-			if(functionalGroupMedical.Count>0 && functionalGroupDental.Count>0) {
-				MessageBox.Show(Lan.g("X12","You must send dental and medical claims in separate batches."));
-				return "";//not allowed
-			}
 			string saveFile=GetFileName(clearhouse,batchNum);
 			if(saveFile==""){
 				return "";
 			}
 			using(StreamWriter sw=new StreamWriter(saveFile,false,Encoding.ASCII)){
-				X837_4010.GenerateMessageText(sw,clearhouse,batchNum,functionalGroupDental);
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010) {
+					X837_4010.GenerateMessageText(sw,clearhouse,batchNum,queueItems);
+				}
+				else {//Any of the 3 kinds of 5010
+					X837_5010.GenerateMessageText(sw,clearhouse,batchNum,queueItems);
+				}
 			}
 			if(clearhouse.CommBridge==EclaimsCommBridge.PostnTrack){
 				//need to clear out all CRLF from entire file

@@ -871,14 +871,20 @@ namespace OpenDentBusiness{
 	public enum ElectronicClaimFormat{
 		///<summary>0-Not in database, but used in various places in program.</summary>
 		None,
-		///<summary>1-The American standard. HIPAA mandated.</summary>
-		X12,
+		///<summary>1-The American standard through 12/31/11.</summary>
+		x837D_4010,
 		///<summary>2-Proprietary format for Renaissance.</summary>
 		Renaissance,
 		///<summary>3-CDAnet format version 4.</summary>
 		Canadian,
 		///<summary>4-CSV file adaptable for use in Netherlands.</summary>
-		Dutch
+		Dutch,
+		///<summary>5-The American standard starting on 1/1/12.</summary>
+		x837D_5010_dental,
+		///<summary>6-Professional aka medical.</summary>
+		x837P_5010_medical,
+		///<summary>7-Institutional.</summary>
+		x837I_5010_institut
 	}
 
 	///<summary>Used when submitting e-claims to some carriers who require extra provider identifiers.  Usage varies by company.  Only used as needed.</summary>

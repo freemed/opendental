@@ -32,15 +32,7 @@ namespace OpenDentBusiness
 				+"0*"//ISA14: no acknowledgment requested
 				+clearhouse.ISA15+"*");//ISA15: T=Test P=Production. Validated.
 			sw.WriteLine(":~");//ISA16: use ':'
-			//Functional groups: one for dental and one for medical
-			//But we instead need to restrict file output to either medical OR dental, not both.
-			//So this part is changing.  One or the other.
-			//if(functionalGroupMedical.Count>0) {
-			//	WriteFunctionalGroup(sw,functionalGroupMedical,batchNum,clearhouse);
-			//}
-			//if(functionalGroupDental.Count>0) {
-				WriteFunctionalGroup(sw,functionalGroupDental,batchNum,clearhouse);
-			//}
+			WriteFunctionalGroup(sw,functionalGroupDental,batchNum,clearhouse);
 			//Interchange Control Trailer
 			sw.WriteLine("IEA*1*"//IEA01: number of functional groups
 					+batchNum.ToString().PadLeft(9,'0')+"~");//IEA02: Interchange control number

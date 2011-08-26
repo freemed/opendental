@@ -847,7 +847,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"When using Emdeon, this software must be the sender.");
 				return;
 			}
-			if(comboFormat.SelectedIndex==(int)ElectronicClaimFormat.X12) {
+			if(comboFormat.SelectedIndex==(int)ElectronicClaimFormat.x837D_4010) {
 				if(textISA05.Text==""){
 					MsgBox.Show(this,"ISA05 is required.");
 					return;

@@ -21,10 +21,8 @@ namespace OpenDental.Eclaims
 		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Can send to multiple clearinghouses simultaneously or can also just send one claim.  Cannot include Canadian.</summary>
 		public static void SendBatches(List<ClaimSendQueueItem> queueItems){
 			List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.Listt.Length];
-			//ArrayList[Clearinghouses.List.Length];
 			for(int i=0;i<claimsByCHouse.Length;i++){
 				claimsByCHouse[i]=new List<ClaimSendQueueItem>();
-				//claimsByCHouse[i]=new ArrayList();
 			}
 			//divide the items by clearinghouse:
 			for(int i=0;i<queueItems.Count;i++){
@@ -32,7 +30,6 @@ namespace OpenDental.Eclaims
 			}
 			//for any clearinghouses with claims, send them:
 			int batchNum;
-			//bool result=true;
 			string messageText="";
 			for(int i=0;i<claimsByCHouse.Length;i++){
 				if(claimsByCHouse[i].Count==0){
@@ -46,19 +43,16 @@ namespace OpenDental.Eclaims
 				batchNum=Clearinghouses.GetNextBatchNumber(Clearinghouses.Listt[i]);
 				//---------------------------------------------------------------------------------------
 				//Create the claim file(s) for this clearinghouse
-				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.X12){
+				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837D_4010
+					|| Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837D_5010_dental
+					|| Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837I_5010_institut
+					|| Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837P_5010_medical) 
+				{
 					messageText=x837Controller.SendBatch(claimsByCHouse[i],batchNum);
 				}
 				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
 					messageText=Renaissance.SendBatch(claimsByCHouse[i],batchNum);
 				}
-				//else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Canadian) {
-					//Canadian is a little different because we need the sequence numbers.
-					//So all programs are launched and statuses changed from within Canadian.SendBatch()
-					//We don't care what the result is.
-				//	Canadian.SendBatch(claimsByCHouse[i],batchNum);
-				//	continue;
-				//}
 				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Dutch) {
 					messageText=Dutch.SendBatch(claimsByCHouse[i],batchNum);
 				}
@@ -176,7 +170,7 @@ namespace OpenDental.Eclaims
 			if(clearhouse==null){
 				return "";
 			}
-			if(clearhouse.Eformat==ElectronicClaimFormat.X12){
+			if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010){
 				string retVal=X837_4010.Validate(queueItem,out warnings);
 				return retVal;
 			}
