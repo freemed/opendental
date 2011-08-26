@@ -48,11 +48,6 @@ namespace OpenDental {
 			formAPE.AggPathCur=AggPathList[e.Row];
 			formAPE.ShowDialog();
 			FillAggPaths();
-			if(formAPE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			//AggPaths.Update(formAPE.AggPathCur);
-			FillAggPaths();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -60,11 +55,6 @@ namespace OpenDental {
 			formAPE.IsNew=true;
 			formAPE.AggPathCur=new AggPath();
 			formAPE.ShowDialog();
-			FillAggPaths();//this runs twice to handle deletions from FormAggPathEdit
-			if(formAPE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			//AggPaths.Insert(formAPE.AggPathCur);
 			FillAggPaths();
 		}
 
@@ -72,12 +62,6 @@ namespace OpenDental {
 			Close();
 		}
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				AggPaths.Delete(AggPathList[gridMain.SelectedIndices[i]].AggPathNum);
-			}
-			FillAggPaths();
-		}
 
 
 	}

@@ -49,7 +49,12 @@ namespace OpenDental {
 			AggPathCur.RemoteURI=textURI.Text;
 			AggPathCur.RemoteUserName=textUserName.Text;
 			AggPathCur.RemotePassword=textPassword.Text;
-			//here is where you do insert or update
+			if(IsNew) {
+				AggPaths.Insert(AggPathCur);
+			}
+			else {
+				AggPaths.Update(AggPathCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

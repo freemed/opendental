@@ -26,7 +26,6 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -54,7 +53,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(613,365);
+			this.gridMain.Size = new System.Drawing.Size(613,395);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Aggregation Paths";
 			this.gridMain.TranslationName = "";
@@ -77,26 +76,10 @@ namespace OpenDental{
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Location = new System.Drawing.Point(12,383);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,24);
-			this.butDelete.TabIndex = 6;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// FormAggPathSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(718,419);
-			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
@@ -113,6 +96,5 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
 		private UI.Button butAdd;
-		private UI.Button butDelete;
 	}
 }
