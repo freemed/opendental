@@ -627,9 +627,11 @@ namespace OpenDental{
 
 		///<Summary>Use clearinghouseNum of 0 to indicate automatic calculation of clearinghouses.</Summary>
 		private void OnEclaims_Click(long clearinghouseNum) {
-			if(clearinghouseNum==0 && !PrefC.GetBool(PrefName.EasyNoClinics)) {
-				MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
-				return;
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Clinics is in use
+				if(clearinghouseNum==0){
+					MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
+					return;
+				}
 			}
 			Clearinghouse clearDefault;
 			if(clearinghouseNum==0){
@@ -690,6 +692,16 @@ namespace OpenDental{
 				if(!MsgBox.Show(this,true,"Send all selected e-claims?")){
 					FillGrid();//this changes back any clearinghouse descriptions that we changed manually.
 					return;
+				}
+			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Clinics is in use
+				long clinicNum0=Claims.GetClaim(listQueue[gridMain.SelectedIndices[0]].ClaimNum).ClinicNum;
+				for(int i=1;i<gridMain.SelectedIndices.Length;i++){
+					long clinicNum=Claims.GetClaim(listQueue[gridMain.SelectedIndices[i]].ClaimNum).ClinicNum;
+					if(clinicNum0!=clinicNum){
+						MsgBox.Show(this,"All claims must be for the same clinic.  You can use the combobox at the top to filter.");
+						return;
+					}
 				}
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
