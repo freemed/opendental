@@ -33,7 +33,8 @@ namespace OpenDentBusiness{
 			string command;
 			int quarter=MonthToQuarter(DateTime.Today.Month);
 			command="SELECT * FROM ehrquarterlykey WHERE YearValue="+(DateTime.Today.Year-2000).ToString()+" "
-				+"AND QuarterValue="+quarter.ToString()+" ";//we don't care about practice title in the query
+				+"AND QuarterValue="+quarter.ToString()+" "//we don't care about practice title in the query
+				+"AND PatNum=0";
 			return Crud.EhrQuarterlyKeyCrud.SelectOne(command);
 		}
 
