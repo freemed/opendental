@@ -13,38 +13,39 @@ namespace OpenDentBusiness
 		public X837_5010(string messageText):base(messageText){
 		
 		}
-
 		
 		public static void GenerateMessageText(StreamWriter sw,Clearinghouse clearhouse,int batchNum,List<ClaimSendQueueItem> functionalGroupDental) {
 			//Interchange Control Header (Interchange number tracked separately from transactionNum)
 			//We set it to between 1 and 999 for simplicity
-			sw.Write("ISA*00*          *"//ISA01,ISA02: 00 + 10 spaces
-				+"00*          *"//ISA03,ISA04: 00 + 10 spaces
-				+clearhouse.ISA05+"*"//ISA05: Sender ID type: ZZ=mutually defined. 30=TIN. Validated
-				+X12Generator.GetISA06(clearhouse)+"*"//ISA06: Sender ID(TIN). Or might be TIN of Open Dental
-				+clearhouse.ISA07+"*"//ISA07: Receiver ID type: ZZ=mutually defined. 30=TIN. Validated
-				+Sout(clearhouse.ISA08,15,15)+"*"//ISA08: Receiver ID. Validated to make sure length is at least 2.
-				+DateTime.Today.ToString("yyMMdd")+"*"//ISA09: today's date
-				+DateTime.Now.ToString("HHmm")+"*"//ISA10: current time
-				+"U*00401*"//ISA11 and ISA12. 
-				//ISA13: interchange control number, right aligned:
-				+batchNum.ToString().PadLeft(9,'0')+"*"
-				+"0*"//ISA14: no acknowledgment requested
-				+clearhouse.ISA15+"*");//ISA15: T=Test P=Production. Validated.
-			sw.WriteLine(":~");//ISA16: use ':'
+			sw.Write("ISA*00*"//ISA01 2/2 Authorization Information Qualifier: 00=No Authorization Information Present (No meaningful information in ISA02).
+				+"          *"//ISA02 10/10 Authorization Information: Blank
+				+"00*"//ISA03 2/2 Security Information Qualifier: 00=No Security Information Present (No meaningful information in ISA04).
+				+"          *"//ISA04 10/10 Security Information: Blank
+				+clearhouse.ISA05+"*"//ISA05 2/2 Interchange ID Qualifier: ZZ=mutually defined. 30=TIN. Validated
+				+X12Generator.GetISA06(clearhouse)+"*"//ISA06 15/15 Interchange Sender ID: Sender ID(TIN) Or might be TIN of Open Dental.
+				+clearhouse.ISA07+"*"//ISA07 2/2 Interchange ID Qualifier: ZZ=mutually defined. 30=TIN. Validated
+				+Sout(clearhouse.ISA08,15,15)+"*"//ISA08 15/15 Interchange Receiver ID: Validated to make sure length is at least 2.
+				+DateTime.Today.ToString("yyMMdd")+"*"//ISA09 6/6 Interchange Date: today's date.
+				+DateTime.Now.ToString("HHmm")+"*"//ISA10 4/4 Interchange Time: current time
+				+"U*"//ISA11 1/1 Repetition Separator:
+				+"00501*"//ISA12 5/5 Interchange Control Version Number
+				+batchNum.ToString().PadLeft(9,'0')+"*"//ISA13 9/9 Interchange Control Number:
+				+"0*"//ISA14 1/1 Acknowledgement Requested: 0=No Interchange Acknowledgment Requested.
+				+clearhouse.ISA15+"*");//ISA15 1/1 Interchange Usage Indicator: T=Test P=Production. Validated.
+			sw.WriteLine(":~");//ISA16 1/1 Component Element Separator: Use colon.
+			//Just one functional group.
 			WriteFunctionalGroup(sw,functionalGroupDental,batchNum,clearhouse);
 			//Interchange Control Trailer
-			sw.WriteLine("IEA*1*"//IEA01: number of functional groups
-					+batchNum.ToString().PadLeft(9,'0')+"~");//IEA02: Interchange control number
+			sw.WriteLine("IEA*1*"//IEA01 1/5 Number of Included Functional Groups:
+					+batchNum.ToString().PadLeft(9,'0')+"~");//IEA02 9/9 Interchange Control Number:
 		}
 
 		private static void WriteFunctionalGroup(StreamWriter sw,List<ClaimSendQueueItem> queueItems,int batchNum,Clearinghouse clearhouse) {
 			int transactionNum=1;//Gets incremented for each carrier. Can be reused in other functional groups and interchanges, so not persisted
 			//Functional Group Header
 			string groupControlNumber=batchNum.ToString();//Must be unique within file.  We will use batchNum
-			bool isMedical=queueItems[0].IsMedical;
 			//this needs to be changed.  Medical should not be sent with dental.
-			if(isMedical) {
+			if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 				//groupControlNumber="2";//this works for now because only two groups
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
 					+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes OpenDental.  Sometimes the sending clinic. Validated
@@ -55,16 +56,16 @@ namespace OpenDentBusiness
 					+"X*"//GS07: X
 					+"005010X222~");//GS08: Version
 			}
-			else {//dental
+			else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 				//groupControlNumber="1";
-				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
-					+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
-					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
-					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
-					+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
-					+groupControlNumber+"*"//GS06: Group control number. Max length 9. No padding necessary.
-					+"X*"//GS07: X
-					+"004010X097A1~");//GS08: Version
+				sw.WriteLine("GS*HC*"//GS01 2/2 Functional Identifier Code: Health Care Claim.
+					+X12Generator.GetGS02(clearhouse)+"*"//GS02 2/15 Application Sender's Code: Sometimes Jordan Sparks.  Sometimes the sending clinic.
+					+Sout(clearhouse.GS03,15,2)+"*"//GS03 2/15 Application Receiver's Code:
+					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04 8/8 Date: today's date.
+					+DateTime.Now.ToString("HHmm")+"*"//GS05 4/8 TIME: current time.
+					+groupControlNumber+"*"//GS06 1/9 Group Control Number: No padding necessary.
+					+"X*"//GS07 1/2 Responsible Agency Code: X=Accredited Standards Committee X12.
+					+"005010X224A2~");//GS08 1/12 Version/Release/Industry Identifier Code:
 			}
 			//Gets an array with PayorID,ProvBill,Subscriber,PatNum,ClaimNum all in the correct order
 			List<long> claimNums=new List<long>();
@@ -115,14 +116,15 @@ namespace OpenDentBusiness
 					//ST02 Transact. control #. Must be unique within ISA
 					//NO: So we used combination of transaction and group, eg 00011
 					seg++;
-					if(isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						sw.WriteLine("ST*837*"//ST01
 							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9
 							+"005010X222~");//ST03: Implementation convention reference
 					}
-					else {//dental
-						sw.WriteLine("ST*837*"//ST01
-							+transactionNum.ToString().PadLeft(4,'0')+"~");//ST02
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
+						sw.WriteLine("ST*837*"//ST01 Transaction Set Identifier Code
+							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 TS Control Number
+							+"005010X224A2~");//ST03 Implementation Convention Reference
 					}
 					seg++;
 					sw.WriteLine("BHT*0019*00*"
@@ -130,7 +132,7 @@ namespace OpenDentBusiness
 						+DateTime.Now.ToString("yyyyMMdd")+"*"//BHT04: Date
 						+DateTime.Now.ToString("HHmmss")+"*"//BHT05: Time
 						+"CH~");//BHT06: Type=Chargable
-					if(!isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						seg++;
 						if(clearhouse.ISA15=="T") {//validated
 							sw.WriteLine("REF*87*004010X097DA1~");
@@ -184,14 +186,14 @@ namespace OpenDentBusiness
 						+"20*"//HL03: Heirarchical level code. 20=Information source
 						+"1~");//HL04: Heirarchical child code. 1=child HL present
 					billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[i].ProvBill1)];
-					if(isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						//2000A PRV: Provider Specialty Information
 						seg++;
 						sw.WriteLine("PRV*BI*"//PRV01: Provider Code. BI=Billing
 							+"PXC*"//PRV02: taxonomy code
 							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Provider taxonomy code
 					}
-					else {//dental
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						//2000A PRV: Provider Specialty Information (Optional Rendering prov for all claims in this HL)
 						//used instead of 2310B.
 						seg++;
@@ -272,7 +274,7 @@ namespace OpenDentBusiness
 							+Sout(clinic.State,2)+"*"//N402: State
 							+Sout(clinic.Zip.Replace("-",""),15)+"~");//N403: Zip
 					}
-					if(!isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						//2010AA REF: Office phone number. Required by WebMD.  Can possibly be removed now that we're using NPI.
 						if(clearhouse.ISA08=="0135WCH00") {//if WebMD
 							seg++;
@@ -303,7 +305,7 @@ namespace OpenDentBusiness
 						sw.Write("SY*");//REF01: qualifier. SY=SSN
 					}
 					sw.WriteLine(Sout(billProv.SSN,30)+"~");//REF02: ID #
-					if(isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						//2010AA PER: Billing Provider Contact Info. Required if different than in 1000A
 						//We'll always include it for simplicity
 						seg++;
@@ -404,10 +406,10 @@ namespace OpenDentBusiness
 					sw.Write(Sout(insPlan.GroupNum,30)+"*"//SBR03: Group Number
 						+Sout(insPlan.GroupName,60)+"*"//SBR04: Group Name
 						+"*");//SBR05: Not used
-					if(isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						sw.Write("*");//SBR06 not used.
 					}
-					else {
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						if(claim.PlanNum2>0) {
 							sw.Write("1*");//SBR06: 1=Coordination of benefits. 6=No coordination
 						}
@@ -527,12 +529,12 @@ namespace OpenDentBusiness
 						+"0~");//HL04: never a subordinate
 					//2000C PAT
 					seg++;
-					if(isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						sw.WriteLine("PAT*"
 							+GetRelat(claim.PatRelat)+"~");//PAT01: Relat
 						//PAT04 not used, so no further lines needed.
 					}
-					else {
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						sw.WriteLine("PAT*"
 							+GetRelat(claim.PatRelat)+"*"//PAT01: Relat
 							+"**"//PAT02 & 03 not used
@@ -550,7 +552,7 @@ namespace OpenDentBusiness
 							patID=patPlans[p].PatID.Replace("-","");
 						}
 					}
-					if(isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						if(patient.MiddleI=="") {
 							sw.WriteLine("~");
 						}
@@ -561,7 +563,7 @@ namespace OpenDentBusiness
 						//NM108-NM112 no longer allowed to be used.
 						//instead of including a patID here, the patient should get their own subsriber loop.
 					}
-					else {
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						if(patID=="") {
 							if(patient.MiddleI=="") {
 								sw.WriteLine("~");
@@ -626,20 +628,22 @@ namespace OpenDentBusiness
 				//else{
 				//	sw.Write("N");//this is not allowed and is now blocked way ahead of time.
 				//}
-				if(!isMedical && claim.ClaimType=="PreAuth") {
-					sw.WriteLine("**"//* for CLM09. CLM10 not used
-						+GetRelatedCauses(claim)+"*"//CLM11: Accident related, including state. Might be blank.
-						+"*"//CLM12: special programs like EPSTD
-						+"******"//CLM13-18 not used
-						+"PB~");//CLM19 PB=Predetermination of Benefits. Not allowed in medical claims. What is the replacement??
-				}
-				else {
-					if(GetRelatedCauses(claim)=="") {
-						sw.WriteLine("~");
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
+					if(claim.ClaimType=="PreAuth") {
+						sw.WriteLine("**"//* for CLM09. CLM10 not used
+							+GetRelatedCauses(claim)+"*"//CLM11: Accident related, including state. Might be blank.
+							+"*"//CLM12: special programs like EPSTD
+							+"******"//CLM13-18 not used
+							+"PB~");//CLM19 PB=Predetermination of Benefits. Not allowed in medical claims. What is the replacement??
 					}
 					else {
-						sw.WriteLine("**"//* for CLM09. CLM10 not used
-							+GetRelatedCauses(claim)+"~");//CLM11: Accident related, including state
+						if(GetRelatedCauses(claim)=="") {
+							sw.WriteLine("~");
+						}
+						else {
+							sw.WriteLine("**"//* for CLM09. CLM10 not used
+								+GetRelatedCauses(claim)+"~");//CLM11: Accident related, including state
+						}
 					}
 				}
 				//CLM20: delay reason code
@@ -656,7 +660,7 @@ namespace OpenDentBusiness
 						+claim.AccidentDate.ToString("yyyyMMdd")+"~");
 				}
 				//2300 DTP: (a bunch more useless medical dates)
-				if(!isMedical) {
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 					//2300 DTP: Date ortho appliance placed
 					if(claim.OrthoDate.Year>1880) {
 						seg++;
@@ -829,7 +833,7 @@ namespace OpenDentBusiness
 				//2300 CR2: (medical) Spinal Manipulation Service Info
 				//2300 CRC: (medical) About 3 irrelevant segments
 				ArrayList diagnoses=new ArrayList();//princDiag will always be the first element.
-				if(isMedical) {
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 					for(int j=0;j<claimProcs.Count;j++) {
 						proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 						if(proc.DiagnosticCode=="") {
@@ -883,14 +887,14 @@ namespace OpenDentBusiness
 				sw.Write("XX*");//NM108: ID code qualifier. 24=EIN. 34=SSN, XX=NPI
 				sw.WriteLine(Sout(provTreat.NationalProvID,80)+"~");//NM109: ID code.  NPI validated.
 				//2310B PRV: Rendering provider information
-				if(isMedical) {
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 					seg++;
 					sw.WriteLine("PRV*"
 						+"PE*"//PRV01: PE=Performing
 						+"PXC*"//PRV02: PXC=Health Care Provider Taxonomy Code
 						+X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
 				}
-				else {//dental
+				else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 					seg++;
 					sw.WriteLine("PRV*"
 						+"PE*"//PRV01: PE=Performing
@@ -904,7 +908,7 @@ namespace OpenDentBusiness
 				seg++;
 				sw.WriteLine("REF*0B*"//REF01: 0B=state license #
 					+Sout(provTreat.StateLicense,30)+"~");
-				if(!isMedical) {//we can't support these numbers very well yet for medical
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {//we can't support these numbers very well yet for medical
 					//2310B REF: Rendering Provider Secondary ID number(s). Only required by some carriers.
 					seg+=WriteProv_REF(sw,provTreat,claimItems[i].PayorId0);
 				}
@@ -1086,7 +1090,7 @@ namespace OpenDentBusiness
 					//2400 LX: Line Counter. or (medical) Service Line Number
 					seg++;
 					sw.WriteLine("LX*"+(j+1).ToString()+"~");
-					if(isMedical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						//2400 SV1: Professional Service
 						seg++;
 						sw.Write("SV1*"
@@ -1133,7 +1137,7 @@ namespace OpenDentBusiness
 						//SV115: Copay status code: 0 or blank. Not supported
 						//2400 SV5,PWK,CR1,CR2,CR3,CR5,CRC(x4): (medical)Unsupported
 					}//if isMedical
-					else {
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						//2400 SV3: Dental Service
 						seg++;
 						sw.Write("SV3*"
@@ -1245,10 +1249,10 @@ namespace OpenDentBusiness
 						seg++;
 						sw.Write("PRV*");
 						sw.Write("PE*");//PRV01: PE=Performing
-						if(isMedical) {
+						if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 							sw.Write("PXC*");//PRV02: PXC=health care provider taxonomy code
 						}
-						else {
+						else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 							sw.Write("ZZ*");//PRV02: ZZ=mutually defined taxonomy code
 						}
 						sw.WriteLine(X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
@@ -1286,9 +1290,8 @@ namespace OpenDentBusiness
 				}
 			}//for claimAr i
 			//Functional Group Trailer
-			sw.WriteLine("GE*"+transactionNum.ToString()+"*"//GE01: Number of transaction sets included
-				+groupControlNumber+"~");//GE02: Group Control number. Must be identical to GS06
-
+			sw.WriteLine("GE*"+transactionNum.ToString()+"*"//GE01 1/6 Number of Transaction Sets Included:
+				+groupControlNumber+"~");//GE02 1/9 Group Control Number: Must be identical to GS06.
 		}
 
 		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
