@@ -529,6 +529,11 @@ namespace OpenDental {
 				IgnoreCertificateErrors();
 			}
 			if(!TestWebServiceExists()) {
+				if(!doForce) {//if being used from FormOpenDental as part of timer
+					if(MessageBox.Show("Mobile synch server not available.  Synch failed.  Turn off synch?","",MessageBoxButtons.YesNo)==DialogResult.Yes) {
+						Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,0);
+					}
+				}
 				return;
 			}
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);			
