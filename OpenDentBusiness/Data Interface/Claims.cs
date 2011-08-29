@@ -80,12 +80,12 @@ namespace OpenDentBusiness{
 		/// <summary>Gets all claims that are not fully covered by InsPayAmt in attached claimprocs. Will likely need a date range for filtering. DateService/DateSent/DateReceived?.</summary>
 		public static List<ClaimPaySplit> GetByClaimPayment(long claimPaymentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum);
 			}
 			string command=
-				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
-				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,claim.PatNum"
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
+				+"carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
+				+"claimproc.ClaimPaymentNum,claim.PatNum"
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
