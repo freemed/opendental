@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		public float FontSize;
 		///<summary>The fontName for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
 		public string FontName;
-		///<summary></summary>
+		///<summary>.</summary>
 		public bool FontIsBold;
 		///<summary>In pixels.</summary>
 		public int XPos;

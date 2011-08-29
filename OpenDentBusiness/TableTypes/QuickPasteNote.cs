@@ -2,7 +2,7 @@ using System;
 
 namespace OpenDentBusiness{
 	
-	///<summary></summary>
+	///<summary>Template for quick pasted note feature.</summary>
 	[Serializable]
 	public class QuickPasteNote:TableBase {
 		///<summary>Primary key.</summary>

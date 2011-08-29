@@ -31,6 +31,9 @@ namespace OpenDentBusiness{
 		public SchedStatus Status;
 		///<summary>FK to employee.EmployeeNum.</summary>
 		public long EmployeeNum;
+		///<summary>Last datetime that this row was inserted or updated.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 		///<summary>Not a db column.  Holds a list of ops that this schedule is assigned to.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public List<long> Ops;

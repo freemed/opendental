@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-
-	///<summary></summary>
+	
+	///<summary>A supply freeform typed in by a user.</summary>
 	[Serializable()]
 	public class SupplyNeeded : TableBase {
 		/// <summary>Primary key.</summary>

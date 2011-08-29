@@ -3,13 +3,13 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
+	///<summary>Stores events for EHR that are needed for reporting purposes.</summary>
 	[Serializable]
 	public class EhrMeasureEvent:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long EhrMeasureEventNum;
-		///<summary></summary>
+		///<summary>Date and time of measure event.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTEvent;
 		///<summary>Enum: EhrMeasureEventType. </summary>

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
+	///<summary>An allergy definition.  Gets linked to an allergy and patient.</summary>
 	[Serializable]
 	public class AllergyDef:TableBase {
 		///<summary>Primary key.</summary>

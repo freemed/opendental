@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>Links Procedures(groupnotes) to Procedures in a 1-n relationship.</summary>
 	[Serializable]
 	public class ProcGroupItem:TableBase{
 		///<summary>Primary key.</summary>

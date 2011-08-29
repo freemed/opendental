@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 		public AutoCondField CompareField;
 		///<summary>Enum:AutoCondComparison Not all comparisons are allowed with all data types.</summary>
 		public AutoCondComparison Comparison;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string CompareString;
 
 		///<summary></summary>

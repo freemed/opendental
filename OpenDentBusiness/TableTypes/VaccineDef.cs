@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
+	///<summary>A vaccine definition.  Should not be altered once linked to VaccinePat.</summary>
 	[Serializable]
 	public class VaccineDef:TableBase {
 		///<summary>Primary key.</summary>

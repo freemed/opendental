@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Crud{
 				recall.RecallStatus       = PIn.Long  (table.Rows[i]["RecallStatus"].ToString());
 				recall.Note               = PIn.String(table.Rows[i]["Note"].ToString());
 				recall.IsDisabled         = PIn.Bool  (table.Rows[i]["IsDisabled"].ToString());
+				recall.DateTStamp         = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				recall.RecallTypeNum      = PIn.Long  (table.Rows[i]["RecallTypeNum"].ToString());
 				recall.DisableUntilBalance= PIn.Double(table.Rows[i]["DisableUntilBalance"].ToString());
 				recall.DisableUntilDate   = PIn.Date  (table.Rows[i]["DisableUntilDate"].ToString());
@@ -111,6 +112,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (recall.RecallStatus)+","
 				+"'"+POut.String(recall.Note)+"',"
 				+    POut.Bool  (recall.IsDisabled)+","
+				//DateTStamp can only be set by MySQL
 				+    POut.Long  (recall.RecallTypeNum)+","
 				+"'"+POut.Double(recall.DisableUntilBalance)+"',"
 				+    POut.Date  (recall.DisableUntilDate)+")";
@@ -134,6 +136,7 @@ namespace OpenDentBusiness.Crud{
 				+"RecallStatus       =  "+POut.Long  (recall.RecallStatus)+", "
 				+"Note               = '"+POut.String(recall.Note)+"', "
 				+"IsDisabled         =  "+POut.Bool  (recall.IsDisabled)+", "
+				//DateTStamp can only be set by MySQL
 				+"RecallTypeNum      =  "+POut.Long  (recall.RecallTypeNum)+", "
 				+"DisableUntilBalance= '"+POut.Double(recall.DisableUntilBalance)+"', "
 				+"DisableUntilDate   =  "+POut.Date  (recall.DisableUntilDate)+" "
@@ -176,6 +179,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="IsDisabled = "+POut.Bool(recall.IsDisabled)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(recall.RecallTypeNum != oldRecall.RecallTypeNum) {
 				if(command!=""){ command+=",";}
 				command+="RecallTypeNum = "+POut.Long(recall.RecallTypeNum)+"";

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
+	///<summary>One credit card along with any recurring charge information.</summary>
 	[Serializable]
 	public class CreditCard:TableBase {
 		///<summary>Primary key.</summary>

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>When a task is created or a comment made, a series of these taskunread objects are created, one for each user who is subscribed to the tasklist.  Duplicates are intelligently avoided.  Rows are deleted once user reads the task.</summary>
 	[Serializable()]
 	public class TaskUnread:TableBase{
 		///<summary>Primary key.</summary>

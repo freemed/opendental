@@ -69,7 +69,9 @@ namespace OpenDentBusiness{
 		///<summary>Enum:SubstitutionCondition Used so that posterior composites only substitute if tooth is molar.  Ins usually pays for premolar composites.</summary>
 		//[XmlIgnore]
 		public SubstitutionCondition SubstOnlyIf;
-		//DateTStamp
+		///<summary>Last datetime that this row was inserted or updated.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 		///<summary>Set to true if the procedure takes more than one appointment to complete.</summary>
 		public bool IsMultiVisit;
 

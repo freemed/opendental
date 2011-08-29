@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		public int Width;
 		///<summary>Height of the sheet in pixels, 100 pixels per inch.</summary>
 		public int Height;
-		///<summary></summary>
+		///<summary>.</summary>
 		public bool IsLandscape;
 		///<summary>An internal note for the use of the office staff regarding the sheet.  Not to be printed on the sheet in any way.</summary>
 		public string InternalNote;

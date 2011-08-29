@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace OpenDentBusiness{
 
-	///<summary></summary>
+	///<summary>Not user-editable.</summary>
 	[Serializable()]
 	public class CanadianNetwork:TableBase{
 		///<summary>Primary key.</summary>
@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public long CanadianNetworkNum;
 		///<summary>This will also be the folder name</summary>
 		public string Abbrev;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Descript;
 		///<summary>A01.  Up to 12 char.</summary>
 		public string CanadianTransactionPrefix;

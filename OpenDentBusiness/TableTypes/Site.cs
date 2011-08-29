@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long SiteNum;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Description;
 		/// <summary>Notes could include phone, address, contacts, etc.</summary>
 		public string Note;

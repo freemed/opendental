@@ -11,11 +11,11 @@ namespace OpenDentBusiness {
 		public long OrthoChartNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary></summary>
+		///<summary>Date of service.</summary>
 		public DateTime DateService;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string FieldName;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string FieldValue;
 
 		///<summary></summary>

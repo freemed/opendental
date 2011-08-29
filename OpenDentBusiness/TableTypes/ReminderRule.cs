@@ -2,7 +2,7 @@
 using System.Collections;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>Ehr</summary>
 	[Serializable]
 	public class ReminderRule:TableBase{
 		///<summary>Primary key.</summary>

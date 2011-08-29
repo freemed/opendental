@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-
-	///<summary></summary>
+	
+	///<summary>Used for property tax tracking.</summary>
 	[Serializable]
 	public class Equipment:TableBase {
 		///<summary>Primary key.</summary>
@@ -19,11 +19,11 @@ namespace OpenDentBusiness{
 		public DateTime DatePurchased;
 		///<summary>Normally 01-01-0001 if equipment still in possession.  Once sold, a date will be present.</summary>
 		public DateTime DateSold;
-		///<summary></summary>
+		///<summary>.</summary>
 		public double PurchaseCost;
-		///<summary></summary>
+		///<summary>.</summary>
 		public double MarketValue;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Location;
 		///<summary>Security uses this date to lock older entries from accidental deletion.  Date, no time.</summary>
 		public DateTime DateEntry;

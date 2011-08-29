@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>Only one popup per patient is currently supported.</summary>
 	[Serializable]
 	public class Popup:TableBase {
 		/// <summary>Primary key.</summary>

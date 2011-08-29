@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public string City;
 		///<summary>2 char in the US.</summary>
 		public string State;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Zip;
 		///<summary>Does not include any punctuation.  Should be exactly 10 digits</summary>
 		public string Phone;

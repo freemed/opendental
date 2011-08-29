@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
+	///<summary>A vaccine given to a patient on a date.</summary>
 	[Serializable]
 	public class VaccinePat:TableBase {
 		///<summary>Primary key.</summary>
@@ -11,10 +11,10 @@ namespace OpenDentBusiness {
 		public long VaccinePatNum;
 		///<summary>FK to vaccinedef.VaccineDefNum.</summary>
 		public long VaccineDefNum;
-		///<summary></summary>
+		///<summary>The datetime that the vaccine was administered.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeStart;
-		///<summary></summary>
+		///<summary>Typically set to the same as DateTimeStart.  User can change.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEnd;
 		///<summary>Size of the dose of the vaccine.  0 indicates unknown and gets converted to 999 on HL7 output.</summary>
@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 		public long PatNum;
 		///<summary>Set to true if no vaccine given.  Documentation required in the Note.</summary>
 		public bool NotGiven;
-		///<summary></summary>
+		///<summary>Documentation sometimes required.</summary>
 		public string Note;
 
 		///<summary></summary>

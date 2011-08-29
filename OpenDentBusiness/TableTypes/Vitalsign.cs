@@ -25,7 +25,9 @@ namespace OpenDentBusiness {
 		public bool IsIneligible;
 		///<summary>For HasFollowupPlan or IsIneligible, this documents the specifics.</summary>
 		public string Documentation;
+		///<summary>.</summary>
 		public bool ChildGotNutrition;
+		///<summary>.</summary>
 		public bool ChildGotPhysCouns;
 
 		///<summary></summary>

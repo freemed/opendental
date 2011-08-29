@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 		public byte Quantity;
 		///<summary>FK to procedurecode.CodeNum.  Typical uses include fluoride, sealants, etc.  If a specific code is used here, then the CovCat should be None.</summary>
 		public long CodeNum;
-		///<Summary>Enum:BenefitCoverageLevel Corresponds to X12 EB02.  None, Individual, or Family.  Individual and Family are commonly used for deductibles and maximums.  None is commonly used for percentages and copays.</Summary>
+		///<summary>Enum:BenefitCoverageLevel Corresponds to X12 EB02.  None, Individual, or Family.  Individual and Family are commonly used for deductibles and maximums.  None is commonly used for percentages and copays.</summary>
 		public BenefitCoverageLevel CoverageLevel;
 
 		public Benefit() {

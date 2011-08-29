@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long RecallTypeNum;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Description;
 		///<summary>The interval between recalls.  The Interval struct combines years, months, weeks, and days into a single integer value.</summary>
 		public Interval DefaultInterval;

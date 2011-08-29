@@ -6107,6 +6107,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				string command;
 				command="ALTER TABLE allergydef DROP COLUMN RxCui";//both oracle and mysql
 				Db.NonQ(command);
+				//Primary key was renamed in 6.8.1 on accident.  Changing back so generating XML documentation works correctly.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE insfilingcodesubtype CHANGE InsFilingCodeSubTypeNum InsFilingCodeSubtypeNum BIGINT(20) NOT NULL AUTO_INCREMENT";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					//No need to change column name in Oracle, strictly affects XML documentation generation.
+				}
 				command="UPDATE preference SET ValueString = '11.0.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}

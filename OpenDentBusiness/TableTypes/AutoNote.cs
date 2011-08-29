@@ -3,7 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Drawing;
 namespace OpenDentBusiness{
-	
+	///<summary>A single autonote template.</summary>
 	[Serializable()]
 	public class AutoNote:TableBase{
 		///<summary>Primary key</summary>

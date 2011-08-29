@@ -127,10 +127,10 @@ namespace OpenDentBusiness{
 		public ContactMethod PreferContactMethod;
 		/// <summary>Enum:ContactMethod</summary>
 		public ContactMethod PreferRecallMethod;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		[XmlIgnore]
 		public TimeSpan SchedBeforeTime;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		[XmlIgnore]
 		public TimeSpan SchedAfterTime;
 		/// <summary>We do not use this, but some users do, so here it is. 0=none. Otherwise, 1-7 for day.</summary>
@@ -141,7 +141,7 @@ namespace OpenDentBusiness{
 		public DateTime AdmitDate;
 		/// <summary>Includes any punctuation.  For example, Mr., Mrs., Miss, Dr., etc.  There is no selection mechanism yet for user; they must simply type it in.</summary>
 		public string Title;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		public double PayPlanDue;
 		///<summary>FK to site.SiteNum. Can be zero. Replaces the old GradeSchool field with a proper foreign key.</summary>
 		public long SiteNum;

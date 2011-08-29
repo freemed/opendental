@@ -69,6 +69,7 @@ namespace OpenDentBusiness.Crud{
 				procedureCode.BaseUnits       = PIn.Int   (table.Rows[i]["BaseUnits"].ToString());
 				procedureCode.SubstitutionCode= PIn.String(table.Rows[i]["SubstitutionCode"].ToString());
 				procedureCode.SubstOnlyIf     = (SubstitutionCondition)PIn.Int(table.Rows[i]["SubstOnlyIf"].ToString());
+				procedureCode.DateTStamp      = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				procedureCode.IsMultiVisit    = PIn.Bool  (table.Rows[i]["IsMultiVisit"].ToString());
 				retVal.Add(procedureCode);
 			}
@@ -137,6 +138,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (procedureCode.BaseUnits)+","
 				+"'"+POut.String(procedureCode.SubstitutionCode)+"',"
 				+    POut.Int   ((int)procedureCode.SubstOnlyIf)+","
+				//DateTStamp can only be set by MySQL
 				+    POut.Bool  (procedureCode.IsMultiVisit)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -172,6 +174,7 @@ namespace OpenDentBusiness.Crud{
 				+"BaseUnits       =  "+POut.Int   (procedureCode.BaseUnits)+", "
 				+"SubstitutionCode= '"+POut.String(procedureCode.SubstitutionCode)+"', "
 				+"SubstOnlyIf     =  "+POut.Int   ((int)procedureCode.SubstOnlyIf)+", "
+				//DateTStamp can only be set by MySQL
 				+"IsMultiVisit    =  "+POut.Bool  (procedureCode.IsMultiVisit)+" "
 				+"WHERE CodeNum = "+POut.Long(procedureCode.CodeNum);
 			Db.NonQ(command);
@@ -265,6 +268,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="SubstOnlyIf = "+POut.Int   ((int)procedureCode.SubstOnlyIf)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(procedureCode.IsMultiVisit != oldProcedureCode.IsMultiVisit) {
 				if(command!=""){ command+=",";}
 				command+="IsMultiVisit = "+POut.Bool(procedureCode.IsMultiVisit)+"";

@@ -206,6 +206,7 @@ namespace DocumentationBuilder {
 				//The only classes that need to be included below are those that have a capital letter in addition to the first one
 				//or those which are obsolete.
 				case "accountingautopay": return "AccountingAutoPay";
+				case "allergydef": return "AllergyDef";
 				case "appointmentrule": return "AppointmentRule";
 				case "apptfield": return "ApptField";
 				case "apptfielddef": return "ApptFieldDef";
@@ -214,6 +215,7 @@ namespace DocumentationBuilder {
 				case "autocode": return "AutoCode";
 				case "autocodecond": return "AutoCodeCond";
 				case "autocodeitem": return "AutoCodeItem";
+				case "automationcondition": return "AutomationCondition";
 				case "autonote": return "AutoNote";
 				case "autonotecontrol": return "AutoNoteControl";
 				case "canadianclaim": return "CanadianClaim";
@@ -230,11 +232,20 @@ namespace DocumentationBuilder {
 				case "computerpref": return "ComputerPref";
 				case "covcat": return "CovCat";
 				case "covspan": return "CovSpan";
+				case "creditcard": return "CreditCard";
 				case "definition": return "Def";
 				case "deletedobject": return "DeletedObject";
 				case "diseasedef": return "DiseaseDef";
 				case "displayfield": return "DisplayField";
 				case "docattach": return "DocAttach";
+				case "drugmanufacturer": return "DrugManufacturer";
+				case "drugunit": return "DrugUnit";
+				case "eduresource": return "EduResource";
+				case "ehrmeasure": return "EhrMeasure";
+				case "ehrmeasureevent": return "EhrMeasureEvent";
+				case "ehrprovkey": return "EhrProvKey";
+				case "ehrquarterlykey": return "EhrQuarterlyKey";
+				case "ehrsummaryccd": return "EhrSummaryCcd";
 				case "electid": return "ElectID";
 				case "emailattach": return "EmailAttach";
 				case "emailmessage": return "EmailMessage";
@@ -242,6 +253,7 @@ namespace DocumentationBuilder {
 				case "etransmessagetext": return "EtransMessageText";
 				case "feesched": return "FeeSched";
 				case "formpat": return "FormPat";
+				case "formularymed": return "FormularyMed";
 				case "graphicassembly": return "GraphicAssembly Not Used";
 				case "graphicelement": return "graphicelement Not Used";
 				case "graphicpoint": return "graphicpoint Not Used";
@@ -249,20 +261,25 @@ namespace DocumentationBuilder {
 				case "graphictype": return "graphictype Not Used";
 				case "grouppermission": return "GroupPermission";
 				case "hl7msg": return "HL7Msg";
+				case "icd9": return "ICD9";
 				case "insfilingcode": return "InsFilingCode";
 				case "insfilingcodesubtype": return "InsFilingCodeSubtype";
 				case "insplan": return "InsPlan";
 				case "inssub": return "InsSub";
 				case "journalentry": return "JournalEntry";
 				case "labcase": return "LabCase";
+				case "labpanel": return "LabPanel";
+				case "labresult": return "LabResult";
 				case "labturnaround": return "LabTurnaround";
 				case "languageforeign": return "LanguageForeign";
 				case "lettermerge": return "LetterMerge";
 				case "lettermergefield": return "LetterMergeField";
+				case "medicalorder": return "MedicalOrder";
 				case "medicationpat": return "MedicationPat";
 				case "mountdef": return "MountDef";
 				case "mountitem": return "MountItem";
 				case "mountitemdef": return "MountItemDef";
+				case "orthochart": return "OrthoChart";
 				case "orionproc": return "OrionProc";
 				case "patfield": return "PatField";
 				case "patfielddef": return "PatFieldDef";
@@ -296,12 +313,14 @@ namespace DocumentationBuilder {
 				case "registrationkey": return "RegistrationKey";
 				case "recalltrigger": return "RecallTrigger";
 				case "recalltype": return "RecallType";
+				case "reminderrule": return "ReminderRule";
 				case "repeatcharge": return "RepeatCharge";
 				case "replicationserver": return "ReplicationServer";
 				case "reqneeded": return "ReqNeeded";
 				case "reqstudent": return "ReqStudent";
 				case "rxalert": return "RxAlert";
 				case "rxdef": return "RxDef";
+				case "rxnorm": return "RxNorm";
 				case "rxpat": return "RxPat";
 				case "scheddefault": return "SchedDefault";
 				case "scheduleop": return "ScheduleOp";
@@ -321,6 +340,7 @@ namespace DocumentationBuilder {
 				case "supplyorderitem": return "SupplyOrderItem";
 				case "taskancestor": return "TaskAncestor";
 				case "tasklist": return "TaskList";
+				case "tasknote": return "TaskNote";
 				case "tasksubscription": return "TaskSubscription";
 				case "taskunread": return "TaskUnread";
 				case "terminalactive": return "TerminalActive";
@@ -331,6 +351,8 @@ namespace DocumentationBuilder {
 				case "treatplan": return "TreatPlan";
 				case "usergroup": return "UserGroup";
 				case "userquery": return "UserQuery";
+				case "vaccinedef": return "VaccineDef";
+				case "vaccinepat": return "VaccinePat";
 				case "zipcode": return "ZipCode";
 			}
 			/*single cap classes:

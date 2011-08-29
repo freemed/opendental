@@ -27,7 +27,9 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary>If true, this recall type will be disabled (there's only one type right now). This is usually used rather than deleting the recall type from the patient because the program must enforce the trigger conditions for all patients.</summary>
 		public bool IsDisabled;
-		//DateTStamp
+		///<summary>Last datetime that this row was inserted or updated.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 		///<summary>FK to recalltype.RecallTypeNum.</summary>
 		public long RecallTypeNum;
 		///<summary>Default is 0.  If a positive number is entered, then the family balance must be less in order for this recall to show in the recall list.</summary>

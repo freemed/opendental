@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		public string EcwID;
 		///<summary>Allows using ehr module for this provider.  Tied to provider fname and lname.</summary>
 		public string EhrKey;
-		///<summary></summary>
+		///<summary>Provider medical State ID.</summary>
 		public string StateRxID;
 
 		///<summary>Used only for serialization purposes</summary>

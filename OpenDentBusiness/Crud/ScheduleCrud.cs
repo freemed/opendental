@@ -56,6 +56,7 @@ namespace OpenDentBusiness.Crud{
 				schedule.Note        = PIn.String(table.Rows[i]["Note"].ToString());
 				schedule.Status      = (SchedStatus)PIn.Int(table.Rows[i]["Status"].ToString());
 				schedule.EmployeeNum = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
+				schedule.DateTStamp  = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(schedule);
 			}
 			return retVal;
@@ -110,6 +111,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(schedule.Note)+"',"
 				+    POut.Int   ((int)schedule.Status)+","
 				+    POut.Long  (schedule.EmployeeNum)+")";
+				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -131,6 +133,7 @@ namespace OpenDentBusiness.Crud{
 				+"Note        = '"+POut.String(schedule.Note)+"', "
 				+"Status      =  "+POut.Int   ((int)schedule.Status)+", "
 				+"EmployeeNum =  "+POut.Long  (schedule.EmployeeNum)+" "
+				//DateTStamp can only be set by MySQL
 				+"WHERE ScheduleNum = "+POut.Long(schedule.ScheduleNum);
 			Db.NonQ(command);
 		}
@@ -174,6 +177,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="EmployeeNum = "+POut.Long(schedule.EmployeeNum)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

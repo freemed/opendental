@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		public string LogText;
 		///<summary>FK to patient.PatNum.  Can be 0 if not applicable.</summary>
 		public long PatNum;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string CompName;
 		///<summary>PatNum-NameLF</summary>
 		[CrudColumn(IsNotDbColumn=true)]
