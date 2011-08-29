@@ -46,13 +46,14 @@ namespace OpenDentBusiness.Crud{
 			EhrProvKey ehrProvKey;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ehrProvKey=new EhrProvKey();
-				ehrProvKey.EhrProvKeyNum= PIn.Long  (table.Rows[i]["EhrProvKeyNum"].ToString());
-				ehrProvKey.PatNum       = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				ehrProvKey.LName        = PIn.String(table.Rows[i]["LName"].ToString());
-				ehrProvKey.FName        = PIn.String(table.Rows[i]["FName"].ToString());
-				ehrProvKey.ProvKey      = PIn.String(table.Rows[i]["ProvKey"].ToString());
-				ehrProvKey.FullTimeEquiv= PIn.Float (table.Rows[i]["FullTimeEquiv"].ToString());
-				ehrProvKey.Notes        = PIn.String(table.Rows[i]["Notes"].ToString());
+				ehrProvKey.EhrProvKeyNum  = PIn.Long  (table.Rows[i]["EhrProvKeyNum"].ToString());
+				ehrProvKey.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				ehrProvKey.LName          = PIn.String(table.Rows[i]["LName"].ToString());
+				ehrProvKey.FName          = PIn.String(table.Rows[i]["FName"].ToString());
+				ehrProvKey.ProvKey        = PIn.String(table.Rows[i]["ProvKey"].ToString());
+				ehrProvKey.FullTimeEquiv  = PIn.Float (table.Rows[i]["FullTimeEquiv"].ToString());
+				ehrProvKey.Notes          = PIn.String(table.Rows[i]["Notes"].ToString());
+				ehrProvKey.HasReportAccess= PIn.Bool  (table.Rows[i]["HasReportAccess"].ToString());
 				retVal.Add(ehrProvKey);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrProvKeyNum,";
 			}
-			command+="PatNum,LName,FName,ProvKey,FullTimeEquiv,Notes) VALUES(";
+			command+="PatNum,LName,FName,ProvKey,FullTimeEquiv,Notes,HasReportAccess) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrProvKey.EhrProvKeyNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrProvKey.FName)+"',"
 				+"'"+POut.String(ehrProvKey.ProvKey)+"',"
 				+    POut.Float (ehrProvKey.FullTimeEquiv)+","
-				+"'"+POut.String(ehrProvKey.Notes)+"')";
+				+"'"+POut.String(ehrProvKey.Notes)+"',"
+				+    POut.Bool  (ehrProvKey.HasReportAccess)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -116,12 +118,13 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EhrProvKey in the database.</summary>
 		internal static void Update(EhrProvKey ehrProvKey){
 			string command="UPDATE ehrprovkey SET "
-				+"PatNum       =  "+POut.Long  (ehrProvKey.PatNum)+", "
-				+"LName        = '"+POut.String(ehrProvKey.LName)+"', "
-				+"FName        = '"+POut.String(ehrProvKey.FName)+"', "
-				+"ProvKey      = '"+POut.String(ehrProvKey.ProvKey)+"', "
-				+"FullTimeEquiv=  "+POut.Float (ehrProvKey.FullTimeEquiv)+", "
-				+"Notes        = '"+POut.String(ehrProvKey.Notes)+"' "
+				+"PatNum         =  "+POut.Long  (ehrProvKey.PatNum)+", "
+				+"LName          = '"+POut.String(ehrProvKey.LName)+"', "
+				+"FName          = '"+POut.String(ehrProvKey.FName)+"', "
+				+"ProvKey        = '"+POut.String(ehrProvKey.ProvKey)+"', "
+				+"FullTimeEquiv  =  "+POut.Float (ehrProvKey.FullTimeEquiv)+", "
+				+"Notes          = '"+POut.String(ehrProvKey.Notes)+"', "
+				+"HasReportAccess=  "+POut.Bool  (ehrProvKey.HasReportAccess)+" "
 				+"WHERE EhrProvKeyNum = "+POut.Long(ehrProvKey.EhrProvKeyNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrProvKey.Notes != oldEhrProvKey.Notes) {
 				if(command!=""){ command+=",";}
 				command+="Notes = '"+POut.String(ehrProvKey.Notes)+"'";
+			}
+			if(ehrProvKey.HasReportAccess != oldEhrProvKey.HasReportAccess) {
+				if(command!=""){ command+=",";}
+				command+="HasReportAccess = "+POut.Bool(ehrProvKey.HasReportAccess)+"";
 			}
 			if(command==""){
 				return;

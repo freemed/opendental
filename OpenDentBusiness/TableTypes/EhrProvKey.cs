@@ -21,6 +21,8 @@ namespace OpenDentBusiness {
 		public float FullTimeEquiv;
 		///<summary>Any notes that the tech wishes to include regarding this situation.</summary>
 		public string Notes;
+		///<summary>True if the provider has access to the reports needed to show MU.  Changing this will require a new provider key.</summary>
+		public bool HasReportAccess;
 
 		///<summary></summary>
 		public EhrProvKey Copy() {

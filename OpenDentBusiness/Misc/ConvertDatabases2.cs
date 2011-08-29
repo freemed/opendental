@@ -6115,6 +6115,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					//No need to change column name in Oracle, strictly affects XML documentation generation.
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrprovkey ADD HasReportAccess tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrprovkey ADD HasReportAccess number(3)";
+					Db.NonQ(command);
+					command="UPDATE ehrprovkey SET HasReportAccess = 0 WHERE HasReportAccess IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrprovkey MODIFY HasReportAccess NOT NULL";
+					Db.NonQ(command);
+				}
 				command="UPDATE preference SET ValueString = '11.0.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
@@ -6307,8 +6319,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 				
-
-
 
 
 
