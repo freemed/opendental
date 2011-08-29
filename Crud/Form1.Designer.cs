@@ -43,6 +43,7 @@
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
 			this.checkRunSchema = new System.Windows.Forms.CheckBox();
+			this.label10 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -217,11 +218,22 @@
 			this.checkRunSchema.TabIndex = 23;
 			this.checkRunSchema.UseVisualStyleBackColor = true;
 			// 
+			// label10
+			// 
+			this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label10.Location = new System.Drawing.Point(406,73);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(421,33);
+			this.label10.TabIndex = 24;
+			this.label10.Text = "This CrudGenerator project MUST be set to compile each time it\'s run even if chan" +
+    "ges were only to OpenDentBusiness.";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1161,910);
+			this.Controls.Add(this.label10);
 			this.Controls.Add(this.checkRunSchema);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
@@ -271,6 +283,7 @@
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.CheckBox checkRunSchema;
+		private System.Windows.Forms.Label label10;
 	}
 }
 
