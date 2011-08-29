@@ -700,11 +700,12 @@ namespace OpenDentBusiness{
 					normalWriteOff=0;
 				}
 				double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns;//This is the fee minus whatever other ins has already paid or written off.
+				//js At one point, we were tentatively subtracting cp.InsEstTotal from the above number.  Unsure of the math.  May revisit if we change COB calcs.
 				if(remainingWriteOff<0) {
 					remainingWriteOff=0;
 				}
 				if(writeOffOtherIns>0) {//no secondary writeoff estimates allowed
-					cp.WriteOffEst=0;
+					cp.WriteOffEst=0;//The reasoning for this is covered in the manual under Unit Test #1 and COB.
 				}
 				//We can't go over either number.  We must use the smaller of the two.  If one of them is zero, then the writeoff is zero.
 				else if(remainingWriteOff==0 || normalWriteOff==0) {
