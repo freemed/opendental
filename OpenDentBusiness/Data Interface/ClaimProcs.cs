@@ -380,6 +380,26 @@ namespace OpenDentBusiness{
  			Db.NonQ(command);
 		}
 
+		///<summary>Detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.  Sets DateCP to min and InsPayAmt to 0.</summary>
+		public static void DettachClaimPayment(long claimNum,long claimPaymentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,claimPaymentNum);
+				return;
+			}
+			string command="UPDATE claimproc "
+				+"SET ClaimPaymentNum = 0,"
+				+"DateCP = "+POut.Date(DateTime.MinValue)+","
+				+"InsPayAmt = 0, "
+				+"Status = "+POut.Int((int)ClaimProcStatus.NotReceived)+" "
+				+"WHERE ClaimNum="+POut.Long(claimNum)+" "
+				+"AND ClaimPaymentNum="+POut.Long(claimPaymentNum);
+ 			Db.NonQ(command);
+			command="UPDATE claim "
+				+"SET ClaimStatus = 'S' "
+				+"WHERE ClaimNum="+POut.Long(claimNum);
+			Db.NonQ(command);
+		}
+
 		/*
 		///<summary></summary>
 		public static double ComputeBal(ClaimProc[] List){
@@ -679,15 +699,17 @@ namespace OpenDentBusiness{
 				if(normalWriteOff<0) {
 					normalWriteOff=0;
 				}
-				double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns;//This is the fee minus whatever other ins has already paid or written off.
+				//double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns;//This is the fee minus whatever other ins has already paid or written off.
+				double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns-cp.InsEstTotal;//This is the fee minus whatever other ins has already paid or written off, minus what this ins will pay off.
 				if(remainingWriteOff<0) {
 					remainingWriteOff=0;
 				}
-				if(writeOffOtherIns>0) {//no secondary writeoff estimates allowed
-					cp.WriteOffEst=0;
-				}
+				//if(writeOffOtherIns>0) {//(Old note: no secondary writeoff estimates allowed)
+				//  cp.WriteOffEst=0;
+				//}
 				//We can't go over either number.  We must use the smaller of the two.  If one of them is zero, then the writeoff is zero.
-				else if(remainingWriteOff==0 || normalWriteOff==0) {
+				//else 
+				if(remainingWriteOff==0 || normalWriteOff==0) {
 					cp.WriteOffEst=0;
 				}
 				else if(remainingWriteOff<=normalWriteOff) {

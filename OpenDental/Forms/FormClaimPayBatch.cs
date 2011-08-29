@@ -41,6 +41,8 @@ namespace OpenDental{
 		private ODGrid gridOut;
 		List<ClaimPaySplit> ClaimsAttached;
 		List<ClaimPaySplit> ClaimsOutstanding;
+		private UI.Button butDown;
+		private Label label1;
 		List<int> ProcsAttached;
 
 		///<summary></summary>
@@ -87,6 +89,8 @@ namespace OpenDental{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.butClaimPayEdit = new OpenDental.UI.Button();
 			this.gridOut = new OpenDental.UI.ODGrid();
+			this.butDown = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -258,7 +262,7 @@ namespace OpenDental{
 			this.gridAttached.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridAttached.HScrollVisible = false;
-			this.gridAttached.Location = new System.Drawing.Point(83,158);
+			this.gridAttached.Location = new System.Drawing.Point(83,151);
 			this.gridAttached.Name = "gridAttached";
 			this.gridAttached.ScrollValue = 0;
 			this.gridAttached.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
@@ -266,7 +270,7 @@ namespace OpenDental{
 			this.gridAttached.TabIndex = 95;
 			this.gridAttached.Title = "Attached to this Payment";
 			this.gridAttached.TranslationName = "TableClaimPaySplits";
-			this.gridAttached.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridAttached.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAttached_CellDoubleClick);
 			// 
 			// textDateIssued
 			// 
@@ -340,14 +344,40 @@ namespace OpenDental{
 			this.gridOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridOut.HScrollVisible = false;
-			this.gridOut.Location = new System.Drawing.Point(83,402);
+			this.gridOut.Location = new System.Drawing.Point(83,387);
 			this.gridOut.Name = "gridOut";
 			this.gridOut.ScrollValue = 0;
-			this.gridOut.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridOut.Size = new System.Drawing.Size(660,211);
 			this.gridOut.TabIndex = 99;
 			this.gridOut.Title = "All Outstanding Claims";
 			this.gridOut.TranslationName = "TableClaimPaySplits";
+			this.gridOut.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOut_CellDoubleClick);
+			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDown.Location = new System.Drawing.Point(372,357);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(79,24);
+			this.butDown.TabIndex = 101;
+			this.butDown.Text = "Detach";
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label1.Location = new System.Drawing.Point(256,604);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(338,13);
+			this.label1.TabIndex = 102;
+			this.label1.Text = "Double click on an outstanding claim to enter payments for this check.";
 			// 
 			// FormClaimPayBatch
 			// 
@@ -355,6 +385,8 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(902,676);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.gridOut);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridAttached);
@@ -373,6 +405,7 @@ namespace OpenDental{
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -462,23 +495,46 @@ namespace OpenDental{
 			Cursor.Current=Cursors.Default;
 		}
 
-
-		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			//splitTot=0;
-			//for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-			//  splitTot+=(decimal)splits[gridMain.SelectedIndices[i]].InsPayAmt;
-			//}
-			//textAmount.Text=splitTot.ToString("F");
-		}
-
-		private void checkShowUn_Click(object sender, System.EventArgs e) {
-			//FillGrid();
-		}
-
 		private void butClaimPayEdit_Click(object sender,EventArgs e) {
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(ClaimPaymentCur);
 			FormCPE.ShowDialog();
 			FillClaimPayment();
+		}
+
+		private void butDown_Click(object sender,EventArgs e) {
+			if(gridAttached.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select a claim from the attached claims grid above.");
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Remove these claims from this check? All payments applied to these claims from this check will be set to $0.")) {
+				return;
+			}
+			for(int i=0;i<gridAttached.SelectedIndices.Length;i++) {
+				Claim claimCur=Claims.GetClaim(ClaimsAttached[gridAttached.SelectedIndices[i]].ClaimNum);
+				ClaimProcs.DettachClaimPayment(claimCur.ClaimNum,ClaimPaymentCur.ClaimPaymentNum);
+			}
+			FillGrids();			
+		}
+
+		private void gridAttached_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//bring up claimedit window
+			//basically they can only view the claim.
+			Claim claimCur=Claims.GetClaim(ClaimsAttached[gridAttached.GetSelectedIndex()].ClaimNum);
+			FormClaimEdit FormCE=new FormClaimEdit(claimCur,Patients.GetPat(claimCur.PatNum),Patients.GetFamily(claimCur.PatNum));
+			FormCE.ShowDialog();
+			FillGrids();	
+		}
+
+
+		private void gridOut_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//bring up claimedit window
+			//after returning from the claim edit window, use a query to get a list of all the claimprocs that have amounts entered for that claim, but have ClaimPaymentNumber of 0.
+			//Set all those claimprocs to be attached.
+			Claim claimCur=Claims.GetClaim(ClaimsOutstanding[gridOut.GetSelectedIndex()].ClaimNum);
+			FormClaimEdit FormCE=new FormClaimEdit(claimCur,Patients.GetPat(claimCur.PatNum),Patients.GetFamily(claimCur.PatNum));
+			FormCE.ShowDialog();
+			ClaimProcs.SetForClaim(claimCur.ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,true);
+			FillGrids();			
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -505,89 +561,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			/*
-			if(textDate.Text=="") {
-				MsgBox.Show(this,"Please enter a date first.");
-				return;
-			}
-			if(textDate.errorProvider1.GetError(textDate)!="")
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			if(gridMain.SelectedIndices.Length==0){
-				MessageBox.Show(Lan.g(this,"At least one item must be selected, or use the delete button."));	
-				return;
-			}
-			if(IsNew){
-				//prevents backdating of initial check
-				if(!Security.IsAuthorized(Permissions.InsPayCreate,PIn.Date(textDate.Text))){
-					return;
-				}
-				//prevents attaching claimprocs with a date that is older than allowed by security.
-
-
-
-			}
-			else{
-				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button.
-				//This catches it if user changed the date to be older.
-				if(!Security.IsAuthorized(Permissions.InsPayEdit,PIn.Date(textDate.Text))){
-					return;
-				}
-			}
-			if(comboClinic.SelectedIndex==0){
-				ClaimPaymentCur.ClinicNum=0;
-			}
-			else{
-				ClaimPaymentCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
-			}
-			ClaimPaymentCur.CheckAmt=PIn.Double(textAmount.Text);
-			ClaimPaymentCur.CheckDate=PIn.Date(textDate.Text);
-			ClaimPaymentCur.CheckNum=textCheckNum.Text;
-			ClaimPaymentCur.BankBranch=textBankBranch.Text;
-			ClaimPaymentCur.CarrierName=textCarrierName.Text;
-			ClaimPaymentCur.Note=textNote.Text;
-			try{
-				ClaimPayments.Update(ClaimPaymentCur);//error thrown if trying to change amount and already attached to a deposit.
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			//this could be optimized to only save changes.
-			//Would require a starting list to compare to.
-			//But this isn't bad, since changes all saved at the very end
-			List<int> selectedRows=new List<int>();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				selectedRows.Add(gridMain.SelectedIndices[i]);
-			}
-			for(int i=0;i<splits.Count;i++){
-				if(selectedRows.Contains(i)){//row is selected
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,true);
-					//Audit trail isn't perfect, since it doesn't make an entry if you remove a claim from a payment.
-					//And it always makes more audit trail entries when you click OK, even if you didn't actually attach new claims.
-					//But since this will cover the vast majority if situations.
-					if(IsNew){
-						SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,splits[i].PatNum,
-							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
-							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
-							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
-					}
-					else{
-						SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,splits[i].PatNum,
-							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
-							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
-							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
-					}
-				}
-				else{//row not selected
-					//If user had not been attaching their inspayments to checks, then this will cause such payments to annoyingly have their
-					//date changed to the current date.  This prompts them to call us.  Then, we tell them to attach to checks.
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,false);
-				}
-			}
-			DialogResult=DialogResult.OK;*/
+			DialogResult=DialogResult.OK;
 		}
 
 		private void FormClaimPayEdit_FormClosing(object sender,FormClosingEventArgs e) {
@@ -599,6 +573,7 @@ namespace OpenDental{
 				ClaimPayments.Delete(ClaimPaymentCur);
 			}
 		}
+		
 
 		
 		
