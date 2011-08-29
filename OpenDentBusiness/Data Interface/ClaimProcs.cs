@@ -699,17 +699,15 @@ namespace OpenDentBusiness{
 				if(normalWriteOff<0) {
 					normalWriteOff=0;
 				}
-				//double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns;//This is the fee minus whatever other ins has already paid or written off.
-				double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns-cp.InsEstTotal;//This is the fee minus whatever other ins has already paid or written off, minus what this ins will pay off.
+				double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns;//This is the fee minus whatever other ins has already paid or written off.
 				if(remainingWriteOff<0) {
 					remainingWriteOff=0;
 				}
-				//if(writeOffOtherIns>0) {//(Old note: no secondary writeoff estimates allowed)
-				//  cp.WriteOffEst=0;
-				//}
+				if(writeOffOtherIns>0) {//no secondary writeoff estimates allowed
+					cp.WriteOffEst=0;
+				}
 				//We can't go over either number.  We must use the smaller of the two.  If one of them is zero, then the writeoff is zero.
-				//else 
-				if(remainingWriteOff==0 || normalWriteOff==0) {
+				else if(remainingWriteOff==0 || normalWriteOff==0) {
 					cp.WriteOffEst=0;
 				}
 				else if(remainingWriteOff<=normalWriteOff) {
