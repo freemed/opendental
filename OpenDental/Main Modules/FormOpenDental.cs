@@ -4548,7 +4548,9 @@ namespace OpenDental{
 				}
 			}*/
 			//send the results back to the UI layer for action.
-			Invoke(new PhoneWebCamTickDisplayDelegate(PhoneWebCamTickDisplay),new object[] { phoneList,phone });
+			if(FormOpenDental!=null) {
+				Invoke(new PhoneWebCamTickDisplayDelegate(PhoneWebCamTickDisplay),new object[] { phoneList,phone });
+			}
 		}
 
 		///<summary></summary>
