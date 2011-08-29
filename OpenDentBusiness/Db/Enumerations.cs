@@ -1097,7 +1097,9 @@ namespace OpenDentBusiness{
 		///<summary>48</summary>
 		EhrEmergencyAccess,
 		///<summary>49</summary>
-		ProcDelete
+		ProcDelete,
+		///<summary>50 - Only used at OD HQ.  No user interface.</summary>
+		EhrKeyAdd
 	}
 
 	///<summary>The type of signal being sent.</summary>

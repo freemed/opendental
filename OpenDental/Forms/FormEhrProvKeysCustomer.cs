@@ -68,12 +68,16 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.EhrKeyAdd)){
+				return;
+			}
 			FormEhrProvKeyEditCust formK=new FormEhrProvKeyEditCust();
 			formK.KeyCur=new EhrProvKey();
 			formK.KeyCur.PatNum=Guarantor;
 			formK.KeyCur.FullTimeEquiv=1;
 			formK.KeyCur.IsNew=true;
 			formK.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.EhrKeyAdd,Guarantor,"Added provider key.");
 			FillGrid();
 		}
 
@@ -110,6 +114,9 @@ namespace OpenDental {
 		}
 
 		private void butAddQuarterly_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.EhrKeyAdd)){
+				return;
+			}
 			FormEhrQuarterlyKeyEditCust formK=new FormEhrQuarterlyKeyEditCust();
 			formK.KeyCur=new EhrQuarterlyKey();
 			formK.KeyCur.PatNum=Guarantor;
@@ -153,6 +160,7 @@ namespace OpenDental {
 			}
 			formK.KeyCur.IsNew=true;
 			formK.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.EhrKeyAdd,Guarantor,"Added quarterly key.");
 			FillGridQ();
 		}
 
