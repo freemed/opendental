@@ -367,15 +367,15 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE claimproc SET ClaimPaymentNum = ";
 			if(setAttached){
-				command+="'"+claimPaymentNum+"' ";
+				command+=""+POut.Long(claimPaymentNum)+" ";
 			}
 			else{
-				command+="'0' ";
+				command+="0 ";
 			}
 			command+=",DateCP="+POut.Date(date)+" "
-				+"WHERE ClaimNum = '"+claimNum+"' AND "
-				+"inspayamt != 0 AND ("
-				+"claimpaymentNum = '"+claimPaymentNum+"' OR claimpaymentNum = '0')";
+				+"WHERE ClaimNum="+POut.Long(claimNum)+" AND "
+				+"InsPayAmt!=0 AND ("
+				+"ClaimPaymentNum="+POut.Long(claimPaymentNum)+" OR ClaimPaymentNum=0)";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 		}
