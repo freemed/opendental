@@ -1194,7 +1194,8 @@ namespace OpenDentBusiness{
 			table.Columns.Add("Status");
 			table.Columns.Add("ops");
 			table.Columns.Add("EmployeeNum");
-			string command="SELECT schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum,"+DbHelper.GroupConcat("scheduleop.OperatoryNum")+" ops_ "
+			table.Columns.Add("DateTStamp");
+			string command="SELECT schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp,"+DbHelper.GroupConcat("scheduleop.OperatoryNum")+" ops_ "
 				+"FROM schedule "
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
@@ -1216,6 +1217,7 @@ namespace OpenDentBusiness{
 				row["Status"]=raw.Rows[i]["Status"].ToString();
 				row["ops"]=PIn.ByteArray(raw.Rows[i]["ops_"]);
 				row["EmployeeNum"]=raw.Rows[i]["EmployeeNum"].ToString();
+				row["DateTStamp"]=POut.Date(PIn.Date(raw.Rows[i]["DateTStamp"].ToString()),false);
 				table.Rows.Add(row);
 			}
 			return table;
