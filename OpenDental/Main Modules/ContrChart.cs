@@ -324,7 +324,7 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrChart));
-			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
 			this.textSurf = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioEntryCn = new System.Windows.Forms.RadioButton();
@@ -2956,8 +2956,8 @@ namespace OpenDental{
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
-			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart.TcData = toothChartData1;
+			toothChartData2.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart.TcData = toothChartData2;
 			this.toothChart.UseHardware = false;
 			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
@@ -5746,10 +5746,10 @@ namespace OpenDental{
 			}
 		}
 
-		private void butAddProc_Click(object sender, System.EventArgs e){
+		private void butAddProc_Click(object sender,System.EventArgs e) {
 			orionProvNum=0;
-			if(newStatus==ProcStat.C){
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){
+			if(newStatus==ProcStat.C) {
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))) {
 					return;
 				}
 			}
@@ -5764,7 +5764,7 @@ namespace OpenDental{
 			List<string> procCodes=new List<string>();
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			Procedure ProcCur;
-			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++){
+			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {
 				isValid=true;
 				ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld
 				//Procedure
@@ -5776,23 +5776,17 @@ namespace OpenDental{
 					|| tArea==TreatmentArea.Quad
 					|| tArea==TreatmentArea.Sextant
 					|| tArea==TreatmentArea.ToothRange)
-					&& n>0){//the only two left are tooth and surf
+					&& n>0) {//the only two left are tooth and surf
 					continue;//only entered if n=0, so they don't get entered more than once.
 				}
-				else if(tArea==TreatmentArea.Quad){
-				//	switch(quadCount){
-				//		case 0: Procedures.Cur.Surf="UR"; break;
-				//		case 1: Procedures.Cur.Surf="UL"; break;
-				//		case 2: Procedures.Cur.Surf="LL"; break;
-				//		case 3: Procedures.Cur.Surf="LR"; break;
-				//		default: Procedures.Cur.Surf="UR"; break;//this could happen.
-				//	}
-				//	quadCount++;
-				//	AddQuick();
-					//Procedures.Cur=ProcCur;
+				else if(tArea==TreatmentArea.Quad) {
+					//This is optimized for single proc like a space maintainer.  User can select a tooth to set quadrant.
+					if(toothChart.SelectedTeeth.Count>0) {
+						ProcCur.Surf=Tooth.GetQuadrant(toothChart.SelectedTeeth[0]);
+					}
 					AddProcedure(ProcCur);
 				}
-				else if(tArea==TreatmentArea.Surf){
+				else if(tArea==TreatmentArea.Surf) {
 					if(toothChart.SelectedTeeth.Count==0) {
 						isValid=false;
 					}
@@ -5813,23 +5807,23 @@ namespace OpenDental{
 						AddProcedure(ProcCur);
 					}
 				}
-				else if(tArea==TreatmentArea.Tooth){
-					if(toothChart.SelectedTeeth.Count==0){
+				else if(tArea==TreatmentArea.Tooth) {
+					if(toothChart.SelectedTeeth.Count==0) {
 						//Procedures.Cur=ProcCur;
 						AddProcedure(ProcCur);
 					}
-					else{
+					else {
 						ProcCur.ToothNum=toothChart.SelectedTeeth[n];
 						//Procedures.Cur=ProcCur;
 						AddQuick(ProcCur);
 					}
 				}
-				else if(tArea==TreatmentArea.ToothRange){
-					if(toothChart.SelectedTeeth.Count==0){
+				else if(tArea==TreatmentArea.ToothRange) {
+					if(toothChart.SelectedTeeth.Count==0) {
 						//Procedures.Cur=ProcCur;
 						AddProcedure(ProcCur);
 					}
-					else{
+					else {
 						ProcCur.ToothRange="";
 						for(int b=0;b<toothChart.SelectedTeeth.Count;b++) {
 							if(b!=0) ProcCur.ToothRange+=",";
@@ -5839,33 +5833,33 @@ namespace OpenDental{
 						AddProcedure(ProcCur);//it's nice to see the procedure to verify the range
 					}
 				}
-				else if(tArea==TreatmentArea.Arch){
+				else if(tArea==TreatmentArea.Arch) {
 					if(toothChart.SelectedTeeth.Count==0) {
 						//Procedures.Cur=ProcCur;
 						AddProcedure(ProcCur);
 						continue;
 					}
-					if(Tooth.IsMaxillary(toothChart.SelectedTeeth[0])){
+					if(Tooth.IsMaxillary(toothChart.SelectedTeeth[0])) {
 						ProcCur.Surf="U";
 					}
-					else{
+					else {
 						ProcCur.Surf="L";
 					}
 					//Procedures.Cur=ProcCur;
 					AddQuick(ProcCur);
 				}
-				else if(tArea==TreatmentArea.Sextant){
+				else if(tArea==TreatmentArea.Sextant) {
 					//Procedures.Cur=ProcCur;
 					AddProcedure(ProcCur);
 				}
-				else{//mouth
+				else {//mouth
 					//Procedures.Cur=ProcCur;
 					AddQuick(ProcCur);
 				}
 				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//for n
 			ModuleSelected(PatCur.PatNum);
-			if(newStatus==ProcStat.C){
+			if(newStatus==ProcStat.C) {
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,DateTime.Today.ToShortDateString());
 				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
 			}
@@ -6263,7 +6257,6 @@ namespace OpenDental{
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			TreatmentArea tArea;
 			Procedure ProcCur;
-			int quadCount=0;//automates quadrant codes.
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {//always loops at least once.
 				ProcCur=new Procedure();//this will be an insert, so no need to set CurOld
 				ProcCur.CodeNum=ProcedureCodes.GetCodeNum(textProcCode.Text);
@@ -6278,33 +6271,29 @@ namespace OpenDental{
 					continue;//only entered if n=0, so they don't get entered more than once.
 				}
 				else if(tArea==TreatmentArea.Quad) {
-					switch(quadCount) {
-						case 0: ProcCur.Surf="UR"; break;
-						case 1: ProcCur.Surf="UL"; break;
-						case 2: ProcCur.Surf="LL"; break;
-						case 3: ProcCur.Surf="LR"; break;
-						default: ProcCur.Surf="UR"; break;//this could happen.
+					//This is optimized for single proc like a space maintainer.  User can select a tooth to set quadrant.
+					if(toothChart.SelectedTeeth.Count>0) {
+						ProcCur.Surf=Tooth.GetQuadrant(toothChart.SelectedTeeth[0]);
 					}
-					quadCount++;
 					AddQuick(ProcCur);
 				}
 				else if(tArea==TreatmentArea.Surf) {
-					if(toothChart.SelectedTeeth.Count==0){
+					if(toothChart.SelectedTeeth.Count==0) {
 						isValid=false;
 					}
-					else{
+					else {
 						ProcCur.ToothNum=toothChart.SelectedTeeth[n];
 					}
-					if(textSurf.Text==""){
+					if(textSurf.Text=="") {
 						isValid=false;
 					}
-					else{
+					else {
 						ProcCur.Surf=Tooth.SurfTidyFromDisplayToDb(textSurf.Text,ProcCur.ToothNum);//it's ok if toothnum is invalid
 					}
-					if(isValid){
+					if(isValid) {
 						AddQuick(ProcCur);
 					}
-					else{
+					else {
 						AddProcedure(ProcCur);
 					}
 				}
