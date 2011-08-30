@@ -6129,6 +6129,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="UPDATE preference SET ValueString = '11.0.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE provider ADD EhrHasReportAccess tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE provider ADD EhrHasReportAccess number(3)";
+					Db.NonQ(command);
+					command="UPDATE provider SET EhrHasReportAccess = 0 WHERE EhrHasReportAccess IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE provider MODIFY EhrHasReportAccess NOT NULL";
+					Db.NonQ(command);
+				}
 			}
 			To11_1_0();
 		}
@@ -6319,6 +6331,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 				
+
 
 
 

@@ -23,6 +23,7 @@ namespace OpenDental {
 		private void FormEhrProvKeyEditCust_Load(object sender,EventArgs e) {
 			textLName.Text=KeyCur.LName;
 			textFName.Text=KeyCur.FName;
+			checkHasReportAccess.Checked=KeyCur.HasReportAccess;
 			textEhrKey.Text=KeyCur.ProvKey;
 			textFullTimeEquiv.Text=KeyCur.FullTimeEquiv.ToString();
 			textNotes.Text=KeyCur.Notes;
@@ -37,7 +38,14 @@ namespace OpenDental {
 			//@"E:\My Documents\Shared Projects Subversion\EhrProvKeyGenerator\EhrProvKeyGenerator\bin\Debug\EhrProvKeyGenerator.exe"
 			string progPath=PrefC.GetString(PrefName.EhrProvKeyGeneratorPath);
 			ProcessStartInfo startInfo=new ProcessStartInfo(progPath);
-			startInfo.Arguments="P \""+textLName.Text.Replace("\"","")+"\" \""+textFName.Text.Replace("\"","")+"\"";
+			string args="P \""+textLName.Text.Replace("\"","")+"\" \""+textFName.Text.Replace("\"","")+"\" ";
+			if(checkHasReportAccess.Checked) {
+				args+="1";
+			}
+			else {
+				args+="0";
+			}
+			startInfo.Arguments=args;
 			startInfo.UseShellExecute=false;
 			startInfo.RedirectStandardOutput=true;
 			Process process=Process.Start(startInfo);
@@ -83,10 +91,10 @@ namespace OpenDental {
 			if(textEhrKey.Text!="") {
 				bool provKeyIsValid=false;
 				#if EHRTEST
-					provKeyIsValid=((FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(textLName.Text,textFName.Text,textEhrKey.Text);
+					provKeyIsValid=((FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(textLName.Text,textFName.Text,checkHasReportAccess.Checked,textEhrKey.Text);
 				#else
 					Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
-					object[] args=new object[] { textLName.Text,textFName.Text,textEhrKey.Text };
+					object[] args=new object[] { textLName.Text,textFName.Text,checkHasReportAccess.Checked,textEhrKey.Text };
 					provKeyIsValid=(bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args);
 				#endif
 				if(!provKeyIsValid) {
@@ -96,8 +104,8 @@ namespace OpenDental {
 			}
 			KeyCur.LName=textLName.Text;
 			KeyCur.FName=textFName.Text;
+			KeyCur.HasReportAccess=checkHasReportAccess.Checked;
 			KeyCur.ProvKey=textEhrKey.Text;
-			//KeyCur.ProcNum already handled.
 			KeyCur.FullTimeEquiv=PIn.Float(textFullTimeEquiv.Text);
 			KeyCur.Notes=textNotes.Text;
 			if(KeyCur.IsNew) {

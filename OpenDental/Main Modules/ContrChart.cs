@@ -4031,7 +4031,9 @@ namespace OpenDental{
 							if(i>0) {
 								desc+="\r\n";
 							}
-							desc+=listProvKeys[i].LName+", "+listProvKeys[i].FName+", "+listProvKeys[i].ProvKey;
+							desc+=listProvKeys[i].LName+", "+listProvKeys[i].FName+", "
+								+(listProvKeys[i].HasReportAccess?"reports, ":"no reports, ")
+								+listProvKeys[i].ProvKey;
 						}
 						row.Cells.Add(desc);
 						row.ColorBackG=Color.PowderBlue;

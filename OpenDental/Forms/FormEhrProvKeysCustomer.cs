@@ -31,6 +31,8 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"FName"),100);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Reports"),60);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Key"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Charge"),60,HorizontalAlignment.Right);
@@ -48,6 +50,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(listKeys[i].LName);
 				row.Cells.Add(listKeys[i].FName);
+				row.Cells.Add(listKeys[i].HasReportAccess?"X":"");
 				row.Cells.Add(listKeys[i].ProvKey);
 				fee=(decimal)(60f*listKeys[i].FullTimeEquiv);
 				feeTotal+=fee;

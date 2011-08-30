@@ -19,16 +19,17 @@ namespace OpenDental {
 		private void FormEhrProvKey_Load(object sender,EventArgs e) {
 			textLName.Text=ProvCur.LName;
 			textFName.Text=ProvCur.FName;
+			checkHasReportAccess.Checked=ProvCur.EhrHasReportAccess;
 			textEhrKey.Text=ProvCur.EhrKey;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			bool provKeyIsValid=false;
 			#if EHRTEST
-				provKeyIsValid=((EHR.FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(ProvCur.LName,ProvCur.FName,textEhrKey.Text);
+				provKeyIsValid=((EHR.FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(ProvCur.LName,ProvCur.FName,ProvCur.EhrHasReportAccess,textEhrKey.Text);
 			#else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
-				object[] args=new object[] { ProvCur.LName,ProvCur.FName,textEhrKey.Text };
+				object[] args=new object[] { ProvCur.LName,ProvCur.FName,ProvCur.EhrHasReportAccess,textEhrKey.Text };
 				provKeyIsValid=(bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args);
 			#endif
 			if(!provKeyIsValid) {

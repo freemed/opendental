@@ -40,6 +40,7 @@ namespace OpenDental{
 			this.textNotes = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
+			this.checkHasReportAccess = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -50,7 +51,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(511,350);
+			this.butOK.Location = new System.Drawing.Point(511,414);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -65,7 +66,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(606,350);
+			this.butCancel.Location = new System.Drawing.Point(606,414);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -116,7 +117,7 @@ namespace OpenDental{
 			// 
 			// textEhrKey
 			// 
-			this.textEhrKey.Location = new System.Drawing.Point(188,170);
+			this.textEhrKey.Location = new System.Drawing.Point(188,190);
 			this.textEhrKey.MaxLength = 15;
 			this.textEhrKey.Name = "textEhrKey";
 			this.textEhrKey.Size = new System.Drawing.Size(161,20);
@@ -124,7 +125,7 @@ namespace OpenDental{
 			// 
 			// labelEhrKey
 			// 
-			this.labelEhrKey.Location = new System.Drawing.Point(49,174);
+			this.labelEhrKey.Location = new System.Drawing.Point(49,194);
 			this.labelEhrKey.Name = "labelEhrKey";
 			this.labelEhrKey.Size = new System.Drawing.Size(139,14);
 			this.labelEhrKey.TabIndex = 113;
@@ -138,7 +139,7 @@ namespace OpenDental{
 			this.butGenerate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butGenerate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butGenerate.CornerRadius = 4F;
-			this.butGenerate.Location = new System.Drawing.Point(355,169);
+			this.butGenerate.Location = new System.Drawing.Point(355,189);
 			this.butGenerate.Name = "butGenerate";
 			this.butGenerate.Size = new System.Drawing.Size(75,24);
 			this.butGenerate.TabIndex = 119;
@@ -155,7 +156,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(30,350);
+			this.butDelete.Location = new System.Drawing.Point(30,414);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 120;
@@ -164,7 +165,7 @@ namespace OpenDental{
 			// 
 			// textFullTimeEquiv
 			// 
-			this.textFullTimeEquiv.Location = new System.Drawing.Point(188,193);
+			this.textFullTimeEquiv.Location = new System.Drawing.Point(188,213);
 			this.textFullTimeEquiv.MaxLength = 15;
 			this.textFullTimeEquiv.Name = "textFullTimeEquiv";
 			this.textFullTimeEquiv.Size = new System.Drawing.Size(46,20);
@@ -172,7 +173,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(12,197);
+			this.label2.Location = new System.Drawing.Point(12,217);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(176,14);
 			this.label2.TabIndex = 123;
@@ -181,7 +182,7 @@ namespace OpenDental{
 			// 
 			// textNotes
 			// 
-			this.textNotes.Location = new System.Drawing.Point(188,232);
+			this.textNotes.Location = new System.Drawing.Point(188,252);
 			this.textNotes.MaxLength = 15;
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
@@ -190,7 +191,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(100,236);
+			this.label3.Location = new System.Drawing.Point(100,256);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(88,14);
 			this.label3.TabIndex = 125;
@@ -199,17 +200,29 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(238,197);
+			this.label4.Location = new System.Drawing.Point(238,217);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(463,32);
 			this.label4.TabIndex = 126;
 			this.label4.Text = "Usually 1. For example, half-time would be .5 and 1 day a week would be about .25" +
     "\r\n0 may be used if the provider is no longer working";
 			// 
+			// checkHasReportAccess
+			// 
+			this.checkHasReportAccess.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkHasReportAccess.Location = new System.Drawing.Point(15,170);
+			this.checkHasReportAccess.Name = "checkHasReportAccess";
+			this.checkHasReportAccess.Size = new System.Drawing.Size(188,18);
+			this.checkHasReportAccess.TabIndex = 127;
+			this.checkHasReportAccess.Text = "Has Report Access";
+			this.checkHasReportAccess.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkHasReportAccess.UseVisualStyleBackColor = true;
+			// 
 			// FormEhrProvKeyEditCust
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(706,394);
+			this.ClientSize = new System.Drawing.Size(706,458);
+			this.Controls.Add(this.checkHasReportAccess);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.label3);
@@ -253,5 +266,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textNotes;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.CheckBox checkHasReportAccess;
 	}
 }
