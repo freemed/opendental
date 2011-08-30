@@ -93,6 +93,9 @@ namespace OpenDentBusiness {
 			//delete claimprocs
 			command="DELETE from claimproc WHERE ProcNum = '"+POut.Long(procNum)+"'";
 			Db.NonQ(command);
+			//detach procedure labs
+			command="UPDATE procedurelog SET ProcNumLab=0 WHERE ProcNumLab='"+POut.Long(procNum)+"'";
+			Db.NonQ(command);
 			//resynch appointment description-------------------------------------------------------------------------------------
 			command="SELECT AptNum,PlannedAptNum FROM procedurelog WHERE ProcNum = "+POut.Long(procNum);
 			DataTable table=Db.GetTable(command);

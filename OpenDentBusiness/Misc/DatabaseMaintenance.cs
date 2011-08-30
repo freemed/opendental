@@ -2288,6 +2288,31 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ProcedurelogLabAttachedToDeletedProc(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM procedurelog "
+					+"WHERE ProcStatus=2 AND ProcNumLab IN(SELECT ProcNum FROM procedurelog WHERE ProcStatus=6)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Completed procedure labs attached to deleted procedures: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command="UPDATE procedurelog pl,procedurelog p "
+					+"SET pl.ProcNumLab=0 "
+					+"WHERE pl.ProcStatus=2 AND pl.ProcNumLab=p.ProcNum AND p.ProcStatus=6";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Completed lab procedures detached from deleted procedures: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ProcedurelogProvNumMissing(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
