@@ -122,25 +122,17 @@ namespace OpenDentBusiness
 							+"005010X222~");//ST03: Implementation convention reference
 					}
 					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-						sw.WriteLine("ST*837*"//ST01 Transaction Set Identifier Code
-							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 TS Control Number
-							+"005010X224A2~");//ST03 Implementation Convention Reference
+						sw.WriteLine("ST*837*"//ST01 3/3 Transaction Set Identifier Code: 
+							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9 Transaction Set Control Number: 
+							+"005010X224A2~");//ST03 1/35 Implementation Convention Reference
 					}
 					seg++;
-					sw.WriteLine("BHT*0019*00*"
-						+transactionNum.ToString().PadLeft(4,'0')+"*"//BHT03. Can be same as ST02
-						+DateTime.Now.ToString("yyyyMMdd")+"*"//BHT04: Date
-						+DateTime.Now.ToString("HHmmss")+"*"//BHT05: Time
-						+"CH~");//BHT06: Type=Chargable
-					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-						seg++;
-						if(clearhouse.ISA15=="T") {//validated
-							sw.WriteLine("REF*87*004010X097DA1~");
-						}
-						else {
-							sw.WriteLine("REF*87*004010X097A1~");
-						}
-					}
+					sw.WriteLine("BHT*0019*"//BHT01 4/4 Hierarchical Structure Code: 0019=Information Source, Subscriber, Dependant.
+						+"00*"//BHT02 2/2 Transaction Set Purpose Code: 00=Original transmissions are transmissions which have neber been sent to the reciever.
+						+transactionNum.ToString().PadLeft(4,'0')+"*"//BHT03 1/50 Reference Identification: Can be same as ST02.
+						+DateTime.Now.ToString("yyyyMMdd")+"*"//BHT04 8/8 Date: 
+						+DateTime.Now.ToString("HHmmss")+"*"//BHT05 4/8 Time: 
+						+"CH~");//BHT06 2/2 Transaction Type Code: CH=Chargable.
 					//1000A Submitter is OPEN DENTAL and sometimes it's the practice
 					//(depends on clearinghouse and Partnership agreements)
 					//See 2010AA PER (after REF) for the new billing provider contact phone number
@@ -153,12 +145,16 @@ namespace OpenDentBusiness
 					//1000B Receiver is always the Clearinghouse
 					//1000B NM1: required
 					seg++;
-					sw.WriteLine("NM1*40*"//NM101: 40=receiver
-						+"2*"//NM102: 2=nonperson
-						+Sout(clearhouse.Description,35,1)+"*"//NM103:Receiver Name
-						+"****"//NM104-NM107 not used since not a person
-						+"46*"//NM108: 46 indicates ETIN
-						+Sout(clearhouse.ISA08,80,2)+"~");//NM109: Receiver ID Code. aka ETIN#.
+					sw.WriteLine("NM1*40*"//NM101 2/3 Entity Identifier Code: 40=Receiver.
+						+"2*"//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
+						+Sout(clearhouse.Description,35,1)+"*"//NM103 1/60 Name Last or Organization Name: Receiver Name.
+						+"*"//NM104 1/35 Name First: Not Used.
+						+"*"//NM105 1/25 Name Middle: Not Used.
+						+"*"//NM106 1/10 Name Prefix: Not Used.
+						+"*"//NM107 1/10 Name Suffix: Not Used.
+						+"46*"//NM108 1/2 Identification Code: 46=ETIN.
+						+Sout(clearhouse.ISA08,80,2)+"~");//NM109 2/80 Identification Code: Receiver ID Code. aka ETIN#.
+						//NM110 through NM112 not used so not specified.
 					HLcount=1;
 					parentProv=0;//the HL sequence # of the current provider.
 					parentSubsc=0;//the HL sequence # of the current subscriber.
@@ -181,10 +177,10 @@ namespace OpenDentBusiness
 					}
 					//2000A HL: Billing/Pay-to provider HL loop
 					seg++;
-					sw.WriteLine("HL*"+HLcount.ToString()+"*"//HL01: Heirarchical ID
-						+"*"//HL02: No parent. Not used
-						+"20*"//HL03: Heirarchical level code. 20=Information source
-						+"1~");//HL04: Heirarchical child code. 1=child HL present
+					sw.WriteLine("HL*"+HLcount.ToString()+"*"//HL01 1/12 Heirarchical ID Number: 
+						+"*"//HL02 Hierarchical Parent ID Number: Not used.
+						+"20*"//HL03 1/2 Heirarchical Level Code: 20=Information Source.
+						+"1~");//HL04 1/1 Heirarchical Child Code. 1=Additional Subordinate HL Data Segment in This Hierarchical Structure.
 					billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[i].ProvBill1)];
 					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 						//2000A PRV: Provider Specialty Information
@@ -197,83 +193,72 @@ namespace OpenDentBusiness
 						//2000A PRV: Provider Specialty Information (Optional Rendering prov for all claims in this HL)
 						//used instead of 2310B.
 						seg++;
-						sw.WriteLine("PRV*PT*"//PRV01: Provider Code. BI=Billing, PT=Pay-To
-							+"ZZ*"//PRV02: mutually defined taxonomy codes
-							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Provider taxonomy code
+						sw.WriteLine("PRV*PT*"//PRV01 1/3 Provider Code: BI=Billing.
+							+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
+							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03 1/50 Provider Taxonomy Code: 
+						//PRV04 through PRV06 are not used.
 					}
+					//2000A CUR: Foreign Currency Information. Situational. We do not need to specify because united states dollars are default.
 					//2010AA NM1: Billing provider
 					seg++;
-					sw.Write("NM1*85*");//NM101: 85=Billing provider
-					if(billProv.FName=="") {
-						sw.Write("2*");//NM102: 1=person,2=non-person
-					}
-					else {
-						sw.Write("1*");
-					}
-					sw.Write(Sout(billProv.LName,35)+"*"//NM103: Last name
-						//NM103 allowable length increased to 60?
-						+Sout(billProv.FName,25)+"*"//NM104: First name. Might be blank.
-						+Sout(billProv.MI,25)+"*"//NM105: Middle name. Since this is optional, there is no min length.
-						+"*"//NM106: not used
-						+"*");//NM107: Name suffix. not used
-					//It's after the NPI date now, so only one choice here:
-					sw.Write("XX*");//NM108: ID code qualifier. 24=EIN. 34=SSN, XX=NPI
-					sw.WriteLine(Sout(billProv.NationalProvID,80)+"~");//NM109: ID code. NPI validated
+					sw.Write("NM1*85*");//NM101 2/3 Entity Identifier Code: 85=Billing Provider.
+					sw.Write(((billProv.FName=="")?"2":"1")+"*");//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
+					sw.Write(Sout(billProv.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
+						+Sout(billProv.FName,35)+"*"//NM104 1/35 Name First: Situational. Required when NM102=1. Might be blank.
+						+Sout(billProv.MI,25)+"*"//NM105 1/25 Name Middle: Since this is situational there is no minimum length.
+						+"*"//NM106 1/10 Name Prefix: Not Used.
+						+"*");//NM107 1/10 Name Suffix: Not Used.
+					sw.Write("XX*");//NM108 1/2 Identification Code Qualifier: 24=EIN, 34=SSN, XX=NPI. It's after the NPI date now, so only one choice here.
+					sw.WriteLine(Sout(billProv.NationalProvID,80)+"~");//NM109 2/80 Identification Code: NPI Validated.
+					//NM110 through NM112 Not Used.
 					//2010AA N3: Billing provider address
 					seg++;
+					string address1="";
 					if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-						sw.Write("N3*"+Sout(PrefC.GetString(PrefName.PracticeBillingAddress),55));//N301: Address
+						address1=PrefC.GetString(PrefName.PracticeBillingAddress);
 					}
 					else if(clinic==null) {
-						sw.Write("N3*"+Sout(PrefC.GetString(PrefName.PracticeAddress),55));//N301: Address
+						address1=PrefC.GetString(PrefName.PracticeAddress);
 					}
 					else {
-						sw.Write("N3*"+Sout(clinic.Address,55));//N301: Address
+						address1=clinic.Address;
 					}
+					sw.Write("N3*"+Sout(address1,55));//N301 1/55 Address Information: 
+					string address2="";
 					if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-						if(PrefC.GetString(PrefName.PracticeBillingAddress2)=="") {
-							sw.WriteLine("~");
-						}
-						else {
-							//N302: Address2. Optional.
-							sw.WriteLine("*"+Sout(PrefC.GetString(PrefName.PracticeBillingAddress2),55)+"~");
-						}
+						address2=PrefC.GetString(PrefName.PracticeBillingAddress2);
 					}
 					else if(clinic==null) {
-						if(PrefC.GetString(PrefName.PracticeAddress2)=="") {
-							sw.WriteLine("~");
-						}
-						else {
-							//N302: Address2. Optional.
-							sw.WriteLine("*"+Sout(PrefC.GetString(PrefName.PracticeAddress2),55)+"~");
-						}
+						address2=PrefC.GetString(PrefName.PracticeAddress2);
 					}
 					else {
-						if(clinic.Address2=="") {
-							sw.WriteLine("~");
-						}
-						else {
-							//N302: Address2. Optional.
-							sw.WriteLine("*"+Sout(clinic.Address2,55)+"~");
-						}
+						address2=clinic.Address2;
 					}
-					//2010AA N4: Billing prov City,State,Zip
+					sw.Write(((address2=="")?"":("*"+Sout(address2,55)))+"~");//N302 1/55 Address Information: Situational. Only specify if there is a second address line.
+					//2010AA N4: Billing Provider City,State,Zip Code.
 					seg++;
+					string city="";
+					string state="";
+					string zip="";
 					if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-						sw.WriteLine("N4*"+Sout(PrefC.GetString(PrefName.PracticeBillingCity),30)+"*"//N401: City
-							+Sout(PrefC.GetString(PrefName.PracticeBillingST),2)+"*"//N402: State
-							+Sout(PrefC.GetString(PrefName.PracticeBillingZip).Replace("-",""),15)+"~");//N403: Zip
+						city=PrefC.GetString(PrefName.PracticeBillingCity);
+						state=PrefC.GetString(PrefName.PracticeBillingST);
+						zip=PrefC.GetString(PrefName.PracticeBillingZip);
 					}
 					else if(clinic==null) {
-						sw.WriteLine("N4*"+Sout(PrefC.GetString(PrefName.PracticeCity),30)+"*"//N401: City
-							+Sout(PrefC.GetString(PrefName.PracticeST),2)+"*"//N402: State
-							+Sout(PrefC.GetString(PrefName.PracticeZip).Replace("-",""),15)+"~");//N403: Zip
+						city=PrefC.GetString(PrefName.PracticeCity);
+						state=PrefC.GetString(PrefName.PracticeST);
+						zip=PrefC.GetString(PrefName.PracticeZip);
 					}
 					else {
-						sw.WriteLine("N4*"+Sout(clinic.City,30)+"*"//N401: City
-							+Sout(clinic.State,2)+"*"//N402: State
-							+Sout(clinic.Zip.Replace("-",""),15)+"~");//N403: Zip
+						city=clinic.City;
+						state=clinic.State;
+						zip=clinic.Zip;
 					}
+					sw.WriteLine("N4*"+Sout(city,30)+"*"//N401 2/30 City Name: 
+							+Sout(state,2)+"*"//N402 2/2 State or Province Code: 
+							+Sout(zip.Replace("-",""),15)//N403 3/15 Postal Code: 
+							+"~");//NM404 through NM407 are either situational with United States as default, or not used, so we don't specify any of them.
 					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						//2010AA REF: Office phone number. Required by WebMD.  Can possibly be removed now that we're using NPI.
 						if(clearhouse.ISA08=="0135WCH00") {//if WebMD
@@ -290,8 +275,9 @@ namespace OpenDentBusiness
 						//2010AA REF: License #. Required by RECS clearinghouse,
 						//but everyone else should find it useful too.
 						seg++;
-						sw.WriteLine("REF*0B*"//REF01: 0B=state license #.
-							+Sout(billProv.StateLicense,30)+"~");
+						sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+							+Sout(billProv.StateLicense,50)//REF02 1/50 Reference Identification: 
+							+"~");//REF03 and REF04 are not used.
 						//2010AA REF: Secondary ID number(s). Only required by some carriers.
 						seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
 					}
@@ -305,23 +291,40 @@ namespace OpenDentBusiness
 						sw.Write("SY*");//REF01: qualifier. SY=SSN
 					}
 					sw.WriteLine(Sout(billProv.SSN,30)+"~");//REF02: ID #
-					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						//2010AA PER: Billing Provider Contact Info. Required if different than in 1000A
 						//We'll always include it for simplicity
 						seg++;
-						if(clinic==null) {
-							sw.WriteLine("PER*IC*"//PER01: IC=Information Contact
-								+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02:Name. Practice title
-								+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
-								+Sout(PrefC.GetString(PrefName.PracticePhone),256,1)+"~");//PER04:Comm Number. aka telephone number
-						}
-						else {
-							sw.WriteLine("PER*IC*"//PER01: IC=Information Contact
-								+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02:Name. Practice title
-								+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
-								+Sout(clinic.Phone,256,1)+"~");//PER04:Comm Number. aka telephone number
-						}
+						sw.WriteLine("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
+							+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02 1/60 Name: Practice Title.
+							+"TE*"//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+							+Sout((clinic==null)?PrefC.GetString(PrefName.PracticePhone):clinic.Phone,256,1)//PER04 1/256 Communication Number: Telephone Number.
+							+"~");//PER05 through PER09 are all situational or not used. Skipped here.
 					}
+					//2010AB NM1: Situational. We can skip because the payee is the billing provider.
+					//2010AB N3: Pay-to Address
+					seg++;
+					sw.WriteLine("N3*"+Sout(address1,55,1)//N301 1/55 Address Information: 
+						+((address2=="")?"":("*"+Sout(address2,55,1)))//N302 1/55 Address Information: Only specify when there is a second address line.
+						+"~");
+					//2010AB N4 Pay-to Address city, state, zip
+					seg++;
+					sw.WriteLine("N4*"+Sout(city,30,2)+"*"//N401 2/30 City Name:
+						+Sout(state,2,2)+"*"//N402 2/2 State or Province Code: 
+						+Sout(zip,15,3)//N403 3/15 Postal Code: 
+						+"~");//N404 through N407 are for addresses outside the US and Canada, or are not used.
+					//2010AC NM1 Pay-to Plan Name
+					seg++;
+					sw.WriteLine("NM1*PE"//NM101 2/3 Entity Identifier Code: PE=Subrogated Payee (the only option).
+						+""
+						+"~");
+
+
+
+
+
+
+
 					parentProv=HLcount;
 					HLcount++;
 				}
@@ -1297,34 +1300,46 @@ namespace OpenDentBusiness
 		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
 		private static void Write1000A_NM1(StreamWriter sw,Clearinghouse clearhouse) {
 			if(clearhouse.SenderTIN=="") {//use OD
-				sw.WriteLine("NM1*41*"//NM101: 41=submitter
-					+"2*"//NM102: 2=nonperson
-					+"OPEN DENTAL SOFTWARE*"//NM103:Submitter Name
-					+"****46*"//NM108: 46 indicates ETIN
-					+"810624427~");//NM109: ID Code. aka ETIN#.
+				sw.WriteLine("NM1*41*"//NM101 2/3 Entity Indentifier Code: 41=submitter
+					+"2*"//NM102 1/1 Entity Type Qualifier: 2=nonperson
+					+"OPEN DENTAL SOFTWARE*"//NM103 1/60 Name Last or Organization Name: 
+					+"*"//NM104 1/35 Name First: Situational.
+					+"*"//NM105 1/25 Name Middle: Situational.
+					+"*"//NM106 1/10 Name Prefix: Not Used.
+					+"*"//NM107 1/10 Name Suffix: Not Used.
+					+"46*"//NM108 1/2 Identification Code Qualifier: 46=ETIN
+					+"810624427~");//NM109 2/80 Identification Code: ETIN#.
 			}
 			else {
-				sw.WriteLine("NM1*41*"//NM101: 41=submitter
-					+"2*"//NM102: 1=person,2=nonperson
-					+Sout(clearhouse.SenderName,35,1)+"*"//NM103:Submitter Name. Validated.
-					+"****46*"//NM108: 46 indicates ETIN
-					+Sout(clearhouse.SenderTIN,80,2)+"~");//NM109: ID Code. aka ETIN#. Validated to be at least 2.
+				sw.WriteLine("NM1*41*"//NM101 2/3 Entity Indentifier Code: 41=submitter
+					+"2*"//NM102 1/1 Entity Type Qualifier: 2=nonperson
+					+Sout(clearhouse.SenderName,35,1)+"*"//NM103 1/60 Name Last or Organization Name: 
+					+"*"//NM104 1/35 Name First: Situational.
+					+"*"//NM105 1/25 Name Middle: Situational.
+					+"*"//NM106 1/10 Name Prefix: Not Used.
+					+"*"//NM107 1/10 Name Suffix: Not Used.
+					+"46*"//NM108 1/2 Identification Code Qualifier: 46=ETIN
+					+Sout(clearhouse.SenderTIN,80,2)+"~");//NM109 2/80 Identification Code: ETIN#. Validated to be at least 2.
 			}
 		}
 
 		///<summary>Usually writes the contact information for Open Dental. But for inmediata and AOS clearinghouses, it writes practice contact info.</summary>
 		private static void Write1000A_PER(StreamWriter sw,Clearinghouse clearhouse) {
 			if(clearhouse.SenderTIN=="") {//use OD
-				sw.WriteLine("PER*IC*"//PER01:Function code: IC=Information Contact
-					+"JORDAN SPARKS*"//PER02:Name
-					+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
-					+"8776861248~");//PER04:Comm Number. aka telephone number
+				sw.WriteLine("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
+					+"*"//PER02 1/60 Name: Situational. Do not send since same as in NM1 segment for loop 1000A.
+					+"TE*"//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+					+"8776861248~");//PER04 1/256 Communication Number: Telephone Number.
+				//PER05 through PER08 are situational and we are not allowed to send if not required.
+				//PER09 is not used so we do not send.
 			}
 			else {
-				sw.WriteLine("PER*IC*"//PER01:Function code: IC=Information Contact
-					+Sout(clearhouse.SenderName,60,1)+"*"//PER02:Name. Validated.
-					+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
-					+clearhouse.SenderTelephone+"~");//PER04:Comm Number. aka telephone number. Validated to be exactly 10 digits.
+				sw.WriteLine("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
+					+"*"//PER02 1/60 Name: Situational. Do not send since same as in NM1 segment for loop 1000A.
+					+"TE*"//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+					+clearhouse.SenderTelephone+"~");//PER04 1/256 Communication Number: Telephone Number. Validated to be exactly 10 digits.
+				//PER05 through PER08 are situational and we are not allowed to send if not required.
+				//PER09 is not used so we do not send.
 			}
 		}
 
@@ -1332,23 +1347,19 @@ namespace OpenDentBusiness
 		private static int WriteProv_REF(StreamWriter sw,Provider prov,string payorID) {
 			int retVal=0;
 			ElectID electID=ElectIDs.GetID(payorID);
-			//if(electID==null){
-			//	return;
-			//}
 			if(electID!=null && electID.IsMedicaid) {
 				retVal++;
 				sw.WriteLine("REF*"
-					+"1D*"//REF01: ID qualifier. 1D=Medicaid
-					+Sout(prov.MedicaidID,30,1)+"~");//REF02. ID number
+					+"1D*"//REF01 2/3 Reference Identification Qualifier: 1D=Medicaid.
+					+Sout(prov.MedicaidID,50,1)+"~");//REF02 1/50 Reference Identification:
 			}
 			//I don't think there would be additional id's if Medicaid, but just in case, no return.
 			ProviderIdent[] provIdents=ProviderIdents.GetForPayor(prov.ProvNum,payorID);
 			for(int i=0;i<provIdents.Length;i++) {
 				retVal++;
 				sw.WriteLine("REF*"
-					//REF01: ID qualifier, a 2 letter code representing type
-					+GetProvTypeQualifier(provIdents[i].SuppIDType)+"*"
-					+provIdents[i].IDNumber+"~");//REF02. ID number
+					+GetProvTypeQualifier(provIdents[i].SuppIDType)+"*"//REF01 2/3 Reference Identification Qualifier: 
+					+Sout(provIdents[i].IDNumber,50,1)+"~");//REF02 1/50 Reference Identification:
 			}
 			return retVal;
 		}
@@ -1364,7 +1375,7 @@ namespace OpenDentBusiness
 				case ProviderSupplementalID.CommercialNumber:
 					return "G2";
 			}
-			return "";
+			return "  ";
 		}
 
 		private static string GetGender(PatientGender patGender) {
