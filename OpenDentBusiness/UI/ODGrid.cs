@@ -1817,6 +1817,7 @@ namespace OpenDental.UI {
 			}
 		}
 
+		/// <summary>If the Ctrl key down is not being captured by the grid because it doesn't have focus, then this automatically handles it.  The only thing you have to do to make it work is to turn on KeyPreview for the parent form.</summary>
 		private void Parent_KeyDown(Object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.ControlKey) {
 				ControlIsDown=true;
@@ -1843,6 +1844,7 @@ namespace OpenDental.UI {
 			}
 		}
 
+		/// <summary>If the Ctrl key down is not being captured by the grid because it doesn't have focus, then this automatically handles it.  The only thing you have to do to make it work is to turn on KeyPreview for the parent form.</summary>
 		private void Parent_KeyUp(Object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.ControlKey) {
 				ControlIsDown=false;
