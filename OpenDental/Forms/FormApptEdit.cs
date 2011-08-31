@@ -11,6 +11,7 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.DocumentObjectModel.Tables;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 using OpenDental.UI;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -1176,12 +1177,12 @@ namespace OpenDental{
 			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirements"].ToString();
 			//IsNewPatient is set well before opening this form.
 			checkIsNewPatient.Checked=AptCur.IsNewPatient;
-			if(ContrApptSheet.MinPerIncr==5) {
+			if(ApptDrawing.MinPerIncr==5) {
 				tbTime.TopBorder[0,12]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,24]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,36]=System.Drawing.Color.Black;
 			}
-			else if(ContrApptSheet.MinPerIncr==10) {
+			else if(ApptDrawing.MinPerIncr==10) {
 				tbTime.TopBorder[0,6]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,12]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,18]=System.Drawing.Color.Black;
@@ -1189,7 +1190,7 @@ namespace OpenDental{
 				tbTime.TopBorder[0,30]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,36]=System.Drawing.Color.Black;
 			}
-			else if(ContrApptSheet.MinPerIncr==15){
+			else if(ApptDrawing.MinPerIncr==15){
 				tbTime.TopBorder[0,4]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,8]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,12]=System.Drawing.Color.Black;
@@ -1778,7 +1779,7 @@ namespace OpenDental{
 			}
 			tbTime.Refresh();
 			butSlider.Location=new Point(tbTime.Location.X+2,(tbTime.Location.Y+strBTime.Length*14+1));
-			textTime.Text=(strBTime.Length*ContrApptSheet.MinPerIncr).ToString();
+			textTime.Text=(strBTime.Length*ApptDrawing.MinPerIncr).ToString();
 		}
 
 		private void CalculateTime() {

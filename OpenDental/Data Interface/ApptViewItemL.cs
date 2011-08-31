@@ -5,16 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 
 namespace OpenDental{
 	public class ApptViewItemL{
 		///<summary>A list of the ApptViewItems for the current view.</summary>
 		public static List<ApptViewItem> ForCurView;
-		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.
-		///<summary>Visible provider bars in appt module.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
-		public static List<Provider> VisProvs;
-		///<summary>Visible ops in appt module.  List of visible operatories.  This is a subset of the available ops.  You can't include a hidden op in this list.  If user has set View.OnlyScheduledProvs, and not isWeekly, then the only ops to show will be for providers that have schedules for the day and ops with no provs assigned.</summary>
-		public static List<Operatory> VisOps;
 		///<summary>Subset of ForCurView. Just items for rowElements, including apptfielddefs. If no view is selected, then the elements are filled with default info.</summary>
 		public static List<ApptViewItem> ApptRows;
 		public static ApptView ApptViewCur;
@@ -28,12 +24,12 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Gets (list)ForCurView, VisOps, VisProvs, and ApptRows.  Also sets TwoRows. Works even if supply -1 to indicate no apptview is selected.  Pass in null for the dailySched if this is a weekly view or if in FormApptViewEdit.</summary>
+		///<summary>Gets (list)ForCurView, ApptDrawing.VisOps, ApptDrawing.VisProvs, and ApptRows.  Also sets TwoRows. Works even if supply -1 to indicate no apptview is selected.  Pass in null for the dailySched if this is a weekly view or if in FormApptViewEdit.</summary>
 		public static void GetForCurView(ApptView av,bool isWeekly,List<Schedule> dailySched){
 			ApptViewCur=av;
 			ForCurView=new List<ApptViewItem>();
-			VisProvs=new List<Provider>();
-			VisOps=new List<Operatory>();
+			ApptDrawing.VisProvs=new List<Provider>();
+			ApptDrawing.VisOps=new List<Operatory>();
 			ApptRows=new List<ApptViewItem>();
 			int index;
 			//If there are no appointment views set up (therefore, none selected), then use a hard-coded default view.
@@ -41,11 +37,11 @@ namespace OpenDental{
 				//MessageBox.Show("apptcategorynum:"+ApptCategories.Cur.ApptCategoryNum.ToString());
 				//make visible ops exactly the same as the short ops list (all except hidden)
 				for(int i=0;i<OperatoryC.ListShort.Count;i++){
-					VisOps.Add(OperatoryC.ListShort[i]);
+					ApptDrawing.VisOps.Add(OperatoryC.ListShort[i]);
 				}
 				//make visible provs exactly the same as the prov list (all except hidden)
 				for(int i=0;i<ProviderC.ListShort.Count;i++){
-					VisProvs.Add(ProviderC.ListShort[i]);
+					ApptDrawing.VisProvs.Add(ProviderC.ListShort[i]);
 				}
 				//Hard coded elements showing
 				ApptRows.Add(new ApptViewItem("PatientName",0,Color.Black));
@@ -55,7 +51,7 @@ namespace OpenDental{
 				ApptRows.Add(new ApptViewItem("Lab",4,Color.DarkRed));
 				ApptRows.Add(new ApptViewItem("Procs",5,Color.Black));
 				ApptRows.Add(new ApptViewItem("Note",6,Color.Black));
-				ContrApptSheet.RowsPerIncr=1;
+				ApptDrawing.RowsPerIncr=1;
 			}
 			//An appointment view is selected, so add provs and ops from the view to our lists of indexes.
 			else{
@@ -68,13 +64,13 @@ namespace OpenDental{
 							}
 							index=Operatories.GetOrder(ApptViewItemC.List[i].OpNum);
 							if(index!=-1){
-								VisOps.Add(OperatoryC.ListShort[index]);
+								ApptDrawing.VisOps.Add(OperatoryC.ListShort[index]);
 							}
 						}
 						else if(ApptViewItemC.List[i].ProvNum>0){//prov
 							index=Providers.GetIndex(ApptViewItemC.List[i].ProvNum);
 							if(index!=-1){
-								VisProvs.Add(ProviderC.ListShort[index]);
+								ApptDrawing.VisProvs.Add(ProviderC.ListShort[index]);
 							}
 						}
 						else{//element or apptfielddef
@@ -82,7 +78,7 @@ namespace OpenDental{
 						}
 					}
 				}
-				ContrApptSheet.RowsPerIncr=ApptViewCur.RowsPerIncr;
+				ApptDrawing.RowsPerIncr=ApptViewCur.RowsPerIncr;
 			}
 			//if this appt view has the option to show only scheduled providers and this is daily view.
 			//Remember that there is no intelligence in weekly view for this option, and it behaves just like it always did.
@@ -127,8 +123,8 @@ namespace OpenDental{
 							if(listSchedOps[p]==OperatoryC.ListShort[i].OperatoryNum) {
 								Operatory op=OperatoryC.ListShort[i];
 								indexOp=Operatories.GetOrder(listSchedOps[p]);
-								if(indexOp!=-1 && !VisOps.Contains(op)) {//prevents adding duplicate ops
-									VisOps.Add(op);
+								if(indexOp!=-1 && !ApptDrawing.VisOps.Contains(op)) {//prevents adding duplicate ops
+									ApptDrawing.VisOps.Add(op);
 									opAdded=true;
 									break;
 								}
@@ -137,8 +133,8 @@ namespace OpenDental{
 						//Also add any ops that are assigned to this dentist by default.
 						if(OperatoryC.ListShort[i].ProvDentist==dailySched[s].ProvNum) {
 							indexOp=Operatories.GetOrder(OperatoryC.ListShort[i].OperatoryNum);
-							if(indexOp!=-1 && !VisOps.Contains(OperatoryC.ListShort[i])) {
-								VisOps.Add(OperatoryC.ListShort[i]);
+							if(indexOp!=-1 && !ApptDrawing.VisOps.Contains(OperatoryC.ListShort[i])) {
+								ApptDrawing.VisOps.Add(OperatoryC.ListShort[i]);
 								opAdded=true;
 							}
 							//index=Providers.GetIndex(OperatoryC.ListShort[i].ProvDentist);
@@ -152,8 +148,8 @@ namespace OpenDental{
 					}
 				}
 			}
-			VisOps.Sort(CompareOps);
-			VisProvs.Sort(CompareProvs);
+			ApptDrawing.VisOps.Sort(CompareOps);
+			ApptDrawing.VisProvs.Sort(CompareProvs);
 		}
 
 		///<summary>Sorts list of operatories by ItemOrder.</summary>
@@ -181,8 +177,8 @@ namespace OpenDental{
 		///<summary>Returns the index of the provNum within VisProvs.</summary>
 		public static int GetIndexProv(long provNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<VisProvs.Count;i++) {
-				if(VisProvs[i].ProvNum==provNum)
+			for(int i=0;i<ApptDrawing.VisProvs.Count;i++) {
+				if(ApptDrawing.VisProvs[i].ProvNum==provNum)
 					return i;
 			}
 			return -1;
@@ -206,16 +202,6 @@ namespace OpenDental{
 					return true;
 			}
 			return false;
-		}
-
-		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
-		public static int GetIndexOp(long opNum) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<VisOps.Count;i++) {
-				if(VisOps[i].OperatoryNum==opNum)
-					return i;
-			}
-			return -1;
 		}
 
 

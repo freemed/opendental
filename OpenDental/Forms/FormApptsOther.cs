@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 using CodeBase;
 
 namespace OpenDental{
@@ -601,13 +602,13 @@ namespace OpenDental{
 			if(this.InitialClick) {
 				Appointment oldApt=apt.Clone();
 				DateTime d;
-				if(ContrApptSheet.IsWeeklyView) {
+				if(ApptDrawing.IsWeeklyView) {
 					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
 				}
 				else {
 					d=AppointmentL.DateSelected;
 				}
-				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
+				int minutes=(int)(ContrAppt.SheetClickedonMin/ApptDrawing.MinPerIncr)*ApptDrawing.MinPerIncr;
 				apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
 				if(PatCur.AskToArriveEarly>0){
 					apt.DateTimeAskedToArrive=apt.AptDateTime.AddMinutes(-PatCur.AskToArriveEarly);
@@ -731,14 +732,14 @@ namespace OpenDental{
 			AptCur.ClinicNum=PatCur.ClinicNum;
 			if(InitialClick) {//initially double clicked on appt module
 				DateTime d;
-				if(ContrApptSheet.IsWeeklyView) {
+				if(ApptDrawing.IsWeeklyView) {
 					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
 				}
 				else {
 					d=AppointmentL.DateSelected;
 				}
-				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)
-					*ContrApptSheet.MinPerIncr;
+				int minutes=(int)(ContrAppt.SheetClickedonMin/ApptDrawing.MinPerIncr)
+					*ApptDrawing.MinPerIncr;
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
 					,ContrAppt.SheetClickedonHour,minutes,0);
 				AptCur.Op=ContrAppt.SheetClickedonOp;
@@ -790,13 +791,13 @@ namespace OpenDental{
 			AptCur.ClinicNum=PatCur.ClinicNum;
 			if(InitialClick){//initially double clicked on appt module
 				DateTime d;
-				if(ContrApptSheet.IsWeeklyView){
+				if(ApptDrawing.IsWeeklyView){
 					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
 				}
 				else{
 					d=AppointmentL.DateSelected;
 				}
-				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
+				int minutes=(int)(ContrAppt.SheetClickedonMin/ApptDrawing.MinPerIncr)*ApptDrawing.MinPerIncr;
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
 					,ContrAppt.SheetClickedonHour,minutes,0);
 				if(PatCur.AskToArriveEarly>0){

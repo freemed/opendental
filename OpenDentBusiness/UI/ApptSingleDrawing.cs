@@ -8,8 +8,13 @@ using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness.UI {
 	public class ApptSingleDrawing {
+		public static float ApptSingleHeight;
+		public static float ApptSingleWidth;
+		public static Point Location;
+		public static string PatternShowing;
+
 		///<summary></summary>
-		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,int totalWidth,int totalHeight,string patternShowing,int lineH,int rowsPerIncr,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
+		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,float totalWidth,float totalHeight,string patternShowing,int lineH,int rowsPerIncr,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
 			Pen penB=new Pen(Color.Black);
 			Pen penW=new Pen(Color.White);
 			Pen penGr=new Pen(Color.SlateGray);
@@ -86,7 +91,7 @@ namespace OpenDentBusiness.UI {
 				elementI++;
 			}
 			//UR
-			drawLoc=new Point(totalWidth-1,0);//in the UR area, we refer to the upper right corner of each element.
+			drawLoc=new Point((int)totalWidth-1,0);//in the UR area, we refer to the upper right corner of each element.
 			elementI=0;
 			while(drawLoc.Y<totalHeight && elementI<apptRows.Count) {
 				if(apptRows[elementI].ElementAlignment!=ApptViewAlignment.UR) {
@@ -97,7 +102,7 @@ namespace OpenDentBusiness.UI {
 				elementI++;
 			}
 			//LR
-			drawLoc=new Point(totalWidth-1,totalHeight-1);//in the LR area, we refer to the lower right corner of each element.
+			drawLoc=new Point((int)totalWidth-1,(int)totalHeight-1);//in the LR area, we refer to the lower right corner of each element.
 			elementI=apptRows.Count-1;//For lower right, draw the list backwards.
 			while(drawLoc.Y>0 && elementI>=0) {
 				if(apptRows[elementI].ElementAlignment!=ApptViewAlignment.LR) {
@@ -117,7 +122,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,int lineH,int totalWidth) {
+		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,int lineH,float totalWidth) {
 			Font baseFont=new Font("Arial",8);
 			string text="";
 			bool isNote=false;
@@ -404,7 +409,7 @@ namespace OpenDentBusiness.UI {
 					return new Point(drawLoc.X,drawLoc.Y+(int)noteSize.Height);
 				}
 				else {
-					noteSize=g.MeasureString(text,baseFont,totalWidth-9);
+					noteSize=g.MeasureString(text,baseFont,(int)totalWidth-9);
 					//Problem: "limited-tooth bothering him ", the trailing space causes measuring error, resulting in m getting partially chopped off.
 					//Tried TextRenderer, but it caused premature wrapping
 					//Size noteSizeInt=TextRenderer.MeasureText(text,baseFont,new Size(totalWidth-9,1000));
@@ -418,7 +423,7 @@ namespace OpenDentBusiness.UI {
 			}
 			else if(align==ApptViewAlignment.UR) {
 				if(stackBehavior==ApptViewStackBehavior.Vertical) {
-					int w=totalWidth-9;
+					float w=totalWidth-9;
 					if(isGraphic) {
 						Bitmap bitmap=new Bitmap(12,12);
 						noteSize=new SizeF(bitmap.Width,bitmap.Height);
@@ -436,7 +441,7 @@ namespace OpenDentBusiness.UI {
 						return new Point(drawLoc.X,drawLoc.Y+(int)noteSize.Height);
 					}
 					else {
-						noteSize=g.MeasureString(text,baseFont,w);
+						noteSize=g.MeasureString(text,baseFont,(int)w);
 						noteSize=new SizeF(noteSize.Width,lineH+1);//only allowed to be one line high.
 						if(noteSize.Width<5) {
 							noteSize=new SizeF(5,noteSize.Height);
@@ -503,7 +508,7 @@ namespace OpenDentBusiness.UI {
 			}
 			else {//LR
 				if(stackBehavior==ApptViewStackBehavior.Vertical) {
-					int w=totalWidth-9;
+					float w=totalWidth-9;
 					if(isGraphic) {
 						Bitmap bitmap=new Bitmap(12,12);
 						noteSize=new SizeF(bitmap.Width,bitmap.Height);
@@ -521,7 +526,7 @@ namespace OpenDentBusiness.UI {
 						return new Point(drawLoc.X,drawLoc.Y-(int)noteSize.Height);
 					}
 					else {
-						noteSize=g.MeasureString(text,baseFont,w);
+						noteSize=g.MeasureString(text,baseFont,(int)w);
 						noteSize=new SizeF(noteSize.Width,lineH+1);//only allowed to be one line high.  Needs an extra pixel.
 						if(noteSize.Width<5) {
 							noteSize=new SizeF(5,noteSize.Height);
@@ -589,10 +594,10 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static Point GetLocation(bool isWeeklyView,float colAptWidth,int colDayWidth,int apptWidth,ref int apptHeight,int colWidth,ref string patternShowing,int lineH,int rowsPerIncr,DataRow dataRoww,int timeWidth,List<Operatory> visOps,int provWidth,int provCount,DateTime startTime,DateTime stopTime) {
+		public static Point GetLocation(bool isWeeklyView,float colAptWidth,float colDayWidth,float apptWidth,ref float apptHeight,float colWidth,ref string patternShowing,int lineH,int rowsPerIncr,DataRow dataRoww,float timeWidth,List<Operatory> visOps,float provWidth,int provCount,DateTime startTime,DateTime stopTime) {
 			Point location;
 			if(isWeeklyView) {
-				apptWidth=(int)colAptWidth;
+				apptWidth=colAptWidth;
 				location=new Point(ConvertToX(isWeeklyView,dataRoww,timeWidth,colWidth,colAptWidth,colDayWidth,provWidth,provCount,visOps),
 					ConvertToY(lineH,rowsPerIncr,dataRoww,startTime,stopTime));
 			}
@@ -606,7 +611,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Used from SetLocation.</summary>
-		private static void SetSize(out string patternShowing,int lineH,int rowsPerIncr,out int apptHeight,DataRow dataRoww) {
+		private static void SetSize(out string patternShowing,int lineH,int rowsPerIncr,out float apptHeight,DataRow dataRoww) {
 			patternShowing=GetPatternShowing(dataRoww["Pattern"].ToString(),rowsPerIncr);
 			//height is based on original 5 minute pattern. Might result in half-rows
 			apptHeight=dataRoww["Pattern"].ToString().Length*lineH*rowsPerIncr;
@@ -619,26 +624,26 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Called from SetLocation to establish X position of control.</summary>
-		private static int ConvertToX(bool isWeeklyView,DataRow dataRoww,int timeWidth,int colWidth,float colAptWidth,int colDayWidth,int provWidth,int provCount,List<Operatory> visOps) {
+		private static int ConvertToX(bool isWeeklyView,DataRow dataRoww,float timeWidth,float colWidth,float colAptWidth,float colDayWidth,float provWidth,int provCount,List<Operatory> visOps) {
 			if(isWeeklyView) {
 				//the next few lines are because we start on Monday instead of Sunday
 				int dayofweek=(int)PIn.DateT(dataRoww["AptDateTime"].ToString()).DayOfWeek-1;
 				if(dayofweek==-1) {
 					dayofweek=6;
 				}
-				return timeWidth
-					+colDayWidth*(dayofweek)+1
-					+(int)(colAptWidth*(float)GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps));
+				return (int)timeWidth
+					+(int)colDayWidth*(dayofweek)+1
+					+((int)colAptWidth*GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps));
 			}
 			else {
-				return timeWidth+provWidth*provCount+colWidth*(GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps))+1;
+				return (int)timeWidth+(int)provWidth*provCount+(int)colWidth*(GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps))+1;
 			}
 		}
 
 		///<summary>Called from SetLocation to establish Y position of control.</summary>
-		private static int ConvertToY(int lineH,int rowsPerIncr,DataRow dataRoww,DateTime startTime, DateTime stopTime) {
+		private static int ConvertToY(int lineH,int rowsPerIncr,DataRow dataRoww,DateTime startTime,DateTime stopTime) {
 			DateTime aptDateTime=PIn.DateT(dataRoww["AptDateTime"].ToString());
-//TODO: Have a way to show appointments for a specific time frame.
+			//TODO: Have a way to show appointments for a specific time frame.
 			int retVal=2000;//Off the page. This is temporary to get a feel getting appointments at the corresponding start and stop X,Y locations.
 			int stopHour=stopTime.Hour;
 			if(stopHour==0) {
@@ -681,6 +686,94 @@ namespace OpenDentBusiness.UI {
 			}
 			return -1;
 		}
+
+		#region PulledOut
+
+		//ContrApptSingle.cs line 95
+		///<summary>This is only called when viewing appointments on the Appt module.  For Planned apt and pinboard, use SetSize instead so that the location won't change.</summary>
+		public static Point SetLocation(DataRow dataRoww) {
+			if(ApptDrawing.IsWeeklyView) {
+				ApptSingleWidth=(int)ApptDrawing.ColAptWidth;
+				Location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
+			}
+			else {
+				Location=new Point(ConvertToX(dataRoww)+2,ConvertToY(dataRoww));
+				ApptSingleWidth=ApptDrawing.ColWidth-5;
+			}
+			return Location;
+		}
+
+		//ContrApptSingle.cs line 108
+		///<summary>Used from SetLocation. Also used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
+		public static Size SetSize(DataRow dataRoww) {
+			PatternShowing=GetPatternShowing(dataRoww["Pattern"].ToString());
+			//height is based on original 5 minute pattern. Might result in half-rows
+			ApptSingleHeight=dataRoww["Pattern"].ToString().Length*ApptDrawing.LineH*ApptDrawing.RowsPerIncr;
+			//if(ContrApptSheet.TwoRowsPerIncrement){
+			//	Height=Height*2;
+			//}
+			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
+				ApptSingleHeight=ApptSingleHeight/2;
+			}
+			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
+				ApptSingleHeight=ApptSingleHeight/3;
+			}
+			return new Size((int)ApptSingleWidth,(int)ApptSingleHeight);
+		}
+
+		//ContrApptSingle.cs line 132
+		///<summary>Called from SetLocation to establish X position of control.</summary>
+		public static int ConvertToX(DataRow dataRoww) {
+			if(ApptDrawing.IsWeeklyView) {
+				//the next few lines are because we start on Monday instead of Sunday
+				int dayofweek=(int)PIn.DateT(dataRoww["AptDateTime"].ToString()).DayOfWeek-1;
+				if(dayofweek==-1) {
+					dayofweek=6;
+				}
+				return (int)(ApptDrawing.TimeWidth
+					+ApptDrawing.ColDayWidth*(dayofweek)+1
+					+(ApptDrawing.ColAptWidth*(float)ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))));
+			}
+			else {
+				return (int)(ApptDrawing.TimeWidth+ApptDrawing.ProvWidth*ApptDrawing.ProvCount
+					+ApptDrawing.ColWidth*(ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString())))+1);
+				//Info.MyApt.Op))+1;
+			}
+		}
+
+		//ContrApptSingle.cs line 151
+		///<summary>Called from SetLocation to establish Y position of control.  Also called from ContrAppt.RefreshDay when determining ProvBar markings. Does not round to the nearest row.</summary>
+		public static int ConvertToY(DataRow dataRoww) {
+			DateTime aptDateTime=PIn.DateT(dataRoww["AptDateTime"].ToString());
+			int retVal=(int)(((double)aptDateTime.Hour*(double)60
+				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
+				+(double)aptDateTime.Minute
+				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
+				)*(double)ApptDrawing.LineH*ApptDrawing.RowsPerIncr);
+			return retVal;
+		}
+
+		//ContrApptSingle.cs line 162
+		///<summary>This converts the dbPattern in 5 minute interval into the pattern that will be viewed based on RowsPerIncrement and AppointmentTimeIncrement.  So it will always depend on the current view.Therefore, it should only be used for visual display purposes rather than within the FormAptEdit. If height of appointment allows a half row, then this includes an increment for that half row.</summary>
+		public static string GetPatternShowing(string dbPattern) {
+			StringBuilder strBTime=new StringBuilder();
+			for(int i=0;i<dbPattern.Length;i++) {
+				for(int j=0;j<ApptDrawing.RowsPerIncr;j++) {
+					strBTime.Append(dbPattern.Substring(i,1));
+				}
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
+					i++;//skip
+				}
+				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
+					i++;
+					i++;//skip two
+				}
+			}
+			return strBTime.ToString();
+		}
+
+
+		#endregion
 
 
 	}

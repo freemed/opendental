@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 
 namespace OpenDental.UI {
 	public partial class PinBoard:Control {
@@ -84,7 +85,7 @@ namespace OpenDental.UI {
 			PinApptSingle.DataRoww=row;
 			PinApptSingle.TableApptFields=tableApptFields;
 			PinApptSingle.TablePatFields=tablePatFields;
-			PinApptSingle.SetSize();
+			PinApptSingle.Size=ApptSingleDrawing.SetSize(row);
 			PinApptSingle.Width=Width-2;
 			PinApptSingle.IsSelected=true;
 			PinApptSingle.Location=new Point(0,13*apptList.Count);
@@ -122,7 +123,7 @@ namespace OpenDental.UI {
 			for(int i=0;i<apptList.Count;i++) {
 				if(apptList[i].DataRoww["AptNum"].ToString()==row["AptNum"].ToString()) {
 					apptList[i].DataRoww=row;
-					apptList[i].SetSize();
+					apptList[i].Size=ApptSingleDrawing.SetSize(row);
 					apptList[i].Width=Width-2;
 					//PinApptSingle.IsSelected=true;
 					//PinApptSingle.Location=new Point(0,13*apptList.Count);

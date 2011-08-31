@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -743,7 +744,7 @@ namespace OpenDental{
 			tbTime.Refresh();
 			butSlider.Location=new Point(tbTime.Location.X+2
 				,(tbTime.Location.Y+strBTime.Length*14+1));
-			textTime2.Text=(strBTime.Length*ContrApptSheet.MinPerIncr).ToString();
+			textTime2.Text=(strBTime.Length*ApptDrawing.MinPerIncr).ToString();
 		}
 
 		private void FillFees(){

@@ -5,6 +5,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDentBusiness.UI;
 
 namespace OpenDental{
 	public class AppointmentL {
@@ -32,8 +33,8 @@ namespace OpenDental{
 				&& dayEvaluating < afterDate.AddYears(2))
 			{
 				for(int i=0;i<providers.Length;i++){
-					provBar[i]=new int[24*ContrApptSheet.RowsPerHr];//[144]; or 24*6
-					provBarSched[i]=new bool[24*ContrApptSheet.RowsPerHr];
+					provBar[i]=new int[24*ApptDrawing.RowsPerHr];//[144]; or 24*6
+					provBarSched[i]=new bool[24*ApptDrawing.RowsPerHr];
 				}
 				//get appointments for one day
 				aptList=Appointments.GetForPeriod(dayEvaluating,dayEvaluating);
@@ -55,10 +56,10 @@ namespace OpenDental{
 					if(provIndex==-1){
 						continue;
 					}
-					pattern=ContrApptSingle.GetPatternShowing(aptList[i].Pattern);
-					startIndex=(int)(((double)aptList[i].AptDateTime.Hour*(double)60/ContrApptSheet.MinPerRow
-						+(double)aptList[i].AptDateTime.Minute/ContrApptSheet.MinPerRow)
-						*(double)ContrApptSheet.Lh)/ContrApptSheet.Lh;//rounds down
+					pattern=ApptSingleDrawing.GetPatternShowing(aptList[i].Pattern);
+					startIndex=(int)(((double)aptList[i].AptDateTime.Hour*(double)60/ApptDrawing.MinPerRow
+						+(double)aptList[i].AptDateTime.Minute/ApptDrawing.MinPerRow)
+						*(double)ApptDrawing.LineH)/ApptDrawing.LineH;//rounds down
 					for(int k=0;k<pattern.Length;k++){
 						if(pattern.Substring(k,1)=="X"){
 							provBar[provIndex][startIndex+k]++;
@@ -79,7 +80,7 @@ namespace OpenDental{
 					}
 				}
 				//step through day, one increment at a time, looking for a slot
-				pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);
+				pattern=ApptSingleDrawing.GetPatternShowing(apt.Pattern);
 				timeFound=new TimeSpan(0);
 				//It's done this way for a plugin that wants to pull all matches for a given day.
 				List<bool> findMoreMatchesToday=new List<bool>(); 
@@ -111,11 +112,11 @@ namespace OpenDental{
 							continue;
 						}
 						//convert to valid time
-						hourFound=(int)((double)(i)/(float)60*ContrApptSheet.MinPerRow);//8am=48/60*10
+						hourFound=(int)((double)(i)/(float)60*ApptDrawing.MinPerRow);//8am=48/60*10
 						timeFound=new TimeSpan(
 							hourFound,
 							//minutes. eg. (13-(2*60/10))*10
-							(int)((i-((double)hourFound*(float)60/ContrApptSheet.MinPerRow))*ContrApptSheet.MinPerRow),
+							(int)((i-((double)hourFound*(float)60/ApptDrawing.MinPerRow))*ApptDrawing.MinPerRow),
 							0);
 						//make sure it's after the time restricted
 						//Debug.WriteLine(timeFound.ToString()+"  "+afterTime.ToString());
@@ -166,8 +167,8 @@ namespace OpenDental{
 		private static int GetProvBarIndex(TimeSpan time) {
 			return (int)(((double)time.Hours*(double)60/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)//aptTimeIncr=minutesPerIncr
 				+(double)time.Minutes/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement))
-				*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr)
-				/ContrApptSheet.Lh;//rounds down
+				*(double)ApptDrawing.LineH*ApptDrawing.RowsPerIncr)
+				/ApptDrawing.LineH;//rounds down
 		}
 
 		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.  If a recallNum is not 0 or -1, then it will create an appt of that recalltype.</summary>
@@ -361,9 +362,9 @@ namespace OpenDental{
 				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
 				+(double)apt.AptDateTime.Minute
 				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
-				)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
-			int startIndex=convertToY/ContrApptSheet.Lh;//rounds down
-			string pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);
+				)*(double)ApptDrawing.LineH*ApptDrawing.RowsPerIncr);
+			int startIndex=convertToY/ApptDrawing.LineH;//rounds down
+			string pattern=ApptSingleDrawing.GetPatternShowing(apt.Pattern);
 			//keep track of which rows in the entire day would be occupied by provider time for this appt
 			ArrayList aptProvTime=new ArrayList();
 			for(int k=0;k<pattern.Length;k++){
@@ -391,7 +392,7 @@ namespace OpenDental{
 					continue;
 				}
 				aptDateTime=PIn.DateT(dayTable.Rows[i]["AptDateTime"].ToString());
-				if(ContrApptSheet.IsWeeklyView && aptDateTime.Date==apt.AptDateTime.Date){
+				if(ApptDrawing.IsWeeklyView && aptDateTime.Date==apt.AptDateTime.Date){
 					continue;
 				}
 				//calculate starting row
@@ -400,9 +401,9 @@ namespace OpenDental{
 					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
 					+(double)aptDateTime.Minute
 					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
-					)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
-				startIndex=convertToY/ContrApptSheet.Lh;//rounds down
-				pattern=ContrApptSingle.GetPatternShowing(dayTable.Rows[i]["Pattern"].ToString());
+					)*(double)ApptDrawing.LineH*ApptDrawing.RowsPerIncr);
+				startIndex=convertToY/ApptDrawing.LineH;//rounds down
+				pattern=ApptSingleDrawing.GetPatternShowing(dayTable.Rows[i]["Pattern"].ToString());
 				//now compare it to apt
 				overlaps=false;
 				for(int k=0;k<pattern.Length;k++){
