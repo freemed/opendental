@@ -48,7 +48,7 @@ namespace MobileWeb {
 					EmailString=@"<a href=""mailto:"+pat.Email+@""" class=""style2"">"+pat.Email+"</a>";
 				}
 				List<Appointmentm> appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,PatNum);
-				appointmentmList=appointmentmList.Where(a => a.AptStatus!=ApptStatus.UnschedList && a.AptStatus!=ApptStatus.Planned).ToList();//exclude unscheduled and planned appointments.
+				appointmentmList=appointmentmList.Where(a=>a.AptStatus!=ApptStatus.UnschedList && a.AptStatus!=ApptStatus.Planned).ToList();//exclude unscheduled and planned appointments.
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
 				List<RxPatm> rxList=RxPatms.GetRxPatms(CustomerNum,PatNum);

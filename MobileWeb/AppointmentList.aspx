@@ -27,12 +27,14 @@
 							<a linkattib="AppointmentDetails.aspx?AptNum=<%#((Appointmentm)Container.DataItem).AptNum %>"
 								href="#AppointmentDetails">
 								<div style="float:left; width:25%;">
-								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("hh:mm tt")%>&nbsp;&nbsp;&nbsp;&nbsp;
+								<%#((Appointmentm)Container.DataItem).AptDateTime.ToString("hh:mm tt")%>&nbsp;&nbsp;&nbsp;&nbsp;<br />
+								<%#GetApptBrokenStatus((Appointmentm)Container.DataItem)%>
 								</div>
 								<div style="float:left; width:65%;">
 								<div><%#GetPatientName(((Appointmentm)Container.DataItem).PatNum)%></div>
 								<div class="infocolumn"><%#((Appointmentm)Container.DataItem).ProcDescript%></div>
 								<div class="infocolumn"><%#((Appointmentm)Container.DataItem).Note%></div>
+								
 								</div>
 								</a>
 								

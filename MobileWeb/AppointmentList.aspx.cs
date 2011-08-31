@@ -51,7 +51,7 @@ namespace MobileWeb {
 							DemoDateCookieD.Value=AppointmentDate.Day+"";
 						}
 						else {
-							DemoDateCookieY.Value="";// these are explicitely set to empty because javascript on the browser is picking values from previously set cookies
+							DemoDateCookieY.Value="";// these are explicitely set to empty, because the javascript on the browser is picking values from previously set cookies
 							DemoDateCookieM.Value="";
 							DemoDateCookieD.Value="";
 							AppointmentDate=DateTime.Today;
@@ -88,7 +88,7 @@ namespace MobileWeb {
 				}else{
 					appointmentmList=Appointmentms.GetAppointmentms(CustomerNum,ProvNum,AppointmentDate,AppointmentDate);
 				}
-				appointmentmList=appointmentmList.Where(a => a.AptStatus!=ApptStatus.UnschedList && a.AptStatus!=ApptStatus.Planned).ToList();//exclude unscheduled and planned appointments.
+				appointmentmList=appointmentmList.Where(a=>a.AptStatus!=ApptStatus.UnschedList && a.AptStatus!=ApptStatus.Planned).ToList();//exclude unscheduled and planned appointments.
 				Repeater1.DataSource=appointmentmList;
 				Repeater1.DataBind();
 			}
@@ -106,6 +106,9 @@ namespace MobileWeb {
 			string HexColor="#FFFFFF";
 			try {
 				Providerm pv;
+				if(ap.AptStatus==ApptStatus.Complete) {
+					return "#808080"; //gray
+				}
 				if(ap.IsHygiene) {
 					if(ap.ProvHyg==0) { //no hygenist
 						return HexColor;
@@ -124,7 +127,12 @@ namespace MobileWeb {
 		}
 
 
-
+		public string GetApptBrokenStatus(Appointmentm ap) {
+			if(ap.AptStatus==ApptStatus.Broken){
+				return @"<div style=""font-style: italic;color: #FF0000;font-weight:normal"">Broken</div>";
+			}
+			return "";
+		}
 
 
 
