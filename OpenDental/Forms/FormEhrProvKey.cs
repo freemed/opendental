@@ -33,9 +33,10 @@ namespace OpenDental {
 				provKeyIsValid=(bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args);
 			#endif
 			if(!provKeyIsValid) {
-				MsgBox.Show(this,"Invalid provider key");
+				MsgBox.Show(this,"Invalid provider key.  Check capitalization, exact spelling, and report access status.");
 				return;
 			}
+			ProvCur.EhrHasReportAccess=checkHasReportAccess.Checked;
 			ProvCur.EhrKey=textEhrKey.Text;
 			DialogResult=DialogResult.OK;
 		}

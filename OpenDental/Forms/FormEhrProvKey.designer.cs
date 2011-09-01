@@ -130,7 +130,7 @@ namespace OpenDental{
 			// checkHasReportAccess
 			// 
 			this.checkHasReportAccess.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkHasReportAccess.Location = new System.Drawing.Point(19,157);
+			this.checkHasReportAccess.Location = new System.Drawing.Point(18,157);
 			this.checkHasReportAccess.Name = "checkHasReportAccess";
 			this.checkHasReportAccess.Size = new System.Drawing.Size(139,18);
 			this.checkHasReportAccess.TabIndex = 128;
