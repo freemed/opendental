@@ -20,8 +20,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label2;
-		private OpenDental.UI.Button butCancel;
-		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butClose;
 		private System.ComponentModel.Container components = null;
 		//private bool ControlDown;
 		///<summary></summary>
@@ -41,9 +40,10 @@ namespace OpenDental{
 		private ODGrid gridOut;
 		List<ClaimPaySplit> ClaimsAttached;
 		List<ClaimPaySplit> ClaimsOutstanding;
-		private UI.Button butDown;
+		private UI.Button butDetach;
+		private ValidDouble textTotal;
+		private Label label8;
 		private Label label1;
-		List<int> ProcsAttached;
 
 		///<summary></summary>
 		public FormClaimPayBatch(ClaimPayment claimPaymentCur) {
@@ -76,8 +76,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.textCarrierName = new System.Windows.Forms.TextBox();
@@ -89,8 +88,10 @@ namespace OpenDental{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.butClaimPayEdit = new OpenDental.UI.Button();
 			this.gridOut = new OpenDental.UI.ODGrid();
-			this.butDown = new OpenDental.UI.Button();
+			this.butDetach = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
+			this.textTotal = new OpenDental.ValidDouble();
+			this.label8 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -185,34 +186,20 @@ namespace OpenDental{
 			this.label2.Text = "Note";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butCancel
+			// butClose
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(803,631);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 1;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(803,593);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 0;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butClose.Location = new System.Drawing.Point(803,631);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.TabIndex = 1;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butDelete
 			// 
@@ -225,7 +212,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(45,626);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(92,24);
+			this.butDelete.Size = new System.Drawing.Size(79,24);
 			this.butDelete.TabIndex = 52;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -353,21 +340,21 @@ namespace OpenDental{
 			this.gridOut.TranslationName = "TableClaimPaySplits";
 			this.gridOut.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOut_CellDoubleClick);
 			// 
-			// butDown
+			// butDetach
 			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDown.Autosize = true;
-			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDown.CornerRadius = 4F;
-			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(372,357);
-			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(79,24);
-			this.butDown.TabIndex = 101;
-			this.butDown.Text = "Detach";
-			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			this.butDetach.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDetach.Autosize = true;
+			this.butDetach.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDetach.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDetach.CornerRadius = 4F;
+			this.butDetach.Image = global::OpenDental.Properties.Resources.down;
+			this.butDetach.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDetach.Location = new System.Drawing.Point(372,357);
+			this.butDetach.Name = "butDetach";
+			this.butDetach.Size = new System.Drawing.Size(79,24);
+			this.butDetach.TabIndex = 101;
+			this.butDetach.Text = "Detach";
+			this.butDetach.Click += new System.EventHandler(this.butDetach_Click);
 			// 
 			// label1
 			// 
@@ -379,20 +366,38 @@ namespace OpenDental{
 			this.label1.TabIndex = 102;
 			this.label1.Text = "Double click on an outstanding claim to enter payments for this check.";
 			// 
+			// textTotal
+			// 
+			this.textTotal.Location = new System.Drawing.Point(606,359);
+			this.textTotal.Name = "textTotal";
+			this.textTotal.ReadOnly = true;
+			this.textTotal.Size = new System.Drawing.Size(68,20);
+			this.textTotal.TabIndex = 0;
+			this.textTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(499,363);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(105,16);
+			this.label8.TabIndex = 36;
+			this.label8.Text = "Total Payments";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormClaimPayBatch
 			// 
-			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.CancelButton = this.butCancel;
+			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(902,676);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.butDown);
+			this.Controls.Add(this.butDetach);
 			this.Controls.Add(this.gridOut);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridAttached);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butClose);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.textTotal);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -400,7 +405,6 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Batch Claim Payment (EOB)";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClaimPayEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormClaimPayEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
@@ -433,10 +437,11 @@ namespace OpenDental{
 		private void FillGrids(){
 			Cursor.Current=Cursors.WaitCursor;
 			//gridAttached:
-			//Get all claims with claimprocs that have "this check attached" i.e. ClaimPaymentNum matches ClaimPaymentCur
+			//Get all claims attached to this check
 			ClaimsAttached=Claims.GetByClaimPayment(ClaimPaymentCur.ClaimPaymentNum);
-			ProcsAttached=new List<int>();
+			List<int> ProcsAttached=new List<int>();//one item per claimAttached object.
 			for(int i=0;i<ClaimsAttached.Count;i++){
+//todo: too many calls to db
 				ProcsAttached.Add(Procedures.GetCountForClaim(ClaimsAttached[i].ClaimNum));
 			}
 			gridAttached.BeginUpdate();
@@ -466,8 +471,7 @@ namespace OpenDental{
 				gridAttached.Rows.Add(row);
 			}
 			gridAttached.EndUpdate();
-			//gridOutstanding:
-			//Get all claims with claimprocs that have SUM(InsPayAmt)<ClaimFee for that claim
+			//gridOutstanding-------------------------------------------------------------------------------------------------
 			ClaimsOutstanding=Claims.GetOutstandingClaims();
 			gridOut.BeginUpdate();
 			gridOut.Columns.Clear();
@@ -493,6 +497,11 @@ namespace OpenDental{
 			}
 			gridOut.EndUpdate();
 			Cursor.Current=Cursors.Default;
+			double total=0;
+			for(int i=0;i<ClaimsAttached.Count;i++) {
+				total+=ClaimsAttached[i].InsPayAmt;
+			}
+			textTotal.Text=total.ToString("F");
 		}
 
 		private void butClaimPayEdit_Click(object sender,EventArgs e) {
@@ -501,24 +510,25 @@ namespace OpenDental{
 			FillClaimPayment();
 		}
 
-		private void butDown_Click(object sender,EventArgs e) {
-			if(gridAttached.GetSelectedIndex()==-1) {
+		private void butDetach_Click(object sender,EventArgs e) {
+			if(gridAttached.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a claim from the attached claims grid above.");
 				return;
 			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Remove these claims from this check? All payments applied to these claims from this check will be set to $0.")) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Remove selected claims from this check?")) {
 				return;
 			}
 			for(int i=0;i<gridAttached.SelectedIndices.Length;i++) {
-				Claim claimCur=Claims.GetClaim(ClaimsAttached[gridAttached.SelectedIndices[i]].ClaimNum);
-				ClaimProcs.DettachClaimPayment(claimCur.ClaimNum,ClaimPaymentCur.ClaimPaymentNum);
+				ClaimProcs.SetForClaim(ClaimsAttached[gridAttached.SelectedIndices[i]].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,DateTime.Now,false);
 			}
 			FillGrids();			
 		}
 
 		private void gridAttached_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//top grid
 			//bring up claimedit window
 			//basically they can only view the claim.
+//todo: Let user edit amounts after attached?
 			Claim claimCur=Claims.GetClaim(ClaimsAttached[gridAttached.GetSelectedIndex()].ClaimNum);
 			FormClaimEdit FormCE=new FormClaimEdit(claimCur,Patients.GetPat(claimCur.PatNum),Patients.GetFamily(claimCur.PatNum));
 			FormCE.ShowDialog();
@@ -527,6 +537,7 @@ namespace OpenDental{
 
 
 		private void gridOut_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//bottom grid
 			//bring up claimedit window
 			//after returning from the claim edit window, use a query to get a list of all the claimprocs that have amounts entered for that claim, but have ClaimPaymentNumber of 0.
 			//Set all those claimprocs to be attached.
@@ -538,12 +549,11 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			//this button is disabled if user does not have permision to edit.
-			if(IsNew){
-				DialogResult=DialogResult.Cancel;//causes claimPayment to be deleted.
+			if(!MsgBox.Show(this,true,"Delete this insurance check?")){
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete this insurance check?")){
+			if(ClaimsAttached.Count!=0) {
+				MsgBox.Show(this,"You may not delete a check with attached claims.");
 				return;
 			}
 			try{
@@ -553,27 +563,12 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			DialogResult=DialogResult.OK;
 		}
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
+		private void butClose_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
-
-		private void FormClaimPayEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			if(DialogResult==DialogResult.OK){
-				return;
-			}
-			if(IsNew){//cancel
-				//ClaimProcs never saved in the first place
-				ClaimPayments.Delete(ClaimPaymentCur);
-			}
-		}
-		
 
 		
 		

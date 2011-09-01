@@ -68,10 +68,11 @@ namespace OpenDentBusiness{
 				+" AND patient.PatNum = claim.PatNum"
 				+" AND insplan.PlanNum = claim.PlanNum"
 				+" AND insplan.CarrierNum = carrier.CarrierNum"
-				+" AND claim.ClaimStatus IN ('S','P')"
+				+" AND claim.ClaimStatus IN ('S','R')"
 				+" AND claim.PreAuthString = ''"
 				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
 				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
+				+" HAVING SUM(claimproc.InsPayAmt)<SUM(claimproc.FeeBilled)"
 				+" ORDER BY claim.DateService";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
