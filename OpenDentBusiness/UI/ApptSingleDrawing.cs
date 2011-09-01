@@ -14,7 +14,7 @@ namespace OpenDentBusiness.UI {
 		public static string PatternShowing;
 
 		///<summary></summary>
-		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,float totalWidth,float totalHeight,string patternShowing,int lineH,int rowsPerIncr,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
+		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,float totalWidth,float totalHeight,int lineH,int rowsPerIncr,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
 			Pen penB=new Pen(Color.Black);
 			Pen penW=new Pen(Color.White);
 			Pen penGr=new Pen(Color.SlateGray);
@@ -53,8 +53,8 @@ namespace OpenDentBusiness.UI {
 			g.DrawLine(penB,7,0,7,totalHeight);
 			Pen penTimediv=Pens.Silver;
 			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
-			for(int i=0;i<patternShowing.Length;i++) {//Info.MyApt.Pattern.Length;i++){
-				if(patternShowing.Substring(i,1)=="X") {
+			for(int i=0;i<PatternShowing.Length;i++) {//Info.MyApt.Pattern.Length;i++){
+				if(PatternShowing.Substring(i,1)=="X") {
 					g.FillRectangle(new SolidBrush(provColor),1,i*lineH+1,6,lineH);
 				}
 				else {
@@ -594,87 +594,16 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static Point GetLocation(bool isWeeklyView,float colAptWidth,float colDayWidth,float apptWidth,ref float apptHeight,float colWidth,ref string patternShowing,int lineH,int rowsPerIncr,DataRow dataRoww,float timeWidth,List<Operatory> visOps,float provWidth,int provCount,DateTime startTime,DateTime stopTime) {
-			Point location;
-			if(isWeeklyView) {
-				apptWidth=colAptWidth;
-				location=new Point(ConvertToX(isWeeklyView,dataRoww,timeWidth,colWidth,colAptWidth,colDayWidth,provWidth,provCount,visOps),
-					ConvertToY(lineH,rowsPerIncr,dataRoww,startTime,stopTime));
-			}
-			else {
-				location=new Point(ConvertToX(isWeeklyView,dataRoww,timeWidth,colWidth,colAptWidth,colDayWidth,provWidth,provCount,visOps)+2,
-					ConvertToY(lineH,rowsPerIncr,dataRoww,startTime,stopTime));
-				apptWidth=colWidth-5;
-			}
-			SetSize(out patternShowing,lineH,rowsPerIncr,out apptHeight,dataRoww);
-			return location;
-		}
-
-		///<summary>Used from SetLocation.</summary>
-		private static void SetSize(out string patternShowing,int lineH,int rowsPerIncr,out float apptHeight,DataRow dataRoww) {
-			patternShowing=GetPatternShowing(dataRoww["Pattern"].ToString(),rowsPerIncr);
-			//height is based on original 5 minute pattern. Might result in half-rows
-			apptHeight=dataRoww["Pattern"].ToString().Length*lineH*rowsPerIncr;
-			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
-				apptHeight=apptHeight/2;
-			}
-			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
-				apptHeight=apptHeight/3;
-			}
-		}
-
-		///<summary>Called from SetLocation to establish X position of control.</summary>
-		private static int ConvertToX(bool isWeeklyView,DataRow dataRoww,float timeWidth,float colWidth,float colAptWidth,float colDayWidth,float provWidth,int provCount,List<Operatory> visOps) {
-			if(isWeeklyView) {
-				//the next few lines are because we start on Monday instead of Sunday
-				int dayofweek=(int)PIn.DateT(dataRoww["AptDateTime"].ToString()).DayOfWeek-1;
-				if(dayofweek==-1) {
-					dayofweek=6;
-				}
-				return (int)timeWidth
-					+(int)colDayWidth*(dayofweek)+1
-					+((int)colAptWidth*GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps));
-			}
-			else {
-				return (int)timeWidth+(int)provWidth*provCount+(int)colWidth*(GetIndexOp(PIn.Long(dataRoww["Op"].ToString()),visOps))+1;
-			}
-		}
-
-		///<summary>Called from SetLocation to establish Y position of control.</summary>
-		private static int ConvertToY(int lineH,int rowsPerIncr,DataRow dataRoww,DateTime startTime,DateTime stopTime) {
-			DateTime aptDateTime=PIn.DateT(dataRoww["AptDateTime"].ToString());
-			//TODO: Have a way to show appointments for a specific time frame.
-			int retVal=2000;//Off the page. This is temporary to get a feel getting appointments at the corresponding start and stop X,Y locations.
-			int stopHour=stopTime.Hour;
-			if(stopHour==0) {
-				stopHour=24;
-			}
-			if(aptDateTime.Hour>=startTime.Hour && aptDateTime.Hour<stopHour) {
-				retVal=(int)((((double)aptDateTime.Hour-startTime.Hour)*(double)60
-					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
-					+(double)aptDateTime.Minute
-					/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
-					)*(double)lineH*rowsPerIncr);
-			}
-			return retVal;
-		}
-
-		///<summary>This converts the dbPattern in 5 minute interval into the pattern that will be viewed based on RowsPerIncrement and AppointmentTimeIncrement.  So it will always depend on the current view.Therefore, it should only be used for visual display purposes rather than within the FormAptEdit. If height of appointment allows a half row, then this includes an increment for that half row.</summary>
-		public static string GetPatternShowing(string dbPattern,int rowsPerIncr) {
-			StringBuilder strBTime=new StringBuilder();
-			for(int i=0;i<dbPattern.Length;i++) {
-				for(int j=0;j<rowsPerIncr;j++) {
-					strBTime.Append(dbPattern.Substring(i,1));
-				}
-				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
-					i++;//skip
-				}
-				if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==15) {
-					i++;
-					i++;//skip two
-				}
-			}
-			return strBTime.ToString();
+		public static Point GetLocation(DataRow dataRoww,DateTime startTime,DateTime stopTime) {
+		  Point location;
+		  if(ApptDrawing.IsWeeklyView) {
+		    location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
+		  }
+		  else {
+		    location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
+		  }
+		  SetSize(dataRoww);
+		  return location;
 		}
 
 		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>

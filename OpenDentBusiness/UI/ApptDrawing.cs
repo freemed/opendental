@@ -226,6 +226,9 @@ namespace OpenDentBusiness.UI {
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*LineH/MinPerRow);
 					}
 					else {
+						if(GetIndexOp(schedForType[i].Ops[o])==-1){
+							continue;//don't display if op not visible
+						}
 						rect=new RectangleF(
 							TimeWidth+ProvWidth*ProvCount
 							+ColWidth*GetIndexOp(schedForType[i].Ops[o],VisOps)+1

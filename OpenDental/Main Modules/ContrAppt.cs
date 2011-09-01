@@ -1484,10 +1484,10 @@ namespace OpenDental {
 						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
 					}
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
-						string pattern=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
+						ApptSingleDrawing.PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 						int startIndex=ApptSingleDrawing.ConvertToY(row)/ApptDrawing.LineH;//rounds down
-						for(int k=0;k<pattern.Length;k++) {
-							if(pattern.Substring(k,1)=="X") {
+						for(int k=0;k<ApptSingleDrawing.PatternShowing.Length;k++) {
+							if(ApptSingleDrawing.PatternShowing.Substring(k,1)=="X") {
 								try {
 									ApptDrawing.ProvBar[indexProv][startIndex+k]++;
 								}
@@ -2614,10 +2614,10 @@ namespace OpenDental {
 			}
 			//if operatories were just hidden and VisOps is mismatched with ListShort
 			int xOp=ApptDrawing.XPosToOpIdx(point.X);
-			if(xOp>OperatoryC.ListShort.Count-1) {
+			if(xOp>ApptDrawing.VisOps.Count-1) {
 				return 0;
 			}
-			long op=OperatoryC.ListShort[xOp].OperatoryNum;
+			long op=ApptDrawing.VisOps[xOp].OperatoryNum;
 			int hour=ApptDrawing.YPosToHour(point.Y);
 			int minute=ApptDrawing.YPosToMin(point.Y);
 			TimeSpan time=new TimeSpan(hour,minute,0);
@@ -3828,10 +3828,10 @@ namespace OpenDental {
 						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
 					}
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
-						string pattern=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
+						ApptSingleDrawing.PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 						int startIndex=ApptSingleDrawing.ConvertToY(row)/fontSize;//rounds down
-						for(int k=0;k<pattern.Length;k++) {
-							if(pattern.Substring(k,1)=="X") {
+						for(int k=0;k<ApptSingleDrawing.PatternShowing.Length;k++) {
+							if(ApptSingleDrawing.PatternShowing.Substring(k,1)=="X") {
 								try {
 									ApptDrawing.ProvBar[indexProv][startIndex+k]++;
 								}
@@ -3855,13 +3855,13 @@ namespace OpenDental {
 				bool isSelected=ContrApptSingle3[i].IsSelected;
 				bool thisIsPinBoard=ContrApptSingle3[i].ThisIsPinBoard;
 				int selectedAptNum=-1;//Never select an apt for printing.
-				string patternShowing="";
+				//string patternShowing="";
 				DataRow dataRoww=DS.Tables["Appointments"].Rows[i];
-				Point location=ApptSingleDrawing.GetLocation(ApptDrawing.IsWeeklyView,ApptDrawing.ColAptWidth,ApptDrawing.ColDayWidth,apptWidth,ref apptHeight,ApptDrawing.ColWidth,
-					ref patternShowing,fontSize,rowsPerIncr,dataRoww,ApptDrawing.TimeWidth,ApptDrawing.VisOps,ApptDrawing.ProvWidth,ApptDrawing.ProvCount,apptPrintStartTime,apptPrintStopTime);
+				Point location=ApptSingleDrawing.GetLocation(dataRoww,apptPrintStartTime,apptPrintStopTime);
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(location.X,location.Y+100);//100 to compensate for print header.
-				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,apptWidth,apptHeight,patternShowing,fontSize,rowsPerIncr,
+				//ApptSingleDrawing.PatternShowing=patternShowing;
+				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,apptWidth,apptHeight,fontSize,rowsPerIncr,
 					isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
 			}
 
