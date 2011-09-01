@@ -13,7 +13,7 @@ namespace OpenDentBusiness.UI {
 		public static Point Location;
 
 		///<summary></summary>
-		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,int lineH,int rowsPerIncr,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
+		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
 			Pen penB=new Pen(Color.Black);
 			Pen penW=new Pen(Color.White);
 			Pen penGr=new Pen(Color.SlateGray);
@@ -54,13 +54,13 @@ namespace OpenDentBusiness.UI {
 			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
 			for(int i=0;i<patternShowing.Length;i++) {//Info.MyApt.Pattern.Length;i++){
 				if(patternShowing.Substring(i,1)=="X") {
-					g.FillRectangle(new SolidBrush(provColor),1,i*lineH+1,6,lineH);
+					g.FillRectangle(new SolidBrush(provColor),1,i*ApptDrawing.LineH+1,6,ApptDrawing.LineH);
 				}
 				else {
 					//leave empty
 				}
-				if(Math.IEEERemainder((double)i,(double)rowsPerIncr)==0) {//0/1
-					g.DrawLine(penTimediv,1,i*lineH,6,i*lineH);
+				if(Math.IEEERemainder((double)i,(double)ApptDrawing.RowsPerIncr)==0) {//0/1
+					g.DrawLine(penTimediv,1,i*ApptDrawing.LineH,6,i*ApptDrawing.LineH);
 				}
 			}
 			//Highlighting border
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.UI {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,lineH,totalWidth);//set the drawLoc to a new point, based on space used by element
+				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth);//set the drawLoc to a new point, based on space used by element
 				elementI++;
 			}
 			//UR
@@ -97,7 +97,7 @@ namespace OpenDentBusiness.UI {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,lineH,totalWidth);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth);
 				elementI++;
 			}
 			//LR
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.UI {
 					elementI--;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,lineH,totalWidth);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth);
 				elementI--;
 			}
 			//Main outline
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,int lineH,float totalWidth) {
+		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,float totalWidth) {
 			Font baseFont=new Font("Arial",8);
 			string text="";
 			bool isNote=false;
@@ -417,7 +417,7 @@ namespace OpenDentBusiness.UI {
 					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(drawLoc,noteSize);
 					g.DrawString(text,baseFont,brush,rect,format);
-					return new Point(drawLoc.X,drawLoc.Y+linesFilled*lineH);
+					return new Point(drawLoc.X,drawLoc.Y+linesFilled*ApptDrawing.LineH);
 				}
 			}
 			else if(align==ApptViewAlignment.UR) {
@@ -441,14 +441,14 @@ namespace OpenDentBusiness.UI {
 					}
 					else {
 						noteSize=g.MeasureString(text,baseFont,(int)w);
-						noteSize=new SizeF(noteSize.Width,lineH+1);//only allowed to be one line high.
+						noteSize=new SizeF(noteSize.Width,ApptDrawing.LineH+1);//only allowed to be one line high.
 						if(noteSize.Width<5) {
 							noteSize=new SizeF(5,noteSize.Height);
 						}
 						//g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y);//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
-						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,lineH);
+						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,ApptDrawing.LineH);
 						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
 							|| apptRows[elementI].ElementDesc=="HasIns[I]"
 							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
@@ -460,7 +460,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
-						return new Point(drawLoc.X,drawLoc.Y+lineH);//move down a certain number of lines for next element.
+						return new Point(drawLoc.X,drawLoc.Y+ApptDrawing.LineH);//move down a certain number of lines for next element.
 					}
 				}
 				else {//horizontal
@@ -483,13 +483,13 @@ namespace OpenDentBusiness.UI {
 					}
 					else {
 						noteSize=g.MeasureString(text,baseFont,w);
-						noteSize=new SizeF(noteSize.Width,lineH+1);//only allowed to be one line high.  Needs an extra pixel.
+						noteSize=new SizeF(noteSize.Width,ApptDrawing.LineH+1);//only allowed to be one line high.  Needs an extra pixel.
 						if(noteSize.Width<5) {
 							noteSize=new SizeF(5,noteSize.Height);
 						}
 						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y);//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
-						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,lineH);
+						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,ApptDrawing.LineH);
 						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
 							|| apptRows[elementI].ElementDesc=="HasIns[I]"
 							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
@@ -511,7 +511,7 @@ namespace OpenDentBusiness.UI {
 					if(isGraphic) {
 						Bitmap bitmap=new Bitmap(12,12);
 						noteSize=new SizeF(bitmap.Width,bitmap.Height);
-						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y+1-lineH);//upper left corner of this element
+						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y+1-ApptDrawing.LineH);//upper left corner of this element
 						rect=new RectangleF(drawLoc,noteSize);
 						using(Graphics gfx=Graphics.FromImage(bitmap)) {
 							gfx.SmoothingMode=SmoothingMode.HighQuality;
@@ -526,14 +526,14 @@ namespace OpenDentBusiness.UI {
 					}
 					else {
 						noteSize=g.MeasureString(text,baseFont,(int)w);
-						noteSize=new SizeF(noteSize.Width,lineH+1);//only allowed to be one line high.  Needs an extra pixel.
+						noteSize=new SizeF(noteSize.Width,ApptDrawing.LineH+1);//only allowed to be one line high.  Needs an extra pixel.
 						if(noteSize.Width<5) {
 							noteSize=new SizeF(5,noteSize.Height);
 						}
 						//g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
-						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y-lineH);//upper left corner of this element
+						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y-ApptDrawing.LineH);//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
-						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,lineH);
+						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,ApptDrawing.LineH);
 						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
 							|| apptRows[elementI].ElementDesc=="HasIns[I]"
 							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
@@ -545,7 +545,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
-						return new Point(drawLoc.X,drawLoc.Y-lineH);//move up a certain number of lines for next element.
+						return new Point(drawLoc.X,drawLoc.Y-ApptDrawing.LineH);//move up a certain number of lines for next element.
 					}
 				}
 				else {//horizontal
@@ -553,7 +553,7 @@ namespace OpenDentBusiness.UI {
 					if(isGraphic) {
 						Bitmap bitmap=new Bitmap(12,12);
 						noteSize=new SizeF(bitmap.Width,bitmap.Height);
-						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width+1,drawLoc.Y+1-lineH);//upper left corner of this element
+						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width+1,drawLoc.Y+1-ApptDrawing.LineH);//upper left corner of this element
 						rect=new RectangleF(drawLoc,noteSize);
 						using(Graphics gfx=Graphics.FromImage(bitmap)) {
 							gfx.SmoothingMode=SmoothingMode.HighQuality;
@@ -568,13 +568,13 @@ namespace OpenDentBusiness.UI {
 					}
 					else {
 						noteSize=g.MeasureString(text,baseFont,w);
-						noteSize=new SizeF(noteSize.Width,lineH+1);//only allowed to be one line high.  Needs an extra pixel.
+						noteSize=new SizeF(noteSize.Width,ApptDrawing.LineH+1);//only allowed to be one line high.  Needs an extra pixel.
 						if(noteSize.Width<5) {
 							noteSize=new SizeF(5,noteSize.Height);
 						}
-						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y-lineH);//upper left corner of this element
+						Point drawLocThis=new Point(drawLoc.X-(int)noteSize.Width,drawLoc.Y-ApptDrawing.LineH);//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
-						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,lineH);
+						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,ApptDrawing.LineH);
 						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
 							|| apptRows[elementI].ElementDesc=="HasIns[I]"
 							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
@@ -594,15 +594,15 @@ namespace OpenDentBusiness.UI {
 
 		///<summary></summary>
 		public static Point GetLocation(DataRow dataRoww,DateTime startTime,DateTime stopTime) {
-		  Point location;
-		  if(ApptDrawing.IsWeeklyView) {
-		    location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
-		  }
-		  else {
-		    location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
-		  }
-		  SetSize(dataRoww);
-		  return location;
+			Point location;
+			if(ApptDrawing.IsWeeklyView) {
+				location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
+			}
+			else {
+				location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
+			}
+			SetSize(dataRoww);
+			return location;
 		}
 
 		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
@@ -615,9 +615,6 @@ namespace OpenDentBusiness.UI {
 			return -1;
 		}
 
-		#region PulledOut
-
-		//ContrApptSingle.cs line 95
 		///<summary>This is only called when viewing appointments on the Appt module.  For Planned apt and pinboard, use SetSize instead so that the location won't change.</summary>
 		public static Point SetLocation(DataRow dataRoww) {
 			if(ApptDrawing.IsWeeklyView) {
@@ -631,7 +628,6 @@ namespace OpenDentBusiness.UI {
 			return Location;
 		}
 
-		//ContrApptSingle.cs line 108
 		///<summary>Used from SetLocation. Also used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
 		public static Size SetSize(DataRow dataRoww) {
 			//height is based on original 5 minute pattern. Might result in half-rows
@@ -648,7 +644,6 @@ namespace OpenDentBusiness.UI {
 			return new Size((int)ApptSingleWidth,(int)ApptSingleHeight);
 		}
 
-		//ContrApptSingle.cs line 132
 		///<summary>Called from SetLocation to establish X position of control.</summary>
 		public static int ConvertToX(DataRow dataRoww) {
 			if(ApptDrawing.IsWeeklyView) {
@@ -668,7 +663,6 @@ namespace OpenDentBusiness.UI {
 			}
 		}
 
-		//ContrApptSingle.cs line 151
 		///<summary>Called from SetLocation to establish Y position of control.  Also called from ContrAppt.RefreshDay when determining ProvBar markings. Does not round to the nearest row.</summary>
 		public static int ConvertToY(DataRow dataRoww) {
 			DateTime aptDateTime=PIn.DateT(dataRoww["AptDateTime"].ToString());
@@ -680,7 +674,6 @@ namespace OpenDentBusiness.UI {
 			return retVal;
 		}
 
-		//ContrApptSingle.cs line 162
 		///<summary>This converts the dbPattern in 5 minute interval into the pattern that will be viewed based on RowsPerIncrement and AppointmentTimeIncrement.  So it will always depend on the current view.Therefore, it should only be used for visual display purposes rather than within the FormAptEdit. If height of appointment allows a half row, then this includes an increment for that half row.</summary>
 		public static string GetPatternShowing(string dbPattern) {
 			StringBuilder strBTime=new StringBuilder();
@@ -698,8 +691,6 @@ namespace OpenDentBusiness.UI {
 			}
 			return strBTime.ToString();
 		}
-
-		#endregion
 
 
 	}

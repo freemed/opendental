@@ -51,8 +51,7 @@ namespace OpenDentBusiness.UI {
 		public static float ApptSheetWidth;//Temp name so I don't mix up Widths.
 
 		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.</summary>
-		public static void DrawAllButAppts(Graphics g,float totalHeight,int fontSize,bool showRedTimeLine,DateTime startTime,DateTime stopTime) 
-		{
+		public static void DrawAllButAppts(Graphics g,float totalHeight,int fontSize,bool showRedTimeLine,DateTime startTime,DateTime stopTime) {
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,totalHeight);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,totalHeight);//R time bar
 			DrawMainBackground(g,totalHeight);
@@ -211,6 +210,9 @@ namespace OpenDentBusiness.UI {
 					//if(aptDateTime.Hour>=startTime.Hour && aptDateTime.Hour<stopHour) {
 
 					if(IsWeeklyView) {
+						if(GetIndexOp(schedForType[i].Ops[o])==-1) {
+							continue;//don't display if op not visible
+						}
 						//this is a workaround because we start on Monday:
 						int dayofweek=(int)schedForType[i].SchedDate.DayOfWeek-1;
 						if(dayofweek==-1) {
@@ -226,7 +228,7 @@ namespace OpenDentBusiness.UI {
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*LineH/MinPerRow);
 					}
 					else {
-						if(GetIndexOp(schedForType[i].Ops[o])==-1){
+						if(GetIndexOp(schedForType[i].Ops[o])==-1) {
 							continue;//don't display if op not visible
 						}
 						rect=new RectangleF(
@@ -264,7 +266,7 @@ namespace OpenDentBusiness.UI {
 			}
 			return -1;
 		}
-		
+
 		///<summary>The background provider schedules for the provider bars on the left.</summary>
 		public static void DrawProvScheds(Graphics g,DateTime startTime,DateTime stopTime) {
 			Brush openBrush;
@@ -475,41 +477,36 @@ namespace OpenDentBusiness.UI {
 
 		///<summary></summary>
 		public static float ComputeColWidth(float totalWidth,int colsPerPage) {
-		  if(colsPerPage<1) {
-		    return 0;
-		  }
-		  return (totalWidth-TimeWidth*2-ProvWidth*ProvCount)/colsPerPage;
+			if(colsPerPage<1) {
+				return 0;
+			}
+			return (totalWidth-TimeWidth*2-ProvWidth*ProvCount)/colsPerPage;
 		}
-		
+
 		///<summary></summary>
 		public static float ComputeColDayWidth(float totalWidth) {
 			return (totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
 		}
-		
+
 		///<summary></summary>
 		public static float ComputeColAptWidth(float ColDayWidth,int colsPerPage) {
 			return (float)(ColDayWidth-1)/(float)colsPerPage;
 		}
-		
+
 		///<summary></summary>
 		public static int ComputeLineHeight(int fontSize) {
 			Font baseFont=new Font("Arial",fontSize);
 			return baseFont.Height;
 		}
 
-
-
-		#region PulledOut
-
-		//ContrApptSheet.cs line 147
 		///<summary></summary>
 		public static int XPosToOpIdx(int xPos) {
 			int retVal;
-			if(IsWeeklyView){
+			if(IsWeeklyView) {
 				int day=XPosToDay(xPos);
 				retVal=(int)Math.Floor((double)(xPos-TimeWidth-day*ColDayWidth)/ColAptWidth);
 			}
-			else{
+			else {
 				retVal=(int)Math.Floor((double)(xPos-TimeWidth-ProvWidth*ProvCount)/ColWidth);
 			}
 			if(retVal>ColCount-1)
@@ -519,10 +516,9 @@ namespace OpenDentBusiness.UI {
 			return retVal;
 		}
 
-		//ContrApptSheet.cs line 164
 		///<summary>If not weekview, then it always returns 0.  If weekview, then it gives the dayofweek as int. Always based on current view, so 0 will be first day showing.</summary>
-		public static int XPosToDay(int xPos){
-			if(!IsWeeklyView){
+		public static int XPosToDay(int xPos) {
+			if(!IsWeeklyView) {
 				return 0;
 			}
 			int retVal=(int)Math.Floor((double)(xPos-TimeWidth)/ColDayWidth);
@@ -532,28 +528,25 @@ namespace OpenDentBusiness.UI {
 				retVal=0;
 			return retVal;
 		}
-		
-		//ContrApptSheet.cs line 177
+
 		///<summary>Called when mouse down anywhere on apptSheet. Automatically rounds down.</summary>
-		public static int YPosToHour(int yPos){
+		public static int YPosToHour(int yPos) {
 			int retVal=yPos/LineH/RowsPerHr;//newY/LineH/6;
 			return retVal;
 		}
-		
-		//ContrApptSheet.cs line 183
+
 		///<summary>Called when mouse down anywhere on apptSheet. This will give very precise minutes. It is not rounded for accuracy.</summary>
-		public static int YPosToMin(int yPos){
+		public static int YPosToMin(int yPos) {
 			int hourPortion=YPosToHour(yPos)*LineH*RowsPerHr;
 			float MinPerPixel=60/(float)LineH/(float)RowsPerHr;
 			int minutes=(int)((yPos-hourPortion)*MinPerPixel);
 			return minutes;
 		}
-		
-		//ContrApptSheet.cs line 191
+
 		///<summary>Used when dropping an appointment to a new location.  Converts x-coordinate to operatory index of ApptCatItems.VisOps, rounding to the nearest.  In this respect it is very different from XPosToOp.</summary>
-		public static int ConvertToOp(int newX){
+		public static int ConvertToOp(int newX) {
 			int retVal=0;
-			if(IsWeeklyView){
+			if(IsWeeklyView) {
 				int dayI=XPosToDay(newX);//does not round
 				int deltaDay=dayI*(int)ColDayWidth;
 				int adjustedX=newX-(int)TimeWidth-deltaDay;
@@ -563,7 +556,7 @@ namespace OpenDentBusiness.UI {
 					retVal=0;
 				}
 			}
-			else{
+			else {
 				retVal=(int)Math.Round((double)(newX-TimeWidth-ProvWidth*ProvCount)/ColWidth);
 			}
 			//make sure it's not outside bounds of array:
@@ -573,13 +566,12 @@ namespace OpenDentBusiness.UI {
 				retVal=0;
 			return retVal;
 		}
-		
-		//ContrApptSheet.cs line 215
+
 		///<summary>Used when dropping an appointment to a new location.  Converts x-coordinate to day index.  Only used in weekly view.</summary>
 		public static int ConvertToDay(int newX) {
 			int retVal=(int)Math.Floor((double)(newX-TimeWidth)/(double)ColDayWidth);
 			//the above works for every situation except when in the right half of the last op for a day. Test for that situation:
-			if(newX-TimeWidth > (retVal+1)*ColDayWidth-ColAptWidth/2){
+			if(newX-TimeWidth > (retVal+1)*ColDayWidth-ColAptWidth/2) {
 				retVal++;
 			}
 			//make sure it's not outside bounds of array:
@@ -589,17 +581,15 @@ namespace OpenDentBusiness.UI {
 				retVal=0;
 			return retVal;
 		}
-		
-		//ContrApptSheet.cs line 230
+
 		///<summary>Used when dropping an appointment to a new location. Rounds to the nearest increment.</summary>
-		public static int ConvertToHour(int newY){
+		public static int ConvertToHour(int newY) {
 			//return (int)((newY+LineH/2)/6/LineH);
 			return (int)(((double)newY+(double)LineH*(double)RowsPerIncr/2)/(double)RowsPerHr/(double)LineH);
 		}
-		
-		//ContrApptSheet.cs line 236
+
 		///<summary>Used when dropping an appointment to a new location. Rounds to the nearest increment.</summary>
-		public static int ConvertToMin(int newY){
+		public static int ConvertToMin(int newY) {
 			//int retVal=(int)(Decimal.Remainder(newY,6*LineH)/LineH)*10;
 			//first, add pixels equivalent to 1/2 increment: newY+LineH*RowsPerIncr/2
 			//Yloc     Height     Rows      1
@@ -620,63 +610,61 @@ namespace OpenDentBusiness.UI {
 			//  1      pixels     Rows
 			int increments=(int)((double)pixels/(double)LineH/(double)RowsPerIncr);
 			//Convert increments to minutes: increments*MinPerIncr
-      int retVal=increments*MinPerIncr;
+			int retVal=increments*MinPerIncr;
 			if(retVal==60)
 				return 0;
 			return retVal;
 		}
 
-		//ContrApptSheet.cs line 299
 		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. So, whenever appt Module layout and when comboView is changed.</summary>
-		public static void ComputeColWidth(int totalWidth){
-		  if(VisOps==null || VisProvs==null){
-		    return;
-		  }
-		  try{
-		    if(RowsPerIncr==0)
-		      RowsPerIncr=1;
-		    ColCount=VisOps.Count;
-		    if(IsWeeklyView){
-		      //ColCount=NumOfWeekDaysToDisplay;
-		      ProvCount=0;
-		    }
-		    else{
-		      ProvCount=VisProvs.Count;
-		    }
-		    if(ColCount==0) {
-		      ColWidth=0;
-		    }
-		    else {
-		      if(IsWeeklyView){
-		        ColDayWidth=(totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
-		        ColAptWidth=(float)(ColDayWidth-1)/(float)ColCount;
-		        ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
-		      }
-		      else{
-		        ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
-		      }
-		    }
-		    MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
-		    MinPerRow=MinPerIncr/RowsPerIncr;
-		    RowsPerHr=60/MinPerIncr*RowsPerIncr;
-		    //if(TwoRowsPerIncrement){
-		      //MinPerRow=MinPerRow/2;
-		      //RowsPerHr=RowsPerHr*2;
-		    //}
-		    ApptSheetHeight=LineH*24*RowsPerHr;
-		    if(IsWeeklyView){
-		      ApptSheetWidth=TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay;
-		    }
-		    else{
-		      ApptSheetWidth=TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount;
-		    }
-		  }
-		  catch{
-		    MessageBox.Show("error computing width");
-		  }
+		public static void ComputeColWidth(int totalWidth) {
+			if(VisOps==null || VisProvs==null) {
+				return;
+			}
+			try {
+				if(RowsPerIncr==0)
+					RowsPerIncr=1;
+				ColCount=VisOps.Count;
+				if(IsWeeklyView) {
+					//ColCount=NumOfWeekDaysToDisplay;
+					ProvCount=0;
+				}
+				else {
+					ProvCount=VisProvs.Count;
+				}
+				if(ColCount==0) {
+					ColWidth=0;
+				}
+				else {
+					if(IsWeeklyView) {
+						ColDayWidth=(totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
+						ColAptWidth=(float)(ColDayWidth-1)/(float)ColCount;
+						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+					}
+					else {
+						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+					}
+				}
+				MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
+				MinPerRow=MinPerIncr/RowsPerIncr;
+				RowsPerHr=60/MinPerIncr*RowsPerIncr;
+				//if(TwoRowsPerIncrement){
+				//MinPerRow=MinPerRow/2;
+				//RowsPerHr=RowsPerHr*2;
+				//}
+				ApptSheetHeight=LineH*24*RowsPerHr;
+				if(IsWeeklyView) {
+					ApptSheetWidth=TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay;
+				}
+				else {
+					ApptSheetWidth=TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount;
+				}
+			}
+			catch {
+				MessageBox.Show("error computing width");
+			}
 		}
 
-		//ApptViewItemL.cs line 212
 		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in VisOps.</summary>
 		public static int GetIndexOp(long opNum) {
 			//No need to check RemotingRole; no call to db.
@@ -686,9 +674,6 @@ namespace OpenDentBusiness.UI {
 			}
 			return -1;
 		}
-
-		#endregion
-
 
 
 	}

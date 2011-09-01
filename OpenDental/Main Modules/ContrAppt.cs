@@ -2732,6 +2732,7 @@ namespace OpenDental {
 					Controls.Add(TempApptSingle);
 					TempApptSingle.Location=ApptSingleDrawing.SetLocation(TempApptSingle.DataRoww);
 					TempApptSingle.Size=ApptSingleDrawing.SetSize(TempApptSingle.DataRoww);
+					TempApptSingle.PatternShowing=ApptSingleDrawing.GetPatternShowing(TempApptSingle.DataRoww["Pattern"].ToString());
 					TempApptSingle.BringToFront();
 					//mouseOrigin is in ApptSheet coordinates
 					mouseOrigin=e.Location;
@@ -3765,7 +3766,7 @@ namespace OpenDental {
 			bool showProvBar=true;
 			int[][] provBars=ApptDrawing.ProvBar;
 			float totalWidth=bounds.Width;
-			int fontSize=ApptDrawing.ComputeLineHeight(apptPrintFontSize);//Measure the font to determine the line height.
+			ApptDrawing.LineH=ApptDrawing.ComputeLineHeight(apptPrintFontSize);//Measure the font to determine the line height.
 			int rowsPerIncr=ApptDrawing.RowsPerIncr;
 			ApptDrawing.ColDayWidth=0;
 			if(ApptDrawing.IsWeeklyView) {
@@ -3788,13 +3789,13 @@ namespace OpenDental {
 			if(stopHour==0) {
 				stopHour=24;
 			}
-			int totalHeight=fontSize*rowsPerHr*(stopHour-startHour);
+			int totalHeight=ApptDrawing.LineH*rowsPerHr*(stopHour-startHour);
 			//Figure out how many pages are needed to print. (maybe do both across and tall)
 			int pagesAcross=(int)Math.Ceiling((double)ApptDrawing.VisOps.Count/(double)apptPrintColsPerPage);
 			int pagesTall=(int)Math.Ceiling((double)totalHeight/(double)(bounds.Height-100));//-100 for the header on every page.
 			DrawPrintingHeader(e.Graphics,ApptDrawing.ColWidth,ApptDrawing.TimeWidth,ApptDrawing.ProvWidth,ApptDrawing.ProvCount,apptPrintColsPerPage,ApptDrawing.VisOps,ApptDrawing.IsWeeklyView);
 			e.Graphics.TranslateTransform(0,100);
-			ApptDrawing.DrawAllButAppts(e.Graphics,totalHeight,fontSize,false,apptPrintStartTime,apptPrintStopTime);
+			ApptDrawing.DrawAllButAppts(e.Graphics,totalHeight,ApptDrawing.LineH,false,apptPrintStartTime,apptPrintStopTime);
 
 			//Now to draw the appointments:
 			#region ApptSingleDrawing
@@ -3831,7 +3832,7 @@ namespace OpenDental {
 					}
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
 						ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
-						int startIndex=ApptSingleDrawing.ConvertToY(row)/fontSize;//rounds down
+						int startIndex=ApptSingleDrawing.ConvertToY(row)/ApptDrawing.LineH;//rounds down
 						for(int k=0;k<ContrApptSingle3[i].PatternShowing.Length;k++) {
 							if(ContrApptSingle3[i].PatternShowing.Substring(k,1)=="X") {
 								try {
@@ -3863,7 +3864,7 @@ namespace OpenDental {
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(location.X,location.Y+100);//100 to compensate for print header.
 				//ApptSingleDrawing.PatternShowing=patternShowing;
-				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString()),apptWidth,apptHeight,fontSize,rowsPerIncr,
+				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString()),apptWidth,apptHeight,
 					isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
 			}
 
