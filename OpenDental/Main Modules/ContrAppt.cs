@@ -1439,6 +1439,10 @@ namespace OpenDental {
 				return;
 			}
 			Calendar2.SetSelectionRange(startDate,endDate);
+			ApptDrawing.ProvBar=new int[ApptDrawing.VisProvs.Count][];
+			for(int i=0;i<ApptDrawing.VisProvs.Count;i++) {
+				ApptDrawing.ProvBar[i]=new int[24*ApptDrawing.RowsPerHr]; //[144]; or 24*6
+			}
 			if(ContrApptSingle3!=null) {//I think this is not needed.
 				for(int i=0;i<ContrApptSingle3.Length;i++) {
 					if(ContrApptSingle3[i]!=null) {
@@ -1454,10 +1458,6 @@ namespace OpenDental {
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
 			int indexProv;
 			DataRow row;
-			ApptDrawing.ProvBar=new int[ApptDrawing.VisProvs.Count][];
-			for(int i=0;i<ApptDrawing.VisProvs.Count;i++) {
-				ApptDrawing.ProvBar[i]=new int[24*ApptDrawing.RowsPerHr]; //[144]; or 24*6
-			}
 			//for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 			//TODO: Try and move if(!isWeeklyView) around lines 1407-1430 here.
 			//}
@@ -1483,11 +1483,11 @@ namespace OpenDental {
 					else {
 						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
 					}
+					ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
-						ApptSingleDrawing.PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 						int startIndex=ApptSingleDrawing.ConvertToY(row)/ApptDrawing.LineH;//rounds down
-						for(int k=0;k<ApptSingleDrawing.PatternShowing.Length;k++) {
-							if(ApptSingleDrawing.PatternShowing.Substring(k,1)=="X") {
+						for(int k=0;k<ContrApptSingle3[i].PatternShowing.Length;k++) {
+							if(ContrApptSingle3[i].PatternShowing.Substring(k,1)=="X") {
 								try {
 									ApptDrawing.ProvBar[indexProv][startIndex+k]++;
 								}
@@ -3728,6 +3728,7 @@ namespace OpenDental {
 					PrintReport();
 				}
 			}
+			ModuleSelected(0);//Refresh the public variables in ApptDrawing.cs
 		}
 
 		///<summary></summary>
@@ -3828,10 +3829,10 @@ namespace OpenDental {
 						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
 					}
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
-						ApptSingleDrawing.PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
+						ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 						int startIndex=ApptSingleDrawing.ConvertToY(row)/fontSize;//rounds down
-						for(int k=0;k<ApptSingleDrawing.PatternShowing.Length;k++) {
-							if(ApptSingleDrawing.PatternShowing.Substring(k,1)=="X") {
+						for(int k=0;k<ContrApptSingle3[i].PatternShowing.Length;k++) {
+							if(ContrApptSingle3[i].PatternShowing.Substring(k,1)=="X") {
 								try {
 									ApptDrawing.ProvBar[indexProv][startIndex+k]++;
 								}
@@ -3861,7 +3862,7 @@ namespace OpenDental {
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(location.X,location.Y+100);//100 to compensate for print header.
 				//ApptSingleDrawing.PatternShowing=patternShowing;
-				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,apptWidth,apptHeight,fontSize,rowsPerIncr,
+				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString()),apptWidth,apptHeight,fontSize,rowsPerIncr,
 					isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
 			}
 

@@ -11,10 +11,9 @@ namespace OpenDentBusiness.UI {
 		public static float ApptSingleHeight;
 		public static float ApptSingleWidth;
 		public static Point Location;
-		public static string PatternShowing;
 
 		///<summary></summary>
-		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,float totalWidth,float totalHeight,int lineH,int rowsPerIncr,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
+		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,int lineH,int rowsPerIncr,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
 			Pen penB=new Pen(Color.Black);
 			Pen penW=new Pen(Color.White);
 			Pen penGr=new Pen(Color.SlateGray);
@@ -53,8 +52,8 @@ namespace OpenDentBusiness.UI {
 			g.DrawLine(penB,7,0,7,totalHeight);
 			Pen penTimediv=Pens.Silver;
 			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
-			for(int i=0;i<PatternShowing.Length;i++) {//Info.MyApt.Pattern.Length;i++){
-				if(PatternShowing.Substring(i,1)=="X") {
+			for(int i=0;i<patternShowing.Length;i++) {//Info.MyApt.Pattern.Length;i++){
+				if(patternShowing.Substring(i,1)=="X") {
 					g.FillRectangle(new SolidBrush(provColor),1,i*lineH+1,6,lineH);
 				}
 				else {
@@ -635,7 +634,6 @@ namespace OpenDentBusiness.UI {
 		//ContrApptSingle.cs line 108
 		///<summary>Used from SetLocation. Also used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
 		public static Size SetSize(DataRow dataRoww) {
-			PatternShowing=GetPatternShowing(dataRoww["Pattern"].ToString());
 			//height is based on original 5 minute pattern. Might result in half-rows
 			ApptSingleHeight=dataRoww["Pattern"].ToString().Length*ApptDrawing.LineH*ApptDrawing.RowsPerIncr;
 			//if(ContrApptSheet.TwoRowsPerIncrement){
@@ -700,7 +698,6 @@ namespace OpenDentBusiness.UI {
 			}
 			return strBTime.ToString();
 		}
-
 
 		#endregion
 
