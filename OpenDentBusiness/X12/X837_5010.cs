@@ -313,18 +313,24 @@ namespace OpenDentBusiness
 						+Sout(state,2,2)+"*"//N402 2/2 State or Province Code: 
 						+Sout(zip,15,3)//N403 3/15 Postal Code: 
 						+"~");//N404 through N407 are for addresses outside the US and Canada, or are not used.
-					//2010AC NM1 Pay-to Plan Name
+					//2010AC NM1 Pay-to Plan Name. Situational. We can skip because we do not set BHT06 to '31'.
+					//2010AC N3 Pay-to Plan Address.
 					seg++;
-					sw.WriteLine("NM1*PE"//NM101 2/3 Entity Identifier Code: PE=Subrogated Payee (the only option).
-						+""
+					sw.WriteLine("N3*"+Sout(PrefC.GetString(PrefName.PracticeBillingAddress),55,1)//N301 1/55 Address Information: 
+						+((PrefC.GetString(PrefName.PracticeBillingAddress2)=="")?"":("*"+PrefC.GetString(PrefName.PracticeBillingAddress2)))//N302 1/55 Address Information: Situational. Do not specify if there is no second address line.
 						+"~");
-
-
-
-
-
-
-
+					//2010AC N4 Pay-to Plan City, State, Zip.
+					seg++;
+					sw.WriteLine("N4*"+Sout(PrefC.GetString(PrefName.PracticeBillingCity),30,2)+"*"//N401 2/30 City Name: 
+						+Sout(PrefC.GetString(PrefName.PracticeBillingST),2,2)+"*"//N402 2/2 State or Provice Code: Situational. Required for United States.
+						+Sout(PrefC.GetString(PrefName.PracticeBillingZip),15,3)//N403 3/15 Postal Code: Situational. Required for United States.
+						+"~");//N404 through N407 are either situational for outside the United States or are not used, so they are skipped.
+					//2010AC REF Pay-to Plan Secondary Identification. Situational. Not required because it is after the HIPAA date.
+					//2010AC REF Pay-to Plan Tax Identification Number.
+					seg++;
+					sw.WriteLine("REF*EI"//REF01 2/3 Reference Identification Qualifier: EI=Employer's Identification Number (EIN), the only option.
+						+Sout("",50,1)//REF02 1/50 Reference Identification Number: TODO: Put office EIN.
+						+"~");//REF03 and REF04 are not used.
 					parentProv=HLcount;
 					HLcount++;
 				}
