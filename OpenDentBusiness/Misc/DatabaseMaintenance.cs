@@ -2303,12 +2303,28 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				command="UPDATE procedurelog pl,procedurelog p "
-					+"SET pl.ProcNumLab=0 "
-					+"WHERE pl.ProcStatus=2 AND pl.ProcNumLab=p.ProcNum AND p.ProcStatus=6";
+				command="SELECT patient.PatNum,patient.FName,patient.LName FROM procedurelog "
+					+"LEFT JOIN patient ON procedurelog.PatNum=patient.PatNum "
+					+"WHERE ProcStatus="+POut.Int((int)ProcStat.C)+" AND ProcNumLab IN(SELECT ProcNum FROM procedurelog WHERE ProcStatus="+POut.Int((int)ProcStat.D)+") "
+					+"GROUP BY patient.PatNum";
+				table=Db.GetTable(command);
+				command="UPDATE procedurelog plab,procedurelog p "
+					+"SET plab.ProcNumLab=0 "
+					+"WHERE plab.ProcStatus="+POut.Int((int)ProcStat.C)+" AND plab.ProcNumLab=p.ProcNum AND p.ProcStatus="+POut.Int((int)ProcStat.D);
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Completed lab procedures detached from deleted procedures: ")+numberFixed.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Patients with completed lab procedures detached from deleted procedures: ")+numberFixed.ToString()+"\r\n";
+					string patNames="";
+					for(int i=0;i<table.Rows.Count;i++) {
+						if(i>15) {
+							break;
+						}
+						if(i>0) {
+							patNames+=", ";
+						}
+						patNames+=table.Rows[i]["PatNum"].ToString()+":"+table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Including: ")+patNames+"\r\n";
 				}
 			}
 			return log;
