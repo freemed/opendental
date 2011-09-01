@@ -93,7 +93,9 @@ namespace OpenDental {
 				return;//not sure if this is necessary
 			}
 			using(Graphics g=Graphics.FromImage(Shadow)) {
-				ApptDrawing.DrawAllButAppts(g,Height,8,true,new DateTime(2011,1,1,0,0,0),new DateTime(2011,1,1,0,0,0));
+				ApptDrawing.ApptSheetWidth=Width;
+				ApptDrawing.ApptSheetHeight=Height;
+				ApptDrawing.DrawAllButAppts(g,true,new DateTime(2011,1,1,0,0,0),new DateTime(2011,1,1,0,0,0));
 			}
 		}
 

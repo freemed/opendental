@@ -47,20 +47,22 @@ namespace OpenDentBusiness.UI {
 		public static List<Provider> VisProvs;
 		///<summary>Visible ops in appt module.  List of visible operatories.  This is a subset of the available ops.  You can't include a hidden op in this list.  If user has set View.OnlyScheduledProvs, and not isWeekly, then the only ops to show will be for providers that have schedules for the day and ops with no provs assigned.</summary>
 		public static List<Operatory> VisOps;
-		public static float ApptSheetHeight;//Temp name so I don't mix up Heights.
-		public static float ApptSheetWidth;//Temp name so I don't mix up Widths.
+		///<summary></summary>
+		public static float ApptSheetHeight;
+		///<summary></summary>
+		public static float ApptSheetWidth;
 
 		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.</summary>
-		public static void DrawAllButAppts(Graphics g,float totalHeight,int fontSize,bool showRedTimeLine,DateTime startTime,DateTime stopTime) {
-			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,totalHeight);//L time bar
-			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,totalHeight);//R time bar
-			DrawMainBackground(g,totalHeight);
-			DrawBlockouts(g,fontSize,startTime,stopTime);
+		public static void DrawAllButAppts(Graphics g,bool showRedTimeLine,DateTime startTime,DateTime stopTime) {
+			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,ApptSheetHeight);//L time bar
+			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,ApptSheetHeight);//R time bar
+			DrawMainBackground(g);
+			DrawBlockouts(g,startTime,stopTime);
 			if(!IsWeeklyView) {
 				DrawProvScheds(g,startTime,stopTime);
 				DrawProvBars(g,startTime,stopTime);
 			}
-			DrawGridLines(g,totalHeight);
+			DrawGridLines(g);
 			if(showRedTimeLine) {
 				DrawRedTimeIndicator(g);
 			}
@@ -68,7 +70,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Including the practice schedule.</summary>
-		public static void DrawMainBackground(Graphics g,float totalHeight) {
+		public static void DrawMainBackground(Graphics g) {
 			Brush openBrush;
 			Brush closedBrush;
 			Brush holidayBrush;
@@ -84,7 +86,7 @@ namespace OpenDentBusiness.UI {
 			}
 			List<Schedule> schedsForOp;
 			//one giant rectangle for everything closed
-			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,totalHeight);
+			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,ApptSheetHeight);
 			//then, loop through each day and operatory
 			//Operatory curOp;
 			bool isHoliday;
@@ -105,7 +107,7 @@ namespace OpenDentBusiness.UI {
 						break;
 					}
 					if(isHoliday) {
-						g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth,0,ColDayWidth,totalHeight);
+						g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth,0,ColDayWidth,ApptSheetHeight);
 					}
 					//this is a workaround because we start on Monday:
 					DayOfWeek dayofweek;
@@ -142,7 +144,7 @@ namespace OpenDentBusiness.UI {
 					break;
 				}
 				if(isHoliday) {
-					g.FillRectangle(holidayBrush,TimeWidth+1,0,ColWidth*ColCount+ProvWidth*ProvCount,totalHeight);
+					g.FillRectangle(holidayBrush,TimeWidth+1,0,ColWidth*ColCount+ProvWidth*ProvCount,ApptSheetHeight);
 				}
 				for(int j=0;j<ColCount;j++) {
 					if(j==VisOps.Count) {//For printing.  This allows printing blank columns on the last page if not enough providers to fill columns.
@@ -188,13 +190,13 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Draws all the blockouts for the entire period.</summary>
-		public static void DrawBlockouts(Graphics g,int fontSize,DateTime startTime,DateTime stopTime) {
+		public static void DrawBlockouts(Graphics g,DateTime startTime,DateTime stopTime) {
 			Schedule[] schedForType;
 			schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 			SolidBrush blockBrush;
 			Pen blockOutlinePen=new Pen(Color.Black,1);
 			Pen penOutline;
-			Font blockFont=new Font("Arial",fontSize);
+			Font blockFont=new Font("Arial",LineH);
 			string blockText;
 			RectangleF rect;
 			for(int i=0;i<schedForType.Length;i++) {
@@ -343,44 +345,44 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static void DrawGridLines(Graphics g,float totalHeight) {
+		public static void DrawGridLines(Graphics g) {
 			//Vert
 			if(IsWeeklyView) {
-				g.DrawLine(new Pen(Color.DarkGray),0,0,0,totalHeight);
-				g.DrawLine(new Pen(Color.White),TimeWidth-1,0,TimeWidth-1,totalHeight);
-				g.DrawLine(new Pen(Color.DarkGray),TimeWidth,0,TimeWidth,totalHeight);
+				g.DrawLine(new Pen(Color.DarkGray),0,0,0,ApptSheetHeight);
+				g.DrawLine(new Pen(Color.White),TimeWidth-1,0,TimeWidth-1,ApptSheetHeight);
+				g.DrawLine(new Pen(Color.DarkGray),TimeWidth,0,TimeWidth,ApptSheetHeight);
 				for(int d=0;d<NumOfWeekDaysToDisplay;d++) {
 					g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ColDayWidth*d,0
-						,TimeWidth+ColDayWidth*d,totalHeight);
+						,TimeWidth+ColDayWidth*d,ApptSheetHeight);
 				}
 				g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ColDayWidth*NumOfWeekDaysToDisplay,0
-					,TimeWidth+1+ColDayWidth*NumOfWeekDaysToDisplay,totalHeight);
+					,TimeWidth+1+ColDayWidth*NumOfWeekDaysToDisplay,ApptSheetHeight);
 				g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay,0
-					,TimeWidth*2+1+ColDayWidth*NumOfWeekDaysToDisplay,totalHeight);
+					,TimeWidth*2+1+ColDayWidth*NumOfWeekDaysToDisplay,ApptSheetHeight);
 			}
 			else {
-				g.DrawLine(new Pen(Color.DarkGray),0,0,0,totalHeight);
-				g.DrawLine(new Pen(Color.White),TimeWidth-2,0,TimeWidth-2,totalHeight);
-				g.DrawLine(new Pen(Color.DarkGray),TimeWidth-1,0,TimeWidth-1,totalHeight);
+				g.DrawLine(new Pen(Color.DarkGray),0,0,0,ApptSheetHeight);
+				g.DrawLine(new Pen(Color.White),TimeWidth-2,0,TimeWidth-2,ApptSheetHeight);
+				g.DrawLine(new Pen(Color.DarkGray),TimeWidth-1,0,TimeWidth-1,ApptSheetHeight);
 				for(int i=0;i<ProvCount;i++) {
-					g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*i,0,TimeWidth+ProvWidth*i,totalHeight);
+					g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*i,0,TimeWidth+ProvWidth*i,ApptSheetHeight);
 				}
 				for(int i=0;i<ColCount;i++) {
 					g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*ProvCount+ColWidth*i,0
-						,TimeWidth+ProvWidth*ProvCount+ColWidth*i,totalHeight);
+						,TimeWidth+ProvWidth*ProvCount+ColWidth*i,ApptSheetHeight);
 				}
 				g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,0
-					,TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,totalHeight);
+					,TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,ApptSheetHeight);
 				g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,0
-					,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,totalHeight);
+					,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,ApptSheetHeight);
 			}
 			//horiz gray
-			for(int i=0;i<(totalHeight);i+=LineH*RowsPerIncr) {
+			for(int i=0;i<(ApptSheetHeight);i+=LineH*RowsPerIncr) {
 				g.DrawLine(new Pen(Color.LightGray),TimeWidth,i
 					,TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,i);
 			}
 			//horiz Hour lines
-			for(int i=0;i<totalHeight;i+=LineH*RowsPerHr) {
+			for(int i=0;i<ApptSheetHeight;i+=LineH*RowsPerHr) {
 				g.DrawLine(new Pen(Color.LightGray),0,i-1//was white
 					,TimeWidth*2+ColWidth*ColCount+ProvWidth*ProvCount,i-1);
 				g.DrawLine(new Pen(Color.DarkSlateGray),0,i,TimeWidth,i);
@@ -476,27 +478,18 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static float ComputeColWidth(float totalWidth,int colsPerPage) {
-			if(colsPerPage<1) {
-				return 0;
-			}
-			return (totalWidth-TimeWidth*2-ProvWidth*ProvCount)/colsPerPage;
+		public static void ComputeColDayWidth() {
+			ColDayWidth=(ApptSheetWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
 		}
 
 		///<summary></summary>
-		public static float ComputeColDayWidth(float totalWidth) {
-			return (totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
+		public static void ComputeColAptWidth(int colsPerPage) {
+			ColAptWidth=(float)(ColDayWidth-1)/(float)colsPerPage;
 		}
 
 		///<summary></summary>
-		public static float ComputeColAptWidth(float ColDayWidth,int colsPerPage) {
-			return (float)(ColDayWidth-1)/(float)colsPerPage;
-		}
-
-		///<summary></summary>
-		public static int ComputeLineHeight(int fontSize) {
-			Font baseFont=new Font("Arial",fontSize);
-			return baseFont.Height;
+		public static void SetLineHeight(int fontSize) {
+			LineH=new Font("Arial",fontSize).Height;
 		}
 
 		///<summary></summary>
@@ -617,7 +610,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. So, whenever appt Module layout and when comboView is changed.</summary>
-		public static void ComputeColWidth(int totalWidth) {
+		public static void ComputeColWidth() {
 			if(VisOps==null || VisProvs==null) {
 				return;
 			}
@@ -637,12 +630,12 @@ namespace OpenDentBusiness.UI {
 				}
 				else {
 					if(IsWeeklyView) {
-						ColDayWidth=(totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
+						ColDayWidth=(ApptSheetWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
 						ColAptWidth=(float)(ColDayWidth-1)/(float)ColCount;
-						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+						ColWidth=(ApptSheetWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
 					}
 					else {
-						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+						ColWidth=(ApptSheetWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
 					}
 				}
 				MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
@@ -675,6 +668,38 @@ namespace OpenDentBusiness.UI {
 			return -1;
 		}
 
+		public static void ProvBarShading(DataRow row,string patternShowing) {
+			int indexProv=-1;
+			if(row["IsHygiene"].ToString()=="1") {
+				indexProv=GetIndexProv(PIn.Long(row["ProvHyg"].ToString()));
+			}
+			else {
+				indexProv=GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
+			}
+			if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
+				int startIndex=ApptSingleDrawing.ConvertToY(row)/LineH;//rounds down
+				for(int k=0;k<patternShowing.Length;k++) {
+					if(patternShowing.Substring(k,1)=="X") {
+						try {
+							ProvBar[indexProv][startIndex+k]++;
+						}
+						catch {
+							//appointment must extend past midnight.  Very rare
+						}
+					}
+				}
+			}
+		}
+
+		///<summary>Returns the index of the provNum within VisProvs.</summary>
+		public static int GetIndexProv(long provNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<VisProvs.Count;i++) {
+				if(VisProvs[i].ProvNum==provNum)
+					return i;
+			}
+			return -1;
+		}
 
 	}
 }

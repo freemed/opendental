@@ -10,7 +10,7 @@ namespace OpenDentBusiness.UI {
 	public class ApptSingleDrawing {
 		public static float ApptSingleHeight;
 		public static float ApptSingleWidth;
-		public static Point Location;
+		private static Point location;
 
 		///<summary></summary>
 		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
@@ -619,13 +619,13 @@ namespace OpenDentBusiness.UI {
 		public static Point SetLocation(DataRow dataRoww) {
 			if(ApptDrawing.IsWeeklyView) {
 				ApptSingleWidth=(int)ApptDrawing.ColAptWidth;
-				Location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
+				location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
 			}
 			else {
-				Location=new Point(ConvertToX(dataRoww)+2,ConvertToY(dataRoww));
+				location=new Point(ConvertToX(dataRoww)+2,ConvertToY(dataRoww));
 				ApptSingleWidth=ApptDrawing.ColWidth-5;
 			}
-			return Location;
+			return location;
 		}
 
 		///<summary>Used from SetLocation. Also used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>

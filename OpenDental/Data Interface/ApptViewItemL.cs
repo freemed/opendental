@@ -174,16 +174,6 @@ namespace OpenDental{
 			return 0;
 		}
 
-		///<summary>Returns the index of the provNum within VisProvs.</summary>
-		public static int GetIndexProv(long provNum) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<ApptDrawing.VisProvs.Count;i++) {
-				if(ApptDrawing.VisProvs[i].ProvNum==provNum)
-					return i;
-			}
-			return -1;
-		}
-
 		///<summary>Only used in FormApptViewEdit. Must have run GetForCurView first.</summary>
 		public static bool OpIsInView(long opNum) {
 			//No need to check RemotingRole; no call to db.

@@ -1269,7 +1269,8 @@ namespace OpenDental {
 			//RefreshVisops();//forces reset after changing databases
 			if(DefC.Short!=null) {
 				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ApptDrawing.IsWeeklyView,SchedListPeriod);//refreshes visops,etc
-				ApptDrawing.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
+				ApptDrawing.ApptSheetWidth=panelSheet.Width-vScrollBar1.Width;
+				ApptDrawing.ComputeColWidth();
 			}
 			this.SuspendLayout();
 			vScrollBar1.Enabled=true;
@@ -1456,11 +1457,7 @@ namespace OpenDental {
 			labelDate2.Text=startDate.ToString("-  MMM d");
 			ContrApptSheet2.Controls.Clear();
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
-			int indexProv;
 			DataRow row;
-			//for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-			//TODO: Try and move if(!isWeeklyView) around lines 1407-1430 here.
-			//}
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 				row=DS.Tables["Appointments"].Rows[i];
 				ContrApptSingle3[i]=new ContrApptSingle();
@@ -1474,29 +1471,9 @@ namespace OpenDental {
 				ContrApptSingle3[i].DataRoww=row;
 				ContrApptSingle3[i].TableApptFields=DS.Tables["ApptFields"];
 				ContrApptSingle3[i].TablePatFields=DS.Tables["PatFields"];
+				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 				if(!ApptDrawing.IsWeeklyView) {
-					//copy time pattern to provBar[]:
-					indexProv=-1;
-					if(row["IsHygiene"].ToString()=="1") {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvHyg"].ToString()));
-					}
-					else {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
-					}
-					ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
-					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
-						int startIndex=ApptSingleDrawing.ConvertToY(row)/ApptDrawing.LineH;//rounds down
-						for(int k=0;k<ContrApptSingle3[i].PatternShowing.Length;k++) {
-							if(ContrApptSingle3[i].PatternShowing.Substring(k,1)=="X") {
-								try {
-									ApptDrawing.ProvBar[indexProv][startIndex+k]++;
-								}
-								catch {
-									//appointment must extend past midnight.  Very rare
-								}
-							}
-						}
-					}
+					ApptDrawing.ProvBarShading(row,ContrApptSingle3[i].PatternShowing);
 				}
 				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(row);
 				ContrApptSingle3[i].Size=ApptSingleDrawing.SetSize(row);
@@ -1661,7 +1638,8 @@ namespace OpenDental {
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
 			if(!DefC.DefShortIsNull) {
 				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ApptDrawing.IsWeeklyView,SchedListPeriod);//refreshes visops,etc
-				ApptDrawing.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
+				ApptDrawing.ApptSheetWidth=panelSheet.Width-vScrollBar1.Width;
+				ApptDrawing.ComputeColWidth();
 			}
 			panelOps.Width=panelSheet.Width;
 		}
@@ -1961,14 +1939,14 @@ namespace OpenDental {
 				indexProv=-1;
 				if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1") {//if isHygiene
 					if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//if no hyg prov set.
-						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+						indexProv=ApptDrawing.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 					}
 					else {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
+						indexProv=ApptDrawing.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
 					}
 				}
 				else {//not hyg
-					indexProv=ApptViewItemL.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+					indexProv=ApptDrawing.GetIndexProv(PIn.Long(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 				}
 				if(indexProv==-1) {
 					continue;
@@ -3765,13 +3743,13 @@ namespace OpenDental {
 			Rectangle bounds=e.PageBounds;
 			bool showProvBar=true;
 			int[][] provBars=ApptDrawing.ProvBar;
-			float totalWidth=bounds.Width;
-			ApptDrawing.LineH=ApptDrawing.ComputeLineHeight(apptPrintFontSize);//Measure the font to determine the line height.
+			ApptDrawing.ApptSheetWidth=bounds.Width;
+			ApptDrawing.SetLineHeight(apptPrintFontSize);//Measure the font to determine the line height.
 			int rowsPerIncr=ApptDrawing.RowsPerIncr;
 			ApptDrawing.ColDayWidth=0;
 			if(ApptDrawing.IsWeeklyView) {
-				ApptDrawing.ColDayWidth=ApptDrawing.ComputeColDayWidth(totalWidth);
-				ApptDrawing.ColAptWidth=ApptDrawing.ComputeColAptWidth(ApptDrawing.ColDayWidth,apptPrintColsPerPage);
+				ApptDrawing.ComputeColDayWidth();
+				ApptDrawing.ComputeColAptWidth(apptPrintColsPerPage);
 			}
 			else {
 				ApptDrawing.ProvCount=ApptDrawing.VisProvs.Count;
@@ -3780,7 +3758,7 @@ namespace OpenDental {
 				ApptDrawing.ProvWidth=0;
 				ApptDrawing.ProvCount=0;
 			}
-			ApptDrawing.ColWidth=ApptDrawing.ComputeColWidth(totalWidth,apptPrintColsPerPage);
+			ApptDrawing.ComputeColWidth();
 			int minPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
 			float minPerRow=(float)minPerIncr/(float)rowsPerIncr;
 			int rowsPerHr=60/minPerIncr*rowsPerIncr;
@@ -3789,13 +3767,13 @@ namespace OpenDental {
 			if(stopHour==0) {
 				stopHour=24;
 			}
-			int totalHeight=ApptDrawing.LineH*rowsPerHr*(stopHour-startHour);
+			ApptDrawing.ApptSheetHeight=ApptDrawing.LineH*rowsPerHr*(stopHour-startHour);
 			//Figure out how many pages are needed to print. (maybe do both across and tall)
 			int pagesAcross=(int)Math.Ceiling((double)ApptDrawing.VisOps.Count/(double)apptPrintColsPerPage);
-			int pagesTall=(int)Math.Ceiling((double)totalHeight/(double)(bounds.Height-100));//-100 for the header on every page.
+			int pagesTall=(int)Math.Ceiling((double)ApptDrawing.ApptSheetHeight/(double)(bounds.Height-100));//-100 for the header on every page.
 			DrawPrintingHeader(e.Graphics,ApptDrawing.ColWidth,ApptDrawing.TimeWidth,ApptDrawing.ProvWidth,ApptDrawing.ProvCount,apptPrintColsPerPage,ApptDrawing.VisOps,ApptDrawing.IsWeeklyView);
 			e.Graphics.TranslateTransform(0,100);
-			ApptDrawing.DrawAllButAppts(e.Graphics,totalHeight,ApptDrawing.LineH,false,apptPrintStartTime,apptPrintStopTime);
+			ApptDrawing.DrawAllButAppts(e.Graphics,false,apptPrintStartTime,apptPrintStopTime);
 
 			//Now to draw the appointments:
 			#region ApptSingleDrawing
@@ -3811,7 +3789,6 @@ namespace OpenDental {
 				ContrApptSingle3=null;
 			}
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
-			int indexProv;
 			DataRow row;
 			//Might filter the list of appointments here for showing those within the time frame.
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
@@ -3822,28 +3799,9 @@ namespace OpenDental {
 				ContrApptSingle3[i].DataRoww=row;
 				ContrApptSingle3[i].TableApptFields=DS.Tables["ApptFields"];
 				ContrApptSingle3[i].TablePatFields=DS.Tables["PatFields"];
+				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 				if(!ApptDrawing.IsWeeklyView) {
-					indexProv=-1;
-					if(row["IsHygiene"].ToString()=="1") {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvHyg"].ToString()));
-					}
-					else {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
-					}
-					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
-						ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
-						int startIndex=ApptSingleDrawing.ConvertToY(row)/ApptDrawing.LineH;//rounds down
-						for(int k=0;k<ContrApptSingle3[i].PatternShowing.Length;k++) {
-							if(ContrApptSingle3[i].PatternShowing.Substring(k,1)=="X") {
-								try {
-									ApptDrawing.ProvBar[indexProv][startIndex+k]++;
-								}
-								catch {
-									//appointment must extend past midnight.  Very rare
-								}
-							}
-						}
-					}
+					ApptDrawing.ProvBarShading(row,ContrApptSingle3[i].PatternShowing);
 				}
 			}
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
