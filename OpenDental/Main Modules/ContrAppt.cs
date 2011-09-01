@@ -2184,6 +2184,7 @@ namespace OpenDental {
 			Controls.Add(TempApptSingle);
 			TempApptSingle.Location=ApptSingleDrawing.SetLocation(TempApptSingle.DataRoww);
 			TempApptSingle.Size=ApptSingleDrawing.SetSize(TempApptSingle.DataRoww);
+			TempApptSingle.PatternShowing=ApptSingleDrawing.GetPatternShowing(TempApptSingle.DataRoww["Pattern"].ToString());
 			TempApptSingle.CreateShadow();
 			TempApptSingle.BringToFront();
 			ContrApptSingle.SelectedAptNum=-1;

@@ -86,6 +86,7 @@ namespace OpenDental.UI {
 			PinApptSingle.TableApptFields=tableApptFields;
 			PinApptSingle.TablePatFields=tablePatFields;
 			PinApptSingle.Size=ApptSingleDrawing.SetSize(row);
+			PinApptSingle.PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 			PinApptSingle.Width=Width-2;
 			PinApptSingle.IsSelected=true;
 			PinApptSingle.Location=new Point(0,13*apptList.Count);
