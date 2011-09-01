@@ -303,17 +303,18 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			command="SELECT Count(*) FROM appointment WHERE PatNum NOT IN(SELECT PatNum FROM patient)";
-			int numberFixed=PIn.Int(Db.GetCount(command));
+			int count=PIn.Int(Db.GetCount(command));
 			if(isCheck){
-				if(table.Rows.Count>0 || verbose){
-					log+=Lans.g("FormDatabaseMaintenance","Appointments found abandoned: ")+numberFixed.ToString()+"\r\n";
+				if(count>0 || verbose){
+					log+=Lans.g("FormDatabaseMaintenance","Appointments found abandoned: ")+count.ToString()+"\r\n";
 				}
 			}
 			else{//Fix is safe because we are not deleting data, we are just attaching abandoned appointments to a dummy patient.
-				if(numberFixed!=0) {
+				if(count!=0) {
 					Patient dummyPatient=new Patient();
 					dummyPatient.FName="MISSING";
 					dummyPatient.LName="PATIENT";
+					dummyPatient.AddrNote="Appointments with missing patients were assigned to this patient on "+DateTime.Now.ToShortDateString()+" while doing database maintenance.";
 					dummyPatient.Birthdate=DateTime.MinValue;
 					dummyPatient.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
 					dummyPatient.PatStatus=PatientStatus.Archived;
@@ -323,10 +324,10 @@ namespace OpenDentBusiness {
 					dummyPatient.Guarantor=dummyPatNum;
 					Patients.Update(dummyPatient,oldDummyPatient);
 					command="UPDATE appointment SET PatNum="+POut.Long(dummyPatNum)+" WHERE PatNum NOT IN(SELECT PatNum FROM patient)";
-					numberFixed=Db.NonQ32(command);
+					count=Db.NonQ32(command);
 				}
-				if(numberFixed!=0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Appointments altered due to no patient: ")+numberFixed.ToString()+"\r\n";
+				if(count!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Appointments altered due to no patient: ")+count.ToString()+"\r\n";
 				}
 			}
 			return log;
