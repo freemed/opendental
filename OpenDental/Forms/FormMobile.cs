@@ -161,42 +161,7 @@ namespace OpenDental {
 			MsgBox.Show(this,"Done");
 		}
 
-		/*
-		///<summary>Old code. May be deleted later</summary>
-		private void butFullSync_ClickOld(object sender,EventArgs e) {
-			if(!SavePrefs()) {
-				return;
-			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will be time consuming. Continue anyway?")) {
-				return;
-			}
-			//for full synch, delete all records then repopulate.
-			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
-			//calculate total number of records------------------------------------------------------------------------------
-			DateTime timeSynchStarted=MiscData.GetNowDateTime();
-			List<long> patNumList=Patientms.GetChangedSincePatNums(DateTime.MinValue);
-			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(DateTime.MinValue,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
-			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(DateTime.MinValue);
-			List<long> provNumList=Providerms.GetChangedSinceProvNums(DateTime.MinValue);
-			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count;
-			FormProgress FormP=new FormProgress();
-			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
-			Thread workerThread=new Thread(uploadDelegate);
-			workerThread.Start();
-			//display the progress dialog to the user:
-			FormP.MaxVal=(double)totalCount;
-			FormP.NumberMultiplication=100;
-			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
-			FormP.NumberFormat="F0";
-			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.Cancel) {
-				workerThread.Abort();
-			}
-			IsSynching=false;
-			changed=true;
-		}*/
-
+		
 		private void butFullSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
 				return;
@@ -221,44 +186,8 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 			changed=true;
-			textDateTimeLastRun.Text=timeSynchStarted.ToShortDateString()+" "+timeSynchStarted.ToShortTimeString();
+			textDateTimeLastRun.Text=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortDateString()+" "+PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortTimeString();
 		}
-
-		/*
-		///<summary>Old code. May be deleted later</summary>
-		private void butSync_ClickOld(object sender,EventArgs e) {
-			if(!SavePrefs()) {
-				return;
-			}
-			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
-				MsgBox.Show(this,"Full synch has never been run before.");
-				return;
-			}
-			//calculate total number of records------------------------------------------------------------------------------
-			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			DateTime timeSynchStarted=MiscData.GetNowDateTime();
-			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
-			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
-			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSince);
-			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count;
-			FormProgress FormP=new FormProgress();
-			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
-			Thread workerThread=new Thread(uploadDelegate);
-			workerThread.Start();
-			//display the progress dialog to the user:
-			FormP.MaxVal=(double)totalCount;
-			FormP.NumberMultiplication=100;
-			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
-			FormP.NumberFormat="F0";
-			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.Cancel) {
-				workerThread.Abort();
-			}
-			IsSynching=false;
-			changed=true;
-		}*/
 
 		private void butSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
@@ -285,81 +214,86 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 			changed=true;
-			textDateTimeLastRun.Text=timeSynchStarted.ToShortDateString()+" "+timeSynchStarted.ToShortTimeString();
+			textDateTimeLastRun.Text=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortDateString()+" "+PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortTimeString();
 		}
 		
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
 		private static void UploadWorker(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
-			//The handling of PrefName.MobileSynchNewTables79 should never be removed in future versions
-			DateTime changedProv=changedSince;
-			DateTime changedDeleted=changedSince;
-			if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
-				changedProv=DateTime.MinValue;
-				changedDeleted=DateTime.MinValue;
-			}
-			bool synchDelPat=true;
-			if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) { 
-				synchDelPat=false;// synching delPatNumList is time consuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
-			}
-			//MobileWeb
-			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
-			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
-			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
-			List<long> pharNumList=Pharmacyms.GetChangedSincePharmacyNums(changedSince);
-			List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
-			List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
-			//exclusively Pat portal
-			List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
-			List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
-			List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
-			List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
-			List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
-			List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
-			List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
-			List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-			List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
-			List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
-			int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
+			try {//Dennis: try catch may not work: Does not work in threads, not sure about this. Note that all methods inside this try catch block are without exception handling. This is done on purpose so that when an exception does occur it does not update PrefName.MobileSyncDateTimeLastRun
+				//The handling of PrefName.MobileSynchNewTables79 should never be removed in future versions
+				DateTime changedProv=changedSince;
+				DateTime changedDeleted=changedSince;
+				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
+					changedProv=DateTime.MinValue;
+					changedDeleted=DateTime.MinValue;
+				}
+				bool synchDelPat=true;
+				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
+					synchDelPat=false;// synching delPatNumList is time consuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
+				}
+				//MobileWeb
+				List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
+				List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
+				List<long> pharNumList=Pharmacyms.GetChangedSincePharmacyNums(changedSince);
+				List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
+				List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
+				//exclusively Pat portal
+				List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
+				List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
+				List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
+				List<long> medicationNumList=Medicationms.GetChangedSinceMedicationNums(changedSince);
+				List<long> medicationPatNumList=MedicationPatms.GetChangedSinceMedicationPatNums(changedSince,eligibleForUploadPatNumList);
+				List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
+				List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
+				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
+				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
+				List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
+				int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
 							+dO.Count;
-			if(synchDelPat){
-				totalCount+=delPatNumList.Count;
+				if(synchDelPat) {
+					totalCount+=delPatNumList.Count;
+				}
+				FormP.MaxVal=(double)totalCount;
+				IsSynching=true;
+				SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
+				SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
+				SynchGeneric(rxNumList,SynchEntity.prescription,ref FormP);
+				SynchGeneric(provNumList,SynchEntity.provider,ref FormP);
+				SynchGeneric(pharNumList,SynchEntity.pharmacy,ref FormP);
+				//pat portal
+				SynchGeneric(labPanelNumList,SynchEntity.labpanel,ref FormP);
+				SynchGeneric(labResultNumList,SynchEntity.labresult,ref FormP);
+				SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
+				SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
+				SynchGeneric(allergyDefNumList,SynchEntity.allergydef,ref FormP);
+				SynchGeneric(allergyNumList,SynchEntity.allergy,ref FormP);
+				SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,ref FormP);
+				SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
+				SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
+				if(synchDelPat) {
+					SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
+				}
+				DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
+				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
+					Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
+					//DataValid.SetInvalid(InvalidType.Prefs);//not allowed from another thread
+				}
+				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
+				IsSynching=false;
 			}
-			FormP.MaxVal=(double)totalCount;
-			IsSynching=true;
-			SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
-			SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
-			SynchGeneric(rxNumList,SynchEntity.prescription,ref FormP);
-			SynchGeneric(provNumList,SynchEntity.provider,ref FormP);
-			SynchGeneric(pharNumList,SynchEntity.pharmacy,ref FormP);
-			//pat portal
-			SynchGeneric(labPanelNumList,SynchEntity.labpanel,ref FormP);
-			SynchGeneric(labResultNumList,SynchEntity.labresult,ref FormP);
-			SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
-			SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
-			SynchGeneric(allergyDefNumList,SynchEntity.allergydef,ref FormP);
-			SynchGeneric(allergyNumList,SynchEntity.allergy,ref FormP);
-			SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,ref FormP);
-			SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
-			SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
-			if(synchDelPat) { 
-				SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
+			catch(Exception e) {
+				IsSynching=false;
+				MessageBox.Show(e.Message);
 			}
-			DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
-			if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
-				Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
-				//DataValid.SetInvalid(InvalidType.Prefs);//not allowed from another thread
-			}
-			Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
-			IsSynching=false;
 		}
 
 		///<summary>a general function to reduce the amount of code for uploading</summary>
 		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,ref FormProgress progressIndicator) {
-		
-			try{ //Dennis: try catch may not work: Does not work in threads not sure about this
+			//Dennis: a try catch block here has been avoid on purpose.
 				int LocalBatchSize=BatchSize;
 				for(int start=0;start<PKNumList.Count;start+=LocalBatchSize) {
 					if((start+LocalBatchSize)>PKNumList.Count) {
@@ -429,10 +363,6 @@ namespace OpenDental {
 					}
 					progressIndicator.CurrentVal+=LocalBatchSize;
 				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
 		}
 
 		private static void DeleteObjects(List<DeletedObject> dO,ref FormProgress progressIndicator) {
@@ -475,41 +405,6 @@ namespace OpenDental {
 			}
 			return true;
 		}
-
-		/*
-		///<summary>Old code. May be deleted later</summary>
-		public static void SynchFromMainOld() {
-			if(Application.OpenForms["FormMobile"]!=null) {//tested.  This prevents main synch whenever this form is open.
-				return;
-			}
-			if(IsSynching) {
-				return;
-			}
-			DateTime timeSynchStarted=MiscData.GetNowDateTime();
-			if(timeSynchStarted < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
-				return;
-			}
-			if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("192.168.0.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
-				IgnoreCertificateErrors();
-			}
-			if(!TestWebServiceExists()) {
-				return;
-			}
-			//calculate total number of records------------------------------------------------------------------------------
-			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
-			List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
-			List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
-			List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
-			List<long> provNumList=Providerms.GetChangedSinceProvNums(changedSince);
-			int totalCount=patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count;
-			FormProgress FormP=new FormProgress();//but we won't display it.
-			FormP.NumberFormat="";
-			FormP.DisplayText="";
-			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(patNumList,aptNumList,rxNumList,provNumList,ref FormP,timeSynchStarted); };
-			Thread workerThread=new Thread(uploadDelegate);
-			workerThread.Start();
-		}*/
 
 		///<summary>Called from FormOpenDental and from FormEhrOnlineAccess.  doForce is set to false to follow regular synching interval.</summary>
 		public static void SynchFromMain(bool doForce) {
