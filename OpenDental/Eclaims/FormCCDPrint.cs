@@ -2084,10 +2084,12 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,text,procedureNotesCol,0);
 				//Display the eligible lab info for the proc but on a separate line.
 				x=doc.StartElement();
-				text="LAB(S)";
-				doc.DrawString(g,text,procedureCodeCol,0);
-				text=RawMoneyStrToDisplayMoney(carrierEligibleLabAmts[p].valuestr);
-				doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				if(carrierEligibleLabAmts.Length>0) {
+					text="LAB(S)";
+					doc.DrawString(g,text,procedureCodeCol,0);
+					text=RawMoneyStrToDisplayMoney(carrierEligibleLabAmts[p].valuestr);
+					doc.DrawString(g,text,procedureEligibleCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				}
 			}
 			//Handle the unallocated deductible amount if it exists. 
 			//This happens when a carrier will not supply deductibles on a procedural basis.
