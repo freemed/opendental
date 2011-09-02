@@ -615,8 +615,9 @@ namespace OpenDentBusiness.UI {
 				return;
 			}
 			try {
-				if(RowsPerIncr==0)
+				if(RowsPerIncr==0) {
 					RowsPerIncr=1;
+				}
 				ColCount=VisOps.Count;
 				if(IsWeeklyView) {
 					//ColCount=NumOfWeekDaysToDisplay;

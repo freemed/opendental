@@ -3742,10 +3742,8 @@ namespace OpenDental {
 			//Logic needs to be added here for calculating if printing will fit on the page. Then call drawing in a loop for number of required pages. 
 			Rectangle bounds=e.PageBounds;
 			bool showProvBar=true;
-			int[][] provBars=ApptDrawing.ProvBar;
 			ApptDrawing.ApptSheetWidth=bounds.Width;
-			ApptDrawing.SetLineHeight(apptPrintFontSize);//Measure the font to determine the line height.
-			int rowsPerIncr=ApptDrawing.RowsPerIncr;
+			ApptDrawing.SetLineHeight(apptPrintFontSize);//Measure size the user set to determine the line height for printout.
 			ApptDrawing.ColDayWidth=0;
 			if(ApptDrawing.IsWeeklyView) {
 				ApptDrawing.ComputeColDayWidth();
@@ -3759,19 +3757,16 @@ namespace OpenDental {
 				ApptDrawing.ProvCount=0;
 			}
 			ApptDrawing.ComputeColWidth();
-			int minPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
-			float minPerRow=(float)minPerIncr/(float)rowsPerIncr;
-			int rowsPerHr=60/minPerIncr*rowsPerIncr;
 			int startHour=apptPrintStartTime.Hour;
 			int stopHour=apptPrintStopTime.Hour;
 			if(stopHour==0) {
 				stopHour=24;
 			}
-			ApptDrawing.ApptSheetHeight=ApptDrawing.LineH*rowsPerHr*(stopHour-startHour);
+			ApptDrawing.ApptSheetHeight=ApptDrawing.LineH*ApptDrawing.RowsPerHr*(stopHour-startHour);
 			//Figure out how many pages are needed to print. (maybe do both across and tall)
 			int pagesAcross=(int)Math.Ceiling((double)ApptDrawing.VisOps.Count/(double)apptPrintColsPerPage);
 			int pagesTall=(int)Math.Ceiling((double)ApptDrawing.ApptSheetHeight/(double)(bounds.Height-100));//-100 for the header on every page.
-			DrawPrintingHeader(e.Graphics,ApptDrawing.ColWidth,ApptDrawing.TimeWidth,ApptDrawing.ProvWidth,ApptDrawing.ProvCount,apptPrintColsPerPage,ApptDrawing.VisOps,ApptDrawing.IsWeeklyView);
+			DrawPrintingHeader(e.Graphics,apptPrintColsPerPage);
 			e.Graphics.TranslateTransform(0,100);
 			ApptDrawing.DrawAllButAppts(e.Graphics,false,apptPrintStartTime,apptPrintStopTime);
 
@@ -3829,13 +3824,13 @@ namespace OpenDental {
 			#endregion
 		}
 
-		private void DrawPrintingHeader(Graphics g,float colWidth,float timeWidth,float provWidth,int provCount,int colsPerPage,List<Operatory> visOps,bool isWeeklyView) {
+		private void DrawPrintingHeader(Graphics g,int colsPerPage) {
 			float xPos=0;//starting pos
 			float yPos=27.5f;//starting pos
 			//Print Title------------------------------------------------------------------------------
 			string title;
 			string date;
-			if(isWeeklyView) {
+			if(ApptDrawing.IsWeeklyView) {
 				title=Lan.g(this,"Weekly Appointments");
 				date=WeekStartDate.DayOfWeek.ToString()+" "+WeekStartDate.ToShortDateString()
 					+" - "+WeekEndDate.DayOfWeek.ToString()+" "+WeekEndDate.ToShortDateString();
@@ -3853,20 +3848,20 @@ namespace OpenDental {
 			yPos+=25;
 			g.DrawString(date,dateFont,Brushes.Black,xDate,yPos);//centered
 			//Provider Cols-----------------------------------------------------------------------------
-			if(!isWeeklyView) {//Don't print providers for weekly view.
+			if(!ApptDrawing.IsWeeklyView) {//Don't print providers for weekly view.
 				string[] headers = new string[colsPerPage];
 				Font headerFont=new Font("Arial",8);
 				yPos+=30;
-				xPos+=(int)(timeWidth+(provWidth*provCount));
+				xPos+=(int)(ApptDrawing.TimeWidth+(ApptDrawing.ProvWidth*ApptDrawing.ProvCount));
 				int xCenter=0;
 				for(int i=0;i<colsPerPage;i++) {
-					if(i==visOps.Count) {
+					if(i==ApptDrawing.VisOps.Count) {
 						break;
 					}
-					headers[i]=visOps[i].OpName;
-					xCenter=(int)((colWidth/2)-(g.MeasureString(headers[i],headerFont).Width/2));
+					headers[i]=ApptDrawing.VisOps[i].OpName;
+					xCenter=(int)((ApptDrawing.ColWidth/2)-(g.MeasureString(headers[i],headerFont).Width/2));
 					g.DrawString(headers[i],headerFont,Brushes.Black,(int)(xPos+xCenter),yPos);
-					xPos+=colWidth;
+					xPos+=ApptDrawing.ColWidth;
 				}
 			}
 		}
