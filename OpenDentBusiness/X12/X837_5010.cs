@@ -516,89 +516,45 @@ namespace OpenDentBusiness
 					sw.Write("NM1*QC*"//NM101 2/3 Entity Identifier Code: QC=Patient.
 						+"1*"//NM102 1/1 Entity Type Qualifier: 1=Person.
 						+Sout(patient.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
-						+Sout(patient.FName,35));//NM104 1/35 Name First:
-					string patID=patient.SSN;
-					for(int p=0;p<patPlans.Count;p++) {
-						if(patPlans[p].InsSubNum==claim.InsSubNum) {
-							patID=patPlans[p].PatID.Replace("-","");
-						}
-					}
-					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
-						if(patient.MiddleI=="") {
-							sw.WriteLine("~");
-						}
-						else {
-							sw.WriteLine("*"+Sout(patient.MiddleI,25)+"~");//NM105: Mid name
-						}
-						//NM106: prefix not used. NM107: No suffix field in Open Dental
-						//NM108-NM112 no longer allowed to be used.
-						//instead of including a patID here, the patient should get their own subsriber loop.
-					}
-					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-						if(patID=="") {
-							if(patient.MiddleI=="") {
-								sw.WriteLine("~");
-							}
-							else {
-								sw.WriteLine("*"+Sout(patient.MiddleI,25)+"~");//NM105: Mid name
-							}
-						}
-						else {//id not blank
-							sw.WriteLine("*"+Sout(patient.MiddleI,25)+"*"//NM105: Mid name (whether or not empty)
-							+"**"//NM106: prefix not used. NM107: No suffix field in Open Dental
-							+"MI*"//NM108: MI=Member ID
-							+Sout(patID,80)+"~");//NM109: Patient ID
-						}
-					}
-					//2010CA N3: Patient address
+						+Sout(patient.FName,35)+//NM104 1/35 Name First:
+						((patient.MiddleI=="")?"":("*"+Sout(patient.MiddleI,25)))//NM105 1/25 Name Middle: 
+						+"~");//NM106 through NM112 are not used, except for NM107, which is situational, but we don't have a suffix in Open Dental yet.
+					//2010CA N3: Patient Address.
 					seg++;
-					sw.Write("N3*"
-						+Sout(patient.Address,55));//N301: address
-					if(patient.Address2=="") {
-						sw.WriteLine("~");
-					}
-					else {
-						//N302: Address2. Optional.
-						sw.WriteLine("*"+Sout(patient.Address2,55)+"~");
-					}
-					//2010CA N4: City State Zip
+					sw.Write("N3*"+
+						Sout(patient.Address,55)+//N301 1/55 Address Information: 
+						((patient.Address2=="")?"":("*"+Sout(patient.Address2,55)))+//N302 1/55 Address Information: Only required when there is a second address line.
+						"~");
+					//2010CA N4: Patient City, State, Zip Code.
 					seg++;
 					sw.WriteLine("N4*"
-						+Sout(patient.City,30)+"*"//N401: City
-						+Sout(patient.State,2)+"*"//N402: State
-						+Sout(patient.Zip.Replace("-",""),15)+"~");//N403: Zip
-					//2010CA DMG: Patient demographic
+						+Sout(patient.City,30,2)+"*"//N401 2/30 City Name: 
+						+Sout(patient.State,2,2)+"*"//N402 2/2 State or Provice Code: 
+						+Sout(patient.Zip.Replace("-",""),15)//N403 3/15 Postal Code: 
+						+"~");//N404 through N407 are either not used or only required for addresses outside the United States.
+					//2010CA DMG: Patient Demographic Information.
 					seg++;
-					sw.WriteLine("DMG*D8*"//DMG01: use D8
-						+patient.Birthdate.ToString("yyyyMMdd")+"*"//DMG02: Birthdate
-						+GetGender(patient.Gender)+"~");//DMG03: gender
-					//2010CA REF: Property and casualty claim number.
-					//2010CA PER: Property and casualty patient contact info
+					sw.WriteLine("DMG*D8*"//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+						+patient.Birthdate.ToString("yyyyMMdd")+"*"//DMG02 1/35 Date Time Period:
+						+GetGender(patient.Gender)//DMG03 1/1 Gender Code: F=Female,M=Male,U=Unknown.
+						+"~");//DMG04 through DMG11 are Not Used.
+					//2010CA REF: Property and Casualty Claim Number. Situational. We do not use this.
 					HLcount++;
 				}
 				#endregion
 				#region Claim
-				//2300 CLM: Claim
+				//2300 CLM: Claim Information.
 				seg++;
 				sw.Write("CLM*"
-					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),20)+"*"//CLM01: A unique id. Can support 20 char.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness. We might need to allow user to override for claims based on preauths.
-					+claim.ClaimFee.ToString()+"*"//CLM02: Claim Fee
-					+"**"//CLM03 & 04 not used
-					+GetPlaceService(claim.PlaceService)+"::1*"//CLM05: place+1. 1=Original claim
-					+"Y*"//CLM06: prov sig on file (always yes)
-					+"A*");//CLM07: prov accepts medicaid assignment. OD has no field for this, so no choice
-				if(sub.AssignBen) {
-					sw.Write("Y*");//CLM08: assign ben. Y or N
-				}
-				else {
-					sw.Write("N*");
-				}
-				//if(insPlan.ReleaseInfo){
-				sw.Write("Y");//CLM09: release info. Y or I(which we don't support)
-				//}
-				//else{
-				//	sw.Write("N");//this is not allowed and is now blocked way ahead of time.
-				//}
+					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),38)+"*"//CLM01 1/38 Claim Submitter's Identifier: A unique id. Can support 20 char.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness. We might need to allow user to override for claims based on preauths.
+					+claim.ClaimFee.ToString()+"*"//CLM02 1/18 Monetary Amount:
+					+"*"//CLM03 1/2 Claim Filing Indicator Code: Not Used.
+					+"*"//CLM04 1/2 Non-Institutional Claim Type Code: Not Used.
+					+GetPlaceService(claim.PlaceService)+"::B::1*"//CLM05 1/2 Health Care Service Location Information (Facility Code Value 1/2::Facility Code Qualifier 1/2 [B=Place of Service Codes for Professional of Dental Services]::Claim Frequency Type Code 1/1 [1=Original claim]):
+					+"Y*"//CLM06 1/1 Yes/No Condition or Response Code: prov sig on file (always yes)
+					+"A*");//CLM07 1/1 Provider Accept Assignment Code: prov accepts medicaid assignment. OD has no field for this, so no choice
+				sw.Write((sub.AssignBen?"Y":"N")+"*");//CLM08 1/1 Yes/No Condition or Response Code:
+				sw.Write("Y");//CLM09 1/1 Release of Information Code: Y or I(which we don't support)
 				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 					if(claim.ClaimType=="PreAuth") {
 						sw.WriteLine("**"//* for CLM09. CLM10 not used
