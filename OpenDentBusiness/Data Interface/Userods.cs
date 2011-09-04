@@ -408,7 +408,12 @@ namespace OpenDentBusiness {
 			if(username==""){
 				return false;
 			}
-			string command="SELECT COUNT(*) FROM userod WHERE UserName='"+POut.String(username)+"' "
+			string command="SELECT COUNT(*) FROM userod WHERE ";
+			if(Programs.UsingEcwTight()){
+				command+="BINARY ";//allows different usernames based on capitalization.
+				//Does not need to be tested under Oracle because eCW users do not use Oracle.
+			}
+			command+="UserName='"+POut.String(username)+"' "
 				+"AND UserNum !="+POut.Long(excludeUserNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0") {
