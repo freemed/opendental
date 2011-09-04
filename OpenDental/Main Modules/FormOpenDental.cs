@@ -1532,8 +1532,8 @@ namespace OpenDental{
 			myOutlookBar.SelectedIndex=Security.GetModule(0);//for eCW, this fails silently.
 			if(Programs.UsingEcwTight()) {
 				myOutlookBar.SelectedIndex=4;//Chart module
-				ToolBarMain.Height=0;//this should force the modules further up on the screen
-				ToolBarMain.Visible=false;
+				//ToolBarMain.Height=0;//this should force the modules further up on the screen
+				//ToolBarMain.Visible=false;
 				LayoutControls();
 			}
 			if(Programs.UsingOrion) {
