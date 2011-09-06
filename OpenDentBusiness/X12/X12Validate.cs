@@ -160,7 +160,7 @@ namespace OpenDentBusiness {
 		///<summary>Clinic passed in must not be null.</summary>
 		public static void Clinic(Clinic clinic,StringBuilder strb) {
 			if(clinic.Phone.Length!=10) {//1000A PER04 min length=1.
-				//But 10 digit phone is required by WebMD and is universally assumed 
+				//But 10 digit phone is required in 2010AA and is universally assumed 
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}

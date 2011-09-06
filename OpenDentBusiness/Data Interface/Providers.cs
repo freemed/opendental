@@ -183,7 +183,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Gets a provider from the List.  If provnum is not valid, then it returns null.</summary>
+		///<summary>Gets a provider from ListLong.  If provnum is not valid, then it returns null.</summary>
 		public static Provider GetProv(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			if(provNum==0){

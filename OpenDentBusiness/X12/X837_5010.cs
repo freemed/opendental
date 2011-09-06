@@ -44,7 +44,6 @@ namespace OpenDentBusiness
 			int transactionNum=1;//Gets incremented for each carrier. Can be reused in other functional groups and interchanges, so not persisted
 			//Functional Group Header
 			string groupControlNumber=batchNum.ToString();//Must be unique within file.  We will use batchNum
-			//this needs to be changed.  Medical should not be sent with dental.
 			if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 				//groupControlNumber="2";//this works for now because only two groups
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
@@ -55,6 +54,16 @@ namespace OpenDentBusiness
 					+groupControlNumber+"*"//GS06: Group control number. Max length 9. No padding necessary. 
 					+"X*"//GS07: X
 					+"005010X222~");//GS08: Version
+			}
+			else if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+				sw.WriteLine("GS*HC*"//GS01 2/2 Functional Identifier Code: Health Care Claim.
+					+X12Generator.GetGS02(clearhouse)+"*"//GS02 2/15 Application Sender's Code: Sometimes Jordan Sparks.  Sometimes the sending clinic.
+					+Sout(clearhouse.GS03,15,2)+"*"//GS03 2/15 Application Receiver's Code:
+					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04 8/8 Date: today's date.
+					+DateTime.Now.ToString("HHmm")+"*"//GS05 4/8 TIME: current time.
+					+groupControlNumber+"*"//GS06 1/9 Group Control Number: No padding necessary.
+					+"X*"//GS07 1/2 Responsible Agency Code: X=Accredited Standards Committee X12.
+					+"005010X223A2~");//GS08 1/12 Version/Release/Industry Identifier Code:
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 				//groupControlNumber="1";
@@ -121,6 +130,11 @@ namespace OpenDentBusiness
 							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9
 							+"005010X222~");//ST03: Implementation convention reference
 					}
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+						sw.WriteLine("ST*837*"//ST01 3/3 Transaction Set Identifier Code: 
+							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9 Transaction Set Control Number: 
+							+"005010X223A2~");//ST03 1/35 Implementation Convention Reference
+					}
 					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						sw.WriteLine("ST*837*"//ST01 3/3 Transaction Set Identifier Code: 
 							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9 Transaction Set Control Number: 
@@ -128,7 +142,7 @@ namespace OpenDentBusiness
 					}
 					seg++;
 					sw.WriteLine("BHT*0019*"//BHT01 4/4 Hierarchical Structure Code: 0019=Information Source, Subscriber, Dependant.
-						+"00*"//BHT02 2/2 Transaction Set Purpose Code: 00=Original transmissions are transmissions which have neber been sent to the reciever.
+						+"00*"//BHT02 2/2 Transaction Set Purpose Code: 00=Original transmissions are transmissions which have never been sent to the reciever.
 						+transactionNum.ToString().PadLeft(4,'0')+"*"//BHT03 1/50 Reference Identification: Can be same as ST02.
 						+DateTime.Now.ToString("yyyyMMdd")+"*"//BHT04 8/8 Date: 
 						+DateTime.Now.ToString("HHmmss")+"*"//BHT05 4/8 Time: 
@@ -175,34 +189,32 @@ namespace OpenDentBusiness
 						long clinicNum=clm.ClinicNum;
 						clinic=Clinics.GetClinic(clinicNum);
 					}
-					//2000A HL: Billing/Pay-to provider HL loop
+					//2000A HL: Billing provider HL loop
 					seg++;
 					sw.WriteLine("HL*"+HLcount.ToString()+"*"//HL01 1/12 Heirarchical ID Number: 
 						+"*"//HL02 Hierarchical Parent ID Number: Not used.
 						+"20*"//HL03 1/2 Heirarchical Level Code: 20=Information Source.
 						+"1~");//HL04 1/1 Heirarchical Child Code. 1=Additional Subordinate HL Data Segment in This Hierarchical Structure.
 					billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[i].ProvBill1)];
-					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
-						//2000A PRV: Provider Specialty Information
-						seg++;
-						sw.WriteLine("PRV*BI*"//PRV01: Provider Code. BI=Billing
-							+"PXC*"//PRV02: taxonomy code
-							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Provider taxonomy code
-					}
-					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-						//2000A PRV: Provider Specialty Information (Optional Rendering prov for all claims in this HL)
-						//used instead of 2310B.
-						seg++;
-						sw.WriteLine("PRV*PT*"//PRV01 1/3 Provider Code: BI=Billing.
-							+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
-							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03 1/50 Provider Taxonomy Code: 
-						//PRV04 through PRV06 are not used.
-					}
+					//2000A PRV: Provider Specialty Information 
+					//used instead of 2310B. js 9/5/11 this comment is confusing.
+					seg++;
+					sw.WriteLine("PRV*BI*"//PRV01 1/3 Provider Code: BI=Billing.
+						+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
+						+X12Generator.GetTaxonomy(billProv)+"~");//PRV03 1/50 Provider Taxonomy Code: 
+					//PRV04 through PRV06 are not used.
 					//2000A CUR: Foreign Currency Information. Situational. We do not need to specify because united states dollars are default.
+					//Loop 2010 includes loops 2010AA, 2010AB, and 2010AC.  We only include 2010AA-------------------------------------------
 					//2010AA NM1: Billing provider
 					seg++;
 					sw.Write("NM1*85*");//NM101 2/3 Entity Identifier Code: 85=Billing Provider.
-					sw.Write(((billProv.FName=="")?"2":"1")+"*");//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
+//TODO: 9/5/11 We need a provider.IsNotPerson field.  So default is 0/false.  The exception is true and can be used for certain dummy billing providers.  Will be used here.
+					if(billProv.FName=="") {
+						sw.Write("2*");//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
+					}
+					else {
+						sw.Write("1*");
+					}
 					sw.Write(Sout(billProv.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
 						+Sout(billProv.FName,35)+"*"//NM104 1/35 Name First: Situational. Required when NM102=1. Might be blank.
 						+Sout(billProv.MI,25)+"*"//NM105 1/25 Name Middle: Since this is situational there is no minimum length.
@@ -234,7 +246,12 @@ namespace OpenDentBusiness
 					else {
 						address2=clinic.Address2;
 					}
-					sw.Write(((address2=="")?"":("*"+Sout(address2,55)))+"~");//N302 1/55 Address Information: Situational. Only specify if there is a second address line.
+					if(address2=="") {
+						sw.WriteLine("~");
+					}
+					else {
+						sw.WriteLine("*"+Sout(address2,55)+"~");//N302 1/55 Address Information: Situational. Only specify if there is a second address line.
+					}
 					//2010AA N4: Billing Provider City,State,Zip Code.
 					seg++;
 					string city="";
@@ -259,20 +276,25 @@ namespace OpenDentBusiness
 							+Sout(state,2)+"*"//N402 2/2 State or Province Code: 
 							+Sout(zip.Replace("-",""),15)//N403 3/15 Postal Code: 
 							+"~");//NM404 through NM407 are either situational with United States as default, or not used, so we don't specify any of them.
-					//TODO: there can only be up to 2 REF segments here.
-					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-						//2010AA REF: Office phone number. Required by WebMD.  Can possibly be removed now that we're using NPI.
-						if(clearhouse.ISA08=="0135WCH00") {//if WebMD
-							seg++;
-							if(clinic==null) {
-								sw.WriteLine("REF*LU*"
-									+PrefC.GetString(PrefName.PracticePhone)+"~");
-							}
-							else {
-								sw.WriteLine("REF*LU*"
-									+clinic.Phone+"~");
-							}
+					//2010AA REF - Billing Provider Tax Identification
+					seg++;
+					bool isSSN=false;
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {//and probably medical
+						//SSN is allowed instead of TIN
+						if(!billProv.UsingTIN){
+							isSSN=true;
 						}
+					}
+					sw.Write("REF*");
+					if(isSSN){
+						sw.Write("SY*");//REF01: qualifier. SY=SSN
+					}
+					else{
+						sw.Write("EI*");//REF01: qualifier. EI=EIN
+					}
+					sw.WriteLine(Sout(billProv.SSN,30)+"~");//REF02 1/50 Tax ID #.  Must be a string of exactly 9 digits
+					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {//and medical?
+						//2010AA REF - Billing Provider UIPN/License Information, max repeat 2
 						//2010AA REF: License #. Required by RECS clearinghouse,
 						//but everyone else should find it useful too.
 						seg++;
@@ -280,58 +302,24 @@ namespace OpenDentBusiness
 							+Sout(billProv.StateLicense,50)//REF02 1/50 Reference Identification: 
 							+"~");//REF03 and REF04 are not used.
 						//2010AA REF: Secondary ID number(s). Only required by some carriers.
-						seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
+						//seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
+						//js 9/5/11 secondary ID numbers are no longer allowed now.  I wonder what BCBS will do now.
 					}
-					//It's after the NPI date, now.  So either TIN or SSN (EI or SY) is required here.
+					//2010AA PER - Billing Provider Contact Information
+					//probably required by a number of carriers and by Emdeon
 					seg++;
-					sw.Write("REF*");
-					if(billProv.UsingTIN) {
-						sw.Write("EI*");//REF01: qualifier. EI=EIN
+					sw.Write("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
+						+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02 1/60 Name: Practice Title.
+						+"TE*");//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+					if(clinic==null){
+						sw.WriteLine(Sout(PrefC.GetString(PrefName.PracticePhone),256,1)+"~");//PER04  1/256 Comm Number: telephone number
 					}
-					else {//SSN
-						sw.Write("SY*");//REF01: qualifier. SY=SSN
+					else{
+						sw.WriteLine(Sout(clinic.Phone,256,1)+"~");
 					}
-					sw.WriteLine(Sout(billProv.SSN,30)+"~");//REF02: ID #
-					if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-						//2010AA PER: Billing Provider Contact Info. Required if different than in 1000A
-						//We'll always include it for simplicity
-						seg++;
-						sw.WriteLine("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
-							+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02 1/60 Name: Practice Title.
-							+"TE*"//PER03 2/2 Communication Number Qualifier: TE=Telephone.
-							+Sout((clinic==null)?PrefC.GetString(PrefName.PracticePhone):clinic.Phone,256,1)//PER04 1/256 Communication Number: Telephone Number.
-							+"~");//PER05 through PER09 are all situational or not used. Skipped here.
-					}
-					//2010AB NM1: Situational. We can skip because the payee is the billing provider.
-					//2010AB N3: Pay-to Address
-					seg++;
-					sw.WriteLine("N3*"+Sout(address1,55,1)//N301 1/55 Address Information: 
-						+((address2=="")?"":("*"+Sout(address2,55,1)))//N302 1/55 Address Information: Only specify when there is a second address line.
-						+"~");
-					//2010AB N4 Pay-to Address city, state, zip
-					seg++;
-					sw.WriteLine("N4*"+Sout(city,30,2)+"*"//N401 2/30 City Name:
-						+Sout(state,2,2)+"*"//N402 2/2 State or Province Code: 
-						+Sout(zip,15,3)//N403 3/15 Postal Code: 
-						+"~");//N404 through N407 are for addresses outside the US and Canada, or are not used.
-					//2010AC NM1 Pay-to Plan Name. Situational. We can skip because we do not set BHT06 to '31'.
-					//2010AC N3 Pay-to Plan Address.
-					seg++;
-					sw.WriteLine("N3*"+Sout(PrefC.GetString(PrefName.PracticeBillingAddress),55,1)//N301 1/55 Address Information: 
-						+((PrefC.GetString(PrefName.PracticeBillingAddress2)=="")?"":("*"+PrefC.GetString(PrefName.PracticeBillingAddress2)))//N302 1/55 Address Information: Situational. Do not specify if there is no second address line.
-						+"~");
-					//2010AC N4 Pay-to Plan City, State, Zip.
-					seg++;
-					sw.WriteLine("N4*"+Sout(PrefC.GetString(PrefName.PracticeBillingCity),30,2)+"*"//N401 2/30 City Name: 
-						+Sout(PrefC.GetString(PrefName.PracticeBillingST),2,2)+"*"//N402 2/2 State or Provice Code: Situational. Required for United States.
-						+Sout(PrefC.GetString(PrefName.PracticeBillingZip),15,3)//N403 3/15 Postal Code: Situational. Required for United States.
-						+"~");//N404 through N407 are either situational for outside the United States or are not used, so they are skipped.
-					//2010AC REF Pay-to Plan Secondary Identification. Situational. Not required because it is after the HIPAA date.
-					//2010AC REF Pay-to Plan Tax Identification Number.
-					seg++;
-					sw.WriteLine("REF*EI"//REF01 2/3 Reference Identification Qualifier: EI=Employer's Identification Number (EIN), the only option.
-						+Sout("",50,1)//REF02 1/50 Reference Identification Number: TODO: Put office EIN.
-						+"~");//REF03 and REF04 are not used.
+					//PER05 through PER09 are all situational or not used. Skipped here.
+					//2010AB Not used.
+					//2010AC Not used
 					parentProv=HLcount;
 					HLcount++;
 				}
@@ -414,10 +402,13 @@ namespace OpenDentBusiness
 						relationshipCode="18";
 					}
 					sw.Write(relationshipCode+"*");//SBR02 2/2 Individual Relationship Code: 18=Self (The only option if not blank).
+					//groupNumber and groupName do not need to be validated because they are optional.
 					sw.Write(Sout(insPlan.GroupNum,50)+"*"//SBR03 1/50 Reference Identification: Group Number.
 						+Sout(insPlan.GroupName,60)+"*"//SBR04 1/60 Name: Group Name.
-						+"*");//SBR05 1/3 Insurance Type Code: TODO, fill when payer is medicare and medicare is not the primary plan.
-					sw.WriteLine("~");//SBR06 through SBR08 are not used, and SBR09 is situational but not used since we are after the HIPAA date.
+						+"*");//SBR05 1/3 Insurance Type Code. Situational.  Skip because we don't support secondary Medicare.
+					sw.Write("***");//SBR06, 07, & 08 not used.
+//Derek: National Plan ID is not the same as National Provider ID.  This field is still required
+					sw.WriteLine(GetFilingCode(insPlan)+"~");//"CI~");//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
 					//2010BA NM1: Subscriber Name
 					seg++;
 					sw.WriteLine("NM1*IL*"//NM101 2/3 Entity Identifier Code: IL=Insured or Subscriber (The only option).
@@ -426,28 +417,40 @@ namespace OpenDentBusiness
 						+Sout(subscriber.FName,35)+"*"//NM104 1/35 Name First:
 						+Sout(subscriber.MiddleI,25)+"*"//NM105 1/25 Name Middle:
 						+"*"//NM106 1/10 Name Prefix: Not Used.
-						+"*"//NM107 1/10 Name Suffix: Situational. Required when NM102=1, but not present in Open Dental yet so we leave blank.
+						+"*"//NM107 1/10 Name Suffix: Situational. Not present in Open Dental yet so we leave blank.
 						+"MI*"//NM108 1/2 Identification Code Qualifier: MI=Member Identification Number.
 						+Sout(sub.SubscriberID.Replace("-",""),80,2)//NM109 2/80 Identification Code: Situational. Required when NM102=1.
 						+"~");//NM110 through NM112 are not used.
 					//At the request of WebMD, we always include N3,N4,and DMG even if patient is not subscriber.
 					//This does not make the transaction non-compliant, and they find it useful.
-					//2010BA N3: Subscriber Address. Situational. Required when the patient is the subscriber or considered to be the subscriber.
+					//2010BA N3: Subscriber Address. Situational. Required when the patient is the subscriber.
 					seg++;
 					sw.Write("N3*"+Sout(subscriber.Address,55,1));//N301 1/55 Address Information:
-					sw.WriteLine(((subscriber.Address2=="")?"":("*"+Sout(subscriber.Address2,55)))+"~");//N302 1/55 Address Information: Situational. Required when there is a second address line.
-					//2010BA N4: Subscriber City, State, Zip Code. Situational. Required when the patient is the subscriber or considered to be the subscriber.
+					if(subscriber.Address2=="") {
+						sw.WriteLine("~");
+					}
+					else {
+						//N302 1/55 Address Information: Situational. Required when there is a second address line.
+						sw.WriteLine("*"+Sout(subscriber.Address2,55)+"~");
+					}
+					//2010BA N4: Subscriber City, State, Zip Code. Situational. Required when the patient is the subscriber.
 					seg++;
 					sw.WriteLine("N4*"
 							+Sout(subscriber.City,30,2)+"*"//N401 2/30 City Name:
 							+Sout(subscriber.State,2,2)+"*"//N402 2/2 State or Provice Code:
 							+Sout(subscriber.Zip.Replace("-",""),15,3)//N403 3/15 Postal Code:
 							+"~");//N404 through N407 either not used or required for addresses outside of the United States.
-					//2010BA DMG: Subscriber Demographic Information. Situational. Required when the patient is the subscriber or considered to be the subscriber.
+					//2010BA DMG: Subscriber Demographic Information. Situational. Required when the patient is the subscriber.
 					seg++;
-					sw.WriteLine("DMG*D8*"//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
-						+((subscriber.Birthdate.Year<1900)?"19000101":subscriber.Birthdate.ToString("yyyyMMdd"))+"*"//DMG02 1/35 Date Time Period:
-								+GetGender(subscriber.Gender)+"~");//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
+					sw.Write("DMG*D8*");//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+//todo: Validate subscriber BD?
+					if(subscriber.Birthdate.Year<1900) {
+						sw.Write("19000101*");//DMG02 1/35 Birthdate
+					}
+					else {
+						sw.Write(subscriber.Birthdate.ToString("yyyyMMdd")+"*");//DMG02 1/35 Birthdate
+					}
+					sw.WriteLine(GetGender(subscriber.Gender)+"~");//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
 					//2010BA REF: Secondary Secondary Identification. Situational. Required when an additional identification number to that provided in NM109 of this loop is necessary. We do not use this.
 					//2010BA REF: Property and Casualty Claim Number. Required when the services included in this claim are to be considered as part of a property and casualty claim. We do not use this.
 					//Medical: 2010BA PER: Property and casualty subscriber contact info. We do not use this.
@@ -477,7 +480,13 @@ namespace OpenDentBusiness
 					//2010BB N3: Payer Address.
 					seg++;
 					sw.Write("N3*"+Sout(carrier.Address,55));//N301 1/55 Address Information:
-					sw.WriteLine(((carrier.Address2=="")?"":("*"+Sout(carrier.Address2,55)))+"~");//N302 1/55 Address Information: Required when there is a second address line.
+					if(carrier.Address2=="") {
+						sw.WriteLine("~");
+					}
+					else {
+						//N302 1/55 Address Information: Required when there is a second address line.
+						sw.WriteLine("*"+Sout(carrier.Address2,55)+"~");
+					}
 					//2010BB N4: Payer City, State, Zip Code.
 					seg++;
 					sw.WriteLine("N4*"
@@ -485,8 +494,8 @@ namespace OpenDentBusiness
 						+Sout(carrier.State,2,2)+"*"//N402 2/2 State or Province Code:
 						+Sout(carrier.Zip.Replace("-",""),15,3)//N403 3/15 Postal Code:
 						+"~");//N404 through N407 are either not used or are for addresses outside of the United States.
-					//2010BB REF: Payer Secondary Identificaiton. Situational. No longer required since we are after the HIPAA date. Not used.
-					//2010BB REF: Billing Provider Secondary Identification. Situational. Required when NM109 of loop 2010AA is not used. Since we are using NM109 in loop 2010AA, we do not use this segment.
+					//2010BB REF: Payer Secondary Identificaiton. Situational.
+					//2010BB REF: Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used. Since we are using NM109  in loop 2010AA, we do not use this segment.
 					parentSubsc=HLcount;
 					HLcount++;
 				}
@@ -501,30 +510,36 @@ namespace OpenDentBusiness
 						+"0~");//HL04 1/1 Hierarchical Child Code: 0=No subordinate HL segment in this hierarchical structure.
 					//2000C PAT: Patient Information
 					seg++;
-					if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
-						sw.WriteLine("PAT*"
-							+GetRelat(claim.PatRelat)+"~");//PAT01: Relat
-						//PAT04 not used, so no further lines needed.
-					}
-					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-						sw.WriteLine("PAT*"
-							+GetRelat(claim.PatRelat)+"*"//PAT01 2/2 Individual Relationship Code:
-							+"~");//PAT02 through PAT09 Not Used.
-					}
+					sw.WriteLine("PAT*"
+						+GetRelat(claim.PatRelat)+"*"//PAT01 2/2 Individual Relationship Code:
+						+"~");//PAT02 through PAT09 Not Used.
 					//2010CA NM1: Patient Name
 					seg++;
 					sw.Write("NM1*QC*"//NM101 2/3 Entity Identifier Code: QC=Patient.
 						+"1*"//NM102 1/1 Entity Type Qualifier: 1=Person.
 						+Sout(patient.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
-						+Sout(patient.FName,35)+//NM104 1/35 Name First:
-						((patient.MiddleI=="")?"":("*"+Sout(patient.MiddleI,25)))//NM105 1/25 Name Middle: 
-						+"~");//NM106 through NM112 are not used, except for NM107, which is situational, but we don't have a suffix in Open Dental yet.
+						+Sout(patient.FName,35));//NM104 1/35 Name First
+						if(patient.MiddleI=="") {
+							sw.WriteLine("~");
+						}
+						else {
+							sw.WriteLine("*"+Sout(patient.MiddleI,25)+"~");//NM105 1/25 Name Middle
+						}
+						//NM106: prefix not used. NM107: No suffix field in Open Dental
+						//NM108-NM112 no longer allowed to be used.
+						//instead of including a patID here, the patient should get their own subsriber loop.
+//TODO: js 9/5/11 Create subscriber loop whenever patID is present.  Test.
 					//2010CA N3: Patient Address.
 					seg++;
 					sw.Write("N3*"+
-						Sout(patient.Address,55)+//N301 1/55 Address Information: 
-						((patient.Address2=="")?"":("*"+Sout(patient.Address2,55)))+//N302 1/55 Address Information: Only required when there is a second address line.
-						"~");
+						Sout(patient.Address,55));//N301 1/55 Address Information
+					if(patient.Address2=="") {
+						sw.WriteLine("~");
+					}
+					else {
+						//N302 1/55 Address Information: Only required when there is a second address line.
+						sw.WriteLine("*"+Sout(patient.Address2,55)+"~");
+					}
 					//2010CA N4: Patient City, State, Zip Code.
 					seg++;
 					sw.WriteLine("N4*"
@@ -539,6 +554,7 @@ namespace OpenDentBusiness
 						+GetGender(patient.Gender)//DMG03 1/1 Gender Code: F=Female,M=Male,U=Unknown.
 						+"~");//DMG04 through DMG11 are Not Used.
 					//2010CA REF: Property and Casualty Claim Number. Situational. We do not use this.
+					//2010CA REF: (institutional) Property and Casualty Patient Identifier. Situational.  We do not use.
 					HLcount++;
 				}
 				#endregion
@@ -549,16 +565,37 @@ namespace OpenDentBusiness
 					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),38)+"*"//CLM01 1/38 Claim Submitter's Identifier: A unique id. Can support 20 char.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness. We might need to allow user to override for claims based on preauths.
 					+claim.ClaimFee.ToString()+"*"//CLM02 1/18 Monetary Amount:
 					+"*"//CLM03 1/2 Claim Filing Indicator Code: Not Used.
-					+"*"//CLM04 1/2 Non-Institutional Claim Type Code: Not Used.
-					+GetPlaceService(claim.PlaceService)+"::B::1*"//CLM05 1/2 Health Care Service Location Information (Facility Code Value 1/2::Facility Code Qualifier 1/2 [B=Place of Service Codes for Professional of Dental Services]::Claim Frequency Type Code 1/1 [1=Original claim]):
-					+"Y*"//CLM06 1/1 Yes/No Condition or Response Code: prov sig on file (always yes)
+					+"*");//CLM04 1/2 Non-Institutional Claim Type Code: Not Used.
+					//CLM05 Health Care Service Location Information
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+//todo: js 9/5/11 Consider a two or three digit field called claim.UniformBillType
+					//default could be 731: 7=clinic, 3=outpatient, 1=new claim.
+					sw.Write("73"+":"//CLM05-1 1/2  Facility Code Value: First and second position of UniformBillType
+						+"B:"//CLM05-2 1/2 Facility Code Qualifier, A=Uniform Billing Claim Form Bill Type
+						+"1"+"*");//CLM05-3 1/1 Claim Frequency Type Code: Third position of UniformBillType
+				}
+				else{
+					sw.Write(GetPlaceService(claim.PlaceService)+":"//CLM05-1 1/2  Facility Code Value: Place of Service
+					+"B:"//CLM05-2 1/2 Facility Code Qualifier, B=Place of Service Codes
+//todo: js 9/5/11 Consider supporting corrected and replacement.
+					+"1"+"*");//CLM05-3 1/1 Claim Frequency Type Code: Code source 235: Claim Frequency Type Code. 1=original, 6=corrected, 7=replacement, 8=void(in limited jursidictions).  We currently only support 1-original.
+				}
+				sw.Write("Y*"//CLM06 1/1 Yes/No Condition or Response Code: prov sig on file (always yes)
 					+"A*");//CLM07 1/1 Provider Accept Assignment Code: prov accepts medicaid assignment. OD has no field for this, so no choice
-				sw.Write((sub.AssignBen?"Y":"N")+"*");//CLM08 1/1 Yes/No Condition or Response Code:
-				sw.Write("Y");//CLM09 1/1 Release of Information Code: Y or I(which we don't support)
+				sw.Write((sub.AssignBen?"Y":"N")+"*");//CLM08 1/1 Yes/No Condition or Response Code. We do not support W.
+				sw.Write(sub.ReleaseInfo?"Y":"I");//CLM09 1/1 Release of Information Code: Y or I(which is equivalent to No)
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+					//CLM10-19 not used, 20 not supported.
+					sw.WriteLine("~");
+				}
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
+					//todo
+				}
 				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 					if(claim.ClaimType=="PreAuth") {
 						sw.WriteLine("**"//* for CLM09. CLM10 not used
 							+GetRelatedCauses(claim)+"*"//CLM11: Accident related, including state. Might be blank.
+//todo: js 9/5/11 EPSTD
 							+"*"//CLM12: special programs like EPSTD
 							+"******"//CLM13-18 not used
 							+"PB~");//CLM19 PB=Predetermination of Benefits. Not allowed in medical claims. What is the replacement??
@@ -574,21 +611,24 @@ namespace OpenDentBusiness
 					}
 				}
 				//CLM20: delay reason code
+				//DTP loops------------------------------------------------------------------------------------------------------
 				//2300 DTP: Date of onset of current illness (medical)
 				//2300 DTP: Initial treatment date (spinal manipulation) (medical)
 				//2300 DTP: Date last seen (foot care) (medical)
 				//2300 DTP: Date accute manifestation (spinal manipulation) (medical)
 				//2300 DTP: Date referral
-				//2300 DTP: Date accident
-				if(claim.AccidentDate.Year>1880) {
-					seg++;
-					sw.WriteLine("DTP*439*"//DTP01: 439=accident
-						+"D8*"//DTP02: use D8
-						+claim.AccidentDate.ToString("yyyyMMdd")+"~");
-				}
-				//2300 DTP: (a bunch more useless medical dates)
 				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-					//2300 DTP: Date ortho appliance placed
+					//2300 DTP: Date accident
+					if(claim.AccidentDate.Year>1880) {
+						seg++;
+						sw.WriteLine("DTP*439*"//DTP01: 439=accident
+							+"D8*"//DTP02: use D8
+							+claim.AccidentDate.ToString("yyyyMMdd")+"~");
+					}
+				}
+				//2300 DTP: (a bunch more useless medical and institutional dates)
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
+					//2300 DTP: Date Appliance Placement
 					if(claim.OrthoDate.Year>1880) {
 						seg++;
 						sw.WriteLine("DTP*452*"//DTP01: 452=Appliance placement
@@ -611,6 +651,8 @@ namespace OpenDentBusiness
 							+"*"//DN101 not used because no field yet in OD.
 							+claim.OrthoRemainM.ToString()+"~");
 					}
+				}
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 					//2300 DN2: Missing teeth
 					List<string> missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 					bool doSkip;
@@ -640,6 +682,15 @@ namespace OpenDentBusiness
 							+"M~");//DN202: M=Missing, I=Impacted, E=To be extracted
 					}
 				}
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+					//2300 CL1: Institutional Claim Code
+//Todo: 9/5/11 Look for examples, add fields, compare with UB-40
+					//CL101 1/1 Admission Type Code: Code source 231 Priority of Admission
+					//CL102 1/1 Admission Source Code: Code source 230 Point of Origin for Admission
+					//CL103 1/2 Patient Status Code: Code source 239 Patient Status Code
+					//CL104 Not used
+				}
+				//PWK loops-------------------------------------------------------------------------------------------------------
 				//2300 PWK: Paperwork. Used to identify attachments.
 				/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
 					seg++;
@@ -720,32 +771,55 @@ namespace OpenDentBusiness
 						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
 						+idCode+"~");//PWK06: Identification Code.
 				}
-				//2300 CN1: Contract Info (medical)
+				//2300 CN1: Contract Info (medical and inst)
+				//2300 AMT: Patient estimated amount due (inst)
 				//2300 AMT: Patient amount paid
 				//2300 AMT: Total Purchased Service Amt (medical)
-				//2300 REF: (A bunch of ref segments for medical which we don't need)
-				//2300 REF: Predetermination ID
+				//REF loops-------------------------------------------------------------------------------------------------------
+				//All loops should be listed for medical (still todo), dental, and inst.  Order varies between types, so is not important.
+				//2300 REF: Predetermination Identification G3 (dental)
+					//required when sending claim for previously predetermined services
 				if(claim.PreAuthString!="") {
 					seg++;
-					//note for REF01: G1 replaced G3 in 837_A specs, including 837pro.
-					sw.WriteLine("REF*G1*"//REF01: G1=prior auth number
-						+Sout(claim.PreAuthString,30)+"~");//REF02: Prior Auth Identifier
+					sw.WriteLine("REF*G3*"//REF01: G3=Predetermination of Benefits Identification Number
+						+Sout(claim.PreAuthString,50)+"~");//REF02 1/50 Prior Auth Identifier
 				}
-				//2300 REF: Original Reference Number
-				//aka Original Document Control Number/Internal Control Number (DCN/ICN).
-				//aka Transaction Control Number (TCN).  
-				//aka Claim Reference Number. 
-				//Seems to be required by Medicaid when voiding a claim or resubmitting a claim by setting the CLM05-3.
-				//todo: Implement 
-
-				//2300 REF: Referral number
+				//2300 REF: Service Authorization Exception Code 4N (dental,inst)
+					//required if services were performed without authorization
+				//2300 REF: Payer Claim Control Number F8 (dental,inst)
+					//required if this is a replacement or a void.
+					//Was originally called Original Reference Number
+					//aka Original Document Control Number/Internal Control Number (DCN/ICN).
+					//aka Transaction Control Number (TCN).  
+					//aka Claim Reference Number. 
+					//Seems to be required by Medicaid when voiding a claim or resubmitting a claim by setting the CLM05-3.
+					//todo: Implement
+				//2300 REF: Referral Number 9F (dental,inst,med)
 				if(claim.RefNumString!="") {
 					seg++;
-					sw.WriteLine("REF*9F*"//REF01: 9F=Referral number. Ok for medical, too.
+					sw.WriteLine("REF*9F*"//REF01: 9F=Referral number. 
 						+Sout(claim.RefNumString,30)+"~");
 				}
-				//2300 K3: File info (medical). Not used.
-				//2300 NTE: Note
+				//2300 REF: Prior Authorization G1 (dental,inst)
+//todo: G1 and G3 have been muddled.  In 4010, we were sending G1, so I think we need to add a field for this,
+					//or else current users will experience a loss of functionality.
+					//Do not report predetermination of benefits id number here.
+				//2300 REF: Repriced Claim Number 9A (dental,inst)
+				//2300 REF: Adjusted Repriced Claim Number 9C (dental,inst)
+				//2300 REF: Claim Identifier For Transmission Intermediaries D9, not required (dental,inst)
+				//2300 REF: Investigational Device Exemption Number LX (inst)
+					//required for FDA IDE.
+				//2300 REF: Auto Accident State LU (inst)
+					//seems to me to be a duplicate of the info in CLM11
+				//2300 REF: Medical Record Number (inst)
+				//2300 REF: Demonstration Project Identifier (inst)
+					//seems very unimportant
+				//2300 REF: Peer Review Organization (PRO) Approval Number G4 (inst)
+				//2300 K3: File info (medical, dental, inst). Not used.
+				//NTE loops------------------------------------------------------------------------------------------------------
+				//2300 NTE: Claim Note (inst)
+					//a number of NTE01 codes other than 'ADD', which we don't support
+				//2300 NTE: Claim Note (dental) aka Billing Note (inst)
 				string note="";
 				if(claim.AttachmentID!="" && !claim.ClaimNote.StartsWith(claim.AttachmentID)) {
 					note=claim.AttachmentID+" ";
@@ -756,52 +830,121 @@ namespace OpenDentBusiness
 					sw.WriteLine("NTE*ADD*"//NTE01: ADD=Additional infor
 						+Sout(note,80)+"~");
 				}
+				//CRx loops------------------------------------------------------------------------------------------------------
 				//2300 CR1: (medical)Ambulance transport info
 				//2300 CR2: (medical) Spinal Manipulation Service Info
 				//2300 CRC: (medical) About 3 irrelevant segments
-				ArrayList diagnoses=new ArrayList();//princDiag will always be the first element.
-				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
+				//2300 CRC: (inst) EPSDT Referral
+					//required on EPSDT claims when the screening service is being billed in this claim.
+				//HI loops-------------------------------------------------------------------------------------------------------
+				//All HI loops should be listed for medical (still todo), dental, and inst. 
+				List<string> diagnosisList=new List<string>();//princDiag will always be the first element.
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical
+					|| clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) 
+				{
 					for(int j=0;j<claimProcs.Count;j++) {
 						proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 						if(proc.DiagnosticCode=="") {
 							continue;
 						}
 						if(proc.IsPrincDiag) {
-							if(diagnoses.Contains(proc.DiagnosticCode)) {
-								diagnoses.Remove(proc.DiagnosticCode);
+							if(diagnosisList.Contains(proc.DiagnosticCode)) {
+								diagnosisList.Remove(proc.DiagnosticCode);
 							}
-							diagnoses.Insert(0,proc.DiagnosticCode);//princDiag always goes first. There will always be one.
+							diagnosisList.Insert(0,proc.DiagnosticCode);//princDiag always goes first. There will always be one.
 						}
 						else {//not princDiag
-							if(!diagnoses.Contains(proc.DiagnosticCode)) {
-								diagnoses.Add(proc.DiagnosticCode);
+							if(!diagnosisList.Contains(proc.DiagnosticCode)) {
+								diagnosisList.Add(proc.DiagnosticCode);
 							}
 						}
 					}
-					//2300 HI: (medical) Health Care Diagnosis Code. Required
+				}
+				//2300 HI: Principal Diagnosis BK (inst)
+				//required
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
 					seg++;
 					sw.Write("HI*"
 						+"BK:"//HI01-1: BK=ICD-9 Principal Diagnosis
-						+Sout((string)diagnoses[0],30).Replace(".",""));//HI01-2: Diagnosis code. No periods.
-					for(int j=1;j<diagnoses.Count;j++) {
+//todo: validate at least one diagnosis
+						+Sout((string)diagnosisList[0],30).Replace(".",""));//HI01-2: Diagnosis code. No periods.
+					sw.WriteLine("~");
+				}
+				//medical stub for Principal Diagnosis BK
+				/*if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+					seg++;
+					sw.Write("HI*"
+						+"BK:"//HI01-1: BK=ICD-9 Principal Diagnosis
+						+Sout((string)diagnosisList[0],30).Replace(".",""));//HI01-2: Diagnosis code. No periods.
+					for(int j=1;j<diagnosisList.Count;j++) {
 						if(j>11) {//maximum of 12 diagnoses
 							continue;
 						}
 						sw.Write("*"//this is the * from the _previous_ field.
 							+"BF:"//HI0#-1: BF=ICD-9 Diagnosis
-							+Sout((string)diagnoses[j],30).Replace(".",""));//HI0#-2: Diagnosis code. No periods.
+							+Sout((string)diagnosisList[j],30).Replace(".",""));//HI0#-2: Diagnosis code. No periods.
 					}
 					sw.WriteLine("~");
-					//2300 HI: (medical) Anesthesia related procedure
-					//2300 HI: (medical) Condition information
-				}
-				//2300 HCP: (medical) (not used) Claim Pricing/Repricing Info
-				//2310A Referring provider. We don't use.
-				//2310B Rendering provider. Only required if different from the billing provider
-				//But required by WebClaim, so we will always include it
-				provTreat=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
-				//if(claim.ProvTreat!=claim.ProvBill){
-				//2310B NM1: name
+				}*/
+				//2300 HI: Health Care Diagnosis Code BK (dental)
+					//todo: might be a good idea
+					//for OMS or anesthesiology
+				//2300 HI: Admitting Diagnosis BJ (inst)
+					//required for inpatient admission.
+				//2300 HI: Patient's Reason for Visit PR (inst)
+//todo: probably required
+					//required for outpatient visits.
+				//2300 HI: External Cause of Injury BN (inst)
+				//2300 HI: Diagnosis Related Group (DRG) Information (inst)
+					//for inpatient hospital under DRG contract
+				//2300 HI: Other Diagnosis Information BF (inst)
+					//when other conditions coexist or develop
+				//2300 HI: Principal Procedure Information BR (inst)
+					//required on inpatient claims when a procedure was performed
+				//2300 HI: Other Procedure Information BQ (inst)
+					//inpatient claims for additional procedures.
+				//2300 HI: Occurence Span Information BI (inst)
+					//for an occurence span code
+				//2300 HI: Occurence Information BH (inst)
+					//for an occurence code
+				//2300 HI: Value Information BE (inst)
+					//for a value code
+				//2300 HI: Condition Information BG (inst)
+					//for a condition code
+				//2300 HI: Treatment Code Information TC (inst)
+					//when home health agencies need to report plan of treatment information under contracts
+				//2300 HCP: Claim Pricing/Repricing Information (medical, inst) 
+					//not used 
+				//2310 Provider Loops--------------------------------------------------------------------------------------------
+				//Since order might be important, we have to handle dental, medical, and institutional separately.  Label each. 
+				//todo: (medical) provider loops.  The medical loops below were just thrown in here from somewhere else and are even started.
+				//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.
+				//2310D (medical)N3,N4,REF,PER: not supported.
+				//2310E (medical)NM1,REF Supervising Provider. Not supported.
+				//2310F (medical)NM1,N3,N4 Ambulance Pickup location. Not supported.
+				//2310G (medical)NM1,N3,N4 Ambulance Dropoff location. Not supported.
+				//2310A (inst) Attending Provider 71 
+					//required. Provider with overall responsibility for care and treatment reported on this claim.
+//todo: attending provider
+				//2310A (inst) NM1
+				//2310A (inst) PRV
+				//2310B (inst) Operating Physician Name 72 
+				//for surgical procedure codes
+				//2310C (inst) Other Operating Physician Name ZZ
+				//2310D (inst) Rendering Provider Name 82
+				//if different from attending provider AND when regulations require both facility and professional components.
+				//2310E (inst) Service Facility Location Name 77
+//todo:
+				//required when place of service is different from loop 2010AA billing provider
+				//2310F (inst) Referring Provider Name DN
+				//required when referring provider is different from attending provider
+				//2310A (dental) Referring provider 
+				//We don't use. js 9/5/11 Why not?
+				//2310B (dental) Rendering provider.
+				//Only required if different from the billing provider, but required by WebClaim, so we will always include it.
+//todo: js 9/5/11 I did not review any of the dental provider loops.
+				provTreat=Providers.GetProv(claim.ProvTreat);
+				//2310B (dental) NM1: name
 				seg++;
 				sw.Write("NM1*82*"//82=rendering prov
 					+"1*"//NM102: 1=person
@@ -813,7 +956,8 @@ namespace OpenDentBusiness
 				//It's after the NPI date, now, so always send NPI here:
 				sw.Write("XX*");//NM108: ID code qualifier. 24=EIN. 34=SSN, XX=NPI
 				sw.WriteLine(Sout(provTreat.NationalProvID,80)+"~");//NM109: ID code.  NPI validated.
-				//2310B PRV: Rendering provider information
+				//2310B (dental) PRV: Rendering provider information
+				/*//medical gets moved up to its own section
 				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 					seg++;
 					sw.WriteLine("PRV*"
@@ -821,13 +965,12 @@ namespace OpenDentBusiness
 						+"PXC*"//PRV02: PXC=Health Care Provider Taxonomy Code
 						+X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
 				}
-				else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-					seg++;
-					sw.WriteLine("PRV*"
-						+"PE*"//PRV01: PE=Performing
-						+"ZZ*"//PRV02: ZZ=mutually defined taxonomy code
-						+X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
-				}
+				else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {*/
+				seg++;
+				sw.WriteLine("PRV*"
+					+"PE*"//PRV01: PE=Performing
+					+"ZZ*"//PRV02: ZZ=mutually defined taxonomy code
+					+X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
 				//2310B REF: Rendering provider secondary ID
 				//All of these will be eliminated when NPI is mandated.
 				//isMedical, only allowed types are 0B,1G,G2,and LU.
@@ -839,9 +982,7 @@ namespace OpenDentBusiness
 					//2310B REF: Rendering Provider Secondary ID number(s). Only required by some carriers.
 					seg+=WriteProv_REF(sw,provTreat,claimItems[i].PayorId0);
 				}
-				//2310C (medical)Purchased Service provider secondary ID. We don't support this for medical
-				//2310C (not medical)NM1: Service facility location.  Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33
-				//if(!isMedical && 
+				//2310C (dental) NM1: Service facility location.  Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33
 				if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
 					|| claim.PlaceService==PlaceOfService.SkilledNursFac || claim.PlaceService==PlaceOfService.CustodialCareFacility) {//AdultLivCareFac
 					seg++;
@@ -855,12 +996,7 @@ namespace OpenDentBusiness
 						+"XX*"//NM108: XX=NPI
 						+Sout(billProv.NationalProvID,80)+"~");//NM109: NPI. Validated.
 				}
-				//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.
-				//2310D (medical)N3,N4,REF,PER: not supported.
-				//2310E (medical)NM1,REF Supervising Provider. Not supported.
-				//2310F (medical)NM1,N3,N4 Ambulance Pickup location. Not supported.
-				//2310G (medical)NM1,N3,N4 Ambulance Dropoff location. Not supported.
-				//2320 Other subscriber
+				//2320 Other subscriber------------------------------------------------------------------------------------------
 				if(claim.PlanNum2>0) {
 					seg++;
 					sw.Write("SBR*");
@@ -892,7 +1028,9 @@ namespace OpenDentBusiness
 					//to use CI for everyone. I don't think anyone will care.
 					//After mandated National Plan ID, then not used anymore.
 					//2320 CAS: Claim Level Adjustments. Not supported.
-					//2320 AMT: COB Payer paid amount
+					//2320 AMT-------------------------------------------------------------------------------------------------------
+					//2320 AMT: COB Payer Paid Amount D (inst,dental)
+					//required when the claim has been adjudicated by payer in loop 2330B
 					if(claim.ClaimType!="P") {
 						double paidOtherIns=0;
 						for(int j=0;j<claimProcs.Count;j++) {
@@ -902,20 +1040,27 @@ namespace OpenDentBusiness
 						sw.WriteLine("AMT*D*"//AMT01: D=Payor amount paid
 							+paidOtherIns.ToString("F")+"~");//AMT02: Amount
 					}
-					//2320 AMT: (medical) COB Total Non-Covered Amt (A8)
-					//2320 AMT: (medical) Remaining Patient liability (EAF)
-					//2320 AMT: COB Approved Amt (AAE)
-					//2320 AMT: COB Allowed Amt (B6)
-					//2320 AMT: COB Patient Responsibility (F2)
-					//2320 AMT: COB Coverage Amt (AU)
-					//2320 AMT: COB Discount Amt (D8)
-					//2320 AMT: COB Patient Paid Amt (F5)
+					//2320 AMT: Remaining Patient liability EAF (medical,inst,dental)
+//todo:
+					//required when claim has been adjudicated by payer in loop 2330B
+					//2320 AMT: COB Total Non-Covered Amount A8 (medical,inst,dental)
+					//claim cannot have been adjudicated
+					/*The following dental AMT segments were present in 4010 but not in 5010
+					 * curious where they went. js 9/5/11
+					//2320 AMT: COB Approved Amt AAE (dental)
+					//2320 AMT: COB Allowed Amt B6 (dental)
+					//2320 AMT: COB Patient Responsibility F2 (dental)
+					//2320 AMT: COB Coverage Amt AU (dental)
+					//2320 AMT: COB Discount Amt D8 (dental)
+					//2320 AMT: COB Patient Paid Amt F5 (dental)*/
+					//2320 AMT --End of section-------------------------------------------------------------------------------------
 					//2320 DMG: Other subscriber demographics
+					/*Gone for 5010?
 					seg++;
 					sw.WriteLine("DMG*D8*"//DMG01: use D8
 						+otherSubsc.Birthdate.ToString("yyyyMMdd")+"*"//DMG02: Birthdate
-						+GetGender(otherSubsc.Gender)+"~");//DMG03: gender
-					//2320 OI: Other ins info
+						+GetGender(otherSubsc.Gender)+"~");//DMG03: gender*/
+					//2320 OI: Other Insurance Coverage Information
 					seg++;
 					sw.Write("OI***");//OI01 & 02 not used
 					if(otherSub.AssignBen) {
@@ -924,13 +1069,17 @@ namespace OpenDentBusiness
 					else {
 						sw.Write("N***");
 					}
-					//if(otherPlan.ReleaseInfo){
-					sw.WriteLine("Y~");//OI06: release info. Y or I(which we don't support)
-					//}
-					//else{
-					//	sw.WriteLine("N~");
-					//}
-					//2320 MOA: (medical) We don't support
+					if(otherSub.ReleaseInfo){
+						sw.WriteLine("Y~");//OI06: release info. Y or I(which we don't support)
+					}
+					else{
+						sw.WriteLine("I~");//essentially same as 'no'
+					}
+					//2320 MIA: (inst) Inpatient Adjudication Information
+					//We don't support.
+					//2320 MOA: (medical,inst,dental) Outpatient Adjudication Information
+					//For reporting remark codes from ERAs.  We don't support.
+					//2330A Other subscriber -----------------------------------------------------------------------------------------
 					//2330A NM1: Other subscriber name
 					seg++;
 					sw.WriteLine("NM1*IL*"//NM010: IL=insured
@@ -959,6 +1108,7 @@ namespace OpenDentBusiness
 						+Sout(otherSubsc.State,2)+"*"//N402: State
 						+Sout(otherSubsc.Zip,15)+"~");//N403: Zip
 					//2330A REF: Other subscriber secondary ID. Not supported.
+					//2330B Other payer--------------------------------------------------------------------------------------------
 					//2330B NM1: Other payer name
 					seg++;
 					sw.Write("NM1*PR*"//NM101: PR=Payer
@@ -1004,6 +1154,7 @@ namespace OpenDentBusiness
 					//2330B REF: Other payer secondary ID
 					//2330B REF: Other payer referral number
 					//2330B REF: Other payer claim adjustment indicator
+					//2330 more that we don't support-----------------------------------------------------------------------------
 					//2330C: Other payer patient info. Only used in COB.
 					//2330D: Other payer referring provider. We don't support
 					//2330E,F,G,H,I: (medical) not supported
@@ -1043,11 +1194,11 @@ namespace OpenDentBusiness
 						}
 						else {
 							int diagI=1;
-							for(int d=0;d<diagnoses.Count;d++) {
+							for(int d=0;d<diagnosisList.Count;d++) {
 								if(d>7) {//we can't point to any except first 8.
 									continue;
 								}
-								if((string)diagnoses[d]==proc.DiagnosticCode) {
+								if((string)diagnosisList[d]==proc.DiagnosticCode) {
 									diagI=d+1;
 								}
 							}
@@ -1064,6 +1215,9 @@ namespace OpenDentBusiness
 						//SV115: Copay status code: 0 or blank. Not supported
 						//2400 SV5,PWK,CR1,CR2,CR3,CR5,CRC(x4): (medical)Unsupported
 					}//if isMedical
+					else if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+
+					}
 					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						//2400 SV3: Dental Service
 						seg++;
