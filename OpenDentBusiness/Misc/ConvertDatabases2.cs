@@ -6376,6 +6376,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE provider MODIFY IsNotPerson NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD SpecialProgramCode tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD SpecialProgramCode number(3)";
+					Db.NonQ(command);
+					command="UPDATE claim SET SpecialProgramCode = 0 WHERE SpecialProgramCode IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY SpecialProgramCode NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD UniformBillType varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD UniformBillType varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -6422,5 +6442,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
+
+				
 
 				
