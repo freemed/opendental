@@ -74,6 +74,8 @@ namespace OpenDentBusiness{
 		public string StateRxID;
 		///<summary>True if the provider key for this provider is set up for report access.</summary>
 		public bool EhrHasReportAccess;
+		///<summary></summary>
+		public bool IsNotPerson;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("ProvColor",typeof(int))]

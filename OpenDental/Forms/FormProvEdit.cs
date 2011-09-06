@@ -75,6 +75,7 @@ namespace OpenDental{
 		private TextBox textStateRxID;
 		private Label label12;
 		private CheckBox checkEhrHasReportAccess;
+		private CheckBox checkIsNotPerson;
 		public Provider ProvCur;
 
 		///<summary></summary>
@@ -166,6 +167,7 @@ namespace OpenDental{
 			this.textStateRxID = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.checkEhrHasReportAccess = new System.Windows.Forms.CheckBox();
+			this.checkIsNotPerson = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupAnesthProvType.SuspendLayout();
@@ -774,12 +776,23 @@ namespace OpenDental{
 			this.checkEhrHasReportAccess.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkEhrHasReportAccess.Visible = false;
 			// 
+			// checkIsNotPerson
+			// 
+			this.checkIsNotPerson.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsNotPerson.Location = new System.Drawing.Point(371,385);
+			this.checkIsNotPerson.Name = "checkIsNotPerson";
+			this.checkIsNotPerson.Size = new System.Drawing.Size(168,17);
+			this.checkIsNotPerson.TabIndex = 108;
+			this.checkIsNotPerson.Text = "Is Not a Person";
+			this.checkIsNotPerson.Visible = false;
+			// 
 			// FormProvEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(849,665);
+			this.Controls.Add(this.checkIsNotPerson);
 			this.Controls.Add(this.checkEhrHasReportAccess);
 			this.Controls.Add(this.textStateRxID);
 			this.Controls.Add(this.label12);
@@ -948,6 +961,7 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				checkIsCDAnet.Visible=true;
 			}
+			checkIsNotPerson.Checked=ProvCur.IsNotPerson;
 		}
 
 		private void butColor_Click(object sender, System.EventArgs e) {
@@ -1105,6 +1119,7 @@ namespace OpenDental{
 			else {
 				ProvCur.AnesthProvType=0;
 			}
+			ProvCur.IsNotPerson=checkIsNotPerson.Checked;
 			if(IsNew) {
 				Providers.Insert(ProvCur);
 			}

@@ -6364,6 +6364,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim ADD PriorAuthorizationNumber varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE provider ADD IsNotPerson tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE provider ADD IsNotPerson number(3)";
+					Db.NonQ(command);
+					command="UPDATE provider SET IsNotPerson = 0 WHERE IsNotPerson IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE provider MODIFY IsNotPerson NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -6404,6 +6416,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+
+				
 
 
 
