@@ -803,6 +803,7 @@ namespace OpenDentBusiness
 				//2300 REF: Prior Authorization G1 (dental,inst)
 //todo: G1 and G3 have been muddled.  In 4010, we were sending G1, so I think we need to add a field for this,
 					//or else current users will experience a loss of functionality.
+					//claim.
 					//Do not report predetermination of benefits id number here.
 				//2300 REF: Repriced Claim Number 9A (dental,inst)
 				//2300 REF: Adjusted Repriced Claim Number 9C (dental,inst)

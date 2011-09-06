@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		public double InsPayAmt;
 		///<summary>Deductible applied to this claim.</summary>
 		public double DedApplied;
-		///<summary>The preauth number received from ins.</summary>
+		///<summary>The predetermination of benefits number received from ins. </summary>
 		public string PreAuthString;
 		///<summary>Single char for No, Initial, or Replacement.</summary>
 		public string IsProsthesis;
