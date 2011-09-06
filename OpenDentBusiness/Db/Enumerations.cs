@@ -1693,6 +1693,15 @@ namespace OpenDentBusiness{
 		EZTEC_OTHER_DS_OPEN
 	}
 
+	///<summary>0=None, 1=EPSDT_1, 2=Handicapped_2, 3=SpecialFederal_3, (no 4), 5=Disability_5</summary>
+	public enum EnumClaimSpecialProgram {
+		None=0,
+		EPSDT_1=1,
+		Handicapped_2=2,
+		SpecialFederal_3=3,
+		Disability_5=5
+	}
+
 	
 }
 

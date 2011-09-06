@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 		public double CanadaAnticipatedPayAmount;
 		///<summary></summary>
 		public string PriorAuthorizationNumber;
-		///<summary></summary>
+		///<summary>Enum:EnumClaimSpecialProgram </summary>
 		public EnumClaimSpecialProgram SpecialProgramCode;
 		///<summary></summary>
 		public string UniformBillType;
@@ -167,14 +167,6 @@ namespace OpenDentBusiness{
 
 		public override int GetHashCode() {
 			return base.GetHashCode();
-		}
-		///<summary>0=None, 1=EPSDT_1, 2=Handicapped_2, 3=SpecialFederal_3, (no 4), 5=Disability_5</summary>
-		public enum EnumClaimSpecialProgram{
-		None=0, 
-		EPSDT_1=1, 
-		Handicapped_2=2, 
-		SpecialFederal_3=3, 
-		Disability_5=5
 		}
 
 	}
