@@ -6306,6 +6306,62 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'AppointmentSearchBehavior','0')";
 					Db.NonQ(command);
 				}
+				//Insert Apixia Imaging Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'Apixia', "
+						+"'Apixia Digital Imaging by Apixia Inc.', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\Digirex\digirex.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"', "
+						+"'System path to Apixia Digital Imaging ini file', "
+						+"'"+POut.String(@"C:\Program Files\Digirex\Switch.ini")+"')";
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'Apixia')";
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"(SELECT MAX(ProgramNum)+1 FROM program),"
+						+"'Apixia', "
+						+"'Apixia Digital Imaging by Apixia Inc.', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\Digirex\digirex.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"(SELECT MAX(ProgramPropertyNum)+1 FROM programproperty),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'System path to Apixia Digital Imaging ini file', "
+						+"'"+POut.String(@"C:\Program Files\Digirex\Switch.ini")+"')";
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'Apixia')";
+					Db.NonQ32(command);
+				}//end Apixia Imaging bridge
+
+
+
+
+
+
 
 
 

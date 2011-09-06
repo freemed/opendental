@@ -32,6 +32,7 @@ namespace OpenDentBusiness{
 	///<summary>This enum is stored in the database as strings rather than as numbers, so we can do the order alphabetically and we can change it whenever we want.</summary>
 	public enum ProgramName {
 		None,
+		Apixia,
 		Apteryx,
 		Camsight,
 		Cerec,
