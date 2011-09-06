@@ -98,8 +98,8 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT schedule.* "
 				+"FROM schedule "//,provider "
-				+"WHERE SchedDate BETWEEN "+POut.Date(startDate)+" AND "+POut.Date(startDate.AddYears(2))+" "
-				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";//Practice or Provider or Employee
+				+"WHERE SchedDate BETWEEN "+POut.Date(startDate)+" AND "+POut.Date(startDate.AddYears(2))+" ";
+				//+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";//Practice or Provider or Employee
 			return RefreshAndFill(command);
 		}
 

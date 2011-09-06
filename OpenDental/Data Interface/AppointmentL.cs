@@ -464,6 +464,9 @@ namespace OpenDental{
 				if(ScheduleList[s].SchedDate.Date!=ScheduleDate) {//ignore schedules for different dates.
 					continue;
 				}
+				if(ScheduleList[s].SchedType==ScheduleType.Blockout) {
+					continue;//might want to change this behavior later
+				}
 				if(ProviderNums.Contains(ScheduleList[s].ProvNum)) {//schedule applies to one of the selected providers
 					int indexOfProvider = ProviderNums.IndexOf(ScheduleList[s].ProvNum);//cache the provider index
 					int scheduleStartBlock = (int)ScheduleList[s].StartTime.TotalMinutes/5;//cache the start time of the schedule
@@ -549,7 +552,7 @@ namespace OpenDental{
 				opsProvPerOperatories.Add(new List<long>());
 				opsProvIntersect.Add(new List<long>());
 			}
-			#region fillOpSchedListAll.ProviderNums
+			#region fillOpSchedListAll.ProviderNums and handle Blockouts
 			for(int i=0;i<ScheduleList.Count;i++) {//use this loop to fill opsProvPerSchedules
 				if(ScheduleList[i].SchedDate.Date!=ScheduleDate) {//only schedules for the applicable day.
 					continue;
@@ -561,6 +564,13 @@ namespace OpenDental{
 					}
 					schedopsforschedule++;
 					int indexofop = OperatoryNums.IndexOf(ScheduleOpList[j].OperatoryNum);//cache to increase speed
+					if(ScheduleList[i].SchedType==ScheduleType.Blockout) {
+						int blockoutStartIndex = (int)ScheduleList[i].StartTime.TotalMinutes/5;
+						int blockoutLength = (int)(ScheduleList[i].StopTime.TotalMinutes-ScheduleList[i].StartTime.TotalMinutes)/5;
+						for(int k=0;k<blockoutLength;k++) {//blockout schedule availability.
+							opSchedListAll[indexofop].OperatorySched[blockoutStartIndex+k]=false;
+						}
+					}
 					if(opsProvPerSchedules[indexofop].Contains(ScheduleList[i].ProvNum)) {//only add ones that have not been added.
 						continue;
 					}
