@@ -918,6 +918,8 @@ namespace OpenDental.WebSheets {
         
         private int yPosField;
         
+        private int tabOrderField;
+        
         private EntityReferenceOfwebforms_sheet webforms_sheetReferenceField;
         
         /// <remarks/>
@@ -1077,6 +1079,16 @@ namespace OpenDental.WebSheets {
             }
             set {
                 this.yPosField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int TabOrder {
+            get {
+                return this.tabOrderField;
+            }
+            set {
+                this.tabOrderField = value;
             }
         }
         

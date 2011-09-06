@@ -162,6 +162,7 @@
               <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="XPos" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="YPos" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="TabOrder" type="s:int" />
               <s:element minOccurs="0" maxOccurs="1" name="webforms_sheetReference" type="tns:EntityReferenceOfwebforms_sheet" />
             </s:sequence>
           </s:extension>
@@ -346,6 +347,7 @@
               <s:element minOccurs="0" maxOccurs="1" name="RadioButtonGroup" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="IsRequired" type="s:boolean" />
               <s:element minOccurs="0" maxOccurs="1" name="ImageData" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="TabOrder" type="s:int" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -389,7 +391,6 @@
           <s:enumeration value="LabSlip" />
           <s:enumeration value="ExamSheet" />
           <s:enumeration value="DepositSlip" />
-          <s:enumeration value="EhrEducation" />
         </s:restriction>
       </s:simpleType>
       <s:complexType name="ArrayOfSheetFieldDef">

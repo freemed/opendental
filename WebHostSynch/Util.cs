@@ -42,18 +42,7 @@ namespace WebHostSynch {
 		}
 
 		public void SetMobileDbConnection() {
-			/*Logger.Information("In SetMobileDbConnection()");
-			string connectStr=ConfigurationManager.ConnectionStrings["DBMobileWeb"].ConnectionString;
-			if(previousConnectStr!=connectStr) {
-				IsMobileDBSet=false;// this situation would occur if the connection sting in the  web.config file
-			}
-			if(!IsMobileDBSet) {
-				OpenDentBusiness.DataConnection dc=new OpenDentBusiness.DataConnection();
-				dc.SetDb(connectStr,"",DatabaseType.MySql,true);
-				IsMobileDBSet=true;
-			}
-			*/
-			DbInit.Init(); // The above code works but this is a cleaner.
+			DbInit.Init();
 		}
 
 		public bool IsPaidCustomer(long customerNum) {

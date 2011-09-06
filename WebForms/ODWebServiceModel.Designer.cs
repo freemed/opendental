@@ -1058,7 +1058,8 @@ namespace WebForms
         /// <param name="width">Initial value of the Width property.</param>
         /// <param name="xPos">Initial value of the XPos property.</param>
         /// <param name="yPos">Initial value of the YPos property.</param>
-        public static webforms_sheetfield Createwebforms_sheetfield(global::System.Int32 fieldType, global::System.String fieldValue, global::System.SByte fontIsBold, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int64 sheetFieldID, global::System.Int64 sheetID, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos)
+        /// <param name="tabOrder">Initial value of the TabOrder property.</param>
+        public static webforms_sheetfield Createwebforms_sheetfield(global::System.Int32 fieldType, global::System.String fieldValue, global::System.SByte fontIsBold, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int64 sheetFieldID, global::System.Int64 sheetID, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos, global::System.Int32 tabOrder)
         {
             webforms_sheetfield webforms_sheetfield = new webforms_sheetfield();
             webforms_sheetfield.FieldType = fieldType;
@@ -1075,6 +1076,7 @@ namespace WebForms
             webforms_sheetfield.Width = width;
             webforms_sheetfield.XPos = xPos;
             webforms_sheetfield.YPos = yPos;
+            webforms_sheetfield.TabOrder = tabOrder;
             return webforms_sheetfield;
         }
 
@@ -1467,6 +1469,30 @@ namespace WebForms
         private global::System.Int32 _YPos;
         partial void OnYPosChanging(global::System.Int32 value);
         partial void OnYPosChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TabOrder
+        {
+            get
+            {
+                return _TabOrder;
+            }
+            set
+            {
+                OnTabOrderChanging(value);
+                ReportPropertyChanging("TabOrder");
+                _TabOrder = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TabOrder");
+                OnTabOrderChanged();
+            }
+        }
+        private global::System.Int32 _TabOrder;
+        partial void OnTabOrderChanging(global::System.Int32 value);
+        partial void OnTabOrderChanged();
 
         #endregion
     
@@ -1543,7 +1569,8 @@ namespace WebForms
         /// <param name="width">Initial value of the Width property.</param>
         /// <param name="xPos">Initial value of the XPos property.</param>
         /// <param name="yPos">Initial value of the YPos property.</param>
-        public static webforms_sheetfielddef Createwebforms_sheetfielddef(global::System.String fieldName, global::System.Int32 fieldType, global::System.String fieldValue, global::System.SByte fontIsBold, global::System.String fontName, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.String imageData, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int64 webSheetDefID, global::System.Int64 webSheetFieldDefID, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos)
+        /// <param name="tabOrder">Initial value of the TabOrder property.</param>
+        public static webforms_sheetfielddef Createwebforms_sheetfielddef(global::System.String fieldName, global::System.Int32 fieldType, global::System.String fieldValue, global::System.SByte fontIsBold, global::System.String fontName, global::System.Single fontSize, global::System.Int32 growthBehavior, global::System.Int32 height, global::System.String imageData, global::System.SByte isRequired, global::System.String radioButtonGroup, global::System.String radioButtonValue, global::System.Int64 webSheetDefID, global::System.Int64 webSheetFieldDefID, global::System.Int32 width, global::System.Int32 xPos, global::System.Int32 yPos, global::System.Int32 tabOrder)
         {
             webforms_sheetfielddef webforms_sheetfielddef = new webforms_sheetfielddef();
             webforms_sheetfielddef.FieldName = fieldName;
@@ -1563,6 +1590,7 @@ namespace WebForms
             webforms_sheetfielddef.Width = width;
             webforms_sheetfielddef.XPos = xPos;
             webforms_sheetfielddef.YPos = yPos;
+            webforms_sheetfielddef.TabOrder = tabOrder;
             return webforms_sheetfielddef;
         }
 
@@ -1979,6 +2007,30 @@ namespace WebForms
         private global::System.Int32 _YPos;
         partial void OnYPosChanging(global::System.Int32 value);
         partial void OnYPosChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TabOrder
+        {
+            get
+            {
+                return _TabOrder;
+            }
+            set
+            {
+                OnTabOrderChanging(value);
+                ReportPropertyChanging("TabOrder");
+                _TabOrder = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TabOrder");
+                OnTabOrderChanged();
+            }
+        }
+        private global::System.Int32 _TabOrder;
+        partial void OnTabOrderChanging(global::System.Int32 value);
+        partial void OnTabOrderChanged();
 
         #endregion
     

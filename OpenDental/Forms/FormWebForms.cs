@@ -99,7 +99,7 @@ namespace OpenDental {
 				}
 				//loop through all incoming sheets
 				for(int i=0;i<arraySheets.Length;i++) {
-					try { //this try catch is put code modified so that a defective downloaded sheet does not stop other sheets from being downloaded.
+					try { //this try catch is put so that a defective downloaded sheet does not stop other sheets from being downloaded.
 						long patNum=0;
 						string lName="";
 						string fName="";
@@ -256,14 +256,27 @@ namespace OpenDental {
 						SheetField sheetfield=new SheetField();
 						sheetfield.FieldName=sAnds.web_sheetfieldlist[i].FieldName;
 						sheetfield.FieldType=(SheetFieldType)sAnds.web_sheetfieldlist[i].FieldType;
-						sheetfield.FontIsBold=sAnds.web_sheetfieldlist[i].FontIsBold==(sbyte)1?true:false; ;
+						//sheetfield.FontIsBold=sAnds.web_sheetfieldlist[i].FontIsBold==(sbyte)1?true:false;
+						if(sAnds.web_sheetfieldlist[i].FontIsBold==(sbyte)1) {
+							sheetfield.FontIsBold=true;
+						}else{
+							sheetfield.FontIsBold=false;
+						}
+						sheetfield.FontIsBold=sAnds.web_sheetfieldlist[i].FontIsBold==(sbyte)1?true:false;
 						sheetfield.FontName=sAnds.web_sheetfieldlist[i].FontName;
 						sheetfield.FontSize=sAnds.web_sheetfieldlist[i].FontSize;
 						sheetfield.Height=sAnds.web_sheetfieldlist[i].Height;
 						sheetfield.Width=sAnds.web_sheetfieldlist[i].Width;
 						sheetfield.XPos=sAnds.web_sheetfieldlist[i].XPos;
 						sheetfield.YPos=sAnds.web_sheetfieldlist[i].YPos;
-						sheetfield.IsRequired=sAnds.web_sheetfieldlist[i].IsRequired==(sbyte)1?true:false; ;
+						//sheetfield.IsRequired=sAnds.web_sheetfieldlist[i].IsRequired==(sbyte)1?true:false;
+						if(sAnds.web_sheetfieldlist[i].IsRequired==(sbyte)1) {
+							sheetfield.IsRequired=true;
+						}
+						else {
+							sheetfield.IsRequired=false;
+						}
+						sheetfield.TabOrder=sAnds.web_sheetfieldlist[i].TabOrder;
 						sheetfield.RadioButtonGroup=sAnds.web_sheetfieldlist[i].RadioButtonGroup;
 						sheetfield.RadioButtonValue=sAnds.web_sheetfieldlist[i].RadioButtonValue;
 						sheetfield.GrowthBehavior=(GrowthBehaviorEnum)sAnds.web_sheetfieldlist[i].GrowthBehavior;

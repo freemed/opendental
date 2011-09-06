@@ -286,7 +286,7 @@ namespace OpenDental {
 				IsSynching=false;
 			}
 			catch(Exception e) {
-				IsSynching=false;
+				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
 				MessageBox.Show(e.Message);
 			}
 		}
