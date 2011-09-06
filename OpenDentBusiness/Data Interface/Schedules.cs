@@ -91,6 +91,18 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(command);
 		}
 
+		///<summary></summary>
+		public static List<Schedule> GetTwoYearPeriod(DateTime startDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),startDate);
+			}
+			string command="SELECT schedule.* "
+				+"FROM schedule "//,provider "
+				+"WHERE SchedDate BETWEEN "+POut.Date(startDate)+" AND "+POut.Date(startDate.AddYears(2))+" "
+				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";//Practice or Provider or Employee
+			return RefreshAndFill(command);
+		}
+
 		///<summary>Used in the check database integrity tool.</summary>
 		public static Schedule[] RefreshAll() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

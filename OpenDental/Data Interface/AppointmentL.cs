@@ -11,146 +11,132 @@ namespace OpenDental{
 	public class AppointmentL {
 		///<summary>The date currently selected in the appointment module.</summary>
 		public static DateTime DateSelected;
-		
-		///<summary>Used by appt search function.  Returns the next available time for the appointment.  Starts searching on lastSlot, which can be tonight at midnight for the first search.  Then, each subsequent search will start at the time of the previous search plus the length of the appointment.  Provider array cannot be length 0.  Might return array of 0 if it goes more than 2 years into the future.</summary>
-		public static List<DateTime> GetSearchResults(long aptNum,DateTime afterDate,long[] providers,int resultCount,TimeSpan beforeTime,TimeSpan afterTime){
-			Appointment apt=Appointments.GetOneApt(aptNum);
+
+		///<summary>copy of function above for testing purposes.</summary>
+		public static List<DateTime> GetSearchResults(long aptNum,DateTime afterDate,List<long> providerNums,int resultCount,TimeSpan beforeTime,TimeSpan afterTime) {
+			if(beforeTime==TimeSpan.FromSeconds(0)) {//if they didn't set a before time, set it to a large timespan so that we can use the same logic for checking appointment times.
+				beforeTime=TimeSpan.FromHours(25);//bigger than any time of day.
+			}
+			SearchBehaviorCriteria SearchType = (SearchBehaviorCriteria)PrefC.GetInt(PrefName.AppointmentSearchBehavior);
+			List<DateTime> retVal= new List<DateTime>();
 			DateTime dayEvaluating=afterDate.AddDays(1);
-			Appointment[] aptList;//list of appointments for one day
-			//ArrayList ALresults=new ArrayList();//result Date/Times
-			List<DateTime> retVal=new List<DateTime>();
-			TimeSpan timeFound;
-			int hourFound;
-			int[][] provBar=new int[providers.Length][];//dim 1 is for each provider.  Dim 2is the 10min increment
-			bool[][] provBarSched=new bool[providers.Length][];//keeps track of the schedule of each provider. True means open, false is closed.
-			long aptProv;
-			string pattern;
-			int startIndex;
-			int provIndex;//the index of a provider within providers
-			List<Schedule> schedDay;//all schedule items for a given day.
-			bool aptIsMatch=false;
-			while(retVal.Count < resultCount//stops when the specified number of results are retrieved
-				&& dayEvaluating < afterDate.AddYears(2))
-			{
-				for(int i=0;i<providers.Length;i++){
-					provBar[i]=new int[24*ApptDrawing.RowsPerHr];//[144]; or 24*6
-					provBarSched[i]=new bool[24*ApptDrawing.RowsPerHr];
-				}
-				//get appointments for one day
-				aptList=Appointments.GetForPeriod(dayEvaluating,dayEvaluating);
-				//fill provBar
-				for(int i=0;i<aptList.Length;i++){
-					if(aptList[i].IsHygiene){
-						aptProv=aptList[i].ProvHyg;
-					}
-					else{
-						aptProv=aptList[i].ProvNum;
-					}
-					provIndex=-1;
-					for(int p=0;p<providers.Length;p++){
-						if(providers[p]==aptProv){
-							provIndex=p;
+			Appointment appointmentToAdd=Appointments.GetOneApt(aptNum);
+			List<DateTime> potentialProvAppointmentTime;
+			List<DateTime> potentialOpAppointmentTime;
+			List<Operatory> opsListAll = OperatoryC.Listt;//all operatory Numbers
+			List<Schedule> scheduleListAll = Schedules.GetTwoYearPeriod(dayEvaluating);// Schedules for the given day.
+			List<Appointment> appointmentListAll = Appointments.GetForPeriodList(dayEvaluating,dayEvaluating.AddYears(2));
+			List<ScheduleOp> schedOpListAll = ScheduleOps.GetForSchedList(scheduleListAll);
+			List<ProviderSchedule> provScheds = new List<ProviderSchedule>();//Provider Bar, ProviderSched Bar, Date and Provider
+			List<OperatorySchedule> operatrorySchedules = new List<OperatorySchedule>();//filtered based on SearchType
+			List<long> operatoryNums = new List<long>();//more usefull than a list of operatories.
+			for(int i=0;i<opsListAll.Count;i++) {
+				operatoryNums.Add(opsListAll[i].OperatoryNum);
+			}
+			while(retVal.Count < resultCount && dayEvaluating < afterDate.AddYears(2)) {
+				potentialOpAppointmentTime = new List<DateTime>();//clear or create
+				//Providers-------------------------------------------------------------------------------------------------------------------------------------
+				potentialProvAppointmentTime = new List<DateTime>();//clear or create
+				provScheds = ProviderSchedules.GetForProvidersAndDate(providerNums,dayEvaluating,scheduleListAll,appointmentListAll);
+				for(int i=0;i<provScheds.Count;i++) {
+					for(int j=0;j<288;j++) {//search every 5 minute increment per day
+						if(j+appointmentToAdd.Pattern.Length>288) {
 							break;
 						}
-					}
-					if(provIndex==-1){
-						continue;
-					}
-					pattern=ApptSingleDrawing.GetPatternShowing(aptList[i].Pattern);
-					startIndex=(int)(((double)aptList[i].AptDateTime.Hour*(double)60/ApptDrawing.MinPerRow
-						+(double)aptList[i].AptDateTime.Minute/ApptDrawing.MinPerRow)
-						*(double)ApptDrawing.LineH)/ApptDrawing.LineH;//rounds down
-					for(int k=0;k<pattern.Length;k++){
-						if(pattern.Substring(k,1)=="X"){
-							provBar[provIndex][startIndex+k]++;
-						}
-					}
-				}
-				//handle all schedules by setting element of provBarSched to true if provider schedule shows open.
-				schedDay=Schedules.GetDayList(dayEvaluating);
-				for(int p=0;p<providers.Length;p++){
-					for(int i=0;i<schedDay.Count;i++){
-						if(schedDay[i].SchedType!=ScheduleType.Provider){
+						if(potentialProvAppointmentTime.Contains(dayEvaluating.AddMinutes(j*5))) {
 							continue;
 						}
-						if(providers[p]!=schedDay[i].ProvNum){
-							continue;
-						}
-						SetProvBarSched(ref provBarSched[p],schedDay[i].StartTime,schedDay[i].StopTime);
-					}
-				}
-				//step through day, one increment at a time, looking for a slot
-				pattern=ApptSingleDrawing.GetPatternShowing(apt.Pattern);
-				timeFound=new TimeSpan(0);
-				//It's done this way for a plugin that wants to pull all matches for a given day.
-				List<bool> findMoreMatchesToday=new List<bool>(); 
-				findMoreMatchesToday.Add(true);
-				for(int i=0;findMoreMatchesToday[0] && i<provBar[0].Length;i++) {//144 if using 10 minute increments
-					//bool matchFound=false;
-					long provMatch=0;
-					for(int p=0;findMoreMatchesToday[0] && p<providers.Length;p++) {
-						//assume apt will be placed here
-						aptIsMatch=true;
-						//test all apt increments for prov closed. If any found, continue
-						for(int a=0;a<pattern.Length;a++){
-							if(provBarSched[p].Length<i+a+1 || !provBarSched[p][i+a]){
-								aptIsMatch=false;
+						bool addDateTime=true;
+						for(int k=0;k<appointmentToAdd.Pattern.Length;k++) {
+							if(provScheds[i].ProvBar[j+k]==false && appointmentToAdd.Pattern[k]=='X') {
+								addDateTime=false;
+								break;
+							}
+							if(provScheds[i].ProvSchedule[j+k]==false) {
+								addDateTime=false;
 								break;
 							}
 						}
-						if(!aptIsMatch){
-							continue;
+						if(addDateTime) {
+							potentialProvAppointmentTime.Add(dayEvaluating.AddMinutes(j*5));
 						}
-						//test all apt increments with an X for not scheduled. If scheduled, continue.
-						for(int a=0;a<pattern.Length;a++){
-							if(pattern.Substring(a,1)=="X" && (provBar[p].Length<i+a+1 || provBar[p][i+a]>0)){
-								aptIsMatch=false;
+					}
+				}
+				if(SearchType==SearchBehaviorCriteria.ProviderTimeOperatory) {//Handle Operatories here--------------------------------------------------------------------------------
+					operatrorySchedules = OperatorySchedules.GetAllForDate(dayEvaluating,scheduleListAll,appointmentListAll,schedOpListAll,operatoryNums,providerNums);
+					potentialOpAppointmentTime = new List<DateTime>();//create or clear
+					//for(int j=0;j<operatrorySchedules.Count;j++) {//for each operatory 
+					for(int i=0;i<288;i++) {//search every 5 minute increment per day
+						if(i+appointmentToAdd.Pattern.Length>288) {//skip if appointment would span across midnight
+							break;
+						}
+						for(int j=0;j<operatrorySchedules.Count;j++) {//for each operatory 
+							//if(potentialOpAppointmentTime.Contains(dayEvaluating.AddMinutes(i*5))) {//skip if we already have this dateTime
+							//  break;
+							//}
+							bool addDateTime=true;
+							for(int k=0;k<appointmentToAdd.Pattern.Length;k++) {//check appointment against operatories
+								if(operatrorySchedules[j].OperatorySched[i+k]==false) {
+									addDateTime=false;
+									break;
+								}
+							}
+							if(!addDateTime){
 								break;
 							}
+							if(addDateTime){// && SearchType==SearchBehaviorCriteria.ProviderTimeOperatory) {//check appointment against providers available for the given operatory
+								bool provAvail=false;
+								for(int k=0;k<providerNums.Count;k++) {
+									if(!operatrorySchedules[j].ProviderNums.Contains(providerNums[k])) {
+										continue;
+									}
+									provAvail=true;
+									for(int m=0;m<appointmentToAdd.Pattern.Length;m++) {
+										if(provScheds[k].ProvBar[i+m]==false && appointmentToAdd.Pattern[m]=='X') {//if provider bar time slot = false
+											provAvail=false;
+											break;
+										}
+									}
+									if(provAvail) {//found a provider with an available operatory
+										break;
+									}
+								}
+								if(provAvail && addDateTime) {//operatory and provider are available
+									potentialOpAppointmentTime.Add(dayEvaluating.AddMinutes(i*5));
+								}
+							}
+							else {//not using SearchBehaviorCriteria.ProviderTimeOperatory
+								if(addDateTime) {
+									potentialOpAppointmentTime.Add(dayEvaluating.AddMinutes(i*5));
+								}
+							}
 						}
-						if(!aptIsMatch){
-							continue;
+					}
+				}
+				//At this point the potentialOpAppointmentTime is already filtered and only contains appointment times that match both provider time and operatory time. 
+				switch(SearchType) {
+					case SearchBehaviorCriteria.ProviderTime:
+						//Add based on provider bars
+						for(int i=0;i<potentialProvAppointmentTime.Count;i++) {
+							if(potentialProvAppointmentTime[i].TimeOfDay>beforeTime || potentialProvAppointmentTime[i].TimeOfDay<afterTime) {
+								continue;
+							}
+							retVal.Add(potentialProvAppointmentTime[i]);//add one for this day
+							break;//stop looking through potential times for today.
 						}
-						//convert to valid time
-						hourFound=(int)((double)(i)/(float)60*ApptDrawing.MinPerRow);//8am=48/60*10
-						timeFound=new TimeSpan(
-							hourFound,
-							//minutes. eg. (13-(2*60/10))*10
-							(int)((i-((double)hourFound*(float)60/ApptDrawing.MinPerRow))*ApptDrawing.MinPerRow),
-							0);
-						//make sure it's after the time restricted
-						//Debug.WriteLine(timeFound.ToString()+"  "+afterTime.ToString());
-							//apt.AptDateTime.TimeOfDay+"  "+afterTime.ToString());
-						if(afterTime!=TimeSpan.Zero && timeFound<afterTime){
-							aptIsMatch=false;
-							continue;
-						}
-						if(beforeTime!=TimeSpan.Zero && timeFound>beforeTime) {
-							aptIsMatch=false;
-							continue;
-						}
-						//matchFound=true;
-						provMatch=providers[p];//this is just for the hook
 						break;
-					}//for p
-					if(provMatch!=0) {
-
-						//this is the only place where a datetime is added to the result set
-						//look for an operatory match for all providers that were passed in
-						//(SearchBehaviorCriteria)PrefC.GetInt(PrefName.AppointmentSearchBehavior)
-						//if(searchBehavior==SearchBehaviorCriteria.ProviderTimeOperatory) {
-							//if an operatory match is not found, 
-							//continue;
-
-						//}
-
-						//a match is found, use it, and move to the next day.
-						retVal.Add(dayEvaluating+timeFound);
-						findMoreMatchesToday[0]=false;
-						Plugins.HookAddCode(null,"AppointmentL.GetSearchResults_postfilter",retVal,provMatch,apt,findMoreMatchesToday);
-					}
+					case SearchBehaviorCriteria.ProviderTimeOperatory:
+						//add based on provider bar and operatory bar
+						for(int i=0;i<potentialOpAppointmentTime.Count;i++) {
+							if(potentialOpAppointmentTime[i].TimeOfDay>beforeTime || potentialOpAppointmentTime[i].TimeOfDay<afterTime) {
+								continue;
+							}
+							retVal.Add(potentialOpAppointmentTime[i]);//add one for this day
+							break;//stop looking through potential times for today.
+						}
+						break;
 				}
-				dayEvaluating=dayEvaluating.AddDays(1);//move to the next day
+				dayEvaluating=dayEvaluating.AddDays(1);
 			}
 			return retVal;
 		}
@@ -432,4 +418,215 @@ namespace OpenDental{
 			return retVal;
 		}
 	}
+
+	///<summary>Holds information about a provider's Schedule. Not actual database table.</summary>
+	public class ProviderSchedule {
+		///<summary>FK to Provider</summary>
+		public long ProviderNum;
+		///<summary>Date of the ProviderSchedule.</summary>
+		public DateTime SchedDate;
+		///<summary>This contains a bool for each 5 minute block throughout the day. True means provider is scheduled to work, False means provider is not scheduled to work.</summary>
+		public bool[] ProvSchedule;
+		///<summary>This contains a bool for each 5 minute block throughout the day. True means available, False means something is scheduled there or the provider is not scheduled to work.</summary>
+		public bool[] ProvBar;
+
+		///<summary>Constructor.</summary>
+		public ProviderSchedule() {
+			ProvSchedule=new bool[288];
+			ProvBar=new bool[288];
+		}
+
+	}
+
+	///<summary></summary>
+	public class ProviderSchedules {
+
+		///<summary>Uses the input parameters to construct a List&lt;ProviderSchedule&gt;. It is written to reduce the number of queries to the database.</summary>
+		/// <param name="ProviderNums">PrimaryKeys to Provider.</param>
+		/// <param name="ScheduleDate">The date to construct the schedule for.</param>
+		/// <param name="ScheduleList">A List of Schedules containing all of the schedules for the given day, or possibly more. 
+		/// Intended to be all schedules between search start date and search start date plus 2 years. This is to reduce queries to DB.</param>
+		/// <param name="AppointmentList">A List of Appointments containing all of the schedules for the given day, or possibly more. 
+		/// Intended to be all Appointments between search start date and search start date plus 2 years. This is to reduce queries to DB.</param>
+		/// <param name="ScheduleOpList">A List of all ScheduleOps . 
+		/// Intended to be all Appointments between search start date and search start date plus 2 years. This is to reduce queries to DB.</param>
+		/// <param name="OperatoryList">A List of all operatories. This is to reduce queries to DB.</param>
+		/// 
+		public static List<ProviderSchedule> GetForProvidersAndDate(List<long> ProviderNums,DateTime ScheduleDate,List<Schedule> ScheduleList,List<Appointment> AppointmentList) {//Not working properly when scheduled but no ops are set.
+			List<ProviderSchedule> retVal=new List<ProviderSchedule>();
+			ScheduleDate=ScheduleDate.Date;
+			for(int i=0;i<ProviderNums.Count;i++) {
+				retVal.Add(new ProviderSchedule());
+				retVal[i].ProviderNum=ProviderNums[i];
+				retVal[i].SchedDate=ScheduleDate;
+			}
+			for(int s=0;s<ScheduleList.Count;s++) {
+				if(ScheduleList[s].SchedDate.Date!=ScheduleDate) {//ignore schedules for different dates.
+					continue;
+				}
+				if(ProviderNums.Contains(ScheduleList[s].ProvNum)) {//schedule applies to one of the selected providers
+					int indexOfProvider = ProviderNums.IndexOf(ScheduleList[s].ProvNum);//cache the provider index
+					int scheduleStartBlock = (int)ScheduleList[s].StartTime.TotalMinutes/5;//cache the start time of the schedule
+					int scheduleLengthInBlocks = (int)(ScheduleList[s].StopTime-ScheduleList[s].StartTime).TotalMinutes/5;//cache the length of the schedule
+					for(int i=0;i<scheduleLengthInBlocks;i++) {
+						retVal[indexOfProvider].ProvBar[scheduleStartBlock+i]=true;//provider may have an appointment here
+						retVal[indexOfProvider].ProvSchedule[scheduleStartBlock+i]=true;//provider is scheduled today
+					}
+				}
+			}
+			for(int a=0;a<AppointmentList.Count;a++) {
+				if(AppointmentList[a].AptDateTime.Date!=ScheduleDate) {
+					continue;
+				}
+				if(!AppointmentList[a].IsHygiene && ProviderNums.Contains(AppointmentList[a].ProvNum)) {//Not hygiene Modify provider bar based on ProvNum
+					int indexOfProvider = ProviderNums.IndexOf(AppointmentList[a].ProvNum);
+					int appointmentCurStartBlock = (int)AppointmentList[a].AptDateTime.TimeOfDay.TotalMinutes/5;
+					for(int i=0;i<AppointmentList[a].Pattern.Length;i++) {
+						if(AppointmentList[a].Pattern[i]=='X') {
+							retVal[indexOfProvider].ProvBar[appointmentCurStartBlock+i]=false;
+						}
+					}
+				}
+				else if(AppointmentList[a].IsHygiene && ProviderNums.Contains(AppointmentList[a].ProvHyg)) {//Modify provider bar based on ProvHyg
+					int indexOfProvider = ProviderNums.IndexOf(AppointmentList[a].ProvHyg);
+					int appointmentStartBlock = (int)AppointmentList[a].AptDateTime.TimeOfDay.TotalMinutes/5;
+					for(int i=0;i<AppointmentList[a].Pattern.Length;i++) {
+						if(AppointmentList[a].Pattern[i]=='X') {
+							retVal[indexOfProvider].ProvBar[appointmentStartBlock+i]=false;
+						}
+					}
+				}
+			}
+			return retVal;
+		}
+
+	}
+
+	///<summary>Holds information about a operatory's Schedule. Not actual database table.</summary>
+	public class OperatorySchedule {
+		///<summary>FK to Operatory</summary>
+		public long OperatoryNum;
+		///<summary>Date of the OperatorySchedule.</summary>
+		public DateTime SchedDate;
+		///<summary>This contains a bool for each 5 minute block throughout the day. True means operatory is open, False means operatory is in use.</summary>
+		public bool[] OperatorySched;
+		///<summary>List of providers 'allowed' to work in this operatory.</summary>
+		public List<long> ProviderNums;
+
+	}
+
+	///<summary></summary>
+	public class OperatorySchedules {
+
+		/// <summary>Uses Inputs to construct a List&lt;OperatorySchedule&gt;. It is written to reduce the number of queries to the database.</summary>
+		/// <param name="ScheduleDate"></param>
+		/// <param name="ScheduleList"></param>
+		/// <param name="AppointmentList"></param>
+		/// <param name="ScheduleOpList"></param>
+		/// <param name="OperatoryNums">Should be in the same order as OperatoryC.Listt;</param>
+		/// <param name="ProviderNums"></param>
+		/// <returns></returns>
+		public static List<OperatorySchedule> GetAllForDate(DateTime ScheduleDate,List<Schedule> ScheduleList,List<Appointment> AppointmentList,List<ScheduleOp> ScheduleOpList,List<long> OperatoryNums,List<long> ProviderNums) {
+			List<OperatorySchedule> retVal = new List<OperatorySchedule>();
+			List<OperatorySchedule> opSchedListAll = new List<OperatorySchedule>();
+			List<Operatory> opsListAll = OperatoryC.Listt;
+			opsListAll.Sort(compareOpsByOpNum);//sort by Operatory Num Ascending
+			OperatoryNums.Sort();//Sort by operatory Num Ascending to match
+			List<List<long>> opsProvPerSchedules = new List<List<long>>();//opsProvPerSchedules[<opIndex>][ProviderNums] based solely on schedules, lists of providers 'allowed' to work in the given operatory
+			List<List<long>> opsProvPerOperatories = new List<List<long>>();//opsProvPerSchedules[<opIndex>][ProviderNums] based solely on operatories, lists of providers 'allowed' to work in the given operatory
+			List<List<long>> opsProvIntersect = new List<List<long>>();////opsProvPerSchedules[<opIndex>][ProviderNums] based on the intersection of the two data sets above.
+			ScheduleDate=ScheduleDate.Date;//remove time component
+			for(int i=0;i<OperatoryNums.Count;i++) {
+				opSchedListAll.Add(new OperatorySchedule());
+				opSchedListAll[i].SchedDate=ScheduleDate;
+				opSchedListAll[i].ProviderNums=new List<long>();
+				opSchedListAll[i].OperatoryNum=OperatoryNums[i];
+				opSchedListAll[i].OperatorySched=new bool[288];
+				for(int j=0;j<288;j++) {
+					opSchedListAll[i].OperatorySched[j]=true;//Set entire operatory schedule to true. True=available.
+				}
+				opsProvPerSchedules.Add(new List<long>());
+				opsProvPerOperatories.Add(new List<long>());
+				opsProvIntersect.Add(new List<long>());
+			}
+			#region fillOpSchedListAll.ProviderNums
+			for(int i=0;i<ScheduleList.Count;i++) {//use this loop to fill opsProvPerSchedules
+				if(ScheduleList[i].SchedDate.Date!=ScheduleDate) {//only schedules for the applicable day.
+					continue;
+				}
+				int schedopsforschedule=0;
+				for(int j=0;j<ScheduleOpList.Count;j++) {
+					if(ScheduleOpList[j].ScheduleNum!=ScheduleList[i].ScheduleNum) {//ScheduleOp does not apply to this schedule
+						continue;
+					}
+					schedopsforschedule++;
+					int indexofop = OperatoryNums.IndexOf(ScheduleOpList[j].OperatoryNum);//cache to increase speed
+					if(opsProvPerSchedules[indexofop].Contains(ScheduleList[i].ProvNum)) {//only add ones that have not been added.
+						continue;
+					}
+					opsProvPerSchedules[indexofop].Add(ScheduleList[i].ProvNum);
+				}
+				if(schedopsforschedule==0) {//Provider is scheduled to work, but not limited to any specific operatory so add provider num to all operatories in opsProvPerSchedules
+					for(int k=0;k<opsProvPerSchedules.Count;k++) {
+						if(opsProvPerSchedules[k].Contains(ScheduleList[i].ProvNum)) {
+							continue;
+						}
+						opsProvPerSchedules[k].Add(ScheduleList[i].ProvNum);
+					}
+				}
+			}
+			for(int i=0;i<opsListAll.Count;i++) {//use this loop to fill opsProvPerOperatories
+				opsProvPerOperatories[i].Add(opsListAll[i].ProvDentist);
+				opsProvPerOperatories[i].Add(opsListAll[i].ProvHygienist);
+			}
+			for(int i=0;i<opsProvPerSchedules.Count;i++) {//Use this loop to fill opsProvIntersect by finding matching pairs in opsProvPerSchedules and opsProvPerOperatories
+				for(int j=0;j<opsProvPerSchedules[i].Count;j++) {
+					if(opsProvPerOperatories[i][0]==0 && opsProvPerOperatories[i][1]==0) {//There are no providers set for this operatory, use all the provider nums from the schedules.
+						opsProvIntersect[i].Add(opsProvPerSchedules[i][j]);
+						opSchedListAll[i].ProviderNums.Add(opsProvPerSchedules[i][j]);
+						continue;
+					}
+					if(opsProvPerSchedules[i][j]==0) {
+						continue;//just in case a non valid prov num got through.
+					}
+					if(opsProvPerOperatories[i].Contains(opsProvPerSchedules[i][j])) {//if a provider was assigned and matches
+						opsProvIntersect[i].Add(opsProvPerSchedules[i][j]);
+						opSchedListAll[i].ProviderNums.Add(opsProvPerSchedules[i][j]);
+					}
+				}
+			}
+			#endregion fillOpSchedListAll.ProviderNums
+			for(int i=0;i<AppointmentList.Count;i++) {//use this loop to set all operatory schedules.
+				if(AppointmentList[i].AptDateTime.Date!=ScheduleDate) {//skip appointments that do not apply to this date
+					continue;
+				}
+				int indexofop = OperatoryNums.IndexOf(AppointmentList[i].Op);
+				int aptstartindex= (int)AppointmentList[i].AptDateTime.TimeOfDay.TotalMinutes/5;
+				for(int j=0;j<AppointmentList[i].Pattern.Length;j++) {//make unavailable all blocks of time during this appointment.
+					opSchedListAll[indexofop].OperatorySched[aptstartindex+j]=false;//Set time block to false, meaning something is scheduled here.
+				}
+			}
+			for(int i=0;i<opSchedListAll.Count;i++) {//Filter out operatory schedules for ops that our selected providers don't work in.
+				if(retVal.Contains(opSchedListAll[i])) {
+					continue;
+				}
+				for(int j=0;j<opSchedListAll[i].ProviderNums.Count;j++) {
+					if(ProviderNums.Contains(opSchedListAll[i].ProviderNums[j])) {
+						retVal.Add(opSchedListAll[i]);
+						break;
+					}
+				}
+			}
+			//For Future Use When adding third search behavior:
+			//if((SearchBehaviorCriteria)PrefC.GetInt(PrefName.AppointmentSearchBehavior)==SearchBehaviorCriteria.OperatoryOnly) {
+			//  return opSchedListAll;
+			//}
+			return retVal;
+		}
+
+		private static int compareOpsByOpNum(Operatory op1,Operatory op2) {
+			return (int)op1.OperatoryNum-(int)op2.OperatoryNum;
+		}
+	}
+
 }

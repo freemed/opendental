@@ -4734,14 +4734,15 @@ namespace OpenDental {
 				return;
 			}
 			long[] providers=new long[listProviders.Items.Count];
+			List<long> providerNums = new List<long>();
 			for(int i=0;i<providers.Length;i++) {
 				providers[i]=ProviderList[i].ProvNum;
+				providerNums.Add(ProviderList[i].ProvNum);
+				//providersList.Add(providers[i]);
 			}
 			//the result might be empty
-			//SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
-			//  afterDate,providers,10,beforeTime,afterTime);
 			SearchResults=AppointmentL.GetSearchResults(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
-				afterDate,providers,10,beforeTime,afterTime);
+				afterDate,providerNums,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
 			for(int i=0;i<SearchResults.Count;i++) {
 				listSearchResults.Items.Add(

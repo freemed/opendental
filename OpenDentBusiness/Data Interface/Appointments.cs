@@ -23,6 +23,20 @@ namespace OpenDentBusiness{
 			return Crud.AppointmentCrud.SelectMany(command).ToArray();
 		}
 
+		///<summary>Gets a List&lt;Appointment&gt; of appointments for a period of time in the schedule, whether hidden or not.</summary>
+		public static List<Appointment> GetForPeriodList(DateTime startDate,DateTime endDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),startDate,endDate);
+			}
+			//DateSelected = thisDay;
+			string command=
+				"SELECT * from appointment "
+				+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"'"
+				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
+				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
+			return Crud.AppointmentCrud.SelectMany(command);
+		}
+
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
 		public static Appointment[] RefreshUnsched(string orderby,long provNum,long siteNum,bool includeBrokenAppts) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -1694,6 +1708,24 @@ namespace OpenDentBusiness{
 			//For testing pass a resource image.
 			return POut.Bitmap(Properties.Resources.ApptBackTest,ImageFormat.Gif);
 		}
+
+		///<summary>Returns a list of appointments that are scheduled between start date and end date. This takes into account the length of the appointments.</summary>
+		public static List<Appointment> GetAppointmentsForPeriod(DateTime start,DateTime end) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),start,end);
+			}
+			string command="SELECT * FROM appointment WHERE ";
+			command+="AptDateTime >= "+POut.DateT(start.Date);//to check to see if an appointment scheduled beforehand overlaps this time segment
+			command+="AND AptDateTime <= "+POut.DateT(end);
+			List<Appointment> retVal = Crud.AppointmentCrud.TableToList(Db.GetTable(command));
+			for(int i=retVal.Count-1;i>=0;i--) {
+				if(retVal[i].AptDateTime.AddMinutes(retVal[i].Pattern.Length*PrefC.GetInt(PrefName.AppointmentTimeIncrement))>start) {
+					retVal.RemoveAt(i);
+				}
+			}
+			return retVal;
+		}
+
 
 	}
 }
