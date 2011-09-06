@@ -128,6 +128,8 @@ namespace OpenDentBusiness{
 		public byte CanadaNumAnticipatedPayments;
 		///<summary>F32 Used for predeterminations.</summary>
 		public double CanadaAnticipatedPayAmount;
+		///<summary></summary>
+		public string PriorAuthorizationNumber;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

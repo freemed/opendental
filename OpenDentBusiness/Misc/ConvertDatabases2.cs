@@ -6356,6 +6356,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'Apixia')";
 					Db.NonQ32(command);
 				}//end Apixia Imaging bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD PriorAuthorizationNumber varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD PriorAuthorizationNumber varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -6398,3 +6406,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+				
