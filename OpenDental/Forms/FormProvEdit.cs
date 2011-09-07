@@ -176,7 +176,7 @@ namespace OpenDental{
 			// checkIsHidden
 			// 
 			this.checkIsHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsHidden.Location = new System.Drawing.Point(371,461);
+			this.checkIsHidden.Location = new System.Drawing.Point(371,458);
 			this.checkIsHidden.Name = "checkIsHidden";
 			this.checkIsHidden.Size = new System.Drawing.Size(158,17);
 			this.checkIsHidden.TabIndex = 12;
@@ -284,7 +284,7 @@ namespace OpenDental{
 			// checkIsSecondary
 			// 
 			this.checkIsSecondary.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsSecondary.Location = new System.Drawing.Point(371,423);
+			this.checkIsSecondary.Location = new System.Drawing.Point(371,404);
 			this.checkIsSecondary.Name = "checkIsSecondary";
 			this.checkIsSecondary.Size = new System.Drawing.Size(155,17);
 			this.checkIsSecondary.TabIndex = 10;
@@ -455,7 +455,7 @@ namespace OpenDental{
 			// checkSigOnFile
 			// 
 			this.checkSigOnFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSigOnFile.Location = new System.Drawing.Point(371,442);
+			this.checkSigOnFile.Location = new System.Drawing.Point(371,422);
 			this.checkSigOnFile.Name = "checkSigOnFile";
 			this.checkSigOnFile.Size = new System.Drawing.Size(121,17);
 			this.checkSigOnFile.TabIndex = 11;
@@ -689,7 +689,7 @@ namespace OpenDental{
 			// checkIsCDAnet
 			// 
 			this.checkIsCDAnet.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsCDAnet.Location = new System.Drawing.Point(371,404);
+			this.checkIsCDAnet.Location = new System.Drawing.Point(371,386);
 			this.checkIsCDAnet.Name = "checkIsCDAnet";
 			this.checkIsCDAnet.Size = new System.Drawing.Size(168,17);
 			this.checkIsCDAnet.TabIndex = 99;
@@ -779,12 +779,11 @@ namespace OpenDental{
 			// checkIsNotPerson
 			// 
 			this.checkIsNotPerson.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsNotPerson.Location = new System.Drawing.Point(371,385);
+			this.checkIsNotPerson.Location = new System.Drawing.Point(371,440);
 			this.checkIsNotPerson.Name = "checkIsNotPerson";
-			this.checkIsNotPerson.Size = new System.Drawing.Size(168,17);
+			this.checkIsNotPerson.Size = new System.Drawing.Size(410,17);
 			this.checkIsNotPerson.TabIndex = 108;
-			this.checkIsNotPerson.Text = "Is Not a Person";
-			this.checkIsNotPerson.Visible = false;
+			this.checkIsNotPerson.Text = "Not a Person (for example, a dummy provider representing the organization)";
 			// 
 			// FormProvEdit
 			// 
@@ -1076,6 +1075,12 @@ namespace OpenDental{
 				}
 				if(textCanadianOfficeNum.Text!=Eclaims.Canadian.TidyAN(textCanadianOfficeNum.Text,4,true)) {
 					MsgBox.Show(this,"Office number must be 4 characters long and composed of numbers and letters only.");
+					return;
+				}
+			}
+			if(checkIsNotPerson.Checked) {
+				if(textFName.Text!="" || textMI.Text!="") {
+					MsgBox.Show(this,"When the 'Not a Person' box is checked, the provider may not have a First Name or Middle Initial entered.");
 					return;
 				}
 			}
