@@ -2462,6 +2462,9 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 			}
 			else if(butComplete.Text=="Revise") {
+				if(!Security.IsAuthorized(Permissions.EcwAppointmentRevise)) {
+					return;
+				}
 				MsgBox.Show(this,"Any changes that you make will not be sent to eCW.  You will also have to make the same changes in eCW.");
 				//revise is only clickable if user has permission
 				butOK.Enabled=true;

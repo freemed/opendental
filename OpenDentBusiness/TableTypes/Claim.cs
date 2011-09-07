@@ -134,6 +134,8 @@ namespace OpenDentBusiness{
 		public EnumClaimSpecialProgram SpecialProgramCode;
 		///<summary>A three digit number used on 837I.  Aka Bill Code.</summary>
 		public string UniformBillType;
+		///<summary>Enum:EnumClaimMedType 0=Dental, 1=Medical, 2=Institutional</summary>
+		public EnumClaimMedType MedType;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
@@ -169,5 +171,14 @@ namespace OpenDentBusiness{
 			return base.GetHashCode();
 		}
 
+	}
+
+	public enum EnumClaimMedType {
+		///<summary>0</summary>
+		Dental,
+		///<summary>1</summary>
+		Medical,
+		///<summary>2</summary>
+		Institutional
 	}
 }

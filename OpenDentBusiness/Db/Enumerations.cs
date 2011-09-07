@@ -1099,7 +1099,11 @@ namespace OpenDentBusiness{
 		///<summary>49</summary>
 		ProcDelete,
 		///<summary>50 - Only used at OD HQ.  No user interface.</summary>
-		EhrKeyAdd
+		EhrKeyAdd,
+		///<summary>51</summary>
+		Providers,
+		///<summary>52</summary>
+		EcwAppointmentRevise
 	}
 
 	///<summary>The type of signal being sent.</summary>

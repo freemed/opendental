@@ -108,6 +108,7 @@ namespace OpenDentBusiness.Crud{
 				claim.PriorAuthorizationNumber    = PIn.String(table.Rows[i]["PriorAuthorizationNumber"].ToString());
 				claim.SpecialProgramCode          = (EnumClaimSpecialProgram)PIn.Int(table.Rows[i]["SpecialProgramCode"].ToString());
 				claim.UniformBillType             = PIn.String(table.Rows[i]["UniformBillType"].ToString());
+				claim.MedType                     = (EnumClaimMedType)PIn.Int(table.Rows[i]["MedType"].ToString());
 				retVal.Add(claim);
 			}
 			return retVal;
@@ -148,7 +149,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClaimNum,";
 			}
-			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2,CanadaTransRefNum,CanadaEstTreatStartDate,CanadaInitialPayment,CanadaPaymentMode,CanadaTreatDuration,CanadaNumAnticipatedPayments,CanadaAnticipatedPayAmount,PriorAuthorizationNumber,SpecialProgramCode,UniformBillType) VALUES(";
+			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2,CanadaTransRefNum,CanadaEstTreatStartDate,CanadaInitialPayment,CanadaPaymentMode,CanadaTreatDuration,CanadaNumAnticipatedPayments,CanadaAnticipatedPayAmount,PriorAuthorizationNumber,SpecialProgramCode,UniformBillType,MedType) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(claim.ClaimNum)+",";
 			}
@@ -213,7 +214,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(claim.CanadaAnticipatedPayAmount)+"',"
 				+"'"+POut.String(claim.PriorAuthorizationNumber)+"',"
 				+    POut.Int   ((int)claim.SpecialProgramCode)+","
-				+"'"+POut.String(claim.UniformBillType)+"')";
+				+"'"+POut.String(claim.UniformBillType)+"',"
+				+    POut.Int   ((int)claim.MedType)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -286,7 +288,8 @@ namespace OpenDentBusiness.Crud{
 				+"CanadaAnticipatedPayAmount  = '"+POut.Double(claim.CanadaAnticipatedPayAmount)+"', "
 				+"PriorAuthorizationNumber    = '"+POut.String(claim.PriorAuthorizationNumber)+"', "
 				+"SpecialProgramCode          =  "+POut.Int   ((int)claim.SpecialProgramCode)+", "
-				+"UniformBillType             = '"+POut.String(claim.UniformBillType)+"' "
+				+"UniformBillType             = '"+POut.String(claim.UniformBillType)+"', "
+				+"MedType                     =  "+POut.Int   ((int)claim.MedType)+" "
 				+"WHERE ClaimNum = "+POut.Long(claim.ClaimNum);
 			Db.NonQ(command);
 		}
@@ -537,6 +540,10 @@ namespace OpenDentBusiness.Crud{
 			if(claim.UniformBillType != oldClaim.UniformBillType) {
 				if(command!=""){ command+=",";}
 				command+="UniformBillType = '"+POut.String(claim.UniformBillType)+"'";
+			}
+			if(claim.MedType != oldClaim.MedType) {
+				if(command!=""){ command+=",";}
+				command+="MedType = "+POut.Int   ((int)claim.MedType)+"";
 			}
 			if(command==""){
 				return;

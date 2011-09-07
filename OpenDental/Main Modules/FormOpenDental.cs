@@ -3954,7 +3954,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemProviders_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
+			if(!Security.IsAuthorized(Permissions.Providers)) {//formerly used Setup permission
 				return;
 			}
 			FormProviderSelect FormPS=new FormProviderSelect();
