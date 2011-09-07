@@ -1240,7 +1240,7 @@ namespace OpenDental{
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(91,17);
 			this.label20.TabIndex = 107;
-			this.label20.Text = "Service Units";
+			this.label20.Text = "Unit Code";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textCodeMod4

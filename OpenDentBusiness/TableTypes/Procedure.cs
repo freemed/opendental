@@ -64,21 +64,21 @@ namespace OpenDentBusiness {
 		public long BillingTypeTwo;
 		///<summary>FK to procedurecode.CodeNum</summary>
 		public long CodeNum;
-		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
+		///<summary>Modifier for certain CPT codes.</summary>
 		public string CodeMod1;
-		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
+		///<summary>Modifier for certain CPT codes.</summary>
 		public string CodeMod2;
-		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
+		///<summary>Modifier for certain CPT codes.</summary>
 		public string CodeMod3;
-		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
+		///<summary>Modifier for certain CPT codes.</summary>
 		public string CodeMod4;
-		///<summary>NUBC Revenue Code for medical/inst billing. Used on UB92, UB04, and 837I.</summary>
+		///<summary>NUBC Revenue Code for medical/inst billing. Used on UB04 and 837I.</summary>
 		public string RevCode;
-		/// <summary>Service Units.  For things like anesthesia.  Used on the UB04.</summary>
+		/// <summary>Unit or basis for measurement code.  Days or Units.  For things like anesthesia.  Used on the UB04.  Never used.</summary>
 		public string UnitCode;
-		///<summary>For certain CPT codes.  Default is now 1.  It was 0 in previous versions, causing all kinds of problems.</summary>
+		///<summary>For certain CPT codes.  Default is 1.  Becomes Service Unit Count on UB claimforms.</summary>
 		public int UnitQty;
-		///<summary>Base units used for some billing codes.  Default is 0.  No UI for this field.  It is only edited in the ProcedureCode window.  The database maint tool changes BaseUnits of all procedures to match that of the procCode.</summary>
+		///<summary>Base units used for some billing codes.  Default is 0.  No UI for this field.  It is only edited in the ProcedureCode window.  The database maint tool changes BaseUnits of all procedures to match that of the procCode.  Not sure yet what it's for.</summary>
 		public int BaseUnits;
 		///<summary>Start time in military</summary>
 		public int StartTime;

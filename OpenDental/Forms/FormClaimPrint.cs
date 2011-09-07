@@ -1692,22 +1692,25 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
 						break;
 					case "P1UnitQty":
-						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 1 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 1 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",1+startProc)!=""){
-							qty=Int16.Parse(GetProcInfo("UnitQty",1+startProc));
-						} else {
-                            qty = 0;
+						if(planCur.ShowBaseUnits) {
+							short bunit;
+							System.Int16.TryParse(GetProcInfo("BaseUnits",1 + startProc),out bunit);
+							short uqty;
+							System.Int16.TryParse(GetProcInfo("UnitQty",1 + startProc),out uqty);
+							qty = bunit + uqty;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						else if(GetProcInfo("UnitQty",1+startProc)!="") {
+							qty=Int16.Parse(GetProcInfo("UnitQty",1+startProc));
+						}
+						else {
+							qty = 0;
+						}
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P1CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",1+startProc) + GetProcInfo("CodeMod1",1+startProc) + GetProcInfo("CodeMod2",1+startProc) + GetProcInfo("CodeMod3",1+startProc) + GetProcInfo("CodeMod4",1+startProc);

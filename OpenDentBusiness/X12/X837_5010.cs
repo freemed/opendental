@@ -1206,12 +1206,13 @@ namespace OpenDentBusiness
 						seg++;
 						sw.Write("SV2*"
 							//SV201 1/48 Product/Service ID, Revenue Code
-							//Composite Medical Procedure Identifier
-							+"HC:"//SV101-1: HC=Health Care
-							+Sout(claimProcs[j].CodeSent)+"*"//SV101-2: Procedure code. The rest of SV101 is not supported
-							+claimProcs[j].FeeBilled.ToString()+"*"//SV102: Charge Amt
-							+"MJ*"//SV103: MJ=minutes
-							+"0*");//SV104: Quantity of anesthesia. We don't support, so always 0.
+							//SV202 Composite Medical Procedure Identifier
+							+"HC:"//SV202-1: HC=Health Care
+							+Sout(claimProcs[j].CodeSent)+"*"//SV202-2: Procedure code. 
+				//todo: modifiers
+							+claimProcs[j].FeeBilled.ToString()+"*"//SV203: Charge Amt
+							+"UN*"//SV204: UN=Units
+							+"0*");//SV205: Quantity 
 						if(proc.PlaceService==claim.PlaceService) {
 							sw.Write("*");//SV105: Place of Service Code if different from claim
 						}
