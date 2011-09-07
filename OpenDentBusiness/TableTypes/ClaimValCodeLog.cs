@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary>Not well documented.  Has something to do with medical claims.</summary>
+	///<summary>Value codes for institutional 'claims'.  Can have up to 12 per claim.</summary>
 	[Serializable()]
 	public class ClaimValCodeLog:TableBase {
 		///<summary>Primary key.</summary>

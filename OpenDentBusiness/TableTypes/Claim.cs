@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		public double InsPayAmt;
 		///<summary>Deductible applied to this claim.</summary>
 		public double DedApplied;
-		///<summary>The predetermination of benefits number received from ins. </summary>
+		///<summary>The predetermination of benefits number received from ins.  In X12, REF G3.</summary>
 		public string PreAuthString;
 		///<summary>Single char for No, Initial, or Replacement.</summary>
 		public string IsProsthesis;
@@ -128,11 +128,11 @@ namespace OpenDentBusiness{
 		public byte CanadaNumAnticipatedPayments;
 		///<summary>F32 Used for predeterminations.</summary>
 		public double CanadaAnticipatedPayAmount;
-		///<summary></summary>
+		///<summary>This is NOT the predetermination of benefits number.  In X12, this is REF G1.</summary>
 		public string PriorAuthorizationNumber;
-		///<summary>Enum:EnumClaimSpecialProgram </summary>
+		///<summary>Enum:EnumClaimSpecialProgram  This is used to track EPSDT.</summary>
 		public EnumClaimSpecialProgram SpecialProgramCode;
-		///<summary></summary>
+		///<summary>A three digit number used on 837I.  Aka Bill Code.</summary>
 		public string UniformBillType;
 
 		///<summary>Not a data column.</summary>

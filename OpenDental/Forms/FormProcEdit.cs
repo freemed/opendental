@@ -1096,10 +1096,10 @@ namespace OpenDental{
 			this.groupMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupMedical.Location = new System.Drawing.Point(400,1);
 			this.groupMedical.Name = "groupMedical";
-			this.groupMedical.Size = new System.Drawing.Size(321,98);
+			this.groupMedical.Size = new System.Drawing.Size(321,293);
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
-			this.groupMedical.Text = "Medical";
+			this.groupMedical.Text = "Medical and Institutional";
 			// 
 			// butShowMedical
 			// 
@@ -1109,7 +1109,7 @@ namespace OpenDental{
 			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowMedical.CornerRadius = 4F;
-			this.butShowMedical.Location = new System.Drawing.Point(263,76);
+			this.butShowMedical.Location = new System.Drawing.Point(263,271);
 			this.butShowMedical.Name = "butShowMedical";
 			this.butShowMedical.Size = new System.Drawing.Size(58,21);
 			this.butShowMedical.TabIndex = 121;
@@ -1236,11 +1236,11 @@ namespace OpenDental{
 			// 
 			// label20
 			// 
-			this.label20.Location = new System.Drawing.Point(29,120);
+			this.label20.Location = new System.Drawing.Point(11,120);
 			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(73,17);
+			this.label20.Size = new System.Drawing.Size(91,17);
 			this.label20.TabIndex = 107;
-			this.label20.Text = "Unit Code";
+			this.label20.Text = "Service Units";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textCodeMod4

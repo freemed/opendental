@@ -243,10 +243,10 @@ namespace OpenDental {
 		    Changes+="Is Princ Diag changed from "+(procOld.IsPrincDiag?"Principal Diagnosis":"Not Principal Diagnosis")
 					+" to "+(procCur.IsPrincDiag?"Principal Diagnosis":"Not Principal Diagnosis")+".";
 		  }
-		  if(procOld.RevCode != procCur.RevCode) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Rev Code changed from "+POut.String(procOld.RevCode)+"' to '"+POut.String(procCur.RevCode)+".";
-		  }
+		  //if(procOld.RevCode != procCur.RevCode) {
+		  //  if(Changes!=""){ Changes+="\r\n";}
+		  //  Changes+="Rev Code changed from "+POut.String(procOld.RevCode)+"' to '"+POut.String(procCur.RevCode)+".";
+		  //}
 			//Proc status and billing fields----------------------------------------------------------------------------------------------------------------
 		  if(procOld.ProcStatus != procCur.ProcStatus) {
 		    if(Changes!=""){ Changes+="\r\n";}
@@ -270,19 +270,19 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Proc Num Lab changed from "+POut.Long(procOld.ProcNumLab)+" to "+POut.Long(procCur.ProcNumLab)+".";
 		  }
-		  if(procOld.UnitCode != procCur.UnitCode) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Unit Code changed from "+POut.String(procOld.UnitCode)+" to "+POut.String(procCur.UnitCode)+".";
-		  }
+		  //if(procOld.UnitCode != procCur.UnitCode) {
+		  //  if(Changes!=""){ Changes+="\r\n";}
+		  //  Changes+="Unit Code changed from "+POut.String(procOld.UnitCode)+" to "+POut.String(procCur.UnitCode)+".";
+		  //}
 			//UnitQty, Canadian Type Codes, and Note--------------------------------------------------------------------------------------------------------
 		  if(procOld.UnitQty != procCur.UnitQty) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Unit Quantity changed from "+POut.Int(procOld.UnitQty)+" to "+POut.Int(procCur.UnitQty)+".";
 		  }
-		  if(procOld.CanadianTypeCodes != procCur.CanadianTypeCodes) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Canadian Code Type changed from "+POut.String(procOld.CanadianTypeCodes)+" to "+POut.String(procCur.CanadianTypeCodes)+".";
-		  }
+		  //if(procOld.CanadianTypeCodes != procCur.CanadianTypeCodes) {
+		  //  if(Changes!=""){ Changes+="\r\n";}
+		  //  Changes+="Canadian Code Type changed from "+POut.String(procOld.CanadianTypeCodes)+" to "+POut.String(procCur.CanadianTypeCodes)+".";
+		 // }
 			if(procOld.Note != procCur.Note && !(procOld.Note==null && procCur.Note=="")) {//Null note is equivalent to an empty note string.
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Note changed from "+(procOld.Note==""?"none":"'"+procOld.Note+"'")

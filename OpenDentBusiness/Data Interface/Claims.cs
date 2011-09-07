@@ -372,7 +372,7 @@ namespace OpenDentBusiness{
 
 	}//end class Claims
 
-	///<summary>This is an odd class.  It holds data for the X12 generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.  Not an actual database table.</summary>
+	///<summary>This is an odd class.  It holds data for the X12 (4010 only) generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.  Not an actual database table.</summary>
 	public class X12TransactionItem{
 		public string PayorId0;
 		public long ProvBill1;

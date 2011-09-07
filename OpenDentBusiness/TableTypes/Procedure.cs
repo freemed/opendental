@@ -72,9 +72,9 @@ namespace OpenDentBusiness {
 		public string CodeMod3;
 		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
 		public string CodeMod4;
-		///<summary>Revenue code for medical billing.  Not used yet.  Only used on UB92 claimforms.</summary>
+		///<summary>NUBC Revenue Code for medical/inst billing. Used on UB92, UB04, and 837I.</summary>
 		public string RevCode;
-		/// <summary>Unit support for things like anesthesia billing and such.-dt</summary>
+		/// <summary>Service Units.  For things like anesthesia.  Used on the UB04.</summary>
 		public string UnitCode;
 		///<summary>For certain CPT codes.  Default is now 1.  It was 0 in previous versions, causing all kinds of problems.</summary>
 		public int UnitQty;
