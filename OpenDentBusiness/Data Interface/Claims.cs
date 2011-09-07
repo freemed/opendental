@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 				+" AND claim.PreAuthString = ''"
 				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
 				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
-				+" HAVING SUM(claimproc.InsPayAmt)<SUM(claimproc.FeeBilled)"
+				//+" HAVING SUM(claimproc.InsPayAmt)<SUM(claimproc.InsPayEst)"
 				+" ORDER BY claim.DateService";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);

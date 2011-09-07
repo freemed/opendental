@@ -439,11 +439,11 @@ namespace OpenDental{
 			//gridAttached:
 			//Get all claims attached to this check
 			ClaimsAttached=Claims.GetByClaimPayment(ClaimPaymentCur.ClaimPaymentNum);
-			List<int> ProcsAttached=new List<int>();//one item per claimAttached object.
-			for(int i=0;i<ClaimsAttached.Count;i++){
+			//List<int> ProcsAttached=new List<int>();//one item per claimAttached object.
+			//for(int i=0;i<ClaimsAttached.Count;i++){
 //todo: too many calls to db
-				ProcsAttached.Add(Procedures.GetCountForClaim(ClaimsAttached[i].ClaimNum));
-			}
+			//	ProcsAttached.Add(Procedures.GetCountForClaim(ClaimsAttached[i].ClaimNum));
+			//}
 			gridAttached.BeginUpdate();
 			gridAttached.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPayClaims","Service Date"),90);
@@ -456,8 +456,8 @@ namespace OpenDental{
 			gridAttached.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Payment"),65,HorizontalAlignment.Right);
 			gridAttached.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayClaims","Procs"),65,HorizontalAlignment.Right);
-			gridAttached.Columns.Add(col);		 
+			//col=new ODGridColumn(Lan.g("TableClaimPayClaims","Procs"),65,HorizontalAlignment.Right);
+			//gridAttached.Columns.Add(col);		 
 			gridAttached.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ClaimsAttached.Count;i++){
@@ -467,7 +467,7 @@ namespace OpenDental{
 				row.Cells.Add(ClaimsAttached[i].Carrier);
 				row.Cells.Add(ClaimsAttached[i].FeeBilled.ToString("F"));
 				row.Cells.Add(ClaimsAttached[i].InsPayAmt.ToString("F"));
-				row.Cells.Add(ProcsAttached[i].ToString());
+				//row.Cells.Add(ProcsAttached[i].ToString());
 				gridAttached.Rows.Add(row);
 			}
 			gridAttached.EndUpdate();
