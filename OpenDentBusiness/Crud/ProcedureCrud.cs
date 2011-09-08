@@ -78,7 +78,6 @@ namespace OpenDentBusiness.Crud{
 				procedure.CodeMod3          = PIn.String(table.Rows[i]["CodeMod3"].ToString());
 				procedure.CodeMod4          = PIn.String(table.Rows[i]["CodeMod4"].ToString());
 				procedure.RevCode           = PIn.String(table.Rows[i]["RevCode"].ToString());
-				procedure.UnitCode          = PIn.String(table.Rows[i]["UnitCode"].ToString());
 				procedure.UnitQty           = PIn.Int   (table.Rows[i]["UnitQty"].ToString());
 				procedure.BaseUnits         = PIn.Int   (table.Rows[i]["BaseUnits"].ToString());
 				procedure.StartTime         = PIn.Int   (table.Rows[i]["StartTime"].ToString());
@@ -131,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcNum,";
 			}
-			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd,Prognosis) VALUES(";
+			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd,Prognosis) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procedure.ProcNum)+",";
 			}
@@ -167,7 +166,6 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(procedure.CodeMod3)+"',"
 				+"'"+POut.String(procedure.CodeMod4)+"',"
 				+"'"+POut.String(procedure.RevCode)+"',"
-				+"'"+POut.String(procedure.UnitCode)+"',"
 				+    POut.Int   (procedure.UnitQty)+","
 				+    POut.Int   (procedure.BaseUnits)+","
 				+    POut.Int   (procedure.StartTime)+","
@@ -223,7 +221,6 @@ namespace OpenDentBusiness.Crud{
 				+"CodeMod3          = '"+POut.String(procedure.CodeMod3)+"', "
 				+"CodeMod4          = '"+POut.String(procedure.CodeMod4)+"', "
 				+"RevCode           = '"+POut.String(procedure.RevCode)+"', "
-				+"UnitCode          = '"+POut.String(procedure.UnitCode)+"', "
 				+"UnitQty           =  "+POut.Int   (procedure.UnitQty)+", "
 				+"BaseUnits         =  "+POut.Int   (procedure.BaseUnits)+", "
 				+"StartTime         =  "+POut.Int   (procedure.StartTime)+", "
@@ -366,10 +363,6 @@ namespace OpenDentBusiness.Crud{
 			if(procedure.RevCode != oldProcedure.RevCode) {
 				if(command!=""){ command+=",";}
 				command+="RevCode = '"+POut.String(procedure.RevCode)+"'";
-			}
-			if(procedure.UnitCode != oldProcedure.UnitCode) {
-				if(command!=""){ command+=",";}
-				command+="UnitCode = '"+POut.String(procedure.UnitCode)+"'";
 			}
 			if(procedure.UnitQty != oldProcedure.UnitQty) {
 				if(command!=""){ command+=",";}

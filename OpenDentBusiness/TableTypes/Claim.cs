@@ -82,8 +82,6 @@ namespace OpenDentBusiness{
 		public long ClinicNum;
 		///<summary>FK to claimform.ClaimFormNum.  0 if not assigned to use the claimform for the insplan.</summary>
 		public long ClaimForm;
-		///<summary>Drop this column.  Not used.</summary>
-		public EtransType EFormat;
 		///<summary>The number of intraoral images attached.  Not the number of files attached.  This is the value that goes on the 2006 claimform.</summary>
 		public int AttachedImages;
 		///<summary>The number of models attached.</summary>

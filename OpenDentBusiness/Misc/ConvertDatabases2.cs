@@ -6396,7 +6396,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim ADD UniformBillType varchar2(255)";
 					Db.NonQ(command);
 				}
-				//Add Procedures permission to all groups------------------------------------------------------
+				//Add Providers permission to groups with security permissions------------------------------------------------------
 				command="SELECT DISTINCT UserGroupNum FROM grouppermission WHERE PermType="+POut.Int((int)Permissions.Setup);
 				DataTable table=Db.GetTable(command);
 				long groupNum;
@@ -6416,6 +6416,44 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ32(command);
 					}
 				}
+				//Add ProcedureNote permission to groups with security permissions------------------------------------------------------
+				command="SELECT DISTINCT UserGroupNum FROM grouppermission";
+				table=Db.GetTable(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcedureNote)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProcedureNote)+")";
+						Db.NonQ32(command);
+					}
+				}
+				//Add ReferralAdd permission to groups with security permissions------------------------------------------------------
+				command="SELECT DISTINCT UserGroupNum FROM grouppermission";
+				table=Db.GetTable(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.ReferralAdd)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ReferralAdd)+")";
+						Db.NonQ32(command);
+					}
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE claim ADD MedType tinyint NOT NULL";
 					Db.NonQ(command);
@@ -6428,6 +6466,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim MODIFY MedType NOT NULL";
 					Db.NonQ(command);
 				}
+				command="ALTER TABLE claim DROP COLUMN EFormat";
+				Db.NonQ(command);
+				command="ALTER TABLE procedurelog DROP COLUMN UnitCode";
+				Db.NonQ(command);
 
 
 

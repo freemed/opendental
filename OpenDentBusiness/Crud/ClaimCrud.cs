@@ -82,7 +82,6 @@ namespace OpenDentBusiness.Crud{
 				claim.Radiographs                 = PIn.Byte  (table.Rows[i]["Radiographs"].ToString());
 				claim.ClinicNum                   = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
 				claim.ClaimForm                   = PIn.Long  (table.Rows[i]["ClaimForm"].ToString());
-				claim.EFormat                     = (EtransType)PIn.Int(table.Rows[i]["EFormat"].ToString());
 				claim.AttachedImages              = PIn.Int   (table.Rows[i]["AttachedImages"].ToString());
 				claim.AttachedModels              = PIn.Int   (table.Rows[i]["AttachedModels"].ToString());
 				claim.AttachedFlags               = PIn.String(table.Rows[i]["AttachedFlags"].ToString());
@@ -149,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClaimNum,";
 			}
-			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,EFormat,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2,CanadaTransRefNum,CanadaEstTreatStartDate,CanadaInitialPayment,CanadaPaymentMode,CanadaTreatDuration,CanadaNumAnticipatedPayments,CanadaAnticipatedPayAmount,PriorAuthorizationNumber,SpecialProgramCode,UniformBillType,MedType) VALUES(";
+			command+="PatNum,DateService,DateSent,ClaimStatus,DateReceived,PlanNum,ProvTreat,ClaimFee,InsPayEst,InsPayAmt,DedApplied,PreAuthString,IsProsthesis,PriorDate,ReasonUnderPaid,ClaimNote,ClaimType,ProvBill,ReferringProv,RefNumString,PlaceService,AccidentRelated,AccidentDate,AccidentST,EmployRelated,IsOrtho,OrthoRemainM,OrthoDate,PatRelat,PlanNum2,PatRelat2,WriteOff,Radiographs,ClinicNum,ClaimForm,AttachedImages,AttachedModels,AttachedFlags,AttachmentID,CanadianMaterialsForwarded,CanadianReferralProviderNum,CanadianReferralReason,CanadianIsInitialLower,CanadianDateInitialLower,CanadianMandProsthMaterial,CanadianIsInitialUpper,CanadianDateInitialUpper,CanadianMaxProsthMaterial,InsSubNum,InsSubNum2,CanadaTransRefNum,CanadaEstTreatStartDate,CanadaInitialPayment,CanadaPaymentMode,CanadaTreatDuration,CanadaNumAnticipatedPayments,CanadaAnticipatedPayAmount,PriorAuthorizationNumber,SpecialProgramCode,UniformBillType,MedType) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(claim.ClaimNum)+",";
 			}
@@ -189,7 +188,6 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (claim.Radiographs)+","
 				+    POut.Long  (claim.ClinicNum)+","
 				+    POut.Long  (claim.ClaimForm)+","
-				+    POut.Int   ((int)claim.EFormat)+","
 				+    POut.Int   (claim.AttachedImages)+","
 				+    POut.Int   (claim.AttachedModels)+","
 				+"'"+POut.String(claim.AttachedFlags)+"',"
@@ -263,7 +261,6 @@ namespace OpenDentBusiness.Crud{
 				+"Radiographs                 =  "+POut.Byte  (claim.Radiographs)+", "
 				+"ClinicNum                   =  "+POut.Long  (claim.ClinicNum)+", "
 				+"ClaimForm                   =  "+POut.Long  (claim.ClaimForm)+", "
-				+"EFormat                     =  "+POut.Int   ((int)claim.EFormat)+", "
 				+"AttachedImages              =  "+POut.Int   (claim.AttachedImages)+", "
 				+"AttachedModels              =  "+POut.Int   (claim.AttachedModels)+", "
 				+"AttachedFlags               = '"+POut.String(claim.AttachedFlags)+"', "
@@ -436,10 +433,6 @@ namespace OpenDentBusiness.Crud{
 			if(claim.ClaimForm != oldClaim.ClaimForm) {
 				if(command!=""){ command+=",";}
 				command+="ClaimForm = "+POut.Long(claim.ClaimForm)+"";
-			}
-			if(claim.EFormat != oldClaim.EFormat) {
-				if(command!=""){ command+=",";}
-				command+="EFormat = "+POut.Int   ((int)claim.EFormat)+"";
 			}
 			if(claim.AttachedImages != oldClaim.AttachedImages) {
 				if(command!=""){ command+=",";}

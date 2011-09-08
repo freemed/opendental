@@ -74,8 +74,6 @@ namespace OpenDentBusiness {
 		public string CodeMod4;
 		///<summary>NUBC Revenue Code for medical/inst billing. Used on UB04 and 837I.</summary>
 		public string RevCode;
-		/// <summary>Drop this column.  Never used.</summary>
-		public string UnitCode;
 		///<summary>For certain CPT codes.  Default is 1.  Becomes Service Unit Count on UB claimforms.</summary>
 		public int UnitQty;
 		///<summary>Base units used for some billing codes.  Default is 0.  No UI for this field.  It is only edited in the ProcedureCode window.  The database maint tool changes BaseUnits of all procedures to match that of the procCode.  Not sure yet what it's for.</summary>
