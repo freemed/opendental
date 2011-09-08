@@ -181,21 +181,21 @@ namespace OpenDental{
 			this.tabFamily = new System.Windows.Forms.TabPage();
 			this.tabAccount = new System.Windows.Forms.TabPage();
 			this.checkStoreCCTokens = new System.Windows.Forms.CheckBox();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
 			this.tabChart = new System.Windows.Forms.TabPage();
+			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
 			this.textAllergiesIndicateNone = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
+			this.butMedicationsIndicateNone = new OpenDental.UI.Button();
 			this.textMedicationsIndicateNone = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
+			this.butProblemsIndicateNone = new OpenDental.UI.Button();
 			this.textProblemsIndicateNone = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.tabImages = new System.Windows.Forms.TabPage();
 			this.tabManage = new System.Windows.Forms.TabPage();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
-			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
-			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
-			this.butMedicationsIndicateNone = new OpenDental.UI.Button();
-			this.butProblemsIndicateNone = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.tabControl1.SuspendLayout();
@@ -831,7 +831,7 @@ namespace OpenDental{
 			this.tabControl1.Location = new System.Drawing.Point(20,10);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(474,464);
+			this.tabControl1.Size = new System.Drawing.Size(474,478);
 			this.tabControl1.TabIndex = 196;
 			// 
 			// tabAppts
@@ -928,7 +928,7 @@ namespace OpenDental{
 			this.tabAccount.Controls.Add(this.textPayPlansBillInAdvanceDays);
 			this.tabAccount.Location = new System.Drawing.Point(4,22);
 			this.tabAccount.Name = "tabAccount";
-			this.tabAccount.Size = new System.Drawing.Size(466,438);
+			this.tabAccount.Size = new System.Drawing.Size(466,452);
 			this.tabAccount.TabIndex = 2;
 			this.tabAccount.Text = "Account";
 			// 
@@ -943,6 +943,26 @@ namespace OpenDental{
 			this.checkStoreCCTokens.Text = "Automatically store X-Charge Tokens";
 			this.checkStoreCCTokens.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStoreCCTokens.UseVisualStyleBackColor = true;
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(381,109);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textPayPlansBillInAdvanceDays
+			// 
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(381,141);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// tabTreatPlan
 			// 
@@ -981,6 +1001,20 @@ namespace OpenDental{
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
 			// 
+			// butAllergiesIndicateNone
+			// 
+			this.butAllergiesIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAllergiesIndicateNone.Autosize = true;
+			this.butAllergiesIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAllergiesIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAllergiesIndicateNone.CornerRadius = 4F;
+			this.butAllergiesIndicateNone.Location = new System.Drawing.Point(419,155);
+			this.butAllergiesIndicateNone.Name = "butAllergiesIndicateNone";
+			this.butAllergiesIndicateNone.Size = new System.Drawing.Size(22,21);
+			this.butAllergiesIndicateNone.TabIndex = 205;
+			this.butAllergiesIndicateNone.Text = "...";
+			this.butAllergiesIndicateNone.Click += new System.EventHandler(this.butAllergiesIndicateNone_Click);
+			// 
 			// textAllergiesIndicateNone
 			// 
 			this.textAllergiesIndicateNone.Location = new System.Drawing.Point(270,156);
@@ -999,6 +1033,20 @@ namespace OpenDental{
 			this.label14.Text = "Indicator that patient has No Allergies";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butMedicationsIndicateNone
+			// 
+			this.butMedicationsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMedicationsIndicateNone.Autosize = true;
+			this.butMedicationsIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMedicationsIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMedicationsIndicateNone.CornerRadius = 4F;
+			this.butMedicationsIndicateNone.Location = new System.Drawing.Point(419,132);
+			this.butMedicationsIndicateNone.Name = "butMedicationsIndicateNone";
+			this.butMedicationsIndicateNone.Size = new System.Drawing.Size(22,21);
+			this.butMedicationsIndicateNone.TabIndex = 202;
+			this.butMedicationsIndicateNone.Text = "...";
+			this.butMedicationsIndicateNone.Click += new System.EventHandler(this.butMedicationsIndicateNone_Click);
+			// 
 			// textMedicationsIndicateNone
 			// 
 			this.textMedicationsIndicateNone.Location = new System.Drawing.Point(270,133);
@@ -1016,6 +1064,20 @@ namespace OpenDental{
 			this.label9.TabIndex = 200;
 			this.label9.Text = "Indicator that patient has No Medications";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butProblemsIndicateNone
+			// 
+			this.butProblemsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butProblemsIndicateNone.Autosize = true;
+			this.butProblemsIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProblemsIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProblemsIndicateNone.CornerRadius = 4F;
+			this.butProblemsIndicateNone.Location = new System.Drawing.Point(419,109);
+			this.butProblemsIndicateNone.Name = "butProblemsIndicateNone";
+			this.butProblemsIndicateNone.Size = new System.Drawing.Size(22,21);
+			this.butProblemsIndicateNone.TabIndex = 199;
+			this.butProblemsIndicateNone.Text = "...";
+			this.butProblemsIndicateNone.Click += new System.EventHandler(this.butProblemsIndicateNone_Click);
 			// 
 			// textProblemsIndicateNone
 			// 
@@ -1055,68 +1117,6 @@ namespace OpenDental{
 			this.tabManage.Text = "Manage";
 			this.tabManage.UseVisualStyleBackColor = true;
 			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(381,109);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// textPayPlansBillInAdvanceDays
-			// 
-			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(381,141);
-			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
-			this.textPayPlansBillInAdvanceDays.MinVal = 0;
-			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
-			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
-			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// butAllergiesIndicateNone
-			// 
-			this.butAllergiesIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAllergiesIndicateNone.Autosize = true;
-			this.butAllergiesIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAllergiesIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAllergiesIndicateNone.CornerRadius = 4F;
-			this.butAllergiesIndicateNone.Location = new System.Drawing.Point(419,155);
-			this.butAllergiesIndicateNone.Name = "butAllergiesIndicateNone";
-			this.butAllergiesIndicateNone.Size = new System.Drawing.Size(22,21);
-			this.butAllergiesIndicateNone.TabIndex = 205;
-			this.butAllergiesIndicateNone.Text = "...";
-			this.butAllergiesIndicateNone.Click += new System.EventHandler(this.butAllergiesIndicateNone_Click);
-			// 
-			// butMedicationsIndicateNone
-			// 
-			this.butMedicationsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butMedicationsIndicateNone.Autosize = true;
-			this.butMedicationsIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMedicationsIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butMedicationsIndicateNone.CornerRadius = 4F;
-			this.butMedicationsIndicateNone.Location = new System.Drawing.Point(419,132);
-			this.butMedicationsIndicateNone.Name = "butMedicationsIndicateNone";
-			this.butMedicationsIndicateNone.Size = new System.Drawing.Size(22,21);
-			this.butMedicationsIndicateNone.TabIndex = 202;
-			this.butMedicationsIndicateNone.Text = "...";
-			this.butMedicationsIndicateNone.Click += new System.EventHandler(this.butMedicationsIndicateNone_Click);
-			// 
-			// butProblemsIndicateNone
-			// 
-			this.butProblemsIndicateNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butProblemsIndicateNone.Autosize = true;
-			this.butProblemsIndicateNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProblemsIndicateNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProblemsIndicateNone.CornerRadius = 4F;
-			this.butProblemsIndicateNone.Location = new System.Drawing.Point(419,109);
-			this.butProblemsIndicateNone.Name = "butProblemsIndicateNone";
-			this.butProblemsIndicateNone.Size = new System.Drawing.Size(22,21);
-			this.butProblemsIndicateNone.TabIndex = 199;
-			this.butProblemsIndicateNone.Text = "...";
-			this.butProblemsIndicateNone.Click += new System.EventHandler(this.butProblemsIndicateNone_Click);
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -1126,7 +1126,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(441,498);
+			this.butCancel.Location = new System.Drawing.Point(441,510);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -1141,7 +1141,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(336,498);
+			this.butOK.Location = new System.Drawing.Point(336,510);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
@@ -1151,7 +1151,7 @@ namespace OpenDental{
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(543,535);
+			this.ClientSize = new System.Drawing.Size(543,547);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
