@@ -188,6 +188,9 @@ namespace OpenDental {
 		#endregion
 
 		private void FormReferralSelect_Load(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.ReferralAdd,true)) {
+				butAdd.Enabled=false;
+			}
 			FillTable();
 			//labelResultCount.Text="";
 		}

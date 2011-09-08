@@ -1487,6 +1487,9 @@ namespace OpenDental{
 		}
 
 		private void updownRed_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
 			//this is necessary because Microsoft's updown control is too buggy to be useful
 			Cursor=Cursors.WaitCursor;
 			PrefName prefname=PrefName.PerioRedProb;

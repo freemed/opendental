@@ -471,6 +471,8 @@ namespace OpenDental{
 					node.Nodes.Add(node2);
 				node2=SetNode(Permissions.EhrEmergencyAccess);
 					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.ReferralAdd);
+					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode("Main Toolbar");
 				node2=SetNode(Permissions.CommlogEdit);
@@ -527,6 +529,8 @@ namespace OpenDental{
 					node3=SetNode(Permissions.ProcEditShowFee);
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.ProcDelete);
+						node2.Nodes.Add(node3);
+					node3=SetNode(Permissions.ProcedureNote);
 						node2.Nodes.Add(node3);
 						node.Nodes.Add(node2);
 					node2=SetNode(Permissions.RxCreate);

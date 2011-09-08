@@ -1103,7 +1103,11 @@ namespace OpenDentBusiness{
 		///<summary>51</summary>
 		Providers,
 		///<summary>52</summary>
-		EcwAppointmentRevise
+		EcwAppointmentRevise,
+		///<summary>53</summary>
+		ProcedureNote,
+		///<summary>54</summary>
+		ReferralAdd
 	}
 
 	///<summary>The type of signal being sent.</summary>

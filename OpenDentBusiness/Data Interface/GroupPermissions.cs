@@ -171,6 +171,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Perio Chart Edit");
 				case Permissions.ProcComplCreate:
 					return Lans.g("enumPermissions","Create Completed Procedure (or set complete)");
+				case Permissions.ProcedureNote:
+					return Lans.g("enumPermissions","Procedure Note");
 				case Permissions.ProcDelete:
 					return Lans.g("enumPermissions","Delete Procedure");
 				case Permissions.ProcComplEdit:
@@ -181,6 +183,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Providers");
 				case Permissions.Reports:
 					return Lans.g("enumPermissions","Reports");
+				case Permissions.ReferralAdd:
+					return Lans.g("enumPermissions","Referral Add");
 				case Permissions.RxCreate:
 					return Lans.g("enumPermissions","Rx Create");
 				case Permissions.Schedules:

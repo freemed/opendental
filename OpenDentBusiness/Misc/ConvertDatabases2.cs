@@ -6396,7 +6396,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim ADD UniformBillType varchar2(255)";
 					Db.NonQ(command);
 				}
-				//Add Providers permission to groups with security permissions------------------------------------------------------
+				//Add Providers permission to groups with existing Setup permission------------------------------------------------------
 				command="SELECT DISTINCT UserGroupNum FROM grouppermission WHERE PermType="+POut.Int((int)Permissions.Setup);
 				DataTable table=Db.GetTable(command);
 				long groupNum;
@@ -6416,7 +6416,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ32(command);
 					}
 				}
-				//Add ProcedureNote permission to groups with security permissions------------------------------------------------------
+				//Add ProcedureNote permission to everyone------------------------------------------------------
 				command="SELECT DISTINCT UserGroupNum FROM grouppermission";
 				table=Db.GetTable(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -6435,7 +6435,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ32(command);
 					}
 				}
-				//Add ReferralAdd permission to groups with security permissions------------------------------------------------------
+				//Add ReferralAdd permission to everyone------------------------------------------------------
 				command="SELECT DISTINCT UserGroupNum FROM grouppermission";
 				table=Db.GetTable(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
