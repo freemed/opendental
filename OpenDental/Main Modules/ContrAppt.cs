@@ -4781,8 +4781,8 @@ namespace OpenDental {
 
 		private void butRefresh_Click(object sender,EventArgs e) {
 			if(pinBoard.SelectedAppt==null ) {
-				if(pinBoard.ApptList.Count>0) {//select first appt if there are any appointments in the pinboard.
-					pinBoard.SelectedIndex=0;
+				if(pinBoard.ApptList.Count>0) {//if there are any appointments in the pinboard.
+					pinBoard.SelectedIndex=pinBoard.ApptList.Count-1;//select last appt
 				}
 				else {
 					MsgBox.Show(this,"There are no appointments on the pinboard.");

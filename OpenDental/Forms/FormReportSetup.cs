@@ -21,7 +21,7 @@ namespace OpenDental {
 			checkReportsShowPatNum.Checked=PrefC.GetBool(PrefName.ReportsShowPatNum);
 			checkReportProdWO.Checked=PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO);
 			//TEMP------------------------------------------------------------------------------------------
-			//butAgg.Visible=false;//TODO: THIS IS TEMPORARY. DELETE THIS LINE WHEN THE AGGREGATOR IS WORKING.
+			butAgg.Visible=false;//TODO: THIS IS TEMPORARY. DELETE THIS LINE WHEN THE AGGREGATOR IS WORKING.
 			//TEMP------------------------------------------------------------------------------------------
 		}
 
