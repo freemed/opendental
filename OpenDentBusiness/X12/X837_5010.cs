@@ -390,7 +390,6 @@ namespace OpenDentBusiness
 					+Sout(insPlan.GroupName,60)+"*"//SBR04 1/60 Name: Group Name.
 					+"*");//SBR05 1/3 Insurance Type Code. Situational.  Skip because we don't support secondary Medicare.
 				sw.Write("***");//SBR06, 07, & 08 not used.
-//Derek: National Plan ID is not the same as National Provider ID.  This field is still required
 				sw.WriteLine(GetFilingCode(insPlan)+"~");//"CI~");//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
 				//2010BA NM1: Subscriber Name
 				seg++;
@@ -544,7 +543,7 @@ namespace OpenDentBusiness
 				//2300 CLM: Claim Information.
 				seg++;
 				sw.Write("CLM*"
-					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),38)+"*"//CLM01 1/38 Claim Submitter's Identifier: A unique id. Can support 20 char.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness. We might need to allow user to override for claims based on preauths.
+					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),38)+"*"//CLM01 1/38 Claim Submitter's Identifier: A unique id.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness. We might need to allow user to override for claims based on preauths.
 					+claim.ClaimFee.ToString()+"*"//CLM02 1/18 Monetary Amount:
 					+"*"//CLM03 1/2 Claim Filing Indicator Code: Not Used.
 					+"*");//CLM04 1/2 Non-Institutional Claim Type Code: Not Used.
@@ -564,78 +563,86 @@ namespace OpenDentBusiness
 				}
 				sw.Write("Y*"//CLM06 1/1 Yes/No Condition or Response Code: prov sig on file (always yes)
 					+"A*");//CLM07 1/1 Provider Accept Assignment Code: prov accepts medicaid assignment. OD has no field for this, so no choice
-				sw.Write((sub.AssignBen?"Y":"N")+"*");//CLM08 1/1 Yes/No Condition or Response Code. We do not support W.
+				sw.Write((sub.AssignBen?"Y":"N")+"*");//CLM08 1/1 Yes/No Condition or Response Code: We do not support W.
 				sw.Write(sub.ReleaseInfo?"Y":"I");//CLM09 1/1 Release of Information Code: Y or I(which is equivalent to No)
 				if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
 					//CLM10-19 not used, 20 not supported.
 					sw.WriteLine("~");
 				}
-				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
+				else if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
 					//todo
 				}
-				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
+				else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 					if(claim.ClaimType=="PreAuth") {
 						sw.WriteLine("**"//* for CLM09. CLM10 not used
-							+GetRelatedCauses(claim)+"*"//CLM11: Accident related, including state. Might be blank.
+							+GetRelatedCauses(claim)+"*"//CLM11 2/3:2/3:2/3:2/2:2/3 Related Causes Information: Situational. Accident related, including state. Might be blank.
 //todo: js 9/7/11 implement EPSTD and validate.
-							+"*"//CLM12: special programs like EPSTD
+							+"*"//CLM12 2/3 Special Program Code: Situational. Example EPSTD.
 							+"******"//CLM13-18 not used
-							+"PB~");//CLM19 PB=Predetermination of Benefits. Not allowed in medical claims. What is the replacement??
+							+"PB"//CLM19 2/2 Claim Submission Reason Code: PB=Predetermination of Benefits. Not allowed in medical claims. What is the replacement??
+							+"~");//CLM20 1/2 Delay Reason Code: Situational. Required when claim is submitted late. Not supported.
 					}
 					else {
 						if(GetRelatedCauses(claim)=="") {
-							sw.WriteLine("~");
+							sw.WriteLine("~");//CLM10 through CLM20 are either not used or situational and are not needed in this case.
 						}
 						else {
 							sw.WriteLine("**"//* for CLM09. CLM10 not used
-								+GetRelatedCauses(claim)+"~");//CLM11: Accident related, including state
+								+GetRelatedCauses(claim)//CLM11 2/3:2/3:2/3:2/2:2/3 Related Causes Information: Situational. Accident related, including state. Might be blank.
+								+"~");//CLM12 through CLM20 are either not used or situational and are not needed in this case.
 						}
 					}
 				}
-				//CLM20: delay reason code
 				//DTP loops------------------------------------------------------------------------------------------------------
-				//2300 DTP: Date of onset of current illness (medical)
-				//2300 DTP: Initial treatment date (spinal manipulation) (medical)
-				//2300 DTP: Date last seen (foot care) (medical)
-				//2300 DTP: Date accute manifestation (spinal manipulation) (medical)
-				//2300 DTP: Date referral
-				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-					//2300 DTP: Date accident
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) {
+					//2300 DTP: Date of onset of current illness (medical)
+					//2300 DTP: Initial treatment date (spinal manipulation) (medical)
+					//2300 DTP: Date last seen (foot care) (medical)
+					//2300 DTP: Date accute manifestation (spinal manipulation) (medical)
+					//2300 DTP: Date referral
+					//todo
+				}
+				else if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
+					//todo
+				}
+				else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
+					//2300 DTP: Date accident. Situational. Required when there was an accident.
 					if(claim.AccidentDate.Year>1880) {
 						seg++;
-						sw.WriteLine("DTP*439*"//DTP01: 439=accident
-							+"D8*"//DTP02: use D8
-							+claim.AccidentDate.ToString("yyyyMMdd")+"~");
+						sw.WriteLine("DTP*439*"//DTP01 3/3 Date/Time Qualifier: 439=accident
+							+"D8*"//DTP02 2/3 Date Time Period Format Qualifer: D8=Date Expressed in Format CCYYMMDD.
+							+claim.AccidentDate.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time Period:
 					}
-				}
-				//2300 DTP: (a bunch more useless medical and institutional dates)
-				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-					//2300 DTP: Date Appliance Placement
+					//2300 DTP: Date Appliance Placement. Situational. Values can be overriden in loop 2400 for individual service items.
 					if(claim.OrthoDate.Year>1880) {
 						seg++;
-						sw.WriteLine("DTP*452*"//DTP01: 452=Appliance placement
-							+"D8*"//DTP02: use D8
-							+claim.OrthoDate.ToString("yyyyMMdd")+"~");
+						sw.WriteLine("DTP*452*"//DTP01 3/3 Date/Time Qualifier: 452=Appliance Placement.
+							+"D8*"//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+							+claim.OrthoDate.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time Period:
 					}
-					//2300 DTP: Date of service for claim. Not used if predeterm
+					//2300 DTP: Service Date. Not used if predeterm.
 					if(claim.ClaimType!="PreAuth") {
 						if(claim.DateService.Year>1880) {
 							seg++;
-							sw.WriteLine("DTP*472*"//DTP01: 472=Service
-								+"D8*"//DTP02: use D8
-								+claim.DateService.ToString("yyyyMMdd")+"~");
+							sw.WriteLine("DTP*472*"//DTP01 3/3 Date/Time Qualifier: 472=Service.
+								+"D8*"//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+								+claim.DateService.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time Period:
 						}
 					}
-					//2300 DN1: Months of ortho service
+					//2300 DTP: Repricer Received Date. Situational. We do not use.
+				}
+				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
+					//2300 DN1: Orthodontic Total Months of Treatment.
 					if(claim.IsOrtho) {
 						seg++;
 						sw.WriteLine("DN1*"
-							+"*"//DN101 not used because no field yet in OD.
-							+claim.OrthoRemainM.ToString()+"~");
+							+"*"//DN101 1/15 Quantity: Not used because no field yet in OD.
+							+claim.OrthoRemainM.ToString()//DN102 1/15 Quantity: Number of treatment months remaining.
+							+"~");//DN103 is not used and DN104 is situational but we do not use it.
 					}
 				}
 				if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
-					//2300 DN2: Missing teeth
+					//2300 DN2: Tooth Status. Missing teeth.
 					List<string> missingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 					bool doSkip;
 					int countMissing=0;
@@ -660,8 +667,8 @@ namespace OpenDentBusiness
 						}
 						seg++;
 						sw.WriteLine("DN2*"
-							+missingTeeth[j]+"*"//DN201: tooth number
-							+"M~");//DN202: M=Missing, I=Impacted, E=To be extracted
+							+missingTeeth[j]+"*"//DN201 1/50 Reference Identification: Tooth number.
+							+"M~");//DN202 1/2 Tooth Status Code: M=Missing, E=To be extracted.
 					}
 				}
 				if(clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) {
@@ -673,7 +680,7 @@ namespace OpenDentBusiness
 					//CL104 Not used
 				}
 				//PWK loops-------------------------------------------------------------------------------------------------------
-				//2300 PWK: Paperwork. Used to identify attachments.
+				//2300 PWK: Claim Supplemental Information. Paperwork. Used to identify attachments.
 				/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
 					seg++;
 					sw.WriteLine("PWK*"
@@ -687,73 +694,45 @@ namespace OpenDentBusiness
 				//Warning if attachments are listed as Mail even though we are sending electronically.
 				//Warning if any PWK segments are needed, and there is no ID code.
 				//PWK can repeat max 10 times.
-				string pwk02;
-				string idCode=claim.AttachmentID;
-				if(idCode=="") {//must be min of two char, so we need to make one up.
-					idCode="  ";
+				string pwk01="  ";
+				if(claim.AttachedFlags.Contains("EoB")) {
+					pwk01="EB";
 				}
-				idCode=Sout(idCode,80,2);
+				if(claim.AttachedFlags.Contains("Note")) {
+					pwk01="OB";
+				}
+				if(claim.AttachedFlags.Contains("Perio")) {
+					pwk01="P6";
+				}
+				if(claim.AttachedFlags.Contains("Misc") || claim.AttachedImages>0) {
+					pwk01="OZ";
+				}
+				if(claim.Radiographs>0) {
+					pwk01="RB";
+				}
+				if(claim.AttachedModels>0) {
+					pwk01="DA";
+				}
+				string pwk02="  ";
 				if(claim.AttachedFlags.Contains("Mail")) {
 					pwk02="BM";//By Mail
 				}
 				else {
 					pwk02="EL";//Elect
 				}
-				if(claim.AttachedFlags.Contains("EoB")) {
-					seg++;
-					sw.WriteLine("PWK*"
-						+"EB*"//PWK01: ReportTypeCode. EB=EoB.
-						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
-						+"**"//PWK03 and 04: not used
-						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
-						+idCode+"~");//PWK06: Identification Code.
+				string idCode=claim.AttachmentID;
+				if(idCode=="") {//must be min of two char, so we need to make one up.
+					idCode="  ";
 				}
-				if(claim.AttachedFlags.Contains("Note")) {
-					seg++;
-					sw.WriteLine("PWK*"
-						+"OB*"//PWK01: ReportTypeCode. OB=Operative Note.
-						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
-						+"**"//PWK03 and 04: not used
-						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
-						+idCode+"~");//PWK06: Identification Code.
-				}
-				if(claim.AttachedFlags.Contains("Perio")) {
-					seg++;
-					sw.WriteLine("PWK*"
-						+"P6*"//PWK01: ReportTypeCode. P6=Perio
-						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
-						+"**"//PWK03 and 04: not used
-						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
-						+idCode+"~");//PWK06: Identification Code.
-				}
-				if(claim.AttachedFlags.Contains("Misc") || claim.AttachedImages>0) {
-					seg++;
-					sw.WriteLine("PWK*"
-						+"OZ*"//PWK01: ReportTypeCode. OZ=Support Data For Claim.
-						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
-						+"**"//PWK03 and 04: not used
-						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
-						+idCode+"~");//PWK06: Identification Code.
-				}
-				if(claim.Radiographs>0) {
-					seg++;
-					sw.WriteLine("PWK*"
-						+"RB*"//PWK01: ReportTypeCode. RB=Radiology Films.
-						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
-						+"**"//PWK03 and 04: not used
-						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
-						+idCode+"~");//PWK06: Identification Code.
-				}
-				if(claim.AttachedModels>0) {
-					seg++;
-					sw.WriteLine("PWK*"
-						+"DA*"//PWK01: ReportTypeCode. DA=Dental Models.
-						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
-						+"**"//PWK03 and 04: not used
-						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
-						+idCode+"~");//PWK06: Identification Code.
-				}
-				//2300 CN1: Contract Info (medical and inst)
+				idCode=Sout(idCode,80,2);
+				seg++;
+				sw.WriteLine("PWK*"
+						+pwk01+"*"//PWK01 2/2 Report Type Code:
+						+pwk02+"*"//PWK02 1/2 Report Transmission Code: EL=Electronically Only, BM=By Mail.
+						+"**"//PWK03 and PWK04: Not Used.
+						+"AC*"//PWK05 1/2 Identification Code Qualifier: AC=Attachment Control Number.
+						+idCode+"~");//PWK06 2/80 Identification Code:
+				//2300 CN1: Contract Info
 				//2300 AMT: Patient estimated amount due (inst)
 				//2300 AMT: Patient amount paid
 				//2300 AMT: Total Purchased Service Amt (medical)
@@ -763,8 +742,9 @@ namespace OpenDentBusiness
 					//required when sending claim for previously predetermined services
 				if(claim.PreAuthString!="") {
 					seg++;
-					sw.WriteLine("REF*G3*"//REF01: G3=Predetermination of Benefits Identification Number
-						+Sout(claim.PreAuthString,50)+"~");//REF02 1/50 Prior Auth Identifier
+					sw.WriteLine("REF*G3*"//REF01 2/3 Reference Identification Qualifier: G3=Predetermination of Benefits Identification Number.
+						+Sout(claim.PreAuthString,50)//REF02 1/50 Reference Identification: Prior Auth Identifier.
+						+"~");//REF03 and REF04 are not used.
 				}
 				//2300 REF: Service Authorization Exception Code 4N (dental,inst)
 					//required if services were performed without authorization
@@ -779,8 +759,9 @@ namespace OpenDentBusiness
 				//2300 REF: Referral Number 9F (dental,inst,med)
 				if(claim.RefNumString!="") {
 					seg++;
-					sw.WriteLine("REF*9F*"//REF01: 9F=Referral number. 
-						+Sout(claim.RefNumString,30)+"~");
+					sw.WriteLine("REF*9F*"//REF01 2/3 Reference Identification Qualifier: 9F=Referral number. 
+						+Sout(claim.RefNumString,30)//REF02 1/50 Reference Identification:
+						+"~");//REF03 and REF04 are not used.
 				}
 				//2300 REF: Prior Authorization G1 (dental,inst)
 //todo: G1 and G3 have been muddled.  In 4010, we were sending G1, so I think we need to add a field for this,
@@ -1560,13 +1541,13 @@ namespace OpenDentBusiness
 				return "";
 			}
 			//even though the specs let you submit all three types at once, we only allow one of the three
-			if(claim.AccidentRelated=="A") {
+			if(claim.AccidentRelated=="A") {//auto accident
 				return "AA:::"+Sout(claim.AccidentST,2,2);
 			}
-			else if(claim.AccidentRelated=="E") {
+			else if(claim.AccidentRelated=="E") {//employment
 				return "EM";
 			}
-			else {// if(claim.AccidentRelated=="O"){
+			else {// if(claim.AccidentRelated=="O"){ //other accident
 				return "OA";
 			}
 		}
