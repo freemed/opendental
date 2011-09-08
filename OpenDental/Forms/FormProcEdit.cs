@@ -130,14 +130,12 @@ namespace OpenDental{
 		private Label labelBillingTypeTwo;
 		private ComboBox comboBillingTypeOne;
 		private Label labelBillingTypeOne;
-		private Label label20;
 		private TextBox textCodeMod4;
 		private TextBox textCodeMod3;
 		private TextBox textCodeMod2;
 		private TextBox textRevCode;
 		private Label label22;
 		private TextBox textUnitQty;
-		private TextBox textUnitCode;
 		private Label label21;
 		private OpenDental.UI.Button buttonUseAutoNote;
 		private Label label24;
@@ -335,9 +333,7 @@ namespace OpenDental{
 			this.textRevCode = new System.Windows.Forms.TextBox();
 			this.label22 = new System.Windows.Forms.Label();
 			this.textUnitQty = new System.Windows.Forms.TextBox();
-			this.textUnitCode = new System.Windows.Forms.TextBox();
 			this.label21 = new System.Windows.Forms.Label();
-			this.label20 = new System.Windows.Forms.Label();
 			this.textCodeMod4 = new System.Windows.Forms.TextBox();
 			this.textCodeMod3 = new System.Windows.Forms.TextBox();
 			this.textCodeMod2 = new System.Windows.Forms.TextBox();
@@ -1080,9 +1076,7 @@ namespace OpenDental{
 			this.groupMedical.Controls.Add(this.textRevCode);
 			this.groupMedical.Controls.Add(this.label22);
 			this.groupMedical.Controls.Add(this.textUnitQty);
-			this.groupMedical.Controls.Add(this.textUnitCode);
 			this.groupMedical.Controls.Add(this.label21);
-			this.groupMedical.Controls.Add(this.label20);
 			this.groupMedical.Controls.Add(this.textCodeMod4);
 			this.groupMedical.Controls.Add(this.textCodeMod3);
 			this.groupMedical.Controls.Add(this.textCodeMod2);
@@ -1096,7 +1090,7 @@ namespace OpenDental{
 			this.groupMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupMedical.Location = new System.Drawing.Point(400,1);
 			this.groupMedical.Name = "groupMedical";
-			this.groupMedical.Size = new System.Drawing.Size(321,293);
+			this.groupMedical.Size = new System.Drawing.Size(321,97);
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
 			this.groupMedical.Text = "Medical and Institutional";
@@ -1109,7 +1103,7 @@ namespace OpenDental{
 			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowMedical.CornerRadius = 4F;
-			this.butShowMedical.Location = new System.Drawing.Point(263,271);
+			this.butShowMedical.Location = new System.Drawing.Point(263,75);
 			this.butShowMedical.Name = "butShowMedical";
 			this.butShowMedical.Size = new System.Drawing.Size(58,21);
 			this.butShowMedical.TabIndex = 121;
@@ -1119,7 +1113,7 @@ namespace OpenDental{
 			// 
 			// label18
 			// 
-			this.label18.Location = new System.Drawing.Point(146,182);
+			this.label18.Location = new System.Drawing.Point(146,161);
 			this.label18.Name = "label18";
 			this.label18.Size = new System.Drawing.Size(152,16);
 			this.label18.TabIndex = 120;
@@ -1128,7 +1122,7 @@ namespace OpenDental{
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(146,164);
+			this.label17.Location = new System.Drawing.Point(146,143);
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(152,16);
 			this.label17.TabIndex = 119;
@@ -1137,7 +1131,7 @@ namespace OpenDental{
 			// 
 			// textTotal
 			// 
-			this.textTotal.Location = new System.Drawing.Point(103,202);
+			this.textTotal.Location = new System.Drawing.Point(103,181);
 			this.textTotal.Name = "textTotal";
 			this.textTotal.ReadOnly = true;
 			this.textTotal.Size = new System.Drawing.Size(36,20);
@@ -1146,7 +1140,7 @@ namespace OpenDental{
 			// 
 			// label25
 			// 
-			this.label25.Location = new System.Drawing.Point(24,204);
+			this.label25.Location = new System.Drawing.Point(24,183);
 			this.label25.Name = "label25";
 			this.label25.Size = new System.Drawing.Size(78,16);
 			this.label25.TabIndex = 117;
@@ -1155,7 +1149,7 @@ namespace OpenDental{
 			// 
 			// label24
 			// 
-			this.label24.Location = new System.Drawing.Point(37,184);
+			this.label24.Location = new System.Drawing.Point(37,163);
 			this.label24.Name = "label24";
 			this.label24.Size = new System.Drawing.Size(65,16);
 			this.label24.TabIndex = 116;
@@ -1164,7 +1158,7 @@ namespace OpenDental{
 			// 
 			// label23
 			// 
-			this.label23.Location = new System.Drawing.Point(37,163);
+			this.label23.Location = new System.Drawing.Point(37,142);
 			this.label23.Name = "label23";
 			this.label23.Size = new System.Drawing.Size(65,16);
 			this.label23.TabIndex = 115;
@@ -1173,7 +1167,7 @@ namespace OpenDental{
 			// 
 			// textStop
 			// 
-			this.textStop.Location = new System.Drawing.Point(103,181);
+			this.textStop.Location = new System.Drawing.Point(103,160);
 			this.textStop.MaxLength = 4;
 			this.textStop.Name = "textStop";
 			this.textStop.Size = new System.Drawing.Size(38,20);
@@ -1183,7 +1177,7 @@ namespace OpenDental{
 			// 
 			// textStart
 			// 
-			this.textStart.Location = new System.Drawing.Point(103,160);
+			this.textStart.Location = new System.Drawing.Point(103,139);
 			this.textStart.MaxLength = 4;
 			this.textStart.Name = "textStart";
 			this.textStart.Size = new System.Drawing.Size(38,20);
@@ -1193,7 +1187,7 @@ namespace OpenDental{
 			// 
 			// textRevCode
 			// 
-			this.textRevCode.Location = new System.Drawing.Point(103,139);
+			this.textRevCode.Location = new System.Drawing.Point(103,118);
 			this.textRevCode.MaxLength = 48;
 			this.textRevCode.Name = "textRevCode";
 			this.textRevCode.Size = new System.Drawing.Size(59,20);
@@ -1201,7 +1195,7 @@ namespace OpenDental{
 			// 
 			// label22
 			// 
-			this.label22.Location = new System.Drawing.Point(6,141);
+			this.label22.Location = new System.Drawing.Point(6,120);
 			this.label22.Name = "label22";
 			this.label22.Size = new System.Drawing.Size(96,17);
 			this.label22.TabIndex = 111;
@@ -1216,15 +1210,6 @@ namespace OpenDental{
 			this.textUnitQty.Size = new System.Drawing.Size(29,20);
 			this.textUnitQty.TabIndex = 110;
 			// 
-			// textUnitCode
-			// 
-			this.textUnitCode.Location = new System.Drawing.Point(103,118);
-			this.textUnitCode.MaxLength = 2;
-			this.textUnitCode.Name = "textUnitCode";
-			this.textUnitCode.Size = new System.Drawing.Size(29,20);
-			this.textUnitCode.TabIndex = 109;
-			this.textUnitCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			// 
 			// label21
 			// 
 			this.label21.Location = new System.Drawing.Point(17,99);
@@ -1233,15 +1218,6 @@ namespace OpenDental{
 			this.label21.TabIndex = 108;
 			this.label21.Text = "Unit Quantity";
 			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label20
-			// 
-			this.label20.Location = new System.Drawing.Point(11,120);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(91,17);
-			this.label20.TabIndex = 107;
-			this.label20.Text = "Unit Code";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textCodeMod4
 			// 
@@ -2727,7 +2703,7 @@ namespace OpenDental{
 			textCodeMod3.Text = ProcCur.CodeMod3;
 			textCodeMod4.Text = ProcCur.CodeMod4;
 			textRevCode.Text = ProcCur.RevCode;
-			textUnitCode.Text = ProcCur.UnitCode;
+			//textUnitCode.Text = ProcCur.UnitCode;
 			textUnitQty.Text = ProcCur.UnitQty.ToString();
 			textStart.Text=ProcCur.StartTime.ToString();
 			textStop.Text=ProcCur.StopTime.ToString();
@@ -4017,7 +3993,7 @@ namespace OpenDental{
 			ProcCur.CodeMod3 = textCodeMod3.Text;
 			ProcCur.CodeMod4 = textCodeMod4.Text;
 			ProcCur.RevCode = textRevCode.Text;
-			ProcCur.UnitCode = textUnitCode.Text;
+			//ProcCur.UnitCode = textUnitCode.Text;
 			ProcCur.UnitQty = PIn.Int(textUnitQty.Text);
 			ProcCur.StartTime=PIn.Int(textStart.Text);
 			ProcCur.StopTime=PIn.Int(textStop.Text);

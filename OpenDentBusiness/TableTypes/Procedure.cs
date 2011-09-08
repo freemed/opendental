@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 		public string CodeMod4;
 		///<summary>NUBC Revenue Code for medical/inst billing. Used on UB04 and 837I.</summary>
 		public string RevCode;
-		/// <summary>Unit or basis for measurement code.  Days or Units.  For things like anesthesia.  Used on the UB04.  Never used.</summary>
+		/// <summary>Drop this column.  Never used.</summary>
 		public string UnitCode;
 		///<summary>For certain CPT codes.  Default is 1.  Becomes Service Unit Count on UB claimforms.</summary>
 		public int UnitQty;

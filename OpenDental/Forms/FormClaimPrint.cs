@@ -1688,9 +1688,9 @@ namespace OpenDental{
 					case "P1CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
 						break;
-					case "P1UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
-						break;
+					//case "P1UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+					//	break;
 					case "P1UnitQty":
 						if(planCur.ShowBaseUnits) {
 							short bunit;
@@ -1775,9 +1775,9 @@ namespace OpenDental{
 					case "P2CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",2+startProc);
 						break;
-					case "P2UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",2+startProc);
-						break;
+					//case "P2UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",2+startProc);
+					//	break;
 					case "P2UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -1863,9 +1863,9 @@ namespace OpenDental{
 					case "P3CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",3+startProc);
 						break;
-					case "P3UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",3+startProc);
-						break;
+					//case "P3UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",3+startProc);
+					//	break;
 					case "P3UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -1951,9 +1951,9 @@ namespace OpenDental{
 					case "P4CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",4+startProc);
 						break;
-					case "P4UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",4+startProc);
-						break;
+					//case "P4UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",4+startProc);
+					//	break;
 					case "P4UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -2039,9 +2039,9 @@ namespace OpenDental{
 					case "P5CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",5+startProc);
 						break;
-					case "P5UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",5+startProc);
-						break;
+					//case "P5UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",5+startProc);
+					//	break;
 					case "P5UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -2127,9 +2127,9 @@ namespace OpenDental{
 					case "P6CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",6+startProc);
 						break;
-					case "P6UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",6+startProc);
-						break;
+					//case "P6UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",6+startProc);
+					//	break;
 					case "P6UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit; 
@@ -2215,9 +2215,9 @@ namespace OpenDental{
 					case "P7CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",7+startProc);
 						break;
-					case "P7UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",7+startProc);
-						break;
+					//case "P7UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",7+startProc);
+					//	break;
 					case "P7UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -2303,9 +2303,9 @@ namespace OpenDental{
 					case "P8CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",8+startProc);
 						break;
-					case "P8UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",8+startProc);
-						break;
+					//case "P8UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",8+startProc);
+					//	break;
 					case "P8UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -2391,9 +2391,9 @@ namespace OpenDental{
 					case "P9CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",9+startProc);
 						break;
-					case "P9UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",9+startProc);
-						break;
+					//case "P9UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",9+startProc);
+					//	break;
 					case "P9UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -2479,9 +2479,9 @@ namespace OpenDental{
 					case "P10CodeMod4":
 						displayStrings[i]=GetProcInfo("CodeMod4",10+startProc);
 						break;
-					case "P10UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",10+startProc);
-						break;
+					//case "P10UnitCode":
+					//	displayStrings[i]=GetProcInfo("UnitCode",10+startProc);
+					//	break;
 					case "P10UnitQty":
 						if(planCur.ShowBaseUnits){
                             short bunit;
@@ -3131,9 +3131,9 @@ namespace OpenDental{
 			if(field=="CodeMod4"){
 				return ProcCur.CodeMod4;
 			}
-			if(field=="UnitCode"){
-				return ProcCur.UnitCode;
-			}
+			//if(field=="UnitCode"){
+			//	return ProcCur.UnitCode;
+			//}
 			if(field=="UnitQty"){
 				return ProcCur.UnitQty.ToString();
 			}

@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 		public string TrojanID;
 		///<summary>Only used in Canada. It's a suffix to the plan number (group number).</summary>
 		public string DivisionNo;
-		///<summary>True if this is medical insurance rather than dental insurance.</summary>
+		///<summary>True if this is medical insurance rather than dental insurance.  When creating a claim, this, along with pref.</summary>
 		public bool IsMedical;
 		///<summary>FK to insfilingcode.InsFilingCodeNum.  Used for e-claims.  Also used for some complex reports in public health.  The e-claim usage might become obsolete when PlanID implemented by HIPAA.  Can be 0 to indicate none.  Then 'CI' will go out on claims.</summary>
 		public long FilingCode;

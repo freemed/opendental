@@ -28,12 +28,9 @@ namespace OpenDental{
 		private List <InsPlan> PlanList;
 		private OpenDental.UI.ODGrid gridMain;
 		private GroupBox groupBox1;
-		private GroupBox groupBox2;
 		private ComboBox comboClaimForm;
-		private ComboBox comboEFormat;
 		private long PatNum;
 		public long ClaimFormNum;
-		public EtransType EFormat;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -65,10 +62,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.comboClaimForm = new System.Windows.Forms.ComboBox();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.comboEFormat = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
-			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -147,31 +141,12 @@ namespace OpenDental{
 			this.comboClaimForm.Size = new System.Drawing.Size(199,21);
 			this.comboClaimForm.TabIndex = 0;
 			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.comboEFormat);
-			this.groupBox2.Location = new System.Drawing.Point(22,287);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(211,47);
-			this.groupBox2.TabIndex = 12;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "E-Format";
-			// 
-			// comboEFormat
-			// 
-			this.comboEFormat.FormattingEnabled = true;
-			this.comboEFormat.Location = new System.Drawing.Point(6,19);
-			this.comboEFormat.Name = "comboEFormat";
-			this.comboEFormat.Size = new System.Drawing.Size(199,21);
-			this.comboEFormat.TabIndex = 0;
-			// 
 			// FormClaimCreate
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,374);
-			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.listRelat);
@@ -189,7 +164,6 @@ namespace OpenDental{
 			this.Text = "Create New Claim";
 			this.Load += new System.EventHandler(this.FormClaimCreate_Load);
 			this.groupBox1.ResumeLayout(false);
-			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -280,7 +254,6 @@ namespace OpenDental{
 			SelectedSub=SubList[gridMain.GetSelectedIndex()];
 			SelectedPlan=InsPlans.GetPlan(SubList[gridMain.GetSelectedIndex()].PlanNum,PlanList);
 			ClaimFormNum=ClaimForms.ListShort[comboClaimForm.SelectedIndex].ClaimFormNum;
-			EFormat=EtransType.ClaimSent;//?? was 2;
       DialogResult=DialogResult.OK;
 		}
 

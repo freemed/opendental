@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 		public long ClinicNum;
 		///<summary>FK to claimform.ClaimFormNum.  0 if not assigned to use the claimform for the insplan.</summary>
 		public long ClaimForm;
-		///<summary>Enum:EtransType to define a specific version of an e-claim.  Only used for medical claims right now.</summary>
+		///<summary>Drop this column.  Not used.</summary>
 		public EtransType EFormat;
 		///<summary>The number of intraoral images attached.  Not the number of files attached.  This is the value that goes on the 2006 claimform.</summary>
 		public int AttachedImages;
