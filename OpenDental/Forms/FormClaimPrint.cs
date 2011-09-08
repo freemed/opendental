@@ -2552,7 +2552,7 @@ namespace OpenDental{
 		}
 
 		private void FillMedValueCodes(){
-			MedValueCodes = ClaimValCodeLogs.GetValCodes(ClaimCur.ClaimNum);
+			MedValueCodes = ClaimValCodeLogs.GetForClaim(ClaimCur.ClaimNum);
 			if(MedValueCodes.Count>0){
 				ClaimValCodeLog[] vcA;
 				vcA = new ClaimValCodeLog[12];
@@ -2833,10 +2833,10 @@ namespace OpenDental{
 				MedSubC=MedSubList[2];
 				MedInsC=InsPlans.GetPlan(MedSubList[2].PlanNum,PlanList);
 			}
-			double TotalValAmount = ClaimValCodeLogs.GetValAmountTotal(ClaimCur,"23");
+			double totalValAmount = ClaimValCodeLogs.GetValAmountTotal(ClaimCur.ClaimNum,"23");
 			//MessageBox.Show(TotalValAmount.ToString());
-			double PriorPayments = 0;
-			if(isPrimary||isSecondary||isTertiary){
+			double priorPayments = 0;
+			if(isPrimary || isSecondary || isTertiary){
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedInsAName":
@@ -2853,16 +2853,16 @@ namespace OpenDental{
 								displayStrings[i] = "";
 							}
 							else {
-								PriorPayments += Primary.InsPayAmt;
+								priorPayments += Primary.InsPayAmt;
 								double amt = Primary.InsPayAmt;// *100; //get rid of decimal
 								displayStrings[i] = amt.ToString("n2");
 							}
 							break;
 						case "MedInsAAmtDue":
-							double AmtDue;
+							double amtDue;
 							//if (ClaimCur.ClaimNum == Primary.ClaimNum){
-							AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount);// * 100;
-							displayStrings[i]=AmtDue.ToString("n2");
+							amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);// * 100;
+							displayStrings[i]=amtDue.ToString("n2");
 							//} 
 							//else {
 							//	displayStrings[i]="";
@@ -2871,9 +2871,9 @@ namespace OpenDental{
 						case "MedInsAOtherProvID":
 							ProviderIdent AltID;
 							string CarrierElectID = Carriers.GetCarrier(MedInsA.CarrierNum).ElectID.ToString();
-							Provider P = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
-								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
+							Provider prov = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+							if (prov.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(prov.ProvNum, CarrierElectID).Length > 0)){
+								AltID = ProviderIdents.GetForPayor(prov.ProvNum, CarrierElectID)[0];
 								if (AltID.IDNumber != ""){
 									displayStrings[i]=AltID.IDNumber.ToString();
 								} else {
@@ -2921,7 +2921,7 @@ namespace OpenDental{
 							if(ClaimCur.ClaimNum==Secondary.ClaimNum){
 								displayStrings[i]="";
 							} else {
-								PriorPayments+=Secondary.InsPayAmt;
+								priorPayments+=Secondary.InsPayAmt;
 								double amt = Secondary.InsPayAmt * 100; //get rid of decimal
 								displayStrings[i]=amt.ToString();
 							}
@@ -2929,7 +2929,7 @@ namespace OpenDental{
 						case "MedInsBAmtDue":
 							double AmtDue;
 							if(ClaimCur.ClaimNum==Secondary.ClaimNum){
-								AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount) * 100;
+								AmtDue = (ClaimCur.ClaimFee-priorPayments-totalValAmount) * 100;
 								displayStrings[i]=AmtDue.ToString();
 							} else {
 								displayStrings[i]="";
@@ -2988,7 +2988,7 @@ namespace OpenDental{
 							if (ClaimCur.ClaimNum == Tertiary.ClaimNum){
 								displayStrings[i]="";
 							} else {
-								PriorPayments += Tertiary.InsPayAmt;
+								priorPayments += Tertiary.InsPayAmt;
 								double amt = Tertiary.InsPayAmt * 100; //get rid of decimal
 								displayStrings[i]=amt.ToString();
 							}
@@ -2996,7 +2996,7 @@ namespace OpenDental{
 						case "MedInsCAmtDue":
 							double AmtDue;
 							if(ClaimCur.ClaimNum==Tertiary.ClaimNum){
-								AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount) * 100;
+								AmtDue = (ClaimCur.ClaimFee-priorPayments-totalValAmount) * 100;
 								displayStrings[i]=AmtDue.ToString();
 							} else {
 								displayStrings[i]="";

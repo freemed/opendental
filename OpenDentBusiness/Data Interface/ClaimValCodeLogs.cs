@@ -8,12 +8,12 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class ClaimValCodeLogs {
 
-		public static double GetValAmountTotal(Claim Cur, string Code){
+		public static double GetValAmountTotal(long claimNum, string valCode){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),Cur,Code);
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),claimNum,valCode);
 			}
 			double total = 0;
-			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + POut.Long(Cur.ClaimNum) + "' AND ValCode='" + POut.String(Code) + "'";
+			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum="+POut.Long(claimNum)+" AND ValCode='"+POut.String(valCode)+"'";
 			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				total+=PIn.Double(table.Rows[i][4].ToString());
@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 			return total;
 		}
 
-		public static List<ClaimValCodeLog> GetValCodes(long claimNum) {
+		public static List<ClaimValCodeLog> GetForClaim(long claimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimValCodeLog>>(MethodBase.GetCurrentMethod(),claimNum);
 			}

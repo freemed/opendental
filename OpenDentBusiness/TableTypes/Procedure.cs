@@ -78,9 +78,9 @@ namespace OpenDentBusiness {
 		public int UnitQty;
 		///<summary>Base units used for some billing codes.  Default is 0.  No UI for this field.  It is only edited in the ProcedureCode window.  The database maint tool changes BaseUnits of all procedures to match that of the procCode.  Not sure yet what it's for.</summary>
 		public int BaseUnits;
-		///<summary>Start time in military</summary>
+		///<summary>Start time in military.  No longer used, but not deleting just in case someone has critical information stored here.</summary>
 		public int StartTime;
-		///<summary>Stop time in military</summary>
+		///<summary>Stop time in military.  No longer used, but not deleting just in case someone has critical information stored here.</summary>
 		public int StopTime;
 		///<summary>The date that the procedure was originally treatment planned.  Does not change when marked complete.</summary>
 		public DateTime DateTP;

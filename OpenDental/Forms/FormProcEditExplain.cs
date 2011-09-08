@@ -60,14 +60,14 @@ namespace OpenDental {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Proc Date changed from "+procOld.ProcDate.ToShortDateString()+" to "+procCur.ProcDate.ToShortDateString()+".";
 		  }
-		  if(procOld.StartTime != procCur.StartTime) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Start Time changed from "+procOld.StartTime+" to "+procCur.StartTime+".";
-		  }
-		  if(procOld.StopTime != procCur.StopTime) {
-		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Stop Time changed from "+procOld.StopTime+" to "+procCur.StopTime+".";
-		  }
+		  //if(procOld.StartTime != procCur.StartTime) {
+		  //  if(Changes!=""){ Changes+="\r\n";}
+		  //  Changes+="Start Time changed from "+procOld.StartTime+" to "+procCur.StartTime+".";
+		  //}
+		  //if(procOld.StopTime != procCur.StopTime) {
+		  //  if(Changes!=""){ Changes+="\r\n";}
+		  //  Changes+="Stop Time changed from "+procOld.StopTime+" to "+procCur.StopTime+".";
+		  //}
 		  if(procOld.ProcTime != procCur.ProcTime) {
 		    if(Changes!=""){ Changes+="\r\n";}
 		    Changes+="Procedure Time changed from "
