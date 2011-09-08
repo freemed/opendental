@@ -48,11 +48,7 @@ namespace OpenDental{
 						}
 						bool addDateTime=true;
 						for(int k=0;k<appointmentToAdd.Pattern.Length;k++) {
-							if(provScheds[i].ProvBar[j+k]==false && appointmentToAdd.Pattern[k]=='X') {
-								addDateTime=false;
-								break;
-							}
-							if(provScheds[i].ProvSchedule[j+k]==false) {
+							if((provScheds[i].ProvBar[j+k]==false && appointmentToAdd.Pattern[k]=='X') || provScheds[i].ProvSchedule[j+k]==false) {
 								addDateTime=false;
 								break;
 							}
@@ -92,7 +88,7 @@ namespace OpenDental{
 									}
 									provAvail=true;
 									for(int m=0;m<appointmentToAdd.Pattern.Length;m++) {
-										if(provScheds[k].ProvBar[i+m]==false && appointmentToAdd.Pattern[m]=='X') {//if provider bar time slot = false
+										if((provScheds[k].ProvBar[i+m]==false && appointmentToAdd.Pattern[m]=='X') || provScheds[k].ProvSchedule[i+m]==false) {//if provider bar time slot
 											provAvail=false;
 											break;
 										}

@@ -4780,9 +4780,14 @@ namespace OpenDental {
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
-			if(pinBoard.SelectedAppt==null) {
-				MsgBox.Show(this,"There is no appointment on the pinboard.");
-				return;
+			if(pinBoard.SelectedAppt==null ) {
+				if(pinBoard.ApptList.Count>0) {//select first appt if there are any appointments in the pinboard.
+					pinBoard.SelectedIndex=0;
+				}
+				else {
+					MsgBox.Show(this,"There are no appointments on the pinboard.");
+					return;
+				}
 			}
 			DoSearch();
 		}
