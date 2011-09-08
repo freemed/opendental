@@ -25,7 +25,7 @@ namespace OpenDental {
 			AggPathList=AggPaths.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Remote URI",120);
+			ODGridColumn col=new ODGridColumn("Remote URI",320);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("User Name",120);
 			gridMain.Columns.Add(col);

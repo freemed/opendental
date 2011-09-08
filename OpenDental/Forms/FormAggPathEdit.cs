@@ -28,6 +28,7 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
+			//no prompt
 			AggPaths.Delete(AggPathCur.AggPathNum);
 			DialogResult=DialogResult.OK;
 		}

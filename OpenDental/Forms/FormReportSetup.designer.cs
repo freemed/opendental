@@ -38,9 +38,9 @@ namespace OpenDental{
 			this.butAgg.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAgg.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAgg.CornerRadius = 4F;
-			this.butAgg.Location = new System.Drawing.Point(310,70);
+			this.butAgg.Location = new System.Drawing.Point(20,83);
 			this.butAgg.Name = "butAgg";
-			this.butAgg.Size = new System.Drawing.Size(156,24);
+			this.butAgg.Size = new System.Drawing.Size(112,24);
 			this.butAgg.TabIndex = 204;
 			this.butAgg.Text = "Aggregation Setup";
 			this.butAgg.Click += new System.EventHandler(this.butAgg_Click);
@@ -53,7 +53,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(310,133);
+			this.butOK.Location = new System.Drawing.Point(233,132);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -68,7 +68,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(391,133);
+			this.butCancel.Location = new System.Drawing.Point(314,132);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -77,41 +77,35 @@ namespace OpenDental{
 			// 
 			// checkReportsProcDate
 			// 
-			this.checkReportsProcDate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkReportsProcDate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportsProcDate.Location = new System.Drawing.Point(104,9);
+			this.checkReportsProcDate.Location = new System.Drawing.Point(20,19);
 			this.checkReportsProcDate.Name = "checkReportsProcDate";
-			this.checkReportsProcDate.Size = new System.Drawing.Size(362,17);
+			this.checkReportsProcDate.Size = new System.Drawing.Size(333,17);
 			this.checkReportsProcDate.TabIndex = 199;
 			this.checkReportsProcDate.Text = "Default to using Proc Date for PPO writeoffs";
-			this.checkReportsProcDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkReportProdWO
 			// 
-			this.checkReportProdWO.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkReportProdWO.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportProdWO.Location = new System.Drawing.Point(52,47);
+			this.checkReportProdWO.Location = new System.Drawing.Point(20,57);
 			this.checkReportProdWO.Name = "checkReportProdWO";
-			this.checkReportProdWO.Size = new System.Drawing.Size(414,17);
+			this.checkReportProdWO.Size = new System.Drawing.Size(385,17);
 			this.checkReportProdWO.TabIndex = 201;
 			this.checkReportProdWO.Text = "Monthly P&&I scheduled production subtracts PPO writeoffs";
-			this.checkReportProdWO.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkReportsShowPatNum
 			// 
-			this.checkReportsShowPatNum.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkReportsShowPatNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportsShowPatNum.Location = new System.Drawing.Point(52,28);
+			this.checkReportsShowPatNum.Location = new System.Drawing.Point(20,38);
 			this.checkReportsShowPatNum.Name = "checkReportsShowPatNum";
-			this.checkReportsShowPatNum.Size = new System.Drawing.Size(414,17);
+			this.checkReportsShowPatNum.Size = new System.Drawing.Size(385,17);
 			this.checkReportsShowPatNum.TabIndex = 200;
 			this.checkReportsShowPatNum.Text = "Show PatNum: Aging, OutstandingIns, ProcsNotBilled";
-			this.checkReportsShowPatNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormReportSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(478,169);
+			this.ClientSize = new System.Drawing.Size(401,168);
 			this.Controls.Add(this.checkReportsShowPatNum);
 			this.Controls.Add(this.checkReportProdWO);
 			this.Controls.Add(this.checkReportsProcDate);
@@ -120,6 +114,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butAgg);
 			this.Name = "FormReportSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Report Setup";
 			this.Load += new System.EventHandler(this.FormReportSetup_Load);
 			this.ResumeLayout(false);
 

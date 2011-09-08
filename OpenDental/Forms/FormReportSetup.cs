@@ -17,8 +17,9 @@ namespace OpenDental {
 		}
 
 		private void FormReportSetup_Load(object sender,EventArgs e) {
+//todo: set checkboxes
 			//TEMP------------------------------------------------------------------------------------------
-			butAgg.Visible=false;//TODO: THIS IS TEMPORARY. DELETE THIS LINE WHEN THE AGGREGATOR IS WORKING.
+			//butAgg.Visible=false;//TODO: THIS IS TEMPORARY. DELETE THIS LINE WHEN THE AGGREGATOR IS WORKING.
 			//TEMP------------------------------------------------------------------------------------------
 		}
 
@@ -35,8 +36,7 @@ namespace OpenDental {
 				changed=true;
 			}
 			if(changed) {
-				DataValid.SetInvalid(InvalidType.Prefs,InvalidType.Computers);
-				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}
