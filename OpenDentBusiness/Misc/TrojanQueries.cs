@@ -85,7 +85,7 @@ namespace OpenDentBusiness {
 					"i.CarrierNum=c.CarrierNum AND "+
 					"s.PlanNum=i.PlanNum AND "+
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
-					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
+					"(SELECT COUNT(*) FROM patplan a WHERE a.PatNum=p.PatNum AND a.InsSubNum=s.InsSubNum) > 0 "+
 					"ORDER BY i.TrojanID,p.LName,p.FName";
 			return Db.GetTable(command);
 		}
@@ -122,7 +122,7 @@ namespace OpenDentBusiness {
 					"i.CarrierNum=c.CarrierNum AND "+
 					"s.PlanNum=i.PlanNum AND "+
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
-					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
+					"(SELECT COUNT(*) FROM patplan a WHERE a.PatNum=p.PatNum AND a.InsSubNum=s.InsSubNum) > 0 "+
 					"ORDER BY i.TrojanID,p.LName,p.FName";
 			return Db.GetTable(command);
 		}
