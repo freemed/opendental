@@ -97,6 +97,7 @@ namespace OpenDentBusiness {
 		ChartQuickAddHideAmalgam,
 		ClaimAttachExportPath,
 		ClaimFormTreatDentSaysSigOnFile,
+		ClaimMedTypeIsInstWhenInsPlanIsMedical,
 		ClaimsValidateACN,
 		ConfirmEmailMessage,
 		ConfirmEmailSubject,

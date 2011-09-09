@@ -46,31 +46,33 @@ namespace OpenDentBusiness.Crud{
 			ProcedureCode procedureCode;
 			for(int i=0;i<table.Rows.Count;i++) {
 				procedureCode=new ProcedureCode();
-				procedureCode.CodeNum         = PIn.Long  (table.Rows[i]["CodeNum"].ToString());
-				procedureCode.ProcCode        = PIn.String(table.Rows[i]["ProcCode"].ToString());
-				procedureCode.Descript        = PIn.String(table.Rows[i]["Descript"].ToString());
-				procedureCode.AbbrDesc        = PIn.String(table.Rows[i]["AbbrDesc"].ToString());
-				procedureCode.ProcTime        = PIn.String(table.Rows[i]["ProcTime"].ToString());
-				procedureCode.ProcCat         = PIn.Long  (table.Rows[i]["ProcCat"].ToString());
-				procedureCode.TreatArea       = (TreatmentArea)PIn.Int(table.Rows[i]["TreatArea"].ToString());
-				procedureCode.NoBillIns       = PIn.Bool  (table.Rows[i]["NoBillIns"].ToString());
-				procedureCode.IsProsth        = PIn.Bool  (table.Rows[i]["IsProsth"].ToString());
-				procedureCode.DefaultNote     = PIn.String(table.Rows[i]["DefaultNote"].ToString());
-				procedureCode.IsHygiene       = PIn.Bool  (table.Rows[i]["IsHygiene"].ToString());
-				procedureCode.GTypeNum        = PIn.Int   (table.Rows[i]["GTypeNum"].ToString());
-				procedureCode.AlternateCode1  = PIn.String(table.Rows[i]["AlternateCode1"].ToString());
-				procedureCode.MedicalCode     = PIn.String(table.Rows[i]["MedicalCode"].ToString());
-				procedureCode.IsTaxed         = PIn.Bool  (table.Rows[i]["IsTaxed"].ToString());
-				procedureCode.PaintType       = (ToothPaintingType)PIn.Int(table.Rows[i]["PaintType"].ToString());
-				procedureCode.GraphicColor    = Color.FromArgb(PIn.Int(table.Rows[i]["GraphicColor"].ToString()));
-				procedureCode.LaymanTerm      = PIn.String(table.Rows[i]["LaymanTerm"].ToString());
-				procedureCode.IsCanadianLab   = PIn.Bool  (table.Rows[i]["IsCanadianLab"].ToString());
-				procedureCode.PreExisting     = PIn.Bool  (table.Rows[i]["PreExisting"].ToString());
-				procedureCode.BaseUnits       = PIn.Int   (table.Rows[i]["BaseUnits"].ToString());
-				procedureCode.SubstitutionCode= PIn.String(table.Rows[i]["SubstitutionCode"].ToString());
-				procedureCode.SubstOnlyIf     = (SubstitutionCondition)PIn.Int(table.Rows[i]["SubstOnlyIf"].ToString());
-				procedureCode.DateTStamp      = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				procedureCode.IsMultiVisit    = PIn.Bool  (table.Rows[i]["IsMultiVisit"].ToString());
+				procedureCode.CodeNum           = PIn.Long  (table.Rows[i]["CodeNum"].ToString());
+				procedureCode.ProcCode          = PIn.String(table.Rows[i]["ProcCode"].ToString());
+				procedureCode.Descript          = PIn.String(table.Rows[i]["Descript"].ToString());
+				procedureCode.AbbrDesc          = PIn.String(table.Rows[i]["AbbrDesc"].ToString());
+				procedureCode.ProcTime          = PIn.String(table.Rows[i]["ProcTime"].ToString());
+				procedureCode.ProcCat           = PIn.Long  (table.Rows[i]["ProcCat"].ToString());
+				procedureCode.TreatArea         = (TreatmentArea)PIn.Int(table.Rows[i]["TreatArea"].ToString());
+				procedureCode.NoBillIns         = PIn.Bool  (table.Rows[i]["NoBillIns"].ToString());
+				procedureCode.IsProsth          = PIn.Bool  (table.Rows[i]["IsProsth"].ToString());
+				procedureCode.DefaultNote       = PIn.String(table.Rows[i]["DefaultNote"].ToString());
+				procedureCode.IsHygiene         = PIn.Bool  (table.Rows[i]["IsHygiene"].ToString());
+				procedureCode.GTypeNum          = PIn.Int   (table.Rows[i]["GTypeNum"].ToString());
+				procedureCode.AlternateCode1    = PIn.String(table.Rows[i]["AlternateCode1"].ToString());
+				procedureCode.MedicalCode       = PIn.String(table.Rows[i]["MedicalCode"].ToString());
+				procedureCode.IsTaxed           = PIn.Bool  (table.Rows[i]["IsTaxed"].ToString());
+				procedureCode.PaintType         = (ToothPaintingType)PIn.Int(table.Rows[i]["PaintType"].ToString());
+				procedureCode.GraphicColor      = Color.FromArgb(PIn.Int(table.Rows[i]["GraphicColor"].ToString()));
+				procedureCode.LaymanTerm        = PIn.String(table.Rows[i]["LaymanTerm"].ToString());
+				procedureCode.IsCanadianLab     = PIn.Bool  (table.Rows[i]["IsCanadianLab"].ToString());
+				procedureCode.PreExisting       = PIn.Bool  (table.Rows[i]["PreExisting"].ToString());
+				procedureCode.BaseUnits         = PIn.Int   (table.Rows[i]["BaseUnits"].ToString());
+				procedureCode.SubstitutionCode  = PIn.String(table.Rows[i]["SubstitutionCode"].ToString());
+				procedureCode.SubstOnlyIf       = (SubstitutionCondition)PIn.Int(table.Rows[i]["SubstOnlyIf"].ToString());
+				procedureCode.DateTStamp        = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				procedureCode.IsMultiVisit      = PIn.Bool  (table.Rows[i]["IsMultiVisit"].ToString());
+				procedureCode.DrugNDC           = PIn.String(table.Rows[i]["DrugNDC"].ToString());
+				procedureCode.RevenueCodeDefault= PIn.String(table.Rows[i]["RevenueCodeDefault"].ToString());
 				retVal.Add(procedureCode);
 			}
 			return retVal;
@@ -111,7 +113,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CodeNum,";
 			}
-			command+="ProcCode,Descript,AbbrDesc,ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,DefaultNote,IsHygiene,GTypeNum,AlternateCode1,MedicalCode,IsTaxed,PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,SubstOnlyIf,IsMultiVisit) VALUES(";
+			command+="ProcCode,Descript,AbbrDesc,ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,DefaultNote,IsHygiene,GTypeNum,AlternateCode1,MedicalCode,IsTaxed,PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,SubstOnlyIf,IsMultiVisit,DrugNDC,RevenueCodeDefault) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procedureCode.CodeNum)+",";
 			}
@@ -139,7 +141,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(procedureCode.SubstitutionCode)+"',"
 				+    POut.Int   ((int)procedureCode.SubstOnlyIf)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Bool  (procedureCode.IsMultiVisit)+")";
+				+    POut.Bool  (procedureCode.IsMultiVisit)+","
+				+"'"+POut.String(procedureCode.DrugNDC)+"',"
+				+"'"+POut.String(procedureCode.RevenueCodeDefault)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -153,29 +157,31 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(ProcedureCode procedureCode){
 			string command="UPDATE procedurecode SET "
 				//ProcCode excluded from update
-				+"Descript        = '"+POut.String(procedureCode.Descript)+"', "
-				+"AbbrDesc        = '"+POut.String(procedureCode.AbbrDesc)+"', "
-				+"ProcTime        = '"+POut.String(procedureCode.ProcTime)+"', "
-				+"ProcCat         =  "+POut.Long  (procedureCode.ProcCat)+", "
-				+"TreatArea       =  "+POut.Int   ((int)procedureCode.TreatArea)+", "
-				+"NoBillIns       =  "+POut.Bool  (procedureCode.NoBillIns)+", "
-				+"IsProsth        =  "+POut.Bool  (procedureCode.IsProsth)+", "
-				+"DefaultNote     = '"+POut.String(procedureCode.DefaultNote)+"', "
-				+"IsHygiene       =  "+POut.Bool  (procedureCode.IsHygiene)+", "
-				+"GTypeNum        =  "+POut.Int   (procedureCode.GTypeNum)+", "
-				+"AlternateCode1  = '"+POut.String(procedureCode.AlternateCode1)+"', "
-				+"MedicalCode     = '"+POut.String(procedureCode.MedicalCode)+"', "
-				+"IsTaxed         =  "+POut.Bool  (procedureCode.IsTaxed)+", "
-				+"PaintType       =  "+POut.Int   ((int)procedureCode.PaintType)+", "
-				+"GraphicColor    =  "+POut.Int   (procedureCode.GraphicColor.ToArgb())+", "
-				+"LaymanTerm      = '"+POut.String(procedureCode.LaymanTerm)+"', "
-				+"IsCanadianLab   =  "+POut.Bool  (procedureCode.IsCanadianLab)+", "
-				+"PreExisting     =  "+POut.Bool  (procedureCode.PreExisting)+", "
-				+"BaseUnits       =  "+POut.Int   (procedureCode.BaseUnits)+", "
-				+"SubstitutionCode= '"+POut.String(procedureCode.SubstitutionCode)+"', "
-				+"SubstOnlyIf     =  "+POut.Int   ((int)procedureCode.SubstOnlyIf)+", "
+				+"Descript          = '"+POut.String(procedureCode.Descript)+"', "
+				+"AbbrDesc          = '"+POut.String(procedureCode.AbbrDesc)+"', "
+				+"ProcTime          = '"+POut.String(procedureCode.ProcTime)+"', "
+				+"ProcCat           =  "+POut.Long  (procedureCode.ProcCat)+", "
+				+"TreatArea         =  "+POut.Int   ((int)procedureCode.TreatArea)+", "
+				+"NoBillIns         =  "+POut.Bool  (procedureCode.NoBillIns)+", "
+				+"IsProsth          =  "+POut.Bool  (procedureCode.IsProsth)+", "
+				+"DefaultNote       = '"+POut.String(procedureCode.DefaultNote)+"', "
+				+"IsHygiene         =  "+POut.Bool  (procedureCode.IsHygiene)+", "
+				+"GTypeNum          =  "+POut.Int   (procedureCode.GTypeNum)+", "
+				+"AlternateCode1    = '"+POut.String(procedureCode.AlternateCode1)+"', "
+				+"MedicalCode       = '"+POut.String(procedureCode.MedicalCode)+"', "
+				+"IsTaxed           =  "+POut.Bool  (procedureCode.IsTaxed)+", "
+				+"PaintType         =  "+POut.Int   ((int)procedureCode.PaintType)+", "
+				+"GraphicColor      =  "+POut.Int   (procedureCode.GraphicColor.ToArgb())+", "
+				+"LaymanTerm        = '"+POut.String(procedureCode.LaymanTerm)+"', "
+				+"IsCanadianLab     =  "+POut.Bool  (procedureCode.IsCanadianLab)+", "
+				+"PreExisting       =  "+POut.Bool  (procedureCode.PreExisting)+", "
+				+"BaseUnits         =  "+POut.Int   (procedureCode.BaseUnits)+", "
+				+"SubstitutionCode  = '"+POut.String(procedureCode.SubstitutionCode)+"', "
+				+"SubstOnlyIf       =  "+POut.Int   ((int)procedureCode.SubstOnlyIf)+", "
 				//DateTStamp can only be set by MySQL
-				+"IsMultiVisit    =  "+POut.Bool  (procedureCode.IsMultiVisit)+" "
+				+"IsMultiVisit      =  "+POut.Bool  (procedureCode.IsMultiVisit)+", "
+				+"DrugNDC           = '"+POut.String(procedureCode.DrugNDC)+"', "
+				+"RevenueCodeDefault= '"+POut.String(procedureCode.RevenueCodeDefault)+"' "
 				+"WHERE CodeNum = "+POut.Long(procedureCode.CodeNum);
 			Db.NonQ(command);
 		}
@@ -272,6 +278,14 @@ namespace OpenDentBusiness.Crud{
 			if(procedureCode.IsMultiVisit != oldProcedureCode.IsMultiVisit) {
 				if(command!=""){ command+=",";}
 				command+="IsMultiVisit = "+POut.Bool(procedureCode.IsMultiVisit)+"";
+			}
+			if(procedureCode.DrugNDC != oldProcedureCode.DrugNDC) {
+				if(command!=""){ command+=",";}
+				command+="DrugNDC = '"+POut.String(procedureCode.DrugNDC)+"'";
+			}
+			if(procedureCode.RevenueCodeDefault != oldProcedureCode.RevenueCodeDefault) {
+				if(command!=""){ command+=",";}
+				command+="RevenueCodeDefault = '"+POut.String(procedureCode.RevenueCodeDefault)+"'";
 			}
 			if(command==""){
 				return;

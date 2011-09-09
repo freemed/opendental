@@ -101,6 +101,11 @@ namespace OpenDentBusiness {
 		public DateTime DateTStamp;
 		///<summary>FK to definition.DefNum, which contains text of the Prognosis.</summary>
 		public long Prognosis;
+		///<summary>Enum:EnumProcDrugUnit For 837I</summary>
+		public EnumProcDrugUnit DrugUnit;
+		///<summary>Includes fractions. For 837I</summary>
+		public float DrugQty;
+
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
@@ -145,12 +150,22 @@ namespace OpenDentBusiness {
 		public Procedure Copy() {
 			return (Procedure)this.MemberwiseClone();
 		}
-
-		
-
-
 	}
 
+	public enum EnumProcDrugUnit {
+		///<summary></summary>
+		None,
+		///<summary></summary>
+		InternationalUnit,
+		///<summary></summary>
+		Gram,
+		///<summary></summary>
+		Milligram,
+		///<summary></summary>
+		Milliliter,
+		///<summary></summary>
+		Unit
+	}
 	
 
 

@@ -90,6 +90,8 @@ namespace OpenDentBusiness.Crud{
 				procedure.ProcTimeEnd       = PIn.Time(table.Rows[i]["ProcTimeEnd"].ToString());
 				procedure.DateTStamp        = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				procedure.Prognosis         = PIn.Long  (table.Rows[i]["Prognosis"].ToString());
+				procedure.DrugUnit          = (EnumProcDrugUnit)PIn.Int(table.Rows[i]["DrugUnit"].ToString());
+				procedure.DrugQty           = PIn.Float (table.Rows[i]["DrugQty"].ToString());
 				retVal.Add(procedure);
 			}
 			return retVal;
@@ -130,7 +132,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcNum,";
 			}
-			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd,Prognosis) VALUES(";
+			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd,Prognosis,DrugUnit,DrugQty) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procedure.ProcNum)+",";
 			}
@@ -177,7 +179,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Time  (procedure.ProcTime)+","
 				+    POut.Time  (procedure.ProcTimeEnd)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Long  (procedure.Prognosis)+")";
+				+    POut.Long  (procedure.Prognosis)+","
+				+    POut.Int   ((int)procedure.DrugUnit)+","
+				+    POut.Float (procedure.DrugQty)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -232,7 +236,9 @@ namespace OpenDentBusiness.Crud{
 				+"ProcTime          =  "+POut.Time  (procedure.ProcTime)+", "
 				+"ProcTimeEnd       =  "+POut.Time  (procedure.ProcTimeEnd)+", "
 				//DateTStamp can only be set by MySQL
-				+"Prognosis         =  "+POut.Long  (procedure.Prognosis)+" "
+				+"Prognosis         =  "+POut.Long  (procedure.Prognosis)+", "
+				+"DrugUnit          =  "+POut.Int   ((int)procedure.DrugUnit)+", "
+				+"DrugQty           =  "+POut.Float (procedure.DrugQty)+" "
 				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum);
 			Db.NonQ(command);
 		}
@@ -408,6 +414,14 @@ namespace OpenDentBusiness.Crud{
 			if(procedure.Prognosis != oldProcedure.Prognosis) {
 				if(command!=""){ command+=",";}
 				command+="Prognosis = "+POut.Long(procedure.Prognosis)+"";
+			}
+			if(procedure.DrugUnit != oldProcedure.DrugUnit) {
+				if(command!=""){ command+=",";}
+				command+="DrugUnit = "+POut.Int   ((int)procedure.DrugUnit)+"";
+			}
+			if(procedure.DrugQty != oldProcedure.DrugQty) {
+				if(command!=""){ command+=",";}
+				command+="DrugQty = "+POut.Float(procedure.DrugQty)+"";
 			}
 			if(command==""){
 				return;

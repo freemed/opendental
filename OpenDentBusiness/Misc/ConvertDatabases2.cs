@@ -6474,7 +6474,55 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE procedurelog DROP COLUMN UnitCode";
 				Db.NonQ(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ClaimMedTypeIsInstWhenInsPlanIsMedical','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ClaimMedTypeIsInstWhenInsPlanIsMedical','0')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD DrugUnit tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD DrugUnit number(3)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET DrugUnit = 0 WHERE DrugUnit IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY DrugUnit NOT NULL";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD DrugQty float NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD DrugQty number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET DrugQty = 0 WHERE DrugQty IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY DrugQty NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurecode ADD DrugNDC varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurecode ADD DrugNDC varchar2(255)";
+					Db.NonQ(command);
+				}			
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurecode ADD RevenueCodeDefault varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurecode ADD RevenueCodeDefault varchar2(255)";
+					Db.NonQ(command);
+				}
+				
 
 
 
@@ -6524,3 +6572,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
+
+
+			

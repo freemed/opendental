@@ -74,6 +74,10 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>Set to true if the procedure takes more than one appointment to complete.</summary>
 		public bool IsMultiVisit;
+		///<summary>11 digits or blank, enforced.  For 837I</summary>
+		public string DrugNDC;
+		///<summary>Gets copied to procedure.RevCode.  For 837I</summary>
+		public string RevenueCodeDefault;
 
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>
