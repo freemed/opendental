@@ -3677,10 +3677,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			if(FromVersion<new Version("7.8.5.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {//signal is a reserved word in mySQL 5.5
+					command="DROP TABLE IF EXISTS signalod";
+					Db.NonQ(command);
 					command="RENAME TABLE `signal` TO signalod";
 					Db.NonQ(command);
 				}
 				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE signalod'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
 					command="ALTER TABLE signal RENAME TO signalod";
 					Db.NonQ(command);
 				}
