@@ -931,7 +931,9 @@ namespace OpenDental{
 				}				
 			}
 			if(PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed)) {
-				TreeDocuments.CollapseAll();//Invalidates tree too.
+				TreeNode selectedNode=TreeDocuments.SelectedNode;//Save the selection so we can reselect after collapsing.
+				TreeDocuments.CollapseAll();//Invalidates tree and clears selection too.
+				TreeDocuments.SelectedNode=selectedNode;//This will expand any category/folder nodes necessary to show the selection.
 				if(prevPatNum==PatCur.PatNum) {//Maintain previously expanded nodes when patient not changed.
 					for(int i=0;i<expandedCategories.Count;i++) {
 						for(int j=0;j<TreeDocuments.Nodes.Count;j++) {
