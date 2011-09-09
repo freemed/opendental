@@ -3686,6 +3686,7 @@ namespace OpenDental{
 			}
 			textAttachID.Text=ClaimCur.AttachmentID;
 			//medical/inst
+			textBillType.Text=ClaimCur.UniformBillType;
 			if(ClaimCondCodeLogCur!=null && ClaimCondCodeLogCur.ClaimNum!=0) {
 				textCode0.Text=ClaimCondCodeLogCur.Code0.ToString();
 				textCode1.Text=ClaimCondCodeLogCur.Code1.ToString();
@@ -5341,6 +5342,7 @@ namespace OpenDental{
 				ClaimCur.AccidentDate=PIn.Date(textAccidentDate.Text);
 				ClaimCur.IsOrtho=checkIsOrtho.Checked;
 			}
+			ClaimCur.UniformBillType=textBillType.Text;
 			Claims.Update(ClaimCur);
 			if(ListClaimValCodes!=null){
 				for(int i=0;i<ListClaimValCodes.Count;i++){ //update existing Value Code pairs

@@ -12,13 +12,14 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),claimNum,valCode);
 			}
-			double total = 0;
-			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum="+POut.Long(claimNum)+" AND ValCode='"+POut.String(valCode)+"'";
-			DataTable table=Db.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++){
-				total+=PIn.Double(table.Rows[i][4].ToString());
-			}
-			return total;
+			//double total = 0;
+			string command="SELECT SUM(ValAmount) FROM claimvalcodelog WHERE ClaimNum="+POut.Long(claimNum)+" AND ValCode='"+POut.String(valCode)+"'";
+			return PIn.Double(Db.GetScalar(command));
+			//DataTable table=Db.GetTable(command);
+			//for(int i=0;i<table.Rows.Count;i++){
+			//	total+=PIn.Double(table.Rows[i][4].ToString());
+			//}
+			//return total;
 		}
 
 		public static List<ClaimValCodeLog> GetForClaim(long claimNum) {

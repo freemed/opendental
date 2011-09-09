@@ -1186,50 +1186,36 @@ namespace OpenDentBusiness
 						//2400 SV2: Institutional Service Line
 						seg++;
 						sw.Write("SV2*"
-							//SV201 1/48 Product/Service ID, Revenue Code
+//todo: validate all of this
+							+Sout(proc.RevCode,48)+"*"//SV201 1/48 Product/Service ID, Revenue Code
 							//SV202 Composite Medical Procedure Identifier
-							+"HC:"//SV202-1: HC=Health Care
-							+Sout(claimProcs[j].CodeSent)+"*"//SV202-2: Procedure code. 
-				//todo: modifiers
+							+"HC:"//SV202-1: HC=Health Care. Includes CPT codes.
+							+Sout(claimProcs[j].CodeSent));//SV202-2: Procedure code. 
+//todo: validate mods to be exactly 2 char long
+						//SV202-3,4,5,6 2/2 Modifiers
+						if(proc.CodeMod1!=""){
+							sw.Write(":"+Sout(proc.CodeMod1));
+						}
+						if(proc.CodeMod2!=""){
+							sw.Write(":"+Sout(proc.CodeMod2));
+						}
+						if(proc.CodeMod3!=""){
+							sw.Write(":"+Sout(proc.CodeMod3));
+						}
+						if(proc.CodeMod4!=""){
+							sw.Write(":"+Sout(proc.CodeMod4));
+						}
+						sw.WriteLine("*"//end of SV202
 							+claimProcs[j].FeeBilled.ToString()+"*"//SV203: Charge Amt
-							+"UN*"//SV204: UN=Units
-							+"0*");//SV205: Quantity 
-						if(proc.PlaceService==claim.PlaceService) {
-							sw.Write("*");//SV105: Place of Service Code if different from claim
-						}
-						else {
-							sw.Write(GetPlaceService(proc.PlaceService)+"*");
-						}
-						sw.Write("*");//SV106: not used
-						//SV107: Composite Diagnosis Code Pointer. Required when 2300HI(Health Care Diagnosis Code) is used (always).
-						//SV107-1: Primary diagnosis. Only allowed pointers 1-8 even though 2300HI supports 12 diagnoses.
-						//We don't validate that there are not more than 8 diagnoses on one claim.
-						//If the diagnosis we need is not in the first 8, then we will use the primary.
-						if(proc.DiagnosticCode=="") {//If the diagnosis is blank, we will use the primary.
-							sw.Write("1");//use primary.
-						}
-						else {
-							int diagI=1;
-							for(int d=0;d<diagnosisList.Count;d++) {
-								if(d>7) {//we can't point to any except first 8.
-									continue;
-								}
-								if((string)diagnosisList[d]==proc.DiagnosticCode) {
-									diagI=d+1;
-								}
-							}
-							sw.Write(diagI.ToString());
-						}
-						//SV107-2 through 4: Other diagnoses, which we don't support yet.
-						sw.WriteLine("~");
-						//sw.Write("*");//SV108: not used
-						//sw.Write("*");//SV109: Emergency indicator. Required if emergency. Y or blank. Not supported.
-						//sw.Write("*");//SV110: not used
-						//sw.Write("*");//SV111: EPSTD indicator (Medicaid from screening). Y or blank. Not supported.
-						//sw.Write("*");//SV112: Family planning indicator for Medicaid. Y or blank. Not supported.
-						//sw.Write("**");//SV113 and SV114: not used
-						//SV115: Copay status code: 0 or blank. Not supported
-						//2400 SV5,PWK,CR1,CR2,CR3,CR5,CRC(x4): (medical)Unsupported
+							+"UN*"//SV204: UN=Units. We don't support Days yet.
+							+proc.UnitQty.ToString()+"~");//SV205: Quantity 
+//Todo: Validate
+						//2410 Drug Identification
+						//if(procCode.DrugNDC!="" && proc.DrugQty>0){
+							//sw.WriteLine("LIN**"//LIN01 not used
+								//LIN02 2/2 N4=NDC code in 5-4-2 format, no dashes.
+
+						//}
 					}//inst
 					else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
 						//2400 SV3: Dental Service

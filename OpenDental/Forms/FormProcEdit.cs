@@ -209,6 +209,12 @@ namespace OpenDental{
 		private ComboBox comboPrognosis;
 		private Label labelPrognosis;
 		private ComboBox comboProcStatus;
+		private ComboBox comboDrugUnit;
+		private Label label1;
+		private Label label5;
+		private TextBox textDrugNDC;
+		private Label label10;
+		private ValidNum textDrugQty;
 		private List<InsSub> SubList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -403,6 +409,12 @@ namespace OpenDental{
 			this.comboPrognosis = new System.Windows.Forms.ComboBox();
 			this.labelPrognosis = new System.Windows.Forms.Label();
 			this.comboProcStatus = new System.Windows.Forms.ComboBox();
+			this.comboDrugUnit = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textDrugNDC = new System.Windows.Forms.TextBox();
+			this.textDrugQty = new OpenDental.ValidNum();
+			this.label10 = new System.Windows.Forms.Label();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -1048,6 +1060,12 @@ namespace OpenDental{
 			// 
 			// groupMedical
 			// 
+			this.groupMedical.Controls.Add(this.label10);
+			this.groupMedical.Controls.Add(this.textDrugQty);
+			this.groupMedical.Controls.Add(this.label5);
+			this.groupMedical.Controls.Add(this.textDrugNDC);
+			this.groupMedical.Controls.Add(this.comboDrugUnit);
+			this.groupMedical.Controls.Add(this.label1);
 			this.groupMedical.Controls.Add(this.butShowMedical);
 			this.groupMedical.Controls.Add(this.textRevCode);
 			this.groupMedical.Controls.Add(this.label22);
@@ -1066,7 +1084,7 @@ namespace OpenDental{
 			this.groupMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupMedical.Location = new System.Drawing.Point(731,3);
 			this.groupMedical.Name = "groupMedical";
-			this.groupMedical.Size = new System.Drawing.Size(223,169);
+			this.groupMedical.Size = new System.Drawing.Size(223,213);
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
 			this.groupMedical.Text = "Medical and Institutional";
@@ -1079,17 +1097,17 @@ namespace OpenDental{
 			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowMedical.CornerRadius = 4F;
-			this.butShowMedical.Location = new System.Drawing.Point(165,147);
+			this.butShowMedical.Location = new System.Drawing.Point(198,191);
 			this.butShowMedical.Name = "butShowMedical";
-			this.butShowMedical.Size = new System.Drawing.Size(58,21);
+			this.butShowMedical.Size = new System.Drawing.Size(25,21);
 			this.butShowMedical.TabIndex = 121;
 			this.butShowMedical.TabStop = false;
-			this.butShowMedical.Text = "Show";
+			this.butShowMedical.Text = "V";
 			this.butShowMedical.Click += new System.EventHandler(this.butShowMedical_Click);
 			// 
 			// textRevCode
 			// 
-			this.textRevCode.Location = new System.Drawing.Point(87,118);
+			this.textRevCode.Location = new System.Drawing.Point(87,116);
 			this.textRevCode.MaxLength = 48;
 			this.textRevCode.Name = "textRevCode";
 			this.textRevCode.Size = new System.Drawing.Size(59,20);
@@ -1097,7 +1115,7 @@ namespace OpenDental{
 			// 
 			// label22
 			// 
-			this.label22.Location = new System.Drawing.Point(7,120);
+			this.label22.Location = new System.Drawing.Point(7,118);
 			this.label22.Name = "label22";
 			this.label22.Size = new System.Drawing.Size(79,17);
 			this.label22.TabIndex = 111;
@@ -1106,7 +1124,7 @@ namespace OpenDental{
 			// 
 			// textUnitQty
 			// 
-			this.textUnitQty.Location = new System.Drawing.Point(87,97);
+			this.textUnitQty.Location = new System.Drawing.Point(87,96);
 			this.textUnitQty.MaxLength = 15;
 			this.textUnitQty.Name = "textUnitQty";
 			this.textUnitQty.Size = new System.Drawing.Size(29,20);
@@ -1114,7 +1132,7 @@ namespace OpenDental{
 			// 
 			// label21
 			// 
-			this.label21.Location = new System.Drawing.Point(10,99);
+			this.label21.Location = new System.Drawing.Point(10,98);
 			this.label21.Name = "label21";
 			this.label21.Size = new System.Drawing.Size(76,17);
 			this.label21.TabIndex = 108;
@@ -1123,7 +1141,7 @@ namespace OpenDental{
 			// 
 			// textCodeMod4
 			// 
-			this.textCodeMod4.Location = new System.Drawing.Point(177,76);
+			this.textCodeMod4.Location = new System.Drawing.Point(174,76);
 			this.textCodeMod4.MaxLength = 2;
 			this.textCodeMod4.Name = "textCodeMod4";
 			this.textCodeMod4.Size = new System.Drawing.Size(29,20);
@@ -1132,7 +1150,7 @@ namespace OpenDental{
 			// 
 			// textCodeMod3
 			// 
-			this.textCodeMod3.Location = new System.Drawing.Point(147,76);
+			this.textCodeMod3.Location = new System.Drawing.Point(145,76);
 			this.textCodeMod3.MaxLength = 2;
 			this.textCodeMod3.Name = "textCodeMod3";
 			this.textCodeMod3.Size = new System.Drawing.Size(29,20);
@@ -1141,7 +1159,7 @@ namespace OpenDental{
 			// 
 			// textCodeMod2
 			// 
-			this.textCodeMod2.Location = new System.Drawing.Point(117,76);
+			this.textCodeMod2.Location = new System.Drawing.Point(116,76);
 			this.textCodeMod2.MaxLength = 2;
 			this.textCodeMod2.Name = "textCodeMod2";
 			this.textCodeMod2.Size = new System.Drawing.Size(29,20);
@@ -2014,6 +2032,60 @@ namespace OpenDental{
 			this.comboProcStatus.TabIndex = 167;
 			this.comboProcStatus.SelectionChangeCommitted += new System.EventHandler(this.comboProcStatus_SelectionChangeCommitted);
 			// 
+			// comboDrugUnit
+			// 
+			this.comboDrugUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDrugUnit.FormattingEnabled = true;
+			this.comboDrugUnit.Location = new System.Drawing.Point(87,156);
+			this.comboDrugUnit.Name = "comboDrugUnit";
+			this.comboDrugUnit.Size = new System.Drawing.Size(92,21);
+			this.comboDrugUnit.TabIndex = 169;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(12,158);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(74,16);
+			this.label1.TabIndex = 168;
+			this.label1.Text = "Drug Unit";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(7,138);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(79,16);
+			this.label5.TabIndex = 170;
+			this.label5.Text = "Drug NDC";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDrugNDC
+			// 
+			this.textDrugNDC.Location = new System.Drawing.Point(87,136);
+			this.textDrugNDC.Name = "textDrugNDC";
+			this.textDrugNDC.ReadOnly = true;
+			this.textDrugNDC.Size = new System.Drawing.Size(109,20);
+			this.textDrugNDC.TabIndex = 171;
+			this.textDrugNDC.Text = "12345678901";
+			// 
+			// textDrugQty
+			// 
+			this.textDrugQty.Location = new System.Drawing.Point(87,177);
+			this.textDrugQty.MaxVal = 255;
+			this.textDrugQty.MinVal = 0;
+			this.textDrugQty.Name = "textDrugQty";
+			this.textDrugQty.Size = new System.Drawing.Size(76,20);
+			this.textDrugQty.TabIndex = 172;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(12,178);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(74,16);
+			this.label10.TabIndex = 173;
+			this.label10.Text = "Drug Qty";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormProcEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -2602,6 +2674,7 @@ namespace OpenDental{
 			}
 			textProc.Text=ProcedureCode2.ProcCode;
 			textDesc.Text=ProcedureCode2.Descript;
+			//medical
 			textMedicalCode.Text=ProcCur.MedicalCode;
 			textDiagnosticCode.Text=ProcCur.DiagnosticCode;
 			checkIsPrincDiag.Checked=ProcCur.IsPrincDiag;
@@ -2609,13 +2682,14 @@ namespace OpenDental{
 			textCodeMod2.Text = ProcCur.CodeMod2;
 			textCodeMod3.Text = ProcCur.CodeMod3;
 			textCodeMod4.Text = ProcCur.CodeMod4;
-			textRevCode.Text = ProcCur.RevCode;
-			//textUnitCode.Text = ProcCur.UnitCode;
 			textUnitQty.Text = ProcCur.UnitQty.ToString();
-			//textStart.Text=ProcCur.StartTime.ToString();
-			//textStop.Text=ProcCur.StopTime.ToString();
-			//int timeTotal=ProcCur.StopTime-ProcCur.StartTime;
-			//textTotal.Text=timeTotal.ToString();
+			textRevCode.Text = ProcCur.RevCode;
+//Todo:
+			//textDrugNDC.Text=ProcedureCode2.DrugNDC;
+			//comboDrugUnit.SelectedIndex=(int)ProcCur.DrugUnit;//also fill the combobxo
+			//textDrugQty.Text=ProcCur.DrugQty.ToString();
+
+
 			switch (ProcedureCode2.TreatArea){
 				case TreatmentArea.Surf:
 					this.textTooth.Visible=true;
@@ -3364,12 +3438,12 @@ namespace OpenDental{
 
 		private void butShowMedical_Click(object sender,EventArgs e) {
 			if(groupMedical.Height<200) {
-				groupMedical.Height=226;
-				butShowMedical.Text=Lan.g(this,"Hide");
+				groupMedical.Height=200;
+				butShowMedical.Text="^";
 			}
 			else {
-				groupMedical.Height=97;
-				butShowMedical.Text=Lan.g(this,"Show");
+				groupMedical.Height=170;
+				butShowMedical.Text="V";
 			}
 		}
 
