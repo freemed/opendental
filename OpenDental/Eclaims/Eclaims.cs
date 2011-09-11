@@ -18,132 +18,132 @@ namespace OpenDental.Eclaims
 			
 		}
 
-		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Can send to multiple clearinghouses simultaneously or can also just send one claim.  Cannot include Canadian.</summary>
-		public static void SendBatches(List<ClaimSendQueueItem> queueItems){
-			List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.Listt.Length];
-			for(int i=0;i<claimsByCHouse.Length;i++){
-				claimsByCHouse[i]=new List<ClaimSendQueueItem>();
-			}
+		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Used to be able to send to multiple clearinghouses simultaneously.  Can also just send one claim.  Cannot include Canadian.</summary>
+		public static void SendBatches(List<ClaimSendQueueItem> queueItems,Clearinghouse clearhouse,EnumClaimMedType medType){
+			//List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.Listt.Length];
+			//for(int i=0;i<claimsByCHouse.Length;i++){
+			//	claimsByCHouse[i]=new List<ClaimSendQueueItem>();
+			//}
 			//divide the items by clearinghouse:
-			for(int i=0;i<queueItems.Count;i++){
-				claimsByCHouse[ClearinghouseL.GetIndex(queueItems[i].ClearinghouseNum)].Add(queueItems[i]);
-			}
+			//for(int i=0;i<queueItems.Count;i++){
+			//	claimsByCHouse[ClearinghouseL.GetIndex(queueItems[i].ClearinghouseNum)].Add(queueItems[i]);
+			//}
 			//for any clearinghouses with claims, send them:
-			int batchNum;
+			//batchNum;
 			string messageText="";
-			for(int i=0;i<claimsByCHouse.Length;i++){
-				if(claimsByCHouse[i].Count==0){
+			//for(int i=0;i<claimsByCHouse.Length;i++){
+			//if(claimsByCHouse[i].Count==0){
+			//	continue;
+			//}
+			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian){
+				MsgBox.Show("Eclaims","Cannot send Canadian claims as part of SendBatches.");
+				return;
+			}
+			//get next batch number for this clearinghouse
+			int batchNum=Clearinghouses.GetNextBatchNumber(clearhouse);
+			//---------------------------------------------------------------------------------------
+			//Create the claim file(s) for this clearinghouse
+			if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010
+				|| clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental
+				|| clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut
+				|| clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) 
+			{
+				messageText=x837Controller.SendBatch(queueItems,batchNum,clearhouse,medType);
+			}
+			else if(clearhouse.Eformat==ElectronicClaimFormat.Renaissance){
+				messageText=Renaissance.SendBatch(queueItems,batchNum);
+			}
+			else if(clearhouse.Eformat==ElectronicClaimFormat.Dutch) {
+				messageText=Dutch.SendBatch(queueItems,batchNum);
+			}
+			else{
+				messageText="";//(ElectronicClaimFormat.None does not get sent)
+			}
+			if(messageText==""){//if failed to create claim file properly,
+				return;//don't launch program or change claim status
+			}
+			//----------------------------------------------------------------------------------------
+			//Launch Client Program for this clearinghouse if applicable
+			if(clearhouse.CommBridge==EclaimsCommBridge.None){
+				AttemptLaunch(clearhouse,batchNum);
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.WebMD){
+				if(!WebMD.Launch(clearhouse,batchNum)){
+					MessageBox.Show(Lan.g("Eclaims","Error sending."));
+					return;
+				}
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.BCBSGA){
+				if(!BCBSGA.Launch(clearhouse,batchNum)){
+					MessageBox.Show(Lan.g("Eclaims","Error sending."));
+					return;
+				}
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.Renaissance){
+				AttemptLaunch(clearhouse,batchNum);
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.ClaimConnect){
+				if(!ClaimConnect.Launch(clearhouse,batchNum)){
+					MessageBox.Show(Lan.g("Eclaims","Error sending."));
+					return;
+				}
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.RECS){
+				if(!RECS.Launch(clearhouse,batchNum)){
+					MessageBox.Show("Claim file created, but could not launch RECS client.");
+					//continue;
+				}
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.Inmediata){
+				if(!Inmediata.Launch(clearhouse,batchNum)){
+					MessageBox.Show("Claim file created, but could not launch Inmediata client.");
+					//continue;
+				}
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.AOS){ // added by SPK 7/13/05
+				if(!AOS.Launch(clearhouse,batchNum)){
+					MessageBox.Show("Claim file created, but could not launch AOS Communicator.");
+					//continue;
+				}
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.PostnTrack){
+				AttemptLaunch(clearhouse,batchNum);
+				//if(!PostnTrack.Launch(Clearinghouses.List[i],batchNum)){
+				//	MessageBox.Show("Claim file created, but could not launch AOS Communicator.");
+					//continue;
+				//}
+			}
+			/*else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.Tesia) {
+				if(!Tesia.Launch(Clearinghouses.List[i],batchNum)) {
+					MessageBox.Show(Lan.g("Eclaims","Error sending."));
 					continue;
 				}
-				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Canadian){
-					MsgBox.Show("Eclaims","Cannot send Canadian claims as part of SendBatches.");
-					continue;
+			}*/
+			else if(clearhouse.CommBridge==EclaimsCommBridge.MercuryDE){
+				if(!MercuryDE.Launch(clearhouse,batchNum)){
+					MsgBox.Show("Eclaims","Error sending.");
+					return;
 				}
-				//get next batch number for this clearinghouse
-				batchNum=Clearinghouses.GetNextBatchNumber(Clearinghouses.Listt[i]);
-				//---------------------------------------------------------------------------------------
-				//Create the claim file(s) for this clearinghouse
-				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837D_4010
-					|| Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837D_5010_dental
-					|| Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837I_5010_institut
-					|| Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.x837P_5010_medical) 
-				{
-					messageText=x837Controller.SendBatch(claimsByCHouse[i],batchNum);
+			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.ClaimX) {
+				if(!ClaimX.Launch(clearhouse,batchNum)) {
+					MessageBox.Show("Claim file created, but encountered an error while launching ClaimX Client.");
+					//continue;
 				}
-				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
-					messageText=Renaissance.SendBatch(claimsByCHouse[i],batchNum);
+			}
+			//----------------------------------------------------------------------------------------
+			//finally, mark the claims sent. (only if not Canadian)
+			EtransType etype=EtransType.ClaimSent;
+			if(clearhouse.Eformat==ElectronicClaimFormat.Renaissance){
+				etype=EtransType.Claim_Ren;
+			}
+			if(clearhouse.Eformat!=ElectronicClaimFormat.Canadian){
+				for(int j=0;j<queueItems.Count;j++){
+					Etrans etrans=Etranss.SetClaimSentOrPrinted(queueItems[j].ClaimNum,queueItems[j].PatNum,clearhouse.ClearinghouseNum,etype,batchNum);
+					Etranss.SetMessage(etrans.EtransNum,messageText);
 				}
-				else if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Dutch) {
-					messageText=Dutch.SendBatch(claimsByCHouse[i],batchNum);
-				}
-				else{
-					messageText="";//(ElectronicClaimFormat.None does not get sent)
-				}
-				if(messageText==""){//if failed to create claim file properly,
-					continue;//don't launch program or change claim status
-				}
-				//----------------------------------------------------------------------------------------
-				//Launch Client Program for this clearinghouse if applicable
-				if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.None){
-					AttemptLaunch(Clearinghouses.Listt[i],batchNum);
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.WebMD){
-					if(!WebMD.Launch(Clearinghouses.Listt[i],batchNum)){
-						MessageBox.Show(Lan.g("Eclaims","Error sending."));
-						continue;
-					}
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.BCBSGA){
-					if(!BCBSGA.Launch(Clearinghouses.Listt[i],batchNum)){
-						MessageBox.Show(Lan.g("Eclaims","Error sending."));
-						continue;
-					}
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.Renaissance){
-					AttemptLaunch(Clearinghouses.Listt[i],batchNum);
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.ClaimConnect){
-					if(!ClaimConnect.Launch(Clearinghouses.Listt[i],batchNum)){
-						MessageBox.Show(Lan.g("Eclaims","Error sending."));
-						continue;
-					}
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.RECS){
-					if(!RECS.Launch(Clearinghouses.Listt[i],batchNum)){
-						MessageBox.Show("Claim file created, but could not launch RECS client.");
-						//continue;
-					}
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.Inmediata){
-					if(!Inmediata.Launch(Clearinghouses.Listt[i],batchNum)){
-						MessageBox.Show("Claim file created, but could not launch Inmediata client.");
-						//continue;
-					}
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.AOS){ // added by SPK 7/13/05
-					if(!AOS.Launch(Clearinghouses.Listt[i],batchNum)){
-						MessageBox.Show("Claim file created, but could not launch AOS Communicator.");
-						//continue;
-					}
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.PostnTrack){
-					AttemptLaunch(Clearinghouses.Listt[i],batchNum);
-					//if(!PostnTrack.Launch(Clearinghouses.List[i],batchNum)){
-					//	MessageBox.Show("Claim file created, but could not launch AOS Communicator.");
-						//continue;
-					//}
-				}
-				/*else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.Tesia) {
-					if(!Tesia.Launch(Clearinghouses.List[i],batchNum)) {
-						MessageBox.Show(Lan.g("Eclaims","Error sending."));
-						continue;
-					}
-				}*/
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.MercuryDE){
-					if(!MercuryDE.Launch(Clearinghouses.Listt[i],batchNum)){
-						MsgBox.Show("Eclaims","Error sending.");
-						continue;
-					}
-				}
-				else if(Clearinghouses.Listt[i].CommBridge==EclaimsCommBridge.ClaimX) {
-					if(!ClaimX.Launch(Clearinghouses.Listt[i],batchNum)) {
-						MessageBox.Show("Claim file created, but encountered an error while launching ClaimX Client.");
-						//continue;
-					}
-				}
-				//----------------------------------------------------------------------------------------
-				//finally, mark the claims sent. (only if not Canadian)
-				EtransType etype=EtransType.ClaimSent;
-				if(Clearinghouses.Listt[i].Eformat==ElectronicClaimFormat.Renaissance){
-					etype=EtransType.Claim_Ren;
-				}
-				if(Clearinghouses.Listt[i].Eformat!=ElectronicClaimFormat.Canadian){
-					for(int j=0;j<claimsByCHouse[i].Count;j++){
-						Etrans etrans=Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,Clearinghouses.Listt[i].ClearinghouseNum,etype,batchNum);
-						Etranss.SetMessage(etrans.EtransNum,messageText);
-					}
-				}
-			}//for(int i=0;i<claimsByCHouse.Length;i++){
+			}
+			//}//for(int i=0;i<claimsByCHouse.Length;i++){
 		}
 
 		///<summary>If no comm bridge is selected for a clearinghouse, this launches any client program the user has entered.  We do not want to cause a rollback, so no return value.</summary>

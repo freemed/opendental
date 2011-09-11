@@ -3347,7 +3347,7 @@ namespace OpenDental{
 				return;
 			}
 			//Visible for everyone.
-			Clearinghouse clearhouse=Clearinghouses.GetDefault();
+			Clearinghouse clearhouse=Clearinghouses.GetDefaultDental();
 			if(clearhouse==null){
 				MsgBox.Show(this,"No clearinghouse is set as default.");
 				return;
@@ -3420,7 +3420,7 @@ namespace OpenDental{
 			string loginID;
 			string passWord;
 			// Get Login / Password
-			Clearinghouse dch=Clearinghouses.GetDefault();
+			Clearinghouse dch=Clearinghouses.GetDefaultDental();
 			if(dch!=null) {
 				loginID = dch.LoginID;
 				passWord = dch.Password;

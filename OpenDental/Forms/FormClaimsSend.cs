@@ -169,8 +169,8 @@ namespace OpenDental{
 			this.panelSplitter.Name = "panelSplitter";
 			this.panelSplitter.Size = new System.Drawing.Size(961,6);
 			this.panelSplitter.TabIndex = 50;
-			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
+			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
 			this.panelSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseUp);
 			// 
 			// panelHistory
@@ -284,7 +284,7 @@ namespace OpenDental{
 			this.labelClinic.Name = "labelClinic";
 			this.labelClinic.Size = new System.Drawing.Size(65,14);
 			this.labelClinic.TabIndex = 52;
-			this.labelClinic.Text = "Clinic";
+			this.labelClinic.Text = "Clinic Filter";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// gridMain
@@ -340,18 +340,7 @@ namespace OpenDental{
 		private void FormClaimsSend_Load(object sender, System.EventArgs e) {
 			AdjustPanelSplit();
 			contextMenuStatus.MenuItems.Add(Lan.g(this,"Go to Account"),new EventHandler(GotoAccount_Clicked));
-			/*contextMenuStatus.MenuItems.Add("-");
-			contextMenuStatus.MenuItems.Add("Unsent",new EventHandler(StatusUnsent_Clicked));
-			contextMenuStatus.MenuItems.Add("Hold until Pri received",new EventHandler(StatusHold_Clicked));
-			contextMenuStatus.MenuItems.Add("Waiting in Send List",new EventHandler(StatusWaiting_Clicked));
-			contextMenuStatus.MenuItems.Add("Probably sent",new EventHandler(StatusProbably_Clicked));
-			contextMenuStatus.MenuItems.Add("Sent - Verified",new EventHandler(StatusSent_Clicked));*/
 			gridMain.ContextMenu=contextMenuStatus;
-			//do not show received because that would mess up the balances
-			//contextMenuStatus.MenuItems.Add("Received",new EventHandler(StatusReceived_Clicked));
-			//contextMenuHist=new ContextMenu();
-			//contextMenuHist.MenuItems.Add(Lan.g(this,"Show Raw Message"),new EventHandler(ShowRawMessage_Clicked));
-			//gridHistory.ContextMenu=contextMenuHist;
 			for(int i=0;i<Clearinghouses.Listt.Length;i++){
 				contextMenuEclaims.MenuItems.Add(Clearinghouses.Listt[i].Description,new EventHandler(Clearinghouse_Clicked));
 			}
@@ -459,9 +448,11 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),150);
+			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),110);
+			col=new ODGridColumn(Lan.g("TableQueue","Clinic"),80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Warnings"),120);
 			gridMain.Columns.Add(col);
@@ -475,6 +466,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(listQueue[i].PatName);
 				row.Cells.Add(listQueue[i].Carrier);
+				row.Cells.Add(Clinics.GetDesc(listQueue[i].ClinicNum));
 				if(listQueue[i].NoSendElect){
 					row.Cells.Add("Paper");
 					row.Cells.Add("");
@@ -635,7 +627,7 @@ namespace OpenDental{
 			}
 			Clearinghouse clearDefault;
 			if(clearinghouseNum==0){
-				clearDefault=Clearinghouses.GetDefault();
+				clearDefault=Clearinghouses.GetDefaultDental();
 			}
 			else{
 				clearDefault=ClearinghouseL.GetClearinghouse(clearinghouseNum);
@@ -651,9 +643,9 @@ namespace OpenDental{
 				#endif
 			}
 			if(gridMain.SelectedIndices.Length==0){//if none are selected
-				for(int i=0;i<listQueue.Length;i++){
+				for(int i=0;i<listQueue.Length;i++){//loop through all rows
 					if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[4].Text==""){//no Missing Info
-						if(clearinghouseNum==0) {
+						if(clearinghouseNum==0) {//they did not use the dropdown list for specific clearinghouse
 							//If clearinghouse is zero because they just pushed the button instead of using the dropdown list,
 							//then don't check the clearinghouse of each claim.  Just select them if they are electronic.
 							gridMain.SetSelected(i,true);
@@ -666,7 +658,7 @@ namespace OpenDental{
 						}
 					}	
 				}
-				//If they used the dropdown list, and there still aren't any valid ones,
+				//If they used the dropdown list, and there still aren't any in the list that match the selected clearinghouse
 				//then ask user if they want to send all of the electronic ones through this clearinghouse.
 				if(clearinghouseNum !=0 && gridMain.SelectedIndices.Length==0) {
 					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Send all e-claims through selected clearinghouse?")) {
@@ -674,7 +666,7 @@ namespace OpenDental{
 					}
 					for(int i=0;i<listQueue.Length;i++) {
 						if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[4].Text=="") {//no Missing Info
-							gridMain.SetSelected(i,true);
+							gridMain.SetSelected(i,true);//this will include other clearinghouses
 						}
 					}
 				}
@@ -682,10 +674,10 @@ namespace OpenDental{
 					MsgBox.Show(this,"No claims to send.");
 					return;
 				}
-				if(clearinghouseNum!=0){
+				if(clearinghouseNum!=0){//if they used the dropdown list to specify clearinghouse
 					int[] selectedindices=(int[])gridMain.SelectedIndices.Clone();
 					for(int i=0;i<selectedindices.Length;i++) {
-						gridMain.Rows[selectedindices[i]].Cells[2].Text=clearDefault.Description;
+						gridMain.Rows[selectedindices[i]].Cells[2].Text=clearDefault.Description;//show the changed clearinghouse
 					}
 					gridMain.Invalidate();
 				}
@@ -723,7 +715,12 @@ namespace OpenDental{
 				}
 				queueItems.Add(queueitem);
 			}
-			Eclaims.Eclaims.SendBatches(queueItems);
+//todo: lots of work above this point for automatically assigning clearinghouse as well as validating. 
+
+			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItems[0].ClearinghouseNum);
+			EnumClaimMedType medType=EnumClaimMedType.Dental;
+//todo: fix the above two lines, of course.
+			Eclaims.Eclaims.SendBatches(queueItems,clearhouse,medType);
 			//statuses changed to S in SendBatches
 			FillGrid();
 			FillHistory();

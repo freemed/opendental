@@ -18,6 +18,9 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.Button butAdd;
+		private GroupBox groupBox1;
+		private UI.Button butDefaultMedical;
+		private UI.Button butDefaultDental;
 		private bool listHasChanged;
 
 		///<summary></summary>
@@ -61,6 +64,10 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.TableClearinghouses();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.butAdd = new OpenDental.UI.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butDefaultDental = new OpenDental.UI.Button();
+			this.butDefaultMedical = new OpenDental.UI.Button();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -73,7 +80,7 @@ namespace OpenDental{
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(807,465);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -85,7 +92,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 1;
 			this.gridMain.SelectedIndices = new int[0];
-			this.gridMain.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.gridMain.SelectionMode = System.Windows.Forms.SelectionMode.One;
 			this.gridMain.Size = new System.Drawing.Size(879,318);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(this.gridMain_CellDoubleClicked);
@@ -113,15 +120,55 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(805,385);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80,26);
+			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 8;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.butDefaultMedical);
+			this.groupBox1.Controls.Add(this.butDefaultDental);
+			this.groupBox1.Location = new System.Drawing.Point(6,387);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(97,86);
+			this.groupBox1.TabIndex = 9;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Set Default";
+			// 
+			// butDefaultDental
+			// 
+			this.butDefaultDental.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDefaultDental.Autosize = true;
+			this.butDefaultDental.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDefaultDental.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDefaultDental.CornerRadius = 4F;
+			this.butDefaultDental.Location = new System.Drawing.Point(15,19);
+			this.butDefaultDental.Name = "butDefaultDental";
+			this.butDefaultDental.Size = new System.Drawing.Size(75,24);
+			this.butDefaultDental.TabIndex = 1;
+			this.butDefaultDental.Text = "Dental";
+			this.butDefaultDental.Click += new System.EventHandler(this.butDefaultDental_Click);
+			// 
+			// butDefaultMedical
+			// 
+			this.butDefaultMedical.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDefaultMedical.Autosize = true;
+			this.butDefaultMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDefaultMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDefaultMedical.CornerRadius = 4F;
+			this.butDefaultMedical.Location = new System.Drawing.Point(15,49);
+			this.butDefaultMedical.Name = "butDefaultMedical";
+			this.butDefaultMedical.Size = new System.Drawing.Size(75,24);
+			this.butDefaultMedical.TabIndex = 2;
+			this.butDefaultMedical.Text = "Medical";
+			this.butDefaultMedical.Click += new System.EventHandler(this.butDefaultMedical_Click);
 			// 
 			// FormClearinghouses
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(891,503);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.gridMain);
@@ -135,6 +182,7 @@ namespace OpenDental{
 			this.Text = "E-Claims";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClearinghouses_Closing);
 			this.Load += new System.EventHandler(this.FormClearinghouses_Load);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -154,9 +202,17 @@ namespace OpenDental{
 				gridMain.Cell[0,i]=Clearinghouses.Listt[i].Description;
 				gridMain.Cell[1,i]=Clearinghouses.Listt[i].ExportPath;
 				gridMain.Cell[2,i]=Clearinghouses.Listt[i].Eformat.ToString();
-				if(Clearinghouses.Listt[i].IsDefault){
-					gridMain.Cell[3,i]="X";
+				string s="";
+				if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==Clearinghouses.Listt[i].ClearinghouseNum){
+					s+="Dent";
 				}
+				if(PrefC.GetLong(PrefName.ClearinghouseDefaultMed)==Clearinghouses.Listt[i].ClearinghouseNum){
+					if(s!=""){
+						s+=",";
+					}
+					s+="Med";
+				}
+				gridMain.Cell[3,i]=s;
 				gridMain.Cell[4,i]=Clearinghouses.Listt[i].Payors;
 			}
 			gridMain.LayoutTables();
@@ -166,8 +222,9 @@ namespace OpenDental{
 			FormClearinghouseEdit FormCE=new FormClearinghouseEdit();
 			FormCE.ClearinghouseCur=Clearinghouses.Listt[e.Row];
 			FormCE.ShowDialog();
-			if(FormCE.DialogResult!=DialogResult.OK)
+			if(FormCE.DialogResult!=DialogResult.OK){
 				return;
+			}
 			listHasChanged=true;
 			FillGrid();
 		}
@@ -183,11 +240,38 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		private void butDefaultDental_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedRow==-1){
+				MsgBox.Show(this,"Please select a row first.");
+				return;
+			}
+			Prefs.UpdateLong(PrefName.ClearinghouseDefaultDent,Clearinghouses.Listt[gridMain.SelectedRow].ClearinghouseNum);
+			FillGrid();
+			DataValid.SetInvalid(InvalidType.Prefs);
+		}
+
+		private void butDefaultMedical_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedRow==-1){
+				MsgBox.Show(this,"Please select a row first.");
+				return;
+			}
+			Prefs.UpdateLong(PrefName.ClearinghouseDefaultMed,Clearinghouses.Listt[gridMain.SelectedRow].ClearinghouseNum);
+			FillGrid();
+			DataValid.SetInvalid(InvalidType.Prefs);
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
 
 		private void FormClearinghouses_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+			if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==0){
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"A default clearinghouse should be set. Continue anyway?")){
+					e.Cancel=true;
+					return;
+				}
+			}
+			/*
 			int defaultsSelected=0;
 			for(int i=0;i<Clearinghouses.Listt.Length;i++){
 				if(Clearinghouses.Listt[i].IsDefault){
@@ -195,22 +279,21 @@ namespace OpenDental{
 				}
 			}
 			if(defaultsSelected==0 && Clearinghouses.Listt.Length>0){
-				if(!MsgBox.Show(this,true,"At least one clearinghouse should be selected as the default. Continue anyway?")){
-					e.Cancel=true;
-					return;
-				}
+				
 			}
 			if(defaultsSelected>1){
 				if(!MsgBox.Show(this,true,"Only one clearinghouse should be selected as the default. Continue anyway?")) {
 					e.Cancel=true;
 					return;
 				}
-			}
+			}*/
 			if(listHasChanged){
 				//update all computers including this one:
 				DataValid.SetInvalid(InvalidType.ClearHouses);
 			}
 		}
+
+		
 
 		
 

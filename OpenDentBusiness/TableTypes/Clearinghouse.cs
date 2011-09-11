@@ -14,8 +14,6 @@ namespace OpenDentBusiness{
 		public string Description;
 		///<summary>The path to export the X12 file to. \ is now optional.</summary>
 		public string ExportPath;
-		///<summary>Set to true if this is the default clearinghouse to which you want most of your e-claims sent.</summary>
-		public bool IsDefault;
 		///<summary>A list of all payors which should have claims sent to this clearinghouse. Comma delimited with no spaces.  Not necessary if IsDefault.</summary>
 		public string Payors;
 		///<summary>Enum:ElectronicClaimFormat The format of the file that gets sent electronically.</summary>

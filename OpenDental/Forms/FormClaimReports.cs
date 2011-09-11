@@ -137,7 +137,7 @@ namespace OpenDental{
 		private void FormClaimReports_Load(object sender, System.EventArgs e) {
 			for(int i=0;i<Clearinghouses.Listt.Length;i++){
 				comboClearhouse.Items.Add(Clearinghouses.Listt[i].Description);
-				if(Clearinghouses.Listt[i].IsDefault){
+				if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==Clearinghouses.Listt[i].ClearinghouseNum){
 					comboClearhouse.SelectedIndex=i;
 				}
 			}
@@ -167,7 +167,7 @@ namespace OpenDental{
 			//For Tesia, user wouldn't normally manually retrieve.
 			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].ISA08=="113504607") {
 				if((PrefC.RandomKeys && !PrefC.GetBool(PrefName.EasyNoClinics))//See FormClaimsSend_Load
-					|| !Clearinghouses.Listt[comboClearhouse.SelectedIndex].IsDefault) 
+					|| PrefC.GetLong(PrefName.ClearinghouseDefaultDent)!=Clearinghouses.Listt[comboClearhouse.SelectedIndex].ClearinghouseNum) 
 				{
 					//But they might need to in these situations.
 					ImportReportFiles();

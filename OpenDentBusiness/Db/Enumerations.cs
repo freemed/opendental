@@ -1366,7 +1366,7 @@ namespace OpenDentBusiness{
 
 	///<summary>The _CA of some types should get stripped off when displaying to users.</summary>
 	public enum EtransType{
-		///<summary>0 X12-837</summary>
+		///<summary>0 X12-837.  Should we differenitate between different kinds of 837s and 4010 vs 5010?</summary>
 		ClaimSent,
 		///<summary>1 claim</summary>
 		ClaimPrinted,

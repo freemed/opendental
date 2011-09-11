@@ -306,6 +306,12 @@ namespace OpenDental{
 		private Label labelSpecialProgram;
 		private TextBox textBillType;
 		private Label label7;
+		private TextBox textBox3;
+		private Label label85;
+		private TextBox textBox2;
+		private Label label84;
+		private TextBox textBox1;
+		private Label label83;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -481,6 +487,8 @@ namespace OpenDental{
 			this.label48 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
 			this.tabUB04 = new System.Windows.Forms.TabPage();
+			this.textBillType = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label60 = new System.Windows.Forms.Label();
 			this.label59 = new System.Windows.Forms.Label();
@@ -589,8 +597,12 @@ namespace OpenDental{
 			this.labelPriorAuth = new System.Windows.Forms.Label();
 			this.comboSpecialProgram = new System.Windows.Forms.ComboBox();
 			this.labelSpecialProgram = new System.Windows.Forms.Label();
-			this.textBillType = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.label83 = new System.Windows.Forms.Label();
+			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.label84 = new System.Windows.Forms.Label();
+			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.label85 = new System.Windows.Forms.Label();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -2062,6 +2074,12 @@ namespace OpenDental{
 			// 
 			this.tabUB04.AutoScroll = true;
 			this.tabUB04.BackColor = System.Drawing.Color.Transparent;
+			this.tabUB04.Controls.Add(this.textBox3);
+			this.tabUB04.Controls.Add(this.label85);
+			this.tabUB04.Controls.Add(this.textBox2);
+			this.tabUB04.Controls.Add(this.label84);
+			this.tabUB04.Controls.Add(this.textBox1);
+			this.tabUB04.Controls.Add(this.label83);
 			this.tabUB04.Controls.Add(this.textBillType);
 			this.tabUB04.Controls.Add(this.label7);
 			this.tabUB04.Controls.Add(this.groupBox1);
@@ -2073,6 +2091,22 @@ namespace OpenDental{
 			this.tabUB04.TabIndex = 0;
 			this.tabUB04.Text = "Medical-UB04";
 			this.tabUB04.UseVisualStyleBackColor = true;
+			// 
+			// textBillType
+			// 
+			this.textBillType.Location = new System.Drawing.Point(140,23);
+			this.textBillType.Name = "textBillType";
+			this.textBillType.Size = new System.Drawing.Size(47,20);
+			this.textBillType.TabIndex = 143;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(24,27);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(117,16);
+			this.label7.TabIndex = 144;
+			this.label7.Text = "Type of Bill (3 digit)";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// groupBox1
 			// 
@@ -3215,21 +3249,53 @@ namespace OpenDental{
 			this.labelSpecialProgram.Text = "Special Program";
 			this.labelSpecialProgram.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textBillType
+			// textBox1
 			// 
-			this.textBillType.Location = new System.Drawing.Point(140,23);
-			this.textBillType.Name = "textBillType";
-			this.textBillType.Size = new System.Drawing.Size(47,20);
-			this.textBillType.TabIndex = 143;
+			this.textBox1.Location = new System.Drawing.Point(140,46);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(47,20);
+			this.textBox1.TabIndex = 145;
 			// 
-			// label7
+			// label83
 			// 
-			this.label7.Location = new System.Drawing.Point(24,27);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(117,16);
-			this.label7.TabIndex = 144;
-			this.label7.Text = "Type of Bill (3 digit)";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label83.Location = new System.Drawing.Point(3,50);
+			this.label83.Name = "label83";
+			this.label83.Size = new System.Drawing.Size(138,16);
+			this.label83.TabIndex = 146;
+			this.label83.Text = "Admission Type (1 digit)";
+			this.label83.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textBox2
+			// 
+			this.textBox2.Location = new System.Drawing.Point(140,69);
+			this.textBox2.Name = "textBox2";
+			this.textBox2.Size = new System.Drawing.Size(47,20);
+			this.textBox2.TabIndex = 147;
+			// 
+			// label84
+			// 
+			this.label84.Location = new System.Drawing.Point(24,73);
+			this.label84.Name = "label84";
+			this.label84.Size = new System.Drawing.Size(117,16);
+			this.label84.TabIndex = 148;
+			this.label84.Text = "Type of Bill (3 digit)";
+			this.label84.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textBox3
+			// 
+			this.textBox3.Location = new System.Drawing.Point(140,92);
+			this.textBox3.Name = "textBox3";
+			this.textBox3.Size = new System.Drawing.Size(47,20);
+			this.textBox3.TabIndex = 149;
+			// 
+			// label85
+			// 
+			this.label85.Location = new System.Drawing.Point(24,96);
+			this.label85.Name = "label85";
+			this.label85.Size = new System.Drawing.Size(117,16);
+			this.label85.TabIndex = 150;
+			this.label85.Text = "Type of Bill (3 digit)";
+			this.label85.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormClaimEdit
 			// 
@@ -4722,7 +4788,11 @@ namespace OpenDental{
 			else {
 				List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
 				queueItems.Add(listQueue[0]);
-				Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
+
+
+			EnumClaimMedType medType=EnumClaimMedType.Dental;
+//todo: fix the above line
+				Eclaims.Eclaims.SendBatches(queueItems,clearhouse,medType);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
 			}
 			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;

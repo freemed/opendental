@@ -51,9 +51,9 @@ namespace OpenDental.Eclaims
 		}
 
 		///<summary>Called from Eclaims and includes multiple claims.  Returns the string that was sent.  The string needs to be parsed to determine the transaction numbers used for each claim.</summary>
-		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum){
-			//each batch is already guaranteed to be specific to one clearinghouse
-			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItems[0].ClearinghouseNum);
+		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum,Clearinghouse clearhouse,EnumClaimMedType medType){
+			//each batch is already guaranteed to be specific to one clearinghouse, one clinic, and one EnumClaimMedType
+			//Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItems[0].ClearinghouseNum);
 			string saveFile=GetFileName(clearhouse,batchNum);
 			if(saveFile==""){
 				return "";
@@ -63,7 +63,7 @@ namespace OpenDental.Eclaims
 					X837_4010.GenerateMessageText(sw,clearhouse,batchNum,queueItems);
 				}
 				else {//Any of the 3 kinds of 5010
-					X837_5010.GenerateMessageText(sw,clearhouse,batchNum,queueItems);
+					X837_5010.GenerateMessageText(sw,clearhouse,batchNum,queueItems,medType);
 				}
 			}
 			if(clearhouse.CommBridge==EclaimsCommBridge.PostnTrack){

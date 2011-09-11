@@ -52,7 +52,7 @@ namespace OpenDental {
 		protected bool isValidCredentials() {
 			Progress("Validate Clearing House Setup..");
 			// Make Sure Clearing House is ClaimConnect
-			Clearinghouse clearhouse = Clearinghouses.GetDefault();
+			Clearinghouse clearhouse = Clearinghouses.GetDefaultDental();
 			if(clearhouse == null) {
 				Error("No clearinghouse is set as default.");
 				return false;
@@ -68,7 +68,7 @@ namespace OpenDental {
 			string passWord;
 
 			// Get Login / Password
-			Clearinghouse dch=Clearinghouses.GetDefault();
+			Clearinghouse dch=Clearinghouses.GetDefaultDental();
 			if(dch!=null) {
 				loginID = dch.LoginID;
 				passWord = dch.Password;

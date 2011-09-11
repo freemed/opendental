@@ -73,8 +73,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clearhouse);
 				return;
 			}
-			string command="DELETE FROM clearinghouse "
-				+"WHERE ClearinghouseNum = '"+POut.Long(clearhouse.ClearinghouseNum)+"'";
+			string command="DELETE FROM clearinghouse WHERE ClearinghouseNum = '"+POut.Long(clearhouse.ClearinghouseNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -126,18 +125,20 @@ namespace OpenDentBusiness{
 				return (long)HList[payorID];
 			}
 			//payorID not found
+			/*
 			Clearinghouse defaultCH=GetDefault();
 			if(defaultCH==null){
 				return 0;//ElectronicClaimFormat.None;
 			}
-			return defaultCH.ClearinghouseNum;
+			return defaultCH.ClearinghouseNum;*/
+			return PrefC.GetLong(PrefName.ClearinghouseDefaultDent);
 		}
 
 		///<summary>Returns the default clearinghouse. If no default present, returns null.</summary>
-		public static Clearinghouse GetDefault(){
+		public static Clearinghouse GetDefaultDental(){
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Length;i++){
-				if(Listt[i].IsDefault){
+				if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==Listt[i].ClearinghouseNum){
 					return Listt[i];
 				}
 			}

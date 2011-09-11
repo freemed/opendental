@@ -49,9 +49,9 @@ namespace OpenDentBusiness
 			int transactionNum=1;//Gets incremented for each carrier. Can be reused in other functional groups and interchanges, so not persisted
 			//Functional Group Header
 			string groupControlNumber=batchNum.ToString();//Must be unique within file.  We will use batchNum
-			bool isMedical=queueItems[0].IsMedical;
+			bool isMedical=false;//queueItems[0].IsMedical;
 			//this needs to be changed.  Medical should not be sent with dental.
-			if(isMedical) {
+			/*if(isMedical) {
 				//groupControlNumber="2";//this works for now because only two groups
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
 					+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes OpenDental.  Sometimes the sending clinic. Validated
@@ -62,17 +62,17 @@ namespace OpenDentBusiness
 					+"X*"//GS07: X
 					+"005010X222~");//GS08: Version
 			}
-			else {//dental
+			else {//dental*/
 				//groupControlNumber="1";
-				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
-					+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
-					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
-					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
-					+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
-					+groupControlNumber+"*"//GS06: Group control number. Max length 9. No padding necessary.
-					+"X*"//GS07: X
-					+"004010X097A1~");//GS08: Version
-			}
+			sw.WriteLine("GS*HC*"//GS01: Health Care Claim
+				+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
+				+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
+				+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
+				+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
+				+groupControlNumber+"*"//GS06: Group control number. Max length 9. No padding necessary.
+				+"X*"//GS07: X
+				+"004010X097A1~");//GS08: Version
+			//}
 			//Gets an array with PayorID,ProvBill,Subscriber,PatNum,ClaimNum all in the correct order
 			List<long> claimNums=new List<long>();
 			for(int i=0;i<queueItems.Count;i++) {

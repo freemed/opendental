@@ -99,6 +99,8 @@ namespace OpenDentBusiness {
 		ClaimFormTreatDentSaysSigOnFile,
 		ClaimMedTypeIsInstWhenInsPlanIsMedical,
 		ClaimsValidateACN,
+		ClearinghouseDefaultDent,
+		ClearinghouseDefaultMed,
 		ConfirmEmailMessage,
 		ConfirmEmailSubject,
 		ConfirmPostcardMessage,

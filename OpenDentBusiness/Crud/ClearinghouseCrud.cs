@@ -49,7 +49,6 @@ namespace OpenDentBusiness.Crud{
 				clearinghouse.ClearinghouseNum= PIn.Long  (table.Rows[i]["ClearinghouseNum"].ToString());
 				clearinghouse.Description     = PIn.String(table.Rows[i]["Description"].ToString());
 				clearinghouse.ExportPath      = PIn.String(table.Rows[i]["ExportPath"].ToString());
-				clearinghouse.IsDefault       = PIn.Bool  (table.Rows[i]["IsDefault"].ToString());
 				clearinghouse.Payors          = PIn.String(table.Rows[i]["Payors"].ToString());
 				clearinghouse.Eformat         = (ElectronicClaimFormat)PIn.Int(table.Rows[i]["Eformat"].ToString());
 				clearinghouse.ISA05           = PIn.String(table.Rows[i]["ISA05"].ToString());
@@ -107,14 +106,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClearinghouseNum,";
 			}
-			command+="Description,ExportPath,IsDefault,Payors,Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES(";
+			command+="Description,ExportPath,Payors,Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(clearinghouse.ClearinghouseNum)+",";
 			}
 			command+=
 				 "'"+POut.String(clearinghouse.Description)+"',"
 				+"'"+POut.String(clearinghouse.ExportPath)+"',"
-				+    POut.Bool  (clearinghouse.IsDefault)+","
 				+"'"+POut.String(clearinghouse.Payors)+"',"
 				+    POut.Int   ((int)clearinghouse.Eformat)+","
 				+"'"+POut.String(clearinghouse.ISA05)+"',"
@@ -146,7 +144,6 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE clearinghouse SET "
 				+"Description     = '"+POut.String(clearinghouse.Description)+"', "
 				+"ExportPath      = '"+POut.String(clearinghouse.ExportPath)+"', "
-				+"IsDefault       =  "+POut.Bool  (clearinghouse.IsDefault)+", "
 				+"Payors          = '"+POut.String(clearinghouse.Payors)+"', "
 				+"Eformat         =  "+POut.Int   ((int)clearinghouse.Eformat)+", "
 				+"ISA05           = '"+POut.String(clearinghouse.ISA05)+"', "
@@ -178,10 +175,6 @@ namespace OpenDentBusiness.Crud{
 			if(clearinghouse.ExportPath != oldClearinghouse.ExportPath) {
 				if(command!=""){ command+=",";}
 				command+="ExportPath = '"+POut.String(clearinghouse.ExportPath)+"'";
-			}
-			if(clearinghouse.IsDefault != oldClearinghouse.IsDefault) {
-				if(command!=""){ command+=",";}
-				command+="IsDefault = "+POut.Bool(clearinghouse.IsDefault)+"";
 			}
 			if(clearinghouse.Payors != oldClearinghouse.Payors) {
 				if(command!=""){ command+=",";}

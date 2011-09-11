@@ -25,9 +25,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textDescription;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textBox2;
-		private System.Windows.Forms.CheckBox checkIsDefault;
 		private System.Windows.Forms.TextBox textPayors;
-		private System.Windows.Forms.Label label3;
 		///<summary></summary>
 		public bool IsNew;
 		private System.Windows.Forms.TextBox textExportPath;
@@ -119,11 +117,9 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.textExportPath = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.checkIsDefault = new System.Windows.Forms.CheckBox();
 			this.textPayors = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textISA08 = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
@@ -147,6 +143,7 @@ namespace OpenDental{
 			this.textGS03 = new System.Windows.Forms.TextBox();
 			this.label24 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label30 = new System.Windows.Forms.Label();
 			this.label29 = new System.Windows.Forms.Label();
 			this.textSenderTelephone = new System.Windows.Forms.TextBox();
 			this.textSenderName = new System.Windows.Forms.TextBox();
@@ -170,7 +167,6 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.label30 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -209,20 +205,9 @@ namespace OpenDental{
 			this.label6.Text = "Description";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// checkIsDefault
-			// 
-			this.checkIsDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsDefault.Location = new System.Drawing.Point(101,526);
-			this.checkIsDefault.Name = "checkIsDefault";
-			this.checkIsDefault.Size = new System.Drawing.Size(163,17);
-			this.checkIsDefault.TabIndex = 10;
-			this.checkIsDefault.Text = "Is Default";
-			this.checkIsDefault.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// textPayors
 			// 
-			this.textPayors.Location = new System.Drawing.Point(251,545);
+			this.textPayors.Location = new System.Drawing.Point(251,525);
 			this.textPayors.MaxLength = 255;
 			this.textPayors.Multiline = true;
 			this.textPayors.Name = "textPayors";
@@ -231,7 +216,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(99,548);
+			this.label1.Location = new System.Drawing.Point(99,528);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(151,17);
 			this.label1.TabIndex = 95;
@@ -241,7 +226,7 @@ namespace OpenDental{
 			// textBox2
 			// 
 			this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox2.Location = new System.Drawing.Point(251,609);
+			this.textBox2.Location = new System.Drawing.Point(251,589);
 			this.textBox2.MaxLength = 255;
 			this.textBox2.Multiline = true;
 			this.textBox2.Name = "textBox2";
@@ -251,15 +236,6 @@ namespace OpenDental{
 			this.textBox2.Text = "The list of payor IDs should be separated by commas with no spaces or other punct" +
     "uation.  For instance: 01234,23456 is valid.  You do not have to enter any payor" +
     " ID\'s for a default Clearinghouse.";
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(270,527);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(366,15);
-			this.label3.TabIndex = 97;
-			this.label3.Text = "(if this is your main clearinghouse for most claims)";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label4
 			// 
@@ -487,6 +463,15 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Sender ID - Used in ISA06, GS02, 1000A NM1, and 1000A PER";
 			// 
+			// label30
+			// 
+			this.label30.Location = new System.Drawing.Point(248,17);
+			this.label30.Name = "label30";
+			this.label30.Size = new System.Drawing.Size(231,15);
+			this.label30.TabIndex = 118;
+			this.label30.Text = "(use this for Emdeon)";
+			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// label29
 			// 
 			this.label29.Location = new System.Drawing.Point(248,37);
@@ -679,7 +664,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(35,621);
+			this.butDelete.Location = new System.Drawing.Point(35,611);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(90,26);
 			this.butDelete.TabIndex = 24;
@@ -694,7 +679,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(713,578);
+			this.butOK.Location = new System.Drawing.Point(713,568);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(78,26);
 			this.butOK.TabIndex = 12;
@@ -710,26 +695,17 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(713,621);
+			this.butCancel.Location = new System.Drawing.Point(713,611);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(78,26);
 			this.butCancel.TabIndex = 13;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// label30
-			// 
-			this.label30.Location = new System.Drawing.Point(248,17);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(231,15);
-			this.label30.TabIndex = 118;
-			this.label30.Text = "(use this for Emdeon)";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// FormClearinghouseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(816,667);
+			this.ClientSize = new System.Drawing.Size(816,657);
 			this.Controls.Add(this.label17);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textLoginID);
@@ -755,9 +731,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.checkIsDefault);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.label2);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -813,7 +787,7 @@ namespace OpenDental{
 			comboCommBridge.SelectedIndex=(int)ClearinghouseCur.CommBridge;
 			textModemPort.Text=ClearinghouseCur.ModemPort.ToString();
 			textClientProgram.Text=ClearinghouseCur.ClientProgram;
-			checkIsDefault.Checked=ClearinghouseCur.IsDefault;
+			//checkIsDefault.Checked=ClearinghouseCur.IsDefault;
 			textPayors.Text=ClearinghouseCur.Payors;
 		}
 
@@ -835,6 +809,14 @@ namespace OpenDental{
 				return;
 			}
 			Clearinghouses.Delete(ClearinghouseCur);
+			if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==ClearinghouseCur.ClearinghouseNum){
+				Prefs.UpdateLong(PrefName.ClearinghouseDefaultDent,0);
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
+			if(PrefC.GetLong(PrefName.ClearinghouseDefaultMed)==ClearinghouseCur.ClearinghouseNum){
+				Prefs.UpdateLong(PrefName.ClearinghouseDefaultMed,0);
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -959,7 +941,7 @@ namespace OpenDental{
 			ClearinghouseCur.CommBridge=(EclaimsCommBridge)(comboCommBridge.SelectedIndex);
 			ClearinghouseCur.ModemPort=PIn.Byte(textModemPort.Text);
 			ClearinghouseCur.ClientProgram=textClientProgram.Text;
-			ClearinghouseCur.IsDefault=checkIsDefault.Checked;
+			//ClearinghouseCur.IsDefault=checkIsDefault.Checked;
 			ClearinghouseCur.Payors=textPayors.Text;
 			if(IsNew){
 				Clearinghouses.Insert(ClearinghouseCur);

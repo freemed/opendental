@@ -79,8 +79,6 @@ namespace OpenDental{
 		private OpenDental.ValidDouble textProcFee;
 		private System.Windows.Forms.CheckBox checkNoBillIns;
 		private OpenDental.ODtextBox textNotes;
-		private System.Windows.Forms.Label labelClaimNote;
-		private OpenDental.ODtextBox textClaimNote;
 		private List<ClaimProc> ClaimProcsForProc;
 		//private Adjustment[] AdjForProc;
 		private ArrayList PaySplitsForProc;
@@ -214,7 +212,7 @@ namespace OpenDental{
 		private Label label5;
 		private TextBox textDrugNDC;
 		private Label label10;
-		private ValidNum textDrugQty;
+		private TextBox textDrugQty;
 		private List<InsSub> SubList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -319,6 +317,11 @@ namespace OpenDental{
 			this.listBoxTeeth2 = new System.Windows.Forms.ListBox();
 			this.butChange = new OpenDental.UI.Button();
 			this.groupMedical = new System.Windows.Forms.GroupBox();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textDrugNDC = new System.Windows.Forms.TextBox();
+			this.comboDrugUnit = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.butShowMedical = new OpenDental.UI.Button();
 			this.textRevCode = new System.Windows.Forms.TextBox();
 			this.label22 = new System.Windows.Forms.Label();
@@ -340,7 +343,6 @@ namespace OpenDental{
 			this.labelPriority = new System.Windows.Forms.Label();
 			this.labelSetComplete = new System.Windows.Forms.Label();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
-			this.labelClaimNote = new System.Windows.Forms.Label();
 			this.labelIncomplete = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
 			this.labelClinic = new System.Windows.Forms.Label();
@@ -405,16 +407,10 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.tbPay = new OpenDental.TableProcPay();
 			this.tbAdj = new OpenDental.TableProcAdj();
-			this.textClaimNote = new OpenDental.ODtextBox();
 			this.comboPrognosis = new System.Windows.Forms.ComboBox();
 			this.labelPrognosis = new System.Windows.Forms.Label();
 			this.comboProcStatus = new System.Windows.Forms.ComboBox();
-			this.comboDrugUnit = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.textDrugNDC = new System.Windows.Forms.TextBox();
-			this.textDrugQty = new OpenDental.ValidNum();
-			this.label10 = new System.Windows.Forms.Label();
+			this.textDrugQty = new System.Windows.Forms.TextBox();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -1060,8 +1056,8 @@ namespace OpenDental{
 			// 
 			// groupMedical
 			// 
-			this.groupMedical.Controls.Add(this.label10);
 			this.groupMedical.Controls.Add(this.textDrugQty);
+			this.groupMedical.Controls.Add(this.label10);
 			this.groupMedical.Controls.Add(this.label5);
 			this.groupMedical.Controls.Add(this.textDrugNDC);
 			this.groupMedical.Controls.Add(this.comboDrugUnit);
@@ -1084,10 +1080,55 @@ namespace OpenDental{
 			this.groupMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupMedical.Location = new System.Drawing.Point(731,3);
 			this.groupMedical.Name = "groupMedical";
-			this.groupMedical.Size = new System.Drawing.Size(223,213);
+			this.groupMedical.Size = new System.Drawing.Size(223,201);
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
 			this.groupMedical.Text = "Medical and Institutional";
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(12,178);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(74,16);
+			this.label10.TabIndex = 173;
+			this.label10.Text = "Drug Qty";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(7,138);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(79,16);
+			this.label5.TabIndex = 170;
+			this.label5.Text = "Drug NDC";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDrugNDC
+			// 
+			this.textDrugNDC.Location = new System.Drawing.Point(87,136);
+			this.textDrugNDC.Name = "textDrugNDC";
+			this.textDrugNDC.ReadOnly = true;
+			this.textDrugNDC.Size = new System.Drawing.Size(109,20);
+			this.textDrugNDC.TabIndex = 171;
+			this.textDrugNDC.Text = "12345678901";
+			// 
+			// comboDrugUnit
+			// 
+			this.comboDrugUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDrugUnit.FormattingEnabled = true;
+			this.comboDrugUnit.Location = new System.Drawing.Point(87,156);
+			this.comboDrugUnit.Name = "comboDrugUnit";
+			this.comboDrugUnit.Size = new System.Drawing.Size(92,21);
+			this.comboDrugUnit.TabIndex = 169;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(12,158);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(74,16);
+			this.label1.TabIndex = 168;
+			this.label1.Text = "Drug Unit";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butShowMedical
 			// 
@@ -1097,7 +1138,7 @@ namespace OpenDental{
 			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowMedical.CornerRadius = 4F;
-			this.butShowMedical.Location = new System.Drawing.Point(198,191);
+			this.butShowMedical.Location = new System.Drawing.Point(198,179);
 			this.butShowMedical.Name = "butShowMedical";
 			this.butShowMedical.Size = new System.Drawing.Size(25,21);
 			this.butShowMedical.TabIndex = 121;
@@ -1285,15 +1326,6 @@ namespace OpenDental{
 			this.checkNoBillIns.Text = "Do Not Bill to Ins";
 			this.checkNoBillIns.ThreeState = true;
 			this.checkNoBillIns.Click += new System.EventHandler(this.checkNoBillIns_Click);
-			// 
-			// labelClaimNote
-			// 
-			this.labelClaimNote.Location = new System.Drawing.Point(0,380);
-			this.labelClaimNote.Name = "labelClaimNote";
-			this.labelClaimNote.Size = new System.Drawing.Size(104,41);
-			this.labelClaimNote.TabIndex = 65;
-			this.labelClaimNote.Text = "E-claim Note (keep it very short)";
-			this.labelClaimNote.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelIncomplete
 			// 
@@ -1992,18 +2024,6 @@ namespace OpenDental{
 			this.tbAdj.TabIndex = 70;
 			this.tbAdj.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(this.tbAdj_CellDoubleClicked);
 			// 
-			// textClaimNote
-			// 
-			this.textClaimNote.AcceptsReturn = true;
-			this.textClaimNote.Location = new System.Drawing.Point(106,380);
-			this.textClaimNote.MaxLength = 80;
-			this.textClaimNote.Multiline = true;
-			this.textClaimNote.Name = "textClaimNote";
-			this.textClaimNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
-			this.textClaimNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textClaimNote.Size = new System.Drawing.Size(277,43);
-			this.textClaimNote.TabIndex = 10;
-			// 
 			// comboPrognosis
 			// 
 			this.comboPrognosis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -2032,59 +2052,12 @@ namespace OpenDental{
 			this.comboProcStatus.TabIndex = 167;
 			this.comboProcStatus.SelectionChangeCommitted += new System.EventHandler(this.comboProcStatus_SelectionChangeCommitted);
 			// 
-			// comboDrugUnit
-			// 
-			this.comboDrugUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboDrugUnit.FormattingEnabled = true;
-			this.comboDrugUnit.Location = new System.Drawing.Point(87,156);
-			this.comboDrugUnit.Name = "comboDrugUnit";
-			this.comboDrugUnit.Size = new System.Drawing.Size(92,21);
-			this.comboDrugUnit.TabIndex = 169;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(12,158);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(74,16);
-			this.label1.TabIndex = 168;
-			this.label1.Text = "Drug Unit";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(7,138);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(79,16);
-			this.label5.TabIndex = 170;
-			this.label5.Text = "Drug NDC";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDrugNDC
-			// 
-			this.textDrugNDC.Location = new System.Drawing.Point(87,136);
-			this.textDrugNDC.Name = "textDrugNDC";
-			this.textDrugNDC.ReadOnly = true;
-			this.textDrugNDC.Size = new System.Drawing.Size(109,20);
-			this.textDrugNDC.TabIndex = 171;
-			this.textDrugNDC.Text = "12345678901";
-			// 
 			// textDrugQty
 			// 
 			this.textDrugQty.Location = new System.Drawing.Point(87,177);
-			this.textDrugQty.MaxVal = 255;
-			this.textDrugQty.MinVal = 0;
 			this.textDrugQty.Name = "textDrugQty";
-			this.textDrugQty.Size = new System.Drawing.Size(76,20);
-			this.textDrugQty.TabIndex = 172;
-			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(12,178);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(74,16);
-			this.label10.TabIndex = 173;
-			this.label10.Text = "Drug Qty";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.textDrugQty.Size = new System.Drawing.Size(59,20);
+			this.textDrugQty.TabIndex = 174;
 			// 
 			// FormProcEdit
 			// 
@@ -2142,8 +2115,6 @@ namespace OpenDental{
 			this.Controls.Add(this.labelSetComplete);
 			this.Controls.Add(this.labelClaim);
 			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.textClaimNote);
-			this.Controls.Add(this.labelClaimNote);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -2261,8 +2232,8 @@ namespace OpenDental{
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				groupProsth.Visible=false;
-				labelClaimNote.Visible=false;
-				textClaimNote.Visible=false;
+				//labelClaimNote.Visible=false;
+				//textClaimNote.Visible=false;
 				butBF.Text=Lan.g(this,"B/V");//vestibular instead of facial
 				butV.Text=Lan.g(this,"5");
 			}
@@ -2315,16 +2286,16 @@ namespace OpenDental{
 				labelSetComplete.Visible=false;
 			}
 			IsStartingUp=true;
-			FillControls();
-			SetControls();
+			FillControlsOnStartup();
+			SetControlsUpperLeft();
 			FillIns(false);
 			FillPayments();
 			FillAdj();
 			IsStartingUp=false;
 		}		
 
-		///<summary>ONLY run on startup. Fills the basic controls, except not the ones in the upper left panel which are handled in SetControls.</summary>
-		private void FillControls(){
+		///<summary>ONLY run on startup. Fills the basic controls, except not the ones in the upper left panel which are handled in SetControlsUpperLeft.</summary>
+		private void FillControlsOnStartup(){
 			comboProcStatus.Items.Clear();
 			comboProcStatus.Items.Add(Lan.g(this,"Treatment Planned"));
 			comboProcStatus.Items.Add(Lan.g(this,"Complete"));
@@ -2486,7 +2457,25 @@ namespace OpenDental{
 					groupProsth.Visible=false;
 				}
 			}
-			textClaimNote.Text=ProcCur.ClaimNote;
+			//medical
+			textMedicalCode.Text=ProcCur.MedicalCode;
+			textDiagnosticCode.Text=ProcCur.DiagnosticCode;
+			checkIsPrincDiag.Checked=ProcCur.IsPrincDiag;
+			textCodeMod1.Text = ProcCur.CodeMod1;
+			textCodeMod2.Text = ProcCur.CodeMod2;
+			textCodeMod3.Text = ProcCur.CodeMod3;
+			textCodeMod4.Text = ProcCur.CodeMod4;
+			textUnitQty.Text = ProcCur.UnitQty.ToString();
+			textRevCode.Text = ProcCur.RevCode;
+			//DrugNDC is handled in SetControlsUpperLeft
+			comboDrugUnit.Items.Clear();
+			for(int i=0;i<Enum.GetNames(typeof(EnumProcDrugUnit)).Length;i++){
+				comboDrugUnit.Items.Add(Enum.GetNames(typeof(EnumProcDrugUnit))[i]);
+			}
+			comboDrugUnit.SelectedIndex=(int)ProcCur.DrugUnit;
+			if(ProcCur.DrugQty!=0){
+				textDrugQty.Text=ProcCur.DrugQty.ToString();
+			}
 			textUser.Text=Userods.GetName(ProcCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
@@ -2652,8 +2641,9 @@ namespace OpenDental{
 				if(textSurfaces.Text.Contains("V")) butV.BackColor=Color.White;
 			}
 		}
+
 		///<summary>Called on open and after changing code.  Sets the visibilities and the data of all the fields in the upper left panel.</summary>
-		private void SetControls(){
+		private void SetControlsUpperLeft(){
 			textDateTP.Text=ProcCur.DateTP.ToString("d");
 			DateTime dateT;
 			if(IsStartingUp){
@@ -2674,22 +2664,7 @@ namespace OpenDental{
 			}
 			textProc.Text=ProcedureCode2.ProcCode;
 			textDesc.Text=ProcedureCode2.Descript;
-			//medical
-			textMedicalCode.Text=ProcCur.MedicalCode;
-			textDiagnosticCode.Text=ProcCur.DiagnosticCode;
-			checkIsPrincDiag.Checked=ProcCur.IsPrincDiag;
-			textCodeMod1.Text = ProcCur.CodeMod1;
-			textCodeMod2.Text = ProcCur.CodeMod2;
-			textCodeMod3.Text = ProcCur.CodeMod3;
-			textCodeMod4.Text = ProcCur.CodeMod4;
-			textUnitQty.Text = ProcCur.UnitQty.ToString();
-			textRevCode.Text = ProcCur.RevCode;
-//Todo:
-			//textDrugNDC.Text=ProcedureCode2.DrugNDC;
-			//comboDrugUnit.SelectedIndex=(int)ProcCur.DrugUnit;//also fill the combobxo
-			//textDrugQty.Text=ProcCur.DrugQty.ToString();
-
-
+			textDrugNDC.Text=ProcedureCode2.DrugNDC;
 			switch (ProcedureCode2.TreatArea){
 				case TreatmentArea.Surf:
 					this.textTooth.Visible=true;
@@ -3177,7 +3152,7 @@ namespace OpenDental{
 			ClaimProcsForProc=new List<ClaimProc>();
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
 			FillIns();
-      SetControls();
+      SetControlsUpperLeft();
 		}
 
 		private void butEditAnyway_Click(object sender, System.EventArgs e) {
@@ -3787,16 +3762,13 @@ namespace OpenDental{
 
 		private bool EntriesAreValid(){
 			if(  textDateTP.errorProvider1.GetError(textDateTP)!=""
-				//|| textDate.errorProvider1.GetError(textDate)!=""
 				|| textProcFee.errorProvider1.GetError(textProcFee)!=""
-				//|| textLabFee.errorProvider1.GetError(textLabFee)!=""
 				|| textDateOriginalProsth.errorProvider1.GetError(textDateOriginalProsth)!=""
 				){
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return false;
 			}
-			if(textDate.Text==""
-				){
+			if(textDate.Text==""){
 				MessageBox.Show(Lan.g(this,"Please enter a date first."));
 				return false;
 			}
@@ -3804,8 +3776,17 @@ namespace OpenDental{
 				DateTime.Parse(textDate.Text);
 			}
 			catch{
-				MessageBox.Show(Lan.g(this,"Date and time invalid."));
+				MessageBox.Show(Lan.g(this,"Date invalid."));
 				return false;
+			}
+			if(Programs.UsingOrion && textTimeStart.Text!=""){
+				try{
+					DateTime.Parse(textTimeStart.Text);
+				}
+				catch{
+					MessageBox.Show(Lan.g(this,"Start time is invalid."));
+					return false;
+				}
 			}
 			if(Programs.UsingOrion && textTimeEnd.Text!=""){
 				try{
@@ -3827,33 +3808,35 @@ namespace OpenDental{
 				MsgBox.Show(this,"Qty not valid.  Typical value is 1.");
 				return false;
 			}
-			//try {
-			//	int startTime=PIn.Int(textStart.Text);
-			//}
-			//catch {
-			//	MsgBox.Show(this,"Invalid start time.");
-			//	return false;
-			//}
-			//try {
-			//	int stopTime=PIn.Int(textStop.Text);
-			//}
-			//catch {
-			//	MsgBox.Show(this,"Invalid stop time.");
-			//	return false;
-			//}
 			if(ProcCur.ProvNum==0){//this works because ProvNum gets set when the user changes the combobox.
 				MsgBox.Show(this,"You must select a provider first.");
 				return false;
 			}
 			if(errorProvider2.GetError(textSurfaces)!=""
-				|| errorProvider2.GetError(textTooth)!=""
-				){
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				|| errorProvider2.GetError(textTooth)!="")
+			{
+				MsgBox.Show(this,"Please fix tooth number or surfaces first.");
 				return false;
 			}
 			if(textMedicalCode.Text!="" && !ProcedureCodeC.HList.Contains(textMedicalCode.Text)){
 				MsgBox.Show(this,"Invalid medical code.  It must refer to an existing procedure code.");
 				return false;
+			}
+			if(textDrugNDC.Text!=""){
+				if(comboDrugUnit.SelectedIndex==(int)EnumProcDrugUnit.None || textDrugQty.Text==""){
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Drug quantity and unit are not entered.  Continue anyway?")){
+						return false;
+					}
+				}
+			}
+			if(textDrugQty.Text!=""){
+				try{
+					float.Parse(textDrugQty.Text);
+				}
+				catch{
+					MsgBox.Show(this,"Please fix drug qty first.");
+					return false;
+				}
 			}
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//if status was changed to complete
 				if(ProcCur.AptNum!=0) {//if attached to an appointment
@@ -3955,11 +3938,10 @@ namespace OpenDental{
 			ProcCur.CodeMod2 = textCodeMod2.Text;
 			ProcCur.CodeMod3 = textCodeMod3.Text;
 			ProcCur.CodeMod4 = textCodeMod4.Text;
-			ProcCur.RevCode = textRevCode.Text;
-			//ProcCur.UnitCode = textUnitCode.Text;
 			ProcCur.UnitQty = PIn.Int(textUnitQty.Text);
-			//ProcCur.StartTime=PIn.Int(textStart.Text);
-			//ProcCur.StopTime=PIn.Int(textStop.Text);
+			ProcCur.RevCode = textRevCode.Text;
+			ProcCur.DrugUnit=(EnumProcDrugUnit)comboDrugUnit.SelectedIndex;
+			ProcCur.DrugQty=PIn.Float(textDrugQty.Text);
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//Proc set complete.
 				ProcCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 			}
@@ -4120,7 +4102,7 @@ namespace OpenDental{
 					ProcCur.DateOriginalProsth=DateTime.MinValue;
 				}
 			}
-			ProcCur.ClaimNote=textClaimNote.Text;
+			//ProcCur.ClaimNote=textClaimNote.Text;
 			//Last chance to run this code before Proc gets updated.
 			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
 				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;

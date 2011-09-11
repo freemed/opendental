@@ -43,7 +43,7 @@ namespace OpenDentBusiness {
 		public string Prosthesis;
 		///<summary>For a prosthesis Replacement, this is the original date.</summary>
 		public DateTime DateOriginalProsth;
-		///<summary>This note will go on e-claim. For By Report, prep dates, or initial endo date.</summary>
+		///<summary>This note used to go out on e-claims, but the new format does not allow it.  So we removed the UI for this field.  We will probably drop this field completely soon.</summary>
 		public string ClaimNote;
 		///<summary>This is the date this procedure was entered or set complete.  If not status C, then the value is ignored.  This date is set automatically when Insert, but older data or converted data might not have this value set.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateEntryEditable)]
@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 		public string CodeMod4;
 		///<summary>NUBC Revenue Code for medical/inst billing. Used on UB04 and 837I.</summary>
 		public string RevCode;
-		///<summary>For certain CPT codes.  Default is 1.  Becomes Service Unit Count on UB claimforms.</summary>
+		///<summary>Default is 1.  Becomes Service Unit Count on UB claimforms.  Becomes procedure count on dental claims.  Gets multiplied by fee in all accounting calculations.</summary>
 		public int UnitQty;
 		///<summary>Base units used for some billing codes.  Default is 0.  No UI for this field.  It is only edited in the ProcedureCode window.  The database maint tool changes BaseUnits of all procedures to match that of the procCode.  Not sure yet what it's for.</summary>
 		public int BaseUnits;
@@ -153,17 +153,17 @@ namespace OpenDentBusiness {
 	}
 
 	public enum EnumProcDrugUnit {
-		///<summary></summary>
+		///<summary>0</summary>
 		None,
-		///<summary></summary>
+		///<summary>1</summary>
 		InternationalUnit,
-		///<summary></summary>
+		///<summary>2</summary>
 		Gram,
-		///<summary></summary>
+		///<summary>3</summary>
 		Milligram,
-		///<summary></summary>
+		///<summary>4</summary>
 		Milliliter,
-		///<summary></summary>
+		///<summary>5</summary>
 		Unit
 	}
 	

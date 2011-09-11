@@ -6380,6 +6380,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE provider MODIFY IsNotPerson NOT NULL";
 					Db.NonQ(command);
 				}
+				command="UPDATE provider SET IsNotPerson=1 WHERE FName=''";
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE claim ADD SpecialProgramCode tinyint NOT NULL";
 					Db.NonQ(command);
@@ -6522,7 +6524,55 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE procedurecode ADD RevenueCodeDefault varchar2(255)";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD AdmissionTypeCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD AdmissionTypeCode varchar2(255)";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD AdmissionSourceCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD AdmissionSourceCode varchar2(255)";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD PatientStatusCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD PatientStatusCode varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ClearinghouseDefaultDent','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ClearinghouseDefaultDent','0')";
+					Db.NonQ(command);
+				}
+				//set this new pref with the existing default value from the clearinghouse table
+				command="SELECT ClearinghouseNum FROM clearinghouse WHERE IsDefault=1";
+				long clearinghouseNum=PIn.Long(Db.GetScalar(command));
+				command="UPDATE preference SET ValueString="+POut.Long(clearinghouseNum)+" WHERE PrefName='ClearinghouseDefaultDent'";
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ClearinghouseDefaultMed','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ClearinghouseDefaultMed','0')";
+					Db.NonQ(command);
+				}
+				command="ALTER TABLE clearinghouse DROP COLUMN IsDefault";
+				Db.NonQ(command);
+
+
 
 
 
@@ -6575,3 +6625,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 			
+
+				

@@ -11,49 +11,36 @@ namespace OpenDentBusiness {
 				&& clearhouse.ISA05!="28"	&& clearhouse.ISA05!="29" && clearhouse.ISA05!="30" && clearhouse.ISA05!="33"
 				&& clearhouse.ISA05!="ZZ")
 			{
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clearinghouse ISA05");
 			}
 			if(clearhouse.SenderTIN!="") {//if it IS blank, then we'll be using OD's info as the sender, so no need to validate the rest
 				if(clearhouse.SenderTIN.Length<2) {
-					if(strb.Length!=0) {
-						strb.Append(",");
-					}
+					Comma(strb);
 					strb.Append("Clearinghouse SenderTIN");
 				}
 				if(clearhouse.SenderName=="") {//1000A NM103 min length=1
-					if(strb.Length!=0) {
-						strb.Append(",");
-					}
+					Comma(strb);
 					strb.Append("Clearinghouse Sender Name");
 				}
 				if(!Regex.IsMatch(clearhouse.SenderTelephone,@"^\d{10}$")) {//1000A PER04 min length=1
-					if(strb.Length!=0) {
-						strb.Append(",");
-					}
+					Comma(strb);
 					strb.Append("Clearinghouse Sender Phone");
 				}
 			}
 			if(clearhouse.ISA07!="01" && clearhouse.ISA07!="14" && clearhouse.ISA07!="20" && clearhouse.ISA07!="27" 
 				&& clearhouse.ISA07!="28"	&& clearhouse.ISA07!="29" && clearhouse.ISA07!="30" && clearhouse.ISA07!="33"
-				&& clearhouse.ISA07!="ZZ") {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				&& clearhouse.ISA07!="ZZ") 
+			{
+				Comma(strb);
 				strb.Append("Clearinghouse ISA07");
 			}
 			if(clearhouse.ISA08.Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clearinghouse ISA08");
 			}
 			if(clearhouse.ISA15!="T" && clearhouse.ISA15!="P") {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clearinghouse ISA15");
 			}
 		}
@@ -61,27 +48,19 @@ namespace OpenDentBusiness {
 		///<summary>StringBuilder does not get altered if no invalid data.</summary>
 		public static void Carrier(Carrier carrier,StringBuilder strb) {
 			if(carrier.Address=="") {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Carrier Address");
 			}
 			if(carrier.City.Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Carrier City");
 			}
 			if(carrier.State.Length!=2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Carrier State(2 char)");
 			}
 			if(carrier.Zip.Length<3) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Carrier Zip");
 			}
 		}
@@ -89,28 +68,19 @@ namespace OpenDentBusiness {
 		///<summary>StringBuilder does not get altered if no invalid data.</summary>
 		public static void BillProv(Provider billProv,StringBuilder strb,bool isPerson) {
 			if(billProv.LName=="") {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Billing Prov LName");
 			}
 			if(isPerson && billProv.FName==""){//this is allowed to be blank if it's a non-person.
-				//The way that it's now written, this can only happen on 270s, not 
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Billing Prov FName");
 			}
 			if(billProv.SSN.Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Billing Prov SSN");
 			}
 			if(billProv.NationalProvID.Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Billing Prov NPI");
 			}
 			/* This was causing problems when dummy providers were used for office and no license number was applicable.
@@ -126,33 +96,23 @@ namespace OpenDentBusiness {
 		public static void PracticeAddress(StringBuilder strb) {
 			if(PrefC.GetString(PrefName.PracticePhone).Length!=10) {
 				//10 digit phone is required by WebMD and is universally assumed 
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Practice Phone");
 			}
 			if(PrefC.GetString(PrefName.PracticeAddress)=="") {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Practice Address");
 			}
 			if(PrefC.GetString(PrefName.PracticeCity).Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Practice City");
 			}
 			if(PrefC.GetString(PrefName.PracticeST).Length!=2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Practice State(2 char)");
 			}
 			if(PrefC.GetString(PrefName.PracticeZip).Length<3) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Practice Zip");
 			}
 		}
@@ -161,38 +121,32 @@ namespace OpenDentBusiness {
 		public static void Clinic(Clinic clinic,StringBuilder strb) {
 			if(clinic.Phone.Length!=10) {//1000A PER04 min length=1.
 				//But 10 digit phone is required in 2010AA and is universally assumed 
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clinic Phone");
 			}
 			if(clinic.Address=="") {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clinic Address");
 			}
 			if(clinic.City.Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clinic City");
 			}
 			if(clinic.State.Length!=2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clinic State(2 char)");
 			}
 			if(clinic.Zip.Length<3) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clinic Zip");
 			}
 		}
 
-
+		private static void Comma(StringBuilder strb){
+			if(strb.Length!=0) {
+				strb.Append(",");
+			}
+		}
 
 
 

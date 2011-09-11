@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		public DateTime DateReceived;
 		///<summary>FK to insplan.PlanNum.  Every claim is attached to one plan.</summary>
 		public long PlanNum;
-		///<summary>FK to provider.ProvNum.  Treating provider.</summary>
+		///<summary>FK to provider.ProvNum.  Treating provider for dental claims.  For institutional claims, this is called the attending provider.</summary>
 		public long ProvTreat;
 		///<summary>Total fee of claim.</summary>
 		public double ClaimFee;
@@ -134,6 +134,12 @@ namespace OpenDentBusiness{
 		public string UniformBillType;
 		///<summary>Enum:EnumClaimMedType 0=Dental, 1=Medical, 2=Institutional</summary>
 		public EnumClaimMedType MedType;
+		///<summary>Used for inst claims. Single digit.  X12 2300 CL101.  UB04 14.  Should only be required for IP, but X12 clearly states required for all.</summary>
+		public string AdmissionTypeCode;
+		///<summary>Used for inst claims. Single char.  X12 2300 CL102.  UB04 15.  Should only be required for IP, but X12 clearly states required for all.</summary>
+		public string AdmissionSourceCode;
+		///<summary>Used for inst claims. Two digit.  X12 2300 CL103.  UB04 17.  Should only be required for IP, but X12 clearly states required for all.</summary>
+		public string PatientStatusCode;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

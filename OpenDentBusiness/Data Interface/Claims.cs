@@ -281,7 +281,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
 				+",CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),patient.FName),' '),patient.MiddleI)"
-				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID,insplan.IsMedical "
+				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID "//,insplan.IsMedical "
 				+"FROM claim "
 				+"Left join insplan on claim.PlanNum = insplan.PlanNum "
 				+"Left join carrier on insplan.CarrierNum = carrier.CarrierNum "
@@ -295,8 +295,7 @@ namespace OpenDentBusiness{
 			if(clinicNum>0) {
 				command+="AND claim.ClinicNum="+POut.Long(clinicNum)+" ";
 			}
-			command+="ORDER BY insplan.IsMedical, patient.LName";//this puts the medical claims at the end, helping with the looping in X12.
-			//MessageBox.Show(string command);
+			command+="ORDER BY patient.LName";
 			DataTable table=Db.GetTable(command);
 			ClaimSendQueueItem[] listQueue=new ClaimSendQueueItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
@@ -308,7 +307,7 @@ namespace OpenDentBusiness{
 				listQueue[i].Carrier         = PIn.String(table.Rows[i][4].ToString());
 				listQueue[i].PatNum          = PIn.Long   (table.Rows[i][5].ToString());
 				listQueue[i].ClearinghouseNum=Clearinghouses.GetNumForPayor(PIn.String(table.Rows[i][6].ToString()));
-				listQueue[i].IsMedical       = PIn.Bool  (table.Rows[i][7].ToString());
+				//listQueue[i].IsMedical       = PIn.Bool  (table.Rows[i][7].ToString());
 			}
 			return listQueue;
 		}
@@ -398,8 +397,10 @@ namespace OpenDentBusiness{
 		public long PatNum;
 		///<summary></summary>
 		public long ClearinghouseNum;
-		///<summary>True if the plan is a medical plan.</summary>
-		public bool IsMedical;
+		///<summary></summary>
+		public long ClinicNum;
+		//<summary>True if the plan is a medical plan.</summary>
+		//public bool IsMedical;
 
 		public ClaimSendQueueItem Copy(){
 			return (ClaimSendQueueItem)MemberwiseClone();
