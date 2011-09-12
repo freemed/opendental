@@ -70,6 +70,11 @@ namespace OpenDental{
 		private Label label19;
 		private ComboBox comboSubstOnlyIf;
 		private CheckBox checkMultiVisit;
+		private Label labelDrugNDC;
+		private Label labelRevenueCode;
+		private TextBox textDrugNDC;
+		private TextBox textRevenueCode;
+		private Label label20;
 		private List<ProcCodeNote> NoteList;
 
 		///<summary>The procedure code must have already been insterted into the database.</summary>
@@ -143,6 +148,11 @@ namespace OpenDental{
 			this.textNote = new OpenDental.ODtextBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.labelDrugNDC = new System.Windows.Forms.Label();
+			this.labelRevenueCode = new System.Windows.Forms.Label();
+			this.textDrugNDC = new System.Windows.Forms.TextBox();
+			this.textRevenueCode = new System.Windows.Forms.TextBox();
+			this.label20 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -448,7 +458,7 @@ namespace OpenDental{
 			// 
 			this.label17.Location = new System.Drawing.Point(215,146);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(251,19);
+			this.label17.Size = new System.Drawing.Size(251,17);
 			this.label17.TabIndex = 55;
 			this.label17.Text = "(zero unless for some medical claims)";
 			// 
@@ -605,6 +615,46 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// labelDrugNDC
+			// 
+			this.labelDrugNDC.Location = new System.Drawing.Point(74,166);
+			this.labelDrugNDC.Name = "labelDrugNDC";
+			this.labelDrugNDC.Size = new System.Drawing.Size(103,13);
+			this.labelDrugNDC.TabIndex = 53;
+			this.labelDrugNDC.Text = "Drug NDC";
+			this.labelDrugNDC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelRevenueCode
+			// 
+			this.labelRevenueCode.Location = new System.Drawing.Point(31,186);
+			this.labelRevenueCode.Name = "labelRevenueCode";
+			this.labelRevenueCode.Size = new System.Drawing.Size(146,13);
+			this.labelRevenueCode.TabIndex = 53;
+			this.labelRevenueCode.Text = "Default Revenue Code";
+			this.labelRevenueCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDrugNDC
+			// 
+			this.textDrugNDC.Location = new System.Drawing.Point(179,163);
+			this.textDrugNDC.Name = "textDrugNDC";
+			this.textDrugNDC.Size = new System.Drawing.Size(100,20);
+			this.textDrugNDC.TabIndex = 54;
+			// 
+			// textRevenueCode
+			// 
+			this.textRevenueCode.Location = new System.Drawing.Point(179,183);
+			this.textRevenueCode.Name = "textRevenueCode";
+			this.textRevenueCode.Size = new System.Drawing.Size(100,20);
+			this.textRevenueCode.TabIndex = 54;
+			// 
+			// label20
+			// 
+			this.label20.Location = new System.Drawing.Point(285,166);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(181,17);
+			this.label20.TabIndex = 55;
+			this.label20.Text = "(11 digits or blank)";
+			// 
 			// FormProcCodeEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -618,8 +668,13 @@ namespace OpenDental{
 			this.Controls.Add(this.butSlider);
 			this.Controls.Add(this.tbTime);
 			this.Controls.Add(this.label18);
+			this.Controls.Add(this.label20);
 			this.Controls.Add(this.label17);
+			this.Controls.Add(this.textRevenueCode);
+			this.Controls.Add(this.textDrugNDC);
 			this.Controls.Add(this.textBaseUnits);
+			this.Controls.Add(this.labelRevenueCode);
+			this.Controls.Add(this.labelDrugNDC);
 			this.Controls.Add(this.label16);
 			this.Controls.Add(this.checkIsCanadianLab);
 			this.Controls.Add(this.textLaymanTerm);
@@ -700,6 +755,8 @@ namespace OpenDental{
 			checkIsHygiene.Checked=ProcCode.IsHygiene;
 			checkIsProsth.Checked=ProcCode.IsProsth;
 			textBaseUnits.Text=ProcCode.BaseUnits.ToString();
+			textDrugNDC.Text=ProcCode.DrugNDC;
+			textRevenueCode.Text=ProcCode.RevenueCodeDefault;
 			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Not Canadian. en-CA or fr-CA
 				checkIsCanadianLab.Visible=false;
 			}
@@ -722,11 +779,13 @@ namespace OpenDental{
 			}
 			for(int i=0;i<DefC.Short[(int)DefCat.ProcCodeCats].Length;i++){
 				listCategory.Items.Add(DefC.Short[(int)DefCat.ProcCodeCats][i].ItemName);
-				if(DefC.Short[(int)DefCat.ProcCodeCats][i].DefNum==ProcCode.ProcCat)
+				if(DefC.Short[(int)DefCat.ProcCodeCats][i].DefNum==ProcCode.ProcCat) {
 					listCategory.SelectedIndex=i;
+				}
 			}
-			if(listCategory.SelectedIndex==-1)
+			if(listCategory.SelectedIndex==-1) {
 				listCategory.SelectedIndex=0;
+			}
 			FillTime();
 			FillFees();
 			FillNotes();
@@ -928,6 +987,8 @@ namespace OpenDental{
 			ProcCode.PaintType=(ToothPaintingType)listPaintType.SelectedIndex;
 			ProcCode.TreatArea=(TreatmentArea)listTreatArea.SelectedIndex+1;
 			ProcCode.BaseUnits=PIn.Int(textBaseUnits.Text.ToString());
+			ProcCode.DrugNDC=textDrugNDC.Text;
+			ProcCode.RevenueCodeDefault=textRevenueCode.Text;
 			if(listCategory.SelectedIndex!=-1)
 				ProcCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
 			ProcedureCodes.Update(ProcCode);//whether new or not.

@@ -742,16 +742,21 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Used by GetProcsForSingle and GetProcsMultApts to generate a short string description of a procedure.</summary>
-		public static string ConvertProcToString(long codeNum,string surf,string toothNum) {
+		public static string ConvertProcToString(long codeNum,string surf,string toothNum,bool forAccount) {
 			//No need to check RemotingRole; no call to db.
 			string strLine="";
 			ProcedureCode code=ProcedureCodes.GetProcCode(codeNum);
 			switch(code.TreatArea) {
 				case TreatmentArea.Surf:
-					strLine+="#"+Tooth.ToInternat(toothNum)+"-"+Tooth.SurfTidyFromDbToDisplay(surf,toothNum)+"-";//""#12-MOD-"
-					break;
+					if(!forAccount) {
+						strLine+="#"+Tooth.ToInternat(toothNum)+"-";//"#12-"
+					}
+					strLine+=Tooth.SurfTidyFromDbToDisplay(surf,toothNum);//"MOD-"
+				break;
 				case TreatmentArea.Tooth:
-					strLine+="#"+Tooth.ToInternat(toothNum)+"-";//"#12-"
+					if(!forAccount) {
+						strLine+="#"+Tooth.ToInternat(toothNum)+"-";//"#12-"
+					}
 					break;
 				default://area 3 or 0 (mouth)
 					break;
@@ -768,14 +773,22 @@ namespace OpenDentBusiness {
 					//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
 					break;
 			}//end switch
-			strLine+=code.AbbrDesc;
+			if(!forAccount) {
+				strLine+=code.AbbrDesc;
+			}
+			else if(code.LaymanTerm!=""){
+				strLine+=code.LaymanTerm;
+			}
+			else{
+				strLine+=code.Descript;
+			}
 			return strLine;
 		}
 
 		///<summary>Used to display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
 		public static string GetDescription(Procedure proc) {
 			//No need to check RemotingRole; no call to db.
-			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum);
+			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum,false);
 		}
 
 		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.  Also sets procDate for TP procs.</Summary>

@@ -94,6 +94,7 @@ namespace OpenDental{
 		private Label label14;
 		private Label label13;
 		private ComboBox comboSearchBehavior;
+		private CheckBox checkClaimMedTypeIsInstWhenInsPlanIsMedical;
 		private bool changed;
 
 		///<summary></summary>
@@ -181,6 +182,7 @@ namespace OpenDental{
 			this.tabFamily = new System.Windows.Forms.TabPage();
 			this.tabAccount = new System.Windows.Forms.TabPage();
 			this.checkStoreCCTokens = new System.Windows.Forms.CheckBox();
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical = new System.Windows.Forms.CheckBox();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
@@ -856,7 +858,7 @@ namespace OpenDental{
 			this.tabAppts.Location = new System.Drawing.Point(4,22);
 			this.tabAppts.Name = "tabAppts";
 			this.tabAppts.Padding = new System.Windows.Forms.Padding(3);
-			this.tabAppts.Size = new System.Drawing.Size(466,438);
+			this.tabAppts.Size = new System.Drawing.Size(466,452);
 			this.tabAppts.TabIndex = 0;
 			this.tabAppts.Text = "Appts";
 			// 
@@ -892,7 +894,7 @@ namespace OpenDental{
 			this.tabFamily.Location = new System.Drawing.Point(4,22);
 			this.tabFamily.Name = "tabFamily";
 			this.tabFamily.Padding = new System.Windows.Forms.Padding(3);
-			this.tabFamily.Size = new System.Drawing.Size(466,438);
+			this.tabFamily.Size = new System.Drawing.Size(466,452);
 			this.tabFamily.TabIndex = 1;
 			this.tabFamily.Text = "Family";
 			// 
@@ -900,6 +902,7 @@ namespace OpenDental{
 			// 
 			this.tabAccount.BackColor = System.Drawing.SystemColors.Window;
 			this.tabAccount.Controls.Add(this.checkStoreCCTokens);
+			this.tabAccount.Controls.Add(this.checkClaimMedTypeIsInstWhenInsPlanIsMedical);
 			this.tabAccount.Controls.Add(this.checkClaimsValidateACN);
 			this.tabAccount.Controls.Add(this.checkStatementShowReturnAddress);
 			this.tabAccount.Controls.Add(this.checkStatementShowProcBreakdown);
@@ -944,6 +947,17 @@ namespace OpenDental{
 			this.checkStoreCCTokens.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStoreCCTokens.UseVisualStyleBackColor = true;
 			// 
+			// checkClaimMedTypeIsInstWhenInsPlanIsMedical
+			// 
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.Location = new System.Drawing.Point(44,432);
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.Name = "checkClaimMedTypeIsInstWhenInsPlanIsMedical";
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.Size = new System.Drawing.Size(396,17);
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.TabIndex = 194;
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.Text = "Set medical claims to institutional when using medical insurance.";
+			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// textStatementsCalcDueDate
 			// 
 			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(381,109);
@@ -972,7 +986,7 @@ namespace OpenDental{
 			this.tabTreatPlan.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.tabTreatPlan.Location = new System.Drawing.Point(4,22);
 			this.tabTreatPlan.Name = "tabTreatPlan";
-			this.tabTreatPlan.Size = new System.Drawing.Size(466,438);
+			this.tabTreatPlan.Size = new System.Drawing.Size(466,452);
 			this.tabTreatPlan.TabIndex = 3;
 			this.tabTreatPlan.Text = "Treat\' Plan";
 			this.tabTreatPlan.UseVisualStyleBackColor = true;
@@ -997,7 +1011,7 @@ namespace OpenDental{
 			this.tabChart.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.tabChart.Location = new System.Drawing.Point(4,22);
 			this.tabChart.Name = "tabChart";
-			this.tabChart.Size = new System.Drawing.Size(466,438);
+			this.tabChart.Size = new System.Drawing.Size(466,452);
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
 			// 
@@ -1102,7 +1116,7 @@ namespace OpenDental{
 			this.tabImages.Controls.Add(this.checkImagesModuleTreeIsCollapsed);
 			this.tabImages.Location = new System.Drawing.Point(4,22);
 			this.tabImages.Name = "tabImages";
-			this.tabImages.Size = new System.Drawing.Size(466,438);
+			this.tabImages.Size = new System.Drawing.Size(466,452);
 			this.tabImages.TabIndex = 5;
 			this.tabImages.Text = "Images";
 			this.tabImages.UseVisualStyleBackColor = true;
@@ -1112,7 +1126,7 @@ namespace OpenDental{
 			this.tabManage.Controls.Add(this.checkRxSendNewToQueue);
 			this.tabManage.Location = new System.Drawing.Point(4,22);
 			this.tabManage.Name = "tabManage";
-			this.tabManage.Size = new System.Drawing.Size(466,438);
+			this.tabManage.Size = new System.Drawing.Size(466,452);
 			this.tabManage.TabIndex = 6;
 			this.tabManage.Text = "Manage";
 			this.tabManage.UseVisualStyleBackColor = true;
@@ -1126,7 +1140,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(441,510);
+			this.butCancel.Location = new System.Drawing.Point(441,515);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -1141,7 +1155,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(336,510);
+			this.butOK.Location = new System.Drawing.Point(336,515);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
@@ -1151,7 +1165,7 @@ namespace OpenDental{
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(543,547);
+			this.ClientSize = new System.Drawing.Size(543,552);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -1272,6 +1286,7 @@ namespace OpenDental{
 			checkStatementSummaryShowInsInfo.Checked=PrefC.GetBool(PrefName.StatementSummaryShowInsInfo);
 			checkIntermingleDefault.Checked=PrefC.GetBool(PrefName.IntermingleFamilyDefault);
 			checkClaimsValidateACN.Checked=PrefC.GetBool(PrefName.ClaimsValidateACN);
+			checkClaimMedTypeIsInstWhenInsPlanIsMedical.Checked=PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical);
 			//TP module-----------------------------------------------------------------------
 			textTreatNote.Text=PrefC.GetString(PrefName.TreatmentPlanNote);
 			checkTreatPlanShowGraphics.Checked=PrefC.GetBool(PrefName.TreatPlanShowGraphics);
@@ -1415,6 +1430,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.CoPay_FeeSchedule_BlankLikeZero,checkCoPayFeeScheduleBlankLikeZero.Checked)
 				| Prefs.UpdateBool(PrefName.InsDefaultShowUCRonClaims,checkInsDefaultShowUCRonClaims.Checked)
 				| Prefs.UpdateBool(PrefName.ClaimsValidateACN,checkClaimsValidateACN.Checked)
+				| Prefs.UpdateBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical,checkClaimMedTypeIsInstWhenInsPlanIsMedical.Checked)
 				| Prefs.UpdateBool(PrefName.ToothChartMoveMenuToRight,checkToothChartMoveMenuToRight.Checked)
 				| Prefs.UpdateBool(PrefName.ImagesModuleTreeIsCollapsed,checkImagesModuleTreeIsCollapsed.Checked)
 				| Prefs.UpdateBool(PrefName.RxSendNewToQueue,checkRxSendNewToQueue.Checked)

@@ -543,14 +543,14 @@ namespace OpenDental{
 			this.textAmount.Location = new System.Drawing.Point(106,90);
 			this.textAmount.Name = "textAmount";
 			this.textAmount.Size = new System.Drawing.Size(84,20);
-			this.textAmount.TabIndex = 1;
+			this.textAmount.TabIndex = 0;
 			// 
 			// textDate
 			// 
 			this.textDate.Location = new System.Drawing.Point(106,70);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(100,20);
-			this.textDate.TabIndex = 0;
+			this.textDate.TabIndex = 1;
 			// 
 			// butCancel
 			// 

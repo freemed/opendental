@@ -540,7 +540,7 @@ namespace OpenDentBusiness {
 			command="SELECT "
 				+"(SELECT SUM(AdjAmt) FROM adjustment WHERE procedurelog.ProcNum=adjustment.ProcNum "
 				+"AND adjustment.PatNum IN ("+familyPatNums+")) adj_, "
-				+"procedurelog.BaseUnits,procedurelog.ClinicNum,Descript,"
+				+"procedurelog.BaseUnits,procedurelog.ClinicNum,procedurecode.CodeNum,Descript,"
 				+"(SELECT SUM(InsPayAmt) FROM claimproc cp5 WHERE procedurelog.ProcNum=cp5.ProcNum "
 				+"AND cp5.PatNum IN ("+familyPatNums+")) insPayAmt_,"
 				+"(SELECT SUM(InsPayEst) FROM claimproc cp4 WHERE procedurelog.ProcNum=cp4.ProcNum "
@@ -550,7 +550,7 @@ namespace OpenDentBusiness {
 				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
 				+"AND paysplit.PatNum IN ("+familyPatNums+")) patPay_,"
 				+"ProcCode,"+DbHelper.DateColumn("procedurelog.ProcDate")+" procDate_,ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
-				+"procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
+				+"procedurelog.ProvNum,procedurelog.Surf,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) writeOff_, "
 				+"(SELECT MIN(ClaimNum) FROM claimproc cp3,insplan WHERE procedurelog.ProcNum=cp3.ProcNum "
 				+"AND insplan.PlanNum=cp3.PlanNum AND insplan.IsMedical=0 AND cp3.Status!=7) unsent_,"
@@ -605,14 +605,18 @@ namespace OpenDentBusiness {
 				dateT=PIn.DateT(rawProc.Rows[i]["procDate_"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
-				row["description"]="";
+				//row["description"]="";
+				long codeNum=PIn.Long(rawProc.Rows[i]["CodeNum"].ToString());
+				string surf=rawProc.Rows[i]["Surf"].ToString();
+				string toothNum=rawProc.Rows[i]["ToothNum"].ToString();
+				row["description"]=Procedures.ConvertProcToString(codeNum,surf,toothNum,true)+" ";
 				if(rawProc.Rows[i]["MedicalCode"].ToString()!=""){
 					row["description"]+=Lans.g("ContrAccount","(medical)")+" ";
 				}
-				row["description"]+=rawProc.Rows[i]["Descript"].ToString();
-				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
-					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
-				}
+				//row["description"]+=rawProc.Rows[i]["Descript"].ToString();
+				//if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
+				//	row["description"]+=rawProc.Rows[i]["LaymanTerm"].ToString();
+				//}
 				if(rawProc.Rows[i]["ToothRange"].ToString()!=""){
 					row["description"]+=" #"+Tooth.FormatRangeForDisplay(rawProc.Rows[i]["ToothRange"].ToString());
 				}
