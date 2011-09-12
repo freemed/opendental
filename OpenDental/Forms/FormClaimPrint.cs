@@ -324,11 +324,10 @@ namespace OpenDental{
 						//this aligns it to the right
 						xPosText-=grfx.MeasureString(displayStrings[i],new Font(ClaimFormCur.FontName,ClaimFormCur.FontSize)).Width;
 					}
-					grfx.DrawString(displayStrings[i]
-						,new Font(ClaimFormCur.FontName,ClaimFormCur.FontSize)
-						,new SolidBrush(Color.Black)
-						,new RectangleF(xPosText,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY
-						,ClaimFormCur.Items[i].Width,ClaimFormCur.Items[i].Height));
+					grfx.DrawString(displayStrings[i],
+						new Font(ClaimFormCur.FontName,ClaimFormCur.FontSize),
+						new SolidBrush(Color.Black),
+						new RectangleF(xPosText,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY,ClaimFormCur.Items[i].Width,ClaimFormCur.Items[i].Height));
 				}
 				else{//image
 					if(!ClaimFormCur.PrintImages){
@@ -356,24 +355,24 @@ namespace OpenDental{
 						extension=Path.GetExtension(fileName);
 					}
 					if(extension==".jpg"){
-						grfx.DrawImage(thisImage
-							,ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX
-							,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY
-							,(int)(thisImage.Width/thisImage.HorizontalResolution*100)
-							,(int)(thisImage.Height/thisImage.VerticalResolution*100));
+						grfx.DrawImage(thisImage,
+							ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX,
+							ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY,
+							(int)(thisImage.Width/thisImage.HorizontalResolution*100),
+							(int)(thisImage.Height/thisImage.VerticalResolution*100));
 					}
 					else if(extension==".gif"){
-						grfx.DrawImage(thisImage
-							,ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX
-							,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY
-							,ClaimFormCur.Items[i].Width
-							,ClaimFormCur.Items[i].Height);
+						grfx.DrawImage(thisImage,
+							ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX,
+							ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY,
+							ClaimFormCur.Items[i].Width,
+							ClaimFormCur.Items[i].Height);
 					}
 					else if(extension==".emf"){
-						grfx.DrawImage(thisImage
-							,ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX
-							,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY
-							,thisImage.Width,thisImage.Height);
+						grfx.DrawImage(thisImage,
+							ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX,
+							ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY,
+							thisImage.Width,thisImage.Height);
 					}
 				}
 			}
@@ -393,23 +392,23 @@ namespace OpenDental{
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pagesPrinted=0;
-			if(PrinterL.SetPrinter(pd2,PrintSituation.Claim)){
-				try{
+			if(PrinterL.SetPrinter(pd2,PrintSituation.Claim)) {
+				try {
 					pd2.Print();
 				}
-				catch{
+				catch {
 					MessageBox.Show(Lan.g("Printer","Printer not available."));
 					return false;
 				}
 			}
-			else{
+			else {
 				return false;//if they hit cancel
-			}		
+			}
 			return true;
 		}
 
 		///<summary>Called from Bridges.Renaissance, this takes the supplied ClaimFormItems.ListForForm, and generates an array of strings that will get saved into a text file.  First dimension of array is the pages. Second dimension is the lines in the page.</summary>
-		public string[][] FillRenaissance(){
+		public string[][] FillRenaissance() {
 			//IsRenaissance=true;
 			int procLimit=8;
 			FillDisplayStrings();//claimprocs is filled in FillDisplayStrings
@@ -572,20 +571,24 @@ namespace OpenDental{
 						displayStrings[i]=ClaimFormCur.Items[i].FormatString;
 						break;
 					case "IsPreAuth":
-						if(ClaimCur.ClaimType=="PreAuth")
+						if(ClaimCur.ClaimType=="PreAuth") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsStandardClaim":
-						if(ClaimCur.ClaimType!="PreAuth")
+						if(ClaimCur.ClaimType!="PreAuth") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "ShowPreauthorizationIfPreauth":
-						if(ClaimCur.ClaimType=="PreAuth")
+						if(ClaimCur.ClaimType=="PreAuth") {
 							displayStrings[i]="Preauthorization";
+						}
 						break;
 					case "IsMedicaidClaim"://this should later be replaced with an insplan field.
-						if(PatCur.MedicaidID!="")
+						if(PatCur.MedicaidID!="") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsGroupHealthPlan":
 						string eclaimcode=InsFilingCodes.GetEclaimCode(planCur.FilingCode);
@@ -623,36 +626,44 @@ namespace OpenDental{
 						displayStrings[i]=carrier.Zip;
 						break;
 					case "OtherInsExists":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "OtherInsNotExists":
-						if(otherPlan.PlanNum==0)
+						if(otherPlan.PlanNum==0) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "OtherInsSubscrLastFirst":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherSubsc.LName+", "+otherSubsc.FName+" "+otherSubsc.MiddleI;
+						}
 						break;
 					case "OtherInsSubscrDOB":
-						if(otherPlan.PlanNum!=0)
-							if(ClaimFormCur.Items[i].FormatString=="")
+						if(otherPlan.PlanNum!=0) {
+							if(ClaimFormCur.Items[i].FormatString=="") {
 								displayStrings[i]=otherSubsc.Birthdate.ToShortDateString();
-							else
-								displayStrings[i]=otherSubsc.Birthdate.ToString
-									(ClaimFormCur.Items[i].FormatString);
+							}
+							else {
+								displayStrings[i]=otherSubsc.Birthdate.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+						}
 						break;
 					case "OtherInsSubscrIsMale":
-						if(otherPlan.PlanNum!=0 && otherSubsc.Gender==PatientGender.Male)
+						if(otherPlan.PlanNum!=0 && otherSubsc.Gender==PatientGender.Male) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "OtherInsSubscrIsFemale":
-						if(otherPlan.PlanNum!=0 && otherSubsc.Gender==PatientGender.Female)
+						if(otherPlan.PlanNum!=0 && otherSubsc.Gender==PatientGender.Female) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "OtherInsSubscrID":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherSub.SubscriberID;
+						}
 						break;
 						//if(otherPlan.PlanNum!=0 && otherSubsc.SSN.Length==9){
 						//	displayStrings[i]=otherSubsc.SSN.Substring(0,3)
@@ -661,20 +672,24 @@ namespace OpenDental{
 						//}
 						//break;
 					case "OtherInsGroupNum":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherPlan.GroupNum;
+						}
 						break;
 					case "OtherInsRelatIsSelf":
-						if(otherPlan.PlanNum!=0 && ClaimCur.PatRelat2==Relat.Self)
+						if(otherPlan.PlanNum!=0 && ClaimCur.PatRelat2==Relat.Self) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "OtherInsRelatIsSpouse":
-						if(otherPlan.PlanNum!=0 && ClaimCur.PatRelat2==Relat.Spouse)
+						if(otherPlan.PlanNum!=0 && ClaimCur.PatRelat2==Relat.Spouse) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "OtherInsRelatIsChild":
-						if(otherPlan.PlanNum!=0 && ClaimCur.PatRelat2==Relat.Child)
+						if(otherPlan.PlanNum!=0 && ClaimCur.PatRelat2==Relat.Child) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "OtherInsRelatIsOther":
 						if(otherPlan.PlanNum!=0 && (
@@ -688,24 +703,29 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "OtherInsCarrierName":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherCarrier.CarrierName;
+						}
 						break;
 					case "OtherInsAddress":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherCarrier.Address;
+						}
 						break;
 					case "OtherInsCity":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherCarrier.City;
+						}
 						break;
 					case "OtherInsST":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherCarrier.State;
+						}
 						break;
 					case "OtherInsZip":
-						if(otherPlan.PlanNum!=0)
+						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherCarrier.Zip;
+						}
 						break;
 					case "SubscrLastFirst":
 						displayStrings[i]=subsc.LName+", "+subsc.FName+" "+subsc.MiddleI;
@@ -735,43 +755,50 @@ namespace OpenDental{
 						displayStrings[i]=phone;
 						break;
 					case "SubscrDOB":
-						if(ClaimFormCur.Items[i].FormatString=="")
+						if(ClaimFormCur.Items[i].FormatString=="") {
 							displayStrings[i]=subsc.Birthdate.ToShortDateString();//MM/dd/yyyy
-						else
+						}
+						else {
 							displayStrings[i]=subsc.Birthdate.ToString(ClaimFormCur.Items[i].FormatString);
+						}
 						break;
 					case "SubscrIsMale":
-						if(subsc.Gender==PatientGender.Male)
+						if(subsc.Gender==PatientGender.Male) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "SubscrIsFemale":
-						if(subsc.Gender==PatientGender.Female)
+						if(subsc.Gender==PatientGender.Female) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "SubscrGender":
-						if(subsc.Gender==PatientGender.Male){
+						if(subsc.Gender==PatientGender.Male) {
 							displayStrings[i]="M";
-						}else{
+						}
+						else {
 							displayStrings[i]="F";
 						}
 						break;
 					case "SubscrIsMarried":
-						if(subsc.Position==PatientPosition.Married)
+						if(subsc.Position==PatientPosition.Married) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "SubscrIsSingle":
 						if(subsc.Position==PatientPosition.Single
 							|| subsc.Position==PatientPosition.Child
-							|| subsc.Position==PatientPosition.Widowed)
+							|| subsc.Position==PatientPosition.Widowed) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "SubscrID":
 						patPlans=PatPlans.Refresh(ThisPatNum);
 						string patID=PatPlans.GetPatID(subCur.InsSubNum,patPlans);
-						if(patID==""){
+						if(patID=="") {
 							displayStrings[i]=subCur.SubscriberID;
 						}
-						else{
+						else {
 							displayStrings[i]=patID;
 						}
 						break;
@@ -779,12 +806,14 @@ namespace OpenDental{
 						displayStrings[i]=subCur.SubscriberID;
 						break;
 					case "SubscrIsFTStudent":
-						if(subsc.StudentStatus=="F")
+						if(subsc.StudentStatus=="F") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "SubscrIsPTStudent":
-						if(subsc.StudentStatus=="P")
+						if(subsc.StudentStatus=="P") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "GroupName":
 						displayStrings[i]=planCur.GroupName;
@@ -799,16 +828,19 @@ namespace OpenDental{
 						displayStrings[i]=Employers.GetEmployer(planCur.EmployerNum).EmpName;;
 						break;
 					case "RelatIsSelf":
-						if(ClaimCur.PatRelat==Relat.Self)
+						if(ClaimCur.PatRelat==Relat.Self) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "RelatIsSpouse":
-						if(ClaimCur.PatRelat==Relat.Spouse)
+						if(ClaimCur.PatRelat==Relat.Spouse) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "RelatIsChild":
-						if(ClaimCur.PatRelat==Relat.Child)
+						if(ClaimCur.PatRelat==Relat.Child) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "RelatIsOther":
 						if(ClaimCur.PatRelat==Relat.Dependent
@@ -816,8 +848,9 @@ namespace OpenDental{
 							|| ClaimCur.PatRelat==Relat.HandicapDep
 							|| ClaimCur.PatRelat==Relat.InjuredPlaintiff
 							|| ClaimCur.PatRelat==Relat.LifePartner
-							|| ClaimCur.PatRelat==Relat.SignifOther)
+							|| ClaimCur.PatRelat==Relat.SignifOther) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Relationship":
 						if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
@@ -842,16 +875,19 @@ namespace OpenDental{
 						}
 						break;
 					case "IsFTStudent":
-						if(PatCur.StudentStatus=="F")
+						if(PatCur.StudentStatus=="F") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsPTStudent":
-						if(PatCur.StudentStatus=="P")
+						if(PatCur.StudentStatus=="P") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsStudent":
-						if(PatCur.StudentStatus=="P" || PatCur.StudentStatus=="F")
+						if(PatCur.StudentStatus=="P" || PatCur.StudentStatus=="F") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "CollegeName":
 						displayStrings[i]=PatCur.SchoolName;
@@ -893,42 +929,51 @@ namespace OpenDental{
 						displayStrings[i]=phonep;
 						break;
 					case "PatientDOB":
-						if(ClaimFormCur.Items[i].FormatString=="")
+						if(ClaimFormCur.Items[i].FormatString=="") {
 							displayStrings[i]=PatCur.Birthdate.ToShortDateString();//MM/dd/yyyy
-						else
+						}
+						else {
 							displayStrings[i]=PatCur.Birthdate.ToString
 								(ClaimFormCur.Items[i].FormatString);
+						}
 						break;
 					case "PatientIsMale":
-						if(PatCur.Gender==PatientGender.Male)
+						if(PatCur.Gender==PatientGender.Male) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PatientIsFemale":
-						if(PatCur.Gender==PatientGender.Female)
+						if(PatCur.Gender==PatientGender.Female) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PatientGender":
-						if(PatCur.Gender==PatientGender.Male)
+						if(PatCur.Gender==PatientGender.Male) {
 							displayStrings[i]="Male";
-						else if(PatCur.Gender==PatientGender.Female)
+						}
+						else if(PatCur.Gender==PatientGender.Female) {
 							displayStrings[i]="Female";
+						}
 						break;
 					case "PatientGenderLetter":
-						if(subsc.Gender==PatientGender.Male){
+						if(subsc.Gender==PatientGender.Male) {
 							displayStrings[i]="M";
-						}else{
+						}
+						else {
 							displayStrings[i]="F";
 						}
 						break;
 					case "PatientIsMarried":
-						if(PatCur.Position==PatientPosition.Married)
+						if(PatCur.Position==PatientPosition.Married) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PatientIsSingle":
 						if(PatCur.Position==PatientPosition.Single
 							|| PatCur.Position==PatientPosition.Child
-							|| PatCur.Position==PatientPosition.Widowed)
+							|| PatCur.Position==PatientPosition.Widowed) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PatIDFromPatPlan": //Dependant Code for Canada
 						patPlans=PatPlans.Refresh(ThisPatNum);
@@ -955,10 +1000,12 @@ namespace OpenDental{
 						displayStrings[i]=PatCur.MedicaidID;
 						break;
 					case "PatientID-MedicaidOrSSN":
-						if(PatCur.MedicaidID!="")
+						if(PatCur.MedicaidID!="") {
 							displayStrings[i]=PatCur.MedicaidID;
-						else
+						}
+						else {
 							displayStrings[i]=PatCur.SSN;
+						}
 						break;
 					case "PatientChartNum":
 						displayStrings[i]=PatCur.ChartNumber;
@@ -980,132 +1027,164 @@ namespace OpenDental{
 						break;
 			//this is where the procedures used to be
 					case "Miss1":
-						if(missingTeeth.Contains("1"))
+						if(missingTeeth.Contains("1")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss2":
-						if(missingTeeth.Contains("2"))
+						if(missingTeeth.Contains("2")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss3":
-						if(missingTeeth.Contains("3"))
+						if(missingTeeth.Contains("3")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss4":
-						if(missingTeeth.Contains("4"))
+						if(missingTeeth.Contains("4")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss5":
-						if(missingTeeth.Contains("5"))
+						if(missingTeeth.Contains("5")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss6":
-						if(missingTeeth.Contains("6"))
+						if(missingTeeth.Contains("6")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss7":
-						if(missingTeeth.Contains("7"))
+						if(missingTeeth.Contains("7")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss8":
-						if(missingTeeth.Contains("8"))
+						if(missingTeeth.Contains("8")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss9":
-						if(missingTeeth.Contains("9"))
+						if(missingTeeth.Contains("9")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss10":
-						if(missingTeeth.Contains("10"))
+						if(missingTeeth.Contains("10")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss11":
-						if(missingTeeth.Contains("11"))
+						if(missingTeeth.Contains("11")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss12":
-						if(missingTeeth.Contains("12"))
+						if(missingTeeth.Contains("12")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss13":
-						if(missingTeeth.Contains("13"))
+						if(missingTeeth.Contains("13")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss14":
-						if(missingTeeth.Contains("14"))
+						if(missingTeeth.Contains("14")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss15":
-						if(missingTeeth.Contains("15"))
+						if(missingTeeth.Contains("15")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss16":
-						if(missingTeeth.Contains("16"))
+						if(missingTeeth.Contains("16")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss17":
-						if(missingTeeth.Contains("17"))
+						if(missingTeeth.Contains("17")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss18":
-						if(missingTeeth.Contains("18"))
+						if(missingTeeth.Contains("18")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss19":
-						if(missingTeeth.Contains("19"))
+						if(missingTeeth.Contains("19")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss20":
-						if(missingTeeth.Contains("20"))
+						if(missingTeeth.Contains("20")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss21":
-						if(missingTeeth.Contains("21"))
+						if(missingTeeth.Contains("21")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss22":
-						if(missingTeeth.Contains("22"))
+						if(missingTeeth.Contains("22")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss23":
-						if(missingTeeth.Contains("23"))
+						if(missingTeeth.Contains("23")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss24":
-						if(missingTeeth.Contains("24"))
+						if(missingTeeth.Contains("24")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss25":
-						if(missingTeeth.Contains("25"))
+						if(missingTeeth.Contains("25")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss26":
-						if(missingTeeth.Contains("26"))
+						if(missingTeeth.Contains("26")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss27":
-						if(missingTeeth.Contains("27"))
+						if(missingTeeth.Contains("27")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss28":
-						if(missingTeeth.Contains("28"))
+						if(missingTeeth.Contains("28")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss29":
-						if(missingTeeth.Contains("29"))
+						if(missingTeeth.Contains("29")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss30":
-						if(missingTeeth.Contains("30"))
+						if(missingTeeth.Contains("30")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss31":
-						if(missingTeeth.Contains("31"))
+						if(missingTeeth.Contains("31")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Miss32":
-						if(missingTeeth.Contains("32"))
+						if(missingTeeth.Contains("32")) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "Remarks":
 						displayStrings[i]="";
@@ -1130,87 +1209,103 @@ namespace OpenDental{
 						displayStrings[i]+=ClaimCur.ClaimNote;
 						break;
 					case "PatientRelease":
-						if(subCur.ReleaseInfo)
-							displayStrings[i]="Signature on File"; 
+						if(subCur.ReleaseInfo) {
+							displayStrings[i]="Signature on File";
+						}
 						break;
 					case "PatientReleaseDate":
 						if(subCur.ReleaseInfo && ClaimCur.DateSent.Year > 1860) {
-							if(ClaimFormCur.Items[i].FormatString=="")
+							if(ClaimFormCur.Items[i].FormatString=="") {
 								displayStrings[i]=ClaimCur.DateSent.ToShortDateString();
-							else
-								displayStrings[i]=ClaimCur.DateSent.ToString
-									(ClaimFormCur.Items[i].FormatString);
+							}
+							else {
+								displayStrings[i]=ClaimCur.DateSent.ToString(ClaimFormCur.Items[i].FormatString);
+							}
 						} 
 						break;
 					case "PatientAssignment":
-						if(subCur.AssignBen)
-							displayStrings[i]="Signature on File"; 
+						if(subCur.AssignBen) {
+							displayStrings[i]="Signature on File";
+						}
 						break;
 					case "PatientAssignmentDate":
 						if(subCur.AssignBen && ClaimCur.DateSent.Year > 1860) {
-							if(ClaimFormCur.Items[i].FormatString=="")
+							if(ClaimFormCur.Items[i].FormatString=="") {
 								displayStrings[i]=ClaimCur.DateSent.ToShortDateString();
-							else
-								displayStrings[i]=ClaimCur.DateSent.ToString
-									(ClaimFormCur.Items[i].FormatString);
+							}
+							else {
+								displayStrings[i]=ClaimCur.DateSent.ToString(ClaimFormCur.Items[i].FormatString);
+							}
 						}
 						break;
 					case "PlaceIsOffice":
-						if(ClaimCur.PlaceService==PlaceOfService.Office)
+						if(ClaimCur.PlaceService==PlaceOfService.Office) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsHospADA2002":
 						if(ClaimCur.PlaceService==PlaceOfService.InpatHospital
-							|| ClaimCur.PlaceService==PlaceOfService.OutpatHospital)
+							|| ClaimCur.PlaceService==PlaceOfService.OutpatHospital) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsExtCareFacilityADA2002":
 						if(ClaimCur.PlaceService==PlaceOfService.CustodialCareFacility
-							|| ClaimCur.PlaceService==PlaceOfService.SkilledNursFac)
+							|| ClaimCur.PlaceService==PlaceOfService.SkilledNursFac) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsOtherADA2002":
 						if(ClaimCur.PlaceService==PlaceOfService.PatientsHome
-							|| ClaimCur.PlaceService==PlaceOfService.OtherLocation)
+							|| ClaimCur.PlaceService==PlaceOfService.OtherLocation) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsInpatHosp":
-						if(ClaimCur.PlaceService==PlaceOfService.InpatHospital)
+						if(ClaimCur.PlaceService==PlaceOfService.InpatHospital) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsOutpatHosp":
-						if(ClaimCur.PlaceService==PlaceOfService.OutpatHospital)
+						if(ClaimCur.PlaceService==PlaceOfService.OutpatHospital) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsAdultLivCareFac":
-						if(ClaimCur.PlaceService==PlaceOfService.CustodialCareFacility)
+						if(ClaimCur.PlaceService==PlaceOfService.CustodialCareFacility) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsSkilledNursFac":
-						if(ClaimCur.PlaceService==PlaceOfService.SkilledNursFac)
+						if(ClaimCur.PlaceService==PlaceOfService.SkilledNursFac) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsPatientsHome":
-						if(ClaimCur.PlaceService==PlaceOfService.PatientsHome)
+						if(ClaimCur.PlaceService==PlaceOfService.PatientsHome) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceIsOtherLocation":
-						if(ClaimCur.PlaceService==PlaceOfService.OtherLocation)
+						if(ClaimCur.PlaceService==PlaceOfService.OtherLocation) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "PlaceNumericCode":
 						displayStrings[i]=GetPlaceOfServiceNum(ClaimCur.PlaceService);
 						break;
 					case "IsRadiographsAttached":
-						if(ClaimCur.Radiographs>0)
+						if(ClaimCur.Radiographs>0) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "RadiographsNumAttached":
 						displayStrings[i]=ClaimCur.Radiographs.ToString();
 						break;
 					case "RadiographsNotAttached":
-						if(ClaimCur.Radiographs==0)
+						if(ClaimCur.Radiographs==0) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "AttachedImagesNum":
 						displayStrings[i]=ClaimCur.AttachedImages.ToString();
@@ -1219,90 +1314,108 @@ namespace OpenDental{
 						displayStrings[i]=ClaimCur.AttachedModels.ToString();
 						break;
 					case "IsNotOrtho":
-						if(!ClaimCur.IsOrtho)
+						if(!ClaimCur.IsOrtho) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsOrtho":
-						if(ClaimCur.IsOrtho)
+						if(ClaimCur.IsOrtho) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "DateOrthoPlaced":
 						if(ClaimCur.OrthoDate.Year > 1880){
-							if(ClaimFormCur.Items[i].FormatString=="")
+							if(ClaimFormCur.Items[i].FormatString=="") {
 								displayStrings[i]=ClaimCur.OrthoDate.ToShortDateString();
-							else
-								displayStrings[i]=ClaimCur.OrthoDate.ToString
-									(ClaimFormCur.Items[i].FormatString);
+							}
+							else {
+								displayStrings[i]=ClaimCur.OrthoDate.ToString(ClaimFormCur.Items[i].FormatString);
+							}
 						}
 						break;
 					case "MonthsOrthoRemaining":
-						if(ClaimCur.OrthoRemainM > 0)
+						if(ClaimCur.OrthoRemainM > 0) {
 							displayStrings[i]=ClaimCur.OrthoRemainM.ToString();
+						}
 						break;
 					case "IsNotProsth":
-						if(ClaimCur.IsProsthesis=="N")
+						if(ClaimCur.IsProsthesis=="N") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsInitialProsth":
-						if(ClaimCur.IsProsthesis=="I")
+						if(ClaimCur.IsProsthesis=="I") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsNotReplacementProsth":
-						if(ClaimCur.IsProsthesis!="R")//=='I'nitial or 'N'o
+						if(ClaimCur.IsProsthesis!="R") {//=='I'nitial or 'N'o
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsReplacementProsth":
-						if(ClaimCur.IsProsthesis=="R")
+						if(ClaimCur.IsProsthesis=="R") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "DatePriorProsthPlaced":
 						if(ClaimCur.PriorDate.Year > 1860){
-							if(ClaimFormCur.Items[i].FormatString=="")
+							if(ClaimFormCur.Items[i].FormatString=="") {
 								displayStrings[i]=ClaimCur.PriorDate.ToShortDateString();
-							else
-								displayStrings[i]=ClaimCur.PriorDate.ToString
-									(ClaimFormCur.Items[i].FormatString);
+							}
+							else {
+								displayStrings[i]=ClaimCur.PriorDate.ToString(ClaimFormCur.Items[i].FormatString);
+							}
 						}
 						break;
 					case "IsOccupational":
-						if(ClaimCur.AccidentRelated=="E")
+						if(ClaimCur.AccidentRelated=="E") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsNotOccupational":
-						if(ClaimCur.AccidentRelated!="E")
+						if(ClaimCur.AccidentRelated!="E") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsAutoAccident":
-						if(ClaimCur.AccidentRelated=="A")
+						if(ClaimCur.AccidentRelated=="A") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsNotAutoAccident":
-						if(ClaimCur.AccidentRelated!="A")
+						if(ClaimCur.AccidentRelated!="A") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsOtherAccident":
-						if(ClaimCur.AccidentRelated=="O")
+						if(ClaimCur.AccidentRelated=="O") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsNotOtherAccident":
-						if(ClaimCur.AccidentRelated!="O")
+						if(ClaimCur.AccidentRelated!="O") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsNotAccident":
-						if(ClaimCur.AccidentRelated!="O" && ClaimCur.AccidentRelated!="A")
+						if(ClaimCur.AccidentRelated!="O" && ClaimCur.AccidentRelated!="A") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "IsAccident":
-						if(ClaimCur.AccidentRelated!="")
+						if(ClaimCur.AccidentRelated!="") {
 							displayStrings[i]="X";
+						}
 						break;
 					case "AccidentDate":
 						if(ClaimCur.AccidentDate.Year > 1860){
-							if(ClaimFormCur.Items[i].FormatString=="")
+							if(ClaimFormCur.Items[i].FormatString=="") {
 								displayStrings[i]=ClaimCur.AccidentDate.ToShortDateString();
-							else
-								displayStrings[i]=ClaimCur.AccidentDate.ToString
-									(ClaimFormCur.Items[i].FormatString);
+							}
+							else {
+								displayStrings[i]=ClaimCur.AccidentDate.ToString(ClaimFormCur.Items[i].FormatString);
+							}
 						}
 						break;
 					case "AccidentST":
@@ -1316,46 +1429,56 @@ namespace OpenDental{
 						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress);
 						}
-						else if(clinic==null)
+						else if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.Address;
+						}
 						break;
 					case "BillingDentistAddress2":
 						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress2);
 						}
-						else if(clinic==null)
+						else if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress2);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.Address2;
+						}
 						break;
 					case "BillingDentistCity":
 						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingCity);
 						}
-						else if(clinic==null)
+						else if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.City;
+						}
 						break;
 					case "BillingDentistST":
 						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingST);
 						}
-						else if(clinic==null)
+						else if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.State;
+						}
 						break;
 					case "BillingDentistZip":
 						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingZip);
 						}
-						else if(clinic==null)
+						else if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.Zip;
+						}
 						break;
 					case "BillingDentistMedicaidID":
 						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].MedicaidID;
@@ -1382,12 +1505,14 @@ namespace OpenDental{
 						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].SSN;
 						break;
 					case "BillingDentistNumIsSSN":
-						if(!ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN)
+						if(!ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "BillingDentistNumIsTIN":
-						if(ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN)
+						if(ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN) {
 							displayStrings[i]="X";
+						}
 						break;
 					case "BillingDentistPh123":
 						if(clinic==null){
@@ -1442,10 +1567,12 @@ namespace OpenDental{
 						}
 						break;
 					case "BillingDentistPhoneRaw":
-						if(clinic==null)
+						if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticePhone);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.Phone;
+						}
 						break;
 					case "TreatingDentistFName":
 						displayStrings[i]=treatDent.FName;
@@ -1465,11 +1592,12 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistSigDate":
 						if(treatDent.SigOnFile && ClaimCur.DateSent.Year > 1860){
-							if(ClaimFormCur.Items[i].FormatString=="")
+							if(ClaimFormCur.Items[i].FormatString=="") {
 								displayStrings[i]=ClaimCur.DateSent.ToShortDateString();
-							else
-								displayStrings[i]=ClaimCur.DateSent.ToString
-									(ClaimFormCur.Items[i].FormatString);
+							}
+							else {
+								displayStrings[i]=ClaimCur.DateSent.ToString(ClaimFormCur.Items[i].FormatString);
+							}
 						}
 						break;
 					case "TreatingDentistMedicaidID":
@@ -1488,28 +1616,36 @@ namespace OpenDental{
 						displayStrings[i]=treatDent.StateLicense;
 						break;
 					case "TreatingDentistAddress":
-						if(clinic==null)
+						if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.Address;
+						}
 						break;
 					case "TreatingDentistCity":
-						if(clinic==null)
+						if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.City;
+						}
 						break;
 					case "TreatingDentistST":
-						if(clinic==null)
+						if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.State;
+						}
 						break;
 					case "TreatingDentistZip":
-						if(clinic==null)
+						if(clinic==null) {
 							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
-						else
+						}
+						else {
 							displayStrings[i]=clinic.Zip;
+						}
 						break;
 					case "TreatingDentistPh123":
 						if(clinic==null){
@@ -1571,9 +1707,7 @@ namespace OpenDental{
 						}
 						break;
 				}//switch
-				if(CultureInfo.CurrentCulture.Name=="nl-BE"//Dutch Belgium
-					&& displayStrings[i]=="")
-				{
+				if(CultureInfo.CurrentCulture.Name=="nl-BE"	&& displayStrings[i]==""){//Dutch Belgium
 					displayStrings[i]="*   *   *";
 				}
 			}//for
@@ -1780,21 +1914,23 @@ namespace OpenDental{
 					//	break;
 					case "P2UnitQty":
 						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 2 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 2 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",2+startProc)!=""){
+              short bunit;
+              System.Int16.TryParse(GetProcInfo("BaseUnits", 2 + startProc), out bunit);
+              short uqty;
+              System.Int16.TryParse(GetProcInfo("UnitQty", 2 + startProc), out uqty);
+              qty = bunit + uqty;
+						} 
+						else if(GetProcInfo("UnitQty",2+startProc)!=""){
 							qty=Int16.Parse(GetProcInfo("UnitQty",2+startProc));
-						} else {
+						} 
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+            if(qty==0){
+              displayStrings[i]="";
+            } else {
+              displayStrings[i]=qty.ToString();
+            }
 						break;
 					case "P2CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",2+startProc) 
@@ -1868,21 +2004,24 @@ namespace OpenDental{
 					//	break;
 					case "P3UnitQty":
 						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 3 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 3 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",3+startProc)!=""){
+              short bunit;
+              System.Int16.TryParse(GetProcInfo("BaseUnits", 3 + startProc), out bunit);
+              short uqty;
+              System.Int16.TryParse(GetProcInfo("UnitQty", 3 + startProc), out uqty);
+              qty = bunit + uqty;
+						} 
+						else if(GetProcInfo("UnitQty",3+startProc)!=""){
 							qty=Int16.Parse(GetProcInfo("UnitQty",3+startProc));
-						} else {
+						} 
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+            if(qty==0){
+                displayStrings[i]="";
+            } 
+						else {
+                displayStrings[i]=qty.ToString();
+            }
 						break;
 					case "P3CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",3+startProc) 
@@ -1956,21 +2095,24 @@ namespace OpenDental{
 					//	break;
 					case "P4UnitQty":
 						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 4 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 4 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",4+startProc)!=""){
+              short bunit;
+              System.Int16.TryParse(GetProcInfo("BaseUnits", 4 + startProc), out bunit);
+              short uqty;
+              System.Int16.TryParse(GetProcInfo("UnitQty", 4 + startProc), out uqty);
+              qty = bunit + uqty;
+						}
+						else if(GetProcInfo("UnitQty",4+startProc)!="") {
 							qty=Int16.Parse(GetProcInfo("UnitQty",4+startProc));
-						} else {
+						}
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P4CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",4+startProc) 
@@ -2043,22 +2185,25 @@ namespace OpenDental{
 					//	displayStrings[i]=GetProcInfo("UnitCode",5+startProc);
 					//	break;
 					case "P5UnitQty":
-						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 5 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 5 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",5+startProc)!=""){
+						if(planCur.ShowBaseUnits) {
+							short bunit;
+							System.Int16.TryParse(GetProcInfo("BaseUnits",5 + startProc),out bunit);
+							short uqty;
+							System.Int16.TryParse(GetProcInfo("UnitQty",5 + startProc),out uqty);
+							qty = bunit + uqty;
+						}
+						else if(GetProcInfo("UnitQty",5+startProc)!="") {
 							qty=Int16.Parse(GetProcInfo("UnitQty",5+startProc));
-						} else {
+						}
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P5CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",5+startProc) 
@@ -2131,22 +2276,25 @@ namespace OpenDental{
 					//	displayStrings[i]=GetProcInfo("UnitCode",6+startProc);
 					//	break;
 					case "P6UnitQty":
-						if(planCur.ShowBaseUnits){
-                            short bunit; 
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 6 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 6 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",6+startProc)!=""){
+						if(planCur.ShowBaseUnits) {
+							short bunit;
+							System.Int16.TryParse(GetProcInfo("BaseUnits",6 + startProc),out bunit);
+							short uqty;
+							System.Int16.TryParse(GetProcInfo("UnitQty",6 + startProc),out uqty);
+							qty = bunit + uqty;
+						}
+						else if(GetProcInfo("UnitQty",6+startProc)!="") {
 							qty=Int16.Parse(GetProcInfo("UnitQty",6+startProc));
-						} else {
+						}
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P6CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",6+startProc) 
@@ -2219,22 +2367,25 @@ namespace OpenDental{
 					//	displayStrings[i]=GetProcInfo("UnitCode",7+startProc);
 					//	break;
 					case "P7UnitQty":
-						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 7 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 7 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",7+startProc)!=""){
+						if(planCur.ShowBaseUnits) {
+							short bunit;
+							System.Int16.TryParse(GetProcInfo("BaseUnits",7 + startProc),out bunit);
+							short uqty;
+							System.Int16.TryParse(GetProcInfo("UnitQty",7 + startProc),out uqty);
+							qty = bunit + uqty;
+						}
+						else if(GetProcInfo("UnitQty",7+startProc)!="") {
 							qty=Int16.Parse(GetProcInfo("UnitQty",7+startProc));
-						} else {
+						}
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P7CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",7+startProc) 
@@ -2307,22 +2458,25 @@ namespace OpenDental{
 					//	displayStrings[i]=GetProcInfo("UnitCode",8+startProc);
 					//	break;
 					case "P8UnitQty":
-						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 8 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 8 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",8+startProc)!=""){
+						if(planCur.ShowBaseUnits) {
+							short bunit;
+							System.Int16.TryParse(GetProcInfo("BaseUnits",8 + startProc),out bunit);
+							short uqty;
+							System.Int16.TryParse(GetProcInfo("UnitQty",8 + startProc),out uqty);
+							qty = bunit + uqty;
+						}
+						else if(GetProcInfo("UnitQty",8+startProc)!="") {
 							qty=Int16.Parse(GetProcInfo("UnitQty",8+startProc));
-						} else {
+						}
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P8CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",8+startProc) 
@@ -2395,22 +2549,25 @@ namespace OpenDental{
 					//	displayStrings[i]=GetProcInfo("UnitCode",9+startProc);
 					//	break;
 					case "P9UnitQty":
-						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 9 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 9 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",9+startProc)!=""){
+						if(planCur.ShowBaseUnits) {
+							short bunit;
+							System.Int16.TryParse(GetProcInfo("BaseUnits",9 + startProc),out bunit);
+							short uqty;
+							System.Int16.TryParse(GetProcInfo("UnitQty",9 + startProc),out uqty);
+							qty = bunit + uqty;
+						}
+						else if(GetProcInfo("UnitQty",9+startProc)!="") {
 							qty=Int16.Parse(GetProcInfo("UnitQty",9+startProc));
-						} else {
+						}
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P9CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",9+startProc) 
@@ -2483,22 +2640,25 @@ namespace OpenDental{
 					//	displayStrings[i]=GetProcInfo("UnitCode",10+startProc);
 					//	break;
 					case "P10UnitQty":
-						if(planCur.ShowBaseUnits){
-                            short bunit;
-                            System.Int16.TryParse(GetProcInfo("BaseUnits", 10 + startProc), out bunit);
-                            short uqty;
-                            System.Int16.TryParse(GetProcInfo("UnitQty", 10 + startProc), out uqty);
-                            qty = bunit + uqty;
-						} else if(GetProcInfo("UnitQty",10+startProc)!=""){
+						if(planCur.ShowBaseUnits) {
+							short bunit;
+							System.Int16.TryParse(GetProcInfo("BaseUnits",10 + startProc),out bunit);
+							short uqty;
+							System.Int16.TryParse(GetProcInfo("UnitQty",10 + startProc),out uqty);
+							qty = bunit + uqty;
+						}
+						else if(GetProcInfo("UnitQty",10+startProc)!="") {
 							qty=Int16.Parse(GetProcInfo("UnitQty",10+startProc));
-						} else {
+						}
+						else {
 							qty=0;
 						}
-                        if(qty==0){
-                            displayStrings[i]="";
-                        } else {
-                            displayStrings[i]=qty.ToString();
-                        }
+						if(qty==0) {
+							displayStrings[i]="";
+						}
+						else {
+							displayStrings[i]=qty.ToString();
+						}
 						break;
 					case "P10CodeAndMods":
 						displayStrings[i]=GetProcInfo("Code",10+startProc) 
@@ -2537,15 +2697,15 @@ namespace OpenDental{
 							if(f < claimprocs.Count && ((ClaimProc)claimprocs[f]).ProcDate < dateService)
 								dateService=((ClaimProc)claimprocs[f]).ProcDate;
 						}
-						if(ClaimFormCur.Items[i].FormatString=="")
+						if(ClaimFormCur.Items[i].FormatString=="") {
 							displayStrings[i]=dateService.ToShortDateString();
-						else
+						}
+						else {
 							displayStrings[i]=dateService.ToString(ClaimFormCur.Items[i].FormatString);
+						}
 						break;
 				}//switch
-				if(CultureInfo.CurrentCulture.Name=="nl-BE"//Dutch Belgium
-					&& displayStrings[i]=="")
-				{
+				if(CultureInfo.CurrentCulture.Name=="nl-BE" && displayStrings[i]==""){//Dutch Belgium
 					displayStrings[i]="*   *   *";
 				}
 			}//for i
@@ -2568,12 +2728,14 @@ namespace OpenDental{
 							displayStrings[i]=vcA[0].ValCode;
 							break;
 						case "MedValAmount39a":
-							if(vcA[0].ValAmount==0){
+							if(vcA[0].ValAmount==0) {
 								displayStrings[i]="";
-							} else if(ClaimFormCur.Items[i].FormatString == "NoDec"){
+							}
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[0].ValAmount * 100;
 								displayStrings[i]=amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[0].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
@@ -2582,14 +2744,14 @@ namespace OpenDental{
 								displayStrings[i]=vcA[3].ValCode;
 							break;
 						case "MedValAmount39b":
-							if(vcA[3].ValAmount==0){
+							if(vcA[3].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[3].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[3].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
@@ -2598,14 +2760,14 @@ namespace OpenDental{
 								displayStrings[i]=vcA[6].ValCode;
 							break;
 						case "MedValAmount39c":
-							if(vcA[6].ValAmount==0){
+							if(vcA[6].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[6].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[6].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
@@ -2614,62 +2776,65 @@ namespace OpenDental{
 								displayStrings[i]=vcA[9].ValCode;
 							break;
 						case "MedValAmount39d":
-							if(vcA[9].ValAmount==0){
+							if(vcA[9].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[9].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[9].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
 						case "MedValCode40a":
-							if(vcA[1]!=null)
+							if(vcA[1]!=null) {
 								displayStrings[i]=vcA[1].ValCode;
+							}
 							break;
 						case "MedValAmount40a":
-							if(vcA[1].ValAmount==0){
+							if(vcA[1].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[1].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[1].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
 						case "MedValCode40b":
-							if(vcA[4]!=null)
+							if(vcA[4]!=null) {
 								displayStrings[i]=vcA[4].ValCode;
+							}
 							break;
 						case "MedValAmount40b":
-							if(vcA[4].ValAmount==0){
+							if(vcA[4].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[4].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[4].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
 						case "MedValCode40c":
-							if(vcA[7]!=null)
+							if(vcA[7]!=null) {
 								displayStrings[i]=vcA[7].ValCode;
+							}
 							break;
 						case "MedValAmount40c":
-							if(vcA[7].ValAmount==0){
+							if(vcA[7].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[7].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[7].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
@@ -2681,11 +2846,11 @@ namespace OpenDental{
 							if(vcA[10].ValAmount==0){
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[10].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[10].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
@@ -2694,46 +2859,48 @@ namespace OpenDental{
 								displayStrings[i]=vcA[2].ValCode;
 							break;
 						case "MedValAmount41a":
-							if(vcA[2].ValAmount==0){
+							if(vcA[2].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[2].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[2].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
 						case "MedValCode41b":
-							if(vcA[5]!=null)
+							if(vcA[5]!=null) {
 								displayStrings[i]=vcA[5].ValCode;
+							}
 							break;
 						case "MedValAmount41b":
-							if(vcA[5].ValAmount==0){
+							if(vcA[5].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[5].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[5].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
 						case "MedValCode41c":
-							if(vcA[8]!=null)
+							if(vcA[8]!=null) {
 								displayStrings[i]=vcA[8].ValCode;
+							}
 							break;
 						case "MedValAmount41c":
-							if(vcA[8].ValAmount==0){
+							if(vcA[8].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[8].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[8].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
@@ -2742,14 +2909,14 @@ namespace OpenDental{
 								displayStrings[i]=vcA[11].ValCode;
 							break;
 						case "MedValAmount41d":
-							if(vcA[11].ValAmount==0){
+							if(vcA[11].ValAmount==0) {
 								displayStrings[i]="";
 							}
-							else if (ClaimFormCur.Items[i].FormatString == "NoDec")
-							{
+							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
 								double amt = vcA[11].ValAmount * 100;
 								displayStrings[i] = amt.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]=vcA[11].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
 							}
 							break;
@@ -2779,40 +2946,40 @@ namespace OpenDental{
 			List <PatPlan> PatInsPlans = PatPlans.Refresh(ThisPatNum); //get this patients ins plans
 			MedClaimsArrayList = new ArrayList(); //list of medical claims for patient
 			MedSubList = new List<InsSub>(); //list of medical ins plans for patient and family
-			for(int i=0;i<PatInsPlans.Count;i++){ //fill med ins plans
+			for(int i=0;i<PatInsPlans.Count;i++) { //fill med ins plans
 				PatPlan tempPatPlan = (PatPlan)PatInsPlans[i];
 				InsSub tempSub = InsSubs.GetSub(tempPatPlan.InsSubNum,SubList);
-				InsPlan tempInsPlan = InsPlans.GetPlan(tempSub.PlanNum, PlanList);
+				InsPlan tempInsPlan = InsPlans.GetPlan(tempSub.PlanNum,PlanList);
 				if(tempInsPlan.IsMedical) {
 					MedSubList.Add(tempSub);
 				}
 			}
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(ThisPatNum); //get all claimprocs for patient
 			ArrayList tmpPlansBilled = new ArrayList();
-			for(int i=0;i<ClaimProcList.Count;i++){ //compare each claimproc on this claim to all claimprocs
-				for(int j=0;j<claimprocs.Count;j++){
-					if((claimprocs[j].ProcNum==ClaimProcList[i].ProcNum) && (ClaimProcList[i].Status==ClaimProcStatus.Received)){
+			for(int i=0;i<ClaimProcList.Count;i++) { //compare each claimproc on this claim to all claimprocs
+				for(int j=0;j<claimprocs.Count;j++) {
+					if((claimprocs[j].ProcNum==ClaimProcList[i].ProcNum) && (ClaimProcList[i].Status==ClaimProcStatus.Received)) {
 						bool inList = true;
 						Claim receivedClaim = Claims.GetClaim(ClaimProcList[i].ClaimNum);
 						inList = MedClaimsArrayList.Contains(receivedClaim);
-						if(!inList){
+						if(!inList) {
 							MedClaimsArrayList.Add(receivedClaim); //fill with claim already sent and received for procs on current(this) claim
 						}
 					}
 				}
 			}
 			//Set Primary through Tertiary Claims
-			if (MedClaimsArrayList.Count == 0){
+			if(MedClaimsArrayList.Count == 0) {
 				Primary = ClaimCur;
 				isPrimary = true;
 			}
-			if (MedClaimsArrayList.Count == 1){
+			if(MedClaimsArrayList.Count == 1) {
 				Primary = (Claim)MedClaimsArrayList[0];
 				Secondary = ClaimCur;
 				isPrimary = true;
 				isSecondary = true;
 			}
-			if (MedClaimsArrayList.Count == 2){
+			if(MedClaimsArrayList.Count == 2) {
 				Primary = (Claim)MedClaimsArrayList[0];
 				Secondary = (Claim)MedClaimsArrayList[1];
 				Tertiary = ClaimCur;
@@ -2876,10 +3043,12 @@ namespace OpenDental{
 								AltID = ProviderIdents.GetForPayor(prov.ProvNum, CarrierElectID)[0];
 								if (AltID.IDNumber != ""){
 									displayStrings[i]=AltID.IDNumber.ToString();
-								} else {
+								}
+								else {
 									displayStrings[i] = "";
 								}
-							} else {
+							}
+							else {
 								displayStrings[i]="";
 							}
 							break;
@@ -2918,9 +3087,10 @@ namespace OpenDental{
 						case "MedInsBAssignBen":
 							break;
 						case "MedInsBPriorPmt":
-							if(ClaimCur.ClaimNum==Secondary.ClaimNum){
+							if(ClaimCur.ClaimNum==Secondary.ClaimNum) {
 								displayStrings[i]="";
-							} else {
+							}
+							else {
 								priorPayments+=Secondary.InsPayAmt;
 								double amt = Secondary.InsPayAmt * 100; //get rid of decimal
 								displayStrings[i]=amt.ToString();
@@ -2928,10 +3098,11 @@ namespace OpenDental{
 							break;
 						case "MedInsBAmtDue":
 							double AmtDue;
-							if(ClaimCur.ClaimNum==Secondary.ClaimNum){
+							if(ClaimCur.ClaimNum==Secondary.ClaimNum) {
 								AmtDue = (ClaimCur.ClaimFee-priorPayments-totalValAmount) * 100;
 								displayStrings[i]=AmtDue.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]="";
 							}
 							break;
@@ -2939,14 +3110,16 @@ namespace OpenDental{
 							ProviderIdent AltID;
 							string CarrierElectID = Carriers.GetCarrier(MedInsB.CarrierNum).ElectID.ToString();
 							Provider P = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
-								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
-								if (AltID.IDNumber != ""){
+							if(P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum,CarrierElectID).Length > 0)) {
+								AltID = ProviderIdents.GetForPayor(P.ProvNum,CarrierElectID)[0];
+								if(AltID.IDNumber != "") {
 									displayStrings[i] = AltID.IDNumber.ToString();
-								} else {
+								}
+								else {
 									displayStrings[i] = "";
 								}
-							} else {
+							}
+							else {
 								displayStrings[i] = "";
 							}
 							break;
@@ -2985,9 +3158,10 @@ namespace OpenDental{
 						case "MedInsCAssignBen":
 							break;
 						case "MedInsCPriorPmt":
-							if (ClaimCur.ClaimNum == Tertiary.ClaimNum){
+							if(ClaimCur.ClaimNum == Tertiary.ClaimNum) {
 								displayStrings[i]="";
-							} else {
+							}
+							else {
 								priorPayments += Tertiary.InsPayAmt;
 								double amt = Tertiary.InsPayAmt * 100; //get rid of decimal
 								displayStrings[i]=amt.ToString();
@@ -2995,10 +3169,11 @@ namespace OpenDental{
 							break;
 						case "MedInsCAmtDue":
 							double AmtDue;
-							if(ClaimCur.ClaimNum==Tertiary.ClaimNum){
+							if(ClaimCur.ClaimNum==Tertiary.ClaimNum) {
 								AmtDue = (ClaimCur.ClaimFee-priorPayments-totalValAmount) * 100;
 								displayStrings[i]=AmtDue.ToString();
-							} else {
+							}
+							else {
 								displayStrings[i]="";
 							}
 							break;
@@ -3006,14 +3181,16 @@ namespace OpenDental{
 							ProviderIdent AltID;
 							string CarrierElectID = Carriers.GetCarrier(MedInsC.CarrierNum).ElectID.ToString();
 							Provider P = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
-								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
-								if (AltID.IDNumber != ""){
+							if(P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum,CarrierElectID).Length > 0)) {
+								AltID = ProviderIdents.GetForPayor(P.ProvNum,CarrierElectID)[0];
+								if(AltID.IDNumber != "") {
 									displayStrings[i] = AltID.IDNumber.ToString();
-								} else {
+								}
+								else {
 									displayStrings[i] = "";
 								}
-							} else {
+							}
+							else {
 								displayStrings[i] = "";
 							}
 							break;
@@ -3047,19 +3224,19 @@ namespace OpenDental{
 			int retVal=0;
 			//loop until a match is not found.  The max of 10 is built in because of course it will never match to 11 since there is no such fieldName.
 			for(int i=0;i<15;i++){
-				for(int ii=0;ii<ClaimFormCur.Items.Length;ii++){
-					if(ClaimFormCur.Items[ii].FieldName=="P"+i.ToString()+"Fee"){
+				for(int j=0;j<ClaimFormCur.Items.Length;j++){
+					if(ClaimFormCur.Items[j].FieldName=="P"+i.ToString()+"Fee"){
 						retVal=i;
 					}
-				}//for ii
+				}//for j
 			}
 			if(retVal==0){//if claimform doesn't use fees, use procedurecode
 				for(int i=0;i<15;i++){
-					for(int ii=0;ii<ClaimFormCur.Items.Length;ii++){
-						if(ClaimFormCur.Items[ii].FieldName=="P"+i.ToString()+"Code"){
+					for(int j=0;j<ClaimFormCur.Items.Length;j++){
+						if(ClaimFormCur.Items[j].FieldName=="P"+i.ToString()+"Code"){
 							retVal=i;
 						}
-					}//for ii
+					}//for j
 				}
 			}
 			if(retVal==0){//if STILL zero
@@ -3072,7 +3249,7 @@ namespace OpenDental{
 		/// <param name="field"></param>
 		/// <param name="procIndex"></param>
 		/// <returns></returns>
-		private string GetProcInfo(string field,int procIndex){
+		private string GetProcInfo(string field,int procIndex) {
 			return GetProcInfo(field,procIndex,"");
 		}
 
@@ -3081,7 +3258,7 @@ namespace OpenDental{
 		/// <param name="procIndex"></param>
 		/// <param name="stringFormat"></param>
 		/// <returns></returns>
-		private string GetProcInfo(string field,int procIndex, string stringFormat){
+		private string GetProcInfo(string field,int procIndex, string stringFormat) {
 			//remember that procIndex is 1 based, not 0 based, 
 			procIndex--;//so convert to 0 based
 			if(claimprocs.Count <= procIndex){
@@ -3092,12 +3269,15 @@ namespace OpenDental{
 				return "";
 				//}
 			}
-			if(field=="System")
+			if(field=="System") {
 				return "JP";
-			if(field=="Code")
+			}
+			if(field=="Code") {
 				return claimprocs[procIndex].CodeSent;
-			if(field=="System")
+			}
+			if(field=="System") {
 				return "JP";
+			}
 			if(field=="Fee") {
 				decimal totalProcFees=(decimal)claimprocs[procIndex].FeeBilled;
 				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
@@ -3148,10 +3328,12 @@ namespace OpenDental{
 					return procCode.Descript;
 				}
 			if(field=="Date"){
-				if(ClaimCur.ClaimType=="PreAuth")//no date on preauth procedures
+				if(ClaimCur.ClaimType=="PreAuth") {//no date on preauth procedures
 					return "";
-				if(stringFormat=="")
+				}
+				if(stringFormat=="") {
 					return claimprocs[procIndex].ProcDate.ToShortDateString();
+				}
 				return claimprocs[procIndex].ProcDate.ToString(stringFormat);
 			}
 			if(field=="TreatDentMedicaidID"){
@@ -3164,8 +3346,9 @@ namespace OpenDental{
 				if(claimprocs[procIndex].ProvNum==0) {
 					return "";
 				}
-				else
+				else {
 					return ProviderC.ListLong[Providers.GetIndexLong(claimprocs[procIndex].ProvNum)].NationalProvID;
+				}
 			}
 			if(field=="PlaceNumericCode"){
 				return GetPlaceOfServiceNum(ClaimCur.PlaceService);
@@ -3302,17 +3485,19 @@ namespace OpenDental{
 		}
 
 		private void butBack_Click(object sender, System.EventArgs e){
-			if(Preview2.StartPage==0) return;
+			if(Preview2.StartPage==0) { 
+				return; 
+			}
 			Preview2.StartPage--;
-			labelTotPages.Text=(Preview2.StartPage+1).ToString()
-				+" / "+totalPages.ToString();
+			labelTotPages.Text=(Preview2.StartPage+1).ToString() + " / " + totalPages.ToString();
 		}
 
 		private void butFwd_Click(object sender, System.EventArgs e){
-			if(Preview2.StartPage==totalPages-1) return;
+			if(Preview2.StartPage==totalPages-1) {
+				return;
+			}
 			Preview2.StartPage++;
-			labelTotPages.Text=(Preview2.StartPage+1).ToString()
-				+" / "+totalPages.ToString();
+			labelTotPages.Text=(Preview2.StartPage+1).ToString() + " / " + totalPages.ToString();
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e){
