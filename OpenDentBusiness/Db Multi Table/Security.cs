@@ -87,6 +87,7 @@ namespace OpenDentBusiness{
 					return false;	
 				}
 			}
+			//the list below is NOT the list of permissions that take dates. See GroupPermissions.PermTakesDates().
 			if(  perm==Permissions.AdjustmentCreate
 				|| perm==Permissions.AdjustmentEdit
 				|| perm==Permissions.PaymentCreate
