@@ -281,7 +281,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
 				+",CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),patient.FName),' '),patient.MiddleI)"
-				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID "//,insplan.IsMedical "
+				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID,MedType "
 				+"FROM claim "
 				+"Left join insplan on claim.PlanNum = insplan.PlanNum "
 				+"Left join carrier on insplan.CarrierNum = carrier.CarrierNum "
@@ -306,8 +306,9 @@ namespace OpenDentBusiness{
 				listQueue[i].ClaimStatus     = PIn.String(table.Rows[i][3].ToString());
 				listQueue[i].Carrier         = PIn.String(table.Rows[i][4].ToString());
 				listQueue[i].PatNum          = PIn.Long   (table.Rows[i][5].ToString());
-				listQueue[i].ClearinghouseNum=Clearinghouses.GetNumForPayor(PIn.String(table.Rows[i][6].ToString()));
-				//listQueue[i].IsMedical       = PIn.Bool  (table.Rows[i][7].ToString());
+				string payorID=PIn.String(table.Rows[i]["ElectID"].ToString());
+				EnumClaimMedType medType=(EnumClaimMedType)PIn.Int(table.Rows[i]["MedType"].ToString());
+				listQueue[i].ClearinghouseNum=Clearinghouses.AutomateClearinghouseSelection(payorID,medType);
 			}
 			return listQueue;
 		}

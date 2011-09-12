@@ -45,8 +45,7 @@ namespace OpenDental.Eclaims
 			//Create the claim file(s) for this clearinghouse
 			if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010
 				|| clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental
-				|| clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut
-				|| clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical) 
+				|| clearhouse.Eformat==ElectronicClaimFormat.x837_5010_med_inst) 
 			{
 				messageText=x837Controller.SendBatch(queueItems,batchNum,clearhouse,medType);
 			}
@@ -167,11 +166,18 @@ namespace OpenDental.Eclaims
 		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warnings){
 			warnings="";
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
+			//this is usually just the default clearinghouse or the clearinghouse for the PayorID.
 			if(clearhouse==null){
 				return "";
 			}
 			if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010){
 				string retVal=X837_4010.Validate(queueItem,out warnings);
+				return retVal;
+			}
+			else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental
+				|| clearhouse.Eformat==ElectronicClaimFormat.x837_5010_med_inst)
+			{
+				string retVal=X837_5010.Validate(queueItem,out warnings);
 				return retVal;
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.Renaissance){

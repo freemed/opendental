@@ -160,7 +160,7 @@ namespace OpenDental{
 		private Label label39;
 		private Label label40;
 		private Label label41;
-		private ClaimForm ClaimFormCur;
+		//private ClaimForm ClaimFormCur;
 		private Label label20;
 		private Panel panelBottomEdge;
 		private Panel panelRightEdge;
@@ -306,12 +306,16 @@ namespace OpenDental{
 		private Label labelSpecialProgram;
 		private TextBox textBillType;
 		private Label label7;
-		private TextBox textBox3;
+		private TextBox textPatientStatus;
 		private Label label85;
-		private TextBox textBox2;
+		private TextBox textAdmissionSource;
 		private Label label84;
-		private TextBox textBox1;
+		private TextBox textAdmissionType;
 		private Label label83;
+		private ComboBox comboMedType;
+		private Label label86;
+		private ComboBox comboClaimForm;
+		private Label label87;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -487,6 +491,12 @@ namespace OpenDental{
 			this.label48 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
 			this.tabUB04 = new System.Windows.Forms.TabPage();
+			this.textPatientStatus = new System.Windows.Forms.TextBox();
+			this.label85 = new System.Windows.Forms.Label();
+			this.textAdmissionSource = new System.Windows.Forms.TextBox();
+			this.label84 = new System.Windows.Forms.Label();
+			this.textAdmissionType = new System.Windows.Forms.TextBox();
+			this.label83 = new System.Windows.Forms.Label();
 			this.textBillType = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -572,6 +582,13 @@ namespace OpenDental{
 			this.menuItemOpen = new System.Windows.Forms.MenuItem();
 			this.menuItemRename = new System.Windows.Forms.MenuItem();
 			this.menuItemRemove = new System.Windows.Forms.MenuItem();
+			this.comboClaimStatus = new System.Windows.Forms.ComboBox();
+			this.comboClaimType = new System.Windows.Forms.ComboBox();
+			this.textPriorAuth = new System.Windows.Forms.TextBox();
+			this.labelPriorAuth = new System.Windows.Forms.Label();
+			this.comboSpecialProgram = new System.Windows.Forms.ComboBox();
+			this.labelSpecialProgram = new System.Windows.Forms.Label();
+			this.textLabFees = new OpenDental.ValidDouble();
 			this.butHistory = new OpenDental.UI.Button();
 			this.gridPay = new OpenDental.UI.ODGrid();
 			this.butSend = new OpenDental.UI.Button();
@@ -590,19 +607,10 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textLabFees = new OpenDental.ValidDouble();
-			this.comboClaimStatus = new System.Windows.Forms.ComboBox();
-			this.comboClaimType = new System.Windows.Forms.ComboBox();
-			this.textPriorAuth = new System.Windows.Forms.TextBox();
-			this.labelPriorAuth = new System.Windows.Forms.Label();
-			this.comboSpecialProgram = new System.Windows.Forms.ComboBox();
-			this.labelSpecialProgram = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.label83 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.label84 = new System.Windows.Forms.Label();
-			this.textBox3 = new System.Windows.Forms.TextBox();
-			this.label85 = new System.Windows.Forms.Label();
+			this.comboMedType = new System.Windows.Forms.ComboBox();
+			this.label86 = new System.Windows.Forms.Label();
+			this.comboClaimForm = new System.Windows.Forms.ComboBox();
+			this.label87 = new System.Windows.Forms.Label();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -627,7 +635,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(241,69);
+			this.label3.Location = new System.Drawing.Point(256,69);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(94,15);
 			this.label3.TabIndex = 2;
@@ -663,7 +671,7 @@ namespace OpenDental{
 			// 
 			// labelPredeterm
 			// 
-			this.labelPredeterm.Location = new System.Drawing.Point(199,131);
+			this.labelPredeterm.Location = new System.Drawing.Point(214,131);
 			this.labelPredeterm.Name = "labelPredeterm";
 			this.labelPredeterm.Size = new System.Drawing.Size(138,16);
 			this.labelPredeterm.TabIndex = 11;
@@ -770,7 +778,7 @@ namespace OpenDental{
 			// 
 			// textPredeterm
 			// 
-			this.textPredeterm.Location = new System.Drawing.Point(336,127);
+			this.textPredeterm.Location = new System.Drawing.Point(351,127);
 			this.textPredeterm.Name = "textPredeterm";
 			this.textPredeterm.Size = new System.Drawing.Size(170,20);
 			this.textPredeterm.TabIndex = 1;
@@ -804,7 +812,7 @@ namespace OpenDental{
 			// 
 			// label21
 			// 
-			this.label21.Location = new System.Drawing.Point(234,89);
+			this.label21.Location = new System.Drawing.Point(249,89);
 			this.label21.Name = "label21";
 			this.label21.Size = new System.Drawing.Size(102,15);
 			this.label21.TabIndex = 93;
@@ -875,7 +883,7 @@ namespace OpenDental{
 			// comboProvBill
 			// 
 			this.comboProvBill.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProvBill.Location = new System.Drawing.Point(336,65);
+			this.comboProvBill.Location = new System.Drawing.Point(351,65);
 			this.comboProvBill.Name = "comboProvBill";
 			this.comboProvBill.Size = new System.Drawing.Size(100,21);
 			this.comboProvBill.TabIndex = 97;
@@ -883,7 +891,7 @@ namespace OpenDental{
 			// comboProvTreat
 			// 
 			this.comboProvTreat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProvTreat.Location = new System.Drawing.Point(336,86);
+			this.comboProvTreat.Location = new System.Drawing.Point(351,86);
 			this.comboProvTreat.Name = "comboProvTreat";
 			this.comboProvTreat.Size = new System.Drawing.Size(100,21);
 			this.comboProvTreat.TabIndex = 99;
@@ -912,7 +920,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label5);
 			this.groupBox2.Controls.Add(this.textPlan);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(523,2);
+			this.groupBox2.Location = new System.Drawing.Point(531,2);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(269,70);
 			this.groupBox2.TabIndex = 110;
@@ -943,7 +951,7 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.label10);
 			this.groupBox3.Controls.Add(this.textPlan2);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(523,73);
+			this.groupBox3.Location = new System.Drawing.Point(531,73);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(269,85);
 			this.groupBox3.TabIndex = 111;
@@ -1015,7 +1023,7 @@ namespace OpenDental{
 			// 
 			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboClinic.Enabled = false;
-			this.comboClinic.Location = new System.Drawing.Point(336,5);
+			this.comboClinic.Location = new System.Drawing.Point(351,5);
 			this.comboClinic.MaxDropDownItems = 100;
 			this.comboClinic.Name = "comboClinic";
 			this.comboClinic.Size = new System.Drawing.Size(126,21);
@@ -1023,7 +1031,7 @@ namespace OpenDental{
 			// 
 			// labelClinic
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(235,9);
+			this.labelClinic.Location = new System.Drawing.Point(250,9);
 			this.labelClinic.Name = "labelClinic";
 			this.labelClinic.Size = new System.Drawing.Size(98,16);
 			this.labelClinic.TabIndex = 120;
@@ -2074,11 +2082,11 @@ namespace OpenDental{
 			// 
 			this.tabUB04.AutoScroll = true;
 			this.tabUB04.BackColor = System.Drawing.Color.Transparent;
-			this.tabUB04.Controls.Add(this.textBox3);
+			this.tabUB04.Controls.Add(this.textPatientStatus);
 			this.tabUB04.Controls.Add(this.label85);
-			this.tabUB04.Controls.Add(this.textBox2);
+			this.tabUB04.Controls.Add(this.textAdmissionSource);
 			this.tabUB04.Controls.Add(this.label84);
-			this.tabUB04.Controls.Add(this.textBox1);
+			this.tabUB04.Controls.Add(this.textAdmissionType);
 			this.tabUB04.Controls.Add(this.label83);
 			this.tabUB04.Controls.Add(this.textBillType);
 			this.tabUB04.Controls.Add(this.label7);
@@ -2091,6 +2099,54 @@ namespace OpenDental{
 			this.tabUB04.TabIndex = 0;
 			this.tabUB04.Text = "Medical-UB04";
 			this.tabUB04.UseVisualStyleBackColor = true;
+			// 
+			// textPatientStatus
+			// 
+			this.textPatientStatus.Location = new System.Drawing.Point(140,92);
+			this.textPatientStatus.Name = "textPatientStatus";
+			this.textPatientStatus.Size = new System.Drawing.Size(47,20);
+			this.textPatientStatus.TabIndex = 149;
+			// 
+			// label85
+			// 
+			this.label85.Location = new System.Drawing.Point(3,96);
+			this.label85.Name = "label85";
+			this.label85.Size = new System.Drawing.Size(138,16);
+			this.label85.TabIndex = 150;
+			this.label85.Text = "Patient Status (2 digit)";
+			this.label85.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textAdmissionSource
+			// 
+			this.textAdmissionSource.Location = new System.Drawing.Point(140,69);
+			this.textAdmissionSource.Name = "textAdmissionSource";
+			this.textAdmissionSource.Size = new System.Drawing.Size(47,20);
+			this.textAdmissionSource.TabIndex = 147;
+			// 
+			// label84
+			// 
+			this.label84.Location = new System.Drawing.Point(6,73);
+			this.label84.Name = "label84";
+			this.label84.Size = new System.Drawing.Size(135,16);
+			this.label84.TabIndex = 148;
+			this.label84.Text = "Admission Source (1 char)";
+			this.label84.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textAdmissionType
+			// 
+			this.textAdmissionType.Location = new System.Drawing.Point(140,46);
+			this.textAdmissionType.Name = "textAdmissionType";
+			this.textAdmissionType.Size = new System.Drawing.Size(47,20);
+			this.textAdmissionType.TabIndex = 145;
+			// 
+			// label83
+			// 
+			this.label83.Location = new System.Drawing.Point(3,50);
+			this.label83.Name = "label83";
+			this.label83.Size = new System.Drawing.Size(138,16);
+			this.label83.TabIndex = 146;
+			this.label83.Text = "Admission Type (1 digit)";
+			this.label83.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textBillType
 			// 
@@ -2859,7 +2915,7 @@ namespace OpenDental{
 			this.groupEnterPayment.Controls.Add(this.butPayTotal);
 			this.groupEnterPayment.Controls.Add(this.butPayProc);
 			this.groupEnterPayment.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupEnterPayment.Location = new System.Drawing.Point(801,12);
+			this.groupEnterPayment.Location = new System.Drawing.Point(809,12);
 			this.groupEnterPayment.Name = "groupEnterPayment";
 			this.groupEnterPayment.Size = new System.Drawing.Size(133,107);
 			this.groupEnterPayment.TabIndex = 132;
@@ -2952,6 +3008,68 @@ namespace OpenDental{
 			this.menuItemRemove.Text = "Remove";
 			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
 			// 
+			// comboClaimStatus
+			// 
+			this.comboClaimStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClaimStatus.Location = new System.Drawing.Point(111,5);
+			this.comboClaimStatus.MaxDropDownItems = 100;
+			this.comboClaimStatus.Name = "comboClaimStatus";
+			this.comboClaimStatus.Size = new System.Drawing.Size(126,21);
+			this.comboClaimStatus.TabIndex = 139;
+			// 
+			// comboClaimType
+			// 
+			this.comboClaimType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClaimType.Enabled = false;
+			this.comboClaimType.Location = new System.Drawing.Point(111,26);
+			this.comboClaimType.MaxDropDownItems = 100;
+			this.comboClaimType.Name = "comboClaimType";
+			this.comboClaimType.Size = new System.Drawing.Size(126,21);
+			this.comboClaimType.TabIndex = 140;
+			// 
+			// textPriorAuth
+			// 
+			this.textPriorAuth.Location = new System.Drawing.Point(351,107);
+			this.textPriorAuth.Name = "textPriorAuth";
+			this.textPriorAuth.Size = new System.Drawing.Size(170,20);
+			this.textPriorAuth.TabIndex = 141;
+			// 
+			// labelPriorAuth
+			// 
+			this.labelPriorAuth.Location = new System.Drawing.Point(214,111);
+			this.labelPriorAuth.Name = "labelPriorAuth";
+			this.labelPriorAuth.Size = new System.Drawing.Size(138,16);
+			this.labelPriorAuth.TabIndex = 142;
+			this.labelPriorAuth.Text = "Prior Authorization";
+			this.labelPriorAuth.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboSpecialProgram
+			// 
+			this.comboSpecialProgram.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSpecialProgram.Location = new System.Drawing.Point(351,26);
+			this.comboSpecialProgram.MaxDropDownItems = 100;
+			this.comboSpecialProgram.Name = "comboSpecialProgram";
+			this.comboSpecialProgram.Size = new System.Drawing.Size(126,21);
+			this.comboSpecialProgram.TabIndex = 144;
+			// 
+			// labelSpecialProgram
+			// 
+			this.labelSpecialProgram.Location = new System.Drawing.Point(252,29);
+			this.labelSpecialProgram.Name = "labelSpecialProgram";
+			this.labelSpecialProgram.Size = new System.Drawing.Size(97,17);
+			this.labelSpecialProgram.TabIndex = 143;
+			this.labelSpecialProgram.Text = "Special Program";
+			this.labelSpecialProgram.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textLabFees
+			// 
+			this.textLabFees.Location = new System.Drawing.Point(411,363);
+			this.textLabFees.Name = "textLabFees";
+			this.textLabFees.ReadOnly = true;
+			this.textLabFees.Size = new System.Drawing.Size(51,20);
+			this.textLabFees.TabIndex = 138;
+			this.textLabFees.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// butHistory
 			// 
 			this.butHistory.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -3019,7 +3137,7 @@ namespace OpenDental{
 			this.butSplit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSplit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSplit.CornerRadius = 4F;
-			this.butSplit.Location = new System.Drawing.Point(818,134);
+			this.butSplit.Location = new System.Drawing.Point(826,134);
 			this.butSplit.Name = "butSplit";
 			this.butSplit.Size = new System.Drawing.Size(99,24);
 			this.butSplit.TabIndex = 127;
@@ -3187,115 +3305,41 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textLabFees
+			// comboMedType
 			// 
-			this.textLabFees.Location = new System.Drawing.Point(411,363);
-			this.textLabFees.Name = "textLabFees";
-			this.textLabFees.ReadOnly = true;
-			this.textLabFees.Size = new System.Drawing.Size(51,20);
-			this.textLabFees.TabIndex = 138;
-			this.textLabFees.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.comboMedType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboMedType.Location = new System.Drawing.Point(111,47);
+			this.comboMedType.MaxDropDownItems = 100;
+			this.comboMedType.Name = "comboMedType";
+			this.comboMedType.Size = new System.Drawing.Size(126,21);
+			this.comboMedType.TabIndex = 146;
 			// 
-			// comboClaimStatus
+			// label86
 			// 
-			this.comboClaimStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClaimStatus.Location = new System.Drawing.Point(111,5);
-			this.comboClaimStatus.MaxDropDownItems = 100;
-			this.comboClaimStatus.Name = "comboClaimStatus";
-			this.comboClaimStatus.Size = new System.Drawing.Size(126,21);
-			this.comboClaimStatus.TabIndex = 139;
+			this.label86.Location = new System.Drawing.Point(14,50);
+			this.label86.Name = "label86";
+			this.label86.Size = new System.Drawing.Size(95,17);
+			this.label86.TabIndex = 145;
+			this.label86.Text = "Med/Dent";
+			this.label86.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// comboClaimType
+			// comboClaimForm
 			// 
-			this.comboClaimType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClaimType.Enabled = false;
-			this.comboClaimType.Location = new System.Drawing.Point(111,26);
-			this.comboClaimType.MaxDropDownItems = 100;
-			this.comboClaimType.Name = "comboClaimType";
-			this.comboClaimType.Size = new System.Drawing.Size(126,21);
-			this.comboClaimType.TabIndex = 140;
+			this.comboClaimForm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClaimForm.Location = new System.Drawing.Point(111,68);
+			this.comboClaimForm.MaxDropDownItems = 100;
+			this.comboClaimForm.Name = "comboClaimForm";
+			this.comboClaimForm.Size = new System.Drawing.Size(126,21);
+			this.comboClaimForm.TabIndex = 148;
 			// 
-			// textPriorAuth
+			// label87
 			// 
-			this.textPriorAuth.Location = new System.Drawing.Point(336,107);
-			this.textPriorAuth.Name = "textPriorAuth";
-			this.textPriorAuth.Size = new System.Drawing.Size(170,20);
-			this.textPriorAuth.TabIndex = 141;
-			// 
-			// labelPriorAuth
-			// 
-			this.labelPriorAuth.Location = new System.Drawing.Point(199,111);
-			this.labelPriorAuth.Name = "labelPriorAuth";
-			this.labelPriorAuth.Size = new System.Drawing.Size(138,16);
-			this.labelPriorAuth.TabIndex = 142;
-			this.labelPriorAuth.Text = "Prior Authorization";
-			this.labelPriorAuth.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboSpecialProgram
-			// 
-			this.comboSpecialProgram.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSpecialProgram.Location = new System.Drawing.Point(111,47);
-			this.comboSpecialProgram.MaxDropDownItems = 100;
-			this.comboSpecialProgram.Name = "comboSpecialProgram";
-			this.comboSpecialProgram.Size = new System.Drawing.Size(126,21);
-			this.comboSpecialProgram.TabIndex = 144;
-			// 
-			// labelSpecialProgram
-			// 
-			this.labelSpecialProgram.Location = new System.Drawing.Point(6,50);
-			this.labelSpecialProgram.Name = "labelSpecialProgram";
-			this.labelSpecialProgram.Size = new System.Drawing.Size(103,17);
-			this.labelSpecialProgram.TabIndex = 143;
-			this.labelSpecialProgram.Text = "Special Program";
-			this.labelSpecialProgram.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(140,46);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(47,20);
-			this.textBox1.TabIndex = 145;
-			// 
-			// label83
-			// 
-			this.label83.Location = new System.Drawing.Point(3,50);
-			this.label83.Name = "label83";
-			this.label83.Size = new System.Drawing.Size(138,16);
-			this.label83.TabIndex = 146;
-			this.label83.Text = "Admission Type (1 digit)";
-			this.label83.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBox2
-			// 
-			this.textBox2.Location = new System.Drawing.Point(140,69);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(47,20);
-			this.textBox2.TabIndex = 147;
-			// 
-			// label84
-			// 
-			this.label84.Location = new System.Drawing.Point(24,73);
-			this.label84.Name = "label84";
-			this.label84.Size = new System.Drawing.Size(117,16);
-			this.label84.TabIndex = 148;
-			this.label84.Text = "Type of Bill (3 digit)";
-			this.label84.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBox3
-			// 
-			this.textBox3.Location = new System.Drawing.Point(140,92);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(47,20);
-			this.textBox3.TabIndex = 149;
-			// 
-			// label85
-			// 
-			this.label85.Location = new System.Drawing.Point(24,96);
-			this.label85.Name = "label85";
-			this.label85.Size = new System.Drawing.Size(117,16);
-			this.label85.TabIndex = 150;
-			this.label85.Text = "Type of Bill (3 digit)";
-			this.label85.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label87.Location = new System.Drawing.Point(14,71);
+			this.label87.Name = "label87";
+			this.label87.Size = new System.Drawing.Size(95,17);
+			this.label87.TabIndex = 147;
+			this.label87.Text = "ClaimForm";
+			this.label87.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormClaimEdit
 			// 
@@ -3303,6 +3347,10 @@ namespace OpenDental{
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(984,913);
 			this.ControlBox = false;
+			this.Controls.Add(this.comboClaimForm);
+			this.Controls.Add(this.label87);
+			this.Controls.Add(this.comboMedType);
+			this.Controls.Add(this.label86);
 			this.Controls.Add(this.comboSpecialProgram);
 			this.Controls.Add(this.labelSpecialProgram);
 			this.Controls.Add(this.textPriorAuth);
@@ -3591,14 +3639,6 @@ namespace OpenDental{
 					comboClaimStatus.SelectedIndex=5;
 					break;
 			}
-			comboClinic.Items.Clear();
-			comboClinic.Items.Add(Lan.g(this,"none"));
-			comboClinic.SelectedIndex=0;
-			for(int i=0;i<Clinics.List.Length;i++){
-				comboClinic.Items.Add(Clinics.List[i].Description);
-				if(Clinics.List[i].ClinicNum==ClaimCur.ClinicNum)
-					comboClinic.SelectedIndex=i+1;
-			}
 			switch(ClaimCur.ClaimType){
 				case "P":
 					comboClaimType.SelectedIndex=0;
@@ -3615,6 +3655,28 @@ namespace OpenDental{
 				case "Cap":
 					comboClaimType.SelectedIndex=4;
 					break;
+			}
+			comboMedType.Items.Clear();
+			for(int i=0;i<Enum.GetNames(typeof(EnumClaimMedType)).Length;i++){
+				comboMedType.Items.Add(Enum.GetNames(typeof(EnumClaimMedType))[i]);
+			}
+			comboMedType.SelectedIndex=(int)ClaimCur.MedType;
+			comboClaimForm.Items.Clear();
+			comboClaimForm.Items.Add(Lan.g(this,"none"));
+			comboClaimForm.SelectedIndex=0;
+			for(int i=0;i<ClaimForms.ListShort.Length;i++){
+				comboClaimForm.Items.Add(ClaimForms.ListShort[i].Description);
+				if(ClaimCur.ClaimForm==ClaimForms.ListShort[i].ClaimFormNum){
+					comboClaimForm.SelectedIndex=i+1;
+				}
+			}
+			comboClinic.Items.Clear();
+			comboClinic.Items.Add(Lan.g(this,"none"));
+			comboClinic.SelectedIndex=0;
+			for(int i=0;i<Clinics.List.Length;i++){
+				comboClinic.Items.Add(Clinics.List[i].Description);
+				if(Clinics.List[i].ClinicNum==ClaimCur.ClinicNum)
+					comboClinic.SelectedIndex=i+1;
 			}
 			comboProvBill.Items.Clear();
 			for(int i=0;i<ProviderC.ListShort.Count;i++){
@@ -3661,10 +3723,12 @@ namespace OpenDental{
 					radioProsthR.Checked=true;
 					break;
 			}
-			if(ClaimCur.PriorDate.Year < 1860)
+			if(ClaimCur.PriorDate.Year < 1880){
 				textPriorDate.Text="";
-			else
+			}
+			else{
 				textPriorDate.Text=ClaimCur.PriorDate.ToShortDateString();
+			}
 			textReasonUnder.Text=ClaimCur.ReasonUnderPaid;
 			textNote.Text=ClaimCur.ClaimNote;
 			checkIsOrtho.Checked=ClaimCur.IsOrtho;
@@ -3753,6 +3817,9 @@ namespace OpenDental{
 			textAttachID.Text=ClaimCur.AttachmentID;
 			//medical/inst
 			textBillType.Text=ClaimCur.UniformBillType;
+			textAdmissionType.Text=ClaimCur.AdmissionTypeCode;
+			textAdmissionSource.Text=ClaimCur.AdmissionSourceCode;
+			textPatientStatus.Text=ClaimCur.PatientStatusCode;
 			if(ClaimCondCodeLogCur!=null && ClaimCondCodeLogCur.ClaimNum!=0) {
 				textCode0.Text=ClaimCondCodeLogCur.Code0.ToString();
 				textCode1.Text=ClaimCondCodeLogCur.Code1.ToString();
@@ -5248,6 +5315,14 @@ namespace OpenDental{
 					wasSentOrReceived=true;
 					break;
 			}
+			//claimType can't be changed here.
+			ClaimCur.MedType=(EnumClaimMedType)comboMedType.SelectedIndex;
+			if(comboClaimForm.SelectedIndex==0){
+				ClaimCur.ClaimForm=0;
+			}
+			else{
+				ClaimCur.ClaimForm=ClaimForms.ListShort[comboClaimForm.SelectedIndex-1].ClaimFormNum;
+			}
 			if(textDateRec.Text==""){
 				ClaimCur.DateReceived=DateTime.MinValue;
 			}
@@ -5413,6 +5488,9 @@ namespace OpenDental{
 				ClaimCur.IsOrtho=checkIsOrtho.Checked;
 			}
 			ClaimCur.UniformBillType=textBillType.Text;
+			ClaimCur.AdmissionTypeCode=textAdmissionType.Text;
+			ClaimCur.AdmissionSourceCode=textAdmissionSource.Text;
+			ClaimCur.PatientStatusCode=textPatientStatus.Text;
 			Claims.Update(ClaimCur);
 			if(ListClaimValCodes!=null){
 				for(int i=0;i<ListClaimValCodes.Count;i++){ //update existing Value Code pairs

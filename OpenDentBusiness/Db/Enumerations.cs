@@ -881,10 +881,8 @@ namespace OpenDentBusiness{
 		Dutch,
 		///<summary>5-The American standard starting on 1/1/12.</summary>
 		x837D_5010_dental,
-		///<summary>6-Professional aka medical.</summary>
-		x837P_5010_medical,
-		///<summary>7-Institutional.</summary>
-		x837I_5010_institut
+		///<summary>6-Either professional or medical.  The distiction is stored at the claim level.</summary>
+		x837_5010_med_inst
 	}
 
 	///<summary>Used when submitting e-claims to some carriers who require extra provider identifiers.  Usage varies by company.  Only used as needed.</summary>

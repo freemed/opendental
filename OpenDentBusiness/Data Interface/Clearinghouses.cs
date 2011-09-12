@@ -112,33 +112,56 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the clearinghouseNum for claims for the supplied payorID.  If the payorID was not entered or if no default was set, then 0 is returned.</summary>
-		public static long GetNumForPayor(string payorID){
+		public static long AutomateClearinghouseSelection(string payorID,EnumClaimMedType medType){
 			//No need to check RemotingRole; no call to db.
-			//this is not done because Renaissance does not require payorID
-			//if(payorID==""){
-			//	return ElectronicClaimFormat.None;
-			//}
+			//payorID can be blank.  For example, Renaissance does not require payorID.
 			if(HList==null) {
 				RefreshCache();
 			}
-			if(payorID!="" && HList.ContainsKey(payorID)){
-				return (long)HList[payorID];
+			Clearinghouse clearinghouse=null;
+			if(medType==EnumClaimMedType.Dental){
+				if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==0){
+					return 0;
+				}
+				clearinghouse=GetClearinghouse(PrefC.GetLong(PrefName.ClearinghouseDefaultDent));
 			}
-			//payorID not found
-			/*
-			Clearinghouse defaultCH=GetDefault();
-			if(defaultCH==null){
-				return 0;//ElectronicClaimFormat.None;
+			if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Institutional){
+				if(PrefC.GetLong(PrefName.ClearinghouseDefaultMed)==0){
+					return 0;
+				}
+				clearinghouse=GetClearinghouse(PrefC.GetLong(PrefName.ClearinghouseDefaultMed));
 			}
-			return defaultCH.ClearinghouseNum;*/
-			return PrefC.GetLong(PrefName.ClearinghouseDefaultDent);
+			if(clearinghouse==null){//we couldn't find a default clearinghouse for that medType.  Needs to always be a default.
+				return 0;
+			}
+			if(payorID!="" && HList.ContainsKey(payorID)){//an override exists for this payorID
+				Clearinghouse ch=GetClearinghouse((long)HList[payorID]);
+				if(ch.Eformat==ElectronicClaimFormat.x837D_4010 || ch.Eformat==ElectronicClaimFormat.x837D_5010_dental){
+					if(medType==EnumClaimMedType.Dental){//med type matches
+						return ch.ClearinghouseNum;
+					}
+				}
+				if(ch.Eformat==ElectronicClaimFormat.x837_5010_med_inst){
+					if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Institutional){//med type matches
+						return ch.ClearinghouseNum;
+					}
+				}
+			}
+			//no override, so just return the default.
+			return clearinghouse.ClearinghouseNum;
 		}
 
 		///<summary>Returns the default clearinghouse. If no default present, returns null.</summary>
 		public static Clearinghouse GetDefaultDental(){
 			//No need to check RemotingRole; no call to db.
+			return GetClearinghouse(PrefC.GetLong(PrefName.ClearinghouseDefaultDent));
+		}
+
+		///<summary>Gets a clearinghouse from cache.  Will return null if invalid.</summary>
+		public static Clearinghouse GetClearinghouse(long clearinghouseNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Length;i++){
-				if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==Listt[i].ClearinghouseNum){
+				if(clearinghouseNum==Listt[i].ClearinghouseNum){
 					return Listt[i];
 				}
 			}

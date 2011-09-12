@@ -839,9 +839,7 @@ namespace OpenDentBusiness
 				//HI loops-------------------------------------------------------------------------------------------------------
 				//All HI loops should be listed for medical (still todo), dental, and inst. 
 				List<string> diagnosisList=new List<string>();//princDiag will always be the first element.
-				if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical
-					|| clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) 
-				{
+				if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Institutional){
 					for(int j=0;j<claimProcs.Count;j++) {
 						proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 						if(proc.DiagnosticCode=="") {
@@ -2039,8 +2037,8 @@ namespace OpenDentBusiness
 					strb.Append("DateService");
 				}
 			}
-			if(clearhouse.Eformat==ElectronicClaimFormat.x837P_5010_medical
-				|| clearhouse.Eformat==ElectronicClaimFormat.x837I_5010_institut) 
+			if(claim.MedType==EnumClaimMedType.Institutional
+				|| claim.MedType==EnumClaimMedType.Medical) 
 			{
 				if(claim.PreAuthString!="") {
 					Comma(strb);

@@ -435,7 +435,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete Lab?")) {
+			if(!MsgBox.Show(this,true,"Delete Clinic?")) {
 				return;
 			}
 			try{

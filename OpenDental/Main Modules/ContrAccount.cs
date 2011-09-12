@@ -2833,7 +2833,7 @@ namespace OpenDental {
 					PlanCur=FormCC.SelectedPlan;
 					SubCur=FormCC.SelectedSub;
 					relatOther=FormCC.PatRelat;
-					claimFormNum=FormCC.ClaimFormNum;
+					//claimFormNum=FormCC.ClaimFormNum;
 					break;
 			}
 			DataTable table=DataSetMain.Tables["account"];

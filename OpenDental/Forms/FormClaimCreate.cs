@@ -27,10 +27,8 @@ namespace OpenDental{
 		public InsSub SelectedSub;
 		private List <InsPlan> PlanList;
 		private OpenDental.UI.ODGrid gridMain;
-		private GroupBox groupBox1;
-		private ComboBox comboClaimForm;
 		private long PatNum;
-		public long ClaimFormNum;
+		//public long ClaimFormNum;
 		private List<InsSub> SubList;
 
 		///<summary></summary>
@@ -60,9 +58,6 @@ namespace OpenDental{
 			this.labelRelat = new System.Windows.Forms.Label();
 			this.listRelat = new System.Windows.Forms.ListBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.comboClaimForm = new System.Windows.Forms.ComboBox();
-			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -74,7 +69,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(618,330);
+			this.butCancel.Location = new System.Drawing.Point(618,275);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(76,26);
 			this.butCancel.TabIndex = 6;
@@ -89,7 +84,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(618,294);
+			this.butOK.Location = new System.Drawing.Point(525,275);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(76,26);
 			this.butOK.TabIndex = 5;
@@ -123,31 +118,12 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableInsPlans";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.comboClaimForm);
-			this.groupBox1.Location = new System.Drawing.Point(22,239);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(211,42);
-			this.groupBox1.TabIndex = 11;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Claim Form";
-			// 
-			// comboClaimForm
-			// 
-			this.comboClaimForm.FormattingEnabled = true;
-			this.comboClaimForm.Location = new System.Drawing.Point(6,15);
-			this.comboClaimForm.Name = "comboClaimForm";
-			this.comboClaimForm.Size = new System.Drawing.Size(199,21);
-			this.comboClaimForm.TabIndex = 0;
-			// 
 			// FormClaimCreate
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(724,374);
-			this.Controls.Add(this.groupBox1);
+			this.ClientSize = new System.Drawing.Size(724,319);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.listRelat);
 			this.Controls.Add(this.labelRelat);
@@ -163,7 +139,6 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Create New Claim";
 			this.Load += new System.EventHandler(this.FormClaimCreate_Load);
-			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -176,9 +151,10 @@ namespace OpenDental{
 			SubList=InsSubs.RefreshForFam(FamCur);
 			PlanList=InsPlans.RefreshForSubList(SubList);
 			FillPlanData();
-			FillClaimForms();
+			//FillClaimForms();
     }
 
+		/*
 		private void FillClaimForms(){
 			for(int i=0;i<ClaimForms.ListShort.Length;i++) {
 				comboClaimForm.Items.Add(ClaimForms.ListShort[i].Description);
@@ -186,7 +162,7 @@ namespace OpenDental{
 					comboClaimForm.SelectedIndex=i;
 				}
 			}
-		}
+		}*/
 
 		private void FillPlanData(){
 			gridMain.BeginUpdate();
@@ -246,14 +222,14 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select a relationship first."));
 				return;
 			}
-			if(comboClaimForm.SelectedIndex==-1) {
-				MessageBox.Show(Lan.g(this,"Please select a claimform first."));
-				return;
-			}
+			//if(comboClaimForm.SelectedIndex==-1) {
+			//	MessageBox.Show(Lan.g(this,"Please select a claimform first."));
+			//	return;
+			//}
 			PatRelat=(Relat)listRelat.SelectedIndex;
 			SelectedSub=SubList[gridMain.GetSelectedIndex()];
 			SelectedPlan=InsPlans.GetPlan(SubList[gridMain.GetSelectedIndex()].PlanNum,PlanList);
-			ClaimFormNum=ClaimForms.ListShort[comboClaimForm.SelectedIndex].ClaimFormNum;
+			//ClaimFormNum=ClaimForms.ListShort[comboClaimForm.SelectedIndex].ClaimFormNum;
       DialogResult=DialogResult.OK;
 		}
 
