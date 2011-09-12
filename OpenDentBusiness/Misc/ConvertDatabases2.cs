@@ -6571,6 +6571,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="ALTER TABLE clearinghouse DROP COLUMN IsDefault";
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claimpayment ADD IsPartial tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claimpayment ADD IsPartial number(3)";
+					Db.NonQ(command);
+					command="UPDATE claimpayment SET IsPartial = 0 WHERE IsPartial IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claimpayment MODIFY IsPartial NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -6625,5 +6637,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 			
+
+				
+
+
 
 				

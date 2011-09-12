@@ -27,6 +27,8 @@ namespace OpenDentBusiness{
 		public string CarrierName;
 		///<summary>Date that the carrier issued the check. Date on the check.</summary>
 		public DateTime DateIssued;
+		///<summary></summary>
+		public bool IsPartial;
 
 		///<summary>Returns a copy of this ClaimPayment.</summary>
 		public ClaimPayment Copy(){
