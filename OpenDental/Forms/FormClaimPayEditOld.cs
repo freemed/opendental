@@ -517,7 +517,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<splits.Count;i++){
 				if(selectedRows.Contains(i)){//row is selected
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,true);
+					ClaimProcs.SetForClaimOld(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,true);
 					//Audit trail isn't perfect, since it doesn't make an entry if you remove a claim from a payment.
 					//And it always makes more audit trail entries when you click OK, even if you didn't actually attach new claims.
 					//But since this will cover the vast majority if situations.
@@ -537,7 +537,7 @@ namespace OpenDental{
 				else{//row not selected
 					//If user had not been attaching their inspayments to checks, then this will cause such payments to annoyingly have their
 					//date changed to the current date.  This prompts them to call us.  Then, we tell them to attach to checks.
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,false);
+					ClaimProcs.SetForClaimOld(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,false);
 				}
 			}
 			DialogResult=DialogResult.OK;

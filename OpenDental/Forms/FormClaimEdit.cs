@@ -5022,8 +5022,11 @@ namespace OpenDental{
 				string warnings;
 				string missingData=Eclaims.Eclaims.GetMissingData(listQueue[0],out warnings);
 				if(missingData!="") {
-					MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+missingData);
-					DialogResult=DialogResult.OK;
+					if(MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+missingData+"\r\n\r\nContinue anyway?",
+						"",MessageBoxButtons.OKCancel)==DialogResult.OK)
+					{
+						DialogResult=DialogResult.OK;
+					}
 					return;
 				}
 				//if(MsgBox.Show(this,true,"Send electronic claim immediately?")){

@@ -83,7 +83,7 @@ namespace OpenDental{
 			this.textAmount.Location = new System.Drawing.Point(134,86);
 			this.textAmount.Name = "textAmount";
 			this.textAmount.Size = new System.Drawing.Size(68,20);
-			this.textAmount.TabIndex = 3;
+			this.textAmount.TabIndex = 0;
 			this.textAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textDate
@@ -91,7 +91,7 @@ namespace OpenDental{
 			this.textDate.Location = new System.Drawing.Point(134,44);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(68,20);
-			this.textDate.TabIndex = 1;
+			this.textDate.TabIndex = 6;
 			this.textDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textBankBranch
@@ -100,7 +100,7 @@ namespace OpenDental{
 			this.textBankBranch.MaxLength = 25;
 			this.textBankBranch.Name = "textBankBranch";
 			this.textBankBranch.Size = new System.Drawing.Size(100,20);
-			this.textBankBranch.TabIndex = 5;
+			this.textBankBranch.TabIndex = 2;
 			// 
 			// textCheckNum
 			// 
@@ -108,7 +108,7 @@ namespace OpenDental{
 			this.textCheckNum.MaxLength = 25;
 			this.textCheckNum.Name = "textCheckNum";
 			this.textCheckNum.Size = new System.Drawing.Size(100,20);
-			this.textCheckNum.TabIndex = 4;
+			this.textCheckNum.TabIndex = 1;
 			// 
 			// textNote
 			// 
@@ -117,7 +117,7 @@ namespace OpenDental{
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(324,70);
-			this.textNote.TabIndex = 7;
+			this.textNote.TabIndex = 4;
 			// 
 			// label6
 			// 
@@ -191,7 +191,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(356,278);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 8;
+			this.butOK.TabIndex = 5;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -219,7 +219,7 @@ namespace OpenDental{
 			this.textCarrierName.MaxLength = 25;
 			this.textCarrierName.Name = "textCarrierName";
 			this.textCarrierName.Size = new System.Drawing.Size(252,20);
-			this.textCarrierName.TabIndex = 6;
+			this.textCarrierName.TabIndex = 3;
 			// 
 			// label7
 			// 
@@ -244,7 +244,7 @@ namespace OpenDental{
 			this.textDateIssued.Location = new System.Drawing.Point(134,65);
 			this.textDateIssued.Name = "textDateIssued";
 			this.textDateIssued.Size = new System.Drawing.Size(68,20);
-			this.textDateIssued.TabIndex = 2;
+			this.textDateIssued.TabIndex = 7;
 			this.textDateIssued.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label1
@@ -302,7 +302,7 @@ namespace OpenDental{
 			this.Name = "FormClaimPayEdit";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Claim Payment";
+			this.Text = "Edit Insurance Payment";
 			this.Load += new System.EventHandler(this.FormClaimPayEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -313,10 +313,7 @@ namespace OpenDental{
 		private void FormClaimPayEdit_Load(object sender, System.EventArgs e) {
 			//ClaimPayment gets inserted into db when OK in this form if new
 			if(IsNew){
-				if(!Security.IsAuthorized(Permissions.InsPayCreate)){
-					DialogResult=DialogResult.Cancel;
-					return;
-				}
+				//security already checked before this form opens
 			}
 			else{	
 				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimPaymentCur.CheckDate)){
@@ -358,13 +355,22 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textDate.Text=="") {
-				MsgBox.Show(this,"Please enter a date first.");
+				MsgBox.Show(this,"Please enter a date.");
+				return;
+			}
+			if(textCarrierName.Text=="") {
+				MsgBox.Show(this,"Please enter a carrier.");
 				return;
 			}
 			if(textDate.errorProvider1.GetError(textDate)!="" 
+				|| textAmount.errorProvider1.GetError(textAmount)!=""
 				|| textDateIssued.errorProvider1.GetError(textDateIssued)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
+			if(PIn.Double(textAmount.Text)==0) {
+				MsgBox.Show(this,"Please enter an amount.");
 				return;
 			}
 			if(IsNew){
@@ -381,11 +387,13 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(comboClinic.SelectedIndex==0){
-				ClaimPaymentCur.ClinicNum=0;
-			}
-			else{
-				ClaimPaymentCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				if(comboClinic.SelectedIndex==0){
+					ClaimPaymentCur.ClinicNum=0;
+				}
+				else{
+					ClaimPaymentCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+				}
 			}
 			ClaimPaymentCur.CheckDate=PIn.Date(textDate.Text);
 			ClaimPaymentCur.DateIssued=PIn.Date(textDateIssued.Text);

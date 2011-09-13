@@ -795,7 +795,7 @@ namespace OpenDental{
 			this.checkAllowedFeeSchedsAutomate.Name = "checkAllowedFeeSchedsAutomate";
 			this.checkAllowedFeeSchedsAutomate.Size = new System.Drawing.Size(413,17);
 			this.checkAllowedFeeSchedsAutomate.TabIndex = 193;
-			this.checkAllowedFeeSchedsAutomate.Text = "Automatically generate allowed fee schedules for category percentage plans";
+			this.checkAllowedFeeSchedsAutomate.Text = "Use Blue Book";
 			this.checkAllowedFeeSchedsAutomate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAllowedFeeSchedsAutomate.Click += new System.EventHandler(this.checkAllowedFeeSchedsAutomate_Click);
 			// 

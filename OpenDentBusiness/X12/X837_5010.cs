@@ -2052,6 +2052,7 @@ namespace OpenDentBusiness
 			ProcedureCode procCode;
 			bool princDiagExists=false;
 			for(int i=0;i<claimProcs.Count;i++) {
+				string p="proc"+(i+1).ToString()+"-";
 				proc=Procedures.GetProcFromList(procList,claimProcs[i].ProcNum);
 				procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 				if(claim.MedType==EnumClaimMedType.Medical) {
@@ -2066,7 +2067,7 @@ namespace OpenDentBusiness
 				else if(claim.MedType==EnumClaimMedType.Institutional) {
 					if(proc.RevCode==""){
 						Comma(strb);
-						strb.Append(procCode.AbbrDesc+" revenue code");
+						strb.Append(p+"RevenueCode");
 					}
 					if(proc.CodeMod1.Length!=0 && proc.CodeMod1.Length!=2){
 						Comma(strb);
@@ -2163,7 +2164,7 @@ namespace OpenDentBusiness
 
 		private static void Comma(StringBuilder strb){
 			if(strb.Length!=0) {
-				strb.Append(",");
+				strb.Append(", ");
 			}
 		}
 		

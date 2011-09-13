@@ -360,7 +360,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Attaches or detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.  It also updates their DateCP's to match the claimpayment date.</summary>
-		public static void SetForClaim(long claimNum,long claimPaymentNum,DateTime date,bool setAttached) {
+		public static void SetForClaimOld(long claimNum,long claimPaymentNum,DateTime date,bool setAttached) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,claimPaymentNum,date,setAttached);
 				return;
@@ -378,6 +378,35 @@ namespace OpenDentBusiness{
 				+"ClaimPaymentNum="+POut.Long(claimPaymentNum)+" OR ClaimPaymentNum=0)";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
+		}
+
+		///<summary>Attaches claimprocs to the specified claimPayment. Updates all claimprocs on a claim with one query.  It also updates their DateCP's to match the claimpayment date.</summary>
+		public static void AttachToPayment(long claimNum,long claimPaymentNum,DateTime date,int paymentRow) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,claimPaymentNum,date,paymentRow);
+				return;
+			}
+			string command= "UPDATE claimproc SET ClaimPaymentNum="+POut.Long(claimPaymentNum)+", "
+				+"DateCP="+POut.Date(date)+", "
+				+"PaymentRow="+POut.Int(paymentRow)+" "
+				+"WHERE ClaimNum="+POut.Long(claimNum)+" "
+				+"AND InsPayAmt!=0 "
+				+"AND ClaimPaymentNum=0";
+			Db.NonQ(command);
+		}
+
+		///<summary>Detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.  It also sets their DateCP's to min.</summary>
+		public static void DetachFromPayment(long claimNum,long claimPaymentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,claimPaymentNum);
+				return;
+			}
+			string command= "UPDATE claimproc SET ClaimPaymentNum=0, "
+				+"DateCP="+POut.Date(DateTime.MinValue)+", "
+				+"PaymentRow=0 "
+				+"WHERE ClaimNum="+POut.Long(claimNum)+" "
+				+"AND ClaimPaymentNum="+POut.Long(claimPaymentNum);
+			Db.NonQ(command);
 		}
 
 		/*
@@ -1162,6 +1191,18 @@ namespace OpenDentBusiness{
 				ClaimProcList[i].ProvNum=proc.ProvNum;
 				Update(ClaimProcList[i]);
 			}
+		}
+
+		///<summary>For moving rows up and down the batch insurance window.</summary>
+		public static void SetPaymentRow(long claimNum,long claimPaymentNum,int paymentRow) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,claimPaymentNum,paymentRow);
+				return;
+			}
+			string command="UPDATE claimproc SET PaymentRow="+POut.Int(paymentRow)+" "
+				+"WHERE ClaimNum="+POut.Long(claimNum)+" "
+				+"AND ClaimPaymentNum="+POut.Long(claimPaymentNum);
+			Db.NonQ(command);
 		}
 
 

@@ -552,7 +552,7 @@ namespace OpenDental{
 			this.butClaimPay.Name = "butClaimPay";
 			this.butClaimPay.Size = new System.Drawing.Size(104,26);
 			this.butClaimPay.TabIndex = 25;
-			this.butClaimPay.Text = "EOBs";
+			this.butClaimPay.Text = "Batch Ins";
 			this.butClaimPay.Click += new System.EventHandler(this.butClaimPay_Click);
 			// 
 			// butBilling
@@ -779,13 +779,8 @@ namespace OpenDental{
 		}
 		
 		private void butClaimPay_Click(object sender,EventArgs e) {
-			//if(!Security.IsAuthorized(Permissions.ClaimSentEdit,DateTime.Today)){
-			//  return;
-			//}//Not sure if this is required for viewing Claim Payments
-			//Cursor=Cursors.WaitCursor;
 			FormClaimPayList FormCPL=new FormClaimPayList();
 			FormCPL.Show();
-			//Cursor=Cursors.Default;
 		}
 
 		private void butBilling_Click(object sender,System.EventArgs e) {

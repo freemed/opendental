@@ -83,6 +83,8 @@ namespace OpenDentBusiness{
 		public long ClinicNum;
 		///<summary>FK to inssub.InsSubNum.</summary>
 		public long InsSubNum;
+		///<summary>1-indexed.  Allows user to sort the order of payments on an EOB.  All claimprocs for a payment will have the same PaymentRow value.</summary>
+		public int PaymentRow;
 		///<summary>Not a database column.  Used to help manage passing lists around.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public bool DoDelete;

@@ -78,8 +78,8 @@ namespace OpenDentBusiness{
 			return ClaimPaySplitTableToList(table);
 		}
 
-		/// <summary>Gets all claims that are not fully covered by InsPayAmt in attached claimprocs. Will likely need a date range for filtering. DateService/DateSent/DateReceived?.</summary>
-		public static List<ClaimPaySplit> GetByClaimPayment(long claimPaymentNum) {
+		/// <summary>Gets all 'claims' attached to the claimpayment.</summary>
+		public static List<ClaimPaySplit> GetAttachedToPayment(long claimPaymentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum);
 			}
@@ -92,10 +92,15 @@ namespace OpenDentBusiness{
 				+" AND patient.PatNum = claim.PatNum"
 				+" AND insplan.PlanNum = claim.PlanNum"
 				+" AND insplan.CarrierNum = carrier.CarrierNum"
-				+" AND claimproc.ClaimPaymentNum = "+claimPaymentNum
-				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
-				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
-				+" ORDER BY claim.DateService";
+				+" AND claimproc.ClaimPaymentNum = "+claimPaymentNum+" ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY claim.ClaimNum ";
+			}
+			else{//oracle
+				command+="GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
+					+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum ";
+			}
+			command+="ORDER BY claimproc.PaymentRow";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
 		}
@@ -428,6 +433,8 @@ namespace OpenDentBusiness{
 		public double InsPayAmt;
 		///<summary></summary>
 		public long ClaimPaymentNum;
+		///<summary></summary>
+		public int PaymentRow;
 	}
 	
 }

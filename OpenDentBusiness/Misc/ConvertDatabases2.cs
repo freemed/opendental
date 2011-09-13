@@ -6583,7 +6583,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claimpayment MODIFY IsPartial NOT NULL";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claimproc ADD PaymentRow int NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claimproc ADD PaymentRow number(11)";
+					Db.NonQ(command);
+					command="UPDATE claimproc SET PaymentRow = 0 WHERE PaymentRow IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claimproc MODIFY PaymentRow NOT NULL";
+					Db.NonQ(command);
+				}
+				
 
 
 
@@ -6606,39 +6618,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-
-
-
-
-			
-
-				
-
-
-
-
-
-
-
-
-
-
-
-
-				
-
-
-
-				
-
-				
-
-
-
-			
-
-				
 
 
 

@@ -31,10 +31,10 @@ namespace OpenDental {
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
 			}
-			FillMain();
+			FillGrid();
 		}
 
-		private void FillMain(){
+		private void FillGrid(){
 			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo=PIn.Date(textDateTo.Text);
 			long clinicNum=0;
@@ -79,8 +79,12 @@ namespace OpenDental {
 		}
 		
 		private void butAdd_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.InsPayCreate)) {//date not checked here, but it will be checked when saving the check to prevent backdating
+				return;
+			}
 			ClaimPayment claimPayment=new ClaimPayment();
 			claimPayment.CheckDate=DateTime.Now;
+			claimPayment.IsPartial=true;
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPayment);
 			FormCPE.IsNew=true;
 			FormCPE.ShowDialog();
@@ -88,15 +92,20 @@ namespace OpenDental {
 				FormClaimPayBatch FormCPB=new FormClaimPayBatch(claimPayment);
 				FormCPB.ShowDialog();
 			}
+			FillGrid();
 		}               
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.InsPayCreate)) {
+				return;
+			}
 			FormClaimPayBatch FormCPB=new FormClaimPayBatch(ListClaimPay[gridMain.GetSelectedIndex()]);
 			FormCPB.ShowDialog();
+			FillGrid();
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
-			FillMain();
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

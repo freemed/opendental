@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(851,526);
 			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Claim Payments (EOBs)";
+			this.gridMain.Title = "Insurance Payments (EOBs)";
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
@@ -116,6 +116,8 @@ namespace OpenDental{
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(12,576);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
@@ -161,7 +163,7 @@ namespace OpenDental{
 			this.Controls.Add(this.labelFromDate);
 			this.Name = "FormClaimPayList";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Claim Payment (EOB) List";
+			this.Text = "Batch Insurance Payments";
 			this.Load += new System.EventHandler(this.FormClaimPayList_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

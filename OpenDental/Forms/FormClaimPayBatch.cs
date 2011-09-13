@@ -43,7 +43,10 @@ namespace OpenDental{
 		private UI.Button butDetach;
 		private ValidDouble textTotal;
 		private Label label8;
-		private Label label1;
+		private Label labelOut;
+		private UI.Button butDown;
+		private UI.Button butUp;
+		private bool IsDeleting;
 
 		///<summary></summary>
 		public FormClaimPayBatch(ClaimPayment claimPaymentCur) {
@@ -89,9 +92,11 @@ namespace OpenDental{
 			this.butClaimPayEdit = new OpenDental.UI.Button();
 			this.gridOut = new OpenDental.UI.ODGrid();
 			this.butDetach = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelOut = new System.Windows.Forms.Label();
 			this.textTotal = new OpenDental.ValidDouble();
 			this.label8 = new System.Windows.Forms.Label();
+			this.butDown = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -194,10 +199,10 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(803,631);
+			this.butClose.Location = new System.Drawing.Point(803,646);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
-			this.butClose.TabIndex = 1;
+			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
@@ -210,7 +215,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(45,626);
+			this.butDelete.Location = new System.Drawing.Point(44,646);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(79,24);
 			this.butDelete.TabIndex = 52;
@@ -310,7 +315,7 @@ namespace OpenDental{
 			this.groupBox1.Size = new System.Drawing.Size(831,117);
 			this.groupBox1.TabIndex = 98;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Claim Payment";
+			this.groupBox1.Text = "Payment Details";
 			// 
 			// butClaimPayEdit
 			// 
@@ -334,7 +339,7 @@ namespace OpenDental{
 			this.gridOut.Location = new System.Drawing.Point(83,387);
 			this.gridOut.Name = "gridOut";
 			this.gridOut.ScrollValue = 0;
-			this.gridOut.Size = new System.Drawing.Size(660,211);
+			this.gridOut.Size = new System.Drawing.Size(660,243);
 			this.gridOut.TabIndex = 99;
 			this.gridOut.Title = "All Outstanding Claims";
 			this.gridOut.TranslationName = "TableClaimPaySplits";
@@ -356,15 +361,14 @@ namespace OpenDental{
 			this.butDetach.Text = "Detach";
 			this.butDetach.Click += new System.EventHandler(this.butDetach_Click);
 			// 
-			// label1
+			// labelOut
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(256,604);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(338,13);
-			this.label1.TabIndex = 102;
-			this.label1.Text = "Double click on an outstanding claim to enter payments for this check.";
+			this.labelOut.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelOut.Location = new System.Drawing.Point(256,633);
+			this.labelOut.Name = "labelOut";
+			this.labelOut.Size = new System.Drawing.Size(338,18);
+			this.labelOut.TabIndex = 102;
+			this.labelOut.Text = "Double click on an outstanding claim to enter payments for this check.";
 			// 
 			// textTotal
 			// 
@@ -384,12 +388,46 @@ namespace OpenDental{
 			this.label8.Text = "Total Payments";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDown.Location = new System.Drawing.Point(771,225);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(75,24);
+			this.butDown.TabIndex = 104;
+			this.butDown.Text = "&Down";
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			// 
+			// butUp
+			// 
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.Autosize = true;
+			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUp.CornerRadius = 4F;
+			this.butUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butUp.Location = new System.Drawing.Point(771,195);
+			this.butUp.Name = "butUp";
+			this.butUp.Size = new System.Drawing.Size(75,24);
+			this.butUp.TabIndex = 103;
+			this.butUp.Text = "&Up";
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
+			// 
 			// FormClaimPayBatch
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(902,676);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butDown);
+			this.Controls.Add(this.butUp);
+			this.Controls.Add(this.labelOut);
 			this.Controls.Add(this.butDetach);
 			this.Controls.Add(this.gridOut);
 			this.Controls.Add(this.groupBox1);
@@ -404,7 +442,8 @@ namespace OpenDental{
 			this.Name = "FormClaimPayBatch";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Batch Claim Payment (EOB)";
+			this.Text = "Insurance Payment (EOB)";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClaimPayBatch_FormClosing);
 			this.Load += new System.EventHandler(this.FormClaimPayEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
@@ -417,6 +456,22 @@ namespace OpenDental{
 		private void FormClaimPayEdit_Load(object sender, System.EventArgs e) {
 			FillClaimPayment();
 			FillGrids();
+			if(ClaimPaymentCur.IsPartial){
+				//an incomplete payment that's not yet locked
+			}
+			else{//locked
+				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimPaymentCur.CheckDate)) {
+					butDelete.Enabled=false;
+					gridAttached.Enabled=false;
+					butClaimPayEdit.Enabled=false;
+					butUp.Visible=false;
+					butDown.Visible=false;
+				}
+				//someone with permission can double click on the top grid to edit amounts and can edit the object fields as well.
+				butDetach.Visible=false;
+				gridOut.Visible=false;
+				labelOut.Visible=false;
+			}
 		}
 
 		private void FillClaimPayment() {
@@ -438,10 +493,9 @@ namespace OpenDental{
 			Cursor.Current=Cursors.WaitCursor;
 			//gridAttached:
 			//Get all claims attached to this check
-			ClaimsAttached=Claims.GetByClaimPayment(ClaimPaymentCur.ClaimPaymentNum);
+			ClaimsAttached=Claims.GetAttachedToPayment(ClaimPaymentCur.ClaimPaymentNum);
 			//List<int> ProcsAttached=new List<int>();//one item per claimAttached object.
 			//for(int i=0;i<ClaimsAttached.Count;i++){
-//todo: too many calls to db
 			//	ProcsAttached.Add(Procedures.GetCountForClaim(ClaimsAttached[i].ClaimNum));
 			//}
 			gridAttached.BeginUpdate();
@@ -472,6 +526,7 @@ namespace OpenDental{
 			}
 			gridAttached.EndUpdate();
 			//gridOutstanding-------------------------------------------------------------------------------------------------
+//todo: needs work
 			ClaimsOutstanding=Claims.GetOutstandingClaims();
 			gridOut.BeginUpdate();
 			gridOut.Columns.Clear();
@@ -518,23 +573,73 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Remove selected claims from this check?")) {
 				return;
 			}
+//todo: reset PaymentRows because they are now out of order
 			for(int i=0;i<gridAttached.SelectedIndices.Length;i++) {
-				ClaimProcs.SetForClaim(ClaimsAttached[gridAttached.SelectedIndices[i]].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,DateTime.Now,false);
+				ClaimProcs.DetachFromPayment(ClaimsAttached[gridAttached.SelectedIndices[i]].ClaimNum,ClaimPaymentCur.ClaimPaymentNum);
 			}
 			FillGrids();			
 		}
 
 		private void gridAttached_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			//top grid
-			//bring up claimedit window
-			//basically they can only view the claim.
-//todo: Let user edit amounts after attached?
+			//bring up claimedit window.  User should be able to edit if not locked.
 			Claim claimCur=Claims.GetClaim(ClaimsAttached[gridAttached.GetSelectedIndex()].ClaimNum);
 			FormClaimEdit FormCE=new FormClaimEdit(claimCur,Patients.GetPat(claimCur.PatNum),Patients.GetFamily(claimCur.PatNum));
 			FormCE.ShowDialog();
 			FillGrids();	
 		}
 
+		private void butUp_Click(object sender,EventArgs e) {
+			if(gridAttached.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid first.");
+				return;
+			}
+			int[] selected=new int[gridAttached.SelectedIndices.Length];//remember the selected rows so that we can reselect them
+			for(int i=0;i<gridAttached.SelectedIndices.Length;i++) {
+				selected[i]=gridAttached.SelectedIndices[i];
+			}
+			if(selected[0]==0) {//can't go up
+				return;
+			}
+			for(int i=0;i<selected.Length;i++) {
+				//In the db, move the one above down to the current pos
+				ClaimProcs.SetPaymentRow(ClaimsAttached[selected[i]-1].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,selected[i]);
+				//and move this row up one
+				ClaimProcs.SetPaymentRow(ClaimsAttached[selected[i]].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,selected[i]-1);
+				//Then, swap them in the cached list.
+				ClaimsAttached.Reverse(selected[i]-1,2);
+			}
+			FillGrids();
+			for(int i=0;i<selected.Length;i++) {
+				gridAttached.SetSelected(selected[i]-1,true);
+			}
+		}
+
+		private void butDown_Click(object sender,EventArgs e) {
+			if(gridAttached.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid first.");
+				return;
+			}
+			int[] selected=new int[gridAttached.SelectedIndices.Length];
+			for(int i=0;i<gridAttached.SelectedIndices.Length;i++) {
+				selected[i]=gridAttached.SelectedIndices[i];
+			}
+			if(selected[selected.Length-1]==ClaimsAttached.Count-1) {//already at the bottom
+				return;
+			}
+			for(int i=selected.Length-1;i>=0;i--) {//go backwards
+				//In the db, move the one below up to the current pos
+				ClaimProcs.SetPaymentRow(ClaimsAttached[selected[i]+1].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,selected[i]);
+				//and move this row down one
+				ClaimProcs.SetPaymentRow(ClaimsAttached[selected[i]].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,selected[i]+1);
+				//Then, swap them in the cached list.
+				ClaimsAttached.Reverse(selected[i],2);
+			}
+			FillGrids();
+			for(int i=0;i<selected.Length;i++) {
+				gridAttached.SetSelected(selected[i]+1,true);
+			}
+		}
 
 		private void gridOut_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			//bottom grid
@@ -544,7 +649,7 @@ namespace OpenDental{
 			Claim claimCur=Claims.GetClaim(ClaimsOutstanding[gridOut.GetSelectedIndex()].ClaimNum);
 			FormClaimEdit FormCE=new FormClaimEdit(claimCur,Patients.GetPat(claimCur.PatNum),Patients.GetFamily(claimCur.PatNum));
 			FormCE.ShowDialog();
-			ClaimProcs.SetForClaim(claimCur.ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,true);
+			ClaimProcs.AttachToPayment(claimCur.ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,ClaimsAttached.Count);
 			FillGrids();			
 		}
 
@@ -552,9 +657,11 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Delete this insurance check?")){
 				return;
 			}
-			if(ClaimsAttached.Count!=0) {
-				MsgBox.Show(this,"You may not delete a check with attached claims.");
-				return;
+			if(ClaimPaymentCur.IsPartial) {//probably new
+				//everyone should have permission to delete a partial payment
+			}
+			else {//locked
+				//this delete button already disabled if no permission
 			}
 			try{
 				ClaimPayments.Delete(ClaimPaymentCur);
@@ -563,11 +670,35 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			IsDeleting=true;
+			Close();
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+			Close();
 		}
+
+		private void FormClaimPayBatch_FormClosing(object sender,FormClosingEventArgs e) {
+			if(IsDeleting){
+				return;
+			}
+			if(ClaimPaymentCur.IsPartial) {
+				if(textAmount.Text==textTotal.Text) {
+					ClaimPaymentCur.IsPartial=false;
+					ClaimPayments.Update(ClaimPaymentCur);
+				}
+			}
+			else {//locked
+				if(textAmount.Text!=textTotal.Text) {//someone edited a locked payment
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Amounts do not match.  Continue anyway?")) {
+						e.Cancel=true;
+						return;
+					}
+				}
+			}
+		}
+
+		
 
 
 		
