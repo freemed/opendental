@@ -1165,18 +1165,25 @@ namespace OpenDentBusiness
 					//2330B REF: Other Payer Predetermination Identification. Situational. We do not use. (dental)
 					//2230B REF: Other Payer Claim Control Number. Situational. We do not use. (dental)
 					//2330C NM1: Other Payer Referring Provider. Situational. Only used in crosswalking COBs. We do not use. (dental)
-					//2330C REF: Other Payer Referring Provider Secondary Identification. (dental)
+					//2330C REF: Other Payer Referring Provider Secondary Identification. We do not use. (dental)
 					//2330D NM1: Other Payer Rendering Provider. Situational. Only used in crosswalking COBs. We do not use. (dental)
-					//2330D REF: Other Payer Rendering Provider Secondary Identificaiton. (dental)
-					//2330E NM1: 
-					//2330E,F,G,H,I: (medical) not supported
+					//2330D REF: Other Payer Rendering Provider Secondary Identificaiton. We do not use. (dental)
+					//2330E NM1: Other Payer Supervising Provider. Situational. We do not use. (medical,dental)
+					//2330E REF: Other Payer Supervising Provider Secondary Identificaiton. We do not use. (medical,dental)
+					//2330F NM1: Other Payer Billing Provider. Situational. We do not use. (medical,dental)
+					//2330F REF: Other Payer Billing Provider Secondary Identification. We do not use. (medical,dental)
+					//2330G NM1: Other Payer Service Facility Location. Situational. We do not use. (medical,dental)
+					//2330G REF: Other Payer Service Facility Location Secondary Identification. We do not use. (medical,dental)
+					//2330H NM1: Other Payer Assistant Sugeon. Situational. We do not use. (medical,dental)
+					//2330H REF: Other Payer Assistant Surgeon Secondary Identifier. We do not use. (medical,dental)
+					//2330I: (medical) not supported
 					#endregion Other payer
 				}
 				for(int j=0;j<claimProcs.Count;j++) {
 					#region Service Line
 					proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
-					//2400 LX: Line Counter. or (medical) Service Line Number
+					//2400 LX: Service Line Number.
 					seg++;
 					sw.WriteLine("LX*"+(j+1).ToString()+"~");
 					if(medType==EnumClaimMedType.Medical) {
@@ -1253,36 +1260,38 @@ namespace OpenDentBusiness
 							+proc.UnitQty.ToString()+"~");//SV205: Quantity 
 					}//inst
 					else if(medType==EnumClaimMedType.Dental) {
-						//2400 SV3: Dental Service
+						//2400 SV3: Dental Service.
 						seg++;
 						sw.Write("SV3*"
-							+"AD:"+Sout(claimProcs[j].CodeSent,5)+"*"//SV301-1: AD=ADA CDT, SV301-2:Procedure code
-							+claimProcs[j].FeeBilled.ToString()+"*");//SV302: Charge Amount
-						if(proc.PlaceService==claim.PlaceService) {
-							sw.Write("*");//SV303: Location Code if different from claim
+							+"AD:"+Sout(claimProcs[j].CodeSent,5)+"*"//SV301-1 2/2 Product/Service ID Qualifier: AD=American Dental Association Codes; SV301-2 1/48 Product/Service ID: Procedure code; SV301-3 through SV301-8 are Situational. We do not use.
+							+claimProcs[j].FeeBilled.ToString()+"*");//SV302 1/18 Monetary Amount: Charge Amount.
+						string placeService="";
+						if(proc.PlaceService!=claim.PlaceService) {
+							placeService=GetPlaceService(proc.PlaceService);
 						}
-						else {
-							sw.Write(GetPlaceService(proc.PlaceService)+"*");
-						}
-						sw.WriteLine(GetArea(proc,procCode)+"*"//SV304: Area
-							+proc.Prosthesis+"*"//SV305: Initial or Replacement
-							+proc.UnitQty.ToString()+"~");//SV306: Procedure count
-						//2400 TOO: Tooth number/surface
+						//SV303 1/2 Facility Code Value: Location Code if different from claim.
+						sw.WriteLine(placeService+"*"
+							+GetArea(proc,procCode)+"*"//SV304 Oral Cavity Designation: SV304-1 1/3 Oral Cavity Designation Code: Area. SV304-2 through SV304-5 are situational and we do not use.
+							+proc.Prosthesis+"*"//SV305 1/1 Prothesis, Crown or Inlay Code: I=Initial Placement. R=Replacement.
+							+proc.UnitQty.ToString()//SV306 1/15 Quantity: Situational. Procedure count.
+							+"~");//SV307 throug SV311 are either not used or are situational and we do not use.
+						//2400 TOO: Tooth Information. Number/Surface.
 						if(procCode.TreatArea==TreatmentArea.Tooth) {
 							seg++;
-							sw.WriteLine("TOO*JP*"//TOO01: JP=National tooth numbering
-								+proc.ToothNum+"~");//TOO02: Tooth number
+							sw.WriteLine("TOO*JP*"//TOO01 1/3 Code List Qualifier Code: JP=Universal National Tooth Designation System.
+								+proc.ToothNum//TOO02 1/30 Industry Code: Tooth number.
+								+"~");//TOO03 Tooth Surface: Situational. Not applicable.
 						}
 						else if(procCode.TreatArea==TreatmentArea.Surf) {
 							seg++;
-							sw.Write("TOO*JP*"//TOO01: JP=National tooth numbering
-								+proc.ToothNum+"*");//TOO02: Tooth number
+							sw.Write("TOO*JP*"//TOO01 1/3 Code List Qualifier Code: JP=Universal National Tooth Designation System.
+								+proc.ToothNum+"*");//TOO02 1/30 Industry Code: Tooth number.
 							string validSurfaces=Tooth.SurfTidyForClaims(proc.Surf,proc.ToothNum);
 							for(int k=0;k<validSurfaces.Length;k++) {
 								if(k>0) {
 									sw.Write(":");
 								}
-								sw.Write(validSurfaces.Substring(k,1));//TOO03: Surfaces
+								sw.Write(validSurfaces.Substring(k,1));//TOO03 Tooth Surface: TOO03-1 through TOO03-5 are for individual surfaces.
 							}
 							sw.WriteLine("~");
 						}
@@ -1290,31 +1299,33 @@ namespace OpenDentBusiness
 							string[] individTeeth=proc.ToothRange.Split(',');
 							for(int t=0;t<individTeeth.Length;t++) {
 								seg++;
-								sw.WriteLine("TOO*JP*"//TOO01: JP=National tooth numbering
-									+individTeeth[t]+"~");//TOO02: Tooth number
+								sw.WriteLine("TOO*JP*"//TOO01 1/3 Code List Qualifier Code: JP=Universal National Tooth Designation System.
+									+individTeeth[t]//TOO02 1/30 Industry Code: Tooth number.
+									+"~");//TOO03 Tooth Surface: Situational. Not applicable.
 							}
 						}
 					}//dental
 					#endregion Service Line
 					#region Service DTP
-					//2400 DTP 472 (inst,dental) Date of service if different from claim, but we will always show the date. Better compatibility.
+					//2400 DTP: Service Date. Situaitonal. Required if different from claim, but we will always show the date. Better compatibility. 472 (inst,dental)
 					//Required if medical anyway?
 					if(claim.ClaimType!="PreAuth") {
 						seg++;
-						sw.WriteLine("DTP*472*"//DTP01: 472=Service
-							+"D8*"//DTP02: D8=Date format CCYYMMDD
-							+proc.ProcDate.ToString("yyyyMMdd")+"~");
+						sw.WriteLine("DTP*472*"//DTP01 3/3 Date/Time Qualifier: 472=Service.
+							+"D8*"//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+							+proc.ProcDate.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time Period:
 					}
-					//2400 DTP 441 (dental) Date prior placement
+					//2400 DTP: Date Prior Placement. Situational. Required when replacement. 441 (dental)
 					if(proc.Prosthesis=="R") {//already validated date
 						seg++;
-						sw.WriteLine("DTP*441*"//DTP01: 441=Prior placement
-							+"D8*"//DTP02: D8=Date format CCYYMMDD
-							+proc.DateOriginalProsth.ToString("yyyyMMdd")+"~");
+						sw.WriteLine("DTP*441*"//DTP01 3/3 Date/Time Qualifier: 441=Prior Placement.
+							+"D8*"//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+							+proc.DateOriginalProsth.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time Period:
 					}
-					//2400 DTP 452 (dental) Date ortho appliance placed. Not used.
-					//2400 DTP 446 (dental) Date ortho appliance replaced.  Not used.
-					//2400 DTP: (medical) Rx date. Not supported.
+					//2400 DTP: Date Appliance Placement. Situational. Ortho appliance placement. We do not use. 452 (dental)
+					//2400 DTP: Date Replacement. Date ortho appliance replaced. We do not use. 446 (dental)
+					//2400 DTP: Date Treatment Start. Situational. Rx date. We do not use. 196 (medical,dental)
+					//2400 DTP: Date Treatment Completion. Situational. We do not use. 198 (dental)
 					//2400 DTP: (medical) Date Certification Revision. Not supported.
 					//2400 DTP: (medical) Date begin therapy. Not supported.
 					//2400 DTP: (medical) Date last certification. Not supported.
@@ -1329,31 +1340,31 @@ namespace OpenDentBusiness
 					//2400 QTY: (medical) Ambulance patient count. Not supported.
 					//2400 QTY: (medical) Anesthesia quantity. Not used.
 					//2400 MEA (medical)
-					//2400 CN1 (medical,dental) . Not supported.
+					//2400 CN1: Contract Information. Situational. We do not use. (medical,dental)
 					#endregion Service QTY MEA CN1
 					#region Service REF
-					//2400 REF G3 (dental) Pretermination ID. Not used.
-					//2400 REF G1 (dental) Prior Authorization. Not used.
-					//2400 REF 9F (dental) Referral #. Not used.
-					//2400 REF 9A (dental) Repriced claim Number.  Not used.
+					//2400 REF: G3 (dental) Service Predetermination Identification. Situational. Pretermination ID. We do not use.
+					//2400 REF: G1 (dental) Prior Authorization. Situational. We do not use.
+					//2400 REF 9F (dental) Referral Number. Situational. We do not use.
+					//2400 REF 9A (dental) Repriced Claim Number. Situational. We do not use.
 					//2400 REF 9B (inst) Repriced line item reference number.  Not used.
-					//2400 REF 9C (dental) Adjusted Repriced claim Number.  Not used.
+					//2400 REF 9C (dental) Adjusted Repriced claim Number. Situational. We do not use.
 					//2400 REF 9D (inst) Adjusted repriced line item reference Number.  Not used.
-					//2400 REF 6R (inst,dental) Line item control number(Proc Num).
+					//2400 REF 6R (inst,dental) Line Item Control Number (ProcNum).
 					//will later be used for ERAs
 					seg++;
-					sw.WriteLine("REF*6R*"//REF01: 6R=Procedure control number
-						+proc.ProcNum.ToString()+"~");
+					sw.WriteLine("REF*6R*"//REF01 2/3 Reference Identification Qualifier: 6R=Procedure Control Number.
+						+proc.ProcNum.ToString()//REF02 1/50 Reference Identification: 
+						+"~");//REF03 and REF04 are not used.
 					#endregion Service REF
 					#region Service AMT K3 NTE PS1 HCP LIN CTP
-					//2400 AMT T (dental) Sales Tax Amount. Not supported.
+					//2400 AMT: T (dental) Sales Tax Amount. Situational. Not supported.
 					//2400 AMT GT (inst) Service Tax Amount. Not supported.
 					//2400 AMT N8 (inst) Facility Tax Amount. Not supported.
-					//2400 K3 (medical,dental) File Information. Not used.
+					//2400 K3: (medical,dental) File Information. Situational. Not supported.
 					//2400 NTE TPO (inst) Third Party Organization Notes. Not sent by providers. Not supported.
-					//2400 NTE ADD (dental) Line note.  This segment was REMOVED in 5010.
 					//2400 PS1 (medical)
-					//2400 HCP (medical,inst) Line pricing/repricing info. Not used by providers. Not supported
+					//2400 HCP: (medical,inst,dental) Line Pricing/Repricing Information. Not used by providers. Not supported.
 					#endregion Service AMT K3 NTE PS1 HCP
 					#region 2410 Service Drug Identification
 					//2410 LIN,CTP,REF: (medical) ?
@@ -1414,35 +1425,37 @@ namespace OpenDentBusiness
 					#endregion 2420 Service Providers (inst)
 					#region 2420 Service Providers (dental)
 					if(medType==EnumClaimMedType.Dental) {
-						//2420A (dental) Rendering Provider
+						//2420A (dental) Rendering Provider.
 						//Only if different from the claim.
-						//2420A NM1: Rendering provider name. 
+						//2420A NM1: Rendering Provider Name.
 						if(claim.ProvTreat!=proc.ProvNum
 							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) 
 						{
 							provTreat=Providers.GetProv(proc.ProvNum);
 							seg++;
-							sw.Write("NM1*82*"//82=rendering prov
-								+"1*"//NM102: 1=person, validated
-								+Sout(provTreat.LName,35)+"*"//NM103: LName
-								+Sout(provTreat.FName,25)+"*"//NM104: FName
-								+Sout(provTreat.MI,25)+"*"//NM105: MiddleName
-								+"*"//NM106: not used.
-								+"*");//NM107: suffix. not supported.
+							sw.Write("NM1*82*"//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
+								+"1*"//NM102 1/1 Entity Type Qualifier: 1=Person.
+								+Sout(provTreat.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
+								+Sout(provTreat.FName,35)+"*"//NM104 1/35 Name First:
+								+Sout(provTreat.MI,25)+"*"//NM105 1/25 Name Middle:
+								+"*"//NM106 1/10 Name Prefix: Not Used.
+								+"*");//NM107 1/10 Name Suffix: Situational. Not Supported.
 							//After NPI date, so always do it one way:
-							sw.Write("XX*");//NM108: XX=NPI
-							sw.Write(Sout(provTreat.NationalProvID,80));//NM109: ID.  NPI validated.
-							sw.WriteLine("~");
-							//2420A PRV: Rendering provider information
+							sw.Write("XX*");//NM108 1/2 Identification Code Qualifier: XX=NPI.
+							sw.Write(Sout(provTreat.NationalProvID,80));//NM109 2/80 Identification Code: NPI validated.
+							sw.WriteLine("~");//NM110 through NM112 not used.
+							//2420A PRV: Rendering Provider Specialty Information.
 							seg++;
-							sw.Write("PRV*");
-							sw.Write("PE*");//PRV01: PE=Performing
-							sw.Write("ZZ*");//PRV02: ZZ=mutually defined taxonomy code
-							sw.WriteLine(X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
-							//2420A REF: Rendering provider secondary ID. 
+							sw.Write("PRV*PE*");//PRV01 1/3 Provider Code: PE=Performing.
+							sw.Write("PXC*");//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
+							sw.WriteLine(X12Generator.GetTaxonomy(provTreat)//PRV03 1/50 Reference Identification: Taxonomy Code.
+								+"~");//PRV04 through PRV06 not used.
+							//2420A REF: Rendering Provider Secondary Identification.
 							seg++;
-							sw.WriteLine("REF*0B*"//REF01: 0B=state license #
-								+Sout(provTreat.StateLicense,30)+"~");
+							sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+								+Sout(provTreat.StateLicense,50)+"*"//REF02 1/50 Reference Identification: 
+								+"*"//REF03 1/80 Description: Not Used.
+								+"~");//REF04 Reference Identifier: Situational. Not used when REF01 is 0B or 1G.
 						}
 						//2420B (dental) Assistant Surgeon
 						//we don't support
