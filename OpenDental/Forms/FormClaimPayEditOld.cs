@@ -373,7 +373,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			splits=Claims.RefreshByCheck(ClaimPaymentCur.ClaimPaymentNum,checkShowUn.Checked);
+			splits=Claims.RefreshByCheckOld(ClaimPaymentCur.ClaimPaymentNum,checkShowUn.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPaySplits","Date"),70);

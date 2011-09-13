@@ -33,6 +33,7 @@ namespace OpenDental{
 		private Label labelDateIssued;
 		private ValidDate textDateIssued;
 		private UI.Button butCarrierSelect;
+		private Label label8;
 		private Label label1;
 
 		///<summary></summary>
@@ -76,6 +77,7 @@ namespace OpenDental{
 			this.textDateIssued = new OpenDental.ValidDate();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butCarrierSelect = new OpenDental.UI.Button();
+			this.label8 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textAmount
@@ -112,7 +114,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(134,170);
+			this.textNote.Location = new System.Drawing.Point(134,198);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
@@ -157,7 +159,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(13,171);
+			this.label2.Location = new System.Drawing.Point(13,199);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(120,16);
 			this.label2.TabIndex = 33;
@@ -173,7 +175,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(447,278);
+			this.butCancel.Location = new System.Drawing.Point(430,302);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
@@ -188,7 +190,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(356,278);
+			this.butOK.Location = new System.Drawing.Point(339,302);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 5;
@@ -270,12 +272,21 @@ namespace OpenDental{
 			this.butCarrierSelect.Text = "Pick";
 			this.butCarrierSelect.Click += new System.EventHandler(this.butCarrierSelect_Click);
 			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(131,172);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(200,16);
+			this.label8.TabIndex = 96;
+			this.label8.Text = "(does not need to be exact)";
+			// 
 			// FormClaimPayEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(542,322);
+			this.ClientSize = new System.Drawing.Size(525,346);
+			this.Controls.Add(this.label8);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCarrierName);
 			this.Controls.Add(this.label7);

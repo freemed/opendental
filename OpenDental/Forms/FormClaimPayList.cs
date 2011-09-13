@@ -11,6 +11,12 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormClaimPayList:Form {
 		List<ClaimPayment> ListClaimPay;
+		///<summary>If this is not zero upon closing, then we will jump to the account module of that patient and highlight the claim.</summary>
+		public long GotoClaimNum;
+		///<summary>If this is not zero upon closing, then we will jump to the account module of that patient and highlight the claim.</summary>
+		public long GotoPatNum;
+		///<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.</summary>
+		public bool IsFromClaim;
 
 		public FormClaimPayList() {
 			InitializeComponent();
@@ -44,17 +50,19 @@ namespace OpenDental {
 			ListClaimPay=ClaimPayments.GetForDateRange(dateFrom,dateTo,clinicNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPayList","Date"),70);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Amount Pd"),70,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g(this,"Amount"),75,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Carrier"),250);
+			col=new ODGridColumn(Lan.g(this,"Partial"),40,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Carrier"),250);
 			gridMain.Columns.Add(col);
 			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
-				col=new ODGridColumn(Lan.g("TableClaimPayList","Clinic"),100);
+				col=new ODGridColumn(Lan.g(this,"Clinic"),100);
 				gridMain.Columns.Add(col);
 			}
-			col=new ODGridColumn(Lan.g("TableClaimPayList","Note"),100);
+			col=new ODGridColumn(Lan.g(this,"Note"),100);
 			gridMain.Columns.Add(col);			
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -67,6 +75,7 @@ namespace OpenDental {
 					row.Cells.Add(ListClaimPay[i].CheckDate.ToShortDateString());
 				}
 				row.Cells.Add(ListClaimPay[i].CheckAmt.ToString("c"));
+				row.Cells.Add(ListClaimPay[i].IsPartial?"X":"");
 				row.Cells.Add(ListClaimPay[i].CarrierName);
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
 					row.Cells.Add(Clinics.GetDesc(ListClaimPay[i].ClinicNum));
@@ -88,11 +97,20 @@ namespace OpenDental {
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPayment);
 			FormCPE.IsNew=true;
 			FormCPE.ShowDialog();
-			if(FormCPE.DialogResult==DialogResult.OK) {
-				FormClaimPayBatch FormCPB=new FormClaimPayBatch(claimPayment);
-				FormCPB.ShowDialog();
+			if(FormCPE.DialogResult!=DialogResult.OK) {
+				return;
 			}
-			FillGrid();
+			FormClaimPayBatch FormCPB=new FormClaimPayBatch(claimPayment);
+			FormCPB.IsFromClaim=IsFromClaim;
+			FormCPB.ShowDialog();
+			if(FormCPB.GotoClaimNum!=0) {
+				GotoClaimNum=FormCPB.GotoClaimNum;
+				GotoPatNum=FormCPB.GotoPatNum;
+				Close();
+			}
+			else {
+				FillGrid();
+			}
 		}               
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -100,8 +118,16 @@ namespace OpenDental {
 				return;
 			}
 			FormClaimPayBatch FormCPB=new FormClaimPayBatch(ListClaimPay[gridMain.GetSelectedIndex()]);
+			FormCPB.IsFromClaim=IsFromClaim;
 			FormCPB.ShowDialog();
-			FillGrid();
+			if(FormCPB.GotoClaimNum!=0){
+				GotoClaimNum=FormCPB.GotoClaimNum;
+				GotoPatNum=FormCPB.GotoPatNum;
+				Close();
+			}
+			else{
+				FillGrid();
+			}
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {

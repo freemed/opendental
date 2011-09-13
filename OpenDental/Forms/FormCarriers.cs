@@ -232,10 +232,10 @@ namespace OpenDental{
 			//}
 			if(IsSelectMode) {
 				butCancel.Text=Lan.g(this,"Cancel");
-				butOK.Visible=false;
 			}
 			else {
 				butCancel.Text=Lan.g(this,"Close");
+				butOK.Visible=false;
 			}
 			Carriers.RefreshCache();
 			FillGrid();

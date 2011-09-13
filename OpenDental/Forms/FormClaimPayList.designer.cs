@@ -27,8 +27,8 @@ namespace OpenDental{
 			this.labelToDate = new System.Windows.Forms.Label();
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butRefresh = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
@@ -71,21 +71,6 @@ namespace OpenDental{
 			this.comboClinic.Size = new System.Drawing.Size(181,21);
 			this.comboClinic.TabIndex = 23;
 			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,42);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(851,526);
-			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Insurance Payments (EOBs)";
-			this.gridMain.TranslationName = null;
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
 			// butRefresh
 			// 
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -100,6 +85,21 @@ namespace OpenDental{
 			this.butRefresh.TabIndex = 24;
 			this.butRefresh.Text = "&Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,42);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(851,526);
+			this.gridMain.TabIndex = 4;
+			this.gridMain.Title = "Insurance Payments (EOBs)";
+			this.gridMain.TranslationName = "FormClaimPayList";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// textDateTo
 			// 

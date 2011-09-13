@@ -1776,17 +1776,20 @@ namespace OpenDental {
 		///<summary>Used when jumping to this module and directly to a claim.</summary>
 		public void ModuleSelected(long patNum,long claimNum) {
 			ModuleSelected(patNum);
-/*
-			for(int i=0;i<AcctLineList.Count;i++){
-				if(AcctLineList[i].Type != AcctModType.Claim){
+			DataTable table=DataSetMain.Tables["account"];
+			for(int i=0;i<table.Rows.Count;i++){
+				if(table.Rows[i]["ClaimPaymentNum"].ToString()!="0") {//claimpayment
 					continue;
 				}
-				if(arrayClaim[AcctLineList[i].Index].ClaimNum!=claimNum){
+				if(table.Rows[i]["ClaimNum"].ToString()=="0") {//not a claim or claimpayment
+					continue;
+				}
+				long claimNumRow=PIn.Long(table.Rows[i]["ClaimNum"].ToString());
+				if(claimNumRow!=claimNum){
 					continue;
 				}
 				gridAccount.SetSelected(i,true);
 			}
- */
 		}
 
 		///<summary></summary>

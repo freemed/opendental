@@ -11,14 +11,14 @@ namespace OpenDentBusiness{
 	public class Claims{
 		
 		///<summary>Gets claimpaysplits attached to a claimpayment with the associated patient, insplan, and carrier. If showUnattached it also shows all claimpaysplits that have not been attached to a claimpayment. Pass (0,true) to just get all unattached (outstanding) claimpaysplits.</summary>
-		public static List<ClaimPaySplit> RefreshByCheck(long claimPaymentNum,bool showUnattached) {
+		public static List<ClaimPaySplit> RefreshByCheckOld(long claimPaymentNum,bool showUnattached) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum,showUnattached);
 			}
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"//Changed from \"_patName\" to patName_ for MySQL 5.5. Also added checks for #<table> and $<table>
 				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,claim.PatNum"
+				+",claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -54,26 +54,32 @@ namespace OpenDentBusiness{
 			return ClaimCrud.SelectMany(command);
 		}
 
-		/// <summary>Gets all claims that are not fully covered by InsPayAmt in attached claimprocs. Will likely need a date range for filtering. DateService/DateSent/DateReceived?.</summary>
+		/// <summary>Gets all outstanding claims for the batch payment window.</summary>
 		public static List<ClaimPaySplit> GetOutstandingClaims() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
 			}
-			string command=
-				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
-				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,claim.PatNum"
-				+" FROM claim,patient,insplan,carrier,claimproc"
-				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
-				+" AND patient.PatNum = claim.PatNum"
-				+" AND insplan.PlanNum = claim.PlanNum"
-				+" AND insplan.CarrierNum = carrier.CarrierNum"
-				+" AND claim.ClaimStatus IN ('S','R')"
-				+" AND claim.PreAuthString = ''"
-				+" GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName)"
-				+",carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum"
-				//+" HAVING SUM(claimproc.InsPayAmt)<SUM(claimproc.InsPayEst)"
-				+" ORDER BY claim.DateService";
+			string command="SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
+				+"carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
+				+"claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow  "
+				+"FROM claim,patient,insplan,carrier,claimproc "
+				+"WHERE claimproc.ClaimNum = claim.ClaimNum "
+				+"AND patient.PatNum = claim.PatNum "
+				+"AND insplan.PlanNum = claim.PlanNum "
+				+"AND insplan.CarrierNum = carrier.CarrierNum "
+				+"AND (claim.ClaimStatus = 'S' "
+				+"OR (claim.ClaimStatus='R' AND claimproc.InsPayAmt>0)) "//certain (very few) received claims will have payment amounts entered but not attached to payment
+				+"AND ClaimType != 'PreAuth' "
+				+"AND claimproc.ClaimPaymentNum=0 ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY claim.ClaimNum ";
+			}
+			else{//oracle
+				command+="GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName),"
+					+"carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum ";
+			}
+			//+" HAVING SUM(claimproc.InsPayAmt)<SUM(claimproc.InsPayEst)"
+			command+="ORDER BY CarrierName,patName_";
 			DataTable table=Db.GetTable(command);
 			return ClaimPaySplitTableToList(table);
 		}
@@ -86,7 +92,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
 				+"carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
-				+"claimproc.ClaimPaymentNum,claim.PatNum"
+				+"claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -106,14 +112,14 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<ClaimPaySplit> GetInsPayNotAttached() {
+		public static List<ClaimPaySplit> GetInsPayNotAttachedForFixTool() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
 			}
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
 				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,claim.PatNum"
+				+",claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -138,12 +144,13 @@ namespace OpenDentBusiness{
 				split.DateClaim      =PIn.Date  (table.Rows[i]["DateService"].ToString());
 				split.ProvAbbr       =Providers.GetAbbr(PIn.Long(table.Rows[i]["ProvTreat"].ToString()));
 				split.PatName        =PIn.String(table.Rows[i]["patName_"].ToString());
+				split.PatNum         =PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				split.Carrier        =PIn.String(table.Rows[i]["CarrierName"].ToString());
 				split.FeeBilled      =PIn.Double(table.Rows[i]["feeBilled_"].ToString());
 				split.InsPayAmt      =PIn.Double(table.Rows[i]["insPayAmt_"].ToString());
-				split.ClaimNum       =PIn.Long   (table.Rows[i]["ClaimNum"].ToString());
-				split.ClaimPaymentNum=PIn.Long   (table.Rows[i]["ClaimPaymentNum"].ToString());
-				split.PatNum         =PIn.Long   (table.Rows[i]["PatNum"].ToString());
+				split.ClaimNum       =PIn.Long  (table.Rows[i]["ClaimNum"].ToString());
+				split.ClaimPaymentNum=PIn.Long  (table.Rows[i]["ClaimPaymentNum"].ToString());
+				split.PaymentRow     =PIn.Int   (table.Rows[i]["PaymentRow"].ToString());
 				splits.Add(split);
 			}
 			return splits;
@@ -433,7 +440,7 @@ namespace OpenDentBusiness{
 		public double InsPayAmt;
 		///<summary></summary>
 		public long ClaimPaymentNum;
-		///<summary></summary>
+		///<summary>1-based</summary>
 		public int PaymentRow;
 	}
 	

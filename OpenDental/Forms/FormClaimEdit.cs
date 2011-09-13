@@ -316,7 +316,11 @@ namespace OpenDental{
 		private Label label86;
 		private ComboBox comboClaimForm;
 		private Label label87;
+		private UI.Button butBatch;
+		private Label labelBatch;
 		private List<InsSub> SubList;
+		///<summary>If this claim edit window is accessed from the batch ins window, then set this to true to hide the batch button in this window and prevent loop.</summary>
+		public bool IsFromBatchWindow;
 
 		///<summary></summary>
 		public FormClaimEdit(Claim claimCur, Patient patCur,Family famCur){
@@ -611,6 +615,8 @@ namespace OpenDental{
 			this.label86 = new System.Windows.Forms.Label();
 			this.comboClaimForm = new System.Windows.Forms.ComboBox();
 			this.label87 = new System.Windows.Forms.Label();
+			this.butBatch = new OpenDental.UI.Button();
+			this.labelBatch = new System.Windows.Forms.Label();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -3341,12 +3347,37 @@ namespace OpenDental{
 			this.label87.Text = "ClaimForm";
 			this.label87.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butBatch
+			// 
+			this.butBatch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBatch.Autosize = true;
+			this.butBatch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBatch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBatch.CornerRadius = 4F;
+			this.butBatch.Location = new System.Drawing.Point(557,389);
+			this.butBatch.Name = "butBatch";
+			this.butBatch.Size = new System.Drawing.Size(96,24);
+			this.butBatch.TabIndex = 150;
+			this.butBatch.Text = "Batch Payment";
+			this.butBatch.Click += new System.EventHandler(this.butBatch_Click);
+			// 
+			// labelBatch
+			// 
+			this.labelBatch.Location = new System.Drawing.Point(557,417);
+			this.labelBatch.Name = "labelBatch";
+			this.labelBatch.Size = new System.Drawing.Size(199,53);
+			this.labelBatch.TabIndex = 151;
+			this.labelBatch.Text = "The usual place to enter batch payments is from the Manage module.  This button i" +
+    "s similar, but doesn\'t allow you to jump to other accounts.";
+			// 
 			// FormClaimEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(984,913);
 			this.ControlBox = false;
+			this.Controls.Add(this.labelBatch);
+			this.Controls.Add(this.butBatch);
 			this.Controls.Add(this.comboClaimForm);
 			this.Controls.Add(this.label87);
 			this.Controls.Add(this.comboMedType);
@@ -3461,6 +3492,10 @@ namespace OpenDental{
 			//the control box (x to close window) is not shown in this form because new users are temped to use it as an OK button, causing errors.
 			if(System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height<this.Height){
 				this.Height=System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;//make this window as tall as possible.
+			}
+			if(IsFromBatchWindow) {
+				butBatch.Visible=false;
+				labelBatch.Visible=false;
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelPredeterm.Text=Lan.g(this,"Predeterm Num");
@@ -4509,6 +4544,7 @@ namespace OpenDental{
 			FillGrids();
 		}
 
+		/*
 		///<summary>Creates insurance check</summary>
 		private void butCheckAdd_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here, but it will be checked when saving the check to prevent backdating
@@ -4541,6 +4577,17 @@ namespace OpenDental{
 			ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
+		}*/
+
+		private void butBatch_Click(object sender,EventArgs e) {
+			if(!ClaimIsValid()) {
+				return;
+			}
+			UpdateClaim();
+			FormClaimPayList FormCPL=new FormClaimPayList();
+			FormCPL.IsFromClaim=true;
+			FormCPL.ShowDialog();
+			DialogResult=DialogResult.OK;
 		}
 
 		private void radioProsthN_Click(object sender, System.EventArgs e) {
@@ -5560,6 +5607,8 @@ namespace OpenDental{
 				Claims.Delete(ClaimCur);//does not do any validation.  Also deletes the claimcanadian.
 			}
 		}
+
+	
 
 	
 

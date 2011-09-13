@@ -780,7 +780,12 @@ namespace OpenDental{
 		
 		private void butClaimPay_Click(object sender,EventArgs e) {
 			FormClaimPayList FormCPL=new FormClaimPayList();
-			FormCPL.Show();
+			FormCPL.ShowDialog();
+			if(FormCPL.GotoPatNum!=0 && FormCPL.GotoClaimNum!=0) {
+				Patient pat=Patients.GetPat(FormCPL.GotoPatNum);
+				OnPatientSelected(FormCPL.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				GotoModule.GotoClaim(FormCPL.GotoClaimNum);
+			}
 		}
 
 		private void butBilling_Click(object sender,System.EventArgs e) {
