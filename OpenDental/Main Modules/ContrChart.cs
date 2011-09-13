@@ -5605,7 +5605,9 @@ namespace OpenDental{
 			else if(Programs.UsingOrion){
 				//No need to synch with Orion mode.
 			}
-			else{
+			else if(newStatus==ProcStat.C 
+				|| newStatus==ProcStat.EC 
+				|| newStatus==ProcStat.EO) {//only run Recalls for completed, existing current, or existing other
 				Recalls.Synch(PatCur.PatNum);
 			}
 		}
@@ -5721,7 +5723,9 @@ namespace OpenDental{
 			else if(Programs.UsingOrion){
 				//No need to synch with Orion mode.
 			}
-			else{
+			else if(newStatus==ProcStat.C 
+				|| newStatus==ProcStat.EC 
+				|| newStatus==ProcStat.EO){//only run Recalls for completed, existing current, or existing other
 				Recalls.Synch(PatCur.PatNum);
 			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
@@ -5858,7 +5862,9 @@ namespace OpenDental{
 				}
 				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//for n
-			ModuleSelected(PatCur.PatNum);
+			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			ClearButtons();
+			FillProgNotes();
 			if(newStatus==ProcStat.C) {
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,DateTime.Today.ToShortDateString());
 				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
@@ -6199,7 +6205,9 @@ namespace OpenDental{
 				}//n selected teeth
 				//orionProvNum=ProcCur.ProvNum;
 			}//for i
-			ModuleSelected(PatCur.PatNum);
+			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			ClearButtons();
+			FillProgNotes();
 			if(newStatus==ProcStat.C){
 				string descript="";
 				if(ProcCur!=null) {//probably overkill
@@ -6340,7 +6348,9 @@ namespace OpenDental{
 				}
 				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//n selected teeth
-			ModuleSelected(PatCur.PatNum);
+			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			ClearButtons();
+			FillProgNotes();
 			textProcCode.Text="";
 			textProcCode.Select();
 			if(newStatus==ProcStat.C) {
