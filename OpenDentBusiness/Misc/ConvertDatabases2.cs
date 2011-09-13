@@ -6595,7 +6595,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claimproc MODIFY PaymentRow NOT NULL";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD SuperFamily bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patient ADD INDEX (SuperFamily)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD SuperFamily number(20)";
+					Db.NonQ(command);
+					command="UPDATE patient SET SuperFamily = 0 WHERE SuperFamily IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patient MODIFY SuperFamily NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX patient_SuperFamily ON patient (SuperFamily)";
+					Db.NonQ(command);
+				}
 
 
 
