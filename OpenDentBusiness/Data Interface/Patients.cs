@@ -1338,7 +1338,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the DataTable to display for treatment finder report</summary>
-		public static DataTable GetTreatmentFinderList(bool noIns,int monthStart,DateTime dateSince,double aboveAmount,ArrayList providerFilter,
+		public static DataTable GetTreatmentFinderList(bool noIns,bool patsWithAppts,int monthStart,DateTime dateSince,double aboveAmount,ArrayList providerFilter,
 			ArrayList billingFilter,string code1,string code2) 
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -1357,6 +1357,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("amountUsed");
 			table.Columns.Add("amountRemaining");
 			table.Columns.Add("treatmentPlan");
+			table.Columns.Add("carrierName");
 			List<DataRow> rows=new List<DataRow>();
 			string command=@"
 				DROP TABLE IF EXISTS tempused;
@@ -1425,22 +1426,27 @@ FROM insplan";
 				patient.Email, patient.HmPhone, patient.PreferRecallMethod,
 				patient.WirelessPhone, patient.WkPhone, patient.Address,
 				patient.Address2, patient.City, patient.State, patient.Zip,
-				patient.PriProv, patient.BillingType, 
+				patient.PriProv, patient.BillingType,
 				tempannualmax.AnnualMax ""$AnnualMax"",
 				tempused.AmtUsed ""$AmountUsed"",
 				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) ""$AmtRemaining"",
-				tempplanned.AmtPlanned ""$TreatmentPlan""
+				tempplanned.AmtPlanned ""$TreatmentPlan"", carrier.CarrierName
 				FROM patient
 				LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
 				LEFT JOIN patplan ON patient.PatNum=patplan.PatNum
 				LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum
 				LEFT JOIN insplan ON insplan.PlanNum=inssub.PlanNum
+				LEFT JOIN carrier ON insplan.CarrierNum=carrier.CarrierNum
 				LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
 				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=inssub.PlanNum
 				AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0)/*may not be necessary*/
+				AND patient.PatNum
 				WHERE tempplanned.AmtPlanned>0 ";
 			if(!noIns) {//if we don't want patients without insurance
 				command+=@"AND patplan.Ordinal=1 AND insplan.MonthRenew="+POut.Int(monthStart)+" ";
+			}
+			if(!patsWithAppts) {
+				command+=@"AND patient.PatNum NOT IN (SELECT patient.PatNum FROM patient JOIN appointment ON patient.PatNum=appointment.PatNum WHERE appointment.AptDateTime > NOW()) ";
 			}
 			if(aboveAmount>0) {
 				command+=@"AND (tempannualmax.AnnualMax IS NULL OR tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+") ";
@@ -1526,6 +1532,7 @@ FROM insplan";
 				row["amountUsed"]=(PIn.Double(rawtable.Rows[i]["$AmountUsed"].ToString())).ToString("N");
 				row["amountRemaining"]=(PIn.Double(rawtable.Rows[i]["$AmtRemaining"].ToString())).ToString("N");
 				row["treatmentPlan"]=(PIn.Double(rawtable.Rows[i]["$TreatmentPlan"].ToString())).ToString("N");
+				row["carrierName"]=rawtable.Rows[i]["CarrierName"].ToString();
 				rows.Add(row);
 			}
 			for(int i=0;i<rows.Count;i++) {

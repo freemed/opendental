@@ -53,6 +53,7 @@ namespace OpenDental{
 		private ComboBoxMulti comboBoxMultiProv;
 		private ComboBoxMulti comboBoxMultiBilling;
 		private int pagesPrinted;
+		private CheckBox checkIncludePatsWithApts;
 		private int patientsPrinted;
 
 		///<summary></summary>
@@ -79,9 +80,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkIncludeNoIns = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.comboBoxMultiBilling = new OpenDental.UI.ComboBoxMulti();
-			this.comboBoxMultiProv = new OpenDental.UI.ComboBoxMulti();
-			this.textOverAmount = new OpenDental.ValidDouble();
 			this.comboMonthStart = new System.Windows.Forms.ComboBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
@@ -90,12 +88,12 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textDateStart = new OpenDental.ValidDate();
 			this.label2 = new System.Windows.Forms.Label();
-			this.butRefresh = new OpenDental.UI.Button();
 			this.contextRightClick = new System.Windows.Forms.ContextMenu();
 			this.menuItemFamily = new System.Windows.Forms.MenuItem();
 			this.menuItemAccount = new System.Windows.Forms.MenuItem();
+			this.checkIncludePatsWithApts = new System.Windows.Forms.CheckBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.buttonExport = new OpenDental.UI.Button();
 			this.butLettersPreview = new OpenDental.UI.Button();
 			this.butLabelSingle = new OpenDental.UI.Button();
@@ -103,7 +101,11 @@ namespace OpenDental{
 			this.butGotoAccount = new OpenDental.UI.Button();
 			this.butGotoFamily = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
+			this.comboBoxMultiBilling = new OpenDental.UI.ComboBoxMulti();
+			this.comboBoxMultiProv = new OpenDental.UI.ComboBoxMulti();
+			this.textOverAmount = new OpenDental.ValidDouble();
+			this.textDateStart = new OpenDental.ValidDate();
+			this.butRefresh = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -119,7 +121,7 @@ namespace OpenDental{
 			// checkIncludeNoIns
 			// 
 			this.checkIncludeNoIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIncludeNoIns.Location = new System.Drawing.Point(13,14);
+			this.checkIncludeNoIns.Location = new System.Drawing.Point(31,14);
 			this.checkIncludeNoIns.Name = "checkIncludeNoIns";
 			this.checkIncludeNoIns.Size = new System.Drawing.Size(214,18);
 			this.checkIncludeNoIns.TabIndex = 30;
@@ -143,6 +145,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textDateStart);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.butRefresh);
+			this.groupBox1.Controls.Add(this.checkIncludePatsWithApts);
 			this.groupBox1.Controls.Add(this.checkIncludeNoIns);
 			this.groupBox1.Location = new System.Drawing.Point(3,41);
 			this.groupBox1.Name = "groupBox1";
@@ -150,39 +153,6 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 33;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
-			// 
-			// comboBoxMultiBilling
-			// 
-			this.comboBoxMultiBilling.BackColor = System.Drawing.SystemColors.Window;
-			this.comboBoxMultiBilling.DroppedDown = false;
-			this.comboBoxMultiBilling.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiBilling.Items")));
-			this.comboBoxMultiBilling.Location = new System.Drawing.Point(513,32);
-			this.comboBoxMultiBilling.Name = "comboBoxMultiBilling";
-			this.comboBoxMultiBilling.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiBilling.SelectedIndices")));
-			this.comboBoxMultiBilling.Size = new System.Drawing.Size(160,21);
-			this.comboBoxMultiBilling.TabIndex = 50;
-			this.comboBoxMultiBilling.UseCommas = true;
-			this.comboBoxMultiBilling.Leave += new System.EventHandler(this.comboBoxMultiBilling_Leave);
-			// 
-			// comboBoxMultiProv
-			// 
-			this.comboBoxMultiProv.BackColor = System.Drawing.SystemColors.Window;
-			this.comboBoxMultiProv.DroppedDown = false;
-			this.comboBoxMultiProv.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.Items")));
-			this.comboBoxMultiProv.Location = new System.Drawing.Point(513,10);
-			this.comboBoxMultiProv.Name = "comboBoxMultiProv";
-			this.comboBoxMultiProv.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.SelectedIndices")));
-			this.comboBoxMultiProv.Size = new System.Drawing.Size(160,21);
-			this.comboBoxMultiProv.TabIndex = 49;
-			this.comboBoxMultiProv.UseCommas = true;
-			this.comboBoxMultiProv.Leave += new System.EventHandler(this.comboBoxMultiProv_Leave);
-			// 
-			// textOverAmount
-			// 
-			this.textOverAmount.Location = new System.Drawing.Point(159,33);
-			this.textOverAmount.Name = "textOverAmount";
-			this.textOverAmount.Size = new System.Drawing.Size(68,20);
-			this.textOverAmount.TabIndex = 48;
 			// 
 			// comboMonthStart
 			// 
@@ -201,7 +171,7 @@ namespace OpenDental{
             "10 - October",
             "11 - November",
             "12 - December"});
-			this.comboMonthStart.Location = new System.Drawing.Point(342,32);
+			this.comboMonthStart.Location = new System.Drawing.Point(346,32);
 			this.comboMonthStart.MaxDropDownItems = 40;
 			this.comboMonthStart.Name = "comboMonthStart";
 			this.comboMonthStart.Size = new System.Drawing.Size(98,21);
@@ -209,7 +179,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(13,36);
+			this.label8.Location = new System.Drawing.Point(31,58);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(140,14);
 			this.label8.TabIndex = 46;
@@ -218,7 +188,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(443,35);
+			this.label7.Location = new System.Drawing.Point(445,35);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(70,14);
 			this.label7.TabIndex = 43;
@@ -242,9 +212,9 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(233,36);
+			this.label3.Location = new System.Drawing.Point(249,36);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(105,14);
+			this.label3.Size = new System.Drawing.Size(93,14);
 			this.label3.TabIndex = 37;
 			this.label3.Text = "Ins Month Start";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -260,43 +230,21 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(443,14);
+			this.label4.Location = new System.Drawing.Point(445,14);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(70,14);
 			this.label4.TabIndex = 35;
 			this.label4.Text = "Provider";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textDateStart
-			// 
-			this.textDateStart.Location = new System.Drawing.Point(363,11);
-			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(77,20);
-			this.textDateStart.TabIndex = 34;
-			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(242,14);
+			this.label2.Location = new System.Drawing.Point(246,14);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(119,14);
 			this.label2.TabIndex = 33;
-			this.label2.Text = "Proc Date Since";
+			this.label2.Text = "TP Date Since";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(342,55);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(98,24);
-			this.butRefresh.TabIndex = 32;
-			this.butRefresh.Text = "&Refresh List";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// contextRightClick
 			// 
@@ -315,6 +263,34 @@ namespace OpenDental{
 			this.menuItemAccount.Index = 1;
 			this.menuItemAccount.Text = "See Account";
 			this.menuItemAccount.Click += new System.EventHandler(this.menuItemAccount_Click);
+			// 
+			// checkIncludePatsWithApts
+			// 
+			this.checkIncludePatsWithApts.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIncludePatsWithApts.Location = new System.Drawing.Point(6,33);
+			this.checkIncludePatsWithApts.Name = "checkIncludePatsWithApts";
+			this.checkIncludePatsWithApts.Size = new System.Drawing.Size(239,18);
+			this.checkIncludePatsWithApts.TabIndex = 30;
+			this.checkIncludePatsWithApts.Text = "Include patients with upcoming appointments";
+			this.checkIncludePatsWithApts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIncludePatsWithApts.UseVisualStyleBackColor = true;
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = true;
+			this.gridMain.Location = new System.Drawing.Point(3,130);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(917,453);
+			this.gridMain.TabIndex = 31;
+			this.gridMain.Title = "Treatment Finder";
+			this.gridMain.TranslationName = "TableTreatmentFinder";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// buttonExport
 			// 
@@ -432,22 +408,60 @@ namespace OpenDental{
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
-			// gridMain
+			// comboBoxMultiBilling
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(3,130);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(917,453);
-			this.gridMain.TabIndex = 31;
-			this.gridMain.Title = "Treatment Finder";
-			this.gridMain.TranslationName = "TableTreatmentFinder";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.comboBoxMultiBilling.BackColor = System.Drawing.SystemColors.Window;
+			this.comboBoxMultiBilling.DroppedDown = false;
+			this.comboBoxMultiBilling.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiBilling.Items")));
+			this.comboBoxMultiBilling.Location = new System.Drawing.Point(515,32);
+			this.comboBoxMultiBilling.Name = "comboBoxMultiBilling";
+			this.comboBoxMultiBilling.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiBilling.SelectedIndices")));
+			this.comboBoxMultiBilling.Size = new System.Drawing.Size(160,21);
+			this.comboBoxMultiBilling.TabIndex = 50;
+			this.comboBoxMultiBilling.UseCommas = true;
+			this.comboBoxMultiBilling.Leave += new System.EventHandler(this.comboBoxMultiBilling_Leave);
+			// 
+			// comboBoxMultiProv
+			// 
+			this.comboBoxMultiProv.BackColor = System.Drawing.SystemColors.Window;
+			this.comboBoxMultiProv.DroppedDown = false;
+			this.comboBoxMultiProv.Items = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.Items")));
+			this.comboBoxMultiProv.Location = new System.Drawing.Point(515,10);
+			this.comboBoxMultiProv.Name = "comboBoxMultiProv";
+			this.comboBoxMultiProv.SelectedIndices = ((System.Collections.ArrayList)(resources.GetObject("comboBoxMultiProv.SelectedIndices")));
+			this.comboBoxMultiProv.Size = new System.Drawing.Size(160,21);
+			this.comboBoxMultiProv.TabIndex = 49;
+			this.comboBoxMultiProv.UseCommas = true;
+			this.comboBoxMultiProv.Leave += new System.EventHandler(this.comboBoxMultiProv_Leave);
+			// 
+			// textOverAmount
+			// 
+			this.textOverAmount.Location = new System.Drawing.Point(177,55);
+			this.textOverAmount.Name = "textOverAmount";
+			this.textOverAmount.Size = new System.Drawing.Size(68,20);
+			this.textOverAmount.TabIndex = 48;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(367,11);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(77,20);
+			this.textDateStart.TabIndex = 34;
+			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(346,55);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(98,24);
+			this.butRefresh.TabIndex = 32;
+			this.butRefresh.Text = "&Refresh List";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// butCancel
 			// 
@@ -573,15 +587,18 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amount Used"),100);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amount Remaining"),140);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amount Rem"),100);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Treatment Plan"),125);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Treatment Plan"),110);
 			col.TextAlign=HorizontalAlignment.Right;
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Insurance Carrier"),165);
+			col.TextAlign=HorizontalAlignment.Left;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			Cursor=Cursors.WaitCursor;
-			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked,monthStart,dateSince,aboveAmount,provFilter,billFilter,code1,code2);
+			table=Patients.GetTreatmentFinderList(checkIncludeNoIns.Checked,checkIncludePatsWithApts.Checked,monthStart,dateSince,aboveAmount,provFilter,billFilter,code1,code2);
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 			  row=new ODGridRow();

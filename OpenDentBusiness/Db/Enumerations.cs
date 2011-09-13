@@ -1012,11 +1012,11 @@ namespace OpenDentBusiness{
 		ImagesModule,
 		///<summary>7</summary>
 		ManageModule,
-		///<summary>8. Currently covers a wide variety of setup functions.</summary>
+		///<summary>8. Currently covers a wide variety of setup functions. </summary>
 		Setup,
 		///<summary>9</summary>
 		RxCreate,
-		///<summary>10</summary>
+		///<summary>10. Uses date restrictions.</summary>
 		ProcComplEdit,
 		///<summary>11</summary>
 		ChooseDatabase,
@@ -1026,13 +1026,13 @@ namespace OpenDentBusiness{
 		Blockouts,
 		///<summary>14</summary>
 		ClaimSentEdit,
-		///<summary>15</summary>
+		///<summary>15. Uses date restrictions.</summary>
 		PaymentCreate,
-		///<summary>16</summary>
+		///<summary>16. Uses date restrictions.</summary>
 		PaymentEdit,
 		///<summary>17</summary>
 		AdjustmentCreate,
-		///<summary>18</summary>
+		///<summary>18. Uses date restrictions.</summary>
 		AdjustmentEdit,
 		///<summary>19</summary>
 		UserQuery,
@@ -1042,7 +1042,7 @@ namespace OpenDentBusiness{
 		StartupMultiUserOld,
 		///<summary>22</summary>
 		Reports,
-		///<summary>23. Includes setting procedures complete.</summary>
+		///<summary>23. Uses date restrictions. Includes setting procedures complete.</summary>
 		ProcComplCreate,
 		///<summary>24. At least one user must have this permission.</summary>
 		SecurityAdmin,
@@ -1068,9 +1068,9 @@ namespace OpenDentBusiness{
 		AnesthesiaIntakeMeds,
 		///<summary>35</summary>
 		AnesthesiaControlMeds,
-		///<summary>36</summary>
+		///<summary>36. Uses date restrictions.</summary>
 		InsPayCreate,
-		///<summary>37- Also includes completed claimprocs even if unattached to an insurance check.  However, it's not actually enforced when creating a check because it would be very complex.</summary>
+		///<summary>37. Uses date restrictions. Also includes completed claimprocs even if unattached to an insurance check.  However, it's not actually enforced when creating a check because it would be very complex.</summary>
 		InsPayEdit,
 		///<summary>38</summary>
 		TreatPlanEdit,
@@ -1078,13 +1078,13 @@ namespace OpenDentBusiness{
 		ReportProdInc,
 		///<summary>40</summary>
 		TimecardDeleteEntry,
-		///<summary>41 All other equipment functions are covered by .Setup.  Uses date restrictions.</summary>
+		///<summary>41. Uses date restrictions. All other equipment functions are covered by .Setup.</summary>
 		EquipmentDelete,
-		///<summary>42 Uses date restrictions</summary>
+		///<summary>42. Uses date restrictions.</summary>
 		SheetEdit,
-		///<summary>43</summary>
+		///<summary>43. Uses date restrictions.</summary>
 		CommlogEdit,
-		///<summary>44</summary>
+		///<summary>44. Uses date restrictions.</summary>
 		ImageDelete,
 		///<summary>45</summary>
 		PerioEdit,
