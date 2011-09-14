@@ -196,7 +196,7 @@ namespace OpenDentBusiness.UI {
 			SolidBrush blockBrush;
 			Pen blockOutlinePen=new Pen(Color.Black,1);
 			Pen penOutline;
-			Font blockFont=new Font("Arial",LineH);
+			Font blockFont=new Font("Arial",8);
 			string blockText;
 			RectangleF rect;
 			for(int i=0;i<schedForType.Length;i++) {
