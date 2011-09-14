@@ -1440,13 +1440,12 @@ FROM insplan";
 				LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
 				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=inssub.PlanNum
 				AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0)/*may not be necessary*/
-				AND patient.PatNum
 				WHERE tempplanned.AmtPlanned>0 ";
 			if(!noIns) {//if we don't want patients without insurance
 				command+=@"AND patplan.Ordinal=1 AND insplan.MonthRenew="+POut.Int(monthStart)+" ";
 			}
 			if(!patsWithAppts) {
-				command+=@"AND patient.PatNum NOT IN (SELECT patient.PatNum FROM patient JOIN appointment ON patient.PatNum=appointment.PatNum WHERE appointment.AptDateTime > NOW()) ";
+				command+=@"AND patient.PatNum NOT IN (SELECT PatNum FROM appointment WHERE AptDateTime > NOW()) ";
 			}
 			if(aboveAmount>0) {
 				command+=@"AND (tempannualmax.AnnualMax IS NULL OR tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)>"+POut.Double(aboveAmount)+") ";
