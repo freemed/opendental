@@ -1457,14 +1457,19 @@ namespace OpenDentBusiness
 								+"*"//REF03 1/80 Description: Not Used.
 								+"~");//REF04 Reference Identifier: Situational. Not used when REF01 is 0B or 1G.
 						}
-						//2420B (dental) Assistant Surgeon
-						//we don't support
-						//2420C (dental) Supervising Provider
-						//we don't support
-						//2420D (dental) Service Facility Location
-						//we enforce all procs on a claim being performed at the same location
-						//2430 (dental) Line Adjudication Information
-						//we don't support
+						//2420B NM1: DD (dental) Assistant Surgeon Name. Situational. We do not support.
+						//2420B PRV: AS (dental) Assistant Surgeon Specialty Information. Situational. We do not support.
+						//2420B REF: (dental) Assistant Surgeon Secondary Identification. Situational. We do not support.
+						//2420C NM1: DQ (dental) Supervising Provider Name. Situational. We do not support.
+						//2420C REF: (dental) Supervising Provider Secondary Identification. Situational. We do not support.
+						//2420D NM1: 77 (dental) Service Facility Location Name. Situational. We enforce all procs on a claim being performed at the same location so we don't need this.
+						//2420D N3: (dental) Service Facility Location Address. We do not use.
+						//2420D N4: (dental) Service Facility Location City, State, Zip Code. We do not use.
+						//2420D REF: (dental) Service Facility Location Secondary Identification. Situational. We do not use.
+						//2430 SVD: (dental) Line Adjudication Information. Situational. We do not support.
+						//2430 CAS: (dental) Line Adjustment. Situational. We do not support.
+						//2430 DTP: (dental) Line Check or Remittance Date. We do not support.
+						//2430 AMT: (dental) Remaining Patient Liability. We do not support.
 					}
 					#endregion 2420 Service Providers (dental)
 				}
@@ -1473,8 +1478,8 @@ namespace OpenDentBusiness
 			//Transaction Trailer
 			seg++;
 			sw.WriteLine("SE*"
-				+seg.ToString()+"*"//SE01: Total segments, including ST & SE
-				+transactionNum.ToString().PadLeft(4,'0')+"~");
+				+seg.ToString()+"*"//SE01 1/10 Number of Included Segments: Total segments, including ST & SE.
+				+transactionNum.ToString().PadLeft(4,'0')+"~");//SE02 4/9 Transaction Set Control Number: 
 			//Functional Group Trailer
 			sw.WriteLine("GE*"+transactionNum.ToString()+"*"//GE01 1/6 Number of Transaction Sets Included:
 				+groupControlNumber+"~");//GE02 1/9 Group Control Number: Must be identical to GS06.
