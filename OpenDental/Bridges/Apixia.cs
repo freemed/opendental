@@ -45,7 +45,7 @@ and should be accessed/opened by C:/Program Files/Digirex/digirex.ini
 				+"Day="+pat.Birthdate.Day+"\r\n"
 				+"[Dentist]\r\n"
 				+"ID="+pat.PriProv+"\r\n"
-				+"Password=";
+				+"Password=digirex";
 			// Write the string to a file.
 			string path=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"System path to Apixia Digital Imaging ini file");
 			StreamWriter iniFile = new System.IO.StreamWriter(path);
