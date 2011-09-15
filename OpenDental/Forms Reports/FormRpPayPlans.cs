@@ -165,7 +165,7 @@ namespace OpenDental
 				pat.MiddleI=raw.Rows[i]["MiddleI"].ToString();
 				pat.Preferred=raw.Rows[i]["Preferred"].ToString();
 				row["guarantor"]=pat.GetNameLF();
-				if(raw.Rows[i]["Preferred"].ToString()=="0"){
+				if(raw.Rows[i]["PlanNum"].ToString()=="0"){
 					row["ins"]="";
 				}
 				else{
