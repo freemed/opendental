@@ -4343,6 +4343,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\UDS3a.gif" />
     <None Include="Web References\MobileWeb\Mobile.disco" />
     <None Include="Web References\WebSheets\Sheets.disco" />
     <EmbeddedResource Include="Bridges\FormTrophyNamePick.resx">
