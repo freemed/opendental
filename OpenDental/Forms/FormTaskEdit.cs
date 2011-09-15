@@ -966,7 +966,6 @@ namespace OpenDental{
 			for(int i=0;i<NoteList.Count;i++) {
 				taskText+="\r\n--------------------------------------------------\r\n";
 				taskText+="=="+Userods.GetName(NoteList[i].UserNum)+" - "+NoteList[i].DateTimeNote.ToShortDateString()+" "+NoteList[i].DateTimeNote.ToShortTimeString()+" - "+NoteList[i].Note;
-				
 			}
 			System.Windows.Forms.Clipboard.SetText(taskText);
 		}
