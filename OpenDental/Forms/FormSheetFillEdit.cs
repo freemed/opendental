@@ -863,6 +863,9 @@ namespace OpenDental {
 							&& field.RadioButtonGroup=="") //doesn't belong to a custom group
 						{
 							//field.FieldName is always "misc"
+							//int widthActual=(SheetCur.IsLandscape?SheetCur.Height:SheetCur.Width);
+							//int heightActual=(SheetCur.IsLandscape?SheetCur.Width:SheetCur.Height);
+							//int topMidBottom=(heightActual/3)
 							MessageBox.Show(Lan.g(this,"You must check the required checkbox."));
 							return false;
 						}

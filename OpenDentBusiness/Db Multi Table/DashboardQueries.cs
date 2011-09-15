@@ -3,10 +3,14 @@ using System.Collections.Generic;
 //using System.Windows.Controls;//need a reference for this dll, or get msgbox into UI layer.
 using System.Data;
 using System.Text;
+using System.Reflection;
 
 namespace OpenDentBusiness {
 	public class DashboardQueries {
 		public static DataTable GetProvList(DateTime dt) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dt);
+			}
 			string command;
 			command="DROP TABLE IF EXISTS tempdash;";
 			Db.NonQ(command);
@@ -73,7 +77,10 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
-		public static List<System.Windows.Media.Color> GetProdProvColors(){
+		public static List<System.Windows.Media.Color> GetProdProvColors() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<System.Windows.Media.Color>>(MethodBase.GetCurrentMethod());
+			}
 			string command=@"SELECT ProvColor
 				FROM provider WHERE IsHidden=0
 				ORDER BY ItemOrder";
@@ -87,7 +94,10 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		public static List<List<int>> GetProdProvs(DateTime dateFrom,DateTime dateTo){
+		public static List<List<int>> GetProdProvs(DateTime dateFrom,DateTime dateTo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<List<int>>>(MethodBase.GetCurrentMethod(),dateFrom,dateTo);
+			}
 			string command;
 			command="DROP TABLE IF EXISTS tempdash;";
 			Db.NonQ(command);
@@ -149,7 +159,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only one dimension to the list for now.</summary>
-		public static List<List<int>> GetAR(DateTime dateFrom,DateTime dateTo,List<DashboardAR> listDashAR){
+		public static List<List<int>> GetAR(DateTime dateFrom,DateTime dateTo,List<DashboardAR> listDashAR) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<List<int>>>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,listDashAR);
+			}
 			//assumes that dateFrom is the first of the month and that there are 12 periods
 			//listDashAR may be empty, in which case, this routine will take about 18 seconds, but the user was warned.
 			//listDashAR may also me incomplete, especially the most recent month(s).
@@ -190,7 +203,10 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		public static List<List<int>> GetProdInc(DateTime dateFrom,DateTime dateTo){
+		public static List<List<int>> GetProdInc(DateTime dateFrom,DateTime dateTo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<List<int>>>(MethodBase.GetCurrentMethod(),dateFrom,dateTo);
+			}
 			string command;
 			command=@"SELECT procedurelog.ProcDate,
 				SUM(procedurelog.ProcFee*(procedurelog.UnitQty+procedurelog.BaseUnits))-IFNULL(SUM(claimproc.WriteOff),0)
@@ -306,6 +322,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static List<List<int>> GetNewPatients(DateTime dateFrom,DateTime dateTo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<List<int>>>(MethodBase.GetCurrentMethod(),dateFrom,dateTo);
+			}
 			string command;
 			command="DROP TABLE IF EXISTS tempdash;";
 			Db.NonQ(command);

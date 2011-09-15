@@ -164,7 +164,15 @@ namespace OpenDental {
 				return -1;
 			}
 			if(def1.TabOrder-def2.TabOrder==0) {
-				return def1.FieldName.CompareTo(def2.FieldName); //If tab orders are the same, alphabetize them.
+				int comp=(def1.FieldName+def1.RadioButtonValue).CompareTo(def2.FieldName+def2.RadioButtonValue);//RadioButtionValuecan be filled or ""
+				if(comp!=0) {
+					return comp;
+				}
+				comp=def1.YPos-def2.YPos;//arbitrarily order by YPos if both controls have the same tab orer and name. This will only happen if both fields are either identical or if they are both misc fields.
+				if(comp!=0) {
+					return comp;
+				}
+				return def1.XPos-def2.XPos;//If tabOrder, Name, and YPos are equal then compare based on X coordinate. 
 			}
 			return def1.TabOrder-def2.TabOrder;
 		}
