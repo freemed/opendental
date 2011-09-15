@@ -317,6 +317,7 @@ namespace OpenDental{
 			this.listBoxTeeth2 = new System.Windows.Forms.ListBox();
 			this.butChange = new OpenDental.UI.Button();
 			this.groupMedical = new System.Windows.Forms.GroupBox();
+			this.textDrugQty = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textDrugNDC = new System.Windows.Forms.TextBox();
@@ -410,7 +411,6 @@ namespace OpenDental{
 			this.comboPrognosis = new System.Windows.Forms.ComboBox();
 			this.labelPrognosis = new System.Windows.Forms.Label();
 			this.comboProcStatus = new System.Windows.Forms.ComboBox();
-			this.textDrugQty = new System.Windows.Forms.TextBox();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -546,6 +546,7 @@ namespace OpenDental{
 			this.groupQuadrant.Controls.Add(this.radioLL);
 			this.groupQuadrant.Controls.Add(this.radioUL);
 			this.groupQuadrant.Controls.Add(this.radioUR);
+			this.groupQuadrant.Controls.Add(this.groupArch);
 			this.groupQuadrant.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupQuadrant.Location = new System.Drawing.Point(104,99);
 			this.groupQuadrant.Name = "groupQuadrant";
@@ -854,7 +855,6 @@ namespace OpenDental{
 			this.panel1.Controls.Add(this.labelAmount);
 			this.panel1.Controls.Add(this.textSurfaces);
 			this.panel1.Controls.Add(this.label6);
-			this.panel1.Controls.Add(this.groupArch);
 			this.panel1.Controls.Add(this.groupQuadrant);
 			this.panel1.Controls.Add(this.textProcFee);
 			this.panel1.Controls.Add(this.textTooth);
@@ -1084,6 +1084,13 @@ namespace OpenDental{
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
 			this.groupMedical.Text = "Medical and Institutional";
+			// 
+			// textDrugQty
+			// 
+			this.textDrugQty.Location = new System.Drawing.Point(87,177);
+			this.textDrugQty.Name = "textDrugQty";
+			this.textDrugQty.Size = new System.Drawing.Size(59,20);
+			this.textDrugQty.TabIndex = 174;
 			// 
 			// label10
 			// 
@@ -2051,13 +2058,6 @@ namespace OpenDental{
 			this.comboProcStatus.Size = new System.Drawing.Size(133,21);
 			this.comboProcStatus.TabIndex = 167;
 			this.comboProcStatus.SelectionChangeCommitted += new System.EventHandler(this.comboProcStatus_SelectionChangeCommitted);
-			// 
-			// textDrugQty
-			// 
-			this.textDrugQty.Location = new System.Drawing.Point(87,177);
-			this.textDrugQty.Name = "textDrugQty";
-			this.textDrugQty.Size = new System.Drawing.Size(59,20);
-			this.textDrugQty.TabIndex = 174;
 			// 
 			// FormProcEdit
 			// 
@@ -3916,6 +3916,12 @@ namespace OpenDental{
 				}
 				if(textDateStop.errorProvider1.GetError(textDateStop)!="") {
 					MsgBox.Show(this,"Invalid stop clock date.");
+					return false;
+				}
+			}
+			if(ProcedureCode2.TreatArea==TreatmentArea.Quad) {
+				if(!radioUL.Checked && !radioUR.Checked && !radioLL.Checked && !radioLR.Checked) {
+					MsgBox.Show(this,"Please select a quadrant.");
 					return false;
 				}
 			}
