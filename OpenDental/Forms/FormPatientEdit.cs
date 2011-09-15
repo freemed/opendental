@@ -2798,10 +2798,6 @@ namespace OpenDental{
 				}
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
-				if(comboCanadianEligibilityCode.SelectedIndex==0) {
-					MsgBox.Show(this,"Please enter Eligibility Exception Code.");
-					return;
-				}
 				if(comboCanadianEligibilityCode.SelectedIndex==1//FT student
 					&& textSchool.Text=="" && PIn.Date(textBirthdate.Text).AddYears(18)<=DateTime.Today)
 				{
