@@ -75,6 +75,8 @@ namespace OpenDental{
 		private bool StatusChanged;
 		///<summary>If this task starts out 'unread', then this starts out true.  If the user changes the description or changes a note, then the task gets set to read.  But the user can manually change it back and this variable gets set to false.  From then on, any changes to description or note do not trigger the task to get set to read.  In other words, the automation only happens once.</summary>
 		private bool MightNeedSetRead;
+		private UI.Button butCopy;
+		private TextBox textBox1;
 		///<summary>When this window is first opened, if this task is in someone else's inbox, then the "new" status is meaningless and will not show.  In that case, this variable is set to true.  Only used when tracking new status by user.</summary>
 		private bool StartedInOthersInbox;
 
@@ -124,8 +126,6 @@ namespace OpenDental{
 			this.listObjectType = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.panelObject = new System.Windows.Forms.Panel();
-			this.butGoto = new OpenDental.UI.Button();
-			this.butChange = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textDateTimeEntry = new System.Windows.Forms.TextBox();
 			this.textUser = new System.Windows.Forms.TextBox();
@@ -141,18 +141,22 @@ namespace OpenDental{
 			this.checkNew = new System.Windows.Forms.CheckBox();
 			this.checkDone = new System.Windows.Forms.CheckBox();
 			this.labelDoneAffectsAll = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butChangeUser = new OpenDental.UI.Button();
 			this.butAddNote = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSend = new OpenDental.UI.Button();
 			this.butReply = new OpenDental.UI.Button();
 			this.butNowFinished = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butNow = new OpenDental.UI.Button();
+			this.butGoto = new OpenDental.UI.Button();
+			this.butChange = new OpenDental.UI.Button();
 			this.textDateTask = new OpenDental.ValidDate();
 			this.textDescript = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butCopy = new OpenDental.UI.Button();
+			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -247,34 +251,6 @@ namespace OpenDental{
 			this.panelObject.Name = "panelObject";
 			this.panelObject.Size = new System.Drawing.Size(550,34);
 			this.panelObject.TabIndex = 15;
-			// 
-			// butGoto
-			// 
-			this.butGoto.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butGoto.Autosize = true;
-			this.butGoto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGoto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGoto.CornerRadius = 4F;
-			this.butGoto.Location = new System.Drawing.Point(449,6);
-			this.butGoto.Name = "butGoto";
-			this.butGoto.Size = new System.Drawing.Size(75,22);
-			this.butGoto.TabIndex = 12;
-			this.butGoto.Text = "Go To";
-			this.butGoto.Click += new System.EventHandler(this.butGoto_Click);
-			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(369,6);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(75,22);
-			this.butChange.TabIndex = 10;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// label5
 			// 
@@ -413,6 +389,20 @@ namespace OpenDental{
 			this.labelDoneAffectsAll.Text = "(affects all users)";
 			this.labelDoneAffectsAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,196);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(798,338);
+			this.gridMain.TabIndex = 149;
+			this.gridMain.Title = "Notes";
+			this.gridMain.TranslationName = "FormTaskEdit";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// butChangeUser
 			// 
 			this.butChangeUser.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -437,26 +427,12 @@ namespace OpenDental{
 			this.butAddNote.CornerRadius = 4F;
 			this.butAddNote.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddNote.Location = new System.Drawing.Point(653,538);
+			this.butAddNote.Location = new System.Drawing.Point(735,540);
 			this.butAddNote.Name = "butAddNote";
 			this.butAddNote.Size = new System.Drawing.Size(75,24);
 			this.butAddNote.TabIndex = 150;
 			this.butAddNote.Text = "Add";
 			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,196);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(798,338);
-			this.gridMain.TabIndex = 149;
-			this.gridMain.Title = "Notes";
-			this.gridMain.TranslationName = "FormTaskEdit";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butSend
 			// 
@@ -533,6 +509,34 @@ namespace OpenDental{
 			this.butNow.Text = "Now";
 			this.butNow.Click += new System.EventHandler(this.butNow_Click);
 			// 
+			// butGoto
+			// 
+			this.butGoto.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGoto.Autosize = true;
+			this.butGoto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGoto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGoto.CornerRadius = 4F;
+			this.butGoto.Location = new System.Drawing.Point(449,6);
+			this.butGoto.Name = "butGoto";
+			this.butGoto.Size = new System.Drawing.Size(75,22);
+			this.butGoto.TabIndex = 12;
+			this.butGoto.Text = "Go To";
+			this.butGoto.Click += new System.EventHandler(this.butGoto_Click);
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(369,6);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(75,22);
+			this.butChange.TabIndex = 10;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
+			// 
 			// textDateTask
 			// 
 			this.textDateTask.Location = new System.Drawing.Point(127,538);
@@ -584,10 +588,37 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butCopy
+			// 
+			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCopy.Autosize = true;
+			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopy.CornerRadius = 4F;
+			this.butCopy.Image = global::OpenDental.Properties.Resources.butCopy;
+			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCopy.Location = new System.Drawing.Point(653,540);
+			this.butCopy.Name = "butCopy";
+			this.butCopy.Size = new System.Drawing.Size(75,24);
+			this.butCopy.TabIndex = 4;
+			this.butCopy.Text = "Copy";
+			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
+			// 
+			// textBox1
+			// 
+			this.textBox1.Location = new System.Drawing.Point(454,-72);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.ReadOnly = true;
+			this.textBox1.Size = new System.Drawing.Size(54,20);
+			this.textBox1.TabIndex = 134;
+			this.textBox1.Visible = false;
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(836,676);
+			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.textTaskNum);
 			this.Controls.Add(this.labelTaskNum);
 			this.Controls.Add(this.checkDone);
@@ -615,6 +646,7 @@ namespace OpenDental{
 			this.Controls.Add(this.listObjectType);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textDateTask);
+			this.Controls.Add(this.butCopy);
 			this.Controls.Add(this.textDescript);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -927,6 +959,16 @@ namespace OpenDental{
 				StatusChanged=true;
 				MightNeedSetRead=false;//so that the automation won't happen again
 			}
+		}
+
+		private void butCopy_Click(object sender,EventArgs e) {
+			string taskText=textDescript.Text;
+			for(int i=0;i<NoteList.Count;i++) {
+				taskText+="\r\n--------------------------------------------------\r\n";
+				taskText+="=="+Userods.GetName(NoteList[i].UserNum)+" - "+NoteList[i].DateTimeNote.ToShortDateString()+" "+NoteList[i].DateTimeNote.ToShortTimeString()+" - "+NoteList[i].Note;
+				
+			}
+			System.Windows.Forms.Clipboard.SetText(taskText);
 		}
 
 		private bool SaveCur(){
