@@ -106,9 +106,6 @@ namespace OpenDental {
 			//Minimum 10 char.  Must contain uppercase, lowercase, numbers, and symbols. Valid symbols are: !@#$%^&+= 
 			//The set of symbols checked was far too small, not even including periods, commas, and parentheses.
 			//So I rewrote it all.  New error messages say exactly what's wrong with it.
-//to do: Dennis, make sure that ANY character is allowed on the server end.  
-			//For example, a space, a {, and a Chinese character would all be allowed in username.
-			//Dennis: There is a low priority bug here - very odd characters (like arabic) are simply ingored when inserted into the db. However this does not cause a noticible problem since while comparing usernames the very same characters are ignored for the keyed in username. right now I'm not sure how to solve this problem. Jordan has indicated that he doesn't know either.
 			if(textMobileUserName.Text!="") {//allowed to be blank
 				if(textMobileUserName.Text.Length<10) {
 					MsgBox.Show(this,"User Name must be at least 10 characters long.");

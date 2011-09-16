@@ -347,7 +347,7 @@ insert  into `allergy`(`AllergyNum`,`AllergyDefNum`,`PatNum`,`Reaction`,`StatusI
 
 /*Data for the table `allergydef` */
 
-insert  into `allergydef`(`AllergyDefNum`,`Description`,`IsHidden`,`DateTStamp`,`Snomed`,`RxCui`,`MedicationNum`) values (1,'Penicillin',0,'2011-06-14 10:06:34',0,0,0),(2,'Aspirin',0,'2011-06-14 10:06:38',0,0,0),(3,'Codeine',0,'2011-06-14 10:59:20',0,0,0);
+insert  into `allergydef`(`AllergyDefNum`,`Description`,`IsHidden`,`DateTStamp`,`Snomed`,`MedicationNum`) values (1,'Penicillin',0,'2011-06-14 10:06:34',0,0),(2,'Aspirin',0,'2011-06-14 10:06:38',0,0),(3,'Codeine',0,'2011-06-14 10:59:20',0,0);
 
 /*Data for the table `appointment` */
 
