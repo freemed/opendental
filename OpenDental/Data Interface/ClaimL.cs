@@ -59,6 +59,18 @@ namespace OpenDental{
 						}
 					}
 				}
+				//When this is the secondary claim, HistList includes the primary estimates, which is something we don't want because the primary calculations gets confused.
+				//So, we must remove those bad entries from histList.
+				for(int h=histList.Count-1;h>=0;h--) {//loop through the histList backwards
+					if(histList[h].ProcNum!=ProcCur.ProcNum) {
+						continue;//Makes sure we will only be excluding histList entries for procs on this claim.
+					}
+					//we already excluded this claimNum when getting the histList.
+					if(histList[h].Status!=ClaimProcStatus.NotReceived) {
+						continue;//The only ones that are a problem are the ones on the primary claim not received yet.
+					}
+					histList.RemoveAt(h);
+				}
 				Procedures.ComputeEstimates(ProcCur,claimCur.PatNum,ref ClaimProcsAll,false,planList,patPlans,benefitList,histList,loopList,false,patientAge,subList);
 				//then, add this information to loopList so that the next procedure is aware of it.
 				loopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcsAll,ProcCur.ProcNum,ProcCur.CodeNum));

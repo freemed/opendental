@@ -1107,7 +1107,7 @@ namespace OpenDentBusiness{
 					//If we use the proc date, then it will indeed get an accurate history.  And future procedures just don't matter when calculating things.
 					dateStart=BenefitLogic.ComputeRenewDate(procDate,plan.MonthRenew);
 				}
-				string command="SELECT claimproc.ProcDate,CodeNum,InsPayEst,InsPayAmt,DedApplied,claimproc.PatNum,Status,ClaimNum,claimproc.InsSubNum "
+				string command="SELECT claimproc.ProcDate,CodeNum,InsPayEst,InsPayAmt,DedApplied,claimproc.PatNum,Status,ClaimNum,claimproc.InsSubNum,claimproc.ProcNum  "
 					+"FROM claimproc "
 					+"LEFT JOIN procedurelog on claimproc.ProcNum=procedurelog.ProcNum "//to get the codenum
 					+"WHERE "//claimproc.PlanNum="+POut.Long(plan.PlanNum)
@@ -1141,6 +1141,7 @@ namespace OpenDentBusiness{
 					cph.PatNum     = PIn.Long   (table.Rows[i]["PatNum"].ToString());
 					cph.ClaimNum   = PIn.Long   (table.Rows[i]["ClaimNum"].ToString());
 					cph.InsSubNum  = PIn.Long   (table.Rows[i]["InsSubNum"].ToString());
+					cph.ProcNum    = PIn.Long   (table.Rows[i]["ProcNum"].ToString());
 					cph.PlanNum=plan.PlanNum;
 					retVal.Add(cph);
 				}
@@ -1226,6 +1227,8 @@ namespace OpenDentBusiness{
 		public ClaimProcStatus Status;
 		///<summary></summary>
 		public long InsSubNum;
+		///<summary>This is needed to filter out primary histList entries on secondary claims.</summary>
+		public long ProcNum;
 
 		public override string ToString() {
 			return StrProcCode+" "+Status.ToString()+" "+Amount.ToString()+" ded:"+Deduct.ToString();

@@ -789,6 +789,101 @@ namespace UnitTests {
 			return "14: Passed.  Claim proc estimates for dual PPO ins.  Writeoff2 not zero.\r\n";
 		}
 
+		///<summary></summary>
+		public static string TestFifteen(int specificTest) {
+			if(specificTest != 0 && specificTest !=15) {
+				return "";
+			}
+			string suffix="15";
+			Patient pat=PatientT.CreatePatient(suffix);
+			long patNum=pat.PatNum;
+			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
+			long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
+			//Standard Fee
+			Fees.RefreshCache();
+			long codeNum=ProcedureCodes.GetCodeNum("D2160");
+			Fee fee=Fees.GetFee(codeNum,53);
+			if(fee==null) {
+				fee=new Fee();
+				fee.CodeNum=codeNum;
+				fee.FeeSched=53;
+				fee.Amount=1279;
+				Fees.Insert(fee);
+			}
+			else {
+				fee.Amount=1279;
+				Fees.Update(fee);
+			}
+			//PPO fees
+			fee=new Fee();
+			fee.CodeNum=codeNum;
+			fee.FeeSched=feeSchedNum1;
+			fee.Amount=1279;
+			Fees.Insert(fee);
+			fee=new Fee();
+			fee.CodeNum=codeNum;
+			fee.FeeSched=feeSchedNum2;
+			fee.Amount=110;
+			Fees.Insert(fee);
+			Fees.RefreshCache();
+			//Carrier
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1).PlanNum;
+			long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2).PlanNum;
+			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
+			long subNum1=sub1.InsSubNum;
+			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
+			long subNum2=sub2.InsSubNum;
+			BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.Restorative,80);
+			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Restorative,80);
+			BenefitT.CreateAnnualMax(planNum1,1200);
+			BenefitT.CreateAnnualMax(planNum2,1200);
+			PatPlanT.CreatePatPlan(1,patNum,subNum1);
+			PatPlanT.CreatePatPlan(2,patNum,subNum2);
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D2160",ProcStat.TP,"19",Fees.GetAmount0(codeNum,53));//amalgam on 19
+			long procNum=proc.ProcNum;
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(patNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();//empty, not used for calcs.
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();//empty, not used for calcs.
+			List<Procedure> procList=Procedures.Refresh(patNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(procList);//sorted by priority, then toothnum
+			//Set complete and attach to claim
+			ProcedureT.SetComplete(proc,pat,planList,patPlans,claimProcs,benefitList,subList);
+			claimProcs=ClaimProcs.Refresh(patNum);
+			List<Procedure> procsForClaim=new List<Procedure>();
+			procsForClaim.Add(proc);
+			Claim claim1=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
+			Claim claim2=ClaimT.CreateClaim("S",patPlans,planList,claimProcs,procList,pat,procsForClaim,benefitList,subList);
+			//Validate
+			string retVal="";
+			Procedures.ComputeEstimates(ProcListTP[0],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+				histList,loopList,false,pat.Age,subList);
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,planNum1,subNum1);
+			if(claimProc1.InsEstTotal!=1023.20) {
+				throw new Exception("Primary Estimate was "+claimProc1.InsEstTotal+", should be 1023.20.\r\n");
+			}
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,planNum2,subNum2);
+			/*Is this ok, or do we need to take another look?
+			if(claimProc2.WriteOff!=0) {//Insurance should not cover.
+				throw new Exception("Secondary writeoff was "+claimProc2.WriteOff+", should be 0.\r\n");
+			}
+			if(claimProc2.InsEstTotal!=0) {//Insurance should not cover.
+				throw new Exception("Secondary Estimate was "+claimProc2.InsEstTotal+", should be 0.\r\n");
+			}*/
+			retVal+="15: Passed. \r\n";
+			return retVal;
+		}
+
 	}
 
 
