@@ -1507,7 +1507,7 @@ namespace OpenDental{
 				//MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
 			if(Security.CurUser==null) {//It could already be set if using web service because login from ChooseDatabase window.
-				if(Programs.UsingEcwTight()) {
+				if(Programs.UsingEcwTight() && odUser!="") {//only leave it null if a user was passed in on the commandline.  If starting OD manually, it will jump into the else.
 					//leave user as null
 				}
 				else {
@@ -4396,10 +4396,12 @@ namespace OpenDental{
 			Bridges.ECW.EcwConfigPath=ecwConfigPath;
 			Bridges.ECW.UserId=userId;
 			//Username and password-----------------------------------------------------
-			if(Programs.UsingEcwTight()//for debugging, no username might be passed in, so we want to trigger login window.
-				|| (userName!=""//if a username was passed in
+			//users are allowed to use ecw tight integration without command line.  They can manually launch Open Dental.
+			if((Programs.UsingEcwTight() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username wass passed in.
+				|| (userName!=""//if a username was passed in, but not in tight eCW mode
 				&& (Security.CurUser==null || Security.CurUser.UserName != userName))//and it's different from the current user
-			){
+			) {
+				//The purpose of this loop is to use the username and password that were passed in to determine which user to log in
 				//log out------------------------------------
 				LastModule=myOutlookBar.SelectedIndex;
 				myOutlookBar.SelectedIndex=-1;

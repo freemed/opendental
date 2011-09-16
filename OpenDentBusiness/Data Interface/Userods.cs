@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 				return null;
 			}
 			if(usingEcw){
-				if(user.Password==password) {
+				if(user.Password==EncryptPassword(password)) {
 					return user;
 				}
 			}
