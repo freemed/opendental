@@ -292,6 +292,7 @@ namespace OpenDentBusiness {
 		ShowAccountFamilyCommEntries,
 		ShowFeatureEhr,
 		ShowFeatureMedicalInsurance,
+		ShowFeatureSuperfamilies,
 		ShowIDinTitleBar,
 		ShowProgressNotesInsteadofCommLog,
 		ShowUrgFinNoteInProgressNotes,
