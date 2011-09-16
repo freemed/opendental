@@ -25,7 +25,8 @@ namespace WebForms {
 		private long WebSheetDefID=0;
 		private Hashtable FormValuesHashTable=new Hashtable();
 		private Hashtable hiddenChkBoxGroupHashTable=new Hashtable();
-		List<WControl> listwc=new List<WControl>();
+		private List<WControl> listwc=new List<WControl>();
+		private bool doTabOrder=true;
 		
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
@@ -101,7 +102,18 @@ namespace WebForms {
 						int height=SheetFieldDefList.ElementAt(j).Height;
 						float fontsize=SheetFieldDefList.ElementAt(j).FontSize;
 						String fontname=SheetFieldDefList.ElementAt(j).FontName;
-						bool fontIsBold=SheetFieldDefList.ElementAt(j).FontIsBold==(sbyte)1?true:false;
+						//bool fontIsBold=SheetFieldDefList.ElementAt(j).FontIsBold==(sbyte)1?true:false;
+						bool fontIsBold;
+						if(SheetFieldDefList.ElementAt(j).FontIsBold==(sbyte)1) {
+							fontIsBold=true;
+						}
+						else {
+							fontIsBold=false;
+						}
+						short TabOrder=(short)SheetFieldDefList.ElementAt(j).TabOrder;
+						if(TabOrder!=0) {
+							doTabOrder=false;
+						}
 						long WebSheetFieldDefID=SheetFieldDefList.ElementAt(j).WebSheetFieldDefID;
 						WebControl wc=null; // WebControl is the parent class of all controls
 						if(FieldType==SheetFieldType.InputField) {
@@ -156,6 +168,7 @@ namespace WebForms {
 							wc.Style["top"]=YPos+"px";
 							wc.Style["left"]=XPos+"px";
 							wc.Style["z-index"]=""+ElementZIndex;
+							wc.TabIndex=TabOrder;
 							if(FieldType==SheetFieldType.Image) {
 								wc.Style["top"]=YPos+ImageYOffset+"px";
 								wc.Style["left"]=XPos+ImageXOffset+"px";
@@ -201,7 +214,9 @@ namespace WebForms {
 					}//for loop end here
 					AdjustErrorMessageForChkBoxes();	
 					CreateChkBoxValidatorsHiddenFields();
+					if(doTabOrder) {
 					AssignTabOrder();
+					}
 					//position the submit button at the end of the page.
 					Button1.Style["position"]="absolute";
 					Button1.Style["left"]=SheetDefWidth/2-(SubmitButtonWidth/2)+"px";
@@ -547,6 +562,7 @@ namespace WebForms {
 					NewSheetfieldObj.RadioButtonGroup=SheetFieldDefObj.RadioButtonGroup;
 					NewSheetfieldObj.RadioButtonValue=SheetFieldDefObj.RadioButtonValue;
 					NewSheetfieldObj.GrowthBehavior=SheetFieldDefObj.GrowthBehavior;
+					NewSheetfieldObj.TabOrder=SheetFieldDefObj.TabOrder;
 					NewSheetfieldObj.FieldValue=SheetFieldDefObj.FieldValue;
 					long WebSheetFieldDefID=SheetFieldDefObj.WebSheetFieldDefID;
 					if(FormValuesHashTable.ContainsKey(WebSheetFieldDefID+"")) {
