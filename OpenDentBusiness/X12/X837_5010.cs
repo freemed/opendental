@@ -28,16 +28,16 @@ namespace OpenDentBusiness
 				+DateTime.Today.ToString("yyMMdd")+"*"//ISA09 6/6 Interchange Date: today's date.
 				+DateTime.Now.ToString("HHmm")+"*"//ISA10 4/4 Interchange Time: current time
 				+"U*"//ISA11 1/1 Repetition Separator:
-				+"00501*"//ISA12 5/5 Interchange Control Version Number
+				+"00501*"//ISA12 5/5 Interchange Control Version Number:
 				+batchNum.ToString().PadLeft(9,'0')+"*"//ISA13 9/9 Interchange Control Number:
 				+"0*"//ISA14 1/1 Acknowledgement Requested: 0=No Interchange Acknowledgment Requested.
-				+clearhouse.ISA15+"*");//ISA15 1/1 Interchange Usage Indicator: T=Test P=Production. Validated.
+				+clearhouse.ISA15+"*");//ISA15 1/1 Interchange Usage Indicator: T=Test, P=Production. Validated.
 			sw.WriteLine(":~");//ISA16 1/1 Component Element Separator: Use colon.
 			//Just one functional group.
 			WriteFunctionalGroup(sw,listQueueItems,batchNum,clearhouse,medType);
 			//Interchange Control Trailer
 			sw.WriteLine("IEA*1*"//IEA01 1/5 Number of Included Functional Groups:
-					+batchNum.ToString().PadLeft(9,'0')+"~");//IEA02 9/9 Interchange Control Number:
+				+batchNum.ToString().PadLeft(9,'0')+"~");//IEA02 9/9 Interchange Control Number:
 		}
 
 		private static void WriteFunctionalGroup(StreamWriter sw,List<ClaimSendQueueItem> queueItems,int batchNum,Clearinghouse clearhouse,EnumClaimMedType medType) {
@@ -45,38 +45,25 @@ namespace OpenDentBusiness
 			int transactionNum=1;//Gets incremented for each carrier. Can be reused in other functional groups and interchanges, so not persisted
 			//Functional Group Header
 			string groupControlNumber=batchNum.ToString();//Must be unique within file.  We will use batchNum
+			string industryIdentifierCode="";
 			if(medType==EnumClaimMedType.Medical) {
-				//groupControlNumber="2";//this works for now because only two groups
-				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
-					+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes OpenDental.  Sometimes the sending clinic. Validated
-					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
-					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
-					+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
-					+groupControlNumber+"*"//GS06: Group control number. Max length 9. No padding necessary. 
-					+"X*"//GS07: X
-					+"005010X222~");//GS08: Version
+				industryIdentifierCode="005010X222A1";
 			}
 			else if(medType==EnumClaimMedType.Institutional) {
-				sw.WriteLine("GS*HC*"//GS01 2/2 Functional Identifier Code: Health Care Claim.
-					+X12Generator.GetGS02(clearhouse)+"*"//GS02 2/15 Application Sender's Code: Sometimes Jordan Sparks.  Sometimes the sending clinic.
-					+Sout(clearhouse.GS03,15,2)+"*"//GS03 2/15 Application Receiver's Code:
-					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04 8/8 Date: today's date.
-					+DateTime.Now.ToString("HHmm")+"*"//GS05 4/8 TIME: current time.
-					+groupControlNumber+"*"//GS06 1/9 Group Control Number: No padding necessary.
-					+"X*"//GS07 1/2 Responsible Agency Code: X=Accredited Standards Committee X12.
-					+"005010X223A2~");//GS08 1/12 Version/Release/Industry Identifier Code:
+				industryIdentifierCode="005010X223A2";
 			}
 			else if(medType==EnumClaimMedType.Dental) {
-				//groupControlNumber="1";
-				sw.WriteLine("GS*HC*"//GS01 2/2 Functional Identifier Code: Health Care Claim.
-					+X12Generator.GetGS02(clearhouse)+"*"//GS02 2/15 Application Sender's Code: Sometimes Jordan Sparks.  Sometimes the sending clinic.
-					+Sout(clearhouse.GS03,15,2)+"*"//GS03 2/15 Application Receiver's Code:
-					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04 8/8 Date: today's date.
-					+DateTime.Now.ToString("HHmm")+"*"//GS05 4/8 TIME: current time.
-					+groupControlNumber+"*"//GS06 1/9 Group Control Number: No padding necessary.
-					+"X*"//GS07 1/2 Responsible Agency Code: X=Accredited Standards Committee X12.
-					+"005010X224A2~");//GS08 1/12 Version/Release/Industry Identifier Code:
+				industryIdentifierCode="005010X224A2";
 			}
+			sw.WriteLine("GS*HC*"//GS01 2/2 Functional Identifier Code: Health Care Claim.
+				+X12Generator.GetGS02(clearhouse)+"*"//GS02 2/15 Application Sender's Code: Sometimes Jordan Sparks.  Sometimes the sending clinic.
+				+Sout(clearhouse.GS03,15,2)+"*"//GS03 2/15 Application Receiver's Code:
+				+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04 8/8 Date: today's date.
+				+DateTime.Now.ToString("HHmm")+"*"//GS05 4/8 TIME: current time.
+				+groupControlNumber+"*"//GS06 1/9 Group Control Number: No padding necessary.
+				+"X*"//GS07 1/2 Responsible Agency Code: X=Accredited Standards Committee X12.
+				+industryIdentifierCode//GS08 1/12 Version/Release/Industry Identifier Code:
+				+"~");
 			#endregion Functional Group Header
 			#region Define Variables
 			int HLcount=1;
@@ -120,21 +107,10 @@ namespace OpenDentBusiness
 			//ST02 Transact. control #. Must be unique within ISA
 			//NO: So we used combination of transaction and group, eg 00011
 			seg++;
-			if(medType==EnumClaimMedType.Medical) {
-				sw.WriteLine("ST*837*"//ST01
-					+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9
-					+"005010X222~");//ST03: Implementation convention reference
-			}
-			else if(medType==EnumClaimMedType.Institutional) {
-				sw.WriteLine("ST*837*"//ST01 3/3 Transaction Set Identifier Code: 
-					+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9 Transaction Set Control Number: 
-					+"005010X223A2~");//ST03 1/35 Implementation Convention Reference
-			}
-			else if(medType==EnumClaimMedType.Dental) {
-				sw.WriteLine("ST*837*"//ST01 3/3 Transaction Set Identifier Code: 
-					+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9 Transaction Set Control Number: 
-					+"005010X224A2~");//ST03 1/35 Implementation Convention Reference
-			}
+			sw.WriteLine("ST*837*"//ST01 3/3 Transaction Set Identifier Code: 
+				+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9 Transaction Set Control Number: 
+				+industryIdentifierCode//ST03 1/35 Implementation Convention Reference:
+				+"~");
 			seg++;
 			sw.WriteLine("BHT*0019*"//BHT01 4/4 Hierarchical Structure Code: 0019=Information Source, Subscriber, Dependant.
 				+"00*"//BHT02 2/2 Transaction Set Purpose Code: 00=Original transmissions are transmissions which have never been sent to the reciever.
@@ -145,25 +121,24 @@ namespace OpenDentBusiness
 			//1000A Submitter is OPEN DENTAL and sometimes it's the practice
 			//(depends on clearinghouse and Partnership agreements)
 			//See 2010AA PER (after REF) for the new billing provider contact phone number
-			//1000A NM1: required
+			//1000A NM1: 41 (medical,institutional,dental) Submitter Name.
 			seg++;
 			Write1000A_NM1(sw,clearhouse);
-			//1000A PER: required. Contact number.
-			seg++;//always one seg
+			//1000A PER: IC (medical,institutional,dental) Submitter EDI Contact Information. Contact number.
+			seg++;
 			Write1000A_PER(sw,clearhouse);
-			//1000B Receiver is always the Clearinghouse
-			//1000B NM1: required
+			//1000B NM1: 40 (medical,institutional,dental) Receiver Name. Always the Clearinghouse.
 			seg++;
 			sw.WriteLine("NM1*40*"//NM101 2/3 Entity Identifier Code: 40=Receiver.
 				+"2*"//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
-				+Sout(clearhouse.Description,35,1)+"*"//NM103 1/60 Name Last or Organization Name: Receiver Name.
+				+Sout(clearhouse.Description,60,1)+"*"//NM103 1/60 Name Last or Organization Name: Receiver Name.
 				+"*"//NM104 1/35 Name First: Not Used.
 				+"*"//NM105 1/25 Name Middle: Not Used.
 				+"*"//NM106 1/10 Name Prefix: Not Used.
 				+"*"//NM107 1/10 Name Suffix: Not Used.
-				+"46*"//NM108 1/2 Identification Code: 46=ETIN.
-				+Sout(clearhouse.ISA08,80,2)+"~");//NM109 2/80 Identification Code: Receiver ID Code. aka ETIN#.
-				//NM110 through NM112 not used so not specified.
+				+"46*"//NM108 1/2 Identification Code Qualifier: 46=Electronic Transmitter Identification Number (ETIN).
+				+Sout(clearhouse.ISA08,80,2)//NM109 2/80 Identification Code: Receiver ID Code. aka ETIN#.
+				+"~");//NM110 through NM112 are not used.
 			HLcount=1;
 			parentProv=0;//the HL sequence # of the current provider.
 			parentSubsc=0;//the HL sequence # of the current subscriber.
@@ -197,41 +172,45 @@ namespace OpenDentBusiness
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//if using clinics
 					clinic=Clinics.GetClinic(claim.ClinicNum);//might be null
 				}
-				//2000A HL: Billing provider HL loop
+				//2000A HL: (medical,instituational,dental) Billing Provider Hierarchical Level.
 				seg++;
 				sw.WriteLine("HL*"+HLcount.ToString()+"*"//HL01 1/12 Heirarchical ID Number: 
-					+"*"//HL02 Hierarchical Parent ID Number: Not used.
+					+"*"//HL02 1/12 Hierarchical Parent ID Number: Not used.
 					+"20*"//HL03 1/2 Heirarchical Level Code: 20=Information Source.
 					+"1~");//HL04 1/1 Heirarchical Child Code. 1=Additional Subordinate HL Data Segment in This Hierarchical Structure.
 				//billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[i].ProvBill1)];
 				billProv=Providers.GetProv(claim.ProvBill);
-				//2000A PRV: Provider Specialty Information 
-				//used instead of 2310B. js 9/5/11 this comment is confusing.
+				//2000A PRV: BI (medical,institutional,dental) Billing Provider Specialty Information.
 				seg++;
 				sw.WriteLine("PRV*BI*"//PRV01 1/3 Provider Code: BI=Billing.
 					+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
-					+X12Generator.GetTaxonomy(billProv)+"~");//PRV03 1/50 Provider Taxonomy Code: 
-				//PRV04 through PRV06 are not used.
-				//2000A CUR: Foreign Currency Information. Situational. We do not need to specify because united states dollars are default.
-				//Loop 2010 includes loops 2010AA, 2010AB, and 2010AC.  We only include 2010AA-------------------------------------------
-				//2010AA NM1: Billing provider
+					+X12Generator.GetTaxonomy(billProv)//PRV03 1/50 Reference Identification: Provider Taxonomy Code.
+					+"~");//PRV04 through PRV06 are not used.
+				//2000A CUR: (medical,instituational,dental) Foreign Currency Information. Situational. We do not need to specify because united states dollars are default.
+				//2010AA NM1: 85 (medical,institutional,dental) Billing Provider Name.
 				seg++;
 				sw.Write("NM1*85*");//NM101 2/3 Entity Identifier Code: 85=Billing Provider.
 //TODO: 9/5/11 We need a provider.IsNotPerson field.  So default is 0/false.  The exception is true and can be used for certain dummy billing providers.  Will be used here.
-				if(billProv.FName=="") {
-					sw.Write("2*");//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
+				if(medType==EnumClaimMedType.Institutional) {
+					sw.Write("2*");//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
 				}
-				else {
-					sw.Write("1*");
+				else { //(medical,dental)
+					sw.Write(((billProv.FName=="")?"2":"1")+"*");//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity. Person when first name is not blank, Non-Person Entity otherwise.
 				}
-				sw.Write(Sout(billProv.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
-					+Sout(billProv.FName,35)+"*"//NM104 1/35 Name First: Situational. Required when NM102=1. Might be blank.
-					+Sout(billProv.MI,25)+"*"//NM105 1/25 Name Middle: Since this is situational there is no minimum length.
-					+"*"//NM106 1/10 Name Prefix: Not Used.
-					+"*");//NM107 1/10 Name Suffix: Not Used.
-				sw.Write("XX*");//NM108 1/2 Identification Code Qualifier: 24=EIN, 34=SSN, XX=NPI. It's after the NPI date now, so only one choice here.
-				sw.WriteLine(Sout(billProv.NationalProvID,80)+"~");//NM109 2/80 Identification Code: NPI Validated.
-				//NM110 through NM112 Not Used.
+				sw.Write(Sout(billProv.LName,60,1)+"*");//NM103 1/60 Name Last or Organization Name:
+				if(medType==EnumClaimMedType.Institutional) {
+					sw.Write("*"//NM104 1/35 Name First: Not used.
+						+"*");//NM105 1/25 Name Middle: Not used.
+				}
+				else { //(medical,dental)
+					sw.Write(Sout(billProv.FName,35,1)+"*"//NM104 1/35 Name First: Situational. Required when NM102=1. Might be blank.
+						+Sout(billProv.MI,25)+"*");//NM105 1/25 Name Middle: Since this is situational there is no minimum length.
+				}
+				sw.WriteLine("*"//NM106 1/10 Name Prefix: Not Used.
+					+"*"//NM107 1/10 Name Suffix: Not Used in instituational. Situational in medical and dental, but we don't support.
+					+"XX*"//NM108 1/2 Identification Code Qualifier: XX=Centers for Medicare and Medicaid Services National Provider Identifier (NPI).
+					+Sout(billProv.NationalProvID,80)//NM109 2/80 Identification Code: NPI. Validated.
+					+"~");//NM110 through NM112 Not Used.
 				//2010AA N3: Billing provider address
 				seg++;
 				string address1="";
@@ -1488,48 +1467,35 @@ namespace OpenDentBusiness
 
 		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
 		private static void Write1000A_NM1(StreamWriter sw,Clearinghouse clearhouse) {
-			if(clearhouse.SenderTIN=="") {//use OD
-				sw.WriteLine("NM1*41*"//NM101 2/3 Entity Indentifier Code: 41=submitter
-					+"2*"//NM102 1/1 Entity Type Qualifier: 2=nonperson
-					+"OPEN DENTAL SOFTWARE*"//NM103 1/60 Name Last or Organization Name: 
-					+"*"//NM104 1/35 Name First: Situational.
-					+"*"//NM105 1/25 Name Middle: Situational.
-					+"*"//NM106 1/10 Name Prefix: Not Used.
-					+"*"//NM107 1/10 Name Suffix: Not Used.
-					+"46*"//NM108 1/2 Identification Code Qualifier: 46=ETIN
-					+"810624427~");//NM109 2/80 Identification Code: ETIN#.
+			string name="OPEN DENTAL SOFTWARE";
+			string idCode="810624427";
+			if(clearhouse.SenderTIN!="") {
+				name=clearhouse.SenderName;
+				idCode=clearhouse.SenderTIN;
 			}
-			else {
-				sw.WriteLine("NM1*41*"//NM101 2/3 Entity Indentifier Code: 41=submitter
-					+"2*"//NM102 1/1 Entity Type Qualifier: 2=nonperson
-					+Sout(clearhouse.SenderName,35,1)+"*"//NM103 1/60 Name Last or Organization Name: 
-					+"*"//NM104 1/35 Name First: Situational.
-					+"*"//NM105 1/25 Name Middle: Situational.
-					+"*"//NM106 1/10 Name Prefix: Not Used.
-					+"*"//NM107 1/10 Name Suffix: Not Used.
-					+"46*"//NM108 1/2 Identification Code Qualifier: 46=ETIN
-					+Sout(clearhouse.SenderTIN,80,2)+"~");//NM109 2/80 Identification Code: ETIN#. Validated to be at least 2.
-			}
+			sw.WriteLine("NM1*41*"//NM101 2/3 Entity Indentifier Code: 41=submitter
+				+"2*"//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
+				+Sout(name,60,1)+"*"//NM103 1/60 Name Last or Organization Name: 
+				+"*"//NM104 1/35 Name First: Situational.
+				+"*"//NM105 1/25 Name Middle: Situational.
+				+"*"//NM106 1/10 Name Prefix: Not Used.
+				+"*"//NM107 1/10 Name Suffix: Not Used.
+				+"46*"//NM108 1/2 Identification Code Qualifier: 46=Electronic Transmitter Identification Number (ETIN).
+				+Sout(idCode,80,2)//NM109 2/80 Identification Code: ETIN#. Validated to be at least 2.
+				+"~");//NM110 through NM112 are not used.
 		}
 
 		///<summary>Usually writes the contact information for Open Dental. But for inmediata and AOS clearinghouses, it writes practice contact info.</summary>
 		private static void Write1000A_PER(StreamWriter sw,Clearinghouse clearhouse) {
-			if(clearhouse.SenderTIN=="") {//use OD
-				sw.WriteLine("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
-					+"*"//PER02 1/60 Name: Situational. Do not send since same as in NM1 segment for loop 1000A.
-					+"TE*"//PER03 2/2 Communication Number Qualifier: TE=Telephone.
-					+"8776861248~");//PER04 1/256 Communication Number: Telephone Number.
-				//PER05 through PER08 are situational and we are not allowed to send if not required.
-				//PER09 is not used so we do not send.
+			string phone="8776861248";
+			if(clearhouse.SenderTIN!="") {
+				phone=clearhouse.SenderTelephone;
 			}
-			else {
-				sw.WriteLine("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
-					+"*"//PER02 1/60 Name: Situational. Do not send since same as in NM1 segment for loop 1000A.
-					+"TE*"//PER03 2/2 Communication Number Qualifier: TE=Telephone.
-					+clearhouse.SenderTelephone+"~");//PER04 1/256 Communication Number: Telephone Number. Validated to be exactly 10 digits.
-				//PER05 through PER08 are situational and we are not allowed to send if not required.
-				//PER09 is not used so we do not send.
-			}
+			sw.WriteLine("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
+				+"*"//PER02 1/60 Name: Situational. Do not send since same as in NM1 segment for loop 1000A.
+				+"TE*"//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+				+phone//PER04 1/256 Communication Number: Telephone Number. Validated to be exactly 10 digits.
+				+"~");//PER05 through PER08 are situational. We do not use. PER09 is not used.
 		}
 
 		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse.  Used for billing prov and also for treating prov. Returns the number of segments written</summary>
