@@ -711,8 +711,12 @@ namespace OpenDental{
 				RemotingClient.ServerURI=textURI.Text;
 				bool useEcwAlgorithm=checkUsingEcw.Checked;
 				try{
-					//string passhash=Userods.EncryptPassword(textPassword2.Text,useEcwAlgorithm);
-					Userod user=Security.LogInWeb(textUser2.Text,textPassword2.Text,"",Application.ProductVersion,useEcwAlgorithm);
+					string password=textPassword2.Text;
+					if(useEcwAlgorithm){
+						password=Userods.EncryptPassword(password,true);
+					}
+					//ecw requires hash, but non-ecw requires actual password
+					Userod user=Security.LogInWeb(textUser2.Text,password,"",Application.ProductVersion,useEcwAlgorithm);
 					Security.CurUser=user;
 					Security.PasswordTyped=textPassword2.Text;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
