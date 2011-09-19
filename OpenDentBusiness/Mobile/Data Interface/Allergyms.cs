@@ -17,6 +17,17 @@ namespace OpenDentBusiness.Mobile{
 					+" AND PatNum = "+POut.Long(patNum);
 			return Crud.AllergymCrud.SelectMany(command);
 		}
+
+		public static DataTable GetAllergymDetails(long customerNum,long patNum) {
+			string command=
+				"SELECT  allergydefm.Description from allergym  LEFT JOIN allergydefm on allergym.AllergyDefNum=allergydefm.AllergyDefNum "
+				+"WHERE allergym.CustomerNum = "+POut.Long(customerNum)
+					+" AND allergym.PatNum = "+POut.Long(patNum)
+					+" AND allergym.StatusIsActive = "+POut.Bool(true) // get only active allergies
+					+" AND allergydefm.CustomerNum = "+POut.Long(customerNum);
+			return Db.GetTable(command);
+		}
+		
 		#endregion
 
 		#region Used only on OD

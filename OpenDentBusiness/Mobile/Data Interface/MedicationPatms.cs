@@ -16,6 +16,17 @@ namespace OpenDentBusiness.Mobile{
 					+" AND PatNum = "+POut.Long(patNum);
 			return Crud.MedicationPatmCrud.SelectMany(command);
 		}
+
+		
+		public static DataTable GetMedicationmDetails(long customerNum,long patNum) {
+			string command=
+				"SELECT  medicationm.MedName from medicationpatm  LEFT JOIN medicationm on medicationpatm.MedicationNum=medicationm.MedicationNum "
+				+"WHERE medicationpatm.CustomerNum = "+POut.Long(customerNum)
+					+" AND medicationpatm.PatNum = "+POut.Long(patNum)
+					+" AND medicationpatm.DateStop = "+POut.Date(DateTime.MinValue) // filter out discontinued medications.
+					+" AND medicationm.CustomerNum = "+POut.Long(customerNum);
+			return Db.GetTable(command);
+		}
 		#endregion
 
 		#region Used only on OD

@@ -16,6 +16,17 @@ namespace OpenDentBusiness.Mobile{
 					+" AND PatNum = "+POut.Long(patNum);
 			return Crud.DiseasemCrud.SelectMany(command);
 		}
+
+		public static DataTable GetDiseasemDetails(long customerNum,long patNum) {
+			string command=
+				"SELECT  icd9m.Description from diseasem  LEFT JOIN icd9m on icd9m.ICD9Num=diseasem.ICD9Num "
+				+"WHERE diseasem.CustomerNum = "+POut.Long(customerNum)
+					+" AND diseasem.PatNum = "+POut.Long(patNum)
+					+" AND diseasem.ProbStatus = "+POut.Int((int)ProblemStatus.Active) // get only active diseases
+					+" AND diseasem.ICD9Num !=0" //get only ICD9NUM which are not zero. ICD9NUM and DiseaseDefNum are mutually exculsive. If one is zero the other is not.
+					+" AND icd9m.CustomerNum = "+POut.Long(customerNum);
+			return Db.GetTable(command);
+		}
 		#endregion
 
 		#region Used only on OD
