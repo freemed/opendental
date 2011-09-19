@@ -211,7 +211,7 @@ namespace OpenDentBusiness
 					+"XX*"//NM108 1/2 Identification Code Qualifier: XX=Centers for Medicare and Medicaid Services National Provider Identifier (NPI).
 					+Sout(billProv.NationalProvID,80)//NM109 2/80 Identification Code: NPI. Validated.
 					+"~");//NM110 through NM112 Not Used.
-				//2010AA N3: Billing provider address
+				//2010AA N3: (medical,institutional,dental) Billing Provider Address.
 				seg++;
 				string address1="";
 				if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
@@ -223,7 +223,7 @@ namespace OpenDentBusiness
 				else {
 					address1=clinic.Address;
 				}
-				sw.Write("N3*"+Sout(address1,55));//N301 1/55 Address Information: 
+				sw.Write("N3*"+Sout(address1,55)+"*");//N301 1/55 Address Information: 
 				string address2="";
 				if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
 					address2=PrefC.GetString(PrefName.PracticeBillingAddress2);
@@ -234,13 +234,8 @@ namespace OpenDentBusiness
 				else {
 					address2=clinic.Address2;
 				}
-				if(address2=="") {
-					sw.WriteLine("~");
-				}
-				else {
-					sw.WriteLine("*"+Sout(address2,55)+"~");//N302 1/55 Address Information: Situational. Only specify if there is a second address line.
-				}
-				//2010AA N4: Billing Provider City,State,Zip Code.
+				sw.WriteLine(Sout(address2,55)+"~");//N302 1/55 Address Information:
+				//2010AA N4: (medical,institutional,dental) Billing Provider City, State, Zip Code.
 				seg++;
 				string city="";
 				string state="";
@@ -260,31 +255,29 @@ namespace OpenDentBusiness
 					state=clinic.State;
 					zip=clinic.Zip;
 				}
-				sw.WriteLine("N4*"+Sout(city,30)+"*"//N401 2/30 City Name: 
-						+Sout(state,2)+"*"//N402 2/2 State or Province Code: 
-						+Sout(zip.Replace("-",""),15)//N403 3/15 Postal Code: 
+				sw.WriteLine("N4*"+Sout(city,30,2)+"*"//N401 2/30 City Name: 
+						+Sout(state,2,2)+"*"//N402 2/2 State or Province Code: 
+						+Sout(zip.Replace("-",""),15,3)//N403 3/15 Postal Code: 
 						+"~");//NM404 through NM407 are either situational with United States as default, or not used, so we don't specify any of them.
-				//2010AA REF - Billing Provider Tax Identification
+				//2010AA REF EI (medical,institutional,dental) Billing Provider Tax Identification.
 				seg++;
-				bool isSSN=false;
-				if(medType==EnumClaimMedType.Dental) {//and probably medical
-					//SSN is allowed instead of TIN
-					if(!billProv.UsingTIN){
-						isSSN=true;
-					}
-				}
 				sw.Write("REF*");
-				if(isSSN){
-					sw.Write("SY*");//REF01: qualifier. SY=SSN
+				if(medType==EnumClaimMedType.Medical) {
+					sw.Write(billProv.UsingTIN?"EI*":"SY*");//REF01 2/3 Reference Identification Qualifier: EI=Employer's Identification Number (EIN). SY=Social Security Number (SSN).
 				}
-				else{
-					sw.Write("EI*");//REF01: qualifier. EI=EIN
+				else if(medType==EnumClaimMedType.Institutional) {
+					sw.Write("EI*");//REF01 2/3 Reference Identification Qualifier: EI=Employer's Identification Number (EIN).
 				}
-				sw.WriteLine(Sout(billProv.SSN,30)+"~");//REF02 1/50 Tax ID #.  Must be a string of exactly 9 digits
-				if(medType==EnumClaimMedType.Dental) {//and medical?
-					//2010AA REF - Billing Provider UIPN/License Information, max repeat 2
-					//2010AA REF: License #. Required by RECS clearinghouse,
-					//but everyone else should find it useful too.
+				else if(medType==EnumClaimMedType.Dental) {
+					sw.Write(billProv.UsingTIN?"EI*":"SY*");//REF01 2/3 Reference Identification Qualifier: EI=Employer's Identification Number (EIN). SY=Social Security Number (SSN).
+				}
+				sw.WriteLine(Sout(billProv.SSN,50,1)//REF02 1/50 Reference Identification. Tax ID #.
+					+"~");//REF03 and REF04 are not used.
+				if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Dental) {
+					//2010AA REF (medical,dental) Billing Provider UIPN/License Information: Situational. We do not use. Max repeat 2.
+				}
+				if(medType==EnumClaimMedType.Dental) {
+					//2010AA REF (dental) License #: NOT IN X12 5010 STANDARD DOCUMENTATION. Required by RECS clearinghouse, but everyone else should find it useful too.
 					//We do NOT validate that it's entered because seding it with non-persons causes problems
 					if(billProv.StateLicense!=""){
 						seg++;
@@ -292,25 +285,31 @@ namespace OpenDentBusiness
 							+Sout(billProv.StateLicense,50)//REF02 1/50 Reference Identification: 
 							+"~");//REF03 and REF04 are not used.
 					}
-					//2010AA REF: Secondary ID number(s). Only required by some carriers.
-					//seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
+					//2010AA REF (dental) Secondary Identification Number(s): NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by some carriers.
 					//js 9/5/11 secondary ID numbers are no longer allowed now.  I wonder what BCBS will do now.
+					//seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
 				}
-				//2010AA PER - Billing Provider Contact Information
-				//probably required by a number of carriers and by Emdeon
+				//2010AA PER IC (medical,institutional,dental) Billing Provider Contact Information: Probably required by a number of carriers and by Emdeon.
 				seg++;
 				sw.Write("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
 					+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02 1/60 Name: Practice Title.
 					+"TE*");//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+				
 				if(clinic==null){
-					sw.WriteLine(Sout(PrefC.GetString(PrefName.PracticePhone),256,1)+"~");//PER04  1/256 Comm Number: telephone number
+					sw.WriteLine(Sout(PrefC.GetString(PrefName.PracticePhone),256,1));//PER04  1/256 Communication Number: Telephone number.
 				}
 				else{
-					sw.WriteLine(Sout(clinic.Phone,256,1)+"~");
+					sw.WriteLine(Sout(clinic.Phone,256,1));//PER04  1/256 Communication Number: Telephone number.
 				}
-				//PER05 through PER09 are all situational or not used. Skipped here.
-				//2010AB Not used.
-				//2010AC Not used
+				sw.WriteLine("~");//PER05 through PER08 are situational and PER09 is not used. We do not use.
+				//2010AB NM1: 87 (medical,institutional,dental) Pay-To Address Name. We do not use.
+				//2010AB N3: (medical,institutional,dental) Pay-To Address. We do not use.
+				//2010AB N4: (medical,institutional,dental) Pay-To Address City, State, Zip Code. We do not use.
+				//2010AC NM1: 98 (medical,institutional,dental) Pay-To Plan Name. We do not use.
+				//2010AC N3: (medical,institutional,dental) Pay-To Plan Address. We do not use.
+				//2010AC N4: (medical,institutional,dental) Pay-To Plan City, State, Zip Code. We do not use.
+				//2010AC REF: (medical,institutional,dental) Pay-To Plan Secondary Identification. We do not use.
+				//2010AC REF: (medical,institutional,dental) Pay-To Plan Tax Identification Number. We do not use.
 				parentProv=HLcount;
 				HLcount++;
 				#endregion Billing Provider
@@ -336,13 +335,13 @@ namespace OpenDentBusiness
 				else {//patient is not the subscriber
 					hasSubord="1";//-patient will always follow
 				}
-				//2000B HL: Subscriber HL loop
+				//2000B HL: (medical,institutional,dental) Subscriber Hierarchical Level.
 				seg++;
 				sw.WriteLine("HL*"+HLcount.ToString()+"*"//HL01 1/12 Hierarchical ID Number:
 					+parentProv.ToString()+"*"//HL02 1/12 Hierarchical Parent ID Number: parent HL is always the billing provider HL.
-					+"22*"//HL03 1/2 Hierarchical Level Code: 22=Subscriber (Only one option).
+					+"22*"//HL03 1/2 Hierarchical Level Code: 22=Subscriber.
 					+hasSubord+"~");//HL04 1/1 Hierarchical Child Code: 0=No subordinate HL segment in this hierarchical structure. 1=Additional subordinate HL data segment in this hierarchical structure.
-				//2000B SBR:
+				//2000B SBR: (medical,institutional,dental) Subscriber Information.
 				seg++;
 				sw.Write("SBR*");
 				string claimType="";
@@ -370,14 +369,19 @@ namespace OpenDentBusiness
 				if(patient.PatNum==subscriber.PatNum) {//if patient is the subscriber
 					relationshipCode="18";
 				}
-				sw.Write(relationshipCode+"*");//SBR02 2/2 Individual Relationship Code: 18=Self (The only option if not blank).
-				//groupNumber and groupName do not need to be validated because they are optional.
-				sw.Write(Sout(insPlan.GroupNum,50)+"*"//SBR03 1/50 Reference Identification: Group Number.
-					+Sout(insPlan.GroupName,60)+"*"//SBR04 1/60 Name: Group Name.
-					+"*");//SBR05 1/3 Insurance Type Code. Situational.  Skip because we don't support secondary Medicare.
-				sw.Write("***");//SBR06, 07, & 08 not used.
-				sw.WriteLine(GetFilingCode(insPlan)+"~");//"CI~");//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
-				//2010BA NM1: Subscriber Name
+				sw.Write(relationshipCode+"*");//SBR02 2/2 Individual Relationship Code: 18=Self (The only option besides blank).
+				sw.Write(Sout(insPlan.GroupNum,50)+"*"//SBR03 1/50 Reference Identification: Group Number. Does not need to be validated because group number is optional.
+					+Sout(insPlan.GroupName,60)+"*"//SBR04 1/60 Name: Group Name. Does not need to be validated because group name is optional.
+					+"*"//SBR05 1/3 Insurance Type Code. Situational.  Skip because we don't support secondary Medicare.
+					+"*"//SBR06 1/1 Coordination of Benefits Code: Not used.
+					+"*"//SBR07 1/1 Yes/No Condition or Respose Code: Not used.
+					+"*"//SBR08 2/2 Employment Status Code: Not used.
+					+GetFilingCode(insPlan)+"~");//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
+				if(medType==EnumClaimMedType.Medical) {
+					//TODO: Do we need to do this?
+					//2000B PAT: (medical) Patient Information. Situational. Required when the patient is the subscriber or considered to be the subscriber and at least one of the element requirements are met. We do not use.
+				}
+				//2010BA NM1: IL (medical,institutional,dental) Subscriber Name.
 				seg++;
 				sw.WriteLine("NM1*IL*"//NM101 2/3 Entity Identifier Code: IL=Insured or Subscriber (The only option).
 					+"1*"//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
