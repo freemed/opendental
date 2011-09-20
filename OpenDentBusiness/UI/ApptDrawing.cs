@@ -609,8 +609,8 @@ namespace OpenDentBusiness.UI {
 			return retVal;
 		}
 
-		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. So, whenever appt Module layout and when comboView is changed.</summary>
-		public static void ComputeColWidth() {
+		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. So, whenever appt Module layout and when comboView is changed. Set colCountOverride to 0 unless printing.</summary>
+		public static void ComputeColWidth(int colCountOverride) {
 			if(VisOps==null || VisProvs==null) {
 				return;
 			}
@@ -618,7 +618,13 @@ namespace OpenDentBusiness.UI {
 				if(RowsPerIncr==0) {
 					RowsPerIncr=1;
 				}
-				ColCount=VisOps.Count;
+				//Allow user to choose how many columns print per page.
+				if(colCountOverride>0) {
+					ColCount=colCountOverride;
+				}
+				else {
+					ColCount=VisOps.Count;
+				}
 				if(IsWeeklyView) {
 					//ColCount=NumOfWeekDaysToDisplay;
 					ProvCount=0;

@@ -161,6 +161,9 @@ namespace OpenDental {
 		private UI.Button butProvHygenist;
 		private UI.Button butProvDentist;
 		public List<Provider> ProviderList;
+		private int pagesPrinted;
+		private int pageRow;
+		private int pageColumn;
 
 		///<summary></summary>
 		public ContrAppt() {
@@ -1270,7 +1273,7 @@ namespace OpenDental {
 			if(DefC.Short!=null) {
 				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ApptDrawing.IsWeeklyView,SchedListPeriod);//refreshes visops,etc
 				ApptDrawing.ApptSheetWidth=panelSheet.Width-vScrollBar1.Width;
-				ApptDrawing.ComputeColWidth();
+				ApptDrawing.ComputeColWidth(0);
 			}
 			this.SuspendLayout();
 			vScrollBar1.Enabled=true;
@@ -1639,7 +1642,7 @@ namespace OpenDental {
 			if(!DefC.DefShortIsNull) {
 				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ApptDrawing.IsWeeklyView,SchedListPeriod);//refreshes visops,etc
 				ApptDrawing.ApptSheetWidth=panelSheet.Width-vScrollBar1.Width;
-				ApptDrawing.ComputeColWidth();
+				ApptDrawing.ComputeColWidth(0);
 			}
 			panelOps.Width=panelSheet.Width;
 		}
@@ -3705,9 +3708,13 @@ namespace OpenDental {
 					apptPrintStopTime=FormAPS.ApptPrintStopTime;
 					apptPrintFontSize=FormAPS.ApptPrintFontSize;
 					apptPrintColsPerPage=FormAPS.ApptPrintColsPerPage;
+					pagesPrinted=0;
+					pageRow=0;
+					pageColumn=0;
 					PrintReport();
 				}
 			}
+			ApptDrawing.LineH=12;//Reset the LineH to default.
 			ModuleSelected(0);//Refresh the public variables in ApptDrawing.cs
 		}
 
@@ -3744,6 +3751,7 @@ namespace OpenDental {
 			bool showProvBar=true;
 			ApptDrawing.ApptSheetWidth=bounds.Width;
 			ApptDrawing.SetLineHeight(apptPrintFontSize);//Measure size the user set to determine the line height for printout.
+			ApptDrawing.ColCount=apptPrintColsPerPage;
 			ApptDrawing.ColDayWidth=0;
 			if(ApptDrawing.IsWeeklyView) {
 				ApptDrawing.ComputeColDayWidth();
@@ -3756,23 +3764,41 @@ namespace OpenDental {
 				ApptDrawing.ProvWidth=0;
 				ApptDrawing.ProvCount=0;
 			}
-			ApptDrawing.ComputeColWidth();
+			ApptDrawing.ComputeColWidth(apptPrintColsPerPage);
 			int startHour=apptPrintStartTime.Hour;
 			int stopHour=apptPrintStopTime.Hour;
 			if(stopHour==0) {
 				stopHour=24;
 			}
-			ApptDrawing.ApptSheetHeight=ApptDrawing.LineH*ApptDrawing.RowsPerHr*(stopHour-startHour);
-			//Figure out how many pages are needed to print. (maybe do both across and tall)
-			int pagesAcross=(int)Math.Ceiling((double)ApptDrawing.VisOps.Count/(double)apptPrintColsPerPage);
-			int pagesTall=(int)Math.Ceiling((double)ApptDrawing.ApptSheetHeight/(double)(bounds.Height-100));//-100 for the header on every page.
-			DrawPrintingHeader(e.Graphics,apptPrintColsPerPage);
+			float totalHeight=ApptDrawing.LineH*ApptDrawing.RowsPerHr*(stopHour-startHour);
+			//Figure out how many pages are needed to print.
+			int pagesAcross=(int)Math.Ceiling((decimal)ApptDrawing.VisOps.Count/(decimal)apptPrintColsPerPage);
+			int pagesTall=(int)Math.Ceiling((decimal)totalHeight/(decimal)(bounds.Height-100));//-100 for the header on every page.
+			int totalPages=pagesAcross*pagesTall;
+			//Decide what page currently on thus knowing what hours to print.
+			#region Hours
+			int hoursPerPage=(int)Math.Floor((decimal)(bounds.Height-100)/(decimal)(ApptDrawing.LineH*ApptDrawing.RowsPerHr));
+			int hourBegin=startHour;
+			int hourEnd=hourBegin+hoursPerPage;
+			if(pageRow>0) {
+				hourBegin=startHour+(hoursPerPage*pageRow);
+				hourEnd=hourBegin+hoursPerPage;
+			}
+			if(hourEnd>stopHour) {//Don't show too many hours.
+				hourEnd=stopHour;
+			}
+			ApptDrawing.ApptSheetHeight=ApptDrawing.LineH*ApptDrawing.RowsPerHr*(hourEnd-hourBegin);
+			if(hourEnd>23) {//Midnight must be 0.
+				hourEnd=0;
+			}
+			DateTime beginTime=new DateTime(1,1,1,hourBegin,0,0);
+			DateTime endTime=new DateTime(1,1,1,hourEnd,0,0);
+			#endregion
+			DrawPrintingHeader(e.Graphics);
 			e.Graphics.TranslateTransform(0,100);
-			ApptDrawing.DrawAllButAppts(e.Graphics,false,apptPrintStartTime,apptPrintStopTime);
-
+			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime);
 			//Now to draw the appointments:
 			#region ApptSingleDrawing
-
 			//Going to keep using ContrApptSingle controls for now just to get started.
 			if(ContrApptSingle3!=null) {//I think this is not needed.
 				for(int i=0;i<ContrApptSingle3.Length;i++) {
@@ -3811,20 +3837,30 @@ namespace OpenDental {
 				bool isSelected=ContrApptSingle3[i].IsSelected;
 				bool thisIsPinBoard=ContrApptSingle3[i].ThisIsPinBoard;
 				int selectedAptNum=-1;//Never select an apt for printing.
-				//string patternShowing="";
 				DataRow dataRoww=DS.Tables["Appointments"].Rows[i];
 				Point location=ApptSingleDrawing.GetLocation(dataRoww,apptPrintStartTime,apptPrintStopTime);
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(location.X,location.Y+100);//100 to compensate for print header.
-				//ApptSingleDrawing.PatternShowing=patternShowing;
 				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString()),apptWidth,apptHeight,
 					isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
 			}
 
 			#endregion
+			pagesPrinted++;
+			pageColumn++;
+			if(totalPages==pagesPrinted) {
+				e.HasMorePages=false;
+			}
+			else {
+				e.HasMorePages=true;
+				if(pagesPrinted==pagesAcross*(pageRow+1)) {
+					pageRow++;
+					pageColumn=0;
+				}
+			}
 		}
 
-		private void DrawPrintingHeader(Graphics g,int colsPerPage) {
+		private void DrawPrintingHeader(Graphics g) {
 			float xPos=0;//starting pos
 			float yPos=27.5f;//starting pos
 			//Print Title------------------------------------------------------------------------------
@@ -3849,16 +3885,20 @@ namespace OpenDental {
 			g.DrawString(date,dateFont,Brushes.Black,xDate,yPos);//centered
 			//Provider Cols-----------------------------------------------------------------------------
 			if(!ApptDrawing.IsWeeklyView) {//Don't print providers for weekly view.
-				string[] headers = new string[colsPerPage];
+				string[] headers = new string[apptPrintColsPerPage];
 				Font headerFont=new Font("Arial",8);
 				yPos+=30;
 				xPos+=(int)(ApptDrawing.TimeWidth+(ApptDrawing.ProvWidth*ApptDrawing.ProvCount));
 				int xCenter=0;
-				for(int i=0;i<colsPerPage;i++) {
+				for(int i=0;i<apptPrintColsPerPage;i++) {
 					if(i==ApptDrawing.VisOps.Count) {
 						break;
 					}
-					headers[i]=ApptDrawing.VisOps[i].OpName;
+					int k=apptPrintColsPerPage*pageColumn+i;
+					if(k>=ApptDrawing.VisOps.Count) {
+						break;
+					}
+					headers[i]=ApptDrawing.VisOps[k].OpName;
 					xCenter=(int)((ApptDrawing.ColWidth/2)-(g.MeasureString(headers[i],headerFont).Width/2));
 					g.DrawString(headers[i],headerFont,Brushes.Black,(int)(xPos+xCenter),yPos);
 					xPos+=ApptDrawing.ColWidth;
