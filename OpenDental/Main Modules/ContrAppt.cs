@@ -3799,7 +3799,11 @@ namespace OpenDental {
 			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime);
 			//Now to draw the appointments:
 			#region ApptSingleDrawing
-			//Going to keep using ContrApptSingle controls for now just to get started.
+			//Clear out the ProvBar from previous page.
+			ApptDrawing.ProvBar=new int[ApptDrawing.VisProvs.Count][];
+			for(int i=0;i<ApptDrawing.VisProvs.Count;i++) {
+				ApptDrawing.ProvBar[i]=new int[24*ApptDrawing.RowsPerHr]; //[144]; or 24*6
+			}
 			if(ContrApptSingle3!=null) {//I think this is not needed.
 				for(int i=0;i<ContrApptSingle3.Length;i++) {
 					if(ContrApptSingle3[i]!=null) {

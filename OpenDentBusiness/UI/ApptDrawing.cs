@@ -56,7 +56,7 @@ namespace OpenDentBusiness.UI {
 		public static void DrawAllButAppts(Graphics g,bool showRedTimeLine,DateTime startTime,DateTime stopTime) {
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,ApptSheetHeight);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,ApptSheetHeight);//R time bar
-			DrawMainBackground(g);
+			DrawMainBackground(g,startTime,stopTime);
 			DrawBlockouts(g,startTime,stopTime);
 			if(!IsWeeklyView) {
 				DrawProvScheds(g,startTime,stopTime);
@@ -70,7 +70,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Including the practice schedule.</summary>
-		public static void DrawMainBackground(Graphics g) {
+		public static void DrawMainBackground(Graphics g,DateTime startTime,DateTime stopTime) {
 			Brush openBrush;
 			Brush closedBrush;
 			Brush holidayBrush;
@@ -90,6 +90,11 @@ namespace OpenDentBusiness.UI {
 			//then, loop through each day and operatory
 			//Operatory curOp;
 			bool isHoliday;
+			int startHour=startTime.Hour;
+			int stopHour=stopTime.Hour;
+			if(stopHour==0) {
+				stopHour=24;
+			}
 			if(IsWeeklyView) {
 				for(int d=0;d<NumOfWeekDaysToDisplay;d++) {
 					isHoliday=false;
@@ -120,9 +125,13 @@ namespace OpenDentBusiness.UI {
 					for(int j=0;j<ColCount;j++) {
 						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,dayofweek,VisOps[j]);//OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
 						for(int i=0;i<schedsForOp.Count;i++) {
+							stopHour=stopTime.Hour;//Reset stopHour every time.
+							if(stopHour==0) {
+								stopHour=24;
+							}
 							g.FillRectangle(openBrush
 								,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
-								,schedsForOp[i].StartTime.Hours*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
+								,(schedsForOp[i].StartTime.Hours-startHour)*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
 								,ColAptWidth
 								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*LineH*RowsPerHr//6
 								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*LineH/MinPerRow);//10
@@ -153,9 +162,19 @@ namespace OpenDentBusiness.UI {
 					schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,VisOps[j]);//OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
 					//first, do all the backgrounds
 					for(int i=0;i<schedsForOp.Count;i++) {
+						stopHour=stopTime.Hour;//Reset stopHour every time.
+						if(stopHour==0) {
+							stopHour=24;
+						}
+						if(schedsForOp[i].StartTime.Hours>=stopHour) {
+							continue;
+						}
+						if(schedsForOp[i].StopTime.Hours<=stopHour) {
+							stopHour=schedsForOp[i].StopTime.Hours;
+						}
 						g.FillRectangle(openBrush
 							,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-							,schedsForOp[i].StartTime.Hours*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
+							,(schedsForOp[i].StartTime.Hours-startHour)*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
 							,ColWidth
 							,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*LineH*RowsPerHr//6
 							+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*LineH/MinPerRow);//10
@@ -165,10 +184,14 @@ namespace OpenDentBusiness.UI {
 						if(schedsForOp[i].Ops.Count==0) {//if this schedule is not assigned to specific ops, skip
 							continue;
 						}
+						stopHour=stopTime.Hour;//Reset stopHour every time.
+						if(stopHour==0) {
+							stopHour=24;
+						}
 						if(!Providers.GetIsSec(schedsForOp[i].ProvNum)) {//if the provider is a dentist
 							g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
 								,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-								,schedsForOp[i].StartTime.Hours*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
+								,(schedsForOp[i].StartTime.Hours-startHour)*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
 								,ProvWidth
 								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*LineH*RowsPerHr//6
 								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*LineH/MinPerRow);//10
@@ -176,7 +199,7 @@ namespace OpenDentBusiness.UI {
 						else {//hygienist
 							g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
 								,TimeWidth+ProvWidth*ProvCount+j*ColWidth+ProvWidth
-								,schedsForOp[i].StartTime.Hours*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
+								,(schedsForOp[i].StartTime.Hours-startHour)*LineH*RowsPerHr+(int)schedsForOp[i].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
 								,ProvWidth
 								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*LineH*RowsPerHr//6
 								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*LineH/MinPerRow);//10
@@ -199,18 +222,26 @@ namespace OpenDentBusiness.UI {
 			Font blockFont=new Font("Arial",8);
 			string blockText;
 			RectangleF rect;
+			int startHour=startTime.Hour;
+			int stopHour=stopTime.Hour;
+			if(stopHour==0) {
+				stopHour=24;
+			}
 			for(int i=0;i<schedForType.Length;i++) {
 				blockBrush=new SolidBrush(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
 				penOutline = new Pen(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType),2);
 				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				for(int o=0;o<schedForType[i].Ops.Count;o++) {
-					//Put logic here for deciding to draw blockout in time frame.
-					//int stopHour=stopTime.Hour;
-					//if(stopHour==0) {
-					//  stopHour=24;
-					//}
-					//if(aptDateTime.Hour>=startTime.Hour && aptDateTime.Hour<stopHour) {
-
+					stopHour=stopTime.Hour;//Reset stopHour every time.
+					if(stopHour==0) {
+						stopHour=24;
+					}
+					if(schedForType[i].StartTime.Hours>=stopHour) {
+						continue;
+					}
+					if(schedForType[i].StopTime.Hours<=stopHour) {
+						stopHour=schedForType[i].StopTime.Hours;
+					}
 					if(IsWeeklyView) {
 						if(GetIndexOp(schedForType[i].Ops[o])==-1) {
 							continue;//don't display if op not visible
@@ -223,7 +254,7 @@ namespace OpenDentBusiness.UI {
 						rect=new RectangleF(
 							TimeWidth+1+(dayofweek)*ColDayWidth
 							+ColAptWidth*GetIndexOp(schedForType[i].Ops[o],VisOps)+1
-							,schedForType[i].StartTime.Hours*LineH*RowsPerHr
+							,(schedForType[i].StartTime.Hours-startHour)*LineH*RowsPerHr
 							+schedForType[i].StartTime.Minutes*LineH/MinPerRow
 							,ColAptWidth-1
 							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*LineH*RowsPerHr
@@ -237,7 +268,7 @@ namespace OpenDentBusiness.UI {
 							TimeWidth+ProvWidth*ProvCount
 							+ColWidth*GetIndexOp(schedForType[i].Ops[o],VisOps)+1
 							+ProvWidth*2//so they don't overlap prov bars
-							,schedForType[i].StartTime.Hours*LineH*RowsPerHr
+							,(schedForType[i].StartTime.Hours-startHour)*LineH*RowsPerHr
 							+schedForType[i].StartTime.Minutes*LineH/MinPerRow
 							,ColWidth-1-ProvWidth*2
 							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*LineH*RowsPerHr
@@ -280,6 +311,7 @@ namespace OpenDentBusiness.UI {
 			}
 			Provider provCur;
 			Schedule[] schedForType;
+			int startHour=startTime.Hour;
 			int stopHour=stopTime.Hour;
 			if(stopHour==0) {
 				stopHour=24;
@@ -288,13 +320,19 @@ namespace OpenDentBusiness.UI {
 				provCur=VisProvs[j];
 				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
 				for(int i=0;i<schedForType.Length;i++) {
-					//Put logic here for drawing prov scheds for the time frame.
-					//if(schedForType[i].StartTime.Hour>=startTime.Hour) {
-					//  continue;
-					//}
+					stopHour=stopTime.Hour;//Reset stopHour every time.
+					if(stopHour==0) {
+						stopHour=24;
+					}
+					if(schedForType[i].StartTime.Hours>=stopHour) {
+						continue;
+					}
+					if(schedForType[i].StopTime.Hours<=stopHour) {
+						stopHour=schedForType[i].StopTime.Hours;
+					}
 					g.FillRectangle(openBrush
 						,TimeWidth+ProvWidth*j
-						,schedForType[i].StartTime.Hours*LineH*RowsPerHr//6
+						,(schedForType[i].StartTime.Hours-startHour)*LineH*RowsPerHr//6
 						+(int)schedForType[i].StartTime.Minutes*LineH/MinPerRow//10
 						,ProvWidth
 						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*LineH*RowsPerHr//6
@@ -306,38 +344,41 @@ namespace OpenDentBusiness.UI {
 
 		///<summary>Not the schedule, but just the indicators of scheduling.</summary>
 		public static void DrawProvBars(Graphics g,DateTime startTime,DateTime stopTime) {
-			//Put logic here for deciding how to draw the provider bars within the time frame.
-			//int stopHour=stopTime.Hour;
-			//if(stopHour==0) {//12AM, but we want to end on the next day so set to 24
-			//  stopHour=24;
-			//}
-			//int index=0;//This will cause drawing times to always start at the top.
-			//for(int i=startTime.Hour;i<stopHour;i++)
-
-
+			int startingPoint=startTime.Hour*RowsPerHr;
+			int stopHour=stopTime.Hour;
+			if(stopHour==0) {
+				stopHour=24;
+			}
+			int endingPoint=stopHour*RowsPerHr;
 			for(int j=0;j<ProvBar.Length;j++) {
 				for(int i=0;i<24*RowsPerHr;i++) {
+					if(i<startingPoint) {
+						continue;
+					}
+					if(i>=endingPoint) {
+						break;
+					}
 					switch(ProvBar[j][i]) {
 						case 0:
 							break;
 						case 1:
 							try {
 								g.FillRectangle(new SolidBrush(VisProvs[j].ProvColor)
-									,TimeWidth+ProvWidth*j+1,(i*LineH)+1,ProvWidth-1,LineH-1);
+									,TimeWidth+ProvWidth*j+1,((i-startingPoint)*LineH)+1,ProvWidth-1,LineH-1);
 							}
 							catch {//design-time
 								g.FillRectangle(new SolidBrush(Color.White)
-									,TimeWidth+ProvWidth*j+1,(i*LineH)+1,ProvWidth-1,LineH-1);
+									,TimeWidth+ProvWidth*j+1,((i-startingPoint)*LineH)+1,ProvWidth-1,LineH-1);
 							}
 							break;
 						case 2:
 							g.FillRectangle(new HatchBrush(HatchStyle.DarkUpwardDiagonal
 								,Color.Black,VisProvs[j].ProvColor)
-								,TimeWidth+ProvWidth*j+1,(i*LineH)+1,ProvWidth-1,LineH-1);
+								,TimeWidth+ProvWidth*j+1,((i-startingPoint)*LineH)+1,ProvWidth-1,LineH-1);
 							break;
 						default://more than 2
 							g.FillRectangle(new SolidBrush(Color.Black)
-								,TimeWidth+ProvWidth*j+1,(i*LineH)+1,ProvWidth-1,LineH-1);
+								,TimeWidth+ProvWidth*j+1,((i-startingPoint)*LineH)+1,ProvWidth-1,LineH-1);
 							break;
 					}
 				}
