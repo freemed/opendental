@@ -121,11 +121,14 @@ namespace OpenDentBusiness{
 			DeletedObjects.SetDeleted(DeletedObjectType.ICD9,icd9Num);
 		}
 
+		///<summary>This method uploads only the ICD9s that are used by the disease table. This is to reduce upload time.</summary>
 		public static List<long> GetChangedSinceICD9Nums(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
 			}
-			string command="SELECT ICD9Num FROM icd9 WHERE DateTStamp > "+POut.DateT(changedSince);
+			//string command="SELECT ICD9Num FROM icd9 WHERE DateTStamp > "+POut.DateT(changedSince);//Dennis: delete this line later
+			string command="SELECT ICD9Num FROM icd9 WHERE DateTStamp > "+POut.DateT(changedSince)
+				+" AND ICD9Num in (SELECT ICD9Num FROM disease)";
 			DataTable dt=Db.GetTable(command);
 			List<long> icd9Nums = new List<long>(dt.Rows.Count);
 			for(int i=0;i<dt.Rows.Count;i++) {
