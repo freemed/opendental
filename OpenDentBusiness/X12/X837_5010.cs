@@ -607,17 +607,17 @@ namespace OpenDentBusiness
 					//2300 DTP: 050 (medical) Repricer Received Date. Situational. We do not use.
 				}
 				else if(medType==EnumClaimMedType.Institutional) {
-					//2300 DTP 096 (inst) Discharge hour. Inpatient.
-					//2300 DTP 434 (inst) Statement. Required.
+					//2300 DTP 096 (institutional) Discharge Hour. Situational. We do not use. Inpatient. 
+					//2300 DTP 434 (instititional) Statement Dates.
 //todo:how to handle preauths?
 					if(claim.DateService.Year>1880) {//DateService validated
 						seg++;
 						sw.WriteLine("DTP*434*"//DTP01 3/3 Date/Time Qualifier: 434=Statement.
-							+"RD8*"//DTP02 2/3 RD8=Date range CCYYMMDD-CCYYMMDD.
-							+claim.DateService.ToString("yyyyMMdd")+"-"+claim.DateService.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time range
+							+"RD8*"//DTP02 2/3 Date Time Period Format Qualifier: RD8=Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD.
+							+claim.DateService.ToString("yyyyMMdd")+"-"+claim.DateService.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time Period:
 					}
-					//2300 DTP 435 (inst) Admission date/hour. Inpatient.
-					//2300 DTP 050 (inst) Repricer Received Date.  Not supported.
+					//2300 DTP 435 (institutional) Admission Date/Hour. Situational. We do not use. Inpatient.
+					//2300 DTP 050 (institutional) Repricer Received Date. Situational. Not supported.
 				}
 				else if(medType==EnumClaimMedType.Dental) {
 					//2300 DTP 439 (dental) Date accident. Situational. Required when there was an accident.
@@ -691,16 +691,14 @@ namespace OpenDentBusiness
 					seg++;
 					sw.Write("CL1*"
 						+claim.AdmissionTypeCode//CL101 1/1 Admission Type Code. Required. Validated.
-
-						//CL102 1/1 Admission source code. Required. Validated.
-
-						//CL103 1/2 Patient status code. Required. Validated.
+						//TODO //CL102 1/1 Admission source code. Required for inpatient services. Validated.
+						//TODO //CL103 1/2 Patient status code. Required. Validated.
+						//CL104 1/1 Nursing Home Residential Status Code: Not used.
 						);
 				}
 				#endregion Claim DN CL1
 				#region Claim PWK
-				//PWK loops-------------------------------------------------------------------------------------------------------
-				//2300 PWK: Claim Supplemental Information. Paperwork. Used to identify attachments.
+				//2300 PWK: (medical,institutional,dental) Claim Supplemental Information. Paperwork. Used to identify attachments.
 				/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
 					seg++;
 					sw.WriteLine("PWK*"
@@ -751,68 +749,63 @@ namespace OpenDentBusiness
 						+pwk02+"*"//PWK02 1/2 Report Transmission Code: EL=Electronically Only, BM=By Mail.
 						+"**"//PWK03 and PWK04: Not Used.
 						+"AC*"//PWK05 1/2 Identification Code Qualifier: AC=Attachment Control Number.
-						+idCode+"~");//PWK06 2/80 Identification Code:
+						+idCode//PWK06 2/80 Identification Code:
+						+"~");//PWK07 through PWK09 are not used.
 				#endregion Claim PWK
 				#region Claim CN1 AMT
-				//2300 CN1: Contract Information. Situational. We do not use this.
-				//2300 AMT: Patient estimated amount due (inst)
-				//2300 AMT: Patient Amount Paid. Situational. We do not use this.
-				//2300 AMT: Total Purchased Service Amt (medical)
+				//2300 CN1: (medical,institutional,dental)Contract Information. Situational. We do not use this.
+				//2300 AMT: (institutional) Patient Estimated Amount Due.
+				//2300 AMT: (medical,dental) Patient Amount Paid. Situational. We do not use this.
 				#endregion Claim CN1 AMT
 				#region Claim REF
-				//All loops should be listed for medical (still todo), dental, and inst.  Order varies between types, so is not important.
-				//2300 REF G3 (dental) Predetermination Identification. Situational. 
-				//Required when sending claim for previously predetermined services. 
-				//Do not send prior authorization number here.
-				if(claim.PreAuthString!="") {//validated to be empty for medical and inst
-					seg++;
-					sw.WriteLine("REF*G3*"//REF01 2/3 G3=Predetermination of Benefits Identification Number.
-						+Sout(claim.PreAuthString,50)//REF02 1/50 Predeterm of Benfits Identifier.
-						+"~");//REF03 and REF04 are not used.
+				if(medType==EnumClaimMedType.Dental) {
+					//2300 REF: G3 (dental) Predetermination Identification. Situational.  Required when sending claim for previously predetermined services. Do not send prior authorization number here.
+					if(claim.PreAuthString!="") {//validated to be empty for medical and inst
+						seg++;
+						sw.WriteLine("REF*G3*"//REF01 2/3 G3=Predetermination of Benefits Identification Number.
+							+Sout(claim.PreAuthString,50)//REF02 1/50 Predeterm of Benfits Identifier.
+							+"~");//REF03 and REF04 are not used.
+					}
 				}
-				//2300 REF 4N (inst,dental) Service Authorization Exception Code. Situational. 
-					//Required if services were performed without authorization.
+				//2300 REF: 4N (medical,institutional,dental) Service Authorization Exception Code. Situational. Required if services were performed without authorization.
 //todo: ServiceAuthException
-				//2300 REF F8 (inst, dental) Payer Claim Control Number
-					//Situational. Required if this is a replacement or a void. 
-					//F8=Original Reference Number 
+				//2300 REF: F5 (medical) Mandatory Medicare (Section 4081) Crossover Indicator. Situational. Required when submitter is Medicare and the claim is a Medigap or COB crossover claim. We do not use.
+				//2300 REF: EW (medical) Mammography Certification Number. Situational. We do not use.
+				//2300 REF: F8 (medical,institutional,dental) Payer Claim Control Number: Situational. Required if this is a replacement or a void. F8=Original Reference Number.
 					//aka Original Document Control Number/Internal Control Number (DCN/ICN).
 					//aka Transaction Control Number (TCN).  
 					//aka Claim Reference Number. 
 					//Seems to be required by Medicaid when voiding a claim or resubmitting a claim by setting the CLM05-3.
 //todo: Implement
-				//2300 REF 9F (med,inst,dental) Referral Number. Situational. 
+				//2300 REF: 9F (medical,institutional,dental) Referral Number. Situational. 
 				if(claim.RefNumString!="") {
 					seg++;
-					sw.WriteLine("REF*9F*"//REF01 2/3 Reference Identification Qualifier: 9F=Referral number. 
+					sw.WriteLine("REF*9F*"//REF01 2/3 Reference Identification Qualifier: 9F=Referral Number.
 						+Sout(claim.RefNumString,30)//REF02 1/50 Reference Identification:
 						+"~");//REF03 and REF04 are not used.
 				}
-				//2300 REF G1 (inst,dental) Prior Authorization. Situational. 
-				//Do not report predetermination of benefits id number here.
-				//G1 and G3 were muddled in 4010.  
+				//2300 REF: X4 (medical) Clinical Laboratory Improvement Amendment (CLIA) Number. Situational. We do not use.
+				//2300 REF: G1 (medical,institutional,dental) Prior Authorization. Situational. Do not report predetermination of benefits id number here. G1 and G3 were muddled in 4010.  
 				if(claim.PriorAuthorizationNumber!="") {
 					seg++;
-					sw.WriteLine("REF*G1*"//REF01 2/3 G1=Prior Authorization Number
-						+Sout(claim.PriorAuthorizationNumber,50)//REF02 1/50 Prior Auth Number
+					sw.WriteLine("REF*G1*"//REF01 2/3 Reference Identification Qualifier: G1=Prior Authorization Number.
+						+Sout(claim.PriorAuthorizationNumber,50)//REF02 1/50 Reference Identification: Prior Authorization Number.
 						+"~");//REF03 and REF04 are not used.
 				}					
-				//2300 REF 9A (inst,dental) Repriced Claim Number. Situational. We do not use. 
-				//2300 REF 9C (inst,dental) Adjusted Repriced Claim Number. Situational. We do not use.
-				//2300 REF D9 (inst,dental) Claim Identifier For Transmission Intermediaries. Situational. We do not use.
-				//2300 REF LX (inst) Investigational Device Exemption Number 
-					//required for FDA IDE.
-				//2300 REF LU (inst) Auto Accident State 
-					//seems to me to be a duplicate of the info in CLM11
-				//2300 REF EA (inst) Medical Record Number 
-				//2300 REF P4 (inst) Demonstration Project Identifier 
-					//seems very unimportant
-				//2300 REF G4 (inst) Peer Review Organization (PRO) Approval Number 
+				//2300 REF: 9A (medical,institutional,dental) Repriced Claim Number. Situational. We do not use. 
+				//2300 REF: 9C (medical,institutional,dental) Adjusted Repriced Claim Number. Situational. We do not use.
+				//2300 REF: D9 (medical,institutional,dental) Claim Identifier For Transmission Intermediaries. Situational. We do not use.
+				//2300 REF: LX (medical,institutional) Investigational Device Exemption Number. Situational. Required for FDA IDE.
+				//2300 REF: LU (institutional) Auto Accident State. Situational. Seems to me to be a duplicate of the info in CLM11.
+				//2300 REF: EA (medical,institutional) Medical Record Number. Situational. We do not use.
+				//2300 REF: P4 (medical,institutional) Demonstration Project Identifier. Situational. We do not use. Seems very unimportant.
+				//2300 REF: G4 (institutional) Peer Review Organization (PRO) Approval Number. Situational. We do not use.
+				//2300 REF: 1J (medical) Care Plan Oversight. Situational. We do not use.
 				#endregion Claim REF
 				#region Claim K3 NTE CRx
-				//2300 K3: File info (medical, dental, inst). Situational. We do not use this.
+				//2300 K3: File info (medical,institutional,dental). Situational. We do not use this.
 				//NTE loops------------------------------------------------------------------------------------------------------
-				//2300 NTE: Claim Note. Situational. A number of NTE01 codes other than 'ADD', which we don't support. (inst, dental)
+				//2300 NTE: (medical,institutional,dental) Claim Note. Situational. A number of NTE01 codes other than 'ADD', which we don't support.
 				string note="";
 				if(claim.AttachmentID!="" && !claim.ClaimNote.StartsWith(claim.AttachmentID)) {
 					note=claim.AttachmentID+" ";
@@ -821,19 +814,19 @@ namespace OpenDentBusiness
 				if(note!="") {
 					seg++;
 					sw.WriteLine("NTE*ADD*"//NTE01 3/3 Note Reference Code: ADD=Additional information.
-						+Sout(note,80)+"~");//NTE02 1/80 Additional Information:
+						+Sout(note,80)+"~");//NTE02 1/80 Description:
 				}
-				//2300 NTE: Billing Note. Situational. (inst)
+				//2300 NTE: (institutional) Billing Note. Situational. We do not use.
 				//CRx loops------------------------------------------------------------------------------------------------------
-				//2300 CR1: (medical)Ambulance transport info
-				//2300 CR2: (medical) Spinal Manipulation Service Info
-				//2300 CRC: (medical) About 3 irrelevant segments
-				//2300 CRC: (inst) EPSDT Referral
-					//required on EPSDT claims when the screening service is being billed in this claim.
+				//2300 CR1: LB (medical) Ambulance Transport Information. Situational. We do not use.
+				//2300 CR2: (medical) Spinal Manipulation Service Information. Situational. We do not use.
+				//2300 CRC: (medical) Ambulance Certification. Situational. We do not use.
+				//2300 CRC: (medical) Patient Condition Information Vision. Situational. We do not use.
+				//2300 CRC: (medcial) Homebound Indicator. Situational. We do not use.
+				//2300 CRC: (medical,institutional) EPSDT Referral. Situational. Required on EPSDT claims when the screening service is being billed in this claim. We do not use.
 				#endregion Claim K3 NTE CRx
 				#region Claim HI HCP
 				//HI loops-------------------------------------------------------------------------------------------------------
-				//All HI loops should be listed for medical (still todo), dental, and inst. 
 				List<string> diagnosisList=new List<string>();//princDiag will always be the first element.
 				if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Institutional){
 					for(int j=0;j<claimProcs.Count;j++) {
@@ -854,8 +847,7 @@ namespace OpenDentBusiness
 						}
 					}
 				}
-				//2300 HI: Principal Diagnosis BK (inst)
-				//required
+				//2300 HI: BK (institutional) Principal Diagnosis.
 				if(medType==EnumClaimMedType.Institutional) {
 					seg++;
 					sw.Write("HI*"
@@ -880,34 +872,23 @@ namespace OpenDentBusiness
 					}
 					sw.WriteLine("~");
 				}*/
-				//2300 HI: Health Care Diagnosis Code. Situational. BK (dental)
-					//todo: might be a good idea
-					//for OMS or anesthesiology
-				//2300 HI: Admitting Diagnosis BJ (inst)
-					//required for inpatient admission.
-				//2300 HI: Patient's Reason for Visit PR (inst)
+				//2300 HI: BK (medical,dental) Health Care Diagnosis Code. Situational. For OMS or anesthesiology.
+//todo: Required for medical.
+				//2300 HI: BP (medical) Anesthesia Related Procedure. Situational. We do not use.
+				//2300 HI: BJ (institutional) Admitting Diagnosis. Situational. Required for inpatient admission. We do not use.
+				//2300 HI: PR (institutional) Patient's Reason for Visit. Situational. Required for outpatient visits.
 //todo: probably required
-					//required for outpatient visits.
-				//2300 HI: External Cause of Injury BN (inst)
-				//2300 HI: Diagnosis Related Group (DRG) Information (inst)
-					//for inpatient hospital under DRG contract
-				//2300 HI: Other Diagnosis Information BF (inst)
-					//when other conditions coexist or develop
-				//2300 HI: Principal Procedure Information BR (inst)
-					//required on inpatient claims when a procedure was performed
-				//2300 HI: Other Procedure Information BQ (inst)
-					//inpatient claims for additional procedures.
-				//2300 HI: Occurence Span Information BI (inst)
-					//for an occurence span code
-				//2300 HI: Occurence Information BH (inst)
-					//for an occurence code
-				//2300 HI: Value Information BE (inst)
-					//for a value code
-				//2300 HI: Condition Information BG (inst)
-					//for a condition code
-				//2300 HI: Treatment Code Information TC (inst)
-					//when home health agencies need to report plan of treatment information under contracts
-				//2300 HCP: Claim Pricing/Repricing Information. Situational. We do not use. (medical, inst, dental)
+				//2300 HI: BN (institutional) External Cause of Injury. Situational. We do not use.
+				//2300 HI: (institutional) Diagnosis Related Group (DRG) Information. Situational. We do not use. For inpatient hospital under DRG contract.
+				//2300 HI: BF (institutional) Other Diagnosis Information. Situational. We do not use. When other conditions coexist or develop.
+				//2300 HI: BR (institutional) Principal Procedure Information. Situational. We do not use. Required on inpatient claims when a procedure was performed.
+				//2300 HI: BQ (institutional) Other Procedure Information. Situational. We do not use. Inpatient claims for additional procedures.
+				//2300 HI: BI (institutional) Occurence Span Information. Situational. We do not use. For an occurence span code.
+				//2300 HI: BH (institutional) Occurence Information. Situational. We do not use. For an occurence code.
+				//2300 HI: BE (institutional) Value Information. Situational. We do not use. For a value code.
+				//2300 HI: BG (medical,institutional) Condition Information. Situational. We do not use. For a condition code.
+				//2300 HI: TC (institutional) Treatment Code Information. Situational. We do not use. When home health agencies need to report plan of treatment information under contracts.
+				//2300 HCP: (medical,institutional,dental) Claim Pricing/Repricing Information. Situational. We do not use.
 				#endregion Claim HI HCP
 				#region 2310 Claim Providers (medical)
 				//Since order might be important, we have to handle medical, institutional, and dental separately.
@@ -921,33 +902,46 @@ namespace OpenDentBusiness
 							+"PXC*"//PRV02: PXC=Health Care Provider Taxonomy Code
 							+X12Generator.GetTaxonomy(provTreat)+"~");//PRV03: Taxonomy code
 					}*/
-					//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.
-					//2310D (medical)N3,N4,REF,PER: not supported.
-					//2310E (medical)NM1,REF Supervising Provider. Not supported.
-					//2310F (medical)NM1,N3,N4 Ambulance Pickup location. Not supported.
-					//2310G (medical)NM1,N3,N4 Ambulance Dropoff location. Not supported.
+					//2310A NM1: (medical) Referring Provider Name. Situational. We do not use.
+					//2310A REF: (medical) Referring Provider Secondary Identification. Situational. We do not use.
+					//2010B NM1: (medical) Rendering Provider Name. Situational. We do not use.
+					//2310B PRV: (medical) Rendering Provider Specialty Information. Situational. We do not use.
+					//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
+					//2310C NM1: (medical) Service Facility Location Name. Situational. We do not use.
+					//2310C N3: (medical) Service Facility Location Address. We do not use.
+					//2310C N4: (medical) Service Facility Location City, State, Zip Code. We do not use.
+					//2310C REF: (medical) Service Facility Location Secondary Identification. Situational. We do not use.
+					//2310C PER: (medical) Service Facility Contact Information. Situational. We do not use.
+					//2310D NM1: (medical) Supervising Provider Name. Situational. We do not use.
+					//2310D REF: (medical) Supervising Provider Secondary Identification. Situational. We do not use.
+					//2310E NM1: (medical) Ambulance Pick-up Location. Situational. We do not use.
+					//2310E N3: (medical) Ambulance Pick-up Location Address. We do not use.
+					//2310E N4: (medical) Ambulance Pick-up Location City, State, Zip Code. We do not use.
+					//2310F NM1: (medical) Ambulance Drop-off Location. Situational. We do not use.
+					//2310F N3: (medical) Ambulance Drop-off Location Address. We do not use.
+					//2310F N4: (medical) Ambulance Drop-off Location City, State, Zip Code. We do not use.
 				}
 				#endregion 2310 Claim Providers (medical)
 				#region 2310 Claim Providers (inst)
 				if(medType==EnumClaimMedType.Institutional) {
-					//2310A (inst) Attending Provider 71 
+					//2310A NM1: 71 (institutional) Attending Provider Name. Situational.
 						//required. Provider with overall responsibility for care and treatment reported on this claim.
 	//todo: attending provider.  We will use our treating provider field.
-					//2310A (inst) NM1
-					//2310A (inst) PRV
-					//2310B (inst) Operating Physician Name 72 
-					//for surgical procedure codes
-					//2310C (inst) Other Operating Physician Name ZZ
-					//2310D (inst) Rendering Provider Name 82
-					//if different from attending provider AND when regulations require both facility and professional components.
-					//2310E (inst) Service Facility Location Name 77
+					//2310A PRV: AT (institutional) Attending Provider Specialty Information. Situational.
+					//2310A REF: (institutional) Attending Provider Secondary Identification. Situational.
+					//2310B NM1: 72 (institutional) Operating Physician Name. Situational. For surgical procedure codes.
+					//2310C REF: ZZ (institutional) Secondary Physician Secondary Identification. Situational.
+					//2310C NM1: ZZ (institutional) Other Operating Physician Name. Situational.
+					//2310C REF: ZZ (institutional) Other Operating Physician Secondary Identification. Situational.
+					//2310D NM1: 82 (institutional) Rendering Provider Name. Situational. If different from attending provider AND when regulations require both facility and professional components.
+					//2310D REF: ZZ (institutional) Rendering Provider Secondary Identificaiton. Situational.
+					//2310E NM1: 77 (institutional) Service Facility Location Name. Situational.
 	//todo:
-						//NM1
-						//N3
-						//N4
-					//required when place of service is different from loop 2010AA billing provider
-					//2310F (inst) Referring Provider Name DN
-					//required when referring provider is different from attending provider
+					//2310E N3: (institutional) Service Facility Location Address. Required when place of service is different from loop 2010AA billing provider.
+					//2310E N4: (institutional) Service Facility Location City, State, Zip Code.
+					//2310E REF: ZZ (institutional) Service Facility Location Secondary Identificiation. Situational.
+					//2310F NM1: DN (institutional) Referring Provider Name. Situational. Required when referring provider is different from attending provider.
+					//2310F REF: (institutional) Referring Provider Secondary Identification. Situational. 
 				}
 				#endregion 2310 Claim Providers (inst)
 				#region 2310 Claim Providers (dental)
