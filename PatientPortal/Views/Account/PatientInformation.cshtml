@@ -1,0 +1,69 @@
+﻿@using System.Data;
+@using OpenDentBusiness;
+@using OpenDentBusiness.Mobile;
+@model PatientPortalMVC.Models.PatientInformationModel
+@{
+	ViewBag.Title = "Patient Information";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>PatientInformation</h2>
+
+    <h2>LabPanel List</h2>
+	@Model.MessageLabPanel
+	<table>
+	@foreach(var item in Model.mLabPanelmList) {    
+    <tr>
+        <td>@Html.Encode(item.LabPanelNum)</td>
+        <td>@Html.Encode(item.LabNameAddress)</td>
+		<td>
+			<table>
+				@{ PatientPortalMVC.Models.PatientInformationModel.LabResults lr= Model.GetLabResult(item.LabPanelNum); }
+					@foreach(LabResultm itemInner in lr.mLabResultmList) {
+					  <tr>
+						  <td>@Html.Encode(itemInner.DateTimeTest) </td>
+						  <td>@Html.Encode(itemInner.TestName) </td>
+						  <td>@Html.Encode(itemInner.ObsValue) </td>
+					  </tr>
+					}
+			</table>
+		</td>
+
+    </tr>
+	}
+	</table>
+
+
+	    <h2>Medication List</h2>
+	@Model.MessageMedication
+	<table>
+	@foreach(DataRow row in Model.mMedicationmDataTable.Rows) {
+    <tr>
+        <td>@Html.Encode(row["MedName"].ToString())</td>
+    </tr>
+	}
+	</table>
+
+		    <h2>List of Problems:</h2>
+	@Model.MessageProblem
+	
+	<table>
+	 @foreach (DataRow row in Model.mDiseasemDataTable.Rows){ // Loop over the rows.
+    <tr>
+        <td>@Html.Encode(row["Description"].ToString())</td>
+    </tr>
+	}
+	</table>
+
+	<h2>List of Allergies:</h2>
+
+	@Model.MessageAllergy
+	<table>
+	@foreach(DataRow row in Model.mAllergymDataTable.Rows) {
+    <tr>
+	<td>@Html.Encode(row["Description"].ToString())</td>
+    </tr>
+	}
+	</table>
+
+
+
