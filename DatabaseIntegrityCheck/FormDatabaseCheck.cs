@@ -96,7 +96,8 @@ namespace DatabaseIntegrityCheck {
 					da=new MySqlDataAdapter(cmd);
 					da.Fill(table);
 					lastRow=table.Rows.Count-1;
-					if(table.Rows[lastRow][3].ToString()!="OK") {
+					string lastcell=table.Rows[lastRow][3].ToString();
+					if(lastcell!="OK") {
 						corruptTables.Add(tableName[i]);
 					}
 				}
@@ -107,10 +108,10 @@ namespace DatabaseIntegrityCheck {
 				}
 				string corruptS="";
 				for(int i=0;i<corruptTables.Count;i++) {
-					corruptS+=corruptTables[i]+"\r";
+					corruptS+=corruptTables[i]+", ";
 				}
-				if(MessageBox.Show("You have the following corrupt tables:\r"
-					+corruptS
+				if(MessageBox.Show("You have the following corrupt tables:\r\n"
+					+corruptS+"\r\n"
 					+"It is strongly suggested that you select Cancel and make a backup before continuing.  Select OK to repair tables.","",MessageBoxButtons.OKCancel)!=DialogResult.OK) 
 				{
 					return;
