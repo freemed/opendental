@@ -1582,7 +1582,7 @@ namespace OpenDentBusiness {
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT AptDateTime,PatNum,ProcDescript "
 				+"FROM appointment "
-				+"WHERE AptDateTime > "+POut.Date(DateTime.Today.AddDays(1))+" "//midnight tonight
+				+"WHERE AptDateTime > "+POut.DateT(DateTime.Now)+" "//Today.AddDays(1) midnight tonight
 				+"AND AptStatus !="+POut.Long((int)ApptStatus.PtNote)+" "
 				+"AND AptStatus !="+POut.Long((int)ApptStatus.PtNoteCompleted)+" "
 				+"AND AptStatus !="+POut.Long((int)ApptStatus.UnschedList)+" "
