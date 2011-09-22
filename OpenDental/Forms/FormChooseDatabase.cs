@@ -680,6 +680,7 @@ namespace OpenDental{
 					//this is only OdPassHash because of Ecw.
 					Userod user=Security.LogInWeb(OdUser,OdPassHash,"",Application.ProductVersion,true);
 					Security.CurUser=user;
+					Security.PasswordTyped=OdPassHash;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 					return true;
 				}
