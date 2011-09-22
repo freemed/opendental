@@ -718,7 +718,7 @@ namespace OpenDental{
 					//ecw requires hash, but non-ecw requires actual password
 					Userod user=Security.LogInWeb(textUser2.Text,password,"",Application.ProductVersion,useEcwAlgorithm);
 					Security.CurUser=user;
-					Security.PasswordTyped=textPassword2.Text;
+					Security.PasswordTyped=password;//for ecw, this is already encrypted.//textPassword2.Text;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 				}
 				catch(Exception ex){

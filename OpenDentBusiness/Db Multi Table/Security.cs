@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class Security{
 		///<summary>The current user.  Might be null when first starting the program.  Otherwise, must contain valid user.</summary>
 		private static Userod curUser;
-		///<summary>Remember the password that the user typed in.  Do not store it in the database.  We will need it when connecting to the web service.  Probably blank if not connected to the web service.</summary>
+		///<summary>Remember the password that the user typed in.  Do not store it in the database.  We will need it when connecting to the web service.  Probably blank if not connected to the web service.  If eCW, then this is already encrypted.</summary>
 		public static string PasswordTyped;
 
 		public static Userod CurUser {

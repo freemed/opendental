@@ -198,7 +198,11 @@ namespace OpenDental{
 			}
 			Security.CurUser = selectedUser.Copy();
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Security.PasswordTyped=textPassword.Text;
+				string password=textPassword.Text;
+				if(Programs.UsingEcwTight()) {//ecw requires hash, but non-ecw requires actual password
+					password=Userods.EncryptPassword(password,true);
+				}
+				Security.PasswordTyped=password;
 			}
 			if(PrefC.GetBool(PrefName.TasksCheckOnStartup)){
 				int taskcount=Tasks.UserTasksCount(Security.CurUser.UserNum);
