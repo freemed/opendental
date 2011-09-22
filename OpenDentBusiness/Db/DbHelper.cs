@@ -37,7 +37,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary>If passing in a literal, surround with single quotes first.</summary>
+		/// <summary>Concatenates the fields and/or literals passed as params for Oracle or MySQL. If passing in a literal, surround with single quotes.</summary>
 		public static string Concat(params string[] values) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				string result="(";
@@ -187,12 +187,19 @@ namespace OpenDentBusiness {
 			}
 			return "YEAR("+date+")";
 		}
-
+		
+		///<summary>Helper for Oracle that will return equivalent of MySql "input REGEXP 'pattern'". Also changes pattern:[0-9] to [:digit:] for Oracle.</summary>
 		public static string Regexp(string input,string pattern) {
+			return Regexp(input,pattern,true);
+		}
+
+		///<summary>Helper for Oracle that will return equivalent of MySql "input REGEXP 'pattern'". Also changes pattern:[0-9] to [:digit:] for Oracle. Takes matches param for "does [not] match this regexp."</summary>
+		public static string Regexp(string input,string pattern,bool matches) {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "REGEXP_INSTR("+input+",'"+pattern+"')";
+				pattern.Replace("[0-9]","[[:digit:]]");
+				return (matches?"":"NOT ")+"REGEXP_LIKE("+input+",'"+pattern+"')";
 			}
-			return input+" REGEXP '"+pattern+"'";
+			return input+(matches?"":" NOT")+" REGEXP '"+pattern+"'";
 		}
 
 		///<summary>Gets the database specific character used for parameters.  For example, : or @.</summary>

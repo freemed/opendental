@@ -38,6 +38,7 @@ namespace OpenDental {
 		private UI.Button butDashboard;
 		private MenuStrip menuMain;
 		private ToolStripMenuItem setupToolStripMenuItem;
+		private UI.Button butUDS;
 		///<summary>After this form closes, this value is checked to see if any non-modal dialog boxes are needed.</summary>
 		public ReportModalSelection RpModalSelection;
 
@@ -89,6 +90,7 @@ namespace OpenDental {
 			this.butDashboard = new OpenDental.UI.Button();
 			this.menuMain = new System.Windows.Forms.MenuStrip();
 			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.butUDS = new OpenDental.UI.Button();
 			this.menuMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -318,6 +320,21 @@ namespace OpenDental {
 			this.setupToolStripMenuItem.Text = "Setup";
 			this.setupToolStripMenuItem.Click += new System.EventHandler(this.setupToolStripMenuItem_Click);
 			// 
+			// butUDS
+			// 
+			this.butUDS.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butUDS.Autosize = true;
+			this.butUDS.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUDS.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUDS.CornerRadius = 4F;
+			this.butUDS.Location = new System.Drawing.Point(427,35);
+			this.butUDS.Name = "butUDS";
+			this.butUDS.Size = new System.Drawing.Size(92,24);
+			this.butUDS.TabIndex = 18;
+			this.butUDS.Text = "UDS Reporting";
+			this.butUDS.UseVisualStyleBackColor = true;
+			this.butUDS.Click += new System.EventHandler(this.butUDS_Click);
+			// 
 			// FormReportsMore
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -325,6 +342,7 @@ namespace OpenDental {
 			this.Controls.Add(this.butDashboard);
 			this.Controls.Add(this.labelArizonaPrimaryCare);
 			this.Controls.Add(this.listArizonaPrimaryCare);
+			this.Controls.Add(this.butUDS);
 			this.Controls.Add(this.butLaserLabels);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.listDaily);
@@ -738,6 +756,11 @@ namespace OpenDental {
 		private void butLaserLabels_Click(object sender,EventArgs e) {
 			FormRpLaserLabels LaserLabels = new FormRpLaserLabels();
 			LaserLabels.ShowDialog();
+		}
+
+		private void butUDS_Click(object sender,EventArgs e) {
+			FormReportsUds FormRU=new FormReportsUds();
+			FormRU.ShowDialog();
 		}
 
 		private void butDashboard_Click(object sender,EventArgs e) {

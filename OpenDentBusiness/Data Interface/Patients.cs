@@ -1838,9 +1838,46 @@ FROM insplan";
 			Db.NonQ(command); Patient pat=new Patient();
 		}
 
+		///<summary>Gets the number of patients with unknown Zip.</summary>
+		public static int GetZipUnknown(DateTime dateFrom, DateTime dateTo) {
+			string command="SELECT COUNT(*) "
+				+"FROM patient pat "
+				+"JOIN procedurelog proc "
+				+"ON pat.PatNum=proc.PatNum "
+				+"WHERE "+DbHelper.Regexp("Zip","^[0-9]{5}",false)+" "//Does not start with five numbers
+				+"AND proc.ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"AND proc.DateEntryC >= "+POut.Date(dateFrom)+" "
+				+"AND proc.DateEntryC <= "+POut.Date(dateTo)+" ";
+			return PIn.Int(Db.GetCount(command));
+		}
+
+		///<summary>Gets the number of qualified patients (having a completed procedure within the given time frame) in zip codes with less than 9 other qualified patients in that same zip code.</summary>
+		public static int GetZipOther(DateTime dateFrom, DateTime dateTo) {
+			string command="SELECT SUM(Patients) FROM "
+				+"(SELECT SUBSTRING(Zip,1,5) Zip_Code,COUNT(*) Patients "//Column headings Zip_Code and Patients are provided by the USD 2010 Manual.
+				+"FROM patient pat "
+				+"JOIN procedurelog proc "
+				+"ON pat.PatNum=proc.PatNum "
+				+"WHERE "+DbHelper.Regexp("Zip","^[0-9]{5}")+" "//Starts with five numbers
+				+"AND proc.ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"AND proc.DateEntryC >= "+POut.Date(dateFrom)+" "
+				+"AND proc.DateEntryC <= "+POut.Date(dateTo)+" "
+				+"GROUP BY Zip "
+				+"HAVING COUNT(*) < 10) patzip";//Has less than 10 patients in that zip code for the given time frame.
+			return PIn.Int(Db.GetCount(command));
+		}
 		
-
-
+		///<summary>Gets the total number of patients with completed procedures between dateFrom and dateTo.</summary>
+		public static int GetPatCount(DateTime dateFrom, DateTime dateTo) {
+			string command="SELECT COUNT(*) "
+				+"FROM patient pat "
+				+"JOIN procedurelog proc "
+				+"ON pat.PatNum=proc.PatNum "
+				+"WHERE proc.ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"AND proc.DateEntryC >= "+POut.Date(dateFrom)+" "
+				+"AND proc.DateEntryC <= "+POut.Date(dateTo)+" ";
+			return PIn.Int(Db.GetCount(command));
+		}
 
 	}
 
