@@ -25,8 +25,23 @@ namespace WebHostSynch {
 	// [System.Web.Script.Services.ScriptService]
 	public class Sheets:System.Web.Services.WebService {
 		private Util util=new Util();
+
 		/// <summary>
-		/// Dennis: This method is backward compatibilty only. Older version of OD may be using it. It may be deleted later. 14 April, 2011
+		/// An inner class made  for just transferring both the sheets and it's fields simultaneously in a web service which otherwise has to transferred seperately.
+		/// </summary>
+		public class SheetAndSheetField {
+			public webforms_sheet web_sheet=null;
+			public List<webforms_sheetfield> web_sheetfieldlist=null;
+			public SheetAndSheetField() {
+			}
+			public SheetAndSheetField(webforms_sheet web_sheet,List<webforms_sheetfield> web_sheetfieldlist) {
+				this.web_sheet=web_sheet;
+				this.web_sheetfieldlist=web_sheetfieldlist;
+			}
+		}
+
+		/// <summary>
+		/// Dennis: This method is for backward compatibilty only. Older version of OD may be using it. It may be deleted later. 14 April, 2011
 		/// </summary>
 		[WebMethod]
 		public bool SetPreferences(string RegistrationKey,int ColorBorder) {
@@ -134,20 +149,6 @@ namespace WebHostSynch {
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+DentalOfficeID,ex);
 				return sAndsfList;
-			}
-		}
-
-		/// <summary>
-		/// A class made  for just transferring both the sheets and it's fields in a web service.
-		/// </summary>
-		public class SheetAndSheetField {
-			public webforms_sheet web_sheet=null;
-			public List<webforms_sheetfield> web_sheetfieldlist=null;
-			public SheetAndSheetField() {
-			}
-			public SheetAndSheetField(webforms_sheet web_sheet,List<webforms_sheetfield> web_sheetfieldlist) {
-				this.web_sheet=web_sheet;
-				this.web_sheetfieldlist=web_sheetfieldlist;
 			}
 		}
 
