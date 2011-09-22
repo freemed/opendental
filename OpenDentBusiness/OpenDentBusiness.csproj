@@ -435,6 +435,7 @@
     <Compile Include="Mobile\Crud\AllergymCrud.cs" />
     <Compile Include="Mobile\Crud\DiseaseDefmCrud.cs" />
     <Compile Include="Mobile\Crud\DiseasemCrud.cs" />
+    <Compile Include="Mobile\Crud\DocumentmCrud.cs" />
     <Compile Include="Mobile\Crud\ICD9mCrud.cs" />
     <Compile Include="Mobile\Crud\LabPanelmCrud.cs" />
     <Compile Include="Mobile\Crud\LabResultmCrud.cs" />
@@ -443,11 +444,13 @@
     <Compile Include="Mobile\Crud\PharmacymCrud.cs" />
     <Compile Include="Mobile\Crud\ProvidermCrud.cs" />
     <Compile Include="Mobile\Crud\RxPatmCrud.cs" />
+    <Compile Include="Mobile\Crud\StatementmCrud.cs" />
     <Compile Include="Mobile\Crud\UsermCrud.cs" />
     <Compile Include="Mobile\Data Interface\AllergyDefms.cs" />
     <Compile Include="Mobile\Data Interface\Allergyms.cs" />
     <Compile Include="Mobile\Data Interface\DiseaseDefms.cs" />
     <Compile Include="Mobile\Data Interface\Diseasems.cs" />
+    <Compile Include="Mobile\Data Interface\Documentms.cs" />
     <Compile Include="Mobile\Data Interface\ICD9ms.cs" />
     <Compile Include="Mobile\Data Interface\LabPanelms.cs" />
     <Compile Include="Mobile\Data Interface\LabResultms.cs" />
@@ -456,6 +459,7 @@
     <Compile Include="Mobile\Data Interface\Pharmacyms.cs" />
     <Compile Include="Mobile\Data Interface\Providerms.cs" />
     <Compile Include="Mobile\Data Interface\RxPatms.cs" />
+    <Compile Include="Mobile\Data Interface\Statementms.cs" />
     <Compile Include="Mobile\Data Interface\Userms.cs" />
     <Compile Include="Mobile\TableTypes\AllergyDefm.cs" />
     <Compile Include="Mobile\TableTypes\Allergym.cs" />
@@ -465,6 +469,7 @@
     <Compile Include="Mobile\TableTypes\Diseasem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mobile\TableTypes\Documentm.cs" />
     <Compile Include="Mobile\TableTypes\ICD9m.cs" />
     <Compile Include="Mobile\TableTypes\LabPanelm.cs" />
     <Compile Include="Mobile\TableTypes\LabResultm.cs" />
@@ -472,6 +477,7 @@
     <Compile Include="Mobile\TableTypes\MedicationPatm.cs" />
     <Compile Include="Mobile\TableTypes\Pharmacym.cs" />
     <Compile Include="Mobile\TableTypes\Providerm.cs" />
+    <Compile Include="Mobile\TableTypes\Statementm.cs" />
     <Compile Include="Mobile\TableTypes\Userm.cs" />
     <Compile Include="Mobile\TableTypes\RxPatm.cs" />
     <Compile Include="Remoting\ClientSL.cs" />

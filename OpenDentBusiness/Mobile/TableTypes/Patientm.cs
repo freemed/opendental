@@ -55,6 +55,10 @@ namespace OpenDentBusiness.Mobile{
 		public string AddrNote;
 		/// <summary>FK to clinic.ClinicNum. Can be zero if not attached to a clinic or no clinics set up.</summary>
 		public long ClinicNum;
+		/// <summary>Insurance Estimate for entire family.</summary>
+		public double InsEst;
+		/// <summary>Total balance for entire family before insurance estimate.  Not the same as the sum of the 4 aging balances because this can be negative.  Only stored with guarantor.</summary>
+		public double BalTotal;
 		/// <summary>Enum:ContactMethod</summary>
 		public ContactMethod PreferContactMethod;
 		///<summary>If this is blank, then the chart info for this patient will not be uploaded.  If this has a value, then this is the password that a patient must use to access their info online.</summary>

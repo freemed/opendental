@@ -59,7 +59,13 @@ namespace PatientPortalMVC.Controllers
 		}
 
 		public ActionResult PatientInformation() {
-			Patientm patm=(Patientm)Session["Patient"];
+			Patientm patm;
+			if(Session["Patient"]==null) {
+				return RedirectToAction("Login");
+			}
+			else {
+				patm=(Patientm)Session["Patient"];
+			}
 			PatientInformationModel pm= new PatientInformationModel(patm);
 			ViewData["PatName"] =patm.FName;
 			return View(pm);

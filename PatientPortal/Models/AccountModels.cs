@@ -27,8 +27,8 @@ namespace PatientPortalMVC.Models {
 	}
 
 
-	public class PatientInformationModel
-{		private Patientm patm;
+	public class PatientInformationModel {
+		public Patientm patm { get; set; }
 		public class LabResults {
 			public List<LabResultm> mLabResultmList { get; set; }
 		}

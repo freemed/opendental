@@ -192,3 +192,64 @@ namespace OpenDentBusiness.Mobile {
 					Db.NonQ(command);
 				}
 				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patientm ADD InsEst double NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patientm ADD InsEst number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE patientm SET InsEst = 0 WHERE InsEst IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patientm MODIFY InsEst NOT NULL";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patientm ADD BalTotal double NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patientm ADD BalTotal number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE patientm SET BalTotal = 0 WHERE BalTotal IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patientm MODIFY BalTotal NOT NULL";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS documentm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE documentm (
+						CustomerNum bigint NOT NULL,
+						DocNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						RawBase64 text NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(DocNum),
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS statementm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE statementm (
+						CustomerNum bigint NOT NULL,
+						StatementNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						DateSent date NOT NULL DEFAULT '0001-01-01',
+						DocNum bigint NOT NULL,
+						INDEX(CustomerNum),,
+						INDEX(StatementNum),,
+						INDEX(PatNum),
+						INDEX(DocNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/

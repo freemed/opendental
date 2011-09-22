@@ -68,6 +68,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				patientm.Email              = PIn.String(table.Rows[i]["Email"].ToString());
 				patientm.AddrNote           = PIn.String(table.Rows[i]["AddrNote"].ToString());
 				patientm.ClinicNum          = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				patientm.InsEst             = PIn.Double(table.Rows[i]["InsEst"].ToString());
+				patientm.BalTotal           = PIn.Double(table.Rows[i]["BalTotal"].ToString());
 				patientm.PreferContactMethod= (ContactMethod)PIn.Int(table.Rows[i]["PreferContactMethod"].ToString());
 				patientm.OnlinePassword     = PIn.String(table.Rows[i]["OnlinePassword"].ToString());
 				retVal.Add(patientm);
@@ -82,7 +84,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			}
 			string command="INSERT INTO patientm (";
 			command+="PatNum,";
-			command+="CustomerNum,LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,Email,AddrNote,ClinicNum,PreferContactMethod,OnlinePassword) VALUES(";
+			command+="CustomerNum,LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,Email,AddrNote,ClinicNum,InsEst,BalTotal,PreferContactMethod,OnlinePassword) VALUES(";
 			command+=POut.Long(patientm.PatNum)+",";
 			command+=
 				     POut.Long  (patientm.CustomerNum)+","
@@ -106,6 +108,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"'"+POut.String(patientm.Email)+"',"
 				+"'"+POut.String(patientm.AddrNote)+"',"
 				+    POut.Long  (patientm.ClinicNum)+","
+				+"'"+POut.Double(patientm.InsEst)+"',"
+				+"'"+POut.Double(patientm.BalTotal)+"',"
 				+    POut.Int   ((int)patientm.PreferContactMethod)+","
 				+"'"+POut.String(patientm.OnlinePassword)+"')";
 			Db.NonQ(command);//There is no autoincrement in the mobile server.
@@ -135,6 +139,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 				+"Email              = '"+POut.String(patientm.Email)+"', "
 				+"AddrNote           = '"+POut.String(patientm.AddrNote)+"', "
 				+"ClinicNum          =  "+POut.Long  (patientm.ClinicNum)+", "
+				+"InsEst             = '"+POut.Double(patientm.InsEst)+"', "
+				+"BalTotal           = '"+POut.Double(patientm.BalTotal)+"', "
 				+"PreferContactMethod=  "+POut.Int   ((int)patientm.PreferContactMethod)+", "
 				+"OnlinePassword     = '"+POut.String(patientm.OnlinePassword)+"' "
 				+"WHERE CustomerNum = "+POut.Long(patientm.CustomerNum)+" AND PatNum = "+POut.Long(patientm.PatNum);
@@ -173,6 +179,8 @@ namespace OpenDentBusiness.Mobile.Crud{
 			patientm.Email              =patient.Email;
 			patientm.AddrNote           =patient.AddrNote;
 			patientm.ClinicNum          =patient.ClinicNum;
+			patientm.InsEst             =patient.InsEst;
+			patientm.BalTotal           =patient.BalTotal;
 			patientm.PreferContactMethod=patient.PreferContactMethod;
 			patientm.OnlinePassword     =patient.OnlinePassword;
 			return patientm;
