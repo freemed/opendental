@@ -3814,39 +3814,34 @@ namespace OpenDental {
 				ContrApptSingle3=null;
 			}
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
-			DataRow row;
-			//Might filter the list of appointments here for showing those within the time frame.
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-				row=DS.Tables["Appointments"].Rows[i];
+				DataRow dataRoww=DS.Tables["Appointments"].Rows[i];
+				//Filter the list of appointments here for those those within the time frame.
+				if(!ApptSingleDrawing.ApptWithinTimeFrame(dataRoww,beginTime,endTime,apptPrintColsPerPage,pageColumn)) {
+					continue;
+				}
 				ContrApptSingle3[i]=new ContrApptSingle();
 				ContrApptSingle3[i].Visible=false;
-				ContrApptSingle3[i].IsSelected=false;//Not sure if needed.
-				ContrApptSingle3[i].DataRoww=row;
+				ContrApptSingle3[i].DataRoww=dataRoww;
 				ContrApptSingle3[i].TableApptFields=DS.Tables["ApptFields"];
 				ContrApptSingle3[i].TablePatFields=DS.Tables["PatFields"];
-				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
-				if(!ApptDrawing.IsWeeklyView) {
-					ApptDrawing.ProvBarShading(row,ContrApptSingle3[i].PatternShowing);
-				}
-			}
-			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString());
+				ContrApptSingle3[i].Size=ApptSingleDrawing.SetSize(dataRoww);
+				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(dataRoww);
+				bool thisIsPinBoard=ContrApptSingle3[i].ThisIsPinBoard;
 				float apptWidth=0;
 				if(ApptDrawing.IsWeeklyView) {
 					apptWidth=(ApptDrawing.ColWidth-4)/ApptDrawing.VisOps.Count;
 				}
 				else {
 					apptWidth=ApptDrawing.ColWidth-4;
+					ApptDrawing.ProvBarShading(dataRoww,ContrApptSingle3[i].PatternShowing);
 				}
 				float apptHeight=ContrApptSingle3[i].Height;
-				bool isSelected=ContrApptSingle3[i].IsSelected;
-				bool thisIsPinBoard=ContrApptSingle3[i].ThisIsPinBoard;
-				int selectedAptNum=-1;//Never select an apt for printing.
-				DataRow dataRoww=DS.Tables["Appointments"].Rows[i];
-				Point location=ApptSingleDrawing.GetLocation(dataRoww,apptPrintStartTime,apptPrintStopTime);
 				e.Graphics.ResetTransform();
-				e.Graphics.TranslateTransform(location.X,location.Y+100);//100 to compensate for print header.
+				e.Graphics.TranslateTransform(ContrApptSingle3[i].Location.X,ContrApptSingle3[i].Location.Y+100);//100 to compensate for print header.
 				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString()),apptWidth,apptHeight,
-					isSelected,thisIsPinBoard,selectedAptNum,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
+					false,thisIsPinBoard,-1,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
 			}
 
 			#endregion

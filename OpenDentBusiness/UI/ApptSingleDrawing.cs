@@ -592,29 +592,6 @@ namespace OpenDentBusiness.UI {
 			}
 		}
 
-		///<summary></summary>
-		public static Point GetLocation(DataRow dataRoww,DateTime startTime,DateTime stopTime) {
-			Point location;
-			if(ApptDrawing.IsWeeklyView) {
-				location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
-			}
-			else {
-				location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
-			}
-			SetSize(dataRoww);
-			return location;
-		}
-
-		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
-		private static int GetIndexOp(long opNum,List<Operatory> visOps) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<visOps.Count;i++) {
-				if(visOps[i].OperatoryNum==opNum)
-					return i;
-			}
-			return -1;
-		}
-
 		///<summary>This is only called when viewing appointments on the Appt module.  For Planned apt and pinboard, use SetSize instead so that the location won't change.</summary>
 		public static Point SetLocation(DataRow dataRoww) {
 			if(ApptDrawing.IsWeeklyView) {
@@ -630,11 +607,9 @@ namespace OpenDentBusiness.UI {
 
 		///<summary>Used from SetLocation. Also used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
 		public static Size SetSize(DataRow dataRoww) {
+			ApptSingleWidth=ApptDrawing.ColWidth-5;
 			//height is based on original 5 minute pattern. Might result in half-rows
 			ApptSingleHeight=dataRoww["Pattern"].ToString().Length*ApptDrawing.LineH*ApptDrawing.RowsPerIncr;
-			//if(ContrApptSheet.TwoRowsPerIncrement){
-			//	Height=Height*2;
-			//}
 			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {
 				ApptSingleHeight=ApptSingleHeight/2;
 			}
@@ -692,6 +667,35 @@ namespace OpenDentBusiness.UI {
 			return strBTime.ToString();
 		}
 
+		///<summary>Tests if the appt is in the allotted time frame and is in a visible operatory.  Returns false in order to skip drawing for apptointment printing.</summary>
+		public static bool ApptWithinTimeFrame(DataRow dataRoww,DateTime beginTime,DateTime endTime,int colsPerPage,int pageColumn) {
+			//Test if appts op is currently visible.
+			bool visible=false;
+			for(int i=0;i<colsPerPage;i++) {
+				if(i==ApptDrawing.VisOps.Count) {
+					return false;
+				}
+				int k=colsPerPage*pageColumn+i;
+				if(k>=ApptDrawing.VisOps.Count) {
+					return false;
+				}
+				int testOp=ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()));
+				if(k==ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))) {
+					visible=true;
+					break;
+				}
+			}
+			if(!visible) {//Op not visible so don't test time frame.
+				return false;
+			}
+			//Test if any portion of appt is within time frame.
+			TimeSpan aptTimeBegin=PIn.DateT(dataRoww["AptDateTime"].ToString()).TimeOfDay;
+			TimeSpan aptTimeEnd=aptTimeBegin.Add(new TimeSpan(0,dataRoww["Pattern"].ToString().Length*5,0));
+			if(aptTimeBegin>=endTime.TimeOfDay || (aptTimeBegin<beginTime.TimeOfDay && aptTimeEnd<=beginTime.TimeOfDay)) {
+				return false;
+			}
+			return true;
+		}
 
 	}
 }
