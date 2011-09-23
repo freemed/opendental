@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 		///<summary>Updates this payment.  Must make sure to update the datePay of all attached paysplits so that they are always in synch.  Also need to manually set IsSplit before here.  Will throw an exception if bad date, so surround by try-catch.  Set excludeDepositNum to true from FormPayment to prevent collision from another worksation that just deleted a deposit.</summary>
 		public static void Update(Payment pay,bool excludeDepositNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay,excludeDepositNum);
 				return;
 			}
 			if(pay.PayDate.Date>DateTime.Today) {
