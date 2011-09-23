@@ -1743,12 +1743,14 @@ namespace OpenDental.Eclaims {
 			if(claim==null){//for eligibility response.
 				return;
 			}
+			float amountWidth=g.MeasureString("****.**",doc.standardFont).Width;
 			float procedureCodeCol=x;
-			float procedureToothCol=procedureCodeCol+450;
-			float procedureSurfaceCol=procedureToothCol+40;
-			float procedureDateCol=procedureSurfaceCol+60;
-			float procedureDateColWidth=predetermination?0:100;
+			float procedureToothCol=procedureCodeCol+470;
+			float procedureSurfaceCol=procedureToothCol+25;
+			float procedureDateCol=procedureSurfaceCol+52;
+			float procedureDateColWidth=predetermination?0:80;
 			float procedureChargeCol=procedureDateCol+procedureDateColWidth;
+			float procedureTotalCol=procedureChargeCol+amountWidth+10;//charge col width is amount width.
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"ACTE":"PROCEDURE",procedureCodeCol,0);
 			doc.DrawString(g,isFrench?"D#":"TH#",procedureToothCol,0);
@@ -1757,10 +1759,10 @@ namespace OpenDental.Eclaims {
 				doc.DrawString(g,"DATE",procedureDateCol,0);//Same in both languages.
 			}
 			doc.DrawString(g,isFrench?"HONS":"CHARGE",procedureChargeCol,0);
+			doc.DrawString(g,"TOTAL",procedureTotalCol,0);//Same in both languages.
 			x=doc.StartElement();
 			Procedure proc;
 			float procCodeWidth=g.MeasureString("*******",doc.standardFont).Width;
-			float amountWidth=g.MeasureString("****.**",doc.standardFont).Width;
 			List<ClaimProc> claimProcsOrdered=new List<ClaimProc>();
 			for(int i=0;i<claimprocs.Count;i++) {
 				ClaimProc claimproc=claimprocs[i];
@@ -1775,6 +1777,8 @@ namespace OpenDental.Eclaims {
 				}
 				claimProcsOrdered.Insert(j,claimproc);
 			}
+			List <Procedure> procListAll=Procedures.Refresh(claim.PatNum);
+			decimal totalSubmitted=0;
 			for(int i=0;i<claimProcsOrdered.Count;i++) {
 				ClaimProc claimproc=claimProcsOrdered[i];
 				proc=Procedures.GetOneProc(claimproc.ProcNum,true);
@@ -1792,14 +1796,22 @@ namespace OpenDental.Eclaims {
 				}
 				text=proc.ProcFee.ToString("F");//Field F12
 				doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				decimal procTotalFee=(decimal)proc.ProcFee;
+				List<Procedure> labProcs=Procedures.GetCanadianLabFees(claimproc.ProcNum,procListAll);
+				for(int j=0;j<labProcs.Count;j++) {
+					procTotalFee+=(decimal)labProcs[j].ProcFee;
+				}				
+				text=procTotalFee.ToString("F");
+				doc.DrawString(g,text,procedureTotalCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+				totalSubmitted+=procTotalFee;
 				x=doc.StartElement();
 			}
 			x=doc.StartElement();
 			doc.DrawField(g,isFrench?"DESTINATAIRE DU PAIEMENT":"BENEFIT AMOUNT PAYABLE TO",payableToStr,true,x,0);
 			text=isFrench?"TOTAL DEMANDÉ ":"TOTAL SUBMITTED ";
-			doc.DrawString(g,text,procedureChargeCol-g.MeasureString(text,doc.standardFont).Width,0);
-			text=claim.ClaimFee.ToString("F");
-			doc.DrawString(g,text,procedureChargeCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
+			doc.DrawString(g,text,procedureTotalCol-g.MeasureString(text,doc.standardFont).Width,0);
+			text=totalSubmitted.ToString("F");
+			doc.DrawString(g,text,procedureTotalCol+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 		}
 
 		///<summary>Prints the EOB header. Left in its own function, since the header is expected to be printed on each respective page of output.</summary>
