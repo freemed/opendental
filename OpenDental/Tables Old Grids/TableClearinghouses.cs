@@ -30,9 +30,9 @@ namespace OpenDental{
 			Fields[4]=Lan.g("TableClearinghouses","Payors");
 			ColWidth[0]=150;
 			ColWidth[1]=230;
-			ColWidth[2]=80;
+			ColWidth[2]=110;
 			ColWidth[3]=60;
-			ColWidth[4]=340;
+			ColWidth[4]=310;
 			LayoutTables();
 		}
 
