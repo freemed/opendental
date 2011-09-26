@@ -608,6 +608,9 @@ namespace OpenDentBusiness.UI {
 		///<summary>Used from SetLocation. Also used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
 		public static Size SetSize(DataRow dataRoww) {
 			ApptSingleWidth=ApptDrawing.ColWidth-5;
+			if(ApptDrawing.IsWeeklyView) {
+				ApptSingleWidth=(int)ApptDrawing.ColAptWidth;
+			}
 			//height is based on original 5 minute pattern. Might result in half-rows
 			ApptSingleHeight=dataRoww["Pattern"].ToString().Length*ApptDrawing.LineH*ApptDrawing.RowsPerIncr;
 			if(PrefC.GetLong(PrefName.AppointmentTimeIncrement)==10) {

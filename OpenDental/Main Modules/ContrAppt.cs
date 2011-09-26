@@ -3741,7 +3741,6 @@ namespace OpenDental {
 		}
 
 		private void pd2_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			//PrintScreenShot(sender,e);
 			PrintApptSchedule(sender,e);
 		}
 
@@ -3796,7 +3795,7 @@ namespace OpenDental {
 			#endregion
 			DrawPrintingHeader(e.Graphics);
 			e.Graphics.TranslateTransform(0,100);
-			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime);
+			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime,apptPrintColsPerPage,pageColumn);
 			//Now to draw the appointments:
 			#region ApptSingleDrawing
 			//Clear out the ProvBar from previous page.
@@ -3903,137 +3902,6 @@ namespace OpenDental {
 					xPos+=ApptDrawing.ColWidth;
 				}
 			}
-		}
-
-		///<summary>The old method for printing the appointment schedule. Being phased out.</summary>
-		private void PrintScreenShot(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			//MessageBox.Show(e.PageSettings.PrinterSettings.Copies.ToString());
-			float xPos=0;//starting pos
-			float yPos=(int)27.5;//starting pos
-			//Print Title
-
-			string title;
-			string date;
-			if(ApptDrawing.IsWeeklyView) {
-				title=Lan.g(this,"Weekly Appointments");
-				date=WeekStartDate.DayOfWeek.ToString()+" "+WeekStartDate.ToShortDateString()
-					+" - "+WeekEndDate.DayOfWeek.ToString()+" "+WeekEndDate.ToShortDateString();
-			}
-			else {
-				title=Lan.g(this,"Daily Appointments");
-				date=AppointmentL.DateSelected.DayOfWeek.ToString()+"   "+AppointmentL.DateSelected.ToShortDateString();
-			}
-			Font titleFont=new Font("Arial",14,FontStyle.Bold);
-			float xTitle = (float)(400-((e.Graphics.MeasureString(title,titleFont).Width/2)));
-			e.Graphics.DrawString(title,titleFont,Brushes.Black,xTitle,yPos);//centered
-			//Print Date
-			//string date = AppointmentL.DateSelected.DayOfWeek.ToString()+"   "
-			//	+AppointmentL.DateSelected.ToShortDateString();
-			Font dateFont=new Font("Arial",10,FontStyle.Regular);
-			float xDate = (float)(400-((e.Graphics.MeasureString(date,dateFont).Width/2)));
-			yPos+=25;
-			e.Graphics.DrawString(date,dateFont,Brushes.Black,xDate,yPos);//centered
-			//FIGURING OUT SIZE OF IMAGE
-			int recHeight=0;
-			int recWidth=0;
-			int recX=0;
-			int recY=0;
-			ArrayList AListStart=new ArrayList();
-			ArrayList AListStop=new ArrayList();
-			DateTime StartTime;
-			DateTime StopTime;
-			Rectangle imageRect;  //holds new dimensions for temp image
-			Bitmap imageTemp;  //clone of shadow image with correct dimensions depending on day of week. Needs to be rewritten.
-			for(int i=0;i<SchedListPeriod.Count;i++) {
-				if(SchedListPeriod[i].SchedType!=ScheduleType.Provider) {
-					continue;
-				}
-				if(SchedListPeriod[i].StartTime==TimeSpan.FromHours(0)) {//ignore notes at midnight
-					continue;
-				}
-				AListStart.Add(SchedListPeriod[i].SchedDate+SchedListPeriod[i].StartTime);
-				AListStop.Add(SchedListPeriod[i].SchedDate+SchedListPeriod[i].StopTime);
-			}
-			if(AListStart.Count > 0) {//makes sure there is at least one timeblock
-				StartTime=(DateTime)AListStart[0];
-				for(int i=0;i<AListStart.Count;i++) {
-					//if (A) OR (B AND C)
-					if((((DateTime)(AListStart[i])).Hour < StartTime.Hour) 
-						|| (((DateTime)(AListStart[i])).Hour==StartTime.Hour 
-						&& ((DateTime)(AListStart[i])).Minute < StartTime.Minute)) {
-						StartTime=(DateTime)AListStart[i];
-					}
-				}
-				StopTime=(DateTime)AListStop[0];
-				for(int i=0;i<AListStop.Count;i++) {
-					//if (A) OR (B AND C)
-					if((((DateTime)(AListStop[i])).Hour > StopTime.Hour) 
-						|| (((DateTime)(AListStop[i])).Hour==StopTime.Hour 
-						&& ((DateTime)(AListStop[i])).Minute > StopTime.Minute)) {
-						StopTime=(DateTime)AListStop[i];
-					}
-				}
-			}
-			else {//office is closed
-				StartTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
-					,AppointmentL.DateSelected.Day
-					,ApptDrawing.ConvertToHour(-ContrApptSheet2.Location.Y)
-					,ApptDrawing.ConvertToMin(-ContrApptSheet2.Location.Y)
-					,0);
-				if(ApptDrawing.ConvertToHour(-ContrApptSheet2.Location.Y)+12<23) {
-					//we will be adding an extra hour later
-					StopTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
-						,AppointmentL.DateSelected.Day
-						,ApptDrawing.ConvertToHour(-ContrApptSheet2.Location.Y)+12//add 12 hours
-						,ApptDrawing.ConvertToMin(-ContrApptSheet2.Location.Y)
-						,0);
-				}
-				else {
-					StopTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
-						,AppointmentL.DateSelected.Day
-						,22
-						,ApptDrawing.ConvertToMin(-ContrApptSheet2.Location.Y)
-						,0);
-				}
-			}
-			recY=(int)(ApptDrawing.LineH*ApptDrawing.RowsPerHr*StartTime.Hour);
-			recWidth=(int)ContrApptSheet2.Shadow.Width;
-			recHeight=(int)((ApptDrawing.LineH*ApptDrawing.RowsPerHr
-				*(StopTime.Hour-StartTime.Hour+1)));
-			//recHeight+=ApptDrawing.LineH*6;
-			imageRect = new Rectangle(recX,recY,recWidth,recHeight);
-			imageTemp=ContrApptSheet2.Shadow.Clone(imageRect,PixelFormat.DontCare);  //clones image and sets size to only show the time open for that day
-			Clipboard.SetDataObject(imageTemp);
-			int horRes=100;
-			int vertRes=100;
-			if(imageTemp.Width>775) {
-				horRes+=(int)((imageTemp.Width-775)/8);
-				if((imageTemp.Width-750)%8!=0)
-					horRes+=1;
-			}
-			if(imageTemp.Height>960) {
-				vertRes+=((imageTemp.Height-960)/8);
-				if((imageTemp.Height-960)%8!=0)
-					vertRes+=1;
-			}
-			imageTemp.SetResolution(horRes,vertRes);  //sets resolution to fit image on screen
-			//HEADER POSITION AND PRINTING		 
-			string[] headers = new string[ApptDrawing.ColCount];
-			Font headerFont=new Font("Arial",8);
-			yPos+=30;   //y Position  
-			//need to size to horizontal resolution if bigger than 100
-			xPos+=(int)(ApptDrawing.TimeWidth+(ApptDrawing.ProvWidth*ApptDrawing.ProvCount)*(100/imageTemp.HorizontalResolution));  // x position
-			int xCenter=0;
-			for(int i=0;i<ApptDrawing.ColCount;i++) {
-				headers[i]=ApptDrawing.VisOps[i].OpName;
-				xCenter=(int)((ApptDrawing.ColWidth/2)-(e.Graphics.MeasureString(headers[i],headerFont).Width/2));
-				e.Graphics.DrawString(headers[i],headerFont,Brushes.Black,(int)((xPos+xCenter)*(100/imageTemp.HorizontalResolution)),yPos);
-				xPos+=ApptDrawing.ColWidth;
-			}
-			//DRAW IMAGE:
-			xPos=0;
-			yPos+=12;
-			e.Graphics.DrawImage(imageTemp,xPos,yPos);
 		}
 
 		///<summary>Clears the pinboard.</summary>
