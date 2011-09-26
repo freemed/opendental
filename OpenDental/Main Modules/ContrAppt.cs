@@ -3795,7 +3795,7 @@ namespace OpenDental {
 			DateTime endTime=new DateTime(1,1,1,hourEnd,0,0);
 			#endregion
 			e.Graphics.TranslateTransform(0,100);//Compensate for header
-			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime,apptPrintColsPerPage,pageColumn);
+			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime,apptPrintColsPerPage,pageColumn,apptPrintFontSize);
 			//Draw the appointments.
 			#region ApptSingleDrawing
 			//Clear out the ProvBar from previous page.
@@ -3841,7 +3841,7 @@ namespace OpenDental {
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(ContrApptSingle3[i].Location.X,ContrApptSingle3[i].Location.Y+100);//100 to compensate for print header.
 				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ContrApptSingle3[i].PatternShowing,apptWidth,apptHeight,
-					false,false,-1,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
+					false,false,-1,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"],apptPrintFontSize);
 			}
 			#endregion
 			e.Graphics.ResetTransform();

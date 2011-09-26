@@ -52,12 +52,12 @@ namespace OpenDentBusiness.UI {
 		///<summary></summary>
 		public static float ApptSheetWidth;
 
-		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.  Pass start and stop times of 12AM for 24 hours.  Set colsPerPage to VisProvs unless printing.  Set pageColumn to 0 unless printing.</summary>
-		public static void DrawAllButAppts(Graphics g,bool showRedTimeLine,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn) {
+		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.  Pass start and stop times of 12AM for 24 hours.  Set colsPerPage to VisProvs unless printing.  Set pageColumn to 0 unless printing.  Default fontSize is 8 unless printing.</summary>
+		public static void DrawAllButAppts(Graphics g,bool showRedTimeLine,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn,int fontSize) {
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,ApptSheetHeight);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,ApptSheetHeight);//R time bar
 			DrawMainBackground(g,startTime,stopTime,colsPerPage,pageColumn);
-			DrawBlockouts(g,startTime,stopTime,colsPerPage,pageColumn);
+			DrawBlockouts(g,startTime,stopTime,colsPerPage,pageColumn,fontSize);
 			if(!IsWeeklyView) {
 				DrawProvScheds(g,startTime,stopTime);
 				DrawProvBars(g,startTime,stopTime);
@@ -223,12 +223,12 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Draws all the blockouts for the entire period.</summary>
-		public static void DrawBlockouts(Graphics g,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn) {
+		public static void DrawBlockouts(Graphics g,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn,int fontSize) {
 			Schedule[] schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 			SolidBrush blockBrush;
 			Pen blockOutlinePen=new Pen(Color.Black,1);
 			Pen penOutline;
-			Font blockFont=new Font("Arial",8);
+			Font blockFont=new Font("Arial",fontSize);
 			string blockText;
 			RectangleF rect;
 			int startHour=startTime.Hour;
@@ -251,8 +251,6 @@ namespace OpenDentBusiness.UI {
 					if(schedForType[i].StopTime.Hours<=stopHour) {
 						stopHour=schedForType[i].StopTime.Hours;
 					}
-					int testOp=GetIndexOp(schedForType[i].Ops[o]);
-					int test=colsPerPage*pageColumn+colsPerPage;
 					if(GetIndexOp(schedForType[i].Ops[o])>=(colsPerPage*pageColumn+colsPerPage)
 						|| GetIndexOp(schedForType[i].Ops[o])<colsPerPage*pageColumn) {
 						continue;//For printing, don't draw blockouts not on current page.

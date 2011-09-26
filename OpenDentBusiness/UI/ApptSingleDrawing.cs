@@ -12,8 +12,8 @@ namespace OpenDentBusiness.UI {
 		public static float ApptSingleWidth;
 		private static Point location;
 
-		///<summary></summary>
-		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields) {
+		///<summary>Set default fontSize to 8 unless printing.</summary>
+		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields,int fontSize) {
 			Pen penB=new Pen(Color.Black);
 			Pen penW=new Pen(Color.White);
 			Pen penGr=new Pen(Color.SlateGray);
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.UI {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth);//set the drawLoc to a new point, based on space used by element
+				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);//set the drawLoc to a new point, based on space used by element
 				elementI++;
 			}
 			//UR
@@ -97,7 +97,7 @@ namespace OpenDentBusiness.UI {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);
 				elementI++;
 			}
 			//LR
@@ -108,11 +108,11 @@ namespace OpenDentBusiness.UI {
 					elementI--;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);
 				elementI--;
 			}
 			//Main outline
-			g.DrawRectangle(new Pen(Color.Black),0,0,totalWidth-1,totalHeight-1);
+			g.DrawRectangle(new Pen(Color.Black),0,0,(int)totalWidth-1,(int)totalHeight-1);
 			//broken X
 			if(dataRoww["AptStatus"].ToString()==((int)ApptStatus.Broken).ToString()) {
 				g.DrawLine(new Pen(Color.Black),8,1,totalWidth-1,totalHeight-1);
@@ -121,10 +121,11 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,float totalWidth) {
-			Font baseFont=new Font("Arial",8);
+		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,float totalWidth,int fontSize) {
+			Font baseFont=new Font("Arial",fontSize);
 			string text="";
 			bool isNote=false;
+			#region FillText
 			if(PIn.Long(dataRoww["AptStatus"].ToString()) == (int)ApptStatus.PtNote
 				|| PIn.Long(dataRoww["AptStatus"].ToString()) == (int)ApptStatus.PtNoteCompleted) {
 				isNote=true;
@@ -378,6 +379,7 @@ namespace OpenDentBusiness.UI {
 						break;
 
 				}
+			#endregion
 			if(text=="" && !isGraphic) {
 				return drawLoc;//next element will draw at the same position as this one would have.
 			}
