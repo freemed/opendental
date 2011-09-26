@@ -2690,28 +2690,9 @@ namespace OpenDental{
 			Claim ClaimCur=new Claim();
       FormInsPlanSelect FormIPS=new FormInsPlanSelect(PatCur.PatNum); 
 			FormIPS.ViewRelat=true;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) { //Canada
-				PatPlan patPlan1=PatPlans.GetPatPlan(PatCur.PatNum,1);
-				if(patPlan1==null) {
-					MsgBox.Show(this,"The patient does not have insurance.");
-					return;
-				}
-				FormIPS.SelectedSub=InsSubs.GetOne(patPlan1.InsSubNum);
-				FormIPS.SelectedPlan=InsPlans.GetPlan(FormIPS.SelectedSub.PlanNum,null);
-				FormIPS.PatRelat=patPlan1.Relationship;
-				PatPlan patPlan2=PatPlans.GetPatPlan(PatCur.PatNum,2);
-				if(patPlan2!=null) {
-					InsSub insSub2=InsSubs.GetOne(patPlan2.InsSubNum);
-					ClaimCur.PlanNum2=insSub2.PlanNum;
-					ClaimCur.InsSubNum2=insSub2.InsSubNum;
-					ClaimCur.PatRelat2=patPlan2.Relationship;
-				}
-			}
-			else {
-				FormIPS.ShowDialog();
-				if(FormIPS.DialogResult!=DialogResult.OK) {
-					return;
-				}
+			FormIPS.ShowDialog();
+			if(FormIPS.DialogResult!=DialogResult.OK) {
+				return;
 			}
 			ClaimCur.PatNum=PatCur.PatNum;
 			ClaimCur.ClaimStatus="W";
