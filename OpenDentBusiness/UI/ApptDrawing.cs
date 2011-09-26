@@ -253,7 +253,8 @@ namespace OpenDentBusiness.UI {
 					}
 					int testOp=GetIndexOp(schedForType[i].Ops[o]);
 					int test=colsPerPage*pageColumn+colsPerPage;
-					if(GetIndexOp(schedForType[i].Ops[o])>=(colsPerPage*pageColumn+colsPerPage)) {
+					if(GetIndexOp(schedForType[i].Ops[o])>=(colsPerPage*pageColumn+colsPerPage)
+						|| GetIndexOp(schedForType[i].Ops[o])<colsPerPage*pageColumn) {
 						continue;//For printing, don't draw blockouts not on current page.
 					}
 					if(IsWeeklyView) {
@@ -730,7 +731,8 @@ namespace OpenDentBusiness.UI {
 			return -1;
 		}
 
-		public static void ProvBarShading(DataRow row,string patternShowing) {
+		public static void ProvBarShading(DataRow row) {
+			string patternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 			int indexProv=-1;
 			if(row["IsHygiene"].ToString()=="1") {
 				indexProv=GetIndexProv(PIn.Long(row["ProvHyg"].ToString()));
@@ -739,7 +741,7 @@ namespace OpenDentBusiness.UI {
 				indexProv=GetIndexProv(PIn.Long(row["ProvNum"].ToString()));
 			}
 			if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
-				int startIndex=ApptSingleDrawing.ConvertToY(row)/LineH;//rounds down
+				int startIndex=ApptSingleDrawing.ConvertToY(row,0)/LineH;//rounds down
 				for(int k=0;k<patternShowing.Length;k++) {
 					if(patternShowing.Substring(k,1)=="X") {
 						try {

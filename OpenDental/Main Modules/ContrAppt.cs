@@ -1476,9 +1476,9 @@ namespace OpenDental {
 				ContrApptSingle3[i].TablePatFields=DS.Tables["PatFields"];
 				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 				if(!ApptDrawing.IsWeeklyView) {
-					ApptDrawing.ProvBarShading(row,ContrApptSingle3[i].PatternShowing);
+					ApptDrawing.ProvBarShading(row);
 				}
-				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(row);
+				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(row,0,ApptDrawing.VisOps.Count,0);
 				ContrApptSingle3[i].Size=ApptSingleDrawing.SetSize(row);
 				ContrApptSheet2.Controls.Add(ContrApptSingle3[i]);
 			}//end for
@@ -2163,7 +2163,7 @@ namespace OpenDental {
 			TempApptSingle.TablePatFields=pinBoard.SelectedAppt.TablePatFields;
 			TempApptSingle.Visible=false;
 			Controls.Add(TempApptSingle);
-			TempApptSingle.Location=ApptSingleDrawing.SetLocation(TempApptSingle.DataRoww);
+			TempApptSingle.Location=ApptSingleDrawing.SetLocation(TempApptSingle.DataRoww,0,ApptDrawing.VisOps.Count,0);
 			TempApptSingle.Size=ApptSingleDrawing.SetSize(TempApptSingle.DataRoww);
 			TempApptSingle.PatternShowing=ApptSingleDrawing.GetPatternShowing(TempApptSingle.DataRoww["Pattern"].ToString());
 			TempApptSingle.CreateShadow();
@@ -2711,7 +2711,7 @@ namespace OpenDental {
 					TempApptSingle.TableApptFields=ContrApptSingle3[thisIndex].TableApptFields;
 					TempApptSingle.TablePatFields=ContrApptSingle3[thisIndex].TablePatFields;
 					Controls.Add(TempApptSingle);
-					TempApptSingle.Location=ApptSingleDrawing.SetLocation(TempApptSingle.DataRoww);
+					TempApptSingle.Location=ApptSingleDrawing.SetLocation(TempApptSingle.DataRoww,0,ApptDrawing.VisOps.Count,0);
 					TempApptSingle.Size=ApptSingleDrawing.SetSize(TempApptSingle.DataRoww);
 					TempApptSingle.PatternShowing=ApptSingleDrawing.GetPatternShowing(TempApptSingle.DataRoww["Pattern"].ToString());
 					TempApptSingle.BringToFront();
@@ -3769,13 +3769,14 @@ namespace OpenDental {
 			if(stopHour==0) {
 				stopHour=24;
 			}
+			float totalWidth=bounds.Width;
 			float totalHeight=ApptDrawing.LineH*ApptDrawing.RowsPerHr*(stopHour-startHour);
 			//Figure out how many pages are needed to print.
 			int pagesAcross=(int)Math.Ceiling((decimal)ApptDrawing.VisOps.Count/(decimal)apptPrintColsPerPage);
 			int pagesTall=(int)Math.Ceiling((decimal)totalHeight/(decimal)(bounds.Height-100));//-100 for the header on every page.
 			int totalPages=pagesAcross*pagesTall;
 			//Decide what page currently on thus knowing what hours to print.
-			#region Hours
+			#region HoursOnPage
 			int hoursPerPage=(int)Math.Floor((decimal)(bounds.Height-100)/(decimal)(ApptDrawing.LineH*ApptDrawing.RowsPerHr));
 			int hourBegin=startHour;
 			int hourEnd=hourBegin+hoursPerPage;
@@ -3793,10 +3794,9 @@ namespace OpenDental {
 			DateTime beginTime=new DateTime(1,1,1,hourBegin,0,0);
 			DateTime endTime=new DateTime(1,1,1,hourEnd,0,0);
 			#endregion
-			DrawPrintingHeader(e.Graphics);
-			e.Graphics.TranslateTransform(0,100);
+			e.Graphics.TranslateTransform(0,100);//Compensate for header
 			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime,apptPrintColsPerPage,pageColumn);
-			//Now to draw the appointments:
+			//Draw the appointments.
 			#region ApptSingleDrawing
 			//Clear out the ProvBar from previous page.
 			ApptDrawing.ProvBar=new int[ApptDrawing.VisProvs.Count][];
@@ -3815,6 +3815,9 @@ namespace OpenDental {
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 				DataRow dataRoww=DS.Tables["Appointments"].Rows[i];
+				if(!ApptDrawing.IsWeeklyView) {
+					ApptDrawing.ProvBarShading(dataRoww);//Always fill prov bars.
+				}
 				//Filter the list of appointments here for those those within the time frame.
 				if(!ApptSingleDrawing.ApptWithinTimeFrame(dataRoww,beginTime,endTime,apptPrintColsPerPage,pageColumn)) {
 					continue;
@@ -3826,24 +3829,27 @@ namespace OpenDental {
 				ContrApptSingle3[i].TablePatFields=DS.Tables["PatFields"];
 				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString());
 				ContrApptSingle3[i].Size=ApptSingleDrawing.SetSize(dataRoww);
-				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(dataRoww);
-				bool thisIsPinBoard=ContrApptSingle3[i].ThisIsPinBoard;
+				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(dataRoww,hourBegin,apptPrintColsPerPage,pageColumn);
 				float apptWidth=0;
 				if(ApptDrawing.IsWeeklyView) {
 					apptWidth=(ApptDrawing.ColWidth-4)/ApptDrawing.VisOps.Count;
 				}
 				else {
 					apptWidth=ApptDrawing.ColWidth-4;
-					ApptDrawing.ProvBarShading(dataRoww,ContrApptSingle3[i].PatternShowing);
 				}
 				float apptHeight=ContrApptSingle3[i].Height;
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(ContrApptSingle3[i].Location.X,ContrApptSingle3[i].Location.Y+100);//100 to compensate for print header.
-				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString()),apptWidth,apptHeight,
-					false,thisIsPinBoard,-1,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
+				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ContrApptSingle3[i].PatternShowing,apptWidth,apptHeight,
+					false,false,-1,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"]);
 			}
-
 			#endregion
+			e.Graphics.ResetTransform();
+			//Cover the portions of the appointments that don't belong on the page.
+			e.Graphics.FillRectangle(new SolidBrush(Color.White),0,0,bounds.Width,100);
+			e.Graphics.FillRectangle(new SolidBrush(Color.White),0,ApptDrawing.ApptSheetHeight+100,bounds.Width,totalHeight);
+			//Draw the header
+			DrawPrintingHeader(e.Graphics);
 			pagesPrinted++;
 			pageColumn++;
 			if(totalPages==pagesPrinted) {

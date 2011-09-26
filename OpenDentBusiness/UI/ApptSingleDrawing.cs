@@ -592,20 +592,20 @@ namespace OpenDentBusiness.UI {
 			}
 		}
 
-		///<summary>This is only called when viewing appointments on the Appt module.  For Planned apt and pinboard, use SetSize instead so that the location won't change.</summary>
-		public static Point SetLocation(DataRow dataRoww) {
+		///<summary>This is only called when viewing appointments on the Appt module.  For Planned apt and pinboard, use SetSize instead so that the location won't change.  Pass 0 for startHour unless printing.  Pass visible ops for colsPerPage unless printing.  Pass 0 for pageColumn unless printing.</summary>
+		public static Point SetLocation(DataRow dataRoww,int beginHour,int colsPerPage,int pageColumn) {
 			if(ApptDrawing.IsWeeklyView) {
 				ApptSingleWidth=(int)ApptDrawing.ColAptWidth;
-				location=new Point(ConvertToX(dataRoww),ConvertToY(dataRoww));
+				location=new Point(ConvertToX(dataRoww,colsPerPage,pageColumn),ConvertToY(dataRoww,beginHour));
 			}
 			else {
-				location=new Point(ConvertToX(dataRoww)+2,ConvertToY(dataRoww));
+				location=new Point(ConvertToX(dataRoww,colsPerPage,pageColumn)+2,ConvertToY(dataRoww,beginHour));
 				ApptSingleWidth=ApptDrawing.ColWidth-5;
 			}
 			return location;
 		}
 
-		///<summary>Used from SetLocation. Also used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
+		///<summary>Used for Planned apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
 		public static Size SetSize(DataRow dataRoww) {
 			ApptSingleWidth=ApptDrawing.ColWidth-5;
 			if(ApptDrawing.IsWeeklyView) {
@@ -623,7 +623,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Called from SetLocation to establish X position of control.</summary>
-		public static int ConvertToX(DataRow dataRoww) {
+		public static int ConvertToX(DataRow dataRoww,int colsPerPage,int pageColumn) {
 			if(ApptDrawing.IsWeeklyView) {
 				//the next few lines are because we start on Monday instead of Sunday
 				int dayofweek=(int)PIn.DateT(dataRoww["AptDateTime"].ToString()).DayOfWeek-1;
@@ -632,19 +632,19 @@ namespace OpenDentBusiness.UI {
 				}
 				return (int)(ApptDrawing.TimeWidth
 					+ApptDrawing.ColDayWidth*(dayofweek)+1
-					+(ApptDrawing.ColAptWidth*(float)ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))));
+					+(ApptDrawing.ColAptWidth*(ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))-(colsPerPage*pageColumn))));
 			}
 			else {
 				return (int)(ApptDrawing.TimeWidth+ApptDrawing.ProvWidth*ApptDrawing.ProvCount
-					+ApptDrawing.ColWidth*(ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString())))+1);
+					+ApptDrawing.ColWidth*(ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))-(colsPerPage*pageColumn))+1);
 				//Info.MyApt.Op))+1;
 			}
 		}
 
 		///<summary>Called from SetLocation to establish Y position of control.  Also called from ContrAppt.RefreshDay when determining ProvBar markings. Does not round to the nearest row.</summary>
-		public static int ConvertToY(DataRow dataRoww) {
+		public static int ConvertToY(DataRow dataRoww,int beginHour) {
 			DateTime aptDateTime=PIn.DateT(dataRoww["AptDateTime"].ToString());
-			int retVal=(int)(((double)aptDateTime.Hour*(double)60
+			int retVal=(int)(((double)(aptDateTime.Hour-beginHour)*(double)60
 				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
 				+(double)aptDateTime.Minute
 				/(double)PrefC.GetLong(PrefName.AppointmentTimeIncrement)
@@ -694,7 +694,7 @@ namespace OpenDentBusiness.UI {
 			//Test if any portion of appt is within time frame.
 			TimeSpan aptTimeBegin=PIn.DateT(dataRoww["AptDateTime"].ToString()).TimeOfDay;
 			TimeSpan aptTimeEnd=aptTimeBegin.Add(new TimeSpan(0,dataRoww["Pattern"].ToString().Length*5,0));
-			if(aptTimeBegin>=endTime.TimeOfDay || (aptTimeBegin<beginTime.TimeOfDay && aptTimeEnd<=beginTime.TimeOfDay)) {
+			if(aptTimeBegin>=endTime.TimeOfDay || aptTimeEnd<=beginTime.TimeOfDay) {
 				return false;
 			}
 			return true;
