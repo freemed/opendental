@@ -172,6 +172,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("PatFields",0,category));
 				//list.Add(new DisplayField("Guardians",0,category));
 				//list.Add(new DisplayField("Arrive Early",0,category));
+				//list.Add(new DisplayField("Super Head",0,category));
 			}
 			else if(category==DisplayFieldCategory.AccountModule) {
 				list.Add(new DisplayField("Date",65,category));
@@ -225,6 +226,7 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Birthdate",0,category));
 				//list.Add(new DisplayField("City",0,category));
 				//list.Add(new DisplayField("AskToArriveEarly",0,category));
+				//list.Add(new DisplayField("Super Head",0,category));
 			}
 			else if(category==DisplayFieldCategory.ProcedureGroupNote) {
 				list.Add(new DisplayField("Date",67,category));
@@ -354,6 +356,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("PatFields",0,category));
 				list.Add(new DisplayField("Guardians",0,category));
 				list.Add(new DisplayField("Arrive Early",0,category));
+				list.Add(new DisplayField("Super Head",0,category));
 			}
 			else if(category==DisplayFieldCategory.AccountModule){
 				list.Add(new DisplayField("Date",65,category));
@@ -404,6 +407,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Birthdate",0,category));
 				list.Add(new DisplayField("City",0,category));
 				list.Add(new DisplayField("AskToArriveEarly",0,category));
+				list.Add(new DisplayField("Super Head",0,category));
 			}
 			else if(category==DisplayFieldCategory.ProcedureGroupNote) {
 				list.Add(new DisplayField("Date",67,category));

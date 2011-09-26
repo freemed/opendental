@@ -479,6 +479,23 @@ namespace OpenDentBusiness{
 			return carrier;
 		}
 
+		///<summary>Returns null if no match is found. You are allowed to pass in nulls.</summary>
+		public static Carrier GetByNameAndPhoneNoInsert(string carrierName,string phone) {
+			//No need to check RemotingRole; no call to db.
+			if(carrierName==null || phone==null) {
+				return null;
+			}
+			if(carrierName=="" || phone=="") {
+				return null;
+			}
+			for(int i=0;i<Listt.Length;i++) {
+				if(carrierName==Listt[i].CarrierName && phone==Listt[i].Phone) {
+					return Listt[i].Copy();
+				}
+			}
+			return null;
+		}
+
 		/*
 		///<summary>Gets a dictionary of carrier names for the supplied patient list.</summary>
 		public static Dictionary<long,string> GetCarrierNames(List<Patient> patients){

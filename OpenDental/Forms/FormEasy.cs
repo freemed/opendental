@@ -27,6 +27,7 @@ namespace OpenDental{
 		private CheckBox checkHospitals;
 		private CheckBox checkMedicalIns;
 		private CheckBox checkEhr;
+		private CheckBox checkSuperFam;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -80,6 +81,7 @@ namespace OpenDental{
 			this.checkHospitals = new System.Windows.Forms.CheckBox();
 			this.checkMedicalIns = new System.Windows.Forms.CheckBox();
 			this.checkEhr = new System.Windows.Forms.CheckBox();
+			this.checkSuperFam = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -257,11 +259,24 @@ namespace OpenDental{
 			this.checkEhr.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkEhr.Click += new System.EventHandler(this.checkEhr_Click);
 			// 
+			// checkSuperFam
+			// 
+			this.checkSuperFam.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkSuperFam.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkSuperFam.Location = new System.Drawing.Point(12,328);
+			this.checkSuperFam.Name = "checkSuperFam";
+			this.checkSuperFam.Size = new System.Drawing.Size(258,19);
+			this.checkSuperFam.TabIndex = 15;
+			this.checkSuperFam.Text = "Super Families";
+			this.checkSuperFam.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkSuperFam.Click += new System.EventHandler(this.checkSuperFam_Click);
+			// 
 			// FormEasy
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(467,362);
+			this.Controls.Add(this.checkSuperFam);
 			this.Controls.Add(this.checkEhr);
 			this.Controls.Add(this.checkMedicalIns);
 			this.Controls.Add(this.checkHospitals);
@@ -304,7 +319,7 @@ namespace OpenDental{
 			checkRepeatCharges.Checked=!PrefC.GetBool(PrefName.EasyHideRepeatCharges);
 			checkMedicalIns.Checked=PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance);
 			checkEhr.Checked=PrefC.GetBool(PrefName.ShowFeatureEhr);
-			
+			checkSuperFam.Checked=PrefC.GetBool(PrefName.ShowFeatureSuperfamilies);
 		}
 
 		private void checkEhr_Click(object sender,EventArgs e) {
@@ -316,6 +331,11 @@ namespace OpenDental{
 			MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
 		}
 
+		private void checkSuperFam_Click(object sender,EventArgs e) {
+			if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)!=checkSuperFam.Checked) {
+				MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
+			}
+		}
 		private void butOK_Click(object sender, System.EventArgs e) {
 			Prefs.UpdateBool(PrefName.EasyHideCapitation,!checkCapitation.Checked);
 			Prefs.UpdateBool(PrefName.EasyHideMedicaid,!checkMedicaid.Checked);
@@ -330,6 +350,7 @@ namespace OpenDental{
 			Prefs.UpdateBool(PrefName.EasyHideRepeatCharges,!checkRepeatCharges.Checked);
 			Prefs.UpdateBool(PrefName.ShowFeatureMedicalInsurance,checkMedicalIns.Checked);
 			Prefs.UpdateBool(PrefName.ShowFeatureEhr,checkEhr.Checked);
+			Prefs.UpdateBool(PrefName.ShowFeatureSuperfamilies,checkSuperFam.Checked);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
@@ -337,6 +358,7 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 		
 

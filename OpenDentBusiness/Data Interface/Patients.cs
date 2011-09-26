@@ -1879,6 +1879,53 @@ FROM insplan";
 			return PIn.Int(Db.GetCount(command));
 		}
 
+		///<summary>Returns a list of patients belonging to the SuperFamily</summary>
+		public static List<Patient> GetBySuperFamily(long SuperFamilyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),SuperFamilyNum);
+			}
+			if(SuperFamilyNum==0) {
+				return new List<Patient>();//return empty list
+			}
+			string command="SELECT * FROM patient WHERE SuperFamily="+POut.Long(SuperFamilyNum);
+			return Crud.PatientCrud.TableToList(Db.GetTable(command));
+		}
+
+		///<summary>Returns a list of patients that are the guarantors for the patients in the Super Family</summary>
+		public static List<Patient> GetSuperFamilyGuarantors(long SuperFamilyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),SuperFamilyNum);
+			}
+			if(SuperFamilyNum==0) {
+				return new List<Patient>();//return empty list
+			}
+			string command = "SELECT DISTINCT * FROM patient WHERE PatNum IN (SELECT Guarantor FROM patient WHERE SuperFamily="+POut.Long(SuperFamilyNum)+")";//should also work in Oracle
+			return Crud.PatientCrud.TableToList(Db.GetTable(command));
+		}
+
+		public static void MoveSuperFamily(long oldSuperFamilyNum,long newSuperFamilyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),oldSuperFamilyNum,newSuperFamilyNum);
+			}
+			if(oldSuperFamilyNum==0) {
+				return;
+			}
+			string command="UPDATE patient SET SuperFamily="+newSuperFamilyNum+" WHERE SuperFamily="+oldSuperFamilyNum;
+			Db.NonQ(command);
+		}
+
+		public static void DisbandSuperFamily(long SuperFamilyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),SuperFamilyNum);
+			}
+			if(SuperFamilyNum==0) {
+				return;
+			}
+			string command = "UPDATE patient SET SuperFamily=0 WHERE SuperFamily="+POut.Long(SuperFamilyNum);
+			Db.NonQ(command);
+		}
+
+
 	}
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>

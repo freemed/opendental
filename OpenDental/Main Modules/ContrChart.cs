@@ -4240,6 +4240,15 @@ namespace OpenDental{
 							row.Cells.Add(PatCur.AskToArriveEarly.ToString()+" minute(s)");
 						}
 						break;
+					case "Super Family":
+						if(PatCur.SuperFamily!=0) {
+							Patient tempSuper = Patients.GetPat(PatCur.SuperFamily);
+							row.Cells.Add(tempSuper.GetNameFL()+" ("+tempSuper.PatNum+")");
+						}
+						else {
+							continue;//do not allow this row to be added if there is no data to in the row.
+						}
+						break;
 				}
 				if(fields[f].InternalName=="PatFields"
 					|| fields[f].InternalName=="Premedicate"

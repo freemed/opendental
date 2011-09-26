@@ -45,7 +45,10 @@ namespace OpenDental{
 		private ODGrid gridRecall;
 		private PatField[] PatFieldList;
 		private bool InitializedOnStartup;
+		private ODGrid gridSuperFam;
 		private List<InsSub> SubList;
+		private List<Patient> SuperFamilyGuarantors;
+		private List<Patient> SuperFamilyMembers;
 
 		///<summary></summary>
 		public ContrFamily(){
@@ -71,6 +74,7 @@ namespace OpenDental{
 			this.imageListToolBar = new System.Windows.Forms.ImageList(this.components);
 			this.menuInsurance = new System.Windows.Forms.ContextMenu();
 			this.menuPlansForFam = new System.Windows.Forms.MenuItem();
+			this.gridSuperFam = new OpenDental.UI.ODGrid();
 			this.gridRecall = new OpenDental.UI.ODGrid();
 			this.gridFamily = new OpenDental.UI.ODGrid();
 			this.gridPat = new OpenDental.UI.ODGrid();
@@ -102,6 +106,21 @@ namespace OpenDental{
 			this.menuPlansForFam.Text = "Plans for Family";
 			this.menuPlansForFam.Click += new System.EventHandler(this.menuPlansForFam_Click);
 			// 
+			// gridSuperFam
+			// 
+			this.gridSuperFam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridSuperFam.HScrollVisible = false;
+			this.gridSuperFam.Location = new System.Drawing.Point(254,129);
+			this.gridSuperFam.Name = "gridSuperFam";
+			this.gridSuperFam.ScrollValue = 0;
+			this.gridSuperFam.Size = new System.Drawing.Size(329,579);
+			this.gridSuperFam.TabIndex = 33;
+			this.gridSuperFam.Title = "Super Family";
+			this.gridSuperFam.TranslationName = "TableSuper";
+			this.gridSuperFam.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellDoubleClick);
+			this.gridSuperFam.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellClick);
+			// 
 			// gridRecall
 			// 
 			this.gridRecall.HScrollVisible = false;
@@ -113,8 +132,8 @@ namespace OpenDental{
 			this.gridRecall.TabIndex = 32;
 			this.gridRecall.Title = "Recall";
 			this.gridRecall.TranslationName = "TableRecall";
-			this.gridRecall.DoubleClick += new System.EventHandler(this.gridRecall_DoubleClick);
 			this.gridRecall.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRecall_CellDoubleClick);
+			this.gridRecall.DoubleClick += new System.EventHandler(this.gridRecall_DoubleClick);
 			// 
 			// gridFamily
 			// 
@@ -181,6 +200,7 @@ namespace OpenDental{
 			// 
 			// ContrFamily
 			// 
+			this.Controls.Add(this.gridSuperFam);
 			this.Controls.Add(this.gridRecall);
 			this.Controls.Add(this.gridFamily);
 			this.Controls.Add(this.gridPat);
@@ -225,6 +245,8 @@ namespace OpenDental{
 			BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
 			PatFieldList=PatFields.Refresh(patNum);
+			SuperFamilyMembers=Patients.GetBySuperFamily(PatCur.SuperFamily);
+			SuperFamilyGuarantors=Patients.GetSuperFamilyGuarantors(PatCur.SuperFamily);
 		}
 
 		private void RefreshModuleScreen(){
@@ -238,14 +260,38 @@ namespace OpenDental{
 				if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 					ToolBarMain.Buttons["Ins"].Enabled=true;
 				}
+				if(ToolBarMain.Buttons["AddSuper"]!=null){//because the toolbar only refreshes on restart. //PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)){
+					ToolBarMain.Buttons["AddSuper"].Enabled=true;
+					ToolBarMain.Buttons["RemoveSuper"].Enabled=true;
+					ToolBarMain.Buttons["DisbandSuper"].Enabled=true;
+					if(PatCur.SuperFamily!=0) {//show Super Family Grid
+						gridSuperFam.Visible=true;
+						gridIns.Location=new Point(gridSuperFam.Right+2,gridIns.Top);// new Point(585,129);//gridIns (X,Y) normally=(254,129) reduced=(585,129)
+						gridIns.Width=this.Width-gridIns.Left;//585;;
+					}
+					else {//Hide super family grid
+						gridSuperFam.Visible=false;
+						gridIns.Location=gridSuperFam.Location;//254,129);//gridIns (X,Y) normally=(254,129) reduced=(585,129)
+						gridIns.Width=this.Width-gridIns.Left;//254;
+					}
+				}
 				ToolBarMain.Invalidate();
 			}
 			else{
+				//Hide super family grid, safe to run even if grid is already hidden.
+				gridSuperFam.Visible=false;
+				gridIns.Location=gridSuperFam.Location;//254,129);//gridIns (X,Y) normally=(254,129) reduced=(585,129)
+				gridIns.Width=this.Width-gridIns.Left;//254;
 				//ToolBarMain.Buttons["Recall"].Enabled=false;
 				ToolBarMain.Buttons["Add"].Enabled=false;
 				ToolBarMain.Buttons["Delete"].Enabled=false;
 				ToolBarMain.Buttons["Guarantor"].Enabled=false;
 				ToolBarMain.Buttons["Move"].Enabled=false;
+				if(ToolBarMain.Buttons["AddSuper"]!=null) {//because the toolbar only refreshes on restart.
+					ToolBarMain.Buttons["AddSuper"].Enabled=false;
+					ToolBarMain.Buttons["RemoveSuper"].Enabled=false;
+					ToolBarMain.Buttons["DisbandSuper"].Enabled=false;
+				}
 				if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 					ToolBarMain.Buttons["Ins"].Enabled=false;
 				}
@@ -263,6 +309,7 @@ namespace OpenDental{
 			FillFamilyData();
 			FillGridRecall();
 			FillInsData();
+			FillGridSuperFam();
 			Plugins.HookAddCode(this,"ContrFamily.RefreshModuleScreen_end");
 		} 
 
@@ -315,6 +362,15 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),3,Lan.g(this,"Delete Family Member"),"Delete"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Set Guarantor"),4,Lan.g(this,"Set as Guarantor"),"Guarantor"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Move"),5,Lan.g(this,"Move to Another Family"),"Move"));
+			if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)){
+				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+				button=new ODToolBarButton(Lan.g(this,"Super Family:"),-1,"","");
+				button.Style=ODToolBarButtonStyle.Label;
+				ToolBarMain.Buttons.Add(button);
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),-1,"Add selected patient to a super family","AddSuper"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Remove"),-1,Lan.g(this,"Remove selected patient, and their family, from super family"),"RemoveSuper"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Disband"),-1,Lan.g(this,"Disband the current super family by removing all members of the super family."),"DisbandSuper"));
+			}
 			if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 				button=new ODToolBarButton(Lan.g(this,"Add Insurance"),6,"","Ins");
@@ -377,6 +433,15 @@ namespace OpenDental{
 						break;
 					case "Ins":
 						ToolButIns_Click();
+						break;
+					case "AddSuper":
+						ToolButAddFam_Click();
+						break;
+					case "RemoveSuper":
+						ToolButRemoveFam_Click();
+						break;
+					case "DisbandSuper":
+						ToolButDisbandFam_Click();
 						break;
 				}
 			}
@@ -885,6 +950,9 @@ namespace OpenDental{
 			tempPat.BillingType=PatCur.BillingType;
 			tempPat.AddrNote   =PatCur.AddrNote;
 			tempPat.ClinicNum  =PatCur.ClinicNum;
+			if(Patients.GetPat(tempPat.Guarantor).SuperFamily!=0) {
+				tempPat.SuperFamily=PatCur.SuperFamily;
+			}
 			Patients.Insert(tempPat,false);
 			FormPatientEdit FormPE=new FormPatientEdit(tempPat,FamCur);
 			FormPE.IsNew=true;
@@ -925,6 +993,7 @@ namespace OpenDental{
 			bool hasPayPlans=payPlanCount>0;
 			bool hasInsPlans=false;
 			bool hasMeds=medList.Count>0;
+			bool hasSuperFamily=PatCur.PatNum==PatCur.SuperFamily;
 			for(int i=0;i<subList.Count;i++) {
 				if(subList[i].Subscriber==PatCur.PatNum) {
 					hasInsPlans=true;
@@ -932,7 +1001,7 @@ namespace OpenDental{
 			}
 			bool hasRef=RefAttachList.Count>0;
 			if(hasProcs || hasClaims || hasAdj || hasPay || hasClaimProcs || hasComm || hasPayPlans
-				|| hasInsPlans || hasRef || hasMeds)
+				|| hasInsPlans || hasRef || hasMeds || hasSuperFamily)
 			{
 				string message=Lan.g(this,
 					"You cannot delete this patient without first deleting the following data:")+"\r";
@@ -956,6 +1025,8 @@ namespace OpenDental{
 					message+=Lan.g(this,"References")+"\r";
 				if(hasMeds)
 					message+=Lan.g(this,"Medications")+"\r";
+				if(hasSuperFamily)
+					message+=Lan.g(this,"Attached Super Family")+"\r";
 				MessageBox.Show(message);
 				return;
 			}
@@ -1013,6 +1084,9 @@ namespace OpenDental{
 				if(MessageBox.Show(Lan.g(this,"Make the selected patient the guarantor?")
 					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 						return;
+				if(PatCur.SuperFamily==PatCur.Guarantor) {//guarantor is also the head of a super family
+					Patients.MoveSuperFamily(PatCur.SuperFamily,PatCur.PatNum);
+				}
 				Patients.ChangeGuarantorToCur(FamCur,PatCur);
 			}
 			ModuleSelected(PatCur.PatNum);
@@ -1069,6 +1143,7 @@ namespace OpenDental{
 						}
 						Patient Lim=Patients.GetLim(FormPS.SelectedPatNum);
 						PatCur.Guarantor=Lim.Guarantor;
+						PatCur.SuperFamily=Lim.SuperFamily;
 						Patients.Update(PatCur,PatOld);
 						break;
 				}//end switch
@@ -1194,6 +1269,151 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 		#endregion gridRecall
+
+		#region gridSuperFam
+		private void FillGridSuperFam() {
+			gridSuperFam.BeginUpdate();
+			gridSuperFam.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("gridSuperFam",""),140);
+			gridSuperFam.Columns.Add(col);
+			gridSuperFam.Rows.Clear();
+			if(PatCur==null) {
+				return;
+			}
+			ODGridRow row;
+			SuperFamilyGuarantors.Sort(sortPatientListBySuperFamily);
+			string superfam="";
+			for(int i=0;i<SuperFamilyGuarantors.Count;i++) {
+				row=new ODGridRow();
+				superfam=SuperFamilyGuarantors[i].GetNameFL();
+				for(int j=0;j<SuperFamilyMembers.Count;j++) {
+					if(SuperFamilyMembers[j].Guarantor==SuperFamilyGuarantors[i].Guarantor && SuperFamilyMembers[j].PatNum!=SuperFamilyGuarantors[i].PatNum) {
+						superfam+=", "+SuperFamilyMembers[j].GetNameFL();
+					}
+				}
+				row.Cells.Add(superfam);
+				row.Tag=SuperFamilyGuarantors[i].PatNum;
+				if(i==0) {
+					row.Cells[0].Bold=YN.Yes;
+					row.Cells[0].ColorText=Color.OrangeRed;
+				}
+				gridSuperFam.Rows.Add(row);
+			}
+			gridSuperFam.EndUpdate();
+			for(int i=0;i<gridSuperFam.Rows.Count;i++) {
+				if((long)gridSuperFam.Rows[i].Tag==PatCur.Guarantor) {
+					gridSuperFam.SetSelected(i,true);
+					break;
+				}
+			}
+		}
+
+		private int sortPatientListBySuperFamily(Patient pat1,Patient pat2) {
+			if(pat1.PatNum==pat2.PatNum) {
+				return 0;
+			}
+			if(pat1.PatNum==pat1.SuperFamily) {//if pat1 is superhead
+				return -1;//pat1 comes first
+			}
+			if(pat2.PatNum==pat2.SuperFamily) {//if pat2 is superhead
+				return 1;
+			}
+			return (int)(pat1.PatNum-pat2.PatNum);//sort by patnums.
+			//return pat1.GetNameFL().CompareTo(pat2.GetNameFL());//Alphabetize them if nothing else.
+		}
+
+		private void gridSuperFam_CellClick(object sender,ODGridClickEventArgs e) {
+			OnPatientSelected(SuperFamilyGuarantors[e.Row].PatNum,SuperFamilyGuarantors[e.Row].GetNameLF(),SuperFamilyGuarantors[e.Row].Email!="",
+				SuperFamilyGuarantors[e.Row].ChartNumber);
+			ModuleSelected(SuperFamilyGuarantors[e.Row].PatNum);
+		}
+
+		private void gridSuperFam_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//OnPatientSelected(SuperFamilyGuarantors[e.Row].PatNum,SuperFamilyGuarantors[e.Row].GetNameLF(),SuperFamilyGuarantors[e.Row].Email!="",
+			//  SuperFamilyGuarantors[e.Row].ChartNumber);
+			//ModuleSelected(SuperFamilyGuarantors[e.Row].PatNum);
+		}
+
+		private void ToolButAddFam_Click() {
+			if(PatCur.Guarantor==PatCur.SuperFamily && SuperFamilyMembers.Count!=FamCur.ListPats.Length) {//member of head family of super family, but also the only family in super family.
+				MsgBox.Show(this,"Selected patient is already in the family of the head of a super family.  All super family members must be removed before changing the head.");
+				return;
+			}
+			FormPatientSelect formPS = new FormPatientSelect();
+			formPS.SelectionModeOnly=true;
+			formPS.ShowDialog();
+			if(formPS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			Patient patSelected=Patients.GetPat(formPS.SelectedPatNum);
+			bool addToSuperFamily=false;
+			long SuperFamilyNumToAdd=(patSelected.SuperFamily==0?patSelected.Guarantor:patSelected.SuperFamily);
+			if(patSelected.SuperFamily==patSelected.Guarantor) {//selected patient is head of a super family.
+				addToSuperFamily=true;
+			}
+			else if(patSelected.SuperFamily==0) {//create a new Super family
+				if(MessageBox.Show("Would you like to create a new super family and make the head of the new super family "+Patients.GetPat(patSelected.Guarantor).GetNameFL()+"?","",MessageBoxButtons.OKCancel)
+					!=DialogResult.OK) 
+				{
+					return;
+				}
+				addToSuperFamily=true;
+				Family headFam = Patients.GetFamily(patSelected.PatNum);
+				for(int i=0;i<headFam.ListPats.Length;i++) {//add whole family of the selected patient (this is the head family)
+					Patient tempPat=headFam.ListPats[i].Copy();
+					tempPat.SuperFamily=SuperFamilyNumToAdd;
+					Patients.Update(tempPat,headFam.ListPats[i]);
+				}
+
+			}
+			else if(patSelected.SuperFamily!=patSelected.Guarantor) {//selected patient is only a member of a super family and not the head.
+				Patient superHead = Patients.GetPat(patSelected.SuperFamily);
+				if(MessageBox.Show("Selected patient is only a member of a super family. Would you like to add your patient to the same super family of "+superHead.GetNameFL()+"?","",MessageBoxButtons.OKCancel)
+					!=DialogResult.OK) {
+					return;
+				}
+				addToSuperFamily=true;
+			}
+			if(!addToSuperFamily) {
+				return;
+			}
+			for(int i=0;i<FamCur.ListPats.Length;i++) {//add whole family
+				Patient tempPat=FamCur.ListPats[i].Copy();
+				tempPat.SuperFamily=SuperFamilyNumToAdd;
+				Patients.Update(tempPat,FamCur.ListPats[i]);
+			}
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void ToolButRemoveFam_Click() {
+			if(PatCur.SuperFamily==PatCur.Guarantor) {
+				MsgBox.Show(this,"You cannot delete the head of a super family.");
+				return;
+			}
+			if(PatCur.SuperFamily==0) {
+				return;
+			}
+			for(int i=0;i<FamCur.ListPats.Length;i++) {//remove whole family
+				Patient tempPat=FamCur.ListPats[i].Copy();
+				tempPat.SuperFamily=0;
+				Patients.Update(tempPat,FamCur.ListPats[i]);
+			}
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void ToolButDisbandFam_Click() {
+			if(PatCur.SuperFamily==0) {
+				return;
+			}
+			Patient superHead = Patients.GetPat(PatCur.SuperFamily);
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Would you like to disband and remove all members in the super family of "+superHead.GetNameFL()+"?")) {
+				return;
+			}
+			Patients.DisbandSuperFamily(superHead.PatNum);
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		#endregion gridSuperFam
 
 		#region gridIns
 		private void menuPlansForFam_Click(object sender,EventArgs e) {
@@ -1681,7 +1901,7 @@ namespace OpenDental{
 
 		
 
-		
+
 
 
 
