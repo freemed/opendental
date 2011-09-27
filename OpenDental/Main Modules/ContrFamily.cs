@@ -118,6 +118,7 @@ namespace OpenDental{
 			this.gridSuperFam.TabIndex = 33;
 			this.gridSuperFam.Title = "Super Family";
 			this.gridSuperFam.TranslationName = "TableSuper";
+			this.gridSuperFam.Visible = false;
 			this.gridSuperFam.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellDoubleClick);
 			this.gridSuperFam.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellClick);
 			// 
