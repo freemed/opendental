@@ -741,11 +741,11 @@ namespace OpenDental{
 			//pointless to save defaults
 			string dbName=MiscData.GetCurrentDatabase();
 			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,dbName))){// D:\opendental
-				MsgBox.Show(this,"Restore FROM path is invalid.");
+				MessageBox.Show(Lan.g(this,"Restore FROM path is invalid.  Unable to find folder named ")+dbName);
 				return;
 			}
-			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,dbName))){// C:\mysql\data\opendental
-				MsgBox.Show(this,"Restore TO path is invalid.");
+			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,dbName))) {// C:\mysql\data\opendental
+				MessageBox.Show(Lan.g(this,"Restore TO path is invalid.  Unable to find folder named ")+dbName);
 				return;
 			}
 			if(ShouldUseAtoZFolder()) {
