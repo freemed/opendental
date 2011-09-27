@@ -712,8 +712,23 @@ namespace OpenDental{
 					}
 				}
 			}
+			long clearinghouseNum0=listQueue[gridMain.SelectedIndices[0]].ClearinghouseNum;
+			EnumClaimMedType medType0=Claims.GetClaim(listQueue[gridMain.SelectedIndices[0]].ClaimNum).MedType;
+			for(int i=1;i<gridMain.SelectedIndices.Length;i++) {
+				long clearinghouseNumI=listQueue[gridMain.SelectedIndices[i]].ClearinghouseNum;
+				EnumClaimMedType medTypeI=Claims.GetClaim(listQueue[gridMain.SelectedIndices[i]].ClaimNum).MedType;
+				if(clearinghouseNum0!=clearinghouseNumI) {
+					MsgBox.Show(this,"All claims must be for the same clearinghouse.");
+					return;
+				}
+
+
+
+
+
+			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				if(listQueue[gridMain.SelectedIndices[i]].MissingData==""){
+				if(listQueue[gridMain.SelectedIndices[i]].MissingData!=""){
 					MsgBox.Show(this,"Not allowed to send e-claims with missing information.");
 					return;
 				}
@@ -722,21 +737,22 @@ namespace OpenDental{
 					return;
 				}
 			}
+
 			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			ClaimSendQueueItem queueitem;
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				queueitem=listQueue[gridMain.SelectedIndices[i]].Copy();
-				if(clearinghouseNum!=0){
+				if(clearinghouseNum!=0) {
 					queueitem.ClearinghouseNum=clearinghouseNum;
 				}
 				queueItems.Add(queueitem);
 			}
-//todo: lots of work above this point for automatically assigning clearinghouse as well as validating. 
-
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItems[0].ClearinghouseNum);
 			EnumClaimMedType medType=EnumClaimMedType.Dental;
 //todo: fix the above two lines, of course.
-			Eclaims.Eclaims.SendBatches(queueItems,clearhouse,medType);
+			//Already validated that all claims are for the same clearinghouse, clinic, 
+//todo validate all same medType, and that medtype matches clearinghouse
+			Eclaims.Eclaims.SendBatch(queueItems,clearhouse,medType);
 			//statuses changed to S in SendBatches
 			FillGrid();
 			FillHistory();

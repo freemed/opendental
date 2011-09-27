@@ -18,31 +18,17 @@ namespace OpenDental.Eclaims
 			
 		}
 
-		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Used to be able to send to multiple clearinghouses simultaneously.  Can also just send one claim.  Cannot include Canadian.</summary>
-		public static void SendBatches(List<ClaimSendQueueItem> queueItems,Clearinghouse clearhouse,EnumClaimMedType medType){
-			//List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.Listt.Length];
-			//for(int i=0;i<claimsByCHouse.Length;i++){
-			//	claimsByCHouse[i]=new List<ClaimSendQueueItem>();
-			//}
-			//divide the items by clearinghouse:
-			//for(int i=0;i<queueItems.Count;i++){
-			//	claimsByCHouse[ClearinghouseL.GetIndex(queueItems[i].ClearinghouseNum)].Add(queueItems[i]);
-			//}
-			//for any clearinghouses with claims, send them:
-			//batchNum;
+		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Can only send to one clearinghouse at a time.  Able to send just send one claim.  Cannot include Canadian.</summary>
+		public static void SendBatch(List<ClaimSendQueueItem> queueItems,Clearinghouse clearhouse,EnumClaimMedType medType){
 			string messageText="";
-			//for(int i=0;i<claimsByCHouse.Length;i++){
-			//if(claimsByCHouse[i].Count==0){
-			//	continue;
-			//}
 			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian){
-				MsgBox.Show("Eclaims","Cannot send Canadian claims as part of SendBatches.");
+				MsgBox.Show("Eclaims","Cannot send Canadian claims as part of Eclaims.SendBatch.");
 				return;
 			}
 			//get next batch number for this clearinghouse
 			int batchNum=Clearinghouses.GetNextBatchNumber(clearhouse);
 			//---------------------------------------------------------------------------------------
-			//Create the claim file(s) for this clearinghouse
+			//Create the claim file for this clearinghouse
 			if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010
 				|| clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental
 				|| clearhouse.Eformat==ElectronicClaimFormat.x837_5010_med_inst) 
@@ -107,17 +93,7 @@ namespace OpenDental.Eclaims
 			}
 			else if(clearhouse.CommBridge==EclaimsCommBridge.PostnTrack){
 				AttemptLaunch(clearhouse,batchNum);
-				//if(!PostnTrack.Launch(Clearinghouses.List[i],batchNum)){
-				//	MessageBox.Show("Claim file created, but could not launch AOS Communicator.");
-					//continue;
-				//}
 			}
-			/*else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.Tesia) {
-				if(!Tesia.Launch(Clearinghouses.List[i],batchNum)) {
-					MessageBox.Show(Lan.g("Eclaims","Error sending."));
-					continue;
-				}
-			}*/
 			else if(clearhouse.CommBridge==EclaimsCommBridge.MercuryDE){
 				if(!MercuryDE.Launch(clearhouse,batchNum)){
 					MsgBox.Show("Eclaims","Error sending.");
@@ -127,7 +103,6 @@ namespace OpenDental.Eclaims
 			else if(clearhouse.CommBridge==EclaimsCommBridge.ClaimX) {
 				if(!ClaimX.Launch(clearhouse,batchNum)) {
 					MessageBox.Show("Claim file created, but encountered an error while launching ClaimX Client.");
-					//continue;
 				}
 			}
 			//----------------------------------------------------------------------------------------
@@ -142,7 +117,6 @@ namespace OpenDental.Eclaims
 					Etranss.SetMessage(etrans.EtransNum,messageText);
 				}
 			}
-			//}//for(int i=0;i<claimsByCHouse.Length;i++){
 		}
 
 		///<summary>If no comm bridge is selected for a clearinghouse, this launches any client program the user has entered.  We do not want to cause a rollback, so no return value.</summary>

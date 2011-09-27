@@ -190,12 +190,11 @@ namespace OpenDentBusiness
 				//2010AA NM1: 85 (medical,institutional,dental) Billing Provider Name.
 				seg++;
 				sw.Write("NM1*85*");//NM101 2/3 Entity Identifier Code: 85=Billing Provider.
-//TODO: 9/5/11 We need a provider.IsNotPerson field.  So default is 0/false.  The exception is true and can be used for certain dummy billing providers.  Will be used here.
 				if(medType==EnumClaimMedType.Institutional) {
 					sw.Write("2*");//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
 				}
 				else { //(medical,dental)
-					sw.Write(((billProv.FName=="")?"2":"1")+"*");//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity. Person when first name is not blank, Non-Person Entity otherwise.
+					sw.Write((billProv.IsNotPerson?"2":"1")+"*");//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
 				}
 				sw.Write(Sout(billProv.LName,60,1)+"*");//NM103 1/60 Name Last or Organization Name:
 				if(medType==EnumClaimMedType.Institutional) {
@@ -297,12 +296,11 @@ namespace OpenDentBusiness
 				sw.Write("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
 					+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02 1/60 Name: Practice Title.
 					+"TE*");//PER03 2/2 Communication Number Qualifier: TE=Telephone.
-				
 				if(clinic==null){
-					sw.WriteLine(Sout(PrefC.GetString(PrefName.PracticePhone),256,1));//PER04  1/256 Communication Number: Telephone number.
+					sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256,1));//PER04  1/256 Communication Number: Telephone number.
 				}
 				else{
-					sw.WriteLine(Sout(clinic.Phone,256,1));//PER04  1/256 Communication Number: Telephone number.
+					sw.Write(Sout(clinic.Phone,256,1));//PER04  1/256 Communication Number: Telephone number.
 				}
 				sw.WriteLine("~");//PER05 through PER08 are situational and PER09 is not used. We do not use.
 				//2010AB NM1: 87 (medical,institutional,dental) Pay-To Address Name. We do not use.
@@ -740,7 +738,7 @@ namespace OpenDentBusiness
 				}
 				string idCode=claim.AttachmentID;
 				if(idCode=="") {//must be min of two char, so we need to make one up.
-					idCode="  ";
+					idCode="00";
 				}
 				idCode=Sout(idCode,80,2);
 				seg++;

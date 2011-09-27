@@ -4912,7 +4912,7 @@ namespace OpenDental{
 
 			EnumClaimMedType medType=EnumClaimMedType.Dental;
 //todo: fix the above line
-				Eclaims.Eclaims.SendBatches(queueItems,clearhouse,medType);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
+				Eclaims.Eclaims.SendBatch(queueItems,clearhouse,medType);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
 			}
 			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;
