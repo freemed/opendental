@@ -1843,9 +1843,9 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.  There is also an out parameter containing any warnings.  Warnings will not block sending.</summary>
-		public static string Validate(ClaimSendQueueItem queueItem,out string warning) {
+		public static void Validate(ClaimSendQueueItem queueItem){//,out string warning) {
 			StringBuilder strb=new StringBuilder();
-			warning="";
+			string warning="";
 			Clearinghouse clearhouse=null;//ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			for(int i=0;i<Clearinghouses.Listt.Length;i++) {
 				if(Clearinghouses.Listt[i].ClearinghouseNum==queueItem.ClearinghouseNum) {
@@ -2173,7 +2173,9 @@ namespace OpenDentBusiness
 							strb.Append("";
 						}*/
 
-			return strb.ToString();
+			//return strb.ToString();
+			queueItem.Warnings=warning;
+			queueItem.MissingData=strb.ToString();
 		}
 
 		private static void Comma(StringBuilder strb){

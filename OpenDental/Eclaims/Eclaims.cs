@@ -162,34 +162,38 @@ namespace OpenDental.Eclaims
 			}
 		}
 
-		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.</summary>
-		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warnings){
-			warnings="";
+		///<summary>Fills the missing data field on the queueItem that was passed in.  This contains all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.</summary>
+		public static void GetMissingData(ClaimSendQueueItem queueItem){//, out string warnings){
+			queueItem.Warnings="";
+			queueItem.MissingData="";
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			//this is usually just the default clearinghouse or the clearinghouse for the PayorID.
 			if(clearhouse==null){
-				return "";
+				return;
 			}
 			if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010){
-				string retVal=X837_4010.Validate(queueItem,out warnings);
-				return retVal;
+				X837_4010.Validate(queueItem);//,out warnings);
+				//return;
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.x837D_5010_dental
 				|| clearhouse.Eformat==ElectronicClaimFormat.x837_5010_med_inst)
 			{
-				string retVal=X837_5010.Validate(queueItem,out warnings);
-				return retVal;
+				X837_5010.Validate(queueItem);//,out warnings);
+				//return;
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.Renaissance){
-				return Renaissance.GetMissingData(queueItem);
+				queueItem.MissingData=Renaissance.GetMissingData(queueItem);
+				//return;
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.Canadian) {
-				return Canadian.GetMissingData(queueItem);
+				queueItem.MissingData=Canadian.GetMissingData(queueItem);
+				//return;
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.Dutch) {
-				return Dutch.GetMissingData(queueItem,out warnings);
+				Dutch.GetMissingData(queueItem);//,out warnings);
+				//return;
 			}
-			return "";
+			//return "";
 		}
 
 	

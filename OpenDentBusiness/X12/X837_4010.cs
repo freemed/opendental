@@ -1613,9 +1613,9 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.  There is also an out parameter containing any warnings.  Warnings will not block sending.</summary>
-		public static string Validate(ClaimSendQueueItem queueItem,out string warning) {
+		public static void Validate(ClaimSendQueueItem queueItem){//,out string warning) {
 			StringBuilder strb=new StringBuilder();
-			warning="";
+			string warning="";
 			Clearinghouse clearhouse=null;//ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			for(int i=0;i<Clearinghouses.Listt.Length;i++) {
 				if(Clearinghouses.Listt[i].ClearinghouseNum==queueItem.ClearinghouseNum) {
@@ -1640,9 +1640,9 @@ namespace OpenDentBusiness
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,null);
 			InsSub sub=InsSubs.GetSub(claim.InsSubNum,null);
-			if(insPlan.IsMedical) {
-				return "Medical e-claims not allowed";
-			}
+			//if(insPlan.IsMedical) {
+			//	return "Medical e-claims not allowed";
+			//}
 			//billProv
 			bool isPerson=(billProv.FName!="");//this is our current hack for indicating a person
 			X12Validate.BillProv(billProv,strb,isPerson);
@@ -1944,7 +1944,9 @@ namespace OpenDentBusiness
 							strb.Append("";
 						}*/
 
-			return strb.ToString();
+			//return strb.ToString();
+			queueItem.Warnings=warning;
+			queueItem.MissingData=strb.ToString();
 		}
 		
 		///<summary>Loops through the 837 to find the transaction number for the specified claim. Will return 0 if can't find.</summary>

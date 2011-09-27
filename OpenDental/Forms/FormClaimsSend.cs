@@ -342,7 +342,7 @@ namespace OpenDental{
 			contextMenuStatus.MenuItems.Add(Lan.g(this,"Go to Account"),new EventHandler(GotoAccount_Clicked));
 			gridMain.ContextMenu=contextMenuStatus;
 			for(int i=0;i<Clearinghouses.Listt.Length;i++){
-				contextMenuEclaims.MenuItems.Add(Clearinghouses.Listt[i].Description,new EventHandler(Clearinghouse_Clicked));
+				contextMenuEclaims.MenuItems.Add(Clearinghouses.Listt[i].Description,new EventHandler(menuItemClearinghouse_Click));
 			}
 			LayoutToolBars();
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
@@ -433,9 +433,9 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
-		private void Clearinghouse_Clicked(object sender, System.EventArgs e){
+		private void menuItemClearinghouse_Click(object sender, System.EventArgs e){
 			MenuItem menuitem=(MenuItem)sender;
-			OnEclaims_Click(Clearinghouses.Listt[menuitem.Index].ClearinghouseNum);
+			SendEclaimsToClearinghouse(Clearinghouses.Listt[menuitem.Index].ClearinghouseNum);
 		}
 
 		private void FillGrid(){
@@ -444,6 +444,9 @@ namespace OpenDental{
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			listQueue=Claims.GetQueueList(0,clinicNum);
+			for(int i=0;i<listQueue.Length;i++) {
+				Eclaims.Eclaims.GetMissingData(listQueue[i]);
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),190);
@@ -454,7 +457,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","M/D"),40);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),80);
+			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),80);//4. This is position critical. See line 696.
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Warnings"),120);
 			gridMain.Columns.Add(col);
@@ -462,8 +465,6 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);			 
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			string missingData;
-			string warnings;
 			for(int i=0;i<listQueue.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(listQueue[i].PatName);
@@ -486,11 +487,9 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 				else{
-					warnings="";
-					missingData=Eclaims.Eclaims.GetMissingData(listQueue[i],out warnings);
 					row.Cells.Add(ClearinghouseL.GetDescript(listQueue[i].ClearinghouseNum));
-					row.Cells.Add(warnings);
-					row.Cells.Add(missingData);
+					row.Cells.Add(listQueue[i].Warnings);
+					row.Cells.Add(listQueue[i].MissingData);
 				}
 				gridMain.Rows.Add(row);
 			}
@@ -513,31 +512,31 @@ namespace OpenDental{
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
 			switch(e.Button.Tag.ToString()){
 				case "Preview":
-					OnPreview_Click();
+					toolBarButPreview_Click();
 					break;
 				case "Blank":
-					OnBlank_Click();
+					toolBarButBlank_Click();
 					break;
 				case "Print":
-					OnPrint_Click();
+					toolBarButPrint_Click();
 					break;
 				case "Labels":
-					OnLabels_Click();
+					toolBarButLabels_Click();
 					break;
 				case "Eclaims":
-					OnEclaims_Click(0);
+					SendEclaimsToClearinghouse(0);
 					break;
 				case "Reports":
-					OnReports_Click();
+					toolBarButReports_Click();
 					break;
 				case "Outstanding":
-					OnOutstanding_Click();
+					toolBarButOutstanding_Click();
 					break;
 				case "PayRec":
-					OnPayRec_Click();
+					toolBarButPayRec_Click();
 					break;
 				case "SummaryRec":
-					OnSummaryRec_Click();
+					toolBarButSummaryRec_Click();
 					break;
 				case "Close":
 					Close();
@@ -545,7 +544,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnPreview_Click(){
+		private void toolBarButPreview_Click(){
 			FormClaimPrint FormCP;
 			FormCP=new FormClaimPrint();
 			if(gridMain.SelectedIndices.Length==0){
@@ -564,7 +563,7 @@ namespace OpenDental{
 			FillHistory();
 		}
 
-		private void OnBlank_Click(){
+		private void toolBarButBlank_Click(){
 			PrintDocument pd=new PrintDocument();
 			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)){
 				return;
@@ -574,7 +573,7 @@ namespace OpenDental{
 			FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,pd.PrinterSettings.Copies);
 		}
 
-		private void OnPrint_Click(){
+		private void toolBarButPrint_Click(){
 			FormClaimPrint FormCP=new FormClaimPrint();
 			if(gridMain.SelectedIndices.Length==0){
 				for(int i=0;i<listQueue.Length;i++){
@@ -605,7 +604,7 @@ namespace OpenDental{
 			FillHistory();
 		}
 
-		private void OnLabels_Click(){
+		private void toolBarButLabels_Click(){
 			if(gridMain.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"Please select a claim first."));
 				return;
@@ -631,7 +630,7 @@ namespace OpenDental{
 		}
 
 		///<Summary>Use clearinghouseNum of 0 to indicate automatic calculation of clearinghouses.</Summary>
-		private void OnEclaims_Click(long clearinghouseNum) {
+		private void SendEclaimsToClearinghouse(long clearinghouseNum) {
 			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Clinics is in use
 				if(clearinghouseNum==0){
 					MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
@@ -657,7 +656,7 @@ namespace OpenDental{
 			}
 			if(gridMain.SelectedIndices.Length==0){//if none are selected
 				for(int i=0;i<listQueue.Length;i++){//loop through all rows
-					if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[4].Text==""){//no Missing Info
+					if(!listQueue[i].NoSendElect && listQueue[i].MissingData==""){
 						if(clearinghouseNum==0) {//they did not use the dropdown list for specific clearinghouse
 							//If clearinghouse is zero because they just pushed the button instead of using the dropdown list,
 							//then don't check the clearinghouse of each claim.  Just select them if they are electronic.
@@ -674,11 +673,15 @@ namespace OpenDental{
 				//If they used the dropdown list, and there still aren't any in the list that match the selected clearinghouse
 				//then ask user if they want to send all of the electronic ones through this clearinghouse.
 				if(clearinghouseNum !=0 && gridMain.SelectedIndices.Length==0) {
+					if(comboClinic.SelectedIndex==0) {
+						MsgBox.Show(this,"Please filter by clinic first.");
+						return;
+					}
 					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Send all e-claims through selected clearinghouse?")) {
 						return;
 					}
 					for(int i=0;i<listQueue.Length;i++) {
-						if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[4].Text=="") {//no Missing Info
+						if(!listQueue[i].NoSendElect && listQueue[i].MissingData=="") {//no Missing Info
 							gridMain.SetSelected(i,true);//this will include other clearinghouses
 						}
 					}
@@ -690,7 +693,7 @@ namespace OpenDental{
 				if(clearinghouseNum!=0){//if they used the dropdown list to specify clearinghouse
 					int[] selectedindices=(int[])gridMain.SelectedIndices.Clone();
 					for(int i=0;i<selectedindices.Length;i++) {
-						gridMain.Rows[selectedindices[i]].Cells[2].Text=clearDefault.Description;//show the changed clearinghouse
+						gridMain.Rows[selectedindices[i]].Cells[4].Text=clearDefault.Description;//show the changed clearinghouse
 					}
 					gridMain.Invalidate();
 				}
@@ -710,7 +713,7 @@ namespace OpenDental{
 				}
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				if(gridMain.Rows[gridMain.SelectedIndices[i]].Cells[4].Text!=""){
+				if(listQueue[gridMain.SelectedIndices[i]].MissingData==""){
 					MsgBox.Show(this,"Not allowed to send e-claims with missing information.");
 					return;
 				}
@@ -749,22 +752,22 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnReports_Click(){
+		private void toolBarButReports_Click(){
 			FormClaimReports FormC=new FormClaimReports();
 			FormC.ShowDialog();
 		}
 
-		private void OnOutstanding_Click() {
+		private void toolBarButOutstanding_Click() {
 			FormCanadaOutstandingTransactions fcot=new FormCanadaOutstandingTransactions();
 			fcot.ShowDialog();
 		}
 
-		private void OnPayRec_Click() {
+		private void toolBarButPayRec_Click() {
 			FormCanadaPaymentReconciliation fcpr=new FormCanadaPaymentReconciliation();
 			fcpr.ShowDialog();
 		}
 
-		private void OnSummaryRec_Click() {
+		private void toolBarButSummaryRec_Click() {
 			FormCanadaSummaryReconciliation fcsr=new FormCanadaSummaryReconciliation();
 			fcsr.ShowDialog();
 		}

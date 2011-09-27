@@ -4886,10 +4886,11 @@ namespace OpenDental{
 				//Later: we need to let user send anyway, using all 0's for electronic id.
 				return;
 			}
-			string warnings;
-			string missingData=Eclaims.Eclaims.GetMissingData(listQueue[0],out warnings);
-			if(missingData!=""){
-				MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+missingData);
+			//string warnings;
+			//string missingData=
+			Eclaims.Eclaims.GetMissingData(listQueue[0]);//,out warnings);
+			if(listQueue[0].MissingData!=""){
+				MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+listQueue[0].MissingData);
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
@@ -5072,10 +5073,11 @@ namespace OpenDental{
 					DialogResult=DialogResult.OK;
 					return;
 				}
-				string warnings;
-				string missingData=Eclaims.Eclaims.GetMissingData(listQueue[0],out warnings);
-				if(missingData!="") {
-					if(MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+missingData+"\r\n\r\nContinue anyway?",
+				//string warnings;
+				//string missingData=
+				Eclaims.Eclaims.GetMissingData(listQueue[0]);//,out warnings);
+				if(listQueue[0].MissingData!="") {
+					if(MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+listQueue[0].MissingData+"\r\n\r\nContinue anyway?",
 						"",MessageBoxButtons.OKCancel)==DialogResult.OK)
 					{
 						DialogResult=DialogResult.OK;

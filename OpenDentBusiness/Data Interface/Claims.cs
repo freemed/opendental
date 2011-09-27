@@ -415,6 +415,10 @@ namespace OpenDentBusiness{
 		public long ClinicNum;
 		///<summary>Enum:EnumClaimMedType 0=Dental, 1=Medical, 2=Institutional</summary>
 		public EnumClaimMedType MedType;
+		///<summary></summary>
+		public string MissingData;
+		///<summary></summary>
+		public string Warnings;
 
 		public ClaimSendQueueItem Copy(){
 			return (ClaimSendQueueItem)MemberwiseClone();
