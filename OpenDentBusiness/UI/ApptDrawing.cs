@@ -88,7 +88,6 @@ namespace OpenDentBusiness.UI {
 			//one giant rectangle for everything closed
 			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,ApptSheetHeight);
 			//then, loop through each day and operatory
-			//Operatory curOp;
 			bool isHoliday;
 			int startHour=startTime.Hour;
 			int stopHour=stopTime.Hour;
@@ -656,7 +655,7 @@ namespace OpenDentBusiness.UI {
 			return retVal;
 		}
 
-		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. So, whenever appt Module layout and when comboView is changed. Set colCountOverride to 0 unless printing.</summary>
+		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. Set colCountOverride to 0 unless printing.</summary>
 		public static void ComputeColWidth(int colCountOverride) {
 			if(VisOps==null || VisProvs==null) {
 				return;
@@ -711,6 +710,16 @@ namespace OpenDentBusiness.UI {
 			return -1;
 		}
 
+		///<summary>Returns the index of the provNum within VisProvs.</summary>
+		public static int GetIndexProv(long provNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<VisProvs.Count;i++) {
+				if(VisProvs[i].ProvNum==provNum)
+					return i;
+			}
+			return -1;
+		}
+
 		public static void ProvBarShading(DataRow row) {
 			string patternShowing=ApptSingleDrawing.GetPatternShowing(row["Pattern"].ToString());
 			int indexProv=-1;
@@ -733,16 +742,6 @@ namespace OpenDentBusiness.UI {
 					}
 				}
 			}
-		}
-
-		///<summary>Returns the index of the provNum within VisProvs.</summary>
-		public static int GetIndexProv(long provNum) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<VisProvs.Count;i++) {
-				if(VisProvs[i].ProvNum==provNum)
-					return i;
-			}
-			return -1;
 		}
 
 	}

@@ -3819,7 +3819,6 @@ namespace OpenDental {
 				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString());
 				ContrApptSingle3[i].Size=ApptSingleDrawing.SetSize(dataRoww);
 				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(dataRoww,hourBegin,apptPrintColsPerPage,pageColumn);
-				float apptHeight=ContrApptSingle3[i].Height;
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(ContrApptSingle3[i].Location.X,ContrApptSingle3[i].Location.Y+100);//100 to compensate for print header.
 				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ContrApptSingle3[i].PatternShowing,ContrApptSingle3[i].Size.Width,ContrApptSingle3[i].Size.Height,
@@ -3846,6 +3845,7 @@ namespace OpenDental {
 			}
 		}
 
+		///<summary>Header and footer for printing.</summary>
 		private void DrawPrintingHeader(Graphics g,int totalPages,float totalHeight) {
 			float xPos=0;//starting pos
 			float yPos=27.5f;//starting pos

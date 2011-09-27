@@ -49,20 +49,29 @@ namespace OpenDentBusiness.UI {
 			SolidBrush backBrush=new SolidBrush(backColor);
 			g.FillRectangle(backBrush,7,0,totalWidth-7,(int)totalHeight);
 			g.FillRectangle(Brushes.White,0,0,7,(int)totalHeight);
-			g.DrawLine(penB,7,0,7,(int)totalHeight);
 			Pen penTimediv=Pens.Silver;
-			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
 			for(int i=0;i<patternShowing.Length;i++) {//Info.MyApt.Pattern.Length;i++){
 				if(patternShowing.Substring(i,1)=="X") {
-					g.FillRectangle(new SolidBrush(provColor),1,i*ApptDrawing.LineH+1,6,ApptDrawing.LineH);
+					if(isPrinting) {
+						g.FillRectangle(new SolidBrush(provColor),0,i*ApptDrawing.LineH,7,ApptDrawing.LineH);
+					}
+					else {
+						g.FillRectangle(new SolidBrush(provColor),1,i*ApptDrawing.LineH+1,6,ApptDrawing.LineH);
+					}
 				}
 				else {
 					//leave empty
 				}
 				if(Math.IEEERemainder((double)i,(double)ApptDrawing.RowsPerIncr)==0) {//0/1
-					g.DrawLine(penTimediv,1,i*ApptDrawing.LineH,6,i*ApptDrawing.LineH);
+					if(isPrinting) {
+						g.DrawLine(penTimediv,0,i*ApptDrawing.LineH,7,i*ApptDrawing.LineH);
+					}
+					else {
+						g.DrawLine(penTimediv,1,i*ApptDrawing.LineH,6,i*ApptDrawing.LineH);
+					}
 				}
 			}
+			g.DrawLine(penB,7,0,7,(int)totalHeight);
 			#region Highlighting border
 			if(isSelected	|| (!thisIsPinBoard && dataRoww["AptNum"].ToString()==selectedAptNum.ToString())) {
 				//Left
@@ -87,7 +96,7 @@ namespace OpenDentBusiness.UI {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);//set the drawLoc to a new point, based on space used by element
+				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);//set the drawLoc to a new point, based on space used by element
 				elementI++;
 			}
 			#endregion
@@ -99,7 +108,7 @@ namespace OpenDentBusiness.UI {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);
 				elementI++;
 			}
 			#endregion
@@ -111,7 +120,7 @@ namespace OpenDentBusiness.UI {
 					elementI--;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);
 				elementI--;
 			}
 			#endregion
@@ -127,10 +136,12 @@ namespace OpenDentBusiness.UI {
 				g.DrawLine(new Pen(Color.Black),8,1,totalWidth-1,totalHeight-1);
 				g.DrawLine(new Pen(Color.Black),8,totalHeight-1,totalWidth-1,1);
 			}
+			//Dispose of the objects.
+			DisposeObjects(penB,penW,penGr,penDG,penO,backBrush);
 		}
 
 		///<summary></summary>
-		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,float totalWidth,int fontSize) {
+		public static Point DrawElement(Graphics g,int elementI,Point drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,float totalWidth,float totalHeight,int fontSize,bool isPrinting) {
 			Font baseFont=new Font("Arial",fontSize);
 			string text="";
 			bool isNote=false;
@@ -338,7 +349,7 @@ namespace OpenDentBusiness.UI {
 							}
 							SolidBrush sb=new SolidBrush(c);
 							g.DrawString(proc,baseFont,sb,tempPt);
-							sb.Dispose();
+							DisposeObjects(procFormat,sb);
 							tempPt.X+=(int)procRect.Width+3;//+3 is room for spaces
 							if((int)procRect.Height>lastH) {
 								lastH=(int)procRect.Height;
@@ -417,6 +428,7 @@ namespace OpenDentBusiness.UI {
 						confirmBrush.Dispose();
 					}
 					g.DrawImage(bitmap,drawLoc.X,drawLoc.Y);
+					DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
 					return new Point(drawLoc.X,drawLoc.Y+(int)noteSize.Height);
 				}
 				else {
@@ -426,9 +438,15 @@ namespace OpenDentBusiness.UI {
 					//Size noteSizeInt=TextRenderer.MeasureText(text,baseFont,new Size(totalWidth-9,1000));
 					//noteSize=new SizeF(noteSizeInt.totalWidth,noteSizeInt.totalHeight);
 					noteSize.Width=(float)Math.Ceiling((double)noteSize.Width);//round up to nearest int solves specific problem discussed above.
+					if(drawLoc.Y+noteSize.Height>totalHeight && isPrinting) {
+						//This keeps text from drawing off the appointment when font is large. Only if isPrinting cause not sure if this will cause bugs.
+						//No need to do this check when drawing to the appt screen cause its just an image on a control which clips itself.
+						noteSize.Height=totalHeight-drawLoc.Y;
+					}
 					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(drawLoc,noteSize);
 					g.DrawString(text,baseFont,brush,rect,format);
+					DisposeObjects(brush,brushWhite,noteTitlebrush,format);
 					return new Point(drawLoc.X,drawLoc.Y+linesFilled*ApptDrawing.LineH);
 				}
 			}
@@ -451,6 +469,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
 						return new Point(drawLoc.X,drawLoc.Y+(int)noteSize.Height);
 					}
 					else {
@@ -474,6 +493,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
 						return new Point(drawLoc.X,drawLoc.Y+ApptDrawing.LineH);//move down a certain number of lines for next element.
 					}
 				}
@@ -493,6 +513,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
 						return new Point(drawLoc.X-(int)noteSize.Width-2,drawLoc.Y);
 					}
 					else {
@@ -515,6 +536,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
 						return new Point(drawLoc.X-(int)noteSize.Width-1,drawLoc.Y);//Move to left.  Might also have to subtract a little from x to space out elements.
 					}
 				}
@@ -538,6 +560,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
 						return new Point(drawLoc.X,drawLoc.Y-(int)noteSize.Height);
 					}
 					else {
@@ -561,6 +584,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
 						return new Point(drawLoc.X,drawLoc.Y-ApptDrawing.LineH);//move up a certain number of lines for next element.
 					}
 				}
@@ -580,6 +604,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
 						return new Point(drawLoc.X-(int)noteSize.Width-1,drawLoc.Y);
 					}
 					else {
@@ -602,6 +627,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
+						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
 						return new Point(drawLoc.X-(int)noteSize.Width-1,drawLoc.Y);//Move to left.  Subtract a little from x to space out elements.
 					}
 				}
@@ -691,22 +717,25 @@ namespace OpenDentBusiness.UI {
 		public static bool ApptWithinTimeFrame(DataRow dataRoww,DateTime beginTime,DateTime endTime,int colsPerPage,int pageColumn) {
 			//Test if appts op is currently visible.
 			bool visible=false;
-			for(int i=0;i<colsPerPage;i++) {
-				if(i==ApptDrawing.VisOps.Count) {
+			if(!ApptDrawing.IsWeeklyView) {
+				for(int i=0;i<colsPerPage;i++) {
+					if(i==ApptDrawing.VisOps.Count) {
+						return false;
+					}
+					int k=colsPerPage*pageColumn+i;
+					if(k>=ApptDrawing.VisOps.Count) {
+						return false;
+					}
+					int testOp=ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()));
+					if(k==ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))) {
+						visible=true;
+						break;
+					}
+				}
+
+				if(!visible) {//Op not visible so don't test time frame.
 					return false;
 				}
-				int k=colsPerPage*pageColumn+i;
-				if(k>=ApptDrawing.VisOps.Count) {
-					return false;
-				}
-				int testOp=ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()));
-				if(k==ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))) {
-					visible=true;
-					break;
-				}
-			}
-			if(!visible) {//Op not visible so don't test time frame.
-				return false;
 			}
 			//Test if any portion of appt is within time frame.
 			TimeSpan aptTimeBegin=PIn.DateT(dataRoww["AptDateTime"].ToString()).TimeOfDay;
@@ -715,6 +744,28 @@ namespace OpenDentBusiness.UI {
 				return false;
 			}
 			return true;
+		}
+
+		///<summary>Disposes objects with typeof Brush, Pen, StringFormat or Bitmap.</summary>
+		private static void DisposeObjects(params object[] disposables) {
+			for(int i=0;i<disposables.Length;i++) {
+				if(disposables[i].GetType()==typeof(Brush)) {
+					Brush b=(Brush)disposables[i];
+					b.Dispose();
+				}
+				else if(disposables[i].GetType()==typeof(Pen)) {
+					Pen p=(Pen)disposables[i];
+					p.Dispose();
+				}
+				else if(disposables[i].GetType()==typeof(StringFormat)) {
+					StringFormat sf=(StringFormat)disposables[i];
+					sf.Dispose();
+				}
+				else if(disposables[i].GetType()==typeof(Bitmap)) {
+					Bitmap bmp=(Bitmap)disposables[i];
+					bmp.Dispose();
+				}
+			}
 		}
 
 	}
