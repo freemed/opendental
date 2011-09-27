@@ -1274,6 +1274,7 @@ namespace OpenDental {
 				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ApptDrawing.IsWeeklyView,SchedListPeriod);//refreshes visops,etc
 				ApptDrawing.ApptSheetWidth=panelSheet.Width-vScrollBar1.Width;
 				ApptDrawing.ComputeColWidth(0);
+				ContrApptSheet2.Height=ApptDrawing.LineH*24*ApptDrawing.RowsPerHr;
 			}
 			this.SuspendLayout();
 			vScrollBar1.Enabled=true;
