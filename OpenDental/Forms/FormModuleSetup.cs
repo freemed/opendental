@@ -95,6 +95,7 @@ namespace OpenDental{
 		private Label label13;
 		private ComboBox comboSearchBehavior;
 		private CheckBox checkClaimMedTypeIsInstWhenInsPlanIsMedical;
+		private CheckBox checkProcGroupNoteDoesAggregate;
 		private bool changed;
 
 		///<summary></summary>
@@ -200,6 +201,7 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkProcGroupNoteDoesAggregate = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -994,6 +996,7 @@ namespace OpenDental{
 			// tabChart
 			// 
 			this.tabChart.BackColor = System.Drawing.SystemColors.Window;
+			this.tabChart.Controls.Add(this.checkProcGroupNoteDoesAggregate);
 			this.tabChart.Controls.Add(this.butAllergiesIndicateNone);
 			this.tabChart.Controls.Add(this.textAllergiesIndicateNone);
 			this.tabChart.Controls.Add(this.label14);
@@ -1162,6 +1165,18 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// checkProcGroupNoteDoesAggregate
+			// 
+			this.checkProcGroupNoteDoesAggregate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkProcGroupNoteDoesAggregate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkProcGroupNoteDoesAggregate.Location = new System.Drawing.Point(60,182);
+			this.checkProcGroupNoteDoesAggregate.Name = "checkProcGroupNoteDoesAggregate";
+			this.checkProcGroupNoteDoesAggregate.Size = new System.Drawing.Size(381,15);
+			this.checkProcGroupNoteDoesAggregate.TabIndex = 206;
+			this.checkProcGroupNoteDoesAggregate.Text = "Procedure Group Note Does Aggregate";
+			this.checkProcGroupNoteDoesAggregate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkProcGroupNoteDoesAggregate.UseVisualStyleBackColor = true;
+			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -1304,6 +1319,7 @@ namespace OpenDental{
 			textProblemsIndicateNone.Text=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone));
 			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone));
 			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
+			checkProcGroupNoteDoesAggregate.Checked=PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate);
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
@@ -1435,6 +1451,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.ImagesModuleTreeIsCollapsed,checkImagesModuleTreeIsCollapsed.Checked)
 				| Prefs.UpdateBool(PrefName.RxSendNewToQueue,checkRxSendNewToQueue.Checked)
 				| Prefs.UpdateInt(PrefName.AppointmentSearchBehavior,comboSearchBehavior.SelectedIndex)
+				| Prefs.UpdateBool(PrefName.ProcGroupNoteDoesAggregate,checkProcGroupNoteDoesAggregate.Checked)
 				)
 			{
 				changed=true;

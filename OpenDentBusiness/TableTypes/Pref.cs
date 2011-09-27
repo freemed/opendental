@@ -230,6 +230,7 @@ namespace OpenDentBusiness {
 		///<summary>In FormProcCodes, this is the default for the ShowHidden checkbox.</summary>
 		ProcCodeListShowHidden,
 		ProcessSigsIntervalInSecs,
+		ProcGroupNoteDoesAggregate,
 		ProgramVersion,
 		ProviderIncomeTransferShows,
 		RandomPrimaryKeys,
