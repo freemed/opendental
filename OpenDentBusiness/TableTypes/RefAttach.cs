@@ -24,6 +24,10 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary>Used to track ehr events.  All outgoing referrals default to true.  The incoming ones get a popup asking if it's a transition of care.</summary>
 		public bool IsTransitionOfCare;
+		///<summary>FK to procedurelog.ProcNum</summary>
+		public long ProcNum;
+		///<summary></summary>
+		public DateTime DateProcComplete;
 
 		///<summary>Returns a copy of this RefAttach.</summary>
 		public RefAttach Copy(){

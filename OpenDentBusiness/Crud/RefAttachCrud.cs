@@ -55,6 +55,8 @@ namespace OpenDentBusiness.Crud{
 				refAttach.RefToStatus       = (ReferralToStatus)PIn.Int(table.Rows[i]["RefToStatus"].ToString());
 				refAttach.Note              = PIn.String(table.Rows[i]["Note"].ToString());
 				refAttach.IsTransitionOfCare= PIn.Bool  (table.Rows[i]["IsTransitionOfCare"].ToString());
+				refAttach.ProcNum           = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
+				refAttach.DateProcComplete  = PIn.Date  (table.Rows[i]["DateProcComplete"].ToString());
 				retVal.Add(refAttach);
 			}
 			return retVal;
@@ -95,7 +97,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RefAttachNum,";
 			}
-			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note,IsTransitionOfCare) VALUES(";
+			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note,IsTransitionOfCare,ProcNum,DateProcComplete) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(refAttach.RefAttachNum)+",";
 			}
@@ -107,7 +109,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (refAttach.IsFrom)+","
 				+    POut.Int   ((int)refAttach.RefToStatus)+","
 				+"'"+POut.String(refAttach.Note)+"',"
-				+    POut.Bool  (refAttach.IsTransitionOfCare)+")";
+				+    POut.Bool  (refAttach.IsTransitionOfCare)+","
+				+    POut.Long  (refAttach.ProcNum)+","
+				+    POut.Date  (refAttach.DateProcComplete)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +131,9 @@ namespace OpenDentBusiness.Crud{
 				+"IsFrom            =  "+POut.Bool  (refAttach.IsFrom)+", "
 				+"RefToStatus       =  "+POut.Int   ((int)refAttach.RefToStatus)+", "
 				+"Note              = '"+POut.String(refAttach.Note)+"', "
-				+"IsTransitionOfCare=  "+POut.Bool  (refAttach.IsTransitionOfCare)+" "
+				+"IsTransitionOfCare=  "+POut.Bool  (refAttach.IsTransitionOfCare)+", "
+				+"ProcNum           =  "+POut.Long  (refAttach.ProcNum)+", "
+				+"DateProcComplete  =  "+POut.Date  (refAttach.DateProcComplete)+" "
 				+"WHERE RefAttachNum = "+POut.Long(refAttach.RefAttachNum);
 			Db.NonQ(command);
 		}
@@ -166,6 +172,14 @@ namespace OpenDentBusiness.Crud{
 			if(refAttach.IsTransitionOfCare != oldRefAttach.IsTransitionOfCare) {
 				if(command!=""){ command+=",";}
 				command+="IsTransitionOfCare = "+POut.Bool(refAttach.IsTransitionOfCare)+"";
+			}
+			if(refAttach.ProcNum != oldRefAttach.ProcNum) {
+				if(command!=""){ command+=",";}
+				command+="ProcNum = "+POut.Long(refAttach.ProcNum)+"";
+			}
+			if(refAttach.DateProcComplete != oldRefAttach.DateProcComplete) {
+				if(command!=""){ command+=",";}
+				command+="DateProcComplete = "+POut.Date(refAttach.DateProcComplete)+"";
 			}
 			if(command==""){
 				return;

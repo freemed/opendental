@@ -23,6 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportsUds));
 			this.label1 = new System.Windows.Forms.Label();
 			this.textFrom = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -35,6 +36,7 @@ namespace OpenDental{
 			this.butPatByZip = new OpenDental.UI.Button();
 			this.but3A = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -170,17 +172,26 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(337,246);
+			this.butClose.Location = new System.Drawing.Point(783,514);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(391,274);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(261,128);
+			this.label3.TabIndex = 6;
+			this.label3.Text = resources.GetString("label3.Text");
+			// 
 			// FormReportsUds
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(437,297);
+			this.ClientSize = new System.Drawing.Size(883,565);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textTo);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textFrom);
@@ -216,5 +227,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textFrom;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textTo;
+		private System.Windows.Forms.Label label3;
 	}
 }

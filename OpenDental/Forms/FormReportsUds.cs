@@ -6,8 +6,10 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Text;
+using System.Reflection;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormReportsUds:Form {
@@ -31,12 +33,12 @@ namespace OpenDental {
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query="SELECT SUBSTR(Zip,1,5) 'Zip Code',COUNT(*) 'Patients' "//Column headings "Zip Code" and "Patients" are provided by the USD 2010 Manual.
 				+"FROM patient pat "
-				+"JOIN procedurelog proc "
-				+"ON pat.PatNum=proc.PatNum "
 				+"WHERE "+DbHelper.Regexp("Zip","^[0-9]{5}")+" "//Starts with five numbers
-				+"AND proc.ProcStatus="+POut.Int((int)ProcStat.C)+" "
-				+"AND proc.DateEntryC >= "+POut.Date(DateFrom)+" "
-				+"AND proc.DateEntryC <= "+POut.Date(DateTo)+" "
+				+"AND PatNum IN ( "
+					+"SELECT PatNum FROM procedurelog "
+					+"WHERE ProcStatus="+POut.Int((int)ProcStat.C)+" "
+					+"AND DateEntryC >= "+POut.Date(DateFrom)+" "
+					+"AND DateEntryC <= "+POut.Date(DateTo)+") "
 				+"GROUP BY Zip "
 				+"HAVING COUNT(*) >= 10 "//Has more than 10 patients in that zip code for the given time frame.
 				+"ORDER BY Zip";
@@ -53,7 +55,55 @@ namespace OpenDental {
 		}
 
 		private void but3A_Click(object sender,EventArgs e) {
+			if(!DateIsValid()) {
+				return;
+			}
+			Cursor.Current=Cursors.WaitCursor;
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage+=new PrintPageEventHandler(this.pdAgeGender_PrintPage);
+			PrintPreview printPreview=new PrintPreview(PrintSituation.Default,pd,1);
+			printPreview.ShowDialog();
+		}
 
+		private void pdAgeGender_PrintPage(object sender,PrintPageEventArgs e){
+			if(!DateIsValid()) {
+				return;
+			}
+			Graphics g=e.Graphics;
+			int width=e.PageBounds.Width;
+			int height=e.PageBounds.Height;
+			int[,] table3A=new int[39,2];
+			for(int i=0;i<25;i++) {//fields 1-25, index 0-24
+				table3A[i,0]=Patients.GetAgeGenderCount(i,i+1,PatientGender.Male,DateFrom,DateTo);
+				table3A[i,1]=Patients.GetAgeGenderCount(i,i+1,PatientGender.Female,DateFrom,DateTo);
+			}
+			int age;
+			for(int i=0;i<13;i++) {//fields 26-37, index 25-36
+				age=25+5*i;
+				table3A[25+i,0]=Patients.GetAgeGenderCount(age,age+5,PatientGender.Male,DateFrom,DateTo);//For i=0 give qty male ages 25-29
+				table3A[25+i,1]=Patients.GetAgeGenderCount(age,age+5,PatientGender.Female,DateFrom,DateTo);//For i=0 give qty female ages 25-29
+			}
+			table3A[37,0]=Patients.GetAgeGenderCount(85,200,PatientGender.Male,DateFrom,DateTo);
+			table3A[37,1]=Patients.GetAgeGenderCount(85,200,PatientGender.Female,DateFrom,DateTo);
+			table3A[38,0]=Patients.GetAgeGenderCount(0,200,PatientGender.Male,DateFrom,DateTo);
+			table3A[38,1]=Patients.GetAgeGenderCount(0,200,PatientGender.Female,DateFrom,DateTo);
+			Bitmap bmp=Properties.Resources.UDS3a;
+			int xPos=(width - bmp.Width)/2;
+			int yPos=(height - bmp.Height)/2;
+			g.DrawImage(bmp,xPos,yPos,bmp.Width,bmp.Height);
+			xPos=540;
+			string qty;
+			Font font=new Font(FontFamily.GenericSansSerif,9);
+			for(int i=0;i<table3A.GetLength(0);i++){
+				if(i==table3A.GetLength(0)-1) {
+					font=new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold);
+				}
+				yPos=245+(int)(17.72*i);
+				qty=table3A[i,0].ToString();
+				g.DrawString(qty,font,Brushes.Black,xPos-g.MeasureString(qty,font).Width,yPos);//Aligns right
+				qty=table3A[i,1].ToString();
+				g.DrawString(qty,font,Brushes.Black,xPos-g.MeasureString(qty,font).Width+125,yPos);//Aligns right
+			}
 		}
 
 		private bool DateIsValid() {

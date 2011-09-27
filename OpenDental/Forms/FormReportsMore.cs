@@ -333,6 +333,7 @@ namespace OpenDental {
 			this.butUDS.TabIndex = 18;
 			this.butUDS.Text = "UDS Reporting";
 			this.butUDS.UseVisualStyleBackColor = true;
+			this.butUDS.Visible = false;
 			this.butUDS.Click += new System.EventHandler(this.butUDS_Click);
 			// 
 			// FormReportsMore
@@ -759,6 +760,7 @@ namespace OpenDental {
 		}
 
 		private void butUDS_Click(object sender,EventArgs e) {
+			//not visible
 			FormReportsUds FormRU=new FormReportsUds();
 			FormRU.ShowDialog();
 		}

@@ -6619,6 +6619,34 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ShowFeatureSuperfamilies','0')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE refattach ADD ProcNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE refattach ADD INDEX (ProcNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE refattach ADD ProcNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE refattach SET ProcNum = 0 WHERE ProcNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE refattach MODIFY ProcNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX refattach_ProcNum ON refattach (ProcNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE refattach ADD DateProcComplete date NOT NULL DEFAULT '0001-01-01')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE refattach ADD DateProcComplete date";
+					Db.NonQ(command);
+					command="UPDATE refattach SET DateProcComplete = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateProcComplete IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE refattach MODIFY DateProcComplete NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -6640,5 +6668,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-				
