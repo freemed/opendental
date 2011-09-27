@@ -4575,7 +4575,7 @@ namespace OpenDental {
 					ProviderList.Add(ProviderC.ListShort[i]);
 				}
 			}
-			Plugins.HookAddCode(this,"ContrAppt.ShowSearch_end",listProviders);
+			Plugins.HookAddCode(this,"ContrAppt.ShowSearch_end",listProviders,PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
 			groupSearch.Visible=true;
 		}
 
