@@ -3747,37 +3747,26 @@ namespace OpenDental {
 		private void PrintApptSchedule(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
 			//Logic needs to be added here for calculating if printing will fit on the page. Then call drawing in a loop for number of required pages. 
 			Rectangle bounds=e.PageBounds;
-			bool showProvBar=true;
 			ApptDrawing.ApptSheetWidth=bounds.Width;
-			ApptDrawing.SetLineHeight(apptPrintFontSize);//Measure size the user set to determine the line height for printout.
-			ApptDrawing.ColCount=apptPrintColsPerPage;
-			ApptDrawing.ColDayWidth=0;
-			if(ApptDrawing.IsWeeklyView) {
-				ApptDrawing.ComputeColDayWidth();
-				ApptDrawing.ComputeColAptWidth(apptPrintColsPerPage);
-			}
-			else {
-				ApptDrawing.ProvCount=ApptDrawing.VisProvs.Count;
-			}
-			if(!showProvBar) {
-				ApptDrawing.ProvWidth=0;
-				ApptDrawing.ProvCount=0;
-			}
 			ApptDrawing.ComputeColWidth(apptPrintColsPerPage);
+			ApptDrawing.SetLineHeight(apptPrintFontSize);//Measure size the user set to determine the line height for printout.
 			int startHour=apptPrintStartTime.Hour;
 			int stopHour=apptPrintStopTime.Hour;
 			if(stopHour==0) {
 				stopHour=24;
 			}
-			float totalWidth=bounds.Width;
 			float totalHeight=ApptDrawing.LineH*ApptDrawing.RowsPerHr*(stopHour-startHour);
 			//Figure out how many pages are needed to print.
 			int pagesAcross=(int)Math.Ceiling((decimal)ApptDrawing.VisOps.Count/(decimal)apptPrintColsPerPage);
-			int pagesTall=(int)Math.Ceiling((decimal)totalHeight/(decimal)(bounds.Height-100));//-100 for the header on every page.
+			int pagesTall=(int)Math.Ceiling((decimal)totalHeight/(decimal)(bounds.Height-130));//-130 for the header and footer on every page.
 			int totalPages=pagesAcross*pagesTall;
+			if(ApptDrawing.IsWeeklyView) {
+				pagesAcross=1;
+				totalPages=1*pagesTall;
+			}
 			//Decide what page currently on thus knowing what hours to print.
 			#region HoursOnPage
-			int hoursPerPage=(int)Math.Floor((decimal)(bounds.Height-100)/(decimal)(ApptDrawing.LineH*ApptDrawing.RowsPerHr));
+			int hoursPerPage=(int)Math.Floor((decimal)(bounds.Height-130)/(decimal)(ApptDrawing.LineH*ApptDrawing.RowsPerHr));
 			int hourBegin=startHour;
 			int hourEnd=hourBegin+hoursPerPage;
 			if(pageRow>0) {
@@ -3842,7 +3831,7 @@ namespace OpenDental {
 			e.Graphics.FillRectangle(new SolidBrush(Color.White),0,0,bounds.Width,100);
 			e.Graphics.FillRectangle(new SolidBrush(Color.White),0,ApptDrawing.ApptSheetHeight+100,bounds.Width,totalHeight);
 			//Draw the header
-			DrawPrintingHeader(e.Graphics);
+			DrawPrintingHeader(e.Graphics,totalPages,bounds.Height);
 			pagesPrinted++;
 			pageColumn++;
 			if(totalPages==pagesPrinted) {
@@ -3857,7 +3846,7 @@ namespace OpenDental {
 			}
 		}
 
-		private void DrawPrintingHeader(Graphics g) {
+		private void DrawPrintingHeader(Graphics g,int totalPages,float totalHeight) {
 			float xPos=0;//starting pos
 			float yPos=27.5f;//starting pos
 			//Print Title------------------------------------------------------------------------------
@@ -3901,6 +3890,11 @@ namespace OpenDental {
 					xPos+=ApptDrawing.ColWidth;
 				}
 			}
+			//Print Footer-----------------------------------------------------------------------------
+			string page=(pagesPrinted+1)+" / "+totalPages;
+			float xPage = (float)(400-((g.MeasureString(page,dateFont).Width/2)));
+			yPos=totalHeight-25;
+			g.DrawString(page,dateFont,Brushes.Black,xPage,yPos);
 		}
 
 		///<summary>Clears the pinboard.</summary>

@@ -530,8 +530,8 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary></summary>
-		public static void ComputeColAptWidth(int colsPerPage) {
-			ColAptWidth=(float)(ColDayWidth-1)/(float)colsPerPage;
+		public static void ComputeColAptWidth() {
+			ColAptWidth=(float)(ColDayWidth-1)/(float)ColCount;
 		}
 
 		///<summary></summary>
@@ -673,7 +673,7 @@ namespace OpenDentBusiness.UI {
 					ColCount=VisOps.Count;
 				}
 				if(IsWeeklyView) {
-					//ColCount=NumOfWeekDaysToDisplay;
+					ColCount=VisOps.Count;
 					ProvCount=0;
 				}
 				else {
@@ -695,17 +695,6 @@ namespace OpenDentBusiness.UI {
 				MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
 				MinPerRow=MinPerIncr/RowsPerIncr;
 				RowsPerHr=60/MinPerIncr*RowsPerIncr;
-				//if(TwoRowsPerIncrement){
-				//MinPerRow=MinPerRow/2;
-				//RowsPerHr=RowsPerHr*2;
-				//}
-				ApptSheetHeight=LineH*24*RowsPerHr;
-				if(IsWeeklyView) {
-					ApptSheetWidth=TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay;
-				}
-				else {
-					ApptSheetWidth=TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount;
-				}
 			}
 			catch {
 				MessageBox.Show("error computing width");
