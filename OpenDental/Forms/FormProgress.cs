@@ -28,6 +28,8 @@ namespace OpenDental{
 		public string NumberFormat;
 		///<summary>Since only int values are allowed for progress bar, this allows you to use a double for the current and max.  The true value of the progress bar will be obtained by multiplying the double by the number here.  For example, 100 if you want to show MB like this: 3.15 MB.  The current value might be 3.1496858596859609.  This will set the currentValue of the progress bar to 315.</summary>
 		public int NumberMultiplication;
+		private Label labelError;
+		public string ErrorMessage;
 
 		///<summary></summary>
 		public FormProgress(){
@@ -67,6 +69,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.labelProgress = new System.Windows.Forms.Label();
+			this.labelError = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -114,10 +117,22 @@ namespace OpenDental{
 			this.labelProgress.TabIndex = 4;
 			this.labelProgress.Text = "labelProgress";
 			// 
+			// labelError
+			// 
+			this.labelError.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelError.ForeColor = System.Drawing.Color.DarkRed;
+			this.labelError.Location = new System.Drawing.Point(32,13);
+			this.labelError.Name = "labelError";
+			this.labelError.Size = new System.Drawing.Size(456,25);
+			this.labelError.TabIndex = 5;
+			this.labelError.Text = "Error Message";
+			this.labelError.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormProgress
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(500,261);
+			this.Controls.Add(this.labelError);
 			this.Controls.Add(this.labelProgress);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.progressBar1);
@@ -136,10 +151,16 @@ namespace OpenDental{
 
 		private void FormProgress_Load(object sender, System.EventArgs e) {
 			progressBar1.Maximum=(int)(MaxVal*NumberMultiplication);
+			labelError.Visible=false;
 		}
 		
 		///<summary>Happens every 200 ms</summary>
 		private void timer1_Tick(object sender, System.EventArgs e) {
+			if(!string.IsNullOrEmpty(ErrorMessage)) {
+				labelError.Visible=true;
+				labelError.Text=ErrorMessage;
+				//and this form will also not close because the currentVal will never reach the maxVal.
+			}
 			//progress bar shows 0 maxVal size
 			progressBar1.Maximum=(int)(MaxVal*NumberMultiplication);
 			string progress=DisplayText.Replace("?currentVal",CurrentVal.ToString(NumberFormat));

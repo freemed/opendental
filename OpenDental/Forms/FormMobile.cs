@@ -284,7 +284,7 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
-				MessageBox.Show(e.Message);
+				FormP.ErrorMessage=e.Message;	//MessageBox.Show(e.Message);
 			}
 		}
 
