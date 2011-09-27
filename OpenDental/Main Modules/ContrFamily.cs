@@ -74,13 +74,13 @@ namespace OpenDental{
 			this.imageListToolBar = new System.Windows.Forms.ImageList(this.components);
 			this.menuInsurance = new System.Windows.Forms.ContextMenu();
 			this.menuPlansForFam = new System.Windows.Forms.MenuItem();
+			this.picturePat = new OpenDental.UI.PictureBox();
+			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.gridSuperFam = new OpenDental.UI.ODGrid();
 			this.gridRecall = new OpenDental.UI.ODGrid();
 			this.gridFamily = new OpenDental.UI.ODGrid();
 			this.gridPat = new OpenDental.UI.ODGrid();
 			this.gridIns = new OpenDental.UI.ODGrid();
-			this.picturePat = new OpenDental.UI.PictureBox();
-			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.SuspendLayout();
 			// 
 			// imageListToolBar
@@ -106,6 +106,25 @@ namespace OpenDental{
 			this.menuPlansForFam.Text = "Plans for Family";
 			this.menuPlansForFam.Click += new System.EventHandler(this.menuPlansForFam_Click);
 			// 
+			// picturePat
+			// 
+			this.picturePat.Location = new System.Drawing.Point(1,27);
+			this.picturePat.Name = "picturePat";
+			this.picturePat.Size = new System.Drawing.Size(100,100);
+			this.picturePat.TabIndex = 28;
+			this.picturePat.Text = "picturePat";
+			this.picturePat.TextNullImage = "Patient Picture Unavailable";
+			// 
+			// ToolBarMain
+			// 
+			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ToolBarMain.ImageList = this.imageListToolBar;
+			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
+			this.ToolBarMain.Name = "ToolBarMain";
+			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
+			this.ToolBarMain.TabIndex = 19;
+			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			// 
 			// gridSuperFam
 			// 
 			this.gridSuperFam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -118,7 +137,6 @@ namespace OpenDental{
 			this.gridSuperFam.TabIndex = 33;
 			this.gridSuperFam.Title = "Super Family";
 			this.gridSuperFam.TranslationName = "TableSuper";
-			this.gridSuperFam.Visible = false;
 			this.gridSuperFam.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellDoubleClick);
 			this.gridSuperFam.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellClick);
 			// 
@@ -180,25 +198,6 @@ namespace OpenDental{
 			this.gridIns.TranslationName = "TableCoverage";
 			this.gridIns.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridIns_CellDoubleClick);
 			// 
-			// picturePat
-			// 
-			this.picturePat.Location = new System.Drawing.Point(1,27);
-			this.picturePat.Name = "picturePat";
-			this.picturePat.Size = new System.Drawing.Size(100,100);
-			this.picturePat.TabIndex = 28;
-			this.picturePat.Text = "picturePat";
-			this.picturePat.TextNullImage = "Patient Picture Unavailable";
-			// 
-			// ToolBarMain
-			// 
-			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListToolBar;
-			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
-			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
-			this.ToolBarMain.TabIndex = 19;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
 			// ContrFamily
 			// 
 			this.Controls.Add(this.gridSuperFam);
@@ -252,7 +251,7 @@ namespace OpenDental{
 
 		private void RefreshModuleScreen(){
 			//ParentForm.Text=Patients.GetMainTitle(PatCur);
-			if(PatCur!=null){
+			if(PatCur!=null){//if there is a patient
 				//ToolBarMain.Buttons["Recall"].Enabled=true;
 				ToolBarMain.Buttons["Add"].Enabled=true;
 				ToolBarMain.Buttons["Delete"].Enabled=true;
@@ -261,7 +260,10 @@ namespace OpenDental{
 				if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 					ToolBarMain.Buttons["Ins"].Enabled=true;
 				}
-				if(ToolBarMain.Buttons["AddSuper"]!=null){//because the toolbar only refreshes on restart. //PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)){
+				if(ToolBarMain.Buttons["AddSuper"]==null){//because the toolbar only refreshes on restart. //PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)){
+					gridSuperFam.Visible=false;
+				}
+				else{
 					ToolBarMain.Buttons["AddSuper"].Enabled=true;
 					ToolBarMain.Buttons["RemoveSuper"].Enabled=true;
 					ToolBarMain.Buttons["DisbandSuper"].Enabled=true;
@@ -436,13 +438,13 @@ namespace OpenDental{
 						ToolButIns_Click();
 						break;
 					case "AddSuper":
-						ToolButAddFam_Click();
+						ToolButAddSuper_Click();
 						break;
 					case "RemoveSuper":
-						ToolButRemoveFam_Click();
+						ToolButRemoveSuper_Click();
 						break;
 					case "DisbandSuper":
-						ToolButDisbandFam_Click();
+						ToolButDisbandSuper_Click();
 						break;
 				}
 			}
@@ -994,7 +996,7 @@ namespace OpenDental{
 			bool hasPayPlans=payPlanCount>0;
 			bool hasInsPlans=false;
 			bool hasMeds=medList.Count>0;
-			bool hasSuperFamily=PatCur.PatNum==PatCur.SuperFamily;
+			bool isSuperFamilyHead=PatCur.PatNum==PatCur.SuperFamily;
 			for(int i=0;i<subList.Count;i++) {
 				if(subList[i].Subscriber==PatCur.PatNum) {
 					hasInsPlans=true;
@@ -1002,7 +1004,7 @@ namespace OpenDental{
 			}
 			bool hasRef=RefAttachList.Count>0;
 			if(hasProcs || hasClaims || hasAdj || hasPay || hasClaimProcs || hasComm || hasPayPlans
-				|| hasInsPlans || hasRef || hasMeds || hasSuperFamily)
+				|| hasInsPlans || hasRef || hasMeds || isSuperFamilyHead)
 			{
 				string message=Lan.g(this,
 					"You cannot delete this patient without first deleting the following data:")+"\r";
@@ -1026,7 +1028,7 @@ namespace OpenDental{
 					message+=Lan.g(this,"References")+"\r";
 				if(hasMeds)
 					message+=Lan.g(this,"Medications")+"\r";
-				if(hasSuperFamily)
+				if(isSuperFamilyHead)
 					message+=Lan.g(this,"Attached Super Family")+"\r";
 				MessageBox.Show(message);
 				return;
@@ -1062,6 +1064,7 @@ namespace OpenDental{
 				PatCur.PatStatus=PatientStatus.Deleted;
 				PatCur.ChartNumber="";
 				PatCur.Guarantor=PatCur.PatNum;
+				PatCur.SuperFamily=0;
 				Patients.Update(PatCur,PatOld);
 				for(int i=0;i<RecallList.Count;i++){
 					if(RecallList[i].PatNum==PatCur.PatNum){
@@ -1110,8 +1113,9 @@ namespace OpenDental{
 					if(FormPS.DialogResult!=DialogResult.OK){
 						return;
 					}
-					Patient Lim=Patients.GetLim(FormPS.SelectedPatNum);
-					PatCur.Guarantor=Lim.Guarantor;
+					Patient pat=Patients.GetPat(FormPS.SelectedPatNum);
+					PatCur.Guarantor=pat.Guarantor;
+					PatCur.SuperFamily=pat.SuperFamily;
 					Patients.Update(PatCur,PatOld);
 					FamCur=Patients.GetFamily(PatCur.PatNum);
 					Patients.CombineGuarantors(FamCur,PatCur);
@@ -1142,9 +1146,9 @@ namespace OpenDental{
 						if(FormPS.DialogResult!=DialogResult.OK){
 							return;
 						}
-						Patient Lim=Patients.GetLim(FormPS.SelectedPatNum);
-						PatCur.Guarantor=Lim.Guarantor;
-						PatCur.SuperFamily=Lim.SuperFamily;
+						Patient pat=Patients.GetPat(FormPS.SelectedPatNum);
+						PatCur.Guarantor=pat.Guarantor;
+						PatCur.SuperFamily=pat.SuperFamily;
 						Patients.Update(PatCur,PatOld);
 						break;
 				}//end switch
@@ -1335,7 +1339,7 @@ namespace OpenDental{
 			//ModuleSelected(SuperFamilyGuarantors[e.Row].PatNum);
 		}
 
-		private void ToolButAddFam_Click() {
+		private void ToolButAddSuper_Click() {
 			if(PatCur.Guarantor==PatCur.SuperFamily && SuperFamilyMembers.Count!=FamCur.ListPats.Length) {//member of head family of super family, but also the only family in super family.
 				MsgBox.Show(this,"Selected patient is already in the family of the head of a super family.  All super family members must be removed before changing the head.");
 				return;
@@ -1386,7 +1390,7 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void ToolButRemoveFam_Click() {
+		private void ToolButRemoveSuper_Click() {
 			if(PatCur.SuperFamily==PatCur.Guarantor) {
 				MsgBox.Show(this,"You cannot delete the head of a super family.");
 				return;
@@ -1402,7 +1406,7 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void ToolButDisbandFam_Click() {
+		private void ToolButDisbandSuper_Click() {
 			if(PatCur.SuperFamily==0) {
 				return;
 			}
