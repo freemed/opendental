@@ -686,7 +686,7 @@ namespace OpenDental {
 			//It turns out that importing insurance is crazy complicated if we want it to be perfect.
 			//So it's better to table that plan for now.
 			//The new strategy is simply to show them what the user entered and notify them if it seems different.
-			//ins1Relat------------------------------------------------------------
+			//ins1Relat------------------------------------------------------------r
 			fieldVal=GetRadioValue("ins1Relat");
 			if(fieldVal!=null) {
 				row=new SheetImportRow();
@@ -708,12 +708,17 @@ namespace OpenDental {
 						MessageBox.Show(fieldVal+Lan.g(this," is not a valid Relationship."));
 					}
 				}
-				row.ImpValDisplay="";
-				row.ImpValObj=null;
+				row.ImpValDisplay=row.NewValDisplay;
+				row.ImpValObj=row.NewValObj;
 				row.ObjType=typeof(Relat);
 				row.DoImport=false;
 				if(row.OldValDisplay!=row.NewValDisplay) {
-					row.IsFlagged=true;
+					if(row.NewValObj!=null) {
+						row.DoImport=true;
+					}
+					else {//something is there but couldn't be parsed as a valid relationship.
+						row.IsFlagged=true;
+					}
 				}
 				rows.Add(row);
 			}
@@ -732,13 +737,14 @@ namespace OpenDental {
 					row.OldValObj=null;
 				}
 				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
-				row.NewValObj=row.NewValDisplay;
-				row.ImpValDisplay="";
-				row.ImpValObj="";
+				row.NewValObj=null;
+				row.ImpValDisplay=fieldVal;
+				row.ImpValObj=null;
 				row.ObjType=typeof(string);
 				row.DoImport=false;
 				if(row.OldValDisplay!=row.NewValDisplay) {
-					row.IsFlagged=true;
+					//row.IsFlagged=true;
+					row.IsFlaggedImp=true;
 				}
 				rows.Add(row);
 			}
@@ -758,16 +764,18 @@ namespace OpenDental {
 				}
 				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 				row.NewValObj="";
-				row.ImpValDisplay="";
+				row.ImpValDisplay=fieldVal;
 				row.ImpValObj="";
 				row.ObjType=typeof(string);
 				row.DoImport=false;
 				if(row.OldValDisplay!=row.NewValDisplay) {
-					row.IsFlagged=true;
+					//row.IsFlagged=true;
+					row.IsFlaggedImp=true;
 				}
 				rows.Add(row);
 			}
-			//ins1CarrierName---------------------------------------------
+			//ins1CarrierName---------------------------------------------r
+			Carrier newCarrier1=Carriers.GetByNameAndPhoneNoInsert(GetInputValue("ins1CarrierName"),GetInputValue("ins1CarrierPhone"));
 			fieldVal=GetInputValue("ins1CarrierName");
 			if(fieldVal!=null) {
 				row=new SheetImportRow();
@@ -783,16 +791,23 @@ namespace OpenDental {
 				}
 				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 				row.NewValObj="";
-				row.ImpValDisplay="";
+				row.ImpValDisplay=fieldVal;
 				row.ImpValObj="";
+				row.IsFlaggedImp=(newCarrier1==null);//flagged if carrier name and number doesn't exist.
 				row.ObjType=typeof(string);
 				row.DoImport=false;
+				if(newCarrier1!=null) {
+					row.NewValDisplay=newCarrier1.CarrierName;					
+					row.NewValObj=newCarrier1;
+					row.ImpValDisplay=newCarrier1.CarrierName;
+					row.ImpValObj=newCarrier1;
+				}
 				if(row.OldValDisplay!=row.NewValDisplay) {
-					row.IsFlagged=true;
+					row.DoImport=true;
 				}
 				rows.Add(row);
 			}
-			//ins1CarrierPhone---------------------------------------------
+			//ins1CarrierPhone---------------------------------------------r
 			fieldVal=GetInputValue("ins1CarrierPhone");
 			if(fieldVal!=null) {
 				row=new SheetImportRow();
@@ -808,10 +823,17 @@ namespace OpenDental {
 				}
 				row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 				row.NewValObj="";
-				row.ImpValDisplay="";
+				row.ImpValDisplay=fieldVal;
 				row.ImpValObj="";
+				row.IsFlaggedImp=(newCarrier1==null);//flagged if carrier name and number doesn't exist.
 				row.ObjType=typeof(string);
 				row.DoImport=false;
+				if(newCarrier1!=null) {
+					row.NewValDisplay=newCarrier1.Phone;
+					row.NewValObj=newCarrier1.Phone;
+					row.ImpValDisplay=newCarrier1.Phone;
+					row.ImpValObj=newCarrier1.Phone;
+				}
 				if(row.OldValDisplay!=row.NewValDisplay) {
 					row.IsFlagged=true;
 				}
@@ -1404,6 +1426,48 @@ namespace OpenDental {
 				rows[e.Row].ImpValDisplay=referralSelected.GetNameFL();
 				rows[e.Row].ImpValObj=referralSelected;
 			}
+			else if(rows[e.Row].FieldName=="ins1Subscriber" || rows[e.Row].FieldName=="ins2Subscriber") {
+				FormPatientSelect formPS = new FormPatientSelect();
+				formPS.ShowDialog();
+				if(formPS.DialogResult!=DialogResult.OK) {
+					//do nothing
+				}
+				else {
+					Patient subscriber = Patients.GetPat(formPS.SelectedPatNum);
+					rows[e.Row].DoImport=true;
+					rows[e.Row].IsFlaggedImp=false;
+					rows[e.Row].ImpValDisplay=subscriber.GetNameFL();
+					rows[e.Row].ImpValObj=subscriber;
+				}
+			}
+			else if(rows[e.Row].FieldName=="ins1CarrierName" || rows[e.Row].FieldName=="ins2CarrierName") {
+				FormCarriers formC = new FormCarriers();
+				formC.IsSelectMode=true;
+				formC.ShowDialog();
+				if(formC.DialogResult!=DialogResult.OK) {
+					//do nothing
+				}
+				else {
+					Carrier carrierImp=formC.SelectedCarrier;
+					rows[e.Row].DoImport=true;
+					rows[e.Row].ImpValDisplay=carrierImp.CarrierName;
+					rows[e.Row].ImpValObj= carrierImp;
+					rows[e.Row].IsFlaggedImp=false;
+					rows[e.Row].IsFlagged=false;
+					for(int i=0;i<rows.Count;i++) {//also change the corresponding phone number.
+						if(rows[i].FieldName.Contains("CarrierPhone") && rows[i].FieldName.Substring(0,4)==rows[e.Row].FieldName.Substring(0,4)) {
+							rows[i].DoImport=true;
+							rows[i].ImpValDisplay=carrierImp.Phone;
+							rows[i].ImpValObj=carrierImp.Phone;
+							rows[i].IsFlagged=false;
+							Carrier newCarrier = Carriers.GetByNameAndPhoneNoInsert(rows[e.Row].ImpValDisplay,rows[i].ImpValDisplay);
+							if(rows[i].NewValDisplay==rows[i].ImpValDisplay || newCarrier!=null) {//it remains flagged only if the new carrier/phone num combo doesn't exist.
+								rows[i].IsFlaggedImp=false;
+							}
+						}
+					}
+				}
+			}
 			else if(rows[e.Row].ObjType==typeof(string)) {
 				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
 				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
@@ -1412,13 +1476,13 @@ namespace OpenDental {
 					return;
 				}
 				if(rows[e.Row].FieldName=="addressAndHmPhoneIsSameEntireFamily") {
-					if(inputbox.textResult.Text==""){
-						AddressSameForFam=false;	
+					if(inputbox.textResult.Text=="") {
+						AddressSameForFam=false;
 					}
 					else if(inputbox.textResult.Text!="X") {
 						AddressSameForFam=true;
 					}
-					else{
+					else {
 						MsgBox.Show(this,"The only allowed values are X or blank.");
 						return;
 					}
@@ -1510,6 +1574,9 @@ namespace OpenDental {
 					if(selectedI==-1) {
 						rows[e.Row].DoImport=false;//impossible to import a null
 					}
+					else if(rows[e.Row].OldValObj==null) {
+						rows[e.Row].DoImport=true;
+					}
 					else if((int)rows[e.Row].ImpValObj==(int)rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
 						rows[e.Row].DoImport=false;//so no need to import
 					}
@@ -1569,11 +1636,25 @@ namespace OpenDental {
 				return;
 			}
 			Patient patientOld=pat.Copy();
+			//ins1
+			PatPlan patPlan1Old = PatPlans.GetPatPlan(pat.PatNum,1);
+			InsSub insSub1Old = InsSubs.GetOne(patPlan1Old.InsSubNum);
+			InsPlan insPlan1Old = InsPlans.GetPlan(insSub1Old.PlanNum,null);
+			PatPlan patPlan1New = patPlan1Old.Copy();
+			InsSub insSub1New = insSub1Old.Copy();
+			InsPlan insPlan1New = insPlan1Old.Copy();
+			//ins2
+			PatPlan patPlan2Old = PatPlans.GetPatPlan(pat.PatNum,2);
+			InsSub insSub2Old = InsSubs.GetOne(patPlan2Old.InsSubNum);
+			InsPlan insPlan2Old = InsPlans.GetPlan(insSub2Old.PlanNum,null);
+			PatPlan patPlan2New = patPlan2Old.Copy();
+			InsSub insSub2New = insSub2Old.Copy();
+			InsPlan insPlan2New = insPlan2Old.Copy();
 			for(int i=0;i<rows.Count;i++) {
 				if(!rows[i].DoImport) {
 					continue;
 				}
-				switch(rows[i].FieldName){
+				switch(rows[i].FieldName) {
 					case "LName":
 						pat.LName=rows[i].ImpValDisplay;
 						break;
@@ -1644,10 +1725,31 @@ namespace OpenDental {
 					case "HmPhone":
 						pat.HmPhone=rows[i].ImpValDisplay;
 						break;
-					
+					case "ins1SubscriberNameF":
+						insSub1New.Subscriber=((Patient)rows[i].ImpValObj).PatNum;
+						break;
+					case "ins1CarrierName":
+						insPlan1New.CarrierNum=((Carrier)rows[i].ImpValObj).CarrierNum;
+						break;
+					case "ins1CarrierPhone":
+
+						break;
 					//ins1 and ins2 do not get imported.
 				}
 			}
+			//Validation on if/how to import insurance
+			if(insPlan1New!=insPlan2Old && insPlan1New!=null) {
+
+				insSub1New.PlanNum=insPlan1New.PlanNum;
+			}
+			if(insSub1New!=insSub1Old) {
+				patPlan1New.InsSubNum=insSub1New.InsSubNum;
+			}
+			if(patPlan1New!=patPlan1Old) {
+
+			}
+
+			
 			Patients.Update(pat,patientOld);
 			if(AddressSameForFam) {
 				Patients.UpdateAddressForFam(pat);
