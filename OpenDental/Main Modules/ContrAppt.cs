@@ -3830,18 +3830,11 @@ namespace OpenDental {
 				ContrApptSingle3[i].PatternShowing=ApptSingleDrawing.GetPatternShowing(dataRoww["Pattern"].ToString());
 				ContrApptSingle3[i].Size=ApptSingleDrawing.SetSize(dataRoww);
 				ContrApptSingle3[i].Location=ApptSingleDrawing.SetLocation(dataRoww,hourBegin,apptPrintColsPerPage,pageColumn);
-				float apptWidth=0;
-				if(ApptDrawing.IsWeeklyView) {
-					apptWidth=(ApptDrawing.ColWidth-4)/ApptDrawing.VisOps.Count;
-				}
-				else {
-					apptWidth=ApptDrawing.ColWidth-4;
-				}
 				float apptHeight=ContrApptSingle3[i].Height;
 				e.Graphics.ResetTransform();
 				e.Graphics.TranslateTransform(ContrApptSingle3[i].Location.X,ContrApptSingle3[i].Location.Y+100);//100 to compensate for print header.
-				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ContrApptSingle3[i].PatternShowing,apptWidth,apptHeight,
-					false,false,-1,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"],apptPrintFontSize);
+				ApptSingleDrawing.DrawEntireAppt(e.Graphics,dataRoww,ContrApptSingle3[i].PatternShowing,ContrApptSingle3[i].Size.Width,ContrApptSingle3[i].Size.Height,
+					false,false,-1,ApptViewItemL.ApptRows,ApptViewItemL.ApptViewCur,DS.Tables["ApptFields"],DS.Tables["PatFields"],apptPrintFontSize,true);
 			}
 			#endregion
 			e.Graphics.ResetTransform();

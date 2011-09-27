@@ -13,7 +13,7 @@ namespace OpenDentBusiness.UI {
 		private static Point location;
 
 		///<summary>Set default fontSize to 8 unless printing.</summary>
-		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields,int fontSize) {
+		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,bool isSelected,bool thisIsPinBoard,long selectedAptNum,List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields,int fontSize,bool isPrinting) {
 			Pen penB=new Pen(Color.Black);
 			Pen penW=new Pen(Color.White);
 			Pen penGr=new Pen(Color.SlateGray);
@@ -47,9 +47,9 @@ namespace OpenDentBusiness.UI {
 				//We might want to do something interesting here.
 			}
 			SolidBrush backBrush=new SolidBrush(backColor);
-			g.FillRectangle(backBrush,7,0,totalWidth-7,totalHeight);
-			g.FillRectangle(Brushes.White,0,0,7,totalHeight);
-			g.DrawLine(penB,7,0,7,totalHeight);
+			g.FillRectangle(backBrush,7,0,totalWidth-7,(int)totalHeight);
+			g.FillRectangle(Brushes.White,0,0,7,(int)totalHeight);
+			g.DrawLine(penB,7,0,7,(int)totalHeight);
 			Pen penTimediv=Pens.Silver;
 			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
 			for(int i=0;i<patternShowing.Length;i++) {//Info.MyApt.Pattern.Length;i++){
@@ -63,7 +63,7 @@ namespace OpenDentBusiness.UI {
 					g.DrawLine(penTimediv,1,i*ApptDrawing.LineH,6,i*ApptDrawing.LineH);
 				}
 			}
-			//Highlighting border
+			#region Highlighting border
 			if(isSelected	|| (!thisIsPinBoard && dataRoww["AptNum"].ToString()==selectedAptNum.ToString())) {
 				//Left
 				g.DrawLine(penO,8,1,8,totalHeight-2);
@@ -78,7 +78,8 @@ namespace OpenDentBusiness.UI {
 				g.DrawLine(penO,9,totalHeight-2,totalWidth-2,totalHeight-2);
 				g.DrawLine(penO,10,totalHeight-3,totalWidth-3,totalHeight-3);
 			}
-			//Draw all the main rows
+			#endregion
+			#region Main rows
 			Point drawLoc=new Point(9,0);
 			int elementI=0;
 			while(drawLoc.Y<totalHeight && elementI<apptRows.Count) {
@@ -89,7 +90,8 @@ namespace OpenDentBusiness.UI {
 				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);//set the drawLoc to a new point, based on space used by element
 				elementI++;
 			}
-			//UR
+			#endregion
+			#region UR
 			drawLoc=new Point((int)totalWidth-1,0);//in the UR area, we refer to the upper right corner of each element.
 			elementI=0;
 			while(drawLoc.Y<totalHeight && elementI<apptRows.Count) {
@@ -100,7 +102,8 @@ namespace OpenDentBusiness.UI {
 				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);
 				elementI++;
 			}
-			//LR
+			#endregion
+			#region LR
 			drawLoc=new Point((int)totalWidth-1,(int)totalHeight-1);//in the LR area, we refer to the lower right corner of each element.
 			elementI=apptRows.Count-1;//For lower right, draw the list backwards.
 			while(drawLoc.Y>0 && elementI>=0) {
@@ -111,8 +114,14 @@ namespace OpenDentBusiness.UI {
 				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,fontSize);
 				elementI--;
 			}
+			#endregion
 			//Main outline
-			g.DrawRectangle(new Pen(Color.Black),0,0,(int)totalWidth-1,(int)totalHeight-1);
+			if(isPrinting) {
+				g.DrawRectangle(new Pen(Color.Black),0,0,totalWidth,totalHeight);
+			}
+			else {
+				g.DrawRectangle(new Pen(Color.Black),0,0,totalWidth-1,totalHeight-1);
+			}
 			//broken X
 			if(dataRoww["AptStatus"].ToString()==((int)ApptStatus.Broken).ToString()) {
 				g.DrawLine(new Pen(Color.Black),8,1,totalWidth-1,totalHeight-1);
@@ -393,6 +402,7 @@ namespace OpenDentBusiness.UI {
 			SizeF noteSize;
 			RectangleF rect;
 			RectangleF rectBack;
+			#region Main
 			if(align==ApptViewAlignment.Main) {//always stacks vertical
 				if(isGraphic) {
 					Bitmap bitmap=new Bitmap(12,12);
@@ -422,6 +432,8 @@ namespace OpenDentBusiness.UI {
 					return new Point(drawLoc.X,drawLoc.Y+linesFilled*ApptDrawing.LineH);
 				}
 			}
+			#endregion
+			#region UR
 			else if(align==ApptViewAlignment.UR) {
 				if(stackBehavior==ApptViewStackBehavior.Vertical) {
 					float w=totalWidth-9;
@@ -507,6 +519,8 @@ namespace OpenDentBusiness.UI {
 					}
 				}
 			}
+			#endregion
+			#region LR
 			else {//LR
 				if(stackBehavior==ApptViewStackBehavior.Vertical) {
 					float w=totalWidth-9;
@@ -592,6 +606,7 @@ namespace OpenDentBusiness.UI {
 					}
 				}
 			}
+			#endregion
 		}
 
 		///<summary>This is only called when viewing appointments on the Appt module.  For Planned apt and pinboard, use SetSize instead so that the location won't change.  Pass 0 for startHour unless printing.  Pass visible ops for colsPerPage unless printing.  Pass 0 for pageColumn unless printing.</summary>

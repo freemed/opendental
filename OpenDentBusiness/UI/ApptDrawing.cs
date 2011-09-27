@@ -122,22 +122,15 @@ namespace OpenDentBusiness.UI {
 					else {
 						dayofweek=(DayOfWeek)(d+1);
 					}
-					for(int i=0;i<colsPerPage;i++) {
-						if(i==ApptDrawing.VisOps.Count) {
-							break;
-						}
-						int k=colsPerPage*pageColumn+i;
-						if(k>=ApptDrawing.VisOps.Count) {
-							break;
-						}
-						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,dayofweek,VisOps[k]);//OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
+					for(int i=0;i<ColCount;i++) {
+						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,dayofweek,VisOps[i]);//OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
 						for(int j=0;j<schedsForOp.Count;j++) {
 							stopHour=stopTime.Hour;//Reset stopHour every time.
 							if(stopHour==0) {
 								stopHour=24;
 							}
 							g.FillRectangle(openBrush
-								,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
+								,TimeWidth+1+d*ColDayWidth+(float)i*ColAptWidth
 								,(schedsForOp[j].StartTime.Hours-startHour)*LineH*RowsPerHr+(int)schedsForOp[j].StartTime.Minutes*LineH/MinPerRow//6RowsPerHr 10MinPerRow
 								,ColAptWidth
 								,(schedsForOp[j].StopTime-schedsForOp[j].StartTime).Hours*LineH*RowsPerHr//6
