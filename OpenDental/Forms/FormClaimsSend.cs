@@ -446,11 +446,13 @@ namespace OpenDental{
 			listQueue=Claims.GetQueueList(0,clinicNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),120);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),190);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Clinic"),80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableQueue","M/D"),40);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),80);
 			gridMain.Columns.Add(col);
@@ -467,6 +469,17 @@ namespace OpenDental{
 				row.Cells.Add(listQueue[i].PatName);
 				row.Cells.Add(listQueue[i].Carrier);
 				row.Cells.Add(Clinics.GetDesc(listQueue[i].ClinicNum));
+				switch(listQueue[i].MedType){
+					case EnumClaimMedType.Dental:
+						row.Cells.Add("Dent");
+						break;
+					case EnumClaimMedType.Medical:
+						row.Cells.Add("Med");
+						break;
+					case EnumClaimMedType.Institutional:
+						row.Cells.Add("Inst");
+						break;
+				}
 				if(listQueue[i].NoSendElect){
 					row.Cells.Add("Paper");
 					row.Cells.Add("");

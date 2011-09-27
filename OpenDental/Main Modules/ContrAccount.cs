@@ -2623,22 +2623,22 @@ namespace OpenDental {
 					//	OnPat_Click();
 					//	break;
 					case "Payment":
-						OnPay_Click();
+						toolBarButPay_Click();
 						break;
 					case "Adjustment":
-						OnAdj_Click();
+						toolBarButAdj_Click();
 						break;
 					case "Insurance":
-						OnIns_Click();
+						toolBarButIns_Click();
 						break;
 					case "PayPlan":
-						OnPayPlan_Click();
+						toolBarButPayPlan_Click();
 						break;
 					case "RepeatCharge":
-						OnRepeatCharge_Click();
+						toolBarButRepeatCharge_Click();
 						break;
 					case "Statement":
-						OnStatement_Click();
+						toolBarButStatement_Click();
 						break;
 				}
 			}
@@ -2655,7 +2655,7 @@ namespace OpenDental {
 			}
 		}
 
-		private void OnPay_Click() {
+		private void toolBarButPay_Click() {
 			Payment PaymentCur=new Payment();
 			PaymentCur.PayDate=DateTime.Today;
 			PaymentCur.PatNum=PatCur.PatNum;
@@ -2671,7 +2671,7 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void OnAdj_Click() {
+		private void toolBarButAdj_Click() {
 			Adjustment AdjustmentCur=new Adjustment();
 			AdjustmentCur.DateEntry=DateTime.Today;//cannot be changed. Handled automatically
 			AdjustmentCur.AdjDate=DateTime.Today;
@@ -2686,7 +2686,7 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void OnIns_Click() {
+		private void toolBarButIns_Click() {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
@@ -2836,15 +2836,9 @@ namespace OpenDental {
 					PlanCur=FormCC.SelectedPlan;
 					SubCur=FormCC.SelectedSub;
 					relatOther=FormCC.PatRelat;
-					//claimFormNum=FormCC.ClaimFormNum;
 					break;
 			}
 			DataTable table=DataSetMain.Tables["account"];
-			//List<int> procNums=new List<int>();
-			//for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-			//	procNums.Add(PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
-			//}
-			//List<Procedure> procList=Procedures.GetProcFromList(procsForPat,  //.GetManyProcs(procNums);
 			Procedure proc;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
 				proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
@@ -2899,7 +2893,6 @@ namespace OpenDental {
 					ClaimProcs.Insert(claimProcs[i]);//this makes a duplicate in db with different claimProcNum
 				}
 			}
-			//Claim ClaimCur=Claims.Cur;
 			ClaimCur.PatNum=PatCur.PatNum;
 			ClaimCur.DateService=claimProcs[claimProcs.Length-1].ProcDate;
 			ClaimCur.ClinicNum=clinicNum;
@@ -2907,11 +2900,10 @@ namespace OpenDental {
 			ClaimCur.ClaimStatus="U";
 			//datereceived
 			InsSub sub;
+			ClaimCur.PlanNum=PlanCur.PlanNum;
+			ClaimCur.InsSubNum=SubCur.InsSubNum;
 			switch(claimType){
 				case "P":
-					ClaimCur.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
-					sub=InsSubs.GetSub(ClaimCur.InsSubNum,subList);
-					ClaimCur.PlanNum=sub.PlanNum;
 					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,1);
 					ClaimCur.ClaimType="P";
 					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,2);
@@ -2920,9 +2912,6 @@ namespace OpenDental {
 					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
 					break;
 				case "S":
-					ClaimCur.InsSubNum=PatPlans.GetInsSubNum(PatPlanList,2);
-					sub=InsSubs.GetSub(ClaimCur.InsSubNum,subList);
-					ClaimCur.PlanNum=sub.PlanNum;
 					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,2);
 					ClaimCur.ClaimType="S";
 					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,1);
@@ -2931,22 +2920,30 @@ namespace OpenDental {
 					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,1);
 					break;
 				case "Med":
-					ClaimCur.PlanNum=PlanCur.PlanNum;
-					ClaimCur.InsSubNum=SubCur.InsSubNum;
 					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,SubCur.InsSubNum).Relationship;
 					ClaimCur.ClaimType="Other";
+					if(PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical)){
+						ClaimCur.MedType=EnumClaimMedType.Institutional;
+					}
+					else{
+						ClaimCur.MedType=EnumClaimMedType.Medical;
+					}
 					break;
 				case "Other":
-					ClaimCur.PlanNum=PlanCur.PlanNum;
-					ClaimCur.InsSubNum=SubCur.InsSubNum;
 					ClaimCur.PatRelat=relatOther;
 					ClaimCur.ClaimType="Other";
 					//plannum2 is not automatically filled in.
 					ClaimCur.ClaimForm=claimFormNum;
-					//ClaimCur.MedType=;
+					if(PlanCur.IsMedical){
+						if(PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical)){
+							ClaimCur.MedType=EnumClaimMedType.Institutional;
+						}
+						else{
+							ClaimCur.MedType=EnumClaimMedType.Medical;
+						}
+					}
 					break;
 			}
-			//InsPlans.GetCur(ClaimCur.PlanNum);
 			if(PlanCur.PlanType=="c"){//if capitation
 				ClaimCur.ClaimType="Cap";
 			}
@@ -2975,6 +2972,7 @@ namespace OpenDental {
 			//}
 			ClaimCur.ProvBill=Providers.GetBillingProvNum(ClaimCur.ProvTreat,ClaimCur.ClinicNum);//,useClinic,clinicInsBillingProv);//OK if zero, because it will get fixed in claim
 			ClaimCur.EmployRelated=YN.No;
+			ClaimCur.ClaimForm=PlanCur.ClaimFormNum;
 			//attach procedures
 			Procedure ProcCur;
 			//for(int i=0;i<tbAccount.SelectedIndices.Length;i++){
@@ -3205,7 +3203,7 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void OnPayPlan_Click() {
+		private void toolBarButPayPlan_Click() {
 			PayPlan payPlan=new PayPlan();
 			payPlan.PatNum=PatCur.PatNum;
 			payPlan.Guarantor=PatCur.Guarantor;
@@ -3224,7 +3222,7 @@ namespace OpenDental {
 			}
 		}
 
-		private void OnRepeatCharge_Click(){
+		private void toolBarButRepeatCharge_Click(){
 			RepeatCharge repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
 			repeat.DateStart=DateTime.Today;
@@ -3280,7 +3278,7 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void OnStatement_Click() {
+		private void toolBarButStatement_Click() {
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.Guarantor;
 			stmt.DateSent=DateTime.Today;

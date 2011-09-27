@@ -164,12 +164,7 @@ namespace OpenDental{
 		}
 
 		private void FormPatFieldDefEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			/*if(DialogResult==DialogResult.OK){
-				return;
-			}
-			if(IsNew) {
-				PatFields.Delete(Field);
-			}*/
+			
 		}
 
 	

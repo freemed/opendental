@@ -5588,6 +5588,7 @@ namespace OpenDental{
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=PatCur.SiteNum;
+			ProcCur.RevCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).RevenueCodeDefault;
 			Procedures.Insert(ProcCur);
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
 				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
@@ -5718,6 +5719,7 @@ namespace OpenDental{
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=PatCur.SiteNum;
+			ProcCur.RevCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).RevenueCodeDefault;
 			//nextaptnum
 			Procedures.Insert(ProcCur);
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)

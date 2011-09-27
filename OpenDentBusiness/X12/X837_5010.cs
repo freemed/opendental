@@ -2162,7 +2162,7 @@ namespace OpenDentBusiness
 					//will add any other checks as needed. Can't think of any others at the moment.
 				}
 			}//for int i claimProcs
-			if(insPlan.IsMedical && !princDiagExists) {
+			if(claim.MedType==EnumClaimMedType.Medical && !princDiagExists) {
 				Comma(strb);
 				strb.Append("Princ Diagnosis");
 			}

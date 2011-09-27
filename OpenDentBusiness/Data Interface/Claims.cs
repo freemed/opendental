@@ -321,6 +321,7 @@ namespace OpenDentBusiness{
 				string payorID=PIn.String(table.Rows[i]["ElectID"].ToString());
 				EnumClaimMedType medType=(EnumClaimMedType)PIn.Int(table.Rows[i]["MedType"].ToString());
 				listQueue[i].ClearinghouseNum=Clearinghouses.AutomateClearinghouseSelection(payorID,medType);
+				listQueue[i].MedType=medType;
 			}
 			return listQueue;
 		}
@@ -412,8 +413,8 @@ namespace OpenDentBusiness{
 		public long ClearinghouseNum;
 		///<summary></summary>
 		public long ClinicNum;
-		//<summary>True if the plan is a medical plan.</summary>
-		//public bool IsMedical;
+		///<summary>Enum:EnumClaimMedType 0=Dental, 1=Medical, 2=Institutional</summary>
+		public EnumClaimMedType MedType;
 
 		public ClaimSendQueueItem Copy(){
 			return (ClaimSendQueueItem)MemberwiseClone();

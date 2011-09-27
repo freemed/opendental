@@ -281,6 +281,9 @@ namespace OpenDental{
 			this.radioLL = new System.Windows.Forms.RadioButton();
 			this.radioUL = new System.Windows.Forms.RadioButton();
 			this.radioUR = new System.Windows.Forms.RadioButton();
+			this.groupArch = new System.Windows.Forms.GroupBox();
+			this.radioL = new System.Windows.Forms.RadioButton();
+			this.radioU = new System.Windows.Forms.RadioButton();
 			this.panelSurfaces = new System.Windows.Forms.Panel();
 			this.butD = new OpenDental.UI.Button();
 			this.butBF = new OpenDental.UI.Button();
@@ -288,9 +291,6 @@ namespace OpenDental{
 			this.butM = new OpenDental.UI.Button();
 			this.butV = new OpenDental.UI.Button();
 			this.butOI = new OpenDental.UI.Button();
-			this.groupArch = new System.Windows.Forms.GroupBox();
-			this.radioL = new System.Windows.Forms.RadioButton();
-			this.radioU = new System.Windows.Forms.RadioButton();
 			this.groupSextant = new System.Windows.Forms.GroupBox();
 			this.radioS6 = new System.Windows.Forms.RadioButton();
 			this.radioS5 = new System.Windows.Forms.RadioButton();
@@ -412,8 +412,8 @@ namespace OpenDental{
 			this.labelPrognosis = new System.Windows.Forms.Label();
 			this.comboProcStatus = new System.Windows.Forms.ComboBox();
 			this.groupQuadrant.SuspendLayout();
-			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
+			this.panelSurfaces.SuspendLayout();
 			this.groupSextant.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.groupMedical.SuspendLayout();
@@ -596,6 +596,39 @@ namespace OpenDental{
 			this.radioUR.Text = "UR";
 			this.radioUR.Click += new System.EventHandler(this.radioUR_Click);
 			// 
+			// groupArch
+			// 
+			this.groupArch.Controls.Add(this.radioL);
+			this.groupArch.Controls.Add(this.radioU);
+			this.groupArch.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupArch.Location = new System.Drawing.Point(104,99);
+			this.groupArch.Name = "groupArch";
+			this.groupArch.Size = new System.Drawing.Size(60,56);
+			this.groupArch.TabIndex = 3;
+			this.groupArch.TabStop = false;
+			this.groupArch.Text = "Arch";
+			this.groupArch.Visible = false;
+			// 
+			// radioL
+			// 
+			this.radioL.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioL.Location = new System.Drawing.Point(12,36);
+			this.radioL.Name = "radioL";
+			this.radioL.Size = new System.Drawing.Size(28,16);
+			this.radioL.TabIndex = 1;
+			this.radioL.Text = "L";
+			this.radioL.Click += new System.EventHandler(this.radioL_Click);
+			// 
+			// radioU
+			// 
+			this.radioU.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioU.Location = new System.Drawing.Point(12,16);
+			this.radioU.Name = "radioU";
+			this.radioU.Size = new System.Drawing.Size(32,16);
+			this.radioU.TabIndex = 0;
+			this.radioU.Text = "U";
+			this.radioU.Click += new System.EventHandler(this.radioU_Click);
+			// 
 			// panelSurfaces
 			// 
 			this.panelSurfaces.Controls.Add(this.butD);
@@ -705,39 +738,6 @@ namespace OpenDental{
 			this.butOI.Text = "O/I";
 			this.butOI.UseVisualStyleBackColor = false;
 			this.butOI.Click += new System.EventHandler(this.butOI_Click);
-			// 
-			// groupArch
-			// 
-			this.groupArch.Controls.Add(this.radioL);
-			this.groupArch.Controls.Add(this.radioU);
-			this.groupArch.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupArch.Location = new System.Drawing.Point(104,99);
-			this.groupArch.Name = "groupArch";
-			this.groupArch.Size = new System.Drawing.Size(60,56);
-			this.groupArch.TabIndex = 3;
-			this.groupArch.TabStop = false;
-			this.groupArch.Text = "Arch";
-			this.groupArch.Visible = false;
-			// 
-			// radioL
-			// 
-			this.radioL.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioL.Location = new System.Drawing.Point(12,36);
-			this.radioL.Name = "radioL";
-			this.radioL.Size = new System.Drawing.Size(28,16);
-			this.radioL.TabIndex = 1;
-			this.radioL.Text = "L";
-			this.radioL.Click += new System.EventHandler(this.radioL_Click);
-			// 
-			// radioU
-			// 
-			this.radioU.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioU.Location = new System.Drawing.Point(12,16);
-			this.radioU.Name = "radioU";
-			this.radioU.Size = new System.Drawing.Size(32,16);
-			this.radioU.TabIndex = 0;
-			this.radioU.Text = "U";
-			this.radioU.Click += new System.EventHandler(this.radioU_Click);
 			// 
 			// groupSextant
 			// 
@@ -1080,7 +1080,7 @@ namespace OpenDental{
 			this.groupMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupMedical.Location = new System.Drawing.Point(731,3);
 			this.groupMedical.Name = "groupMedical";
-			this.groupMedical.Size = new System.Drawing.Size(223,201);
+			this.groupMedical.Size = new System.Drawing.Size(223,169);
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
 			this.groupMedical.Text = "Medical and Institutional";
@@ -1145,7 +1145,7 @@ namespace OpenDental{
 			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowMedical.CornerRadius = 4F;
-			this.butShowMedical.Location = new System.Drawing.Point(198,179);
+			this.butShowMedical.Location = new System.Drawing.Point(198,147);
 			this.butShowMedical.Name = "butShowMedical";
 			this.butShowMedical.Size = new System.Drawing.Size(25,21);
 			this.butShowMedical.TabIndex = 121;
@@ -2125,8 +2125,8 @@ namespace OpenDental{
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormProcEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormProcInfo_Load);
 			this.groupQuadrant.ResumeLayout(false);
-			this.panelSurfaces.ResumeLayout(false);
 			this.groupArch.ResumeLayout(false);
+			this.panelSurfaces.ResumeLayout(false);
 			this.groupSextant.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();

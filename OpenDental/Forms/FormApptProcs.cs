@@ -172,6 +172,7 @@ namespace OpenDental {
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
+			ProcCur.RevCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).RevenueCodeDefault;
 			Procedures.Insert(ProcCur);
 			List <Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
 			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,planList,patPlanList,benefitList,pat.Age,subList);

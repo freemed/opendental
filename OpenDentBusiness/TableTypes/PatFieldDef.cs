@@ -11,10 +11,12 @@ namespace OpenDentBusiness{
 		public long PatFieldDefNum;
 		///<summary>The name of the field that the user will be allowed to fill in the patient info window.</summary>
 		public string FieldName;
-		///<summary>Enum:PatFieldType Text=0,PickList=1,Date=2</summary>
+		///<summary>Enum:PatFieldType Text=0,PickList=1,Date=2,Checkbox=3,Currency=4</summary>
 		public PatFieldType FieldType;
 		/// <summary>The text that contains pick list values.</summary>
 		public string PickList;
+		//<summary>Enum:PatFieldMapping Certain reports such as Medicaid make use of patient fields that are explicitly mapped.</summary>
+		//public PatFieldMapping FieldMapping;
 
 		///<summary></summary>
 		public PatFieldDef Copy() {
@@ -33,8 +35,17 @@ namespace OpenDentBusiness{
 		///<summary>2</summary>
 		Date,
 		///<summary>3</summary>
-		Checkbox
+		Checkbox,
+		///<summary>4</summary>
+		Currency
 	}
+
+	//public enum PatFieldMapping{
+		//<summary>0</summary>
+		//None,
+		//<summary>1</summary>
+		//IncomeForPoverty	
+	//}
 
 
 }

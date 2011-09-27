@@ -20,8 +20,8 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private PatField Field;
+		private ValidDate textFieldDate;
 		private Label labelName;
-		private ODR.ValidDate textFieldDate;
 
 		///<summary></summary>
 		public FormPatFieldDateEdit(PatField field)
@@ -60,7 +60,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.labelName = new System.Windows.Forms.Label();
-			this.textFieldDate = new ODR.ValidDate();
+			this.textFieldDate = new OpenDental.ValidDate();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -105,10 +105,10 @@ namespace OpenDental{
 			// 
 			// textFieldDate
 			// 
-			this.textFieldDate.Location = new System.Drawing.Point(22,40);
+			this.textFieldDate.Location = new System.Drawing.Point(22,43);
 			this.textFieldDate.Name = "textFieldDate";
-			this.textFieldDate.Size = new System.Drawing.Size(125,20);
-			this.textFieldDate.TabIndex = 0;
+			this.textFieldDate.Size = new System.Drawing.Size(108,20);
+			this.textFieldDate.TabIndex = 4;
 			// 
 			// FormPatFieldDateEdit
 			// 
@@ -127,8 +127,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Patient Field Date";
-			this.Load += new System.EventHandler(this.FormPatFieldDateEdit_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPatFieldDefEdit_FormClosing);
+			this.Load += new System.EventHandler(this.FormPatFieldDateEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -137,9 +137,7 @@ namespace OpenDental{
 
 		private void FormPatFieldDateEdit_Load(object sender, System.EventArgs e) {
 			labelName.Text=Field.FieldName;
-			if(!IsNew) {
-				textFieldDate.Text=Field.FieldValue.ToString();
-			}
+			textFieldDate.Text=Field.FieldValue;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -171,12 +169,7 @@ namespace OpenDental{
 		}
 
 		private void FormPatFieldDefEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			//if(DialogResult==DialogResult.OK){
-			//	return;
-			//}
-			//if(IsNew) {
-			//	PatFields.Delete(Field);
-			//}
+			
 		}
 
 	

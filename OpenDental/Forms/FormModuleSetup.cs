@@ -516,7 +516,6 @@ namespace OpenDental{
 			// checkMedicalEclaimsEnabled
 			// 
 			this.checkMedicalEclaimsEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkMedicalEclaimsEnabled.Enabled = false;
 			this.checkMedicalEclaimsEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(94,7);
 			this.checkMedicalEclaimsEnabled.Name = "checkMedicalEclaimsEnabled";
@@ -524,6 +523,7 @@ namespace OpenDental{
 			this.checkMedicalEclaimsEnabled.TabIndex = 60;
 			this.checkMedicalEclaimsEnabled.Text = "Enable medical e-claims";
 			this.checkMedicalEclaimsEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkMedicalEclaimsEnabled.Visible = false;
 			// 
 			// checkSolidBlockouts
 			// 
@@ -1402,7 +1402,7 @@ namespace OpenDental{
 				| Prefs.UpdateLong(PrefName.PayPlansBillInAdvanceDays,PIn.Long(textPayPlansBillInAdvanceDays.Text))
 				| Prefs.UpdateBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily,checkAgingMonthly.Checked)
 				| Prefs.UpdateBool(PrefName.EclaimsSeparateTreatProv,checkEclaimsSeparateTreatProv.Checked)
-				| Prefs.UpdateBool(PrefName.MedicalEclaimsEnabled,checkMedicalEclaimsEnabled.Checked)
+				//| Prefs.UpdateBool(PrefName.MedicalEclaimsEnabled,checkMedicalEclaimsEnabled.Checked)
 				| Prefs.UpdateLong(PrefName.UseInternationalToothNumbers, comboToothNomenclature.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.InsurancePlansShared,checkInsurancePlansShared.Checked)
 				| Prefs.UpdateBool(PrefName.SolidBlockouts, checkSolidBlockouts.Checked)

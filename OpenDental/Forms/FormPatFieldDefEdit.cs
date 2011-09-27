@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(254,451);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,25);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -99,7 +99,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(254,416);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,25);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -123,7 +123,7 @@ namespace OpenDental{
 			this.buttonDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.buttonDelete.Location = new System.Drawing.Point(20,451);
 			this.buttonDelete.Name = "buttonDelete";
-			this.buttonDelete.Size = new System.Drawing.Size(82,25);
+			this.buttonDelete.Size = new System.Drawing.Size(82,24);
 			this.buttonDelete.TabIndex = 3;
 			this.buttonDelete.Text = "&Delete";
 			this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
@@ -212,10 +212,9 @@ namespace OpenDental{
 			textPickList.Visible=false;
 			comboFieldType.Items.Clear();
 			comboFieldType.Items.AddRange(Enum.GetNames(typeof(PatFieldType)));
-			comboFieldType.SelectedIndex=0;
+			comboFieldType.SelectedIndex=(int)FieldDef.FieldType;
 			if(!IsNew){
 				OldFieldName=FieldDef.FieldName;
-				comboFieldType.SelectedIndex=(int)FieldDef.FieldType;
 			}
 			if(comboFieldType.SelectedIndex==(int)PatFieldType.PickList) {
 				textPickList.Visible=true;
@@ -225,6 +224,9 @@ namespace OpenDental{
 		}
 
 		private void comboFieldType_SelectedIndexChanged(object sender,EventArgs e) {
+			if(!IsNew){
+				//todo: check existing values to make sure that it makes sense to change the type.  Especially when moving to currency or date.
+			}
 			textPickList.Visible=false;
 			labelWarning.Visible=false;
 			if(comboFieldType.SelectedIndex==(int)PatFieldType.PickList) {

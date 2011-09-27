@@ -176,6 +176,7 @@ namespace OpenDentBusiness {
 		LanguagesUsedByPatients,
 		LetterMergePath,
 		MainWindowTitle,
+		///<summary>Not in use at the moment.  Soon, we will either start using it or else get rid of it completely.</summary>
 		MedicalEclaimsEnabled,
 		///<summary>FK to medication.MedicationNum</summary>
 		MedicationsIndicateNone,
