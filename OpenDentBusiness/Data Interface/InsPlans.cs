@@ -868,6 +868,9 @@ namespace OpenDentBusiness {
 			//must be posterior composite with an ordinary fee schedule
 			//Although it won't happen very often, it's possible that there is no fee schedule assigned to the plan.
 			if(feeSched==0) {
+				if(provNum==0) {//slight corruption
+					return Fees.GetAmount(substCodeNum,Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv)).FeeSched);
+				}
 				return Fees.GetAmount(substCodeNum,Providers.GetProv(provNum).FeeSched);
 			}
 			return Fees.GetAmount(substCodeNum,feeSched);

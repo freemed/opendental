@@ -1106,7 +1106,7 @@ namespace OpenDentBusiness {
 				//dummy.FName="Dummy";
 				//dummy.LName="Provider";
 				//Will get to this soon.
-				//01-17-2011 No fix yet. This has not cause issues except for notifying users.
+				//01-17-2011 No fix yet. This has not caused issues except for notifying users.
 
 				//command="UPDATE claimproc SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
 				//int numberFixed=Db.NonQ32(command);
