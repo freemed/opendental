@@ -11,7 +11,10 @@
 <h2>Family Balance</h2>
 BalTotal=@Model.patm.BalTotal<br />
 InsEst=@Model.patm.InsEst
-
+<br /><br />
+@foreach(var item in Model.mStatementmList) {    
+	@Html.Encode("Statement "+item.DateSent.ToShortDateString() + " ")   @Html.ActionLink("View Statement","ShowPdfFile","Account",new { d=item.DocNum }, new { target="_blank" }) <br />
+}
 
     <h2>LabPanel List</h2>
 	@Model.MessageLabPanel
@@ -29,12 +32,12 @@ InsEst=@Model.patm.InsEst
 						  <td>@Html.Encode(itemInner.TestName) </td>
 						  <td>@Html.Encode(itemInner.ObsValue) </td>
 					  </tr>
-					}
+	 }
 			</table>
 		</td>
 
     </tr>
-	}
+ }
 	</table>
 
 
@@ -45,18 +48,18 @@ InsEst=@Model.patm.InsEst
     <tr>
         <td>@Html.Encode(row["MedName"].ToString())</td>
     </tr>
-	}
+ }
 	</table>
 
 		    <h2>List of Problems:</h2>
 	@Model.MessageProblem
 	
 	<table>
-	 @foreach (DataRow row in Model.mDiseasemDataTable.Rows){ // Loop over the rows.
+	 @foreach(DataRow row in Model.mDiseasemDataTable.Rows) { // Loop over the rows.
     <tr>
         <td>@Html.Encode(row["Description"].ToString())</td>
     </tr>
-	}
+  }
 	</table>
 
 	<h2>List of Allergies:</h2>

@@ -143,6 +143,8 @@
               <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="AddrNote" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="ClinicNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="InsEst" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="BalTotal" type="s:double" />
               <s:element minOccurs="1" maxOccurs="1" name="PreferContactMethod" type="tns:ContactMethod" />
               <s:element minOccurs="0" maxOccurs="1" name="OnlinePassword" type="s:string" />
             </s:sequence>
@@ -406,6 +408,7 @@
               <s:element minOccurs="0" maxOccurs="1" name="SpecimenSource" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="ServiceId" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="ServiceName" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="MedicalOrderNum" type="s:long" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -439,10 +442,19 @@
               <s:element minOccurs="0" maxOccurs="1" name="ObsValue" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="ObsUnits" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="ObsRange" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="AbnormalFlag" type="tns:LabAbnormalFlag" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
       </s:complexType>
+      <s:simpleType name="LabAbnormalFlag">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="Below" />
+          <s:enumeration value="Normal" />
+          <s:enumeration value="Above" />
+        </s:restriction>
+      </s:simpleType>
       <s:element name="SynchLabResultsResponse">
         <s:complexType />
       </s:element>
@@ -467,6 +479,7 @@
               <s:element minOccurs="1" maxOccurs="1" name="MedicationNum" type="s:long" />
               <s:element minOccurs="0" maxOccurs="1" name="MedName" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="GenericNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="RxCui" type="s:long" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -496,7 +509,8 @@
               <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
               <s:element minOccurs="1" maxOccurs="1" name="MedicationNum" type="s:long" />
               <s:element minOccurs="0" maxOccurs="1" name="PatNote" type="s:string" />
-              <s:element minOccurs="1" maxOccurs="1" name="IsDiscontinued" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateStart" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateStop" type="s:dateTime" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -527,6 +541,7 @@
               <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
               <s:element minOccurs="0" maxOccurs="1" name="Reaction" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="StatusIsActive" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateAdverseReaction" type="s:dateTime" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -554,10 +569,26 @@
               <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
               <s:element minOccurs="1" maxOccurs="1" name="AllergyDefNum" type="s:long" />
               <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="Snomed" type="tns:SnomedAllergy" />
+              <s:element minOccurs="1" maxOccurs="1" name="MedicationNum" type="s:long" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
       </s:complexType>
+      <s:simpleType name="SnomedAllergy">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="AllergyToSubstance" />
+          <s:enumeration value="DrugAllergy" />
+          <s:enumeration value="DrugIntolerance" />
+          <s:enumeration value="FoodAllergy" />
+          <s:enumeration value="FoodIntolerance" />
+          <s:enumeration value="AdverseReactions" />
+          <s:enumeration value="AdverseReactionsToDrug" />
+          <s:enumeration value="AdverseReactionsToFood" />
+          <s:enumeration value="AdverseReactionsToSubstance" />
+        </s:restriction>
+      </s:simpleType>
       <s:element name="SynchAllergyDefsResponse">
         <s:complexType />
       </s:element>
@@ -585,6 +616,8 @@
               <s:element minOccurs="0" maxOccurs="1" name="PatNote" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="ICD9Num" type="s:long" />
               <s:element minOccurs="1" maxOccurs="1" name="ProbStatus" type="tns:ProblemStatus" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateStart" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateStop" type="s:dateTime" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -652,6 +685,63 @@
         </s:complexContent>
       </s:complexType>
       <s:element name="SynchICD9sResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchStatements">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="statementList" type="tns:ArrayOfStatementm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfStatementm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Statementm" nillable="true" type="tns:Statementm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Statementm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="StatementNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateSent" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="DocNum" type="s:long" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchStatementsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SynchDocuments">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documentList" type="tns:ArrayOfDocumentm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDocumentm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Documentm" nillable="true" type="tns:Documentm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Documentm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DocNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="RawBase64" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchDocumentsResponse">
         <s:complexType />
       </s:element>
       <s:element name="DeletePatientsRecords">
@@ -804,6 +894,18 @@
   <wsdl:message name="SynchICD9sSoapOut">
     <wsdl:part name="parameters" element="tns:SynchICD9sResponse" />
   </wsdl:message>
+  <wsdl:message name="SynchStatementsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchStatements" />
+  </wsdl:message>
+  <wsdl:message name="SynchStatementsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchStatementsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SynchDocumentsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchDocuments" />
+  </wsdl:message>
+  <wsdl:message name="SynchDocumentsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchDocumentsResponse" />
+  </wsdl:message>
   <wsdl:message name="DeletePatientsRecordsSoapIn">
     <wsdl:part name="parameters" element="tns:DeletePatientsRecords" />
   </wsdl:message>
@@ -898,6 +1000,14 @@
     <wsdl:operation name="SynchICD9s">
       <wsdl:input message="tns:SynchICD9sSoapIn" />
       <wsdl:output message="tns:SynchICD9sSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchStatements">
+      <wsdl:input message="tns:SynchStatementsSoapIn" />
+      <wsdl:output message="tns:SynchStatementsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchDocuments">
+      <wsdl:input message="tns:SynchDocumentsSoapIn" />
+      <wsdl:output message="tns:SynchDocumentsSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="DeletePatientsRecords">
       <wsdl:input message="tns:DeletePatientsRecordsSoapIn" />
@@ -1097,6 +1207,24 @@
     </wsdl:operation>
     <wsdl:operation name="SynchICD9s">
       <soap:operation soapAction="http://opendental.com/SynchICD9s" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchStatements">
+      <soap:operation soapAction="http://opendental.com/SynchStatements" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchDocuments">
+      <soap:operation soapAction="http://opendental.com/SynchDocuments" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1307,6 +1435,24 @@
     </wsdl:operation>
     <wsdl:operation name="SynchICD9s">
       <soap12:operation soapAction="http://opendental.com/SynchICD9s" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchStatements">
+      <soap12:operation soapAction="http://opendental.com/SynchStatements" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchDocuments">
+      <soap12:operation soapAction="http://opendental.com/SynchDocuments" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

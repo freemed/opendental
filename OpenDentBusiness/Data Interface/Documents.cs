@@ -461,6 +461,70 @@ namespace OpenDentBusiness {
 
 		//public static string GetFull
 
+		public static List<long> GetChangedSinceDocumentNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,eligibleForUploadPatNumList);
+			}
+			string strEligibleForUploadPatNums="";
+			DataTable table;
+			if(eligibleForUploadPatNumList.Count>0) {
+				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
+					if(i>0) {
+						strEligibleForUploadPatNums+="OR ";
+					}
+					strEligibleForUploadPatNums+="PatNum='"+eligibleForUploadPatNumList[i].ToString()+"' ";
+				}
+				string command="SELECT DocNum FROM document WHERE DateTStamp > "+POut.DateT(changedSince)+" AND ("+strEligibleForUploadPatNums+")";
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			List<long> documentnums = new List<long>(table.Rows.Count);
+			for(int i=0;i<table.Rows.Count;i++) {
+				documentnums.Add(PIn.Long(table.Rows[i]["DocNum"].ToString()));
+			}
+			return documentnums;
+		}
+
+		///<summary>Used along with GetChangedSinceDocumentNums</summary>
+		public static List<Document> GetMultDocuments(List<long> documentNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Document>>(MethodBase.GetCurrentMethod(),documentNums);
+			}
+			string strDocumentNums="";
+			DataTable table;
+			if(documentNums.Count>0) {
+				for(int i=0;i<documentNums.Count;i++) {
+					if(i>0) {
+						strDocumentNums+="OR ";
+					}
+					strDocumentNums+="DocNum='"+documentNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM document WHERE "+strDocumentNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			Document[] multDocuments=Crud.DocumentCrud.TableToList(table).ToArray();
+			List<Document> documentList=new List<Document>(multDocuments);
+			
+			foreach(Document d in documentList){
+				Patient pat=Patients.GetPat(d.PatNum);
+				string patFolder=ImageStore.GetPatientFolder(pat);
+				string filePathAndName=ImageStore.GetFilePath(Documents.GetByNum(d.DocNum),patFolder);
+				if(File.Exists(filePathAndName)) {
+					FileStream fs= new FileStream(filePathAndName,FileMode.Open,FileAccess.Read);
+					byte[] rawData = new byte[fs.Length];
+					fs.Read(rawData,0,(int)fs.Length);
+					fs.Close();
+					d.RawBase64=Convert.ToBase64String(rawData);
+				}
+			}
+			return documentList;
+		}
+
 	}	
   
 }

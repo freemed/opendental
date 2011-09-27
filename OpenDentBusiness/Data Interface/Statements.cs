@@ -210,6 +210,56 @@ namespace OpenDentBusiness{
 			return Crud.StatementCrud.SelectOne(command);
 		}
 
+		public static List<long> GetChangedSinceStatementNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,eligibleForUploadPatNumList);
+			}
+			string strEligibleForUploadPatNums="";
+			DataTable table;
+			if(eligibleForUploadPatNumList.Count>0) {
+				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
+					if(i>0) {
+						strEligibleForUploadPatNums+="OR ";
+					}
+					strEligibleForUploadPatNums+="PatNum='"+eligibleForUploadPatNumList[i].ToString()+"' ";
+				}
+				string command="SELECT StatementNum FROM statement WHERE DateTStamp > "+POut.DateT(changedSince)+" AND ("+strEligibleForUploadPatNums+")";
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			List<long> statementnums = new List<long>(table.Rows.Count);
+			for(int i=0;i<table.Rows.Count;i++) {
+				statementnums.Add(PIn.Long(table.Rows[i]["StatementNum"].ToString()));
+			}
+			return statementnums;
+		}
+
+		///<summary>Used along with GetChangedSinceStatementNums</summary>
+		public static List<Statement> GetMultStatements(List<long> statementNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Statement>>(MethodBase.GetCurrentMethod(),statementNums);
+			}
+			string strStatementNums="";
+			DataTable table;
+			if(statementNums.Count>0) {
+				for(int i=0;i<statementNums.Count;i++) {
+					if(i>0) {
+						strStatementNums+="OR ";
+					}
+					strStatementNums+="StatementNum='"+statementNums[i].ToString()+"' ";
+				}
+				string command="SELECT * FROM statement WHERE "+strStatementNums;
+				table=Db.GetTable(command);
+			}
+			else {
+				table=new DataTable();
+			}
+			Statement[] multStatements=Crud.StatementCrud.TableToList(table).ToArray();
+			List<Statement> statementList=new List<Statement>(multStatements);
+			return statementList;
+		}
 
 	}
 

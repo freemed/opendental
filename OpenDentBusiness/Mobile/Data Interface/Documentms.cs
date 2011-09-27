@@ -7,7 +7,72 @@ using System.Text;
 namespace OpenDentBusiness.Mobile{
 	///<summary></summary>
 	public class Documentms{
-		
+		#region Only used for webserver for mobile.
+
+		///<summary>Gets one Documentm from the db.</summary>
+		public static Documentm GetOne(long customerNum,long docNum) {
+			return Crud.DocumentmCrud.SelectOne(customerNum,docNum);
+		}
+		///<summary>Gets all Documentm for a single patient </summary>
+		public static List<Documentm> GetDocumentms(long customerNum,long patNum) {
+			string command=
+					"SELECT * from documentm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)
+					+" AND PatNum = "+POut.Long(patNum);
+			return Crud.DocumentmCrud.SelectMany(command);
+		}
+		#endregion
+
+		#region Used only on OD
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<long> GetChangedSinceDocumentNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+			return Documents.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
+		}
+
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<Documentm> GetMultDocumentms(List<long> documentNums) {
+			List<Document> documentList=Documents.GetMultDocuments(documentNums);
+			List<Documentm> documentmList=ConvertListToM(documentList);
+			return documentmList;
+		}
+
+		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
+		public static List<Documentm> ConvertListToM(List<Document> list) {
+			List<Documentm> retVal=new List<Documentm>();
+			for(int i=0;i<list.Count;i++) {
+				retVal.Add(Crud.DocumentmCrud.ConvertToM(list[i]));
+			}
+			return retVal;
+		}
+		#endregion
+
+		#region Used only on the Mobile webservice server for  synching.
+		///<summary>Only run on server for mobile.  Takes the list of changes from the dental office and makes updates to those items in the mobile server db.  Also, make sure to run DeletedObjects.DeleteForMobile().</summary>
+		public static void UpdateFromChangeList(List<Documentm> list,long customerNum) {
+			for(int i=0;i<list.Count;i++) {
+				list[i].CustomerNum=customerNum;
+				Documentm documentm=Crud.DocumentmCrud.SelectOne(customerNum,list[i].DocNum);
+				if(documentm==null) {//not in db
+					Crud.DocumentmCrud.Insert(list[i],true);
+				}
+				else {
+					Crud.DocumentmCrud.Update(list[i]);
+				}
+			}
+		}
+
+		///<summary>used in tandem with Full synch</summary>
+		public static void DeleteAll(long customerNum) {
+			string command= "DELETE FROM documentm WHERE CustomerNum = "+POut.Long(customerNum); ;
+			Db.NonQ(command);
+		}
+
+		///<summary>Delete all documents of a particular patient</summary>
+		public static void Delete(long customerNum,long PatNum) {
+			string command= "DELETE FROM documentm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(PatNum);
+			Db.NonQ(command);
+		}
+		#endregion
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -17,10 +82,7 @@ namespace OpenDentBusiness.Mobile{
 			return Crud.DocumentmCrud.SelectMany(command);
 		}
 
-		///<summary>Gets one Documentm from the db.</summary>
-		public static Documentm GetOne(long customerNum,long docNum){
-			return Crud.DocumentmCrud.SelectOne(customerNum,docNum);
-		}
+
 
 		///<summary></summary>
 		public static long Insert(Documentm documentm){

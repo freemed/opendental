@@ -96,7 +96,9 @@ namespace WebHostSynch {
 				Allergyms.DeleteAll(customerNum);
 				DiseaseDefms.DeleteAll(customerNum);
 				Diseasems.DeleteAll(customerNum);
-				ICD9ms.DeleteAll(customerNum);			
+				ICD9ms.DeleteAll(customerNum);
+				Statementms.DeleteAll(customerNum);
+				Documentms.DeleteAll(customerNum);
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -363,6 +365,36 @@ namespace WebHostSynch {
 						return;
 					}
 					ICD9ms.UpdateFromChangeList(icd9List,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchStatements(String RegistrationKey,List<Statementm> statementList) {
+				try {
+					Logger.Information("In SynchStatements");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Statementms.UpdateFromChangeList(statementList,customerNum);
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+			[WebMethod]
+			public void SynchDocuments(String RegistrationKey,List<Documentm> documentList) {
+				try {
+					Logger.Information("In SynchDocuments");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					Documentms.UpdateFromChangeList(documentList,customerNum);
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);

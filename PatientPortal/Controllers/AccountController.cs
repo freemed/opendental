@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Mime;
 using WebForms;
 using WebHostSynch;
 using OpenDentBusiness;
@@ -14,7 +15,6 @@ namespace PatientPortalMVC.Controllers
     public class AccountController : Controller
     {
 		private long DentalOfficeID=0;
-
 		
 		[HttpPost]
 		public ActionResult Login(LoginModel model,string returnUrl)
@@ -56,6 +56,31 @@ namespace PatientPortalMVC.Controllers
 			Session["Patient"]=null;
 			Session.Abandon();
 			return RedirectToAction("Login",new { controller="Account",action="Login",DentalOfficeID=DentalOfficeID });
+		}
+
+		public ActionResult ShowPdfFile(long? d){
+			Documentm doc=null;
+			long DocNum=0;
+			if(d!=null) {
+				DocNum=(long)d;
+			}
+			Patientm patm;
+			if(Session["Patient"]==null) {
+				return RedirectToAction("Login");
+			}
+			else {
+				patm=(Patientm)Session["Patient"];
+			}
+			if(DocNum!=0) {
+				doc=Documentms.GetOne(patm.CustomerNum,DocNum);
+			}
+			if(patm.PatNum!=doc.PatNum){//make sure that the patient does not pass the another DocNum of another patient.
+				return new EmptyResult(); //return a blank page
+			}
+			ContentDisposition cd = new ContentDisposition();
+			cd.Inline=true;//the browser will try and show the pdf inline i.e inside the browser window. If set to false it will force a download.
+			Response.AppendHeader("Content-Disposition", cd.ToString());
+			return File(Convert.FromBase64String(doc.RawBase64),"application/pdf","statement.pdf");
 		}
 
 		public ActionResult PatientInformation() {

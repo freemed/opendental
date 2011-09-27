@@ -1,22 +1,35 @@
-﻿/*
-SQLyog Community Edition- MySQL GUI v8.0 
-MySQL - 5.5.9 : Database - mobile_dev
-*********************************************************************
-*/
+﻿-- MySQL dump 10.13  Distrib 5.5.9, for Win32 (x86)
+--
+-- Host: localhost    Database: mobile_dev
+-- ------------------------------------------------------
+-- Server version	5.5.15
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`mobile_dev` /*!40100 DEFAULT CHARACTER SET utf8 */;
+--
+-- Current Database: `mobile_dev`
+--
 
-/*Table structure for table `allergydefm` */
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `mobile_dev` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `mobile_dev`;
+
+--
+-- Table structure for table `allergydefm`
+--
 
 DROP TABLE IF EXISTS `allergydefm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `allergydefm` (
   `CustomerNum` bigint(20) NOT NULL,
   `AllergyDefNum` bigint(20) NOT NULL,
@@ -28,11 +41,25 @@ CREATE TABLE `allergydefm` (
   KEY `AllergyDefNum` (`AllergyDefNum`),
   KEY `MedicationNum` (`MedicationNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `allergym` */
+--
+-- Dumping data for table `allergydefm`
+--
+
+LOCK TABLES `allergydefm` WRITE;
+/*!40000 ALTER TABLE `allergydefm` DISABLE KEYS */;
+INSERT INTO `allergydefm` VALUES (6566,1,'Penicillin',0,0),(6566,2,'Aspirin',0,0),(6566,3,'Codeine',0,0);
+/*!40000 ALTER TABLE `allergydefm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `allergym`
+--
 
 DROP TABLE IF EXISTS `allergym`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `allergym` (
   `CustomerNum` bigint(20) NOT NULL,
   `AllergyNum` bigint(20) NOT NULL,
@@ -47,11 +74,25 @@ CREATE TABLE `allergym` (
   KEY `AllergyDefNum` (`AllergyDefNum`),
   KEY `PatNum` (`PatNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `appointmentm` */
+--
+-- Dumping data for table `allergym`
+--
+
+LOCK TABLES `allergym` WRITE;
+/*!40000 ALTER TABLE `allergym` DISABLE KEYS */;
+INSERT INTO `allergym` VALUES (6566,1,1,1,'Nausea ',1,'2003-05-05'),(6566,2,2,7,'Hives ',1,'2004-03-03'),(6566,3,1,7,'Wheezing ',1,'0001-01-01'),(6566,5,3,7,'Wheezing ',1,'2003-05-05'),(6566,6,2,1,'Hives ',1,'2004-03-03'),(6566,7,1,10,'Wheezing',1,'2003-05-05'),(6566,8,2,10,'Hives',1,'2004-03-03'),(6566,9,1,11,'Wheezing',1,'2003-05-05'),(6566,10,2,11,'Hives',1,'2004-03-03'),(6566,11,1,12,'Wheezing',1,'2003-05-05'),(6566,12,1,13,'Nausea',1,'2003-05-05'),(6566,13,2,13,'Hives',1,'2003-05-05'),(6566,14,3,13,'Wheezing',1,'2003-05-05'),(6566,15,1,14,'Nausea',1,'2003-05-05'),(6566,16,2,14,'Nausea',1,'2003-05-05'),(6566,17,3,14,'Wheezing',1,'2003-05-05'),(6566,18,1,15,'Nausea',1,'2003-05-05'),(6566,19,2,8,'Hives',1,'2003-05-05'),(6566,20,1,9,'Wheezing',1,'2003-05-05');
+/*!40000 ALTER TABLE `allergym` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `appointmentm`
+--
 
 DROP TABLE IF EXISTS `appointmentm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `appointmentm` (
   `CustomerNum` bigint(20) NOT NULL,
   `AptNum` bigint(20) NOT NULL,
@@ -71,11 +112,25 @@ CREATE TABLE `appointmentm` (
   PRIMARY KEY (`CustomerNum`,`AptNum`),
   KEY `PatNum` (`PatNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `diseasedefm` */
+--
+-- Dumping data for table `appointmentm`
+--
+
+LOCK TABLES `appointmentm` WRITE;
+/*!40000 ALTER TABLE `appointmentm` DISABLE KEYS */;
+INSERT INTO `appointmentm` VALUES (6566,1,7,1,'//XXXXXX////////////////////',19,4,'Pt. paid for in advance!',1,1,'2011-02-22 12:30:00',0,'Flo, Ex',0,1),(6566,5,8,1,'//XX//',19,4,'Pain',4,0,'2011-02-16 12:20:00',0,'Ex',0,0),(6566,6,9,1,'////XXXX//////',19,3,'may be late',1,2,'2011-02-13 11:10:00',0,'Pano',0,0),(6566,7,10,1,'//////////////////////////////////////////',21,2,'need to call him',2,0,'2011-02-15 09:20:00',0,'2-BWX',0,0),(6566,8,11,1,'//XXXXXX//',21,4,'Moved from last week.',1,1,'2011-02-14 11:10:00',0,'Flo, Ex, Pro',0,0),(6566,9,12,1,'//XXXXXX//',19,4,'In pain',2,0,'2011-02-13 16:00:00',0,'Flo, Ex, Pro',0,0),(6566,11,13,1,'//XX//',19,2,'Review TP',1,0,'2011-02-12 09:10:00',0,'4-BWX',0,0),(6566,17,14,1,'//XXXXXX//',19,4,'Collect payment before sending back.',2,0,'2011-02-12 11:00:00',0,'Flo, Ex, Pro',0,0),(6566,18,15,1,'//XXXXXX//',19,4,'In pain',2,0,'2011-02-17 08:10:00',0,'Flo, Ex, Pro',0,0),(6566,19,16,1,'//XX//////',0,3,'In pain',5,0,'2011-02-12 15:00:00',0,'Ex',0,0),(6566,20,18,1,'//XXXXXX//////',21,3,'Running late',5,5,'2011-02-13 09:30:00',0,'2-BWX',0,1),(6566,21,19,1,'//XXXXXX//',19,4,'Check labcase',2,0,'2011-02-16 10:40:00',0,'Flo, Ex, Pro',0,0),(6566,22,20,1,'//XX',19,4,'In pain',1,0,'2011-02-13 09:00:00',0,'Pro',0,0),(6566,23,10,1,'//XX//',19,4,'Start early',1,0,'2011-02-16 14:50:00',0,'Pro',0,0),(6566,24,16,5,'//XXXXXX//',19,3,'Moved from last month',1,0,'2011-02-13 13:00:00',0,'Flo, Ex, Pro',0,0),(6566,25,15,1,'//XX//',19,4,'added 20 minutes for discussion',2,0,'2011-02-18 12:50:00',0,'Pano',0,0),(6566,26,11,1,'//XX////',21,4,'crown fell off',1,0,'2011-02-14 09:30:00',0,'',0,0),(6566,27,13,1,'//XXXXXX//',19,4,'discuss finances',2,0,'2011-02-14 16:00:00',0,'Flo, Ex, Pro',0,0),(6566,28,14,1,'//XX//',19,4,'pt has braces',1,0,'2011-02-15 14:00:00',0,'4-BWX',0,0),(6566,655,17,1,'//XX//////',20,4,'Moved from last month',1,0,'2011-02-17 09:10:00',1,'4-BWX',0,0),(6566,656,7,1,'//XX//',19,5,'',1,0,'2011-06-15 13:20:00',0,'2-BWX',0,0);
+/*!40000 ALTER TABLE `appointmentm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `diseasedefm`
+--
 
 DROP TABLE IF EXISTS `diseasedefm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diseasedefm` (
   `CustomerNum` bigint(20) NOT NULL,
   `DiseaseDefNum` bigint(20) NOT NULL,
@@ -84,11 +139,25 @@ CREATE TABLE `diseasedefm` (
   KEY `CustomerNum` (`CustomerNum`),
   KEY `DiseaseDefNum` (`DiseaseDefNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `diseasem` */
+--
+-- Dumping data for table `diseasedefm`
+--
+
+LOCK TABLES `diseasedefm` WRITE;
+/*!40000 ALTER TABLE `diseasedefm` DISABLE KEYS */;
+INSERT INTO `diseasedefm` VALUES (6566,1,'prob1'),(6566,2,'problems galore');
+/*!40000 ALTER TABLE `diseasedefm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `diseasem`
+--
 
 DROP TABLE IF EXISTS `diseasem`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diseasem` (
   `CustomerNum` bigint(20) NOT NULL,
   `DiseaseNum` bigint(20) NOT NULL,
@@ -106,11 +175,52 @@ CREATE TABLE `diseasem` (
   KEY `DiseaseDefNum` (`DiseaseDefNum`),
   KEY `ICD9Num` (`ICD9Num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `icd9m` */
+--
+-- Dumping data for table `diseasem`
+--
+
+LOCK TABLES `diseasem` WRITE;
+/*!40000 ALTER TABLE `diseasem` DISABLE KEYS */;
+INSERT INTO `diseasem` VALUES (6566,1,7,1,'',0,0,'0001-01-01','0001-01-01'),(6566,2,7,0,'',147,0,'2011-01-09','2011-06-09'),(6566,3,7,1,'',2412,0,'0001-01-01','0001-01-01'),(6566,4,7,0,'',14765,0,'0001-01-01','0001-01-01'),(6566,5,7,2,'',0,0,'0001-01-01','0001-01-01'),(6566,6,7,0,'',14608,0,'0001-01-01','0001-01-01');
+/*!40000 ALTER TABLE `diseasem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `documentm`
+--
+
+DROP TABLE IF EXISTS `documentm`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `documentm` (
+  `CustomerNum` bigint(20) NOT NULL,
+  `DocNum` bigint(20) NOT NULL,
+  `PatNum` bigint(20) NOT NULL,
+  `RawBase64` mediumtext NOT NULL,
+  KEY `CustomerNum` (`CustomerNum`),
+  KEY `DocNum` (`DocNum`),
+  KEY `PatNum` (`PatNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `documentm`
+--
+
+LOCK TABLES `documentm` WRITE;
+/*!40000 ALTER TABLE `documentm` DISABLE KEYS */;
+/*!40000 ALTER TABLE `documentm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `icd9m`
+--
 
 DROP TABLE IF EXISTS `icd9m`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `icd9m` (
   `CustomerNum` bigint(20) NOT NULL,
   `ICD9Num` bigint(20) NOT NULL,
@@ -120,11 +230,25 @@ CREATE TABLE `icd9m` (
   KEY `CustomerNum` (`CustomerNum`),
   KEY `ICD9Num` (`ICD9Num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `labpanelm` */
+--
+-- Dumping data for table `icd9m`
+--
+
+LOCK TABLES `icd9m` WRITE;
+/*!40000 ALTER TABLE `icd9m` DISABLE KEYS */;
+INSERT INTO `icd9m` VALUES (6566,147,'011.21','TUBERCULOSIS OF LUNG WITH CAVITATION BACTERIOLOGIC'),(6566,2412,'236.7','NEOPLASM OF UNCERTAIN BEHAVIOR OF BLADDER'),(6566,14608,'V01.5','CONTACT WITH OR EXPOSURE TO RABIES'),(6566,14765,'V11.2','PERSONAL HISTORY OF NEUROSIS'),(6567,14765,'V11.2','PERSONAL HISTORY OF NEUROSIS2');
+/*!40000 ALTER TABLE `icd9m` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `labpanelm`
+--
 
 DROP TABLE IF EXISTS `labpanelm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `labpanelm` (
   `CustomerNum` bigint(20) NOT NULL,
   `LabPanelNum` bigint(20) NOT NULL,
@@ -141,11 +265,25 @@ CREATE TABLE `labpanelm` (
   KEY `PatNum` (`PatNum`),
   KEY `MedicalOrderNum` (`MedicalOrderNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `labresultm` */
+--
+-- Dumping data for table `labpanelm`
+--
+
+LOCK TABLES `labpanelm` WRITE;
+/*!40000 ALTER TABLE `labpanelm` DISABLE KEYS */;
+INSERT INTO `labpanelm` VALUES (6566,1,7,'lab name 1 address1','specimen condition1','0958&Location 1&HL70070','serviceloinc1','servicename1',0),(6566,2,7,'lab2','asdsad','0052&location x&HL70070','service2','loinc service2',0);
+/*!40000 ALTER TABLE `labpanelm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `labresultm`
+--
 
 DROP TABLE IF EXISTS `labresultm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `labresultm` (
   `CustomerNum` bigint(20) NOT NULL,
   `LabResultNum` bigint(20) NOT NULL,
@@ -162,11 +300,25 @@ CREATE TABLE `labresultm` (
   KEY `LabResultNum` (`LabResultNum`),
   KEY `LabPanelNum` (`LabPanelNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `medicationm` */
+--
+-- Dumping data for table `labresultm`
+--
+
+LOCK TABLES `labresultm` WRITE;
+/*!40000 ALTER TABLE `labresultm` DISABLE KEYS */;
+INSERT INTO `labresultm` VALUES (6566,1,1,'2011-06-09 16:41:59','Test name1','Loinc1','34','cm3','50-45',0),(6566,2,2,'2011-06-10 16:22:57','result 3 ','loinc3','87','nautical miles','50 miles',0),(6566,3,2,'2011-06-10 16:26:12','dsds','loin2','436','657','47',0);
+/*!40000 ALTER TABLE `labresultm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `medicationm`
+--
 
 DROP TABLE IF EXISTS `medicationm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `medicationm` (
   `CustomerNum` bigint(20) NOT NULL,
   `MedicationNum` bigint(20) NOT NULL,
@@ -179,11 +331,25 @@ CREATE TABLE `medicationm` (
   KEY `GenericNum` (`GenericNum`),
   KEY `RxCui` (`RxCui`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `medicationpatm` */
+--
+-- Dumping data for table `medicationm`
+--
+
+LOCK TABLES `medicationm` WRITE;
+/*!40000 ALTER TABLE `medicationm` DISABLE KEYS */;
+INSERT INTO `medicationm` VALUES (6566,1,'drug1',1,0),(6566,2,'drug2',2,0),(6566,3,'drug1 brand1',1,0),(6566,4,'drug3',4,0),(6566,5,'drug4',5,0);
+/*!40000 ALTER TABLE `medicationm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `medicationpatm`
+--
 
 DROP TABLE IF EXISTS `medicationpatm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `medicationpatm` (
   `CustomerNum` bigint(20) NOT NULL,
   `MedicationPatNum` bigint(20) NOT NULL,
@@ -199,11 +365,25 @@ CREATE TABLE `medicationpatm` (
   KEY `PatNum` (`PatNum`),
   KEY `MedicationNum` (`MedicationNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `patientm` */
+--
+-- Dumping data for table `medicationpatm`
+--
+
+LOCK TABLES `medicationpatm` WRITE;
+/*!40000 ALTER TABLE `medicationpatm` DISABLE KEYS */;
+INSERT INTO `medicationpatm` VALUES (6566,1,7,1,'drug1 med1',0,'0001-01-01','0001-01-01'),(6566,2,7,2,'med2',0,'2011-06-03','2011-07-09'),(6566,3,7,2,'discont',0,'2011-05-09','0001-01-01'),(6566,4,7,4,'refill 4 etc.',0,'0001-01-01','0001-01-01'),(6566,5,7,5,'',0,'2011-01-09','2011-06-09');
+/*!40000 ALTER TABLE `medicationpatm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `patientm`
+--
 
 DROP TABLE IF EXISTS `patientm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `patientm` (
   `CustomerNum` bigint(20) NOT NULL,
   `PatNum` bigint(20) NOT NULL,
@@ -229,15 +409,31 @@ CREATE TABLE `patientm` (
   `ClinicNum` bigint(20) NOT NULL,
   `PreferContactMethod` tinyint(4) NOT NULL,
   `OnlinePassword` varchar(255) NOT NULL,
+  `InsEst` double NOT NULL,
+  `BalTotal` double NOT NULL,
   PRIMARY KEY (`CustomerNum`,`PatNum`),
   KEY `Guarantor` (`Guarantor`),
   KEY `ClinicNum` (`ClinicNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `pharmacym` */
+--
+-- Dumping data for table `patientm`
+--
+
+LOCK TABLES `patientm` WRITE;
+/*!40000 ALTER TABLE `patientm` DISABLE KEYS */;
+INSERT INTO `patientm` VALUES (6566,1,'Jonathan','White','','',0,0,0,'1975-03-23','','','','','','','','',1,'','',0,0,'dE!2N7q_3',0,0),(6566,7,'Mathew','Dennis','','',0,0,1,'1975-04-04','W','Wet','Ewt','AB','we','416-268-5212','416-268-5212','416-268-5212',7,'dennis_mathew2000@yahoo.com','',0,0,'dE!2N7q_3',157,-100),(6566,8,'Spander','Jason','M','Jay',0,0,1,'1968-03-10','31 Drewry Av','','','','1256','503-363-7246','503-363-1246','503-585-6421',9,'jspander@gmail.com','',0,2,'dE!2N7q_3',0,0),(6566,9,'Adams','Mike','R','',0,0,0,'1985-04-17','','','','','','503-363-7246','503-363-1246','503-585-6421',10,'mike34@yahoo.com','',0,0,'dE!2N7q_3',0,0),(6566,10,'Williams','John','A','',0,0,0,'1974-02-05','','','','','','503-363-7246','503-363-1246','503-585-6421',11,'wjohn@hotmail.com','',0,0,'dE!2N7q_3',0,0),(6566,11,'Allen','Sarah','S','',0,1,0,'1990-11-23','','','','','','503-363-7246','503-363-1246','503-585-6421',13,'scarpenter@rogers.com','',0,0,'dE!2N7q_3',0,0),(6566,12,'Roberts','Barbara','','Barb',0,1,3,'1950-04-07','','','','','','503-363-7246','503-363-1246','503-585-6421',18,'barb_2000@yahoo.com','',0,0,'dE!2N7q_3',0,0),(6566,13,'Shulfer','Mary','','',0,1,0,'1964-06-03','','','','','','503-363-7246','503-363-1246','503-585-6421',19,'shulferm@hotmail.com','',0,0,'dE!2N7q_3',0,0),(6566,14,'Stump','Roger','','',0,0,0,'1961-11-04','','','','','','503-363-7246','503-363-1246','503-585-6421',17,'rogerstump53@gmail.com','',0,0,'dE!2N7q_3',0,0),(6566,15,'White','Rose','B','',0,1,0,'1981-01-20','','','','','','503-363-7246','503-363-1246','503-585-6421',15,'rose.white@yahoo.com','',0,0,'dE!2N7q_3',0,0),(6566,16,'Stump','Anna','B','',0,1,0,'1983-10-16','','','','','','503-363-7246','503-363-1246','503-585-6421',16,'anna4562@gmail.com','',0,0,'dE!2N7q_3',0,0),(6566,17,'Anderson','Bill','','',0,0,0,'1976-05-02','','','','','','403-545-4464','403-554-4384','403-439-8023',20,'anderbil@tech.com','',0,0,'dE!2N7q_3',0,0),(6566,18,'Abbot','Bejamin','','',0,0,0,'1945-04-04','','','','','','403-545-4464','403-554-4384','403-439-8023',20,'','',0,0,'dE!2N7q_3',0,0),(6566,19,'Andrews','Patrick','','',0,0,0,'1940-08-02','','','','','','403-545-4464','403-554-4384','403-439-8023',21,'','',0,0,'dE!2N7q_3',0,0),(6566,20,'Bailey','Kevin','','',0,0,0,'1965-12-17','','','','','','403-545-4464','403-554-4384','403-439-8023',22,'','',0,0,'dE!2N7q_3',0,0);
+/*!40000 ALTER TABLE `patientm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pharmacym`
+--
 
 DROP TABLE IF EXISTS `pharmacym`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pharmacym` (
   `CustomerNum` bigint(20) NOT NULL,
   `PharmacyNum` bigint(20) NOT NULL,
@@ -254,21 +450,48 @@ CREATE TABLE `pharmacym` (
   KEY `CustomerNum` (`CustomerNum`),
   KEY `PharmacyNum` (`PharmacyNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `preference` */
+--
+-- Dumping data for table `pharmacym`
+--
+
+LOCK TABLES `pharmacym` WRITE;
+/*!40000 ALTER TABLE `pharmacym` DISABLE KEYS */;
+INSERT INTO `pharmacym` VALUES (6566,1,'pharmacy1','(444)444-4444','(666)666-6666','blah blah street','blah blah street','asdddddddddddd','','','note2... note2... note2... note2... '),(6566,2,'Pharmacy 2','(444)444-4444','(777)777-7777','ddddddddddd','hhhhhhhhhhh','hhhhhhhhhhhhhhhhhhhh','','','note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... note2... not');
+/*!40000 ALTER TABLE `pharmacym` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `preference`
+--
 
 DROP TABLE IF EXISTS `preference`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `preference` (
   `PrefmName` varchar(255) NOT NULL,
   `ValueString` text NOT NULL,
   PRIMARY KEY (`PrefmName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `providerm` */
+--
+-- Dumping data for table `preference`
+--
+
+LOCK TABLES `preference` WRITE;
+/*!40000 ALTER TABLE `preference` DISABLE KEYS */;
+/*!40000 ALTER TABLE `preference` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `providerm`
+--
 
 DROP TABLE IF EXISTS `providerm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `providerm` (
   `CustomerNum` bigint(20) NOT NULL,
   `ProvNum` bigint(20) NOT NULL,
@@ -279,11 +502,25 @@ CREATE TABLE `providerm` (
   KEY `CustomerNum` (`CustomerNum`),
   KEY `ProvNum` (`ProvNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `rxpatm` */
+--
+-- Dumping data for table `providerm`
+--
+
+LOCK TABLES `providerm` WRITE;
+/*!40000 ALTER TABLE `providerm` DISABLE KEYS */;
+INSERT INTO `providerm` VALUES (6566,1,'DOC',0,-4602138),(6566,2,'HYG',1,-17956);
+/*!40000 ALTER TABLE `providerm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rxpatm`
+--
 
 DROP TABLE IF EXISTS `rxpatm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rxpatm` (
   `CustomerNum` bigint(20) NOT NULL,
   `RxNum` bigint(20) NOT NULL,
@@ -298,11 +535,54 @@ CREATE TABLE `rxpatm` (
   KEY `PatNum` (`PatNum`),
   KEY `ProvNum` (`ProvNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `userm` */
+--
+-- Dumping data for table `rxpatm`
+--
+
+LOCK TABLES `rxpatm` WRITE;
+/*!40000 ALTER TABLE `rxpatm` DISABLE KEYS */;
+INSERT INTO `rxpatm` VALUES (6566,1,9,'2011-02-03','Penicillin VK','','40','3',1),(6566,2,9,'2011-02-03','Vicodin','','16 (sixteen)','12',1),(6566,6,9,'2011-02-03','Peridex','','1','12',1),(6566,7,10,'2011-02-03','Vicodin','','16 (sixteen)','12',1),(6566,8,10,'2011-02-03','Peridex','','1','12',1),(6566,9,11,'2011-02-03','Vicodin','','16 (sixteen)','12',1),(6566,10,12,'2011-02-03','Peridex','','1','12',1),(6566,11,13,'2011-02-03','Vicodin','','20 (twenty)','12',1),(6566,12,14,'2011-02-03','Penicillin VK','','20','12',1),(6566,13,15,'2011-02-03','Vicodin','','16 (sixteen)','12',1),(6566,14,16,'2011-02-03','Penicillin VK','','18','12',1),(6566,15,17,'2011-02-03','Penicillin VK','','20','12',1),(6566,16,18,'2011-02-03','Vicodin','','16 (sixteen)','12',1),(6566,17,19,'2011-02-03','Penicillin VK','','10','12',1);
+/*!40000 ALTER TABLE `rxpatm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `statementm`
+--
+
+DROP TABLE IF EXISTS `statementm`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `statementm` (
+  `CustomerNum` bigint(20) NOT NULL,
+  `StatementNum` bigint(20) NOT NULL,
+  `PatNum` bigint(20) NOT NULL,
+  `DateSent` date NOT NULL DEFAULT '0001-01-01',
+  `DocNum` bigint(20) NOT NULL,
+  KEY `CustomerNum` (`CustomerNum`),
+  KEY `StatementNum` (`StatementNum`),
+  KEY `PatNum` (`PatNum`),
+  KEY `DocNum` (`DocNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `statementm`
+--
+
+LOCK TABLES `statementm` WRITE;
+/*!40000 ALTER TABLE `statementm` DISABLE KEYS */;
+/*!40000 ALTER TABLE `statementm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userm`
+--
 
 DROP TABLE IF EXISTS `userm`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `userm` (
   `CustomerNum` bigint(20) NOT NULL,
   `UsermNum` bigint(20) NOT NULL,
@@ -310,9 +590,29 @@ CREATE TABLE `userm` (
   `Password` varchar(255) NOT NULL,
   PRIMARY KEY (`CustomerNum`,`UsermNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userm`
+--
+
+LOCK TABLES `userm` WRITE;
+/*!40000 ALTER TABLE `userm` DISABLE KEYS */;
+INSERT INTO `userm` VALUES (6566,1,'','jZsKTk7wXKA7vBEtgQ5U0Q==');
+/*!40000 ALTER TABLE `userm` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2011-09-22 16:25:31
+
 
 
 /* to enable registrationkey related stuff use below statements*/

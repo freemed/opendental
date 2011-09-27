@@ -59,6 +59,7 @@ namespace OpenDentBusiness.Crud{
 				statement.Intermingled = PIn.Bool  (table.Rows[i]["Intermingled"].ToString());
 				statement.IsSent       = PIn.Bool  (table.Rows[i]["IsSent"].ToString());
 				statement.DocNum       = PIn.Long  (table.Rows[i]["DocNum"].ToString());
+				statement.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(statement);
 			}
 			return retVal;
@@ -116,6 +117,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (statement.Intermingled)+","
 				+    POut.Bool  (statement.IsSent)+","
 				+    POut.Long  (statement.DocNum)+")";
+				//DateTStamp can only be set by MySQL
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -140,6 +142,7 @@ namespace OpenDentBusiness.Crud{
 				+"Intermingled =  "+POut.Bool  (statement.Intermingled)+", "
 				+"IsSent       =  "+POut.Bool  (statement.IsSent)+", "
 				+"DocNum       =  "+POut.Long  (statement.DocNum)+" "
+				//DateTStamp can only be set by MySQL
 				+"WHERE StatementNum = "+POut.Long(statement.StatementNum);
 			Db.NonQ(command);
 		}
@@ -195,6 +198,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="DocNum = "+POut.Long(statement.DocNum)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

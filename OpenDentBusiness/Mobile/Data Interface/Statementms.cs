@@ -7,7 +7,67 @@ using System.Text;
 namespace OpenDentBusiness.Mobile{
 	///<summary></summary>
 	public class Statementms{
-		
+		#region Only used for webserver for mobile.
+		///<summary>Gets all Statementm for a single patient </summary>
+		public static List<Statementm> GetStatementms(long customerNum,long patNum) {
+			string command=
+					"SELECT * from statementm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)
+					+" AND PatNum = "+POut.Long(patNum);
+			return Crud.StatementmCrud.SelectMany(command);
+		}
+		#endregion
+
+		#region Used only on OD
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<long> GetChangedSinceStatementNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+			return Statements.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList);
+		}
+
+		///<summary>The values returned are sent to the webserver.</summary>
+		public static List<Statementm> GetMultStatementms(List<long> statementNums) {
+			List<Statement> statementList=Statements.GetMultStatements(statementNums);
+			List<Statementm> statementmList=ConvertListToM(statementList);
+			return statementmList;
+		}
+
+		///<summary>First use GetChangedSince.  Then, use this to convert the list a list of 'm' objects.</summary>
+		public static List<Statementm> ConvertListToM(List<Statement> list) {
+			List<Statementm> retVal=new List<Statementm>();
+			for(int i=0;i<list.Count;i++) {
+				retVal.Add(Crud.StatementmCrud.ConvertToM(list[i]));
+			}
+			return retVal;
+		}
+		#endregion
+
+		#region Used only on the Mobile webservice server for  synching.
+		///<summary>Only run on server for mobile.  Takes the list of changes from the dental office and makes updates to those items in the mobile server db.  Also, make sure to run DeletedObjects.DeleteForMobile().</summary>
+		public static void UpdateFromChangeList(List<Statementm> list,long customerNum) {
+			for(int i=0;i<list.Count;i++) {
+				list[i].CustomerNum=customerNum;
+				Statementm statementm=Crud.StatementmCrud.SelectOne(customerNum,list[i].StatementNum);
+				if(statementm==null) {//not in db
+					Crud.StatementmCrud.Insert(list[i],true);
+				}
+				else {
+					Crud.StatementmCrud.Update(list[i]);
+				}
+			}
+		}
+
+		///<summary>used in tandem with Full synch</summary>
+		public static void DeleteAll(long customerNum) {
+			string command= "DELETE FROM statementm WHERE CustomerNum = "+POut.Long(customerNum); ;
+			Db.NonQ(command);
+		}
+
+		///<summary>Delete all statements of a particular patient</summary>
+		public static void Delete(long customerNum,long PatNum) {
+			string command= "DELETE FROM statementm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(PatNum);
+			Db.NonQ(command);
+		}
+		#endregion
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

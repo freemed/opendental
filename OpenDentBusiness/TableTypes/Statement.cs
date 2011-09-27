@@ -33,7 +33,10 @@ namespace OpenDentBusiness{
 		public bool IsSent;
 		/// <summary>FK to document.DocNum when a pdf has been archived.</summary>
 		public long DocNum;
-		
+		/// <summary>Date/time last altered.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
+
 		public Statement Copy(){
 			return (Statement)this.MemberwiseClone();
 		}	

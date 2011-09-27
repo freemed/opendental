@@ -36,6 +36,8 @@ namespace OpenDental {
 			disease,
 			diseasedef,
 			icd9,
+			statement,
+			document,
 			patientdel
 		}
 
@@ -245,11 +247,14 @@ namespace OpenDental {
 				List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 				List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
+				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList);
+				List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
 				int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
+							+statementNumList.Count+documentNumList.Count
 							+dO.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
@@ -271,6 +276,8 @@ namespace OpenDental {
 				SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,ref FormP);
 				SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
 				SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
+				SynchGeneric(statementNumList,SynchEntity.statement,ref FormP);
+				SynchGeneric(documentNumList,SynchEntity.document,ref FormP);
 				if(synchDelPat) {
 					SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
 				}
@@ -353,6 +360,14 @@ namespace OpenDental {
 						case SynchEntity.icd9:
 							List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
 							mb.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
+						break;
+						case SynchEntity.statement:
+						List<Statementm> ChangedStatementList=Statementms.GetMultStatementms(BlockPKNumList);
+						mb.SynchStatements(PrefC.GetString(PrefName.RegistrationKey),ChangedStatementList.ToArray());
+						break;
+						case SynchEntity.document:
+						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList);
+						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
 						case SynchEntity.patientdel:
 						mb.DeletePatientsRecords(PrefC.GetString(PrefName.RegistrationKey),BlockPKNumList.ToArray());
