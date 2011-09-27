@@ -160,7 +160,7 @@ namespace OpenDentBusiness{
 		public SmokingStatus SmokeStatus;
 		///<summary>Enum:ContactMethod  Used for EHR.</summary>
 		public ContactMethod PreferContactConfidential;
-		///<summary></summary>
+		///<summary>FK to patient.PatNum.  If this is the same as PatNum, then this is a SuperHead.  If zero, then not part of a superfamily.  Synched for entire family.  If family is part of a superfamily, then the guarantor for this family will show in the superfamily list in the Family module for anyone else who is in the superfamily.  Only a guarantor can be a superfamily head.</summary>
 		public long SuperFamily;
 
 

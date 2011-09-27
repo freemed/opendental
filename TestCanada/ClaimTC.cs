@@ -441,10 +441,9 @@ namespace TestCanada {
 		public static string Run(int scriptNum,string responseExpected,string responseTypeExpected,Claim claim,bool showForms) {
 			string retVal="";
 			ClaimSendQueueItem queueItem=Claims.GetQueueList(claim.ClaimNum,claim.ClinicNum)[0];
-			string warnings;
-			string missingData=Eclaims.GetMissingData(queueItem,out warnings);
-			if(missingData!="") {
-				return "Cannot send claim until missing data is fixed:\r\n"+missingData+"\r\n";
+			Eclaims.GetMissingData(queueItem);//,out warnings);
+			if(queueItem.MissingData!="") {
+				return "Cannot send claim until missing data is fixed:\r\n"+queueItem.MissingData+"\r\n";
 			}
 #if DEBUG
 			Canadian.testNumber=scriptNum;
