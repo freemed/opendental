@@ -1440,6 +1440,21 @@ namespace OpenDentBusiness {
 			return PIn.Int(Db.GetCount(command));
 		}
 
+		///<summary>Gets a list of procedures for </summary>
+		public static DataTable GetReferred(DateTime dateFrom, DateTime dateTo, bool unfinished) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,unfinished);
+			}
+			string command=
+				"SELECT  FROM procedurelog p "
+				+"JOIN refattach r"
+				+"ON p.ProcNum=r.ProcNum "
+				+"WHERE r.DateProcComplete!='01-01-0001' "
+				+"AND r.DateReferredOut>="+POut.Date(dateFrom)+" "
+				+"AND r.DateReferredOut<="+POut.Date(dateTo);
+			return Db.GetTable(command);
+		}
+
 	}
 
 	/*================================================================================================================
