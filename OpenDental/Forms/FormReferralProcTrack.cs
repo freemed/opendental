@@ -64,7 +64,7 @@ namespace OpenDental {
 				row.Cells.Add(procCode.ProcCode);
 				row.Cells.Add(Patients.GetPat(PIn.Long(Table.Rows[i]["PatNum"].ToString())).GetNameLF());
 				row.Cells.Add(Table.Rows[i]["LName"].ToString()+", "+Table.Rows[i]["FName"].ToString()+" "+Table.Rows[i]["MName"].ToString());
-				row.Cells.Add(procCode.Descript);
+				row.Cells.Add(ProcedureCodes.GetLaymanTerm(PIn.Long(Table.Rows[i]["CodeNum"].ToString())));
 				date=PIn.Date(Table.Rows[i]["RefDate"].ToString());
 				if(date.Year<1880) {
 					row.Cells.Add("");
