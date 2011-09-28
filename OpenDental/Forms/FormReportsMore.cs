@@ -96,7 +96,7 @@ namespace OpenDental {
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(312,259);
+			this.label1.Location = new System.Drawing.Point(312,273);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(118,18);
 			this.label1.TabIndex = 2;
@@ -151,7 +151,7 @@ namespace OpenDental {
 			// labelArizonaPrimaryCare
 			// 
 			this.labelArizonaPrimaryCare.AutoSize = true;
-			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,319);
+			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,333);
 			this.labelArizonaPrimaryCare.Name = "labelArizonaPrimaryCare";
 			this.labelArizonaPrimaryCare.Size = new System.Drawing.Size(104,13);
 			this.labelArizonaPrimaryCare.TabIndex = 20;
@@ -163,7 +163,7 @@ namespace OpenDental {
 			this.listArizonaPrimaryCare.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listArizonaPrimaryCare.FormattingEnabled = true;
 			this.listArizonaPrimaryCare.ItemHeight = 15;
-			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,337);
+			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,351);
 			this.listArizonaPrimaryCare.Name = "listArizonaPrimaryCare";
 			this.listArizonaPrimaryCare.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listArizonaPrimaryCare.Size = new System.Drawing.Size(204,34);
@@ -243,7 +243,7 @@ namespace OpenDental {
 			this.listPublicHealth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listPublicHealth.FormattingEnabled = true;
 			this.listPublicHealth.ItemHeight = 15;
-			this.listPublicHealth.Location = new System.Drawing.Point(315,280);
+			this.listPublicHealth.Location = new System.Drawing.Point(315,294);
 			this.listPublicHealth.Name = "listPublicHealth";
 			this.listPublicHealth.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listPublicHealth.Size = new System.Drawing.Size(204,34);
@@ -258,7 +258,7 @@ namespace OpenDental {
 			this.listLists.Location = new System.Drawing.Point(315,87);
 			this.listLists.Name = "listLists";
 			this.listLists.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listLists.Size = new System.Drawing.Size(204,169);
+			this.listLists.Size = new System.Drawing.Size(204,184);
 			this.listLists.TabIndex = 9;
 			this.listLists.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listLists_MouseDown);
 			// 
@@ -316,7 +316,7 @@ namespace OpenDental {
 			// setupToolStripMenuItem
 			// 
 			this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
-			this.setupToolStripMenuItem.Size = new System.Drawing.Size(49,20);
+			this.setupToolStripMenuItem.Size = new System.Drawing.Size(47,20);
 			this.setupToolStripMenuItem.Text = "Setup";
 			this.setupToolStripMenuItem.Click += new System.EventHandler(this.setupToolStripMenuItem_Click);
 			// 
@@ -419,6 +419,7 @@ namespace OpenDental {
 				Lan.g(this,"Procedure Codes"),
 				Lan.g(this,"Referrals - Raw"),
 				Lan.g(this,"Referral Analysis"),
+				Lan.g(this,"Referred Proc Tracking"),
 				Lan.g(this,"Treatment Finder")
 				//Lan.g(this,"Treatment Plan Manager")//js too buggy
 			});
@@ -702,12 +703,18 @@ namespace OpenDental {
 					FormRA.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referral Analysis");
 					break;
-				case 10://Treatment Finder
+				case 10://Referred Proc Tracking
+					FormReferralProcTrack FormRP=new FormReferralProcTrack();
+					FormRP.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"ReferredProcTracking");
+					Close();
+					break;
+				case 11://Treatment Finder
 					RpModalSelection=ReportModalSelection.TreatmentFinder;
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Finder");
 					Close();
 					break;
-				//case 11://Treatment Plan Manager
+				//case 12://Treatment Plan Manager
 				//  FormTxPlanManager FormTM=new FormTxPlanManager();
 				//  FormTM.ShowDialog();
 				//  SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Plan Manager");

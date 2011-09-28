@@ -213,6 +213,9 @@ namespace OpenDental{
 		private TextBox textDrugNDC;
 		private Label label10;
 		private TextBox textDrugQty;
+		private Label label13;
+		private TextBox textReferral;
+		private UI.Button butReferral;
 		private List<InsSub> SubList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -411,6 +414,9 @@ namespace OpenDental{
 			this.comboPrognosis = new System.Windows.Forms.ComboBox();
 			this.labelPrognosis = new System.Windows.Forms.Label();
 			this.comboProcStatus = new System.Windows.Forms.ComboBox();
+			this.label13 = new System.Windows.Forms.Label();
+			this.textReferral = new System.Windows.Forms.TextBox();
+			this.butReferral = new OpenDental.UI.Button();
 			this.groupQuadrant.SuspendLayout();
 			this.groupArch.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
@@ -1539,7 +1545,7 @@ namespace OpenDental{
 			this.groupProsth.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupProsth.Location = new System.Drawing.Point(15,299);
 			this.groupProsth.Name = "groupProsth";
-			this.groupProsth.Size = new System.Drawing.Size(275,80);
+			this.groupProsth.Size = new System.Drawing.Size(269,80);
 			this.groupProsth.TabIndex = 7;
 			this.groupProsth.TabStop = false;
 			this.groupProsth.Text = "Prosthesis Replacement";
@@ -1624,7 +1630,7 @@ namespace OpenDental{
 			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeB);
 			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeA);
 			this.groupCanadianProcType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupCanadianProcType.Location = new System.Drawing.Point(96,300);
+			this.groupCanadianProcType.Location = new System.Drawing.Point(396,300);
 			this.groupCanadianProcType.Name = "groupCanadianProcType";
 			this.groupCanadianProcType.Size = new System.Drawing.Size(316,124);
 			this.groupCanadianProcType.TabIndex = 163;
@@ -2059,10 +2065,46 @@ namespace OpenDental{
 			this.comboProcStatus.TabIndex = 167;
 			this.comboProcStatus.SelectionChangeCommitted += new System.EventHandler(this.comboProcStatus_SelectionChangeCommitted);
 			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(20,383);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(84,16);
+			this.label13.TabIndex = 168;
+			this.label13.Text = "Referral";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textReferral
+			// 
+			this.textReferral.BackColor = System.Drawing.SystemColors.Control;
+			this.textReferral.ForeColor = System.Drawing.Color.DarkRed;
+			this.textReferral.Location = new System.Drawing.Point(106,380);
+			this.textReferral.Name = "textReferral";
+			this.textReferral.Size = new System.Drawing.Size(221,20);
+			this.textReferral.TabIndex = 169;
+			this.textReferral.Text = "test";
+			// 
+			// butReferral
+			// 
+			this.butReferral.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butReferral.Autosize = false;
+			this.butReferral.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butReferral.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReferral.CornerRadius = 2F;
+			this.butReferral.Location = new System.Drawing.Point(328,379);
+			this.butReferral.Name = "butReferral";
+			this.butReferral.Size = new System.Drawing.Size(18,21);
+			this.butReferral.TabIndex = 170;
+			this.butReferral.Text = "...";
+			this.butReferral.Click += new System.EventHandler(this.butReferral_Click);
+			// 
 			// FormProcEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,696);
+			this.Controls.Add(this.butReferral);
+			this.Controls.Add(this.textReferral);
+			this.Controls.Add(this.label13);
 			this.Controls.Add(this.comboProcStatus);
 			this.Controls.Add(this.labelPrognosis);
 			this.Controls.Add(this.comboPrognosis);
@@ -2288,6 +2330,7 @@ namespace OpenDental{
 			IsStartingUp=true;
 			FillControlsOnStartup();
 			SetControlsUpperLeft();
+			FillReferral();
 			FillIns(false);
 			FillPayments();
 			FillAdj();
@@ -2766,6 +2809,34 @@ namespace OpenDental{
 			}//end switch
 			textProcFee.Text=ProcCur.ProcFee.ToString("n");
 		}//end SetControls
+
+		private void FillReferral() {
+			List<RefAttach> refsList=RefAttaches.RefreshFiltered(ProcCur.PatNum,false,ProcCur.ProcNum);
+			if(refsList.Count==0) {
+				textReferral.Text="";
+			}
+			else {
+				Referral referral=Referrals.GetReferral(refsList[0].ReferralNum);
+				textReferral.Text=referral.LName+", ";
+				if(refsList[0].DateProcComplete.Year<1880) {
+					textReferral.Text+=refsList[0].RefDate.ToShortDateString();
+				}
+				else{
+					textReferral.Text+=Lan.g(this,"done:")+refsList[0].DateProcComplete.ToShortDateString();
+				}
+				if(refsList[0].RefToStatus!=ReferralToStatus.None){
+					textReferral.Text+=refsList[0].RefToStatus.ToString();
+				}
+			}
+		}
+
+		private void butReferral_Click(object sender,EventArgs e) {
+			FormReferralsPatient formRP=new FormReferralsPatient();
+			formRP.PatNum=ProcCur.PatNum;
+			formRP.ProcNum=ProcCur.ProcNum;
+			formRP.ShowDialog();
+			FillReferral();
+		}
 
 		private void FillIns(){
 			FillIns(true);
@@ -4310,32 +4381,6 @@ namespace OpenDental{
 			}
 		}
 
-		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			//if(allowTopaz){
-			//	if(sigBoxTopaz!=null) {
-			//		sigBoxTopaz.Dispose();
-			//	}
-			//}
-			if(DialogResult==DialogResult.OK){
-				//this catches date,prov,fee,status,etc for all claimProcs attached to this proc.
-				if(!StartedAttachedToClaim
-					&& Procedures.IsAttachedToClaim(ProcCur.ProcNum))
-				{
-					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
-				}
-				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
-				return;
-			}
-			if(IsNew){//if cancelling on a new procedure
-				//delete any newly created claimprocs
-				for(int i=0;i<ClaimProcsForProc.Count;i++) {
-					//if(ClaimProcsForProc[i].ProcNum==ProcCur.ProcNum) {
-					ClaimProcs.Delete(ClaimProcsForProc[i]);
-					//}
-				}
-			}
-		}
-
 		private void butOK_Click(object sender,System.EventArgs e) {
 			if(!EntriesAreValid()) {
 				return;
@@ -4378,6 +4423,33 @@ namespace OpenDental{
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			//if(allowTopaz){
+			//	if(sigBoxTopaz!=null) {
+			//		sigBoxTopaz.Dispose();
+			//	}
+			//}
+			if(DialogResult==DialogResult.OK){
+				//this catches date,prov,fee,status,etc for all claimProcs attached to this proc.
+				if(!StartedAttachedToClaim
+					&& Procedures.IsAttachedToClaim(ProcCur.ProcNum))
+				{
+					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
+				}
+				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
+				return;
+			}
+			if(IsNew){//if cancelling on a new procedure
+				//delete any newly created claimprocs
+				for(int i=0;i<ClaimProcsForProc.Count;i++) {
+					//if(ClaimProcsForProc[i].ProcNum==ProcCur.ProcNum) {
+					ClaimProcs.Delete(ClaimProcsForProc[i]);
+					//}
+				}
+			}
+		}
+	
 
 		
 

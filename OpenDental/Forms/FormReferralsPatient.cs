@@ -21,6 +21,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSlip;
 		private UI.Button butAddTo;
 		private List<RefAttach> RefAttachList;
+		private CheckBox checkShowAll;
+		///<summary>This number is normally zero.  If this number is set externally before opening this form, then this will behave differently.</summary>
+		public long ProcNum;
 
 		///<summary></summary>
 		public FormReferralsPatient()
@@ -60,15 +63,19 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.butSlip = new OpenDental.UI.Button();
 			this.butAddTo = new OpenDental.UI.Button();
+			this.checkShowAll = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(12,42);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(655,261);
+			this.gridMain.Size = new System.Drawing.Size(719,261);
 			this.gridMain.TabIndex = 74;
 			this.gridMain.Title = "Referrals Attached";
 			this.gridMain.TranslationName = "TableRefList";
@@ -98,7 +105,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(592,317);
+			this.butClose.Location = new System.Drawing.Point(656,317);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
@@ -137,10 +144,21 @@ namespace OpenDental{
 			this.butAddTo.Text = "Refer To";
 			this.butAddTo.Click += new System.EventHandler(this.butAddTo_Click);
 			// 
+			// checkShowAll
+			// 
+			this.checkShowAll.Location = new System.Drawing.Point(560,18);
+			this.checkShowAll.Name = "checkShowAll";
+			this.checkShowAll.Size = new System.Drawing.Size(162,20);
+			this.checkShowAll.TabIndex = 92;
+			this.checkShowAll.Text = "Show All";
+			this.checkShowAll.UseVisualStyleBackColor = true;
+			this.checkShowAll.Click += new System.EventHandler(this.checkShowAll_Click);
+			// 
 			// FormReferralsPatient
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(695,352);
+			this.ClientSize = new System.Drawing.Size(743,352);
+			this.Controls.Add(this.checkShowAll);
 			this.Controls.Add(this.butAddTo);
 			this.Controls.Add(this.butSlip);
 			this.Controls.Add(this.gridMain);
@@ -160,14 +178,22 @@ namespace OpenDental{
 		#endregion
 
 		private void FormReferralsPatient_Load(object sender,EventArgs e) {
+			if(ProcNum!=0) {
+				Text=Lan.g(this,"Referrals");
+				butAddFrom.Visible=false;
+			}
 			FillGrid();
 			if(RefAttachList.Count>0){
 				gridMain.SetSelected(0,true);
 			}
 		}
 
+		private void checkShowAll_Click(object sender,EventArgs e) {
+			FillGrid();
+		}
+
 		private void FillGrid() {
-			RefAttachList=RefAttaches.Refresh(PatNum);
+			RefAttachList=RefAttaches.RefreshFiltered(PatNum,checkShowAll.Checked,ProcNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRefList","From/To"),50);
@@ -176,7 +202,9 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRefList","Date"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRefList","Status"),80);
+			col=new ODGridColumn(Lan.g("TableRefList","Status"),90);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRefList","Proc"),120);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRefList","Note"),200);
 			gridMain.Columns.Add(col);
@@ -200,6 +228,14 @@ namespace OpenDental{
 					row.Cells.Add(RefAttachList[i].RefDate.ToShortDateString());
 				}
 				row.Cells.Add(Lan.g("enumReferralToStatus",RefAttachList[i].RefToStatus.ToString()));
+				if(RefAttachList[i].ProcNum==0) {
+					row.Cells.Add("");
+				}
+				else {
+					Procedure proc=Procedures.GetOneProc(RefAttachList[i].ProcNum,false);
+					string str=Procedures.GetDescription(proc);
+					row.Cells.Add(str);
+				}
 				row.Cells.Add(RefAttachList[i].Note);
 				gridMain.Rows.Add(row);
 			}
@@ -275,6 +311,7 @@ namespace OpenDental{
 				}
 			}
 			refattach.ItemOrder=order+1;
+			refattach.ProcNum=ProcNum;
 			RefAttaches.Insert(refattach);
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++) {
@@ -311,6 +348,8 @@ namespace OpenDental{
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+	
 
 		
 

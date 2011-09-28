@@ -75,7 +75,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Also deletes any claimProcs. Must test to make sure claimProcs are not part of a payment first.  This does not actually delete the procedure, but just changes the status to deleted.  If not allowed to delete, then it throws an exception.</summary>
+		///<summary>Also deletes any claimProcs and adjustments. Must test to make sure claimProcs are not part of a payment first.  This does not actually delete the procedure, but just changes the status to deleted.  If not allowed to delete, then it throws an exception.</summary>
 		public static void Delete(long procNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum);
@@ -86,6 +86,11 @@ namespace OpenDentBusiness {
 				+" AND InsPayAmt > 0 AND Status != "+POut.Long((int)ClaimProcStatus.Preauth);
 			if(Db.GetCount(command)!="0") {
 				throw new Exception(Lans.g("Procedures","Not allowed to delete a procedure that is attached to a payment."));
+			}
+			//Test to see if any referrals exist for this proc
+			command="SELECT COUNT(*) FROM refattach WHERE ProcNum="+POut.Long(procNum);
+			if(Db.GetCount(command)!="0") {
+				throw new Exception(Lans.g("Procedures","Not allowed to delete a procedure with referrals attached."));
 			}
 			//delete adjustments
 			command="DELETE FROM adjustment WHERE ProcNum='"+POut.Long(procNum)+"'";
@@ -774,13 +779,13 @@ namespace OpenDentBusiness {
 					break;
 			}//end switch
 			if(!forAccount) {
-				strLine+=code.AbbrDesc;
+				strLine+=" "+code.AbbrDesc;
 			}
 			else if(code.LaymanTerm!=""){
-				strLine+=code.LaymanTerm;
+				strLine+=" "+code.LaymanTerm;
 			}
 			else{
-				strLine+=code.Descript;
+				strLine+=" "+code.Descript;
 			}
 			return strLine;
 		}
