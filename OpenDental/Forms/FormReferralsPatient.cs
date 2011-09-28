@@ -75,6 +75,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12,42);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(719,261);
 			this.gridMain.TabIndex = 74;
 			this.gridMain.Title = "Referrals Attached";
@@ -182,6 +183,9 @@ namespace OpenDental{
 				Text=Lan.g(this,"Referrals");
 				butAddFrom.Visible=false;
 			}
+			else {//all for patient
+				checkShowAll.Visible=false;//we will always show all
+			}
 			FillGrid();
 			if(RefAttachList.Count>0){
 				gridMain.SetSelected(0,true);
@@ -250,7 +254,7 @@ namespace OpenDental{
 			FillGrid();
 			//reselect
 			for(int i=0;i<RefAttachList.Count;i++){
-				if(RefAttachList[i].ReferralNum==refattach.ReferralNum){
+				if(RefAttachList[i].RefAttachNum==refattach.RefAttachNum) {
 					gridMain.SetSelected(i,true);
 				}
 			}
@@ -283,7 +287,7 @@ namespace OpenDental{
 			RefAttaches.Insert(refattach);
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++){
-				if(RefAttachList[i].ReferralNum==refattach.ReferralNum){
+				if(RefAttachList[i].RefAttachNum==refattach.RefAttachNum) {
 					gridMain.SetSelected(i,true);
 				}
 			}

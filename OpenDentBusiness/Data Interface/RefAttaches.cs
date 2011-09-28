@@ -20,19 +20,14 @@ namespace OpenDentBusiness{
 			return Crud.RefAttachCrud.SelectMany(command);
 		}
 
-		///<summary>For the ReferralsPatient window.</summary>
+		///<summary>For the ReferralsPatient window.  showAll is only used for the referred procs view.</summary>
 		public static List<RefAttach> RefreshFiltered(long patNum,bool showAll,long procNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<RefAttach>>(MethodBase.GetCurrentMethod(),patNum,showAll,procNum);
 			}
 			string command="SELECT * FROM refattach "
 				+"WHERE PatNum = "+POut.Long(patNum)+" ";
-			if(procNum==0) {//for patient
-				if(!showAll) {//hide procs
-					command+="AND ProcNum=0 ";
-				}
-			}
-			else {//for procedure
+			if(procNum!=0) {//for procedure
 				if(!showAll) {//hide regular referrals
 					command+="AND ProcNum="+POut.Long(procNum)+" ";
 				}

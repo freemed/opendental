@@ -1312,7 +1312,7 @@ namespace OpenDental.UI {
 			Invalidate();
 		}
 
-		///<summary>If one row is selected, it returns the index to that row.  Really only useful for SelectionMode.One.  If no rows selected, returns -1.</summary>
+		///<summary>If one row is selected, it returns the index to that row.  If more than one row are selected, it returns the first selected row.  Really only useful for SelectionMode.One.  If no rows selected, returns -1.</summary>
 		public int GetSelectedIndex() {
 			if(selectedIndices.Count>0) {
 				return (int)selectedIndices[0];
