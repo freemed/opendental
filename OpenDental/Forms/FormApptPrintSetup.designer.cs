@@ -29,9 +29,9 @@ namespace OpenDental{
 			this.labelStopTime = new System.Windows.Forms.Label();
 			this.textStopTime = new System.Windows.Forms.TextBox();
 			this.textStartTime = new System.Windows.Forms.TextBox();
-			this.textFontSize = new ODR.ValidDouble();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.textFontSize = new ODR.ValidDouble();
 			this.butSave = new OpenDental.UI.Button();
 			this.textColumnsPerPage = new OpenDental.ValidNumber();
 			this.butOK = new OpenDental.UI.Button();
@@ -45,7 +45,7 @@ namespace OpenDental{
 			this.labelColumnsPerPage.Name = "labelColumnsPerPage";
 			this.labelColumnsPerPage.Size = new System.Drawing.Size(128,15);
 			this.labelColumnsPerPage.TabIndex = 72;
-			this.labelColumnsPerPage.Text = "Columns per page";
+			this.labelColumnsPerPage.Text = "Operatories per page";
 			this.labelColumnsPerPage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelFontSize
@@ -92,13 +92,6 @@ namespace OpenDental{
 			this.textStartTime.Size = new System.Drawing.Size(75,20);
 			this.textStartTime.TabIndex = 84;
 			// 
-			// textFontSize
-			// 
-			this.textFontSize.Location = new System.Drawing.Point(146,108);
-			this.textFontSize.Name = "textFontSize";
-			this.textFontSize.Size = new System.Drawing.Size(50,20);
-			this.textFontSize.TabIndex = 85;
-			// 
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -118,6 +111,13 @@ namespace OpenDental{
 			this.label2.TabIndex = 87;
 			this.label2.Text = "Example: 8:00 PM";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textFontSize
+			// 
+			this.textFontSize.Location = new System.Drawing.Point(146,108);
+			this.textFontSize.Name = "textFontSize";
+			this.textFontSize.Size = new System.Drawing.Size(50,20);
+			this.textFontSize.TabIndex = 85;
 			// 
 			// butSave
 			// 
@@ -140,10 +140,8 @@ namespace OpenDental{
 			this.textColumnsPerPage.MaxVal = 255;
 			this.textColumnsPerPage.MinVal = 0;
 			this.textColumnsPerPage.Name = "textColumnsPerPage";
-			this.textColumnsPerPage.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.textColumnsPerPage.Size = new System.Drawing.Size(50,20);
 			this.textColumnsPerPage.TabIndex = 73;
-			this.textColumnsPerPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// butOK
 			// 

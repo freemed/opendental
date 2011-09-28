@@ -52,12 +52,12 @@ namespace OpenDentBusiness.UI {
 		///<summary></summary>
 		public static float ApptSheetWidth;
 
-		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.  Pass start and stop times of 12AM for 24 hours.  Set colsPerPage to VisProvs unless printing.  Set pageColumn to 0 unless printing.  Default fontSize is 8 unless printing.</summary>
-		public static void DrawAllButAppts(Graphics g,bool showRedTimeLine,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn,int fontSize) {
+		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.  Pass start and stop times of 12AM for 24 hours.  Set colsPerPage to VisOps.Count unless printing.  Set pageColumn to 0 unless printing.  Default fontSize is 8 unless printing.</summary>
+		public static void DrawAllButAppts(Graphics g,bool showRedTimeLine,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn,int fontSize,bool isPrinting) {
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,ApptSheetHeight);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,ApptSheetHeight);//R time bar
 			DrawMainBackground(g,startTime,stopTime,colsPerPage,pageColumn);
-			DrawBlockouts(g,startTime,stopTime,colsPerPage,pageColumn,fontSize);
+			DrawBlockouts(g,startTime,stopTime,colsPerPage,pageColumn,fontSize,isPrinting);
 			if(!IsWeeklyView) {
 				DrawProvScheds(g,startTime,stopTime);
 				DrawProvBars(g,startTime,stopTime);
@@ -215,7 +215,7 @@ namespace OpenDentBusiness.UI {
 		}
 
 		///<summary>Draws all the blockouts for the entire period.</summary>
-		public static void DrawBlockouts(Graphics g,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn,int fontSize) {
+		public static void DrawBlockouts(Graphics g,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn,int fontSize,bool isPrinting) {
 			Schedule[] schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 			SolidBrush blockBrush;
 			Pen blockOutlinePen=new Pen(Color.Black,1);
@@ -223,29 +223,27 @@ namespace OpenDentBusiness.UI {
 			Font blockFont=new Font("Arial",fontSize);
 			string blockText;
 			RectangleF rect;
-			int startHour=startTime.Hour;
-			int stopHour=stopTime.Hour;
-			if(stopHour==0) {
-				stopHour=24;
-			}
 			for(int i=0;i<schedForType.Length;i++) {
 				blockBrush=new SolidBrush(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
 				penOutline = new Pen(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType),2);
 				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				for(int o=0;o<schedForType[i].Ops.Count;o++) {
-					stopHour=stopTime.Hour;//Reset stopHour every time.
-					if(stopHour==0) {
-						stopHour=24;
-					}
-					if(schedForType[i].StartTime.Hours>=stopHour) {
-						continue;
-					}
-					if(schedForType[i].StopTime.Hours<=stopHour) {
-						stopHour=schedForType[i].StopTime.Hours;
-					}
-					if(GetIndexOp(schedForType[i].Ops[o])>=(colsPerPage*pageColumn+colsPerPage)
+					int startHour=startTime.Hour;
+					if(isPrinting) {//Filtering logic for printing.
+						int stopHour=stopTime.Hour;
+						if(stopHour==0) {
+							stopHour=24;
+						}
+						if(schedForType[i].StartTime.Hours>=stopHour) {
+							continue;//Blockout starts after the current time frame.
+						}
+						if(schedForType[i].StopTime.Hours<=stopHour) {
+							stopHour=schedForType[i].StopTime.Hours;
+						}
+						if(GetIndexOp(schedForType[i].Ops[o])>=(colsPerPage*pageColumn+colsPerPage)
 						|| GetIndexOp(schedForType[i].Ops[o])<colsPerPage*pageColumn) {
-						continue;//For printing, don't draw blockouts not on current page.
+							continue;//Blockout not on current page.
+						}
 					}
 					if(IsWeeklyView) {
 						if(GetIndexOp(schedForType[i].Ops[o])==-1) {

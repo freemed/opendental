@@ -31,7 +31,7 @@ namespace OpenDental {
 			if(!ValidEntries()) {
 				return;
 			}
-			SaveChanges();
+			SaveChanges(false);
 		}
 
 		private bool ValidEntries() {
@@ -66,13 +66,15 @@ namespace OpenDental {
 			return true;
 		}
 
-		private void SaveChanges() {
+		private void SaveChanges(bool suppressMessage) {
 			if(ValidEntries()) {
 				Prefs.UpdateDateT(PrefName.ApptPrintTimeStart,PIn.DateT(textStartTime.Text));
 				Prefs.UpdateDateT(PrefName.ApptPrintTimeStop,PIn.DateT(textStopTime.Text));
 				Prefs.UpdateString(PrefName.ApptPrintFontSize,textFontSize.Text);
 				Prefs.UpdateInt(PrefName.ApptPrintColumnsPerPage,PIn.Int(textColumnsPerPage.Text));
-				MsgBox.Show(this,"Settings saved.");
+				if(!suppressMessage) {
+					MsgBox.Show(this,"Settings saved.");
+				}
 			}
 		}
 
@@ -90,7 +92,7 @@ namespace OpenDental {
 			}
 			if(changed) {
 				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Save the changes that were made?")) {
-					SaveChanges();
+					SaveChanges(true);
 				}
 			}
 			ApptPrintStartTime=PIn.DateT(textStartTime.Text);

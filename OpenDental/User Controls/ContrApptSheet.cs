@@ -95,7 +95,7 @@ namespace OpenDental {
 			using(Graphics g=Graphics.FromImage(Shadow)) {
 				ApptDrawing.ApptSheetWidth=Width;
 				ApptDrawing.ApptSheetHeight=Height;
-				ApptDrawing.DrawAllButAppts(g,true,new DateTime(2011,1,1,0,0,0),new DateTime(2011,1,1,0,0,0),ApptDrawing.VisProvs.Count,0,8);
+				ApptDrawing.DrawAllButAppts(g,true,new DateTime(2011,1,1,0,0,0),new DateTime(2011,1,1,0,0,0),ApptDrawing.VisOps.Count,0,8,false);
 			}
 		}
 

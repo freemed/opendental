@@ -749,6 +749,9 @@ namespace OpenDentBusiness.UI {
 		///<summary>Disposes objects with typeof Brush, Pen, StringFormat or Bitmap.</summary>
 		private static void DisposeObjects(params object[] disposables) {
 			for(int i=0;i<disposables.Length;i++) {
+				if(disposables[i]==null) {
+					continue;
+				}
 				if(disposables[i].GetType()==typeof(Brush)) {
 					Brush b=(Brush)disposables[i];
 					b.Dispose();
