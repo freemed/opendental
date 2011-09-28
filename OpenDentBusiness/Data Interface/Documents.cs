@@ -104,7 +104,8 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command= "DELETE from document WHERE DocNum = '"+doc.DocNum.ToString()+"'";
-			Db.NonQ(command);	
+			Db.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.Document,doc.DocNum);
 		}
 
 		///<summary>This is used by FormImageViewer to get a list of paths based on supplied list of DocNums. The reason is that later we will allow sharing of documents, so the paths may not be in the current patient folder.</summary>
@@ -509,20 +510,31 @@ namespace OpenDentBusiness {
 			}
 			Document[] multDocuments=Crud.DocumentCrud.TableToList(table).ToArray();
 			List<Document> documentList=new List<Document>(multDocuments);
-			
 			foreach(Document d in documentList){
-				Patient pat=Patients.GetPat(d.PatNum);
-				string patFolder=ImageStore.GetPatientFolder(pat);
-				string filePathAndName=ImageStore.GetFilePath(Documents.GetByNum(d.DocNum),patFolder);
-				if(File.Exists(filePathAndName)) {
-					FileStream fs= new FileStream(filePathAndName,FileMode.Open,FileAccess.Read);
-					byte[] rawData = new byte[fs.Length];
-					fs.Read(rawData,0,(int)fs.Length);
-					fs.Close();
-					d.RawBase64=Convert.ToBase64String(rawData);
+				if(string.IsNullOrEmpty(d.RawBase64)){
+					Patient pat=Patients.GetPat(d.PatNum);
+					string patFolder=ImageStore.GetPatientFolder(pat);
+					string filePathAndName=ImageStore.GetFilePath(Documents.GetByNum(d.DocNum),patFolder);
+					if(File.Exists(filePathAndName)) {
+						FileStream fs= new FileStream(filePathAndName,FileMode.Open,FileAccess.Read);
+						byte[] rawData = new byte[fs.Length];
+						fs.Read(rawData,0,(int)fs.Length);
+						fs.Close();
+						d.RawBase64=Convert.ToBase64String(rawData);
+					}
 				}
 			}
 			return documentList;
+		}
+
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all documents of a patient</summary>
+		public static void ResetTimeStamps(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			string command="UPDATE document SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			Db.NonQ(command);
 		}
 
 	}	

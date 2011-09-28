@@ -1491,7 +1491,9 @@ namespace OpenDentBusiness{
 		DiseaseDef,
 		ICD9,
 		Provider,
-		Pharmacy
+		Pharmacy,
+		Statement,
+		Document,
 	}
 
 	public enum HL7MessageStatus {

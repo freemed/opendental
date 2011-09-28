@@ -46,6 +46,7 @@ namespace OpenDentBusiness{
 			}
 			//validate that not already in use.
 			Crud.StatementCrud.Delete(statement.StatementNum);
+			DeletedObjects.SetDeleted(DeletedObjectType.Statement,statement.StatementNum);
 		}
 
 		public static void DeleteObject(long statementNum) {
@@ -54,6 +55,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.StatementCrud.Delete(statementNum);
+			DeletedObjects.SetDeleted(DeletedObjectType.Statement,statementNum);
 		}
 
 		///<summary>Queries the database to determine if there are any unsent statements.</summary>
@@ -261,12 +263,20 @@ namespace OpenDentBusiness{
 			return statementList;
 		}
 
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all statements of a patient</summary>
+		public static void ResetTimeStamps(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			string command="UPDATE statement SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			Db.NonQ(command);
+		}
+
+
+
+
 	}
-
-	
-
-	
-	
 
 
 }

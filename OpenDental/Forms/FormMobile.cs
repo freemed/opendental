@@ -37,7 +37,7 @@ namespace OpenDental {
 			diseasedef,
 			icd9,
 			statement,
-			document,
+			//document,
 			patientdel
 		}
 
@@ -248,13 +248,13 @@ namespace OpenDental {
 				List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList);
-				List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
+				//List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
 				int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-							+statementNumList.Count+documentNumList.Count
+							+statementNumList.Count//+documentNumList.Count
 							+dO.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
@@ -277,7 +277,7 @@ namespace OpenDental {
 				SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
 				SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
 				SynchGeneric(statementNumList,SynchEntity.statement,ref FormP);
-				SynchGeneric(documentNumList,SynchEntity.document,ref FormP);
+				//SynchGeneric(documentNumList,SynchEntity.document,ref FormP);
 				if(synchDelPat) {
 					SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
 				}
@@ -288,6 +288,7 @@ namespace OpenDental {
 				}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 				IsSynching=false;
+				throw new Exception("custome exception");
 			}
 			catch(Exception e) {
 				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
@@ -365,10 +366,12 @@ namespace OpenDental {
 						List<Statementm> ChangedStatementList=Statementms.GetMultStatementms(BlockPKNumList);
 						mb.SynchStatements(PrefC.GetString(PrefName.RegistrationKey),ChangedStatementList.ToArray());
 						break;
+						/*
 						case SynchEntity.document:
 						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList);
 						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
+						*/
 						case SynchEntity.patientdel:
 						mb.DeletePatientsRecords(PrefC.GetString(PrefName.RegistrationKey),BlockPKNumList.ToArray());
 						break;
