@@ -1438,10 +1438,10 @@ namespace OpenDentBusiness {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),claimNum);
 			}
 			string command=
-				"SELECT COUNT(*) FROM procedurelog p "
-				+"WHERE p.ProcNum IN "
-				+"(SELECT cp.ProcNum FROM claimproc cp "
-				+" WHERE cp.ClaimNum="+claimNum+")";
+				"SELECT COUNT(*) FROM procedurelog "
+				+"WHERE ProcNum IN "
+				+"(SELECT claimproc.ProcNum FROM claimproc "
+				+" WHERE ClaimNum="+claimNum+")";
 			return PIn.Int(Db.GetCount(command));
 		}
 
@@ -1451,12 +1451,15 @@ namespace OpenDentBusiness {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,unfinished);
 			}
 			string command=
-				"SELECT  FROM procedurelog p "
-				+"JOIN refattach r"
-				+"ON p.ProcNum=r.ProcNum "
-				+"WHERE r.DateProcComplete!='01-01-0001' "
-				+"AND r.DateReferredOut>="+POut.Date(dateFrom)+" "
-				+"AND r.DateReferredOut<="+POut.Date(dateTo);
+				"SELECT procedurelog.CodeNum,procedurelog.PatNum,LName,FName,MName,RefDate,DateProcComplete,refattach.Note,RefToStatus "
+				+"FROM procedurelog "
+				+"JOIN refattach ON procedurelog.ProcNum=refattach.ProcNum "
+				+"JOIN referral ON refattach.ReferralNum=referral.ReferralNum "
+				+"WHERE RefDate>="+POut.Date(dateFrom)+" "
+				+"AND RefDate<="+POut.Date(dateTo)+" ";
+			if(unfinished) {
+				command+="AND DateProcComplete!="+POut.Date(DateTime.MinValue)+" ";
+			}
 			return Db.GetTable(command);
 		}
 
