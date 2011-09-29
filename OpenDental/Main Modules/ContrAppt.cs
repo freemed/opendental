@@ -3748,7 +3748,8 @@ namespace OpenDental {
 		private void PrintApptSchedule(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
 			//Logic needs to be added here for calculating if printing will fit on the page. Then call drawing in a loop for number of required pages. 
 			Rectangle pageBounds=e.PageBounds;
-			ApptDrawing.ApptSheetWidth=pageBounds.Width-60;//60 for Margins
+			//Set the ApptSheetWidth to width of the page minus 75 for the margins. 
+			ApptDrawing.ApptSheetWidth=pageBounds.Width-75;
 			ApptDrawing.ComputeColWidth(apptPrintColsPerPage);
 			ApptDrawing.SetLineHeight(apptPrintFontSize);//Measure size the user set to determine the line height for printout.
 			int startHour=apptPrintStartTime.Hour;
@@ -3784,7 +3785,7 @@ namespace OpenDental {
 			DateTime beginTime=new DateTime(1,1,1,hourBegin,0,0);
 			DateTime endTime=new DateTime(1,1,1,hourEnd,0,0);
 			#endregion
-			e.Graphics.TranslateTransform(30,100);//Compensate for header and margin
+			e.Graphics.TranslateTransform(30,100);//Compensate for header and margin.  Only 30 cause printers need more room on right side for width to look correct.
 			ApptDrawing.DrawAllButAppts(e.Graphics,false,beginTime,endTime,apptPrintColsPerPage,pageColumn,apptPrintFontSize,true);
 			//Draw the appointments.
 			#region ApptSingleDrawing
