@@ -714,18 +714,30 @@ namespace OpenDental{
 			}
 			long clearinghouseNum0=listQueue[gridMain.SelectedIndices[0]].ClearinghouseNum;
 			EnumClaimMedType medType0=Claims.GetClaim(listQueue[gridMain.SelectedIndices[0]].ClaimNum).MedType;
-			for(int i=1;i<gridMain.SelectedIndices.Length;i++) {
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {//we start with 0 so that we can check medtype match on the first claim
 				long clearinghouseNumI=listQueue[gridMain.SelectedIndices[i]].ClearinghouseNum;
-				EnumClaimMedType medTypeI=Claims.GetClaim(listQueue[gridMain.SelectedIndices[i]].ClaimNum).MedType;
 				if(clearinghouseNum0!=clearinghouseNumI) {
 					MsgBox.Show(this,"All claims must be for the same clearinghouse.");
 					return;
 				}
-
-
-
-
-
+				EnumClaimMedType medTypeI=Claims.GetClaim(listQueue[gridMain.SelectedIndices[i]].ClaimNum).MedType;
+				if(medType0!=medTypeI) {
+					MsgBox.Show(this,"All claims must have the same MedType.");
+					return;
+				}
+				Clearinghouse clearh=Clearinghouses.GetClearinghouse(clearinghouseNumI);
+				if(clearh.Eformat==ElectronicClaimFormat.x837D_4010 || clearh.Eformat==ElectronicClaimFormat.x837D_5010_dental) {
+					if(medTypeI!=EnumClaimMedType.Dental) {
+						MessageBox.Show("On claim "+i.ToString()+", the MedType does not match the clearinghouse e-format.");
+						return;
+					}
+				}
+				if(clearh.Eformat==ElectronicClaimFormat.x837_5010_med_inst) {
+					if(medTypeI!=EnumClaimMedType.Medical && medTypeI!=EnumClaimMedType.Institutional) {
+						MessageBox.Show("On claim "+i.ToString()+", the MedType does not match the clearinghouse e-format.");
+						return;
+					}
+				}
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				if(listQueue[gridMain.SelectedIndices[i]].MissingData!=""){
@@ -737,7 +749,6 @@ namespace OpenDental{
 					return;
 				}
 			}
-
 			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			ClaimSendQueueItem queueitem;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
@@ -748,10 +759,9 @@ namespace OpenDental{
 				queueItems.Add(queueitem);
 			}
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItems[0].ClearinghouseNum);
-			EnumClaimMedType medType=EnumClaimMedType.Dental;
-//todo: fix the above two lines, of course.
-			//Already validated that all claims are for the same clearinghouse, clinic, 
-//todo validate all same medType, and that medtype matches clearinghouse
+			EnumClaimMedType medType=Claims.GetClaim(listQueue[gridMain.SelectedIndices[0]].ClaimNum).MedType;
+			//Already validated that all claims are for the same clearinghouse, clinic, and medType.
+			//Validated that medtype matches clearinghouse e-format
 			Eclaims.Eclaims.SendBatch(queueItems,clearhouse,medType);
 			//statuses changed to S in SendBatches
 			FillGrid();
