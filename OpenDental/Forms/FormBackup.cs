@@ -547,7 +547,7 @@ namespace OpenDental{
 			curVal=0;
 			Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { curVal,
 				Lan.g(this,"Preparing to copy database"),//this happens very fast and probably won't be noticed.
-				100 });//max of 100 keeps dlg from closing
+				100,"" });//max of 100 keeps dlg from closing
 			string dbName=MiscData.GetCurrentDatabase();
 			double dbSize=GetFileSizes(textBackupFromPath.Text+dbName)/1024;
 			try{
@@ -582,7 +582,7 @@ namespace OpenDental{
 					if(curVal<dbSize){//this avoids setting progress bar to max, which would close the dialog.
 						Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { curVal,
 							Lan.g(this,"Database: ?currentVal MB of ?maxVal MB copied"),
-							dbSize});
+							dbSize,""});
 					}
 				}
 			}
@@ -595,7 +595,7 @@ namespace OpenDental{
 				string atozDir=atozFull.Substring(atozFull.LastIndexOf(Path.DirectorySeparatorChar)+1);//OpenDentalData
 				Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { 0,
 					Lan.g(this,"Calculating size of files in A to Z folder."),
-					100 });//max of 100 keeps dlg from closing
+					100,"" });//max of 100 keeps dlg from closing
 				int atozSize=GetFileSizes(ODFileUtils.CombinePaths(atozFull,""),
 					ODFileUtils.CombinePaths(new string[] {textBackupToPath.Text,atozDir,""}))/1024;
 				if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupToPath.Text,atozDir))){// D:\OpenDentalData
@@ -607,7 +607,7 @@ namespace OpenDental{
 					atozSize);
 			}
 			//force dialog to close even if no files copied or calculation was slightly off.
-			Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { 0,"",0});
+			Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 0,"",0,"" });
 		}
 
 		///<summary>This is the function that the worker thread uses to restore the A-Z folder.</summary>
@@ -619,7 +619,7 @@ namespace OpenDental{
 			string atozDir=atozFull.Substring(atozFull.LastIndexOf(Path.DirectorySeparatorChar)+1);// OpenDentalData
 			Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { 0,
 				Lan.g(this,"Database restored.\r\nCalculating size of files in A to Z folder."),
-				100 });//max of 100 keeps dlg from closing
+				100,"" });//max of 100 keeps dlg from closing
 			int atozSize=GetFileSizes(ODFileUtils.CombinePaths(new string[] {textBackupRestoreFromPath.Text,atozDir,""}),
 				ODFileUtils.CombinePaths(atozFull,""))/1024;// C:\OpenDentalData\
 			if(!Directory.Exists(atozFull)){// C:\OpenDentalData\
@@ -630,14 +630,15 @@ namespace OpenDental{
 				ODFileUtils.CombinePaths(atozFull,""),// C:\OpenDentalData\
 				atozSize);
 			//force dlg to close even if no files copied or calculation was slightly off.
-			Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { 0,"",0});
+			Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 0,"",0,"" });
 		}
 
 		///<summary>This function gets invoked from the worker threads.</summary>
-		private void PassProgressToDialog(double currentVal,string displayText,double maxVal){
+		private void PassProgressToDialog(double currentVal,string displayText,double maxVal,string errorMessage){
 			FormP.CurrentVal=currentVal;
 			FormP.DisplayText=displayText;
 			FormP.MaxVal=maxVal;
+			FormP.ErrorMessage=errorMessage;
 		}
 
 		///<summary>Counts the total KB of all files that will need to be copied from one directory to another.  Recursive.  Only includes missing files, not changed files.  Used to display the progress bar.  Supplied paths must end in \. toPath might not exist.</summary>
@@ -710,7 +711,7 @@ namespace OpenDental{
 				if(curVal<maxSize) {//this avoids setting progress bar to max, which would close the dialog.
 					Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { curVal,
 							Lan.g(this,"A to Z folder: ?currentVal MB of ?maxVal MB copied"),
-							maxSize});
+							maxSize,""});
 				}
 			}
 		}

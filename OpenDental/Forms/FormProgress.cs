@@ -192,7 +192,7 @@ namespace OpenDental{
 	}
 
 	///<summary></summary>
-	public delegate void PassProgressDelegate(double newCurVal,string newDisplayText,double newMaxVal);
+	public delegate void PassProgressDelegate(double newCurVal,string newDisplayText,double newMaxVal,string errorMessage);
 }
 
 

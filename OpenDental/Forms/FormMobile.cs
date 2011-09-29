@@ -20,6 +20,7 @@ namespace OpenDental {
 		private static bool IsSynching;
 		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
 		private bool changed;
+		private static FormProgress FormP;
 
 		private enum SynchEntity {
 			patient,
@@ -172,14 +173,15 @@ namespace OpenDental {
 			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
 			DateTime timeSynchStarted=MiscData.GetNowDateTime();
 			FormProgress FormP=new FormProgress();
+			FormP.MaxVal=100;//to keep the form from closing until the real MaxVal is set.
+			FormP.NumberMultiplication=1;
+			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
+			FormP.NumberFormat="F0";
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(DateTime.MinValue,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(DateTime.MinValue,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
-			FormP.NumberMultiplication=100;
-			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
-			FormP.NumberFormat="F0";
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel) {
 				workerThread.Abort();
@@ -199,16 +201,16 @@ namespace OpenDental {
 			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 			DateTime timeSynchStarted=MiscData.GetNowDateTime();
-			FormProgress FormP=new FormProgress();
+			FormP=new FormProgress();
 			FormP.MaxVal=100;//to keep the form from closing until the real MaxVal is set.
+			FormP.NumberMultiplication=1;
+			FormP.DisplayText="Preparing records for upload.";
+			FormP.NumberFormat="F0";
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(changedSince,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(changedSince,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
-			FormP.NumberMultiplication=100;
-			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
-			FormP.NumberFormat="F0";
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel) {
 				workerThread.Abort();
@@ -218,7 +220,8 @@ namespace OpenDental {
 		}
 		
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
-		private static void UploadWorker(DateTime changedSince,ref FormProgress FormP,DateTime timeSynchStarted) {
+		private static void UploadWorker(DateTime changedSince,DateTime timeSynchStarted) {
+			int totalCount=100;
 			try {//Dennis: try catch may not work: Does not work in threads, not sure about this. Note that all methods inside this try catch block are without exception handling. This is done on purpose so that when an exception does occur it does not update PrefName.MobileSyncDateTimeLastRun
 				//The handling of PrefName.MobileSynchNewTables79 should never be removed in future versions
 				DateTime changedProv=changedSince;
@@ -252,60 +255,61 @@ namespace OpenDental {
 				//List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
-				int totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
-							+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
-							+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-							+statementNumList.Count//+documentNumList.Count
-							+dO.Count;
+				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
+					+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
+					+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
+					+statementNumList.Count//+documentNumList.Count
+					+dO.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
 				}
-				FormP.MaxVal=(double)totalCount;
+				double currentVal=0;
 				IsSynching=true;
-				SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
-				SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
-				SynchGeneric(rxNumList,SynchEntity.prescription,ref FormP);
-				SynchGeneric(provNumList,SynchEntity.provider,ref FormP);
-				SynchGeneric(pharNumList,SynchEntity.pharmacy,ref FormP);
+				SynchGeneric(patNumList,SynchEntity.patient,totalCount,ref currentVal);
+				SynchGeneric(aptNumList,SynchEntity.appointment,totalCount,ref currentVal);
+				SynchGeneric(rxNumList,SynchEntity.prescription,totalCount,ref currentVal);
+				SynchGeneric(provNumList,SynchEntity.provider,totalCount,ref currentVal);
+				SynchGeneric(pharNumList,SynchEntity.pharmacy,totalCount,ref currentVal);
 				//pat portal
-				SynchGeneric(labPanelNumList,SynchEntity.labpanel,ref FormP);
-				SynchGeneric(labResultNumList,SynchEntity.labresult,ref FormP);
-				SynchGeneric(medicationNumList,SynchEntity.medication,ref FormP);
-				SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,ref FormP);
-				SynchGeneric(allergyDefNumList,SynchEntity.allergydef,ref FormP);
-				SynchGeneric(allergyNumList,SynchEntity.allergy,ref FormP);
-				SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,ref FormP);
-				SynchGeneric(diseaseNumList,SynchEntity.disease,ref FormP);
-				SynchGeneric(icd9NumList,SynchEntity.icd9,ref FormP);
-				SynchGeneric(statementNumList,SynchEntity.statement,ref FormP);
-				//SynchGeneric(documentNumList,SynchEntity.document,ref FormP);
+				SynchGeneric(labPanelNumList,SynchEntity.labpanel,totalCount,ref currentVal);
+				SynchGeneric(labResultNumList,SynchEntity.labresult,totalCount,ref currentVal);
+				SynchGeneric(medicationNumList,SynchEntity.medication,totalCount,ref currentVal);
+				SynchGeneric(medicationPatNumList,SynchEntity.medicationpat,totalCount,ref currentVal);
+				SynchGeneric(allergyDefNumList,SynchEntity.allergydef,totalCount,ref currentVal);
+				SynchGeneric(allergyNumList,SynchEntity.allergy,totalCount,ref currentVal);
+				SynchGeneric(diseaseDefNumList,SynchEntity.diseasedef,totalCount,ref currentVal);
+				SynchGeneric(diseaseNumList,SynchEntity.disease,totalCount,ref currentVal);
+				SynchGeneric(icd9NumList,SynchEntity.icd9,totalCount,ref currentVal);
+				SynchGeneric(statementNumList,SynchEntity.statement,totalCount,ref currentVal);
+				//SynchGeneric(documentNumList,SynchEntity.document,totalCount,ref currentVal);
 				if(synchDelPat) {
-					SynchGeneric(delPatNumList,SynchEntity.patientdel,ref FormP);
+					SynchGeneric(delPatNumList,SynchEntity.patientdel,totalCount,ref currentVal);
 				}
-				DeleteObjects(dO,ref FormP);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
+				DeleteObjects(dO,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 					Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
 					//DataValid.SetInvalid(InvalidType.Prefs);//not allowed from another thread
 				}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 				IsSynching=false;
-				throw new Exception("custome exception");
+				//throw new Exception("custom exception");
 			}
 			catch(Exception e) {
 				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
-				FormP.ErrorMessage=e.Message;	//MessageBox.Show(e.Message);
+				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 0,"",totalCount,e.Message});
+				//FormP.ErrorMessage=e.Message;	//not allowed
 			}
 		}
 
 		///<summary>a general function to reduce the amount of code for uploading</summary>
-		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,ref FormProgress progressIndicator) {
+		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,double totalCount,ref double currentVal) {
 			//Dennis: a try catch block here has been avoid on purpose.
-				int LocalBatchSize=BatchSize;
-				for(int start=0;start<PKNumList.Count;start+=LocalBatchSize) {
-					if((start+LocalBatchSize)>PKNumList.Count) {
-						LocalBatchSize=PKNumList.Count-start;
+				int localBatchSize=BatchSize;
+				for(int start=0;start<PKNumList.Count;start+=localBatchSize) {
+					if((start+localBatchSize)>PKNumList.Count) {
+						localBatchSize=PKNumList.Count-start;
 					}
-					List<long> BlockPKNumList=PKNumList.GetRange(start,LocalBatchSize);
+					List<long> BlockPKNumList=PKNumList.GetRange(start,localBatchSize);
 					switch(entity) {
 						case SynchEntity.patient:
 							List<Patientm> changedPatientmList=Patientms.GetMultPats(BlockPKNumList);
@@ -377,18 +381,32 @@ namespace OpenDental {
 						mb.DeletePatientsRecords(PrefC.GetString(PrefName.RegistrationKey),BlockPKNumList.ToArray());
 						break;
 					}
-					progressIndicator.CurrentVal+=LocalBatchSize;
+					//progressIndicator.CurrentVal+=LocalBatchSize;//not allowed
+					currentVal+=localBatchSize;
+					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 
+						currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 				}
 		}
 
-		private static void DeleteObjects(List<DeletedObject> dO,ref FormProgress progressIndicator) {
+		///<summary>This method gets invoked from the worker thread.</summary>
+		private static void PassProgressToDialog(double currentVal,string displayText,double maxVal,string errorMessage) {
+			FormP.CurrentVal=currentVal;
+			FormP.DisplayText=displayText;
+			FormP.MaxVal=maxVal;
+			FormP.ErrorMessage=errorMessage;
+		}
+
+		private static void DeleteObjects(List<DeletedObject> dO,double totalCount,ref double currentVal) {
 			int LocalBatchSize=BatchSize;
 			for(int start=0;start<dO.Count;start+=LocalBatchSize) {
 				if((start+LocalBatchSize)>dO.Count) {
 					mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),dO.ToArray());
 					LocalBatchSize=dO.Count-start;
 				}
-				progressIndicator.CurrentVal+=BatchSize;
+				//progressIndicator.CurrentVal+=BatchSize;//not allowed
+				currentVal+=BatchSize;
+				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 
+					currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 			}
 			
 		}
@@ -448,11 +466,11 @@ namespace OpenDental {
 				return;
 			}
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);			
-			FormProgress FormP=new FormProgress();//but we won't display it.
-			FormP.NumberFormat="";
-			FormP.DisplayText="";
+			//FormProgress FormP=new FormProgress();//but we won't display it.
+			//FormP.NumberFormat="";
+			//FormP.DisplayText="";
 			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(changedSince,ref FormP,timeSynchStarted); };
+			ThreadStart uploadDelegate= delegate { UploadWorker(changedSince,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 		}
