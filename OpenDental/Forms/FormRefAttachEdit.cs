@@ -41,6 +41,7 @@ namespace OpenDental{
 		private Label label13;
 		private ValidDate textDateProcCompleted;
 		private Label label9;
+		private UI.Button butChangeReferral;
 		///<summary>List of referral slips for this pat/ref combo.</summary>
 		private List<Sheet> SheetList; 
 
@@ -91,6 +92,7 @@ namespace OpenDental{
 			this.label13 = new System.Windows.Forms.Label();
 			this.textDateProcCompleted = new OpenDental.ValidDate();
 			this.label9 = new System.Windows.Forms.Label();
+			this.butChangeReferral = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -361,6 +363,20 @@ namespace OpenDental{
 			this.label9.Text = "Date Proc Completed";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butChangeReferral
+			// 
+			this.butChangeReferral.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChangeReferral.Autosize = true;
+			this.butChangeReferral.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangeReferral.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangeReferral.CornerRadius = 4F;
+			this.butChangeReferral.Location = new System.Drawing.Point(514,40);
+			this.butChangeReferral.Name = "butChangeReferral";
+			this.butChangeReferral.Size = new System.Drawing.Size(95,24);
+			this.butChangeReferral.TabIndex = 74;
+			this.butChangeReferral.Text = "Change Referral";
+			this.butChangeReferral.Click += new System.EventHandler(this.butChangeReferral_Click);
+			// 
 			// FormRefAttachEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -383,6 +399,7 @@ namespace OpenDental{
 			this.Controls.Add(this.labelPatient);
 			this.Controls.Add(this.textReferralNotes);
 			this.Controls.Add(this.textRefDate);
+			this.Controls.Add(this.butChangeReferral);
 			this.Controls.Add(this.butEdit);
 			this.Controls.Add(this.textOrder);
 			this.Controls.Add(this.textName);
@@ -478,6 +495,17 @@ namespace OpenDental{
 			FormReferralEdit FormRE=new FormReferralEdit(referral);
 			FormRE.ShowDialog();
 			Referrals.RefreshCache();
+			FillData();
+		}
+
+		private void butChangeReferral_Click(object sender,EventArgs e) {
+			FormReferralSelect FormRS=new FormReferralSelect();
+			FormRS.IsSelectionMode=true;
+			FormRS.ShowDialog();
+			if(FormRS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			RefAttachCur.ReferralNum=FormRS.SelectedReferral.ReferralNum;
 			FillData();
 		}
 

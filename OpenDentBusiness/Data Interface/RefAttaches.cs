@@ -35,6 +35,22 @@ namespace OpenDentBusiness{
 			command+="ORDER BY ItemOrder";
 			return Crud.RefAttachCrud.SelectMany(command);
 		}
+		
+		///<summary>For FormReferralProckTrack.</summary>
+		public static List<RefAttach> RefreshForReferralProcTrack(DateTime dateFrom,DateTime dateTo,bool complete) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<RefAttach>>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,complete);
+			}
+			string command="SELECT * FROM refattach "
+				+"WHERE ProcNum IN(SELECT ProcNum FROM procedurelog) "
+				+"AND RefDate>="+POut.Date(dateFrom)+" "
+				+"AND RefDate<="+POut.Date(dateTo)+" ";
+			if(!complete) {
+				command+="AND DateProcComplete="+POut.Date(DateTime.MinValue)+" ";
+			}
+			command+="ORDER BY RefDate";
+			return Crud.RefAttachCrud.SelectMany(command);
+		}
 
 		///<summary></summary>
 		public static void Update(RefAttach attach){
@@ -114,6 +130,5 @@ namespace OpenDentBusiness{
 			command=DbHelper.LimitOrderBy(command,1);
 			return PIn.Long(Db.GetScalar(command));
 		}
-
 	}
 }

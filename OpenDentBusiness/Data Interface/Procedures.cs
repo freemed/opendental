@@ -1446,9 +1446,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list of procedures for </summary>
-		public static DataTable GetReferred(DateTime dateFrom, DateTime dateTo, bool unfinished) {
+		public static DataTable GetReferred(DateTime dateFrom, DateTime dateTo, bool complete) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,unfinished);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,complete);
 			}
 			string command=
 				"SELECT procedurelog.CodeNum,procedurelog.PatNum,LName,FName,MName,RefDate,DateProcComplete,refattach.Note,RefToStatus "
@@ -1457,9 +1457,10 @@ namespace OpenDentBusiness {
 				+"JOIN referral ON refattach.ReferralNum=referral.ReferralNum "
 				+"WHERE RefDate>="+POut.Date(dateFrom)+" "
 				+"AND RefDate<="+POut.Date(dateTo)+" ";
-			if(unfinished) {
-				command+="AND DateProcComplete!="+POut.Date(DateTime.MinValue)+" ";
+			if(!complete) {
+				command+="AND DateProcComplete="+POut.Date(DateTime.MinValue)+" ";
 			}
+			command+="ORDER BY RefDate";
 			return Db.GetTable(command);
 		}
 
