@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("11.1.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("11.2.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -6146,12 +6146,12 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To11_1_0();
+			To11_1_1();
 		}
 
 		///<summary></summary>
-		private static void To11_1_0() {
-			if(FromVersion<new Version("11.1.0.0")) {
+		private static void To11_1_1() {
+			if(FromVersion<new Version("11.1.1.0")) {
 				string command;
 				//Set default appt schedule printing preferences.  Was released when not finished so can't trust current values.
 				command="UPDATE preference SET ValueString="+POut.DateT(new DateTime(2011,1,1,0,0,0))+" WHERE PrefName='ApptPrintTimeStart'";
@@ -6667,15 +6667,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE statement SET DateTStamp = SYSTIMESTAMP";
 					Db.NonQ(command);
 				}
-				
-
-
-
-
-				command="UPDATE preference SET ValueString = '11.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '11.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To11_1_1();
+			To11_2_0();
+		}
+		
+		///<summary></summary>
+		private static void To11_2_0() {
+			if(FromVersion<new Version("11.2.0.0")) {
+				string command;
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '11.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To11_3_0();
 		}
 
 
