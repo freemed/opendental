@@ -172,7 +172,7 @@ namespace OpenDental {
 			//for full synch, delete all records then repopulate.
 			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
 			DateTime timeSynchStarted=MiscData.GetNowDateTime();
-			FormProgress FormP=new FormProgress();
+			FormP=new FormProgress();
 			FormP.MaxVal=100;//to keep the form from closing until the real MaxVal is set.
 			FormP.NumberMultiplication=1;
 			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
