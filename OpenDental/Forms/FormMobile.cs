@@ -264,6 +264,8 @@ namespace OpenDental {
 					totalCount+=delPatNumList.Count;
 				}
 				double currentVal=0;
+				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
+					new object[] { currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 				IsSynching=true;
 				SynchGeneric(patNumList,SynchEntity.patient,totalCount,ref currentVal);
 				SynchGeneric(aptNumList,SynchEntity.appointment,totalCount,ref currentVal);
