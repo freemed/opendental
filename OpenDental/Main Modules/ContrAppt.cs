@@ -3886,8 +3886,14 @@ namespace OpenDental {
 						break;
 					}
 					headers[i]=ApptDrawing.VisOps[k].OpName;
-					xCenter=(int)((ApptDrawing.ColWidth/2)-(g.MeasureString(headers[i],headerFont).Width/2));
-					g.DrawString(headers[i],headerFont,Brushes.Black,(int)(xPos+xCenter),yPos);
+					if(g.MeasureString(headers[i],headerFont).Width>ApptDrawing.ColWidth) {
+						RectangleF rf=new RectangleF(xPos,yPos,ApptDrawing.ColWidth,g.MeasureString(headers[i],headerFont).Height);
+						g.DrawString(headers[i],headerFont,Brushes.Black,rf);
+					}
+					else {
+						xCenter=(int)((ApptDrawing.ColWidth/2)-(g.MeasureString(headers[i],headerFont).Width/2));
+						g.DrawString(headers[i],headerFont,Brushes.Black,(int)(xPos+xCenter),yPos);
+					}
 					xPos+=ApptDrawing.ColWidth;
 				}
 			}
