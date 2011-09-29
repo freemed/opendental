@@ -647,6 +647,7 @@ namespace OpenDental{
 			signatureBoxWrapper.BringToFront();
 			FillPatientData();
 			FillPlanned();
+			textNotes.Select(textNotes.Text.Length,0);
 			IsStartingUp=false;
 		}
 
@@ -1069,46 +1070,25 @@ namespace OpenDental{
 		}
 		#endregion Planned
 
-
 		private void butRx_Click(object sender,EventArgs e) {
-			/*?
-			if(UsingEcwTight()) {
-				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
-				//refresh the right panel:
-				try {
-					string strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
-					webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
-							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
-							+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
-					labelECWerror.Visible=false;
-				}
-				catch(Exception ex) {
-					webBrowserEcw.Url=null;
-					labelECWerror.Text="Error: "+ex.Message;
-					labelECWerror.Visible=true;
-				}
+			//only visible in Orion mode
+			if(!Security.IsAuthorized(Permissions.RxCreate)) {
+				return;
 			}
-			else {
-			?*/
-				if(!Security.IsAuthorized(Permissions.RxCreate)) {
-					return;
-				}
-				FormRxSelect FormRS=new FormRxSelect(PatCur);
-				FormRS.ShowDialog();
-				if(FormRS.DialogResult!=DialogResult.OK) return;
-				//ModuleSelected(PatCur.PatNum);
-				SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
-			//}
-			if(FormRS.DialogResult==DialogResult.OK){
-				RxPat Rx=RxPats.GetRx(RxNum);
-				if(textNotes.Text!=""){
-					textNotes.Text+="\r\n";
-				}
-				textNotes.Text+="Rx - "+Rx.Drug+" - #"+Rx.Disp;
-				string rxNote=Pharmacies.GetDescription(RxNum);
-				if(rxNote!=""){
-					textNotes.Text+="\r\n"+rxNote;
-				}
+			FormRxSelect FormRS=new FormRxSelect(PatCur);
+			FormRS.ShowDialog();
+			if(FormRS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
+			RxPat Rx=RxPats.GetRx(RxNum);
+			if(textNotes.Text!=""){
+				textNotes.Text+="\r\n";
+			}
+			textNotes.Text+="Rx - "+Rx.Drug+" - #"+Rx.Disp;
+			string rxNote=Pharmacies.GetDescription(RxNum);
+			if(rxNote!=""){
+				textNotes.Text+="\r\n"+rxNote;
 			}
 		}
 
@@ -1216,16 +1196,15 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			bool result=MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want delete this group note?");
-			if(result){
-				Procedures.Delete(GroupCur.ProcNum);
-				for(int i=0;i<GroupItemList.Count;i++){
-					ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
-				}
-				DialogResult=DialogResult.Cancel;
-				IsOpen=false;
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Delete this group note?")){
+				return;
 			}
-			return;
+			Procedures.Delete(GroupCur.ProcNum);
+			for(int i=0;i<GroupItemList.Count;i++){
+				ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
+			}
+			DialogResult=DialogResult.OK;
+			IsOpen=false;
 		}		
 
 		private void butOK_Click(object sender,System.EventArgs e) {

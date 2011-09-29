@@ -7806,7 +7806,7 @@ namespace OpenDental{
 			Procedure proc;
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++){//Create proclist from selected items.
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
-				proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),false);
+				proc=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
 				proclist.Add(proc);
 			}
 			//Validate the list of procedures------------------------------------------------------------------------------------
@@ -7847,7 +7847,10 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate)) {
 				string aggNote="";
 				for(int i=0;i<proclist.Count;i++) {
-					aggNote+=ProcCodeNotes.GetNote(proclist[i].ProvNum,proclist[i].CodeNum)+"\r\n";
+					if(i>0) {
+						aggNote+="\r\n";
+					}
+					aggNote+=proclist[i].Note;
 				}
 				group.Note=aggNote;
 			}
@@ -7876,9 +7879,19 @@ namespace OpenDental{
 			FormP.GroupItemList=groupItemList;
 			FormP.ProcList=proclist;
 			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.OK){
-				ModuleSelected(PatCur.PatNum);
+			if(FormP.DialogResult!=DialogResult.OK){
+				return;
 			}
+			if(PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate)) {
+				//remove the notes from all the attached procs
+				for(int i=0;i<proclist.Count;i++) {
+					Procedure oldProc=proclist[i].Copy();
+					Procedure changedProc=proclist[i].Copy();
+					changedProc.Note="";
+					Procedures.Update(changedProc,oldProc);
+				}
+			}
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuItemLabFee_Click(object sender,EventArgs e) {
