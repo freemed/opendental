@@ -175,7 +175,7 @@ namespace OpenDental {
 			FormP=new FormProgress();
 			FormP.MaxVal=100;//to keep the form from closing until the real MaxVal is set.
 			FormP.NumberMultiplication=1;
-			FormP.DisplayText="?currentVal of ?maxVal records uploaded";
+			FormP.DisplayText="Preparing records for upload.";
 			FormP.NumberFormat="F0";
 			//start the thread that will perform the upload
 			ThreadStart uploadDelegate= delegate { UploadWorker(DateTime.MinValue,timeSynchStarted); };
@@ -296,7 +296,8 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
-				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 0,"",totalCount,e.Message});
+				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
+					new object[] { 0,"?currentVal of ?maxVal records uploaded",totalCount,e.Message });
 				//FormP.ErrorMessage=e.Message;	//not allowed
 			}
 		}
