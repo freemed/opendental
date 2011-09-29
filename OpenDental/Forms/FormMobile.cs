@@ -200,6 +200,7 @@ namespace OpenDental {
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
 			DateTime timeSynchStarted=MiscData.GetNowDateTime();
 			FormProgress FormP=new FormProgress();
+			FormP.MaxVal=100;//to keep the form from closing until the real MaxVal is set.
 			//start the thread that will perform the upload
 			ThreadStart uploadDelegate= delegate { UploadWorker(changedSince,ref FormP,timeSynchStarted); };
 			Thread workerThread=new Thread(uploadDelegate);
@@ -260,7 +261,6 @@ namespace OpenDental {
 					totalCount+=delPatNumList.Count;
 				}
 				FormP.MaxVal=(double)totalCount;
-				FormP.ShowProgress=true;
 				IsSynching=true;
 				SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
 				SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);
