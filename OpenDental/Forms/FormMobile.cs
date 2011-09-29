@@ -260,6 +260,7 @@ namespace OpenDental {
 					totalCount+=delPatNumList.Count;
 				}
 				FormP.MaxVal=(double)totalCount;
+				FormP.ShowProgress=true;
 				IsSynching=true;
 				SynchGeneric(patNumList,SynchEntity.patient,ref FormP);
 				SynchGeneric(aptNumList,SynchEntity.appointment,ref FormP);

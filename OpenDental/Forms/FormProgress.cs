@@ -30,7 +30,8 @@ namespace OpenDental{
 		public int NumberMultiplication;
 		private Label labelError;
 		public string ErrorMessage;
-
+		///<summary>Without this variable this form will only momentarily flash if there are a large number of uploads</summary>
+		public bool ShowProgress=false;
 		///<summary></summary>
 		public FormProgress(){
 			//
@@ -115,7 +116,7 @@ namespace OpenDental{
 			this.labelProgress.Name = "labelProgress";
 			this.labelProgress.Size = new System.Drawing.Size(402,55);
 			this.labelProgress.TabIndex = 4;
-			this.labelProgress.Text = "labelProgress";
+			this.labelProgress.Text = "Preparing for Upload";
 			// 
 			// labelError
 			// 
@@ -156,6 +157,11 @@ namespace OpenDental{
 		
 		///<summary>Happens every 200 ms</summary>
 		private void timer1_Tick(object sender, System.EventArgs e) {
+			if(!ShowProgress) {
+				Cursor=Cursors.WaitCursor;
+				return;
+			}
+			Cursor=Cursors.Default;
 			if(!string.IsNullOrEmpty(ErrorMessage)) {
 				labelError.Visible=true;
 				labelError.Text=ErrorMessage;
@@ -175,11 +181,14 @@ namespace OpenDental{
 				//must be done.
 				//progressBar1.Value=progressBar1.Maximum;
 				DialogResult=DialogResult.OK;
+				Dispose();//without this line the timer ticks even after this form is closed
 			}
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
+			Cursor=Cursors.Default;//probably not needed
 			DialogResult=DialogResult.Cancel;
+			Dispose();//without this line the timer ticks even after this form is closed
 		}
 
 		
