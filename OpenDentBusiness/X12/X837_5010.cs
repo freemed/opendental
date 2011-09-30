@@ -17,7 +17,7 @@ namespace OpenDentBusiness
 		public static void GenerateMessageText(StreamWriter sw,Clearinghouse clearhouse,int batchNum,List<ClaimSendQueueItem> listQueueItems,EnumClaimMedType medType) {
 			//Interchange Control Header (Interchange number tracked separately from transactionNum)
 			//We set it to between 1 and 999 for simplicity
-			sw.Write("ISA*00*"//ISA01 2/2 Authorization Information Qualifier: 00=No Authorization Information Present (No meaningful information in ISA02).
+			sw.WriteLine("ISA*00*"//ISA01 2/2 Authorization Information Qualifier: 00=No Authorization Information Present (No meaningful information in ISA02).
 				+"          *"//ISA02 10/10 Authorization Information: Blank
 				+"00*"//ISA03 2/2 Security Information Qualifier: 00=No Security Information Present (No meaningful information in ISA04).
 				+"          *"//ISA04 10/10 Security Information: Blank
@@ -27,12 +27,12 @@ namespace OpenDentBusiness
 				+Sout(clearhouse.ISA08,15,15)+"*"//ISA08 15/15 Interchange Receiver ID: Validated to make sure length is at least 2.
 				+DateTime.Today.ToString("yyMMdd")+"*"//ISA09 6/6 Interchange Date: today's date.
 				+DateTime.Now.ToString("HHmm")+"*"//ISA10 4/4 Interchange Time: current time
-				+"U*"//ISA11 1/1 Repetition Separator:
+				+"^*"//ISA11 1/1 Repetition Separator:
 				+"00501*"//ISA12 5/5 Interchange Control Version Number:
 				+batchNum.ToString().PadLeft(9,'0')+"*"//ISA13 9/9 Interchange Control Number:
 				+"0*"//ISA14 1/1 Acknowledgement Requested: 0=No Interchange Acknowledgment Requested.
-				+clearhouse.ISA15+"*");//ISA15 1/1 Interchange Usage Indicator: T=Test, P=Production. Validated.
-			sw.WriteLine(":~");//ISA16 1/1 Component Element Separator: Use colon.
+				+clearhouse.ISA15+"*"//ISA15 1/1 Interchange Usage Indicator: T=Test, P=Production. Validated.
+				+":~");//ISA16 1/1 Component Element Separator: Use colon.
 			//Just one functional group.
 			WriteFunctionalGroup(sw,listQueueItems,batchNum,clearhouse,medType);
 			//Interchange Control Trailer
@@ -276,22 +276,22 @@ namespace OpenDentBusiness
 				sw.WriteLine(Sout(billProv.SSN,50,1)//REF02 1/50 Reference Identification. Tax ID #.
 					+"~");//REF03 and REF04 are not used.
 				if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Dental) {
-					//2010AA REF (medical,dental) Billing Provider UIPN/License Information: Situational. We do not use. Max repeat 2.
+					//2010AA REF: (medical,dental) Billing Provider UIPN/License Information: Situational. We do not use. Max repeat 2.
 				}
 				if(medType==EnumClaimMedType.Dental) {
-					//2010AA REF (dental) License #: NOT IN X12 5010 STANDARD DOCUMENTATION. Required by RECS clearinghouse, but everyone else should find it useful too.
-					//We do NOT validate that it's entered because seding it with non-persons causes problems
+					//2010AA REF: (dental) State License Number: Required by RECS and Emdeon clearinghouses. Everyone else should find it useful too. We do NOT validate that it's entered because seding it with non-persons causes problems.
 					if(billProv.StateLicense!=""){
 						seg++;
 						sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
 							+Sout(billProv.StateLicense,50)//REF02 1/50 Reference Identification: 
 							+"~");//REF03 and REF04 are not used.
 					}
-					//2010AA REF (dental) Secondary Identification Number(s): NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by some carriers.
-					//js 9/5/11 secondary ID numbers are no longer allowed now.  I wonder what BCBS will do now.
-					//seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
+					//2010AA REF G5 (dental) Site Identification Number: NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by some Emdeon.
+					if(clearhouse.ISA08=="0135WCH00") { //Emdeon
+						seg+=Write2010AASiteIDforEmdeon(sw,billProv,carrier.ElectID);
+					}
 				}
-				//2010AA PER IC (medical,institutional,dental) Billing Provider Contact Information: Probably required by a number of carriers and by Emdeon.
+				//2010AA PER: IC (medical,institutional,dental) Billing Provider Contact Information: Probably required by a number of carriers and by WebMD.
 				seg++;
 				sw.Write("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
 					+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02 1/60 Name: Practice Title.
@@ -464,8 +464,11 @@ namespace OpenDentBusiness
 					+Sout(carrier.State,2,2)+"*"//N402 2/2 State or Province Code:
 					+Sout(carrier.Zip.Replace("-",""),15,3)//N403 3/15 Postal Code:
 					+"~");//N404 through N407 are either not used or are for addresses outside of the United States.
-				//2010BB REF: Payer Secondary Identificaiton. Situational. We do not use this.
-				//2010BB REF: Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used. Since we are using NM109 in loop 2010AA, we do not use this segment.
+				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
+				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
+				if(clearhouse.ISA08=="0135WCH00") {//Required by Emdeon
+					seg+=WriteProv_REFG2(sw,billProv,carrier.ElectID);
+				}
 				parentSubsc=HLcount;
 				HLcount++;
 				#endregion
@@ -967,12 +970,13 @@ namespace OpenDentBusiness
 						+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
 						+X12Generator.GetTaxonomy(provTreat)//PRV03 1/50 Reference Identification: Taxonomy Code.
 						+"~");//PRV04 through PRV06 are not used.
-					//2310B REF: (dental) Rendering Provider Secondary Identification. Situational.
-	//todo: is this validated?
+					//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
+	//todo: is StateLicense validated?
 					seg++;
 					sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-						+Sout(provTreat.StateLicense,50)//REF02 1/50 Reference Identification:
+						+Sout(provTreat.StateLicense,50,1)//REF02 1/50 Reference Identification:
 						+"~");//REF03 and REF04 are not used.
+					seg+=WriteProv_REFG2(sw,provTreat,carrier.ElectID);
 					//2310C NM1: 77 (dental) Service Facility Location Name. Situational. Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33.
 					if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
 						|| claim.PlaceService==PlaceOfService.SkilledNursFac || claim.PlaceService==PlaceOfService.CustodialCareFacility) {//AdultLivCareFac
@@ -1581,41 +1585,42 @@ namespace OpenDentBusiness
 				+"~");//PER05 through PER08 are situational. We do not use. PER09 is not used.
 		}
 
-		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse.  Used for billing prov and also for treating prov. Returns the number of segments written</summary>
-		private static int WriteProv_REF(StreamWriter sw,Provider prov,string payorID) {
-			int retVal=0;
-			ElectID electID=ElectIDs.GetID(payorID);
-			if(electID!=null && electID.IsMedicaid) {
-				retVal++;
-				sw.WriteLine("REF*"
-					+"1D*"//REF01 2/3 Reference Identification Qualifier: 1D=Medicaid.
-					+Sout(prov.MedicaidID,50,1)//REF02 1/50 Reference Identification:
-					+"~");//REF03 and REF04 are not used.
-			}
-			//I don't think there would be additional id's if Medicaid, but just in case, no return.
+		///<summary>Generates SiteID REF G5 for Emdeon only. Returns number of segments generated.</summary>
+		private static int Write2010AASiteIDforEmdeon(StreamWriter sw,Provider prov,string payorID) {
 			ProviderIdent[] provIdents=ProviderIdents.GetForPayor(prov.ProvNum,payorID);
 			for(int i=0;i<provIdents.Length;i++) {
-				retVal++;
-				sw.WriteLine("REF*"
-					+GetProvTypeQualifier(provIdents[i].SuppIDType)+"*"//REF01 2/3 Reference Identification Qualifier: 
-					+Sout(provIdents[i].IDNumber,50,1)//REF02 1/50 Reference Identification:
-					+"~");//REF03 and REF04 are not used.
+				if(provIdents[i].SuppIDType==ProviderSupplementalID.SiteNumber) {
+					sw.WriteLine("REF*"
+						+"G5*"//REF01 2/3 Reference Identification Qualifier: 
+						+Sout(provIdents[i].IDNumber,50,1)//REF02 1/50 Reference Identification:
+						+"~");//REF03 and REF04 are not used.
+					return 1;
+				}
 			}
-			return retVal;
+			return 0;
 		}
 
-		private static string GetProvTypeQualifier(ProviderSupplementalID provType) {
-			switch(provType) {
-				case ProviderSupplementalID.BlueCross:
-					return "1A";
-				case ProviderSupplementalID.BlueShield:
-					return "1B";
-				case ProviderSupplementalID.SiteNumber:
-					return "G5";
-				case ProviderSupplementalID.CommercialNumber:
-					return "G2";
+		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse. Used for billing prov and also for treating prov. Writes 0 or 1 G2 segments. Returns the number of segments written.</summary>
+		private static int WriteProv_REFG2(StreamWriter sw,Provider prov,string payorID) {
+			string provID="";
+			ElectID electID=ElectIDs.GetID(payorID);
+			if(electID!=null && electID.IsMedicaid) {
+				provID=prov.MedicaidID;
 			}
-			return "  ";
+			else {
+				ProviderIdent[] provIdents=ProviderIdents.GetForPayor(prov.ProvNum,payorID);//Should always return 1 value unless user set it up wrong.
+				if(provIdents.Length>0) {
+					provID=provIdents[0].IDNumber;
+				}
+			}
+			if(provID!="") {
+				sw.WriteLine("REF*"
+		      +"G2*"//REF01 2/3 Reference Identification Qualifier: 1D=Medicaid.
+		      +Sout(provID,50,1)//REF02 1/50 Reference Identification:
+		      +"~");//REF03 and REF04 are not used.
+				return 1;
+			}
+			return 0;
 		}
 
 		private static string GetGender(PatientGender patGender) {
