@@ -1340,52 +1340,22 @@ namespace OpenDental{
 		}
 
 		private void ToolButAddSuper_Click() {
-			if(PatCur.Guarantor==PatCur.SuperFamily && SuperFamilyMembers.Count!=FamCur.ListPats.Length) {//member of head family of super family, but also the only family in super family.
-				MsgBox.Show(this,"Selected patient is already in the family of the head of a super family.  All super family members must be removed before changing the head.");
-				return;
+			if(PatCur.SuperFamily==0) {
+				Patients.AssignToSuperfamily(PatCur.Guarantor,PatCur.Guarantor);
 			}
-			FormPatientSelect formPS = new FormPatientSelect();
-			formPS.SelectionModeOnly=true;
-			formPS.ShowDialog();
-			if(formPS.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			Patient patSelected=Patients.GetPat(formPS.SelectedPatNum);
-			bool addToSuperFamily=false;
-			long SuperFamilyNumToAdd=(patSelected.SuperFamily==0?patSelected.Guarantor:patSelected.SuperFamily);
-			if(patSelected.SuperFamily==patSelected.Guarantor) {//selected patient is head of a super family.
-				addToSuperFamily=true;
-			}
-			else if(patSelected.SuperFamily==0) {//create a new Super family
-				if(MessageBox.Show("Would you like to create a new super family and make the head of the new super family "+Patients.GetPat(patSelected.Guarantor).GetNameFL()+"?","",MessageBoxButtons.OKCancel)
-					!=DialogResult.OK) 
-				{
+			else {//we must want to add some other family to this superfamily
+				FormPatientSelect formPS = new FormPatientSelect();
+				formPS.SelectionModeOnly=true;
+				formPS.ShowDialog();
+				if(formPS.DialogResult!=DialogResult.OK) {
 					return;
 				}
-				addToSuperFamily=true;
-				Family headFam = Patients.GetFamily(patSelected.PatNum);
-				for(int i=0;i<headFam.ListPats.Length;i++) {//add whole family of the selected patient (this is the head family)
-					Patient tempPat=headFam.ListPats[i].Copy();
-					tempPat.SuperFamily=SuperFamilyNumToAdd;
-					Patients.Update(tempPat,headFam.ListPats[i]);
-				}
-
-			}
-			else if(patSelected.SuperFamily!=patSelected.Guarantor) {//selected patient is only a member of a super family and not the head.
-				Patient superHead = Patients.GetPat(patSelected.SuperFamily);
-				if(MessageBox.Show("Selected patient is only a member of a super family. Would you like to add your patient to the same super family of "+superHead.GetNameFL()+"?","",MessageBoxButtons.OKCancel)
-					!=DialogResult.OK) {
+				Patient patSelected=Patients.GetPat(formPS.SelectedPatNum);
+				if(patSelected.SuperFamily==PatCur.SuperFamily) {
+					MsgBox.Show(this,"That patient is already part of this superfamily.");
 					return;
 				}
-				addToSuperFamily=true;
-			}
-			if(!addToSuperFamily) {
-				return;
-			}
-			for(int i=0;i<FamCur.ListPats.Length;i++) {//add whole family
-				Patient tempPat=FamCur.ListPats[i].Copy();
-				tempPat.SuperFamily=SuperFamilyNumToAdd;
-				Patients.Update(tempPat,FamCur.ListPats[i]);
+				Patients.AssignToSuperfamily(patSelected.Guarantor,PatCur.SuperFamily);
 			}
 			ModuleSelected(PatCur.PatNum);
 		}

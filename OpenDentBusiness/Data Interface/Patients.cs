@@ -1928,6 +1928,14 @@ FROM insplan";
 			return Crud.PatientCrud.TableToList(Db.GetTable(command));
 		}
 
+		public static void AssignToSuperfamily(long guarantor,long superFamilyNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),guarantor,superFamilyNum);
+			}
+			string command="UPDATE patient SET SuperFamily="+POut.Long(superFamilyNum)+" WHERE Guarantor="+POut.Long(guarantor);
+			Db.NonQ(command);
+		}
+
 		public static void MoveSuperFamily(long oldSuperFamilyNum,long newSuperFamilyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),oldSuperFamilyNum,newSuperFamilyNum);
