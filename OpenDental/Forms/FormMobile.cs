@@ -166,6 +166,10 @@ namespace OpenDental {
 			if(!SavePrefs()) {
 				return;
 			}
+			if(IsSynching) {
+				MsgBox.Show(this,"A Synch is in progress at the moment. Please try again later.");
+				return;
+			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will be time consuming. Continue anyway?")) {
 				return;
 			}
@@ -192,6 +196,10 @@ namespace OpenDental {
 
 		private void butSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
+				return;
+			}
+			if(IsSynching) {
+				MsgBox.Show(this,"A Synch is in progress at the moment. Please try again later.");
 				return;
 			}
 			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
@@ -264,7 +272,7 @@ namespace OpenDental {
 					totalCount+=delPatNumList.Count;
 				}
 				double currentVal=0;
-				if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+				if(Application.OpenForms["FormProgress"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
 					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
 						new object[] { currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 				}
@@ -300,7 +308,7 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
-				if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+				if(Application.OpenForms["FormProgress"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
 					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
 						new object[] { 0,"?currentVal of ?maxVal records uploaded",totalCount,e.Message });
 				}
@@ -389,7 +397,7 @@ namespace OpenDental {
 					}
 					//progressIndicator.CurrentVal+=LocalBatchSize;//not allowed
 					currentVal+=localBatchSize;
-					if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+					if(Application.OpenForms["FormProgress"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
 						FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
 							new object[] {currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 					}
@@ -413,7 +421,7 @@ namespace OpenDental {
 				}
 				//progressIndicator.CurrentVal+=BatchSize;//not allowed
 				currentVal+=BatchSize;
-				if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+				if(Application.OpenForms["FormProgress"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
 					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
 						new object[] {currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 				}
