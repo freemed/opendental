@@ -16,11 +16,14 @@ using OpenDentBusiness.HL7;
 
 namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
-		private System.Threading.Timer timer;
-		private static string inFolder;
+		private System.Threading.Timer timerSend;
+		private System.Threading.Timer timerReceive;
+		private static string hl7FolderIn;
+		private static string hl7FolderOut;
 		///<summary>Indicates the standalone mode for eCW, or the use of Mountainside.  In both cases, chartNumber will be used instead of PatNum.</summary>
 		private static bool IsStandalone;
 		private bool IsVerboseLogging;
+		private static bool isReceiving;
 
 		public ServiceHL7() {
 			InitializeComponent();
@@ -81,45 +84,36 @@ namespace OpenDentHL7 {
 			//#if DEBUG//just so I don't forget to remove it later.
 			//IsStandalone=false;
 			//#endif
-			//start filewatcher
-			string hl7folderOut=PrefC.GetString(PrefName.HL7FolderOut);
-				//ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderOut");
-				//HL7Msgs.GetHL7FolderOut();
-			if(!Directory.Exists(hl7folderOut)) {
-				throw new ApplicationException(hl7folderOut+" does not exist.");
+			hl7FolderOut=PrefC.GetString(PrefName.HL7FolderOut);
+			if(!Directory.Exists(hl7FolderOut)) {
+				throw new ApplicationException(hl7FolderOut+" does not exist.");
 			}
-			FileSystemWatcher watcher=new FileSystemWatcher(hl7folderOut);//'out' from eCW/Mountainside
-			watcher.Created += new FileSystemEventHandler(OnCreated);
-			watcher.Renamed += new RenamedEventHandler(OnRenamed);
-			watcher.EnableRaisingEvents=true;
-			//process all waiting messages
-			string[] existingFiles=Directory.GetFiles(hl7folderOut);
-			for(int i=0;i<existingFiles.Length;i++) {
-				ProcessMessage(existingFiles[i]);
-			}
+			//start polling the folder for waiting messages to import.  Every 5 seconds.
+			TimerCallback timercallbackReceive=new TimerCallback(TimerCallbackReceiveFunction);
+			timerReceive=new System.Threading.Timer(timercallbackReceive,null,5000,5000);
 			if(IsStandalone) {
 				return;//do not continue with the HL7 sending code below
 			}
-			//start polling the db for new HL7 messages to send
-			inFolder=PrefC.GetString(PrefName.HL7FolderIn);
-				//ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderIn");
-				//HL7Msgs.GetHL7FolderIn();
-			if(!Directory.Exists(inFolder)) {
-				throw new ApplicationException(inFolder+" does not exist.");
+			//start polling the db for new HL7 messages to send. Every 1.8 seconds.
+			hl7FolderIn=PrefC.GetString(PrefName.HL7FolderIn);
+			if(!Directory.Exists(hl7FolderIn)) {
+				throw new ApplicationException(hl7FolderIn+" does not exist.");
 			}
-			TimerCallback callback=new TimerCallback(TimerCallbackFunction);
-			timer=new System.Threading.Timer(callback,null,1800,1800);
-			//timer.
-			//timer.Tick+=new EventHandler(timer_Tick);
-			//timer.Interval=1800;//just under 2 seconds.
+			TimerCallback timercallbackSend=new TimerCallback(TimerCallbackSendFunction);
+			timerSend=new System.Threading.Timer(timercallbackSend,null,1800,1800);
 		}
 
-		private void OnCreated(object source,FileSystemEventArgs e) {
-			ProcessMessage(e.FullPath);
-		}
-
-		private void OnRenamed(object source,RenamedEventArgs e) {
-			ProcessMessage(e.FullPath);
+		private void TimerCallbackReceiveFunction(Object stateInfo) {
+			//process all waiting messages
+			if(isReceiving) {
+				return;//already in the middle of processing files
+			}
+			isReceiving=true;
+			string[] existingFiles=Directory.GetFiles(hl7FolderOut);
+			for(int i=0;i<existingFiles.Length;i++) {
+				ProcessMessage(existingFiles[i]);
+			}
+			isReceiving=false;
 		}
 		
 		private void ProcessMessage(string fullPath) {
@@ -167,27 +161,21 @@ namespace OpenDentHL7 {
 
 		protected override void OnStop() {
 			//inform od via signal that this service has shut down
-			//timer.Enabled=false;
-			if(timer!=null) {
-				timer.Dispose();
+			if(timerSend!=null) {
+				timerSend.Dispose();
 			}
 		}
 
-		private static void TimerCallbackFunction(Object stateInfo) {
-			//string diagnosticMsg="";
+		private void TimerCallbackSendFunction(Object stateInfo) {
+			//does not happen for standalone
 			List<HL7Msg> list=HL7Msgs.GetAllPending();
-			//if(list.Count==0) {
-			//	EventLog.WriteEntry("No messages found.  Connection string and query: "+diagnosticMsg);
-			//}
-			//else {
-			//	EventLog.WriteEntry("Messages found: "+list.Count.ToString());
-			//}
 			string filename;
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].AptNum==0){
-					filename=ODFileUtils.CreateRandomFile(inFolder,".txt");
-				}else{
-					filename=Path.Combine(inFolder,list[i].AptNum.ToString()+".txt");
+					filename=ODFileUtils.CreateRandomFile(hl7FolderIn,".txt");
+				}
+				else{
+					filename=Path.Combine(hl7FolderIn,list[i].AptNum.ToString()+".txt");
 				}
 				//EventLog.WriteEntry("Attempting to create file: "+filename);
 				File.WriteAllText(filename,list[i].MsgText);
