@@ -264,8 +264,10 @@ namespace OpenDental {
 					totalCount+=delPatNumList.Count;
 				}
 				double currentVal=0;
-				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
-					new object[] { currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
+				if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
+						new object[] { currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
+				}
 				IsSynching=true;
 				SynchGeneric(patNumList,SynchEntity.patient,totalCount,ref currentVal);
 				SynchGeneric(aptNumList,SynchEntity.appointment,totalCount,ref currentVal);
@@ -298,9 +300,10 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
-				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
-					new object[] { 0,"?currentVal of ?maxVal records uploaded",totalCount,e.Message });
-				//FormP.ErrorMessage=e.Message;	//not allowed
+				if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
+						new object[] { 0,"?currentVal of ?maxVal records uploaded",totalCount,e.Message });
+				}
 			}
 		}
 
@@ -386,8 +389,10 @@ namespace OpenDental {
 					}
 					//progressIndicator.CurrentVal+=LocalBatchSize;//not allowed
 					currentVal+=localBatchSize;
-					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 
-						currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
+					if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+						FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
+							new object[] {currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
+					}
 				}
 		}
 
@@ -408,8 +413,10 @@ namespace OpenDental {
 				}
 				//progressIndicator.CurrentVal+=BatchSize;//not allowed
 				currentVal+=BatchSize;
-				FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 
-					currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
+				if(Application.OpenForms["FormMobile"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
+					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
+						new object[] {currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
+				}
 			}
 			
 		}
