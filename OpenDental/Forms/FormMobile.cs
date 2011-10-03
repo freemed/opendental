@@ -20,6 +20,8 @@ namespace OpenDental {
 		private static bool IsSynching;
 		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
 		private bool changed;
+		///<summary>All statements of a patient are not uploaded. The limit is defined by the recent [statementLimitPerPatient] records</summary>
+		private static int statementLimitPerPatient=5;
 		private static FormProgress FormP;
 
 		private enum SynchEntity {
@@ -259,7 +261,7 @@ namespace OpenDental {
 				List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 				List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList);
+				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList,statementLimitPerPatient);
 				//List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
@@ -575,6 +577,20 @@ namespace OpenDental {
 				}
 			}
 		}
+
+		private static void CreateStatements(int StatementCount) {
+			long[] patNumArray=Patients.GetAllPatNums();
+			for(int i=0;i<patNumArray.Length;i++) {
+				for(int j=0;j<StatementCount;j++) {
+					Statement st= new Statement();
+					st.DateSent=new DateTime(2010,12,1,11,0,0).AddDays(1+j);
+					st.DocNum=i+j;
+					st.PatNum=patNumArray[i];
+					Statements.Insert(st);
+				}
+			}
+		}
+
 		#endregion Testing
 
 		private void butClose_Click(object sender,EventArgs e) {

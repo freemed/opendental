@@ -416,12 +416,13 @@ namespace WebHostSynch {
 						/* On OD if a labpanel is deleted the corresponding labresults are also deleted. This will ensure that on the webserver labresults are deleted via 	the DeleteObjects function
 						 * a similar situation would be true for  medications, allergydefs and disease defs.
 						 * If however the patient password is set to blank then the corresponding deletes of labresults, medications, allergydefs and disease defs will not occur causing some unnecessary records to be present on the webserver. 
-						 * Given the current level of coding it's important to leave these unnecessary records onthe webserver because the moment a patient password is not blank they will be needed again.
+						 * Given the current level of coding it's important to leave these unnecessary records on the webserver because the moment a patient password is not blank they will be needed again.
 						*/
 							LabPanelms.Delete(customerNum,patNumList[i]);
 							MedicationPatms.Delete(customerNum,patNumList[i]);
 							Allergyms.Delete(customerNum,patNumList[i]);
 							Diseasems.Delete(customerNum,patNumList[i]);
+							Statementms.Delete(customerNum,patNumList[i]);
 					}
 				}
 				catch(Exception ex) {

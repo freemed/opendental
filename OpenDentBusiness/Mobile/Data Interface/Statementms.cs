@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
+using System.Linq;
 
 namespace OpenDentBusiness.Mobile{
 	///<summary></summary>
@@ -20,8 +21,8 @@ namespace OpenDentBusiness.Mobile{
 
 		#region Used only on OD
 		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<long> GetChangedSinceStatementNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
-			return Statements.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList);
+		public static List<long> GetChangedSinceStatementNums(DateTime changedSince,List<long> eligibleForUploadPatNumList,int limitPerPatient) {
+			return Statements.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList,limitPerPatient);
 		}
 
 		///<summary>The values returned are sent to the webserver.</summary>

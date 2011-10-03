@@ -212,28 +212,27 @@ namespace OpenDentBusiness{
 			return Crud.StatementCrud.SelectOne(command);
 		}
 
-		public static List<long> GetChangedSinceStatementNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+		///<summary>Fetches StatementNums restricted by the DateTStamp, PatNums and a limit of records per patient. If limitPerPatient is zero all StatementNums of a patient are fetched</summary>
+		public static List<long> GetChangedSinceStatementNums(DateTime changedSince,List<long> eligibleForUploadPatNumList,int limitPerPatient) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,eligibleForUploadPatNumList);
 			}
-			string strEligibleForUploadPatNums="";
+			List<long> statementnums = new List<long>();
+			string limitStr="";
+			if(limitPerPatient>0) {
+				limitStr="LIMIT "+ limitPerPatient;
+			}
 			DataTable table;
+			// there are possibly more efficient ways to implement this using a single sql statement but readability of the sql can be compromised
 			if(eligibleForUploadPatNumList.Count>0) {
 				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
-					if(i>0) {
-						strEligibleForUploadPatNums+="OR ";
+					string command="SELECT StatementNum FROM statement WHERE DateTStamp > "+POut.DateT(changedSince)+" AND PatNum='" 
+						+eligibleForUploadPatNumList[i].ToString()+"' ORDER BY DateSent, StatementNum  "+limitStr;
+					table=Db.GetTable(command);
+					for(int j=0;j<table.Rows.Count;j++) {
+						statementnums.Add(PIn.Long(table.Rows[j]["StatementNum"].ToString()));
 					}
-					strEligibleForUploadPatNums+="PatNum='"+eligibleForUploadPatNumList[i].ToString()+"' ";
 				}
-				string command="SELECT StatementNum FROM statement WHERE DateTStamp > "+POut.DateT(changedSince)+" AND ("+strEligibleForUploadPatNums+")";
-				table=Db.GetTable(command);
-			}
-			else {
-				table=new DataTable();
-			}
-			List<long> statementnums = new List<long>(table.Rows.Count);
-			for(int i=0;i<table.Rows.Count;i++) {
-				statementnums.Add(PIn.Long(table.Rows[i]["StatementNum"].ToString()));
 			}
 			return statementnums;
 		}
