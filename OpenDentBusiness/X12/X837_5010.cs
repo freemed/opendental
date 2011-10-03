@@ -286,12 +286,12 @@ namespace OpenDentBusiness
 							+Sout(billProv.StateLicense,50)//REF02 1/50 Reference Identification: 
 							+"~");//REF03 and REF04 are not used.
 					}
-					//2010AA REF G5 (dental) Site Identification Number: NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by some Emdeon.
+					//2010AA REF G5 (dental) Site Identification Number: NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by Emdeon.
 					if(clearhouse.ISA08=="0135WCH00") { //Emdeon
 						seg+=Write2010AASiteIDforEmdeon(sw,billProv,carrier.ElectID);
 					}
 				}
-				//2010AA PER: IC (medical,institutional,dental) Billing Provider Contact Information: Probably required by a number of carriers and by WebMD.
+				//2010AA PER: IC (medical,institutional,dental) Billing Provider Contact Information: Probably required by a number of carriers and by Emdeon.
 				seg++;
 				sw.Write("PER*IC*"//PER01 2/2 Contact Function Code: IC=Information Contact.
 					+Sout(PrefC.GetString(PrefName.PracticeTitle),60,1)+"*"//PER02 1/60 Name: Practice Title.
@@ -394,7 +394,7 @@ namespace OpenDentBusiness
 					+"MI*"//NM108 1/2 Identification Code Qualifier: MI=Member Identification Number.
 					+Sout(sub.SubscriberID.Replace("-",""),80,2)//NM109 2/80 Identification Code: Situational. Required when NM102=1.
 					+"~");//NM110 through NM112 are not used.
-				//At the request of WebMD, we always include N3,N4,and DMG even if patient is not subscriber.
+				//At the request of Emdeon, we always include N3,N4,and DMG even if patient is not subscriber.
 				//This does not make the transaction non-compliant, and they find it useful.
 				//2010BA N3: (medical,institutional,dental) Subscriber Address. Situational. Required when the patient is the subscriber.
 				seg++;
@@ -482,9 +482,19 @@ namespace OpenDentBusiness
 						+"0~");//HL04 1/1 Hierarchical Child Code: 0=No subordinate HL segment in this hierarchical structure.
 					//2000C PAT: (medical,institutional,dental) Patient Information.
 					seg++;
-					sw.WriteLine("PAT*"
-						+GetRelat(claim.PatRelat)+"*"//PAT01 2/2 Individual Relationship Code:
-						+"~");//PAT02 through PAT04 Not used. PAT05 through PAT08 not used in institutional or dental, but is sometimes used in medical. We do not use.
+					if(clearhouse.ISA08=="0135WCH00") { //Emdeon
+						sw.WriteLine("PAT*"
+							+GetRelat(claim.PatRelat)+"*"//PAT01 2/2 Individual Relationship Code:
+							+"*"//PAT02 1/1 Patient Location Code: Not used.
+							+"*"//PAT03 2/2 Employment Status Code: Not used.
+							+GetStudentEmdeon(patient.StudentStatus)//PAT04 1/1 Student Status Code: Not used. Emdeon wants us to sent this code corresponding to version 4010, even through it is not standard X12.
+							+"~");//PAT05 through PAT08 not used in institutional or dental, but is sometimes used in medical. We do not use.
+					}
+					else {
+						sw.WriteLine("PAT*"
+							+GetRelat(claim.PatRelat)+"*"//PAT01 2/2 Individual Relationship Code:
+							+"~");//PAT02 through PAT04 Not used. PAT05 through PAT08 not used in institutional or dental, but is sometimes used in medical. We do not use.
+					}
 					//2010CA NM1: QC (medical,institutional,dental) Patient Name.
 					seg++;
 					sw.Write("NM1*QC*"//NM101 2/3 Entity Identifier Code: QC=Patient.
@@ -1659,7 +1669,7 @@ namespace OpenDentBusiness
 			return "";
 		}
 
-		private static string GetStudent(string studentStatus) {
+		private static string GetStudentEmdeon(string studentStatus) {
 			if(studentStatus=="P") {
 				return "P";
 			}
