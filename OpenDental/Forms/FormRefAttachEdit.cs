@@ -259,7 +259,7 @@ namespace OpenDental{
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(143,14);
 			this.label7.TabIndex = 85;
-			this.label7.Text = "Status (if refferred out)";
+			this.label7.Text = "Status (if referred out)";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butDelete
@@ -416,7 +416,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "FormRefAttachEdit";
+			this.Text = "Edit Referral Attachment";
 			this.Load += new System.EventHandler(this.FormRefAttachEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
