@@ -281,7 +281,9 @@ namespace OpenDentBusiness{
 				command+="AND claim.ClaimType!='Preauth' ";
 			}
 			command+="ORDER BY carrier.Phone,insplan.PlanNum, carrier.Phone,insplan.PlanNum";
-			Plugins.HookAddCode(null,"Claims.GetOutInsClaims_end",command);
+			object[] parameters={command};
+			Plugins.HookAddCode(null,"Claims.GetOutInsClaims_beforequeryrun",parameters);
+			command=(string)parameters[0];
 			DataTable table=Db.GetTable(command);
 			return table;
 		}

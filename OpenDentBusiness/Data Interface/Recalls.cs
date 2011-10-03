@@ -963,6 +963,19 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static int GetCountForType(long recallTypeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),recallTypeNum);
+			}
+			string command="SELECT COUNT(*) FROM recall "
+				+"JOIN recalltype ON recall.RecallTypeNum=recalltype.RecallTypeNum "
+				+"WHERE recalltype.recallTypeNum="+POut.Long(recallTypeNum);
+			return PIn.Int(Db.GetCount(command));
+		}
+
+
+
+
 	}
 
 	///<summary>The supplied DataRows must include the following columns: Guarantor, PatNum, guarLName, guarFName, LName, FName, DateDue, maxDateDue, billingType.  maxDateDue is the most recent DateDue for all family members in the list and needs to be the same for all family members.  This date will be used for better grouping.</summary>
@@ -1045,6 +1058,10 @@ namespace OpenDentBusiness{
 			}
 			return 0;
 		}
+
+
+
+
 	}
 
 	public enum RecallListShowNumberReminders {

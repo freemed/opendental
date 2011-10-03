@@ -228,8 +228,8 @@ namespace OpenDental{
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			FormRecallTypeEdit FormRE=new FormRecallTypeEdit();
-			FormRE.RecallCur=new RecallType();
-			FormRE.RecallCur.IsNew=true;
+			FormRE.RecallTypeCur=new RecallType();
+			FormRE.RecallTypeCur.IsNew=true;
 			FormRE.ShowDialog();
 			FillGrid();
 			changed=true;
@@ -243,7 +243,7 @@ namespace OpenDental{
 			}
 			else{*/
 			FormRecallTypeEdit FormR=new FormRecallTypeEdit();
-			FormR.RecallCur=RecallTypeC.Listt[e.Row].Copy();
+			FormR.RecallTypeCur=RecallTypeC.Listt[e.Row].Copy();
 			FormR.ShowDialog();
 			FillGrid();
 			changed=true;
