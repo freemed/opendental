@@ -709,92 +709,12 @@ namespace UnitTests {
 			return "13: Passed.  Ortho procedures should not affect insurance used section at lower right of TP module.\r\n"; 
 		}
 
-		public static string TestFourteen(int specificTest) {
-			if(specificTest != 0 && specificTest !=14){
-				return"";
-			}
-			string suffix="14";
-			Patient pat=PatientT.CreatePatient(suffix);
-			long patNum=pat.PatNum;
-			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
-			long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
-			//Standard Fee
-			Fees.RefreshCache();
-			long codeNum=ProcedureCodes.GetCodeNum("D7140");
-			Fee fee=Fees.GetFee(codeNum,53);
-			if(fee==null) {
-				fee=new Fee();
-				fee.CodeNum=codeNum;
-				fee.FeeSched=53;
-				fee.Amount=140;
-				Fees.Insert(fee);
-			}
-			else {
-				fee.Amount=140;
-				Fees.Update(fee);
-			}
-			//PPO fees
-			fee=new Fee();
-			fee.CodeNum=codeNum;
-			fee.FeeSched=feeSchedNum1;
-			fee.Amount=136;
-			Fees.Insert(fee);
-			fee=new Fee();
-			fee.CodeNum=codeNum;
-			fee.FeeSched=feeSchedNum2;
-			fee.Amount=77;
-			Fees.Insert(fee);
-			Fees.RefreshCache();
-			//Carrier
-			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1).PlanNum;
-			long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2).PlanNum;
-			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
-			long subNum1=sub1.InsSubNum;
-			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
-			long subNum2=sub2.InsSubNum;
-			BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.OralSurgery,50);
-			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.OralSurgery,100);
-			PatPlanT.CreatePatPlan(1,patNum,subNum1);
-			PatPlanT.CreatePatPlan(2,patNum,subNum2);
-			Procedure proc=ProcedureT.CreateProcedure(pat,"D7140",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//extraction on 8
-			long procNum=proc.ProcNum;
-			//Lists
-			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
-			Family fam=Patients.GetFamily(patNum);
-			List<InsSub> subList=InsSubs.RefreshForFam(fam);
-			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
-			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
-			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
-			List<ClaimProcHist> histList=new List<ClaimProcHist>();
-			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
-			//Validate
-			ClaimProc claimProc;
-			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
-			claimProcs=ClaimProcs.Refresh(patNum);
-			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
-			if(claimProc.InsEstTotal!=68) {
-				throw new Exception("Should be 68. \r\n");
-			}
-			if(claimProc.WriteOffEst!=4) {
-				throw new Exception("Should be 4. \r\n");
-			}
-			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2,subNum2);
-			if(claimProc.InsEstTotal!=9) {
-				throw new Exception("Should be 9. \r\n");
-			}
-			if(claimProc.WriteOffEst!=59) {
-				throw new Exception("Writeoff should be 59. \r\n");
-			}
-			return "14: Passed.  Claim proc estimates for dual PPO ins.  Writeoff2 not zero.\r\n";
-		}
-
 		///<summary></summary>
-		public static string TestFifteen(int specificTest) {
-			if(specificTest != 0 && specificTest !=15) {
+		public static string TestFourteen(int specificTest) {
+			if(specificTest != 0 && specificTest !=14) {
 				return "";
 			}
-			string suffix="15";
+			string suffix="14";
 			Patient pat=PatientT.CreatePatient(suffix);
 			long patNum=pat.PatNum;
 			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
@@ -880,7 +800,7 @@ namespace UnitTests {
 			if(claimProc2.InsEstTotal!=0) {//Insurance should not cover.
 				throw new Exception("Secondary Estimate was "+claimProc2.InsEstTotal+", should be 0.\r\n");
 			}*/
-			retVal+="15: Passed. \r\n";
+			retVal+="14: Passed. \r\n";
 			return retVal;
 		}
 
