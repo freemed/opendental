@@ -129,7 +129,12 @@ namespace OpenDental {
 						break;
 					}
 					if(listPatientFields[j].FieldName==PatFieldDefs.List[i].FieldName) {
-						row.Cells.Add(listPatientFields[j].FieldValue);
+						if(PatFieldDefs.List[i].FieldType==PatFieldType.Checkbox) {
+							row.Cells.Add("X");
+						}
+						else {
+							row.Cells.Add(listPatientFields[j].FieldValue);
+						}
 						break;
 					}
 				}
