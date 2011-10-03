@@ -23,13 +23,13 @@ namespace OpenDentBusiness.HL7 {
 			}
 			SegmentPID.ProcessPID(pat,seg,isStandalone);
 			//PV1-patient visit---------------------------
-			seg=message.GetSegment(SegmentName.PV1,false);
-			if(seg!=null) {
-				SegmentPID.ProcessPV1(pat,seg);
-			}
+			//seg=message.GetSegment(SegmentName.PV1,false);
+			//if(seg!=null) {
+			//	SegmentPID.ProcessPV1(pat,seg);
+			//}
 			//SCH- Schedule Activity Information
 			seg=message.GetSegment(SegmentName.SCH,true);
-			//The documentation is wrong.  SCH.01 is not a the appointment ID, but is instead a sequence# (always 1)
+			//The documentation is wrong.  SCH.01 is not the appointment ID, but is instead a sequence# (always 1)
 			long aptNum=PIn.Long(seg.GetFieldFullText(2));
 			Appointment apt=Appointments.GetOneApt(aptNum);
 			Appointment aptOld=null;
@@ -63,6 +63,7 @@ namespace OpenDentBusiness.HL7 {
 				long provNum=SegmentPID.ProvProcess(seg.GetField(3));
 				if(provNum!=0) {
 					apt.ProvNum=provNum;
+					pat.PriProv=provNum;
 				}
 			}
 			//AIL,AIP seem to be optional, and I'm going to ignore them for now.

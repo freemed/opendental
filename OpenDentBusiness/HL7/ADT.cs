@@ -72,23 +72,23 @@ namespace OpenDentBusiness.HL7 {
 			}
 			SegmentPID.ProcessPID(pat,seg,isStandalone);
 			//PV1-patient visit---------------------------
-			seg=message.GetSegment(SegmentName.PV1,false);
-			if(seg!=null) {//this seg is optional
-				SegmentPID.ProcessPV1(pat,seg);
-			}
+			//seg=message.GetSegment(SegmentName.PV1,false);
+			//if(seg!=null) {//this seg is optional
+			//	SegmentPID.ProcessPV1(pat,seg);
+			//}
 			//PD1-additional patient demographics------------
-			seg=message.GetSegment(SegmentName.PD1,false);
-			if(seg!=null) {//this seg is optional
-				ProcessPD1(pat,seg);
-			}
+			//seg=message.GetSegment(SegmentName.PD1,false);
+			//if(seg!=null) {//this seg is optional
+			//	ProcessPD1(pat,seg);
+			//}
 			//GT1-Guarantor-------------------------------------
 			seg=message.GetSegment(SegmentName.GT1,true);
 			SegmentPID.ProcessGT1(pat,seg,isStandalone);
 			//IN1-Insurance-------------------------------------
-			List<SegmentHL7> segments=message.GetSegments(SegmentName.IN1);
-			for(int i=0;i<segments.Count;i++) {
-				ProcessIN1(pat,seg);
-			}
+			//List<SegmentHL7> segments=message.GetSegments(SegmentName.IN1);
+			//for(int i=0;i<segments.Count;i++) {
+			//	ProcessIN1(pat,seg);
+			//}
 			if(isNewPat) {
 				if(isVerboseLogging) {
 					EventLog.WriteEntry("OpenDentHL7","Inserted patient: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
