@@ -73,10 +73,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),dateStart,clinicNum);
 			}
 			string command=
-				"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
-				+"Checknum,BankBranch,Note,"
-				+"ClinicNum,DepositNum,CarrierName "
-				+"FROM claimpayment "
+				"SELECT * FROM claimpayment "
 				+"WHERE DepositNum = 0 "
 				+"AND CheckDate >= "+POut.Date(dateStart);
 			if(clinicNum!=0){
@@ -92,10 +89,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),depositNum);
 			}
 			string command=
-				"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
-				+"Checknum,BankBranch,Note,"
-				+"ClinicNum,DepositNum,CarrierName "
-				+"FROM claimpayment "
+				"SELECT * FROM claimpayment "
 				+"WHERE DepositNum = "+POut.Long(depositNum)
 				+" ORDER BY CheckDate";
 			return Crud.ClaimPaymentCrud.SelectMany(command).ToArray();
