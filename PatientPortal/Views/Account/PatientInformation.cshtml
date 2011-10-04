@@ -6,34 +6,55 @@
 	ViewBag.Title = "Patient Information";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>PatientInformation</h2>
+<h2>Patient Information</h2>
 
-<h2>Family Balance</h2>
-BalTotal=@Model.patm.BalTotal<br />
-InsEst=@Model.patm.InsEst
+<p>&nbsp;</p>
+    <p><strong>Family Balance</strong></p>
+<strong>BalTotal</strong>=@Model.patm.BalTotal<br />
+<strong>InsEst</strong>=@Model.patm.InsEst
 <br /><br />
 @foreach(var item in Model.mStatementmList) {    
-	@Html.Encode("Statement "+item.DateSent.ToShortDateString() + " ")   @Html.ActionLink("View Statement","ShowPdfFile","Account",new { d=item.DocNum }, new { target="_blank" }) <br />
+	@Html.Encode("Statement "+item.DateSent.ToShortDateString() + " ")
+	if(item.DocNum!=0) {
+	@Html.ActionLink("View Statement","ShowPdfFile","Account",new { d=item.DocNum },new { target="_blank" }) 
+	}
+	<br />
 }
 
-    <h2>LabPanel List</h2>
+	<p>&nbsp;</p>
+    <p><strong>LabPanel:</strong></p>
 	@Model.MessageLabPanel
 	<table>
+	<tr>
+		<td><strong>Lab Name &amp; Address</strong></td>
+		<td colspan="2"><strong>Lab Results</strong></td>
+	</tr>
 	@foreach(var item in Model.mLabPanelmList) {    
     <tr>
         <td>@Html.Encode(item.LabPanelNum)</td>
         <td>@Html.Encode(item.LabNameAddress)</td>
 		<td>
-			<table>
+			
 				@{ PatientPortalMVC.Models.PatientInformationModel.LabResults lr= Model.GetLabResult(item.LabPanelNum); }
-					@foreach(LabResultm itemInner in lr.mLabResultmList) {
-					  <tr>
-						  <td>@Html.Encode(itemInner.DateTimeTest) </td>
-						  <td>@Html.Encode(itemInner.TestName) </td>
-						  <td>@Html.Encode(itemInner.ObsValue) </td>
-					  </tr>
-	 }
-			</table>
+					@if(lr.mLabResultmList.Count!=0) {
+						<table>			  
+							<tr>
+							  <td><strong>Date Time</strong></td>
+							  <td><strong>Test Name</strong></td>
+							  <td><strong>Observed Value</strong></td>
+							</tr>
+							@foreach(LabResultm itemInner in lr.mLabResultmList) {
+
+		 
+								<tr>
+								  <td>@Html.Encode(itemInner.DateTimeTest) </td>
+								  <td>@Html.Encode(itemInner.TestName) </td>
+								  <td>@Html.Encode(itemInner.ObsValue) </td>
+							  </tr>
+							 }
+						</table>
+					 }
+		 
 		</td>
 
     </tr>
@@ -41,37 +62,57 @@ InsEst=@Model.patm.InsEst
 	</table>
 
 
-	    <h2>Medication List</h2>
+	<p>&nbsp;</p>
+    <p><strong>List of Medications:</strong></p>
 	@Model.MessageMedication
-	<table>
-	@foreach(DataRow row in Model.mMedicationmDataTable.Rows) {
-    <tr>
-        <td>@Html.Encode(row["MedName"].ToString())</td>
-    </tr>
- }
-	</table>
+	@if(Model.mMedicationmDataTable.Rows.Count!=0) {
+		<table>
+		<tr>
+			<td><strong>Medication Name</strong></td>
+		</tr>
+		@foreach(DataRow row in Model.mMedicationmDataTable.Rows) {
+			<tr>
+				<td>@Html.Encode(row["MedName"].ToString())</td>
+			</tr>
+		 }
+		</table>
+	}
 
-		    <h2>List of Problems:</h2>
+	<p>&nbsp;</p>
+    <p><strong>List of Problems:</strong></p>
 	@Model.MessageProblem
 	
-	<table>
-	 @foreach(DataRow row in Model.mDiseasemDataTable.Rows) { // Loop over the rows.
-    <tr>
-        <td>@Html.Encode(row["Description"].ToString())</td>
-    </tr>
-  }
-	</table>
+	@if(Model.mDiseasemDataTable.Rows.Count!=0) {
+		<table>
+			<tr>
+				<td><strong>ICD</strong></td>
+			</tr>
+			@foreach(DataRow row in Model.mDiseasemDataTable.Rows) { // Loop over the rows.
+				<tr>
+					<td>@Html.Encode(row["Description"].ToString())</td>
+				</tr>
+			}
+		</table>
+	}
 
-	<h2>List of Allergies:</h2>
+<p>&nbsp;</p>
+    <p><strong>List of Allergies:</strong></p>
 
 	@Model.MessageAllergy
-	<table>
-	@foreach(DataRow row in Model.mAllergymDataTable.Rows) {
-    <tr>
-	<td>@Html.Encode(row["Description"].ToString())</td>
-    </tr>
-	}
-	</table>
+		@if(Model.mAllergymDataTable.Rows.Count!=0) {
+			<table>
+			<tr>
+				<td><strong>Allergy</strong></td>
+				<td><strong>Reaction</strong></td>
+			</tr>
+			@foreach(DataRow row in Model.mAllergymDataTable.Rows) {
+				<tr>
+				<td>@Html.Encode(row["Description"].ToString())</td>
+				<td>@Html.Encode(row["Reaction"].ToString())</td>
+				</tr>
+			 }
+		</table>
 
+		 }
 
 

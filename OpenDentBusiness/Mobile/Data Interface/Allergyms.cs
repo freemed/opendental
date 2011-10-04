@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Mobile{
 
 		public static DataTable GetAllergymDetails(long customerNum,long patNum) {
 			string command=
-				"SELECT  allergydefm.Description from allergym  LEFT JOIN allergydefm on allergym.AllergyDefNum=allergydefm.AllergyDefNum "
+				"SELECT  allergydefm.Description, allergym.Reaction from allergym  LEFT JOIN allergydefm on allergym.AllergyDefNum=allergydefm.AllergyDefNum "
 				+"WHERE allergym.CustomerNum = "+POut.Long(customerNum)
 					+" AND allergym.PatNum = "+POut.Long(patNum)
 					+" AND allergym.StatusIsActive = "+POut.Bool(true) // get only active allergies

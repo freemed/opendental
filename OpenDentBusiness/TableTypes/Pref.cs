@@ -183,6 +183,8 @@ namespace OpenDentBusiness {
 		MobileSyncDateTimeLastRun,
 		///<summary>Used one time after the conversion to 7.9 for initial synch of the provider table.</summary>
 		MobileSynchNewTables79Done,
+		///<summary>Used one time after the conversion to 11.1 for re-synch of the patient records because 2 columns BalTotal and InsEst have been added to the patientm table.</summary>
+		//MobileSynchNewTable111Done, dennis:uncomment later
 		MobileSyncIntervalMinutes,
 		MobileSyncServerURL,
 		MobileSyncWorkstationName,

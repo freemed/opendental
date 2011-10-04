@@ -74,8 +74,8 @@ namespace PatientPortalMVC.Controllers
 			if(DocNum!=0) {
 				doc=Documentms.GetOne(patm.CustomerNum,DocNum);
 			}
-			if(patm.PatNum!=doc.PatNum){//make sure that the patient does not pass the another DocNum of another patient.
-				return new EmptyResult(); //return a blank page
+			if(doc==null || patm.PatNum!=doc.PatNum) {//make sure that the patient does not pass the another DocNum of another patient.
+				return new EmptyResult(); //return a blank page todo: return page with proper message.
 			}
 			ContentDisposition cd = new ContentDisposition();
 			cd.Inline=true;//the browser will try and show the pdf inline i.e inside the browser window. If set to false it will force a download.

@@ -199,8 +199,7 @@ CREATE TABLE `documentm` (
   `DocNum` bigint(20) NOT NULL,
   `PatNum` bigint(20) NOT NULL,
   `RawBase64` mediumtext NOT NULL,
-  KEY `CustomerNum` (`CustomerNum`),
-  KEY `DocNum` (`DocNum`),
+  PRIMARY KEY (`CustomerNum`,`DocNum`),
   KEY `PatNum` (`PatNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -560,8 +559,7 @@ CREATE TABLE `statementm` (
   `PatNum` bigint(20) NOT NULL,
   `DateSent` date NOT NULL DEFAULT '0001-01-01',
   `DocNum` bigint(20) NOT NULL,
-  KEY `CustomerNum` (`CustomerNum`),
-  KEY `StatementNum` (`StatementNum`),
+  PRIMARY KEY (`CustomerNum`,`StatementNum`),
   KEY `PatNum` (`PatNum`),
   KEY `DocNum` (`DocNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

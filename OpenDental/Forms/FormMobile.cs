@@ -16,12 +16,12 @@ namespace OpenDental {
 	public partial class FormMobile:Form {
 		private static MobileWeb.Mobile mb=new MobileWeb.Mobile();
 		private static int BatchSize=100;
+		///<summary>All statements of a patient are not uploaded. The limit is defined by the recent [statementLimitPerPatient] records</summary>
+		private static int statementLimitPerPatient=5;
 		///<summary>This variable prevents the synching methods from being called when a previous synch is in progress.</summary>
 		private static bool IsSynching;
 		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
 		private bool changed;
-		///<summary>All statements of a patient are not uploaded. The limit is defined by the recent [statementLimitPerPatient] records</summary>
-		private static int statementLimitPerPatient=5;
 		private static FormProgress FormP;
 
 		private enum SynchEntity {
@@ -236,16 +236,20 @@ namespace OpenDental {
 				//The handling of PrefName.MobileSynchNewTables79 should never be removed in future versions
 				DateTime changedProv=changedSince;
 				DateTime changedDeleted=changedSince;
+				DateTime changedPat=changedSince;
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 					changedProv=DateTime.MinValue;
 					changedDeleted=DateTime.MinValue;
 				}
+				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTable111Done,false)) { dennis:Uncomment later
+				//	changedPat=DateTime.MinValue;
+				//}
 				bool synchDelPat=true;
 				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
 					synchDelPat=false;// synching delPatNumList is time consuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
 				}
 				//MobileWeb
-				List<long> patNumList=Patientms.GetChangedSincePatNums(changedSince);
+				List<long> patNumList=Patientms.GetChangedSincePatNums(changedPat);
 				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
 				List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
@@ -302,11 +306,12 @@ namespace OpenDental {
 				DeleteObjects(dO,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 					Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
-					//DataValid.SetInvalid(InvalidType.Prefs);//not allowed from another thread
 				}
+				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTable111Done,true)) {dennis:Uncomment later
+				//	Prefs.UpdateBool(PrefName.MobileSynchNewTable111Done,true);
+				//}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 				IsSynching=false;
-				//throw new Exception("custom exception");
 			}
 			catch(Exception e) {
 				IsSynching=false;// this will ensure that the synch can start again. If this variable remains true due to an exception then a synch will never take place automatically.
