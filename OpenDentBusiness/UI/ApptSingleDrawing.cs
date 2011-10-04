@@ -726,13 +726,11 @@ namespace OpenDentBusiness.UI {
 					if(k>=ApptDrawing.VisOps.Count) {
 						return false;
 					}
-					int testOp=ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()));
 					if(k==ApptDrawing.GetIndexOp(PIn.Long(dataRoww["Op"].ToString()))) {
 						visible=true;
 						break;
 					}
 				}
-
 				if(!visible) {//Op not visible so don't test time frame.
 					return false;
 				}
@@ -740,7 +738,17 @@ namespace OpenDentBusiness.UI {
 			//Test if any portion of appt is within time frame.
 			TimeSpan aptTimeBegin=PIn.DateT(dataRoww["AptDateTime"].ToString()).TimeOfDay;
 			TimeSpan aptTimeEnd=aptTimeBegin.Add(new TimeSpan(0,dataRoww["Pattern"].ToString().Length*5,0));
-			if(aptTimeBegin>=endTime.TimeOfDay || aptTimeEnd<=beginTime.TimeOfDay) {
+			int aptHourBegin=aptTimeBegin.Hours;
+			int aptHourEnd=aptTimeEnd.Hours;
+			if(aptHourEnd==0) {
+				aptHourEnd=24;
+			}
+			int beginHour=beginTime.Hour;
+			int endHour=endTime.Hour;
+			if(endHour==0) {
+				endHour=24;
+			}
+			if(aptHourBegin>=endHour || aptHourEnd<=beginHour) {
 				return false;
 			}
 			return true;
