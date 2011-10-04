@@ -225,16 +225,34 @@ namespace UnitTests {
 			catch(Exception ex) {
 				textResults.Text+="13: Failed. "+ex.Message+"\r\n";
 			}
+			//try {//There is a phantom TestFourteen that has been commented out. It is similary to TestOne.
+			//  Application.DoEvents();
+			//  textResults.Text+=AllTests.TestFourteen(specificTest);
+			//}
+			//catch(Exception ex) {
+			//  textResults.Text+="14: Failed. "+ex.Message+"\r\n";
+			//}
 			try {
 				Application.DoEvents();
 				textResults.Text+=AllTests.TestFourteen(specificTest);
 			}
 			catch(Exception ex) {
-			  textResults.Text+="14: Failed. "+ex.Message+"\r\n";
+				textResults.Text+="14: Failed. "+ex.Message;
 			}
-		
-
-
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestFifteen(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="15: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestSixteen(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="16: Failed. "+ex.Message;
+			}
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 		}

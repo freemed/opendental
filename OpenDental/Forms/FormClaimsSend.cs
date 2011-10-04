@@ -500,8 +500,8 @@ namespace OpenDental{
 			int selected=e.Row;
 			FormClaimPrint FormCP;
 			FormCP=new FormClaimPrint();
-			FormCP.ThisPatNum=listQueue[e.Row].PatNum;
-			FormCP.ThisClaimNum=listQueue[e.Row].ClaimNum;
+			FormCP.PatNumCur=listQueue[e.Row].PatNum;
+			FormCP.ClaimNumCur=listQueue[e.Row].ClaimNum;
 			FormCP.PrintImmediately=false;
 			FormCP.ShowDialog();				
 			FillGrid();	
@@ -555,8 +555,8 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select only one claim."));
 				return;
 			}
-			FormCP.ThisPatNum=listQueue[gridMain.GetSelectedIndex()].PatNum;
-			FormCP.ThisClaimNum=listQueue[gridMain.GetSelectedIndex()].ClaimNum;
+			FormCP.PatNumCur=listQueue[gridMain.GetSelectedIndex()].PatNum;
+			FormCP.ClaimNumCur=listQueue[gridMain.GetSelectedIndex()].ClaimNum;
 			FormCP.PrintImmediately=false;
 			FormCP.ShowDialog();				
 			FillGrid();
@@ -592,8 +592,8 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				FormCP.ThisPatNum=listQueue[gridMain.SelectedIndices[i]].PatNum;
-				FormCP.ThisClaimNum=listQueue[gridMain.SelectedIndices[i]].ClaimNum;
+				FormCP.PatNumCur=listQueue[gridMain.SelectedIndices[i]].PatNum;
+				FormCP.ClaimNumCur=listQueue[gridMain.SelectedIndices[i]].ClaimNum;
 				FormCP.ClaimFormCur=null;//so that it will pull from the individual claim or plan.
 				if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,1)){
 					return;

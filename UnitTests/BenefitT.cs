@@ -38,6 +38,19 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
+		/// <summary>Takes an individual codeNum instead of a category.</summary>
+		public static void CreateDeductible(long planNum,string procCodeStr,double amt){
+			Benefit ben=new Benefit();
+			ben.PlanNum=planNum;
+			ben.BenefitType=InsBenefitType.Deductible;
+			ben.CovCatNum=0;
+			ben.CodeNum=ProcedureCodes.GetCodeNum(procCodeStr);
+			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.MonetaryAmt=amt;
+			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			Benefits.Insert(ben);
+		}
+
 		public static void CreateLimitation(long planNum,EbenefitCategory category,double amt){
 			Benefit ben=new Benefit();
 			ben.PlanNum=planNum;

@@ -4836,8 +4836,8 @@ namespace OpenDental{
 			}
 			UpdateClaim();
 			FormClaimPrint FormCP=new FormClaimPrint();
-			FormCP.ThisPatNum=ClaimCur.PatNum;
-			FormCP.ThisClaimNum=ClaimCur.ClaimNum;
+			FormCP.PatNumCur=ClaimCur.PatNum;
+			FormCP.ClaimNumCur=ClaimCur.ClaimNum;
 			FormCP.PrintImmediately=false;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult==DialogResult.OK) {
@@ -4860,8 +4860,8 @@ namespace OpenDental{
 				return;
 			}
 			FormClaimPrint FormCP=new FormClaimPrint();
-			FormCP.ThisPatNum=ClaimCur.PatNum;
-			FormCP.ThisClaimNum=ClaimCur.ClaimNum;
+			FormCP.PatNumCur=ClaimCur.PatNum;
+			FormCP.ClaimNumCur=ClaimCur.ClaimNum;
 			if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,pd.PrinterSettings.Copies)) {
 				return;
 			}

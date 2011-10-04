@@ -709,9 +709,89 @@ namespace UnitTests {
 			return "13: Passed.  Ortho procedures should not affect insurance used section at lower right of TP module.\r\n"; 
 		}
 
+		//public static string TestFourteen(int specificTest) {//This was taken out of the manual because it was a duplicate of Unit Test 1 but expected a different result.
+		//  if(specificTest != 0 && specificTest !=14){
+		//    return"";
+		//  }
+		//  string suffix="14";
+		//  Patient pat=PatientT.CreatePatient(suffix);
+		//  long patNum=pat.PatNum;
+		//  long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
+		//  long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
+		//  //Standard Fee
+		//  Fees.RefreshCache();
+		//  long codeNum=ProcedureCodes.GetCodeNum("D7140");
+		//  Fee fee=Fees.GetFee(codeNum,53);
+		//  if(fee==null) {
+		//    fee=new Fee();
+		//    fee.CodeNum=codeNum;
+		//    fee.FeeSched=53;
+		//    fee.Amount=140;
+		//    Fees.Insert(fee);
+		//  }
+		//  else {
+		//    fee.Amount=140;
+		//    Fees.Update(fee);
+		//  }
+		//  //PPO fees
+		//  fee=new Fee();
+		//  fee.CodeNum=codeNum;
+		//  fee.FeeSched=feeSchedNum1;
+		//  fee.Amount=136;
+		//  Fees.Insert(fee);
+		//  fee=new Fee();
+		//  fee.CodeNum=codeNum;
+		//  fee.FeeSched=feeSchedNum2;
+		//  fee.Amount=77;
+		//  Fees.Insert(fee);
+		//  Fees.RefreshCache();
+		//  //Carrier
+		//  Carrier carrier=CarrierT.CreateCarrier(suffix);
+		//  long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1).PlanNum;
+		//  long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2).PlanNum;
+		//  InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
+		//  long subNum1=sub1.InsSubNum;
+		//  InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
+		//  long subNum2=sub2.InsSubNum;
+		//  BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.OralSurgery,50);
+		//  BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.OralSurgery,100);
+		//  PatPlanT.CreatePatPlan(1,patNum,subNum1);
+		//  PatPlanT.CreatePatPlan(2,patNum,subNum2);
+		//  Procedure proc=ProcedureT.CreateProcedure(pat,"D7140",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//extraction on 8
+		//  long procNum=proc.ProcNum;
+		//  //Lists
+		//  List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+		//  Family fam=Patients.GetFamily(patNum);
+		//  List<InsSub> subList=InsSubs.RefreshForFam(fam);
+		//  List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+		//  List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+		//  List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+		//  List<ClaimProcHist> histList=new List<ClaimProcHist>();
+		//  List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+		//  //Validate
+		//  ClaimProc claimProc;
+		//  Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
+		//  claimProcs=ClaimProcs.Refresh(patNum);
+		//  claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
+		//  if(claimProc.InsEstTotal!=68) {
+		//    throw new Exception("Should be 68. \r\n");
+		//  }
+		//  if(claimProc.WriteOffEst!=4) {
+		//    throw new Exception("Should be 4. \r\n");
+		//  }
+		//  claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2,subNum2);
+		//  if(claimProc.InsEstTotal!=9) {
+		//    throw new Exception("Should be 9. \r\n");
+		//  }
+		//  if(claimProc.WriteOffEst!=59) {
+		//    throw new Exception("Writeoff should be 59. \r\n");
+		//  }
+		//  return "14: Passed.  Claim proc estimates for dual PPO ins.  Writeoff2 not zero.\r\n";
+		//}
+
 		///<summary></summary>
 		public static string TestFourteen(int specificTest) {
-			if(specificTest != 0 && specificTest !=14) {
+			if(specificTest != 0 && specificTest !=15) {
 				return "";
 			}
 			string suffix="14";
@@ -800,11 +880,228 @@ namespace UnitTests {
 			if(claimProc2.InsEstTotal!=0) {//Insurance should not cover.
 				throw new Exception("Secondary Estimate was "+claimProc2.InsEstTotal+", should be 0.\r\n");
 			}*/
-			retVal+="14: Passed. \r\n";
+			retVal+="14: Passed. Primary estimate are not affected by secondary claim.\r\n";
 			return retVal;
 		}
 
+				///<summary></summary>
+		public static string TestFifteen(int specificTest) {
+			if(specificTest != 0 && specificTest !=15){
+				return"";
+			}
+			string suffix="15";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			BenefitT.CreateAnnualMax(plan.PlanNum,1000);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
+			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,0);
+			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.Diagnostic,0);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Restorative,80);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Endodontics,80);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Periodontics,80);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.OralSurgery,80);
+			BenefitT.CreateDeductible(plan.PlanNum,"D0330",45);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,sub.InsSubNum);
+			//proc1 - Pano
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0330",ProcStat.TP,"",95);
+			ProcedureT.SetPriority(proc1,0);
+			//proc2 - Amalg
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2150",ProcStat.TP,"30",200);
+			ProcedureT.SetPriority(proc2,1);
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure>	ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++){
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age,subList);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum,sub.InsSubNum);
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum,sub.InsSubNum);
+			if(claimProc1.DedEst!=45){
+				throw new Exception("Estimate 1 should be 45. Is " + claimProc1.DedEst + ".\r\n");
+			}
+			if(claimProc2.DedEst!=5) {
+				throw new Exception("Estimate 2 should be 5. Is " + claimProc2.DedEst + ".\r\n");
+			}
+			retVal+="15: Passed. Deductibles can be created to override the regular deductible.\r\n";
+			return retVal;
+		}
+
+				///<summary></summary>
+		public static string TestSixteen(int specificTest) {
+			if(specificTest != 0 && specificTest !=16){
+				return"";
+			}
+			string suffix="16";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);//guarantor is subscriber
+			BenefitT.CreateAnnualMax(plan.PlanNum,1000);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
+			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,0);
+			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.Diagnostic,0);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Restorative,80);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Endodontics,80);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Periodontics,80);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.OralSurgery,80);
+			BenefitT.CreateDeductible(plan.PlanNum,"D0330",45);
+			BenefitT.CreateDeductible(plan.PlanNum,"D0220",25);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,sub.InsSubNum);
+			//proc1 - Pano
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0330",ProcStat.TP,"",100);
+			ProcedureT.SetPriority(proc1,0);
+			//proc2 - Intraoral - periapical first film
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D0220",ProcStat.TP,"",75);
+			ProcedureT.SetPriority(proc2,1);
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure>	ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++){
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age,subList);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum,sub.InsSubNum);
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum,sub.InsSubNum);
+			//
+			if(claimProc1.DedEst!=45){
+				throw new Exception("Estimate 1 should be 45. Is " + claimProc1.DedEst + ".\r\n");
+			}
+			if(claimProc2.DedEst!=5) {
+				throw new Exception("Estimate 2 should be 5. Is " + claimProc2.DedEst + ".\r\n");
+			}
+			retVal+="16: Passed. Multiple deductibles for categories do not exceed the regular deductible.\r\n";
+			return retVal;
+		}
+
+		public static string TestSeventeen(int specificTest) {
+			if(specificTest != 17) {
+				return "";
+			}
+			string suffix="1";
+			Patient pat=PatientT.CreatePatient(suffix);
+			long patNum=pat.PatNum;
+			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
+			long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
+			//Standard Fee
+			Fees.RefreshCache();
+			long codeNum=ProcedureCodes.GetCodeNum("D2750");
+			Fee fee=Fees.GetFee(codeNum,53);
+			if(fee==null) {
+				fee=new Fee();
+				fee.CodeNum=codeNum;
+				fee.FeeSched=53;
+				fee.Amount=1200;
+				Fees.Insert(fee);
+			}
+			else {
+				fee.Amount=1200;
+				Fees.Update(fee);
+			}
+			//PPO fees
+			fee=new Fee();
+			fee.CodeNum=codeNum;
+			fee.FeeSched=feeSchedNum1;
+			fee.Amount=900;
+			Fees.Insert(fee);
+			fee=new Fee();
+			fee.CodeNum=codeNum;
+			fee.FeeSched=feeSchedNum2;
+			fee.Amount=650;
+			Fees.Insert(fee);
+			Fees.RefreshCache();
+			//Carrier
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1).PlanNum;
+			long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2).PlanNum;
+			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
+			long subNum1=sub1.InsSubNum;
+			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
+			long subNum2=sub2.InsSubNum;
+			BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.Crowns,50);
+			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Crowns,50);
+			PatPlanT.CreatePatPlan(1,patNum,subNum1);
+			PatPlanT.CreatePatPlan(2,patNum,subNum2);
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//crown on 8
+			long procNum=proc.ProcNum;
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			Family fam=Patients.GetFamily(patNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			//Validate
+			string retVal="";
+			ClaimProc claimProc;
+			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
+			claimProcs=ClaimProcs.Refresh(patNum);
+			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
+			//I don't think allowed can be easily tested on the fly, and it's not that important.
+			if(claimProc.InsEstTotal!=450) {
+				throw new Exception("Should be 450. \r\n");
+			}
+			if(claimProc.WriteOffEst!=300) {
+				throw new Exception("Should be 300. \r\n");
+			}
+			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2,subNum2);
+			if(claimProc.InsEstTotal!=200) {
+				throw new Exception("Should be 200. \r\n");
+			}
+			if(claimProc.WriteOffEst!=0) {
+				throw new Exception("Should be 0. \r\n");
+			}
+			retVal+="17: Passed.  Claim proc estimates for dual PPO ins.  Allowed1 greater than Allowed2.\r\n";
+			return retVal;
+		}
+
+
+
+
+
+
+
+
+
 	}
-
-
 }

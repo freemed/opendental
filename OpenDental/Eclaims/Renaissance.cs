@@ -295,8 +295,8 @@ namespace OpenDental.Eclaims{
 			ClaimFormItem[] listForForm=new ClaimFormItem[241];
 			//items.CopyTo(ClaimFormItems.ListForForm,0);
 			FormClaimPrint FormCP=new FormClaimPrint();
-			FormCP.ThisClaimNum=claimNum;
-			FormCP.ThisPatNum=patNum;
+			FormCP.ClaimNumCur=claimNum;
+			FormCP.PatNumCur=patNum;
 			FormCP.ClaimFormCur=new ClaimForm();
 			FormCP.ClaimFormCur.Items=new ClaimFormItem[items.Length];
 			items.CopyTo(FormCP.ClaimFormCur.Items,0);
