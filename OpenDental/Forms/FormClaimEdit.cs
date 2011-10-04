@@ -4908,10 +4908,7 @@ namespace OpenDental{
 			else {
 				List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
 				queueItems.Add(listQueue[0]);
-
-
-			EnumClaimMedType medType=EnumClaimMedType.Dental;
-//todo: fix the above line
+				EnumClaimMedType medType=listQueue[0].MedType;
 				Eclaims.Eclaims.SendBatch(queueItems,clearhouse,medType);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
 			}
 			Cursor=Cursors.Default;
