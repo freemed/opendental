@@ -210,6 +210,10 @@ namespace OpenDental{
 					s+=" "+Lan.g(this,"(hidden)");
 				}
 				listMain.Items.Add(s);
+				if(DiseaseDefs.ListLong[i].ItemOrder!=i) {//index is wrong, so fix it
+					DiseaseDefs.ListLong[i].ItemOrder=i;
+					DiseaseDefs.Update(DiseaseDefs.ListLong[i]);
+				}
 			}
 		}
 
@@ -224,8 +228,9 @@ namespace OpenDental{
 			}
 			FormDiseaseDefEdit FormD=new FormDiseaseDefEdit(DiseaseDefs.ListLong[listMain.SelectedIndex]);
 			FormD.ShowDialog();
-			if(FormD.DialogResult!=DialogResult.OK)
+			if(FormD.DialogResult!=DialogResult.OK) {
 				return;
+			}
 			FillGrid();
 		}
 

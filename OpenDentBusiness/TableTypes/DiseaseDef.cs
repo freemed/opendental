@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public long DiseaseDefNum;
 		///<summary>.</summary>
 		public string DiseaseName;
-		///<summary>The order that the diseases will show in various lists.</summary>
+		///<summary>0-based.  The order that the diseases will show in various lists.</summary>
 		public int ItemOrder;
 		///<summary>If hidden, the disease will still show on any patient that it was previously attached to, but it will not be available for future patients.</summary>
 		public bool IsHidden;
