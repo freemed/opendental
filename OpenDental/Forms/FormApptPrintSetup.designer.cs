@@ -31,11 +31,12 @@ namespace OpenDental{
 			this.textStartTime = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textFontSize = new ODR.ValidDouble();
+			this.textFontSize = new OpenDental.ValidNum();
 			this.butSave = new OpenDental.UI.Button();
 			this.textColumnsPerPage = new OpenDental.ValidNumber();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// labelColumnsPerPage
@@ -115,9 +116,11 @@ namespace OpenDental{
 			// textFontSize
 			// 
 			this.textFontSize.Location = new System.Drawing.Point(146,108);
+			this.textFontSize.MaxVal = 50;
+			this.textFontSize.MinVal = 2;
 			this.textFontSize.Name = "textFontSize";
 			this.textFontSize.Size = new System.Drawing.Size(50,20);
-			this.textFontSize.TabIndex = 85;
+			this.textFontSize.TabIndex = 88;
 			// 
 			// butSave
 			// 
@@ -173,13 +176,24 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label3
+			// 
+			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label3.Location = new System.Drawing.Point(202,112);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(128,15);
+			this.label3.TabIndex = 89;
+			this.label3.Text = "Between 2 and 50";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormApptPrintSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(367,204);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textFontSize);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textFontSize);
 			this.Controls.Add(this.textStartTime);
 			this.Controls.Add(this.textStopTime);
 			this.Controls.Add(this.butSave);
@@ -211,8 +225,9 @@ namespace OpenDental{
 		private UI.Button butSave;
 		private System.Windows.Forms.TextBox textStopTime;
 		private System.Windows.Forms.TextBox textStartTime;
-		private ODR.ValidDouble textFontSize;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
+		private ValidNum textFontSize;
+		private System.Windows.Forms.Label label3;
 	}
 }
