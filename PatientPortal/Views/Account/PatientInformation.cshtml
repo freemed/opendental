@@ -8,6 +8,8 @@
 }
 <h2>Patient Information</h2>
 
+<p><strong>Patient Name:</strong> @Model.patm.LName , @Model.patm.FName </p>
+
 <p>&nbsp;</p>
     <p><strong>Family Balance</strong></p>
 <strong>BalTotal</strong>=@Model.patm.BalTotal<br />
@@ -31,10 +33,9 @@
 	</tr>
 	@foreach(var item in Model.mLabPanelmList) {    
     <tr>
-        <td>@Html.Encode(item.LabPanelNum)</td>
+        
         <td>@Html.Encode(item.LabNameAddress)</td>
 		<td>
-			
 				@{ PatientPortalMVC.Models.PatientInformationModel.LabResults lr= Model.GetLabResult(item.LabPanelNum); }
 					@if(lr.mLabResultmList.Count!=0) {
 						<table>			  
@@ -44,8 +45,6 @@
 							  <td><strong>Observed Value</strong></td>
 							</tr>
 							@foreach(LabResultm itemInner in lr.mLabResultmList) {
-
-		 
 								<tr>
 								  <td>@Html.Encode(itemInner.DateTimeTest) </td>
 								  <td>@Html.Encode(itemInner.TestName) </td>

@@ -227,7 +227,7 @@ namespace OpenDentBusiness{
 			if(eligibleForUploadPatNumList.Count>0) {
 				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
 					string command="SELECT StatementNum FROM statement WHERE DateTStamp > "+POut.DateT(changedSince)+" AND PatNum='" 
-						+eligibleForUploadPatNumList[i].ToString()+"' ORDER BY DateSent, StatementNum  "+limitStr;
+						+eligibleForUploadPatNumList[i].ToString()+"' ORDER BY DateSent DESC, StatementNum DESC "+limitStr;
 					table=Db.GetTable(command);
 					for(int j=0;j<table.Rows.Count;j++) {
 						statementnums.Add(PIn.Long(table.Rows[j]["StatementNum"].ToString()));
