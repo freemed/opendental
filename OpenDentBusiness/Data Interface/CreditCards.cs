@@ -60,12 +60,12 @@ namespace OpenDentBusiness{
 			}
 			DataTable table=new DataTable();
 			//This query will return patient information and the latest recurring payment whom:
-			//	-have recurring charges setup and today's date falls within the start and stop range they are setup.
+			//	-have recurring charges setup and today's date falls within the start and stop range.
 			//	-have a total balance >= recurring charge amount
 			//NOTE: Query will return patients with or without payments regardless of when that payment occurred, filtering is done below.
 			string command="SELECT cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"
 					+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN DATE('0001-01-01') ELSE MAX(pay.PayDate) END LatestPayment,"
-					+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt "
+					+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,0 AS IsPayPlan "
 					+"FROM (creditcard cc,patient pat,patient guar) "
 					+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.PayType="+payType+" AND pay.IsRecurringCC=1 "
 					+"WHERE cc.PatNum=pat.PatNum "
@@ -77,6 +77,28 @@ namespace OpenDentBusiness{
 					+"GROUP BY cc.CreditCardNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
 					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt";
 			table=Db.GetTable(command);
+			FilterRecurringChargeList(table);
+			return table;
+		}
+
+		///<summary>Returns list of credit cards that are ready for a recurring charge that are part of a payment plan.</summary>
+		public static DataTable GetRecurringPayPlanList(int payType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),payType);
+			}
+			DataTable table=new DataTable();
+			//This query will return patient information and the latest recurring payment whom:
+			//	-have recurring charges setup and today's date falls within the start and stop range.
+			//	-have a payment plan balance >= recurring charge amount
+			//NOTE: Query will return patients with or without payments regardless of when that payment occurred, filtering is done below.
+			string command="";
+			table=Db.GetTable(command);
+			FilterRecurringChargeList(table);
+			return table;
+		}
+
+		///<summary>Talbe must include columns labeled LatestPayment and DateStart.</summary>
+		public static void FilterRecurringChargeList(DataTable table) {
 			DateTime curDate=MiscData.GetNowDateTime();
 			//Loop through table and remove patients that do not need to be charged yet.
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -100,7 +122,7 @@ namespace OpenDentBusiness{
 				}
 				else {//Else, current date is before the recurring date in the current month, so the recurring charge will be going in for last month
 					//Check if payment didn't happen last month.
-					if(curDate.AddMonths(-1).Month!=latestPayment.Month && curDate.Date!=latestPayment.Date){
+					if(curDate.AddMonths(-1).Month!=latestPayment.Month && curDate.Date!=latestPayment.Date) {
 						//Charge did not happen last month so the patient needs to show up in list.
 						//Example: Last month had a recurring charge set at the end of the month that fell on a weekend.
 						//Today is the next month and still before the recurring charge date. 
@@ -112,9 +134,7 @@ namespace OpenDentBusiness{
 				table.Rows.RemoveAt(i);
 				i--;
 			}
-			return table;
 		}
-
 
 	}
 }
