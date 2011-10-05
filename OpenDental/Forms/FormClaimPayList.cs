@@ -15,8 +15,8 @@ namespace OpenDental {
 		public long GotoClaimNum;
 		///<summary>If this is not zero upon closing, then we will jump to the account module of that patient and highlight the claim.</summary>
 		public long GotoPatNum;
-		///<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.</summary>
-		public bool IsFromClaim;
+		//<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.</summary>
+		//public bool IsFromClaim;
 
 		public FormClaimPayList() {
 			InitializeComponent();
@@ -101,7 +101,7 @@ namespace OpenDental {
 				return;
 			}
 			FormClaimPayBatch FormCPB=new FormClaimPayBatch(claimPayment);
-			FormCPB.IsFromClaim=IsFromClaim;
+			//FormCPB.IsFromClaim=IsFromClaim;
 			FormCPB.ShowDialog();
 			if(FormCPB.GotoClaimNum!=0) {
 				GotoClaimNum=FormCPB.GotoClaimNum;
@@ -118,7 +118,7 @@ namespace OpenDental {
 				return;
 			}
 			FormClaimPayBatch FormCPB=new FormClaimPayBatch(ListClaimPay[gridMain.GetSelectedIndex()]);
-			FormCPB.IsFromClaim=IsFromClaim;
+			//FormCPB.IsFromClaim=IsFromClaim;
 			FormCPB.ShowDialog();
 			if(FormCPB.GotoClaimNum!=0){
 				GotoClaimNum=FormCPB.GotoClaimNum;

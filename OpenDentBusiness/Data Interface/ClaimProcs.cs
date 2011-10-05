@@ -1206,6 +1206,20 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Attaches all claimprocs that have an InsPayAmt entered to the specified ClaimPayment, and then returns the sum amount of all the attached payments.  The claimprocs must be currently unattached.  Used from FormClaimEdit when user is not doing the batch entry.</summary>
+		public static double AttachAllOutstandingToPayment(long claimPaymentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),claimPaymentNum);
+			}
+			string command="UPDATE claimproc SET ClaimPaymentNum="+POut.Long(claimPaymentNum)+" "
+				+"WHERE ClaimPaymentNum=0 "
+				+"AND (claimproc.Status = '1' OR claimproc.Status = '4' OR claimproc.Status='5') "//received or supplemental or capclaim
+				+"AND InsPayAmt != 0";
+			Db.NonQ(command);
+			command="SELECT SUM(InsPayAmt) FROM claimproc WHERE ClaimPaymentNum="+POut.Long(claimPaymentNum);
+			return PIn.Double(Db.GetScalar(command));
+		}
+
 
 	}
 

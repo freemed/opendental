@@ -43,10 +43,10 @@ namespace OpenDental{
 		private UI.Button butDetach;
 		private ValidDouble textTotal;
 		private Label label8;
-		private Label labelOut;
+		private Label labelInstruct1;
 		private UI.Button butDown;
 		private UI.Button butUp;
-		private Label label1;
+		private Label labelInstruct2;
 		private ContextMenu menuRightAttached;
 		private MenuItem menuItemGotoAccount;
 		private ContextMenu menuRightOut;
@@ -56,7 +56,8 @@ namespace OpenDental{
 		public long GotoClaimNum;
 		///<summary>If this is not zero upon closing, then we will jump to the account module of that patient and highlight the claim.</summary>
 		public long GotoPatNum;
-		///<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.</summary>
+		private UI.Button butOK;
+		///<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.  It also causes OK/Cancel buttons to show so that user can cancel out of a brand new check creation.</summary>
 		public bool IsFromClaim;
 
 		///<summary></summary>
@@ -103,16 +104,17 @@ namespace OpenDental{
 			this.butClaimPayEdit = new OpenDental.UI.Button();
 			this.gridOut = new OpenDental.UI.ODGrid();
 			this.butDetach = new OpenDental.UI.Button();
-			this.labelOut = new System.Windows.Forms.Label();
+			this.labelInstruct1 = new System.Windows.Forms.Label();
 			this.textTotal = new OpenDental.ValidDouble();
 			this.label8 = new System.Windows.Forms.Label();
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelInstruct2 = new System.Windows.Forms.Label();
 			this.menuRightAttached = new System.Windows.Forms.ContextMenu();
 			this.menuItemGotoAccount = new System.Windows.Forms.MenuItem();
 			this.menuRightOut = new System.Windows.Forms.ContextMenu();
 			this.menuItemGotoOut = new System.Windows.Forms.MenuItem();
+			this.butOK = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -219,7 +221,7 @@ namespace OpenDental{
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
-			this.butClose.Text = "&Close";
+			this.butClose.Text = "Cancel";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butDelete
@@ -379,15 +381,15 @@ namespace OpenDental{
 			this.butDetach.Text = "Detach";
 			this.butDetach.Click += new System.EventHandler(this.butDetach_Click);
 			// 
-			// labelOut
+			// labelInstruct1
 			// 
-			this.labelOut.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelOut.Location = new System.Drawing.Point(10,162);
-			this.labelOut.Name = "labelOut";
-			this.labelOut.Size = new System.Drawing.Size(177,20);
-			this.labelOut.TabIndex = 102;
-			this.labelOut.Text = "Instructions";
-			this.labelOut.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelInstruct1.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelInstruct1.Location = new System.Drawing.Point(10,162);
+			this.labelInstruct1.Name = "labelInstruct1";
+			this.labelInstruct1.Size = new System.Drawing.Size(177,20);
+			this.labelInstruct1.TabIndex = 102;
+			this.labelInstruct1.Text = "Instructions";
+			this.labelInstruct1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textTotal
 			// 
@@ -439,14 +441,14 @@ namespace OpenDental{
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
-			// label1
+			// labelInstruct2
 			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(11,188);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(207,452);
-			this.label1.TabIndex = 105;
-			this.label1.Text = resources.GetString("label1.Text");
+			this.labelInstruct2.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelInstruct2.Location = new System.Drawing.Point(11,188);
+			this.labelInstruct2.Name = "labelInstruct2";
+			this.labelInstruct2.Size = new System.Drawing.Size(207,452);
+			this.labelInstruct2.TabIndex = 105;
+			this.labelInstruct2.Text = resources.GetString("labelInstruct2.Text");
 			// 
 			// menuRightAttached
 			// 
@@ -470,15 +472,31 @@ namespace OpenDental{
 			this.menuItemGotoOut.Text = "Go to Account";
 			this.menuItemGotoOut.Click += new System.EventHandler(this.menuItemGotoOut_Click);
 			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butOK.Location = new System.Drawing.Point(734,646);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 107;
+			this.butOK.Text = "OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
 			// FormClaimPayBatch
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(902,676);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.labelInstruct2);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
-			this.Controls.Add(this.labelOut);
+			this.Controls.Add(this.labelInstruct1);
 			this.Controls.Add(this.butDetach);
 			this.Controls.Add(this.gridOut);
 			this.Controls.Add(this.groupBox1);
@@ -505,6 +523,16 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimPayEdit_Load(object sender, System.EventArgs e) {
+			if(IsFromClaim && IsNew) {
+				//ok and cancel
+				labelInstruct1.Visible=false;
+				labelInstruct2.Visible=false;
+				gridOut.Visible=false;
+			}
+			else {
+				butOK.Visible=false;
+				butClose.Text=Lan.g(this,"Close");
+			}
 			FillClaimPayment();
 			FillGrids();
 			if(ClaimPaymentCur.IsPartial){
@@ -521,7 +549,8 @@ namespace OpenDental{
 				//someone with permission can double click on the top grid to edit amounts and can edit the object fields as well.
 				butDetach.Visible=false;
 				gridOut.Visible=false;
-				labelOut.Visible=false;
+				labelInstruct1.Visible=false;
+				labelInstruct2.Visible=false;
 			}
 		}
 
@@ -544,6 +573,16 @@ namespace OpenDental{
 			Cursor.Current=Cursors.WaitCursor;
 			//gridAttached-----------------------------------------------------------------------------------------------
 			ClaimsAttached=Claims.GetAttachedToPayment(ClaimPaymentCur.ClaimPaymentNum);
+			bool didReorder=false;
+			for(int i=0;i<ClaimsAttached.Count;i++) {
+				if(ClaimsAttached[i].PaymentRow!=i+1) {
+					ClaimProcs.SetPaymentRow(ClaimsAttached[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,i+1);
+					didReorder=true;
+				}
+			}
+			if(didReorder) {
+				ClaimsAttached=Claims.GetAttachedToPayment(ClaimPaymentCur.ClaimPaymentNum);
+			}
 			gridAttached.BeginUpdate();
 			gridAttached.Columns.Clear();
 			ODGridColumn col;
@@ -794,8 +833,15 @@ namespace OpenDental{
 			Close();
 		}
 
+		private void butOK_Click(object sender,EventArgs e) {
+			//only visible if IsFromClaim and IsNew
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
-			Close();
+			//if IsFromClaim and IsNew, then this acts as a Cancel button
+			IsDeleting=true;//the actual deletion will be handled in FormClaimEdit.
+			DialogResult=DialogResult.Cancel;
 		}
 
 		private void FormClaimPayBatch_FormClosing(object sender,FormClosingEventArgs e) {
@@ -817,6 +863,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+	
 
 	
 

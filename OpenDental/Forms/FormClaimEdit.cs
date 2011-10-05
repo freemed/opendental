@@ -3354,21 +3354,22 @@ namespace OpenDental{
 			this.butBatch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBatch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBatch.CornerRadius = 4F;
+			this.butBatch.Image = global::OpenDental.Properties.Resources.Add;
+			this.butBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butBatch.Location = new System.Drawing.Point(557,389);
 			this.butBatch.Name = "butBatch";
-			this.butBatch.Size = new System.Drawing.Size(96,24);
+			this.butBatch.Size = new System.Drawing.Size(114,24);
 			this.butBatch.TabIndex = 150;
-			this.butBatch.Text = "Batch Payment";
+			this.butBatch.Text = "Create Check";
 			this.butBatch.Click += new System.EventHandler(this.butBatch_Click);
 			// 
 			// labelBatch
 			// 
-			this.labelBatch.Location = new System.Drawing.Point(557,417);
+			this.labelBatch.Location = new System.Drawing.Point(557,421);
 			this.labelBatch.Name = "labelBatch";
-			this.labelBatch.Size = new System.Drawing.Size(199,53);
+			this.labelBatch.Size = new System.Drawing.Size(158,53);
 			this.labelBatch.TabIndex = 151;
-			this.labelBatch.Text = "The usual place to enter batch payments is from the Manage module.  This button i" +
-    "s similar, but doesn\'t allow you to jump to other accounts.";
+			this.labelBatch.Text = "Don\'t create a new check until payments for all claims have been entered.";
 			// 
 			// FormClaimEdit
 			// 
@@ -4252,10 +4253,13 @@ namespace OpenDental{
 		private void gridPay_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			long tempClaimNum=ClaimCur.ClaimNum;
 			ClaimPayment claimPaymentCur=ClaimPayments.GetOne(PIn.Long(tablePayments.Rows[e.Row]["ClaimPaymentNum"].ToString()));
-			FormClaimPayEditOld FormCPE=new FormClaimPayEditOld(claimPaymentCur);
+			FormClaimPayBatch formCPB=new FormClaimPayBatch(claimPaymentCur);
+			//FormClaimPayEditOld FormCPE=new FormClaimPayEditOld(claimPaymentCur);
 			//Security handled in that form.  Anyone can view.
-			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
-			FormCPE.ShowDialog();
+			formCPB.IsFromClaim=true;//but not IsNew.
+			formCPB.ShowDialog();
+			//FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
+			//FormCPE.ShowDialog();
 			ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
@@ -4586,13 +4590,53 @@ namespace OpenDental{
 		}*/
 
 		private void butBatch_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.InsPayCreate)) {//date not checked here, but it will be checked when saving the check to prevent backdating
+				return;
+			}
 			if(!ClaimIsValid()) {
 				return;
 			}
 			UpdateClaim();
-			FormClaimPayList FormCPL=new FormClaimPayList();
-			FormCPL.IsFromClaim=true;
-			FormCPL.ShowDialog();
+			bool existsReceived=false;
+			for(int i=0;i<ClaimProcsForClaim.Count;i++) {
+				if((ClaimProcsForClaim[i].Status==ClaimProcStatus.Received
+					|| ClaimProcsForClaim[i].Status==ClaimProcStatus.Supplemental)
+					&& ClaimProcsForClaim[i].InsPayAmt!=0) 
+				{
+					existsReceived=true;
+				}
+			}
+			if(!existsReceived) {
+				MessageBox.Show(Lan.g(this,"There are no valid received payments for this claim."));
+				return;
+			}
+			ClaimPayment claimPayment=new ClaimPayment();
+			claimPayment.CheckDate=DateTime.Now;
+			claimPayment.IsPartial=true;
+			claimPayment.ClinicNum=PatCur.ClinicNum;
+			claimPayment.CarrierName=Carriers.GetName(InsPlans.GetPlan(ClaimCur.PlanNum,PlanList).CarrierNum);
+			ClaimPayments.Insert(claimPayment);
+			double amt=ClaimProcs.AttachAllOutstandingToPayment(claimPayment.ClaimPaymentNum);
+			claimPayment.CheckAmt=amt;
+			ClaimPayments.Update(claimPayment);
+			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPayment);
+			//FormCPE.IsNew=true;//not new.  Already added.
+			FormCPE.ShowDialog();
+			if(FormCPE.DialogResult!=DialogResult.OK) {
+				ClaimPayments.Delete(claimPayment);
+				return;
+			}
+			FormClaimPayBatch FormCPB=new FormClaimPayBatch(claimPayment);
+			FormCPB.IsFromClaim=true;
+			FormCPB.IsNew=true;
+			FormCPB.ShowDialog();
+			if(FormCPB.DialogResult!=DialogResult.OK) {
+				ClaimPayments.Delete(claimPayment);
+				return;
+			}
+			//ClaimList=Claims.Refresh(PatCur.PatNum);
+			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			//FillGrids();
 			DialogResult=DialogResult.OK;
 		}
 

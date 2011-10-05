@@ -326,7 +326,8 @@ namespace OpenDental{
 			if(IsNew){
 				//security already checked before this form opens
 			}
-			else{	
+			else{
+				textCheckNum.Select();//If new, then the amount would have been selected.
 				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimPaymentCur.CheckDate)){
 					butOK.Enabled=false;
 				}
