@@ -4222,6 +4222,62 @@ namespace OpenDental{
 				}//End of "is not new."
 			}
 			Procedures.Update(ProcCur,ProcOld);
+			//Update the ProcDescript on the appointment if procedure is attached to one.
+			if(ProcCur.AptNum>0) {
+				Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
+				Appointment aptOld=apt.Clone();
+				//List<Procedure> procs=Procedures.GetProcsForSingle(ProcCur.AptNum,false);
+				DataTable procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),ProcCur.AptNum.ToString(),apt.AptStatus.ToString(),apt.AptDateTime.ToString());
+				apt.ProcDescript="";
+				apt.ProcsColored="";
+				for(int i=0;i<procTable.Rows.Count;i++) {
+					string procDescOne="";
+					string procCode=procTable.Rows[i]["ProcCode"].ToString();
+					if(i>0) {
+						apt.ProcDescript+=", ";
+					}
+					switch(procTable.Rows[i]["TreatArea"].ToString()) {
+						case "1"://TreatmentArea.Surf:
+							procDescOne+="#"+Tooth.GetToothLabel(procTable.Rows[i]["ToothNum"].ToString())+"-"
+								+procTable.Rows[i]["Surf"].ToString()+"-";//""#12-MOD-"
+							break;
+						case "2"://TreatmentArea.Tooth:
+							procDescOne+="#"+Tooth.GetToothLabel(procTable.Rows[i]["ToothNum"].ToString())+"-";//"#12-"
+							break;
+						default://area 3 or 0 (mouth)
+							break;
+						case "4"://TreatmentArea.Quad:
+							procDescOne+=procTable.Rows[i]["Surf"].ToString()+"-";//"UL-"
+							break;
+						case "5"://TreatmentArea.Sextant:
+							procDescOne+="S"+procTable.Rows[i]["Surf"].ToString()+"-";//"S2-"
+							break;
+						case "6"://TreatmentArea.Arch:
+							procDescOne+=procTable.Rows[i]["Surf"].ToString()+"-";//"U-"
+							break;
+						case "7"://TreatmentArea.ToothRange:
+							//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
+							break;
+					}
+					procDescOne+=procTable.Rows[i]["AbbrDesc"].ToString();
+					apt.ProcDescript+=procDescOne;
+					//Color and previous date are determined by ProcApptColor object
+					ProcApptColor pac=ProcApptColors.GetMatch(procCode);
+					System.Drawing.Color pColor=System.Drawing.Color.Black;
+					string prevDateString="";
+					if(pac!=null) {
+						pColor=pac.ColorText;
+						if(pac.ShowPreviousDate) {
+							prevDateString=Procedures.GetRecentProcDateString(apt.PatNum,apt.AptDateTime,pac.CodeRange);
+							if(prevDateString!="") {
+								prevDateString=" ("+prevDateString+")";
+							}
+						}
+					}
+					apt.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
+				}
+				Appointments.Update(apt,aptOld);
+			}
 			for(int i=0;i<ClaimProcsForProc.Count;i++) {
 				ClaimProcsForProc[i].ClinicNum=ProcCur.ClinicNum;
 			}
