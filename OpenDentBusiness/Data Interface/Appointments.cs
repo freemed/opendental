@@ -663,14 +663,17 @@ namespace OpenDentBusiness{
 				+"carrier1.CarrierName carrierName1,carrier2.CarrierName carrierName2,"
 				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,"
 				+"DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
+				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,"
+				+"COUNT(AllergyNum) hasAllergy,"
 				+"COUNT(DiseaseNum) hasDisease,"
-				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
+				+"patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,COUNT(patplan.InsSubNum) hasIns,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
 				+"ProcDescript,ProcsColored,ProvHyg,appointment.ProvNum,"
 				+"patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip "
-				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
+				+"FROM appointment "
+				+"LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
 				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg ";
 			if(isPlanned){
@@ -686,7 +689,8 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN insplan plan2 ON InsPlan2=plan2.PlanNum "
 				+"LEFT JOIN carrier carrier1 ON plan1.CarrierNum=carrier1.CarrierNum "
 				+"LEFT JOIN carrier carrier2 ON plan2.CarrierNum=carrier2.CarrierNum "
-				+"LEFT JOIN disease ON patient.PatNum=disease.PatNum ";
+				+"LEFT JOIN disease ON patient.PatNum=disease.PatNum "
+				+"LEFT JOIN allergy ON patient.PatNum=allergy.PatNum ";
 			if(aptNum==0){
 				command+="WHERE AptDateTime >= "+POut.Date(dateStart)+" "
 					+"AND AptDateTime < "+POut.Date(dateEnd.AddDays(1))+" "
@@ -952,7 +956,7 @@ namespace OpenDentBusiness{
 					}
 				}
 				row["medOrPremed[+]"]="";
-				if(raw.Rows[i]["MedUrgNote"].ToString()!="" || raw.Rows[i]["Premed"].ToString()=="1" || raw.Rows[i]["hasDisease"].ToString()!="0") {
+				if(raw.Rows[i]["MedUrgNote"].ToString()!="" || raw.Rows[i]["Premed"].ToString()=="1" || raw.Rows[i]["hasDisease"].ToString()!="0" || raw.Rows[i]["hasAllergy"].ToString()!="0") {
 					row["medOrPremed[+]"]="+";
 				}
 				row["MedUrgNote"]=raw.Rows[i]["MedUrgNote"].ToString();
