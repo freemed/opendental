@@ -2407,16 +2407,27 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command="SELECT procedurelog.ProcNum FROM procedurelog,claim,claimproc "
-					+"WHERE procedurelog.ProcNum=claimproc.ProcNum "
-					+"AND claim.ClaimNum=claimproc.ClaimNum "
-					+"AND procedurelog.ProcStatus!="+POut.Long((int)ProcStat.C)+" "//procedure not complete
-					+"AND (claim.ClaimStatus='W' OR claim.ClaimStatus='S' OR claim.ClaimStatus='R') "//waiting, sent, or received
-					+"AND (claim.ClaimType='P' OR claim.ClaimType='S' OR claim.ClaimType='Other')";//pri, sec, or other.  Eliminates preauths.
+			command="SELECT procedurelog.ProcNum,claim.ClaimNum,claim.DateService,patient.PatNum,Patient.LName,Patient.FName,procedureCode.ProcCode "
+				+"FROM procedurelog,claim,claimproc,patient,procedurecode "
+				+"WHERE procedurelog.ProcNum=claimproc.ProcNum "
+				+"AND claim.ClaimNum=claimproc.ClaimNum "
+				+"AND claim.PatNum=patient.PatNum "
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
+				+"AND procedurelog.ProcStatus!="+POut.Long((int)ProcStat.C)+" "//procedure not complete
+				+"AND (claim.ClaimStatus='W' OR claim.ClaimStatus='S' OR claim.ClaimStatus='R') "//waiting, sent, or received
+				+"AND (claim.ClaimType='P' OR claim.ClaimType='S' OR claim.ClaimType='Other')";//pri, sec, or other.  Eliminates preauths.
 			table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Procedures attached to claims, but with status of TP: ")+table.Rows.Count+"\r\n";
+					for(int i=0;i<table.Rows.Count;i++) {
+						log+=Lans.g("FormDatabaseMaintenance","Patient")
+							+" "+table.Rows[i]["FName"].ToString()
+							+" "+table.Rows[i]["LName"].ToString()
+							+" #"+table.Rows[i]["PatNum"].ToString()
+							+", for claim service date "+PIn.Date(table.Rows[i]["DateService"].ToString()).ToShortDateString()
+							+", procedure code "+table.Rows[i]["ProcCode"].ToString()+"\r\n";
+					}
 				}
 			}
 			else {
