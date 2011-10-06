@@ -957,16 +957,16 @@ namespace UnitTests {
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
 			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
 			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);//guarantor is subscriber
-			BenefitT.CreateAnnualMax(plan.PlanNum,1000);
+			//BenefitT.CreateAnnualMax(plan.PlanNum,1000);//Irrelevant benefits bog down debugging.
 			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
-			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
+			//BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
-			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,0);
+			//BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,0);
 			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.Diagnostic,0);
-			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Restorative,80);
-			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Endodontics,80);
-			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Periodontics,80);
-			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.OralSurgery,80);
+			//BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Restorative,80);
+			//BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Endodontics,80);
+			//BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Periodontics,80);
+			//BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.OralSurgery,80);
 			BenefitT.CreateDeductible(plan.PlanNum,"D0330",45);
 			BenefitT.CreateDeductible(plan.PlanNum,"D0220",25);
 			PatPlanT.CreatePatPlan(1,pat.PatNum,sub.InsSubNum);
@@ -1012,6 +1012,7 @@ namespace UnitTests {
 			return retVal;
 		}
 
+		/// <summary>Outline copied from Unit Test 1. No real changes yet made.</summary>
 		public static string TestSeventeen(int specificTest) {
 			if(specificTest != 17) {
 				return "";

@@ -293,6 +293,7 @@ namespace OpenDentBusiness {
 				listShort.Add(benList[i]);
 			}
 			//look for the best matching individual deduct----------------------------------------------------------------
+			Benefit benIndGeneral=null;
 			Benefit benInd=null;
 			//start with no category
 			for(int i=0;i<listShort.Count;i++){
@@ -304,6 +305,8 @@ namespace OpenDentBusiness {
 				}
 				if(listShort[i].CovCatNum==0){
 					benInd=listShort[i];
+					//This deductible must be a general deductible since it has no associated category
+					benIndGeneral=listShort[i];//sum of deductibles should not exceed this amount, even if benInd is less.
 				}
 			}
 			//then, specific category.
@@ -537,6 +540,16 @@ namespace OpenDentBusiness {
 			}
 			if(retVal<=0) {
 				return 0;
+			}
+			double deductUsedInLoopList=0;//sum of deductibles in looplist
+			for(int i=0;i<loopList.Count;i++) {
+				deductUsedInLoopList+=loopList[i].Deduct;
+			}
+			if(benIndGeneral!=null) {//if there exists a general deductible
+				if((retVal + deductUsedInLoopList) > benIndGeneral.MonetaryAmt) {//if this would put us over the general deductible, instead make that amount
+					//examples: if (25+45) > 50, then return 50-45=5.
+					retVal=benIndGeneral.MonetaryAmt - deductUsedInLoopList;// (fix for Unit Test 16)
+				}
 			}
 			//if there is still a deductible, we might still reduce it based on family ded used.
 			if(benFam==null || benFam.MonetaryAmt==-1) {
