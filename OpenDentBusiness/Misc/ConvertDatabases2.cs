@@ -6677,7 +6677,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To11_2_0() {
 			if(FromVersion<new Version("11.2.0.0")) {
 				string command;
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('BillingEmailSubject','Statement for account [PatNum]')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'BillingEmailSubject','Statement for account [PatNum]')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('BillingEmailBodyText','Statement attached for [nameFL], account number [PatNum]')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'BillingEmailBodyText','Statement attached for [nameFL], account number [PatNum]')";
+					Db.NonQ(command);
+				}
 
 
 

@@ -81,6 +81,8 @@ namespace OpenDentBusiness {
 		BillingElectUserName,
 		BillingElectVendorId,
 		BillingElectVendorPMSCode,
+		BillingEmailBodyText,
+		BillingEmailSubject,
 		BillingExcludeBadAddresses,
 		BillingExcludeIfUnsentProcs,
 		BillingExcludeInactive,

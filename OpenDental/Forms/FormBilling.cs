@@ -808,8 +808,16 @@ namespace OpenDental{
 					message.PatNum=pat.PatNum;
 					message.ToAddress=pat.Email;
 					message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
-					message.Subject=Lan.g(this,"Statement");
-					message.BodyText=Lan.g(this,"Statement");
+					string str;
+					str=PrefC.GetString(PrefName.BillingEmailSubject);
+					str=str.Replace("[nameF]",pat.GetNameFirst());
+					str=str.Replace("[nameFL]",pat.GetNameFL());
+					str=str.Replace("[PatNum]",pat.PatNum.ToString());
+					message.Subject=str;
+					str=PrefC.GetString(PrefName.BillingEmailBodyText);
+					str=str.Replace("[nameF]",pat.GetNameFirst());
+					str=str.Replace("[nameFL]",pat.GetNameFL());
+					str=str.Replace("[PatNum]",pat.PatNum.ToString());
 					attach=new EmailAttach();
 					attach.DisplayedFileName="Statement.pdf";
 					attach.ActualFileName=fileName;

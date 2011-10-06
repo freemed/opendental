@@ -37,6 +37,9 @@ namespace OpenDental {
 			textClientAcctNumber.Text=PrefC.GetString(PrefName.BillingElectClientAcctNumber);
 			textUserName.Text=PrefC.GetString(PrefName.BillingElectUserName);
 			textPassword.Text=PrefC.GetString(PrefName.BillingElectPassword);
+			//email
+			textBillingEmailSubject.Text=PrefC.GetString(PrefName.BillingEmailSubject);
+			textBillingEmailBody.Text=PrefC.GetString(PrefName.BillingEmailBodyText);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -70,6 +73,8 @@ namespace OpenDental {
 				| Prefs.UpdateBool(PrefName.BillingDefaultsIntermingle,checkIntermingled.Checked)
 				| Prefs.UpdateString(PrefName.BillingDefaultsNote,textNote.Text)
 				| Prefs.UpdateBool(PrefName.BillingUseElectronic,checkUseElectronic.Checked)
+				| Prefs.UpdateString(PrefName.BillingEmailSubject,textBillingEmailSubject.Text)
+				| Prefs.UpdateString(PrefName.BillingEmailBodyText,textBillingEmailBody.Text)
 				| Prefs.UpdateString(PrefName.BillingElectVendorId,textVendorId.Text)
 				| Prefs.UpdateString(PrefName.BillingElectVendorPMSCode,textVendorPMScode.Text)
 				| Prefs.UpdateString(PrefName.BillingElectCreditCardChoices,cc)
