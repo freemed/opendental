@@ -23,7 +23,6 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBillingDefaults));
 			this.checkIntermingled = new System.Windows.Forms.CheckBox();
 			this.labelStartDate = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
@@ -31,7 +30,6 @@ namespace OpenDental{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.textPassword = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.textBillingEmailSubject = new System.Windows.Forms.TextBox();
 			this.textUserName = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -39,8 +37,6 @@ namespace OpenDental{
 			this.checkD = new System.Windows.Forms.CheckBox();
 			this.checkV = new System.Windows.Forms.CheckBox();
 			this.checkMC = new System.Windows.Forms.CheckBox();
-			this.label9 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
 			this.textClientAcctNumber = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textVendorPMScode = new System.Windows.Forms.TextBox();
@@ -48,6 +44,9 @@ namespace OpenDental{
 			this.textVendorId = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkUseElectronic = new System.Windows.Forms.CheckBox();
+			this.textBillingEmailSubject = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
 			this.textBillingEmailBody = new OpenDental.ODtextBox();
 			this.textDays = new OpenDental.ValidNum();
 			this.textNote = new OpenDental.ODtextBox();
@@ -133,13 +132,6 @@ namespace OpenDental{
 			this.label6.Text = "Password";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBillingEmailSubject
-			// 
-			this.textBillingEmailSubject.Location = new System.Drawing.Point(12,84);
-			this.textBillingEmailSubject.Name = "textBillingEmailSubject";
-			this.textBillingEmailSubject.Size = new System.Drawing.Size(616,20);
-			this.textBillingEmailSubject.TabIndex = 1;
-			// 
 			// textUserName
 			// 
 			this.textUserName.Location = new System.Drawing.Point(274,83);
@@ -205,24 +197,6 @@ namespace OpenDental{
 			this.checkMC.Text = "Master Card";
 			this.checkMC.UseVisualStyleBackColor = true;
 			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(11,66);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(218,16);
-			this.label9.TabIndex = 240;
-			this.label9.Text = "Subject";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(11,105);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(218,16);
-			this.label8.TabIndex = 240;
-			this.label8.Text = "Body";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// textClientAcctNumber
 			// 
 			this.textClientAcctNumber.Location = new System.Drawing.Point(274,62);
@@ -280,10 +254,35 @@ namespace OpenDental{
 			this.checkUseElectronic.TabIndex = 0;
 			this.checkUseElectronic.Text = "Use electronic billing";
 			// 
+			// textBillingEmailSubject
+			// 
+			this.textBillingEmailSubject.Location = new System.Drawing.Point(12,70);
+			this.textBillingEmailSubject.Name = "textBillingEmailSubject";
+			this.textBillingEmailSubject.Size = new System.Drawing.Size(616,20);
+			this.textBillingEmailSubject.TabIndex = 1;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(11,52);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(218,16);
+			this.label9.TabIndex = 240;
+			this.label9.Text = "Subject";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(11,91);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(218,16);
+			this.label8.TabIndex = 240;
+			this.label8.Text = "Body";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// textBillingEmailBody
 			// 
 			this.textBillingEmailBody.AcceptsReturn = true;
-			this.textBillingEmailBody.Location = new System.Drawing.Point(12,123);
+			this.textBillingEmailBody.Location = new System.Drawing.Point(12,109);
 			this.textBillingEmailBody.Multiline = true;
 			this.textBillingEmailBody.Name = "textBillingEmailBody";
 			this.textBillingEmailBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
@@ -357,11 +356,11 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(11,25);
+			this.label10.Location = new System.Drawing.Point(11,23);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(612,41);
+			this.label10.Size = new System.Drawing.Size(612,22);
 			this.label10.TabIndex = 249;
-			this.label10.Text = resources.GetString("label10.Text");
+			this.label10.Text = "These variables may be used in either box: [nameF], [nameFL], and [PatNum].";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormBillingDefaults
