@@ -97,7 +97,7 @@ namespace OpenDental {
 				panelMain.Height=SheetDefCur.Height;
 			}
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 			panelMain.Focus();
 			//textDescription.Focus();
 		}
@@ -379,7 +379,7 @@ namespace OpenDental {
 				panelMain.Height=SheetDefCur.Height;
 			}
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddOutputText_Click(object sender,EventArgs e) {
@@ -400,7 +400,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddStaticText_Click(object sender,EventArgs e) {
@@ -417,7 +417,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddInputField_Click(object sender,EventArgs e) {
@@ -438,7 +438,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddImage_Click(object sender,EventArgs e) {
@@ -459,7 +459,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Insert(0,FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddLine_Click(object sender,EventArgs e) {
@@ -475,7 +475,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddRect_Click(object sender,EventArgs e) {
@@ -491,7 +491,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddCheckBox_Click(object sender,EventArgs e) {
@@ -511,7 +511,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddSigBox_Click(object sender,EventArgs e) {
@@ -527,7 +527,7 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAddPatImage_Click(object sender,EventArgs e) {
@@ -548,14 +548,14 @@ namespace OpenDental {
 			}
 			SheetDefCur.SheetFieldDefs.Insert(0,FormS.SheetFieldDefCur);
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void listFields_Click(object sender,EventArgs e) {
 			//if(listFields.SelectedIndices.Count==0){
 			//	return;
 			//}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void listFields_MouseDoubleClick(object sender,MouseEventArgs e) {
@@ -565,7 +565,7 @@ namespace OpenDental {
 			}
 			listFields.SelectedIndices.Clear();
 			listFields.SetSelected(idx,true);
-			panelMain.Invalidate();
+			panelMain.Refresh();
 			SheetFieldDef field=SheetDefCur.SheetFieldDefs[idx];
 			SheetFieldDef fieldold=field.Copy();
 			LaunchEditWindow(field);
@@ -714,11 +714,11 @@ namespace OpenDental {
 			if(listFields.Items.Count-1>=idx){
 				listFields.SelectedIndex=idx;//reselect the item.
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void panelMain_MouseDown(object sender,MouseEventArgs e) {
-			panelMain.Select();
+			panel1.Select();
 			if(AltIsDown) {
 				PasteControlsFromMemory(e.Location);
 				return;
@@ -761,7 +761,7 @@ namespace OpenDental {
 				}
 				ClickedOnBlankSpace=true;
 				listFields.SelectedIndices.Clear();//clear the existing selection
-				panelMain.Invalidate();
+				panelMain.Refresh();
 				return;
 			}
 			int idx=SheetDefCur.SheetFieldDefs.IndexOf(field);
@@ -789,7 +789,7 @@ namespace OpenDental {
 					SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos);
 				OriginalControlPositions.Add(point);
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void panelMain_MouseMove(object sender,MouseEventArgs e) {
@@ -804,14 +804,14 @@ namespace OpenDental {
 			}
 			if(ClickedOnBlankSpace) {
 				MouseCurrentPos=e.Location;
-				panelMain.Invalidate();
+				panelMain.Refresh();
 				return;
 			}
 			for(int i=0;i<listFields.SelectedIndices.Count;i++){
 				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos=OriginalControlPositions[i].X+e.X-MouseOriginalPos.X;
 				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos=OriginalControlPositions[i].Y+e.Y-MouseOriginalPos.Y;
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void panelMain_MouseUp(object sender,MouseEventArgs e) {
@@ -834,7 +834,7 @@ namespace OpenDental {
 				}
 			}
 			ClickedOnBlankSpace=false;
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void panelMain_MouseDoubleClick(object sender,MouseEventArgs e) {
@@ -867,7 +867,7 @@ namespace OpenDental {
 				ListSheetFieldDefsTabOrder[i].TabOrder=i+1;
 			}
 			FillFieldList();
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		///<summary>Images will be ignored in the hit test since they frequently fill the entire background.  Lines will be ignored too, since a diagonal line could fill a large area.</summary>
@@ -943,7 +943,7 @@ namespace OpenDental {
 						break;
 				}
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void FormSheetDefEdit_KeyUp(object sender,KeyEventArgs e) {
@@ -995,7 +995,7 @@ namespace OpenDental {
 			}
 			strPrompt+=Lan.g(this,"Would you like to continue anyways?");
 			if(conflictingfield && MessageBox.Show(strPrompt,Lan.g(this,"Warning"),MessageBoxButtons.OKCancel)!=DialogResult.OK) {
-				panelMain.Select();
+				panel1.Select();
 				CtrlIsDown=false;
 				return;
 			}
@@ -1004,6 +1004,8 @@ namespace OpenDental {
 				ListSheetFieldDefsCopyPaste.Add(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].Copy());//fill clipboard with copies of the controls. 
 				//It would probably be safe to fill the clipboard with the originals. but it is safer to fill it with copies.
 			}
+			PasteOffset=0;
+			PasteOffsetY=0;//reset PasteOffset for pasting a new set of fields.
 		}
 
 		private void PasteControlsFromMemory(Point origin) {
@@ -1014,6 +1016,16 @@ namespace OpenDental {
 				return;
 			}
 			if(origin.X==0 && origin.Y==0) {//allows for cascading pastes in the upper right hand corner.
+				Rectangle r=panelMain.Bounds;//Gives relative position of panel (scroll position)
+				int h=panel1.Height;//Current resized height/width of parent panel
+				int w=panel1.Width;
+				int maxH=0;
+				int maxW=0;
+				for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//calculate height/width of control to be pasted
+					maxH=Math.Max(maxH,ListSheetFieldDefsCopyPaste[i].Height);
+					maxW=Math.Max(maxW,ListSheetFieldDefsCopyPaste[i].Width);
+				}
+				origin=new Point((-1)*r.X+w/2-maxW/2-10,(-1)*r.Y+h/2-maxH/2-10);//Center: scroll position * (-1) + 1/2 size of window - 1/2 the size of the field - 10 for scroll bar
 				origin.X+=PasteOffset;
 				origin.Y+=PasteOffset+PasteOffsetY;
 			}
@@ -1039,7 +1051,7 @@ namespace OpenDental {
 			for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//reselect newly added controls
 				listFields.SetSelected((listFields.Items.Count-1)-i,true);//Add to selected indicies, which will be the newest clipboard.count controls on the bottom of the list.
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -1134,7 +1146,7 @@ namespace OpenDental {
 			for(int i=0;i<listFields.SelectedIndices.Count;i++) {//Actually move the controls now
 				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos=(int)minY;
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butAlignLeft_Click(object sender,EventArgs e) {
@@ -1161,7 +1173,7 @@ namespace OpenDental {
 			for(int i=0;i<listFields.SelectedIndices.Count;i++) {//Actually move the controls now
 				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos=(int)minX;
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butPaste_Click(object sender,EventArgs e) {
@@ -1197,7 +1209,7 @@ namespace OpenDental {
 				butAlignTop.Enabled=true;
 				butEdit.Enabled=true;
 			}
-			panelMain.Invalidate();
+			panelMain.Refresh();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
