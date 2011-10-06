@@ -4223,10 +4223,11 @@ namespace OpenDental{
 			}
 			Procedures.Update(ProcCur,ProcOld);
 			//Update the ProcDescript on the appointment if procedure is attached to one.
+			//The ApptProcDescript region is also in FormApptEdit.UpdateToDB()  Make any changes there as well.
+			#region ApptProcDescript
 			if(ProcCur.AptNum>0) {
 				Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
 				Appointment aptOld=apt.Clone();
-				//List<Procedure> procs=Procedures.GetProcsForSingle(ProcCur.AptNum,false);
 				DataTable procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),ProcCur.AptNum.ToString(),apt.AptStatus.ToString(),apt.AptDateTime.ToString());
 				apt.ProcDescript="";
 				apt.ProcsColored="";
@@ -4276,6 +4277,7 @@ namespace OpenDental{
 					}
 					apt.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
 				}
+			#endregion
 				Appointments.Update(apt,aptOld);
 			}
 			for(int i=0;i<ClaimProcsForProc.Count;i++) {

@@ -2193,6 +2193,8 @@ namespace OpenDental{
 			AptCur.DateTimeSeated=dateTimeSeated;
 			AptCur.DateTimeDismissed=dateTimeDismissed;
 			//AptCur.InsPlan1 and InsPlan2 already handled 
+			//The ApptProcDescript region is also in FormProcEdit.SaveAndClose()  Make any changes there as well.
+			#region ApptProcDescript
 			AptCur.ProcDescript="";
 			AptCur.ProcsColored="";
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
@@ -2241,6 +2243,7 @@ namespace OpenDental{
 				}
 				AptCur.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
 			}
+			#endregion
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
 			try {
 				Appointments.Update(AptCur,AptOld);
