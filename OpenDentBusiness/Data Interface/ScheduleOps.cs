@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ScheduleOp>>(MethodBase.GetCurrentMethod(), scheduleNum);
 			}
-			string command="SELECT * FROM scheduleOp ";
+			string command="SELECT * FROM scheduleop ";
 			command+="WHERE schedulenum = "+scheduleNum;
 			return Crud.ScheduleOpCrud.SelectMany(command);
 		}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ScheduleOp>>(MethodBase.GetCurrentMethod(),schedules);
 			}
-			string command="SELECT * FROM scheduleOp ";
+			string command="SELECT * FROM scheduleop ";
 			command+="WHERE ScheduleNum IN ( ";
 			for(int i=0;i<schedules.Count;i++) {
 				command+=(i>0?",":"")+schedules[i].ScheduleNum.ToString();
