@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				creditCard.DateStart     = PIn.Date  (table.Rows[i]["DateStart"].ToString());
 				creditCard.DateStop      = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				creditCard.Note          = PIn.String(table.Rows[i]["Note"].ToString());
+				creditCard.PayPlanNum    = PIn.Long  (table.Rows[i]["PayPlanNum"].ToString());
 				retVal.Add(creditCard);
 			}
 			return retVal;
@@ -98,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CreditCardNum,";
 			}
-			command+="PatNum,Address,Zip,XChargeToken,CCNumberMasked,CCExpiration,ItemOrder,ChargeAmt,DateStart,DateStop,Note) VALUES(";
+			command+="PatNum,Address,Zip,XChargeToken,CCNumberMasked,CCExpiration,ItemOrder,ChargeAmt,DateStart,DateStop,Note,PayPlanNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(creditCard.CreditCardNum)+",";
 			}
@@ -113,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(creditCard.ChargeAmt)+"',"
 				+    POut.Date  (creditCard.DateStart)+","
 				+    POut.Date  (creditCard.DateStop)+","
-				+"'"+POut.String(creditCard.Note)+"')";
+				+"'"+POut.String(creditCard.Note)+"',"
+				+    POut.Long  (creditCard.PayPlanNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -136,7 +138,8 @@ namespace OpenDentBusiness.Crud{
 				+"ChargeAmt     = '"+POut.Double(creditCard.ChargeAmt)+"', "
 				+"DateStart     =  "+POut.Date  (creditCard.DateStart)+", "
 				+"DateStop      =  "+POut.Date  (creditCard.DateStop)+", "
-				+"Note          = '"+POut.String(creditCard.Note)+"' "
+				+"Note          = '"+POut.String(creditCard.Note)+"', "
+				+"PayPlanNum    =  "+POut.Long  (creditCard.PayPlanNum)+" "
 				+"WHERE CreditCardNum = "+POut.Long(creditCard.CreditCardNum);
 			Db.NonQ(command);
 		}
@@ -187,6 +190,10 @@ namespace OpenDentBusiness.Crud{
 			if(creditCard.Note != oldCreditCard.Note) {
 				if(command!=""){ command+=",";}
 				command+="Note = '"+POut.String(creditCard.Note)+"'";
+			}
+			if(creditCard.PayPlanNum != oldCreditCard.PayPlanNum) {
+				if(command!=""){ command+=",";}
+				command+="PayPlanNum = "+POut.Long(creditCard.PayPlanNum)+"";
 			}
 			if(command==""){
 				return;

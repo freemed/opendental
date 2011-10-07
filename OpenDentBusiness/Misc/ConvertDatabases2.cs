@@ -6693,6 +6693,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'BillingEmailBodyText','Statement attached for [nameFL], account number [PatNum]')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE creditcard ADD PayPlanNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE creditcard ADD INDEX (PayPlanNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE creditcard ADD PayPlanNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE creditcard SET PayPlanNum = 0 WHERE PayPlanNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE creditcard MODIFY PayPlanNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX creditcard_PayPlanNum ON creditcard (PayPlanNum)";
+					Db.NonQ(command);
+				}
+
+
 
 
 
@@ -6712,3 +6730,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE creditcard ADD PayPlanNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE creditcard ADD INDEX (PayPlanNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE creditcard ADD PayPlanNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE creditcard SET PayPlanNum = 0 WHERE PayPlanNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE creditcard MODIFY PayPlanNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX creditcard_PayPlanNum ON creditcard (PayPlanNum)";
+					Db.NonQ(command);
+				}
+				*/

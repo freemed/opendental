@@ -29,8 +29,10 @@ namespace OpenDentBusiness {
 		public DateTime DateStart;
 		///<summary>Stop date for recurring charges.</summary>
 		public DateTime DateStop;
-		///<summary></summary>
+		///<summary>Any notes about the credit card or account goes here.</summary>
 		public string Note;
+		///<summary>FK to payplan.PayPlanNum.</summary>
+		public long PayPlanNum;
 
 		///<summary></summary>
 		public CreditCard Clone() {
