@@ -14,14 +14,18 @@
             <div id="logindisplay">
                 @Html.Partial("_LogInPartial")
             </div>
-            <div id="menucontainer">
-                <ul id="menu">
-@*                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>*@
-                </ul>
-            </div>
+			@if(Session["Patient"]!=null) {
+				<div id="menucontainer">
+					<ul id="menu">
+						<li>@Html.ActionLink("Family","FamilyInformation","Family")</li>
+						<li>@Html.ActionLink("Account","AccountView","Account")</li>
+						<li>@Html.ActionLink("Medical","EHRInformation","Medical")</li>
+					</ul>
+				</div>
+			}
         </div>
         <div id="main">
+		@*<p><strong>Patient Name:</strong> @Model.patm.LName , @Model.patm.FName </p>*@
             @RenderBody()
         </div>
         <div id="footer">

@@ -30,14 +30,13 @@ namespace PatientPortalMVC.Controllers
 				}
 				else {
 					Session["Patient"]=pat;
-					ViewData["PatName"] =pat.FName;
-					return RedirectToAction("PatientInformation");
-					//return RedirectToAction("PatientInformation","Account");
+					return RedirectToAction("EHRInformation","Medical");
 				}
 			}
 			return View();
         }
 		
+
 		//get
 		public ActionResult Login(long? DentalOfficeID) {
 			// or use RouteData.Values["DentalOfficeID"]; to extract DentalOfficeID
@@ -58,44 +57,6 @@ namespace PatientPortalMVC.Controllers
 			return RedirectToAction("Login",new { controller="Account",action="Login",DentalOfficeID=DentalOfficeID });
 		}
 
-		public ActionResult ShowPdfFile(long? d){
-			Documentm doc=null;
-			long DocNum=0;
-			if(d!=null) {
-				DocNum=(long)d;
-			}
-			Patientm patm;
-			if(Session["Patient"]==null) {
-				return RedirectToAction("Login");
-			}
-			else {
-				patm=(Patientm)Session["Patient"];
-			}
-			if(DocNum!=0) {
-				doc=Documentms.GetOne(patm.CustomerNum,DocNum);
-			}
-			if(doc==null || patm.PatNum!=doc.PatNum) {//make sure that the patient does not pass the another DocNum of another patient.
-				return new EmptyResult(); //return a blank page todo: return page with proper message.
-			}
-			ContentDisposition cd = new ContentDisposition();
-			cd.Inline=true;//the browser will try and show the pdf inline i.e inside the browser window. If set to false it will force a download.
-			Response.AppendHeader("Content-Disposition", cd.ToString());
-			return File(Convert.FromBase64String(doc.RawBase64),"application/pdf","statement.pdf");
-		}
-
-		public ActionResult PatientInformation() {
-			Patientm patm;
-			if(Session["Patient"]==null) {
-				return RedirectToAction("Login");
-			}
-			else {
-				patm=(Patientm)Session["Patient"];
-			}
-			PatientInformationModel pm= new PatientInformationModel(patm);
-			ViewData["PatName"] =patm.FName;
-			return View(pm);
-		}
-
 		/// <summary>
 		/// this cookie is used to retrieve the DentalOfficeID incase the session times out. The login depends on 3 parmeters 1)the username 2)the password and 3) the DentalOfficeID.
 		/// </summary>
@@ -105,6 +66,23 @@ namespace PatientPortalMVC.Controllers
 			DentalOfficeIDCookie.Expires=DateTime.Now.AddYears(1);
 			Response.Cookies.Add(DentalOfficeIDCookie);
 		}
+
+		public ActionResult AccountView() {
+			Patientm patm;
+			if(Session["Patient"]==null) {
+				return RedirectToAction("Login","Account");
+			}
+			else {
+				patm=(Patientm)Session["Patient"];
+			}
+			AccountModel am= new AccountModel(patm);
+			return View(am);
+		}
+
+
+
+
+
 
     }
 }

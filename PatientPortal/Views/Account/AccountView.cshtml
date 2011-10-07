@@ -1,0 +1,19 @@
+﻿@using System.Data;
+@using OpenDentBusiness;
+@using OpenDentBusiness.Mobile;
+@model PatientPortalMVC.Models.AccountModel
+@{
+	ViewBag.Title = "Account";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ @Html.Partial("_PatientName")
+<h2>Patient Information</h2>
+
+
+
+<p>&nbsp;</p>
+    <p><strong>Family Balance</strong></p>
+<strong>Balance</strong> = @Model.BalTotal<br />
+<strong>Ins Pending</strong> = @Model.InsEst<br />
+<strong>After Ins</strong> = @(Model.AfterIns)
+<br /><br />

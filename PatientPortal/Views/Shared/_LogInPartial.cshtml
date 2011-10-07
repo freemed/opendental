@@ -1,8 +1,11 @@
 ﻿@using OpenDentBusiness;
 @using OpenDentBusiness.Mobile;
 
-@if(Session["Patient"]!=null) {
-   <text>Welcome <strong>@ViewData["PatName"]</strong>!
-    [ @Html.ActionLink("Log Off","LogOff","Account") ]</text>
+@{
+	if(Session["Patient"]!=null) {
+    <text>[ @Html.ActionLink("Log Off","LogOff","Account") ]</text>
+	}
 }
+
+
 

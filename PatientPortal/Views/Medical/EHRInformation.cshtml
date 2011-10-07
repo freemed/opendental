@@ -1,31 +1,19 @@
 ﻿@using System.Data;
 @using OpenDentBusiness;
 @using OpenDentBusiness.Mobile;
-@model PatientPortalMVC.Models.PatientInformationModel
+@model PatientPortalMVC.Models.MedicalModel
 @{
-	ViewBag.Title = "Patient Information";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Medical";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Patient Information</h2>
-
-<p><strong>Patient Name:</strong> @Model.patm.LName , @Model.patm.FName </p>
+ @Html.Partial("_PatientName")
+<h2>Medical</h2>
 
 <p>&nbsp;</p>
-    <p><strong>Family Balance</strong></p>
-<strong>BalTotal</strong>=@Model.patm.BalTotal<br />
-<strong>InsEst</strong>=@Model.patm.InsEst
-<br /><br />
-@foreach(var item in Model.mStatementmList) {    
-	@Html.Encode("Statement "+item.DateSent.ToShortDateString() + " ")
-	if(item.DocNum!=0) {
-	@Html.ActionLink("View Statement","ShowPdfFile","Account",new { d=item.DocNum },new { target="_blank" }) 
-	}
-	<br />
-}
+<p><strong>LabPanel:</strong></p>
+@Model.MessageLabPanel
 
-	<p>&nbsp;</p>
-    <p><strong>LabPanel:</strong></p>
-	@Model.MessageLabPanel
+@if(Model.mLabPanelmList.Count()!=0) {
 	<table>
 	<tr>
 		<td><strong>Lab Name &amp; Address</strong></td>
@@ -36,7 +24,7 @@
         
         <td>@Html.Encode(item.LabNameAddress)</td>
 		<td>
-				@{ PatientPortalMVC.Models.PatientInformationModel.LabResults lr= Model.GetLabResult(item.LabPanelNum); }
+				@{ PatientPortalMVC.Models.MedicalModel.LabResults lr= Model.GetLabResult(item.LabPanelNum); }
 					@if(lr.mLabResultmList.Count!=0) {
 						<table>			  
 							<tr>
@@ -50,22 +38,22 @@
 								  <td>@Html.Encode(itemInner.TestName) </td>
 								  <td>@Html.Encode(itemInner.ObsValue) </td>
 							  </tr>
-							 }
+	   }
 						</table>
-					 }
+	 }
 		 
 		</td>
 
     </tr>
  }
 	</table>
+}
 
-
-	<p>&nbsp;</p>
-    <p><strong>List of Medications:</strong></p>
-	@Model.MessageMedication
-	@if(Model.mMedicationmDataTable.Rows.Count!=0) {
-		<table>
+<p>&nbsp;</p>
+<p><strong>List of Medications:</strong></p>
+@Model.MessageMedication
+@if(Model.mMedicationmDataTable.Rows.Count!=0) {
+	<table>
 		<tr>
 			<td><strong>Medication Name</strong></td>
 		</tr>
@@ -75,14 +63,13 @@
 			</tr>
 		 }
 		</table>
-	}
+}
 
-	<p>&nbsp;</p>
-    <p><strong>List of Problems:</strong></p>
-	@Model.MessageProblem
-	
-	@if(Model.mDiseasemDataTable.Rows.Count!=0) {
-		<table>
+<p>&nbsp;</p>
+<p><strong>List of Problems:</strong></p>
+@Model.MessageProblem
+@if(Model.mDiseasemDataTable.Rows.Count!=0) {
+	<table>
 			<tr>
 				<td><strong>ICD</strong></td>
 			</tr>
@@ -92,14 +79,14 @@
 				</tr>
 			}
 		</table>
-	}
+}
 
 <p>&nbsp;</p>
-    <p><strong>List of Allergies:</strong></p>
+<p><strong>List of Allergies:</strong></p>
 
-	@Model.MessageAllergy
-		@if(Model.mAllergymDataTable.Rows.Count!=0) {
-			<table>
+@Model.MessageAllergy
+@if(Model.mAllergymDataTable.Rows.Count!=0) {
+	<table>
 			<tr>
 				<td><strong>Allergy</strong></td>
 				<td><strong>Reaction</strong></td>
@@ -111,7 +98,6 @@
 				</tr>
 			 }
 		</table>
-
-		 }
+}
 
 
