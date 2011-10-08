@@ -216,7 +216,6 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butClose.Location = new System.Drawing.Point(815,646);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
@@ -479,7 +478,6 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butOK.Location = new System.Drawing.Point(734,646);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
@@ -835,6 +833,10 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,EventArgs e) {
 			//only visible if IsFromClaim and IsNew
+			if(textAmount.Text!=textTotal.Text) {
+				MsgBox.Show(this,"Amounts do not match.");
+				return;
+			}
 			DialogResult=DialogResult.OK;
 		}
 
