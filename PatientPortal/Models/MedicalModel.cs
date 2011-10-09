@@ -16,21 +16,21 @@ namespace PatientPortalMVC.Models
 {
 
 		public class MedicalModel {
-			public Patientm patm { get; set; }
-			public class LabResults {
-				public List<LabResultm> mLabResultmList { get; set; }
+			public Patientm patm;
+			public class LabResults {//inner class used for convenience
+				public List<LabResultm> mLabResultmList;
 			}
 
-			public List<Statementm> mStatementmList { get; set; }
-			public List<LabPanelm> mLabPanelmList { get; set; }
-			public DataTable mMedicationmDataTable { get; set; }
-			public DataTable mDiseasemDataTable { get; set; }
-			public DataTable mAllergymDataTable { get; set; }
+			public List<Statementm> mStatementmList;
+			public List<LabPanelm> mLabPanelmList;
+			public DataTable mMedicationmDataTable;
+			public DataTable mDiseasemDataTable;
+			public DataTable mAllergymDataTable;
 
-			public string MessageLabPanel { get; set; }
-			public string MessageMedication { get; set; }
-			public string MessageProblem { get; set; }
-			public string MessageAllergy { get; set; }
+			public string MessageLabPanel;
+			public string MessageMedication;
+			public string MessageProblem;
+			public string MessageAllergy;
 
 			public MedicalModel(Patientm patm) {//constructor
 				this.patm=patm;
@@ -38,14 +38,13 @@ namespace PatientPortalMVC.Models
 			}
 
 			public LabResults GetLabResult(long LabPanelNum) {
-				LabResults lr = new LabResults();// a vaiable made from the above declared  inner class LabResults
+				LabResults lr = new LabResults();// a variable made from the above declared  inner class LabResults
 				lr.mLabResultmList=LabResultms.GetLabResultms(patm.CustomerNum,LabPanelNum);
 				return lr;
 			}
 
 			public MedicalModel FillData() {
 				mStatementmList=Statementms.GetStatementms(patm.CustomerNum,patm.PatNum);
-
 				mLabPanelmList=LabPanelms.GetLabPanelms(patm.CustomerNum,patm.PatNum);
 				if(mLabPanelmList.Count==0) {
 					MessageLabPanel="Lab Panels: No Lab Panels found";

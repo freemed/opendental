@@ -35,6 +35,17 @@ namespace OpenDentBusiness.Mobile {
 				return Crud.PatientmCrud.SelectMany(command);
 			}
 
+			///<summary>Gets Family Members who are patients</summary>
+			public static List<Patientm> GetPatientmsOfFamily(long customerNum,long patNum) {
+				string command="SELECT * FROM patientm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)+ " "
+					+"AND guarantor in "
+					+"(SELECT guarantor FROM patientm "
+					+"WHERE CustomerNum = "+POut.Long(customerNum)+ " "
+					+"AND PatNum ="+POut.Long(patNum)+ ")";
+				return Crud.PatientmCrud.SelectMany(command);
+			}
+
 			///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
 			public static int DateToAge(DateTime date) {
 				return Patients.DateToAge(date);

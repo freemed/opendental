@@ -27,31 +27,48 @@ namespace PatientPortalMVC.Models {
 	}
 
 	public class AccountModel {
-		public string BalTotal{ get; set; }
-		public string InsEst{ get; set; }
-		public string AfterIns { get; set; }
+		public List<PatDetails> patDetailsList;
 
 		public AccountModel(Patientm patm) {
+			patDetailsList= new List<PatDetails>();
+			List<Patientm>  patList=Patientms.GetPatientmsOfFamily(patm.CustomerNum,patm.PatNum);
+			foreach(Patientm pm in patList) {
+				patDetailsList.Add(GetDetails(pm));
+			}
+		}
+
+		private PatDetails GetDetails(Patientm patm) {
+			PatDetails pd=new PatDetails();
+			pd.patm=patm;
 			if(patm.BalTotal<0) {
-				BalTotal="-$" + Math.Abs(patm.BalTotal);
+				pd.BalTotal="-$" + Math.Abs(patm.BalTotal);
 			}
 			else{
-				BalTotal="$" + Math.Abs(patm.BalTotal);
+				pd.BalTotal="$" + Math.Abs(patm.BalTotal);
 			}
 			if(patm.InsEst<0) {
-				InsEst="-$" + Math.Abs(patm.InsEst);
+				pd.InsEst="-$" + Math.Abs(patm.InsEst);
 			}
 			else {
-				InsEst="$" + Math.Abs(patm.InsEst);
+				pd.InsEst="$" + Math.Abs(patm.InsEst);
 			}
 			if((patm.BalTotal-patm.InsEst)<0){
-				AfterIns="-$" + Math.Abs(patm.BalTotal-patm.InsEst);
+				pd.AfterIns="-$" + Math.Abs(patm.BalTotal-patm.InsEst);
 			}
 			else {
-				AfterIns="$" + Math.Abs(patm.BalTotal-patm.InsEst);
+				pd.AfterIns="$" + Math.Abs(patm.BalTotal-patm.InsEst);
 			}
-
+			return pd;
 		}
+
+		public class PatDetails {//inner class used for convenience
+			public Patientm patm;
+			public string BalTotal;
+			public string InsEst;
+			public string AfterIns;
+		}
+
+
 
 	}
 
