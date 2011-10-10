@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -876,7 +877,7 @@ namespace OpenDentBusiness
 						}
 					}
 				}
-				//2300 HI: BK (medical,institutional) Principal Diagnosis.
+				//2300 HI: BK (medical,dental) Health Care Diagnosis Code. Situational. For OMS or anesthesiology.
 //todo: validate at least one diagnosis
 				if(medType==EnumClaimMedType.Institutional) {
 					seg++;
@@ -899,8 +900,6 @@ namespace OpenDentBusiness
 					}
 					sw.WriteLine("~");
 				}
-				//2300 HI: BK (medical,dental) Health Care Diagnosis Code. Situational. For OMS or anesthesiology.
-//todo: Required for medical.
 				//2300 HI: BP (medical) Anesthesia Related Procedure. Situational. We do not use.
 				//2300 HI: BJ (institutional) Admitting Diagnosis. Situational. Required for inpatient admission. We do not use.
 				//2300 HI: PR (institutional) Patient's Reason for Visit. Situational. Required for outpatient visits.
@@ -1238,7 +1237,7 @@ namespace OpenDentBusiness
 						sw.Write("SV1*"
 							//SV101 Composite Medical Procedure Identifier
 							+"HC:"//SV101-1 2/2 Product/Service ID Qualifier: HC=Health Care.
-							+Sout(claimProcs[j].CodeSent)+"*"//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported
+							+Sout(proc.MedicalCode)+"*"//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported
 							+claimProcs[j].FeeBilled.ToString()+"*"//SV102 1/18 Monetary Amount: Charge Amt.
 							+"MJ*"//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes.
 							+"0*");//SV104 1/15 Quantity: Quantity of anesthesia. We don't support, so always 0.							
@@ -1954,39 +1953,85 @@ namespace OpenDentBusiness
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,null);
 			InsSub sub=InsSubs.GetSub(claim.InsSubNum,null);
-			//if(insPlan.IsMedical) {
-			//	return "Medical e-claims not allowed";
-			//}
 			//billProv
-			//bool isPerson=(billProv.FName!="");//this was our old hack for indicating a person
-			X12Validate.BillProv(billProv,strb,!billProv.IsNotPerson);
+			if(billProv.LName=="") {
+				Comma(strb);
+				strb.Append("Billing Prov LName");
+			}
+			if(!billProv.IsNotPerson && billProv.FName=="") {//this is allowed to be blank if it's a non-person.
+				Comma(strb);
+				strb.Append("Billing Prov FName");
+			}
+			if(billProv.SSN.Length<2) {
+				Comma(strb);
+				strb.Append("Billing Prov SSN");
+			}
+			if(billProv.NationalProvID.Length<2) {
+				Comma(strb);
+				strb.Append("Billing Prov NPI");
+			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+				if(!Regex.IsMatch(billProv.SSN,"^[0-9]{9}$")) {
+					Comma(strb);
+					strb.Append("Billing Prov SSN/TIN must be a 9 digit number");
+				}
+				if(!Regex.IsMatch(billProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
+					Comma(strb);
+					strb.Append("Billing Prov NPI must be a 10 digit number with an optional prefix of 80840");
+				}
+			}
+			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				string zip=PrefC.GetString(PrefName.PracticeBillingZip);
+				if(!Regex.IsMatch(zip,"^[0-9]{5}\\-?[0-9]{4}$")) {
+					Comma(strb);
+					strb.Append("Practice billing zip must contain nine digits");
+				}
+			}
+			else if(clinic==null) {
+				string zip=PrefC.GetString(PrefName.PracticeZip);
+				if(!Regex.IsMatch(zip,"^[0-9]{5}\\-?[0-9]{4}$")) {
+					Comma(strb);
+					strb.Append("Practice zip must contain nine digits");
+				}
+			}
+			else {
+				string zip=clinic.Zip;
+				if(!Regex.IsMatch(zip,"^[0-9]{5}\\-?[0-9]{4}$")) {
+					Comma(strb);
+					strb.Append("Clinic zip must contain nine digits");
+				}
+			}
 			//treatProv
 			if(treatProv.LName=="") {
 				Comma(strb);
-				strb.Append("Treating Prov LName");
+				strb.Append("Treating Prov LName for claim");
 			}
 			if(treatProv.FName=="") {
 				Comma(strb);
-				strb.Append("Treating Prov FName");
+				strb.Append("Treating Prov FName for claim");
 			}
 			if(treatProv.SSN.Length<2) {
 				Comma(strb);
-				strb.Append("Treating Prov SSN");
+				strb.Append("Treating Prov SSN/TIN for claim");
 			}
 			if(treatProv.NationalProvID.Length<2) {
 				Comma(strb);
-				strb.Append("Treating Prov NPI");
+				strb.Append("Treating Prov NPI for claim");
+			}
+			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+				if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {
+					Comma(strb);
+					strb.Append("Treating Prov SSN/TIN for claim must be a 9 digit number");
+				}
+				if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
+					Comma(strb);
+					strb.Append("Treating Prov NPI for claim must be a 10 digit number with an optional prefix of 80840");
+				}
 			}
 			if(treatProv.StateLicense=="") {
 				Comma(strb);
-				strb.Append("Treating Prov Lic #");
+				strb.Append("Treating Prov Lic # for claim");
 			}
-			//if(insPlan.IsMedical) {
-			if(treatProv.NationalProvID.Length<2) {
-				Comma(strb);
-				strb.Append("Treating Prov NPI");
-			}
-			//}
 			if(PrefC.GetString(PrefName.PracticeTitle)=="") {
 				Comma(strb);
 				strb.Append("Practice Title");
@@ -2221,27 +2266,37 @@ namespace OpenDentBusiness
 					treatProv=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];
 					if(treatProv.LName=="") {
 						Comma(strb);
-						strb.Append("Treating Prov LName");
+						strb.Append("Treating Prov LName for proc "+procCode.ProcCode);
 					}
 					if(treatProv.FName=="") {
 						Comma(strb);
-						strb.Append("Treating Prov FName");
+						strb.Append("Treating Prov FName for proc "+procCode.ProcCode);
 					}
 					if(treatProv.IsNotPerson) {
 						Comma(strb);
-						strb.Append("Treating Prov IsNotPerson");//required to be a person
+						strb.Append("Treating Prov IsNotPerson for proc "+procCode.ProcCode);//required to be a person
 					}
 					if(treatProv.SSN.Length<2) {
 						Comma(strb);
-						strb.Append("Treating Prov SSN");
+						strb.Append("Treating Prov SSN/TIN for proc "+procCode.ProcCode);
 					}
 					if(treatProv.NationalProvID.Length<2) {
 						Comma(strb);
-						strb.Append("Treating Prov NPI");
+						strb.Append("Treating Prov NPI for proc "+procCode.ProcCode);
+					}
+					if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+						if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {
+							Comma(strb);
+							strb.Append("Treating Prov SSN/TIN for proc "+procCode.ProcCode+" must be a 9 digit number");
+						}
+						if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
+							Comma(strb);
+							strb.Append("Treating Prov NPI for proc "+procCode.ProcCode+" must be a 10 digit number with an optional prefix of 80840");
+						}
 					}
 					if(treatProv.StateLicense=="") {
 						Comma(strb);
-						strb.Append("Treating Prov Lic #");
+						strb.Append("Treating Prov Lic # for proc "+procCode.ProcCode);
 					}
 					//will add any other checks as needed. Can't think of any others at the moment.
 				}
