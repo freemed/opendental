@@ -201,20 +201,22 @@ namespace OpenDental {
 		private void butSend_Click(object sender,EventArgs e) {
 			//Assuming the use of XCharge.  If adding another vendor (PayConnect for example)
 			//make sure to move XCharge validation in FillGrid() to here.
-			if(prog==null){//Gets filled in FillGrid()
+			if(prog==null) {//Gets filled in FillGrid()
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)){
+			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)) {
 				return;
 			}
 			if(gridMain.SelectedIndices.Length<1) {
 				MsgBox.Show(this,"Must select at least one recurring charge.");
 				return;
 			}
+			string recurringResultFile="Recurring charge results for "+DateTime.Now.ToShortDateString()+" ran at "+DateTime.Now.ToShortTimeString()+"\r\n\r\n";
 			int failed=0;
 			int success=0;
 			string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
+			#region Card Charge Loop
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				insertPayment=false;
 				ProcessStartInfo info=new ProcessStartInfo(prog.Path);
@@ -251,33 +253,37 @@ namespace OpenDental {
 				process.EnableRaisingEvents=true;
 				process.Start();
 				while(!process.HasExited) {
-				  Application.DoEvents();
+					Application.DoEvents();
 				}
 				Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
 				Cursor=Cursors.Default;
-				string resulttext="";
 				string line="";
+				string resultText="";
+				recurringResultFile+="PatNum: "+patNum+" Name: "+table.Rows[i]["PatName"].ToString()+"\r\n";
 				using(TextReader reader=new StreamReader(resultfile)) {
-				  line=reader.ReadLine();
-				  while(line!=null) {
-				    if(resulttext!="") {
-				      resulttext+="\r\n";
-				    }
-				    resulttext+=line;
-				    if(line.StartsWith("RESULT=")) {
-				      if(line!="RESULT=SUCCESS") {
-				        failed++;
-				        labelFailed.Text=Lan.g(this,"Failed=")+failed;
-				        break;
-				      }
-				      success++;
-				      labelCharged.Text=Lan.g(this,"Charged=")+success;
-				      insertPayment=true;
-				    }
-				    line=reader.ReadLine();
-				  }
+					line=reader.ReadLine();
+					while(line!=null) {
+						if(resultText!="") {
+							resultText+="\r\n";
+						}
+						resultText+=line;
+						if(line.StartsWith("RESULT=")) {
+							if(line=="RESULT=SUCCESS") {
+								success++;
+								labelCharged.Text=Lan.g(this,"Charged=")+success;
+								insertPayment=true;
+							}
+							else {
+								failed++;
+								labelFailed.Text=Lan.g(this,"Failed=")+failed;
+							}
+						}
+						line=reader.ReadLine();
+					}
+					recurringResultFile+=resultText+"\r\n\r\n";
 				}
-				if(insertPayment) {
+				long payPlanNum=PIn.Long(table.Rows[i]["PayPlanNum"].ToString());
+				if(insertPayment && payPlanNum<1) {//Not a payment plan payment.
 					Patient patCur=Patients.GetPat(patNum);
 					Payment paymentCur=new Payment();
 					paymentCur.DateEntry=nowDateTime.Date;
@@ -287,7 +293,7 @@ namespace OpenDental {
 					paymentCur.ClinicNum=patCur.ClinicNum;
 					paymentCur.PayType=payType;
 					paymentCur.PayAmt=amt;
-					paymentCur.PayNote=resulttext;
+					paymentCur.PayNote=resultText;
 					paymentCur.IsRecurringCC=true;
 					Payments.Insert(paymentCur);
 					PaySplit split=new PaySplit();
@@ -311,6 +317,11 @@ namespace OpenDental {
 					}
 				}
 			}
+			#endregion
+			try {
+				File.WriteAllText(Path.Combine(Path.GetDirectoryName(prog.Path),"RecurringChargeResult.txt"),recurringResultFile);
+			}
+			catch { } //Do nothing cause this is just for internal use.
 			FillGrid();
 			labelCharged.Text=Lan.g(this,"Charged=")+success;
 			labelFailed.Text=Lan.g(this,"Failed=")+failed;

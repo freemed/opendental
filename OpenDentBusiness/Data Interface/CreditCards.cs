@@ -65,7 +65,7 @@ namespace OpenDentBusiness{
 			//NOTE: Query will return patients with or without payments regardless of when that payment occurred, filtering is done below.
 			string command="SELECT cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"
 					+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN DATE('0001-01-01') ELSE MAX(pay.PayDate) END LatestPayment,"
-					+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,0 AS IsPayPlan "
+					+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,PayPlanNum "
 					+"FROM (creditcard cc,patient pat,patient guar) "
 					+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.PayType="+payType+" AND pay.IsRecurringCC=1 "
 					+"WHERE cc.PatNum=pat.PatNum "
