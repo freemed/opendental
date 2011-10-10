@@ -24,9 +24,9 @@ namespace OpenDentBusiness.Mobile{
 		#endregion
 
 		#region Used only on OD
-		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<long> GetChangedSinceDocumentNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
-			return Documents.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
+		///<summary>Only documents listed in the corresponding rows of the statement table are uploaded</summary>
+		public static List<long> GetChangedSinceDocumentNums(DateTime changedSince,List<long> statementNumList) {
+			return Documents.GetChangedSinceDocumentNums(changedSince,statementNumList);
 		}
 
 		///<summary>The values returned are sent to the webserver.</summary>

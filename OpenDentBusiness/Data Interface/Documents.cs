@@ -462,20 +462,21 @@ namespace OpenDentBusiness {
 
 		//public static string GetFull
 
-		public static List<long> GetChangedSinceDocumentNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {
+		///<summary>Only documents listed in the corresponding rows of the statement table are uploaded</summary>
+		public static List<long> GetChangedSinceDocumentNums(DateTime changedSince,List<long> statementNumList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,eligibleForUploadPatNumList);
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince,statementNumList);
 			}
-			string strEligibleForUploadPatNums="";
+			string strStatementNums="";
 			DataTable table;
-			if(eligibleForUploadPatNumList.Count>0) {
-				for(int i=0;i<eligibleForUploadPatNumList.Count;i++) {
+			if(statementNumList.Count>0) {
+				for(int i=0;i<statementNumList.Count;i++) {
 					if(i>0) {
-						strEligibleForUploadPatNums+="OR ";
+						strStatementNums+="OR ";
 					}
-					strEligibleForUploadPatNums+="PatNum='"+eligibleForUploadPatNumList[i].ToString()+"' ";
+					strStatementNums+="StatementNum='"+statementNumList[i].ToString()+"' ";
 				}
-				string command="SELECT DocNum FROM document WHERE DateTStamp > "+POut.DateT(changedSince)+" AND ("+strEligibleForUploadPatNums+")";
+				string command="SELECT DocNum FROM document WHERE  DateTStamp > "+POut.DateT(changedSince)+" AND DocNum IN ( SELECT DocNum FROM statement WHERE "+strStatementNums+")";
 				table=Db.GetTable(command);
 			}
 			else {

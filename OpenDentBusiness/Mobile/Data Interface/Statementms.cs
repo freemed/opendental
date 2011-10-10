@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Mobile{
 		#endregion
 
 		#region Used only on OD
-		///<summary>The values returned are sent to the webserver.</summary>
+		///<summary>Fetches StatementNums restricted by the DateTStamp, PatNums and a limit of records per patient. If limitPerPatient is zero all StatementNums of a patient are fetched</summary>
 		public static List<long> GetChangedSinceStatementNums(DateTime changedSince,List<long> eligibleForUploadPatNumList,int limitPerPatient) {
 			return Statements.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList,limitPerPatient);
 		}
