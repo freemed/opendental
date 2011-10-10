@@ -13,19 +13,32 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormCreditCardEdit:Form {
-		private Patient PatCur;
+		private Patient patCur;
+		private List<PayPlanCharge> chargeList;
+		private List<PayPlan> payPlanList;
 		private CreditCard creditCardOld;
 		public CreditCard CreditCardCur;
 
 		public FormCreditCardEdit(Patient pat) {
 			InitializeComponent();
 			Lan.F(this);
-			PatCur=pat;
+			patCur=pat;
 		}
 
-		private void FormPayConnect_Load(object sender,EventArgs e) {
+		private void FormCreditCardEdit_Load(object sender,EventArgs e) {
 			creditCardOld=CreditCardCur.Clone();
 			FillData();
+			chargeList=PayPlanCharges.Refresh(patCur.PatNum);
+			payPlanList=PayPlans.GetValidPlansNoIns(patCur.PatNum);
+			comboPaymentPlans.Items.Add("None");
+			comboPaymentPlans.SelectedIndex=0;
+			for(int i=0;i<payPlanList.Count;i++) {
+				comboPaymentPlans.Items.Add(PayPlans.GetTotalPrinc(payPlanList[i].PayPlanNum,chargeList).ToString("F")
+					+"  "+Patients.GetPat(payPlanList[i].PatNum).GetNameFL());
+				if(payPlanList[i].PayPlanNum==CreditCardCur.PayPlanNum) {
+					comboPaymentPlans.SelectedIndex=i+1;
+				}
+			}
 		}
 
 		private void FillData() {
@@ -70,11 +83,17 @@ namespace OpenDental {
 				MsgBox.Show(this,"Expiration format invalid.");
 				return false;
 			}
-			if(  textDateStart.errorProvider1.GetError(textDateStart)!=""
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
 				|| textDateStop.errorProvider1.GetError(textDateStop)!=""
-				)
+				|| textChargeAmt.errorProvider1.GetError(textChargeAmt)!="") 
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
+				return false;
+			}
+			if((textChargeAmt.Text=="" && comboPaymentPlans.SelectedIndex>0)
+				|| (textChargeAmt.Text=="" && textDateStart.Text.Trim()!="")) 
+			{
+				MsgBox.Show(this,"You need a charge amount for recurring charges.");
 				return false;
 			}
 			if(textChargeAmt.Text!="" && textDateStart.Text.Trim()=="") {
@@ -105,7 +124,7 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 			}
 			CreditCards.Delete(CreditCardCur.CreditCardNum);
-			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
+			List<CreditCard> creditCards=CreditCards.Refresh(patCur.PatNum);
 			for(int i=0;i<creditCards.Count;i++) {
 				creditCards[i].ItemOrder=creditCards.Count-(i+1);
 				CreditCards.Update(creditCards[i]);//Resets ItemOrder.
@@ -119,14 +138,20 @@ namespace OpenDental {
 			}
 			CreditCardCur.Address=textAddress.Text;
 			CreditCardCur.CCNumberMasked=textCardNumber.Text;
-			CreditCardCur.PatNum=PatCur.PatNum;
+			CreditCardCur.PatNum=patCur.PatNum;
 			CreditCardCur.Zip=textZip.Text;
 			CreditCardCur.ChargeAmt=PIn.Double(textChargeAmt.Text);
 			CreditCardCur.DateStart=PIn.Date(textDateStart.Text);
 			CreditCardCur.DateStop=PIn.Date(textDateStop.Text);
 			CreditCardCur.Note=textNote.Text;
+			if(comboPaymentPlans.SelectedIndex>0) {
+				CreditCardCur.PayPlanNum=payPlanList[comboPaymentPlans.SelectedIndex-1].PayPlanNum;
+			}
+			else {
+				CreditCardCur.PayPlanNum=0;//Allows users to change from a recurring payplan charge to a normal one.
+			}
 			if(CreditCardCur.IsNew) {
-				List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
+				List<CreditCard> itemOrderCount=CreditCards.Refresh(patCur.PatNum);
 				CreditCardCur.ItemOrder=itemOrderCount.Count;
 				CreditCards.Insert(CreditCardCur);
 			}

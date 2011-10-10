@@ -43,13 +43,13 @@ namespace OpenDental{
 			this.textChargeAmt = new OpenDental.ValidDouble();
 			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.labelPayPlan = new System.Windows.Forms.Label();
+			this.comboPaymentPlans = new System.Windows.Forms.ComboBox();
 			this.butToday = new OpenDental.UI.Button();
 			this.butClear = new OpenDental.UI.Button();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
-			this.comboPaymentPlans = new System.Windows.Forms.ComboBox();
-			this.labelPayPlan = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -236,6 +236,24 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Authorized Recurring Charges";
 			// 
+			// labelPayPlan
+			// 
+			this.labelPayPlan.Location = new System.Drawing.Point(0,27);
+			this.labelPayPlan.Name = "labelPayPlan";
+			this.labelPayPlan.Size = new System.Drawing.Size(112,16);
+			this.labelPayPlan.TabIndex = 132;
+			this.labelPayPlan.Text = "Payment Plan";
+			this.labelPayPlan.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboPaymentPlans
+			// 
+			this.comboPaymentPlans.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPaymentPlans.Location = new System.Drawing.Point(114,26);
+			this.comboPaymentPlans.MaxDropDownItems = 30;
+			this.comboPaymentPlans.Name = "comboPaymentPlans";
+			this.comboPaymentPlans.Size = new System.Drawing.Size(167,21);
+			this.comboPaymentPlans.TabIndex = 131;
+			// 
 			// butToday
 			// 
 			this.butToday.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -293,24 +311,6 @@ namespace OpenDental{
 			this.label6.Text = "Date Stop will be blank if the charges will be repeated indefinitely.  Clear all " +
     "these values if no further recurring charges are planned.";
 			// 
-			// comboPaymentPlans
-			// 
-			this.comboPaymentPlans.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPaymentPlans.Location = new System.Drawing.Point(114,26);
-			this.comboPaymentPlans.MaxDropDownItems = 30;
-			this.comboPaymentPlans.Name = "comboPaymentPlans";
-			this.comboPaymentPlans.Size = new System.Drawing.Size(167,21);
-			this.comboPaymentPlans.TabIndex = 131;
-			// 
-			// labelPayPlan
-			// 
-			this.labelPayPlan.Location = new System.Drawing.Point(0,27);
-			this.labelPayPlan.Name = "labelPayPlan";
-			this.labelPayPlan.Size = new System.Drawing.Size(112,16);
-			this.labelPayPlan.TabIndex = 132;
-			this.labelPayPlan.Text = "Payment Plan";
-			this.labelPayPlan.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormCreditCardEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -331,7 +331,7 @@ namespace OpenDental{
 			this.Name = "FormCreditCardEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Credit Card Edit";
-			this.Load += new System.EventHandler(this.FormPayConnect_Load);
+			this.Load += new System.EventHandler(this.FormCreditCardEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
