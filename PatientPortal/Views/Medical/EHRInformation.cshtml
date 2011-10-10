@@ -8,11 +8,9 @@
 }
  @Html.Partial("_PatientName")
 <h2>Medical</h2>
-
-<p>&nbsp;</p>
 <p><strong>LabPanel:</strong></p>
+<div style="margin-left:3em">
 @Model.MessageLabPanel
-
 @if(Model.mLabPanelmList.Count()!=0) {
 	<table>
 	<tr>
@@ -21,7 +19,6 @@
 	</tr>
 	@foreach(var item in Model.mLabPanelmList) {    
     <tr>
-        
         <td>@Html.Encode(item.LabNameAddress)</td>
 		<td>
 				@{ PatientPortalMVC.Models.MedicalModel.LabResults lr= Model.GetLabResult(item.LabPanelNum); }
@@ -48,56 +45,62 @@
  }
 	</table>
 }
+</div>
 
 <p>&nbsp;</p>
 <p><strong>List of Medications:</strong></p>
-@Model.MessageMedication
-@if(Model.mMedicationmDataTable.Rows.Count!=0) {
-	<table>
-		<tr>
-			<td><strong>Medication Name</strong></td>
-		</tr>
-		@foreach(DataRow row in Model.mMedicationmDataTable.Rows) {
+	<div style="margin-left:3em">
+	@Model.MessageMedication
+	@if(Model.mMedicationmDataTable.Rows.Count!=0) {
+		<table>
 			<tr>
-				<td>@Html.Encode(row["MedName"].ToString())</td>
+				<td><strong>Medication Name</strong></td>
 			</tr>
-		 }
-		</table>
-}
+			@foreach(DataRow row in Model.mMedicationmDataTable.Rows) {
+				<tr>
+					<td>@Html.Encode(row["MedName"].ToString())</td>
+				</tr>
+			 }
+			</table>
+	}
+</div>
 
 <p>&nbsp;</p>
 <p><strong>List of Problems:</strong></p>
-@Model.MessageProblem
-@if(Model.mDiseasemDataTable.Rows.Count!=0) {
-	<table>
-			<tr>
-				<td><strong>ICD</strong></td>
-			</tr>
-			@foreach(DataRow row in Model.mDiseasemDataTable.Rows) { // Loop over the rows.
+	<div style="margin-left:3em">
+	@Model.MessageProblem
+	@if(Model.mDiseasemDataTable.Rows.Count!=0) {
+		<table>
 				<tr>
-					<td>@Html.Encode(row["Description"].ToString())</td>
+					<td><strong>ICD</strong></td>
 				</tr>
-			}
-		</table>
-}
+				@foreach(DataRow row in Model.mDiseasemDataTable.Rows) { // Loop over the rows.
+					<tr>
+						<td>@Html.Encode(row["Description"].ToString())</td>
+					</tr>
+				}
+			</table>
+	}
+</div>
 
 <p>&nbsp;</p>
 <p><strong>List of Allergies:</strong></p>
-
-@Model.MessageAllergy
-@if(Model.mAllergymDataTable.Rows.Count!=0) {
-	<table>
-			<tr>
-				<td><strong>Allergy</strong></td>
-				<td><strong>Reaction</strong></td>
-			</tr>
-			@foreach(DataRow row in Model.mAllergymDataTable.Rows) {
+<div style="margin-left:3em">
+	@Model.MessageAllergy
+	@if(Model.mAllergymDataTable.Rows.Count!=0) {
+		<table>
 				<tr>
-				<td>@Html.Encode(row["Description"].ToString())</td>
-				<td>@Html.Encode(row["Reaction"].ToString())</td>
+					<td><strong>Allergy</strong></td>
+					<td><strong>Reaction</strong></td>
 				</tr>
-			 }
-		</table>
-}
+				@foreach(DataRow row in Model.mAllergymDataTable.Rows) {
+					<tr>
+					<td>@Html.Encode(row["Description"].ToString())</td>
+					<td>@Html.Encode(row["Reaction"].ToString())</td>
+					</tr>
+				 }
+			</table>
+	}
+</div>
 
 

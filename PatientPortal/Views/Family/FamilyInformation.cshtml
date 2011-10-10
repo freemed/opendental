@@ -8,3 +8,11 @@
 }
  @Html.Partial("_PatientName")
 <h2>Family Information</h2>
+
+@foreach(var item in Model.patList) {
+	<div style="margin-left:3em">
+		<p><strong>Name:</strong> = @Html.Encode(item.LName), @Html.Encode(item.FName)</p>  
+		<p><strong>Age</strong> = @Html.Encode(item.Age)</p>
+		<p>&nbsp;</p>
+	</div>
+}

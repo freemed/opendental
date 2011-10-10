@@ -7,20 +7,20 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
  @Html.Partial("_PatientName")
-<h2>Patient Information</h2>
+<h2>Account Information</h2>
+<div style="margin-left:3em"> 
+	<p><strong>Balance</strong> = @Html.Encode(Model.BalTotal)</p>
+	<p><strong>Ins Pending</strong> = @Html.Encode(Model.InsEst)</p>
+	<p><strong>After Ins</strong> = @Html.Encode(Model.AfterIns)</p>
+</div>
 
-
-
-<p>&nbsp;</p>
-    <p><strong>Family Balance:</strong></p>
-
-@foreach(var item in Model.patDetailsList) {
-	<div style=" text-indent:3em">
-		<p><strong>Name:</strong> = @Html.Encode(item.patm.LName), @Html.Encode(item.patm.FName)</p>  
-		<p><strong>Balance</strong> = @Html.Encode(item.BalTotal)</p>
-		<p><strong>Ins Pending</strong> = @Html.Encode(item.InsEst) </p>
-		<p><strong>After Ins</strong> = @Html.Encode(item.AfterIns) </p>
-		<p>&nbsp;</p>
-	</div>
-}
-
+<p><strong>Statement History:</strong></p>
+<div style="margin-left:3em">
+	@foreach(var item in Model.statementmList) {    
+		<p>@Html.Encode("Statement "+item.DateSent.ToShortDateString() + " ")
+		@if(item.DocNum!=0) {
+		@Html.ActionLink("View Statement","ShowPdfFile","Account",new { d=item.DocNum },new { target="_blank" }) 
+		}
+		</p>
+	}
+</div>
