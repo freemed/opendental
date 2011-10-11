@@ -99,6 +99,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM etrans WHERE ClaimNum="+POut.Long(claimNum)+" "
 				+"AND (Etype="+POut.Int((int)EtransType.Claim_CA)+" "
 				+"OR Etype="+POut.Int((int)EtransType.ClaimCOB_CA)+" "
+				+"OR Etype="+POut.Int((int)EtransType.Predeterm_CA)+" "
 				+"OR Etype="+POut.Int((int)EtransType.ClaimSent)+") "
 				+(CultureInfo.CurrentCulture.Name.EndsWith("CA")?"ORDER BY DateTimeTrans DESC":""); //Canadian. en-CA or fr-CA
 			return Crud.EtransCrud.SelectMany(command);
