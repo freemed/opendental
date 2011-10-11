@@ -61,6 +61,16 @@ namespace OpenDental {
 			if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {
 				if(Programs.IsEnabled(ProgramName.Xcharge)) {
 					Program prog=Programs.GetCur(ProgramName.Xcharge);
+					if(!File.Exists(prog.Path)){
+						MsgBox.Show(this,"Path is not valid.");
+						if(Security.IsAuthorized(Permissions.Setup)) {
+							FormXchargeSetup FormX=new FormXchargeSetup();
+							FormX.ShowDialog();
+							if(FormX.DialogResult!=DialogResult.OK) {
+								return;
+							}
+						}
+					}
 					string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 					string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 					ProcessStartInfo info=new ProcessStartInfo(prog.Path);
