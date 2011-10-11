@@ -2653,7 +2653,11 @@ namespace OpenDental.Eclaims {
 			if(payableTo=="1") {//Pay the subscriber.
 				text=isFrench?"TOTAL REMBOURSABLE AU TITULAIRE:":"TOTAL PAYABLE TO INSURED:";
 				doc.DrawString(g,text,valuesBlockOffset-g.MeasureString(text,doc.standardFont).Width-5,0);
-				text=RawMoneyStrToDisplayMoney(formData.GetFieldById(formatVersionNumber=="04"?"G55":"G28").valuestr);
+				CCDField totalPayable=formData.GetFieldById("G55");//G55 exists in version 04, but not in version 02.
+				if(totalPayable==null) {
+					totalPayable=formData.GetFieldById("G28");
+				}
+				text=RawMoneyStrToDisplayMoney(totalPayable.valuestr);
 				doc.DrawString(g,text,valuesBlockOffset+amountWidth-g.MeasureString(text,doc.standardFont).Width,0);
 				x=doc.StartElement();
 				text=isFrench?"ADRESSE DU DESTINATAIRE DU PAIEMENT:":"PAYEE'S ADDRESS:";
