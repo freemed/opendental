@@ -84,7 +84,6 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(838,605);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
@@ -769,7 +768,7 @@ namespace OpenDental{
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.OK;
+			DialogResult=DialogResult.Cancel;
 		}
 
 		
