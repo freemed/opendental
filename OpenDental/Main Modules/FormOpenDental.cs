@@ -1883,32 +1883,34 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,Lan.g(this,"New Commlog Entry"),"Commlog"));
-			button=new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email");
-			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton("",-1,"","EmailDropdown");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuEmail;
-			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton(Lan.g(this,"Letter"),-1,Lan.g(this,"Quick Letter"),"Letter");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuLetter;
-			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton(Lan.g(this,"Forms"),-1,"","Form");
-			//button.Style=ODToolBarButtonStyle.DropDownButton;
-			//button.DropDownMenu=menuForm;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
-			button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuLabel;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Popups"),-1,Lan.g(this,"Edit popups for this patient"),"Popups"));
+			if(!Programs.UsingEcwTight()) {
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,Lan.g(this,"New Commlog Entry"),"Commlog"));
+				button=new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email");
+				ToolBarMain.Buttons.Add(button);
+				button=new ODToolBarButton("",-1,"","EmailDropdown");
+				button.Style=ODToolBarButtonStyle.DropDownButton;
+				button.DropDownMenu=menuEmail;
+				ToolBarMain.Buttons.Add(button);
+				button=new ODToolBarButton(Lan.g(this,"Letter"),-1,Lan.g(this,"Quick Letter"),"Letter");
+				button.Style=ODToolBarButtonStyle.DropDownButton;
+				button.DropDownMenu=menuLetter;
+				ToolBarMain.Buttons.Add(button);
+				button=new ODToolBarButton(Lan.g(this,"Forms"),-1,"","Form");
+				//button.Style=ODToolBarButtonStyle.DropDownButton;
+				//button.DropDownMenu=menuForm;
+				ToolBarMain.Buttons.Add(button);
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
+				button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
+				button.Style=ODToolBarButtonStyle.DropDownButton;
+				button.DropDownMenu=menuLabel;
+				ToolBarMain.Buttons.Add(button);
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Popups"),-1,Lan.g(this,"Edit popups for this patient"),"Popups"));
+			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.AllModules);
 			for(int i=0;i<toolButItems.Count;i++) {
-				//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(((ToolButItem)toolButItems[i]).ButtonText
-					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
+			  //ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			  ToolBarMain.Buttons.Add(new ODToolBarButton(((ToolButItem)toolButItems[i]).ButtonText
+			    ,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
 			}
 			Plugins.HookAddCode(this,"FormOpenDental.LayoutToolBar_end");
 			ToolBarMain.Invalidate();
@@ -1999,30 +2001,32 @@ namespace OpenDental{
 			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
 				return;
 			}
-			if(CurPatNum==0){//Only on startup, I think.
-				ToolBarMain.Buttons["Email"].Enabled=false;
-				ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
-				ToolBarMain.Buttons["Commlog"].Enabled=false;
-				ToolBarMain.Buttons["Letter"].Enabled=false;
-				ToolBarMain.Buttons["Form"].Enabled=false;
-				ToolBarMain.Buttons["Tasklist"].Enabled=false;
-				ToolBarMain.Buttons["Label"].Enabled=false;
-				ToolBarMain.Buttons["Popups"].Enabled=false;
-			}
-			else{
-				if(hasEmail){
-					ToolBarMain.Buttons["Email"].Enabled=true;
-				}
-				else{
+			if(!Programs.UsingEcwTight()) {
+				if(CurPatNum==0) {//Only on startup, I think.
 					ToolBarMain.Buttons["Email"].Enabled=false;
+					ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
+					ToolBarMain.Buttons["Commlog"].Enabled=false;
+					ToolBarMain.Buttons["Letter"].Enabled=false;
+					ToolBarMain.Buttons["Form"].Enabled=false;
+					ToolBarMain.Buttons["Tasklist"].Enabled=false;
+					ToolBarMain.Buttons["Label"].Enabled=false;
+					ToolBarMain.Buttons["Popups"].Enabled=false;
 				}
-				ToolBarMain.Buttons["EmailDropdown"].Enabled=true;
-				ToolBarMain.Buttons["Commlog"].Enabled=true;
-				ToolBarMain.Buttons["Letter"].Enabled=true;
-				ToolBarMain.Buttons["Form"].Enabled=true;
-				ToolBarMain.Buttons["Tasklist"].Enabled=true;
-				ToolBarMain.Buttons["Label"].Enabled=true;
-				ToolBarMain.Buttons["Popups"].Enabled=true;
+				else {
+					if(hasEmail) {
+						ToolBarMain.Buttons["Email"].Enabled=true;
+					}
+					else {
+						ToolBarMain.Buttons["Email"].Enabled=false;
+					}
+					ToolBarMain.Buttons["EmailDropdown"].Enabled=true;
+					ToolBarMain.Buttons["Commlog"].Enabled=true;
+					ToolBarMain.Buttons["Letter"].Enabled=true;
+					ToolBarMain.Buttons["Form"].Enabled=true;
+					ToolBarMain.Buttons["Tasklist"].Enabled=true;
+					ToolBarMain.Buttons["Label"].Enabled=true;
+					ToolBarMain.Buttons["Popups"].Enabled=true;
+				}
 			}
 			ToolBarMain.Invalidate();
 			Text=PatientL.GetMainTitle(patName,patNum,chartNumber,siteNum);
