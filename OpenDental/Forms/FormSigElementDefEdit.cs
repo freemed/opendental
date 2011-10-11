@@ -423,19 +423,21 @@ namespace OpenDental{
 				//Try to launch the sound recorder program within the Windows operating system
 				//for all versions of Windows prior to Windows Vista.
 				Process.Start("sndrec32.exe");
-			}catch{
+			}
+			catch{
 				//We are on a Windows Vista or later Operating System.
 				//The path to the SoundRecorder.exe changes depending on if the Operating System
 				//is 32 bit or 64 bit.
 				try{
 					//First try to launch the SoundRecorder.exe for 32 bit Operating Systems.
-					Process.Start("SoundRecorder.exe");
-				}catch{
+					Process.Start("SoundRecorder.exe","/file outputfile.wav");
+				}
+				catch{
 					//This is a 64 bit Operating System. A special environment variable path must be used to indirectly access
 					//the SoundRecoder.exe file. The resulting path inside of the soundRecoderVirtualPath variable will only
 					//exist inside of this program and does not actually exist if one tries to browse to it.
 					string soundRecorderVirtualPath=Environment.ExpandEnvironmentVariables(@"%systemroot%\Sysnative")+"\\SoundRecorder.exe";
-					Process.Start(soundRecorderVirtualPath);
+					Process.Start(soundRecorderVirtualPath,"/file outputfile.wav");
 				}
 			}
 		}
