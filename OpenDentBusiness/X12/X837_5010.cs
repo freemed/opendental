@@ -997,10 +997,10 @@ namespace OpenDentBusiness
 						+"~");//PRV04 through PRV06 are not used.
 					//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
 	//todo: is StateLicense validated?
-					seg++;
-					sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-						+Sout(provTreat.StateLicense,50)//REF02 1/50 Reference Identification:
-						+"~");//REF03 and REF04 are not used.
+					//seg++;
+					//sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+					//  +Sout(provTreat.StateLicense,50)//REF02 1/50 Reference Identification:
+					//  +"~");//REF03 and REF04 are not used.
 					seg+=WriteProv_REFG2(sw,provTreat,carrier.ElectID);
 					//2310C NM1: 77 (dental) Service Facility Location Name. Situational. Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33.
 					if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
@@ -1016,22 +1016,22 @@ namespace OpenDentBusiness
 							+"XX*"//NM108 1/2 Identification Code Qualifier: XX=NPI.
 							+Sout(billProv.NationalProvID,80)//NM109 2/80 Identification Code: Validated.
 							+"~");//NM110 through NM112 not used.
+						//2310C N3: (dental) Service Facility Location Address.
+						seg++;
+						sw.Write("N3*"+Sout(address1,55));//N301 1/55 Address Information:
+						if(address2!="") {
+							sw.Write("*"+Sout(address2,55));//N302 1/55 Address Information: Only required when there is a secondary address line.
+						}
+						sw.WriteLine("~");
+						//2310C N4: (dental) Service Facility Location City, State, Zip Code.
+						seg++;
+						sw.WriteLine("N4*"
+							+Sout(city,30)+"*"//N401 2/30 City Name:
+							+Sout(state,2,2)+"*"//N402 2/2 State or Provice Code:
+							+Sout(zip,15)+"*"//N403 3/15 Postal Code:
+							+"~");//N404 through N407 are either not used or only required when outside of the United States.
+						//2310C REF: (dental) Service Facility Location Secondary Identification. Situational. We do not use this.
 					}
-					//2310C N3: (dental) Service Facility Location Address.
-					seg++;
-					sw.Write("N3*"+Sout(address1,55));//N301 1/55 Address Information:
-					if(address2!="") {
-						sw.Write("*"+Sout(address2,55));//N302 1/55 Address Information: Only required when there is a secondary address line.
-					}
-					sw.WriteLine("~");
-					//2310C N4: (dental) Service Facility Location City, State, Zip Code.
-					seg++;
-					sw.WriteLine("N4*"
-						+Sout(city,30)+"*"//N401 2/30 City Name:
-						+Sout(state,2,2)+"*"//N402 2/2 State or Provice Code:
-						+Sout(zip,15)+"*"//N403 3/15 Postal Code:
-						+"~");//N404 through N407 are either not used or only required when outside of the United States.
-					//2310C REF: (dental) Service Facility Location Secondary Identification. Situational. We do not use this.
 					//2310D NM1: (dental) Assistant Surgeon Name. Situational. We do not support.
 					//2310D PRV: (dental) Assistant Surgeon Specialty Information. We do not support.
 					//2310D REF: (dental) Assistant Surgeon Secondary Identification. We do not support.
@@ -1346,8 +1346,8 @@ namespace OpenDentBusiness
 					//2400 PWK: (institutional) Line Supplemental Information. Situational. We do not use.
 					//2400 CRC: (medical) Condition Indicator/Durable Medical Equipment. Situational. We do not use.
 					#region Service DTP
-					//2400 DTP: 472 (medical,institutional,dental) Service Date. Situaitonal. Required for medical. Required if different from claim, but we will always show the date. Better compatibility.
-					if(claim.ClaimType!="PreAuth") {
+					//2400 DTP: 472 (medical,institutional,dental) Service Date. Situaitonal. Required for medical. Required if different from claim. Emdeon complains if this date is specified at is not needed.
+					if(claim.ClaimType!="PreAuth" && proc.ProcDate!=claim.DateService) {
 						seg++;
 						sw.WriteLine("DTP*472*"//DTP01 3/3 Date/Time Qualifier: 472=Service.
 							+"D8*"//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
