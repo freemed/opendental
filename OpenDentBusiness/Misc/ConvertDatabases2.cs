@@ -6709,6 +6709,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX creditcard_PayPlanNum ON creditcard (PayPlanNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE popup ADD IsFamily tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE popup ADD IsFamily number(3)";
+					Db.NonQ(command);
+					command="UPDATE popup SET IsFamily = 0 WHERE IsFamily IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE popup MODIFY IsFamily NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -6726,7 +6738,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
 
 
 
