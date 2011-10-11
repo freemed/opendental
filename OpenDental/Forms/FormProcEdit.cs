@@ -4222,19 +4222,32 @@ namespace OpenDental{
 				}//End of "is not new."
 			}
 			Procedures.Update(ProcCur,ProcOld);
-			//Update the ProcDescript on the appointment if procedure is attached to one.
-			//The ApptProcDescript region is also in FormApptEdit.UpdateToDB()  Make any changes there as well.
-			#region ApptProcDescript
-			if(ProcCur.AptNum>0) {
-				Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
+			if(ProcCur.AptNum>0 || ProcCur.PlannedAptNum>0) {
+				//Update the ProcDescript on the appointment if procedure is attached to one.
+				//The ApptProcDescript region is also in FormApptEdit.UpdateToDB() and FormDatabaseMaintenance.butApptProcs_Click()  Make any changes there as well.
+				#region ApptProcDescript
+				Appointment apt;
+				DataTable procTable;
+				if(ProcCur.PlannedAptNum>0) {
+					PlannedAppt planned=PlannedAppts.GetOne(ProcCur.PlannedAptNum);
+					apt=Appointments.GetOneApt(planned.AptNum);
+					procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),ProcCur.PlannedAptNum.ToString(),((int)apt.AptStatus).ToString(),apt.AptDateTime.ToString());
+				}
+				else {
+					apt=Appointments.GetOneApt(ProcCur.AptNum);
+					procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),apt.AptNum.ToString(),apt.AptStatus.ToString(),apt.AptDateTime.ToString());
+				}
 				Appointment aptOld=apt.Clone();
-				DataTable procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),ProcCur.AptNum.ToString(),apt.AptStatus.ToString(),apt.AptDateTime.ToString());
 				apt.ProcDescript="";
 				apt.ProcsColored="";
+				int count=0;
 				for(int i=0;i<procTable.Rows.Count;i++) {
+					if(procTable.Rows[i]["attached"].ToString()!="1") {
+						continue;
+					}
 					string procDescOne="";
 					string procCode=procTable.Rows[i]["ProcCode"].ToString();
-					if(i>0) {
+					if(count>0) {
 						apt.ProcDescript+=", ";
 					}
 					switch(procTable.Rows[i]["TreatArea"].ToString()) {
@@ -4276,8 +4289,9 @@ namespace OpenDental{
 						}
 					}
 					apt.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
+					count++;
 				}
-			#endregion
+				#endregion
 				Appointments.Update(apt,aptOld);
 			}
 			for(int i=0;i<ClaimProcsForProc.Count;i++) {

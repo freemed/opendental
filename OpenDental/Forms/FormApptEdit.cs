@@ -2193,7 +2193,7 @@ namespace OpenDental{
 			AptCur.DateTimeSeated=dateTimeSeated;
 			AptCur.DateTimeDismissed=dateTimeDismissed;
 			//AptCur.InsPlan1 and InsPlan2 already handled 
-			//The ApptProcDescript region is also in FormProcEdit.SaveAndClose()  Make any changes there as well.
+			//The ApptProcDescript region is also in FormProcEdit.SaveAndClose() and FormProcEdit.SaveAndClose()  Make any changes there as well.
 			#region ApptProcDescript
 			AptCur.ProcDescript="";
 			AptCur.ProcsColored="";
