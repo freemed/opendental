@@ -2045,7 +2045,7 @@ namespace OpenDental{
 				}
 			}
 			if(!popupIsDisabled){
-				List<Popup> popList=Popups.CreateObjects(patNum);
+				List<Popup> popList=Popups.GetForPatient(patNum);
 				if(popList.Count>0 && !popList[0].IsDisabled) {
 					if(ContrAppt2.Visible) {
 					  ContrAppt2.MouseUpForced();
@@ -2383,7 +2383,7 @@ namespace OpenDental{
 		}
 
 		private void OnPopups_Click() {
-			List<Popup> popList=Popups.CreateObjects(CurPatNum);
+			List<Popup> popList=Popups.GetForPatient(CurPatNum);
 			FormPopupEdit FormP=new FormPopupEdit();
 			if(popList.Count==0) {
 				Popup pop=new Popup();

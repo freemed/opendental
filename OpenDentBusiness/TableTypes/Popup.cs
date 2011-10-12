@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 		/// <summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long PopupNum;
-		/// <summary>FK to patient.PatNum.</summary>
+		/// <summary>FK to patient.PatNum.  If this IsFamily, then this must be a guarantor.</summary>
 		public long PatNum;
 		/// <summary>The text of the popup.</summary>
 		public string Description;

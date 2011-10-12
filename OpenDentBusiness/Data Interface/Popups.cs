@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class Popups {
 
 		///<summary>Gets all Popups for a single patient.  There will actually only be one or zero for now.</summary>
-		public static List<Popup> CreateObjects(long patNum) {
+		public static List<Popup> GetForPatient(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),patNum);
 			} 
