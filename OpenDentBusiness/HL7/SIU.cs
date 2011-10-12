@@ -58,9 +58,18 @@ namespace OpenDentBusiness.HL7 {
 			apt.Pattern=ProcessPattern(apt.AptDateTime,stopTime);
 			apt.ProvNum=pat.PriProv;//just in case there's not AIG segment.
 			//AIG is optional, but looks like the only way to get provider for the appt-----------
-			seg=message.GetSegment(SegmentName.AIG,false);
-			if(seg!=null) {
-				long provNum=SegmentPID.ProvProcess(seg.GetField(3));
+			//PV1 seems to frequently be sent instead of AIG.
+			SegmentHL7 segAIG=message.GetSegment(SegmentName.AIG,false);
+			SegmentHL7 segPV=message.GetSegment(SegmentName.PV1,false);
+			if(segAIG!=null) {
+				long provNum=SegmentPID.ProvProcess(segAIG.GetField(3));
+				if(provNum!=0) {
+					apt.ProvNum=provNum;
+					pat.PriProv=provNum;
+				}
+			}
+			else if(segPV!=null) {
+				long provNum=SegmentPID.ProvProcess(segPV.GetField(7));
 				if(provNum!=0) {
 					apt.ProvNum=provNum;
 					pat.PriProv=provNum;

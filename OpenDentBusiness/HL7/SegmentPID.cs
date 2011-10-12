@@ -110,12 +110,12 @@ namespace OpenDentBusiness.HL7 {
 			pat.Guarantor=guar.PatNum;
 		}
 
-		public static void ProcessPV1(Patient pat,SegmentHL7 seg) {
-			long provNum=ProvProcess(seg.GetField(7));
-			if(provNum!=0) {
-				pat.PriProv=provNum;
-			}
-		}
+		//public static void ProcessPV1(Patient pat,SegmentHL7 seg) {
+		//	long provNum=ProvProcess(seg.GetField(7));
+		//	if(provNum!=0) {
+		//		pat.PriProv=provNum;
+		//	}
+		//}
 
 		///<summary>yyyyMMdd.  If not in that format, it returns minVal.</summary>
 		public static DateTime DateParse(string str) {
