@@ -22,6 +22,7 @@ namespace OpenDental {
 		private static bool IsSynching;
 		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
 		private bool changed;
+		private static bool IsTroubleshootMode=false;
 		private static FormProgress FormP;
 
 		private enum SynchEntity {
@@ -177,23 +178,7 @@ namespace OpenDental {
 			}
 			//for full synch, delete all records then repopulate.
 			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
-			DateTime timeSynchStarted=MiscData.GetNowDateTime();
-			FormP=new FormProgress();
-			FormP.MaxVal=100;//to keep the form from closing until the real MaxVal is set.
-			FormP.NumberMultiplication=1;
-			FormP.DisplayText="Preparing records for upload.";
-			FormP.NumberFormat="F0";
-			//start the thread that will perform the upload
-			ThreadStart uploadDelegate= delegate { UploadWorker(DateTime.MinValue,timeSynchStarted); };
-			Thread workerThread=new Thread(uploadDelegate);
-			workerThread.Start();
-			//display the progress dialog to the user:
-			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.Cancel) {
-				workerThread.Abort();
-			}
-			changed=true;
-			textDateTimeLastRun.Text=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortDateString()+" "+PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortTimeString();
+			ShowProgressForm(DateTime.MinValue);
 		}
 
 		private void butSync_Click(object sender,EventArgs e) {
@@ -208,8 +193,17 @@ namespace OpenDental {
 				MsgBox.Show(this,"Full synch has never been run before.");
 				return;
 			}
-			//calculate total number of records------------------------------------------------------------------------------
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			ShowProgressForm(changedSince);
+		}
+		
+		private void ShowProgressForm(DateTime changedSince){
+			if(checkTroubleshooting.Checked) {
+				IsTroubleshootMode=true;
+			}
+			else {
+				IsTroubleshootMode=false;
+			}
 			DateTime timeSynchStarted=MiscData.GetNowDateTime();
 			FormP=new FormProgress();
 			FormP.MaxVal=100;//to keep the form from closing until the real MaxVal is set.
@@ -228,7 +222,8 @@ namespace OpenDental {
 			changed=true;
 			textDateTimeLastRun.Text=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortDateString()+" "+PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortTimeString();
 		}
-		
+
+
 		///<summary>This is the function that the worker thread uses to actually perform the upload.  Can also call this method in the ordinary way if the data to be transferred is small.  The timeSynchStarted must be passed in to ensure that no records are skipped due to small time differences.</summary>
 		private static void UploadWorker(DateTime changedSince,DateTime timeSynchStarted) {
 			int totalCount=100;
@@ -237,12 +232,16 @@ namespace OpenDental {
 				DateTime changedProv=changedSince;
 				DateTime changedDeleted=changedSince;
 				DateTime changedPat=changedSince;
+				DateTime changedStatement=changedSince;
+				//DateTime changedDocument=changedSince;
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 					changedProv=DateTime.MinValue;
 					changedDeleted=DateTime.MinValue;
 				}
-				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTable111Done,false)) { dennis:Uncomment later
-				//	changedPat=DateTime.MinValue;
+				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables111Done,false)) { //dennis:Uncomment later
+				//    changedPat=DateTime.MinValue;
+				//	  changedStatement=DateTime.MinValue;
+				//	  changedDocument=DateTime.MinValue;
 				//}
 				bool synchDelPat=true;
 				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
@@ -256,7 +255,7 @@ namespace OpenDental {
 				List<long> pharNumList=Pharmacyms.GetChangedSincePharmacyNums(changedSince);
 				List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
 				List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
-				//exclusively Pat portal
+				//exclusively Patient Portal
 				List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 				List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
 				List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
@@ -265,8 +264,8 @@ namespace OpenDental {
 				List<long> diseaseDefNumList=DiseaseDefms.GetChangedSinceDiseaseDefNums(changedSince);
 				List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
-				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedSince,eligibleForUploadPatNumList,statementLimitPerPatient);
-				//List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedSince,eligibleForUploadPatNumList);
+				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedStatement,eligibleForUploadPatNumList,statementLimitPerPatient);
+				//List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedDocument,statementNumList);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
 				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
@@ -305,10 +304,10 @@ namespace OpenDental {
 				}
 				DeleteObjects(dO,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
-					Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
+				    Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
 				}
-				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTable111Done,true)) {dennis:Uncomment later
-				//	Prefs.UpdateBool(PrefName.MobileSynchNewTable111Done,true);
+				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables111Done,true)) {//dennis:Uncomment later
+				//    Prefs.UpdateBool(PrefName.MobileSynchNewTables111Done,true);
 				//}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 				IsSynching=false;
@@ -325,12 +324,17 @@ namespace OpenDental {
 		///<summary>a general function to reduce the amount of code for uploading</summary>
 		private static void SynchGeneric(List<long> PKNumList,SynchEntity entity,double totalCount,ref double currentVal) {
 			//Dennis: a try catch block here has been avoid on purpose.
-				int localBatchSize=BatchSize;
-				for(int start=0;start<PKNumList.Count;start+=localBatchSize) {
-					if((start+localBatchSize)>PKNumList.Count) {
-						localBatchSize=PKNumList.Count-start;
-					}
-					List<long> BlockPKNumList=PKNumList.GetRange(start,localBatchSize);
+			List<long> BlockPKNumList=null;
+			int localBatchSize=BatchSize;
+			if(IsTroubleshootMode) {
+				localBatchSize=1;
+			}
+			for(int start=0;start<PKNumList.Count;start+=localBatchSize) {
+				if((start+localBatchSize)>PKNumList.Count) {
+					localBatchSize=PKNumList.Count-start;
+				}
+				try{
+					BlockPKNumList=PKNumList.GetRange(start,localBatchSize);
 					switch(entity) {
 						case SynchEntity.patient:
 							List<Patientm> changedPatientmList=Patientms.GetMultPats(BlockPKNumList);
@@ -408,7 +412,20 @@ namespace OpenDental {
 						FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
 							new object[] {currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 					}
+
 				}
+				catch(Exception e) {
+					if(IsTroubleshootMode) {
+						string errorMessage=entity+ " with Primary Key = "+BlockPKNumList.First() + " failed to synch. " +  "\n" + e.Message;
+						throw new Exception(errorMessage);
+					}
+					else {
+						throw e;
+					}
+				}
+
+			}//for loop ends here
+			
 		}
 
 		///<summary>This method gets invoked from the worker thread.</summary>

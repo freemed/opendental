@@ -80,7 +80,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(376,182);
+			this.butCancel.Location = new System.Drawing.Point(376,215);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -89,14 +89,14 @@ namespace OpenDental{
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Location = new System.Drawing.Point(73,79);
+			this.progressBar1.Location = new System.Drawing.Point(73,99);
 			this.progressBar1.Name = "progressBar1";
 			this.progressBar1.Size = new System.Drawing.Size(377,23);
 			this.progressBar1.TabIndex = 2;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(71,49);
+			this.label1.Location = new System.Drawing.Point(71,69);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100,23);
 			this.label1.TabIndex = 3;
@@ -111,7 +111,7 @@ namespace OpenDental{
 			// 
 			// labelProgress
 			// 
-			this.labelProgress.Location = new System.Drawing.Point(71,115);
+			this.labelProgress.Location = new System.Drawing.Point(71,135);
 			this.labelProgress.Name = "labelProgress";
 			this.labelProgress.Size = new System.Drawing.Size(402,55);
 			this.labelProgress.TabIndex = 4;
@@ -123,7 +123,7 @@ namespace OpenDental{
 			this.labelError.ForeColor = System.Drawing.Color.DarkRed;
 			this.labelError.Location = new System.Drawing.Point(32,13);
 			this.labelError.Name = "labelError";
-			this.labelError.Size = new System.Drawing.Size(456,25);
+			this.labelError.Size = new System.Drawing.Size(456,41);
 			this.labelError.TabIndex = 5;
 			this.labelError.Text = "Error Message";
 			this.labelError.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -131,7 +131,7 @@ namespace OpenDental{
 			// FormProgress
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(500,261);
+			this.ClientSize = new System.Drawing.Size(500,294);
 			this.Controls.Add(this.labelError);
 			this.Controls.Add(this.labelProgress);
 			this.Controls.Add(this.label1);

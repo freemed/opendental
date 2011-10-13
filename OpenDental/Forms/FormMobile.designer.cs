@@ -47,6 +47,7 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.service11 = new OpenDental.localhost.Service1();
 			this.butDelete = new OpenDental.UI.Button();
+			this.checkTroubleshooting = new System.Windows.Forms.CheckBox();
 			this.groupPreferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -305,10 +306,21 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete All";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
+			// checkTroubleshooting
+			// 
+			this.checkTroubleshooting.Location = new System.Drawing.Point(327,239);
+			this.checkTroubleshooting.Name = "checkTroubleshooting";
+			this.checkTroubleshooting.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkTroubleshooting.Size = new System.Drawing.Size(184,24);
+			this.checkTroubleshooting.TabIndex = 246;
+			this.checkTroubleshooting.Text = "Synch Troubleshooting Mode";
+			this.checkTroubleshooting.UseVisualStyleBackColor = true;
+			// 
 			// FormMobile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(714,325);
+			this.Controls.Add(this.checkTroubleshooting);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textDateTimeLastRun);
 			this.Controls.Add(this.groupPreferences);
@@ -353,5 +365,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label8;
 		private localhost.Service1 service11;
 		private UI.Button butDelete;
+		private System.Windows.Forms.CheckBox checkTroubleshooting;
 	}
 }
