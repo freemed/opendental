@@ -4228,14 +4228,13 @@ namespace OpenDental{
 				#region ApptProcDescript
 				Appointment apt;
 				DataTable procTable;
-				if(ProcCur.PlannedAptNum>0) {
-					PlannedAppt planned=PlannedAppts.GetOne(ProcCur.PlannedAptNum);
-					apt=Appointments.GetOneApt(planned.AptNum);
-					procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),ProcCur.PlannedAptNum.ToString(),((int)apt.AptStatus).ToString(),apt.AptDateTime.ToString());
+				if(ProcCur.AptNum>0) {
+					apt=Appointments.GetOneApt(ProcCur.AptNum);
+					procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),apt.AptNum.ToString(),((int)apt.AptStatus).ToString(),apt.AptDateTime.ToString());
 				}
 				else {
-					apt=Appointments.GetOneApt(ProcCur.AptNum);
-					procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),apt.AptNum.ToString(),apt.AptStatus.ToString(),apt.AptDateTime.ToString());
+					apt=Appointments.GetOneApt(ProcCur.PlannedAptNum);
+					procTable=Appointments.GetProcTable(ProcCur.PatNum.ToString(),ProcCur.PlannedAptNum.ToString(),((int)apt.AptStatus).ToString(),apt.AptDateTime.ToString());
 				}
 				Appointment aptOld=apt.Clone();
 				apt.ProcDescript="";
