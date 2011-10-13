@@ -22,6 +22,7 @@ namespace OpenDental {
 		private static bool IsSynching;
 		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
 		private bool changed;
+		///<summary>If this variable is true then records are uploaded one at a time so that an error in uploading can be traced down to a single record</summary>
 		private static bool IsTroubleshootMode=false;
 		private static FormProgress FormP;
 
