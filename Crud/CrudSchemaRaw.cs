@@ -77,7 +77,8 @@ namespace Crud {
 //					indexes.Add(cols[i]);
 //				}
 			}
-			strb.Append(rn+tb+t2+"CONSTRAINT "+tableName+"_"+cols[0].ColumnName+" PRIMARY KEY ("+cols[0].ColumnName+")");
+			string constraint=tableName+"_"+cols[0].ColumnName;
+			strb.Append(rn+tb+t2+"CONSTRAINT "+constraint.Substring(0,Math.Min(30,constraint.Length))+" PRIMARY KEY ("+cols[0].ColumnName+")");
 			strb.Append(rn+tb+t2+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			////Generate timestamp triggers if they need to be created.

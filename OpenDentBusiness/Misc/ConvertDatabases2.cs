@@ -5780,13 +5780,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						KeyValue varchar2(255),
 						PatNum number(20) NOT NULL,
 						Notes varchar2(4000),
-						CONSTRAINT ehrquarterlykey_EhrQuarterlyKeyNum PRIMARY KEY (EhrQuarterlyKeyNum)
+						CONSTRAINT ehrquarterlykey_EhrQuarterlyKe PRIMARY KEY (EhrQuarterlyKeyNum)
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrquarterlykey_PatNum ON ehrquarterlykey (PatNum)";
 					Db.NonQ(command);
 				}
-				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6' LIMIT 1";
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6' LIMIT 1";
+				}
+				else {//oracle doesn't have LIMIT
+					command="SELECT * FROM (SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6') WHERE RowNum<=1";
+				}
 				DataTable tableClaimFormNum=Db.GetTable(command);
 				if(tableClaimFormNum.Rows.Count>0) {
 					long claimFormNum=PIn.Long(tableClaimFormNum.Rows[0][0].ToString());
@@ -5801,7 +5806,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To11_0_9();
 		}
 
-		///<summary></summary>
+		///<summary>Oracle compatible: 10/13/2011</summary>
 		private static void To11_0_9() {
 			if(FromVersion<new Version("11.0.9.0")) {
 				string command;
@@ -5826,9 +5831,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else{//oracle
-					command="INSERT INTO clearinghouse(Description,ExportPath,IsDefault,Payors,Eformat,ResponsePath,CommBridge,ClientProgram,ISA05,ISA07,ISA08,ISA15,GS03) ";
+					command="INSERT INTO clearinghouse(ClearinghouseNum,Description,ExportPath,IsDefault,Payors,Eformat,ResponsePath,CommBridge,ClientProgram,ISA05,ISA07,ISA08,ISA15,GS03) ";
 					command+="VALUES(";
-					command+="'ClaimX'";//Description
+					command+="(SELECT MAX(ClearinghouseNum)+1 FROM clearinghouse)";
+					command+=",'ClaimX'";//Description
 					command+=",'"+POut.String(@"C:\ClaimX\Temp\")+"'";//ExportPath that the X12 is placed into
 					command+=",'0'";//IsDefault
 					command+=",''";//Payors
@@ -5849,11 +5855,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 			To11_0_10();
 		}
-
+		
+		///<summary>Oracle compatible: 10/13/2011</summary>
 		private static void To11_0_10() {
 			if(FromVersion<new Version("11.0.10.0")) {
 				string command;
-				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6' LIMIT 1";
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6' LIMIT 1";
+				}
+				else {//oracle doesn't have LIMIT
+					command="SELECT * FROM (SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6') WHERE RowNum<=1";
+				}
 				DataTable tableClaimFormNum=Db.GetTable(command);
 				if(tableClaimFormNum.Rows.Count>0) {
 					long claimFormNum=PIn.Long(tableClaimFormNum.Rows[0][0].ToString());
@@ -6016,7 +6028,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 			To11_0_11();
 		}
-
+		
+		///<summary>Oracle compatible: 10/13/2011</summary>
 		private static void To11_0_11() {
 			if(FromVersion<new Version("11.0.11.0")) {
 				string command;
@@ -6057,7 +6070,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 			To11_0_13();
 		}
-
+		
+		///<summary>Oracle compatible: 10/13/2011</summary>
 		private static void To11_0_13() {
 			if(FromVersion<new Version("11.0.13.0")) {
 				string command;
@@ -6081,7 +6095,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 			To11_0_15();
 		}
-
+		
+		///<summary>Oracle compatible: 10/13/2011</summary>
 		private static void To11_0_15() {
 			if(FromVersion<new Version("11.0.15.0")) {
 				string command;
@@ -6105,7 +6120,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 			To11_0_24();
 		}
-
+		
+		///<summary>Oracle compatible: 10/13/2011</summary>
 		private static void To11_0_24() {
 			if(FromVersion<new Version("11.0.24.0")) {
 				string command;
@@ -6148,8 +6164,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 			To11_1_1();
 		}
-
-		///<summary></summary>
+		
+		///<summary>Oracle compatible: 10/13/2011</summary>
 		private static void To11_1_1() {
 			if(FromVersion<new Version("11.1.1.0")) {
 				string command;
