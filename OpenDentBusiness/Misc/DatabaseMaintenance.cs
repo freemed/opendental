@@ -2407,7 +2407,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command="SELECT procedurelog.ProcNum,claim.ClaimNum,claim.DateService,patient.PatNum,patient.LName,patient.FName,procedureCode.ProcCode "
+			command="SELECT procedurelog.ProcNum,claim.ClaimNum,claim.DateService,patient.PatNum,patient.LName,patient.FName,procedurecode.ProcCode "
 				+"FROM procedurelog,claim,claimproc,patient,procedurecode "
 				+"WHERE procedurelog.ProcNum=claimproc.ProcNum "
 				+"AND claim.ClaimNum=claimproc.ClaimNum "
