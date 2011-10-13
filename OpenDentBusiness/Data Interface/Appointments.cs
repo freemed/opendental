@@ -1218,7 +1218,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
 				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
-				+"GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum "
+				+"GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp "
 				+"ORDER BY StartTime";
 			DataTable raw=Db.GetTable(command);
 			DataRow row;
