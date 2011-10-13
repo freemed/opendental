@@ -96,6 +96,7 @@ namespace OpenDental{
 		private ComboBox comboSearchBehavior;
 		private CheckBox checkClaimMedTypeIsInstWhenInsPlanIsMedical;
 		private CheckBox checkProcGroupNoteDoesAggregate;
+		private CheckBox checkChartAddProcNoRefreshGrid;
 		private bool changed;
 
 		///<summary></summary>
@@ -188,6 +189,7 @@ namespace OpenDental{
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
 			this.tabChart = new System.Windows.Forms.TabPage();
+			this.checkProcGroupNoteDoesAggregate = new System.Windows.Forms.CheckBox();
 			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
 			this.textAllergiesIndicateNone = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
@@ -201,7 +203,7 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkProcGroupNoteDoesAggregate = new System.Windows.Forms.CheckBox();
+			this.checkChartAddProcNoRefreshGrid = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -996,6 +998,7 @@ namespace OpenDental{
 			// tabChart
 			// 
 			this.tabChart.BackColor = System.Drawing.SystemColors.Window;
+			this.tabChart.Controls.Add(this.checkChartAddProcNoRefreshGrid);
 			this.tabChart.Controls.Add(this.checkProcGroupNoteDoesAggregate);
 			this.tabChart.Controls.Add(this.butAllergiesIndicateNone);
 			this.tabChart.Controls.Add(this.textAllergiesIndicateNone);
@@ -1017,6 +1020,18 @@ namespace OpenDental{
 			this.tabChart.Size = new System.Drawing.Size(466,452);
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
+			// 
+			// checkProcGroupNoteDoesAggregate
+			// 
+			this.checkProcGroupNoteDoesAggregate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkProcGroupNoteDoesAggregate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkProcGroupNoteDoesAggregate.Location = new System.Drawing.Point(60,182);
+			this.checkProcGroupNoteDoesAggregate.Name = "checkProcGroupNoteDoesAggregate";
+			this.checkProcGroupNoteDoesAggregate.Size = new System.Drawing.Size(381,15);
+			this.checkProcGroupNoteDoesAggregate.TabIndex = 206;
+			this.checkProcGroupNoteDoesAggregate.Text = "Procedure Group Note Does Aggregate";
+			this.checkProcGroupNoteDoesAggregate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkProcGroupNoteDoesAggregate.UseVisualStyleBackColor = true;
 			// 
 			// butAllergiesIndicateNone
 			// 
@@ -1165,17 +1180,17 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkProcGroupNoteDoesAggregate
+			// checkChartAddProcNoRefreshGrid
 			// 
-			this.checkProcGroupNoteDoesAggregate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkProcGroupNoteDoesAggregate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkProcGroupNoteDoesAggregate.Location = new System.Drawing.Point(60,182);
-			this.checkProcGroupNoteDoesAggregate.Name = "checkProcGroupNoteDoesAggregate";
-			this.checkProcGroupNoteDoesAggregate.Size = new System.Drawing.Size(381,15);
-			this.checkProcGroupNoteDoesAggregate.TabIndex = 206;
-			this.checkProcGroupNoteDoesAggregate.Text = "Procedure Group Note Does Aggregate";
-			this.checkProcGroupNoteDoesAggregate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkProcGroupNoteDoesAggregate.UseVisualStyleBackColor = true;
+			this.checkChartAddProcNoRefreshGrid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartAddProcNoRefreshGrid.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkChartAddProcNoRefreshGrid.Location = new System.Drawing.Point(60,199);
+			this.checkChartAddProcNoRefreshGrid.Name = "checkChartAddProcNoRefreshGrid";
+			this.checkChartAddProcNoRefreshGrid.Size = new System.Drawing.Size(381,15);
+			this.checkChartAddProcNoRefreshGrid.TabIndex = 207;
+			this.checkChartAddProcNoRefreshGrid.Text = "Add Procedures Without Refreshing Entire Chart (Increase in speed)";
+			this.checkChartAddProcNoRefreshGrid.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartAddProcNoRefreshGrid.UseVisualStyleBackColor = true;
 			// 
 			// FormModuleSetup
 			// 
@@ -1452,6 +1467,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.RxSendNewToQueue,checkRxSendNewToQueue.Checked)
 				| Prefs.UpdateInt(PrefName.AppointmentSearchBehavior,comboSearchBehavior.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.ProcGroupNoteDoesAggregate,checkProcGroupNoteDoesAggregate.Checked)
+				| Prefs.UpdateBool(PrefName.ChartAddProcNoRefreshGrid,checkChartAddProcNoRefreshGrid.Checked)
 				)
 			{
 				changed=true;
