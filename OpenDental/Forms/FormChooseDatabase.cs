@@ -639,6 +639,12 @@ namespace OpenDental{
 					return;
 				}
 				nav=Navigator.SelectSingleNode("//ServerConnection");
+				/* example:
+				<ServerConnection>
+					<URI>http://server/OpenDentalServer/ServiceMain.asmx</URI>
+					<UsingEcw>True</UsingEcw>
+				</ServerConnection>
+				*/
 				if(nav!=null) {
 					//If there is a ServerConnection, then use it.
 					checkConnectServer.Checked=true;
