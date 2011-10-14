@@ -6162,6 +6162,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.0.24.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_0_36();
+		}
+
+		private static void To11_0_36() {
+			if(FromVersion<new Version("11.0.36.0")) {
+				string command;
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE procedurelog ADD INDEX procedurelog_ProcNumLab (ProcNumLab)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX procedurelog_ProcNumLab ON procedurelog (ProcNumLab)";
+						Db.NonQ(command);
+					}
+				}
+				catch {
+					//Oh well, it's just an index. Probably failed because it already exists anyway.
+				}
+				command="UPDATE preference SET ValueString = '11.0.36.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_1_1();
 		}
 		
@@ -6684,6 +6706,29 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '11.1.1.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To11_1_6();
+		}
+
+		private static void To11_1_6() {
+			if(FromVersion<new Version("11.1.6.0")) {
+				string command;
+				//We added an index in version 11.0.36 for this column, but some of our customers were already on version 11.1, so we had to add it here as well.
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE procedurelog ADD INDEX procedurelog_ProcNumLab (ProcNumLab)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX procedurelog_ProcNumLab ON procedurelog (ProcNumLab)";
+						Db.NonQ(command);
+					}
+				}
+				catch {
+					//Oh well, it's just an index. Probably failed because it already exists anyway.
+				}
+				command="UPDATE preference SET ValueString = '11.1.6.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
 			To11_2_0();
