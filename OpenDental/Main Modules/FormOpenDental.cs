@@ -1387,6 +1387,8 @@ namespace OpenDental{
 			allNeutral();
 			string odUser="";
 			string odPassHash="";
+			string webServiceUri="";
+			YN webServiceIsEcw=YN.Unknown;
 			if(CommandLineArgs.Length!=0) {
 				for(int i=0;i<CommandLineArgs.Length;i++) {
 					if(CommandLineArgs[i].StartsWith("UserName=") && CommandLineArgs[i].Length>9) {
@@ -1395,12 +1397,26 @@ namespace OpenDental{
 					if(CommandLineArgs[i].StartsWith("PassHash=") && CommandLineArgs[i].Length>9) {
 						odPassHash=CommandLineArgs[i].Substring(9).Trim('"');
 					}
+					if(CommandLineArgs[i].StartsWith("WebServiceUri=") && CommandLineArgs[i].Length>14) {
+						webServiceUri=CommandLineArgs[i].Substring(14).Trim('"');
+					}
+					if(CommandLineArgs[i].StartsWith("WebServiceIsEcw=") && CommandLineArgs[i].Length>16) {
+						if(CommandLineArgs[i].Substring(16).Trim('"')=="True") {
+							webServiceIsEcw=YN.Yes;
+						}
+						else {
+							webServiceIsEcw=YN.No;
+						}
+					}
 				}
 			}
 			FormChooseDatabase formChooseDb=new FormChooseDatabase();
 			formChooseDb.OdUser=odUser;
 			formChooseDb.OdPassHash=odPassHash;
+			formChooseDb.WebServiceUri=webServiceUri;
+			formChooseDb.WebServiceIsEcw=webServiceIsEcw;
 			formChooseDb.GetConfig();
+			formChooseDb.GetCmdLine();
 			if(formChooseDb.NoShow) {
 				if(!formChooseDb.TryToConnect()) {
 					formChooseDb.ShowDialog();

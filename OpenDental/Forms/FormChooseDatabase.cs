@@ -55,8 +55,10 @@ namespace OpenDental{
 		public string OdUser;
 		///<summary>Only used by Ecw.</summary>
 		public string OdPassHash;
-		///<summary>This is used when selecting File>Choose Database.</summary>
+		///<summary>This is used when selecting File>Choose Database.  It will behave slightly differently.</summary>
 		public bool IsAccessedFromMainMenu;
+		public string WebServiceUri;
+		public YN WebServiceIsEcw;
 
 		///<summary></summary>
 		public FormChooseDatabase(){
@@ -423,6 +425,7 @@ namespace OpenDental{
 			listType.Items.Add("Oracle");
 			listType.SelectedIndex=0;
 			GetConfig();
+			GetCmdLine();
 			FillCombosComputerNames();
 			FillComboDatabases();
 			/*
@@ -431,10 +434,13 @@ namespace OpenDental{
 				+"Current directory: "+Environment.CurrentDirectory);*/
 			#if DEBUG
 				//textURI.Text="http://localhost/OpenDentalServer/ServiceMain.asmx";
-				textURI.Text="http://localhost:49262/ServiceMain.asmx";
-				textUser2.Text="Admin";
-				textPassword2.Text="pass";
+				//textURI.Text="http://localhost:49262/ServiceMain.asmx";
+				//textUser2.Text="Admin";
+				//textPassword2.Text="pass";
 			#endif
+			if(textUser2.Text!="") {
+				textPassword2.Select();
+			}
 		}
 
 		///<summary>Gets a list of all computer names on the network (this is not easy)</summary>
@@ -564,8 +570,12 @@ namespace OpenDental{
 			}
 		}
 		
-		///<summary>Gets the settings from the config file, and fills the form with those values.  Gets run twice at startup.</summary>
+		///<summary>Gets the settings from the config file, and fills the form with those values.  Gets run twice at startup.  If certain command-line parameters were passed in when starting the program, then the config file will not be processed at all.</summary>
 		public void GetConfig(){
+			if(WebServiceUri!="") {//if a URI was passed in
+				return;//do not even bother with the config file
+			}
+			//command-line support for the upper portion of this window will be added later.
 			//Improvement should be made here to avoid requiring admin priv.
 			//Search path should be something like this:
 			//1. /home/username/.opendental/config.xml (or corresponding user path in Windows)
@@ -593,7 +603,7 @@ namespace OpenDental{
 				if(listType.Items.Count>0) {//not true on startup
 					listType.SelectedIndex=0;
 				}
-				return;
+				//return;
 			}
 			XmlDocument document=new XmlDocument();
 			try{
@@ -678,13 +688,44 @@ namespace OpenDental{
 			DataConnection.DBtype=DatabaseType.MySql;
 		}
 
+		/// <summary>This is always run after GetConfig.  It takes any command-line arguments that were set when the form was created, and uses them to replace values obtained from the config file.</summary>
+		public void GetCmdLine() {
+			if(WebServiceUri!="") {//if a URI was passed in
+				checkConnectServer.Checked=true;
+				groupDirect.Enabled=false;
+				textURI.Text=WebServiceUri;
+			}
+			if(WebServiceIsEcw==YN.No) {
+				checkUsingEcw.Checked=false;
+			}
+			if(WebServiceIsEcw==YN.Yes) {
+				checkUsingEcw.Checked=true;
+			}
+			if(OdUser!=""){
+				textUser2.Text=OdUser;
+			}
+			//OdPassHash;//not allowed to be used here.  Instead, only used directly in TryToConnect
+			//The upper portion of this window is not yet supported for command-line parameter use.
+		}
+
 		///<summary>Only called at startup if this dialog is not supposed to be shown.  Must call GetConfig first.</summary>
 		public bool TryToConnect(){
-			if(checkConnectServer.Checked && checkUsingEcw.Checked){
+			if(checkConnectServer.Checked){// && checkUsingEcw.Checked){
+				if(!checkUsingEcw.Checked) {//Can't silently connect unless using eCW.
+					return false;
+				}
+				//So from here on, guaranteed to be eCW
 				RemotingClient.ServerURI=textURI.Text;
+				//bool useEcwAlgorithm=checkUsingEcw.Checked;
 				try{
+					//string password=textPassword2.Text;
+					//if(useEcwAlgorithm) {
+					//	password=Userods.EncryptPassword(password,true);
+					//}
+					//ecw requires hash, but non-ecw requires actual password
 					//this is only OdPassHash because of Ecw.
-					Userod user=Security.LogInWeb(OdUser,OdPassHash,"",Application.ProductVersion,true);
+					Userod user=Security.LogInWeb(textUser2.Text,OdPassHash,"",Application.ProductVersion,true);
+					//Userod user=Security.LogInWeb(textUser2.Text,password,"",Application.ProductVersion,useEcwAlgorithm);
 					Security.CurUser=user;
 					Security.PasswordTyped=OdPassHash;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
