@@ -874,7 +874,7 @@ namespace OpenDental{
 						SQLwhereComparison+=" "+ListPrerequisites.Items[i].ToString();
 					}
 					else{
-						SQLwhereComparison+=" AND "+ListPrerequisites.Items[i].ToString();
+						SQLwhereComparison+=((i==0)?" ":" AND ")+ListPrerequisites.Items[i].ToString();
 					}
           count++;
         }
