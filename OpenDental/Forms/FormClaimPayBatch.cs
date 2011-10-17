@@ -57,6 +57,7 @@ namespace OpenDental{
 		///<summary>If this is not zero upon closing, then we will jump to the account module of that patient and highlight the claim.</summary>
 		public long GotoPatNum;
 		private UI.Button butOK;
+		private ODGrid odGrid1;
 		///<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.  It also causes OK/Cancel buttons to show so that user can cancel out of a brand new check creation.</summary>
 		public bool IsFromClaim;
 
@@ -115,6 +116,7 @@ namespace OpenDental{
 			this.menuRightOut = new System.Windows.Forms.ContextMenu();
 			this.menuItemGotoOut = new System.Windows.Forms.MenuItem();
 			this.butOK = new OpenDental.UI.Button();
+			this.odGrid1 = new OpenDental.UI.ODGrid();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -138,7 +140,7 @@ namespace OpenDental{
 			// 
 			// textBankBranch
 			// 
-			this.textBankBranch.Location = new System.Drawing.Point(346,39);
+			this.textBankBranch.Location = new System.Drawing.Point(362,82);
 			this.textBankBranch.MaxLength = 25;
 			this.textBankBranch.Name = "textBankBranch";
 			this.textBankBranch.ReadOnly = true;
@@ -147,7 +149,7 @@ namespace OpenDental{
 			// 
 			// textCheckNum
 			// 
-			this.textCheckNum.Location = new System.Drawing.Point(346,19);
+			this.textCheckNum.Location = new System.Drawing.Point(362,61);
 			this.textCheckNum.MaxLength = 25;
 			this.textCheckNum.Name = "textCheckNum";
 			this.textCheckNum.ReadOnly = true;
@@ -156,12 +158,12 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(614,19);
+			this.textNote.Location = new System.Drawing.Point(362,40);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.ReadOnly = true;
-			this.textNote.Size = new System.Drawing.Size(244,35);
+			this.textNote.Size = new System.Drawing.Size(288,20);
 			this.textNote.TabIndex = 3;
 			// 
 			// label6
@@ -184,7 +186,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(253,21);
+			this.label4.Location = new System.Drawing.Point(269,63);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(90,16);
 			this.label4.TabIndex = 35;
@@ -193,7 +195,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(254,42);
+			this.label3.Location = new System.Drawing.Point(270,85);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(91,16);
 			this.label3.TabIndex = 34;
@@ -202,7 +204,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(506,20);
+			this.label2.Location = new System.Drawing.Point(254,41);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(104,16);
 			this.label2.TabIndex = 33;
@@ -216,6 +218,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
+			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butClose.Location = new System.Drawing.Point(815,646);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
@@ -250,16 +253,16 @@ namespace OpenDental{
 			// 
 			// textCarrierName
 			// 
-			this.textCarrierName.Location = new System.Drawing.Point(346,64);
+			this.textCarrierName.Location = new System.Drawing.Point(362,19);
 			this.textCarrierName.MaxLength = 25;
 			this.textCarrierName.Name = "textCarrierName";
 			this.textCarrierName.ReadOnly = true;
-			this.textCarrierName.Size = new System.Drawing.Size(212,20);
+			this.textCarrierName.Size = new System.Drawing.Size(288,20);
 			this.textCarrierName.TabIndex = 93;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(236,62);
+			this.label7.Location = new System.Drawing.Point(252,21);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(109,16);
 			this.label7.TabIndex = 94;
@@ -328,9 +331,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textBankBranch);
 			this.groupBox1.Controls.Add(this.textAmount);
 			this.groupBox1.Controls.Add(this.textDate);
-			this.groupBox1.Location = new System.Drawing.Point(12,6);
+			this.groupBox1.Location = new System.Drawing.Point(230,6);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(878,110);
+			this.groupBox1.Size = new System.Drawing.Size(660,110);
 			this.groupBox1.TabIndex = 98;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Payment Details";
@@ -342,7 +345,7 @@ namespace OpenDental{
 			this.butClaimPayEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClaimPayEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClaimPayEdit.CornerRadius = 4F;
-			this.butClaimPayEdit.Location = new System.Drawing.Point(783,79);
+			this.butClaimPayEdit.Location = new System.Drawing.Point(575,78);
 			this.butClaimPayEdit.Name = "butClaimPayEdit";
 			this.butClaimPayEdit.Size = new System.Drawing.Size(75,24);
 			this.butClaimPayEdit.TabIndex = 6;
@@ -383,7 +386,7 @@ namespace OpenDental{
 			// labelInstruct1
 			// 
 			this.labelInstruct1.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelInstruct1.Location = new System.Drawing.Point(10,162);
+			this.labelInstruct1.Location = new System.Drawing.Point(9,1);
 			this.labelInstruct1.Name = "labelInstruct1";
 			this.labelInstruct1.Size = new System.Drawing.Size(177,20);
 			this.labelInstruct1.TabIndex = 102;
@@ -417,11 +420,11 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(149,125);
+			this.butDown.Location = new System.Drawing.Point(311,357);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(75,24);
 			this.butDown.TabIndex = 104;
-			this.butDown.Text = "&Down";
+			this.butDown.Text = "Order";
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// butUp
@@ -433,17 +436,17 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(68,125);
+			this.butUp.Location = new System.Drawing.Point(230,357);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(75,24);
 			this.butUp.TabIndex = 103;
-			this.butUp.Text = "&Up";
+			this.butUp.Text = "Order";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
 			// labelInstruct2
 			// 
 			this.labelInstruct2.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelInstruct2.Location = new System.Drawing.Point(11,188);
+			this.labelInstruct2.Location = new System.Drawing.Point(10,27);
 			this.labelInstruct2.Name = "labelInstruct2";
 			this.labelInstruct2.Size = new System.Drawing.Size(207,452);
 			this.labelInstruct2.TabIndex = 105;
@@ -485,11 +488,25 @@ namespace OpenDental{
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// odGrid1
+			// 
+			this.odGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.odGrid1.HScrollVisible = false;
+			this.odGrid1.Location = new System.Drawing.Point(12,482);
+			this.odGrid1.Name = "odGrid1";
+			this.odGrid1.ScrollValue = 0;
+			this.odGrid1.Size = new System.Drawing.Size(210,148);
+			this.odGrid1.TabIndex = 108;
+			this.odGrid1.Title = "Scanned Docs";
+			this.odGrid1.TranslationName = "TableClaimPaySplits";
+			// 
 			// FormClaimPayBatch
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(902,676);
+			this.Controls.Add(this.odGrid1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInstruct2);
 			this.Controls.Add(this.butDown);
