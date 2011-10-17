@@ -47,10 +47,9 @@ namespace OpenDentBusiness {
 			if (mountItem == null) {
 				return;
 			}
-			
 			using(Graphics g = Graphics.FromImage(mountImage)) {
 				g.FillRectangle(Brushes.Black, mountItem.Xpos, mountItem.Ypos, mountItem.Width, mountItem.Height);//draw box behind image
-				Bitmap image = ApplyDocumentSettingsToImage(mountItemDoc,mountItemImage,ApplyImageSettings.ALL);
+				Bitmap image = ApplyDocumentSettingsToImage(mountItemDoc,mountItemImage,ImageSettingFlags.ALL);
 				if (image == null) {
 					return;
 				}
@@ -65,7 +64,6 @@ namespace OpenDentBusiness {
 			}
 		}
 
-
 		///<summary>Returns true if the given filename contains a supported file image extension.</summary>
 		public static bool HasImageExtension(string fileName) {
 			string ext = Path.GetExtension(fileName).ToLower();
@@ -75,7 +73,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Applies the document specified cropping, flip, rotation, brightness and contrast transformations to the image and returns the resulting image. Zoom and translation must be handled by the calling code. The returned image is always a new image that can be modified without affecting the original image. The change in the image's center point is returned into deltaCenter, so that rotation offsets can be properly calculated when displaying the returned image.</summary>
-		public static Bitmap ApplyDocumentSettingsToImage(Document doc, Bitmap image, ApplyImageSettings settings) {
+		public static Bitmap ApplyDocumentSettingsToImage(Document doc, Bitmap image, ImageSettingFlags settings) {
 			if (image == null) {//Any operation on a non-existant image produces a non-existant image.
 				return null;
 			}
@@ -85,7 +83,7 @@ namespace OpenDentBusiness {
 			//CROP - Implies that the croping rectangle must be saved in raw-image-space coordinates, 
 			//with an origin of that equal to the upper left hand portion of the image.
 			Rectangle cropResult;
-			if((settings & ApplyImageSettings.CROP) != 0 &&	//Crop not requested.
+			if((settings & ImageSettingFlags.CROP) != 0 &&	//Crop not requested.
 				doc.CropW > 0 && doc.CropH > 0)//No clip area yet defined, so no clipping is performed.
 			{
 				float[] cropDims = ODMathLib.IntersectRectangles(0, 0, image.Width, image.Height,//Intersect image rectangle with
@@ -109,12 +107,12 @@ namespace OpenDentBusiness {
 			g.DrawImage(image, croppedDims, cropResult, GraphicsUnit.Pixel);
 			g.Dispose();
 			//FLIP AND ROTATE - must match the operations in GetDocumentFlippedRotatedMatrix().
-			if((settings & ApplyImageSettings.FLIP) != 0) {
+			if((settings & ImageSettingFlags.FLIP) != 0) {
 				if (doc.IsFlipped) {
 					cropped.RotateFlip(RotateFlipType.RotateNoneFlipX);
 				}
 			}
-			if((settings & ApplyImageSettings.ROTATE) != 0) {
+			if((settings & ImageSettingFlags.ROTATE) != 0) {
 				if (doc.DegreesRotated % 360 == 90) {
 					cropped.RotateFlip(RotateFlipType.Rotate90FlipNone);
 				}
@@ -128,7 +126,7 @@ namespace OpenDentBusiness {
 			//APPLY BRIGHTNESS AND CONTRAST - 
 			//TODO: should be updated later for more general functions 
 			//(create inputValues and outputValues from stored db function/table).
-			if((settings & ApplyImageSettings.COLORFUNCTION) != 0 &&
+			if((settings & ImageSettingFlags.COLORFUNCTION) != 0 &&
 				doc.WindowingMax != 0 && //Do not apply color function if brightness/contrast have never been set (assume normal settings).
 				!(doc.WindowingMax == 255 && doc.WindowingMin == 0)) {//Don't apply if brightness/contrast settings are normal.
 				float[] inputValues = new float[] {
@@ -211,7 +209,7 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	public enum ApplyImageSettings {
+	public enum ImageSettingFlags {
 		NONE=0x00,
 		ALL=0xFF,
 		CROP=0x01,

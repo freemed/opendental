@@ -231,7 +231,7 @@ namespace OpenDentBusiness {
 			Bitmap thumbBitmap;
 			//Gets the cropped/flipped/rotated image with any color filtering applied.
 			Bitmap sourceImage=new Bitmap(fullName);
-			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(doc,sourceImage,ApplyImageSettings.ALL);
+			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(doc,sourceImage,ImageSettingFlags.ALL);
 			sourceImage.Dispose();
 			thumbBitmap=ImageHelper.GetThumbnail(fullImage,size);
 			fullImage.Dispose();

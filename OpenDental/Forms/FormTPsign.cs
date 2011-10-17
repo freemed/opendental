@@ -375,7 +375,7 @@ namespace OpenDental{
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			textNote.Text=selectionDoc.Note;
+			textNote.Text=DocSelected.Note;
 			sigBox.Visible=true;
 			sigBox.SetTabletState(0);//never accepts input here
 			labelInvalidSig.Visible=false;
@@ -385,20 +385,20 @@ namespace OpenDental{
 				sigBoxTopaz.Visible=false;
 				((Topaz.SigPlusNET)sigBoxTopaz).SetTabletState(0);
 			}
-			//A machine running Unix will have selectionDoc.SigIsTopaz set to false here, because the visibility of the panelNote
+			//A machine running Unix will have DocSelected.SigIsTopaz set to false here, because the visibility of the panelNote
 			//will be set to false in the case of Unix and SigIsTopaz. Therefore, the else part of this if-else clause is always
 			//run on Unix systems.
-			if(selectionDoc.SigIsTopaz) {
-				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
+			if(DocSelected.SigIsTopaz) {
+				if(DocSelected.Signature!=null && DocSelected.Signature!="") {
 					sigBox.Visible=false;
 					sigBoxTopaz.Visible=true;
 					((Topaz.SigPlusNET)sigBoxTopaz).ClearTablet();
 					((Topaz.SigPlusNET)sigBoxTopaz).SetSigCompressionMode(0);
 					((Topaz.SigPlusNET)sigBoxTopaz).SetEncryptionMode(0);
-					((Topaz.SigPlusNET)sigBoxTopaz).SetKeyString(GetHashString(selectionDoc));
+					((Topaz.SigPlusNET)sigBoxTopaz).SetKeyString(GetHashString(DocSelected));
 					((Topaz.SigPlusNET)sigBoxTopaz).SetEncryptionMode(2);//high encryption
 					((Topaz.SigPlusNET)sigBoxTopaz).SetSigCompressionMode(2);//high compression
-					((Topaz.SigPlusNET)sigBoxTopaz).SetSigString(selectionDoc.Signature);
+					((Topaz.SigPlusNET)sigBoxTopaz).SetSigString(DocSelected.Signature);
 					if(((Topaz.SigPlusNET)sigBoxTopaz).NumberOfTabletPoints() == 0) {
 						labelInvalidSig.Visible=true;
 					}
@@ -406,11 +406,11 @@ namespace OpenDental{
 			}
 			else {
 				sigBox.ClearTablet();
-				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
+				if(DocSelected.Signature!=null && DocSelected.Signature!="") {
 					sigBox.Visible=true;
 					sigBoxTopaz.Visible=false;
-					sigBox.SetKeyString(GetHashString(selectionDoc));
-					sigBox.SetSigString(selectionDoc.Signature);
+					sigBox.SetKeyString(GetHashString(DocSelected));
+					sigBox.SetSigString(DocSelected.Signature);
 					if(sigBox.NumberOfTabletPoints()==0) {
 						labelInvalidSig.Visible=true;
 					}
@@ -423,7 +423,7 @@ namespace OpenDental{
 			//MessageBox.Show(e.Button.Tag.ToString());
 			switch(e.Button.Tag.ToString()){
 				//case "Print":
-				//	OnPrint_Click();
+				//	ToolBarPrint_Click();
 				//	break;
 				case "Back":
 					OnBack_Click();

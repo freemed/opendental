@@ -145,7 +145,7 @@ namespace OpenDental {
 				BitmapOriginal.Dispose();
 			}
 			BitmapOriginal=ImageStore.OpenImage(doc,patFolder);
-			Bitmap bitmap=ImageHelper.ApplyDocumentSettingsToImage(doc,BitmapOriginal,ApplyImageSettings.ALL);
+			Bitmap bitmap=ImageHelper.ApplyDocumentSettingsToImage(doc,BitmapOriginal,ImageSettingFlags.ALL);
 			pictBox.BackgroundImage=bitmap;
 			resizePictBox();
 		}

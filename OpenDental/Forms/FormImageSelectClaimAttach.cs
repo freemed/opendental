@@ -195,7 +195,7 @@ namespace OpenDental{
 					{
 						//this does result in a significantly larger images size if jpg.  A later optimization would recompress it.
 						Bitmap bitmapold=(Bitmap)Bitmap.FromFile(oldPath);
-						Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ApplyImageSettings.ALL);
+						Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ImageSettingFlags.ALL);
 						bitmapnew.Save(newPath);
 					}
 					else {

@@ -30,9 +30,9 @@ namespace OpenDental{
 		private Bitmap ImageCurrent=null;
 		///<summary>The current zoom of the image. 1 implies normal size, <1 implies the image is shrunk, >1 imples the image is blown-up.</summary>
 		float imageZoom=1.0f;
-		///<summary>The current amount. The zoomLevel is 0 after an image is loaded. The image is zoomed a factor of (initial image zoom)*(2^zoomLevel)</summary>
+		///<summary>The current amount. The ZoomLevel is 0 after an image is loaded. The image is zoomed a factor of (initial image zoom)*(2^ZoomLevel)</summary>
 		int zoomLevel=0;
-		///<summary>Represents the current factor for level of zoom from the initial zoom of the image. This is calculated directly as 2^zoomLevel every time a zoom occurs. Recalculated from zoomLevel each time, so that zoomFactor always hits the exact same values for the exact same zoom levels (not loss of data).</summary>
+		///<summary>Represents the current factor for level of zoom from the initial zoom of the image. This is calculated directly as 2^ZoomLevel every time a zoom occurs. Recalculated from ZoomLevel each time, so that ZoomOverall always hits the exact same values for the exact same zoom levels (not loss of data).</summary>
 		float zoomFactor=1;
 
 		///<summary></summary>
@@ -153,7 +153,7 @@ namespace OpenDental{
 				ImageCurrent=new Bitmap(fileName);
 				renderImage=ImageHelper.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
 					//ContrDocs.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
-					ApplyImageSettings.CROP | ApplyImageSettings.COLORFUNCTION);
+					ImageSettingFlags.CROP | ImageSettingFlags.COLORFUNCTION);
 				if(renderImage==null) {
 					imageZoom=1;
 					imageTranslation=new PointF(0,0);
