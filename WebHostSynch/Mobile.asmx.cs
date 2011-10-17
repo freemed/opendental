@@ -61,7 +61,7 @@ namespace WebHostSynch {
 		[WebMethod]
 		public void DeleteObjects(String RegistrationKey,List<DeletedObject> dOList) {
 			try {
-				Logger.Information("In DeleteAllRecords");
+				Logger.Information("In DeleteObjects");
 				customerNum=util.GetDentalOfficeID(RegistrationKey);
 				if(customerNum==0) {
 					return;

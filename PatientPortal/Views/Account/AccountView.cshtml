@@ -16,11 +16,14 @@
 
 <p><strong>Statement History:</strong></p>
 <div style="margin-left:3em">
+@if(Model.statementmList.Count()==0) {
+	<p>No Statement History available</p>
+}
 	@foreach(var item in Model.statementmList) {    
 		<p>@Html.Encode("Statement "+item.DateSent.ToShortDateString() + " ")
 		@if(item.DocNum!=0) {
-		@Html.ActionLink("View Statement","ShowPdfFile","Account",new { d=item.DocNum },new { target="_blank" }) 
-		}
+			@Html.ActionLink("View Statement","ShowPdfFile","Account",new { d=item.DocNum },new { target="_blank" }) 
+  }
 		</p>
 	}
 </div>

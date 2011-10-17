@@ -43,6 +43,7 @@ namespace OpenDental {
 			icd9,
 			statement,
 			//document,
+			deletedobject,
 			patientdel
 		}
 
@@ -63,6 +64,7 @@ namespace OpenDental {
 				textDateTimeLastRun.Text=lastRun.ToShortDateString()+" "+lastRun.ToShortTimeString();
 			}
 			//Web server is not contacted when loading this form.  That would be too slow.
+			//CreateAppointments(5);
 		}
 
 		private void butCurrentWorkstation_Click(object sender,EventArgs e) {
@@ -239,7 +241,17 @@ namespace OpenDental {
 					changedProv=DateTime.MinValue;
 					changedDeleted=DateTime.MinValue;
 				}
-				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables111Done,false)) { //dennis:Uncomment later
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSynchNewTables112Done','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MobileSynchNewTables112Done','0')";
+					Db.NonQ(command);
+				}
+				 */
+				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,false)) { //dennis:Uncomment later
 				//    changedPat=DateTime.MinValue;
 				//	  changedStatement=DateTime.MinValue;
 				//	  changedDocument=DateTime.MinValue;
@@ -268,12 +280,13 @@ namespace OpenDental {
 				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedStatement,eligibleForUploadPatNumList,statementLimitPerPatient);
 				//List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedDocument,statementNumList);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
-				List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
+				//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
+				List<long> deletedObjectNumList=DeletedObjects.GetChangedSinceDeletedObjectNums(changedDeleted);
 				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 					+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 					+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
 					+statementNumList.Count//+documentNumList.Count
-					+dO.Count;
+					+deletedObjectNumList.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
 				}
@@ -303,12 +316,13 @@ namespace OpenDental {
 				if(synchDelPat) {
 					SynchGeneric(delPatNumList,SynchEntity.patientdel,totalCount,ref currentVal);
 				}
-				DeleteObjects(dO,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
+				//DeleteObjects(dO,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
+				SynchGeneric(deletedObjectNumList,SynchEntity.deletedobject,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 				    Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
 				}
-				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables111Done,true)) {//dennis:Uncomment later
-				//    Prefs.UpdateBool(PrefName.MobileSynchNewTables111Done,true);
+				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,true)) {//dennis:Uncomment later
+				//    Prefs.UpdateBool(PrefName.MobileSynchNewTables112Done,true);
 				//}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 				IsSynching=false;
@@ -403,6 +417,10 @@ namespace OpenDental {
 						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
 						*/
+						case SynchEntity.deletedobject:
+						List<DeletedObject> ChangedDeleteObjectList=DeletedObjects.GetMultDeletedObjects(BlockPKNumList);
+						mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),ChangedDeleteObjectList.ToArray());
+						break;
 						case SynchEntity.patientdel:
 						mb.DeletePatientsRecords(PrefC.GetString(PrefName.RegistrationKey),BlockPKNumList.ToArray());
 						break;
@@ -413,7 +431,6 @@ namespace OpenDental {
 						FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
 							new object[] {currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 					}
-
 				}
 				catch(Exception e) {
 					if(IsTroubleshootMode) {
@@ -424,9 +441,7 @@ namespace OpenDental {
 						throw e;
 					}
 				}
-
 			}//for loop ends here
-			
 		}
 
 		///<summary>This method gets invoked from the worker thread.</summary>
@@ -437,23 +452,37 @@ namespace OpenDental {
 			FormP.ErrorMessage=errorMessage;
 		}
 
+		/*
 		private static void DeleteObjects(List<DeletedObject> dO,double totalCount,ref double currentVal) {
 			int LocalBatchSize=BatchSize;
+			if(IsTroubleshootMode) {
+				LocalBatchSize=1;
+			}
 			for(int start=0;start<dO.Count;start+=LocalBatchSize) {
+				try {
 				if((start+LocalBatchSize)>dO.Count) {
-					mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),dO.ToArray());
+					mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),dO.ToArray()); //dennis check this - why is it not done in batches.
 					LocalBatchSize=dO.Count-start;
 				}
-				//progressIndicator.CurrentVal+=BatchSize;//not allowed
 				currentVal+=BatchSize;
 				if(Application.OpenForms["FormProgress"]!=null) {// without this line the following error is thrown: "Invoke or BeginInvoke cannot be called on a control until the window handle has been created." or a null pointer exception is thrown when an automatic synch is done by the system.
 					FormP.Invoke(new PassProgressDelegate(PassProgressToDialog),
 						new object[] {currentVal,"?currentVal of ?maxVal records uploaded",totalCount,"" });
 				}
-			}
+								}
+				catch(Exception e) {
+					if(IsTroubleshootMode) {
+						//string errorMessage="DeleteObjects with Primary Key = "+BlockPKNumList.First() + " failed to synch. " +  "\n" + e.Message;
+						//throw new Exception(errorMessage);
+					}
+					else {
+						throw e;
+					}
+				}
+			}//for loop ends here
 			
 		}
-			 
+		*/	 
 		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
 		private static bool TestWebServiceExists() {
 			try {
@@ -565,21 +594,27 @@ namespace OpenDental {
 		/// <summary>For testing only</summary>
 		private static void CreateAppointments(int AppointmentCount) {
 			long[] patNumArray=Patients.GetAllPatNums();
-			DateTime appdate= new DateTime(2010,12,1,11,0,0);
+			DateTime appdate= DateTime.Now;
 			for(int i=0;i<patNumArray.Length;i++) {
-				appdate=appdate.AddDays(2);
+				appdate=appdate.AddMinutes(20);
 				for(int j=0;j<AppointmentCount;j++) {
 					Appointment apt=new Appointment();
+					appdate=appdate.AddMinutes(20);
 					apt.PatNum=patNumArray[i];
 					apt.DateTimeArrived=appdate;
 					apt.DateTimeAskedToArrive=appdate;
 					apt.DateTimeDismissed=appdate;
 					apt.DateTimeSeated=appdate;
+					apt.AptDateTime=appdate;
 					apt.Note="some notenote noten otenotenot enotenot enote"+j;
 					apt.IsNewPatient=true;
 					apt.ProvNum=3;
 					apt.AptStatus=ApptStatus.Scheduled;
 					apt.AptDateTime=appdate;
+					apt.Op=2;
+					apt.Pattern="//XX//////";
+					apt.ProcDescript="4-BWX";
+					apt.ProcsColored="<span color=\"-16777216\">4-BWX</span>";
 					Appointments.Insert(apt);
 				}
 			}
