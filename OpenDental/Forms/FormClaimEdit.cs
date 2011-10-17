@@ -4945,7 +4945,7 @@ namespace OpenDental{
 				}
 				catch(Exception ex) {
 					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message);
+					MessageBox.Show(ex.ToString());
 					return;
 				}
 			}
