@@ -34,7 +34,7 @@ using System.Text.RegularExpressions;
 namespace OpenDental{
 
 	///<summary></summary>
-	public class ContrDocs : System.Windows.Forms.UserControl {
+	public class ContrImages:System.Windows.Forms.UserControl {
 
 		#region Designer Generated Variables
 
@@ -151,7 +151,7 @@ namespace OpenDental{
 		#endregion ManuallyCreatedVariables
 
 		///<summary></summary>
-		public ContrDocs(){
+		public ContrImages() {
 			Logger.openlog.Log("Initializing Document Module...", Logger.Severity.INFO);
 			InitializeComponent();
 			//The context menu causes strange bugs in MONO when performing selections on the tree.
@@ -206,7 +206,7 @@ namespace OpenDental{
 
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrDocs));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrImages));
 			this.treeDocuments = new System.Windows.Forms.TreeView();
 			this.contextTree = new System.Windows.Forms.ContextMenu();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
@@ -222,6 +222,7 @@ namespace OpenDental{
 			this.menuPrefs = new System.Windows.Forms.MenuItem();
 			this.panelNote = new System.Windows.Forms.Panel();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
+			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
@@ -230,7 +231,6 @@ namespace OpenDental{
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.ToolBarPaint = new OpenDental.UI.ODToolBar();
 			this.sliderBrightnessContrast = new OpenDental.UI.ContrWindowingSlider();
-			this.sigBox = new OpenDental.UI.SignatureBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
 			this.panelNote.SuspendLayout();
 			this.SuspendLayout();
@@ -245,7 +245,7 @@ namespace OpenDental{
 			this.treeDocuments.ImageList = this.imageListTree;
 			this.treeDocuments.Indent = 20;
 			this.treeDocuments.Location = new System.Drawing.Point(0,29);
-			this.treeDocuments.Name = "TreeDocuments";
+			this.treeDocuments.Name = "treeDocuments";
 			this.treeDocuments.SelectedImageIndex = 2;
 			this.treeDocuments.Size = new System.Drawing.Size(228,519);
 			this.treeDocuments.TabIndex = 0;
@@ -325,7 +325,7 @@ namespace OpenDental{
 			this.pictureBoxMain.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.pictureBoxMain.InitialImage = null;
 			this.pictureBoxMain.Location = new System.Drawing.Point(233,54);
-			this.pictureBoxMain.Name = "PictureBox1";
+			this.pictureBoxMain.Name = "pictureBoxMain";
 			this.pictureBoxMain.Size = new System.Drawing.Size(703,370);
 			this.pictureBoxMain.TabIndex = 6;
 			this.pictureBoxMain.TabStop = false;
@@ -390,6 +390,14 @@ namespace OpenDental{
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.labelInvalidSig.DoubleClick += new System.EventHandler(this.labelInvalidSig_DoubleClick);
 			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(308,20);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(362,79);
+			this.sigBox.TabIndex = 90;
+			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
+			// 
 			// label15
 			// 
 			this.label15.Location = new System.Drawing.Point(305,0);
@@ -426,7 +434,7 @@ namespace OpenDental{
 			// 
 			this.panelUnderline.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.panelUnderline.Location = new System.Drawing.Point(236,48);
-			this.panelUnderline.Name = "paintToolsUnderline";
+			this.panelUnderline.Name = "panelUnderline";
 			this.panelUnderline.Size = new System.Drawing.Size(702,2);
 			this.panelUnderline.TabIndex = 15;
 			// 
@@ -452,7 +460,7 @@ namespace OpenDental{
 			// 
 			this.ToolBarPaint.ImageList = this.imageListTools2;
 			this.ToolBarPaint.Location = new System.Drawing.Point(440,24);
-			this.ToolBarPaint.Name = "paintTools";
+			this.ToolBarPaint.Name = "ToolBarPaint";
 			this.ToolBarPaint.Size = new System.Drawing.Size(499,25);
 			this.ToolBarPaint.TabIndex = 14;
 			this.ToolBarPaint.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.paintTools_ButtonClick);
@@ -463,22 +471,14 @@ namespace OpenDental{
 			this.sliderBrightnessContrast.Location = new System.Drawing.Point(240,32);
 			this.sliderBrightnessContrast.MaxVal = 255;
 			this.sliderBrightnessContrast.MinVal = 0;
-			this.sliderBrightnessContrast.Name = "brightnessContrastSlider";
+			this.sliderBrightnessContrast.Name = "sliderBrightnessContrast";
 			this.sliderBrightnessContrast.Size = new System.Drawing.Size(194,14);
 			this.sliderBrightnessContrast.TabIndex = 12;
 			this.sliderBrightnessContrast.Text = "contrWindowingSlider1";
 			this.sliderBrightnessContrast.Scroll += new System.EventHandler(this.brightnessContrastSlider_Scroll);
 			this.sliderBrightnessContrast.ScrollComplete += new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
 			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(308,20);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(362,79);
-			this.sigBox.TabIndex = 90;
-			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
-			// 
-			// ContrDocs
+			// ContrImages
 			// 
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.panelUnderline);
@@ -488,9 +488,9 @@ namespace OpenDental{
 			this.Controls.Add(this.panelNote);
 			this.Controls.Add(this.pictureBoxMain);
 			this.Controls.Add(this.treeDocuments);
-			this.Name = "ContrDocs";
+			this.Name = "ContrImages";
 			this.Size = new System.Drawing.Size(939,585);
-			this.Resize += new System.EventHandler(this.ContrDocs_Resize);
+			this.Resize += new System.EventHandler(this.ContrImages_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).EndInit();
 			this.panelNote.ResumeLayout(false);
 			this.panelNote.PerformLayout();
@@ -499,7 +499,7 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void ContrDocs_Resize(object sender,EventArgs e) {
+		private void ContrImages_Resize(object sender,EventArgs e) {
 			ResizeAll();
 		}
 
@@ -631,7 +631,7 @@ namespace OpenDental{
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
 			SelectTreeNode(GetNodeById(MakeIdentifier(docNum.ToString(),"0")));
-			Plugins.HookAddCode(this,"ContrDocs.ModuleSelected_end",patNum,docNum);
+			Plugins.HookAddCode(this,"ContrImages.ModuleSelected_end",patNum,docNum);
 		}
 
 		///<summary></summary>
@@ -639,7 +639,7 @@ namespace OpenDental{
 			FamCur=null;
 			//Cancel current image capture.
 			xRayImageController.KillXRayThread();
-			Plugins.HookAddCode(this,"ContrDocs.ModuleUnselected_end");
+			Plugins.HookAddCode(this,"ContrImages.ModuleUnselected_end");
 		}
 
 		///<summary></summary>

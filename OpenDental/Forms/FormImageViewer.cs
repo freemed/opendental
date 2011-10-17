@@ -260,13 +260,13 @@ namespace OpenDental{
 		private void timer1_Tick(object sender,EventArgs e) {
 			try{
 				backBuffGraph.Clear(Pens.White.Color);
-				backBuffGraph.Transform=ContrDocs.GetScreenMatrix(displayedDoc,
-					ImageCurrent.Width,ImageCurrent.Height,imageZoom*zoomFactor,imageTranslation);
+				backBuffGraph.Transform=ContrImages.GetScreenMatrix(displayedDoc,ImageCurrent.Width,ImageCurrent.Height,imageZoom*zoomFactor,imageTranslation);
 				backBuffGraph.DrawImage(renderImage,0,0);
 				Graphics pbg=PictureBox1.CreateGraphics();
 				pbg.DrawImage(backBuffer,0,0);
 				pbg.Dispose();
-			}catch{
+			}
+			catch{
 				//Not being able to render the image is non-fatal and probably due to a simple change in state
 				//or rounding errors.
 			}

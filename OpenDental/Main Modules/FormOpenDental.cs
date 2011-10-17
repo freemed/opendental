@@ -204,7 +204,7 @@ namespace OpenDental{
 		private ContrAccount ContrAccount2;
 		private ContrTreat ContrTreat2;
 		private ContrChart ContrChart2;
-		private ContrDocs ContrDocs2;
+		private ContrImages ContrImages2;
 		private ContrStaff ContrManage2;
 		private OutlookBar myOutlookBar;
 		private MenuItem menuItemShutdown;
@@ -295,11 +295,11 @@ namespace OpenDental{
 			ContrChart2.Visible=false;
 			ContrChart2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
 			this.Controls.Add(ContrChart2);
-			//contrDocs
-			ContrDocs2=new ContrDocs();
-			ContrDocs2.Visible=false;
-			ContrDocs2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
-			this.Controls.Add(ContrDocs2);
+			//contrImages
+			ContrImages2=new ContrImages();
+			ContrImages2.Visible=false;
+			ContrImages2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrImages2);
 			//contrManage
 			ContrManage2=new ContrStaff();
 			ContrManage2.Visible=false;
@@ -1666,7 +1666,7 @@ namespace OpenDental{
 						return false;
 					}
 					//bool usingAtoZ=FormPath.UsingImagePath();
-					//ContrDocs2.Enabled=usingAtoZ;
+					//ContrImages2.Enabled=usingAtoZ;
 					//menuItemClaimForms.Visible=usingAtoZ;
 					//CheckCustomReports();
 					//this.RefreshCurrentModule();
@@ -1774,7 +1774,7 @@ namespace OpenDental{
 				else {
 					menuItemCustomerManage.Visible=true;
 				}
-				ContrDocs2.Enabled=PrefC.UsingAtoZfolder;
+				ContrImages2.Enabled=PrefC.UsingAtoZfolder;
 				//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
@@ -1858,7 +1858,7 @@ namespace OpenDental{
 				ContrAccount2.LayoutToolBar();
 				ContrAppt2.LayoutToolBar();
 				ContrChart2.LayoutToolBar();
-				ContrDocs2.LayoutToolBar();
+				ContrImages2.LayoutToolBar();
 				ContrFamily2.LayoutToolBar();
 			}
 			if(itypeList.Contains((int)InvalidType.Views) || isAll) {
@@ -2509,9 +2509,9 @@ namespace OpenDental{
 			ContrChart2.Location=position;
 			ContrChart2.Width=width;
 			ContrChart2.Height=height;
-			ContrDocs2.Location=position;
-			ContrDocs2.Width=width;
-			ContrDocs2.Height=height;
+			ContrImages2.Location=position;
+			ContrImages2.Width=width;
+			ContrImages2.Height=height;
 			ContrFamily2.Location=position;
 			ContrFamily2.Width=width;
 			ContrFamily2.Height=height;
@@ -2665,9 +2665,9 @@ namespace OpenDental{
 			}
 			else if(e.DocNum>0) {
 				myOutlookBar.SelectedIndex=e.IModule;
-				ContrDocs2.Visible=true;
-				this.ActiveControl=this.ContrDocs2;
-				ContrDocs2.ModuleSelected(CurPatNum,e.DocNum);
+				ContrImages2.Visible=true;
+				this.ActiveControl=this.ContrImages2;
+				ContrImages2.ModuleSelected(CurPatNum,e.DocNum);
 			}
 			else if(e.IModule!=-1){
 				myOutlookBar.SelectedIndex=e.IModule;
@@ -3092,10 +3092,10 @@ namespace OpenDental{
 					ContrChart2.ModuleSelected(CurPatNum);
 					break;
 				case 5:
-					ContrDocs2.InitializeOnStartup();
-					ContrDocs2.Visible=true;
-					this.ActiveControl=this.ContrDocs2;
-					ContrDocs2.ModuleSelected(CurPatNum);
+					ContrImages2.InitializeOnStartup();
+					ContrImages2.Visible=true;
+					this.ActiveControl=this.ContrImages2;
+					ContrImages2.ModuleSelected(CurPatNum);
 					break;
 				case 6:
 					//ContrManage2.InitializeOnStartup();//This gets done earlier.
@@ -3113,7 +3113,7 @@ namespace OpenDental{
 			ContrAccount2.Visible=false;
 			ContrTreat2.Visible=false;
 			ContrChart2.Visible=false;
-			ContrDocs2.Visible=false;
+			ContrImages2.Visible=false;
 			ContrManage2.Visible=false;
 		}
 
@@ -3136,8 +3136,8 @@ namespace OpenDental{
 			if(ContrChart2.Visible){
 				ContrChart2.ModuleUnselected();
 			}
-			if(ContrDocs2.Visible){
-				ContrDocs2.ModuleUnselected();
+			if(ContrImages2.Visible){
+				ContrImages2.ModuleUnselected();
 			}
 		}
 
@@ -3161,8 +3161,8 @@ namespace OpenDental{
 			if(ContrChart2.Visible){
 				ContrChart2.ModuleSelected(CurPatNum);
 			}
-			if(ContrDocs2.Visible){
-				ContrDocs2.ModuleSelected(CurPatNum);
+			if(ContrImages2.Visible){
+				ContrImages2.ModuleSelected(CurPatNum);
 			}
 			if(ContrManage2.Visible){
 				ContrManage2.ModuleSelected(CurPatNum);
@@ -3529,7 +3529,7 @@ namespace OpenDental{
 			//security is handled from within the form.
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
-			ContrDocs2.Enabled=PrefC.UsingAtoZfolder;
+			ContrImages2.Enabled=PrefC.UsingAtoZfolder;
 			//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 			CheckCustomReports();
 			this.RefreshCurrentModule();

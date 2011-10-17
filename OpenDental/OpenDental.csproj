@@ -2197,7 +2197,7 @@
     <Compile Include="Main Modules\ContrChart.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Main Modules\ContrDocs.cs">
+    <Compile Include="Main Modules\ContrImages.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Main Modules\ContrFamily.cs">
@@ -3817,8 +3817,8 @@
       <DependentUpon>ContrChart.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main Modules\ContrDocs.resx">
-      <DependentUpon>ContrDocs.cs</DependentUpon>
+    <EmbeddedResource Include="Main Modules\ContrImages.resx">
+      <DependentUpon>ContrImages.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main Modules\ContrFamily.resx">
