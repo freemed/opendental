@@ -975,33 +975,37 @@ namespace OpenDentBusiness
 					//2310A NM1: DN (dental) Referring Provider Name. Situational. //js 9/5/11 Why not?  I thought this was a field on the claim that we DID send.
 					//2310A PRV: (dental) Referring Provider Specialty Information. Situational.
 					//2310A REF: G2 (dental) Referring Provider Secondary Identification. Situational.
-					//2310B NM1: 82 (dental) Rendering Provider Name. Situational. Only required if different from the billing provider, but required by WebClaim, so we will always include it.
-					provTreat=Providers.GetProv(claim.ProvTreat);
-					seg++;
-					sw.WriteLine("NM1*82*"//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
-						+"1*"//NM102 1/1 Entity Type Qualifier: 1=Person.
-						+Sout(provTreat.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
-						+Sout(provTreat.FName,35)+"*"//NM104 1/35 Name First:
-						+Sout(provTreat.MI,25)+"*"//NM105 1/25 Name Middle:
-						+"*"//NM106 1/10 Name Prefix: Not Used.
-						+"*"//NM107 1/10 Name Suffix: We don't support.
-						+"XX*"//NM108 1/2 Identification Code Qualifier: Situational. Required since after the HIPAA date. XX=NPI.
-						+Sout(provTreat.NationalProvID,80)//NM109 2/80 Identification Code:  NPI validated.
-						+"~");//NM110 through NM112 are not used.
-					//2310B PRV: PE (dental) Rendering Provider Specialty Information.
-					seg++;
-					sw.WriteLine("PRV*"
-						+"PE*"//PRV01 1/3 Provider Code: PE=Performing.
-						+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
-						+X12Generator.GetTaxonomy(provTreat)//PRV03 1/50 Reference Identification: Taxonomy Code.
-						+"~");//PRV04 through PRV06 are not used.
-					//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
-	//todo: is StateLicense validated?
-					//seg++;
-					//sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-					//  +Sout(provTreat.StateLicense,50)//REF02 1/50 Reference Identification:
-					//  +"~");//REF03 and REF04 are not used.
-					seg+=WriteProv_REFG2(sw,provTreat,carrier.ElectID);
+					if(claim.ProvTreat!=claim.ProvBill) {
+						//2310B NM1: 82 (dental) Rendering Provider Name. Situational. Only required if different from the billing provider. Emdeon will reject the claim if this segment is the same as the billing provider for all claims in the batch.
+						provTreat=Providers.GetProv(claim.ProvTreat);
+						seg++;
+						sw.WriteLine("NM1*82*"//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
+							+"1*"//NM102 1/1 Entity Type Qualifier: 1=Person.
+							+Sout(provTreat.LName,60)+"*"//NM103 1/60 Name Last or Organization Name:
+							+Sout(provTreat.FName,35)+"*"//NM104 1/35 Name First:
+							+Sout(provTreat.MI,25)+"*"//NM105 1/25 Name Middle:
+							+"*"//NM106 1/10 Name Prefix: Not Used.
+							+"*"//NM107 1/10 Name Suffix: We don't support.
+							+"XX*"//NM108 1/2 Identification Code Qualifier: Situational. Required since after the HIPAA date. XX=NPI.
+							+Sout(provTreat.NationalProvID,80)//NM109 2/80 Identification Code:  NPI validated.
+							+"~");//NM110 through NM112 are not used.
+						//2310B PRV: PE (dental) Rendering Provider Specialty Information.
+						seg++;
+						sw.WriteLine("PRV*"
+							+"PE*"//PRV01 1/3 Provider Code: PE=Performing.
+							+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
+							+X12Generator.GetTaxonomy(provTreat)//PRV03 1/50 Reference Identification: Taxonomy Code.
+							+"~");//PRV04 through PRV06 are not used.
+						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
+						//todo: is StateLicense validated?
+						if(provTreat.StateLicense!="") {
+							seg++;
+							sw.WriteLine("REF*0B*"//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+								+Sout(provTreat.StateLicense,50)//REF02 1/50 Reference Identification:
+								+"~");//REF03 and REF04 are not used.
+						}
+						seg+=WriteProv_REFG2(sw,provTreat,carrier.ElectID);
+					}
 					//2310C NM1: 77 (dental) Service Facility Location Name. Situational. Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33.
 					if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
 						|| claim.PlaceService==PlaceOfService.SkilledNursFac || claim.PlaceService==PlaceOfService.CustodialCareFacility) {//AdultLivCareFac
