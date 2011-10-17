@@ -199,6 +199,7 @@
     <Compile Include="Crud\EmailTemplateCrud.cs" />
     <Compile Include="Crud\EmployeeCrud.cs" />
     <Compile Include="Crud\EmployerCrud.cs" />
+    <Compile Include="Crud\EobAttachCrud.cs" />
     <Compile Include="Crud\EquipmentCrud.cs" />
     <Compile Include="Crud\EtransCrud.cs" />
     <Compile Include="Crud\EtransMessageTextCrud.cs" />
@@ -353,6 +354,7 @@
     <Compile Include="Data Interface\EhrProvKeys.cs" />
     <Compile Include="Data Interface\EhrQuarterlyKeys.cs" />
     <Compile Include="Data Interface\EhrSummaryCcds.cs" />
+    <Compile Include="Data Interface\EobAttaches.cs" />
     <Compile Include="Data Interface\Formularies.cs" />
     <Compile Include="Data Interface\FormularyMeds.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
@@ -692,6 +694,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\AggPath.cs" />
+    <Compile Include="TableTypes\EobAttach.cs" />
     <Compile Include="TableTypes\DashboardAR.cs" />
     <Compile Include="TableTypes\EhrQuarterlyKey.cs" />
     <Compile Include="TableTypes\EhrSummaryCcd.cs" />

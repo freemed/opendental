@@ -149,7 +149,8 @@ namespace OpenDental{
 			if(!File.Exists(fileName)){
 				MessageBox.Show(fileName+" could not be found.");
 				return;
-			}try{
+			}
+			try{
 				ImageCurrent=new Bitmap(fileName);
 				renderImage=ImageHelper.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
 					//ContrDocs.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
@@ -157,7 +158,8 @@ namespace OpenDental{
 				if(renderImage==null) {
 					imageZoom=1;
 					imageTranslation=new PointF(0,0);
-				}else{
+				}
+				else{
 					float matchWidth=PictureBox1.Width-16;
 					matchWidth=(matchWidth<=0?1:matchWidth);
 					float matchHeight=PictureBox1.Height-16;
@@ -167,7 +169,8 @@ namespace OpenDental{
 				}
 				zoomLevel=0;
 				zoomFactor=1;
-	    }catch(System.Exception exception){
+	    }
+			catch(System.Exception exception){
 		    MessageBox.Show(Lan.g(this,exception.Message)); 
 				ImageCurrent=null;
 				renderImage=null;

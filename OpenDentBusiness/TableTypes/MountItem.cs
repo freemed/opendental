@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	/// <summary>These are always attached to a mount and are constant. Should not be deleted, but rather updated if geometry changes.</summary>
+	/// <summary>These are always attached to a mount and are constant. Should not be deleted, but rather updated if geometry changes.  Documents are then attached to MountItems using Document.MountItemNum field.</summary>
 	[Serializable()]
 	public class MountItem : TableBase {
 		/// <summary>Primary key.</summary>

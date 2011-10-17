@@ -6790,7 +6790,33 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ChartAddProcNoRefreshGrid','0')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS eobattach";
+					Db.NonQ(command);
+					command=@"CREATE TABLE eobattach (
+						EobAttachNum bigint NOT NULL auto_increment PRIMARY KEY,
+						ClaimPaymentNum bigint NOT NULL,
+						FileName varchar(255) NOT NULL,
+						RawBase64 text NOT NULL,
+						INDEX(ClaimPaymentNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE eobattach'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE eobattach (
+						EobAttachNum number(20) NOT NULL,
+						ClaimPaymentNum number(20) NOT NULL,
+						FileName varchar2(255),
+						RawBase64 clob,
+						CONSTRAINT eobattach_EobAttachNum PRIMARY KEY (EobAttachNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX eobattach_ClaimPaymentNum ON eobattach (ClaimPaymentNum)";
+					Db.NonQ(command);
+				}
+				
 
 
 
@@ -6811,3 +6837,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				

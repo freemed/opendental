@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 		public DateTime DateCreated;
 		/// <summary>FK to definition.DefNum. Categories for documents.</summary>
 		public long DocCategory;
-		/// <summary>FK to patient.PatNum.  Patient folder that document is in.(for sharing situations later)</summary>
+		/// <summary>FK to patient.PatNum.  The document will be located in the patient folder of this patient.</summary>
 		public long PatNum;
 		/// <summary>The name of the file. Does not include any directory info.</summary>
 		public string FileName;
@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		public int WindowingMin;
 		/// <summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
 		public int WindowingMax;
-		/// <summary>FK to mountitem.MountItemNum. If set to 0, then no mount item is associated with this document.</summary>
+		/// <summary>FK to mountitem.MountItemNum. If set, then this image will only show on a mount, not in the main tree. If set to 0, then no mount item is associated with this document.</summary>
 		public long MountItemNum;
 		/// <summary>Date/time last altered.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
