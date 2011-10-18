@@ -25,6 +25,7 @@ namespace WebForms {
 		private long WebSheetDefID=0;
 		private Hashtable FormValuesHashTable=new Hashtable();
 		private Hashtable hiddenChkBoxGroupHashTable=new Hashtable();
+		private List<long> dateTodayList=new List<long>();
 		private List<WControl> listwc=new List<WControl>();
 		private bool doTabOrder=true;
 		
@@ -132,8 +133,7 @@ namespace WebForms {
 						if(FieldType==SheetFieldType.StaticText) {
 							Label lb=new Label();
 							if(FieldValue.Contains("[dateToday]")) {
-								//FieldValue=FieldValue.Replace("[dateToday]",DateTime.Today.ToString("d",System.Threading.Thread.CurrentThread.CurrentCulture));//culture of the browser
-								AddHiddenFieldForDate(WebSheetFieldDefID);// the replacing is done at the client side using javascript via a hidden variable.
+								dateTodayList.Add(WebSheetFieldDefID);// the replacing is done at the client side using javascript via a hidden variable.
 							}
 							lb.Text=FieldValue.Replace(Environment.NewLine,"<br />").Replace("\n","<br />"); //it appears that the text contains only "\n" as the newline character and not Environment.NewLine (i.e "\n\r") as the line break, so the code takes into account both cases.
 							wc=lb;
@@ -214,6 +214,7 @@ namespace WebForms {
 					}//for loop end here
 					AdjustErrorMessageForChkBoxes();	
 					CreateChkBoxValidatorsHiddenFields();
+					CreateHiddenFieldForDateToday();
 					if(doTabOrder) {
 					AssignTabOrder();
 					}
@@ -301,11 +302,13 @@ namespace WebForms {
 			}// end foreach3
 		}
 
-		///<summary></summary>
-		private void AddHiddenFieldForDate(long WebSheetFieldDefID) {
+		///<summary>A single Hidden field is created which holds the ids of all dateTodays</summary>
+		private void CreateHiddenFieldForDateToday() {
 			HiddenField hf= new HiddenField();
-			hf.Value=""+WebSheetFieldDefID;
 			hf.ID="dateToday";
+			for(int i=0;i<dateTodayList.Count();i++) {
+				hf.Value+=" "+dateTodayList.ElementAt(i);
+			}
 			Panel1.Controls.Add(hf);
 		}
 

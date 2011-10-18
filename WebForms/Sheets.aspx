@@ -14,11 +14,16 @@
 		///<summary> The visible date seen by the patient on the webform is set here, if it exists. This text is static is cannot be changed by the patient</summary>
 		function setDateToday() {
 			// dateToday is a hiddenfield, set from the server code. The date however is not set on the server.
-			// This existance of this variable merely indicates that the form contains a visible static today's Date.
-			if ($get("dateToday")!= null && $get(""+$get("dateToday").value)!= null) {
-				var str=$get(""+$get("dateToday").value).innerHTML;
-				var strBrowserDateToday=(new Date()).localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern);// read browser date
-				$get(""+$get("dateToday").value).innerHTML=str.replace("[dateToday]", strBrowserDateToday); // set static date text here
+			// The existence of this variable merely indicates that the form contains visible static labels which are DateToday fields
+			if ($get("dateToday") != null) {
+				var dateTodayIdArray = $get("dateToday").value.split(" ");
+				for (var i = 0; i < dateTodayIdArray.length; i++) {
+					if ($get("" + dateTodayIdArray[i]) != null) {
+						var str = $get("" + dateTodayIdArray[i]).innerHTML;
+						var strBrowserDateToday = (new Date()).localeFormat(Sys.CultureInfo.CurrentCulture.dateTimeFormat.ShortDatePattern); // read browser date
+						$get("" + dateTodayIdArray[i]).innerHTML = str.replace("[dateToday]", strBrowserDateToday); // set static date text here
+					}
+				}
 			}
 		}
 
