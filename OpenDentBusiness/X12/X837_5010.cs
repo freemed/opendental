@@ -181,12 +181,14 @@ namespace OpenDentBusiness
 					+"1~");//HL04 1/1 Heirarchical Child Code. 1=Additional Subordinate HL Data Segment in This Hierarchical Structure.
 				//billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[i].ProvBill1)];
 				billProv=Providers.GetProv(claim.ProvBill);
-				//2000A PRV: BI (medical,institutional,dental) Billing Provider Specialty Information.
-				seg++;
-				sw.WriteLine("PRV*BI*"//PRV01 1/3 Provider Code: BI=Billing.
-					+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
-					+X12Generator.GetTaxonomy(billProv)//PRV03 1/50 Reference Identification: Provider Taxonomy Code.
-					+"~");//PRV04 through PRV06 are not used.
+				//2000A PRV: BI (medical,institutional,dental) Billing Provider Specialty Information. Situational. Required when billing provider is treating provider.
+				if(claim.ProvBill==claim.ProvTreat) {
+					seg++;
+					sw.WriteLine("PRV*BI*"//PRV01 1/3 Provider Code: BI=Billing.
+						+"PXC*"//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
+						+X12Generator.GetTaxonomy(billProv)//PRV03 1/50 Reference Identification: Provider Taxonomy Code.
+						+"~");//PRV04 through PRV06 are not used.
+				}
 				//2000A CUR: (medical,instituational,dental) Foreign Currency Information. Situational. We do not need to specify because united states dollars are default.
 				//2010AA NM1: 85 (medical,institutional,dental) Billing Provider Name.
 				seg++;
@@ -288,7 +290,7 @@ namespace OpenDentBusiness
 							+"~");//REF03 and REF04 are not used.
 					}
 					//2010AA REF G5 (dental) Site Identification Number: NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by Emdeon.
-					if(clearhouse.ISA08=="0135WCH00") { //Emdeon
+					if(IsEmdeon(clearhouse)) {
 						seg+=Write2010AASiteIDforEmdeon(sw,billProv,carrier.ElectID);
 					}
 				}
@@ -467,7 +469,7 @@ namespace OpenDentBusiness
 					+"~");//N404 through N407 are either not used or are for addresses outside of the United States.
 				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
 				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
-				if(clearhouse.ISA08=="0135WCH00") {//Required by Emdeon
+				if(IsEmdeon(clearhouse)) {//Required by Emdeon
 					seg+=WriteProv_REFG2(sw,billProv,carrier.ElectID);
 				}
 				parentSubsc=HLcount;
@@ -483,7 +485,7 @@ namespace OpenDentBusiness
 						+"0~");//HL04 1/1 Hierarchical Child Code: 0=No subordinate HL segment in this hierarchical structure.
 					//2000C PAT: (medical,institutional,dental) Patient Information.
 					seg++;
-					if(clearhouse.ISA08=="0135WCH00") { //Emdeon
+					if(IsEmdeon(clearhouse)) {
 						sw.WriteLine("PAT*"
 							+GetRelat(claim.PatRelat)+"*"//PAT01 2/2 Individual Relationship Code:
 							+"*"//PAT02 1/1 Patient Location Code: Not used.
@@ -1579,6 +1581,10 @@ namespace OpenDentBusiness
 			sw.WriteLine("GE*"+transactionNum.ToString()+"*"//GE01 1/6 Number of Transaction Sets Included:
 				+groupControlNumber+"~");//GE02 1/9 Group Control Number: Must be identical to GS06.
 			#endregion Trailers
+		}
+
+		private static bool IsEmdeon(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="0135WCH00" || clearinghouse.ISA08=="133052274");
 		}
 
 		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
