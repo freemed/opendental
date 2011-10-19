@@ -97,6 +97,8 @@ namespace OpenDental{
 		private CheckBox checkClaimMedTypeIsInstWhenInsPlanIsMedical;
 		private CheckBox checkProcGroupNoteDoesAggregate;
 		private CheckBox checkChartAddProcNoRefreshGrid;
+		private Label label15;
+		private ComboBox comboCobRule;
 		private bool changed;
 
 		///<summary></summary>
@@ -182,6 +184,8 @@ namespace OpenDental{
 			this.label13 = new System.Windows.Forms.Label();
 			this.comboSearchBehavior = new System.Windows.Forms.ComboBox();
 			this.tabFamily = new System.Windows.Forms.TabPage();
+			this.label15 = new System.Windows.Forms.Label();
+			this.comboCobRule = new System.Windows.Forms.ComboBox();
 			this.tabAccount = new System.Windows.Forms.TabPage();
 			this.checkStoreCCTokens = new System.Windows.Forms.CheckBox();
 			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical = new System.Windows.Forms.CheckBox();
@@ -189,6 +193,7 @@ namespace OpenDental{
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
 			this.tabChart = new System.Windows.Forms.TabPage();
+			this.checkChartAddProcNoRefreshGrid = new System.Windows.Forms.CheckBox();
 			this.checkProcGroupNoteDoesAggregate = new System.Windows.Forms.CheckBox();
 			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
 			this.textAllergiesIndicateNone = new System.Windows.Forms.TextBox();
@@ -203,7 +208,6 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkChartAddProcNoRefreshGrid = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -889,6 +893,8 @@ namespace OpenDental{
 			// tabFamily
 			// 
 			this.tabFamily.BackColor = System.Drawing.SystemColors.Window;
+			this.tabFamily.Controls.Add(this.label15);
+			this.tabFamily.Controls.Add(this.comboCobRule);
 			this.tabFamily.Controls.Add(this.checkInsDefaultShowUCRonClaims);
 			this.tabFamily.Controls.Add(this.checkMedicalEclaimsEnabled);
 			this.tabFamily.Controls.Add(this.checkCoPayFeeScheduleBlankLikeZero);
@@ -901,6 +907,26 @@ namespace OpenDental{
 			this.tabFamily.Size = new System.Drawing.Size(466,452);
 			this.tabFamily.TabIndex = 1;
 			this.tabFamily.Text = "Family";
+			// 
+			// label15
+			// 
+			this.label15.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label15.Location = new System.Drawing.Point(61,115);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(247,15);
+			this.label15.TabIndex = 202;
+			this.label15.Text = "Coordination of Benefits (COB) Rule";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboCobRule
+			// 
+			this.comboCobRule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCobRule.FormattingEnabled = true;
+			this.comboCobRule.Location = new System.Drawing.Point(312,111);
+			this.comboCobRule.MaxDropDownItems = 30;
+			this.comboCobRule.Name = "comboCobRule";
+			this.comboCobRule.Size = new System.Drawing.Size(128,21);
+			this.comboCobRule.TabIndex = 201;
 			// 
 			// tabAccount
 			// 
@@ -1020,6 +1046,18 @@ namespace OpenDental{
 			this.tabChart.Size = new System.Drawing.Size(466,452);
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
+			// 
+			// checkChartAddProcNoRefreshGrid
+			// 
+			this.checkChartAddProcNoRefreshGrid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartAddProcNoRefreshGrid.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkChartAddProcNoRefreshGrid.Location = new System.Drawing.Point(60,199);
+			this.checkChartAddProcNoRefreshGrid.Name = "checkChartAddProcNoRefreshGrid";
+			this.checkChartAddProcNoRefreshGrid.Size = new System.Drawing.Size(381,15);
+			this.checkChartAddProcNoRefreshGrid.TabIndex = 207;
+			this.checkChartAddProcNoRefreshGrid.Text = "Add Procedures Without Refreshing Entire Chart (Increase in speed)";
+			this.checkChartAddProcNoRefreshGrid.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartAddProcNoRefreshGrid.UseVisualStyleBackColor = true;
 			// 
 			// checkProcGroupNoteDoesAggregate
 			// 
@@ -1180,18 +1218,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkChartAddProcNoRefreshGrid
-			// 
-			this.checkChartAddProcNoRefreshGrid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkChartAddProcNoRefreshGrid.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkChartAddProcNoRefreshGrid.Location = new System.Drawing.Point(60,199);
-			this.checkChartAddProcNoRefreshGrid.Name = "checkChartAddProcNoRefreshGrid";
-			this.checkChartAddProcNoRefreshGrid.Size = new System.Drawing.Size(381,15);
-			this.checkChartAddProcNoRefreshGrid.TabIndex = 207;
-			this.checkChartAddProcNoRefreshGrid.Text = "Add Procedures Without Refreshing Entire Chart (Increase in speed)";
-			this.checkChartAddProcNoRefreshGrid.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkChartAddProcNoRefreshGrid.UseVisualStyleBackColor = true;
-			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -1283,6 +1309,10 @@ namespace OpenDental{
 			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate);
 			checkCoPayFeeScheduleBlankLikeZero.Checked=PrefC.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero);
 			checkInsDefaultShowUCRonClaims.Checked=PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims);
+			for(int i=0;i<Enum.GetNames(typeof(EnumCobRule)).Length;i++) {
+				comboCobRule.Items.Add(Lan.g("enumEnumCobRule",Enum.GetNames(typeof(EnumCobRule))[i]));
+			}
+			comboCobRule.SelectedIndex=PrefC.GetInt(PrefName.InsDefaultCobRule);
 			//Image module-----------------------------------------------------------------------
 			checkImagesModuleTreeIsCollapsed.Checked=PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed);
 			//Manage module
@@ -1468,6 +1498,7 @@ namespace OpenDental{
 				| Prefs.UpdateInt(PrefName.AppointmentSearchBehavior,comboSearchBehavior.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.ProcGroupNoteDoesAggregate,checkProcGroupNoteDoesAggregate.Checked)
 				| Prefs.UpdateBool(PrefName.ChartAddProcNoRefreshGrid,checkChartAddProcNoRefreshGrid.Checked)
+				| Prefs.UpdateInt(PrefName.InsDefaultCobRule,comboCobRule.SelectedIndex)
 				)
 			{
 				changed=true;

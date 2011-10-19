@@ -19,6 +19,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.Button butDelete;
 		public Popup PopupCur;
+		private CheckBox checkIsFamily;
 		///<summary>Will be zero unless user successfully clicked a disable time interval.  Accepted range is 1 to 1440 (24hrs)</summary>
 		public int MinutesDisabled;
 
@@ -61,6 +62,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkIsDisabled = new System.Windows.Forms.CheckBox();
 			this.butDelete = new OpenDental.UI.Button();
+			this.checkIsFamily = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -113,7 +115,7 @@ namespace OpenDental{
 			// checkIsDisabled
 			// 
 			this.checkIsDisabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkIsDisabled.Location = new System.Drawing.Point(50,152);
+			this.checkIsDisabled.Location = new System.Drawing.Point(50,134);
 			this.checkIsDisabled.Name = "checkIsDisabled";
 			this.checkIsDisabled.Size = new System.Drawing.Size(235,18);
 			this.checkIsDisabled.TabIndex = 4;
@@ -137,11 +139,22 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
+			// checkIsFamily
+			// 
+			this.checkIsFamily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkIsFamily.Location = new System.Drawing.Point(50,154);
+			this.checkIsFamily.Name = "checkIsFamily";
+			this.checkIsFamily.Size = new System.Drawing.Size(235,18);
+			this.checkIsFamily.TabIndex = 4;
+			this.checkIsFamily.Text = "Popup for entire family";
+			this.checkIsFamily.UseVisualStyleBackColor = true;
+			// 
 			// FormPopupEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(437,219);
 			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.checkIsFamily);
 			this.Controls.Add(this.checkIsDisabled);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textDescription);
@@ -176,6 +189,7 @@ namespace OpenDental{
 			}
 			comboHours.Text="1";*/
 			MinutesDisabled=0;
+			checkIsFamily.Checked=PopupCur.IsFamily;
 		}
 
 		/*

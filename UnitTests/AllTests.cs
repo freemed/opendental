@@ -106,16 +106,16 @@ namespace UnitTests {
 					throw new Exception("Should be 325. \r\n");
 				}
 				if(claimProc.WriteOffEst!=425) {
-					throw new Exception("Should be 425. \r\n");
+					throw new Exception("Should be 425.\r\n");
 				}
 				claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2,subNum2);
 				if(claimProc.InsEstTotal!=450) {
-					throw new Exception("Should be 450. \r\n");
+					throw new Exception("Should be 450.\r\n");
 				}
 				if(claimProc.WriteOffEst!=0) {
 					throw new Exception("Should be 0. \r\n");
 				}
-				retVal+="2: Passed.  Claim proc estimates for dual PPO ins.  Allowed2 greater than Allowed1.\r\n";
+				retVal+="2: Passed.  Basic COB with PPOs.  Allowed2 greater than Allowed1.\r\n";
 			}
 			return retVal;
 		}
@@ -947,7 +947,7 @@ namespace UnitTests {
 			return retVal;
 		}
 
-				///<summary></summary>
+		///<summary></summary>
 		public static string TestSixteen(int specificTest) {
 			if(specificTest != 0 && specificTest !=16){
 				return"";
@@ -1012,12 +1012,12 @@ namespace UnitTests {
 			return retVal;
 		}
 
-		/// <summary>Outline copied from Unit Test 1. No real changes yet made.</summary>
+		///<summary></summary>
 		public static string TestSeventeen(int specificTest) {
-			if(specificTest != 17) {
-				return "";
+			if(specificTest != 0 && specificTest != 17){
+				return"";
 			}
-			string suffix="1";
+			string suffix="17";
 			Patient pat=PatientT.CreatePatient(suffix);
 			long patNum=pat.PatNum;
 			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
@@ -1051,8 +1051,8 @@ namespace UnitTests {
 			Fees.RefreshCache();
 			//Carrier
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
-			long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1).PlanNum;
-			long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2).PlanNum;
+			long planNum1=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum1,EnumCobRule.Standard).PlanNum;
+			long planNum2=InsPlanT.CreateInsPlanPPO(carrier.CarrierNum,feeSchedNum2,EnumCobRule.Standard).PlanNum;
 			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
 			long subNum1=sub1.InsSubNum;
 			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
@@ -1075,6 +1075,7 @@ namespace UnitTests {
 			//Validate
 			string retVal="";
 			ClaimProc claimProc;
+		//Test 17 Part 1 (copied from Unit Test 1)----------------------------------------------------------------------------------------------------
 			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 			claimProcs=ClaimProcs.Refresh(patNum);
 			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
@@ -1086,18 +1087,108 @@ namespace UnitTests {
 				throw new Exception("Should be 300. \r\n");
 			}
 			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2,subNum2);
-			if(claimProc.InsEstTotal!=200) {
-				throw new Exception("Should be 200. \r\n");
+			if(claimProc.InsEstTotal!=325) {
+				throw new Exception("Should be 325. \r\n");
 			}
 			if(claimProc.WriteOffEst!=0) {
 				throw new Exception("Should be 0. \r\n");
 			}
-			retVal+="17: Passed.  Claim proc estimates for dual PPO ins.  Allowed1 greater than Allowed2.\r\n";
+		//Test 17 Part 2 (copied from Unit Test 2)----------------------------------------------------------------------------------------------------
+			//switch the fees
+			fee=Fees.GetFee(codeNum,feeSchedNum1);
+			fee.Amount=650;
+			Fees.Update(fee);
+			fee=Fees.GetFee(codeNum,feeSchedNum2);
+			fee.Amount=900;
+			Fees.Update(fee);
+			Fees.RefreshCache();
+			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
+			//Validate
+			claimProcs=ClaimProcs.Refresh(patNum);
+			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
+			if(claimProc.InsEstTotal!=325) {
+				throw new Exception("Should be 325. \r\n");
+			}
+			if(claimProc.WriteOffEst!=550) {
+				throw new Exception("Should be 550. \r\n");
+			}
+			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2,subNum2);
+			if(claimProc.InsEstTotal!=325) {
+				throw new Exception("Should be 325. \r\n");
+			}
+			if(claimProc.WriteOffEst!=0) {
+				throw new Exception("Should be 0. \r\n");
+			}
+			retVal+="17: Passed.  Standard COB with PPOs.\r\n";
 			return retVal;
 		}
 
-
-
+		///<summary></summary>
+		public static string TestEighteen(int specificTest) {
+			if(specificTest != 0 && specificTest != 18){
+				return"";
+			}
+			string suffix="18";
+			Patient pat=PatientT.CreatePatient(suffix);
+			long patNum=pat.PatNum;
+			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
+			long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
+			//Standard Fee
+			Fees.RefreshCache();
+			long codeNum=ProcedureCodes.GetCodeNum("D2750");
+			Fee fee=Fees.GetFee(codeNum,53);
+			if(fee==null) {
+				fee=new Fee();
+				fee.CodeNum=codeNum;
+				fee.FeeSched=53;
+				fee.Amount=1200;
+				Fees.Insert(fee);
+			}
+			else {
+				fee.Amount=1200;
+				Fees.Update(fee);
+			}
+			//Carrier
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			long planNum1=InsPlanT.CreateInsPlan(carrier.CarrierNum,EnumCobRule.CarveOut).PlanNum;
+			long planNum2=InsPlanT.CreateInsPlan(carrier.CarrierNum,EnumCobRule.CarveOut).PlanNum;
+			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,planNum1);
+			long subNum1=sub1.InsSubNum;
+			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
+			long subNum2=sub2.InsSubNum;
+			BenefitT.CreateCategoryPercent(planNum1,EbenefitCategory.Crowns,50);
+			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Crowns,75);
+			PatPlanT.CreatePatPlan(1,patNum,subNum1);
+			PatPlanT.CreatePatPlan(2,patNum,subNum2);
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//crown on 8
+			long procNum=proc.ProcNum;
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			Family fam=Patients.GetFamily(patNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			//Validate
+			string retVal="";
+			ClaimProc claimProc;
+		//Test 17 Part 1 (copied from Unit Test 1)----------------------------------------------------------------------------------------------------
+			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
+			claimProcs=ClaimProcs.Refresh(patNum);
+			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
+			//I don't think allowed can be easily tested on the fly, and it's not that important.
+			if(claimProc.InsEstTotal!=600) {
+				throw new Exception("Should be 600. \r\n");
+			}
+			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum2,subNum2);
+			if(claimProc.InsEstTotal!=300) {
+				throw new Exception("Should be 300. \r\n");
+			}
+			retVal+="18: Passed. CarveOut using category percentage.\r\n";
+			return retVal;
+		}
 
 
 

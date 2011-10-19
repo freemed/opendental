@@ -169,6 +169,7 @@ namespace OpenDentBusiness {
 		ImageWindowingMin,
 		///<summary>0=Default practice provider, -1=Treating Provider. Otherwise, FK to provider.ProvNum.</summary>
 		InsBillingProv,
+		InsDefaultCobRule,
 		InsDefaultPPOpercent,
 		InsDefaultShowUCRonClaims,
 		///<summary>0=unknown, user did not make a selection.  1=Yes, 2=No.</summary>

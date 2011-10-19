@@ -479,7 +479,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a single claimproc.  This is is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.  PaidOtherInsEstTotal should only contain sum of InsEstTotal/Override, or paid, depending on the status.  PaidOtherInsBaseEst also includes actual payments.</summary>
+		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a single claimproc.  This is is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.  PaidOtherInsTot should only contain sum of InsEstTotal/Override, or paid, depending on the status.  PaidOtherInsBase also includes actual payments.</summary>
 		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,long codeNum,InsPlan plan,long patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsTot,double paidOtherInsBase,int patientAge,double writeOffOtherIns) {
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
@@ -642,7 +642,7 @@ namespace OpenDentBusiness{
 			else if(pp.Ordinal==1 || cp.ProcNum==0){
 				cp.PaidOtherIns=0;
 			}
-			else{
+			else{//if secondary or greater
 				//The normal calculation uses the InsEstTotal from the primary ins.
 				//But in TP module, if not using max and deduct, then the amount estimated to be paid by primary will be different.
 				//It will use the primary BaseEst instead of the primary InsEstTotal.
@@ -663,7 +663,17 @@ namespace OpenDentBusiness{
 				//Since InsEstT is not greater than MaxPtoP, no change.
 				//Since BaseEst is greater than MaxPtoP, BaseEst changed to 90.
 				if(paidOtherInsTotTemp != -1) {
-					double maxPossibleToPay=allowed-paidOtherInsTotTemp;
+					double maxPossibleToPay=0;
+					if(plan.CobRule==EnumCobRule.Basic) {
+						maxPossibleToPay=allowed-paidOtherInsTotTemp;
+					}
+					else if(plan.CobRule==EnumCobRule.Standard) {
+						double patPortionTot=procFee - paidOtherInsTotTemp - writeOffOtherIns;//patPortion for InsEstTotal
+						maxPossibleToPay=Math.Min(cp.BaseEst,patPortionTot);//The lesser of what insurance would pay if they were primary, and the patient portion.
+					}
+					else{//plan.CobRule==EnumCobRule.CarveOut
+						maxPossibleToPay=cp.BaseEst - paidOtherInsTotTemp;
+					}
 					if(maxPossibleToPay<0) {
 						maxPossibleToPay=0;
 					}
@@ -677,7 +687,17 @@ namespace OpenDentBusiness{
 					paidOtherInsBaseTemp=cp.PaidOtherInsOverride;
 				}
 				if(paidOtherInsBaseTemp != -1) {
-					double maxPossibleToPay=allowed-paidOtherInsBaseTemp;
+					double maxPossibleToPay=0;
+					if(plan.CobRule==EnumCobRule.Basic) {
+						maxPossibleToPay=allowed-paidOtherInsBaseTemp;
+					}
+					else if(plan.CobRule==EnumCobRule.Standard) {
+						double patPortionBase=procFee - paidOtherInsBaseTemp - writeOffOtherIns;//patPortion for BaseEst
+						maxPossibleToPay=Math.Min(cp.BaseEst,patPortionBase);
+					}
+					else {//plan.CobRule==EnumCobRule.CarveOut
+						maxPossibleToPay=cp.BaseEst - paidOtherInsBaseTemp;
+					}
 					if(maxPossibleToPay<0) {
 						maxPossibleToPay=0;
 					}
@@ -730,7 +750,6 @@ namespace OpenDentBusiness{
 					normalWriteOff=0;
 				}
 				double remainingWriteOff=procFee-paidOtherInsTot-writeOffOtherIns;//This is the fee minus whatever other ins has already paid or written off.
-				//js At one point, we were tentatively subtracting cp.InsEstTotal from the above number.  Unsure of the math.  May revisit if we change COB calcs.
 				if(remainingWriteOff<0) {
 					remainingWriteOff=0;
 				}

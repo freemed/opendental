@@ -6818,7 +6818,29 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX eobattach_ClaimPaymentNum ON eobattach (ClaimPaymentNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE insplan ADD CobRule tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE insplan ADD CobRule number(3)";
+					Db.NonQ(command);
+					command="UPDATE insplan SET CobRule = 0 WHERE CobRule IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE insplan MODIFY CobRule NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('InsDefaultCobRule','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'InsDefaultCobRule','0')";
+					Db.NonQ(command);
+				}
 				
+
+
 
 
 

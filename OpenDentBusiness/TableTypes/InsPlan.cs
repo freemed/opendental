@@ -61,6 +61,8 @@ namespace OpenDentBusiness{
 		public string CanadianInstitutionCode;
 		///<summary>BIN location number.  Only used with EHR.</summary>
 		public string RxBIN;
+		///<summary>Enum:EnumCobRule. 0=Basic, 1=Standard, 2=CarveOut. </summary>
+		public EnumCobRule CobRule;
 		
 
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
@@ -93,16 +95,16 @@ namespace OpenDentBusiness{
 
 		
 
-		
-
-		
-		
-
-
-
 	}
 
-	
+	public enum EnumCobRule {
+		///<summary>0=Basic</summary>
+		Basic,
+		///<summary>1=Standard</summary>
+		Standard,
+		///<summary>2=CarveOut</summary>
+		CarveOut
+	}
 
 	
 

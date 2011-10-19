@@ -135,7 +135,8 @@ namespace OpenDentBusiness {
 				&& plan1.IsHidden==plan2.IsHidden
 				&& plan1.MonthRenew==plan2.MonthRenew
 				&& plan1.FilingCodeSubtype==plan2.FilingCodeSubtype
-				&& plan1.CanadianPlanFlag==plan2.CanadianPlanFlag) 
+				&& plan1.CanadianPlanFlag==plan2.CanadianPlanFlag
+				&& plan1.CobRule==plan2.CobRule) 
 			{
 				return true;
 			}
