@@ -48,6 +48,7 @@ namespace OpenDentBusiness.Crud{
 				eobAttach=new EobAttach();
 				eobAttach.EobAttachNum   = PIn.Long  (table.Rows[i]["EobAttachNum"].ToString());
 				eobAttach.ClaimPaymentNum= PIn.Long  (table.Rows[i]["ClaimPaymentNum"].ToString());
+				eobAttach.DateTCreated   = PIn.DateT (table.Rows[i]["DateTCreated"].ToString());
 				eobAttach.FileName       = PIn.String(table.Rows[i]["FileName"].ToString());
 				eobAttach.RawBase64      = PIn.String(table.Rows[i]["RawBase64"].ToString());
 				retVal.Add(eobAttach);
@@ -90,12 +91,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EobAttachNum,";
 			}
-			command+="ClaimPaymentNum,FileName,RawBase64) VALUES(";
+			command+="ClaimPaymentNum,DateTCreated,FileName,RawBase64) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(eobAttach.EobAttachNum)+",";
 			}
 			command+=
 				     POut.Long  (eobAttach.ClaimPaymentNum)+","
+				+    POut.DateT (eobAttach.DateTCreated)+","
 				+"'"+POut.String(eobAttach.FileName)+"',"
 				+DbHelper.ParamChar+"paramRawBase64)";
 			if(eobAttach.RawBase64==null) {
@@ -115,6 +117,7 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(EobAttach eobAttach){
 			string command="UPDATE eobattach SET "
 				+"ClaimPaymentNum=  "+POut.Long  (eobAttach.ClaimPaymentNum)+", "
+				+"DateTCreated   =  "+POut.DateT (eobAttach.DateTCreated)+", "
 				+"FileName       = '"+POut.String(eobAttach.FileName)+"', "
 				+"RawBase64      =  "+DbHelper.ParamChar+"paramRawBase64 "
 				+"WHERE EobAttachNum = "+POut.Long(eobAttach.EobAttachNum);
@@ -131,6 +134,10 @@ namespace OpenDentBusiness.Crud{
 			if(eobAttach.ClaimPaymentNum != oldEobAttach.ClaimPaymentNum) {
 				if(command!=""){ command+=",";}
 				command+="ClaimPaymentNum = "+POut.Long(eobAttach.ClaimPaymentNum)+"";
+			}
+			if(eobAttach.DateTCreated != oldEobAttach.DateTCreated) {
+				if(command!=""){ command+=",";}
+				command+="DateTCreated = "+POut.DateT(eobAttach.DateTCreated)+"";
 			}
 			if(eobAttach.FileName != oldEobAttach.FileName) {
 				if(command!=""){ command+=",";}

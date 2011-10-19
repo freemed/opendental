@@ -135,12 +135,13 @@ namespace OpenDentBusiness{
 			Crud.ClaimPaymentCrud.Update(cp);
 		}
 
-		///<summary>Surround by try catch, because it will throw an exception if trying to delete a claimpayment attached to a deposit.</summary>
+		///<summary>Surround by try catch, because it will throw an exception if trying to delete a claimpayment attached to a deposit or if there are eobs attached.</summary>
 		public static void Delete(ClaimPayment cp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
 				return;
 			}
+			//validate deposits
 			string command="SELECT DepositNum FROM claimpayment "
 				+"WHERE ClaimPaymentNum="+POut.Long(cp.ClaimPaymentNum);
 			DataTable table=Db.GetTable(command);
@@ -151,6 +152,11 @@ namespace OpenDentBusiness{
 				#if !DEBUG
 				throw new ApplicationException(Lans.g("ClaimPayments","Not allowed to delete a payment attached to a deposit."));
 				#endif
+			}
+			//validate eobs
+			command="SELECT COUNT(*) FROM eobattach WHERE ClaimPaymentNum="+POut.Long(cp.ClaimPaymentNum);
+			if(Db.GetScalar(command)!="0") {
+				throw new ApplicationException(Lans.g("ClaimPayments","Not allowed to delete this payment because EOBs are attached."));
 			}
 			command= "UPDATE claimproc SET "
 				+"ClaimPaymentNum=0 "

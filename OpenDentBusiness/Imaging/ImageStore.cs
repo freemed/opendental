@@ -90,6 +90,15 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
+		public static string GetEobFolder() {
+			string retVal=ODFileUtils.CombinePaths(GetPreferredImagePath(),"EOBs");
+			if(!Directory.Exists(retVal)) {
+				Directory.CreateDirectory(retVal);
+			}
+			return retVal;
+		}
+
 		///<summary>When the Image module is opened, this loads newly added files.</summary>
 		public static void AddMissingFilesToDatabase(Patient pat){
 			string patFolder=GetPatientFolder(pat);
@@ -147,21 +156,8 @@ namespace OpenDentBusiness {
 			return values;
 		}
 
-		//public static Bitmap OpenImage(Document doc,Patient pat) {
-		//	string patFolder=GetPatientFolder(pat);
-		//	return OpenImage(doc,patFolder);
-		//}
-
 		public static Bitmap OpenImage(Document doc,string patFolder) {
-			if(!PrefC.UsingAtoZfolder) {
-				if(HasImageExtension(doc.FileName)) {
-					return PIn.Bitmap(doc.RawBase64);
-				}
-				else {
-					return null;
-				}
-			}
-			else {
+			if(PrefC.UsingAtoZfolder) {
 				string srcFileName = ODFileUtils.CombinePaths(patFolder,doc.FileName);
 				if(HasImageExtension(srcFileName)) {
 					//if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
@@ -177,6 +173,44 @@ namespace OpenDentBusiness {
 					return null;
 				}
 			}
+			else {
+				if(HasImageExtension(doc.FileName)) {
+					return PIn.Bitmap(doc.RawBase64);
+				}
+				else {
+					return null;
+				}
+			}
+		}
+
+		public static Bitmap[] OpenImagesEob(EobAttach eob) {
+			Bitmap[] values = new Bitmap[0];
+			return values;
+			if(PrefC.UsingAtoZfolder) {
+				string eobFolder=GetEobFolder();
+				string srcFileName = ODFileUtils.CombinePaths(eobFolder,eob.FileName);
+				if(HasImageExtension(srcFileName)) {
+					if(File.Exists(srcFileName)) {
+						values[0]=new Bitmap(srcFileName);
+					}
+					else {
+						//throw new Exception();
+						values[0]= null;
+					}
+				}
+				else {
+					values[0]= null;
+				}
+			}
+			else {
+				if(HasImageExtension(eob.FileName)) {
+					values[0]= PIn.Bitmap(eob.RawBase64);
+				}
+				else {
+					values[0]= null;
+				}
+			}
+			return values;
 		}
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
@@ -220,29 +254,35 @@ namespace OpenDentBusiness {
 			return buffer;
 		}
 
-		public static Document Import(string path,long docCategory,Patient pat) {
-			string patFolder=GetPatientFolder(pat);
+		/// <summary></summary>
+		public static Document Import(string pathImportFrom,long docCategory,Patient pat) {
+			string patFolder="";
+			if(PrefC.UsingAtoZfolder) {
+				patFolder=GetPatientFolder(pat);
+			}
 			Document doc = new Document();
 			//Document.Insert will use this extension when naming:
-			doc.FileName = Path.GetExtension(path);
-			doc.DateCreated = File.GetLastWriteTime(path);
+			if(Path.GetExtension(pathImportFrom)=="") {//If the file has no extension
+				doc.FileName=".jpg";
+			}
+			else{
+				doc.FileName = Path.GetExtension(pathImportFrom);
+			}
+			doc.DateCreated = File.GetLastWriteTime(pathImportFrom);
 			doc.PatNum = pat.PatNum;
-			doc.ImgType = (HasImageExtension(path) || Path.GetExtension(path) == "") ? ImageType.Photo : ImageType.Document;
+			if(HasImageExtension(doc.FileName)) {
+				doc.ImgType=ImageType.Photo;
+			}
+			else {
+				doc.ImgType=ImageType.Document;
+			}
 			doc.DocCategory = docCategory;
 			Documents.Insert(doc,pat);//this assigns a filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
 			try {
-				// If the file has no extension, try to open it as a image. If it is an image,
-				// save it as a JPEG file.
-				if(Path.GetExtension(path) == string.Empty && IsImageFile(path)) {
-					Bitmap testImage = new Bitmap(path);
-					doc.FileName += ".jpg";
+				SaveDocument(doc,pathImportFrom,patFolder);
+				if(PrefC.UsingAtoZfolder) {
 					Documents.Update(doc);
-					SaveDocument(doc, testImage, ImageFormat.Jpeg,patFolder);
-				}
-				else {
-					// Just copy the file.
-					SaveDocument(doc, path,patFolder);
 				}
 			}
 			catch {
@@ -268,7 +308,7 @@ namespace OpenDentBusiness {
 			Documents.Insert(doc,pat);//this assigns a filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
 			try {
-				SaveDocument(doc,image,patFolder);
+				SaveDocument(doc,image,ImageFormat.Jpeg,patFolder);
 				if(PrefC.UsingAtoZfolder) {
 					Documents.Update(doc);
 				}
@@ -282,7 +322,10 @@ namespace OpenDentBusiness {
 
 		/// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will differ depending on imageType.</summary>
 		public static Document Import(Bitmap image,long docCategory,ImageType imageType,Patient pat) {
-			string patFolder=GetPatientFolder(pat);
+			string patFolder="";
+			if(PrefC.UsingAtoZfolder) {
+				patFolder=GetPatientFolder(pat);
+			}
 			Document doc = new Document();
 			doc.ImgType = imageType;
 			doc.FileName = ".jpg";
@@ -329,14 +372,15 @@ namespace OpenDentBusiness {
 			return doc;
 		}
 
+		/// <summary>Obviously no support for db storage</summary>
 		public static Document ImportForm(string form,long docCategory,Patient pat) {
 			string patFolder=GetPatientFolder(pat);
-			string fileName = ODFileUtils.CombinePaths(GetPreferredImagePath(),"Forms",form);
-			if(!File.Exists(fileName)) {
-				throw new Exception(Lans.g("ContrDocs", "Could not find file: ") + fileName);
+			string pathSourceFile = ODFileUtils.CombinePaths(GetPreferredImagePath(),"Forms",form);
+			if(!File.Exists(pathSourceFile)) {
+				throw new Exception(Lans.g("ContrDocs", "Could not find file: ") + pathSourceFile);
 			}
 			Document doc = new Document();
-			doc.FileName = Path.GetExtension(fileName);
+			doc.FileName = Path.GetExtension(pathSourceFile);
 			doc.DateCreated = DateTime.Today;
 			doc.DocCategory = docCategory;
 			doc.PatNum = pat.PatNum;
@@ -344,7 +388,7 @@ namespace OpenDentBusiness {
 			Documents.Insert(doc,pat);//this assigns a filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
 			try {
-				SaveDocument(doc,fileName,patFolder);
+				SaveDocument(doc,pathSourceFile,patFolder);
 			}
 			catch {
 				Documents.Delete(doc);
@@ -353,7 +397,8 @@ namespace OpenDentBusiness {
 			return doc;
 		}
 
-		public static Document ImportCapturedImage(Bitmap image,short rotationAngle,long mountItemNum,long docCategory,Patient pat) {
+		/// <summary>Always saves as bmp.  So the 'paste to mount' logic needs to be changed to prevent conversion to bmp.</summary>
+		public static Document ImportImageToMount(Bitmap image,short rotationAngle,long mountItemNum,long docCategory,Patient pat) {
 			string patFolder=GetPatientFolder(pat);
 			string fileExtention = ".bmp";//The file extention to save the greyscale image as.
 			Document doc = new Document();
@@ -369,7 +414,7 @@ namespace OpenDentBusiness {
 			Documents.Insert(doc,pat);//creates filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
 			try {
-				SaveDocument(doc, image, ImageFormat.Bmp,patFolder);
+				SaveDocument(doc,image,ImageFormat.Bmp,patFolder);
 			}
 			catch {
 				Documents.Delete(doc);
@@ -378,24 +423,46 @@ namespace OpenDentBusiness {
 			return doc;
 		}
 
-		public static void ImportImage(Document document,string filename,string patFolder) {
-			//string patFolder=GetPatientFolder(pat);
-			// No try -- catch here, because the document already existed -- we cannot delete it.
-			SaveDocument(document, filename,patFolder);
+		/// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will be according to user setting.</summary>
+		public static EobAttach ImportEobAttach(Bitmap image,long claimPaymentNum) {
+			string eobFolder="";
+			if(PrefC.UsingAtoZfolder) {
+				eobFolder=GetEobFolder();
+			}
+			EobAttach eob=new EobAttach();
+			eob.FileName=".jpg";
+			eob.DateTCreated = DateTime.Now;
+			eob.ClaimPaymentNum=claimPaymentNum;
+			EobAttaches.Insert(eob);//creates filename and saves to db
+			eob=EobAttaches.GetOne(eob.EobAttachNum);
+			long qualityL=PrefC.GetLong(PrefName.ScannerCompression);
+			ImageCodecInfo myImageCodecInfo;
+			ImageCodecInfo[] encoders;
+			encoders = ImageCodecInfo.GetImageEncoders();
+			myImageCodecInfo = null;
+			for(int j = 0;j < encoders.Length;j++) {
+				if(encoders[j].MimeType == "image/jpeg") {
+					myImageCodecInfo = encoders[j];
+				}
+			}
+			EncoderParameters myEncoderParameters = new EncoderParameters(1);
+			EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality,qualityL);
+			myEncoderParameters.Param[0] = myEncoderParameter;
+			try {
+				SaveEobAttach(eob,image,myImageCodecInfo,myEncoderParameters,eobFolder);
+				if(!PrefC.UsingAtoZfolder) {
+					EobAttaches.Update(eob);//because SaveEobAttach stuck the image in eob.RawBase64.
+					//no thumbnail
+				}
+			}
+			catch {
+				EobAttaches.Delete(eob.EobAttachNum);
+				throw;
+			}
+			return eob;
 		}
 
-		///<summary>If using AtoZ folder, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.</summary>
-		public static void SaveDocument(Document doc,Bitmap image,string patFolder) {
-			if(!PrefC.UsingAtoZfolder) {
-				doc.RawBase64=POut.Bitmap(image,ImageFormat.Jpeg);
-			}
-			else {
-				string srcFile = ODFileUtils.CombinePaths(patFolder,doc.FileName);
-				image.Save(srcFile);
-			}
-		}
-
-		/// <summary> Save a Document to annother location on the disk (outside of Open Dental). </summary>
+		/// <summary> Save a Document to another location on the disk (outside of Open Dental). </summary>
 		/// <param name="saveToPath">The path that the file is to be moved to.</param>
 		/// <param name="doc">The document to be moved.</param>
 		/// <param name="pat">The patient the document belongs to.</param>
@@ -415,16 +482,19 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>patFolder must be fully qualified and valid.</summary>
+		///<summary>If using AtoZ folder, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.  The image format can be bmp, jpg, etc, but this overload does not allow specifying jpg compression quality.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,ImageFormat format,string patFolder) {
-			//if(ImageStoreIsDatabase) {
-			//	using(MemoryStream stream = new MemoryStream()) {
-			//		image.Save(stream,format);
-			//		SaveDocumentToDatabase(doc,stream);
-			//	}
-			//}
-			//else {
-			image.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),ImageFormat.Bmp);
+			if(PrefC.UsingAtoZfolder) {
+				string pathFileOut = ODFileUtils.CombinePaths(patFolder,doc.FileName);
+				image.Save(pathFileOut);
+			}
+			else {//saving to db
+				using(MemoryStream stream=new MemoryStream()) {
+					image.Save(stream,format);
+					byte[] rawData=stream.ToArray();
+					doc.RawBase64=Convert.ToBase64String(rawData);
+				}
+			}
 		}
 
 		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.</summary>
@@ -441,15 +511,40 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>patFolder must be fully qualified and valid.</summary>
-		public static void SaveDocument(Document doc,string filename,string patFolder) {
-			//if(ImageStoreIsDatabase) {
-			//	using(FileStream stream = new FileStream(filename,FileMode.Open,FileAccess.Read)) {
-			//		SaveDocumentToDatabase(doc,stream);
-			//	}
-			//}
-			//else {
-			File.Copy(filename,ODFileUtils.CombinePaths(patFolder,doc.FileName));
+		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
+		public static void SaveDocument(Document doc,string pathSourceFile,string patFolder) {
+			if(PrefC.UsingAtoZfolder) {
+				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(patFolder,doc.FileName));
+			}
+			else {//saving to db
+				byte[] rawData=File.ReadAllBytes(pathSourceFile);
+				doc.RawBase64=Convert.ToBase64String(rawData);
+			}
+		}
+
+		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
+		public static void SaveEobAttach(EobAttach eob,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string eobFolder) {
+			if(PrefC.UsingAtoZfolder) {
+				image.Save(ODFileUtils.CombinePaths(eobFolder,eob.FileName),codec,encoderParameters);
+			}
+			else {//saving to db
+				using(MemoryStream stream=new MemoryStream()) {
+					image.Save(stream,codec,encoderParameters);
+					byte[] rawData=stream.ToArray();
+					eob.RawBase64=Convert.ToBase64String(rawData);
+				}
+			}
+		}
+
+		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
+		public static void SaveEobAttach(EobAttach eob,string pathSourceFile,string patFolder) {
+			if(PrefC.UsingAtoZfolder) {
+				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(patFolder,eob.FileName));
+			}
+			else {//saving to db
+				byte[] rawData=File.ReadAllBytes(pathSourceFile);
+				eob.RawBase64=Convert.ToBase64String(rawData);
+			}
 		}
 
 		public static void DeleteImage(IList<Document> documents,string patFolder) {
@@ -535,16 +630,18 @@ namespace OpenDentBusiness {
 			return ODFileUtils.CombinePaths(patFolder,doc.FileName);
 		}
 		
+		/*
 		public static bool IsImageFile(string filename) {
 			try {
 				Bitmap bitmap = new Bitmap(filename);
 				bitmap.Dispose();
+				bitmap=null;
 				return true;
 			}
 			catch {
 				return false;
 			}
-		}
+		}*/
 
 		///<summary>Returns true if the given filename contains a supported file image extension.</summary>
 		public static bool HasImageExtension(string fileName) {

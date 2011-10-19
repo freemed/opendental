@@ -57,7 +57,9 @@ namespace OpenDental{
 		///<summary>If this is not zero upon closing, then we will jump to the account module of that patient and highlight the claim.</summary>
 		public long GotoPatNum;
 		private UI.Button butOK;
-		private ODGrid odGrid1;
+		private Label label1;
+		private UI.Button butView;
+		private TextBox textEobIsScanned;
 		///<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.  It also causes OK/Cancel buttons to show so that user can cancel out of a brand new check creation.</summary>
 		public bool IsFromClaim;
 
@@ -116,7 +118,9 @@ namespace OpenDental{
 			this.menuRightOut = new System.Windows.Forms.ContextMenu();
 			this.menuItemGotoOut = new System.Windows.Forms.MenuItem();
 			this.butOK = new OpenDental.UI.Button();
-			this.odGrid1 = new OpenDental.UI.ODGrid();
+			this.label1 = new System.Windows.Forms.Label();
+			this.butView = new OpenDental.UI.Button();
+			this.textEobIsScanned = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -229,6 +233,7 @@ namespace OpenDental{
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -488,25 +493,47 @@ namespace OpenDental{
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// odGrid1
+			// label1
 			// 
-			this.odGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.odGrid1.HScrollVisible = false;
-			this.odGrid1.Location = new System.Drawing.Point(12,482);
-			this.odGrid1.Name = "odGrid1";
-			this.odGrid1.ScrollValue = 0;
-			this.odGrid1.Size = new System.Drawing.Size(210,148);
-			this.odGrid1.TabIndex = 108;
-			this.odGrid1.Title = "Scanned Docs";
-			this.odGrid1.TranslationName = "TableClaimPaySplits";
+			this.label1.Location = new System.Drawing.Point(21,583);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(123,16);
+			this.label1.TabIndex = 108;
+			this.label1.Text = "EOB is Scanned";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butView
+			// 
+			this.butView.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butView.Autosize = true;
+			this.butView.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butView.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butView.CornerRadius = 4F;
+			this.butView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butView.Location = new System.Drawing.Point(138,606);
+			this.butView.Name = "butView";
+			this.butView.Size = new System.Drawing.Size(79,24);
+			this.butView.TabIndex = 109;
+			this.butView.Text = "View";
+			this.butView.Click += new System.EventHandler(this.butView_Click);
+			// 
+			// textEobIsScanned
+			// 
+			this.textEobIsScanned.Location = new System.Drawing.Point(145,580);
+			this.textEobIsScanned.MaxLength = 25;
+			this.textEobIsScanned.Name = "textEobIsScanned";
+			this.textEobIsScanned.ReadOnly = true;
+			this.textEobIsScanned.Size = new System.Drawing.Size(72,20);
+			this.textEobIsScanned.TabIndex = 110;
 			// 
 			// FormClaimPayBatch
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(902,676);
-			this.Controls.Add(this.odGrid1);
+			this.Controls.Add(this.textEobIsScanned);
+			this.Controls.Add(this.butView);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInstruct2);
 			this.Controls.Add(this.butDown);
@@ -567,6 +594,7 @@ namespace OpenDental{
 				labelInstruct1.Visible=false;
 				labelInstruct2.Visible=false;
 			}
+			textEobIsScanned.Text=EobAttaches.Exists(ClaimPaymentCur.ClaimPaymentNum)?Lan.g(this,"Yes"):Lan.g(this,"No");
 		}
 
 		private void FillClaimPayment() {
@@ -827,6 +855,12 @@ namespace OpenDental{
 			//GotoModule.GotoClaim(FormCS.GotoClaimNum);
 		//}
 
+		private void butView_Click(object sender,EventArgs e) {
+			FormImages formI=new FormImages();
+			formI.ClaimPaymentNum=ClaimPaymentCur.ClaimPaymentNum;
+			formI.ShowDialog();
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(!MsgBox.Show(this,true,"Delete this insurance check?")){
 				return;
@@ -882,6 +916,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+	
 
 	
 

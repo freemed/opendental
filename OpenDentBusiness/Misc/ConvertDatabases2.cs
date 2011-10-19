@@ -6796,6 +6796,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE eobattach (
 						EobAttachNum bigint NOT NULL auto_increment PRIMARY KEY,
 						ClaimPaymentNum bigint NOT NULL,
+						DateTCreated datetime NOT NULL,
 						FileName varchar(255) NOT NULL,
 						RawBase64 text NOT NULL,
 						INDEX(ClaimPaymentNum)
@@ -6808,6 +6809,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE eobattach (
 						EobAttachNum number(20) NOT NULL,
 						ClaimPaymentNum number(20) NOT NULL,
+						DateTCreated date NOT NULL,
 						FileName varchar2(255),
 						RawBase64 clob,
 						CONSTRAINT eobattach_EobAttachNum PRIMARY KEY (EobAttachNum)
@@ -6840,3 +6842,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE eobattach ADD DateTCreated datetime NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE eobattach ADD DateTCreated date";
+					Db.NonQ(command);
+					command="UPDATE eobattach SET DateTCreated = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateTCreated IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE eobattach MODIFY DateTCreated NOT NULL";
+					Db.NonQ(command);
+				}
+				*/

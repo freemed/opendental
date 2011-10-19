@@ -337,6 +337,12 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormImages.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormImages.designer.cs">
+      <DependentUpon>FormImages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormReferralProcTrack.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2344,6 +2350,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormImages.resx">
+      <DependentUpon>FormImages.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReferralProcTrack.resx">
