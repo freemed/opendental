@@ -216,6 +216,8 @@ namespace OpenDental{
 		private Label label13;
 		private TextBox textReferral;
 		private UI.Button butReferral;
+		private Label labelClaimNote;
+		private ODtextBox textClaimNote;
 		private List<InsSub> SubList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.  You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -417,6 +419,8 @@ namespace OpenDental{
 			this.label13 = new System.Windows.Forms.Label();
 			this.textReferral = new System.Windows.Forms.TextBox();
 			this.butReferral = new OpenDental.UI.Button();
+			this.labelClaimNote = new System.Windows.Forms.Label();
+			this.textClaimNote = new OpenDental.ODtextBox();
 			this.groupQuadrant.SuspendLayout();
 			this.groupArch.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
@@ -1630,7 +1634,7 @@ namespace OpenDental{
 			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeB);
 			this.groupCanadianProcType.Controls.Add(this.checkTypeCodeA);
 			this.groupCanadianProcType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupCanadianProcType.Location = new System.Drawing.Point(396,300);
+			this.groupCanadianProcType.Location = new System.Drawing.Point(106,301);
 			this.groupCanadianProcType.Name = "groupCanadianProcType";
 			this.groupCanadianProcType.Size = new System.Drawing.Size(316,124);
 			this.groupCanadianProcType.TabIndex = 163;
@@ -2067,7 +2071,7 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(20,383);
+			this.label13.Location = new System.Drawing.Point(418,80);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(84,16);
 			this.label13.TabIndex = 168;
@@ -2078,9 +2082,9 @@ namespace OpenDental{
 			// 
 			this.textReferral.BackColor = System.Drawing.SystemColors.Control;
 			this.textReferral.ForeColor = System.Drawing.Color.DarkRed;
-			this.textReferral.Location = new System.Drawing.Point(106,380);
+			this.textReferral.Location = new System.Drawing.Point(504,77);
 			this.textReferral.Name = "textReferral";
-			this.textReferral.Size = new System.Drawing.Size(221,20);
+			this.textReferral.Size = new System.Drawing.Size(198,20);
 			this.textReferral.TabIndex = 169;
 			this.textReferral.Text = "test";
 			// 
@@ -2091,17 +2095,41 @@ namespace OpenDental{
 			this.butReferral.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReferral.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReferral.CornerRadius = 2F;
-			this.butReferral.Location = new System.Drawing.Point(328,379);
+			this.butReferral.Location = new System.Drawing.Point(707,77);
 			this.butReferral.Name = "butReferral";
 			this.butReferral.Size = new System.Drawing.Size(18,21);
 			this.butReferral.TabIndex = 170;
 			this.butReferral.Text = "...";
 			this.butReferral.Click += new System.EventHandler(this.butReferral_Click);
 			// 
+			// labelClaimNote
+			// 
+			this.labelClaimNote.Location = new System.Drawing.Point(0,380);
+			this.labelClaimNote.Name = "labelClaimNote";
+			this.labelClaimNote.Size = new System.Drawing.Size(104,41);
+			this.labelClaimNote.TabIndex = 174;
+			this.labelClaimNote.Text = "E-claim Note (keep it very short)";
+			this.labelClaimNote.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textClaimNote
+			// 
+			this.textClaimNote.AcceptsReturn = true;
+			this.textClaimNote.Location = new System.Drawing.Point(106,380);
+			this.textClaimNote.MaxLength = 80;
+			this.textClaimNote.Multiline = true;
+			this.textClaimNote.Name = "textClaimNote";
+			this.textClaimNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
+			this.textClaimNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textClaimNote.Size = new System.Drawing.Size(277,43);
+			this.textClaimNote.TabIndex = 173;
+			// 
 			// FormProcEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,696);
+			this.Controls.Add(this.groupCanadianProcType);
+			this.Controls.Add(this.labelClaimNote);
+			this.Controls.Add(this.textClaimNote);
 			this.Controls.Add(this.butReferral);
 			this.Controls.Add(this.textReferral);
 			this.Controls.Add(this.label13);
@@ -2109,7 +2137,6 @@ namespace OpenDental{
 			this.Controls.Add(this.labelPrognosis);
 			this.Controls.Add(this.comboPrognosis);
 			this.Controls.Add(this.panelOrion);
-			this.Controls.Add(this.groupCanadianProcType);
 			this.Controls.Add(this.comboProvNum);
 			this.Controls.Add(this.checkHideGraphics);
 			this.Controls.Add(this.butPickProv);
@@ -2274,8 +2301,8 @@ namespace OpenDental{
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				groupProsth.Visible=false;
-				//labelClaimNote.Visible=false;
-				//textClaimNote.Visible=false;
+				labelClaimNote.Visible=false;
+				textClaimNote.Visible=false;
 				butBF.Text=Lan.g(this,"B/V");//vestibular instead of facial
 				butV.Text=Lan.g(this,"5");
 			}
@@ -2519,6 +2546,7 @@ namespace OpenDental{
 			if(ProcCur.DrugQty!=0){
 				textDrugQty.Text=ProcCur.DrugQty.ToString();
 			}
+			textClaimNote.Text=ProcCur.ClaimNote;
 			textUser.Text=Userods.GetName(ProcCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
@@ -4179,7 +4207,7 @@ namespace OpenDental{
 					ProcCur.DateOriginalProsth=DateTime.MinValue;
 				}
 			}
-			//ProcCur.ClaimNote=textClaimNote.Text;
+			ProcCur.ClaimNote=textClaimNote.Text;
 			//Last chance to run this code before Proc gets updated.
 			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
 				OrionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
