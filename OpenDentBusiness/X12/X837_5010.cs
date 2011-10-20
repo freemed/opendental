@@ -1243,8 +1243,16 @@ namespace OpenDentBusiness
 						sw.Write("SV1*"
 							//SV101 Composite Medical Procedure Identifier
 							+"HC:"//SV101-1 2/2 Product/Service ID Qualifier: HC=Health Care.
-							+Sout(proc.MedicalCode)+"*"//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported
-							+claimProcs[j].FeeBilled.ToString()+"*"//SV102 1/18 Monetary Amount: Charge Amt.
+							+Sout(proc.MedicalCode));//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported
+						if(proc.ClaimNote!="") {
+							sw.Write(":"//SV101-3 2/2 Procedure Modifier: Situational. We do not use.
+								+":"//SV101-4 2/2 Procedure Modifier: Situational. We do not use.
+								+":"//SV101-5 2/2 Procedure Modifier: Situational. We do not use.
+								+":"//SV101-6 2/2 Procedure Modifier: Situational. We do not use.
+								+":"+Sout(proc.ClaimNote,80));//SV301-7 1/80 Description: Situational.
+						}
+						sw.Write("*");//SV101-8 is not used.
+						sw.Write(claimProcs[j].FeeBilled.ToString()+"*"//SV102 1/18 Monetary Amount: Charge Amt.
 							+"MJ*"//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes.
 							+"0*");//SV104 1/15 Quantity: Quantity of anesthesia. We don't support, so always 0.							
 						if(proc.PlaceService!=claim.PlaceService) {
@@ -1283,20 +1291,12 @@ namespace OpenDentBusiness
 							+"HC:"//SV202-1 2/2 Product/Service ID Qualifier: HC=Health Care. Includes CPT codes.
 							+Sout(claimProcs[j].CodeSent));//SV202-2 1/48 Product/Service ID: Procedure code. 
 						//mods validated to be exactly 2 char long or else blank.
-						//SV202-3,4,5,6 2/2 Procedure Modifiers:
-						if(proc.CodeMod1!=""){
-							sw.Write(":"+Sout(proc.CodeMod1));
-						}
-						if(proc.CodeMod2!=""){
-							sw.Write(":"+Sout(proc.CodeMod2));
-						}
-						if(proc.CodeMod3!=""){
-							sw.Write(":"+Sout(proc.CodeMod3));
-						}
-						if(proc.CodeMod4!=""){
-							sw.Write(":"+Sout(proc.CodeMod4));
-						}
-						sw.WriteLine("*"//SV202-7 is situational and SV202-8 is not used.
+						sw.Write(":"+Sout(proc.CodeMod1));//SV202-3 2/2 Procedure Modifier: Situational.
+						sw.Write(":"+Sout(proc.CodeMod2));//SV202-4 2/2 Procedure Modifier: Situational.
+						sw.Write(":"+Sout(proc.CodeMod3));//SV202-5 2/2 Procedure Modifier: Situational.
+						sw.Write(":"+Sout(proc.CodeMod4));//SV202-6 2/2 Procedure Modifier: Situational.
+						sw.Write(":"+Sout(proc.ClaimNote,80));//SV202-7 1/80 Description: Situational.
+						sw.WriteLine("*"//SV202-8 is not used.
 							+claimProcs[j].FeeBilled.ToString()+"*"//SV203 1/18 Monetary Amount: Charge Amt.
 							+"UN*"//SV204 2/2 Unit or Basis for Measurement Code: UN=Unit. We don't support Days yet.
 							+proc.UnitQty.ToString()//SV205 1/15 Quantity:
@@ -1306,7 +1306,16 @@ namespace OpenDentBusiness
 						//2400 SV3: Dental Service.
 						seg++;
 						sw.Write("SV3*"
-							+"AD:"+Sout(claimProcs[j].CodeSent,5)+"*"//SV301-1 2/2 Product/Service ID Qualifier: AD=American Dental Association Codes; SV301-2 1/48 Product/Service ID: Procedure code; SV301-3 through SV301-8 are Situational. We do not use.
+								+"AD:"//SV301-1 2/2 Product/Service ID Qualifier: AD=American Dental Association Codes
+								+Sout(claimProcs[j].CodeSent,5));//SV301-2 1/48 Product/Service ID: Procedure code
+						if(proc.ClaimNote!="") {
+							sw.Write(":"//SV301-3 2/2 Procedure Modifier: Situational. We do not use.
+								+":"//SV301-4 2/2 Procedure Modifier: Situational. We do not use.
+								+":"//SV301-5 2/2 Procedure Modifier: Situational. We do not use.
+								+":"//SV301-6 2/2 Procedure Modifier: Situational. We do not use.
+								+":"+Sout(proc.ClaimNote,80));//SV301-7 1/80 Description: Situational.
+						}
+						sw.Write("*"//SV301-8 is not used.
 							+claimProcs[j].FeeBilled.ToString()+"*");//SV302 1/18 Monetary Amount: Charge Amount.
 						string placeService="";
 						if(proc.PlaceService!=claim.PlaceService) {
