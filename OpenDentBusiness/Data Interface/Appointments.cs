@@ -1159,8 +1159,9 @@ namespace OpenDentBusiness{
 				+"WHERE appointment.PatNum=patient.PatNum "
 				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(dateStart)+" "
 				+"AND DateTimeArrived > "+POut.Date(dateStart)+" "//midnight earlier today
-				+"AND DateTimeArrived < "+DbHelper.Now()+" ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
+				+"AND DateTimeArrived < "+DbHelper.Now()+" "
+				+"AND DATE(DateTimeArrived)=DATE(AptDateTime) ";//prevents people from getting "stuck" in waiting room.
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+="AND TO_NUMBER(TO_CHAR(DateTimeSeated,'SSSSS')) = 0 ";
 			}
 			else{
