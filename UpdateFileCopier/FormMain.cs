@@ -33,7 +33,14 @@ namespace UpdateFileCopier {
 			//If the software has been rebranded, this won't do anything, but the original exe will still be correctly closed.
 			Process[] processes=Process.GetProcessesByName("OpenDental");
 			for(int i=0;i<processes.Length;i++) {
-				processes[i].Kill();//CloseMainWindow and Close were ineffective if a dialog was open.
+				try {
+					processes[i].Kill();//CloseMainWindow and Close were ineffective if a dialog was open.
+				}
+				catch {
+					//Kill() could fail if the process is closed between the time that the process list is read and the time that the Kill() function is called.
+					//Since each Kill() call could take a few seconds, this exception could easily be caused by user interaction. In this case, the instance
+					//is already closed so we don't need to take any further action.
+				}
 			}
 			/* Don't bother with this anymore.  It always happens very quickly anyway.
 			if(OpenDentProcessId!=0){//it could be zero for debugging
