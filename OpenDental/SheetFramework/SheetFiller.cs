@@ -682,7 +682,7 @@ namespace OpenDental{
 				fldval=fldval.Replace("[ins2DeductibleUsed]",ins2DeductibleUsed);
 				fldval=fldval.Replace("[ins2Pending]",ins2Pending);
 				fldval=fldval.Replace("[ins2Percentages]",ins2Percentages);
-				fldval=fldval.Replace("[ins2Remaining]",insRemaining);
+				fldval=fldval.Replace("[ins2Remaining]",ins2Remaining);
 				fldval=fldval.Replace("[ins2Used]",ins2Used);
 				fldval=fldval.Replace("[MedUrgNote]",pat.MedUrgNote);
 				fldval=fldval.Replace("[nameF]",pat.FName);
