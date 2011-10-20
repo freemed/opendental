@@ -343,7 +343,7 @@ namespace OpenDentBusiness{
 				}
 				catch (System.Exception e){
 					Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
-					throw e;//continue to pass the exception one level up.
+					throw;//continue to pass the exception one level up.
 				}
 				conOr.Close();
 			}
