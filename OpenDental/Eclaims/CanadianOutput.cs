@@ -336,7 +336,9 @@ namespace OpenDental.Eclaims {
 			}
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum);
 			Etrans etrans=Etranss.CreateCanadianOutput(claim.PatNum,carrier.CarrierNum,carrier.CanadianNetworkNum,
-				clearhouse.ClearinghouseNum,EtransType.ReverseResponse_CA,plan.PlanNum,insSub.InsSubNum);
+				clearhouse.ClearinghouseNum,EtransType.ClaimReversal_CA,plan.PlanNum,insSub.InsSubNum);
+			etrans.ClaimNum=claim.ClaimNum;//We don't normally use a claim number with Etranss.CreateCanadianOutput(), but here we need the claim number so that we can show the claim reversal in the claim history.
+			Etranss.Update(etrans);
 			Patient patient=Patients.GetPat(claim.PatNum);
 			Provider prov=Providers.GetProv(claim.ProvTreat);
 			if(!prov.IsCDAnet) {
