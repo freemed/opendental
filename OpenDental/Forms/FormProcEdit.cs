@@ -556,7 +556,6 @@ namespace OpenDental{
 			this.groupQuadrant.Controls.Add(this.radioLL);
 			this.groupQuadrant.Controls.Add(this.radioUL);
 			this.groupQuadrant.Controls.Add(this.radioUR);
-			this.groupQuadrant.Controls.Add(this.groupArch);
 			this.groupQuadrant.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupQuadrant.Location = new System.Drawing.Point(104,99);
 			this.groupQuadrant.Name = "groupQuadrant";
@@ -877,6 +876,7 @@ namespace OpenDental{
 			this.panel1.Controls.Add(this.textRange);
 			this.panel1.Controls.Add(this.butChange);
 			this.panel1.Controls.Add(this.groupSextant);
+			this.panel1.Controls.Add(this.groupArch);
 			this.panel1.Location = new System.Drawing.Point(0,0);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(397,177);
