@@ -391,7 +391,7 @@ namespace OpenDentBusiness {
 				//ask user first?
 			}
 			if(situation==3) {
-				command="UPDATE patient SET DateFirstVisit ='0001-01-01'"
+				command="UPDATE patient SET DateFirstVisit ="+POut.Date(new DateTime(0001,01,01))
 					+" WHERE PatNum ='"
 					+POut.Long(pat.PatNum)+"'";
 			}

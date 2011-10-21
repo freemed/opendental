@@ -962,8 +962,7 @@ namespace OpenDentBusiness {
 				//We can't touch those claimprocs because it would mess up the accounting.  So the only option, if we decide to fix automatically, is going to be to create some sort of claim that has the specific ClaimNum that seems to be missing.
 				command="SELECT * FROM claimproc WHERE claimproc.ClaimNum!=0 "
 				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
-					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) "
-					+"GROUP BY ClaimNum";
+					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) ";
 				table=Db.GetTable(command);
 				List<ClaimProc> cpList=Crud.ClaimProcCrud.TableToList(table);
 				Claim claim;
@@ -2305,12 +2304,24 @@ namespace OpenDentBusiness {
 			else {
 				command="SELECT patient.PatNum,patient.FName,patient.LName FROM procedurelog "
 					+"LEFT JOIN patient ON procedurelog.PatNum=patient.PatNum "
-					+"WHERE ProcStatus="+POut.Int((int)ProcStat.C)+" AND ProcNumLab IN(SELECT ProcNum FROM procedurelog WHERE ProcStatus="+POut.Int((int)ProcStat.D)+") "
-					+"GROUP BY patient.PatNum";
+					+"WHERE ProcStatus="+POut.Int((int)ProcStat.C)+" AND ProcNumLab IN(SELECT ProcNum FROM procedurelog WHERE ProcStatus="+POut.Int((int)ProcStat.D)+") ";
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command+="GROUP BY patient.PatNum";
+				}
+				else {//Oracle
+					command+="GROUP BY patient.PatNum,patient.FName,patient.LName";
+				}
 				table=Db.GetTable(command);
-				command="UPDATE procedurelog plab,procedurelog p "
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="UPDATE procedurelog plab,procedurelog p "
 					+"SET plab.ProcNumLab=0 "
 					+"WHERE plab.ProcStatus="+POut.Int((int)ProcStat.C)+" AND plab.ProcNumLab=p.ProcNum AND p.ProcStatus="+POut.Int((int)ProcStat.D);
+				}
+				else {//Oracle
+					command="UPDATE procedurelog plab SET plab.ProcNumLab=0 "
+						+"WHERE plab.ProcStatus="+POut.Int((int)ProcStat.C)+" "
+						+"AND plab.ProcNumLab IN (SELECT p.ProcNum FROM procedurelog p WHERE p.ProcStatus="+POut.Int((int)ProcStat.D)+") ";
+				}
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Patients with completed lab procedures detached from deleted procedures: ")+numberFixed.ToString()+"\r\n";

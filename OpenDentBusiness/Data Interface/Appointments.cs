@@ -335,6 +335,9 @@ namespace OpenDentBusiness{
 			if(appt.ProvNum==0){
 				appt.ProvNum=ProviderC.ListShort[0].ProvNum;
 			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) {//Oracle treats PK differently.
+				return Crud.AppointmentCrud.Insert(appt);
+			}
 			return Crud.AppointmentCrud.Insert(appt,useExistingPK);
 		}
 
@@ -699,7 +702,11 @@ namespace OpenDentBusiness{
 			else{
 				command+="WHERE appointment.AptNum="+POut.Long(aptNum);
 			}
-			command+=" GROUP BY p1.Abbr,p2.Abbr,patient.Address,patient.Address2,patient.AddrNote,"
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+=" GROUP BY appointment.AptNum";
+			}
+			else {//Oracle
+				command+=" GROUP BY p1.Abbr,p2.Abbr,patient.Address,patient.Address2,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
 				+"carrier1.CarrierName,carrier2.CarrierName,"
@@ -711,6 +718,7 @@ namespace OpenDentBusiness{
 				+"patient.PreferRecallMethod,patient.Premed,"
 				+"ProcDescript,ProcsColored,ProvHyg,appointment.ProvNum,"
 				+"patient.State,patient.WirelessPhone,patient.WkPhone,patient.Zip ";
+			}
 			DataTable raw=dcon.GetTable(command);
 			//rawProc table was historically used for other purposes.  It is currently only used for production--------------------------
 			DataTable rawProc;
@@ -748,7 +756,12 @@ namespace OpenDentBusiness{
 				else {
 					command+=POut.Long(aptNum);
 				}
-				command+=") GROUP BY procedurelog.ProcNum";
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command+=") GROUP BY procedurelog.ProcNum";
+				}
+				else {//Oracle
+					command+=") GROUP BY procedurelog.ProcNum,AptNum,PlannedAptNum,ProcFee";
+				}
 				rawProc=dcon.GetTable(command);
 			}
 			//rawInsProc table is usually skipped. Too slow------------------------------------------------------------------------------
@@ -1160,7 +1173,7 @@ namespace OpenDentBusiness{
 				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(dateStart)+" "
 				+"AND DateTimeArrived > "+POut.Date(dateStart)+" "//midnight earlier today
 				+"AND DateTimeArrived < "+DbHelper.Now()+" "
-				+"AND DATE(DateTimeArrived)=DATE(AptDateTime) ";//prevents people from getting "stuck" in waiting room.
+				+"AND "+DbHelper.DateColumn("DateTimeArrived")+"="+DbHelper.DateColumn("AptDateTime")+" ";//prevents people from getting "stuck" in waiting room.
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+="AND TO_NUMBER(TO_CHAR(DateTimeSeated,'SSSSS')) = 0 ";
 			}
@@ -1197,7 +1210,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static DataTable GetPeriodSchedule(DateTime dateStart,DateTime dateEnd){
+		public static DataTable GetPeriodSchedule(DateTime dateStart,DateTime dateEnd) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
 			}
@@ -1218,12 +1231,17 @@ namespace OpenDentBusiness{
 				+"FROM schedule "
 				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.Date(dateStart)+" "
-				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
-				+"GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp "
-				+"ORDER BY StartTime";
+				+"AND SchedDate <= "+POut.Date(dateEnd)+" ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY schedule.ScheduleNum ";
+			}
+			else {//Oracle
+				command+="GROUP BY schedule.ScheduleNum,SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum,DateTStamp ";
+			}
+			command+="ORDER BY StartTime";
 			DataTable raw=Db.GetTable(command);
 			DataRow row;
-			for(int i=0;i<raw.Rows.Count;i++){
+			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 				row["ScheduleNum"]=raw.Rows[i]["ScheduleNum"].ToString();
 				row["SchedDate"]=POut.Date(PIn.Date(raw.Rows[i]["SchedDate"].ToString()),false);

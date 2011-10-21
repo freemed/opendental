@@ -82,10 +82,15 @@ namespace OpenDentBusiness{
 			if(!showHidden){
 				command+="AND carrier.IsHidden=0 ";
 			}
-			command+="GROUP BY Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
-				+"CarrierName,CDAnetVersion,City,ElectID,"
-				+"carrier.IsHidden,Phone,State,Zip "
-				+"ORDER BY CarrierName";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY carrier.CarrierNum ";
+			}
+			else {//Oracle
+				command+="GROUP BY Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
+				+"CarrierName,CDAnetVersion,City,ElectID,IsCDA,"
+				+"carrier.IsHidden,Phone,State,Zip ";
+			}
+			command+="ORDER BY CarrierName";
 			tableRaw=Db.GetTable(command);
 			table=new DataTable();
 			table.Columns.Add("Address");

@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 				//+"LEFT JOIN task ON task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0 "
 				+"WHERE tasksubscription.UserNum="+POut.Long(userNum)
 				+" AND tasksubscription.TaskListNum!=0 "
-				+"ORDER BY DateTimeEntry";
+				+"ORDER BY tasklist.DateTimeEntry";
 			return TableToList(Db.GetTable(command));
 		}
 
