@@ -3358,13 +3358,20 @@ namespace OpenDental{
 					//the following sequence also gets repeated after exiting the Rx window to refresh.
 					String strAppServer="";
 					try {
-						//ecwEx.InitClass oExInit=new ecwEx.InitClass();
-						strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
-						//oExInit.getAppServer();
-						webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
-							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
-							+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
-						labelECWerror.Visible=false;
+						if(Bridges.ECW.UserId==0 || String.IsNullOrEmpty(Bridges.ECW.EcwConfigPath)) {
+							webBrowserEcw.Url=null;
+							labelECWerror.Text="This panel does not display unless\r\nOpen Dental is launched from inside eCW";
+							labelECWerror.Visible=true;
+						}
+						else {
+							//ecwEx.InitClass oExInit=new ecwEx.InitClass();
+							strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
+							//oExInit.getAppServer();
+							webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
+								+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
+								+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
+							labelECWerror.Visible=false;
+						}
 					}
 					catch (Exception ex){
 						webBrowserEcw.Url=null;
