@@ -4975,9 +4975,14 @@ namespace OpenDental{
 			InsPlan insPlan=InsPlans.GetPlan(ClaimCur.PlanNum,null);
 			InsSub insSub=InsSubs.GetOne(ClaimCur.InsSubNum);
 			try {
-				CanadianOutput.SendClaimReversal(ClaimCur,insPlan,insSub);
-				ClaimCur.CanadaTransRefNum="";//So the user can resend if desired. Will make the claim look like it was not ever sent, except in send claims window there will be extra history.
-				Claims.Update(ClaimCur);
+				long etransNumAck=CanadianOutput.SendClaimReversal(ClaimCur,insPlan,insSub);
+				Etrans etransAck=Etranss.GetEtrans(etransNumAck);
+				if(etransAck.AckCode!="R") {
+					//If the claim was successfully reversed, clear the claim transaction reference number so the user can resend the claim if desired.
+					//Will make the claim look like it was not ever sent, except in send claims window there will be extra history.
+					ClaimCur.CanadaTransRefNum="";
+					Claims.Update(ClaimCur);
+				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Failed to reverse claim")+": "+ex.Message);
