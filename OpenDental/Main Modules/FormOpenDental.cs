@@ -1379,7 +1379,9 @@ namespace OpenDental{
 
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
 			Splash.Dispose();
-			if(Assembly.GetAssembly(typeof(FormOpenDental)).GetName().Version!=Assembly.GetAssembly(typeof(Db)).GetName().Version) {//OpenDental.Version!=OpenDentBusiness.Version?
+			Version versionOd=Assembly.GetAssembly(typeof(FormOpenDental)).GetName().Version;
+			Version versionObBus=Assembly.GetAssembly(typeof(Db)).GetName().Version;
+			if(versionOd!=versionObBus) {
 				MessageBox.Show("Mismatched program file versions. Please run the Open Dental setup file again on this computer.");//No MsgBox or Lan.g() here, because we don't want to access the database if there is a version conflict.
 				Application.Exit();
 				return;
