@@ -6,13 +6,23 @@
 	ViewBag.Title = "Family Information";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
- @Html.Partial("_PatientName")
-<h2>Family Information</h2>
-
 @foreach(var item in Model.patList) {
-	<div style="margin-left:3em">
-		<p><strong>Name:</strong> = @Html.Encode(item.LName), @Html.Encode(item.FName)</p>  
-		<p><strong>Age</strong> = @Html.Encode(item.Age)</p>
+	<div style="margin-left:6em">
+		<p style="margin-left:-3em"><strong>Name:</strong> @Html.Encode(item.LName), @Html.Encode(item.FName)</p>  
+		<p><strong>Age:</strong> @Html.Encode(item.Age)</p>
+		<p>
+		
+		<div style="width:60px;float:left"><strong>Address:</strong></div>
+		<div style="width:150px;float:left">
+			@Html.Encode(item.Address) <br />
+			@Html.Encode(item.Address2)
+		</div>
+		<div style="clear:both"> </div>
+		<br />
+		</p>
+		<p><strong>Home Phone:</strong> @Html.Encode(item.HmPhone)</p>
+		<p><strong>Work Phone:</strong> @Html.Encode(item.WkPhone)</p>
+		<p><strong>Cell Phone:</strong> @Html.Encode(item.WirelessPhone)</p>
 		<p>&nbsp;</p>
 	</div>
 }

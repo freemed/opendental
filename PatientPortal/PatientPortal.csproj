@@ -190,8 +190,8 @@
     <Content Include="Views\Shared\_LogInPartial.cshtml" />
     <Content Include="Views\Family\FamilyInformation.cshtml" />
     <Content Include="Views\Medical\EHRInformation.cshtml" />
-    <Content Include="Views\Account\AccountView.cshtml" />
     <Content Include="Views\Shared\_PatientName.cshtml" />
+    <Content Include="Views\Account\AccountInformation.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

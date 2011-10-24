@@ -4,6 +4,6 @@
 @{
 	if(Session["Patient"]!=null) {
 	Patientm pat=((Patientm)Session["Patient"]);
-		<text>Patient Name: <strong>@pat.LName, @pat.FName</strong></text>
+		<text><strong>Patient Name:</strong> @pat.LName, @pat.FName</text>
 	}
 }

@@ -8,24 +8,37 @@
 <body>
     <div class="page">
         <div id="header">
-            <div id="title">
-                <h1></h1>
+            <div id="patname">
+                @Html.Partial("_PatientName")
             </div>
             <div id="logindisplay">
                 @Html.Partial("_LogInPartial")
             </div>
 			@if(Session["Patient"]!=null) {
+	   string styleFamily="";
+	   string styleAccount="";
+	   string styleMedical="";
+	   if(HttpContext.Current.Request.Path == "/Family/FamilyInformation") {
+		   styleFamily="highlight";
+	   }
+	   if(HttpContext.Current.Request.Path == "/Account/AccountInformation") {
+		   styleAccount="highlight";
+	   }
+	   if(HttpContext.Current.Request.Path == "/Medical/EHRInformation") {
+		   styleMedical="highlight";
+	   }
+
 				<div id="menucontainer">
 					<ul id="menu">
-						<li>@Html.ActionLink("Family","FamilyInformation","Family")</li>
-						<li>@Html.ActionLink("Account","AccountView","Account")</li>
-						<li>@Html.ActionLink("Medical","EHRInformation","Medical")</li>
+						<li>@Html.ActionLink("Family","FamilyInformation","Family",new object { },new { @class=styleFamily })</li>
+						<li>@Html.ActionLink("Account","AccountInformation","Account",new object { },new { @class=styleAccount })</li>
+						<li>@Html.ActionLink("Medical","EHRInformation","Medical",new object { },new { @class=styleMedical })</li>
 					</ul>
 				</div>
 			}
         </div>
         <div id="main">
-		@*<p><strong>Patient Name:</strong> @Model.patm.LName , @Model.patm.FName </p>*@
+		
             @RenderBody()
         </div>
         <div id="footer">

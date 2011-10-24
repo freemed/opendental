@@ -103,7 +103,7 @@ header h1, #header h1 {
 #main {
     padding: 30px 30px 15px 30px;
     background-color: #fff;
-    border-radius: 4px 0 0 0;
+    border-radius: 0 0 0 0;
     -webkit-border-radius: 4px 0 0 0;
     -moz-border-radius: 4px 0 0 0;
 }
@@ -146,11 +146,11 @@ ul#menu li#greeting {
 }
 
 ul#menu li a {
-    padding: 10px 20px;
+    padding: 10px 20px 15px 20px;
     font-weight: bold;
     text-decoration: none;
     line-height: 2.8em;
-    background-color: #e8eef4;
+    /*background-color: #e8eef4;*/
     color: #034af3;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
@@ -158,7 +158,7 @@ ul#menu li a {
 }
 
 ul#menu li a:hover {
-    background-color: #fff;
+    background-color: #99CCFF;
     text-decoration: none;
 }
 
@@ -170,6 +170,9 @@ ul#menu li a:active {
 ul#menu li.selected a {
     background-color: #fff;
     color: #000;
+}
+.highlight{
+    background-color: White;
 }
 
 /* FORM LAYOUT ELEMENTS   
@@ -246,10 +249,11 @@ nav,
     margin-top: 40px;
 }
 
-div#title {
+div#patname {
     display: block;
     float: left;
     text-align: left;
+    color:White;
 }
 
 #logindisplay {

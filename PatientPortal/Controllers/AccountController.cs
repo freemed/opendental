@@ -67,7 +67,7 @@ namespace PatientPortalMVC.Controllers
 			Response.Cookies.Add(DentalOfficeIDCookie);
 		}
 
-		public ActionResult AccountView() {
+		public ActionResult AccountInformation() {
 			Patientm patm;
 			if(Session["Patient"]==null) {
 				return RedirectToAction("Login","Account");
