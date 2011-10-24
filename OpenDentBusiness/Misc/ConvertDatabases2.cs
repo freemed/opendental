@@ -6731,6 +6731,21 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.1.6.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_1_7();
+		}
+
+		private static void To11_1_7() {
+			if(FromVersion<new Version("11.1.7.0")) {
+				string command;
+				command="ALTER TABLE insplan DROP COLUMN DedBeforePerc";
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command="ALTER TABLE insplan MODIFY CanadianPlanFlag NULL";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '11.1.7.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_2_0();
 		}
 		
