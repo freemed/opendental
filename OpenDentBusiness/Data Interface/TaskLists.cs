@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 			command+=") "
 				+"FROM tasklist "
 				+"WHERE Parent=0 "
-				+"AND DateTL < '1880-01-01' "
+				+"AND DateTL < "+POut.Date(new DateTime(1880,01,01))+" "
 				+"AND IsRepeating=0 "
 				+"ORDER BY Descript";//DateTimeEntry";
 			return TableToList(Db.GetTable(command));
@@ -80,7 +80,7 @@ namespace OpenDentBusiness{
 				//Acutual behavior in both cases needs to be tested.
 				+"FROM tasklist "
 				+"WHERE Parent=0 "
-				+"AND DateTL < '1880-01-01' "
+				+"AND DateTL < "+POut.Date(new DateTime(1880,01,01))+" "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
 			return TableToList(Db.GetTable(command));

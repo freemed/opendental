@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 				+"AND taskunread.UserNum="+POut.Long(currentUserNum)+") IsUnread "
 				+"FROM task "
 				+"WHERE TaskListNum=0 "
-				+"AND DateTask < '1880-01-01' "
+				+"AND DateTask < "+POut.Date(new DateTime(1880,01,01))+" "
 				+"AND IsRepeating=0";
 			if(showDone){
 				command+=" AND (TaskStatus !="+POut.Long((int)TaskStatusEnum.Done)
@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM task "
 				+"WHERE TaskListNum=0 "
-				+"AND DateTask < '1880-01-01' "
+				+"AND DateTask < "+POut.Date(new DateTime(1880,01,01))+" "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
 			DataTable table=Db.GetTable(command);
