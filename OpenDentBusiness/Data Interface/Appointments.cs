@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 			//DateSelected = thisDay;
 			string command=
 				"SELECT * from appointment "
-				+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"'"
+				+"WHERE AptDateTime BETWEEN "+POut.Date(startDate)+" AND "+POut.Date(endDate.AddDays(1))+" "
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
 			return Crud.AppointmentCrud.SelectMany(command).ToArray();
@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 			//DateSelected = thisDay;
 			string command=
 				"SELECT * from appointment "
-				+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"'"
+				+"WHERE AptDateTime BETWEEN "+POut.Date(startDate)+" AND "+POut.Date(endDate.AddDays(1))+" "
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
 			return Crud.AppointmentCrud.SelectMany(command);
