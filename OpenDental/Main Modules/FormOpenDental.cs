@@ -4681,12 +4681,14 @@ namespace OpenDental{
 			if(userControlTasks1.Visible) {
 				userControlTasks1.ClearLogOff();
 			}
-			Security.CurUser=null;
+			Userod oldUser=Security.CurUser;
 			if(CurPatNum==0) {
+				Security.CurUser=null;
 				Text=PatientL.GetMainTitle("",0,"",0);
 			}
 			else {
 				Patient pat=Patients.GetPat(CurPatNum);
+				Security.CurUser=null;
 				Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
 			}
 			//Iterating through OpenForms with foreach did not work, probably because we were altering the collection when closing forms.
@@ -4702,6 +4704,7 @@ namespace OpenDental{
 				}
 			}
 			Application.DoEvents();//so that the window background will refresh.
+			Security.CurUser=oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
 			FormLogOn FormL=new FormLogOn();
 			FormL.ShowDialog(this);
 			if(FormL.DialogResult==DialogResult.Cancel) {
