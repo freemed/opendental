@@ -147,7 +147,8 @@ namespace OpenDental{
 		private string PatFolder;
 		private AxAcroPDFLib.AxAcroPDF axAcroPDF1=null;
 		private long PatNumPrev=0;
-		private List<Def> DefListExpandedCats=new List<Def>();
+		//private List<Def> DefListExpandedCats=new List<Def>();
+		private List<long> ExpandedCats=new List<long>();
 		///<summary>If this is not zero, then this indicates a different mode special for claimpayment.</summary>
 		private long ClaimPaymentNum;
 		///<summary></summary>
@@ -1052,7 +1053,7 @@ namespace OpenDental{
 			//Add all predefined folder names to the tree.
 			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
 				treeDocuments.Nodes.Add(new TreeNode(DefC.Short[(int)DefCat.ImageCats][i].ItemName));
-				treeDocuments.Nodes[i].Tag=DefC.Short[(int)DefCat.ImageCats][i];
+				treeDocuments.Nodes[i].Tag=MakeIdDef(DefC.Short[(int)DefCat.ImageCats][i].DefNum);
 				treeDocuments.Nodes[i].SelectedImageIndex=1;
 				treeDocuments.Nodes[i].ImageIndex=1;
 			}
@@ -1067,7 +1068,7 @@ namespace OpenDental{
 					node.Tag=MakeIdMount(PIn.Long(rows[i]["MountNum"].ToString()));
 				}
 				else {//doc
-					node.Tag=MakeIdMount(PIn.Long(rows[i]["DocNum"].ToString()));
+					node.Tag=MakeIdDoc(PIn.Long(rows[i]["DocNum"].ToString()));
 				}
 				node.ImageIndex=2+Convert.ToInt32(rows[i]["ImgType"].ToString());
 				node.SelectedImageIndex=node.ImageIndex;
@@ -1080,9 +1081,9 @@ namespace OpenDental{
 				treeDocuments.CollapseAll();//Invalidates tree and clears selection too.
 				treeDocuments.SelectedNode=selectedNode;//This will expand any category/folder nodes necessary to show the selection.
 				if(PatNumPrev==PatCur.PatNum) {//Maintain previously expanded nodes when patient not changed.
-					for(int i=0;i<DefListExpandedCats.Count;i++) {
+					for(int i=0;i<ExpandedCats.Count;i++) {
 						for(int j=0;j<treeDocuments.Nodes.Count;j++) {
-							if(DefListExpandedCats[i].DefNum==((Def)treeDocuments.Nodes[j].Tag).DefNum) {
+							if(ExpandedCats[i]==((ImageNodeId)treeDocuments.Nodes[j].Tag).PriKey) {
 								treeDocuments.Nodes[j].Expand();
 								break;
 							}
@@ -1090,7 +1091,7 @@ namespace OpenDental{
 					}
 				}
 				else {//Patient changed.
-					DefListExpandedCats.Clear();
+					ExpandedCats.Clear();
 				}
 				PatNumPrev=PatCur.PatNum;
 			}
@@ -1915,13 +1916,13 @@ namespace OpenDental{
 		}
 
 		private void TreeDocuments_AfterExpand(object sender,TreeViewEventArgs e) {
-			DefListExpandedCats.Add((Def)e.Node.Tag);
+			ExpandedCats.Add(((ImageNodeId)e.Node.Tag).PriKey);
 		}
 
 		private void TreeDocuments_AfterCollapse(object sender,TreeViewEventArgs e) {
-			for(int i=0;i<DefListExpandedCats.Count;i++) {
-				if(DefListExpandedCats[i].DefNum==((Def)e.Node.Tag).DefNum) {
-					DefListExpandedCats.RemoveAt(i);
+			for(int i=0;i<ExpandedCats.Count;i++) {
+				if(ExpandedCats[i]==((ImageNodeId)e.Node.Tag).PriKey) {
+					ExpandedCats.RemoveAt(i);
 					return;
 				}
 			}
@@ -1955,9 +1956,7 @@ namespace OpenDental{
 				EraseCurrentImages();
 				return;
 			}
-			DataRow datarow=(DataRow)treeDocuments.SelectedNode.Tag;
-			long docNum=Convert.ToInt64(datarow["DocNum"].ToString());
-			if(docNum!=0){//Only applied to document nodes.
+			if(((ImageNodeId)treeDocuments.SelectedNode.Tag).NodeType==ImageNodeType.Doc) {//Only applied to document nodes.
 				if(!ToolBarPaint.Enabled){
 					EraseCurrentImages();
 					return;
@@ -1983,11 +1982,11 @@ namespace OpenDental{
 				IdxDocsFlaggedForUpdate=(bool[])docsToUpdate.Clone();
 				DocForSettings=DocSelected.Copy();
 				ImageSettingFlagsForSettings=ImageSettingFlagsInvalidated;
-				if(docNum!=0){									
-					MountForSettings=null;					
-				}
-				else{//Mount
+				if(((ImageNodeId)treeDocuments.SelectedNode.Tag).NodeType==ImageNodeType.Mount) {		
 					MountForSettings=MountSelected.Copy();
+				}
+				else{//all other types
+					MountForSettings=null;					
 				}
 			}
 			//Tell the thread to start processing (as soon as the thread is created, or as soon as otherwise 
