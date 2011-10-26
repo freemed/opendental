@@ -8,23 +8,24 @@
 <body>
     <div class="page">
         <div id="header">
-            <div id="patname">
-                @Html.Partial("_PatientName")
-            </div>
+
             <div id="logindisplay">
                 @Html.Partial("_LogInPartial")
             </div>
+			            <div id="patname">
+                @Html.Partial("_PatientName")
+            </div>
 			@if(Session["Patient"]!=null) {
-	   string styleFamily="";
-	   string styleAccount="";
-	   string styleMedical="";
-	   if(HttpContext.Current.Request.Path == "/Family/FamilyInformation") {
+	   string styleFamily="nohighlight";
+	   string styleAccount="nohighlight";
+	   string styleMedical="nohighlight";
+	   if(HttpContext.Current.Request.Path.Contains("/Family/FamilyInformation")) {
 		   styleFamily="highlight";
 	   }
-	   if(HttpContext.Current.Request.Path == "/Account/AccountInformation") {
+	   if(HttpContext.Current.Request.Path.Contains("/Account/AccountInformation")) {
 		   styleAccount="highlight";
 	   }
-	   if(HttpContext.Current.Request.Path == "/Medical/EHRInformation") {
+	   if(HttpContext.Current.Request.Path.Contains("/Medical/EHRInformation")) {
 		   styleMedical="highlight";
 	   }
 
@@ -35,7 +36,7 @@
 						<li>@Html.ActionLink("Medical","EHRInformation","Medical",new object { },new { @class=styleMedical })</li>
 					</ul>
 				</div>
-			}
+   }
         </div>
         <div id="main">
 		

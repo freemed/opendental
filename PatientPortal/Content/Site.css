@@ -150,16 +150,10 @@ ul#menu li a {
     font-weight: bold;
     text-decoration: none;
     line-height: 2.8em;
-    /*background-color: #e8eef4;*/
     color: #034af3;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     -moz-border-radius: 4px 4px 0 0;
-}
-
-ul#menu li a:hover {
-    background-color: #99CCFF;
-    text-decoration: none;
 }
 
 ul#menu li a:active {
@@ -170,6 +164,9 @@ ul#menu li a:active {
 ul#menu li.selected a {
     background-color: #fff;
     color: #000;
+}
+.nohighlight{
+    background-color: #99CCFF;
 }
 .highlight{
     background-color: White;
@@ -325,4 +322,23 @@ div#patname {
 
 .tri-state {
     width: 6em;
+}
+
+/*table using divs*/
+.divtable{
+    display: table;
+    padding-bottom:50px;
+}
+.divtablerow{
+    display: table-row;
+}
+.divtablecell1{
+    display: table-cell; 
+    width:100px;
+    padding-bottom:20px;
+    
+}
+.divtablecell2{
+    display: table-cell; 
+     padding-bottom:20px;
 }

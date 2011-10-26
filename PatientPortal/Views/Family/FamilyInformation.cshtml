@@ -6,23 +6,77 @@
 	ViewBag.Title = "Family Information";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<p>&nbsp;</p>
 @foreach(var item in Model.patList) {
-	<div style="margin-left:6em">
-		<p style="margin-left:-3em"><strong>Name:</strong> @Html.Encode(item.LName), @Html.Encode(item.FName)</p>  
-		<p><strong>Age:</strong> @Html.Encode(item.Age)</p>
-		<p>
-		
-		<div style="width:60px;float:left"><strong>Address:</strong></div>
-		<div style="width:150px;float:left">
-			@Html.Encode(item.Address) <br />
-			@Html.Encode(item.Address2)
+	<div style="margin-left:3em">
+	<div class="divtable">
+	
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Last Name:</strong></div><div class="divtablecell2">@Html.Encode(item.LName)
+			</div>
 		</div>
-		<div style="clear:both"> </div>
-		<br />
-		</p>
-		<p><strong>Home Phone:</strong> @Html.Encode(item.HmPhone)</p>
-		<p><strong>Work Phone:</strong> @Html.Encode(item.WkPhone)</p>
-		<p><strong>Cell Phone:</strong> @Html.Encode(item.WirelessPhone)</p>
-		<p>&nbsp;</p>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>First Name:</strong></div><div class="divtablecell2">@Html.Encode(item.FName)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Middle Name:</strong></div><div class="divtablecell2">@Html.Encode(item.MiddleI)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Nick Name:</strong></div><div class="divtablecell2">@Html.Encode(item.Preferred)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Status:</strong></div><div class="divtablecell2">@Html.Encode(item.PatStatus)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Gender:</strong></div><div class="divtablecell2">@Html.Encode(item.Gender)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Birthdate:</strong></div><div class="divtablecell2">@Html.Encode(item.Birthdate.ToShortDateString())
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Address:</strong></div><div class="divtablecell2">@Html.Encode(item.Address)
+			</div>
+		</div>			
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Address2:</strong></div><div class="divtablecell2">@Html.Encode(item.Address2)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>City:</strong></div><div class="divtablecell2">@Html.Encode(item.City)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>State:</strong></div><div class="divtablecell2">@Html.Encode(item.State)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Zip:</strong></div><div class="divtablecell2">@Html.Encode(item.Zip)
+			</div>
+		</div>	
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Home Phone:</strong></div><div class="divtablecell2">@Html.Encode(item.HmPhone)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Work Phone:</strong></div><div class="divtablecell2">@Html.Encode(item.WkPhone)
+			</div>
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Cell Phone:</strong></div><div class="divtablecell2">@Html.Encode(item.WirelessPhone)
+			</div> 
+		</div>
+		<div class="divtablerow">
+			<div class="divtablecell1"><strong>Home Phone:</strong></div><div class="divtablecell2">@Html.Encode(item.Email)
+			</div>
+		</div>		
+	</div>
+
+
 	</div>
 }
