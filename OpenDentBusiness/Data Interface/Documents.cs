@@ -108,13 +108,13 @@ namespace OpenDentBusiness {
 			DeletedObjects.SetDeleted(DeletedObjectType.Document,doc.DocNum);
 		}
 
-		///<summary>This is used by FormImageViewer to get a list of paths based on supplied list of DocNums. The reason is that later we will allow sharing of documents, so the paths may not be in the current patient folder.</summary>
-		public static ArrayList GetPaths(ArrayList docNums){
+		///<summary>This is used by FormImageViewer to get a list of paths based on supplied list of DocNums. The reason is that later we will allow sharing of documents, so the paths may not be in the current patient folder. Rewritten by Ryan on 10/26/2011 to use List&lt;&gt; instead of ArrayList.</summary>
+		public static List<string> GetPaths(List<long> docNums){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),docNums);
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),docNums);
 			}
 			if(docNums.Count==0){
-				return new ArrayList();
+				return new List<string>();
 			}
 			string command="SELECT document.DocNum,document.FileName,patient.ImageFolder "
 				+"FROM document "
@@ -138,7 +138,7 @@ namespace OpenDentBusiness {
 																									PIn.String(table.Rows[i][2].ToString()),
 																									PIn.String(table.Rows[i][1].ToString()),}));
 			}
-			ArrayList retVal=new ArrayList();
+			List<string> retVal=new List<string>();
 			for(int i=0;i<docNums.Count;i++){
 				retVal.Add((string)hList[(long)docNums[i]]);
 			}

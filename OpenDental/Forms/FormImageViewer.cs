@@ -8,6 +8,7 @@ using System.Net;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System.Collections.Generic;
 
 namespace OpenDental{
 	///<summary>Eventually, the user will be able to edit some image display settings and do a Documents.UpdateCur, but they can't actually make changes to the image.</summary>
@@ -89,9 +90,9 @@ namespace OpenDental{
 			this.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.PictureBox1.Cursor = System.Windows.Forms.Cursors.Arrow;
 			this.PictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PictureBox1.Location = new System.Drawing.Point(0,29);
+			this.PictureBox1.Location = new System.Drawing.Point(0,25);
 			this.PictureBox1.Name = "PictureBox1";
-			this.PictureBox1.Size = new System.Drawing.Size(903,669);
+			this.PictureBox1.Size = new System.Drawing.Size(903,673);
 			this.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.PictureBox1.TabIndex = 12;
 			this.PictureBox1.TabStop = false;
@@ -111,7 +112,7 @@ namespace OpenDental{
 			this.ToolBarMain.ImageList = this.imageListTools;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(903,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(903,25);
 			this.ToolBarMain.TabIndex = 11;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
@@ -126,8 +127,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Image Viewer";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Resize += new System.EventHandler(this.FormImageViewer_Resize);
 			this.Load += new System.EventHandler(this.FormImageViewer_Load);
+			this.Resize += new System.EventHandler(this.FormImageViewer_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
 			this.ResumeLayout(false);
 
@@ -139,18 +140,18 @@ namespace OpenDental{
 		}
 
 		/// <summary>This form will get the necessary images off disk so that it can control layout.</summary>
-		public void SetImage(Document thisDocument,string displayTitle){
+		public void SetImage(Document thisDocument,string displayTitle) {
 			//for now, the document is single. Later, it will get groups for composite images/mounts.
 			Text=displayTitle;
 			displayedDoc=thisDocument;
-			ArrayList docNums=new ArrayList();
+			List<long> docNums=new List<long>();
 			docNums.Add(thisDocument.DocNum);
 			string fileName=(string)Documents.GetPaths(docNums)[0];
-			if(!File.Exists(fileName)){
+			if(!File.Exists(fileName)) {
 				MessageBox.Show(fileName+" could not be found.");
 				return;
 			}
-			try{
+			try {
 				ImageCurrent=new Bitmap(fileName);
 				renderImage=ImageHelper.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
 					//ContrDocs.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
@@ -159,7 +160,7 @@ namespace OpenDental{
 					imageZoom=1;
 					imageTranslation=new PointF(0,0);
 				}
-				else{
+				else {
 					float matchWidth=PictureBox1.Width-16;
 					matchWidth=(matchWidth<=0?1:matchWidth);
 					float matchHeight=PictureBox1.Height-16;
@@ -169,12 +170,12 @@ namespace OpenDental{
 				}
 				zoomLevel=0;
 				zoomFactor=1;
-	    }
-			catch(System.Exception exception){
-		    MessageBox.Show(Lan.g(this,exception.Message)); 
+			}
+			catch(System.Exception exception) {
+				MessageBox.Show(Lan.g(this,exception.Message));
 				ImageCurrent=null;
 				renderImage=null;
-	    }
+			}
 		}
 
 		private void FormImageViewer_Resize(object sender,System.EventArgs e) {
