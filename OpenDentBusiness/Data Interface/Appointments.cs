@@ -1045,20 +1045,30 @@ namespace OpenDentBusiness{
 
 		///<summary>Pass in the appointments table so that we can search based on appointments.</summary>
 		public static DataTable GetApptFields(DataTable tableAppts) {
+			//No need to check RemotingRole; no call to db.
+			List<long> aptNums=new List<long>();
+			for(int i=0;i<tableAppts.Rows.Count;i++) {
+				aptNums.Add(PIn.Long(tableAppts.Rows[i]["AptNum"].ToString()));
+			}
+			return GetApptFieldsByApptNums(aptNums);
+		}
+
+		/// <summary>Only called from above method, but must be public for remoting.</summary>
+		public static DataTable GetApptFieldsByApptNums(List<long> aptNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),tableAppts);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNums);
 			}
 			string command="SELECT AptNum,FieldName,FieldValue "
 				+"FROM apptfield "
 				+"WHERE AptNum IN (";
-			if(tableAppts.Rows.Count==0) {
+			if(aptNums.Count==0) {
 				command+="0";
 			}
-			else for(int i=0;i<tableAppts.Rows.Count;i++) {
+			else for(int i=0;i<aptNums.Count;i++) {
 					if(i>0) {
 						command+=",";
 					}
-					command+=tableAppts.Rows[i]["AptNum"].ToString();
+					command+=POut.Long(aptNums[i]);
 				}
 			command+=")";
 			DataConnection dcon=new DataConnection();
