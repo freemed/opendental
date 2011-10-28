@@ -236,26 +236,16 @@ namespace OpenDental {
 				DateTime changedDeleted=changedSince;
 				DateTime changedPat=changedSince;
 				DateTime changedStatement=changedSince;
-				//DateTime changedDocument=changedSince;
+				DateTime changedDocument=changedSince;
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 					changedProv=DateTime.MinValue;
 					changedDeleted=DateTime.MinValue;
 				}
-				/*
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSynchNewTables112Done','0')";
-					Db.NonQ(command);
+				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,false)) {
+				    changedPat=DateTime.MinValue;
+					changedStatement=DateTime.MinValue;
+					changedDocument=DateTime.MinValue;
 				}
-				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MobileSynchNewTables112Done','0')";
-					Db.NonQ(command);
-				}
-				 */
-				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,false)) { //dennis:Uncomment later
-				//    changedPat=DateTime.MinValue;
-				//	  changedStatement=DateTime.MinValue;
-				//	  changedDocument=DateTime.MinValue;
-				//}
 				bool synchDelPat=true;
 				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
 					synchDelPat=false;// synching delPatNumList is time consuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
@@ -278,9 +268,9 @@ namespace OpenDental {
 				List<long> diseaseNumList=Diseasems.GetChangedSinceDiseaseNums(changedSince,eligibleForUploadPatNumList);
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedStatement,eligibleForUploadPatNumList,statementLimitPerPatient);
-				//List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedDocument,statementNumList);
+				List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedDocument,statementNumList);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
-				//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);
+				//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);dennis: delete this line later
 				List<long> deletedObjectNumList=DeletedObjects.GetChangedSinceDeletedObjectNums(changedDeleted);
 				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 					+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
@@ -321,9 +311,9 @@ namespace OpenDental {
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 				    Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
 				}
-				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,true)) {//dennis:Uncomment later
-				//    Prefs.UpdateBool(PrefName.MobileSynchNewTables112Done,true);
-				//}
+				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,true)) {
+				    Prefs.UpdateBool(PrefName.MobileSynchNewTables112Done,true);
+				}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 				IsSynching=false;
 			}
