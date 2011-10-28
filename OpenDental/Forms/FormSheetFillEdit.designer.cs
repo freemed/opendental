@@ -53,6 +53,7 @@ namespace OpenDental{
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(146,90);
 			this.textNote.TabIndex = 6;
+			this.textNote.TabStop = false;
 			// 
 			// labelNote
 			// 
@@ -101,6 +102,7 @@ namespace OpenDental{
 			this.checkErase.Name = "checkErase";
 			this.checkErase.Size = new System.Drawing.Size(89,20);
 			this.checkErase.TabIndex = 81;
+			this.checkErase.TabStop = false;
 			this.checkErase.Text = "Eraser Tool";
 			this.checkErase.UseVisualStyleBackColor = true;
 			this.checkErase.Click += new System.EventHandler(this.checkErase_Click);
@@ -112,6 +114,7 @@ namespace OpenDental{
 			this.textDescription.Name = "textDescription";
 			this.textDescription.Size = new System.Drawing.Size(146,20);
 			this.textDescription.TabIndex = 84;
+			this.textDescription.TabStop = false;
 			// 
 			// labelDescription
 			// 
@@ -145,6 +148,7 @@ namespace OpenDental{
 			this.textDateTime.Name = "textDateTime";
 			this.textDateTime.Size = new System.Drawing.Size(144,20);
 			this.textDateTime.TabIndex = 88;
+			this.textDateTime.TabStop = false;
 			// 
 			// butUnlock
 			// 
@@ -159,6 +163,7 @@ namespace OpenDental{
 			this.butUnlock.Name = "butUnlock";
 			this.butUnlock.Size = new System.Drawing.Size(81,24);
 			this.butUnlock.TabIndex = 89;
+			this.butUnlock.TabStop = false;
 			this.butUnlock.Text = "Unlock";
 			this.butUnlock.Visible = false;
 			this.butUnlock.Click += new System.EventHandler(this.butUnlock_Click);
@@ -172,6 +177,7 @@ namespace OpenDental{
 			this.textShowInTerminal.Name = "textShowInTerminal";
 			this.textShowInTerminal.Size = new System.Drawing.Size(29,20);
 			this.textShowInTerminal.TabIndex = 87;
+			this.textShowInTerminal.TabStop = false;
 			// 
 			// butPDF
 			// 
@@ -186,6 +192,7 @@ namespace OpenDental{
 			this.butPDF.Name = "butPDF";
 			this.butPDF.Size = new System.Drawing.Size(81,24);
 			this.butPDF.TabIndex = 83;
+			this.butPDF.TabStop = false;
 			this.butPDF.Text = "Create PDF";
 			this.butPDF.Click += new System.EventHandler(this.butPDF_Click);
 			// 
@@ -203,6 +210,7 @@ namespace OpenDental{
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 79;
+			this.butDelete.TabStop = false;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -219,6 +227,7 @@ namespace OpenDental{
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 80;
+			this.butPrint.TabStop = false;
 			this.butPrint.Text = "Print/Email";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
@@ -234,6 +243,7 @@ namespace OpenDental{
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(81,24);
 			this.butOK.TabIndex = 3;
+			this.butOK.TabStop = false;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -249,6 +259,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(81,24);
 			this.butCancel.TabIndex = 2;
+			this.butCancel.TabStop = false;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 

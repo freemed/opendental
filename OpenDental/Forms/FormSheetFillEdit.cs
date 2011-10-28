@@ -192,7 +192,7 @@ namespace OpenDental {
 				}
 				else if(field.FieldType==SheetFieldType.InputField){
 					textbox.BackColor=Color.FromArgb(245,245,200);
-					textbox.TabStop=true;
+					textbox.TabStop=(field.TabOrder==0?false:true);
 					textbox.TabIndex=field.TabOrder;
 				}
 				textbox.Location=new Point(field.XPos,field.YPos);
@@ -233,7 +233,7 @@ namespace OpenDental {
 				checkbox.Height=field.Height;
 				checkbox.Tag=field;
 				checkbox.Click+=new EventHandler(text_TextChanged);
-				checkbox.TabStop=true;
+				checkbox.TabStop=(field.TabOrder==0?false:true);
 				checkbox.TabIndex=field.TabOrder;
 				panelMain.Controls.Add(checkbox);
 				checkbox.BringToFront();
@@ -260,7 +260,7 @@ namespace OpenDental {
 					sigBox.FillSignature(sigIsTopaz,keyData,signature);
 				}
 				sigBox.Tag=field;
-				sigBox.TabStop=true;
+				sigBox.TabStop=(field.TabOrder==0?false:true);
 				sigBox.TabIndex=field.TabOrder;
 				panelMain.Controls.Add(sigBox);
 				sigBox.BringToFront();

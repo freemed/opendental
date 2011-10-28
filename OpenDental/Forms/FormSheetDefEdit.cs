@@ -864,7 +864,7 @@ namespace OpenDental {
 		///<summary>Used To renumber TabOrder on controls</summary>
 		private void RenumberTabOrderHelper() {
 			for(int i=0;i<ListSheetFieldDefsTabOrder.Count;i++) {
-				ListSheetFieldDefsTabOrder[i].TabOrder=i+1;
+				ListSheetFieldDefsTabOrder[i].TabOrder=i+1;//Start number tab order at 1
 			}
 			FillFieldList();
 			panelMain.Refresh();
