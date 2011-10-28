@@ -42,7 +42,7 @@ namespace OpenDental {
 			diseasedef,
 			icd9,
 			statement,
-			//document,
+			document,
 			deletedobject,
 			patientdel
 		}
@@ -275,7 +275,7 @@ namespace OpenDental {
 				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 					+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 					+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-					+statementNumList.Count//+documentNumList.Count
+					+statementNumList.Count+documentNumList.Count
 					+deletedObjectNumList.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
@@ -302,7 +302,7 @@ namespace OpenDental {
 				SynchGeneric(diseaseNumList,SynchEntity.disease,totalCount,ref currentVal);
 				SynchGeneric(icd9NumList,SynchEntity.icd9,totalCount,ref currentVal);
 				SynchGeneric(statementNumList,SynchEntity.statement,totalCount,ref currentVal);
-				//SynchGeneric(documentNumList,SynchEntity.document,totalCount,ref currentVal);
+				SynchGeneric(documentNumList,SynchEntity.document,totalCount,ref currentVal);
 				if(synchDelPat) {
 					SynchGeneric(delPatNumList,SynchEntity.patientdel,totalCount,ref currentVal);
 				}
@@ -401,12 +401,10 @@ namespace OpenDental {
 						List<Statementm> ChangedStatementList=Statementms.GetMultStatementms(BlockPKNumList);
 						mb.SynchStatements(PrefC.GetString(PrefName.RegistrationKey),ChangedStatementList.ToArray());
 						break;
-						/*
 						case SynchEntity.document:
 						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList);
 						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
-						*/
 						case SynchEntity.deletedobject:
 						List<DeletedObject> ChangedDeleteObjectList=DeletedObjects.GetMultDeletedObjects(BlockPKNumList);
 						mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),ChangedDeleteObjectList.ToArray());
