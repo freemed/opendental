@@ -1290,11 +1290,16 @@ GROUP BY SchedDate
 				}
 				whereClin+=") ";
 			}
-			report.Query= "SELECT "+DbHelper.DateColumn("appointment.AptDateTime")+" SchedDate,SUM(IFNULL(procedurelog.ProcFee,0)";
-			if(PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO)){
-				report.Query+="-IFNULL(CASE WHEN WriteOffEstOverride != -1 THEN WriteOffEstOverride ELSE WriteOffEst END,0)";
+			report.Query= "SELECT "+DbHelper.DateColumn("t.AptDateTime")+" SchedDate,SUM(t.Fee-t.WriteoffEstimate) "
+				+"FROM (SELECT appointment.AptDateTime,IFNULL(procedurelog.ProcFee,0) Fee,";
+			if(PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO)) {
+				report.Query+="SUM(IFNULL(CASE WHEN WriteOffEstOverride != -1 THEN WriteOffEstOverride ELSE WriteOffEst END,0)) WriteoffEstimate ";
 			}
-			report.Query+=") FROM appointment "
+			else {
+				report.Query+="0 WriteoffEstimate ";
+			}
+			report.Query+=
+				"FROM appointment "
 				+"LEFT JOIN procedurelog ON appointment.AptNum = procedurelog.AptNum "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum = claimproc.ProcNum AND Status=6 AND (WriteOffEst != -1 OR WriteOffEstOverride != -1) "
 				+"WHERE (appointment.AptStatus = 1 OR "//stat=scheduled
@@ -1303,8 +1308,9 @@ GROUP BY SchedDate
 				+"AND "+DbHelper.DateColumn("appointment.AptDateTime")+" <= "+POut.Date(dateTo)+" "
 				+whereProv
 				+whereClin
-				+" GROUP BY SchedDate "
-				+"ORDER BY SchedDate"; 
+				+" GROUP BY procedurelog.ProcNum) t "//without this, there can be duplicate proc rows due to the claimproc join with dual insurance.
+				+"GROUP BY SchedDate "
+				+"ORDER BY SchedDate";
 			TableSched=report.GetTempTable();
 
 // NEXT is TablePay----------------------------------------------------------------------------------
