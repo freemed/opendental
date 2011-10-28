@@ -102,6 +102,16 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void menuItemOptions_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormSheetSetup formSS=new FormSheetSetup();
+			formSS.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"ShowForms");
+			FillGrid();
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormSheetPicker FormS=new FormSheetPicker();
 			FormS.SheetType=SheetTypeEnum.PatientForm;

@@ -35,9 +35,13 @@ namespace OpenDental {
 				listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.PatientRegistration));
 				listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.FinancialAgreement));
 				listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.HIPAA));
+				if(PrefC.GetBool(PrefName.PatientFormsShowConsent)) {
+					listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.Consent));
+				}
 			}
 			if(SheetType==SheetTypeEnum.PatientForm) {//we will also show medical history
 				List<SheetDef> listMedSheets=SheetDefs.GetCustomForType(SheetTypeEnum.MedicalHistory);
+				List<SheetDef> listConSheets=SheetDefs.GetCustomForType(SheetTypeEnum.Consent);
 				if(listMedSheets.Count==0) {
 					//showingInternalMed=true;
 					listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.MedicalHistory));
@@ -47,7 +51,18 @@ namespace OpenDental {
 						listSheets.Add(listMedSheets[i]);
 					}
 				}
-				labelSheetType.Text=Lan.g("this","Patient Forms and Medical Histories");
+				labelSheetType.Text=Lan.g("this","Patient Forms and Medical Histories");//Change name?
+				if(PrefC.GetBool(PrefName.PatientFormsShowConsent)) {//only if they want to see consent forms with patient forms.
+					if(listConSheets.Count==0) {//use internal consent forms
+						listSheets.Add(SheetsInternal.GetSheetDef(SheetInternalType.Consent));
+					}
+					else {//if user has added any of their own consent forms
+						for(int i=0;i<listConSheets.Count;i++) {
+							listSheets.Add(listConSheets[i]);
+						}
+					}
+					labelSheetType.Text=Lan.g("this","Patient, Consent, and Medical History Forms");
+				}
 			}
 			else {
 				labelSheetType.Text=Lan.g("enumSheetTypeEnum",SheetType.ToString());

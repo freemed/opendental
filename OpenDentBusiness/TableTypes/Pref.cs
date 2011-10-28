@@ -202,6 +202,7 @@ namespace OpenDentBusiness {
 		OracleInsertId,
 		PasswordsMustBeStrong,
 		PatientSelectUsesSearchButton,
+		PatientFormsShowConsent,
 		PayPlansBillInAdvanceDays,
 		PerioColorCAL,
 		PerioColorFurcations,

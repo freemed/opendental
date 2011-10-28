@@ -27,13 +27,14 @@ namespace OpenDental{
 			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemSheets = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemImageCats = new System.Windows.Forms.ToolStripMenuItem();
+			this.showFormsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.label1 = new System.Windows.Forms.Label();
+			this.butCopy = new OpenDental.UI.Button();
+			this.butImport = new OpenDental.UI.Button();
 			this.butTerminal = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butImport = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.butCopy = new OpenDental.UI.Button();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -51,24 +52,74 @@ namespace OpenDental{
 			// 
 			this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemSheets,
-            this.menuItemImageCats});
+            this.menuItemImageCats,
+            this.showFormsToolStripMenuItem});
 			this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
-			this.setupToolStripMenuItem.Size = new System.Drawing.Size(47,20);
+			this.setupToolStripMenuItem.Size = new System.Drawing.Size(49,20);
 			this.setupToolStripMenuItem.Text = "Setup";
 			// 
 			// menuItemSheets
 			// 
 			this.menuItemSheets.Name = "menuItemSheets";
-			this.menuItemSheets.Size = new System.Drawing.Size(159,22);
+			this.menuItemSheets.Size = new System.Drawing.Size(166,22);
 			this.menuItemSheets.Text = "Sheets";
 			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
 			// menuItemImageCats
 			// 
 			this.menuItemImageCats.Name = "menuItemImageCats";
-			this.menuItemImageCats.Size = new System.Drawing.Size(159,22);
+			this.menuItemImageCats.Size = new System.Drawing.Size(166,22);
 			this.menuItemImageCats.Text = "Image Categories";
 			this.menuItemImageCats.Click += new System.EventHandler(this.menuItemImageCats_Click);
+			// 
+			// showFormsToolStripMenuItem
+			// 
+			this.showFormsToolStripMenuItem.Name = "showFormsToolStripMenuItem";
+			this.showFormsToolStripMenuItem.Size = new System.Drawing.Size(166,22);
+			this.showFormsToolStripMenuItem.Text = "Options";
+			this.showFormsToolStripMenuItem.Click += new System.EventHandler(this.menuItemOptions_Click);
+			// 
+			// label1
+			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Location = new System.Drawing.Point(328,588);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(173,18);
+			this.label1.TabIndex = 10;
+			this.label1.Text = "(from form into database)";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butCopy
+			// 
+			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butCopy.Autosize = true;
+			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopy.CornerRadius = 4F;
+			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCopy.Location = new System.Drawing.Point(170,585);
+			this.butCopy.Name = "butCopy";
+			this.butCopy.Size = new System.Drawing.Size(75,24);
+			this.butCopy.TabIndex = 11;
+			this.butCopy.Text = "Copy";
+			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
+			// 
+			// butImport
+			// 
+			this.butImport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butImport.Autosize = true;
+			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImport.CornerRadius = 4F;
+			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butImport.Location = new System.Drawing.Point(249,585);
+			this.butImport.Name = "butImport";
+			this.butImport.Size = new System.Drawing.Size(75,24);
+			this.butImport.TabIndex = 9;
+			this.butImport.Text = "Import";
+			this.butImport.Click += new System.EventHandler(this.butImport_Click);
 			// 
 			// butTerminal
 			// 
@@ -133,48 +184,6 @@ namespace OpenDental{
 			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butImport
-			// 
-			this.butImport.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butImport.Autosize = true;
-			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butImport.CornerRadius = 4F;
-			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butImport.Location = new System.Drawing.Point(249,585);
-			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(75,24);
-			this.butImport.TabIndex = 9;
-			this.butImport.Text = "Import";
-			this.butImport.Click += new System.EventHandler(this.butImport_Click);
-			// 
-			// label1
-			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.Location = new System.Drawing.Point(328,588);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(173,18);
-			this.label1.TabIndex = 10;
-			this.label1.Text = "(from form into database)";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// butCopy
-			// 
-			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butCopy.Autosize = true;
-			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCopy.CornerRadius = 4F;
-			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy.Location = new System.Drawing.Point(170,585);
-			this.butCopy.Name = "butCopy";
-			this.butCopy.Size = new System.Drawing.Size(75,24);
-			this.butCopy.TabIndex = 11;
-			this.butCopy.Text = "Copy";
-			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
-			// 
 			// FormPatientForms
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -212,5 +221,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butImport;
 		private System.Windows.Forms.Label label1;
 		private OpenDental.UI.Button butCopy;
+		private System.Windows.Forms.ToolStripMenuItem showFormsToolStripMenuItem;
 	}
 }

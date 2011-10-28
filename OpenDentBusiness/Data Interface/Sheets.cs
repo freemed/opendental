@@ -202,7 +202,11 @@ namespace OpenDentBusiness{
 			//sheet---------------------------------------------------------------------------------------
 			string command="SELECT DateTimeSheet,SheetNum,Description,ShowInTerminal "
 				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)+" "
-				+"AND (SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)+" OR SheetType="+POut.Long((int)SheetTypeEnum.MedicalHistory)+") ";
+				+"AND (SheetType="+POut.Long((int)SheetTypeEnum.PatientForm)+" OR SheetType="+POut.Long((int)SheetTypeEnum.MedicalHistory);
+			if(PrefC.GetBool(PrefName.PatientFormsShowConsent)) {
+				command+=" OR SheetType="+POut.Long((int)SheetTypeEnum.Consent);//Show consent forms if pref is true.
+			}
+			command+=")";
 				//+"ORDER BY ShowInTerminal";//DATE(DateTimeSheet),ShowInTerminal,TIME(DateTimeSheet)";
 			DataTable rawSheet=Db.GetTable(command);
 			DateTime dateT;
