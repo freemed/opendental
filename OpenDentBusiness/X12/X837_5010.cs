@@ -1077,7 +1077,7 @@ namespace OpenDentBusiness
 					else {
 						sw.Write(Sout(otherPlan.GroupName,60)+"*");
 					}
-					sw.WriteLine("*"//SBR05 1/3 Insurance Type Code: Situational. Required when they payer in loop 2330B is Medicare and Medicare is not the primary payer. Medical and Dental only. TODO: implement.
+					sw.WriteLine("*"//SBR05 1/3 Insurance Type Code: Situational. Required when the payer in loop 2330B is Medicare and Medicare is not the primary payer. Medical and Dental only. TODO: implement.
 						+"*"//SBR06 1/1 Coordination of Benefits Code: Not used.
 						+"*"//SBR07 1/1 Yes/No Condition or Response Code: Not Used.
 						+"*"//SBR08 2/2 Employment Status Code: Not Used.
