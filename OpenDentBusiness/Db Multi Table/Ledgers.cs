@@ -103,21 +103,29 @@ namespace OpenDentBusiness{
 			string tempTableSuffix=CodeBase.MiscUtils.CreateRandomAlphaNumericString(14);//max size for a table name in oracle is 30 chars.
 			string tempAgingTableName="tempaging"+tempTableSuffix;
 			string tempOdAgingTransTableName="tempodagingtrans"+tempTableSuffix;
-			try {
-				//We would use DROP TEMPORARY TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
-				command="DROP TEMPORARY TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				try {
+					//We would use DROP TEMPORARY TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
+					command="DROP TEMPORARY TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+					Db.NonQ(command);
+				}
+				catch {
+					//The tables do not exist. Nothing to do.
+				}
+				try {
+					//We would use DROP TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
+					command="DROP TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+					Db.NonQ(command);
+				}
+				catch {
+					//The tables do not exist. Nothing to do.
+				}
+			}
+			else {
+				command="DROP TEMPORARY TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 				Db.NonQ(command);
-			}
-			catch {
-				//The tables do not exist. Nothing to do.
-			}
-			try {
-				//We would use DROP TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
-				command="DROP TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+				command="DROP TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 				Db.NonQ(command);
-			}
-			catch {
-				//The tables do not exist. Nothing to do.
 			}
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command="CREATE GLOBAL TEMPORARY TABLE "+tempAgingTableName+" ("+
@@ -396,21 +404,29 @@ namespace OpenDentBusiness{
 				"WHERE p.PatNum=f.Guarantor;";//Aging calculations only apply to guarantors.
 				Db.NonQ(command);
 			}
-			try {
-				//We would use DROP TEMPORARY TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
-				command="DROP TEMPORARY TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				try {
+					//We would use DROP TEMPORARY TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
+					command="DROP TEMPORARY TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+					Db.NonQ(command);
+				}
+				catch {
+					//The tables do not exist. Nothing to do.
+				}
+				try {
+					//We would use DROP TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
+					command="DROP TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+					Db.NonQ(command);
+				}
+				catch {
+					//The tables do not exist. Nothing to do.
+				}
+			}
+			else {
+				command="DROP TEMPORARY TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 				Db.NonQ(command);
-			}
-			catch {
-				//The tables do not exist. Nothing to do.
-			}
-			try {
-				//We would use DROP TABLE IF EXISTS syntax here but no such syntax exists in Oracle.
-				command="DROP TABLE "+tempAgingTableName+", "+tempOdAgingTransTableName;
+				command="DROP TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 				Db.NonQ(command);
-			}
-			catch {
-				//The tables do not exist. Nothing to do.
 			}
 		}
 	}
