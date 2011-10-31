@@ -6300,8 +6300,11 @@ namespace OpenDental{
 					//This is optimized for single proc like a space maintainer.  User can select a tooth to set quadrant.
 					if(toothChart.SelectedTeeth.Count>0) {
 						ProcCur.Surf=Tooth.GetQuadrant(toothChart.SelectedTeeth[0]);
+						AddQuick(ProcCur);
 					}
-					AddQuick(ProcCur);
+					else {
+						AddProcedure(ProcCur);
+					}
 				}
 				else if(tArea==TreatmentArea.Surf) {
 					if(toothChart.SelectedTeeth.Count==0) {
