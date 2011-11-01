@@ -634,7 +634,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used only in ClaimProcs.ComputeBaseEst.  Calculates the most specific limitation for the specified code.  This is usually an annual max, ortho max, or fluoride limitation (only if age match).  Ignores benefits that do not match either the planNum or the patPlanNum.  It figures out how much was already used and reduces the returned value by that amount.  Both individual and family limitations will reduce the returned value independently.  Works for individual procs, categories, and general.  Also outputs a string description of the limitation.  There don't seem to be any situations where multiple limitations would each partially reduce coverage for a single code, other than ind/fam.  The returned value will be the original insEstTotal passed in unless there was some limitation that reduced it.</summary>
-		public static double GetLimitationByCode(List<Benefit> benList,long planNum,long patPlanNum,DateTime procDate,string procCodeStr,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,long patNum,out string note,double insEstTotal,int patientAge) {
+		public static double GetLimitationByCode(List<Benefit> benList,long planNum,long patPlanNum,DateTime procDate,string procCodeStr,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,long patNum,out string note,double insEstTotal,int patientAge,long insSubNum) {
 			//No need to check RemotingRole;no call to db.
 			note ="";
 			//first, create a much shorter list with only relevant benefits in it.
@@ -819,7 +819,7 @@ namespace OpenDentBusiness {
 					dateStart=DateTime.MinValue;
 				}
 				for(int i=0;i<histList.Count;i++) {
-					if(histList[i].PlanNum != planNum) {
+					if(histList[i].InsSubNum != insSubNum) {
 						continue;//different plan
 					}
 					if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
@@ -873,7 +873,7 @@ namespace OpenDentBusiness {
 					//if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
 					//	continue;
 					//}
-					if(loopList[i].PlanNum != planNum) {
+					if(loopList[i].InsSubNum != insSubNum) {
 						continue;//different plan.  Even the loop list can contain info for multiple plans.
 					}
 					if(loopList[i].PatNum != patNum) {

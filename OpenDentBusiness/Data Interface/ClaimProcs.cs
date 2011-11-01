@@ -741,7 +741,7 @@ namespace OpenDentBusiness{
 			//annual max and other limitations--------------------------------------------------------------------------------
 			if(loopList!=null && histList!=null) {
 				string note="";
-				cp.InsEstTotal=Benefits.GetLimitationByCode(benList,plan.PlanNum,patPlanNum,procDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum,out note,cp.InsEstTotal,patientAge);
+				cp.InsEstTotal=Benefits.GetLimitationByCode(benList,plan.PlanNum,patPlanNum,procDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum,out note,cp.InsEstTotal,patientAge,cp.InsSubNum);
 				if(note != "") {
 					if(cp.EstimateNote != "") {
 						cp.EstimateNote+=", ";
@@ -1208,6 +1208,7 @@ namespace OpenDentBusiness{
 				}
 				cph.PatNum=claimProcList[i].PatNum;
 				cph.PlanNum=claimProcList[i].PlanNum;
+				cph.InsSubNum=claimProcList[i].InsSubNum;
 				cph.ProcDate=DateTime.Today;
 				cph.Status=ClaimProcStatus.Estimate;
 				cph.StrProcCode=ProcedureCodes.GetStringProcCode(codeNum);
