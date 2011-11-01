@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
 		public static Appointment[] RefreshUnsched(string orderby,long provNum,long siteNum,bool includeBrokenAppts) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
+				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum,includeBrokenAppts);
 			}
 			string command="SELECT * FROM appointment "
 				+"LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
