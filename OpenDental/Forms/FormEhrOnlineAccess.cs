@@ -64,7 +64,7 @@ namespace OpenDental {
 				Allergies.ResetTimeStamps(PatCur.PatNum);
 				MedicationPats.ResetTimeStamps(PatCur.PatNum);
 				Statements.ResetTimeStamps(PatCur.PatNum);
-				//Documents.ResetTimeStamps(PatCur.PatNum);
+				Documents.ResetTimeStamps(PatCur.PatNum);
 				//4. Make the password editable in case they want to change it.
 				textOnlinePassword.ReadOnly=false;
 				//5. Save password to db

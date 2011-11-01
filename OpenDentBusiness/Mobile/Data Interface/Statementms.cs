@@ -17,6 +17,11 @@ namespace OpenDentBusiness.Mobile{
 					+" AND PatNum = "+POut.Long(patNum);
 			return Crud.StatementmCrud.SelectMany(command);
 		}
+		public static void TrimStatementms(long customerNum,long patNum) {
+			//DELETE FROM statementm where StatementNum in (SELECT StatementNum FROM statementm WHERE CustomerNum=6566 AND 
+//PatNum=7 ORDER BY DateSent DESC, StatementNum DESC LIMIT 4,10)
+			//This version of MySQL doesn't yet support 'LIMIT & IN/ALL/ANY/SOME subquery'
+		}
 		#endregion
 
 		#region Used only on OD

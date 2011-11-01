@@ -423,6 +423,7 @@ namespace WebHostSynch {
 							Allergyms.Delete(customerNum,patNumList[i]);
 							Diseasems.Delete(customerNum,patNumList[i]);
 							Statementms.Delete(customerNum,patNumList[i]);
+							Documentms.Delete(customerNum,patNumList[i]);
 					}
 				}
 				catch(Exception ex) {

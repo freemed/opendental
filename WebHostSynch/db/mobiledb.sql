@@ -101,7 +101,7 @@ CREATE TABLE `appointmentm` (
   `Pattern` varchar(255) NOT NULL,
   `Confirmed` bigint(20) NOT NULL,
   `Op` bigint(20) NOT NULL,
-  `Note` varchar(255) NOT NULL,
+  `Note` text,
   `ProvNum` bigint(20) NOT NULL,
   `ProvHyg` bigint(20) NOT NULL,
   `AptDateTime` datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
