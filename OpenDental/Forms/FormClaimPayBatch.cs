@@ -892,8 +892,9 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
-			//if IsFromClaim and IsNew, then this acts as a Cancel button
-			IsDeleting=true;//the actual deletion will be handled in FormClaimEdit.
+			if(IsFromClaim && IsNew) {//this acts as a Cancel button
+				IsDeleting=true;//the actual deletion will be handled in FormClaimEdit.
+			}
 			DialogResult=DialogResult.Cancel;
 		}
 
