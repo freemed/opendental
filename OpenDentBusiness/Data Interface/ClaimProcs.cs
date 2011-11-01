@@ -292,13 +292,13 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Used in E-claims to get the amount paid by primary. The insurance amount paid by other planNums based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
-		public static double ProcInsPayPri(List<ClaimProc> claimProcList,long procNum,long planNumExclude) {
+		///<summary>Used in E-claims to get the amount paid by primary. The insurance amount paid by other subNums based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
+		public static double ProcInsPayPri(List<ClaimProc> claimProcList,long procNum,long subNumExclude) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==procNum
-					&& claimProcList[i].PlanNum!=planNumExclude
+					&& claimProcList[i].InsSubNum!=subNumExclude
 					&& claimProcList[i].Status!=ClaimProcStatus.Preauth
 					&& claimProcList[i].Status!=ClaimProcStatus.CapEstimate
 					&& claimProcList[i].Status!=ClaimProcStatus.CapComplete
@@ -308,6 +308,27 @@ namespace OpenDentBusiness{
 				}
 			}
 			return retVal;
+		}
+
+		public static bool IsValidClaimAdj(ClaimProc claimProc,long procNum,long subNumExclude) {
+			//No need to check RemotingRole; no call to db.
+			if(claimProc.ProcNum!=procNum) {
+				return false;
+			}
+			if(claimProc.InsSubNum==subNumExclude) {
+				return false;
+			}
+			if(claimProc.Status==ClaimProcStatus.CapClaim 
+				|| claimProc.Status==ClaimProcStatus.NotReceived 
+				|| claimProc.Status==ClaimProcStatus.Received 
+				|| claimProc.Status==ClaimProcStatus.Supplemental)
+				//Adjustment never attached to proc. Preauth, CapEstimate, CapComplete, and Estimate never paid. 
+			{
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 
 		///<summary>Used in E-claims to get the most recent date paid (by primary?). The insurance amount paid by the planNum based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>

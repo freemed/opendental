@@ -972,7 +972,7 @@ namespace OpenDentBusiness
 					if(claim.ClaimType!="P") {
 						double paidOtherIns=0;
 						for(int j=0;j<claimProcs.Count;j++) {
-							paidOtherIns+=ClaimProcs.ProcInsPayPri(claimProcList,claimProcs[j].ProcNum,claimProcs[j].PlanNum);
+							paidOtherIns+=ClaimProcs.ProcInsPayPri(claimProcList,claimProcs[j].ProcNum,claimProcs[j].InsSubNum);
 						}
 						seg++;
 						sw.WriteLine("AMT*D*"//AMT01: D=Payor amount paid

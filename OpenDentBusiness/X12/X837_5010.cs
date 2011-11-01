@@ -1083,36 +1083,53 @@ namespace OpenDentBusiness
 						+"*"//SBR08 2/2 Employment Status Code: Not Used.
 						+"CI~");//SBR09 1/2 Claim Filing Indicator Code: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO. There are too many. I'm just going to use CI for everyone. I don't think anyone will care.
 					if(claim.ClaimType!="P") {
-						double paidOtherIns=0;
+						double claimWriteoff=0;
+						double claimDeductible=0;
+						double claimPaidOtherIns=0;
 						for(int j=0;j<claimProcs.Count;j++) {
-							paidOtherIns+=ClaimProcs.ProcInsPayPri(claimProcList,claimProcs[j].ProcNum,claimProcs[j].PlanNum);
+							for(int k=0;k<claimProcList.Count;k++) {
+								if(ClaimProcs.IsValidClaimAdj(claimProcList[k],claimProcs[j].ProcNum,claimProcs[j].InsSubNum)) {
+									claimWriteoff+=claimProcList[k].WriteOff;
+									claimDeductible+=claimProcList[k].DedApplied;
+									claimPaidOtherIns+=claimProcList[k].InsPayAmt;
+								}
+							}
 						}
-						string paidOtherInsStr=paidOtherIns.ToString("F");
-						while(paidOtherInsStr[0]=='0') { //Emdeon does not allow leading zeros in this field. Leading zeros only happen on values between $0.99 and $0.00. Zero (.00) will probably be used somewhat often.
-							paidOtherInsStr=paidOtherInsStr.Substring(1);
-						}
-						double amountRemaining=claim.ClaimFee-paidOtherIns;
-						string amountRemainingStr=amountRemaining.ToString("F");
-						while(amountRemainingStr[0]=='0') { //Emdeon does not allow leading zeros in this field. Leading zeros only happen on values between $0.99 and $0.00. We check just to be safe.
-							amountRemainingStr=amountRemainingStr.Substring(1);
-						}
+						double claimPatientPortion=Math.Max(0,claim.ClaimFee-claimWriteoff-claimDeductible-claimPaidOtherIns);
 						//2320 CAS: (medical,institutional,dental) Claim Level Adjustments. Situational. We use this to show patient responsibility, because the adjustments here plus AMT D below must equal claim amount in CLM02 for Emdeon.
-						if(amountRemaining>0) {
+						//Claim Adjustment Reason Codes can be found on the Washington Publishing Company website at: http://www.wpc-edi.com/reference/codelists/healthcare/claim-adjustment-reason-codes/
+						if(claimWriteoff>0) {
 							seg++;
-							sw.WriteLine("CAS*PR*"//CAS01 1/2 Claim Adjustment Group Code: PR=Patient Responsibility.
-								+"1*"//CAS02 1/5 Claim Adjustment Reason Code: 1=Deductible, 2=Co-insurance amount.
-								+amountRemainingStr//CAS03 1/18 Monetary Amount:
+							sw.WriteLine("CAS*CO*"//CAS01 1/2 Claim Adjustment Group Code: CO=Contractual Obligations.
+								+"45*"//CAS02 1/5 Claim Adjustment Reason Code: 45=Charge exceeds fee schedule/maximum allowable or contracted/legislated fee arrangement.
+								+AmountToStrNoLeading(claimWriteoff)//CAS03 1/18 Monetary Amount:
 								+"~");
+						}
+						if(claimDeductible>0 || claimPatientPortion>0) {
+							seg++;
+							sw.Write("CAS*PR");//CAS01 1/2 Claim Adjustment Group Code: PR=Patient Responsibility.
+							if(claimDeductible>0) {
+								sw.Write("*"//end of previous field
+									+"1*"//CAS02 1/5 Claim Adjustment Reason Code: 1=Deductible.
+									+AmountToStrNoLeading(claimDeductible)+"*"//CAS03 1/18 Monetary Amount:
+									+"1");//CAS04 1/15 Quantity:
+							}
+							if(claimPatientPortion>0) {
+								sw.Write("*"//end of previous field
+									+"3*"//CAS02 or CAS05 1/5 Claim Adjustment Reason Code: 3=Co-payment Amount.
+									+AmountToStrNoLeading(claimPatientPortion));//CAS03 or CAS06 1/18 Monetary Amount:
+							}
+							sw.WriteLine("~");
 						}
 						//2320 AMT: D (medical,institutional,dental) COB Payer Paid Amount. Situational. Required when the claim has been adjudicated by payer in loop 2330B.
 						seg++;
 						sw.WriteLine("AMT*D*"//AMT01 1/3 Amount Qualifier Code: D=Payor Amount Paid.
-							+paidOtherInsStr//AMT02 1/18 Monetary Amount:
+							+AmountToStrNoLeading(claimPaidOtherIns)//AMT02 1/18 Monetary Amount:
 							+"~");//AMT03 Not used.
 						//2320 AMT: EAF (medical,institutional,dental) Remaining Patient Liability. Situational. Required when claim has been adjudicated by payer in loop 2330B.
 						seg++;
 						sw.WriteLine("AMT*EAF*"//AMT01 1/3 Amount Qualifier Code: EAF=Amount Owed.
-							+amountRemainingStr//AMT02 1/18 Monetary Amount:
+							+AmountToStrNoLeading(claimPatientPortion)//AMT02 1/18 Monetary Amount:
 							+"~");//AMT03 Not used.
 						//2320 AMT: A8 (medical,institutional,dental) COB Total Non-Covered Amount. Situational. Can be set when primary claim was not adjudicated. We do not use.
 					}
@@ -2396,7 +2413,17 @@ namespace OpenDentBusiness
 			}
 			return false;
 		}
-		
+
+
+		///<summary>Removes leading zeros in numbers such as 0.00 or 0.99, for Emdeon and maybe others.</summary>
+		private static string AmountToStrNoLeading(double amount) {
+			string result=amount.ToString("F");
+			int i=0;
+			while(i<result.Length-1 && result[i]=='0') {
+				i++;
+			}
+			return result.Substring(i);
+		}
 
 
 	}
