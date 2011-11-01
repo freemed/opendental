@@ -80,6 +80,7 @@ namespace OpenDentBusiness{
 		UAppoint,
 		Vipersoft,
 		VixWin,
+		VixWinBase41,
 		VixWinOld,
 		Xcharge,
 		XDR

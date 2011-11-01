@@ -6746,6 +6746,83 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '11.1.7.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To11_1_9();
+		}
+
+		private static void To11_1_9() {
+			if(FromVersion<new Version("11.1.9.0")) {
+				//Update VixWin Bridge
+				string command="Select ProgramNum FROM program WHERE ProgName='VixWin'";
+				long programNum=PIn.Long(Db.GetScalar(command));
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+POut.Long(programNum)+", "
+						+"'Optional Image Path', "
+						+"'')";
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+POut.Long(programNum)+", "
+						+"'Optional Image Path', "
+						+"'')";
+					Db.NonQ32(command);
+				}
+				//Insert VixWinBase41 Imaging Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'VixWinBase41', "
+						+"'VixWin(Base41) from www.gendexxray.com', "
+						+"'0', "
+						+"'"+POut.String(@"C:\VixWin\VixWin.exe")+"',"
+						+"'', "
+						+"'This VixWin bridge uses base 41 PatNums.')";
+					programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+POut.Long(programNum)+", "
+						+"'Image Path', "
+						+"'')";//User will be required to set up image path before using bridge. If they try to use it they will get a warning message and the bridge will fail gracefully.
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+POut.Long(programNum)+", "
+						+POut.Int(((int)ToolBarsAvail.ChartModule))+", "
+						+"'VixWinBase41')";
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"(SELECT MAX(ProgramNum)+1 FROM program),"
+						+"'VixWinBase41', "
+						+"'VixWin(Base41) from www.gendexxray.com', "
+						+"'0', "
+						+"'"+POut.String(@"C:\VixWin\VixWin.exe")+"',"
+						+"'', "
+						+"'This VixWin bridge uses base 41 PatNums.')";
+					programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"(SELECT MAX(ProgramPropertyNum)+1 FROM programproperty),"
+						+POut.Long(programNum)+", "
+						+"'Image Path', "
+						+"'')";//User will be required to set up image path before using bridge. If they try to use it they will get a warning message and the bridge will fail gracefully.
+					Db.NonQ32(command);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+						+POut.Long(programNum)+", "
+						+POut.Int(((int)ToolBarsAvail.ChartModule))+", "
+						+"'VixWinBase41')";
+					Db.NonQ32(command);
+				}
+				command="UPDATE preference SET ValueString = '11.1.9.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To11_2_0();
 		}
 		
@@ -6869,6 +6946,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PatientFormsShowConsent','0')";
 					Db.NonQ(command);
 				}
+				
+
+
 
 
 
