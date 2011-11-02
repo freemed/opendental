@@ -2472,7 +2472,7 @@ namespace OpenDental{
 		}
 		
 		private void butChange_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+			if(!Security.IsAuthorized(Permissions.InsPlanChangeSubsc)) {
 				return;
 			}
 			try {

@@ -159,6 +159,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Insurance Payment Create");
 				case Permissions.InsPayEdit:
 					return Lans.g("enumPermissions","Insurance Payment Edit");
+				case Permissions.InsPlanChangeSubsc:
+					return Lans.g("enumPermissions","Insurance Plan Change Subscriber");
 				case Permissions.ManageModule:
 					return Lans.g("enumPermissions","Manage Module");
 				case Permissions.None:

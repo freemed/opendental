@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				popup.PatNum     = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				popup.Description= PIn.String(table.Rows[i]["Description"].ToString());
 				popup.IsDisabled = PIn.Bool  (table.Rows[i]["IsDisabled"].ToString());
-				popup.IsFamily   = PIn.Bool  (table.Rows[i]["IsFamily"].ToString());
+				popup.IsFamily   = (EnumPopupFamily)PIn.Int  (table.Rows[i]["IsFamily"].ToString());
 				retVal.Add(popup);
 			}
 			return retVal;
@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (popup.PatNum)+","
 				+"'"+POut.String(popup.Description)+"',"
 				+    POut.Bool  (popup.IsDisabled)+","
-				+    POut.Bool  (popup.IsFamily)+")";
+				+    POut.Int  ((int)popup.IsFamily)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum     =  "+POut.Long  (popup.PatNum)+", "
 				+"Description= '"+POut.String(popup.Description)+"', "
 				+"IsDisabled =  "+POut.Bool  (popup.IsDisabled)+", "
-				+"IsFamily   =  "+POut.Bool  (popup.IsFamily)+" "
+				+"IsFamily   =  "+POut.Int  ((int)popup.IsFamily)+" "
 				+"WHERE PopupNum = "+POut.Long(popup.PopupNum);
 			Db.NonQ(command);
 		}
@@ -137,7 +137,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(popup.IsFamily != oldPopup.IsFamily) {
 				if(command!=""){ command+=",";}
-				command+="IsFamily = "+POut.Bool(popup.IsFamily)+"";
+				command+="IsFamily = "+POut.Int((int)popup.IsFamily)+"";
 			}
 			if(command==""){
 				return;

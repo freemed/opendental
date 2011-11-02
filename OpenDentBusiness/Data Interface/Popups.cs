@@ -14,7 +14,30 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),patNum);
 			} 
-			string command="SELECT * FROM popup WHERE PatNum = "+POut.Long(patNum);
+			Patient patCur=Patients.GetPat(patNum);
+			string command="SELECT * FROM popup "
+				+"WHERE PatNum = "+POut.Long(patNum)+" "
+				+"OR (PatNum IN (SELECT Guarantor FROM Patient "
+						+"WHERE PatNum = "+POut.Long(patNum)+") "
+					+"AND IsFamily = "+POut.Int((int)EnumPopupFamily.Family)+") "
+				+"OR (PatNum IN (SELECT SuperFamily FROM Patient "
+						+"WHERE PatNum = "+POut.Long(patNum)+") "
+					+"AND IsFamily = "+POut.Int((int)EnumPopupFamily.SuperFamily)+") ";
+			return Crud.PopupCrud.SelectMany(command);
+		}
+
+		///<summary>Gets all Popups for a single patient.  There will actually only be one or zero for now.</summary>
+		public static List<Popup> GetForFamily(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),pat);
+			}
+			string command="SELECT * FROM popup "
+					+"WHERE PatNum IN (SELECT PatNum FROM Patient "
+						+"WHERE Guarantor = "+POut.Long(pat.Guarantor)+") ";
+			if(pat.SuperFamily!=0) {//They are part of a super family
+				command+="OR PatNum IN (SELECT PatNum FROM Patient "
+						+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
+			}
 			return Crud.PopupCrud.SelectMany(command);
 		}
 

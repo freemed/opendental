@@ -1105,7 +1105,9 @@ namespace OpenDentBusiness{
 		///<summary>53</summary>
 		ProcedureNote,
 		///<summary>54</summary>
-		ReferralAdd
+		ReferralAdd,
+		///<summary>55</summary>
+		InsPlanChangeSubsc
 	}
 
 	///<summary>The type of signal being sent.</summary>

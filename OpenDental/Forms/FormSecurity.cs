@@ -491,6 +491,8 @@ namespace OpenDental{
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.FamilyModule);
+				node2=SetNode(Permissions.InsPlanChangeSubsc);
+					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.AccountModule);
 				node2=SetNode(Permissions.ClaimSentEdit);

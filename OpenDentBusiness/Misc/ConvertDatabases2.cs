@@ -6946,7 +6946,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PatientFormsShowConsent','0')";
 					Db.NonQ(command);
 				}
-				
+				//Add InsPlanChangeSubsc permission to all groups that had SecurityAdmin permission---------------------------------------------
+				long groupNum;
+				command="SELECT DISTINCT UserGroupNum "
+					+"FROM grouppermission "
+					+"WHERE PermType="+POut.Int((int)Permissions.SecurityAdmin);
+				DataTable table=Db.GetTable(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.InsPlanChangeSubsc)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.InsPlanChangeSubsc)+")";
+						Db.NonQ32(command);
+					}
+				}
 
 
 

@@ -189,7 +189,9 @@ namespace OpenDental{
 			}
 			comboHours.Text="1";*/
 			MinutesDisabled=0;
-			checkIsFamily.Checked=PopupCur.IsFamily;
+			if(PopupCur.IsFamily==EnumPopupFamily.Family) {
+				checkIsFamily.Checked=true;
+			}
 		}
 
 		/*

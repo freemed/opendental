@@ -14,13 +14,20 @@ namespace OpenDentBusiness{
 		public string Description;
 		/// <summary>If true, then the popup won't ever automatically show.</summary>
 		public bool IsDisabled;
-		/// <summary>If true, then this Popup will apply to the entire family and PatNum for this popup will the Guarantor PatNum.  This column will need to be synched for all family actions where the guarantor changes.</summary>
-		public bool IsFamily;
+		/// <summary>Enum:EnumPopupFamily 0=Patient, 1=Family, 2=Superfamily. If Family, then this Popup will apply to the entire family and PatNum will the Guarantor PatNum.  If Superfamily, then this popup will apply to the entire superfamily and PatNum will be the head of the superfamily. This column will need to be synched for all family actions where the guarantor changes.  </summary>
+		public EnumPopupFamily IsFamily;
 
 			
 	}
 
-	
+	public enum EnumPopupFamily {
+		/// <summary>0=Patient</summary>
+		Patient,
+		/// <summary>1=Family</summary>
+		Family,
+		/// <summary>3=SuperFamily</summary>
+		SuperFamily
+	}
 
 }
 

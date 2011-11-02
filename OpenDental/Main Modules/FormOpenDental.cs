@@ -2016,7 +2016,7 @@ namespace OpenDental{
 					ContrAppt2.MouseUpForced();
 				}
 			}
-			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
+			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count==0){//on startup
 				return;
 			}
 			if(!Programs.UsingEcwTight()) {
@@ -2401,7 +2401,11 @@ namespace OpenDental{
 		}
 
 		private void OnPopups_Click() {
+			FormPopupsForFam FormPFF=new FormPopupsForFam();
+			FormPFF.PatCur=Patients.GetPat(CurPatNum);
+			FormPFF.ShowDialog();
 			List<Popup> popList=Popups.GetForPatient(CurPatNum);
+			/*
 			FormPopupEdit FormP=new FormPopupEdit();
 			if(popList.Count==0) {
 				Popup pop=new Popup();
@@ -2420,12 +2424,14 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(FormP.MinutesDisabled>0) {
-				PopupEvent popevent=new PopupEvent();
-				popevent.PatNum=CurPatNum;
-				popevent.DisableUntil=DateTime.Now+TimeSpan.FromMinutes(FormP.MinutesDisabled);
-				PopupEventList.Add(popevent);
-				PopupEventList.Sort();
+			*/
+			if(FormPFF.DialogResult==DialogResult.OK) {
+				for(int i=0;i<FormPFF.PopupEventList.Count;i++) {
+					if(FormPFF.PopupEventList[i].DisableUntil>DateTime.Now) {
+						PopupEventList.Add(FormPFF.PopupEventList[i]);
+						PopupEventList.Sort();
+					}
+				}
 			}
 		}
 
@@ -4914,8 +4920,9 @@ namespace OpenDental{
 
 	}
 
-	class PopupEvent:IComparable{
+	public class PopupEvent:IComparable{
 		public long PatNum;
+		public long PopupNum;
 		///<summary>Disable popup for this patient until this time.</summary>
 		public DateTime DisableUntil;
 

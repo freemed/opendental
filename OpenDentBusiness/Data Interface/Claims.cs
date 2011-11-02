@@ -254,6 +254,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called from FormRpOutIns. Gets outstanding insurance claims. Requires all fields. provNumList may be empty (but will return null if isAllProv is false). dateMin and dateMax will not be used if they are set to DateTime.MinValue() (01/01/0001). If isPreauth is true only claims of type preauth will be returned.</summary>
 		public static DataTable GetOutInsClaims(bool isAllProv, List<long> provNumList, DateTime dateMin, DateTime dateMax, bool isPreauth){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),isAllProv,provNumList,dateMin,dateMax,isPreauth);
+			}
 			string command;
 			command = "SELECT carrier.CarrierName,carrier.Phone,claim.ClaimType,patient.FName,patient.LName,patient.MiddleI,patient.PatNum,claim.DateService,claim.DateSent,claim.ClaimFee,claim.ClaimNum "
 				+"FROM carrier,patient,claim,insplan "
@@ -282,7 +285,9 @@ namespace OpenDentBusiness{
 			}
 			command+="ORDER BY carrier.Phone,insplan.PlanNum, carrier.Phone,insplan.PlanNum";
 			object[] parameters={command};
-			Plugins.HookAddCode(null,"Claims.GetOutInsClaims_beforequeryrun",parameters);
+			if(RemotingClient.RemotingRole==RemotingRole.ClientDirect) {//this is a temporary safe fix
+				Plugins.HookAddCode(null,"Claims.GetOutInsClaims_beforequeryrun",parameters);
+			}
 			command=(string)parameters[0];
 			DataTable table=Db.GetTable(command);
 			return table;
