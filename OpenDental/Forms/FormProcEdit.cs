@@ -3842,7 +3842,8 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;//verified that this triggers a delete when window closed from all places where FormProcEdit is used, and where proc could be new.
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.ProcDelete,ProcCur.DateEntryC)) {
+			//If this is an existing completed proc, then this delete button is only enabled if the user has permission for ProcComplEdit based on the DateEntryC.
+			if(!Security.IsAuthorized(Permissions.ProcDelete,ProcCur.DateEntryC)) {//This should be a much more lenient permission since completed procedures are already safeguarded.
 				return;
 			}
 			if(MessageBox.Show(Lan.g(this,"Delete Procedure?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
@@ -3958,6 +3959,8 @@ namespace OpenDental{
 			}
 			else if(!IsNew){//an old procedure
 				if(ProcOld.ProcStatus==ProcStat.C){//that was already complete
+					//It's not possible for the user to get to this point unless they have permission for ProcComplEdit based on the DateEntryC.
+					//The following 2 checks are not redundant because they check different dates.
 					if(!Security.IsAuthorized(Permissions.ProcComplEdit,ProcOld.ProcDate)){//block old date
 						return false;
 					}

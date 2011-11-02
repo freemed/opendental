@@ -1016,7 +1016,7 @@ namespace OpenDentBusiness{
 		Setup,
 		///<summary>9</summary>
 		RxCreate,
-		///<summary>10. Uses date restrictions.</summary>
+		///<summary>10. Uses date restrictions.  Covers editing AND deleting of completed procs.  Deleting non-completed procs is covered by ProcDelete.</summary>
 		ProcComplEdit,
 		///<summary>11</summary>
 		ChooseDatabase,
@@ -1094,7 +1094,7 @@ namespace OpenDentBusiness{
 		AdjustmentEditZero,
 		///<summary>48</summary>
 		EhrEmergencyAccess,
-		///<summary>49. Uses date restrictions.</summary>
+		///<summary>49. Uses date restrictions.  This only applies to non-completed procs.  Deletion of completed procs is covered by ProcComplEdit.</summary>
 		ProcDelete,
 		///<summary>50 - Only used at OD HQ.  No user interface.</summary>
 		EhrKeyAdd,
