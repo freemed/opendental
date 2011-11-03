@@ -1902,7 +1902,7 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
-			if(!Programs.UsingEcwTight()) {
+			if(!Programs.UsingEcwTight()) {//eCW only gets Patient Select and Popups toolbar buttons
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,Lan.g(this,"New Commlog Entry"),"Commlog"));
 				button=new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email");
 				ToolBarMain.Buttons.Add(button);
@@ -1923,8 +1923,8 @@ namespace OpenDental{
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuLabel;
 				ToolBarMain.Buttons.Add(button);
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Popups"),-1,Lan.g(this,"Edit popups for this patient"),"Popups"));
 			}
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Popups"),-1,Lan.g(this,"Edit popups for this patient"),"Popups"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.AllModules);
 			for(int i=0;i<toolButItems.Count;i++) {
 			  //ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -2017,11 +2017,11 @@ namespace OpenDental{
 					ContrAppt2.MouseUpForced();
 				}
 			}
-			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count==0){//on startup
+			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){//on startup.  js Not sure why it's checking count.
 				return;
 			}
-			if(!Programs.UsingEcwTight()) {
-				if(CurPatNum==0) {//Only on startup, I think.
+			if(CurPatNum==0) {//Only on startup, I think.
+				if(!Programs.UsingEcwTight()) {//eCW only gets Patient Select and Popups toolbar buttons
 					ToolBarMain.Buttons["Email"].Enabled=false;
 					ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
@@ -2029,9 +2029,11 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Form"].Enabled=false;
 					ToolBarMain.Buttons["Tasklist"].Enabled=false;
 					ToolBarMain.Buttons["Label"].Enabled=false;
-					ToolBarMain.Buttons["Popups"].Enabled=false;
 				}
-				else {
+				ToolBarMain.Buttons["Popups"].Enabled=false;
+			}
+			else {
+				if(!Programs.UsingEcwTight()) {
 					if(hasEmail) {
 						ToolBarMain.Buttons["Email"].Enabled=true;
 					}
@@ -2044,8 +2046,8 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Form"].Enabled=true;
 					ToolBarMain.Buttons["Tasklist"].Enabled=true;
 					ToolBarMain.Buttons["Label"].Enabled=true;
-					ToolBarMain.Buttons["Popups"].Enabled=true;
 				}
+				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
 			Text=PatientL.GetMainTitle(patName,patNum,chartNumber,siteNum);
@@ -2071,14 +2073,16 @@ namespace OpenDental{
 					}
 					//MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
 					FormPopupDisplay FormP=new FormPopupDisplay();
-					FormP.PopupCur=popList[0];
-					FormP.ShowDialog();
-					if(FormP.MinutesDisabled>0){
-						PopupEvent popevent=new PopupEvent();
-						popevent.PatNum=patNum;
-						popevent.DisableUntil=DateTime.Now+TimeSpan.FromMinutes(FormP.MinutesDisabled);
-						PopupEventList.Add(popevent);
-						PopupEventList.Sort();
+					for(int i=0;i<PopupEventList.Count-1;i++) {
+						FormP.PopupCur=popList[i];
+						FormP.ShowDialog();
+						if(FormP.MinutesDisabled>0) {
+							PopupEvent popevent=new PopupEvent();
+							popevent.PatNum=patNum;
+							popevent.DisableUntil=DateTime.Now+TimeSpan.FromMinutes(FormP.MinutesDisabled);
+							PopupEventList.Add(popevent);
+							PopupEventList.Sort();
+						}
 					}
 				}
 			}
