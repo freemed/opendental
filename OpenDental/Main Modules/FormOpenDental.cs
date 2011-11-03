@@ -238,6 +238,7 @@ namespace OpenDental{
 		private Point locationMouseForLogoff;
 		private MenuItem menuItemPayerIDs;
 		private MenuItem menuItemTestLatency;
+		private FormLogOn FormLogOn_;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -1534,9 +1535,9 @@ namespace OpenDental{
 						Security.CurUser=adminUser.Copy();
 					}
 					else {
-						FormLogOn FormL=new FormLogOn();
-						FormL.ShowDialog(this);
-						if(FormL.DialogResult==DialogResult.Cancel) {
+						FormLogOn_=new FormLogOn();
+						FormLogOn_.ShowDialog(this);
+						if(FormLogOn_.DialogResult==DialogResult.Cancel) {
 							Cursor=Cursors.Default;
 							Application.Exit();
 							return;
@@ -4453,9 +4454,9 @@ namespace OpenDental{
 					}
 					else {//not using eCW in tight integration mode
 						//So present logon screen
-						FormLogOn FormL=new FormLogOn();
-						FormL.ShowDialog(this);
-						if(FormL.DialogResult==DialogResult.Cancel) {
+						FormLogOn_=new FormLogOn();
+						FormLogOn_.ShowDialog(this);
+						if(FormLogOn_.DialogResult==DialogResult.Cancel) {
 							Application.Exit();
 							return;
 						}
@@ -4466,9 +4467,9 @@ namespace OpenDental{
 				if(passHash!=user.Password || !Programs.UsingEcwTight())//password not accepted or not using eCW
 				{
 					//So present logon screen
-					FormLogOn FormL=new FormLogOn();
-					FormL.ShowDialog(this);
-					if(FormL.DialogResult==DialogResult.Cancel) {
+					FormLogOn_=new FormLogOn();
+					FormLogOn_.ShowDialog(this);
+					if(FormLogOn_.DialogResult==DialogResult.Cancel) {
 						Application.Exit();
 						return;
 					}
@@ -4711,9 +4712,9 @@ namespace OpenDental{
 			}
 			Application.DoEvents();//so that the window background will refresh.
 			Security.CurUser=oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
-			FormLogOn FormL=new FormLogOn();
-			FormL.ShowDialog(this);
-			if(FormL.DialogResult==DialogResult.Cancel) {
+			FormLogOn_=new FormLogOn();
+			FormLogOn_.ShowDialog(this);
+			if(FormLogOn_.DialogResult==DialogResult.Cancel) {
 				Application.Exit();
 				return;
 			}
@@ -4825,9 +4826,12 @@ namespace OpenDental{
 			myOutlookBar.Invalidate();
 			UnselectActive();
 			allNeutral();
-			FormLogOn FormL=new FormLogOn();
-			FormL.ShowDialog(this);//Passing "this" brings FormL to the front when user logs back in.
-			if(FormL.DialogResult==DialogResult.Cancel) {
+			if(FormLogOn_!=null) {//To prevent multiple log on screens from showing.
+				FormLogOn_.Dispose();
+			}
+			FormLogOn_=new FormLogOn();
+			FormLogOn_.ShowDialog(this);//Passing "this" brings FormL to the front when user logs back in.
+			if(FormLogOn_.DialogResult==DialogResult.Cancel) {
 				Application.Exit();
 				return;
 			}
