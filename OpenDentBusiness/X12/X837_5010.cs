@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness
-{
+{ 
 	///<summary></summary>
 	public class X837_5010:X12object{
 
