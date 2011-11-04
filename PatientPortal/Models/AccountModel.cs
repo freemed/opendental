@@ -38,11 +38,20 @@ namespace PatientPortalMVC.Models {
 			if(patm.BalTotal<0) {
 				BalTotal="-"+BalTotal;
 			}
+			else {
+				BalTotal=" "+BalTotal;
+			}
 			if(patm.InsEst<0) {
 				InsEst="-"+InsEst;
 			}
+			else {
+				InsEst=" "+InsEst;
+			}
 			if((patm.BalTotal-patm.InsEst)<0) {
 				AfterIns="-"+AfterIns;
+			}
+			else {
+				AfterIns=" "+AfterIns;
 			}
 			statementmList=Statementms.GetStatementms(patm.CustomerNum,patm.PatNum);
 		}

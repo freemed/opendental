@@ -380,6 +380,10 @@ namespace WebHostSynch {
 						return;
 					}
 					Statementms.UpdateFromChangeList(statementList,customerNum);
+					//now delete some statements to restrict the number of statements per patient.
+					int limitPerPatient=4;
+					List<long> patList=statementList.Select(sl=>sl.PatNum).Distinct().ToList();//select distint patients from the list.
+					Statementms.LimitStatementmsPerPatient(patList,customerNum,limitPerPatient);
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
@@ -395,6 +399,9 @@ namespace WebHostSynch {
 						return;
 					}
 					Documentms.UpdateFromChangeList(documentList,customerNum);
+					//now delete documents whoes DocNums are not found in the statements table
+					Documentms.LimitDocumentmsPerPatient(customerNum);
+
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);

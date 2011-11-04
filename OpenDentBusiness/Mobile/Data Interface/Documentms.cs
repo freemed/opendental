@@ -21,6 +21,13 @@ namespace OpenDentBusiness.Mobile{
 					+" AND PatNum = "+POut.Long(patNum);
 			return Crud.DocumentmCrud.SelectMany(command);
 		}
+		///<summary>Limits the number of documents in the database for a single patient </summary>
+		public static void LimitDocumentmsPerPatient(long customerNum) {
+			string command="DELETE FROM documentm WHERE CustomerNum = "+POut.Long(customerNum)
+			+" AND DocNum NOT IN (SELECT DocNum from statementm  WHERE CustomerNum = "+POut.Long(customerNum)+" )"; ;
+			Db.NonQ(command);
+		}
+		
 		#endregion
 
 		#region Used only on OD

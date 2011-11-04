@@ -11,9 +11,11 @@ using WebForms;
 namespace PatientPortalMVC.Models
 {
     public class FamilyModel {
+		public Patientm patm;
 		public List<Patientm> patList;
 
 		public FamilyModel(Patientm patm) {
+			this.patm=patm;
 			patList=Patientms.GetPatientmsOfFamily(patm.CustomerNum,patm.PatNum);
 			foreach(Patientm pm in patList) {
 				pm.Age=Patientms.DateToAge(pm.Birthdate);

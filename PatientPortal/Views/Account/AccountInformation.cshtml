@@ -6,21 +6,21 @@
 	ViewBag.Title = "Account";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div style="margin-left:3em"> 
+<div style="margin-top:3em;margin-left:3em;"> 
 	<div class="divtable">
 		<div class="divtablerow">
-			<div class="divtablecell1">
-				<strong>Balance </strong></div><div class="divtablecell2">=&nbsp;&nbsp;&nbsp;&nbsp; @Html.Encode(Model.BalTotal)
+			<div class="divtablecell1 padbottom20px">
+				<strong>Balance </strong></div><div class="divtablecell2">=&nbsp;&nbsp;&nbsp;&nbsp;@Html.Encode(Model.BalTotal)
 			</div>
 		</div>
 		<div class="divtablerow">
-			<div class="divtablecell1">
-				<strong>Ins Pending </strong></div><div class="divtablecell2">=&nbsp;&nbsp;&nbsp;&nbsp; @Html.Encode(Model.InsEst)
+			<div class="divtablecell1 padbottom20px">
+				<strong>Ins Pending </strong></div><div class="divtablecell2">=&nbsp;&nbsp;&nbsp;&nbsp;@Html.Encode(Model.InsEst)
 			</div>
 		</div>
 		<div class="divtablerow">
-			<div class="divtablecell1">
-				<strong>After Ins </strong></div><div class="divtablecell2">=&nbsp;&nbsp;&nbsp;&nbsp; @Html.Encode(Model.AfterIns)
+			<div class="divtablecell1 padbottom20px">
+				<strong>After Ins </strong></div><div class="divtablecell2">=&nbsp;&nbsp;&nbsp;&nbsp;@Html.Encode(Model.AfterIns)
 			</div>
 		</div>
 	</div>

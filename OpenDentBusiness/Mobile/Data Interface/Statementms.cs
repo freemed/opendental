@@ -29,25 +29,18 @@ namespace OpenDentBusiness.Mobile{
 				return;
 			}
 			for(int i=0;i<patList.Count;i++) {
-				string command="SELECT StatementNum, DocNum FROM statementm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patList[i])
+				string command="SELECT StatementNum FROM statementm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patList[i])
 					+" ORDER BY DateSent DESC, StatementNum DESC " + limitStr;
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					string strStatementNums=" AND ( ";
-					string strDocNums=" AND ( ";
 					for(int j=0;j<table.Rows.Count;j++) {
 						if(j>0) {
 							strStatementNums+="OR ";
-							strDocNums+="OR ";
 						}
 						strStatementNums+="StatementNum='"+PIn.Long(table.Rows[j]["StatementNum"].ToString())+"' ";
-						strDocNums+="DocNum='"+PIn.Long(table.Rows[j]["DocNum"].ToString())+"' ";
 					}
 					strStatementNums+=" )";
-					strDocNums+=" )";
-					command="DELETE FROM documentm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patList[i])
-						+strDocNums;
-					Db.NonQ(command);
 					command="DELETE FROM statementm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patList[i])
 						+strStatementNums;
 					Db.NonQ(command);

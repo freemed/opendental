@@ -166,7 +166,7 @@ ul#menu li.selected a {
     color: #000;
 }
 .nohighlight{
-    background-color: #99CCFF;
+    background-color: #CCCCCC;
 }
 .highlight{
     background-color: White;
@@ -335,10 +335,15 @@ div#patname {
 .divtablecell1{
     display: table-cell; 
     width:100px;
-    padding-bottom:20px;
-    
+    padding-bottom:5px;
 }
+
 .divtablecell2{
-    display: table-cell; 
-     padding-bottom:20px;
+    display: table-cell;ftp
+    
+    padding-bottom:5px;
+}
+
+.padbottom20px{
+    padding-bottom:20px;
 }
