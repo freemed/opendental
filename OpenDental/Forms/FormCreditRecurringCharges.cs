@@ -42,6 +42,8 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
+			//Currently only working for X-Charge. If more added then move this check out of FillGrid.
+			#region XCharge Check
 			if(prog==null){
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return;
@@ -61,6 +63,7 @@ namespace OpenDental {
 				}
 				return;
 			}
+			#endregion
 			table=CreditCards.GetRecurringChargeList(payType);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -204,11 +207,11 @@ namespace OpenDental {
 			if(prog==null) {//Gets filled in FillGrid()
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)) {
-				return;
-			}
 			if(gridMain.SelectedIndices.Length<1) {
 				MsgBox.Show(this,"Must select at least one recurring charge.");
+				return;
+			}
+			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)) {
 				return;
 			}
 			string recurringResultFile="Recurring charge results for "+DateTime.Now.ToShortDateString()+" ran at "+DateTime.Now.ToShortTimeString()+"\r\n\r\n";

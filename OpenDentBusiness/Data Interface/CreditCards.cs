@@ -63,19 +63,53 @@ namespace OpenDentBusiness{
 			//	-have recurring charges setup and today's date falls within the start and stop range.
 			//	-have a total balance >= recurring charge amount
 			//NOTE: Query will return patients with or without payments regardless of when that payment occurred, filtering is done below.
-			string command="SELECT cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"
-					+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN DATE('0001-01-01') ELSE MAX(pay.PayDate) END LatestPayment,"
-					+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum "
-					+"FROM (creditcard cc,patient pat,patient guar) "
-					+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.PayType="+payType+" AND pay.IsRecurringCC=1 "
-					+"WHERE cc.PatNum=pat.PatNum "
-					+"AND pat.Guarantor=guar.PatNum "
-					+"AND cc.ChargeAmt>0 "
-					+"AND cc.DateStart<="+DbHelper.Curdate()+" "
-					+"AND (cc.DateStop>="+DbHelper.Curdate()+" OR YEAR(cc.DateStop)<1880) "
-					+"AND guar.BalTotal-guar.InsEst>=cc.ChargeAmt "
-					+"GROUP BY cc.CreditCardNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
-					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt";
+			string command="SELECT PatNum,PatName,FamBalTotal,LatestPayment,DateStart,Address,Zip,XChargeToken,CCNumberMasked,CCExpiration,ChargeAmt,PayPlanNum "
+				+"FROM (";
+			#region Payments
+			command+="(SELECT 1,cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"//The 'SELECT 1' garuntees the UNION will not combine results with payment plans.
+				+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN "+POut.Date(new DateTime(1,1,1))+" ELSE MAX(pay.PayDate) END LatestPayment,"
+				+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop "
+				+"FROM (creditcard cc,patient pat,patient guar) "
+				+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.IsRecurringCC=1 "
+				+"WHERE cc.PatNum=pat.PatNum "
+				+"AND pat.Guarantor=guar.PatNum "
+				+"AND cc.PayPlanNum=0 ";//Keeps card from showing up in case they have a balance AND is setup for payment plan. 
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY cc.CreditCardNum) ";
+			}
+			else {//Oracle
+				command+="GROUP BY cc.CreditCardNum,cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
+					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop) ";
+			}
+			#endregion
+			command+="UNION ";
+			#region Payment Plans
+			command+="(SELECT 2,cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,";//The 'SELECT 2' garuntees the UNION will not combine results with payments.
+			//Special select statement to figure out how much is owed on a particular payment plan.  This total amount will be Labeled as FamBalTotal for UNION purposes.
+			command+="(SELECT CASE WHEN SUM(ppc.Principal+ppc.Interest) IS NULL THEN 0 ELSE SUM(ppc.Principal+ppc.Interest) END "
+				+"FROM PayPlanCharge ppc "
+				+"WHERE ppc.ChargeDate <= "+DbHelper.Curdate()+" AND ppc.PayPlanNum=cc.PayPlanNum) "
+				+"- (SELECT CASE WHEN SUM(ps.SplitAmt) IS NULL THEN 0 ELSE SUM(ps.SplitAmt) END FROM paysplit ps WHERE ps.PayPlanNum=cc.PayPlanNum) FamBalTotal,";
+			command+="CASE WHEN MAX(ps.DatePay) IS NULL THEN "+POut.Date(new DateTime(1,1,1))+" ELSE MAX(pay.PayDate) END LatestPayment,"
+				+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop "
+				+"FROM creditcard cc "
+				+"INNER JOIN patient pat ON pat.PatNum=cc.PatNum "
+				+"LEFT JOIN paysplit ps ON ps.PayPlanNum=cc.PayPlanNum "
+				+"LEFT JOIN payment pay ON pay.PayNum=ps.PayNum AND pay.IsRecurringCC=1 ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY cc.CreditCardNum) ";
+			}
+			else {//Oracle
+				command+="GROUP BY cc.CreditCardNum,cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
+					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop) ";
+			}
+			#endregion
+			//Now we have all the results for payments and payment plans, so do an obvious filter. A more thorough filter happens later.
+			command+=") due "
+				+"WHERE FamBalTotal>=ChargeAmt "
+				+"AND ChargeAmt>0 "
+				+"AND DateStart<="+DbHelper.Curdate()+" "
+				+"AND (DateStop>="+DbHelper.Curdate()+" OR YEAR(DateStop)<1880) ";
 			table=Db.GetTable(command);
 			FilterRecurringChargeList(table);
 			return table;
