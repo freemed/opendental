@@ -10,7 +10,7 @@ namespace OpenDentBusiness
 {
 	///<summary></summary>
 	public class X837_5010:X12object{
-
+		//test commit.
 		public X837_5010(string messageText):base(messageText){
 		
 		}
