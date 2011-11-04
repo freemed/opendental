@@ -17,10 +17,45 @@ namespace OpenDentBusiness.Mobile{
 					+" AND PatNum = "+POut.Long(patNum);
 			return Crud.StatementmCrud.SelectMany(command);
 		}
-		public static void TrimStatementms(long customerNum,long patNum) {
+
+		///<summary>Limits the number of statements and documents in the database for a single patient </summary>
+		public static void LimitStatementmsPerPatient(List<long> patList,long customerNum,int limitPerPatient) {
+			int upperlimit=500+limitPerPatient;// The figure 500 is somewhat arbitrary.
+			string limitStr="";
+			if(limitPerPatient>0) {
+				limitStr="LIMIT "+ limitPerPatient+","+upperlimit;
+			}
+			else {
+				return;
+			}
+			for(int i=0;i<patList.Count;i++) {
+				string command="SELECT StatementNum, DocNum FROM statementm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patList[i])
+					+" ORDER BY DateSent DESC, StatementNum DESC " + limitStr;
+				DataTable table=Db.GetTable(command);
+				if(table.Rows.Count>0) {
+					string strStatementNums=" AND ( ";
+					string strDocNums=" AND ( ";
+					for(int j=0;j<table.Rows.Count;j++) {
+						if(j>0) {
+							strStatementNums+="OR ";
+							strDocNums+="OR ";
+						}
+						strStatementNums+="StatementNum='"+PIn.Long(table.Rows[j]["StatementNum"].ToString())+"' ";
+						strDocNums+="DocNum='"+PIn.Long(table.Rows[j]["DocNum"].ToString())+"' ";
+					}
+					strStatementNums+=" )";
+					strDocNums+=" )";
+					command="DELETE FROM documentm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patList[i])
+						+strDocNums;
+					Db.NonQ(command);
+					command="DELETE FROM statementm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(patList[i])
+						+strStatementNums;
+					Db.NonQ(command);
+				}
+			}
+			//Note: this statement does not work: error =This version of MySQL doesn't yet support 'LIMIT & IN/ALL/ANY/SOME subquery'
 			//DELETE FROM statementm where StatementNum in (SELECT StatementNum FROM statementm WHERE CustomerNum=6566 AND 
-//PatNum=7 ORDER BY DateSent DESC, StatementNum DESC LIMIT 4,10)
-			//This version of MySQL doesn't yet support 'LIMIT & IN/ALL/ANY/SOME subquery'
+			//PatNum=7 ORDER BY DateSent DESC, StatementNum DESC LIMIT 5,100)
 		}
 		#endregion
 
