@@ -6763,8 +6763,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ32(command);
 				}
 				else {//oracle
-					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
+						+"(SELECT MAX(ProgramPropertyNum)+1 FROM programproperty),"
 						+POut.Long(programNum)+", "
 						+"'Optional Image Path', "
 						+"'')";
