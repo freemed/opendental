@@ -134,7 +134,7 @@ namespace OpenDentBusiness{
 
 		public static void ClearAllHeartBeats(string machineNameException) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),machineNameException);
 				return;
 			}
 			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' "
