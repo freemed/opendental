@@ -140,7 +140,8 @@ namespace OpenDentBusiness{
 				|| perm==Permissions.InsPayEdit//a claim payment with no date.
 				|| perm==Permissions.TreatPlanEdit
 				|| perm==Permissions.AdjustmentEdit
-				|| perm==Permissions.CommlogEdit)//usually from a conversion
+				|| perm==Permissions.CommlogEdit//usually from a conversion
+				|| perm==Permissions.ProcDelete)//because older versions did not set the DateEntryC.
 			{
 				if(date.Year<1880	&& dateLimit.Year<1880) {
 					return true;
