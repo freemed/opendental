@@ -4010,7 +4010,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						}
 					}
 				}
-				catch { }//do nothing
+				catch(Exception) { }//do nothing
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS medicalorder";
 					Db.NonQ(command);
