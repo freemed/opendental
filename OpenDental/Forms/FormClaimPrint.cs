@@ -1706,6 +1706,18 @@ namespace OpenDental{
 							displayStrings[i]=ClaimReferral.GetNameFL();
 						}
 						break;
+					case "UniformBillType":
+						displayStrings[i]=ClaimCur.UniformBillType;
+						break;
+					case "AdmissionType":
+						displayStrings[i]=ClaimCur.AdmissionTypeCode;
+						break;
+					case "AdmissionSource":
+						displayStrings[i]=ClaimCur.AdmissionSourceCode;
+						break;
+					case "PatientStatus":
+						displayStrings[i]=ClaimCur.PatientStatusCode;
+						break;
 				}//switch
 				if(CultureInfo.CurrentCulture.Name=="nl-BE"	&& displayStrings[i]==""){//Dutch Belgium
 					displayStrings[i]="*   *   *";
@@ -2684,8 +2696,7 @@ namespace OpenDental{
 							displayStrings[i]=fee.ToString("F");
 						}
 						else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-							decimal amt = fee * 100;
-							displayStrings[i] = amt.ToString();
+							displayStrings[i] = fee.ToString("F").Replace("."," ");
 						}
 						else {
 							displayStrings[i]=fee.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2732,8 +2743,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[0].ValAmount * 100;
-								displayStrings[i]=amt.ToString();
+								displayStrings[i]=vcA[0].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[0].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2748,8 +2758,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[3].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[3].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[3].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2764,8 +2773,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[6].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[6].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[6].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2780,8 +2788,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[9].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[9].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[9].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2797,8 +2804,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[1].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[1].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[1].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2814,8 +2820,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[4].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[4].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[4].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2831,8 +2836,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[7].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[7].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[7].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2847,8 +2851,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[10].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[10].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[10].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2863,8 +2866,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[2].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[2].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[2].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2880,8 +2882,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[5].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[5].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[5].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2897,8 +2898,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[8].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[8].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[8].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -2913,8 +2913,7 @@ namespace OpenDental{
 								displayStrings[i]="";
 							}
 							else if(ClaimFormCur.Items[i].FormatString == "NoDec") {
-								double amt = vcA[11].ValAmount * 100;
-								displayStrings[i] = amt.ToString();
+								displayStrings[i] = vcA[11].ValAmount.ToString("F").Replace("."," ");
 							}
 							else {
 								displayStrings[i]=vcA[11].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
@@ -3004,6 +3003,7 @@ namespace OpenDental{
 			double priorPayments = 0;
 			if(isPrimary || isSecondary || isTertiary){
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
+					string stringFormat=ClaimFormCur.Items[i].FormatString;
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedInsAName":
 							displayStrings[i] = Carriers.GetName(insPlan1.CarrierNum);
@@ -3020,19 +3020,29 @@ namespace OpenDental{
 							}
 							else {
 								priorPayments += claim1.InsPayAmt;
-								double amt = claim1.InsPayAmt;// *100; //get rid of decimal
-								displayStrings[i] = amt.ToString("n2");
+								double amt = claim1.InsPayAmt;
+								if(stringFormat=="") {
+									displayStrings[i]=amt.ToString("F");
+								}
+								else if(stringFormat=="NoDec") {
+									displayStrings[i]=amt.ToString("F").Replace("."," ");
+								}
+								else {
+									displayStrings[i]=amt.ToString(stringFormat);
+								}
 							}
 							break;
 						case "MedInsAAmtDue":
-							double amtDue;
-							//if (ClaimCur.ClaimNum == Primary.ClaimNum){
-							amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);// * 100;
-							displayStrings[i]=amtDue.ToString("n2");
-							//} 
-							//else {
-							//	displayStrings[i]="";
-							//}
+							double amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);
+							if(stringFormat=="") {								
+								displayStrings[i]=amtDue.ToString("F");
+							}
+							else if(stringFormat=="NoDec") {
+								displayStrings[i]=amtDue.ToString("F").Replace("."," ");
+							}
+							else {
+								displayStrings[i]=amtDue.ToString(stringFormat);
+							}
 							break;
 						case "MedInsAOtherProvID":
 							ProviderIdent provID;
@@ -3075,6 +3085,7 @@ namespace OpenDental{
 			}
 			if(isSecondary||isTertiary){
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
+					string stringFormat=ClaimFormCur.Items[i].FormatString;
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedInsBName":
 							displayStrings[i] = Carriers.GetName(insPlan2.CarrierNum);
@@ -3091,15 +3102,31 @@ namespace OpenDental{
 							}
 							else {
 								priorPayments+=claim2.InsPayAmt;
-								double amt = claim2.InsPayAmt * 100; //get rid of decimal
-								displayStrings[i]=amt.ToString();
+								double amt=claim2.InsPayAmt;
+								if(stringFormat=="") {
+									displayStrings[i]=amt.ToString("F");
+								}
+								else if(stringFormat=="NoDec") {
+									displayStrings[i]=amt.ToString("F").Replace("."," ");
+								}
+								else {
+									displayStrings[i]=amt.ToString(stringFormat);
+								}
 							}
 							break;
 						case "MedInsBAmtDue":
-							double AmtDue;
 							if(ClaimCur.ClaimNum==claim2.ClaimNum) {
-								AmtDue = (ClaimCur.ClaimFee-priorPayments-totalValAmount) * 100;
-								displayStrings[i]=AmtDue.ToString();
+								double amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);
+								if(stringFormat=="") {
+									displayStrings[i]=amtDue.ToString("F");
+								}
+								else if(stringFormat=="NoDec") {
+									displayStrings[i]=amtDue.ToString("F").Replace("."," ");
+								}
+								else {
+									displayStrings[i]=amtDue.ToString(stringFormat);
+								}
+								break;
 							}
 							else {
 								displayStrings[i]="";
@@ -3146,6 +3173,7 @@ namespace OpenDental{
 			}
 			if(isTertiary){
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
+					string stringFormat=ClaimFormCur.Items[i].FormatString;
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedInsCName":
 							displayStrings[i] = Carriers.GetName(insPlan3.CarrierNum);
@@ -3162,15 +3190,31 @@ namespace OpenDental{
 							}
 							else {
 								priorPayments += claim3.InsPayAmt;
-								double amt = claim3.InsPayAmt * 100; //get rid of decimal
-								displayStrings[i]=amt.ToString();
+								double amt=claim3.InsPayAmt;
+								if(stringFormat=="") {
+									displayStrings[i]=amt.ToString("F");
+								}
+								else if(stringFormat=="NoDec") {
+									displayStrings[i]=amt.ToString("F").Replace("."," ");
+								}
+								else {
+									displayStrings[i]=amt.ToString(stringFormat);
+								}
 							}
 							break;
 						case "MedInsCAmtDue":
-							double AmtDue;
 							if(ClaimCur.ClaimNum==claim3.ClaimNum) {
-								AmtDue = (ClaimCur.ClaimFee-priorPayments-totalValAmount) * 100;
-								displayStrings[i]=AmtDue.ToString();
+								double amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);
+								if(stringFormat=="") {
+									displayStrings[i]=amtDue.ToString("F");
+								}
+								else if(stringFormat=="NoDec") {
+									displayStrings[i]=amtDue.ToString("F").Replace("."," ");
+								}
+								else {
+									displayStrings[i]=amtDue.ToString(stringFormat);
+								}
+								break;
 							}
 							else {
 								displayStrings[i]="";
@@ -3289,7 +3333,7 @@ namespace OpenDental{
 					return totalProcFees.ToString("F");
 				}
 				else if(stringFormat=="NoDec") {
-					return (totalProcFees*100).ToString("F");
+					return totalProcFees.ToString("F").Replace("."," ");
 				}
 				return totalProcFees.ToString(stringFormat);
 			}
@@ -3377,7 +3421,7 @@ namespace OpenDental{
 						return totalLabFees.ToString("F");
 					}
 					else if(stringFormat=="NoDec") {
-						return (totalLabFees*100).ToString("F");
+						return totalLabFees.ToString("F").Replace("."," ");
 					}
 					return totalLabFees.ToString(stringFormat);
 				}

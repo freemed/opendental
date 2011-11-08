@@ -722,7 +722,11 @@ namespace OpenDental{
 				"MedValCode41d",
 				"MedValAmount41d",
 				"ReferringProvNPI",
-				"ReferringProvNameFL"
+				"ReferringProvNameFL",
+				"UniformBillType",
+				"AdmissionType",
+				"AdmissionSource",
+				"PatientStatus",
 			};
 		}
 

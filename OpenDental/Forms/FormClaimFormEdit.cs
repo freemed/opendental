@@ -822,6 +822,16 @@ namespace OpenDental{
 					case "MedValAmount41d":
 						displayStrings[i]="1234.00";
 						break;
+					case "UniformBillType":
+						displayStrings[i]="831";
+						break;
+					case "AdmissionType":
+					case "AdmissionSource":
+						displayStrings[i]="1";
+						break;
+					case "PatientStatus":
+						displayStrings[i]="01";
+						break;
 					case "Remarks":
 						displayStrings[i]="This is a test of the remarks section of the claim form.";
 						break;
