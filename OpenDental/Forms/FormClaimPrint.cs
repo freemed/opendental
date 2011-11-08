@@ -3430,8 +3430,8 @@ namespace OpenDental{
 					break;
 				case TreatmentArea.ToothRange:
 					//area blank
-					toothNum="";
-					for(int i=0;i<ProcCur.ToothRange.Split(',').Length;i++){
+					toothNum=Tooth.FormatRangeForDisplay(ProcCur.ToothRange);
+					/*for(int i=0;i<ProcCur.ToothRange.Split(',').Length;i++){
 						if(!Tooth.IsValidDB(ProcCur.ToothRange.Split(',')[i])){
 							continue;
 						}
@@ -3439,7 +3439,7 @@ namespace OpenDental{
 							toothNum+=",";
 						}
 						toothNum+=Tooth.ToInternat(ProcCur.ToothRange.Split(',')[i]);
-					}
+					}*/
 					//surf blank
 					break;
 				default://mouth
