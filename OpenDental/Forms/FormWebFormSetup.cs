@@ -112,23 +112,29 @@ namespace OpenDental {
 
 		///<summary>This now also gets a new list of sheet defs from the server.  But it's only called after testing that the web service exists.</summary>
 		private void FillGrid() {
-			wh.Url=textboxWebHostAddress.Text;
-			sheetDefList=wh.DownloadSheetDefs(RegistrationKey);
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),200);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Browser Address For Patients"),510);
-			gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			for(int i=0;i<sheetDefList.Length;i++) {
-				ODGridRow row=new ODGridRow();
-				row.Tag=sheetDefList[i];
-				row.Cells.Add(sheetDefList[i].Description);
-				String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+sheetDefList[i].WebSheetDefID;
-				row.Cells.Add(SheetFormAddress);
-				gridMain.Rows.Add(row);
+			try{
+				wh.Url=textboxWebHostAddress.Text;
+				sheetDefList=wh.DownloadSheetDefs(RegistrationKey);
+				gridMain.Columns.Clear();
+				ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),200);
+				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Browser Address For Patients"),510);
+				gridMain.Columns.Add(col);
+				gridMain.Rows.Clear();
+				for(int i=0;i<sheetDefList.Length;i++) {
+					ODGridRow row=new ODGridRow();
+					row.Tag=sheetDefList[i];
+					row.Cells.Add(sheetDefList[i].Description);
+					String SheetFormAddress=SheetDefAddress+"?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+sheetDefList[i].WebSheetDefID;
+					row.Cells.Add(SheetFormAddress);
+					gridMain.Rows.Add(row);
+				}
+				gridMain.EndUpdate();
 			}
-			gridMain.EndUpdate();
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
