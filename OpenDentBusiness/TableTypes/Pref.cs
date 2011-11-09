@@ -183,6 +183,8 @@ namespace OpenDentBusiness {
 		MainWindowTitle,
 		///<summary>Not in use at the moment.  Soon, we will either start using it or else get rid of it completely.</summary>
 		MedicalEclaimsEnabled,
+		///<summary>New procs will use the fee amount tied to the medical code instead of the ADA code.</summary>
+		MedicalFeeUsedForNewProcs,
 		///<summary>FK to medication.MedicationNum</summary>
 		MedicationsIndicateNone,
 		MobileSyncDateTimeLastRun,
