@@ -1539,14 +1539,14 @@ namespace OpenDental{
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			if(comboProvNum.SelectedIndex==-1){
+			if(comboProvNum.SelectedIndex==-1) {
 				MsgBox.Show(this,"Please select a dentist.");
 				return;
 			}
 			FormProcCodes FormP=new FormProcCodes();
 			FormP.IsSelectionMode=true;
 			FormP.ShowDialog();
-			if(FormP.DialogResult!=DialogResult.OK){
+			if(FormP.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			Procedure ProcCur;
@@ -1565,12 +1565,33 @@ namespace OpenDental{
 			//Family fam=Patients.GetFamily(AptCur.PatNum);
 			//Patient pat=fam.GetPatient(AptCur.PatNum);
 			//InsPlan[] planList=InsPlans.Refresh(fam);
-			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			if(patPlanList.Count>0) {
 				prisub=InsSubs.GetSub(patPlanList[0].InsSubNum,SubList);
 				priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
 			}
-			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,patPlanList,SubList));
+			//Check if it's a medical procedure.
+			double insfee;
+			bool isMed = false;
+			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+			if(ProcCur.MedicalCode != null && ProcCur.MedicalCode != "") {
+				isMed = true;
+			}
+			//Get fee schedule for medical or dental.
+			long feeSch;
+			if(isMed) {
+				feeSch=Fees.GetMedFeeSched(pat,PlanList,patPlanList,SubList);
+			}
+			else {
+				feeSch=Fees.GetFeeSched(pat,PlanList,patPlanList,SubList);
+			}
+			//Get the fee amount for medical or dental.
+			if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed) {
+				insfee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.MedicalCode).CodeNum,feeSch);
+			}
+			else {
+				insfee=Fees.GetAmount0(ProcCur.CodeNum,feeSch);
+			}
 			if(priplan!=null && priplan.PlanType=="p") {//PPO
 				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
 				if(standardfee>insfee) {
@@ -1598,11 +1619,10 @@ namespace OpenDental{
 				aptProvHyg=ProviderC.ListShort[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
-				&& aptProvHyg != 0)
-			{
+				&& aptProvHyg != 0) {
 				ProcCur.ProvNum=aptProvHyg;
 			}
-			else{
+			else {
 				ProcCur.ProvNum=aptProvNum;
 			}
 			ProcCur.Note="";
@@ -1610,36 +1630,35 @@ namespace OpenDental{
 			//dx
 			//nextaptnum
 			ProcCur.DateEntryC=DateTime.Now;
-			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			ProcCur.RevCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).RevenueCodeDefault;
 			Procedures.Insert(ProcCur);
-			List <Benefit> benefitList=Benefits.Refresh(patPlanList,SubList);
+			List<Benefit> benefitList=Benefits.Refresh(patPlanList,SubList);
 			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList,pat.Age,SubList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
-			if(Programs.UsingOrion){
+			if(Programs.UsingOrion) {
 				FormPE.OrionProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
 				FormPE.OrionDentist=true;
 			}
 			FormPE.ShowDialog();
-			if(FormPE.DialogResult==DialogResult.Cancel){
+			if(FormPE.DialogResult==DialogResult.Cancel) {
 				//any created claimprocs are automatically deleted from within procEdit window.
-				try{
+				try {
 					Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
 				}
-				catch(Exception ex){
+				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
 				}
 				return;
 			}
-			else if(Programs.UsingOrion){
+			else if(Programs.UsingOrion) {
 				//No need to synch with Orion mode.
 			}
-			else{
+			else {
 				//Default is set to TP, so Synch is usually not needed.
-				if(ProcCur.ProcStatus==ProcStat.C||ProcCur.ProcStatus==ProcStat.EC||ProcCur.ProcStatus==ProcStat.EO){
+				if(ProcCur.ProcStatus==ProcStat.C||ProcCur.ProcStatus==ProcStat.EC||ProcCur.ProcStatus==ProcStat.EO) {
 					Recalls.Synch(pat.PatNum);
 				}
 			}
@@ -1907,7 +1926,28 @@ namespace OpenDental{
 					prisub=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
 					priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
 				}
-				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,PatPlanList,SubList));
+				//Check if it's a medical procedure.
+				double insfee;
+				bool isMed = false;
+				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+				if(ProcCur.MedicalCode != null && ProcCur.MedicalCode != "") {
+					isMed = true;
+				}
+				//Get fee schedule for medical or dental.
+				long feeSch;
+				if(isMed) {
+					feeSch=Fees.GetMedFeeSched(pat,PlanList,PatPlanList,SubList);
+				}
+				else {
+					feeSch=Fees.GetFeeSched(pat,PlanList,PatPlanList,SubList);
+				}
+				//Get the fee amount for medical or dental.
+				if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed) {
+					insfee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.MedicalCode).CodeNum,feeSch);
+				}
+				else {
+					insfee=Fees.GetAmount0(ProcCur.CodeNum,feeSch);
+				}
 				if(priplan!=null && priplan.PlanType=="p") {//PPO
 					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
 					if(standardfee>insfee) {
@@ -1934,7 +1974,6 @@ namespace OpenDental{
 				if(AptCur.AptStatus==ApptStatus.Planned) {
 					ProcCur.PlannedAptNum=AptCur.AptNum;
 				}
-				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
 				if(Programs.UsingOrion){//Orion requires a DPC for every procedure. Force proc edit window open.

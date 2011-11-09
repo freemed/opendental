@@ -138,7 +138,28 @@ namespace OpenDental {
 				prisub=InsSubs.GetSub(patPlanList[0].InsSubNum,subList);
 				priplan=InsPlans.GetPlan(prisub.PlanNum,planList);
 			}
-			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,planList,patPlanList,subList));
+			//Check if it's a medical procedure.
+			double insfee;
+			bool isMed = false;
+			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+			if(ProcCur.MedicalCode != null && ProcCur.MedicalCode != "") {
+				isMed = true;
+			}
+			//Get fee schedule for medical or dental.
+			long feeSch;
+			if(isMed) {
+				feeSch=Fees.GetMedFeeSched(pat,planList,patPlanList,subList);
+			}
+			else {
+				feeSch=Fees.GetFeeSched(pat,planList,patPlanList,subList);
+			}
+			//Get the fee amount for medical or dental.
+			if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed) {
+				insfee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.MedicalCode).CodeNum,feeSch);
+			}
+			else {
+				insfee=Fees.GetAmount0(ProcCur.CodeNum,feeSch);
+			}
 			if(priplan!=null && priplan.PlanType=="p") {//PPO
 				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
 				if(standardfee>insfee) {
@@ -169,7 +190,6 @@ namespace OpenDental {
 			//dx
 			//nextaptnum
 			ProcCur.DateEntryC=DateTime.Now;
-			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			ProcCur.RevCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).RevenueCodeDefault;

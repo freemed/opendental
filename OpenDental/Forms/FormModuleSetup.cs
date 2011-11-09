@@ -99,6 +99,7 @@ namespace OpenDental{
 		private CheckBox checkChartAddProcNoRefreshGrid;
 		private Label label15;
 		private ComboBox comboCobRule;
+		private CheckBox checkMedicalFeeUsedForNewProcs;
 		private bool changed;
 
 		///<summary></summary>
@@ -208,6 +209,7 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkMedicalFeeUsedForNewProcs = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -1024,6 +1026,7 @@ namespace OpenDental{
 			// tabChart
 			// 
 			this.tabChart.BackColor = System.Drawing.SystemColors.Window;
+			this.tabChart.Controls.Add(this.checkMedicalFeeUsedForNewProcs);
 			this.tabChart.Controls.Add(this.checkChartAddProcNoRefreshGrid);
 			this.tabChart.Controls.Add(this.checkProcGroupNoteDoesAggregate);
 			this.tabChart.Controls.Add(this.butAllergiesIndicateNone);
@@ -1218,6 +1221,18 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// checkMedicalFeeUsedForNewProcs
+			// 
+			this.checkMedicalFeeUsedForNewProcs.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkMedicalFeeUsedForNewProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkMedicalFeeUsedForNewProcs.Location = new System.Drawing.Point(60,216);
+			this.checkMedicalFeeUsedForNewProcs.Name = "checkMedicalFeeUsedForNewProcs";
+			this.checkMedicalFeeUsedForNewProcs.Size = new System.Drawing.Size(381,15);
+			this.checkMedicalFeeUsedForNewProcs.TabIndex = 208;
+			this.checkMedicalFeeUsedForNewProcs.Text = "Use medical fee for new procedures";
+			this.checkMedicalFeeUsedForNewProcs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkMedicalFeeUsedForNewProcs.UseVisualStyleBackColor = true;
+			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -1365,6 +1380,7 @@ namespace OpenDental{
 			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone));
 			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
 			checkProcGroupNoteDoesAggregate.Checked=PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate);
+			checkMedicalFeeUsedForNewProcs.Checked=PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
@@ -1499,6 +1515,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.ProcGroupNoteDoesAggregate,checkProcGroupNoteDoesAggregate.Checked)
 				| Prefs.UpdateBool(PrefName.ChartAddProcNoRefreshGrid,checkChartAddProcNoRefreshGrid.Checked)
 				| Prefs.UpdateInt(PrefName.InsDefaultCobRule,comboCobRule.SelectedIndex)
+				| Prefs.UpdateBool(PrefName.MedicalFeeUsedForNewProcs,checkMedicalFeeUsedForNewProcs.Checked)
 				)
 			{
 				changed=true;

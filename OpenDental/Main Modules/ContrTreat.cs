@@ -2455,13 +2455,13 @@ namespace OpenDental{
 		}
 
 		private void OnUpdate_Click() {
-			if(gridPlans.SelectedIndices[0]!=0){
+			if(gridPlans.SelectedIndices[0]!=0) {
 				MsgBox.Show(this,"The update fee utility only works on the current treatment plan, not any saved plans.");
 				return;
 			}
-		  if(!MsgBox.Show(this,true,"Update all fees and insurance estimates on this treatment plan to the current fees for this patient?")){
-        return;   
-      }
+			if(!MsgBox.Show(this,true,"Update all fees and insurance estimates on this treatment plan to the current fees for this patient?")) {
+				return;
+			}
 			Procedure procCur;
 			//Procedure procOld
 			//Find the primary plan------------------------------------------------------------------
@@ -2472,25 +2472,30 @@ namespace OpenDental{
 			double standardfee;
 			double insfee;
 			List<ClaimProc> claimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
-      for(int i=0;i<ProcListTP.Length;i++){
+			for(int i=0;i<ProcListTP.Length;i++) {
 				procCur=ProcListTP[i];
 				//procOld=procCur.Clone();
 				//first the fees
-  
-				//check code to see if it is a medical code
+				//Check if it's a medical procedure.
 				bool isMed=false;
 				if(procCur.MedicalCode != null && procCur.MedicalCode != "") {
 					isMed=true;
 				}
-				//get fee schedule for medical ins or Fees.GetFeeSched if dental
+				//Get fee schedule for medical or dental.
 				long feeSch;
-				if(isMed){
+				if(isMed) {
 					feeSch=Fees.GetMedFeeSched(PatCur,InsPlanList,PatPlanList,SubList);
-				} 
-				else{
+				}
+				else {
 					feeSch=Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList,SubList);
 				}
-				insfee=Fees.GetAmount0(procCur.CodeNum,feeSch);
+				//Get the fee amount for medical or dental.
+				if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed) {
+					insfee=Fees.GetAmount0(ProcedureCodes.GetProcCode(procCur.MedicalCode).CodeNum,feeSch);
+				}
+				else {
+					insfee=Fees.GetAmount0(procCur.CodeNum,feeSch);
+				}
 				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO
 					standardfee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 					if(standardfee>insfee) {
@@ -2506,8 +2511,8 @@ namespace OpenDental{
 				Procedures.ComputeEstimates(procCur,PatCur.PatNum,claimProcList,false,InsPlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 
-      }
-      ModuleSelected(PatCur.PatNum);
+			}
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void OnCreate_Click(){
