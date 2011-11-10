@@ -459,6 +459,8 @@
     <Compile Include="Mobile\Data Interface\Medicationms.cs" />
     <Compile Include="Mobile\Data Interface\MedicationPatms.cs" />
     <Compile Include="Mobile\Data Interface\Pharmacyms.cs" />
+    <Compile Include="Mobile\Data Interface\PrefmC.cs" />
+    <Compile Include="Mobile\Data Interface\Prefms.cs" />
     <Compile Include="Mobile\Data Interface\Providerms.cs" />
     <Compile Include="Mobile\Data Interface\RxPatms.cs" />
     <Compile Include="Mobile\Data Interface\Statementms.cs" />

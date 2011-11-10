@@ -30,6 +30,7 @@ namespace PatientPortalMVC.Controllers
 				}
 				else {
 					Session["Patient"]=pat;
+					//Session["Patient"]=PrefmName.PracticeTitle;
 					return RedirectToAction("EHRInformation","Medical");
 				}
 			}

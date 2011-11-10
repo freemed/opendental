@@ -36,13 +36,14 @@ namespace PatientPortalMVC {
 		/// Older format: https://opendentalsoft.com/PatientPortal/Login.aspx?DentalOfficeID=6566 new format: https://opendentalsoft.com/PatientPortal/?DentalOfficeID=6566
 		/// </summary>
 		protected void Application_BeginRequest(Object sender,EventArgs e) {
-			if(Request.Url.AbsolutePath.Contains("Login.aspx")) {
+			String requestUrl=Request.Url.AbsolutePath;
+			if(requestUrl.Contains("Login.aspx")) {
 				long DentalOfficeID=0;
 				HttpContextBase currentContext = new HttpContextWrapper(HttpContext.Current);
                 RouteData routeData = RouteTable.Routes.GetRouteData(currentContext);
 				if(Request.QueryString["DentalOfficeID"]!=null)
 					Int64.TryParse(Request.QueryString["DentalOfficeID"].ToString(),out DentalOfficeID);
-					Response.Redirect("/?DentalOfficeID="+DentalOfficeID);
+					Response.Redirect(requestUrl.Substring(0,requestUrl.IndexOf("Login.aspx"))+"?DentalOfficeID="+DentalOfficeID);
 				}
 		}
 

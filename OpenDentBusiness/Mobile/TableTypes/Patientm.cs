@@ -5,7 +5,7 @@ namespace OpenDentBusiness.Mobile{
 	///<summary>One row for each patient.  Unlike main program, this does not include deleted patients.  Primary key is first two fields combined.</summary>
 	[Serializable()]
 	[CrudTable(IsMobile=true)]
-	public class Patientm : TableBase {
+	public class Patientm:TableBase {
 		///<summary>Primary key 1.</summary>
 		[CrudColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;

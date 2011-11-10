@@ -381,7 +381,7 @@ namespace WebHostSynch {
 					}
 					Statementms.UpdateFromChangeList(statementList,customerNum);
 					//now delete some statements to restrict the number of statements per patient.
-					int limitPerPatient=4;
+					int limitPerPatient=5;
 					List<long> patList=statementList.Select(sl=>sl.PatNum).Distinct().ToList();//select distint patients from the list.
 					Statementms.LimitStatementmsPerPatient(patList,customerNum,limitPerPatient);
 				}
