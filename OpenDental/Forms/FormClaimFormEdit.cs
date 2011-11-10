@@ -822,14 +822,25 @@ namespace OpenDental{
 					case "MedValAmount41d":
 						displayStrings[i]="1234.00";
 						break;
-					case "UniformBillType":
+					case "MedUniformBillType":
 						displayStrings[i]="831";
 						break;
-					case "AdmissionType":
-					case "AdmissionSource":
+					case "MedAdmissionTypeCode":
+					case "MedAdmissionSourceCode":
 						displayStrings[i]="1";
 						break;
-					case "PatientStatus":
+					case "MedPatientStatusCode":
+					case "MedConditionCode18":
+					case "MedConditionCode19":
+					case "MedConditionCode20":
+					case "MedConditionCode21":
+					case "MedConditionCode22":
+					case "MedConditionCode23":
+					case "MedConditionCode24":
+					case "MedConditionCode25":
+					case "MedConditionCode26":
+					case "MedConditionCode27":
+					case "MedConditionCode28":
 						displayStrings[i]="01";
 						break;
 					case "Remarks":

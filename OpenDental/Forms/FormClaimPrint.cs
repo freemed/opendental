@@ -1706,16 +1706,16 @@ namespace OpenDental{
 							displayStrings[i]=ClaimReferral.GetNameFL();
 						}
 						break;
-					case "UniformBillType":
+					case "MedUniformBillType":
 						displayStrings[i]=ClaimCur.UniformBillType;
 						break;
-					case "AdmissionType":
+					case "MedAdmissionTypeCode":
 						displayStrings[i]=ClaimCur.AdmissionTypeCode;
 						break;
-					case "AdmissionSource":
+					case "MedAdmissionSourceCode":
 						displayStrings[i]=ClaimCur.AdmissionSourceCode;
 						break;
-					case "PatientStatus":
+					case "MedPatientStatusCode":
 						displayStrings[i]=ClaimCur.PatientStatusCode;
 						break;
 				}//switch
@@ -2925,7 +2925,47 @@ namespace OpenDental{
 		}
 
 		private void FillMedCondCodes(){
-
+			ClaimCondCodeLog claimCondCodeLog=ClaimCondCodeLogs.GetByClaimNum(ClaimCur.ClaimNum);
+			if(claimCondCodeLog==null) {
+				return;
+			}
+			for(int i=0;i<ClaimFormCur.Items.Length;i++) {
+				switch(ClaimFormCur.Items[i].FieldName) {
+					case "MedConditionCode18":
+						displayStrings[i]=claimCondCodeLog.Code0;
+						break;
+					case "MedConditionCode19":
+						displayStrings[i]=claimCondCodeLog.Code1;
+						break;
+					case "MedConditionCode20":
+						displayStrings[i]=claimCondCodeLog.Code2;
+						break;
+					case "MedConditionCode21":
+						displayStrings[i]=claimCondCodeLog.Code3;
+						break;
+					case "MedConditionCode22":
+						displayStrings[i]=claimCondCodeLog.Code4;
+						break;
+					case "MedConditionCode23":
+						displayStrings[i]=claimCondCodeLog.Code5;
+						break;
+					case "MedConditionCode24":
+						displayStrings[i]=claimCondCodeLog.Code6;
+						break;
+					case "MedConditionCode25":
+						displayStrings[i]=claimCondCodeLog.Code7;
+						break;
+					case "MedConditionCode26":
+						displayStrings[i]=claimCondCodeLog.Code8;
+						break;
+					case "MedConditionCode27":
+						displayStrings[i]=claimCondCodeLog.Code9;
+						break;
+					case "MedConditionCode28":
+						displayStrings[i]=claimCondCodeLog.Code10;
+						break;
+				}
+			}
 		}
 
 		//The function below was written with the UB04 in mind any ?'s email:david@dentalasc.com as I don't always see the forum

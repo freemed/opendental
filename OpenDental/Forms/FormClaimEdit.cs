@@ -5625,6 +5625,32 @@ namespace OpenDental{
 				}
 				ClaimValCodeLogs.UpdateList(ListClaimValCodes);
 			}
+			if(ClaimCondCodeLogCur!=null || textCode0.Text!="" || textCode1.Text!="" || textCode2.Text!="" || textCode3.Text!="" || 
+				textCode4.Text!="" || textCode5.Text!="" || textCode6.Text!="" || textCode7.Text!="" || textCode8.Text!="" || 
+				textCode9.Text!="" || textCode10.Text!="") {
+				if(ClaimCondCodeLogCur==null) {
+					ClaimCondCodeLogCur=new ClaimCondCodeLog();
+					ClaimCondCodeLogCur.ClaimNum=ClaimCur.ClaimNum;
+					ClaimCondCodeLogCur.IsNew=true;
+				}
+				ClaimCondCodeLogCur.Code0=textCode0.Text;
+				ClaimCondCodeLogCur.Code1=textCode1.Text;
+				ClaimCondCodeLogCur.Code2=textCode2.Text;
+				ClaimCondCodeLogCur.Code3=textCode3.Text;
+				ClaimCondCodeLogCur.Code4=textCode4.Text;
+				ClaimCondCodeLogCur.Code5=textCode5.Text;
+				ClaimCondCodeLogCur.Code6=textCode6.Text;
+				ClaimCondCodeLogCur.Code7=textCode7.Text;
+				ClaimCondCodeLogCur.Code8=textCode8.Text;
+				ClaimCondCodeLogCur.Code9=textCode9.Text;
+				ClaimCondCodeLogCur.Code10=textCode10.Text;
+				if(ClaimCondCodeLogCur.IsNew) {
+					ClaimCondCodeLogs.Insert(ClaimCondCodeLogCur);
+				}
+				else {
+					ClaimCondCodeLogs.Update(ClaimCondCodeLogCur);
+				}
+			}
 			if(wasSentOrReceived){
 				SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,
 					PatCur.GetNameLF()+", "

@@ -20,5 +20,22 @@ namespace OpenDentBusiness {
 			//}
 			//return claimCondCodeLog;
 		}
+
+		public static void Update(ClaimCondCodeLog claimCondCodeLog) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimCondCodeLog);
+				return;
+			}
+			Crud.ClaimCondCodeLogCrud.Update(claimCondCodeLog);
+		}
+
+		public static void Insert(ClaimCondCodeLog claimCondCodeLog) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimCondCodeLog);
+				return;
+			}
+			Crud.ClaimCondCodeLogCrud.Insert(claimCondCodeLog);
+		}
+
 	}
 }

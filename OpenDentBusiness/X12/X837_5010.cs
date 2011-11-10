@@ -643,6 +643,7 @@ namespace OpenDentBusiness
 							+claim.DateService.ToString("yyyyMMdd")+"-"+claim.DateService.ToString("yyyyMMdd")+"~");//DTP03 1/35 Date Time Period:
 					}
 					//2300 DTP 435 (institutional) Admission Date/Hour. Situational. We do not use. Inpatient.
+					//For the UB04 we are using claim.DateService for this field.
 					//2300 DTP 050 (institutional) Repricer Received Date. Situational. Not supported.
 				}
 				else if(medType==EnumClaimMedType.Dental) {
