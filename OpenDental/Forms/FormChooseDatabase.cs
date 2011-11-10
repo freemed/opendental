@@ -135,7 +135,7 @@ namespace OpenDental{
 			this.textPassword.Name = "textPassword";
 			this.textPassword.PasswordChar = '*';
 			this.textPassword.Size = new System.Drawing.Size(280,20);
-			this.textPassword.TabIndex = 1;
+			this.textPassword.TabIndex = 4;
 			// 
 			// label2
 			// 
@@ -152,7 +152,7 @@ namespace OpenDental{
 			this.textUser.Location = new System.Drawing.Point(13,140);
 			this.textUser.Name = "textUser";
 			this.textUser.Size = new System.Drawing.Size(280,20);
-			this.textUser.TabIndex = 0;
+			this.textUser.TabIndex = 3;
 			// 
 			// label3
 			// 
@@ -199,7 +199,7 @@ namespace OpenDental{
 			this.comboDatabase.MaxDropDownItems = 100;
 			this.comboDatabase.Name = "comboDatabase";
 			this.comboDatabase.Size = new System.Drawing.Size(280,21);
-			this.comboDatabase.TabIndex = 9;
+			this.comboDatabase.TabIndex = 2;
 			this.comboDatabase.DropDown += new System.EventHandler(this.comboDatabase_DropDown);
 			// 
 			// checkNoShow
@@ -209,7 +209,7 @@ namespace OpenDental{
 			this.checkNoShow.Location = new System.Drawing.Point(13,211);
 			this.checkNoShow.Name = "checkNoShow";
 			this.checkNoShow.Size = new System.Drawing.Size(294,18);
-			this.checkNoShow.TabIndex = 2;
+			this.checkNoShow.TabIndex = 5;
 			this.checkNoShow.Text = "Do not show this window on startup (this computer only)";
 			this.checkNoShow.UseVisualStyleBackColor = true;
 			// 
@@ -219,7 +219,7 @@ namespace OpenDental{
 			this.comboComputerName.MaxDropDownItems = 100;
 			this.comboComputerName.Name = "comboComputerName";
 			this.comboComputerName.Size = new System.Drawing.Size(280,21);
-			this.comboComputerName.TabIndex = 8;
+			this.comboComputerName.TabIndex = 1;
 			this.comboComputerName.SelectionChangeCommitted += new System.EventHandler(this.comboComputerName_SelectionChangeCommitted);
 			this.comboComputerName.Leave += new System.EventHandler(this.comboComputerName_Leave);
 			// 
@@ -246,7 +246,7 @@ namespace OpenDental{
 			this.checkUsingEcw.Location = new System.Drawing.Point(13,176);
 			this.checkUsingEcw.Name = "checkUsingEcw";
 			this.checkUsingEcw.Size = new System.Drawing.Size(317,18);
-			this.checkUsingEcw.TabIndex = 16;
+			this.checkUsingEcw.TabIndex = 10;
 			this.checkUsingEcw.Text = "Using eClinicalWorks";
 			this.checkUsingEcw.UseVisualStyleBackColor = true;
 			// 
@@ -255,14 +255,14 @@ namespace OpenDental{
 			this.textURI.Location = new System.Drawing.Point(13,65);
 			this.textURI.Name = "textURI";
 			this.textURI.Size = new System.Drawing.Size(309,20);
-			this.textURI.TabIndex = 15;
+			this.textURI.TabIndex = 7;
 			// 
 			// textUser2
 			// 
 			this.textUser2.Location = new System.Drawing.Point(13,108);
 			this.textUser2.Name = "textUser2";
 			this.textUser2.Size = new System.Drawing.Size(309,20);
-			this.textUser2.TabIndex = 2;
+			this.textUser2.TabIndex = 8;
 			// 
 			// textPassword2
 			// 
@@ -270,7 +270,7 @@ namespace OpenDental{
 			this.textPassword2.Name = "textPassword2";
 			this.textPassword2.PasswordChar = '*';
 			this.textPassword2.Size = new System.Drawing.Size(309,20);
-			this.textPassword2.TabIndex = 3;
+			this.textPassword2.TabIndex = 9;
 			this.textPassword2.UseSystemPasswordChar = true;
 			// 
 			// label10
@@ -314,7 +314,7 @@ namespace OpenDental{
 			this.checkConnectServer.Location = new System.Drawing.Point(16,277);
 			this.checkConnectServer.Name = "checkConnectServer";
 			this.checkConnectServer.Size = new System.Drawing.Size(328,18);
-			this.checkConnectServer.TabIndex = 1;
+			this.checkConnectServer.TabIndex = 6;
 			this.checkConnectServer.Text = "Connect to Web Service instead";
 			this.checkConnectServer.UseVisualStyleBackColor = true;
 			this.checkConnectServer.Click += new System.EventHandler(this.checkConnectServer_Click);
@@ -352,7 +352,7 @@ namespace OpenDental{
 			this.textConnectionString.Name = "textConnectionString";
 			this.textConnectionString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textConnectionString.Size = new System.Drawing.Size(312,130);
-			this.textConnectionString.TabIndex = 22;
+			this.textConnectionString.TabIndex = 11;
 			// 
 			// butCancel
 			// 
@@ -366,7 +366,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(601,535);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
-			this.butCancel.TabIndex = 6;
+			this.butCancel.TabIndex = 13;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -381,7 +381,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(508,535);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
-			this.butOK.TabIndex = 3;
+			this.butOK.TabIndex = 12;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
