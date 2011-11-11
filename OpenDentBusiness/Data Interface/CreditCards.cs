@@ -89,7 +89,7 @@ namespace OpenDentBusiness{
 			command+="(SELECT CASE WHEN SUM(ppc.Principal+ppc.Interest) IS NULL THEN 0 ELSE SUM(ppc.Principal+ppc.Interest) END "
 				+"FROM PayPlanCharge ppc "
 				+"WHERE ppc.ChargeDate <= "+DbHelper.Curdate()+" AND ppc.PayPlanNum=cc.PayPlanNum) "
-				+"- (SELECT CASE WHEN SUM(ps.SplitAmt) IS NULL THEN 0 ELSE SUM(ps.SplitAmt) END FROM paysplit ps WHERE ps.PayPlanNum=cc.PayPlanNum) FamBalTotal,";
+				+"- CASE WHEN SUM(ps.SplitAmt) IS NULL THEN 0 ELSE SUM(ps.SplitAmt) END FamBalTotal,";
 			command+="CASE WHEN MAX(ps.DatePay) IS NULL THEN "+POut.Date(new DateTime(1,1,1))+" ELSE MAX(pay.PayDate) END LatestPayment,"
 				+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop "
 				+"FROM creditcard cc "
