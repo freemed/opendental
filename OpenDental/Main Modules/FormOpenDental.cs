@@ -47,7 +47,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Serialization;
 using SparksToothChart;
-using OpenDental.SmartCards;
+//using OpenDental.SmartCards;
 using OpenDental.UI;
 #if EHRTEST
 using EHR;
@@ -170,7 +170,6 @@ namespace OpenDental{
 		private ContextMenu menuSplitter;
 		private MenuItem menuItemDockBottom;
 		private MenuItem menuItemDockRight;
-		private OpenDental.SmartCards.SmartCardWatcher smartCardWatcher1;
 		private ImageList imageListMain;
 		private ContextMenu menuPatient;
 		private ContextMenu menuLabel;
@@ -466,7 +465,6 @@ namespace OpenDental{
 			this.timerWebHostSynch = new System.Windows.Forms.Timer(this.components);
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
-			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
@@ -1342,10 +1340,6 @@ namespace OpenDental{
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
-			// 
-			// smartCardWatcher1
-			// 
-			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
 			// timerLogoff
 			// 
@@ -4322,23 +4316,23 @@ namespace OpenDental{
 
 		#endregion
 
-		private void OnPatientCardInserted(object sender, PatientCardInsertedEventArgs e) {
-			if (InvokeRequired) {
-				Invoke(new PatientCardInsertedEventHandler(OnPatientCardInserted), new object[] { sender, e });
-				return;
-			}
-			if (MessageBox.Show(this, string.Format(Lan.g(this, "A card belonging to {0} has been inserted. Do you wish to search for this patient now?"), e.Patient.GetNameFL()), "Open Dental", MessageBoxButtons.YesNo) != DialogResult.Yes)
-			{
-				return;
-			}
-			using (FormPatientSelect formPS = new FormPatientSelect()) {
-				formPS.PreselectPatient(e.Patient);
-				if(formPS.ShowDialog() == DialogResult.OK) {
-					// OnPatientSelected(formPS.SelectedPatNum);
-					// ModuleSelected(formPS.SelectedPatNum);
-				}
-			}
-		}
+		//private void OnPatientCardInserted(object sender, PatientCardInsertedEventArgs e) {
+		//  if (InvokeRequired) {
+		//    Invoke(new PatientCardInsertedEventHandler(OnPatientCardInserted), new object[] { sender, e });
+		//    return;
+		//  }
+		//  if (MessageBox.Show(this, string.Format(Lan.g(this, "A card belonging to {0} has been inserted. Do you wish to search for this patient now?"), e.Patient.GetNameFL()), "Open Dental", MessageBoxButtons.YesNo) != DialogResult.Yes)
+		//  {
+		//    return;
+		//  }
+		//  using (FormPatientSelect formPS = new FormPatientSelect()) {
+		//    formPS.PreselectPatient(e.Patient);
+		//    if(formPS.ShowDialog() == DialogResult.OK) {
+		//      // OnPatientSelected(formPS.SelectedPatNum);
+		//      // ModuleSelected(formPS.SelectedPatNum);
+		//    }
+		//  }
+		//}
 
 		///<summary>separate thread</summary>
 		public void Listen() {
