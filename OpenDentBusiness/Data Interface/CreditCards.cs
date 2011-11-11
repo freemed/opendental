@@ -54,9 +54,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns list of credit cards that are ready for a recurring charge.</summary>
-		public static DataTable GetRecurringChargeList(int payType) {
+		public static DataTable GetRecurringChargeList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),payType);
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
 			DataTable table=new DataTable();
 			//This query will return patient information and the latest recurring payment whom:
@@ -110,22 +110,6 @@ namespace OpenDentBusiness{
 				+"AND ChargeAmt>0 "
 				+"AND DateStart<="+DbHelper.Curdate()+" "
 				+"AND (DateStop>="+DbHelper.Curdate()+" OR YEAR(DateStop)<1880) ";
-			table=Db.GetTable(command);
-			FilterRecurringChargeList(table);
-			return table;
-		}
-
-		///<summary>Returns list of credit cards that are ready for a recurring charge that are part of a payment plan.</summary>
-		public static DataTable GetRecurringPayPlanList(int payType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),payType);
-			}
-			DataTable table=new DataTable();
-			//This query will return patient information and the latest recurring payment whom:
-			//	-have recurring charges setup and today's date falls within the start and stop range.
-			//	-have a payment plan balance >= recurring charge amount
-			//NOTE: Query will return patients with or without payments regardless of when that payment occurred, filtering is done below.
-			string command="";
 			table=Db.GetTable(command);
 			FilterRecurringChargeList(table);
 			return table;

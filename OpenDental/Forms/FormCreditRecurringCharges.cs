@@ -18,7 +18,6 @@ namespace OpenDental {
 		private PrintDocument pd;
 		private int pagesPrinted;
 		private int headingPrintH;
-		private int payType;
 		private bool headingPrinted;
 		private bool insertPayment;
 		private Program prog;
@@ -33,7 +32,6 @@ namespace OpenDental {
 		private void FormRecurringCharges_Load(object sender,EventArgs e) {
 			nowDateTime=MiscData.GetNowDateTime();
 			prog=Programs.GetCur(ProgramName.Xcharge);
-			payType=PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType"));
 			labelCharged.Text=Lan.g(this,"Charged=")+"0";
 			labelFailed.Text=Lan.g(this,"Failed=")+"0";
 			FillGrid();
@@ -64,7 +62,7 @@ namespace OpenDental {
 				return;
 			}
 			#endregion
-			table=CreditCards.GetRecurringChargeList(payType);
+			table=CreditCards.GetRecurringChargeList();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRecurring","PatNum"),110);
@@ -285,8 +283,7 @@ namespace OpenDental {
 					}
 					recurringResultFile+=resultText+"\r\n\r\n";
 				}
-				long payPlanNum=PIn.Long(table.Rows[i]["PayPlanNum"].ToString());
-				if(insertPayment && payPlanNum<1) {//Not a payment plan payment.
+				if(insertPayment) {
 					Patient patCur=Patients.GetPat(patNum);
 					Payment paymentCur=new Payment();
 					paymentCur.DateEntry=nowDateTime.Date;
@@ -294,7 +291,7 @@ namespace OpenDental {
 						PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["DateStart"].ToString()));
 					paymentCur.PatNum=patCur.PatNum;
 					paymentCur.ClinicNum=patCur.ClinicNum;
-					paymentCur.PayType=payType;
+					paymentCur.PayType=PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType"));
 					paymentCur.PayAmt=amt;
 					paymentCur.PayNote=resultText;
 					paymentCur.IsRecurringCC=true;
@@ -307,6 +304,7 @@ namespace OpenDental {
 					split.DatePay=paymentCur.PayDate;
 					split.ProvNum=Patients.GetProvNum(patCur);
 					split.SplitAmt=paymentCur.PayAmt;
+					split.PayPlanNum=PIn.Long(table.Rows[i]["PayPlanNum"].ToString());
 					PaySplits.Insert(split);
 					if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
 						Ledgers.ComputeAging(patCur.Guarantor,PrefC.GetDate(PrefName.DateLastAging),false);
