@@ -1554,7 +1554,7 @@ FROM insplan";
 
 		///<summary>To prevent orphaned patients, if patFrom is a guarantor then all family members of patFrom 
 		///are moved into the family patTo belongs to, and then the merge of the two specified accounts is performed.</summary>
-		public static void MergeTwoPatients(long patTo,long patFrom){
+		public static void MergeTwoPatients(long patTo,long patFrom,string atoZpath){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patTo,patFrom);
 				return;
@@ -1564,8 +1564,9 @@ FROM insplan";
 				return;
 			}
 			string[] patNumForeignKeys=new string[]{
-				//This list is up to date as of 11/19/2010 up to version 7.6.0
+				//This list is up to date as of 11/11/2011 up to version v11.2
 				"adjustment.PatNum",
+				"allergy.PatNum",
 				"anestheticrecord.PatNum",
 				"anesthvsdata.PatNum",
 				"appointment.PatNum",
@@ -1574,11 +1575,17 @@ FROM insplan";
 				"commlog.PatNum",
 				"disease.PatNum",
 				"document.PatNum",
+				"ehrmeasureevent.PatNum",
+				"ehrprovkey.PatNum",
+				"ehrquarterlykey.PatNum",
+				"ehrsummaryccd.PatNum",
 				"emailmessage.PatNum",
 				"etrans.PatNum",
 				"formpat.PatNum",
 				"inssub.Subscriber",
 				"labcase.PatNum",
+				"labpanel.PatNum",
+				"medicalorder.PatNum",
 				"medicationpat.PatNum",
 				"mount.PatNum",
 				"patfield.PatNum",				
@@ -1616,12 +1623,14 @@ FROM insplan";
 				"toothinitial.PatNum",
 				"treatplan.PatNum",
 				"treatplan.ResponsParty",
+				"vaccinepat.PatNum",
+				"vitalsign.PatNum"
 			};
 			string command="";
 			Patient patientFrom=Patients.GetPat(patFrom);
 			Patient patientTo=Patients.GetPat(patTo);
-			string atozFrom=ImageStore.GetPatientFolder(patientFrom);
-			string atozTo=ImageStore.GetPatientFolder(patientTo);
+			string atozFrom=ImageStore.GetPatientFolder(patientFrom,atoZpath);
+			string atozTo=ImageStore.GetPatientFolder(patientTo,atoZpath);
 			//Move the patient documents within the 'patFrom' A to Z folder to the 'patTo' A to Z folder.
 			//We have to be careful here of documents with the same name. We have to rename such documents
 			//so that no documents are overwritten/lost.
