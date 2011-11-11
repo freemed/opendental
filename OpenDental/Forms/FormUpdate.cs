@@ -876,7 +876,7 @@ namespace OpenDental{
 			fileNameWithVers=fileNameWithVers.Replace("F","");//6.9.23
 			fileNameWithVers=fileNameWithVers.Replace(".","_");//6_9_23
 			fileNameWithVers="Setup_"+fileNameWithVers+".exe";//Setup_6_9_23.exe
-			string destDir=ImageStore.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredAtoZpath();
 			string destPath2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
@@ -901,7 +901,7 @@ namespace OpenDental{
 			fileNameWithVers=fileNameWithVers.Replace("F","");
 			fileNameWithVers=fileNameWithVers.Replace(".","_");
 			fileNameWithVers="Setup_"+fileNameWithVers+".exe";
-			string destDir=ImageStore.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredAtoZpath();
 			string destPath2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
@@ -925,7 +925,7 @@ namespace OpenDental{
 			fileNameWithVers=fileNameWithVers.Replace("F","");
 			fileNameWithVers=fileNameWithVers.Replace(".","_");
 			fileNameWithVers="Setup_"+fileNameWithVers+".exe";
-			string destDir=ImageStore.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredAtoZpath();
 			string destPath2=null;
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
@@ -1040,7 +1040,7 @@ namespace OpenDental{
 
 		private void butDownload_Click(object sender, System.EventArgs e){
 			string patchName="Setup.exe";
-			string destDir=ImageStore.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredAtoZpath();
 			if(destDir==null){//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}

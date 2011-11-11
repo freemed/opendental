@@ -334,6 +334,7 @@ namespace OpenDental {
 			if(IsTroubleshootMode) {
 				localBatchSize=1;
 			}
+			string AtoZpath=ImageStore.GetPreferredAtoZpath();
 			for(int start=0;start<PKNumList.Count;start+=localBatchSize) {
 				if((start+localBatchSize)>PKNumList.Count) {
 					localBatchSize=PKNumList.Count-start;
@@ -402,7 +403,7 @@ namespace OpenDental {
 						mb.SynchStatements(PrefC.GetString(PrefName.RegistrationKey),ChangedStatementList.ToArray());
 						break;
 						case SynchEntity.document:
-						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList);
+						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList,AtoZpath);
 						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
 						case SynchEntity.deletedobject:

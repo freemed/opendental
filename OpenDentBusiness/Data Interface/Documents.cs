@@ -109,37 +109,37 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>This is used by FormImageViewer to get a list of paths based on supplied list of DocNums. The reason is that later we will allow sharing of documents, so the paths may not be in the current patient folder. Rewritten by Ryan on 10/26/2011 to use List&lt;&gt; instead of ArrayList.</summary>
-		public static List<string> GetPaths(List<long> docNums){
+		public static List<string> GetPaths(List<long> docNums,string atoZPath) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),docNums);
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),docNums,atoZPath);
 			}
-			if(docNums.Count==0){
+			if(docNums.Count==0) {
 				return new List<string>();
 			}
 			string command="SELECT document.DocNum,document.FileName,patient.ImageFolder "
 				+"FROM document "
 				+"LEFT JOIN patient ON patient.PatNum=document.PatNum "
 				+"WHERE document.DocNum = '"+docNums[0].ToString()+"'";
-			for(int i=1;i<docNums.Count;i++){
+			for(int i=1;i<docNums.Count;i++) {
 				command+=" OR document.DocNum = '"+docNums[i].ToString()+"'";
 			}
 			//remember, they will not be in the correct order.
 			DataTable table=Db.GetTable(command);
 			Hashtable hList=new Hashtable();//key=docNum, value=path
 			//one row for each document, but in the wrong order
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				//We do not need to check if A to Z folders are being used here, because
 				//thumbnails are not visible from the chart module when A to Z are disabled,
 				//making it impossible to launch the form image viewer (the only place this
-				//function is called from.
+				//function is called from).
 				hList.Add(PIn.Long(table.Rows[i][0].ToString()),
-					ODFileUtils.CombinePaths(new string[] {	ImageStore.GetPreferredImagePath(),
+					ODFileUtils.CombinePaths(new string[] {	atoZPath,
 																									PIn.String(table.Rows[i][2].ToString()).Substring(0,1).ToUpper(),
 																									PIn.String(table.Rows[i][2].ToString()),
 																									PIn.String(table.Rows[i][1].ToString()),}));
 			}
 			List<string> retVal=new List<string>();
-			for(int i=0;i<docNums.Count;i++){
+			for(int i=0;i<docNums.Count;i++) {
 				retVal.Add((string)hList[(long)docNums[i]]);
 			}
 			return retVal;
@@ -490,9 +490,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used along with GetChangedSinceDocumentNums</summary>
-		public static List<Document> GetMultDocuments(List<long> documentNums) {
+		public static List<Document> GetMultDocuments(List<long> documentNums,string AtoZpath) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Document>>(MethodBase.GetCurrentMethod(),documentNums);
+				return Meth.GetObject<List<Document>>(MethodBase.GetCurrentMethod(),documentNums,AtoZpath);
 			}
 			string strDocumentNums="";
 			DataTable table;
@@ -511,11 +511,10 @@ namespace OpenDentBusiness {
 			}
 			Document[] multDocuments=Crud.DocumentCrud.TableToList(table).ToArray();
 			List<Document> documentList=new List<Document>(multDocuments);
-			foreach(Document d in documentList){
-				if(string.IsNullOrEmpty(d.RawBase64)){
+			foreach(Document d in documentList) {
+				if(string.IsNullOrEmpty(d.RawBase64)) {
 					Patient pat=Patients.GetPat(d.PatNum);
-					string patFolder=ImageStore.GetPatientFolder(pat);
-					string filePathAndName=ImageStore.GetFilePath(Documents.GetByNum(d.DocNum),patFolder);
+					string filePathAndName=ImageStore.GetFilePath(Documents.GetByNum(d.DocNum),AtoZpath);
 					if(File.Exists(filePathAndName)) {
 						FileStream fs= new FileStream(filePathAndName,FileMode.Open,FileAccess.Read);
 						byte[] rawData = new byte[fs.Length];

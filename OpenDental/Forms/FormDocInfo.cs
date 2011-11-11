@@ -288,7 +288,7 @@ namespace OpenDental{
 			textDate.Text=DocCur.DateCreated.ToString("d");
 			textDescript.Text=DocCur.Description;
 			if(PrefC.UsingAtoZfolder) {
-				string patFolder=ImageStore.GetPatientFolder(PatCur);
+				string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
 				textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName);
 				if(File.Exists(textFileName.Text)) {
 					FileInfo fileInfo=new FileInfo(textFileName.Text);

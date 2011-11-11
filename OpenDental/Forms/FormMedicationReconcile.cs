@@ -138,7 +138,7 @@ namespace OpenDental {
 			if(formIS.DialogResult!=DialogResult.OK) {
 				return;
 			}		
-			string patFolder=ImageStore.GetPatientFolder(PatCur);
+			string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
 			Document doc=Documents.GetByNum(formIS.SelectedDocNum);
 			textDocDateDesc.Text=doc.DateTStamp.ToShortDateString()+" - "+doc.Description.ToString();
 			if(BitmapOriginal!=null) {

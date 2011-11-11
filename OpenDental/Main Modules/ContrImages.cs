@@ -582,7 +582,7 @@ namespace OpenDental{
 				button=new ODToolBarButton(Lan.g(this,"Templates"),-1,"","Forms");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				menuForms=new ContextMenu();
-				string formDir=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"Forms");
+				string formDir=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"Forms");
 				if(Directory.Exists(formDir)) {
 					DirectoryInfo dirInfo=new DirectoryInfo(formDir);
 					FileInfo[] fileInfos=dirInfo.GetFiles();
@@ -694,7 +694,7 @@ namespace OpenDental{
 			}
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
-			PatFolder=ImageStore.GetPatientFolder(PatCur);//This is where the pat folder gets created if it does not yet exist.
+			PatFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//This is where the pat folder gets created if it does not yet exist.
 			ImageStore.AddMissingFilesToDatabase(PatCur);
 		}
 

@@ -164,7 +164,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}
-			string patfolder=ImageStore.GetPatientFolder(PatCur);
+			string patfolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
 				//ODFileUtils.CombinePaths(
 				//FormPath.GetPreferredImagePath(),PatCur.ImageFolder.Substring(0,1).ToUpper(),PatCur.ImageFolder);
 			//if(!Directory.Exists(patfolder)) {

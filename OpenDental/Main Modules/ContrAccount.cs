@@ -3417,7 +3417,7 @@ namespace OpenDental {
 			//	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			//}
 			Patient guar=Patients.GetPat(stmt.PatNum);
-			string guarFolder=ImageStore.GetPatientFolder(guar);
+			string guarFolder=ImageStore.GetPatientFolder(guar,ImageStore.GetPreferredAtoZpath());
 			//OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
 			if(stmt.Mode_==StatementMode.Email){
 				string attachPath=FormEmailMessageEdit.GetAttachPath();

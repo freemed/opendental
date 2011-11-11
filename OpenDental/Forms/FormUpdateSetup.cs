@@ -439,7 +439,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not using AtoZ folders, so UpdateFiles folder does not exist.");
 				return;
 			}
-			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
+			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
 			Version currentVersion=new Version(Application.ProductVersion);
 			//identify the ideal situation where everything is already in place and no copy is needed.
 			if(Directory.Exists(folderUpdate)) {

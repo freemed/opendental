@@ -179,7 +179,7 @@ namespace OpenDental{
 			if(!PrefC.UsingAtoZfolder) {
 				throw new ApplicationException("Must be using AtoZ folders.");
 			}
-			imagePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"SheetImages");
+			imagePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"SheetImages");
 			if(!Directory.Exists(imagePath)) {
 				Directory.CreateDirectory(imagePath);
 			}

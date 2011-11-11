@@ -3243,7 +3243,7 @@ namespace OpenDental {
 					try {
 						Bitmap patPict;
 						Documents.GetPatPict(PIn.Long(row["PatNum"].ToString()),
-							ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),
+							ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),
 								row["ImageFolder"].ToString().Substring(0,1).ToUpper(),
 								row["ImageFolder"].ToString(),""),
 							out patPict);

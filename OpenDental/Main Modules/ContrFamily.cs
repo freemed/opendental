@@ -325,7 +325,7 @@ namespace OpenDental{
 			}
 			try{
 				Bitmap patPict;
-				Documents.GetPatPict(	PatCur.PatNum,ImageStore.GetPatientFolder(PatCur),out patPict);
+				Documents.GetPatPict(	PatCur.PatNum,ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath()),out patPict);
 				picturePat.Image=patPict;
 			}
 			catch{

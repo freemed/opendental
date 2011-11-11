@@ -782,7 +782,7 @@ namespace OpenDental{
 				//Delete the archived copy of the statement
 				if(StmtCur.DocNum!=0){
 					Patient pat=Patients.GetPat(StmtCur.PatNum);
-					string patFolder=ImageStore.GetPatientFolder(pat);
+					string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
 					ImageStore.DeleteImage(listdocs,patFolder);
@@ -806,7 +806,7 @@ namespace OpenDental{
 				//launch existing archive pdf. User can click print from within Acrobat.
 				Cursor=Cursors.WaitCursor;
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
-				string patFolder=ImageStore.GetPatientFolder(pat);
+				string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 				Process.Start(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder));
 				Cursor=Cursors.Default;
 			}
@@ -882,7 +882,7 @@ namespace OpenDental{
 				return false;
 			}
 			Patient pat=Patients.GetPat(StmtCur.PatNum);
-			string oldPath=ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat),Documents.GetByNum(StmtCur.DocNum).FileName);
+			string oldPath=ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath()),Documents.GetByNum(StmtCur.DocNum).FileName);
 			File.Copy(oldPath,filePathAndName);//
 			//Process.Start(filePathAndName);
 			EmailMessage message=new EmailMessage();
@@ -918,7 +918,7 @@ namespace OpenDental{
 				//launch existing archive pdf
 				Cursor=Cursors.WaitCursor;
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
-				string patFolder=ImageStore.GetPatientFolder(pat);
+				string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 				Process.Start(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder));
 				Cursor=Cursors.Default;
 			}
@@ -1187,7 +1187,7 @@ namespace OpenDental{
 				if(StmtCur.DocNum!=0){
 					//deleted the pdf
 					pat=Patients.GetPat(StmtCur.PatNum);
-					patFolder=ImageStore.GetPatientFolder(pat);
+					patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
 					ImageStore.DeleteImage(listdocs,patFolder);
@@ -1199,7 +1199,7 @@ namespace OpenDental{
 					if(StmtList[i].DocNum!=0){
 						//deleted the pdf
 						pat=Patients.GetPat(StmtList[i].PatNum);
-						patFolder=ImageStore.GetPatientFolder(pat);
+						patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 						List<Document> listdocs=new List<Document>();
 						listdocs.Add(Documents.GetByNum(StmtList[i].DocNum));
 						ImageStore.DeleteImage(listdocs,patFolder);

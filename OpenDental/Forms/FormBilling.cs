@@ -757,7 +757,7 @@ namespace OpenDental{
 				stmt=Statements.CreateObject(PIn.Long(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				fam=Patients.GetFamily(stmt.PatNum);
 				pat=fam.GetPatient(stmt.PatNum);
-				patFolder=ImageStore.GetPatientFolder(pat);
+				patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 				dataSet=AccountModules.GetStatementDataSet(stmt);
 				if(stmt.Mode_==StatementMode.Email){
 					if(PrefC.GetString(PrefName.EmailSMTPserver)==""){

@@ -561,7 +561,7 @@ namespace OpenDental{
 		public static string GetAttachPath(){
 			string attachPath;
 			if(PrefC.UsingAtoZfolder) {
-				attachPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"EmailAttachments");
+				attachPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EmailAttachments");
 				if(!Directory.Exists(attachPath)) {
 					Directory.CreateDirectory(attachPath);
 				}
@@ -581,7 +581,7 @@ namespace OpenDental{
 			Patient PatCur=Patients.GetPat(MessageCur.PatNum);
 			if(PatCur.ImageFolder!=""){
 				if(PrefC.UsingAtoZfolder){
-					dlg.InitialDirectory=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),
+					dlg.InitialDirectory=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),
 																																				PatCur.ImageFolder.Substring(0,1).ToUpper(),
 																																				PatCur.ImageFolder);
 				}

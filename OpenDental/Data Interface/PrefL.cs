@@ -37,7 +37,7 @@ namespace OpenDental {
 			if(!PrefC.UsingAtoZfolder) {
 				return true;//not using AtoZ, so no place to stash the files.
 			}
-			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
+			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
 			if(Directory.Exists(folderUpdate)) {
 				try {
 					Directory.Delete(folderUpdate,true);
@@ -126,7 +126,7 @@ namespace OpenDental {
 					Application.Exit();
 					return false;
 				}
-				string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
+				string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
 				//look at the manifest to see if it's the version we need
 				string manifestVersion="";
 				try {
@@ -200,7 +200,7 @@ namespace OpenDental {
 				return;
 			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
-			dlg.SelectedPath=ImageStore.GetPreferredImagePath();
+			dlg.SelectedPath=ImageStore.GetPreferredAtoZpath();
 			dlg.Description=Lan.g("Prefs","Setup.exe will be downloaded to the folder you select below");
 			if(dlg.ShowDialog()!=DialogResult.OK) {
 				return;//app will exit
@@ -290,7 +290,7 @@ namespace OpenDental {
 			}
 			if(storedVersion>currentVersion) {
 				if(PrefC.UsingAtoZfolder) {
-					string setupBinPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"Setup.exe");
+					string setupBinPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"Setup.exe");
 					if(File.Exists(setupBinPath)) {
 						if(MessageBox.Show("You are attempting to run version "+currentVersion.ToString(3)+",\r\n"
 							+"But the database "+database+"\r\n"
@@ -316,7 +316,7 @@ namespace OpenDental {
 					}
 					else if(MessageBox.Show("A newer version has been installed on at least one computer,"+
 							"but Setup.exe could not be found in any of the following paths: "+
-							ImageStore.GetPreferredImagePath()+".  Download again?","",MessageBoxButtons.OKCancel)==DialogResult.OK) {
+							ImageStore.GetPreferredAtoZpath()+".  Download again?","",MessageBoxButtons.OKCancel)==DialogResult.OK) {
 						FormUpdate FormU=new FormUpdate();
 						FormU.ShowDialog();
 					}

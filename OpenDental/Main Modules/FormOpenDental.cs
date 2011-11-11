@@ -1651,7 +1651,7 @@ namespace OpenDental{
 			}
 			PrefL.MySqlVersion55Remind();
 			if(PrefC.UsingAtoZfolder) {
-				string prefImagePath=ImageStore.GetPreferredImagePath();
+				string prefImagePath=ImageStore.GetPreferredAtoZpath();
 				if(prefImagePath==null || !Directory.Exists(prefImagePath)) {//AtoZ folder not found
 					Cache.Refresh(InvalidType.Security);
 					FormPath FormP=new FormPath();
@@ -1869,7 +1869,7 @@ namespace OpenDental{
 			menuItemCustomReports.MenuItems.Clear();
 			//Try to load custom reports, but only if using the A to Z folders.
 			if(PrefC.UsingAtoZfolder) {
-				string imagePath=ImageStore.GetPreferredImagePath();
+				string imagePath=ImageStore.GetPreferredAtoZpath();
 				string reportFolderName=PrefC.GetString(PrefName.ReportFolderName);
 				string reportDir=ODFileUtils.CombinePaths(imagePath,reportFolderName);
 				if(Directory.Exists(reportDir)) {
@@ -4044,7 +4044,7 @@ namespace OpenDental{
 			//the image path should exist.
 			FormReportCustom FormR=new FormReportCustom();
 			FormR.SourceFilePath=
-				ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),PrefC.GetString(PrefName.ReportFolderName),((MenuItem)sender).Text+".rdl");
+				ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),PrefC.GetString(PrefName.ReportFolderName),((MenuItem)sender).Text+".rdl");
 			FormR.ShowDialog();
 		}
 

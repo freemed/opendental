@@ -37,8 +37,8 @@ namespace OpenDentBusiness.Mobile{
 		}
 
 		///<summary>The values returned are sent to the webserver.</summary>
-		public static List<Documentm> GetMultDocumentms(List<long> documentNums) {
-			List<Document> documentList=Documents.GetMultDocuments(documentNums);
+		public static List<Documentm> GetMultDocumentms(List<long> documentNums,string AtoZpath) {
+			List<Document> documentList=Documents.GetMultDocuments(documentNums,AtoZpath);
 			List<Documentm> documentmList=ConvertListToM(documentList);
 			return documentmList;
 		}

@@ -17,8 +17,8 @@ namespace OpenDentBusiness {
 		///<summary>Remembers the computerpref.AtoZpath.  Set to empty string on startup.  If set to something else, this path will override all other paths.</summary>
 		public static string LocalAtoZpath=null;
 
-		///<summary>Only makes a call to the database on startup.  After that, just uses cached data.  Does not validate that the path exists except if the main one is used.</summary>
-		public static string GetPreferredImagePath() {
+		///<summary>Only makes a call to the database on startup.  After that, just uses cached data.  Does not validate that the path exists except if the main one is used.  ONLY used from Client layer; no S classes.</summary>
+		public static string GetPreferredAtoZpath() {
 			if(!PrefC.UsingAtoZfolder) {
 				return null;
 			}
@@ -49,7 +49,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Will create folder if needed.  Will validate that folder exists.  It will alter the pat.ImageFolder if needed, but still make sure to pass in a very new Patient because we do not want an invalid patFolder.</summary>
-		public static string GetPatientFolder(Patient pat) {
+		public static string GetPatientFolder(Patient pat,string AtoZpath) {
 			string retVal="";
 			if(pat.ImageFolder=="") {//creates new folder for patient if none present
 				string name=pat.LName+pat.FName;
@@ -63,7 +63,7 @@ namespace OpenDentBusiness {
 				try {
 					Patient PatOld=pat.Copy();
 					pat.ImageFolder=folder;
-					retVal=ODFileUtils.CombinePaths(GetPreferredImagePath(),
+					retVal=ODFileUtils.CombinePaths(AtoZpath,
 																		pat.ImageFolder.Substring(0,1).ToUpper(),
 																		pat.ImageFolder);
 					Directory.CreateDirectory(retVal);
@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {//patient folder already created once
-				retVal = ODFileUtils.CombinePaths(GetPreferredImagePath(),
+				retVal = ODFileUtils.CombinePaths(AtoZpath,
 																	pat.ImageFolder.Substring(0,1).ToUpper(),
 																	pat.ImageFolder);
 			}
@@ -92,7 +92,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
 		public static string GetEobFolder() {
-			string retVal=ODFileUtils.CombinePaths(GetPreferredImagePath(),"EOBs");
+			string retVal=ODFileUtils.CombinePaths(GetPreferredAtoZpath(),"EOBs");
 			if(!Directory.Exists(retVal)) {
 				Directory.CreateDirectory(retVal);
 			}
@@ -101,7 +101,7 @@ namespace OpenDentBusiness {
 
 		///<summary>When the Image module is opened, this loads newly added files.</summary>
 		public static void AddMissingFilesToDatabase(Patient pat){
-			string patFolder=GetPatientFolder(pat);
+			string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			DirectoryInfo di = new DirectoryInfo(patFolder);
 			FileInfo[] fiList = di.GetFiles();
 			List<string> fileList = new List<string>();
@@ -258,7 +258,7 @@ namespace OpenDentBusiness {
 		public static Document Import(string pathImportFrom,long docCategory,Patient pat) {
 			string patFolder="";
 			if(PrefC.UsingAtoZfolder) {
-				patFolder=GetPatientFolder(pat);
+				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			}
 			Document doc = new Document();
 			//Document.Insert will use this extension when naming:
@@ -295,7 +295,7 @@ namespace OpenDentBusiness {
 		public static Document Import(Bitmap image,long docCategory,Patient pat) {
 			string patFolder="";
 			if(PrefC.UsingAtoZfolder) {
-				patFolder=GetPatientFolder(pat);
+				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			}
 			Document doc=new Document();
 			doc.FileName=".jpg";
@@ -324,7 +324,7 @@ namespace OpenDentBusiness {
 		public static Document Import(Bitmap image,long docCategory,ImageType imageType,Patient pat) {
 			string patFolder="";
 			if(PrefC.UsingAtoZfolder) {
-				patFolder=GetPatientFolder(pat);
+				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			}
 			Document doc = new Document();
 			doc.ImgType = imageType;
@@ -374,8 +374,8 @@ namespace OpenDentBusiness {
 
 		/// <summary>Obviously no support for db storage</summary>
 		public static Document ImportForm(string form,long docCategory,Patient pat) {
-			string patFolder=GetPatientFolder(pat);
-			string pathSourceFile = ODFileUtils.CombinePaths(GetPreferredImagePath(),"Forms",form);
+			string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
+			string pathSourceFile = ODFileUtils.CombinePaths(GetPreferredAtoZpath(),"Forms",form);
 			if(!File.Exists(pathSourceFile)) {
 				throw new Exception(Lans.g("ContrDocs", "Could not find file: ") + pathSourceFile);
 			}
@@ -399,7 +399,7 @@ namespace OpenDentBusiness {
 
 		/// <summary>Always saves as bmp.  So the 'paste to mount' logic needs to be changed to prevent conversion to bmp.</summary>
 		public static Document ImportImageToMount(Bitmap image,short rotationAngle,long mountItemNum,long docCategory,Patient pat) {
-			string patFolder=GetPatientFolder(pat);
+			string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			string fileExtention = ".bmp";//The file extention to save the greyscale image as.
 			Document doc = new Document();
 			doc.MountItemNum = mountItemNum;
@@ -468,7 +468,7 @@ namespace OpenDentBusiness {
 		/// <param name="pat">The patient the document belongs to.</param>
 		public static void Export(string saveToPath,Document doc,Patient pat) {
 			if(PrefC.UsingAtoZfolder) {
-				string patFolder=GetPatientFolder(pat);
+				string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 				File.Copy(ODFileUtils.CombinePaths(patFolder,doc.FileName),saveToPath);
 			}
 			else {//image is in database

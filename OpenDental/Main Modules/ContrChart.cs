@@ -3305,7 +3305,7 @@ namespace OpenDental{
 			BenefitList=Benefits.Refresh(PatPlanList,SubList);
 			PatientNoteCur=PatientNotes.Refresh(patNum,PatCur.Guarantor);
 			if(PrefC.UsingAtoZfolder) {
-				patFolder=ImageStore.GetPatientFolder(PatCur);//GetImageFolder();
+				patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//GetImageFolder();
 			}
 			DocumentList=Documents.GetAllWithPat(patNum);
 			ApptList=Appointments.GetForPat(patNum);
@@ -8129,7 +8129,7 @@ namespace OpenDental{
 				//Patient images are not shown when the A to Z folders are disabled.
 				if(PrefC.UsingAtoZfolder){
 					Bitmap picturePat;
-					bool patientPictExists=Documents.GetPatPict(PatCur.PatNum,ImageStore.GetPatientFolder(PatCur),out picturePat);
+					bool patientPictExists=Documents.GetPatPict(PatCur.PatNum,ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath()),out picturePat);
 					if(picturePat!=null){//Successfully loaded a patient picture?
 						Bitmap thumbnail=ImageHelper.GetThumbnail(picturePat,80);
 						g.DrawImage(thumbnail,center-40,yPos);

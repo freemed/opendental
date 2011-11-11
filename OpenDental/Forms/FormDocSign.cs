@@ -63,7 +63,7 @@ namespace OpenDental{
 			}
 			DocCur=docCur;
 			PatCur=pat;
-			PatFolder=ImageStore.GetPatientFolder(pat);
+			PatFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 			Lan.F(this);
 		}
 
