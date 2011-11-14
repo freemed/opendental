@@ -111,5 +111,30 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Deletes FeeScheds that are hidden and not attached to any insurance plans.  Returns the number of deleted fee scheds.</summary>
+		public static long CleanupAllowedScheds() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetLong(MethodBase.GetCurrentMethod());
+			}
+			long result;
+			//Detach allowed FeeSchedules from any hidden InsPlans.
+			string command="UPDATE insplan "
+				+"SET AllowedFeeSched=0 "
+				+"WHERE IsHidden=1";
+			Db.NonQ(command);
+			//Delete unattached FeeSchedules.
+			command="DELETE FROM feesched "
+				+"WHERE FeeSchedNum NOT IN (SELECT AllowedFeeSched FROM insplan) "
+				+"AND FeeSchedType="+POut.Int((int)FeeScheduleType.Allowed);
+			result=Db.NonQ(command);
+			//Delete all orphaned fees.
+			command="DELETE FROM fee "
+				+"WHERE FeeSched NOT IN (SELECT FeeSchedNum FROM feesched)";
+			Db.NonQ(command);
+			return result;
+		}
+
+
+
 	}
 }

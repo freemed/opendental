@@ -29,6 +29,8 @@ namespace OpenDental{
 		private Label label1;
 		private OpenDental.UI.Button butSort;
 		private Label label2;
+		private Label labelCleanUp;
+		private UI.Button butCleanUp;
 		private List<FeeSched> FeeSchedsForType;
 
 		///<summary></summary>
@@ -66,16 +68,18 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFeeScheds));
 			this.listType = new System.Windows.Forms.ListBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.butIns = new OpenDental.UI.Button();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butSort = new OpenDental.UI.Button();
-			this.butIns = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
+			this.labelCleanUp = new System.Windows.Forms.Label();
+			this.butCleanUp = new OpenDental.UI.Button();
 			this.groupBox7.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -99,6 +103,20 @@ namespace OpenDental{
 			this.groupBox7.TabIndex = 17;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Check Ins Plan Fee Schedules";
+			// 
+			// butIns
+			// 
+			this.butIns.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butIns.Autosize = true;
+			this.butIns.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butIns.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butIns.CornerRadius = 4F;
+			this.butIns.Location = new System.Drawing.Point(248,19);
+			this.butIns.Name = "butIns";
+			this.butIns.Size = new System.Drawing.Size(75,24);
+			this.butIns.TabIndex = 4;
+			this.butIns.Text = "Go";
+			this.butIns.Click += new System.EventHandler(this.butIns_Click);
 			// 
 			// label6
 			// 
@@ -132,20 +150,6 @@ namespace OpenDental{
 			this.butSort.TabIndex = 19;
 			this.butSort.Text = "Sort";
 			this.butSort.Click += new System.EventHandler(this.butSort_Click);
-			// 
-			// butIns
-			// 
-			this.butIns.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butIns.Autosize = true;
-			this.butIns.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butIns.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butIns.CornerRadius = 4F;
-			this.butIns.Location = new System.Drawing.Point(248,19);
-			this.butIns.Name = "butIns";
-			this.butIns.Size = new System.Drawing.Size(75,24);
-			this.butIns.TabIndex = 4;
-			this.butIns.Text = "Go";
-			this.butIns.Click += new System.EventHandler(this.butIns_Click);
 			// 
 			// butDown
 			// 
@@ -230,10 +234,35 @@ namespace OpenDental{
 			this.label2.TabIndex = 20;
 			this.label2.Text = "Sorts by type and alphabetically";
 			// 
+			// labelCleanUp
+			// 
+			this.labelCleanUp.Location = new System.Drawing.Point(315,511);
+			this.labelCleanUp.Name = "labelCleanUp";
+			this.labelCleanUp.Size = new System.Drawing.Size(161,44);
+			this.labelCleanUp.TabIndex = 22;
+			this.labelCleanUp.Text = "Deletes any allowed fee schedules that are not in use.";
+			// 
+			// butCleanUp
+			// 
+			this.butCleanUp.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCleanUp.Autosize = true;
+			this.butCleanUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCleanUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCleanUp.CornerRadius = 4F;
+			this.butCleanUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCleanUp.Location = new System.Drawing.Point(318,484);
+			this.butCleanUp.Name = "butCleanUp";
+			this.butCleanUp.Size = new System.Drawing.Size(99,24);
+			this.butCleanUp.TabIndex = 21;
+			this.butCleanUp.Text = "Clean Up Allowed";
+			this.butCleanUp.Click += new System.EventHandler(this.butCleanUp_Click);
+			// 
 			// FormFeeScheds
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(515,644);
+			this.Controls.Add(this.labelCleanUp);
+			this.Controls.Add(this.butCleanUp);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butSort);
 			this.Controls.Add(this.label1);
@@ -251,8 +280,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Fee Schedules";
-			this.Load += new System.EventHandler(this.FormFeeSchedules_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormFeeSchedules_FormClosing);
+			this.Load += new System.EventHandler(this.FormFeeSchedules_Load);
 			this.groupBox7.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -265,6 +294,10 @@ namespace OpenDental{
 				listType.Items.Add(((FeeScheduleType)i).ToString());
 			}
 			listType.SelectedIndex=0;
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin)){
+				butCleanUp.Visible=false;
+				labelCleanUp.Visible=false;
+			}
 			FillGrid();
 		}
 
@@ -444,6 +477,15 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidType.FeeScheds);
 			}
+		}
+
+		private void butCleanUp_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete allowed fee schedules that are not in use or that are attached to hidden insurance plans?")) {
+				return;
+			}
+			long changed=FeeScheds.CleanupAllowedScheds();
+			MessageBox.Show(changed.ToString()+Lan.g(this," unused fee schedules deleted."));
+			FillGrid();
 		}
 
 		

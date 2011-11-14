@@ -3966,8 +3966,7 @@ namespace OpenDental{
 			if(comboAllowedFeeSched.SelectedIndex==0){
 				if(IsNewPlan
 					&& PlanCur.PlanType==""//percentage
-					&& PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate))
-				{
+					&& PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate)){
 					//add a fee schedule if needed
 					FeeSched sched=FeeScheds.GetByExactName(CarrierCur.CarrierName,FeeScheduleType.Allowed);
 					if(sched==null){

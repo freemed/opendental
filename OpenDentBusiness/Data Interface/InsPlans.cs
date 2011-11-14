@@ -717,12 +717,13 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetLong(MethodBase.GetCurrentMethod());
 			}
-			//get carrier names for all plans without an allowed fee schedule.
+			//get carrier names for all plans without an allowed fee schedule that are also not hidden.
 			string command="SELECT carrier.CarrierName "
 				+"FROM insplan,carrier "
 				+"WHERE carrier.CarrierNum=insplan.CarrierNum "
 				+"AND insplan.AllowedFeeSched=0 "
 				+"AND insplan.PlanType='' "
+				+"AND insplan.IsHidden='0' "
 				+"GROUP BY carrier.CarrierName";
 			DataTable table=Db.GetTable(command);
 			//loop through all the carrier names
@@ -758,6 +759,7 @@ namespace OpenDentBusiness {
 					+"SET AllowedFeeSched="+POut.Long(sched.FeeSchedNum)+" "
 					+"WHERE AllowedFeeSched=0 "
 					+"AND PlanType='' "
+					+"AND IsHidden='0' "
 					+"AND (";
 				for(int c=0;c<tableCarrierNums.Rows.Count;c++){
 					if(c>0){
