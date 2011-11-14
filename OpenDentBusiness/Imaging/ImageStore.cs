@@ -184,8 +184,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static Bitmap[] OpenImagesEob(EobAttach eob) {
-			Bitmap[] values = new Bitmap[0];
-			return values;
+			Bitmap[] values = new Bitmap[1];
 			if(PrefC.UsingAtoZfolder) {
 				string eobFolder=GetEobFolder();
 				string srcFileName = ODFileUtils.CombinePaths(eobFolder,eob.FileName);
@@ -462,10 +461,37 @@ namespace OpenDentBusiness {
 			return eob;
 		}
 
-		/// <summary> Save a Document to another location on the disk (outside of Open Dental). </summary>
-		/// <param name="saveToPath">The path that the file is to be moved to.</param>
-		/// <param name="doc">The document to be moved.</param>
-		/// <param name="pat">The patient the document belongs to.</param>
+		/// <summary></summary>
+		public static EobAttach ImportEobAttach(string pathImportFrom,long claimPaymentNum) {
+			string eobFolder="";
+			if(PrefC.UsingAtoZfolder) {
+				eobFolder=GetEobFolder();
+			}
+			EobAttach eob=new EobAttach();
+			if(Path.GetExtension(pathImportFrom)=="") {//If the file has no extension
+				eob.FileName=".jpg";
+			}
+			else{
+				eob.FileName=Path.GetExtension(pathImportFrom);
+			}
+			eob.DateTCreated=File.GetLastWriteTime(pathImportFrom);
+			eob.ClaimPaymentNum=claimPaymentNum;
+			EobAttaches.Insert(eob);//creates filename and saves to db
+			eob=EobAttaches.GetOne(eob.EobAttachNum);
+			try {
+				SaveEobAttach(eob,pathImportFrom,eobFolder);
+				if(PrefC.UsingAtoZfolder) {
+					EobAttaches.Update(eob);
+				}
+			}
+			catch {
+				EobAttaches.Delete(eob.EobAttachNum);
+				throw;
+			}
+			return eob;
+		}
+
+		///<summary> Save a Document to another location on the disk (outside of Open Dental). </summary>
 		public static void Export(string saveToPath,Document doc,Patient pat) {
 			if(PrefC.UsingAtoZfolder) {
 				string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
@@ -473,6 +499,23 @@ namespace OpenDentBusiness {
 			}
 			else {//image is in database
 				byte[] rawData=Convert.FromBase64String(doc.RawBase64);
+				Image image=null;
+				using(MemoryStream stream=new MemoryStream()) {
+					stream.Read(rawData,0,rawData.Length);
+					image=Image.FromStream(stream);
+				}
+				image.Save(saveToPath);
+			}
+		}
+
+		///<summary> Save an Eob to another location on the disk (outside of Open Dental). </summary>
+		public static void ExportEobAttach(string saveToPath,EobAttach eob) {
+			if(PrefC.UsingAtoZfolder) {
+				string eobFolder=GetEobFolder();
+				File.Copy(ODFileUtils.CombinePaths(eobFolder,eob.FileName),saveToPath);
+			}
+			else {//image is in database
+				byte[] rawData=Convert.FromBase64String(eob.RawBase64);
 				Image image=null;
 				using(MemoryStream stream=new MemoryStream()) {
 					stream.Read(rawData,0,rawData.Length);
@@ -536,10 +579,10 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
-		public static void SaveEobAttach(EobAttach eob,string pathSourceFile,string patFolder) {
+		///<summary>If usingAtoZfoler, then eobFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
+		public static void SaveEobAttach(EobAttach eob,string pathSourceFile,string eobFolder) {
 			if(PrefC.UsingAtoZfolder) {
-				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(patFolder,eob.FileName));
+				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(eobFolder,eob.FileName));
 			}
 			else {//saving to db
 				byte[] rawData=File.ReadAllBytes(pathSourceFile);
@@ -547,22 +590,41 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static void DeleteImage(IList<Document> documents,string patFolder) {
-			//string patFolder=GetPatientFolder(pat);
-			for(int i = 0; i < documents.Count; i++) {
-				if(documents[i] == null) {
+		///<summary>For each of the documents in the list, deletes row from db and image from AtoZ folder if needed.</summary>
+		public static void DeleteDocuments(IList<Document> documents,string patFolder) {
+			for(int i=0;i<documents.Count;i++){
+				if(documents[i]==null){
 					continue;
 				}
-				try {
-					DeleteDocument(documents[i],patFolder);
+				if(PrefC.UsingAtoZfolder) {
+					try{
+						string filePath = ODFileUtils.CombinePaths(patFolder,documents[i].FileName);
+						if(File.Exists(filePath)) {
+							File.Delete(filePath);
+						}
+					}
+					catch {
+						//if(verbose) {
+						//	Debug.WriteLine(Lans.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
+						//}
+					}
 				}
-				catch {
-					//if(verbose) {
-					//	Debug.WriteLine(Lans.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
-					//}
-				}
+				//Row from db.  This deletes the "image file" also if it's stored in db.
 				Documents.Delete(documents[i]);
 			}
+		}
+
+		///<summary>Also handles deletion of db object.</summary>
+		public static void DeleteEobAttach(EobAttach eob) {
+			if(PrefC.UsingAtoZfolder) {
+				string eobFolder=GetEobFolder();
+				string filePath=ODFileUtils.CombinePaths(eobFolder,eob.FileName);
+				if(File.Exists(filePath)) {
+					File.Delete(filePath);
+				}
+			}
+			//db
+			EobAttaches.Delete(eob.EobAttachNum);
 		}
 
 		///<summary></summary>
@@ -593,31 +655,6 @@ namespace OpenDentBusiness {
 				catch {
 					//Two users *might* edit the same image at the same time, so the image might already be deleted.
 				}
-			}
-		}
-
-		///<summary>patFolder must be fully qualified and valid.</summary>
-		public static void DeleteDocument(Document doc,string patFolder) {
-			/*if(ImageStoreIsDatabase) {
-				unsupported, but leaving code here for later.
-				using(IDbConnection connection = DataSettings.GetConnection())
-				using(IDbCommand command = connection.CreateCommand()) {
-					command.CommandText =
-					@"DELETE FROM files WHERE DocNum = ?DocNum";
-					IDataParameter docNumParameter = command.CreateParameter();
-					docNumParameter.ParameterName = "?DocNum";
-					docNumParameter.Value = doc.DocNum;
-					command.Parameters.Add(docNumParameter);
-
-					connection.Open();
-					command.ExecuteNonQuery();
-					connection.Close();
-				}
-			}
-			else {*/
-			string srcFile = ODFileUtils.CombinePaths(patFolder,doc.FileName);
-			if(File.Exists(srcFile)) {
-				File.Delete(srcFile);
 			}
 		}
 

@@ -74,10 +74,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Applies the document specified cropping, flip, rotation, brightness and contrast transformations to the image and returns the resulting image. Zoom and translation must be handled by the calling code. The returned image is always a new image that can be modified without affecting the original image. The change in the image's center point is returned into deltaCenter, so that rotation offsets can be properly calculated when displaying the returned image.</summary>
 		public static Bitmap ApplyDocumentSettingsToImage(Document doc, Bitmap image, ImageSettingFlags settings) {
-			if (image == null) {//Any operation on a non-existant image produces a non-existant image.
+			if(image==null) {//Any operation on a non-existant image produces a non-existant image.
 				return null;
 			}
-			if (doc == null) {//No doc implies no operations, implies that the image should be returned unaltered.
+			if(doc==null) {//No doc implies no operations, implies that the image should be returned unaltered.
 				return (Bitmap)image.Clone();
 			}
 			//CROP - Implies that the croping rectangle must be saved in raw-image-space coordinates, 

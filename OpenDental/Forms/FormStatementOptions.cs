@@ -785,7 +785,7 @@ namespace OpenDental{
 					string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
-					ImageStore.DeleteImage(listdocs,patFolder);
+					ImageStore.DeleteDocuments(listdocs,patFolder);
 				}
 			}
 		}
@@ -1190,7 +1190,7 @@ namespace OpenDental{
 					patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
-					ImageStore.DeleteImage(listdocs,patFolder);
+					ImageStore.DeleteDocuments(listdocs,patFolder);
 				}
 				Statements.DeleteObject(StmtCur);
 			}
@@ -1202,7 +1202,7 @@ namespace OpenDental{
 						patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 						List<Document> listdocs=new List<Document>();
 						listdocs.Add(Documents.GetByNum(StmtList[i].DocNum));
-						ImageStore.DeleteImage(listdocs,patFolder);
+						ImageStore.DeleteDocuments(listdocs,patFolder);
 					}
 					Statements.DeleteObject(StmtList[i]);
 				}

@@ -510,9 +510,9 @@ namespace OpenDental{
 			this.butView.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butView.CornerRadius = 4F;
 			this.butView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butView.Location = new System.Drawing.Point(138,606);
+			this.butView.Location = new System.Drawing.Point(145,606);
 			this.butView.Name = "butView";
-			this.butView.Size = new System.Drawing.Size(79,24);
+			this.butView.Size = new System.Drawing.Size(72,24);
 			this.butView.TabIndex = 109;
 			this.butView.Text = "View";
 			this.butView.Click += new System.EventHandler(this.butView_Click);

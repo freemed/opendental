@@ -13,7 +13,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EobAttach>>(MethodBase.GetCurrentMethod(),claimPaymentNum);
 			}
-			string command="SELECT * FROM eobattach WHERE ClaimPaymentNum="+POut.Long(claimPaymentNum);
+			string command="SELECT * FROM eobattach WHERE ClaimPaymentNum="+POut.Long(claimPaymentNum)+" "
+				+"ORDER BY DateTCreated";
 			return Crud.EobAttachCrud.SelectMany(command);
 		}
 
