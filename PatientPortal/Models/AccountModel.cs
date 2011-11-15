@@ -58,7 +58,14 @@ namespace PatientPortalMVC.Models {
 
 	}
 
+	public class AppointmentModel {
+		public List<Appointmentm> appointmentmList;
 
+		public AppointmentModel(Patientm patm) {
+			appointmentmList=Appointmentms.GetAppointmentms(patm.CustomerNum,patm.PatNum);
+		}
+
+	}
 
 
 }

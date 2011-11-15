@@ -1,0 +1,20 @@
+﻿@using System.Data;
+@using OpenDentBusiness;
+@using OpenDentBusiness.Mobile;
+@model PatientPortalMVC.Models.AppointmentModel
+@{
+	ViewBag.Title = "Appointments";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p><strong>Appointments:</strong></p>
+<div style="margin-left:3em">
+@if(Model.appointmentmList.Count()==0) {
+	<p>No Statement History available</p>
+}
+	@foreach(var item in Model.appointmentmList) {    
+		<p>@Html.Encode("Appointment Date and time "+item.AptDateTime.ToShortDateString() + " ")
+		@Html.Encode("Appointment Notes "+item.Note + " ")
+		</p>
+	}
+</div>

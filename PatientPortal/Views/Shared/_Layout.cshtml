@@ -20,6 +20,7 @@
 	   string styleFamily="nohighlight";
 	   string styleAccount="nohighlight";
 	   string styleMedical="nohighlight";
+	   string styleAppointments="nohighlight";
 	   if(HttpContext.Current.Request.Path.Contains("/Family/FamilyInformation")) {
 		   styleFamily="highlight";
 	   }
@@ -29,12 +30,16 @@
 	   if(HttpContext.Current.Request.Path.Contains("/Medical/EHRInformation")) {
 		   styleMedical="highlight";
 	   }
+	   if(HttpContext.Current.Request.Path.Contains("/Account/Appointments")) {
+		   styleAppointments="highlight";
+	   }
 
 				<div id="menucontainer">
 					<ul id="menu">
 						<li>@Html.ActionLink("Family","FamilyInformation","Family",new object { },new { @class=styleFamily })</li>
 						<li>@Html.ActionLink("Account","AccountInformation","Account",new object { },new { @class=styleAccount })</li>
 						<li>@Html.ActionLink("Medical","EHRInformation","Medical",new object { },new { @class=styleMedical })</li>
+						<li>@Html.ActionLink("Appointments","Appointments","Account",new object { },new { @class=styleAppointments })</li>
 					</ul>
 				</div>
    }

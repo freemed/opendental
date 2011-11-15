@@ -80,33 +80,17 @@ namespace PatientPortalMVC.Controllers
 			return View(am);
 		}
 
-		public ActionResult ShowPdfFile(long? d) {
-			Documentm doc=null;
-			long DocNum=0;
-			if(d!=null) {
-				DocNum=(long)d;
-			}
+		public ActionResult Appointments() {
 			Patientm patm;
 			if(Session["Patient"]==null) {
-				return RedirectToAction("Login");
+				return RedirectToAction("Login","Account");
 			}
 			else {
 				patm=(Patientm)Session["Patient"];
 			}
-			if(DocNum!=0) {
-				doc=Documentms.GetOne(patm.CustomerNum,DocNum);
-			}
-			if(doc==null || patm.PatNum!=doc.PatNum) {//make sure that the patient does not pass the another DocNum of another patient.
-				return new EmptyResult(); //return a blank page todo: return page with proper message.
-			}
-			ContentDisposition cd = new ContentDisposition();
-			cd.Inline=true;//the browser will try and show the pdf inline i.e inside the browser window. If set to false it will force a download.
-			Response.AppendHeader("Content-Disposition",cd.ToString());
-			return File(Convert.FromBase64String(doc.RawBase64),"application/pdf","statement.pdf");
+			AppointmentModel am= new AppointmentModel(patm);
+			return View(am);
 		}
-
-
-
 
     }
 }
