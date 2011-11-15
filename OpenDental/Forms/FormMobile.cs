@@ -153,6 +153,7 @@ namespace OpenDental {
 			}
 			//Username and password-----------------------------------------------------------------------------
 			mb.SetMobileWebUserPassword(PrefC.GetString(PrefName.RegistrationKey),textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
+			// The practice title may be set here.
 			return true;
 		}
 

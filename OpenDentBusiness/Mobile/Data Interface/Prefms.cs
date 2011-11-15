@@ -9,16 +9,12 @@ using System.Web;
 
 
 namespace OpenDentBusiness.Mobile {
-	///<summary>Dennis ToDo: this class has to be revised</summary>
 	public class Prefms {
-
-		///<summary>Gets one Userm from the db.</summary>
 		public static PrefmC LoadPreferences(long customerNum) {
-			string command="SELECT * FROM prefm WHERE CustomerNum = "+POut.Long(customerNum); ;
+			string command="SELECT * FROM preferencem WHERE CustomerNum = "+POut.Long(customerNum); ;
 			DataTable table=Db.GetTable(command);
 			Prefm prefm=new Prefm(); 
 			PrefmC prefmc=new PrefmC();
-
 			for(int i=0;i<table.Rows.Count;i++) {
 				prefm=new Prefm();
 				if(table.Columns.Contains("PrefmNum")) {
@@ -28,6 +24,7 @@ namespace OpenDentBusiness.Mobile {
 				prefm.ValueString=PIn.String(table.Rows[i]["ValueString"].ToString());
 				prefmc.Dict.Add(prefm.PrefmName,prefm);
 			}
+			HttpContext.Current.Session["prefmC"]=prefmc;
 			return prefmc;
 		}
 

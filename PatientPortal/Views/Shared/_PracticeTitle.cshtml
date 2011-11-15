@@ -1,0 +1,10 @@
+﻿@using OpenDentBusiness;
+@using OpenDentBusiness.Mobile;
+@using PatientPortalMVC;
+
+@{
+	if(Session["Patient"]!=null) {
+		PrefmC prefmC = new PrefmC();
+		<text><strong>Practice Title:</strong> @PrefmC.GetString(PrefmName.PracticeTitle)</text>
+	}
+}

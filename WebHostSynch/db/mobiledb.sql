@@ -465,14 +465,20 @@ UNLOCK TABLES;
 -- Table structure for table `preference`
 --
 
-DROP TABLE IF EXISTS `preference`;
+DROP TABLE IF EXISTS `preferencem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `preference` (
+
+CREATE TABLE `preferencem` (
+  `CustomerNum` bigint(20) NOT NULL,
   `PrefmName` varchar(255) NOT NULL,
   `ValueString` text NOT NULL,
-  PRIMARY KEY (`PrefmName`)
+  PRIMARY KEY (`CustomerNum`,`PrefmName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

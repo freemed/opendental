@@ -10,9 +10,10 @@
         <div id="header">
 
             <div id="logindisplay">
-                @Html.Partial("_LogInPartial")
+               <span style="float: left;"> @Html.Partial("_PracticeTitle") </span> <span style="float: right;">@Html.Partial("_LogInPartial") </span>
             </div>
-			            <div id="patname">
+			<div style="clear: both;">&nbsp;</div>
+			   <div id="patname">
                 @Html.Partial("_PatientName")
             </div>
 			@if(Session["Patient"]!=null) {

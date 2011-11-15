@@ -192,6 +192,7 @@
     <Content Include="Views\Medical\EHRInformation.cshtml" />
     <Content Include="Views\Shared\_PatientName.cshtml" />
     <Content Include="Views\Account\AccountInformation.cshtml" />
+    <Content Include="Views\Shared\_PracticeTitle.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -24,13 +24,13 @@ namespace PatientPortalMVC.Controllers
 				if(DentalOfficeIDCookie!=null) {
 				Int64.TryParse(DentalOfficeIDCookie.Value,out DentalOfficeID);
 				}
-				Patientm pat=Patientms.GetOne(DentalOfficeID,model.UserName,model.Password);
-				if(pat==null) {
+				Patientm patm=Patientms.GetOne(DentalOfficeID,model.UserName,model.Password);
+				if(patm==null) {
 					ModelState.AddModelError("","Login Failed, Please Try Again");
 				}
 				else {
-					Session["Patient"]=pat;
-					//Session["Patient"]=PrefmName.PracticeTitle;
+					Session["Patient"]=patm;
+					Prefms.LoadPreferences(DentalOfficeID);//load session with preferences.
 					return RedirectToAction("EHRInformation","Medical");
 				}
 			}
