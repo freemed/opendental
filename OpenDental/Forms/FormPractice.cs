@@ -298,7 +298,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(865,426);
+			this.butOK.Location = new System.Drawing.Point(785,426);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 7;
@@ -314,7 +314,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(865,464);
+			this.butCancel.Location = new System.Drawing.Point(785,464);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 8;
@@ -323,7 +323,7 @@ namespace OpenDental{
 			// 
 			// labelPlaceService
 			// 
-			this.labelPlaceService.Location = new System.Drawing.Point(793,8);
+			this.labelPlaceService.Location = new System.Drawing.Point(490,185);
 			this.labelPlaceService.Name = "labelPlaceService";
 			this.labelPlaceService.Size = new System.Drawing.Size(156,18);
 			this.labelPlaceService.TabIndex = 44;
@@ -332,7 +332,7 @@ namespace OpenDental{
 			// 
 			// listPlaceService
 			// 
-			this.listPlaceService.Location = new System.Drawing.Point(795,29);
+			this.listPlaceService.Location = new System.Drawing.Point(492,206);
 			this.listPlaceService.Name = "listPlaceService";
 			this.listPlaceService.Size = new System.Drawing.Size(145,147);
 			this.listPlaceService.TabIndex = 45;
@@ -344,7 +344,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.radioInsBillingProvTreat);
 			this.groupBox4.Controls.Add(this.radioInsBillingProvDefault);
 			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox4.Location = new System.Drawing.Point(493,200);
+			this.groupBox4.Location = new System.Drawing.Point(649,200);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(235,104);
 			this.groupBox4.TabIndex = 50;
@@ -530,7 +530,7 @@ namespace OpenDental{
 			// FormPractice
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(972,513);
+			this.ClientSize = new System.Drawing.Size(892,513);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupSwiss);
 			this.Controls.Add(this.groupBox4);
