@@ -7,7 +7,7 @@ using System.Web;
 
 
 
-/*
+
 namespace OpenDentBusiness.Mobile {
 	public class Prefms {
 		public static PrefmC LoadPreferences(long customerNum) {
@@ -29,9 +29,33 @@ namespace OpenDentBusiness.Mobile {
 		}
 
 
-
+		///<summary>Returns true if a change was required, or false if no change needed.</summary>
+		public static bool UpdateString(PrefName prefName,string newValue) {
+			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
+			if(!PrefC.Dict.ContainsKey(prefName.ToString())) {
+				throw new ApplicationException(prefName+" is an invalid pref name.");
+			}
+			if(PrefC.GetString(prefName)==newValue) {
+				return false;//no change needed
+			}
+			string command = "UPDATE preference SET "
+				+"ValueString = '"+POut.String(newValue)+"' "
+				+"WHERE PrefName = '"+POut.String(prefName.ToString())+"'";
+			bool retVal=true;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
+			}
+			else {
+				Db.NonQ(command);
+			}
+			Pref pref=new Pref();
+			pref.PrefName=prefName.ToString();
+			pref.ValueString=newValue;
+			PrefC.Dict[prefName.ToString()]=pref;
+			return retVal;
+		}
 
 
 
 	}
-}*/
+}
