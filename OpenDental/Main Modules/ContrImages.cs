@@ -1544,7 +1544,7 @@ namespace OpenDental{
 				else if(errorCode==(int)EZTwainErrorCode.EZTEC_DEVICE_PAPERJAM) {//76
 					message="\r\nPaper jam.";
 				}
-				MessageBox.Show(Lan.g(this,"Unable to scan. Error code: ")+errorCode+" "+((EZTwainErrorCode)errorCode).ToString()+"\r\n"+message);
+				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error code: ")+errorCode+" "+((EZTwainErrorCode)errorCode).ToString()+"\r\n"+message);
 				return;
 			}
 			ImageNodeId nodeId=new ImageNodeId(); 
