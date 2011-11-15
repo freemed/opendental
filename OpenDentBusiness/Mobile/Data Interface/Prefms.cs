@@ -7,7 +7,7 @@ using System.Web;
 
 
 
-
+/*
 namespace OpenDentBusiness.Mobile {
 	public class Prefms {
 		public static PrefmC LoadPreferences(long customerNum) {
@@ -34,4 +34,4 @@ namespace OpenDentBusiness.Mobile {
 
 
 	}
-}
+}*/

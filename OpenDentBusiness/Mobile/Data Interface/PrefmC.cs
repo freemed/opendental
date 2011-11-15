@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Web;
 
+/*
 namespace OpenDentBusiness.Mobile {
 	public class PrefmC {
 		///<summary>Dennis ToDo: this class has to be revised</summary>
@@ -37,7 +38,7 @@ namespace OpenDentBusiness.Mobile {
 
 
 	}
-}
+}*/
 
 
 

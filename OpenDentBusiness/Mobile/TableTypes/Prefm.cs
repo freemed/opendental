@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+/*
 namespace OpenDentBusiness.Mobile {
 	
 	[Serializable()]
@@ -25,4 +26,4 @@ namespace OpenDentBusiness.Mobile {
 	public enum PrefmName {
 		PracticeTitle
 	}
-}
+}*/
