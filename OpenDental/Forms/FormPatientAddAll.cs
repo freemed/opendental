@@ -1185,6 +1185,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Guarantor name must be entered.");
 				return;
 			}
+			// Validate Insurance subscribers--------------------------------------------------------------------------------------------------------
 			if((comboSubscriber1.SelectedIndex==2 || comboSubscriber2.SelectedIndex==2) && (textFName2.Text=="" || textLName2.Text=="")){
 				MsgBox.Show(this,"Subscriber must have name entered.");
 				return;
@@ -1201,6 +1202,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Subscriber must have name entered.");
 				return;
 			}
+			// Validate Insurance Plans--------------------------------------------------------------------------------------------------------------
 			bool insComplete1=false;
 			bool insComplete2=false;
 			if(comboSubscriber1.SelectedIndex>0
@@ -1256,6 +1258,7 @@ namespace OpenDental {
 					return;
 				}
 			}
+			//Validate Insurance subscriptions---------------------------------------------------------------------------------------------------
 			if(insComplete1){
 				if(!checkInsOne1.Checked
 					&& !checkInsOne2.Checked
@@ -1266,6 +1269,15 @@ namespace OpenDental {
 					MsgBox.Show(this,"Insurance information has been filled in, but has not been assigned to any patients.");
 					return;
 				}
+				if(checkInsOne1.Checked && (textLName1.Text=="" || textFName1.Text=="")//Insurance1 assigned to invalid patient1
+					|| checkInsOne2.Checked && (textLName2.Text=="" || textFName2.Text=="")//Insurance1 assigned to invalid patient2
+					|| checkInsOne3.Checked && (textLName3.Text=="" || textFName3.Text=="")//Insurance1 assigned to invalid patient3
+					|| checkInsOne4.Checked && (textLName4.Text=="" || textFName4.Text=="")//Insurance1 assigned to invalid patient4
+					|| checkInsOne5.Checked && (textLName5.Text=="" || textFName5.Text=="")) //Insurance1 assigned to invalid patient5
+				{
+					MsgBox.Show(this,"Insurance information 1 has been filled in, but has been assigned to a patient with no name.");
+					return;
+				}
 			}
 			if(insComplete2){
 				if(!checkInsTwo1.Checked
@@ -1274,7 +1286,16 @@ namespace OpenDental {
 					&& !checkInsTwo4.Checked
 					&& !checkInsTwo5.Checked)
 				{
-					MsgBox.Show(this,"Insurance information has been filled in, but has not been assigned to any patients.");
+					MsgBox.Show(this,"Insurance information 2 has been filled in, but has not been assigned to any patients.");
+					return;
+				}
+				if(checkInsTwo1.Checked && (textLName1.Text=="" || textFName1.Text=="")//Insurance2 assigned to invalid patient1
+					|| checkInsTwo2.Checked && (textLName2.Text=="" || textFName2.Text=="")//Insurance2 assigned to invalid patient2
+					|| checkInsTwo3.Checked && (textLName3.Text=="" || textFName3.Text=="")//Insurance2 assigned to invalid patient3
+					|| checkInsTwo4.Checked && (textLName4.Text=="" || textFName4.Text=="")//Insurance2 assigned to invalid patient4
+					|| checkInsTwo5.Checked && (textLName5.Text=="" || textFName5.Text=="")) //Insurance2 assigned to invalid patient5
+				{
+					MsgBox.Show(this,"Insurance information 2 has been filled in, but has been assigned to a patient with no name.");
 					return;
 				}
 			}
