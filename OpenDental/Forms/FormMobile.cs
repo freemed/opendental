@@ -153,8 +153,15 @@ namespace OpenDental {
 			}
 			//Username and password-----------------------------------------------------------------------------
 			mb.SetMobileWebUserPassword(PrefC.GetString(PrefName.RegistrationKey),textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
-			// The practice title may be set here.
 			return true;
+		}
+
+		private static void UploadPracticeTitle() {
+			try {
+				mb.SetPracticeTitle(PrefC.GetString(PrefName.RegistrationKey),PrefC.GetString(PrefName.PracticeTitle));
+			}
+			catch(Exception e) {
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -167,7 +174,6 @@ namespace OpenDental {
 			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
 			MsgBox.Show(this,"Done");
 		}
-
 		
 		private void butFullSync_Click(object sender,EventArgs e) {
 			if(!SavePrefs()) {
@@ -246,6 +252,7 @@ namespace OpenDental {
 				    changedPat=DateTime.MinValue;
 					changedStatement=DateTime.MinValue;
 					changedDocument=DateTime.MinValue;
+					UploadPracticeTitle();
 				}
 				bool synchDelPat=true;
 				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
@@ -536,7 +543,6 @@ namespace OpenDental {
 			Thread workerThread=new Thread(uploadDelegate);
 			workerThread.Start();
 		}
-
 
 		#region Testing
 		///<summary>This allows the code to continue by not throwing an exception even if there is a problem with the security certificate.</summary>

@@ -55,6 +55,8 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SetMobileWebUserPasswordOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SetPracticeTitleOperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetPatientPortalAddressOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchLabPanelsOperationCompleted;
@@ -154,6 +156,9 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SetMobileWebUserPasswordCompletedEventHandler SetMobileWebUserPasswordCompleted;
+        
+        /// <remarks/>
+        public event SetPracticeTitleCompletedEventHandler SetPracticeTitleCompleted;
         
         /// <remarks/>
         public event GetPatientPortalAddressCompletedEventHandler GetPatientPortalAddressCompleted;
@@ -545,6 +550,36 @@ namespace OpenDental.MobileWeb {
             if ((this.SetMobileWebUserPasswordCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.SetMobileWebUserPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetPracticeTitle", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SetPracticeTitle(string RegistrationKey, string PracticeTitle) {
+            this.Invoke("SetPracticeTitle", new object[] {
+                        RegistrationKey,
+                        PracticeTitle});
+        }
+        
+        /// <remarks/>
+        public void SetPracticeTitleAsync(string RegistrationKey, string PracticeTitle) {
+            this.SetPracticeTitleAsync(RegistrationKey, PracticeTitle, null);
+        }
+        
+        /// <remarks/>
+        public void SetPracticeTitleAsync(string RegistrationKey, string PracticeTitle, object userState) {
+            if ((this.SetPracticeTitleOperationCompleted == null)) {
+                this.SetPracticeTitleOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetPracticeTitleOperationCompleted);
+            }
+            this.InvokeAsync("SetPracticeTitle", new object[] {
+                        RegistrationKey,
+                        PracticeTitle}, this.SetPracticeTitleOperationCompleted, userState);
+        }
+        
+        private void OnSetPracticeTitleOperationCompleted(object arg) {
+            if ((this.SetPracticeTitleCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetPracticeTitleCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -1091,6 +1126,10 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SetMobileWebUserPasswordCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SetPracticeTitleCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

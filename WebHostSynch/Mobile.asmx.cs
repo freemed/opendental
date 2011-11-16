@@ -220,6 +220,25 @@ namespace WebHostSynch {
 		#region PatientPortal
 
 			[WebMethod]
+			
+			public void SetPracticeTitle(String RegistrationKey,String PracticeTitle) {
+				try {
+					Logger.Information("In SetPracticeTitle");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					else {
+						//util.SetMobileWebUserPassword(customerNum,UserName,Password);
+					}
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				}
+			}
+
+
+			[WebMethod]
 			public string GetPatientPortalAddress(string RegistrationKey) {
 				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
 				if(DentalOfficeID==0) {

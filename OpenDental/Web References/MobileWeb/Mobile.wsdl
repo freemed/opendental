@@ -88,6 +88,8 @@
           <s:enumeration value="ICD9" />
           <s:enumeration value="Provider" />
           <s:enumeration value="Pharmacy" />
+          <s:enumeration value="Statement" />
+          <s:enumeration value="Document" />
         </s:restriction>
       </s:simpleType>
       <s:element name="DeleteObjectsResponse">
@@ -367,6 +369,17 @@
         </s:complexType>
       </s:element>
       <s:element name="SetMobileWebUserPasswordResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SetPracticeTitle">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PracticeTitle" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPracticeTitleResponse">
         <s:complexType />
       </s:element>
       <s:element name="GetPatientPortalAddress">
@@ -834,6 +847,12 @@
   <wsdl:message name="SetMobileWebUserPasswordSoapOut">
     <wsdl:part name="parameters" element="tns:SetMobileWebUserPasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="SetPracticeTitleSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPracticeTitle" />
+  </wsdl:message>
+  <wsdl:message name="SetPracticeTitleSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPracticeTitleResponse" />
+  </wsdl:message>
   <wsdl:message name="GetPatientPortalAddressSoapIn">
     <wsdl:part name="parameters" element="tns:GetPatientPortalAddress" />
   </wsdl:message>
@@ -960,6 +979,10 @@
     <wsdl:operation name="SetMobileWebUserPassword">
       <wsdl:input message="tns:SetMobileWebUserPasswordSoapIn" />
       <wsdl:output message="tns:SetMobileWebUserPasswordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPracticeTitle">
+      <wsdl:input message="tns:SetPracticeTitleSoapIn" />
+      <wsdl:output message="tns:SetPracticeTitleSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="GetPatientPortalAddress">
       <wsdl:input message="tns:GetPatientPortalAddressSoapIn" />
@@ -1117,6 +1140,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebUserPassword">
       <soap:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPracticeTitle">
+      <soap:operation soapAction="http://opendental.com/SetPracticeTitle" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1345,6 +1377,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetMobileWebUserPassword">
       <soap12:operation soapAction="http://opendental.com/SetMobileWebUserPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPracticeTitle">
+      <soap12:operation soapAction="http://opendental.com/SetPracticeTitle" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
