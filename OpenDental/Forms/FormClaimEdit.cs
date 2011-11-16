@@ -3042,11 +3042,11 @@ namespace OpenDental{
 			// 
 			// labelPriorAuth
 			// 
-			this.labelPriorAuth.Location = new System.Drawing.Point(214,111);
+			this.labelPriorAuth.Location = new System.Drawing.Point(194,111);
 			this.labelPriorAuth.Name = "labelPriorAuth";
-			this.labelPriorAuth.Size = new System.Drawing.Size(138,16);
+			this.labelPriorAuth.Size = new System.Drawing.Size(158,16);
 			this.labelPriorAuth.TabIndex = 142;
-			this.labelPriorAuth.Text = "Prior Authorization";
+			this.labelPriorAuth.Text = "Prior Authorization (used rarely)";
 			this.labelPriorAuth.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// comboSpecialProgram
