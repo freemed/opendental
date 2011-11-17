@@ -730,6 +730,7 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
+			FormMobile.UploadPracticeTitle();
 			DialogResult=DialogResult.OK;
 		}
 

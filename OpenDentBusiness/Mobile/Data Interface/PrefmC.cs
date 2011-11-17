@@ -13,13 +13,7 @@ namespace OpenDentBusiness.Mobile {
 		///<summary>Gets a pref of type string.</summary>
 		public static string GetString(PrefmName prefmName) {
 			try {
-				PrefmC prefmC=(PrefmC)HttpContext.Current.Session["prefmC"];
-				if(prefmC==null) {
-					if(HttpContext.Current.Session["Patient"]!=null) {
-						long DentalOfficeID=((Patientm)HttpContext.Current.Session["Patient"]).CustomerNum;
-						prefmC=Prefms.LoadPreferences(DentalOfficeID);
-					}
-				}
+				PrefmC prefmC=Prefms.LoadPreferences();
 				if(!prefmC.Dict.ContainsKey(prefmName.ToString())) {
 					throw new Exception(prefmName+" is an invalid pref name.");
 				}

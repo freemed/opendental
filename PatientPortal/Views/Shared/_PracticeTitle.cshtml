@@ -5,6 +5,6 @@
 @{
 	if(Session["Patient"]!=null) {
 		PrefmC prefmC = new PrefmC();
-		<text><strong>Practice Title:</strong> @PrefmC.GetString(PrefmName.PracticeTitle)</text>
+		<text><strong>@PrefmC.GetString(PrefmName.PracticeTitle)</strong> </text>
 	}
 }

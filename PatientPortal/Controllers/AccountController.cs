@@ -30,7 +30,7 @@ namespace PatientPortalMVC.Controllers
 				}
 				else {
 					Session["Patient"]=patm;
-					Prefms.LoadPreferences(DentalOfficeID);//load session with preferences.
+					Prefms.LoadPreferences();
 					return RedirectToAction("EHRInformation","Medical");
 				}
 			}

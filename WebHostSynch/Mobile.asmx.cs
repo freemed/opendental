@@ -229,7 +229,7 @@ namespace WebHostSynch {
 						return;
 					}
 					else {
-						//util.SetMobileWebUserPassword(customerNum,UserName,Password);
+						(new Prefms()).UpdateString(customerNum,PrefmName.PracticeTitle,PracticeTitle);
 					}
 				}
 				catch(Exception ex) {

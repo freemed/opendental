@@ -156,11 +156,15 @@ namespace OpenDental {
 			return true;
 		}
 
-		private static void UploadPracticeTitle() {
+		///<summary>Uploads the Dental practice name or practice title to the Patient Portal.</summary>
+		public static void UploadPracticeTitle() {
 			try {
-				mb.SetPracticeTitle(PrefC.GetString(PrefName.RegistrationKey),PrefC.GetString(PrefName.PracticeTitle));
+				if(TestWebServiceExists()) {
+					mb.SetPracticeTitle(PrefC.GetString(PrefName.RegistrationKey),PrefC.GetString(PrefName.PracticeTitle));
+				}
 			}
-			catch(Exception e) {
+			catch(Exception ex) {
+				//throw ex;
 			}
 		}
 
