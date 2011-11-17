@@ -4898,6 +4898,9 @@ namespace OpenDental{
 			if(!ClaimIsValid()){
 				return;
 			}
+			if(textDateSent.Text=="") {
+				textDateSent.Text=DateTime.Today.ToShortDateString();
+			}
 			UpdateClaim();
 			PrintDocument pd=new PrintDocument();
 			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)) {
