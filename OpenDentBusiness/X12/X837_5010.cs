@@ -252,7 +252,7 @@ namespace OpenDentBusiness
 						+Sout(billingState,2,2)+"*"//N402 2/2 State or Province Code: 
 						+Sout(billingZip.Replace("-",""),15)//N403 3/15 Postal Code: 
 						+"~");//NM404 through NM407 are either situational with United States as default, or not used, so we don't specify any of them.
-				//2010AA REF EI (medical,institutional,dental) Billing Provider Tax Identification.
+				//2010AA REF: EI (medical,institutional,dental) Billing Provider Tax Identification.
 				seg++;
 				sw.Write("REF*");
 				if(medType==EnumClaimMedType.Medical) {
@@ -294,9 +294,31 @@ namespace OpenDentBusiness
 					sw.Write(Sout(clinic.Phone,256));//PER04  1/256 Communication Number: Telephone number.
 				}
 				sw.WriteLine("~");//PER05 through PER08 are situational and PER09 is not used. We do not use.
-				//2010AB NM1: 87 (medical,institutional,dental) Pay-To Address Name. We do not use.
-				//2010AB N3: (medical,institutional,dental) Pay-To Address. We do not use.
-				//2010AB N4: (medical,institutional,dental) Pay-To Address City, State, Zip Code. We do not use.
+				if(PrefC.GetString(PrefName.PracticePayToAddress)!="") {
+					//2010AB NM1: 87 (medical,institutional,dental) Pay-To Address Name.
+					seg++;
+					sw.Write("NM1*87*");//NM101 2/3 Entity Identifier Code: 87=Pay-to Provider.
+					if(medType==EnumClaimMedType.Institutional) {
+						sw.Write("2");//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
+					}
+					else { //(medical,dental)
+						sw.Write((billProv.IsNotPerson?"2":"1"));//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
+					}
+					sw.WriteLine("~"); //NM103 through NM112 are not used.
+					//2010AB N3: (medical,institutional,dental) Pay-To Address.
+					seg++;
+					sw.Write("N3*"+Sout(PrefC.GetString(PrefName.PracticePayToAddress),55));//N301 1/55 Address Information:
+					if(PrefC.GetString(PrefName.PracticePayToAddress2)!="") {
+						sw.Write("*"+Sout(PrefC.GetString(PrefName.PracticePayToAddress2),55));//N302 1/55 Address Information:
+					}
+					sw.WriteLine("~");
+					//2010AB N4: (medical,institutional,dental) Pay-To Address City, State, Zip Code.
+					seg++;
+					sw.WriteLine("N4*"+Sout(PrefC.GetString(PrefName.PracticePayToCity),30)+"*"//N401 2/30 City Name: 
+						+Sout(PrefC.GetString(PrefName.PracticePayToST),2,2)+"*"//N402 2/2 State or Province Code: 
+						+Sout(PrefC.GetString(PrefName.PracticePayToZip).Replace("-",""),15)//N403 3/15 Postal Code: 
+						+"~");//NM404 through NM407 are either situational with United States as default, or not used, so we don't specify any of them.
+				}
 				//2010AC NM1: 98 (medical,institutional,dental) Pay-To Plan Name. We do not use.
 				//2010AC N3: (medical,institutional,dental) Pay-To Plan Address. We do not use.
 				//2010AC N4: (medical,institutional,dental) Pay-To Plan City, State, Zip Code. We do not use.
@@ -2046,6 +2068,10 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Practice billing zip must contain nine digits");
 				}
+				if(Regex.IsMatch(PrefC.GetString(PrefName.PracticeBillingAddress),".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
+					Comma(strb);
+					strb.Append("Practice billing address cannot be a P.O. BOX when used for e-claims.");
+				}
 			}
 			else if(clinic==null) {
 				string zip=PrefC.GetString(PrefName.PracticeZip);
@@ -2053,12 +2079,20 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Practice zip must contain nine digits");
 				}
+				if(Regex.IsMatch(PrefC.GetString(PrefName.PracticeAddress),".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
+					Comma(strb);
+					strb.Append("Practice address cannot be a P.O. BOX when used for e-claims.");
+				}
 			}
 			else {
 				string zip=clinic.Zip;
 				if(!Regex.IsMatch(zip,"^[0-9]{5}\\-?[0-9]{4}$")) {
 					Comma(strb);
 					strb.Append("Clinic zip must contain nine digits");
+				}
+				if(Regex.IsMatch(clinic.Address,".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
+					Comma(strb);
+					strb.Append("Clinic address cannot be a P.O. BOX when used for e-claims.");
 				}
 			}
 			//treatProv
