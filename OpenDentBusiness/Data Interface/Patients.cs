@@ -501,7 +501,7 @@ namespace OpenDentBusiness{
 				SELECT patient.PatNum,claimproc.ProvNum,claimproc.ClinicNum,-SUM(InsPayAmt)-SUM(Writeoff)
 				FROM claimproc,patient
 				WHERE patient.PatNum=claimproc.PatNum
-				AND (Status=1 OR Status=4 OR Status=5)/*received,supplemental,capclaim. (7-capcomplete writeoff)*/
+				AND (Status=1 OR Status=4 OR Status=5 OR Status=7)/*received,supplemental,capclaim. (7-capcomplete writeoff)*/
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
