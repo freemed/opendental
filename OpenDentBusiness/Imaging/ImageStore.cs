@@ -291,6 +291,7 @@ namespace OpenDentBusiness {
 			return doc;
 		}
 
+		/*
 		public static Document Import(Bitmap image,long docCategory,Patient pat) {
 			string patFolder="";
 			if(PrefC.UsingAtoZfolder) {
@@ -317,7 +318,7 @@ namespace OpenDentBusiness {
 				throw;
 			}
 			return doc;
-		}
+		}*/
 
 		/// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will differ depending on imageType.</summary>
 		public static Document Import(Bitmap image,long docCategory,ImageType imageType,Patient pat) {

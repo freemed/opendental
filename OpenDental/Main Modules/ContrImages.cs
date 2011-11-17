@@ -1794,7 +1794,7 @@ namespace OpenDental{
 			}
 			else {//Paste the image as its own unique document.
 				try {
-					doc=ImageStore.Import(bitmapPaste,GetCurrentCategory(),PatCur);
+					doc=ImageStore.Import(bitmapPaste,GetCurrentCategory(),ImageType.Photo,PatCur);
 				}
 				catch {
 					MessageBox.Show(Lan.g(this,"Error saving document."));
