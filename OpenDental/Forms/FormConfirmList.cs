@@ -577,20 +577,21 @@ namespace OpenDental{
 			printPreview.ShowDialog();
 		}
 
-		private void butPostcards_Click(object sender, System.EventArgs e) {
-			if(table.Rows.Count==0){
-				MessageBox.Show(Lan.g(this,"There are no appointments in the list.  Must have at least one to print."));    
+		///<summary>Changes made to printing confirmation postcards need to be made in FormRecallList.butPostcards_Click() as well.</summary>
+		private void butPostcards_Click(object sender,System.EventArgs e) {
+			if(table.Rows.Count==0) {
+				MessageBox.Show(Lan.g(this,"There are no appointments in the list.  Must have at least one to print."));
 				return;
 			}
-			if(grid.SelectedIndices.Length==0){
-				for(int i=0;i<table.Rows.Count;i++){
+			if(grid.SelectedIndices.Length==0) {
+				for(int i=0;i<table.Rows.Count;i++) {
 					grid.SetSelected(i,true);
 				}
 			}
 			List<long> aptNums=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++) {
-        aptNums.Add(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
-      }
+				aptNums.Add(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
+			}
 			AddrTable=Appointments.GetAddrTable(aptNums);
 			pagesPrinted=0;
 			patientsPrinted=0;
@@ -598,14 +599,14 @@ namespace OpenDental{
 			pd.PrintPage+=new PrintPageEventHandler(this.pdCards_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1){
-				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",400,600);
+			if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",500,700);
 				pd.DefaultPageSettings.Landscape=true;
 			}
-			else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==3){
+			else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==3) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 			}
-			else{//4
+			else {//4
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 				pd.DefaultPageSettings.Landscape=true;
 			}

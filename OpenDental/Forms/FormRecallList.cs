@@ -1133,28 +1133,29 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 		}
 
-		private void butPostcards_Click(object sender, System.EventArgs e) {
-			if(gridMain.Rows.Count < 1){
-        MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one to print."));    
-        return;
-      }
-			if(PrefC.GetLong(PrefName.RecallStatusMailed)==0){
+		///<summary>Changes made to printing recall postcards need to be made in FormConfirmList.butPostcards_Click() as well.</summary>
+		private void butPostcards_Click(object sender,System.EventArgs e) {
+			if(gridMain.Rows.Count < 1) {
+				MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one to print."));
+				return;
+			}
+			if(PrefC.GetLong(PrefName.RecallStatusMailed)==0) {
 				MsgBox.Show(this,"You need to set a status first in the Recall Setup window.");
 				return;
 			}
-			if(gridMain.SelectedIndices.Length==0){
+			if(gridMain.SelectedIndices.Length==0) {
 				ContactMethod cmeth;
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					//if(table.Rows[i]["status"].ToString()!=""){//we only want rows without a status
 					//	continue;
 					//}
 					cmeth=(ContactMethod)PIn.Long(table.Rows[i]["PreferRecallMethod"].ToString());
-					if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None){
+					if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None) {
 						continue;
 					}
 					gridMain.SetSelected(i,true);
 				}
-				if(gridMain.SelectedIndices.Length==0){
+				if(gridMain.SelectedIndices.Length==0) {
 					MsgBox.Show(this,"No patients of mail type.");
 					return;
 				}
@@ -1163,9 +1164,9 @@ namespace OpenDental{
 				}
 			}
 			List<long> recallNums=new List<long>();
-      for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-        recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
-      }
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+			}
 			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
 			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
 			pagesPrinted=0;
@@ -1174,14 +1175,14 @@ namespace OpenDental{
 			pd.PrintPage+=new PrintPageEventHandler(this.pdCards_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1){
+			if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",500,700);
 				pd.DefaultPageSettings.Landscape=true;
 			}
-			else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==3){
+			else if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==3) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 			}
-			else{//4
+			else {//4
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 				pd.DefaultPageSettings.Landscape=true;
 			}
@@ -1190,12 +1191,12 @@ namespace OpenDental{
 			printPreview.ShowDialog();
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Did all the postcards finish printing correctly?  Statuses will be changed and commlog entries made for all of the selected patients.  Click Yes only if postcards printed successfully.")) {
 				Cursor=Cursors.WaitCursor;
-				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					//make commlog entries for each patient
 					Commlogs.InsertForRecall(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
 						PIn.Int(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()),PrefC.GetLong(PrefName.RecallStatusMailed));
 				}
-				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					Recalls.UpdateStatus(
 						PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetLong(PrefName.RecallStatusMailed));
 				}
