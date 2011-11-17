@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 			pat=fam.GetPatient(patNum);
 			retVal=new DataSet();
 			if(viewingInRecall) {//always false
-				retVal.Tables.Add(ChartModules.GetProgNotes(patNum, false));
+				retVal.Tables.Add(ChartModules.GetProgNotes(patNum,false,new ChartModuleComponentsToLoad()));
 			}
 			else {
 				GetCommLog(patNum);

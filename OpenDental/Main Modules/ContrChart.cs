@@ -4563,7 +4563,45 @@ namespace OpenDental{
 			}
 			DataSetMain=null;
 			if(PatCur!=null){
-				DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
+				if(Programs.UsingEcwTight()) {//ecw customers
+					ChartModuleComponentsToLoad componentsToLoad = new ChartModuleComponentsToLoad(
+					checkAppt.Checked,				        //showAppointments
+					false, //checkComm.Checked,	      //showCommLog
+					checkShowC.Checked,               //showCompleted
+					checkShowCn.Checked,              //showConditions
+					false, //checkEmail.Checked,      //showEmail
+					checkShowE.Checked,               //showExisting
+					false, //checkCommFamily.Checked,	//showFamilyCommLog
+					false,														//showFormPat
+					checkLabCase.Checked,			        //showLabCases
+					checkNotes.Checked,				        //showProcNotes
+					checkShowR.Checked,				        //showReferred
+					checkRx.Checked,					        //showRX
+					checkSheets.Checked,			        //showSheets, consent
+					false, //checkTasks.Checked,			//showTasks (for now)
+					checkShowTP.Checked);			        //showTreatPlan
+					DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked,componentsToLoad);//showConditions
+				}
+				else {//non ecw customers
+					//DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
+					DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked,new ChartModuleComponentsToLoad(
+						checkAppt.Checked,				//showAppointments
+						checkComm.Checked,				//showCommLog
+						checkShowC.Checked,				//showCompleted
+						checkShowCn.Checked,			//showConditions
+						checkEmail.Checked,				//showEmail
+						checkShowE.Checked,				//showExisting
+						checkCommFamily.Checked,	//showFamilyCommLog
+						true,											//showFormPat
+						checkLabCase.Checked,			//showLabCases
+						checkNotes.Checked,				//showProcNotes
+						checkShowR.Checked,				//showReferred
+						checkRx.Checked,					//showRX
+						checkSheets.Checked,			//showSheets, consent
+						checkTasks.Checked,				//showTasks
+						checkShowTP.Checked)			//showTreatPlan
+					);
+				}
 			}
 			for(int i=0;i<fields.Count;i++){
 				if(fields[i].Description==""){
