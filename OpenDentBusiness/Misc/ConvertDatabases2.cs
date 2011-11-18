@@ -6749,6 +6749,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To11_1_9();
 		}
 
+		///<summary>Oracle compatible: 11/17/2011</summary>
 		private static void To11_1_9() {
 			if(FromVersion<new Version("11.1.9.0")) {
 				//Update VixWin Bridge
