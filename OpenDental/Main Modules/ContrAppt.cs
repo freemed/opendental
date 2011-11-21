@@ -3713,9 +3713,10 @@ namespace OpenDental {
 					pageRow=0;
 					pageColumn=0;
 					PrintReport();
+					ApptDrawing.LineH=12;//Reset the LineH to default.
+					CopyScheduleToClipboard();
 				}
 			}
-			ApptDrawing.LineH=12;//Reset the LineH to default.
 			ModuleSelected(0);//Refresh the public variables in ApptDrawing.cs
 		}
 
@@ -3941,6 +3942,74 @@ namespace OpenDental {
 			float xPage = (float)(400-((g.MeasureString(page,dateFont).Width/2)));
 			yPos=pageHeight-40;
 			g.DrawString(page,dateFont,Brushes.Black,xPage,yPos);
+		}
+
+		///<summary>Sends a "screenshot" of the current appointment schedule to the clipboard.  This is to preserve old functionality.</summary>
+		private void CopyScheduleToClipboard() {
+			ArrayList aListStart=new ArrayList();
+			ArrayList aListStop=new ArrayList();
+			DateTime startTime;
+			DateTime stopTime;
+			for(int i=0;i<SchedListPeriod.Count;i++) {
+				if(SchedListPeriod[i].SchedType!=ScheduleType.Provider) {
+					continue;
+				}
+				if(SchedListPeriod[i].StartTime==TimeSpan.FromHours(0)) {//ignore notes at midnight
+					continue;
+				}
+				aListStart.Add(SchedListPeriod[i].SchedDate+SchedListPeriod[i].StartTime);
+				aListStop.Add(SchedListPeriod[i].SchedDate+SchedListPeriod[i].StopTime);
+			}
+			if(aListStart.Count > 0) {//makes sure there is at least one timeblock
+				startTime=(DateTime)aListStart[0];
+				for(int i=0;i<aListStart.Count;i++) {
+					//if (A) OR (B AND C)
+					if((((DateTime)(aListStart[i])).Hour < startTime.Hour) 
+						|| (((DateTime)(aListStart[i])).Hour==startTime.Hour 
+						&& ((DateTime)(aListStart[i])).Minute < startTime.Minute)) {
+						startTime=(DateTime)aListStart[i];
+					}
+				}
+				stopTime=(DateTime)aListStop[0];
+				for(int i=0;i<aListStop.Count;i++) {
+					//if (A) OR (B AND C)
+					if((((DateTime)(aListStop[i])).Hour > stopTime.Hour) 
+						|| (((DateTime)(aListStop[i])).Hour==stopTime.Hour 
+						&& ((DateTime)(aListStop[i])).Minute > stopTime.Minute)) {
+						stopTime=(DateTime)aListStop[i];
+					}
+				}
+			}
+			else {//office is closed
+				startTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
+					,AppointmentL.DateSelected.Day
+					,ApptDrawing.ConvertToHour(-ContrApptSheet2.Location.Y)
+					,ApptDrawing.ConvertToMin(-ContrApptSheet2.Location.Y)
+					,0);
+				if(ApptDrawing.ConvertToHour(-ContrApptSheet2.Location.Y)+12<23) {
+					//we will be adding an extra hour later
+					stopTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
+						,AppointmentL.DateSelected.Day
+						,ApptDrawing.ConvertToHour(-ContrApptSheet2.Location.Y)+12//add 12 hours
+						,ApptDrawing.ConvertToMin(-ContrApptSheet2.Location.Y)
+						,0);
+				}
+				else {
+					stopTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
+						,AppointmentL.DateSelected.Day
+						,22
+						,ApptDrawing.ConvertToMin(-ContrApptSheet2.Location.Y)
+						,0);
+				}
+			}
+			int recX=0;
+			int recY=(int)(ApptDrawing.LineH*ApptDrawing.RowsPerHr*startTime.Hour);
+			int recWidth=(int)ContrApptSheet2.Shadow.Width;
+			int recHeight=(int)((ApptDrawing.LineH*ApptDrawing.RowsPerHr
+				*(stopTime.Hour-startTime.Hour+1)));
+			Rectangle imageRect = new Rectangle(recX,recY,recWidth,recHeight); //Holds new dimensions for temp image
+			Bitmap imageTemp=ContrApptSheet2.Shadow.Clone(imageRect,PixelFormat.DontCare);  //Clones image and sets size to only show the time open for that day. (Needs to be rewritten)
+			Clipboard.SetDataObject(imageTemp);
 		}
 
 		///<summary>Clears the pinboard.</summary>
