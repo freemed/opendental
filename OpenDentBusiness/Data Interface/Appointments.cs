@@ -319,7 +319,13 @@ namespace OpenDentBusiness{
 		}
 
 		public static void Insert(Appointment appt) {
-			InsertIncludeAptNum(appt,false);
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				InsertIncludeAptNum(appt,false);
+			}
+			else {//Oracle must always have a valid PK.
+				appt.AptNum=DbHelper.GetNextOracleKey("appointment","AptNum");
+				InsertIncludeAptNum(appt,true);
+			}
 		}
 
 		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
@@ -334,9 +340,6 @@ namespace OpenDentBusiness{
 			}
 			if(appt.ProvNum==0){
 				appt.ProvNum=ProviderC.ListShort[0].ProvNum;
-			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {//Oracle treats PK differently.
-				return Crud.AppointmentCrud.Insert(appt);
 			}
 			return Crud.AppointmentCrud.Insert(appt,useExistingPK);
 		}
