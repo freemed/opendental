@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
 				return;
 			}
-			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' WHERE CompName = '"+POut.String(computerName)+"'";
+			string command= "UPDATE computer SET LastHeartBeat="+POut.Date(new DateTime(0001,1,1),true)+" WHERE CompName = '"+POut.String(computerName)+"'";
 			Db.NonQ(command);
 		}
 
@@ -137,7 +137,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),machineNameException);
 				return;
 			}
-			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' "
+			string command= "UPDATE computer SET LastHeartBeat="+POut.Date(new DateTime(0001,1,1),true)+" "
 				+"WHERE CompName != '"+POut.String(machineNameException)+"'";
 			Db.NonQ(command);
 		}
