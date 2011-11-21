@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM signalod "
 				+"WHERE (SigDateTime>"+POut.DateT(sinceDateT)+" "
 				+"OR AckTime>"+POut.DateT(sinceDateT)+" "
-				+"OR AckTime<'1880-01-01') "//always include all unacked.
+				+"OR AckTime<"+POut.Date(new DateTime(1880,1,1),true)+") "//always include all unacked.
 				+"AND SigType="+POut.Long((int)SignalType.Button)
 				+" ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM signalod "
 				+"WHERE SigType=0 "//buttons only
-				+"AND AckTime<'1880-01-01' "
+				+"AND AckTime<"+POut.Date(new DateTime(1880,1,1),true)+" "
 				+"ORDER BY SigDateTime";
 			List<Signalod> sigList=new List<Signalod>();
 			try {
@@ -221,7 +221,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);*/
 			//Rewritten so that the SQL is compatible with both Oracle and MySQL.
 			string command= "SELECT signalod.SignalNum FROM signalod,sigelement,sigelementdef "
-				+"WHERE signalod.AckTime < '1880-01-01' "
+				+"WHERE signalod.AckTime < "+POut.Date(new DateTime(1880,1,1),true)+" "
 				+"AND SigDateTime <= "+POut.DateT(time)+" "
 				+"AND signalod.SignalNum=sigelement.SignalNum "
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
