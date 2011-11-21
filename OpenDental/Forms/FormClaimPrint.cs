@@ -43,22 +43,25 @@ namespace OpenDental{
 		//<summary>Set to true if using this class just to generate strings for the Renaissance link.</summary>
 		//private bool IsRenaissance;
 		private List<ClaimProc> ClaimProcsForClaim;
+		private List<ClaimProc> ClaimProcsForPat;
 		///<summary>All procedures for the patient.</summary>
 		private List<Procedure> ListProc;
 		///<summary>This is set externally for Renaissance and generic e-claims.  If it was not set ahead of time, it will set in FillDisplayStrings according to the insPlan.</summary>
 		public ClaimForm ClaimFormCur;
 		private List <InsPlan> ListInsPlan;
 		//private InsPlan[] MedPlanList;
-		private List<InsSub> ListInsSub1;
+		private List<PatPlan> ListPatPlans;
 		private Claim ClaimCur;
 		///<summary>Always length of 4.</summary>
 		private string[] diagnoses;
 		//private Claim[] ClaimsArray;
 		//private Claim[] MedClaimsArray;
-		private ArrayList ListClaim;
 		private List<ClaimValCodeLog> ListClaimValCodeLog;
 		private Referral ClaimReferral;
 		private List<InsSub> ListInsSub2;
+		private InsSub subCur;
+		private InsPlan planCur;
+		private Carrier carrier;
 
 		///<summary></summary>
 		public FormClaimPrint(){
@@ -445,6 +448,7 @@ namespace OpenDental{
 				//((Claim)Claims.HList[ThisClaimNum]).Clone();
 			ListInsSub2=InsSubs.RefreshForFam(FamCur);
 			ListInsPlan=InsPlans.RefreshForSubList(ListInsSub2);
+			ListPatPlans=PatPlans.Refresh(ClaimCur.PatNum);
 			InsPlan otherPlan=InsPlans.GetPlan(ClaimCur.PlanNum2,ListInsPlan);
 			InsSub otherSub=InsSubs.GetSub(ClaimCur.InsSubNum2,ListInsSub2);
 			if(otherPlan==null){
@@ -457,10 +461,10 @@ namespace OpenDental{
 			//Employers.GetEmployer(otherPlan.EmployerNum);
 			//Employer otherEmployer=Employers.Cur;//not actually used
 			//then get the main plan
-			InsSub subCur=InsSubs.GetSub(ClaimCur.InsSubNum,ListInsSub2);
-			InsPlan planCur=InsPlans.GetPlan(ClaimCur.PlanNum,ListInsPlan);
+			subCur=InsSubs.GetSub(ClaimCur.InsSubNum,ListInsSub2);
+			planCur=InsPlans.GetPlan(ClaimCur.PlanNum,ListInsPlan);
 			Clinic clinic=Clinics.GetClinic(ClaimCur.ClinicNum);
-			Carrier carrier=Carriers.GetCarrier(planCur.CarrierNum);
+			carrier=Carriers.GetCarrier(planCur.CarrierNum);
 			//Employers.GetEmployer(InsPlans.Cur.EmployerNum);
 			Patient subsc;
 			if(FamCur.GetIndex(subCur.Subscriber)==-1) {//from another family
@@ -488,6 +492,7 @@ namespace OpenDental{
 			ListProc=Procedures.Refresh(PatCur.PatNum);
 			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
       //List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			ClaimProcsForPat=ClaimProcs.Refresh(ClaimCur.PatNum);
       ClaimProcsForClaim=ClaimProcs.RefreshForClaim(ClaimCur.ClaimNum); 
 			ListClaimProcs=new List<ClaimProc>();
 			bool includeThis;
@@ -1014,16 +1019,36 @@ namespace OpenDental{
 						displayStrings[i]=PatCur.PatNum.ToString();
 						break;
 					case "Diagnosis1":
-						displayStrings[i]=diagnoses[0];
+						if(ClaimFormCur.Items[i].FormatString=="") {
+							displayStrings[i]=diagnoses[0];
+						}
+						else if(ClaimFormCur.Items[i].FormatString=="NoDec") {
+							displayStrings[i]=diagnoses[0].Replace(".","");
+						}
 						break;
 					case "Diagnosis2":
-						displayStrings[i]=diagnoses[1];
+						if(ClaimFormCur.Items[i].FormatString=="") {
+							displayStrings[i]=diagnoses[1];
+						}
+						else if(ClaimFormCur.Items[i].FormatString=="NoDec") {
+							displayStrings[i]=diagnoses[1].Replace(".","");
+						}
 						break;
 					case "Diagnosis3":
-						displayStrings[i]=diagnoses[2];
+						if(ClaimFormCur.Items[i].FormatString=="") {
+							displayStrings[i]=diagnoses[2];
+						}
+						else if(ClaimFormCur.Items[i].FormatString=="NoDec") {
+							displayStrings[i]=diagnoses[2].Replace(".","");
+						}
 						break;
 					case "Diagnosis4":
-						displayStrings[i]=diagnoses[3];
+						if(ClaimFormCur.Items[i].FormatString=="") {
+							displayStrings[i]=diagnoses[3];
+						}
+						else if(ClaimFormCur.Items[i].FormatString=="NoDec") {
+							displayStrings[i]=diagnoses[3].Replace(".","");
+						}
 						break;
 			//this is where the procedures used to be
 					case "Miss1":
@@ -1717,6 +1742,14 @@ namespace OpenDental{
 						break;
 					case "MedPatientStatusCode":
 						displayStrings[i]=ClaimCur.PatientStatusCode;
+						break;
+					case "MedAccidentCode": //For UB04.
+						if(ClaimCur.AccidentRelated=="A") { //Auto accident
+							displayStrings[i]="01";
+						}
+						else if(ClaimCur.AccidentRelated=="E") { //Employment related accident
+							displayStrings[i]="04";
+						}
 						break;
 				}//switch
 				if(CultureInfo.CurrentCulture.Name=="nl-BE"	&& displayStrings[i]==""){//Dutch Belgium
@@ -2968,335 +3001,181 @@ namespace OpenDental{
 			}
 		}
 
-		//The function below was written with the UB04 in mind any ?'s email:david@dentalasc.com as I don't always see the forum
+		///<summary>These fields are used for the UB04.</summary>
 		private void FillMedInsStrings(){
-			InsPlan insPlan1 = new InsPlan(); //Primary Insurance
-			InsPlan insPlan2 = new InsPlan(); //Secondary Insurance
-			InsPlan insPlan3 = new InsPlan(); //Tertiary Insurance
-			InsSub insSub1=new InsSub();
-			InsSub insSub2=new InsSub();
-			InsSub insSub3=new InsSub();
-			Claim claim1 = new Claim(); //Pri Claim
-			Claim claim2 = new Claim(); //Secondary Claim
-			Claim claim3 = new Claim(); //Tertiary Claim
-			bool isPrimary = false;
-			bool isSecondary = false;
-			bool isTertiary = false;
-			List <PatPlan> listPatPlans = PatPlans.Refresh(PatNumCur); //get this patients ins plans
-			ListClaim = new ArrayList(); //list of medical claims for patient
-			ListInsSub1 = new List<InsSub>(); //list of medical ins plans for patient and family
-			for(int i=0;i<listPatPlans.Count;i++) { //fill med ins plans
-				PatPlan patPlanTemp = (PatPlan)listPatPlans[i];
-				InsSub insSubTemp = InsSubs.GetSub(patPlanTemp.InsSubNum,ListInsSub2);
-				InsPlan insPlanTemp = InsPlans.GetPlan(insSubTemp.PlanNum,ListInsPlan);
-				if(insPlanTemp.IsMedical) {
-					ListInsSub1.Add(insSubTemp);
+			PatPlan patPlan=null;
+			for(int i=0;i<ListPatPlans.Count;i++) {
+				if(ListPatPlans[i].InsSubNum==ClaimCur.InsSubNum) {
+					patPlan=ListPatPlans[i];
+					break;
 				}
 			}
-			List<ClaimProc> listClaimProc=ClaimProcs.Refresh(PatNumCur); //get all claimprocs for patient
-			for(int i=0;i<listClaimProc.Count;i++) { //compare each claimproc on this claim to all claimprocs
-				for(int j=0;j<ListClaimProcs.Count;j++) {
-					if((ListClaimProcs[j].ProcNum==listClaimProc[i].ProcNum) && (listClaimProc[i].Status==ClaimProcStatus.Received)) {
-						bool inList = true;
-						Claim claimReceived = Claims.GetClaim(listClaimProc[i].ClaimNum);
-						inList = ListClaim.Contains(claimReceived);
-						if(!inList) {
-							ListClaim.Add(claimReceived); //fill with claim already sent and received for procs on current(this) claim
+			string insFilingCodeStr=InsFilingCodes.GetEclaimCode(planCur.FilingCode);
+			//Determine the slot (A, B or C) where the medical insurance information belongs.
+			string insLine="A";
+			if(insFilingCodeStr=="MC") { //Medicaid
+				insLine="C";
+			}
+			else {
+				//If not Medicaid, then primary is on line A, secondary is on line B, and Tertiary is on line C.
+				if(patPlan.Ordinal==2) {
+					insLine="B";
+				}
+				else if(patPlan.Ordinal==3) {
+					insLine="C";
+				}
+			}
+			//Determine the prior payments or total payments from other insurance companies.
+			decimal priorPaymentsA=0;
+			decimal priorPaymentsB=0;
+			for(int i=0;i<ClaimProcsForClaim.Count;i++) {
+				for(int j=0;j<ClaimProcsForPat.Count;j++) {
+					if(!ClaimProcs.IsValidClaimAdj(ClaimProcsForPat[j],ClaimProcsForClaim[i].ProcNum,ClaimProcsForClaim[i].InsSubNum)) {
+						continue;
+					}
+					if(insFilingCodeStr=="MC") { //Medicaid
+						string insFilingCodeClaimProcStr="";
+						for(int k=0;k<ListInsPlan.Count;k++) {
+							if(ListInsPlan[k].PlanNum==ClaimProcsForPat[j].PlanNum) {
+								insFilingCodeClaimProcStr=InsFilingCodes.GetEclaimCode(ListInsPlan[k].FilingCode);
+								break;
+							}
+						}
+						if(insFilingCodeClaimProcStr=="16" || insFilingCodeClaimProcStr=="MB") {//HMO_MedicareRisk and MedicarePartB
+							priorPaymentsA+=(decimal)ClaimProcsForPat[j].InsPayAmt;
+						}
+						else {
+							priorPaymentsB+=(decimal)ClaimProcsForPat[j].InsPayAmt;
+						}
+					}
+					else {
+						for(int k=0;k<ListPatPlans.Count;k++) {
+							if(ListPatPlans[k].InsSubNum==ClaimProcsForPat[j].InsSubNum) {
+								if(ListPatPlans[k].Ordinal==1) {
+									priorPaymentsA+=(decimal)ClaimProcsForPat[j].InsPayAmt;
+								}
+								else if(ListPatPlans[k].Ordinal==2) {
+									priorPaymentsB+=(decimal)ClaimProcsForPat[j].InsPayAmt;
+								}
+								break;
+							}
 						}
 					}
 				}
 			}
-			//Set Primary through Tertiary Claims
-			if(ListClaim.Count == 0) {
-				claim1 = ClaimCur;
-				isPrimary = true;
-			}
-			if(ListClaim.Count == 1) {
-				claim1 = (Claim)ListClaim[0];
-				claim2 = ClaimCur;
-				isPrimary = true;
-				isSecondary = true;
-			}
-			if(ListClaim.Count == 2) {
-				claim1 = (Claim)ListClaim[0];
-				claim2 = (Claim)ListClaim[1];
-				claim3 = ClaimCur;
-				isPrimary = true;
-				isSecondary = true;
-				isTertiary = true;
-			}
-			//Set Primary through Tertiary Insurance Plans
-			if(ListInsSub1.Count > 0){
-				insSub1=ListInsSub1[0];
-				insPlan1=InsPlans.GetPlan(ListInsSub1[0].PlanNum,ListInsPlan);
-			}
-			if(ListInsSub1.Count > 1) {
-				insSub2=ListInsSub1[1];
-				insPlan2=InsPlans.GetPlan(ListInsSub1[1].PlanNum,ListInsPlan);
-			}
-			if(ListInsSub1.Count > 2) {
-				insSub3=ListInsSub1[2];
-				insPlan3=InsPlans.GetPlan(ListInsSub1[2].PlanNum,ListInsPlan);
-			}
-			double totalValAmount = ClaimValCodeLogs.GetValAmountTotal(ClaimCur.ClaimNum,"23");
-			//MessageBox.Show(TotalValAmount.ToString());
-			double priorPayments = 0;
-			if(isPrimary || isSecondary || isTertiary){
-				for(int i=0;i<ClaimFormCur.Items.Length;i++){
-					string stringFormat=ClaimFormCur.Items[i].FormatString;
-					switch(ClaimFormCur.Items[i].FieldName){
-						case "MedInsAName":
-							displayStrings[i] = Carriers.GetName(insPlan1.CarrierNum);
-							break;
-						case "MedInsAPlanID":
-							break;
-						case "MedInsARelInfo":
-							break;
-						case "MedInsAAssignBen":
-							break;
-						case "MedInsAPriorPmt":
-							if(ClaimCur.ClaimNum==claim1.ClaimNum) {
-								displayStrings[i] = "";
-							}
-							else {
-								priorPayments += claim1.InsPayAmt;
-								double amt = claim1.InsPayAmt;
-								if(stringFormat=="") {
-									displayStrings[i]=amt.ToString("F");
-								}
-								else if(stringFormat=="NoDec") {
-									displayStrings[i]=amt.ToString("F").Replace("."," ");
-								}
-								else {
-									displayStrings[i]=amt.ToString(stringFormat);
-								}
-							}
-							break;
-						case "MedInsAAmtDue":
-							double amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);
-							if(stringFormat=="") {								
-								displayStrings[i]=amtDue.ToString("F");
-							}
-							else if(stringFormat=="NoDec") {
-								displayStrings[i]=amtDue.ToString("F").Replace("."," ");
-							}
-							else {
-								displayStrings[i]=amtDue.ToString(stringFormat);
-							}
-							break;
-						case "MedInsAOtherProvID":
-							ProviderIdent provID;
-							string CarrierElectID = Carriers.GetCarrier(insPlan1.CarrierNum).ElectID.ToString();
-							Provider prov = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if (prov.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(prov.ProvNum, CarrierElectID).Length > 0)){
-								provID = ProviderIdents.GetForPayor(prov.ProvNum, CarrierElectID)[0];
-								if (provID.IDNumber != ""){
-									displayStrings[i]=provID.IDNumber.ToString();
-								}
-								else {
-									displayStrings[i] = "";
-								}
-							}
-							else {
-								displayStrings[i]="";
-							}
-							break;
-						case "MedInsAInsuredName":
-							Patient patTemp = Patients.GetPat(Int16.Parse((insSub1.Subscriber.ToString())));
-							displayStrings[i] = patTemp.FName.ToString() + " " + patTemp.MiddleI.ToString() + " " + patTemp.LName.ToString();
-							break;
-						case "MedInsAInsuredID":
-							displayStrings[i] = insSub1.SubscriberID.ToString();
-							break;
-						case "MedInsAGroupName":
-							displayStrings[i] = insPlan1.GroupName.ToString();
-							break;
-						case "MedInsAGroupNum":
-							displayStrings[i] = insPlan1.GroupNum.ToString();
-							break;
-						case "MedInsAAuthCode":
-							displayStrings[i] = claim1.PreAuthString.ToString();
-							break;
-						case "MedInsAEmployer":
-							displayStrings[i] = Employers.GetName(insPlan1.EmployerNum);
-							break;
+			for(int i=0;i<ClaimFormCur.Items.Length;i++) {
+				string stringFormat=ClaimFormCur.Items[i].FormatString;
+				if(ClaimFormCur.Items[i].FieldName=="MedInsCrossoverIndicator") {
+					if(insFilingCodeStr=="MB") { //Medicare Part B
+						displayStrings[i]="XOVR";
 					}
 				}
-			}
-			if(isSecondary||isTertiary){
-				for(int i=0;i<ClaimFormCur.Items.Length;i++){
-					string stringFormat=ClaimFormCur.Items[i].FormatString;
-					switch(ClaimFormCur.Items[i].FieldName){
-						case "MedInsBName":
-							displayStrings[i] = Carriers.GetName(insPlan2.CarrierNum);
-							break;
-						case "MedInsBPlanID":
-							break;
-						case "MedInsBRelInfo":
-							break;
-						case "MedInsBAssignBen":
-							break;
-						case "MedInsBPriorPmt":
-							if(ClaimCur.ClaimNum==claim2.ClaimNum) {
-								displayStrings[i]="";
-							}
-							else {
-								priorPayments+=claim2.InsPayAmt;
-								double amt=claim2.InsPayAmt;
-								if(stringFormat=="") {
-									displayStrings[i]=amt.ToString("F");
-								}
-								else if(stringFormat=="NoDec") {
-									displayStrings[i]=amt.ToString("F").Replace("."," ");
-								}
-								else {
-									displayStrings[i]=amt.ToString(stringFormat);
-								}
-							}
-							break;
-						case "MedInsBAmtDue":
-							if(ClaimCur.ClaimNum==claim2.ClaimNum) {
-								double amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);
-								if(stringFormat=="") {
-									displayStrings[i]=amtDue.ToString("F");
-								}
-								else if(stringFormat=="NoDec") {
-									displayStrings[i]=amtDue.ToString("F").Replace("."," ");
-								}
-								else {
-									displayStrings[i]=amtDue.ToString(stringFormat);
-								}
-								break;
-							}
-							else {
-								displayStrings[i]="";
-							}
-							break;
-						case "MedInsBOtherProvID":
-							ProviderIdent provID;
-							string CarrierElectID = Carriers.GetCarrier(insPlan2.CarrierNum).ElectID.ToString();
-							Provider prov = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if(prov.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(prov.ProvNum,CarrierElectID).Length > 0)) {
-								provID = ProviderIdents.GetForPayor(prov.ProvNum,CarrierElectID)[0];
-								if(provID.IDNumber != "") {
-									displayStrings[i] = provID.IDNumber.ToString();
-								}
-								else {
-									displayStrings[i] = "";
-								}
-							}
-							else {
-								displayStrings[i] = "";
-							}
-							break;
-						case "MedInsBInsuredName":
-							Patient patTemp = Patients.GetPat(Int16.Parse((insSub2.Subscriber.ToString())));
-							displayStrings[i] = patTemp.FName.ToString() + " " + patTemp.MiddleI.ToString() + " " + patTemp.LName.ToString();
-							break;
-						case "MedInsBInsuredID":
-							displayStrings[i] = insSub2.SubscriberID.ToString();
-							break;
-						case "MedInsBGroupName":
-							displayStrings[i] = insPlan2.GroupName.ToString();
-							break;
-						case "MedInsBGroupNum":
-							displayStrings[i] = insPlan2.GroupNum.ToString();
-							break;
-						case "MedInsBAuthCode":
-							displayStrings[i] = claim2.PreAuthString.ToString();
-							break;
-						case "MedInsBEmployer":
-							displayStrings[i] = Employers.GetName(insPlan2.EmployerNum);
-							break;
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"Name") { //MedInsAName, MedInsBName, MedInsCName
+					displayStrings[i]=Carriers.GetName(planCur.CarrierNum);
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"PlanID") { //MedInsAPlanID, MedInsBPlanID, MedInsCPlanID
+					//Not used. Leave blank.
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"RelInfo") { //MedInsARelInfo, MedInsBRelInfo, MedInsCRelInfo
+					displayStrings[i]=subCur.ReleaseInfo?"X":"";
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"AssignBen") { //MedInsAAssignBen, MedInsBAssignBen, MedInsCAssignBen
+					displayStrings[i]=subCur.AssignBen?"X":"";
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedInsAPriorPmt") {
+					if(priorPaymentsA==0) {
+						continue;
+					}
+					if(stringFormat=="") {
+						displayStrings[i]=priorPaymentsA.ToString("F");
+					}
+					else if(stringFormat=="NoDec") {
+						displayStrings[i]=priorPaymentsA.ToString("F").Replace("."," ");
+					}
+					else {
+						displayStrings[i]=priorPaymentsA.ToString(stringFormat);
 					}
 				}
-			}
-			if(isTertiary){
-				for(int i=0;i<ClaimFormCur.Items.Length;i++){
-					string stringFormat=ClaimFormCur.Items[i].FormatString;
-					switch(ClaimFormCur.Items[i].FieldName){
-						case "MedInsCName":
-							displayStrings[i] = Carriers.GetName(insPlan3.CarrierNum);
-							break;
-						case "MedInsCPlanID":
-							break;
-						case "MedInsCRelInfo":
-							break;
-						case "MedInsCAssignBen":
-							break;
-						case "MedInsCPriorPmt":
-							if(ClaimCur.ClaimNum == claim3.ClaimNum) {
-								displayStrings[i]="";
-							}
-							else {
-								priorPayments += claim3.InsPayAmt;
-								double amt=claim3.InsPayAmt;
-								if(stringFormat=="") {
-									displayStrings[i]=amt.ToString("F");
-								}
-								else if(stringFormat=="NoDec") {
-									displayStrings[i]=amt.ToString("F").Replace("."," ");
-								}
-								else {
-									displayStrings[i]=amt.ToString(stringFormat);
-								}
-							}
-							break;
-						case "MedInsCAmtDue":
-							if(ClaimCur.ClaimNum==claim3.ClaimNum) {
-								double amtDue=(ClaimCur.ClaimFee-priorPayments-totalValAmount);
-								if(stringFormat=="") {
-									displayStrings[i]=amtDue.ToString("F");
-								}
-								else if(stringFormat=="NoDec") {
-									displayStrings[i]=amtDue.ToString("F").Replace("."," ");
-								}
-								else {
-									displayStrings[i]=amtDue.ToString(stringFormat);
-								}
-								break;
-							}
-							else {
-								displayStrings[i]="";
-							}
-							break;
-						case "MedInsCOtherProvID":
-							ProviderIdent provID;
-							string CarrierElectID = Carriers.GetCarrier(insPlan3.CarrierNum).ElectID.ToString();
-							Provider prov = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if(prov.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(prov.ProvNum,CarrierElectID).Length > 0)) {
-								provID = ProviderIdents.GetForPayor(prov.ProvNum,CarrierElectID)[0];
-								if(provID.IDNumber != "") {
-									displayStrings[i] = provID.IDNumber.ToString();
-								}
-								else {
-									displayStrings[i] = "";
-								}
-							}
-							else {
-								displayStrings[i] = "";
-							}
-							break;
-						case "MedInsCInsuredName":
-							Patient patTemp = Patients.GetPat(Int16.Parse((insSub3.Subscriber.ToString())));
-							displayStrings[i] = patTemp.FName.ToString() + " " + patTemp.MiddleI.ToString() + " " + patTemp.LName.ToString();
-							break;
-						case "MedInsCInsuredID":
-							displayStrings[i] = insSub3.SubscriberID.ToString();
-							break;
-						case "MedInsCGroupName":
-							displayStrings[i] = insPlan3.GroupName.ToString();
-							break;
-						case "MedInsCGroupNum":
-							displayStrings[i] = insPlan3.GroupNum.ToString();
-							break;
-						case "MedInsCAuthCode":
-							displayStrings[i] = claim3.PreAuthString.ToString();
-							break;
-						case "MedInsCEmployer":
-							displayStrings[i] = Employers.GetName(insPlan3.EmployerNum);
-							break;
+				else if(ClaimFormCur.Items[i].FieldName=="MedInsBPriorPmt") {
+					if(priorPaymentsB==0) {
+						continue;
 					}
+					if(stringFormat=="") {
+						displayStrings[i]=priorPaymentsB.ToString("F");
+					}
+					else if(stringFormat=="NoDec") {
+						displayStrings[i]=priorPaymentsB.ToString("F").Replace("."," ");
+					}
+					else {
+						displayStrings[i]=priorPaymentsB.ToString(stringFormat);
+					}
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"AmtDue") { //MedInsAAmtDue, MedInsBAmtDue, MedInsCAmtDue
+					decimal totalValAmount=(decimal)ClaimValCodeLogs.GetValAmountTotal(ClaimCur.ClaimNum,"23");
+					decimal amtDue=((decimal)ClaimCur.ClaimFee-priorPaymentsA-priorPaymentsB-totalValAmount);
+					if(stringFormat=="") {
+						displayStrings[i]=amtDue.ToString("F");
+					}
+					else if(stringFormat=="NoDec") {
+						displayStrings[i]=amtDue.ToString("F").Replace("."," ");
+					}
+					else {
+						displayStrings[i]=amtDue.ToString(stringFormat);
+					}
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"OtherProvID") { //MedInsAOtherProvID, MedInsBOtherProvID, MedInsCOtherProvID
+					string CarrierElectID=carrier.ElectID.ToString();
+					Provider prov=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+					if(prov.ProvNum>0 && CarrierElectID!="" && ProviderIdents.GetForPayor(prov.ProvNum,CarrierElectID).Length>0) {
+						ProviderIdent provID=ProviderIdents.GetForPayor(prov.ProvNum,CarrierElectID)[0];
+						if(provID.IDNumber != "") {
+							displayStrings[i]=provID.IDNumber.ToString();
+						}
+						else {
+							displayStrings[i] = "";
+						}
+					}
+					else {
+						displayStrings[i]="";
+					}
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"InsuredName") { //MedInsAInsuredName, MedInsBInsuredName, MedInsCInsuredName
+					displayStrings[i]=Patients.GetPat(subCur.Subscriber).GetNameFLFormal();
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"Relation") { //MedInsARelation, MedInsBRelation, MedInsCRelation
+					if(patPlan.Relationship==Relat.Spouse) {
+						displayStrings[i]="01";
+					}
+					else if(patPlan.Relationship==Relat.Self) {
+						displayStrings[i]="18";
+					}
+					else if(patPlan.Relationship==Relat.Child) {
+						displayStrings[i]="19";
+					}
+					else if(patPlan.Relationship==Relat.Employee) {
+						displayStrings[i]="20";
+					}
+					else if(patPlan.Relationship==Relat.LifePartner) {
+						displayStrings[i]="53";
+					}
+					else {
+						displayStrings[i]="G8";
+					}
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"InsuredID") { //MedInsAInsuredID, MedInsBInsuredID, MedInsCInsuredID
+					displayStrings[i]=subCur.SubscriberID;
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"GroupName") { //MedInsAGroupName, MedInsBGroupName, MedInsCGroupName
+					displayStrings[i]=planCur.GroupName;
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"GroupNum") { //MedInsAGroupNum, MedInsBGroupNum, MedInsCGroupNum
+					displayStrings[i]=planCur.GroupNum;
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"AuthCode") { //MedInsAAuthCode, MedInsBAuthCode, MedInsCAuthCode
+					displayStrings[i]=ClaimCur.PreAuthString;
+				}
+				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"Employer") { //MedInsAEmployer, MedInsBEmployer, MedInsCEmployer
+					displayStrings[i]=Employers.GetName(planCur.EmployerNum);
 				}
 			}
 		}

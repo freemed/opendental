@@ -660,6 +660,7 @@ namespace OpenDental{
 				"ReferringProvNameFL",
 				"DateService",
 				"TotalPages",
+				"MedInsCrossoverIndicator",
 				"MedInsAName",
 				"MedInsAPlanID",
 				"MedInsARelInfo",
@@ -668,6 +669,7 @@ namespace OpenDental{
 				"MedInsAAmtDue",
 				"MedInsAOtherProvID",
 				"MedInsAInsuredName",
+				"MedInsARelation",
 				"MedInsAInsuredID",
 				"MedInsAGroupName",
 				"MedInsAGroupNum",
@@ -681,6 +683,7 @@ namespace OpenDental{
 				"MedInsBAmtDue",
 				"MedInsBOtherProvID",
 				"MedInsBInsuredName",
+				"MedInsBRelation",
 				"MedInsBInsuredID",
 				"MedInsBGroupName",
 				"MedInsBGroupNum",
@@ -694,6 +697,7 @@ namespace OpenDental{
 				"MedInsCAmtDue",
 				"MedInsCOtherProvID",
 				"MedInsCInsuredName",
+				"MedInsCRelation",
 				"MedInsCInsuredID",
 				"MedInsCGroupName",
 				"MedInsCGroupNum",
@@ -737,7 +741,8 @@ namespace OpenDental{
 				"MedUniformBillType",
 				"MedAdmissionTypeCode",
 				"MedAdmissionSourceCode",
-				"MedPatientStatusCode"
+				"MedPatientStatusCode",
+				"MedAccidentCode"
 			};
 		}
 
