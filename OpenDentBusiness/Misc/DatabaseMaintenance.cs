@@ -600,7 +600,7 @@ namespace OpenDentBusiness {
 				//quickcard
 				"000103",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes|eligibilityTypes,canadianNetworkNumCSI,
 				//pbas
-				"610256",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
+				"610256",1,"04",claimTypes|predeterminationTypes|rotTypes,canadianNetworkNumCSI,
 				//rwam insurance
 				"610616",1,"04",claimTypes|reversalTypes,canadianNetworkNumTelusB,
 				//saskatchewan blue cross
