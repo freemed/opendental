@@ -16,9 +16,9 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 
-namespace OpenDental{
-///<summary></summary>
-	public class FormPayment : System.Windows.Forms.Form{
+namespace OpenDental {
+	///<summary></summary>
+	public class FormPayment:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
@@ -91,10 +91,12 @@ namespace OpenDental{
 		private DataTable tableBalances;
 		private Program prog;
 		private ProgramProperty prop;
+		private CheckBox checkRecurring;
 		private bool payConnectWarn;
+		private List<CreditCard> creditCards;
 
 		///<summary>PatCur and FamCur are not for the PatCur of the payment.  They are for the patient and family from which this window was accessed.</summary>
-		public FormPayment(Patient patCur,Family famCur,Payment paymentCur){
+		public FormPayment(Patient patCur,Family famCur,Payment paymentCur) {
 			InitializeComponent();// Required for Windows Form Designer support
 			PatCur=patCur;
 			FamCur=famCur;
@@ -105,13 +107,13 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		protected override void Dispose( bool disposing ){
-			if( disposing ){
-				if(components != null){
+		protected override void Dispose(bool disposing) {
+			if(disposing) {
+				if(components != null) {
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
@@ -119,8 +121,7 @@ namespace OpenDental{
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InitializeComponent()
-		{
+		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPayment));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -170,6 +171,7 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.comboCreditCards = new System.Windows.Forms.ComboBox();
 			this.labelCreditCards = new System.Windows.Forms.Label();
+			this.checkRecurring = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -288,7 +290,7 @@ namespace OpenDental{
 			// checkPayPlan
 			// 
 			this.checkPayPlan.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPayPlan.Location = new System.Drawing.Point(694,108);
+			this.checkPayPlan.Location = new System.Drawing.Point(694,116);
 			this.checkPayPlan.Name = "checkPayPlan";
 			this.checkPayPlan.Size = new System.Drawing.Size(196,18);
 			this.checkPayPlan.TabIndex = 30;
@@ -634,10 +636,20 @@ namespace OpenDental{
 			this.labelCreditCards.Text = "Credit Card";
 			this.labelCreditCards.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// checkRecurring
+			// 
+			this.checkRecurring.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkRecurring.Location = new System.Drawing.Point(694,97);
+			this.checkRecurring.Name = "checkRecurring";
+			this.checkRecurring.Size = new System.Drawing.Size(196,18);
+			this.checkRecurring.TabIndex = 132;
+			this.checkRecurring.Text = "Apply to Recurring Charge";
+			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(974,562);
+			this.Controls.Add(this.checkRecurring);
 			this.Controls.Add(this.labelCreditCards);
 			this.Controls.Add(this.comboCreditCards);
 			this.Controls.Add(this.butPayConnect);
@@ -697,40 +709,42 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void FormPayment_Load(object sender, System.EventArgs e) {
-			if(IsNew){
+		private void FormPayment_Load(object sender,System.EventArgs e) {
+			if(IsNew) {
 				checkPayTypeNone.Enabled=true;
-				if(!Security.IsAuthorized(Permissions.PaymentCreate)){//date not checked here
+				if(!Security.IsAuthorized(Permissions.PaymentCreate)) {//date not checked here
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
 			}
-			else{
+			else {
 				checkPayTypeNone.Enabled=false;
-				if(!Security.IsAuthorized(Permissions.PaymentEdit,PaymentCur.PayDate)){
+				checkRecurring.Checked=PaymentCur.IsRecurringCC;
+				if(!Security.IsAuthorized(Permissions.PaymentEdit,PaymentCur.PayDate)) {
 					butOK.Enabled=false;
 					butDeleteAll.Enabled=false;
 					butAdd.Enabled=false;
 					gridMain.Enabled=false;
 					butPay.Enabled=false;
+					checkRecurring.Enabled=false;
 				}
 			}
-			if(PrefC.GetBool(PrefName.EasyNoClinics)){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			else{
+			else {
 				comboClinic.Items.Clear();
 				comboClinic.Items.Add(Lan.g(this,"none"));
 				comboClinic.SelectedIndex=0;
-				for(int i=0;i<Clinics.List.Length;i++){
+				for(int i=0;i<Clinics.List.Length;i++) {
 					comboClinic.Items.Add(Clinics.List[i].Description);
-					if(Clinics.List[i].ClinicNum==PaymentCur.ClinicNum){
+					if(Clinics.List[i].ClinicNum==PaymentCur.ClinicNum) {
 						comboClinic.SelectedIndex=i+1;
 					}
 				}
 			}
-			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
+			creditCards=CreditCards.Refresh(PatCur.PatNum);
 			for(int i=0;i<creditCards.Count;i++) {
 				comboCreditCards.Items.Add(creditCards[i].CCNumberMasked);
 			}
@@ -744,7 +758,7 @@ namespace OpenDental{
 			textAmount.Text=PaymentCur.PayAmt.ToString("F");
 			textCheckNum.Text=PaymentCur.CheckNum;
 			textBankBranch.Text=PaymentCur.BankBranch;
-			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++){
+			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++) {
 				listPayType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
 				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum==PaymentCur.PayType) {
 					listPayType.SelectedIndex=i;
@@ -757,11 +771,11 @@ namespace OpenDental{
 			//	listPayType.SelectedIndex=0;
 			//}
 			textNote.Text=PaymentCur.PayNote;
-			if(PaymentCur.DepositNum==0){
+			if(PaymentCur.DepositNum==0) {
 				labelDeposit.Visible=false;
 				textDeposit.Visible=false;
 			}
-			else{
+			else {
 				textDeposit.Text=Deposits.GetOne(PaymentCur.DepositNum).DateDeposit.ToShortDateString();
 				textAmount.ReadOnly=true;
 				textAmount.BackColor=SystemColors.Control;
@@ -775,22 +789,22 @@ namespace OpenDental{
 			}
 			if(IsNew) {
 				List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(PatCur.PatNum);
-				if(payPlanList.Count==0){
+				if(payPlanList.Count==0) {
 					//
 				}
-				else if(payPlanList.Count==1){ //if there is only one valid payplan
+				else if(payPlanList.Count==1) { //if there is only one valid payplan
 					if(!PayPlans.PlanIsPaidOff(payPlanList[0].PayPlanNum)) {
 						AddOneSplit();//the amount and date will be updated upon closing
 						SplitList[SplitList.Count-1].PayPlanNum=payPlanList[0].PayPlanNum;
 					}
 				}
-				else{
+				else {
 					List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(PatCur.PatNum);
 					//enhancement needed to weed out payment plans that are all paid off
 					//more than one valid PayPlan
 					FormPayPlanSelect FormPPS=new FormPayPlanSelect(payPlanList,chargeList);
 					FormPPS.ShowDialog();
-					if(FormPPS.DialogResult==DialogResult.OK){
+					if(FormPPS.DialogResult==DialogResult.OK) {
 						//return PayPlanList[FormPPS.IndexSelected].Clone();
 						AddOneSplit();//the amount and date will be updated upon closing
 						SplitList[SplitList.Count-1].PayPlanNum=payPlanList[FormPPS.IndexSelected].PayPlanNum;
@@ -804,19 +818,19 @@ namespace OpenDental{
 				}*/
 			}
 			FillMain();
-			if(InitialPaySplit!=0){
-				for(int i=0;i<SplitList.Count;i++){
-					if(InitialPaySplit==SplitList[i].SplitNum){
+			if(InitialPaySplit!=0) {
+				for(int i=0;i<SplitList.Count;i++) {
+					if(InitialPaySplit==SplitList[i].SplitNum) {
 						gridMain.SetSelected(i,true);
 					}
 				}
 			}
-			if(IsNew){
+			if(IsNew) {
 				//Fill comboDepositAccount based on autopay for listPayType.SelectedIndex
 				SetComboDepositAccounts();
 				textDepositAccount.Visible=false;
 			}
-			else{
+			else {
 				//put a description in the textbox.  If the user clicks on the same or another item in listPayType,
 				//then the textbox will go away, and be replaced by comboDepositAccount.
 				labelDepositAccount.Visible=false;
@@ -831,10 +845,10 @@ namespace OpenDental{
 					for(int i=0;i<jeL.Count;i++) {
 						if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString();
-							if(jeL[i].DebitAmt>0){
+							if(jeL[i].DebitAmt>0) {
 								textDepositAccount.Text+=" "+jeL[i].DebitAmt.ToString("c");
 							}
-							else{//negative
+							else {//negative
 								textDepositAccount.Text+=" "+(-jeL[i].CreditAmt).ToString("c");
 							}
 							break;
@@ -845,10 +859,10 @@ namespace OpenDental{
 			CheckUIState();
 		}
 
-		private void CheckUIState(){
+		private void CheckUIState() {
 			Program progXcharge=Programs.GetCur(ProgramName.Xcharge);
 			Program progPayConnect=Programs.GetCur(ProgramName.PayConnect);
-			if(progXcharge==null || progPayConnect==null){//Should not happen.
+			if(progXcharge==null || progPayConnect==null) {//Should not happen.
 				panelXcharge.Visible=(progXcharge!=null);
 				butPayConnect.Visible=(progPayConnect!=null);
 				return;
@@ -861,16 +875,16 @@ namespace OpenDental{
 				butPayConnect.Visible=true;
 			}
 			//show if enabled.  User could have both enabled.
-			if(progPayConnect.Enabled){
+			if(progPayConnect.Enabled) {
 				butPayConnect.Visible=true;
 			}
-			else if(progXcharge.Enabled){
+			else if(progXcharge.Enabled) {
 				panelXcharge.Visible=true;
 			}
 		}
 
 		///<summary>This does not make any calls to db (except one tiny one).  Simply refreshes screen for SplitList.</summary>
-		private void FillMain(){
+		private void FillMain() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePaySplits","Date"),70);
@@ -892,18 +906,18 @@ namespace OpenDental{
 			tot=0;
 			Procedure proc;
 			string procDesc;
-			for(int i=0;i<SplitList.Count;i++){
+			for(int i=0;i<SplitList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(SplitList[i].ProcDate.ToShortDateString());
 				row.Cells.Add(Providers.GetAbbr(SplitList[i].ProvNum));
 				row.Cells.Add(Clinics.GetDesc(SplitList[i].ClinicNum));
 				row.Cells.Add(FamCur.GetNameInFamFL(SplitList[i].PatNum));
-				if(SplitList[i].ProcNum>0){
+				if(SplitList[i].ProcNum>0) {
 					proc=Procedures.GetOneProc(SplitList[i].ProcNum,false);
 					procDesc=Procedures.GetDescription(proc);
 					row.Cells.Add(procDesc);
 				}
-				else{
+				else {
 					row.Cells.Add("");
 				}
 				row.Cells.Add(SplitList[i].SplitAmt.ToString("F"));
@@ -913,16 +927,16 @@ namespace OpenDental{
 			}
 			gridMain.EndUpdate();
 			textTotal.Text=tot.ToString("F");
-			if(SplitList.Count==1){
+			if(SplitList.Count==1) {
 				checkPayPlan.Enabled=true;
-				if(((PaySplit)SplitList[0]).PayPlanNum>0){
+				if(((PaySplit)SplitList[0]).PayPlanNum>0) {
 					checkPayPlan.Checked=true;
 				}
-				else{
+				else {
 					checkPayPlan.Checked=false;
 				}
 			}
-			else{
+			else {
 				checkPayPlan.Checked=false;
 				checkPayPlan.Enabled=false;
 			}
@@ -930,7 +944,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void FillGridBal(){
+		private void FillGridBal() {
 			double famstart=0;
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				famstart+=PIn.Double(tableBalances.Rows[i]["StartBal"].ToString());
@@ -940,15 +954,15 @@ namespace OpenDental{
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				famafterins+=PIn.Double(tableBalances.Rows[i]["AfterIns"].ToString());
 			}
-			if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
+			if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				textFamAfterIns.Text=famafterins.ToString("N");
 			}
 			//compute ending balances-----------------------------------------------------------------------------
-			for(int i=0;i<tableBalances.Rows.Count;i++){
-				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
+			for(int i=0;i<tableBalances.Rows.Count;i++) {
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 					tableBalances.Rows[i]["EndBal"]=tableBalances.Rows[i]["StartBal"].ToString();
 				}
-				else{
+				else {
 					tableBalances.Rows[i]["EndBal"]=tableBalances.Rows[i]["AfterIns"].ToString();
 				}
 			}
@@ -984,10 +998,10 @@ namespace OpenDental{
 			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","Start"),60,HorizontalAlignment.Right);
 			gridBal.Columns.Add(col);
-			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
+			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				col=new ODGridColumn("",60);
 			}
-			else{
+			else {
 				col=new ODGridColumn(Lan.g("TablePaymentBal","After Ins"),60,HorizontalAlignment.Right);
 			}
 			gridBal.Columns.Add(col);
@@ -995,21 +1009,21 @@ namespace OpenDental{
 			gridBal.Columns.Add(col);
 			gridBal.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<tableBalances.Rows.Count;i++){
+			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(Providers.GetAbbr(PIn.Long(tableBalances.Rows[i]["ProvNum"].ToString())));
 				row.Cells.Add(Clinics.GetDesc(PIn.Long(tableBalances.Rows[i]["ClinicNum"].ToString())));
-				if(tableBalances.Rows[i]["Preferred"].ToString()==""){
+				if(tableBalances.Rows[i]["Preferred"].ToString()=="") {
 					row.Cells.Add(tableBalances.Rows[i]["FName"].ToString());
 				}
-				else{
+				else {
 					row.Cells.Add("'"+tableBalances.Rows[i]["Preferred"].ToString()+"'");
 				}
 				row.Cells.Add(PIn.Double(tableBalances.Rows[i]["StartBal"].ToString()).ToString("N"));
-				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 					row.Cells.Add("");
 				}
-				else{
+				else {
 					row.Cells.Add(PIn.Double(tableBalances.Rows[i]["AfterIns"].ToString()).ToString("N"));
 				}
 				row.Cells.Add(PIn.Double(tableBalances.Rows[i]["EndBal"].ToString()).ToString("N"));
@@ -1032,7 +1046,7 @@ namespace OpenDental{
 			//}
 		}
 
-		private void butAdd_Click(object sender, System.EventArgs e) {
+		private void butAdd_Click(object sender,System.EventArgs e) {
 			PaySplit PaySplitCur=new PaySplit();
 			PaySplitCur.PayNum=PaymentCur.PayNum;
 			PaySplitCur.DatePay=PIn.Date(textDate.Text);//this may be updated upon closing
@@ -1044,7 +1058,7 @@ namespace OpenDental{
 			FormPS.PaySplitCur=PaySplitCur;
 			FormPS.IsNew=true;
 			FormPS.Remain=PaymentCur.PayAmt-PIn.Double(textTotal.Text);
-			if(FormPS.ShowDialog()!=DialogResult.OK){
+			if(FormPS.ShowDialog()!=DialogResult.OK) {
 				return;
 			}
 			SplitList.Add(PaySplitCur);
@@ -1052,20 +1066,20 @@ namespace OpenDental{
 		}
 
 		private void butPay_Click(object sender,EventArgs e) {
-			if(gridBal.SelectedIndices.Length==0){
+			if(gridBal.SelectedIndices.Length==0) {
 				gridBal.SetSelected(true);
 			}
 			SplitList.Clear();
 			double amt;
 			PaySplit split;
-			for(int i=0;i<gridBal.SelectedIndices.Length;i++){
-				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
+			for(int i=0;i<gridBal.SelectedIndices.Length;i++) {
+				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 					amt=PIn.Double(tableBalances.Rows[gridBal.SelectedIndices[i]]["StartBal"].ToString());
 				}
-				else{
+				else {
 					amt=PIn.Double(tableBalances.Rows[gridBal.SelectedIndices[i]]["AfterIns"].ToString());
 				}
-				if(amt==0){
+				if(amt==0) {
 					continue;
 				}
 				split=new PaySplit();
@@ -1082,35 +1096,35 @@ namespace OpenDental{
 			textAmount.Text=textTotal.Text;
 		}
 
-		private void checkPayPlan_Click(object sender, System.EventArgs e) {
+		private void checkPayPlan_Click(object sender,System.EventArgs e) {
 			//*****if there is more than one split, then this checkbox is not even available.
-			if(SplitList.Count==0){
+			if(SplitList.Count==0) {
 				AddOneSplit();//won't use returned value
 				FillMain();
 				checkPayPlan.Checked=true;
 				//now there is exactly one.  The amount will be updated as the form closes.
 			}
-			if(checkPayPlan.Checked){
+			if(checkPayPlan.Checked) {
 				//PayPlan payPlanCur=PayPlans.GetValidPlan(SplitList[0].PatNum);
 				List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(SplitList[0].PatNum);
-				if(payPlanList.Count==0){
+				if(payPlanList.Count==0) {
 					MsgBox.Show(this,"The selected patient is not the guarantor for any payment plans.");
 					checkPayPlan.Checked=false;
 					return;
 				}
-				else if(payPlanList.Count==1){ //if there is only one valid payplan
+				else if(payPlanList.Count==1) { //if there is only one valid payplan
 					SplitList[0].PayPlanNum=payPlanList[0].PayPlanNum;
 				}
-				else{//multiple valid plans
+				else {//multiple valid plans
 					List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(SplitList[0].PatNum);
 					//enhancement needed to weed out payment plans that are all paid off
 					//more than one valid PayPlan
 					FormPayPlanSelect FormPPS=new FormPayPlanSelect(payPlanList,chargeList);
 					FormPPS.ShowDialog();
-					if(FormPPS.DialogResult==DialogResult.OK){
+					if(FormPPS.DialogResult==DialogResult.OK) {
 						SplitList[0].PayPlanNum=payPlanList[FormPPS.IndexSelected].PayPlanNum;
 					}
-					else{
+					else {
 						checkPayPlan.Checked=false;
 						return;
 					}
@@ -1123,14 +1137,14 @@ namespace OpenDental{
 				}
 				SplitList[0].PayPlanNum=payPlanCur.PayPlanNum;*/
 			}
-			else{//payPlan unchecked
+			else {//payPlan unchecked
 				SplitList[0].PayPlanNum=0;
 			}
 			FillMain();
 		}
 
 		/// <summary>Adds one split to work with.  Called when checkPayPlan click, or upon load if auto attaching to payplan.</summary>
-		private void AddOneSplit(){
+		private void AddOneSplit() {
 			PaySplit PaySplitCur=new PaySplit();
 			PaySplitCur.PatNum=PatCur.PatNum;
 			PaySplitCur.PayNum=PaymentCur.PayNum;
@@ -1148,7 +1162,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Called from all 3 places where listPayType gets changed.</summary>
-		private void SetComboDepositAccounts(){
+		private void SetComboDepositAccounts() {
 			if(listPayType.SelectedIndex==-1) {
 				return;
 			}
@@ -1166,14 +1180,14 @@ namespace OpenDental{
 				for(int i=0;i<DepositAccounts.Length;i++) {
 					comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
 				}
-				if(comboDepositAccount.Items.Count>0){
+				if(comboDepositAccount.Items.Count>0) {
 					comboDepositAccount.SelectedIndex=0;
 				}
 			}
 		}
 
 		private void panelXcharge_MouseClick(object sender,MouseEventArgs e) {
-			if(e.Button != MouseButtons.Left){
+			if(e.Button != MouseButtons.Left) {
 				return;
 			}
 			if(textAmount.Text=="") {
@@ -1208,7 +1222,7 @@ namespace OpenDental{
 			CreditCard CCard=null;
 			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
 			for(int i=0;i<creditCards.Count;i++) {
-				if(i==comboCreditCards.SelectedIndex){
+				if(i==comboCreditCards.SelectedIndex) {
 					CCard=creditCards[i];
 				}
 			}
@@ -1382,8 +1396,7 @@ namespace OpenDental{
 			}
 			if(showApprovedAmtNotice && !xVoid && !xAdjust) {
 				if(MessageBox.Show(Lan.g(this,"The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the approved amount returned: ")+approvedAmt.ToString("C")
-					+"\r\n"+Lan.g(this,"Change the amount to match?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)==DialogResult.OK) 
-				{
+					+"\r\n"+Lan.g(this,"Change the amount to match?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)==DialogResult.OK) {
 					textAmount.Text=approvedAmt.ToString("F");
 				}
 			}
@@ -1405,7 +1418,7 @@ namespace OpenDental{
 			}
 			textNote.Text+=resulttext;
 		}
-		
+
 		private void VoidXChargeTransaction(string transID,string amount,bool isDebit) {
 			ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
@@ -1443,18 +1456,18 @@ namespace OpenDental{
 
 		private bool HasXCharge() {
 			prog=Programs.GetCur(ProgramName.Xcharge);
-			if(prog==null){
+			if(prog==null) {
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return false;
 			}
-			if(!prog.Enabled){
+			if(!prog.Enabled) {
 				if(Security.IsAuthorized(Permissions.Setup)) {
 					FormXchargeSetup FormX=new FormXchargeSetup();
 					FormX.ShowDialog();
 				}
 				return false;
 			}
-			if(!File.Exists(prog.Path)){
+			if(!File.Exists(prog.Path)) {
 				MsgBox.Show(this,"Path is not valid.");
 				if(Security.IsAuthorized(Permissions.Setup)) {
 					FormXchargeSetup FormX=new FormXchargeSetup();
@@ -1516,11 +1529,11 @@ namespace OpenDental{
 					string adjustTransactionID="";
 					string[] noteSplit=Regex.Split(textNote.Text,"\r\n");
 					foreach(string XCTrans in noteSplit) {
-						if(XCTrans.StartsWith("XCTRANSACTIONID="))	{
+						if(XCTrans.StartsWith("XCTRANSACTIONID=")) {
 							adjustTransactionID=XCTrans.Substring(16);
 						}
 					}
-					if(adjustTransactionID!="")	{
+					if(adjustTransactionID!="") {
 						tranText+="/XCTRANSACTIONID:"+adjustTransactionID+" ";
 						tranText+="/AUTOPROCESS ";
 					}
@@ -1534,7 +1547,7 @@ namespace OpenDental{
 
 		private void butPayConnect_Click(object sender,EventArgs e) {
 			Program prog=Programs.GetCur(ProgramName.PayConnect);
-			if(!prog.Enabled){
+			if(!prog.Enabled) {
 				FormPayConnectSetup fpcs=new FormPayConnectSetup();
 				fpcs.ShowDialog();
 				CheckUIState();
@@ -1547,7 +1560,7 @@ namespace OpenDental{
 			CreditCard CCard=null;
 			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
 			for(int i=0;i<creditCards.Count;i++) {
-				if(i==comboCreditCards.SelectedIndex){
+				if(i==comboCreditCards.SelectedIndex) {
 					CCard=creditCards[i];
 				}
 			}
@@ -1556,9 +1569,9 @@ namespace OpenDental{
 			FormP.ShowDialog();
 			ArrayList props=ProgramProperties.GetForProgram(prog.ProgramNum);
 			ProgramProperty prop=null;
-			for(int i=0;i<props.Count;i++){
+			for(int i=0;i<props.Count;i++) {
 				ProgramProperty curProp=(ProgramProperty)props[i];
-				if(curProp.PropertyDesc=="PaymentType"){
+				if(curProp.PropertyDesc=="PaymentType") {
 					prop=curProp;
 					break;
 				}
@@ -1599,7 +1612,7 @@ namespace OpenDental{
 		private void menuXcharge_Click(object sender,EventArgs e) {
 			if(Security.IsAuthorized(Permissions.Setup)) {
 				FormXchargeSetup FormX=new FormXchargeSetup();
-				if(FormX.ShowDialog()==DialogResult.OK){
+				if(FormX.ShowDialog()==DialogResult.OK) {
 					CheckUIState();
 				}
 			}
@@ -1608,7 +1621,7 @@ namespace OpenDental{
 		private void menuPayConnect_Click(object sender,EventArgs e) {
 			if(Security.IsAuthorized(Permissions.Setup)) {
 				FormPayConnectSetup fpcs=new FormPayConnectSetup();
-				if(fpcs.ShowDialog()==DialogResult.OK){
+				if(fpcs.ShowDialog()==DialogResult.OK) {
 					CheckUIState();
 				}
 			}
@@ -1656,12 +1669,12 @@ namespace OpenDental{
 
 		}
 
-		private void butDeleteAll_Click(object sender, System.EventArgs e) {
-			if(textDeposit.Visible){//this will get checked again by the middle layer
+		private void butDeleteAll_Click(object sender,System.EventArgs e) {
+			if(textDeposit.Visible) {//this will get checked again by the middle layer
 				MsgBox.Show(this,"This payment is attached to a deposit.  Not allowed to delete.");
 				return;
 			}
-			if(!MsgBox.Show(this,true,"This will delete the entire payment and all splits.")){
+			if(!MsgBox.Show(this,true,"This will delete the entire payment and all splits.")) {
 				return;
 			}
 			//If payment is attached to a transaction which is more than 48 hours old, then not allowed to delete.
@@ -1672,7 +1685,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"Not allowed to delete.  This payment is already attached to an accounting transaction.  You will need to detach it from within the accounting section of the program.");
 					return;
 				}
-				if(Transactions.IsReconciled(trans)){
+				if(Transactions.IsReconciled(trans)) {
 					MsgBox.Show(this,"Not allowed to delete.  This payment is attached to an accounting transaction that has been reconciled.  You will need to detach it from within the accounting section of the program.");
 					return;
 				}
@@ -1684,10 +1697,10 @@ namespace OpenDental{
 					return;
 				}
 			}
-			try{
+			try {
 				Payments.Delete(PaymentCur);
 			}
-			catch(ApplicationException ex){//error if attached to deposit slip
+			catch(ApplicationException ex) {//error if attached to deposit slip
 				MessageBox.Show(ex.Message);
 				return;
 			}
@@ -1698,10 +1711,9 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e){
-			if(  textDate.errorProvider1.GetError(textDate)!=""
-				|| textAmount.errorProvider1.GetError(textAmount)!="")
-			{
+		private void butOK_Click(object sender,System.EventArgs e) {
+			if(textDate.errorProvider1.GetError(textDate)!=""
+				|| textAmount.errorProvider1.GetError(textAmount)!="") {
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
@@ -1711,7 +1723,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			else{
+			else {
 				if(textAmount.Text=="") {
 					MessageBox.Show(Lan.g(this,"Please enter an amount."));
 					return;
@@ -1724,29 +1736,29 @@ namespace OpenDental{
 					MsgBox.Show(this,"A payment type must be selected.");
 				}
 			}
-			if(IsNew){
+			if(IsNew) {
 				//prevents backdating of initial payment
-				if(!Security.IsAuthorized(Permissions.PaymentCreate,PIn.Date(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.PaymentCreate,PIn.Date(textDate.Text))) {
 					return;
 				}
 			}
-			else{
+			else {
 				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button
 				//This catches it if user changed the date to be older.
-				if(!Security.IsAuthorized(Permissions.PaymentEdit,PIn.Date(textDate.Text))){
+				if(!Security.IsAuthorized(Permissions.PaymentEdit,PIn.Date(textDate.Text))) {
 					return;
 				}
 			}
 			bool accountingSynchRequired=false;
 			double accountingOldAmt=PaymentCur.PayAmt;
 			long accountingNewAcct=-1;//the old acctNum will be retrieved inside the validation code.
-			if(textDepositAccount.Visible){
+			if(textDepositAccount.Visible) {
 				accountingNewAcct=-1;//indicates no change
 			}
-			else if(comboDepositAccount.Visible && comboDepositAccount.Items.Count>0 && comboDepositAccount.SelectedIndex!=-1){
+			else if(comboDepositAccount.Visible && comboDepositAccount.Items.Count>0 && comboDepositAccount.SelectedIndex!=-1) {
 				accountingNewAcct=DepositAccounts[comboDepositAccount.SelectedIndex];
 			}
-			else{//neither textbox nor combo visible. Or something's wrong with combobox
+			else {//neither textbox nor combo visible. Or something's wrong with combobox
 				accountingNewAcct=0;
 			}
 			try {
@@ -1759,9 +1771,34 @@ namespace OpenDental{
 			}
 			PaymentCur.PayAmt=PIn.Double(textAmount.Text);//handles blank
 			PaymentCur.PayDate=PIn.Date(textDate.Text);
+			//User chose to have a recurring payment so we need to know if the card has recurring setup and which month to apply the payment to.
+			if(IsNew && checkRecurring.Checked && comboCreditCards.SelectedIndex!=creditCards.Count) {
+				//Check if a recurring charge is setup for the selected card.
+				if(creditCards[comboCreditCards.SelectedIndex].ChargeAmt==0 
+					|| creditCards[comboCreditCards.SelectedIndex].DateStart.Year < 1880
+					|| creditCards[comboCreditCards.SelectedIndex].DateStop<=DateTime.Now) 
+				{
+					MsgBox.Show(this,"The selected credit card has not been setup for recurring charges \r\nor it is past the stop date that was set for it.");
+					return;
+				}
+				//Have the user decide what month to apply the recurring charge towards.
+				FormCreditRecurringDateChoose formDateChoose=new FormCreditRecurringDateChoose(creditCards[comboCreditCards.SelectedIndex]);
+				formDateChoose.ShowDialog();
+				if(formDateChoose.DialogResult!=DialogResult.OK) {
+					MsgBox.Show(this,"Uncheck the \"Apply to Recurring Charge\" box.");
+					return;
+				}
+				//This will change the PayDate to work better with the recurring charge automation.  User was notified in previous window.
+				PaymentCur.PayDate=formDateChoose.PayDate;
+			}
+			else if(IsNew && checkRecurring.Checked && comboCreditCards.SelectedIndex==creditCards.Count) {
+				MsgBox.Show(this,"Cannot apply a recurring charge to a new card.");
+				return;
+			}
 			PaymentCur.CheckNum=textCheckNum.Text;
 			PaymentCur.BankBranch=textBankBranch.Text;
 			PaymentCur.PayNote=textNote.Text;
+			PaymentCur.IsRecurringCC=checkRecurring.Checked;
 			if(checkPayTypeNone.Checked) {
 				PaymentCur.PayType=0;
 			}
@@ -1772,11 +1809,10 @@ namespace OpenDental{
 			//PaymentCur.ClinicNum already handled
 			if(SplitList.Count==0) {
 				if(Payments.AllocationRequired(PaymentCur.PayAmt,PaymentCur.PatNum)
-					&& MsgBox.Show(this,true,"Apply part of payment to other family members?"))
-				{
+					&& MsgBox.Show(this,true,"Apply part of payment to other family members?")) {
 					SplitList=Payments.Allocate(PaymentCur);//PayAmt needs to be set first
 				}
-				else{//Either no allocation required, or user does not want to allocate.  Just add one split.
+				else {//Either no allocation required, or user does not want to allocate.  Just add one split.
 					PaySplit split=new PaySplit();
 					split.PatNum=PaymentCur.PatNum;
 					split.ClinicNum=PaymentCur.ClinicNum;
@@ -1809,45 +1845,45 @@ namespace OpenDental{
 			if(SplitList.Count>1) {
 				PaymentCur.IsSplit=true;
 			}
-			else{
+			else {
 				PaymentCur.IsSplit=false;
 			}
-			try{
+			try {
 				Payments.Update(PaymentCur,true);
 			}
-			catch(ApplicationException ex){//this catches bad dates.
+			catch(ApplicationException ex) {//this catches bad dates.
 				MessageBox.Show(ex.Message);
 				return;
 			}
 			//Set all DatePays the same.
-			for(int i=0;i<SplitList.Count;i++){
+			for(int i=0;i<SplitList.Count;i++) {
 				SplitList[i].DatePay=PaymentCur.PayDate;
 			}
 			PaySplits.UpdateList(SplitListOld,SplitList);
 			//Accounting synch is done here.  All validation was done further up
 			//If user is trying to change the amount or linked account of an entry that was already copied and linked to accounting section
-			if(accountingSynchRequired){
+			if(accountingSynchRequired) {
 				Payments.AlterLinkedEntries(accountingOldAmt,PIn.Double(textAmount.Text),IsNew,
 					PaymentCur.PayNum,accountingNewAcct,PaymentCur.PayDate,FamCur.GetNameInFamFL(PaymentCur.PatNum));
 			}
-			if(IsNew){
+			if(IsNew) {
 				SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,PaymentCur.PatNum,
 					Patients.GetLim(PaymentCur.PatNum).GetNameLF()+", "
 					+PaymentCur.PayAmt.ToString("c"));
 			}
-			else{
-			  SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,PaymentCur.PatNum,
+			else {
+				SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,PaymentCur.PatNum,
 					Patients.GetLim(PaymentCur.PatNum).GetNameLF()+", "
 					+PaymentCur.PayAmt.ToString("c"));
 			}
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
+		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void FormPayment_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+		private void FormPayment_Closing(object sender,System.ComponentModel.CancelEventArgs e) {
 			if(DialogResult==DialogResult.OK) {
 				return;
 			}
@@ -1857,7 +1893,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(IsNew){ 
+			if(IsNew) {
 				Payments.Delete(PaymentCur);
 				//Void the transaction in X-Charge if there was one.
 				string transactionID="";
@@ -1865,7 +1901,7 @@ namespace OpenDental{
 				bool isDebit=false;
 				string[] noteSplit=Regex.Split(textNote.Text,"\r\n");
 				foreach(string XCTrans in noteSplit) {
-					if(XCTrans.StartsWith("XCTRANSACTIONID="))	{
+					if(XCTrans.StartsWith("XCTRANSACTIONID=")) {
 						transactionID=XCTrans.Substring(16);
 					}
 					if(XCTrans.StartsWith("APPROVEDAMOUNT=")) {
@@ -1877,7 +1913,7 @@ namespace OpenDental{
 						}
 					}
 				}
-				if(transactionID!="")	{
+				if(transactionID!="") {
 					if(HasXCharge()) {
 						VoidXChargeTransaction(transactionID,amount,isDebit);
 					}
@@ -1890,29 +1926,29 @@ namespace OpenDental{
 			//}	
 		}
 
-		
-
-		
-
-	
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
 
 
-		
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 }

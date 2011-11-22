@@ -339,6 +339,12 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormCreditRecurringDateChoose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCreditRecurringDateChoose.designer.cs">
+      <DependentUpon>FormCreditRecurringDateChoose.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSheetSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2364,6 +2370,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCreditRecurringDateChoose.resx">
+      <DependentUpon>FormCreditRecurringDateChoose.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSheetSetup.resx">
