@@ -34,10 +34,11 @@ namespace OpenDental{
 		///<summary>This gets set externally beforehand.  Lets user quickly select audit trail for current patient.</summary>
 		public long CurPatNum;
 		private PrintDocument pd;
-		private int linesPrinted;
-		//private OpenDental.UI.PrintPreview printPreview;
 		///<summary>This alphabetizes the permissions, except for "none", which is always first.  If using a foreign language, the order will be according to the English version, not the foreign translated text.</summary>
 		private List<string> permissionsAlphabetic;
+		private bool headingPrinted;
+		private int pagesPrinted;
+		private int headingPrintH;
 
 		///<summary></summary>
 		public FormAudit()
@@ -427,14 +428,16 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
-			linesPrinted=0;
+			pagesPrinted=0;
 			pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
-			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			pd.OriginAtMargins=true;
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			pd.DefaultPageSettings.Landscape=true;
 			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
+			headingPrinted=false;
 			#if DEBUG
 			PrintPreview printPreview=new PrintPreview(PrintSituation.Default,pd,1);
 			printPreview.ShowDialog();
@@ -450,72 +453,37 @@ namespace OpenDental{
 			#endif
 		}
 
-		///<summary>raised for each page to be printed.</summary>
+		///<summary>Raised for each page to be printed.</summary>
 		private void pd_PrintPage(object sender,PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+				//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
 			Graphics g=e.Graphics;
-			float yPos=75;
-			float xPos=55;
-			string str;
-			Font font=new Font(FontFamily.GenericSansSerif,8);
-			Font fontTitle=new Font(FontFamily.GenericSansSerif,11,FontStyle.Bold);
-			Font fontHeader=new Font(FontFamily.GenericSansSerif,8,FontStyle.Bold);
-			SolidBrush brush=new SolidBrush(Color.Black);
-			Pen pen=new Pen(Color.Black);
-			//Title
-			str=Text;
-			g.DrawString(str,fontTitle,brush,xPos,yPos);
-			yPos+=30;
-			//define columns
-			//ODGridColumn col=new ODGridColumn(Lan.g("TableAudit","Date Time"),120);
-			//col=new ODGridColumn(Lan.g("TableAudit","User"),70);
-			//col=new ODGridColumn(Lan.g("TableAudit","Permission"),110);
-			//col=new ODGridColumn(Lan.g("TableAudit","Log Text"),570);
-			int[] colW=new int[4];
-			colW[0]=120;//Date Time
-			colW[1]=70;//User
-			colW[2]=110;//Permission
-			colW[3]=470;//Log Text
-			int[] colPos=new int[colW.Length+1];
-			colPos[0]=30;
-			for(int i=1;i<colPos.Length;i++) {
-				colPos[i]=colPos[i-1]+colW[i-1];
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			if(!headingPrinted) {
+				text=Lan.g(this,"Audit Trail");
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				text=textDateFrom.Text+" "+Lan.g(this,"to")+" "+textDateTo.Text;
+				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=20;
+				headingPrinted=true;
+				headingPrintH=yPos;
 			}
-			string[] ColCaption=new string[4];
-			ColCaption[0]=Lan.g("TableAudit","Date Time");
-			ColCaption[1]=Lan.g("TableAudit","User");
-			ColCaption[2]=Lan.g("TableAudit","Permission");
-			ColCaption[3]=Lan.g("TableAudit","Log Text");
-			//column headers-----------------------------------------------------------------------------------------
-			e.Graphics.FillRectangle(Brushes.LightGray,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);
-			e.Graphics.DrawRectangle(pen,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);
-			for(int i=1;i<colPos.Length;i++) {
-				e.Graphics.DrawLine(new Pen(Color.Black),colPos[i],yPos,colPos[i],yPos+18);
-			}
-			//Prints the Column Titles
-			for(int i=0;i<ColCaption.Length;i++) {
-				e.Graphics.DrawString(ColCaption[i],fontHeader,brush,colPos[i]+2,yPos+1);
-			}
-			yPos+=18;
-			while(yPos < e.PageBounds.Height-75-50-32-16 && linesPrinted < grid.Rows.Count) {
-				for(int i=0;i<colPos.Length-1;i++) {
-					e.Graphics.DrawString(grid.Rows[linesPrinted].Cells[i].Text,font,brush
-						,new RectangleF(colPos[i]+2,yPos,colPos[i+1]-colPos[i]-5,font.GetHeight(e.Graphics)));
-				}
-				//Column lines		
-				for(int i=0;i<colPos.Length;i++) {
-					e.Graphics.DrawLine(Pens.Gray,colPos[i],yPos+16,colPos[i],yPos);
-				}
-				linesPrinted++;
-				yPos+=16;
-				e.Graphics.DrawLine(new Pen(Color.Gray),colPos[0],yPos,colPos[colPos.Length-1],yPos);
-			}
-			if(linesPrinted==grid.Rows.Count) {
-				e.HasMorePages=false;
-				linesPrinted=0;//so that after the print preview, it will still print.
-			}
-			else {
+			#endregion
+			yPos=grid.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(yPos==-1) {
 				e.HasMorePages=true;
 			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		

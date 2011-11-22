@@ -3944,7 +3944,7 @@ namespace OpenDental {
 			g.DrawString(page,dateFont,Brushes.Black,xPage,yPos);
 		}
 
-		///<summary>Sends a "screenshot" of the current appointment schedule to the clipboard.  This is to preserve old functionality.</summary>
+		///<summary>Sends an image of the current appointment schedule to the clipboard.  Some users 'paste' to their own editor for more control.</summary>
 		private void CopyScheduleToClipboard() {
 			ArrayList aListStart=new ArrayList();
 			ArrayList aListStop=new ArrayList();
