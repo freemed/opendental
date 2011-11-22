@@ -649,8 +649,13 @@ namespace OpenDental {
 				text="Order";
 				g.DrawString(text,headingFont,Brushes.Black,425-g.MeasureString(text,headingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,headingFont).Height;
-				text=listOrder[gridOrder.GetSelectedIndex()].DatePlaced.ToShortDateString()
-					+"  "+listOrder[gridOrder.GetSelectedIndex()].AmountTotal.ToString("c");
+				if(listOrder[gridOrder.GetSelectedIndex()].DatePlaced.Year>2200) {
+					text="Pending  "+listOrder[gridOrder.GetSelectedIndex()].AmountTotal.ToString("c");
+				}
+				else {
+					text=listOrder[gridOrder.GetSelectedIndex()].DatePlaced.ToShortDateString()
+						+"  "+listOrder[gridOrder.GetSelectedIndex()].AmountTotal.ToString("c");
+				}
 				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
 				text=listSupplier[comboSupplier.SelectedIndex].Name;
