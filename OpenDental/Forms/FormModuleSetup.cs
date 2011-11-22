@@ -194,6 +194,7 @@ namespace OpenDental{
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
 			this.tabChart = new System.Windows.Forms.TabPage();
+			this.checkMedicalFeeUsedForNewProcs = new System.Windows.Forms.CheckBox();
 			this.checkChartAddProcNoRefreshGrid = new System.Windows.Forms.CheckBox();
 			this.checkProcGroupNoteDoesAggregate = new System.Windows.Forms.CheckBox();
 			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
@@ -209,7 +210,6 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkMedicalFeeUsedForNewProcs = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -843,7 +843,7 @@ namespace OpenDental{
 			this.tabControl1.Location = new System.Drawing.Point(20,10);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(474,478);
+			this.tabControl1.Size = new System.Drawing.Size(474,505);
 			this.tabControl1.TabIndex = 196;
 			// 
 			// tabAppts
@@ -963,7 +963,7 @@ namespace OpenDental{
 			this.tabAccount.Controls.Add(this.textPayPlansBillInAdvanceDays);
 			this.tabAccount.Location = new System.Drawing.Point(4,22);
 			this.tabAccount.Name = "tabAccount";
-			this.tabAccount.Size = new System.Drawing.Size(466,452);
+			this.tabAccount.Size = new System.Drawing.Size(466,479);
 			this.tabAccount.TabIndex = 2;
 			this.tabAccount.Text = "Account";
 			// 
@@ -1049,6 +1049,18 @@ namespace OpenDental{
 			this.tabChart.Size = new System.Drawing.Size(466,452);
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
+			// 
+			// checkMedicalFeeUsedForNewProcs
+			// 
+			this.checkMedicalFeeUsedForNewProcs.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkMedicalFeeUsedForNewProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkMedicalFeeUsedForNewProcs.Location = new System.Drawing.Point(60,216);
+			this.checkMedicalFeeUsedForNewProcs.Name = "checkMedicalFeeUsedForNewProcs";
+			this.checkMedicalFeeUsedForNewProcs.Size = new System.Drawing.Size(381,15);
+			this.checkMedicalFeeUsedForNewProcs.TabIndex = 208;
+			this.checkMedicalFeeUsedForNewProcs.Text = "Use medical fee for new procedures";
+			this.checkMedicalFeeUsedForNewProcs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkMedicalFeeUsedForNewProcs.UseVisualStyleBackColor = true;
 			// 
 			// checkChartAddProcNoRefreshGrid
 			// 
@@ -1199,7 +1211,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(441,515);
+			this.butCancel.Location = new System.Drawing.Point(441,533);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -1214,29 +1226,17 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(336,515);
+			this.butOK.Location = new System.Drawing.Point(336,533);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkMedicalFeeUsedForNewProcs
-			// 
-			this.checkMedicalFeeUsedForNewProcs.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkMedicalFeeUsedForNewProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkMedicalFeeUsedForNewProcs.Location = new System.Drawing.Point(60,216);
-			this.checkMedicalFeeUsedForNewProcs.Name = "checkMedicalFeeUsedForNewProcs";
-			this.checkMedicalFeeUsedForNewProcs.Size = new System.Drawing.Size(381,15);
-			this.checkMedicalFeeUsedForNewProcs.TabIndex = 208;
-			this.checkMedicalFeeUsedForNewProcs.Text = "Use medical fee for new procedures";
-			this.checkMedicalFeeUsedForNewProcs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkMedicalFeeUsedForNewProcs.UseVisualStyleBackColor = true;
-			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(543,552);
+			this.ClientSize = new System.Drawing.Size(543,570);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
