@@ -7045,16 +7045,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE eobattach ADD DateTCreated datetime NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE eobattach ADD DateTCreated date";
-					Db.NonQ(command);
-					command="UPDATE eobattach SET DateTCreated = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateTCreated IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE eobattach MODIFY DateTCreated NOT NULL";
-					Db.NonQ(command);
-				}
-				*/
+			
