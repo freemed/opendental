@@ -5931,6 +5931,8 @@ namespace OpenDental{
 				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//for n
 			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
+			FillToothChart(false);
 			ClearButtons();
 			FillProgNotes();
 			if(newStatus==ProcStat.C) {
@@ -6274,6 +6276,8 @@ namespace OpenDental{
 				//orionProvNum=ProcCur.ProvNum;
 			}//for i
 			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
+			FillToothChart(false);
 			ClearButtons();
 			FillProgNotes();
 			if(newStatus==ProcStat.C){
@@ -6420,6 +6424,8 @@ namespace OpenDental{
 				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//n selected teeth
 			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
+			FillToothChart(false);
 			ClearButtons();
 			FillProgNotes();
 			textProcCode.Text="";
