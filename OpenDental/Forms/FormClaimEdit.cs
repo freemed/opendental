@@ -4103,17 +4103,25 @@ namespace OpenDental{
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript);
 				}
 				row.Cells.Add(ClaimProcsForClaim[i].FeeBilled.ToString("F"));
+				decimal claimProcInsEst=(decimal)ClaimProcsForClaim[i].InsPayEst;
 				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					decimal labFeesForProc=0;
 					List<Procedure> labFeeProcs=Procedures.GetCanadianLabFees(ClaimProcsForClaim[i].ProcNum,ProcList);
 					for(int j=0;j<labFeeProcs.Count;j++) {
 						labFeesForProc+=(decimal)labFeeProcs[j].ProcFee;
+						List <ClaimProc> claimProcsForLab=ClaimProcs.GetForProc(ClaimProcList,labFeeProcs[j].ProcNum);
+						for(int k=0;k<claimProcsForLab.Count;k++) { //We add the insurance estimate for the lab into the insurance estimate column of the procedure and the claim.
+							if(claimProcsForLab[k].PlanNum==ClaimCur.PlanNum && claimProcsForLab[k].InsSubNum==ClaimCur.InsSubNum) { //only claimprocs for the current claim
+								claimProcInsEst+=(decimal)ClaimProcs.GetInsEstTotal(claimProcsForLab[k]);
+								insPayEst+=ClaimProcs.GetInsEstTotal(claimProcsForLab[k]);
+							}
+						}
 					}
 					row.Cells.Add(labFeesForProc.ToString("F"));
 					labFees+=labFeesForProc;
 				}
 				row.Cells.Add(ClaimProcsForClaim[i].DedApplied.ToString("F"));
-				row.Cells.Add(ClaimProcsForClaim[i].InsPayEst.ToString("F"));
+				row.Cells.Add(claimProcInsEst.ToString("F"));
 				row.Cells.Add(ClaimProcsForClaim[i].InsPayAmt.ToString("F"));
 				row.Cells.Add(ClaimProcsForClaim[i].WriteOff.ToString("F"));
 				switch(ClaimProcsForClaim[i].Status){
