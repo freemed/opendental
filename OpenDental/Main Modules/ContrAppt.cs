@@ -184,6 +184,7 @@ namespace OpenDental {
 			infoBubble.Controls.Clear();
 			infoBubble.Controls.Add(PicturePat);
 			this.Controls.Add(infoBubble);
+			ContrApptSheet2.MouseWheel+=new MouseEventHandler(ContrApptSheet2_MouseWheel);
 		}
 
 		///<summary></summary>
@@ -1301,7 +1302,6 @@ namespace OpenDental {
 					vScrollBar1.Value=vScrollBar1.Maximum-vScrollBar1.LargeChange;
 				}
 			}
-			ContrApptSheet2.MouseWheel+=new MouseEventHandler(ContrApptSheet2_MouseWheel);
 			ContrApptSheet2.Location=new Point(0,-vScrollBar1.Value);
 			toolTip1.RemoveAll();//without this line, the program becomes sluggish.
 			for(int i=panelOps.Controls.Count-1;i>=0;i--) {
