@@ -32,11 +32,11 @@ namespace OpenDentBusiness{
 		Text,
 		///<summary>1</summary>
 		PickList,
-		///<summary>2</summary>
+		///<summary>2-Stored in db as entered, already localized.  For example, it could be 2/04/11, 2/4/11, 2/4/2011, or any other variant.  This makes it harder to create queries that filter by date, but easier to display dates as part of results.</summary>
 		Date,
-		///<summary>3</summary>
+		///<summary>3-If checked, value stored as "1".  If unchecked, row deleted.</summary>
 		Checkbox,
-		///<summary>4</summary>
+		///<summary>4-This seems to have been added without implementing.  Not sure what will happen if someone tries to use it.</summary>
 		Currency
 	}
 
