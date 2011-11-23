@@ -377,7 +377,7 @@ namespace OpenDental{
 				else{
 					//if guarRelat is not self, and name and birthdate not supplied, a warning was issued, and relat was changed to self.
 					//add guarantor or attach to an existing guarantor
-					patNum=Patients.GetPatNumByNameAndBirthday(pat.LName,pat.FName,pat.Birthdate);
+					patNum=Patients.GetPatNumByNameAndBirthday(guar.LName,guar.FName,guar.Birthdate);
 					if(patNum != 0){//a guar already exists, so simply attach. Make no other changes
 						existingPatOld=pat.Copy();
 						pat.Guarantor=patNum;
