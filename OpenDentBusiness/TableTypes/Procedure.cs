@@ -101,7 +101,7 @@ namespace OpenDentBusiness {
 		public DateTime DateTStamp;
 		///<summary>FK to definition.DefNum, which contains text of the Prognosis.</summary>
 		public long Prognosis;
-		///<summary>Enum:EnumProcDrugUnit For 837I</summary>
+		///<summary>Enum:EnumProcDrugUnit For 837I and UB04</summary>
 		public EnumProcDrugUnit DrugUnit;
 		///<summary>Includes fractions. For 837I</summary>
 		public float DrugQty;
@@ -155,15 +155,15 @@ namespace OpenDentBusiness {
 	public enum EnumProcDrugUnit {
 		///<summary>0</summary>
 		None,
-		///<summary>1</summary>
+		///<summary>1 - F2 on UB04.</summary>
 		InternationalUnit,
-		///<summary>2</summary>
+		///<summary>2 - GR on UB04.</summary>
 		Gram,
-		///<summary>3</summary>
+		///<summary>3 - GR on UB04.</summary>
 		Milligram,
-		///<summary>4</summary>
+		///<summary>4 - ML on UB04.</summary>
 		Milliliter,
-		///<summary>5</summary>
+		///<summary>5 - UN on UB04.</summary>
 		Unit
 	}
 	

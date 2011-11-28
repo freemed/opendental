@@ -281,6 +281,7 @@ namespace OpenDental{
 				"IsStudent",
 				"CollegeName",
 				"PatientLastFirst",
+				"PatientFirstMiddleLast",
 				"PatientFirstName",
 				"PatientMiddleName",
 				"PatientLastName",

@@ -900,6 +900,9 @@ namespace OpenDental{
 					case "PatientLastFirst":
 						displayStrings[i]=PatCur.LName+", "+PatCur.FName+" "+PatCur.MiddleI;
 						break;
+					case "PatientFirstMiddleLast":
+						displayStrings[i]=PatCur.FName+" "+PatCur.MiddleI+" "+PatCur.LName;
+						break;
 					case "PatientFirstName":
 						displayStrings[i] = PatCur.FName;
 						break;
@@ -3282,13 +3285,38 @@ namespace OpenDental{
 			if(field=="BaseUnits"){
 				return ProcCur.BaseUnits.ToString();
 			}
-			if(field=="Desc")
-				if(procCode.TreatArea==TreatmentArea.Quad){
-					return ProcCur.Surf+" "+procCode.Descript;
+			if(field=="Desc") {
+				if(procCode.DrugNDC!="") {
+					//For UB04, we must show the procedure description as a standard drug format so that the drug can be easily recognized.
+					//The DrugNDC field is only used when medical features are turned on so this behavior won't take effect in many circumstances.
+					string drugUnit="UN";//Unit
+					float drugQty=ProcCur.DrugQty;
+					switch(ProcCur.DrugUnit) {
+						case EnumProcDrugUnit.Gram:
+							drugUnit="GR";
+							break;
+						case EnumProcDrugUnit.InternationalUnit:
+							drugUnit="F2";
+							break;
+						case EnumProcDrugUnit.Milligram:
+							drugUnit="GR";
+							drugQty=drugQty/1000;
+							break;
+						case EnumProcDrugUnit.Milliliter:
+							drugUnit="ML";
+							break;
+					}
+					return "N4"+procCode.DrugNDC+drugUnit+drugQty.ToString("f3");
 				}
-				else{
-					return procCode.Descript;
+				else {
+					if(procCode.TreatArea==TreatmentArea.Quad) {
+						return ProcCur.Surf+" "+procCode.Descript;
+					}
+					else {
+						return procCode.Descript;
+					}
 				}
+			}
 			if(field=="Date"){
 				if(ClaimCur.ClaimType=="PreAuth") {//no date on preauth procedures
 					return "";
