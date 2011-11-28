@@ -1190,7 +1190,61 @@ namespace UnitTests {
 			return retVal;
 		}
 
-
+		///<summary></summary>
+		public static string TestNineteen(int specificTest) {
+			if(specificTest != 0 && specificTest !=19){
+				return"";
+			}
+			string suffix="19";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier1=CarrierT.CreateCarrier(suffix);
+			Carrier carrier2=CarrierT.CreateCarrier(suffix);
+			InsPlan plan1=InsPlanT.CreateInsPlan(carrier1.CarrierNum);
+			InsPlan plan2=InsPlanT.CreateInsPlan(carrier2.CarrierNum);
+			InsSub sub1=InsSubT.CreateInsSub(pat.PatNum,plan1.PlanNum);
+			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,plan2.PlanNum);
+			long subNum1=sub1.InsSubNum;
+			long subNum2=sub2.InsSubNum;
+			//plans
+			BenefitT.CreateCategoryPercent(plan1.PlanNum,EbenefitCategory.Diagnostic,40);
+			BenefitT.CreateCategoryPercent(plan2.PlanNum,EbenefitCategory.Diagnostic,40);
+			BenefitT.CreateDeductibleGeneral(plan1.PlanNum,50);
+			BenefitT.CreateDeductibleGeneral(plan2.PlanNum,50);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum1);
+			PatPlanT.CreatePatPlan(2,pat.PatNum,subNum2);
+			//proc1 - PerExam
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.TP,"",150);
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure>	ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++){
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age,subList);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,plan1.PlanNum,subNum1);
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,plan2.PlanNum,subNum2);
+			if(claimProc2.InsEstTotal!=10) {//Second procedure should show no deductible.
+				throw new Exception("Should be 10. \r\n");
+			}
+			retVal+="19: Passed.  Multiple deductibles are accounted for.\r\n";
+			return retVal;
+		}
 
 
 

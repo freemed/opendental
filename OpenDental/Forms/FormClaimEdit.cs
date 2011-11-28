@@ -5061,10 +5061,10 @@ namespace OpenDental{
 					double paidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(ClaimProcsForClaim[i],PatPlanList);
 					double writeOffOtherIns=ClaimProcs.GetWriteOffOtherIns(ClaimProcsForClaim[i],PatPlanList);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Count>0){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0,PatCur.Age,0);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0,PatCur.Age,0,0);
 					}
 					else if(ClaimCur.ClaimType=="S" && PatPlanList.Count>1){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns,0);//Might need to calculate and pass deductibleOtherIns here instead of the last 0.
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;
 					ClaimProcs.Update(ClaimProcsForClaim[i]);

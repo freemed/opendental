@@ -1126,14 +1126,15 @@ namespace OpenDentBusiness {
 			double paidOtherInsEstTotal=0;
 			double paidOtherInsBaseEst=0;
 			double writeOffEstOtherIns=0;
+			double deductibleOtherIns=0;
 			//because secondary claimproc might come before primary claimproc in the list, we cannot simply loop through the claimprocs
-			ComputeForOrdinal(1,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+			ComputeForOrdinal(1,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,ref deductibleOtherIns,
 				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
-			ComputeForOrdinal(2,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+			ComputeForOrdinal(2,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,ref deductibleOtherIns,
 				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
-			ComputeForOrdinal(3,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+			ComputeForOrdinal(3,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,ref deductibleOtherIns,
 				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
-			ComputeForOrdinal(4,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+			ComputeForOrdinal(4,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,ref deductibleOtherIns,
 				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
 			//At this point, for a PPO with secondary, the sum of all estimates plus primary writeoff might be greater than fee.
 			if(patPlans.Count>1){
@@ -1190,7 +1191,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Passing in 4 will compute for 4 as well as any other situation such as dropped plan.</summary>
 		private static void ComputeForOrdinal(int ordinal,List<ClaimProc> claimProcs,Procedure proc,List<InsPlan> PlanList,bool isInitialEntry,
-			ref double paidOtherInsEstTotal,ref double paidOtherInsBaseEst,ref double writeOffEstOtherIns,
+			ref double paidOtherInsEstTotal,ref double paidOtherInsBaseEst,ref double writeOffEstOtherIns,ref double deductibleOtherIns,
 			List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb,int patientAge) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan PlanCur;
@@ -1231,44 +1232,47 @@ namespace OpenDentBusiness {
 						continue;
 					}
 					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,0,
-						benefitList,histList,loopList,patPlans,0,0,patientAge,0);
+						benefitList,histList,loopList,patPlans,0,0,patientAge,0,0);
 				}
 				else if(patplan.Ordinal==1){
 					if(ordinal!=1) {
 						continue;
 					}
 					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns,deductibleOtherIns);
 					paidOtherInsEstTotal+=claimProcs[i].InsEstTotal;
 					paidOtherInsBaseEst+=claimProcs[i].BaseEst;
 					writeOffEstOtherIns+=ClaimProcs.GetWriteOffEstimate(claimProcs[i]);
+					deductibleOtherIns+=claimProcs[i].DedEst;
 				}
 				else if(patplan.Ordinal==2){
 					if(ordinal!=2) {
 						continue;
 					}
 					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns,deductibleOtherIns);
 					paidOtherInsEstTotal+=claimProcs[i].InsEstTotal;
 					paidOtherInsBaseEst+=claimProcs[i].BaseEst;
 					writeOffEstOtherIns+=ClaimProcs.GetWriteOffEstimate(claimProcs[i]);
+					deductibleOtherIns+=claimProcs[i].DedEst;
 				}
 				else if(patplan.Ordinal==3) {
 					if(ordinal!=3) {
 						continue;
 					}
 					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns,deductibleOtherIns);
 					paidOtherInsEstTotal+=claimProcs[i].InsEstTotal;
 					paidOtherInsBaseEst+=claimProcs[i].BaseEst;
 					writeOffEstOtherIns+=ClaimProcs.GetWriteOffEstimate(claimProcs[i]);
+					deductibleOtherIns+=claimProcs[i].DedEst;
 				}
 				else{//patplan.Ordinal is 4 or greater.  Estimate won't be accurate if more than 4 insurances.
 					if(ordinal!=4) {
 						continue;
 					}
 					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns,deductibleOtherIns);
 				}
 				//This was a longstanding bug. I hope there are not other consequences for commenting it out.
 				//claimProcs[i].DateCP=proc.ProcDate;
