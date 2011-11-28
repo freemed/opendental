@@ -7018,8 +7018,61 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PracticePayToZip','')";
 					Db.NonQ(command);
 				}
-
-
+				try{
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE patient ADD INDEX (SiteNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX patient_SiteNum ON patient (SiteNum)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex){}
+				try{
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE claimproc ADD INDEX (Status)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX claimproc_Status ON claimproc (Status)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex){}
+				try{
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE patient ADD INDEX (PatStatus)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX patient_PatStatus ON patient (PatStatus)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex){}
+				try{
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE patient ADD INDEX (ClinicNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX patient_ClinicNum ON patient (ClinicNum)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex){}
+				try{
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE appointment ADD INDEX (DateTimeArrived)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX appointment_DateTimeArrived ON appointment (DateTimeArrived)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex){}
 
 
 
