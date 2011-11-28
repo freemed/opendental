@@ -338,9 +338,16 @@ div#patname {
 }
 
 .divtablecell2{
-    display: table-cell;ftp
-    
+    display: table-cell;
     padding-bottom:5px;
+}
+.divtablecell3{
+    display: table-cell;
+     border-width:1px;
+     border-style:solid;
+     border-color:#e8eef4;
+     padding-right:02px;
+     padding-left:10px;
 }
 
 .padbottom20px{

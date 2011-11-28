@@ -43,6 +43,7 @@ namespace OpenDental {
 			icd9,
 			statement,
 			document,
+			//recall,
 			deletedobject,
 			patientdel
 		}
@@ -248,6 +249,7 @@ namespace OpenDental {
 				DateTime changedPat=changedSince;
 				DateTime changedStatement=changedSince;
 				DateTime changedDocument=changedSince;
+				//DateTime changedRecall=changedSince;//dennis recall
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 					changedProv=DateTime.MinValue;
 					changedDeleted=DateTime.MinValue;
@@ -258,6 +260,9 @@ namespace OpenDental {
 					changedDocument=DateTime.MinValue;
 					UploadPracticeTitle();
 				}
+				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables120Done,false)) {//dennis recall
+				//changedRecall=DateTime.MinValue;
+				//}
 				bool synchDelPat=true;
 				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
 					synchDelPat=false;// synching delPatNumList is time consuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
@@ -281,13 +286,14 @@ namespace OpenDental {
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedStatement,eligibleForUploadPatNumList,statementLimitPerPatient);
 				List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedDocument,statementNumList);
+				//List<long> recallNumList=Recallms.GetChangedSinceRecallNums(changedRecall);//dennis recall
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);dennis: delete this line later
 				List<long> deletedObjectNumList=DeletedObjects.GetChangedSinceDeletedObjectNums(changedDeleted);
 				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 					+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 					+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-					+statementNumList.Count+documentNumList.Count
+					+statementNumList.Count+documentNumList.Count//+recallNumList.Count//dennis recall
 					+deletedObjectNumList.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
@@ -315,6 +321,7 @@ namespace OpenDental {
 				SynchGeneric(icd9NumList,SynchEntity.icd9,totalCount,ref currentVal);
 				SynchGeneric(statementNumList,SynchEntity.statement,totalCount,ref currentVal);
 				SynchGeneric(documentNumList,SynchEntity.document,totalCount,ref currentVal);
+				//SynchGeneric(recallNumList,SynchEntity.recall,totalCount,ref currentVal);//dennis recall
 				if(synchDelPat) {
 					SynchGeneric(delPatNumList,SynchEntity.patientdel,totalCount,ref currentVal);
 				}
@@ -418,6 +425,10 @@ namespace OpenDental {
 						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList,AtoZpath);
 						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
+						//case SynchEntity.recall://dennis recall
+						//List<Recallm> ChangedRecallList=Recallms.GetMultRecallms(BlockPKNumList);
+						//mb.SynchRecalls(PrefC.GetString(PrefName.RegistrationKey),ChangedRecallList.ToArray());
+						//break;
 						case SynchEntity.deletedobject:
 						List<DeletedObject> ChangedDeleteObjectList=DeletedObjects.GetMultDeletedObjects(BlockPKNumList);
 						mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),ChangedDeleteObjectList.ToArray());

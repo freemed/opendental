@@ -8,13 +8,58 @@
 }
 
 <p><strong>Appointments:</strong></p>
-<div style="margin-left:3em">
+
+
+<div style="margin-top:3em;margin-left:3em;">
 @if(Model.appointmentmList.Count()==0) {
-	<p>No Statement History available</p>
+	<p>No Appointments available</p>
 }
-	@foreach(var item in Model.appointmentmList) {    
-		<p>@Html.Encode("Appointment Date and time "+item.AptDateTime.ToShortDateString() + " ")
-		@Html.Encode("Appointment Notes "+item.Note + " ")
-		</p>
-	}
+else {
+	<div class="divtable">
+		<div class="divtablerow">
+			<div class="divtablecell3">
+				<strong> Appt Status </strong>
+			</div>
+			<div class="divtablecell3">
+				<strong> Date </strong>
+			</div>
+			<div class="divtablecell3">
+				<strong> Time </strong>
+			</div>
+			<div class="divtablecell3">
+				<strong> Min </strong>
+			</div>
+			<div class="divtablecell3">
+				<strong> Procedures </strong>
+			</div>
+			<div class="divtablecell3">
+				<strong> Notes </strong>
+			</div>
+		</div>
+		@foreach(var item in Model.appointmentmList) {  
+			<div class="divtablerow">
+				<div class="divtablecell3">
+					@Html.Encode(item.AptStatus)
+				</div>
+				<div class="divtablecell3">
+					@Html.Encode(item.AptDateTime.ToString("d"))
+				</div>
+				<div class="divtablecell3">
+					@Html.Encode(item.AptDateTime.ToString("t"))
+				</div>
+				<div class="divtablecell3">
+					@Html.Encode(item.Pattern.Length*5)
+				</div>
+				<div class="divtablecell3">
+					@Html.Encode(item.ProcDescript)
+				</div>
+				<div class="divtablecell3">
+					@Html.Encode(item.Note)
+				</div>
+			</div>	  	  
+			
+	  
+  }
+	</div>
+}
 </div>

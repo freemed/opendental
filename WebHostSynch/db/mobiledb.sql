@@ -355,7 +355,6 @@ CREATE TABLE `medicationpatm` (
   `PatNum` bigint(20) NOT NULL,
   `MedicationNum` bigint(20) NOT NULL,
   `PatNote` varchar(255) NOT NULL,
-  `IsDiscontinued` tinyint(4) NOT NULL,
   `DateStart` date NOT NULL DEFAULT '0001-01-01',
   `DateStop` date NOT NULL DEFAULT '0001-01-01',
   PRIMARY KEY (`CustomerNum`,`MedicationPatNum`),
@@ -372,7 +371,7 @@ CREATE TABLE `medicationpatm` (
 
 LOCK TABLES `medicationpatm` WRITE;
 /*!40000 ALTER TABLE `medicationpatm` DISABLE KEYS */;
-INSERT INTO `medicationpatm` VALUES (6566,1,7,1,'drug1 med1',0,'0001-01-01','0001-01-01'),(6566,2,7,2,'med2',0,'2011-06-03','2011-07-09'),(6566,3,7,2,'discont',0,'2011-05-09','0001-01-01'),(6566,4,7,4,'refill 4 etc.',0,'0001-01-01','0001-01-01'),(6566,5,7,5,'',0,'2011-01-09','2011-06-09');
+INSERT INTO `medicationpatm` VALUES (6566,1,7,1,'drug1 med1','0001-01-01','0001-01-01'),(6566,2,7,2,'med2','2011-06-03','2011-07-09'),(6566,3,7,2,'discont','2011-05-09','0001-01-01'),(6566,4,7,4,'refill 4 etc.','0001-01-01','0001-01-01'),(6566,5,7,5,'','2011-01-09','2011-06-09');
 /*!40000 ALTER TABLE `medicationpatm` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -404,7 +403,7 @@ CREATE TABLE `patientm` (
   `WirelessPhone` varchar(255) NOT NULL,
   `Guarantor` bigint(20) NOT NULL,
   `Email` varchar(255) NOT NULL,
-  `AddrNote` varchar(255) NOT NULL,
+  `AddrNote` text NOT NULL,
   `ClinicNum` bigint(20) NOT NULL,
   `PreferContactMethod` tinyint(4) NOT NULL,
   `OnlinePassword` varchar(255) NOT NULL,

@@ -70,6 +70,7 @@ namespace WebHostSynch {
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				throw new Exception("Exception in DeleteObjects");
 			}
 		}
 
@@ -102,6 +103,7 @@ namespace WebHostSynch {
 			}
 			catch(Exception ex) {
 				Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+				throw new Exception("Exception in DeleteAllRecords");
 			}
 		}
 
@@ -119,6 +121,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchPatients");
 				}
 			}
 
@@ -134,6 +137,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchAppointments");
 				}
 			}
 		
@@ -149,6 +153,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchPrescriptions");
 				}
 			}
 
@@ -164,6 +169,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchProviders");
 				}
 			}
 			
@@ -179,6 +185,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchPharmacies");
 				}
 			}
 
@@ -213,6 +220,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SetMobileWebUserPassword");
 				}
 			}
 		#endregion
@@ -234,6 +242,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SetPracticeTitle");
 				}
 			}
 
@@ -267,6 +276,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchLabPanels");
 				}
 			}
 
@@ -282,6 +292,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchLabResults");
 				}
 			}
 			
@@ -297,6 +308,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchMedications");
 				}
 			}
 
@@ -312,6 +324,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchMedicationPats");
 				}
 			}
 
@@ -327,6 +340,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchAllergies");
 				}
 			}
 
@@ -342,6 +356,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchAllergyDefs");
 				}
 			}
 
@@ -357,6 +372,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchDiseases");
 				}
 			}
 
@@ -372,6 +388,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchDiseaseDefs");
 				}
 			}
 
@@ -387,6 +404,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchICD9s");
 				}
 			}
 
@@ -406,6 +424,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchStatements");
 				}
 			}
 
@@ -424,11 +443,28 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchDocuments");
 				}
 			}
-			
+
+			[WebMethod]
+			public void SynchRecalls(String RegistrationKey,List<Recallm> recallList) {
+				try {
+					Logger.Information("In SynchRecalls");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					//Recallms.UpdateFromChangeList(recallList,customerNum);//dennis recall
+
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SynchRecalls");
+				}
+			}	
 		/// <summary>
-		/// Deletes records assoicated with the PatNums
+		/// Deletes records associated with the PatNums
 		/// </summary>
 		[WebMethod]
 			public void DeletePatientsRecords(String RegistrationKey,List<long> patNumList) {
@@ -454,6 +490,7 @@ namespace WebHostSynch {
 				}
 				catch(Exception ex) {
 					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in DeletePatientsRecords");
 				}
 		}
 

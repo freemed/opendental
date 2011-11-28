@@ -3623,6 +3623,7 @@ namespace OpenDental{
 		private void Tool_EHR_Click(bool onLoadShowOrders) {
 			#if EHRTEST
 				//so we can step through for debugging.
+			/*
 				EhrQuarterlyKey keyThisQ=EhrQuarterlyKeys.GetKeyThisQuarter();
 				if(keyThisQ==null) {
 					MessageBox.Show("No quarterly key entered for this quarter.");
@@ -3633,11 +3634,12 @@ namespace OpenDental{
 					MessageBox.Show("Invalid quarterly key.");
 					return;
 				}
+			*/
 				((FormEHR)FormOpenDental.FormEHR).PatNum=PatCur.PatNum;
 				((FormEHR)FormOpenDental.FormEHR).OnShowLaunchOrders=onLoadShowOrders;
 				((FormEHR)FormOpenDental.FormEHR).ShowDialog();
 				if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.None) {
-					return;
+					//return;
 				}
 				if(((FormEHR)FormOpenDental.FormEHR).ResultOnClosing==EhrFormResult.RxEdit) {
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(((FormEHR)FormOpenDental.FormEHR).LaunchRxNum));

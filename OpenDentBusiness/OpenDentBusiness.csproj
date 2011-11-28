@@ -463,6 +463,7 @@
     <Compile Include="Mobile\Data Interface\PrefmC.cs" />
     <Compile Include="Mobile\Data Interface\Prefms.cs" />
     <Compile Include="Mobile\Data Interface\Providerms.cs" />
+    <Compile Include="Mobile\Data Interface\Recallms.cs" />
     <Compile Include="Mobile\Data Interface\RxPatms.cs" />
     <Compile Include="Mobile\Data Interface\Statementms.cs" />
     <Compile Include="Mobile\Data Interface\Userms.cs" />
@@ -482,6 +483,7 @@
     <Compile Include="Mobile\TableTypes\MedicationPatm.cs" />
     <Compile Include="Mobile\TableTypes\Pharmacym.cs" />
     <Compile Include="Mobile\TableTypes\Providerm.cs" />
+    <Compile Include="Mobile\TableTypes\Recallm.cs" />
     <Compile Include="Mobile\TableTypes\Statementm.cs" />
     <Compile Include="Mobile\TableTypes\Userm.cs" />
     <Compile Include="Mobile\TableTypes\RxPatm.cs" />

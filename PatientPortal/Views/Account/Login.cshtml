@@ -17,19 +17,19 @@
             <legend>Account Information</legend>
 
             <div class="editor-label">
-                @Html.LabelFor(lm => lm.UserName)
+                @Html.LabelFor(lm=>lm.UserName)
             </div>
             <div class="editor-field">
-                @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(lm => lm.UserName)
+                @Html.TextBoxFor(lm=>lm.UserName)
+                @Html.ValidationMessageFor(lm=>lm.UserName)
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(lm => lm.Password)
+                @Html.LabelFor(lm=>lm.Password)
             </div>
             <div class="editor-field">
-                @Html.PasswordFor(lm => lm.Password)
-                @Html.ValidationMessageFor(lm => lm.Password)
+                @Html.PasswordFor(lm=>lm.Password)
+                @Html.ValidationMessageFor(lm=>lm.Password)
             </div>
 
             <p>
