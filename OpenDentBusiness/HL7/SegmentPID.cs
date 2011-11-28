@@ -40,7 +40,10 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>If relationship is self, this loop does nothing.  A new pat will later change guarantor to be same as patnum. </summary>
 		public static void ProcessGT1(Patient pat,SegmentHL7 seg,bool useChartNumber) {
 			long guarNum=PIn.Long(seg.GetFieldFullText(2));
-			if(seg.GetFieldFullText(11)=="1") {//if relationship is self
+			if(guarNum==0) {//because we have an example where they sent us this (position 2 is empty): GT1|1||^^||^^^^||||||||
+				return;
+			}
+			if(seg.GetFieldFullText(11)=="1") {//if relationship is self (according to some of their documentation)
 				return;
 			}
 			Patient guar=null;
