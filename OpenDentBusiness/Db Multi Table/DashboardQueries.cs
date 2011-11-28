@@ -186,7 +186,7 @@ namespace OpenDentBusiness {
 				agingWasRun=true;
 				//run historical aging on all patients based on the date entered.
 				Ledgers.ComputeAging(0,dateLastOfMonth,true);
-				command=@"SELECT SUM(Bal_0_30+Bal_31_60+Bal_61_90+BalOver90),InsEst FROM patient";
+				command=@"SELECT SUM(Bal_0_30+Bal_31_60+Bal_61_90+BalOver90),SUM(InsEst) FROM patient";
 				DataTable table=Db.GetTable(command);
 				dash=new DashboardAR();
 				dash.DateCalc=dateLastOfMonth;
