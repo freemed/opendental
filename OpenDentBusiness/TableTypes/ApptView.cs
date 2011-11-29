@@ -28,6 +28,8 @@ namespace OpenDentBusiness{
 		public ApptViewStackBehavior StackBehavUR;
 		///<summary>Enum:ApptViewStackBehavior </summary>
 		public ApptViewStackBehavior StackBehavLR;
+		///<summary>FK to clinic.ClinicNum.  0=All clinics.  If OnlyScheduledProvs is set to true, then only provider schedules with matching clinic will be included.</summary>
+		public long ClinicNum;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("OnlySchedBeforeTime",typeof(long))]

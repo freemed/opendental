@@ -7073,6 +7073,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					}
 				}
 				catch(Exception ex){}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE apptview ADD ClinicNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE apptview ADD INDEX (ClinicNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE apptview ADD ClinicNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE apptview SET ClinicNum = 0 WHERE ClinicNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE apptview MODIFY ClinicNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX apptview_ClinicNum ON apptview (ClinicNum)";
+					Db.NonQ(command);
+				}
+
+
+
 
 
 
@@ -7099,3 +7118,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+

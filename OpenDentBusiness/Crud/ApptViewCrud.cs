@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Crud{
 				apptView.OnlySchedAfterTime = PIn.Time(table.Rows[i]["OnlySchedAfterTime"].ToString());
 				apptView.StackBehavUR       = (ApptViewStackBehavior)PIn.Int(table.Rows[i]["StackBehavUR"].ToString());
 				apptView.StackBehavLR       = (ApptViewStackBehavior)PIn.Int(table.Rows[i]["StackBehavLR"].ToString());
+				apptView.ClinicNum          = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
 				retVal.Add(apptView);
 			}
 			return retVal;
@@ -95,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ApptViewNum,";
 			}
-			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs,OnlySchedBeforeTime,OnlySchedAfterTime,StackBehavUR,StackBehavLR) VALUES(";
+			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs,OnlySchedBeforeTime,OnlySchedAfterTime,StackBehavUR,StackBehavLR,ClinicNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(apptView.ApptViewNum)+",";
 			}
@@ -107,7 +108,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Time  (apptView.OnlySchedBeforeTime)+","
 				+    POut.Time  (apptView.OnlySchedAfterTime)+","
 				+    POut.Int   ((int)apptView.StackBehavUR)+","
-				+    POut.Int   ((int)apptView.StackBehavLR)+")";
+				+    POut.Int   ((int)apptView.StackBehavLR)+","
+				+    POut.Long  (apptView.ClinicNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +129,8 @@ namespace OpenDentBusiness.Crud{
 				+"OnlySchedBeforeTime=  "+POut.Time  (apptView.OnlySchedBeforeTime)+", "
 				+"OnlySchedAfterTime =  "+POut.Time  (apptView.OnlySchedAfterTime)+", "
 				+"StackBehavUR       =  "+POut.Int   ((int)apptView.StackBehavUR)+", "
-				+"StackBehavLR       =  "+POut.Int   ((int)apptView.StackBehavLR)+" "
+				+"StackBehavLR       =  "+POut.Int   ((int)apptView.StackBehavLR)+", "
+				+"ClinicNum          =  "+POut.Long  (apptView.ClinicNum)+" "
 				+"WHERE ApptViewNum = "+POut.Long(apptView.ApptViewNum);
 			Db.NonQ(command);
 		}
@@ -166,6 +169,10 @@ namespace OpenDentBusiness.Crud{
 			if(apptView.StackBehavLR != oldApptView.StackBehavLR) {
 				if(command!=""){ command+=",";}
 				command+="StackBehavLR = "+POut.Int   ((int)apptView.StackBehavLR)+"";
+			}
+			if(apptView.ClinicNum != oldApptView.ClinicNum) {
+				if(command!=""){ command+=",";}
+				command+="ClinicNum = "+POut.Long(apptView.ClinicNum)+"";
 			}
 			if(command==""){
 				return;
