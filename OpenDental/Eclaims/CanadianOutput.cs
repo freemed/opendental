@@ -488,18 +488,25 @@ namespace OpenDental.Eclaims {
 			etransAck.InsSubNum=etrans.InsSubNum;
 			etransAck.CarrierNum=etrans.CarrierNum;
 			etransAck.DateTimeTrans=DateTime.Now;
-			CCDFieldInputter fieldInputter=null;
 			if(resultIsError) {
+				etransAck.AckCode="R";//To allow the user to try and reverse the claim again.
 			  etransAck.Etype=EtransType.AckError;
 			  etrans.Note="failed";
 			}
 			else {
-			  fieldInputter=new CCDFieldInputter(result);
-				CCDField fieldG05=fieldInputter.GetFieldById("G05");
-				if(fieldG05!=null) {
-					etransAck.AckCode=fieldG05.valuestr;
+				try {
+					CCDFieldInputter fieldInputter=new CCDFieldInputter(result);
+					CCDField fieldG05=fieldInputter.GetFieldById("G05");
+					if(fieldG05!=null) {
+						etransAck.AckCode=fieldG05.valuestr;
+					}
+					etransAck.Etype=fieldInputter.GetEtransType();
 				}
-			  etransAck.Etype=fieldInputter.GetEtransType();
+				catch {
+					etransAck.AckCode="R";//To allow the user to try and reverse the claim again.
+					etransAck.Etype=EtransType.AckError;
+					etrans.Note="Could not parse response from ITRANS.";
+				}
 			}
 			Etranss.Insert(etransAck);
 			Etranss.SetMessage(etransAck.EtransNum,result);
