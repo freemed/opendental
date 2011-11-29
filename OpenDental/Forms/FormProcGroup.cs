@@ -748,7 +748,7 @@ namespace OpenDental{
 							row.Cells.Add(ProcList[i].ProcDate.ToShortDateString());
 							break;
 						case "Th":
-							row.Cells.Add(ProcList[i].ToothNum.ToString());
+							row.Cells.Add(Tooth.GetToothLabel(ProcList[i].ToothNum));
 							break;
 						case "Surf":
 							row.Cells.Add(ProcList[i].Surf.ToString());
