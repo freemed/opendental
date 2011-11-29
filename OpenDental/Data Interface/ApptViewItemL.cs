@@ -130,17 +130,13 @@ namespace OpenDental{
 								}
 							}
 						}
-						//Also add any ops that are assigned to this dentist by default.
-						if(OperatoryC.ListShort[i].ProvDentist==dailySched[s].ProvNum) {
+						//If the provider is not scheduled to any op(s), add their default op(s).
+						if(OperatoryC.ListShort[i].ProvDentist==dailySched[s].ProvNum && listSchedOps.Count==0) {//only if the sched does not specify any ops
 							indexOp=Operatories.GetOrder(OperatoryC.ListShort[i].OperatoryNum);
 							if(indexOp!=-1 && !ApptDrawing.VisOps.Contains(OperatoryC.ListShort[i])) {
 								ApptDrawing.VisOps.Add(OperatoryC.ListShort[i]);
 								opAdded=true;
 							}
-							//index=Providers.GetIndex(OperatoryC.ListShort[i].ProvDentist);
-							//if(index!=-1 && !VisProvs.Contains(index)) {
-							//	VisProvs.Add(index);
-							//}
 						}
 						if(opAdded) {
 							break;//break out of the loop of schedules.  Continue with the next op.
