@@ -129,6 +129,7 @@ namespace OpenDental
 		private ComboBox comboStatus;
 		///<summary>This value is obtained by a query when this window first opens.  It includes both actual writeoffs and estimated writeoffs.  Will be 0 if this is a primary estimate.</summary>
 		private double WriteOffOtherIns;
+		private double DeductibleOtherIns;
 		private bool SaveToDb;
 		private List<InsSub> SubList;
 
@@ -1227,7 +1228,7 @@ namespace OpenDental
 			PaidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(ClaimProcCur,PatPlanList);
 			PaidOtherInsBaseEst=ClaimProcs.GetPaidOtherInsBaseEst(ClaimProcCur,PatPlanList);
 			WriteOffOtherIns=ClaimProcs.GetWriteOffOtherIns(ClaimProcCur,PatPlanList);
-//todo: DedOtherIns?
+			DeductibleOtherIns=ClaimProcs.GetDeductibleOtherIns(ClaimProcCur,PatPlanList);
 			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList,ClaimProcCur.InsSubNum,subList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
@@ -1654,7 +1655,7 @@ namespace OpenDental
 			}
 			if(IsProc) {
 				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,
-					HistList,LoopList,PatPlanList,PaidOtherInsTotal,PaidOtherInsBaseEst,PatCur.Age,WriteOffOtherIns,0);
+					HistList,LoopList,PatPlanList,PaidOtherInsTotal,PaidOtherInsBaseEst,PatCur.Age,WriteOffOtherIns,DeductibleOtherIns);
 				//Paid other ins is not accurate
 
 			}
