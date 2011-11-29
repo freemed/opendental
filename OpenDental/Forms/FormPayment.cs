@@ -1771,14 +1771,21 @@ namespace OpenDental {
 			}
 			PaymentCur.PayAmt=PIn.Double(textAmount.Text);//handles blank
 			PaymentCur.PayDate=PIn.Date(textDate.Text);
+			#region Recurring charge logic
 			//User chose to have a recurring payment so we need to know if the card has recurring setup and which month to apply the payment to.
 			if(IsNew && checkRecurring.Checked && comboCreditCards.SelectedIndex!=creditCards.Count) {
 				//Check if a recurring charge is setup for the selected card.
 				if(creditCards[comboCreditCards.SelectedIndex].ChargeAmt==0 
-					|| creditCards[comboCreditCards.SelectedIndex].DateStart.Year < 1880
-					|| creditCards[comboCreditCards.SelectedIndex].DateStop<=DateTime.Now) 
+					|| creditCards[comboCreditCards.SelectedIndex].DateStart.Year < 1880) 
 				{
-					MsgBox.Show(this,"The selected credit card has not been setup for recurring charges \r\nor it is past the stop date that was set for it.");
+					MsgBox.Show(this,"The selected credit card has not been setup for recurring charges.");
+					return;
+				}
+				//Check if a stop date was set and if that date falls in on today or in the past.
+				if(creditCards[comboCreditCards.SelectedIndex].DateStop.Year > 1880
+					&& creditCards[comboCreditCards.SelectedIndex].DateStop<=DateTime.Now) 
+				{
+					MsgBox.Show(this,"This card is no longer accepting recurring charges based on the stop date.");
 					return;
 				}
 				//Have the user decide what month to apply the recurring charge towards.
@@ -1795,6 +1802,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Cannot apply a recurring charge to a new card.");
 				return;
 			}
+			#endregion
 			PaymentCur.CheckNum=textCheckNum.Text;
 			PaymentCur.BankBranch=textBankBranch.Text;
 			PaymentCur.PayNote=textNote.Text;
