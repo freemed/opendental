@@ -3060,8 +3060,9 @@ namespace OpenDental{
 			if(patPlanNum > 0){
 				double paidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(cp,PatPlanList);
 				double writeOffOtherIns=ClaimProcs.GetWriteOffOtherIns(cp,PatPlanList);
+				double deductibleOtherIns=ClaimProcs.GetDeductibleOtherIns(cp,PatPlanList);
 				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benList,
-					HistList,LoopList,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns);	
+					HistList,LoopList,PatPlanList,paidOtherInsTotal,paidOtherInsTotal,PatCur.Age,writeOffOtherIns,deductibleOtherIns);	
 			}
 			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList,true,SubList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled

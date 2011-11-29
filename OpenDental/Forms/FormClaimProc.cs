@@ -1227,6 +1227,7 @@ namespace OpenDental
 			PaidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(ClaimProcCur,PatPlanList);
 			PaidOtherInsBaseEst=ClaimProcs.GetPaidOtherInsBaseEst(ClaimProcCur,PatPlanList);
 			WriteOffOtherIns=ClaimProcs.GetWriteOffOtherIns(ClaimProcCur,PatPlanList);
+//todo: DedOtherIns?
 			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList,ClaimProcCur.InsSubNum,subList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;

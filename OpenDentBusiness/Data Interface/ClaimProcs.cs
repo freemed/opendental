@@ -959,6 +959,52 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of WriteOffEstimates/Override for other insurances with lower ordinals.  Either estimates or actual writeoffs.  Will return 0 if ordinal of this claimproc is 1.</summary>
+		public static double GetDeductibleOtherIns(ClaimProc cp,List<PatPlan> patPlanList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),cp,patPlanList);
+			}
+			if(cp.ProcNum==0) {
+				return 0;
+			}
+			int thisOrdinal=PatPlans.GetOrdinal(cp.InsSubNum,patPlanList);
+			if(thisOrdinal==1) {
+				return 0;
+			}
+			string command="SELECT InsSubNum,DedEst,DedEstOverride,DedApplied,Status FROM claimproc WHERE ProcNum="+POut.Long(cp.ProcNum);
+			DataTable table=Db.GetTable(command);
+			double retVal=0;
+			long subNum;
+			int ordinal;
+			double dedEst;
+			double dedEstOverride;
+			double dedApplied;
+			ClaimProcStatus status;
+			for(int i=0;i<table.Rows.Count;i++) {
+				subNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+				ordinal=PatPlans.GetOrdinal(subNum,patPlanList);
+				if(ordinal >= thisOrdinal) {
+					continue;
+				}
+				dedEst=PIn.Double(table.Rows[i]["DedEst"].ToString());
+				dedEstOverride=PIn.Double(table.Rows[i]["DedEstOverride"].ToString());
+				dedApplied=PIn.Double(table.Rows[i]["DedApplied"].ToString());
+				status=(ClaimProcStatus)PIn.Int(table.Rows[i]["Status"].ToString());
+				if(status==ClaimProcStatus.Received || status==ClaimProcStatus.Supplemental) {
+					retVal+=dedApplied;
+				}
+				if(status==ClaimProcStatus.Estimate || status==ClaimProcStatus.NotReceived) {
+					if(dedEstOverride != -1) {
+						retVal+=dedEst;
+					}
+					else if(dedEst !=-1){
+						retVal+=dedEst;
+					}
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>Simply gets insEstTotal or its override if applicable.</summary>
 		public static double GetInsEstTotal(ClaimProc cp) {
 			//No need to check RemotingRole; no call to db.
