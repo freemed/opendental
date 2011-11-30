@@ -6,9 +6,64 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class ProcedureLogic{
 
-		///<summary>The supplied DataRows must include the following columns: Priority(optional),ToothRange,ToothNum,ProcCode.  This sorts procedures based on priority, then tooth number, then procCode.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
+		///<summary>The supplied DataRows must include the following columns: ProcStatus(optional),Priority(optional),ToothRange,ToothNum,ProcCode.  This sorts procedures based on priority, then tooth number, then procCode.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
 		public static int CompareProcedures(DataRow x,DataRow y) {
-			//first, by priority
+			//first, by status
+			if(x.Table.Columns.Contains("ProcStatus") && y.Table.Columns.Contains("ProcStatus")) {
+				if(x["ProcStatus"].ToString()!=y["ProcStatus"].ToString()) {
+					//Cn,TP,R,EO,EC,C,D
+					int xIdx=0;
+					switch(x["ProcStatus"].ToString()) {
+						case "7"://Cn
+							xIdx=0;
+							break;
+						case "1"://TP
+							xIdx=1;
+							break;
+						case "5"://R
+							xIdx=2;
+							break;
+						case "4"://EO
+							xIdx=3;
+							break;
+						case "3"://EC
+							xIdx=4;
+							break;
+						case "2"://C
+							xIdx=5;
+							break;
+						case "6"://D
+							xIdx=6;
+							break;
+					}
+					int yIdx=0;
+					switch(y["ProcStatus"].ToString()) {
+						case "7"://Cn
+							yIdx=0;
+							break;
+						case "1"://TP
+							yIdx=1;
+							break;
+						case "5"://R
+							yIdx=2;
+							break;
+						case "4"://EO
+							yIdx=3;
+							break;
+						case "3"://EC
+							yIdx=4;
+							break;
+						case "2"://C
+							yIdx=5;
+							break;
+						case "6"://D
+							yIdx=6;
+							break;
+					}
+					return xIdx.CompareTo(yIdx);
+				}
+			}
+			//by priority
 			if(x.Table.Columns.Contains("Priority") && y.Table.Columns.Contains("Priority")){
 				if(x["Priority"].ToString()!=y["Priority"].ToString()) {//if priorities are different
 					if(x["Priority"].ToString()=="0") {

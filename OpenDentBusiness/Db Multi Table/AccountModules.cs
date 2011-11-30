@@ -1691,21 +1691,20 @@ namespace OpenDentBusiness {
 	class AccountLineComparer : IComparer<DataRow>	{
 		///<summary></summary>
 		public int Compare (DataRow x,DataRow y){
-			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
-				if(((DateTime)x["DateTime"]).Date==((DateTime)y["DateTime"]).Date) {//and the dates are the same
-					return ProcedureLogic.CompareProcedures(x,y);
-				}
-			}
 			//if dates are different, then sort by date
 			if(((DateTime)x["DateTime"]).Date!=((DateTime)y["DateTime"]).Date){
 				return (((DateTime)x["DateTime"]).Date).CompareTo(((DateTime)y["DateTime"]).Date);
 			}
-			//Procedures come before other types
+			//Sort by Type (right now just sorts procedures first...)
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()=="0"){
 				return -1;
 			}
 			if(x["ProcNum"].ToString()=="0" && y["ProcNum"].ToString()!="0"){
 				return 1;
+			}
+			//Sort procedures by status, priority, tooth region/num, proc code
+			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
+				return ProcedureLogic.CompareProcedures(x,y);
 			}
 			return 0;
 		}

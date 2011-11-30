@@ -1205,19 +1205,69 @@ namespace OpenDentBusiness {
 
 		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode. This sorts all objects in Chart module based on their dates, times, priority, and toothnum.  For time comparisons, procs are not included.  But if other types such as comm have a time component in ProcDate, then they will be sorted by time as well.</summary>
 		public static int CompareChartRows(DataRow x,DataRow y) {
-			//No need to check RemotingRole; no call to db.
-			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
-				if(((DateTime)x["ProcDate"]).Date==((DateTime)y["ProcDate"]).Date) {//and the dates are the same
-					return ProcedureLogic.CompareProcedures(x,y);
-					//IComparer procComparer=new ProcedureComparer();
-					//return procComparer.Compare(x,y);//sort by priority, toothnum, procCode
-					//return 0;
-				}
+			//if dates are different, then sort by date
+			if(((DateTime)x["ProcDate"]).Date!=((DateTime)y["ProcDate"]).Date){
+				return ((DateTime)x["ProcDate"]).Date.CompareTo(((DateTime)y["ProcDate"]).Date);
 			}
-			//In all other situations, all we care about is the date/time.
-			return ((DateTime)x["ProcDate"]).CompareTo(((DateTime)y["ProcDate"]));
-			//IComparer myComparer = new ObjectDateComparer();
-			//return myComparer.Compare(x,y);
+			//Sort by Type. Types are: Appointments, Procedures, CommLog, Tasks, Email, Lab Cases, Rx, Sheets.----------------------------------------------------
+			int xInd=0;
+			if(x["AptNum"].ToString()!="0") {
+				xInd=0;
+			}
+			else if(x["ProcNum"].ToString()!="0") {
+				xInd=1;
+			}
+			else if(x["CommlogNum"].ToString()!="0") {
+				xInd=2;
+			}
+			else if(x["TaskNum"].ToString()!="0") {
+				xInd=3;
+			}
+			else if(x["EmailMessageNum"].ToString()!="0") {
+				xInd=4;
+			}
+			else if(x["LabCaseNum"].ToString()!="0") {
+				xInd=5;
+			}
+			else if(x["RxNum"].ToString()!="0") {
+				xInd=6;
+			}
+			else if(x["SheetNum"].ToString()!="0") {
+				xInd=7;
+			}
+			int yInd=0;
+			if(y["AptNum"].ToString()!="0") {
+				yInd=0;
+			}
+			else if(y["ProcNum"].ToString()!="0") {
+				yInd=1;
+			}
+			else if(y["CommlogNum"].ToString()!="0") {
+				yInd=2;
+			}
+			else if(y["TaskNum"].ToString()!="0") {
+				yInd=3;
+			}
+			else if(y["EmailMessageNum"].ToString()!="0") {
+				yInd=4;
+			}
+			else if(y["LabCaseNum"].ToString()!="0") {
+				yInd=5;
+			}
+			else if(y["RxNum"].ToString()!="0") {
+				yInd=6;
+			}
+			else if(y["SheetNum"].ToString()!="0") {
+				yInd=7;
+			}
+			if(xInd!=yInd) {
+				return xInd.CompareTo(yInd);
+			}//End sort by type------------------------------------------------------------------------------------------------------------------------------------
+			//Sort procedures by status, priority, tooth region/num, proc code
+			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
+				return ProcedureLogic.CompareProcedures(x,y);
+			}
+			return 0;
 		}
 
 

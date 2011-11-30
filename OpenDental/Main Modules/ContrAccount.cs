@@ -1821,8 +1821,7 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void RefreshModuleData(long patNum,bool isSelectingFamily) {
-			if (patNum == 0)
-			{
+			if (patNum == 0){
 				PatCur=null;
 				FamCur=null;
 				DataSetMain=null;
@@ -1832,12 +1831,11 @@ namespace OpenDental {
 			DateTime fromDate=DateTime.MinValue;
 			DateTime toDate=DateTime.MaxValue;
 			if(textDateStart.errorProvider1.GetError(textDateStart)==""
-				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
-			{
-				if(textDateStart.Text!=""){
+				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="") {
+				if(textDateStart.Text!="") {
 					fromDate=PIn.Date(textDateStart.Text);
 				}
-				if(textDateEnd.Text!=""){
+				if(textDateEnd.Text!="") {
 					toDate=PIn.Date(textDateEnd.Text);
 				}
 			}
