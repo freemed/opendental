@@ -470,9 +470,9 @@ DROP TABLE IF EXISTS `preferencem`;
 
 CREATE TABLE `preferencem` (
   `CustomerNum` bigint(20) NOT NULL,
-  `PrefmName` varchar(255) NOT NULL,
+  `PrefName` varchar(255) NOT NULL,
   `ValueString` text NOT NULL,
-  PRIMARY KEY (`CustomerNum`,`PrefmName`)
+  PRIMARY KEY (`CustomerNum`,`PrefName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

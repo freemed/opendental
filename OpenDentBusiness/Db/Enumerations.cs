@@ -1496,6 +1496,7 @@ namespace OpenDentBusiness{
 		Pharmacy,
 		Statement,
 		Document,
+		Recall
 	}
 
 	public enum HL7MessageStatus {

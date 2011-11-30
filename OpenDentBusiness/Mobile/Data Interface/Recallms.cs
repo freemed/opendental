@@ -74,58 +74,10 @@ namespace OpenDentBusiness.Mobile {
 	*/
 
 
-		/* move this to Recalls.cs
-		 
-		 * 		public static List<long> GetChangedSinceRecallNums(DateTime changedSince) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),changedSince);
-			}
-			string command="SELECT RecallNum FROM recall WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable dt=Db.GetTable(command);
-			List<long> recallnums = new List<long>(dt.Rows.Count);
-			for(int i=0;i<dt.Rows.Count;i++) {
-				recallnums.Add(PIn.Long(dt.Rows[i]["RecallNum"].ToString()));
-			}
-			return recallnums;
-		}
 
-		///<summary>Used along with GetChangedSinceRecallNums</summary>
-		public static List<Recall> GetMultRecalls(List<long> recallNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Recall>>(MethodBase.GetCurrentMethod(),recallNums);
-			}
-			string strRecallNums="";
-			DataTable table;
-			if(recallNums.Count>0) {
-				for(int i=0;i<recallNums.Count;i++) {
-					if(i>0) {
-						strRecallNums+="OR ";
-					}
-					strRecallNums+="RecallNum='"+recallNums[i].ToString()+"' ";
-				}
-				string command="SELECT * FROM recall WHERE "+strRecallNums;
-				table=Db.GetTable(command);
-			}
-			else {
-				table=new DataTable();
-			}
-			Recall[] multRecalls=Crud.RecallCrud.TableToList(table).ToArray();
-			List<Recall> recallList=new List<Recall>(multRecalls);
-			return recallList;
-		}
+		 
+		 
 
-		///<summary>Changes the value of the DateTStamp column to the current time stamp for all recalls of a patient</summary>
-		public static void ResetTimeStamps(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
-				return;
-			}
-			string command="UPDATE recall SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
-			Db.NonQ(command);
-		}
-		 
-		 
-		 */
 
 
 	}

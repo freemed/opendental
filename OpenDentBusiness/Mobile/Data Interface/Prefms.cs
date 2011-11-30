@@ -18,10 +18,10 @@ namespace OpenDentBusiness.Mobile {
 				PrefmC prefmc=new PrefmC();
 				for(int i=0;i<table.Rows.Count;i++) {
 					prefm=new Prefm();
-					if(table.Columns.Contains("PrefmNum")) {
-						prefm.PrefmNum=PIn.Long(table.Rows[i]["PrefmNum"].ToString());
+					if(table.Columns.Contains("PrefNum")) {
+						prefm.PrefNum=PIn.Long(table.Rows[i]["PrefNum"].ToString());
 					}
-					prefm.PrefmName=PIn.String(table.Rows[i]["PrefmName"].ToString());
+					prefm.PrefmName=PIn.String(table.Rows[i]["PrefName"].ToString());
 					prefm.ValueString=PIn.String(table.Rows[i]["ValueString"].ToString());
 					prefmc.Dict.Add(prefm.PrefmName,prefm);
 				}
@@ -46,17 +46,17 @@ namespace OpenDentBusiness.Mobile {
 			///<summary>Returns true if a change was required, or false if no change needed.</summary>
 			public void UpdateString(long customerNum,PrefmName prefmName,string newValue) {
 				string command="SELECT * FROM preferencem "
-					+"WHERE CustomerNum =" +POut.Long(customerNum)+" AND PrefmName = '"+POut.String(prefmName.ToString())+"'";
+					+"WHERE CustomerNum =" +POut.Long(customerNum)+" AND PrefName = '"+POut.String(prefmName.ToString())+"'";
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					command = "UPDATE preferencem SET "
 					+"ValueString = '"+POut.String(newValue)+"' "
-					+"WHERE CustomerNum =" +POut.Long(customerNum)+" AND PrefmName = '"+POut.String(prefmName.ToString())+"'";
+					+"WHERE CustomerNum =" +POut.Long(customerNum)+" AND PrefName = '"+POut.String(prefmName.ToString())+"'";
 					Db.NonQ(command);
 				}
 				else {
 					command = "INSERT into preferencem " 
-					+"(CustomerNum,PrefmName,ValueString) VALUES "
+					+"(CustomerNum,PrefName,ValueString) VALUES "
 					+"("+POut.Long(customerNum)+",'"+POut.String(prefmName.ToString())+"','"+POut.String(newValue)+"')";
 					Db.NonQ(command);
 				}

@@ -253,3 +253,27 @@ namespace OpenDentBusiness.Mobile {
 					Db.NonQ(command);
 				}
 				*/
+
+				/*
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS recallm";
+					Db.NonQ(command);
+					command=@"CREATE TABLE recallm (
+						CustomerNum bigint NOT NULL,
+						RecallNum bigint NOT NULL,
+						PatNum bigint NOT NULL,
+						DateDue date NOT NULL DEFAULT '0001-01-01',
+						DatePrevious date NOT NULL DEFAULT '0001-01-01',
+						RecallStatus bigint NOT NULL,
+						Note varchar(255) NOT NULL,
+						IsDisabled tinyint NOT NULL,
+						DisableUntilBalance double NOT NULL,
+						DisableUntilDate date NOT NULL DEFAULT '0001-01-01',
+						INDEX(CustomerNum),,
+						INDEX(RecallNum),,
+						INDEX(PatNum),
+						INDEX(RecallStatus)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				*/

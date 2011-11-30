@@ -446,6 +446,7 @@
     <Compile Include="Mobile\Crud\MedicationPatmCrud.cs" />
     <Compile Include="Mobile\Crud\PharmacymCrud.cs" />
     <Compile Include="Mobile\Crud\ProvidermCrud.cs" />
+    <Compile Include="Mobile\Crud\RecallmCrud.cs" />
     <Compile Include="Mobile\Crud\RxPatmCrud.cs" />
     <Compile Include="Mobile\Crud\StatementmCrud.cs" />
     <Compile Include="Mobile\Crud\UsermCrud.cs" />

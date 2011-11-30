@@ -109,6 +109,9 @@ namespace OpenDentBusiness{
 				if(list[i].ObjectType==DeletedObjectType.Document) {
 					Mobile.Crud.DocumentmCrud.Delete(customerNum,list[i].ObjectNum);
 				}
+				if(list[i].ObjectType==DeletedObjectType.Recall) {
+					Mobile.Crud.RecallmCrud.Delete(customerNum,list[i].ObjectNum);
+				}
 			}
 		}
 

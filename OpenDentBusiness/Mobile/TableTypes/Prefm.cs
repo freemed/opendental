@@ -15,9 +15,9 @@ namespace OpenDentBusiness.Mobile {
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
 		[CrudColumn(IsPriKeyMobile2=true)]
-		public long PrefmNum;
+		public long PrefNum;
 		///<summary>The text 'key' in the key/value pairing.</summary>
-		public string PrefmName;
+		public string PrefmName;// this is named PrefmName rather than PrefName because there would be name ambigiouty with Pref.PrefName which would cause a compilation error in the main program where ever PrefName (Pref.PrefName) is used.
 		///<summary>The stored value.</summary>
 		public string ValueString;
 	}
