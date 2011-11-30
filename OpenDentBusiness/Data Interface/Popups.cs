@@ -17,10 +17,10 @@ namespace OpenDentBusiness{
 			Patient patCur=Patients.GetPat(patNum);
 			string command="SELECT * FROM popup "
 				+"WHERE PatNum = "+POut.Long(patNum)+" "
-				+"OR (PatNum IN (SELECT Guarantor FROM Patient "
+				+"OR (PatNum IN (SELECT Guarantor FROM patient "
 						+"WHERE PatNum = "+POut.Long(patNum)+") "
 					+"AND IsFamily = "+POut.Int((int)EnumPopupFamily.Family)+") "
-				+"OR (PatNum IN (SELECT SuperFamily FROM Patient "
+				+"OR (PatNum IN (SELECT SuperFamily FROM patient "
 						+"WHERE PatNum = "+POut.Long(patNum)+") "
 					+"AND IsFamily = "+POut.Int((int)EnumPopupFamily.SuperFamily)+") ";
 			return Crud.PopupCrud.SelectMany(command);
@@ -32,10 +32,10 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),pat);
 			}
 			string command="SELECT * FROM popup "
-					+"WHERE PatNum IN (SELECT PatNum FROM Patient "
+					+"WHERE PatNum IN (SELECT PatNum FROM patient "
 						+"WHERE Guarantor = "+POut.Long(pat.Guarantor)+") ";
 			if(pat.SuperFamily!=0) {//They are part of a super family
-				command+="OR PatNum IN (SELECT PatNum FROM Patient "
+				command+="OR PatNum IN (SELECT PatNum FROM patient "
 						+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
 			}
 			return Crud.PopupCrud.SelectMany(command);
