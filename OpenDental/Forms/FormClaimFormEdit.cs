@@ -165,9 +165,9 @@ namespace OpenDental{
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(850,1200);
 			this.panel2.TabIndex = 2;
+			this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
 			this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
 			this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
-			this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
 			this.panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseUp);
 			// 
 			// labelWarning
@@ -230,8 +230,8 @@ namespace OpenDental{
 			this.listItems.Size = new System.Drawing.Size(114,329);
 			this.listItems.TabIndex = 8;
 			this.listItems.DoubleClick += new System.EventHandler(this.listItems_DoubleClick);
-			this.listItems.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listItems_MouseUp);
 			this.listItems.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listItems_MouseDown);
+			this.listItems.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listItems_MouseUp);
 			// 
 			// butAdd
 			// 
@@ -372,9 +372,9 @@ namespace OpenDental{
 			// 
 			this.textUniqueID.Location = new System.Drawing.Point(928,55);
 			this.textUniqueID.Name = "textUniqueID";
+			this.textUniqueID.ReadOnly = true;
 			this.textUniqueID.Size = new System.Drawing.Size(51,20);
 			this.textUniqueID.TabIndex = 24;
-			this.textUniqueID.Validating += new System.ComponentModel.CancelEventHandler(this.textUniqueID_Validating);
 			// 
 			// checkPrintImages
 			// 
@@ -460,11 +460,11 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormClaimFormEdit_Layout);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClaimFormEdit_Closing);
-			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormClaimFormEdit_KeyUp);
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormClaimFormEdit_KeyDown);
 			this.Load += new System.EventHandler(this.FormClaimFormEdit_Load);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormClaimFormEdit_KeyDown);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormClaimFormEdit_KeyUp);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormClaimFormEdit_Layout);
 			this.panel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -855,27 +855,6 @@ namespace OpenDental{
 
 		private void vScrollBar1_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e) {
 			panel2.Location=new Point(0,-vScrollBar1.Value);
-		}
-
-		private void textUniqueID_Validating(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(ClaimFormCur.UniqueID==textUniqueID.Text){
-				return;
-			}
-			if(ClaimFormCur.UniqueID==""){
-				//this is a user-created claimform
-				MessageBox.Show(Lan.g(this,"Remember if you assign a Unique ID, that it should be your name followed by a number. For instance JoeDeveloper4. Claim forms released by us will be of the form OD#."));
-			}
-			else{
-				//they are trying to change a claimform with an existing UniqueID
-				if(MessageBox.Show(Lan.g(this,"Are you sure you want to change the Unique ID?  It might be better to make a copy of the claim form instead. If you change it, future upgrades will not be made to this form automatically. Continue anyway?")
-					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-				{
-					textUniqueID.Text=ClaimFormCur.UniqueID;
-					e.Cancel=true;
-					return;
-				}
-				//allow the change
-			}
 		}
 
 		private void listItems_DoubleClick(object sender, System.EventArgs e) {
