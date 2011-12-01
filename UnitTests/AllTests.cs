@@ -1075,7 +1075,7 @@ namespace UnitTests {
 			//Validate
 			string retVal="";
 			ClaimProc claimProc;
-		//Test 17 Part 1 (copied from Unit Test 1)----------------------------------------------------------------------------------------------------
+			//Test 17 Part 1 (copied from Unit Test 1)----------------------------------------------------------------------------------------------------
 			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 			claimProcs=ClaimProcs.Refresh(patNum);
 			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
@@ -1093,7 +1093,7 @@ namespace UnitTests {
 			if(claimProc.WriteOffEst!=0) {
 				throw new Exception("Should be 0. \r\n");
 			}
-		//Test 17 Part 2 (copied from Unit Test 2)----------------------------------------------------------------------------------------------------
+			//Test 17 Part 2 (copied from Unit Test 2)----------------------------------------------------------------------------------------------------
 			//switch the fees
 			fee=Fees.GetFee(codeNum,feeSchedNum1);
 			fee.Amount=650;
@@ -1174,7 +1174,7 @@ namespace UnitTests {
 			//Validate
 			string retVal="";
 			ClaimProc claimProc;
-		//Test 17 Part 1 (copied from Unit Test 1)----------------------------------------------------------------------------------------------------
+			//Test 18 Part 1 (copied from Unit Test 1)----------------------------------------------------------------------------------------------------
 			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 			claimProcs=ClaimProcs.Refresh(patNum);
 			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
@@ -1239,7 +1239,7 @@ namespace UnitTests {
 			claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,plan1.PlanNum,subNum1);
 			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,plan2.PlanNum,subNum2);
-			if(claimProc2.InsEstTotal!=10) {//Second procedure should show no deductible.
+			if(claimProc2.InsEstTotal!=10) {
 				throw new Exception("Should be 10. \r\n");
 			}
 			retVal+="19: Passed.  Multiple deductibles are accounted for.\r\n";
