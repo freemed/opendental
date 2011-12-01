@@ -238,6 +238,7 @@ namespace OpenDental{
 		private MenuItem menuItemPayerIDs;
 		private MenuItem menuItemTestLatency;
 		private FormLogOn FormLogOn_;
+		private bool IsFormLogOnLastActive;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -1226,13 +1227,13 @@ namespace OpenDental{
 			// 
 			this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
 			this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList32.Images.SetKeyName(0,"Appt32.gif");
-			this.imageList32.Images.SetKeyName(1,"Family32b.gif");
-			this.imageList32.Images.SetKeyName(2,"Account32b.gif");
-			this.imageList32.Images.SetKeyName(3,"TreatPlan3D.gif");
-			this.imageList32.Images.SetKeyName(4,"chart32.gif");
-			this.imageList32.Images.SetKeyName(5,"Images32.gif");
-			this.imageList32.Images.SetKeyName(6,"Manage32.gif");
+			this.imageList32.Images.SetKeyName(0, "Appt32.gif");
+			this.imageList32.Images.SetKeyName(1, "Family32b.gif");
+			this.imageList32.Images.SetKeyName(2, "Account32b.gif");
+			this.imageList32.Images.SetKeyName(3, "TreatPlan3D.gif");
+			this.imageList32.Images.SetKeyName(4, "chart32.gif");
+			this.imageList32.Images.SetKeyName(5, "Images32.gif");
+			this.imageList32.Images.SetKeyName(6, "Manage32.gif");
 			// 
 			// timerSignals
 			// 
@@ -1242,9 +1243,9 @@ namespace OpenDental{
 			// 
 			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.panelSplitter.Location = new System.Drawing.Point(71,542);
+			this.panelSplitter.Location = new System.Drawing.Point(71, 542);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(769,7);
+			this.panelSplitter.Size = new System.Drawing.Size(769, 7);
 			this.panelSplitter.TabIndex = 50;
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
@@ -1272,11 +1273,11 @@ namespace OpenDental{
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
-			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
-			this.imageListMain.Images.SetKeyName(2,"email.gif");
-			this.imageListMain.Images.SetKeyName(3,"tasksNicer.gif");
-			this.imageListMain.Images.SetKeyName(4,"label.gif");
+			this.imageListMain.Images.SetKeyName(0, "Pat.gif");
+			this.imageListMain.Images.SetKeyName(1, "commlog.gif");
+			this.imageListMain.Images.SetKeyName(2, "email.gif");
+			this.imageListMain.Images.SetKeyName(3, "tasksNicer.gif");
+			this.imageListMain.Images.SetKeyName(4, "label.gif");
 			// 
 			// menuPatient
 			// 
@@ -1319,14 +1320,14 @@ namespace OpenDental{
 			// 
 			// butBigPhones
 			// 
-			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBigPhones.Autosize = true;
 			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBigPhones.CornerRadius = 4F;
-			this.butBigPhones.Location = new System.Drawing.Point(143,565);
+			this.butBigPhones.Location = new System.Drawing.Point(143, 565);
 			this.butBigPhones.Name = "butBigPhones";
-			this.butBigPhones.Size = new System.Drawing.Size(75,24);
+			this.butBigPhones.Size = new System.Drawing.Size(75, 24);
 			this.butBigPhones.TabIndex = 52;
 			this.butBigPhones.Text = "Big Phones";
 			this.butBigPhones.Visible = false;
@@ -1334,9 +1335,9 @@ namespace OpenDental{
 			// 
 			// lightSignalGrid1
 			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
 			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
@@ -1348,11 +1349,11 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,585);
+			this.ClientSize = new System.Drawing.Size(982, 585);
 			this.Controls.Add(this.butBigPhones);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
-			this.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.Menu = this.mainMenu;
@@ -4630,19 +4631,29 @@ namespace OpenDental{
 			//If a breakpoint is set below here, ActiveForm will erroneously show as null.
 			if(Form.ActiveForm==null) {//some other program has focus
 				FormRecentlyOpenForLogoff=null;
+				//Do not alter IsFormLogOnLastActive because it could still be active in background.
 			}
 			else if(Form.ActiveForm==this) {//main form active
 				FormRecentlyOpenForLogoff=null;
+				//User must have logged back in so IsFormLogOnLastActive should be false.
+				IsFormLogOnLastActive=false;
 			}
-			else{//A different form is active, some dialog.
+			else {//Some Open Dental dialog is active.
 				if(Form.ActiveForm==FormRecentlyOpenForLogoff) {
 					//The same form is active as last time, so don't add events again.
-					//The active form will now be constantly resetting the dateTimeLastActivity
+					//The active form will now be constantly resetting the dateTimeLastActivity.
 				}
 				else {//this is the first time this form has been encountered, so attach events and don't do anything else
 					AttachMouseMoveToForm(Form.ActiveForm);
 					FormRecentlyOpenForLogoff=Form.ActiveForm;
 					dateTimeLastActivity=DateTime.Now;
+					//Flag FormLogOn as the active form so that OD doesn't continue trying to log the user off when using the web service.
+					if(Form.ActiveForm.GetType()==typeof(FormLogOn)) {
+						IsFormLogOnLastActive=true;
+					}
+					else {
+						IsFormLogOnLastActive=false;
+					}
 					return;
 				}
 			}
@@ -4654,8 +4665,14 @@ namespace OpenDental{
 			if(Security.CurUser==null) {//nobody logged on
 				return;
 			}
+			//The above check works unless using web service.  With web service, CurUser is not set to null when FormLogOn is shown.
+			if(IsFormLogOnLastActive) {//Don't try to log off a user that is already logged off.
+				return;
+			}
 			FormLogoffWarning formW=new FormLogoffWarning();
 			formW.ShowDialog();
+			//User could be working outside of OD and the Log On window will never become "active" so we set it here for a fail safe.
+			IsFormLogOnLastActive=true;
 			if(formW.DialogResult!=DialogResult.OK) {
 				dateTimeLastActivity=DateTime.Now;
 				return;//user hit cancel, so don't log off
@@ -4709,7 +4726,9 @@ namespace OpenDental{
 				}
 			}
 			Application.DoEvents();//so that the window background will refresh.
-			Security.CurUser=oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Security.CurUser=oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
+			}
 			FormLogOn_=new FormLogOn();
 			FormLogOn_.ShowDialog(this);
 			if(FormLogOn_.DialogResult==DialogResult.Cancel) {
@@ -4729,6 +4748,8 @@ namespace OpenDental{
 			if(userControlTasks1.Visible) {
 				userControlTasks1.InitializeOnStartup();
 			}
+			//User logged back in so log on form is no longer the active window.
+			IsFormLogOnLastActive=false;
 			dateTimeLastActivity=DateTime.Now;
 			if(myOutlookBar.SelectedIndex==-1) {
 				MsgBox.Show(this,"You do not have permission to use any modules.");
