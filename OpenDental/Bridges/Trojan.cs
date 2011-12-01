@@ -480,7 +480,7 @@ namespace OpenDental.Bridges {
 			string[] fields;
 			int percent;
 			double amt;
-			string[] splitField;//if a field is a sentence with more than one word, we can split it for analysis
+			string rowVal;
 			TrojanObject troj=new TrojanObject();
 			troj.BenefitList=new List<Benefit>();
 			troj.BenefitNotes="";
@@ -498,6 +498,7 @@ namespace OpenDental.Bridges {
 				fields[0]=fields[0].Trim();
 				fields[1]=fields[1].Trim();
 				fields[2]=fields[2].Trim();
+				rowVal=fields[2].Trim();
 				if(fields[2]==""){
 					continue;
 				}
@@ -606,12 +607,15 @@ namespace OpenDental.Bridges {
 						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "PREV"://eg 100%
-						splitField=fields[2].Split(new char[] { ' ' });
-						if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+						if(rowVal.EndsWith("%")) {
+							percent=PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
+						}
+						else if(rowVal.ToLower()=="not covered") {
+							percent=0;
+						}
+						else {
 							break;
 						}
-						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -629,12 +633,15 @@ namespace OpenDental.Bridges {
 						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "BASIC":
-						splitField=fields[2].Split(new char[] { ' ' });
-						if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+						if(rowVal.EndsWith("%")) {
+							percent=PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
+						}
+						else if(rowVal.ToLower()=="not covered") {
+							percent=0;
+						}
+						else {
 							break;
 						}
-						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -664,12 +671,15 @@ namespace OpenDental.Bridges {
 						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "MAJOR":
-						splitField=fields[2].Split(new char[] { ' ' });
-						if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+						if(rowVal.EndsWith("%")) {
+							percent=PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
+						}
+						else if(rowVal.ToLower()=="not covered") {
+							percent=0;
+						}
+						else {
 							break;
 						}
-						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -687,12 +697,15 @@ namespace OpenDental.Bridges {
 						//troj.BenefitList.Add(ben.Copy());//later
 						break;
 					case "CROWNS"://Examples: Paid Major, or 80%.  We will only process percentages.
-						splitField=fields[2].Split(new char[] { ' ' });
-						if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+						if(rowVal.EndsWith("%")) {
+							percent=PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
+						}
+						else if(rowVal.ToLower()=="not covered") {
+							percent=0;
+						}
+						else {
 							break;
 						}
-						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -719,12 +732,15 @@ namespace OpenDental.Bridges {
 						}
 						break;
 					case "ORPCT":
-						splitField=fields[2].Split(new char[] { ' ' });
-						if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+						if(rowVal.EndsWith("%")) {
+							percent=PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
+						}
+						else if(rowVal.ToLower()=="not covered") {
+							percent=0;
+						}
+						else {
 							break;
 						}
-						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.Int(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
