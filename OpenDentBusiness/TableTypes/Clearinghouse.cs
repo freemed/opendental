@@ -49,6 +49,16 @@ namespace OpenDentBusiness{
 		public string SenderTelephone;
 		///<summary>Usually the same as ISA08, but at least one clearinghouse uses a different number here.</summary>
 		public string GS03;
+		///<summary>Authorization information. Almost always blank. Used for Denti-Cal.</summary>
+		public string ISA02;
+		///<summary>Security information. Almost always blank. Used for Denti-Cal.</summary>
+		public string ISA04;
+		///<summary>X12 component element separator. Two digit hexadecimal string representing an ASCII character or blank. Usually blank, implying 3A which represents ':'. For Denti-Cal, hexadecimal value 22 must be used, corresponding to '"'.</summary>
+		public string ISA16;
+		///<summary>X12 data element separator. Two digit hexadecimal string representing an ASCII character or blank. Usually blank, implying 2A which represents '*'. For Denti-Cal, hexadecimal value 1D must be used, corresponding to the "group separator" character which has no visual representation.</summary>
+		public string SeparatorData;
+		///<summary>X12 segment terminator. Two digit hexadecimal string representing an ASCII character or blank. Usually blank, implying 7E which represents '~'. For Denti-Cal, hexadecimal value 1C must be used, corresponding to the "file separator" character which has no visual representation.</summary>
+		public string SeparatorSegment;
 
 
 		public Clearinghouse() {

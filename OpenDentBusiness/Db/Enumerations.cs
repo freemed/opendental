@@ -924,7 +924,9 @@ namespace OpenDentBusiness{
 		///<summary>11</summary>
 		MercuryDE,
 		///<summary>12</summary>
-		ClaimX
+		ClaimX,
+		///<summary>13</summary>
+		DentiCal
 	}
 
 	///<summary></summary>

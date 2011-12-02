@@ -7632,7 +7632,47 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="INSERT INTO `claimformitem` (`ClaimFormItemNum`,`ClaimFormNum`,`ImageFileName`,`FieldName`,`FormatString`,`XPos`,`YPos`,`Width`,`Height`) "
 					+"VALUES ("+POut.Long(claimFormItemNum++)+","+POut.Long(claimFormNum)+",'','TreatingDentistNPI','','600','966','100','17')";
 				Db.NonQ(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clearinghouse ADD ISA02 varchar(10) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clearinghouse ADD ISA02 varchar2(10)";
+					Db.NonQ(command);
+				} if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clearinghouse ADD ISA04 varchar(10) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clearinghouse ADD ISA04 varchar2(10)";
+					Db.NonQ(command);
+				} if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clearinghouse ADD ISA16 varchar(2) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clearinghouse ADD ISA16 varchar2(2)";
+					Db.NonQ(command);
+				} if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clearinghouse ADD SeparatorData varchar(2) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clearinghouse ADD SeparatorData varchar2(2)";
+					Db.NonQ(command);
+				} if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clearinghouse ADD SeparatorSegment varchar(2) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clearinghouse ADD SeparatorSegment varchar2(2)";
+					Db.NonQ(command);
+				}
+				//Denti-Cal clearinghouse.
+				command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+					LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+					VALUES ('Denti-Cal','','','5','ZZ','','ZZ','DENTICAL','P','','','13','',0,0,'','','','DENTICAL','DENTICAL','NONE','22','1D','1C')";
+				Db.NonQ(command);
 				
 
 

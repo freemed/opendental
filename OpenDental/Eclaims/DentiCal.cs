@@ -106,15 +106,17 @@ namespace OpenDental.Eclaims {
 							}
 						}
 						//TODO: Is the following archive step allowed?
-						//Move the processed files into the Archive folder within the Out folder on the Denti-Cal sftp so that history is preserved.
-						string archiveFilePath=retrievePath+"Archive/"+getFileName;
-						try {
-							ch.rm(archiveFilePath);
+						if(success) {
+							//Move the processed files into the Archive folder within the Out folder on the Denti-Cal sftp so that history is preserved.
+							string archiveFilePath=retrievePath+"Archive/"+getFileName;
+							try {
+								ch.rm(archiveFilePath);
+							}
+							catch {
+								//Remove any destination files by the same exact name. The file will most likely not be present.
+							}
+							ch.rename(getFilePath,archiveFilePath);
 						}
-						catch {
-							//Remove any destination files by the same exact name. The file will most likely not be present.
-						}
-						ch.rename(getFilePath,archiveFilePath);
 					}
 				}
 				else { //Send batch of claims.

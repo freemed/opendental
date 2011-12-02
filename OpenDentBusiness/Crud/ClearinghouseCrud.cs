@@ -66,6 +66,11 @@ namespace OpenDentBusiness.Crud{
 				clearinghouse.SenderName      = PIn.String(table.Rows[i]["SenderName"].ToString());
 				clearinghouse.SenderTelephone = PIn.String(table.Rows[i]["SenderTelephone"].ToString());
 				clearinghouse.GS03            = PIn.String(table.Rows[i]["GS03"].ToString());
+				clearinghouse.ISA02           = PIn.String(table.Rows[i]["ISA02"].ToString());
+				clearinghouse.ISA04           = PIn.String(table.Rows[i]["ISA04"].ToString());
+				clearinghouse.ISA16           = PIn.String(table.Rows[i]["ISA16"].ToString());
+				clearinghouse.SeparatorData   = PIn.String(table.Rows[i]["SeparatorData"].ToString());
+				clearinghouse.SeparatorSegment= PIn.String(table.Rows[i]["SeparatorSegment"].ToString());
 				retVal.Add(clearinghouse);
 			}
 			return retVal;
@@ -106,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClearinghouseNum,";
 			}
-			command+="Description,ExportPath,Payors,Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES(";
+			command+="Description,ExportPath,Payors,Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(clearinghouse.ClearinghouseNum)+",";
 			}
@@ -129,7 +134,12 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(clearinghouse.LoginID)+"',"
 				+"'"+POut.String(clearinghouse.SenderName)+"',"
 				+"'"+POut.String(clearinghouse.SenderTelephone)+"',"
-				+"'"+POut.String(clearinghouse.GS03)+"')";
+				+"'"+POut.String(clearinghouse.GS03)+"',"
+				+"'"+POut.String(clearinghouse.ISA02)+"',"
+				+"'"+POut.String(clearinghouse.ISA04)+"',"
+				+"'"+POut.String(clearinghouse.ISA16)+"',"
+				+"'"+POut.String(clearinghouse.SeparatorData)+"',"
+				+"'"+POut.String(clearinghouse.SeparatorSegment)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -160,7 +170,12 @@ namespace OpenDentBusiness.Crud{
 				+"LoginID         = '"+POut.String(clearinghouse.LoginID)+"', "
 				+"SenderName      = '"+POut.String(clearinghouse.SenderName)+"', "
 				+"SenderTelephone = '"+POut.String(clearinghouse.SenderTelephone)+"', "
-				+"GS03            = '"+POut.String(clearinghouse.GS03)+"' "
+				+"GS03            = '"+POut.String(clearinghouse.GS03)+"', "
+				+"ISA02           = '"+POut.String(clearinghouse.ISA02)+"', "
+				+"ISA04           = '"+POut.String(clearinghouse.ISA04)+"', "
+				+"ISA16           = '"+POut.String(clearinghouse.ISA16)+"', "
+				+"SeparatorData   = '"+POut.String(clearinghouse.SeparatorData)+"', "
+				+"SeparatorSegment= '"+POut.String(clearinghouse.SeparatorSegment)+"' "
 				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouse.ClearinghouseNum);
 			Db.NonQ(command);
 		}
@@ -240,6 +255,26 @@ namespace OpenDentBusiness.Crud{
 			if(clearinghouse.GS03 != oldClearinghouse.GS03) {
 				if(command!=""){ command+=",";}
 				command+="GS03 = '"+POut.String(clearinghouse.GS03)+"'";
+			}
+			if(clearinghouse.ISA02 != oldClearinghouse.ISA02) {
+				if(command!=""){ command+=",";}
+				command+="ISA02 = '"+POut.String(clearinghouse.ISA02)+"'";
+			}
+			if(clearinghouse.ISA04 != oldClearinghouse.ISA04) {
+				if(command!=""){ command+=",";}
+				command+="ISA04 = '"+POut.String(clearinghouse.ISA04)+"'";
+			}
+			if(clearinghouse.ISA16 != oldClearinghouse.ISA16) {
+				if(command!=""){ command+=",";}
+				command+="ISA16 = '"+POut.String(clearinghouse.ISA16)+"'";
+			}
+			if(clearinghouse.SeparatorData != oldClearinghouse.SeparatorData) {
+				if(command!=""){ command+=",";}
+				command+="SeparatorData = '"+POut.String(clearinghouse.SeparatorData)+"'";
+			}
+			if(clearinghouse.SeparatorSegment != oldClearinghouse.SeparatorSegment) {
+				if(command!=""){ command+=",";}
+				command+="SeparatorSegment = '"+POut.String(clearinghouse.SeparatorSegment)+"'";
 			}
 			if(command==""){
 				return;
