@@ -238,6 +238,7 @@ namespace OpenDental{
 		private MenuItem menuItemPayerIDs;
 		private MenuItem menuItemTestLatency;
 		private FormLogOn FormLogOn_;
+		///<summary>When auto log off is in use, we don't want to log off user if they are in the FormLogOn window.  Mostly a problem when using web service because CurUser is not null.</summary>
 		private bool IsFormLogOnLastActive;
 
 		///<summary></summary>
