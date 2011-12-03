@@ -7089,15 +7089,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX apptview_ClinicNum ON apptview (ClinicNum)";
 					Db.NonQ(command);
 				}
+				//todo: rework the following four lines to conform with our established pattern for inserts that are safe for all situations.
 				command="(SELECT MAX(ClaimFormNum)+1 FROM claimform)";
 				long claimFormNum=PIn.Long(Db.GetTable(command).Rows[0][0].ToString());
 				command="INSERT INTO claimform(ClaimFormNum,Description,IsHidden,FontName,FontSize,UniqueID,PrintImages,OffsetX,OffsetY) VALUES ("+POut.Long(claimFormNum)+",'UB04',0,'Tahoma',9.75,'OD10',0,0,0)";
 				Db.NonQ(command);
+
+				//todo: remove the following two lines.
 				command="(SELECT MAX(ClaimFormItemNum)+1 FROM claimformitem)";
 				long claimFormItemNum=PIn.Long(Db.GetTable(command).Rows[0][0].ToString());
-				command="INSERT INTO `claimformitem` (`ClaimFormItemNum`,`ClaimFormNum`,`ImageFileName`,`FieldName`,`FormatString`,`XPos`,`YPos`,`Width`,`Height`) "
-					+"VALUES ("+POut.Long(claimFormItemNum++)+","+POut.Long(claimFormNum)+",'UB04.jpg','','','4','5','860','1120')";
+
+				//example solution:
+				command="INSERT INTO claimformitem (ClaimFormItemNum,ClaimFormNum,ImageFileName,FieldName,FormatString,XPos,YPos,Width,Height) "
+					+"VALUES ("+GetClaimFormItemNum()+","+POut.Long(claimFormNum)+",'UB04.jpg','','','4','5','860','1120')";
 				Db.NonQ(command);
+
+				//todo: rework all the statements below to conform with the 3 example lines above.
 				command="INSERT INTO `claimformitem` (`ClaimFormItemNum`,`ClaimFormNum`,`ImageFileName`,`FieldName`,`FormatString`,`XPos`,`YPos`,`Width`,`Height`) "
 					+"VALUES ("+POut.Long(claimFormItemNum++)+","+POut.Long(claimFormNum)+",'','AccidentDate','MMddyyyy','45','164','68','17')";
 				Db.NonQ(command);
@@ -7639,28 +7646,32 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					command="ALTER TABLE clearinghouse ADD ISA02 varchar2(10)";
 					Db.NonQ(command);
-				} if(DataConnection.DBtype==DatabaseType.MySql) {
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clearinghouse ADD ISA04 varchar(10) NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
 					command="ALTER TABLE clearinghouse ADD ISA04 varchar2(10)";
 					Db.NonQ(command);
-				} if(DataConnection.DBtype==DatabaseType.MySql) {
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clearinghouse ADD ISA16 varchar(2) NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
 					command="ALTER TABLE clearinghouse ADD ISA16 varchar2(2)";
 					Db.NonQ(command);
-				} if(DataConnection.DBtype==DatabaseType.MySql) {
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clearinghouse ADD SeparatorData varchar(2) NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
 					command="ALTER TABLE clearinghouse ADD SeparatorData varchar2(2)";
 					Db.NonQ(command);
-				} if(DataConnection.DBtype==DatabaseType.MySql) {
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clearinghouse ADD SeparatorSegment varchar(2) NOT NULL";
 					Db.NonQ(command);
 				}
@@ -7686,6 +7697,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 			}
 			//To12_1_0();
+		}
+
+		///<summary>This is a helper method for the 12.0.0 conversion.  Without it, there would be an additional 1200 lines of code.</summary>
+		private static string GetClaimFormItemNum(){
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				return "(SELECT MAX(ClaimFormItemNum)+1 FROM claimformitem)";
+			}
+			else {
+				//for mysql, this seems to be allowed and will automatically increment.
+				//Should work fine for both autoincrement and regular.
+				return "0";
+			}
 		}
 
 
