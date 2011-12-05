@@ -7682,7 +7682,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
 					VALUES ('Denti-Cal','C:\\Denti-Cal\\','','5','ZZ','','ZZ','DENTICAL','P','','','13','',0,0,'','','','DENTICAL','DENTICAL','NONE','22','1D','1C')";
 				Db.NonQ(command);
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS aggpath";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE aggpath'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+				}
 
 
 

@@ -10,7 +10,7 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormAggPathSetup:Form {
-		private List<AggPath> AggPathList;
+		private List<CentralConnection> AggPathList;
 
 		public FormAggPathSetup() {
 			InitializeComponent();
@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 
 		private void FillAggPaths() {
-			AggPathList=AggPaths.Refresh();
+			//AggPathList=AggPaths.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Remote URI",320);
@@ -45,7 +45,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormAggPathEdit formAPE = new FormAggPathEdit();
-			formAPE.AggPathCur=AggPathList[e.Row];
+			formAPE.CentralConnectionCur=AggPathList[e.Row];
 			formAPE.ShowDialog();
 			FillAggPaths();
 		}
@@ -53,7 +53,7 @@ namespace OpenDental {
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormAggPathEdit formAPE = new FormAggPathEdit();
 			formAPE.IsNew=true;
-			formAPE.AggPathCur=new AggPath();
+			formAPE.CentralConnectionCur=new CentralConnection();
 			formAPE.ShowDialog();
 			FillAggPaths();
 		}

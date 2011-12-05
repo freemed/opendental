@@ -9,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormAggPathEdit:Form {
-		public AggPath AggPathCur;
+		public CentralConnection CentralConnectionCur;
 		public bool IsNew;
 
 		public FormAggPathEdit() {
@@ -18,9 +18,9 @@ namespace OpenDental {
 		}
 
 		private void FormAggPathEdit_Load(object sender,EventArgs e) {
-			textURI.Text=AggPathCur.RemoteURI;
-			textUserName.Text=AggPathCur.RemoteUserName;
-			textPassword.Text=AggPathCur.RemotePassword;
+			textURI.Text=CentralConnectionCur.RemoteURI;
+			textUserName.Text=CentralConnectionCur.RemoteUserName;
+			textPassword.Text=CentralConnectionCur.RemotePassword;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -29,7 +29,7 @@ namespace OpenDental {
 				return;
 			}
 			//no prompt
-			AggPaths.Delete(AggPathCur.AggPathNum);
+			//AggPaths.Delete(AggPathCur.AggPathNum);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -47,14 +47,14 @@ namespace OpenDental {
 					return;
 				}
 			}
-			AggPathCur.RemoteURI=textURI.Text;
-			AggPathCur.RemoteUserName=textUserName.Text;
-			AggPathCur.RemotePassword=textPassword.Text;
+			CentralConnectionCur.RemoteURI=textURI.Text;
+			CentralConnectionCur.RemoteUserName=textUserName.Text;
+			CentralConnectionCur.RemotePassword=textPassword.Text;
 			if(IsNew) {
-				AggPaths.Insert(AggPathCur);
+				//AggPaths.Insert(DbConnectionCur);
 			}
 			else {
-				AggPaths.Update(AggPathCur);
+				//AggPaths.Update(DbConnectionCur);
 			}
 			DialogResult=DialogResult.OK;
 		}
