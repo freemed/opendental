@@ -23,27 +23,12 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butAgg = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.checkReportsProcDate = new System.Windows.Forms.CheckBox();
 			this.checkReportProdWO = new System.Windows.Forms.CheckBox();
 			this.checkReportsShowPatNum = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
-			// 
-			// butAgg
-			// 
-			this.butAgg.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAgg.Autosize = true;
-			this.butAgg.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAgg.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAgg.CornerRadius = 4F;
-			this.butAgg.Location = new System.Drawing.Point(20,83);
-			this.butAgg.Name = "butAgg";
-			this.butAgg.Size = new System.Drawing.Size(112,24);
-			this.butAgg.TabIndex = 204;
-			this.butAgg.Text = "Aggregation Setup";
-			this.butAgg.Click += new System.EventHandler(this.butAgg_Click);
 			// 
 			// butOK
 			// 
@@ -53,7 +38,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(233,132);
+			this.butOK.Location = new System.Drawing.Point(233,112);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -68,7 +53,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(314,132);
+			this.butCancel.Location = new System.Drawing.Point(314,112);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -105,13 +90,12 @@ namespace OpenDental{
 			// FormReportSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(401,168);
+			this.ClientSize = new System.Drawing.Size(401,148);
 			this.Controls.Add(this.checkReportsShowPatNum);
 			this.Controls.Add(this.checkReportProdWO);
 			this.Controls.Add(this.checkReportsProcDate);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.butAgg);
 			this.Name = "FormReportSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Report Setup";
@@ -124,7 +108,6 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private UI.Button butAgg;
 		private System.Windows.Forms.CheckBox checkReportsProcDate;
 		private System.Windows.Forms.CheckBox checkReportProdWO;
 		private System.Windows.Forms.CheckBox checkReportsShowPatNum;
