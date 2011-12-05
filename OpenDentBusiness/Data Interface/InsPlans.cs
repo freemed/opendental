@@ -1042,5 +1042,14 @@ namespace OpenDentBusiness {
 			return plan;
 		}
 
+		public static void UpdateCobRuleForAll(EnumCobRule cobRule) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cobRule);
+				return;
+			}
+			string command="UPDATE insplan SET CobRule="+POut.Int((int)cobRule);
+			Db.NonQ(command);
+		}
+
 	}
 }
