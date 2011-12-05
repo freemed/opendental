@@ -1,4 +1,4 @@
-namespace OpenDental{
+namespace CentralManager {
 	partial class FormAggPathSetup {
 		/// <summary>
 		/// Required designer variable.
@@ -23,19 +23,14 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butCancel = new OpenDental.UI.Button();
+			this.butCancel = new System.Windows.Forms.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAdd = new OpenDental.UI.Button();
+			this.butAdd = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(631,383);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
@@ -61,13 +56,7 @@ namespace OpenDental{
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(631,12);
 			this.butAdd.Name = "butAdd";
@@ -93,8 +82,8 @@ namespace OpenDental{
 
 		#endregion
 
-		private OpenDental.UI.Button butCancel;
-		private UI.ODGrid gridMain;
-		private UI.Button butAdd;
+		private System.Windows.Forms.Button butCancel;
+		private OpenDental.UI.ODGrid gridMain;
+		private System.Windows.Forms.Button butAdd;
 	}
 }

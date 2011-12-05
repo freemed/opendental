@@ -8,13 +8,12 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 
-namespace OpenDental {
+namespace CentralManager {
 	public partial class FormAggPathSetup:Form {
 		private List<CentralConnection> AggPathList;
 
 		public FormAggPathSetup() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void FormAggPathSetup_Load(object sender,EventArgs e) {

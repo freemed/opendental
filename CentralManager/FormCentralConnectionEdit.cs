@@ -7,14 +7,13 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental {
+namespace CentralManager {
 	public partial class FormAggPathEdit:Form {
 		public CentralConnection CentralConnectionCur;
 		public bool IsNew;
 
 		public FormAggPathEdit() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void FormAggPathEdit_Load(object sender,EventArgs e) {
@@ -35,17 +34,17 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textURI.Text=="") {
-				MsgBox.Show(this,"Please enter a remote URI.");
+				MessageBox.Show("Please enter a remote URI.");
 				return;
 			}
 			if(textUserName.Text=="") {
-				MsgBox.Show(this,"Please enter a username.");
+				MessageBox.Show("Please enter a username.");
 				return;
 			}
 			if(textPassword.Text=="") {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Do you want to save with no password?")) {
-					return;
-				}
+				//if(!MessageBox.Show(this,MsgBoxButtons.OKCancel,"Do you want to save with no password?")) {
+				//	return;
+				//}
 			}
 			CentralConnectionCur.RemoteURI=textURI.Text;
 			CentralConnectionCur.RemoteUserName=textUserName.Text;
