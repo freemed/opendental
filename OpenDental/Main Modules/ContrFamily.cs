@@ -1865,6 +1865,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			PatPlan patPlan=PatPlanList[e.Col-1];
 			InsSub insSub=InsSubs.GetSub(patPlan.InsSubNum,SubList);
+			PlanList=InsPlans.RefreshForSubList(SubList);//this is only here in case, if in FormModuleSetup, the InsDefaultCobRule is changed and cob changed for all plans.
 			InsPlan insPlan=InsPlans.GetPlan(insSub.PlanNum,PlanList);
 			FormInsPlan FormIP=new FormInsPlan(insPlan,patPlan,insSub);
 			FormIP.ShowDialog();

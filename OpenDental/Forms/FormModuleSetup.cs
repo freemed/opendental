@@ -101,6 +101,7 @@ namespace OpenDental{
 		private ComboBox comboCobRule;
 		private CheckBox checkMedicalFeeUsedForNewProcs;
 		private bool changed;
+		private bool IsLoading;
 
 		///<summary></summary>
 		public FormModuleSetup() {
@@ -868,7 +869,7 @@ namespace OpenDental{
 			this.tabAppts.Location = new System.Drawing.Point(4,22);
 			this.tabAppts.Name = "tabAppts";
 			this.tabAppts.Padding = new System.Windows.Forms.Padding(3);
-			this.tabAppts.Size = new System.Drawing.Size(466,452);
+			this.tabAppts.Size = new System.Drawing.Size(466,479);
 			this.tabAppts.TabIndex = 0;
 			this.tabAppts.Text = "Appts";
 			// 
@@ -906,7 +907,7 @@ namespace OpenDental{
 			this.tabFamily.Location = new System.Drawing.Point(4,22);
 			this.tabFamily.Name = "tabFamily";
 			this.tabFamily.Padding = new System.Windows.Forms.Padding(3);
-			this.tabFamily.Size = new System.Drawing.Size(466,452);
+			this.tabFamily.Size = new System.Drawing.Size(466,479);
 			this.tabFamily.TabIndex = 1;
 			this.tabFamily.Text = "Family";
 			// 
@@ -929,6 +930,7 @@ namespace OpenDental{
 			this.comboCobRule.Name = "comboCobRule";
 			this.comboCobRule.Size = new System.Drawing.Size(128,21);
 			this.comboCobRule.TabIndex = 201;
+			this.comboCobRule.SelectionChangeCommitted += new System.EventHandler(this.comboCobRule_SelectionChangeCommitted);
 			// 
 			// tabAccount
 			// 
@@ -1018,7 +1020,7 @@ namespace OpenDental{
 			this.tabTreatPlan.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.tabTreatPlan.Location = new System.Drawing.Point(4,22);
 			this.tabTreatPlan.Name = "tabTreatPlan";
-			this.tabTreatPlan.Size = new System.Drawing.Size(466,452);
+			this.tabTreatPlan.Size = new System.Drawing.Size(466,479);
 			this.tabTreatPlan.TabIndex = 3;
 			this.tabTreatPlan.Text = "Treat\' Plan";
 			this.tabTreatPlan.UseVisualStyleBackColor = true;
@@ -1046,7 +1048,7 @@ namespace OpenDental{
 			this.tabChart.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.tabChart.Location = new System.Drawing.Point(4,22);
 			this.tabChart.Name = "tabChart";
-			this.tabChart.Size = new System.Drawing.Size(466,452);
+			this.tabChart.Size = new System.Drawing.Size(466,479);
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
 			// 
@@ -1187,7 +1189,7 @@ namespace OpenDental{
 			this.tabImages.Controls.Add(this.checkImagesModuleTreeIsCollapsed);
 			this.tabImages.Location = new System.Drawing.Point(4,22);
 			this.tabImages.Name = "tabImages";
-			this.tabImages.Size = new System.Drawing.Size(466,452);
+			this.tabImages.Size = new System.Drawing.Size(466,479);
 			this.tabImages.TabIndex = 5;
 			this.tabImages.Text = "Images";
 			this.tabImages.UseVisualStyleBackColor = true;
@@ -1197,7 +1199,7 @@ namespace OpenDental{
 			this.tabManage.Controls.Add(this.checkRxSendNewToQueue);
 			this.tabManage.Location = new System.Drawing.Point(4,22);
 			this.tabManage.Name = "tabManage";
-			this.tabManage.Size = new System.Drawing.Size(466,452);
+			this.tabManage.Size = new System.Drawing.Size(466,479);
 			this.tabManage.TabIndex = 6;
 			this.tabManage.Text = "Manage";
 			this.tabManage.UseVisualStyleBackColor = true;
@@ -1267,6 +1269,7 @@ namespace OpenDental{
 
 		private void FormModuleSetup_Load(object sender, System.EventArgs e) {
 			changed=false;
+			IsLoading=true;
 			//Appointment module---------------------------------------------------------------
 			checkSolidBlockouts.Checked=PrefC.GetBool(PrefName.SolidBlockouts);
 			checkBrokenApptNote.Checked=PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment);
@@ -1381,6 +1384,7 @@ namespace OpenDental{
 			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
 			checkProcGroupNoteDoesAggregate.Checked=PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate);
 			checkMedicalFeeUsedForNewProcs.Checked=PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
+			IsLoading=false;
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
@@ -1446,6 +1450,12 @@ namespace OpenDental{
 				changed=true;
 			}
 			textAllergiesIndicateNone.Text=AllergyDefs.GetOne(formA.SelectedAllergyDefNum).Description;
+		}
+
+		private void comboCobRule_SelectionChangeCommitted(object sender,EventArgs e) {
+			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to change the COB rule for all existing insurance plans?")) {
+				InsPlans.UpdateCobRuleForAll((EnumCobRule)comboCobRule.SelectedIndex);
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -1563,6 +1573,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
+
+		
 
 		
 
