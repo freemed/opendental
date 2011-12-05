@@ -1133,21 +1133,6 @@ namespace UnitTests {
 			long patNum=pat.PatNum;
 			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
 			long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
-			//Standard Fee
-			Fees.RefreshCache();
-			long codeNum=ProcedureCodes.GetCodeNum("D2750");
-			Fee fee=Fees.GetFee(codeNum,53);
-			if(fee==null) {
-				fee=new Fee();
-				fee.CodeNum=codeNum;
-				fee.FeeSched=53;
-				fee.Amount=1200;
-				Fees.Insert(fee);
-			}
-			else {
-				fee.Amount=1200;
-				Fees.Update(fee);
-			}
 			//Carrier
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
 			long planNum1=InsPlanT.CreateInsPlan(carrier.CarrierNum,EnumCobRule.CarveOut).PlanNum;
@@ -1160,7 +1145,7 @@ namespace UnitTests {
 			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Crowns,75);
 			PatPlanT.CreatePatPlan(1,patNum,subNum1);
 			PatPlanT.CreatePatPlan(2,patNum,subNum2);
-			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",Fees.GetAmount0(codeNum,53));//crown on 8
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"8",1200);//crown on 8
 			long procNum=proc.ProcNum;
 			//Lists
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
@@ -1206,8 +1191,8 @@ namespace UnitTests {
 			long subNum1=sub1.InsSubNum;
 			long subNum2=sub2.InsSubNum;
 			//plans
-			BenefitT.CreateCategoryPercent(plan1.PlanNum,EbenefitCategory.Diagnostic,40);
-			BenefitT.CreateCategoryPercent(plan2.PlanNum,EbenefitCategory.Diagnostic,40);
+			BenefitT.CreateCategoryPercent(plan1.PlanNum,EbenefitCategory.Diagnostic,50);
+			BenefitT.CreateCategoryPercent(plan2.PlanNum,EbenefitCategory.Diagnostic,50);
 			BenefitT.CreateDeductibleGeneral(plan1.PlanNum,50);
 			BenefitT.CreateDeductibleGeneral(plan2.PlanNum,50);
 			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum1);
@@ -1239,8 +1224,17 @@ namespace UnitTests {
 			claimProcs=ClaimProcs.Refresh(pat.PatNum);
 			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,plan1.PlanNum,subNum1);
 			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc.ProcNum,plan2.PlanNum,subNum2);
-			if(claimProc2.InsEstTotal!=10) {
-				throw new Exception("Should be 10. \r\n");
+			if(claimProc1.DedEst!=50) {//$50 deductible
+				throw new Exception("Should be 50. \r\n");
+			}
+			if(claimProc1.InsEstTotal!=50) {//Ins1 pays 40% of (fee - deductible) = .4 * (150 - 50)
+				throw new Exception("Should be 50. \r\n");
+			}
+			if(claimProc2.DedEst!=50) {//$50 deductible
+				throw new Exception("Should be 50. \r\n");
+			}
+			if(claimProc2.InsEstTotal!=50) {//Ins2 pays 
+				throw new Exception("Should be 50. \r\n");
 			}
 			retVal+="19: Passed.  Multiple deductibles are accounted for.\r\n";
 			return retVal;

@@ -1228,7 +1228,6 @@ namespace OpenDental
 			PaidOtherInsTotal=ClaimProcs.GetPaidOtherInsTotal(ClaimProcCur,PatPlanList);
 			PaidOtherInsBaseEst=ClaimProcs.GetPaidOtherInsBaseEst(ClaimProcCur,PatPlanList);
 			WriteOffOtherIns=ClaimProcs.GetWriteOffOtherIns(ClaimProcCur,PatPlanList);
-			DeductibleOtherIns=ClaimProcs.GetDeductibleOtherIns(ClaimProcCur,PatPlanList);
 			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList,ClaimProcCur.InsSubNum,subList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
@@ -1655,7 +1654,7 @@ namespace OpenDental
 			}
 			if(IsProc) {
 				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,
-					HistList,LoopList,PatPlanList,PaidOtherInsTotal,PaidOtherInsBaseEst,PatCur.Age,WriteOffOtherIns,DeductibleOtherIns);
+					HistList,LoopList,PatPlanList,PaidOtherInsTotal,PaidOtherInsBaseEst,PatCur.Age,WriteOffOtherIns);
 				//Paid other ins is not accurate
 
 			}
