@@ -7680,7 +7680,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//Denti-Cal clearinghouse.
 				command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
 					LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
-					VALUES ('Denti-Cal','C:\\Denti-Cal\\','','5','ZZ','','ZZ','DENTICAL','P','','','13','',0,0,'','','','DENTICAL','DENTICAL','NONE','22','1D','1C')";
+					VALUES ('Denti-Cal','"+POut.String(@"C:\Denti-Cal\")+"','','5','ZZ','','ZZ','DENTICAL','P','','','13','',0,0,'','','','DENTICAL','DENTICAL','NONE','22','1D','1C')";
 				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS aggpath";
@@ -7690,8 +7690,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE aggpath'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 					Db.NonQ(command);
 				}
-
-
+				//IAP bridge was using a hardcoded path.  Now we will allow users to use a custom path.
+				//Only update the path if the user doesn't have a custom path already entered.
+				command="SELECT Path FROM program WHERE ProgName='IAP'";
+				if(Db.GetScalar(command)=="") {
+					command="UPDATE program SET Path='"+POut.String(@"C:\IAPlus\")+"' WHERE ProgName='IAP'";
+					Db.NonQ(command);
+				}
+				command="UPDATE program SET Note='No buttons are available.' WHERE ProgName='IAP'";
+				Db.NonQ(command);
 
 
 
