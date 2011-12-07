@@ -1278,7 +1278,8 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM patient WHERE "
 				+"LName LIKE '"+POut.String(lName.Substring(0,subStrIndexlName))+"%' "
 				+"AND FName LIKE '"+POut.String(fName.Substring(0,subStrIndexfName))+"%' "
-				+"AND Birthdate="+POut.Date(birthdate)+" "
+				+"AND (Birthdate="+POut.Date(birthdate)+" "//either a matching bd
+				+"OR Birthdate < "+POut.Date(new DateTime(1880,1,1))+")"//or no bd
 				+"AND PatStatus!=4";//not deleted
 			return Crud.PatientCrud.SelectMany(command);
 		}
