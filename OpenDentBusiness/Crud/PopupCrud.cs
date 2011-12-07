@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				popup.PatNum     = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				popup.Description= PIn.String(table.Rows[i]["Description"].ToString());
 				popup.IsDisabled = PIn.Bool  (table.Rows[i]["IsDisabled"].ToString());
-				popup.IsFamily   = (EnumPopupFamily)PIn.Int(table.Rows[i]["IsFamily"].ToString());
+				popup.PopupLevel   = (EnumPopupLevel)PIn.Int  (table.Rows[i]["PopupLevel"].ToString());
 				retVal.Add(popup);
 			}
 			return retVal;
@@ -91,7 +91,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PopupNum,";
 			}
-			command+="PatNum,Description,IsDisabled,IsFamily) VALUES(";
+			command+="PatNum,Description,IsDisabled,PopupLevel) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(popup.PopupNum)+",";
 			}
@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (popup.PatNum)+","
 				+"'"+POut.String(popup.Description)+"',"
 				+    POut.Bool  (popup.IsDisabled)+","
-				+    POut.Int   ((int)popup.IsFamily)+")";
+				+    POut.Int  ((int)popup.PopupLevel)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum     =  "+POut.Long  (popup.PatNum)+", "
 				+"Description= '"+POut.String(popup.Description)+"', "
 				+"IsDisabled =  "+POut.Bool  (popup.IsDisabled)+", "
-				+"IsFamily   =  "+POut.Int   ((int)popup.IsFamily)+" "
+				+"PopupLevel   =  "+POut.Int  ((int)popup.PopupLevel)+" "
 				+"WHERE PopupNum = "+POut.Long(popup.PopupNum);
 			Db.NonQ(command);
 		}
@@ -135,9 +135,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="IsDisabled = "+POut.Bool(popup.IsDisabled)+"";
 			}
-			if(popup.IsFamily != oldPopup.IsFamily) {
+			if(popup.PopupLevel != oldPopup.PopupLevel) {
 				if(command!=""){ command+=",";}
-				command+="IsFamily = "+POut.Int   ((int)popup.IsFamily)+"";
+				command+="PopupLevel = "+POut.Int((int)popup.PopupLevel)+"";
 			}
 			if(command==""){
 				return;

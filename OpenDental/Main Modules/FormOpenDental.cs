@@ -2051,25 +2051,34 @@ namespace OpenDental{
 				PopupEventList=new List<PopupEvent>();
 			}
 			bool popupIsDisabled=false;
+			List<Popup> popList=Popups.GetForPatient(patNum);//get all possible 
 			for(int i=PopupEventList.Count-1;i>=0;i--){//go backwards
 				if(PopupEventList[i].DisableUntil<DateTime.Now){//expired
 					PopupEventList.RemoveAt(i);
 					continue;
 				}
-				if(PopupEventList[i].PatNum==patNum){
+				bool contains=false;
+				for(int j=0;j<popList.Count;j++) {
+					if(PopupEventList[i].PopupNum==popList[j].PopupNum) {
+						contains=true;
+						break;
+					}
+				}
+				if(!contains) {
 					popupIsDisabled=true;
+				}
+				else {
+					popupIsDisabled=false;
 					break;
 				}
 			}
 			if(!popupIsDisabled){
-				List<Popup> popList=Popups.GetForPatient(patNum);
 				if(popList.Count>0 && !popList[0].IsDisabled) {
 					if(ContrAppt2.Visible) {
-					  ContrAppt2.MouseUpForced();
+						ContrAppt2.MouseUpForced();
 					}
-					//MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
 					FormPopupDisplay FormP=new FormPopupDisplay();
-					for(int i=0;i<PopupEventList.Count-1;i++) {
+					for(int i=0;i<popList.Count;i++) {//show popups
 						FormP.PopupCur=popList[i];
 						FormP.ShowDialog();
 						if(FormP.MinutesDisabled>0) {
@@ -2405,35 +2414,6 @@ namespace OpenDental{
 			FormPopupsForFam FormPFF=new FormPopupsForFam();
 			FormPFF.PatCur=Patients.GetPat(CurPatNum);
 			FormPFF.ShowDialog();
-			List<Popup> popList=Popups.GetForPatient(CurPatNum);
-			/*
-			FormPopupEdit FormP=new FormPopupEdit();
-			if(popList.Count==0) {
-				Popup pop=new Popup();
-				pop.PatNum=CurPatNum;
-				pop.IsNew=true;
-				FormP.PopupCur=pop;
-			}
-			else{
-				FormP.PopupCur=popList[0];	
-			}
-			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.OK){
-				for(int i=PopupEventList.Count-1;i>=0;i--){
-					if(PopupEventList[i].PatNum==CurPatNum){
-						PopupEventList.RemoveAt(i);
-					}
-				}
-			}
-			*/
-			if(FormPFF.DialogResult==DialogResult.OK) {
-				for(int i=0;i<FormPFF.PopupEventList.Count;i++) {
-					if(FormPFF.PopupEventList[i].DisableUntil>DateTime.Now) {
-						PopupEventList.Add(FormPFF.PopupEventList[i]);
-						PopupEventList.Sort();
-					}
-				}
-			}
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {

@@ -9,34 +9,41 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Popups {
 
-		///<summary>Gets all Popups for a single patient.  There will actually only be one or zero for now.</summary>
+		///<summary>Gets all Popups that should be displayed for a single patient.</summary>
 		public static List<Popup> GetForPatient(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),patNum);
-			} 
+			}
+			if(patNum==0) {
+				return new List<Popup>();
+			}
 			Patient patCur=Patients.GetPat(patNum);
 			string command="SELECT * FROM popup "
 				+"WHERE PatNum = "+POut.Long(patNum)+" "
-				+"OR (PatNum IN (SELECT Guarantor FROM patient "
-						+"WHERE PatNum = "+POut.Long(patNum)+") "
-					+"AND IsFamily = "+POut.Int((int)EnumPopupFamily.Family)+") "
-				+"OR (PatNum IN (SELECT SuperFamily FROM patient "
-						+"WHERE PatNum = "+POut.Long(patNum)+") "
-					+"AND IsFamily = "+POut.Int((int)EnumPopupFamily.SuperFamily)+") ";
+				//any family level popup for anyone in the family
+				+"OR (PatNum IN (SELECT PatNum FROM patient "
+				+"WHERE Guarantor = "+POut.Long(patCur.Guarantor)+") "
+				+"AND PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+") ";
+				//any superfamily level popup for anyone in the superfamily
+			if(patCur.SuperFamily!=0) {//They are part of a super family
+				command+="OR (PatNum IN (SELECT PatNum FROM patient "
+					+"WHERE SuperFamily = "+POut.Long(patCur.SuperFamily)+") "
+					+"AND PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+") ";
+			}
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
-		///<summary>Gets all Popups for a single patient.  There will actually only be one or zero for now.</summary>
+		///<summary>Gets all Popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily.</summary>
 		public static List<Popup> GetForFamily(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),pat);
 			}
 			string command="SELECT * FROM popup "
-					+"WHERE PatNum IN (SELECT PatNum FROM patient "
-						+"WHERE Guarantor = "+POut.Long(pat.Guarantor)+") ";
+				+"WHERE PatNum IN (SELECT PatNum FROM patient "
+				+"WHERE Guarantor = "+POut.Long(pat.Guarantor)+") ";
 			if(pat.SuperFamily!=0) {//They are part of a super family
 				command+="OR PatNum IN (SELECT PatNum FROM patient "
-						+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
+					+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
 			}
 			return Crud.PopupCrud.SelectMany(command);
 		}

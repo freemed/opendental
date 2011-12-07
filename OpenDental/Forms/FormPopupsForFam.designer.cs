@@ -36,7 +36,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(500,345);
+			this.butClose.Location = new System.Drawing.Point(500,354);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
@@ -52,7 +52,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(24,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(551,315);
+			this.gridMain.Size = new System.Drawing.Size(551,325);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Popups";
 			this.gridMain.TranslationName = null;
@@ -68,7 +68,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(24,345);
+			this.butAdd.Location = new System.Drawing.Point(24,354);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 2;
@@ -78,7 +78,7 @@ namespace OpenDental{
 			// FormPopupsForFam
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(600,396);
+			this.ClientSize = new System.Drawing.Size(600,391);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
