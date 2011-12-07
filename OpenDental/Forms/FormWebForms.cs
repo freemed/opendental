@@ -400,17 +400,22 @@ namespace OpenDental {
 		/// </summary>
 		private bool CompareSheets(Sheet sheetFromDb,Sheet newSheet) {
 			bool isEqual=true;
-			for(int i=0;i<sheetFromDb.SheetFields.Count;i++) {
+			//the 2 sheets are sorted before comparison because in some cases SheetFields[i] refers to a different field in sheetFromDb than in newSheet
+			Sheet sortedSheetFromDb=new Sheet();
+			Sheet sortedNewSheet=new Sheet();
+			sortedSheetFromDb.SheetFields=sheetFromDb.SheetFields.OrderBy(sf => sf.SheetFieldNum).ToList();
+			sortedNewSheet.SheetFields=newSheet.SheetFields.OrderBy(sf => sf.SheetFieldNum).ToList();
+			for(int i=0;i<sortedSheetFromDb.SheetFields.Count;i++) {
 				// read each parameter of the SheetField like Fontsize,FieldValue, FontIsBold, XPos, YPos etc.
-				foreach(FieldInfo fieldinfo in sheetFromDb.SheetFields[i].GetType().GetFields()) {
+				foreach(FieldInfo fieldinfo in sortedSheetFromDb.SheetFields[i].GetType().GetFields()) {
 					string dbSheetFieldValue="";
 					string newSheetFieldValue="";
 					//.ToString() works for Int64, Int32, Enum, DateTime(bithdate), Boolean, Double
-					if(fieldinfo.GetValue(sheetFromDb.SheetFields[i])!=null) {
-						dbSheetFieldValue=fieldinfo.GetValue(sheetFromDb.SheetFields[i]).ToString();
+					if(fieldinfo.GetValue(sortedSheetFromDb.SheetFields[i])!=null) {
+						dbSheetFieldValue=fieldinfo.GetValue(sortedSheetFromDb.SheetFields[i]).ToString();
 					}
 					if(fieldinfo.GetValue(newSheet.SheetFields[i])!=null) {
-						newSheetFieldValue=fieldinfo.GetValue(newSheet.SheetFields[i]).ToString();
+						newSheetFieldValue=fieldinfo.GetValue(sortedNewSheet.SheetFields[i]).ToString();
 					}
 					if(dbSheetFieldValue!=newSheetFieldValue) {
 						isEqual=false;
