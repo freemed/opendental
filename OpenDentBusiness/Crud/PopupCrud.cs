@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				popup.PatNum     = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				popup.Description= PIn.String(table.Rows[i]["Description"].ToString());
 				popup.IsDisabled = PIn.Bool  (table.Rows[i]["IsDisabled"].ToString());
-				popup.PopupLevel   = (EnumPopupLevel)PIn.Int  (table.Rows[i]["PopupLevel"].ToString());
+				popup.PopupLevel = (EnumPopupLevel)PIn.Int(table.Rows[i]["PopupLevel"].ToString());
 				retVal.Add(popup);
 			}
 			return retVal;
@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (popup.PatNum)+","
 				+"'"+POut.String(popup.Description)+"',"
 				+    POut.Bool  (popup.IsDisabled)+","
-				+    POut.Int  ((int)popup.PopupLevel)+")";
+				+    POut.Int   ((int)popup.PopupLevel)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum     =  "+POut.Long  (popup.PatNum)+", "
 				+"Description= '"+POut.String(popup.Description)+"', "
 				+"IsDisabled =  "+POut.Bool  (popup.IsDisabled)+", "
-				+"PopupLevel   =  "+POut.Int  ((int)popup.PopupLevel)+" "
+				+"PopupLevel =  "+POut.Int   ((int)popup.PopupLevel)+" "
 				+"WHERE PopupNum = "+POut.Long(popup.PopupNum);
 			Db.NonQ(command);
 		}
@@ -137,7 +137,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(popup.PopupLevel != oldPopup.PopupLevel) {
 				if(command!=""){ command+=",";}
-				command+="PopupLevel = "+POut.Int((int)popup.PopupLevel)+"";
+				command+="PopupLevel = "+POut.Int   ((int)popup.PopupLevel)+"";
 			}
 			if(command==""){
 				return;

@@ -50,11 +50,11 @@ namespace CentralManager {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormAggPathEdit formAPE = new FormAggPathEdit();
-			formAPE.IsNew=true;
-			formAPE.CentralConnectionCur=new CentralConnection();
-			formAPE.ShowDialog();
-			FillAggPaths();
+			//FormAggPathEdit formAPE = new FormAggPathEdit();
+			//formAPE.IsNew=true;
+			//formAPE.CentralConnectionCur=new CentralConnection();
+			//formAPE.ShowDialog();
+			//FillAggPaths();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

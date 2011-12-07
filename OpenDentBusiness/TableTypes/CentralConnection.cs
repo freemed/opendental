@@ -5,7 +5,7 @@ namespace OpenDentBusiness{
 
 	///<summary>Used by the Central Manager.  Stores the information needed to establish a connection to a remote database.</summary>
 	[Serializable()]
-	public class CentralConnection{//:TableBase {//not yet
+	public class CentralConnection:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long CentralConnectionNum;

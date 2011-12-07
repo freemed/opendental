@@ -7699,6 +7699,41 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="UPDATE program SET Note='No buttons are available.' WHERE ProgName='IAP'";
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS centralconnection";
+					Db.NonQ(command);
+					command=@"CREATE TABLE centralconnection (
+						CentralConnectionNum bigint NOT NULL auto_increment PRIMARY KEY,
+						ServerName varchar(255) NOT NULL,
+						DatabaseName varchar(255) NOT NULL,
+						MySqlUser varchar(255) NOT NULL,
+						MySqlPassword varchar(255) NOT NULL,
+						ServiceURI varchar(255) NOT NULL,
+						OdUser varchar(255) NOT NULL,
+						OdPassword varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE centralconnection'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE centralconnection (
+						CentralConnectionNum number(20) NOT NULL,
+						ServerName varchar2(255),
+						DatabaseName varchar2(255),
+						MySqlUser varchar2(255),
+						MySqlPassword varchar2(255),
+						ServiceURI varchar2(255),
+						OdUser varchar2(255),
+						OdPassword varchar2(255),
+						CONSTRAINT centralconnection_CentralConne PRIMARY KEY (CentralConnectionNum)
+						)";
+					Db.NonQ(command);
+				}
+	
+
+
+
 
 
 
@@ -7738,3 +7773,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 
+
+
+			
+
+			
