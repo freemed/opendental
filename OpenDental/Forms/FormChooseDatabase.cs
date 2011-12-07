@@ -45,7 +45,7 @@ namespace OpenDental{
 		private Label label11;
 		private CheckBox checkConnectServer;
 		///<summary>When silently running GetConfig() without showing UI, this gets set to true if either NoShowOnStartup or UsingEcw is found in config file.</summary>
-		public bool NoShow;
+		public YN NoShow;
 		private Label label7;
 		private ListBox listType;
 		private Label label8;
@@ -59,6 +59,11 @@ namespace OpenDental{
 		public bool IsAccessedFromMainMenu;
 		public string WebServiceUri;
 		public YN WebServiceIsEcw;
+		public string OdPassword;
+		public string ServerName;
+		public string DatabaseName;
+		public string MySqlUser;
+		public string MySqlPassword;
 
 		///<summary></summary>
 		public FormChooseDatabase(){
@@ -572,7 +577,9 @@ namespace OpenDental{
 		
 		///<summary>Gets the settings from the config file, and fills the form with those values.  Gets run twice at startup.  If certain command-line parameters were passed in when starting the program, then the config file will not be processed at all.</summary>
 		public void GetConfig(){
-			if(WebServiceUri!="") {//if a URI was passed in
+			if(WebServiceUri!=""//if a URI was passed in
+				|| DatabaseName!="")//or if a direct db was specified
+			{
 				return;//do not even bother with the config file
 			}
 			//command-line support for the upper portion of this window will be added later.
@@ -642,7 +649,7 @@ namespace OpenDental{
 					if(noshownav!=null){
 						string noshow=noshownav.Value;
 						if(noshow=="True"){
-							NoShow=true;
+							NoShow=YN.Yes;
 							checkNoShow.Checked=true;
 						}
 					}
@@ -664,7 +671,7 @@ namespace OpenDental{
 					if(ecwnav!=null){
 						string usingecw=ecwnav.Value;
 						if(usingecw=="True"){
-							NoShow=true;
+							NoShow=YN.Yes;
 							checkUsingEcw.Checked=true;
 						}
 					}
@@ -705,29 +712,50 @@ namespace OpenDental{
 				textUser2.Text=OdUser;
 			}
 			//OdPassHash;//not allowed to be used here.  Instead, only used directly in TryToConnect
-			//The upper portion of this window is not yet supported for command-line parameter use.
+			//OdPassword//not allowed to be used here.  Instead, only used directly in TryToConnect
+			if(ServerName!="") {
+				comboComputerName.Text=ServerName;
+			}
+			if(DatabaseName!="") {
+				comboDatabase.Text=DatabaseName;
+			}
+			if(MySqlUser!="") {
+				textUser.Text=MySqlUser;
+			}
+			if(MySqlPassword!="") {
+				textPassword.Text=MySqlPassword;
+			}
+			if(NoShow==YN.No) {//but this shouldn't happen
+				checkNoShow.Checked=false;
+			}
+			else if(NoShow==YN.Yes) {
+				checkNoShow.Checked=true;
+			}
 		}
 
 		///<summary>Only called at startup if this dialog is not supposed to be shown.  Must call GetConfig first.</summary>
 		public bool TryToConnect(){
 			if(checkConnectServer.Checked){// && checkUsingEcw.Checked){
-				if(!checkUsingEcw.Checked) {//Can't silently connect unless using eCW.
-					return false;
-				}
-				//So from here on, guaranteed to be eCW
+				//js commented this portion out in version 12.0 on 1/7/11.  Must hunt down resulting bugs.
+				//if(!checkUsingEcw.Checked) {//Can't silently connect unless using eCW.
+				//	return false;
+				//}
 				RemotingClient.ServerURI=textURI.Text;
-				//bool useEcwAlgorithm=checkUsingEcw.Checked;
 				try{
-					//string password=textPassword2.Text;
-					//if(useEcwAlgorithm) {
-					//	password=Userods.EncryptPassword(password,true);
-					//}
 					//ecw requires hash, but non-ecw requires actual password
-					//this is only OdPassHash because of Ecw.
-					Userod user=Security.LogInWeb(textUser2.Text,OdPassHash,"",Application.ProductVersion,true);
-					//Userod user=Security.LogInWeb(textUser2.Text,password,"",Application.ProductVersion,useEcwAlgorithm);
-					Security.CurUser=user;
-					Security.PasswordTyped=OdPassHash;
+					if(checkUsingEcw.Checked) {
+						//this handles situation where an eCW user passes in an actual OdPassword
+						string password=OdPassHash;
+						if(OdPassword!="") {
+							password=Userods.EncryptPassword(OdPassword,true);
+						}
+						Security.CurUser=Security.LogInWeb(textUser2.Text,password,"",Application.ProductVersion,true);
+						Security.PasswordTyped=password;//so we really store the encrypted pw if ecw user passes in their real password?
+					}
+					else {
+						Security.CurUser=Security.LogInWeb(textUser2.Text,OdPassword,"",Application.ProductVersion,false);
+						Security.PasswordTyped=OdPassword;
+					}
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 					return true;
 				}
@@ -748,7 +776,7 @@ namespace OpenDental{
 				RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 				return true;
 			}
-			catch {//(Exception ex){
+			catch(Exception ex){
 				return false;
 			}
 		}

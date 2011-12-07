@@ -1388,6 +1388,12 @@ namespace OpenDental{
 			string odPassHash="";
 			string webServiceUri="";
 			YN webServiceIsEcw=YN.Unknown;
+			string odPassword="";
+			string serverName="";
+			string databaseName="";
+			string mySqlUser="";
+			string mySqlPassword="";
+			YN noShow=YN.Unknown;
 			if(CommandLineArgs.Length!=0) {
 				for(int i=0;i<CommandLineArgs.Length;i++) {
 					if(CommandLineArgs[i].StartsWith("UserName=") && CommandLineArgs[i].Length>9) {
@@ -1398,6 +1404,7 @@ namespace OpenDental{
 					}
 					if(CommandLineArgs[i].StartsWith("WebServiceUri=") && CommandLineArgs[i].Length>14) {
 						webServiceUri=CommandLineArgs[i].Substring(14).Trim('"');
+						noShow=YN.Yes;
 					}
 					if(CommandLineArgs[i].StartsWith("WebServiceIsEcw=") && CommandLineArgs[i].Length>16) {
 						if(CommandLineArgs[i].Substring(16).Trim('"')=="True") {
@@ -1407,6 +1414,22 @@ namespace OpenDental{
 							webServiceIsEcw=YN.No;
 						}
 					}
+					if(CommandLineArgs[i].StartsWith("OdPassword=") && CommandLineArgs[i].Length>11) {
+						odPassword=CommandLineArgs[i].Substring(11).Trim('"');
+					}
+					if(CommandLineArgs[i].StartsWith("ServerName=") && CommandLineArgs[i].Length>11) {
+						serverName=CommandLineArgs[i].Substring(11).Trim('"');
+					}
+					if(CommandLineArgs[i].StartsWith("DatabaseName=") && CommandLineArgs[i].Length>13) {
+						databaseName=CommandLineArgs[i].Substring(13).Trim('"');
+						noShow=YN.Yes;
+					}
+					if(CommandLineArgs[i].StartsWith("MySqlUser=") && CommandLineArgs[i].Length>10) {
+						mySqlUser=CommandLineArgs[i].Substring(10).Trim('"');
+					}
+					if(CommandLineArgs[i].StartsWith("MySqlPassword=") && CommandLineArgs[i].Length>14) {
+						mySqlPassword=CommandLineArgs[i].Substring(14).Trim('"');
+					}
 				}
 			}
 			FormChooseDatabase formChooseDb=new FormChooseDatabase();
@@ -1414,9 +1437,15 @@ namespace OpenDental{
 			formChooseDb.OdPassHash=odPassHash;
 			formChooseDb.WebServiceUri=webServiceUri;
 			formChooseDb.WebServiceIsEcw=webServiceIsEcw;
+			formChooseDb.OdPassword=odPassword;
+			formChooseDb.ServerName=serverName;
+			formChooseDb.DatabaseName=databaseName;
+			formChooseDb.MySqlUser=mySqlUser;
+			formChooseDb.MySqlPassword=mySqlPassword;
+			formChooseDb.NoShow=noShow;//either unknown or yes
 			formChooseDb.GetConfig();
 			formChooseDb.GetCmdLine();
-			if(formChooseDb.NoShow) {
+			if(formChooseDb.NoShow==YN.Yes) {
 				if(!formChooseDb.TryToConnect()) {
 					formChooseDb.ShowDialog();
 					if(formChooseDb.DialogResult==DialogResult.Cancel) {

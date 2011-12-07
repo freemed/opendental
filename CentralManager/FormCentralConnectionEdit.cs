@@ -8,18 +8,18 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace CentralManager {
-	public partial class FormAggPathEdit:Form {
+	public partial class FormCentralConnectionEdit:Form {
 		public CentralConnection CentralConnectionCur;
 		public bool IsNew;
 
-		public FormAggPathEdit() {
+		public FormCentralConnectionEdit() {
 			InitializeComponent();
 		}
 
-		private void FormAggPathEdit_Load(object sender,EventArgs e) {
-			textURI.Text=CentralConnectionCur.RemoteURI;
-			textUserName.Text=CentralConnectionCur.RemoteUserName;
-			textPassword.Text=CentralConnectionCur.RemotePassword;
+		private void FormCentralConnectionEdit_Load(object sender,EventArgs e) {
+			//textURI.Text=CentralConnectionCur.RemoteURI;
+			//textUserName.Text=CentralConnectionCur.RemoteUserName;
+			//textPassword.Text=CentralConnectionCur.RemotePassword;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -33,22 +33,22 @@ namespace CentralManager {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(textURI.Text=="") {
+			if(textServiceURI.Text=="") {
 				MessageBox.Show("Please enter a remote URI.");
 				return;
 			}
-			if(textUserName.Text=="") {
-				MessageBox.Show("Please enter a username.");
-				return;
-			}
-			if(textPassword.Text=="") {
+			//if(textUserName.Text=="") {
+			//	MessageBox.Show("Please enter a username.");
+			//	return;
+			//}
+			//if(textPassword.Text=="") {
 				//if(!MessageBox.Show(this,MsgBoxButtons.OKCancel,"Do you want to save with no password?")) {
 				//	return;
 				//}
-			}
-			CentralConnectionCur.RemoteURI=textURI.Text;
-			CentralConnectionCur.RemoteUserName=textUserName.Text;
-			CentralConnectionCur.RemotePassword=textPassword.Text;
+			//}
+			//CentralConnectionCur.RemoteURI=textURI.Text;
+			//CentralConnectionCur.RemoteUserName=textUserName.Text;
+			//CentralConnectionCur.RemotePassword=textPassword.Text;
 			if(IsNew) {
 				//AggPaths.Insert(DbConnectionCur);
 			}
