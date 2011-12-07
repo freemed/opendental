@@ -109,6 +109,7 @@ namespace OpenDental{
 			this.checkIsHidden.Text = "Hidden";
 			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsHidden.UseVisualStyleBackColor = true;
+			this.checkIsHidden.Click += new System.EventHandler(this.checkIsHidden_Click);
 			// 
 			// butOK
 			// 
@@ -177,6 +178,29 @@ namespace OpenDental{
 				}
 			}
 			checkIsHidden.Checked=FeeSchedCur.IsHidden;
+		}
+
+		private void checkIsHidden_Click(object sender,EventArgs e) {
+			//Don't allow fees to be hidden if they are in use by a provider.
+			if(!checkIsHidden.Checked) {
+				return;//Unhiding a fee. OK.
+			}
+			if(FeeSchedCur.FeeSchedType!=FeeScheduleType.Normal) {
+				return;//Not Normal fee. Not in use by a provider.
+			}
+			string providersUsingFee="";
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
+				if(FeeSchedCur.FeeSchedNum==ProviderC.ListShort[i].FeeSched) {
+					if(providersUsingFee!=""){//There is a name before this on the list
+						providersUsingFee+=", ";
+					}
+					providersUsingFee+=ProviderC.ListShort[i].Abbr;
+				}
+			}
+			if(providersUsingFee!="") {
+				MessageBox.Show(Lan.g(this,"Cannot hide. Fee schedule is currently in use by the following providers:\r\n") + providersUsingFee);
+				checkIsHidden.Checked=false;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
