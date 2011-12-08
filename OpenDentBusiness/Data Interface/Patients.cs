@@ -1356,18 +1356,25 @@ namespace OpenDentBusiness{
 			table.Columns.Add("cityStZip");
 			table.Columns.Add("annualMax");
 			table.Columns.Add("amountUsed");
+			table.Columns.Add("amountPending");
 			table.Columns.Add("amountRemaining");
 			table.Columns.Add("treatmentPlan");
 			table.Columns.Add("carrierName");
 			List<DataRow> rows=new List<DataRow>();
 			string command=@"
 				DROP TABLE IF EXISTS tempused;
+				DROP TABLE IF EXISTS temppending;
 				DROP TABLE IF EXISTS tempplanned;
 				DROP TABLE IF EXISTS tempannualmax;
 
 				CREATE TABLE tempused(
 				PatPlanNum bigint unsigned NOT NULL,
 				AmtUsed double NOT NULL,
+				PRIMARY KEY (PatPlanNum));
+
+				CREATE TABLE temppending(
+				PatPlanNum bigint unsigned NOT NULL,
+				PendingAmt double NOT NULL,
 				PRIMARY KEY (PatPlanNum));
 
 				CREATE TABLE tempplanned(
@@ -1387,10 +1394,22 @@ SUM(IFNULL(claimproc.InsPayAmt,0))
 FROM claimproc
 LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
 AND patplan.InsSubNum = claimproc.InsSubNum
-WHERE claimproc.Status IN (1, 3, 4)
+WHERE claimproc.Status IN (1, 3, 4) /*Received, Adjustment, Supplemental*/
 AND claimproc.ProcDate >= "+POut.Date(renewDate)+" "  //  MAKEDATE("+renewDate.Year+", "+renewDate.Month+") "
 +"AND claimproc.ProcDate < "+POut.Date(renewDate.AddYears(1))+" "   //MAKEDATE("+renewDate.Year+"+1, "+renewDate.Month+") "
 +"GROUP BY patplan.PatPlanNum";
+			Db.NonQ(command);
+			command=@"INSERT INTO temppending
+SELECT patplan.PatPlanNum,
+SUM(IFNULL(claimproc.InsPayEst,0))
+FROM claimproc
+LEFT JOIN patplan ON patplan.PatNum = claimproc.PatNum
+AND patplan.InsSubNum = claimproc.InsSubNum
+WHERE claimproc.Status = 0 /*NotReceived*/
+AND claimproc.InsPayAmt = 0
+AND claimproc.ProcDate >= "+POut.Date(renewDate)+@" 
+AND claimproc.ProcDate < "+POut.Date(renewDate.AddYears(1))+@" 
+GROUP BY patplan.PatPlanNum";
 			Db.NonQ(command);
 			command=@"INSERT INTO tempplanned
 SELECT PatNum, SUM(ProcFee)
@@ -1430,7 +1449,8 @@ FROM insplan";
 				patient.PriProv, patient.BillingType,
 				tempannualmax.AnnualMax ""$AnnualMax"",
 				tempused.AmtUsed ""$AmountUsed"",
-				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0) ""$AmtRemaining"",
+				temppending.PendingAmt ""$AmountPending"",
+				tempannualmax.AnnualMax-IFNULL(tempused.AmtUsed,0)-IFNULL(temppending.PendingAmt,0) ""$AmtRemaining"",
 				tempplanned.AmtPlanned ""$TreatmentPlan"", carrier.CarrierName
 				FROM patient
 				LEFT JOIN tempplanned ON tempplanned.PatNum=patient.PatNum
@@ -1439,6 +1459,7 @@ FROM insplan";
 				LEFT JOIN insplan ON insplan.PlanNum=inssub.PlanNum
 				LEFT JOIN carrier ON insplan.CarrierNum=carrier.CarrierNum
 				LEFT JOIN tempused ON tempused.PatPlanNum=patplan.PatPlanNum
+				LEFT JOIN temppending ON temppending.PatPlanNum=patplan.PatPlanNum
 				LEFT JOIN tempannualmax ON tempannualmax.PlanNum=inssub.PlanNum
 				AND (tempannualmax.AnnualMax IS NOT NULL AND tempannualmax.AnnualMax>0)/*may not be necessary*/
 				WHERE tempplanned.AmtPlanned>0 ";
@@ -1480,6 +1501,7 @@ FROM insplan";
 				ORDER BY tempplanned.AmtPlanned DESC";
 			DataTable rawtable=Db.GetTable(command);
 			command=@"DROP TABLE tempused;
+				DROP TABLE temppending;
 				DROP TABLE tempplanned;
 				DROP TABLE tempannualmax;";
 			Db.NonQ(command);
@@ -1530,6 +1552,7 @@ FROM insplan";
 						+rawtable.Rows[i]["Zip"].ToString();
 				row["annualMax"]=(PIn.Double(rawtable.Rows[i]["$AnnualMax"].ToString())).ToString("N");
 				row["amountUsed"]=(PIn.Double(rawtable.Rows[i]["$AmountUsed"].ToString())).ToString("N");
+				row["amountPending"]=(PIn.Double(rawtable.Rows[i]["$AmountPending"].ToString())).ToString("N");
 				row["amountRemaining"]=(PIn.Double(rawtable.Rows[i]["$AmtRemaining"].ToString())).ToString("N");
 				row["treatmentPlan"]=(PIn.Double(rawtable.Rows[i]["$TreatmentPlan"].ToString())).ToString("N");
 				row["carrierName"]=rawtable.Rows[i]["CarrierName"].ToString();

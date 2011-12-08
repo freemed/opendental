@@ -581,19 +581,22 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			//4=address
 			//5=cityStateZip
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Annual Max"),100);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Annual Max"),70);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amount Used"),100);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Used"),70);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amount Rem"),100);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Pend"),70);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Treatment Plan"),110);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Rem"),70);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Insurance Carrier"),165);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Treat Plan"),70);
+			col.TextAlign=HorizontalAlignment.Right;
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Insurance Carrier"),225);
 			col.TextAlign=HorizontalAlignment.Left;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -611,7 +614,7 @@ namespace OpenDental{
 						row.Cells.Add("");//don't show annual max for patients without ins or patients without annual max
 						continue;
 					}
-					if(j==8 && PIn.Double(table.Rows[i][6].ToString())==0){//if annualmax is 0
+					if(j==9 && PIn.Double(table.Rows[i][6].ToString())==0){//if annualmax is 0
 						row.Cells.Add("");//don't show amount remaining if no annual max
 						continue;
 					}
