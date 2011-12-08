@@ -13,31 +13,43 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormCreditCardEdit:Form {
-		private Patient patCur;
-		private List<PayPlanCharge> chargeList;
-		private List<PayPlan> payPlanList;
-		private CreditCard creditCardOld;
+		private Patient PatCur;
+		private List<PayPlan> PayPlanList;
+		private CreditCard CreditCardOld;
 		public CreditCard CreditCardCur;
+		///<summary>True if X-Charge is enabled.  Recurring charge section will only show if using X-Charge.</summary>
+		private bool IsXCharge;
 
 		public FormCreditCardEdit(Patient pat) {
 			InitializeComponent();
 			Lan.F(this);
-			patCur=pat;
+			PatCur=pat;
+			IsXCharge=false;
+			Program xCharge=Programs.GetCur(ProgramName.Xcharge);
+			if(xCharge!=null && xCharge.Enabled) {
+				IsXCharge=true;
+			}
 		}
 
 		private void FormCreditCardEdit_Load(object sender,EventArgs e) {
-			creditCardOld=CreditCardCur.Clone();
+			CreditCardOld=CreditCardCur.Clone();
 			FillData();
-			chargeList=PayPlanCharges.Refresh(patCur.PatNum);
-			payPlanList=PayPlans.GetValidPlansNoIns(patCur.PatNum);
-			comboPaymentPlans.Items.Add("None");
-			comboPaymentPlans.SelectedIndex=0;
-			for(int i=0;i<payPlanList.Count;i++) {
-				comboPaymentPlans.Items.Add(PayPlans.GetTotalPrinc(payPlanList[i].PayPlanNum,chargeList).ToString("F")
-					+"  "+Patients.GetPat(payPlanList[i].PatNum).GetNameFL());
-				if(payPlanList[i].PayPlanNum==CreditCardCur.PayPlanNum) {
-					comboPaymentPlans.SelectedIndex=i+1;
+			if(IsXCharge) {//Get recurring payment plan information if using X-Charge.
+				List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(PatCur.PatNum);
+				PayPlanList=PayPlans.GetValidPlansNoIns(PatCur.PatNum);
+				comboPaymentPlans.Items.Add("None");
+				comboPaymentPlans.SelectedIndex=0;
+				for(int i=0;i<PayPlanList.Count;i++) {
+					comboPaymentPlans.Items.Add(PayPlans.GetTotalPrinc(PayPlanList[i].PayPlanNum,chargeList).ToString("F")
+					+"  "+Patients.GetPat(PayPlanList[i].PatNum).GetNameFL());
+					if(PayPlanList[i].PayPlanNum==CreditCardCur.PayPlanNum) {
+						comboPaymentPlans.SelectedIndex=i+1;
+					}
 				}
+			}
+			else {//This will hide the recurring section and change the window size.
+				groupRecurringCharges.Visible=false;
+				this.ClientSize=new System.Drawing.Size(this.ClientSize.Width,this.ClientSize.Height-215);
 			}
 		}
 
@@ -49,16 +61,18 @@ namespace OpenDental {
 					textExpDate.Text=CreditCardCur.CCExpiration.ToString("MMyy");
 				}
 				textZip.Text=CreditCardCur.Zip;
-				if(CreditCardCur.ChargeAmt>0) {
-					textChargeAmt.Text=CreditCardCur.ChargeAmt.ToString("F");
+				if(IsXCharge) {//Only fill information if using X-Charge.
+					if(CreditCardCur.ChargeAmt>0) {
+						textChargeAmt.Text=CreditCardCur.ChargeAmt.ToString("F");
+					}
+					if(CreditCardCur.DateStart.Year>1880) {
+						textDateStart.Text=CreditCardCur.DateStart.ToShortDateString();
+					}
+					if(CreditCardCur.DateStop.Year>1880) {
+						textDateStop.Text=CreditCardCur.DateStop.ToShortDateString();
+					}
+					textNote.Text=CreditCardCur.Note;
 				}
-				if(CreditCardCur.DateStart.Year>1880) {
-					textDateStart.Text=CreditCardCur.DateStart.ToShortDateString();
-				}
-				if(CreditCardCur.DateStop.Year>1880) {
-					textDateStop.Text=CreditCardCur.DateStop.ToShortDateString();
-				}
-				textNote.Text=CreditCardCur.Note;
 			}
 		}
 
@@ -83,22 +97,23 @@ namespace OpenDental {
 				MsgBox.Show(this,"Expiration format invalid.");
 				return false;
 			}
-			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
+			if(IsXCharge) {//Only validate recurring setup if using X-Charge.
+				if(textDateStart.errorProvider1.GetError(textDateStart)!=""
 				|| textDateStop.errorProvider1.GetError(textDateStop)!=""
-				|| textChargeAmt.errorProvider1.GetError(textChargeAmt)!="") 
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return false;
-			}
-			if((textChargeAmt.Text=="" && comboPaymentPlans.SelectedIndex>0)
-				|| (textChargeAmt.Text=="" && textDateStart.Text.Trim()!="")) 
-			{
-				MsgBox.Show(this,"You need a charge amount for recurring charges.");
-				return false;
-			}
-			if(textChargeAmt.Text!="" && textDateStart.Text.Trim()=="") {
-				MsgBox.Show(this,"You need a start date for recurring charges.");
-				return false;
+				|| textChargeAmt.errorProvider1.GetError(textChargeAmt)!=""
+					) {
+					MsgBox.Show(this,"Please fix data entry errors first.");
+					return false;
+				}
+				if((textChargeAmt.Text=="" && comboPaymentPlans.SelectedIndex>0)
+				|| (textChargeAmt.Text=="" && textDateStart.Text.Trim()!="")) {
+					MsgBox.Show(this,"You need a charge amount for recurring charges.");
+					return false;
+				}
+				if(textChargeAmt.Text!="" && textDateStart.Text.Trim()=="") {
+					MsgBox.Show(this,"You need a start date for recurring charges.");
+					return false;
+				}
 			}
 			return true;
 		}
@@ -124,7 +139,7 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 			}
 			CreditCards.Delete(CreditCardCur.CreditCardNum);
-			List<CreditCard> creditCards=CreditCards.Refresh(patCur.PatNum);
+			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
 			for(int i=0;i<creditCards.Count;i++) {
 				creditCards[i].ItemOrder=creditCards.Count-(i+1);
 				CreditCards.Update(creditCards[i]);//Resets ItemOrder.
@@ -138,26 +153,31 @@ namespace OpenDental {
 			}
 			CreditCardCur.Address=textAddress.Text;
 			CreditCardCur.CCNumberMasked=textCardNumber.Text;
-			CreditCardCur.PatNum=patCur.PatNum;
+			CreditCardCur.PatNum=PatCur.PatNum;
 			CreditCardCur.Zip=textZip.Text;
-			CreditCardCur.ChargeAmt=PIn.Double(textChargeAmt.Text);
-			CreditCardCur.DateStart=PIn.Date(textDateStart.Text);
-			CreditCardCur.DateStop=PIn.Date(textDateStop.Text);
-			CreditCardCur.Note=textNote.Text;
-			if(comboPaymentPlans.SelectedIndex>0) {
-				CreditCardCur.PayPlanNum=payPlanList[comboPaymentPlans.SelectedIndex-1].PayPlanNum;
-			}
-			else {
-				CreditCardCur.PayPlanNum=0;//Allows users to change from a recurring payplan charge to a normal one.
+			if(IsXCharge) {//Only update recurring if using X-Charge.
+				CreditCardCur.ChargeAmt=PIn.Double(textChargeAmt.Text);
+				CreditCardCur.DateStart=PIn.Date(textDateStart.Text);
+				CreditCardCur.DateStop=PIn.Date(textDateStop.Text);
+				CreditCardCur.Note=textNote.Text;
+				if(comboPaymentPlans.SelectedIndex>0) {
+					CreditCardCur.PayPlanNum=PayPlanList[comboPaymentPlans.SelectedIndex-1].PayPlanNum;
+				}
+				else {
+					CreditCardCur.PayPlanNum=0;//Allows users to change from a recurring payplan charge to a normal one.
+				}
 			}
 			if(CreditCardCur.IsNew) {
-				List<CreditCard> itemOrderCount=CreditCards.Refresh(patCur.PatNum);
+				List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
 				CreditCardCur.ItemOrder=itemOrderCount.Count;
 				CreditCards.Insert(CreditCardCur);
 			}
 			else {
+				#region X-Charge
 				//Special logic for had a token and changed number or expiration date
-				if(CreditCardCur.XChargeToken!="" && (creditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked || creditCardOld.CCExpiration!=CreditCardCur.CCExpiration)) { 
+				if(CreditCardCur.XChargeToken!="" && IsXCharge &&
+					(CreditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked || CreditCardOld.CCExpiration!=CreditCardCur.CCExpiration)) 
+				{ 
 					Program prog=Programs.GetCur(ProgramName.Xcharge);
 					if(prog==null){
 						MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
@@ -183,7 +203,7 @@ namespace OpenDental {
 					ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 					string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
 					File.Delete(resultfile);//delete the old result file.
-					if(creditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked) {//They changed card number which we have to delete archived token which will create a new one next time card is charged.
+					if(CreditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked) {//They changed card number which we have to delete archived token which will create a new one next time card is charged.
 						info.Arguments+="/TRANSACTIONTYPE:ARCHIVEVAULTDELETE ";
 						info.Arguments+="/XCACCOUNTID:"+CreditCardCur.XChargeToken+" ";
 						info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
@@ -235,6 +255,7 @@ namespace OpenDental {
 						}
 					}
 				}//End of special token logic
+				#endregion
 				CreditCards.Update(CreditCardCur);
 			}
 			DialogResult=DialogResult.OK;
