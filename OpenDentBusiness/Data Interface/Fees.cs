@@ -270,7 +270,7 @@ namespace OpenDentBusiness{
 				Delete(fee);
 			}
 			if(amt==-1) {
-				RefreshCache();
+				//RefreshCache();
 				return;
 			}
 			fee=new Fee();
@@ -278,7 +278,7 @@ namespace OpenDentBusiness{
 			fee.FeeSched=feeSchedNum;
 			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
 			Insert(fee);
-			RefreshCache();
+			//RefreshCache();//moved this outside the loop
 		}
 
 	}
