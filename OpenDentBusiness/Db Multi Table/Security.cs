@@ -246,9 +246,9 @@ namespace OpenDentBusiness{
 				//Then, check username and password
 				Userod user=Userods.CheckUserAndPassword(oduser,odpass,usingEcw);
 				#if DEBUG
-					if(oduser=="Admin"){
-						user=Userods.GetUserByName("Admin");//without checking password.  Makes debugging faster.
-					}
+					//if(oduser=="Admin"){
+					//	user=Userods.GetUserByName("Admin");//without checking password.  Makes debugging faster.
+					//}
 				#endif
 				if(user==null) {
 					throw new Exception("Invalid username or password.");

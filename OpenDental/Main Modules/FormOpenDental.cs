@@ -1393,7 +1393,6 @@ namespace OpenDental{
 			string databaseName="";
 			string mySqlUser="";
 			string mySqlPassword="";
-			YN noShow=YN.Unknown;
 			if(CommandLineArgs.Length!=0) {
 				for(int i=0;i<CommandLineArgs.Length;i++) {
 					if(CommandLineArgs[i].StartsWith("UserName=") && CommandLineArgs[i].Length>9) {
@@ -1404,7 +1403,6 @@ namespace OpenDental{
 					}
 					if(CommandLineArgs[i].StartsWith("WebServiceUri=") && CommandLineArgs[i].Length>14) {
 						webServiceUri=CommandLineArgs[i].Substring(14).Trim('"');
-						noShow=YN.Yes;
 					}
 					if(CommandLineArgs[i].StartsWith("WebServiceIsEcw=") && CommandLineArgs[i].Length>16) {
 						if(CommandLineArgs[i].Substring(16).Trim('"')=="True") {
@@ -1422,7 +1420,6 @@ namespace OpenDental{
 					}
 					if(CommandLineArgs[i].StartsWith("DatabaseName=") && CommandLineArgs[i].Length>13) {
 						databaseName=CommandLineArgs[i].Substring(13).Trim('"');
-						noShow=YN.Yes;
 					}
 					if(CommandLineArgs[i].StartsWith("MySqlUser=") && CommandLineArgs[i].Length>10) {
 						mySqlUser=CommandLineArgs[i].Substring(10).Trim('"');
@@ -1431,6 +1428,15 @@ namespace OpenDental{
 						mySqlPassword=CommandLineArgs[i].Substring(14).Trim('"');
 					}
 				}
+			}
+			YN noShow=YN.Unknown;
+			if(webServiceUri!=""){//a web service was specified
+				if(odUser!="" && odPassword!=""){//and both a username and password were specified
+					noShow=YN.Yes;
+				}
+			}
+			else if(databaseName!=""){
+				noShow=YN.Yes;
 			}
 			FormChooseDatabase formChooseDb=new FormChooseDatabase();
 			formChooseDb.OdUser=odUser;
@@ -1555,17 +1561,35 @@ namespace OpenDental{
 					//leave user as null
 				}
 				else {
-					Userod adminUser=Userods.GetAdminUser();
-					if(adminUser.Password=="") {
-						Security.CurUser=adminUser.Copy();
+					if(odUser!="" && odPassword!=""){//if a username and password were passed in
+						Userod user=Userods.GetUserByName(odUser);
+						if(user!=null){
+							if(Userods.CheckTypedPassword(odPassword,user.Password)){//password matches
+								Security.CurUser=user.Copy();
+								if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+									string pw=odPassword;
+									if(Programs.UsingEcwTight()) {//ecw requires hash, but non-ecw requires actual password
+										pw=Userods.EncryptPassword(pw,true);
+									}
+									Security.PasswordTyped=pw;
+								}
+								//TasksCheckOnStartup is one thing that doesn't get done because login window wasn't used
+							}
+						}
 					}
-					else {
-						FormLogOn_=new FormLogOn();
-						FormLogOn_.ShowDialog(this);
-						if(FormLogOn_.DialogResult==DialogResult.Cancel) {
-							Cursor=Cursors.Default;
-							Application.Exit();
-							return;
+					if(Security.CurUser==null) {//normal manual log in process
+						Userod adminUser=Userods.GetAdminUser();
+						if(adminUser.Password=="") {
+							Security.CurUser=adminUser.Copy();
+						}
+						else {
+							FormLogOn_=new FormLogOn();
+							FormLogOn_.ShowDialog(this);
+							if(FormLogOn_.DialogResult==DialogResult.Cancel) {
+								Cursor=Cursors.Default;
+								Application.Exit();
+								return;
+							}
 						}
 					}
 				}
@@ -4435,7 +4459,7 @@ namespace OpenDental{
 			Bridges.ECW.UserId=userId;
 			//Username and password-----------------------------------------------------
 			//users are allowed to use ecw tight integration without command line.  They can manually launch Open Dental.
-			if((Programs.UsingEcwTight() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username wass passed in.
+			if((Programs.UsingEcwTight() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username was passed in.
 				|| (userName!=""//if a username was passed in, but not in tight eCW mode
 				&& (Security.CurUser==null || Security.CurUser.UserName != userName))//and it's different from the current user
 			) {

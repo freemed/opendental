@@ -23,6 +23,10 @@ namespace OpenDentBusiness{
 		public string OdUser;
 		///<summary>If connecting to the web service.  Symmetrically encrypted.</summary>
 		public string OdPassword;
+		///<summary></summary>
+		public string Note;
+		///<summary></summary>
+		public int ItemOrder;
 
 		///<summary>Returns a copy.</summary>
 		public CentralConnection Copy() {

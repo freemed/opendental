@@ -7710,7 +7710,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						MySqlPassword varchar(255) NOT NULL,
 						ServiceURI varchar(255) NOT NULL,
 						OdUser varchar(255) NOT NULL,
-						OdPassword varchar(255) NOT NULL
+						OdPassword varchar(255) NOT NULL,
+						Note text NOT NULL,
+						ItemOrder int NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -7726,6 +7728,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						ServiceURI varchar2(255),
 						OdUser varchar2(255),
 						OdPassword varchar2(255),
+						Note varchar2(255),
+						ItemOrder number(11) NOT NULL,
 						CONSTRAINT centralconnection_CentralConne PRIMARY KEY (CentralConnectionNum)
 						)";
 					Db.NonQ(command);
@@ -8267,3 +8271,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 			
+
+				

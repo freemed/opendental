@@ -42,6 +42,11 @@ namespace CentralManager{
 			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.textNote = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.textItemOrder = new System.Windows.Forms.TextBox();
+			this.label10 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -49,7 +54,7 @@ namespace CentralManager{
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(521,265);
+			this.butOK.Location = new System.Drawing.Point(521,389);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -59,7 +64,7 @@ namespace CentralManager{
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(602,265);
+			this.butCancel.Location = new System.Drawing.Point(602,389);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -121,7 +126,7 @@ namespace CentralManager{
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(13,265);
+			this.butDelete.Location = new System.Drawing.Point(13,389);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,24);
 			this.butDelete.TabIndex = 205;
@@ -221,17 +226,67 @@ namespace CentralManager{
 			this.groupBox2.Controls.Add(this.textOdPassword);
 			this.groupBox2.Controls.Add(this.textOdUser);
 			this.groupBox2.Controls.Add(this.label3);
-			this.groupBox2.Location = new System.Drawing.Point(15,152);
+			this.groupBox2.Location = new System.Drawing.Point(15,176);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(661,100);
 			this.groupBox2.TabIndex = 215;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Web Service Connection";
 			// 
+			// label8
+			// 
+			this.label8.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label8.Location = new System.Drawing.Point(21,285);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(111,17);
+			this.label8.TabIndex = 217;
+			this.label8.Text = "Order";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textNote
+			// 
+			this.textNote.Location = new System.Drawing.Point(135,308);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.Size = new System.Drawing.Size(368,61);
+			this.textNote.TabIndex = 218;
+			// 
+			// label9
+			// 
+			this.label9.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label9.Location = new System.Drawing.Point(21,311);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(111,17);
+			this.label9.TabIndex = 219;
+			this.label9.Text = "Note";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textItemOrder
+			// 
+			this.textItemOrder.Location = new System.Drawing.Point(135,282);
+			this.textItemOrder.Name = "textItemOrder";
+			this.textItemOrder.Size = new System.Drawing.Size(57,20);
+			this.textItemOrder.TabIndex = 216;
+			// 
+			// label10
+			// 
+			this.label10.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label10.Location = new System.Drawing.Point(15,155);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(111,17);
+			this.label10.TabIndex = 220;
+			this.label10.Text = "OR (but not both)";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormCentralConnectionEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(689,301);
+			this.ClientSize = new System.Drawing.Size(689,425);
+			this.Controls.Add(this.label10);
+			this.Controls.Add(this.textNote);
+			this.Controls.Add(this.label9);
+			this.Controls.Add(this.textItemOrder);
+			this.Controls.Add(this.label8);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butDelete);
@@ -246,6 +301,7 @@ namespace CentralManager{
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -270,5 +326,10 @@ namespace CentralManager{
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.TextBox textNote;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.TextBox textItemOrder;
+		private System.Windows.Forms.Label label10;
 	}
 }

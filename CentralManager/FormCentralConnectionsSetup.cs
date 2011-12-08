@@ -9,34 +9,40 @@ using OpenDentBusiness;
 using OpenDental.UI;
 
 namespace CentralManager {
-	public partial class FormAggPathSetup:Form {
-		private List<CentralConnection> AggPathList;
+	public partial class FormCentralConnectionsSetup:Form {
+		private List<CentralConnection> ConnList;
 
-		public FormAggPathSetup() {
+		public FormCentralConnectionsSetup() {
 			InitializeComponent();
 		}
 
 		private void FormAggPathSetup_Load(object sender,EventArgs e) {
-			FillAggPaths();
+			FillGrid();
 		}
 
-		private void FillAggPaths() {
-			//AggPathList=AggPaths.Refresh();
+		private void FillGrid() {
+			ConnList=CentralConnections.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Remote URI",320);
+			ODGridColumn col;
+			col=new ODGridColumn("#",40);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("User Name",120);
+			col=new ODGridColumn("Database",320);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Password",120);
+			col=new ODGridColumn("Note",300);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<AggPathList.Count;i++) {
+			for(int i=0;i<ConnList.Count;i++) {
 				row=new ODGridRow();
-				//row.Cells.Add(AggPathList[i].RemoteURI);
-				//row.Cells.Add(AggPathList[i].RemoteUserName);
-				//row.Cells.Add(AggPathList[i].RemotePassword);
+				row.Cells.Add(ConnList[i].ItemOrder.ToString());
+				if(ConnList[i].DatabaseName=="") {//uri
+					row.Cells.Add(ConnList[i].ServiceURI);
+				}
+				else {
+					row.Cells.Add(ConnList[i].ServerName+", "+ConnList[i].DatabaseName);
+				}
+				row.Cells.Add(ConnList[i].Note);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -44,17 +50,18 @@ namespace CentralManager {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormCentralConnectionEdit formC = new FormCentralConnectionEdit();
-			formC.CentralConnectionCur=AggPathList[e.Row];
+			formC.CentralConnectionCur=ConnList[e.Row];
 			formC.ShowDialog();
-			FillAggPaths();
+			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			//FormAggPathEdit formAPE = new FormAggPathEdit();
-			//formAPE.IsNew=true;
-			//formAPE.CentralConnectionCur=new CentralConnection();
-			//formAPE.ShowDialog();
-			//FillAggPaths();
+			FormCentralConnectionEdit formC = new FormCentralConnectionEdit();
+			CentralConnection cc=new CentralConnection();
+			cc.IsNew=true;;
+			formC.CentralConnectionCur=cc;
+			formC.ShowDialog();
+			FillGrid();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

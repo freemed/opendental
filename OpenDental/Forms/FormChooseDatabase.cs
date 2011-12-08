@@ -442,6 +442,8 @@ namespace OpenDental{
 				//textURI.Text="http://localhost:49262/ServiceMain.asmx";
 				//textUser2.Text="Admin";
 				//textPassword2.Text="pass";
+				//try this commandline parameter for speed (assuming Admin password is pass):
+				//WebServiceUri="http://localhost:49262/ServiceMain.asmx" UserName=Admin OdPassword=pass
 			#endif
 			if(textUser2.Text!="") {
 				textPassword2.Select();

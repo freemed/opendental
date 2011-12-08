@@ -54,6 +54,8 @@ namespace OpenDentBusiness.Crud{
 				centralConnection.ServiceURI          = PIn.String(table.Rows[i]["ServiceURI"].ToString());
 				centralConnection.OdUser              = PIn.String(table.Rows[i]["OdUser"].ToString());
 				centralConnection.OdPassword          = PIn.String(table.Rows[i]["OdPassword"].ToString());
+				centralConnection.Note                = PIn.String(table.Rows[i]["Note"].ToString());
+				centralConnection.ItemOrder           = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
 				retVal.Add(centralConnection);
 			}
 			return retVal;
@@ -94,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CentralConnectionNum,";
 			}
-			command+="ServerName,DatabaseName,MySqlUser,MySqlPassword,ServiceURI,OdUser,OdPassword) VALUES(";
+			command+="ServerName,DatabaseName,MySqlUser,MySqlPassword,ServiceURI,OdUser,OdPassword,Note,ItemOrder) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(centralConnection.CentralConnectionNum)+",";
 			}
@@ -105,7 +107,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(centralConnection.MySqlPassword)+"',"
 				+"'"+POut.String(centralConnection.ServiceURI)+"',"
 				+"'"+POut.String(centralConnection.OdUser)+"',"
-				+"'"+POut.String(centralConnection.OdPassword)+"')";
+				+"'"+POut.String(centralConnection.OdPassword)+"',"
+				+"'"+POut.String(centralConnection.Note)+"',"
+				+    POut.Int   (centralConnection.ItemOrder)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,7 +128,9 @@ namespace OpenDentBusiness.Crud{
 				+"MySqlPassword       = '"+POut.String(centralConnection.MySqlPassword)+"', "
 				+"ServiceURI          = '"+POut.String(centralConnection.ServiceURI)+"', "
 				+"OdUser              = '"+POut.String(centralConnection.OdUser)+"', "
-				+"OdPassword          = '"+POut.String(centralConnection.OdPassword)+"' "
+				+"OdPassword          = '"+POut.String(centralConnection.OdPassword)+"', "
+				+"Note                = '"+POut.String(centralConnection.Note)+"', "
+				+"ItemOrder           =  "+POut.Int   (centralConnection.ItemOrder)+" "
 				+"WHERE CentralConnectionNum = "+POut.Long(centralConnection.CentralConnectionNum);
 			Db.NonQ(command);
 		}
@@ -159,6 +165,14 @@ namespace OpenDentBusiness.Crud{
 			if(centralConnection.OdPassword != oldCentralConnection.OdPassword) {
 				if(command!=""){ command+=",";}
 				command+="OdPassword = '"+POut.String(centralConnection.OdPassword)+"'";
+			}
+			if(centralConnection.Note != oldCentralConnection.Note) {
+				if(command!=""){ command+=",";}
+				command+="Note = '"+POut.String(centralConnection.Note)+"'";
+			}
+			if(centralConnection.ItemOrder != oldCentralConnection.ItemOrder) {
+				if(command!=""){ command+=",";}
+				command+="ItemOrder = "+POut.Int(centralConnection.ItemOrder)+"";
 			}
 			if(command==""){
 				return;

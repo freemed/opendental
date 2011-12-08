@@ -10,33 +10,44 @@ using OpenDentBusiness;
 namespace CentralManager {
 	public partial class FormCentralConnectionEdit:Form {
 		public CentralConnection CentralConnectionCur;
-		public bool IsNew;
 
 		public FormCentralConnectionEdit() {
 			InitializeComponent();
 		}
 
 		private void FormCentralConnectionEdit_Load(object sender,EventArgs e) {
-			//textURI.Text=CentralConnectionCur.RemoteURI;
-			//textUserName.Text=CentralConnectionCur.RemoteUserName;
-			//textPassword.Text=CentralConnectionCur.RemotePassword;
+			textServerName.Text=CentralConnectionCur.ServerName;
+			textDatabaseName.Text=CentralConnectionCur.DatabaseName;
+			textMySqlUser.Text=CentralConnectionCur.MySqlUser;
+			textMySqlPassword.Text=CentralConnectionCur.MySqlPassword;
+			textServiceURI.Text=CentralConnectionCur.ServiceURI;
+			textOdUser.Text=CentralConnectionCur.OdUser;
+			textOdPassword.Text=CentralConnectionCur.OdPassword;
+			textItemOrder.Text=CentralConnectionCur.ItemOrder.ToString();
+			textNote.Text=CentralConnectionCur.Note;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(IsNew) {
+			if(CentralConnectionCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
 			//no prompt
-			//AggPaths.Delete(AggPathCur.AggPathNum);
+			CentralConnections.Delete(CentralConnectionCur.CentralConnectionNum);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(textServiceURI.Text=="") {
-				MessageBox.Show("Please enter a remote URI.");
-				return;
+			try {
+				int.Parse(textItemOrder.Text);
 			}
+			catch {
+				MessageBox.Show("Item Order invalid");
+			}
+			//if(textServiceURI.Text=="") {
+			//	MessageBox.Show("Please enter a remote URI.");
+			//	return;
+			//}
 			//if(textUserName.Text=="") {
 			//	MessageBox.Show("Please enter a username.");
 			//	return;
@@ -46,14 +57,20 @@ namespace CentralManager {
 				//	return;
 				//}
 			//}
-			//CentralConnectionCur.RemoteURI=textURI.Text;
-			//CentralConnectionCur.RemoteUserName=textUserName.Text;
-			//CentralConnectionCur.RemotePassword=textPassword.Text;
-			if(IsNew) {
-				//AggPaths.Insert(DbConnectionCur);
+			CentralConnectionCur.ServerName=textServerName.Text;
+			CentralConnectionCur.DatabaseName=textDatabaseName.Text;
+			CentralConnectionCur.MySqlUser=textMySqlUser.Text;
+			CentralConnectionCur.MySqlPassword=textMySqlPassword.Text;
+			CentralConnectionCur.ServiceURI=textServiceURI.Text;
+			CentralConnectionCur.OdUser=textOdUser.Text;
+			CentralConnectionCur.OdPassword=textOdPassword.Text;
+			CentralConnectionCur.ItemOrder=int.Parse(textItemOrder.Text);
+			CentralConnectionCur.Note=textNote.Text;
+			if(CentralConnectionCur.IsNew) {
+				CentralConnections.Insert(CentralConnectionCur);
 			}
 			else {
-				//AggPaths.Update(DbConnectionCur);
+				CentralConnections.Update(CentralConnectionCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

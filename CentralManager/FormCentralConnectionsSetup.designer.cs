@@ -1,5 +1,5 @@
 namespace CentralManager {
-	partial class FormAggPathSetup {
+	partial class FormCentralConnectionsSetup {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -31,7 +31,7 @@ namespace CentralManager {
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(631,383);
+			this.butCancel.Location = new System.Drawing.Point(631,434);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -48,9 +48,9 @@ namespace CentralManager {
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(613,395);
+			this.gridMain.Size = new System.Drawing.Size(613,446);
 			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Aggregation Paths";
+			this.gridMain.Title = "Connections";
 			this.gridMain.TranslationName = "";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
@@ -65,16 +65,16 @@ namespace CentralManager {
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// FormAggPathSetup
+			// FormCentralConnectionsSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(718,419);
+			this.ClientSize = new System.Drawing.Size(718,470);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
-			this.Name = "FormAggPathSetup";
+			this.Name = "FormCentralConnectionsSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Aggregation Path Setup";
+			this.Text = "Setup Connections";
 			this.Load += new System.EventHandler(this.FormAggPathSetup_Load);
 			this.ResumeLayout(false);
 

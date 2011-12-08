@@ -291,7 +291,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Only used from log on screen.</summary>
+		///<summary>Used from log on screen, phoneUI, and when logging in via command line.</summary>
 		public static bool CheckTypedPassword(string inputPass,string hashedPass) {
 			//No need to check RemotingRole; no call to db.
 			if(hashedPass=="") {
