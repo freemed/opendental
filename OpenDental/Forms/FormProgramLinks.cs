@@ -204,6 +204,16 @@ namespace OpenDental{
 				}
 				return;
 			}
+			if(program.ProgName=="QuickBooks") {
+				FormQuickBooksSetup FormQ=new FormQuickBooksSetup();
+				FormQ.ProgramCur=program;
+				FormQ.ShowDialog();
+				if(FormQ.DialogResult==DialogResult.OK) {
+					changed=true;
+					FillList();
+				}
+				return;
+			}
 			if(program.ProgName=="Xcharge") {
 				FormXchargeSetup fxcs=new FormXchargeSetup();
 				fxcs.ShowDialog();
