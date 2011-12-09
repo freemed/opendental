@@ -24,11 +24,7 @@ namespace OpenDental {
 			InitializeComponent();
 			Lan.F(this);
 			PatCur=pat;
-			IsXCharge=false;
-			Program xCharge=Programs.GetCur(ProgramName.Xcharge);
-			if(xCharge!=null && xCharge.Enabled) {
-				IsXCharge=true;
-			}
+			IsXCharge=Programs.IsEnabled(ProgramName.Xcharge);
 		}
 
 		private void FormCreditCardEdit_Load(object sender,EventArgs e) {
