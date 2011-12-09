@@ -163,17 +163,27 @@ namespace OpenDentBusiness
 			Write1000A_PER(sw,clearhouse);
 			//1000B NM1: 40 (medical,institutional,dental) Receiver Name. Always the Clearinghouse.
 			seg++;
-			sw.WriteLine("NM1"+s
+			sw.Write("NM1"+s
 				+"40"+s//NM101 2/3 Entity Identifier Code: 40=Receiver.
-				+"2"+s//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
-				+Sout(clearhouse.Description,60)+s//NM103 1/60 Name Last or Organization Name: Receiver Name.
-				+s//NM104 1/35 Name First: Not Used.
+				+"2"+s);//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
+			if(clearhouse.ISA08=="DENTICAL") {
+				sw.Write("DENTICAL"+s);//NM103 1/60 Name Last or Organization Name: Receiver Name.
+			}
+			else {
+				sw.Write(Sout(clearhouse.Description,60)+s);//NM103 1/60 Name Last or Organization Name: Receiver Name.
+			}
+			sw.Write(s//NM104 1/35 Name First: Not Used.
 				+s//NM105 1/25 Name Middle: Not Used.
 				+s//NM106 1/10 Name Prefix: Not Used.
 				+s//NM107 1/10 Name Suffix: Not Used.
-				+"46"+s//NM108 1/2 Identification Code Qualifier: 46=Electronic Transmitter Identification Number (ETIN).
-				+Sout(clearhouse.ISA08,80,2)//NM109 2/80 Identification Code: Receiver ID Code. aka ETIN#.
-				+endSegment);//NM110 through NM112 are not used.
+				+"46"+s);//NM108 1/2 Identification Code Qualifier: 46=Electronic Transmitter Identification Number (ETIN).
+			if(clearhouse.ISA08=="DENTICAL") {
+				sw.Write("1941461312");//NM109 2/80 Identification Code: Receiver ID Code. aka ETIN#.
+			}
+			else {
+				sw.Write(Sout(clearhouse.ISA08,80,2));//NM109 2/80 Identification Code: Receiver ID Code. aka ETIN#.
+			}
+			sw.WriteLine(endSegment);//NM110 through NM112 are not used.
 			HLcount=1;
 			parentProv=0;//the HL sequence # of the current provider.
 			parentSubsc=0;//the HL sequence # of the current subscriber.
@@ -437,7 +447,7 @@ namespace OpenDentBusiness
 					+s//SBR06 1/1 Coordination of Benefits Code: Not used.
 					+s//SBR07 1/1 Yes/No Condition or Respose Code: Not used.
 					+s//SBR08 2/2 Employment Status Code: Not used.
-					+GetFilingCode(insPlan)//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
+					+GetFilingCode(insPlan)//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO //For Denti-Cal, "MC" is required. pg. 27
 					+endSegment);
 				if(medType==EnumClaimMedType.Medical) {
 					//TODO: Do we need to do this?
@@ -500,6 +510,9 @@ namespace OpenDentBusiness
 					//This is a special situation requested by EMS.  This tacks the employer onto the end of the carrier.
 					sw.Write(Sout(carrier.CarrierName,30)+"|"+Sout(Employers.GetName(insPlan.EmployerNum),30)+s);
 				}
+				else if(clearhouse.ISA08=="DENTICAL") {
+					sw.Write("DENTICAL"+s);
+				}
 				else {
 					sw.Write(Sout(carrier.CarrierName,60)+s);
 				}
@@ -515,7 +528,7 @@ namespace OpenDentBusiness
 				if(electid.Length<3) {
 					electid="06126";
 				}
-				sw.WriteLine(Sout(electid,80,2)//NM109 2/80 Identification Code: PayorID.
+				sw.WriteLine(Sout(electid,80,2)//NM109 2/80 Identification Code: PayorID.   //Denti-Cal requires "94146". pg. 33
 					+endSegment);//NM110 through NM112 Not Used.
 				//2010BB N3: (medical,institutional,dental) Payer Address.
 				seg++;
@@ -533,7 +546,7 @@ namespace OpenDentBusiness
 					+endSegment);//N404 through N407 are either not used or are for addresses outside of the United States.
 				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
 				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
-				if(IsEmdeon(clearhouse)) {//Required by Emdeon
+				if(IsEmdeon(clearhouse)) {//Required by Emdeon   //Denti-Cal requires? pg. 34
 					seg+=WriteProv_REFG2(sw,billProv,carrier.ElectID);
 				}
 				parentSubsc=HLcount;
@@ -608,7 +621,7 @@ namespace OpenDentBusiness
 				#region Claim CLM
 				//2300 CLM: (medical,institutional,dental) Claim Information.
 				seg++;
-				sw.Write("CLM"+s
+				sw.Write("CLM"+s  //Denti-Cal has a maximum of 17 chars. pg. 35
 					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),38)+s//CLM01 1/38 Claim Submitter's Identifier: A unique id.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness.
 //todo: add field to allow user to override for claims based on preauths.
 					+claim.ClaimFee.ToString()+s//CLM02 1/18 Monetary Amount:
@@ -849,7 +862,12 @@ namespace OpenDentBusiness
 					pwk02="BM";//By Mail
 				}
 				else {
-					pwk02="EL";//Elect
+					if(clearhouse.ISA08=="DENTICAL") {
+						pwk02="FT";//"File Transfer", but is really electronic. Required value by Denti-Cal.
+					}
+					else {
+						pwk02="EL";//Elect
+					}
 				}
 				string idCode=claim.AttachmentID;
 				if(idCode=="") {//must be min of two char, so we need to make one up.
@@ -870,7 +888,7 @@ namespace OpenDentBusiness
 				#region Claim CN1 AMT
 				//2300 CN1: (medical,institutional,dental)Contract Information. Situational. We do not use this.
 				//2300 AMT: (institutional) Patient Estimated Amount Due.
-				//2300 AMT: (medical,dental) Patient Amount Paid. Situational. We do not use this.
+				//2300 AMT: (medical,dental) Patient Amount Paid. Situational. We do not use this. //Denti-Cal requires? pg. 40
 				#endregion Claim CN1 AMT
 				#region Claim REF
 				if(medType==EnumClaimMedType.Dental) {
@@ -1063,7 +1081,7 @@ namespace OpenDentBusiness
 				#endregion 2310 Claim Providers (inst)
 				#region 2310 Claim Providers (dental)
 				if(medType==EnumClaimMedType.Dental) {
-					//2310A NM1: DN (dental) Referring Provider Name. Situational. //js 9/5/11 Why not?  I thought this was a field on the claim that we DID send.
+					//2310A NM1: DN (dental) Referring Provider Name. Situational. //js 9/5/11 Why not?  I thought this was a field on the claim that we DID send. //Denti-Cal requires? pg. 45
 					//2310A PRV: (dental) Referring Provider Specialty Information. Situational.
 					//2310A REF: G2 (dental) Referring Provider Secondary Identification. Situational.
 					if(claim.ProvTreat!=claim.ProvBill) {
@@ -1284,6 +1302,9 @@ namespace OpenDentBusiness
 					if(clearhouse.ISA08=="EMS") {
 						//This is a special situation requested by EMS.  This tacks the employer onto the end of the carrier.
 						sw.Write(Sout(otherCarrier.CarrierName,30)+"|"+Sout(Employers.GetName(otherPlan.EmployerNum),30)+s);
+					}
+					else if(clearhouse.ISA08=="DENTICAL") {
+						sw.Write("DENTICAL"+s);
 					}
 					else {
 						sw.Write(Sout(otherCarrier.CarrierName,60)+s);
@@ -1553,7 +1574,7 @@ namespace OpenDentBusiness
 					//2400 REF: 9B (medical,institutional) Repriced Line Item Reference Number. Situational. We do not use.
 					//2400 REF: 9C (dental) Adjusted Repriced claim Number. Situational. We do not use.
 					//2400 REF: 9D (medical,instituitonal) Adjusted Repriced Line Item Reference Number. Situational. We do not use.
-					//2400 REF: 6R (medical,institutional,dental) Line Item Control Number. ProcNum. Will later be used for ERAs.
+					//2400 REF: 6R (medical,institutional,dental) Line Item Control Number. ProcNum. Will later be used for ERAs. //Denti-Cal requires? pg. 67
 					seg++;
 					sw.WriteLine("REF"+s
 						+"6R"+s//REF01 2/3 Reference Identification Qualifier: 6R=Procedure Control Number.
@@ -1731,9 +1752,9 @@ namespace OpenDentBusiness
 						//2420D REF: (dental) Service Facility Location Secondary Identification. Situational. We do not use.
 					}
 					#endregion 2420 Service Providers (dental)
-					//2430 SVD: (medical,institutional,dental) Line Adjudication Information. Situational. We do not support.
-					//2430 CAS: (medical,institutional,dental) Line Adjustment. Situational. We do not support.
-					//2430 DTP: (medical,institutional,dental) Line Check or Remittance Date. We do not support.
+					//2430 SVD: (medical,institutional,dental) Line Adjudication Information. Situational. We do not support.    //Denti-Cal requires? pg. 71
+					//2430 CAS: (medical,institutional,dental) Line Adjustment. Situational. We do not support.    //Denti-Cal requires? pg. 72
+					//2430 DTP: (medical,institutional,dental) Line Check or Remittance Date. We do not support.    //Denti-Cal requires? pg. 73
 					//2430 AMT: (medical,institutional,dental) Remaining Patient Liability. We do not support.
 					//2440 LQ: (medical) Form Identification Code. Situational. We do not use.
 					//2440 FRM: (medical) Supporting Documentation. We do not use.
