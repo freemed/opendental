@@ -1841,7 +1841,8 @@ namespace OpenDentBusiness
 				if(provIdents.Length>0) {
 
 //todo: clause for LU
-					provID=provIdents[0].SuppIDType.IDNumber;
+					//provIdents[0].SuppIDType
+					provID=provIdents[0].IDNumber;
 				}
 			}
 			if(provID!="") {
