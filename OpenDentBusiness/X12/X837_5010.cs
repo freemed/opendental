@@ -166,7 +166,7 @@ namespace OpenDentBusiness
 			sw.Write("NM1"+s
 				+"40"+s//NM101 2/3 Entity Identifier Code: 40=Receiver.
 				+"2"+s);//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
-			if(clearhouse.ISA08=="DENTICAL") {
+			if(IsDentiCal(clearhouse)) {
 				sw.Write("DENTICAL"+s);//NM103 1/60 Name Last or Organization Name: Receiver Name.
 			}
 			else {
@@ -177,7 +177,7 @@ namespace OpenDentBusiness
 				+s//NM106 1/10 Name Prefix: Not Used.
 				+s//NM107 1/10 Name Suffix: Not Used.
 				+"46"+s);//NM108 1/2 Identification Code Qualifier: 46=Electronic Transmitter Identification Number (ETIN).
-			if(clearhouse.ISA08=="DENTICAL") {
+			if(IsDentiCal(clearhouse)) {
 				sw.Write("1941461312");//NM109 2/80 Identification Code: Receiver ID Code. aka ETIN#.
 			}
 			else {
@@ -378,7 +378,7 @@ namespace OpenDentBusiness
 				HLcount++;
 				#endregion Billing Provider
 				#region Attachments
-				/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0){//If Tesia and has attachments
+				/*if(IsTesia(clearhouse) && claim.Attachments.Count>0){//If Tesia and has attachments
 					claim.ClaimNote="TESIA#"+claim.ClaimNum.ToString()+" "+claim.ClaimNote;
 					string saveFolder=clearhouse.ExportPath;//we've already tested to make sure this exists.
 					string saveFile;
@@ -447,7 +447,7 @@ namespace OpenDentBusiness
 					+s//SBR06 1/1 Coordination of Benefits Code: Not used.
 					+s//SBR07 1/1 Yes/No Condition or Respose Code: Not used.
 					+s//SBR08 2/2 Employment Status Code: Not used.
-					+GetFilingCode(insPlan)//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO //For Denti-Cal, "MC" is required. pg. 27. Use validation
+					+GetFilingCode(insPlan)//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
 					+endSegment);
 				if(medType==EnumClaimMedType.Medical) {
 					//TODO: Do we need to do this?
@@ -506,11 +506,11 @@ namespace OpenDentBusiness
 					+"PR"+s//NM101 2/3 Entity Identifier Code: PR=Payer.
 					+"2"+s);//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
 				//NM103 1/60 Name Last or Organization Name:
-				if(clearhouse.ISA08=="EMS") {
+				if(IsEMS(clearhouse)) {
 					//This is a special situation requested by EMS.  This tacks the employer onto the end of the carrier.
 					sw.Write(Sout(carrier.CarrierName,30)+"|"+Sout(Employers.GetName(insPlan.EmployerNum),30)+s);
 				}
-				else if(clearhouse.ISA08=="DENTICAL") {
+				else if(IsDentiCal(clearhouse)) {
 					sw.Write("DENTICAL"+s);
 				}
 				else {
@@ -522,13 +522,13 @@ namespace OpenDentBusiness
 					+s//NM107 1/10 Name Suffix: Not used.
 					+"PI"+s);//NM108 1/2 Identification Code Qualifier: PI=Payor Identification.
 				string electid=carrier.ElectID;
-				if(electid=="" && clearhouse.ISA08=="113504607") {//only for Tesia
+				if(electid=="" && IsTesia(clearhouse)) {//only for Tesia
 					electid="00000";
 				}
 				if(electid.Length<3) {
 					electid="06126";
 				}
-				sw.WriteLine(Sout(electid,80,2)//NM109 2/80 Identification Code: PayorID.   //Denti-Cal requires "94146". pg. 33.  Check in validation.
+				sw.WriteLine(Sout(electid,80,2)//NM109 2/80 Identification Code: PayorID.
 					+endSegment);//NM110 through NM112 Not Used.
 				//2010BB N3: (medical,institutional,dental) Payer Address.
 				seg++;
@@ -546,7 +546,7 @@ namespace OpenDentBusiness
 					+endSegment);//N404 through N407 are either not used or are for addresses outside of the United States.
 				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
 				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
-				if(IsEmdeon(clearhouse)) {//Required by Emdeon   //Denti-Cal requires? pg. 34.  
+				if(IsEmdeon(clearhouse) || IsDentiCal(clearhouse)) {//Required by Emdeon and Denti-Cal.
 					seg+=WriteProv_REFG2orLU(sw,billProv,carrier.ElectID);
 				}
 				parentSubsc=HLcount;
@@ -824,7 +824,7 @@ namespace OpenDentBusiness
 				#endregion Claim DN CL1
 				#region Claim PWK
 				//2300 PWK: (medical,institutional,dental) Claim Supplemental Information. Paperwork. Used to identify attachments.
-				/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
+				/*if(IsTesia(clearhouse) && claim.Attachments.Count>0) {//If Tesia and has attachments
 					seg++;
 					sw.WriteLine("PWK"+s
 						+"OZ"+s//PWK01: ReportTypeCode. OZ=Support data for claim.
@@ -862,7 +862,7 @@ namespace OpenDentBusiness
 					pwk02="BM";//By Mail
 				}
 				else {
-					if(clearhouse.ISA08=="DENTICAL") {
+					if(IsDentiCal(clearhouse)) {
 						pwk02="FT";//"File Transfer", but is really electronic. Required value by Denti-Cal.
 					}
 					else {
@@ -1299,11 +1299,11 @@ namespace OpenDentBusiness
 						+"PR"+s//NM101 2/3 Entity Code Identifier: PR=Payer.
 						+"2"+s);//NM102 1/1 Entity Type Qualifier: 2=Non-Person.
 					//NM103 1/60 Name Last or Organization Name:
-					if(clearhouse.ISA08=="EMS") {
+					if(IsEMS(clearhouse)) {
 						//This is a special situation requested by EMS.  This tacks the employer onto the end of the carrier.
 						sw.Write(Sout(otherCarrier.CarrierName,30)+"|"+Sout(Employers.GetName(otherPlan.EmployerNum),30)+s);
 					}
-					else if(clearhouse.ISA08=="DENTICAL") {
+					else if(IsDentiCal(clearhouse)) {
 						sw.Write("DENTICAL"+s);
 					}
 					else {
@@ -1774,8 +1774,20 @@ namespace OpenDentBusiness
 			#endregion Trailers
 		}
 
+		private static bool IsDentiCal(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="DENTICAL");
+		}
+
 		private static bool IsEmdeon(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="0135WCH00" || clearinghouse.ISA08=="133052274");
+		}
+
+		private static bool IsEMS(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="EMS");
+		}
+
+		private static bool IsTesia(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="113504607");
 		}
 
 		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
@@ -1828,8 +1840,9 @@ namespace OpenDentBusiness
 			return 0;
 		}
 
-		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse. Used for billing prov and also for treating prov. Writes 0 or to 1 G2 segments. Returns the number of segments written.</summary>
+		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse. Used for billing prov and also for treating prov. Writes 0 or to 1 G2 or LU segment. Returns the number of segments written.</summary>
 		private static int WriteProv_REFG2orLU(StreamWriter sw,Provider prov,string payorID) {
+			string segmentType="G2";
 			string provID="";
 			ElectID electID=ElectIDs.GetID(payorID);
 			if(electID!=null && electID.IsMedicaid) {
@@ -1839,15 +1852,15 @@ namespace OpenDentBusiness
 				ProviderIdent[] provIdents=ProviderIdents.GetForPayor(prov.ProvNum,payorID);
 				//Should always return 1 or 0 values unless user set it up wrong.
 				if(provIdents.Length>0) {
-
-//todo: clause for LU
-					//provIdents[0].SuppIDType
+					if(provIdents[0].SuppIDType==ProviderSupplementalID.SiteNumber) {
+						segmentType="LU";
+					}
 					provID=provIdents[0].IDNumber;
 				}
 			}
 			if(provID!="") {
 				sw.WriteLine("REF"+s
-		      +"G2"+s//REF01 2/3 Reference Identification Qualifier: G2=all payers including Medicare, Medicaid, Blue Cross, etc.
+		      +segmentType+s//REF01 2/3 Reference Identification Qualifier: G2=all payers including Medicare, Medicaid, Blue Cross, etc. LU=Location Number.
 		      +Sout(provID,50)//REF02 1/50 Reference Identification:
 		      +endSegment);//REF03 and REF04 are not used.
 				return 1;
@@ -2262,6 +2275,17 @@ namespace OpenDentBusiness
 				strb.Append("InsPlan Release of Info");
 			}
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
+			if(IsDentiCal(clearhouse)) {
+				if(GetFilingCode(insPlan)!="MC") {
+					Comma(strb);
+					strb.Append("InsPlan Filing Code must be Medicaid for Denti-Cal.");
+				}
+				//We cannot perform this check, because the user must enter this ID in the carrier payor id box before this block is even triggered, defeating the purpose of this check.
+				//if(carrier.ElectID!="94146") {
+				//  Comma(strb);
+				//  strb.Append("Carrier ID must be set to 94146 for Denti-Cal.");
+				//}
+			}
 			X12Validate.Carrier(carrier,strb);
 			ElectID electID=ElectIDs.GetID(carrier.ElectID);
 			if(electID!=null && electID.IsMedicaid && billProv.MedicaidID=="") {
@@ -2339,7 +2363,7 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Auto accident State");
 			}
-			/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
+			/*if(IsTesia(clearhouse) && claim.Attachments.Count>0) {//If Tesia and has attachments
 				string storedFile;
 				for(int c=0;c<claim.Attachments.Count;c++) {
 					storedFile=ODFileUtils.CombinePaths(FormEmailMessageEdit.GetAttachPath(),claim.Attachments[c].ActualFileName);
