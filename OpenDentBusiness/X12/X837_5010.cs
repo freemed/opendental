@@ -447,7 +447,7 @@ namespace OpenDentBusiness
 					+s//SBR06 1/1 Coordination of Benefits Code: Not used.
 					+s//SBR07 1/1 Yes/No Condition or Respose Code: Not used.
 					+s//SBR08 2/2 Employment Status Code: Not used.
-					+GetFilingCode(insPlan)//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO //For Denti-Cal, "MC" is required. pg. 27
+					+GetFilingCode(insPlan)//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO //For Denti-Cal, "MC" is required. pg. 27. Use validation
 					+endSegment);
 				if(medType==EnumClaimMedType.Medical) {
 					//TODO: Do we need to do this?
@@ -528,7 +528,7 @@ namespace OpenDentBusiness
 				if(electid.Length<3) {
 					electid="06126";
 				}
-				sw.WriteLine(Sout(electid,80,2)//NM109 2/80 Identification Code: PayorID.   //Denti-Cal requires "94146". pg. 33
+				sw.WriteLine(Sout(electid,80,2)//NM109 2/80 Identification Code: PayorID.   //Denti-Cal requires "94146". pg. 33.  Check in validation.
 					+endSegment);//NM110 through NM112 Not Used.
 				//2010BB N3: (medical,institutional,dental) Payer Address.
 				seg++;
@@ -546,8 +546,8 @@ namespace OpenDentBusiness
 					+endSegment);//N404 through N407 are either not used or are for addresses outside of the United States.
 				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
 				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
-				if(IsEmdeon(clearhouse)) {//Required by Emdeon   //Denti-Cal requires? pg. 34
-					seg+=WriteProv_REFG2(sw,billProv,carrier.ElectID);
+				if(IsEmdeon(clearhouse)) {//Required by Emdeon   //Denti-Cal requires? pg. 34.  
+					seg+=WriteProv_REFG2orLU(sw,billProv,carrier.ElectID);
 				}
 				parentSubsc=HLcount;
 				HLcount++;
@@ -1115,7 +1115,7 @@ namespace OpenDentBusiness
 								+Sout(provTreat.StateLicense,50)//REF02 1/50 Reference Identification:
 								+endSegment);//REF03 and REF04 are not used.
 						}
-						seg+=WriteProv_REFG2(sw,provTreat,carrier.ElectID);
+						seg+=WriteProv_REFG2orLU(sw,provTreat,carrier.ElectID);
 					}
 					//2310C NM1: 77 (dental) Service Facility Location Name. Situational. Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33.
 					if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
@@ -1828,22 +1828,25 @@ namespace OpenDentBusiness
 			return 0;
 		}
 
-		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse. Used for billing prov and also for treating prov. Writes 0 or 1 G2 segments. Returns the number of segments written.</summary>
-		private static int WriteProv_REFG2(StreamWriter sw,Provider prov,string payorID) {
+		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse. Used for billing prov and also for treating prov. Writes 0 or to 1 G2 segments. Returns the number of segments written.</summary>
+		private static int WriteProv_REFG2orLU(StreamWriter sw,Provider prov,string payorID) {
 			string provID="";
 			ElectID electID=ElectIDs.GetID(payorID);
 			if(electID!=null && electID.IsMedicaid) {
 				provID=prov.MedicaidID;
 			}
 			else {
-				ProviderIdent[] provIdents=ProviderIdents.GetForPayor(prov.ProvNum,payorID);//Should always return 1 value unless user set it up wrong.
+				ProviderIdent[] provIdents=ProviderIdents.GetForPayor(prov.ProvNum,payorID);
+				//Should always return 1 or 0 values unless user set it up wrong.
 				if(provIdents.Length>0) {
-					provID=provIdents[0].IDNumber;
+
+//todo: clause for LU
+					provID=provIdents[0].SuppIDType.IDNumber;
 				}
 			}
 			if(provID!="") {
 				sw.WriteLine("REF"+s
-		      +"G2"+s//REF01 2/3 Reference Identification Qualifier: 1D=Medicaid.
+		      +"G2"+s//REF01 2/3 Reference Identification Qualifier: G2=all payers including Medicare, Medicaid, Blue Cross, etc.
 		      +Sout(provID,50)//REF02 1/50 Reference Identification:
 		      +endSegment);//REF03 and REF04 are not used.
 				return 1;
