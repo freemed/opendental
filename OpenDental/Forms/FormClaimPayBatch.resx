@@ -120,7 +120,7 @@
   <data name="labelInstruct2.Text" xml:space="preserve">
     <value>In the lower grid, find the first claim on the EOB.  
 
-If it's not there, close this window, find the claim in the Account module of the patient, open it, and enter the amounts paid.  Then, return here.  That claim will now be in the lower grid.
+If it's not there (for a supplemental payment, for example), close this window, find the claim in the Account module of the patient, open it, and enter the amounts paid.  Then, return here.  That claim will now be in the lower grid.
 
 In the lower grid, double click on the claim.  Enter payment amounts for each procedure, including deductibles and writeoffs.  Clicking OK attaches the claim to this payment.
 

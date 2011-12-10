@@ -453,7 +453,7 @@ namespace OpenDental{
 			this.labelInstruct2.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelInstruct2.Location = new System.Drawing.Point(10,27);
 			this.labelInstruct2.Name = "labelInstruct2";
-			this.labelInstruct2.Size = new System.Drawing.Size(207,452);
+			this.labelInstruct2.Size = new System.Drawing.Size(207,465);
 			this.labelInstruct2.TabIndex = 105;
 			this.labelInstruct2.Text = resources.GetString("labelInstruct2.Text");
 			// 
