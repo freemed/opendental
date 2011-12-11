@@ -47,6 +47,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormCentralPasswordCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCentralPasswordCheck.designer.cs">
+      <DependentUpon>FormCentralPasswordCheck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCentralPasswordChange.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCentralPasswordChange.designer.cs">
+      <DependentUpon>FormCentralPasswordChange.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormCentralConnectionEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +79,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormCentralPasswordCheck.resx">
+      <DependentUpon>FormCentralPasswordCheck.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCentralPasswordChange.resx">
+      <DependentUpon>FormCentralPasswordChange.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormCentralConnectionEdit.resx">
       <DependentUpon>FormCentralConnectionEdit.cs</DependentUpon>
       <SubType>Designer</SubType>

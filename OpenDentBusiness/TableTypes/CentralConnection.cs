@@ -27,6 +27,8 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary></summary>
 		public int ItemOrder;
+		///<summary></summary>
+		public bool WebServiceIsEcw;
 
 		///<summary>Returns a copy.</summary>
 		public CentralConnection Copy() {

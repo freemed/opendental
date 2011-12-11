@@ -230,7 +230,7 @@ namespace OpenDentBusiness {
 			return EncryptPassword(inputPass,useEcwAlgorithm);
 		}
 
-		///<summary></summary>
+		///<summary>Creates a hash.</summary>
 		public static string EncryptPassword(string inputPass,bool useEcwAlgorithm) {
 			//No need to check RemotingRole; no call to db.
 			if(inputPass=="") {

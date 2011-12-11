@@ -7712,7 +7712,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						OdUser varchar(255) NOT NULL,
 						OdPassword varchar(255) NOT NULL,
 						Note text NOT NULL,
-						ItemOrder int NOT NULL
+						ItemOrder int NOT NULL,
+						WebServiceIsEcw tinyint NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -7730,6 +7731,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						OdPassword varchar2(255),
 						Note varchar2(255),
 						ItemOrder number(11) NOT NULL,
+						WebServiceIsEcw number(3) NOT NULL,
 						CONSTRAINT centralconnection_CentralConne PRIMARY KEY (CentralConnectionNum)
 						)";
 					Db.NonQ(command);
@@ -8224,7 +8226,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"VALUES ("+GetClaimFormItemNum()+","+POut.Long(claimFormNum)+",'','TreatingDentistSignature','','27','1020','142','30')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('CentralManagerPassHash','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CentralManagerPassHash','')";
+					Db.NonQ(command);
+				}
 
 
 
@@ -8273,3 +8282,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 				
+
+			
