@@ -34,7 +34,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.  Returns</summary>
+		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.  Returns true if patient has changed.</summary>
 		public static bool AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			//add current patient
@@ -57,15 +57,7 @@ namespace OpenDental{
 				buttonLastFivePatNums.RemoveAt(5);
 				buttonLastFiveNames.RemoveAt(5);
 			}
-			if(AutomationL.Trigger(AutomationTrigger.OpenPatient,null,patNum)) {
-				return true;//Will cause MouseUpForced if in ApptModule
-			}
-			return false;
-			//fill menu
-			//menu.MenuItems.Clear();
-			//for(int i=0;i<buttonLastFiveNames.Count;i++) {
-			//	menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
-			//}
+			return true;
 		}
 
 		///<summary>Determines which menu Item was selected from the Patient dropdown list and returns the patNum for that patient. This will not be activated when click on 'FAMILY' or on separator, because they do not have events attached.  Calling class then does a ModuleSelected.</summary>

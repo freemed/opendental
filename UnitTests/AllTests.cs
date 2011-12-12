@@ -1131,8 +1131,8 @@ namespace UnitTests {
 			string suffix="18";
 			Patient pat=PatientT.CreatePatient(suffix);
 			long patNum=pat.PatNum;
-			long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
-			long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
+			//long feeSchedNum1=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix);
+			//long feeSchedNum2=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,suffix+"b");
 			//Carrier
 			Carrier carrier=CarrierT.CreateCarrier(suffix);
 			long planNum1=InsPlanT.CreateInsPlan(carrier.CarrierNum,EnumCobRule.CarveOut).PlanNum;

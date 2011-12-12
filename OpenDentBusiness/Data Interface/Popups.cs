@@ -19,7 +19,8 @@ namespace OpenDentBusiness{
 			}
 			Patient patCur=Patients.GetPat(patNum);
 			string command="SELECT * FROM popup "
-				+"WHERE PatNum = "+POut.Long(patNum)+" "
+				+"WHERE IsDisabled=0 "
+				+"AND (PatNum = "+POut.Long(patNum)+" "
 				//any family level popup for anyone in the family
 				+"OR (PatNum IN (SELECT PatNum FROM patient "
 				+"WHERE Guarantor = "+POut.Long(patCur.Guarantor)+") "
@@ -30,6 +31,7 @@ namespace OpenDentBusiness{
 					+"WHERE SuperFamily = "+POut.Long(patCur.SuperFamily)+") "
 					+"AND PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+") ";
 			}
+			command+=")";
 			return Crud.PopupCrud.SelectMany(command);
 		}
 

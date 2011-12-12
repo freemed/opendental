@@ -2061,9 +2061,12 @@ namespace OpenDental{
 
 		///<Summary>Serves four functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text. 4. Displays any popup.</Summary>
 		private void FillPatientButton(long patNum,string patName,bool hasEmail,string chartNumber,long siteNum) {
-			if(PatientL.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum)) {
-				if(ContrAppt2.Visible) {
-					ContrAppt2.MouseUpForced();
+			bool patChanged=PatientL.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
+			if(patChanged){
+				if(AutomationL.Trigger(AutomationTrigger.OpenPatient,null,patNum)) {//if a trigger happened
+					if(ContrAppt2.Visible) {
+						ContrAppt2.MouseUpForced();
+					}
 				}
 			}
 			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){//on startup.  js Not sure why it's checking count.
@@ -2103,45 +2106,45 @@ namespace OpenDental{
 			if(PopupEventList==null){
 				PopupEventList=new List<PopupEvent>();
 			}
-			bool popupIsDisabled=false;
-			List<Popup> popList=Popups.GetForPatient(patNum);//get all possible 
+			if(!patChanged){
+				return;
+			}
+			//New patient selected.  Everything below here is for popups.
+			//First, remove all expired popups from the event list.
 			for(int i=PopupEventList.Count-1;i>=0;i--){//go backwards
 				if(PopupEventList[i].DisableUntil<DateTime.Now){//expired
 					PopupEventList.RemoveAt(i);
-					continue;
 				}
-				bool contains=false;
-				for(int j=0;j<popList.Count;j++) {
-					if(PopupEventList[i].PopupNum==popList[j].PopupNum) {
-						contains=true;
+			}
+			//Now, loop through all popups for the patient.
+			List<Popup> popList=Popups.GetForPatient(patNum);//get all possible 
+			for(int i=0;i<popList.Count;i++) {
+				//skip any popups that are disabled because they are on the event list
+				bool popupIsDisabled=false;
+				for(int e=0;e<PopupEventList.Count;e++){
+					if(popList[i].PopupNum==PopupEventList[e].PopupNum){
+						popupIsDisabled=true;
 						break;
 					}
 				}
-				if(!contains) {
-					popupIsDisabled=true;
+				if(popupIsDisabled){
+					continue;
 				}
-				else {
-					popupIsDisabled=false;
-					break;
+				//This popup is not disabled, so show it.
+				//A future improvement would be to assemble all the popups that are to be shown and then show them all in one large window.
+				//But for now, they will show in sequence.
+				if(ContrAppt2.Visible) {
+					ContrAppt2.MouseUpForced();
 				}
-			}
-			if(!popupIsDisabled){
-				if(popList.Count>0 && !popList[0].IsDisabled) {
-					if(ContrAppt2.Visible) {
-						ContrAppt2.MouseUpForced();
-					}
-					FormPopupDisplay FormP=new FormPopupDisplay();
-					for(int i=0;i<popList.Count;i++) {//show popups
-						FormP.PopupCur=popList[i];
-						FormP.ShowDialog();
-						if(FormP.MinutesDisabled>0) {
-							PopupEvent popevent=new PopupEvent();
-							popevent.PatNum=patNum;
-							popevent.DisableUntil=DateTime.Now+TimeSpan.FromMinutes(FormP.MinutesDisabled);
-							PopupEventList.Add(popevent);
-							PopupEventList.Sort();
-						}
-					}
+				FormPopupDisplay FormP=new FormPopupDisplay();
+				FormP.PopupCur=popList[i];
+				FormP.ShowDialog();
+				if(FormP.MinutesDisabled>0){
+					PopupEvent popevent=new PopupEvent();
+					popevent.PopupNum=popList[i].PopupNum;
+					popevent.DisableUntil=DateTime.Now+TimeSpan.FromMinutes(FormP.MinutesDisabled);
+					PopupEventList.Add(popevent);
+					PopupEventList.Sort();
 				}
 			}
 		}
@@ -4978,9 +4981,8 @@ namespace OpenDental{
 	}
 
 	public class PopupEvent:IComparable{
-		public long PatNum;
 		public long PopupNum;
-		///<summary>Disable popup for this patient until this time.</summary>
+		///<summary>Disable this popup until this time.</summary>
 		public DateTime DisableUntil;
 
 		public int CompareTo(object obj) {
@@ -4989,7 +4991,7 @@ namespace OpenDental{
 		}
 
 		public override string ToString() {
-			return PatNum.ToString()+", "+DisableUntil.ToString();
+			return PopupNum.ToString()+", "+DisableUntil.ToString();
 		}
 	}
 }
