@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("12.0.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("12.1.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -6829,8 +6829,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		}
 		
 		///<summary></summary>
-		private static void To12_0_0() {
-			if(FromVersion<new Version("12.0.0.0")) {
+		private static void To12_0_1() {
+			if(FromVersion<new Version("12.0.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString) VALUES('BillingEmailSubject','Statement for account [PatNum]')";
@@ -8234,21 +8234,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CentralManagerPassHash','')";
 					Db.NonQ(command);
 				}
-
-
-
-
-
-
-
-
-				command="UPDATE preference SET ValueString = '12.0.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '12.0.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To12_1_0();
+			To12_1_0();
 		}
 
-		///<summary>This is a helper method for the 12.0.0 conversion.  Without it, there would be an additional 1200 lines of code.</summary>
+		///<summary>This is a helper method for the 12.0.1 conversion.  Without it, there would be an additional 1200 lines of code.</summary>
 		private static string GetClaimFormItemNum(){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "(SELECT MAX(ClaimFormItemNum)+1 FROM claimformitem)";
@@ -8259,6 +8251,23 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				return "0";
 			}
 		}
+
+		private static void To12_1_0() {
+			if(FromVersion<new Version("12.1.0.0")) {
+				string command;
+
+
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '12.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To12_2_0();
+		}
+
 
 
 
