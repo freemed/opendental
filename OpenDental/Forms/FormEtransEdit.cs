@@ -404,7 +404,8 @@ namespace OpenDental{
 			textAckCode.Text=EtransCur.AckCode;
 			textNote.Text=EtransCur.Note;
 			if(EtransCur.Etype==EtransType.ClaimSent){
-				if(X837_4010.IsX12(MessageText)) {
+				if(X12object.IsX12(MessageText)) {
+					//TODO: we need to do something different here for 5010s.
 					X837_4010 x837=new X837_4010(MessageText);
 					checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);
 				}
