@@ -94,8 +94,9 @@ namespace OpenDentBusiness{
 				+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop "
 				+"FROM creditcard cc "
 				+"INNER JOIN patient pat ON pat.PatNum=cc.PatNum "
-				+"LEFT JOIN paysplit ps ON ps.PayPlanNum=cc.PayPlanNum "
-				+"LEFT JOIN payment pay ON pay.PayNum=ps.PayNum AND pay.IsRecurringCC=1 ";
+				+"LEFT JOIN paysplit ps ON ps.PayPlanNum=cc.PayPlanNum AND ps.PayPlanNum<>0 "
+				+"LEFT JOIN payment pay ON pay.PayNum=ps.PayNum AND pay.IsRecurringCC=1 "
+				+"WHERE cc.PayPlanNum<>0 ";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command+="GROUP BY cc.CreditCardNum) ";
 			}

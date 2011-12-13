@@ -8292,6 +8292,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'MiPACS')";
 					Db.NonQ32(command);
 				}//end MiPACS Imaging bridge
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE paysplit ADD INDEX (PayPlanNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX paysplit_PayPlanNum ON paysplit (PayPlanNum)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }
 				command="UPDATE preference SET ValueString = '12.0.2.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
