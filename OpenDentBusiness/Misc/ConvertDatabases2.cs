@@ -8237,7 +8237,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.0.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To12_1_0();
+			To12_0_2();
 		}
 
 		///<summary>This is a helper method for the 12.0.1 conversion.  Without it, there would be an additional 1200 lines of code.</summary>
@@ -8252,9 +8252,92 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 		}
 
+		private static void To12_0_2() {
+			if(FromVersion<new Version("12.0.2.0")) {
+				string command;
+				//Insert MiPACS Imaging Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'MiPACS', "
+						+"'MiPACS Imaging', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\MiDentView\Cmdlink.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'MiPACS')";
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"(SELECT MAX(ProgramNum)+1 FROM program),"
+						+"'MiPACS', "
+						+"'MiPACS Imaging', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\MiDentView\Cmdlink.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'MiPACS')";
+					Db.NonQ32(command);
+				}//end MiPACS Imaging bridge
+				command="UPDATE preference SET ValueString = '12.0.2.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To12_1_0();
+		}
+
 		private static void To12_1_0() {
 			if(FromVersion<new Version("12.1.0.0")) {
 				string command;
+				//Insert MiPACS Imaging Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'MiPACS', "
+						+"'MiPACS Imaging', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\MiDentView\Cmdlink.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'MiPACS')";
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"(SELECT MAX(ProgramNum)+1 FROM program),"
+						+"'MiPACS', "
+						+"'MiPACS Imaging', "
+						+"'0', "
+						+"'"+POut.String(@"C:\Program Files\MiDentView\Cmdlink.exe")+"',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+						+"'MiPACS')";
+					Db.NonQ32(command);
+				}//end MiPACS Imaging bridge
 
 
 

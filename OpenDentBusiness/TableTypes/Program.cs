@@ -57,6 +57,7 @@ namespace OpenDentBusiness{
 		ImageFX,
 		Lightyear,
 		MediaDent,
+		MiPACS,
 		Mountainside,
 		///<summary>Please use Programs.UsingOrion where possible.</summary>
 		Orion,

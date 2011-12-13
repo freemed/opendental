@@ -224,6 +224,7 @@
     <Compile Include="Bridges\Apteryx.cs" />
     <Compile Include="Bridges\Cerec.cs" />
     <Compile Include="Bridges\Apixia.cs" />
+    <Compile Include="Bridges\MiPACS.cs" />
     <Compile Include="Bridges\VixWinBase41.cs" />
     <Compile Include="Bridges\EvaSoft.cs" />
     <Compile Include="Bridges\Orion.cs" />

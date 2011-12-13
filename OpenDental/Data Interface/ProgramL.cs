@@ -31,6 +31,10 @@ namespace OpenDental{
 				}
 				return;
 			}
+			if(prog.ProgName==ProgramName.Apixia.ToString()) {
+				Apixia.SendData(prog,pat);
+				return;
+			}
 			if(prog.ProgName==ProgramName.Apteryx.ToString()) {
 				Apteryx.SendData(prog,pat);
 				return;
@@ -117,6 +121,10 @@ namespace OpenDental{
 			}
 			else if(prog.ProgName==ProgramName.MediaDent.ToString()) {
 				MediaDent.SendData(prog,pat);
+				return;
+			}
+			else if(prog.ProgName==ProgramName.MiPACS.ToString()) {
+				MiPACS.SendData(prog,pat);
 				return;
 			}
 			else if(prog.ProgName==ProgramName.Owandy.ToString()) {
