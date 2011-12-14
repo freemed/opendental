@@ -521,8 +521,10 @@
 			}
 			if (event) {
 				var hoverTimeout = null,
-                    startX = event.changedTouches[0].clientX,
-                    startY = event.changedTouches[0].clientY,
+                //startX = event.changedTouches[0].clientX, //Dennis Mathew: This causes issue in links after the page is scrolled in safari iOS 5.0 and up
+				//startY = event.changedTouches[0].clientY, //Dennis Mathew: This causes issue in links after the page is scrolled in safari iOS 5.0 and up
+				startX = event.changedTouches[0].pageX,
+				startY = event.changedTouches[0].pageY,
                     startTime = (new Date).getTime(),
                     deltaX = 0,
                     deltaY = 0,

@@ -91,9 +91,9 @@
 			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="AppointmentList.aspx" href="#AppointmentList">Appointments</a></li>
 			</ul>
-			<ul class="rounded narrowul">
+<%--			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="AppointmentImage.aspx" href="#AppointmentImage">Appointments <br />(graphical)</a></li>
-			</ul>
+			</ul>--%>
 			<ul class="rounded narrowul">
 				<li><a class="arrowless" linkattib="PatientList.aspx" href="#PatientList">Patients</a></li>
 			</ul>
