@@ -97,8 +97,6 @@ function TraversePage(){
 		var SectionToFill='#PatientListContents';
 		ProcessPreviousNextButton(e, UrlForFetchingData, SectionToFill);
 	});
-		
-
 
 	// a tap function is used instead of .live() for elements loaded by AJAX
 	// here the tap does not give an error with jQT.goTo(MoveToURL, 'slide')
@@ -196,7 +194,7 @@ function TraversePage(){
 		var SectionToFill='#PatientListContents';
 		var MoveToURL='#PatientList'; 
 		ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill);
-		//var today=new Date(); console.log("in patients"+today);
+		//var today=new Date(); //console.log("in patients"+today);
     });
 
 $('.pharmacies').tap(function (e) {
@@ -312,7 +310,7 @@ function ProcessArrowlessPageLink(UrlForFetchingData, MoveToURL, SectionToFill){
 
 function ProcessReversePageLink(UrlForFetchingData, MoveToURL, SectionToFill){
     $(SectionToFill).append(MessageLoad);
-    jQT.goToReverse(MoveToURL, 'slide'); //var today=new Date(); console.log("in ProcessReversePageLink 1a"+today);
+    jQT.goToReverse(MoveToURL, 'slide'); //var today=new Date(); //console.log("in ProcessReversePageLink 1a"+today);
     FetchPage(UrlForFetchingData, SectionToFill); //console.log("in ProcessReversePageLink 1b"+today);
 }
 
@@ -404,7 +402,7 @@ function ProcessLogout(e) {
 ///$('area').live('click', function () { 
 ///<summary>
     function areaClicked(url) {
-        //console.log('areaClicked !');
+    	//console.log('areaClicked !' + url);
         UrlForFetchingData=url;
         var SectionToFill='#AppointmentDetailsContents';
         var MoveToURL='#AppointmentDetails';
@@ -424,9 +422,9 @@ function ProcessLogout(e) {
     initialWindowWidth=jQuery(window).width(); // This value is read only once because it changes for android. In android jQuery(window).width()=window.innerWidth
     }
     var zoomL=window.innerWidth/initialWindowWidth;
-    // console.log("window.innerWidth="+window.innerWidth)
-    // console.log("initialWindowWidth="+initialWindowWidth)
-    // console.log("jQuery(window).width()="+jQuery(window).width())
+    // //console.log("window.innerWidth="+window.innerWidth)
+    // //console.log("initialWindowWidth="+initialWindowWidth)
+    // //console.log("jQuery(window).width()="+jQuery(window).width())
     $('#toolbarAppointmentImage').attr('style', '-webkit-transform: scale('+zoomL+')');
     }
     //setInterval(resizeAppointmentImageToolbar, 2000);
@@ -475,12 +473,12 @@ function ProcessLogout(e) {
 
     function displayWidth(){
     //$(window).width();
-    console.log('window width '+$(window).width());
+    //console.log('window width '+$(window).width());
     //$(window).width() changes when the orientation changes, window.innerWidth does not change when the orientation changes
     }
 
     function resetScreenSizeOr() {
-    console.log("Adjustion for orientatiion change");
+    //console.log("Adjustion for orientatiion change");
     scale=appImageWindowWidth / jQuery(window).width();
     $('body').attr('style', '-webkit-transform: scale('+scale+'); -webkit-transform-origin: 0 0;');
 
@@ -503,19 +501,19 @@ function ProcessLogout(e) {
     //screen.width=initialWindowWidth;
     //observation
     $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1');
-    console.log("in reset"+ $('meta[name=viewport]').attr("content"));
+    //console.log("in reset"+ $('meta[name=viewport]').attr("content"));
 
 
     var browser=navigator.userAgent.toLowerCase(); cc
     if (browser.indexOf('android')!=-1) {
     $('meta[name=viewport]').attr('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0'); //works for android
-    console.log("window.innerWidth a="+window.innerWidth);
+    //console.log("window.innerWidth a="+window.innerWidth);
     }
     else {//iphone
-    var zoom=window.innerWidth/jQuery(window).width(); console.log("window.innerWidth b="+window.innerWidth);
+    var zoom=window.innerWidth/jQuery(window).width(); //console.log("window.innerWidth b="+window.innerWidth);
     $('body').attr('style', '-webkit-transform: scale('+zoom+'); -webkit-transform-origin: 0 0;'); //works for iphone
     //window.innerWidth=initialWindowWidth;
-    console.log("window.innerWidth c="+window.innerWidth);
+    //console.log("window.innerWidth c="+window.innerWidth);
     }
   
     }

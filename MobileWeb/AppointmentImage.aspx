@@ -59,6 +59,7 @@
 
 
 <script type="text/javascript">
+/*resize generated image to fit page width*/
 	$(document).ready(function () {
 		$("#GeneratedImage1").load(function () {
 			var scale = $(window).width()/$(this).width();

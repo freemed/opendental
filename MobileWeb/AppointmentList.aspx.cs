@@ -117,7 +117,9 @@ namespace MobileWeb {
 				}else{
 					pv=Providerms.GetOne(CustomerNum,ap.ProvNum);
 				}
-				HexColor=ColorTranslator.ToHtml(pv.ProvColor);
+				if(pv!=null) {
+					HexColor=ColorTranslator.ToHtml(pv.ProvColor);
+				}
 				return HexColor;
 			}
 			catch(Exception ex) {

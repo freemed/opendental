@@ -25,7 +25,6 @@ namespace MobileWeb {
 			try {
 				// a query involving both username and password is used because 2 dental offices could potentially have the same username
 				String command="SELECT * FROM userm WHERE UserName='"+POut.String(username)+"' AND Password='" +POut.String(md5password)+"'";
-				//String command="SELECT * FROM userm WHERE UserName='"+POut.String(username)+"'"; Old query
 				Userm um=Userms.GetOne(command);
 				if(um==null) {
 					DentalOfficeID=0;//user password combination incorrect- specify message if necessary
