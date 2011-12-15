@@ -884,6 +884,7 @@ namespace OpenDental{
 			gridFamily.Columns.Add(col);
 			gridFamily.Rows.Clear();
 			if(PatCur==null){
+				gridFamily.EndUpdate();
 				return;
 			}
 			ODGridRow row;
@@ -1183,6 +1184,7 @@ namespace OpenDental{
 			gridRecall.Columns.Add(col);
 			gridRecall.Rows.Clear();
 			if(PatCur==null){
+				gridRecall.EndUpdate();
 				return;
 			}
 			//we just want the recall for the current patient
