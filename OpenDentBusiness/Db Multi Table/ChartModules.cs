@@ -1267,6 +1267,13 @@ namespace OpenDentBusiness {
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
 				return ProcedureLogic.CompareProcedures(x,y);
 			}
+			//nothing below this point can be a procedure.
+			//dates are guaranteed to match at this point.
+			//they are also guaranteed to be the same type.
+			//Sort other types by time-----------------------------------------------------------------------------------------------------------------------------
+			if(((DateTime)x["ProcDate"])!=((DateTime)y["ProcDate"])){
+			  return ((DateTime)x["ProcDate"]).CompareTo(((DateTime)y["ProcDate"]));
+			}
 			return 0;
 		}
 
