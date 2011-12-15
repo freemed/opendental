@@ -103,22 +103,39 @@ namespace OpenDental {
 		}
 
 		///<summary>Runs as the final step of loading the form, and also immediately after fields are moved down due to growth.</summary>
-		private void LayoutFields(){
+		private void LayoutFields() {
 			panelMain.Controls.Clear();
 			RichTextBox textbox;//has to be richtextbox due to MS bug that doesn't show cursor.
 			FontStyle style;
 			SheetCheckBox checkbox;
 			//first, draw images---------------------------------------------------------------------------------------
 			//might change this to only happen once when first loading form:
-			if(pictDraw!=null){
-				if(panelMain.Controls.Contains(pictDraw)){
+			if(pictDraw!=null) {
+				if(panelMain.Controls.Contains(pictDraw)) {
 					Controls.Remove(pictDraw);
 				}
 				pictDraw=null;
 			}
 			imgDraw=null;
-			foreach(SheetField field in SheetCur.SheetFields){
-				if(field.FieldType!=SheetFieldType.Image){
+			pictDraw=new PictureBox();
+			if(SheetCur.IsLandscape) {
+				imgDraw=new Bitmap(SheetCur.Height,SheetCur.Width);
+				pictDraw.Width=SheetCur.Height;
+				pictDraw.Height=SheetCur.Width;
+			}
+			else {
+				imgDraw=new Bitmap(SheetCur.Width,SheetCur.Height);
+				pictDraw.Width=SheetCur.Width;
+				pictDraw.Height=SheetCur.Height;
+			}
+			pictDraw.Location=new Point(0,0);
+			pictDraw.Image=(Image)imgDraw.Clone();
+			pictDraw.SizeMode=PictureBoxSizeMode.StretchImage;
+			panelMain.Controls.Add(pictDraw);
+			panelMain.SendToBack();
+			Graphics pictGraphics=Graphics.FromImage(imgDraw);
+			foreach(SheetField field in SheetCur.SheetFields) {
+				if(field.FieldType!=SheetFieldType.Image) {
 					continue;
 				}
 				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
@@ -126,47 +143,15 @@ namespace OpenDental {
 				if(field.FieldName=="Patient Info.gif") {
 					img=Properties.Resources.Patient_Info;
 				}
-				else if(File.Exists(filePathAndName)){
+				else if(File.Exists(filePathAndName)) {
 					img=Image.FromFile(filePathAndName);
 				}
-				else{
+				else {
 					continue;
 				}
-				//we will now change the resolution to 100x100 to make this screen faster and to simplify calculations.
-				//I tested it, and this does not decrease the screen quality.
-				Image img2=new Bitmap(img,field.Width,field.Height);
-				PictureBox pictBox=new PictureBox();
-				pictBox.Location=new Point(field.XPos,field.YPos);
-				pictBox.Width=field.Width;
-				pictBox.Height=field.Height;
-				pictBox.Image=img2;
-				pictBox.SizeMode=PictureBoxSizeMode.StretchImage;
-				pictBox.Tag=field;
-				panelMain.Controls.Add(pictBox);
-				pictBox.BringToFront();
-				if(pictDraw==null || pictBox.Height>pictDraw.Height){//use the tallest pictBox
-					pictDraw=pictBox;
-					imgDraw=(Image)img2.Clone();//we will preserve this original image and draw on the real image.
-				}
+				pictGraphics.DrawImage(img,field.XPos,field.YPos,field.Width,field.Height);
 			}
-			if(pictDraw==null){
-				pictDraw=new PictureBox();				
-				if(SheetCur.IsLandscape){
-					imgDraw=new Bitmap(SheetCur.Height,SheetCur.Width);
-					pictDraw.Width=SheetCur.Height;
-					pictDraw.Height=SheetCur.Width;
-				}
-				else{
-					imgDraw=new Bitmap(SheetCur.Width,SheetCur.Height);
-					pictDraw.Width=SheetCur.Width;
-					pictDraw.Height=SheetCur.Height;
-				}
-				pictDraw.Location=new Point(0,0);
-				pictDraw.Image=(Image)imgDraw.Clone();
-				pictDraw.SizeMode=PictureBoxSizeMode.StretchImage;
-				panelMain.Controls.Add(pictDraw);
-				panelMain.SendToBack();
-			}
+			pictGraphics.Dispose();
 			//Set mouse events for the pictDraw
 			pictDraw.MouseDown+=new MouseEventHandler(pictDraw_MouseDown);
 			pictDraw.MouseMove+=new MouseEventHandler(pictDraw_MouseMove);
@@ -174,23 +159,21 @@ namespace OpenDental {
 			//draw drawings, rectangles, and lines-----------------------------------------------------------------------
 			RefreshPanel();
 			//draw textboxes----------------------------------------------------------------------------------------------
-			foreach(SheetField field in SheetCur.SheetFields){
+			foreach(SheetField field in SheetCur.SheetFields) {
 				if(field.FieldType!=SheetFieldType.InputField
 					&& field.FieldType!=SheetFieldType.OutputText
-					&& field.FieldType!=SheetFieldType.StaticText)
-				{
+					&& field.FieldType!=SheetFieldType.StaticText) {
 					continue;
 				}
 				textbox=new RichTextBox();
 				textbox.BorderStyle=BorderStyle.None;
 				//textbox.Multiline=true;//due to MS malfunction at 9pt which cuts off the bottom of the text.
 				if(field.FieldType==SheetFieldType.OutputText
-					|| field.FieldType==SheetFieldType.StaticText)
-				{
+					|| field.FieldType==SheetFieldType.StaticText) {
 					//textbox.BackColor=Color.White;
 					//textbox.BackColor=Color.FromArgb(245,245,200);
 				}
-				else if(field.FieldType==SheetFieldType.InputField){
+				else if(field.FieldType==SheetFieldType.InputField) {
 					textbox.BackColor=Color.FromArgb(245,245,200);
 					textbox.TabStop=(field.TabOrder==0?false:true);
 					textbox.TabIndex=field.TabOrder;
@@ -200,15 +183,15 @@ namespace OpenDental {
 				textbox.ScrollBars=RichTextBoxScrollBars.None;
 				textbox.Text=field.FieldValue;
 				style=FontStyle.Regular;
-				if(field.FontIsBold){
+				if(field.FontIsBold) {
 					style=FontStyle.Bold;
 				}
 				textbox.Font=new Font(field.FontName,field.FontSize,style);
-				if(field.Height<textbox.Font.Height+2){
+				if(field.Height<textbox.Font.Height+2) {
 					textbox.Multiline=false;
 					//textbox.AcceptsReturn=false;
 				}
-				else{
+				else {
 					textbox.Multiline=true;
 					//textbox.AcceptsReturn=true;
 				}
@@ -220,12 +203,12 @@ namespace OpenDental {
 				textbox.BringToFront();
 			}
 			//draw checkboxes----------------------------------------------------------------------------------------------
-			foreach(SheetField field in SheetCur.SheetFields){
-				if(field.FieldType!=SheetFieldType.CheckBox){
+			foreach(SheetField field in SheetCur.SheetFields) {
+				if(field.FieldType!=SheetFieldType.CheckBox) {
 					continue;
 				}
 				checkbox=new SheetCheckBox();
-				if(field.FieldValue=="X"){
+				if(field.FieldValue=="X") {
 					checkbox.IsChecked=true;
 				}
 				checkbox.Location=new Point(field.XPos,field.YPos);
@@ -239,21 +222,21 @@ namespace OpenDental {
 				checkbox.BringToFront();
 			}
 			//draw signature boxes----------------------------------------------------------------------------------------------
-			foreach(SheetField field in SheetCur.SheetFields){
-				if(field.FieldType!=SheetFieldType.SigBox){
+			foreach(SheetField field in SheetCur.SheetFields) {
+				if(field.FieldType!=SheetFieldType.SigBox) {
 					continue;
 				}
 				OpenDental.UI.SignatureBoxWrapper sigBox=new OpenDental.UI.SignatureBoxWrapper();
 				sigBox.Location=new Point(field.XPos,field.YPos);
 				sigBox.Width=field.Width;
 				sigBox.Height=field.Height;
-				if(field.FieldValue.Length>0){//a signature is present
+				if(field.FieldValue.Length>0) {//a signature is present
 					bool sigIsTopaz=false;
-					if(field.FieldValue[0]=='1'){
+					if(field.FieldValue[0]=='1') {
 						sigIsTopaz=true;
 					}
 					string signature="";
-					if(field.FieldValue.Length>1){
+					if(field.FieldValue.Length>1) {
 						signature=field.FieldValue.Substring(1);
 					}
 					string keyData=Sheets.GetSignatureKey(SheetCur);
