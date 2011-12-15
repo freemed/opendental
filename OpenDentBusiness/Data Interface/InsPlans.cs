@@ -11,11 +11,16 @@ namespace OpenDentBusiness {
 	public class InsPlans {
 		///<summary>Also fills PlanNum from db.</summary>
 		public static long Insert(InsPlan plan) {
+			return Insert(plan,false);
+		}
+		
+		///<summary>Also fills PlanNum from db.</summary>
+		public static long Insert(InsPlan plan,bool useExistingPK) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				plan.PlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),plan);
+				plan.PlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),plan,useExistingPK);
 				return plan.PlanNum;
 			}
-			return Crud.InsPlanCrud.Insert(plan);
+			return Crud.InsPlanCrud.Insert(plan,true);
 		}
 
 		///<summary></summary>

@@ -74,11 +74,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(InsSub insSub){
+			return Insert(insSub,false);
+		}
+
+		///<summary></summary>
+		public static long Insert(InsSub insSub,bool useExistingPK){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				insSub.InsSubNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insSub);
+				insSub.InsSubNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insSub,useExistingPK);
 				return insSub.InsSubNum;
 			}
-			return Crud.InsSubCrud.Insert(insSub);
+			return Crud.InsSubCrud.Insert(insSub,true);
 		}
 
 		///<summary></summary>
