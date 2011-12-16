@@ -1035,25 +1035,20 @@ namespace OpenDentBusiness
 				//2300 HI: TC (institutional) Treatment Code Information. Situational. We do not use. When home health agencies need to report plan of treatment information under contracts.
 				//2300 HCP: (medical,institutional,dental) Claim Pricing/Repricing Information. Situational. We do not use.
 				#endregion Claim HI HCP
+				provTreat=Providers.GetProv(claim.ProvTreat);
 				#region 2310 Claim Providers (medical)
 				//Since order might be important, we have to handle medical, institutional, and dental separately.
 				if(medType==EnumClaimMedType.Medical) {
-//todo: (medical) provider loops.  The medical loops below were just thrown in here from somewhere else and are not even started.
-					/*
-					if(medType==EnumClaimMedType.Medical) {
-						seg++;
-						sw.Write("PRV"+s
-							+"PE"+s//PRV01: PE=Performing
-							+"PXC"+s//PRV02: PXC=Health Care Provider Taxonomy Code
-							+X12Generator.GetTaxonomy(provTreat)//PRV03: Taxonomy code
-							+endSegment);
-					}*/
 					//2310A NM1: DN/P3 (medical) Referring Provider Name. Situational.
 					seg+=WriteNM1_DN(sw,claim.ReferringProv);
 					//2310A REF: (medical) Referring Provider Secondary Identification. Situational. We do not use.
-					//2010B NM1: (medical) Rendering Provider Name. Situational. We do not use.
-					//2310B PRV: (medical) Rendering Provider Specialty Information. Situational. We do not use.
-					//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
+					if(claim.ProvTreat!=claim.ProvBill) {
+						//2010B NM1: 82 (medical) Rendering Provider Name. Required when treating provider is different from billing provider.
+						seg+=WriteNM1_82(sw,provTreat);
+						//2310B PRV: PE (medical) Rendering Provider Specialty Information. Situational.
+						seg+=WritePRV_PE(sw,provTreat);
+						//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
+					}
 					//2310C NM1: (medical) Service Facility Location Name. Situational. We do not use.
 					//2310C N3: (medical) Service Facility Location Address. We do not use.
 					//2310C N4: (medical) Service Facility Location City, State, Zip Code. We do not use.
@@ -1080,8 +1075,11 @@ namespace OpenDentBusiness
 					//2310C REF: ZZ (institutional) Secondary Physician Secondary Identification. Situational.
 					//2310C NM1: ZZ (institutional) Other Operating Physician Name. Situational.
 					//2310C REF: ZZ (institutional) Other Operating Physician Secondary Identification. Situational.
-					//2310D NM1: 82 (institutional) Rendering Provider Name. Situational. If different from attending provider AND when regulations require both facility and professional components.
-					//2310D REF: ZZ (institutional) Rendering Provider Secondary Identificaiton. Situational.
+					if(claim.ProvTreat!=claim.ProvBill) {
+						//2310D NM1: 82 (institutional) Rendering Provider Name. Situational. If different from attending provider AND when regulations require both facility and professional components.
+						seg+=WriteNM1_82(sw,provTreat);
+						//2310D REF: ZZ (institutional) Rendering Provider Secondary Identificaiton. Situational.
+					}
 					//2310E NM1: 77 (institutional) Service Facility Location Name. Situational.
 	//todo:
 					//2310E N3: (institutional) Service Facility Location Address. Required when place of service is different from loop 2010AA billing provider.
@@ -1102,26 +1100,9 @@ namespace OpenDentBusiness
 					//2310A REF: G2 (dental) Referring Provider Secondary Identification. Situational.
 					if(claim.ProvTreat!=claim.ProvBill) {
 						//2310B NM1: 82 (dental) Rendering Provider Name. Situational. Only required if different from the billing provider. Emdeon will reject the claim if this segment is the same as the billing provider for all claims in the batch.
-						provTreat=Providers.GetProv(claim.ProvTreat);
-						seg++;
-						sw.Write("NM1"+s
-							+"82"+s//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
-							+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
-							+Sout(provTreat.LName,60)+s//NM103 1/60 Name Last or Organization Name:
-							+Sout(provTreat.FName,35)+s//NM104 1/35 Name First:
-							+Sout(provTreat.MI,25)+s//NM105 1/25 Name Middle:
-							+s//NM106 1/10 Name Prefix: Not Used.
-							+s//NM107 1/10 Name Suffix: We don't support.
-							+"XX"+s//NM108 1/2 Identification Code Qualifier: Situational. Required since after the HIPAA date. XX=NPI.
-							+Sout(provTreat.NationalProvID,80)//NM109 2/80 Identification Code:  NPI validated.
-							+endSegment);//NM110 through NM112 are not used.
+						seg+=WriteNM1_82(sw,provTreat);
 						//2310B PRV: PE (dental) Rendering Provider Specialty Information.
-						seg++;
-						sw.Write("PRV"+s
-							+"PE"+s//PRV01 1/3 Provider Code: PE=Performing.
-							+"PXC"+s//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
-							+X12Generator.GetTaxonomy(provTreat)//PRV03 1/50 Reference Identification: Taxonomy Code.
-							+endSegment);//PRV04 through PRV06 are not used.
+						seg+=WritePRV_PE(sw,provTreat);
 						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
 						//todo: is StateLicense validated?
 						if(provTreat.StateLicense!="") {
@@ -1884,7 +1865,7 @@ namespace OpenDentBusiness
 			return 0;
 		}
 
-		///<summary>A referring provider.  The loop has different numbers depending on med/dent/inst.</summary>
+		///<summary>A referring provider.  The loop has different numbers depending on med/inst/dent.</summary>
 		private static int WriteNM1_DN(StreamWriter sw,long referringProv) {
 			Referral referral=Referrals.GetReferral(referringProv);
 			if(referral==null || referral.NotPerson || !referral.IsDoctor || referral.LName=="") {
@@ -1911,6 +1892,45 @@ namespace OpenDentBusiness
 					);//NM110 through NM112 not used.
 			}
 			sw.Write(endSegment);
+			return 1;
+		}
+
+		///<summary>A rendering provider. The loop has different numbers depending on med/inst/dent</summary>
+		private static int WriteNM1_82(StreamWriter sw,Provider provTreat) {
+			if(provTreat==null || provTreat.LName=="") {
+				return 0;
+			}
+			sw.Write("NM1"+s
+				+"82"+s//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
+				+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
+				+Sout(provTreat.LName,60));//NM103 1/60 Name Last or Organization Name:
+			if(provTreat.FName!="" || provTreat.MI!="" || provTreat.NationalProvID.Length>1) {
+				sw.Write(s//end of NM103.
+					+Sout(provTreat.FName,35));//NM104 1/35 Name First:
+			}
+			if(provTreat.MI!="" || provTreat.NationalProvID.Length>1) {
+				sw.Write(s//end of NM104.
+					+Sout(provTreat.MI,25));//NM105 1/25 Name Middle:
+			}
+			if(provTreat.NationalProvID.Length>1) {
+				sw.Write(s//end of NM105.
+					+s//NM106 1/10 Name Prefix: Not Used.
+					+s//NM107 1/10 Name Suffix: We don't support.
+					+"XX"+s//NM108 1/2 Identification Code Qualifier: Situational. Required since after the HIPAA date. XX=NPI.
+					+Sout(provTreat.NationalProvID,80));//NM109 2/80 Identification Code:  NPI validated.
+			}
+			sw.Write(endSegment);//NM110 through NM112 are not used.
+			return 1;
+		}
+
+		///<summary>Rendering provider specialty information. The loop has different numbers in med/dent. Not used in inst.</summary>
+		private static int WritePRV_PE(StreamWriter sw,Provider provTreat) {
+			//2310B PRV: PE (dental) Rendering Provider Specialty Information.
+			sw.Write("PRV"+s
+				+"PE"+s//PRV01 1/3 Provider Code: PE=Performing.
+				+"PXC"+s//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
+				+X12Generator.GetTaxonomy(provTreat)//PRV03 1/50 Reference Identification: Taxonomy Code.
+				+endSegment);//PRV04 through PRV06 are not used.
 			return 1;
 		}
 
