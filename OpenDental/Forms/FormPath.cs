@@ -509,14 +509,15 @@ namespace OpenDental{
 			//remember that user might be using a website or a linux box to store images, therefore must allow forward slashes.
 			if(radioUseFolder.Checked){
 				if(textLocalPath.Text!=""){
-					if(!Directory.Exists(textLocalPath.Text)){
-						MsgBox.Show(this,"The path override for this computer is invalid.");
+					//if(!Directory.Exists(textLocalPath.Text)){
+					if(ImageStore.GetValidPathFromString(textLocalPath.Text)==null){
+						MsgBox.Show(this,"The path override for this computer is invalid.  The folder must exist and must contain all 26 A through Z folders.");
 						return;
 					}
 				}
 				else if(textServerPath.Text!=""){
-					if(!Directory.Exists(textServerPath.Text)){
-						MsgBox.Show(this,"The path override for this server is invalid.");
+					if(ImageStore.GetValidPathFromString(textServerPath.Text)==null){
+						MsgBox.Show(this,"The path override for this server is invalid.  The folder must exist and must contain all 26 A through Z folders.");
 						return;
 					}
 				}
