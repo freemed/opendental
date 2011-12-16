@@ -186,13 +186,14 @@ namespace OpenDentBusiness{
 		Institutional
 	}
 
-	///<summary>0=None, 1=EPSDT_1, 2=Handicapped_2, 3=SpecialFederal_3, (no 4), 5=Disability_5</summary>
+	///<summary>0=None, 1=EPSDT_1, 2=Handicapped_2, 3=SpecialFederal_3, (no 4), 5=Disability_5, 9=SecondOpinion_9</summary>
 	public enum EnumClaimSpecialProgram {
 		None=0,
 		EPSDT_1=1,
 		Handicapped_2=2,
 		SpecialFederal_3=3,
-		Disability_5=5
+		Disability_5=5,
+		SecondOpinion_9=9
 	}
 
 }

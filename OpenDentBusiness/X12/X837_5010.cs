@@ -326,7 +326,7 @@ namespace OpenDentBusiness
 							+endSegment);//REF03 and REF04 are not used.
 					}
 					//2010AA REF G5 (dental) Site Identification Number: NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by Emdeon.
-					if(IsEmdeon(clearhouse)) {
+					if(IsEmdeonDental(clearhouse)) {
 						seg+=Write2010AASiteIDforEmdeon(sw,billProv,carrier.ElectID);
 					}
 				}
@@ -546,7 +546,7 @@ namespace OpenDentBusiness
 					+endSegment);//N404 through N407 are either not used or are for addresses outside of the United States.
 				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
 				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
-				if(IsEmdeon(clearhouse) || IsDentiCal(clearhouse)) {//Required by Emdeon and Denti-Cal.
+				if(IsEmdeonDental(clearhouse) || IsDentiCal(clearhouse)) {//Required by Emdeon and Denti-Cal.
 					seg+=WriteProv_REFG2orLU(sw,billProv,carrier.ElectID);
 				}
 				parentSubsc=HLcount;
@@ -563,7 +563,7 @@ namespace OpenDentBusiness
 						+endSegment);
 					//2000C PAT: (medical,institutional,dental) Patient Information.
 					seg++;
-					if(IsEmdeon(clearhouse)) {
+					if(IsEmdeonDental(clearhouse)) {
 						sw.Write("PAT"+s
 							+GetRelat(claim.PatRelat)+s//PAT01 2/2 Individual Relationship Code:
 							+s//PAT02 1/1 Patient Location Code: Not used.
@@ -663,23 +663,9 @@ namespace OpenDentBusiness
 				sw.Write("A"+s);//CLM07 1/1 Provider Accept Assignment Code: Prov accepts medicaid assignment. OD has no field for this, so no choice.
 				sw.Write((sub.AssignBen?"Y":"N")+s);//CLM08 1/1 Yes/No Condition or Response Code: We do not support W.
 				sw.Write(sub.ReleaseInfo?"Y":"I");//CLM09 1/1 Release of Information Code: Y or I(which is equivalent to No)
-				if(medType==EnumClaimMedType.Medical) {
-					//sw.Write(s//end of CLM09
-					//  +s);//CLM10 1/1 Patient Signature Source Code: Situational. We do not use.
-					////CLM11 Related Causes Information. Situational. Required when accident date is specified in DTP 439 of loop 2300.
-					//if(claim.AccidentDate.Year>1880) {
-//todo						
-					//}
-					//sw.Write(s);//End of CLM11
-					sw.Write(endSegment);//CLM10 through CLM20 are mostly not used, but some are situational and we will probably need to implement. For now, we do not use.
-				}
-				else if(medType==EnumClaimMedType.Institutional) {
-					//CLM10-19 not used, 20 not supported.
-					sw.Write(endSegment);
-				}
-				else if(medType==EnumClaimMedType.Dental) {
-					if(claim.AccidentRelated!="" || claim.SpecialProgramCode!=EnumClaimSpecialProgram.None || claim.ClaimType=="PreAuth") {//if val for 11,12, or 19
-						sw.Write(s+s//nothing for CLM09. CLM10 not used
+				if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Dental) {
+					if(claim.AccidentDate.Year>1880 || claim.SpecialProgramCode!=EnumClaimSpecialProgram.None || claim.ClaimType=="PreAuth") {//if val for 11,12, or 19
+						sw.Write(s+s//end of CLM09. CLM10 not used
 							+GetRelatedCauses(claim));//CLM11 2/3:2/3:2/3:2/2:2/3 Related Causes Information: Situational. Accident related, including state. Might be blank.
 					}
 					if(claim.SpecialProgramCode!=EnumClaimSpecialProgram.None || claim.ClaimType=="PreAuth") {//if val for 12, or 19
@@ -689,11 +675,12 @@ namespace OpenDentBusiness
 					if(claim.ClaimType=="PreAuth") {//if val for 19
 						sw.Write(s//nothing for CLM12.
 							+s+s+s+s+s+s//CLM13-18 not used
-							+"PB");//CLM19 2/2 Claim Submission Reason Code: PB=Predetermination of Benefits. Not allowed in medical claims. What is the replacement??
-							//CLM20 1/2 Delay Reason Code: Situational. Required when claim is submitted late. Not supported.
+							+"PB");//CLM19 2/2 Claim Submission Reason Code: PB=Predetermination of Benefits. TODO: Not allowed in medical claims. What is the replacement??
+						//CLM20 1/2 Delay Reason Code: Situational. Required when claim is submitted late. Not supported.
 					}
-					sw.Write(endSegment);
 				}
+				//CLM10-19 not used, 20 not supported for institutional.
+				sw.Write(endSegment);
 				#endregion Claim CLM
 				#region Claim DTP
 				if(medType==EnumClaimMedType.Medical) {
@@ -844,22 +831,24 @@ namespace OpenDentBusiness
 				//PWK can repeat max 10 times.
 				string pwk01="  ";
 				if(claim.AttachedFlags.Contains("EoB")) {
-					pwk01="EB";
-				}
-				if(claim.AttachedFlags.Contains("Note")) {
-					pwk01="OB";
+					pwk01="EB";//Explaination of Benefits
 				}
 				if(claim.AttachedFlags.Contains("Perio")) {
-					pwk01="P6";
+					if(medType==EnumClaimMedType.Dental) {
+						pwk01="P6";//Periodontal Charts
+					}
+					else {//Medical and institutional
+						pwk01="OZ";//Support Data for Claim. There is no "P6" nor a code for perio charts.
+					}
 				}
-				if(claim.AttachedFlags.Contains("Misc") || claim.AttachedImages>0) {
-					pwk01="OZ";
+				if(claim.AttachedFlags.Contains("Misc") || claim.AttachedFlags.Contains("Note") || claim.AttachedImages>0) {
+					pwk01="OZ";//Support Data for Claim
 				}
 				if(claim.Radiographs>0) {
-					pwk01="RB";
+					pwk01="RB";//Radiology Films
 				}
 				if(claim.AttachedModels>0) {
-					pwk01="DA";
+					pwk01="DA";//Dental Models
 				}
 				string pwk02="  ";
 				if(claim.AttachedFlags.Contains("Mail")) {
@@ -1525,14 +1514,16 @@ namespace OpenDentBusiness
 					//2400 PWK: (institutional) Line Supplemental Information. Situational. We do not use.
 					//2400 CRC: (medical) Condition Indicator/Durable Medical Equipment. Situational. We do not use.
 					#region Service DTP
-					//2400 DTP: 472 (medical,institutional,dental) Service Date. Situaitonal. Required for medical. Required if different from claim. Emdeon complains if this date is specified at is not needed.
-					if(claim.ClaimType!="PreAuth" && proc.ProcDate!=claim.DateService) {
-						seg++;
-						sw.Write("DTP"+s
-							+"472"+s//DTP01 3/3 Date/Time Qualifier: 472=Service.
-							+"D8"+s//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
-							+proc.ProcDate.ToString("yyyyMMdd")//DTP03 1/35 Date Time Period:
-							+endSegment);
+					//2400 DTP: 472 (medical,institutional,dental) Service Date. Situaitonal. Required for medical. Required if different from claim for dental and inst. Emdeon dental complains if this date is specified when not needed.
+					if(claim.ClaimType!="PreAuth") {
+						if(medType==EnumClaimMedType.Medical || proc.ProcDate!=claim.DateService) {//Always required for medical because there is no date of service at the claim level.
+							seg++;
+							sw.Write("DTP"+s
+								+"472"+s//DTP01 3/3 Date/Time Qualifier: 472=Service.
+								+"D8"+s//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+								+proc.ProcDate.ToString("yyyyMMdd")//DTP03 1/35 Date Time Period:
+								+endSegment);
+						}
 					}
 					//2400 DTP: 139/441 (dental) Date Prior Placement. Situational. Required when replacement.
 					if(proc.Prosthesis=="R") {//already validated date
@@ -1775,8 +1766,8 @@ namespace OpenDentBusiness
 			return (clearinghouse.ISA08=="DENTICAL");
 		}
 
-		private static bool IsEmdeon(Clearinghouse clearinghouse) {
-			return (clearinghouse.ISA08=="0135WCH00" || clearinghouse.ISA08=="133052274");
+		private static bool IsEmdeonDental(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="0135WCH00");
 		}
 
 		private static bool IsEMS(Clearinghouse clearinghouse) {
@@ -2037,13 +2028,15 @@ namespace OpenDentBusiness
 				default:
 					return "";
 				case EnumClaimSpecialProgram.EPSDT_1:
-					return "1";
+					return "01";//only valid for dental.
 				case EnumClaimSpecialProgram.Handicapped_2:
-					return "2";
+					return "02";
 				case EnumClaimSpecialProgram.SpecialFederal_3:
-					return "3";
+					return "03";
 				case EnumClaimSpecialProgram.Disability_5:
-					return "5";
+					return "05";
+				case EnumClaimSpecialProgram.SecondOpinion_9:
+					return "09";//only valid for medical.
 			}
 		}
 		
