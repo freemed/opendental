@@ -798,118 +798,122 @@ namespace OpenDentBusiness {
 				}
 				#endregion Task
 			}
-			if(componentsToLoad.ShowAppointments) {
-				#region Appointments
-				command="SELECT * FROM appointment WHERE PatNum="+POut.Long(patNum)
-				+" ORDER BY AptDateTime";
-				//+" AND AptStatus != 6"//do not include planned appts.
-				rawApt=dcon.GetTable(command);
-				long apptStatus;
-				for(int i=0;i<rawApt.Rows.Count;i++) {
-					row=table.NewRow();
-					row["aptDateTime"]=DateTime.MinValue;
-					row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
-					row["clinic"]="";
-					row["colorBackG"]=Color.White.ToArgb();
-					dateT=PIn.DateT(rawApt.Rows[i]["AptDateTime"].ToString());
-					apptStatus=PIn.Long(rawApt.Rows[i]["AptStatus"].ToString());
-					row["colorBackG"]="";
-					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
-					row["CommlogNum"]=0;
-					row["dateEntryC"]="";
-					row["dateTP"]="";
-					row["description"]=Lans.g("ChartModule","Appointment - ")+dateT.ToShortTimeString()+"\r\n"
-					+rawApt.Rows[i]["ProcDescript"].ToString();
-					if(dateT.Date.Date==DateTime.Today.Date) {
-						row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor.ToArgb().ToString(); //deliniates nicely between old appts
-						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
-					}
-					else if(dateT.Date<DateTime.Today) {
-						row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
-						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
-					}
-					else if(dateT.Date>DateTime.Today) {
-						row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString(); //at a glace, you see green...the pt is good to go as they have a future appt scheduled
-						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
-					}
-					if(apptStatus==(int)ApptStatus.Broken) {
-						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
-						row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
-						row["description"]=Lans.g("ChartModule","BROKEN Appointment - ")+dateT.ToShortTimeString()+"\r\n"
-						+rawApt.Rows[i]["ProcDescript"].ToString();
-					}
-					else if(apptStatus==(int)ApptStatus.UnschedList) {
-						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
-						row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
-						row["description"]=Lans.g("ChartModule","UNSCHEDULED Appointment - ")+dateT.ToShortTimeString()+"\r\n"
-						+rawApt.Rows[i]["ProcDescript"].ToString();
-					}
-					else if(apptStatus==(int)ApptStatus.Planned) {
-						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][16].ItemColor.ToArgb().ToString();
-						row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][17].ItemColor.ToArgb().ToString();
-						row["description"]=Lans.g("ChartModule","PLANNED Appointment")+"\r\n"
-						+rawApt.Rows[i]["ProcDescript"].ToString();
-					}
-					else if(apptStatus==(int)ApptStatus.PtNote) {
-						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString();
-						row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
-						row["description"] = Lans.g("ChartModule","*** Patient NOTE  *** - ") + dateT.ToShortTimeString();
-					}
-					else if(apptStatus ==(int)ApptStatus.PtNoteCompleted) {
-						row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][20].ItemColor.ToArgb().ToString();
-						row["colorBackG"] = DefC.Long[(int)DefCat.ProgNoteColors][21].ItemColor.ToArgb().ToString();
-						row["description"] = Lans.g("ChartModule","** Complete Patient NOTE ** - ") + dateT.ToShortTimeString();
-					}
-					row["dx"]="";
-					row["Dx"]="";
-					row["EmailMessageNum"]=0;
-					row["FormPatNum"]=0;
-					row["HideGraphics"]="";
-					row["LabCaseNum"]=0;
-					row["note"]=rawApt.Rows[i]["Note"].ToString();
-					row["orionDateScheduleBy"]="";
-					row["orionDateStopClock"]="";
-					row["orionDPC"]="";
-					row["orionDPCpost"]="";
-					row["orionIsEffectiveComm"]="";
-					row["orionIsOnCall"]="";
-					row["orionStatus2"]="";
-					row["PatNum"]="";
-					row["Priority"]="";
-					row["priority"]="";
-					row["ProcCode"]="";
-					if(dateT.Year<1880) {
-						row["procDate"]="";
-					}
-					else {
-						row["procDate"]=dateT.ToString(Lans.GetShortDateTimeFormat());
-					}
-					row["procTime"]="";
-					if(dateT.TimeOfDay!=TimeSpan.Zero) {
-						row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
-					}
-					row["ProcDate"]=dateT;
-					row["procTimeEnd"]="";
-					row["procFee"]="";
-					row["ProcNum"]=0;
-					row["ProcNumLab"]="";
-					row["procStatus"]="";
-					row["ProcStatus"]="";
-					row["prov"]="";
-					row["quadrant"]="";
-					row["RxNum"]=0;
-					row["SheetNum"]=0;
-					row["signature"]="";
-					row["Surf"]="";
-					row["TaskNum"]=0;
-					row["toothNum"]="";
-					row["ToothNum"]="";
-					row["ToothRange"]="";
-					row["user"]="";
-					rows.Add(row);
-				}
-				#endregion Appointments
+			#region Appointments
+			command="SELECT * FROM appointment WHERE PatNum="+POut.Long(patNum);
+			if(componentsToLoad.ShowAppointments) {//we will need this table later for planned appts, so always need to get.
+				//get all appts
 			}
+			else{
+				//only include planned appts.  We will need those later, but not in this grid.
+				command+=" AND AptStatus = "+POut.Int((int)ApptStatus.Planned);
+			}
+			command+=" ORDER BY AptDateTime";
+			rawApt=dcon.GetTable(command);
+			long apptStatus;
+			for(int i=0;i<rawApt.Rows.Count;i++) {
+				row=table.NewRow();
+				row["aptDateTime"]=DateTime.MinValue;
+				row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
+				row["clinic"]="";
+				row["colorBackG"]=Color.White.ToArgb();
+				dateT=PIn.DateT(rawApt.Rows[i]["AptDateTime"].ToString());
+				apptStatus=PIn.Long(rawApt.Rows[i]["AptStatus"].ToString());
+				row["colorBackG"]="";
+				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
+				row["CommlogNum"]=0;
+				row["dateEntryC"]="";
+				row["dateTP"]="";
+				row["description"]=Lans.g("ChartModule","Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+				+rawApt.Rows[i]["ProcDescript"].ToString();
+				if(dateT.Date.Date==DateTime.Today.Date) {
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor.ToArgb().ToString(); //deliniates nicely between old appts
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
+				}
+				else if(dateT.Date<DateTime.Today) {
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
+				}
+				else if(dateT.Date>DateTime.Today) {
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString(); //at a glace, you see green...the pt is good to go as they have a future appt scheduled
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
+				}
+				if(apptStatus==(int)ApptStatus.Broken) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
+					row["description"]=Lans.g("ChartModule","BROKEN Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+					+rawApt.Rows[i]["ProcDescript"].ToString();
+				}
+				else if(apptStatus==(int)ApptStatus.UnschedList) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
+					row["description"]=Lans.g("ChartModule","UNSCHEDULED Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+					+rawApt.Rows[i]["ProcDescript"].ToString();
+				}
+				else if(apptStatus==(int)ApptStatus.Planned) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][16].ItemColor.ToArgb().ToString();
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][17].ItemColor.ToArgb().ToString();
+					row["description"]=Lans.g("ChartModule","PLANNED Appointment")+"\r\n"
+					+rawApt.Rows[i]["ProcDescript"].ToString();
+				}
+				else if(apptStatus==(int)ApptStatus.PtNote) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString();
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
+					row["description"] = Lans.g("ChartModule","*** Patient NOTE  *** - ") + dateT.ToShortTimeString();
+				}
+				else if(apptStatus ==(int)ApptStatus.PtNoteCompleted) {
+					row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][20].ItemColor.ToArgb().ToString();
+					row["colorBackG"] = DefC.Long[(int)DefCat.ProgNoteColors][21].ItemColor.ToArgb().ToString();
+					row["description"] = Lans.g("ChartModule","** Complete Patient NOTE ** - ") + dateT.ToShortTimeString();
+				}
+				row["dx"]="";
+				row["Dx"]="";
+				row["EmailMessageNum"]=0;
+				row["FormPatNum"]=0;
+				row["HideGraphics"]="";
+				row["LabCaseNum"]=0;
+				row["note"]=rawApt.Rows[i]["Note"].ToString();
+				row["orionDateScheduleBy"]="";
+				row["orionDateStopClock"]="";
+				row["orionDPC"]="";
+				row["orionDPCpost"]="";
+				row["orionIsEffectiveComm"]="";
+				row["orionIsOnCall"]="";
+				row["orionStatus2"]="";
+				row["PatNum"]="";
+				row["Priority"]="";
+				row["priority"]="";
+				row["ProcCode"]="";
+				if(dateT.Year<1880) {
+					row["procDate"]="";
+				}
+				else {
+					row["procDate"]=dateT.ToString(Lans.GetShortDateTimeFormat());
+				}
+				row["procTime"]="";
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				row["ProcDate"]=dateT;
+				row["procTimeEnd"]="";
+				row["procFee"]="";
+				row["ProcNum"]=0;
+				row["ProcNumLab"]="";
+				row["procStatus"]="";
+				row["ProcStatus"]="";
+				row["prov"]="";
+				row["quadrant"]="";
+				row["RxNum"]=0;
+				row["SheetNum"]=0;
+				row["signature"]="";
+				row["Surf"]="";
+				row["TaskNum"]=0;
+				row["toothNum"]="";
+				row["ToothNum"]="";
+				row["ToothRange"]="";
+				row["user"]="";
+				rows.Add(row);
+			}
+			#endregion Appointments
 			if(componentsToLoad.ShowEmail) {
 				#region email
 				command="SELECT EmailMessageNum,MsgDateTime,Subject,BodyText,PatNum,SentOrReceived "
