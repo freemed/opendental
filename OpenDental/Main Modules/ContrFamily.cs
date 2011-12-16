@@ -1126,15 +1126,16 @@ namespace OpenDental{
 				}
 			}
 			else{//guarantor not selected
-				if(!MsgBox.Show(this,true,"Preparing to move family member.  Financial notes and address notes will not be transferred.  Proceed to next step?")){
+				if(!MsgBox.Show(this,true,"Preparing to move family member.  Financial notes and address notes will not be transferred.  Popups will be copied.  Proceed to next step?")){
 					return;
 				}
-				switch(MessageBox.Show(Lan.g(this,"Create new family instead of moving to an existing family?")
-					,"",MessageBoxButtons.YesNoCancel)){
+				switch(MessageBox.Show(Lan.g(this,"Create new family instead of moving to an existing family?"),"",MessageBoxButtons.YesNoCancel)){
 					case DialogResult.Cancel:
 						return;
-					case DialogResult.Yes://new family
+					case DialogResult.Yes://new family (split)
+						Popups.CopyForMovingFamilyMember(PatCur);//Copy Family Level Popups to new family. 
 						PatCur.Guarantor=PatCur.PatNum;
+						//keep current superfamily
 						Patients.Update(PatCur,PatOld);
 						break;
 					case DialogResult.No://move to an existing family
@@ -1147,12 +1148,15 @@ namespace OpenDental{
 						if(FormPS.DialogResult!=DialogResult.OK){
 							return;
 						}
+						Popups.CopyForMovingFamilyMember(PatCur);//Copy Family Level Popups to new Family. 
+	//superfamily popups, copy
+						//Popups.CopyForMovingSuperFamilyMember(PatCur);//Copy SuperFamily Level Popups to new SuperFamily.
 						Patient pat=Patients.GetPat(FormPS.SelectedPatNum);
 						PatCur.Guarantor=pat.Guarantor;
-						PatCur.SuperFamily=pat.SuperFamily;
+						PatCur.SuperFamily=pat.SuperFamily;//assign to the new superfamily
 						Patients.Update(PatCur,PatOld);
 						break;
-				}//end switch
+				}
 			}//end guarantor not selected
 			ModuleSelected(PatCur.PatNum);
 		}

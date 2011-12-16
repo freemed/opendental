@@ -896,6 +896,12 @@ namespace OpenDental{
 		}
 
 		private void butInstallStable_Click(object sender,EventArgs e) {
+			FormUpdateInstallMsg FormUIM=new FormUpdateInstallMsg();
+			FormUIM.VersionAvailable=stableAvailable;
+			FormUIM.ShowDialog();
+			if(FormUIM.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			string patchName="Setup.exe";
 			string fileNameWithVers=stableAvailable;
 			fileNameWithVers=fileNameWithVers.Replace("F","");
@@ -920,6 +926,12 @@ namespace OpenDental{
 		}
 
 		private void butInstallBeta_Click(object sender,EventArgs e) {
+			FormUpdateInstallMsg FormUIM=new FormUpdateInstallMsg();
+			FormUIM.VersionAvailable=betaAvailable;
+			FormUIM.ShowDialog();
+			if(FormUIM.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			string patchName="Setup.exe";
 			string fileNameWithVers=betaAvailable;
 			fileNameWithVers=fileNameWithVers.Replace("F","");

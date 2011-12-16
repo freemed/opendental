@@ -50,6 +50,54 @@ namespace OpenDentBusiness{
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
+		/// <summary>Copies all family level popups when a family member leaves a family. Copies from other family members to patient, and from patient to guarantor.</summary>
+		public static void CopyForMovingFamilyMember(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				return;
+			}
+			//Get a list of all popups for the family
+			string command="SELECT * FROM popup "
+				+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
+				+"AND PatNum IN (SELECT PatNum FROM patient WHERE Guarantor = "+POut.Long(pat.Guarantor)+")";
+			List<Popup> ListForFam=Crud.PopupCrud.SelectMany(command);
+			Popup popup;
+			for(int i=0;i<ListForFam.Count;i++) {
+				popup=ListForFam[i].Copy();
+				if(popup.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to guarantor of old family.
+					popup.PatNum=pat.Guarantor;
+				}
+				else {//if popup is on some other family member, then copy to this patient.
+					popup.PatNum=pat.PatNum;
+				}
+				Popups.Insert(popup);//changes the PK
+			}
+		}
+
+		/// <summary>Copies all SuperFamily level popups when a SuperFamily member leaves a SuperFamily. Copies from other family members to patient, and from patient to guarantor.</summary>
+		public static void CopyForMovingSuperFamilyMember(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				return;
+			}
+			//Get a list of all popups for the family
+			string command="SELECT * FROM popup "
+				+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
+				+"AND PatNum IN (SELECT PatNum FROM patient WHERE Guarantor = "+POut.Long(pat.Guarantor)+")";
+			List<Popup> ListForFam=Crud.PopupCrud.SelectMany(command);
+			Popup popup;
+			for(int i=0;i<ListForFam.Count;i++) {
+				popup=ListForFam[i].Copy();
+				if(popup.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to guarantor of old family.
+					popup.PatNum=pat.Guarantor;
+				}
+				else {//if popup is on some other family member, then copy to this patient.
+					popup.PatNum=pat.PatNum;
+				}
+				Popups.Insert(popup);//changes the PK
+			}
+		}
+
 		///<summary></summary>
 		public static long Insert(Popup popup) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
