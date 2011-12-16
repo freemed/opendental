@@ -40,7 +40,8 @@ namespace OpenDentBusiness{
 
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * from employer ORDER BY EmpName";
+			//As of 12/15/2011 we are not making use of Address info.  Selecting empty strings makes loading the cache much faster. 
+			string command="SELECT EmployerNum,EmpName,'' Address,'' Address2,'' City,'' State,'' Zip,'' Phone FROM employer";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Employer";
 			FillCache(table);

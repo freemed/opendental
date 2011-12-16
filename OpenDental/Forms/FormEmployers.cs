@@ -20,6 +20,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butEdit;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private OpenDental.UI.Button butCombine;
+		private List<Employer> ListEmployers;
 		//<summary>Set to true if using this dialog to select an employer.</summary>
 		//public bool IsSelectMode;
 
@@ -31,6 +32,7 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			Lan.F(this);
+			ListEmployers=new List<Employer>();
 		}
 
 		/// <summary>
@@ -205,13 +207,22 @@ namespace OpenDental{
 
 		private void FillGrid(){
 			Employers.RefreshCache();
+			ListEmployers.Clear();
+			for(int i=0;i<Employers.List.Length;i++) {
+				ListEmployers.Add(Employers.List[i]);
+			}
+			ListEmployers.Sort(CompareEmployers);
 			listEmp.Items.Clear();
-			for(int i=0;i<Employers.List.Length;i++){
-				listEmp.Items.Add(Employers.List[i].EmpName);
-				//if(IsSelectMode && Employers.List[i].EmployerNum==Employers.Cur.EmployerNum){
+			for(int i=0;i<ListEmployers.Count;i++){
+				listEmp.Items.Add(ListEmployers[i].EmpName);
+				//if(IsSelectMode && ListEmployers[i].EmployerNum==Employers.Cur.EmployerNum){
 				//	listEmp.SetSelected(i,true);
 				//}
 			}
+		}
+
+		private int CompareEmployers(Employer emp1,Employer emp2) {
+			return emp1.EmpName.CompareTo(emp2.EmpName);
 		}
 
 		private void listEmp_DoubleClick(object sender, System.EventArgs e) {
@@ -223,7 +234,7 @@ namespace OpenDental{
 			//	return;
 			//}
 			FormEmployerEdit FormEE=new FormEmployerEdit();
-			FormEE.EmployerCur=Employers.List[listEmp.SelectedIndices[0]];
+			FormEE.EmployerCur=ListEmployers[listEmp.SelectedIndices[0]];
 			FormEE.ShowDialog();
 			if(FormEE.DialogResult!=DialogResult.OK)
 				return;
@@ -245,7 +256,7 @@ namespace OpenDental{
 			}
 			//Employers.Cur=;
 			//make sure no dependent patients:
-			string dependentNames=Employers.DependentPatients(Employers.List[listEmp.SelectedIndices[0]]);
+			string dependentNames=Employers.DependentPatients(ListEmployers[listEmp.SelectedIndices[0]]);
 			if(dependentNames!=""){
 				MessageBox.Show(Lan.g(this,"Not allowed to delete this employer because it it attached to "
 					+"the following patients.  You should combine employers instead.")
@@ -253,7 +264,7 @@ namespace OpenDental{
 					return;
 			}
 			//make sure no dependent insplans:
-			dependentNames=Employers.DependentInsPlans(Employers.List[listEmp.SelectedIndices[0]]);
+			dependentNames=Employers.DependentInsPlans(ListEmployers[listEmp.SelectedIndices[0]]);
 			if(dependentNames!=""){
 				MessageBox.Show(Lan.g(this,"Not allowed to delete this employer because it is attached to "
 					+"the following insurance plans.  You should combine employers instead.")
@@ -263,7 +274,7 @@ namespace OpenDental{
 			if(MessageBox.Show(Lan.g(this,"Delete Employer?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
-			Employers.Delete(Employers.List[listEmp.SelectedIndices[0]]);
+			Employers.Delete(ListEmployers[listEmp.SelectedIndices[0]]);
 			FillGrid();
 		}
 
@@ -273,7 +284,7 @@ namespace OpenDental{
 				return;
 			}
 			FormEmployerEdit FormEE=new FormEmployerEdit();
-			FormEE.EmployerCur=Employers.List[listEmp.SelectedIndices[0]];
+			FormEE.EmployerCur=ListEmployers[listEmp.SelectedIndices[0]];
 			FormEE.ShowDialog();
 			if(FormEE.DialogResult!=DialogResult.OK)
 				return;
@@ -291,7 +302,7 @@ namespace OpenDental{
 			}
 			List<long> employerNums=new List<long>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
-				employerNums.Add(Employers.List[listEmp.SelectedIndices[i]].EmployerNum);
+				employerNums.Add(ListEmployers[listEmp.SelectedIndices[i]].EmployerNum);
 			}
 			Employers.Combine(employerNums);
 			FillGrid();
@@ -305,7 +316,7 @@ namespace OpenDental{
 					//return;
 				}
 				else
-					Employers.Cur=Employers.List[listEmp.SelectedIndices[0]];
+					Employers.Cur=ListEmployers[listEmp.SelectedIndices[0]];
 			}
 			else{
 				//update the other computers:
