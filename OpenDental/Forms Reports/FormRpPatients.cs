@@ -854,7 +854,7 @@ namespace OpenDental{
         SQLwhereComparison="WHERE ";
       }
       else{
-				if(SQLwhereRelation!="") {
+				if(SQLwhereRelation!="" && ListPrerequisites.Items.Count > 0) {
 					SQLwhereComparison="AND ";
 				}
 				else {
