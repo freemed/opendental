@@ -897,7 +897,6 @@ namespace OpenDental{
 
 		private void butInstallStable_Click(object sender,EventArgs e) {
 			FormUpdateInstallMsg FormUIM=new FormUpdateInstallMsg();
-			FormUIM.VersionAvailable=stableAvailable;
 			FormUIM.ShowDialog();
 			if(FormUIM.DialogResult!=DialogResult.OK) {
 				return;
@@ -926,8 +925,10 @@ namespace OpenDental{
 		}
 
 		private void butInstallBeta_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you really want to install a beta version?  Do NOT do this unless you are OK with some bugs.  Continue?")){
+				return;
+			}
 			FormUpdateInstallMsg FormUIM=new FormUpdateInstallMsg();
-			FormUIM.VersionAvailable=betaAvailable;
 			FormUIM.ShowDialog();
 			if(FormUIM.DialogResult!=DialogResult.OK) {
 				return;
