@@ -26,7 +26,7 @@ namespace OpenDental.Bridges{
 			}
 			string info="";
 			//Patient id can be any string format
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");
 			if(PPCur.PropertyValue=="0"){
 				info+="\""+pat.PatNum.ToString()+"\" ";
 			}
@@ -35,7 +35,7 @@ namespace OpenDental.Bridges{
 			}
 			info+="\""+pat.LName.Replace("\"","")+"\" "
 				+"\""+pat.FName.Replace("\"","")+"\" "
-				+"\""+pat.Birthdate.ToShortDateString()+"\"";
+				+"\""+pat.Birthdate.ToString("dd/MM/yyyy")+"\"";//Planmeca is a Finland based company, so their date format is dd/MM/yyyy. We used to send date format "MM/dd/yyyy" for our American customers before 12/19/2011.
 			try{
 				Process.Start(ProgramCur.Path,info);
 			}
