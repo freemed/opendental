@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 
@@ -724,21 +725,27 @@ namespace OpenDentBusiness{
 			}
 			DataTable raw=dcon.GetTable(command);
 			//rawProc table was historically used for other purposes.  It is currently only used for production--------------------------
+			//rawProcLab table is only used for Canada and goes hand in hand with the rawProc table, also only used for production.
 			DataTable rawProc;
+			DataTable rawProcLab=null;
 			if(raw.Rows.Count==0){
 				rawProc=new DataTable();
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					rawProcLab=new DataTable();
+				}
 			}
 			else{
 				command="SELECT AptNum,PlannedAptNum,"//AbbrDesc,procedurecode.CodeNum
 					+"ProcFee, "
-					+"SUM(CASE WHEN WriteOffEstOverride!=-1 THEN WriteOffEstOverride ELSE WriteOffEst END) writeoffPPO "
+					+"SUM(CASE WHEN WriteOffEstOverride!=-1 THEN WriteOffEstOverride ELSE WriteOffEst END) writeoffPPO,"
+					+"procedurelog.ProcNum "
 					//+"Surf,ToothNum,TreatArea  "
 					+"FROM procedurelog "
-					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					//+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 					+"LEFT JOIN claimproc ON claimproc.ProcNum=procedurelog.ProcNum "
 					+"AND (claimproc.WriteOffEst != -1 "
 					+"OR claimproc.WriteOffEstOverride != -1) "
-					+"WHERE ";
+					+"WHERE ProcNumLab=0 AND ";
 				if(isPlanned) {
 					command+="PlannedAptNum!=0 AND PlannedAptNum ";
 				} 
@@ -766,6 +773,27 @@ namespace OpenDentBusiness{
 					command+=") GROUP BY procedurelog.ProcNum,AptNum,PlannedAptNum,ProcFee";
 				}
 				rawProc=dcon.GetTable(command);
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					command="SELECT procedurelog.ProcNum,ProcNumLab,ProcFee,SUM(CASE WHEN WriteOffEstOverride!=-1 THEN WriteOffEstOverride ELSE WriteOffEst END) writeoffPPO "
+						+"FROM procedurelog "
+						+"LEFT JOIN claimproc ON claimproc.ProcNum=procedurelog.ProcNum "
+						+"AND (claimproc.WriteOffEst != -1 "
+						+"OR claimproc.WriteOffEstOverride != -1) "
+						+"WHERE ProcNumLab IN (";
+					for(int i=0;i<rawProc.Rows.Count;i++) {
+						if(i>0) {
+							command+=",";
+						}
+						command+=rawProc.Rows[i]["ProcNum"].ToString();
+					}
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command+=") GROUP BY procedurelog.ProcNum";
+					}
+					else {//Oracle
+						command+=") GROUP BY procedurelog.ProcNum,ProcNumLab,ProcFee";
+					}
+					rawProcLab=dcon.GetTable(command);
+				}
 			}
 			//rawInsProc table is usually skipped. Too slow------------------------------------------------------------------------------
 			DataTable rawInsProc=null;
@@ -1015,6 +1043,14 @@ namespace OpenDentBusiness{
 						//WriteOffEst -1 and WriteOffEstOverride -1 already excluded
 						//production-=
 						writeoffPPO+=PIn.Decimal(rawProc.Rows[p]["writeoffPPO"].ToString());//frequently zero
+						if(rawProcLab!=null) { //Will be null if not Canada.
+							for(int a=0;a<rawProcLab.Rows.Count;a++) {
+								if(rawProcLab.Rows[a]["ProcNumLab"].ToString()==rawProc.Rows[p]["ProcNum"].ToString()) {
+									production+=PIn.Decimal(rawProcLab.Rows[a]["ProcFee"].ToString());
+									writeoffPPO+=PIn.Decimal(rawProcLab.Rows[a]["writeoffPPO"].ToString());//frequently zero
+								}
+							}
+						}
 					}
 				}
 				row["production"]=production.ToString("c");//PIn.Double(raw.Rows[i]["Production"].ToString()).ToString("c");
