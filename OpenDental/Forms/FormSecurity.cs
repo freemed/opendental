@@ -852,7 +852,8 @@ namespace OpenDental{
 			for(int i=0;i<Enum.GetNames(typeof(Permissions)).Length;i++){
 				if(i==(int)Permissions.SecurityAdmin
 					|| i==(int)Permissions.StartupMultiUserOld
-					|| i==(int)Permissions.StartupSingleUserOld)
+					|| i==(int)Permissions.StartupSingleUserOld
+					|| i==(int)Permissions.EhrKeyAdd)
 				{
 					continue;
 				}
