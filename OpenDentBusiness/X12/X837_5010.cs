@@ -1083,7 +1083,7 @@ namespace OpenDentBusiness
 				#endregion 2310 Claim Providers (inst)
 				#region 2310 Claim Providers (dental)
 				if(medType==EnumClaimMedType.Dental) {
-					//2310A NM1: DN (dental) Referring Provider Name. Situational. //js 9/5/11 Why not?  I thought this was a field on the claim that we DID send.
+					//2310A NM1: DN (dental) Referring Provider Name. Situational.
 					seg+=WriteNM1_DN(sw,claim.ReferringProv);
 					//2310A PRV: (dental) Referring Provider Specialty Information. Situational.
 					//2310A REF: G2 (dental) Referring Provider Secondary Identification. Situational.
@@ -1404,7 +1404,7 @@ namespace OpenDentBusiness
 						sw.Write(s);//SV101-8 is not used.
 						sw.Write(claimProcs[j].FeeBilled.ToString()+s//SV102 1/18 Monetary Amount: Charge Amt.
 							+"MJ"+s//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes.
-							+"0"+s);//SV104 1/15 Quantity: Quantity of anesthesia. We don't support, so always 0.							
+							+proc.UnitQty+s);//SV104 1/15 Quantity: Service Unit Count or Anesthesia Minutes.
 						if(proc.PlaceService!=claim.PlaceService) {
 							sw.Write(GetPlaceService(proc.PlaceService));
 						}
