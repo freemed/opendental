@@ -88,6 +88,7 @@ namespace WebHostSynch {
 				RxPatms.DeleteAll(customerNum);
 				Providerms.DeleteAll(customerNum);
 				Pharmacyms.DeleteAll(customerNum);
+				Recallms.DeleteAll(customerNum);
 				//pat portal
 				LabPanelms.DeleteAll(customerNum);
 				LabResultms.DeleteAll(customerNum);
@@ -237,7 +238,7 @@ namespace WebHostSynch {
 						return;
 					}
 					else {
-						(new Prefms()).UpdateString(customerNum,PrefmName.PracticeTitle,PracticeTitle);
+						// we do nothing here because the preferencem table now has a PrefNum column and the  older code did not take into account this column
 					}
 				}
 				catch(Exception ex) {
@@ -246,7 +247,24 @@ namespace WebHostSynch {
 				}
 			}
 
-
+			[WebMethod]
+			public void SetPreference(String RegistrationKey,Prefm prefm) {
+				try {
+					Logger.Information("In SetPreference");
+					customerNum=util.GetDentalOfficeID(RegistrationKey);
+					if(customerNum==0) {
+						return;
+					}
+					else {
+						prefm.CustomerNum=customerNum;
+						Prefms.UpdatePreference(prefm);
+					}
+				}
+				catch(Exception ex) {
+					Logger.LogError("IpAddress="+HttpContext.Current.Request.UserHostAddress+" DentalOfficeID="+customerNum,ex);
+					throw new Exception("Exception in SetPreference");
+				}
+			}
 			[WebMethod]
 			public string GetPatientPortalAddress(string RegistrationKey) {
 				long DentalOfficeID=util.GetDentalOfficeID(RegistrationKey);
@@ -455,7 +473,7 @@ namespace WebHostSynch {
 					if(customerNum==0) {
 						return;
 					}
-					//Recallms.UpdateFromChangeList(recallList,customerNum);//dennis recall
+					Recallms.UpdateFromChangeList(recallList,customerNum);
 
 				}
 				catch(Exception ex) {

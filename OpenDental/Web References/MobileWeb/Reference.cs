@@ -57,6 +57,8 @@ namespace OpenDental.MobileWeb {
         
         private System.Threading.SendOrPostCallback SetPracticeTitleOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SetPreferenceOperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetPatientPortalAddressOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchLabPanelsOperationCompleted;
@@ -80,6 +82,8 @@ namespace OpenDental.MobileWeb {
         private System.Threading.SendOrPostCallback SynchStatementsOperationCompleted;
         
         private System.Threading.SendOrPostCallback SynchDocumentsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SynchRecallsOperationCompleted;
         
         private System.Threading.SendOrPostCallback DeletePatientsRecordsOperationCompleted;
         
@@ -161,6 +165,9 @@ namespace OpenDental.MobileWeb {
         public event SetPracticeTitleCompletedEventHandler SetPracticeTitleCompleted;
         
         /// <remarks/>
+        public event SetPreferenceCompletedEventHandler SetPreferenceCompleted;
+        
+        /// <remarks/>
         public event GetPatientPortalAddressCompletedEventHandler GetPatientPortalAddressCompleted;
         
         /// <remarks/>
@@ -195,6 +202,9 @@ namespace OpenDental.MobileWeb {
         
         /// <remarks/>
         public event SynchDocumentsCompletedEventHandler SynchDocumentsCompleted;
+        
+        /// <remarks/>
+        public event SynchRecallsCompletedEventHandler SynchRecallsCompleted;
         
         /// <remarks/>
         public event DeletePatientsRecordsCompletedEventHandler DeletePatientsRecordsCompleted;
@@ -584,6 +594,36 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SetPreference", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SetPreference(string RegistrationKey, Prefm prefm) {
+            this.Invoke("SetPreference", new object[] {
+                        RegistrationKey,
+                        prefm});
+        }
+        
+        /// <remarks/>
+        public void SetPreferenceAsync(string RegistrationKey, Prefm prefm) {
+            this.SetPreferenceAsync(RegistrationKey, prefm, null);
+        }
+        
+        /// <remarks/>
+        public void SetPreferenceAsync(string RegistrationKey, Prefm prefm, object userState) {
+            if ((this.SetPreferenceOperationCompleted == null)) {
+                this.SetPreferenceOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetPreferenceOperationCompleted);
+            }
+            this.InvokeAsync("SetPreference", new object[] {
+                        RegistrationKey,
+                        prefm}, this.SetPreferenceOperationCompleted, userState);
+        }
+        
+        private void OnSetPreferenceOperationCompleted(object arg) {
+            if ((this.SetPreferenceCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetPreferenceCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/GetPatientPortalAddress", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public string GetPatientPortalAddress(string RegistrationKey) {
             object[] results = this.Invoke("GetPatientPortalAddress", new object[] {
@@ -943,6 +983,36 @@ namespace OpenDental.MobileWeb {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/SynchRecalls", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SynchRecalls(string RegistrationKey, Recallm[] recallList) {
+            this.Invoke("SynchRecalls", new object[] {
+                        RegistrationKey,
+                        recallList});
+        }
+        
+        /// <remarks/>
+        public void SynchRecallsAsync(string RegistrationKey, Recallm[] recallList) {
+            this.SynchRecallsAsync(RegistrationKey, recallList, null);
+        }
+        
+        /// <remarks/>
+        public void SynchRecallsAsync(string RegistrationKey, Recallm[] recallList, object userState) {
+            if ((this.SynchRecallsOperationCompleted == null)) {
+                this.SynchRecallsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSynchRecallsOperationCompleted);
+            }
+            this.InvokeAsync("SynchRecalls", new object[] {
+                        RegistrationKey,
+                        recallList}, this.SynchRecallsOperationCompleted, userState);
+        }
+        
+        private void OnSynchRecallsOperationCompleted(object arg) {
+            if ((this.SynchRecallsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SynchRecallsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://opendental.com/DeletePatientsRecords", RequestNamespace="http://opendental.com/", ResponseNamespace="http://opendental.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void DeletePatientsRecords(string RegistrationKey, long[] patNumList) {
             this.Invoke("DeletePatientsRecords", new object[] {
@@ -1133,6 +1203,10 @@ namespace OpenDental.MobileWeb {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SetPreferenceCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void GetPatientPortalAddressCompletedEventHandler(object sender, GetPatientPortalAddressCompletedEventArgs e);
     
     /// <remarks/>
@@ -1200,6 +1274,10 @@ namespace OpenDental.MobileWeb {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void SynchDocumentsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SynchRecallsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]

@@ -5,8 +5,8 @@ namespace OpenDentBusiness.Mobile{
 	[Serializable()]
 	[CrudTable(IsMobile=true)]
 	public class Recallm:TableBase{
-		/*Dennis: This pseudocode will be refactored/revisited*/	//dennis recall
-				///<summary>Primary key 1.</summary>
+		
+		///<summary>Primary key 1.</summary>
 		[CrudColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>

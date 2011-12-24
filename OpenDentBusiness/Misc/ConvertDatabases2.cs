@@ -8357,7 +8357,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'MiPACS')";
 					Db.NonQ32(command);
 				}//end MiPACS Imaging bridge
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('MobileSynchNewTables121Done','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MobileSynchNewTables121Done','0')";
+					Db.NonQ(command);
+				}
 
 
 

@@ -258,7 +258,12 @@ namespace OpenDentBusiness{
 			command="INSERT INTO preference VALUES('DatabaseConvertedForMySql41','1')";
 			Db.NonQ(command);
 		}
-		
+
+		///<summary>Gets a Pref object when the PrefName is provided</summary>
+		public static Pref GetPref(String PrefName) {
+			Pref pref=PrefC.Dict[PrefName];
+			return pref;
+		}
 
 	}
 

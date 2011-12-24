@@ -7,8 +7,7 @@ using System.Text;
 namespace OpenDentBusiness.Mobile {
 	///<summary></summary>
 	public class Recallms {
-		/*Dennis: This pseudocode will be refactored/revisited*/ //dennis recall
-		/*		
+	
 		#region Only used for webserver for mobile.
 		///<summary>Gets all Recallm for a single patient </summary>
 		public static List<Recallm> GetRecallms(long customerNum,long patNum) {
@@ -65,13 +64,8 @@ namespace OpenDentBusiness.Mobile {
 			Db.NonQ(command);
 		}
 
-		///<summary>Delete all recalls of a particular patient</summary>
-		public static void Delete(long customerNum,long PatNum) {
-			string command= "DELETE FROM recallm WHERE CustomerNum = "+POut.Long(customerNum)+" AND PatNum = "+POut.Long(PatNum);
-			Db.NonQ(command);
-		}
 		#endregion
-	*/
+
 
 
 

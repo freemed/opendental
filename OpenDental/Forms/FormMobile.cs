@@ -43,7 +43,7 @@ namespace OpenDental {
 			icd9,
 			statement,
 			document,
-			//recall,
+			recall,
 			deletedobject,
 			patientdel
 		}
@@ -157,17 +157,16 @@ namespace OpenDental {
 			return true;
 		}
 
-		///<summary>Uploads the Dental practice name or practice title to the Patient Portal.</summary>
-		public static void UploadPracticeTitle() {
+		///<summary>Uploads Preferences to the Patient Portal /Mobile Web.</summary>
+		public static void UploadPreference(PrefName prefname) {
 			try {
-				/*
 				if(TestWebServiceExists()) {
-					mb.SetPracticeTitle(PrefC.GetString(PrefName.RegistrationKey),PrefC.GetString(PrefName.PracticeTitle));
+					Prefm prefm = Prefms.GetPrefm(prefname.ToString());
+					mb.SetPreference(PrefC.GetString(PrefName.RegistrationKey),prefm);
 				}
-				*/
 			}
 			catch(Exception ex) {
-				//throw ex;
+				MessageBox.Show(ex.Message);//may not show if called from a thread but that does not matter - the failing of this method should not stop the  the code from proceeding.
 			}
 		}
 
@@ -251,7 +250,7 @@ namespace OpenDental {
 				DateTime changedPat=changedSince;
 				DateTime changedStatement=changedSince;
 				DateTime changedDocument=changedSince;
-				//DateTime changedRecall=changedSince;//dennis recall
+				DateTime changedRecall=changedSince;
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 					changedProv=DateTime.MinValue;
 					changedDeleted=DateTime.MinValue;
@@ -260,14 +259,14 @@ namespace OpenDental {
 				    changedPat=DateTime.MinValue;
 					changedStatement=DateTime.MinValue;
 					changedDocument=DateTime.MinValue;
-					UploadPracticeTitle();
 				}
-				//if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables120Done,false)) {//dennis recall
-				//changedRecall=DateTime.MinValue;
-				//}
+				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables121Done,false)) {
+					changedRecall=DateTime.MinValue;
+					UploadPreference(PrefName.PracticeTitle); //done again because the previous upload did not include the prefnum
+				}
 				bool synchDelPat=true;
 				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
-					synchDelPat=false;// synching delPatNumList is time consuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
+					synchDelPat=false;// synching delPatNumList is timeconsuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
 				}
 				//MobileWeb
 				List<long> patNumList=Patientms.GetChangedSincePatNums(changedPat);
@@ -288,14 +287,14 @@ namespace OpenDental {
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedStatement,eligibleForUploadPatNumList,statementLimitPerPatient);
 				List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedDocument,statementNumList);
-				//List<long> recallNumList=Recallms.GetChangedSinceRecallNums(changedRecall);//dennis recall
+				List<long> recallNumList=Recallms.GetChangedSinceRecallNums(changedRecall);
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);dennis: delete this line later
 				List<long> deletedObjectNumList=DeletedObjects.GetChangedSinceDeletedObjectNums(changedDeleted);
 				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
 					+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
 					+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-					+statementNumList.Count+documentNumList.Count//+recallNumList.Count//dennis recall
+					+statementNumList.Count+documentNumList.Count+recallNumList.Count
 					+deletedObjectNumList.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
@@ -323,7 +322,7 @@ namespace OpenDental {
 				SynchGeneric(icd9NumList,SynchEntity.icd9,totalCount,ref currentVal);
 				SynchGeneric(statementNumList,SynchEntity.statement,totalCount,ref currentVal);
 				SynchGeneric(documentNumList,SynchEntity.document,totalCount,ref currentVal);
-				//SynchGeneric(recallNumList,SynchEntity.recall,totalCount,ref currentVal);//dennis recall
+				SynchGeneric(recallNumList,SynchEntity.recall,totalCount,ref currentVal);
 				if(synchDelPat) {
 					SynchGeneric(delPatNumList,SynchEntity.patientdel,totalCount,ref currentVal);
 				}
@@ -334,6 +333,9 @@ namespace OpenDental {
 				}
 				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,true)) {
 				    Prefs.UpdateBool(PrefName.MobileSynchNewTables112Done,true);
+				}
+				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables121Done,true)) {
+					Prefs.UpdateBool(PrefName.MobileSynchNewTables121Done,true);
 				}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
 				IsSynching=false;
@@ -427,10 +429,10 @@ namespace OpenDental {
 						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList,AtoZpath);
 						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
-						//case SynchEntity.recall://dennis recall
-						//List<Recallm> ChangedRecallList=Recallms.GetMultRecallms(BlockPKNumList);
-						//mb.SynchRecalls(PrefC.GetString(PrefName.RegistrationKey),ChangedRecallList.ToArray());
-						//break;
+						case SynchEntity.recall:
+						List<Recallm> ChangedRecallList=Recallms.GetMultRecallms(BlockPKNumList);
+						mb.SynchRecalls(PrefC.GetString(PrefName.RegistrationKey),ChangedRecallList.ToArray());
+						break;
 						case SynchEntity.deletedobject:
 						List<DeletedObject> ChangedDeleteObjectList=DeletedObjects.GetMultDeletedObjects(BlockPKNumList);
 						mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),ChangedDeleteObjectList.ToArray());
@@ -505,7 +507,7 @@ namespace OpenDental {
 					return true;
 				}
 			}
-			catch{//(Exception ex) {
+			catch{
 				return false;
 			}
 			return false;

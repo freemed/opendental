@@ -29,7 +29,7 @@ namespace OpenDentBusiness.Mobile {
 				return prefmc;
 			}
 
-			/// <summary>Load the preferences form the session. If it is not found inthe session it's loaded from the database</summary>
+			/// <summary>Load the preferences from the session. If it is not found in the session it's loaded from the database</summary>
 			public static PrefmC LoadPreferences() {
 				PrefmC prefmc=(PrefmC)HttpContext.Current.Session["prefmC"];
 				if(prefmc==null) {
@@ -42,8 +42,26 @@ namespace OpenDentBusiness.Mobile {
 			}
 		#endregion
 
-		#region Only used on Webhostsynch
-			///<summary>Returns true if a change was required, or false if no change needed.</summary>
+		#region Only used on OD
+		/// <summary>converts a Pref to a Prefm object</summary>
+		 public static Prefm ConvertToM(Pref pref){
+			Prefm prefm=new Prefm();
+			prefm.PrefNum=pref.PrefNum;
+			prefm.PrefmName=pref.PrefName;
+			prefm.ValueString=pref.ValueString;
+			return prefm;
+		 }
+
+		 /// <summary>Returns a Prefm object when provided with the PrefName. Note that the CustomerNum field of the return object is not populated. </summary>
+		 public static Prefm GetPrefm(String PrefName) {
+			 Pref pref = Prefs.GetPref(PrefName);
+			 Prefm prefm=ConvertToM(pref);
+			 return prefm;
+		 }
+		#endregion
+
+		#region Only used on WebHostSynch
+			///<summary>Returns true if a change was required, or false if no change needed. This method is no longer used and may be deleted later. Dennis Mathew: Dec 24, 2011</summary>
 			public void UpdateString(long customerNum,PrefmName prefmName,string newValue) {
 				string command="SELECT * FROM preferencem "
 					+"WHERE CustomerNum =" +POut.Long(customerNum)+" AND PrefName = '"+POut.String(prefmName.ToString())+"'";
@@ -61,6 +79,25 @@ namespace OpenDentBusiness.Mobile {
 					Db.NonQ(command);
 				}
 			}
+	
+			public static void UpdatePreference(Prefm prefm) {
+				string command="SELECT * FROM preferencem "
+					+"WHERE CustomerNum =" +POut.Long(prefm.CustomerNum)+" AND PrefNum = "+POut.Long(prefm.PrefNum);
+				DataTable table=Db.GetTable(command);
+				if(table.Rows.Count>0) {
+					command = "UPDATE preferencem SET "
+					+"ValueString = '"+prefm.ValueString+"' "
+					+"WHERE CustomerNum =" +POut.Long(prefm.CustomerNum)+" AND PrefNum = "+POut.Long(prefm.PrefNum);
+					Db.NonQ(command);
+				}
+				else {
+					command = "INSERT into preferencem " 
+					+"(CustomerNum,PrefNum,PrefName,ValueString) VALUES "
+					+"("+POut.Long(prefm.CustomerNum)+","+POut.Long(prefm.PrefNum)+",'"+POut.String(prefm.PrefmName.ToString())+"','"+POut.String(prefm.ValueString)+"')";
+					Db.NonQ(command);
+				}
+			}
+		
 		#endregion
 
 

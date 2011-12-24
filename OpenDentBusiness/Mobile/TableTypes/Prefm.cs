@@ -5,9 +5,9 @@ using System.Text;
 
 
 namespace OpenDentBusiness.Mobile {
-	
+
 	[Serializable()]
-	[CrudTable(IsMobile=true)]
+	//[CrudTable(IsMobile=true)]
 	/// <summary>This table is called preference in the mobile database.  This is to simply to avoid having to rewrite DataConnection.TestConnection().  The primary key of this table has an m in it to remind us that the preferences are totally different than in the main program.</summary>
 	public class Prefm:TableBase {
 		///<summary>Primary key 1.</summary>
@@ -17,7 +17,7 @@ namespace OpenDentBusiness.Mobile {
 		[CrudColumn(IsPriKeyMobile2=true)]
 		public long PrefNum;
 		///<summary>The text 'key' in the key/value pairing.</summary>
-		public string PrefmName;// this is named PrefmName rather than PrefName because there would be name ambigiouty with Pref.PrefName which would cause a compilation error in the main program where ever PrefName (Pref.PrefName) is used.
+		public string PrefmName;// this is named PrefmName rather than PrefName because there would be name ambiguity with Pref.PrefName which would cause a compilation error in the main program whereever PrefName (Pref.PrefName) is used.
 		///<summary>The stored value.</summary>
 		public string ValueString;
 	}

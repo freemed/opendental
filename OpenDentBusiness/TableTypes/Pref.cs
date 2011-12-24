@@ -194,6 +194,8 @@ namespace OpenDentBusiness {
 		MobileSynchNewTables79Done,
 		///<summary>Used one time after the conversion to 11.2 for re-synch of the patient records because a)2 columns BalTotal and InsEst have been added to the patientm table. b) the table documentm has been added</summary>
 		MobileSynchNewTables112Done,
+		///<summary>Used one time after the conversion to 12.1 for the recallm table being added and for upload of the practice Title.</summary>
+		MobileSynchNewTables121Done,
 		MobileSyncIntervalMinutes,
 		MobileSyncServerURL,
 		MobileSyncWorkstationName,

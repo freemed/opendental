@@ -90,6 +90,7 @@
           <s:enumeration value="Pharmacy" />
           <s:enumeration value="Statement" />
           <s:enumeration value="Document" />
+          <s:enumeration value="Recall" />
         </s:restriction>
       </s:simpleType>
       <s:element name="DeleteObjectsResponse">
@@ -380,6 +381,29 @@
         </s:complexType>
       </s:element>
       <s:element name="SetPracticeTitleResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SetPreference">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="prefm" type="tns:Prefm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Prefm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PrefNum" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="PrefmName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ValueString" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SetPreferenceResponse">
         <s:complexType />
       </s:element>
       <s:element name="GetPatientPortalAddress">
@@ -757,6 +781,40 @@
       <s:element name="SynchDocumentsResponse">
         <s:complexType />
       </s:element>
+      <s:element name="SynchRecalls">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="recallList" type="tns:ArrayOfRecallm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRecallm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Recallm" nillable="true" type="tns:Recallm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Recallm">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TableBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CustomerNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="RecallNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="PatNum" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateDue" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="DatePrevious" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="RecallStatus" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsDisabled" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="DisableUntilBalance" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="DisableUntilDate" type="s:dateTime" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SynchRecallsResponse">
+        <s:complexType />
+      </s:element>
       <s:element name="DeletePatientsRecords">
         <s:complexType>
           <s:sequence>
@@ -853,6 +911,12 @@
   <wsdl:message name="SetPracticeTitleSoapOut">
     <wsdl:part name="parameters" element="tns:SetPracticeTitleResponse" />
   </wsdl:message>
+  <wsdl:message name="SetPreferenceSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPreference" />
+  </wsdl:message>
+  <wsdl:message name="SetPreferenceSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPreferenceResponse" />
+  </wsdl:message>
   <wsdl:message name="GetPatientPortalAddressSoapIn">
     <wsdl:part name="parameters" element="tns:GetPatientPortalAddress" />
   </wsdl:message>
@@ -925,6 +989,12 @@
   <wsdl:message name="SynchDocumentsSoapOut">
     <wsdl:part name="parameters" element="tns:SynchDocumentsResponse" />
   </wsdl:message>
+  <wsdl:message name="SynchRecallsSoapIn">
+    <wsdl:part name="parameters" element="tns:SynchRecalls" />
+  </wsdl:message>
+  <wsdl:message name="SynchRecallsSoapOut">
+    <wsdl:part name="parameters" element="tns:SynchRecallsResponse" />
+  </wsdl:message>
   <wsdl:message name="DeletePatientsRecordsSoapIn">
     <wsdl:part name="parameters" element="tns:DeletePatientsRecords" />
   </wsdl:message>
@@ -984,6 +1054,10 @@
       <wsdl:input message="tns:SetPracticeTitleSoapIn" />
       <wsdl:output message="tns:SetPracticeTitleSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="SetPreference">
+      <wsdl:input message="tns:SetPreferenceSoapIn" />
+      <wsdl:output message="tns:SetPreferenceSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetPatientPortalAddress">
       <wsdl:input message="tns:GetPatientPortalAddressSoapIn" />
       <wsdl:output message="tns:GetPatientPortalAddressSoapOut" />
@@ -1031,6 +1105,10 @@
     <wsdl:operation name="SynchDocuments">
       <wsdl:input message="tns:SynchDocumentsSoapIn" />
       <wsdl:output message="tns:SynchDocumentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchRecalls">
+      <wsdl:input message="tns:SynchRecallsSoapIn" />
+      <wsdl:output message="tns:SynchRecallsSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="DeletePatientsRecords">
       <wsdl:input message="tns:DeletePatientsRecordsSoapIn" />
@@ -1156,6 +1234,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SetPreference">
+      <soap:operation soapAction="http://opendental.com/SetPreference" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPatientPortalAddress">
       <soap:operation soapAction="http://opendental.com/GetPatientPortalAddress" style="document" />
       <wsdl:input>
@@ -1257,6 +1344,15 @@
     </wsdl:operation>
     <wsdl:operation name="SynchDocuments">
       <soap:operation soapAction="http://opendental.com/SynchDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchRecalls">
+      <soap:operation soapAction="http://opendental.com/SynchRecalls" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1393,6 +1489,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SetPreference">
+      <soap12:operation soapAction="http://opendental.com/SetPreference" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPatientPortalAddress">
       <soap12:operation soapAction="http://opendental.com/GetPatientPortalAddress" style="document" />
       <wsdl:input>
@@ -1494,6 +1599,15 @@
     </wsdl:operation>
     <wsdl:operation name="SynchDocuments">
       <soap12:operation soapAction="http://opendental.com/SynchDocuments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchRecalls">
+      <soap12:operation soapAction="http://opendental.com/SynchRecalls" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
