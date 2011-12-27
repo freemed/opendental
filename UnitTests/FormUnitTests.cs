@@ -274,6 +274,13 @@ namespace UnitTests {
 			catch(Exception ex) {
 			  textResults.Text+="19: Failed. "+ex.Message;
 			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwenty(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="20: Failed. "+ex.Message;
+			}
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 		}

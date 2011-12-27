@@ -1505,7 +1505,7 @@ namespace OpenDental{
 			double maxInd=0;
 			double ded=0;
 			double dedFam=0;
-			double dedUsed=0;
+			double dedRem=0;
 			double remain=0;
 			double pend=0;
 			double used=0;
@@ -1544,9 +1544,8 @@ namespace OpenDental{
 				dedFam=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,BenefitCoverageLevel.Family);
 				if(ded!=-1){
 					textPriDed.Text=ded.ToString("F");
-					dedUsed=InsPlans.GetDedUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,
-						BenefitCoverageLevel.Individual,PatCur.PatNum);
-					textPriDedRem.Text=(ded-dedUsed).ToString("F");
+					dedRem=InsPlans.GetDedRemainDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,PatCur.PatNum,ded,dedFam);
+					textPriDedRem.Text=dedRem.ToString("F");
 				}
 				if(dedFam!=-1) {
 					textFamPriDed.Text=dedFam.ToString("F");
@@ -1586,9 +1585,8 @@ namespace OpenDental{
 				dedFam=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Family);
 				if(ded!=-1){
 					textSecDed.Text=ded.ToString("F");
-					dedUsed=InsPlans.GetDedUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,
-						BenefitCoverageLevel.Individual,PatCur.PatNum);
-					textSecDedRem.Text=(ded-dedUsed).ToString("F");
+					dedRem=InsPlans.GetDedRemainDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,PatCur.PatNum,ded,dedFam);
+					textSecDedRem.Text=dedRem.ToString("F");
 				}
 				if(dedFam!=-1) {
 					textFamSecDed.Text=dedFam.ToString("F");

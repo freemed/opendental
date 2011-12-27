@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 				plan.PlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),plan,useExistingPK);
 				return plan.PlanNum;
 			}
-			return Crud.InsPlanCrud.Insert(plan,true);
+			return Crud.InsPlanCrud.Insert(plan,useExistingPK);
 		}
 
 		///<summary></summary>
@@ -374,6 +374,39 @@ namespace OpenDentBusiness {
 				retVal+=histList[i].Deduct;
 			}
 			return retVal;
+		}
+
+		///<summary>Only for display purposes rather than for calculations.  Get insurance deductible used for one benefit year.  Must supply a history list for the patient/family.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The planNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  It includes pending deductibles in the result. The ded and dedFam variables are the individual and family deductibles respectively. This function assumes that the individual deductible 'ded' is always available, but that the family deductible 'dedFam' is optional (set to -1 if not available).</summary>
+		public static double GetDedRemainDisplay(List<ClaimProcHist> histList,DateTime asofDate,long planNum,long patPlanNum,long excludeClaim,List<InsPlan> planList,long patNum,double ded,double dedFam) {
+			//No need to check RemotingRole; no call to db.
+			InsPlan curPlan=GetPlan(planNum,planList);
+			if(curPlan==null) {
+				return 0;
+			}
+			//get the most recent renew date, possibly including today. Date based on annual max.
+			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
+			DateTime stopDate=renewDate.AddYears(1);
+			double dedRemInd=ded;
+			double dedRemFam=dedFam;
+			for(int i=0;i<histList.Count;i++) {
+				if(histList[i].PlanNum!=planNum
+					|| histList[i].ClaimNum == excludeClaim
+					|| histList[i].ProcDate >= stopDate
+					|| histList[i].ProcDate < renewDate
+					//no need to check status, because only the following statuses will be part of histlist:
+					//Adjustment,NotReceived,Received,Supplemental
+					) {
+					continue;
+				}
+				dedRemFam-=histList[i].Deduct;
+				if(histList[i].PatNum==patNum) {
+					dedRemInd-=histList[i].Deduct;
+				}
+			}
+			if(dedFam>=0) {
+				return Math.Max(0,Math.Min(dedRemInd,dedRemFam));//never negative
+			}
+			return Math.Max(0,dedRemInd);//never negative
 		}
 
 		/*

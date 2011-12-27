@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 				insSub.InsSubNum=Meth.GetLong(MethodBase.GetCurrentMethod(),insSub,useExistingPK);
 				return insSub.InsSubNum;
 			}
-			return Crud.InsSubCrud.Insert(insSub,true);
+			return Crud.InsSubCrud.Insert(insSub,useExistingPK);
 		}
 
 		///<summary></summary>

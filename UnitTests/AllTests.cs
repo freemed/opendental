@@ -237,7 +237,7 @@ namespace UnitTests {
 			BenefitT.CreateAnnualMax(planNum,1000);	
 			BenefitT.CreateAnnualMaxFamily(planNum,2500);	
 			BenefitT.CreateCategoryPercent(planNum,EbenefitCategory.Crowns,100);
-			ClaimProcT.AddInsUsedAdjustment(pat2.PatNum,planNum,2000,subNum);//Adjustment goes on the second patient
+			ClaimProcT.AddInsUsedAdjustment(pat2.PatNum,planNum,2000,subNum,0);//Adjustment goes on the second patient
 			Procedure proc=ProcedureT.CreateProcedure(pat2,"D2750",ProcStat.TP,"8",830);//crown and testing is for the first patient
 			long procNum=proc.ProcNum;
 			//Lists
@@ -281,8 +281,8 @@ namespace UnitTests {
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",50);//An exam
 			long procNum=proc.ProcNum;
 			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.C,"8",830);//create a crown
-			ClaimProcT.AddInsPaid(patNum,planNum,procNum,50,subNum);
-			ClaimProcT.AddInsPaid(patNum,planNum,proc2.ProcNum,400,subNum);
+			ClaimProcT.AddInsPaid(patNum,planNum,procNum,50,subNum,0,0);
+			ClaimProcT.AddInsPaid(patNum,planNum,proc2.ProcNum,400,subNum,0,0);
 			//Lists
 			Family fam=Patients.GetFamily(patNum);
 			List<InsSub> subList=InsSubs.RefreshForFam(fam);
@@ -313,7 +313,7 @@ namespace UnitTests {
 			BenefitT.CreateAnnualMax(plan.PlanNum,1000);	
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
-			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,50);
 			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,25);
 			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.Diagnostic,25);
 			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
@@ -639,8 +639,8 @@ namespace UnitTests {
 			InsSub sub2=InsSubT.CreateInsSub(pat2.PatNum,planNum);//spouse is subscriber for plan 2
 			long subNum2=sub2.InsSubNum;
 			PatPlanT.CreatePatPlan(2,pat.PatNum,subNum2);//patient also has spouse's coverage
-			BenefitT.CreateAnnualMax(planNum,1200);	
-			BenefitT.CreateDeductibleGeneral(planNum,0);
+			BenefitT.CreateAnnualMax(planNum,1200);
+			BenefitT.CreateDeductibleGeneral(planNum,BenefitCoverageLevel.Individual,0);
 			BenefitT.CreateCategoryPercent(planNum,EbenefitCategory.Crowns,100);//2700-2799
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D2750",ProcStat.TP,"19",1400);
 			//Lists
@@ -692,8 +692,8 @@ namespace UnitTests {
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Orthodontics,100);
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0140",ProcStat.C,"",59);//limEx
 			Procedure proc2=ProcedureT.CreateProcedure(pat,"D8090",ProcStat.C,"",348);//Comprehensive ortho
-			ClaimProcT.AddInsPaid(pat.PatNum,plan.PlanNum,proc1.ProcNum,59,subNum);
-			ClaimProcT.AddInsPaid(pat.PatNum,plan.PlanNum,proc2.ProcNum,348,subNum);
+			ClaimProcT.AddInsPaid(pat.PatNum,plan.PlanNum,proc1.ProcNum,59,subNum,0,0);
+			ClaimProcT.AddInsPaid(pat.PatNum,plan.PlanNum,proc2.ProcNum,348,subNum,0,0);
 			//Lists
 			Family fam=Patients.GetFamily(pat.PatNum);
 			List<InsSub> subList=InsSubs.RefreshForFam(fam);
@@ -895,7 +895,7 @@ namespace UnitTests {
 			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
 			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
 			BenefitT.CreateAnnualMax(plan.PlanNum,1000);
-			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,50);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
 			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,0);
@@ -958,7 +958,7 @@ namespace UnitTests {
 			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
 			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);//guarantor is subscriber
 			//BenefitT.CreateAnnualMax(plan.PlanNum,1000);//Irrelevant benefits bog down debugging.
-			BenefitT.CreateDeductibleGeneral(plan.PlanNum,50);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,50);
 			//BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
 			//BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,0);
@@ -1193,8 +1193,8 @@ namespace UnitTests {
 			//plans
 			BenefitT.CreateCategoryPercent(plan1.PlanNum,EbenefitCategory.Diagnostic,50);
 			BenefitT.CreateCategoryPercent(plan2.PlanNum,EbenefitCategory.Diagnostic,50);
-			BenefitT.CreateDeductibleGeneral(plan1.PlanNum,50);
-			BenefitT.CreateDeductibleGeneral(plan2.PlanNum,50);
+			BenefitT.CreateDeductibleGeneral(plan1.PlanNum,BenefitCoverageLevel.Individual,50);
+			BenefitT.CreateDeductibleGeneral(plan2.PlanNum,BenefitCoverageLevel.Individual,50);
 			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum1);
 			PatPlanT.CreatePatPlan(2,pat.PatNum,subNum2);
 			//proc1 - PerExam
@@ -1240,6 +1240,56 @@ namespace UnitTests {
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static string TestTwenty(int specificTest) {
+			if(specificTest != 0 && specificTest !=20) {
+				return "";
+			}
+			string suffix="20";
+			Patient pat=PatientT.CreatePatient(suffix);//guarantor
+			long patNum=pat.PatNum;
+			Patient pat2=PatientT.CreatePatient(suffix);
+			PatientT.SetGuarantor(pat2,pat.PatNum);
+			Patient pat3=PatientT.CreatePatient(suffix);
+			PatientT.SetGuarantor(pat3,pat.PatNum);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			long planNum=plan.PlanNum;
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,planNum);//guarantor is subscriber
+			long subNum=sub.InsSubNum;
+			PatPlan patPlan=PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);//all three patients have the same plan
+			PatPlan patPlan2=PatPlanT.CreatePatPlan(1,pat2.PatNum,subNum);//all three patients have the same plan
+			PatPlan patPlan3=PatPlanT.CreatePatPlan(1,pat3.PatNum,subNum);//all three patients have the same plan
+			BenefitT.CreateDeductibleGeneral(planNum,BenefitCoverageLevel.Individual,75);
+			BenefitT.CreateDeductibleGeneral(planNum,BenefitCoverageLevel.Family,150);
+			ClaimProcT.AddInsUsedAdjustment(pat3.PatNum,planNum,0,subNum,75);//Adjustment goes on the third patient
+			Procedure proc=ProcedureT.CreateProcedure(pat2,"D2750",ProcStat.C,"20",1280);//proc for second patient with a deductible already applied.
+			ClaimProcT.AddInsPaid(pat2.PatNum,planNum,proc.ProcNum,304,subNum,50,597);
+			proc=ProcedureT.CreateProcedure(pat,"D4355",ProcStat.TP,"",135);//proc is for the first patient
+			long procNum=proc.ProcNum;
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			Family fam=Patients.GetFamily(patNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today,subList);
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			//Validate
+			List<ClaimProcHist> HistList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlans,planList,DateTime.Today,subList);
+			double dedFam=Benefits.GetDeductGeneralDisplay(benefitList,planNum,patPlan.PatPlanNum,BenefitCoverageLevel.Family);
+			double ded=Benefits.GetDeductGeneralDisplay(benefitList,planNum,patPlan.PatPlanNum,BenefitCoverageLevel.Individual);
+			double dedRem=InsPlans.GetDedRemainDisplay(HistList,DateTime.Today,planNum,patPlan.PatPlanNum,-1,planList,pat.PatNum,ded,dedFam);//test family and individual deductible together
+			if(dedRem!=25) { //guarantor deductible
+				throw new Exception("Guarantor combination deductible remaining should be 25.\r\n");
+			}
+			dedRem=InsPlans.GetDedRemainDisplay(HistList,DateTime.Today,planNum,patPlan.PatPlanNum,-1,planList,pat.PatNum,ded,-1);//test individual deductible by itself
+			if(dedRem!=75) { //guarantor deductible
+				throw new Exception("Guarantor individual deductible remaining should be 75.\r\n");
+			}
+			return "20: Passed.  Both individual and family deductibles taken into account.\r\n";
+		}
 
 
 

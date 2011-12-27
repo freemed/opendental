@@ -16,12 +16,12 @@ namespace UnitTests {
 			Benefits.Insert(ben);
 		}
 
-		public static void CreateDeductibleGeneral(long planNum,double amt){
+		public static void CreateDeductibleGeneral(long planNum,BenefitCoverageLevel coverageLevel,double amt){
 			Benefit ben=new Benefit();
 			ben.PlanNum=planNum;
 			ben.BenefitType=InsBenefitType.Deductible;
 			ben.CovCatNum=0;
-			ben.CoverageLevel=BenefitCoverageLevel.Individual;
+			ben.CoverageLevel=coverageLevel;
 			ben.MonetaryAmt=amt;
 			ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 			Benefits.Insert(ben);
