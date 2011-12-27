@@ -423,6 +423,14 @@ namespace OpenDental{
 
 		private void FormConfig_Load(object sender, System.EventArgs e) {
 			if(IsAccessedFromMainMenu) {
+				//Act like no command line parameters were entered when accessing from main menu.
+				//Set the variable values to "" otherwise they would be null which causes issues.
+				WebServiceUri="";
+				OdPassword="";
+				ServerName="";
+				DatabaseName="";
+				MySqlUser="";
+				MySqlPassword="";
 				comboDatabase.Enabled=false;
 				comboDatabase.Text=DataConnection.GetDatabaseName();
 			}

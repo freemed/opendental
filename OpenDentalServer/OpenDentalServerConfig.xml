@@ -2,7 +2,7 @@
 <ConnectionSettings>
 	<DatabaseConnection>
 		<ComputerName>localhost</ComputerName>
-		<Database>development120</Database>
+		<Database>development121</Database>
 		<User>root</User>
 		<Password></Password>
 		<UserLow>root</UserLow>
