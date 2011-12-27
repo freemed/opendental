@@ -1293,13 +1293,15 @@ namespace OpenDentBusiness {
 			if(isCheck) {
 				command="SELECT * FROM INFORMATION_SCHEMA.tables "
 					+"WHERE ENGINE NOT LIKE 'MyISAM'"
-					+"AND Table_Schema='"+DataConnection.GetDatabaseName()+"'";
+					+"AND TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
+					+"AND TABLE_NAME!='phone'";//this table is used internally at OD HQ, and is always innodb.
 				int numFound=Db.GetTable(command).Rows.Count;
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Number of tables not MyISAM (probably InnoDb): ")+numFound+"\r\n";
 				}
 			}
 			else {//fix
+				//we will fix manually for now.
 			}
 			return log;
 		}
