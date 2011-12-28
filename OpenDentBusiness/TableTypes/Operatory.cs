@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public string OpName;
 		///<summary>5 char or less. Not used much.</summary>
 		public string Abbrev;
-		///<summary>The order that this op column will show.  Changing views only hides some ops; it does not change their order.</summary>
+		///<summary>The order that this op column will show.  Changing views only hides some ops; it does not change their order.  Zero based.</summary>
 		public int ItemOrder;
 		///<summary>Used instead of deleting to hide an op that is no longer used.</summary>
 		public bool IsHidden;

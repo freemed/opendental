@@ -182,6 +182,17 @@ namespace OpenDental{
 
 		private void FillGrid(){
 			Cache.Refresh(InvalidType.Operatories);
+			bool neededFixing=false;
+			for(int i=0;i<OperatoryC.Listt.Count;i++) {
+				if(OperatoryC.Listt[i].ItemOrder!=i) {
+					OperatoryC.Listt[i].ItemOrder=i;
+					Operatories.Update(OperatoryC.Listt[i]);
+					neededFixing=true;
+				}
+			}
+			if(neededFixing) {
+				DataValid.SetInvalid(InvalidType.Operatories);
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableOperatories","Op Name"),150);
