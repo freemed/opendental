@@ -240,7 +240,7 @@ namespace OpenDental {
 			this.textBankBranch.Location = new System.Drawing.Point(106, 130);
 			this.textBankBranch.Name = "textBankBranch";
 			this.textBankBranch.Size = new System.Drawing.Size(100, 20);
-			this.textBankBranch.TabIndex = 3;
+			this.textBankBranch.TabIndex = 2;
 			// 
 			// label7
 			// 
@@ -538,7 +538,7 @@ namespace OpenDental {
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Payment;
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(290, 80);
-			this.textNote.TabIndex = 4;
+			this.textNote.TabIndex = 3;
 			// 
 			// textAmount
 			// 
@@ -552,7 +552,7 @@ namespace OpenDental {
 			this.textDate.Location = new System.Drawing.Point(106, 70);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(100, 20);
-			this.textDate.TabIndex = 2;
+			this.textDate.TabIndex = 4;
 			// 
 			// butCancel
 			// 
