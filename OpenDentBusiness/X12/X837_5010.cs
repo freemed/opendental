@@ -806,11 +806,10 @@ namespace OpenDentBusiness
 					//2300 CL1: Institutional Claim Code. Required
 					seg++;
 					sw.Write("CL1"+s
-						+claim.AdmissionTypeCode//CL101 1/1 Admission Type Code. Required. Validated.
-						//TODO //CL102 1/1 Admission source code. Required for inpatient services. Validated.
-						//TODO //CL103 1/2 Patient status code. Required. Validated.
-						//CL104 1/1 Nursing Home Residential Status Code: Not used.
-						);
+						+claim.AdmissionTypeCode+s//CL101 1/1 Admission Type Code: Validated.
+						+claim.AdmissionSourceCode+s//CL102 1/1 Admission Source Code: Required for inpatient services. Validated.
+						+claim.PatientStatusCode+s//CL103 1/2 Patient Status Code: Validated.
+						+endSegment);//CL104 1/1 Nursing Home Residential Status Code: Not used.
 				}
 				#endregion Claim DN CL1
 				#region Claim PWK
@@ -1011,7 +1010,13 @@ namespace OpenDentBusiness
 				//2300 HI: BP (medical) Anesthesia Related Procedure. Situational. We do not use.
 				//2300 HI: BJ (institutional) Admitting Diagnosis. Situational. Required for inpatient admission. We do not use.
 				//2300 HI: PR (institutional) Patient's Reason for Visit. Situational. Required for outpatient visits.
-//todo: probably required
+				if(medType==EnumClaimMedType.Institutional) {
+					seg++;
+					sw.Write("HI"+s
+						+"PR"+isa16//HI01-1 1/3 Code List Qualifier Code: PR=ICD-9 Patient's Reason for Visit.
+						+Sout((string)diagnosisList[0],30).Replace(".","")//HI01-2 1/30 Industry Code: No periods. TODO: This is not principal diagnosis, so we need to pull this info from somewhere else.
+						+endSegment);
+				}
 				//2300 HI: BN (institutional) External Cause of Injury. Situational. We do not use.
 				//2300 HI: (institutional) Diagnosis Related Group (DRG) Information. Situational. We do not use. For inpatient hospital under DRG contract.
 				//2300 HI: BF (institutional) Other Diagnosis Information. Situational. We do not use. When other conditions coexist or develop.
@@ -1056,8 +1061,7 @@ namespace OpenDentBusiness
 				#region 2310 Claim Providers (inst)
 				if(medType==EnumClaimMedType.Institutional) {
 					//2310A NM1: 71 (institutional) Attending Provider Name. Situational.
-						//required. Provider with overall responsibility for care and treatment reported on this claim.
-	//todo: attending provider.  We will use our treating provider field.
+					seg+=WriteNM1_71(sw,provTreat);
 					//2310A PRV: AT (institutional) Attending Provider Specialty Information. Situational.
 					//2310A REF: (institutional) Attending Provider Secondary Identification. Situational.
 					//2310B NM1: 72 (institutional) Operating Physician Name. Situational. For surgical procedure codes.
@@ -1069,8 +1073,8 @@ namespace OpenDentBusiness
 						seg+=WriteNM1_82(sw,provTreat);
 						//2310D REF: ZZ (institutional) Rendering Provider Secondary Identificaiton. Situational.
 					}
-					//2310E NM1: 77 (institutional) Service Facility Location Name. Situational.
-	//todo:
+					//2310E NM1: 77 (institutional) Service Facility Location Name. Situational. Required if different than billing provider loop 2010AA.
+	//todo: However, there shouldn't be too many situations where the facility location is different than the billing location, except maybe multi-location institutions.
 					//2310E N3: (institutional) Service Facility Location Address. Required when place of service is different from loop 2010AA billing provider.
 					//2310E N4: (institutional) Service Facility Location City, State, Zip Code.
 					//2310E REF: ZZ (institutional) Service Facility Location Secondary Identificiation. Situational.
@@ -1859,56 +1863,51 @@ namespace OpenDentBusiness
 		///<summary>A referring provider.  The loop has different numbers depending on med/inst/dent.</summary>
 		private static int WriteNM1_DN(StreamWriter sw,long referringProv) {
 			Referral referral=Referrals.GetReferral(referringProv);
-			if(referral==null || referral.NotPerson || !referral.IsDoctor || referral.LName=="") {
+			if(referral==null || referral.NotPerson || !referral.IsDoctor) {
 				return 0;
 			}
-			sw.Write("NM1"+s
-				+"DN"+s//NM101 2/3 Entity Identifier Code: DN=Referring Provider.
-				+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
-				+Sout(referral.LName,60,1));//NM103 1/60 Name Last
-			if(referral.FName!="" || referral.MName!="" || referral.NationalProvID.Length>1){
-				sw.Write(s//end of NM103
-					+Sout(referral.FName,35));//NM104 1/35 Name First:
-			}
-			if(referral.MName!="" || referral.NationalProvID.Length>1){
-				sw.Write(s//end of NM104
-					+Sout(referral.MName,25));//NM105 1/25 Name Middle:
-			}
-			if(referral.NationalProvID.Length>1) {
-				sw.Write(s//End of NM105.
-					+s//NM106 1/10 Name Prefix: Not used.
-					+s//NM107 1/10 Name Suffix: Situational. We do not use.
-					+"XX"+s//NM108 1/2 Identification Code Qualifier: XX=Centers for Medicare and Medicaid Services National Provider Identifier.
-					+Sout(referral.NationalProvID,80,2)//NM109 2/80 Identification Code:
-					);//NM110 through NM112 not used.
-			}
-			sw.Write(endSegment);
-			return 1;
+			return WriteNM1Provider("DN",sw,referral.FName,referral.MName,referral.LName,referral.NationalProvID);
 		}
 
 		///<summary>A rendering provider. The loop has different numbers depending on med/inst/dent</summary>
 		private static int WriteNM1_82(StreamWriter sw,Provider provTreat) {
-			if(provTreat==null || provTreat.LName=="") {
+			if(provTreat==null) {
+				return 0;
+			}
+			return WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID);
+		}
+
+		///<summary>An attending/treating provider.</summary>
+		private static int WriteNM1_71(StreamWriter sw,Provider provTreat) {
+			if(provTreat==null) {
+				return 0;
+			}
+			return WriteNM1Provider("71",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID);
+		}
+
+		///<summary>A generic function that is reused because there are many identical provider NM1 segments within the X12 specification. Returns number of segments written.</summary>
+		private static int WriteNM1Provider(string entityIdentifierCode,StreamWriter sw,string FName,string middleName,string LName,string NPI) {
+			if(LName=="") {
 				return 0;
 			}
 			sw.Write("NM1"+s
-				+"82"+s//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
+				+entityIdentifierCode+s//NM101 2/3 Entity Identifier Code: Used to identify the type of provider being specified.
 				+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
-				+Sout(provTreat.LName,60));//NM103 1/60 Name Last or Organization Name:
-			if(provTreat.FName!="" || provTreat.MI!="" || provTreat.NationalProvID.Length>1) {
+				+Sout(LName,60));//NM103 1/60 Name Last or Organization Name:
+			if(FName!="" || middleName!="" || NPI.Length>1) {
 				sw.Write(s//end of NM103.
-					+Sout(provTreat.FName,35));//NM104 1/35 Name First:
+					+Sout(FName,35));//NM104 1/35 Name First:
 			}
-			if(provTreat.MI!="" || provTreat.NationalProvID.Length>1) {
+			if(middleName!="" || NPI.Length>1) {
 				sw.Write(s//end of NM104.
-					+Sout(provTreat.MI,25));//NM105 1/25 Name Middle:
+					+Sout(middleName,25));//NM105 1/25 Name Middle:
 			}
-			if(provTreat.NationalProvID.Length>1) {
+			if(NPI.Length>1) {
 				sw.Write(s//end of NM105.
 					+s//NM106 1/10 Name Prefix: Not Used.
 					+s//NM107 1/10 Name Suffix: We don't support.
 					+"XX"+s//NM108 1/2 Identification Code Qualifier: Situational. Required since after the HIPAA date. XX=NPI.
-					+Sout(provTreat.NationalProvID,80));//NM109 2/80 Identification Code:  NPI validated.
+					+Sout(NPI,80));//NM109 2/80 Identification Code:  NPI validated.
 			}
 			sw.Write(endSegment);//NM110 through NM112 are not used.
 			return 1;
