@@ -267,87 +267,87 @@ namespace OpenDentBusiness {
 								break;//out of note loop.
 							}
 						}
-						row["PatNum"]="";
-						row["Priority"]=rawProcs.Rows[i]["Priority"].ToString();
-						row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.Long(rawProcs.Rows[i]["Priority"].ToString()));
-						row["ProcCode"]=rawProcs.Rows[i]["ProcCode"].ToString();
-						dateT=PIn.DateT(rawProcs.Rows[i]["ProcDate"].ToString());
-						if(dateT.Year<1880) {
-							row["procDate"]="";
-						}
-						else {
-							row["procDate"]=dateT.ToString(Lans.GetShortDateTimeFormat());
-						}
-						row["ProcDate"]=dateT;
-						double amt = PIn.Double(rawProcs.Rows[i]["ProcFee"].ToString());
-						int qty = PIn.Int(rawProcs.Rows[i]["UnitQty"].ToString()) + PIn.Int(rawProcs.Rows[i]["BaseUnits"].ToString());
-						if(qty>0) {
-							amt *= qty;
-						}
-						row["procFee"]=amt.ToString("F");
-						row["ProcNum"]=rawProcs.Rows[i]["ProcNum"].ToString();
-						row["ProcNumLab"]=rawProcs.Rows[i]["ProcNumLab"].ToString();
-						row["procStatus"]=Lans.g("enumProcStat",((ProcStat)PIn.Long(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
-						row["ProcStatus"]=rawProcs.Rows[i]["ProcStatus"].ToString();
-						row["procTime"]="";
-						dateT=PIn.DateT(rawProcs.Rows[i]["ProcTime"].ToString());
-						if(dateT.TimeOfDay!=TimeSpan.Zero) {
-							row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
-						}
-						row["procTimeEnd"]="";
-						dateT=PIn.DateT(rawProcs.Rows[i]["ProcTimeEnd"].ToString());
-						if(dateT.TimeOfDay!=TimeSpan.Zero) {
-							row["procTimeEnd"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
-						}
-						row["prognosis"]=DefC.GetName(DefCat.Prognosis,PIn.Long(rawProcs.Rows[i]["Prognosis"].ToString()));
-						row["prov"]=rawProcs.Rows[i]["Abbr"].ToString();
-						row["quadrant"]="";
-						if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Tooth) {
-							row["quadrant"]=Tooth.GetQuadrant(rawProcs.Rows[i]["ToothNum"].ToString());
-						}
-						else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Surf) {
-							row["quadrant"]=Tooth.GetQuadrant(rawProcs.Rows[i]["ToothNum"].ToString());
-						}
-						else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Quad) {
-							row["quadrant"]=rawProcs.Rows[i]["Surf"].ToString();
-						}
-						else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.ToothRange) {
-							string[] toothNum=rawProcs.Rows[i]["ToothRange"].ToString().Split(',');
-							bool sameQuad=false;//Don't want true if length==0.
-							for(int n=0;n<toothNum.Length;n++) {//But want true if length==1 (check index 0 against itself).
-								if(Tooth.GetQuadrant(toothNum[n])==Tooth.GetQuadrant(toothNum[0])) {
-									sameQuad=true;
-								}
-								else {
-									sameQuad=false;
-									break;
-								}
-							}
-							if(sameQuad) {
-								row["quadrant"]=Tooth.GetQuadrant(toothNum[0]);
-							}
-						}
-						row["RxNum"]=0;
-						row["SheetNum"]=0;
-						row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
-						if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Surf) {
-							row["surf"]=Tooth.SurfTidyFromDbToDisplay(rawProcs.Rows[i]["Surf"].ToString(),rawProcs.Rows[i]["ToothNum"].ToString());
-						}
-						else {
-							row["surf"]=rawProcs.Rows[i]["Surf"].ToString();
-						}
-						row["TaskNum"]=0;
-						row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString());
-						row["ToothNum"]=rawProcs.Rows[i]["ToothNum"].ToString();
-						row["ToothRange"]=rawProcs.Rows[i]["ToothRange"].ToString();
-						if(rawProcs.Rows[i]["ProcNumLab"].ToString()=="0") {//normal proc
-							rows.Add(row);
-						}
-						else {
-							row["description"]="^ ^ "+row["description"].ToString();
-							labRows.Add(row);//these will be added in the loop at the end
-						}
 						#endregion Note
+					}
+					row["PatNum"]="";
+					row["Priority"]=rawProcs.Rows[i]["Priority"].ToString();
+					row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.Long(rawProcs.Rows[i]["Priority"].ToString()));
+					row["ProcCode"]=rawProcs.Rows[i]["ProcCode"].ToString();
+					dateT=PIn.DateT(rawProcs.Rows[i]["ProcDate"].ToString());
+					if(dateT.Year<1880) {
+						row["procDate"]="";
+					}
+					else {
+						row["procDate"]=dateT.ToString(Lans.GetShortDateTimeFormat());
+					}
+					row["ProcDate"]=dateT;
+					double amt = PIn.Double(rawProcs.Rows[i]["ProcFee"].ToString());
+					int qty = PIn.Int(rawProcs.Rows[i]["UnitQty"].ToString()) + PIn.Int(rawProcs.Rows[i]["BaseUnits"].ToString());
+					if(qty>0) {
+						amt *= qty;
+					}
+					row["procFee"]=amt.ToString("F");
+					row["ProcNum"]=rawProcs.Rows[i]["ProcNum"].ToString();
+					row["ProcNumLab"]=rawProcs.Rows[i]["ProcNumLab"].ToString();
+					row["procStatus"]=Lans.g("enumProcStat",((ProcStat)PIn.Long(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
+					row["ProcStatus"]=rawProcs.Rows[i]["ProcStatus"].ToString();
+					row["procTime"]="";
+					dateT=PIn.DateT(rawProcs.Rows[i]["ProcTime"].ToString());
+					if(dateT.TimeOfDay!=TimeSpan.Zero) {
+						row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+					}
+					row["procTimeEnd"]="";
+					dateT=PIn.DateT(rawProcs.Rows[i]["ProcTimeEnd"].ToString());
+					if(dateT.TimeOfDay!=TimeSpan.Zero) {
+						row["procTimeEnd"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+					}
+					row["prognosis"]=DefC.GetName(DefCat.Prognosis,PIn.Long(rawProcs.Rows[i]["Prognosis"].ToString()));
+					row["prov"]=rawProcs.Rows[i]["Abbr"].ToString();
+					row["quadrant"]="";
+					if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Tooth) {
+						row["quadrant"]=Tooth.GetQuadrant(rawProcs.Rows[i]["ToothNum"].ToString());
+					}
+					else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Surf) {
+						row["quadrant"]=Tooth.GetQuadrant(rawProcs.Rows[i]["ToothNum"].ToString());
+					}
+					else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Quad) {
+						row["quadrant"]=rawProcs.Rows[i]["Surf"].ToString();
+					}
+					else if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.ToothRange) {
+						string[] toothNum=rawProcs.Rows[i]["ToothRange"].ToString().Split(',');
+						bool sameQuad=false;//Don't want true if length==0.
+						for(int n=0;n<toothNum.Length;n++) {//But want true if length==1 (check index 0 against itself).
+							if(Tooth.GetQuadrant(toothNum[n])==Tooth.GetQuadrant(toothNum[0])) {
+								sameQuad=true;
+							}
+							else {
+								sameQuad=false;
+								break;
+							}
+						}
+						if(sameQuad) {
+							row["quadrant"]=Tooth.GetQuadrant(toothNum[0]);
+						}
+					}
+					row["RxNum"]=0;
+					row["SheetNum"]=0;
+					row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
+					if(ProcedureCodes.GetProcCode(PIn.Long(row["CodeNum"].ToString())).TreatArea==TreatmentArea.Surf) {
+						row["surf"]=Tooth.SurfTidyFromDbToDisplay(rawProcs.Rows[i]["Surf"].ToString(),rawProcs.Rows[i]["ToothNum"].ToString());
+					}
+					else {
+						row["surf"]=rawProcs.Rows[i]["Surf"].ToString();
+					}
+					row["TaskNum"]=0;
+					row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString());
+					row["ToothNum"]=rawProcs.Rows[i]["ToothNum"].ToString();
+					row["ToothRange"]=rawProcs.Rows[i]["ToothRange"].ToString();
+					if(rawProcs.Rows[i]["ProcNumLab"].ToString()=="0") {//normal proc
+						rows.Add(row);
+					}
+					else {
+						row["description"]="^ ^ "+row["description"].ToString();
+						labRows.Add(row);//these will be added in the loop at the end
 					}
 				}
 				#endregion Procedures
