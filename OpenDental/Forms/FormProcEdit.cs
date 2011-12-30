@@ -3823,6 +3823,9 @@ namespace OpenDental{
 
 		private void comboProvNum_SelectionChangeCommitted(object sender,EventArgs e) {
 			ProcCur.ProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
+			for(int i=0;i<ClaimProcsForProc.Count;i++) {
+				ClaimProcsForProc[i].ProvNum=ProcCur.ProvNum;
+			}
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
