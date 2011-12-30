@@ -808,7 +808,7 @@ namespace OpenDentBusiness
 					sw.Write("CL1"+s
 						+claim.AdmissionTypeCode+s//CL101 1/1 Admission Type Code: Validated.
 						+claim.AdmissionSourceCode+s//CL102 1/1 Admission Source Code: Required for inpatient services. Validated.
-						+claim.PatientStatusCode+s//CL103 1/2 Patient Status Code: Validated.
+						+claim.PatientStatusCode//CL103 1/2 Patient Status Code: Validated.
 						+endSegment);//CL104 1/1 Nursing Home Residential Status Code: Not used.
 				}
 				#endregion Claim DN CL1
@@ -990,20 +990,20 @@ namespace OpenDentBusiness
 					seg++;
 					sw.Write("HI"+s
 						+"BK"+isa16//HI01-1 1/3 Code List Qualifier Code: BK=ICD-9 Principal Diagnosis.
-						+Sout((string)diagnosisList[0],30).Replace(".",""));//HI01-2 1/30 Industry Code: Diagnosis code. No periods.
+						+Sout(diagnosisList[0].Replace(".",""),30));//HI01-2 1/30 Industry Code: Diagnosis code. No periods.
 					sw.Write(endSegment);
 				} else if(medType==EnumClaimMedType.Medical) {
 					seg++;
 					sw.Write("HI"+s
 						+"BK"+isa16//HI01-1 1/3 Code List Qualifier Code: BK=ICD-9 Principal Diagnosis.
-						+Sout((string)diagnosisList[0],30).Replace(".",""));//HI01-2 1/30 Industry Code: Diagnosis code. No periods.
+						+Sout(diagnosisList[0].Replace(".",""),30));//HI01-2 1/30 Industry Code: Diagnosis code. No periods.
 					for(int j=1;j<diagnosisList.Count;j++) {
 						if(j>11) {//maximum of 12 diagnoses
 							break;
 						}
 						sw.Write(s//this is the separator from the _previous_ field.
 							+"BF"+isa16//HI0#-1 1/3 Code List Qualifier Code: BF=ICD-9 Diagnosis
-							+Sout((string)diagnosisList[j],30).Replace(".",""));//HI0#-2 1/30 Industry Code: Diagnosis code. No periods.
+							+Sout(diagnosisList[j].Replace(".",""),30));//HI0#-2 1/30 Industry Code: Diagnosis code. No periods.
 					}
 					sw.Write(endSegment);
 				}
@@ -1014,7 +1014,7 @@ namespace OpenDentBusiness
 					seg++;
 					sw.Write("HI"+s
 						+"PR"+isa16//HI01-1 1/3 Code List Qualifier Code: PR=ICD-9 Patient's Reason for Visit.
-						+Sout((string)diagnosisList[0],30).Replace(".","")//HI01-2 1/30 Industry Code: No periods. TODO: This is not principal diagnosis, so we need to pull this info from somewhere else.
+						+Sout(diagnosisList[0].Replace(".",""),30)//HI01-2 1/30 Industry Code: No periods. TODO: This is not principal diagnosis, so we need to pull this info from somewhere else.
 						+endSegment);
 				}
 				//2300 HI: BN (institutional) External Cause of Injury. Situational. We do not use.
@@ -1068,11 +1068,8 @@ namespace OpenDentBusiness
 					//2310C REF: ZZ (institutional) Secondary Physician Secondary Identification. Situational.
 					//2310C NM1: ZZ (institutional) Other Operating Physician Name. Situational.
 					//2310C REF: ZZ (institutional) Other Operating Physician Secondary Identification. Situational.
-					if(claim.ProvTreat!=claim.ProvBill) {
-						//2310D NM1: 82 (institutional) Rendering Provider Name. Situational. If different from attending provider AND when regulations require both facility and professional components.
-						seg+=WriteNM1_82(sw,provTreat);
-						//2310D REF: ZZ (institutional) Rendering Provider Secondary Identificaiton. Situational.
-					}
+					//2310D NM1: 82 (institutional) Rendering Provider Name. Situational. If different from attending provider AND when regulations require both facility and professional components.
+					//2310D REF: ZZ (institutional) Rendering Provider Secondary Identificaiton. Situational.
 					//2310E NM1: 77 (institutional) Service Facility Location Name. Situational. Required if different than billing provider loop 2010AA.
 	//todo: However, there shouldn't be too many situations where the facility location is different than the billing location, except maybe multi-location institutions.
 					//2310E N3: (institutional) Service Facility Location Address. Required when place of service is different from loop 2010AA billing provider.
@@ -1445,11 +1442,21 @@ namespace OpenDentBusiness
 							+"HC"+isa16//SV202-1 2/2 Product/Service ID Qualifier: HC=Health Care. Includes CPT codes.
 							+Sout(claimProcs[j].CodeSent));//SV202-2 1/48 Product/Service ID: Procedure code. 
 						//mods validated to be exactly 2 char long or else blank.
-						sw.Write(isa16+Sout(proc.CodeMod1));//SV202-3 2/2 Procedure Modifier: Situational.
-						sw.Write(isa16+Sout(proc.CodeMod2));//SV202-4 2/2 Procedure Modifier: Situational.
-						sw.Write(isa16+Sout(proc.CodeMod3));//SV202-5 2/2 Procedure Modifier: Situational.
-						sw.Write(isa16+Sout(proc.CodeMod4));//SV202-6 2/2 Procedure Modifier: Situational.
-						sw.Write(isa16+Sout(proc.ClaimNote,80));//SV202-7 1/80 Description: Situational.
+						if(proc.CodeMod1!="" || proc.CodeMod2!="" || proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod1));//SV202-3 2/2 Procedure Modifier: Situational.
+						}
+						if(proc.CodeMod2!="" || proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod2));//SV202-4 2/2 Procedure Modifier: Situational.
+						}
+						if(proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod3));//SV202-5 2/2 Procedure Modifier: Situational.
+						}
+						if(proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod4));//SV202-6 2/2 Procedure Modifier: Situational.
+						}
+						if(proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.ClaimNote,80));//SV202-7 1/80 Description: Situational.
+						}
 						sw.Write(s//SV202-8 is not used.
 							+claimProcs[j].FeeBilled.ToString()+s//SV203 1/18 Monetary Amount: Charge Amt.
 							+"UN"+s//SV204 2/2 Unit or Basis for Measurement Code: UN=Unit. We don't support Days yet.
