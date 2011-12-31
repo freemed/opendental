@@ -795,6 +795,7 @@ namespace OpenDental{
 					isFirstShow=true;
 					FormB=new FormBilling();
 					FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+					FormB.ClinicNum=0;
 				}
 				FormB.Show();
 				FormB.BringToFront();
@@ -808,6 +809,7 @@ namespace OpenDental{
 				if(FormBO.DialogResult==DialogResult.OK){
 					FormB=new FormBilling();
 					FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+					FormB.ClinicNum=FormBO.ClinicNum;
 					FormB.Show();
 				}
 			}

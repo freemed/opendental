@@ -769,10 +769,10 @@ namespace OpenDentBusiness{
 		///<summary>This is only used in the Billing dialog</summary>
 		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<long> billingNums,bool excludeAddr,
 			bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending,
-			bool excludeIfUnsentProcs,bool ignoreInPerson)
+			bool excludeIfUnsentProcs,bool ignoreInPerson,long clinicNum)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatAging>>(MethodBase.GetCurrentMethod(),age,lastStatement,billingNums,excludeAddr,excludeNeg,excludeLessThan,excludeInactive,includeChanged,excludeInsPending,excludeIfUnsentProcs,ignoreInPerson);
+				return Meth.GetObject<List<PatAging>>(MethodBase.GetCurrentMethod(),age,lastStatement,billingNums,excludeAddr,excludeNeg,excludeLessThan,excludeInactive,includeChanged,excludeInsPending,excludeIfUnsentProcs,ignoreInPerson,clinicNum);
 			}
 			string command="";
 			if(includeChanged){
@@ -913,6 +913,9 @@ namespace OpenDentBusiness{
 			}
 			if(excludeAddr){
 				command+=" AND (zip !='')";
+			}
+			if(clinicNum>0) {
+				command+=" AND patient.ClinicNum="+clinicNum+" ";
 			}
 			command+=" GROUP BY patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
 				+"InsEst,LName,FName,MiddleI,PayPlanDue,Preferred "
