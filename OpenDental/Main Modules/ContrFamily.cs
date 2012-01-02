@@ -1042,6 +1042,8 @@ namespace OpenDental{
 					}
 					PatCur.PatStatus=PatientStatus.Deleted;
 					PatCur.ChartNumber="";
+					Popups.MoveForDeletePat(PatCur);
+					PatCur.SuperFamily=0;
 					Patients.Update(PatCur,PatOld);
 					for(int i=0;i<RecallList.Count;i++){
 						if(RecallList[i].PatNum==PatCur.PatNum){
@@ -1064,6 +1066,7 @@ namespace OpenDental{
 				}
 				PatCur.PatStatus=PatientStatus.Deleted;
 				PatCur.ChartNumber="";
+				Popups.MoveForDeletePat(PatCur);
 				PatCur.Guarantor=PatCur.PatNum;
 				PatCur.SuperFamily=0;
 				Patients.Update(PatCur,PatOld);
@@ -1104,19 +1107,26 @@ namespace OpenDental{
 			if(PatCur.PatNum==PatCur.Guarantor){//if guarantor selected
 				if(FamCur.ListPats.Length==1){//and no other family members
 					//no need to check insurance.  It will follow.
-					if(!MsgBox.Show(this,true,"Moving the guarantor will cause two families to be combined.  The financial notes for both families will be combined and may need to be edited.  The address notes will also be combined and may need to be edited. Do you wish to continue?"))
+					if(!MsgBox.Show(this,true,"Moving the guarantor will cause two families to be combined.  The financial notes for both families will be combined and may need to be edited.  The address notes will also be combined and may need to be edited. Do you wish to continue?")) {
 						return;
-					if(!MsgBox.Show(this,true,"Select the family to move this patient to from the list that will come up next."))
+					}
+					if(!MsgBox.Show(this,true,"Select the family to move this patient to from the list that will come up next.")) {
 						return;
+					}
 					FormPatientSelect FormPS=new FormPatientSelect();
 					FormPS.SelectionModeOnly=true;
 					FormPS.ShowDialog();
 					if(FormPS.DialogResult!=DialogResult.OK){
 						return;
 					}
-					Patient pat=Patients.GetPat(FormPS.SelectedPatNum);
-					PatCur.Guarantor=pat.Guarantor;
-					PatCur.SuperFamily=pat.SuperFamily;
+					Patient patInNewFam=Patients.GetPat(FormPS.SelectedPatNum);
+					if(PatCur.SuperFamily!=patInNewFam.SuperFamily){//If they are moving into or out of a superfamily
+						if(PatCur.SuperFamily!=0) {//If they are currently in a SuperFamily and moving out.  Otherwise, no superfamily popups to worry about.
+							Popups.CopyForMovingSuperFamily(PatCur,patInNewFam.SuperFamily);
+						}
+					}
+					PatCur.Guarantor=patInNewFam.Guarantor;
+					PatCur.SuperFamily=patInNewFam.SuperFamily;
 					Patients.Update(PatCur,PatOld);
 					FamCur=Patients.GetFamily(PatCur.PatNum);
 					Patients.CombineGuarantors(FamCur,PatCur);
@@ -1134,6 +1144,7 @@ namespace OpenDental{
 						return;
 					case DialogResult.Yes://new family (split)
 						Popups.CopyForMovingFamilyMember(PatCur);//Copy Family Level Popups to new family. 
+						//Don't need to copy SuperFamily Popups. Stays in same super family.
 						PatCur.Guarantor=PatCur.PatNum;
 						//keep current superfamily
 						Patients.Update(PatCur,PatOld);
@@ -1149,11 +1160,14 @@ namespace OpenDental{
 							return;
 						}
 						Popups.CopyForMovingFamilyMember(PatCur);//Copy Family Level Popups to new Family. 
-	//superfamily popups, copy
-						//Popups.CopyForMovingSuperFamilyMember(PatCur);//Copy SuperFamily Level Popups to new SuperFamily.
-						Patient pat=Patients.GetPat(FormPS.SelectedPatNum);
-						PatCur.Guarantor=pat.Guarantor;
-						PatCur.SuperFamily=pat.SuperFamily;//assign to the new superfamily
+						Patient patInNewFam=Patients.GetPat(FormPS.SelectedPatNum);
+						if(PatCur.SuperFamily!=patInNewFam.SuperFamily){//If they are moving into or out of a superfamily
+							if(PatCur.SuperFamily!=0) {//If they are currently in a SuperFamily.  Otherwise, no superfamily popups to worry about.
+								Popups.CopyForMovingSuperFamily(PatCur,patInNewFam.SuperFamily);
+							}
+						}
+						PatCur.Guarantor=patInNewFam.Guarantor;
+						PatCur.SuperFamily=patInNewFam.SuperFamily;//assign to the new superfamily
 						Patients.Update(PatCur,PatOld);
 						break;
 				}
@@ -1376,6 +1390,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<FamCur.ListPats.Length;i++) {//remove whole family
 				Patient tempPat=FamCur.ListPats[i].Copy();
+				Popups.CopyForMovingSuperFamily(tempPat,0);
 				tempPat.SuperFamily=0;
 				Patients.Update(tempPat,FamCur.ListPats[i]);
 			}
@@ -1390,6 +1405,7 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Would you like to disband and remove all members in the super family of "+superHead.GetNameFL()+"?")) {
 				return;
 			}
+			Popups.RemoveForDisbandingSuperFamily(PatCur);
 			Patients.DisbandSuperFamily(superHead.PatNum);
 			ModuleSelected(PatCur.PatNum);
 		}
