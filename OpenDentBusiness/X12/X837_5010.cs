@@ -317,13 +317,15 @@ namespace OpenDentBusiness
 					//2010AA REF: (medical,dental) Billing Provider UIPN/License Information: Situational. We do not use. Max repeat 2.
 				}
 				if(medType==EnumClaimMedType.Dental) {
-					//2010AA REF: (dental) State License Number: Required by RECS and Emdeon clearinghouses. Everyone else should find it useful too. We do NOT validate that it's entered because seding it with non-persons causes problems.
-					if(billProv.StateLicense!=""){
-						seg++;
-						sw.Write("REF"+s
-							+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-							+Sout(billProv.StateLicense,50)//REF02 1/50 Reference Identification: 
-							+endSegment);//REF03 and REF04 are not used.
+					//2010AA REF: (dental) State License Number: Required by RECS and Emdeon clearinghouses. We do NOT validate that it's entered because sending it with non-persons causes problems.
+					if(IsEmdeonDental(clearhouse) || clearhouse.CommBridge==EclaimsCommBridge.RECS) {
+						if(billProv.StateLicense!="") {
+							seg++;
+							sw.Write("REF"+s
+								+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+								+Sout(billProv.StateLicense,50)//REF02 1/50 Reference Identification: 
+								+endSegment);//REF03 and REF04 are not used.
+						}
 					}
 					//2010AA REF G5 (dental) Site Identification Number: NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by Emdeon.
 					if(IsEmdeonDental(clearhouse)) {
@@ -992,7 +994,8 @@ namespace OpenDentBusiness
 						+"BK"+isa16//HI01-1 1/3 Code List Qualifier Code: BK=ICD-9 Principal Diagnosis.
 						+Sout(diagnosisList[0].Replace(".",""),30));//HI01-2 1/30 Industry Code: Diagnosis code. No periods.
 					sw.Write(endSegment);
-				} else if(medType==EnumClaimMedType.Medical) {
+				} 
+				else if(medType==EnumClaimMedType.Medical) {
 					seg++;
 					sw.Write("HI"+s
 						+"BK"+isa16//HI01-1 1/3 Code List Qualifier Code: BK=ICD-9 Principal Diagnosis.
@@ -1014,7 +1017,7 @@ namespace OpenDentBusiness
 					seg++;
 					sw.Write("HI"+s
 						+"PR"+isa16//HI01-1 1/3 Code List Qualifier Code: PR=ICD-9 Patient's Reason for Visit.
-						+Sout(diagnosisList[0].Replace(".",""),30)//HI01-2 1/30 Industry Code: No periods. TODO: This is not principal diagnosis, so we need to pull this info from somewhere else.
+						+Sout(diagnosisList[0].Replace(".",""),30)//HI01-2 1/30 Industry Code: No periods. This is not really principal diagnosis but is close to the same, so someday we will add this field to claim.
 						+endSegment);
 				}
 				//2300 HI: BN (institutional) External Cause of Injury. Situational. We do not use.
