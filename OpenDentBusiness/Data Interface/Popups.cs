@@ -117,8 +117,8 @@ namespace OpenDentBusiness{
 			}
 			else{//Move all family/superfamily popups to the guarantor
 				command+="SET PatNum = "+POut.Long(pat.Guarantor)+" "
-					+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
-					+"OR PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+" "
+					+"WHERE (PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
+					+"OR PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+") "
 					+"AND PatNum = "+POut.Long(pat.PatNum);
 			}
 			Db.NonQ(command);
