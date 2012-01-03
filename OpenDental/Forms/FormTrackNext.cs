@@ -36,6 +36,8 @@ namespace OpenDental{
 		private ComboBox comboSite;
 		private Label labelSite;
 		private int headingPrintH;
+		private ComboBox comboClinic;
+		private Label labelClinic;
 		private Dictionary<long,string> patientNames;
 
 		///<summary></summary>
@@ -77,20 +79,22 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.comboSite = new System.Windows.Forms.ComboBox();
 			this.labelSite = new System.Windows.Forms.Label();
+			this.comboClinic = new System.Windows.Forms.ComboBox();
+			this.labelClinic = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(675,641);
+			this.butClose.Location = new System.Drawing.Point(755, 600);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(87, 24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -98,10 +102,10 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,52);
+			this.gridMain.Location = new System.Drawing.Point(12, 53);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(734,572);
+			this.gridMain.Size = new System.Drawing.Size(734, 571);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Planned Appointments";
 			this.gridMain.TranslationName = "FormTrackNext";
@@ -110,32 +114,32 @@ namespace OpenDental{
 			// comboProv
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.Location = new System.Drawing.Point(331,5);
+			this.comboProv.Location = new System.Drawing.Point(336, 5);
 			this.comboProv.MaxDropDownItems = 40;
 			this.comboProv.Name = "comboProv";
-			this.comboProv.Size = new System.Drawing.Size(181,21);
+			this.comboProv.Size = new System.Drawing.Size(181, 21);
 			this.comboProv.TabIndex = 26;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(239,9);
+			this.label4.Location = new System.Drawing.Point(244, 9);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(91,14);
+			this.label4.Size = new System.Drawing.Size(91, 14);
 			this.label4.TabIndex = 25;
 			this.label4.Text = "Provider";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butRefresh
 			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRefresh.Autosize = true;
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(531,3);
+			this.butRefresh.Location = new System.Drawing.Point(755, 5);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(84,26);
+			this.butRefresh.Size = new System.Drawing.Size(87, 24);
 			this.butRefresh.TabIndex = 24;
 			this.butRefresh.Text = "&Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
@@ -143,24 +147,24 @@ namespace OpenDental{
 			// comboOrder
 			// 
 			this.comboOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboOrder.Location = new System.Drawing.Point(104,5);
+			this.comboOrder.Location = new System.Drawing.Point(104, 5);
 			this.comboOrder.MaxDropDownItems = 40;
 			this.comboOrder.Name = "comboOrder";
-			this.comboOrder.Size = new System.Drawing.Size(133,21);
+			this.comboOrder.Size = new System.Drawing.Size(133, 21);
 			this.comboOrder.TabIndex = 30;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,9);
+			this.label1.Location = new System.Drawing.Point(11, 9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(91,14);
+			this.label1.Size = new System.Drawing.Size(91, 14);
 			this.label1.TabIndex = 29;
 			this.label1.Text = "Order by";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butPrint
 			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butPrint.Autosize = true;
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -168,9 +172,9 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(559,641);
+			this.butPrint.Location = new System.Drawing.Point(755, 552);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(87,26);
+			this.butPrint.Size = new System.Drawing.Size(87, 24);
 			this.butPrint.TabIndex = 31;
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -178,26 +182,46 @@ namespace OpenDental{
 			// comboSite
 			// 
 			this.comboSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSite.Location = new System.Drawing.Point(331,28);
+			this.comboSite.Location = new System.Drawing.Point(613, 29);
 			this.comboSite.MaxDropDownItems = 40;
 			this.comboSite.Name = "comboSite";
-			this.comboSite.Size = new System.Drawing.Size(181,21);
+			this.comboSite.Size = new System.Drawing.Size(133, 21);
 			this.comboSite.TabIndex = 33;
 			// 
 			// labelSite
 			// 
-			this.labelSite.Location = new System.Drawing.Point(239,32);
+			this.labelSite.Location = new System.Drawing.Point(520, 31);
 			this.labelSite.Name = "labelSite";
-			this.labelSite.Size = new System.Drawing.Size(91,14);
+			this.labelSite.Size = new System.Drawing.Size(91, 14);
 			this.labelSite.TabIndex = 32;
 			this.labelSite.Text = "Site";
 			this.labelSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// comboClinic
+			// 
+			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClinic.Location = new System.Drawing.Point(613, 5);
+			this.comboClinic.MaxDropDownItems = 40;
+			this.comboClinic.Name = "comboClinic";
+			this.comboClinic.Size = new System.Drawing.Size(133, 21);
+			this.comboClinic.TabIndex = 35;
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(520, 9);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(91, 14);
+			this.labelClinic.TabIndex = 34;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormTrackNext
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butClose;
-			this.ClientSize = new System.Drawing.Size(771,683);
+			this.ClientSize = new System.Drawing.Size(852, 640);
+			this.Controls.Add(this.comboClinic);
+			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.comboSite);
 			this.Controls.Add(this.labelSite);
 			this.Controls.Add(this.butPrint);
@@ -215,8 +239,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Track Planned Appointments";
-			this.Load += new System.EventHandler(this.FormTrackNext_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTrackNext_FormClosing);
+			this.Load += new System.EventHandler(this.FormTrackNext_Load);
 			this.ResumeLayout(false);
 
 		}
@@ -244,6 +268,17 @@ namespace OpenDental{
 					comboSite.Items.Add(SiteC.List[i].Description);
 				}
 			}
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				comboClinic.Visible=false;
+				labelClinic.Visible=false;
+			}
+			else {
+				comboClinic.Items.Add(Lan.g(this,"All"));
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+				}
+			}
 			FillGrid();
 		}
 
@@ -269,7 +304,11 @@ namespace OpenDental{
 			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
-			AptList=Appointments.RefreshPlannedTracker(order,provNum,siteNum);
+			long clinicNum=0;
+			if(comboClinic.SelectedIndex!=0) {
+				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+			}
+			AptList=Appointments.RefreshPlannedTracker(order,provNum,siteNum,clinicNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Patient"),140);
