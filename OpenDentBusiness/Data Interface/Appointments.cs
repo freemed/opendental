@@ -373,9 +373,9 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Used in FormConfirmList</summary>
-		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,long provNum) {
+		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,long provNum,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,provNum);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,provNum,clinicNum);
 			}
 			DataTable table=new DataTable();
 			DataRow row;
@@ -414,6 +414,9 @@ namespace OpenDentBusiness{
 				+"OR AptStatus=4) ";//ASAP
 			if(provNum>0){
 				command+="AND (appointment.ProvNum="+POut.Long(provNum)+" OR appointment.ProvHyg="+POut.Long(provNum)+") ";
+			}
+			if(clinicNum>0) {
+				command+="AND appointment.ClinicNum="+POut.Long(clinicNum)+" ";
 			}
 			command+="ORDER BY AptDateTime";
 			DataTable rawtable=Db.GetTable(command);
