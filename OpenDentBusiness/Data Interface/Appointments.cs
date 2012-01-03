@@ -39,9 +39,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
-		public static Appointment[] RefreshUnsched(string orderby,long provNum,long siteNum,bool includeBrokenAppts) {
+		public static Appointment[] RefreshUnsched(string orderby,long provNum,long siteNum,bool includeBrokenAppts,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum,includeBrokenAppts);
+				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum,includeBrokenAppts,clinicNum);
 			}
 			string command="SELECT * FROM appointment "
 				+"LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
@@ -58,6 +58,9 @@ namespace OpenDentBusiness{
 			if(siteNum>0) {
 				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
 			}
+			if(clinicNum>0) {
+				command+="AND appointment.ClinicNum="+POut.Long(clinicNum)+" ";
+			}
 			command+="HAVING patient.PatStatus= "+POut.Long((int)PatientStatus.Patient)+" "
 				+" OR patient.PatStatus= "+POut.Long((int)PatientStatus.Prospective)+" ";	
 			if(orderby=="status") {
@@ -73,9 +76,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets list of asap appointments.</summary>
-		public static List<Appointment> RefreshASAP(long provNum,long siteNum) {
+		public static List<Appointment> RefreshASAP(long provNum,long siteNum,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),provNum,siteNum);
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),provNum,siteNum,clinicNum);
 			}
 			string command="SELECT * FROM appointment ";
 			//if(orderby=="alph" || siteNum>0) {
@@ -91,6 +94,9 @@ namespace OpenDentBusiness{
 			if(siteNum>0) {
 				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
 			}
+			if(clinicNum>0) {
+				command+="AND appointment.ClinicNum="+POut.Long(clinicNum)+" ";
+			}
 			/*if(orderby=="status") {
 				command+="ORDER BY UnschedStatus,AptDateTime";
 			}
@@ -105,9 +111,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Allowed orderby: status, alph, date</summary>
-		public static List<Appointment> RefreshPlannedTracker(string orderby,long provNum,long siteNum) {
+		public static List<Appointment> RefreshPlannedTracker(string orderby,long provNum,long siteNum,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum,clinicNum);
 			}
 			//We create a in-memory temporary table by joining the appointment and patient
 			//tables to get a list of planned appointments for active paients, then we
@@ -127,6 +133,9 @@ namespace OpenDentBusiness{
 			}
 			if(siteNum>0) {
 				command+="AND p.SiteNum="+POut.Long(siteNum)+" ";
+			}
+			if(clinicNum>0) {
+				command+="AND a.ClinicNum="+POut.Long(clinicNum)+" ";
 			}
 			if(orderby=="status") {
 				command+="ORDER BY a.UnschedStatus,a.AptDateTime";
