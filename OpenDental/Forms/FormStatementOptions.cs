@@ -893,11 +893,13 @@ namespace OpenDental{
 			str=PrefC.GetString(PrefName.BillingEmailSubject);
 			str=str.Replace("[nameF]",pat.GetNameFirst());
 			str=str.Replace("[nameFL]",pat.GetNameFL());
+			str=str.Replace("[namePref]",pat.Preferred);
 			str=str.Replace("[PatNum]",pat.PatNum.ToString());
 			message.Subject=str;
 			str=PrefC.GetString(PrefName.BillingEmailBodyText);
 			str=str.Replace("[nameF]",pat.GetNameFirst());
 			str=str.Replace("[nameFL]",pat.GetNameFL());
+			str=str.Replace("[namePref]",pat.Preferred);
 			str=str.Replace("[PatNum]",pat.PatNum.ToString());
 			message.BodyText=str;
 			EmailAttach attach=new EmailAttach();

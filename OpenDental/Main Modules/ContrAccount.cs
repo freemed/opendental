@@ -3430,11 +3430,13 @@ namespace OpenDental {
 				str=PrefC.GetString(PrefName.BillingEmailSubject);
 				str=str.Replace("[nameF]",guar.GetNameFirst());
 				str=str.Replace("[nameFL]",guar.GetNameFL());
+				str=str.Replace("[namePref]",guar.Preferred);
 				str=str.Replace("[PatNum]",guar.PatNum.ToString());
 				message.Subject=str;
 				str=PrefC.GetString(PrefName.BillingEmailBodyText);
 				str=str.Replace("[nameF]",guar.GetNameFirst());
 				str=str.Replace("[nameFL]",guar.GetNameFL());
+				str=str.Replace("[namePref]",guar.Preferred);
 				str=str.Replace("[PatNum]",guar.PatNum.ToString());
 				message.BodyText=str;
 				EmailAttach attach=new EmailAttach();

@@ -360,7 +360,8 @@ namespace OpenDental{
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(612,22);
 			this.label10.TabIndex = 249;
-			this.label10.Text = "These variables may be used in either box: [nameF], [nameFL], and [PatNum].";
+			this.label10.Text = "These variables may be used in either box: [nameF], [nameFL], [namePref], and [Pa" +
+    "tNum].";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormBillingDefaults
