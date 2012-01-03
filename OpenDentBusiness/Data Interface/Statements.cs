@@ -70,6 +70,24 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		///<summary>Queries the database to determine if there are any unsent statements for a particular clinic.</summary>
+		public static bool UnsentClinicStatementsExist(long clinicNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),clinicNum);
+			}
+			if(clinicNum==0) {//All clinics.
+				return UnsentStatementsExist();
+			}
+			string command=@"SELECT COUNT(*) FROM statement 
+				LEFT JOIN patient ON statement.PatNum=patient.PatNum
+				WHERE statement.IsSent=0
+				AND patient.ClinicNum="+clinicNum;
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
+		}
+
 		public static void MarkSent(long statementNum,DateTime dateSent) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum,dateSent);

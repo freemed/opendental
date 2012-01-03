@@ -789,32 +789,57 @@ namespace OpenDental{
 
 		private void butBilling_Click(object sender,System.EventArgs e) {
 			bool unsentStatementsExist=Statements.UnsentStatementsExist();
-			if(unsentStatementsExist){
-				bool isFirstShow=false;
-				if(FormB==null || FormB.IsDisposed){
-					isFirstShow=true;
-					FormB=new FormBilling();
-					FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
-					FormB.ClinicNum=0;
+			if(unsentStatementsExist) {
+				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Using clinics.
+					//Have user choose which clinic they want to see billing for.
+					FormBillingClinic FormBC=new FormBillingClinic();
+					FormBC.ShowDialog();
+					if(FormBC.DialogResult==DialogResult.OK) {
+						if(Statements.UnsentClinicStatementsExist(FormBC.ClinicNum)) {//Check if clinic has unsent bills.
+							ShowBilling(FormBC.ClinicNum);//Clinic has unsent bills.  Simply show billing window.
+						}
+						else {//No unsent bills for clinic.  Show billing options to generate a billing list.
+							ShowBillingOptions(FormBC.ClinicNum);
+						}
+					}
 				}
-				FormB.Show();
-				FormB.BringToFront();
-				if(isFirstShow){
-					MsgBox.Show(this,"These unsent bills must either be sent or deleted before a new list can be created.");
-				}
-			}
-			else{
-				FormBillingOptions FormBO=new FormBillingOptions();
-				FormBO.ShowDialog();
-				if(FormBO.DialogResult==DialogResult.OK){
-					FormB=new FormBilling();
-					FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
-					FormB.ClinicNum=FormBO.ClinicNum;
-					FormB.Show();
+				else {//Not using clinics and has unsent bills.  Simply show billing window.
+					ShowBilling(0);
 				}
 			}
-			//RefreshCurrentModule();
+			else {//No unsent statements exist.  Have user create a billing list.
+				ShowBillingOptions(0);
+			}
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Billing");
+		}
+
+		///<summary>Shows FormBilling and displays warning message if needed.  Pass 0 to show all clinics.</summary>
+		private void ShowBilling(long clinicNum) {
+			bool isFirstShow=false;
+			if(FormB==null || FormB.IsDisposed) {
+				isFirstShow=true;
+				FormB=new FormBilling();
+				FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+				FormB.ClinicNum=clinicNum;
+			}
+			FormB.Show();
+			FormB.BringToFront();
+			if(isFirstShow) {
+				MsgBox.Show(this,"These unsent bills must either be sent or deleted before a new list can be created.");
+			}
+		}
+
+		///<summary>Shows FormBillingOptions and FormBilling if needed.  Pass 0 to show all clinics.</summary>
+		private void ShowBillingOptions(long clinicNum) {
+			FormBillingOptions FormBO=new FormBillingOptions();
+			FormBO.ClinicNum=clinicNum;
+			FormBO.ShowDialog();
+			if(FormBO.DialogResult==DialogResult.OK) {
+				FormB=new FormBilling();
+				FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+				FormB.ClinicNum=FormBO.ClinicNum;
+				FormB.Show();
+			}
 		}
 
 		private void formBilling_GoToChanged(object sender,PatientSelectedEventArgs e) {

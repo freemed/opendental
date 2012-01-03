@@ -59,7 +59,7 @@ namespace OpenDental{
 		public event PatientSelectedEventHandler GoToChanged=null;
 		private bool isInitial=true;
 		private ComboBox comboClinic;
-		private Label label6;
+		private Label labelClinic;
 		private bool ignoreRefreshOnce;
 		///<summary>ClinicNum should be set before this window by FormBillingOptions.</summary>
 		public long ClinicNum;
@@ -120,7 +120,7 @@ namespace OpenDental{
 			this.butPrintList = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
-			this.label6 = new System.Windows.Forms.Label();
+			this.labelClinic = new System.Windows.Forms.Label();
 			this.contextMenu.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -426,16 +426,18 @@ namespace OpenDental{
 			this.comboClinic.Name = "comboClinic";
 			this.comboClinic.Size = new System.Drawing.Size(133, 21);
 			this.comboClinic.TabIndex = 44;
+			this.comboClinic.Visible = false;
 			this.comboClinic.SelectionChangeCommitted += new System.EventHandler(this.comboClinic_SelectionChangeCommitted);
 			// 
-			// label6
+			// labelClinic
 			// 
-			this.label6.Location = new System.Drawing.Point(334, 13);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(73, 14);
-			this.label6.TabIndex = 45;
-			this.label6.Text = "Clinic";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelClinic.Location = new System.Drawing.Point(334, 13);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(73, 14);
+			this.labelClinic.TabIndex = 45;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelClinic.Visible = false;
 			// 
 			// FormBilling
 			// 
@@ -443,7 +445,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(888, 688);
-			this.Controls.Add(this.label6);
+			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.comboClinic);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.comboOrder);
@@ -488,12 +490,16 @@ namespace OpenDental{
 			comboOrder.Items.Add(Lan.g(this,"BillingType"));
 			comboOrder.Items.Add(Lan.g(this,"PatientName"));
 			comboOrder.SelectedIndex=0;
-			comboClinic.Items.Add("All");
-			comboClinic.SelectedIndex=0;
-			for(int i=0;i<Clinics.List.Length;i++) {
-				comboClinic.Items.Add(Clinics.List[i].Description);
-				if(Clinics.List[i].ClinicNum==ClinicNum) {
-					comboClinic.SelectedIndex=i+1;
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Using clinics.
+				labelClinic.Visible=true;
+				comboClinic.Visible=true;
+				comboClinic.Items.Add("All");
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+					if(Clinics.List[i].ClinicNum==ClinicNum) {
+						comboClinic.SelectedIndex=i+1;
+					}
 				}
 			}
 		}

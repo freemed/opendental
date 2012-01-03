@@ -46,11 +46,11 @@ namespace OpenDental{
 		private Label label6;
 		private Label label7;
 		private ListBox listBillType;
-		private Label label2;
+		private Label labelSaveDefaults;
 		private OpenDental.UI.Button butUndo;
 		private CheckBox checkIgnoreInPerson;
 		private CheckBox checkExcludeIfProcs;
-		private Label label8;
+		private Label labelClinic;
 		private ComboBox comboClinic;
 		private Dunning[] dunningList;
 		public long ClinicNum;
@@ -82,11 +82,11 @@ namespace OpenDental{
 			this.textExcludeLessThan = new OpenDental.ValidDouble();
 			this.checkExcludeInactive = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.label8 = new System.Windows.Forms.Label();
+			this.labelClinic = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
 			this.checkExcludeIfProcs = new System.Windows.Forms.CheckBox();
 			this.checkIgnoreInPerson = new System.Windows.Forms.CheckBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.labelSaveDefaults = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.comboAge = new System.Windows.Forms.ComboBox();
@@ -195,11 +195,11 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Controls.Add(this.label8);
+			this.groupBox2.Controls.Add(this.labelClinic);
 			this.groupBox2.Controls.Add(this.comboClinic);
 			this.groupBox2.Controls.Add(this.checkExcludeIfProcs);
 			this.groupBox2.Controls.Add(this.checkIgnoreInPerson);
-			this.groupBox2.Controls.Add(this.label2);
+			this.groupBox2.Controls.Add(this.labelSaveDefaults);
 			this.groupBox2.Controls.Add(this.label7);
 			this.groupBox2.Controls.Add(this.label6);
 			this.groupBox2.Controls.Add(this.comboAge);
@@ -222,25 +222,28 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Filter";
 			// 
-			// label8
+			// labelClinic
 			// 
-			this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label8.Location = new System.Drawing.Point(3, 492);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(128, 16);
-			this.label8.TabIndex = 250;
-			this.label8.Text = "Clinic";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelClinic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelClinic.Location = new System.Drawing.Point(3, 492);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(128, 16);
+			this.labelClinic.TabIndex = 250;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelClinic.Visible = false;
 			// 
 			// comboClinic
 			// 
 			this.comboClinic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboClinic.FormattingEnabled = true;
 			this.comboClinic.Location = new System.Drawing.Point(132, 491);
 			this.comboClinic.MaxDropDownItems = 40;
 			this.comboClinic.Name = "comboClinic";
 			this.comboClinic.Size = new System.Drawing.Size(145, 21);
 			this.comboClinic.TabIndex = 249;
+			this.comboClinic.Visible = false;
 			// 
 			// checkExcludeIfProcs
 			// 
@@ -266,15 +269,15 @@ namespace OpenDental{
 			this.checkIgnoreInPerson.Text = "Ignore walkout (InPerson) statements";
 			this.checkIgnoreInPerson.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label2
+			// labelSaveDefaults
 			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(6, 590);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(270, 16);
-			this.label2.TabIndex = 246;
-			this.label2.Text = "(except the date at the top and clinic at the bottom)";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelSaveDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelSaveDefaults.Location = new System.Drawing.Point(6, 590);
+			this.labelSaveDefaults.Name = "labelSaveDefaults";
+			this.labelSaveDefaults.Size = new System.Drawing.Size(270, 16);
+			this.labelSaveDefaults.TabIndex = 246;
+			this.labelSaveDefaults.Text = "(except the date at the top)";
+			this.labelSaveDefaults.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label7
 			// 
@@ -299,6 +302,7 @@ namespace OpenDental{
 			// comboAge
 			// 
 			this.comboAge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboAge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboAge.FormattingEnabled = true;
 			this.comboAge.Location = new System.Drawing.Point(132, 73);
 			this.comboAge.Name = "comboAge";
@@ -663,11 +667,19 @@ namespace OpenDental{
 			if(listBillType.SelectedIndices.Count==0){
 				listBillType.SelectedIndex=0;
 			}
-			comboClinic.Items.Add("All");
-			for(int i=0;i<Clinics.List.Length;i++) {
-				comboClinic.Items.Add(Clinics.List[i].Description);
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Using clinics.
+				labelSaveDefaults.Text="(except the date at the top and clinic at the bottom)";
+				labelClinic.Visible=true;
+				comboClinic.Visible=true;
+				comboClinic.Items.Add("All");
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+					if(Clinics.List[i].ClinicNum==ClinicNum) {
+						comboClinic.SelectedIndex=i+1;
+					}
+				}
 			}
-			comboClinic.SelectedIndex=0;
 			//blank is allowed
 			FillDunning();
 			SetDefaults();
