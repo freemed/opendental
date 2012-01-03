@@ -31,6 +31,7 @@ namespace OpenDentBusiness {
 			command=@"UPDATE tempdash 
 				SET production=(SELECT SUM(ProcFee*(UnitQty+BaseUnits)) FROM procedurelog 
 				WHERE procedurelog.ProvNum=tempdash.ProvNum
+				AND procedurelog.ProcStatus="+POut.Int((int)ProcStat.C)+@"
 				AND ProcDate="+POut.Date(dt)+")";
 			Db.NonQ(command);
 			//capcomplete writeoffs were skipped
