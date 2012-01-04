@@ -260,7 +260,7 @@ namespace OpenDentBusiness{
 				if(lname.Length>0) {
 					if(limit) {//normal behavior is fast
 						if(PrefC.GetBool(PrefName.DistributorKey)) {
-							command+="AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%')";
+							command+="AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%') ";
 						}
 						else {
 							command+="AND LName LIKE '"+POut.String(lname)+"%' ";
@@ -268,7 +268,7 @@ namespace OpenDentBusiness{
 					}
 					else {//slower, but more inclusive.  User explicitly looking for all matches.
 						if(PrefC.GetBool(PrefName.DistributorKey)) {
-							command+="AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%')";
+							command+="AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%') ";
 						}
 						else {
 							command+="AND LName LIKE '"+POut.String(lname)+"%' ";
@@ -277,7 +277,7 @@ namespace OpenDentBusiness{
 				}
 				if(fname.Length>0){
 						if(PrefC.GetBool(PrefName.DistributorKey)) {
-							command+="AND (FName LIKE '"+POut.String(fname)+"%' OR Preferred LIKE '"+POut.String(fname)+"%')";
+							command+="AND (FName LIKE '"+POut.String(fname)+"%' OR Preferred LIKE '"+POut.String(fname)+"%') ";
 						}
 						else {
 							command+="AND FName LIKE '"+POut.String(fname)+"%' ";
