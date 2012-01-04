@@ -926,7 +926,9 @@ namespace OpenDentBusiness{
 		///<summary>12</summary>
 		ClaimX,
 		///<summary>13</summary>
-		DentiCal
+		DentiCal,
+		///<summary>14</summary>
+		EmdeonMedical
 	}
 
 	///<summary></summary>

@@ -22,6 +22,8 @@
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
+    <TargetFrameworkProfile />
     <PublishUrl>http://localhost/OpenDental/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -36,8 +38,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -314,6 +314,7 @@
     <Compile Include="Eclaims\Canadian.cs" />
     <Compile Include="Eclaims\CanadianOutput.cs" />
     <Compile Include="Eclaims\ClaimX.cs" />
+    <Compile Include="Eclaims\EmdeonMedical.cs" />
     <Compile Include="Eclaims\DentiCal.cs" />
     <Compile Include="Eclaims\MercuryDE.cs" />
     <Compile Include="Eclaims\Dutch.cs" />
@@ -2349,6 +2350,11 @@
     </Compile>
     <Compile Include="User Controls\ContrFamilyEcw.Designer.cs">
       <DependentUpon>ContrFamilyEcw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\EmdeonITSTest\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\MobileWeb\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -4396,6 +4402,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <None Include="Web References\EmdeonITSTest\ITSReturn.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\EmdeonITSTest\ITSWS.wsdl" />
+    <None Include="Web References\EmdeonITSTest\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Web References\MobileWeb\Mobile.wsdl" />
     <None Include="Web References\MobileWeb\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -5073,6 +5087,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_localhost_Service1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://cert.its.emdeon.com/ITS/ITSWS.asmx%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\EmdeonITSTest\</RelPath>
+      <UpdateFromURL>https://cert.its.emdeon.com/ITS/ITSWS.asmx%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>OpenDental_EmdeonITSTest_ITSWS</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="https://webservices.dentalxchange.com/dws/webservice/wsdl.jsp">
       <UrlBehavior>Dynamic</UrlBehavior>

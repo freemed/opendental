@@ -105,6 +105,12 @@ namespace OpenDental.Eclaims
 					MessageBox.Show("Claim file created, but encountered an error while launching ClaimX Client.");
 				}
 			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.EmdeonMedical) {
+				if(!EmdeonMedical.Launch(clearhouse,batchNum,medType)) {
+					MessageBox.Show(Lan.g("Eclaims","Error sending."));
+					return;
+				}
+			}
 			//----------------------------------------------------------------------------------------
 			//finally, mark the claims sent. (only if not Canadian)
 			EtransType etype=EtransType.ClaimSent;
