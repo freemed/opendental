@@ -8260,6 +8260,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			}
 		}
 
+		///<summary>Oracle compatible: 01/04/2012</summary>
 		private static void To12_0_2() {
 			if(FromVersion<new Version("12.0.2.0")) {
 				string command;
