@@ -259,14 +259,29 @@ namespace OpenDentBusiness{
 			if(DataConnection.DBtype==DatabaseType.MySql) {//LIKE is case insensitive in mysql.
 				if(lname.Length>0) {
 					if(limit) {//normal behavior is fast
-						command+="AND LName LIKE '"+POut.String(lname)+"%' ";
+						if(PrefC.GetBool(PrefName.DistributorKey)) {
+							command+="AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%')";
+						}
+						else {
+							command+="AND LName LIKE '"+POut.String(lname)+"%' ";
+						}
 					}
 					else {//slower, but more inclusive.  User explicitly looking for all matches.
-						command+="AND LName LIKE '%"+POut.String(lname)+"%' ";
+						if(PrefC.GetBool(PrefName.DistributorKey)) {
+							command+="AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%')";
+						}
+						else {
+							command+="AND LName LIKE '"+POut.String(lname)+"%' ";
+						}
 					}
 				}
 				if(fname.Length>0){
-					command+="AND FName LIKE '"+POut.String(fname)+"%' ";
+						if(PrefC.GetBool(PrefName.DistributorKey)) {
+							command+="AND (FName LIKE '"+POut.String(fname)+"%' OR Preferred LIKE '"+POut.String(fname)+"%')";
+						}
+						else {
+							command+="AND FName LIKE '"+POut.String(fname)+"%' ";
+						}
 				}
 			}
 			else {//oracle, case matters in a like statement
