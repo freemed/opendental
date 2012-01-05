@@ -205,8 +205,8 @@ namespace OpenDental{
 				MessageBox.Show("Not allowed when using client web.");
 				return;
 			}
-			string remoteUri = "http://www.open-dent.com/cultures/";
-			string fileName = CultureInfo.CurrentCulture.Name+".sql";//eg. en-US.sql
+			string remoteUri = "http://www.opendental.com/cultures/";
+			string fileName = CultureInfo.CurrentCulture.Name+".txt";//eg. en-US.txt
 			string myStringWebResource = null;
 			WebClient myWebClient = new WebClient();
 			myStringWebResource=remoteUri+fileName;
