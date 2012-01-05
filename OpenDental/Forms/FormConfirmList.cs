@@ -415,7 +415,7 @@ namespace OpenDental{
 				provNum=ProviderC.ListShort[comboProv.SelectedIndex-1].ProvNum;
 			}
 			long clinicNum=0;
-			if(comboClinic.SelectedIndex!=0) {
+			if(comboClinic.SelectedIndex > 0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			table=Appointments.GetConfirmList(dateFrom,dateTo,provNum,clinicNum);

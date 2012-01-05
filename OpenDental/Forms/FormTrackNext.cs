@@ -305,7 +305,7 @@ namespace OpenDental{
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
 			long clinicNum=0;
-			if(comboClinic.SelectedIndex!=0) {
+			if(comboClinic.SelectedIndex > 0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			AptList=Appointments.RefreshPlannedTracker(order,provNum,siteNum,clinicNum);
