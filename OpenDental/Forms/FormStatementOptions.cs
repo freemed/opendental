@@ -51,6 +51,7 @@ namespace OpenDental{
 		private TextBox textDate;
 		///<summary>This will be null for ordinary edits.  But sometimes this window is used to edit bulk statements.  In that case, this list contains the statements being edited.  Must contain at least one item.</summary>
 		public List<Statement> StmtList;
+		private CheckBox checkIsReceipt;
 		private int electIndex;
 
 		///<summary></summary>
@@ -119,6 +120,7 @@ namespace OpenDental{
 			this.butEmail = new OpenDental.UI.Button();
 			this.butPreview = new OpenDental.UI.Button();
 			this.textDate = new System.Windows.Forms.TextBox();
+			this.checkIsReceipt = new System.Windows.Forms.CheckBox();
 			this.groupFuchs.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -158,7 +160,7 @@ namespace OpenDental{
 			// 
 			this.checkHidePayment.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkHidePayment.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkHidePayment.Location = new System.Drawing.Point(-2,121);
+			this.checkHidePayment.Location = new System.Drawing.Point(-3,120);
 			this.checkHidePayment.Name = "checkHidePayment";
 			this.checkHidePayment.Size = new System.Drawing.Size(162,20);
 			this.checkHidePayment.TabIndex = 11;
@@ -167,7 +169,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(55,200);
+			this.label3.Location = new System.Drawing.Point(55,206);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(90,17);
 			this.label3.TabIndex = 13;
@@ -177,7 +179,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(146,200);
+			this.textNote.Location = new System.Drawing.Point(146,206);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
@@ -322,7 +324,7 @@ namespace OpenDental{
 			this.textNoteBold.AcceptsReturn = true;
 			this.textNoteBold.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textNoteBold.ForeColor = System.Drawing.Color.DarkRed;
-			this.textNoteBold.Location = new System.Drawing.Point(146,353);
+			this.textNoteBold.Location = new System.Drawing.Point(146,359);
 			this.textNoteBold.Multiline = true;
 			this.textNoteBold.Name = "textNoteBold";
 			this.textNoteBold.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
@@ -332,7 +334,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(35,354);
+			this.label1.Location = new System.Drawing.Point(35,360);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(110,17);
 			this.label1.TabIndex = 230;
@@ -361,7 +363,7 @@ namespace OpenDental{
 			// 
 			this.checkIntermingled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIntermingled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIntermingled.Location = new System.Drawing.Point(-2,165);
+			this.checkIntermingled.Location = new System.Drawing.Point(-3,162);
 			this.checkIntermingled.Name = "checkIntermingled";
 			this.checkIntermingled.Size = new System.Drawing.Size(162,20);
 			this.checkIntermingled.TabIndex = 234;
@@ -372,7 +374,7 @@ namespace OpenDental{
 			// 
 			this.checkSinglePatient.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSinglePatient.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSinglePatient.Location = new System.Drawing.Point(-2,143);
+			this.checkSinglePatient.Location = new System.Drawing.Point(-3,141);
 			this.checkSinglePatient.Name = "checkSinglePatient";
 			this.checkSinglePatient.Size = new System.Drawing.Size(162,20);
 			this.checkSinglePatient.TabIndex = 235;
@@ -515,11 +517,23 @@ namespace OpenDental{
 			this.textDate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDate_KeyPress);
 			this.textDate.Validating += new System.ComponentModel.CancelEventHandler(this.textDate_Validating);
 			// 
+			// checkIsReceipt
+			// 
+			this.checkIsReceipt.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsReceipt.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsReceipt.Location = new System.Drawing.Point(38,182);
+			this.checkIsReceipt.Name = "checkIsReceipt";
+			this.checkIsReceipt.Size = new System.Drawing.Size(121,20);
+			this.checkIsReceipt.TabIndex = 245;
+			this.checkIsReceipt.Text = "Receipt";
+			this.checkIsReceipt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormStatementOptions
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(709,493);
+			this.Controls.Add(this.checkIsReceipt);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butPreview);
