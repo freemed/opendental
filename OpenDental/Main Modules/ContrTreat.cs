@@ -1236,10 +1236,12 @@ namespace OpenDental{
 				bool isDone;
 				for(int i=0;i<ProcTPSelectList.Length;i++){
 					row=new TpRow();
-					isDone=true;
-					for(int j=0;j<ProcListTP.Length;j++) {
-						if(ProcListTP[j].ProcNum==ProcTPSelectList[i].ProcNumOrig) {
-							isDone=false;
+					isDone=false;
+					for(int j=0;j<ProcList.Count;j++) {
+						if(ProcList[j].ProcNum==ProcTPSelectList[i].ProcNumOrig) {
+							if(ProcList[j].ProcStatus==ProcStat.C){
+								isDone=true;
+							}
 						}
 					}
 					if(isDone) {
