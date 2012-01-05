@@ -36,6 +36,8 @@ namespace OpenDentBusiness{
 		/// <summary>Date/time last altered.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		///<summary>The only effect of this flag is to change the text at the top of a statement from "statement" to "receipt".  It might later do more.</summary>
+		public bool IsReceipt;
 
 		public Statement Copy(){
 			return (Statement)this.MemberwiseClone();
