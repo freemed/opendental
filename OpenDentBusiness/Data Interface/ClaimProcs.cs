@@ -430,6 +430,18 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Synchs all claimproc DateCP's attached to the claim payment.  Used when an insurance check's date is changed.</summary>
+		public static void SynchDateCP(long claimPaymentNum,DateTime date) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimPaymentNum,date);
+				return;
+			}
+			string command= "UPDATE claimproc SET "
+				+"DateCP="+POut.Date(date)+" "
+				+"WHERE ClaimPaymentNum="+POut.Long(claimPaymentNum);
+			Db.NonQ(command);
+		}
+
 		/*
 		///<summary>Detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.  Sets DateCP to min and InsPayAmt to 0.</summary>
 		public static void DettachClaimPayment(long claimNum,long claimPaymentNum) {

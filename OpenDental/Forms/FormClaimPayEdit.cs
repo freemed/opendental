@@ -426,6 +426,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			ClaimProcs.SynchDateCP(ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate);
 			DialogResult=DialogResult.OK;
 		}
 
