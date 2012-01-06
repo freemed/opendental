@@ -268,7 +268,7 @@ namespace OpenDental{
 				}
 			}
 			else if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.EmdeonMedical) {
-				if(!WebMD.Launch(Clearinghouses.Listt[comboClearhouse.SelectedIndex],0)) {
+				if(!EmdeonMedical.Retrieve(Clearinghouses.Listt[comboClearhouse.SelectedIndex])) {
 					Cursor=Cursors.Default;
 					MessageBox.Show(Lan.g(this,"Error retrieving."));
 					return;

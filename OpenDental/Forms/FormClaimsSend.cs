@@ -762,7 +762,9 @@ namespace OpenDental{
 			EnumClaimMedType medType=Claims.GetClaim(listQueue[gridMain.SelectedIndices[0]].ClaimNum).MedType;
 			//Already validated that all claims are for the same clearinghouse, clinic, and medType.
 			//Validated that medtype matches clearinghouse e-format
+			Cursor=Cursors.WaitCursor;
 			Eclaims.Eclaims.SendBatch(queueItems,clearhouse,medType);
+			Cursor=Cursors.Default;
 			//statuses changed to S in SendBatches
 			FillGrid();
 			FillHistory();

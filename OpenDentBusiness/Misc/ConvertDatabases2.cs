@@ -8348,6 +8348,30 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.0.5.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_0_6();
+		}
+
+		private static void To12_0_6() {
+			if(FromVersion<new Version("12.0.6.0")) {
+				string command;
+				//EmdeonMedical clearinghouse.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+							LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ('Emdeon Medical','"+POut.String(@"C:\EmdeonMedical\Claims\")+"','','6','ZZ','','ZZ','133052274','P','',"
+							+"'"+POut.String(@"C:\EmdeonMedical\Reports\")+"','14','',0,0,'','','','133052274','','','','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"INSERT INTO clearinghouse(ClearinghouseNum,Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+							LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ((SELECT MAX(ClearinghouseNum+1) FROM clearinghouse),'Emdeon Medical','"+POut.String(@"C:\EmdeonMedical\Claims\")+"','','6','ZZ','','ZZ','133052274','P','',"
+							+"'"+POut.String(@"C:\EmdeonMedical\Reports\")+"','14','',0,0,'','','','133052274','','','','','')";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '12.0.6.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_1_0();
 		}
 

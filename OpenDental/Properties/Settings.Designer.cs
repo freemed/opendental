@@ -83,7 +83,6 @@ namespace OpenDental.Properties {
             }
         }
         
-        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
@@ -91,6 +90,16 @@ namespace OpenDental.Properties {
         public string OpenDental_EmdeonITSTest_ITSWS {
             get {
                 return ((string)(this["OpenDental_EmdeonITSTest_ITSWS"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://its.emdeon.com/ITS/ITSWS.asmx")]
+        public string OpenDental_EmdeonITS_ITSWS {
+            get {
+                return ((string)(this["OpenDental_EmdeonITS_ITSWS"]));
             }
         }
     }
