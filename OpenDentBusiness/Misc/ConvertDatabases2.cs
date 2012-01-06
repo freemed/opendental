@@ -8331,6 +8331,20 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="DELETE FROM toolbutitem WHERE ProgramNum="+POut.Long(programNum);
 					Db.NonQ(command);
 				}
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+table.Rows[0]["ProgramNum"].ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
+				command="SELECT * FROM program WHERE ProgName='Apixia'";
+				table=Db.GetTable(command);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+table.Rows[0]["ProgramNum"].ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
 				command="UPDATE preference SET ValueString = '12.0.5.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
@@ -8348,7 +8362,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MobileSynchNewTables121Done','0')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('AccountShowPaymentNums','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'AccountShowPaymentNums','0')";
+					Db.NonQ(command);
+				}
 
 
 

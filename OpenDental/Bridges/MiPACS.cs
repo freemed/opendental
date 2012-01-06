@@ -29,8 +29,14 @@ C:\Program Files\MiDentView\Cmdlink.exe /ID=12345 /FN=Oscar /LN=De La Hoya /BD=1
 				}
 			}
 			string gender=(pat.Gender==PatientGender.Female)?"F":"M";//M for Male, F for Female, M for Unknown.
-			string info="/ID=" + pat.PatNum.ToString() 
-				+ " /FN=" + pat.FName //special characters claimed to be ok
+			string info="";
+			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
+				info+="/ID="+pat.PatNum.ToString();
+			}
+			else{
+				info+="/ID="+pat.ChartNumber;
+			}
+			info+= " /FN=" + pat.FName //special characters claimed to be ok
 				+ " /LN=" + pat.LName 
 				+ " /BD=" + pat.Birthdate.ToShortDateString() 
 				+ " /Sex=" + gender;
