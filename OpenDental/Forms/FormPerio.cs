@@ -1716,6 +1716,10 @@ namespace OpenDental{
 			float xPos=100;
 			grfx.TranslateTransform(xPos,yPos);
 			gridP.DrawChart(grfx);//have to print graphics first, or they cover up title.
+			grfx.DrawString("F",new Font("Arial",15),Brushes.Black,new Point(-26,92));
+			grfx.DrawString("L",new Font("Arial",15),Brushes.Black,new Point(-26,212));
+			grfx.DrawString("L",new Font("Arial",15),Brushes.Black,new Point(-26,416));
+			grfx.DrawString("F",new Font("Arial",15),Brushes.Black,new Point(-26,552));
 			grfx.TranslateTransform(-xPos,-yPos);
 			yPos=67;
 			xPos=100;
