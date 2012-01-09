@@ -1363,8 +1363,8 @@ namespace OpenDental {
 					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene) {
 						panOpName.BackColor=Providers.GetColor(curOp.ProvHygienist);
 					}
-					panOpName.Location=new Point
-						(2+(int)ApptDrawing.TimeWidth+(int)ApptDrawing.ProvWidth*(int)ApptDrawing.ProvCount+i*(int)ApptDrawing.ColWidth,0);
+					float xPos=ApptDrawing.TimeWidth+ApptDrawing.ProvWidth*ApptDrawing.ProvCount+i*ApptDrawing.ColWidth;
+					panOpName.Location=new Point(2+(int)xPos,0);
 					panOpName.Width=(int)ApptDrawing.ColWidth;
 					panOpName.Height=18;
 					panOpName.BorderStyle=BorderStyle.Fixed3D;
