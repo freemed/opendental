@@ -654,9 +654,9 @@ namespace OpenDental{
 				gridAttached.Rows.Add(row);
 			}
 			gridAttached.EndUpdate();
-			double total=0;
+			decimal total=0;
 			for(int i=0;i<ClaimsAttached.Count;i++) {
-				total+=ClaimsAttached[i].InsPayAmt;
+				total+=(decimal)ClaimsAttached[i].InsPayAmt;
 			}
 			textTotal.Text=total.ToString("F");
 			//gridOutstanding-------------------------------------------------------------------------------------------------
