@@ -7968,11 +7968,11 @@ namespace OpenDental{
 				return;
 			}
 			//One check that is not made is whether a lab proc is already attached to a different proc.
-			DataRow row1=DataSetMain.Tables["ProgNotes"].Rows[gridProg.SelectedIndices[0]];
-			DataRow row2=DataSetMain.Tables["ProgNotes"].Rows[gridProg.SelectedIndices[1]];
+			DataRow row1=(DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag;
+			DataRow row2=(DataRow)gridProg.Rows[gridProg.SelectedIndices[1]].Tag;
 			DataRow row3=null;
 			if(gridProg.SelectedIndices.Length==3) {
-				row3=DataSetMain.Tables["ProgNotes"].Rows[gridProg.SelectedIndices[2]];
+				row3=(DataRow)gridProg.Rows[gridProg.SelectedIndices[2]].Tag;
 			}
 			if(row1["ProcNum"].ToString()=="0" || row2["ProcNum"].ToString()=="0" || (row3!=null && row3["ProcNum"].ToString()=="0")) {
 				MsgBox.Show(this,"All selected items must be procedures.");
@@ -8025,7 +8025,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select exactly one lab procedure first.");
 				return;
 			}
-			DataRow row=DataSetMain.Tables["ProgNotes"].Rows[gridProg.SelectedIndices[0]];
+			DataRow row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag;
 			if(row["ProcNum"].ToString()=="0") {
 				MsgBox.Show(this,"Please select a lab procedure first.");
 				return;
