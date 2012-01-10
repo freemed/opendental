@@ -7,7 +7,7 @@ using System.Text;
 namespace OpenDentBusiness.Mobile {
 
 	[Serializable()]
-	//[CrudTable(IsMobile=true)]
+	[CrudTable(IsMobile=true)]
 	/// <summary>This table is called preference in the mobile database.  This is to simply to avoid having to rewrite DataConnection.TestConnection().  The primary key of this table has an m in it to remind us that the preferences are totally different than in the main program.</summary>
 	public class Prefm:TableBase {
 		///<summary>Primary key 1.</summary>

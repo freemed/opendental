@@ -303,7 +303,12 @@ namespace OpenDental{
 				return;
 			}
 			docc.ImgType=ImageType.Document;
-			docc.Description=Lan.g(this,"Statement");
+			if(Stmt.IsReceipt==true) {
+				docc.Description=Lan.g(this,"Receipt");
+			}
+			else {
+				docc.Description=Lan.g(this,"Statement");
+			}
 			docc.DateCreated=stmt.DateSent;
 			Documents.Update(docc);
 			stmt.DocNum=docc.DocNum;//this signals the calling class that the pdf was created successfully.
@@ -386,9 +391,10 @@ namespace OpenDental{
 			parformat.Alignment=ParagraphAlignment.Center;
 			par.Format=parformat;
 			font=MigraDocHelper.CreateFont(14,true);
-			if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
-				text=Lan.g(this,"STATEMENT / TAX INVOICE");
-			}else{//Assume English (United States) for everyone else.
+			if(Stmt.IsReceipt) {
+				text=Lan.g(this,"RECEIPT");
+			}
+			else {
 				text=Lan.g(this,"STATEMENT");
 			}
 			par.AddFormattedText(text,font);

@@ -60,6 +60,7 @@ namespace OpenDentBusiness.Crud{
 				statement.IsSent       = PIn.Bool  (table.Rows[i]["IsSent"].ToString());
 				statement.DocNum       = PIn.Long  (table.Rows[i]["DocNum"].ToString());
 				statement.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				statement.IsReceipt    = PIn.Bool  (table.Rows[i]["IsReceipt"].ToString());
 				retVal.Add(statement);
 			}
 			return retVal;
@@ -100,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="StatementNum,";
 			}
-			command+="PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,HidePayment,SinglePatient,Intermingled,IsSent,DocNum) VALUES(";
+			command+="PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,HidePayment,SinglePatient,Intermingled,IsSent,DocNum,IsReceipt) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(statement.StatementNum)+",";
 			}
@@ -116,8 +117,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (statement.SinglePatient)+","
 				+    POut.Bool  (statement.Intermingled)+","
 				+    POut.Bool  (statement.IsSent)+","
-				+    POut.Long  (statement.DocNum)+")";
+				+    POut.Long  (statement.DocNum)+","
 				//DateTStamp can only be set by MySQL
+				+    POut.Bool  (statement.IsReceipt)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -141,8 +143,9 @@ namespace OpenDentBusiness.Crud{
 				+"SinglePatient=  "+POut.Bool  (statement.SinglePatient)+", "
 				+"Intermingled =  "+POut.Bool  (statement.Intermingled)+", "
 				+"IsSent       =  "+POut.Bool  (statement.IsSent)+", "
-				+"DocNum       =  "+POut.Long  (statement.DocNum)+" "
+				+"DocNum       =  "+POut.Long  (statement.DocNum)+", "
 				//DateTStamp can only be set by MySQL
+				+"IsReceipt    =  "+POut.Bool  (statement.IsReceipt)+" "
 				+"WHERE StatementNum = "+POut.Long(statement.StatementNum);
 			Db.NonQ(command);
 		}
@@ -199,6 +202,10 @@ namespace OpenDentBusiness.Crud{
 				command+="DocNum = "+POut.Long(statement.DocNum)+"";
 			}
 			//DateTStamp can only be set by MySQL
+			if(statement.IsReceipt != oldStatement.IsReceipt) {
+				if(command!=""){ command+=",";}
+				command+="IsReceipt = "+POut.Bool(statement.IsReceipt)+"";
+			}
 			if(command==""){
 				return;
 			}

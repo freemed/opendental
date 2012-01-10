@@ -8405,7 +8405,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					}
 				}
 				catch(Exception ex) { }
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE statement ADD IsReceipt tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE statement ADD IsReceipt number(3)";
+					Db.NonQ(command);
+					command="UPDATE statement SET IsReceipt = 0 WHERE IsReceipt IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE statement MODIFY IsReceipt NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -8441,3 +8452,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+				

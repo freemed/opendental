@@ -592,6 +592,7 @@ namespace OpenDental{
 				checkHidePayment.Checked=StmtCur.HidePayment;
 				checkSinglePatient.Checked=StmtCur.SinglePatient;
 				checkIntermingled.Checked=StmtCur.Intermingled;
+				checkIsReceipt.Checked=StmtCur.IsReceipt;
 				if(StmtCur.DateRangeFrom.Year>1880){
 					textDateStart.Text=StmtCur.DateRangeFrom.ToShortDateString();
 				}
@@ -1316,6 +1317,7 @@ namespace OpenDental{
 				StmtCur.HidePayment=checkHidePayment.Checked;
 				StmtCur.SinglePatient=checkSinglePatient.Checked;
 				StmtCur.Intermingled=checkIntermingled.Checked;
+				StmtCur.IsReceipt=checkIsReceipt.Checked;
 				StmtCur.DateRangeFrom=PIn.Date(textDateStart.Text);//handles blank
 				if(textDateEnd.Text==""){
 					StmtCur.DateRangeTo=new DateTime(2200,1,1);//max val
@@ -1352,6 +1354,9 @@ namespace OpenDental{
 					}
 					if(checkIntermingled.CheckState!=CheckState.Indeterminate){
 						StmtList[i].Intermingled=checkIntermingled.Checked;
+					}
+					if(checkIsReceipt.CheckState!=CheckState.Indeterminate) {
+						StmtList[i].IsReceipt=checkIsReceipt.Checked;
 					}
 					if(textDateStart.Text!="?"){
 						StmtList[i].DateRangeFrom=PIn.Date(textDateStart.Text);//handles blank

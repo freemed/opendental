@@ -30,6 +30,8 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		AccountingLockDate,
 		///<summary></summary>
+		AccountShowPaymentNums,
+		///<summary></summary>
 		ADAComplianceDateTime,
 		///<summary></summary>
 		ADAdescriptionsReset,

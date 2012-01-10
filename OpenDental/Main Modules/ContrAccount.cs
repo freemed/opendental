@@ -166,6 +166,7 @@ namespace OpenDental {
 		private Label label17;
 		private UI.Button butCreditCard;
 		private MenuItem menuItemRepeatMobile;
+		private MenuItem menuItemReceipt;
 		private bool InitializedOnStartup;
 		#endregion UserVariables
 
@@ -309,6 +310,7 @@ namespace OpenDental {
 			this.butComm = new OpenDental.UI.Button();
 			this.butTrojan = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.menuItemReceipt = new System.Windows.Forms.MenuItem();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -409,6 +411,7 @@ namespace OpenDental {
 			this.contextMenuStatement.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemStatementWalkout,
             this.menuItemStatementEmail,
+            this.menuItemReceipt,
             this.menuItemStatementMore});
 			// 
 			// menuItemStatementWalkout
@@ -425,7 +428,7 @@ namespace OpenDental {
 			// 
 			// menuItemStatementMore
 			// 
-			this.menuItemStatementMore.Index = 2;
+			this.menuItemStatementMore.Index = 3;
 			this.menuItemStatementMore.Text = "More Options";
 			this.menuItemStatementMore.Click += new System.EventHandler(this.menuItemStatementMore_Click);
 			// 
@@ -1600,6 +1603,12 @@ namespace OpenDental {
 			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			// 
+			// menuItemReceipt
+			// 
+			this.menuItemReceipt.Index = 2;
+			this.menuItemReceipt.Text = "Receipt";
+			this.menuItemReceipt.Click += new System.EventHandler(this.menuItemReceipt_Click);
 			// 
 			// ContrAccount
 			// 
@@ -3319,6 +3328,7 @@ namespace OpenDental {
 			stmt.HidePayment=true;
 			stmt.SinglePatient=true;
 			stmt.Intermingled=false;
+			stmt.IsReceipt=false;
 			if(PrefC.GetBool(PrefName.IntermingleFamilyDefault)) {
 				stmt.Intermingled = true;
 				stmt.SinglePatient=false;
@@ -3339,9 +3349,9 @@ namespace OpenDental {
 			stmt.Mode_=StatementMode.Email;
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
-			stmt.Intermingled = false;
-			if (PrefC.GetBool(PrefName.IntermingleFamilyDefault))
-			{
+			stmt.Intermingled=false;
+			stmt.IsReceipt=true;
+			if(PrefC.GetBool(PrefName.IntermingleFamilyDefault)){
 				stmt.Intermingled=true;
 			}
 			stmt.DateRangeFrom=DateTime.MinValue;
@@ -3362,6 +3372,28 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
+		private void menuItemReceipt_Click(object sender,EventArgs e) {
+			Statement stmt=new Statement();
+			stmt.PatNum=PatCur.PatNum;
+			stmt.DateSent=DateTime.Today;
+			stmt.IsSent=true;
+			stmt.Mode_=StatementMode.InPerson;
+			stmt.HidePayment=true;
+			stmt.SinglePatient=true;
+			stmt.Intermingled=false;
+			stmt.IsReceipt=true;
+			if(PrefC.GetBool(PrefName.IntermingleFamilyDefault)) {
+				stmt.Intermingled = true;
+				stmt.SinglePatient=false;
+			}
+			stmt.DateRangeFrom=DateTime.Today;
+			stmt.DateRangeTo=DateTime.Today;
+			stmt.Note="";
+			stmt.NoteBold="";
+			PrintStatement(stmt);
+			ModuleSelected(PatCur.PatNum);
+		}
+
 		private void menuItemStatementMore_Click(object sender, System.EventArgs e) {
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.PatNum;
@@ -3370,6 +3402,8 @@ namespace OpenDental {
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
+			stmt.Intermingled=false;
+			stmt.IsReceipt=false;
 			if(PrefC.GetBool(PrefName.IntermingleFamilyDefault)) {
 				stmt.Intermingled=true;
 			}

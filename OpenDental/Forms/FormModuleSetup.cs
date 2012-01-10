@@ -101,6 +101,7 @@ namespace OpenDental{
 		private ComboBox comboCobRule;
 		private CheckBox checkMedicalFeeUsedForNewProcs;
 		private bool changed;
+		private CheckBox checkAccountShowPaymentNums;
 		private bool IsLoading;
 
 		///<summary></summary>
@@ -190,6 +191,7 @@ namespace OpenDental{
 			this.comboCobRule = new System.Windows.Forms.ComboBox();
 			this.tabAccount = new System.Windows.Forms.TabPage();
 			this.checkStoreCCTokens = new System.Windows.Forms.CheckBox();
+			this.checkAccountShowPaymentNums = new System.Windows.Forms.CheckBox();
 			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical = new System.Windows.Forms.CheckBox();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
@@ -936,6 +938,7 @@ namespace OpenDental{
 			// 
 			this.tabAccount.BackColor = System.Drawing.SystemColors.Window;
 			this.tabAccount.Controls.Add(this.checkStoreCCTokens);
+			this.tabAccount.Controls.Add(this.checkAccountShowPaymentNums);
 			this.tabAccount.Controls.Add(this.checkClaimMedTypeIsInstWhenInsPlanIsMedical);
 			this.tabAccount.Controls.Add(this.checkClaimsValidateACN);
 			this.tabAccount.Controls.Add(this.checkStatementShowReturnAddress);
@@ -980,6 +983,17 @@ namespace OpenDental{
 			this.checkStoreCCTokens.Text = "Automatically store X-Charge Tokens";
 			this.checkStoreCCTokens.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStoreCCTokens.UseVisualStyleBackColor = true;
+			// 
+			// checkAccountShowPaymentNums
+			// 
+			this.checkAccountShowPaymentNums.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAccountShowPaymentNums.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAccountShowPaymentNums.Location = new System.Drawing.Point(44,449);
+			this.checkAccountShowPaymentNums.Name = "checkAccountShowPaymentNums";
+			this.checkAccountShowPaymentNums.Size = new System.Drawing.Size(396,17);
+			this.checkAccountShowPaymentNums.TabIndex = 194;
+			this.checkAccountShowPaymentNums.Text = "Show Payment Numbers in Account Module";
+			this.checkAccountShowPaymentNums.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkClaimMedTypeIsInstWhenInsPlanIsMedical
 			// 
@@ -1365,6 +1379,7 @@ namespace OpenDental{
 			checkIntermingleDefault.Checked=PrefC.GetBool(PrefName.IntermingleFamilyDefault);
 			checkClaimsValidateACN.Checked=PrefC.GetBool(PrefName.ClaimsValidateACN);
 			checkClaimMedTypeIsInstWhenInsPlanIsMedical.Checked=PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical);
+			checkAccountShowPaymentNums.Checked=PrefC.GetBool(PrefName.AccountShowPaymentNums);
 			//TP module-----------------------------------------------------------------------
 			textTreatNote.Text=PrefC.GetString(PrefName.TreatmentPlanNote);
 			checkTreatPlanShowGraphics.Checked=PrefC.GetBool(PrefName.TreatPlanShowGraphics);
@@ -1518,6 +1533,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.InsDefaultShowUCRonClaims,checkInsDefaultShowUCRonClaims.Checked)
 				| Prefs.UpdateBool(PrefName.ClaimsValidateACN,checkClaimsValidateACN.Checked)
 				| Prefs.UpdateBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical,checkClaimMedTypeIsInstWhenInsPlanIsMedical.Checked)
+				| Prefs.UpdateBool(PrefName.AccountShowPaymentNums,checkAccountShowPaymentNums.Checked)
 				| Prefs.UpdateBool(PrefName.ToothChartMoveMenuToRight,checkToothChartMoveMenuToRight.Checked)
 				| Prefs.UpdateBool(PrefName.ImagesModuleTreeIsCollapsed,checkImagesModuleTreeIsCollapsed.Checked)
 				| Prefs.UpdateBool(PrefName.RxSendNewToQueue,checkRxSendNewToQueue.Checked)
