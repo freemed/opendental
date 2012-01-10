@@ -8394,6 +8394,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'AccountShowPaymentNums','0')";
 					Db.NonQ(command);
 				}
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE insplan ADD INDEX (TrojanID)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX insplan_TrojanID ON insplan (TrojanID)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }
 
 
 
