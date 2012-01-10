@@ -21,6 +21,10 @@ namespace OpenDental.Bridges {
 				return;
 			}
 			Provider prov=Providers.GetProv(pat.PriProv);
+			string ssn=Tidy(pat.SSN.ToString(),9);
+			if(ssn.Replace("-","").Replace("0","").Trim()=="") {
+				ssn="";//We do not send if the ssn is all zeros, because Patterson treats ssn like a primary key if present. If more than one patient have the same ssn, then they are treated as the same patient.
+			}
 			try {
 				VBbridges.Patterson.Launch(
 					Tidy(pat.FName,40),
@@ -31,7 +35,7 @@ namespace OpenDental.Bridges {
 					Tidy(pat.City,30),
 					Tidy(pat.State,2),
 					Tidy(pat.Zip,10),
-					Tidy(pat.SSN.ToString(),9),//This only works with ssn in america with no punctuation
+					ssn,//This only works with ssn in america with no punctuation
 					Tidy((pat.Gender==PatientGender.Male?"M":(pat.Gender==PatientGender.Female?"F":" ")),1),//uses "M" for male "F" for female and " " for unkown
 					Tidy(pat.Birthdate.ToShortDateString(),11),
 					LTidy(pat.PatNum.ToString(),5),
@@ -51,6 +55,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Will only return the beginning amount of characters based on maximum value.</summary>
 		private static string Tidy(string str,int maxL) {
+			str.Trim();
 			if(str.Length>maxL) {
 				str=str.Substring(0,maxL);
 			}
