@@ -26,6 +26,7 @@ namespace OpenDentBusiness{
 			return Crud.EobAttachCrud.SelectOne(eobAttachNum);
 		}
 
+		/// <summary>Tests to see whether an attachment exists on this claimpayment.</summary>
 		public static bool Exists(long claimPaymentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),claimPaymentNum);

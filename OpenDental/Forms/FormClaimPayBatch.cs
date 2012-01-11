@@ -594,7 +594,12 @@ namespace OpenDental{
 				labelInstruct1.Visible=false;
 				labelInstruct2.Visible=false;
 			}
-			textEobIsScanned.Text=EobAttaches.Exists(ClaimPaymentCur.ClaimPaymentNum)?Lan.g(this,"Yes"):Lan.g(this,"No");
+			if(EobAttaches.Exists(ClaimPaymentCur.ClaimPaymentNum)) {
+				textEobIsScanned.Text=Lan.g(this,"Yes");
+			}
+			else {
+				textEobIsScanned.Text=Lan.g(this,"No");
+			}
 		}
 
 		private void FillClaimPayment() {
@@ -859,6 +864,12 @@ namespace OpenDental{
 			FormImages formI=new FormImages();
 			formI.ClaimPaymentNum=ClaimPaymentCur.ClaimPaymentNum;
 			formI.ShowDialog();
+			if(EobAttaches.Exists(ClaimPaymentCur.ClaimPaymentNum)) {
+				textEobIsScanned.Text=Lan.g(this,"Yes");
+			}
+			else {
+				textEobIsScanned.Text=Lan.g(this,"No");
+			}
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
