@@ -621,7 +621,10 @@ namespace OpenDentBusiness {
 				string eobFolder=GetEobFolder();
 				string filePath=ODFileUtils.CombinePaths(eobFolder,eob.FileName);
 				if(File.Exists(filePath)) {
-					File.Delete(filePath);
+					try {
+						File.Delete(filePath);
+					}
+					catch { }//file seems to be frequently locked.
 				}
 			}
 			//db
