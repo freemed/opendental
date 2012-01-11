@@ -1069,13 +1069,14 @@ namespace OpenDental.UI {
 					//Figure out how much vertical distance the rest of the note will take up.
 					int noteHeight;
 					int noteW=0;
+					format.Alignment=StringAlignment.Near;
 					for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
 						noteW+=(int)((float)columns[i].ColWidth);
 					}
 					if(NoteRemaining=="") {//We are not in the middle of a note.
 						NoteRemaining=rows[RowsPrinted].Note;//The note remaining is the whole note.
 					}
-					noteHeight=(int)g.MeasureString(NoteRemaining,cellFont,noteW,StringFormat.GenericTypographic).Height; //This is how much height the rest of the note will take.
+					noteHeight=(int)g.MeasureString(NoteRemaining,cellFont,noteW,format).Height; //This is how much height the rest of the note will take.
 					bool roomForRestOfNote=false;
 					//Test to see if there's enough room on the page for the rest of the note.
 					if(yPos+noteHeight<bounds.Bottom) {
@@ -1106,7 +1107,6 @@ namespace OpenDental.UI {
 								yPos,
 								xPos+ColPos[0],
 								yPos+noteHeight);
-
 						}
 						//lower horizontal gridline gets marked with the dark lowerPen since this is the end of a row
 						g.DrawLine(lowerPen,
@@ -1128,7 +1128,6 @@ namespace OpenDental.UI {
 								yPos,
 								(float)ColPos[NoteSpanStop]+(float)columns[NoteSpanStop].ColWidth-(float)ColPos[NoteSpanStart],
 								noteHeight);
-							format.Alignment=StringAlignment.Near;
 							g.DrawString(NoteRemaining,cellFont,textBrush,textRect,format);
 						}
 						NoteRemaining="";
@@ -1194,7 +1193,6 @@ namespace OpenDental.UI {
 								yPos,
 								(float)ColPos[NoteSpanStop]+(float)columns[NoteSpanStop].ColWidth-(float)ColPos[NoteSpanStart],
 								noteHeight);
-							format.Alignment=StringAlignment.Near;
 							g.DrawString(noteFitted,cellFont,textBrush,textRect,format);
 						}
 						NoteRemaining=NoteRemaining.Substring(charactersFitted);
