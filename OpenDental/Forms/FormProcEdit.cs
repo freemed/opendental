@@ -2335,10 +2335,7 @@ namespace OpenDental{
 						textNotes.Enabled=false;
 					}
 				}
-				labelEndTime.Visible=true;
 				textDateTP.ReadOnly=true;
-				textTimeEnd.Visible=true;
-				butNow.Visible=true;
 				panelOrion.Visible=true;
 				butAddEstimate.Visible=false;
 				checkNoBillIns.Visible=false;
@@ -2353,6 +2350,11 @@ namespace OpenDental{
 				comboPriority.Visible=false;
 				butSetComplete.Visible=false;
 				labelSetComplete.Visible=false;
+			}
+			if(Programs.UsingOrion || PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+				labelEndTime.Visible=true;
+				textTimeEnd.Visible=true;
+				butNow.Visible=true;
 			}
 			IsStartingUp=true;
 			FillControlsOnStartup();
@@ -2724,7 +2726,7 @@ namespace OpenDental{
 				if(dateT.ToShortTimeString()!="12:00 AM"){
 					textTimeStart.Text+=dateT.ToShortTimeString();
 				}
-				if(Programs.UsingOrion){
+				if(Programs.UsingOrion || PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)){
 					dateT=PIn.DateT(ProcCur.ProcTimeEnd.ToString());
 					if(dateT.ToShortTimeString()!="12:00 AM"){
 						textTimeEnd.Text=dateT.ToShortTimeString();
@@ -3024,7 +3026,12 @@ namespace OpenDental{
 		}
 
 		void butNow_Click(object sender,EventArgs e) {
-			textTimeEnd.Text=MiscData.GetNowDateTime().ToShortTimeString();
+			if(textTimeStart.Text.Trim()=="") {
+				textTimeStart.Text=MiscData.GetNowDateTime().ToShortTimeString();
+			}
+			else {
+				textTimeEnd.Text=MiscData.GetNowDateTime().ToShortTimeString();
+			}
 		}
 
 		private void butAddEstimate_Click(object sender, System.EventArgs e) {
@@ -3883,7 +3890,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Date invalid."));
 				return false;
 			}
-			if(Programs.UsingOrion && textTimeStart.Text!=""){
+			if(textTimeStart.Text!=""){
 				try{
 					DateTime.Parse(textTimeStart.Text);
 				}
@@ -3892,7 +3899,7 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			if(Programs.UsingOrion && textTimeEnd.Text!=""){
+			if((Programs.UsingOrion || PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) && textTimeEnd.Text!=""){
 				try{
 					DateTime.Parse(textTimeEnd.Text);
 				}
@@ -4061,7 +4068,7 @@ namespace OpenDental{
 			ProcCur.ProcDate=PIn.Date(this.textDate.Text);
 			DateTime dateT=PIn.DateT(this.textTimeStart.Text);
 			ProcCur.ProcTime=new TimeSpan(dateT.Hour,dateT.Minute,0);
-			if(Programs.UsingOrion){
+			if(Programs.UsingOrion || PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)){
 				dateT=PIn.DateT(this.textTimeEnd.Text);
 				ProcCur.ProcTimeEnd=new TimeSpan(dateT.Hour,dateT.Minute,0);
 			}
