@@ -21,7 +21,12 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<List<Phone>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM phone ORDER BY Extension";
-			return Crud.PhoneCrud.SelectMany(command);
+			try {
+				return Crud.PhoneCrud.SelectMany(command);
+			}
+			catch {
+				return new List<Phone>();
+			}
 		}
 
 		///<summary>Converts from string to enum and also handles conversion of Working to Available</summary>
