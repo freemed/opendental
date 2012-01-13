@@ -99,7 +99,9 @@ namespace OpenDental{
 		}
 
 		private void timer1_Tick(object sender,EventArgs e) {
-			userControlTasks1.RefreshTasks();
+			if(Security.CurUser!=null) {//Possible if OD auto logged a user off and they left the task window open in the background.
+				userControlTasks1.RefreshTasks();
+			}
 			//this quick and dirty refresh is not as intelligent as the one used when tasks are docked.
 			//Sound notification of new task is controlled from main form completely
 			//independently of this visual refresh.
