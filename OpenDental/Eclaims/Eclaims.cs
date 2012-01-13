@@ -146,7 +146,7 @@ namespace OpenDental.Eclaims
 		public static void GetMissingData(ClaimSendQueueItem queueItem){//, out string warnings){
 			queueItem.Warnings="";
 			queueItem.MissingData="";
-			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
+			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum,true);//Suppress error message in case no default medical clearinghouse set.
 			//this is usually just the default clearinghouse or the clearinghouse for the PayorID.
 			if(clearhouse==null){
 				return;

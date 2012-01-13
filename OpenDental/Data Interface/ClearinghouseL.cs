@@ -10,12 +10,19 @@ namespace OpenDental{
 
 		///<summary>Returns the clearinghouse specified by the given num.</summary>
 		public static Clearinghouse GetClearinghouse(long clearinghouseNum) {
+			return GetClearinghouse(clearinghouseNum,false);
+		}
+
+		///<summary>Returns the clearinghouse specified by the given num.</summary>
+		public static Clearinghouse GetClearinghouse(long clearinghouseNum,bool suppressError) {
 			for(int i=0;i<Clearinghouses.Listt.Length;i++){
 				if(Clearinghouses.Listt[i].ClearinghouseNum==clearinghouseNum) {
 					return Clearinghouses.Listt[i];
 				}
 			}
-			MessageBox.Show("Error. Could not locate Clearinghouse.");
+			if(!suppressError) {
+				MessageBox.Show("Error. Could not locate Clearinghouse.");
+			}
 			return null;
 		}
 
