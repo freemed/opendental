@@ -3144,10 +3144,10 @@ namespace OpenDental {
 			}
 			//original location of provider code
 			if(curOp.ClinicNum==0){
-				aptCur.ClinicNum=PatCur.ClinicNum;
+				apt.ClinicNum=PatCur.ClinicNum;
 			}
 			else{
-				aptCur.ClinicNum=curOp.ClinicNum;
+				apt.ClinicNum=curOp.ClinicNum;
 			}
 			try {
 				Appointments.Update(apt,aptOld);

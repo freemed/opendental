@@ -1739,16 +1739,16 @@ namespace OpenDentBusiness {
 			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				return log;
 			}
-			command=@"SELECT PatNum,LName,FName FROM patient WHERE ClinicNum=0 AND PatStatus!="+POut.Int(PatientStatus.Deleted);
+			command=@"SELECT PatNum,LName,FName FROM patient WHERE ClinicNum=0 AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return log;
 			}
 			log+=Lans.g("FormDatabaseMaintenance","Patients with no Clinic assigned: ")+table.Rows.Count.ToString()+Lans.g("FormDatabaseMaintenance",", including: ");
 			for(int i=0;i<table.Rows.Count;i++){
-				log+=table.Rows[i][PatNum].ToString()+"-"
-					+table.Rows[i][LName].ToString()+", "
-					+table.Rows[i][FName].ToString()+"; ";
+				log+=table.Rows[i]["PatNum"].ToString()+"-"
+					+table.Rows[i]["LName"].ToString()+", "
+					+table.Rows[i]["FName"].ToString()+"; ";
 			}
 			log+="\r\n";
 			return log;
