@@ -623,7 +623,12 @@ namespace OpenDental{
 				}
 				apt.ProvHyg=curOp.ProvHygienist;
 				apt.IsHygiene=curOp.IsHygiene;
-				apt.ClinicNum=curOp.ClinicNum;
+				if(curOp.ClinicNum==0){
+					apt.ClinicNum=PatCur.ClinicNum;
+				}
+				else{
+					apt.ClinicNum=curOp.ClinicNum;
+				}
 				Appointments.Update(apt,oldApt);
 				oResult=OtherResult.CreateNew;
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString());
@@ -812,7 +817,9 @@ namespace OpenDental{
 				}
 				AptCur.ProvHyg=curOp.ProvHygienist;
 				AptCur.IsHygiene=curOp.IsHygiene;
-				AptCur.ClinicNum=curOp.ClinicNum;
+				if(curOp.ClinicNum!=0){
+					AptCur.ClinicNum=curOp.ClinicNum;
+				}
 				AptCur.AptStatus=ApptStatus.Scheduled;
 			}
 			else{

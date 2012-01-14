@@ -373,6 +373,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientBadGuarantor(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PatientsNoClinicSet(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientPriProvHidden(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatientPriProvMissing(verbose,isCheck);

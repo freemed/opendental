@@ -31,6 +31,7 @@ namespace OpenDental{
 		private ListBox listClinic;
 		private Label labelClinic;
 		private CheckBox checkIsHidden;
+		private CheckBox checkClinicIsRestricted;
 		///<summary></summary>
 		public Userod UserCur;
 
@@ -83,6 +84,7 @@ namespace OpenDental{
 			this.listClinic = new System.Windows.Forms.ListBox();
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.checkIsHidden = new System.Windows.Forms.CheckBox();
+			this.checkClinicIsRestricted = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -108,7 +110,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(662,340);
+			this.butOK.Location = new System.Drawing.Point(581,381);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -209,14 +211,15 @@ namespace OpenDental{
 			this.listClinic.Name = "listClinic";
 			this.listClinic.Size = new System.Drawing.Size(124,225);
 			this.listClinic.TabIndex = 16;
+			this.listClinic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listClinic_MouseClick);
 			// 
 			// labelClinic
 			// 
 			this.labelClinic.Location = new System.Drawing.Point(611,37);
 			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(156,20);
+			this.labelClinic.Size = new System.Drawing.Size(150,20);
 			this.labelClinic.TabIndex = 15;
-			this.labelClinic.Text = "Clinic (restricts user)";
+			this.labelClinic.Text = "Clinic";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// checkIsHidden
@@ -230,10 +233,22 @@ namespace OpenDental{
 			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsHidden.UseVisualStyleBackColor = true;
 			// 
+			// checkClinicIsRestricted
+			// 
+			this.checkClinicIsRestricted.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkClinicIsRestricted.Location = new System.Drawing.Point(612,292);
+			this.checkClinicIsRestricted.Name = "checkClinicIsRestricted";
+			this.checkClinicIsRestricted.Size = new System.Drawing.Size(125,33);
+			this.checkClinicIsRestricted.TabIndex = 18;
+			this.checkClinicIsRestricted.Text = "Restrict user to only see this clinic";
+			this.checkClinicIsRestricted.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkClinicIsRestricted.UseVisualStyleBackColor = true;
+			// 
 			// FormUserEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(773,432);
+			this.Controls.Add(this.checkClinicIsRestricted);
 			this.Controls.Add(this.checkIsHidden);
 			this.Controls.Add(this.listClinic);
 			this.Controls.Add(this.labelClinic);
@@ -296,6 +311,7 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.EasyNoClinics)){
 				labelClinic.Visible=false;
 				listClinic.Visible=false;
+				checkClinicIsRestricted.Visible=false;
 			}
 			else{
 				listClinic.Items.Clear();
@@ -307,11 +323,25 @@ namespace OpenDental{
 						listClinic.SelectedIndex=i+1;
 					}
 				}
+				checkClinicIsRestricted.Checked=UserCur.ClinicIsRestricted;
 			}
 			if(UserCur.Password==""){
 				butPassword.Text=Lan.g(this,"Create Password");
 			}
-			
+		}
+
+		private void listClinic_MouseClick(object sender,MouseEventArgs e) {
+			int idx=listClinic.IndexFromPoint(e.Location);
+			if(idx==-1){
+				return;
+			}
+			if(idx==0){//all
+				checkClinicIsRestricted.Checked=false;
+				checkClinicIsRestricted.Enabled=false;
+			}
+			else{
+				checkClinicIsRestricted.Enabled=true;
+			}
 		}
 
 		private void butPassword_Click(object sender, System.EventArgs e) {
@@ -373,11 +403,18 @@ namespace OpenDental{
 			else {
 				UserCur.ProvNum=ProviderC.ListShort[listProv.SelectedIndex-1].ProvNum;
 			}
-			if(PrefC.GetBool(PrefName.EasyNoClinics) || listClinic.SelectedIndex==0) {
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				UserCur.ClinicNum=0;
+				UserCur.ClinicIsRestricted=false;
 			}
 			else{
-				UserCur.ClinicNum=Clinics.List[listClinic.SelectedIndex-1].ClinicNum;
+				if(listClinic.SelectedIndex==0){
+					UserCur.ClinicNum=0;
+				}
+				else{
+					UserCur.ClinicNum=Clinics.List[listClinic.SelectedIndex-1].ClinicNum;
+				}
+				UserCur.ClinicIsRestricted=checkClinicIsRestricted.Checked;
 			}
 			try{
 				if(IsNew){
@@ -397,6 +434,10 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 

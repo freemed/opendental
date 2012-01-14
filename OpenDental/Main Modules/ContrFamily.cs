@@ -953,7 +953,8 @@ namespace OpenDental{
 			tempPat.FeeSched   =PatCur.FeeSched;
 			tempPat.BillingType=PatCur.BillingType;
 			tempPat.AddrNote   =PatCur.AddrNote;
-			tempPat.ClinicNum  =PatCur.ClinicNum;
+			tempPat.ClinicNum  =PatCur.ClinicNum;//this is probably better in case they don't have user.ClinicNums set.
+			//tempPat.ClinicNum  =Security.CurUser.ClinicNum;
 			if(Patients.GetPat(tempPat.Guarantor).SuperFamily!=0) {
 				tempPat.SuperFamily=PatCur.SuperFamily;
 			}

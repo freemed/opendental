@@ -1330,6 +1330,7 @@ namespace OpenDental {
 			guar.State=textState.Text;
 			guar.Zip=textZip.Text;
 			guar.AddrNote=textAddrNotes.Text;
+			guar.ClinicNum=Security.CurUser.ClinicNum;
 			Patients.Insert(guar,false);
 			Patient guarOld=guar.Copy();
 			guar.Guarantor=guar.PatNum;
@@ -1390,6 +1391,7 @@ namespace OpenDental {
 				pat2.State=textState.Text;
 				pat2.Zip=textZip.Text;
 				pat2.AddrNote=textAddrNotes.Text;
+				pat2.ClinicNum=Security.CurUser.ClinicNum;
 				pat2.Guarantor=guar.Guarantor;
 				Patients.Insert(pat2,false);
 				if(textReferral.Text!=""){
@@ -1429,6 +1431,7 @@ namespace OpenDental {
 				pat3.State=textState.Text;
 				pat3.Zip=textZip.Text;
 				pat3.AddrNote=textAddrNotes.Text;
+				pat3.ClinicNum=Security.CurUser.ClinicNum;
 				pat3.Guarantor=guar.Guarantor;
 				Patients.Insert(pat3,false);
 				if(textReferral.Text!=""){
@@ -1468,6 +1471,7 @@ namespace OpenDental {
 				pat4.State=textState.Text;
 				pat4.Zip=textZip.Text;
 				pat4.AddrNote=textAddrNotes.Text;
+				pat4.ClinicNum=Security.CurUser.ClinicNum;
 				pat4.Guarantor=guar.Guarantor;
 				Patients.Insert(pat4,false);
 				if(textReferral.Text!=""){
@@ -1507,6 +1511,7 @@ namespace OpenDental {
 				pat5.State=textState.Text;
 				pat5.Zip=textZip.Text;
 				pat5.AddrNote=textAddrNotes.Text;
+				pat5.ClinicNum=Security.CurUser.ClinicNum;
 				pat5.Guarantor=guar.Guarantor;
 				Patients.Insert(pat5,false);
 				if(textReferral.Text!=""){

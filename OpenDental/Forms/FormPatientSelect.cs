@@ -984,11 +984,15 @@ namespace OpenDental{
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}
 			DateTime birthdate=PIn.Date(textBirthdate.Text);//this will frequently be minval.
+			long clinicNum=0;//all clinics
+			if(Security.CurUser.ClinicNum!=0 && Security.CurUser.ClinicIsRestricted){
+				clinicNum=Security.CurUser.ClinicNum;
+			}
 			PtDataTable=Patients.GetPtDataTable(limit,textLName.Text,textFName.Text,textHmPhone.Text,
 				textAddress.Text,checkHideInactive.Checked,textCity.Text,textState.Text,
 				textSSN.Text,textPatNum.Text,textChartNumber.Text,billingType,
 				checkGuarantors.Checked,checkShowArchived.Checked,//checkShowProspectiveOnly.Checked,
-				Security.CurUser.ClinicNum,birthdate,siteNum,textSubscriberID.Text);
+				clinicNum,birthdate,siteNum,textSubscriberID.Text);
 			gridMain.BeginUpdate();
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -1101,6 +1105,7 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				PatCur.Gender=PatientGender.Unknown;
 			}
+			PatCur.ClinicNum=Security.CurUser.ClinicNum;
 			Patients.Insert(PatCur,false);
 			Patient PatOld=PatCur.Copy();
 			PatCur.Guarantor=PatCur.PatNum;

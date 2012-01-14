@@ -203,6 +203,7 @@ namespace OpenDental {
 			newPat.LName=LastName;
 			newPat.FName=FirstName;
 			newPat.Birthdate=birthDate;
+			newPat.ClinicNum=Security.CurUser.ClinicNum;
 			Type t=newPat.GetType();
 			FieldInfo[] fi=t.GetFields();
 			foreach(FieldInfo field in fi) {

@@ -8429,6 +8429,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE userod MODIFY ClinicIsRestricted NOT NULL";
 					Db.NonQ(command);
 				}
+				command="UPDATE userod SET ClinicIsRestricted = 1 WHERE ClinicNum != 0";//to preserve old ClinicNum behavior.
+				Db.NonQ(command);
 
 
 

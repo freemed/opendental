@@ -226,7 +226,7 @@ namespace OpenDental{
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(8,29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
@@ -609,7 +609,9 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableSecurity","Clinic"),80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableSecurity","Strong"),90,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableSecurity","ClinicRestricted"),100,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableSecurity","Strong"),80,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -640,12 +642,8 @@ namespace OpenDental{
 				row.Cells.Add(Employees.GetNameFL(ListUser[i].EmployeeNum));
 				row.Cells.Add(Providers.GetLongDesc(ListUser[i].ProvNum));
 				row.Cells.Add(Clinics.GetDesc(ListUser[i].ClinicNum));
-				if(ListUser[i].PasswordIsStrong) {
-					row.Cells.Add("X");
-				}
-				else {
-					row.Cells.Add("");
-				}
+				row.Cells.Add(ListUser[i].ClinicIsRestricted?"X":"");
+				row.Cells.Add(ListUser[i].PasswordIsStrong?"X":"");
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();	

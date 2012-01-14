@@ -2444,7 +2444,12 @@ namespace OpenDental {
 				aptCur.AptStatus=ApptStatus.Scheduled;
 			}
 			//original position of provider settings
-			aptCur.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
+			if(curOp.ClinicNum==0){
+				aptCur.ClinicNum=PatCur.ClinicNum;
+			}
+			else{
+				aptCur.ClinicNum=curOp.ClinicNum;
+			}
 			if(aptCur.AptStatus==ApptStatus.Planned) {//if Planned appt is on pinboard
 				long plannedAptNum=aptCur.AptNum;
 				LabCase lab=LabCases.GetForPlanned(aptCur.AptNum);
@@ -3138,7 +3143,12 @@ namespace OpenDental {
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
 			//original location of provider code
-			apt.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
+			if(curOp.ClinicNum==0){
+				aptCur.ClinicNum=PatCur.ClinicNum;
+			}
+			else{
+				aptCur.ClinicNum=curOp.ClinicNum;
+			}
 			try {
 				Appointments.Update(apt,aptOld);
 			}
@@ -3432,7 +3442,6 @@ namespace OpenDental {
 						apt.ProvNum=PatCur.PriProv;
 					}
 					apt.ProvHyg=PatCur.SecProv;
-					apt.ClinicNum=PatCur.ClinicNum;
 					apt.AptStatus=ApptStatus.Scheduled;
 					DateTime d=AppointmentL.DateSelected;
 					if(ApptDrawing.IsWeeklyView) {
@@ -3461,7 +3470,12 @@ namespace OpenDental {
 					}
 					apt.ProvHyg=curOp.ProvHygienist;
 					apt.IsHygiene=curOp.IsHygiene;
-					apt.ClinicNum=curOp.ClinicNum;
+					if(curOp.ClinicNum==0){
+						apt.ClinicNum=PatCur.ClinicNum;
+					}
+					else{
+						apt.ClinicNum=curOp.ClinicNum;
+					}
 					try {
 						Appointments.Insert(apt);
 					}
