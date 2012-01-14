@@ -46,18 +46,19 @@ namespace OpenDentBusiness.Crud{
 			Userod userod;
 			for(int i=0;i<table.Rows.Count;i++) {
 				userod=new Userod();
-				userod.UserNum          = PIn.Long  (table.Rows[i]["UserNum"].ToString());
-				userod.UserName         = PIn.String(table.Rows[i]["UserName"].ToString());
-				userod.Password         = PIn.String(table.Rows[i]["Password"].ToString());
-				userod.UserGroupNum     = PIn.Long  (table.Rows[i]["UserGroupNum"].ToString());
-				userod.EmployeeNum      = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				userod.ClinicNum        = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
-				userod.ProvNum          = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
-				userod.IsHidden         = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
-				userod.TaskListInBox    = PIn.Long  (table.Rows[i]["TaskListInBox"].ToString());
-				userod.AnesthProvType   = PIn.Int   (table.Rows[i]["AnesthProvType"].ToString());
-				userod.DefaultHidePopups= PIn.Bool  (table.Rows[i]["DefaultHidePopups"].ToString());
-				userod.PasswordIsStrong = PIn.Bool  (table.Rows[i]["PasswordIsStrong"].ToString());
+				userod.UserNum           = PIn.Long  (table.Rows[i]["UserNum"].ToString());
+				userod.UserName          = PIn.String(table.Rows[i]["UserName"].ToString());
+				userod.Password          = PIn.String(table.Rows[i]["Password"].ToString());
+				userod.UserGroupNum      = PIn.Long  (table.Rows[i]["UserGroupNum"].ToString());
+				userod.EmployeeNum       = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
+				userod.ClinicNum         = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				userod.ProvNum           = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				userod.IsHidden          = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
+				userod.TaskListInBox     = PIn.Long  (table.Rows[i]["TaskListInBox"].ToString());
+				userod.AnesthProvType    = PIn.Int   (table.Rows[i]["AnesthProvType"].ToString());
+				userod.DefaultHidePopups = PIn.Bool  (table.Rows[i]["DefaultHidePopups"].ToString());
+				userod.PasswordIsStrong  = PIn.Bool  (table.Rows[i]["PasswordIsStrong"].ToString());
+				userod.ClinicIsRestricted= PIn.Bool  (table.Rows[i]["ClinicIsRestricted"].ToString());
 				retVal.Add(userod);
 			}
 			return retVal;
@@ -98,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="UserNum,";
 			}
-			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,AnesthProvType,DefaultHidePopups,PasswordIsStrong) VALUES(";
+			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,AnesthProvType,DefaultHidePopups,PasswordIsStrong,ClinicIsRestricted) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(userod.UserNum)+",";
 			}
@@ -113,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (userod.TaskListInBox)+","
 				+    POut.Int   (userod.AnesthProvType)+","
 				+    POut.Bool  (userod.DefaultHidePopups)+","
-				+    POut.Bool  (userod.PasswordIsStrong)+")";
+				+    POut.Bool  (userod.PasswordIsStrong)+","
+				+    POut.Bool  (userod.ClinicIsRestricted)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -126,17 +128,18 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Userod in the database.</summary>
 		internal static void Update(Userod userod){
 			string command="UPDATE userod SET "
-				+"UserName         = '"+POut.String(userod.UserName)+"', "
-				+"Password         = '"+POut.String(userod.Password)+"', "
-				+"UserGroupNum     =  "+POut.Long  (userod.UserGroupNum)+", "
-				+"EmployeeNum      =  "+POut.Long  (userod.EmployeeNum)+", "
-				+"ClinicNum        =  "+POut.Long  (userod.ClinicNum)+", "
-				+"ProvNum          =  "+POut.Long  (userod.ProvNum)+", "
-				+"IsHidden         =  "+POut.Bool  (userod.IsHidden)+", "
-				+"TaskListInBox    =  "+POut.Long  (userod.TaskListInBox)+", "
-				+"AnesthProvType   =  "+POut.Int   (userod.AnesthProvType)+", "
-				+"DefaultHidePopups=  "+POut.Bool  (userod.DefaultHidePopups)+", "
-				+"PasswordIsStrong =  "+POut.Bool  (userod.PasswordIsStrong)+" "
+				+"UserName          = '"+POut.String(userod.UserName)+"', "
+				+"Password          = '"+POut.String(userod.Password)+"', "
+				+"UserGroupNum      =  "+POut.Long  (userod.UserGroupNum)+", "
+				+"EmployeeNum       =  "+POut.Long  (userod.EmployeeNum)+", "
+				+"ClinicNum         =  "+POut.Long  (userod.ClinicNum)+", "
+				+"ProvNum           =  "+POut.Long  (userod.ProvNum)+", "
+				+"IsHidden          =  "+POut.Bool  (userod.IsHidden)+", "
+				+"TaskListInBox     =  "+POut.Long  (userod.TaskListInBox)+", "
+				+"AnesthProvType    =  "+POut.Int   (userod.AnesthProvType)+", "
+				+"DefaultHidePopups =  "+POut.Bool  (userod.DefaultHidePopups)+", "
+				+"PasswordIsStrong  =  "+POut.Bool  (userod.PasswordIsStrong)+", "
+				+"ClinicIsRestricted=  "+POut.Bool  (userod.ClinicIsRestricted)+" "
 				+"WHERE UserNum = "+POut.Long(userod.UserNum);
 			Db.NonQ(command);
 		}
@@ -187,6 +190,10 @@ namespace OpenDentBusiness.Crud{
 			if(userod.PasswordIsStrong != oldUserod.PasswordIsStrong) {
 				if(command!=""){ command+=",";}
 				command+="PasswordIsStrong = "+POut.Bool(userod.PasswordIsStrong)+"";
+			}
+			if(userod.ClinicIsRestricted != oldUserod.ClinicIsRestricted) {
+				if(command!=""){ command+=",";}
+				command+="ClinicIsRestricted = "+POut.Bool(userod.ClinicIsRestricted)+"";
 			}
 			if(command==""){
 				return;

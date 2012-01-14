@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		public long UserGroupNum;
 		///<summary>FK to employee.EmployeeNum. Cannot be used if provnum is used. Used for timecards to block access by other users.</summary>
 		public long EmployeeNum;
-		///<summary>FK to clinic.ClinicNum.  If 0, then user has access to all clinics.</summary>
+		///<summary>FK to clinic.ClinicNum.  Has two purposes.  Firstly, it causes new patients to default to this clinic when entered by this user.  Also, if ClinicIsRestricted is set to be true, then it does not allow this user to have access to other clinics. If 0, then user had access to all clinics regardless of ClinicIsRestricted.</summary>
 		public long ClinicNum;
 		///<summary>FK to provider.ProvNum.  Cannot be used if EmployeeNum is used.</summary>
 		public long ProvNum;
@@ -31,6 +31,8 @@ namespace OpenDentBusiness{
 		public bool DefaultHidePopups;
 		///<summary>Gets set to true if strong passwords are turned on, and this user changes their password to a strong password.  We don't store actual passwords, so this flag is the only way to tell.</summary>
 		public bool PasswordIsStrong;
+		///<summary>Only used when userod.ClinicNum is set to not be zero.  Prevents user from having access to other clinics.</summary>
+		public bool ClinicIsRestricted;
 
 		public Userod(){
 

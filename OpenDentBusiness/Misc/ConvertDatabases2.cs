@@ -8417,6 +8417,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE statement MODIFY IsReceipt NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE userod ADD ClinicIsRestricted tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE userod ADD ClinicIsRestricted number(3)";
+					Db.NonQ(command);
+					command="UPDATE userod SET ClinicIsRestricted = 0 WHERE ClinicIsRestricted IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE userod MODIFY ClinicIsRestricted NOT NULL";
+					Db.NonQ(command);
+				}
+
+
+
+
 
 
 
