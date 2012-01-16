@@ -86,7 +86,12 @@ namespace OpenDental.Bridges {
 			writer.WriteElementString("City",guar.City);
 			writer.WriteElementString("State",guar.State);
 			writer.WriteElementString("Zip",guar.Zip);
-			writer.WriteElementString("EMail","");//leave this blank until we figure out how to set this trigger.
+			string email="";
+			Def billingDef=DefC.GetDef(DefCat.BillingTypes,guar.BillingType);
+			if(billingDef.ItemValue=="E") {
+				email=guar.Email;
+			}
+			writer.WriteElementString("EMail",email);
 			//Account summary-----------------------------------------------------------------------
 			writer.WriteStartElement("AccountSummary");
 			if(stmt.DateRangeFrom.Year<1880) {//make up a statement date.
