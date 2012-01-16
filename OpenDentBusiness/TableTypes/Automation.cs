@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 		public AutomationTrigger Autotrigger;
 		///<summary>If this has a CompleteProcedure trigger, this is a comma-delimited list of codes that will trigger the action.</summary>
 		public string ProcCodes;
-		///<summary>The action taken as a result of the trigger.  To get more than one action, create multiple automation entries.</summary>
+		///<summary>Enum:AutomationAction The action taken as a result of the trigger.  To get more than one action, create multiple automation entries.</summary>
 		public AutomationAction AutoAction;
 		///<summary>FK to sheetdef.SheetDefNum.  If the action is to print a sheet, then this tells which sheet to print.  So it must be a custom sheet.  Also, not that this organization does not allow passing parameters to the sheet such as which procedures were completed, or which appt was broken.</summary>
 		public long SheetDefNum;
