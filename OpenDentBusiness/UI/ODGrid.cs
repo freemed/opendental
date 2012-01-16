@@ -28,6 +28,9 @@ namespace OpenDental.UI {
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user types in a textbox.")]
 		public event EventHandler CellTextChanged=null;
+		///<summary></summary>
+		[Category("Focus"),Description("When user presses Enter (or up or down arrows) to move to next cell.")]
+		public event ODGridClickEventHandler CellLeave=null;
 		private string title;
 		//private Font titleFont=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
 		//private Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold);
@@ -1633,6 +1636,7 @@ namespace OpenDental.UI {
 		void editBox_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Enter) {
 				editBox.Dispose();
+				OnCellLeave(selectedCell.X,selectedCell.Y);
 				//find the next editable cell to the right.
 				int nextCellToRight=-1;
 				for(int i=selectedCell.X+1;i<columns.Count;i++) {
@@ -1664,6 +1668,7 @@ namespace OpenDental.UI {
 			if(e.KeyCode==Keys.Down) {
 				if(selectedCell.Y<rows.Count-1) {
 					editBox.Dispose();
+					OnCellLeave(selectedCell.X,selectedCell.Y);
 					selectedCell=new Point(selectedCell.X,selectedCell.Y+1);
 					CreateEditBox();
 				}
@@ -1671,6 +1676,7 @@ namespace OpenDental.UI {
 			if(e.KeyCode==Keys.Up) {
 				if(selectedCell.Y>0) {
 					editBox.Dispose();
+					OnCellLeave(selectedCell.X,selectedCell.Y);
 					selectedCell=new Point(selectedCell.X,selectedCell.Y-1);
 					CreateEditBox();
 				}
@@ -1859,6 +1865,12 @@ namespace OpenDental.UI {
 		protected void OnCellTextChanged() {
 			if(CellTextChanged!=null) {
 				CellTextChanged(this,new EventArgs());
+			}
+		}
+
+		protected void OnCellLeave(int col,int row) {
+			if(CellLeave!=null) {
+				CellLeave(this,new ODGridClickEventArgs(col,row,MouseButtons.None));
 			}
 		}
 		#endregion KeyEvents

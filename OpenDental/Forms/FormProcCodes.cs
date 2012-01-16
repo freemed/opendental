@@ -81,8 +81,6 @@ namespace OpenDental{
 			this.listFeeSched = new System.Windows.Forms.ListBox();
 			this.labelFeeSched = new System.Windows.Forms.Label();
 			this.groupFeeScheds = new System.Windows.Forms.GroupBox();
-			this.butTools = new OpenDental.UI.Button();
-			this.butEditFeeSched = new OpenDental.UI.Button();
 			this.listCategories = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -90,23 +88,25 @@ namespace OpenDental{
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.textAbbreviation = new System.Windows.Forms.TextBox();
 			this.textCode = new System.Windows.Forms.TextBox();
-			this.butAll = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkShowHidden = new System.Windows.Forms.CheckBox();
-			this.butEditCategories = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.comboCompare1 = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboCompare2 = new System.Windows.Forms.ComboBox();
 			this.groupProcCodeSetup = new System.Windows.Forms.GroupBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butProcTools = new OpenDental.UI.Button();
 			this.butImport = new OpenDental.UI.Button();
 			this.butExport = new OpenDental.UI.Button();
 			this.butNew = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butShowHiddenDefault = new OpenDental.UI.Button();
+			this.butAll = new OpenDental.UI.Button();
+			this.butEditCategories = new OpenDental.UI.Button();
+			this.butTools = new OpenDental.UI.Button();
+			this.butEditFeeSched = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.butShowHiddenDefault = new OpenDental.UI.Button();
 			this.groupFeeScheds.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupProcCodeSetup.SuspendLayout();
@@ -142,34 +142,6 @@ namespace OpenDental{
 			this.groupFeeScheds.Size = new System.Drawing.Size(200,51);
 			this.groupFeeScheds.TabIndex = 14;
 			this.groupFeeScheds.TabStop = false;
-			// 
-			// butTools
-			// 
-			this.butTools.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTools.Autosize = true;
-			this.butTools.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTools.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTools.CornerRadius = 4F;
-			this.butTools.Location = new System.Drawing.Point(109,16);
-			this.butTools.Name = "butTools";
-			this.butTools.Size = new System.Drawing.Size(81,26);
-			this.butTools.TabIndex = 14;
-			this.butTools.Text = "Fee Tools";
-			this.butTools.Click += new System.EventHandler(this.butTools_Click);
-			// 
-			// butEditFeeSched
-			// 
-			this.butEditFeeSched.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEditFeeSched.Autosize = true;
-			this.butEditFeeSched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditFeeSched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEditFeeSched.CornerRadius = 4F;
-			this.butEditFeeSched.Location = new System.Drawing.Point(12,16);
-			this.butEditFeeSched.Name = "butEditFeeSched";
-			this.butEditFeeSched.Size = new System.Drawing.Size(81,26);
-			this.butEditFeeSched.TabIndex = 13;
-			this.butEditFeeSched.Text = "Fee Scheds";
-			this.butEditFeeSched.Click += new System.EventHandler(this.butEditFeeSched_Click);
 			// 
 			// listCategories
 			// 
@@ -246,20 +218,6 @@ namespace OpenDental{
 			this.textCode.TabIndex = 1;
 			this.textCode.TextChanged += new System.EventHandler(this.textCode_TextChanged);
 			// 
-			// butAll
-			// 
-			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(103,100);
-			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(62,25);
-			this.butAll.TabIndex = 7;
-			this.butAll.Text = "All";
-			this.butAll.Click += new System.EventHandler(this.butAll_Click);
-			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(1,16);
@@ -279,21 +237,6 @@ namespace OpenDental{
 			this.checkShowHidden.Text = "Show Hidden";
 			this.checkShowHidden.UseVisualStyleBackColor = true;
 			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
-			// 
-			// butEditCategories
-			// 
-			this.butEditCategories.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEditCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butEditCategories.Autosize = true;
-			this.butEditCategories.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditCategories.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEditCategories.CornerRadius = 4F;
-			this.butEditCategories.Location = new System.Drawing.Point(10,501);
-			this.butEditCategories.Name = "butEditCategories";
-			this.butEditCategories.Size = new System.Drawing.Size(94,26);
-			this.butEditCategories.TabIndex = 21;
-			this.butEditCategories.Text = "Edit Categories";
-			this.butEditCategories.Click += new System.EventHandler(this.butEditCategories_Click);
 			// 
 			// label3
 			// 
@@ -344,6 +287,20 @@ namespace OpenDental{
 			this.groupProcCodeSetup.TabIndex = 26;
 			this.groupProcCodeSetup.TabStop = false;
 			this.groupProcCodeSetup.Text = "Procedure Codes";
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(187,8);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMain.Size = new System.Drawing.Size(553,674);
+			this.gridMain.TabIndex = 19;
+			this.gridMain.Title = "Procedures";
+			this.gridMain.TranslationName = "TableProcedures";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
 			// 
 			// butProcTools
 			// 
@@ -409,17 +366,78 @@ namespace OpenDental{
 			this.butNew.Text = "&New";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
-			// gridMain
+			// butShowHiddenDefault
 			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(187,8);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(553,674);
-			this.gridMain.TabIndex = 19;
-			this.gridMain.Title = "Procedures";
-			this.gridMain.TranslationName = "TableProcedures";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.butShowHiddenDefault.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowHiddenDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butShowHiddenDefault.Autosize = true;
+			this.butShowHiddenDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowHiddenDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowHiddenDefault.CornerRadius = 4F;
+			this.butShowHiddenDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butShowHiddenDefault.Location = new System.Drawing.Point(100,530);
+			this.butShowHiddenDefault.Name = "butShowHiddenDefault";
+			this.butShowHiddenDefault.Size = new System.Drawing.Size(65,20);
+			this.butShowHiddenDefault.TabIndex = 25;
+			this.butShowHiddenDefault.Text = "set default";
+			this.butShowHiddenDefault.Click += new System.EventHandler(this.butShowHiddenDefault_Click);
+			// 
+			// butAll
+			// 
+			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAll.Autosize = true;
+			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAll.CornerRadius = 4F;
+			this.butAll.Location = new System.Drawing.Point(103,100);
+			this.butAll.Name = "butAll";
+			this.butAll.Size = new System.Drawing.Size(62,25);
+			this.butAll.TabIndex = 7;
+			this.butAll.Text = "All";
+			this.butAll.Click += new System.EventHandler(this.butAll_Click);
+			// 
+			// butEditCategories
+			// 
+			this.butEditCategories.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEditCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butEditCategories.Autosize = true;
+			this.butEditCategories.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEditCategories.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEditCategories.CornerRadius = 4F;
+			this.butEditCategories.Location = new System.Drawing.Point(10,501);
+			this.butEditCategories.Name = "butEditCategories";
+			this.butEditCategories.Size = new System.Drawing.Size(94,26);
+			this.butEditCategories.TabIndex = 21;
+			this.butEditCategories.Text = "Edit Categories";
+			this.butEditCategories.Click += new System.EventHandler(this.butEditCategories_Click);
+			// 
+			// butTools
+			// 
+			this.butTools.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTools.Autosize = true;
+			this.butTools.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTools.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTools.CornerRadius = 4F;
+			this.butTools.Location = new System.Drawing.Point(109,16);
+			this.butTools.Name = "butTools";
+			this.butTools.Size = new System.Drawing.Size(81,26);
+			this.butTools.TabIndex = 14;
+			this.butTools.Text = "Fee Tools";
+			this.butTools.Click += new System.EventHandler(this.butTools_Click);
+			// 
+			// butEditFeeSched
+			// 
+			this.butEditFeeSched.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEditFeeSched.Autosize = true;
+			this.butEditFeeSched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEditFeeSched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEditFeeSched.CornerRadius = 4F;
+			this.butEditFeeSched.Location = new System.Drawing.Point(12,16);
+			this.butEditFeeSched.Name = "butEditFeeSched";
+			this.butEditFeeSched.Size = new System.Drawing.Size(81,26);
+			this.butEditFeeSched.TabIndex = 13;
+			this.butEditFeeSched.Text = "Fee Scheds";
+			this.butEditFeeSched.Click += new System.EventHandler(this.butEditFeeSched_Click);
 			// 
 			// butCancel
 			// 
@@ -450,22 +468,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 4;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butShowHiddenDefault
-			// 
-			this.butShowHiddenDefault.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowHiddenDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butShowHiddenDefault.Autosize = true;
-			this.butShowHiddenDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowHiddenDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowHiddenDefault.CornerRadius = 4F;
-			this.butShowHiddenDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butShowHiddenDefault.Location = new System.Drawing.Point(100,530);
-			this.butShowHiddenDefault.Name = "butShowHiddenDefault";
-			this.butShowHiddenDefault.Size = new System.Drawing.Size(65,20);
-			this.butShowHiddenDefault.TabIndex = 25;
-			this.butShowHiddenDefault.Text = "set default";
-			this.butShowHiddenDefault.Click += new System.EventHandler(this.butShowHiddenDefault_Click);
 			// 
 			// FormProcCodes
 			// 
@@ -613,7 +615,7 @@ namespace OpenDental{
 			if(heading.Length>8){
 				heading=heading.Substring(0,8);
 			}
-			col=new ODGridColumn(heading,50,HorizontalAlignment.Right);
+			col=new ODGridColumn(heading,50,HorizontalAlignment.Right,true);
 			gridMain.Columns.Add(col);
 			heading="";
 			if(comboCompare1.SelectedIndex!=0){
@@ -637,6 +639,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<ProcTable.Rows.Count;i++){
 				row=new ODGridRow();
+				row.Height=19;//To handle the isEditable functionality
 				if(i==0 || ProcTable.Rows[i-1]["ProcCat"].ToString() != ProcTable.Rows[i]["ProcCat"].ToString()){
 					row.Cells.Add(DefC.GetName(DefCat.ProcCodeCats,PIn.Long(ProcTable.Rows[i]["ProcCat"].ToString())));
 				}
@@ -652,7 +655,6 @@ namespace OpenDental{
 				else{
 					row.Cells.Add(PIn.Double(ProcTable.Rows[i]["FeeAmt1"].ToString()).ToString("n"));
 				}
-				
 				if(ProcTable.Rows[i]["FeeAmt2"].ToString()=="-1") {
 					row.Cells.Add("");
 				}
@@ -979,7 +981,56 @@ namespace OpenDental{
 					FillGrid();
 				}
 			}
-			
+		}
+
+		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
+			//logic only works for column 4.
+			long codeNum=PIn.Long(ProcTable.Rows[e.Row]["CodeNum"].ToString());
+			long feesched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
+			Fee fee=fee=Fees.GetFee(codeNum,feesched);
+			string strOld="";
+			if(fee!=null){
+				strOld=fee.Amount.ToString("n");
+			}
+			string strNew=gridMain.Rows[e.Row].Cells[e.Col].Text;
+			if(strOld==strNew){
+				return;
+			}
+			if(!Security.IsAuthorized(Permissions.Setup)){//includes dialog
+				gridMain.Rows[e.Row].Cells[e.Col].Text=strOld;
+				gridMain.Invalidate();
+				return;
+			}
+			double dNew=-1;
+			if(strNew!=""){
+				try{
+					dNew=PIn.Double(strNew);
+				}
+				catch{
+					gridMain.SetSelected(new Point(e.Col,e.Row));
+					MessageBox.Show(Lan.g(this,"Please fix data entry error first."));
+					return;
+				}
+				gridMain.Rows[e.Row].Cells[e.Col].Text=dNew.ToString("n");//to standardize formatting.  They probably didn't type .00
+				//invalidate doesn't seem to be necessary here
+			}
+			if(strOld==""){//if no fee was originally entered
+				//and since it's no longer empty, then we need to insert a fee
+				fee=new Fee();
+				fee.FeeSched=feesched;
+				fee.CodeNum=codeNum;
+				fee.Amount=dNew;
+				Fees.Insert(fee);
+			}
+			else{//if fee existed
+				if(strNew==""){//delete old fee
+					Fees.Delete(fee);
+				}
+				else{//change fee
+					fee.Amount=dNew;
+					Fees.Update(fee);
+				}
+			}		
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
@@ -1000,6 +1051,10 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.ProcCodes, InvalidType.Fees);
 			}
 		}
+
+		
+
+		
 
 
 
