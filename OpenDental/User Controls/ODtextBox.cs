@@ -7,9 +7,7 @@ using OpenDentBusiness;
 
 namespace OpenDental
 {
-	/// <summary>
-	/// Summary description for ODtextBox.
-	/// </summary>
+	/// <summary>This is used instead of a regular textbox when quickpaste functionality is needed.</summary>
 	public class ODtextBox : System.Windows.Forms.TextBox{//System.ComponentModel.Component
 		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.ComponentModel.Container components = null;// Required designer variable.
@@ -81,9 +79,7 @@ namespace OpenDental
 		#endregion
 
 		///<summary></summary>
-		[Category("Behavior"),
-			Description("This will determine which category of Quick Paste notes opens first.")
-		]
+		[Category("Behavior"),Description("This will determine which category of Quick Paste notes opens first.")]
 		public QuickPasteType QuickPasteType{
 			get{
 				return quickPasteType;

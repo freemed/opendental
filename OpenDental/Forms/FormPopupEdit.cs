@@ -10,7 +10,6 @@ namespace OpenDental{
 	public class FormPopupEdit : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private TextBox textDescription;
 		private Label label1;
 		private CheckBox checkIsDisabled;
 		/// <summary>
@@ -23,6 +22,7 @@ namespace OpenDental{
 		private Label label2;
 		private Label label3;
 		private TextBox textPatient;
+		private ODtextBox textDescription;
 		private Patient Pat;
 
 		///<summary></summary>
@@ -58,7 +58,6 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPopupEdit));
-			this.textDescription = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkIsDisabled = new System.Windows.Forms.CheckBox();
 			this.comboPopupLevel = new System.Windows.Forms.ComboBox();
@@ -68,15 +67,8 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textDescription = new OpenDental.ODtextBox();
 			this.SuspendLayout();
-			// 
-			// textDescription
-			// 
-			this.textDescription.Location = new System.Drawing.Point(157,93);
-			this.textDescription.Multiline = true;
-			this.textDescription.Name = "textDescription";
-			this.textDescription.Size = new System.Drawing.Size(271,91);
-			this.textDescription.TabIndex = 2;
 			// 
 			// label1
 			// 
@@ -180,10 +172,20 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textDescription
+			// 
+			this.textDescription.Location = new System.Drawing.Point(157,93);
+			this.textDescription.Multiline = true;
+			this.textDescription.Name = "textDescription";
+			this.textDescription.QuickPasteType = OpenDentBusiness.QuickPasteType.Popup;
+			this.textDescription.Size = new System.Drawing.Size(271,91);
+			this.textDescription.TabIndex = 2;
+			// 
 			// FormPopupEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(492,248);
+			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.textPatient);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
@@ -191,7 +193,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkIsDisabled);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

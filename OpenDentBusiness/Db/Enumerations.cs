@@ -864,7 +864,9 @@ namespace OpenDentBusiness{
 		///<summary>23</summary>
     Statement,
 		///<summary>24</summary>
-    Recall
+    Recall,
+		///<summary>25</summary>
+		Popup
 	}
 
 	///<summary>For every type of electronic claim format that Open Dental can create, there will be an item in this enumeration.  All e-claim formats are hard coded due to complexity.</summary>
