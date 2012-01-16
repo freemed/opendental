@@ -890,8 +890,8 @@ namespace OpenDental{
 				//ignore rows that aren't weekly totals
 				if(i<mergedAL.Count-1//if not the last row
 					//if the next row has the same week as this row
-					&& cal.GetWeekOfYear(GetDateForRow(i+1),rule,DayOfWeek.Sunday)
-					== cal.GetWeekOfYear(GetDateForRow(i),rule,DayOfWeek.Sunday))
+					&& cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
+					== cal.GetWeekOfYear(GetDateForRow(i),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))
 				{
 					continue;
 				}

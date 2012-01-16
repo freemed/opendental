@@ -102,6 +102,8 @@ namespace OpenDental{
 		private CheckBox checkMedicalFeeUsedForNewProcs;
 		private bool changed;
 		private CheckBox checkAccountShowPaymentNums;
+		private ComboBox comboTimeCardOvertimeFirstDayOfWeek;
+		private Label label16;
 		private bool IsLoading;
 
 		///<summary></summary>
@@ -213,6 +215,8 @@ namespace OpenDental{
 			this.tabManage = new System.Windows.Forms.TabPage();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.comboTimeCardOvertimeFirstDayOfWeek = new System.Windows.Forms.ComboBox();
+			this.label16 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -1210,6 +1214,8 @@ namespace OpenDental{
 			// 
 			// tabManage
 			// 
+			this.tabManage.Controls.Add(this.comboTimeCardOvertimeFirstDayOfWeek);
+			this.tabManage.Controls.Add(this.label16);
 			this.tabManage.Controls.Add(this.checkRxSendNewToQueue);
 			this.tabManage.Location = new System.Drawing.Point(4,22);
 			this.tabManage.Name = "tabManage";
@@ -1248,6 +1254,26 @@ namespace OpenDental{
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// comboTimeCardOvertimeFirstDayOfWeek
+			// 
+			this.comboTimeCardOvertimeFirstDayOfWeek.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboTimeCardOvertimeFirstDayOfWeek.FormattingEnabled = true;
+			this.comboTimeCardOvertimeFirstDayOfWeek.Location = new System.Drawing.Point(270,30);
+			this.comboTimeCardOvertimeFirstDayOfWeek.Name = "comboTimeCardOvertimeFirstDayOfWeek";
+			this.comboTimeCardOvertimeFirstDayOfWeek.Size = new System.Drawing.Size(170,21);
+			this.comboTimeCardOvertimeFirstDayOfWeek.TabIndex = 195;
+			// 
+			// label16
+			// 
+			this.label16.BackColor = System.Drawing.SystemColors.Window;
+			this.label16.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label16.Location = new System.Drawing.Point(17,34);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(248,13);
+			this.label16.TabIndex = 196;
+			this.label16.Text = "Time Card first day of week for overtime";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormModuleSetup
 			// 
@@ -1345,10 +1371,6 @@ namespace OpenDental{
 				comboCobRule.Items.Add(Lan.g("enumEnumCobRule",Enum.GetNames(typeof(EnumCobRule))[i]));
 			}
 			comboCobRule.SelectedIndex=PrefC.GetInt(PrefName.InsDefaultCobRule);
-			//Image module-----------------------------------------------------------------------
-			checkImagesModuleTreeIsCollapsed.Checked=PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed);
-			//Manage module
-			checkRxSendNewToQueue.Checked=PrefC.GetBool(PrefName.RxSendNewToQueue);
 			//Account module-----------------------------------------------------------------------
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool(PrefName.StatementShowReturnAddress);
 			checkShowCC.Checked=PrefC.GetBool(PrefName.StatementShowCreditCard);
@@ -1399,6 +1421,14 @@ namespace OpenDental{
 			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
 			checkProcGroupNoteDoesAggregate.Checked=PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate);
 			checkMedicalFeeUsedForNewProcs.Checked=PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
+			//Image module-----------------------------------------------------------------------
+			checkImagesModuleTreeIsCollapsed.Checked=PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed);
+			//Manage module
+			checkRxSendNewToQueue.Checked=PrefC.GetBool(PrefName.RxSendNewToQueue);
+			for(int i=0;i<7;i++) {
+				comboTimeCardOvertimeFirstDayOfWeek.Items.Add(Lan.g("enumDayOfWeek",Enum.GetNames(typeof(DayOfWeek))[i]));
+			}
+			comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex=PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek);
 			IsLoading=false;
 		}
 
@@ -1542,6 +1572,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.ChartAddProcNoRefreshGrid,checkChartAddProcNoRefreshGrid.Checked)
 				| Prefs.UpdateInt(PrefName.InsDefaultCobRule,comboCobRule.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.MedicalFeeUsedForNewProcs,checkMedicalFeeUsedForNewProcs.Checked)
+				| Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex)
 				)
 			{
 				changed=true;

@@ -8431,7 +8431,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="UPDATE userod SET ClinicIsRestricted = 1 WHERE ClinicNum != 0";//to preserve old ClinicNum behavior.
 				Db.NonQ(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('TimeCardOvertimeFirstDayOfWeek','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'TimeCardOvertimeFirstDayOfWeek','0')";
+					Db.NonQ(command);
+				}
 
 
 

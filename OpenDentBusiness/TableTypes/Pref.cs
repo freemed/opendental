@@ -336,6 +336,8 @@ namespace OpenDentBusiness {
 		TasksNewTrackedByUser,
 		TasksShowOpenTickets,
 		TerminalClosePassword,
+		///<summary>0=Sun,1=Mon...6=Sat</summary>
+		TimeCardOvertimeFirstDayOfWeek,
 		TimecardSecurityEnabled,
 		TimeCardsMakesAdjustmentsForOverBreaks,
 		TimeCardsUseDecimalInsteadOfColon,
