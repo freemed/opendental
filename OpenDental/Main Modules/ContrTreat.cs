@@ -106,7 +106,7 @@ namespace OpenDental{
 		public event PatientSelectedEventHandler PatientSelected=null;
 		private List <PatPlan> PatPlanList;
 		private List <Benefit> BenefitList;
-		private ArrayList ProcAL;
+		private List<Procedure> ProcListFiltered;
 		///<summary>Only used for printing graphical chart.</summary>
 		private List<ToothInitial> ToothInitialList;
 		///<summary>Only used for printing graphical chart.</summary>
@@ -1948,13 +1948,8 @@ namespace OpenDental{
 							break;
 					}
 				}
-				ComputeProcAL();
-				DrawProcsOfStatus(ProcStat.EO);
-				DrawProcsOfStatus(ProcStat.EC);
-				DrawProcsOfStatus(ProcStat.C);
-				DrawProcsOfStatus(ProcStat.R);
-				DrawProcsOfStatus(ProcStat.TP);
-				DrawProcsOfStatus(ProcStat.Cn);
+				ComputeProcListFiltered();
+				DrawProcsGraphics();
 				toothChart.AutoFinish=true;
 				chartBitmap=toothChart.GetBitmap();
 				toothChart.Dispose();
@@ -2239,8 +2234,8 @@ namespace OpenDental{
 		}
 
 		///<summary>Just used for printing the 3D chart.</summary>
-		private void ComputeProcAL() {
-			ProcAL=new ArrayList();
+		private void ComputeProcListFiltered() {
+			ProcListFiltered=new List<Procedure>();
 			//first, add all completed work and conditions. C,EC,EO, and Referred
 			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcList[i].ProcStatus==ProcStat.C
@@ -2248,14 +2243,14 @@ namespace OpenDental{
 					|| ProcList[i].ProcStatus==ProcStat.EO)
 				{
 					if(checkShowCompleted.Checked){
-						ProcAL.Add(ProcList[i]);
+						ProcListFiltered.Add(ProcList[i]);
 					}
 				}
 				if(ProcList[i].ProcStatus==ProcStat.R){//always show all referred
-					ProcAL.Add(ProcList[i]);
+					ProcListFiltered.Add(ProcList[i]);
 				}
 				if(ProcList[i].ProcStatus==ProcStat.Cn){//always show all conditions.
-					ProcAL.Add(ProcList[i]);
+					ProcListFiltered.Add(ProcList[i]);
 				}
 			}
 			//then add whatever is showing on the selected TP
@@ -2264,7 +2259,7 @@ namespace OpenDental{
 					if(ProcListTP[i].HideGraphics){
 						continue;
 					}
-					ProcAL.Add(ProcListTP[i]);
+					ProcListFiltered.Add(ProcListTP[i]);
 				}
 			}
 			else {
@@ -2293,21 +2288,54 @@ namespace OpenDental{
 					//procDummy.HideGraphical??
 					procDummy.ProcStatus=ProcStat.TP;
 					procDummy.CodeNum=ProcedureCodes.GetProcCode(ProcTPSelectList[i].ProcCode).CodeNum;
-					ProcAL.Add(procDummy);
+					ProcListFiltered.Add(procDummy);
 				}
 			}
+			ProcListFiltered.Sort(CompareProcListFiltered);
 		}
 
-		private void DrawProcsOfStatus(ProcStat procStat) {
+		private int CompareProcListFiltered(Procedure proc1,Procedure proc2) {
+			int dateFilter=proc1.ProcDate.CompareTo(proc2.ProcDate);
+			if(dateFilter!=0) {
+				return dateFilter;
+			}
+			//Dates are the same, filter by ProcStatus.
+			int xIdx=GetProcStatusIdx(proc1.ProcStatus);
+			int yIdx=GetProcStatusIdx(proc2.ProcStatus);
+			return xIdx.CompareTo(yIdx);
+		}
+
+		///<summary>Returns index for sorting based on this order: Cn,TP,R,EO,EC,C,D</summary>
+		private int GetProcStatusIdx(ProcStat procStat) {
+			switch(procStat) {
+				case ProcStat.Cn:
+					return 0;
+				case ProcStat.TP:
+					return 1;
+				case ProcStat.R:
+					return 2;
+				case ProcStat.EO:
+					return 3;
+				case ProcStat.EC:
+					return 4;
+				case ProcStat.C:
+					return 5;
+				case ProcStat.D:
+					return 6;
+			}
+			return 0;
+		}
+
+		private void DrawProcsGraphics() {
 			Procedure proc;
 			string[] teeth;
 			System.Drawing.Color cLight=System.Drawing.Color.White;
 			System.Drawing.Color cDark=System.Drawing.Color.White;
-			for(int i=0;i<ProcAL.Count;i++) {
-				proc=(Procedure)ProcAL[i];
-				if(proc.ProcStatus!=procStat) {
-					continue;
-				}
+			for(int i=0;i<ProcListFiltered.Count;i++) {
+				proc=ProcListFiltered[i];
+				//if(proc.ProcStatus!=procStat) {
+				//  continue;
+				//}
 				if(proc.HideGraphics) {
 					continue;
 				}
