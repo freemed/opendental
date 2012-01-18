@@ -19,6 +19,9 @@ namespace OpenDental{
 		private ImageList imageListMain;
 		///<summary>Upon closing with OK, this will be the selected account.</summary>
 		public Account SelectedAccount;
+		///<summary>Change to an enum to decide what accounting software is being used.</summary>
+		public bool IsQuickBooks;
+		public bool ShowReceivedFromQB;
 
 		///<summary></summary>
 		public FormAccountPick()

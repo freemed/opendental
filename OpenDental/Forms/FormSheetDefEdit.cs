@@ -27,11 +27,13 @@ namespace OpenDental {
 		private bool AltIsDown;
 		private List<SheetFieldDef> ListSheetFieldDefsCopyPaste;
 		private int PasteOffset=0;
-		/// <summary>After each 10 pastes to the upper left origin, this increments 10 to shift the next 10 down.</summary>
+		///<summary>After each 10 pastes to the upper left origin, this increments 10 to shift the next 10 down.</summary>
 		private int PasteOffsetY=0;
 		private bool IsTabMode;
 		private List<SheetFieldDef> ListSheetFieldDefsTabOrder;
 		public static Font tabOrderFont = new Font("Times New Roman",12f,FontStyle.Regular,GraphicsUnit.Pixel);
+		///<summary>List of every image stored in memory to cut back loading time for drawing.  Directly matches the list of SheetFieldDefs because PK's will not always exist.</summary>
+		private List<Image> ImageList;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -65,6 +67,7 @@ namespace OpenDental {
 			if(Height>SystemInformation.WorkingArea.Height){
 				Height=SystemInformation.WorkingArea.Height;
 			}
+			ImageList=new List<Image>();
 		}
 
 		private void FormSheetDefEdit_Load(object sender,EventArgs e) {
@@ -96,10 +99,19 @@ namespace OpenDental {
 				panelMain.Width=SheetDefCur.Width;
 				panelMain.Height=SheetDefCur.Height;
 			}
+			FillImageList();
 			FillFieldList();
 			panelMain.Refresh();
 			panelMain.Focus();
 			//textDescription.Focus();
+		}
+
+		private void FillImageList() {
+			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image) {
+					AddImageToList(SheetDefCur.SheetFieldDefs[i]);
+				}
+			}
 		}
 
 		private void FillFieldList(){
@@ -110,27 +122,30 @@ namespace OpenDental {
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.StaticText){
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldValue);
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image) {
 					listFields.Items.Add(Lan.g(this,"Image:")+SheetDefCur.SheetFieldDefs[i].FieldName);
+					if(!ImageExists(SheetDefCur.SheetFieldDefs[i])) {
+						AddImageToList(SheetDefCur.SheetFieldDefs[i]);
+					}
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line) {
 					listFields.Items.Add(Lan.g(this,"Line:")
 						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
 						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle){
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle) {
 					listFields.Items.Add(Lan.g(this,"Rect:")
 						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
 						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox){
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox) {
 					listFields.Items.Add(Lan.g(this,"Signature Box"));
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox) {
 					txt=//Lan.g(this,"Check:")+
 						SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+
 						SheetDefCur.SheetFieldDefs[i].FieldName;
@@ -139,7 +154,7 @@ namespace OpenDental {
 					}
 					listFields.Items.Add(txt);
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.InputField){
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.InputField) {
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
 				else {
@@ -212,16 +227,10 @@ namespace OpenDental {
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Parameter){
 					continue;
 				}
-				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
-					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[i].FieldName);
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image) {
 					Image img=null;
-					if(SheetDefCur.SheetFieldDefs[i].FieldName=="Patient Info.gif") {
-						img=Properties.Resources.Patient_Info;
-					}
-					else if(File.Exists(filePathAndName)){
-						img=Image.FromFile(filePathAndName);
-					}
-					else{
+					img=GetImageFromList(SheetDefCur.SheetFieldDefs[i]);
+					if(img==null) {//Should never happen.
 						continue;
 					}
 					g.DrawImage(img,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
@@ -358,6 +367,52 @@ namespace OpenDental {
 			}
 		}
 
+		private void AddImageToList(SheetFieldDef def) {
+			string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),def.FieldName);
+			Image img=null;
+			if(def.FieldName=="Patient Info.gif") {
+				img=Properties.Resources.Patient_Info;
+			}
+			else if(File.Exists(filePathAndName)) {
+				img=Image.FromFile(filePathAndName);
+			}
+			else {//Couldn't load image, nothing else to do.
+				return;
+			}
+			img.Tag=def.FieldName;
+			ImageList.Add(img);
+		}
+
+		///<summary>Returns the image from memory based on the FieldName of the SheetFieldDef.</summary>
+		private Image GetImageFromList(SheetFieldDef def) {
+			for(int i=0;i<ImageList.Count;i++) {
+				if(ImageList[i].Tag.ToString()==def.FieldName) {
+					return ImageList[i];
+				}
+			}
+			return null;
+		}
+
+		///<summary>Removes the image from memory based on the FieldName of the SheetFieldDef.</summary>
+		private void RemoveImageFromList(SheetFieldDef def) {
+			for(int i=0;i<ImageList.Count;i++) {
+				if(ImageList[i].Tag.ToString()==def.FieldName) {
+					ImageList[i].Dispose();
+					ImageList.RemoveAt(i);
+				}
+			}
+		}
+
+		///<summary>Returns if the static image is in memory already or not.</summary>
+		private bool ImageExists(SheetFieldDef def) {
+			for(int i=0;i<ImageList.Count;i++) {
+				if(ImageList[i].Tag.ToString()==def.FieldName) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		private void butEdit_Click(object sender,EventArgs e) {
 			FormSheetDef FormS=new FormSheetDef();
 			FormS.SheetDefCur=SheetDefCur;
@@ -458,6 +513,7 @@ namespace OpenDental {
 				return;
 			}
 			SheetDefCur.SheetFieldDefs.Insert(0,FormS.SheetFieldDefCur);
+			AddImageToList(FormS.SheetFieldDefCur);
 			FillFieldList();
 			panelMain.Refresh();
 		}
@@ -635,9 +691,10 @@ namespace OpenDental {
 					if(FormSI.DialogResult!=DialogResult.OK){
 						return;
 					}
-					if(FormSI.SheetFieldDefCur==null){
+					if(FormSI.SheetFieldDefCur==null) {
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
-					}
+						RemoveImageFromList(field);
+						}
 					break;
 				case SheetFieldType.Line:
 					FormSheetFieldLine FormSL=new FormSheetFieldLine();

@@ -71,7 +71,6 @@ namespace OpenDentBusiness{
 		Progeny,
 		PT,
 		PTupdate,
-		QuickBooks,
 		Schick,
 		Sirona,
 		Sopro,
