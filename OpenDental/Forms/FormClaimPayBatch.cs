@@ -1,9 +1,11 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using CodeBase;
 using OpenDentBusiness;
 using OpenDental.UI;
 
@@ -860,6 +862,24 @@ namespace OpenDental{
 			//GotoModule.GotoClaim(FormCS.GotoClaimNum);
 		//}
 
+		private void ShowSecondaryClaims() {
+			DataTable secCPs=Claims.GetSecondaryClaims(ClaimsAttached);
+			if(secCPs.Rows.Count==0) {
+				return;
+			}
+			string message="Some of the payments have secondary claims: \r\n"
+				+"Date | PatNum | Patient Name";
+			for(int i=0;i<secCPs.Rows.Count;i++) {
+				//claimProc=secondaryClaims[i];
+				message+="\r\n"+PIn.Date(secCPs.Rows[i]["ProcDate"].ToString()).ToShortDateString()
+					+" | "+secCPs.Rows[i]["PatNum"].ToString()
+					+" | "+Patients.GetPat(PIn.Long(secCPs.Rows[i]["PatNum"].ToString())).GetNameLF();
+			}
+			message+="\r\n\r\nPrint this list, then use it to review and send secondary claims.";
+			MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(message);
+			msgBox.ShowDialog();
+		}
+
 		private void butView_Click(object sender,EventArgs e) {
 			FormImages formI=new FormImages();
 			formI.ClaimPaymentNum=ClaimPaymentCur.ClaimPaymentNum;
@@ -899,14 +919,15 @@ namespace OpenDental{
 				MsgBox.Show(this,"Amounts do not match.");
 				return;
 			}
+			//No need to prompt user about secondary claims because they already went into each Account individually.
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butClose_Click(object sender, System.EventArgs e) {
+		private void butClose_Click(object sender,System.EventArgs e) {
 			if(IsFromClaim && IsNew) {//this acts as a Cancel button
 				IsDeleting=true;//the actual deletion will be handled in FormClaimEdit.
 			}
-			DialogResult=DialogResult.Cancel;
+			DialogResult=DialogResult.Cancel;			
 		}
 
 		private void FormClaimPayBatch_FormClosing(object sender,FormClosingEventArgs e) {
@@ -915,6 +936,7 @@ namespace OpenDental{
 			}
 			if(ClaimPaymentCur.IsPartial) {
 				if(textAmount.Text==textTotal.Text) {
+					ShowSecondaryClaims();//always continues after this dlg
 					ClaimPaymentCur.IsPartial=false;
 					ClaimPayments.Update(ClaimPaymentCur);
 				}

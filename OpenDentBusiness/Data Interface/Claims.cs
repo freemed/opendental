@@ -111,6 +111,35 @@ namespace OpenDentBusiness{
 			return ClaimPaySplitTableToList(table);
 		}
 
+		/// <summary>Gets all secondary claims for the related ClaimPaySplits. Called after a payment has been received.</summary>
+		public static DataTable GetSecondaryClaims(List<ClaimPaySplit> claimsAttached) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),claimsAttached);
+			}
+			string command="SELECT DISTINCT ProcNum FROM claimproc WHERE ClaimNum IN (";
+			string claimNums="";//used twice
+			for(int i=0;i<claimsAttached.Count;i++) {
+				if(i>0) {
+					claimNums+=",";
+				}
+				claimNums+=claimsAttached[i].ClaimNum;
+			}
+			command+=claimNums+")";
+			//List<ClaimProc> tempClaimProcs=ClaimProcCrud.SelectMany(command);
+			DataTable table=Db.GetTable(command);
+			command="SELECT PatNum,ProcDate FROM claimproc WHERE ProcNum IN (";
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(i>0) {
+					command+=",";
+				}
+				command+=table.Rows[i]["ProcNum"].ToString();
+			}
+			command+=") AND ClaimNum NOT IN ("+claimNums+")"
+				+"GROUP BY ClaimNum,PatNum,ProcDate";
+			DataTable secondaryClaims=Db.GetTable(command);
+			return secondaryClaims;
+		}
+
 		///<summary></summary>
 		public static List<ClaimPaySplit> GetInsPayNotAttachedForFixTool() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
