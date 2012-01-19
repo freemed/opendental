@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.Bridges;
 using OpenDental.UI;
 using OpenDentBusiness;
 
@@ -45,18 +46,19 @@ namespace OpenDental{
 		private Panel panelOD;
 		private GroupBox groupQB;
 		private Label labelDepositsQB;
-		private ListBox listDepositToFromQB;
-		private UI.Button butRemoveDepositQB;
-		private UI.Button butReceivedFromQB;
-		private Label labelReceivedFromQB;
-		private TextBox textReceivedFromQB;
-		private UI.Button butAddDepositQB;
+		private ListBox listAccountsQB;
+		private UI.Button butRemoveAccountsQB;
+		private UI.Button butChangeIncomeAccountQB;
+		private TextBox textIncomeAccountQB;
+		private UI.Button butAddAccountsQB;
 		private Label label7;
 		private UI.Button butConnectQB;
 		private UI.Button butBrowseQB;
 		private Label labelCompanyFile;
 		private TextBox textCompanyFileQB;
-		private Label labelTitleQB;
+		private Label labelWarning;
+		private Label labelIncomeAccountQB;
+		private Label labelConnectQB;
 		///<summary>Arraylist of AccountingAutoPays.</summary>
 		private List<AccountingAutoPay> payList;
 
@@ -96,39 +98,40 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.listAccountsDep = new System.Windows.Forms.ListBox();
+			this.butRemove = new OpenDental.UI.Button();
+			this.butChange = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textAccountInc = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.butAdd = new OpenDental.UI.Button();
 			this.groupAutomaticPayment = new System.Windows.Forms.GroupBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butChangeCash = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textAccountCashInc = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.butAddPay = new OpenDental.UI.Button();
 			this.listSoftware = new System.Windows.Forms.ListBox();
 			this.labelSoftware = new System.Windows.Forms.Label();
 			this.panelQB = new System.Windows.Forms.Panel();
 			this.groupQB = new System.Windows.Forms.GroupBox();
-			this.listDepositToFromQB = new System.Windows.Forms.ListBox();
-			this.labelReceivedFromQB = new System.Windows.Forms.Label();
-			this.textReceivedFromQB = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.labelDepositsQB = new System.Windows.Forms.Label();
-			this.panelOD = new System.Windows.Forms.Panel();
-			this.butRemove = new OpenDental.UI.Button();
-			this.butChange = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
-			this.butRemoveDepositQB = new OpenDental.UI.Button();
-			this.butReceivedFromQB = new OpenDental.UI.Button();
-			this.butAddDepositQB = new OpenDental.UI.Button();
-			this.butChangeCash = new OpenDental.UI.Button();
-			this.butAddPay = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.labelTitleQB = new System.Windows.Forms.Label();
+			this.labelIncomeAccountQB = new System.Windows.Forms.Label();
+			this.labelWarning = new System.Windows.Forms.Label();
+			this.butConnectQB = new OpenDental.UI.Button();
 			this.butBrowseQB = new OpenDental.UI.Button();
 			this.labelCompanyFile = new System.Windows.Forms.Label();
 			this.textCompanyFileQB = new System.Windows.Forms.TextBox();
-			this.butConnectQB = new OpenDental.UI.Button();
+			this.listAccountsQB = new System.Windows.Forms.ListBox();
+			this.butRemoveAccountsQB = new OpenDental.UI.Button();
+			this.butChangeIncomeAccountQB = new OpenDental.UI.Button();
+			this.textIncomeAccountQB = new System.Windows.Forms.TextBox();
+			this.butAddAccountsQB = new OpenDental.UI.Button();
+			this.label7 = new System.Windows.Forms.Label();
+			this.labelDepositsQB = new System.Windows.Forms.Label();
+			this.panelOD = new System.Windows.Forms.Panel();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.labelConnectQB = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupAutomaticPayment.SuspendLayout();
 			this.panelQB.SuspendLayout();
@@ -170,6 +173,34 @@ namespace OpenDental{
 			this.listAccountsDep.Size = new System.Drawing.Size(230, 108);
 			this.listAccountsDep.TabIndex = 37;
 			// 
+			// butRemove
+			// 
+			this.butRemove.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRemove.Autosize = true;
+			this.butRemove.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRemove.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemove.CornerRadius = 4F;
+			this.butRemove.Location = new System.Drawing.Point(418, 88);
+			this.butRemove.Name = "butRemove";
+			this.butRemove.Size = new System.Drawing.Size(75, 24);
+			this.butRemove.TabIndex = 36;
+			this.butRemove.Text = "Remove";
+			this.butRemove.Click += new System.EventHandler(this.butRemove_Click);
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(418, 176);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(75, 24);
+			this.butChange.TabIndex = 35;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
+			// 
 			// label3
 			// 
 			this.label3.Location = new System.Drawing.Point(12, 179);
@@ -195,6 +226,20 @@ namespace OpenDental{
 			this.label2.TabIndex = 32;
 			this.label2.Text = "Every time a deposit is created, an accounting transaction will also be automatic" +
     "ally created.";
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Location = new System.Drawing.Point(418, 58);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 24);
+			this.butAdd.TabIndex = 30;
+			this.butAdd.Text = "Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// groupAutomaticPayment
 			// 
@@ -223,6 +268,20 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableAccountingAutoPay";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// butChangeCash
+			// 
+			this.butChangeCash.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butChangeCash.Autosize = true;
+			this.butChangeCash.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangeCash.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangeCash.CornerRadius = 4F;
+			this.butChangeCash.Location = new System.Drawing.Point(418, 306);
+			this.butChangeCash.Name = "butChangeCash";
+			this.butChangeCash.Size = new System.Drawing.Size(75, 24);
+			this.butChangeCash.TabIndex = 35;
+			this.butChangeCash.Text = "Change";
+			this.butChangeCash.Click += new System.EventHandler(this.butChangeCash_Click);
+			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(12, 309);
@@ -249,6 +308,20 @@ namespace OpenDental{
 			this.label5.Text = "Some payment types do not use deposit slips.  An example is cashbox entries.  For" +
     " these types, an accounting transaction will be automatically created each time " +
     "a patient payment is entered.";
+			// 
+			// butAddPay
+			// 
+			this.butAddPay.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddPay.Autosize = true;
+			this.butAddPay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddPay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddPay.CornerRadius = 4F;
+			this.butAddPay.Location = new System.Drawing.Point(418, 75);
+			this.butAddPay.Name = "butAddPay";
+			this.butAddPay.Size = new System.Drawing.Size(75, 24);
+			this.butAddPay.TabIndex = 30;
+			this.butAddPay.Text = "Add";
+			this.butAddPay.Click += new System.EventHandler(this.butAddPay_Click);
 			// 
 			// listSoftware
 			// 
@@ -282,17 +355,18 @@ namespace OpenDental{
 			// 
 			// groupQB
 			// 
+			this.groupQB.Controls.Add(this.labelConnectQB);
+			this.groupQB.Controls.Add(this.labelIncomeAccountQB);
+			this.groupQB.Controls.Add(this.labelWarning);
 			this.groupQB.Controls.Add(this.butConnectQB);
 			this.groupQB.Controls.Add(this.butBrowseQB);
 			this.groupQB.Controls.Add(this.labelCompanyFile);
 			this.groupQB.Controls.Add(this.textCompanyFileQB);
-			this.groupQB.Controls.Add(this.labelTitleQB);
-			this.groupQB.Controls.Add(this.listDepositToFromQB);
-			this.groupQB.Controls.Add(this.butRemoveDepositQB);
-			this.groupQB.Controls.Add(this.butReceivedFromQB);
-			this.groupQB.Controls.Add(this.labelReceivedFromQB);
-			this.groupQB.Controls.Add(this.textReceivedFromQB);
-			this.groupQB.Controls.Add(this.butAddDepositQB);
+			this.groupQB.Controls.Add(this.listAccountsQB);
+			this.groupQB.Controls.Add(this.butRemoveAccountsQB);
+			this.groupQB.Controls.Add(this.butChangeIncomeAccountQB);
+			this.groupQB.Controls.Add(this.textIncomeAccountQB);
+			this.groupQB.Controls.Add(this.butAddAccountsQB);
 			this.groupQB.Controls.Add(this.label7);
 			this.groupQB.Controls.Add(this.labelDepositsQB);
 			this.groupQB.Location = new System.Drawing.Point(0, 0);
@@ -302,168 +376,155 @@ namespace OpenDental{
 			this.groupQB.TabStop = false;
 			this.groupQB.Text = "QuickBooks";
 			// 
-			// listDepositToFromQB
+			// labelIncomeAccountQB
 			// 
-			this.listDepositToFromQB.FormattingEnabled = true;
-			this.listDepositToFromQB.Location = new System.Drawing.Point(182, 156);
-			this.listDepositToFromQB.Name = "listDepositToFromQB";
-			this.listDepositToFromQB.Size = new System.Drawing.Size(230, 108);
-			this.listDepositToFromQB.TabIndex = 44;
+			this.labelIncomeAccountQB.Location = new System.Drawing.Point(12, 273);
+			this.labelIncomeAccountQB.Name = "labelIncomeAccountQB";
+			this.labelIncomeAccountQB.Size = new System.Drawing.Size(168, 19);
+			this.labelIncomeAccountQB.TabIndex = 51;
+			this.labelIncomeAccountQB.Text = "Income Account";
+			this.labelIncomeAccountQB.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// labelReceivedFromQB
+			// labelWarning
 			// 
-			this.labelReceivedFromQB.Location = new System.Drawing.Point(12, 276);
-			this.labelReceivedFromQB.Name = "labelReceivedFromQB";
-			this.labelReceivedFromQB.Size = new System.Drawing.Size(168, 19);
-			this.labelReceivedFromQB.TabIndex = 40;
-			this.labelReceivedFromQB.Text = "Received From";
-			this.labelReceivedFromQB.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelWarning.Location = new System.Drawing.Point(35, 569);
+			this.labelWarning.Name = "labelWarning";
+			this.labelWarning.Size = new System.Drawing.Size(448, 27);
+			this.labelWarning.TabIndex = 50;
+			this.labelWarning.Text = "(Open Dental will run faster if your QuickBooks company file is open in the backg" +
+    "round)";
+			this.labelWarning.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// textReceivedFromQB
+			// butConnectQB
 			// 
-			this.textReceivedFromQB.Location = new System.Drawing.Point(182, 276);
-			this.textReceivedFromQB.Name = "textReceivedFromQB";
-			this.textReceivedFromQB.ReadOnly = true;
-			this.textReceivedFromQB.Size = new System.Drawing.Size(230, 20);
-			this.textReceivedFromQB.TabIndex = 41;
+			this.butConnectQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butConnectQB.Autosize = true;
+			this.butConnectQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butConnectQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butConnectQB.CornerRadius = 4F;
+			this.butConnectQB.Location = new System.Drawing.Point(418, 56);
+			this.butConnectQB.Name = "butConnectQB";
+			this.butConnectQB.Size = new System.Drawing.Size(75, 24);
+			this.butConnectQB.TabIndex = 49;
+			this.butConnectQB.Text = "Connect";
+			this.butConnectQB.Click += new System.EventHandler(this.butConnectQB_Click);
+			// 
+			// butBrowseQB
+			// 
+			this.butBrowseQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butBrowseQB.Autosize = true;
+			this.butBrowseQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowseQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseQB.CornerRadius = 4F;
+			this.butBrowseQB.Location = new System.Drawing.Point(418, 19);
+			this.butBrowseQB.Name = "butBrowseQB";
+			this.butBrowseQB.Size = new System.Drawing.Size(75, 24);
+			this.butBrowseQB.TabIndex = 48;
+			this.butBrowseQB.Text = "Browse";
+			this.butBrowseQB.Click += new System.EventHandler(this.butBrowseQB_Click);
+			// 
+			// labelCompanyFile
+			// 
+			this.labelCompanyFile.Location = new System.Drawing.Point(12, 22);
+			this.labelCompanyFile.Name = "labelCompanyFile";
+			this.labelCompanyFile.Size = new System.Drawing.Size(105, 19);
+			this.labelCompanyFile.TabIndex = 46;
+			this.labelCompanyFile.Text = "Company File";
+			this.labelCompanyFile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCompanyFileQB
+			// 
+			this.textCompanyFileQB.Location = new System.Drawing.Point(123, 22);
+			this.textCompanyFileQB.Name = "textCompanyFileQB";
+			this.textCompanyFileQB.ReadOnly = true;
+			this.textCompanyFileQB.Size = new System.Drawing.Size(289, 20);
+			this.textCompanyFileQB.TabIndex = 47;
+			// 
+			// listAccountsQB
+			// 
+			this.listAccountsQB.FormattingEnabled = true;
+			this.listAccountsQB.Location = new System.Drawing.Point(182, 145);
+			this.listAccountsQB.Name = "listAccountsQB";
+			this.listAccountsQB.Size = new System.Drawing.Size(230, 108);
+			this.listAccountsQB.TabIndex = 44;
+			// 
+			// butRemoveAccountsQB
+			// 
+			this.butRemoveAccountsQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRemoveAccountsQB.Autosize = true;
+			this.butRemoveAccountsQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRemoveAccountsQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveAccountsQB.CornerRadius = 4F;
+			this.butRemoveAccountsQB.Location = new System.Drawing.Point(418, 172);
+			this.butRemoveAccountsQB.Name = "butRemoveAccountsQB";
+			this.butRemoveAccountsQB.Size = new System.Drawing.Size(75, 24);
+			this.butRemoveAccountsQB.TabIndex = 43;
+			this.butRemoveAccountsQB.Text = "Remove";
+			this.butRemoveAccountsQB.Click += new System.EventHandler(this.butRemoveAccountsQB_Click);
+			// 
+			// butChangeIncomeAccountQB
+			// 
+			this.butChangeIncomeAccountQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butChangeIncomeAccountQB.Autosize = true;
+			this.butChangeIncomeAccountQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangeIncomeAccountQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangeIncomeAccountQB.CornerRadius = 4F;
+			this.butChangeIncomeAccountQB.Location = new System.Drawing.Point(418, 270);
+			this.butChangeIncomeAccountQB.Name = "butChangeIncomeAccountQB";
+			this.butChangeIncomeAccountQB.Size = new System.Drawing.Size(75, 24);
+			this.butChangeIncomeAccountQB.TabIndex = 42;
+			this.butChangeIncomeAccountQB.Text = "Change";
+			this.butChangeIncomeAccountQB.Click += new System.EventHandler(this.butChangeIncomeAccountQB_Click);
+			// 
+			// textIncomeAccountQB
+			// 
+			this.textIncomeAccountQB.Location = new System.Drawing.Point(182, 272);
+			this.textIncomeAccountQB.Name = "textIncomeAccountQB";
+			this.textIncomeAccountQB.ReadOnly = true;
+			this.textIncomeAccountQB.Size = new System.Drawing.Size(230, 20);
+			this.textIncomeAccountQB.TabIndex = 41;
+			// 
+			// butAddAccountsQB
+			// 
+			this.butAddAccountsQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddAccountsQB.Autosize = true;
+			this.butAddAccountsQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddAccountsQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAccountsQB.CornerRadius = 4F;
+			this.butAddAccountsQB.Location = new System.Drawing.Point(418, 142);
+			this.butAddAccountsQB.Name = "butAddAccountsQB";
+			this.butAddAccountsQB.Size = new System.Drawing.Size(75, 24);
+			this.butAddAccountsQB.TabIndex = 39;
+			this.butAddAccountsQB.Text = "Add";
+			this.butAddAccountsQB.Click += new System.EventHandler(this.butAddAccountsQB_Click);
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(7, 156);
+			this.label7.Location = new System.Drawing.Point(3, 145);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(173, 53);
+			this.label7.Size = new System.Drawing.Size(177, 53);
 			this.label7.TabIndex = 38;
-			this.label7.Text = "User will get to pick from this list of accounts to deposit to and from.";
+			this.label7.Text = "User will get to pick from this list of accounts to deposit to.";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelDepositsQB
 			// 
-			this.labelDepositsQB.Location = new System.Drawing.Point(12, 126);
+			this.labelDepositsQB.Location = new System.Drawing.Point(12, 115);
 			this.labelDepositsQB.Name = "labelDepositsQB";
 			this.labelDepositsQB.Size = new System.Drawing.Size(492, 27);
 			this.labelDepositsQB.TabIndex = 33;
 			this.labelDepositsQB.Text = "Every time a deposit is created, a deposit will be created within QuickBooks usin" +
     "g these settings.";
+			this.labelDepositsQB.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// panelOD
 			// 
 			this.panelOD.Controls.Add(this.groupBox1);
-			this.panelOD.Location = new System.Drawing.Point(664, 112);
+			this.panelOD.Location = new System.Drawing.Point(665, 138);
 			this.panelOD.Name = "panelOD";
 			this.panelOD.Size = new System.Drawing.Size(144, 121);
 			this.panelOD.TabIndex = 40;
-			// 
-			// butRemove
-			// 
-			this.butRemove.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRemove.Autosize = true;
-			this.butRemove.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemove.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemove.CornerRadius = 4F;
-			this.butRemove.Location = new System.Drawing.Point(418, 88);
-			this.butRemove.Name = "butRemove";
-			this.butRemove.Size = new System.Drawing.Size(75, 24);
-			this.butRemove.TabIndex = 36;
-			this.butRemove.Text = "Remove";
-			this.butRemove.Click += new System.EventHandler(this.butRemove_Click);
-			// 
-			// butChange
-			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butChange.Autosize = true;
-			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(418, 176);
-			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(75, 24);
-			this.butChange.TabIndex = 35;
-			this.butChange.Text = "Change";
-			this.butChange.Click += new System.EventHandler(this.butChange_Click);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Location = new System.Drawing.Point(418, 58);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 24);
-			this.butAdd.TabIndex = 30;
-			this.butAdd.Text = "Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// butRemoveDepositQB
-			// 
-			this.butRemoveDepositQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRemoveDepositQB.Autosize = true;
-			this.butRemoveDepositQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveDepositQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemoveDepositQB.CornerRadius = 4F;
-			this.butRemoveDepositQB.Location = new System.Drawing.Point(418, 183);
-			this.butRemoveDepositQB.Name = "butRemoveDepositQB";
-			this.butRemoveDepositQB.Size = new System.Drawing.Size(75, 24);
-			this.butRemoveDepositQB.TabIndex = 43;
-			this.butRemoveDepositQB.Text = "Remove";
-			this.butRemoveDepositQB.Click += new System.EventHandler(this.butRemoveDepositQB_Click);
-			// 
-			// butReceivedFromQB
-			// 
-			this.butReceivedFromQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butReceivedFromQB.Autosize = true;
-			this.butReceivedFromQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butReceivedFromQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butReceivedFromQB.CornerRadius = 4F;
-			this.butReceivedFromQB.Location = new System.Drawing.Point(418, 273);
-			this.butReceivedFromQB.Name = "butReceivedFromQB";
-			this.butReceivedFromQB.Size = new System.Drawing.Size(75, 24);
-			this.butReceivedFromQB.TabIndex = 42;
-			this.butReceivedFromQB.Text = "Change";
-			this.butReceivedFromQB.Click += new System.EventHandler(this.butReceivedFromQB_Click);
-			// 
-			// butAddDepositQB
-			// 
-			this.butAddDepositQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddDepositQB.Autosize = true;
-			this.butAddDepositQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddDepositQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddDepositQB.CornerRadius = 4F;
-			this.butAddDepositQB.Location = new System.Drawing.Point(418, 153);
-			this.butAddDepositQB.Name = "butAddDepositQB";
-			this.butAddDepositQB.Size = new System.Drawing.Size(75, 24);
-			this.butAddDepositQB.TabIndex = 39;
-			this.butAddDepositQB.Text = "Add";
-			this.butAddDepositQB.Click += new System.EventHandler(this.butAddDepositQB_Click);
-			// 
-			// butChangeCash
-			// 
-			this.butChangeCash.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butChangeCash.Autosize = true;
-			this.butChangeCash.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangeCash.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChangeCash.CornerRadius = 4F;
-			this.butChangeCash.Location = new System.Drawing.Point(418, 306);
-			this.butChangeCash.Name = "butChangeCash";
-			this.butChangeCash.Size = new System.Drawing.Size(75, 24);
-			this.butChangeCash.TabIndex = 35;
-			this.butChangeCash.Text = "Change";
-			this.butChangeCash.Click += new System.EventHandler(this.butChangeCash_Click);
-			// 
-			// butAddPay
-			// 
-			this.butAddPay.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddPay.Autosize = true;
-			this.butAddPay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddPay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddPay.CornerRadius = 4F;
-			this.butAddPay.Location = new System.Drawing.Point(418, 75);
-			this.butAddPay.Name = "butAddPay";
-			this.butAddPay.Size = new System.Drawing.Size(75, 24);
-			this.butAddPay.TabIndex = 30;
-			this.butAddPay.Text = "Add";
-			this.butAddPay.Click += new System.EventHandler(this.butAddPay_Click);
 			// 
 			// butOK
 			// 
@@ -495,60 +556,16 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// labelTitleQB
+			// labelConnectQB
 			// 
-			this.labelTitleQB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTitleQB.Location = new System.Drawing.Point(12, 22);
-			this.labelTitleQB.Name = "labelTitleQB";
-			this.labelTitleQB.Size = new System.Drawing.Size(492, 27);
-			this.labelTitleQB.TabIndex = 45;
-			this.labelTitleQB.Text = "Your company file must be open in the background the first time you connect to Qu" +
-    "ickBooks.";
-			// 
-			// butBrowseQB
-			// 
-			this.butBrowseQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butBrowseQB.Autosize = true;
-			this.butBrowseQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowseQB.CornerRadius = 4F;
-			this.butBrowseQB.Location = new System.Drawing.Point(418, 52);
-			this.butBrowseQB.Name = "butBrowseQB";
-			this.butBrowseQB.Size = new System.Drawing.Size(75, 24);
-			this.butBrowseQB.TabIndex = 48;
-			this.butBrowseQB.Text = "Browse";
-			this.butBrowseQB.Click += new System.EventHandler(this.butBrowseQB_Click);
-			// 
-			// labelCompanyFile
-			// 
-			this.labelCompanyFile.Location = new System.Drawing.Point(12, 55);
-			this.labelCompanyFile.Name = "labelCompanyFile";
-			this.labelCompanyFile.Size = new System.Drawing.Size(105, 19);
-			this.labelCompanyFile.TabIndex = 46;
-			this.labelCompanyFile.Text = "Company File";
-			this.labelCompanyFile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textCompanyFileQB
-			// 
-			this.textCompanyFileQB.Location = new System.Drawing.Point(123, 55);
-			this.textCompanyFileQB.Name = "textCompanyFileQB";
-			this.textCompanyFileQB.ReadOnly = true;
-			this.textCompanyFileQB.Size = new System.Drawing.Size(289, 20);
-			this.textCompanyFileQB.TabIndex = 47;
-			// 
-			// butConnectQB
-			// 
-			this.butConnectQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butConnectQB.Autosize = true;
-			this.butConnectQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butConnectQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butConnectQB.CornerRadius = 4F;
-			this.butConnectQB.Location = new System.Drawing.Point(418, 82);
-			this.butConnectQB.Name = "butConnectQB";
-			this.butConnectQB.Size = new System.Drawing.Size(75, 24);
-			this.butConnectQB.TabIndex = 49;
-			this.butConnectQB.Text = "Connect";
-			this.butConnectQB.Click += new System.EventHandler(this.butConnectQB_Click);
+			this.labelConnectQB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelConnectQB.Location = new System.Drawing.Point(15, 45);
+			this.labelConnectQB.Name = "labelConnectQB";
+			this.labelConnectQB.Size = new System.Drawing.Size(397, 46);
+			this.labelConnectQB.TabIndex = 52;
+			this.labelConnectQB.Text = "Push the connect button with QuickBooks running in the background if this is your" +
+    " first time using QuickBooks with Open Dental. (Only need to do this once)";
+			this.labelConnectQB.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormAccountingSetup
 			// 
@@ -584,6 +601,16 @@ namespace OpenDental{
 
 		private void FormAccountingSetup_Load(object sender,EventArgs e) {
 //TODO:Figure out which panel layout needs to be loaded up here.
+			////Load up the accounting software pref.
+			//if(index==0){//None
+			//  PanelODLayout();
+			//}
+			//else if(index==1) {//Open Dental
+			//  PanelODLayout();
+			//}
+			//else {//QuickBooks
+			//  PanelQBLayout();
+			//}
 			PanelODLayout();
 			string depStr=PrefC.GetString(PrefName.AccountingDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] {','});
@@ -609,6 +636,13 @@ namespace OpenDental{
 			listAccountsDep.Items.Clear();
 			for(int i=0;i<depAL.Count;i++){
 				listAccountsDep.Items.Add(Accounts.GetDescript((long)depAL[i]));
+			}
+		}
+
+		private void FillAccountListQB(List<string> accountList) {
+			listAccountsQB.Items.Clear();
+			for(int i=0;i<accountList.Count;i++) {
+				listAccountsQB.Items.Add(accountList[i]);
 			}
 		}
 
@@ -660,25 +694,43 @@ namespace OpenDental{
 		}
 
 		private void butBrowseQB_Click(object sender,EventArgs e) {
-			//Open file browser for qbw company files.
+			OpenFileDialog fdlg=new OpenFileDialog();
+			fdlg.Title="QuickBooks Company File";
+			fdlg.InitialDirectory=@"C:\";
+			fdlg.Filter="QuickBooks|*.qbw";
+			fdlg.RestoreDirectory=true;
+			if(fdlg.ShowDialog()==DialogResult.OK) {
+				textCompanyFileQB.Text=fdlg.FileName;
+			}
 		}
 
 		private void butConnectQB_Click(object sender,EventArgs e) {
-			//Test the QB connection using path set in textCompanyFileQB.Text
+			if(textCompanyFileQB.Text.Trim()=="") {
+				MsgBox.Show(this,"Browse to your QuickBooks company file first.");
+				return;
+			}
+			Cursor.Current=Cursors.WaitCursor;
+			string result=QuickBooks.TestConnection(textCompanyFileQB.Text);
+			Cursor.Current=Cursors.Default;
+			MessageBox.Show(result);
 		}
 
-		private void butAddDepositQB_Click(object sender,EventArgs e) {
-			FormAccountPick FormA=new FormAccountPick();
-			FormA.IsQuickBooks=true;
-			FormA.ShowDialog();
-			if(FormA.DialogResult!=DialogResult.OK) {
-			  return;
+		private void butAddAccountsQB_Click(object sender,EventArgs e) {
+			if(textCompanyFileQB.Text.Trim()=="") {
+				MsgBox.Show(this,"Browse to your QuickBooks company file first.");
+				return;
 			}
+			//FormAccountPick FormA=new FormAccountPick();
+			//FormA.IsQuickBooks=true;
+			//FormA.ShowDialog();
+			//if(FormA.DialogResult!=DialogResult.OK) {
+			//  return;
+			//}
 			//depAL.Add(FormA.SelectedAccount.AccountNum);
 			//FillDepList();
 		}
 
-		private void butRemoveDepositQB_Click(object sender,EventArgs e) {
+		private void butRemoveAccountsQB_Click(object sender,EventArgs e) {
 			if(listAccountsDep.SelectedIndex==-1){
 			  MsgBox.Show(this,"Please select an item first.");
 			  return;
@@ -687,10 +739,12 @@ namespace OpenDental{
 			//FillDepList();
 		}
 
-		private void butReceivedFromQB_Click(object sender,EventArgs e) {
+		private void butChangeIncomeAccountQB_Click(object sender,EventArgs e) {
+			if(textCompanyFileQB.Text.Trim()=="") {
+				MsgBox.Show(this,"Browse to your QuickBooks company file first.");
+				return;
+			}
 			FormAccountPick FormA=new FormAccountPick();
-			FormA.IsQuickBooks=true;
-			FormA.ShowReceivedFromQB=true;
 			FormA.ShowDialog();
 			if(FormA.DialogResult!=DialogResult.OK) {
 			  return;
@@ -769,6 +823,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+//TODO: Decide if using quickbooks or not and only do certain things regarding selection.
 			string depStr="";
 			for(int i=0;i<depAL.Count;i++){
 				if(i>0){
@@ -788,6 +843,10 @@ namespace OpenDental{
 			if(Prefs.UpdateLong(PrefName.AccountingCashIncomeAccount,PickedPayAccountNum)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
+			//QuickBooks-----------------------------------------------------------------------------------
+			#region QuickBooks
+			//use this section for saving all the quickbooks information.
+			#endregion
 			DialogResult=DialogResult.OK;
 		}
 

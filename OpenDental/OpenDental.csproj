@@ -128,6 +128,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Microsoft.Office.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.QBFC10, Version=11.0.0.29, Culture=neutral, PublicKeyToken=31d8aec643e18259">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\Required dlls\Interop.QBFC10.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.Word, Version=8.2.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Word.dll</HintPath>
